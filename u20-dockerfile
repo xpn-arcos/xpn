@@ -1,0 +1,110 @@
+ARG UBUNTU_VERSION=18.04
+FROM ubuntu:${UBUNTU_VERSION} AS base
+
+ENV DEBIAN_FRONTEND=noninteractive 
+
+# Install initial software
+RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
+        aptitude \
+        apt-utils \
+        sudo \
+        zip \
+        unzip \
+        zlib1g-dev \
+        ca-certificates \
+        pkg-config \
+        rsync \
+        software-properties-common \
+        gpg-agent \
+        vim \
+        curl \
+        libcurl3-dev \
+        wget \
+        \
+        build-essential \
+        cmake \
+        g++ \
+        git \
+        man-db \
+        doxygen \
+        valgrind \
+        autoconf \
+        strace \
+        \
+        inetutils-ping \
+        nmap \
+        netcat \
+        net-tools \
+        hping3 \
+        iftop \
+        lsof \
+        \
+        \
+        libtool \
+    	libjson-c-dev \
+    	rpcbind \
+    	openjdk-8-jdk \
+        \
+        \
+        nfs-kernel-server \
+        systemd \
+        automake \
+        libmxml-dev \
+        flex \
+        && \
+    apt-get clean
+
+# tzdata: Configure region
+RUN echo "Europe/Madrid" > /etc/timezone
+#RUN dpkg-reconfigure -f noninteractive tzdata
+
+
+# OpenSSH: Install
+RUN apt-get install -y --no-install-recommends openssh-client openssh-server
+RUN mkdir -p /var/run/sshd
+
+# OpenSSH: Allow Root login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+RUN sed -i 's/PermitRootLogin prohibit-password/#PermitRootLogin prohibit-password/' /etc/ssh/sshd_config
+RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+# OpenSSH: Allow to talk to containers without asking for confirmation
+RUN cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
+    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
+    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
+# OpenSSH: keygen
+RUN ssh-keygen -q -t rsa -N "" -f /root/.ssh/id_rsa
+RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+
+
+# Initial env
+RUN echo 'root:ssdd' | chpasswd
+
+# Expand configuration
+WORKDIR "/"
+ADD expand.zip /
+RUN unzip expand.zip && \
+    mkdir -p /opt/xpn && \
+    cd expand && \
+    ./autogen.sh && \
+    ./configure --prefix=/opt/xpn --enable-nfs3 && \
+    make clean && \
+    make -j$(nproc) && \
+    make install && \
+    rm /expand.zip
+
+RUN mkdir -p /work
+WORKDIR "/work"
+
+# container start-up
+RUN mkdir -p /srv
+COPY u20-dockerstart.sh /srv
+
+# NFS configuration
+RUN mkdir -p /nfs && \
+    chmod -R 777 /nfs
+# RUN exportfs -arv
+
+
+EXPOSE 22
+CMD ["/srv/u20-dockerstart.sh"]
+

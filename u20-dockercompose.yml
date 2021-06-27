@@ -1,0 +1,22 @@
+version: "3.5"
+
+networks:
+  b0:
+    driver: bridge
+
+services:
+  node:
+    build:
+      context: ./
+      dockerfile: ./u20-dockerfile
+    image: u20
+    privileged: true
+    volumes:
+      - type: bind
+        source: .
+        target: /work
+      - type: bind
+        source: ./export
+        target: /nfs
+    networks:
+      - b0
