@@ -29,7 +29,9 @@ if [ $status -ne 0 ]; then
 fi
 
 # Start NFS
-echo "/nfs $(hostname -i)/16(rw,sync,no_root_squash,no_subtree_check)" >> /etc/exports
+mkdir /nfs/$(hostname)
+echo "/nfs/$(hostname) $(hostname -i)/16(rw,sync,no_root_squash,no_subtree_check,fsid=0)" >> /etc/exports
+#echo "/nfs $(hostname -i)/16(rw,sync,no_root_squash,no_subtree_check,fsid=0)" >> /etc/exports
 /usr/sbin/service nfs-kernel-server start
 status=$?
 if [ $status -ne 0 ]; then
