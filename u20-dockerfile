@@ -79,6 +79,17 @@ RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 # Initial env
 RUN echo 'root:ssdd' | chpasswd
 
+# mpich install
+WORKDIR "/"
+RUN mkdir -p /opt/mpich && \
+    wget http://www.mpich.org/static/downloads/3.4.2/mpich-3.4.2.tar.gz && \
+    tar -xzvf /mpich-3.4.2.tar.gz && \
+    cd /mpich-3.4.2 && \
+    ./configure --prefix="/opt/mpich" --disable-fortran --enable-threads=multiple --with-device=ch3 && \
+    make -j$(nproc) && \
+    make install && \
+    rm -rf /mpich-3.4.2*
+
 # Expand configuration
 WORKDIR "/"
 ADD expand.zip /
