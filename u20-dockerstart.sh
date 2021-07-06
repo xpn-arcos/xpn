@@ -28,6 +28,8 @@ if [ $status -ne 0 ]; then
      echo "Failed to start rpcbind: $status"
 fi
 
+echo "export export LD_LIBRARY_PATH=/opt/mpich/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
+
 # Start NFS
 mkdir /nfs/$(hostname)
 echo "/nfs/$(hostname) $(hostname -i)/16(rw,sync,no_root_squash,no_subtree_check,fsid=0)" >> /etc/exports
