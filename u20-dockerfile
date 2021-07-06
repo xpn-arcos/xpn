@@ -103,6 +103,18 @@ RUN unzip expand.zip && \
     make install && \
     rm /expand.zip
 
+#IOR configuration
+WORKDIR "/"
+RUN git clone https://github.com/hpc/ior.git && \
+    cd ior && \
+    ./bootstrap && \
+    export MPICC="/opt/mpich/bin" && \
+    export CC="/usr/bin/gcc" && \
+    ./configure CFLAGS="-I/opt/mpich/include" LDFLAGS="-L/opt/mpich/lib" LIBS="-lmpi" --prefix="/opt/ior" && \
+    make -j$(nproc) && \
+    make install && \
+    rm -r /ior
+
 RUN mkdir -p /work
 WORKDIR "/work"
 
