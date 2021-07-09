@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xpn_conf>
-	<partition name="xpn1" type="NORMAL" bsize="64k" >
-        <data_node id="id1" url="nfs3://192.168.208.2/nfs/0af1e626fe23/"/>
-        <data_node id="id2" url="nfs3://192.168.208.3/nfs/dbd7ebe93db2/"/>
-	</partition>
+  <partition bsize="64k" type="NORMAL" name="xpn1">
+    <data_node url="nfs3://192.168.208.2/nfs/0af1e626fe23/" id="id1"/>
+    <data_node url="nfs3://192.168.208.3/nfs/dbd7ebe93db2/" id="id2"/>
+  </partition>
 </xpn_conf>

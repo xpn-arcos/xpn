@@ -12,7 +12,7 @@ int main()
 	int ret,fd1,fd2;
 	char buffer[MAXIM];
 	
-	setenv("XPN_CONF", "/work/test/xpn.conf.xml", 1);
+	setenv("XPN_CONF", "/work/xpn.conf.xml", 1);
 	printf("Antes ..... init \n");
 	ret = xpn_init();
 	if(ret<0){

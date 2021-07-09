@@ -41,6 +41,11 @@ if [ $status -ne 0 ]; then
      exit $status
 fi
 
+# Create xpn.conf
+python3 /work/conf_generator.py $(hostname -i) $(hostname)
+#echo "$(hostname -i),$(hostname)" >> /work/conf.txt
+#wc -l conf.txt | awk '{print $1}'
+
 # Start SSHD
 /usr/sbin/sshd -D
 status=$?
