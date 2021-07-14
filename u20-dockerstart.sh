@@ -28,12 +28,12 @@ if [ $status -ne 0 ]; then
      echo "Failed to start rpcbind: $status"
 fi
 
-echo "export export LD_LIBRARY_PATH=/opt/mpich/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=/opt/mpich/lib:/work/new_bypass:$LD_LIBRARY_PATH" >> ~/.bashrc
+source ~/.bashrc
 
 # Start NFS
 mkdir /nfs/$(hostname)
 echo "/nfs/$(hostname) $(hostname -i)/16(rw,sync,no_root_squash,no_subtree_check,fsid=0)" >> /etc/exports
-#echo "/nfs $(hostname -i)/16(rw,sync,no_root_squash,no_subtree_check,fsid=0)" >> /etc/exports
 /usr/sbin/service nfs-kernel-server start
 status=$?
 if [ $status -ne 0 ]; then
@@ -43,8 +43,6 @@ fi
 
 # Create xpn.conf
 python3 /work/conf_generator.py $(hostname -i) $(hostname)
-#echo "$(hostname -i),$(hostname)" >> /work/conf.txt
-#wc -l conf.txt | awk '{print $1}'
 
 # Start SSHD
 /usr/sbin/sshd -D

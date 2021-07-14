@@ -63,7 +63,7 @@ int main()
 	
 	printf("antes de destroy\n");
 	
-	ret = xpn_destroy();
+	//ret = xpn_destroy();
 	printf("Destroy = %d\n",ret);
 	return 0;
 }
