@@ -16,7 +16,7 @@ int main()
 	int ret,fd1,fd2;
 	char buffer[MAXIM];
  
-  setenv("XPN_CONF", "/work/xpn.conf.xml", 1);
+  	//setenv("XPN_CONF", "/work/xpn.conf.xml", 1);
 	
 
 	/*fd1 = unlink("/xpn1/jj.txt");

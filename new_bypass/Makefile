@@ -3,10 +3,11 @@
 #
 
 #gcc -Wall -Wextra -fpic -DLINUX -I/opt/xpn/include/ -c xpn_bypass.c
-#gcc -shared -Wl,--trace -lmxml -lpthread -L/opt/xpn/lib -lxpn -o xpn_bypass.so *.o
+#gcc -shared -lmxml -lpthread -o xpn_bypass.so *.o -Wl,--trace /opt/xpn/lib/libxpn.a
 
 
-#gcc -shared -lpthread -o xpn_bypass.so *.o -Wl,--trace -Wl,--whole-archive /opt/xpn/lib/libxpn.a -Wl,--no-whole-archive #Prueba para enlazar bibliotecas
+#gcc -shared -o xpn_bypass.so *.o -Wl,--trace /opt/xpn/lib/libxpn.a -lmxml -lpthread
+
 
 
 
