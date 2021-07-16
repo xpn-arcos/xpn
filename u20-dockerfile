@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-
         man-db \
         doxygen \
         valgrind \
+        gdb \
         autoconf \
         strace \
         \
@@ -105,6 +106,8 @@ RUN unzip expand.zip && \
     make clean && \
     make -j$(nproc) && \
     make install && \
+    cd bypass && \
+    make && \
     rm /expand.zip
 
 #IOR configuration

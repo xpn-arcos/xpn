@@ -29,6 +29,7 @@ if [ $status -ne 0 ]; then
 fi
 
 echo "export LD_LIBRARY_PATH=/opt/mpich/lib:/work/new_bypass:$LD_LIBRARY_PATH" >> ~/.bashrc
+echo "export XPN_CONF=/work/xpn.conf.xml" >> ~/.bashrc
 source ~/.bashrc
 
 # Start NFS
