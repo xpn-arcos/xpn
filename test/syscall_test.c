@@ -8,6 +8,7 @@
 #include <fcntl.h> //added
 #include <sys/unistd.h>
 #include <stdio.h>
+#include <sys/stat.h>
 
 #define MAXIM (1024*1024)
 
@@ -24,10 +25,10 @@ int main()
 	fd1 = unlink("/xpn1/jj1.txt");
 	printf("xpn_unlink jj = %d\n",fd1);*/
 	
-	fd1 = creat("/xpn1/jj.txt",00777);
+	fd1 = creat("xpn:///xpn1/jj.txt",00777);
 	printf("xpn_creat jj = %d\n",fd1);
 	
-	fd2 = creat("/xpn1/jj1.txt",0777);
+	fd2 = creat("xpn:///xpn1/jj1.txt",0777);
 	printf("xpn_creat jj1= %d\n",fd2);
 	
 	ret = write(fd1, buffer,MAXIM);	
@@ -39,7 +40,7 @@ int main()
 	
 	printf("des. closes\n");
 	
-	fd1 = open("/xpn1/jj.txt",O_RDWR);
+	fd1 = open("xpn:///xpn1/jj.txt",O_RDWR);
 	printf("xpn_open jj = %d\n",fd1);
 
 	lseek(fd1,MAXIM,0);
@@ -59,4 +60,6 @@ int main()
 	close(fd1);
 
 
+	struct stat stat_buf;
+	printf("%d\n", stat("xpn:///xpn1/jj.txt", &stat_buf));
 }
