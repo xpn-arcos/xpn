@@ -1,0 +1,7 @@
+
+<!-- atributes name threads="yes/no" th_limit="int" -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xpn_profile>
+	<partition name="PNFS1" threads="yes" th_limit="64K"/>
+	<partition name="PNFS2" threads="no" />	
+</xpn_profile>

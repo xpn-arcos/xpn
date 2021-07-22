@@ -1,0 +1,1888 @@
+diff -burN mpich-1.2.4-orig/romio/.config_params mpich-1.2.4-xpn/romio/.config_params
+--- mpich-1.2.4-orig/romio/.config_params	Tue Jul 31 17:36:57 2001
++++ mpich-1.2.4-xpn/romio/.config_params	Fri Nov 22 19:56:14 2002
+@@ -27,6 +27,7 @@
+ __piofs_
+ __pvfs_
+ __testfs_
++__xpn_
+ __xfs_
+ __hfs_
+ __sfs_
+diff -burN mpich-1.2.4-orig/romio/Makefile.in mpich-1.2.4-xpn/romio/Makefile.in
+--- mpich-1.2.4-orig/romio/Makefile.in	Thu Nov 29 23:35:46 2001
++++ mpich-1.2.4-xpn/romio/Makefile.in	Fri Nov 22 19:56:14 2002
+@@ -13,7 +13,7 @@
+ BUILD_MPI_ARRAY = @BUILD_MPI_ARRAY@
+ DIRS        = mpi-io adio/common
+ MPIO_DIRS   = mpi-io
+-ALL_DIRS    = mpi-io mpi-io/fortran mpi2-other/info mpi2-other/info/fortran mpi2-other/array mpi2-other/array/fortran adio/common adio/ad_pfs adio/ad_piofs adio/ad_nfs adio/ad_ufs adio/ad_xfs adio/ad_hfs adio/ad_sfs adio/ad_testfs adio/ad_pvfs test
++ALL_DIRS    = mpi-io mpi-io/fortran mpi2-other/info mpi2-other/info/fortran mpi2-other/array mpi2-other/array/fortran adio/common adio/ad_pfs adio/ad_piofs adio/ad_nfs adio/ad_ufs adio/ad_xfs adio/ad_hfs adio/ad_sfs adio/ad_testfs adio/ad_pvfs adio/ad_xpn test
+ SHELL       = /bin/sh
+ 
+ @VPATH@
+diff -burN mpich-1.2.4-orig/romio/acconfig.h mpich-1.2.4-xpn/romio/acconfig.h
+--- mpich-1.2.4-orig/romio/acconfig.h	Thu Nov 29 23:35:46 2001
++++ mpich-1.2.4-xpn/romio/acconfig.h	Fri Nov 22 19:56:14 2002
+@@ -38,6 +38,7 @@
+ #undef PRINT_ERR_MSG
+ #undef ROMIO_PVFS
+ #undef ROMIO_TESTFS
++#undef XPN
+ #undef SFS
+ #undef SOLARIS
+ #undef SPPUX
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/Makefile mpich-1.2.4-xpn/romio/adio/ad_xpn/Makefile
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/Makefile	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/Makefile	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,28 @@
++# Generated automatically from Makefile.in by configure.
++CC          = /export/home/pato11-1/proyectos/xpn/mpich-1.2.4/bin/mpicc
++AR          = ar crl
++LIBNAME     = /export/home/pato11-1/proyectos/xpn/mpich-1.2.4/lib/libmpich.a
++srcdir      = /export/home/pato11-1/proyectos/xpn/mpich-1.2.4/romio/adio/ad_xpn
++
++INCLUDE_DIR = -I/export/home/pato11-1/proyectos/xpn/mpich-1.2.4/include -I${srcdir}/../include -I../include
++#CFLAGS      =  -I/usr/include/pvfs -I/usr/include/xpn -O -DHAVE_ROMIOCONF_H $(INCLUDE_DIR) -DDEBUG
++CFLAGS      =  -I/usr/include/pvfs -I/usr/include/xpn -O -DHAVE_ROMIOCONF_H $(INCLUDE_DIR) 
++
++VPATH=.:$(srcdir)
++
++AD_XPN_OBJECTS = ad_xpn_close.o ad_xpn_read.o ad_xpn_rdcoll.o \
++                 ad_xpn_wrcoll.o ad_xpn_open.o ad_xpn_write.o ad_xpn_done.o \
++                 ad_xpn_fcntl.o ad_xpn_iread.o ad_xpn_iwrite.o ad_xpn_wait.o \
++                 ad_xpn_flush.o ad_xpn_seek.o ad_xpn_resize.o ad_xpn_hints.o \
++                 ad_xpn_delete.o ad_xpn.o ad_xpn_helper.o
++
++default: $(LIBNAME)
++
++.c.o:
++	$(CC) $(CFLAGS) -c $<
++
++$(LIBNAME): $(AD_XPN_OBJECTS)
++	$(AR) $(LIBNAME) $(AD_XPN_OBJECTS)
++
++clean:
++	@rm -f *.o
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/Makefile.in mpich-1.2.4-xpn/romio/adio/ad_xpn/Makefile.in
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/Makefile.in	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/Makefile.in	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,26 @@
++CC          = @CC@
++AR          = @AR@
++LIBNAME     = @LIBNAME@
++srcdir      = @srcdir@
++
++INCLUDE_DIR = -I@MPI_INCLUDE_DIR@ -I${srcdir}/../include -I../include
++CFLAGS      = @CFLAGS@ $(INCLUDE_DIR)
++
++@VPATH@
++
++AD_XPN_OBJECTS = ad_xpn_close.o ad_xpn_read.o ad_xpn_rdcoll.o \
++                 ad_xpn_wrcoll.o ad_xpn_open.o ad_xpn_write.o ad_xpn_done.o \
++                 ad_xpn_fcntl.o ad_xpn_iread.o ad_xpn_iwrite.o ad_xpn_wait.o \
++                 ad_xpn_flush.o ad_xpn_seek.o ad_xpn_resize.o ad_xpn_hints.o \
++                 ad_xpn_delete.o ad_xpn.o ad_xpn_helper.o
++
++default: $(LIBNAME)
++
++.c.o:
++	$(CC) $(CFLAGS) -c $<
++
++$(LIBNAME): $(AD_XPN_OBJECTS)
++	$(AR) $(LIBNAME) $(AD_XPN_OBJECTS)
++
++clean:
++	@rm -f *.o
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,80 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++
++
++void ADIOI_XPN_Open(ADIO_File fd, int *error_code) ;
++void ADIOI_XPN_ReadContig(ADIO_File fd, void *buf, int count,
++		          MPI_Datatype datatype, int file_ptr_type,
++			  ADIO_Offset offset, ADIO_Status *status, int *error_code) ;
++void ADIOI_XPN_ReadStrided(ADIO_File fd, void *buf, int count,
++                          MPI_Datatype datatype, int file_ptr_type,
++                          ADIO_Offset offset, ADIO_Status *status, int
++                          *error_code) ;
++void ADIOI_XPN_WriteContig(ADIO_File fd, void *buf, int count,
++                          MPI_Datatype datatype, int file_ptr_type,
++                          ADIO_Offset offset, ADIO_Status *status, int *error_code) ;
++void ADIOI_XPN_WriteStrided(ADIO_File fd, void *buf, int count,
++                          MPI_Datatype datatype, int file_ptr_type,
++                          ADIO_Offset offset, ADIO_Status *status, int
++                          *error_code);
++void ADIOI_XPN_Close(ADIO_File fd, int *error_code);
++ADIO_Offset ADIOI_XPN_SeekIndividual(ADIO_File fd, ADIO_Offset offset,
++                          int whence, int *error_code) ;
++void ADIOI_XPN_Fcntl(ADIO_File fd, int flag, ADIO_Fcntl_t *fcntl_struct, int *error_code);
++void ADIOI_XPN_Flush(ADIO_File fd, int *error_code);
++void ADIOI_XPN_Delete(char *filename, int *error_code);
++int ADIOI_XPN_ReadDone(ADIO_Request *request, ADIO_Status *status, int *error_code);
++int ADIOI_XPN_WriteDone(ADIO_Request *request, ADIO_Status *status, int *error_code);
++void ADIOI_XPN_IreadContig(ADIO_File fd, void *buf, int count,
++                          MPI_Datatype datatype, int file_ptr_type,
++                          ADIO_Offset offset, ADIO_Request *request, int *error_code);
++void ADIOI_XPN_IreadStrided(ADIO_File fd, void *buf, int count,
++                          MPI_Datatype datatype, int file_ptr_type,
++                          ADIO_Offset offset, ADIO_Request *request, int
++                          *error_code);
++void ADIOI_XPN_IwriteContig(ADIO_File fd, void *buf, int count,
++                          MPI_Datatype datatype, int file_ptr_type,
++                          ADIO_Offset offset, ADIO_Request *request, int *error_code);
++ 
++void ADIOI_XPN_IwriteStrided(ADIO_File fd, void *buf, int count,
++                          MPI_Datatype datatype, int file_ptr_type,
++                          ADIO_Offset offset, ADIO_Request *request, int
++                          *error_code);
++void ADIOI_XPN_ReadComplete(ADIO_Request *request, ADIO_Status *status, int *error_code);
++void ADIOI_XPN_WriteComplete(ADIO_Request *request, ADIO_Status *status, int *error_code);
++void ADIOI_XPN_Resize(ADIO_File fd, ADIO_Offset size, int *error_code);
++void ADIOI_XPN_SetInfo(ADIO_File fd, MPI_Info users_info, int *error_code);
++
++
++
++struct ADIOI_Fns_struct ADIO_XPN_operations = {
++       ADIOI_XPN_Open, /* Open */
++       ADIOI_XPN_ReadContig, /* ReadContig */
++       ADIOI_XPN_WriteContig, /* WriteContig */
++       ADIOI_GEN_ReadStridedColl, /* ReadStridedColl */
++       ADIOI_GEN_WriteStridedColl, /* WriteStridedColl */
++       ADIOI_XPN_SeekIndividual, /* SeekIndividual */
++       ADIOI_XPN_Fcntl, /* Fcntl */
++       ADIOI_XPN_SetInfo, /* SetInfo */
++       ADIOI_XPN_ReadStrided, /* ReadStrided */
++       ADIOI_XPN_WriteStrided, /* WriteStrided */
++       ADIOI_XPN_Close, /* Close */
++       ADIOI_XPN_IreadContig, /* IreadContig */
++       ADIOI_XPN_IwriteContig, /* IwriteContig */
++       ADIOI_XPN_ReadDone, /* ReadDone */
++       ADIOI_XPN_WriteDone, /* WriteDone */
++       ADIOI_XPN_ReadComplete, /* ReadComplete */
++       ADIOI_XPN_WriteComplete, /* WriteComplete */
++       ADIOI_XPN_IreadStrided, /* IreadStrided */
++       ADIOI_XPN_IwriteStrided, /* IwriteStrided */
++       ADIOI_XPN_Flush,  /* Flush */
++       ADIOI_XPN_Resize, /* Resize */
++       ADIOI_XPN_Delete   /* Delete */
++};
++
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn.h mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn.h
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn.h	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn.h	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,16 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#ifndef AD_XPN_INCLUDE
++#define AD_XPN_INCLUDE
++
++#include <unistd.h>
++#include <sys/types.h>
++#include <sys/uio.h>
++#include <fcntl.h>
++#include "adio.h" /* adioi.h has the ADIOI_Fns_struct define */
++
++#endif
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_close.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_close.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_close.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_close.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,29 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++#include "ad_xpn_helper.h"
++
++void ADIOI_XPN_Close(ADIO_File fd, int *error_code)
++{
++    int err;
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_CLOSE";
++#endif
++
++    ad_xpn_helper_close(fd,&err);
++
++#ifdef PRINT_ERR_MSG
++    *error_code = (err == 0) ? MPI_SUCCESS : MPI_ERR_UNKNOWN;
++#else
++    if (err == -1) {
++	*error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++			              "I/O Error", "%s", strerror(errno));
++	ADIOI_Error(fd, *error_code, myname);	    
++    }
++    else *error_code = MPI_SUCCESS;
++#endif
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_delete.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_delete.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_delete.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_delete.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,32 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++void ADIOI_XPN_Delete(char *filename, int *error_code)
++{
++    int err;
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_DELETE";
++#endif
++
++    err = xpn_unlink(filename);
++
++#ifdef DEBUG
++    printf("%d = xpn_unlink(%s);\n",err,filename);
++#endif
++
++#ifdef PRINT_ERR_MSG
++    *error_code = (err == 0) ? MPI_SUCCESS : MPI_ERR_UNKNOWN;
++#else
++    if (err == -1) {
++	*error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++			              "I/O Error", "%s", strerror(errno));
++	ADIOI_Error(MPI_FILE_NULL, *error_code, myname);	    
++    }
++    else *error_code = MPI_SUCCESS;
++#endif
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_done.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_done.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_done.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_done.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,28 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++int ADIOI_XPN_ReadDone(ADIO_Request *request, ADIO_Status *status, int *error_code)  
++{
++    if (*request != ADIO_REQUEST_NULL) {
++#ifdef HAVE_STATUS_SET_BYTES
++	MPIR_Status_set_bytes(status, (*request)->datatype, (*request)->nbytes);
++#endif
++	(*request)->fd->async_count--;
++	ADIOI_Free_request((ADIOI_Req_node *) (*request));
++	*request = ADIO_REQUEST_NULL;
++    }
++
++    *error_code = MPI_SUCCESS;
++    return 1;
++}
++
++
++int ADIOI_XPN_WriteDone(ADIO_Request *request, ADIO_Status *status, int *error_code)  
++{
++    return ADIOI_XPN_ReadDone(request, status, error_code);
++} 
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_fcntl.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_fcntl.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_fcntl.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_fcntl.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,158 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++#include "adio_extern.h"
++
++void ADIOI_XPN_Fcntl(ADIO_File fd, int flag, ADIO_Fcntl_t *fcntl_struct, int *error_code)
++{
++    MPI_Datatype copy_etype, copy_filetype;
++    int combiner, i, j, k, filetype_is_contig, ntimes, err;
++    ADIOI_Flatlist_node *flat_file;
++    ADIO_Offset curr_fsize, alloc_size, size, len, done;
++    ADIO_Status status;
++    char *buf;
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_FCNTL";
++#endif
++
++    switch(flag) {
++    case ADIO_FCNTL_SET_VIEW:
++
++	MPI_Type_get_envelope(fd->etype, &i, &j, &k, &combiner);
++	if (combiner != MPI_COMBINER_NAMED) MPI_Type_free(&(fd->etype));
++
++	ADIOI_Datatype_iscontig(fd->filetype, &filetype_is_contig);
++	if (!filetype_is_contig) ADIOI_Delete_flattened(fd->filetype);
++
++	MPI_Type_get_envelope(fd->filetype, &i, &j, &k, &combiner);
++	if (combiner != MPI_COMBINER_NAMED) MPI_Type_free(&(fd->filetype));
++
++	ADIO_SetInfo(fd, fcntl_struct->info, &err);
++
++	MPI_Type_get_envelope(fcntl_struct->etype, &i, &j, &k, &combiner);
++	if (combiner == MPI_COMBINER_NAMED) fd->etype = fcntl_struct->etype;
++	else {
++	    MPI_Type_contiguous(1, fcntl_struct->etype, &copy_etype);
++	    MPI_Type_commit(&copy_etype);
++	    fd->etype = copy_etype;
++	}
++
++	MPI_Type_get_envelope(fcntl_struct->filetype, &i, &j, &k, &combiner);
++	if (combiner == MPI_COMBINER_NAMED) 
++	    fd->filetype = fcntl_struct->filetype;
++	else {
++	    MPI_Type_contiguous(1, fcntl_struct->filetype, &copy_filetype);
++	    MPI_Type_commit(&copy_filetype);
++	    fd->filetype = copy_filetype;
++	    ADIOI_Flatten_datatype(fd->filetype);
++	}
++
++	MPI_Type_size(fd->etype, &(fd->etype_size));
++	fd->disp = fcntl_struct->disp;
++
++        ADIOI_Datatype_iscontig(fd->filetype, &filetype_is_contig);
++	if (filetype_is_contig) fd->fp_ind = fcntl_struct->disp;
++	else {
++	    flat_file = ADIOI_Flatlist;
++	    while (flat_file->type != fd->filetype) 
++		flat_file = flat_file->next;
++	    for (i=0; i<flat_file->count; i++) {
++		if (flat_file->blocklens[i]) {
++		    fd->fp_ind = fcntl_struct->disp + flat_file->indices[i];
++		    break;
++		}
++	    }
++	}
++	*error_code = MPI_SUCCESS;
++	break;
++
++    case ADIO_FCNTL_GET_FSIZE:
++
++	fcntl_struct->fsize = xpn_lseek(fd->fd_sys, 0, SEEK_END);
++	if (fd->fp_sys_posn != -1) 
++	     xpn_lseek(fd->fd_sys, fd->fp_sys_posn, SEEK_SET);
++
++#ifdef PRINT_ERR_MSG
++	*error_code = (fcntl_struct->fsize == -1) ? MPI_ERR_UNKNOWN : MPI_SUCCESS;
++#else
++	if (fcntl_struct->fsize == -1) {
++	    *error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++			                  "I/O Error", "%s", strerror(errno));
++	    ADIOI_Error(fd, *error_code, myname);	    
++	}
++	else *error_code = MPI_SUCCESS;
++#endif
++	break;
++
++    case ADIO_FCNTL_SET_DISKSPACE:
++
++	curr_fsize = xpn_lseek(fd->fd_sys, 0, SEEK_END);
++	alloc_size = fcntl_struct->diskspace;
++
++	size = ADIOI_MIN(curr_fsize, alloc_size);
++	
++	ntimes = (size + ADIOI_PREALLOC_BUFSZ - 1)/ADIOI_PREALLOC_BUFSZ;
++	buf = (char *) ADIOI_Malloc(ADIOI_PREALLOC_BUFSZ);
++	done = 0;
++
++	for (i=0; i<ntimes; i++) {
++	    len = ADIOI_MIN(size-done, ADIOI_PREALLOC_BUFSZ);
++	    ADIO_ReadContig(fd, buf, len, MPI_BYTE, ADIO_EXPLICIT_OFFSET, done,
++			    &status, error_code);
++	    if (*error_code != MPI_SUCCESS) {
++#ifdef PRINT_ERR_MSG
++		FPRINTF(stderr, 
++			"ADIOI_XPN_Fcntl: To preallocate disk space, ROMIO needs to read the file and write it back, but is unable to read the file. Please give the file read permission and open it with MPI_MODE_RDWR.\n");
++		MPI_Abort(MPI_COMM_WORLD, 1);
++#else
++		*error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++					      "I/O Error", "%s", strerror(errno));
++		ADIOI_Error(fd, *error_code, myname);
++                return;  
++#endif
++	    }
++	    ADIO_WriteContig(fd, buf, len, MPI_BYTE, ADIO_EXPLICIT_OFFSET, done,
++			     &status, error_code);
++	    if (*error_code != MPI_SUCCESS) return;
++	    done += len;
++	}
++
++	if (alloc_size > curr_fsize) {
++	    memset(buf, 0, ADIOI_PREALLOC_BUFSZ); 
++	    size = alloc_size - curr_fsize;
++	    ntimes = (size + ADIOI_PREALLOC_BUFSZ - 1)/ADIOI_PREALLOC_BUFSZ;
++	    for (i=0; i<ntimes; i++) {
++		len = ADIOI_MIN(alloc_size-done, ADIOI_PREALLOC_BUFSZ);
++		ADIO_WriteContig(fd, buf, len, MPI_BYTE, ADIO_EXPLICIT_OFFSET, 
++				 done, &status, error_code);
++		if (*error_code != MPI_SUCCESS) return;
++		done += len;  
++	    }
++	}
++	ADIOI_Free(buf);
++	if (fd->fp_sys_posn != -1) 
++	    xpn_lseek(fd->fd_sys, fd->fp_sys_posn, SEEK_SET);
++	*error_code = MPI_SUCCESS;
++	break;
++
++    case ADIO_FCNTL_SET_IOMODE:
++	if (fd->iomode != fcntl_struct->iomode) {
++	    fd->iomode = fcntl_struct->iomode;
++	    MPI_Barrier(MPI_COMM_WORLD);
++	}
++	*error_code = MPI_SUCCESS;
++	break;
++
++    case ADIO_FCNTL_SET_ATOMICITY:
++	*error_code = MPI_ERR_UNKNOWN;
++	break;
++
++    default:
++	FPRINTF(stderr, "Unknown flag passed to ADIOI_XPN_Fcntl\n");
++	MPI_Abort(MPI_COMM_WORLD, 1);
++    }
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_flush.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_flush.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_flush.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_flush.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,42 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++void ADIOI_XPN_Flush(ADIO_File fd, int *error_code)
++{
++#ifdef AD_XPN_HAVE_FSYNC
++#else
++    int myrank, nprocs;
++#endif
++    int err;
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_FLUSH";
++#endif
++
++#ifdef AD_XPN_HAVE_FTRUNCATE
++    err = xpn_fsync(fd->fd_sys);
++#else
++    MPI_Comm_size(fd->comm, &nprocs);
++    MPI_Comm_rank(fd->comm, &myrank);
++    /*
++    FPRINTF(stdout, "[%d/%d] ADIOI_XPN_Flush called on %s\n but not yet implemented.", 
++	    myrank, nprocs, fd->filename);
++    */
++    err = 0;
++#endif
++
++#ifdef PRINT_ERR_MSG
++    *error_code = (err == 0) ? MPI_SUCCESS : MPI_ERR_UNKNOWN;
++#else
++    if (err == -1) {
++	*error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++			              "I/O Error", "%s", strerror(errno));
++	ADIOI_Error(fd, *error_code, myname);	    
++    }
++    else *error_code = MPI_SUCCESS;
++#endif
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_helper.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_helper.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_helper.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_helper.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,193 @@
++/*
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn_helper.h"
++
++/* 
++ * by defalut, base library (xpn) is *not* initialized,
++ * so first call to *any* function will call to
++ * ad_xpn_helper_init in order to setup xpn.
++ */
++static ad_xpn_helper_isInit = 0 ;
++
++int ad_xpn_helper_init(ADIO_File fd)
++{
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "AD_XPN_HELPER_INIT";
++#endif
++
++    int   flag;
++    char *value;
++    char *xpn_path;
++    int   ret, error_code;
++
++    /* 1.- alloc buffer */
++    value = (char *) ADIOI_Malloc((MPI_MAX_INFO_VAL+1)*sizeof(char));
++    if ((char *)NULL == value)
++    {
++#ifdef PRINT_ERR_MSG
++       FPRINTF(stderr,
++               "AD_XPN_HELPER_init: Fail to alloc memory.\n");
++       return;
++#else
++       error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++				    "I/O Error", "%s", strerror(errno));
++       ADIOI_Error(fd, error_code, myname);
++       return -1;
++#endif
++    }
++
++    /* 2.- get xpn.conf path */
++    MPI_Info_get(fd->info, "xpn_conf", MPI_MAX_INFO_VAL, 
++                 value, &flag);
++    if (flag && (!strcmp(value,""))) 
++	 xpn_path = value;
++    else xpn_path = AD_XPN_DEFAULT_XPN_CONF ;
++
++    /* 3.- init expand... */
++    ret = xpn_init(xpn_path) ;
++    if (ret < 0) 
++    {
++#ifdef PRINT_ERR_MSG
++       FPRINTF(stderr,
++               "AD_XPN_HELPER_init: fail xpn_init (%d).\n",
++               ret);
++       return;
++#else
++       error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++                                    "I/O Error", "%s", strerror(errno));
++       ADIOI_Error(fd, error_code, myname);
++       return -1;
++#endif
++    }
++
++#ifdef DEBUG
++    printf("%d = xpn_init(%s);\n",ret,xpn_path);
++#endif
++
++    /* 4.- free buffer */
++    ADIOI_Free(value);
++    return 0;
++}
++
++void ad_xpn_helper_open(ADIO_File fd, int amode, int perm)
++{
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "AD_XPN_HELPER_OPEN";
++#endif
++    int error_code;
++
++    /* - ensure xpn is initialized... */
++    if (ad_xpn_helper_isInit == 0) {
++	    error_code = ad_xpn_helper_init(fd);
++	    if (error_code < 0) {
++                fd->fd_sys = -1;
++		return ;
++	    }
++	    ad_xpn_helper_isInit=1;
++    }
++
++    /* - try to open... */
++    fd->fd_sys = xpn_open(fd->filename,amode,perm);
++#ifdef DEBUG
++    printf("%d = xpn_open(%s,%d,%d);\n",fd->fd_sys,fd->filename,amode,perm);
++#endif
++
++    /* if ok then return ok */
++    if (fd->fd_sys >= 0) {
++	    return;
++    } 
++
++    /* if (error && open-only) then return error */
++    if (!(amode & O_CREAT)) {
++#ifdef PRINT_ERR_MSG
++	       FPRINTF(stderr,
++                       "AD_XPN_HELPER_open: xpn_creat(%s,%d,NULL)->%d\n",
++                       fd->filename,perm,fd->fd_sys);
++	       return;
++#else
++               error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++                                            "I/O Error", "%s", strerror(errno));
++	       ADIOI_Error(fd, error_code, myname);
++	       return;
++#endif
++    } else {
++               /* if (error && creat) then try creat */
++	       fd->fd_sys = xpn_creat(fd->filename,perm);
++#ifdef DEBUG
++               printf("%d = xpn_creat(%s,%d);\n",fd->fd_sys,fd->filename,perm);
++#endif
++   	       if (fd->fd_sys < 0)
++	       {
++#ifdef PRINT_ERR_MSG
++	          FPRINTF(stderr,
++                          "AD_XPN_HELPER_open: xpn_creat(%s,%d,NULL)->%d\n",
++                          fd->filename,perm,fd->fd_sys);
++	          return;
++#else
++                  error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++                                            "I/O Error", "%s", strerror(errno));
++	          ADIOI_Error(fd, error_code, myname);
++	          return;
++#endif
++	       }
++    } /* else */
++}
++
++void ad_xpn_helper_close(ADIO_File fd, int *err)
++{
++    int error_code;
++
++    /* - ensure xpn is initialized... */
++    if (ad_xpn_helper_isInit == 0) {
++	    error_code = ad_xpn_helper_init(fd);
++	    if (error_code < 0) return ;
++	    ad_xpn_helper_isInit=1;
++    }
++
++    /* - try close file... */
++    (*err) = xpn_close(fd->fd_sys);
++
++#ifdef DEBUG
++    printf("%d = xpn_close(%d);\n",*err,fd->fd_sys);
++#endif
++}
++
++void ad_xpn_helper_writev(ADIO_File fd, const struct iovec * vector, int count, int *err)
++{
++    int ret ;
++    int i ;
++    int error_code;
++
++    /* - ensure xpn is initialized... */
++    if (ad_xpn_helper_isInit == 0) {
++	    error_code = ad_xpn_helper_init(fd);
++	    if (error_code < 0) return ;
++	    ad_xpn_helper_isInit=1;
++    }
++
++    /* - check params */
++    if (vector == NULL) {
++	    *err = 0; /* not error, but warning ? */
++	    return;
++    }
++
++    /* - make 'count' write requests... */
++    for (i=0; i<count; i++) {
++	    ret = xpn_write(fd->fd_sys,(vector[i]).iov_base,(vector[i]).iov_len);
++	    if (ret == -1) {
++	    	    *err = -1;
++	    	    return;
++    	    }
++#ifdef DEBUG
++            printf("%ld = xpn_write(%d,%ld,%ld);\n",ret,fd->fd_sys,(vector[i]).iov_base,(vector[i]).iov_len);
++#endif
++    }
++
++    /* - no errors found... */
++    *err = 0;
++}
++
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_helper.h mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_helper.h
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_helper.h	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_helper.h	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,28 @@
++/*
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#ifndef AD_XPN_HELPER
++#define AD_XPN_HELPER
++
++/*
++ * include
++ */
++#include "ad_xpn.h"
++#include "adio.h"
++
++/*
++ * define
++ */
++#define AD_XPN_DEFAULT_XPN_CONF "xpn.conf"
++
++/*
++ * functions
++ */
++void ad_xpn_helper_open(ADIO_File fd, int amode, int perm) ;
++void ad_xpn_helper_close(ADIO_File fd, int *err) ;
++void ad_xpn_helper_writev(ADIO_File fd, const struct iovec * vector, int count, int *err) ;
++
++#endif
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_hints.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_hints.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_hints.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_hints.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,49 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++void ADIOI_XPN_SetInfo(ADIO_File fd, MPI_Info users_info, int *error_code)
++{
++    int ret;
++    char *value;
++    int flag;
++
++    if (!(fd->info)) {
++
++	/* create MPI_Info object...  */
++	MPI_Info_create(&(fd->info));
++	
++	/* if user has specified parameters ensure 
++	 * we have the same value on all processes */
++	if (users_info != MPI_INFO_NULL) 
++	{
++	    /* - alloc memory */
++	    value = (char *) ADIOI_Malloc((MPI_MAX_INFO_VAL+1)*sizeof(char));
++
++	    /* - bcast value */
++	    MPI_Info_get(users_info, "xpn.conf", MPI_MAX_INFO_VAL, 
++			 value, &flag);
++	    if (flag) {
++		ret = MPI_Bcast(value, strlen(value), MPI_CHAR, 0, fd->comm);
++		if (ret != MPI_SUCCESS) {
++		    FPRINTF(stderr, 
++			    "ADIOI_XPN_SetInfo: the value for key \"xpn.conf\" can not be send to all processes\n");
++		    MPI_Abort(MPI_COMM_WORLD, 1);
++		}
++		else MPI_Info_set(fd->info, "xpn.conf", value);
++	    }
++
++	    /* - free memory */
++	    ADIOI_Free(value);
++	}
++    }	
++
++    /* set the values for collective I/O and data sieving parameters */
++    ADIOI_GEN_SetInfo(fd, users_info, error_code);
++
++    *error_code = MPI_SUCCESS;
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_iread.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_iread.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_iread.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_iread.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,67 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++void ADIOI_XPN_IreadContig(ADIO_File fd, void *buf, int count, 
++                MPI_Datatype datatype, int file_ptr_type,
++                ADIO_Offset offset, ADIO_Request *request, int *error_code)  
++{
++    ADIO_Status status;
++    int len, typesize;
++
++    /* XPN does not support nonblocking I/O. Therefore, use blocking I/O */
++    *request = ADIOI_Malloc_request();
++    (*request)->optype = ADIOI_READ;
++    (*request)->fd = fd;
++    (*request)->queued = 0;
++    (*request)->datatype = datatype;
++
++    MPI_Type_size(datatype, &typesize);
++    len = count * typesize;
++    ADIOI_XPN_ReadContig(fd, buf, len, MPI_BYTE, file_ptr_type, offset, &status,
++		    error_code);  
++
++#ifdef HAVE_STATUS_SET_BYTES
++    if (*error_code == MPI_SUCCESS) {
++	MPI_Get_elements(&status, MPI_BYTE, &len);
++	(*request)->nbytes = len;
++    }
++#endif
++    fd->async_count++;
++}
++
++
++
++void ADIOI_XPN_IreadStrided(ADIO_File fd, void *buf, int count, 
++		       MPI_Datatype datatype, int file_ptr_type,
++                       ADIO_Offset offset, ADIO_Request *request, int
++                       *error_code)
++{
++    ADIO_Status status;
++#ifdef HAVE_STATUS_SET_BYTES
++    int typesize;
++#endif
++
++    /* XPN does not support nonblocking I/O. Therefore, use blocking I/O */
++    *request = ADIOI_Malloc_request();
++    (*request)->optype = ADIOI_READ;
++    (*request)->fd = fd;
++    (*request)->queued = 0;
++    (*request)->datatype = datatype;
++
++    ADIOI_XPN_ReadStrided(fd, buf, count, datatype, file_ptr_type, 
++                            offset, &status, error_code);  
++
++    fd->async_count++;
++
++#ifdef HAVE_STATUS_SET_BYTES
++    if (*error_code == MPI_SUCCESS) {
++	MPI_Type_size(datatype, &typesize);
++	(*request)->nbytes = count * typesize;
++    }
++#endif
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_iwrite.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_iwrite.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_iwrite.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_iwrite.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,67 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++void ADIOI_XPN_IwriteContig(ADIO_File fd, void *buf, int count, 
++                MPI_Datatype datatype, int file_ptr_type,
++                ADIO_Offset offset, ADIO_Request *request, int *error_code)  
++{
++    ADIO_Status status;
++    int len, typesize;
++
++    /* XPN does not support nonblocking I/O. Therefore, use blocking I/O */
++    *request = ADIOI_Malloc_request();
++    (*request)->optype = ADIOI_WRITE;
++    (*request)->fd = fd;
++    (*request)->queued = 0;
++    (*request)->datatype = datatype;
++
++    MPI_Type_size(datatype, &typesize);
++    len = count * typesize;
++    ADIOI_XPN_WriteContig(fd, buf, len, MPI_BYTE, file_ptr_type, offset, &status,
++		    error_code);  
++
++#ifdef HAVE_STATUS_SET_BYTES
++    if (*error_code == MPI_SUCCESS) {
++	MPI_Get_elements(&status, MPI_BYTE, &len);
++	(*request)->nbytes = len;
++    }
++#endif
++    fd->async_count++;
++}
++
++
++void ADIOI_XPN_IwriteStrided(ADIO_File fd, void *buf, int count, 
++		       MPI_Datatype datatype, int file_ptr_type,
++                       ADIO_Offset offset, ADIO_Request *request, int
++                       *error_code)
++{
++    ADIO_Status status;
++#ifdef HAVE_STATUS_SET_BYTES
++    int typesize;
++#endif
++
++/* XPN does not support nonblocking I/O. Therefore, use blocking I/O */
++
++    *request = ADIOI_Malloc_request();
++    (*request)->optype = ADIOI_WRITE;
++    (*request)->fd = fd;
++    (*request)->queued = 0;
++    (*request)->datatype = datatype;
++
++    ADIOI_XPN_WriteStrided(fd, buf, count, datatype, file_ptr_type, 
++			    offset, &status, error_code);  
++
++    fd->async_count++;
++
++#ifdef HAVE_STATUS_SET_BYTES
++    if (*error_code == MPI_SUCCESS) {
++	MPI_Type_size(datatype, &typesize);
++	(*request)->nbytes = count * typesize;
++    }
++#endif
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_open.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_open.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_open.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_open.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,56 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++#include "ad_xpn_helper.h"
++
++void ADIOI_XPN_Open(ADIO_File fd, int *error_code)
++{
++    int perm, amode, old_mask;
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_OPEN";
++#endif
++
++    if (fd->perm == ADIO_PERM_NULL) {
++	old_mask = umask(022);
++	umask(old_mask);
++	perm = old_mask ^ 0666;
++    }
++    else perm = fd->perm;
++
++    amode = 0;
++    if (fd->access_mode & ADIO_CREATE)
++	amode = amode | O_CREAT;
++    if (fd->access_mode & ADIO_RDONLY)
++	amode = amode | O_RDONLY;
++    if (fd->access_mode & ADIO_WRONLY)
++	amode = amode | O_WRONLY;
++    if (fd->access_mode & ADIO_RDWR)
++	amode = amode | O_RDWR;
++    if (fd->access_mode & ADIO_EXCL)
++	amode = amode | O_EXCL;
++
++    ad_xpn_helper_open(fd,amode,perm);
++
++    if ((fd->fd_sys != -1) && (fd->access_mode & ADIO_APPEND))
++    {
++	fd->fp_ind = fd->fp_sys_posn = xpn_lseek(fd->fd_sys, 0, SEEK_END);
++#ifdef DEBUG
++        printf("%ld = xpn_lseek(%ld,%d,ld);\n",fd->fp_ind,fd->fd_sys,0,SEEK_END);
++#endif
++    }
++
++#ifdef PRINT_ERR_MSG
++    *error_code = (fd->fd_sys <= -1) ? MPI_ERR_UNKNOWN : MPI_SUCCESS;
++#else
++    if (fd->fd_sys <= -1) {
++        *error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++				      "I/O Error", "%s", strerror(errno));
++	ADIOI_Error(ADIO_FILE_NULL, *error_code, myname);	    
++    }
++    else *error_code = MPI_SUCCESS;
++#endif
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_rdcoll.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_rdcoll.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_rdcoll.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_rdcoll.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,18 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++/* not referenced from operations table */
++
++void ADIOI_XPN_ReadStridedColl(ADIO_File fd, void *buf, int count,
++                       MPI_Datatype datatype, int file_ptr_type,
++                       ADIO_Offset offset, ADIO_Status *status, int
++                       *error_code)
++{
++    ADIOI_GEN_ReadStridedColl(fd, buf, count, datatype, file_ptr_type,
++			      offset, status, error_code);
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_read.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_read.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_read.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_read.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,73 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++void ADIOI_XPN_ReadContig(ADIO_File fd, void *buf, int count, 
++                     MPI_Datatype datatype, int file_ptr_type,
++		     ADIO_Offset offset, ADIO_Status *status, int *error_code)
++{
++    int err=-1, datatype_size, len;
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_READCONTIG";
++#endif
++
++
++     MPI_Type_size(datatype, &datatype_size);
++    len = datatype_size * count;
++
++#ifdef DEBUG
++    printf("%d,%d>> ADIOI_XPN_ReadContig(%ld,%p,%d,%d);\n",datatype_size,count,fd->fd_sys,buf,(int)offset,len);
++#endif
++    if (file_ptr_type == ADIO_EXPLICIT_OFFSET) {
++	if (fd->fp_sys_posn != offset) 
++	     err = xpn_pread(fd->fd_sys, buf, len, (int)offset);
++	else err = xpn_read(fd->fd_sys, buf, len);
++	fd->fp_sys_posn = offset + err;
++#ifdef DEBUG
++if (fd->fp_sys_posn != offset) 
++        printf("%ld = xpn_pread(%ld,%p,%d,%d);\n",err,fd->fd_sys,buf,len,(int)offset);
++   else printf("%ld = xpn_read(%ld,%p,%d);\n",err,fd->fd_sys,buf,len);
++#endif
++    }
++    else {  
++	if (fd->fp_sys_posn != fd->fp_ind)
++	     err = xpn_pread(fd->fd_sys, buf, len, (int)fd->fp_ind);
++	else err = xpn_read(fd->fd_sys, buf, len);
++	fd->fp_ind += err; 
++	fd->fp_sys_posn = fd->fp_ind;
++#ifdef DEBUG
++if (fd->fp_sys_posn != fd->fp_ind)
++        printf("%ld = xpn_pread(%d,%p,%d,%d);\n",err,fd->fd_sys,buf,len,(int)fd->fp_ind);
++   else printf("%ld = xpn_read(%ld,%p,%d);\n",err,fd->fd_sys,buf,len);
++#endif
++    }         
++
++#ifdef HAVE_STATUS_SET_BYTES
++    if (err != -1) MPIR_Status_set_bytes(status, datatype, err);
++#endif
++
++#ifdef PRINT_ERR_MSG
++    *error_code = (err == -1) ? MPI_ERR_UNKNOWN : MPI_SUCCESS;
++#else
++    if (err == -1) {
++        *error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++				      "I/O Error", "%s", strerror(errno));
++	ADIOI_Error(fd, *error_code, myname);	    
++    }
++    else *error_code = MPI_SUCCESS;
++#endif
++}
++
++
++void ADIOI_XPN_ReadStrided(ADIO_File fd, void *buf, int count,
++                       MPI_Datatype datatype, int file_ptr_type,
++                       ADIO_Offset offset, ADIO_Status *status, int
++                       *error_code)
++{
++    ADIOI_GEN_ReadStrided(fd, buf, count, datatype, file_ptr_type,
++                        offset, status, error_code);
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_resize.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_resize.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_resize.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_resize.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,43 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++void ADIOI_XPN_Resize(ADIO_File fd, ADIO_Offset size, int *error_code)
++{
++#ifdef AD_XPN_HAVE_FTRUNCATE
++#else
++    int myrank, nprocs;
++#endif
++    int err;
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_RESIZE";
++#endif
++    
++#ifdef AD_XPN_HAVE_FTRUNCATE
++     err = xpn_ftruncate(fd->fd_sys, size);
++#else
++    MPI_Comm_size(fd->comm, &nprocs);
++    MPI_Comm_rank(fd->comm, &myrank);
++    FPRINTF(stdout, "[%d/%d] ADIOI_XPN_Resize called on %s\n but not yet implemented.", 
++	    myrank, nprocs, fd->filename);
++    err = 0;
++#endif
++
++#ifdef PRINT_ERR_MSG
++    *error_code = (err == 0) ? MPI_SUCCESS : MPI_ERR_UNKNOWN;
++#else
++    if (err == -1) {
++        *error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++				      "I/O Error", "%s", strerror(errno));
++	ADIOI_Error(fd, *error_code, myname);	    
++    }
++    else *error_code = MPI_SUCCESS;
++#endif
++}
++
++
++
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_seek.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_seek.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_seek.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_seek.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,81 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++#include "adio_extern.h"
++
++ADIO_Offset ADIOI_XPN_SeekIndividual(ADIO_File fd, ADIO_Offset offset, 
++		      int whence, int *error_code)
++{
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_SEEKINDIVIDUAL";
++#endif
++
++    ADIO_Offset off, err;
++    ADIOI_Flatlist_node *flat_file;
++
++    int i, n_etypes_in_filetype, n_filetypes, etype_in_filetype;
++    ADIO_Offset abs_off_in_filetype=0;
++    int size_in_filetype, sum;
++    int filetype_size, etype_size, filetype_is_contig;
++    MPI_Aint filetype_extent;
++
++    ADIOI_Datatype_iscontig(fd->filetype, &filetype_is_contig);
++    etype_size = fd->etype_size;
++
++    if (filetype_is_contig) off = fd->disp + etype_size * offset;
++    else {
++        flat_file = ADIOI_Flatlist;
++        while (flat_file->type != fd->filetype) flat_file = flat_file->next;
++
++	MPI_Type_extent(fd->filetype, &filetype_extent);
++	MPI_Type_size(fd->filetype, &filetype_size);
++	if ( ! filetype_size ) {
++	    *error_code = MPI_SUCCESS; 
++	    return 0;
++	}
++
++	n_etypes_in_filetype = filetype_size/etype_size;
++	n_filetypes = (int) (offset / n_etypes_in_filetype);
++	etype_in_filetype = (int) (offset % n_etypes_in_filetype);
++	size_in_filetype = etype_in_filetype * etype_size;
++ 
++	sum = 0;
++	for (i=0; i<flat_file->count; i++) {
++	    sum += flat_file->blocklens[i];
++	    if (sum > size_in_filetype) {
++		abs_off_in_filetype = flat_file->indices[i] +
++		    size_in_filetype - (sum - flat_file->blocklens[i]);
++		break;
++	    }
++	}
++
++	/* abs. offset in bytes in the file */
++	off = fd->disp + (ADIO_Offset) n_filetypes * filetype_extent +
++                abs_off_in_filetype;
++    }
++
++    err = xpn_lseek(fd->fd_sys, off, SEEK_SET);
++#ifdef DEBUG
++    printf("%ld = xpn_lseek(%ld,%lld,%ld);\n",err,fd->fd_sys,off,SEEK_SET);
++#endif
++
++    fd->fp_ind = off;
++    fd->fp_sys_posn = off;
++
++#ifdef PRINT_ERR_MSG
++    *error_code = (err == -1) ? MPI_ERR_UNKNOWN : MPI_SUCCESS;
++#else
++    if (err == -1) {
++        *error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++				      "I/O Error", "%s", strerror(errno));
++	ADIOI_Error(fd, *error_code, myname);	    
++    }
++    else *error_code = MPI_SUCCESS;
++#endif
++    return off;
++}
++
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_wait.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_wait.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_wait.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_wait.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,28 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++void ADIOI_XPN_ReadComplete(ADIO_Request *request, ADIO_Status *status, int *error_code)  
++{
++    if (*request == ADIO_REQUEST_NULL) {
++        *error_code = MPI_SUCCESS;
++        return;
++    }
++
++#ifdef HAVE_STATUS_SET_BYTES
++    MPIR_Status_set_bytes(status, (*request)->datatype, (*request)->nbytes);
++#endif
++    (*request)->fd->async_count--;
++    ADIOI_Free_request((ADIOI_Req_node *) (*request));
++    *request = ADIO_REQUEST_NULL;
++    *error_code = MPI_SUCCESS;
++}
++
++void ADIOI_XPN_WriteComplete(ADIO_Request *request, ADIO_Status *status, int *error_code)  
++{
++    ADIOI_XPN_ReadComplete(request, status, error_code);
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_wrcoll.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_wrcoll.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_wrcoll.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_wrcoll.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,18 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++
++/* not referenced from operations table */
++
++void ADIOI_XPN_WriteStridedColl(ADIO_File fd, void *buf, int count,
++                       MPI_Datatype datatype, int file_ptr_type,
++                       ADIO_Offset offset, ADIO_Status *status, int
++                       *error_code)
++{
++    ADIOI_GEN_WriteStridedColl(fd, buf, count, datatype, file_ptr_type,
++			      offset, status, error_code);
++}
+diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_write.c mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_write.c
+--- mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_write.c	Thu Jan  1 01:00:00 1970
++++ mpich-1.2.4-xpn/romio/adio/ad_xpn/ad_xpn_write.c	Fri Nov 22 19:56:59 2002
+@@ -0,0 +1,340 @@
++/* 
++ *   $Id: XPN-v2.00-linux-user-patch-MPICH-1.2.4,v 1.1 2004/11/04 15:23:31 bbergua Exp $    
++ *
++ *   Copyright (C) 2002 Universidad Carlos III de Madrid.
++ */
++
++#include "ad_xpn.h"
++#include "adio_extern.h"
++
++void ADIOI_XPN_WriteContig(ADIO_File fd, void *buf, int count, 
++                     MPI_Datatype datatype, int file_ptr_type,
++		     ADIO_Offset offset, ADIO_Status *status, int *error_code)
++{
++    long err=-1;
++    int datatype_size, len;
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_WRITECONTIG";
++#endif
++
++#ifdef DEBUG
++printf(">> ADIOI_XPN_WriteContig(%ld,%p,%lld,%ld);\n",fd->fd_sys,buf,offset,len);
++#endif
++
++    MPI_Type_size(datatype, &datatype_size);
++    len = datatype_size * count;
++
++    if (file_ptr_type == ADIO_EXPLICIT_OFFSET) {
++	if (fd->fp_sys_posn != offset) 
++	     err = xpn_pwrite(fd->fd_sys, buf, len, (int)offset);
++	else err = xpn_write(fd->fd_sys, buf, len);
++	fd->fp_sys_posn = offset + err;
++#ifdef DEBUG
++if (fd->fp_sys_posn != offset) 
++     printf("%ld = xpn_pwrite(%ld,%p,%ld,%lld);\n",err,fd->fd_sys,buf,len,offset);
++else printf("%ld = xpn_write(%ld,%p,%ld);\n",err,fd->fd_sys,buf,len);
++#endif
++    }
++    else { 
++	if (fd->fp_sys_posn != fd->fp_ind)
++	     err = xpn_pwrite(fd->fd_sys, buf, len, (int)fd->fp_ind);
++	else err = xpn_write(fd->fd_sys, buf, len);
++#ifdef DEBUG
++if (fd->fp_sys_posn != fd->fp_ind) 
++     printf("%ld = xpn_pwrite(%ld,%p,%ld,%lld);\n",err,fd->fd_sys,buf,len,fd->fp_ind);
++else printf("%ld = xpn_write(%ld,%p,%ld);\n",err,fd->fd_sys,buf,len);
++#endif
++	fd->fp_ind += err;
++	fd->fp_sys_posn = fd->fp_ind;
++    }
++
++#ifdef HAVE_STATUS_SET_BYTES
++    if (err != -1) MPIR_Status_set_bytes(status, datatype, err);
++#endif
++    
++
++#ifdef PRINT_ERR_MSG
++    *error_code = (err == -1) ? MPI_ERR_UNKNOWN : MPI_SUCCESS;
++#else
++    if (err == -1) {
++        *error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++				      "I/O Error", "%s", strerror(errno));
++	ADIOI_Error(fd, *error_code, myname);
++    }
++    else *error_code = MPI_SUCCESS;
++#endif
++}
++
++
++
++void ADIOI_XPN_WriteStrided(ADIO_File fd, void *buf, int count,
++                       MPI_Datatype datatype, int file_ptr_type,
++                       ADIO_Offset offset, ADIO_Status *status, int
++                       *error_code)
++{
++    /* Since XPN does not support file locking, 
++     * can't do buffered writes as on Unix */
++
++    ADIOI_Flatlist_node *flat_buf, *flat_file;
++    struct iovec *iov;
++    int i, j, k, err=-1, bwr_size, fwr_size=0, st_index=0;
++    int bufsize, num, size, sum, n_etypes_in_filetype, size_in_filetype;
++    int n_filetypes, etype_in_filetype;
++    ADIO_Offset abs_off_in_filetype=0;
++    int filetype_size, etype_size, buftype_size;
++    MPI_Aint filetype_extent, buftype_extent, indx;
++    int buf_count, buftype_is_contig, filetype_is_contig;
++    ADIO_Offset off, disp;
++    int flag, new_bwr_size, new_fwr_size, err_flag=0;
++#ifndef PRINT_ERR_MSG
++    static char myname[] = "ADIOI_XPN_WRITESTRIDED";
++#endif
++
++    if ((fd->iomode != M_ASYNC) && (fd->iomode != M_UNIX)) {
++	FPRINTF(stderr, "ADIOI_XPN_WriteStrided: only M_ASYNC and M_UNIX iomodes are valid\n");
++	MPI_Abort(MPI_COMM_WORLD, 1);
++    }
++
++    if (fd->atomicity) {
++	FPRINTF(stderr, "ROMIO cannot guarantee atomicity of noncontiguous accesses in atomic mode, as XPN doesn't support file locking. Use nonatomic mode and its associated semantics.\n");
++	MPI_Abort(MPI_COMM_WORLD, 1);
++    }
++
++    ADIOI_Datatype_iscontig(datatype, &buftype_is_contig);
++    ADIOI_Datatype_iscontig(fd->filetype, &filetype_is_contig);
++
++    MPI_Type_size(fd->filetype, &filetype_size);
++    if ( ! filetype_size ) {
++	*error_code = MPI_SUCCESS; 
++	return;
++    }
++
++    MPI_Type_extent(fd->filetype, &filetype_extent);
++    MPI_Type_size(datatype, &buftype_size);
++    MPI_Type_extent(datatype, &buftype_extent);
++    etype_size = fd->etype_size;
++    
++    bufsize = buftype_size * count;
++
++    if (!buftype_is_contig && filetype_is_contig) {
++
++	ADIOI_Flatten_datatype(datatype);
++	flat_buf = ADIOI_Flatlist;
++	while (flat_buf->type != datatype) flat_buf = flat_buf->next;
++
++	iov = (struct iovec *) ADIOI_Malloc(16*sizeof(struct iovec));
++
++	if (file_ptr_type == ADIO_EXPLICIT_OFFSET) {
++	    off = fd->disp + etype_size * offset;
++	    xpn_lseek(fd->fd_sys, off, SEEK_SET);
++#ifdef DEBUG
++            printf("xpn_lseek(%ld,%lld,%ld);\n",fd->fd_sys,off,SEEK_SET);
++#endif
++	}
++	else {
++		off = xpn_lseek(fd->fd_sys, fd->fp_ind, SEEK_SET);
++#ifdef DEBUG
++            printf("%ld = xpn_lseek(%ld,%lld,%ld);\n",off,fd->fd_sys,fd->fp_ind,SEEK_SET);
++#endif
++	}
++
++	k = 0;
++	for (j=0; j<count; j++) 
++	    for (i=0; i<flat_buf->count; i++) {
++
++		iov[k].iov_base = ((char *) buf) + j*buftype_extent +
++		flat_buf->indices[i]; 
++		iov[k].iov_len = flat_buf->blocklens[i];
++		/*FPRINTF(stderr, "%d %d\n", iov[k].iov_base, iov[k].iov_len);*/
++
++		off += flat_buf->blocklens[i];
++		k = (k+1)%16;
++
++		if (!k) {
++		    ad_xpn_helper_writev(fd->fd_sys, iov, 16, &err);
++		    if (err == -1) err_flag = 1;
++		}
++	    }
++
++	if (k) {
++	    ad_xpn_helper_writev(fd->fd_sys, iov, k, &err);
++	    if (err == -1) err_flag = 1;
++	}
++
++	if (file_ptr_type == ADIO_INDIVIDUAL) fd->fp_ind = off;
++
++	ADIOI_Free(iov);
++#ifdef PRINT_ERR_MSG
++	*error_code = (err_flag) ? MPI_ERR_UNKNOWN : MPI_SUCCESS;
++#else
++	if (err_flag) {
++            *error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++	    			          "I/O Error", "%s", strerror(errno));
++	    ADIOI_Error(fd, *error_code, myname);
++	}
++	else *error_code = MPI_SUCCESS;
++#endif
++    }
++
++    else {
++
++	flat_file = ADIOI_Flatlist;
++	while (flat_file->type != fd->filetype) flat_file = flat_file->next;
++        disp = fd->disp;
++
++	if (file_ptr_type == ADIO_INDIVIDUAL) {
++	    offset = fd->fp_ind; 
++            n_filetypes = -1;
++            flag = 0;
++            while (!flag) {
++                n_filetypes++;
++                for (i=0; i<flat_file->count; i++) {
++                    if (disp + flat_file->indices[i] + 
++                        (ADIO_Offset) n_filetypes*filetype_extent + flat_file->blocklens[i] 
++                            >= offset) {
++                        st_index = i;
++                        fwr_size = disp + flat_file->indices[i] + 
++                                (ADIO_Offset) n_filetypes*filetype_extent
++                                 + flat_file->blocklens[i] - offset;
++                        flag = 1;
++                        break;
++                    }
++                }
++            }
++	}
++	else {
++	    n_etypes_in_filetype = filetype_size/etype_size;
++	    n_filetypes = (int) (offset / n_etypes_in_filetype);
++	    etype_in_filetype = (int) (offset % n_etypes_in_filetype);
++	    size_in_filetype = etype_in_filetype * etype_size;
++ 
++	    sum = 0;
++	    for (i=0; i<flat_file->count; i++) {
++		sum += flat_file->blocklens[i];
++		if (sum > size_in_filetype) {
++		    st_index = i;
++		    fwr_size = sum - size_in_filetype;
++		    abs_off_in_filetype = flat_file->indices[i] +
++			size_in_filetype - (sum - flat_file->blocklens[i]);
++		    break;
++		}
++	    }
++
++            offset = disp + (ADIO_Offset) n_filetypes*filetype_extent + abs_off_in_filetype;
++	}
++
++	if (buftype_is_contig && !filetype_is_contig) {
++
++	    i = 0;
++	    j = st_index;
++	    off = offset;
++	    fwr_size = ADIOI_MIN(fwr_size, bufsize);
++	    while (i < bufsize) {
++                if (fwr_size) { 
++		    err = xpn_pwrite(fd->fd_sys, ((char *) buf) + i, fwr_size, fd->fd_sys);
++		    if (err == -1) err_flag = 1;
++#ifdef DEBUG
++                    printf("%ld = xpn_pwrite(%ld,%p,%ld,%ld);\n",
++			    err,fd->fd_sys,((char *)buf)+i,fwr_size,fd->fd_sys);
++#endif
++		}
++		i += fwr_size;
++
++                if (off + fwr_size < disp + flat_file->indices[j] +
++                   flat_file->blocklens[j] + (ADIO_Offset) n_filetypes*filetype_extent)
++                       off += fwr_size;
++                else {
++		    if (j < (flat_file->count - 1)) j++;
++		    else {
++			j = 0;
++			n_filetypes++;
++		    }
++		    off = disp + flat_file->indices[j] + 
++                                        (ADIO_Offset) n_filetypes*filetype_extent;
++		    fwr_size = ADIOI_MIN(flat_file->blocklens[j], bufsize-i);
++		}
++	    }
++	}
++	else {
++
++	    ADIOI_Flatten_datatype(datatype);
++	    flat_buf = ADIOI_Flatlist;
++	    while (flat_buf->type != datatype) flat_buf = flat_buf->next;
++
++	    k = num = buf_count = 0;
++	    indx = flat_buf->indices[0];
++	    j = st_index;
++	    off = offset;
++	    bwr_size = flat_buf->blocklens[0];
++
++	    while (num < bufsize) {
++		size = ADIOI_MIN(fwr_size, bwr_size);
++		if (size) {
++		    err = xpn_pwrite(fd->fd_sys, ((char *) buf) + indx, size, fd->fd_sys);
++		    if (err == -1) err_flag = 1;
++#ifdef DEBUG
++                    printf("%ld = xpn_pwrite(%ld,%p,%ld,%ld);\n",
++			    err,fd->fd_sys,((char *)buf)+indx,size,fd->fd_sys);
++#endif
++		}
++
++		new_fwr_size = fwr_size;
++		new_bwr_size = bwr_size;
++
++		if (size == fwr_size) {
++
++                    if (j < (flat_file->count - 1)) j++;
++                    else {
++                        j = 0;
++                        n_filetypes++;
++                    }
++
++                    off = disp + flat_file->indices[j] + 
++                                   (ADIO_Offset) n_filetypes*filetype_extent;
++
++		    new_fwr_size = flat_file->blocklens[j];
++		    if (size != bwr_size) {
++			indx += size;
++			new_bwr_size -= size;
++		    }
++		}
++
++		if (size == bwr_size) {
++
++		    k = (k + 1)%flat_buf->count;
++		    buf_count++;
++		    indx = buftype_extent*(buf_count/flat_buf->count) +
++			flat_buf->indices[k]; 
++		    new_bwr_size = flat_buf->blocklens[k];
++		    if (size != fwr_size) {
++			off += size;
++			new_fwr_size -= size;
++		    }
++		}
++		num += size;
++		fwr_size = new_fwr_size;
++                bwr_size = new_bwr_size;
++	    }
++	}
++
++        if (file_ptr_type == ADIO_INDIVIDUAL) fd->fp_ind = off;
++#ifdef PRINT_ERR_MSG
++	*error_code = (err_flag) ? MPI_ERR_UNKNOWN : MPI_SUCCESS;
++#else
++	if (err_flag) {
++            *error_code = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ADIO_ERROR, myname, 
++	    			          "I/O Error", "%s", strerror(errno));
++	    ADIOI_Error(fd, *error_code, myname);
++	}
++	else *error_code = MPI_SUCCESS;
++#endif
++    }
++
++    fd->fp_sys_posn = -1;
++
++#ifdef HAVE_STATUS_SET_BYTES
++    MPIR_Status_set_bytes(status, datatype, bufsize);
++#endif
++
++    if (!buftype_is_contig) ADIOI_Delete_flattened(datatype);
++}
+diff -burN mpich-1.2.4-orig/romio/adio/common/ad_fstype.c mpich-1.2.4-xpn/romio/adio/common/ad_fstype.c
+--- mpich-1.2.4-orig/romio/adio/common/ad_fstype.c	Tue Dec 18 21:46:10 2001
++++ mpich-1.2.4-xpn/romio/adio/common/ad_fstype.c	Fri Nov 22 19:56:14 2002
+@@ -111,6 +111,11 @@
+ 	}
+     }
+ #elif defined(LINUX)
++
++    #ifdef XPN
++       *fstype=ADIO_XPN;
++    #else
++
+     err = statfs(filename, &fsbuf);
+     if (err && (errno == ENOENT)) err = statfs(dir, &fsbuf);
+     free(dir);
+@@ -124,6 +129,8 @@
+ # endif
+ 	else *fstype = ADIO_UFS;
+     }
++    #endif
++
+ #elif (defined(FREEBSD) && defined(HAVE_MOUNT_NFS))
+     err = statfs(filename, &fsbuf);
+     if (err && (errno == ENOENT)) err = statfs(dir, &fsbuf);
+@@ -205,6 +212,9 @@
+     if (!strncmp(filename, "pfs:", 4) || !strncmp(filename, "PFS:", 4)) {
+ 	*fstype = ADIO_PFS;
+     }
++    else if (!strncmp(filename, "xpn:", 4) || !strncmp(filename, "XPN:", 4)) {
++	*fstype = ADIO_XPN;
++    }
+     else if (!strncmp(filename, "piofs:", 6) || !strncmp(filename, "PIOFS:", 6)) {
+ 	*fstype = ADIO_PIOFS;
+     }
+@@ -340,6 +350,21 @@
+ # endif
+ #else
+ 	*ops = &ADIO_PIOFS_operations;
++#endif
++    }
++    if (file_system == ADIO_XPN) {
++#ifndef XPN
++# ifdef PRINT_ERR_MSG
++	FPRINTF(stderr, "ADIO_ResolveFileType: ROMIO has not been configured to use the XPN file system\n");
++	MPI_Abort(MPI_COMM_WORLD, 1);
++# else
++	myerrcode = MPIR_Err_setmsg(MPI_ERR_IO, MPIR_ERR_NO_XPN,
++				     myname, (char *) 0, (char *) 0);
++	*error_code = ADIOI_Error(MPI_FILE_NULL, myerrcode, myname);
++	return;
++# endif
++#else
++	*ops = &ADIO_XPN_operations;
+ #endif
+     }
+     if (file_system == ADIO_UFS) {
+diff -burN mpich-1.2.4-orig/romio/adio/common/setfn.c mpich-1.2.4-xpn/romio/adio/common/setfn.c
+--- mpich-1.2.4-orig/romio/adio/common/setfn.c	Tue Nov 27 20:23:29 2001
++++ mpich-1.2.4-xpn/romio/adio/common/setfn.c	Fri Nov 22 19:56:14 2002
+@@ -32,6 +32,15 @@
+ #endif
+ 	break;
+ 
++    case ADIO_XPN:
++#ifdef XPN	
++	*(fd->fns) = ADIO_XPN_operations;
++#else
++	FPRINTF(stderr, "ADIOI_SetFunctions: ROMIO has not been configured to use the XPN file system\n");
++        MPI_Abort(MPI_COMM_WORLD, 1);
++#endif
++	break;
++
+     case ADIO_UFS:
+ #ifdef UFS	
+ 	*(fd->fns) = ADIO_UFS_operations;
+diff -burN mpich-1.2.4-orig/romio/adio/include/BaseIOErrMsgs.msg mpich-1.2.4-xpn/romio/adio/include/BaseIOErrMsgs.msg
+--- mpich-1.2.4-orig/romio/adio/include/BaseIOErrMsgs.msg	Fri Jan 21 21:55:41 2000
++++ mpich-1.2.4-xpn/romio/adio/include/BaseIOErrMsgs.msg	Fri Nov 22 19:56:14 2002
+@@ -34,6 +34,7 @@
+ 32	17	"ROMIO has not been configured to use the XFS file system"
+ 32	19	"ROMIO has not been configured to use the SFS file system"
+ 32	21	"ROMIO has not been configured to use the PVFS file system"
++32	22	"ROMIO has not been configured to use the XPN file system"
+ 32	23	"Only one active split collective I/O operation allowed per file handle"
+ 32	25	"No previous split collective begin"
+ 32	27	"There are outstanding nonblocking I/O operations on this file"
+diff -burN mpich-1.2.4-orig/romio/adio/include/adio.h mpich-1.2.4-xpn/romio/adio/include/adio.h
+--- mpich-1.2.4-orig/romio/adio/include/adio.h	Thu Dec 13 00:38:02 2001
++++ mpich-1.2.4-xpn/romio/adio/include/adio.h	Fri Nov 22 19:56:14 2002
+@@ -259,6 +259,7 @@
+ #define ADIO_PVFS                157   /* PVFS for Linux Clusters from Clemson Univ. */
+ #define ADIO_NTFS                158   /* NTFS for Windows NT */
+ #define ADIO_TESTFS              159   /* fake file system for testing */
++#define ADIO_XPN                 160   /* Expand (see http://arcos.inf.uc3m.es/~xpn/ */
+ 
+ #define ADIO_SEEK_SET            SEEK_SET
+ #define ADIO_SEEK_CUR            SEEK_CUR
+diff -burN mpich-1.2.4-orig/romio/adio/include/adioi_errmsg.h mpich-1.2.4-xpn/romio/adio/include/adioi_errmsg.h
+--- mpich-1.2.4-orig/romio/adio/include/adioi_errmsg.h	Wed Aug  1 17:30:20 2001
++++ mpich-1.2.4-xpn/romio/adio/include/adioi_errmsg.h	Fri Nov 22 19:56:14 2002
+@@ -45,6 +45,7 @@
+     MPIR_ERR_NO_XFS "ROMIO has not been configured to use the XFS file system"
+     MPIR_ERR_NO_SFS "ROMIO has not been configured to use the SFS file system"
+     MPIR_ERR_NO_PVFS "ROMIO has not been configured to use the PVFS file system"
++    MPIR_ERR_NO_XPN "ROMIO has not been configured to use the XPN file system"
+     MPIR_ERR_MULTIPLE_SPLIT_COLL "Only one active split collective I/O operation allowed per file handle"
+     MPIR_ERR_NO_SPLIT_COLL "No previous split collective begin"
+     MPIR_ERR_ASYNC_OUTSTANDING "There are outstanding nonblocking I/O operations on this file"
+diff -burN mpich-1.2.4-orig/romio/adio/include/adioi_fs_proto.h mpich-1.2.4-xpn/romio/adio/include/adioi_fs_proto.h
+--- mpich-1.2.4-orig/romio/adio/include/adioi_fs_proto.h	Tue Nov 27 20:23:33 2001
++++ mpich-1.2.4-xpn/romio/adio/include/adioi_fs_proto.h	Fri Nov 22 19:56:14 2002
+@@ -578,4 +578,70 @@
+ /* prototypes are in adio/ad_testfs/ad_testfs.h */
+ #endif
+ 
++#ifdef XPN
++extern struct ADIOI_Fns_struct ADIO_XPN_operations;
++
++void ADIOI_XPN_Open(ADIO_File fd, int *error_code);
++void ADIOI_XPN_Close(ADIO_File fd, int *error_code);
++void ADIOI_XPN_ReadContig(ADIO_File fd, void *buf, int count, 
++                      MPI_Datatype datatype, int file_ptr_type,
++                     ADIO_Offset offset, ADIO_Status *status, int
++		     *error_code);
++void ADIOI_XPN_WriteContig(ADIO_File fd, void *buf, int count, 
++                      MPI_Datatype datatype, int file_ptr_type,
++                      ADIO_Offset offset, ADIO_Status *status, int
++		      *error_code);   
++void ADIOI_XPN_IwriteContig(ADIO_File fd, void *buf, int count, 
++                      MPI_Datatype datatype, int file_ptr_type,
++                      ADIO_Offset offset, ADIO_Request *request, int
++		      *error_code);   
++void ADIOI_XPN_IreadContig(ADIO_File fd, void *buf, int count, 
++                      MPI_Datatype datatype, int file_ptr_type,
++                      ADIO_Offset offset, ADIO_Request *request, int
++		      *error_code);   
++int ADIOI_XPN_ReadDone(ADIO_Request *request, ADIO_Status *status, int
++		       *error_code);
++int ADIOI_XPN_WriteDone(ADIO_Request *request, ADIO_Status *status, int
++		       *error_code);
++void ADIOI_XPN_ReadComplete(ADIO_Request *request, ADIO_Status *status, int
++		       *error_code); 
++void ADIOI_XPN_WriteComplete(ADIO_Request *request, ADIO_Status *status,
++			int *error_code); 
++void ADIOI_XPN_Fcntl(ADIO_File fd, int flag, ADIO_Fcntl_t *fcntl_struct, int
++		*error_code); 
++void ADIOI_XPN_WriteStrided(ADIO_File fd, void *buf, int count,
++		       MPI_Datatype datatype, int file_ptr_type,
++		       ADIO_Offset offset, ADIO_Status *status, int
++		       *error_code);
++void ADIOI_XPN_ReadStrided(ADIO_File fd, void *buf, int count,
++		       MPI_Datatype datatype, int file_ptr_type,
++		       ADIO_Offset offset, ADIO_Status *status, int
++		       *error_code);
++void ADIOI_XPN_WriteStridedColl(ADIO_File fd, void *buf, int count,
++		       MPI_Datatype datatype, int file_ptr_type,
++		       ADIO_Offset offset, ADIO_Status *status, int
++		       *error_code);
++void ADIOI_XPN_ReadStridedColl(ADIO_File fd, void *buf, int count,
++		       MPI_Datatype datatype, int file_ptr_type,
++		       ADIO_Offset offset, ADIO_Status *status, int
++		       *error_code);
++void ADIOI_XPN_IreadStrided(ADIO_File fd, void *buf, int count,
++		       MPI_Datatype datatype, int file_ptr_type,
++		       ADIO_Offset offset, ADIO_Request *request, int
++		       *error_code);
++void ADIOI_XPN_IwriteStrided(ADIO_File fd, void *buf, int count,
++		       MPI_Datatype datatype, int file_ptr_type,
++		       ADIO_Offset offset, ADIO_Request *request, int
++		       *error_code);
++void ADIOI_XPN_Flush(ADIO_File fd, int *error_code);
++void ADIOI_XPN_Resize(ADIO_File fd, ADIO_Offset size, int *error_code);
++ADIO_Offset ADIOI_XPN_SeekIndividual(ADIO_File fd, ADIO_Offset offset, 
++                       int whence, int *error_code);
++void ADIOI_XPN_SetInfo(ADIO_File fd, MPI_Info users_info, int *error_code);
++void ADIOI_XPN_Get_shared_fp(ADIO_File fd, int size, ADIO_Offset *shared_fp, 
++			 int *error_code);
++void ADIOI_XPN_Set_shared_fp(ADIO_File fd, ADIO_Offset offset, int *error_code);
++void ADIOI_XPN_Delete(char *filename, int *error_code);
++#endif
++
+ #endif
+diff -burN mpich-1.2.4-orig/romio/adio/include/mpio_error.h mpich-1.2.4-xpn/romio/adio/include/mpio_error.h
+--- mpich-1.2.4-orig/romio/adio/include/mpio_error.h	Wed Nov 14 20:25:42 2001
++++ mpich-1.2.4-xpn/romio/adio/include/mpio_error.h	Fri Nov 22 19:56:14 2002
+@@ -48,6 +48,7 @@
+ #define MPIR_ERR_NO_XFS 17
+ #define MPIR_ERR_NO_SFS 19
+ #define MPIR_ERR_NO_PVFS 21
++#define MPIR_ERR_NO_XPN 22
+ #define MPIR_ERR_MULTIPLE_SPLIT_COLL 23
+ #define MPIR_ERR_NO_SPLIT_COLL 25
+ #define MPIR_ERR_ASYNC_OUTSTANDING 27
+diff -burN mpich-1.2.4-orig/romio/adio/include/romioconf.h.in mpich-1.2.4-xpn/romio/adio/include/romioconf.h.in
+--- mpich-1.2.4-orig/romio/adio/include/romioconf.h.in	Thu May  2 22:52:13 2002
++++ mpich-1.2.4-xpn/romio/adio/include/romioconf.h.in	Fri Nov 22 19:56:14 2002
+@@ -60,6 +60,7 @@
+ #undef PRINT_ERR_MSG
+ #undef ROMIO_PVFS
+ #undef ROMIO_TESTFS
++#undef XPN
+ #undef SFS
+ #undef SOLARIS
+ #undef SPPUX
+diff -burN mpich-1.2.4-orig/romio/configure mpich-1.2.4-xpn/romio/configure
+--- mpich-1.2.4-orig/romio/configure	Thu May  2 22:52:12 2002
++++ mpich-1.2.4-xpn/romio/configure	Fri Nov 22 19:56:14 2002
+@@ -35,10 +35,10 @@
+ where
+    FILE_SYSTEM  = the file system(s) for which ROMIO is to be configured.
+                   Valid values are pfs, piofs, hfs, xfs, sfs, pvfs, ufs,
+-                  and nfs (case-sensitive). They correspond to Intel's PFS, 
++                  nfs (case-sensitive) y xpn. They correspond to Intel's PFS, 
+                   IBM's PIOFS, HP/Convex's HFS, SGI's XFS, NEC's SFS, 
+                   Clemson University's PVFS (for Linux clusters), any Unix 
+-                  file system, and NFS. 
++                  file system, NFS, and Expand. 
+                   To configure for multiple file systems, use "+" as a 
+                   separator; e.g., ufs+nfs
+    ARCH_TYPE    = the type of machine for which ROMIO is to be configured.
+@@ -179,7 +179,7 @@
+ TEST_F77=""
+ TRY_WEAK_SYMBOLS=1
+ #
+-known_filesystems="nfs ufs pfs piofs pvfs testfs xfs hfs sfs"
++known_filesystems="nfs ufs pfs piofs pvfs testfs xpn xfs hfs sfs"
+ known_mpi_impls="mpich_mpi sgi_mpi hp_mpi cray_mpi lam_mpi"
+ #
+ # Defaults
+@@ -4187,6 +4187,20 @@
+ }
+ 
+ fi
++if test -n "$file_system_xpn"; then
++        
++{
++test -n "$verbose" && \
++echo "	defining XPN"
++echo "#define" XPN 1 >> confdefs.h
++DEFS="$DEFS -DXPN=1"
++SEDDEFS="${SEDDEFS}\${SEDdA}XPN\${SEDdB}XPN\${SEDdC}1\${SEDdD}
++\${SEDuA}XPN\${SEDuB}XPN\${SEDuC}1\${SEDuD}
++\${SEDeA}XPN\${SEDeB}XPN\${SEDeC}1\${SEDeD}
++"
++}
++
++fi
+ if test -n "$file_system_testfs"; then
+         
+ {
+@@ -4792,6 +4806,7 @@
+ 		   adio/ad_nfs/Makefile adio/ad_ufs/Makefile \
+ 		   adio/ad_xfs/Makefile adio/ad_hfs/Makefile \
+ 		   adio/ad_sfs/Makefile adio/ad_pfs/Makefile \
++		   adio/ad_xpn/Makefile \
+ 		   adio/ad_testfs/Makefile adio/ad_pvfs/Makefile \
+ 		   adio/ad_piofs/Makefile  adio/include/romioconf.h conftest*; exit 1' 1 3 15
+ VPATH='$VPATH'
+@@ -4882,6 +4897,7 @@
+ 		   adio/ad_nfs/Makefile adio/ad_ufs/Makefile \
+ 		   adio/ad_xfs/Makefile adio/ad_hfs/Makefile \
+ 		   adio/ad_sfs/Makefile adio/ad_pfs/Makefile \
++		   adio/ad_xpn/Makefile \
+ 		   adio/ad_testfs/Makefile adio/ad_pvfs/Makefile \
+ 		   adio/ad_piofs/Makefile "}
+ for file in .. ${CONFIG_FILES}; do if test "x$file" != x..; then

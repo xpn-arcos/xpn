@@ -1,0 +1,2 @@
+init nfs://pato11/export/home/pato11/PNFS/
+mkdir nfs://pato11/export/home/pato11/PNFS/directorio

@@ -1,0 +1,81 @@
+# Makefile for the I/O benchmark -- ASCI Blue
+
+# objects
+OBJS = get_mfluid_property.o \
+       flash_release.o \
+       flash_benchmark_io.o 
+
+OBJS_HDF5_PARALLEL_IO = checkpoint_hdf5_parallel.o \
+                        plotfile_hdf5_parallel.o \
+                        h5_file_interface.o \
+                        h5_parallel_write.o \
+                        h5_parallel_write_single.o
+
+# compiler and linker commands
+FCOMP   = newmpxlf
+CCOMP   = newmpcc
+CPPCOMP = newmpCC
+LINK    = newmpxlf
+
+
+# library locations
+HDF5path = /usr/local/hdf5/hdf5-1.4.2/parallel
+
+# compiler flags
+FFLAGS = -c -O3 -qintsize=4 -qrealsize=8 -cpp -qtune=auto \
+         -WF,-DN_DIM=3 -WF,-DMAXBLOCKS=100, -WF,-DIONMAX=13 
+
+F90FLAGS = -qsuffix=f=F90:cpp=F90 -qfree
+
+CFLAGS = -c -O3 -I $(HDF5path)/include/ -DIBM -DN_DIM=3 -qtune=auto
+
+.SUFFIXES: .f .F .f90 .F90 .c .C .o
+
+# linker flags
+LFLAGS = -brename:.h5_open_file_for_read_,.h5_open_file_for_read \
+         -brename:.h5_close_file_,.h5_close_file \
+         -brename:.h5_initialize_file_,.h5_initialize_file \
+         -brename:.h5_write_header_info_,.h5_write_header_info \
+         -brename:.h5_write_lrefine_,.h5_write_lrefine \
+         -brename:.h5_write_nodetype_,.h5_write_nodetype \
+         -brename:.h5_write_gid_,.h5_write_gid \
+         -brename:.h5_write_coord_,.h5_write_coord \
+         -brename:.h5_write_size_,.h5_write_size \
+         -brename:.h5_write_bnd_box_,.h5_write_bnd_box \
+         -brename:.h5_write_bnd_box_min_,.h5_write_bnd_box_min \
+         -brename:.h5_write_bnd_box_max_,.h5_write_bnd_box_max \
+         -brename:.h5_write_unknowns_,.h5_write_unknowns \
+         -brename:.h5_write_header_info_sp_,.h5_write_header_info_sp \
+         -brename:.h5_write_coord_sp_,.h5_write_coord_sp \
+         -brename:.h5_write_size_sp_,.h5_write_size_sp \
+         -brename:.h5_write_bnd_box_sp_,.h5_write_bnd_box_sp \
+         -brename:.h5_write_bnd_box_min_sp_,.h5_write_bnd_box_min_sp \
+         -brename:.h5_write_bnd_box_max_sp_,.h5_write_bnd_box_max_sp \
+         -brename:.h5_write_unknowns_sp_,.h5_write_unknowns_sp \
+         -o
+
+
+# libraries to include
+LIB = -L $(HDF5path)/lib -lhdf5 -L /usr/local/lib -lz -bmaxdata:0x80000000
+
+
+.SUFFIXES: .f .F .f90 .F90 .c .C .o
+
+.F90.o :
+	$(FCOMP) $(FFLAGS) $(F90FLAGS) $<
+
+.c.o :
+	$(CCOMP) $(CFLAGS) $<
+
+flash_benchmark_io: $(OBJS) \
+                    $(OBJS_HDF5_PARALLEL_IO) 
+	$(LINK) $(LFLAGS) $@ $(OBJS) $(OBJS_HDF5_PARALLEL_IO) $(LIB)
+
+
+
+
+
+
+
+
+

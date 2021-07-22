@@ -1,0 +1,11 @@
+OBJECTS
+xpn2_close.c
+xpn2_destroy.c
+xpn2_init.c
+xpn2_open.c
+xpn2_opendir.c
+xpn2_creat.c
+xpn2_read.c
+xpn2_write.c
+xpn2_ioctl.c
+xpn2_lseek.c

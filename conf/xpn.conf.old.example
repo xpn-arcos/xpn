@@ -1,0 +1,9 @@
+PNFS 64 2 NORMAL
+file:///tmp/pruebas/expand1
+file:///tmp/pruebas/expand2
+nfs://faisan1.arcos.inf.uc3m.es/grid
+nfs://faisan2.arcos.inf.uc3m.es/grid
+xio://faisan1.arcos.inf.uc3m.es/grid
+xio://faisan2.arcos.inf.uc3m.es/grid
+gsoap://faisan1.arcos.inf.uc3m.es:3000/grid
+gsoap://faisan2.arcos.inf.uc3m.es:3000/grid

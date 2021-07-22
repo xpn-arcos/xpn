@@ -1,0 +1,880 @@
+#
+# Usage:
+#    mkdir /tmp/foo
+#    /path/to/fuse-expand -d /tmp/foo
+#    make check
+#
+# '@<:@' escapes '[' and '@:>@' escapes ']'
+# For escape characters see http://www.gnu.org/software/autoconf/manual/autoconf.html#Quadrigraphs
+#
+# TODO:
+#  - Check if is it possible to use
+#    AS_IF([test "`id -u`" = "0"], [
+#    ])
+#    to avoid execute some tests when non-root.
+#
+
+AT_INIT(syscalls)
+
+
+AT_BANNER(open)
+
+AT_SETUP(open01)
+AT_DATA([expout], [open01      1  PASS  :  Save text bit not cleared as expected
+open01      2  PASS  :  directory bit is set as expected
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(open02)
+AT_DATA([expout], [open02      1  PASS  :  open returned ENOENT
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(open03)
+AT_DATA([expout], [open03      1  PASS  :  open(, O_RDWR|O_CREAT,0700) returned 3
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open03 | sed s/tfile_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(open04)
+AT_DATA([expout], [open04      1  PASS  :  call returned expected EMFILE error
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open04], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(open05)
+AT_DATA([expout], [open05      1  PASS  :  open returned expected EACCES error
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open05], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(open06)
+AT_DATA([expout], [open06      1  PASS  :  call returned expected ENXIO error
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open06], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(open07)
+AT_DATA([expout], [open07      1  PASS  :  open returned expected ELOOP error
+open07      2  PASS  :  open returned expected ELOOP error
+open07      3  PASS  :  open returned expected ELOOP error
+open07      4  PASS  :  open returned expected ELOOP error
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open07], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(open08)
+AT_DATA([expout], [open08      1  PASS  :  expected failure - errno = 17 : File exists
+open08      2  PASS  :  expected failure - errno = 21 : Is a directory
+open08      3  PASS  :  expected failure - errno = 20 : Not a directory
+open08      4  PASS  :  expected failure - errno = 36 : File name too long
+open08      5  PASS  :  expected failure - errno = 13 : Permission denied
+open08      6  PASS  :  expected failure - errno = 14 : Bad address
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open08], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(open09)
+AT_DATA([expout], [open09      1  PASS  :  Test passed in block0.
+open09      2  PASS  :  Test passed in block1.
+open09      3  PASS  :  Test passed.
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open09], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(open10)
+AT_DATA([expout], [open10      1  PASS  :  Test passed in block0.
+open10      2  PASS  :  Test passed in block1.
+open10      3  PASS  :  Test passed in block2.
+open10      4  PASS  :  Test passed in block3.
+open10      5  PASS  :  Test passed.
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/open/open10], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(close)
+
+AT_SETUP(close01)
+AT_DATA([expout], [close01     1  PASS  :  file appears closed
+close01     2  PASS  :  pipe appears closed
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/close/close01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(close02)
+AT_DATA([expout], [close02     1  PASS  :  call returned EBADF
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/close/close02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(close08)
+AT_DATA([expout], [close08     1  PASS  :  close() returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/close/close08 | sed s/tfile_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(creat)
+
+AT_SETUP(creat01)
+AT_DATA([expout], [creat01     1  PASS  :  file was created and written to successfully
+creat01     2  PASS  :  creat() truncated existing file to 0 bytes
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/creat/creat01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(creat03)
+AT_DATA([expout], [creat03     0  INFO  :  Created file has mode = 0100444
+creat03     1  PASS  :  save text bit cleared
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/creat/creat03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(creat04)
+AT_DATA([expout], [creat04     1  PASS  :  call failed with expected EACCES error
+creat04     2  PASS  :  call failed with expected EACCES error
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/creat/creat04], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(creat05)
+AT_DATA([expout], [creat05     0  INFO  :  first file is #3
+creat05     0  INFO  :  could not creat file #1024
+creat05     1  PASS  :  call failed with expected error - EMFILE
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/creat/creat05], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(creat06)
+AT_DATA([expout], [creat06     1  PASS  :  expected failure - errno = 21 : Is a directory
+creat06     2  PASS  :  expected failure - errno = 36 : File name too long
+creat06     3  PASS  :  expected failure - errno = 2 : No such file or directory
+creat06     4  PASS  :  expected failure - errno = 20 : Not a directory
+creat06     5  PASS  :  expected failure - errno = 14 : Bad address
+creat06     6  PASS  :  expected failure - errno = 13 : Permission denied
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/creat/creat06], [], [expout], [ignore])
+AT_CLEANUP
+
+#AT_SETUP(creat07)
+#AT_DATA([expout], [creat07     1  PASS  :  received ETXTBSY
+#])
+#AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/creat/creat07 -F test1], [], [expout], [ignore])
+#AT_CLEANUP
+
+AT_SETUP(creat08)
+AT_DATA([expout], [creat08     1  PASS  :  Test passed in block0.
+creat08     2  PASS  :  Test passed in block1.
+creat08     3  PASS  :  Test passed in block2.
+creat08     4  PASS  :  Test passed in block3.
+creat08     5  PASS  :  Test passed.
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/creat/creat08], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(creat09)
+AT_DATA([expout], [creat09     1  PASS  :  creat(, 0700) returned 3
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/creat/creat09 | sed s/tfile_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(pread)
+
+AT_SETUP(pread01)
+AT_DATA([expout], [pread01     1  PASS  :  Functionality of pread() is correct
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/pread/pread01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(pread02)
+AT_DATA([expout], [pread02     1  PASS  :  pread() fails, file descriptor is a PIPE or FIFO, errno:29
+pread02     2  PASS  :  pread() fails, specified offset is -ve or invalid, errno:22
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/pread/pread02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(pread03)
+AT_DATA([expout], [pread03     1  PASS  :  pread() fails with expected error EISDIR errno:21
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/pread/pread03], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(read)
+
+AT_SETUP(read01)
+AT_DATA([expout], [read01      1  PASS  :  read(pfds) returned 512
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/read/read01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(read02)
+AT_DATA([expout], [read02      1  PASS  :  expected failure - errno = 9 : Bad file descriptor
+read02      2  PASS  :  expected failure - errno = 21 : Is a directory
+read02      3  PASS  :  expected failure - errno = 14 : Bad address
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/read/read02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(read03)
+AT_DATA([expout], [read03      0  INFO  :  read() succeded in setting errno to EAGAIN
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/read/read03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(read04)
+AT_DATA([expout], [read04      1  PASS  :  functionality of read() is correct
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/read/read04], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(pwrite)
+
+AT_SETUP(pwrite01)
+AT_DATA([expout], [pwrite01    1  PASS  :  Functionality of pwrite() successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/pwrite/pwrite01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(pwrite02)
+AT_DATA([expout], [pwrite02    1  PASS  :  file descriptor is a PIPE or FIFO, errno:29
+pwrite02    2  PASS  :  specified offset is -ve or invalid, errno:22
+pwrite02    3  PASS  :  file descriptor is bad, errno:9
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/pwrite/pwrite02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(pwrite03)
+AT_DATA([expout], [pwrite03    1  PASS  :  pwrite() fails with expected error EFAULT errno:14
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/pwrite/pwrite03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(pwrite04)
+AT_DATA([expout], [pwrite04    1  PASS  :  O_APPEND test passed.
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/pwrite/pwrite04], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(write)
+
+AT_SETUP(write01)
+AT_DATA([expout], [write01     1  PASS  :  write(, F_CLRALF, 1) returned 1
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/write/write01 | sed s/tfile_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(write02)
+AT_DATA([expout], [write02     0  INFO  :  Block 1: test to see write() returns proper write count
+write02     1  PASS  :  write() PASSED
+write02     0  INFO  :  block 1 passed
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/write/write02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(write03)
+AT_DATA([expout], [write03     0  INFO  :  Enter Block 1: test to check if write corrupts the file when write fails
+write03     1  PASS  :  failure of write(2) didnot corrupt the file
+write03     0  INFO  :  Exit block 1
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/write/write03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(write04)
+AT_DATA([expout], [write04     0  INFO  :  Enter block 1: test for EAGAIN in write()
+write04     0  INFO  :  read() succeded in setting errno to EAGAIN
+write04     1  PASS  :  Block 1 PASSED
+write04     0  INFO  :  Exit block 1
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/write/write04], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(write05)
+AT_DATA([expout], [write05     0  INFO  :  Enter Block 1: test with bad fd
+write05     1  PASS  :  received EBADF as expected.
+write05     0  INFO  :  Exit Block 1
+write05     0  INFO  :  Enter Block 2: test with a bad address
+write05     2  PASS  :  received EFAULT as expected.
+write05     0  INFO  :  Exit Block 2
+write05     0  INFO  :  Enter Block 3: test with invalid pipe
+write05     0  INFO  :  Enter Block 1: test with bad fd
+write05     1  PASS  :  received EBADF as expected.
+write05     0  INFO  :  Exit Block 1
+write05     0  INFO  :  Enter Block 2: test with a bad address
+write05     2  PASS  :  received EFAULT as expected.
+write05     0  INFO  :  Exit Block 2
+write05     0  INFO  :  Enter Block 3: test with invalid pipe
+write05     3  PASS  :  received EPIPE as expected.
+write05     0  INFO  :  Exit Block 3
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/write/write05], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(lseek)
+
+AT_SETUP(lseek01)
+AT_DATA([expout], [lseek01     1  PASS  :  lseek(, 0, 0) returned 0
+lseek01     2  PASS  :  lseek(, 0, 1) returned 0
+lseek01     3  PASS  :  lseek(, 0, 2) returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek01 | sed s/tfile_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(lseek02)
+AT_DATA([expout], [lseek02     1  PASS  :  lseek(-1, 1, SEEK_SET) Failed, errno=9 : Bad file descriptor
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(lseek03)
+AT_DATA([expout], [lseek03     1  PASS  :  lseek(, 1, 4) Failed, errno=22 : Invalid argument
+lseek03     2  PASS  :  lseek(, 1, -1) Failed, errno=22 : Invalid argument
+lseek03     3  PASS  :  lseek(, 1, 7) Failed, errno=22 : Invalid argument
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek03 | sed s/tfile_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(lseek04)
+AT_DATA([expout], [lseek04     1  PASS  :  lseek(fifofd, 1, SEEK_SET) Failed, errno=29 : Illegal seek
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek04], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(lseek05)
+AT_DATA([expout], [lseek05     1  PASS  :  lseek(pipefd, 1, SEEK_SET) Failed, errno=29 : Illegal seek
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek05], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(lseek06)
+AT_DATA([expout], [lseek06     1  PASS  :  Functionality of lseek() on tmp_file successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek06], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(lseek07)
+AT_DATA([expout], [lseek07     1  PASS  :  Functionality of lseek() on tmp_file successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek07], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(lseek08)
+AT_DATA([expout], [lseek08     1  PASS  :  Functionality of lseek() on tmp_file successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek08], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(lseek09)
+AT_DATA([expout], [lseek09     1  PASS  :  Functionality of lseek() on tmp_file successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek09], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(lseek10)
+AT_DATA([expout], [lseek10     1  PASS  :  lseek() fails, 'fd' associated with a pipe/fifo, errno:29
+lseek10     2  PASS  :  lseek() fails, 'whence' argument is not valid, errno:22
+lseek10     3  PASS  :  lseek() fails, 'fd' is not an open file descriptor, errno:9
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/lseek/lseek10], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(stat)
+
+AT_SETUP(stat01)
+AT_DATA([expout], [stat01      1  PASS  :  Functionality of stat(2) on 'testfile' Succcessful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/stat/stat01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(stat02)
+AT_DATA([expout], [stat02      1  PASS  :  Functionality of stat(2) on 'testfile' Succcessful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/stat/stat02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(stat03)
+AT_DATA([expout], [stat03      1  PASS  :  stat() fails, No Search permissions to process, errno:13
+stat03      2  PASS  :  stat() fails, Address beyond address space, errno:14
+stat03      3  PASS  :  stat() fails, Negative address, errno:14
+stat03      4  PASS  :  stat() fails, Pathname too long, errno:36
+stat03      5  PASS  :  stat() fails, Pathname is empty, errno:2
+stat03      6  PASS  :  stat() fails, Path contains regular file, errno:20
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/stat/stat03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(stat05)
+AT_DATA([expout], [stat05      1  PASS  :  stat(, &statter) returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/stat/stat05 | sed s/tfile_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(stat06)
+AT_DATA([expout], [stat06      1  PASS  :  stat(<non-existent file>, &stbuf) Failed, errno=2
+stat06      2  PASS  :  stat(<path is empty string>, &stbuf) Failed, errno=2
+stat06      3  PASS  :  stat(<path contains a non-existent file>, &stbuf) Failed, errno=2
+stat06      4  PASS  :  stat(<path contains a regular file>, &stbuf) Failed, errno=20
+stat06      5  PASS  :  stat(<pathname too long>, &stbuf) Failed, errno=36
+stat06      6  PASS  :  stat(<address beyond address space>, &stbuf) Failed, errno=14
+stat06      7  PASS  :  stat(<negative address>, &stbuf) Failed, errno=14
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/stat/stat06], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(fstat)
+
+AT_SETUP(fstat01)
+AT_DATA([expout], [fstat01     1  PASS  :  fstat(, &statter) returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/fstat/fstat01 | sed s/tfile_[[0-9]]*//1], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(fstat02)
+AT_DATA([expout], [fstat02     1  PASS  :  Functionality of fstat(2) on 'testfile' Succcessful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/fstat/fstat02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(fstat03)
+AT_DATA([expout], [fstat03     1  PASS  :  fstat() fails with expected error EBADF
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/fstat/fstat03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(fstat04)
+AT_DATA([expout], [fstat04     1  PASS  :  Functionality of fstat(2) on 'testfile' Succcessful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/fstat/fstat04], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(fstat05)
+AT_DATA([expout], [fstat05     1  PASS  :  fstat() fails with expected signal SIGSEGV
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/fstat/fstat05], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(unlink)
+
+AT_SETUP(unlink05)
+AT_DATA([expout], [unlink05    1  PASS  :  unlink() returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/unlink/unlink05 | sed s/tfile_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(unlink06)
+AT_DATA([expout], [unlink06    1  PASS  :  unlink() returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/unlink/unlink06 | sed s/fifo_unlink[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(unlink07)
+AT_DATA([expout], [unlink07    1  PASS  :  unlink(<non-existent file>) Failed, errno=2
+unlink07    2  PASS  :  unlink(<path is empty string>) Failed, errno=2
+unlink07    3  PASS  :  unlink(<path contains a non-existent file>) Failed, errno=2
+unlink07    4  PASS  :  unlink(<address beyond address space>) Failed, errno=14
+unlink07    5  PASS  :  unlink(<path contains a regular file>) Failed, errno=20
+unlink07    6  PASS  :  unlink(<address beyond address space>) Failed, errno=14
+unlink07    7  PASS  :  unlink(<pathname too long>) Failed, errno=36
+unlink07    8  PASS  :  unlink(<negative address>) Failed, errno=14
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/unlink/unlink07], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(unlink08)
+AT_DATA([expout], [unlink08    1  PASS  :  unlink(<unwritable directory>) returned 0
+unlink08    2  PASS  :  unlink(<unsearchable directory>) returned 0
+unlink08    3  PASS  :  unlink(<directory>) Failed, errno=21
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/unlink/unlink08], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(rename)
+
+AT_SETUP(rename01)
+AT_DATA([expout], [rename01    1  PASS  :  functionality is correct for renaming a file
+rename01    2  PASS  :  functionality is correct for renaming a directory
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename02)
+AT_DATA([expout], [rename02    1  PASS  :  rename(./, ./) returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename02 | sed s/tfile_[[0-9]]*// | sed s/rnfile_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename03)
+AT_DATA([expout], [rename03    1  PASS  :  functionality is correct for renaming a file
+rename03    2  PASS  :  functionality is correct for renaming a directory
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename04)
+AT_DATA([expout], [rename04    1  PASS  :  rename() returned ENOTEMPTY
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename04], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename05)
+AT_DATA([expout], [rename05    1  PASS  :  rename() returned EISDIR
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename05], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename06)
+AT_DATA([expout], [rename06    1  PASS  :  rename() returned EINVAL
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename06], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename07)
+AT_DATA([expout], [rename07    1  PASS  :  rename() returned ENOTDIR
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename07], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename08)
+AT_DATA([expout], [rename08    1  PASS  :  expected failure - errno = 14 : Bad address
+rename08    2  PASS  :  expected failure - errno = 14 : Bad address
+rename08    3  PASS  :  expected failure - errno = 14 : Bad address
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename08], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename09)
+AT_DATA([expout], [rename09    1  PASS  :  rename() returned EACCES
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename09], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename10)
+AT_DATA([expout], [rename10    1  PASS  :  expected failure - errno = 36 : File name too long
+rename10    2  PASS  :  expected failure - errno = 2 : No such file or directory
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename10], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename12)
+AT_DATA([expout], [rename12    1  PASS  :  rename returned EPERM or EACCES
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename12], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rename13)
+AT_DATA([expout], [rename13    1  PASS  :  functionality of rename() is correct
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename13], [], [expout], [ignore])
+AT_CLEANUP
+
+#AT_SETUP(rename14)
+#AT_DATA([expout], [rename14    1  PASS  :  Test Passed
+#])
+#AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rename/rename14], [], [expout], [ignore])
+#AT_CLEANUP
+
+
+AT_BANNER(chmod)
+
+AT_SETUP(chmod01)
+AT_DATA([expout], [chmod01     1  PASS  :  Functionality of chmod(testfile, 0) successful
+chmod01     2  PASS  :  Functionality of chmod(testfile, 07) successful
+chmod01     3  PASS  :  Functionality of chmod(testfile, 070) successful
+chmod01     4  PASS  :  Functionality of chmod(testfile, 0700) successful
+chmod01     5  PASS  :  Functionality of chmod(testfile, 0777) successful
+chmod01     6  PASS  :  Functionality of chmod(testfile, 02777) successful
+chmod01     7  PASS  :  Functionality of chmod(testfile, 04777) successful
+chmod01     8  PASS  :  Functionality of chmod(testfile, 06777) successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chmod/chmod01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(chmod02)
+AT_DATA([expout], [chmod02     1  PASS  :  chmod(tfile, 0) returned 0
+chmod02     2  PASS  :  chmod(tfile, 07) returned 0
+chmod02     3  PASS  :  chmod(tfile, 070) returned 0
+chmod02     4  PASS  :  chmod(tfile, 0700) returned 0
+chmod02     5  PASS  :  chmod(tfile, 0777) returned 0
+chmod02     6  PASS  :  chmod(tfile, 02777) returned 0
+chmod02     7  PASS  :  chmod(tfile, 04777) returned 0
+chmod02     8  PASS  :  chmod(tfile, 06777) returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chmod/chmod02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(chmod03)
+AT_DATA([expout], [chmod03     1  PASS  :  Functionality of chmod(testfile, 01777) successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chmod/chmod03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(chmod04)
+AT_DATA([expout], [chmod04     1  PASS  :  Functionality of chmod(testdir_4, 01777) successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chmod/chmod04], [], [expout], [ignore])
+AT_CLEANUP
+
+#AT_SETUP(chmod05)
+#AT_DATA([expout], [chmod05     1  PASS  :  Functionality of chmod(testdir, 043777) successful
+#])
+#AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chmod/chmod05], [], [expout], [ignore])
+#AT_CLEANUP
+
+#AT_SETUP(chmod06)
+#AT_DATA([expout], [chmod06     1  PASS  :  chmod() fails, Process is not owner/root, errno:1
+#chmod06     2  PASS  :  chmod() fails, No Search permissions to process, errno:13
+#chmod06     3  PASS  :  chmod() fails, Address beyond address space, errno:14
+#chmod06     4  PASS  :  chmod() fails, Negative address, errno:14
+#chmod06     5  PASS  :  chmod() fails, Pathname too long, errno:36
+#chmod06     6  PASS  :  chmod() fails, Pathname is empty, errno:2
+#chmod06     7  PASS  :  chmod() fails, Path contains regular file, errno:20
+#])
+#AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chmod/chmod06], [], [expout], [ignore])
+#AT_CLEANUP
+
+AT_SETUP(chmod07)
+AT_DATA([expout], [chmod07     1  PASS  :  Functionality of chmod(testfile, 01777) successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chmod/chmod07], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(chown)
+
+AT_SETUP(chown01)
+AT_DATA([expout], [chown01     1  PASS  :  chown(, 0,0) returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chown/chown01 | sed s/t_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(chown02)
+AT_DATA([expout], [chown02     1  PASS  :  chown() on testfile1 succeeds : Setuid/Setgid bits cleared
+chown02     2  PASS  :  chown() on testfile2 succeeds : Setgid bit not cleared
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chown/chown02], [], [expout], [ignore])
+AT_CLEANUP
+
+#AT_SETUP(chown03)
+#AT_DATA([expout], [
+#])
+#AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chown/chown03], [], [expout], [ignore])
+#AT_CLEANUP
+
+#AT_SETUP(chown04)
+#AT_DATA([expout], [
+#])
+#AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chown/chown04], [], [expout], [ignore])
+#AT_CLEANUP
+
+AT_SETUP(chown05)
+AT_DATA([expout], [chown05     1  PASS  :  chown() succeeds to Change Owner/Group ids of testfile
+chown05     2  PASS  :  chown() succeeds to Change Owner id only of testfile
+chown05     3  PASS  :  chown() succeeds to Change Owner id only of testfile
+chown05     4  PASS  :  chown() succeeds to Change Group id only of testfile
+chown05     5  PASS  :  chown() succeeds to Change Group id only of testfile
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chown/chown05], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(truncate)
+
+AT_SETUP(truncate01)
+AT_DATA([expout], [truncate01    1  PASS  :  Functionality of truncate(testfile, 256) successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/truncate/truncate01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(truncate02)
+AT_DATA([expout], [truncate02    1  PASS  :  Functionality of truncate(2) on testfile successful
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/truncate/truncate02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(truncate03)
+AT_DATA([expout], [truncate03    1  PASS  :  truncate() fails, No Search permissions to process, errno=13
+truncate03    2  PASS  :  truncate() fails, Path contains regular file, errno=20
+truncate03    3  PASS  :  truncate() fails, Address beyond address space, errno=14
+truncate03    4  PASS  :  truncate() fails, Negative address, errno=14
+truncate03    5  PASS  :  truncate() fails, Pathname too long, errno=36
+truncate03    6  PASS  :  truncate() fails, Pathname is empty, errno=2
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/truncate/truncate03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(truncate04)
+AT_DATA([expout], [truncate04    1  PASS  :  truncate() fails, File is a directory, errno=21
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/truncate/truncate04], [], [expout], [ignore])
+AT_CLEANUP
+
+
+#AT_BANNER()
+
+#AT_SETUP(01)
+#AT_DATA([expout], [
+#])
+#AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls//01], [], [expout], [ignore])
+#AT_CLEANUP
+
+
+AT_BANNER(mkdir)
+
+AT_SETUP(mkdir01)
+AT_DATA([expout], [mkdir01     1  PASS  :  mkdir - path argument pointing below allocated address space failed as expected with errno 14 : Bad address
+mkdir01     2  PASS  :  mkdir - path argument pointing above allocated address space failed as expected with errno 14 : Bad address
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/mkdir/mkdir01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(mkdir02)
+AT_DATA([expout], [mkdir02     1  PASS  :  Test to attempt to make a directory inherits group ID SUCCEEDED @&t@
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/mkdir/mkdir02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(mkdir03)
+AT_DATA([expout], [mkdir03     1  PASS  :  expected failure - errno = 14 : Bad address
+mkdir03     2  PASS  :  expected failure - errno = 36 : File name too long
+mkdir03     3  PASS  :  expected failure - errno = 17 : File exists
+mkdir03     4  PASS  :  expected failure - errno = 2 : No such file or directory
+mkdir03     5  PASS  :  expected failure - errno = 20 : Not a directory
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/mkdir/mkdir03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(mkdir04)
+AT_DATA([expout], [mkdir04     1  PASS  :  Test to attempt to creat a directory in a directory having no permissions SUCCEEDED in setting errno to EACCES
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/mkdir/mkdir04], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(mkdir05)
+AT_DATA([expout], [mkdir05     1  PASS  :  mkdir() functionality is correct
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/mkdir/mkdir05], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(mkdir08)
+AT_DATA([expout], [mkdir08     1  PASS  :  mkdir(./) returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/mkdir/mkdir08 | sed s/dir_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+#AT_SETUP(mkdir09)
+#AT_DATA([expout], [mkdir09     1  PASS  :  PASS
+#])
+#AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/mkdir/mkdir09], [], [expout], [ignore])
+#AT_CLEANUP
+
+
+AT_BANNER(rmdir)
+
+AT_SETUP(rmdir01)
+AT_DATA([expout], [rmdir01     1  PASS  :  directory has been removed
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rmdir/rmdir01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rmdir02)
+AT_DATA([expout], [rmdir02     1  PASS  :  expected failure - errno = 39 : Directory not empty
+rmdir02     2  PASS  :  expected failure - errno = 36 : File name too long
+rmdir02     3  PASS  :  expected failure - errno = 2 : No such file or directory
+rmdir02     4  PASS  :  expected failure - errno = 20 : Not a directory
+rmdir02     5  PASS  :  expected failure - errno = 14 : Bad address
+rmdir02     6  PASS  :  expected failure - errno = 14 : Bad address
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rmdir/rmdir02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rmdir03)
+AT_DATA([expout], [rmdir03     1  PASS  :  rmdir() produced EPERM or EACCES
+rmdir03     1  PASS  :  rmdir() produced EACCES
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rmdir/rmdir03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rmdir04)
+AT_DATA([expout], [rmdir04     1  PASS  :  rmdir(./) returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rmdir/rmdir04 | sed s/dir_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(rmdir05)
+AT_DATA([expout], [rmdir05     1  PASS  :  rmdir(".") failed to remove the current working directory. Returned 22 : Invalid argument
+rmdir05     2  CONF  :  rmdir on "dir/." supported on Linux
+rmdir05     3  CONF  :  linked directories test not implemented on Linux
+rmdir05     4  PASS  :  rmdir() - path argument points below the minimum allocated address space failed as expected with errno 14 : Bad address
+rmdir05     5  PASS  :  rmdir() - path argument points above the maximum allocated address space failed as expected with errno 14 : Bad address
+rmdir05     6  PASS  :  rmdir("./") removed the directory as expected.
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/rmdir/rmdir05 | sed s/dir_[[0-9]]*//], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(chdir)
+
+AT_SETUP(chdir01)
+AT_DATA([expout], [chdir01     0  INFO  :  Found file ..
+chdir01     0  INFO  :  Found file .
+chdir01     0  INFO  :  Found file chdirtest
+chdir01     1  PASS  :  received expected error - 20 : Not a directory
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chdir/chdir01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(chdir02)
+AT_DATA([expout], [chdir02     1  PASS  :  chdir(/) returned 0
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chdir/chdir02], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(chdir03)
+AT_DATA([expout], [chdir03     1  PASS  :  expected failure - errno = 13 : Permission denied
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chdir/chdir03], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(chdir04)
+AT_DATA([expout], [chdir04     1  PASS  :  expected failure - errno = 36 : File name too long
+chdir04     2  PASS  :  expected failure - errno = 2 : No such file or directory
+chdir04     3  PASS  :  expected failure - errno = 14 : Bad address
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/chdir/chdir04], [], [expout], [ignore])
+AT_CLEANUP
+
+
+AT_BANNER(readdir)
+
+AT_SETUP(readdir01)
+AT_DATA([expout], [readdir01    1  PASS  :  found all 10 that were created
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/readdir/readdir01], [], [expout], [ignore])
+AT_CLEANUP
+
+AT_SETUP(readdir02)
+AT_DATA([expout], [readdir02    1  PASS  :  expected failure - errno = 9 : Bad file descriptor
+])
+AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls/readdir/readdir02], [], [expout], [ignore])
+AT_CLEANUP
+
+
+#AT_BANNER()
+
+#AT_SETUP(01)
+#AT_DATA([expout], [
+#])
+#AT_CHECK([@LTP_PATH@/testcases/kernel/syscalls//01], [], [expout], [ignore])
+#AT_CLEANUP
+

@@ -1,0 +1,9 @@
+OBJECTS
+xpn_cwd.c
+xpn_dir.c
+xpn_err.c
+xpn_file.c
+xpn_init.c
+xpn_open.c
+xpn_opendir.c
+xpn_rw.c

@@ -1,0 +1,422 @@
+diff -urN libneon.orig/Makefile.in libneon.new/Makefile.in
+--- libneon.orig/Makefile.in	2010-05-05 14:14:14.000000000 +0200
++++ libneon.new/Makefile.in	2011-03-21 16:34:47.000000000 +0100
+@@ -86,6 +86,7 @@
+ 
+ subdirs:
+ 	@cd src && $(MAKE)
++	@rm -f src/.libs/*.so
+ 
+ # Uses Tim Waugh's excellent "xmlto" utility, see
+ # http://cyberelk.net/tim/xmlto/.  (The docs target is executed at release
+diff -urN libneon.orig/src/ne_basic.c libneon.new/src/ne_basic.c
+--- libneon.orig/src/ne_basic.c	2010-05-05 14:14:13.000000000 +0200
++++ libneon.new/src/ne_basic.c	2011-03-21 16:40:39.000000000 +0100
+@@ -76,6 +76,35 @@
+     return ret;
+ }
+ 
++int ne_getmodtime_and_length(ne_session *sess, const char *uri, char **length, char **modtime) 
++{
++    ne_request *req = ne_request_create(sess, "HEAD", uri);
++    const char *value;
++    int ret;
++
++    ret = ne_request_dispatch(req);
++
++    value = ne_get_response_header(req, "Content-Length");
++    
++    if (ret == NE_OK && ne_get_status(req)->klass != 2) {
++	ret = NE_ERROR;
++    } else {
++	if (value != NULL)
++		*length = strdup(value);
++
++	value = ne_get_response_header(req, "Last-Modified");
++
++	if (ret == NE_OK && ne_get_status(req)->klass != 2) {
++		ret = NE_ERROR;
++	} else if (value != NULL)
++		*modtime = strdup(value);
++    }
++    
++    ne_request_destroy(req);
++
++    return ret;
++}
++
+ #ifdef NE_LFS
+ #define ne_fstat fstat64
+ typedef struct stat64 struct_stat;
+@@ -85,19 +114,109 @@
+ #endif
+ 
+ /* PUT's from fd to URI */
++int ne_put_range(
++	ne_session *sess, const char *uri, ne_content_range *range, int fd) 
++{
++    ne_generic_data data;
++
++    data.type = NE_GENERIC_DATA_TYPE_FILE;
++    data.generic_data.file.fd = fd;
++
++    return ne_put_range_generic(sess, uri, range, &data);
++}
++
++int ne_put_range_generic(
++	ne_session *sess, const char *uri, ne_content_range *range, ne_generic_data *data) 
++{
++	ne_request *req;
++	struct_stat st;
++	int ret;
++	char crange[64];
++
++	switch (data->type) {
++		case NE_GENERIC_DATA_TYPE_FILE:
++			if (ne_fstat(data->generic_data.file.fd, &st)) {
++				int errnum = errno;
++				char buf[200];
++		
++				ne_set_error(sess, "Could not determine file size: %s",
++							ne_strerror(errnum, buf, sizeof buf));
++				return NE_ERROR;
++			}
++			break;
++		case NE_GENERIC_DATA_TYPE_BUFFER:
++			st.st_size = data->generic_data.buf.length;
++			break;
++		default:
++			return NE_ERROR;
++	}
++
++	req = ne_request_create(sess, "PUT", uri);
++
++	ne_snprintf(crange, sizeof crange, "bytes %" FMT_NE_OFF_T "-%" FMT_NE_OFF_T "/*", 
++		range->start, range->end);
++
++	ne_add_request_header(req, "Content-Range", crange);
++
++#ifdef NE_HAVE_DAV
++	ne_lock_using_resource(req, uri, 0);
++	ne_lock_using_parent(req, uri);
++#endif
++
++	switch (data->type) {
++		case NE_GENERIC_DATA_TYPE_FILE:
++			ne_set_request_body_fd(req, data->generic_data.file.fd, 0, st.st_size);
++			break;
++		case NE_GENERIC_DATA_TYPE_BUFFER:
++			ne_set_request_body_buffer(req, data->generic_data.buf.buffer, st.st_size);
++			break;
++		default:
++			return NE_ERROR;
++	}
++
++	ret = ne_request_dispatch(req);
++
++	if (ret == NE_OK && ne_get_status(req)->klass != 2)
++		ret = NE_ERROR;
++
++	ne_request_destroy(req);
++
++	return ret;
++}
++
++/* PUT's from fd to URI */
+ int ne_put(ne_session *sess, const char *uri, int fd) 
+ {
++    ne_generic_data data;
++
++    data.type = NE_GENERIC_DATA_TYPE_FILE;
++    data.generic_data.file.fd = fd;
++
++    return ne_put_generic(sess, uri, &data);
++}
++
++int ne_put_generic(ne_session *sess, const char *uri, ne_generic_data *data) 
++{
+     ne_request *req;
+     struct_stat st;
+     int ret;
+ 
+-    if (ne_fstat(fd, &st)) {
+-        int errnum = errno;
+-        char buf[200];
+-
+-        ne_set_error(sess, _("Could not determine file size: %s"),
+-                     ne_strerror(errnum, buf, sizeof buf));
+-        return NE_ERROR;
++    switch (data->type) {
++        case NE_GENERIC_DATA_TYPE_FILE:
++            if (ne_fstat(data->generic_data.file.fd, &st)) {
++                int errnum = errno;
++                char buf[200];
++
++                ne_set_error(sess, _("Could not determine file size: %s"),
++                             ne_strerror(errnum, buf, sizeof buf));
++                return NE_ERROR;
++            }
++            break;
++        case NE_GENERIC_DATA_TYPE_BUFFER:
++            st.st_size = data->generic_data.buf.length;
++            break;
++        default:
++            return NE_ERROR;
+     }
+     
+     req = ne_request_create(sess, "PUT", uri);
+@@ -107,7 +226,16 @@
+     ne_lock_using_parent(req, uri);
+ #endif
+ 
+-    ne_set_request_body_fd(req, fd, 0, st.st_size);
++    switch (data->type) {
++        case NE_GENERIC_DATA_TYPE_FILE:
++            ne_set_request_body_fd(req, data->generic_data.file.fd, 0, st.st_size);
++            break;
++        case NE_GENERIC_DATA_TYPE_BUFFER:
++            ne_set_request_body_buffer(req, data->generic_data.buf.buffer, st.st_size);
++            break;
++        default:
++            return NE_ERROR;
++    }
+ 	
+     ret = ne_request_dispatch(req);
+     
+@@ -119,10 +247,10 @@
+     return ret;
+ }
+ 
+-/* Dispatch a GET request REQ, writing the response body to FD fd.  If
++/* Dispatch a GET request REQ, writing the response body to a generic data container.  If
+  * RANGE is non-NULL, then it is the value of the Range request
+  * header, e.g. "bytes=1-5".  Returns an NE_* error code. */
+-static int dispatch_to_fd(ne_request *req, int fd, const char *range)
++static int dispatch_to_generic(ne_request *req, ne_generic_data *data, const char *range)
+ {
+     ne_session *const sess = ne_get_session(req);
+     const ne_status *const st = ne_get_status(req);
+@@ -151,7 +279,17 @@
+         }
+ 
+         if ((range && st->code == 206) || (!range && st->klass == 2)) {
+-            ret = ne_read_response_to_fd(req, fd);
++            switch (data->type) {
++                case NE_GENERIC_DATA_TYPE_FILE:
++                    ret = ne_read_response_to_fd(req, data->generic_data.file.fd);
++                    break;
++                case NE_GENERIC_DATA_TYPE_BUFFER:
++                    ret = ne_read_response_to_buffer(req, data->generic_data.buf.buffer,
++                                                         &data->generic_data.buf.length);
++                    break;
++                default:
++                    return NE_ERROR;
++            }
+         } else {
+             ret = ne_discard_response(req);
+         }
+@@ -163,7 +301,7 @@
+ }
+ 
+ static int get_range_common(ne_session *sess, const char *uri, 
+-                            const char *brange, int fd)
++                            const char *brange, ne_generic_data *data)
+ 
+ {
+     ne_request *req = ne_request_create(sess, "GET", uri);
+@@ -173,7 +311,7 @@
+     ne_add_request_header(req, "Range", brange);
+     ne_add_request_header(req, "Accept-Ranges", "bytes");
+ 
+-    ret = dispatch_to_fd(req, fd, brange);
++    ret = dispatch_to_generic(req, data, brange);
+ 
+     status = ne_get_status(req);
+ 
+@@ -201,6 +339,17 @@
+ int ne_get_range(ne_session *sess, const char *uri, 
+ 		 ne_content_range *range, int fd)
+ {
++    ne_generic_data data;
++
++    data.type = NE_GENERIC_DATA_TYPE_FILE;
++    data.generic_data.file.fd = fd;
++
++    return ne_get_range_generic(sess, uri, range, &data);
++}
++
++int ne_get_range_generic(ne_session *sess, const char *uri, 
++		 ne_content_range *range, ne_generic_data *data)
++{
+     char brange[64];
+ 
+     if (range->end == -1) {
+@@ -213,16 +362,26 @@
+                     range->start, range->end);
+     }
+ 
+-    return get_range_common(sess, uri, brange, fd);
++    return get_range_common(sess, uri, brange, data);
+ }
+ 
+ /* Get to given fd */
+ int ne_get(ne_session *sess, const char *uri, int fd)
+ {
++    ne_generic_data data;
++
++    data.type = NE_GENERIC_DATA_TYPE_FILE;
++    data.generic_data.file.fd = fd;
++
++    return ne_get_generic(sess, uri, &data);
++}
++
++int ne_get_generic(ne_session *sess, const char *uri, ne_generic_data *data)
++{
+     ne_request *req = ne_request_create(sess, "GET", uri);
+     int ret;
+ 
+-    ret = dispatch_to_fd(req, fd, NULL);
++    ret = dispatch_to_generic(req, data, NULL);
+     
+     if (ret == NE_OK && ne_get_status(req)->klass != 2) {
+ 	ret = NE_ERROR;
+@@ -237,6 +396,16 @@
+ /* Get to given fd */
+ int ne_post(ne_session *sess, const char *uri, int fd, const char *buffer)
+ {
++    ne_generic_data data;
++
++    data.type = NE_GENERIC_DATA_TYPE_FILE;
++    data.generic_data.file.fd = fd;
++
++    return ne_post_generic(sess, uri, &data, buffer);
++}
++
++int ne_post_generic(ne_session *sess, const char *uri, ne_generic_data *data, const char *buffer)
++{
+     ne_request *req = ne_request_create(sess, "POST", uri);
+     int ret;
+ 
+@@ -244,7 +413,7 @@
+ 
+     ne_set_request_body_buffer(req, buffer, strlen(buffer));
+ 
+-    ret = dispatch_to_fd(req, fd, NULL);
++    ret = dispatch_to_generic(req, data, NULL);
+     
+     if (ret == NE_OK && ne_get_status(req)->klass != 2) {
+ 	ret = NE_ERROR;
+diff -urN libneon.orig/src/ne_basic.h libneon.new/src/ne_basic.h
+--- libneon.orig/src/ne_basic.h	2010-05-05 14:14:13.000000000 +0200
++++ libneon.new/src/ne_basic.h	2011-03-21 16:34:47.000000000 +0100
+@@ -31,10 +31,12 @@
+ /* Perform a GET request on resource at 'path', writing the entity
+  * body which is returned to 'fd'. */
+ int ne_get(ne_session *sess, const char *path, int fd);
++int ne_get_generic(ne_session *sess, const char *path, ne_generic_data *data);
+ 
+ /* Perform a PUT request on resource at 'path', reading the entity
+  * body to submit from 'fd'. */
+ int ne_put(ne_session *sess, const char *path, int fd);
++int ne_put_generic(ne_session *sess, const char *path, ne_generic_data *data);
+ 
+ #define NE_DEPTH_ZERO (0)
+ #define NE_DEPTH_ONE (1)
+@@ -76,6 +78,8 @@
+  * given could not be parsed.  Returns NE_* error code.  */
+ int ne_getmodtime(ne_session *sess, const char *path, time_t *modtime);
+ 
++int ne_getmodtime_and_length(ne_session *sess, const char *uri, char **length, char **modtime);
++
+ typedef struct {
+     const char *type, *subtype;
+     const char *charset;
+@@ -145,9 +149,16 @@
+  *      ne_get_range(sess, path, &range, myfile); */
+ int ne_get_range(ne_session *sess, const char *path, 
+ 		 ne_content_range *range, int fd);
++int ne_get_range_generic(ne_session *sess, const char *path, 
++		 ne_content_range *range, ne_generic_data *data);
++
++/* PUT's from fd to URI */
++int ne_put_range(ne_session *sess, const char *uri, ne_content_range *range, int fd);
++int ne_put_range_generic(ne_session *sess, const char *uri, ne_content_range *range, ne_generic_data *data);
+ 
+ /* Post using buffer as request-body: stream response into f */
+ int ne_post(ne_session *sess, const char *path, int fd, const char *buffer);
++int ne_post_generic(ne_session *sess, const char *path, ne_generic_data *data, const char *buffer);
+ 
+ NE_END_DECLS
+ 
+diff -urN libneon.orig/src/ne_request.c libneon.new/src/ne_request.c
+--- libneon.orig/src/ne_request.c	2010-05-05 14:14:13.000000000 +0200
++++ libneon.new/src/ne_request.c	2011-03-21 16:34:47.000000000 +0100
+@@ -1381,6 +1381,30 @@
+     return len == 0 ? NE_OK : NE_ERROR;
+ }
+ 
++int ne_read_response_to_buffer(ne_request *req, char *buffer, size_t *length)
++{
++    ssize_t len;
++    *length = 0;
++
++    while ((len = ne_read_response_block(req, req->respbuf, 
++                                         sizeof req->respbuf)) > 0) {
++        const char *block = req->respbuf;
++
++        void *ret = memcpy(&buffer[*length], block, len);
++        if (ret == NULL) {
++            char err[200];
++            ne_strerror(errno, err, sizeof err);
++            ne_set_error(ne_get_session(req), 
++                         _("Could not write to buffer: %s"), err);
++            return NE_ERROR;
++        } else {
++            *length += len;
++        }
++    }
++
++    return NE_OK;
++}
++
+ int ne_discard_response(ne_request *req)
+ {
+     ssize_t len;
+diff -urN libneon.orig/src/ne_request.h libneon.new/src/ne_request.h
+--- libneon.orig/src/ne_request.h	2010-05-05 14:14:13.000000000 +0200
++++ libneon.new/src/ne_request.h	2011-03-21 16:34:47.000000000 +0100
+@@ -42,6 +42,23 @@
+ /* Opaque object representing a single HTTP request. */
+ typedef struct ne_request_s ne_request;
+ 
++#define NE_GENERIC_DATA_TYPE_FILE 0
++#define NE_GENERIC_DATA_TYPE_BUFFER 1
++
++typedef struct {
++	int type;
++	union {
++		struct {
++			int fd;
++		} file;
++		struct {
++			/* length bytes @ buffer = whole buffer. */
++			char *buffer;
++			size_t length;
++		} buf;
++	} generic_data;
++} ne_generic_data;
++
+ /***** Request Handling *****/
+ 
+ /* Create a request in session 'sess', with given method and path.
+@@ -209,6 +226,10 @@
+  * given file descriptor.  Returns NE_ERROR on error. */
+ int ne_read_response_to_fd(ne_request *req, int fd);
+ 
++/* Read response blocks until end of response, writing content to the
++ * given buffer.  Returns NE_ERROR on error. */
++int ne_read_response_to_buffer(ne_request *req, char *buffer, size_t *length);
++
+ /* Defined request flags: */
+ typedef enum ne_request_flag_e {
+     NE_REQFLAG_EXPECT100 = 0, /* enable this flag to enable use of the

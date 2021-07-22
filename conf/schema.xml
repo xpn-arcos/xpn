@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="data_node">
+    <xs:complexType>
+      <xs:attribute name="url" type="xs:string" use="required" />
+      <xs:attribute name="id" type="xs:string" use="optional" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="metadata_node">
+    <xs:complexType>
+      <xs:attribute name="url" type="xs:string" use="required" />
+      <xs:attribute name="id" type="xs:string" use="optional" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="partition">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="data_node" />
+        <xs:element ref="metadata_node" />
+      </xs:sequence>
+      <xs:attribute name="threshold_threads" type="xs:NMTOKEN" use="optional" />
+      <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+      <xs:attribute name="type" type="xs:NMTOKEN" use="required" />
+      <xs:attribute name="threads" type="xs:NMTOKEN" use="optional" />
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

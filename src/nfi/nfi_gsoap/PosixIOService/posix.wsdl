@@ -1,0 +1,206 @@
+<!-- wsdl2h -c -t typemap.dat -o posix.h posix.wsdl -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="posix"
+ targetNamespace="urn:posix"
+ xmlns:tns="urn:posix"
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:ns1="urn:posix"
+ xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+ xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+ xmlns:WSDL="http://schemas.xmlsoap.org/wsdl/"
+ xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<types>
+
+ <schema targetNamespace="urn:posix"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ns1="urn:posix"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="unqualified"
+  attributeFormDefault="unqualified">
+  <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+  <complexType name="structStat">
+   <sequence>
+     <element name="st-dev" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1"/>
+     <element name="st-ino" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1"/>
+     <element name="st-mode" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/>
+     <element name="st-nlink" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/>
+     <element name="st-uid" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/>
+     <element name="st-gid" type="xsd:unsignedInt" minOccurs="1" maxOccurs="1"/>
+     <element name="st-rdev" type="xsd:unsignedLong" minOccurs="1" maxOccurs="1"/>
+     <element name="st-size" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+     <element name="st-blksize" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+     <element name="st-blocks" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+     <element name="st-atim" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+     <element name="st-mtim" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+     <element name="st-ctim" type="xsd:dateTime" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+ </schema>
+
+</types>
+
+<message name="openRequest">
+ <part name="pathname" type="xsd:string"/>
+ <part name="flags" type="xsd:int"/>
+ <part name="mode" type="xsd:unsignedInt"/>
+</message>
+
+<message name="openResponse">
+ <part name="result" type="xsd:int"/>
+</message>
+
+<message name="closeRequest">
+ <part name="fd" type="xsd:int"/>
+</message>
+
+<message name="closeResponse">
+ <part name="result" type="xsd:int"/>
+</message>
+
+<message name="read">
+ <part name="fd" type="xsd:int"/>
+ <part name="count" type="xsd:unsignedInt"/>
+</message>
+
+<message name="readResponse">
+ <part name="buf" type="ns__t_buf_param"/>
+ <part name="result" type="xsd:int"/>
+</message>
+
+<message name="writeRequest">
+ <part name="fd" type="xsd:int"/>
+ <part name="buf" type="ns__t_buf_param"/>
+ <part name="count" type="xsd:unsignedInt"/>
+</message>
+
+<message name="writeResponse">
+ <part name="result" type="xsd:int"/>
+</message>
+
+<message name="lseekRequest">
+ <part name="fildes" type="xsd:int"/>
+ <part name="offset" type="xsd:long"/>
+ <part name="whence" type="xsd:int"/>
+</message>
+
+<message name="lseekResponse">
+ <part name="result" type="xsd:long"/>
+</message>
+
+<message name="stat">
+ <part name="path" type="xsd:string"/>
+</message>
+
+<message name="statResponse">
+ <part name="buf" type="ns1:structStat"/>
+ <part name="result" type="xsd:int"/>
+</message>
+
+<portType name="posixPortType">
+ <operation name="open">
+  <documentation>Service definition of function ns1__open</documentation>
+  <input message="tns:openRequest"/>
+  <output message="tns:openResponse"/>
+ </operation>
+ <operation name="close">
+  <documentation>Service definition of function ns1__close</documentation>
+  <input message="tns:closeRequest"/>
+  <output message="tns:closeResponse"/>
+ </operation>
+ <operation name="read">
+  <documentation>Service definition of function ns1__read</documentation>
+  <input message="tns:read"/>
+  <output message="tns:readResponse"/>
+ </operation>
+ <operation name="write">
+  <documentation>Service definition of function ns1__write</documentation>
+  <input message="tns:writeRequest"/>
+  <output message="tns:writeResponse"/>
+ </operation>
+ <operation name="lseek">
+  <documentation>Service definition of function ns1__lseek</documentation>
+  <input message="tns:lseekRequest"/>
+  <output message="tns:lseekResponse"/>
+ </operation>
+ <operation name="stat">
+  <documentation>Service definition of function ns1__stat</documentation>
+  <input message="tns:stat"/>
+  <output message="tns:statResponse"/>
+ </operation>
+</portType>
+
+<binding name="posix" type="tns:posixPortType">
+ <SOAP:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+ <operation name="open">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="close">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="read">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="write">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="lseek">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+ <operation name="stat">
+  <SOAP:operation style="rpc" soapAction=""/>
+  <input>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </input>
+  <output>
+     <SOAP:body use="encoded" namespace="urn:posix" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+  </output>
+ </operation>
+</binding>
+
+<service name="posix">
+ <documentation>gSOAP 2.7.9k generated service definition</documentation>
+ <port name="posix" binding="tns:posix">
+  <SOAP:address location="http://xpn.arcos.inf.uc3m.es/posixserver.cgi"/>
+ </port>
+</service>
+
+</definitions>

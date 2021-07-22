@@ -1,0 +1,9 @@
+DIRS
+common
+nfi_local
+@NFI_NFS@
+@NFI_NFS3@
+@NFI_FTP@
+@NFI_XIO@
+@NFI_GSOAP@
+@NFI_GRIDFTP@

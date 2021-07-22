@@ -1,0 +1,53 @@
+[
+// soapcpp2 -I /home/bbergua/gsoap-2.7/gsoap/import/ -c -d project posix.h
+
+#import "soap12.h"
+#import "xop.h"
+#import "xmime4.h"
+
+]
+
+#wsdl__structStat = \
+#typedef unsigned long long int __u_quad_t; \n\
+#typedef __u_quad_t __dev_t; \n\
+#typedef unsigned int __uid_t; \n\
+#typedef unsigned int __gid_t; \n\
+#typedef unsigned long int __ino_t; \n\
+#typedef unsigned int __mode_t; \n\
+#typedef unsigned int __nlink_t; \n\
+#typedef long int __off_t; \n\
+#typedef long int __blksize_t; \n\
+#typedef long int __blkcnt_t; \n\
+#typedef long int __time_t; \n\
+#\n\
+#struct timespec \n\
+#  { \n\
+#    __time_t tv_sec; \n\
+#    long int tv_nsec; \n\
+#  }; \n\
+#\n\
+#struct structStat { \n\
+#    __dev_t st_dev; \n\
+#    unsigned short int __pad1; \n\
+#    __ino_t st_ino; \n\
+#    __mode_t st_mode; \n\
+#    __nlink_t st_nlink; \n\
+#    __uid_t st_uid; \n\
+#    __gid_t st_gid; \n\
+#    __dev_t st_rdev; \n\
+#    unsigned short int __pad2; \n\
+#    __off_t st_size; \n\
+#    __blksize_t st_blksize; \n\
+#    __blkcnt_t st_blocks; \n\
+#    struct timespec st_atim; \n\
+#    struct timespec st_mtim; \n\
+#    struct timespec st_ctim; \n\
+#    unsigned long int __unused4; \n\
+#    unsigned long int __unused5; \n\
+#  }; \
+# | struct structStat | struct structStat *
+wsdl__ns_USCORE_USCOREt_USCOREbuf_USCOREparam = typedef struct x__buf \n\
+{ \n\
+   _xop__Include xop__Include ;  // attachment \n\
+   @char *xmlmime__contentType ; // and its contentType \n\
+} ns__t_buf_param; | ns__t_buf_param

@@ -1,0 +1,87 @@
+
+CC             	= /export/home/pato11-1/proyectos/xpn/mpich/bin/mpicc
+CFLAGS	       	= -g -Wall -Wextra -DLINUX
+SOURCE_PATH    	= .
+#LIBLINK        = -lpthread  
+LIBLINK        	= -lpthread  -lxpn -lnfi_nfs -lnfi_local
+INCLUDE_PATH	= /export/home/pato11-1/proyectos/xpn/expand-2.0/include/
+LIB		= /export/home/pato11-1/proyectos/xpn/expand-2.0/lib/
+OBJETOS1       	= ./ION.o \
+		 ./time.o
+
+OBJETOS11      	= ./IONW.o \
+		 ./time.o
+
+OBJETOS12      	= ./IONR.o \
+		 ./time.o
+		 
+OBJETOS21      	= ./IONsW.o \
+		 ./time.o
+
+OBJETOS22      	= ./IONsR.o \
+		 ./time.o
+		 
+OBJETOS31      	= ./IOPR.o \
+		 ./time.o
+
+OBJETOS32      	= ./IOPW.o \
+		 ./time.o
+
+OBJETOS33      	= ./IOPRe.o \
+		 ./time.o
+		 
+OBJETOS41      	= ./IOPsR.o \
+		 ./time.o
+
+OBJETOS42      	= ./IOPsW.o \
+		 ./time.o
+
+OBJETOS43      	= ./IOPsRe.o \
+		 ./time.o
+
+all:    IONsR IONsW IONR IONW IOPsW IOPsR IOPsRe IOPW IOPR IOPRe
+
+ION: $(OBJETOS1)
+	@$(CC)  $(CFLAGS) $(OBJETOS1)  -L$(LIB) $(LIBLINK)  -o ION
+
+IONW: $(OBJETOS11)
+	@$(CC)  $(CFLAGS) $(OBJETOS11)  -L$(LIB) $(LIBLINK)  -o IONW
+
+IONR: $(OBJETOS12)
+	@$(CC)  $(CFLAGS) $(OBJETOS12)  -L$(LIB) $(LIBLINK)  -o IONR
+	
+IONsW: $(OBJETOS21)
+	@$(CC)  $(CFLAGS) $(OBJETOS21)  -L$(LIB) $(LIBLINK)  -o IONsW
+
+IONsR: $(OBJETOS22)
+	@$(CC)  $(CFLAGS) $(OBJETOS22)  -L$(LIB) $(LIBLINK)  -o IONsR
+	
+IOPR: $(OBJETOS31)
+	@$(CC)  $(CFLAGS) $(OBJETOS31)  -L$(LIB) $(LIBLINK)  -o IOPR
+
+IOPRe: $(OBJETOS33)
+	@$(CC)  $(CFLAGS) $(OBJETOS33)  -L$(LIB) $(LIBLINK)  -o IOPRe
+	
+IOPW: $(OBJETOS32)
+	@$(CC)  $(CFLAGS) $(OBJETOS32)  -L$(LIB) $(LIBLINK)  -o IOPW
+	
+IOPsR: $(OBJETOS41)
+	@$(CC)  $(CFLAGS) $(OBJETOS41)  -L$(LIB) $(LIBLINK)  -o IOPsR
+	
+IOPsRe: $(OBJETOS43)
+	@$(CC)  $(CFLAGS) $(OBJETOS43)  -L$(LIB) $(LIBLINK)  -o IOPsRe
+	
+IOPsW: $(OBJETOS42)
+	@$(CC)  $(CFLAGS) $(OBJETOS42)  -L$(LIB) $(LIBLINK)  -o IOPsW
+	
+%.o: %.c
+	@echo "     $< ..." 
+	@$(CC)  $(CFLAGS) -I$(INCLUDE_PATH) -c $*.c  
+
+clean: 
+	@echo "   Removing trash..."
+	@rm -fr *.o 
+	@rm -fr ./ION ./IOPR ./IOPW
+	@rm -fr ./IONsW ./IONsR ./IOPsW ./IOPsR ./IOPsRe ./IONW ./IONR ./IONRe
+	@echo "   Trash succesfully removed !."
+

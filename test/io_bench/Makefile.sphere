@@ -1,0 +1,67 @@
+# Makefile for the I/O benchmark -- sphere (SGI)
+
+# objects
+OBJS = get_mfluid_property.o \
+       flash_release.o \
+       flash_benchmark_io.o 
+
+OBJS_HDF5_PARALLEL_IO = checkpoint_hdf5_parallel.o \
+                        plotfile_hdf5_parallel.o \
+                        h5_file_interface.o \
+                        h5_parallel_write.o \
+                        h5_parallel_write_single.o
+
+# compiler and linker commands
+FCOMP   = f90
+CCOMP   = cc
+CPPCOMP = CC
+LINK    = f90
+
+
+# library locations
+HDF5path = /opt/pkgs/HDF5-1.4.0-irix64n32
+
+ZLIBpath = /opt/pkgs/zlib-1.1.3
+
+# compiler flags
+FFLAGS = -c -O3 -IPA -r8 -d8 -i4 -cpp -LNO \
+         -DN_DIM=3 -DMAXBLOCKS=100 -DIONMAX=13
+
+F90FLAGS = 
+
+CFLAGS = -c -O3 -I $(HDF5path)/include/ -DSGI -DN_DIM=3
+
+
+# linker flags
+LFLAGS = -IPA -o 
+
+
+
+# libraries to include
+LIB = -B static -L $(HDF5path)/lib -lhdf5 \
+          -B dynamic -L $(ZLIBpath)/lib -lz -L /usr/lib32 -lc -lm -lmpi
+
+
+.SUFFIXES: .f .F .f90 .F90 .c .C .o
+
+.F90.o :
+	$(FCOMP) $(FFLAGS) $<
+
+.f.o :
+	$(FCOMP) $(FFLAGS) $<
+
+.c.o :
+	$(CCOMP) $(CFLAGS) $<
+
+flash_benchmark_io: $(OBJS) \
+                    $(OBJS_HDF5_PARALLEL_IO) 
+	$(LINK) $(LFLAGS) $@ $(OBJS) $(OBJS_HDF5_PARALLEL_IO) $(LIB)
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+OBJECTS
+xpn_policy_cwd.c
+xpn_policy_opendir.c
+xpn_policy_err.c
+xpn_policy_init.c
+xpn_policy_open.c
+xpn_policy_rw.c

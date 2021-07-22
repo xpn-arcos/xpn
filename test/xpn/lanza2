@@ -1,0 +1,8 @@
+rsh pato13 ./lanza1.sh
+rsh pato23 ./lanza1.sh
+rsh pato33 ./lanza1.sh
+rsh pato43 ./lanza1.sh
+rsh pato53 ./lanza1.sh
+rsh pato63 ./lanza1.sh
+rsh pato73 ./lanza1.sh
+rsh pato83 ./lanza1.sh

@@ -1,0 +1,12 @@
+OBJECTS
+xpni_null_close.c
+xpni_null_destroy.c
+xpni_null_init.c
+xpni_null_open.c
+xpni_null_read.c
+xpni_null_write.c
+xpni_null_register.c
+xpni_null_importFile.c
+xpni_null_exportFile.c
+xpni_null_lseek.c
+xpni_null_opendir.c

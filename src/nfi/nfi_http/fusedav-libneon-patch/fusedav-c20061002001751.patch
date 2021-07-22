@@ -1,0 +1,449 @@
+diff -urN fusedav.orig/src/filecache.c fusedav.new/src/filecache.c
+--- fusedav.orig/src/filecache.c	2010-05-05 13:57:10.000000000 +0200
++++ fusedav.new/src/filecache.c	2010-05-06 12:51:48.000000000 +0200
+@@ -70,6 +70,8 @@
+ 
+ static int file_cache_sync_unlocked(struct file_info *fi);
+ 
++extern int no_cache;
++
+ void* file_cache_get(const char *path) {
+     struct file_info *f, *r = NULL;
+ 
+@@ -114,7 +116,8 @@
+     fi->ref--;
+ 
+     if (!fi->ref && fi->dead) {
+-        file_cache_sync_unlocked(fi);
++        if (!no_cache)
++            file_cache_sync_unlocked(fi);
+         file_cache_free_unlocked(fi);
+     }
+ 
+@@ -181,10 +184,12 @@
+ 
+     fi->filename = strdup(path);
+ 
+-    snprintf(tempfile, sizeof(tempfile), "%s/fusedav-cache-XXXXXX", "/tmp");
+-    if ((fi->fd = mkstemp(tempfile)) < 0)
+-        goto fail;
+-    unlink(tempfile);
++    if(!no_cache) {
++        snprintf(tempfile, sizeof(tempfile), "%s/fusedav-cache-XXXXXX", "/tmp");
++        if ((fi->fd = mkstemp(tempfile)) < 0)
++            goto fail;
++        unlink(tempfile);
++    }
+ 
+     req = ne_request_create(session, "HEAD", path);
+     assert(req);
+@@ -234,10 +239,10 @@
+ 
+ static int load_up_to_unlocked(struct file_info *fi, off_t l) {
+ 
+-    ne_content_range64 range;
++    ne_content_range range;
+     ne_session *session;
+ 
+-    assert(fi);
++    assert(fi && (fi->fd >= 0));
+ 
+     if (!(session = session_get(1))) {
+         errno = EIO;
+@@ -257,7 +262,7 @@
+     range.end = l-1;
+     range.total = 0;
+     
+-    if (ne_get_range64(session, fi->filename, &range, fi->fd) != NE_OK) {
++    if (ne_get_range(session, fi->filename, &range, fi->fd) != NE_OK) {
+         fprintf(stderr, "GET failed: %s\n", ne_get_error(session));
+         errno = ENOENT;
+         return -1;
+@@ -271,7 +276,7 @@
+     struct file_info *fi = f;
+     ssize_t r = -1;
+     
+-    assert(fi && buf && size);
++    assert(fi && (fi->fd >= 0) && buf && size);
+ 
+     pthread_mutex_lock(&fi->mutex);
+ 
+@@ -292,7 +297,7 @@
+     struct file_info *fi = f;
+     ssize_t r = -1;
+ 
+-    assert (fi);
++    assert (fi && (fi->fd >= 0));
+ 
+     pthread_mutex_lock(&fi->mutex);
+ 
+@@ -325,7 +330,7 @@
+     struct file_info *fi = f;
+     int r;
+ 
+-    assert(fi);
++    assert(fi && (fi->fd >= 0));
+ 
+     pthread_mutex_lock(&fi->mutex);
+ 
+@@ -341,7 +346,7 @@
+     int r = -1;
+     ne_session *session;
+ 
+-    assert(fi);
++    assert(fi && (fi->fd >= 0));
+     
+     if (!fi->writable) {
+         errno = EBADF;
+diff -urN fusedav.orig/src/fusedav.c fusedav.new/src/fusedav.c
+--- fusedav.orig/src/fusedav.c	2010-05-05 13:57:10.000000000 +0200
++++ fusedav.new/src/fusedav.c	2010-05-06 12:51:43.000000000 +0200
+@@ -51,6 +51,7 @@
+ 
+ #include "statcache.h"
+ #include "filecache.h"
++#include "remoteaccess.h"
+ #include "session.h"
+ #include "fusedav.h"
+ 
+@@ -70,6 +71,7 @@
+ struct ne_lock *lock = NULL;
+ int lock_thread_exit = 0;
+ int lock_timeout = 60;
++int no_cache = 0;
+ 
+ #define MIME_XATTR "user.mime_type"
+ 
+@@ -547,7 +549,7 @@
+         goto finish;
+     }
+ 
+-    if (file_cache_sync(f) < 0) {
++    if ((!no_cache) && (file_cache_sync(f) < 0)) {
+         r = -errno;
+         goto finish;
+     }
+@@ -626,15 +628,22 @@
+         goto finish;
+     }
+ 
+-    if ((r = file_cache_read(f, buf, size, offset)) < 0) {
+-        r = -errno;
+-        goto finish;
++    if (no_cache) {
++        if ((r = remote_access_read(f, buf, size, offset)) < 0) {
++            r = -errno;
++            goto finish;
++        }
++    } else {
++        if ((r = file_cache_read(f, buf, size, offset)) < 0) {
++            r = -errno;
++            goto finish;
++        }
+     }
+ 
+ finish:
+     if (f)
+         file_cache_unref(f);
+-    
++
+     return r;
+ }
+ 
+@@ -653,15 +662,22 @@
+         goto finish;
+     }
+ 
+-    if ((r = file_cache_write(f, buf, size, offset)) < 0) {
+-        r = -errno;
+-        goto finish;
++    if (no_cache) {
++        if ((r = remote_access_write(f, buf, size, offset)) < 0) {
++            r = -errno;
++            goto finish;
++        }
++    } else {
++        if ((r = file_cache_write(f, buf, size, offset)) < 0) {
++            r = -errno;
++            goto finish;
++        }
+     }
+-    
++
+ finish:
+     if (f)
+         file_cache_unref(f);
+-    
++
+     return r;
+ }
+ 
+@@ -1169,14 +1185,15 @@
+         e = argv0;
+     
+     fprintf(stderr,
+-            "%s [-hDL] [-t SECS] [-u USERNAME] [-p PASSWORD] [-o OPTIONS] URL MOUNTPOINT\n"
++            "%s [-hDLr] [-t SECS] [-u USERNAME] [-p PASSWORD] [-o OPTIONS] URL MOUNTPOINT\n"
+             "\t-h Show this help\n"
+             "\t-D Enable debug mode\n"
+             "\t-u Username if required\n"
+             "\t-p Password if required\n"
+             "\t-o Additional FUSE mount options\n"
+             "\t-L Locking the repository during mount\n"
+-            "\t-t Set lock timeout\n",
++            "\t-t Set lock timeout\n"
++            "\t-n No cache (default is file cache)\n",
+             e);
+ }
+ 
+@@ -1400,7 +1417,7 @@
+     if (setup_signal_handlers() < 0)
+         goto finish;
+     
+-    while ((c = getopt(argc, argv, "hu:p:Do:Lt:")) != -1) {
++    while ((c = getopt(argc, argv, "hu:p:Do:Lt:n")) != -1) {
+ 
+         switch(c) {
+             case 'u':
+@@ -1430,6 +1447,10 @@
+                 }
+                 break;
+                 
++            case 'n':
++                no_cache = 1;
++                break;
++
+             case 'h':
+                 ret = 0;
+ 
+@@ -1440,6 +1461,9 @@
+         }
+     }
+ 
++    /*if (debug)
++        ne_debug_init(stderr, 2);*/
++
+     if (optind != argc-2) {
+         usage(argv[0]);
+         goto finish;
+diff -urN fusedav.orig/src/Makefile.am fusedav.new/src/Makefile.am
+--- fusedav.orig/src/Makefile.am	2010-05-05 13:57:10.000000000 +0200
++++ fusedav.new/src/Makefile.am	2010-05-06 12:55:04.000000000 +0200
+@@ -21,6 +21,7 @@
+ fusedav_SOURCES=fusedav.c fusedav.h \
+ 				statcache.c statcache.h \
+ 				filecache.c filecache.h \
++				remoteaccess.c remoteaccess.h \
+ 				session.c session.h
+ 
+ fusedav_CFLAGS = $(AM_CFLAGS) $(NEON_CFLAGS) $(FUSE_CFLAGS) -DFUSE_USE_VERSION=25
+diff -urN fusedav.orig/src/remoteaccess.c fusedav.new/src/remoteaccess.c
+--- fusedav.orig/src/remoteaccess.c	1970-01-01 01:00:00.000000000 +0100
++++ fusedav.new/src/remoteaccess.c	2010-05-06 12:51:57.000000000 +0200
+@@ -0,0 +1,171 @@
++/* $Id$ */
++
++/***
++  This file is part of fusedav.
++
++  fusedav is free software; you can redistribute it and/or modify it
++  under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
++  
++  fusedav is distributed in the hope that it will be useful, but WITHOUT
++  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++  License for more details.
++  
++  You should have received a copy of the GNU General Public License
++  along with fusedav; if not, write to the Free Software Foundation,
++  Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++***/
++
++#ifdef HAVE_CONFIG_H
++#include <config.h>
++#endif
++
++#include <errno.h>
++#include <string.h>
++#include <limits.h>
++#include <fcntl.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <assert.h>
++#include <pthread.h>
++#include <inttypes.h>
++#include <limits.h>
++
++#include <ne_props.h>
++#include <ne_uri.h>
++#include <ne_session.h>
++#include <ne_utils.h>
++#include <ne_socket.h>
++#include <ne_auth.h>
++#include <ne_dates.h>
++#include <ne_basic.h>
++
++#include "filecache.h"
++#include "statcache.h"
++#include "remoteaccess.h"
++#include "fusedav.h"
++#include "session.h"
++
++struct file_info {
++    char *filename;
++    int fd;
++    off_t server_length, length, present;
++    
++    int readable;
++    int writable;
++
++    int modified;
++
++    int ref, dead;
++
++    pthread_mutex_t mutex;
++
++    /* This field is locked by files_mutex, not by file_info->mutex */
++    struct file_info *next;
++};
++
++extern int no_cache;
++
++int remote_access_read(void *f, char *buf, size_t size, off_t offset) {
++    struct file_info *fi = f;
++    ssize_t r = -1;
++    off_t l;
++    ne_content_range range;
++    ne_session *session;
++    ne_generic_data data;
++    
++    if (debug)
++        fprintf(stderr, "Called remote_access_read (size=%d, offset=%lld)\n", size, offset);
++    assert(fi && buf && size);
++
++    pthread_mutex_lock(&fi->mutex);
++
++    if (!(session = session_get(1))) {
++        errno = EIO;
++        goto finish;
++    }
++
++    l = offset+size;
++    if (l > fi->server_length)
++        l = fi->server_length;
++    
++    range.start = offset;
++    range.end = l-1;
++    range.total = 0;
++    
++    data.type = NE_GENERIC_DATA_TYPE_BUFFER;
++    data.generic_data.buf.buffer = buf;
++
++    if (ne_get_range_generic(session, fi->filename, &range, &data) != NE_OK) {
++        fprintf(stderr, "GET failed: %s\n", ne_get_error(session));
++        errno = ENOENT;
++        goto finish;
++    }
++
++    r = data.generic_data.buf.length;
++
++finish:
++    
++    pthread_mutex_unlock(&fi->mutex);
++
++    return r;
++}
++
++int remote_access_write(void *f, const char *buf, size_t size, off_t offset) {
++    struct file_info *fi = f;
++    ssize_t r = -1;
++    off_t l;
++    ne_content_range range;
++    ne_session *session;
++    ne_generic_data data;
++
++    if (debug)
++        fprintf(stderr, "Called remote_access_write (size=%d, offset=%lld)\n", size, offset);
++    assert (fi);
++
++    pthread_mutex_lock(&fi->mutex);
++
++    if (!(session = session_get(1))) {
++        errno = EIO;
++        goto finish;
++    }
++
++    l = offset+size;
++
++    range.start = offset;
++    range.end = l-1;
++    range.total = size;
++
++    data.type = NE_GENERIC_DATA_TYPE_BUFFER;
++    data.generic_data.buf.buffer = buf;
++    data.generic_data.buf.length = size;
++
++    if (ne_put_range_generic(session, fi->filename, &range, &data) != NE_OK) {
++        fprintf(stderr, "PUT failed: %s\n", ne_get_error(session));
++        errno = ENOENT;
++        goto finish;
++    }
++
++    r = size;
++
++    if (offset+size > fi->present)
++        fi->present = offset+size;
++
++    if (offset+size > fi->length)
++        fi->length = offset+size;
++
++    fi->modified = 1;
++
++finish:
++    pthread_mutex_unlock(&fi->mutex);
++
++    return r;
++}
++
++//TODO
++/*int remote_access_truncate(void *f, off_t s) {
++    int r = -1;
++    return r;
++}*/
+diff -urN fusedav.orig/src/remoteaccess.h fusedav.new/src/remoteaccess.h
+--- fusedav.orig/src/remoteaccess.h	1970-01-01 01:00:00.000000000 +0100
++++ fusedav.new/src/remoteaccess.h	2010-05-06 12:52:00.000000000 +0200
+@@ -0,0 +1,31 @@
++#ifndef fooremoteaccesshfoo
++#define fooremoteaceesshfoo
++
++/* $Id$ */
++
++/***
++  This file is part of fusedav.
++
++  fusedav is free software; you can redistribute it and/or modify it
++  under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
++  
++  fusedav is distributed in the hope that it will be useful, but WITHOUT
++  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
++  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
++  License for more details.
++  
++  You should have received a copy of the GNU General Public License
++  along with fusedav; if not, write to the Free Software Foundation,
++  Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++***/
++
++#include <sys/types.h>
++
++#include <ne_session.h>
++
++int remote_access_read(void *f, char *buf, size_t size, off_t offset);
++int remote_access_write(void *f, const char *buf, size_t size, off_t offset);
++
++#endif

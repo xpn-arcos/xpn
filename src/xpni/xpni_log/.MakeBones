@@ -1,0 +1,13 @@
+OBJECTS
+xpni_log_close.c
+xpni_log_destroy.c
+xpni_log_init.c
+xpni_log_open.c
+xpni_log_read.c
+xpni_log_write.c
+xpni_log_register.c
+xpni_log_importFile.c
+xpni_log_exportFile.c
+xpni_log_lseek.c
+xpni_log_opendir.c
+xpni_log_elog.c

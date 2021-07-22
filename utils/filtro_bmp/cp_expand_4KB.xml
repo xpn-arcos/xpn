@@ -1,0 +1,43 @@
+<!--
+Ejecutar con:
+	globusrun-ws -submit -F https://gridimadrid.ciemat.es:8443/wsrf/services/ManagedJobFactoryService -J -S -f cp_expand_4KB.xml
+O simplemente:
+	globusrun-ws -submit -F gridimadrid.ciemat.es -J -S -f cp_expand_4KB.xml
+-->
+<job>
+    <executable>xpncp</executable>
+    <directory>${GLOBUS_USER_HOME}</directory>
+    <argument>-S</argument>
+    <argument>-b</argument>
+    <argument>4</argument>
+    <argument>xpn:///PNFS/earth8k-BM-col-bmp-um.xpn.bmp</argument>
+    <argument>xpn:///PNFS/earth8k-BM-col-bmp-um2.xpn.bmp</argument>
+    <environment>
+        <name>LD_LIBRARY_PATH</name>
+        <value>/usr/local/globus/lib</value>
+    </environment>
+    <environment>
+        <name>XPN_CONF</name>
+        <value>${GLOBUS_USER_HOME}</value>
+    </environment>
+    <stdout>${GLOBUS_USER_HOME}/stdout</stdout>
+    <stderr>${GLOBUS_USER_HOME}/stderr</stderr>
+    <fileStageIn>
+        <transfer>
+            <sourceUrl>gsiftp://cormoran.arcos.inf.uc3m.es/grid/xpncp</sourceUrl>
+            <destinationUrl>file:///${GLOBUS_USER_HOME}/xpncp</destinationUrl>
+        </transfer>
+        <transfer>
+            <sourceUrl>gsiftp://cormoran.arcos.inf.uc3m.es/grid/conf/xpn.conf</sourceUrl>
+            <destinationUrl>file:///${GLOBUS_USER_HOME}/conf/xpn.conf</destinationUrl>
+        </transfer>
+    </fileStageIn>
+    <fileCleanUp>
+        <deletion>
+            <file>file:///${GLOBUS_USER_HOME}/xpncp</file>
+        </deletion>
+        <deletion>
+            <file>file:///${GLOBUS_USER_HOME}/conf/xpn.conf</file>
+        </deletion>
+    </fileCleanUp>
+</job>

@@ -1,0 +1,70 @@
+# Makefile for the I/O benchmark -- generic linux
+
+# objects
+OBJS = get_mfluid_property.o \
+       flash_release.o \
+       flash_benchmark_io.o 
+
+OBJS_HDF5_PARALLEL_IO = checkpoint_hdf5_parallel.o \
+                        plotfile_hdf5_parallel.o \
+                        h5_file_interface.o \
+                        h5_parallel_write.o \
+                        h5_parallel_write_single.o
+
+# compiler and linker commands
+MPICHpath = $(PWD)/third-party/mpich-1.2.4-XPN-patch
+FCOMP   = $(MPICHpath)/bin/mpif90
+CCOMP   = $(MPICHpath)/bin/mpicc
+CPPCOMP = $(MPICHpath)/bin/mpiCC
+LINK    = $(MPICHpath)/bin/mpif90
+
+
+# library locations
+HDF5path = $(PWD)/third-party/hdf5-1.4.5-post8
+ZLIBpath = /usr/lib/
+XPNpath = $(PWD)/../..
+INTELFCEpath = /home/software/intel/intel_fce_80
+GLOBUSpath = /home/software/globus-5.2.2
+
+# compiler flags
+FFLAGS = -c -fast -r8 -ipo_obj \
+         -DN_DIM=3 -DMAXBLOCKS=100 -DIONMAX=13 \
+         -DMPIR_F_TRUE=1 -DMPIR_F_FALSE=0 -DXPN
+
+F90FLAGS = 
+
+CFLAGS = -c -I $(HDF5path)/include/ -DTFLOPS -DN_DIM=3
+
+
+# linker flags
+LFLAGS = -o
+
+
+
+# libraries to include
+LIB = -L$(HDF5path)/lib -lhdf5 -L$(ZLIBpath)/lib -lz -L$(XPNpath)/lib -lxpn
+
+.SUFFIXES: .f .F .f90 .F90 .c .C .o
+
+.F90.o :
+	$(FCOMP) $(FFLAGS) $<
+
+.f.o :
+	$(FCOMP) $(FFLAGS) $<
+
+.c.o :
+	$(CCOMP) $(CFLAGS) $<
+
+flash_benchmark_io: $(OBJS) \
+                    $(OBJS_HDF5_PARALLEL_IO) 
+	$(LINK) $(LFLAGS) $@ $(OBJS) $(OBJS_HDF5_PARALLEL_IO) $(LIB) -Wl,--rpath -Wl,/usr/local/lib -Wl,--rpath -Wl,$(INTELFCEpath)/lib -Wl,--rpath -Wl,$(GLOBUSpath)/lib64
+
+clean:
+	rm -f *.o flash_benchmark_io
+
+
+
+
+
+
+

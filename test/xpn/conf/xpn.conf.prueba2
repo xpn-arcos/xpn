@@ -1,0 +1,9 @@
+PNFS  1 8 NORMAL
+file://192.168.1.3/export/temp/pato13/
+file://192.168.2.3/export/temp/pato23/
+file://192.168.3.3/export/temp/pato33/
+file://192.168.4.3/export/temp/pato43/
+file://192.168.5.3/export/temp/pato53/
+file://192.168.6.3/export/temp/pato63/
+file://192.168.7.3/export/temp/pato73/
+file://192.168.8.3/export/temp/pato83/

@@ -1,0 +1,15 @@
+ Comm_Size       Comm_Rank                    FS_TAG     File_Size       T_W_SEC        T_XCH_SEC
+         1               0        xpni_ft_raid5inner         32768      0.002644        0.022001
+         1               0        xpni_ft_raid5inner        524288      0.032391        0.235990
+         1               0        xpni_ft_raid5inner       2097152      0.128177        0.893555
+         1               0        xpni_ft_raid5inner      16777216      1.049290        7.759545
+         1               0        xpni_ft_raid5inner      67108864      4.243508        29.504999
+         1               0        xpni_ft_raid5inner     134217728      8.680694        58.783535
+         1               0        xpni_ft_raid5inner     268435456      17.298834       110.267517
+         1               0        xpni_ft_raid5outer         32768      0.002814        0.008239
+         1               0        xpni_ft_raid5outer        524288      0.036878        0.052799
+         1               0        xpni_ft_raid5outer       2097152      0.127021        0.193598
+         1               0        xpni_ft_raid5outer      16777216      1.253346        1.525288
+         1               0        xpni_ft_raid5outer      67108864      4.198607        6.233689
+         1               0        xpni_ft_raid5outer     134217728      8.363991        12.278122
+         1               0        xpni_ft_raid5outer     268435456      16.777681       24.759571

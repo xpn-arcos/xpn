@@ -1,0 +1,11 @@
+// the configured options and settings for Expand
+#define Expand_VERSION_MAJOR @Expand_VERSION_MAJOR@
+#define Expand_VERSION_MINOR @Expand_VERSION_MINOR@
+#define Expand_SVN_REVISION @SUBVERSION_REVISION@
+
+// FindThreads
+//#define THREAD_LIBS_INIT		@CMAKE_THREAD_LIBS_INIT@	// the thread library
+//#define USE_SPROC_INIT		@CMAKE_USE_SPROC_INIT@		// are we using sproc?
+//#define USE_WIN32_THREADS_INIT	@CMAKE_USE_WIN32_THREADS_INIT@	// using WIN32 threads?
+//#define USE_PTHREADS_INIT		@CMAKE_USE_PTHREADS_INIT@	// are we using pthreads
+//#define HP_PTHREADS_INIT		@CMAKE_HP_PTHREADS_INIT@	// are we using hp pthreads

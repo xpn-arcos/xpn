@@ -1,0 +1,22 @@
+EXPAND_DIR=../../..
+
+MYFLAGS      = @CFLAGS@ @CDEFS@ -DBUILD_LITE -DHAVE_STRUCT_IOVEC
+MYHEADERS    =  -I$(EXPAND_DIR)/include @M_HEADERS@
+MYLIBS       =  -L$(EXPAND_DIR)/lib @M_LIBS@
+
+EXECS=bmp_est
+
+all: $(EXECS)
+
+Bitmap.o: Bitmap.c Bitmap.h
+	gcc $(MYFLAGS) $(MYHEADERS) -c $<
+
+bmp_est.o: bmp_est.c Bitmap.o
+	gcc $(MYFLAGS) $(MYHEADERS) -c $<
+
+bmp_est: bmp_est.o Bitmap.o $(EXPAND_DIR)/lib/libxpn.a
+	gcc -o $@ $^ -lpthread $(MYLIBS)
+
+clean:
+	rm -f *.o
+	rm -f bmp_est

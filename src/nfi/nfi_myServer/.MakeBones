@@ -1,0 +1,6 @@
+OBJECTS
+nfi_nfs.c
+nfi_nfs_err.c
+nfs.c
+nfs_clnt.c
+nfs_xdr.c

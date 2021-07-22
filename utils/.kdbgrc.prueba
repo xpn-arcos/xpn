@@ -1,0 +1,61 @@
+[Breakpoint 0]
+Enabled=true
+File=../src/xpn/xpn_simple/xpncore/xpn_fillbuf.c
+Line=83
+Temporary=false
+
+[Breakpoint 1]
+Enabled=true
+File=prueba.c
+Line=34
+Temporary=false
+
+[Breakpoint 2]
+Enabled=true
+File=prueba.c
+Line=18
+Temporary=false
+
+[Breakpoint 3]
+Enabled=true
+File=prueba.c
+Line=29
+Temporary=false
+
+[Breakpoint 4]
+Enabled=true
+File=prueba.c
+Line=31
+Temporary=false
+
+[Breakpoint 5]
+Enabled=true
+File=../src/xpn/xpn_simple/xpncore/xpn_rw.c
+Line=49
+Temporary=false
+
+[Breakpoint 6]
+Enabled=true
+File=../src/xpn/xpn_simple/xpncore/xpn_open.c
+Line=626
+Temporary=false
+
+[Environment]
+Value0=/home/bbergua/expand/conf/xpn.conf
+Var0=XPN_CONF
+
+[General]
+DebuggerCmdStr=
+DriverName=GDB
+FileVersion=1
+OptionsSelected=
+ProgramArgs=
+TTYLevel=7
+WorkingDirectory=
+
+[Memory]
+ColumnWidths=80,0
+NumExprs=0
+
+[Watches]
+Expr0=xpn_file_table[0]
