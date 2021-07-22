@@ -1,9 +1,3 @@
-//#include "xpn.h" //added
-//include "expand.h"
-
-//#include "/expand/bypass/xpn_bypass.h"
-
-
 #include <stdlib.h> //added
 #include <fcntl.h> //added
 #include <sys/unistd.h>
@@ -21,10 +15,10 @@ int main()
   	//setenv("XPN_CONF", "/work/xpn.conf.xml", 1);
 	
 
-	/*fd1 = unlink("/xpn1/jj.txt");
+	fd1 = unlink("/xpn1/jj.txt");
 	printf("xpn_unlink jj = %d\n",fd1);
 	fd1 = unlink("/xpn1/jj1.txt");
-	printf("xpn_unlink jj = %d\n",fd1);*/
+	printf("xpn_unlink jj = %d\n",fd1);
 	
 	fd1 = creat("xpn:///xpn1/jj.txt",00747);
 	printf("xpn_creat jj = %d\n",fd1);
