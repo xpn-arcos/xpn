@@ -119,22 +119,25 @@ struct dirent *readdir(DIR *dirp);
 int closedir(DIR *dirp);
 
 
-/*
-//int lstat64(const char *path, struct stat64 *buf);
-int __lxstat64(int ver, const char *path, struct stat64 *buf); //comment
+//int lstat64(const char *path, struct stat64 *buf); //old
+int __lxstat64(int ver, const char *path, struct stat64 *buf);
 
-//int stat64(const char *path, struct stat64 *buf);
-int __xstat64(int ver, const char *path, struct stat64 *buf); //comment 
+//int stat64(const char *path, struct stat64 *buf); //old
+int __xstat64(int ver, const char *path, struct stat64 *buf);
 
-//int fstat64(int fildes, struct stat64 *buf);
-int __fxstat64(int ver, int fildes, struct stat64 *buf); //comment
-*/
+//int fstat64(int fildes, struct stat64 *buf); //old
+int __fxstat64(int ver, int fildes, struct stat64 *buf);
 
-int lstat(const char *path, struct stat *buf);
 
-int stat(const char *path, struct stat *buf);
+//int lstat(const char *path, struct stat *buf); //old
+int __lxstat(int ver, const char *path, struct stat *buf);
 
-int fstat(int fildes, struct stat *buf);
+//int stat(const char *path, struct stat *buf); //old
+int __xstat(int ver, const char *path, struct stat *buf);
+
+//int fstat(int fildes, struct stat *buf); //old
+int __fxstat(int ver, int fd, struct stat *buf);
+
 
 int chmod(const char *path, mode_t mode);
 
