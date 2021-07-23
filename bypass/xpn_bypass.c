@@ -376,7 +376,7 @@
 			printf("NO ES EXPAND!\n");
 	#endif
 			//fd=creat(path,mode);
-			int (*real_creat)(char *, mode_t);
+			int (*real_creat)(const char *, mode_t);
 			real_creat = dlsym(RTLD_NEXT,"creat");
 			fd = real_creat(path,mode);
 	#ifdef DEBUG_BYPASS_CREAT
@@ -1235,7 +1235,7 @@
 		else // Not an XPN partition. We must link with the standard library
 		{
 			//return(write(fd, (void *)buf, nbyte));
-			ssize_t (*real_write)(int, void*, size_t);
+			ssize_t (*real_write)(int, const void*, size_t);
 			real_write = dlsym(RTLD_NEXT,"write");
 			return real_write(fd, buf, nbyte);
 		} // Else
