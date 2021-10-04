@@ -28,7 +28,7 @@ ssize_t xpn_writer (void *cookie, const char *buffer, size_t size) {
 	return xpn_write(*((int *)cookie), (char *)buffer, size);
 }
 
-int xpn_seeker (void *cookie, _IO_off64_t *position, int whence) {
+int xpn_seeker (void *cookie, __off64_t *position, int whence) {
 	return xpn_lseek(*((int *)cookie), (off_t)*position, whence);
 }
 
