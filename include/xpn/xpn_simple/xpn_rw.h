@@ -28,7 +28,7 @@ ssize_t xpn_reader (void *cookie, char *buffer, size_t size);
 ssize_t xpn_writer (void *cookie, const char *buffer, size_t size);
 
 //int xpn_seeker (void *cookie, fpos_t *position, int whence);
-int xpn_seeker (void *cookie, _IO_off64_t *position, int whence);
+int xpn_seeker (void *cookie, __off64_t *position, int whence);
 
 int xpn_cleaner (void *cookie);
 
