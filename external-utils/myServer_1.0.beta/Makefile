@@ -6,7 +6,8 @@
 MAKE         = make -s
 CC           = gcc
 SOURCE_PATH  = ./
-EXPAND_DIR   = $(HOME)/expand/trunk/expand
+#EXPAND_DIR   = $(HOME)/expand/trunk/expand
+EXPAND_DIR   = /opt/xpn
 OBJECTS_MYSERVER      = myServer.o \
 		       myServer_comm.o \
 		       myServer_ops.o \
