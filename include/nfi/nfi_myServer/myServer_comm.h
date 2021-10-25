@@ -15,8 +15,8 @@
 
 void myServer_readFile();
 void myServer_translate(char *server, char *newserver, int *port);
-int myServer_write_data(int fd, char *data, int size, char *id);
-int myServer_read_data(int fd, char *data, int size, char *id);
+ssize_t myServer_write_data(int fd, char *data, ssize_t size, char *id);
+ssize_t myServer_read_data(int fd, char *data, ssize_t size, char *id);
 int myServer_connect(char *server);	
 
 #endif

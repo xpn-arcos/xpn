@@ -291,7 +291,7 @@ int myServer_connect(char *server){
 	return sd;
 }
 
-int myServer_write_data(int fd, char *data, ssize_t size, char *id){
+ssize_t myServer_write_data(int fd, char *data, ssize_t size, char *id){
 	int ret = 0;
 	int cont = 0;
 
@@ -339,7 +339,7 @@ int myServer_write_data(int fd, char *data, ssize_t size, char *id){
 	return size;
 }
 
-int myServer_read_data(int fd, char *data, ssize_t size, char *id){
+ssize_t myServer_read_data(int fd, char *data, ssize_t size, char *id){
 	        
 	int ret = 0;
 	int cont = 0;
