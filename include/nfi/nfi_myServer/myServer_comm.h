@@ -3,6 +3,8 @@
 
 #include "all_system.h"
 
+#include <dlfcn.h>
+
 /* ENVIROMENT VARIABLE: DNS SERVICE */
 #define MYSERVER_FILE "MYSERVER_FILE"
 #define MYSERVER_FILE_DEFAULT "/etc/xpn/myServer.dns"

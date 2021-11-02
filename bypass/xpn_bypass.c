@@ -112,6 +112,7 @@
 	#ifdef DEBUG_BYPASS_XPN_ADAPTOR_KEEPINIT
 			printf("Antes de xpn_init()\n");
 	#endif
+			//xpn_adaptor_initCalled = 1; //TODO: quitar
 			ret = xpn_init();
 	#ifdef DEBUG_BYPASS_XPN_ADAPTOR_KEEPINIT
 			printf("Despues de xpn_init()\n");
@@ -290,9 +291,11 @@
 			printf("antes open64\n");
 	#endif
 			//fd=open64((char *)path,flags,mode);
+			
 			int (*real_open64)(char *, int, mode_t);
 			real_open64 = dlsym(RTLD_NEXT,"open64");
 			fd = real_open64((char *)path, flags, mode);
+
 			if(fd<0){
 	#ifdef DEBUG_BYPASS_OPEN64
 				printf("open64 = %d\n",fd);

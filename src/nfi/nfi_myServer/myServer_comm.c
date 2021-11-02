@@ -119,7 +119,14 @@ int myServer_write_data_test(int fd, char *id){
 		buffer_temp[i] = aux;
 	}
 
-	ret = write(fd, buffer_temp, CONST_TEMP); 
+	//ret = write(fd, buffer_temp, CONST_TEMP); //TODO
+
+	ssize_t (*real_write)(int, const void*, size_t);
+	real_write = dlsym(RTLD_NEXT,"write");
+	ret = real_write(fd, buffer_temp, CONST_TEMP);
+
+
+
 	if(ret != CONST_TEMP ){
 		printf("[NFI_COMM]client:ERROR TEST(1) write_data(%d): err %d  ID=%s --th:%d--\n",fd,ret,id,(int)pthread_self());
 		perror("[NFI_COMM]client:ERROR TEST(1) write");
@@ -129,7 +136,13 @@ int myServer_write_data_test(int fd, char *id){
 	printf("[NFI_COMM] send write test ok ID=%s\n",id);
 #endif
 	bzero(buffer_temp, CONST_TEMP);	
-	ret = read(fd, buffer_temp, CONST_TEMP); 
+	//ret = read(fd, buffer_temp, CONST_TEMP); //TODO
+
+	ssize_t (*real_read)(int, void*, size_t);
+	real_read = dlsym(RTLD_NEXT,"read");
+	ret = real_read(fd, buffer_temp, CONST_TEMP);
+
+
 	if(ret != CONST_TEMP ){
 		printf("[NFI_COMM]client:ERROR TEST(2) write_data(%d): err %d  ID=%s --th:%d--\n",fd,ret,id,(int)pthread_self());
 		perror("[NFI_COMM]client:ERROR TEST(2) write");
@@ -168,7 +181,12 @@ int myServer_read_data_test(int fd, char *id){
 #endif
 	
 	bzero(buffer_temp, CONST_TEMP);	
-	ret = read(fd, buffer_temp, CONST_TEMP); 
+
+	//ret = read(fd, buffer_temp, CONST_TEMP); //TODO
+
+	ssize_t (*real_read)(int, void*, size_t);
+	real_read = dlsym(RTLD_NEXT,"read");
+	ret = real_read(fd, buffer_temp, CONST_TEMP);
 
 	if(ret != CONST_TEMP ){
 		printf("[NFI_COMM]client:ERROR TEST(1) read_data(%d): err %d  ID=%s --th:%d--\n",fd,ret,id,(int)pthread_self());
@@ -195,7 +213,13 @@ int myServer_read_data_test(int fd, char *id){
 		buffer_temp[i] = aux;
 	}
 
-	ret = write(fd, buffer_temp, CONST_TEMP); 
+	//ret = write(fd, buffer_temp, CONST_TEMP); //TODO
+
+	ssize_t (*real_write)(int, const void*, size_t);
+	real_write = dlsym(RTLD_NEXT,"write");
+	ret = real_write(fd, buffer_temp, CONST_TEMP);
+
+
 	if(ret != CONST_TEMP ){
 		printf("[NFI_COMM]client:ERROR TEST(3) read_data(%d): err %d  ID=%s --th:%d--\n",fd,ret,id,(int)pthread_self());
 		perror("[NFI_COMM]client:ERROR TEST(3) read");
@@ -313,7 +337,13 @@ ssize_t myServer_write_data(int fd, char *data, ssize_t size, char *id){
 	}
 
 	do{
-		ret = write(fd, data+cont, size-cont);
+		//ret = write(fd, data+cont, size-cont); //TODO
+
+		ssize_t (*real_write)(int, const void*, size_t);
+		real_write = dlsym(RTLD_NEXT,"write");
+		ret = real_write(fd, data+cont, size-cont);
+
+
 #ifdef DBG_COMM
 	printf("[NFI_COMM]client: write_data(%d): %d = %d ID=%s --th:%d--\n",fd,size,ret,id,(int)pthread_self());
 #endif
@@ -363,7 +393,13 @@ ssize_t myServer_read_data(int fd, char *data, ssize_t size, char *id){
 	}
 
 	do{
-		ret = read(fd, data+cont, size-cont);
+		//ret = read(fd, data+cont, size-cont); //TODO
+
+		ssize_t (*real_read)(int, void*, size_t);
+		real_read = dlsym(RTLD_NEXT,"read");
+		ret = real_read(fd, data+cont, size-cont);
+
+
 #ifdef DBG_COMM
 	printf("[NFI_COMM]client: read_data(%d): %d = %d ID=%s --th:%d--\n",fd,size,ret,id,(int)pthread_self());
 #endif
