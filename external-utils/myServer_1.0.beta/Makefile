@@ -21,7 +21,7 @@ OBJECTS_MYSERVER      = myServer.o \
 #MYFLAGS      = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDBG_OPS -DDBG_WORKERS 
 MYFLAGS      = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
 MYHEADERS    =  -I$(EXPAND_DIR)/include 
-MYLIBS       =  -L$(EXPAND_DIR)/lib  -L${HOME}/mxml/lib  -lpthread -lxpn -lmxml
+MYLIBS       =  -L$(EXPAND_DIR)/lib  -L${HOME}/mxml/lib  -lpthread -lxpn -lmxml -ldl
 
 
 MYSERVER_EXE = myServer.exe
