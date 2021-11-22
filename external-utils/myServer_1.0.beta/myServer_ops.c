@@ -511,15 +511,15 @@ void myServer_op_read(int sd, struct st_myServer_msg *head){
 		}
 	
 		
-/*		
+		
 		req.size = read(head->u_st_myServer_msg.op_read.fd,
 		 			buffer,
        		   			size_req);
-*/
+
 
 		
-		usleep(rand()%1000);	
-		req.size = size_req;
+		//usleep(rand()%1000);	
+		//req.size = size_req;
 
 		if(req.size < 0){
 			perror("read:");
