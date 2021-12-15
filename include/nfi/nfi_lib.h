@@ -38,11 +38,16 @@
 	#include "nfi_gridftp/gridftp_lib.h"
 #endif
 // END OF ENABLE_GRIDFTP BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_MYSERVER BLOCK. Do not remove this line. //
-#ifdef ENABLE_MYSERVER
-	#include "nfi_myServer/myServer_lib.h"
+// BEGIN OF ENABLE_TCPSERVER BLOCK. Do not remove this line. //
+#ifdef ENABLE_TCPSERVER
+	#include "nfi_tcpServer/myServer_lib.h"
 #endif
-// END OF ENABLE_MYSERVER BLOCK. Do not remove this line. //
+// END OF ENABLE_TCPSERVER BLOCK. Do not remove this line. //
+// BEGIN OF ENABLE_MPISERVER BLOCK. Do not remove this line. //
+#ifdef ENABLE_MPISERVER
+	#include "nfi_mpiServer/myServer_lib.h"
+#endif
+// END OF ENABLE_MPISERVER BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_IOPROXY_RPC BLOCK. Do not remove this line. //
 #ifdef ENABLE_IOPROXY_RPC
 	#include "nfi_ioproxy-rpc/ioproxy-rpc_lib.h"

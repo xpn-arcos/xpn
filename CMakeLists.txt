@@ -146,19 +146,33 @@ if (ENABLE_GRIDFTP)
 endif (ENABLE_GRIDFTP)
 ### END OF GRIDFTP BLOCK. Do not remove this line. ###
 
-### BEGIN OF MYSERVER BLOCK. Do not remove this line. ###
+### BEGIN OF TCPSERVER BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if gridftp is enabled.
 #
-option (ENABLE_MYSERVER "Enable MyServer module." OFF)
-if (ENABLE_MYSERVER)
+option (ENABLE_TCPSERVER "Enable MyServer module." OFF)
+if (ENABLE_TCPSERVER)
 	MESSAGE("Enabling MyServer module")
-	add_definitions(-DENABLE_MYSERVER)
-	#set (CDEFS "${CDEFS} -DENABLE_MYSERVER")
-	#set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DENABLE_MYSERVER")
+	add_definitions(-DENABLE_TCPSERVER)
+	#set (CDEFS "${CDEFS} -DENABLE_TCPSERVER")
+	#set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DENABLE_TCPSERVER")
 	# TODO
-endif (ENABLE_MYSERVER)
-### END OF MYSERVER BLOCK. Do not remove this line. ###
+endif (ENABLE_TCPSERVER)
+### END OF TCPSERVER BLOCK. Do not remove this line. ###
+
+### BEGIN OF MPISERVER BLOCK. Do not remove this line. ###
+#
+# Defines the necessary variables if gridftp is enabled.
+#
+option (ENABLE_MPISERVER "Enable MyServer module." OFF)
+if (ENABLE_MPISERVER)
+	MESSAGE("Enabling MyServer module")
+	add_definitions(-DENABLE_MPISERVER)
+	#set (CDEFS "${CDEFS} -DENABLE_MPISERVER")
+	#set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DENABLE_MPISERVER")
+	# TODO
+endif (ENABLE_MPISERVER)
+### END OF MPISERVER BLOCK. Do not remove this line. ###
 
 ### BEGIN OF IOPROXY_RPC BLOCK. Do not remove this line. ###
 #

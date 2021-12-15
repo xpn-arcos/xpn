@@ -6,7 +6,6 @@
  * XPN_DNS -> node{ID}	{hostname}	{port}
  */
 
-
 /**********************************
 Write the operation to realize
 ***********************************/
@@ -14,151 +13,136 @@ int myServer_write_operation(int sd, struct st_myServer_msg *head){
         int ret;
 
 
-#ifdef DBG_NFI 
-	printf("[NFI]ID=%s)myServer_write_data: begin\n", head->id);	
+#ifdef _DBG_
+	printf("ID=%s)myServer_write_data: begin\n",head->id);	
 #endif
-        ret = myServer_write_data(sd, (char *)&head->type, sizeof(head->type), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->type), sizeof(int));
         if(ret == -1){
                 return -1;
         }
 
 
+#ifdef _DBG_
+        printf("ID=%s)antes de write_operation: %d\n ", head->id, head->type);
+#endif
+        ret = myServer_write_data(sd, (char *)&(head->id), sizeof(int));
+        if(ret == -1){
+                return -1;
+        }
 
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)write_operation: %d -> \n", head->id, head->type);
+#ifdef _DBG_
+	
+        printf("ID=%s)write_operation: %d -> \n", head->id, head->type);
 #endif
         switch(head->type){
 case MYSERVER_OPEN_FILE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)OPEN operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)OPEN operation\n",sd,head->id);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_open, sizeof(struct st_myServer_open), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_open), sizeof(struct st_myServer_open));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_CREAT_FILE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)CREAT operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)CREAT operation\n",sd,head->id);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_creat, sizeof(struct st_myServer_creat), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_creat), sizeof(struct st_myServer_creat));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_READ_FILE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)READ operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)READ operation\n", sd,head->type);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_read, sizeof(struct st_myServer_read), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_read), sizeof(struct st_myServer_read));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_WRITE_FILE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)WRITE operation\n", head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)WRITE operation\n",sd, head->type);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_write, sizeof(struct st_myServer_write), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_write), sizeof(struct st_myServer_write));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_CLOSE_FILE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)CLOSE operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)CLOSE operation\n", sd,head->type);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_close, sizeof(struct st_myServer_close), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_close), sizeof(struct st_myServer_close));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_RM_FILE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)RM operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)RM operation\n", sd,head->type);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_rm, sizeof(struct st_myServer_rm), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_rm), sizeof(struct st_myServer_rm));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_GETATTR_FILE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)GETATTR operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)GETATTR operation\n", sd,head->type);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_getattr, sizeof(struct st_myServer_getattr), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_getattr), sizeof(struct st_myServer_getattr));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_MKDIR_DIR:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)MDKIR operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)MDKIR operation\n", sd,head->type);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_mkdir, sizeof(struct st_myServer_mkdir), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_mkdir), sizeof(struct st_myServer_mkdir));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_RMDIR_DIR:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)RMDIR operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)RMDIR operation\n", sd,head->type);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_rmdir, sizeof(struct st_myServer_rmdir), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_rmdir), sizeof(struct st_myServer_rmdir));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_FLUSH_FILE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)FLUSH operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)FLUSH operation\n", sd,head->type);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_flush, sizeof(struct st_myServer_flush), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_flush), sizeof(struct st_myServer_flush));
         if(ret == -1){
                 return -1;
         }
         break;
 case MYSERVER_PRELOAD_FILE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)PRELOAD operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)PRELOAD operation\n", sd,head->type);
 #endif
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_preload, sizeof(struct st_myServer_preload), head->id);
+        ret = myServer_write_data(sd, (char *)&(head->u_st_myServer_msg.op_preload), sizeof(struct st_myServer_preload));
         if(ret == -1){
                 return -1;
-        }
+	}
         break;
 case MYSERVER_FINALIZE:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)FINALIZE operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)FINALIZE operation\n", sd,head->type);
 #endif
-/*
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_end, sizeof(struct st_myServer_end), head->id);
-        if(ret == -1){
-                return -1;
-        }
-*/
-        break;
-case MYSERVER_GETID:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)GETID operation\n",head->id);
-#endif
-/*
-        ret = myServer_write_data(sd, (char *)head->id, MYSERVER_ID, head->id);
-        if(ret == -1){
-                return -1;
-        }
-*/
         break;
 case MYSERVER_END:
-#ifdef DBG_NFI_OPS
-        printf("[NFI]ID=%s)END operation\n",head->id);
+#ifdef _DBG_
+        printf("sd=%d,id=%d)END operation\n", sd,head->type);
 #endif
-/*
-        ret = myServer_write_data(sd, (char *)&head->u_st_myServer_msg.op_end, sizeof(struct st_myServer_end), head->id);
-        if(ret == -1){
-                return -1;
-        }
-*/
         break;
         }
         return 0;
@@ -172,13 +156,14 @@ case MYSERVER_END:
  ************************************************************/
 void NFItoMYSERVERattr(struct stat *att, struct nfi_attr *nfi_att)
 {
+	
 	if(nfi_att->at_type == NFIFILE){		
 		att->st_mode	= nfi_att->at_mode | S_IFREG;     /* protection */	}
 	
 	if(nfi_att->at_type == NFIDIR){		
 		att->st_mode	= nfi_att->at_mode | S_IFDIR;     /* protection */	}
 	
-	att->st_size	= nfi_att->at_size;      /* size */
+	att->st_size	= nfi_att->at_off;      /* size */
 	att->st_uid	= nfi_att->at_uid;      /* user ID of owner */
 	att->st_gid	= nfi_att->at_gid;      /* group ID of owner */
 	att->st_blksize	= nfi_att->at_blksize;  /* blocksize for filesystem I/O */
@@ -197,7 +182,7 @@ void MYSERVERtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
 		nfi_att->at_type = NFIDIR;
         }
 
-	nfi_att->at_size = att->st_size;      /* size */
+	nfi_att->at_off = att->st_size;      /* size */
         nfi_att->at_mode = att->st_mode&(S_IRWXU|S_IRWXG|S_IRWXO); /* protection */
         nfi_att->at_uid = att->st_uid;      /* user ID of owner */
         nfi_att->at_gid = att->st_gid;      /* group ID of owner */
@@ -225,15 +210,19 @@ int nfi_myServer_init(char *url, struct nfi_server *serv, struct nfi_attr_server
 	
 	int ret;
 	struct nfi_myServer_server *server_aux;
-	struct st_myServer_msg msg;        
 
+	srand(time(NULL));
 
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_init: begin\n");
+	fflush(stdout);
+	printf("nfi_myServer_init: begin\n");
+	fflush(stdout);
 #endif	
 
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_init: sizeof(struct st_myServer_msg) = %d.\n", sizeof(struct st_myServer_msg));
+	fflush(stdout);
+	printf("nfi_myServer_init: sizeof(struct st_myServer_msg) = %d.\n", sizeof(struct st_myServer_msg));
+	fflush(stdout);
 #endif	
 	
 	if(serv == NULL){
@@ -291,65 +280,67 @@ int nfi_myServer_init(char *url, struct nfi_server *serv, struct nfi_attr_server
 
 	/******************************************/
 
+//	strcpy(server_aux->path, dir);	
 	server_aux->sd = myServer_connect(server);
-	strcpy(msg.id, "GETID");
-        msg.type = MYSERVER_GETID;                                                                                   
-        myServer_write_operation(server_aux->sd, &msg);                                                                     
-#ifdef  DBG_NFI
-	printf("[NFI]nfi_myServer_init: myServer_write_data\n");
-#endif
-	myServer_read_data(server_aux->sd, (char *)server_aux->id, MYSERVER_ID, msg.id);  
-#ifdef  DBG_NFI
-	printf("[NFI]nfi_myServer_init: myServer_read_data id = %s\n",server_aux->id);
-#endif
+	
+//	printf("nfi_myServer_init: 1\n");
 	/******************************************/
 	
 	serv->private_info = (void *)server_aux;
+//	printf("nfi_myServer_init: 2\n");
 
-	//serv->protocol = MYSERVER;
-	
+	serv->protocol = MYSERVER;
+//	printf("nfi_myServer_init: 3\n");
 	serv->server = (char *)malloc(sizeof(char)*(strlen(server)+1));	/* server address */
+//	printf("nfi_myServer_init: 4\n");
 	if(serv->server == NULL){
 		myServer_err(MYSERVERERR_MEMORY);
 		return -1;
 	}
 	strcpy(serv->server, server);
+//	printf("nfi_myServer_init: 5\n");
 
 	serv->url = (char *)malloc(sizeof(char)*(strlen(url)+1));	/* server address */
+//	printf("nfi_myServer_init: 5\n");
 	if(serv->url == NULL){
 		myServer_err(MYSERVERERR_MEMORY);
 		return -1;
 	}
 
+//	printf("nfi_myServer_init: 6\n");
 	strcpy(serv->url, url);
+//	printf("nfi_myServer_init: 7\n");
         serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker));
-	memset(serv->wrk, 0, sizeof(struct nfi_worker));
+//	printf("nfi_myServer_init: 8\n");
+
 
 
 #ifdef _ALL_THREADS_
+//	printf("nfi_myServer_init: 9\n");
 //	nfi_worker_init(serv->wrk, serv, 1);
+//	printf("nfi_myServer_init: 10\n");
 //	nfi_worker_init(serv->wrk, serv, 0);
 
 #else
 	if(strcmp("myServer", prt) == 0){
 #if defined(DEBUG_NFI)
-		printf("[NFI]myServer\n");
+		printf("myServer\n");
 #endif
-#ifdef  DBG_NFI 
-	printf("[NFI]nfi_worker_init(1,ID=%s): \n",server_aux->id);
-#endif
+//		printf("nfi_myServer_init: 11.1\n");
 		nfi_worker_init(serv->wrk, serv, 1);
+//		printf("nfi_myServer_init: 12.1\n");
 	}
 	else{
-#ifdef  DBG_NFI 
-	printf("[NFI]nfi_worker_init(0,ID=%s): \n",server_aux->id);
-#endif
+//		printf("nfi_myServer_init: 11.0\n");
 		nfi_worker_init(serv->wrk, serv, 0);
+//		printf("nfi_myServer_init: 12.0\n");
 	}
 #endif	
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_init(ID=%s): end\n",server_aux->id);
-#endif
+	fflush(stdout);
+	printf("nfi_myServer_init: end\n");
+	fflush(stdout);
+#endif	
 	return 0;
 }
 
@@ -369,7 +360,7 @@ int nfi_myServer_disconnect(struct nfi_server *serv)
         server_aux = (struct nfi_myServer_server *)serv->private_info;
         if(server_aux != NULL){
         	close(server_aux->sd);
-			//printf("[NFI]close la conexion\n");
+			//printf("close la conexion\n");
                 free(serv->private_info);
 	}
 
@@ -381,7 +372,7 @@ int nfi_myServer_disconnect(struct nfi_server *serv)
 		free(serv->server);
 	}
 
-	//serv->protocol = -1;
+	serv->protocol = -1;
 
 	return 0;
 }
@@ -436,7 +427,7 @@ int nfi_myServer_destroy(struct nfi_server *serv)
 	server_aux = (struct nfi_myServer_server *)serv->private_info;
 
 	if(server_aux != NULL){
-		//printf("[NFI]Cierro la conexion\n");
+		//printf("Cierro la conexion\n");
 		msg.type = -1;
         	myServer_write_operation(server_aux->sd, &msg);
         	close(server_aux->sd);
@@ -451,10 +442,8 @@ int nfi_myServer_destroy(struct nfi_server *serv)
 		free(serv->server);
 	}
 
-	//serv->protocol = -1;
-	
+	serv->protocol = -1;
 	nfi_worker_end(serv->wrk);
-	
 	return 0;
 }
 
@@ -473,10 +462,10 @@ int nfi_myServer_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struc
 	struct st_myServer_msg msg;
 	struct st_myServer_attr_req req;
 
-	server_aux = (struct nfi_myServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_getattr(ID=%s): begin\n",server_aux->id);
+	fflush(stdout);
+	printf("nfi_myServer_getattr: begin\n");
+	fflush(stdout);
 #endif	
 	if (attr == NULL){
 		myServer_err(MYSERVERERR_PARAM);
@@ -504,7 +493,7 @@ int nfi_myServer_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struc
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -524,14 +513,24 @@ int nfi_myServer_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struc
 	msg.type = MYSERVER_GETATTR_FILE; 
 	strcpy(msg.u_st_myServer_msg.op_getattr.path, fh_aux->path);
 
+#ifdef DBG_NFI 
+	fflush(stdout);
+	printf("nfi_myServer_getattr: sizeof(struct st_myServer_msg) = %d.\n", sizeof(struct st_myServer_msg));
+	fflush(stdout);
+#endif	
+	
         myServer_write_operation(server_aux->sd, &msg);
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_getattr(ID=%s): getattr: -> %s \n", server_aux->id, msg.u_st_myServer_msg.op_getattr.path);
+	fflush(stdout);
+	printf("getattr: -> %s \n",msg.u_st_myServer_msg.op_getattr.path);
+	fflush(stdout);
 #endif
 	bzero(&req, sizeof(struct st_myServer_attr_req));
-	myServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_myServer_attr_req), msg.id);
+	myServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_myServer_attr_req));
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_getattr(ID=%s): getattr: <- %d\n", server_aux->id, req.status);
+	fflush(stdout);
+	printf("getattr: <- %d \n", req.status);
+	fflush(stdout);
 #endif
 	/*****************************************/	
 	
@@ -547,7 +546,9 @@ int nfi_myServer_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struc
 	MYSERVERtoNFIattr(attr, &req.attr);
 	
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_getattr(ID=%s): end\n",server_aux->id);
+	fflush(stdout);
+	printf("nfi_myServer_getattr: end\n");
+	fflush(stdout);
 #endif
 	return req.status;
 }
@@ -578,7 +579,7 @@ int nfi_myServer_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struc
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -617,10 +618,10 @@ int nfi_myServer_preload(struct nfi_server *serv, char *url, char *virtual_path,
 	struct nfi_myServer_server *server_aux;
 	struct st_myServer_msg msg;
 	
-	server_aux = (struct nfi_myServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_preload(ID=%s): begin %s - %s \n", server_aux->id, virtual_path, storage_path);
+	fflush(stdout);
+	printf("nfi_myServer_preload begin %s - %s \n", virtual_path, storage_path);
+	fflush(stdout);
 #endif
 	if(url == NULL){
 		myServer_err(MYSERVERERR_PARAM);
@@ -650,7 +651,7 @@ int nfi_myServer_preload(struct nfi_server *serv, char *url, char *virtual_path,
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -663,7 +664,9 @@ int nfi_myServer_preload(struct nfi_server *serv, char *url, char *virtual_path,
 
 	server_aux = (struct nfi_myServer_server *) serv->private_info;
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_preload(ID=%s): preload %s in server %s.\n",server_aux->id,virtual_path,serv->server);
+	fflush(stdout);
+	printf("nfi_myServer_preload: preload %s in server %s.\n",virtual_path,serv->server);
+	fflush(stdout);
 #endif
 	
 	/*****************************************/
@@ -673,21 +676,32 @@ int nfi_myServer_preload(struct nfi_server *serv, char *url, char *virtual_path,
 	strcpy(msg.u_st_myServer_msg.op_preload.storage_path,storage_path);
 	msg.u_st_myServer_msg.op_preload.opt = opt;
 
+#ifdef DBG_NFI 
+	fflush(stdout);
+	printf("nfi_myServer_preload: sizeof(struct st_myServer_msg) = %d.\n", sizeof(struct st_myServer_msg));
+	fflush(stdout);
+#endif	
         myServer_write_operation(server_aux->sd, &msg);
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_preload(ID=%s): preload: -> %s \n",server_aux->id,msg.u_st_myServer_msg.op_preload.virtual_path);
+	fflush(stdout);
+	printf("preload: -> %s \n",msg.u_st_myServer_msg.op_preload.virtual_path);
+	fflush(stdout);
 #endif
-	myServer_read_data(server_aux->sd, (char *)&ret, sizeof(int), msg.id);
+	myServer_read_data(server_aux->sd, (char *)&ret, sizeof(int));
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_preload(ID=%s): preload: <- %d \n",server_aux->id,ret);
+	fflush(stdout);
+	printf("preload: <- %d \n",ret);
+	fflush(stdout);
 #endif
 	/*****************************************/
 	
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_preload(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret);
+	fflush(stdout);
+	printf("nfi_myServer_preload end %s - %s = %d\n", virtual_path, storage_path, ret);
+	fflush(stdout);
 #endif
 	if(ret == -1){
-		printf("[NFI]Error en el preload\n");
+		printf("Error en el preload\n");
 	}
 
 	return ret;
@@ -702,10 +716,10 @@ int nfi_myServer_flush(struct nfi_server *serv,  char *url, char *virtual_path, 
 
 	struct st_myServer_msg msg;
 	
-	server_aux = (struct nfi_myServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_flush(ID=%s): begin %s - %s \n", server_aux->id,virtual_path, storage_path);
+	fflush(stdout);
+	printf("nfi_myServer_flush begin %s - %s \n", virtual_path, storage_path);
+	fflush(stdout);
 #endif
 	if(url == NULL){
 		myServer_err(MYSERVERERR_PARAM);
@@ -735,7 +749,7 @@ int nfi_myServer_flush(struct nfi_server *serv,  char *url, char *virtual_path, 
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -748,7 +762,9 @@ int nfi_myServer_flush(struct nfi_server *serv,  char *url, char *virtual_path, 
 
 	server_aux = (struct nfi_myServer_server *) serv->private_info;
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_flush(ID=%s): open %s in server %s.\n",server_aux->id,virtual_path,serv->server);
+	fflush(stdout);
+	printf("nfi_myServer_flush: open %s in server %s.\n",virtual_path,serv->server);
+	fflush(stdout);
 #endif
 	
 	/*****************************************/
@@ -758,18 +774,29 @@ int nfi_myServer_flush(struct nfi_server *serv,  char *url, char *virtual_path, 
 	strcpy(msg.u_st_myServer_msg.op_flush.storage_path,storage_path);
 	msg.u_st_myServer_msg.op_flush.opt = opt;
 
+#ifdef DBG_NFI 
+	fflush(stdout);
+	printf("nfi_myServer_flush: sizeof(struct st_myServer_msg) = %d.\n", sizeof(struct st_myServer_msg));
+	fflush(stdout);
+#endif	
         myServer_write_operation(server_aux->sd, &msg);
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_flush(ID=%s): flush: -> %s \n",server_aux->id,msg.u_st_myServer_msg.op_flush.virtual_path);
+	fflush(stdout);
+	printf("flush: -> %s \n",msg.u_st_myServer_msg.op_flush.virtual_path);
+	fflush(stdout);
 #endif
-	myServer_read_data(server_aux->sd, (char *)&ret, sizeof(int), msg.id);
+	myServer_read_data(server_aux->sd, (char *)&ret, sizeof(int));
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_flush(ID=%s): flush: <- %d \n",server_aux->id,ret);
+	fflush(stdout);
+	printf("flush: <- %d \n",ret);
+	fflush(stdout);
 #endif
 	/*****************************************/
 	
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_flush(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret);
+	fflush(stdout);
+	printf("nfi_myServer_flush end %s - %s = %d\n", virtual_path, storage_path, ret);
+	fflush(stdout);
 #endif
 	return 0;
 }
@@ -785,10 +812,10 @@ int nfi_myServer_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *f
 
 	struct st_myServer_msg msg;
 	
-	server_aux = (struct nfi_myServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_open(ID=%s): begin %s\n",server_aux->id,url);
+	fflush(stdout);
+	printf("nfi_myServer_open begin %s\n",url);
+	fflush(stdout);
 #endif
 	if(url[strlen(url)-1] == '/'){
 		return nfi_myServer_opendir(serv, url, fho);
@@ -807,7 +834,7 @@ int nfi_myServer_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *f
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -844,14 +871,23 @@ int nfi_myServer_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *f
 	/*****************************************/
 	msg.type = MYSERVER_OPEN_FILE; 
 	strcpy(msg.u_st_myServer_msg.op_open.path,dir);
+#ifdef DBG_NFI 
+	fflush(stdout);
+	printf("nfi_myServer_open: sizeof(istruct st_myServer_msg) = %d.\n", sizeof(struct st_myServer_msg));
+	fflush(stdout);
+#endif	
 	
         myServer_write_operation(server_aux->sd, &msg);
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_open(ID=%s): open -> %s \n",server_aux->id,msg.u_st_myServer_msg.op_open.path);
+	fflush(stdout);
+	printf("open: -> %s \n",msg.u_st_myServer_msg.op_open.path);
+	fflush(stdout);
 #endif
-	myServer_read_data(server_aux->sd, (char *)&fh_aux->fd, sizeof(int), msg.id);
+	myServer_read_data(server_aux->sd, (char *)&fh_aux->fd, sizeof(int));
 #ifdef DBG_NFI 
-	printf("[NFI]nfi_myServer_open(ID=%s): open <- %d \n",server_aux->id,fh_aux->fd);
+	fflush(stdout);
+	printf("open: <- %d \n",fh_aux->fd);
+	fflush(stdout);
 #endif
 	strcpy(fh_aux->path, dir);
 	/*****************************************/
@@ -864,7 +900,9 @@ int nfi_myServer_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *f
 	fho->priv_fh = (void *) fh_aux;
 
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_open(ID=%s): end\n",server_aux->id);
+	fflush(stdout);
+	printf("nfi_myServer_open end\n");
+	fflush(stdout);
 #endif
 	return 0;
 
@@ -880,10 +918,10 @@ int nfi_myServer_close(struct nfi_server *server,  struct nfi_fhandle *fh){
 	struct nfi_myServer_server *server_aux;
 	struct st_myServer_msg msg;
 
-	server_aux = (struct nfi_myServer_server *) server->private_info;
-	strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_close(ID=%s): begin\n",server_aux->id);
+	fflush(stdout);
+	printf("nfi_myServer_close begin\n");
+	fflush(stdout);
 #endif
 	if (server == NULL){
 		myServer_err(MYSERVERERR_PARAM);
@@ -901,10 +939,17 @@ int nfi_myServer_close(struct nfi_server *server,  struct nfi_fhandle *fh){
 		msg.type = MYSERVER_CLOSE_FILE; 
 		msg.u_st_myServer_msg.op_close.fd = fh_aux->fd;
 	
-        	myServer_write_operation(server_aux->sd, &msg);
+#ifdef DBG_NFI 
+	fflush(stdout);
+	printf("nfi_myServer_close: sizeof(struct st_myServer_msg) = %d.\n", sizeof(struct st_myServer_msg));
+	fflush(stdout);
+#endif	
+        myServer_write_operation(server_aux->sd, &msg);
 			
 #ifdef  DBG_NFI 
-		printf("[NFI]nfi_myServer_close(ID=%s): close -> %d \n",server_aux->id,msg.u_st_myServer_msg.op_close.fd);
+	fflush(stdout);
+		printf("close: -> %d \n",msg.u_st_myServer_msg.op_close.fd);
+	fflush(stdout);
 #endif
 		/*****************************************/
 		//close(fh_aux->fd);
@@ -916,7 +961,9 @@ int nfi_myServer_close(struct nfi_server *server,  struct nfi_fhandle *fh){
 	fh->type = NFINULL;
 	fh->server = NULL;
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_close(ID=%s): end\n",server_aux->id);
+	fflush(stdout);
+	printf("nfi_myServer_close end\n");
+	fflush(stdout);
 #endif
 
 	return 0;
@@ -937,10 +984,10 @@ ssize_t nfi_myServer_read(	struct nfi_server *serv,
 	struct st_myServer_msg msg;
 	struct st_myServer_read_req req;
 
-	server_aux = (struct nfi_myServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_read(%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
+	fflush(stdout);
+	printf("nfi_myServer_read begin off %d size %d\n",(int)offset, (int)size);
+	fflush(stdout);
 #endif
 	if (serv == NULL){
 		myServer_err(MYSERVERERR_PARAM);
@@ -958,7 +1005,7 @@ ssize_t nfi_myServer_read(	struct nfi_server *serv,
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -981,64 +1028,72 @@ ssize_t nfi_myServer_read(	struct nfi_server *serv,
 	msg.u_st_myServer_msg.op_read.size 	= size;
 
 	#ifdef  DBG_IO
-		printf("[NFI]read: -> fd %d \n",msg.u_st_myServer_msg.op_read.fd);
-		printf("[NFI]read: -> offset %d \n",(int)msg.u_st_myServer_msg.op_read.offset);
-		printf("[NFI]read: -> size %d \n",msg.u_st_myServer_msg.op_read.size);
+	fflush(stdout);
+		printf("read: -> fd %d \n",msg.u_st_myServer_msg.op_read.fd);
+		printf("read: -> offset %d \n",(int)msg.u_st_myServer_msg.op_read.offset);
+		printf("read: -> size %d \n",msg.u_st_myServer_msg.op_read.size);
+	fflush(stdout);
 	#endif  
+
+#ifdef DBG_NFI 
+	fflush(stdout);
+	printf("nfi_myServer_read: sizeof(struct st_myServer_msg) = %d.\n", sizeof(struct st_myServer_msg));
+	fflush(stdout);
+#endif	
 
 	ret = myServer_write_operation(server_aux->sd, &msg);
 	if(ret == -1){
-		perror("ERROR: (1)nfi_myServer_read: Error on write operation");
-		fprintf(stderr,"ERROR: (1)nfi_myServer_read: Error on write operation\n");
+		fprintf(stderr,"(1)nfi_myServer_read: Error on read operation\n");
 		return -1;
 	}
 
 	cont = 0;
 	do{
-		ret = myServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_myServer_read_req), msg.id);
+		ret = myServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_myServer_read_req));
 #ifdef DBG_NFI 
-		printf("[NFI]nfi_myServer_read(ID=%s): (1)myServer_read_data = %d.\n",server_aux->id, ret);
+		printf("nfi_myServer_read: (1)myServer_read_data = %d.\n", ret);
 #endif		
 		if(ret == -1){
-			perror("ERROR: (2)nfi_myServer_read: Error on write operation");
-			fprintf(stderr,"ERROR: (2)nfi_myServer_read: Error on write operation\n");
+			fprintf(stderr,"(1)nfi_myServer_read: Error on read operation\n");
 			return -1;
 		}
 
 
 		if(req.size > 0){
+			ret = myServer_read_data(server_aux->sd, (char *)buffer+cont, req.size);
 #ifdef DBG_NFI 
-		printf("[NFI]nfi_myServer_read(ID=%s): (2)myServer_read_data = %d. size = %d cont = %d\n",server_aux->id, ret, req.size, cont);
-#endif		
-			ret = myServer_read_data(server_aux->sd, (char *)buffer+cont, req.size, msg.id);
-#ifdef DBG_NFI 
-			printf("[NFI]nfi_myServer_read(ID=%s): (2)myServer_read_data = %d.\n",server_aux->id, ret);
+			printf("nfi_myServer_read: (2)myServer_read_data = %d.\n", ret);
 #endif		
 			if(ret == -1){
-				perror("ERROR: (3)nfi_myServer_read: Error on write operation");
-				fprintf(stderr,"ERROR: (3)nfi_myServer_read: Error on read operation\n");
+				fprintf(stderr,"(2)nfi_myServer_read: Error on read operation\n");
 				return -1;
 			}
 			//cont += req.size;
 		}
 		cont += req.size;
 #ifdef  DBG_NFI 
-		printf("[NFI]nfi_myServer_read(ID=%s): read(%d,%d) cont = %d\n",server_aux->id,req.size,(int)req.last,cont);	
+	fflush(stdout);
+		printf("read(%d,%d) cont = %d\n",req.size,(int)req.last,cont);	
+	fflush(stdout);
 #endif
 	}while((req.size>0)&&(!req.last));
 	
 	/*****************************************/
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_read(ID=%s): read %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
+	fflush(stdout);
+	printf("nfi_myServer_read: read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)req.size);
+	fflush(stdout);
 #endif
 	if(req.size < 0){
-		fprintf(stderr,"ERROR: nfi_myServer_read: Fail read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)req.size);
+		fprintf(stderr,"nfi_myServer_read: Fail read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)req.size);
 		myServer_err(MYSERVERERR_READ);
 		return -1;
 	}
 
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_read(ID=%s): end\n",server_aux->id);
+	fflush(stdout);
+	printf("nfi_myServer_read end\n");
+	fflush(stdout);
 #endif
 	return req.size;
 }
@@ -1060,10 +1115,10 @@ ssize_t nfi_myServer_write(struct nfi_server *serv,
 
 	int ret;
 	
-	server_aux = (struct nfi_myServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI
-	printf("[NFI]nfi_myServer_write(ID=%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
+	fflush(stdout);
+	printf("nfi_myServer_write begin off %d size %d\n",(int)offset, (int)size);
+	fflush(stdout);
 #endif
 	if(size == 0){
 		return 0;
@@ -1084,7 +1139,7 @@ ssize_t nfi_myServer_write(struct nfi_server *serv,
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -1106,44 +1161,55 @@ ssize_t nfi_myServer_write(struct nfi_server *serv,
 	msg.u_st_myServer_msg.op_write.size 	= size;
 
 	#ifdef  DBG_IO
-		printf("[NFI]write: -> fd %d \n",msg.u_st_myServer_msg.op_write.fd);
-		printf("[NFI]write: -> offset %d \n",(int)msg.u_st_myServer_msg.op_write.offset);
-		printf("[NFI]write: -> size %d \n",msg.u_st_myServer_msg.op_write.size);
+	fflush(stdout);
+		printf("write: -> fd %d \n",msg.u_st_myServer_msg.op_write.fd);
+		printf("write: -> offset %d \n",(int)msg.u_st_myServer_msg.op_write.offset);
+		printf("write: -> size %d \n",msg.u_st_myServer_msg.op_write.size);
+	fflush(stdout);
 	#endif  
 
+#ifdef DBG_NFI 
+	fflush(stdout);
+	printf("nfi_myServer_write: sizeof(struct st_myServer_msg) = %d.\n", sizeof(struct st_myServer_msg));
+	fflush(stdout);
+#endif	
 	ret = myServer_write_operation(server_aux->sd, &msg);
 	if(ret == -1){
-		fprintf(stderr,"(1)ERROR: nfi_myServer_write(ID=%s): Error on write operation\n",server_aux->id);
+		fprintf(stderr,"(1)nfi_myServer_write: Error on write operation\n");
 		return -1;
 	}
 
 
-	ret = myServer_write_data(server_aux->sd, (char *)buffer, size, msg.id);
+	ret = myServer_write_data(server_aux->sd, (char *)buffer, size);
 	if(ret == -1){
-		fprintf(stderr,"(2)ERROR: nfi_myServer_read(ID=%s): Error on write operation\n",server_aux->id);
+		fprintf(stderr,"(2)nfi_myServer_read: Error on write operation\n");
 		return -1;
 	}
 
-	ret = myServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_myServer_write_req), msg.id);
+	ret = myServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_myServer_write_req));
 	if(ret == -1){
-		fprintf(stderr,"(3)ERROR: nfi_myServer_write(ID=%s): Error on write operation\n",server_aux->id);
+		fprintf(stderr,"(3)nfi_myServer_write: Error on write operation\n");
 		return -1;
 	}
 	
 	
 	/*****************************************/
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_write(ID=%s): write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
+	fflush(stdout);
+	printf("nfi_myServer_write1: write %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)req.size);
+	fflush(stdout);
 #endif
 	if(req.size < 0){
-		fprintf(stderr,"ERROR: nfi_myServer_write(ID=%s): Fail write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
+		fprintf(stderr,"nfi_myServer_write: Fail write %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)req.size);
 		
 		myServer_err(MYSERVERERR_WRITE);
 		return -1;
 	}
 
 #ifdef  DBG_NFI
-	printf("[NFI]nfi_myServer_write(ID=%s): end\n",server_aux->id);
+	fflush(stdout);
+	printf("nfi_myServer_write end\n");
+	fflush(stdout);
 #endif
 	return req.size;
 }
@@ -1156,10 +1222,10 @@ int nfi_myServer_create(struct nfi_server *serv,  char *url, struct nfi_attr *at
         struct nfi_myServer_fhandle *fh_aux;
 	struct st_myServer_msg msg;
 
-	server_aux = (struct nfi_myServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_create(ID=%s): begin %s\n",server_aux->id,url);
+	fflush(stdout);
+	printf("nfi_myServer_create begin %s\n",url);
+	fflush(stdout);
 #endif
 	if (serv == NULL){
 		myServer_err(MYSERVERERR_PARAM);
@@ -1175,7 +1241,7 @@ int nfi_myServer_create(struct nfi_server *serv,  char *url, struct nfi_attr *at
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -1187,7 +1253,7 @@ int nfi_myServer_create(struct nfi_server *serv,  char *url, struct nfi_attr *at
 #endif
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
-		fprintf(stderr,"ERROR: nfi_myServer_create: url %s incorrect.\n",url);
+		fprintf(stderr,"nfi_myServer_create: url %s incorrect.\n",url);
 		myServer_err(MYSERVERERR_URL);
 		return -1;
 	}
@@ -1209,7 +1275,7 @@ int nfi_myServer_create(struct nfi_server *serv,  char *url, struct nfi_attr *at
 	strcpy(msg.u_st_myServer_msg.op_creat.path,dir);
 	
     	myServer_write_operation(server_aux->sd, &msg);
-	myServer_read_data(server_aux->sd, (char *)&(fh_aux->fd), sizeof(int), msg.id);
+	myServer_read_data(server_aux->sd, (char *)&(fh_aux->fd), sizeof(int));
 	
 	strcpy(fh_aux->path, dir);
 	/*****************************************/
@@ -1230,7 +1296,9 @@ int nfi_myServer_create(struct nfi_server *serv,  char *url, struct nfi_attr *at
         strcpy(fh->url, url);
 
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_create(ID=%s): end\n",server_aux->id);
+	fflush(stdout);
+	printf("nfi_myServer_create end\n");
+	fflush(stdout);
 #endif
 	return 0;
 }
@@ -1243,10 +1311,10 @@ int nfi_myServer_remove(struct nfi_server *serv,  char *url)
 	struct nfi_myServer_server *server_aux;
 	struct st_myServer_msg msg;
 	
-	server_aux = (struct nfi_myServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_remove(%s): begin %s\n",server_aux->id, url);
+	fflush(stdout);
+	printf("nfi_myServer_remove begin %s\n", url);
+	fflush(stdout);
 #endif	
 	if (serv == NULL){
 		myServer_err(MYSERVERERR_PARAM);
@@ -1257,7 +1325,7 @@ int nfi_myServer_remove(struct nfi_server *serv,  char *url)
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -1287,7 +1355,9 @@ int nfi_myServer_remove(struct nfi_server *serv,  char *url)
 	
 	/*****************************************/
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_myServer_remove(ID=%s): end \n",server_aux->id);
+	fflush(stdout);
+	printf("nfi_myServer_remove end \n");
+	fflush(stdout);
 #endif
 	return 0;
 }
@@ -1306,7 +1376,7 @@ int nfi_myServer_rename(struct nfi_server *server,  char *old_url, char *new_url
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			myServer_err(); not necessary
+			myServer_err(); don't necessary
 			return -1;
 		}
 	}
@@ -1319,7 +1389,7 @@ int nfi_myServer_rename(struct nfi_server *server,  char *old_url, char *new_url
 	server_aux = (strcut nfi_myServer_server *)serv->private_info;
 	*/
 
-	/* ????? */
+	/* ¿?¿?¿?¿?¿?¿ */
 	return 0;
 }
 
@@ -1345,7 +1415,7 @@ int nfi_myServer_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *att
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -1381,7 +1451,7 @@ int nfi_myServer_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *att
 	strcpy(msg.u_st_myServer_msg.op_mkdir.path, dir);
 	
     	myServer_write_operation(server_aux->sd, &msg);
-	myServer_read_data(server_aux->sd, (char *)&(fh_aux->fd), sizeof(int), msg.id);
+	myServer_read_data(server_aux->sd, (char *)&(fh_aux->fd), sizeof(int));
 	
 	strcpy(fh_aux->path, dir);
 	/******************************************************/
@@ -1428,7 +1498,7 @@ int nfi_myServer_rmdir(struct nfi_server *serv,  char *url)
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -1455,7 +1525,7 @@ int nfi_myServer_rmdir(struct nfi_server *serv,  char *url)
 	strcpy(msg.u_st_myServer_msg.op_rmdir.path, url);
 	
     	myServer_write_operation(server_aux->sd, &msg);
-	myServer_read_data(server_aux->sd, (char *)&ret, sizeof(int), msg.id);
+	myServer_read_data(server_aux->sd, (char *)&ret, sizeof(int));
 	
 	//strcpy(fh_aux->path, dir);
 	/******************************************************/
@@ -1494,7 +1564,7 @@ int nfi_myServer_opendir(struct nfi_server *serv,  char *url, struct nfi_fhandle
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -1585,7 +1655,7 @@ int nfi_myServer_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, char 
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-			/* myServer_err(); not necessary */
+			/* myServer_err(); don't necessary */
 			return -1;
 		}
 	}
@@ -1609,7 +1679,7 @@ int nfi_myServer_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, char 
 		return 0;
 	}
 	strcpy(entry, ent->d_name);
-	//printf("[NFI]ent->d_name = %s S_ISDIR(%o) = %o\n", ent->d_name, ent->d_type,S_ISDIR(ent->d_type));
+	//printf("ent->d_name = %s S_ISDIR(%o) = %o\n", ent->d_name, ent->d_type,S_ISDIR(ent->d_type));
 //	*type = ent->d_type;
 
 	return 0;
@@ -1666,7 +1736,7 @@ int nfi_myServer_statfs(struct nfi_server *serv,  struct nfi_info *inf)
 	if (serv->private_info == NULL){
 		ret = nfi_myServer_reconnect(serv);
 		if(ret <0){
-		 myServer_err(); not necessary 
+		 myServer_err(); don't necessary 
 			return -1;
 		}
 	}
