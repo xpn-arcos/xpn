@@ -1,5 +1,5 @@
-#ifndef _MYSERVER_WORKERS_H_
-#define _MYSERVER_WORKERS_H_
+#ifndef _TCPSERVER_WORKERS_H_
+#define _TCPSERVER_WORKERS_H_
 
 #include "tcpServer.h"
 #include "tcpServer_ops.h"

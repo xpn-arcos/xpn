@@ -1,5 +1,5 @@
-#ifndef _MYSERVER_CONF_H_
-#define _MYSERVER_CONF_H_
+#ifndef _MPISERVER_CONF_H_
+#define _MPISERVER_CONF_H_
 
 #ifndef KB
 	#define KB (1024)
@@ -32,44 +32,44 @@
 #endif
 
 /* ENVIROMENT VARIABLE: DNS SERVICE */
-#ifndef MYSERVER_FILE
-	#define MYSERVER_FILE "MYSERVER_FILE"
+#ifndef MPISERVER_FILE
+	#define MPISERVER_FILE "MPISERVER_FILE"
 #endif
 
-#ifndef MYSERVER_FILE_DEFAULT
-	#define MYSERVER_FILE_DEFAULT "/etc/xpn/mpiServer.dns"
+#ifndef MPISERVER_FILE_DEFAULT
+	#define MPISERVER_FILE_DEFAULT "/etc/xpn/mpiServer.dns"
 #endif
 
-#ifndef MYSERVER_NAME_DEFAULT
-	#define MYSERVER_NAME_DEFAULT	"node"
+#ifndef MPISERVER_NAME_DEFAULT
+	#define MPISERVER_NAME_DEFAULT	"node"
 #endif
 
-#ifndef MYSERVER_DIRBASE_DEFAULT
-	#define MYSERVER_DIRBASE_DEFAULT	"/tmp"
+#ifndef MPISERVER_DIRBASE_DEFAULT
+	#define MPISERVER_DIRBASE_DEFAULT	"/tmp"
 #endif
 
-#ifndef MYSERVER_PORT_DEFAULT
-	#define MYSERVER_PORT_DEFAULT	9999
+#ifndef MPISERVER_PORT_DEFAULT
+	#define MPISERVER_PORT_DEFAULT	9999
 #endif
 
-#ifndef MYSERVER_IOSIZE_DEFAULT
-	#define MYSERVER_IOSIZE_DEFAULT	(MB)
+#ifndef MPISERVER_IOSIZE_DEFAULT
+	#define MPISERVER_IOSIZE_DEFAULT	(MB)
 #endif
 
-#ifndef MYSERVER_FLUSH_EXE
-	#define MYSERVER_FLUSH_EXE "xpn2d_lock.exe" //params: virtual_path , storage_path, local_path
+#ifndef MPISERVER_FLUSH_EXE
+	#define MPISERVER_FLUSH_EXE "xpn2d_lock.exe" //params: virtual_path , storage_path, local_path
 #endif
 
-#ifndef MYSERVER_PRELOAD_EXE
-	#define MYSERVER_PRELOAD_EXE "d2xpn_lock.exe" //params: virtual_path , storage_path, local_path
+#ifndef MPISERVER_PRELOAD_EXE
+	#define MPISERVER_PRELOAD_EXE "d2xpn_lock.exe" //params: virtual_path , storage_path, local_path
 #endif
 
 
 
 /* GLOBAL VARIABLES */
-extern char *MYSERVER_ALIAS_NAME_STRING;
-extern char *MYSERVER_FILE_STRING;
-extern char *MYSERVER_DIRBASE_STRING;
-extern int   MYSERVER_IOSIZE_INT;
+extern char *MPISERVER_ALIAS_NAME_STRING;
+extern char *MPISERVER_FILE_STRING;
+extern char *MPISERVER_DIRBASE_STRING;
+extern int   MPISERVER_IOSIZE_INT;
 
 #endif

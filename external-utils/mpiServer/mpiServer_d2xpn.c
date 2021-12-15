@@ -11,11 +11,11 @@
 #define MB (KB*KB)
 #endif
 
-int MYSERVER_IOSIZE_INT;
+int MPISERVER_IOSIZE_INT;
 
 #define DEFAULT_PATH "/tmp"
 
-#define MYSERVER_PATH_DEFAULT "/tmp"
+#define MPISERVER_PATH_DEFAULT "/tmp"
 
 extern struct mpiServer_param_st mpiServer_params;
 
@@ -118,7 +118,7 @@ int mpiServer_d2xpn(char *origen, char *destino, int opt)
 
 mpiServer_path = mpiServer_params.dirbase;
 if(mpiServer_path  == NULL){
-	mpiServer_path = MYSERVER_PATH_DEFAULT; 
+	mpiServer_path = MPISERVER_PATH_DEFAULT; 
 }
 
   sprintf(new_path, "%s/%s", mpiServer_path, destino); 
@@ -208,14 +208,14 @@ if(mpiServer_path  == NULL){
  
   
 
-  global_transfer_buffer = malloc(sizeof(char)*MYSERVER_IOSIZE_INT);
+  global_transfer_buffer = malloc(sizeof(char)*MPISERVER_IOSIZE_INT);
   sum = 0;
   do{
 
 #ifdef DBG_XPN
-	printf("d2xpn(%d): antes read(%d,%d)\n", private_id,MYSERVER_IOSIZE_INT, sum);
+	printf("d2xpn(%d): antes read(%d,%d)\n", private_id,MPISERVER_IOSIZE_INT, sum);
 #endif
-    sp = read(fd,global_transfer_buffer,MYSERVER_IOSIZE_INT);
+    sp = read(fd,global_transfer_buffer,MPISERVER_IOSIZE_INT);
     //printf("antes de xpn_write(%d bytes) ...\n", s);
     if(s == -1){
 	    break;
@@ -235,7 +235,7 @@ if(mpiServer_path  == NULL){
     sum = sum + sp;
 
     //printf("Se han leido s=%d y escrito sp=%d\n", s, sp);
-  }while((s==MYSERVER_IOSIZE_INT)&&(sp >= 0));
+  }while((s==MPISERVER_IOSIZE_INT)&&(sp >= 0));
   free(global_transfer_buffer);
 
 #ifdef DBG_XPN
@@ -287,7 +287,7 @@ if(mpiServer_path  == NULL){
 
   transfer_time = (t2.tv_sec + t2.tv_usec/1000000.0) - (t1.tv_sec + t1.tv_usec/1000000.0);
 
-  printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, MYSERVER_IOSIZE_INT);
+  printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, MPISERVER_IOSIZE_INT);
 
 
 /*

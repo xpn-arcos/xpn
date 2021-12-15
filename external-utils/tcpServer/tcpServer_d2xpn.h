@@ -1,5 +1,5 @@
-#ifndef _MYSERVER_D2XPN_H_
-#define _MYSERVER_D2XPN_H_
+#ifndef _TCPSERVER_D2XPN_H_
+#define _TCPSERVER_D2XPN_H_
 
 
 #include <sys/param.h>

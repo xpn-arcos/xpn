@@ -1,5 +1,5 @@
-#ifndef _MYSERVER_OPS_H_
-#define _MYSERVER_OPS_H_
+#ifndef _MPISERVER_OPS_H_
+#define _MPISERVER_OPS_H_
 
 #include "mpiServer.h"
 

@@ -1,5 +1,5 @@
-#ifndef _MYSERVER_PARAMS_H_
-#define _MYSERVER_PARAMS_H_
+#ifndef _MPISERVER_PARAMS_H_
+#define _MPISERVER_PARAMS_H_
 
 struct mpiServer_param_st{
         int port;
@@ -9,4 +9,4 @@ struct mpiServer_param_st{
         char dirbase[255];
 };
 
-#endif// _MYSERVER_PARAMS_H_
+#endif// _MPISERVER_PARAMS_H_

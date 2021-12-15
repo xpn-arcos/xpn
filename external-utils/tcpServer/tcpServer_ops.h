@@ -1,5 +1,5 @@
-#ifndef _MYSERVER_OPS_H_
-#define _MYSERVER_OPS_H_
+#ifndef _TCPSERVER_OPS_H_
+#define _TCPSERVER_OPS_H_
 
 #include "tcpServer.h"
 

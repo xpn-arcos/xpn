@@ -46,7 +46,7 @@ void generateName(char *file, char *new_file){
 	return;
 }
 
-int tcplock(char *file){
+int mylock(char *file){
 	char new_file[255];
 	int fd;
 
@@ -62,7 +62,7 @@ int tcplock(char *file){
 }
 
 
-int tcpunlock(int fd){
+int myunlock(int fd){
   	flock(fd, LOCK_UN);
 	close(fd);
 	
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
   destino=argv[2];
 
 
-  fd_lock = tcplock(origen);
+  fd_lock = mylock(origen);
   if(fd_lock == -1){
 	printf("Err: lock %s\n",destino);
 	exit(-1);	  
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 
   
   if((fd=xpn_init())<0){
-    tcpunlock(fd_lock);
+    myunlock(fd_lock);
     xpn_destroy();	  
     printf("Error in init %d\n",fd);
     exit(-1);
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
   
   ret = xpn_stat(origen, &st);
   if (ret == -1){
-    tcpunlock(fd_lock);
+    myunlock(fd_lock);
     xpn_destroy();
     printf("error in xpn_stat(%s)\n",destino);
     exit(-1);
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
   ret = xpn_stat(destino, &st_xpn);
   if (ret != -1){
  	 if(st.st_size == st_xpn.st_size){
-	    tcpunlock(fd_lock);
+	    myunlock(fd_lock);
 	    xpn_destroy();	  
 	    printf("%s and %s are the same file\n", origen, destino);
 	    exit(0);	    
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 
   fd = xpn_open(origen, O_RDONLY);
   if(fd<0){
-    tcpunlock(fd_lock);
+    myunlock(fd_lock);
     xpn_destroy();	  
     printf("error in open fd = %d\n",fd);
     exit(-1);
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
   
   fdp = xpn_open(destino ,O_CREAT|O_TRUNC|O_WRONLY, 0777); 
   if(fdp<0){
-    tcpunlock(fd_lock);
+    myunlock(fd_lock);
     xpn_destroy();	  
     printf("error in xpn_open fdp = %d\n",fdp);
     exit(-1);
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 
   xpn_close(fd);
   xpn_close(fdp);
-  tcpunlock(fd_lock);
+  myunlock(fd_lock);
   xpn_destroy();
 
   exit(0);

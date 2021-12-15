@@ -1,5 +1,5 @@
-#ifndef _MYSERVER_CONF_H_
-#define _MYSERVER_CONF_H_
+#ifndef _TCPSERVER_CONF_H_
+#define _TCPSERVER_CONF_H_
 
 #ifndef KB
 	#define KB (1024)
@@ -32,44 +32,44 @@
 #endif
 
 /* ENVIROMENT VARIABLE: DNS SERVICE */
-#ifndef MYSERVER_FILE
-	#define MYSERVER_FILE "MYSERVER_FILE"
+#ifndef TCPSERVER_FILE
+	#define TCPSERVER_FILE "TCPSERVER_FILE"
 #endif
 
-#ifndef MYSERVER_FILE_DEFAULT
-	#define MYSERVER_FILE_DEFAULT "/etc/xpn/tcpServer.dns"
+#ifndef TCPSERVER_FILE_DEFAULT
+	#define TCPSERVER_FILE_DEFAULT "/etc/xpn/tcpServer.dns"
 #endif
 
-#ifndef MYSERVER_NAME_DEFAULT
-	#define MYSERVER_NAME_DEFAULT	"node"
+#ifndef TCPSERVER_NAME_DEFAULT
+	#define TCPSERVER_NAME_DEFAULT	"node"
 #endif
 
-#ifndef MYSERVER_DIRBASE_DEFAULT
-	#define MYSERVER_DIRBASE_DEFAULT	"/tmp"
+#ifndef TCPSERVER_DIRBASE_DEFAULT
+	#define TCPSERVER_DIRBASE_DEFAULT	"/tmp"
 #endif
 
-#ifndef MYSERVER_PORT_DEFAULT
-	#define MYSERVER_PORT_DEFAULT	9999
+#ifndef TCPSERVER_PORT_DEFAULT
+	#define TCPSERVER_PORT_DEFAULT	9999
 #endif
 
-#ifndef MYSERVER_IOSIZE_DEFAULT
-	#define MYSERVER_IOSIZE_DEFAULT	(MB)
+#ifndef TCPSERVER_IOSIZE_DEFAULT
+	#define TCPSERVER_IOSIZE_DEFAULT	(MB)
 #endif
 
-#ifndef MYSERVER_FLUSH_EXE
-	#define MYSERVER_FLUSH_EXE "xpn2d_lock.exe" //params: virtual_path , storage_path, local_path
+#ifndef TCPSERVER_FLUSH_EXE
+	#define TCPSERVER_FLUSH_EXE "xpn2d_lock.exe" //params: virtual_path , storage_path, local_path
 #endif
 
-#ifndef MYSERVER_PRELOAD_EXE
-	#define MYSERVER_PRELOAD_EXE "d2xpn_lock.exe" //params: virtual_path , storage_path, local_path
+#ifndef TCPSERVER_PRELOAD_EXE
+	#define TCPSERVER_PRELOAD_EXE "d2xpn_lock.exe" //params: virtual_path , storage_path, local_path
 #endif
 
 
 
 /* GLOBAL VARIABLES */
-extern char *MYSERVER_ALIAS_NAME_STRING;
-extern char *MYSERVER_FILE_STRING;
-extern char *MYSERVER_DIRBASE_STRING;
-extern int   MYSERVER_IOSIZE_INT;
+extern char *TCPSERVER_ALIAS_NAME_STRING;
+extern char *TCPSERVER_FILE_STRING;
+extern char *TCPSERVER_DIRBASE_STRING;
+extern int   TCPSERVER_IOSIZE_INT;
 
 #endif
