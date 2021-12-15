@@ -65,16 +65,10 @@ int main(int argc, char *argv[])
   origen=argv[1]; //virtual file
   destino=argv[2]; //storage file
 
-#ifdef _DBG_
-	printf("d2xpn: Origen: %s\n",origen);
-	printf("d2xpn: Destino: %s\n",destino);
-	fflush(stdout);
-#endif
+	debug_printf("d2xpn: Origen: %s\n",origen);
+	debug_printf("d2xpn: Destino: %s\n",destino);
 
-#ifdef _DBG_
-	printf("d2xpn: xpn_init()\n");
-	fflush(stdout);
-#endif
+	debug_printf("d2xpn: xpn_init()\n");
   if((fd=xpn_init())<0){
     xpn_destroy();	  
     printf("Error in init %d\n",fd);
@@ -83,10 +77,7 @@ int main(int argc, char *argv[])
 
 
   
-#ifdef _DBG_
-	printf("d2xpn: stat(%s)\n",destino);
-	fflush(stdout);
-#endif
+	debug_printf("d2xpn: stat(%s)\n",destino);
   ret = stat(destino, &st);
   if (ret == -1){
     xpn_destroy();
@@ -94,10 +85,7 @@ int main(int argc, char *argv[])
     exit(-1);
   }
 
-#ifdef _DBG_
-	printf("d2xpn: xpn_stat(%s)\n",origen);
-	fflush(stdout);
-#endif
+	debug_printf("d2xpn: xpn_stat(%s)\n",origen);
   ret = xpn_stat(origen, &st_xpn);
   if (ret != -1){
 
@@ -110,10 +98,7 @@ int main(int argc, char *argv[])
 
 
 
-#ifdef _DBG_
-	printf("d2xpn: open(%s, O_RDONLY)\n",destino);
-	fflush(stdout);
-#endif
+	debug_printf("d2xpn: open(%s, O_RDONLY)\n",destino);
   fd=open(destino,O_RDONLY);
   if(fd<0){
     xpn_destroy();	  
@@ -123,9 +108,7 @@ int main(int argc, char *argv[])
   
 
   
-#ifdef _DBG_
-	printf("d2xpn: xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777)\n",origen);
-#endif
+	debug_printf("d2xpn: xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777)\n",origen);
   fdp = xpn_open(origen,O_CREAT|O_TRUNC|O_WRONLY, 0777); 
   if(fdp<0){
     xpn_destroy();	  
@@ -139,46 +122,30 @@ int main(int argc, char *argv[])
   sum = 0;
   do{
 
-#ifdef _DBG_
-	printf("d2xpn: antes read(%d,%d)\n", DATAM, sum);
-#endif
+	debug_printf("d2xpn: antes read(%d,%d)\n", DATAM, sum);
     sp = read(fd,buffer,DATAM);
     //printf("antes de xpn_write(%d bytes) ...\n", s);
     if(s == -1){
 	    break;
     }
-#ifdef _DBG_
-	printf("d2xpn: desp. read(%d,%d)\n", sp, sum);
-#endif
+	debug_printf("d2xpn: desp. read(%d,%d)\n", sp, sum);
 
-#ifdef _DBG_
-	printf("d2xpn: antes write(%d,%d)\n", sp , sum);
-#endif
+	debug_printf("d2xpn: antes write(%d,%d)\n", sp , sum);
     s = xpn_write(fdp, buffer, sp);
-#ifdef _DBG_
-	printf("d2xpn: desp write(%d,%d)\n", s , sum);
-#endif
+	debug_printf("d2xpn: desp write(%d,%d)\n", s , sum);
     //printf("despues de xpn_write ...\n");
     sum = sum + sp;
 
     //printf("Se han leido s=%d y escrito sp=%d\n", s, sp);
   }while((s==DATAM)&&(sp >= 0));
 
-#ifdef _DBG_
-	printf("d2xpn: (%s,%d)\n",origen,sum);
-#endif
+	debug_printf("d2xpn: (%s,%d)\n",origen,sum);
 
-#ifdef _DBG_
-	printf("d2xpn: close()\n");
-#endif
+	debug_printf("d2xpn: close()\n");
   close(fd);
-#ifdef _DBG_
-	printf("d2xpn: xpn_close()\n");
-#endif
+	debug_printf("d2xpn: xpn_close()\n");
   xpn_close(fdp);
-#ifdef _DBG_
-	printf("d2xpn: xpn_destroy()\n");
-#endif
+	debug_printf("d2xpn: xpn_destroy()\n");
   xpn_destroy();
 
   exit(0);

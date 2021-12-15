@@ -9,6 +9,7 @@ SOURCE_PATH  = ./
 #EXPAND_DIR   = $(HOME)/expand/trunk/expand
 EXPAND_DIR   = /opt/xpn
 OBJECTS_MPISERVER      = mpiServer.o \
+		         mpiServer_utils.o \
 		         mpiServer_comm.o \
 		         mpiServer_ops.o \
 		         mpiServer_workers.o \
@@ -17,8 +18,8 @@ OBJECTS_MPISERVER      = mpiServer.o \
 #OBJECTS_D2XPN         = d2xpn_lock.o
 #OBJECTS_RMXPN         = rmxpn.o
 #OBJECTS_XPN2XPN       = xpn2xpn_lock.o
-#MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDBG_OPS -DDBG_WORKERS -DDBG_COMM
-#MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDBG_OPS -DDBG_WORKERS 
+#MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDEBUG
+#MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDEBUG
 MYFLAGS                = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
 MYHEADERS              =  -I$(EXPAND_DIR)/include 
 MYLIBS                 =  -L$(EXPAND_DIR)/lib  -L${HOME}/mxml/lib  -lpthread -lxpn -lmxml -ldl

@@ -9,10 +9,12 @@ and server
 #include "all_system.h"
 #include "mpiServer_conf.h"
 #include "mpiServer_comm.h"
+#include "mpiServer_utils.h"
 
 #define _LARGEFILE64_ 1
 
-
+/* External CONST & STRUCTS */
+extern int errno;
 
 /* Operation */
 #define MPISERVER_OPEN_FILE	0
