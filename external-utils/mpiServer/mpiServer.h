@@ -2,8 +2,8 @@
 Only include the necessary data to realize the comunication between client
 and server
 */
-#ifndef _MPISERVER_CLIENT_H_
-#define _MPISERVER_CLIENT_H_
+#ifndef _MYSERVER_CLIENT_H_
+#define _MYSERVER_CLIENT_H_
 
 
 #include "all_system.h"
@@ -15,29 +15,29 @@ and server
 
 
 /* Operation */
-#define MPISERVER_OPEN_FILE	0
-#define MPISERVER_CREAT_FILE	1
-#define MPISERVER_READ_FILE	2
-#define MPISERVER_WRITE_FILE	3
-#define MPISERVER_CLOSE_FILE	4
-#define MPISERVER_RM_FILE	5
-#define MPISERVER_GETATTR_FILE	6
-#define MPISERVER_SETATTR_FILE	7
+#define MYSERVER_OPEN_FILE	0
+#define MYSERVER_CREAT_FILE	1
+#define MYSERVER_READ_FILE	2
+#define MYSERVER_WRITE_FILE	3
+#define MYSERVER_CLOSE_FILE	4
+#define MYSERVER_RM_FILE	5
+#define MYSERVER_GETATTR_FILE	6
+#define MYSERVER_SETATTR_FILE	7
 
-#define MPISERVER_MKDIR_DIR	8
-#define MPISERVER_RMDIR_DIR	9
-#define MPISERVER_OPENDIR_DIR	10
-#define MPISERVER_READDIR_DIR	11
-#define MPISERVER_CLOSEDIR_DIR	12
+#define MYSERVER_MKDIR_DIR	8
+#define MYSERVER_RMDIR_DIR	9
+#define MYSERVER_OPENDIR_DIR	10
+#define MYSERVER_READDIR_DIR	11
+#define MYSERVER_CLOSEDIR_DIR	12
 
-#define MPISERVER_FLUSH_FILE	13
-#define MPISERVER_PRELOAD_FILE	14
+#define MYSERVER_FLUSH_FILE	13
+#define MYSERVER_PRELOAD_FILE	14
 
-#define MPISERVER_STATFS_DIR	15
+#define MYSERVER_STATFS_DIR	15
 
-#define MPISERVER_FINALIZE   	16
-#define MPISERVER_GETID          17
-#define MPISERVER_END 		-1
+#define MYSERVER_FINALIZE   	16
+#define MYSERVER_GETID          17
+#define MYSERVER_END 		-1
 
 
 
@@ -64,24 +64,24 @@ and server
 /* buffer size */
 //#define BUFFER_SIZE (2*MB)
 
-/* MPISERVER_MAXPATHLEN */
-#ifndef MPISERVER_MAXPATHLEN
-	//#define MPISERVER_MAXPATHLEN 255
-	#define MPISERVER_MAXPATHLEN 128
+/* MYSERVER_MAXPATHLEN */
+#ifndef MYSERVER_MAXPATHLEN
+	//#define MYSERVER_MAXPATHLEN 255
+	#define MYSERVER_MAXPATHLEN 128
 #endif
 
-/* MPISERVER_MAXPATHLEN */
-#ifndef MPISERVER_ID
-	#define MPISERVER_ID 32
+/* MYSERVER_MAXPATHLEN */
+#ifndef MYSERVER_ID
+	#define MYSERVER_ID 32
 #endif
 
 
 struct st_mpiServer_open{
-	char path[MPISERVER_MAXPATHLEN];
+	char path[MYSERVER_MAXPATHLEN];
 };
 
 struct st_mpiServer_creat{
-	char path[MPISERVER_MAXPATHLEN];
+	char path[MYSERVER_MAXPATHLEN];
 };
 
 struct st_mpiServer_read{
@@ -122,24 +122,24 @@ struct st_mpiServer_close{
 };
 
 struct st_mpiServer_rm{
-	char path[MPISERVER_MAXPATHLEN];
+	char path[MYSERVER_MAXPATHLEN];
 };
 
 struct st_mpiServer_mkdir{	
-	char path[MPISERVER_MAXPATHLEN];
+	char path[MYSERVER_MAXPATHLEN];
 };
 
 struct st_mpiServer_rmdir{
-	char path[MPISERVER_MAXPATHLEN];
+	char path[MYSERVER_MAXPATHLEN];
 };
 
 
 struct st_mpiServer_getattr{	
-	char path[MPISERVER_MAXPATHLEN];
+	char path[MYSERVER_MAXPATHLEN];
 };
 
 struct st_mpiServer_setattr{	
-	char path[MPISERVER_MAXPATHLEN];
+	char path[MYSERVER_MAXPATHLEN];
 	struct stat attr;
 };
 
@@ -150,14 +150,14 @@ struct st_mpiServer_attr_req{
 
 
 struct st_mpiServer_flush{
-	char storage_path[MPISERVER_MAXPATHLEN];
-	char virtual_path[MPISERVER_MAXPATHLEN];
+	char storage_path[MYSERVER_MAXPATHLEN];
+	char virtual_path[MYSERVER_MAXPATHLEN];
 	char opt;
 };
 
 struct st_mpiServer_preload{
-	char storage_path[MPISERVER_MAXPATHLEN];
-	char virtual_path[MPISERVER_MAXPATHLEN];
+	char storage_path[MYSERVER_MAXPATHLEN];
+	char virtual_path[MYSERVER_MAXPATHLEN];
 	char opt;
 };
 
@@ -167,7 +167,7 @@ struct st_mpiServer_end{
 
 struct st_mpiServer_msg{
 	char type;
-	char id[MPISERVER_ID];
+	char id[MYSERVER_ID];
 	union{
 		struct st_mpiServer_flush 	op_flush;
 		struct st_mpiServer_preload 	op_preload;

@@ -7,7 +7,7 @@
  */
 
 /* VARIABLES DE ENTORNO:
- * MPISERVER_DNS: indica donde se encuentra el sistema traductor de 
+ * MYSERVER_DNS: indica donde se encuentra el sistema traductor de 
  * <id> <hostname> <port>
  */
 
@@ -24,9 +24,9 @@
 struct mpiServer_param_st mpiServer_params;
 
 /* GLOBAL VARIABLES */
-char *MPISERVER_ALIAS_NAME_STRING;
-char *MPISERVER_FILE_STRING;
-char *MPISERVER_DIRBASE_STRING;
+char *MYSERVER_ALIAS_NAME_STRING;
+char *MYSERVER_FILE_STRING;
+char *MYSERVER_DIRBASE_STRING;
 
 
 /* INTERNAL CONST & STRUCTS */
@@ -57,11 +57,11 @@ void show_usage(){
 int get_params(int argc, char *argv[], struct mpiServer_param_st *params){
 	int i;
 
-	params->port 	= MPISERVER_PORT_DEFAULT;	
-	params->IOsize 	= MPISERVER_IOSIZE_DEFAULT;	
+	params->port 	= MYSERVER_PORT_DEFAULT;	
+	params->IOsize 	= MYSERVER_IOSIZE_DEFAULT;	
 	gethostname(params->name, 255);
-	strcpy(params->file, MPISERVER_FILE_DEFAULT);
-	strcpy(params->dirbase, MPISERVER_DIRBASE_DEFAULT);
+	strcpy(params->file, MYSERVER_FILE_DEFAULT);
+	strcpy(params->dirbase, MYSERVER_DIRBASE_DEFAULT);
 	
 	for(i=0;i<argc;i++){
 		switch(argv[i][0]){
@@ -100,24 +100,35 @@ int get_params(int argc, char *argv[], struct mpiServer_param_st *params){
 		}
 	}
 
-	MPISERVER_ALIAS_NAME_STRING = params->name;
-	MPISERVER_FILE_STRING = params->file;
-	MPISERVER_DIRBASE_STRING = params->dirbase;
-	MPISERVER_IOSIZE_INT = params->IOsize * KB;
+	MYSERVER_ALIAS_NAME_STRING = params->name;
+	MYSERVER_FILE_STRING = params->file;
+	MYSERVER_DIRBASE_STRING = params->dirbase;
+	MYSERVER_IOSIZE_INT = params->IOsize * KB;
 
 	
 	return 0;
 }
 
 
+void sigint_handler ( int signal )
+{
+	printf("Signal %d received !!", signal) ;
+
+	exit(0) ;
+}
+
 
 int main(int argc, char *argv[]){
 	int sd;
 	int cont;
 
+	// Initializing...
 	setbuf(stdout,NULL);	
 	setbuf(stderr,NULL);
 
+	signal(SIGINT, sigint_handler);
+
+	// Get parameters..
 	if(get_params(argc,argv, &mpiServer_params) == -1){
 		show_usage();
 		exit(-1);

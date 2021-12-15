@@ -1,0 +1,38 @@
+#ifndef _NFI_MYSERVER_ERR_H_
+#define _NFI_MYSERVER_ERR_H_
+
+
+ #ifdef  __cplusplus
+    extern "C" {
+ #endif
+
+
+enum nfi_myServer_err{
+	MYSERVERERR_PARAM = 0,
+	MYSERVERERR_MEMORY = 1,
+	MYSERVERERR_URL = 2,
+	MYSERVERERR_MNTCONNECTION = 3,
+	MYSERVERERR_MOUNT = 4,
+	MYSERVERERR_NFSCONNECTION = 5,		
+	MYSERVERERR_GETATTR = 6,
+	MYSERVERERR_LOOKUP = 7,
+	MYSERVERERR_READ = 8,
+	MYSERVERERR_WRITE = 9,
+	MYSERVERERR_CREATE = 10,
+	MYSERVERERR_REMOVE = 11,
+	MYSERVERERR_MKDIR = 12,
+	MYSERVERERR_READDIR = 13,
+	MYSERVERERR_STATFS = 14,
+	MYSERVERERR_NOTDIR = 15,
+};
+
+
+void myServer_err(int err);
+
+
+ #ifdef  __cplusplus
+     }
+ #endif
+
+
+#endif

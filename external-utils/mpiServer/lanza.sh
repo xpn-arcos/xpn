@@ -8,4 +8,4 @@ export MYSERVER_HOME=${HOME}/expand/external-utils/mpiServer
 
 I=$1
 
-${MYSERVER_HOME}/expand/exter/myServer.exe -n node$I -p 9999 -f ${MYSERVER_FILE}
+${MYSERVER_HOME}/expand/exter/mpiServer.exe -n node$I -p 9999 -f ${MYSERVER_FILE}

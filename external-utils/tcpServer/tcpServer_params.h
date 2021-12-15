@@ -1,5 +1,5 @@
-#ifndef _TCPSERVER_PARAMS_H_
-#define _TCPSERVER_PARAMS_H_
+#ifndef _MYSERVER_PARAMS_H_
+#define _MYSERVER_PARAMS_H_
 
 struct tcpServer_param_st{
         int port;
@@ -9,4 +9,4 @@ struct tcpServer_param_st{
         char dirbase[255];
 };
 
-#endif// _TCPSERVER_PARAMS_H_
+#endif// _MYSERVER_PARAMS_H_

@@ -457,8 +457,8 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 	}
 #endif
 // END OF ENABLE_GRIDFTP BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_TCPSERVER BLOCK. Do not remove this line. //
-#ifdef ENABLE_TCPSERVER
+// BEGIN OF ENABLE_MYSERVER BLOCK. Do not remove this line. //
+#ifdef ENABLE_MYSERVER
 	else if (strcmp(prt,"myServer") == 0){
 		//printf("[XPN]nfi_myServer_init: %s\n",url);
 		ret = nfi_myServer_init(url, serv, NULL);
@@ -468,19 +468,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 		}
 	}
 #endif
-// END OF ENABLE_TCPSERVER BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_MPISERVER BLOCK. Do not remove this line. //
-#ifdef ENABLE_MPISERVER
-	else if (strcmp(prt,"myServer") == 0){
-		//printf("[XPN]nfi_myServer_init: %s\n",url);
-		ret = nfi_myServer_init(url, serv, NULL);
-		if(ret < 0){
-			xpn_err(XPNERR_INITSERV);
-			return -1;
-		}
-	}
-#endif
-// END OF ENABLE_MPISERVER BLOCK. Do not remove this line. //
+// END OF ENABLE_MYSERVER BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_IOPROXY_RPC BLOCK. Do not remove this line. //
 #ifdef ENABLE_IOPROXY_RPC
 	else if (strcmp(prt,"ioproxy-rpc") == 0){

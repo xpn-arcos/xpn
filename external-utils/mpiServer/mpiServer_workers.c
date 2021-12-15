@@ -154,7 +154,7 @@ void mpiServer_worker_run(void *arg)
 
   do{
 	  /* */
-  	head.type = MPISERVER_END;
+  	head.type = MYSERVER_END;
 	strcpy(head.id, id);
 #ifdef DBG_WORKERS	
 	printf("[WORKERS]mpiServer_read_operation begin (%s)\n", id);
@@ -166,7 +166,7 @@ void mpiServer_worker_run(void *arg)
 #endif		
  		
 	switch(op){
-		case MPISERVER_OPEN_FILE:
+		case MYSERVER_OPEN_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_open begin (sd, &head);\n", id);
 #endif			
@@ -175,7 +175,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_open end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_CREAT_FILE:
+		case MYSERVER_CREAT_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_creat begin (sd, &head);\n", id);
 #endif			
@@ -184,7 +184,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_creat end(sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_READ_FILE:
+		case MYSERVER_READ_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_read begin (sd, &head);\n", id);
 #endif			
@@ -193,7 +193,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_read end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_WRITE_FILE: 
+		case MYSERVER_WRITE_FILE: 
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_write begin (sd, &head);\n", id);
 #endif			
@@ -202,7 +202,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_write end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_CLOSE_FILE:
+		case MYSERVER_CLOSE_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_close begin (sd, &head);\n", id);
 #endif			
@@ -211,7 +211,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_close end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_RM_FILE:
+		case MYSERVER_RM_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_rm begin (sd, &head);\n", id);
 #endif			
@@ -220,7 +220,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_rm end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_GETATTR_FILE:
+		case MYSERVER_GETATTR_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_getattr begin (sd, &head);\n", id);
 #endif			
@@ -229,7 +229,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_getattr end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_SETATTR_FILE:
+		case MYSERVER_SETATTR_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_setattr begin (sd, &head);\n", id);
 #endif			
@@ -238,7 +238,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_setattr end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_MKDIR_DIR:
+		case MYSERVER_MKDIR_DIR:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_mkdir begin (sd, &head);\n", id);
 #endif			
@@ -247,7 +247,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_mkdir end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_RMDIR_DIR:
+		case MYSERVER_RMDIR_DIR:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_rmdir begin (sd, &head);\n", id);
 #endif			
@@ -256,7 +256,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_rmdir end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_PRELOAD_FILE:
+		case MYSERVER_PRELOAD_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_preload begin (sd, &head);\n", id);
 #endif			
@@ -265,7 +265,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_preload end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_FLUSH_FILE:
+		case MYSERVER_FLUSH_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_flush begin (sd, &head);\n", id);
 #endif			
@@ -274,7 +274,7 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_flush end (sd, &head);\n", id);
 #endif			
 			break;
-		case MPISERVER_GETID:
+		case MYSERVER_GETID:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_getid begin (sd, &head);\n", id);
 #endif			
@@ -283,11 +283,11 @@ void mpiServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)mpiServer_op_getid end (sd, &head);\n", id);
 #endif			
 			break;
-                case MPISERVER_FINALIZE:                                                                                     
+                case MYSERVER_FINALIZE:                                                                                     
 #ifdef DBG_WORKERS                                                                                                                
                         printf("[WORKERS]ID=%s)mpiServer_op_finalize begin (sd, &head);\n", id); 
 #endif                                                                                                                      
-                        op = MPISERVER_FINALIZE;                                                                             
+                        op = MYSERVER_FINALIZE;                                                                             
                         printf("[WORKERS]EXIT\n");                                                                                   
 #ifdef DBG_WORKERS                                                                                                                
                         printf("[WORKERS]ID=%s)mpiServer_op_finalize end (sd, &head);\n", id); 
@@ -299,7 +299,7 @@ void mpiServer_worker_run(void *arg)
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_end begin (sd, &head);\n", id);
 #endif			
-			op = MPISERVER_END;
+			op = MYSERVER_END;
 			//printf("[WORKERS]EXIT\n");
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)mpiServer_op_end end(sd, &head);\n", id);
@@ -307,7 +307,7 @@ void mpiServer_worker_run(void *arg)
 			break;
 	}
 			  
-  }while(op != MPISERVER_END);
+  }while(op != MYSERVER_END);
 
 #ifdef DBG_WORKERS				
 	printf("[WORKERS]mpiServer_worker_run(ID=%s): close\n", id);

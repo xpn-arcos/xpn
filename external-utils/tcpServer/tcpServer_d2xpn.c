@@ -11,11 +11,11 @@
 #define MB (KB*KB)
 #endif
 
-int TCPSERVER_IOSIZE_INT;
+int MYSERVER_IOSIZE_INT;
 
 #define DEFAULT_PATH "/tmp"
 
-#define TCPSERVER_PATH_DEFAULT "/tmp"
+#define MYSERVER_PATH_DEFAULT "/tmp"
 
 extern struct tcpServer_param_st tcpServer_params;
 
@@ -52,12 +52,12 @@ void generateName(char *file, char *new_file){
 	return;
 }
 
-int mylock(char *file){
+int tcplock(char *file){
 	//char new_file[255];
 	int fd;
 
 #if defined (DBG_XPN) || defined(_DBGXPN_)
-  	printf("d2xpn: mylock(%s)\n",file);
+  	printf("d2xpn: tcplock(%s)\n",file);
 #endif
 	
 	pthread_mutex_lock(&mutex_id);
@@ -71,16 +71,16 @@ int mylock(char *file){
  	flock(fd, LOCK_EX);
 */
 #if defined (DBG_XPN) || defined(_DBGXPN_)
-  	printf("d2xpn: mylock(%s) -> %d\n",file,fd);
+  	printf("d2xpn: tcplock(%s) -> %d\n",file,fd);
 #endif
 
 	return fd;
 }
 
 
-int myunlock(int fd){
+int tcpunlock(int fd){
 #if defined (DBG_XPN) || defined(_DBGXPN_)
-  	printf("d2xpn: myunlock(%d)\n",fd);
+  	printf("d2xpn: tcpunlock(%d)\n",fd);
 #endif
 	pthread_mutex_unlock(&mutex_id);
 /*
@@ -118,7 +118,7 @@ int tcpServer_d2xpn(char *origen, char *destino, int opt)
 
 tcpServer_path = tcpServer_params.dirbase;
 if(tcpServer_path  == NULL){
-	tcpServer_path = TCPSERVER_PATH_DEFAULT; 
+	tcpServer_path = MYSERVER_PATH_DEFAULT; 
 }
 
   sprintf(new_path, "%s/%s", tcpServer_path, destino); 
@@ -130,7 +130,7 @@ if(tcpServer_path  == NULL){
  */
 
   gettimeofday(&t1, NULL);
-  fd_lock = mylock(origen);
+  fd_lock = tcplock(origen);
   if(fd_lock == -1){
 	printf("Err: lock %s\n",destino);
 	perror("Error: lock");
@@ -157,7 +157,7 @@ if(tcpServer_path  == NULL){
 #if defined( DBG_XPN) || defined(_DBGXPN_)
 	    printf("d2xpn(%d): %s (%s) is stored in cache\n", private_id, destino, origen);
 #endif
-	    myunlock(fd_lock);
+	    tcpunlock(fd_lock);
 	    //xpn_destroy();	  
 	    //printf("d2xpn: %s and %s are the same file\n", origen, destino);
 	    return(0);	    
@@ -170,7 +170,7 @@ if(tcpServer_path  == NULL){
 	fflush(stdout);
 #endif
   if((fd=xpn_init())<0){
-    myunlock(fd_lock);
+    tcpunlock(fd_lock);
     printf("Error in init %d\n",fd);
     return(-1);
   }
@@ -183,7 +183,7 @@ if(tcpServer_path  == NULL){
 #endif
   fd=open(destino,O_RDONLY);
   if(fd<0){
-    myunlock(fd_lock);
+    tcpunlock(fd_lock);
     //xpn_destroy();	  
     printf("tcpServer_d2xpn: error in open(%s) fd (%d)\n",destino,fd);
     return(-1);
@@ -199,7 +199,7 @@ if(tcpServer_path  == NULL){
 	printf("d2xpn(%d): end xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777) = %d\n",private_id,origen,fdp);
 #endif
   if(fdp<0){
-    myunlock(fd_lock);
+    tcpunlock(fd_lock);
     //xpn_destroy();	  
     printf("error in xpn_open fdp = %d\n",fdp);
     return(-1);
@@ -208,14 +208,14 @@ if(tcpServer_path  == NULL){
  
   
 
-  global_transfer_buffer = malloc(sizeof(char)*TCPSERVER_IOSIZE_INT);
+  global_transfer_buffer = malloc(sizeof(char)*MYSERVER_IOSIZE_INT);
   sum = 0;
   do{
 
 #ifdef DBG_XPN
-	printf("d2xpn(%d): antes read(%d,%d)\n", private_id,TCPSERVER_IOSIZE_INT, sum);
+	printf("d2xpn(%d): antes read(%d,%d)\n", private_id,MYSERVER_IOSIZE_INT, sum);
 #endif
-    sp = read(fd,global_transfer_buffer,TCPSERVER_IOSIZE_INT);
+    sp = read(fd,global_transfer_buffer,MYSERVER_IOSIZE_INT);
     //printf("antes de xpn_write(%d bytes) ...\n", s);
     if(s == -1){
 	    break;
@@ -235,7 +235,7 @@ if(tcpServer_path  == NULL){
     sum = sum + sp;
 
     //printf("Se han leido s=%d y escrito sp=%d\n", s, sp);
-  }while((s==TCPSERVER_IOSIZE_INT)&&(sp >= 0));
+  }while((s==MYSERVER_IOSIZE_INT)&&(sp >= 0));
   free(global_transfer_buffer);
 
 #ifdef DBG_XPN
@@ -277,7 +277,7 @@ if(tcpServer_path  == NULL){
 #if defined (DBG_XPN) || defined(_DBGXPN_)
 	printf("d2xpn(%d): move %s -> %s\n", private_id, destino, origen);
 #endif
-  myunlock(fd_lock);
+  tcpunlock(fd_lock);
 #ifdef DBG_XPN
 	printf("d2xpn(%d): xpn_destroy()\n", private_id);
 #endif
@@ -287,7 +287,7 @@ if(tcpServer_path  == NULL){
 
   transfer_time = (t2.tv_sec + t2.tv_usec/1000000.0) - (t1.tv_sec + t1.tv_usec/1000000.0);
 
-  printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, TCPSERVER_IOSIZE_INT);
+  printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, MYSERVER_IOSIZE_INT);
 
 
 /*

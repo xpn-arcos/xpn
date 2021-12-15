@@ -11,20 +11,19 @@
 
 /* PROTOCOLS */
 /*
-#define LOCAL		 1
-#define NFS		 2
-#define NFS3		 3
-#define FTP		 4
-#define XIO		 5
-#define GSOAP		 6
-#define GRIDFTP		 7
-#define TCPSERVER	 9
-#define MPISERVER	10
+#define LOCAL		1
+#define NFS		2
+#define NFS3		3
+#define FTP		4
+#define XIO		5
+#define GSOAP		6
+#define GRIDFTP		7
+#define MYSERVER	9
 */
 
 /* TYPE FILES */
-#define NFIFILE 	 0
-#define NFIDIR		 1
+#define NFIFILE 	0
+#define NFIDIR		1
 #define NFINULL 	-1
 
 
