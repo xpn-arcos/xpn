@@ -110,14 +110,25 @@ int get_params(int argc, char *argv[], struct mpiServer_param_st *params){
 }
 
 
+void sigint_handler ( int signal )
+{
+	printf("Signal %d received !!", signal) ;
+
+	exit(0) ;
+}
+
 
 int main(int argc, char *argv[]){
 	int sd;
 	int cont;
 
+	// Initializing...
 	setbuf(stdout,NULL);	
 	setbuf(stderr,NULL);
 
+	signal(SIGINT, sigint_handler);
+
+	// Get parameters..
 	if(get_params(argc,argv, &mpiServer_params) == -1){
 		show_usage();
 		exit(-1);

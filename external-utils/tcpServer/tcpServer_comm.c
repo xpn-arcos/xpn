@@ -140,7 +140,30 @@ int tcpServer_comm_init(char *name, int port, char *file){
 		perror("error en el socket:");
 		return -1;
 	}
-	
+
+	val = 1;
+	if (setsockopt (global_sock, IPPROTO_TCP,TCP_NODELAY, &val, sizeof(val)) == -1){
+                perror("setsockopt: ");
+                return -1;
+        }
+
+        //NEW
+
+        val = 1024 * 1024; //1 MB
+
+        if (setsockopt(global_sock, SOL_SOCKET, SO_SNDBUF, (char *) &val, sizeof(int)) == -1){
+                perror("setsockopt: ");
+                return -1;
+        }
+
+        val = 1024 * 1024; //1 MB
+        if (setsockopt(global_sock, SOL_SOCKET, SO_RCVBUF, (char *) &val, sizeof(int)) == -1){
+                perror("setsockopt: ");
+                return -1;
+        }
+
+
+	val = 1;	
 	ret = setsockopt(global_sock, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(int));
 	if(ret == -1){
 		perror("error en el setsockopt:");
@@ -198,9 +221,25 @@ int tcpServer_accept_comm(){
 	}	
 
 	//printf("[COMM]accept conection ....\n");	
-	if (setsockopt (sc, IPPROTO_TCP,
-		        TCP_NODELAY, &flag, sizeof(flag)) == -1)
+	if (setsockopt (sc, IPPROTO_TCP,TCP_NODELAY, &flag, sizeof(flag)) == -1){
+		perror("setsockopt: ");
 		return -1;
+	}
+
+	//NEW
+
+	int val = 1024 * 1024; //1 MB
+
+	if (setsockopt(sc, SOL_SOCKET, SO_SNDBUF, (char *) &val, sizeof(int)) == -1){
+		perror("setsockopt: ");
+		return -1;
+	}
+
+	val = 1024 * 1024; //1 MB
+	if (setsockopt(sc, SOL_SOCKET, SO_RCVBUF, (char *) &val, sizeof(int)) == -1){
+		perror("setsockopt: ");
+		return -1;
+	}
 
         #ifdef DBG_COMM
  printf("[COMM]end tcpServer_accept_comm()\n");
@@ -318,3 +357,4 @@ ssize_t tcpServer_comm_readdata(int fd, char *data, ssize_t size, char *id){
 #endif	
 	return size;
 }
+
