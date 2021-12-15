@@ -1,0 +1,218 @@
+#include "myServer_workers.h"
+
+int busy_worker;
+pthread_mutex_t m_worker;
+pthread_cond_t c_worker;
+
+struct st_th th_worker[MAX_THREADS];
+
+int myServer_init_worker(){
+	int i;
+
+//	c_worker = PTHREAD_COND_INITIALIZER; 
+//	m_worker = PTHREAD_MUTEX_INITIALIZER;
+
+	busy_worker = TRUE;
+	pthread_cond_init(&c_worker, NULL);
+	pthread_mutex_init(&m_worker, NULL);
+
+	for(i=0;i<MAX_THREADS;i++){
+		th_worker[i].value = -1;
+	}
+
+
+	return 0;
+}
+
+
+
+int myServer_launch_worker(int sd){
+	
+	pthread_attr_t   tattr;
+	pthread_t *th;	
+	int i;
+
+	pthread_attr_init(&tattr);
+	pthread_attr_setdetachstate(&tattr,PTHREAD_CREATE_DETACHED);
+#ifdef _DBG_
+	printf("pthread_create(%d)\n",sd);
+#endif
+	
+	for(i=0;i<MAX_THREADS;i++){
+		if(th_worker[i].value == -1){
+			th = &(th_worker[i].th);
+			th_worker[i].value = sd;	
+#ifdef _DBG_
+			printf("Encontrado hilo %d... (%d)\n",i,sd);
+#endif
+			break;
+		}
+
+		if(i == MAX_THREADS -1) {
+#ifdef _DBG_
+			printf("Seguimos buscando hilo ...(%d)\n",sd);
+#endif
+			i = 0;
+		}
+	}
+	
+	pthread_create(th, &tattr, (void * (*)(void *))(myServer_worker_run), (void *)th);
+
+	pthread_mutex_lock(&m_worker);
+#ifdef _DBG_ 
+  printf("pthread_create: wait myServer_worker_run(%d)\n", sd);
+#endif 
+	while(busy_worker == TRUE)
+		pthread_cond_wait(&c_worker, &m_worker);
+#ifdef _DBG_ 
+  printf("pthread_create: unlock myServer_worker_run(%d)\n", sd);
+#endif 
+	pthread_mutex_unlock(&m_worker);
+	busy_worker = TRUE;
+	// siguiente hijo
+	
+/*
+	myServer_worker_run((void*)sd);
+*/		
+	return 0;
+}
+
+/* thread process */
+void myServer_worker_run(void *arg)
+{
+ 
+  int op, sd; 
+  struct st_myServer_msg head;
+  struct st_th *th;
+
+#ifdef _DBG_ 
+  printf("begin myServer_worker_run()\n");
+#endif 
+  pthread_mutex_lock(&m_worker);
+  
+  th = (struct st_th *)arg;
+  sd = th->value;
+#ifdef _DBG_ 
+  printf("myServer_worker_run(%d)\n", sd);
+#endif 
+
+#ifdef _DBG_ 
+  printf("unlock in myServer_worker_run(%d)\n", sd);
+#endif 
+  busy_worker = FALSE;
+  pthread_cond_signal(&c_worker);
+  pthread_mutex_unlock(&m_worker);
+
+  do{
+	  /* */
+  	head.type = MYSERVER_END;
+	op = myServer_read_operation(sd, &head);
+#ifdef _DBG_	
+	printf ("OP = %d\n",op);
+#endif		
+	switch(op){
+		case MYSERVER_OPEN_FILE:
+#ifdef _DBG_				
+			printf("myServer_op_open(sd, &head);\n");
+#endif			
+			myServer_op_open(sd, &head);
+			break;
+		case MYSERVER_CREAT_FILE:
+#ifdef _DBG_				
+			printf("myServer_op_creat(sd, &head);\n");
+#endif			
+			myServer_op_creat(sd, &head);
+			break;
+		case MYSERVER_READ_FILE:
+#ifdef _DBG_				
+			printf("myServer_op_read(sd, &head);\n");
+#endif			
+			myServer_op_read(sd, &head);
+			break;
+		case MYSERVER_WRITE_FILE: 
+#ifdef _DBG_				
+			printf("myServer_op_write(sd, &head);\n");
+#endif			
+			myServer_op_write(sd, &head);
+			break;
+		case MYSERVER_CLOSE_FILE:
+#ifdef _DBG_				
+			printf("myServer_op_close(sd, &head);\n");
+#endif			
+			myServer_op_close(sd, &head);
+			break;
+		case MYSERVER_RM_FILE:
+#ifdef _DBG_				
+			printf("myServer_op_rm(sd, &head);\n");
+#endif			
+			myServer_op_rm(sd, &head);
+			break;
+		case MYSERVER_GETATTR_FILE:
+#ifdef _DBG_				
+			printf("myServer_op_getattr(sd, &head);\n");
+#endif			
+			myServer_op_getattr(sd, &head);
+			break;
+		case MYSERVER_SETATTR_FILE:
+#ifdef _DBG_				
+			printf("myServer_op_setattr(sd, &head);\n");
+#endif			
+			myServer_op_setattr(sd, &head);
+			break;
+		case MYSERVER_MKDIR_DIR:
+#ifdef _DBG_				
+			printf("myServer_op_mkdir(sd, &head);\n");
+#endif			
+			myServer_op_mkdir(sd, &head);
+			break;
+		case MYSERVER_RMDIR_DIR:
+#ifdef _DBG_				
+			printf("myServer_op_rmdir(sd, &head);\n");
+#endif			
+			myServer_op_rmdir(sd, &head);
+			break;
+		case MYSERVER_PRELOAD_FILE:
+#ifdef _DBG_				
+			printf("myServer_op_preload(sd, &head);\n");
+#endif			
+			myServer_op_preload(sd, &head);
+			break;
+		case MYSERVER_FLUSH_FILE:
+#ifdef _DBG_				
+			printf("myServer_op_flush(sd, &head);\n");
+#endif			
+			myServer_op_flush(sd, &head);
+			break;
+		case MYSERVER_FINALIZE:
+#ifdef _DBG_				
+			printf("myServer_op_finalize(sd, &head);\n");
+#endif			
+			op = MYSERVER_FINALIZE;
+			printf("EXIT\n");
+			exit(0);
+			break;
+		default:
+#ifdef _DBG_				
+			printf("myServer_op_end(sd, &head);\n");
+#endif			
+			op = MYSERVER_END;
+			//printf("EXIT\n");
+			break;
+	}
+			  
+  }while(op != MYSERVER_END);
+
+#ifdef _DBG_				
+	printf("myServer_worker_run: close(%d);\n",sd);
+#endif			
+  close(sd);
+	
+  th->value = -1;
+  
+
+#ifdef _DBG_ 
+  printf("end myServer_worker_run(%d)\n", sd);
+#endif 
+  pthread_exit(0);
+}
+

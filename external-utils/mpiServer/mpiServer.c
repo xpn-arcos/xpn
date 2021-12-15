@@ -7,26 +7,26 @@
  */
 
 /* VARIABLES DE ENTORNO:
- * TCPSERVER_DNS: indica donde se encuentra el sistema traductor de 
+ * MPISERVER_DNS: indica donde se encuentra el sistema traductor de 
  * <id> <hostname> <port>
  */
 
-#include "tcpServer.h"
-#include "tcpServer_ops.h"
-#include "tcpServer_workers.h"
-#include "tcpServer_comm.h"
-#include "tcpServer_d2xpn.h"
-#include "tcpServer_params.h"
+#include "mpiServer.h"
+#include "mpiServer_ops.h"
+#include "mpiServer_workers.h"
+#include "mpiServer_comm.h"
+#include "mpiServer_d2xpn.h"
+#include "mpiServer_params.h"
 ///////////////////////////////
 
 
 
-struct tcpServer_param_st tcpServer_params;
+struct mpiServer_param_st mpiServer_params;
 
 /* GLOBAL VARIABLES */
-char *TCPSERVER_ALIAS_NAME_STRING;
-char *TCPSERVER_FILE_STRING;
-char *TCPSERVER_DIRBASE_STRING;
+char *MPISERVER_ALIAS_NAME_STRING;
+char *MPISERVER_FILE_STRING;
+char *MPISERVER_DIRBASE_STRING;
 
 
 /* INTERNAL CONST & STRUCTS */
@@ -34,7 +34,7 @@ extern int errno;
 //pthread_t th;
 
 
-void show_values(struct tcpServer_param_st *params){
+void show_values(struct mpiServer_param_st *params){
 	printf("Usage:\n");
 	printf("\t-n <string>:\t%s\n",params->name);
 	printf("\t-p <int>:\t%d\n",params->port);
@@ -54,14 +54,14 @@ void show_usage(){
 }
 
 
-int get_params(int argc, char *argv[], struct tcpServer_param_st *params){
+int get_params(int argc, char *argv[], struct mpiServer_param_st *params){
 	int i;
 
-	params->port 	= TCPSERVER_PORT_DEFAULT;	
-	params->IOsize 	= TCPSERVER_IOSIZE_DEFAULT;	
+	params->port 	= MPISERVER_PORT_DEFAULT;	
+	params->IOsize 	= MPISERVER_IOSIZE_DEFAULT;	
 	gethostname(params->name, 255);
-	strcpy(params->file, TCPSERVER_FILE_DEFAULT);
-	strcpy(params->dirbase, TCPSERVER_DIRBASE_DEFAULT);
+	strcpy(params->file, MPISERVER_FILE_DEFAULT);
+	strcpy(params->dirbase, MPISERVER_DIRBASE_DEFAULT);
 	
 	for(i=0;i<argc;i++){
 		switch(argv[i][0]){
@@ -100,10 +100,10 @@ int get_params(int argc, char *argv[], struct tcpServer_param_st *params){
 		}
 	}
 
-	TCPSERVER_ALIAS_NAME_STRING = params->name;
-	TCPSERVER_FILE_STRING = params->file;
-	TCPSERVER_DIRBASE_STRING = params->dirbase;
-	TCPSERVER_IOSIZE_INT = params->IOsize * KB;
+	MPISERVER_ALIAS_NAME_STRING = params->name;
+	MPISERVER_FILE_STRING = params->file;
+	MPISERVER_DIRBASE_STRING = params->dirbase;
+	MPISERVER_IOSIZE_INT = params->IOsize * KB;
 
 	
 	return 0;
@@ -118,37 +118,37 @@ int main(int argc, char *argv[]){
 	setbuf(stdout,NULL);	
 	setbuf(stderr,NULL);
 
-	if(get_params(argc,argv, &tcpServer_params) == -1){
+	if(get_params(argc,argv, &mpiServer_params) == -1){
 		show_usage();
 		exit(-1);
 	}
-	show_values(&tcpServer_params);
-	tcpServer_comm_init(tcpServer_params.name,
-		       	   tcpServer_params.port,
-			   tcpServer_params.file);
+	show_values(&mpiServer_params);
+	mpiServer_comm_init(mpiServer_params.name,
+		       	   mpiServer_params.port,
+			   mpiServer_params.file);
 
-	//tcpServer_init_worker(&th);
-	tcpServer_init_worker();
+	//mpiServer_init_worker(&th);
+	mpiServer_init_worker();
 
 	cont = 0;
 
 	while (1)
 	{
 	#ifdef DBG_MAIN
-        	printf("tcpServer_accept_comm()\n");
+        	printf("mpiServer_accept_comm()\n");
 	#endif
-		sd = tcpServer_accept_comm();
+		sd = mpiServer_accept_comm();
 	#ifdef DBG_MAIN
-        	printf("tcpServer_launch_worker()\n");
+        	printf("mpiServer_launch_worker()\n");
 	#endif
 		if(sd == -1){
 			break;
 		}
-		//tcpServer_launch_worker(sd, &th);
-		tcpServer_launch_worker(sd);
+		//mpiServer_launch_worker(sd, &th);
+		mpiServer_launch_worker(sd);
 	}
 
-	tcpServer_close_comm();
+	mpiServer_close_comm();
     	xpn_destroy();
 	exit(0);
 }

@@ -1,5 +1,5 @@
-#include "tcpServer_d2xpn.h"
-#include "tcpServer_params.h"
+#include "mpiServer_d2xpn.h"
+#include "mpiServer_params.h"
 #include "xpn.h"
 #include <sys/time.h>
 
@@ -11,13 +11,13 @@
 #define MB (KB*KB)
 #endif
 
-int TCPSERVER_IOSIZE_INT;
+int MPISERVER_IOSIZE_INT;
 
 #define DEFAULT_PATH "/tmp"
 
-#define TCPSERVER_PATH_DEFAULT "/tmp"
+#define MPISERVER_PATH_DEFAULT "/tmp"
 
-extern struct tcpServer_param_st tcpServer_params;
+extern struct mpiServer_param_st mpiServer_params;
 
 
 /*****************************************************************/
@@ -90,14 +90,14 @@ int myunlock(int fd){
 	return 0;
 }
 
-int tcpServer_d2xpn(char *origen, char *destino, int opt)
+int mpiServer_d2xpn(char *origen, char *destino, int opt)
 {
   struct stat st;
   //struct stat st_xpn;
   //char s_exe [255];
   int fdp,fd,s,sp, ret,fd_lock;
   int sum = 0;
-  char *tcpServer_path, new_path[255];
+  char *mpiServer_path, new_path[255];
   int private_id; 
   char *global_transfer_buffer;
 
@@ -116,12 +116,12 @@ int tcpServer_d2xpn(char *origen, char *destino, int opt)
 
 
 
-tcpServer_path = tcpServer_params.dirbase;
-if(tcpServer_path  == NULL){
-	tcpServer_path = TCPSERVER_PATH_DEFAULT; 
+mpiServer_path = mpiServer_params.dirbase;
+if(mpiServer_path  == NULL){
+	mpiServer_path = MPISERVER_PATH_DEFAULT; 
 }
 
-  sprintf(new_path, "%s/%s", tcpServer_path, destino); 
+  sprintf(new_path, "%s/%s", mpiServer_path, destino); 
 
 /*
  * Deberia comprobar si puedo hacer el lock,
@@ -185,7 +185,7 @@ if(tcpServer_path  == NULL){
   if(fd<0){
     myunlock(fd_lock);
     //xpn_destroy();	  
-    printf("tcpServer_d2xpn: error in open(%s) fd (%d)\n",destino,fd);
+    printf("mpiServer_d2xpn: error in open(%s) fd (%d)\n",destino,fd);
     return(-1);
   }  
   
@@ -208,14 +208,14 @@ if(tcpServer_path  == NULL){
  
   
 
-  global_transfer_buffer = malloc(sizeof(char)*TCPSERVER_IOSIZE_INT);
+  global_transfer_buffer = malloc(sizeof(char)*MPISERVER_IOSIZE_INT);
   sum = 0;
   do{
 
 #ifdef DBG_XPN
-	printf("d2xpn(%d): antes read(%d,%d)\n", private_id,TCPSERVER_IOSIZE_INT, sum);
+	printf("d2xpn(%d): antes read(%d,%d)\n", private_id,MPISERVER_IOSIZE_INT, sum);
 #endif
-    sp = read(fd,global_transfer_buffer,TCPSERVER_IOSIZE_INT);
+    sp = read(fd,global_transfer_buffer,MPISERVER_IOSIZE_INT);
     //printf("antes de xpn_write(%d bytes) ...\n", s);
     if(s == -1){
 	    break;
@@ -235,7 +235,7 @@ if(tcpServer_path  == NULL){
     sum = sum + sp;
 
     //printf("Se han leido s=%d y escrito sp=%d\n", s, sp);
-  }while((s==TCPSERVER_IOSIZE_INT)&&(sp >= 0));
+  }while((s==MPISERVER_IOSIZE_INT)&&(sp >= 0));
   free(global_transfer_buffer);
 
 #ifdef DBG_XPN
@@ -287,7 +287,7 @@ if(tcpServer_path  == NULL){
 
   transfer_time = (t2.tv_sec + t2.tv_usec/1000000.0) - (t1.tv_sec + t1.tv_usec/1000000.0);
 
-  printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, TCPSERVER_IOSIZE_INT);
+  printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, MPISERVER_IOSIZE_INT);
 
 
 /*
