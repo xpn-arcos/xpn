@@ -459,9 +459,9 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 // END OF ENABLE_GRIDFTP BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_TCPSERVER BLOCK. Do not remove this line. //
 #ifdef ENABLE_TCPSERVER
-	else if (strcmp(prt,"myServer") == 0){
-		//printf("[XPN]nfi_myServer_init: %s\n",url);
-		ret = nfi_myServer_init(url, serv, NULL);
+	else if (strcmp(prt,"tcpServer") == 0){
+		//printf("[XPN]nfi_tcpServer_init: %s\n",url);
+		ret = nfi_tcpServer_init(url, serv, NULL);
 		if(ret < 0){
 			xpn_err(XPNERR_INITSERV);
 			return -1;
@@ -471,9 +471,9 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 // END OF ENABLE_TCPSERVER BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_MPISERVER BLOCK. Do not remove this line. //
 #ifdef ENABLE_MPISERVER
-	else if (strcmp(prt,"myServer") == 0){
-		//printf("[XPN]nfi_myServer_init: %s\n",url);
-		ret = nfi_myServer_init(url, serv, NULL);
+	else if (strcmp(prt,"mpiServer") == 0){
+		//printf("[XPN]nfi_mpiServer_init: %s\n",url);
+		ret = nfi_mpiServer_init(url, serv, NULL);
 		if(ret < 0){
 			xpn_err(XPNERR_INITSERV);
 			return -1;

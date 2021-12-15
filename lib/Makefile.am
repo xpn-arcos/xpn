@@ -61,21 +61,21 @@ NFI_GRIDFTP_HEADER=	@top_srcdir@/include/nfi/nfi_gridftp/gridftp_lib.h \
 ### END OF NFI_GRIDFTP_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_TCPSERVER_HEADER=	@top_srcdir@/include/nfi/nfi_tcpServer/ \
-			@top_srcdir@/include/nfi/nfi_tcpServer/myServer_comm.h \
-			@top_srcdir@/include/nfi/nfi_tcpServer/myServer_conf.h \
-			@top_srcdir@/include/nfi/nfi_tcpServer/myServer.h \
-			@top_srcdir@/include/nfi/nfi_tcpServer/myServer_lib.h \
-			@top_srcdir@/include/nfi/nfi_tcpServer/nfi_myServer_err.h \
-			@top_srcdir@/include/nfi/nfi_tcpServer/nfi_myServer.h
+			@top_srcdir@/include/nfi/nfi_tcpServer/tcpServer_comm.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/tcpServer_conf.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/tcpServer.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/tcpServer_lib.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/nfi_tcpServer_err.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/nfi_tcpServer.h
 ### END OF NFI_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPISERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPISERVER_HEADER=	@top_srcdir@/include/nfi/nfi_mpiServer/ \
-			@top_srcdir@/include/nfi/nfi_mpiServer/myServer_comm.h \
-			@top_srcdir@/include/nfi/nfi_mpiServer/myServer_conf.h \
-			@top_srcdir@/include/nfi/nfi_mpiServer/myServer.h \
-			@top_srcdir@/include/nfi/nfi_mpiServer/myServer_lib.h \
-			@top_srcdir@/include/nfi/nfi_mpiServer/nfi_myServer_err.h \
-			@top_srcdir@/include/nfi/nfi_mpiServer/nfi_myServer.h
+			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_comm.h \
+			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_conf.h \
+			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer.h \
+			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_lib.h \
+			@top_srcdir@/include/nfi/nfi_mpiServer/nfi_mpiServer_err.h \
+			@top_srcdir@/include/nfi/nfi_mpiServer/nfi_mpiServer.h
 ### END OF NFI_MPISERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_IOPROXY_RPC_HEADER BLOCK. Do not remove this line. ###
 NFI_IOPROXY_RPC_HEADER=	@top_srcdir@/include/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.h \
@@ -238,14 +238,14 @@ NFI_GRIDFTP_OBJECTS=	@top_srcdir@/src/nfi/nfi_gridftp/nfi_gridftp.c \
 			@top_srcdir@/src/nfi/nfi_gridftp/nfi_gridftp_err.c
 ### END OF NFI_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
-NFI_TCPSERVER_OBJECTS=	@top_srcdir@/src/nfi/nfi_tcpServer/nfi_myServer.c \
-			@top_srcdir@/src/nfi/nfi_tcpServer/myServer_comm.c \
-			@top_srcdir@/src/nfi/nfi_tcpServer/nfi_myServer_err.c
+NFI_TCPSERVER_OBJECTS=	@top_srcdir@/src/nfi/nfi_tcpServer/nfi_tcpServer.c \
+			@top_srcdir@/src/nfi/nfi_tcpServer/tcpServer_comm.c \
+			@top_srcdir@/src/nfi/nfi_tcpServer/nfi_tcpServer_err.c
 ### END OF NFI_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
-NFI_MPISERVER_OBJECTS=	@top_srcdir@/src/nfi/nfi_mpiServer/nfi_myServer.c \
-			@top_srcdir@/src/nfi/nfi_mpiServer/myServer_comm.c \
-			@top_srcdir@/src/nfi/nfi_mpiServer/nfi_myServer_err.c
+NFI_MPISERVER_OBJECTS=	@top_srcdir@/src/nfi/nfi_mpiServer/nfi_mpiServer.c \
+			@top_srcdir@/src/nfi/nfi_mpiServer/mpiServer_comm.c \
+			@top_srcdir@/src/nfi/nfi_mpiServer/nfi_mpiServer_err.c
 ### END OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
 NFI_IOPROXY_RPC_OBJECTS=	@top_srcdir@/src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.c \

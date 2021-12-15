@@ -40,12 +40,12 @@
 // END OF ENABLE_GRIDFTP BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_TCPSERVER BLOCK. Do not remove this line. //
 #ifdef ENABLE_TCPSERVER
-	#include "nfi_tcpServer/myServer_lib.h"
+	#include "nfi_tcpServer/tcpServer_lib.h"
 #endif
 // END OF ENABLE_TCPSERVER BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_MPISERVER BLOCK. Do not remove this line. //
 #ifdef ENABLE_MPISERVER
-	#include "nfi_mpiServer/myServer_lib.h"
+	#include "nfi_mpiServer/mpiServer_lib.h"
 #endif
 // END OF ENABLE_MPISERVER BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_IOPROXY_RPC BLOCK. Do not remove this line. //
