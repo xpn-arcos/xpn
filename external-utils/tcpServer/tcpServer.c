@@ -11,17 +11,17 @@
  * <id> <hostname> <port>
  */
 
-#include "myServer.h"
-#include "myServer_ops.h"
-#include "myServer_workers.h"
-#include "myServer_comm.h"
-#include "myServer_d2xpn.h"
-#include "myServer_params.h"
+#include "tcpServer.h"
+#include "tcpServer_ops.h"
+#include "tcpServer_workers.h"
+#include "tcpServer_comm.h"
+#include "tcpServer_d2xpn.h"
+#include "tcpServer_params.h"
 ///////////////////////////////
 
 
 
-struct myServer_param_st myServer_params;
+struct tcpServer_param_st tcpServer_params;
 
 /* GLOBAL VARIABLES */
 char *MYSERVER_ALIAS_NAME_STRING;
@@ -34,7 +34,7 @@ extern int errno;
 //pthread_t th;
 
 
-void show_values(struct myServer_param_st *params){
+void show_values(struct tcpServer_param_st *params){
 	printf("Usage:\n");
 	printf("\t-n <string>:\t%s\n",params->name);
 	printf("\t-p <int>:\t%d\n",params->port);
@@ -54,7 +54,7 @@ void show_usage(){
 }
 
 
-int get_params(int argc, char *argv[], struct myServer_param_st *params){
+int get_params(int argc, char *argv[], struct tcpServer_param_st *params){
 	int i;
 
 	params->port 	= MYSERVER_PORT_DEFAULT;	
@@ -118,37 +118,37 @@ int main(int argc, char *argv[]){
 	setbuf(stdout,NULL);	
 	setbuf(stderr,NULL);
 
-	if(get_params(argc,argv, &myServer_params) == -1){
+	if(get_params(argc,argv, &tcpServer_params) == -1){
 		show_usage();
 		exit(-1);
 	}
-	show_values(&myServer_params);
-	myServer_comm_init(myServer_params.name,
-		       	   myServer_params.port,
-			   myServer_params.file);
+	show_values(&tcpServer_params);
+	tcpServer_comm_init(tcpServer_params.name,
+		       	   tcpServer_params.port,
+			   tcpServer_params.file);
 
-	//myServer_init_worker(&th);
-	myServer_init_worker();
+	//tcpServer_init_worker(&th);
+	tcpServer_init_worker();
 
 	cont = 0;
 
 	while (1)
 	{
 	#ifdef DBG_MAIN
-        	printf("myServer_accept_comm()\n");
+        	printf("tcpServer_accept_comm()\n");
 	#endif
-		sd = myServer_accept_comm();
+		sd = tcpServer_accept_comm();
 	#ifdef DBG_MAIN
-        	printf("myServer_launch_worker()\n");
+        	printf("tcpServer_launch_worker()\n");
 	#endif
 		if(sd == -1){
 			break;
 		}
-		//myServer_launch_worker(sd, &th);
-		myServer_launch_worker(sd);
+		//tcpServer_launch_worker(sd, &th);
+		tcpServer_launch_worker(sd);
 	}
 
-	myServer_close_comm();
+	tcpServer_close_comm();
     	xpn_destroy();
 	exit(0);
 }

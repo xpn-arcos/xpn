@@ -1,10 +1,10 @@
-#include "myServer_comm.h"
+#include "tcpServer_comm.h"
 
 static int global_sock = 0;
 
 
 
-int myServer_comm_writedata_test(int fd, char *id){
+int tcpServer_comm_writedata_test(int fd, char *id){
         /*****************************TEST****************************************/
 	int ret;
         char buffer_temp[CONST_TEMP], aux;
@@ -61,7 +61,7 @@ int myServer_comm_writedata_test(int fd, char *id){
 }
 
 
-int myServer_comm_readdata_test(int fd, char *id){
+int tcpServer_comm_readdata_test(int fd, char *id){
 
         /*****************************TEST****************************************/
 	int ret;
@@ -125,13 +125,13 @@ int myServer_comm_readdata_test(int fd, char *id){
 
 
 /* AUXILIAR FUNCTIONS */
-int myServer_comm_init(char *name, int port, char *file){
+int tcpServer_comm_init(char *name, int port, char *file){
 	struct sockaddr_in server_addr;
 	int val, ret;
 	char host[255];
 	FILE *f;
 #ifdef  DBG_COMM	
-  printf("[COMM]begin myServer_comm_init(%s, %d, %s)\n",name, port, file);
+  printf("[COMM]begin tcpServer_comm_init(%s, %d, %s)\n",name, port, file);
 #endif
 	val = 1;
 	/* create the connections */
@@ -165,22 +165,22 @@ int myServer_comm_init(char *name, int port, char *file){
 		fclose(f);
 	}
 #ifdef  DBG_COMM	
-  printf("[COMM]begin myServer_comm_init(%s, %d, %s)\n",name, port, file);
+  printf("[COMM]begin tcpServer_comm_init(%s, %d, %s)\n",name, port, file);
 #endif
 	return 0;
 }
 
-void myServer_close_comm(){
+void tcpServer_close_comm(){
 	close(global_sock);
 }
 
 
-int myServer_accept_comm(){
+int tcpServer_accept_comm(){
 	struct sockaddr_in client_addr;
 	int sc, flag = 1;
 	int size = sizeof(struct sockaddr_in);
         #ifdef DBG_COMM
- printf("[COMM]begin myServer_accept_comm()\n");
+ printf("[COMM]begin tcpServer_accept_comm()\n");
         #endif
 
 
@@ -203,12 +203,12 @@ int myServer_accept_comm(){
 		return -1;
 
         #ifdef DBG_COMM
- printf("[COMM]end myServer_accept_comm()\n");
+ printf("[COMM]end tcpServer_accept_comm()\n");
         #endif
 	return sc;
 }
 
-int myServer_destroy_comm(){
+int tcpServer_destroy_comm(){
 	return 0;
 }
 
@@ -216,11 +216,11 @@ int myServer_destroy_comm(){
 /********************************** 
 Write data to client using sockets
 ***********************************/
-ssize_t myServer_comm_writedata(int fd, char *data, ssize_t size, char *id){
+ssize_t tcpServer_comm_writedata(int fd, char *data, ssize_t size, char *id){
 	int ret = 0;
 	int cont = 0;
 #ifdef DBG_COMM	
-	myServer_comm_writedata_test(fd, id);
+	tcpServer_comm_writedata_test(fd, id);
 #endif	
 
 #ifdef DBG_COMM	
@@ -260,7 +260,7 @@ ssize_t myServer_comm_writedata(int fd, char *data, ssize_t size, char *id){
 	printf("[COMM]server: end write_comm(%d): %d of %d data %p ID=%s:%p --th:%d--\n",fd,cont,size,data,id,id,(int)pthread_self());
 #endif
 #ifdef DBG_COMM	
-	myServer_comm_writedata_test(fd, id);
+	tcpServer_comm_writedata_test(fd, id);
 #endif	
 	return size;
 }
@@ -269,11 +269,11 @@ ssize_t myServer_comm_writedata(int fd, char *data, ssize_t size, char *id){
 /********************************** 
 Read data from client using sockets
 ***********************************/
-ssize_t myServer_comm_readdata(int fd, char *data, ssize_t size, char *id){
+ssize_t tcpServer_comm_readdata(int fd, char *data, ssize_t size, char *id){
 	int ret = 0;
 	int cont = 0;
 #ifdef DBG_COMM	
-	myServer_comm_readdata_test(fd, id);
+	tcpServer_comm_readdata_test(fd, id);
 #endif	
 
 #ifdef DBG_COMM	
@@ -314,7 +314,7 @@ ssize_t myServer_comm_readdata(int fd, char *data, ssize_t size, char *id){
 #endif	
 
 #ifdef DBG_COMM	
-	myServer_comm_readdata_test(fd, id);
+	tcpServer_comm_readdata_test(fd, id);
 #endif	
 	return size;
 }

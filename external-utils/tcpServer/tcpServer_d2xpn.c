@@ -1,5 +1,5 @@
-#include "myServer_d2xpn.h"
-#include "myServer_params.h"
+#include "tcpServer_d2xpn.h"
+#include "tcpServer_params.h"
 #include "xpn.h"
 #include <sys/time.h>
 
@@ -17,7 +17,7 @@ int MYSERVER_IOSIZE_INT;
 
 #define MYSERVER_PATH_DEFAULT "/tmp"
 
-extern struct myServer_param_st myServer_params;
+extern struct tcpServer_param_st tcpServer_params;
 
 
 /*****************************************************************/
@@ -90,14 +90,14 @@ int myunlock(int fd){
 	return 0;
 }
 
-int myServer_d2xpn(char *origen, char *destino, int opt)
+int tcpServer_d2xpn(char *origen, char *destino, int opt)
 {
   struct stat st;
   //struct stat st_xpn;
   //char s_exe [255];
   int fdp,fd,s,sp, ret,fd_lock;
   int sum = 0;
-  char *myServer_path, new_path[255];
+  char *tcpServer_path, new_path[255];
   int private_id; 
   char *global_transfer_buffer;
 
@@ -116,12 +116,12 @@ int myServer_d2xpn(char *origen, char *destino, int opt)
 
 
 
-myServer_path = myServer_params.dirbase;
-if(myServer_path  == NULL){
-	myServer_path = MYSERVER_PATH_DEFAULT; 
+tcpServer_path = tcpServer_params.dirbase;
+if(tcpServer_path  == NULL){
+	tcpServer_path = MYSERVER_PATH_DEFAULT; 
 }
 
-  sprintf(new_path, "%s/%s", myServer_path, destino); 
+  sprintf(new_path, "%s/%s", tcpServer_path, destino); 
 
 /*
  * Deberia comprobar si puedo hacer el lock,
@@ -185,7 +185,7 @@ if(myServer_path  == NULL){
   if(fd<0){
     myunlock(fd_lock);
     //xpn_destroy();	  
-    printf("myServer_d2xpn: error in open(%s) fd (%d)\n",destino,fd);
+    printf("tcpServer_d2xpn: error in open(%s) fd (%d)\n",destino,fd);
     return(-1);
   }  
   
