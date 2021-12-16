@@ -83,9 +83,7 @@ int main(int argc, char *argv[])
 	params_show(&mpiServer_params);
 
 	// Initialize
-	mpiServer_comm_init(mpiServer_params.name,
-		       	    mpiServer_params.port,
-			    mpiServer_params.file);
+	mpiServer_comm_init(&mpiServer_params) ;
 
 	//mpiServer_init_worker(&th);
 	mpiServer_init_worker();

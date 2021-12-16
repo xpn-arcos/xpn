@@ -14,17 +14,18 @@ void params_show ( struct mpiServer_param_st *params )
 
 int params_get ( int argc, char *argv[], struct mpiServer_param_st *params )
 {
-	int i;
-
 	// set default values
-	gethostname(params->name, 255);
-	params->port 	      = MPISERVER_PORT_DEFAULT;
-	params->IOsize 	      = MPISERVER_IOSIZE_DEFAULT;
-	strcpy(params->file,    MPISERVER_FILE_DEFAULT);
-	strcpy(params->dirbase, MPISERVER_DIRBASE_DEFAULT);
+	params->argc = argc ;
+	params->argv = argv ;
+	params->size = 0 ;
+	params->rank = 0 ;
+	params->IOsize = MPISERVER_IOSIZE_DEFAULT ;
+	strcpy(params->port_name, "") ;
+	strcpy(params->srv_name,  "") ;
+	strcpy(params->dirbase,   MPISERVER_DIRBASE_DEFAULT) ;
 
 	// update user requests
-	for(i=0;i<argc;i++)
+	for (int i=0; i<argc; i++)
 	{
 		switch(argv[i][0])
 		{
