@@ -1,8 +1,8 @@
-#include "mpiServer_comm.h"
+#include "tcpServer_comm.h"
 
 
 /*****************************/
-struct mpiServer_node_st{
+struct tcpServer_node_st{
 	char host[255];
 	int  port;
 	char name[255];
@@ -11,13 +11,13 @@ struct mpiServer_node_st{
 
 
 static int load = 0;
-static struct mpiServer_node_st mpiServer_node[MAX_TCPSERVER_NODES];
-static int num_mpiServer_nodes = 0;
+static struct tcpServer_node_st tcpServer_node[MAX_TCPSERVER_NODES];
+static int num_tcpServer_nodes = 0;
 /****************************/
 
 
 	
-void mpiServer_readFile(){
+void tcpServer_readFile(){
 
 	FILE *fd;
 	char *name = NULL;
@@ -32,24 +32,24 @@ void mpiServer_readFile(){
 	
 	fd = fopen(name,"r");
 	if(fd == NULL){
-		fprintf(stderr,"mpiServer_readFile: can't open %s\n",name);
+		fprintf(stderr,"tcpServer_readFile: can't open %s\n",name);
 		exit(-1);
 	}
 	while(EOF != fscanf(fd,"%s %s %d",
-		mpiServer_node[num_mpiServer_nodes].name,
-		mpiServer_node[num_mpiServer_nodes].host,
-		&mpiServer_node[num_mpiServer_nodes].port)){
+		tcpServer_node[num_tcpServer_nodes].name,
+		tcpServer_node[num_tcpServer_nodes].host,
+		&tcpServer_node[num_tcpServer_nodes].port)){
 			/*	
 			printf("[NFI_COMM]-%d> %s %s %d -\n",
-			num_mpiServer_nodes,
-			mpiServer_node[num_mpiServer_nodes].name,
-			mpiServer_node[num_mpiServer_nodes].host,
-			mpiServer_node[num_mpiServer_nodes].port);
+			num_tcpServer_nodes,
+			tcpServer_node[num_tcpServer_nodes].name,
+			tcpServer_node[num_tcpServer_nodes].host,
+			tcpServer_node[num_tcpServer_nodes].port);
 			*/
-			num_mpiServer_nodes++;
+			num_tcpServer_nodes++;
 			
-			if(num_mpiServer_nodes >= MAX_TCPSERVER_NODES){
-				fprintf(stderr,"Error: num_mpiServer_nodes >= MAX_TCPSERVER_NODES\n");
+			if(num_tcpServer_nodes >= MAX_TCPSERVER_NODES){
+				fprintf(stderr,"Error: num_tcpServer_nodes >= MAX_TCPSERVER_NODES\n");
 				exit(0);
 			}
 		}
@@ -60,7 +60,7 @@ void mpiServer_readFile(){
 }
 
 
-void mpiServer_translate(char *server, char *newserver, int *port){
+void tcpServer_translate(char *server, char *newserver, int *port){
     int i;
 	
 	/*************************************/
@@ -73,39 +73,39 @@ void mpiServer_translate(char *server, char *newserver, int *port){
 #ifdef DBG_COMM
 		printf("[NFI_COMM]Cargando Fichero ... \n");
 #endif
-		mpiServer_readFile();
+		tcpServer_readFile();
 	}
 	/*************************************/
 #ifdef DBG_COMM
 	printf("[NFI_COMM]Buscando 2 ... %s\n",server);
 #endif
-	for(i=0;i<num_mpiServer_nodes;i++){
-		if(strcmp(server, mpiServer_node[i].name) == 0){
-			strcpy(newserver, mpiServer_node[i].host);
+	for(i=0;i<num_tcpServer_nodes;i++){
+		if(strcmp(server, tcpServer_node[i].name) == 0){
+			strcpy(newserver, tcpServer_node[i].host);
 			 
 			 /*
 			 printf("[NFI_COMM]Encontrado ... %s %d\n",
-				mpiServer_node[i].host,
-				mpiServer_node[i].port);
+				tcpServer_node[i].host,
+				tcpServer_node[i].port);
 				*/
 #ifdef DBG_COMM
 			 printf("[NFI_COMM]Encontrado ... %s %d\n",
-				mpiServer_node[i].host,
-				mpiServer_node[i].port);
+				tcpServer_node[i].host,
+				tcpServer_node[i].port);
 #endif
 			
-			*port = mpiServer_node[i].port;
+			*port = tcpServer_node[i].port;
 			break;
 		}
 	}
-	if(i == num_mpiServer_nodes){
-		fprintf(stderr,"translate: error %s not found (%d)\n",server,num_mpiServer_nodes);
+	if(i == num_tcpServer_nodes){
+		fprintf(stderr,"translate: error %s not found (%d)\n",server,num_tcpServer_nodes);
 		exit(-1);
 	}
 }
 
 
-int mpiServer_write_data_test(int fd, char *id){
+int tcpServer_write_data_test(int fd, char *id){
 	/*****************************TEST****************************************/
 	int ret;	
 	char buffer_temp[CONST_TEMP], aux;
@@ -169,7 +169,7 @@ int mpiServer_write_data_test(int fd, char *id){
 
 
 
-int mpiServer_read_data_test(int fd, char *id){
+int tcpServer_read_data_test(int fd, char *id){
 
 	/*****************************TEST****************************************/
 	int ret;	
@@ -233,7 +233,7 @@ int mpiServer_read_data_test(int fd, char *id){
 }
 
 /*********************************************************************/
-int mpiServer_connect(char *server){
+int tcpServer_connect(char *server){
 
 	struct hostent *hp;
 	struct sockaddr_in server_addr;
@@ -258,7 +258,7 @@ int mpiServer_connect(char *server){
 #ifdef DBG_COMM
 	//printf("[NFI_COMM]----TRANSLATE server = %s URL = %s\n",server, url);	
 #endif	
-	mpiServer_translate(server, newserver, &port);	
+	tcpServer_translate(server, newserver, &port);	
 #ifdef DBG_COMM
 	printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d\n",server, newserver, port);	
 #endif	
@@ -297,9 +297,9 @@ int mpiServer_connect(char *server){
 
 	hp = gethostbyname (newserver);
 	if(hp == NULL){
-		//mpiServer_err(TCPSERVERERR_MEMORY);
+		//tcpServer_err(TCPSERVERERR_MEMORY);
 		
-		fprintf(stderr,"nfi_mpiServer_init: error gethostbyname %s (%s,%d)\n",
+		fprintf(stderr,"nfi_tcpServer_init: error gethostbyname %s (%s,%d)\n",
 				server, newserver, port);
 		return -1;
 	}
@@ -321,21 +321,21 @@ int mpiServer_connect(char *server){
 	printf("[NFI_COMM]%s)connect(%s,%d) = %d\n",server,newserver,port,ret);
 #endif	
 	if(ret == -1){
-		//mpiServer_err(TCPSERVERERR_MEMORY);
-		fprintf(stderr,"nfi_mpiServer_init: error in connect %s (%s,%d)\n",
+		//tcpServer_err(TCPSERVERERR_MEMORY);
+		fprintf(stderr,"nfi_tcpServer_init: error in connect %s (%s,%d)\n",
 				server, newserver, port);
-			perror("nfi_mpiServer_init:");
+			perror("nfi_tcpServer_init:");
 		return -1;
 	}
 	return sd;
 }
 
-ssize_t mpiServer_write_data(int fd, char *data, ssize_t size, char *id){
+ssize_t tcpServer_write_data(int fd, char *data, ssize_t size, char *id){
 	int ret = 0;
 	int cont = 0;
 
 #ifdef DBG_COMM
-	mpiServer_write_data_test(fd, id);
+	tcpServer_write_data_test(fd, id);
 #endif
 
 	
@@ -381,19 +381,19 @@ ssize_t mpiServer_write_data(int fd, char *data, ssize_t size, char *id){
 	printf("[NFI_COMM]client: write_data(%d): %d de %d ID=%s --th:%d--\n",fd,cont,size,id,(int)pthread_self());
 #endif	
 #ifdef DBG_COMM
-	mpiServer_write_data_test(fd, id);
+	tcpServer_write_data_test(fd, id);
 #endif
 	return size;
 }
 
-ssize_t mpiServer_read_data(int fd, char *data, ssize_t size, char *id){
+ssize_t tcpServer_read_data(int fd, char *data, ssize_t size, char *id){
 	        
 	int ret = 0;
 	int cont = 0;
 
 
 #ifdef DBG_COMM
-	mpiServer_read_data_test(fd, id);
+	tcpServer_read_data_test(fd, id);
 #endif
 
 
@@ -443,7 +443,7 @@ ssize_t mpiServer_read_data(int fd, char *data, ssize_t size, char *id){
 	printf("[NFI_COMM]client: read_data(%d): %d de %d ID=%s --th:%d--\n",fd,cont,size,id,(int)pthread_self());
 #endif	
 #ifdef DBG_COMM
-	mpiServer_read_data_test(fd, id);
+	tcpServer_read_data_test(fd, id);
 #endif
 	return size;
 }

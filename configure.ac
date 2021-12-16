@@ -333,36 +333,36 @@ AM_CONDITIONAL([ENABLE_GRIDFTP], [test "$NFI_GRIDFTP" = "nfi_gridftp"])
 #
 # Defines the necessary variables if gridftp is enabled.
 #
-AC_ARG_ENABLE(	[myserver],
-                [AS_HELP_STRING([--enable-myserver],[Enable MyServer module.])],
+AC_ARG_ENABLE(	[tcpserver],
+                [AS_HELP_STRING([--enable-tcpserver],[Enable tcpServer module.])],
                 [
                         [CDEFS="$CDEFS -DENABLE_TCPSERVER"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_myServer"]
-			[NFI_TCPSERVER="nfi_myserver"]
+			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_tcpServer"]
+			[NFI_TCPSERVER="nfi_tcpserver"]
 			[NFI_TCPSERVER_OBJECTS="\$(NFI_TCPSERVER_OBJECTS)"]
                 ]
 )
 AC_SUBST(NFI_TCPSERVER)
 AC_SUBST(NFI_TCPSERVER_OBJECTS)
-AM_CONDITIONAL([ENABLE_TCPSERVER], [test "$NFI_TCPSERVER" = "nfi_myserver"])
+AM_CONDITIONAL([ENABLE_TCPSERVER], [test "$NFI_TCPSERVER" = "nfi_tcpserver"])
 ### END OF TCPSERVER BLOCK. Do not remove this line. ###
 
 ### BEGIN OF MPISERVER BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if gridftp is enabled.
 #
-AC_ARG_ENABLE(	[myserver],
-                [AS_HELP_STRING([--enable-myserver],[Enable MyServer module.])],
+AC_ARG_ENABLE(	[mpiserver],
+                [AS_HELP_STRING([--enable-mpiserver],[Enable mpiServer module.])],
                 [
                         [CDEFS="$CDEFS -DENABLE_MPISERVER"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_myServer"]
-			[NFI_MPISERVER="nfi_myserver"]
+			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_mpiServer"]
+			[NFI_MPISERVER="nfi_mpiserver"]
 			[NFI_MPISERVER_OBJECTS="\$(NFI_MPISERVER_OBJECTS)"]
                 ]
 )
 AC_SUBST(NFI_MPISERVER)
 AC_SUBST(NFI_MPISERVER_OBJECTS)
-AM_CONDITIONAL([ENABLE_MPISERVER], [test "$NFI_MPISERVER" = "nfi_myserver"])
+AM_CONDITIONAL([ENABLE_MPISERVER], [test "$NFI_MPISERVER" = "nfi_mpiserver"])
 ### END OF MPISERVER BLOCK. Do not remove this line. ###
 
 
