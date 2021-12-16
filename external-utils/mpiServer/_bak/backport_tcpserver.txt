@@ -1,0 +1,65 @@
+int     mpiServer_comm_init_tcp      ( mpiServer_param_st *params )
+{
+	struct sockaddr_in server_addr;
+	int val, ret;
+	char host[255];
+	FILE *f;
+
+        debug_printf("[COMM]begin mpiServer_comm_init(%s, %d, %s)\n",params->name, params->port, params->file);
+	val = 1;
+	/* create the connections */
+	global_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if(global_sock<0){
+		perror("error en el socket:");
+		return -1;
+	}
+
+	val = 1;
+	if (setsockopt (global_sock, IPPROTO_TCP,TCP_NODELAY, &val, sizeof(val)) == -1){
+                perror("setsockopt: ");
+                return -1;
+        }
+
+        //NEW
+
+        val = 1024 * 1024; //1 MB
+
+        if (setsockopt(global_sock, SOL_SOCKET, SO_SNDBUF, (char *) &val, sizeof(int)) == -1){
+                perror("setsockopt: ");
+                return -1;
+        }
+
+        val = 1024 * 1024; //1 MB
+        if (setsockopt(global_sock, SOL_SOCKET, SO_RCVBUF, (char *) &val, sizeof(int)) == -1){
+                perror("setsockopt: ");
+                return -1;
+        }
+
+
+	val = 1;	
+	ret = setsockopt(global_sock, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(int));
+	if(ret == -1){
+		perror("error en el setsockopt:");
+		return -1;
+	}
+	bzero((char *)&server_addr, sizeof(server_addr));
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_addr.s_addr = INADDR_ANY;
+	server_addr.sin_port = htons(params->port);
+	
+	ret = bind(global_sock, (struct sockaddr *)&server_addr, sizeof(server_addr));
+	if(ret == -1){
+		perror("Error en el bind:");
+		return -1;
+	}
+	listen(global_sock, 20);
+
+	f = fopen(params->file, "a+");
+	if(f != NULL){
+		gethostname(host, 255);
+		fprintf(f, "%s %s %d\r\n", params->name, params->host, params->port);	
+		fclose(f);
+	}
+        debug_printf("[COMM]begin mpiServer_comm_init(%s, %d, %s)\n",params->name, params->port, params->file);
+	return 0;
+}

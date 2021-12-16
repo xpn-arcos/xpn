@@ -1,0 +1,56 @@
+# gSOAP compile-time dependencies: aptitude install autoconf automake flex bison zlib1g-dev libssl-dev
+
+WSDL2H=/wsdl2h
+SOAPCPP2=/soapcpp2
+GSOAP_INCLUDE_DIR=
+GSOAP_IMPORT_DIR=
+GSOAP_LIB_DIR=
+
+OUTPUT_DIR=project
+
+CC=gcc
+COFLAGS=
+CWFLAGS=-Wall -Wextra -O0 -g3 -ggdb3
+CIFLAGS=-I$(GSOAP_INCLUDE_DIR) -I$(GSOAP_IMPORT_DIR) -I$(OUTPUT_DIR) -I/usr/local/ssl/include
+SOAP_FLAGS=-DWITH_GZIP -DWITH_OPENSSL -D_POSIX_THREADS -D_FILE_OFFSET_BITS=64
+CFLAGS= $(CWFLAGS) $(COFLAGS) $(CIFLAGS) $(SOAP_FLAGS)
+
+LDFLAGS=-static -L$(GSOAP_LIB_DIR) -L/usr/local/ssl/lib
+LDLIBS=-lpthread -lm -lgsoapssl -lssl -lcrypto -lz -ldl
+
+AR=ar
+
+all: IOServiceClient IOServiceServer IOServiceServerRequestsQueue
+
+posix.h: posix.wsdl typemap.dat
+	$(WSDL2H) -c -t typemap.dat -o $@ $<
+
+$(OUTPUT_DIR)/soapC.c $(OUTPUT_DIR)/posix.nsmap: posix.h
+	mkdir -p $(OUTPUT_DIR)
+	$(SOAPCPP2) -I $(GSOAP_IMPORT_DIR) -c -d $(OUTPUT_DIR) $<
+
+libIOServiceClient.o: libIOServiceClient.c libIOServiceClient.h posix.h $(OUTPUT_DIR)/soapC.c $(OUTPUT_DIR)/soapClient.c
+
+libIOServiceServer.o: libIOServiceServer.c posix.h libIOServiceServer.h $(OUTPUT_DIR)/soapC.c $(OUTPUT_DIR)/soapServer.c
+
+IOServiceClient.o: IOServiceClient.c $(OUTPUT_DIR)/posix.nsmap
+
+IOServiceServer.o: IOServiceServer.c posix.h $(OUTPUT_DIR)/soapC.c $(GSOAP_INCLUDE_DIR)/stdsoap2.h
+
+th-lock.o: th-lock.c
+
+libIOServiceClient.a: libIOServiceClient.o $(OUTPUT_DIR)/soapC.o $(OUTPUT_DIR)/soapClient.o
+	$(AR) rcs $@ $^
+
+libIOServiceServer.a: libIOServiceServer.o $(OUTPUT_DIR)/soapC.o $(OUTPUT_DIR)/soapServer.o th-lock.o
+	$(AR) rcs $@ $^
+
+IOServiceClient: IOServiceClient.o libIOServiceClient.a
+
+IOServiceServer: IOServiceServer.o libIOServiceServer.a
+
+IOServiceServerRequestsQueue: IOServiceServerRequestsQueue.o libIOServiceServer.a
+
+clean:
+	rm -f IOServiceClient IOServiceClient.o IOServiceServer IOServiceServer.o IOServiceServerRequestsQueue IOServiceServerRequestsQueue.o libIOServiceClient.a libIOServiceClient.o libIOServiceServer.a libIOServiceServer.o posix.h th-lock.o
+	rm -rf $(OUTPUT_DIR)

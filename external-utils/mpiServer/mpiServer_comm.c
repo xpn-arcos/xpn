@@ -109,13 +109,14 @@ int mpiServer_comm_readdata_test(int fd, char *id){
 
 
 /* AUXILIAR FUNCTIONS */
-int mpiServer_comm_init(char *name, int port, char *file){
+int     mpiServer_comm_init      ( mpiServer_param_st *params )
+{
 	struct sockaddr_in server_addr;
 	int val, ret;
 	char host[255];
 	FILE *f;
 
-        debug_printf("[COMM]begin mpiServer_comm_init(%s, %d, %s)\n",name, port, file);
+        debug_printf("[COMM]begin mpiServer_comm_init(%s, %d, %s)\n",params->name, params->port, params->file);
 	val = 1;
 	/* create the connections */
 	global_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -155,7 +156,7 @@ int mpiServer_comm_init(char *name, int port, char *file){
 	bzero((char *)&server_addr, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = INADDR_ANY;
-	server_addr.sin_port = htons(port);
+	server_addr.sin_port = htons(params->port);
 	
 	ret = bind(global_sock, (struct sockaddr *)&server_addr, sizeof(server_addr));
 	if(ret == -1){
@@ -164,22 +165,22 @@ int mpiServer_comm_init(char *name, int port, char *file){
 	}
 	listen(global_sock, 20);
 
-	f = fopen(file, "a+");
+	f = fopen(params->file, "a+");
 	if(f != NULL){
 		gethostname(host, 255);
-		fprintf(f, "%s %s %d\r\n", name, host, port);	
+		fprintf(f, "%s %s %d\r\n", params->name, params->host, params->port);	
 		fclose(f);
 	}
-        debug_printf("[COMM]begin mpiServer_comm_init(%s, %d, %s)\n",name, port, file);
+        debug_printf("[COMM]begin mpiServer_comm_init(%s, %d, %s)\n",params->name, params->port, params->file);
 	return 0;
 }
 
-void mpiServer_close_comm()
+void mpiServer_close_comm ( void )
 {
 	close(global_sock);
 }
 
-int mpiServer_accept_comm()
+int mpiServer_accept_comm ( void )
 {
 	struct sockaddr_in client_addr;
 	int sc, flag = 1;
