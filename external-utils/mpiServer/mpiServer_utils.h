@@ -7,7 +7,7 @@
 
   // debug_printf(...)
 #ifdef DEBUG
-  #define debug_printf(...) mpisrv_print(__FILE__, __LINE__, stderr, __VA_ARGS__)
+  #define debug_printf(...) mpisrv_print(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
 #else
   #define debug_printf(...)
 #endif
