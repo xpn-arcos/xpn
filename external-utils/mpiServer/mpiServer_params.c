@@ -2,7 +2,7 @@
 #include "mpiServer_params.h"
 
 
-void params_show ( struct mpiServer_param_st *params )
+void params_show ( mpiServer_param_st *params )
 {
 	printf("Usage:\n");
 	printf("\t-n <string>:\t%s\n", params->name) ;
@@ -12,7 +12,7 @@ void params_show ( struct mpiServer_param_st *params )
 	printf("\t-d <string>:\t%s\n", params->dirbase) ;
 }
 
-int params_get ( int argc, char *argv[], struct mpiServer_param_st *params )
+int params_get ( mpiServer_param_st *params, int argc, char *argv[] )
 {
 	// set default values
 	params->argc = argc ;

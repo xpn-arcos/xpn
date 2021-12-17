@@ -4,8 +4,9 @@
 
 int     mpiServer_comm_init      ( mpiServer_param_st *params )
 {
-        int ret, claimed, provided ;
+        int ret, provided ;
 	char srv_name[1024] ;
+        MPI_Info info ;
 
         debug_info("[COMM] begin mpiServer_comm_init(...)\n") ;
 
@@ -31,18 +32,16 @@ int     mpiServer_comm_init      ( mpiServer_param_st *params )
         }
 
         // Open server port...
-        ret = MPI_Open_port(MPI_INFO_NULL, &(params->port_name)) ;
+        ret = MPI_Open_port(MPI_INFO_NULL, params->port_name) ;
         if (MPI_SUCCESS != ret) {
             debug_error("Server[%d]: MPI_Open_port fails :-(", params->rank) ;
             return -1 ;
         }
 
         // Publish port name
-        sprintf(srv_name, "mpiServer.%d", params->rank) ;
-
-        MPI_Info info ;
         MPI_Info_create(&info) ;
         MPI_Info_set(info, "ompi_global_scope", "true") ;
+        sprintf(srv_name, "mpiServer.%d", params->rank) ;
 
         ret = MPI_Publish_name(srv_name, info, params->port_name) ;
         if (MPI_SUCCESS != ret) {
@@ -51,27 +50,47 @@ int     mpiServer_comm_init      ( mpiServer_param_st *params )
         }
 
         debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
-        debug_info("[COMM] server %d  accepting...\n",   params->rank) ;
+        debug_info("[COMM] server %d accepting...\n",   params->rank) ;
         debug_info("[COMM] end mpiServer_comm_init(...)\n") ;
 
 	// Return OK
-	return 0 ;
+	return 1 ;
 }
 
-void mpiServer_close_comm ( mpiServer_param_st *params )
+int mpiServer_comm_destroy ( mpiServer_param_st *params )
 {
-	// TODO:
-        // int mpiServer_close_comm( int fd ) ; <- add one argument
-	// MPI_Comm_disconnect((MPI_Comm *)&fd) ; <- call disconnect...
-	// TODO
+        int ret ;
+
+        debug_info("[COMM] begin mpiServer_comm_destroy(...)\n") ;
+
+        // Close port
+        MPI_Close_port(params->port_name) ;
+
+        // Unpublish port name
+        ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
+        if (MPI_SUCCESS != ret) {
+            debug_error("Server[%d]: MPI_Unpublish_name fails :-(", params->rank) ;
+            return -1 ;
+        }
+
+        // Finalize
+        ret = MPI_Finalize() ;
+        if (MPI_SUCCESS != ret) {
+            debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
+            return -1 ;
+        }
+
+        debug_info("[COMM] end mpiServer_comm_destroy(...)\n") ;
+
+        // Return OK
+        return 1 ;
 }
 
-int mpiServer_accept_comm ( mpiServer_param_st *params )
+int mpiServer_comm_accept ( mpiServer_param_st *params )
 {
 	int ret ;
-	MPI_Comm client ;
 
-        debug_info("[COMM] begin mpiServer_accept_comm()\n") ;
+        debug_info("[COMM] begin mpiServer_accept_comm(...)\n") ;
 
         // Accept
         ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &(params->client)) ;
@@ -80,18 +99,25 @@ int mpiServer_accept_comm ( mpiServer_param_st *params )
             return -1 ;
         }
 
-        debug_info("[COMM] end mpiServer_accept_comm()\n") ;
+        debug_info("[COMM] end mpiServer_accept_comm(...)\n") ;
 
         // Return client MPI_Comm
-	return (int)client ;
+	return (int)(params->client) ;
 }
 
-int mpiServer_destroy_comm ( mpiServer_param_st *params )
+int mpiServer_comm_close ( mpiServer_param_st *params )
 {
-	// TODO:
-        // int mpiServer_destroy_comm( *params ) ; <- add one argument
-	// MPI_...close_port(...) ; <- call disconnect...
-	return 0;
+        int ret ;
+
+        // Disconnect
+        ret = MPI_Comm_disconnect(&(params->client)) ;
+        if (MPI_SUCCESS != ret) {
+            debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
+            return -1 ;
+        }
+
+        // Return OK
+        return 1 ;
 }
 
 ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, int fd, char *data, ssize_t size, char *id )

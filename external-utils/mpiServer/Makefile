@@ -4,7 +4,7 @@
 #--------------------------
 
 MAKE         = make -s
-CC           = gcc
+CC           = mpicc
 SOURCE_PATH  = ./
 #EXPAND_DIR   = $(HOME)/expand/trunk/expand
 EXPAND_DIR   = /opt/xpn

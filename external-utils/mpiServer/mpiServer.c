@@ -27,7 +27,9 @@
 /* 
  * GLOBAL VARIABLES 
  */
-struct mpiServer_param_st mpiServer_params;
+
+int the_end = 0;
+mpiServer_param_st params;
 
 char  *MPISERVER_ALIAS_NAME_STRING;
 char  *MPISERVER_FILE_STRING;
@@ -50,59 +52,61 @@ void show_usage()
 
 void sigint_handler ( int signal )
 {
-	printf("Signal %d received !!", signal) ;
-
-	exit(0) ;
+	printf("[MAIN] Signal %d received => ending execution...", signal) ;
+        the_end = 1;
 }
 
 
-int main(int argc, char *argv[])
+/*
+ * Main
+ */
+
+int main ( int argc, char *argv[] )
 {
 	int sd;
-	int the_end;
 	int ret ;
 
 	// Initializing...
-	setbuf(stdout,NULL);
-	setbuf(stderr,NULL);
-
-	signal(SIGINT, sigint_handler);
+	setbuf(stdout,NULL) ;
+	setbuf(stderr,NULL) ;
+	signal(SIGINT, sigint_handler) ;
 
 	// Get parameters..
-        ret = params_get(argc, argv, params) ;
+        ret = params_get(&params, argc, argv) ;
 	if (ret < 0) {
-		show_usage();
-		exit(-1);
+	    show_usage() ;
+	    exit(-1) ;
 	}
 
-	MPISERVER_ALIAS_NAME_STRING = params->name ;
-	MPISERVER_FILE_STRING       = params->file ;
-	MPISERVER_DIRBASE_STRING    = params->dirbase ;
-	MPISERVER_IOSIZE_INT        = params->IOsize * KB ;
+	//MPISERVER_ALIAS_NAME_STRING = params.name ;
+	//MPISERVER_FILE_STRING       = params.file ;
+	MPISERVER_DIRBASE_STRING    = params.dirbase ;
+	MPISERVER_IOSIZE_INT        = params.IOsize * KB ;
 
-	params_show(&mpiServer_params);
+	params_show(&params) ;
 
 	// Initialize
-	mpiServer_comm_init(&mpiServer_params) ;
+	mpiServer_comm_init(&params) ;
+	mpiServer_init_worker() ;
 
-	//mpiServer_init_worker(&th);
-	mpiServer_init_worker();
-
-	the_end = 0;
+	the_end = 0 ;
 	while (0 == the_end)
 	{
-        	debug_info("[MAIN] mpiServer_accept_comm()\n");
-		sd = mpiServer_accept_comm();
-        	debug_info("[MAIN] mpiServer_launch_worker()\n");
-		if(sd == -1){
-			break;
+        	debug_info("[MAIN] mpiServer_accept_comm()\n") ;
+		sd = mpiServer_comm_accept(&params) ;
+		if (sd == -1){
+		    continue ;
 		}
-		//mpiServer_launch_worker(sd, &th);
-		mpiServer_launch_worker(sd);
+
+        	debug_info("[MAIN] mpiServer_launch_worker()\n") ;
+		mpiServer_launch_worker(&params, sd) ;
 	}
 
-	mpiServer_close_comm();
-    	xpn_destroy();
-	exit(0);
+	// Finalize
+	mpiServer_comm_destroy(&params) ;
+    	xpn_destroy() ;
+
+	// return OK 
+	return 0 ;
 }
 
