@@ -4,12 +4,25 @@
   #include "mpiServer.h"
   #include "mpiServer_ops.h"
 
+ 
+  /* 
+   * Const
+   */
+
+  #define DBG_ERROR 1, __FILE__, __LINE__
+  #define DBG_WARN  2, __FILE__, __LINE__
+  #define DBG_INFO  3, __FILE__, __LINE__
+
+
+  /* 
+   * API
+   */
 
   // debug_printf(...)
 #ifdef DEBUG
-  #define debug_printf(...) mpisrv_print(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
+  #define debug_printf(level, ...) mpisrv_print(level, stderr, __VA_ARGS__)
 #else
-  #define debug_printf(...)
+  #define debug_printf(level, ...)
 #endif
 
   // mpisrv_print(...)
