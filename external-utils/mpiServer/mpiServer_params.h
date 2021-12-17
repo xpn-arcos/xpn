@@ -1,7 +1,11 @@
 #ifndef _MPISERVER_PARAMS_H_
 #define _MPISERVER_PARAMS_H_
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "mpi.h"
+#include "mpiServer_conf.h"
 
 typedef struct
 {

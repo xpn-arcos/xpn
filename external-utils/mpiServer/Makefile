@@ -9,6 +9,7 @@ SOURCE_PATH  = ./
 #EXPAND_DIR   = $(HOME)/expand/trunk/expand
 EXPAND_DIR   = /opt/xpn
 OBJECTS_MPISERVER      = mpiServer.o \
+		         mpiServer_params.o \
 		         mpiServer_utils.o \
 		         mpiServer_comm.o \
 		         mpiServer_ops.o \

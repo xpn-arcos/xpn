@@ -32,7 +32,8 @@ int aux_clear_dirs(char *path)
 
 int aux_get_dirs(char *path, int n, char *s)
 {
-	int i=0, j=0, ant=-1, pos=-1;
+	long unsigned i=0;
+	long j=0, ant=-1, pos=-1;
 	int cont=-1;
 	char new_path[MAXPATHLEN];
 	
@@ -45,7 +46,8 @@ int aux_get_dirs(char *path, int n, char *s)
 		return 0;	
 	}
 	
-	for(i=0; i<strlen(path) && cont<(n+1); i++){
+	for (i=0; i<strlen(path) && cont<(n+1); i++)
+	{
 		if (path[i] == '/'){
 			if(ant == -1){
 				ant = pos = i;
@@ -291,7 +293,8 @@ void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiSer
 							  head->u_st_mpiServer_msg.op_preload.storage_path);
 	ret = 0;
 
-	ret = mpiServer_d2xpn(head->u_st_mpiServer_msg.op_preload.virtual_path,
+	ret = mpiServer_d2xpn(params, 
+			      head->u_st_mpiServer_msg.op_preload.virtual_path,
                               head->u_st_mpiServer_msg.op_preload.storage_path,
 			      head->u_st_mpiServer_msg.op_preload.opt);
 

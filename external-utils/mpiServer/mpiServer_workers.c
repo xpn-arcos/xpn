@@ -71,7 +71,7 @@ void mpiServer_worker_run ( void *arg )
       
       
         debug_info("[WORKERS] begin mpiServer_worker_run(...)\n");
-	memcpy(th, arg, sizeof(struct st_th)) ;
+	memcpy(&th, arg, sizeof(struct st_th)) ;
       
         debug_info("[WORKERS] client: mpiServer_worker_run(...) antes lock\n");
         pthread_mutex_lock(&m_worker);
@@ -147,7 +147,7 @@ void mpiServer_worker_run ( void *arg )
         } while(op != MPISERVER_END);
       
         debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.id);
-        mpiServer_comm_close(sd) ;
+        mpiServer_comm_close(th.params) ;
 
         debug_info("[WORKERS] mpiServer_worker_run (ID=%d) ends\n", th.id);
         pthread_exit(0);

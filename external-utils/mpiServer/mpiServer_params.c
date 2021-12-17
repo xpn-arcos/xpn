@@ -5,10 +5,10 @@
 void params_show ( mpiServer_param_st *params )
 {
 	printf("Usage:\n");
-	printf("\t-n <string>:\t%s\n", params->name) ;
-	printf("\t-p <int>:\t%d\n",    params->port) ;
+	//printf("\t-n <string>:\t%s\n", params->name) ;
+	//printf("\t-p <int>:\t%d\n",    params->port) ;
 	printf("\t-io <int>:\t%d\n",   params->IOsize) ;
-	printf("\t-f <string>:\t%s\n", params->file) ;
+	//printf("\t-f <string>:\t%s\n", params->file) ;
 	printf("\t-d <string>:\t%s\n", params->dirbase) ;
 }
 
@@ -31,14 +31,17 @@ int params_get ( mpiServer_param_st *params, int argc, char *argv[] )
 		{
 			case '-':
 				switch(argv[i][1]){
+					/*
 					case 'p':
 						params->port = atoi(argv[i+1]);
 						i++;
 						break;
+					*/
 					case 'i':
 						params->IOsize = atoi(argv[i+1]);
 						i++;
 						break;
+					/*
 					case 'n':
 						strcpy(params->name, argv[i+1]);
 						i++;
@@ -47,12 +50,12 @@ int params_get ( mpiServer_param_st *params, int argc, char *argv[] )
 						strcpy(params->file, argv[i+1]);
 						i++;
 						break;					
+					*/
 					case 'd':
 						strcpy(params->dirbase, argv[i+1]);
 						i++;
 						break;					
 					case 'h':
-						show_usage();
 						return -1;
 
 					default:
@@ -64,6 +67,6 @@ int params_get ( mpiServer_param_st *params, int argc, char *argv[] )
 		}
 	}
 
-	return 0;
+	return 1;
 }
 

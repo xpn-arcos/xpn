@@ -120,7 +120,7 @@ int mpiServer_comm_close ( mpiServer_param_st *params )
         return 1 ;
 }
 
-ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, int fd, char *data, ssize_t size, char *id )
+ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, int fd, char *data, ssize_t size )
 {
 	int ret ;
 
@@ -146,7 +146,7 @@ ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, int fd, char *dat
 	return size;
 }
 
-ssize_t mpiServer_comm_readdata ( mpiServer_param_st *params, int fd, char *data, ssize_t size, char *id )
+ssize_t mpiServer_comm_readdata ( mpiServer_param_st *params, int fd, char *data, ssize_t size )
 {
 	int ret ;
 	MPI_Status status ;

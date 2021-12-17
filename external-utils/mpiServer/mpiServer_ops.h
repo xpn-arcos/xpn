@@ -2,6 +2,7 @@
 #define _MPISERVER_OPS_H_
 
 #include "mpiServer.h"
+#include "mpiServer_params.h"
 
 
 /*

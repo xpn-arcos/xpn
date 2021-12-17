@@ -12,7 +12,7 @@
    int     mpiServer_comm_accept    ( mpiServer_param_st *params ) ;
    int     mpiServer_comm_close     ( mpiServer_param_st *params ) ;
 
-   ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, int fd, char *data, ssize_t size, char *id ) ;
-   ssize_t mpiServer_comm_readdata  ( mpiServer_param_st *params, int fd, char *data, ssize_t size, char *id ) ;
+   ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, int fd, char *data, ssize_t size ) ;
+   ssize_t mpiServer_comm_readdata  ( mpiServer_param_st *params, int fd, char *data, ssize_t size ) ;
 
 #endif
