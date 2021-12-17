@@ -6,23 +6,17 @@
 
  
   /* 
-   * Const
-   */
-
-  #define DBG_ERROR 1, __FILE__, __LINE__
-  #define DBG_WARN  2, __FILE__, __LINE__
-  #define DBG_INFO  3, __FILE__, __LINE__
-
-
-  /* 
    * API
    */
 
-  // debug_printf(...)
 #ifdef DEBUG
-  #define debug_printf(level, ...) mpisrv_print(level, stderr, __VA_ARGS__)
+  #define debug_error(...)    mpisrv_print(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
+  #define debug_warning(...)  mpisrv_print(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
+  #define debug_info(...)     mpisrv_print(3, __FILE__, __LINE__, stdout, __VA_ARGS__)
 #else
-  #define debug_printf(level, ...)
+  #define debug_error(...)
+  #define debug_warning(...)
+  #define debug_info(...)
 #endif
 
   // mpisrv_print(...)

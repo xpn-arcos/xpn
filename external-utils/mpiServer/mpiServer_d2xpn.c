@@ -56,7 +56,7 @@ int mylock(char *file){
 	//char new_file[255];
 	int fd;
 
-  	debug_printf(DBG_INFO, "d2xpn: mylock(%s)\n",file);
+  	debug_info("d2xpn: mylock(%s)\n",file);
 	
 	pthread_mutex_lock(&mutex_id);
 	fd = 0;
@@ -68,14 +68,14 @@ int mylock(char *file){
 	}
  	flock(fd, LOCK_EX);
 */
-  	debug_printf(DBG_INFO, "d2xpn: mylock(%s) -> %d\n",file,fd);
+  	debug_info("d2xpn: mylock(%s) -> %d\n",file,fd);
 
 	return fd;
 }
 
 
 int myunlock(int fd){
-  	debug_printf(DBG_INFO, "d2xpn: myunlock(%d)\n",fd);
+  	debug_info("d2xpn: myunlock(%d)\n",fd);
 	pthread_mutex_unlock(&mutex_id);
 /*
   	flock(fd, LOCK_UN);
@@ -102,8 +102,8 @@ int mpiServer_d2xpn(char *origen, char *destino, int opt)
 	//pthread_mutex_unlock(&mutex_id);
 	
 
-	debug_printf(DBG_INFO, "d2xpn(%d): Origen: %s\n", private_id, origen);
-	debug_printf(DBG_INFO, "d2xpn(%d): Destino: %s\n", private_id, destino);
+	debug_info("d2xpn(%d): Origen: %s\n", private_id, origen);
+	debug_info("d2xpn(%d): Destino: %s\n", private_id, destino);
 
 mpiServer_path = mpiServer_params.dirbase;
 if(mpiServer_path  == NULL){
@@ -130,14 +130,14 @@ if(mpiServer_path  == NULL){
 //system(s_exe);
 
 
-	debug_printf(DBG_INFO, "d2xpn(%d): xpn_stat(%s)\n",private_id,origen);
+	debug_info("d2xpn(%d): xpn_stat(%s)\n",private_id,origen);
  
   ret = stat(new_path, &st);
-  debug_printf(DBG_INFO, "d2xpn(%d): stat(%s) = %d\n", private_id,new_path, ret);
+  debug_info("d2xpn(%d): stat(%s) = %d\n", private_id,new_path, ret);
   if (0 ==  ret){
 //sprintf(s_exe,"ls -l %s",new_path);
 //system(s_exe);
-	    debug_printf(DBG_INFO, "d2xpn(%d): %s (%s) is stored in cache\n", private_id, destino, origen);
+	    debug_info("d2xpn(%d): %s (%s) is stored in cache\n", private_id, destino, origen);
 	    myunlock(fd_lock);
 	    //xpn_destroy();	  
 	    //printf("d2xpn: %s and %s are the same file\n", origen, destino);
@@ -145,14 +145,14 @@ if(mpiServer_path  == NULL){
   }
 
 
-	debug_printf(DBG_INFO, "d2xpn(%d): xpn_init()\n",private_id);
+	debug_info("d2xpn(%d): xpn_init()\n",private_id);
   if((fd=xpn_init())<0){
     myunlock(fd_lock);
     printf("Error in init %d\n",fd);
     return(-1);
   }
 
-	debug_printf(DBG_INFO, "d2xpn(%d): open(%s, O_RDONLY)\n",private_id,destino);
+	debug_info("d2xpn(%d): open(%s, O_RDONLY)\n",private_id,destino);
   fd=open(destino,O_RDONLY);
   if(fd<0){
     myunlock(fd_lock);
@@ -163,9 +163,9 @@ if(mpiServer_path  == NULL){
   
 
   
-	debug_printf(DBG_INFO, "d2xpn(%d): begin xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777)\n",private_id,origen);
+	debug_info("d2xpn(%d): begin xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777)\n",private_id,origen);
   fdp = xpn_open(origen,O_CREAT|O_TRUNC|O_WRONLY, 0777); 
-	debug_printf(DBG_INFO, "d2xpn(%d): end xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777) = %d\n",private_id,origen,fdp);
+	debug_info("d2xpn(%d): end xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777) = %d\n",private_id,origen,fdp);
   if(fdp<0){
     myunlock(fd_lock);
     //xpn_destroy();	  
@@ -180,17 +180,17 @@ if(mpiServer_path  == NULL){
   sum = 0;
   do{
 
-	debug_printf(DBG_INFO, "d2xpn(%d): antes read(%d,%d)\n", private_id,MPISERVER_IOSIZE_INT, sum);
+	debug_info("d2xpn(%d): antes read(%d,%d)\n", private_id,MPISERVER_IOSIZE_INT, sum);
     sp = read(fd,global_transfer_buffer,MPISERVER_IOSIZE_INT);
     //printf("antes de xpn_write(%d bytes) ...\n", s);
     if(s == -1){
 	    break;
     }
-	debug_printf(DBG_INFO, "d2xpn(%d): desp. read(%d,%d)\n", private_id, sp, sum);
+	debug_info("d2xpn(%d): desp. read(%d,%d)\n", private_id, sp, sum);
 
-	debug_printf(DBG_INFO, "d2xpn(%d): antes write(%d,%d)\n", private_id, sp , sum);
+	debug_info("d2xpn(%d): antes write(%d,%d)\n", private_id, sp , sum);
     s = xpn_write(fdp, global_transfer_buffer, sp);
-	debug_printf(DBG_INFO, "d2xpn(%d): desp write(%d,%d)\n", private_id, s, sum);
+	debug_info("d2xpn(%d): desp write(%d,%d)\n", private_id, s, sum);
     //printf("despues de xpn_write ...\n");
     sum = sum + sp;
 
@@ -198,11 +198,11 @@ if(mpiServer_path  == NULL){
   }while((s==MPISERVER_IOSIZE_INT)&&(sp >= 0));
   free(global_transfer_buffer);
 
-  debug_printf(DBG_INFO, "d2xpn(%d): (%s,%d)\n", private_id, origen, sum);
+  debug_info("d2xpn(%d): (%s,%d)\n", private_id, origen, sum);
 
-  debug_printf(DBG_INFO, "d2xpn(%d): close()\n",private_id);
+  debug_info("d2xpn(%d): close()\n",private_id);
   close(fd);
-  debug_printf(DBG_INFO, "d2xpn(%d): xpn_close()\n",private_id);
+  debug_info("d2xpn(%d): xpn_close()\n",private_id);
   xpn_close(fdp);
 
 //sprintf(s_exe,"ls -l %s",new_path);
@@ -228,9 +228,9 @@ if(mpiServer_path  == NULL){
         }
   }
 ***************************************************************/
-	debug_printf(DBG_INFO, "d2xpn(%d): move %s -> %s\n", private_id, destino, origen);
+	debug_info("d2xpn(%d): move %s -> %s\n", private_id, destino, origen);
   myunlock(fd_lock);
-	debug_printf(DBG_INFO, "d2xpn(%d): xpn_destroy()\n", private_id);
+	debug_info("d2xpn(%d): xpn_destroy()\n", private_id);
   //xpn_destroy();
 
   gettimeofday(&t2, NULL);

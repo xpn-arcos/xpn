@@ -91,9 +91,9 @@ int main(int argc, char *argv[])
 	the_end = 0;
 	while (0 == the_end)
 	{
-        	debug_printf(DBG_INFO, "[MAIN] mpiServer_accept_comm()\n");
+        	debug_info("[MAIN] mpiServer_accept_comm()\n");
 		sd = mpiServer_accept_comm();
-        	debug_printf(DBG_INFO, "[MAIN] mpiServer_launch_worker()\n");
+        	debug_info("[MAIN] mpiServer_launch_worker()\n");
 		if(sd == -1){
 			break;
 		}
