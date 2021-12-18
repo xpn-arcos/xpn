@@ -1,30 +1,17 @@
 #ifndef _MPISERVER_CONF_H_
 #define _MPISERVER_CONF_H_
 
-#ifndef KB
-	#define KB (1024)
-#endif
+#include "all_system.h"
 
-#ifndef MB
-	#define MB (KB*KB)
-#endif
-
-#ifndef GB
-	#define GB (MB*MB)
-#endif
-
-#ifndef TRUE
-	#define TRUE 1
-#endif
-#ifndef FALSE
-	#define FALSE 0
-#endif
+/* Support for files of > 4GB */
+#define _LARGEFILE64_ 1
 
 /* MAXPATHLEN */
 #ifndef MAXPATHLEN
 	#define MAXPATHLEN 255
 #endif
 
+/* MAX_BUFFER_SIZE */
 #ifndef MAX_BUFFER_SIZE
 //	#define MAX_BUFFER_SIZE (64*KB)
 //	#define MAX_BUFFER_SIZE (128*KB)
@@ -64,12 +51,11 @@
 	#define MPISERVER_PRELOAD_EXE "d2xpn_lock.exe" //params: virtual_path , storage_path, local_path
 #endif
 
-
-
 /* GLOBAL VARIABLES */
 extern char *MPISERVER_ALIAS_NAME_STRING;
 extern char *MPISERVER_FILE_STRING;
 extern char *MPISERVER_DIRBASE_STRING;
 extern int   MPISERVER_IOSIZE_INT;
+
 
 #endif

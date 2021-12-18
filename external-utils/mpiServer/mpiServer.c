@@ -13,32 +13,34 @@
  */
 
 
-/*
- * Includes
- */
-#include "mpiServer.h"
-#include "mpiServer_ops.h"
-#include "mpiServer_workers.h"
-#include "mpiServer_comm.h"
-#include "mpiServer_d2xpn.h"
-#include "mpiServer_params.h"
+   /*
+    * Includes
+    */
+
+   #include "all_system.h"
+   #include "mpiServer_params.h"
+   #include "mpiServer_utils.h"
+   #include "mpiServer_ops.h"
+   #include "mpiServer_workers.h"
+   #include "mpiServer_comm.h"
+   #include "mpiServer_d2xpn.h"
 
 
-/* 
- * GLOBAL VARIABLES 
- */
+   /* 
+    * GLOBAL VARIABLES 
+    */
 
-int the_end = 0;
-mpiServer_param_st params;
+   int the_end = 0;
+   mpiServer_param_st params;
 
-char  *MPISERVER_ALIAS_NAME_STRING;
-char  *MPISERVER_FILE_STRING;
-char  *MPISERVER_DIRBASE_STRING;
+   char  *MPISERVER_ALIAS_NAME_STRING;
+   char  *MPISERVER_FILE_STRING;
+   char  *MPISERVER_DIRBASE_STRING;
 
 
-/*
- * Auxiliar functions
- */
+   /*
+    * Auxiliar functions
+    */
 
 void show_usage()
 {
@@ -57,9 +59,9 @@ void sigint_handler ( int signal )
 }
 
 
-/*
- * Main
- */
+   /*
+    * Main
+    */
 
 int main ( int argc, char *argv[] )
 {

@@ -131,6 +131,11 @@ ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, int fd, char *dat
 	    return 0;
 	}
 	if (size < 0){
+            debug_warning("Server[%d]: size < 0", params->rank) ;
+	    return -1;
+	}
+	if (NULL == params) {
+            debug_warning("Server[%d]: NULL params", params->rank) ;
 	    return -1;
 	}
 	
@@ -158,7 +163,12 @@ ssize_t mpiServer_comm_readdata ( mpiServer_param_st *params, int fd, char *data
 	    return  0;
 	}
 	if (size < 0){
+            debug_warning("Server[%d]: size < 0", params->rank) ;
 	    return  -1;
+	}
+	if (NULL == params) {
+            debug_warning("Server[%d]: NULL params", params->rank) ;
+	    return -1;
 	}
 	
         // Get message

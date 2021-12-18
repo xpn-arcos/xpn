@@ -25,9 +25,11 @@ int static_id = 0;
 
 void generateName(char *file, char *new_file){
 	char aux[255];
-	int i,j;
+	unsigned long i;
+	         long j;
 	
-	for(j=0,i=0;i<strlen(file);i++){
+	for (j=0,i=0; i<strlen(file); i++)
+	{
 		switch(file[i]){
 			case '/':
 				aux[j] = '_';		

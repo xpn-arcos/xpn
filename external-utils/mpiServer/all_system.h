@@ -3,21 +3,10 @@
 #define _ALL_H_SYSTEM
 
 
-#ifndef KB
-	#define KB	(1024)
-#endif
-
-#ifndef MB
-	#define MB	(KB*KB)
-#endif
-
-#ifndef GB
-	#define GB	(KB*KB*KB)
-#endif
-
 /*
  * Get config*.h
  */
+
 #if   defined(HAVE_CONFIG_H)
 	#include "config.h"
 #elif defined(LINUX)
@@ -25,7 +14,6 @@
 #elif defined(WIN32)
 	#include "config_win32.h"
 #endif
-
 
 
 /*
@@ -49,6 +37,7 @@
 /*
  * Include common headers
  */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
@@ -56,16 +45,11 @@
 #include <stdint.h>
 #include <math.h>
 
-/* */
-//#include <linux/linux.h>
-//#include <dlfcn.h>
-//#include <sys/stat.h>
-//#include <sys/types.h>
-//#include <sys/ioctl.h>
 
 /*
  * Include detected headers
  */
+
 #if defined(HAVE_DIRENT_H)
 	#include <dirent.h>
 #endif
@@ -119,8 +103,27 @@
 
 
 /*
- *
+ * Common constants
  */
+
+#ifndef KB
+	#define KB	(1024)
+#endif
+#ifndef MB
+	#define MB	(KB*KB)
+#endif
+#ifndef GB
+	#define GB	(KB*KB*KB)
+#endif
+
+
+#ifndef TRUE
+	#define TRUE 1
+#endif
+#ifndef FALSE
+	#define FALSE 0
+#endif
+
 
 #if defined(HAVE_UNISTD_H)
           #define NULL_DEVICE_PATH  "/dev/null"
@@ -128,6 +131,7 @@
 #if defined(HAVE_WINDOWS_H)
           #define NULL_DEVICE_PATH  "NUL"
 #endif
+
 
 #if !defined(HAVE_FCNTL_H)
 	#define O_ACCMODE          0003
@@ -145,20 +149,6 @@
 	#define O_FSYNC          O_SYNC
 	#define O_ASYNC          020000
 #endif
-
-
-
-/*
- * Include adaptors headers
- */
-
-/*
- * TODO: back-porting of posthr2win...
- *
-#ifdef WIN32
-	#include "posthr2win.h"
-#endif
-*/
 
 
 #endif /*_ALL_H_SYSTEM*/

@@ -1,14 +1,19 @@
 #ifndef _MPISERVER_PARAMS_H_
 #define _MPISERVER_PARAMS_H_
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "mpi.h"
-#include "mpiServer_conf.h"
+   #include <stdlib.h>
+   #include <stdio.h>
+   #include <string.h>
+   #include "mpi.h"
+   #include "mpiServer_conf.h"
 
-typedef struct
-{
+
+   /*
+    * Datatype
+    */
+
+   typedef struct
+   {
         // server identification
         int  size ;
         int  rank ;
@@ -23,9 +28,15 @@ typedef struct
         // server arguments
 	int    argc ;
 	char **argv ;
-} mpiServer_param_st ;
+   } mpiServer_param_st ;
 
-void params_show ( mpiServer_param_st *params ) ;
-int  params_get  ( mpiServer_param_st *params, int argc, char *argv[] ) ;
 
-#endif// _MPISERVER_PARAMS_H_
+   /*
+    * API
+    */
+
+   void params_show ( mpiServer_param_st *params ) ;
+   int  params_get  ( mpiServer_param_st *params, int argc, char *argv[] ) ;
+
+#endif
+

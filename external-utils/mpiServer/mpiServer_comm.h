@@ -1,11 +1,16 @@
 #ifndef _MPISERVER_COMM_H_
 #define _MPISERVER_COMM_H_
 
-   // Include
-   #include "mpiServer.h"
+   #include "all_system.h"
    #include "mpiServer_params.h"
+   #include "mpiServer_utils.h"
+   #include "mpiServer_ops.h"
 
-   // API
+
+   /*
+    *  API
+    */
+
    int     mpiServer_comm_init      ( mpiServer_param_st *params ) ;
    int     mpiServer_comm_destroy   ( mpiServer_param_st *params ) ;
 
