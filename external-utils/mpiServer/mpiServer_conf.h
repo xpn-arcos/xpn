@@ -51,11 +51,5 @@
 	#define MPISERVER_PRELOAD_EXE "d2xpn_lock.exe" //params: virtual_path , storage_path, local_path
 #endif
 
-/* GLOBAL VARIABLES */
-extern char *MPISERVER_ALIAS_NAME_STRING;
-extern char *MPISERVER_FILE_STRING;
-extern char *MPISERVER_DIRBASE_STRING;
-extern int   MPISERVER_IOSIZE_INT;
-
 
 #endif

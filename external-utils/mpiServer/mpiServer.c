@@ -36,10 +36,6 @@
    int the_end = 0;
    mpiServer_param_st params;
 
-   char  *MPISERVER_ALIAS_NAME_STRING;
-   char  *MPISERVER_FILE_STRING;
-   char  *MPISERVER_DIRBASE_STRING;
-
 
    /* ... Functions / Funciones ......................................... */
 
@@ -138,11 +134,6 @@
 	    params_show_usage() ;
 	    exit(-1) ;
 	}
-
-	//MPISERVER_ALIAS_NAME_STRING = params.name ;
-	//MPISERVER_FILE_STRING       = params.file ;
-	MPISERVER_DIRBASE_STRING    = params.dirbase ;
-	MPISERVER_IOSIZE_INT        = params.IOsize * KB ;
 
 	params_show(&params) ;
 

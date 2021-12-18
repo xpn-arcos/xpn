@@ -44,8 +44,6 @@
 
    /* ... Global variables / Variables globales ......................... */
 
-int MPISERVER_IOSIZE_INT;
-
 pthread_mutex_t mutex_id = PTHREAD_MUTEX_INITIALIZER; 
 int static_id = 0;
 
@@ -208,11 +206,11 @@ int mpiServer_d2xpn ( mpiServer_param_st *params, char *origen, char *destino )
             return(-1);
         } 
       
-        global_transfer_buffer = malloc(sizeof(char)*MPISERVER_IOSIZE_INT);
+        global_transfer_buffer = malloc(sizeof(char)*(params->IOsize * KB));
         sum = 0;
         do {
-		debug_info("d2xpn(%d): before read(%d,%d)\n", private_id,MPISERVER_IOSIZE_INT, sum);
-		sp = read(fd,global_transfer_buffer,MPISERVER_IOSIZE_INT);
+		debug_info("d2xpn(%d): before read(%d,%d)\n", private_id, params->IOsize * KB, sum);
+		sp = read(fd,global_transfer_buffer,params->IOsize * KB);
 		debug_info("d2xpn(%d): desp. read(%d,%d)\n", private_id, sp, sum);
 		if (s == -1) {
 		    break;
@@ -225,7 +223,7 @@ int mpiServer_d2xpn ( mpiServer_param_st *params, char *origen, char *destino )
 		sum = sum + sp;
 	      
 		//printf("Se han leido s=%d y escrito sp=%d\n", s, sp);
-        } while ((s==MPISERVER_IOSIZE_INT)&&(sp >= 0));
+        } while ((s==(params->IOsize * KB))&&(sp >= 0));
         free(global_transfer_buffer);
       
         debug_info("d2xpn(%d): (%s,%d)\n", private_id, origen, sum);
@@ -242,7 +240,7 @@ int mpiServer_d2xpn ( mpiServer_param_st *params, char *origen, char *destino )
       
         gettimeofday(&t2, NULL);
         transfer_time = (t2.tv_sec + t2.tv_usec/1000000.0) - (t1.tv_sec + t1.tv_usec/1000000.0);
-        printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, MPISERVER_IOSIZE_INT);
+        printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, (params->IOsize * KB));
       
         return(0);
 }
