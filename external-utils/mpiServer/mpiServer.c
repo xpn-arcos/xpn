@@ -1,4 +1,25 @@
 
+/*
+ *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *
+ *  This file is part of mpiServer.
+ *
+ *  mpiServer is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  mpiServer is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with mpiServer.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
 /* defines usados
  * _LARGEFILE64_: para soporte de ficheros mayores de 4GB
  * _MPI_: para lanzar los servidores como procesos MPI
@@ -13,9 +34,7 @@
  */
 
 
-   /*
-    * Includes
-    */
+   /* ... Include / Inclusion ........................................... */
 
    #include "all_system.h"
    #include "mpiServer_params.h"
@@ -26,9 +45,7 @@
    #include "mpiServer_d2xpn.h"
 
 
-   /* 
-    * GLOBAL VARIABLES 
-    */
+   /* ... Global variables / Variables globales ......................... */
 
    int the_end = 0;
    mpiServer_param_st params;
@@ -38,9 +55,7 @@
    char  *MPISERVER_DIRBASE_STRING;
 
 
-   /*
-    * Auxiliar functions
-    */
+   /* ... Functions / Funciones ......................................... */
 
 void show_usage()
 {
@@ -111,4 +126,6 @@ int main ( int argc, char *argv[] )
 	// return OK 
 	return 0 ;
 }
+
+   /* ................................................................... */
 

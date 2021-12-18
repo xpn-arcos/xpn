@@ -19,12 +19,13 @@
  *
  */
 
+
+   /* ... Include / Inclusion ........................................... */
+
 #include "mpiServer_utils.h"
 
 
-//
-// Print for debug
-//
+   /* ... Functions / Funciones ......................................... */
 
 int mpisrv_print ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... )
 {
@@ -61,10 +62,6 @@ int mpisrv_print ( int src_type, char *src_fname, long src_line, FILE *fd, char 
 }
 
 
-//
-// Time
-//
-
 long mpisrv_get_time ( void )
 {
     struct timeval timenow ;
@@ -75,4 +72,6 @@ long mpisrv_get_time ( void )
     // return timestamp
     return (long)timenow.tv_sec * 1000 + (long)timenow.tv_usec / 1000 ;
 }
+
+   /* ................................................................... */
 
