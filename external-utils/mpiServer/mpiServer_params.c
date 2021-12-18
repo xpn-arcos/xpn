@@ -29,7 +29,7 @@
 
       void mpiServer_params_show ( mpiServer_param_st *params )
       {
-      	   printf("Usage:\n");
+      	   printf("Current configuration:\n");
       	 //printf("\t-n <string>:\t%s\n",   params->name) ;
       	 //printf("\t-p <int>:\t%d\n",      params->port) ;
       	   printf("\t-io <int>:\t%d\n",     params->IOsize) ;

@@ -43,13 +43,5 @@
 	#define MPISERVER_IOSIZE_DEFAULT	(MB)
 #endif
 
-#ifndef MPISERVER_FLUSH_EXE
-	#define MPISERVER_FLUSH_EXE "xpn2d_lock.exe" //params: virtual_path , storage_path, local_path
-#endif
-
-#ifndef MPISERVER_PRELOAD_EXE
-	#define MPISERVER_PRELOAD_EXE "d2xpn_lock.exe" //params: virtual_path , storage_path, local_path
-#endif
-
 
 #endif

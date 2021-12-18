@@ -2,13 +2,21 @@
  mpiServer
  ---------
 
-"#define" used:
- * _LARGEFILE64_: add support for files large than 4GB
- * _MPI_	: to launch servers as MPI process
- * DEBUG	: print debug messages
- * _LOG_	: print error messages
- * _COMPRESS_	: use of lzf compressor
+## "#define" used:
+   * _LARGEFILE64_: add support for files large than 4GB
+   * DEBUG	: print debug messages
 
-Environmental variable used:
- * MPISERVER_DNS: where is the translation of <id> <hostname> <port>
+## Execution:
+
+   * start MPICH hydra:
+```
+hydra_nameserver &
+sleep 1
+```
+
+   * start mpiServer:
+```
+mpirun -np <number of process> -nameserver <hydra host name> ./mpiServer.exe
+sleep 1
+```
 

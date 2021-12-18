@@ -15,10 +15,6 @@ OBJECTS_MPISERVER      = mpiServer.o \
 		         mpiServer_ops.o \
 		         mpiServer_workers.o \
 		         mpiServer_d2xpn.o
-#OBJECTS_XPN2D         = xpn2d_lock.o
-#OBJECTS_D2XPN         = d2xpn_lock.o
-#OBJECTS_RMXPN         = rmxpn.o
-#OBJECTS_XPN2XPN       = xpn2xpn_lock.o
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDEBUG
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDEBUG
 MYFLAGS                = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
@@ -27,10 +23,6 @@ MYLIBS                 =  -L$(EXPAND_DIR)/lib  -L${HOME}/mxml/lib  -lpthread -lx
 
 
 MPISERVER_EXE = mpiServer.exe
-#D2XPN_EXE    = d2xpn_lock.exe
-#XPN2D_EXE    = xpn2d_lock.exe
-#XPN2XPN_EXE  = xpn2xpn_lock.exe
-#RMXPN_EXE    = rmxpn.exe
 
 #D2XPN_EXE    = 
 #XPN2D_EXE    = 
