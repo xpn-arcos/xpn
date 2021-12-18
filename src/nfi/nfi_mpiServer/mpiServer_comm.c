@@ -1,4 +1,18 @@
+
+
 #include "mpiServer_comm.h"
+
+#include <dlfcn.h>
+
+/* ENVIROMENT VARIABLE: DNS SERVICE */
+#define MPISERVER_FILE "MPISERVER_FILE"
+#define MPISERVER_FILE_DEFAULT "/etc/xpn/mpiServer.dns"
+
+
+/* Nuevo */
+#define CONST_TEMP              1024
+#define MAX_MPISERVER_NODES      256
+
 
 
 /*****************************/
@@ -315,7 +329,7 @@ int mpiServer_connect(char *server){
 #ifdef DBG_COMM
 	printf("[NFI_COMM]Antes de connect to %s\n",newserver);
 #endif	
-	//se establece la conexión
+	//se establece la conexiï¿½n
 	ret = connect(sd, (struct sockaddr *) &server_addr, sizeof(server_addr));
 #ifdef DBG_COMM
 	printf("[NFI_COMM]%s)connect(%s,%d) = %d\n",server,newserver,port,ret);

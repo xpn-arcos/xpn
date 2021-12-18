@@ -72,7 +72,6 @@ NFI_TCPSERVER_HEADER=	@top_srcdir@/include/nfi/nfi_tcpServer/ \
 NFI_MPISERVER_HEADER=	@top_srcdir@/include/nfi/nfi_mpiServer/ \
 			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_comm.h \
 			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_conf.h \
-			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer.h \
 			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_lib.h \
 			@top_srcdir@/include/nfi/nfi_mpiServer/nfi_mpiServer_err.h \
 			@top_srcdir@/include/nfi/nfi_mpiServer/nfi_mpiServer.h

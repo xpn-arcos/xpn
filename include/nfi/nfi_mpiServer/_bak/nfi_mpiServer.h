@@ -1,12 +1,8 @@
 #ifndef _NFI_MPISERVER_H
 #define _NFI_MPISERVER_H
 
+#include "mpiServer.h"
 #include "all_system.h"
-#include "mpiServer_comm.h"
-#include "mpiServer_conf.h"
-#include "mpiServer_ops.h"
-#include "mpiServer_params.h"
-#include "mpiServer_utils.h"
 #include "base/string_misc.h"
 #include "nfi_mpiServer_err.h"
 #include "nfi.h"
@@ -39,6 +35,7 @@ struct nfi_mpiServer_fhandle{
 
 int nfi_mpiServer_init(char *url, struct nfi_server *serv, struct nfi_attr_server *attr);
 int nfi_mpiServer_destroy(struct nfi_server *server);
+
 
 int nfi_mpiServer_preload(struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt);
 int nfi_mpiServer_flush(struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt);

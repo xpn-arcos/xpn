@@ -1,24 +1,23 @@
 #ifndef _MPISERVER_COMM_H_
 #define _MPISERVER_COMM_H_
 
-#include "all_system.h"
-
-#include <dlfcn.h>
-
-/* ENVIROMENT VARIABLE: DNS SERVICE */
-#define MPISERVER_FILE "MPISERVER_FILE"
-#define MPISERVER_FILE_DEFAULT "/etc/xpn/mpiServer.dns"
+   #include "all_system.h"
+   #include "mpiServer_params.h"
+   #include "mpiServer_utils.h"
+   #include "mpiServer_ops.h"
 
 
-/* Nuevo */
-#define CONST_TEMP              1024
-#define MAX_MPISERVER_NODES      256
+   /*
+    *  API
+    */
 
+   int     mpiServer_comm_init      ( mpiServer_param_st *params ) ;
+   int     mpiServer_comm_destroy   ( mpiServer_param_st *params ) ;
 
-void mpiServer_readFile();
-void mpiServer_translate(char *server, char *newserver, int *port);
-ssize_t mpiServer_write_data(int fd, char *data, ssize_t size, char *id);
-ssize_t mpiServer_read_data(int fd, char *data, ssize_t size, char *id);
-int mpiServer_connect(char *server);	
+   int     mpiServer_comm_accept    ( mpiServer_param_st *params ) ;
+   int     mpiServer_comm_close     ( mpiServer_param_st *params ) ;
+
+   ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, int fd, char *data, ssize_t size ) ;
+   ssize_t mpiServer_comm_readdata  ( mpiServer_param_st *params, int fd, char *data, ssize_t size ) ;
 
 #endif

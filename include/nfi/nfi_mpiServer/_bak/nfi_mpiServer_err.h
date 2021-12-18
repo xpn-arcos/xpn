@@ -6,8 +6,8 @@
     extern "C" {
  #endif
 
-enum nfi_mpiServer_err
-{
+
+enum nfi_mpiServer_err{
 	MPISERVERERR_PARAM = 0,
 	MPISERVERERR_MEMORY = 1,
 	MPISERVERERR_URL = 2,
@@ -25,6 +25,7 @@ enum nfi_mpiServer_err
 	MPISERVERERR_STATFS = 14,
 	MPISERVERERR_NOTDIR = 15,
 };
+
 
 void mpiServer_err(int err);
 

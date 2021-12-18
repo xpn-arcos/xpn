@@ -698,7 +698,6 @@ am__noinst_HEADERS_DIST = ../include/all_system.h \
 	../include/nfi/nfi_mpiServer/ \
 	../include/nfi/nfi_mpiServer/mpiServer_comm.h \
 	../include/nfi/nfi_mpiServer/mpiServer_conf.h \
-	../include/nfi/nfi_mpiServer/mpiServer.h \
 	../include/nfi/nfi_mpiServer/mpiServer_lib.h \
 	../include/nfi/nfi_mpiServer/nfi_mpiServer_err.h \
 	../include/nfi/nfi_mpiServer/nfi_mpiServer.h \
@@ -774,7 +773,7 @@ AUTOHEADER = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoheade
 AUTOM4TE = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autom4te
 AUTOMAKE = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing automake-1.16
 AWK = gawk
-CC = gcc
+CC = mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
 CFLAGS = -fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra
@@ -1039,7 +1038,6 @@ NFI_TCPSERVER_HEADER = ../include/nfi/nfi_tcpServer/ \
 NFI_MPISERVER_HEADER = ../include/nfi/nfi_mpiServer/ \
 			../include/nfi/nfi_mpiServer/mpiServer_comm.h \
 			../include/nfi/nfi_mpiServer/mpiServer_conf.h \
-			../include/nfi/nfi_mpiServer/mpiServer.h \
 			../include/nfi/nfi_mpiServer/mpiServer_lib.h \
 			../include/nfi/nfi_mpiServer/nfi_mpiServer_err.h \
 			../include/nfi/nfi_mpiServer/nfi_mpiServer.h
