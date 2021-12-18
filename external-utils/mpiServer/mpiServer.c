@@ -20,20 +20,6 @@
  */
 
 
-/* defines usados
- * _LARGEFILE64_: para soporte de ficheros mayores de 4GB
- * _MPI_: para lanzar los servidores como procesos MPI
- * DEBUG: imprimo depuracion
- * _LOG_: imprimo errores
- * _COMPRESS_: uso del sistema de compresion lzf
- */
-
-/* VARIABLES DE ENTORNO:
- * MPISERVER_DNS: indica donde se encuentra el sistema traductor de
- * <id> <hostname> <port>
- */
-
-
    /* ... Include / Inclusion ........................................... */
 
    #include "all_system.h"
@@ -57,29 +43,87 @@
 
    /* ... Functions / Funciones ......................................... */
 
-void show_usage()
-{
-	printf("Usage:\n");
-	printf("\t-n <string>: name of the server\n") ;
-	printf("\t-p <int>: port number\n") ;
-	printf("\t-io <int>: IOsize\n") ;
-	printf("\t-f <string>: name of the DNS file\n") ; 
-	printf("\t-d <string>: dir base\n") ;
-}
-
-void sigint_handler ( int signal )
-{
+   void sigint_handler ( int signal )
+   {
 	printf("[MAIN] Signal %d received => ending execution...", signal) ;
         the_end = 1;
-}
+   }
+
+   void worker_function ( struct st_th th )
+   {
+        int op;
+        struct st_mpiServer_msg head;
+      
+        do {
+		head.type = MPISERVER_END;
+
+		debug_info("[WORKERS] (ID=%d) mpiServer_read_operation begin...\n", th.id);
+		op = mpiServer_read_operation(th.params, th.sd, &head);
+			
+		debug_info("[WORKERS] (ID=%d) mpiServer_op_<%d> begins\n", th.id, op);
+		switch(op)
+		{
+			case MPISERVER_OPEN_FILE:
+				mpiServer_op_open(th.params, th.sd, &head);
+				break;
+			case MPISERVER_CREAT_FILE:
+				mpiServer_op_creat(th.params, th.sd, &head);
+				break;
+			case MPISERVER_READ_FILE:
+				mpiServer_op_read(th.params, th.sd, &head);
+				break;
+			case MPISERVER_WRITE_FILE:
+				mpiServer_op_write(th.params, th.sd, &head);
+				break;
+			case MPISERVER_CLOSE_FILE:
+				mpiServer_op_close(th.params, th.sd, &head);
+				break;
+			case MPISERVER_RM_FILE:
+				mpiServer_op_rm(th.params, th.sd, &head);
+				break;
+			case MPISERVER_GETATTR_FILE:
+				mpiServer_op_getattr(th.params, th.sd, &head);
+				break;
+			case MPISERVER_SETATTR_FILE:
+				mpiServer_op_setattr(th.params, th.sd, &head);
+				break;
+			case MPISERVER_MKDIR_DIR:
+				mpiServer_op_mkdir(th.params, th.sd, &head);
+				break;
+			case MPISERVER_RMDIR_DIR:
+				mpiServer_op_rmdir(th.params, th.sd, &head);
+				break;
+			case MPISERVER_PRELOAD_FILE:
+				mpiServer_op_preload(th.params, th.sd, &head);
+				break;
+			case MPISERVER_FLUSH_FILE:
+				mpiServer_op_flush(th.params, th.sd, &head);
+				break;
+			case MPISERVER_GETID:
+				mpiServer_op_getid(th.params, th.sd, &head);
+				break;
+			case MPISERVER_FINALIZE:
+				op = MPISERVER_FINALIZE;
+				break;
+			default:
+				op = MPISERVER_END;
+				break;
+		}
+		debug_info("[WORKERS] (ID=%d) mpiServer_op_<%d> ends\n", th.id, op);
+				
+        } while(op != MPISERVER_END);
+      
+        debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.id);
+        mpiServer_comm_close(th.params) ;
+   }
 
 
    /*
     * Main
     */
 
-int main ( int argc, char *argv[] )
-{
+   int main ( int argc, char *argv[] )
+   {
 	int sd;
 	int ret ;
 
@@ -91,7 +135,7 @@ int main ( int argc, char *argv[] )
 	// Get parameters..
         ret = params_get(&params, argc, argv) ;
 	if (ret < 0) {
-	    show_usage() ;
+	    params_show_usage() ;
 	    exit(-1) ;
 	}
 
@@ -111,13 +155,16 @@ int main ( int argc, char *argv[] )
 	{
         	debug_info("[MAIN] mpiServer_accept_comm()\n") ;
 		sd = mpiServer_comm_accept(&params) ;
-		if (sd == -1){
+		if (sd == -1) {
 		    continue ;
 		}
 
         	debug_info("[MAIN] mpiServer_launch_worker()\n") ;
-		mpiServer_launch_worker(&params, sd) ;
+	mpiServer_launch_worker(&params, sd, worker_function) ;
 	}
+
+	// TODO
+	// Wait for all current workers
 
 	// Finalize
 	mpiServer_comm_destroy(&params) ;
@@ -125,7 +172,8 @@ int main ( int argc, char *argv[] )
 
 	// return OK 
 	return 0 ;
-}
+   }
+
 
    /* ................................................................... */
 

@@ -24,6 +24,7 @@
 	mpiServer_param_st *params;
 	int sd;
 	int id;
+        void (*function)(struct st_th) ;
    };
 
 
@@ -32,7 +33,9 @@
     */
 
    int  mpiServer_init_worker   ( void ) ;
-   int  mpiServer_launch_worker ( mpiServer_param_st *params, int sd ) ;
+   int  mpiServer_launch_worker ( mpiServer_param_st *params, 
+		                  int sd, 
+                                  void (*worker_function)(struct st_th) ) ;
    void mpiServer_worker_run    ( void *arg ) ;
 
 #endif

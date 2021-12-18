@@ -22,10 +22,13 @@
 
    /* ... Include / Inclusion ........................................... */
 
-#include "mpiServer_d2xpn.h"
-#include "mpiServer_params.h"
-#include "xpn.h"
-#include <sys/time.h>
+      #include "mpiServer_d2xpn.h"
+      #include "mpiServer_params.h"
+      #include "xpn.h"
+      #include <sys/time.h>
+
+
+   /* ... Constants / Constantes ........................................ */
 
 #ifndef KB
 #define KB 1024
@@ -35,21 +38,22 @@
 #define MB (KB*KB)
 #endif
 
-int MPISERVER_IOSIZE_INT;
-
 #define DEFAULT_PATH "/tmp"
 #define MPISERVER_PATH_DEFAULT "/tmp"
 
 
-/*****************************************************************/
+   /* ... Global variables / Variables globales ......................... */
+
+int MPISERVER_IOSIZE_INT;
+
 pthread_mutex_t mutex_id = PTHREAD_MUTEX_INITIALIZER; 
 int static_id = 0;
-/*****************************************************************/
 
 
    /* ... Functions / Funciones ......................................... */
 
-void generateName(char *file, char *new_file){
+void generateName(char *file, char *new_file)
+{
 	char aux[255];
 	unsigned long i;
 	         long j;
@@ -77,16 +81,22 @@ void generateName(char *file, char *new_file){
 	return;
 }
 
-int mylock(char *file)
+int mylock ( char *file )
 {
-	//char new_file[255];
 	int fd;
 
-  	debug_info("d2xpn: mylock(%s)\n",file);
+  	debug_info("d2xpn: mylock(%s)\n", file);
+	if (NULL == file) {
+	    return -1 ;
+	}
 	
-	pthread_mutex_lock(&mutex_id);
+	// lock with pthread...
 	fd = 0;
+	pthread_mutex_lock(&mutex_id);
+
+	// lock with file system...
 /*
+	char new_file[255];
 	generateName(file, new_file);
 	fd = open(new_file, O_CREAT|O_TRUNC|O_RDWR, 0777);
 	if(fd == -1){
@@ -94,23 +104,32 @@ int mylock(char *file)
 	}
  	flock(fd, LOCK_EX);
 */
-  	debug_info("d2xpn: mylock(%s) -> %d\n",file,fd);
+
+  	debug_info("d2xpn: mylock(%s) -> %d\n", file, fd);
 
 	return fd;
 }
 
 int myunlock ( int fd )
 {
-  	debug_info("d2xpn: myunlock(%d)\n",fd);
+  	debug_info("d2xpn: myunlock(%d)\n", fd);
+	if (fd < 0) {
+	    return -1 ;
+	}
+
+	// unlock with pthread...
 	pthread_mutex_unlock(&mutex_id);
+
+	// lock with file system...
 /*
   	flock(fd, LOCK_UN);
 	close(fd);
 */	
+
 	return 0;
 }
 
-int mpiServer_d2xpn ( mpiServer_param_st *params, char *origen, char *destino, int opt )
+int mpiServer_d2xpn ( mpiServer_param_st *params, char *origen, char *destino )
 {
         struct stat st;
         //struct stat st_xpn;

@@ -322,8 +322,7 @@ void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiSer
 
 	ret = mpiServer_d2xpn(params, 
 			      head->u_st_mpiServer_msg.op_preload.virtual_path,
-                              head->u_st_mpiServer_msg.op_preload.storage_path,
-			      head->u_st_mpiServer_msg.op_preload.opt);
+                              head->u_st_mpiServer_msg.op_preload.storage_path) ;
 
 
 	debug_info("[OPS]%s)end preload(%s,%s) ID=x -> %d\n", MPISERVER_ALIAS_NAME_STRING,

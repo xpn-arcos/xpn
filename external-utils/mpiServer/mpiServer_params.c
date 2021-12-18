@@ -32,9 +32,19 @@ void params_show ( mpiServer_param_st *params )
 	printf("Usage:\n");
 	//printf("\t-n <string>:\t%s\n", params->name) ;
 	//printf("\t-p <int>:\t%d\n",    params->port) ;
-	printf("\t-io <int>:\t%d\n",   params->IOsize) ;
+	printf("\t-io <int>:\t%d\n",     params->IOsize) ;
 	//printf("\t-f <string>:\t%s\n", params->file) ;
-	printf("\t-d <string>:\t%s\n", params->dirbase) ;
+	printf("\t-d <string>:\t%s\n",   params->dirbase) ;
+}
+
+void params_show_usage ( void )
+{
+	printf("Usage:\n");
+	//printf("\t-n <string>: name of the server\n") ;
+	//printf("\t-p <int>: port number\n") ;
+	printf("\t-io <int>: IOsize\n") ;
+	//printf("\t-f <string>: name of the DNS file\n") ; 
+	printf("\t-d <string>: name of the base directory\n") ;
 }
 
 int params_get ( mpiServer_param_st *params, int argc, char *argv[] )

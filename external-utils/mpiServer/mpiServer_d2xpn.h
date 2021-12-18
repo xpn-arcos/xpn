@@ -20,6 +20,6 @@
    #define PRELOAD_SYNC  0
    #define PRELOAD_ASYNC 1
 
-   int mpiServer_d2xpn ( mpiServer_param_st *params, char *origen, char *destino, int opt ) ;
+   int mpiServer_d2xpn ( mpiServer_param_st *params, char *origen, char *destino ) ;
 
 #endif

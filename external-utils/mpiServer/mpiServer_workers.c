@@ -43,7 +43,9 @@ int mpiServer_init_worker ( void )
 	return 0;
 }
 
-int mpiServer_launch_worker ( mpiServer_param_st *params, int sd )
+int mpiServer_launch_worker ( mpiServer_param_st *params, 
+		              int sd, 
+                              void (*worker_function)(struct st_th) )
 {
 	int ret;
 	pthread_attr_t tattr;
@@ -57,6 +59,7 @@ int mpiServer_launch_worker ( mpiServer_param_st *params, int sd )
 	st_worker.sd = sd;	
 	st_worker.id = th_cont++;	
 	st_worker.params = params ;
+	st_worker.function = worker_function ;
 
 	busy_worker = TRUE;
 	
@@ -87,13 +90,9 @@ int mpiServer_launch_worker ( mpiServer_param_st *params, int sd )
 	return 0;
 }
 
-/* thread process */
 void mpiServer_worker_run ( void *arg )
 {
         struct st_th th;
-        int op;
-        struct st_mpiServer_msg head;
-      
       
         debug_info("[WORKERS] begin mpiServer_worker_run(...)\n");
 	memcpy(&th, arg, sizeof(struct st_th)) ;
@@ -112,67 +111,8 @@ void mpiServer_worker_run ( void *arg )
         pthread_mutex_unlock(&m_worker);
         debug_info("[WORKERS] client: mpiServer_worker_run(...) desp. unlock\n");
       
-        do {
-		head.type = MPISERVER_END;
-
-		debug_info("[WORKERS] (ID=%d) mpiServer_read_operation begin...\n", th.id);
-		op = mpiServer_read_operation(th.params, th.sd, &head);
-			
-		debug_info("[WORKERS] (ID=%d) mpiServer_op_<%d> begins\n", th.id, op);
-		switch(op)
-		{
-			case MPISERVER_OPEN_FILE:
-				mpiServer_op_open(th.params, th.sd, &head);
-				break;
-			case MPISERVER_CREAT_FILE:
-				mpiServer_op_creat(th.params, th.sd, &head);
-				break;
-			case MPISERVER_READ_FILE:
-				mpiServer_op_read(th.params, th.sd, &head);
-				break;
-			case MPISERVER_WRITE_FILE:
-				mpiServer_op_write(th.params, th.sd, &head);
-				break;
-			case MPISERVER_CLOSE_FILE:
-				mpiServer_op_close(th.params, th.sd, &head);
-				break;
-			case MPISERVER_RM_FILE:
-				mpiServer_op_rm(th.params, th.sd, &head);
-				break;
-			case MPISERVER_GETATTR_FILE:
-				mpiServer_op_getattr(th.params, th.sd, &head);
-				break;
-			case MPISERVER_SETATTR_FILE:
-				mpiServer_op_setattr(th.params, th.sd, &head);
-				break;
-			case MPISERVER_MKDIR_DIR:
-				mpiServer_op_mkdir(th.params, th.sd, &head);
-				break;
-			case MPISERVER_RMDIR_DIR:
-				mpiServer_op_rmdir(th.params, th.sd, &head);
-				break;
-			case MPISERVER_PRELOAD_FILE:
-				mpiServer_op_preload(th.params, th.sd, &head);
-				break;
-			case MPISERVER_FLUSH_FILE:
-				mpiServer_op_flush(th.params, th.sd, &head);
-				break;
-			case MPISERVER_GETID:
-				mpiServer_op_getid(th.params, th.sd, &head);
-				break;
-			case MPISERVER_FINALIZE:
-				op = MPISERVER_FINALIZE;
-				break;
-			default:
-				op = MPISERVER_END;
-				break;
-		}
-		debug_info("[WORKERS] (ID=%d) mpiServer_op_<%d> ends\n", th.id, op);
-				
-        } while(op != MPISERVER_END);
-      
-        debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.id);
-        mpiServer_comm_close(th.params) ;
+	// do function code...
+	th.function(th) ;
 
         debug_info("[WORKERS] mpiServer_worker_run (ID=%d) ends\n", th.id);
         pthread_exit(0);
