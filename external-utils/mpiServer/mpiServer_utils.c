@@ -22,56 +22,62 @@
 
    /* ... Include / Inclusion ........................................... */
 
-#include "mpiServer_utils.h"
+      #include "mpiServer_utils.h"
 
 
    /* ... Functions / Funciones ......................................... */
 
-int mpisrv_print ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... )
-{
-   va_list valist ;
-   int ret ;
+      void mpiServer_utils_init ( void )
+      {
+	  setbuf(stdout,NULL) ;
+	  setbuf(stderr,NULL) ;
+      }
 
-   va_start(valist, msg_fmt) ;
-   switch (src_type)
-   {
-        case  3:
-              fprintf(fd, "[%s:%4ld] [INFO] ", src_fname, src_line) ;
-              ret = vfprintf(fd, msg_fmt, valist) ;
-     	      break;
+      int mpiServer_utils_printf ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... )
+      {
+         va_list valist ;
+         int ret ;
+      
+         va_start(valist, msg_fmt) ;
+         switch (src_type)
+         {
+              case  3:
+                    fprintf(fd, "[%s:%4ld] [INFO] ", src_fname, src_line) ;
+                    ret = vfprintf(fd, msg_fmt, valist) ;
+           	    break;
+      
+              case  2:
+                    fprintf(fd, "[%s:%4ld] [WARN] ", src_fname, src_line) ;
+                    ret = vfprintf(fd, msg_fmt, valist) ;
+           	    break;
+      
+              case  1:
+                    fprintf(fd, "[%s:%4ld] [ERROR] ", src_fname, src_line) ;
+                    ret = vfprintf(fd, msg_fmt, valist) ;
+           	    break;
+      
+              default:
+                    ret = vfprintf(fd, msg_fmt, valist) ;
+      	            break;
+         }
+         va_end(valist) ;
+      
+         // fflush(fd) ;
+      
+         return ret ;
+      }
+      
+      long mpiServer_utils_get_time ( void )
+      {
+          struct timeval timenow ;
+      
+          // get timestamp
+          gettimeofday(&timenow, NULL) ;
+      
+          // return timestamp
+          return (long)timenow.tv_sec * 1000 + (long)timenow.tv_usec / 1000 ;
+      }
 
-        case  2:
-              fprintf(fd, "[%s:%4ld] [WARN] ", src_fname, src_line) ;
-              ret = vfprintf(fd, msg_fmt, valist) ;
-     	      break;
-
-        case  1:
-              fprintf(fd, "[%s:%4ld] [ERROR] ", src_fname, src_line) ;
-              ret = vfprintf(fd, msg_fmt, valist) ;
-     	      break;
-
-        default:
-              ret = vfprintf(fd, msg_fmt, valist) ;
-	      break;
-   }
-   va_end(valist) ;
-
-   // fflush(fd) ;
-
-   return ret ;
-}
-
-
-long mpisrv_get_time ( void )
-{
-    struct timeval timenow ;
-
-    // get timestamp
-    gettimeofday(&timenow, NULL) ;
-
-    // return timestamp
-    return (long)timenow.tv_sec * 1000 + (long)timenow.tv_usec / 1000 ;
-}
 
    /* ................................................................... */
 

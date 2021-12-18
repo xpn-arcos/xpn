@@ -35,9 +35,9 @@
     * API
     */
 
-   void params_show       ( mpiServer_param_st *params ) ;
-   void params_show_usage ( void ) ;
-   int  params_get        ( mpiServer_param_st *params, int argc, char *argv[] ) ;
+   void mpiServer_params_show_usage ( void ) ;
+   int  mpiServer_params_get        ( mpiServer_param_st *params, int argc, char *argv[] ) ;
+   void mpiServer_params_show       ( mpiServer_param_st *params ) ;
 
 #endif
 

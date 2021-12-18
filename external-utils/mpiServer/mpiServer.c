@@ -123,25 +123,23 @@
 	int sd;
 	int ret ;
 
-	// Initializing...
-	setbuf(stdout,NULL) ;
-	setbuf(stderr,NULL) ;
-	signal(SIGINT, sigint_handler) ;
-
 	// Get parameters..
-        ret = params_get(&params, argc, argv) ;
+        ret = mpiServer_params_get(&params, argc, argv) ;
 	if (ret < 0) {
-	    params_show_usage() ;
+	    mpiServer_params_show_usage() ;
 	    exit(-1) ;
 	}
 
-	params_show(&params) ;
+	mpiServer_params_show(&params) ;
 
 	// Initialize
-	mpiServer_comm_init(&params) ;
-	mpiServer_init_worker() ;
-
 	the_end = 0 ;
+	signal(SIGINT, sigint_handler) ;
+        mpiServer_utils_init() ;
+	mpiServer_init_worker() ;
+	mpiServer_comm_init(&params) ;
+
+	// Loop: receiving + processing
 	while (0 == the_end)
 	{
         	debug_info("[MAIN] mpiServer_accept_comm()\n") ;
@@ -151,11 +149,11 @@
 		}
 
         	debug_info("[MAIN] mpiServer_launch_worker()\n") ;
-	mpiServer_launch_worker(&params, sd, worker_function) ;
+	        mpiServer_launch_worker(&params, sd, worker_function) ;
 	}
 
-	// TODO
 	// Wait for all current workers
+	// TODO
 
 	// Finalize
 	mpiServer_comm_destroy(&params) ;
