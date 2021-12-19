@@ -210,6 +210,25 @@
 	  return 0 ;
       }
 
+      int nfi_mpiServer_keepConnected ( struct nfi_server *serv )
+      {
+#ifdef NFI_DYNAMIC
+	  if (serv->private_info == NULL)
+	  {
+		int ret = nfi_mpiServer_reconnect(serv);
+		if (ret < 0)
+		{
+		    /* mpiServer_err(); not necessary */
+	            serv->private_info = NULL;
+		    return -1;
+		}
+	  }
+#endif
+
+          // return OK 
+	  return (serv->private_info != NULL) ;
+      }
+
 
       /*
        *  PRIVATE FUNCTIONS TO USE mpiServer SERVERS
@@ -381,10 +400,8 @@
 	  //.....................................
 	  strcpy(msg.id, "GETID");
           msg.type = MPISERVER_GETID;
-          mpiServer_write_operation(server_aux->sd, &msg);
-	  dbgnfi_info("[NFI] nfi_mpiServer_init: mpiServer_write_data\n");
-	  mpiServer_read_data(server_aux->sd, (char *)server_aux->id, MPISERVER_ID, msg.id);
-	  dbgnfi_info("[NFI] nfi_mpiServer_init: mpiServer_read_data id = %s\n",server_aux->id);
+
+          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(server_aux->id), MPISERVER_ID) ; 
 	  //.....................................
 
 	  // copy 'server address' string...
@@ -565,41 +582,30 @@
 	  dbgnfi_info("[NFI] nfi_mpiServer_getattr (...): begin\n");
 
 	  // check arguments...
-	  if (attr == NULL) {
+	  if (NULL == attr) {
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	  }
-	  if (serv == NULL) {
+	  if (NULL == serv) {
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	  }
-	  if (fh == NULL) {
+	  if (NULL == fh) {
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	  }
-	  if (fh->priv_fh == NULL) {
+	  if (NULL == fh->priv_fh) {
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	  }
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
 	  // copy private information...
 	  server_aux = (struct nfi_mpiServer_server *) serv->private_info;
-
-#ifdef NFI_DYNAMIC
-	  if (serv->private_info == NULL)
-	  {
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	  }
-#else
-	  if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-          }
-#endif
 	  fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 	  server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 
@@ -637,21 +643,11 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		ret = nfi_mpiServer_reconnect(serv);
-		if (ret <0) {
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
 	fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
@@ -686,6 +682,11 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
 	// get private_info...
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
@@ -695,21 +696,6 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
 
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	dbgnfi_info("[NFI] nfi_mpiServer_preload(ID=%s): preload %s in server %s.\n",server_aux->id,virtual_path,serv->server);
@@ -757,6 +743,11 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
 	// private_info...
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
@@ -766,21 +757,6 @@
 	    mpiServer_err(MPISERVERERR_PARAM);
 	    return -1;
 	}
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
 
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	dbgnfi_info("[NFI] nfi_mpiServer_flush(ID=%s): open %s in server %s.\n",server_aux->id,virtual_path,serv->server);
@@ -818,6 +794,11 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
         // private_info...
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
@@ -827,35 +808,17 @@
 		return nfi_mpiServer_opendir(serv, url, fho);
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL)
-	{
-		ret = nfi_mpiServer_reconnect(serv);
-		if (ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
-
 	ret = ParseURL(url, NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		fprintf(stderr,"nfi_mpiServer_open: url %s incorrect.\n",url);
 		mpiServer_err(MPISERVERERR_URL);
 		return -1;
 	}
-	fho->url = (char *)malloc(strlen(url)+1);
+	fho->url = strdup(url) ;
 	if(fho->url == NULL){
 		mpiServer_err(MPISERVERERR_MEMORY);
 		return -1;
 	}
-
-	strcpy(fho->url, url);
 
 	fh_aux = (struct nfi_mpiServer_fhandle *)malloc(sizeof(struct nfi_mpiServer_fhandle));
 	if (fh_aux == NULL){
@@ -902,6 +865,11 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	  }
+          nfi_mpiServer_keepConnected(server) ;
+	  if (NULL == server->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
 	  server_aux = (struct nfi_mpiServer_server *) server->private_info;
 	  dbgnfi_info("[NFI] nfi_mpiServer_close(ID=%s): begin\n",server_aux->id);
@@ -956,24 +924,14 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	dbgnfi_info("[NFI] nfi_mpiServer_read(%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
 
 	fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
@@ -1060,25 +1018,14 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	dbgnfi_info("[NFI] nfi_mpiServer_write(ID=%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL)
-	{
-		ret = nfi_mpiServer_reconnect(serv);
-		if (ret <0) {
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-            mpiServer_err(MPISERVERERR_PARAM);
-            return -1;
-        }
-#endif
 
     	fh_aux     = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_mpiServer_server  *) serv->private_info;
@@ -1144,32 +1091,23 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
         // private_info...
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	dbgnfi_info("[NFI] nfi_mpiServer_create(ID=%s): begin %s\n",server_aux->id,url);
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL)
-	{
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		fprintf(stderr,"ERROR: nfi_mpiServer_create: url %s incorrect.\n",url);
 		mpiServer_err(MPISERVERERR_URL);
 		return -1;
 	}
+
 	/* private_info file handle */
 	fh_aux = (struct nfi_mpiServer_fhandle *)malloc(sizeof(struct nfi_mpiServer_fhandle));
 	if (fh_aux == NULL){
@@ -1195,14 +1133,12 @@
 	fh->server = serv;
         fh->priv_fh = (void *)fh_aux;
 
-        fh->url = (char *)malloc(strlen(url)+1);
+        fh->url = strdup(url) ;
         if(fh->url == NULL){
                	mpiServer_err(MPISERVERERR_MEMORY);
 		free(fh_aux);
                	return -1;
         }
-
-        strcpy(fh->url, url);
 
 	dbgnfi_info("[NFI] nfi_mpiServer_create(ID=%s): end\n",server_aux->id);
 
@@ -1211,32 +1147,29 @@
 
       int nfi_mpiServer_remove(struct nfi_server *serv,  char *url)
       {
-	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
-	int ret;
-	struct nfi_mpiServer_server *server_aux;
-	struct st_mpiServer_msg msg;
+	  char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+	  int ret;
+	  struct nfi_mpiServer_server *server_aux;
+	  struct st_mpiServer_msg msg;
 
+          // Check arguments...
+	  if (serv == NULL){
+		mpiServer_err(MPISERVERERR_PARAM);
+		return -1;
+	  }
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
+
+        // private_info...
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	dbgnfi_info("[NFI] nfi_mpiServer_remove(%s): begin %s\n",server_aux->id, url);
 	if (serv == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
 
 	server_aux = (struct nfi_mpiServer_server *)serv->private_info;
 
@@ -1267,25 +1200,17 @@
 	/*
         struct nfi_mpiServer_server *server_aux;
         struct nfi_mpiServer_fhandle *fh_aux;
+
 	if (server == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(server) ;
+	  if (NULL == server->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			mpiServer_err(); not necessary
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
 	server_aux = (strcut nfi_mpiServer_server *)serv->private_info;
 	*/
 
@@ -1310,22 +1235,13 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
-
+	// private_info...
 	server_aux = (struct nfi_mpiServer_server *)serv->private_info;
 
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
@@ -1364,13 +1280,12 @@
 	fh->type = NFIDIR;
         fh->priv_fh = (void *)fh_aux;
 
-        fh->url = (char *)malloc(strlen(url)+1);
+        fh->url = strdup(url) ;
         if(fh->url == NULL){
                mpiServer_err(MPISERVERERR_MEMORY);
 	       free(fh_aux);
                return -1;
         }
-        strcpy(fh->url, url);
 
 	//TODO:
 	//MPISERVERtoNFIattr(attr, &st);
@@ -1380,32 +1295,23 @@
 
       int nfi_mpiServer_rmdir(struct nfi_server *serv,  char *url)
       {
-	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
 	int ret;
-
         struct nfi_mpiServer_server *server_aux;
 	struct st_mpiServer_msg msg;
+	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
 
-	if (serv == NULL){
+	  // Check arguments...
+	  if (serv == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
-	}
+	  }
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
-
+	  // private_info...
 	server_aux = (struct nfi_mpiServer_server *)serv->private_info;
 
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
@@ -1449,22 +1355,14 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
 
+	  // private_info...
 	ret = ParseURL(url, NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		fprintf(stderr,"nfi_mpiServer_opendir: url %s incorrect.\n",url);
@@ -1472,13 +1370,11 @@
 		return -1;
 	}
 
-	fho->url = (char *)malloc(strlen(url)+1);
+	fho->url = strdup(url) ;
 	if(fho->url == NULL){
 		mpiServer_err(MPISERVERERR_MEMORY);
 		return -1;
 	}
-
-	strcpy(fho->url, url);
 
 	fh_aux = (struct nfi_mpiServer_fhandle *)malloc(sizeof(struct nfi_mpiServer_fhandle));
 	if (fh_aux == NULL){
@@ -1533,23 +1429,13 @@
 		mpiServer_err(MPISERVERERR_NOTDIR);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-			/* mpiServer_err(); not necessary */
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL)
-	{
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
-
+        // private_info...
 	server_aux = (struct nfi_mpiServer_server *)serv->private_info;
 	fh_aux = (struct nfi_mpiServer_fhandle *)fh->priv_fh;
 
@@ -1581,6 +1467,11 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
 	if (fh->priv_fh != NULL){
 		fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
@@ -1611,22 +1502,11 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
-
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_mpiServer_reconnect(serv);
-		if(ret <0){
-		 mpiServer_err(); not necessary
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL){
-               mpiServer_err(MPISERVERERR_PARAM);
-               return -1;
-        }
-#endif
+          nfi_mpiServer_keepConnected(serv) ;
+	  if (NULL == serv->private_info) {
+              mpiServer_err(MPISERVERERR_PARAM);
+              return -1;
+          }
 
 	server_aux = (struct nfi_mpiServer_server *)serv->private_info;
 	ret = mpiServer_statfs(server_aux->fh, &mpiServerinf, server_aux->cl);
