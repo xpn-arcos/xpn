@@ -24,15 +24,26 @@
 	#define MB (KB*KB)
 #endif	
 
-struct nfi_mpiServer_server{
+struct nfi_mpiServer_server
+{
+	// old stuff of XPN
 	char id[NFIMAXPATHLEN];
 	char path[NFIMAXPATHLEN];
-	int sd;
+	int  sd;
+
+        // server port and comm
+        char port_name[MPI_MAX_PORT_NAME] ;
+        MPI_Comm server ;
+
+        // client identification
+        int  size ;
+        int  rank ;
 };
 
-struct nfi_mpiServer_fhandle{
+struct nfi_mpiServer_fhandle
+{
 	char path[NFIMAXPATHLEN];
-	int fd;
+	int  fd;
 	DIR *dir;
 };
 
