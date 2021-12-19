@@ -178,7 +178,7 @@
                   debug_warning("Server[?]: size < 0") ;
       	          return -1;
       	      }
-      	
+      
               // Send message
               ret = MPI_Send(data, size, MPI_CHAR, 0, 0, (MPI_Comm)fd) ;
               if (MPI_SUCCESS != ret) {
@@ -206,7 +206,7 @@
                   debug_warning("Server[?]: size < 0") ;
       	          return  -1;
       	      }
-      	
+      
               // Get message
       	      ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, MPI_ANY_TAG, (MPI_Comm)fd, &status);
               if (MPI_SUCCESS != ret) {
@@ -228,7 +228,7 @@
       {
         int ret;
 
-	dbgnfi_info("[NFI] (ID=%s) mpiServer_write_data: begin\n", head->id);	
+	dbgnfi_info("[NFI] (ID=%s) mpiServer_write_data: begin\n", head->id);
 
         ret = mpiServer_write_data(sd, (char *)&head->type, sizeof(head->type), head->id);
         if(ret == -1){
@@ -355,14 +355,14 @@
 
       void NFItoMPISERVERattr ( struct stat *att, struct nfi_attr *nfi_att )
       {
-	if (nfi_att->at_type == NFIFILE){		
+	if (nfi_att->at_type == NFIFILE){
 	    att->st_mode = nfi_att->at_mode | S_IFREG;     /* protection */
 	}
-	
-	if (nfi_att->at_type == NFIDIR){		
+
+	if (nfi_att->at_type == NFIDIR){
 	    att->st_mode = nfi_att->at_mode | S_IFDIR;     /* protection */
 	}
-	
+
 	att->st_size	= nfi_att->at_size;      /* size */
 	att->st_uid	= nfi_att->at_uid;      /* user ID of owner */
 	att->st_gid	= nfi_att->at_gid;      /* group ID of owner */
@@ -405,7 +405,7 @@
        /************************************************************
         * Init Local 					    	    *
         ************************************************************/
-      int nfi_mpiServer_init(char *url, struct nfi_server *serv, struct nfi_attr_server *attr)
+      int nfi_mpiServer_init ( char *url, struct nfi_server *serv, struct nfi_attr_server *attr )
       {
 	int ret;
 	struct nfi_mpiServer_server *server_aux;
@@ -414,50 +414,52 @@
 
 
 	dbgnfi_info("[NFI] nfi_mpiServer_init: begin\n");
-	dbgnfi_info("[NFI] nfi_mpiServer_init: sizeof(struct st_mpiServer_msg) = %d.\n", sizeof(struct st_mpiServer_msg));
-	
+
+	// check arguments...
 	if (serv == NULL) {
 	    mpiServer_err(MPISERVERERR_PARAM);
 	    return -1;
 	}
 
-	/* functions */
+	// new nfi_ops with mpiServer functions...
 	serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops));
 	if (serv->ops == NULL){
 		mpiServer_err(MPISERVERERR_MEMORY);
 		return -1;
 	}
 	bzero(serv->ops, sizeof(struct nfi_ops));
-	
-	serv->ops->nfi_preload	= nfi_mpiServer_preload;
-	serv->ops->nfi_flush	= nfi_mpiServer_flush;
+
+	serv->ops->nfi_preload	  = nfi_mpiServer_preload;
+	serv->ops->nfi_flush	  = nfi_mpiServer_flush;
 	serv->ops->nfi_reconnect  = nfi_mpiServer_reconnect;
 	serv->ops->nfi_disconnect = nfi_mpiServer_disconnect;
-	serv->ops->nfi_getattr	= nfi_mpiServer_getattr;
-	serv->ops->nfi_setattr	= nfi_mpiServer_setattr;
-	serv->ops->nfi_open	= nfi_mpiServer_open;
-	serv->ops->nfi_close	= nfi_mpiServer_close;
-	serv->ops->nfi_read	= nfi_mpiServer_read;
-	serv->ops->nfi_write	= nfi_mpiServer_write;
-	serv->ops->nfi_create	= nfi_mpiServer_create;
-	serv->ops->nfi_remove	= nfi_mpiServer_remove;
-	serv->ops->nfi_rename	= nfi_mpiServer_rename;
-	serv->ops->nfi_mkdir	= nfi_mpiServer_mkdir;
-	serv->ops->nfi_rmdir	= nfi_mpiServer_rmdir;
-	serv->ops->nfi_opendir	= nfi_mpiServer_opendir;
-	serv->ops->nfi_readdir	= nfi_mpiServer_readdir;
-	serv->ops->nfi_closedir	= nfi_mpiServer_closedir;
-	serv->ops->nfi_statfs	= nfi_mpiServer_statfs;
+	serv->ops->nfi_getattr	  = nfi_mpiServer_getattr;
+	serv->ops->nfi_setattr	  = nfi_mpiServer_setattr;
+	serv->ops->nfi_open	  = nfi_mpiServer_open;
+	serv->ops->nfi_close	  = nfi_mpiServer_close;
+	serv->ops->nfi_read	  = nfi_mpiServer_read;
+	serv->ops->nfi_write	  = nfi_mpiServer_write;
+	serv->ops->nfi_create	  = nfi_mpiServer_create;
+	serv->ops->nfi_remove	  = nfi_mpiServer_remove;
+	serv->ops->nfi_rename	  = nfi_mpiServer_rename;
+	serv->ops->nfi_mkdir	  = nfi_mpiServer_mkdir;
+	serv->ops->nfi_rmdir	  = nfi_mpiServer_rmdir;
+	serv->ops->nfi_opendir	  = nfi_mpiServer_opendir;
+	serv->ops->nfi_readdir	  = nfi_mpiServer_readdir;
+	serv->ops->nfi_closedir	  = nfi_mpiServer_closedir;
+	serv->ops->nfi_statfs	  = nfi_mpiServer_statfs;
 
-	ret = ParseURL(url,  prt, NULL, NULL, server,  NULL,  dir);
+	// parse url...
+	ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		mpiServer_err(MPISERVERERR_URL);
-		fprintf(stderr,"nfi_mpiServer_init: url %s incorrect.\n",url);
+		fprintf(stderr,"nfi_mpiServer_init: incorrect url '%s'.\n", url);
 		free(serv->ops);
 		return -1;
 	}
 
+	// new nfi_mpiserver_server...
 	server_aux = (struct nfi_mpiServer_server *)malloc(sizeof(struct nfi_mpiServer_server));
 	if(server_aux == NULL){
 		mpiServer_err(MPISERVERERR_MEMORY);
@@ -471,9 +473,11 @@
 	dbgnfi_info("[NFI] nfi_mpiServer_init: mpiServer_write_data\n");
 	mpiServer_read_data(server_aux->sd, (char *)server_aux->id, MPISERVER_ID, msg.id);
 	dbgnfi_info("[NFI] nfi_mpiServer_init: mpiServer_read_data id = %s\n",server_aux->id);
-	
+
 	serv->private_info = (void *)server_aux;
 	//serv->protocol = MPISERVER;
+
+	// copy 'server address' string...
 	serv->server = (char *)malloc(sizeof(char)*(strlen(server)+1));	/* server address */
 	if(serv->server == NULL){
 		mpiServer_err(MPISERVERERR_MEMORY);
@@ -481,13 +485,15 @@
 	}
 	strcpy(serv->server, server);
 
+	// copy 'url' string...
 	serv->url = (char *)malloc(sizeof(char)*(strlen(url)+1));	/* server address */
 	if(serv->url == NULL){
 		mpiServer_err(MPISERVERERR_MEMORY);
 		return -1;
 	}
-
 	strcpy(serv->url, url);
+
+	// new server wrk...
         serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker));
 	memset(serv->wrk, 0, sizeof(struct nfi_worker));
 
@@ -504,8 +510,11 @@
 	        dbgnfi_info("[NFI] nfi_worker_init(0,ID=%s): \n",server_aux->id);
 		nfi_worker_init(serv->wrk, serv, 0);
 	}
-#endif	
+#endif
+
 	dbgnfi_info("[NFI] nfi_mpiServer_init(ID=%s): end\n",server_aux->id);
+
+	// return OK
 	return 0;
       }
 
@@ -514,31 +523,40 @@
        * **********************************************************/
       int nfi_mpiServer_disconnect ( struct nfi_server *serv )
       {
-        struct nfi_mpiServer_server *server_aux;
+          struct nfi_mpiServer_server *server_aux;
 
-	if (serv == NULL) {
+	  dbgnfi_info("[NFI] nfi_mpiServer_disconnect(): begin\n");
+
+	  // check params...
+	  if (serv == NULL) {
 	       return 0;
-	}
+	  }
 
-        server_aux = (struct nfi_mpiServer_server *)serv->private_info;
-        if (server_aux != NULL)
-	{
+	  // close connections...
+          server_aux = (struct nfi_mpiServer_server *)serv->private_info;
+          if (server_aux != NULL) {
         	close(server_aux->sd);
-		//printf("[NFI]close la conexion\n");
                 free(serv->private_info);
-	}
+                server_aux = NULL ;
+	  }
 
-        if (serv->url != NULL){
+	  // free 'url' string
+          if (serv->url != NULL) {
         	free(serv->url);
-	}
+        	serv->url = NULL;
+	  }
 
-	if(serv->server != NULL){
+	  // free 'server' string
+	  if (serv->server != NULL) {
 		free(serv->server);
-	}
+		serv->server = NULL;
+	  }
 
-	//serv->protocol = -1;
+	  //serv->protocol = -1;
+	  dbgnfi_info("[NFI] nfi_mpiServer_disconnect(): end\n");
 
-	return 0;
+	  // return OK
+	  return 0;
       }
 
       /************************************************************
@@ -559,7 +577,7 @@
 	}
 
 	server_aux = (struct nfi_mpiServer_server *)malloc(sizeof(struct nfi_mpiServer_server));
-	if(server_aux == NULL){		
+	if(server_aux == NULL){
 		mpiServer_err(MPISERVERERR_MEMORY);
 		return -1;
 	}
@@ -575,38 +593,49 @@
        ************************************************************/
       int nfi_mpiServer_destroy(struct nfi_server *serv)
       {
-	struct nfi_mpiServer_server *server_aux;
-	struct st_mpiServer_msg msg;
+	  struct nfi_mpiServer_server *server_aux;
+	  struct st_mpiServer_msg msg;
 
-	if (serv == NULL)
+	  // check arguments...
+	  if (serv == NULL) {
 		return 0;
+	  }
 
-	if(serv->ops != NULL)
-		free(serv->ops);
+	  // free private info
+	  server_aux = (struct nfi_mpiServer_server *)serv->private_info;
 
-	server_aux = (struct nfi_mpiServer_server *)serv->private_info;
-
-	if(server_aux != NULL){
-		//printf("[NFI]Cierro la conexion\n");
+	  if (server_aux != NULL) {
 		msg.type = -1;
         	mpiServer_write_operation(server_aux->sd, &msg);
         	close(server_aux->sd);
 		free(serv->private_info);
-	}
+	        server_aux = NULL ;
+	  }
 
-	if(serv->url != NULL){
+	  // end workers...
+	  nfi_worker_end(serv->wrk);
+
+	  // free 'url' string
+	  if (serv->url != NULL) {
 		free(serv->url);
-	}
+	        serv->url = NULL ;
+	  }
 
-	if(serv->server != NULL){
+	  // free 'server' string
+	  if (serv->server != NULL) {
 		free(serv->server);
-	}
+	        serv->server = NULL ;
+	  }
 
-	//serv->protocol = -1;
-	
-	nfi_worker_end(serv->wrk);
-	
-	return 0;
+	  // free nfi_ops...
+	  if (serv->ops != NULL) {
+		free(serv->ops);
+	  }
+
+	  //serv->protocol = -1;
+
+          // return OK
+	  return 0;
       }
 
 
@@ -614,69 +643,68 @@
        *  GENERIC FUNCTIONS
        */
 
-      int nfi_mpiServer_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr)
+      int nfi_mpiServer_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
       {
-	struct nfi_mpiServer_server *server_aux;
-	struct nfi_mpiServer_fhandle *fh_aux;
-	struct st_mpiServer_msg msg;
-	struct st_mpiServer_attr_req req;
+	  struct nfi_mpiServer_server *server_aux;
+	  struct nfi_mpiServer_fhandle *fh_aux;
+	  struct st_mpiServer_msg msg;
+	  struct st_mpiServer_attr_req req;
 
-	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
-	dbgnfi_info("[NFI] nfi_mpiServer_getattr(ID=%s): begin\n",server_aux->id);
-	if (attr == NULL){
+	  dbgnfi_info("[NFI] nfi_mpiServer_getattr (...): begin\n");
+
+	  // check arguments...
+	  if (attr == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
-	}
+	  }
 
-
-	if (serv == NULL){
+	  if (serv == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
-	}
+	  }
 
-
-	if (fh == NULL){
+	  if (fh == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
-	}
+	  }
 
-	if (fh->priv_fh == NULL){
+	  if (fh->priv_fh == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
-	}
+	  }
+
+	  // copy private information...
+	  server_aux = (struct nfi_mpiServer_server *) serv->private_info;
+	  strcpy(msg.id, server_aux->id);
 
 #ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
+	  if (serv->private_info == NULL){
 		ret = nfi_mpiServer_reconnect(serv);
 		if(ret <0){
 			/* mpiServer_err(); not necessary */
 			return -1;
 		}
-	}
+	  }
 #else
-	if (serv->private_info == NULL){
+	  if (serv->private_info == NULL){
                mpiServer_err(MPISERVERERR_PARAM);
                return -1;
-        }
+          }
 #endif
-	fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
-	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
+	  fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
+	  server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 
-	
-	
-	/*****************************************/
+	  /*****************************************/
+	  msg.type = MPISERVER_GETATTR_FILE;
+	  strcpy(msg.u_st_mpiServer_msg.op_getattr.path, fh_aux->path);
 
-	msg.type = MPISERVER_GETATTR_FILE;
-	strcpy(msg.u_st_mpiServer_msg.op_getattr.path, fh_aux->path);
+          mpiServer_write_operation(server_aux->sd, &msg);
+	  dbgnfi_info("[NFI] nfi_mpiServer_getattr(ID=%s): getattr: -> %s \n", server_aux->id, msg.u_st_mpiServer_msg.op_getattr.path);
+	  bzero(&req, sizeof(struct st_mpiServer_attr_req));
+	  mpiServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_attr_req), msg.id);
+	  dbgnfi_info("[NFI] nfi_mpiServer_getattr(ID=%s): getattr: <- %d\n", server_aux->id, req.status);
+	  /*****************************************/
 
-        mpiServer_write_operation(server_aux->sd, &msg);
-	dbgnfi_info("[NFI] nfi_mpiServer_getattr(ID=%s): getattr: -> %s \n", server_aux->id, msg.u_st_mpiServer_msg.op_getattr.path);
-	bzero(&req, sizeof(struct st_mpiServer_attr_req));
-	mpiServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_attr_req), msg.id);
-	dbgnfi_info("[NFI] nfi_mpiServer_getattr(ID=%s): getattr: <- %d\n", server_aux->id, req.status);
-	/*****************************************/	
-	
 	/*
 	ret = stat(fh_aux->path, &st);
 	if(ret < 0){
@@ -686,13 +714,15 @@
 	}
 	*/
 
-	MPISERVERtoNFIattr(attr, &req.attr);
-	
-	dbgnfi_info("[NFI] nfi_mpiServer_getattr(ID=%s): end\n",server_aux->id);
-	return req.status;
+	  MPISERVERtoNFIattr(attr, &req.attr);
+
+	  dbgnfi_info("[NFI] nfi_mpiServer_getattr (...): end\n");
+
+	  // return status
+	  return req.status;
       }
 
-      int nfi_mpiServer_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr)
+      int nfi_mpiServer_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
       {
 	struct nfi_mpiServer_server *server_aux;
 	struct nfi_mpiServer_fhandle *fh_aux;
@@ -743,7 +773,7 @@
 		mpiServer_err(MPISERVERERR_GETATTR);
 		return -1;
 	}
-*/	
+*/
 	return 0;
       }
 
@@ -753,7 +783,7 @@
 	int ret;
 	struct nfi_mpiServer_server *server_aux;
 	struct st_mpiServer_msg msg;
-	
+
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	strcpy(msg.id,server_aux->id);
 	dbgnfi_info("[NFI] nfi_mpiServer_preload(ID=%s): begin %s - %s \n", server_aux->id, virtual_path, storage_path);
@@ -771,7 +801,7 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
-	
+
 	if (virtual_path == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
@@ -798,7 +828,7 @@
 
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	dbgnfi_info("[NFI] nfi_mpiServer_preload(ID=%s): preload %s in server %s.\n",server_aux->id,virtual_path,serv->server);
-	
+
 	/*****************************************/
 	msg.type = MPISERVER_PRELOAD_FILE;
 	//strcpy(msg.u_st_mpiServer_msg.op_preload.path,dir);
@@ -811,7 +841,7 @@
 	mpiServer_read_data(server_aux->sd, (char *)&ret, sizeof(int), msg.id);
 	dbgnfi_info("[NFI] nfi_mpiServer_preload(ID=%s): preload: <- %d \n",server_aux->id,ret);
 	/*****************************************/
-	
+
 	dbgnfi_info("[NFI] nfi_mpiServer_preload(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret);
 	if(ret == -1){
 		printf("[NFI]Error en el preload\n");
@@ -828,7 +858,7 @@
 	struct nfi_mpiServer_server *server_aux;
 
 	struct st_mpiServer_msg msg;
-	
+
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	strcpy(msg.id,server_aux->id);
 	dbgnfi_info("[NFI] nfi_mpiServer_flush(ID=%s): begin %s - %s \n", server_aux->id,virtual_path, storage_path);
@@ -841,12 +871,12 @@
 	    mpiServer_err(MPISERVERERR_PARAM);
 	    return -1;
 	}
-	
+
 	if (serv == NULL){
 	    mpiServer_err(MPISERVERERR_PARAM);
 	    return -1;
 	}
-	
+
 	if (virtual_path == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
@@ -873,7 +903,7 @@
 
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	dbgnfi_info("[NFI] nfi_mpiServer_flush(ID=%s): open %s in server %s.\n",server_aux->id,virtual_path,serv->server);
-	
+
 	/*****************************************/
 	msg.type = MPISERVER_FLUSH_FILE;
 	//strcpy(msg.u_st_mpiServer_msg.op_flush.path,dir);
@@ -886,12 +916,12 @@
 	mpiServer_read_data(server_aux->sd, (char *)&ret, sizeof(int), msg.id);
 	dbgnfi_info("[NFI] nfi_mpiServer_flush(ID=%s): flush: <- %d \n",server_aux->id,ret);
 	/*****************************************/
-	
+
 	dbgnfi_info("[NFI] nfi_mpiServer_flush(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret);
 	return 0;
       }
 
-      int nfi_mpiServer_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
+      int nfi_mpiServer_open ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
       {
 	char dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
 	int ret;
@@ -899,19 +929,19 @@
 	struct nfi_mpiServer_fhandle *fh_aux;
 
 	struct st_mpiServer_msg msg;
-	
+
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	strcpy(msg.id,server_aux->id);
 	dbgnfi_info("[NFI] nfi_mpiServer_open(ID=%s): begin %s\n",server_aux->id,url);
 	if(url[strlen(url)-1] == '/'){
 		return nfi_mpiServer_opendir(serv, url, fho);
 	}
-	
+
 	if (serv == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
-	
+
 	if (fho == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
@@ -946,26 +976,26 @@
 	strcpy(fho->url, url);
 
 	fh_aux = (struct nfi_mpiServer_fhandle *)malloc(sizeof(struct nfi_mpiServer_fhandle));
-	if (fh_aux == NULL){		
+	if (fh_aux == NULL){
 		mpiServer_err(MPISERVERERR_MEMORY);
 		free(fho->url);
 		return -1;
 	}
 
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
-	
+
 	/*****************************************/
 	msg.type = MPISERVER_OPEN_FILE;
 	strcpy(msg.u_st_mpiServer_msg.op_open.path,dir);
-	
+
         mpiServer_write_operation(server_aux->sd, &msg);
 	dbgnfi_info("[NFI] nfi_mpiServer_open(ID=%s): open -> %s \n",server_aux->id,msg.u_st_mpiServer_msg.op_open.path);
 	mpiServer_read_data(server_aux->sd, (char *)&fh_aux->fd, sizeof(int), msg.id);
 	dbgnfi_info("[NFI] nfi_mpiServer_open(ID=%s): open <- %d \n",server_aux->id,fh_aux->fd);
 	strcpy(fh_aux->path, dir);
 	/*****************************************/
-	
-	fho->type = NFIFILE;			
+
+	fho->type = NFIFILE;
 	fho->server = NULL;
 	fho->priv_fh = NULL;
 	fho->server = serv;
@@ -993,16 +1023,16 @@
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
 	}
-	
+
 	if (fh->priv_fh != NULL){
 		fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 		server_aux = (struct nfi_mpiServer_server *) server->private_info;
 		/*****************************************/
 		msg.type = MPISERVER_CLOSE_FILE;
 		msg.u_st_mpiServer_msg.op_close.fd = fh_aux->fd;
-	
+
         	mpiServer_write_operation(server_aux->sd, &msg);
-			
+
 		dbgnfi_info("[NFI] nfi_mpiServer_close(ID=%s): close -> %d \n",server_aux->id,msg.u_st_mpiServer_msg.op_close.fd);
 		/*****************************************/
 		//close(fh_aux->fd);
@@ -1010,7 +1040,7 @@
 		free(fh->priv_fh);
 		fh->priv_fh = NULL;
 	}
-	
+
 	fh->type = NFINULL;
 	fh->server = NULL;
 	dbgnfi_info("[NFI] nfi_mpiServer_close(ID=%s): end\n",server_aux->id);
@@ -1062,9 +1092,9 @@
 
 	fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
-	
+
 	/*****************************************/
-		
+
 	msg.type = MPISERVER_READ_FILE;
 	msg.u_st_mpiServer_msg.op_read.fd 	= fh_aux->fd;
 	msg.u_st_mpiServer_msg.op_read.offset 	= offset;
@@ -1106,9 +1136,9 @@
 			//cont += req.size;
 		}
 		cont += req.size;
-		dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): read(%d,%d) cont = %d\n",server_aux->id,req.size,(int)req.last,cont);	
+		dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): read(%d,%d) cont = %d\n",server_aux->id,req.size,(int)req.last,cont);
 	}while((req.size>0)&&(!req.last));
-	
+
 	/*****************************************/
 	dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): read %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
 	if(req.size < 0){
@@ -1134,14 +1164,14 @@
 	struct st_mpiServer_write_req req;
 
 	int ret;
-	
+
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	strcpy(msg.id,server_aux->id);
 	dbgnfi_info("[NFI] nfi_mpiServer_write(ID=%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
 
 	if(size == 0){
 		return 0;
-	}	
+	}
 	if (serv == NULL){
 		mpiServer_err(MPISERVERERR_PARAM);
 		return -1;
@@ -1198,8 +1228,8 @@
 		fprintf(stderr,"(3)ERROR: nfi_mpiServer_write(ID=%s): Error on write operation\n",server_aux->id);
 		return -1;
 	}
-	
-	
+
+
 	/*****************************************/
 	dbgnfi_info("[NFI] nfi_mpiServer_write(ID=%s): write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
 	if (req.size < 0)
@@ -1262,7 +1292,7 @@
 	}
 
 	bzero(fh_aux, sizeof(struct nfi_mpiServer_fhandle));
-	
+
 
     	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	/* create the file into the directory */
@@ -1270,13 +1300,13 @@
 	/*****************************************/
 	msg.type = MPISERVER_CREAT_FILE;
 	strcpy(msg.u_st_mpiServer_msg.op_creat.path,dir);
-	
+
     	mpiServer_write_operation(server_aux->sd, &msg);
 	mpiServer_read_data(server_aux->sd, (char *)&(fh_aux->fd), sizeof(int), msg.id);
-	
+
 	strcpy(fh_aux->path, dir);
 	/*****************************************/
-	fh->type = NFIFILE;			
+	fh->type = NFIFILE;
 	fh->server = serv;
         fh->priv_fh = (void *)fh_aux;
 
@@ -1286,7 +1316,7 @@
 		free(fh_aux);
                	return -1;
         }
-		
+
         strcpy(fh->url, url);
 
 	dbgnfi_info("[NFI] nfi_mpiServer_create(ID=%s): end\n",server_aux->id);
@@ -1299,7 +1329,7 @@
 	int ret;
 	struct nfi_mpiServer_server *server_aux;
 	struct st_mpiServer_msg msg;
-	
+
 	server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 	strcpy(msg.id,server_aux->id);
 	dbgnfi_info("[NFI] nfi_mpiServer_remove(%s): begin %s\n",server_aux->id, url);
@@ -1337,9 +1367,9 @@
 	/*****************************************/
 	msg.type = MPISERVER_RM_FILE;
 	strcpy(msg.u_st_mpiServer_msg.op_rm.path,dir);
-	
+
         mpiServer_write_operation(server_aux->sd, &msg);
-	
+
 	/*****************************************/
 	dbgnfi_info("[NFI] nfi_mpiServer_remove(ID=%s): end \n",server_aux->id);
 	return 0;
@@ -1429,13 +1459,13 @@
 	bzero(fh_aux, sizeof(struct nfi_mpiServer_fhandle));
 	/* create the dir into the directory */
 
-	/******************************************************/	
+	/******************************************************/
 	msg.type = MPISERVER_MKDIR_DIR;
 	strcpy(msg.u_st_mpiServer_msg.op_mkdir.path, dir);
-	
+
     	mpiServer_write_operation(server_aux->sd, &msg);
 	mpiServer_read_data(server_aux->sd, (char *)&(fh_aux->fd), sizeof(int), msg.id);
-	
+
 	strcpy(fh_aux->path, dir);
 	/******************************************************/
 
@@ -1445,7 +1475,7 @@
 		free(fh_aux);
 		return -1;
 	}
-	
+
 	fh->type = NFIDIR;
         fh->priv_fh = (void *)fh_aux;
 
@@ -1459,7 +1489,7 @@
 
 	//TODO:
 	//MPISERVERtoNFIattr(attr, &st);
-	
+
 	return 0;
       }
 
@@ -1503,18 +1533,18 @@
 	}
 
 
-	/******************************************************/	
+	/******************************************************/
 	msg.type = MPISERVER_RMDIR_DIR;
 	strcpy(msg.u_st_mpiServer_msg.op_rmdir.path, url);
-	
+
     	mpiServer_write_operation(server_aux->sd, &msg);
 	mpiServer_read_data(server_aux->sd, (char *)&ret, sizeof(int), msg.id);
-	
+
 	//strcpy(fh_aux->path, dir);
 	/******************************************************/
 
-	
-	//ret = rmdir(dir);	
+
+	//ret = rmdir(dir);
 	if(ret < 0){
 		fprintf(stderr,"nfi_mpiServer_rmdir: Fail rmdir %s in server %s.\n",dir,serv->server);
 		mpiServer_err(MPISERVERERR_REMOVE);
@@ -1527,7 +1557,7 @@
       int nfi_mpiServer_opendir(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho)
       {
 	char dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
-	int ret;	
+	int ret;
 	struct nfi_mpiServer_server *server_aux;
 	struct nfi_mpiServer_fhandle *fh_aux;
 
@@ -1585,16 +1615,16 @@
 	fh_aux->dir = opendir(dir);
     if (ret < 0 ){
 		fprintf(stderr,"nfi_mpiServer_opendir: Fail opendir %s in server %s.\n",dir,serv->server);
-	    mpiServer_err(MPISERVERERR_MEMORY);		
+	    mpiServer_err(MPISERVERERR_MEMORY);
 		free(fh_aux);
 		free(fho->url);
-		return -1;		
+		return -1;
 	}
-	
+
 	fh_aux->fd = ret;
-	strcpy(fh_aux->path, dir);	
+	strcpy(fh_aux->path, dir);
 	fho->type = NFIDIR;
-	
+
 	fho->server = NULL;
 	fho->priv_fh = NULL;
 	fho->server = serv;
@@ -1687,13 +1717,13 @@
 		fh->priv_fh = NULL;
 
 	}
-	
+
 	return 0;
       }
 
       int nfi_mpiServer_statfs(struct nfi_server *serv,  struct nfi_info *inf)
       {/*
-	
+
 	struct mpiServer_info mpiServerinf;
 	int ret;
         struct nfi_mpiServer_server *server_aux;
@@ -1724,7 +1754,7 @@
                return -1;
         }
 #endif
-	
+
 	server_aux = (struct nfi_mpiServer_server *)serv->private_info;
 	ret = mpiServer_statfs(server_aux->fh, &mpiServerinf, server_aux->cl);
 	if(ret <0){
@@ -1733,7 +1763,7 @@
 	}
 
 	NFStoNFIInfo(inf, &mpiServerinf);
-*/	
+*/
 	return 0;
       }
 
