@@ -22,7 +22,7 @@
 
    /* ... Include / Inclusion ........................................... */
 
-      #include "nfi_mpiServer.h"
+      #include "mpiServer_comm.h"
 
 
    /* ... Functions / Funciones ......................................... */

@@ -22,7 +22,7 @@
 
 #ifndef MB
 	#define MB (KB*KB)
-#endif	
+#endif
 
 struct nfi_mpiServer_server
 {
@@ -48,53 +48,36 @@ struct nfi_mpiServer_fhandle
 };
 
 
-int nfi_mpiServer_init(char *url, struct nfi_server *serv, struct nfi_attr_server *attr);
-int nfi_mpiServer_destroy(struct nfi_server *server);
+int     nfi_mpiServer_init    ( char *url, struct nfi_server *serv, struct nfi_attr_server *attr) ;
+int     nfi_mpiServer_destroy ( struct nfi_server *server) ;
 
-int nfi_mpiServer_preload(struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt);
-int nfi_mpiServer_flush(struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt);
+int     nfi_mpiServer_reconnect ( struct nfi_server *server) ;
+int     nfi_mpiServer_disconnect( struct nfi_server *server) ;
 
-int nfi_mpiServer_reconnect(struct nfi_server *server);
-int nfi_mpiServer_disconnect(struct nfi_server *server);
+int     nfi_mpiServer_preload ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt) ;
+int     nfi_mpiServer_flush   ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt) ;
 
-int nfi_mpiServer_getattr(struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr);
+int     nfi_mpiServer_getattr ( struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr) ;
+int     nfi_mpiServer_setattr ( struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr) ;
 
-int nfi_mpiServer_setattr(struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr);
+int     nfi_mpiServer_open    ( struct nfi_server *server, char *url, struct nfi_fhandle *fho) ;
+int     nfi_mpiServer_close   ( struct nfi_server *server, struct nfi_fhandle *fh) ;
+ssize_t nfi_mpiServer_read    ( struct nfi_server *server, struct nfi_fhandle *fh,
+		                void *buffer, off_t offset, size_t size) ;
+ssize_t nfi_mpiServer_write   ( struct nfi_server *server, struct nfi_fhandle *fh,
+		                void *buffer, off_t offset, size_t size) ;
+int     nfi_mpiServer_create  ( struct nfi_server *server, char *url,  struct nfi_attr *attr, struct nfi_fhandle  *fh) ;
 
-int nfi_mpiServer_open(struct nfi_server *server, char *url, struct nfi_fhandle *fho);
+int     nfi_mpiServer_remove  ( struct nfi_server *server, char *url) ;
+int     nfi_mpiServer_rename  ( struct nfi_server *server, char *old_url, char *new_url) ;
+int     nfi_mpiServer_mkdir   ( struct nfi_server *server, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh) ;
+int     nfi_mpiServer_rmdir   ( struct nfi_server *server, char *url) ;
 
-int nfi_mpiServer_close(struct nfi_server *server, struct nfi_fhandle *fh);
+int     nfi_mpiServer_opendir ( struct nfi_server *server, char *url, struct nfi_fhandle *fho) ;
+int     nfi_mpiServer_readdir ( struct nfi_server *server, struct nfi_fhandle *fhd, char *entry , unsigned char *type) ;
+int     nfi_mpiServer_closedir( struct nfi_server *server, struct nfi_fhandle *fh) ;
 
-ssize_t nfi_mpiServer_read(struct nfi_server *server, struct nfi_fhandle *fh, 
-		void *buffer, 
-		off_t offset, 
-		size_t size
-		);
-
-ssize_t nfi_mpiServer_write(struct nfi_server *server, struct nfi_fhandle *fh, 
-		void *buffer, 
-		off_t offset, 
-		size_t size
-		);
-
-int nfi_mpiServer_create(struct nfi_server *server, char *url,  struct nfi_attr *attr, struct nfi_fhandle  *fh);
-
-int nfi_mpiServer_remove(struct nfi_server *server, char *url);
-
-int nfi_mpiServer_rename(struct nfi_server *server, char *old_url, char *new_url);
-
-int nfi_mpiServer_mkdir(struct nfi_server *server, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
-
-int nfi_mpiServer_rmdir(struct nfi_server *server, char *url);
-
-int nfi_mpiServer_opendir(struct nfi_server *server, char *url, struct nfi_fhandle *fho);
-
-int nfi_mpiServer_readdir(struct nfi_server *server, struct nfi_fhandle *fhd, char *entry , unsigned char *type);
-
-int nfi_mpiServer_closedir(struct nfi_server *server, struct nfi_fhandle *fh);
-
-int nfi_mpiServer_statfs(struct nfi_server *server, struct nfi_info *inf);
-
+int     nfi_mpiServer_statfs  ( struct nfi_server *server, struct nfi_info *inf) ;
 
  #ifdef  __cplusplus
      }
