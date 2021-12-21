@@ -112,7 +112,7 @@
 	#ifdef DEBUG_BYPASS_XPN_ADAPTOR_KEEPINIT
 			printf("Antes de xpn_init()\n");
 	#endif
-			//xpn_adaptor_initCalled = 1; //TODO: quitar
+			xpn_adaptor_initCalled = 1; //TODO: quitar
 			ret = xpn_init();
 	#ifdef DEBUG_BYPASS_XPN_ADAPTOR_KEEPINIT
 			printf("Despues de xpn_init()\n");
