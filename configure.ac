@@ -10,7 +10,7 @@
 #
 # begin
 #
-AC_INIT([Expand],[1.9.0],[xpn@arcos.inf.uc3m.es],[expand])
+AC_INIT([Expand],[1.9.0],[fgcarbal@inf.uc3m.es],[expand])
 AC_CONFIG_AUX_DIR(./config)
 AC_CONFIG_HEADER(include/config.h)
 AC_PROG_INSTALL
@@ -181,14 +181,14 @@ INCLUDEFLAGS="\
 #
 # Defines the necessary variables if nfs is enabled.
 #
-AC_ARG_ENABLE(	[nfs],
-		[AS_HELP_STRING([--enable-nfs],[Enable NFS v2 module.])],
-		[
-			[CDEFS="$CDEFS -DENABLE_NFS"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_nfs"]
-			[NFI_NFS="nfi_nfs"]
-			[NFI_NFS_OBJECTS="\$(NFI_NFS_OBJECTS)"]
-		]
+AC_ARG_ENABLE(  [nfs],
+    [AS_HELP_STRING([--enable-nfs],[Enable NFS v2 module.])],
+    [
+      [CDEFS="$CDEFS -DENABLE_NFS"]
+      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_nfs"]
+      [NFI_NFS="nfi_nfs"]
+      [NFI_NFS_OBJECTS="\$(NFI_NFS_OBJECTS)"]
+    ]
 )
 AC_SUBST(NFI_NFS)
 AC_SUBST(NFI_NFS_OBJECTS)
@@ -199,14 +199,14 @@ AM_CONDITIONAL([ENABLE_NFS], [test "$NFI_NFS" = "nfi_nfs"])
 #
 # Defines the necessary variables if nfs3 is enabled.
 #
-AC_ARG_ENABLE(	[nfs3],
-		[AS_HELP_STRING([--enable-nfs3],[Enable NFS v3 module.])],
-		[
-			[CDEFS="$CDEFS -DENABLE_NFS3"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_nfs3"]
-			[NFI_NFS3="nfi_nfs3"]
-			[NFI_NFS3_OBJECTS="\$(NFI_NFS3_OBJECTS)"]
-		]
+AC_ARG_ENABLE(  [nfs3],
+    [AS_HELP_STRING([--enable-nfs3],[Enable NFS v3 module.])],
+    [
+      [CDEFS="$CDEFS -DENABLE_NFS3"]
+      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_nfs3"]
+      [NFI_NFS3="nfi_nfs3"]
+      [NFI_NFS3_OBJECTS="\$(NFI_NFS3_OBJECTS)"]
+    ]
 )
 AC_SUBST(NFI_NFS3)
 AC_SUBST(NFI_NFS3_OBJECTS)
@@ -217,14 +217,14 @@ AM_CONDITIONAL([ENABLE_NFS3], [test "$NFI_NFS3" = "nfi_nfs3"])
 #
 # Defines the necessary variables if ftp is enabled.
 #
-AC_ARG_ENABLE(	[ftp],
-		[AS_HELP_STRING([--enable-ftp],[Enable FTP module.])],
-		[
-			[CDEFS="$CDEFS -DENABLE_FTP"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_ftp"]
-			[NFI_FTP="nfi_ftp"]
-			[NFI_FTP_OBJECTS="\$(NFI_FTP_OBJECTS)"]
-		]
+AC_ARG_ENABLE(  [ftp],
+    [AS_HELP_STRING([--enable-ftp],[Enable FTP module.])],
+    [
+      [CDEFS="$CDEFS -DENABLE_FTP"]
+      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_ftp"]
+      [NFI_FTP="nfi_ftp"]
+      [NFI_FTP_OBJECTS="\$(NFI_FTP_OBJECTS)"]
+    ]
 )
 AC_SUBST(NFI_FTP)
 AC_SUBST(NFI_FTP_OBJECTS)
@@ -235,26 +235,26 @@ AM_CONDITIONAL([ENABLE_FTP], [test "$NFI_FTP" = "nfi_ftp"])
 #
 # Defines the necessary variables if xio is enabled.
 #
-AC_ARG_ENABLE(	[xio],
+AC_ARG_ENABLE(  [xio],
                 [AS_HELP_STRING([--enable-xio=/path/to/globus/ (Don't use '~')],[Enable Globus XIO module.])],
                 [
-                        [CDEFS="$CDEFS -DENABLE_XIO"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_xio"]
-                        #[LIBS="$LIBS -L$enable_xio/lib/ -lglobus_xio_gcc32dbg -lglobus_ftp_client_gcc32dbg"]
-                        #[M_HEADERS="$M_HEADERS -I$enable_xio/include/gcc32dbg/"]
-			#[LIBS="$LIBS -lglobus_xio -lglobus_ftp_client -lglobus_common -lcrypto"]
-                        #[M_HEADERS="$M_HEADERS -I/usr/lib/globus/include"]
-			[if test "x$enable_xio" = "xyes"; then
-				XIO_INCLUDE="-I/usr/include/globus -I/usr/lib/globus/include"
-				XIO_LIB=""
-			 else
-				XIO_INCLUDE="-I$enable_xio/include/globus -I$enable_xio/include/globus/gcc64dbg"
-				XIO_LIB="-L$enable_xio/lib64"
-			 fi]
-			[LIBS="$LIBS $XIO_LIB -lglobus_xio -lglobus_ftp_client -lglobus_common -lssl -lcrypto"]
-                        [M_HEADERS="$M_HEADERS $XIO_INCLUDE"]
-			[NFI_XIO="nfi_xio"]
-			[NFI_XIO_OBJECTS="\$(NFI_XIO_OBJECTS)"]
+                  [CDEFS="$CDEFS -DENABLE_XIO"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_xio"]
+                  #[LIBS="$LIBS -L$enable_xio/lib/ -lglobus_xio_gcc32dbg -lglobus_ftp_client_gcc32dbg"]
+                  #[M_HEADERS="$M_HEADERS -I$enable_xio/include/gcc32dbg/"]
+                  #[LIBS="$LIBS -lglobus_xio -lglobus_ftp_client -lglobus_common -lcrypto"]
+                  #[M_HEADERS="$M_HEADERS -I/usr/lib/globus/include"]
+                  [if test "x$enable_xio" = "xyes"; then
+                    XIO_INCLUDE="-I/usr/include/globus -I/usr/lib/globus/include"
+                    XIO_LIB=""
+                   else
+                    XIO_INCLUDE="-I$enable_xio/include/globus -I$enable_xio/include/globus/gcc64dbg"
+                    XIO_LIB="-L$enable_xio/lib64"
+                   fi]
+                  [LIBS="$LIBS $XIO_LIB -lglobus_xio -lglobus_ftp_client -lglobus_common -lssl -lcrypto"]
+                  [M_HEADERS="$M_HEADERS $XIO_INCLUDE"]
+                  [NFI_XIO="nfi_xio"]
+                  [NFI_XIO_OBJECTS="\$(NFI_XIO_OBJECTS)"]
                 ]
 )
 AC_SUBST(NFI_XIO)
@@ -266,27 +266,27 @@ AM_CONDITIONAL([ENABLE_XIO], [test "$NFI_XIO" = "nfi_xio"])
 #
 # Defines the necessary variables if gsoap is enabled.
 #
-AC_ARG_ENABLE(	[gsoap],
-		[AS_HELP_STRING([--enable-gsoap@<:@=/path/to/gsoap/@:>@ (Don't use '~')],[Enable Gsoap module.])],
-		[
-			#[if test "x$enable_gsoap" = "xyes"; then
-			#	GSOAP_BIN_DIR="/usr/bin"
-			#	GSOAP_INCLUDE_DIR="/usr/include"
-			#	GSOAP_LIB_DIR="/usr/lib"
-			# else
-				GSOAP_BIN_DIR="$enable_gsoap/bin"
-				GSOAP_INCLUDE_DIR="$enable_gsoap/include"
-				GSOAP_IMPORT_DIR="$enable_gsoap/share/gsoap/import"
-				GSOAP_LIB_DIR="$enable_gsoap/lib"
-			# fi]
-			[CDEFS="$CDEFS -DENABLE_GSOAP"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_gsoap"]
-			[LIBS="$LIBS -L$GSOAP_LIB_DIR -L/usr/local/ssl/lib -L\$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/ -lIOServiceClient -lpthread -lm -lgsoapssl -lssl -lcrypto -lz -ldl"]
-			[M_HEADERS="$M_HEADERS -I$GSOAP_INCLUDE_DIR -I$GSOAP_IMPORT_DIR -I/usr/local/ssl/include/ -I\$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/ -I\$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/project"]
-			[NFI_GSOAP="nfi_gsoap"]
-			[NFI_GSOAP_OBJECTS="\$(NFI_GSOAP_OBJECTS)"]
-			[POSIXIOSERVICE="src/nfi/nfi_gsoap/PosixIOService"]
-		]
+AC_ARG_ENABLE(  [gsoap],
+    [AS_HELP_STRING([--enable-gsoap@<:@=/path/to/gsoap/@:>@ (Don't use '~')],[Enable Gsoap module.])],
+    [
+      #[if test "x$enable_gsoap" = "xyes"; then
+      # GSOAP_BIN_DIR="/usr/bin"
+      # GSOAP_INCLUDE_DIR="/usr/include"
+      # GSOAP_LIB_DIR="/usr/lib"
+      # else
+        GSOAP_BIN_DIR="$enable_gsoap/bin"
+        GSOAP_INCLUDE_DIR="$enable_gsoap/include"
+        GSOAP_IMPORT_DIR="$enable_gsoap/share/gsoap/import"
+        GSOAP_LIB_DIR="$enable_gsoap/lib"
+      # fi]
+      [CDEFS="$CDEFS -DENABLE_GSOAP"]
+      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_gsoap"]
+      [LIBS="$LIBS -L$GSOAP_LIB_DIR -L/usr/local/ssl/lib -L\$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/ -lIOServiceClient -lpthread -lm -lgsoapssl -lssl -lcrypto -lz -ldl"]
+      [M_HEADERS="$M_HEADERS -I$GSOAP_INCLUDE_DIR -I$GSOAP_IMPORT_DIR -I/usr/local/ssl/include/ -I\$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/ -I\$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/project"]
+      [NFI_GSOAP="nfi_gsoap"]
+      [NFI_GSOAP_OBJECTS="\$(NFI_GSOAP_OBJECTS)"]
+      [POSIXIOSERVICE="src/nfi/nfi_gsoap/PosixIOService"]
+    ]
 )
 AC_SUBST(NFI_GSOAP)
 AC_SUBST(NFI_GSOAP_OBJECTS)
@@ -302,26 +302,26 @@ AM_CONDITIONAL([ENABLE_GSOAP], [test "$NFI_GSOAP" = "nfi_gsoap"])
 #
 # Defines the necessary variables if gridftp is enabled.
 #
-AC_ARG_ENABLE(	[gridftp],
+AC_ARG_ENABLE(  [gridftp],
                 [AS_HELP_STRING([--enable-gridftp=/path/to/globus/ (Don't use '~')],[Enable Globus GridFTP module.])],
                 [
-                        [CDEFS="$CDEFS -DENABLE_GRIDFTP"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_gridftp"]
-                        #[LIBS="$LIBS -L$enable_gridftp/lib/ -lglobus_ftp_client_gcc32dbg"]
-                        #[M_HEADERS="$M_HEADERS -I$enable_gridftp/include/gcc32dbg/"]
-			#[LIBS="$LIBS -lglobus_ftp_client -lglobus_common -lcrypto"]
-       	                #[M_HEADERS="$M_HEADERS -I/usr/include/globus -I/usr/lib/globus/include"]
-			[if test "x$enable_gridftp" = "xyes"; then
-				GRIDFTP_INCLUDE="-I/usr/include/globus -I/usr/lib/globus/include"
-				GRIDFTP_LIB=""
-			 else
-				GRIDFTP_INCLUDE="-I$enable_gridftp/include -I$enable_gridftp/include/globus/gcc64dbg"
-				GRIDFTP_LIB="-L$enable_gridftp/lib64"
-			 fi]
-			[LIBS="$LIBS $GRIDFTP_LIB -lglobus_ftp_client -lglobus_common -lssl -lcrypto"]
-       	                [M_HEADERS="$M_HEADERS $GRIDFTP_INCLUDE"]
-			[NFI_GRIDFTP="nfi_gridftp"]
-			[NFI_GRIDFTP_OBJECTS="\$(NFI_GRIDFTP_OBJECTS)"]
+                  [CDEFS="$CDEFS -DENABLE_GRIDFTP"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_gridftp"]
+                  #[LIBS="$LIBS -L$enable_gridftp/lib/ -lglobus_ftp_client_gcc32dbg"]
+                  #[M_HEADERS="$M_HEADERS -I$enable_gridftp/include/gcc32dbg/"]
+                  #[LIBS="$LIBS -lglobus_ftp_client -lglobus_common -lcrypto"]
+                  #[M_HEADERS="$M_HEADERS -I/usr/include/globus -I/usr/lib/globus/include"]
+                  [if test "x$enable_gridftp" = "xyes"; then
+                    GRIDFTP_INCLUDE="-I/usr/include/globus -I/usr/lib/globus/include"
+                    GRIDFTP_LIB=""
+                   else
+                    GRIDFTP_INCLUDE="-I$enable_gridftp/include -I$enable_gridftp/include/globus/gcc64dbg"
+                    GRIDFTP_LIB="-L$enable_gridftp/lib64"
+                   fi]
+                  [LIBS="$LIBS $GRIDFTP_LIB -lglobus_ftp_client -lglobus_common -lssl -lcrypto"]
+                  [M_HEADERS="$M_HEADERS $GRIDFTP_INCLUDE"]
+                  [NFI_GRIDFTP="nfi_gridftp"]
+                  [NFI_GRIDFTP_OBJECTS="\$(NFI_GRIDFTP_OBJECTS)"]
                 ]
 )
 AC_SUBST(NFI_GRIDFTP)
@@ -333,13 +333,13 @@ AM_CONDITIONAL([ENABLE_GRIDFTP], [test "$NFI_GRIDFTP" = "nfi_gridftp"])
 #
 # Defines the necessary variables if gridftp is enabled.
 #
-AC_ARG_ENABLE(	[tcpserver],
+AC_ARG_ENABLE(  [tcpserver],
                 [AS_HELP_STRING([--enable-tcpserver],[Enable tcpServer module.])],
                 [
-                        [CDEFS="$CDEFS -DENABLE_TCPSERVER"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_tcpServer"]
-			[NFI_TCPSERVER="nfi_tcpserver"]
-			[NFI_TCPSERVER_OBJECTS="\$(NFI_TCPSERVER_OBJECTS)"]
+                  [CDEFS="$CDEFS -DENABLE_TCPSERVER"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_tcpServer"]
+                  [NFI_TCPSERVER="nfi_tcpserver"]
+                  [NFI_TCPSERVER_OBJECTS="\$(NFI_TCPSERVER_OBJECTS)"]
                 ]
 )
 AC_SUBST(NFI_TCPSERVER)
@@ -351,15 +351,17 @@ AM_CONDITIONAL([ENABLE_TCPSERVER], [test "$NFI_TCPSERVER" = "nfi_tcpserver"])
 #
 # Defines the necessary variables if gridftp is enabled.
 #
-AC_ARG_ENABLE(	[mpiserver],
+AC_ARG_ENABLE(  [mpiserver],
                 [AS_HELP_STRING([--enable-mpiserver],[Enable mpiServer module.])],
                 [
-                        [CDEFS="$CDEFS -DENABLE_MPISERVER"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_mpiServer"]
-			[NFI_MPISERVER="nfi_mpiserver"]
-			[NFI_MPISERVER_OBJECTS="\$(NFI_MPISERVER_OBJECTS)"]
+                  [CC="mpicc"]
+                  [CDEFS="$CDEFS -DENABLE_MPISERVER"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_mpiServer"]
+                  [NFI_MPISERVER="nfi_mpiserver"]
+                  [NFI_MPISERVER_OBJECTS="\$(NFI_MPISERVER_OBJECTS)"]
                 ]
 )
+AC_SUBST(CC)
 AC_SUBST(NFI_MPISERVER)
 AC_SUBST(NFI_MPISERVER_OBJECTS)
 AM_CONDITIONAL([ENABLE_MPISERVER], [test "$NFI_MPISERVER" = "nfi_mpiserver"])
@@ -370,14 +372,14 @@ AM_CONDITIONAL([ENABLE_MPISERVER], [test "$NFI_MPISERVER" = "nfi_mpiserver"])
 #
 # Defines the necessary variables if ioproxy-rpc is enabled.
 #
-AC_ARG_ENABLE(	[ioproxy-rpc],
-		[AS_HELP_STRING([--enable-ioproxy-rpc@<:@=/path/to/ioproxy-rpc/@:>@ (Don't use '~')],[Enable ioproxy-rpc module.])],
-		[
-			[CDEFS="$CDEFS -DENABLE_IOPROXY_RPC"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_ioproxy-rpc"]
-			[NFI_IOPROXY_RPC="nfi_ioproxy-rpc"]
-			[NFI_IOPROXY_RPC_OBJECTS="\$(NFI_IOPROXY_RPC_OBJECTS)"]
-		]
+AC_ARG_ENABLE(  [ioproxy-rpc],
+    [AS_HELP_STRING([--enable-ioproxy-rpc@<:@=/path/to/ioproxy-rpc/@:>@ (Don't use '~')],[Enable ioproxy-rpc module.])],
+    [
+      [CDEFS="$CDEFS -DENABLE_IOPROXY_RPC"]
+      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_ioproxy-rpc"]
+      [NFI_IOPROXY_RPC="nfi_ioproxy-rpc"]
+      [NFI_IOPROXY_RPC_OBJECTS="\$(NFI_IOPROXY_RPC_OBJECTS)"]
+    ]
 )
 AC_SUBST(NFI_IOPROXY_RPC)
 AC_SUBST(NFI_IOPROXY_RPC_OBJECTS)
@@ -388,17 +390,17 @@ AM_CONDITIONAL([ENABLE_IOPROXY_RPC], [test "$NFI_IOPROXY_RPC" = "nfi_ioproxy-rpc
 #
 # Defines the necessary variables if http is enabled.
 #
-AC_ARG_ENABLE(	[http],
-		[AS_HELP_STRING([--enable-http],[Enable http module.])],
-		[
-			[CDEFS="$CDEFS -DENABLE_HTTP"]
-			[INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_http"]
-			[LIBS="$LIBS -L\$(top_srcdir)/src/nfi/nfi_http/fusedav/src -lfusedav -lpthread -L\$(top_srcdir)/src/nfi/nfi_http/fusedav/libneon/src/.libs -lneon -lexpat -lgssapi_krb5 -lssl"]
-			[M_HEADERS="$M_HEADERS -I\$(top_srcdir)/src/nfi/nfi_http/fusedav/src -I\$(top_srcdir)/src/nfi/nfi_http/fusedav/libneon/src"]
-			[NFI_HTTP="nfi_http"]
-			[NFI_HTTP_OBJECTS="\$(NFI_HTTP_OBJECTS)"]
-			[FUSEDAV="src/nfi/nfi_http/fusedav"]
-		]
+AC_ARG_ENABLE(  [http],
+    [AS_HELP_STRING([--enable-http],[Enable http module.])],
+    [
+      [CDEFS="$CDEFS -DENABLE_HTTP"]
+      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_http"]
+      [LIBS="$LIBS -L\$(top_srcdir)/src/nfi/nfi_http/fusedav/src -lfusedav -lpthread -L\$(top_srcdir)/src/nfi/nfi_http/fusedav/libneon/src/.libs -lneon -lexpat -lgssapi_krb5 -lssl"]
+      [M_HEADERS="$M_HEADERS -I\$(top_srcdir)/src/nfi/nfi_http/fusedav/src -I\$(top_srcdir)/src/nfi/nfi_http/fusedav/libneon/src"]
+      [NFI_HTTP="nfi_http"]
+      [NFI_HTTP_OBJECTS="\$(NFI_HTTP_OBJECTS)"]
+      [FUSEDAV="src/nfi/nfi_http/fusedav"]
+    ]
 )
 AC_SUBST(NFI_HTTP)
 AC_SUBST(NFI_HTTP_OBJECTS)
@@ -406,20 +408,20 @@ AC_SUBST(FUSEDAV)
 AM_CONDITIONAL([ENABLE_HTTP], [test "$NFI_HTTP" = "nfi_http"])
 
 if test x$FUSEDAV != x; then
-	AC_CONFIG_SUBDIRS([$FUSEDAV])
+  AC_CONFIG_SUBDIRS([$FUSEDAV])
 fi
 
 ### END OF HTTP BLOCK. Do not remove this line. ###
 ### END OF AC_ARG_ENABLE BLOCK. Do not remove this line. ###
 
-AC_ARG_ENABLE(	[fuse],
+AC_ARG_ENABLE(  [fuse],
                 [AS_HELP_STRING([--enable-fuse@<:@=/path/to/fuse/@:>@ (Don't use '~')],[Enable FUSE module.])],
-		[FUSE="fuse"]
-		[case "${enableval}" in
-			yes) ;;
-			no) FUSE="" ;;
-			*) LIBFUSE_A="$enable_fuse/lib/libfuse.a" ;;
-		esac]
+                [FUSE="fuse"]
+                [case "${enableval}" in
+                  yes) ;;
+                  no) FUSE="" ;;
+                  *) LIBFUSE_A="$enable_fuse/lib/libfuse.a" ;;
+                esac]
 )
 AC_SUBST(FUSE)
 AC_SUBST(LIBFUSE_A)
@@ -437,11 +439,12 @@ AC_SUBST(M_HEADERS)
 # Initialize the test suite.
 AC_CONFIG_TESTDIR([test/autotest])
 AM_MISSING_PROG([AUTOM4TE], [autom4te])
-AC_ARG_WITH(	[ltp],
-		[AS_HELP_STRING([--with-ltp],
-			[Support for LTP testsuite @<:@default=20080731@:>@])],
-		[LTP_VERSION="$with_ltp"],
-		[LTP_VERSION=20080731])
+AC_ARG_WITH(  [ltp],
+              [AS_HELP_STRING([--with-ltp],
+              [Support for LTP testsuite @<:@default=20080731@:>@])],
+              [LTP_VERSION="$with_ltp"],
+              [LTP_VERSION=20080731]
+            )
 AC_SUBST(LTP_VERSION)
 AC_SUBST([LTP_PATH], ["\${abs_top_srcdir}/test/autotest/ltp-full-$LTP_VERSION"])
 AC_CONFIG_FILES([test/autotest/testsuite.at])

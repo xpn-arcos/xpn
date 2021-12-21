@@ -304,8 +304,8 @@
 	  dbgnfi_info("[NFI] nfi_mpiServer_init: begin\n");
 
 	  // check arguments...
-          NULL_RET_ERR(serv, MPISERVERERR_PARAM) ;
-          NULL_RET_ERR(attr, MPISERVERERR_PARAM) ;
+          //NULL_RET_ERR(serv, MPISERVERERR_PARAM) ;
+          //NULL_RET_ERR(attr, MPISERVERERR_PARAM) ;
 
 	  // new nfi_ops with mpiServer functions...
 	  serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops));
@@ -353,7 +353,8 @@
 
           // MPI Initialization
           ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: add server->argc, server->argv from upper layers...
-          if (MPI_SUCCESS != ret) {
+          printf("RET Thread: %d\n", ret);
+	  if (MPI_SUCCESS != ret) {
               debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
               free(serv->ops);
               free(server_aux);

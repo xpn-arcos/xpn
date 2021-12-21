@@ -120,15 +120,15 @@ am__can_run_installinfo = \
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/testsuite.at.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} /local_test/expand/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoconf
-AUTOHEADER = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoheader
-AUTOM4TE = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autom4te
-AUTOMAKE = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing automake-1.16
-AWK = gawk
-CC = gcc
+AUTOCONF = ${SHELL} /local_test/expand/config/missing autoconf
+AUTOHEADER = ${SHELL} /local_test/expand/config/missing autoheader
+AUTOM4TE = ${SHELL} /local_test/expand/config/missing autom4te
+AUTOMAKE = ${SHELL} /local_test/expand/config/missing automake-1.16
+AWK = mawk
+CC = mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
 CFLAGS = -fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra
@@ -140,11 +140,11 @@ DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
-EGREP = /usr/bin/grep -E
+EGREP = /bin/grep -E
 EXEEXT = 
 FUSE = 
 FUSEDAV = 
-GREP = /usr/bin/grep
+GREP = /bin/grep
 GSOAP_BIN_DIR = 
 GSOAP_IMPORT_DIR = 
 GSOAP_INCLUDE_DIR = 
@@ -163,8 +163,8 @@ LTLIBOBJS =
 LTP_PATH = ${abs_top_srcdir}/test/autotest/ltp-full-20080731
 LTP_VERSION = 20080731
 MAKE = make
-MAKEINFO = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing makeinfo
-MKDIR_P = /usr/bin/mkdir -p
+MAKEINFO = ${SHELL} /local_test/expand/config/missing makeinfo
+MKDIR_P = /bin/mkdir -p
 M_HEADERS = 
 NFI_FTP = 
 NFI_FTP_OBJECTS = 
@@ -189,7 +189,7 @@ NFI_XIO_OBJECTS =
 OBJEXT = o
 OS = __LINUX__
 PACKAGE = expand
-PACKAGE_BUGREPORT = xpn@arcos.inf.uc3m.es
+PACKAGE_BUGREPORT = fgcarbal@inf.uc3m.es
 PACKAGE_NAME = Expand
 PACKAGE_STRING = Expand 1.9.0
 PACKAGE_TARNAME = expand
@@ -202,10 +202,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 1.9.0
-abs_builddir = /home/acaldero/work/xpn-dcamarmas/test/autotest
-abs_srcdir = /home/acaldero/work/xpn-dcamarmas/test/autotest
-abs_top_builddir = /home/acaldero/work/xpn-dcamarmas
-abs_top_srcdir = /home/acaldero/work/xpn-dcamarmas
+abs_builddir = /local_test/expand/test/autotest
+abs_srcdir = /local_test/expand/test/autotest
+abs_top_builddir = /local_test/expand
+abs_top_srcdir = /local_test/expand
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -232,7 +232,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/install-sh
+install_sh = ${SHELL} /local_test/expand/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -488,7 +488,7 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 		echo 'm4_define([AT_PACKAGE_TARNAME],   [expand])' && \
 		echo 'm4_define([AT_PACKAGE_VERSION],   [1.9.0])' && \
 		echo 'm4_define([AT_PACKAGE_STRING],    [Expand 1.9.0])' && \
-		echo 'm4_define([AT_PACKAGE_BUGREPORT], [xpn@arcos.inf.uc3m.es])'; \
+		echo 'm4_define([AT_PACKAGE_BUGREPORT], [fgcarbal@inf.uc3m.es])'; \
 	} >'$(srcdir)/package.m4'
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
