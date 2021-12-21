@@ -7,7 +7,7 @@
 
 
 
-CC=gcc
+CC=mpicc
 FLAGS=-Wall -Wextra -fpic -DLINUX
 INCLUDE=-I/opt/xpn/include/
 XPN=/opt/xpn/lib/libxpn.a
