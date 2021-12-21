@@ -437,11 +437,11 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/local_test/expand'
+ac_pwd='/home/acaldero/work/xpn-dcamarmas'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
-MKDIR_P='/bin/mkdir -p'
-AWK='mawk'
+MKDIR_P='/usr/bin/mkdir -p'
+AWK='gawk'
 test -n "$AWK" || AWK=awk
 # The default lists apply if the user does not specify any file.
 ac_need_defaults=:
@@ -629,7 +629,7 @@ S["LTLIBOBJS"]=""
 S["LIBOBJS"]=""
 S["LTP_PATH"]="${abs_top_srcdir}/test/autotest/ltp-full-20080731"
 S["LTP_VERSION"]="20080731"
-S["AUTOM4TE"]="${SHELL} /local_test/expand/config/missing autom4te"
+S["AUTOM4TE"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autom4te"
 S["M_HEADERS"]=""
 S["LIBFUSE_A"]=""
 S["FUSE"]=""
@@ -685,8 +685,8 @@ S["CDEFS"]="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_X
 "SERVER -DENABLE_MPISERVER"
 S["MAKE"]="make"
 S["OS"]="__LINUX__"
-S["EGREP"]="/bin/grep -E"
-S["GREP"]="/bin/grep"
+S["EGREP"]="/usr/bin/grep -E"
+S["GREP"]="/usr/bin/grep"
 S["CPP"]="gcc -E"
 S["CCDEPMODE"]="depmode=gcc3"
 S["am__nodep"]="_no"
@@ -716,17 +716,17 @@ S["am__tar"]="$${TAR-tar} chof - \"$$tardir\""
 S["AMTAR"]="$${TAR-tar}"
 S["am__leading_dot"]="."
 S["SET_MAKE"]=""
-S["AWK"]="mawk"
+S["AWK"]="gawk"
 S["mkdir_p"]="$(MKDIR_P)"
-S["MKDIR_P"]="/bin/mkdir -p"
+S["MKDIR_P"]="/usr/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]=""
-S["install_sh"]="${SHELL} /local_test/expand/config/install-sh"
-S["MAKEINFO"]="${SHELL} /local_test/expand/config/missing makeinfo"
-S["AUTOHEADER"]="${SHELL} /local_test/expand/config/missing autoheader"
-S["AUTOMAKE"]="${SHELL} /local_test/expand/config/missing automake-1.16"
-S["AUTOCONF"]="${SHELL} /local_test/expand/config/missing autoconf"
-S["ACLOCAL"]="${SHELL} /local_test/expand/config/missing aclocal-1.16"
+S["install_sh"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/install-sh"
+S["MAKEINFO"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing makeinfo"
+S["AUTOHEADER"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoheader"
+S["AUTOMAKE"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing automake-1.16"
+S["AUTOCONF"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoconf"
+S["ACLOCAL"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing aclocal-1.16"
 S["VERSION"]="1.9.0"
 S["PACKAGE"]="expand"
 S["CYGPATH_W"]="echo"
