@@ -2,21 +2,23 @@
  mpiServer
  ---------
 
-## "#define" used:
-   * _LARGEFILE64_: add support for files large than 4GB
-   * DEBUG	: print debug messages
+## Compile:
+   * To compile mpiServer:
+```
+make clean; make
+```
 
 ## Execution:
 
-   * start MPICH hydra:
+   * To start MPICH hydra:
 ```
+HYDRA_HOSTNAME=$(hostname)
 hydra_nameserver &
 sleep 1
 ```
 
-   * start mpiServer:
+   * To start one mpiServer with 8 processes:
 ```
-mpirun -np <number of process> -nameserver <hydra host name> ./mpiServer.exe
-sleep 1
+mpirun -np 8 -nameserver ${HYDRA_HOSTNAME} ./mpiServer.exe
 ```
 

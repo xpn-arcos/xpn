@@ -35,7 +35,6 @@ int aux_clear_dirs(char *path)
 	char ant = '\0', s[255];
 
 	j=0;
-
 	for (unsigned i=0; i < strlen(path); i++)
 	{
 		switch(path[i])
@@ -98,7 +97,6 @@ int aux_get_dirs(char *path, int n, char *s)
 	return strlen(s);
 }
 
-
 int mpiServer_create_spacename ( mpiServer_param_st *params, char *path )
 {
 	int i;
@@ -137,131 +135,80 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 	}
 
 	debug_info("[OPS] (ID=%s) read_operation: %d ID=x\n", params->name,head->type);
-	switch(head->type){
-	case MPISERVER_OPEN_FILE:
-		debug_info("[OPS] (ID=%s) OPEN operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_open, sizeof(struct st_mpiServer_open));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_CREAT_FILE:
-		debug_info("[OPS] (ID=%s) CREAT operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_creat, sizeof(struct st_mpiServer_creat));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_READ_FILE:
-		debug_info("[OPS] (ID=%s) READ operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_read, sizeof(struct st_mpiServer_read));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_WRITE_FILE:
-		debug_info("[OPS] (ID=%s) WRITE operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_write, sizeof(struct st_mpiServer_write));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_CLOSE_FILE:
-		debug_info("[OPS] (ID=%s) CLOSE operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_close, sizeof(struct st_mpiServer_close));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_RM_FILE:
-		debug_info("[OPS] (ID=%s) RM operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_rm, sizeof(struct st_mpiServer_rm));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_GETATTR_FILE:
-		debug_info("[OPS] (ID=%s) GETATTR operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_getattr, sizeof(struct st_mpiServer_getattr));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_SETATTR_FILE:
-		debug_info("[OPS] (ID=%s) SETATTR operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_setattr, sizeof(struct st_mpiServer_setattr));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_MKDIR_DIR:
-		debug_info("[OPS] (ID=%s) MKDIR operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_mkdir, sizeof(struct st_mpiServer_mkdir));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_RMDIR_DIR:
-		debug_info("[OPS] (ID=%s) RMDIR operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_rmdir, sizeof(struct st_mpiServer_rmdir));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_FLUSH_FILE:
-		debug_info("[OPS] (ID=%s) FLUSH operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_flush, sizeof(struct st_mpiServer_flush));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-	case MPISERVER_PRELOAD_FILE:
-		debug_info("[OPS] (ID=%s) PRELOAD operation from ID=x\n", params->name);
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_preload, sizeof(struct st_mpiServer_preload));
-		if(ret == -1){
-			return -1;
-		}
-
-		break;
-        case MPISERVER_GETID:
-                debug_info("[OPS] (ID=%s) GETID operation from ID=x\n", params->name);
-/*
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->id, sizeof(MPISERVER_ID));
-		if(ret == -1){
-			return -1;
-		}
-*/
-                break;
-	case MPISERVER_FINALIZE:
-		debug_info("[OPS] (ID=%s) FINALIZE operation from ID=x\n", params->name);
-/*
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_end, sizeof(struct st_mpiServer_end));
-		if(ret == -1){
-			return -1;
-		}
-*/
-		break;
-	case MPISERVER_END:
-		debug_info("[OPS] (ID=%s) END operation from ID=x\n", params->name);
-/*
-		ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_end, sizeof(struct st_mpiServer_end));
-		if(ret == -1){
-			return -1;
-		}
-*/
-		break;
+	switch(head->type)
+	{
+		case MPISERVER_OPEN_FILE:
+			debug_info("[OPS] (ID=%s) OPEN operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_open, sizeof(struct st_mpiServer_open));
+			break;
+		case MPISERVER_CREAT_FILE:
+			debug_info("[OPS] (ID=%s) CREAT operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_creat, sizeof(struct st_mpiServer_creat));
+			break;
+		case MPISERVER_READ_FILE:
+			debug_info("[OPS] (ID=%s) READ operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_read, sizeof(struct st_mpiServer_read));
+			break;
+		case MPISERVER_WRITE_FILE:
+			debug_info("[OPS] (ID=%s) WRITE operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_write, sizeof(struct st_mpiServer_write));
+			break;
+		case MPISERVER_CLOSE_FILE:
+			debug_info("[OPS] (ID=%s) CLOSE operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_close, sizeof(struct st_mpiServer_close));
+			break;
+		case MPISERVER_RM_FILE:
+			debug_info("[OPS] (ID=%s) RM operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_rm, sizeof(struct st_mpiServer_rm));
+			break;
+		case MPISERVER_GETATTR_FILE:
+			debug_info("[OPS] (ID=%s) GETATTR operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_getattr, sizeof(struct st_mpiServer_getattr));
+			break;
+		case MPISERVER_SETATTR_FILE:
+			debug_info("[OPS] (ID=%s) SETATTR operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_setattr, sizeof(struct st_mpiServer_setattr));
+			break;
+		case MPISERVER_MKDIR_DIR:
+			debug_info("[OPS] (ID=%s) MKDIR operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_mkdir, sizeof(struct st_mpiServer_mkdir));
+			break;
+		case MPISERVER_RMDIR_DIR:
+			debug_info("[OPS] (ID=%s) RMDIR operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_rmdir, sizeof(struct st_mpiServer_rmdir));
+			break;
+		case MPISERVER_FLUSH_FILE:
+			debug_info("[OPS] (ID=%s) FLUSH operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_flush, sizeof(struct st_mpiServer_flush));
+			break;
+		case MPISERVER_PRELOAD_FILE:
+			debug_info("[OPS] (ID=%s) PRELOAD operation from ID=x\n", params->name);
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_preload, sizeof(struct st_mpiServer_preload));
+			break;
+		case MPISERVER_GETID:
+			debug_info("[OPS] (ID=%s) GETID operation from ID=x\n", params->name);
+	/*
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->id, sizeof(MPISERVER_ID));
+	*/
+			break;
+		case MPISERVER_FINALIZE:
+			debug_info("[OPS] (ID=%s) FINALIZE operation from ID=x\n", params->name);
+	/*
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_end, sizeof(struct st_mpiServer_end));
+	*/
+			break;
+		case MPISERVER_END:
+			debug_info("[OPS] (ID=%s) END operation from ID=x\n", params->name);
+	/*
+			ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_end, sizeof(struct st_mpiServer_end));
+	*/
+			break;
 	}
+
+	if (ret == -1) {
+	    return -1;
+	}
+
 	return head->type;
 }
 
@@ -271,18 +218,17 @@ void mpiServer_op_open ( mpiServer_param_st *params, int sd, struct st_mpiServer
 	int fd;
 	char s[255];
 
-	//sprintf(s,"%s", head->u_st_mpiServer_msg.op_open.path);
-	strcpy(s,head->u_st_mpiServer_msg.op_open.path);
+	// check params...
+	if (NULL == params) {
+	    return;
+	}
 
+	// do open
 	debug_info("[OPS]%s> begin open(%s) ID=x -> %d\n", params->name,s,fd);
-
+	strcpy(s,head->u_st_mpiServer_msg.op_open.path);
 	fd = open(s, O_RDWR);
-	//if(fd == -1){
-	//	mpiServer_create_spacename(params, s);
-	//}
-	debug_info("[OPS]%s> end open(%s) ID=x ->%d\n", params->name,s,fd);
 	mpiServer_comm_writedata(params, sd, (char *)&fd, sizeof(int));
-	debug_info("[OPS] (ID=%s) OPEN operation from ID=x\n", params->name);
+	debug_info("[OPS]%s> end open(%s) ID=x ->%d\n", params->name,s,fd);
 }
 
 void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -295,10 +241,9 @@ void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	    return;
 	}
 
-	strcpy(s,head->u_st_mpiServer_msg.op_creat.path);
-
+	// do creat
 	debug_info("[OPS] (ID=%s) begin creat(%s) ID=x ->\n", params->name,s);
-      //fd = open(s, O_CREAT | O_TRUNC | O_RDWR, 0666);
+	strcpy(s,head->u_st_mpiServer_msg.op_creat.path);
 	fd = open(s, O_CREAT | O_RDWR, 0777);
 	if (fd == -1)
 	{
@@ -306,7 +251,6 @@ void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServe
             //fd = open(s, O_CREAT | O_TRUNC | O_RDWR, 0666);
             fd = open(s, O_CREAT | O_RDWR, 0666);
 	}
-
 	mpiServer_comm_writedata(params, sd,(char *)&fd,sizeof(int)) ;
 	debug_info("[OPS] (ID=%s) end CREAT operation from ID=x ->%d\n", params->name,fd);
 }
@@ -326,10 +270,9 @@ void mpiServer_op_flush ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	    return ;
 	}
 
+	// do flush
 	debug_info("[OPS] (ID=%s) begin FLUSH(%s) ID=x ->\n", params->name, head->u_st_mpiServer_msg.op_flush.virtual_path);
-
 	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
-
 	debug_info("[OPS] (ID=%s) end FLUSH operation from ID=x\n", params->name);
 }
 
@@ -337,24 +280,23 @@ void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiSer
 {
 	int ret;
 
+	// check params...
+	if (NULL == params) {
+	    return ;
+	}
+
+	// do preload
 	debug_info("[OPS] (ID=%s) begin preload(%s,%s) ID=x\n", params->name,
 							  head->u_st_mpiServer_msg.op_preload.virtual_path,
 							  head->u_st_mpiServer_msg.op_preload.storage_path);
-	ret = 0;
-
 	ret = mpiServer_d2xpn(params,
 			      head->u_st_mpiServer_msg.op_preload.virtual_path,
                               head->u_st_mpiServer_msg.op_preload.storage_path) ;
-
-
+	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
 	debug_info("[OPS] (ID=%s) end preload(%s,%s) ID=x -> %d\n", params->name,
 							      head->u_st_mpiServer_msg.op_preload.virtual_path,
 							      head->u_st_mpiServer_msg.op_preload.storage_path,
 							      ret);
-
-	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
-
-	debug_info("[OPS] (ID=%s) end PRELOAD operation from ID=x\n", params->name);
 }
 
 void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -367,10 +309,9 @@ void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	    return ;
 	}
 
+	// do close
 	debug_info("[OPS] (ID=%s) begin close: fd %d ID=x\n", params->name, head->u_st_mpiServer_msg.op_close.fd);
-
 	close(head->u_st_mpiServer_msg.op_close.fd);
-
 	debug_info("[OPS] (ID=%s) end close: fd %d ID=x\n", params->name, head->u_st_mpiServer_msg.op_close.fd);
 }
 
@@ -386,11 +327,10 @@ void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_m
 	    return ;
 	}
 
+	// do rm
 	debug_info("[OPS] (ID=%s) begin RM: path %s ID=x\n", params->name, head->u_st_mpiServer_msg.op_rm.path);
-
 	strcpy(s, head->u_st_mpiServer_msg.op_rm.path);
 	unlink(s);
-
 	debug_info("[OPS] (ID=%s) end RM: path %s ID=x\n", params->name, head->u_st_mpiServer_msg.op_rm.path);
 }
 
@@ -556,12 +496,11 @@ void mpiServer_op_mkdir ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	char s[255];
 	int ret;
 
+	// do mkdir
 	debug_info("[OPS] (ID=%s) begin MKDIR operation from ID=x\n", params->name);
-
 	strcpy(s, head->u_st_mpiServer_msg.op_mkdir.path);
 	ret = mkdir(s, 0777);
 	mpiServer_comm_writedata(params, sd,(char *)&ret,sizeof(int));
-
 	debug_info("[OPS] (ID=%s) end MKDIR operation from ID=x\n", params->name);
 }
 
@@ -570,19 +509,16 @@ void mpiServer_op_rmdir ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	char s[255];
 	int ret;
 
+	// do rmdir
 	debug_info("[OPS] (ID=%s) begin RMDIR operation from ID=x\n", params->name);
-
 	strcpy(s, head->u_st_mpiServer_msg.op_rmdir.path);
 	ret = rmdir(s);
 	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
-
 	debug_info("[OPS] (ID=%s) end RMDIR operation from ID=x\n", params->name);
 }
 
 void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
-	debug_info("[OPS] (ID=%s) begin SETATTR operation from ID=x\n", params->name);
-
 	// check params...
 	if (NULL == params) {
 	    return ;
@@ -594,9 +530,9 @@ void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 	    return ;
 	}
 
-	// do request...
+	// do setattr
+	debug_info("[OPS] (ID=%s) begin SETATTR operation from ID=x\n", params->name);
 	debug_info("[OPS] SETATTR operation to be implemented !!\n");
-
 	debug_info("[OPS] (ID=%s) end   SETATTR operation from ID=x\n", params->name);
 }
 
@@ -605,21 +541,19 @@ void mpiServer_op_getattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 	char s[255];
 	struct st_mpiServer_attr_req req;
 
+	// do getattr
 	debug_info("[OPS] (ID=%s) begin GETATTR(%s) ID=xn", params->name, head->u_st_mpiServer_msg.op_getattr.path);
-
 	strcpy(s, head->u_st_mpiServer_msg.op_getattr.path);
 	req.status = stat(s, &req.attr);
 	mpiServer_comm_writedata(params, sd,(char *)&req,sizeof(struct st_mpiServer_attr_req));
-
 	debug_info("[OPS] (ID=%s) end GETATTR(%s) ID=xn", params->name, head->u_st_mpiServer_msg.op_getattr.path);
 }
 
 void mpiServer_op_getid ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
+	// do getid
         debug_info("[OPS] (ID=%s) begin GETID ID=x\n", params->name);
-
         mpiServer_comm_writedata(params, sd,(char *)head->id, MPISERVER_ID);
-
         debug_info("[OPS] (ID=%s) end GETID operation from ID=x\n", params->name);
 }
 
