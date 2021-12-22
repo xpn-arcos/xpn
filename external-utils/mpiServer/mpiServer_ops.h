@@ -163,23 +163,23 @@
     *  API
     */
 
-   char *  mpiServer_op2string      ( int op_code ) ;
-   int  mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   char *mpiServer_op2string      ( int op_code ) ;
+   int   mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
 
-   void mpiServer_op_open        ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_creat       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_close       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_rm          ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_read        ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_write       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_rmdir       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_mkdir       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_fstat       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_setattr     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_getattr     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_flush       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_preload     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_getid       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_open        ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_creat       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_close       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_rm          ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_read        ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_write       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_rmdir       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_mkdir       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_fstat       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_setattr     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_getattr     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_flush       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_preload     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_getid       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
 
 #endif
 
