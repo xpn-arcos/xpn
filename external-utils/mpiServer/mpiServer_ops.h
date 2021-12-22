@@ -163,7 +163,9 @@
     *  API
     */
 
+   int  mpiServer_op2string      ( int op_code ) ;
    int  mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+
    void mpiServer_op_open        ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
    void mpiServer_op_creat       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
    void mpiServer_op_close       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;

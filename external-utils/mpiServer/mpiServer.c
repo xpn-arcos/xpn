@@ -50,13 +50,20 @@
         int op;
         struct st_mpiServer_msg head;
       
+	// check params...
+	if (NULL == th.params) {
+	    debug_warning("[WORKERS] (ID=%d): NULL params", th.id) ;
+	    return;
+	}
+
+	// loop for client requests...
         do {
 		head.type = MPISERVER_END;
 
-		debug_info("[WORKERS] (ID=%d) mpiServer_read_operation begin...\n", th.id);
+		debug_info("[WORKERS] (ID=%d): mpiServer_read_operation and arguments...\n", th.id);
 		op = mpiServer_read_operation(th.params, th.sd, &head);
 			
-		debug_info("[WORKERS] (ID=%d) mpiServer_op_<%d> begins\n", th.id, op);
+		debug_info("[WORKERS] (ID=%d): begin to do operation '%s'\n", th.id, op, mpiServer_op2string(op));
 		switch(op)
 		{
 			case MPISERVER_OPEN_FILE:
@@ -105,7 +112,7 @@
 				op = MPISERVER_END;
 				break;
 		}
-		debug_info("[WORKERS] (ID=%d) mpiServer_op_<%d> ends\n", th.id, op);
+		debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, op, mpiServer_op2string(op));
 				
         } while(op != MPISERVER_END);
       
