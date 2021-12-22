@@ -115,7 +115,7 @@ int mpiServer_create_spacename ( mpiServer_param_st *params, char *path )
 	return 0;
 }
 
-int mpiServer_op2string ( int op_code )
+char *mpiServer_op2string ( int op_code )
 {
 	char *ret = "Unknown" ;
 
@@ -253,7 +253,7 @@ void mpiServer_op_open ( mpiServer_param_st *params, int sd, struct st_mpiServer
 	char s[255];
 
 	// do open
-	strcpy(s,head->u_st_mpiServer_msg.op_open.path);
+	strcpy(s, head->u_st_mpiServer_msg.op_open.path);
 	fd = open(s, O_RDWR);
 	mpiServer_comm_writedata(params, sd, (char *)&fd, sizeof(int));
 
@@ -267,7 +267,7 @@ void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	char s[255];
 
 	// do creat
-	strcpy(s,head->u_st_mpiServer_msg.op_creat.path);
+	strcpy(s, head->u_st_mpiServer_msg.op_creat.path);
 	fd = open(s, O_CREAT | O_RDWR, 0777);
 	if (fd == -1)
 	{
@@ -284,6 +284,7 @@ void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServe
 void mpiServer_op_flush ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
 	int ret = 0;
+	char s[255];
 
 	// check params...
 	if (sd < 0) {
@@ -291,7 +292,8 @@ void mpiServer_op_flush ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	}
 
 	// do flush
-	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
+	strcpy(s, head->u_st_mpiServer_msg.op_flush.virtual_path) ;
+	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int)) ;
 
 	// show debug info
 	debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->name, head->u_st_mpiServer_msg.op_flush.virtual_path);
@@ -317,6 +319,9 @@ void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiSer
 void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
 	// check params...
+	if (NULL == params) {
+	    return ;
+	}
 	if (sd < 0) {
 	    return ;
 	}
@@ -333,6 +338,9 @@ void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_m
 	char s[255];
 
 	// check params...
+	if (NULL == params) {
+	    return ;
+	}
 	if (sd < 0) {
 	    return ;
 	}
@@ -534,6 +542,12 @@ void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 {
 	// check params...
 	if (sd < 0) {
+	    return ;
+	}
+	if (NULL == params) {
+	    return ;
+	}
+	if (NULL == head) {
 	    return ;
 	}
 
