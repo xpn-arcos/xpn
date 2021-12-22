@@ -243,21 +243,21 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 }
 
 
+// TODO:
+// mpiServer_op_open:
+// * why in all cases message path is copied into a local "char s[256]" variable? 
+// * any checks about string overwrite in the strcpy?
 void mpiServer_op_open ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
 	int fd;
 	char s[255];
-
-	// check params...
-	if (NULL == params) {
-	    return;
-	}
 
 	// do open
 	strcpy(s,head->u_st_mpiServer_msg.op_open.path);
 	fd = open(s, O_RDWR);
 	mpiServer_comm_writedata(params, sd, (char *)&fd, sizeof(int));
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) OPEN(%s)=%d\n", params->name, s, fd);
 }
 
@@ -265,11 +265,6 @@ void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServe
 {
 	int fd;
 	char s[255];
-
-	// check params...
-	if (NULL == params) {
-	    return;
-	}
 
 	// do creat
 	strcpy(s,head->u_st_mpiServer_msg.op_creat.path);
@@ -282,6 +277,7 @@ void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	}
 	mpiServer_comm_writedata(params, sd,(char *)&fd,sizeof(int)) ;
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) CREAT(%s)=%d\n", params->name, s, fd);
 }
 
@@ -290,19 +286,14 @@ void mpiServer_op_flush ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	int ret = 0;
 
 	// check params...
-	if (NULL == params) {
-	    return ;
-	}
 	if (sd < 0) {
-	    return ;
-	}
-	if (NULL == head) {
 	    return ;
 	}
 
 	// do flush
 	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->name, head->u_st_mpiServer_msg.op_flush.virtual_path);
 }
 
@@ -310,17 +301,13 @@ void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiSer
 {
 	int ret;
 
-	// check params...
-	if (NULL == params) {
-	    return ;
-	}
-
 	// do preload
 	ret = mpiServer_d2xpn(params,
 			      head->u_st_mpiServer_msg.op_preload.virtual_path,
                               head->u_st_mpiServer_msg.op_preload.storage_path) ;
 	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n", params->name,
 							            head->u_st_mpiServer_msg.op_preload.virtual_path,
 							            head->u_st_mpiServer_msg.op_preload.storage_path,
@@ -330,9 +317,6 @@ void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiSer
 void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
 	// check params...
-	if (NULL == params) {
-	    return ;
-	}
 	if (sd < 0) {
 	    return ;
 	}
@@ -340,6 +324,7 @@ void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	// do close
 	close(head->u_st_mpiServer_msg.op_close.fd);
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) CLOSE(fd=%d)\n", params->name, head->u_st_mpiServer_msg.op_close.fd);
 }
 
@@ -348,9 +333,6 @@ void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_m
 	char s[255];
 
 	// check params...
-	if (NULL == params) {
-	    return ;
-	}
 	if (sd < 0) {
 	    return ;
 	}
@@ -359,6 +341,7 @@ void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_m
 	strcpy(s, head->u_st_mpiServer_msg.op_rm.path);
 	unlink(s);
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) RM(path=%s)\n", params->name, head->u_st_mpiServer_msg.op_rm.path);
 }
 
@@ -529,13 +512,12 @@ void mpiServer_op_mkdir ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	ret = mkdir(s, 0777);
 	mpiServer_comm_writedata(params, sd,(char *)&ret,sizeof(int));
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) MKDIR(%s)\n", params->name, s);
 }
 
 void mpiServer_op_rmdir ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
-	// TODO: why in all cases message path is copied into a local "char s[256]" variable? 
-	// TODO: any checks about string overwrite?
 	char s[255];
 	int ret;
 
@@ -544,25 +526,21 @@ void mpiServer_op_rmdir ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	ret = rmdir(s);
 	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) RMDIR(%s) \n", params->name, s);
 }
 
 void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
 	// check params...
-	if (NULL == params) {
-	    return ;
-	}
 	if (sd < 0) {
-	    return ;
-	}
-	if (NULL == head) {
 	    return ;
 	}
 
 	// do setattr
 	debug_info("[OPS] SETATTR operation to be implemented !!\n");
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) SETATTR(...)\n", params->name);
 }
 
@@ -576,6 +554,7 @@ void mpiServer_op_getattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 	req.status = stat(s, &req.attr);
 	mpiServer_comm_writedata(params, sd,(char *)&req,sizeof(struct st_mpiServer_attr_req));
 
+	// show debug info
 	debug_info("[OPS] (ID=%s) GETATTR(%s)\n", params->name, head->u_st_mpiServer_msg.op_getattr.path);
 }
 
@@ -584,6 +563,7 @@ void mpiServer_op_getid ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	// do getid
         mpiServer_comm_writedata(params, sd,(char *)head->id, MPISERVER_ID);
 
+	// show debug info
         debug_info("[OPS] (ID=%s) GETID(...)\n", params->name);
 }
 
