@@ -63,7 +63,7 @@
 		debug_info("[WORKERS] (ID=%d): mpiServer_read_operation and arguments...\n", th.id);
 		op = mpiServer_read_operation(th.params, th.sd, &head);
 			
-		debug_info("[WORKERS] (ID=%d): begin to do operation '%s'\n", th.id, op, mpiServer_op2string(op));
+		debug_info("[WORKERS] (ID=%d): begin to do operation '%s'\n", th.id, mpiServer_op2string(op));
 		switch(op)
 		{
 			case MPISERVER_OPEN_FILE:
@@ -112,7 +112,7 @@
 				op = MPISERVER_END;
 				break;
 		}
-		debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, op, mpiServer_op2string(op));
+		debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(op));
 				
         } while(op != MPISERVER_END);
       
