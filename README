@@ -89,8 +89,14 @@ make
 (optional) make check
 (optional) make install
 
+2. Execution
+--------------------
 
-2. Source structure
+	- mpiServer
+	  mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} -genv LD_PRELOAD=<bypass path> ./<program path>
+
+
+3. Source structure
 --------------------
 
 Expand 2.0 sources has four main levels:
