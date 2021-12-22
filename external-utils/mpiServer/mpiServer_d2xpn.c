@@ -141,25 +141,25 @@
             	    return(-1);	  
            }
             
-           debug_info("d2xpn(%d): xpn_stat(%s)\n", private_id, origen);
+           debug_info("d2xpn(%d): xpn_stat(%s)\n", params->rank, origen);
              
            ret = stat(new_path, &st);
-           debug_info("d2xpn(%d): stat(%s) = %d\n", private_id, new_path, ret);
+           debug_info("d2xpn(%d): stat(%s) = %d\n", params->rank, new_path, ret);
            if (0 ==  ret)
            {
-            	    debug_info("d2xpn(%d): %s (%s) is stored in cache\n", private_id, destino, origen);
+            	    debug_info("d2xpn(%d): %s (%s) is stored in cache\n", params->rank, destino, origen);
             	    myunlock(fd_lock);
             	    return(0);	    
            }
             
-           debug_info("d2xpn(%d): xpn_init()\n",private_id);
+           debug_info("d2xpn(%d): xpn_init()\n",params->rank);
            if ((fd=xpn_init())<0){
                    myunlock(fd_lock);
                    printf("Error in init %d\n",fd);
                    return(-1);
            }
             
-           debug_info("d2xpn(%d): open(%s, O_RDONLY)\n",private_id, destino);
+           debug_info("d2xpn(%d): open(%s, O_RDONLY)\n",params->rank, destino);
            fd=open(destino,O_RDONLY);
            if (fd<0){
                   myunlock(fd_lock);
@@ -168,9 +168,9 @@
                   return(-1);
            }  
               
-           debug_info("d2xpn(%d): begin xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777)\n",private_id, origen);
+           debug_info("d2xpn(%d): begin xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777)\n",params->rank, origen);
            fdp = xpn_open(origen,O_CREAT|O_TRUNC|O_WRONLY, 0777); 
-           debug_info("d2xpn(%d): end xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777) = %d\n",private_id, origen, fdp);
+           debug_info("d2xpn(%d): end xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777) = %d\n",params->rank, origen, fdp);
            if (fdp<0){
                   myunlock(fd_lock);
                   //xpn_destroy();	  
@@ -181,16 +181,16 @@
            global_transfer_buffer = malloc(sizeof(char)*(params->IOsize * KB));
            sum = 0;
            do {
-      		debug_info("d2xpn(%d): before read(%d,%d)\n", private_id, params->IOsize * KB, sum);
+      		debug_info("d2xpn(%d): before read(%d,%d)\n", params->rank, params->IOsize * KB, sum);
       		sp = read(fd,global_transfer_buffer,params->IOsize * KB);
-      		debug_info("d2xpn(%d): desp. read(%d,%d)\n", private_id, sp, sum);
+      		debug_info("d2xpn(%d): desp. read(%d,%d)\n", params->rank, sp, sum);
       		if (s == -1) {
       		    break;
       		}
       	      
-      		debug_info("d2xpn(%d): antes write(%d,%d)\n", private_id, sp , sum);
+      		debug_info("d2xpn(%d): antes write(%d,%d)\n", params->rank, sp , sum);
       		s = xpn_write(fdp, global_transfer_buffer, sp);
-      		debug_info("d2xpn(%d): desp write(%d,%d)\n", private_id, s, sum);
+      		debug_info("d2xpn(%d): desp write(%d,%d)\n", params->rank, s, sum);
       	      
       		sum = sum + sp;
       	      
@@ -198,17 +198,17 @@
            } while ((s==(params->IOsize * KB))&&(sp >= 0));
            free(global_transfer_buffer);
             
-           debug_info("d2xpn(%d): (%s,%d)\n", private_id, origen, sum);
+           debug_info("d2xpn(%d): (%s,%d)\n", params->rank, origen, sum);
             
-           debug_info("d2xpn(%d): close()\n",private_id);
+           debug_info("d2xpn(%d): close()\n",params->rank);
            close(fd);
             
-           debug_info("d2xpn(%d): xpn_close()\n",private_id);
+           debug_info("d2xpn(%d): xpn_close()\n",params->rank);
            xpn_close(fdp);
             
-           debug_info("d2xpn(%d): move %s -> %s\n", private_id, destino, origen);
+           debug_info("d2xpn(%d): move %s -> %s\n", params->rank, destino, origen);
            myunlock(fd_lock);
-           debug_info("d2xpn(%d): xpn_destroy()\n", private_id);
+           debug_info("d2xpn(%d): xpn_destroy()\n", params->rank);
             
            gettimeofday(&t2, NULL);
            transfer_time = (t2.tv_sec + t2.tv_usec/1000000.0) - (t1.tv_sec + t1.tv_usec/1000000.0);

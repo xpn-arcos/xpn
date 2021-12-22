@@ -351,16 +351,22 @@
 	  }
 	  serv->private_info = (void *)server_aux;
 
-          // MPI Initialization
-          ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: add server->argc, server->argv from upper layers...
-          printf("RET Thread: %d\n", ret);
-	  if (MPI_SUCCESS != ret) {
-              debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
-              free(serv->ops);
-              free(server_aux);
-              return -1 ;
-          }
-      
+			    int flag = 0;
+			    MPI_Initialized(&flag);
+			    if (!flag)
+			    {
+			    	printf("Client[%d]: Dentro\n");
+	          // MPI Initialization
+	          ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: add server->argc, server->argv from upper layers...
+	          printf("RET Thread: %d\n", ret);
+		 				if (MPI_SUCCESS != ret) {
+	              debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
+	              free(serv->ops);
+	              free(server_aux);
+	              return -1 ;
+	          }
+	      	}
+
           ret = MPI_Comm_rank(MPI_COMM_WORLD, &(server_aux->rank)) ;
           if (MPI_SUCCESS != ret) {
               debug_error("Server[%d]: MPI_Comm_rank fails :-(", server_aux->rank) ;
@@ -377,7 +383,8 @@
               return -1 ;
           }
 
-	  // Lookup port name
+          printf("Client[%d]: Aqui 1\n");
+	  			// Lookup port name
           sprintf(srv_name, "mpiServer.%d", server_aux->rank) ;
           ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, server_aux->port_name) ;
           if (MPI_SUCCESS != ret) {
@@ -387,6 +394,7 @@
               return -1 ;
           }
 
+          printf("Client[%d]: Aqui 2 %s\n", server_aux->port_name);
           // Connect...
           ret = MPI_Comm_connect(server_aux->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(server_aux->server)) ;
           if (MPI_SUCCESS != ret) {
@@ -395,6 +403,8 @@
               free(server_aux);
               return -1 ;
           }
+
+          printf("Aqui 3\n");
       
 	  server_aux->sd = (int)server_aux->server ;
 
@@ -437,7 +447,7 @@
 	  //serv->protocol = MPISERVER;
 
 	  dbgnfi_info("[NFI] nfi_mpiServer_init(ID=%s): end\n",server_aux->id);
-
+	   printf("Client[%d]: Aqui 4\n");
 	  // return OK
 	  return 0;
       }
@@ -539,10 +549,16 @@
           }
 
           // MPI Finalize...
-          ret = MPI_Finalize() ;
-          if (MPI_SUCCESS != ret) {
-              debug_error("Client[%d]: MPI_Finalize fails :-(", server_aux->rank) ;
-          }
+          int flag = 0;
+          MPI_Initialized(&flag);
+			    if (flag)
+			    {
+			    	ret =MPI_Finalize();
+			    	if (MPI_SUCCESS != ret) {
+	            debug_error("Client[%d]: MPI_Finalize fails :-(", server_aux->rank) ;
+	          }
+			    }
+          
 
 	  // end workers...
 	  nfi_worker_end(serv->wrk);

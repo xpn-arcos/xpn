@@ -107,7 +107,7 @@ int mpiServer_create_spacename ( mpiServer_param_st *params, char *path )
 	    return -1;
 	}
 
-	debug_info("[OPS] (ID=%s) mpiServer_create_spacename: %s\n", params->name, path);
+	debug_info("[OPS] (ID=%s) mpiServer_create_spacename: %s\n", params->srv_name, path);
 	for(i=0; 0 != aux_get_dirs(path, i, dir);i++){
 		mkdir(dir, 0777);
 	}
@@ -115,7 +115,7 @@ int mpiServer_create_spacename ( mpiServer_param_st *params, char *path )
 	return 0;
 }
 
-int mpiServer_op2string ( int op_code )
+char * mpiServer_op2string ( int op_code )
 {
 	char *ret = "Unknown" ;
 
@@ -176,7 +176,7 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 {
 	int ret;
 
-	debug_info("[OPS] (ID=%s) antes de read_operation: sizeof(struct st_mpiServer_msg) = %d.\n ", params->name, sizeof(struct st_mpiServer_msg));
+	debug_info("[OPS] (ID=%s) antes de read_operation: sizeof(struct st_mpiServer_msg) = %d.\n ", params->srv_name, sizeof(struct st_mpiServer_msg));
 
 	ret = mpiServer_comm_readdata(params, sd, (char *)&head->type, sizeof(head->type));
 	if (ret == -1) {
@@ -184,7 +184,7 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 	    return -1;
 	}
 
-	debug_info("[OPS] (ID=%s) begin to read operation (%s) arguments\n", params->name, mpiServer_op2string(head->type));
+	debug_info("[OPS] (ID=%s) begin to read operation (%s) arguments\n", params->srv_name, mpiServer_op2string(head->type));
 	switch(head->type)
 	{
 		case MPISERVER_OPEN_FILE:
@@ -233,7 +233,7 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 			// ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_end, sizeof(struct st_mpiServer_end));
 			break;
 	}
-	debug_info("[OPS] (ID=%s) end to read operation (%s) arguments\n", params->name, mpiServer_op2string(head->type));
+	debug_info("[OPS] (ID=%s) end to read operation (%s) arguments\n", params->srv_name, mpiServer_op2string(head->type));
 
 	// Return
 	if (ret == -1) {
@@ -258,7 +258,7 @@ void mpiServer_op_open ( mpiServer_param_st *params, int sd, struct st_mpiServer
 	mpiServer_comm_writedata(params, sd, (char *)&fd, sizeof(int));
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) OPEN(%s)=%d\n", params->name, s, fd);
+	debug_info("[OPS] (ID=%s) OPEN(%s)=%d\n", params->srv_name, s, fd);
 }
 
 void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -278,7 +278,7 @@ void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	mpiServer_comm_writedata(params, sd,(char *)&fd,sizeof(int)) ;
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) CREAT(%s)=%d\n", params->name, s, fd);
+	debug_info("[OPS] (ID=%s) CREAT(%s)=%d\n", params->srv_name, s, fd);
 }
 
 void mpiServer_op_flush ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -294,7 +294,7 @@ void mpiServer_op_flush ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->name, head->u_st_mpiServer_msg.op_flush.virtual_path);
+	debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_flush.virtual_path);
 }
 
 void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -308,7 +308,7 @@ void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiSer
 	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n", params->name,
+	debug_info("[OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n", params->srv_name,
 							            head->u_st_mpiServer_msg.op_preload.virtual_path,
 							            head->u_st_mpiServer_msg.op_preload.storage_path,
 							            ret);
@@ -325,7 +325,7 @@ void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	close(head->u_st_mpiServer_msg.op_close.fd);
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) CLOSE(fd=%d)\n", params->name, head->u_st_mpiServer_msg.op_close.fd);
+	debug_info("[OPS] (ID=%s) CLOSE(fd=%d)\n", params->srv_name, head->u_st_mpiServer_msg.op_close.fd);
 }
 
 void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -342,7 +342,7 @@ void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_m
 	unlink(s);
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) RM(path=%s)\n", params->name, head->u_st_mpiServer_msg.op_rm.path);
+	debug_info("[OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_rm.path);
 }
 
 void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -355,15 +355,15 @@ void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer
 #ifndef _MALLOC_
 	char buffer[MAX_BUFFER_SIZE];
 	SIZE = MAX_BUFFER_SIZE;
-	debug_info("[OPS] (ID=%s) op_read: static buffer (%d) ID=x\n", params->name,MAX_BUFFER_SIZE);
+	debug_info("[OPS] (ID=%s) op_read: static buffer (%d) ID=x\n", params->srv_name,MAX_BUFFER_SIZE);
 #else
 	char *buffer;
 	SIZE = 0;
-	debug_info("[OPS] (ID=%s) op_read: variable buffer (%d) ID=x\n", params->name,MAX_BUFFER_SIZE);
+	debug_info("[OPS] (ID=%s) op_read: variable buffer (%d) ID=x\n", params->srv_name,MAX_BUFFER_SIZE);
 #endif
 
 	//
-	debug_info("[OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n", params->name,
+	debug_info("[OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n", params->srv_name,
 						head->u_st_mpiServer_msg.op_read.fd,
 						(int)head->u_st_mpiServer_msg.op_read.offset,
 						head->u_st_mpiServer_msg.op_read.size);
@@ -372,8 +372,8 @@ void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer
 	SIZE = head->u_st_mpiServer_msg.op_read.size;
 	buffer = (char *)malloc(SIZE);
 	//buffer = (char *)malloc(MAX_BUFFER_SIZE);
-	//debug_info("[OPS] (ID=%s) op_read: malloc(%d) ID=x\n", params->name,MAX_BUFFER_SIZE);
-	debug_info("[OPS] (ID=%s) op_read: malloc(%d) ID=x\n", params->name,SIZE);
+	//debug_info("[OPS] (ID=%s) op_read: malloc(%d) ID=x\n", params->srv_name,MAX_BUFFER_SIZE);
+	debug_info("[OPS] (ID=%s) op_read: malloc(%d) ID=x\n", params->srv_name,SIZE);
 #endif
 	//t1 = MPI_Wtime();
 	do{
@@ -382,7 +382,7 @@ void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer
 				head->u_st_mpiServer_msg.op_read.offset+cont,
 				0);
 #else
-	        debug_info("[OPS] (ID=%s) lseek: fd %d offset %d size %d ID=x\n", params->name,
+	        debug_info("[OPS] (ID=%s) lseek: fd %d offset %d size %d ID=x\n", params->srv_name,
 						head->u_st_mpiServer_msg.op_read.fd,
 						(int)head->u_st_mpiServer_msg.op_read.offset+cont,
 						head->u_st_mpiServer_msg.op_read.size);
@@ -411,27 +411,27 @@ void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer
 			req.last = 0;
 		}
 		mpiServer_comm_writedata(params, sd, (char *)&req, sizeof(struct st_mpiServer_read_req));
-		debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->name, req.size);
+		debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size);
 
 		if(req.size > 0){
 			mpiServer_comm_writedata(params, sd, (char *)buffer, req.size);
-			debug_info("[OPS] (ID=%s) op_read: send data\n", params->name);
+			debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name);
 		}else{
 			break;
 		}
 	}while((size >0)&&(!req.last));
 
-        debug_info("[OPS] (ID=%s) end read: fd %d offset %d size %d ID=x\n", params->name,
+        debug_info("[OPS] (ID=%s) end read: fd %d offset %d size %d ID=x\n", params->srv_name,
                                                                        head->u_st_mpiServer_msg.op_read.fd,
                                                                        (int)head->u_st_mpiServer_msg.op_read.offset,
                                                                        size);
 
-	debug_info("[OPS] (ID=%s) op_read: new_size %d\n", params->name,size);
+	debug_info("[OPS] (ID=%s) op_read: new_size %d\n", params->srv_name,size);
 #ifdef _MALLOC_
-	debug_info("[OPS] (ID=%s) op_read: free ID=x\n", params->name);
+	debug_info("[OPS] (ID=%s) op_read: free ID=x\n", params->srv_name);
 	free(buffer);
 #endif
-        debug_info("[OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n", params->name,
+        debug_info("[OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n", params->srv_name,
                                                 head->u_st_mpiServer_msg.op_read.fd,
                                                 (int)head->u_st_mpiServer_msg.op_read.offset,
                                                 size);
@@ -450,7 +450,7 @@ void mpiServer_op_write ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	int SIZE = 0;
 #endif
 
-	debug_info("[OPS] (ID=%s) begin write: fd %d ID=xn", params->name, head->u_st_mpiServer_msg.op_write.fd);
+	debug_info("[OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_mpiServer_msg.op_write.fd);
 
 #ifdef _MALLOC_
 	SIZE = head->u_st_mpiServer_msg.op_write.size;
@@ -497,9 +497,9 @@ void mpiServer_op_write ( mpiServer_param_st *params, int sd, struct st_mpiServe
 		free(buffer);
 	#endif
 
-	debug_info("[OPS] (ID=%s) op_write on fd %d with %d bytes", params->name, head->u_st_mpiServer_msg.op_write.fd, req.size);
+	debug_info("[OPS] (ID=%s) op_write on fd %d with %d bytes", params->srv_name, head->u_st_mpiServer_msg.op_write.fd, req.size);
 
-	debug_info("[OPS] (ID=%s) end write: fd %d ID=xn", params->name, head->u_st_mpiServer_msg.op_write.fd);
+	debug_info("[OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_mpiServer_msg.op_write.fd);
 }
 
 void mpiServer_op_mkdir ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -513,7 +513,7 @@ void mpiServer_op_mkdir ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	mpiServer_comm_writedata(params, sd,(char *)&ret,sizeof(int));
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) MKDIR(%s)\n", params->name, s);
+	debug_info("[OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, s);
 }
 
 void mpiServer_op_rmdir ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -527,7 +527,7 @@ void mpiServer_op_rmdir ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) RMDIR(%s) \n", params->name, s);
+	debug_info("[OPS] (ID=%s) RMDIR(%s) \n", params->srv_name, s);
 }
 
 void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -537,11 +537,15 @@ void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 	    return ;
 	}
 
+	if (NULL == head) {
+	    return ;
+	}
+
 	// do setattr
 	debug_info("[OPS] SETATTR operation to be implemented !!\n");
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) SETATTR(...)\n", params->name);
+	debug_info("[OPS] (ID=%s) SETATTR(...)\n", params->srv_name);
 }
 
 void mpiServer_op_getattr ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -555,7 +559,7 @@ void mpiServer_op_getattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 	mpiServer_comm_writedata(params, sd,(char *)&req,sizeof(struct st_mpiServer_attr_req));
 
 	// show debug info
-	debug_info("[OPS] (ID=%s) GETATTR(%s)\n", params->name, head->u_st_mpiServer_msg.op_getattr.path);
+	debug_info("[OPS] (ID=%s) GETATTR(%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_getattr.path);
 }
 
 void mpiServer_op_getid ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
@@ -564,7 +568,7 @@ void mpiServer_op_getid ( mpiServer_param_st *params, int sd, struct st_mpiServe
         mpiServer_comm_writedata(params, sd,(char *)head->id, MPISERVER_ID);
 
 	// show debug info
-        debug_info("[OPS] (ID=%s) GETID(...)\n", params->name);
+        debug_info("[OPS] (ID=%s) GETID(...)\n", params->srv_name);
 }
 
    /* ................................................................... */
