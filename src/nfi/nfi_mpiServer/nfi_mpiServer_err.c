@@ -3,8 +3,10 @@
 extern int errno;
 
 /* this interface must be changed */
-void mpiServer_err(int err){
-	switch(err){
+void mpiServer_err(int err)
+{
+	switch(err)
+	{
 		case MPISERVERERR_PARAM:
 			errno = -1;
 			break;
@@ -33,4 +35,5 @@ void mpiServer_err(int err){
 			errno = -1;
 			break;
 	}
-};
+}
+
