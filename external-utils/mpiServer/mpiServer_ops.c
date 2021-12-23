@@ -363,9 +363,7 @@ void op_read_buffer ( mpiServer_param_st *params, int read_fd2, void *buffer, in
      while (read_remaining_bytes > 0)
      {
 	 /* Read from local file... */
-	 if (read_fd2 != -1) {
-             read_num_bytes = read(read_fd2, read_buffer, read_remaining_bytes) ;
-	 }
+         read_num_bytes = read(read_fd2, read_buffer, read_remaining_bytes) ;
 
 	 /* Check errors */
          if (read_num_bytes == -1) {
@@ -389,6 +387,30 @@ void op_read_buffer ( mpiServer_param_st *params, int read_fd2, void *buffer, in
      return buffer_size ;
 }
 
+void op_write_buffer ( mpiServer_param_st *params, int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
+{
+     ssize_t write_num_bytes       = -1 ;
+     ssize_t write_remaining_bytes = num_readed_bytes ;
+     void   *write_buffer          = buffer ;
+
+     while (write_remaining_bytes > 0)
+     {
+	 /* Write into local file (write_fd2)... */
+         write_num_bytes = write(write_fd2, write_buffer, write_remaining_bytes) ;
+
+	 /* Check errors */
+         if (write_num_bytes == -1) {
+	     debug_error("ERROR[%s]:\t write fails to write data.\n", params->srv_name) ;
+	     return -1 ;
+         }
+
+         write_remaining_bytes -= write_num_bytes ;
+         write_buffer          += write_num_bytes ;
+     }
+
+     return num_readed_bytes ;
+}
+
 void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
 	long size_req, size = 0, cont = 0;
@@ -406,11 +428,8 @@ void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer
 	SIZE = MAX_BUFFER_SIZE;
 	do
 	{
-#ifdef _LARGEFILE64_
-		lseek64(head->u_st_mpiServer_msg.op_read.fd, head->u_st_mpiServer_msg.op_read.offset+cont, 0);
-#else
-		lseek(head->u_st_mpiServer_msg.op_read.fd, head->u_st_mpiServer_msg.op_read.offset+cont, 0);
-#endif
+		LSEEK(head->u_st_mpiServer_msg.op_read.fd, head->u_st_mpiServer_msg.op_read.offset+cont, 0);
+
 		size_req = (head->u_st_mpiServer_msg.op_read.size - cont);
 		if (size_req > SIZE) {
 		    size_req = SIZE;
@@ -458,21 +477,17 @@ void mpiServer_op_write ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	do
 	{
 		size = (head->u_st_mpiServer_msg.op_write.size - cont);
-		if (size>SIZE) {
-			size= SIZE;
+		if (size > SIZE) {
+		    size= SIZE;
 		}
-
-		if (size == 0)
-			break;
+		if (size == 0) {
+		    break;
+		}
 
 		mpiServer_comm_readdata(params, sd,(char *)buffer, size);
 
-#ifdef _LARGEFILE64_
-		lseek64(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset+cont, 0);
-#else
-		lseek(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset+cont, 0);
-#endif
-		req.size = write(head->u_st_mpiServer_msg.op_write.fd, buffer, size);
+		LSEEK(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset+cont, 0);
+                req.size = op_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, size, size) ;
 
 		cont += size;
 	} while (req.size>0) ;
