@@ -27,13 +27,8 @@
 	   char path[NFIMAXPATHLEN];
 	   int  sd;
 
-           // server port and comm
-           char port_name[MPI_MAX_PORT_NAME] ;
-           MPI_Comm server ;
-
-           // client identification
-           int  size ;
-           int  rank ;
+	   // client stub
+           mpiClient_param_st params ;
       };
 
       struct nfi_mpiServer_fhandle

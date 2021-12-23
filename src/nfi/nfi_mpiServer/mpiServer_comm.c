@@ -27,7 +27,7 @@
 
    /* ... Functions / Funciones ......................................... */
 
-      int     mpiClient_comm_init      ( struct nfi_mpiServer_server *params )
+      int     mpiClient_comm_init      ( mpiClient_param_st *params, int *sd )
       {
               int ret, provided ;
 	      int flag = 0;
@@ -83,7 +83,7 @@ printf("Client[%d]: Aqui 2 %s\n", params->rank, params->port_name);
 printf("Aqui 3\n");
       
               // use server mpi_comm as sd...
-	      params->sd = (int)params->server ;
+	      (*sd) = (int)(params->server) ;
 
               debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
               debug_info("[COMM] server %d accepting...\n",    params->rank) ;
@@ -93,7 +93,7 @@ printf("Aqui 3\n");
       	      return 1 ;
       }
 
-      int mpiClient_comm_destroy ( struct nfi_mpiServer_server *params )
+      int mpiClient_comm_destroy ( mpiClient_param_st *params )
       {
               int ret ;
       
@@ -119,7 +119,7 @@ printf("Aqui 3\n");
               return 1 ;
       }
 
-      int mpiClient_comm_connect ( struct nfi_mpiServer_server *params )
+      int mpiClient_comm_connect ( mpiClient_param_st *params )
       {
               int ret ;
       	      char srv_name[1024] ;
@@ -143,7 +143,7 @@ printf("Aqui 3\n");
               return 1 ;
       }
       
-      int mpiClient_comm_disconnect ( struct nfi_mpiServer_server *params )
+      int mpiClient_comm_disconnect ( mpiClient_param_st *params )
       {
               int ret ;
       

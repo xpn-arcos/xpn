@@ -23,7 +23,6 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "nfi_mpiServer.h"
-      #include "mpiServer_comm.h"
 
 
    /* ... Functions / Funciones ......................................... */
@@ -300,7 +299,7 @@
 	  serv->private_info = (void *)server_aux;
 
 	  // initialize MPI Client communication side...
-          ret = mpiClient_comm_init(server_aux) ;
+          ret = mpiClient_comm_init(&(server_aux->params), &(server_aux->sd)) ;
 	  if (ret < 0) {
 	      free(serv->ops);
 	      free(server_aux);
@@ -378,9 +377,9 @@ printf("Client[%s]: Aqui 4\n", server_aux->id);
        	  mpiServer_write_operation(server_aux->sd, &msg);
 
           // MPI Disconnect...
-          ret = mpiClient_comm_disconnect(server_aux) ;
+          ret = mpiClient_comm_disconnect(&(server_aux->params)) ;
 	  if (ret < 0) {
-              debug_error("Client[%d]: mpiClient_comm_disconnect fails :-(", server_aux->rank) ;
+              debug_error("[NFI]: mpiClient_comm_disconnect fails :-(") ;
 	  }
 
 	  // free private_info, 'url' string and 'server' string...
@@ -421,7 +420,7 @@ printf("Client[%s]: Aqui 4\n", server_aux->id);
 	  serv->private_info = (void *)server_aux;
 
 	  // reconnect...
-          ret = mpiClient_comm_connect(server_aux) ;
+          ret = mpiClient_comm_connect(&(server_aux->params)) ;
 	  if (ret < 0) {
 	      dbgnfi_error("nfi_mpiServer_reconnect: mpiClient_comm_connect fails.\n");
 	      return -1;
@@ -454,9 +453,9 @@ printf("Client[%s]: Aqui 4\n", server_aux->id);
        	  mpiServer_write_operation(server_aux->sd, &msg);
 
 	  // Finalize MPI communication...
-          ret = mpiClient_comm_destroy(server_aux) ;
+          ret = mpiClient_comm_destroy(&(server_aux->params)) ;
 	  if (ret < 0) {
-              debug_error("Server[%d]: mpiClient_comm_destroy fails :-(", server_aux->rank) ;
+              debug_error("[NFI]: mpiClient_comm_destroy fails :-(") ;
 	  }
 
 	  // end workers...
