@@ -11,6 +11,7 @@
       #include "all_system.h"
       #include "mpiServer_conf.h"
       #include "mpiServer_ops.h"
+      #include "mpiServer_comm.h"
       #include "mpiServer_params.h"
       #include "mpiServer_utils.h"
       #include "base/string_misc.h"
