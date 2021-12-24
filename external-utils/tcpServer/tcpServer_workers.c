@@ -6,14 +6,15 @@ pthread_cond_t c_worker;
 pthread_t th_worker;
 
 struct st_th st_worker;
-int th_cont = 0; 
+int th_cont = 0;
 
 
 
-int tcpServer_init_worker(){
+int tcpServer_init_worker()
+{
 	//int i;
 
-	//c_worker = PTHREAD_COND_INITIALIZER; 
+	//c_worker = PTHREAD_COND_INITIALIZER;
 	//m_worker = PTHREAD_MUTEX_INITIALIZER;
 
 	busy_worker = TRUE;
@@ -22,10 +23,8 @@ int tcpServer_init_worker(){
 	return 0;
 }
 
-
-
-int tcpServer_launch_worker(int sd){
-	
+int tcpServer_launch_worker(int sd)
+{
 	pthread_attr_t   tattr;
 	//pthread_t *th;	
 	//int i;
@@ -44,49 +43,49 @@ int tcpServer_launch_worker(int sd){
 
 	busy_worker = TRUE;
 	
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]pthread_create: antes create_thread tcpServer_worker_run\n");
-#endif 
+#endif
 	//usleep(100);
 	ret = pthread_create(&th_worker, &tattr, (void *)(tcpServer_worker_run), (void *)&st_worker);
 	
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]pthread_create: desp. create_thread tcpServer_worker_run = %d\n", ret);
-#endif 
+#endif
 	if(ret != 0){
 		perror("pthread_create: Error en create_thread: ");
 	}
 
 	
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]pthread_create: antes lock tcpServer_worker_run\n");
-#endif 
+#endif
 	pthread_mutex_lock(&m_worker);
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]pthread_create: desp. lock tcpServer_worker_run\n");
-#endif 
+#endif
 	while(busy_worker == TRUE){
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]pthread_create: antes wait tcpServer_worker_run\n");
-#endif 
+#endif
 		pthread_cond_wait(&c_worker, &m_worker);
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]pthread_create: desp. wait tcpServer_worker_run\n");
-#endif 
+#endif
 	}
 
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]pthread_create: busy_worker= TRUE tcpServer_worker_run\n");
-#endif 
+#endif
 	busy_worker = TRUE;
 
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]pthread_create: antes unlock tcpServer_worker_run\n");
-#endif 
+#endif
 	pthread_mutex_unlock(&m_worker);
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]pthread_create: desp. unlock tcpServer_worker_run\n");
-#endif 
+#endif
 	// siguiente hijo
 	
 /*
@@ -98,14 +97,13 @@ int tcpServer_launch_worker(int sd){
 /* thread process */
 void tcpServer_worker_run(void *arg)
 {
- 
-  int op, sd; 
+  int op, sd;
   struct st_tcpServer_msg head;
   struct st_th *th;
 
   int cont_aux;
   char host[255];
-  char id[255];  
+  char id[1024];
 
 
   th = (struct st_th *)arg;
@@ -115,42 +113,42 @@ void tcpServer_worker_run(void *arg)
   gethostname(host, 255);
   sprintf(id,"[%s:%d:%d]", host, cont_aux, sd);
 
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]begin tcpServer_worker_run(%s)\n", id);
-#endif 
+#endif
 
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]client: tcpServer_worker_run(%s) antes lock\n", id);
-#endif 
+#endif
   pthread_mutex_lock(&m_worker);
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]client: tcpServer_worker_run(%s) desp. lock\n", id);
-#endif 
+#endif
 
-  
+
   //cont_aux = cont;
   //gethostname(host, 255);
-  //cont++; 
+  //cont++;
 
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]client: tcpServer_worker_run(%s) busy_worker = FALSE\n", id);
-#endif 
- 
+#endif
+
   busy_worker = FALSE;
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]client: tcpServer_worker_run(%s) signal\n", id);
-#endif 
+#endif
   //pthread_cond_signal(&c_worker);
   pthread_cond_broadcast(&c_worker);
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]client: tcpServer_worker_run(%s) antes unlock\n", id);
-#endif 
+#endif
   pthread_mutex_unlock(&m_worker);
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]client: tcpServer_worker_run(%s) desp. unlock\n", id);
-#endif 
+#endif
 
-   
+
 
   do{
 	  /* */
@@ -193,7 +191,7 @@ void tcpServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)tcpServer_op_read end (sd, &head);\n", id);
 #endif			
 			break;
-		case TCPSERVER_WRITE_FILE: 
+		case TCPSERVER_WRITE_FILE:
 #ifdef DBG_WORKERS				
 			printf("[WORKERS]ID=%s)tcpServer_op_write begin (sd, &head);\n", id);
 #endif			
@@ -283,17 +281,17 @@ void tcpServer_worker_run(void *arg)
 			printf("[WORKERS]ID=%s)tcpServer_op_getid end (sd, &head);\n", id);
 #endif			
 			break;
-                case TCPSERVER_FINALIZE:                                                                                     
-#ifdef DBG_WORKERS                                                                                                                
-                        printf("[WORKERS]ID=%s)tcpServer_op_finalize begin (sd, &head);\n", id); 
-#endif                                                                                                                      
-                        op = TCPSERVER_FINALIZE;                                                                             
-                        printf("[WORKERS]EXIT\n");                                                                                   
-#ifdef DBG_WORKERS                                                                                                                
-                        printf("[WORKERS]ID=%s)tcpServer_op_finalize end (sd, &head);\n", id); 
-#endif                                                                                                                      
-                        exit(0);                                                                                            
-                        break;                                                                                              
+                case TCPSERVER_FINALIZE:
+#ifdef DBG_WORKERS
+                        printf("[WORKERS]ID=%s)tcpServer_op_finalize begin (sd, &head);\n", id);
+#endif
+                        op = TCPSERVER_FINALIZE;
+                        printf("[WORKERS]EXIT\n");
+#ifdef DBG_WORKERS
+                        printf("[WORKERS]ID=%s)tcpServer_op_finalize end (sd, &head);\n", id);
+#endif
+                        exit(0);
+                        break;
 
 		default:
 #ifdef DBG_WORKERS				
@@ -306,7 +304,7 @@ void tcpServer_worker_run(void *arg)
 #endif			
 			break;
 	}
-			  
+			
   }while(op != TCPSERVER_END);
 
 #ifdef DBG_WORKERS				
@@ -314,9 +312,9 @@ void tcpServer_worker_run(void *arg)
 #endif			
   close(sd);
 	
-#ifdef DBG_WORKERS 
+#ifdef DBG_WORKERS
   printf("[WORKERS]end tcpServer_worker_run (ID=%s): end\n", id);
-#endif 
+#endif
   pthread_exit(0);
 }
 

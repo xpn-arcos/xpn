@@ -118,7 +118,8 @@ void sigint_handler ( int signal )
 }
 
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])
+{
 	int sd;
 	int cont;
 
@@ -141,9 +142,8 @@ int main(int argc, char *argv[]){
 	//tcpServer_init_worker(&th);
 	tcpServer_init_worker();
 
-	cont = 0;
-
-	while (1)
+	cont = 1;
+	while (cont)
 	{
 	#ifdef DBG_MAIN
         	printf("tcpServer_accept_comm()\n");
