@@ -32,18 +32,6 @@
 
    /* ... Functions / Funciones ......................................... */
 
-   // debug print
-#ifdef DBG_COMM
-  #define debug_error(...)    fprintf(stderr, __VA_ARGS__)
-  #define debug_warning(...)  fprintf(stderr, __VA_ARGS__)
-  #define debug_info(...)     fprintf(stdout, __VA_ARGS__)
-#else
-  #define debug_error(...)
-  #define debug_warning(...)
-  #define debug_info(...)
-#endif
-
-
    // TEST
 int tcpServer_comm_writedata_test(int fd, char *id)
 {
@@ -59,34 +47,34 @@ int tcpServer_comm_writedata_test(int fd, char *id)
 
         ret = write(fd, buffer_temp, CONST_TEMP);
 	if (ret == 0) {
-		perror("[COMM]server:ERROR TEST(0) write");
+		perror("[COMM] server:ERROR TEST(0) write");
 		return 0;
 	}
         if (ret != CONST_TEMP ) {
-                printf("[COMM]server:ERROR TEST(1) write_data(%d): err %d  ID=%s:%p --th:%d--\n",fd,ret,id,id,(int)pthread_self());
+                printf("[COMM] server:ERROR TEST(1) write_data(%d): err %d  ID=%s:%p --th:%d--\n",fd,ret,id,id,(int)pthread_self());
 		//exit(-1);
-		perror("[COMM]server:ERROR TEST(1) write");
+		perror("[COMM] server:ERROR TEST(1) write");
         }
         debug_info("[COMM] send write test ok ID=%s\n",id);
 
 	bzero(buffer_temp, CONST_TEMP);
         ret = read(fd, buffer_temp, CONST_TEMP);
 	if (ret == 0) {
-		perror("[COMM]server:ERROR TEST(1.1) write");
+		perror("[COMM] server:ERROR TEST(1.1) write");
 		return 0;
 	}
         if (ret != CONST_TEMP ) {
-                printf("[COMM]server:ERROR TEST(2) write_data(%d): err %d  ID=%s:%p --th:%d--\n",fd,ret,id,id,(int)pthread_self());
+                printf("[COMM] server:ERROR TEST(2) write_data(%d): err %d  ID=%s:%p --th:%d--\n",fd,ret,id,id,(int)pthread_self());
 		//exit(-1);
-		perror("[COMM]server:ERROR TEST(2) write");
+		perror("[COMM] server:ERROR TEST(2) write");
         }
         debug_info("[COMM] receive write test ok ID=%s:%p\n",id,id);
         for (i=0; i<CONST_TEMP; i++)
 	{
 		aux = (char)(i%128);
                 if (buffer_temp[i] != aux) {
-                        printf("[COMM]server:ERROR TEST(3) write_data(%d): err %d(%d!=%d) ID=%s:%p --th:%d--\n",fd,ret,buffer_temp[i],aux,id,id,(int)pthread_self());
-			perror("[COMM]server:ERROR TEST(3) write");
+                        printf("[COMM] server:ERROR TEST(3) write_data(%d): err %d(%d!=%d) ID=%s:%p --th:%d--\n",fd,ret,buffer_temp[i],aux,id,id,(int)pthread_self());
+			perror("[COMM] server:ERROR TEST(3) write");
                 }
         }
         debug_info("[COMM] ===check write test ok ID=%s:%p--th:%d--===\n",id,id,(int)pthread_self());
@@ -105,22 +93,22 @@ int tcpServer_comm_readdata_test(int fd, char *id)
 	bzero(buffer_temp, CONST_TEMP);
         ret = read(fd, buffer_temp, CONST_TEMP);
 	if (ret == 0) {
-		perror("[COMM]server:ERROR TEST(0) read");
+		perror("[COMM] server:ERROR TEST(0) read");
 		return 0;
 	}
 
         if (ret != CONST_TEMP ) {
-                printf("[COMM]server:ERROR TEST(1) read_data(%d): err %d ID=%s:%p --th:%d--\n",fd,ret,id,id,(int)pthread_self());
+                printf("[COMM] server:ERROR TEST(1) read_data(%d): err %d ID=%s:%p --th:%d--\n",fd,ret,id,id,(int)pthread_self());
 		//exit(-1);
-		perror("[COMM]server:ERROR TEST(1) read");
+		perror("[COMM] server:ERROR TEST(1) read");
         }
         debug_info("[COMM] receive read test ok ID=%s:%p\n",id,id);
         for (i=0;i<CONST_TEMP;i++) {
 		aux = (char)(i%128);
                 if (buffer_temp[i] != aux) {
-                        printf("[COMM]server:ERROR TEST(2) write_data(%d): err %d(%d!=%d)  ID=%s:%p --th:%d--\n",fd,ret,buffer_temp[i],aux,id,id,(int)pthread_self());
-                        //printf("[COMM]server:ERROR TEST(2) read_data(%d): err %d  ID=%s:%p\n",fd,ret,id,id);
-			perror("[COMM]server:ERROR TEST(2) read");
+                        printf("[COMM] server:ERROR TEST(2) write_data(%d): err %d(%d!=%d)  ID=%s:%p --th:%d--\n",fd,ret,buffer_temp[i],aux,id,id,(int)pthread_self());
+                        //printf("[COMM] server:ERROR TEST(2) read_data(%d): err %d  ID=%s:%p\n",fd,ret,id,id);
+			perror("[COMM] server:ERROR TEST(2) read");
                 }
         }
         debug_info("[COMM] check read test ok ID=%s:%p --th:%d--\n",id,id,(int)pthread_self());
@@ -133,12 +121,12 @@ int tcpServer_comm_readdata_test(int fd, char *id)
 
         ret = write(fd, buffer_temp, CONST_TEMP);
 	if (ret == 0) {
-		perror("[COMM]server:ERROR TEST(2.1) read");
+		perror("[COMM] server:ERROR TEST(2.1) read");
 		return 0;
 	}
         if (ret != CONST_TEMP ) {
-                printf("[COMM]server:ERROR TEST(3) read_data(%d): err %d  ID=%s:%p --th:%d--\n",fd,ret,id,id,(int)pthread_self());
-		perror("[COMM]server:ERROR TEST(3) read");
+                printf("[COMM] server:ERROR TEST(3) read_data(%d): err %d  ID=%s:%p --th:%d--\n",fd,ret,id,id,(int)pthread_self());
+		perror("[COMM] server:ERROR TEST(3) read");
         }
         debug_info("[COMM] ===send read test ok ID=%s:%p--th:%d--===\n",id,id,(int)pthread_self());
 
@@ -154,7 +142,7 @@ int tcpServer_comm_init(char *name, int port, char *file)
 	char host[255];
 	FILE *f;
 
-        debug_info("[COMM]begin tcpServer_comm_init(%s, %d, %s)\n",name, port, file);
+        debug_info("[COMM] begin tcpServer_comm_init(%s, %d, %s)\n",name, port, file);
 
 	/* create the connections */
 	global_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -211,7 +199,7 @@ int tcpServer_comm_init(char *name, int port, char *file)
 		fprintf(f, "%s %s %d\r\n", name, host, port);
 		fclose(f);
 	}
-        debug_info("[COMM]begin tcpServer_comm_init(%s, %d, %s)\n",name, port, file);
+        debug_info("[COMM] begin tcpServer_comm_init(%s, %d, %s)\n",name, port, file);
 
 	return 0;
 }
@@ -227,14 +215,14 @@ int tcpServer_accept_comm()
 	int sc, flag;
 	int size = sizeof(struct sockaddr_in);
 
-        debug_info("[COMM]begin tcpServer_accept_comm()\n");
+        debug_info("[COMM] begin tcpServer_accept_comm()\n");
 
-	debug_info("[COMM]antes accept conection ....\n");
+	debug_info("[COMM] antes accept conection ....\n");
 	sc = accept(global_sock, (struct sockaddr *)&client_addr, (socklen_t *restrict)&size);
 	if (sc == -1) {
 		perror("accept: ");
 	}
-	debug_info("[COMM]desp. accept conection .... %d\n",sc);
+	debug_info("[COMM] desp. accept conection .... %d\n",sc);
 
 	// tcp_nodelay
 	flag = 1 ;
@@ -257,7 +245,7 @@ int tcpServer_accept_comm()
 		return -1;
 	}
 
-        debug_info("[COMM]end tcpServer_accept_comm()\n");
+        debug_info("[COMM] end tcpServer_accept_comm()\n");
 
 	return sc;
 }
@@ -280,7 +268,7 @@ ssize_t tcpServer_comm_writedata(int fd, char *data, ssize_t size, char *id)
 	tcpServer_comm_writedata_test(fd, id);
 #endif
 
-	debug_info("[COMM]server: begin write_comm(%d): %d data %p ID=%s:%p --th:%d--\n",fd,size,data,id,id,(int)pthread_self());
+	debug_info("[COMM] server: begin write_comm(%d): %d data %p ID=%s:%p --th:%d--\n",fd,size,data,id,id,(int)pthread_self());
 
 	// check params...
 	if (size == 0) {
@@ -295,21 +283,21 @@ ssize_t tcpServer_comm_writedata(int fd, char *data, ssize_t size, char *id)
 
 	do
 	{
-	        debug_info("[COMM]server:write_comm(%d) antes: %d = %d data %p ID=%s:%p --th:%d--\n",fd,size,ret,data,id,id,(int)pthread_self());
+	        debug_info("[COMM] server:write_comm(%d) antes: %d = %d data %p ID=%s:%p --th:%d--\n",fd,size,ret,data,id,id,(int)pthread_self());
 		ret = write(fd, data+cont, size-cont);
 		if (ret < 0) {
 			perror("server: Error write_comm:");
 		}
-	        debug_info("[COMM]server:write_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n",fd,size,ret,data,id,id,(int)pthread_self());
+	        debug_info("[COMM] server:write_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n",fd,size,ret,data,id,id,(int)pthread_self());
 		cont += ret;
 	} while ((ret>0)&&(cont!=size));
 
 	if (ret == -1)
 	{
-		debug_info("[COMM]server: Error write_comm(%d): -1 ID=%s:%p\n",fd,id,id);
+		debug_info("[COMM] server: Error write_comm(%d): -1 ID=%s:%p\n",fd,id,id);
 		return ret;
 	}
-	debug_info("[COMM]server: end write_comm(%d): %d of %d data %p ID=%s:%p --th:%d--\n",fd,cont,size,data,id,id,(int)pthread_self());
+	debug_info("[COMM] server: end write_comm(%d): %d of %d data %p ID=%s:%p --th:%d--\n",fd,cont,size,data,id,id,(int)pthread_self());
 
 #ifdef DBG_COMM
 	tcpServer_comm_writedata_test(fd, id);
@@ -331,7 +319,7 @@ ssize_t tcpServer_comm_readdata(int fd, char *data, ssize_t size, char *id)
 	tcpServer_comm_readdata_test(fd, id);
 #endif
 
-	debug_info("[COMM]server: begin read_comm(%d): %d data %p ID=%s:%p --th:%d--\n",fd,size,data,id,id,(int)pthread_self());
+	debug_info("[COMM] server: begin read_comm(%d): %d data %p ID=%s:%p --th:%d--\n",fd,size,data,id,id,(int)pthread_self());
 
 	// check params...
 	if (size == 0) {
@@ -346,20 +334,20 @@ ssize_t tcpServer_comm_readdata(int fd, char *data, ssize_t size, char *id)
 
 	do
 	{
-	        debug_info("[COMM]server:read_comm(%d) antes: %d = %d data %p ID=%s:%p --th:%d--\n",fd,size,ret,data,id,id,(int)pthread_self());
+	        debug_info("[COMM] server:read_comm(%d) antes: %d = %d data %p ID=%s:%p --th:%d--\n",fd,size,ret,data,id,id,(int)pthread_self());
 		ret = read(fd, data+cont, size-cont);
 		if (ret < 0) {
 			perror("server: Error read_comm:");
 		}
-	        debug_info("[COMM]server:read_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n",fd,size,ret,data,id,id,(int)pthread_self());
+	        debug_info("[COMM] server:read_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n",fd,size,ret,data,id,id,(int)pthread_self());
 		cont += ret;
 	} while ((ret>0)&&(cont!=size));
 
 	if (ret == -1) {
-		debug_info("[COMM]server: Error read_comm(%d): -1 ID=%s:%p\n",fd,id,id);
+		debug_info("[COMM] server: Error read_comm(%d): -1 ID=%s:%p\n",fd,id,id);
 		return ret;
 	}
-	debug_info("[COMM]server: end read_comm(%d): %d of %d data %p ID=%s:%p --th:%d--\n",fd,cont,size,data,id,id,(int)pthread_self());
+	debug_info("[COMM] server: end read_comm(%d): %d of %d data %p ID=%s:%p --th:%d--\n",fd,cont,size,data,id,id,(int)pthread_self());
 
 #ifdef DBG_COMM
 	tcpServer_comm_readdata_test(fd, id);

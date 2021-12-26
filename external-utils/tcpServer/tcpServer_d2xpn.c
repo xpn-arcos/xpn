@@ -1,3 +1,27 @@
+
+/*
+ *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *
+ *  This file is part of mpiServer.
+ *
+ *  mpiServer is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  mpiServer is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with mpiServer.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+   /* ... Include / Inclusion ........................................... */
+
 #include "tcpServer_d2xpn.h"
 #include "tcpServer_params.h"
 #include "xpn.h"
@@ -11,27 +35,29 @@
 #define MB (KB*KB)
 #endif
 
-int TCPSERVER_IOSIZE_INT;
-
 #define DEFAULT_PATH "/tmp"
-
 #define TCPSERVER_PATH_DEFAULT "/tmp"
 
+
+   /* ... Global variables / Variables globales ......................... */
+
+int TCPSERVER_IOSIZE_INT;
 extern struct tcpServer_param_st tcpServer_params;
-
-
-/*****************************************************************/
 pthread_mutex_t mutex_id = PTHREAD_MUTEX_INITIALIZER;
 int static_id = 0;
-/*****************************************************************/
 
 
-void generateName(char *file, char *new_file){
+   /* ... Functions / Funciones ......................................... */
+
+void generateName(char *file, char *new_file)
+{
+	long unsigned i, j;
 	char aux[255];
-	int i,j;
 	
-	for(j=0,i=0;i<strlen(file);i++){
-		switch(file[i]){
+	for (j=0,i=0; i<strlen(file); i++)
+	{
+		switch(file[i])
+		{
 			case '/':
 				aux[j] = '_';		
 				break;
@@ -103,7 +129,7 @@ int myunlock ( int fd )
 	return 0;
 }
 
-int tcpServer_d2xpn(char *origen, char *destino, int opt)
+int tcpServer_d2xpn ( char *origen, char *destino, int opt )
 {
   struct stat st;
   //struct stat st_xpn;
@@ -118,6 +144,13 @@ int tcpServer_d2xpn(char *origen, char *destino, int opt)
 
   double transfer_time;
   struct timeval t1, t2;
+
+
+  if (opt < 0) {
+#ifdef DBG_XPN
+      printf("d2xpn(%d): warning opt is %d\n",  private_id, opt);
+#endif
+  }
 
 	//pthread_mutex_lock(&mutex_id);
 #ifdef DBG_XPN

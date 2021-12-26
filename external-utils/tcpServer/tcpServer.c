@@ -1,3 +1,27 @@
+
+/*
+ *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *
+ *  This file is part of mpiServer.
+ *
+ *  mpiServer is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  mpiServer is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with mpiServer.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+   /* ... Include / Inclusion ........................................... */
+
 /* defines usados
  * _LARGEFILE64_: para soporte de ficheros mayores de 4GB
  * _MPI_: para lanzar los servidores como procesos MPI
@@ -17,9 +41,9 @@
 #include "tcpServer_comm.h"
 #include "tcpServer_d2xpn.h"
 #include "tcpServer_params.h"
-///////////////////////////////
 
 
+   /* ... Global variables / Variables globales ......................... */
 
 struct tcpServer_param_st tcpServer_params;
 
@@ -28,13 +52,15 @@ char *TCPSERVER_ALIAS_NAME_STRING;
 char *TCPSERVER_FILE_STRING;
 char *TCPSERVER_DIRBASE_STRING;
 
-
 /* INTERNAL CONST & STRUCTS */
 extern int errno;
 //pthread_t th;
 
 
-void show_values(struct tcpServer_param_st *params){
+   /* ... Functions / Funciones ......................................... */
+
+void show_values(struct tcpServer_param_st *params)
+{
 	printf("Usage:\n");
 	printf("\t-n <string>:\t%s\n",params->name);
 	printf("\t-p <int>:\t%d\n",params->port);
@@ -44,7 +70,8 @@ void show_values(struct tcpServer_param_st *params){
 }
 
 
-void show_usage(){
+void show_usage()
+{
 	printf("Usage:\n");
 	printf("\t-n <string>: name of the server\n");
 	printf("\t-p <int>: port number\n");
@@ -53,8 +80,8 @@ void show_usage(){
 	printf("\t-d <string>: dir base\n");
 }
 
-
-int get_params(int argc, char *argv[], struct tcpServer_param_st *params){
+int get_params(int argc, char *argv[], struct tcpServer_param_st *params)
+{
 	int i;
 
 	params->port 	= TCPSERVER_PORT_DEFAULT;	
@@ -163,3 +190,4 @@ int main(int argc, char *argv[])
     	xpn_destroy();
 	exit(0);
 }
+

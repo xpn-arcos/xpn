@@ -9,6 +9,7 @@ SOURCE_PATH  = ./
 #EXPAND_DIR   = $(HOME)/expand/trunk/expand
 EXPAND_DIR   = /opt/xpn
 OBJECTS_TCPSERVER      = tcpServer.o \
+		         tcpServer_utils.o \
 		         tcpServer_comm.o \
 		         tcpServer_ops.o \
 		         tcpServer_workers.o \
