@@ -176,7 +176,7 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 {
 	int ret;
 
-	debug_info("[OPS] (ID=%s) antes de read_operation: sizeof(struct st_mpiServer_msg) = %d.\n ", params->srv_name, sizeof(struct st_mpiServer_msg));
+        DEBUG_BEGIN() ;
 
 	ret = mpiServer_comm_readdata(params, sd, (char *)&head->type, sizeof(head->type));
 	if (ret == -1) {
@@ -233,7 +233,8 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 			// ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_end, sizeof(struct st_mpiServer_end));
 			break;
 	}
-	debug_info("[OPS] (ID=%s) end to read operation (%s) arguments\n", params->srv_name, mpiServer_op2string(head->type));
+
+        DEBUG_END() ;
 
 	// Return
 	if (ret == -1) {
@@ -354,11 +355,16 @@ void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_m
 }
 
 
-void op_read_buffer ( mpiServer_param_st *params, int read_fd2, void *buffer, int buffer_size )
+long op_read_buffer ( mpiServer_param_st *params, int read_fd2, void *buffer, int buffer_size )
 {
      ssize_t read_num_bytes       = -1 ;
      ssize_t read_remaining_bytes = buffer_size ;
      void   *read_buffer          = buffer ;
+
+     // check arguments...
+     if (NULL == params) {
+	 debug_warning("WARNING[%s]:\t read with NULL mpiServer_param_st *.\n", params->srv_name) ;
+     }
 
      while (read_remaining_bytes > 0)
      {
@@ -387,11 +393,20 @@ void op_read_buffer ( mpiServer_param_st *params, int read_fd2, void *buffer, in
      return buffer_size ;
 }
 
-void op_write_buffer ( mpiServer_param_st *params, int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
+long op_write_buffer ( mpiServer_param_st *params, int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
 {
      ssize_t write_num_bytes       = -1 ;
      ssize_t write_remaining_bytes = num_readed_bytes ;
      void   *write_buffer          = buffer ;
+
+     // check arguments...
+     if (NULL == params) {
+	 debug_warning("WARNING[%s]:\t read with NULL mpiServer_param_st *.\n", params->srv_name) ;
+     }
+     if (num_readed_bytes > buffer_size) {
+	 debug_error("ERROR[%s]:\t write for %d bytes from a buffer with only %d bytes.\n", params->srv_name, num_readed_bytes, buffer_size) ;
+	 return -1 ;
+     }
 
      while (write_remaining_bytes > 0)
      {

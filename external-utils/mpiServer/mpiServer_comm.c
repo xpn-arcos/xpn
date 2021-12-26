@@ -33,7 +33,7 @@
       	      char srv_name[1024] ;
               MPI_Info info ;
       
-              debug_info("[COMM] begin mpiServer_comm_init(...)\n") ;
+              DEBUG_BEGIN() ;
       
               // MPI_Init
               ret = MPI_Init_thread(&(params->argc), &(params->argv), MPI_THREAD_MULTIPLE, &provided) ;
@@ -76,7 +76,8 @@
       
               debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
               debug_info("[COMM] server %d accepting...\n",    params->rank) ;
-              debug_info("[COMM] end mpiServer_comm_init(...)\n") ;
+
+              DEBUG_END() ;
       
       	      // Return OK
       	      return 1 ;
@@ -86,7 +87,7 @@
       {
               int ret ;
       
-              debug_info("[COMM] begin mpiServer_comm_destroy(...)\n") ;
+              DEBUG_BEGIN() ;
       
               // Close port
               MPI_Close_port(params->port_name) ;
@@ -105,7 +106,7 @@
                   return -1 ;
               }
       
-              debug_info("[COMM] end mpiServer_comm_destroy(...)\n") ;
+              DEBUG_END() ;
       
               // Return OK
               return 1 ;
@@ -115,7 +116,7 @@
       {
       	      int ret ;
       
-              debug_info("[COMM] begin mpiServer_accept_comm(...)\n") ;
+              DEBUG_BEGIN() ;
       
               // Accept
               ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &(params->client)) ;
@@ -124,7 +125,7 @@
                   return -1 ;
               }
       
-              debug_info("[COMM] end mpiServer_accept_comm(...)\n") ;
+              DEBUG_END() ;
       
               // Return client MPI_Comm
       	      return (int)(params->client) ;
@@ -149,7 +150,7 @@
       {
       	      int ret ;
       
-      	      debug_info("[COMM] server: begin comm_writedata(...)\n") ;
+              DEBUG_BEGIN() ;
       
       	      // Check params
       	      if (size == 0){
@@ -170,7 +171,7 @@
                   debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
               }
       
-      	      debug_info("[COMM] server: end comm_writedata(...)\n") ;
+              DEBUG_END() ;
       
               // Return bytes written
       	      return size;
@@ -181,7 +182,7 @@
       	      int ret ;
       	      MPI_Status status ;
       
-      	      debug_info("[COMM] server: begin comm_readdata(...)\n") ;
+              DEBUG_BEGIN() ;
       
       	      // Check params
       	      if (size == 0) {
@@ -202,7 +203,7 @@
                   debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
               }
       
-      	      debug_info("[COMM] server: end comm_readdata(...)\n") ;
+              DEBUG_END() ;
       
               // Return bytes read
       	      return size;

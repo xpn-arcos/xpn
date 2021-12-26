@@ -53,6 +53,8 @@
 	  int ret;
 	  pthread_attr_t tattr;
 
+          DEBUG_BEGIN() ;
+
 	  pthread_attr_init(&tattr);
 	  pthread_attr_setdetachstate(&tattr, PTHREAD_CREATE_DETACHED);
  	  pthread_attr_setstacksize  (&tattr, STACK_SIZE);
@@ -90,6 +92,7 @@
 	  pthread_mutex_unlock(&m_worker);
           debug_info("[WORKERS] pthread_create: desp. unlock mpiServer_worker_run\n");
 	
+          DEBUG_END() ;
 	  return 0;
       }
 
@@ -97,27 +100,29 @@
       {
           struct st_th th;
       
-          debug_info("[WORKERS] begin mpiServer_worker_run(...)\n");
+          DEBUG_BEGIN() ;
+
 	  memcpy(&th, arg, sizeof(struct st_th)) ;
       
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) antes lock\n");
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) antes lock\n", th.id);
           pthread_mutex_lock(&m_worker);
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) desp. lock\n");
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) desp. lock\n", th.id);
       
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) busy_worker = FALSE\n");
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) busy_worker = FALSE\n", th.id);
           busy_worker = FALSE;
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) signal\n");
-          //pthread_cond_signal(&c_worker);
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) signal\n", th.id);
+       // pthread_cond_signal(&c_worker);
           pthread_cond_broadcast(&c_worker);
 
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) antes unlock\n");
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) antes unlock\n", th.id);
           pthread_mutex_unlock(&m_worker);
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) desp. unlock\n");
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) desp. unlock\n", th.id);
       
 	  // do function code...
 	  th.function(th) ;
 
-          debug_info("[WORKERS] mpiServer_worker_run (ID=%d) ends\n", th.id);
+	  // end
+          DEBUG_END() ;
           pthread_exit(0);
       }
 
