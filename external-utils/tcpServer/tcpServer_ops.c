@@ -22,15 +22,9 @@
 
    /* ... Include / Inclusion ........................................... */
 
-//#include "tcpServer.h"
-#include "tcpServer_ops.h"
-#include "tcpServer_comm.h"
-#include "tcpServer_d2xpn.h"
-
-
-   /* ... Global variables / Variables globales ......................... */
-
-//char global_buffer[MAX_BUFFER_SIZE];
+      #include "tcpServer_ops.h"
+      #include "tcpServer_comm.h"
+      #include "tcpServer_d2xpn.h"
 
 
    /* ... Functions / Funciones ......................................... */
@@ -116,85 +110,110 @@ int tcpServer_create_spacename(char *path)
 	return 0;
 }
 
-/* OPERATIONAL FUNCTIONS */
 
-/**********************************
-Read the operation to realize
-***********************************/
+/* 
+ * OPERATIONAL FUNCTIONS 
+ */
+
+char * tcpServer_op2string ( int op_code )
+{
+	char *ret = "Unknown" ;
+
+	switch (op_code)
+	{
+		case TCPSERVER_OPEN_FILE:	ret = "OPEN" ;
+			break;
+		case TCPSERVER_CREAT_FILE:	ret = "CREAT" ;
+			break;
+		case TCPSERVER_READ_FILE:	ret = "READ" ;
+			break;
+		case TCPSERVER_WRITE_FILE:	ret = "WRITE" ;
+			break;
+		case TCPSERVER_CLOSE_FILE:	ret = "CLOSE" ;
+			break;
+		case TCPSERVER_RM_FILE:		ret = "RM" ;
+			break;
+		case TCPSERVER_GETATTR_FILE:	ret = "GETATTR" ;
+			break;
+		case TCPSERVER_SETATTR_FILE:	ret = "SETATTR" ;
+			break;
+		case TCPSERVER_MKDIR_DIR:	ret = "MKDIR" ;
+			break;
+		case TCPSERVER_RMDIR_DIR:	ret = "RMDIR" ;
+			break;
+		case TCPSERVER_FLUSH_FILE:	ret = "FLUSH" ;
+			break;
+		case TCPSERVER_PRELOAD_FILE:	ret = "PRELOAD" ;
+			break;
+		case TCPSERVER_GETID:		ret = "GETID" ;
+			break;
+		case TCPSERVER_FINALIZE:	ret = "FINALIZE" ;
+			break;
+		case TCPSERVER_END:		ret = "END" ;
+			break;
+	}
+
+	return ret ;
+}
+
+// Read the operation to realize
 int tcpServer_read_operation(int sd, struct st_tcpServer_msg *head)
 {
 	int ret;
 
-	debug_info("[OPS] (%s) antes de read_operation: sizeof(struct st_tcpServer_msg) = %d.\n ", TCPSERVER_ALIAS_NAME_STRING, sizeof(struct st_tcpServer_msg));
-
+	debug_info("[OPS] (%s) read_operation code of %d bytes.\n ", TCPSERVER_ALIAS_NAME_STRING, sizeof(head->type));
 	ret = tcpServer_comm_readdata(sd, (char *)&head->type, sizeof(head->type), head->id);
 	if (ret == -1) {
 	    return -1;
 	}
 
-	debug_info("[OPS] (%s) read_operation: %d ID=%s\n", TCPSERVER_ALIAS_NAME_STRING,head->type,head->id);
-
-	switch(head->type)
+	debug_info("[OPS] (%s) read operation '%s' from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING, tcpServer_op2string(head->type), head->id);
+	switch (head->type)
 	{
 		case TCPSERVER_OPEN_FILE:
-			debug_info("[OPS] (%s) OPEN operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_open, sizeof(struct st_tcpServer_open), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_open), sizeof(struct st_tcpServer_open), head->id);
 			break;
 		case TCPSERVER_CREAT_FILE:
-			debug_info("[OPS] (%s) CREAT operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_creat, sizeof(struct st_tcpServer_creat), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_creat), sizeof(struct st_tcpServer_creat), head->id);
 			break;
 		case TCPSERVER_READ_FILE:
-			debug_info("[OPS] (%s) READ operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_read, sizeof(struct st_tcpServer_read), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_read), sizeof(struct st_tcpServer_read), head->id);
 			break;
 		case TCPSERVER_WRITE_FILE:
-			debug_info("[OPS] (%s) WRITE operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_write, sizeof(struct st_tcpServer_write), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_write), sizeof(struct st_tcpServer_write), head->id);
 			break;
 		case TCPSERVER_CLOSE_FILE:
-			debug_info("[OPS] (%s) CLOSE operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_close, sizeof(struct st_tcpServer_close), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_close), sizeof(struct st_tcpServer_close), head->id);
 			break;
 		case TCPSERVER_RM_FILE:
-			debug_info("[OPS] (%s) RM operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_rm, sizeof(struct st_tcpServer_rm), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_rm), sizeof(struct st_tcpServer_rm), head->id);
 			break;
 		case TCPSERVER_GETATTR_FILE:
-			debug_info("[OPS] (%s) GETATTR operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_getattr, sizeof(struct st_tcpServer_getattr), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_getattr), sizeof(struct st_tcpServer_getattr), head->id);
 			break;
 		case TCPSERVER_SETATTR_FILE:
-			debug_info("[OPS] (%s) SETATTR operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_setattr, sizeof(struct st_tcpServer_setattr), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_setattr), sizeof(struct st_tcpServer_setattr), head->id);
 			break;
 		case TCPSERVER_MKDIR_DIR:
-			debug_info("[OPS] (%s) MKDIR operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_mkdir, sizeof(struct st_tcpServer_mkdir), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_mkdir), sizeof(struct st_tcpServer_mkdir), head->id);
 			break;
 		case TCPSERVER_RMDIR_DIR:
-			debug_info("[OPS] (%s) RMDIR operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_rmdir, sizeof(struct st_tcpServer_rmdir), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_rmdir), sizeof(struct st_tcpServer_rmdir), head->id);
 			break;
 		case TCPSERVER_FLUSH_FILE:
-			debug_info("[OPS] (%s) FLUSH operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_flush, sizeof(struct st_tcpServer_flush), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_flush), sizeof(struct st_tcpServer_flush), head->id);
 			break;
 		case TCPSERVER_PRELOAD_FILE:
-			debug_info("[OPS] (%s) PRELOAD operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_preload, sizeof(struct st_tcpServer_preload), head->id);
+			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_preload), sizeof(struct st_tcpServer_preload), head->id);
 			break;
 		case TCPSERVER_GETID:
-			debug_info("[OPS] (%s) GETID operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			/* ret = tcpServer_comm_readdata(sd, (char *)&head->id, sizeof(TCPSERVER_ID), head->id); */
+			/* ret = tcpServer_comm_readdata(sd, (char *)&(head->id), sizeof(TCPSERVER_ID), head->id); */
 			break;
 		case TCPSERVER_FINALIZE:
-			debug_info("[OPS] (%s) FINALIZE operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			/* ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_end, sizeof(struct st_tcpServer_end), head->id); */
+			/* ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_end), sizeof(struct st_tcpServer_end), head->id); */
 			break;
 		case TCPSERVER_END:
-			debug_info("[OPS] (%s) END operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-			/* ret = tcpServer_comm_readdata(sd, (char *)&head->u_st_tcpServer_msg.op_end, sizeof(struct st_tcpServer_end), head->id); */
+			/* ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_end), sizeof(struct st_tcpServer_end), head->id); */
 			break;
 	}
 
@@ -210,17 +229,16 @@ void tcpServer_op_open(int sd, struct st_tcpServer_msg *head)
 	int fd;
 	char s[255];
 
-	//sprintf(s,"%s", head->u_st_tcpServer_msg.op_open.path);
+	debug_info("[OPS]%s> begin open(%s) ID=%s -> %d\n", TCPSERVER_ALIAS_NAME_STRING, head->u_st_tcpServer_msg.op_open.path, head->id, fd);
+
 	strcpy(s,head->u_st_tcpServer_msg.op_open.path);
-
-	debug_info("[OPS]%s> begin open(%s) ID=%s -> %d\n",TCPSERVER_ALIAS_NAME_STRING,s,head->id,fd);
-
 	fd = open(s, O_RDWR);
 	//if(fd == -1){
 	//	tcpServer_create_spacename(s);
 	//}
-	debug_info("[OPS]%s> end open(%s) ID=%s ->%d\n",TCPSERVER_ALIAS_NAME_STRING,s, head->id, fd);
+
 	tcpServer_comm_writedata(sd, (char *)&fd, sizeof(int), head->id);
+
 	debug_info("[OPS] (%s) OPEN operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
 }
 
@@ -332,7 +350,7 @@ void tcpServer_op_rm ( int sd, struct st_tcpServer_msg *head )
 						head->id);
 }
 
-void tcpServer_op_read(int sd, struct st_tcpServer_msg *head)
+void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 {
 	unsigned long cont = 0;
 	int size_req, size = 0;
@@ -554,6 +572,7 @@ void tcpServer_op_setattr(int sd, struct st_tcpServer_msg *head)
 	if (NULL == head) {
 	    printf("[OPS] (%s)  RM operation with head == NULL\n",TCPSERVER_ALIAS_NAME_STRING);
 	}
+	// TODO: setattr
 }
 
 void tcpServer_op_getattr(int sd, struct st_tcpServer_msg *head)
@@ -579,7 +598,7 @@ void tcpServer_op_getid(int sd, struct st_tcpServer_msg *head)
         debug_info("[OPS] (%s) begin GETID ID=%s\n",TCPSERVER_ALIAS_NAME_STRING, head->id);
 
         //sprintf(s,"%s/", head->u_st_tcpServer_msg.op_rmdir.path);
-        tcpServer_comm_writedata(sd,(char *)head->id, TCPSERVER_ID, head->id);
+        tcpServer_comm_writedata(sd, (char *)(head->id), TCPSERVER_ID, head->id);
 
         debug_info("[OPS] (%s) end GETID operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
 }
