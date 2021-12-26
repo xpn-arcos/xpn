@@ -160,7 +160,7 @@
 	}
 
 	// Wait for all current workers
-	// TODO
+        mpiServer_wait_workers() ;
 
 	// Finalize
 	mpiServer_comm_destroy(&params) ;

@@ -6,6 +6,7 @@
    #include <string.h>
    #include "mpi.h"
    #include "mpiServer_conf.h"
+   #include "mpiServer_utils.h"
 
 
    /*

@@ -9,9 +9,9 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "all_system.h"
-      #include "mpiServer_comm.h"
       #include "mpiServer_conf.h"
       #include "mpiServer_ops.h"
+      #include "mpiServer_comm.h"
       #include "mpiServer_params.h"
       #include "mpiServer_utils.h"
       #include "base/string_misc.h"
@@ -28,13 +28,8 @@
 	   char path[NFIMAXPATHLEN];
 	   int  sd;
 
-           // server port and comm
-           char port_name[MPI_MAX_PORT_NAME] ;
-           MPI_Comm server ;
-
-           // client identification
-           int  size ;
-           int  rank ;
+	   // client stub
+           mpiClient_param_st params ;
       };
 
       struct nfi_mpiServer_fhandle

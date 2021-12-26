@@ -1,3 +1,27 @@
+
+/*
+ *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *
+ *  This file is part of mpiServer.
+ *
+ *  mpiServer is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  mpiServer is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with mpiServer.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+   /* ... Include / Inclusion ........................................... */
+
 #include <sys/param.h>
 #include <stdio.h>
 #include <sys/file.h>
@@ -19,6 +43,9 @@
 #define DATAM (256*KB)
 
 #define DEFAULT_PATH "/tmp"
+
+
+   /* ... Functions / Funciones ......................................... */
 
 void generateName(char *file, char *new_file){
 	char aux[255];
@@ -123,7 +150,6 @@ int main(int argc, char *argv[])
   }
 
 
-
   fd = xpn_open(origen, O_RDONLY);
   if(fd<0){
     myunlock(fd_lock);
@@ -132,7 +158,6 @@ int main(int argc, char *argv[])
     exit(-1);
   }  
   
-
   
   fdp = xpn_open(destino ,O_CREAT|O_TRUNC|O_WRONLY, 0777); 
   if(fdp<0){
@@ -143,8 +168,6 @@ int main(int argc, char *argv[])
   } 
 
  
-  
-
   //sum = 0;
   do{
 
@@ -167,3 +190,4 @@ int main(int argc, char *argv[])
 
   exit(0);
 }
+

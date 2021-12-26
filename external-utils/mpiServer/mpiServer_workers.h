@@ -37,6 +37,7 @@
 		                  int sd, 
                                   void (*worker_function)(struct st_th) ) ;
    void mpiServer_worker_run    ( void *arg ) ;
+   void mpiServer_wait_workers  ( void ) ;
 
 #endif
 

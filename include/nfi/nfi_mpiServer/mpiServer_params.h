@@ -14,30 +14,20 @@
 
    typedef struct
    {
-        // server identification
+        // client identification
         int  size ;
         int  rank ;
+
+        // server port and comm
         char port_name[MPI_MAX_PORT_NAME] ;
         char  srv_name[MPI_MAX_PORT_NAME] ;
-
-        // associated client
-        MPI_Comm client ;
-        char dirbase[255] ;
-        int  IOsize ;
+        MPI_Comm server ;
 
         // server arguments
 	int    argc ;
 	char **argv ;
-   } mpiServer_param_st ;
+   } mpiClient_param_st ;
 
-
-   /*
-    * API
-    */
-
-   void mpiServer_params_show_usage ( void ) ;
-   int  mpiServer_params_get        ( mpiServer_param_st *params, int argc, char *argv[] ) ;
-   void mpiServer_params_show       ( mpiServer_param_st *params ) ;
 
 #endif
 

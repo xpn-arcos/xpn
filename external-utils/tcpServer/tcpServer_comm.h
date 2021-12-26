@@ -2,6 +2,7 @@
 #define _TCPSERVER_COMM_H_
 
 #include "tcpServer.h"
+#include "tcpServer_utils.h"
 
 
 /* Nuevo */
