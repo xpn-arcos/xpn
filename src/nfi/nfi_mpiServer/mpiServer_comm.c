@@ -155,6 +155,7 @@
       ssize_t mpiClient_write_data ( int fd, char *data, ssize_t size, char *msg_id )
       {
       	      int ret ;
+
       	      debug_info("[COMM] server: begin comm_write_data(...)\n") ;
       
       	      // Check params

@@ -25,6 +25,11 @@
   #define DEBUG_END() \
 	  debug_info("End   %s(), errno=%d\n", __func__, errno)
 
+  #define DEBUG_BEGIN() \
+	  debug_info("Begin %s()\n", __func__)
+  #define DEBUG_END() \
+	  debug_info("End   %s(), errno=%d\n", __func__, errno)
+
    // Memory
   #define FREE_AND_NULL(ptr) \
 	  if ((ptr) != NULL) { free((ptr)); (ptr) = NULL; }

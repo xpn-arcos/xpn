@@ -860,16 +860,11 @@
 		return -1;
 	}
 
-	printf("AQUUUUII 1\n");
-
-
 	ret = mpiClient_write_data(server_aux->sd, (char *)buffer, size, msg.id);
 	if(ret == -1){
 		fprintf(stderr,"(2)ERROR: nfi_mpiServer_read(ID=%s): Error on write operation\n",server_aux->id);
 		return -1;
 	}
-
-	printf("AQUUUUII 2\n");
 
 	ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_write_req), msg.id);
 	if(ret == -1){
