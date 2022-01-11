@@ -318,9 +318,6 @@ void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	if (NULL == params) {
 	    return ;
 	}
-	if (sd < 0) {
-	    return ;
-	}
 
 	// do close
 	close(head->u_st_mpiServer_msg.op_close.fd);
@@ -335,9 +332,6 @@ void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_m
 
 	// check params...
 	if (NULL == params) {
-	    return ;
-	}
-	if (sd < 0) {
 	    return ;
 	}
 
@@ -444,6 +438,7 @@ void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer
 	}
 
 	// read data...
+	LSEEK(head->u_st_mpiServer_msg.op_read.fd, head->u_st_mpiServer_msg.op_read.offset, 0);
 	req.size = op_read_buffer(params, head->u_st_mpiServer_msg.op_read.fd, buffer, size);
 	if (req.size < 0) {
 	    perror("read:");
@@ -495,6 +490,7 @@ void mpiServer_op_write ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	mpiServer_comm_readdata(params, sd, buffer, size);
 
     // write into the file
+    LSEEK(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset, 0);
 	req.size = op_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, size, size) ;
 
 	// write to the client the status of the write operation

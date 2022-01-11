@@ -30,22 +30,22 @@
       int     mpiClient_comm_init      ( mpiClient_param_st *params, int *sd )
       {
               int ret, provided ;
-	      int flag = 0;
-      	      char srv_name[1024] ;
+              int flag = 0;
+              char srv_name[1024] ;
       
               debug_info("[COMM] begin mpiClient_comm_init(...)\n") ;
 
               // MPI_Init
-	      MPI_Initialized(&flag);
-	      if (!flag)
-	      {
-	          ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: server->argc, server->argv from upper layers?
-	          printf("RET Thread: %d\n", ret);
-		  if (MPI_SUCCESS != ret) {
-	              debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
-	              return -1 ;
-	          }
-	      }
+              MPI_Initialized(&flag);
+              if (!flag)
+              {
+                  ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: server->argc, server->argv from upper layers?
+                  printf("RET Thread: %d\n", ret);
+                  if (MPI_SUCCESS != ret) {
+                      debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
+                      return -1 ;
+                  }
+              }
 
               // params->rank = comm_rank()
               ret = MPI_Comm_rank(MPI_COMM_WORLD, &(params->rank)) ;
@@ -61,7 +61,7 @@
                   return -1 ;
               }
 
-	      // Lookup port name
+              // Lookup port name
               sprintf(srv_name, "mpiServer.%d", params->rank) ;
               ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, params->port_name) ;
               if (MPI_SUCCESS != ret) {
@@ -77,14 +77,14 @@
               }
       
               // use server mpi_comm as sd...
-	      (*sd) = (int)(params->server) ;
+              (*sd) = (int)(params->server) ;
 
               debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
               debug_info("[COMM] server %d accepting...\n",    params->rank) ;
               debug_info("[COMM] end mpiClient_comm_init(...)\n") ;
 
-      	      // Return OK
-      	      return 1 ;
+              // Return OK
+              return 1 ;
       }
 
       int mpiClient_comm_destroy ( mpiClient_param_st *params )
@@ -116,9 +116,9 @@
       int mpiClient_comm_connect ( mpiClient_param_st *params )
       {
               int ret ;
-      	      char srv_name[1024] ;
+              char srv_name[1024] ;
       
-	      // Lookup port name
+              // Lookup port name
               sprintf(srv_name, "mpiServer.%d", params->rank) ;
               ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, params->port_name) ;
               if (MPI_SUCCESS != ret) {
@@ -154,61 +154,61 @@
       
       ssize_t mpiClient_write_data ( int fd, char *data, ssize_t size, char *msg_id )
       {
-      	      int ret ;
+              int ret ;
 
-      	      debug_info("[COMM] server: begin comm_write_data(...)\n") ;
+              debug_info("[COMM] server: begin comm_write_data(...)\n") ;
       
-      	      // Check params
-      	      if (size == 0) {
-      	          return 0;
-      	      }
-      	      if (size < 0) {
+              // Check params
+              if (size == 0) {
+                  return 0;
+              }
+              if (size < 0) {
                   debug_warning("Server[?]: size < 0") ;
-      	          return -1;
-      	      }
+                  return -1;
+              }
       
               // Send message
               ret = MPI_Send(data, size, MPI_CHAR, 0, 0, (MPI_Comm)fd) ;
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[?]: MPI_Recv fails :-(") ;
-		  size = 0 ;
+                  size = 0 ;
               }
       
-      	      debug_info("[COMM] server: end comm_write_data(...)\n") ;
+              debug_info("[COMM] server: end comm_write_data(...)\n") ;
       
               // Return bytes written
-      	      return size;
+              return size;
       }
 
       ssize_t mpiClient_read_data ( int fd, char *data, ssize_t size, char *msg_id )
       {
-      	      int ret ;
-      	      MPI_Status status ;
+              int ret ;
+              MPI_Status status ;
       
-      	      debug_info("[COMM] server: begin comm_read_data(...)\n") ;
+              debug_info("[COMM] server: begin comm_read_data(...)\n") ;
       
-      	      // Check params
-      	      if (size == 0) {
-      	          return  0;
-      	      }
-      	      if (size < 0){
+              // Check params
+              if (size == 0) {
+                  return  0;
+              }
+              if (size < 0){
                   debug_warning("Server[?]: size < 0") ;
-      	          return  -1;
-      	      }
+                  return  -1;
+              }
       
               // Get message
-      	      ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, MPI_ANY_TAG, (MPI_Comm)fd, &status);
+              ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, MPI_ANY_TAG, (MPI_Comm)fd, &status);
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[?]: MPI_Recv fails :-(") ;
-		  size = 0 ;
+                  size = 0 ;
               }
 
-	      // TODO: status holds the mpi_rank and tag to be used to answer in case of a high-level function that reads a request... how we can return (size, rank, tag, ...) with this 'descriptor'-based interface?
+              // TODO: status holds the mpi_rank and tag to be used to answer in case of a high-level function that reads a request... how we can return (size, rank, tag, ...) with this 'descriptor'-based interface?
       
-      	      debug_info("[COMM] server: end comm_read_data(...)\n") ;
+              debug_info("[COMM] server: end comm_read_data(...)\n") ;
       
               // Return bytes read
-      	      return size;
+              return size;
       }
 
 

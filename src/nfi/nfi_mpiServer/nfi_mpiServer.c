@@ -31,15 +31,15 @@
        * Debug
        */
 
-//#ifdef DBG_NFI
+#ifdef DBG_NFI
       #define dbgnfi_error(...)    fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_warning(...)  fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_info(...)     fprintf(stdout, __VA_ARGS__)
-/*#else
+#else
       #define dbgnfi_error(...)
       #define dbgnfi_warning(...)
       #define dbgnfi_info(...)
-#endif*/
+#endif
 
       /*
        * Memory
@@ -137,7 +137,6 @@
 		*/
 			break;
           }
-          printf("END\n");
           return ret;
       }
 
@@ -871,8 +870,6 @@
 		fprintf(stderr,"(3)ERROR: nfi_mpiServer_write(ID=%s): Error on write operation\n",server_aux->id);
 		return -1;
 	}
-
-	printf("AQUUUUII 3\n");
 
 	dbgnfi_info("[NFI] nfi_mpiServer_write(ID=%s): write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
 	if (req.size < 0)

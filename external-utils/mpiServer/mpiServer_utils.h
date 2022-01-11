@@ -10,15 +10,15 @@
    */
 
    // debug print
-//#ifdef DEBUG
+#ifdef DEBUG
   #define debug_error(...)    mpiServer_utils_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
   #define debug_warning(...)  mpiServer_utils_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
   #define debug_info(...)     mpiServer_utils_printf(3, __FILE__, __LINE__, stdout, __VA_ARGS__)
-/*#else
+#else
   #define debug_error(...)
   #define debug_warning(...)
   #define debug_info(...)
-#endif*/
+#endif
 
   #define DEBUG_BEGIN() \
 	  debug_info("Begin %s()\n", __func__)
