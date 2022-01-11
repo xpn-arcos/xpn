@@ -64,6 +64,7 @@
 		op = mpiServer_read_operation(th.params, th.sd, &head);
 			
 		debug_info("[WORKERS] (ID=%d): begin to do operation '%s'\n", th.id, mpiServer_op2string(op));
+
 		switch(op)
 		{
 			case MPISERVER_OPEN_FILE:
@@ -160,7 +161,7 @@
 	}
 
 	// Wait for all current workers
-	// TODO
+        mpiServer_wait_workers() ;
 
 	// Finalize
 	mpiServer_comm_destroy(&params) ;

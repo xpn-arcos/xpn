@@ -6,6 +6,7 @@
    #include <string.h>
    #include "mpi.h"
    #include "mpiServer_conf.h"
+   #include "mpiServer_utils.h"
 
 
    /*
@@ -26,8 +27,8 @@
         int  IOsize ;
 
         // server arguments
-	int    argc ;
-	char **argv ;
+        int    argc ;
+        char **argv ;
    } mpiServer_param_st ;
 
 

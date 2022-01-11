@@ -27,13 +27,13 @@
 
    /* ... Global variables / Variables globales ......................... */
 
-      int busy_worker;
+      int             busy_worker;
       pthread_mutex_t m_worker;
-      pthread_cond_t c_worker;
-      pthread_t th_worker;
+      pthread_cond_t  c_worker;
 
-      struct st_th st_worker;
-      int th_cont = 0;
+      pthread_cond_t  c_nworkers;
+      long            n_workers;
+      int             th_cont = 0;
 
 
    /* ... Functions / Funciones ......................................... */
@@ -41,8 +41,11 @@
       int mpiServer_init_worker ( void )
       {
 	  busy_worker = TRUE;
-	  pthread_cond_init(&c_worker, NULL);
-	  pthread_mutex_init(&m_worker, NULL);
+          n_workers   = 0L;
+	  pthread_cond_init (&c_worker,   NULL);
+	  pthread_cond_init (&c_nworkers, NULL);
+	  pthread_mutex_init(&m_worker,   NULL);
+
 	  return 0;
       }
 
@@ -51,45 +54,45 @@
                                     void (*worker_function)(struct st_th) )
       {
 	  int ret;
-	  pthread_attr_t tattr;
+	  pthread_attr_t th_attr;
+          pthread_t      th_worker;
+          struct st_th   st_worker;
 
-	  pthread_attr_init(&tattr);
-	  pthread_attr_setdetachstate(&tattr, PTHREAD_CREATE_DETACHED);
- 	  pthread_attr_setstacksize  (&tattr, STACK_SIZE);
+          DEBUG_BEGIN() ;
 
-	  debug_info("[WORKERS] mpiServer_launch_worker(%d)\n",sd) ;
-	
-	  st_worker.sd = sd;	
-	  st_worker.id = th_cont++;	
-	  st_worker.params = params ;
+	  pthread_attr_init(&th_attr);
+	  pthread_attr_setdetachstate(&th_attr, PTHREAD_CREATE_DETACHED);
+ 	  pthread_attr_setstacksize  (&th_attr, STACK_SIZE);
+	  busy_worker = TRUE;
+
+	  // prepare arguments...
+	  st_worker.sd       = sd;
+	  st_worker.id       = th_cont++;
+	  st_worker.params   = params ;
 	  st_worker.function = worker_function ;
 
-	  busy_worker = TRUE;
-	
-          debug_info("[WORKERS] pthread_create: antes create_thread mpiServer_worker_run\n") ;
-	  ret = pthread_create(&th_worker, &tattr, (void *)(mpiServer_worker_run), (void *)&st_worker);
+	  // create thread...
+          debug_info("[WORKERS] pthread_create: create_thread mpiServer_worker_run\n") ;
+	  ret = pthread_create(&th_worker, &th_attr, (void *)(mpiServer_worker_run), (void *)&st_worker);
 	  if (ret != 0){
               debug_error("[WORKERS] pthread_create %d\n", ret);
 	      perror("pthread_create: Error en create_thread: ");
 	  }
-	
-          debug_info("[WORKERS] pthread_create: antes lock mpiServer_worker_run\n");
+
+	  // wait to copy args...
+          debug_info("[WORKERS] pthread_create: lock mpiServer_worker_run\n");
 	  pthread_mutex_lock(&m_worker);
-          debug_info("[WORKERS] pthread_create: desp. lock mpiServer_worker_run\n");
 	  while (busy_worker == TRUE)
 	  {
-                debug_info("[WORKERS] pthread_create: antes wait mpiServer_worker_run\n");
+                debug_info("[WORKERS] pthread_create: wait mpiServer_worker_run\n");
 		pthread_cond_wait(&c_worker, &m_worker);
-                debug_info("[WORKERS] pthread_create: desp. wait mpiServer_worker_run\n");
 	  }
-
           debug_info("[WORKERS] pthread_create: busy_worker= TRUE mpiServer_worker_run\n");
 	  busy_worker = TRUE;
-
-          debug_info("[WORKERS] pthread_create: antes unlock mpiServer_worker_run\n");
+          debug_info("[WORKERS] pthread_create: unlock mpiServer_worker_run\n");
 	  pthread_mutex_unlock(&m_worker);
-          debug_info("[WORKERS] pthread_create: desp. unlock mpiServer_worker_run\n");
-	
+
+          DEBUG_END() ;
 	  return 0;
       }
 
@@ -97,28 +100,57 @@
       {
           struct st_th th;
       
-          debug_info("[WORKERS] begin mpiServer_worker_run(...)\n");
-	  memcpy(&th, arg, sizeof(struct st_th)) ;
-      
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) antes lock\n");
-          pthread_mutex_lock(&m_worker);
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) desp. lock\n");
-      
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) busy_worker = FALSE\n");
-          busy_worker = FALSE;
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) signal\n");
-          //pthread_cond_signal(&c_worker);
-          pthread_cond_broadcast(&c_worker);
+          DEBUG_BEGIN() ;
 
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) antes unlock\n");
+          // prolog... 
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) lock\n", th.id);
+          pthread_mutex_lock(&m_worker);
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) copy arguments\n", th.id);
+	  memcpy(&th, arg, sizeof(struct st_th)) ;
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) busy_worker = FALSE\n", th.id);
+          busy_worker = FALSE;
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) n_workers++\n", th.id);
+          n_workers++ ;
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) signal c_worker\n", th.id);
+          pthread_cond_broadcast(&c_worker); // pthread_cond_signal(&c_worker);
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) unlock\n", th.id);
           pthread_mutex_unlock(&m_worker);
-          debug_info("[WORKERS] client: mpiServer_worker_run(...) desp. unlock\n");
       
 	  // do function code...
 	  th.function(th) ;
 
-          debug_info("[WORKERS] mpiServer_worker_run (ID=%d) ends\n", th.id);
+	  // epilog...
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) lock\n", th.id);
+          pthread_mutex_lock(&m_worker);
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) n_workers--\n", th.id);
+          n_workers-- ;
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) signal c_nworkers\n", th.id);
+          pthread_cond_broadcast(&c_nworkers); // pthread_cond_signal(&c_nworkers);
+          debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) unlock\n", th.id);
+          pthread_mutex_unlock(&m_worker);
+
+          DEBUG_END() ;
+
+	  // end
           pthread_exit(0);
+      }
+
+      void mpiServer_wait_workers ( void )
+      {
+          DEBUG_BEGIN() ;
+
+	  // wait to n_workers be zero...
+          debug_info("[WORKERS] pthread_create: lock mpiServer_wait_workers\n");
+	  pthread_mutex_lock(&m_worker);
+	  while (n_workers != 0)
+	  {
+                debug_info("[WORKERS] pthread_create: wait mpiServer_wait_workers\n");
+		pthread_cond_wait(&c_nworkers, &m_worker);
+	  }
+          debug_info("[WORKERS] pthread_create: unlock mpiServer_wait_workers\n");
+	  pthread_mutex_unlock(&m_worker);
+
+          DEBUG_END() ;
       }
 
 

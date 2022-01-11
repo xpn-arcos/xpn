@@ -176,7 +176,7 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 {
 	int ret;
 
-	debug_info("[OPS] (ID=%s) antes de read_operation: sizeof(struct st_mpiServer_msg) = %d.\n ", params->srv_name, sizeof(struct st_mpiServer_msg));
+        DEBUG_BEGIN() ;
 
 	ret = mpiServer_comm_readdata(params, sd, (char *)&head->type, sizeof(head->type));
 	if (ret == -1) {
@@ -233,7 +233,8 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 			// ret = mpiServer_comm_readdata(params, sd, (char *)&head->u_st_mpiServer_msg.op_end, sizeof(struct st_mpiServer_end));
 			break;
 	}
-	debug_info("[OPS] (ID=%s) end to read operation (%s) arguments\n", params->srv_name, mpiServer_op2string(head->type));
+
+        DEBUG_END() ;
 
 	// Return
 	if (ret == -1) {
@@ -242,18 +243,13 @@ int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpi
 	return head->type;
 }
 
-
-// TODO:
-// mpiServer_op_open:
-// * why in all cases message path is copied into a local "char s[256]" variable? 
-// * any checks about string overwrite in the strcpy?
 void mpiServer_op_open ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
 	int fd;
-	char s[255];
+	char *s;
 
 	// do open
-	strcpy(s,head->u_st_mpiServer_msg.op_open.path);
+	s = head->u_st_mpiServer_msg.op_open.path;
 	fd = open(s, O_RDWR);
 	mpiServer_comm_writedata(params, sd, (char *)&fd, sizeof(int));
 
@@ -264,18 +260,17 @@ void mpiServer_op_open ( mpiServer_param_st *params, int sd, struct st_mpiServer
 void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
 	int fd;
-	char s[255];
+	char *s;
 
 	// do creat
-	strcpy(s,head->u_st_mpiServer_msg.op_creat.path);
+	s = head->u_st_mpiServer_msg.op_creat.path;
 	fd = open(s, O_CREAT | O_RDWR, 0777);
 	if (fd == -1)
 	{
 	    mpiServer_create_spacename(params, s);
-            //fd = open(s, O_CREAT | O_TRUNC | O_RDWR, 0666);
-            fd = open(s, O_CREAT | O_RDWR, 0666);
+            fd = open(s, O_CREAT | O_RDWR, 0660);
 	}
-	mpiServer_comm_writedata(params, sd,(char *)&fd,sizeof(int)) ;
+	mpiServer_comm_writedata(params, sd, (char *)&fd, sizeof(int)) ;
 
 	// show debug info
 	debug_info("[OPS] (ID=%s) CREAT(%s)=%d\n", params->srv_name, s, fd);
@@ -283,15 +278,18 @@ void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServe
 
 void mpiServer_op_flush ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
-	int ret = 0;
+	int ret;
 
-	// check params...
-	if (sd < 0) {
+	// check arguments
+        if (NULL == head) {
 	    return ;
 	}
 
 	// do flush
-	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
+	ret = 0 ; // TODO: do flush...
+	debug_warning("[OPS] (ID=%s) TODO: flush\n", params->srv_name) ;
+
+	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int)) ;
 
 	// show debug info
 	debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_flush.virtual_path);
@@ -317,6 +315,9 @@ void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiSer
 void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
 	// check params...
+	if (NULL == params) {
+	    return ;
+	}
 	if (sd < 0) {
 	    return ;
 	}
@@ -330,185 +331,190 @@ void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServe
 
 void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
-	char s[255];
+	char *s;
 
 	// check params...
+	if (NULL == params) {
+	    return ;
+	}
 	if (sd < 0) {
 	    return ;
 	}
 
 	// do rm
-	strcpy(s, head->u_st_mpiServer_msg.op_rm.path);
+	s = head->u_st_mpiServer_msg.op_rm.path;
 	unlink(s);
 
 	// show debug info
 	debug_info("[OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_rm.path);
 }
 
+
+long op_read_buffer ( mpiServer_param_st *params, int read_fd2, void *buffer, int buffer_size )
+{
+     ssize_t read_num_bytes       = -1 ;
+     ssize_t read_remaining_bytes = buffer_size ;
+     void   *read_buffer          = buffer ;
+
+     // check arguments...
+     if (NULL == params) {
+	 debug_warning("WARNING[%s]:\t read with NULL mpiServer_param_st *.\n", params->srv_name) ;
+     }
+
+     while (read_remaining_bytes > 0)
+     {
+	 /* Read from local file... */
+         read_num_bytes = read(read_fd2, read_buffer, read_remaining_bytes) ;
+
+	 /* Check errors */
+         if (read_num_bytes == -1) {
+	     debug_error("ERROR[%s]:\t read fails to read data.\n", params->srv_name) ;
+	     return -1 ;
+         }
+
+	 /* Check end of file */
+         if (read_num_bytes == 0)
+	 {
+	     debug_error("INFO[%s]:\t end of file, readed %ld.\n", 
+			 params->srv_name, 
+			 (buffer_size - read_remaining_bytes)) ;
+	     return (buffer_size - read_remaining_bytes) ;
+         }
+
+         read_remaining_bytes -= read_num_bytes ;
+         read_buffer          += read_num_bytes ;
+     }
+
+     return buffer_size ;
+}
+
+long op_write_buffer ( mpiServer_param_st *params, int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
+{
+     ssize_t write_num_bytes       = -1 ;
+     ssize_t write_remaining_bytes = num_readed_bytes ;
+     void   *write_buffer          = buffer ;
+
+     // check arguments...
+     if (NULL == params) {
+	 debug_warning("WARNING[%s]:\t read with NULL mpiServer_param_st *.\n", params->srv_name) ;
+     }
+     if (num_readed_bytes > buffer_size) {
+	 debug_error("ERROR[%s]:\t write for %d bytes from a buffer with only %d bytes.\n", params->srv_name, num_readed_bytes, buffer_size) ;
+	 return -1 ;
+     }
+
+     while (write_remaining_bytes > 0)
+     {
+	 /* Write into local file (write_fd2)... */
+         write_num_bytes = write(write_fd2, write_buffer, write_remaining_bytes) ;
+
+	 /* Check errors */
+         if (write_num_bytes == -1) {
+	     debug_error("ERROR[%s]:\t write fails to write data.\n", params->srv_name) ;
+	     return -1 ;
+         }
+
+         write_remaining_bytes -= write_num_bytes ;
+         write_buffer          += write_num_bytes ;
+     }
+
+     return num_readed_bytes ;
+}
+
 void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
-	long size_req, size = 0, cont = 0;
-	//char *buffer;
+	long size ;
 	struct st_mpiServer_read_req req;
-	int SIZE;
-
-#ifndef _MALLOC_
-	char buffer[MAX_BUFFER_SIZE];
-	SIZE = MAX_BUFFER_SIZE;
-	debug_info("[OPS] (ID=%s) op_read: static buffer (%d) ID=x\n", params->srv_name,MAX_BUFFER_SIZE);
-#else
 	char *buffer;
-	SIZE = 0;
-	debug_info("[OPS] (ID=%s) op_read: variable buffer (%d) ID=x\n", params->srv_name,MAX_BUFFER_SIZE);
-#endif
+   
+	debug_info("[OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n",
+		   params->srv_name,
+		   head->u_st_mpiServer_msg.op_read.fd,
+		   (int)head->u_st_mpiServer_msg.op_read.offset,
+		   head->u_st_mpiServer_msg.op_read.size);
 
-	//
-	debug_info("[OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n", params->srv_name,
-						head->u_st_mpiServer_msg.op_read.fd,
-						(int)head->u_st_mpiServer_msg.op_read.offset,
-						head->u_st_mpiServer_msg.op_read.size);
+    // malloc a buffer of size...
+    size = head->u_st_mpiServer_msg.op_read.size;
+	buffer = (char *)malloc(size) ;
+	if (NULL == buffer)
+	{
+		req.size = -1;	// TODO: check in client that -1 is treated properly... :-9
+ 	    mpiServer_comm_writedata(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req));
+ 	    return ;
+	}
 
-#ifdef _MALLOC_
-	SIZE = head->u_st_mpiServer_msg.op_read.size;
-	buffer = (char *)malloc(SIZE);
-	//buffer = (char *)malloc(MAX_BUFFER_SIZE);
-	//debug_info("[OPS] (ID=%s) op_read: malloc(%d) ID=x\n", params->srv_name,MAX_BUFFER_SIZE);
-	debug_info("[OPS] (ID=%s) op_read: malloc(%d) ID=x\n", params->srv_name,SIZE);
-#endif
-	//t1 = MPI_Wtime();
-	do{
-#ifdef _LARGEFILE64_
-		lseek64(head->u_st_mpiServer_msg.op_read.fd,
-				head->u_st_mpiServer_msg.op_read.offset+cont,
-				0);
-#else
-	        debug_info("[OPS] (ID=%s) lseek: fd %d offset %d size %d ID=x\n", params->srv_name,
-						head->u_st_mpiServer_msg.op_read.fd,
-						(int)head->u_st_mpiServer_msg.op_read.offset+cont,
-						head->u_st_mpiServer_msg.op_read.size);
+	// read data...
+	req.size = op_read_buffer(params, head->u_st_mpiServer_msg.op_read.fd, buffer, size);
+	if (req.size < 0) {
+	    perror("read:");
 
-		lseek(head->u_st_mpiServer_msg.op_read.fd,
-			head->u_st_mpiServer_msg.op_read.offset+cont,
-			0);
-#endif
+	    req.size = -1;	// TODO: check in client that -1 is treated properly... :-9
+ 	    mpiServer_comm_writedata(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req));
 
-		size_req = (head->u_st_mpiServer_msg.op_read.size - cont);
-		if(size_req>SIZE){
-			size_req = SIZE;
-		}
+ 	    FREE_AND_NULL(buffer) ;
+ 	    return ;
+	}
 
-		req.size = read(head->u_st_mpiServer_msg.op_read.fd,
-		 			buffer,
-       		   			size_req);
+    // send (how many + data) to client...
+	mpiServer_comm_writedata(params, sd, (char *)&req, sizeof(struct st_mpiServer_read_req));
+	debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size);
 
-		if(req.size < 0){
-			perror("read:");
-		}
-		cont += req.size;
-		if (((unsigned)cont == head->u_st_mpiServer_msg.op_read.size) || (req.size < size_req)) {
-			req.last = 1;
-		} else {
-			req.last = 0;
-		}
-		mpiServer_comm_writedata(params, sd, (char *)&req, sizeof(struct st_mpiServer_read_req));
-		debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size);
+    mpiServer_comm_writedata(params, sd, buffer, req.size);
+    debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name);
 
-		if(req.size > 0){
-			mpiServer_comm_writedata(params, sd, (char *)buffer, req.size);
-			debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name);
-		}else{
-			break;
-		}
-	}while((size >0)&&(!req.last));
+    // free buffer
+    FREE_AND_NULL(buffer) ;
 
-        debug_info("[OPS] (ID=%s) end read: fd %d offset %d size %d ID=x\n", params->srv_name,
-                                                                       head->u_st_mpiServer_msg.op_read.fd,
-                                                                       (int)head->u_st_mpiServer_msg.op_read.offset,
-                                                                       size);
-
-	debug_info("[OPS] (ID=%s) op_read: new_size %d\n", params->srv_name,size);
-#ifdef _MALLOC_
-	debug_info("[OPS] (ID=%s) op_read: free ID=x\n", params->srv_name);
-	free(buffer);
-#endif
-        debug_info("[OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n", params->srv_name,
-                                                head->u_st_mpiServer_msg.op_read.fd,
-                                                (int)head->u_st_mpiServer_msg.op_read.offset,
-                                                size);
+	// debugging information
+    debug_info("[OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",
+ 		        params->srv_name,
+                head->u_st_mpiServer_msg.op_read.fd,
+                (int)head->u_st_mpiServer_msg.op_read.offset,
+                size) ;
 }
 
 void mpiServer_op_write ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
-	//char *buffer;
-	int cont =0 ,size =0;
 	struct st_mpiServer_write_req req;
-#ifndef _MALLOC_
-	char buffer[MAX_BUFFER_SIZE];
-	int SIZE = MAX_BUFFER_SIZE;
-#else
 	char *buffer;
-	int SIZE = 0;
-#endif
-
+	int size ;
+	
 	debug_info("[OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_mpiServer_msg.op_write.fd);
 
-#ifdef _MALLOC_
-	SIZE = head->u_st_mpiServer_msg.op_write.size;
-#endif
-	do{
-	size = (head->u_st_mpiServer_msg.op_write.size - cont);
-	if(size>SIZE){
-		size= SIZE;
+    // malloc a buffer of size...
+	size = (head->u_st_mpiServer_msg.op_write.size);
+	buffer = (char *)malloc(size) ;
+	if (NULL == buffer)
+	{
+		req.size = -1;	// TODO: check in client that -1 is treated properly... :-9
+ 	    mpiServer_comm_writedata(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req));
+ 	    return ;
 	}
 
-	if(size == 0)
-		break;
+    // read data from MPI 
+	mpiServer_comm_readdata(params, sd, buffer, size);
 
-#ifdef _MALLOC_
-	buffer = (char *)malloc(SIZE);
-	//buffer = (char *)malloc(head->u_st_mpiServer_msg.op_read.size);
-	//buffer = (char *)malloc(MAX_BUFFER_SIZE);
-#endif
-	mpiServer_comm_readdata(params, sd,(char *)buffer, size);
+    // write into the file
+	req.size = op_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, size, size) ;
 
-#ifdef _LARGEFILE64_
-	lseek64(head->u_st_mpiServer_msg.op_write.fd,
-			head->u_st_mpiServer_msg.op_write.offset+cont,
-			0);
-#else
-	lseek(head->u_st_mpiServer_msg.op_write.fd,
-			head->u_st_mpiServer_msg.op_write.offset+cont,
-			0);
-#endif
-
-	req.size = write(head->u_st_mpiServer_msg.op_write.fd,
-			  buffer,
-		          size);
-
-	cont += size;
-	}while(req.size>0);
-
-	if(req.size>=0){
-		req.size = head->u_st_mpiServer_msg.op_write.size;
-	}
+	// write to the client the status of the write operation
 	mpiServer_comm_writedata(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req));
 
-	#ifdef _MALLOC_
-		free(buffer);
-	#endif
 
-	debug_info("[OPS] (ID=%s) op_write on fd %d with %d bytes", params->srv_name, head->u_st_mpiServer_msg.op_write.fd, req.size);
+    // free buffer
+    FREE_AND_NULL(buffer) ;
 
+    // for debugging purpouses 
 	debug_info("[OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_mpiServer_msg.op_write.fd);
 }
 
 void mpiServer_op_mkdir ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
-	char s[255];
 	int ret;
+	char *s;
 
 	// do mkdir
-	strcpy(s, head->u_st_mpiServer_msg.op_mkdir.path);
+	s = head->u_st_mpiServer_msg.op_mkdir.path;
 	ret = mkdir(s, 0777);
 	mpiServer_comm_writedata(params, sd,(char *)&ret,sizeof(int));
 
@@ -518,11 +524,11 @@ void mpiServer_op_mkdir ( mpiServer_param_st *params, int sd, struct st_mpiServe
 
 void mpiServer_op_rmdir ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
-	char s[255];
 	int ret;
+	char *s;
 
 	// do rmdir
-	strcpy(s, head->u_st_mpiServer_msg.op_rmdir.path); 
+	s = head->u_st_mpiServer_msg.op_rmdir.path; 
 	ret = rmdir(s);
 	mpiServer_comm_writedata(params, sd, (char *)&ret, sizeof(int));
 
@@ -536,7 +542,9 @@ void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 	if (sd < 0) {
 	    return ;
 	}
-
+	if (NULL == params) {
+	    return ;
+	}
 	if (NULL == head) {
 	    return ;
 	}
@@ -550,11 +558,11 @@ void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 
 void mpiServer_op_getattr ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head )
 {
-	char s[255];
 	struct st_mpiServer_attr_req req;
+	char *s;
 
 	// do getattr
-	strcpy(s, head->u_st_mpiServer_msg.op_getattr.path);
+	s = head->u_st_mpiServer_msg.op_getattr.path;
 	req.status = stat(s, &req.attr);
 	mpiServer_comm_writedata(params, sd,(char *)&req,sizeof(struct st_mpiServer_attr_req));
 

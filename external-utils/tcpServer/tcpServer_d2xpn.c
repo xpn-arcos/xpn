@@ -1,3 +1,27 @@
+
+/*
+ *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *
+ *  This file is part of mpiServer.
+ *
+ *  mpiServer is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  mpiServer is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with mpiServer.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+   /* ... Include / Inclusion ........................................... */
+
 #include "tcpServer_d2xpn.h"
 #include "tcpServer_params.h"
 #include "xpn.h"
@@ -11,27 +35,29 @@
 #define MB (KB*KB)
 #endif
 
-int TCPSERVER_IOSIZE_INT;
-
 #define DEFAULT_PATH "/tmp"
-
 #define TCPSERVER_PATH_DEFAULT "/tmp"
 
+
+   /* ... Global variables / Variables globales ......................... */
+
+int TCPSERVER_IOSIZE_INT;
 extern struct tcpServer_param_st tcpServer_params;
-
-
-/*****************************************************************/
-pthread_mutex_t mutex_id = PTHREAD_MUTEX_INITIALIZER; 
+pthread_mutex_t mutex_id = PTHREAD_MUTEX_INITIALIZER;
 int static_id = 0;
-/*****************************************************************/
 
 
-void generateName(char *file, char *new_file){
+   /* ... Functions / Funciones ......................................... */
+
+void generateName(char *file, char *new_file)
+{
+	long unsigned i, j;
 	char aux[255];
-	int i,j;
 	
-	for(j=0,i=0;i<strlen(file);i++){
-		switch(file[i]){
+	for (j=0,i=0; i<strlen(file); i++)
+	{
+		switch(file[i])
+		{
 			case '/':
 				aux[j] = '_';		
 				break;
@@ -52,13 +78,19 @@ void generateName(char *file, char *new_file){
 	return;
 }
 
-int mylock(char *file){
+int mylock ( char *file )
+{
 	//char new_file[255];
 	int fd;
 
 #if defined (DBG_XPN) || defined(_DBGXPN_)
-  	printf("d2xpn: mylock(%s)\n",file);
+  	printf("d2xpn: mylock(%s)\n", file);
 #endif
+
+	// check params...
+	if (NULL == file) {
+	    return -1 ;
+	}
 	
 	pthread_mutex_lock(&mutex_id);
 	fd = 0;
@@ -77,20 +109,27 @@ int mylock(char *file){
 	return fd;
 }
 
-
-int myunlock(int fd){
+int myunlock ( int fd )
+{
 #if defined (DBG_XPN) || defined(_DBGXPN_)
   	printf("d2xpn: myunlock(%d)\n",fd);
 #endif
+
+	// check params...
+	if (fd < 0)  {
+	    return -1 ;
+	}
+
 	pthread_mutex_unlock(&mutex_id);
 /*
   	flock(fd, LOCK_UN);
 	close(fd);
 */	
+
 	return 0;
 }
 
-int tcpServer_d2xpn(char *origen, char *destino, int opt)
+int tcpServer_d2xpn ( char *origen, char *destino, int opt )
 {
   struct stat st;
   //struct stat st_xpn;
@@ -98,35 +137,45 @@ int tcpServer_d2xpn(char *origen, char *destino, int opt)
   int fdp,fd,s,sp, ret,fd_lock;
   int sum = 0;
   char *tcpServer_path, new_path[255];
-  int private_id; 
+#ifdef DBG_XPN
+  int private_id;
+#endif
   char *global_transfer_buffer;
 
-  double transfer_time;  
+  double transfer_time;
   struct timeval t1, t2;
+
+
+  if (opt < 0) {
+#ifdef DBG_XPN
+      printf("d2xpn(%d): warning opt is %d\n",  private_id, opt);
+#endif
+  }
+
 	//pthread_mutex_lock(&mutex_id);
+#ifdef DBG_XPN
         private_id = static_id++;
+#endif
 	//pthread_mutex_unlock(&mutex_id);
 	
 
 #ifdef DBG_XPN
-	printf("d2xpn(%d): Origen: %s\n", private_id, origen);
+	printf("d2xpn(%d): Origen: %s\n",  private_id, origen);
 	printf("d2xpn(%d): Destino: %s\n", private_id, destino);
 	fflush(stdout);
 #endif
 
-
-
 tcpServer_path = tcpServer_params.dirbase;
 if(tcpServer_path  == NULL){
-	tcpServer_path = TCPSERVER_PATH_DEFAULT; 
+	tcpServer_path = TCPSERVER_PATH_DEFAULT;
 }
 
-  sprintf(new_path, "%s/%s", tcpServer_path, destino); 
+  sprintf(new_path, "%s/%s", tcpServer_path, destino);
 
 /*
  * Deberia comprobar si puedo hacer el lock,
- * si no devolver resultado para que lea del 
- * 
+ * si no devolver resultado para que lea del
+ *
  */
 
   gettimeofday(&t1, NULL);
@@ -134,7 +183,7 @@ if(tcpServer_path  == NULL){
   if(fd_lock == -1){
 	printf("Err: lock %s\n",destino);
 	perror("Error: lock");
-	return(-1);	  
+	return(-1);	
   }
 
 //sprintf(s_exe,"ls -l %s",new_path);
@@ -145,8 +194,8 @@ if(tcpServer_path  == NULL){
 	printf("d2xpn(%d): xpn_stat(%s)\n",private_id,origen);
 	fflush(stdout);
 #endif
- 
- 
+
+
   ret = stat(new_path, &st);
 #if defined( DBG_XPN) || defined(_DBGXPN_)
   printf("d2xpn(%d): stat(%s) = %d\n", private_id,new_path, ret);
@@ -158,13 +207,13 @@ if(tcpServer_path  == NULL){
 	    printf("d2xpn(%d): %s (%s) is stored in cache\n", private_id, destino, origen);
 #endif
 	    myunlock(fd_lock);
-	    //xpn_destroy();	  
+	    //xpn_destroy();	
 	    //printf("d2xpn: %s and %s are the same file\n", origen, destino);
-	    return(0);	    
+	    return(0);	
   }
 
 
-  
+
 #ifdef DBG_XPN
 	printf("d2xpn(%d): xpn_init()\n",private_id);
 	fflush(stdout);
@@ -184,29 +233,29 @@ if(tcpServer_path  == NULL){
   fd=open(destino,O_RDONLY);
   if(fd<0){
     myunlock(fd_lock);
-    //xpn_destroy();	  
+    //xpn_destroy();	
     printf("tcpServer_d2xpn: error in open(%s) fd (%d)\n",destino,fd);
     return(-1);
-  }  
-  
+  }
 
-  
+
+
 #ifdef DBG_XPN
 	printf("d2xpn(%d): begin xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777)\n",private_id,origen);
 #endif
-  fdp = xpn_open(origen,O_CREAT|O_TRUNC|O_WRONLY, 0777); 
+  fdp = xpn_open(origen,O_CREAT|O_TRUNC|O_WRONLY, 0777);
 #ifdef DBG_XPN
 	printf("d2xpn(%d): end xpn_open(%s, O_CREAT|O_TRUNC|O_WRONLY, 0777) = %d\n",private_id,origen,fdp);
 #endif
   if(fdp<0){
     myunlock(fd_lock);
-    //xpn_destroy();	  
+    //xpn_destroy();	
     printf("error in xpn_open fdp = %d\n",fdp);
     return(-1);
-  } 
+  }
 
- 
-  
+
+
 
   global_transfer_buffer = malloc(sizeof(char)*TCPSERVER_IOSIZE_INT);
   sum = 0;
@@ -311,3 +360,4 @@ if(tcpServer_path  == NULL){
 */
   return(0);
 }
+

@@ -47,15 +47,15 @@
     *  Message struct
     */
 
-   struct st_mpiServer_open{
+   struct st_mpiServer_open {
 	char path[MPISERVER_MAXPATHLEN];
    };
 
-   struct st_mpiServer_creat{
+   struct st_mpiServer_creat {
 	char path[MPISERVER_MAXPATHLEN];
    };
 
-   struct st_mpiServer_read{
+   struct st_mpiServer_read {
 	int fd;
 #ifdef _LARGEFILE64_
 	long long int offset;
@@ -65,7 +65,7 @@
 	size_t size;
    };
 
-   struct st_mpiServer_write{
+   struct st_mpiServer_write {
 	int fd;
 #ifdef _LARGEFILE64_
 	long long int offset;
@@ -75,64 +75,64 @@
 	size_t size;
    };
 
-   struct st_mpiServer_read_req{
+   struct st_mpiServer_read_req {
 	ssize_t size;
 	char last;
    };
 
-   struct st_mpiServer_write_req{
+   struct st_mpiServer_write_req {
 	ssize_t size;
    };
 
-   struct st_mpiServer_open_req{
+   struct st_mpiServer_open_req {
 	int fd;
    };
 
-   struct st_mpiServer_close{
+   struct st_mpiServer_close {
 	int fd;
    };
 
-   struct st_mpiServer_rm{
+   struct st_mpiServer_rm {
 	char path[MPISERVER_MAXPATHLEN];
    };
 
-   struct st_mpiServer_mkdir{	
+   struct st_mpiServer_mkdir {	
 	char path[MPISERVER_MAXPATHLEN];
    };
 
-   struct st_mpiServer_rmdir{
+   struct st_mpiServer_rmdir {
 	char path[MPISERVER_MAXPATHLEN];
    };
 
 
-   struct st_mpiServer_getattr{	
+   struct st_mpiServer_getattr {	
 	char path[MPISERVER_MAXPATHLEN];
    };
 
-   struct st_mpiServer_setattr{	
+   struct st_mpiServer_setattr {	
 	char path[MPISERVER_MAXPATHLEN];
 	struct stat attr;
    };
 
-   struct st_mpiServer_attr_req{
+   struct st_mpiServer_attr_req {
 	char status;	
 	struct stat attr;
    };
 
 
-   struct st_mpiServer_flush{
+   struct st_mpiServer_flush {
 	char storage_path[MPISERVER_MAXPATHLEN];
 	char virtual_path[MPISERVER_MAXPATHLEN];
 	char opt;
    };
 
-   struct st_mpiServer_preload{
+   struct st_mpiServer_preload {
 	char storage_path[MPISERVER_MAXPATHLEN];
 	char virtual_path[MPISERVER_MAXPATHLEN];
 	char opt;
    };
 
-   struct st_mpiServer_end{
+   struct st_mpiServer_end {
 	char status;
    };
 
@@ -163,23 +163,29 @@
     *  API
     */
 
-   char *  mpiServer_op2string      ( int op_code ) ;
-   int  mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+#ifdef _LARGEFILE64_
+   #define LSEEK lseek64
+#else
+   #define LSEEK lseek
+#endif
 
-   void mpiServer_op_open        ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_creat       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_close       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_rm          ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_read        ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_write       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_rmdir       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_mkdir       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_fstat       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_setattr     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_getattr     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_flush       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_preload     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
-   void mpiServer_op_getid       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   char *mpiServer_op2string      ( int op_code ) ;
+   int   mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+
+   void  mpiServer_op_open        ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_creat       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_close       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_rm          ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_read        ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_write       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_rmdir       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_mkdir       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_fstat       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_setattr     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_getattr     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_flush       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_preload     ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
+   void  mpiServer_op_getid       ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head ) ;
 
 #endif
 
