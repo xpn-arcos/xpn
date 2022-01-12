@@ -1455,7 +1455,8 @@ Optional Features:
   --enable-gridftp=/path/to/globus/ (Don't use '~') 
                           Enable Globus GridFTP module.
   --enable-tcpserver      Enable tcpServer module.
-  --enable-mpiserver      Enable mpiServer module.
+  --enable-mpiserver@<:@=/path/to/mpi/@:>@ (Don't use '~') 
+                          Enable mpiServer module.
   --enable-ioproxy-rpc@<:@=/path/to/ioproxy-rpc/@:>@ (Don't use '~') 
                           Enable ioproxy-rpc module.
   --enable-http           Enable http module.
@@ -5692,7 +5693,11 @@ fi
 @%:@ Check whether --enable-mpiserver was given.
 if test "${enable_mpiserver+set}" = set; then :
   enableval=$enable_mpiserver; 
-                  CC="mpicc"
+                  case "${enableval}" in
+                    yes) CC="mpicc";;
+                    no)  CC="mpicc" ;;
+                    *)   CC="$enableval/mpicc" ;;
+                  esac
                   CDEFS="$CDEFS -DENABLE_MPISERVER"
                   INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_mpiServer"
                   NFI_MPISERVER="nfi_mpiserver"

@@ -352,9 +352,13 @@ AM_CONDITIONAL([ENABLE_TCPSERVER], [test "$NFI_TCPSERVER" = "nfi_tcpserver"])
 # Defines the necessary variables if gridftp is enabled.
 #
 AC_ARG_ENABLE(  [mpiserver],
-                [AS_HELP_STRING([--enable-mpiserver],[Enable mpiServer module.])],
+                [AS_HELP_STRING([--enable-mpiserver@<:@=/path/to/mpi/@:>@ (Don't use '~')],[Enable mpiServer module.])],
                 [
-                  [CC="mpicc"]
+                  [case "${enableval}" in
+                    yes) CC="mpicc";;
+                    no)  CC="mpicc" ;;
+                    *)   CC="$enableval/mpicc" ;;
+                  esac]
                   [CDEFS="$CDEFS -DENABLE_MPISERVER"]
                   [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_mpiServer"]
                   [NFI_MPISERVER="nfi_mpiserver"]
