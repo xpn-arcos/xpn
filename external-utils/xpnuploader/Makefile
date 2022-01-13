@@ -5,7 +5,7 @@ SOAPC=@SOAPC_DIR@/stdsoap2.c
 
 OUTPUT_DIR=project
 
-CC=mpicc
+CC=/opt/software/install-mpich/bin/mpicc
 CWFLAGS=-g -Wall -Wextra
 CIFLAGS=-I@SOAPH_DIR@/ -I$(OUTPUT_DIR) -I/usr/local/ssl/include
 CLFLAGS=-L/usr/local/ssl/lib

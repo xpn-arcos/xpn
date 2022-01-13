@@ -1299,3 +1299,44 @@
 			return real_fcntl(fd, cmd, arg);
 		}
 	}
+
+
+
+	#include "mpi.h"
+
+	int MPI_Init (int *argc, char ***argv)
+	{
+		char *value;
+
+		printf("DENTRO \n");
+
+		// We must initialize expand if it has not been initialized yet.
+		xpn_adaptor_keepInit ();
+
+		value = getenv("IS_MPI_SERVER") ;
+		if (NULL == value){
+
+			printf("Default\n");
+
+			return PMPI_Init(argc, argv);
+		}
+
+		printf("mpiServer end\n");
+		return MPI_SUCCESS;
+	}
+
+
+	int MPI_Finalize (void)
+	{
+		char *value;
+
+		//xpn_destroy();
+
+		value = getenv("IS_MPI_SERVER") ;
+		if (NULL == value){
+
+			printf("Default\n");
+
+			return PMPI_Finalize();
+		}
+	}

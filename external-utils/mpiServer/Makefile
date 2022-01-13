@@ -4,7 +4,7 @@
 #--------------------------
 
 MAKE         = make -s
-CC           = mpicc
+CC           = /opt/software/install-mpich/bin/mpicc
 SOURCE_PATH  = ./
 #EXPAND_DIR   = $(HOME)/expand/trunk/expand
 EXPAND_DIR   = /opt/xpn

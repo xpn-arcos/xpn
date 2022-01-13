@@ -29,14 +29,15 @@
 
       int     mpiClient_comm_init      ( mpiClient_param_st *params, int *sd )
       {
-              int ret, provided ;
-              int flag = 0;
+              int ret, provided, claimed ;
+              int flag = 0 ;
               char srv_name[1024] ;
       
               debug_info("[COMM] begin mpiClient_comm_init(...)\n") ;
 
               // MPI_Init
               MPI_Initialized(&flag);
+              printf("%d\n ", flag);
               if (!flag)
               {
                   ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: server->argc, server->argv from upper layers?
@@ -47,20 +48,25 @@
                   }
               }
 
+              MPI_Query_thread(&claimed) ;
+              if (claimed != MPI_THREAD_MULTIPLE) {
+                printf("MPI_Init: your MPI implementation seem not supporting thereads\n") ;
+              }
+              printf("AQUI 1\n");
               // params->rank = comm_rank()
               ret = MPI_Comm_rank(MPI_COMM_WORLD, &(params->rank)) ;
               if (MPI_SUCCESS != ret) {
                   debug_error("Server[%d]: MPI_Comm_rank fails :-(", params->rank) ;
                   return -1 ;
               }
-
+              printf("AQUI 2\n");
               // params->size = comm_size()
               ret = MPI_Comm_size(MPI_COMM_WORLD, &(params->size)) ;
               if (MPI_SUCCESS != ret) {
                   debug_error("Server[%d]: MPI_Comm_size fails :-(", params->rank) ;
                   return -1 ;
               }
-
+              printf("AQUI 3\n");
               // Lookup port name
               sprintf(srv_name, "mpiServer.%d", params->rank) ;
               ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, params->port_name) ;
@@ -68,21 +74,21 @@
                   debug_error("Server[%d]: MPI_Lookup_name fails :-(", params->rank) ;
                   return -1 ;
               }
-
+              printf("AQUI 4 %s\n", params->port_name);
               // Connect...
               ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(params->server)) ;
               if (MPI_SUCCESS != ret) {
                   debug_error("Client[%d]: MPI_Comm_connect fails :-(", params->rank) ;
                   return -1 ;
               }
-      
+              printf("AQUI 5\n");
               // use server mpi_comm as sd...
               (*sd) = (int)(params->server) ;
 
               debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
               debug_info("[COMM] server %d accepting...\n",    params->rank) ;
               debug_info("[COMM] end mpiClient_comm_init(...)\n") ;
-
+              printf("AQUI 6\n");
               // Return OK
               return 1 ;
       }

@@ -7,7 +7,7 @@
 
 
 
-CC=mpicc
+CC=/opt/software/install-mpich/bin/mpicc
 FLAGS=-Wall -Wextra -fpic -DLINUX
 INCLUDE=-I/opt/xpn/include/
 XPN=/opt/xpn/lib/libxpn.a

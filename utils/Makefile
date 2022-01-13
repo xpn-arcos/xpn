@@ -242,7 +242,7 @@ AUTOHEADER = ${SHELL} /local_test/expand/config/missing autoheader
 AUTOM4TE = ${SHELL} /local_test/expand/config/missing autom4te
 AUTOMAKE = ${SHELL} /local_test/expand/config/missing automake-1.16
 AWK = mawk
-CC = mpicc
+CC = /opt/software/install-mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
 CFLAGS = -fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra
