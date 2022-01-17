@@ -37,11 +37,11 @@
 
               // MPI_Init
               MPI_Initialized(&flag);
-              printf("%d\n ", flag);
+              //printf("%d\n ", flag);
               if (!flag)
               {
                   ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: server->argc, server->argv from upper layers?
-                  printf("RET Thread: %d\n", ret);
+                  //printf("RET Thread: %d\n", ret);
                   if (MPI_SUCCESS != ret) {
                       debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
                       return -1 ;
