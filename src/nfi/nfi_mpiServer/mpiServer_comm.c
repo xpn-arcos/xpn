@@ -52,43 +52,45 @@
               if (claimed != MPI_THREAD_MULTIPLE) {
                 printf("MPI_Init: your MPI implementation seem not supporting thereads\n") ;
               }
-              printf("AQUI 1\n");
+
               // params->rank = comm_rank()
               ret = MPI_Comm_rank(MPI_COMM_WORLD, &(params->rank)) ;
               if (MPI_SUCCESS != ret) {
                   debug_error("Server[%d]: MPI_Comm_rank fails :-(", params->rank) ;
                   return -1 ;
               }
-              printf("AQUI 2\n");
+
               // params->size = comm_size()
               ret = MPI_Comm_size(MPI_COMM_WORLD, &(params->size)) ;
               if (MPI_SUCCESS != ret) {
                   debug_error("Server[%d]: MPI_Comm_size fails :-(", params->rank) ;
                   return -1 ;
               }
-              printf("AQUI 3\n");
+
               // Lookup port name
-              sprintf(srv_name, "mpiServer.%d", params->rank) ;
+              //sprintf(srv_name, "mpiServer.%d", params->rank) ;
+              sprintf(srv_name, "mpiServer.%d", 0) ;
+
               ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, params->port_name) ;
               if (MPI_SUCCESS != ret) {
                   debug_error("Server[%d]: MPI_Lookup_name fails :-(", params->rank) ;
                   return -1 ;
               }
-              printf("AQUI 4 %s\n", params->port_name);
+
               // Connect...
               ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(params->server)) ;
               if (MPI_SUCCESS != ret) {
                   debug_error("Client[%d]: MPI_Comm_connect fails :-(", params->rank) ;
                   return -1 ;
               }
-              printf("AQUI 5\n");
+
               // use server mpi_comm as sd...
               (*sd) = (int)(params->server) ;
 
               debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
               debug_info("[COMM] server %d accepting...\n",    params->rank) ;
               debug_info("[COMM] end mpiClient_comm_init(...)\n") ;
-              printf("AQUI 6\n");
+
               // Return OK
               return 1 ;
       }

@@ -1308,7 +1308,7 @@
 	{
 		char *value;
 
-		printf("DENTRO \n");
+		//printf("DENTRO \n");
 
 		// We must initialize expand if it has not been initialized yet.
 		xpn_adaptor_keepInit ();
@@ -1316,12 +1316,12 @@
 		value = getenv("IS_MPI_SERVER") ;
 		if (NULL == value){
 
-			printf("Default\n");
+			//printf("Default Init\n");
 
 			return PMPI_Init(argc, argv);
 		}
 
-		printf("mpiServer end\n");
+		//printf("mpiServer end\n");
 		return MPI_SUCCESS;
 	}
 
@@ -1335,7 +1335,7 @@
 		value = getenv("IS_MPI_SERVER") ;
 		if (NULL == value){
 
-			printf("Default\n");
+			//printf("Default Finalize\n");
 
 			return PMPI_Finalize();
 		}
