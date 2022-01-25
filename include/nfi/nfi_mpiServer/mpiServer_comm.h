@@ -11,7 +11,7 @@
        *  API
        */
 
-      int     mpiClient_comm_init       ( mpiClient_param_st *params, int *sd ) ;
+      int     mpiClient_comm_init       ( mpiClient_param_st *params ) ;
       int     mpiClient_comm_destroy    ( mpiClient_param_st *params ) ;
       int     mpiClient_comm_connect    ( mpiClient_param_st *params ) ;
       int     mpiClient_comm_disconnect ( mpiClient_param_st *params ) ;

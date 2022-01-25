@@ -31,15 +31,15 @@
        * Debug
        */
 
-#ifdef DBG_NFI
+//#ifdef DBG_NFI
       #define dbgnfi_error(...)    fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_warning(...)  fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_info(...)     fprintf(stdout, __VA_ARGS__)
-#else
+/*#else
       #define dbgnfi_error(...)
       #define dbgnfi_warning(...)
       #define dbgnfi_info(...)
-#endif
+//#endif*/
 
       /*
        * Memory
@@ -298,12 +298,46 @@
           serv->private_info = (void *)server_aux;
 
           // initialize MPI Client communication side...
-          ret = mpiClient_comm_init(&(server_aux->params), &(server_aux->sd)) ;
+          ret = mpiClient_comm_init(&(server_aux->params)) ;
           if (ret < 0) {
               free(serv->ops);
               free(server_aux);
               return -1 ;
           }
+
+          ret = nfi_mpiServer_connect(serv, url, prt, server, dir);
+          if (ret < 0) {
+              free(serv->ops);
+              free(server_aux);
+              return -1 ;
+          }
+
+          //serv->protocol = MPISERVER;
+
+          dbgnfi_info("[NFI] nfi_mpiServer_init(ID=%s): end\n",server_aux->id);
+
+          // return OK
+          return 0;
+      }
+
+
+
+      int nfi_mpiServer_connect(struct nfi_server *serv, char *url, char* prt, char* server, char* dir)
+      {
+          int ret ;
+          struct nfi_mpiServer_server *server_aux;
+          struct st_mpiServer_msg msg;
+
+          server_aux = (struct nfi_mpiServer_server *) (serv->private_info);
+
+          ret = mpiClient_comm_connect(&(server_aux->params));
+          if (ret < 0) {
+              return -1 ;
+          }
+
+          server_aux->sd = (int)(server_aux->params.server) ;
+
+          printf("AQUI 1 %s %p \n", server_aux->params.port_name, server_aux->params.server);
 
           //.....................................
           strcpy(msg.id, "GETID");
@@ -311,7 +345,7 @@
 
           nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(server_aux->id), MPISERVER_ID) ; 
           //.....................................
-
+          printf("AQUI 2\n");
           // copy 'server address' string...
           serv->server = strdup(server) ;
           NULL_RET_ERR(serv->server, MPISERVERERR_MEMORY) ;
@@ -340,14 +374,25 @@
                 nfi_worker_init(serv->wrk, serv, 0);
           }
 #endif
-
-          //serv->protocol = MPISERVER;
-
-          dbgnfi_info("[NFI] nfi_mpiServer_init(ID=%s): end\n",server_aux->id);
-
-          // return OK
-          return 0;
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       /************************************************************
        * Disconnect to the server                                   *
@@ -426,6 +471,42 @@
           // return OK
           return 0;
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       /************************************************************
        * Destroy MPI operations                             *
