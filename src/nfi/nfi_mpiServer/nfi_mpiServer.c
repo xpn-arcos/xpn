@@ -56,7 +56,7 @@
        * Communication
        */
 
-      int mpiServer_write_operation ( int sd, struct st_mpiServer_msg *head )
+      int mpiServer_write_operation ( struct nfi_mpiServer_connector sd, struct st_mpiServer_msg *head )
       {
           int ret;
 
@@ -328,16 +328,35 @@
           struct nfi_mpiServer_server *server_aux;
           struct st_mpiServer_msg msg;
 
+          static int init = 0;
+          static MPI_Comm comm;
+          static int id_server = 0;
+          static struct nfi_mpiServer_server server_aux2;
+
           server_aux = (struct nfi_mpiServer_server *) (serv->private_info);
 
-          ret = mpiClient_comm_connect(&(server_aux->params));
-          if (ret < 0) {
-              return -1 ;
+          if (init == 0)
+          {
+              ret = mpiClient_comm_connect(&(server_aux->params));
+              if (ret < 0) {
+                  return -1 ;
+              }
+
+              init = 1;
+
+              //server_aux->sd = (int)(server_aux->params.server) ;
+
+              printf("AQUI 1 %s %p \n", server_aux->params.port_name, server_aux->params.server);
+
+              server_aux2 = *server_aux;
+          }
+          else{
+            server_aux->params = server_aux2.params;
           }
 
-          server_aux->sd = (int)(server_aux->params.server) ;
 
-          printf("AQUI 1 %s %p \n", server_aux->params.port_name, server_aux->params.server);
+
+
 
           //.....................................
           strcpy(msg.id, "GETID");

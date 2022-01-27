@@ -175,7 +175,7 @@
               return 1 ;
       }
       
-      ssize_t mpiClient_write_data ( int fd, char *data, ssize_t size, char *msg_id )
+      ssize_t mpiClient_write_data ( struct nfi_mpiServer_connector fd, char *data, ssize_t size, char *msg_id )
       {
               int ret ;
 
@@ -191,7 +191,8 @@
               }
       
               // Send message
-              ret = MPI_Send(data, size, MPI_CHAR, 0, 0, (MPI_Comm)fd) ;
+              printf("PRINT   ----------------  %d\n", fd.rank_id);
+              ret = MPI_Send(data, size, MPI_CHAR, fd.rank_id, 0, fd.comm) ;
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[?]: MPI_Recv fails :-(") ;
                   size = 0 ;
@@ -203,7 +204,7 @@
               return size;
       }
 
-      ssize_t mpiClient_read_data ( int fd, char *data, ssize_t size, char *msg_id )
+      ssize_t mpiClient_read_data ( struct nfi_mpiServer_connector fd, char *data, ssize_t size, char *msg_id )
       {
               int ret ;
               MPI_Status status ;
@@ -220,7 +221,7 @@
               }
       
               // Get message
-              ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, MPI_ANY_TAG, (MPI_Comm)fd, &status);
+              ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, MPI_ANY_TAG, fd.comm, &status);
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[?]: MPI_Recv fails :-(") ;
                   size = 0 ;

@@ -23,13 +23,13 @@
 
       struct nfi_mpiServer_server
       {
-	   // old stuff of XPN
-	   char id[NFIMAXPATHLEN];
-	   char path[NFIMAXPATHLEN];
-	   int  sd;
+   	   // old stuff of XPN
+   	   char id[NFIMAXPATHLEN];
+   	   char path[NFIMAXPATHLEN];
+   	   struct nfi_mpiServer_connector sd;
 
-	   // client stub
-           mpiClient_param_st params ;
+	      // client stub
+         mpiClient_param_st params ;
       };
 
       struct nfi_mpiServer_fhandle
