@@ -31,15 +31,15 @@
        * Debug
        */
 
-//#ifdef DBG_NFI
+#ifdef DBG_NFI
       #define dbgnfi_error(...)    fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_warning(...)  fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_info(...)     fprintf(stdout, __VA_ARGS__)
-/*#else
+#else
       #define dbgnfi_error(...)
       #define dbgnfi_warning(...)
       #define dbgnfi_info(...)
-//#endif*/
+#endif
 
       /*
        * Memory
@@ -56,7 +56,7 @@
        * Communication
        */
 
-      int mpiServer_write_operation ( int sd, struct st_mpiServer_msg *head )
+      int mpiServer_write_operation ( struct nfi_mpiServer_connector sd, struct st_mpiServer_msg *head )
       {
           int ret;
 
@@ -328,16 +328,40 @@
           struct nfi_mpiServer_server *server_aux;
           struct st_mpiServer_msg msg;
 
+          static int init = 0;
+          static MPI_Comm comm;
+          static int id_server = 0;
+          static struct nfi_mpiServer_server server_aux2;
+
           server_aux = (struct nfi_mpiServer_server *) (serv->private_info);
 
-          ret = mpiClient_comm_connect(&(server_aux->params));
-          if (ret < 0) {
-              return -1 ;
+          if (init == 0)
+          {
+              ret = mpiClient_comm_connect(&(server_aux->params));
+              if (ret < 0) {
+                  return -1 ;
+              }
+
+              init = 1;
+              comm = server_aux->params.server;
+              server_aux2 = *server_aux;
+          }
+          else{
+              
+              server_aux->params = server_aux2.params;
           }
 
-          server_aux->sd = (int)(server_aux->params.server) ;
+          
 
-          printf("AQUI 1 %s %p \n", server_aux->params.port_name, server_aux->params.server);
+          server_aux->sd.comm = comm ; //Comunidador
+          server_aux->sd.rank_id = id_server ; //rank
+
+          id_server++;
+
+          int rank;
+          MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+
+          printf("%d  AQUI 1 %s %p \n", rank,server_aux->params.port_name, server_aux->params.server);
 
           //.....................................
           strcpy(msg.id, "GETID");
@@ -937,7 +961,6 @@
                 fprintf(stderr,"(1)ERROR: nfi_mpiServer_write(ID=%s): Error on write operation\n",server_aux->id);
                 return -1;
         }
-
         ret = mpiClient_write_data(server_aux->sd, (char *)buffer, size, msg.id);
         if(ret == -1){
                 fprintf(stderr,"(2)ERROR: nfi_mpiServer_read(ID=%s): Error on write operation\n",server_aux->id);

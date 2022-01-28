@@ -111,7 +111,7 @@
               }
 
               // Connect...
-              ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(params->server)) ;
+              ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &(params->server)) ;
               if (MPI_SUCCESS != ret) {
                   debug_error("Client[%d]: MPI_Comm_connect fails :-(", params->rank) ;
                   return -1 ;
