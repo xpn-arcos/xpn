@@ -363,6 +363,7 @@
 
           printf("%d  AQUI 1 %s %p \n", rank,server_aux->params.port_name, server_aux->params.server);
 
+
           //.....................................
           strcpy(msg.id, "GETID");
           msg.type = MPISERVER_GETID;
