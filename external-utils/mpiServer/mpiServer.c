@@ -41,84 +41,148 @@
 
    void sigint_handler ( int signal )
    {
-	printf("[MAIN] Signal %d received => ending execution...", signal) ;
+  printf("[MAIN] Signal %d received => ending execution...", signal) ;
         the_end = 1;
    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
    void worker_function ( struct st_th th )
    {
         int op;
         struct st_mpiServer_msg head;
+        int ret;
+        //int rank_client_id;
       
-	// check params...
-	if (NULL == th.params) {
-	    debug_warning("[WORKERS] (ID=%d): NULL params", th.id) ;
-	    return;
-	}
+  // check params...
+  if (NULL == th.params) {
+      debug_warning("[WORKERS] (ID=%d): NULL params", th.id) ;
+      return;
+  }
 
-	// loop for client requests...
+  // loop for client requests...
         do {
-		head.type = MPISERVER_END;
+    //head.type = MPISERVER_END;
 
-		debug_info("[WORKERS] (ID=%d): mpiServer_read_operation and arguments...\n", th.id);
-		op = mpiServer_read_operation(th.params, th.sd, &head);
-			
-		debug_info("[WORKERS] (ID=%d): begin to do operation '%s'\n", th.id, mpiServer_op2string(op));
+    debug_info("[WORKERS] (ID=%d): mpiServer_read_operation and arguments...\n", th.id);
+    //op = mpiServer_read_operation(th.params, th.sd, &head, &rank_client_id);
+      
+    debug_info("[WORKERS] (ID=%d): begin to do operation '%s'\n", th.id, mpiServer_op2string(th.type_op));
 
-		switch(op)
-		{
-			case MPISERVER_OPEN_FILE:
-				mpiServer_op_open(th.params, th.sd, &head);
-				break;
-			case MPISERVER_CREAT_FILE:
-				mpiServer_op_creat(th.params, th.sd, &head);
-				break;
-			case MPISERVER_READ_FILE:
-				mpiServer_op_read(th.params, th.sd, &head);
-				break;
-			case MPISERVER_WRITE_FILE:
-				mpiServer_op_write(th.params, th.sd, &head);
-				break;
-			case MPISERVER_CLOSE_FILE:
-				mpiServer_op_close(th.params, th.sd, &head);
-				break;
-			case MPISERVER_RM_FILE:
-				mpiServer_op_rm(th.params, th.sd, &head);
-				break;
-			case MPISERVER_GETATTR_FILE:
-				mpiServer_op_getattr(th.params, th.sd, &head);
-				break;
-			case MPISERVER_SETATTR_FILE:
-				mpiServer_op_setattr(th.params, th.sd, &head);
-				break;
-			case MPISERVER_MKDIR_DIR:
-				mpiServer_op_mkdir(th.params, th.sd, &head);
-				break;
-			case MPISERVER_RMDIR_DIR:
-				mpiServer_op_rmdir(th.params, th.sd, &head);
-				break;
-			case MPISERVER_PRELOAD_FILE:
-				mpiServer_op_preload(th.params, th.sd, &head);
-				break;
-			case MPISERVER_FLUSH_FILE:
-				mpiServer_op_flush(th.params, th.sd, &head);
-				break;
-			case MPISERVER_GETID:
-				mpiServer_op_getid(th.params, th.sd, &head);
-				break;
-			case MPISERVER_FINALIZE:
-				op = MPISERVER_FINALIZE;
-				break;
-			default:
-				op = MPISERVER_END;
-				break;
-		}
-		debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(op));
-				
+    switch(op)
+    {
+      case MPISERVER_OPEN_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_open, sizeof(struct st_mpiServer_open), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_open(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_CREAT_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_creat, sizeof(struct st_mpiServer_creat), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_creat(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_READ_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_read, sizeof(struct st_mpiServer_read), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_read(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_WRITE_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_write, sizeof(struct st_mpiServer_write), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_write(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_CLOSE_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_close, sizeof(struct st_mpiServer_close), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_close(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_RM_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_rm, sizeof(struct st_mpiServer_rm), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_rm(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_GETATTR_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_getattr, sizeof(struct st_mpiServer_getattr), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_getattr(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_SETATTR_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_setattr, sizeof(struct st_mpiServer_setattr), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_setattr(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_MKDIR_DIR:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_mkdir, sizeof(struct st_mpiServer_mkdir), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_mkdir(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_RMDIR_DIR:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_rmdir, sizeof(struct st_mpiServer_rmdir), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_rmdir(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_PRELOAD_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_preload, sizeof(struct st_mpiServer_preload), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_preload(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      case MPISERVER_FLUSH_FILE:
+        ret = mpiServer_comm_readdata(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_flush, sizeof(struct st_mpiServer_flush), th.rank_client_id);
+        if (ret == -1) {
+            return -1;
+        }
+        mpiServer_op_flush(th.params, th.sd, &head, th.rank_client_id);
+        break;
+      /*case MPISERVER_FINALIZE:
+        op = MPISERVER_FINALIZE;
+        break;
+      default:
+        op = MPISERVER_END;
+        break;*/
+    }
+    debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(op));
+        
         } while(op != MPISERVER_END);
       
-        debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.id);
-        mpiServer_comm_close(th.params) ;
+        //debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.id);
+        //mpiServer_comm_close(th.params) ;
    }
 
 
@@ -126,50 +190,69 @@
     * Main
     */
 
-   int main ( int argc, char *argv[] )
-   {
-	int sd;
-	int ret ;
+    int main ( int argc, char *argv[] )
+    {
+      int sd ;
+      int ret ;
+      struct st_mpiServer_msg head ;
 
-	// Get parameters..
-        ret = mpiServer_params_get(&params, argc, argv) ;
-	if (ret < 0) {
-	    mpiServer_params_show_usage() ;
-	    exit(-1) ;
-	}
+      // Get parameters..
+      ret = mpiServer_params_get(&params, argc, argv) ;
+      if (ret < 0) {
+          mpiServer_params_show_usage() ;
+          exit(-1) ;
+      }
 
-	mpiServer_params_show(&params) ;
+      mpiServer_params_show(&params) ;
 
-	// Initialize
-	the_end = 0 ;
-	signal(SIGINT, sigint_handler) ;
-        mpiServer_utils_init() ;
-	mpiServer_init_worker() ;
-	mpiServer_comm_init(&params) ;
+      // Initialize
+      the_end = 0 ;
+      signal(SIGINT, sigint_handler) ;
 
-	// Loop: receiving + processing
-	while (0 == the_end)
-	{
-        	debug_info("[MAIN] mpiServer_accept_comm()\n") ;
-		sd = mpiServer_comm_accept(&params) ;
-		if (sd == -1) {
-		    continue ;
-		}
+      mpiServer_utils_init() ;
+      mpiServer_init_worker() ;
+      mpiServer_comm_init(&params) ;
 
-        	debug_info("[MAIN] mpiServer_launch_worker()\n") ;
-	        mpiServer_launch_worker(&params, sd, worker_function) ;
-	}
+      // Loop: receiving + processing
+      while (0 == the_end)
+      {
+        debug_info("[MAIN] mpiServer_accept_comm()\n") ;
+        sd = mpiServer_comm_accept(&params) ; //Accept por aplicacion
+        if (sd == -1) {
+            continue ;
+        }
 
-	// Wait for all current workers
-        mpiServer_wait_workers() ;
+        while (1){
+          int rank_client_id;
 
-	// Finalize
-	mpiServer_comm_destroy(&params) ;
-    	xpn_destroy() ;
+          ret = mpiServer_comm_readoperation(&params, sd, (char *)&head.type, sizeof(head.type), &rank_client_id);
+          if (ret == -1) {
+              debug_info("[OPS] (ID=%s)  mpiServer_comm_readdata fail\n") ;
+              return -1;
+          }
 
-	// return OK 
-	return 0 ;
-   }
+          //TODO ver si es desconectar o finalizar y hacer un break aqui
+
+          debug_info("[MAIN] mpiServer_launch_worker()\n") ;
+          mpiServer_launch_worker(&params, sd, head.type, rank_client_id, worker_function) ;
+
+        }
+
+        debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.id);
+        mpiServer_comm_close(&params) ;
+     
+      }
+
+      // Wait for all current workers
+      mpiServer_wait_workers() ; //TODO ???
+
+      // Finalize
+      mpiServer_comm_destroy(&params) ;
+          xpn_destroy() ;
+
+      // return OK 
+      return 0 ;
+    }
 
 
    /* ................................................................... */
