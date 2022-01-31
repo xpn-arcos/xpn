@@ -22,7 +22,7 @@
    struct st_th
    {
    	mpiServer_param_st *params;
-   	int sd;
+   	MPI_Comm sd;
    	int id;
       int type_op;
       int rank_client_id;
@@ -35,7 +35,7 @@
     */
 
    int  mpiServer_init_worker   ( void ) ;
-   int  mpiServer_launch_worker ( mpiServer_param_st * params, int sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) );
+   int  mpiServer_launch_worker ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) );
    void mpiServer_worker_run    ( void *arg ) ;
    void mpiServer_wait_workers  ( void ) ;
 

@@ -60,9 +60,9 @@
       {
           int ret;
 
-          dbgnfi_info("[NFI] (ID=%s) mpiClient_write_data: begin\n", head->id);
+          dbgnfi_info("[NFI] (ID=%s) mpiClient_write_data: begin               HEAD_TYPE:%d\n", head->id, sizeof(head->type));
 
-          ret = mpiClient_write_data(sd, (char *)&head->type, sizeof(head->type), head->id);
+          ret = mpiClient_write_operation(sd, (char *)&head->type, sizeof(head->type), head->id);
           if (ret == -1){
               debug_warning("Server[?]: mpiClient_write_data fails :-(") ;
               return -1;
@@ -72,7 +72,7 @@
           switch (head->type)
           {
                 case MPISERVER_OPEN_FILE:
-                        dbgnfi_info("[NFI] (ID=%s) OPEN operation\n", head->id);
+                        dbgnfi_info("[NFI] (ID=%s) OPEN operation ---------------------  %ld\n", head->id, sizeof(struct st_mpiServer_open));
                         ret = mpiClient_write_data(sd, (char *)&head->u_st_mpiServer_msg.op_open, sizeof(struct st_mpiServer_open), head->id);
                         break;
                 case MPISERVER_CREAT_FILE:
@@ -347,7 +347,7 @@
               server_aux2 = *server_aux;
           }
           else{
-              
+              printf("ELSE\n");
               server_aux->params = server_aux2.params;
           }
 
@@ -365,7 +365,7 @@
 
 
           //.....................................
-          strcpy(msg.id, "GETID");
+          /*strcpy(msg.id, "GETID");
           msg.type = MPISERVER_GETID;
 
           nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(server_aux->id), MPISERVER_ID) ; 
@@ -373,7 +373,7 @@
           printf("AQUI 2\n");
           // copy 'server address' string...
           serv->server = strdup(server) ;
-          NULL_RET_ERR(serv->server, MPISERVERERR_MEMORY) ;
+          NULL_RET_ERR(serv->server, MPISERVERERR_MEMORY) ;*/
 
           // copy 'url' string...
           serv->url = strdup(url) ;
@@ -1025,7 +1025,6 @@
           msg.type = MPISERVER_CREAT_FILE;
           strcpy(msg.id, server_aux->id);
           strcpy(msg.u_st_mpiServer_msg.op_creat.path,dir);
-
           nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ; 
           strcpy(fh_aux->path, dir);
           /*****************************************/

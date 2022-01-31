@@ -67,12 +67,22 @@
               MPI_Info_create(&info) ;
               MPI_Info_set(info, "ompi_global_scope", "true") ;
               sprintf(srv_name, "mpiServer.%d", params->rank) ;
-      
-              ret = MPI_Publish_name(srv_name, info, params->port_name) ;
-              if (MPI_SUCCESS != ret) {
-                  debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
-                  return -1 ;
+
+
+
+              if (params->rank == 0)
+              {
+                ret = MPI_Publish_name(srv_name, info, params->port_name) ;
+                if (MPI_SUCCESS != ret) {
+                    debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
+                    return -1 ;
+                }
               }
+      
+              
+
+
+
       
               debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
               debug_info("[COMM] server %d accepting...\n",    params->rank) ;
@@ -112,7 +122,7 @@
               return 1 ;
       }
       
-      int mpiServer_comm_accept ( mpiServer_param_st *params )
+      MPI_Comm mpiServer_comm_accept ( mpiServer_param_st *params )
       {
       	      int ret ;
       
@@ -128,7 +138,7 @@
               DEBUG_END() ;
       
               // Return client MPI_Comm
-      	      return (int)(params->client) ;
+      	      return params->client ;
       }
       
       int mpiServer_comm_close ( mpiServer_param_st *params )
@@ -146,7 +156,7 @@
               return 1 ;
       }
       
-      ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, int fd, char *data, ssize_t size, int rank_client_id)
+      ssize_t mpiServer_comm_writedata ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id)
       {
       	      int ret ;
       
@@ -166,7 +176,7 @@
       	      }
       	
               // Send message
-              ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 0, (MPI_Comm)fd) ;
+              ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 0, fd) ;
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
               }
@@ -177,7 +187,7 @@
       	      return size;
       }
 
-      ssize_t mpiServer_comm_readoperation ( mpiServer_param_st *params, int fd, char *data, ssize_t size, int *rank_client_id )
+      ssize_t mpiServer_comm_readoperation ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int *rank_client_id )
       {
               int ret ;
               MPI_Status status ;
@@ -198,14 +208,14 @@
               }
         
               // Get message
-              ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, MPI_ANY_TAG, (MPI_Comm)fd, &status);
+              ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, 0, fd, &status);
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
               }
 
               *rank_client_id = status.MPI_SOURCE;
 
-              printf("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
+              //printf("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
       
               DEBUG_END() ;
       
@@ -213,7 +223,7 @@
               return size;
       }
       
-      ssize_t mpiServer_comm_readdata ( mpiServer_param_st *params, int fd, char *data, ssize_t size, int rank_client_id )
+      ssize_t mpiServer_comm_readdata ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id )
       {
       	      int ret ;
       	      MPI_Status status ;
@@ -234,13 +244,13 @@
       	      }
       	
               // Get message
-      	      ret = MPI_Recv(data, size, MPI_CHAR, rank_client_id, MPI_ANY_TAG, (MPI_Comm)fd, &status);
+      	      ret = MPI_Recv(data, size, MPI_CHAR, rank_client_id, 1, fd, &status);
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
               }
 
 
-              printf("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
+              //printf("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
       
               DEBUG_END() ;
       

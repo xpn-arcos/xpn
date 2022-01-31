@@ -172,7 +172,7 @@ char * mpiServer_op2string ( int op_code )
 /**********************************
 Read the operation to realize
 ***********************************/
-/*int mpiServer_read_operation ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int *rank_client_id )
+/*int mpiServer_read_operation ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int *rank_client_id )
 {
 	int ret;
 
@@ -244,7 +244,7 @@ Read the operation to realize
 	return head->type;
 }*/
 
-void mpiServer_op_open ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_open ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	int fd;
 	char *s;
@@ -258,7 +258,7 @@ void mpiServer_op_open ( mpiServer_param_st *params, int sd, struct st_mpiServer
 	debug_info("[OPS] (ID=%s) OPEN(%s)=%d\n", params->srv_name, s, fd);
 }
 
-void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_creat ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	int fd;
 	char *s;
@@ -277,7 +277,7 @@ void mpiServer_op_creat ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	debug_info("[OPS] (ID=%s) CREAT(%s)=%d\n", params->srv_name, s, fd);
 }
 
-void mpiServer_op_flush ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id)
+void mpiServer_op_flush ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id)
 {
 	int ret;
 
@@ -296,7 +296,7 @@ void mpiServer_op_flush ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_flush.virtual_path);
 }
 
-void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_preload ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	int ret;
 
@@ -313,7 +313,7 @@ void mpiServer_op_preload ( mpiServer_param_st *params, int sd, struct st_mpiSer
 							            ret);
 }
 
-void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_close ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	// check params...
 	if (NULL == params) {
@@ -329,7 +329,7 @@ void mpiServer_op_close ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	debug_info("[OPS] (ID=%s) CLOSE(fd=%d)\n", params->srv_name, head->u_st_mpiServer_msg.op_close.fd);
 }
 
-void mpiServer_op_rm ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_rm ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	char *s;
 
@@ -420,7 +420,7 @@ long op_write_buffer ( mpiServer_param_st *params, int write_fd2, void *buffer, 
      return num_readed_bytes ;
 }
 
-void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	long size ;
 	struct st_mpiServer_read_req req;
@@ -473,7 +473,7 @@ void mpiServer_op_read ( mpiServer_param_st *params, int sd, struct st_mpiServer
                 size) ;
 }
 
-void mpiServer_op_write ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_write ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	struct st_mpiServer_write_req req;
 	char *buffer;
@@ -509,7 +509,7 @@ void mpiServer_op_write ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	debug_info("[OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_mpiServer_msg.op_write.fd);
 }
 
-void mpiServer_op_mkdir ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_mkdir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	int ret;
 	char *s;
@@ -523,7 +523,7 @@ void mpiServer_op_mkdir ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	debug_info("[OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, s);
 }
 
-void mpiServer_op_rmdir ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_rmdir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	int ret;
 	char *s;
@@ -537,7 +537,7 @@ void mpiServer_op_rmdir ( mpiServer_param_st *params, int sd, struct st_mpiServe
 	debug_info("[OPS] (ID=%s) RMDIR(%s) \n", params->srv_name, s);
 }
 
-void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_setattr ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	// check params...
 	if (sd < 0) {
@@ -559,7 +559,7 @@ void mpiServer_op_setattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 	debug_info("[OPS] (ID=%s) SETATTR(...)\n", params->srv_name);
 }
 
-void mpiServer_op_getattr ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id )
+void mpiServer_op_getattr ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
 	struct st_mpiServer_attr_req req;
 	char *s;
@@ -573,7 +573,7 @@ void mpiServer_op_getattr ( mpiServer_param_st *params, int sd, struct st_mpiSer
 	debug_info("[OPS] (ID=%s) GETATTR(%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_getattr.path);
 }
 
-void mpiServer_op_getid ( mpiServer_param_st *params, int sd, struct st_mpiServer_msg *head, int rank_client_id)
+void mpiServer_op_getid ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id)
 {
 	// do getid
         mpiServer_comm_writedata(params, sd,(char *)head->id, MPISERVER_ID, rank_client_id);
