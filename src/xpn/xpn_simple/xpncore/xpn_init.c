@@ -9,10 +9,13 @@ int xpn_destroy_servers(struct xpn_partition *part)
 {
 	int i;
 	struct nfi_server *serv;
-
+	printf("DESTROY SERVERS\n");
+	printf("DATA NSERV %d \n", part->data_nserv);
 	for(i=0;i<part->data_nserv;i++){
 		serv = part->data_serv;
+		printf("--------------------- %d \n", serv[i].ops);
 		if(serv[i].ops != NULL){
+			printf("DESCONECTANDO 1 \n");
 			part->data_serv[i].ops->nfi_disconnect(&(serv[i]));
 			//part->data_serv[i].ops->nfi_destroy(&(serv[i]));
 			if(serv[i].ops != NULL)
@@ -26,6 +29,7 @@ int xpn_destroy_servers(struct xpn_partition *part)
 	for(i=0;i<part->meta_nserv;i++){
 		serv = part->meta_serv;
 		if(serv[i].ops != NULL){
+			printf("DESCONECTANDO 2 \n");
 			part->meta_serv[i].ops->nfi_disconnect(&(serv[i]));
 			//part->meta_serv[i].ops->nfi_destroy(&(serv[i]));
 			if(serv[i].ops != NULL)
@@ -46,15 +50,21 @@ int xpn_destroy()
 
 	XPN_DEBUG_BEGIN
 
+	printf("XPN DESTROY 1\n");
+
 	if(xpn_parttable[0].id == -1) {
 		res = 0;
 		XPN_DEBUG_END
 	    return res;
 	}
 
+	printf("XPN DESTROY 2\n");
+
 	xpn_destroy_file_table();
 	nfi_worker_destroy();
 	i = 0;
+
+	printf("XPN DESTROY 3\n");
 	while(xpn_parttable[i].id != -1){
 		xpn_destroy_servers(&(xpn_parttable[i]));
 		xpn_parttable[i].id = -1;

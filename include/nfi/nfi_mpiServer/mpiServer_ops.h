@@ -23,14 +23,14 @@
    #define MPISERVER_READ_FILE		2
    #define MPISERVER_WRITE_FILE		3
    #define MPISERVER_CLOSE_FILE		4
-   #define MPISERVER_RM_FILE		5
+   #define MPISERVER_RM_FILE		   5
    #define MPISERVER_GETATTR_FILE	6
    #define MPISERVER_SETATTR_FILE	7
    
    #define MPISERVER_MKDIR_DIR		8
    #define MPISERVER_RMDIR_DIR		9
-   #define MPISERVER_OPENDIR_DIR	10
-   #define MPISERVER_READDIR_DIR	11
+   #define MPISERVER_OPENDIR_DIR	   10
+   #define MPISERVER_READDIR_DIR	   11
    #define MPISERVER_CLOSEDIR_DIR	12
    
    #define MPISERVER_FLUSH_FILE		13
@@ -38,9 +38,10 @@
    
    #define MPISERVER_STATFS_DIR		15
    
-   #define MPISERVER_FINALIZE   	16
-   #define MPISERVER_GETID          	17
-   #define MPISERVER_END 		-1
+   #define MPISERVER_FINALIZE   	   16
+   #define MPISERVER_GETID          17
+   #define MPISERVER_DISCONNECT     18
+   #define MPISERVER_END 		      -1
 
 
    /*

@@ -31,15 +31,15 @@
        * Debug
        */
 
-#ifdef DBG_NFI
+//#ifdef DBG_NFI
       #define dbgnfi_error(...)    fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_warning(...)  fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_info(...)     fprintf(stdout, __VA_ARGS__)
-#else
+/*#else
       #define dbgnfi_error(...)
       #define dbgnfi_warning(...)
       #define dbgnfi_info(...)
-#endif
+#endif*/
 
       /*
        * Memory
@@ -440,8 +440,9 @@
           }
 
           // Remote disconnect...
-          msg.type = -1;
-          mpiServer_write_operation(server_aux->sd, &msg);
+          //msg.type = -1;
+          //msg.type = MPISERVER_DISCONNECT;
+          //mpiServer_write_operation(server_aux->sd, &msg);
 
           // MPI Disconnect...
           ret = mpiClient_comm_disconnect(&(server_aux->params)) ;

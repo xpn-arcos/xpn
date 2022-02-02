@@ -103,10 +103,13 @@
               MPI_Close_port(params->port_name) ;
       
               // Unpublish port name
-              ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
-              if (MPI_SUCCESS != ret) {
-                  debug_error("Server[%d]: MPI_Unpublish_name fails :-(", params->rank) ;
-                  return -1 ;
+              if (params->rank == 0)
+              {
+                ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
+                if (MPI_SUCCESS != ret) {
+                    debug_error("Server[%d]: MPI_Unpublish_name fails :-(", params->rank) ;
+                    return -1 ;
+                }
               }
       
               // Finalize

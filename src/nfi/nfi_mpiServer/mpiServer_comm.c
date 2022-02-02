@@ -124,7 +124,43 @@
               return 1 ;
       }
 
+      int mpiClient_comm_disconnect ( mpiClient_param_st *params )
+      {
+              int ret ;
+              int data[512];
+              int size;
 
+              printf("DISCONNECT\n");
+
+              MPI_Barrier(MPI_COMM_WORLD);
+
+              MPI_Comm_size(params->server, &size);
+              debug_info("[COMM] mpiClient_comm_disconnect nservers: %d\n", size) ;
+
+              if (params->rank==0) {  
+                for (int i = 0; i < size; i++) { 
+                  data[0] = MPISERVER_DISCONNECT;
+
+                  MPI_Send( data, 1, MPI_INT, i, 0, params->server );
+                }
+              }
+      
+              // Disconnect
+              ret = MPI_Comm_disconnect(&(params->server)) ;
+              if (MPI_SUCCESS != ret) {
+                  debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
+                  return -1 ;
+              }
+
+              ret = MPI_Finalize();
+              if (MPI_SUCCESS != ret) {
+                  debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
+                  return -1 ;
+              }
+      
+              // Return OK
+              return 1 ;
+      }
 
 
 
@@ -135,8 +171,25 @@
       int mpiClient_comm_destroy ( mpiClient_param_st *params )
       {
               int ret ;
+              int data[512];
+              int size;
+
+              printf("DESTROY\n");
       
               debug_info("[COMM] begin mpiClient_comm_destroy(...)\n") ;
+
+              MPI_Barrier(MPI_COMM_WORLD);
+
+              MPI_Comm_size(params->server, &size);
+              debug_info("[COMM] mpiClient_comm_disconnect nservers: %d\n", size) ;
+
+              if (params->rank==0) {  
+                for (int i = 0; i < size; i++) { 
+                  data[0] = MPISERVER_DISCONNECT;
+
+                  MPI_Send( data, 1, MPI_INT, i, 0, params->server );
+                }
+              }
       
               // Disconnect
               ret = MPI_Comm_disconnect(&(params->server)) ;
@@ -144,13 +197,13 @@
                   debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
                   return -1 ;
               }
-      
-              // Finalize
-              ret = MPI_Finalize() ;
+
+              ret = MPI_Finalize();
               if (MPI_SUCCESS != ret) {
                   debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
                   return -1 ;
               }
+
       
               debug_info("[COMM] end mpiClient_comm_destroy(...)\n") ;
       
@@ -160,20 +213,7 @@
 
 
       
-      int mpiClient_comm_disconnect ( mpiClient_param_st *params )
-      {
-              int ret ;
-      
-              // Disconnect
-              ret = MPI_Comm_disconnect(&(params->server)) ;
-              if (MPI_SUCCESS != ret) {
-                  debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
-                  return -1 ;
-              }
-      
-              // Return OK
-              return 1 ;
-      }
+
 
       ssize_t mpiClient_write_operation ( struct nfi_mpiServer_connector fd, char *data, ssize_t size, char *msg_id )
       {
