@@ -10,6 +10,8 @@ int xpn_destroy_servers(struct xpn_partition *part)
 	int i;
 	struct nfi_server *serv;
 	printf("DESTROY SERVERS\n");
+
+	printf("DATA NSERV GOLBAL %d \n", xpn_parttable[0].data_nserv);
 	printf("DATA NSERV %d \n", part->data_nserv);
 	for(i=0;i<part->data_nserv;i++){
 		serv = part->data_serv;

@@ -350,6 +350,72 @@ void tcpServer_op_rm ( int sd, struct st_tcpServer_msg *head )
 						head->id);
 }
 
+
+
+long op_read_buffer (int read_fd2, void *buffer, int buffer_size )
+{
+     ssize_t read_num_bytes       = -1 ;
+     ssize_t read_remaining_bytes = buffer_size ;
+     void   *read_buffer          = buffer ;
+
+     while (read_remaining_bytes > 0)
+     {
+     /* Read from local file... */
+         read_num_bytes = read(read_fd2, read_buffer, read_remaining_bytes) ;
+
+     /* Check errors */
+         if (read_num_bytes == -1) {
+         debug_error("ERROR:\t read fails to read data.\n") ;
+         return -1 ;
+         }
+
+     /* Check end of file */
+         if (read_num_bytes == 0)
+     	{
+	        debug_error("INFO:\t end of file, readed %ld.\n", (buffer_size - read_remaining_bytes)) ;
+	        return (buffer_size - read_remaining_bytes) ;
+        }
+
+         read_remaining_bytes -= read_num_bytes ;
+         read_buffer          += read_num_bytes ;
+     }
+
+     return buffer_size ;
+}
+
+
+
+long op_write_buffer ( int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
+{
+     ssize_t write_num_bytes       = -1 ;
+     ssize_t write_remaining_bytes = num_readed_bytes ;
+     void   *write_buffer          = buffer ;
+
+     if (num_readed_bytes > buffer_size) {
+     debug_error("ERROR:\t write for %d bytes from a buffer with only %d bytes.\n", num_readed_bytes, buffer_size) ;
+     return -1 ;
+     }
+
+     while (write_remaining_bytes > 0)
+     {
+     /* Write into local file (write_fd2)... */
+         write_num_bytes = write(write_fd2, write_buffer, write_remaining_bytes) ;
+
+     /* Check errors */
+         if (write_num_bytes == -1) {
+         debug_error("ERROR:\t write fails to write data.\n") ;
+         return -1 ;
+         }
+
+         write_remaining_bytes -= write_num_bytes ;
+         write_buffer          += write_num_bytes ;
+     }
+
+     return num_readed_bytes ;
+}
+
+
+
 void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 {
 	unsigned long cont = 0;
@@ -359,12 +425,12 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 	int SIZE;
 
 #ifndef _MALLOC_
-	char buffer[MAX_BUFFER_SIZE];
-	SIZE = MAX_BUFFER_SIZE;
+	char buffer[128*1024];
+	size = head->u_st_tcpServer_msg.op_read.size;
 	debug_info("[OPS] (%s) op_read: static buffer (%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,MAX_BUFFER_SIZE,head->id);
 #else
 	char *buffer;
-	SIZE = 0;
+	size = head->u_st_tcpServer_msg.op_read.size;
 	debug_info("[OPS] (%s) op_read: variable buffer (%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,MAX_BUFFER_SIZE,head->id);
 #endif
 
@@ -375,15 +441,6 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 						head->u_st_tcpServer_msg.op_read.size,
 						head->id);
 
-/*
-#ifdef _LARGEFILE64_
-	printf("[OPS] (%s) op_read: offset %lld\n",TCPSERVER_ALIAS_NAME_STRING,head->u_st_tcpServer_msg.op_read.offset);
-#else
-	printf("[OPS] (%s) op_read: offset %d\n",TCPSERVER_ALIAS_NAME_STRING,(int)head->u_st_tcpServer_msg.op_read.offset);
-#endif
-	printf("[OPS] (%s) op_read: size %d\n",TCPSERVER_ALIAS_NAME_STRING,head->u_st_tcpServer_msg.op_read.size);
-#endif
-*/
 #ifdef _MALLOC_
 	SIZE = head->u_st_tcpServer_msg.op_read.size;
 	buffer = (char *)malloc(SIZE);
@@ -392,55 +449,37 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 	debug_info("[OPS] (%s) op_read: malloc(%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,SIZE,head->id);
 #endif
 	//t1 = MPI_Wtime();
-	do{
+
 #ifdef _LARGEFILE64_
-		lseek64(head->u_st_tcpServer_msg.op_read.fd,
-				head->u_st_tcpServer_msg.op_read.offset+cont,
-				0);
+	lseek64(head->u_st_tcpServer_msg.op_read.fd, head->u_st_tcpServer_msg.op_read.offset, 0);
 #else
-	        debug_info("[OPS] (%s) lseek: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
+	debug_info("[OPS] (%s) lseek: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
 						head->u_st_tcpServer_msg.op_read.fd,
-						(int)head->u_st_tcpServer_msg.op_read.offset+cont,
+						(int)head->u_st_tcpServer_msg.op_read.offset,
 						head->u_st_tcpServer_msg.op_read.size,
 						head->id);
 
-		lseek(head->u_st_tcpServer_msg.op_read.fd,
-				head->u_st_tcpServer_msg.op_read.offset+cont,
-				0);
+	lseek(head->u_st_tcpServer_msg.op_read.fd, head->u_st_tcpServer_msg.op_read.offset, 0);
 #endif
 
-		size_req = (head->u_st_tcpServer_msg.op_read.size - cont);
-		if(size_req>SIZE){
-			size_req = SIZE;
-		}
+	req.size = op_read_buffer( head->u_st_tcpServer_msg.op_read.fd, buffer, size);
 
-		req.size = read(head->u_st_tcpServer_msg.op_read.fd,
-		 			buffer,
-       		   			size_req);
+	if(req.size < 0){
+		perror("read:");
+		req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+		tcpServer_comm_writedata(sd, (char *)&req, sizeof(struct st_tcpServer_write_req), head->id);
+		return;
+	}
 
-		//usleep(rand()%1000);
-		//req.size = size_req;
+	// send (how many + data) to client...
+	tcpServer_comm_writedata(sd, (char *)&req, sizeof(struct st_tcpServer_read_req), head->id);
+	debug_info("[OPS] (%s) op_read: send size %d\n",TCPSERVER_ALIAS_NAME_STRING, req.size);
 
-		if(req.size < 0){
-			perror("read:");
-		}
-		cont += req.size;
-		if((cont == head->u_st_tcpServer_msg.op_read.size) ||
-			(req.size < size_req)){
-			req.last = 1;
-		}else{
-			req.last = 0;
-		}
-		tcpServer_comm_writedata(sd, (char *)&req, sizeof(struct st_tcpServer_read_req), head->id);
-		debug_info("[OPS] (%s) op_read: send size %d\n",TCPSERVER_ALIAS_NAME_STRING, req.size);
+	if(req.size > 0){
+		tcpServer_comm_writedata(sd, (char *)buffer, req.size, head->id);
+		debug_info("[OPS] (%s) op_read: send data\n",TCPSERVER_ALIAS_NAME_STRING);
+	}
 
-		if(req.size > 0){
-			tcpServer_comm_writedata(sd, (char *)buffer, req.size, head->id);
-			debug_info("[OPS] (%s) op_read: send data\n",TCPSERVER_ALIAS_NAME_STRING);
-		}else{
-			break;
-		}
-	} while ((size >0)&&(!req.last)) ;
 
         debug_info("[OPS] (%s) end read: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
                                                 head->u_st_tcpServer_msg.op_read.fd,
@@ -459,75 +498,41 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
                                                 head->id);
 }
 
+
+
 void tcpServer_op_write(int sd, struct st_tcpServer_msg *head)
 {
 	//char *buffer;
 	int cont =0 ,size =0;
 	struct st_tcpServer_write_req req;
 #ifndef _MALLOC_
-	char buffer[MAX_BUFFER_SIZE];
-	int SIZE = MAX_BUFFER_SIZE;
+	char buffer[128*1024];
+	size = head->u_st_tcpServer_msg.op_write.size
 #else
 	char *buffer;
-	int SIZE = 0;
+	size = head->u_st_tcpServer_msg.op_write.size
 #endif
 
 	debug_info("[OPS] (%s) begin write: fd %d ID=%sn",TCPSERVER_ALIAS_NAME_STRING,
 						head->u_st_tcpServer_msg.op_write.fd,
 						head->id);
-/*
-#ifdef DBG_OPS
-	debug_info("[OPS] (%s) op_write: fd %d\n",TCPSERVER_ALIAS_NAME_STRING,head->u_st_tcpServer_msg.op_write.fd);
-#ifdef _LARGEFILE64_
-	debug_info("[OPS] (%s) op_write: offset %lld\n",TCPSERVER_ALIAS_NAME_STRING,head->u_st_tcpServer_msg.op_write.offset);
-#else
-	debug_info("[OPS] (%s) op_write: offset %d\n",TCPSERVER_ALIAS_NAME_STRING,(int)head->u_st_tcpServer_msg.op_write.offset);
-#endif
-	debug_info("[OPS] (%s) op_write: size %d\n",TCPSERVER_ALIAS_NAME_STRING,head->u_st_tcpServer_msg.op_write.size);
-#endif
-*/
-	//t1 = MPI_Wtime();
+
 
 #ifdef _MALLOC_
-	SIZE = head->u_st_tcpServer_msg.op_write.size;
+	buffer = (char *)malloc(size);
+	//buffer = (char *)malloc(head->u_st_tcpServer_msg.op_read.size);
+	//buffer = (char *)malloc(MAX_BUFFER_SIZE);
 #endif
-	do
-	{
-		size = (head->u_st_tcpServer_msg.op_write.size - cont);
-		if(size>SIZE){
-			size= SIZE;
-		}
-
-		if(size == 0)
-			break;
-
-#ifdef _MALLOC_
-		buffer = (char *)malloc(SIZE);
-		//buffer = (char *)malloc(head->u_st_tcpServer_msg.op_read.size);
-		//buffer = (char *)malloc(MAX_BUFFER_SIZE);
-#endif
-		tcpServer_comm_readdata(sd,(char *)buffer, size, head->id);
+	tcpServer_comm_readdata(sd,(char *)buffer, size, head->id);
 
 #ifdef _LARGEFILE64_
-		lseek64(head->u_st_tcpServer_msg.op_write.fd,
-				head->u_st_tcpServer_msg.op_write.offset+cont,
-				0);
+	lseek64(head->u_st_tcpServer_msg.op_write.fd, head->u_st_tcpServer_msg.op_write.offset, 0);
 #else
-		lseek(head->u_st_tcpServer_msg.op_write.fd,
-				head->u_st_tcpServer_msg.op_write.offset+cont,
-				0);
+	lseek(head->u_st_tcpServer_msg.op_write.fd, head->u_st_tcpServer_msg.op_write.offset, 0);
 #endif
 
-		req.size = write(head->u_st_tcpServer_msg.op_write.fd,
-				  buffer,
-				  size);
+	req.size = op_write_buffer (head->u_st_tcpServer_msg.op_write.fd, buffer, size, size);
 
-		cont += size;
-	}while(req.size>0);
-
-	if(req.size>=0){
-		req.size = head->u_st_tcpServer_msg.op_write.size;
-	}
 	tcpServer_comm_writedata(sd,(char *)&req,sizeof(struct st_tcpServer_write_req), head->id);
 
 	#ifdef _MALLOC_
@@ -538,6 +543,10 @@ void tcpServer_op_write(int sd, struct st_tcpServer_msg *head)
 						head->u_st_tcpServer_msg.op_write.fd,
 						head->id);
 }
+
+
+
+
 
 void tcpServer_op_mkdir(int sd, struct st_tcpServer_msg *head)
 {

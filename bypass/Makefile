@@ -6,11 +6,11 @@
 #gcc -shared -o xpn_bypass.so *.o -Wl,--trace /opt/xpn/lib/libxpn.a -lmxml -lpthread
 
 
-
-CC=/opt/software/install-mpich/bin/mpicc
+#CC=/opt/software/install-mpich/bin/mpicc
+CC=/home/dcamarma/mpich-install/bin/mpicc
 FLAGS=-Wall -Wextra -fpic -DLINUX
-INCLUDE=-I/opt/xpn/include/
-XPN=/opt/xpn/lib/libxpn.a
+INCLUDE=-I/home/dcamarma/xpn-install/include/
+XPN=/home/dcamarma/xpn-install/lib/libxpn.a
 LIBS= -lmxml -lpthread -ldl
 OBJ= xpn_bypass.o
 

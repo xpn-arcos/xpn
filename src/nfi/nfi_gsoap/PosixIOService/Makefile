@@ -8,7 +8,7 @@ GSOAP_LIB_DIR=
 
 OUTPUT_DIR=project
 
-CC=/opt/software/install-mpich/bin/mpicc
+CC=/home/dcamarma/mpich-install/bin/mpicc
 COFLAGS=
 CWFLAGS=-Wall -Wextra -O0 -g3 -ggdb3
 CIFLAGS=-I$(GSOAP_INCLUDE_DIR) -I$(GSOAP_IMPORT_DIR) -I$(OUTPUT_DIR) -I/usr/local/ssl/include
