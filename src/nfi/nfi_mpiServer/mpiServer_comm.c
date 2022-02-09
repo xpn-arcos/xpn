@@ -130,7 +130,7 @@
               int data[512];
               int size;
 
-              printf("DISCONNECT\n");
+              printf("DISCONNECT....\n");
 
               MPI_Barrier(MPI_COMM_WORLD);
 
@@ -231,8 +231,8 @@
               }
       
               // Send message
-          
-              ret = MPI_Send(data, size, MPI_CHAR, fd.rank_id, 0, fd.comm) ;
+              printf("OP SIZE %d\n", size);
+              ret = MPI_Send(data, size, MPI_BYTE, fd.rank_id, 0, fd.comm) ;
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[?]: MPI_Recv fails :-(") ;
                   size = 0 ;
@@ -260,7 +260,7 @@
               }
       
               // Send message
-              
+              printf("DATA SIZE %d\n", size);
               ret = MPI_Send(data, size, MPI_CHAR, fd.rank_id, 1, fd.comm) ;
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[?]: MPI_Recv fails :-(") ;
@@ -290,6 +290,7 @@
               }
       
               // Get message
+              printf("READ SIZE %d\n", size);
               ret = MPI_Recv(data, size, MPI_CHAR, fd.rank_id, MPI_ANY_TAG, fd.comm, &status);
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[?]: MPI_Recv fails :-(") ;

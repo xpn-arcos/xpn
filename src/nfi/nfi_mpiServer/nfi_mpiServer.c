@@ -31,15 +31,15 @@
        * Debug
        */
 
-#ifdef DBG_NFI
+//#ifdef DBG_NFI
       #define dbgnfi_error(...)    fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_warning(...)  fprintf(stderr, __VA_ARGS__)
       #define dbgnfi_info(...)     fprintf(stdout, __VA_ARGS__)
-#else
+/*#else
       #define dbgnfi_error(...)
       #define dbgnfi_warning(...)
       #define dbgnfi_info(...)
-#endif
+#endif*/
 
       /*
        * Memory

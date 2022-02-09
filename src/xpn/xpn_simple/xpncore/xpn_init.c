@@ -230,6 +230,11 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 	
 	res = 0;
 	XPN_DEBUG_END
+
+
+
+	printf("DATA NSERV GOLBAL %d \n", xpn_parttable[0].data_nserv);
+	
 	return res;
 }
 

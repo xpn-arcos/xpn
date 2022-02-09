@@ -211,7 +211,8 @@
               }
         
               // Get message
-              ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, 0, fd, &status);
+              ret = MPI_Recv(data, size, MPI_BYTE, MPI_ANY_SOURCE, 0, fd, &status);
+              //ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, 0, fd, &status);
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
               }

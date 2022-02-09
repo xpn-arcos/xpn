@@ -246,6 +246,7 @@
           //TODO ver si es desconectar o finalizar y hacer un break aqui
           if (head.type == MPISERVER_DISCONNECT || head.type == MPISERVER_FINALIZE)
           {
+            printf("Ha llegado un DISCONNECT\n");
             break;
           }
 

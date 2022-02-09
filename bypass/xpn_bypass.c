@@ -1330,7 +1330,7 @@
 	{
 		char *value;
 
-		//xpn_destroy();
+		xpn_destroy();
 
 		value = getenv("IS_MPI_SERVER") ;
 		if (NULL == value){
@@ -1339,4 +1339,10 @@
 
 			return PMPI_Finalize();
 		}
+	}
+
+
+	void exit(int status){
+		printf("EXIT BYPASS\n");
+		xpn_destroy();
 	}
