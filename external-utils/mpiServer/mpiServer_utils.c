@@ -29,8 +29,8 @@
 
       void mpiServer_utils_init ( void )
       {
-	  setbuf(stdout,NULL) ;
-	  setbuf(stderr,NULL) ;
+        setbuf(stdout,NULL) ;
+        setbuf(stderr,NULL) ;
       }
 
       int mpiServer_utils_printf ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... )
@@ -44,21 +44,21 @@
               case  3:
                     fprintf(fd, "[%s:%4ld] [INFO] ", src_fname, src_line) ;
                     ret = vfprintf(fd, msg_fmt, valist) ;
-           	    break;
+                break;
       
               case  2:
                     fprintf(fd, "[%s:%4ld] [WARN] ", src_fname, src_line) ;
                     ret = vfprintf(fd, msg_fmt, valist) ;
-           	    break;
+                break;
       
               case  1:
                     fprintf(fd, "[%s:%4ld] [ERROR] ", src_fname, src_line) ;
                     ret = vfprintf(fd, msg_fmt, valist) ;
-           	    break;
+                break;
       
               default:
                     ret = vfprintf(fd, msg_fmt, valist) ;
-      	            break;
+                    break;
          }
          va_end(valist) ;
       

@@ -1330,7 +1330,7 @@
 	{
 		char *value;
 
-		xpn_destroy();
+		//xpn_destroy();
 
 		value = getenv("IS_MPI_SERVER") ;
 		if (NULL == value){
