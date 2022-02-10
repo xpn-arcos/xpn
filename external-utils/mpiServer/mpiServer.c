@@ -35,10 +35,10 @@
 
 
     // Pool
-    #define MAX_OPERATIONS 256
+    /*#define MAX_OPERATIONS 256
     struct st_th operations_buffer[MAX_OPERATIONS]; // buffer
     int n_operation = 0;
-    int position = 0;
+    int position = 0;*/
 
 
 
@@ -48,10 +48,14 @@
 
 
 
-    pthread_mutex_t mutex;
-    pthread_cond_t no_full;
-    pthread_cond_t no_empty;
-    pthread_mutex_t mend;
+    /*pthread_mutex_t m_pool;
+    pthread_cond_t c_pool_no_full;
+    pthread_cond_t C_poll_no_empty;
+    pthread_mutex_t m_pool_end;*/
+
+    /* //pthread_attr_t t_attr;
+    pthread_t thid[MAX_THREADS];*/
+    
 
 
 
@@ -62,6 +66,10 @@
 
     int the_end = 0;
     mpiServer_param_st params;
+
+
+
+
 
 
     /* ... Functions / Funciones ......................................... */
@@ -104,13 +112,13 @@
 
       while(1){
 
-        pthread_mutex_lock(&mutex);
+        pthread_mutex_lock(&m_pool);
         while (n_operation == 0) {
           if (the_end==1) {
-            pthread_mutex_unlock(&mutex);
+            pthread_mutex_unlock(&m_pool);
             pthread_exit(0);
           }
-          pthread_cond_wait(&no_empty, &mutex);
+          pthread_cond_wait(&C_poll_no_empty, &m_pool);
         }
       
         //DELETE
@@ -126,8 +134,8 @@
         position = (position + 1) % MAX_OPERATIONS;
         n_operation--;
 
-        pthread_cond_signal(&no_full);
-        pthread_mutex_unlock(&mutex);
+        pthread_cond_signal(&c_pool_no_full);
+        pthread_mutex_unlock(&m_pool);
 
 
 
@@ -297,39 +305,30 @@
 
       mpiServer_utils_init() ;
       mpiServer_comm_init(&params) ;
-
-
-
-
       //mpiServer_init_worker() ;
+
       
 
 
-
-
-
-
       //Threads pool
-      pthread_attr_t t_attr;
-      pthread_t thid[MAX_THREADS];
-      int pos = 0;
+      //int pos = 0;
+      mpiServer_init_worker_pool ( );
 
 
+      /*pthread_mutex_init(&m_pool,NULL);
+      pthread_cond_init(&c_pool_no_full,NULL);
+      pthread_cond_init(&C_poll_no_empty,NULL);
+      pthread_mutex_init(&m_pool_end,NULL);*/
 
+      mpiServer_launch_worker_pool(worker_function);
 
-      pthread_mutex_init(&mutex,NULL);
-      pthread_cond_init(&no_full,NULL);
-      pthread_cond_init(&no_empty,NULL);
-      pthread_mutex_init(&mend,NULL);
-
-      pthread_attr_init(&t_attr);
-      for (int i = 0; i < MAX_THREADS; i++){
+      //pthread_attr_init(&t_attr);
+      /*for (int i = 0; i < MAX_THREADS; i++){
         if (pthread_create(&thid[i], NULL, (void *)(worker_function), NULL) !=0){
           perror("Error creating thread pool\n");
           return -1;
         }
-      }
-
+      }*/
       //Threads pool End
 
 
@@ -370,9 +369,12 @@
 
 
           //Pool
-          pthread_mutex_lock(&mutex);
+
+          mpiServer_worker_pool_run ( sd, &params, head.type, rank_client_id);
+
+          /*pthread_mutex_lock(&m_pool);
           while (n_operation == MAX_OPERATIONS){
-            pthread_cond_wait(&no_full, &mutex);
+            pthread_cond_wait(&c_pool_no_full, &m_pool);
           }
 
           struct st_th st_worker;
@@ -385,8 +387,8 @@
           operations_buffer[pos] = st_worker;
           pos = (pos+1) % MAX_OPERATIONS;
           n_operation++;
-          pthread_cond_signal(&no_empty);
-          pthread_mutex_unlock(&mutex);
+          pthread_cond_signal(&C_poll_no_empty);
+          pthread_mutex_unlock(&m_pool);*/
 
           //Pool end
 
@@ -415,23 +417,23 @@
 
 
       //Pool
-      pthread_mutex_lock(&mend);
+      pthread_mutex_lock(&m_pool_end);
       the_end=1;
-      pthread_mutex_unlock(&mend);
+      pthread_mutex_unlock(&m_pool_end);
 
-      pthread_mutex_lock(&mutex);
-      pthread_cond_broadcast(&no_empty);
-      pthread_mutex_unlock(&mutex);
+      pthread_mutex_lock(&m_pool);
+      pthread_cond_broadcast(&C_poll_no_empty);
+      pthread_mutex_unlock(&m_pool);
 
 
       for (int i=0;i<MAX_THREADS;i++){
         pthread_join(thid[i],NULL);
       }
 
-      pthread_mutex_destroy(&mutex);
-      pthread_cond_destroy(&no_full);
-      pthread_cond_destroy(&no_empty);
-      pthread_mutex_destroy(&mend);
+      pthread_mutex_destroy(&m_pool);
+      pthread_cond_destroy(&c_pool_no_full);
+      pthread_cond_destroy(&C_poll_no_empty);
+      pthread_mutex_destroy(&m_pool_end);
       //Pool end
 
       // return OK 

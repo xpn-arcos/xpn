@@ -25,6 +25,7 @@
   #include "mpiServer_workers.h"
 
 
+
   /* ... Global variables / Variables globales ......................... */
 
   int             busy_worker;
@@ -36,18 +37,60 @@
   int             th_cont = 0;
 
 
+
+
+
+  /**************************/
+
+  pthread_mutex_t m_pool;
+  pthread_cond_t c_pool_no_full;
+  pthread_cond_t C_poll_no_empty;
+  pthread_mutex_t m_pool_end;
+
+  pthread_t thid[MAX_THREADS];
+
+  struct st_th operations_buffer[MAX_OPERATIONS]; // buffer
+  int n_operation = 0;
+  int position = 0;
+  int pos = 0;
+
+
+
+
+
+
+
   /* ... Functions / Funciones ......................................... */
 
   int mpiServer_init_worker ( void )
   {
     busy_worker = TRUE;
     n_workers   = 0L;
+
     pthread_cond_init (&c_worker,   NULL);
     pthread_cond_init (&c_nworkers, NULL);
     pthread_mutex_init(&m_worker,   NULL);
 
     return 0;
   }
+
+  int mpiServer_init_worker_pool ( void )
+  {
+    pthread_mutex_init(&m_pool,NULL);
+    pthread_cond_init (&c_pool_no_full,NULL);
+    pthread_cond_init (&C_poll_no_empty,NULL);
+    pthread_mutex_init(&m_pool_end,NULL);
+
+    return 0;
+  }
+
+
+
+
+
+
+
+
 
 
 
@@ -79,7 +122,7 @@
     ret = pthread_create(&th_worker, &th_attr, (void *)(mpiServer_worker_run), (void *)&st_worker);
     if (ret != 0){
       debug_error("[WORKERS] pthread_create %d\n", ret);
-       perror("pthread_create: Error en create_thread: ");
+      perror("pthread_create: Error en create_thread: ");
     }
 
     // wait to copy args...
@@ -100,6 +143,23 @@
     DEBUG_END() ;
     return 0;
   }
+
+  int mpiServer_launch_worker_pool ( void (*worker_function)(struct st_th) )
+  {
+    for (int i = 0; i < MAX_THREADS; i++){
+      if (pthread_create(&thid[i], NULL, (void *)(worker_function), NULL) !=0){
+        perror("Error creating thread pool\n");
+        return -1;
+      }
+    }
+
+    return 0;
+  }
+
+
+
+
+
 
   void mpiServer_worker_run ( void *arg )
   {
@@ -140,6 +200,33 @@
       pthread_exit(0);
   }
 
+  void mpiServer_worker_pool_run ( MPI_Comm sd, mpiServer_param_st *params, int op_type, int rank_client_id)
+  {
+    pthread_mutex_lock(&m_pool);
+    while (n_operation == MAX_OPERATIONS){
+      pthread_cond_wait(&c_pool_no_full, &m_pool);
+    }
+
+    struct st_th st_worker;
+
+    st_worker.sd                = sd;
+    st_worker.params            = params ;
+    st_worker.type_op           = op_type ;
+    st_worker.rank_client_id    = rank_client_id ;
+
+    operations_buffer[pos] = st_worker;
+    pos = (pos+1) % MAX_OPERATIONS;
+    n_operation++;
+    pthread_cond_signal(&C_poll_no_empty);
+    pthread_mutex_unlock(&m_pool);
+  }
+
+
+
+
+
+
+
   void mpiServer_wait_workers ( void )
   {
     DEBUG_BEGIN() ;
@@ -160,4 +247,17 @@
 
 
   /* ................................................................... */
+
+
+
+
+
+
+
+
+
+
+
+
+
 

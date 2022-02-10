@@ -470,7 +470,7 @@ void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiS
         req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
         mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req), rank_client_id);
 
-        //FREE_AND_NULL(buffer) ;
+        FREE_AND_NULL(buffer) ;
         return ;
     }
 
@@ -482,7 +482,7 @@ void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiS
     debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name);
 
     // free buffer
-    //FREE_AND_NULL(buffer) ;
+    FREE_AND_NULL(buffer) ;
 
     // debugging information
     debug_info("[OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",
@@ -539,7 +539,7 @@ void mpiServer_op_write ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpi
     mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req), rank_client_id);
 
     // free buffer
-    //FREE_AND_NULL(buffer) ;
+    FREE_AND_NULL(buffer) ;
 
     // for debugging purpouses 
     debug_info("[OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_mpiServer_msg.op_write.fd);
