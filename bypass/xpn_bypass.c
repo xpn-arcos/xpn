@@ -1302,6 +1302,8 @@
 
 
 
+
+
 	#include "mpi.h"
 
 	int MPI_Init (int *argc, char ***argv)
@@ -1315,9 +1317,6 @@
 
 		value = getenv("IS_MPI_SERVER") ;
 		if (NULL == value){
-
-			//printf("Default Init\n");
-
 			return PMPI_Init(argc, argv);
 		}
 
@@ -1330,19 +1329,28 @@
 	{
 		char *value;
 
-		//xpn_destroy();
+		printf("MPI_Finalize BYPASS\n");
 
 		value = getenv("IS_MPI_SERVER") ;
-		if (NULL == value){
-
-			//printf("Default Finalize\n");
-
-			return PMPI_Finalize();
+		if (NULL != value && xpn_adaptor_initCalled == 1){
+			xpn_destroy();
 		}
+
+		printf("MPI_Finalize BYPASS 2\n");
+
+		return PMPI_Finalize();
 	}
 
 
 	void exit(int status){
 		printf("EXIT BYPASS\n");
-		xpn_destroy();
+
+		if (xpn_adaptor_initCalled == 1)
+		{
+			xpn_destroy();
+		}
+		
+		void (*real_exit)(int);
+		real_exit = dlsym(RTLD_NEXT,"exit");
+		real_exit(status);
 	}

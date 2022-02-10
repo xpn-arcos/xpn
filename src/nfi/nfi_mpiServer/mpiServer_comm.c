@@ -144,7 +144,9 @@
                   MPI_Send( data, 1, MPI_INT, i, 0, params->server );
                 }
               }
-      
+              
+              printf("DISCONNECT.... 2\n");
+
               // Disconnect
               ret = MPI_Comm_disconnect(&(params->server)) ;
               if (MPI_SUCCESS != ret) {
@@ -152,11 +154,17 @@
                   return -1 ;
               }
 
-              ret = MPI_Finalize();
+              printf("DISCONNECT.... 3\n");
+
+              //ret = MPI_Finalize();
+
+              ret = PMPI_Finalize();
               if (MPI_SUCCESS != ret) {
                   debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
                   return -1 ;
               }
+
+              printf("DISCONNECT.... 4\n");
       
               // Return OK
               return 1 ;
@@ -232,7 +240,8 @@
       
               // Send message
               printf("OP SIZE %d\n", size);
-              ret = MPI_Send(data, size, MPI_BYTE, fd.rank_id, 0, fd.comm) ;
+              //ret = MPI_Send(data, size, MPI_CHAR, fd.rank_id, 0, fd.comm) ;
+              ret = MPI_Send(data, size, MPI_INT, fd.rank_id, 0, fd.comm) ;
               if (MPI_SUCCESS != ret) {
                   debug_warning("Server[?]: MPI_Recv fails :-(") ;
                   size = 0 ;

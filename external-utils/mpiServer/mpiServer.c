@@ -97,8 +97,8 @@
       struct st_mpiServer_msg head;
       int ret;
 
-
-      int id;
+      //DELETE
+      int id, init_pthread = 0;
 
       //int rank_client_id;
 
@@ -113,9 +113,14 @@
           pthread_cond_wait(&no_empty, &mutex);
         }
       
-
-        id = id_all;
-        id_all++;
+        //DELETE
+        if (init_pthread == 0)
+        {
+          id = id_all;
+          id_all++;
+          init_pthread = 1;
+        }
+        
 
         th = operations_buffer[position];
         position = (position + 1) % MAX_OPERATIONS;

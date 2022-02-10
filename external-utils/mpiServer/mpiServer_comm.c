@@ -27,7 +27,7 @@
 
    /* ... Functions / Funciones ......................................... */
 
-      int     mpiServer_comm_init      ( mpiServer_param_st *params )
+      int mpiServer_comm_init ( mpiServer_param_st *params )
       {
         int ret, provided ;
         char srv_name[1024] ;
@@ -204,7 +204,7 @@
         }
   
         // Get message
-        ret = MPI_Recv(data, size, MPI_BYTE, MPI_ANY_SOURCE, 0, fd, &status);
+        ret = MPI_Recv(data, size, MPI_INT, MPI_ANY_SOURCE, 0, fd, &status);
         //ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, 0, fd, &status);
         if (MPI_SUCCESS != ret) {
             debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
