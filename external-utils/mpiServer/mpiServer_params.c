@@ -32,6 +32,11 @@
       	   printf("Current configuration:\n");
       	   printf("\t-io <int>:\t%d\n",     params->IOsize) ;
       	   printf("\t-d <string>:\t%s\n",   params->dirbase) ;
+
+            if(params->thread_mode == TH_POOL)
+               printf("\t-p:\tThread Pool\n") ;
+            if(params->thread_mode == TH_OP)
+               printf("\t-p:\tThread per client\n") ;
       }
       
       void mpiServer_params_show_usage ( void )
@@ -39,6 +44,7 @@
       	   printf("Usage:\n");
       	   printf("\t-io <int>: IOsize\n") ;
       	   printf("\t-d <string>: name of the base directory\n") ;
+            printf("\t-p: thread Pool\n") ;
       }
       
       int mpiServer_params_get ( mpiServer_param_st *params, int argc, char *argv[] )
@@ -51,6 +57,7 @@
       	   params->size = 0 ;
       	   params->rank = 0 ;
       	   params->IOsize = MPISERVER_IOSIZE_DEFAULT ;
+            params->thread_mode = TH_OP ;
       	   strcpy(params->port_name, "") ;
       	   strcpy(params->srv_name,  "") ;
       	   strcpy(params->dirbase,   MPISERVER_DIRBASE_DEFAULT) ;
@@ -86,7 +93,11 @@
       					case 'd':
       						strcpy(params->dirbase, argv[i+1]);
       						i++;
-      						break;					
+      						break;
+                     case 'p':
+                        params->thread_mode = TH_POOL;
+                        i++;
+                        break;				
       					case 'h':
       						return -1;
       

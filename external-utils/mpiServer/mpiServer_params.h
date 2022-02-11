@@ -9,6 +9,11 @@
    #include "mpiServer_utils.h"
 
 
+   //TODO
+   #define TH_POOL 1
+   #define TH_OP   2
+
+
    /*
     * Datatype
     */
@@ -20,6 +25,9 @@
         int  rank ;
         char port_name[MPI_MAX_PORT_NAME] ;
         char  srv_name[MPI_MAX_PORT_NAME] ;
+
+        // server configuration
+        int thread_mode;
 
         // associated client
         MPI_Comm client ;

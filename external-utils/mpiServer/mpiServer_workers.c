@@ -25,8 +25,9 @@
   #include "mpiServer_workers.h"
 
 
-
   /* ... Global variables / Variables globales ......................... */
+
+  /*Worker variables*/
 
   int             busy_worker;
   pthread_mutex_t m_worker;
@@ -36,11 +37,7 @@
   long            n_workers;
   int             th_cont = 0;
 
-
-
-
-
-  /**************************/
+  /*Worker pool variables*/
 
   pthread_mutex_t m_pool;
   pthread_cond_t c_pool_no_full;
@@ -51,12 +48,11 @@
 
   struct st_th operations_buffer[MAX_OPERATIONS]; // buffer
   int n_operation = 0;
-  int position = 0;
-  int pos = 0;
+  int deq_pos = 0;
+  int enq_pos = 0;
+  int pool_end = 0;
 
-
-
-
+  /**************************/
 
 
 
@@ -71,27 +67,24 @@
     pthread_cond_init (&c_nworkers, NULL);
     pthread_mutex_init(&m_worker,   NULL);
 
+    DEBUG_END() ;
+
     return 0;
   }
 
   int mpiServer_init_worker_pool ( void )
   {
+    DEBUG_BEGIN() ;
+
     pthread_mutex_init(&m_pool,NULL);
     pthread_cond_init (&c_pool_no_full,NULL);
     pthread_cond_init (&C_poll_no_empty,NULL);
     pthread_mutex_init(&m_pool_end,NULL);
 
+    DEBUG_END() ;
+
     return 0;
   }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -146,6 +139,8 @@
 
   int mpiServer_launch_worker_pool ( void (*worker_function)(struct st_th) )
   {
+    DEBUG_BEGIN() ;
+
     for (int i = 0; i < MAX_THREADS; i++){
       if (pthread_create(&thid[i], NULL, (void *)(worker_function), NULL) !=0){
         perror("Error creating thread pool\n");
@@ -153,11 +148,10 @@
       }
     }
 
+    DEBUG_END() ;
+
     return 0;
   }
-
-
-
 
 
 
@@ -200,8 +194,12 @@
       pthread_exit(0);
   }
 
-  void mpiServer_worker_pool_run ( MPI_Comm sd, mpiServer_param_st *params, int op_type, int rank_client_id)
+
+
+  void mpiServer_worker_pool_enqueue ( MPI_Comm sd, mpiServer_param_st *params, int op_type, int rank_client_id)
   {
+    DEBUG_BEGIN() ;
+
     pthread_mutex_lock(&m_pool);
     while (n_operation == MAX_OPERATIONS){
       pthread_cond_wait(&c_pool_no_full, &m_pool);
@@ -214,16 +212,43 @@
     st_worker.type_op           = op_type ;
     st_worker.rank_client_id    = rank_client_id ;
 
-    operations_buffer[pos] = st_worker;
-    pos = (pos+1) % MAX_OPERATIONS;
+    operations_buffer[enq_pos] = st_worker;
+    enq_pos = (enq_pos+1) % MAX_OPERATIONS;
     n_operation++;
     pthread_cond_signal(&C_poll_no_empty);
     pthread_mutex_unlock(&m_pool);
+
+    DEBUG_END() ;
   }
 
+  struct st_th mpiServer_worker_pool_dequeue ( int the_end )
+  {
+    DEBUG_BEGIN() ;
 
+    struct st_th th;
 
+    pthread_mutex_lock(&m_pool);
+    while (n_operation == 0) {
+      if ( pool_end==1 || the_end==1 ) {
+        pthread_mutex_unlock(&m_pool);
+        pthread_exit(0);
+      }
+      pthread_cond_wait(&C_poll_no_empty, &m_pool);
+    }
 
+    printf("In function \nthread id = %d\n", pthread_self()); //DELETE
+
+    th = operations_buffer[deq_pos];
+    deq_pos = (deq_pos + 1) % MAX_OPERATIONS;
+    n_operation--;
+
+    pthread_cond_signal(&c_pool_no_full);
+    pthread_mutex_unlock(&m_pool);
+
+    DEBUG_END() ;
+
+    return th;
+  }
 
 
 
@@ -246,18 +271,32 @@
   }
 
 
+
+  void mpiServer_destroy_worker_pool ( void )
+  {
+    DEBUG_BEGIN() ;
+
+    pthread_mutex_lock(&m_pool_end);
+    pool_end=1;
+    pthread_mutex_unlock(&m_pool_end);
+
+    pthread_mutex_lock(&m_pool);
+    pthread_cond_broadcast(&C_poll_no_empty);
+    pthread_mutex_unlock(&m_pool);
+
+    printf("AQUII \n");
+
+    for (int i=0;i<MAX_THREADS;i++){
+      pthread_join(thid[i],NULL);
+    }
+
+    pthread_mutex_destroy(&m_pool);
+    pthread_cond_destroy(&c_pool_no_full);
+    pthread_cond_destroy(&C_poll_no_empty);
+    pthread_mutex_destroy(&m_pool_end);
+
+    DEBUG_END() ;
+  }
+
+
   /* ................................................................... */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
