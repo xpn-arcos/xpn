@@ -4,7 +4,8 @@
 #include "tcpServer.h"
 #include "tcpServer_ops.h"
 
-#define MAX_THREADS 1024 
+#define MAX_THREADS 32
+#define MAX_OPERATIONS 256 
 #define STACK_SIZE (256*KB)
 
 struct st_th{

@@ -20,45 +20,45 @@
  */
 
 
-   /* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-#include "mpiServer_ops.h"
-#include "mpiServer_comm.h"
-#include "mpiServer_d2xpn.h"
+  #include "mpiServer_ops.h"
+  #include "mpiServer_comm.h"
+  #include "mpiServer_d2xpn.h"
 
 
-   /* ... Functions / Funciones ......................................... */
+  /* ... Functions / Funciones ......................................... */
 
-int aux_clear_dirs(char *path)
-{
+  int aux_clear_dirs(char *path)
+  {
     int j;
     char ant = '\0', s[255];
 
     j=0;
     for (unsigned i=0; i < strlen(path); i++)
     {
-        switch(path[i])
-        {
-            case '/':
-                if(ant != '/'){
-                    ant = s[j] = '/';
-                    j++;
-                }
-                break;
-            default:
-                ant = s[j] = path[i];
-                j++;
-        }
+      switch(path[i])
+      {
+        case '/':
+          if(ant != '/'){
+            ant = s[j] = '/';
+            j++;
+          }
+          break;
+        default:
+          ant = s[j] = path[i];
+          j++;
+      }
 
-        s[j] = '\0';
+      s[j] = '\0';
     }
 
     strcpy(path, s);
     return 0;
-}
+  }
 
-int aux_get_dirs(char *path, int n, char *s)
-{
+  int aux_get_dirs(char *path, int n, char *s)
+  {
     long unsigned i=0;
     long j=0, ant=-1, pos=-1;
     int cont=-1;
@@ -70,35 +70,35 @@ int aux_get_dirs(char *path, int n, char *s)
     aux_clear_dirs(path);
     s[0] = '\0';
     if (path == NULL) {
-        return 0;
+      return 0;
     }
 
     for (i=0; i<strlen(path) && cont<(n+1); i++)
     {
-        if (path[i] == '/'){
-            if(ant == -1){
-                ant = pos = i;
-            }
-            pos = i;
-            cont++;
+      if (path[i] == '/'){
+        if(ant == -1){
+          ant = pos = i;
         }
+        pos = i;
+        cont++;
+      }
     }
 
     if(cont<(n+1)){
-        return 0;
+      return 0;
     }
 
     for(j=ant; j<pos; j++){
-        s[j] = path[j];
+      s[j] = path[j];
     }
 
     s[j] = '\0';
 
     return strlen(s);
-}
+  }
 
-int mpiServer_create_spacename ( mpiServer_param_st *params, char *path )
-{
+  int mpiServer_create_spacename ( mpiServer_param_st *params, char *path )
+  {
     int i;
     char dir[MAXPATHLEN];
 
@@ -113,10 +113,10 @@ int mpiServer_create_spacename ( mpiServer_param_st *params, char *path )
     }
 
     return 0;
-}
+  }
 
-char * mpiServer_op2string ( int op_code )
-{
+  char * mpiServer_op2string ( int op_code )
+  {
     char *ret = "Unknown" ;
 
     switch (op_code)
@@ -162,7 +162,7 @@ char * mpiServer_op2string ( int op_code )
     }
 
     return ret ;
-}
+  }
 
 
 /*

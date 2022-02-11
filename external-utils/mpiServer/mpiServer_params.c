@@ -44,7 +44,7 @@
       	   printf("Usage:\n");
       	   printf("\t-io <int>: IOsize\n") ;
       	   printf("\t-d <string>: name of the base directory\n") ;
-            printf("\t-p: thread Pool\n") ;
+            printf("\t-p: use thread pool\n") ;
       }
       
       int mpiServer_params_get ( mpiServer_param_st *params, int argc, char *argv[] )
