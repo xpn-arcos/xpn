@@ -73,26 +73,6 @@
     }
 
 
-    void worker_pool_function ( void )
-    {
-      struct st_th th;
-
-      while(1)
-      {
-        // Dequeue operation
-        if (params.thread_mode == TH_POOL)
-        {
-          th = mpiServer_worker_pool_dequeue ( the_end );
-        }
-
-        worker_function ( th );
-        
-      }
-
-      pthread_exit(0);
-    }
-
-
     void worker_function ( struct st_th th )
     {
       //int op;
@@ -234,11 +214,29 @@
       //mpiServer_comm_close(th.params) ;
     }
 
+    void worker_pool_function ( void )
+    {
+      struct st_th th;
+
+      while(1)
+      {
+        // Dequeue operation
+        if (params.thread_mode == TH_POOL)
+        {
+          th = mpiServer_worker_pool_dequeue ( the_end );
+        }
+
+        worker_function ( th );
+        
+      }
+
+      pthread_exit(0);
+    }
 
 
-   /*
-    * Main
-    */
+    /*
+     * Main
+     */
 
     int main ( int argc, char *argv[] )
     {

@@ -137,12 +137,12 @@
     return 0;
   }
 
-  int mpiServer_launch_worker_pool ( void (*worker_function)(struct st_th) )
+  int mpiServer_launch_worker_pool ( void (*worker_pool_function)(void) )
   {
     DEBUG_BEGIN() ;
 
     for (int i = 0; i < MAX_THREADS; i++){
-      if (pthread_create(&thid[i], NULL, (void *)(worker_function), NULL) !=0){
+      if (pthread_create(&thid[i], NULL, (void *)(worker_pool_function), NULL) !=0){
         perror("Error creating thread pool\n");
         return -1;
       }
@@ -236,7 +236,7 @@
       pthread_cond_wait(&C_poll_no_empty, &m_pool);
     }
 
-    printf("In function \nthread id = %d\n", pthread_self()); //DELETE
+    debug_info("[WORKERS] thread id = %ld\n", pthread_self());
 
     th = operations_buffer[deq_pos];
     deq_pos = (deq_pos + 1) % MAX_OPERATIONS;

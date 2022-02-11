@@ -39,7 +39,7 @@
    int mpiServer_init_worker_pool ( void );
 
    int mpiServer_launch_worker      ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) );
-   int mpiServer_launch_worker_pool ( void (*worker_function)(struct st_th) );
+   int mpiServer_launch_worker_pool ( void (*worker_pool_function)(void) );
 
    void mpiServer_worker_run ( void *arg ) ;
 
