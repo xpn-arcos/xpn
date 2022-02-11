@@ -69,7 +69,7 @@
     int main(int argc, char *argv[])
     {
       int sd;
-      int cont;
+      //int cont;
 
       // Initializing...
       setbuf(stdout,NULL);  
@@ -89,11 +89,27 @@
       tcpServer_comm_init(tcpServer_params.name, tcpServer_params.port, tcpServer_params.file);
 
       // Initialize tcp_worker...
-      tcpServer_init_worker();
+      if (params.thread_mode == TH_OP)
+      {
+        debug_info("[MAIN] tcpServer_init_worker\n");
+        tcpServer_init_worker();
+      }
+
+      // Initialize and launch worker pool
+      if (params.thread_mode == TH_POOL)
+      {
+        debug_info("[MAIN] tcpServer_init_worker_pool\n");
+        tcpServer_init_worker_pool ( );
+        debug_info("[MAIN] tcpServer_launch_worker_pool launch\n");
+        tcpServer_launch_worker_pool(worker_pool_function);
+      }
+
+
+
 
       // Request loop...
-      cont = 1;
-      while (cont)
+      //cont = 1;
+      while (1)
       {
         debug_info("tcpServer_accept_comm()\n");
         sd = tcpServer_accept_comm();
@@ -101,13 +117,34 @@
           break;
         }
 
-        debug_info("tcpServer_launch_worker()\n");
-        tcpServer_launch_worker(sd);
+        // Launch worker to execute the operation
+        if (params.thread_mode == TH_OP)
+        {
+          debug_info("[MAIN] tcpServer_launch_worker\n") ;
+          tcpServer_launch_worker(sd);
+        }
+
+        // Enqueue the operation on the buffer
+        if (params.thread_mode == TH_POOL)
+        {
+          debug_info("[MAIN] mpiServer_worker_pool_enqueue\n");
+          mpiServer_worker_pool_enqueue ( sd, &params, head.type, rank_client_id );
+        }
+
       }
 
       tcpServer_close_comm();
-      xpn_destroy();
-      
+      //xpn_destroy();
+
+      //TODO: los otros hilos no se destruyen??
+
+      // Destroy worker pool
+      if (params.thread_mode == TH_POOL)
+      {
+        debug_info("[WORKERS] tcpServer_destroy_worker_pool\n");
+        mpiServer_destroy_worker_pool();
+      }
+
       return 0;
     }
 

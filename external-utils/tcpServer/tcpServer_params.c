@@ -91,10 +91,10 @@
                      strcpy(params->dirbase, argv[i+1]);
                      i++;
                      break;
-                  case 'p':
+                  /*case 'p':
                      params->thread_mode = TH_POOL;
                      i++;
-                     break;
+                     break;*/
                   case 'h':
                      params_show_usage();
                      exit(0);

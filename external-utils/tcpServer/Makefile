@@ -4,12 +4,12 @@
 #--------------------------
 
 MAKE         = make -s
-#CC           = /opt/software/install-mpich/bin/mpicc
-CC           = /home/dcamarma/mpich-install/bin/mpicc
+CC           = /opt/software/install-mpich/bin/mpicc
+#CC           = /home/dcamarma/mpich-install/bin/mpicc
 SOURCE_PATH  = ./
 #EXPAND_DIR   = $(HOME)/expand/trunk/expand
-#EXPAND_DIR   = /opt/xpn
-EXPAND_DIR   = /home/dcamarma/xpn-install
+EXPAND_DIR   = /opt/xpn
+#EXPAND_DIR   = /home/dcamarma/xpn-install
 OBJECTS_TCPSERVER      = tcpServer.o \
 		         tcpServer_utils.o \
 		         tcpServer_params.o \
