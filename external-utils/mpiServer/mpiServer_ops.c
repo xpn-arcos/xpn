@@ -422,15 +422,6 @@ long op_write_buffer ( mpiServer_param_st *params, int write_fd2, void *buffer, 
 
 
 
-
-
-
-
-
-
-
-
-
 void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
     long size ;
@@ -438,7 +429,6 @@ void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiS
     int diff;
     struct st_mpiServer_read_req req;
     char *buffer;
-    //char buffer[128*1024];
    
     debug_info("[OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n",
            params->srv_name,
@@ -512,15 +502,6 @@ void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiS
 
 
 
-
-
-
-
-
-
-
-
-
 void mpiServer_op_write ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
 {
     struct st_mpiServer_write_req req;
@@ -528,7 +509,6 @@ void mpiServer_op_write ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpi
     int cont = 0;
     int diff;
     char *buffer;
-    //char buffer[128*1024];
     
     debug_info("[OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_mpiServer_msg.op_write.fd);
 
