@@ -435,6 +435,7 @@ void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiS
 {
     long size ;
     int cont = 0;
+    int diff;
     struct st_mpiServer_read_req req;
     char *buffer;
     //char buffer[128*1024];
@@ -461,25 +462,35 @@ void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiS
         return ;
     }
 
-    // read data...
-    LSEEK(head->u_st_mpiServer_msg.op_read.fd, head->u_st_mpiServer_msg.op_read.offset, 0);
-    req.size = op_read_buffer(params, head->u_st_mpiServer_msg.op_read.fd, buffer, size);
-    if (req.size < 0) {
-        perror("read:");
 
-        req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
-        mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req), rank_client_id);
+    do{
+        // read data...
+        LSEEK(head->u_st_mpiServer_msg.op_read.fd, head->u_st_mpiServer_msg.op_read.offset + cont, SEEK_SET);
 
-        FREE_AND_NULL(buffer) ;
-        return ;
-    }
+        req.size = op_read_buffer(params, head->u_st_mpiServer_msg.op_read.fd, buffer, size);
+        if (req.size < 0) {
+            perror("read:");
 
-    // send (how many + data) to client...
-    mpiServer_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpiServer_read_req), rank_client_id);
-    debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size);
+            req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+            mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req), rank_client_id);
 
-    mpiServer_comm_write_data(params, sd, buffer, req.size, rank_client_id);
-    debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name);
+            FREE_AND_NULL(buffer) ;
+            return ;
+        }
+
+        // send (how many + data) to client...
+        mpiServer_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpiServer_read_req), rank_client_id);
+        debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size);
+
+        if (req.size > 0) {
+            mpiServer_comm_write_data(params, sd, buffer, req.size, rank_client_id);
+            debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name);
+        }
+
+        cont = cont + req.size; //Send bytes
+        diff = head->u_st_mpiServer_msg.op_read.size - cont;
+
+    } while ((diff > 0) || (req.size == 0)) ;
 
     // free buffer
     FREE_AND_NULL(buffer) ;
@@ -507,6 +518,8 @@ void mpiServer_op_write ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpi
 {
     struct st_mpiServer_write_req req;
     int size ;
+    int cont = 0;
+    int diff;
     char *buffer;
     //char buffer[128*1024];
     
@@ -529,14 +542,23 @@ void mpiServer_op_write ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpi
         return ;
     }
 
-    // read data from MPI
-    mpiServer_comm_read_data(params, sd, buffer, size, rank_client_id);
-    // write into the file
-    LSEEK(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset, 0);
-    req.size = op_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, size, size) ;
+    do{
+        // read data from MPI
+        mpiServer_comm_read_data(params, sd, buffer, size, rank_client_id);
+        // write into the file
+        LSEEK(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset + cont, SEEK_SET);
+        req.size = op_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, size, size) ;
+
+        cont = cont + req.size; //Send bytes
+        diff = head->u_st_mpiServer_msg.op_read.size - cont;
+
+    } while((diff > 0) || (req.size == 0));
 
     // write to the client the status of the write operation
     mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req), rank_client_id);
+
+
+
 
     // free buffer
     FREE_AND_NULL(buffer) ;

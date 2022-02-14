@@ -135,17 +135,19 @@
 
       }
 
-      tcpServer_close_comm();
-      //xpn_destroy();
-
-      //TODO: los otros hilos no se destruyen??
-
       // Destroy worker pool
       if (tcpServer_params.thread_mode == TH_POOL)
       {
         debug_info("[WORKERS] tcpServer_destroy_worker_pool\n");
         tcpServer_destroy_worker_pool();
       }
+
+      tcpServer_close_comm();
+      //xpn_destroy();
+
+      //TODO: los otros hilos no se destruyen??
+
+      
 
       return 0;
     }

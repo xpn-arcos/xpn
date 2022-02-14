@@ -842,7 +842,7 @@
                                    size_t size )
                                    //off_t offset)
         {
-          int ret, cont;
+          int ret, cont, diff;
           struct nfi_mpiServer_server *server_aux;
           struct nfi_mpiServer_fhandle *fh_aux;
           struct st_mpiServer_msg msg;
@@ -879,31 +879,36 @@
                 return -1;
         }
 
-        ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_read_req), msg.id);
-        dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): (1)mpiClient_read_data = %d.\n",server_aux->id, ret);
-        if(ret == -1){
-                perror("ERROR: (2)nfi_mpiServer_read: Error on write operation");
-                fprintf(stderr,"ERROR: (2)nfi_mpiServer_read: Error on write operation\n");
-                return -1;
-        }
+        // read n times: number of bytes + read data (n bytes)
+        cont = 0 ;
 
+        do {
 
-        if(req.size > 0){
-        dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): (2)mpiClient_read_data = %d. size = %d\n",server_aux->id, ret, req.size);
-                ret = mpiClient_read_data(server_aux->sd, (char *)buffer, req.size, msg.id);
-                dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): (2)mpiClient_read_data = %d.\n",server_aux->id, ret);
-                if(ret == -1){
-                        perror("ERROR: (3)nfi_mpiServer_read: Error on write operation");
-                        fprintf(stderr,"ERROR: (3)nfi_mpiServer_read: Error on read operation\n");
-                        return -1;
-                }
-        }
-        dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): read(%d,%d) cont = %d\n",server_aux->id,req.size,(int)req.last,cont);
+            ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_read_req), msg.id);
+            dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): (1)mpiClient_read_data = %d.\n",server_aux->id, ret);
+            if(ret == -1){
+                    perror("ERROR: (2)nfi_mpiServer_read: Error on write operation");
+                    fprintf(stderr,"ERROR: (2)nfi_mpiServer_read: Error on write operation\n");
+                    return -1;
+            }
+     
+            if(req.size > 0){
+                    dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): (2)mpiClient_read_data = %d. size = %d\n",server_aux->id, ret, req.size);
+                    ret = mpiClient_read_data(server_aux->sd, (char *)buffer+cont, req.size, msg.id);
+                    dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): (2)mpiClient_read_data = %d.\n",server_aux->id, ret);
+                    if(ret == -1){
+                            perror("ERROR: (3)nfi_mpiServer_read: Error on write operation");
+                            fprintf(stderr,"ERROR: (3)nfi_mpiServer_read: Error on read operation\n");
+                            return -1;
+                    }
+            }
 
+            cont = cont + req.size ;
+            diff = msg.u_st_mpiServer_msg.op_read.size - cont;
 
+        } while ((diff > 0) || (req.size == 0));
+        
 
-
-        dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): read %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
         if (req.size < 0)
         {
                 fprintf(stderr,"ERROR: nfi_mpiServer_read: Fail read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)req.size);
@@ -963,11 +968,24 @@
                 fprintf(stderr,"(1)ERROR: nfi_mpiServer_write(ID=%s): Error on write operation\n",server_aux->id);
                 return -1;
         }
+
+
+
+
+        //Tamaño maximo 1M nuevo buffer etc.
+
+
         ret = mpiClient_write_data(server_aux->sd, (char *)buffer, size, msg.id);
         if(ret == -1){
                 fprintf(stderr,"(2)ERROR: nfi_mpiServer_read(ID=%s): Error on write operation\n",server_aux->id);
                 return -1;
         }
+
+
+
+
+
+
 
         ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_write_req), msg.id);
         if(ret == -1){
