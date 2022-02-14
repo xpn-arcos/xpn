@@ -903,10 +903,13 @@
                     }
             }
 
-            cont = cont + req.size ;
+            cont = cont + ret ;
             diff = msg.u_st_mpiServer_msg.op_read.size - cont;
 
-        } while ((diff > 0) || (req.size == 0));
+            printf("CONT %d; DIFF %d\n", cont, diff);
+
+
+        } while ((diff > 0) || (ret == 0));
         
 
         if (req.size < 0)
@@ -918,7 +921,7 @@
 
         dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): end\n",server_aux->id);
 
-        return req.size;
+        return cont;
       }
 
       ssize_t nfi_mpiServer_write( struct nfi_server *serv,
@@ -932,7 +935,7 @@
           struct nfi_mpiServer_fhandle *fh_aux;
           struct st_mpiServer_msg msg;
           struct st_mpiServer_write_req req;
-          int ret;
+          int ret, diff, cont;
 
           // Check arguments...
           if (size == 0){
@@ -971,21 +974,37 @@
 
 
 
+        diff = size;
+        cont = 0;
 
-        //Tamaño maximo 1M nuevo buffer etc.
+        int buffer_size = size;
 
-
-        ret = mpiClient_write_data(server_aux->sd, (char *)buffer, size, msg.id);
-        if(ret == -1){
-                fprintf(stderr,"(2)ERROR: nfi_mpiServer_read(ID=%s): Error on write operation\n",server_aux->id);
-                return -1;
+        if (buffer_size > (1 * 1024 * 1024)) // > 1MB
+        {
+            buffer_size = 1 * 1024 * 1024; // 1MB
         }
 
+        do{
+            if (diff > buffer_size)
+            {
+                ret = mpiClient_write_data(server_aux->sd, (char *)buffer + cont, buffer_size, msg.id);
+                if(ret == -1){
+                    fprintf(stderr,"(2)ERROR: nfi_mpiServer_read(ID=%s): Error on write operation\n",server_aux->id);
+                    return -1;
+                }
+            }
+            else{
+                ret = mpiClient_write_data(server_aux->sd, (char *)buffer + cont, diff, msg.id);
+                if(ret == -1){
+                    fprintf(stderr,"(2)ERROR: nfi_mpiServer_read(ID=%s): Error on write operation\n",server_aux->id);
+                    return -1;
+                }
+            }
 
+            cont = cont + ret; //Send bytes
+            diff = size - cont;
 
-
-
-
+        } while((diff > 0) || (ret == 0));
 
         ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_write_req), msg.id);
         if(ret == -1){

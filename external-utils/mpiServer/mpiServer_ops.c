@@ -467,7 +467,14 @@ void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiS
         // read data...
         LSEEK(head->u_st_mpiServer_msg.op_read.fd, head->u_st_mpiServer_msg.op_read.offset + cont, SEEK_SET);
 
-        req.size = op_read_buffer(params, head->u_st_mpiServer_msg.op_read.fd, buffer, size);
+        if (diff > size)
+        {
+            req.size = op_read_buffer(params, head->u_st_mpiServer_msg.op_read.fd, buffer, size);
+        }
+        else{
+            req.size = op_read_buffer(params, head->u_st_mpiServer_msg.op_read.fd, buffer, diff);
+        }
+
         if (req.size < 0) {
             perror("read:");
 
@@ -542,23 +549,34 @@ void mpiServer_op_write ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpi
         return ;
     }
 
+    diff = head->u_st_mpiServer_msg.op_read.size;
+
     do{
         // read data from MPI
-        mpiServer_comm_read_data(params, sd, buffer, size, rank_client_id);
-        // write into the file
-        LSEEK(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset + cont, SEEK_SET);
-        req.size = op_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, size, size) ;
+        if (diff > size)
+        {
+            mpiServer_comm_read_data(params, sd, buffer, size, rank_client_id);
+            // write into the file
+            LSEEK(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset + cont, SEEK_SET);
+            req.size = op_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, size, size) ;
+        }
+        else{
+            mpiServer_comm_read_data(params, sd, buffer, diff, rank_client_id);
+            // write into the file
+            LSEEK(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset + cont, SEEK_SET);
+            req.size = op_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, diff, diff) ;
+        }
 
         cont = cont + req.size; //Send bytes
         diff = head->u_st_mpiServer_msg.op_read.size - cont;
 
     } while((diff > 0) || (req.size == 0));
 
+
+    req.size = cont;
+
     // write to the client the status of the write operation
     mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req), rank_client_id);
-
-
-
 
     // free buffer
     FREE_AND_NULL(buffer) ;
