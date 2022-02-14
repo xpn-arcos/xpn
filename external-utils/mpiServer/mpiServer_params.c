@@ -34,9 +34,9 @@
       	   printf("\t-d <string>:\t%s\n",   params->dirbase) ;
 
             if(params->thread_mode == TH_POOL)
-               printf("\t-p:\tThread Pool\n") ;
-            if(params->thread_mode == TH_OP)
-               printf("\t-p:\tThread per client\n") ;
+            printf("\t-pt:\t\tThread Pool Activated\n") ;
+         if(params->thread_mode == TH_OP)
+            printf("\t-pt:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
       }
       
       void mpiServer_params_show_usage ( void )
@@ -44,7 +44,7 @@
       	   printf("Usage:\n");
       	   printf("\t-io <int>: IOsize\n") ;
       	   printf("\t-d <string>: name of the base directory\n") ;
-            printf("\t-p: use thread pool\n") ;
+            printf("\t-pt: use thread pool\n") ;
       }
       
       int mpiServer_params_get ( mpiServer_param_st *params, int argc, char *argv[] )
@@ -95,7 +95,9 @@
       						i++;
       						break;
                      case 'p':
-                        params->thread_mode = TH_POOL;
+                        if ((strlen(argv[i]) == 3) && (argv[i][2] == 't')){
+                           params->thread_mode = TH_POOL;
+                        }
                         i++;
                         break;				
       					case 'h':

@@ -37,9 +37,9 @@
          printf("\t-d <string>:\t%s\n",params->dirbase);
 
          if(params->thread_mode == TH_POOL)
-            printf("\t-p:\tThread Pool\n") ;
+            printf("\t-pt:\t\tThread Pool Activated\n") ;
          if(params->thread_mode == TH_OP)
-            printf("\t-p:\tThread per client\n") ;
+            printf("\t-pt:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
       }
 
       void params_show_usage ( void )
@@ -50,7 +50,7 @@
          printf("\t-io <int>: IOsize\n");
          printf("\t-f <string>: name of the DNS file\n");
          printf("\t-d <string>: dir base\n");
-         printf("\t-p: use thread pool\n") ;
+         printf("\t-pt: use thread pool\n") ;
       }
 
       int params_get ( int argc, char *argv[], struct tcpServer_param_st *params )
@@ -66,46 +66,47 @@
 
          for (i=0;i<argc;i++)
          {
-         switch(argv[i][0])
-         {
-            case '-':
-               switch(argv[i][1])
-               {
-                  case 'p':
-                     params->port = atoi(argv[i+1]);
-                     i++;
-                     break;
-                  case 'i':
-                     params->IOsize = atoi(argv[i+1]);
-                     i++;
-                     break;
-                  case 'n':
-                     strcpy(params->name, argv[i+1]);
-                     i++;
-                     break;
-                  case 'f':
-                     strcpy(params->file, argv[i+1]);
-                     i++;
-                     break;
-                  case 'd':
-                     strcpy(params->dirbase, argv[i+1]);
-                     i++;
-                     break;
-                  /*case 'p':
-                     params->thread_mode = TH_POOL;
-                     i++;
-                     break;*/
-                  case 'h':
-                     params_show_usage();
-                     exit(0);
+            switch(argv[i][0])
+            {
+               case '-':
+                  switch(argv[i][1])
+                  {
+                     case 'p':
+                        if ((strlen(argv[i]) == 3) && (argv[i][2] == 't')){
+                           params->thread_mode = TH_POOL;
+                        }
+                        else if (strlen(argv[i]) == 2){
+                           params->port = atoi(argv[i+1]);
+                        }
+                        i++;
+                        break;
+                     case 'i':
+                        params->IOsize = atoi(argv[i+1]);
+                        i++;
+                        break;
+                     case 'n':
+                        strcpy(params->name, argv[i+1]);
+                        i++;
+                        break;
+                     case 'f':
+                        strcpy(params->file, argv[i+1]);
+                        i++;
+                        break;
+                     case 'd':
+                        strcpy(params->dirbase, argv[i+1]);
+                        i++;
+                        break;
+                     case 'h':
+                        params_show_usage();
+                        exit(0);
 
-                  default:
-                     break;
-               }
-               break;
-            default:
-               break;
-         }
+                     default:
+                        break;
+                  }
+                  break;
+               default:
+                  break;
+            }
          }
 
          TCPSERVER_ALIAS_NAME_STRING = params->name;

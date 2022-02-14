@@ -10,7 +10,7 @@
 
 struct st_th{
 //	pthread_t th;
-	int value;
+	int sd;
 	int id;
 };
 
@@ -26,10 +26,10 @@ int tcpServer_launch_worker_pool ( void (*worker_pool_function)(void) );
 
 void tcpServer_worker_run(void *arg);
 
-void tcpServer_worker_pool_enqueue         ( );
+void tcpServer_worker_pool_enqueue         ( int sd, int id );
 struct st_th tcpServer_worker_pool_dequeue ( int the_end );
 
-void worker_function      (int sd, int id)
+void worker_function      ( struct st_th th );
 void worker_pool_function ( void );
 
 void tcpServer_destroy_worker_pool ( void );

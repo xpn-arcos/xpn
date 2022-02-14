@@ -510,7 +510,7 @@ void tcpServer_op_write(int sd, struct st_tcpServer_msg *head)
 	size = head->u_st_tcpServer_msg.op_write.size
 #else
 	char *buffer;
-	size = head->u_st_tcpServer_msg.op_write.size
+	size = head->u_st_tcpServer_msg.op_write.size;
 #endif
 
 	debug_info("[OPS] (%s) begin write: fd %d ID=%sn",TCPSERVER_ALIAS_NAME_STRING,
