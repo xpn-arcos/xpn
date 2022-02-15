@@ -162,7 +162,7 @@ int tcpServer_read_operation(int sd, struct st_tcpServer_msg *head)
 	int ret;
 
 	debug_info("[OPS] (%s) read_operation code of %d bytes.\n ", TCPSERVER_ALIAS_NAME_STRING, sizeof(head->type));
-	ret = tcpServer_comm_readdata(sd, (char *)&head->type, sizeof(head->type), head->id);
+	ret = tcpServer_comm_read_data(sd, (char *)&head->type, sizeof(head->type), head->id);
 	if (ret == -1) {
 	    return -1;
 	}
@@ -171,49 +171,49 @@ int tcpServer_read_operation(int sd, struct st_tcpServer_msg *head)
 	switch (head->type)
 	{
 		case TCPSERVER_OPEN_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_open), sizeof(struct st_tcpServer_open), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_open), sizeof(struct st_tcpServer_open), head->id);
 			break;
 		case TCPSERVER_CREAT_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_creat), sizeof(struct st_tcpServer_creat), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_creat), sizeof(struct st_tcpServer_creat), head->id);
 			break;
 		case TCPSERVER_READ_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_read), sizeof(struct st_tcpServer_read), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_read), sizeof(struct st_tcpServer_read), head->id);
 			break;
 		case TCPSERVER_WRITE_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_write), sizeof(struct st_tcpServer_write), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_write), sizeof(struct st_tcpServer_write), head->id);
 			break;
 		case TCPSERVER_CLOSE_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_close), sizeof(struct st_tcpServer_close), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_close), sizeof(struct st_tcpServer_close), head->id);
 			break;
 		case TCPSERVER_RM_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_rm), sizeof(struct st_tcpServer_rm), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_rm), sizeof(struct st_tcpServer_rm), head->id);
 			break;
 		case TCPSERVER_GETATTR_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_getattr), sizeof(struct st_tcpServer_getattr), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_getattr), sizeof(struct st_tcpServer_getattr), head->id);
 			break;
 		case TCPSERVER_SETATTR_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_setattr), sizeof(struct st_tcpServer_setattr), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_setattr), sizeof(struct st_tcpServer_setattr), head->id);
 			break;
 		case TCPSERVER_MKDIR_DIR:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_mkdir), sizeof(struct st_tcpServer_mkdir), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_mkdir), sizeof(struct st_tcpServer_mkdir), head->id);
 			break;
 		case TCPSERVER_RMDIR_DIR:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_rmdir), sizeof(struct st_tcpServer_rmdir), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_rmdir), sizeof(struct st_tcpServer_rmdir), head->id);
 			break;
 		case TCPSERVER_FLUSH_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_flush), sizeof(struct st_tcpServer_flush), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_flush), sizeof(struct st_tcpServer_flush), head->id);
 			break;
 		case TCPSERVER_PRELOAD_FILE:
-			ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_preload), sizeof(struct st_tcpServer_preload), head->id);
+			ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_preload), sizeof(struct st_tcpServer_preload), head->id);
 			break;
 		case TCPSERVER_GETID:
-			/* ret = tcpServer_comm_readdata(sd, (char *)&(head->id), sizeof(TCPSERVER_ID), head->id); */
+			/* ret = tcpServer_comm_read_data(sd, (char *)&(head->id), sizeof(TCPSERVER_ID), head->id); */
 			break;
 		case TCPSERVER_FINALIZE:
-			/* ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_end), sizeof(struct st_tcpServer_end), head->id); */
+			/* ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_end), sizeof(struct st_tcpServer_end), head->id); */
 			break;
 		case TCPSERVER_END:
-			/* ret = tcpServer_comm_readdata(sd, (char *)&(head->u_st_tcpServer_msg.op_end), sizeof(struct st_tcpServer_end), head->id); */
+			/* ret = tcpServer_comm_read_data(sd, (char *)&(head->u_st_tcpServer_msg.op_end), sizeof(struct st_tcpServer_end), head->id); */
 			break;
 	}
 
@@ -237,7 +237,7 @@ void tcpServer_op_open(int sd, struct st_tcpServer_msg *head)
 	//	tcpServer_create_spacename(s);
 	//}
 
-	tcpServer_comm_writedata(sd, (char *)&fd, sizeof(int), head->id);
+	tcpServer_comm_write_data(sd, (char *)&fd, sizeof(int), head->id);
 
 	debug_info("[OPS] (%s) OPEN operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
 }
@@ -258,7 +258,7 @@ void tcpServer_op_creat(int sd, struct st_tcpServer_msg *head)
 	        fd = open(s, O_CREAT | O_RDWR, 0666);
 	}
 
-	tcpServer_comm_writedata(sd,(char *)&fd,sizeof(int), head->id);
+	tcpServer_comm_write_data(sd,(char *)&fd,sizeof(int), head->id);
 
 	debug_info("[OPS] (%s) end CREAT operation from ID=%s ->%d\n",TCPSERVER_ALIAS_NAME_STRING,head->id,fd);
 }
@@ -285,7 +285,7 @@ void tcpServer_op_flush(int sd, struct st_tcpServer_msg *head)
 							sd, head->id,ret);
 */
 
-	tcpServer_comm_writedata(sd, (char *)&ret, sizeof(int), head->id);
+	tcpServer_comm_write_data(sd, (char *)&ret, sizeof(int), head->id);
 
 	debug_info("[OPS] (%s) end FLUSH operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
 }
@@ -308,7 +308,7 @@ void tcpServer_op_preload(int sd, struct st_tcpServer_msg *head)
 							head->u_st_tcpServer_msg.op_preload.storage_path,
 							head->id, ret);
 
-	tcpServer_comm_writedata(sd, (char *)&ret, sizeof(int),  head->id);
+	tcpServer_comm_write_data(sd, (char *)&ret, sizeof(int),  head->id);
 
 	debug_info("[OPS] (%s) end PRELOAD operation from ID=%s\n", TCPSERVER_ALIAS_NAME_STRING,head->id);
 }
@@ -418,133 +418,144 @@ long op_write_buffer ( int write_fd2, void *buffer, int buffer_size, int num_rea
 
 void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 {
-	unsigned long cont = 0;
-	int size_req, size = 0;
-	char *buffer;
-	struct st_tcpServer_read_req req;
+    long size ;
+    int cont = 0;
+    int diff;
+    struct st_tcpServer_read_req req;
+    char *buffer;
+   
+    debug_info("[OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n",
+           params->srv_name,
+           head->u_st_tcpServer_msg.op_read.fd,
+           (int)head->u_st_tcpServer_msg.op_read.offset,
+           head->u_st_tcpServer_msg.op_read.size);
 
-	size = head->u_st_tcpServer_msg.op_read.size;
+    // malloc a buffer of size...
+    size = head->u_st_tcpServer_msg.op_read.size;
 
-	if (size > MAX_BUFFER_SIZE)
+    if (size > MAX_BUFFER_SIZE)
     {
         size = MAX_BUFFER_SIZE;
     }
 
-
-	debug_info("[OPS] (%s) op_read: variable buffer (%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,MAX_BUFFER_SIZE,head->id);
-	debug_info("[OPS] (%s) begin read: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
-						head->u_st_tcpServer_msg.op_read.fd,
-						(int)head->u_st_tcpServer_msg.op_read.offset,
-						head->u_st_tcpServer_msg.op_read.size,
-						head->id);
-
-	buffer = (char *)malloc(size);
-	if (NULL == buffer)
+    buffer = (char *)malloc(size) ;
+    if (NULL == buffer)
     {
         req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
-		tcpServer_comm_writedata(sd, (char *)&req, sizeof(struct st_tcpServer_write_req), head->id);
-		return;
+        tcpServer_comm_write_data(sd,(char *)&req,sizeof(struct st_tcpServer_write_req), head->id);
+        return ;
     }
 
+    diff = head->u_st_tcpServer_msg.op_read.size - cont;
 
-	debug_info("[OPS] (%s) op_read: malloc(%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,size,head->id);
+    do{
+        // read data...
+        LSEEK(head->u_st_tcpServer_msg.op_read.fd, head->u_st_tcpServer_msg.op_read.offset + cont, SEEK_SET);
 
+        if (diff > size)
+        {
+            req.size = op_read_buffer(head->u_st_tcpServer_msg.op_read.fd, buffer, size);
+        }
+        else{
+            req.size = op_read_buffer(head->u_st_tcpServer_msg.op_read.fd, buffer, diff);
+        }
 
-#ifdef _LARGEFILE64_
-	lseek64(head->u_st_tcpServer_msg.op_read.fd, head->u_st_tcpServer_msg.op_read.offset, 0);
-#else
-	debug_info("[OPS] (%s) lseek: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
-						head->u_st_tcpServer_msg.op_read.fd,
-						(int)head->u_st_tcpServer_msg.op_read.offset,
-						head->u_st_tcpServer_msg.op_read.size,
-						head->id);
+        if (req.size < 0) {
+            perror("read:");
+            req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+            tcpServer_comm_write_data(sd,(char *)&req,sizeof(struct st_tcpServer_write_req), head->id);
+            
+            FREE_AND_NULL(buffer) ;
+            return ;
+        }
 
-	lseek(head->u_st_tcpServer_msg.op_read.fd, head->u_st_tcpServer_msg.op_read.offset, 0);
-#endif
+        // send (how many + data) to client...
+        tcpServer_comm_write_data(sd, (char *)&req, sizeof(struct st_tcpServer_read_req), head->id);
+        debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size);
 
-	req.size = op_read_buffer( head->u_st_tcpServer_msg.op_read.fd, buffer, size);
+        if (req.size > 0) {
+            tcpServer_comm_write_data(sd, buffer, req.size, head->id);
+            debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name);
+        }
 
-	if(req.size < 0){
-		perror("read:");
-		req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
-		tcpServer_comm_writedata(sd, (char *)&req, sizeof(struct st_tcpServer_write_req), head->id);
-		return;
-	}
+        cont = cont + req.size; //Send bytes
+        diff = head->u_st_tcpServer_msg.op_read.size - cont;
 
-	// send (how many + data) to client...
-	tcpServer_comm_writedata(sd, (char *)&req, sizeof(struct st_tcpServer_read_req), head->id);
-	debug_info("[OPS] (%s) op_read: send size %d\n",TCPSERVER_ALIAS_NAME_STRING, req.size);
+    } while ((diff > 0) || (req.size == 0)) ;
 
-	if(req.size > 0){
-		tcpServer_comm_writedata(sd, (char *)buffer, req.size, head->id);
-		debug_info("[OPS] (%s) op_read: send data\n",TCPSERVER_ALIAS_NAME_STRING);
-	}
+    // free buffer
+    FREE_AND_NULL(buffer) ;
 
-
-        debug_info("[OPS] (%s) end read: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
-                                                head->u_st_tcpServer_msg.op_read.fd,
-                                                (int)head->u_st_tcpServer_msg.op_read.offset,
-                                                size,
-                                                head->id);
-
-	debug_info("[OPS] (%s) op_read: free ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-	FREE_AND_NULL(buffer) ;
-
-    debug_info("[OPS] (%s) end READ: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
-                                                head->u_st_tcpServer_msg.op_read.fd,
-                                                (int)head->u_st_tcpServer_msg.op_read.offset,
-                                                size,
-                                                head->id);
+    // debugging information
+    debug_info("[OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",
+                params->srv_name,
+                head->u_st_tcpServer_msg.op_read.fd,
+                (int)head->u_st_tcpServer_msg.op_read.offset,
+                size) ;
 }
 
 
 
-void tcpServer_op_write(int sd, struct st_tcpServer_msg *head)
+void tcpServer_op_write (int sd, struct st_tcpServer_msg *head)
 {
-	char *buffer;
-	int cont =0 ,size =0;
-	struct st_tcpServer_write_req req;
+    struct st_tcpServer_write_req req;
+    int size ;
+    int cont = 0;
+    int diff;
+    char *buffer;
+    
+    // malloc a buffer of size...
+    size = (head->u_st_tcpServer_msg.op_write.size);
 
-	size = head->u_st_tcpServer_msg.op_write.size;
-
-	if (size > MAX_BUFFER_SIZE) // > 1MB
+    if (size > MAX_BUFFER_SIZE)
     {
-        size = MAX_BUFFER_SIZE; //
+        size = MAX_BUFFER_SIZE;
     }
 
-
-	debug_info("[OPS] (%s) begin write: fd %d ID=%sn",TCPSERVER_ALIAS_NAME_STRING,
-						head->u_st_tcpServer_msg.op_write.fd,
-						head->id);
-
-	buffer = (char *)malloc(size);
-	if (NULL == buffer)
+    buffer = (char *)malloc(size) ;
+    
+    if (NULL == buffer)
     {
         req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
-		tcpServer_comm_writedata(sd, (char *)&req, sizeof(struct st_tcpServer_write_req), head->id);
-		return;
+        tcpServer_comm_write_data( sd,(char *)&req,sizeof(struct st_tcpServer_write_req), head->id);
+        return ;
     }
 
-	tcpServer_comm_readdata(sd,(char *)buffer, size, head->id);
+    diff = head->u_st_tcpServer_msg.op_read.size - cont;
 
-#ifdef _LARGEFILE64_
-	lseek64(head->u_st_tcpServer_msg.op_write.fd, head->u_st_tcpServer_msg.op_write.offset, 0);
-#else
-	lseek(head->u_st_tcpServer_msg.op_write.fd, head->u_st_tcpServer_msg.op_write.offset, 0);
-#endif
+    do{
+        // read data from MPI
+        if (diff > size)
+        {
+            tcpServer_comm_read_data( sd, buffer, size, head->id);
+            // write into the file
+            LSEEK(head->u_st_tcpServer_msg.op_write.fd, head->u_st_tcpServer_msg.op_write.offset + cont, SEEK_SET);
+            req.size = op_write_buffer( head->u_st_tcpServer_msg.op_write.fd, buffer, size, size) ;
+        }
+        else{
+            tcpServer_comm_read_data( sd, buffer, diff, head->id);
+            // write into the file
+            LSEEK(head->u_st_tcpServer_msg.op_write.fd, head->u_st_tcpServer_msg.op_write.offset + cont, SEEK_SET);
+            req.size = op_write_buffer( head->u_st_tcpServer_msg.op_write.fd, buffer, diff, diff) ;
+        }
 
-	req.size = op_write_buffer (head->u_st_tcpServer_msg.op_write.fd, buffer, size, size);
+        cont = cont + req.size; //Send bytes
+        diff = head->u_st_tcpServer_msg.op_read.size - cont;
 
-	tcpServer_comm_writedata(sd,(char *)&req,sizeof(struct st_tcpServer_write_req), head->id);
+    } while((diff > 0) || (req.size == 0));
 
-	FREE_AND_NULL(buffer) ;
 
-	debug_info("[OPS] (%s) end write: fd %d ID=%sn",TCPSERVER_ALIAS_NAME_STRING,
-						head->u_st_tcpServer_msg.op_write.fd,
-						head->id);
+    req.size = cont;
+
+    // write to the client the status of the write operation
+    tcpServer_comm_write_data( sd,(char *)&req,sizeof(struct st_tcpServer_write_req), head->id);
+
+    // free buffer
+    FREE_AND_NULL(buffer) ;
+
+    // for debugging purpouses 
+    debug_info("[OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_tcpServer_msg.op_write.fd);
 }
-
-
 
 
 
@@ -555,7 +566,7 @@ void tcpServer_op_mkdir(int sd, struct st_tcpServer_msg *head)
 
 	strcpy(s, head->u_st_tcpServer_msg.op_mkdir.path);
 	ret = mkdir(s, 0777);
-	tcpServer_comm_writedata(sd,(char *)&ret,sizeof(int), head->id);
+	tcpServer_comm_write_data(sd,(char *)&ret,sizeof(int), head->id);
 
 	debug_info("[OPS] (%s) end MKDIR operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
 }
@@ -567,7 +578,7 @@ void tcpServer_op_rmdir(int sd, struct st_tcpServer_msg *head)
 
 	strcpy(s, head->u_st_tcpServer_msg.op_rmdir.path);
 	ret = rmdir(s);
-	tcpServer_comm_writedata(sd,(char *)&ret,sizeof(int), head->id);
+	tcpServer_comm_write_data(sd,(char *)&ret,sizeof(int), head->id);
 
 	debug_info("[OPS] (%s) end RMDIR operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
 }
@@ -595,7 +606,7 @@ void tcpServer_op_getattr(int sd, struct st_tcpServer_msg *head)
 
 	strcpy(s, head->u_st_tcpServer_msg.op_getattr.path);
 	req.status = stat(s, &req.attr);
-	tcpServer_comm_writedata(sd,(char *)&req,sizeof(struct st_tcpServer_attr_req), head->id);
+	tcpServer_comm_write_data(sd,(char *)&req,sizeof(struct st_tcpServer_attr_req), head->id);
 
 	debug_info("[OPS] (%s) end GETATTR(%s) ID=%sn",TCPSERVER_ALIAS_NAME_STRING,
 						head->u_st_tcpServer_msg.op_getattr.path,
@@ -607,7 +618,7 @@ void tcpServer_op_getid(int sd, struct st_tcpServer_msg *head)
         debug_info("[OPS] (%s) begin GETID ID=%s\n",TCPSERVER_ALIAS_NAME_STRING, head->id);
 
         //sprintf(s,"%s/", head->u_st_tcpServer_msg.op_rmdir.path);
-        tcpServer_comm_writedata(sd, (char *)(head->id), TCPSERVER_ID, head->id);
+        tcpServer_comm_write_data(sd, (char *)(head->id), TCPSERVER_ID, head->id);
 
         debug_info("[OPS] (%s) end GETID operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
 }

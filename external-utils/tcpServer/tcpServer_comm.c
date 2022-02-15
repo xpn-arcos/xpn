@@ -259,7 +259,7 @@ int tcpServer_destroy_comm()
 /**********************************
 Write data to client using sockets
 ***********************************/
-ssize_t tcpServer_comm_writedata(int fd, char *data, ssize_t size, char *id)
+ssize_t tcpServer_comm_write_data(int fd, char *data, ssize_t size, char *id)
 {
 	int ret = 0;
 	int cont = 0;
@@ -310,7 +310,7 @@ ssize_t tcpServer_comm_writedata(int fd, char *data, ssize_t size, char *id)
 /**********************************
 Read data from client using sockets
 ***********************************/
-ssize_t tcpServer_comm_readdata(int fd, char *data, ssize_t size, char *id)
+ssize_t tcpServer_comm_read_data(int fd, char *data, ssize_t size, char *id)
 {
 	int ret = 0;
 	int cont = 0;

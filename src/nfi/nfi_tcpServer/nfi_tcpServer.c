@@ -930,8 +930,7 @@ ssize_t nfi_tcpServer_read(	struct nfi_server *serv,
 			//off_t offset)
 {
 
-	int ret, cont;
-
+	int ret, cont, diff;
 	struct nfi_tcpServer_server *server_aux;
 	struct nfi_tcpServer_fhandle *fh_aux;
 	struct st_tcpServer_msg msg;
@@ -939,9 +938,11 @@ ssize_t nfi_tcpServer_read(	struct nfi_server *serv,
 
 	server_aux = (struct nfi_tcpServer_server *) serv->private_info;
 	strcpy(msg.id,server_aux->id);
+
 #ifdef  DBG_NFI 
 	printf("[NFI]nfi_tcpServer_read(%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
 #endif
+	
 	if (serv == NULL){
 		tcpServer_err(TCPSERVERERR_PARAM);
 		return -1;
@@ -976,7 +977,7 @@ ssize_t nfi_tcpServer_read(	struct nfi_server *serv,
 	/*****************************************/
 		
 	msg.type = TCPSERVER_READ_FILE; 
-	msg.u_st_tcpServer_msg.op_read.fd 	= fh_aux->fd;
+	msg.u_st_tcpServer_msg.op_read.fd 	    = fh_aux->fd;
 	msg.u_st_tcpServer_msg.op_read.offset 	= offset;
 	msg.u_st_tcpServer_msg.op_read.size 	= size;
 
@@ -995,52 +996,34 @@ ssize_t nfi_tcpServer_read(	struct nfi_server *serv,
 
 	cont = 0;
 	do{
-		ret = tcpServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_tcpServer_read_req), msg.id);
-#ifdef DBG_NFI 
-		printf("[NFI]nfi_tcpServer_read(ID=%s): (1)tcpServer_read_data = %d.\n",server_aux->id, ret);
-#endif		
+		ret = tcpServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_tcpServer_read_req), msg.id);	
 		if(ret == -1){
 			perror("ERROR: (2)nfi_tcpServer_read: Error on write operation");
 			fprintf(stderr,"ERROR: (2)nfi_tcpServer_read: Error on write operation\n");
 			return -1;
 		}
 
-
 		if(req.size > 0){
-#ifdef DBG_NFI 
-		printf("[NFI]nfi_tcpServer_read(ID=%s): (2)tcpServer_read_data = %d. size = %d cont = %d\n",server_aux->id, ret, req.size, cont);
-#endif		
 			ret = tcpServer_read_data(server_aux->sd, (char *)buffer+cont, req.size, msg.id);
-#ifdef DBG_NFI 
-			printf("[NFI]nfi_tcpServer_read(ID=%s): (2)tcpServer_read_data = %d.\n",server_aux->id, ret);
-#endif		
 			if(ret == -1){
 				perror("ERROR: (3)nfi_tcpServer_read: Error on write operation");
 				fprintf(stderr,"ERROR: (3)nfi_tcpServer_read: Error on read operation\n");
 				return -1;
 			}
-			//cont += req.size;
 		}
-		cont += req.size;
-#ifdef  DBG_NFI 
-		printf("[NFI]nfi_tcpServer_read(ID=%s): read(%d,%d) cont = %d\n",server_aux->id,req.size,(int)req.last,cont);	
-#endif
-	}while((req.size>0)&&(!req.last));
-	
-	/*****************************************/
-#ifdef  DBG_NFI 
-	printf("[NFI]nfi_tcpServer_read(ID=%s): read %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
-#endif
+
+		cont = cont + req.size ;
+        diff = msg.u_st_tcpServer_msg.op_read.size - cont;
+
+	}while((diff > 0) || (req.size == 0));
+
 	if(req.size < 0){
 		fprintf(stderr,"ERROR: nfi_tcpServer_read: Fail read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)req.size);
 		tcpServer_err(TCPSERVERERR_READ);
 		return -1;
 	}
 
-#ifdef  DBG_NFI 
-	printf("[NFI]nfi_tcpServer_read(ID=%s): end\n",server_aux->id);
-#endif
-	return req.size;
+	return cont;
 }
 
 
@@ -1054,42 +1037,42 @@ ssize_t nfi_tcpServer_write(struct nfi_server *serv,
 {
 
         struct nfi_tcpServer_server *server_aux;
-	struct nfi_tcpServer_fhandle *fh_aux;
-	struct st_tcpServer_msg msg;
-	struct st_tcpServer_write_req req;
+		struct nfi_tcpServer_fhandle *fh_aux;
+		struct st_tcpServer_msg msg;
+		struct st_tcpServer_write_req req;
+		int ret, diff, cont;
 
-	int ret;
-	
-	server_aux = (struct nfi_tcpServer_server *) serv->private_info;
-	strcpy(msg.id,server_aux->id);
+		
+		server_aux = (struct nfi_tcpServer_server *) serv->private_info;
+		strcpy(msg.id,server_aux->id);
 #ifdef  DBG_NFI
-	printf("[NFI]nfi_tcpServer_write(ID=%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
+		printf("[NFI]nfi_tcpServer_write(ID=%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
 #endif
-	if(size == 0){
-		return 0;
-	}	
+		if(size == 0){
+			return 0;
+		}	
 
-	if (serv == NULL){
-		tcpServer_err(TCPSERVERERR_PARAM);
-		return -1;
-	}
-
-
-	if (fh == NULL){
-		tcpServer_err(TCPSERVERERR_PARAM);
-		return -1;
-	}
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL){
-		ret = nfi_tcpServer_reconnect(serv);
-		if(ret <0){
-			/* tcpServer_err(); not necessary */
+		if (serv == NULL){
+			tcpServer_err(TCPSERVERERR_PARAM);
 			return -1;
 		}
-	}
+
+
+		if (fh == NULL){
+			tcpServer_err(TCPSERVERERR_PARAM);
+			return -1;
+		}
+
+#ifdef NFI_DYNAMIC
+		if (serv->private_info == NULL){
+			ret = nfi_tcpServer_reconnect(serv);
+			if(ret <0){
+				/* tcpServer_err(); not necessary */
+				return -1;
+			}
+		}
 #else
-	if (serv->private_info == NULL){
+		if (serv->private_info == NULL){
                tcpServer_err(TCPSERVERERR_PARAM);
                return -1;
         }
@@ -1097,53 +1080,80 @@ ssize_t nfi_tcpServer_write(struct nfi_server *serv,
 
 
     	fh_aux = (struct nfi_tcpServer_fhandle *) fh->priv_fh;
-	server_aux = (struct nfi_tcpServer_server *) serv->private_info;
+		server_aux = (struct nfi_tcpServer_server *) serv->private_info;
 
-	/*****************************************/
-	msg.type = TCPSERVER_WRITE_FILE; 
-	msg.u_st_tcpServer_msg.op_write.fd 	= fh_aux->fd;
-	msg.u_st_tcpServer_msg.op_write.offset 	= offset;
-	msg.u_st_tcpServer_msg.op_write.size 	= size;
+		/*****************************************/
+		msg.type = TCPSERVER_WRITE_FILE; 
+		msg.u_st_tcpServer_msg.op_write.fd 	= fh_aux->fd;
+		msg.u_st_tcpServer_msg.op_write.offset 	= offset;
+		msg.u_st_tcpServer_msg.op_write.size 	= size;
 
-	#ifdef  DBG_IO
-		printf("[NFI]write: -> fd %d \n",msg.u_st_tcpServer_msg.op_write.fd);
-		printf("[NFI]write: -> offset %d \n",(int)msg.u_st_tcpServer_msg.op_write.offset);
-		printf("[NFI]write: -> size %d \n",msg.u_st_tcpServer_msg.op_write.size);
-	#endif  
+		#ifdef  DBG_IO
+			printf("[NFI]write: -> fd %d \n",msg.u_st_tcpServer_msg.op_write.fd);
+			printf("[NFI]write: -> offset %d \n",(int)msg.u_st_tcpServer_msg.op_write.offset);
+			printf("[NFI]write: -> size %d \n",msg.u_st_tcpServer_msg.op_write.size);
+		#endif  
 
-	ret = tcpServer_write_operation(server_aux->sd, &msg);
-	if(ret == -1){
-		fprintf(stderr,"(1)ERROR: nfi_tcpServer_write(ID=%s): Error on write operation\n",server_aux->id);
-		return -1;
-	}
+		ret = tcpServer_write_operation(server_aux->sd, &msg);
+		if(ret == -1){
+			fprintf(stderr,"(1)ERROR: nfi_tcpServer_write(ID=%s): Error on write operation\n",server_aux->id);
+			return -1;
+		}
 
 
-	ret = tcpServer_write_data(server_aux->sd, (char *)buffer, size, msg.id);
-	if(ret == -1){
-		fprintf(stderr,"(2)ERROR: nfi_tcpServer_read(ID=%s): Error on write operation\n",server_aux->id);
-		return -1;
-	}
+		diff = size;
+        cont = 0;
 
-	ret = tcpServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_tcpServer_write_req), msg.id);
-	if(ret == -1){
-		fprintf(stderr,"(3)ERROR: nfi_tcpServer_write(ID=%s): Error on write operation\n",server_aux->id);
-		return -1;
-	}
+        int buffer_size = size;
+
+        if (buffer_size > (1 * 1024 * 1024)) // > 1MB
+        {
+            buffer_size = 1 * 1024 * 1024; // 1MB
+        }
+
+        do{
+
+        	if (diff > buffer_size)
+            {
+            	ret = tcpServer_write_data(server_aux->sd, (char *)buffer + cont, buffer_size, msg.id);
+				if(ret == -1){
+					fprintf(stderr,"(2)ERROR: nfi_tcpServer_read(ID=%s): Error on write operation\n",server_aux->id);
+					return -1;
+				}
+            }
+            else{
+            	ret = tcpServer_write_data(server_aux->sd, (char *)buffer + cont, diff, msg.id);
+				if(ret == -1){
+					fprintf(stderr,"(2)ERROR: nfi_tcpServer_read(ID=%s): Error on write operation\n",server_aux->id);
+					return -1;
+				}
+            }
+
+			cont = cont + ret; //Send bytes
+            diff = size - cont;
+
+        } while((diff > 0) || (ret == 0));
+
+		ret = tcpServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_tcpServer_write_req), msg.id);
+		if(ret == -1){
+			fprintf(stderr,"(3)ERROR: nfi_tcpServer_write(ID=%s): Error on write operation\n",server_aux->id);
+			return -1;
+		}
 	
 	
 	/*****************************************/
 #ifdef  DBG_NFI 
-	printf("[NFI]nfi_tcpServer_write(ID=%s): write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
+		printf("[NFI]nfi_tcpServer_write(ID=%s): write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
 #endif
-	if(req.size < 0){
-		fprintf(stderr,"ERROR: nfi_tcpServer_write(ID=%s): Fail write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
-		
-		tcpServer_err(TCPSERVERERR_WRITE);
-		return -1;
-	}
+		if(req.size < 0){
+			fprintf(stderr,"ERROR: nfi_tcpServer_write(ID=%s): Fail write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
+			
+			tcpServer_err(TCPSERVERERR_WRITE);
+			return -1;
+		}
 
 #ifdef  DBG_NFI
-	printf("[NFI]nfi_tcpServer_write(ID=%s): end\n",server_aux->id);
+		printf("[NFI]nfi_tcpServer_write(ID=%s): end\n",server_aux->id);
 #endif
 	return req.size;
 }

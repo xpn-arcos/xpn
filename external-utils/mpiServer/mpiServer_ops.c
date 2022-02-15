@@ -450,6 +450,7 @@ void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiS
         return ;
     }
 
+    diff = head->u_st_mpiServer_msg.op_read.size - cont;
 
     do{
         // read data...
@@ -525,7 +526,7 @@ void mpiServer_op_write ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpi
         return ;
     }
 
-    diff = head->u_st_mpiServer_msg.op_read.size;
+    diff = head->u_st_mpiServer_msg.op_read.size - cont;
 
     do{
         // read data from MPI
