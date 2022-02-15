@@ -157,41 +157,41 @@
 
 
     ssize_t mpiServer_comm_read_operation ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int *rank_client_id )
-  {
-    int ret ;
-    MPI_Status status ;
+    {
+      int ret ;
+      MPI_Status status ;
 
-    DEBUG_BEGIN() ;
+      DEBUG_BEGIN() ;
 
-    // Check params
-    if (size == 0) {
-        return  0;
+      // Check params
+      if (size == 0) {
+          return  0;
+      }
+      if (size < 0){
+          debug_warning("Server[%d]: size < 0", params->rank) ;
+          return  -1;
+      }
+      if (NULL == params) {
+          debug_warning("Server[%d]: NULL params", params->rank) ;
+          return -1;
+      }
+
+      // Get message
+      ret = MPI_Recv(data, size, MPI_INT, MPI_ANY_SOURCE, 0, fd, &status);
+      //ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, 0, fd, &status);
+      if (MPI_SUCCESS != ret) {
+          debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
+      }
+
+      *rank_client_id = status.MPI_SOURCE;
+
+      //printf("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
+
+      DEBUG_END() ;
+
+      // Return bytes read
+      return size;
     }
-    if (size < 0){
-        debug_warning("Server[%d]: size < 0", params->rank) ;
-        return  -1;
-    }
-    if (NULL == params) {
-        debug_warning("Server[%d]: NULL params", params->rank) ;
-        return -1;
-    }
-
-    // Get message
-    ret = MPI_Recv(data, size, MPI_INT, MPI_ANY_SOURCE, 0, fd, &status);
-    //ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, 0, fd, &status);
-    if (MPI_SUCCESS != ret) {
-        debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
-    }
-
-    *rank_client_id = status.MPI_SOURCE;
-
-    //printf("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
-
-    DEBUG_END() ;
-
-    // Return bytes read
-    return size;
-  }
 
   ssize_t mpiServer_comm_write_data ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id)
   {
@@ -246,6 +246,45 @@
 
     // Get message
     ret = MPI_Recv(data, size, MPI_CHAR, rank_client_id, 1, fd, &status);
+    if (MPI_SUCCESS != ret) {
+        debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
+    }
+
+    //printf("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
+
+    DEBUG_END() ;
+
+    // Return bytes read
+    return size;
+  }
+
+
+
+
+
+  ssize_t mpiServer_comm_read_operation_client ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id )
+  {
+    int ret ;
+    MPI_Status status ;
+
+    DEBUG_BEGIN() ;
+
+    // Check params
+    if (size == 0) {
+        return  0;
+    }
+    if (size < 0){
+        debug_warning("Server[%d]: size < 0", params->rank) ;
+        return  -1;
+    }
+    if (NULL == params) {
+        debug_warning("Server[%d]: NULL params", params->rank) ;
+        return -1;
+    }
+    printf("RANK %d\n", rank_client_id);
+    // Get message
+    ret = MPI_Recv(data, size, MPI_INT, rank_client_id, 0, fd, &status);
+    //ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, 0, fd, &status);
     if (MPI_SUCCESS != ret) {
         debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
     }

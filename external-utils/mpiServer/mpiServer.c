@@ -70,12 +70,25 @@
     mpiServer_utils_init() ;
     mpiServer_comm_init(&params) ;
 
+
+
+
+
+
+
+
     // Initialize worker
-    if (params.thread_mode == TH_OP)
+    if (params.thread_mode == TH_OP || params.thread_mode == TH_CLI) //REVISAR
     {
       debug_info("[MAIN] mpiServer_init_worker\n");
       mpiServer_init_worker() ;
     }
+
+
+
+
+
+
 
     // Initialize and launch worker pool
     if (params.thread_mode == TH_POOL)
@@ -97,35 +110,69 @@
 
       int rank_client_id;
 
-      while (1){
-        ret = mpiServer_comm_read_operation(&params, sd, (char *)&head.type, sizeof(head.type), &rank_client_id);
-        if (ret == -1) {
-          debug_info("[OPS] (ID=%s)  mpiServer_comm_readdata fail\n") ;
-          return -1;
+
+
+
+
+
+
+
+      if (params.thread_mode == TH_CLI)
+      {
+        printf("CLIENT MODE\n");
+
+        int ret, n_clients; 
+
+        ret = MPI_Comm_remote_size(sd, &n_clients) ;
+        if (MPI_SUCCESS != ret) {
+            debug_error("Server[%d]: MPI_Comm_size fails :-(", params.rank) ;
+            return -1 ;
         }
 
-        //TODO ver si es desconectar o finalizar y hacer un break aqui
-        if (head.type == MPISERVER_DISCONNECT || head.type == MPISERVER_FINALIZE)
+        for (int i = 0; i < n_clients; ++i)
         {
-          printf("Ha llegado un DISCONNECT\n");
-          break;
+          mpiServer_launch_worker_client(&params, sd, head.type, rank_client_id, worker_client_function);
         }
-
-        // Launch worker to execute the operation
-        if (params.thread_mode == TH_OP)
-        {
-          debug_info("[MAIN] mpiServer_launch_worker (ID=%d)\n", rank_client_id) ;
-          mpiServer_launch_worker(&params, sd, head.type, rank_client_id, worker_function) ;
-        }
-
-        // Enqueue the operation on the buffer
-        if (params.thread_mode == TH_POOL)
-        {
-          debug_info("[MAIN] mpiServer_worker_pool_enqueue (ID=%d)\n", rank_client_id);
-          mpiServer_worker_pool_enqueue ( sd, &params, head.type, rank_client_id );
-        }
-
       }
+
+
+
+
+
+
+      else{
+        printf("OTHERS MODE\n");
+        while (1){
+          ret = mpiServer_comm_read_operation(&params, sd, (char *)&head.type, sizeof(head.type), &rank_client_id);
+          if (ret == -1) {
+            debug_info("[OPS] (ID=%s)  mpiServer_comm_readdata fail\n") ;
+            return -1;
+          }
+
+          //TODO ver si es desconectar o finalizar y hacer un break aqui
+          if (head.type == MPISERVER_DISCONNECT || head.type == MPISERVER_FINALIZE)
+          {
+            printf("Ha llegado un DISCONNECT\n");
+            break;
+          }
+
+          // Launch worker to execute the operation
+          if (params.thread_mode == TH_OP)
+          {
+            debug_info("[MAIN] mpiServer_launch_worker (ID=%d)\n", rank_client_id) ;
+            mpiServer_launch_worker(&params, sd, head.type, rank_client_id, worker_function) ;
+          }
+
+          // Enqueue the operation on the buffer
+          if (params.thread_mode == TH_POOL)
+          {
+            debug_info("[MAIN] mpiServer_worker_pool_enqueue (ID=%d)\n", rank_client_id);
+            mpiServer_worker_pool_enqueue ( sd, &params, head.type, rank_client_id );
+          }
+        }
+      }
+
+
 
       if (head.type == MPISERVER_FINALIZE)
       {

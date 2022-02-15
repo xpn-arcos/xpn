@@ -21,4 +21,8 @@
    ssize_t mpiServer_comm_read_operation ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int *rank_client_id ) ;
    ssize_t mpiServer_comm_read_data      ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int  rank_client_id ) ;
 
+
+
+   ssize_t mpiServer_comm_read_operation_client ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id );
+
 #endif

@@ -35,8 +35,8 @@
 
             if(params->thread_mode == TH_POOL)
             printf("\t-pt:\t\tThread Pool Activated\n") ;
-         if(params->thread_mode == TH_OP)
-            printf("\t-pt:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
+            if(params->thread_mode == TH_OP)
+               printf("\t-pt:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
       }
       
       void mpiServer_params_show_usage ( void )
@@ -57,7 +57,7 @@
       	   params->size = 0 ;
       	   params->rank = 0 ;
       	   params->IOsize = MPISERVER_IOSIZE_DEFAULT ;
-            params->thread_mode = TH_OP ;
+            params->thread_mode = TH_CLI ;
       	   strcpy(params->port_name, "") ;
       	   strcpy(params->srv_name,  "") ;
       	   strcpy(params->dirbase,   MPISERVER_DIRBASE_DEFAULT) ;

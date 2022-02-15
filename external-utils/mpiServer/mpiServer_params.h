@@ -9,9 +9,10 @@
    #include "mpiServer_utils.h"
 
 
-   //TODO
+   //Constants
    #define TH_POOL 1
    #define TH_OP   2
+   #define TH_CLI  3
 
 
    /*

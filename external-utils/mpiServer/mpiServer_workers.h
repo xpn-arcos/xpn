@@ -53,4 +53,21 @@
 
   void mpiServer_destroy_worker_pool ( void );
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  int mpiServer_launch_worker_proccess ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_client_function)(struct st_th) );
+  void mpiServer_worker_client_run ( void *arg ) ;
+  void worker_client_function ( struct st_th th ) ;
 #endif
