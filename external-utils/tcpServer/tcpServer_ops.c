@@ -2,20 +2,20 @@
 /*
  *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
- *  This file is part of mpiServer.
+ *  This file is part of tcpServer.
  *
- *  mpiServer is free software: you can redistribute it and/or modify
+ *  tcpServer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  mpiServer is distributed in the hope that it will be useful,
+ *  tcpServer is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
- *  along with mpiServer.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with tcpServer.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -420,35 +420,35 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 {
 	unsigned long cont = 0;
 	int size_req, size = 0;
-	//char *buffer;
-	struct st_tcpServer_read_req req;
-	int SIZE;
-
-#ifndef _MALLOC_
-	char buffer[128*1024];
-	size = head->u_st_tcpServer_msg.op_read.size;
-	debug_info("[OPS] (%s) op_read: static buffer (%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,MAX_BUFFER_SIZE,head->id);
-#else
 	char *buffer;
-	size = head->u_st_tcpServer_msg.op_read.size;
-	debug_info("[OPS] (%s) op_read: variable buffer (%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,MAX_BUFFER_SIZE,head->id);
-#endif
+	struct st_tcpServer_read_req req;
 
-	//
+	size = head->u_st_tcpServer_msg.op_read.size;
+
+	if (size > MAX_BUFFER_SIZE)
+    {
+        size = MAX_BUFFER_SIZE;
+    }
+
+
+	debug_info("[OPS] (%s) op_read: variable buffer (%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,MAX_BUFFER_SIZE,head->id);
 	debug_info("[OPS] (%s) begin read: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
 						head->u_st_tcpServer_msg.op_read.fd,
 						(int)head->u_st_tcpServer_msg.op_read.offset,
 						head->u_st_tcpServer_msg.op_read.size,
 						head->id);
 
-#ifdef _MALLOC_
-	SIZE = head->u_st_tcpServer_msg.op_read.size;
-	buffer = (char *)malloc(SIZE);
-	//buffer = (char *)malloc(MAX_BUFFER_SIZE);
-	//debug_info("[OPS] (%s) op_read: malloc(%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,MAX_BUFFER_SIZE,head->id);
-	debug_info("[OPS] (%s) op_read: malloc(%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,SIZE,head->id);
-#endif
-	//t1 = MPI_Wtime();
+	buffer = (char *)malloc(size);
+	if (NULL == buffer)
+    {
+        req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+		tcpServer_comm_writedata(sd, (char *)&req, sizeof(struct st_tcpServer_write_req), head->id);
+		return;
+    }
+
+
+	debug_info("[OPS] (%s) op_read: malloc(%d) ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,size,head->id);
+
 
 #ifdef _LARGEFILE64_
 	lseek64(head->u_st_tcpServer_msg.op_read.fd, head->u_st_tcpServer_msg.op_read.offset, 0);
@@ -487,11 +487,10 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
                                                 size,
                                                 head->id);
 
-#ifdef _MALLOC_
 	debug_info("[OPS] (%s) op_read: free ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-	free(buffer);
-#endif
-        debug_info("[OPS] (%s) end READ: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
+	FREE_AND_NULL(buffer) ;
+
+    debug_info("[OPS] (%s) end READ: fd %d offset %d size %d ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,
                                                 head->u_st_tcpServer_msg.op_read.fd,
                                                 (int)head->u_st_tcpServer_msg.op_read.offset,
                                                 size,
@@ -502,27 +501,30 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 
 void tcpServer_op_write(int sd, struct st_tcpServer_msg *head)
 {
-	//char *buffer;
+	char *buffer;
 	int cont =0 ,size =0;
 	struct st_tcpServer_write_req req;
-#ifndef _MALLOC_
-	char buffer[128*1024];
-	size = head->u_st_tcpServer_msg.op_write.size
-#else
-	char *buffer;
+
 	size = head->u_st_tcpServer_msg.op_write.size;
-#endif
+
+	if (size > MAX_BUFFER_SIZE) // > 1MB
+    {
+        size = MAX_BUFFER_SIZE; //
+    }
+
 
 	debug_info("[OPS] (%s) begin write: fd %d ID=%sn",TCPSERVER_ALIAS_NAME_STRING,
 						head->u_st_tcpServer_msg.op_write.fd,
 						head->id);
 
-
-#ifdef _MALLOC_
 	buffer = (char *)malloc(size);
-	//buffer = (char *)malloc(head->u_st_tcpServer_msg.op_read.size);
-	//buffer = (char *)malloc(MAX_BUFFER_SIZE);
-#endif
+	if (NULL == buffer)
+    {
+        req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+		tcpServer_comm_writedata(sd, (char *)&req, sizeof(struct st_tcpServer_write_req), head->id);
+		return;
+    }
+
 	tcpServer_comm_readdata(sd,(char *)buffer, size, head->id);
 
 #ifdef _LARGEFILE64_
@@ -535,9 +537,7 @@ void tcpServer_op_write(int sd, struct st_tcpServer_msg *head)
 
 	tcpServer_comm_writedata(sd,(char *)&req,sizeof(struct st_tcpServer_write_req), head->id);
 
-	#ifdef _MALLOC_
-		free(buffer);
-	#endif
+	FREE_AND_NULL(buffer) ;
 
 	debug_info("[OPS] (%s) end write: fd %d ID=%sn",TCPSERVER_ALIAS_NAME_STRING,
 						head->u_st_tcpServer_msg.op_write.fd,

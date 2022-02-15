@@ -439,9 +439,9 @@ void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiS
     // malloc a buffer of size...
     size = head->u_st_mpiServer_msg.op_read.size;
 
-    if (size > (1 * 1024 * 1024)) // > 1MB
+    if (size > MAX_BUFFER_SIZE)
     {
-        size = 1 * 1024 * 1024; // 1MB
+        size = MAX_BUFFER_SIZE;
     }
 
     buffer = (char *)malloc(size) ;
@@ -515,9 +515,9 @@ void mpiServer_op_write ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpi
     // malloc a buffer of size...
     size = (head->u_st_mpiServer_msg.op_write.size);
 
-    if (size > (1 * 1024 * 1024)) // > 1MB
+    if (size > MAX_BUFFER_SIZE)
     {
-        size = 1 * 1024 * 1024; // 1MB
+        size = MAX_BUFFER_SIZE;
     }
 
     buffer = (char *)malloc(size) ;
