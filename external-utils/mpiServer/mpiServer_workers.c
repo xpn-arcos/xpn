@@ -293,6 +293,7 @@
       
     debug_info("[WORKERS] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpiServer_op2string(th.type_op), th.type_op);
 
+    //TODO --> Mover a ops??
     switch(th.type_op)
     {
       //Connection API
@@ -678,7 +679,13 @@
       }
 
       while (1){
-        printf("RANK ID %d\n", th.rank_client_id);
+
+        int ret, n_clients; 
+
+        ret = MPI_Comm_remote_size(th.sd, &n_clients) ;
+
+        printf("RANK ID %d COMM SIZE %d\n", th.rank_client_id, n_clients);
+
         ret = mpiServer_comm_read_operation_client (&th.params, th.sd, (char *)&head.type, sizeof(head.type), th.rank_client_id);
         if (ret == -1) {
           debug_info("[OPS] (ID=%s)  mpiServer_comm_readdata fail\n") ;
