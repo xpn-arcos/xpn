@@ -16,6 +16,8 @@ OBJECTS_MPISERVER      = mpiServer.o \
 				         mpiServer_comm.o \
 				         mpiServer_ops.o \
 				         mpiServer_workers.o \
+				         mpiServer_workers_ondemand.o \
+				         mpiServer_workers_pool.o \
 				         mpiServer_d2xpn.o
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDEBUG
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDEBUG
