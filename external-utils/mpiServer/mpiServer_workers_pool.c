@@ -45,27 +45,43 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int mpiServer_init_worker_pool ( void )
+  /*
+   *  Internal
+   */
+
+  void worker_pool_function ( void )
+  {
+    struct st_th th;
+
+    while(1)
+    {
+      // Dequeue operation
+      th = mpiServer_worker_pool_dequeue ( the_end );
+      worker_function ( th );
+    }
+
+    pthread_exit(0);
+  }
+
+
+  /*
+   *  API
+   */
+
+  int mpiServer_worker_pool_init ( void )
   {
     DEBUG_BEGIN() ;
 
+    // initialize variables...
     pthread_mutex_init(&m_pool,NULL);
     pthread_cond_init (&c_pool_no_full,NULL);
     pthread_cond_init (&c_poll_no_empty,NULL);
     pthread_mutex_init(&m_pool_end,NULL);
 
-    DEBUG_END() ;
-
-    return 0;
-  }
-
-  int mpiServer_launch_worker_pool ( void (*worker_pool_function)(void) )
-  {
-    DEBUG_BEGIN() ;
-
+    // starting threads...
     for (int i = 0; i < MAX_THREADS; i++)
     {
-      debug_info("[WORKERS] pthread_create: create_thread mpiServer_launch_worker_pool\n") ;
+      debug_info("[WORKERS] pthread_create: create_thread mpiServer_worker_pool_init\n") ;
       if (pthread_create(&thid[i], NULL, (void *)(worker_pool_function), NULL) !=0)
       {
         perror("Error creating thread pool\n");
@@ -157,7 +173,7 @@
     struct st_mpiServer_msg head;
     int ret;
     //int rank_client_id;
-    
+
     // check params...
     if (NULL == th.params) {
         debug_warning("[WORKERS] (ID=%d): NULL params", th.id) ;
@@ -168,7 +184,7 @@
 
     debug_info("[WORKERS] (ID=%d): mpiServer_read_operation and arguments...\n", th.id);
     //op = mpiServer_read_operation(th.params, th.sd, &head, &rank_client_id);
-      
+
     debug_info("[WORKERS] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpiServer_op2string(th.type_op), th.type_op);
 
     //TODO --> Mover a ops??
@@ -249,7 +265,7 @@
         mpiServer_op_setattr(th.params, th.sd, &head, th.rank_client_id);
         break;
 
-      //Directory API  
+      //Directory API
       case MPISERVER_MKDIR_DIR:
         ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_mkdir, sizeof(struct st_mpiServer_mkdir), th.rank_client_id);
         if (ret == -1) {
@@ -285,54 +301,39 @@
         mpiServer_op_flush(th.params, th.sd, &head, th.rank_client_id);
         break;
     }
-    
+
     debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(th.type_op));
-      
-  
+
+
     //debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.id);
     //mpiServer_comm_close(th.params) ;
   }
 
-  void worker_pool_function ( void )
-  {
-    struct st_th th;
-
-    while(1)
-    {
-      // Dequeue operation
-      th = mpiServer_worker_pool_dequeue ( the_end );
-      
-      worker_function ( th );
-      
-    }
-
-    pthread_exit(0);
-  }
 
 
-  void mpiServer_destroy_worker_pool ( void )
+  void mpiServer_worker_pool_destroy ( void )
   {
     DEBUG_BEGIN() ;
 
-    debug_info("[WORKERS] client: mpiServer_destroy_worker_pool(...) lock\n");
+    debug_info("[WORKERS] client: mpiServer_worker_pool_destroy(...) lock\n");
     pthread_mutex_lock(&m_pool_end);
     pool_end=1;
-    debug_info("[WORKERS] : mpiServer_destroy_worker_pool(...) unlock\n");
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&m_pool_end);
 
-    debug_info("[WORKERS] : mpiServer_destroy_worker_pool(...) lock\n");
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) lock\n");
     pthread_mutex_lock(&m_pool);
-    debug_info("[WORKERS] : mpiServer_destroy_worker_pool(...) broadcast\n");
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) broadcast\n");
     pthread_cond_broadcast(&c_poll_no_empty);
-    debug_info("[WORKERS] : mpiServer_destroy_worker_pool(...) unlock\n");
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&m_pool);
 
     for (int i=0;i<MAX_THREADS;i++){
-      debug_info("[WORKERS] : mpiServer_destroy_worker_pool(...) join\n");
+      debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) join\n");
       pthread_join(thid[i],NULL);
     }
 
-    debug_info("[WORKERS] : mpiServer_destroy_worker_pool(...) destroy\n");
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) destroy\n");
     pthread_mutex_destroy(&m_pool);
     pthread_cond_destroy(&c_pool_no_full);
     pthread_cond_destroy(&c_poll_no_empty);
@@ -427,10 +428,10 @@
     void mpiServer_worker_client_run ( void *arg )
     {
         struct st_th th;
-    
+
         DEBUG_BEGIN() ;
 
-        // prolog... 
+        // prolog...
         debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) lock\n", th.id);
         pthread_mutex_lock(&m_worker);
         debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) copy arguments\n", th.id);
@@ -443,7 +444,7 @@
         pthread_cond_broadcast(&c_worker); // pthread_cond_signal(&c_worker);
         debug_info("[WORKERS] client(%d): mpiServer_worker_run(...) unlock\n", th.id);
         pthread_mutex_unlock(&m_worker);
-    
+
         // do function code...
         th.function(th) ;
 
@@ -490,7 +491,7 @@
       struct st_mpiServer_msg head;
       int ret;
       //int rank_client_id;
-      
+
       // check params...
       if (NULL == th.params) {
           debug_warning("[WORKERS] (ID=%d): NULL params", th.id) ;
@@ -499,7 +500,7 @@
 
       while (1){
 
-        int ret, n_clients; 
+        int ret, n_clients;
 
         ret = MPI_Comm_remote_size(th.sd, &n_clients) ;
 
@@ -517,7 +518,7 @@
           printf("Ha llegado un DISCONNECT\n");
           break;
         }
-    
+
         debug_info("[WORKERS] (ID=%d): mpiServer_read_operation and arguments...\n", th.id);
         debug_info("[WORKERS] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpiServer_op2string(th.type_op), th.type_op);
 
@@ -598,7 +599,7 @@
             mpiServer_op_setattr(th.params, th.sd, &head, th.rank_client_id);
             break;
 
-          //Directory API  
+          //Directory API
           case MPISERVER_MKDIR_DIR:
             ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_mkdir, sizeof(struct st_mpiServer_mkdir), th.rank_client_id);
             if (ret == -1) {
@@ -635,10 +636,10 @@
             break;
         }
       }
-      
+
       debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(th.type_op));
-        
-    
+
+
       //debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.id);
       //mpiServer_comm_close(th.params) ;
     }

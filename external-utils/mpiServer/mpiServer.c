@@ -93,10 +93,8 @@
     // Initialize and launch worker pool
     if (params.thread_mode == TH_POOL)
     {
-      debug_info("[MAIN] mpiServer_init_worker_pool\n");
-      mpiServer_init_worker_pool ( );
-      debug_info("[MAIN] mpiServer_launch_worker_pool launch\n");
-      mpiServer_launch_worker_pool(worker_pool_function);
+      debug_info("[MAIN] mpiServer_worker_pool_init\n");
+      mpiServer_worker_pool_init ( );
     }
     
     // Loop: receiving + processing
@@ -196,8 +194,8 @@
     // Destroy worker pool
     if (params.thread_mode == TH_POOL)
     {
-      debug_info("[WORKERS] mpiServer_destroy_worker_pool\n");
-      mpiServer_destroy_worker_pool();
+      debug_info("[WORKERS] mpiServer_worker_pool_destroy\n");
+      mpiServer_worker_pool_destroy();
     }
 
     // return OK 

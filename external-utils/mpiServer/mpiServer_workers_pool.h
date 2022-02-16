@@ -12,9 +12,8 @@
    * API
    */
 
-  int          mpiServer_init_worker_pool    ( void ) ;
-  int          mpiServer_launch_worker_pool  ( void (*worker_pool_function)(void) ) ;
-  void         mpiServer_destroy_worker_pool ( void ) ;
+  int          mpiServer_worker_pool_init    ( void ) ;
+  void         mpiServer_worker_pool_destroy ( void ) ;
 
   void         mpiServer_worker_pool_enqueue ( MPI_Comm sd, mpiServer_param_st *params, int op_type, int rank_client_id) ;
   struct st_th mpiServer_worker_pool_dequeue ( int the_end ) ;
