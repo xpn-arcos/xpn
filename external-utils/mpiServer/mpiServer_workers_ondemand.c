@@ -86,7 +86,7 @@
       *  API
       */
 
-     int mpiServer_init_worker ( void )
+     int mpiServer_worker_ondemand_init ( void )
      {
        DEBUG_BEGIN() ;
 
@@ -102,7 +102,7 @@
        return 0;
      }
 
-     int mpiServer_launch_worker ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) )
+     int mpiServer_worker_ondemand_launch ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) )
      {
        int ret;
        pthread_attr_t th_attr;
@@ -151,19 +151,19 @@
        return 0;
      }
 
-     void mpiServer_wait_workers ( void )
+     void mpiServer_workers_ondemand_wait ( void )
      {
        DEBUG_BEGIN() ;
 
        // wait to n_workers be zero...
-       debug_info("[WORKERS] pthread_create: lock mpiServer_wait_workers\n");
+       debug_info("[WORKERS] pthread_create: lock mpiServer_workers_ondemand_wait\n");
        pthread_mutex_lock(&m_worker);
        while (n_workers != 0)
        {
-         debug_info("[WORKERS] pthread_create: wait mpiServer_wait_workers\n");
+         debug_info("[WORKERS] pthread_create: wait mpiServer_workers_ondemand_wait\n");
          pthread_cond_wait(&c_nworkers, &m_worker);
        }
-       debug_info("[WORKERS] pthread_create: unlock mpiServer_wait_workers\n");
+       debug_info("[WORKERS] pthread_create: unlock mpiServer_workers_ondemand_wait\n");
        pthread_mutex_unlock(&m_worker);
 
        DEBUG_END() ;

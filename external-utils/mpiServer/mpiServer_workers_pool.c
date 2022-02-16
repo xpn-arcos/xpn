@@ -55,9 +55,9 @@
 
     while(1)
     {
-      // Dequeue operation
-      th = mpiServer_worker_pool_dequeue ( the_end );
-      worker_function ( th );
+        // Dequeue operation
+        th = mpiServer_worker_pool_dequeue ( the_end );
+        worker_function ( th );
     }
 
     pthread_exit(0);
@@ -165,6 +165,42 @@
     return th;
   }
 
+  void mpiServer_worker_pool_destroy ( void )
+  {
+    DEBUG_BEGIN() ;
+
+    debug_info("[WORKERS] client: mpiServer_worker_pool_destroy(...) lock\n");
+    pthread_mutex_lock(&m_pool_end);
+    pool_end=1;
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
+    pthread_mutex_unlock(&m_pool_end);
+
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) lock\n");
+    pthread_mutex_lock(&m_pool);
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) broadcast\n");
+    pthread_cond_broadcast(&c_poll_no_empty);
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
+    pthread_mutex_unlock(&m_pool);
+
+    for (int i=0;i<MAX_THREADS;i++){
+      debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) join\n");
+      pthread_join(thid[i],NULL);
+    }
+
+    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) destroy\n");
+    pthread_mutex_destroy(&m_pool);
+    pthread_cond_destroy(&c_pool_no_full);
+    pthread_cond_destroy(&c_poll_no_empty);
+    pthread_mutex_destroy(&m_pool_end);
+
+    DEBUG_END() ;
+  }
+
+
+
+  /* 
+   *
+   */
 
 
   void worker_function ( struct st_th th )
@@ -311,36 +347,6 @@
 
 
 
-  void mpiServer_worker_pool_destroy ( void )
-  {
-    DEBUG_BEGIN() ;
-
-    debug_info("[WORKERS] client: mpiServer_worker_pool_destroy(...) lock\n");
-    pthread_mutex_lock(&m_pool_end);
-    pool_end=1;
-    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
-    pthread_mutex_unlock(&m_pool_end);
-
-    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) lock\n");
-    pthread_mutex_lock(&m_pool);
-    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) broadcast\n");
-    pthread_cond_broadcast(&c_poll_no_empty);
-    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
-    pthread_mutex_unlock(&m_pool);
-
-    for (int i=0;i<MAX_THREADS;i++){
-      debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) join\n");
-      pthread_join(thid[i],NULL);
-    }
-
-    debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) destroy\n");
-    pthread_mutex_destroy(&m_pool);
-    pthread_cond_destroy(&c_pool_no_full);
-    pthread_cond_destroy(&c_poll_no_empty);
-    pthread_mutex_destroy(&m_pool_end);
-
-    DEBUG_END() ;
-  }
 
 
 

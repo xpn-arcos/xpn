@@ -25,8 +25,30 @@
   #include "mpiServer_workers.h"
 
 
-  /* ... Global variables / Variables globales ......................... */
+  /* ... Functions / Funciones ......................................... */
 
+     int mpiServer_init_worker ( int thread_mode )
+     {
+         if (thread_mode == TH_OP || thread_mode == TH_CLI) //REVISAR
+         {
+           debug_info("[MAIN] mpiServer_worker_ondemand_init\n");
+           mpiServer_worker_ondemand_init() ;
+         }
+
+         if (thread_mode == TH_POOL)
+         {
+           debug_info("[MAIN] mpiServer_worker_pool_init\n");
+           mpiServer_worker_pool_init ( );
+         }
+     }
+
+     int mpiServer_launch_worker ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) )
+     {
+     }
+
+     void mpiServer_wait_workers ( void )
+     {
+     }
 
 
   /* ................................................................... */

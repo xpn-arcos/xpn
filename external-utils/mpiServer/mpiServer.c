@@ -73,29 +73,18 @@
 
 
 
-
-
-
-
     // Initialize worker
     if (params.thread_mode == TH_OP || params.thread_mode == TH_CLI) //REVISAR
     {
-      debug_info("[MAIN] mpiServer_init_worker\n");
-      mpiServer_init_worker() ;
+      debug_info("[MAIN] mpiServer_worker_ondemand_init\n");
+      mpiServer_worker_ondemand_init() ;
     }
-
-
-
-
-
-
-
-    // Initialize and launch worker pool
     if (params.thread_mode == TH_POOL)
     {
       debug_info("[MAIN] mpiServer_worker_pool_init\n");
       mpiServer_worker_pool_init ( );
     }
+
     
     // Loop: receiving + processing
     while (1)
@@ -107,10 +96,6 @@
       }
 
       int rank_client_id;
-
-
-
-
 
 
 
@@ -129,7 +114,7 @@
 
         for (int i = 0; i < n_clients; ++i)
         {
-          mpiServer_launch_worker_client(&params, sd, head.type, rank_client_id, worker_client_function);
+          mpiServer_worker_ondemand_launch_client(&params, sd, head.type, rank_client_id, worker_client_function);
         }
       }
 
@@ -157,8 +142,8 @@
           // Launch worker to execute the operation
           if (params.thread_mode == TH_OP)
           {
-            debug_info("[MAIN] mpiServer_launch_worker (ID=%d)\n", rank_client_id) ;
-            mpiServer_launch_worker(&params, sd, head.type, rank_client_id, worker_function) ;
+            debug_info("[MAIN] mpiServer_worker_ondemand_launch (ID=%d)\n", rank_client_id) ;
+            mpiServer_worker_ondemand_launch(&params, sd, head.type, rank_client_id, worker_function) ;
           }
 
           // Enqueue the operation on the buffer
@@ -185,8 +170,8 @@
     // Wait and finalize for all current workers
     if (params.thread_mode == TH_OP)
     {
-      debug_info("[WORKERS] mpiServer_wait_workers\n");
-      mpiServer_wait_workers() ; //TODO ???
+      debug_info("[WORKERS] mpiServer_workers_ondemand_wait\n");
+      mpiServer_workers_ondemand_wait() ; //TODO ???
       debug_info("[WORKERS] mpiServer_comm_destroy\n");
       mpiServer_comm_destroy(&params) ;
     }
