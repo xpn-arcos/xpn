@@ -350,6 +350,40 @@ void tcpServer_op_rm ( int sd, struct st_tcpServer_msg *head )
             head->id);
 }
 
+/******************************************** Buffer Operations ********************************************/
+
+long op_read_buffer (int read_fd2, void *buffer, int buffer_size )
+{
+     ssize_t read_num_bytes       = -1 ;
+     ssize_t read_remaining_bytes = buffer_size ;
+     void   *read_buffer          = buffer ;
+
+     while (read_remaining_bytes > 0)
+     {
+     /* Read from local file... */
+         read_num_bytes = read(read_fd2, read_buffer, read_remaining_bytes) ;
+
+     /* Check errors */
+         if (read_num_bytes == -1) {
+         debug_error("ERROR:\t read fails to read data.\n") ;
+         return -1 ;
+         }
+
+     /* Check end of file */
+         if (read_num_bytes == 0)
+      {
+          debug_error("INFO:\t end of file, readed %ld.\n", (buffer_size - read_remaining_bytes)) ;
+          return (buffer_size - read_remaining_bytes) ;
+        }
+
+         read_remaining_bytes -= read_num_bytes ;
+         read_buffer          += read_num_bytes ;
+     }
+
+     return buffer_size ;
+}
+
+/***********************************************************************************************************/
 
 void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 {
@@ -429,7 +463,38 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
                 size) ;
 }
 
+/******************************************** Buffer Operations ********************************************/
 
+long op_write_buffer ( int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
+{
+     ssize_t write_num_bytes       = -1 ;
+     ssize_t write_remaining_bytes = num_readed_bytes ;
+     void   *write_buffer          = buffer ;
+
+     if (num_readed_bytes > buffer_size) {
+     debug_error("ERROR:\t write for %d bytes from a buffer with only %d bytes.\n", num_readed_bytes, buffer_size) ;
+     return -1 ;
+     }
+
+     while (write_remaining_bytes > 0)
+     {
+     /* Write into local file (write_fd2)... */
+         write_num_bytes = write(write_fd2, write_buffer, write_remaining_bytes) ;
+
+     /* Check errors */
+         if (write_num_bytes == -1) {
+         debug_error("ERROR:\t write fails to write data.\n") ;
+         return -1 ;
+         }
+
+         write_remaining_bytes -= write_num_bytes ;
+         write_buffer          += write_num_bytes ;
+     }
+
+     return num_readed_bytes ;
+}
+
+/***********************************************************************************************************/
 
 void tcpServer_op_write (int sd, struct st_tcpServer_msg *head)
 {
@@ -556,69 +621,4 @@ void tcpServer_op_getid(int sd, struct st_tcpServer_msg *head)
         tcpServer_comm_write_data(sd, (char *)(head->id), TCPSERVER_ID, head->id);
 
         debug_info("[OPS] (%s) end GETID operation from ID=%s\n",TCPSERVER_ALIAS_NAME_STRING,head->id);
-}
-
-
-/******************************************** Buffer Operations ********************************************/
-
-long op_read_buffer (int read_fd2, void *buffer, int buffer_size )
-{
-     ssize_t read_num_bytes       = -1 ;
-     ssize_t read_remaining_bytes = buffer_size ;
-     void   *read_buffer          = buffer ;
-
-     while (read_remaining_bytes > 0)
-     {
-     /* Read from local file... */
-         read_num_bytes = read(read_fd2, read_buffer, read_remaining_bytes) ;
-
-     /* Check errors */
-         if (read_num_bytes == -1) {
-         debug_error("ERROR:\t read fails to read data.\n") ;
-         return -1 ;
-         }
-
-     /* Check end of file */
-         if (read_num_bytes == 0)
-      {
-          debug_error("INFO:\t end of file, readed %ld.\n", (buffer_size - read_remaining_bytes)) ;
-          return (buffer_size - read_remaining_bytes) ;
-        }
-
-         read_remaining_bytes -= read_num_bytes ;
-         read_buffer          += read_num_bytes ;
-     }
-
-     return buffer_size ;
-}
-
-
-
-long op_write_buffer ( int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
-{
-     ssize_t write_num_bytes       = -1 ;
-     ssize_t write_remaining_bytes = num_readed_bytes ;
-     void   *write_buffer          = buffer ;
-
-     if (num_readed_bytes > buffer_size) {
-     debug_error("ERROR:\t write for %d bytes from a buffer with only %d bytes.\n", num_readed_bytes, buffer_size) ;
-     return -1 ;
-     }
-
-     while (write_remaining_bytes > 0)
-     {
-     /* Write into local file (write_fd2)... */
-         write_num_bytes = write(write_fd2, write_buffer, write_remaining_bytes) ;
-
-     /* Check errors */
-         if (write_num_bytes == -1) {
-         debug_error("ERROR:\t write fails to write data.\n") ;
-         return -1 ;
-         }
-
-         write_remaining_bytes -= write_num_bytes ;
-         write_buffer          += write_num_bytes ;
-     }
-
-     return num_readed_bytes ;
 }

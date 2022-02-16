@@ -1224,6 +1224,7 @@
 
     ssize_t write(int fd, const void *buf, size_t nbyte)
     {
+        int ret;
 
     #ifdef DEBUG_BYPASS_WRITE
         printf("antes de write...\n");
@@ -1234,15 +1235,17 @@
 
         if(fd>=PLUSXPN)
         {
-            return(xpn_write(fd-PLUSXPN, (void *)buf, nbyte));
+            ret =(xpn_write(fd-PLUSXPN, (void *)buf, nbyte));
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
             //return(write(fd, (void *)buf, nbyte));
             ssize_t (*real_write)(int, const void*, size_t);
             real_write = dlsym(RTLD_NEXT,"write");
-            return real_write(fd, buf, nbyte);
+            ret = real_write(fd, buf, nbyte);
         } // Else
+
+        return ret;
     }
 
     off_t lseek(int fd, off_t offset, int whence)

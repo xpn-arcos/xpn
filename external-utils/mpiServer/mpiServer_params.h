@@ -1,53 +1,52 @@
 #ifndef _MPISERVER_PARAMS_H_
 #define _MPISERVER_PARAMS_H_
 
-   #include <stdlib.h>
-   #include <stdio.h>
-   #include <string.h>
-   #include "mpi.h"
-   #include "mpiServer_conf.h"
-   #include "mpiServer_utils.h"
+  #include <stdlib.h>
+  #include <stdio.h>
+  #include <string.h>
+  #include "mpi.h"
+  #include "mpiServer_conf.h"
+  #include "mpiServer_utils.h"
 
 
-   //Constants
-   #define TH_POOL 1
-   #define TH_OP   2
-   #define TH_CLI  3
+  //Constants
+  #define TH_POOL 1
+  #define TH_OP   2
+  #define TH_CLI  3
 
 
-   /*
-    * Datatype
-    */
+  /*
+   * Datatype
+   */
 
-   typedef struct
-   {
-        // server identification
-        int  size ;
-        int  rank ;
-        char port_name[MPI_MAX_PORT_NAME] ;
-        char  srv_name[MPI_MAX_PORT_NAME] ;
+  typedef struct
+  {
+    // server identification
+    int  size ;
+    int  rank ;
+    char port_name[MPI_MAX_PORT_NAME] ;
+    char  srv_name[MPI_MAX_PORT_NAME] ;
 
-        // server configuration
-        int thread_mode;
+    // server configuration
+    int thread_mode;
 
-        // associated client
-        MPI_Comm client ;
-        char dirbase[255] ;
-        int  IOsize ;
+    // associated client
+    MPI_Comm client ;
+    char dirbase[255] ;
+    int  IOsize ;
 
-        // server arguments
-        int    argc ;
-        char **argv ;
-   } mpiServer_param_st ;
+    // server arguments
+    int    argc ;
+    char **argv ;
+  } mpiServer_param_st ;
 
 
-   /*
-    * API
-    */
+  /*
+   * API
+   */
 
-   void mpiServer_params_show_usage ( void ) ;
-   int  mpiServer_params_get        ( mpiServer_param_st *params, int argc, char *argv[] ) ;
-   void mpiServer_params_show       ( mpiServer_param_st *params ) ;
+  void mpiServer_params_show_usage ( void ) ;
+  int  mpiServer_params_get        ( mpiServer_param_st *params, int argc, char *argv[] ) ;
+  void mpiServer_params_show       ( mpiServer_param_st *params ) ;
 
 #endif
-

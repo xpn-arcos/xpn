@@ -1,15 +1,15 @@
 #ifndef _MPISERVER_UTILS_H_
 #define _MPISERVER_UTILS_H_
 
-   #include "all_system.h"
-   #include "mpiServer_params.h"
+  #include "all_system.h"
+  #include "mpiServer_params.h"
 
  
   /* 
    * API
    */
 
-   // debug print
+  // debug print
 #ifdef DEBUG
   #define debug_error(...)    mpiServer_utils_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
   #define debug_warning(...)  mpiServer_utils_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
@@ -21,21 +21,21 @@
 #endif
 
   #define DEBUG_BEGIN() \
-	  debug_info("Begin %s()\n", __func__)
+    debug_info("Begin %s()\n", __func__)
   #define DEBUG_END() \
-	  debug_info("End   %s(), errno=%d\n", __func__, errno)
+    debug_info("End   %s(), errno=%d\n", __func__, errno)
 
   #define DEBUG_BEGIN() \
-	  debug_info("Begin %s()\n", __func__)
+    debug_info("Begin %s()\n", __func__)
   #define DEBUG_END() \
-	  debug_info("End   %s(), errno=%d\n", __func__, errno)
+    debug_info("End   %s(), errno=%d\n", __func__, errno)
 
-   // Memory
+  // Memory
   #define FREE_AND_NULL(ptr) \
-	  if ((ptr) != NULL) { free((ptr)); (ptr) = NULL; }
+    if ((ptr) != NULL) { free((ptr)); (ptr) = NULL; }
 
   #define NULL_RET_ERR(ptr, err_val) \
-	  if (NULL == (ptr)) { mpiServer_err(err_val); return -1; }
+    if (NULL == (ptr)) { mpiServer_err(err_val); return -1; }
 
   // print message
   void mpiServer_utils_init     ( void ) ;

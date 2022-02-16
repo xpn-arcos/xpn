@@ -27,9 +27,9 @@
 
   /* ... Functions / Funciones ......................................... */
 
-     int mpiServer_init_worker ( int thread_mode )
+     int mpiServer_workers_init ( int thread_mode )
      {
-         if (thread_mode == TH_OP || thread_mode == TH_CLI) //REVISAR
+         if (thread_mode == TH_OP) //REVISAR
          {
            debug_info("[MAIN] mpiServer_worker_ondemand_init\n");
            mpiServer_worker_ondemand_init() ;
@@ -40,14 +40,42 @@
            debug_info("[MAIN] mpiServer_worker_pool_init\n");
            mpiServer_worker_pool_init ( );
          }
+
+         return 1;
      }
 
-     int mpiServer_launch_worker ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) )
+     int mpiServer_workers_launch ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) )
      {
+      if (params->thread_mode == TH_OP)
+      {
+        debug_info("[MAIN] mpiServer_worker_ondemand_launch (ID=%d)\n", rank_client_id) ;
+        mpiServer_worker_ondemand_launch( &params, sd, type_op, rank_client_id, worker_function ) ;
+      }
+
+      // Enqueue the operation on the buffer
+      if (params->thread_mode == TH_POOL)
+      {
+        debug_info("[MAIN] mpiServer_worker_pool_enqueue (ID=%d)\n", rank_client_id);
+        mpiServer_worker_pool_enqueue ( sd, &params, type_op, rank_client_id, worker_function );
+      }
+
+      return 1;
      }
 
-     void mpiServer_wait_workers ( void )
+     void mpiServer_workers_destroy ( int thread_mode )
      {
+      if (thread_mode == TH_OP)
+      {
+        debug_info("[WORKERS] mpiServer_workers_ondemand_wait\n");
+        mpiServer_workers_ondemand_wait() ; //TODO ???
+      }
+
+      // Destroy worker pool
+      if (thread_mode == TH_POOL)
+      {
+        debug_info("[WORKERS] mpiServer_worker_pool_destroy\n");
+        mpiServer_worker_pool_destroy();
+      }
      }
 
 
