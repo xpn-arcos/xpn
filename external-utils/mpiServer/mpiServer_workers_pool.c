@@ -32,7 +32,8 @@
   pthread_cond_t c_poll_no_empty;
   pthread_mutex_t m_pool_end;
 
-  pthread_t thid[MAX_THREADS];
+  int POOL_MAX_THREADS = 1 ;
+  pthread_t *thid = NULL ;
 
   struct st_th operations_buffer[MAX_OPERATIONS]; // buffer
   int n_operation = 0;
@@ -76,8 +77,16 @@
     pthread_cond_init (&c_poll_no_empty,NULL);
     pthread_mutex_init(&m_pool_end,NULL);
 
+    // malloc threads...
+    POOL_MAX_THREADS = 2 * sysconf(_SC_NPROCESSORS_ONLN) ;  // "2*" is for oversubscription
+    thid = (pthread_t *)malloc(POOL_MAX_THREADS * sizeof(pthread_t)) ;
+    if (NULL == thid) {
+        perror("malloc: ");
+	return -1;
+    }
+
     // starting threads...
-    for (int i = 0; i < MAX_THREADS; i++)
+    for (int i = 0; i < POOL_MAX_THREADS; i++)
     {
       debug_info("[WORKERS] pthread_create: create_thread mpiServer_worker_pool_init\n") ;
       if (pthread_create(&thid[i], NULL, (void *)(worker_pool_function), NULL) !=0)
@@ -182,10 +191,14 @@
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&m_pool);
 
-    for (int i=0;i<MAX_THREADS;i++){
+    for (int i=0;i<POOL_MAX_THREADS;i++){
       debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) join\n");
       pthread_join(thid[i],NULL);
     }
+
+    // free threads...
+    free(thid) ;
+    thid = NULL ;
 
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) destroy\n");
     pthread_mutex_destroy(&m_pool);

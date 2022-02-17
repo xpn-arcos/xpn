@@ -18,7 +18,4 @@
   void         mpiServer_worker_pool_enqueue ( MPI_Comm sd, mpiServer_param_st *params, int op_type, int rank_client_id, void (*worker_function)(struct st_th)) ;
   struct st_th mpiServer_worker_pool_dequeue ( void ) ;
 
-  void worker_function      ( struct st_th th ) ;
-  void worker_pool_function ( void ) ;
-
 #endif
