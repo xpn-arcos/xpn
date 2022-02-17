@@ -49,14 +49,14 @@
       if (params->thread_mode == TH_OP)
       {
         debug_info("[MAIN] mpiServer_worker_ondemand_launch (ID=%d)\n", rank_client_id) ;
-        mpiServer_worker_ondemand_launch( &params, sd, type_op, rank_client_id, worker_function ) ;
+        mpiServer_worker_ondemand_launch( params, sd, type_op, rank_client_id, worker_function ) ;
       }
 
       // Enqueue the operation on the buffer
       if (params->thread_mode == TH_POOL)
       {
         debug_info("[MAIN] mpiServer_worker_pool_enqueue (ID=%d)\n", rank_client_id);
-        mpiServer_worker_pool_enqueue ( sd, &params, type_op, rank_client_id, worker_function );
+        mpiServer_worker_pool_enqueue ( sd, params, type_op, rank_client_id, worker_function );
       }
 
       return 1;

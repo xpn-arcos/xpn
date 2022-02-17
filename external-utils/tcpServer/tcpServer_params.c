@@ -37,9 +37,9 @@
          printf("\t-d <string>:\t%s\n",params->dirbase);
 
          if(params->thread_mode == TH_POOL)
-            printf("\t-pt:\t\tThread Pool Activated\n") ;
+            printf("\t-tp:\t\tThread Pool Activated\n") ;
          if(params->thread_mode == TH_OP)
-            printf("\t-pt:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
+            printf("\t-tp:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
       }
 
       void params_show_usage ( void )
@@ -50,7 +50,7 @@
          printf("\t-io <int>: IOsize\n");
          printf("\t-f <string>: name of the DNS file\n");
          printf("\t-d <string>: dir base\n");
-         printf("\t-pt: use thread pool\n") ;
+         printf("\t-tp: use thread pool\n") ;
       }
 
       int params_get ( int argc, char *argv[], struct tcpServer_param_st *params )
@@ -72,12 +72,7 @@
                   switch(argv[i][1])
                   {
                      case 'p':
-                        if ((strlen(argv[i]) == 3) && (argv[i][2] == 't')){
-                           params->thread_mode = TH_POOL;
-                        }
-                        else if (strlen(argv[i]) == 2){
-                           params->port = atoi(argv[i+1]);
-                        }
+                        params->port = atoi(argv[i+1]);
                         i++;
                         break;
                      case 'i':
@@ -96,6 +91,12 @@
                         strcpy(params->dirbase, argv[i+1]);
                         i++;
                         break;
+                     case 't':
+                       if ((strlen(argv[i]) == 3) && (argv[i][2] == 'p')){
+                          params->thread_mode = TH_POOL;
+                       }
+                       i++;
+                       break; 
                      case 'h':
                         params_show_usage();
                         exit(0);

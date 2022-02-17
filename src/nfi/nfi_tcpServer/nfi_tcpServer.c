@@ -1015,9 +1015,9 @@ ssize_t nfi_tcpServer_read( struct nfi_server *serv,
     }
 
     cont = cont + req.size ;
-        diff = msg.u_st_tcpServer_msg.op_read.size - cont;
+    diff = msg.u_st_tcpServer_msg.op_read.size - cont;
 
-  }while((diff > 0) || (req.size == 0));
+  } while ((diff > 0) && (req.size != 0));
 
   if(req.size < 0){
     fprintf(stderr,"ERROR: nfi_tcpServer_read: Fail read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)req.size);
@@ -1104,37 +1104,38 @@ ssize_t nfi_tcpServer_read( struct nfi_server *serv,
 
 
     diff = size;
-        cont = 0;
+    cont = 0;
 
-        int buffer_size = size;
+    int buffer_size = size;
 
-        if (buffer_size > (1 * 1024 * 1024)) // > 1MB
-        {
-            buffer_size = 1 * 1024 * 1024; // 1MB
-        }
+    if (buffer_size > (MAX_BUFFER_SIZE))
+    {
+        buffer_size = MAX_BUFFER_SIZE;
+    }
 
-        do{
+    do{
 
-          if (diff > buffer_size)
-            {
-              ret = tcpServer_write_data(server_aux->sd, (char *)buffer + cont, buffer_size, msg.id);
+      if (diff > buffer_size)
+      {
+        ret = tcpServer_write_data(server_aux->sd, (char *)buffer + cont, buffer_size, msg.id);
         if(ret == -1){
           fprintf(stderr,"(2)ERROR: nfi_tcpServer_read(ID=%s): Error on write operation\n",server_aux->id);
           return -1;
         }
-            }
-            else{
-              ret = tcpServer_write_data(server_aux->sd, (char *)buffer + cont, diff, msg.id);
+      }
+      else{
+        ret = tcpServer_write_data(server_aux->sd, (char *)buffer + cont, diff, msg.id);
         if(ret == -1){
           fprintf(stderr,"(2)ERROR: nfi_tcpServer_read(ID=%s): Error on write operation\n",server_aux->id);
           return -1;
         }
-            }
+      }
 
       cont = cont + ret; //Send bytes
-            diff = size - cont;
+      diff = size - cont;
 
-        } while((diff > 0) || (ret == 0));
+    //} while((diff > 0) || (ret == 0));
+    } while ((diff > 0) && (ret != 0));
 
     ret = tcpServer_read_data(server_aux->sd, (char *)&req, sizeof(struct st_tcpServer_write_req), msg.id);
     if(ret == -1){

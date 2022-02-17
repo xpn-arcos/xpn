@@ -567,7 +567,8 @@
       cont = cont + req.size; //Send bytes
       diff = head->u_st_mpiServer_msg.op_read.size - cont;
 
-    } while((diff > 0) || (req.size == 0));
+    //} while((diff > 0) || (req.size == 0));
+    } while ((diff > 0) && (req.size != 0)) ;
 
     req.size = cont;
 

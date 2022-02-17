@@ -431,6 +431,7 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
 
         if (req.size < 0) {
             perror("read:");
+
             req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
             tcpServer_comm_write_data(sd,(char *)&req,sizeof(struct st_tcpServer_write_req), head->id);
             
@@ -450,7 +451,7 @@ void tcpServer_op_read ( int sd, struct st_tcpServer_msg *head )
         cont = cont + req.size; //Send bytes
         diff = head->u_st_tcpServer_msg.op_read.size - cont;
 
-    } while ((diff > 0) || (req.size == 0)) ;
+    } while ((diff > 0) && (req.size != 0)) ;
 
     // free buffer
     FREE_AND_NULL(buffer) ;
@@ -542,7 +543,8 @@ void tcpServer_op_write (int sd, struct st_tcpServer_msg *head)
         cont = cont + req.size; //Send bytes
         diff = head->u_st_tcpServer_msg.op_read.size - cont;
 
-    } while((diff > 0) || (req.size == 0));
+    //} while((diff > 0) || (req.size == 0));
+    } while ((diff > 0) && (req.size != 0)) ;
 
 
     req.size = cont;

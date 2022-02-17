@@ -50,7 +50,7 @@
 #endif
 
 #ifndef MAX_BUFFER_SIZE
-	#define MAX_BUFFER_SIZE (2*MB)
+	#define MAX_BUFFER_SIZE (1*MB)
 #endif
 
 /* GLOBAL VARIABLES */

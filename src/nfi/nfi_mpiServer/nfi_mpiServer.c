@@ -361,9 +361,6 @@
           int rank;
           MPI_Comm_rank (MPI_COMM_WORLD, &rank);
 
-          printf("%d  AQUI 1 %s %p \n", rank,server_aux->params.port_name, server_aux->params.server);
-
-
           //.....................................
           /*strcpy(msg.id, "GETID");
           msg.type = MPISERVER_GETID;
@@ -927,8 +924,6 @@
 
         dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): end\n",server_aux->id);
 
-        printf("cont %d\n", cont);
-
         return cont;
       }
 
@@ -1011,7 +1006,8 @@
           cont = cont + ret; //Send bytes
           diff = size - cont;
 
-        } while((diff > 0) || (ret == 0));
+        //} while((diff > 0) || (ret == 0));
+        } while ((diff > 0) && (ret != 0));
 
         ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_write_req), msg.id);
         if(ret == -1){

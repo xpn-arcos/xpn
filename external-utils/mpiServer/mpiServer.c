@@ -246,7 +246,7 @@
 
         if (head.type == MPISERVER_DISCONNECT || head.type == MPISERVER_FINALIZE)
         {
-          printf("Ha llegado un DISCONNECT\n");
+          debug_info("DISCONNECT received\n");
           disconnect = 1;
         }
 
