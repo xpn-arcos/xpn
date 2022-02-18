@@ -22,98 +22,12 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "mpiServer_ops.h"
-  #include "mpiServer_comm.h"
-  #include "mpiServer_d2xpn.h"
+     #include "mpiServer_ops.h"
+     #include "mpiServer_comm.h"
+     #include "mpiServer_d2xpn.h"
 
 
   /* ... Functions / Funciones ......................................... */
-
-  int aux_clear_dirs(char *path)
-  {
-    int j;
-    char ant = '\0', s[255];
-
-    j=0;
-    for (unsigned i=0; i < strlen(path); i++)
-    {
-      switch(path[i])
-      {
-        case '/':
-          if(ant != '/'){
-            ant = s[j] = '/';
-            j++;
-          }
-          break;
-        default:
-          ant = s[j] = path[i];
-          j++;
-      }
-
-      s[j] = '\0';
-    }
-
-    strcpy(path, s);
-    return 0;
-  }
-
-  int aux_get_dirs(char *path, int n, char *s)
-  {
-    long unsigned i=0;
-    long j=0, ant=-1, pos=-1;
-    int cont=-1;
-    char new_path[MAXPATHLEN];
-
-    strcpy(new_path, path);
-
-    path = new_path;
-    aux_clear_dirs(path);
-    s[0] = '\0';
-    if (path == NULL) {
-      return 0;
-    }
-
-    for (i=0; i<strlen(path) && cont<(n+1); i++)
-    {
-      if (path[i] == '/'){
-        if(ant == -1){
-          ant = pos = i;
-        }
-        pos = i;
-        cont++;
-      }
-    }
-
-    if(cont<(n+1)){
-      return 0;
-    }
-
-    for(j=ant; j<pos; j++){
-      s[j] = path[j];
-    }
-
-    s[j] = '\0';
-
-    return strlen(s);
-  }
-
-  int mpiServer_create_spacename ( mpiServer_param_st *params, char *path )
-  {
-    int i;
-    char dir[MAXPATHLEN];
-
-    // check params...
-    if (NULL == params) {
-        return -1;
-    }
-
-    debug_info("[OPS] (ID=%s) mpiServer_create_spacename: %s\n", params->srv_name, path);
-    for(i=0; 0 != aux_get_dirs(path, i, dir);i++){
-        mkdir(dir, 0777);
-    }
-
-    return 0;
-  }
 
   char * mpiServer_op2string ( int op_code )
   {
@@ -165,11 +79,6 @@
 
     return ret ;
   }
-
-
-
-
-
 
 
   /*
@@ -263,7 +172,8 @@
 
     // do open
     s = head->u_st_mpiServer_msg.op_open.path;
-    fd = open(s, O_RDWR);
+    fd = mpiServer_file_open(s, O_RDWR) ;
+
     mpiServer_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id);
 
     // show debug info
@@ -277,12 +187,8 @@
 
     // do creat
     s = head->u_st_mpiServer_msg.op_creat.path;
-    fd = open(s, O_CREAT | O_RDWR, 0777);
-    if (fd == -1)
-    {
-      mpiServer_create_spacename(params, s);
-      fd = open(s, O_CREAT | O_RDWR, 0660);
-    }
+    fd = mpiServer_file_creat(s, 0777) ;
+
     mpiServer_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id) ;
 
     // show debug info
@@ -334,12 +240,12 @@
     }
 
     // do close
-    close(head->u_st_mpiServer_msg.op_close.fd);
+    mpiServer_file_close(head->u_st_mpiServer_msg.op_close.fd) ;
 
     //TODO return client
 
     // show debug info
-    debug_info("[OPS] (ID=%s) CLOSE(fd=%d)\n", params->srv_name, head->u_st_mpiServer_msg.op_close.fd);
+    debug_info("[OPS] (ID=%s) CLOSE(fd=%d)\n", params->srv_name, head->u_st_mpiServer_msg.op_close.fd) ;
   }
 
   void mpiServer_op_rm ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
@@ -365,8 +271,7 @@
   {
     struct st_mpiServer_read_req req;
     char *buffer;
-    long  size, diff, to_read ;
-    int   cont ;
+    long  size, diff, to_read, cont ;
 
     debug_info("[OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n", params->srv_name,
                                                                            head->u_st_mpiServer_msg.op_read.fd,
@@ -376,11 +281,10 @@
     // initialize counters
     cont = 0 ;
     size = head->u_st_mpiServer_msg.op_read.size;
-    diff = head->u_st_mpiServer_msg.op_read.size - cont;
-
     if (size > MAX_BUFFER_SIZE) {
         size = MAX_BUFFER_SIZE;
     }
+    diff = head->u_st_mpiServer_msg.op_read.size - cont;
 
     // malloc a buffer of size...
     buffer = (char *)malloc(size) ;
@@ -392,8 +296,8 @@
     }
 
     // loop...
-    do {
-
+    do
+    {
       if (diff > size)
 	   to_read = size ;
       else to_read = diff ;
@@ -405,7 +309,7 @@
       // if error then send as "how many bytes" -1
       if (req.size < 0)
       {
-        req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+        req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
         mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req), rank_client_id);
 
         FREE_AND_NULL(buffer) ;
@@ -441,8 +345,7 @@
   {
     struct st_mpiServer_write_req req;
     char *buffer;
-    int   size, diff, to_write ;
-    int   cont ;
+    int   size, diff, cont, to_write ;
 
     debug_info("[OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_mpiServer_msg.op_write.fd);
 
@@ -458,13 +361,14 @@
     buffer = (char *)malloc(size) ;
     if (NULL == buffer)
     {
-      req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+      req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
       mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req), rank_client_id);
       return ;
     }
 
-    do {
-
+    // loop...
+    do
+    {
       if (diff > size)
 	   to_write = size ;
       else to_write = diff ;
@@ -475,7 +379,7 @@
       req.size = mpiServer_file_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, to_write, to_write) ;
 
       // update counters
-      cont = cont + req.size ; // Sent bytes
+      cont = cont + req.size ; // Received bytes
       diff = head->u_st_mpiServer_msg.op_read.size - cont ;
 
     } while ((diff > 0) && (req.size != 0)) ;
