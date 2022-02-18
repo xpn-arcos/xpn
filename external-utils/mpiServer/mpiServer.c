@@ -43,9 +43,16 @@
   /* ... Functions / Funciones ......................................... */
 
   void sigint_handler ( int signal )
-  {  
-    printf("[MAIN] Signal %d received => ending execution...", signal) ;
-    //the_end = 1; //TODO: enviar a los threads
+  {
+    MPI_Comm cd ;
+
+    printf("[MAIN] Signal %d received => ending execution...\n", signal) ;
+
+    the_end = 1; //TODO: enviar a los threads
+
+
+    //Desbloquear MPI_Accept, probar hilo
+
   }
 
   void mpiServer_worker_function ( struct st_th th )
@@ -256,12 +263,7 @@
       
       if (head.type == MPISERVER_FINALIZE)
       {
-        for (int i = 0; i < MAX_THREADS; ++i)
-        {
-          mpiServer_worker_pool_enqueue ( sd, &params, head.type, rank_client_id, mpiServer_worker_function );
-        }
-        
-        the_end = 1;
+          the_end = 1;
       }
 
       debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", rank_client_id);

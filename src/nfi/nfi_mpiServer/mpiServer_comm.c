@@ -153,7 +153,7 @@
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-    MPI_Comm_size(params->server, &size);
+    MPI_Comm_remote_size(params->server, &size);
     debug_info("[COMM] mpiClient_comm_disconnect nservers: %d\n", size) ;
 
     if (params->rank==0) {  

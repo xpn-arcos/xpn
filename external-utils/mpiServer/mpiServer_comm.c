@@ -92,8 +92,12 @@
 
     DEBUG_BEGIN() ;
 
+    printf("AQUI 1\n");
+
     // Close port
     MPI_Close_port(params->port_name) ;
+
+    printf("AQUI 2\n");
 
     // Unpublish port name
     if (params->rank == 0)
@@ -105,12 +109,16 @@
       }
     }
 
+    printf("AQUI 3\n");
+
     // Finalize
     ret = MPI_Finalize() ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
       return -1 ;
     }
+
+    printf("AQUI 4\n");
 
     DEBUG_END() ;
 

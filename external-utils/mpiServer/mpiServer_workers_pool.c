@@ -184,6 +184,11 @@
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&m_pool_end);
 
+    for (int i = 0; i < POOL_MAX_THREADS; ++i) //POOL_MAX_THREADS
+    {
+      mpiServer_worker_pool_enqueue ( (MPI_Comm) 0, NULL, MPISERVER_FINALIZE, 0, NULL );
+    }
+
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) lock\n");
     pthread_mutex_lock(&m_pool);
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) broadcast\n");
