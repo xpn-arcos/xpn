@@ -178,12 +178,20 @@
   {
     DEBUG_BEGIN() ;
 
+    // update pool_end...
     debug_info("[WORKERS] client: mpiServer_worker_pool_destroy(...) lock\n");
     pthread_mutex_lock(&m_pool_end);
     pool_end=1;
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&m_pool_end);
 
+    // send request to end execution...
+    for (int i=0; i<POOL_MAX_THREADS; i++)
+    {
+         mpiServer_worker_pool_enqueue( (MPI_Comm)0, NULL, MPISERVER_FINALIZE, 0, NULL) ;
+    }
+
+    // wakeup all threads...
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) lock\n");
     pthread_mutex_lock(&m_pool);
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) broadcast\n");
@@ -191,7 +199,8 @@
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&m_pool);
 
-    for (int i=0;i<POOL_MAX_THREADS;i++){
+    for (int i=0; i<POOL_MAX_THREADS; i++)
+    {
       debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) join\n");
       pthread_join(thid[i],NULL);
     }
