@@ -21,9 +21,10 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include "mpiServer_ops.h"
-     #include "mpiServer_comm.h"
-     #include "mpiServer_d2xpn.h"
+    #include "mpiServer_ops.h"
+    #include "mpiServer_file.h"
+    #include "mpiServer_comm.h"
+    #include "mpiServer_d2xpn.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -166,7 +167,7 @@
 
     // do creat
     s = head->u_st_mpiServer_msg.op_creat.path;
-    fd = mpiServer_file_creat(s, 0777) ;
+    fd = mpiServer_file_creat(params, s, 0777) ;
 
     mpiServer_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id) ;
 
