@@ -88,74 +88,121 @@
   /**********************************
   Read the operation to realize
   ***********************************/
-
-  /*
-  int mpiServer_read_operation ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int *rank_client_id )
+  int mpiServer_read_operation ( struct st_th th, struct st_mpiServer_msg head, int * the_end )
   {
-    int ret;
+
     DEBUG_BEGIN() ;
-    ret = mpiServer_comm_readoperation(params, sd, (char *)&head->type, sizeof(head->type), &rank_client_id);
-    if (ret == -1) {
-      debug_info("[OPS] (ID=%s)  mpiServer_comm_read_data fail\n") ;
-      return -1;
-    }
-    debug_info("[OPS] (ID=%s) begin to read operation (%s) arguments\n", params->srv_name, mpiServer_op2string(head->type));
-    switch(head->type)
+
+    int ret;
+
+    switch(th.type_op)
     {
+      //Connection API
+      case MPISERVER_DISCONNECT:
+        break;
+
+      case MPISERVER_FINALIZE:
+        *the_end = 1;
+        break;
+
+      //File API
       case MPISERVER_OPEN_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_open, sizeof(struct st_mpiServer_open), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_open, sizeof(struct st_mpiServer_open), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_open(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
       case MPISERVER_CREAT_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_creat, sizeof(struct st_mpiServer_creat), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_creat, sizeof(struct st_mpiServer_creat), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_creat(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
       case MPISERVER_READ_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_read, sizeof(struct st_mpiServer_read), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_read, sizeof(struct st_mpiServer_read), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_read(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
       case MPISERVER_WRITE_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_write, sizeof(struct st_mpiServer_write), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_write, sizeof(struct st_mpiServer_write), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_write(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
       case MPISERVER_CLOSE_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_close, sizeof(struct st_mpiServer_close), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_close, sizeof(struct st_mpiServer_close), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_close(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
       case MPISERVER_RM_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_rm, sizeof(struct st_mpiServer_rm), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_rm, sizeof(struct st_mpiServer_rm), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_rm(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
       case MPISERVER_GETATTR_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_getattr, sizeof(struct st_mpiServer_getattr), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_getattr, sizeof(struct st_mpiServer_getattr), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_getattr(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
       case MPISERVER_SETATTR_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_setattr, sizeof(struct st_mpiServer_setattr), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_setattr, sizeof(struct st_mpiServer_setattr), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_setattr(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
+
+      //Directory API
       case MPISERVER_MKDIR_DIR:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_mkdir, sizeof(struct st_mpiServer_mkdir), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_mkdir, sizeof(struct st_mpiServer_mkdir), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_mkdir(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
       case MPISERVER_RMDIR_DIR:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_rmdir, sizeof(struct st_mpiServer_rmdir), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_rmdir, sizeof(struct st_mpiServer_rmdir), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_rmdir(th.params, th.sd, &head, th.rank_client_id);
+        }
+        break;
+
+      //Optimization API
+      case MPISERVER_PRELOAD_FILE:
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_preload, sizeof(struct st_mpiServer_preload), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_preload(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
       case MPISERVER_FLUSH_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_flush, sizeof(struct st_mpiServer_flush), rank_client_id);
-        break;
-      case MPISERVER_PRELOAD_FILE:
-        ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_preload, sizeof(struct st_mpiServer_preload), rank_client_id);
-        break;
-      case MPISERVER_GETID:
-        // ret = mpiServer_comm_read_data(params, sd, (char *)&head->id, sizeof(MPISERVER_ID), rank_client_id);
-        break;
-      case MPISERVER_FINALIZE:
-        // ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_end, sizeof(struct st_mpiServer_end), rank_client_id);
-        break;
-      case MPISERVER_END:
-        // ret = mpiServer_comm_read_data(params, sd, (char *)&head->u_st_mpiServer_msg.op_end, sizeof(struct st_mpiServer_end), rank_client_id);
+        ret = mpiServer_comm_read_data(th.params, th.sd, (char *)&head.u_st_mpiServer_msg.op_flush, sizeof(struct st_mpiServer_flush), th.rank_client_id);
+        if (ret != -1) {
+            mpiServer_op_flush(th.params, th.sd, &head, th.rank_client_id);
+        }
         break;
     }
+
     DEBUG_END() ;
-    // Return
-    if (ret == -1) {
-        return -1;
-    }
-    return head->type;
+
+    return 0;
   }
-  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   //File API

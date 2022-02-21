@@ -54,7 +54,7 @@
   void mpiServer_worker_function ( struct st_th th )
   {
     struct st_mpiServer_msg head;
-    int ret;
+    //int ret;
 
     // check params...
     if (NULL == th.params) {
@@ -64,8 +64,10 @@
 
     debug_info("[WORKERS] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpiServer_op2string(th.type_op), th.type_op);
 
+    mpiServer_read_operation ( th, head,  &the_end );
+
     //TODO --> Mover a ops??
-    switch(th.type_op)
+    /*switch(th.type_op)
     {
       //Connection API
       case MPISERVER_DISCONNECT:
@@ -152,7 +154,7 @@
             mpiServer_op_flush(th.params, th.sd, &head, th.rank_client_id);
         }
         break;
-    }
+    }*/
 
     debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(th.type_op));
     // debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.id);

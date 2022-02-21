@@ -4,6 +4,7 @@
   #include "all_system.h"
   #include "mpiServer_params.h"
   #include "mpiServer_utils.h"
+  #include "mpiServer_workers_common.h"
 
 
   /*
@@ -170,7 +171,8 @@
 #endif
 
   char *mpiServer_op2string      ( int op_code ) ;
-  int   mpiServer_read_operation ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
+  // int   mpiServer_read_operation ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
+  int   mpiServer_read_operation ( struct st_th th, struct st_mpiServer_msg head, int * the_end );
 
   void  mpiServer_op_open        ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
   void  mpiServer_op_creat       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
