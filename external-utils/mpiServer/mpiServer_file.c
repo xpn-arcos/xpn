@@ -24,6 +24,8 @@
 
     
     #include "mpiServer_file.h"
+    #include <sys/stat.h>
+    #include <sys/types.h>
 
 
   /* ... Functions / Funciones ......................................... */
@@ -124,12 +126,12 @@
      * API
      */
 
-    int  mpiServer_file_open ( const char *pathname, int flags )
+    int  mpiServer_file_open ( char *pathname, int flags )
     {
       return open(pathname, flags) ;
     }
 
-    int  mpiServer_file_creat ( mpiServer_param_st *params, const char *pathname, mode_t mode )
+    int  mpiServer_file_creat ( mpiServer_param_st *params, char *pathname, mode_t mode )
     {
       int fd ;
 
