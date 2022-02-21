@@ -14,6 +14,7 @@ OBJECTS_MPISERVER      = mpiServer.o \
 				         mpiServer_params.o \
 				         mpiServer_utils.o \
 				         mpiServer_comm.o \
+				         mpiServer_file.o \
 				         mpiServer_ops.o \
 				         mpiServer_workers.o \
 				         mpiServer_workers_ondemand.o \
