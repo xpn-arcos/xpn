@@ -66,8 +66,8 @@
      {
       if (thread_mode == TH_OP)
       {
-        debug_info("[WORKERS] mpiServer_workers_ondemand_wait\n");
-        mpiServer_workers_ondemand_wait() ; //TODO ???
+        debug_info("[WORKERS] mpiServer_workers_ondemand_destroy\n");
+        mpiServer_workers_ondemand_destroy() ;
       }
 
       // Destroy worker pool

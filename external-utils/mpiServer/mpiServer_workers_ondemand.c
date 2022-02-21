@@ -151,7 +151,7 @@
        return 0;
      }
 
-     void mpiServer_workers_ondemand_wait ( void )
+     void mpiServer_workers_ondemand_destroy ( void )
      {
        DEBUG_BEGIN() ;
 
@@ -165,6 +165,10 @@
        }
        debug_info("[WORKERS] pthread_create: unlock mpiServer_workers_ondemand_wait\n");
        pthread_mutex_unlock(&m_worker);
+
+       pthread_cond_destroy  (&c_worker);
+       pthread_cond_destroy  (&c_nworkers);
+       pthread_mutex_destroy (&m_worker);
 
        DEBUG_END() ;
      }
