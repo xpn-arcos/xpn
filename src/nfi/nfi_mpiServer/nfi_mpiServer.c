@@ -347,7 +347,6 @@
               server_aux2 = *server_aux;
           }
           else{
-              printf("ELSE\n");
               server_aux->params = server_aux2.params;
           }
 
@@ -420,11 +419,6 @@
                 return 0;
           }
 
-          // Remote disconnect...
-          //msg.type = -1;
-          //msg.type = MPISERVER_DISCONNECT;
-          //mpiServer_write_operation(server_aux->sd, &msg);
-
           // MPI Disconnect...
           ret = mpiClient_comm_disconnect(&(server_aux->params)) ;
           if (ret < 0) {
@@ -433,7 +427,7 @@
 
           // free private_info, 'url' string and 'server' string...
           FREE_AND_NULL(serv->private_info);
-          FREE_AND_NULL(serv->url);
+          //FREE_AND_NULL(serv->url); //TODO
           FREE_AND_NULL(serv->server);
 
           //serv->protocol = -1;

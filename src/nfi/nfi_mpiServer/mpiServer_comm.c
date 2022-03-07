@@ -153,28 +153,34 @@
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-    MPI_Comm_remote_size(params->server, &size);
-    debug_info("[COMM] mpiClient_comm_disconnect nservers: %d\n", size) ;
+    debug_info("[COMM] mpiClient_comm_disconnect nservers\n") ; //
 
-    if (params->rank==0) {  
+    if (params->rank==0) {
+      MPI_Comm_remote_size(params->server, &size);
+
       for (int i = 0; i < size; i++) { 
         data[0] = MPISERVER_DISCONNECT;
-
         MPI_Send( data, 1, MPI_INT, i, 0, params->server );
       }
     }
-    
+
     // Disconnect
     ret = MPI_Comm_disconnect(&(params->server)) ;
     if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
-        return -1 ;
+      debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
+      return -1 ;
     }
 
-    ret = PMPI_Finalize();
-    if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
-        return -1 ;
+    int flag = 0;
+    MPI_Initialized(&flag);
+
+    if (!flag)
+    {
+        ret = PMPI_Finalize();
+        if (MPI_SUCCESS != ret) {
+            debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
+            return -1 ;
+        }
     }
 
     // Return OK

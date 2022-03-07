@@ -1313,7 +1313,7 @@
 
 
     void exit(int status){
-        //printf("EXIT BYPASS\n");
+        printf("EXIT BYPASS\n");
 
         if (xpn_adaptor_initCalled == 1)
         {
@@ -1347,7 +1347,7 @@
     {
         char *value;
 
-        //printf("MPI_Finalize BYPASS\n");
+        printf("MPI_Finalize BYPASS\n");
 
         value = getenv("IS_MPI_SERVER") ;
         if (NULL != value && xpn_adaptor_initCalled == 1){
