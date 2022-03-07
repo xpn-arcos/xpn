@@ -67,8 +67,6 @@ int xpn_destroy()
     i = 0;
 
     while(xpn_parttable[i].id != -1){
-        printf("ID = %d\n", xpn_parttable[i].id);
-
         xpn_destroy_servers(&(xpn_parttable[i]));
         xpn_parttable[i].id = -1;
         i++;

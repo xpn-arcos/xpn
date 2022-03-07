@@ -78,7 +78,7 @@
     pthread_mutex_init(&m_pool_end,NULL);
 
     // malloc threads...
-    POOL_MAX_THREADS = 2 * sysconf(_SC_NPROCESSORS_ONLN) ;  // "2*" is for oversubscription
+    POOL_MAX_THREADS = 3 * sysconf(_SC_NPROCESSORS_ONLN) ;  // "3*" is for oversubscription
     thid = (pthread_t *)malloc(POOL_MAX_THREADS * sizeof(pthread_t)) ;
     if (NULL == thid) {
         perror("malloc: ");
