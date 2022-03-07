@@ -82,8 +82,6 @@
     int data[512];
     int size;
 
-    printf("DESTROY\n");
-
     debug_info("[COMM] begin mpiClient_comm_destroy(...)\n") ;
 
     MPI_Barrier(MPI_COMM_WORLD);
@@ -148,7 +146,7 @@
   int mpiClient_comm_disconnect ( mpiClient_param_st *params )
   {
     int ret ;
-    int data[512];
+    int data;
     int size;
 
     MPI_Barrier(MPI_COMM_WORLD);
@@ -159,8 +157,8 @@
       MPI_Comm_remote_size(params->server, &size);
 
       for (int i = 0; i < size; i++) { 
-        data[0] = MPISERVER_DISCONNECT;
-        MPI_Send( data, 1, MPI_INT, i, 0, params->server );
+        data = MPISERVER_DISCONNECT;
+        MPI_Send( &data, 1, MPI_INT, i, 0, params->server );
       }
     }
 

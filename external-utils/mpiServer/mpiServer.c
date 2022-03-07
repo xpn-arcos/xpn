@@ -123,6 +123,7 @@
       }
       
       if (head.type == MPISERVER_FINALIZE) {
+        debug_info("FINALIZE received\n");
         the_end = 1;
       }
 

@@ -30,7 +30,6 @@
   int mpiServer_comm_init ( mpiServer_param_st *params )
   {
     int ret, provided ;
-    char srv_name[1024] ;
     MPI_Info info ;
 
     DEBUG_BEGIN() ;
@@ -66,11 +65,11 @@
     // Publish port name
     MPI_Info_create(&info) ;
     MPI_Info_set(info, "ompi_global_scope", "true") ;
-    sprintf(srv_name, "mpiServer.%d", params->rank) ;
+    sprintf(params->srv_name, "mpiServer.%d", params->rank) ;
 
     if (params->rank == 0)
     {
-      ret = MPI_Publish_name(srv_name, info, params->port_name) ;
+      ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
       if (MPI_SUCCESS != ret) {
         debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
         return -1 ;
@@ -92,12 +91,8 @@
 
     DEBUG_BEGIN() ;
 
-    printf("AQUI 1\n");
-
     // Close port
     MPI_Close_port(params->port_name) ;
-
-    printf("AQUI 2\n");
 
     // Unpublish port name
     if (params->rank == 0)
@@ -109,16 +104,12 @@
       }
     }
 
-    printf("AQUI 3\n");
-
     // Finalize
     ret = MPI_Finalize() ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
       return -1 ;
     }
-
-    printf("AQUI 4\n");
 
     DEBUG_END() ;
 
