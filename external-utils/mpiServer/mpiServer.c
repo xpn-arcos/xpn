@@ -45,10 +45,10 @@
 
   void sigint_handler ( int signal )
   {  
-       printf("[MAIN] Signal %d received => ending execution...", signal) ;
-       the_end = 1;
+    printf("[MAIN] Signal %d received => ending execution...", signal) ;
+    the_end = 1;
 
-  // TODO: unblock MPI_Comm_accept :-/
+    // TODO: unblock MPI_Comm_accept :-/
   }
 
   void mpiServer_run ( struct st_th th )
@@ -64,15 +64,15 @@
     mpiServer_do_operation ( &th,  &the_end );
 
     debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(th.type_op));
-   }
+  }
 
 
-   /*
-    * Main
-    */
+  /*
+   * Main
+   */
 
-   int main ( int argc, char *argv[] )
-   {
+  int main ( int argc, char *argv[] )
+  {
     MPI_Comm sd ;
     int ret ;
     struct st_mpiServer_msg head ;

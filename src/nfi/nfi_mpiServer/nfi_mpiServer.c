@@ -427,7 +427,7 @@
 
           // free private_info, 'url' string and 'server' string...
           FREE_AND_NULL(serv->private_info);
-          //FREE_AND_NULL(serv->url); //TODO
+          FREE_AND_NULL(serv->url);
           FREE_AND_NULL(serv->server);
 
           //serv->protocol = -1;

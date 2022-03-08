@@ -475,6 +475,24 @@
 
   //Optimization API
 
+  void mpiServer_op_preload ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
+  {
+    int ret;
+
+    // do preload
+    ret = mpiServer_d2xpn(params,
+                          head->u_st_mpiServer_msg.op_preload.virtual_path,
+                          head->u_st_mpiServer_msg.op_preload.storage_path) ;
+
+    mpiServer_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id);
+
+    // show debug info
+    debug_info("[OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n",  params->srv_name,
+                                                        head->u_st_mpiServer_msg.op_preload.virtual_path,
+                                                        head->u_st_mpiServer_msg.op_preload.storage_path,
+                                                        ret);
+  }
+  
   void mpiServer_op_flush ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id)
   {
     int ret;
@@ -494,23 +512,7 @@
     debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_flush.virtual_path);
   }
 
-  void mpiServer_op_preload ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
-  {
-    int ret;
-
-    // do preload
-    ret = mpiServer_d2xpn(params,
-                          head->u_st_mpiServer_msg.op_preload.virtual_path,
-                          head->u_st_mpiServer_msg.op_preload.storage_path) ;
-
-    mpiServer_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id);
-
-    // show debug info
-    debug_info("[OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n",  params->srv_name,
-                                                        head->u_st_mpiServer_msg.op_preload.virtual_path,
-                                                        head->u_st_mpiServer_msg.op_preload.storage_path,
-                                                        ret);
-  }
+  
 
 
 

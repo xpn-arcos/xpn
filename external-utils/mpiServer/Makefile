@@ -28,10 +28,11 @@ MYLIBS                 =  -L$(EXPAND_DIR)/lib  -L${HOME}/mxml/lib  -lpthread -lx
 
 
 MPISERVER_EXE = mpiServer.exe
-
+MPISERVER_FINALIZE_EXE = mpiServer_finalize.exe
 #D2XPN_EXE    = 
 #XPN2D_EXE    = 
 #XPN2XPN_EXE    = 
+
 #--------------------------
 # Compilation rules
 #--------------------------
@@ -43,7 +44,7 @@ all:  all_object  all_exe
 all_object:  $(OBJECTS_MPISERVER)
 
 #all_exe:  $(MPISERVER_EXE) $(D2XPN_EXE) $(XPN2D_EXE) $(XPN2XPN_EXE) $(RMXPN_EXE)
-all_exe:  $(MPISERVER_EXE)
+all_exe:  $(MPISERVER_EXE) $(MPISERVER_FINALIZE_EXE)
 
 %.o: %.c
 	@echo -n "                    "
@@ -86,11 +87,15 @@ $(RMXPN_EXE): $(OBJECTS_RMXPN)
              $(OBJECTS_RMXPN) \
 		$(MYLIBS) > /dev/null
 	@echo "..]" 
-
+$(MPISERVER_FINALIZE_EXE): mpiServer_finalize.o
+	@echo -n "                    "
+	@echo -n "$@ [.." 
+	@$(CC) -o $(MPISERVER_FINALIZE_EXE)  \
+             mpiServer_finalize.o \
+		$(MYLIBS) > /dev/null
+	@echo "..]" 
 
 
 clean:
-	rm -f $(OBJECTS_MPISERVER) $(OBJECTS_D2XPN) $(OBJECTS_XPN2D) $(OBJECTS_RMXPN)
-	rm -f $(MPISERVER_EXE) $(D2XPN_EXE) $(XPN2D_EXE) $(RMXPN_EXE)
-
-
+	rm -f $(OBJECTS_MPISERVER) $(OBJECTS_D2XPN) $(OBJECTS_XPN2D) $(OBJECTS_RMXPN) mpiServer_finalize.o
+	rm -f $(MPISERVER_EXE) $(MPISERVER_FINALIZE_EXE) $(D2XPN_EXE) $(XPN2D_EXE) $(RMXPN_EXE)

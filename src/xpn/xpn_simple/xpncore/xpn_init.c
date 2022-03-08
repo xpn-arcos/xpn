@@ -12,17 +12,16 @@ int xpn_destroy_servers(struct xpn_partition *part)
     int mpi_server_disconnect = 0 ;
 
     for(i=0;i<part->data_nserv;i++){
-        if(mpi_server_disconnect == 1 && strncmp(&(part->data_serv[i].url), "mpiServer:", strlen("mpiServer:"))){
+        if(mpi_server_disconnect == 1 && strncmp(part->data_serv[i].url, "mpiServer:", strlen("mpiServer:"))){
             continue;
         }
 
-
         serv = part->data_serv;
         if(serv[i].ops != NULL){
-            part->data_serv[i].ops->nfi_disconnect(&(serv[i]));
-            if(strncmp(&serv[i].url, "mpiServer:", strlen("mpiServer:"))){
+            if(strncmp(serv[i].url, "mpiServer:", strlen("mpiServer:"))){
                 mpi_server_disconnect = 1;
             }
+            part->data_serv[i].ops->nfi_disconnect(&(serv[i]));
 
             //part->data_serv[i].ops->nfi_destroy(&(serv[i]));
             if(serv[i].ops != NULL){
