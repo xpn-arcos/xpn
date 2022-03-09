@@ -51,6 +51,54 @@
     // TODO: unblock MPI_Comm_accept :-/
   }
 
+  void mpiServer_finalize ( int argc, char *argv[] ) {
+
+    int rank, nservers, ret, buf;
+    char port_name[MPI_MAX_PORT_NAME];
+    char srv_name[1024] ;
+    MPI_Comm server;
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    // Lookup port name
+    sprintf(srv_name, "mpiServer.%d", 0) ;
+    ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name) ;
+    if (MPI_SUCCESS != ret) {
+        printf("MPI_Lookup_name fails\n") ;
+        return ;
+    }
+    // Connect with servers
+    ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &server );
+    if (MPI_SUCCESS != ret) {
+        printf("MPI_Comm_connect fails\n") ;
+        return ;
+    }
+
+    //Get number of servers
+    MPI_Comm_remote_size(server, &nservers);
+
+    //Finalize all servers
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    if (rank == 0)
+    {
+      for (int i = 0; i < nservers; i++) { 
+        buf = MPISERVER_FINALIZE; 
+        MPI_Send( &buf, 1, MPI_INT, i, 0, server );
+      }
+    }
+
+    MPI_Comm_disconnect( &server );
+    MPI_Finalize();
+
+    if (params.exec_mode == SERV_DOWN)
+    {
+      exit(0);
+    }
+
+  }
+
   void mpiServer_run ( struct st_th th )
   {
     // check params...
@@ -83,6 +131,11 @@
     if (ret < 0) {
       mpiServer_params_show_usage() ;
       exit(-1) ;
+    }
+
+    if (params.exec_mode != SERV_UP)
+    {
+      mpiServer_finalize (argc, argv);
     }
 
     mpiServer_params_show(&params) ;

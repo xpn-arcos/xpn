@@ -57,7 +57,8 @@
     params->size = 0 ;
     params->rank = 0 ;
     params->IOsize = MPISERVER_IOSIZE_DEFAULT ;
-    params->thread_mode = TH_OP ;
+    params->thread_mode = TH_OP   ;
+    params->exec_mode   = SERV_UP ;
     strcpy(params->port_name, "") ;
     strcpy(params->srv_name,  "") ;
     strcpy(params->dirbase,   MPISERVER_DIRBASE_DEFAULT) ;
@@ -91,15 +92,32 @@
               break;          
             */
             case 'd':
-              strcpy(params->dirbase, argv[i+1]);
+              if ((strlen(argv[i]) == 5) && (argv[i][2] == 'o') && (argv[i][3] == 'w') && (argv[i][4] == 'n')){
+                params->exec_mode = SERV_DOWN;
+              }
+              else{
+                strcpy(params->dirbase, argv[i+1]);
+              }
               i++;
               break;
-           case 't':
+            case 't':
               if ((strlen(argv[i]) == 3) && (argv[i][2] == 'p')){
                  params->thread_mode = TH_POOL;
               }
               i++;
-              break;        
+              break;
+            case 'u':
+              if ((strlen(argv[i]) == 3) && (argv[i][2] == 'p')){
+                 params->exec_mode = SERV_UP;
+              }
+              i++;
+              break;
+            case 'r':
+              if ((strlen(argv[i]) == 6) && (argv[i][2] == 'e') && (argv[i][3] == 's') && (argv[i][4] == 'e') && (argv[i][5] == 't')){
+                  params->exec_mode = SERV_RESET;
+              }
+              i++;
+              break;
             case 'h':
               return -1;
   

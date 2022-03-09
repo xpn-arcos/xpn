@@ -13,6 +13,10 @@
   #define TH_POOL 1
   #define TH_OP   2
 
+  #define SERV_UP    1
+  #define SERV_DOWN  2
+  #define SERV_RESET 3
+
 
   /*
    * Datatype
@@ -28,6 +32,7 @@
 
     // server configuration
     int thread_mode;
+    int exec_mode;
 
     // associated client
     MPI_Comm client ;
