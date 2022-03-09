@@ -23,20 +23,20 @@
 
       struct nfi_mpiServer_server
       {
-	   // old stuff of XPN
-	   char id[NFIMAXPATHLEN];
-	   char path[NFIMAXPATHLEN];
-	   int  sd;
+         // old stuff of XPN
+         char id[NFIMAXPATHLEN];
+         char path[NFIMAXPATHLEN];
+         struct nfi_mpiServer_connector sd;
 
-	   // client stub
-           mpiClient_param_st params ;
+         // client stub
+         mpiClient_param_st params ;
       };
 
       struct nfi_mpiServer_fhandle
       {
-	   char path[NFIMAXPATHLEN];
-	   int  fd;
-	   DIR *dir;
+      char path[NFIMAXPATHLEN];
+      int  fd;
+      DIR *dir;
       };
 
 
@@ -58,9 +58,9 @@
       int     nfi_mpiServer_open      ( struct nfi_server *server, char *url, struct nfi_fhandle *fho ) ;
       int     nfi_mpiServer_close     ( struct nfi_server *server, struct nfi_fhandle *fh ) ;
       ssize_t nfi_mpiServer_read      ( struct nfi_server *server, struct nfi_fhandle *fh,
-		                        void *buffer, off_t offset, size_t size ) ;
+                              void *buffer, off_t offset, size_t size ) ;
       ssize_t nfi_mpiServer_write     ( struct nfi_server *server, struct nfi_fhandle *fh,
-		                        void *buffer, off_t offset, size_t size ) ;
+                              void *buffer, off_t offset, size_t size ) ;
       int     nfi_mpiServer_create    ( struct nfi_server *server, char *url,  struct nfi_attr *attr, struct nfi_fhandle  *fh ) ;
 
       int     nfi_mpiServer_remove    ( struct nfi_server *server, char *url ) ;

@@ -14,7 +14,7 @@
 /* MAX_BUFFER_SIZE */
 #ifndef MAX_BUFFER_SIZE
 //	#define MAX_BUFFER_SIZE (64*KB)
-	#define MAX_BUFFER_SIZE (2*MB)
+	#define MAX_BUFFER_SIZE (1*MB)
 #endif
 
 /* ENVIROMENT VARIABLE: DNS SERVICE */

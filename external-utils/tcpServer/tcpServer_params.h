@@ -7,6 +7,9 @@
    #include "tcpServer_conf.h"
    #include "tcpServer_utils.h"
 
+   #define TH_POOL 1
+   #define TH_OP   2
+
 
    /*
     * Datatype
@@ -14,11 +17,15 @@
 
    struct tcpServer_param_st
    {
+        // server identification
         int port;
         int IOsize;
         char name[255];
         char file[255];
         char dirbase[255];
+
+        // server configuration
+        int thread_mode;
    };
 
 

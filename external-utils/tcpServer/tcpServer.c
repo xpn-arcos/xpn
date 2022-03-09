@@ -20,95 +20,135 @@
  */
 
 
-   /* ... Include / Inclusion ........................................... */
+    /* ... Include / Inclusion ........................................... */
 
-/* defines usados
- * _LARGEFILE64_: para soporte de ficheros mayores de 4GB
- * _MPI_: para lanzar los servidores como procesos MPI
- * DBG_MAIN: imprimo depuracion
- * _LOG_: imprimo errores
- * _COMPRESS_: uso del sistema de compresion lzf
- */
+    /* defines usados
+     * _LARGEFILE64_: para soporte de ficheros mayores de 4GB
+     * _MPI_: para lanzar los servidores como procesos MPI
+     * DBG_MAIN: imprimo depuracion
+     * _LOG_: imprimo errores
+     * _COMPRESS_: uso del sistema de compresion lzf
+     */
 
-/* VARIABLES DE ENTORNO:
- * TCPSERVER_DNS: indica donde se encuentra el sistema traductor de 
- * <id> <hostname> <port>
- */
+    /* VARIABLES DE ENTORNO:
+     * TCPSERVER_DNS: indica donde se encuentra el sistema traductor de 
+     * <id> <hostname> <port>
+     */
 
-#include "tcpServer.h"
-#include "tcpServer_ops.h"
-#include "tcpServer_workers.h"
-#include "tcpServer_comm.h"
-#include "tcpServer_d2xpn.h"
-#include "tcpServer_params.h"
-
-
-   /* ... Global variables / Variables globales ......................... */
-
-struct tcpServer_param_st tcpServer_params;
-
-/* GLOBAL VARIABLES */
-char *TCPSERVER_ALIAS_NAME_STRING;
-char *TCPSERVER_FILE_STRING;
-char *TCPSERVER_DIRBASE_STRING;
-
-/* INTERNAL CONST & STRUCTS */
-extern int errno;
-//pthread_t th;
+    #include "tcpServer.h"
+    #include "tcpServer_ops.h"
+    #include "tcpServer_workers.h"
+    #include "tcpServer_comm.h"
+    #include "tcpServer_d2xpn.h"
+    #include "tcpServer_params.h"
 
 
-   /* ... Functions / Funciones ......................................... */
+    /* ... Global variables / Variables globales ......................... */
 
-      void sigint_handler ( int signal )
+    struct tcpServer_param_st tcpServer_params;
+
+    /* GLOBAL VARIABLES */
+    char *TCPSERVER_ALIAS_NAME_STRING;
+    char *TCPSERVER_FILE_STRING;
+    char *TCPSERVER_DIRBASE_STRING;
+
+    /* INTERNAL CONST & STRUCTS */
+    extern int errno;
+    //pthread_t th;
+
+
+    /* ... Functions / Funciones ......................................... */
+
+    void sigint_handler ( int signal )
+    {
+     printf("Signal %d received !!", signal) ;
+     exit(0) ;
+    }
+
+
+    int main(int argc, char *argv[])
+    {
+      int sd;
+      int id = 0;
+      //int cont;
+
+      // Initializing...
+      setbuf(stdout,NULL);  
+      setbuf(stderr,NULL);
+
+      signal(SIGINT, sigint_handler);
+
+      // Get parameters..
+      if (params_get(argc,argv, &tcpServer_params) == -1)
       {
-	   printf("Signal %d received !!", signal) ;
-	   exit(0) ;
+        params_show_usage();
+        exit(-1);
+      }
+      params_show_values(&tcpServer_params);
+
+      // Initialize tcp_comm...
+      tcpServer_comm_init(tcpServer_params.name, tcpServer_params.port, tcpServer_params.file);
+
+      // Initialize tcp_worker...
+      if (tcpServer_params.thread_mode == TH_OP)
+      {
+        debug_info("[MAIN] tcpServer_init_worker\n");
+        tcpServer_init_worker();
+      }
+
+      // Initialize and launch worker pool
+      if (tcpServer_params.thread_mode == TH_POOL)
+      {
+        debug_info("[MAIN] tcpServer_init_worker_pool\n");
+        tcpServer_init_worker_pool ( );
+        debug_info("[MAIN] tcpServer_launch_worker_pool launch\n");
+        tcpServer_launch_worker_pool(worker_pool_function);
       }
 
 
-      int main(int argc, char *argv[])
+
+
+      // Request loop...
+      //cont = 1;
+      while (1)
       {
-	  int sd;
-	  int cont;
+        debug_info("tcpServer_accept_comm()\n");
+        sd = tcpServer_accept_comm();
+        if(sd == -1){
+          break;
+        }
 
-	  // Initializing...
-	  setbuf(stdout,NULL);	
-	  setbuf(stderr,NULL);
+        // Launch worker to execute the operation
+        if (tcpServer_params.thread_mode == TH_OP)
+        {
+          debug_info("[MAIN] tcpServer_launch_worker\n") ;
+          tcpServer_launch_worker(sd);
+        }
 
-	  signal(SIGINT, sigint_handler);
+        // Enqueue the operation on the buffer
+        if (tcpServer_params.thread_mode == TH_POOL)
+        {
+          debug_info("[MAIN] tcpServer_worker_pool_enqueue\n");
+          tcpServer_worker_pool_enqueue ( sd, id );
+          id++;
+        }
 
-	  // Get parameters..
-	  if (params_get(argc,argv, &tcpServer_params) == -1)
-	  {
-		params_show_usage();
-		exit(-1);
-	  }
-	  params_show_values(&tcpServer_params);
-
-	  // Initialize tcp_comm...
-	  tcpServer_comm_init(tcpServer_params.name,
-		       	      tcpServer_params.port,
-			      tcpServer_params.file);
-
-	  // Initialize tcp_worker...
-	  tcpServer_init_worker();
-
-	  // Request loop...
-	  cont = 1;
-	  while (cont)
-	  {
-        	debug_info("tcpServer_accept_comm()\n");
-		sd = tcpServer_accept_comm();
-		if(sd == -1){
-			break;
-		}
-
-        	debug_info("tcpServer_launch_worker()\n");
-		tcpServer_launch_worker(sd);
-	  }
-
-	  tcpServer_close_comm();
-    	  xpn_destroy();
-	  return 0;
       }
+
+      // Destroy worker pool
+      if (tcpServer_params.thread_mode == TH_POOL)
+      {
+        debug_info("[WORKERS] tcpServer_destroy_worker_pool\n");
+        tcpServer_destroy_worker_pool();
+      }
+
+      tcpServer_close_comm();
+      //xpn_destroy();
+
+      //TODO: los otros hilos no se destruyen??
+
+      
+
+      return 0;
+    }
 
