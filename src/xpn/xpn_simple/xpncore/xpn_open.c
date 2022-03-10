@@ -439,8 +439,28 @@ int xpn_internal_remove(const char *path)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*****************************************************************/
-int xpn_preload(const char *virtual_path, const char *storage_path, int opt)
+int xpn_preload(const char *virtual_path, const char *storage_path)
 {
 	char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
 	struct nfi_server **servers;
@@ -512,9 +532,9 @@ int xpn_preload(const char *virtual_path, const char *storage_path, int opt)
 	/* worker */
 	nfi_worker_do_preload(	servers[i]->wrk,
 				url_serv,
-				(char *)virtual_path,
+				(char *)url_serv,
 				(char *)storage_path,
-				opt);
+				1);
 	
 	/* wait */
 	res = nfi_worker_wait(servers[i]->wrk);
@@ -535,7 +555,33 @@ int xpn_preload(const char *virtual_path, const char *storage_path, int opt)
 }
 
 
-int xpn_flush(const char *virtual_path, const char *storage_path, int opt)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int xpn_flush(const char *virtual_path, const char *storage_path)
 {
 	char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
 	struct nfi_server **servers;
@@ -594,9 +640,9 @@ int xpn_flush(const char *virtual_path, const char *storage_path, int opt)
 	/* worker */
 	nfi_worker_do_flush(	servers[i]->wrk,
 				url_serv,
-				(char *)virtual_path,
+				(char *)virtual_path, //TODO: xpn///quijote_preload.txt --> /server0/quijote_preload.txt
 				(char *)storage_path,
-				opt);
+				1);
 		
 	/* wait */
 	res = nfi_worker_wait(servers[i]->wrk);

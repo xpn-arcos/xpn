@@ -1029,7 +1029,8 @@
           //strcpy(msg.u_st_mpiServer_msg.op_preload.path,dir);
           strcpy(msg.u_st_mpiServer_msg.op_preload.virtual_path,virtual_path);
           strcpy(msg.u_st_mpiServer_msg.op_preload.storage_path,storage_path);
-          msg.u_st_mpiServer_msg.op_preload.opt = opt;
+          msg.u_st_mpiServer_msg.op_preload.block_size = serv->block_size;
+          msg.u_st_mpiServer_msg.op_preload.opt        = opt;
 
           nfi_mpiServer_doRequest(server_aux, &msg, (char *)&ret, sizeof(int)) ; 
           /*****************************************/

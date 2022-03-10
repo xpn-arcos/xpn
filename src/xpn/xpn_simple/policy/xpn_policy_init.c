@@ -377,7 +377,10 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 		xpn_err(XPNERR_INVALURL);
 		return -1;
 	}
-	
+
+	serv->block_size = part->block_size; // Reference of the partition blocksize
+
+
 	// crear conexion
 	if (strcmp(prt,"file") == 0) {
 		//printf("[XPN]nfi_local_init: %s\n",url);
