@@ -23,6 +23,8 @@
                  "gopher",
                  "telnet",
                  "finger",
+                 "tcpServer",
+                 "mpiServer",
                  NULL
                } ;
         int i, ret ;

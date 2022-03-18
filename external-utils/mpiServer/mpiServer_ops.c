@@ -506,30 +506,29 @@
                           head->u_st_mpiServer_msg.op_preload.virtual_path,
                           head->u_st_mpiServer_msg.op_preload.storage_path) ;*/
 
-    printf("VIRTUAL %s\n", head->u_st_mpiServer_msg.op_preload.virtual_path);
-    printf("STORAGE %s\n", head->u_st_mpiServer_msg.op_preload.storage_path);
-
-
     //Open origin file
     fd_orig = open(head->u_st_mpiServer_msg.op_preload.storage_path, O_RDONLY);
     if (fd_orig == -1)
     {
-        printf("Error on open operation\n");
+        perror("Error on open operation\n");
         return -1;
     }
 
+    char *protocol;
+    char *user;
+    char *machine;
+    int  port;
+    char *file;
+    char *relative;
+    char *params1;
+
+    ret = URLSTR_ParseURL(head->u_st_mpiServer_msg.op_preload.virtual_path, &protocol, &user, &machine, &port, &file, &relative, &params1) ;   
 
     //Create new file
-    printf("STORAGE PATH %s\n", head->u_st_mpiServer_msg.op_preload.virtual_path);
-    //sprintf(path, "/local_test/test%d/preload_test.txt", rank);
-
-    char * fname = basename(head->u_st_mpiServer_msg.op_preload.storage_path);
-    sprintf(path, "%s/%s", head->u_st_mpiServer_msg.op_preload.virtual_path, fname);
-
-    fd_dest = creat(path, 0777);
+    fd_dest = creat(file, 0777);
     if (fd_dest == -1)
     {
-        printf("Error on creat operation\n");
+        perror("Error on creat operation\n");
         close(fd_orig);
         return -1;
     }
@@ -543,7 +542,7 @@
         ret = lseek (fd_orig, cont, SEEK_SET);
         if (ret == -1)
         {
-            printf("Error on lseek operation\n");
+            perror("Error on lseek operation\n");
             close(fd_orig);
             close(fd_dest);
             return -1;
@@ -551,7 +550,7 @@
 
         read_bytes = read(fd_orig, &buffer, BLOCKSIZE);
         if(read_bytes == -1){
-            printf("Error on read operation\n");
+            perror("Error on read operation\n");
             close(fd_orig);
             close(fd_dest);
             return -1;
@@ -561,7 +560,7 @@
         {
             write_bytes = write(fd_dest, &buffer, read_bytes);
             if(write_bytes==-1){
-                printf("Error on read operation\n");
+                perror("Error on read operation\n");
                 close(fd_orig);
                 close(fd_dest);
                 return -1;
@@ -590,34 +589,39 @@
   void mpiServer_op_flush ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id)
   {
     int ret;
+    int  fd_dest, fd_orig;
 
-    // check arguments
-    /*if (NULL == head) {
-      return ;
-    }
+    int BLOCKSIZE = head->u_st_mpiServer_msg.op_flush.block_size;
+    char buffer [BLOCKSIZE];
+    char path [PATH_MAX];
 
-    // do flush
-    ret = 0 ; // TODO: do flush...
-    debug_warning("[OPS] (ID=%s) TODO: flush\n", params->srv_name) ;*/
+    char *protocol;
+    char *user;
+    char *machine;
+    int  port;
+    char *file;
+    char *relative;
+    char *params1;
 
-
+    ret = URLSTR_ParseURL(head->u_st_mpiServer_msg.op_flush.virtual_path, &protocol, &user, &machine, &port, &file, &relative, &params1) ;  
 
 
     //Open origin file
-    /*sprintf(path, "/local_test/test%d/preload_test.txt", rank);
-    fd_orig = open(path, O_RDONLY);
+    fd_orig = open(file, O_RDONLY);
     if (fd_orig == -1)
     {
-        printf("Error on open operation\n");
+        perror("open: ");
+        printf("Error on open operation on '%s'\n", file);
         return -1;
     }
 
 
     //Create new file
-    fd_dest = open(argv[1], O_WRONLY | O_CREAT, 0755);
+    fd_dest = open(head->u_st_mpiServer_msg.op_flush.storage_path, O_WRONLY | O_CREAT, 0755);
     if (fd_dest == -1)
     {
-        printf("Error on open operation\n");
+        perror("open: ");
+        printf("Error on open operation on '%s'\n", head->u_st_mpiServer_msg.op_flush.storage_path);
         return -1;
     }
 
@@ -629,7 +633,7 @@
     do{
         read_bytes = read(fd_orig, &buffer, BLOCKSIZE);
         if(read_bytes == -1){
-            printf("Error on read operation\n");
+            perror("Error on read operation\n");
             return -1;
         }
 
@@ -639,30 +643,17 @@
 
             write_bytes = write(fd_dest, &buffer, read_bytes);
             if(write_bytes==-1){
-                printf("Error on read operation\n");
+                perror("Error on read operation\n");
                 return -1;
             }
         }
 
-        cont = cont + (BLOCKSIZE * size);
+        cont = cont + (BLOCKSIZE * params->size);
 
     }while(read_bytes == BLOCKSIZE);
 
     close(fd_orig);
-    close(fd_dest);*/
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    close(fd_dest);
 
     mpiServer_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 

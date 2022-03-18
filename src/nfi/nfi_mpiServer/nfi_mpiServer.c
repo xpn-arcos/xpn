@@ -1076,6 +1076,7 @@
           //strcpy(msg.u_st_mpiServer_msg.op_flush.path,dir);
           strcpy(msg.u_st_mpiServer_msg.op_flush.virtual_path,virtual_path);
           strcpy(msg.u_st_mpiServer_msg.op_flush.storage_path,storage_path);
+          msg.u_st_mpiServer_msg.op_flush.block_size = serv->block_size;
           msg.u_st_mpiServer_msg.op_flush.opt = opt;
 
           nfi_mpiServer_doRequest(server_aux, &msg, (char *)&ret, sizeof(int)) ; 
