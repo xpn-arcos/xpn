@@ -14,8 +14,8 @@
  #endif
 
 
-int xpn_preload(const char *virtual_path, const char *storage_path, int opt);
-int xpn_flush(const char *virtual_path, const char *storage_path, int opt);
+int xpn_preload(const char *virtual_path, const char *storage_path);
+int xpn_flush(const char *virtual_path, const char *storage_path);
 	    
 int xpn_creat(const char *path, mode_t perm);
 

@@ -208,7 +208,7 @@
     }
 
     // Send message
-    ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 0, fd) ;
+    ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 1, fd) ;
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
     }
@@ -253,18 +253,8 @@
     return size;
   }
 
-
-
-
-
-
-
-
-
-
-
   //TODO
-  ssize_t mpiServer_comm_read_operation_client ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id )
+  /*ssize_t mpiServer_comm_read_operation_client ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id )
   {
     int ret ;
     MPI_Status status ;
@@ -299,4 +289,4 @@
 
     // Return bytes read
     return size;
-  }
+  }*/

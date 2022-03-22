@@ -88,11 +88,9 @@
 
     MPI_Comm_size(params->server, &size);
     debug_info("[COMM] mpiClient_comm_disconnect nservers: %d\n", size) ;
-
     if (params->rank==0) {  
       for (int i = 0; i < size; i++) { 
         data[0] = MPISERVER_DISCONNECT;
-
         MPI_Send( data, 1, MPI_INT, i, 0, params->server );
       }
     }
@@ -152,7 +150,6 @@
     MPI_Barrier(MPI_COMM_WORLD);
 
     debug_info("[COMM] mpiClient_comm_disconnect nservers\n") ; //
-
     if (params->rank==0) {
       MPI_Comm_remote_size(params->server, &size);
 
@@ -232,6 +229,10 @@
     }
 
     // Send message
+
+
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     ret = MPI_Send(data, size, MPI_CHAR, fd.rank_id, 1, fd.comm) ;
     if (MPI_SUCCESS != ret) {
         debug_warning("Server[?]: MPI_Recv fails :-(") ;
@@ -261,7 +262,7 @@
     }
 
     // Get message
-    ret = MPI_Recv(data, size, MPI_CHAR, fd.rank_id, MPI_ANY_TAG, fd.comm, &status);
+    ret = MPI_Recv(data, size, MPI_CHAR, fd.rank_id, 1, fd.comm, &status);
     if (MPI_SUCCESS != ret) {
         debug_warning("Server[?]: MPI_Recv fails :-(") ;
         size = 0 ;

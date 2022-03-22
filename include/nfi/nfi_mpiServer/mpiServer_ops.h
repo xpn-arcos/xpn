@@ -124,12 +124,14 @@
    struct st_mpiServer_flush{
 	char storage_path[MPISERVER_MAXPATHLEN];
 	char virtual_path[MPISERVER_MAXPATHLEN];
+   int block_size;
 	char opt;
    };
 
    struct st_mpiServer_preload{
 	char storage_path[MPISERVER_MAXPATHLEN];
 	char virtual_path[MPISERVER_MAXPATHLEN];
+   int block_size;
 	char opt;
    };
 
