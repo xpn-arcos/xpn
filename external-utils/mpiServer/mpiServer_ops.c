@@ -249,7 +249,6 @@
                                                                            head->u_st_mpiServer_msg.op_read.fd,
                                                                            (int)head->u_st_mpiServer_msg.op_read.offset,
                                                                            head->u_st_mpiServer_msg.op_read.size);
-
     // initialize counters
     cont = 0 ;
     size = head->u_st_mpiServer_msg.op_read.size;
@@ -266,18 +265,16 @@
       mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_write_req), rank_client_id);
       return ;
     }
-
     // loop...
     do
     {
       if (diff > size)
-     to_read = size ;
+        to_read = size ;
       else to_read = diff ;
 
       // lseek and read data...
       LSEEK(head->u_st_mpiServer_msg.op_read.fd, head->u_st_mpiServer_msg.op_read.offset + cont, SEEK_SET);
       req.size = mpiServer_file_read_buffer(params, head->u_st_mpiServer_msg.op_read.fd, buffer, to_read);
-
       // if error then send as "how many bytes" -1
       if (req.size < 0)
       {
@@ -287,7 +284,6 @@
         FREE_AND_NULL(buffer) ;
         return ;
       }
-
       // send (how many + data) to client...
       mpiServer_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpiServer_read_req), rank_client_id);
       debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size);
@@ -297,7 +293,6 @@
         mpiServer_comm_write_data(params, sd, buffer, req.size, rank_client_id);
         debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name);
       }
-
       cont = cont + req.size; //Send bytes
       diff = head->u_st_mpiServer_msg.op_read.size - cont;
 
@@ -375,9 +370,9 @@
     }
 
     // do close
-    mpiServer_file_close(head->u_st_mpiServer_msg.op_close.fd) ;
+    int ret = mpiServer_file_close(head->u_st_mpiServer_msg.op_close.fd) ;
 
-    //TODO return client
+    mpiServer_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id);
 
     // show debug info
     debug_info("[OPS] (ID=%s) CLOSE(fd=%d)\n", params->srv_name, head->u_st_mpiServer_msg.op_close.fd) ;
@@ -394,9 +389,9 @@
 
     // do rm
     s = head->u_st_mpiServer_msg.op_rm.path;
-    unlink(s);
+    int ret = unlink(s);
 
-    //TODO return client
+    mpiServer_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id);
 
     // show debug info
     debug_info("[OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_rm.path);

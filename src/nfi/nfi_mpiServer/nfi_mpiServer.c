@@ -61,12 +61,14 @@
           int ret;
 
           dbgnfi_info("[NFI] (ID=%s) mpiClient_write_data: begin               HEAD_TYPE:%d\n", head->id, sizeof(head->type));
-
           ret = mpiClient_write_operation(sd, (char *)&head->type, sizeof(head->type), head->id);
           if (ret == -1){
               debug_warning("Server[?]: mpiClient_write_data fails :-(") ;
               return -1;
           }
+
+          int rank;
+          MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
           dbgnfi_info("[NFI] (ID=%s) write_operation: %d -> \n", head->id, head->type);
           switch (head->type)
@@ -694,7 +696,6 @@
         cont = 0 ;
 
         do {
-
           ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_read_req), msg.id);
           dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): (1)mpiClient_read_data = %d.\n",server_aux->id, ret);
           if(ret == -1){
@@ -702,7 +703,6 @@
             fprintf(stderr,"ERROR: (2)nfi_mpiServer_read: Error on write operation\n");
             return -1;
           }
-
    
           if(req.size > 0){
             dbgnfi_info("[NFI] nfi_mpiServer_read(ID=%s): (2)mpiClient_read_data = %d. size = %d\n",server_aux->id, ret, req.size);
@@ -713,7 +713,6 @@
               fprintf(stderr,"ERROR: (3)nfi_mpiServer_read: Error on read operation\n");
             }
           }
-
           cont = cont + req.size ;
           diff = msg.u_st_mpiServer_msg.op_read.size - cont;
 
@@ -833,6 +832,7 @@
 
       int nfi_mpiServer_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
       {
+          int ret = -1;
           struct nfi_mpiServer_fhandle *fh_aux;
           struct nfi_mpiServer_server *server_aux;
           struct st_mpiServer_msg msg;
@@ -856,11 +856,9 @@
                 msg.type = MPISERVER_CLOSE_FILE;
                 strcpy(msg.id, server_aux->id);
                 msg.u_st_mpiServer_msg.op_close.fd = fh_aux->fd;
-
-                mpiServer_write_operation(server_aux->sd, &msg);
+                nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
                 dbgnfi_info("[NFI] nfi_mpiServer_close(ID=%s): close -> %d \n",server_aux->id,msg.u_st_mpiServer_msg.op_close.fd);
                 /*****************************************/
-
                 /* free memory */
                 free(fh->priv_fh);
                 fh->priv_fh = NULL;
@@ -872,7 +870,7 @@
           dbgnfi_info("[NFI] nfi_mpiServer_close(ID=%s): end\n",server_aux->id);
 
           // Return OK
-          return 0;
+          return ret;
       }
 
       int nfi_mpiServer_remove(struct nfi_server *serv,  char *url)
@@ -912,12 +910,12 @@
         strcpy(msg.id, server_aux->id);
         strcpy(msg.u_st_mpiServer_msg.op_rm.path,dir);
 
-        mpiServer_write_operation(server_aux->sd, &msg);
+        //mpiServer_write_operation(server_aux->sd, &msg);
+        nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
+        dbgnfi_info("[NFI] nfi_mpiServer_remove(ID=%s): end \n",server_aux->id);
         /*****************************************/
 
-        dbgnfi_info("[NFI] nfi_mpiServer_remove(ID=%s): end \n",server_aux->id);
-
-        return 0;
+        return ret;
       }
 
 
