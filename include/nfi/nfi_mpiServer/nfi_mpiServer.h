@@ -34,9 +34,9 @@
 
       struct nfi_mpiServer_fhandle
       {
-      char path[NFIMAXPATHLEN];
-      int  fd;
-      DIR *dir;
+         char path[NFIMAXPATHLEN];
+         int  fd;
+         DIR *dir;
       };
 
 
