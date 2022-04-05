@@ -10,7 +10,7 @@
 #
 # begin
 #
-AC_INIT([Expand],[1.9.0],[fgcarbal@inf.uc3m.es],[expand])
+AC_INIT([Expand],[1.0.0],[fgcarbal@inf.uc3m.es],[expand])
 AC_CONFIG_AUX_DIR(./config)
 AC_CONFIG_HEADER(include/config.h)
 AC_PROG_INSTALL

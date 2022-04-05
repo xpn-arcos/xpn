@@ -30,6 +30,18 @@
   #define DEBUG_END() \
     debug_info("End   %s(), errno=%d\n", __func__, errno)
 
+#ifdef _LARGEFILE64_
+    typedef long long int offset_t;
+#else 
+    typedef off_t offset_t;
+#endif
+
+#ifdef _LARGEFILE64_
+    #define LSEEK lseek64
+#else
+    #define LSEEK lseek
+#endif
+
   // Memory
   #define FREE_AND_NULL(ptr) \
     if ((ptr) != NULL) { free((ptr)); (ptr) = NULL; }

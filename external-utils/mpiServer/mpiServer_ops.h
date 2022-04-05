@@ -6,6 +6,7 @@
   #include "all_system.h"
   #include "mpiServer_params.h"
   #include "mpiServer_utils.h"
+  #include "base/urlstr.h" //TODO: cp base into make install
   #include "mpiServer_workers_common.h"
 
 
@@ -22,6 +23,10 @@
 #endif
 
   /* Operations */
+
+  /* Operations */
+
+  // File operations
   #define MPISERVER_OPEN_FILE      0
   #define MPISERVER_CREAT_FILE     1
   #define MPISERVER_READ_FILE      2
@@ -31,116 +36,120 @@
   #define MPISERVER_GETATTR_FILE   6
   #define MPISERVER_SETATTR_FILE   7
 
-  #define MPISERVER_MKDIR_DIR      8
-  #define MPISERVER_RMDIR_DIR      9
-  #define MPISERVER_OPENDIR_DIR    10
-  #define MPISERVER_READDIR_DIR    11
-  #define MPISERVER_CLOSEDIR_DIR   12
+  // Directory operations
+  #define MPISERVER_MKDIR_DIR      20
+  #define MPISERVER_RMDIR_DIR      21
+  #define MPISERVER_OPENDIR_DIR    22
+  #define MPISERVER_READDIR_DIR    23
+  #define MPISERVER_CLOSEDIR_DIR   24
 
-  #define MPISERVER_FLUSH_FILE     13
-  #define MPISERVER_PRELOAD_FILE   14
+  // Import / Export operations
+  #define MPISERVER_FLUSH_FILE     40
+  #define MPISERVER_PRELOAD_FILE   41
 
-  #define MPISERVER_STATFS_DIR     15
+  // FS Operations
+  #define MPISERVER_STATFS_DIR     60
+  #define MPISERVER_GETNODENAME    61
+  #define MPISERVER_GETID          62
 
-  #define MPISERVER_FINALIZE       16
-  #define MPISERVER_GETID          17
-  #define MPISERVER_DISCONNECT     18
-  #define MPISERVER_GETNAME        19
+  // Connection operatons
+  #define MPISERVER_FINALIZE       80
+  #define MPISERVER_DISCONNECT     81
   #define MPISERVER_END            -1
 
 
   /*
-  *  Message struct
-  */
+   *  Message struct
+   */
 
-  struct st_mpiServer_open {
+  struct st_mpiServer_open{
     char path[MPISERVER_MAXPATHLEN];
   };
 
-  struct st_mpiServer_creat {
+  struct st_mpiServer_open_req{
+   int fd;
+  };
+
+  struct st_mpiServer_creat{
     char path[MPISERVER_MAXPATHLEN];
   };
 
-  struct st_mpiServer_read {
+  struct st_mpiServer_read{
     int fd;
-#ifdef _LARGEFILE64_
-    long long int offset;
-#else   
-    off_t offset;
-#endif
+    offset_t offset;
     size_t size;
   };
 
-  struct st_mpiServer_write {
-    int fd;
-#ifdef _LARGEFILE64_
-    long long int offset;
-#else
-    off_t offset;
-#endif
-    size_t size;
-  };
-
-  struct st_mpiServer_read_req {
+  struct st_mpiServer_read_req{
     ssize_t size;
     char last;
   };
 
-  struct st_mpiServer_write_req {
+  struct st_mpiServer_write{
+    int fd;
+    offset_t offset;
+    size_t size;
+  };
+
+  struct st_mpiServer_write_req{
     ssize_t size;
   };
 
-  struct st_mpiServer_open_req {
+  struct st_mpiServer_close{
     int fd;
   };
 
-  struct st_mpiServer_close {
-    int fd;
-  };
-
-  struct st_mpiServer_rm {
+  struct st_mpiServer_rm{
     char path[MPISERVER_MAXPATHLEN];
   };
 
-  struct st_mpiServer_mkdir {  
+  struct st_mpiServer_getattr{ 
     char path[MPISERVER_MAXPATHLEN];
   };
 
-  struct st_mpiServer_rmdir {
-    char path[MPISERVER_MAXPATHLEN];
-  };
-
-  struct st_mpiServer_getattr {    
-    char path[MPISERVER_MAXPATHLEN];
-  };
-
-  struct st_mpiServer_setattr {    
+  struct st_mpiServer_setattr{ 
     char path[MPISERVER_MAXPATHLEN];
     struct stat attr;
   };
 
-  struct st_mpiServer_attr_req {
-    char status;    
+  struct st_mpiServer_attr_req{
+    char status;  
     struct stat attr;
   };
+  
 
-  struct st_mpiServer_flush {
+  
+  struct st_mpiServer_mkdir{  
+    char path[MPISERVER_MAXPATHLEN];
+  };
+
+  struct st_mpiServer_rmdir{
+    char path[MPISERVER_MAXPATHLEN];
+  };
+
+  //TODO: define MPISERVER_OPENDIR_DIR, MPISERVER_READDIR_DIR, MPISERVER_CLOSEDIR_DIR
+
+  struct st_mpiServer_flush{
     char storage_path[MPISERVER_MAXPATHLEN];
     char virtual_path[MPISERVER_MAXPATHLEN];
     int block_size;
     char opt;
   };
 
-  struct st_mpiServer_preload {
+  struct st_mpiServer_preload{
     char storage_path[MPISERVER_MAXPATHLEN];
     char virtual_path[MPISERVER_MAXPATHLEN];
     int block_size;
     char opt;
   };
 
-  struct st_mpiServer_end {
+
+
+  struct st_mpiServer_end{
     char status;
   };
+
+
 
   struct st_mpiServer_msg
   {
@@ -152,28 +161,24 @@
       struct st_mpiServer_close   op_close;
       struct st_mpiServer_read    op_read;
       struct st_mpiServer_write   op_write;
-      struct st_mpiServer_rm      op_rm;      
+      struct st_mpiServer_rm      op_rm;    
       struct st_mpiServer_mkdir   op_mkdir;
       struct st_mpiServer_rmdir   op_rmdir;
-      struct st_mpiServer_getattr     op_getattr;
-      struct st_mpiServer_setattr     op_setattr;
+      struct st_mpiServer_getattr op_getattr;
+      struct st_mpiServer_setattr op_setattr;
 
       struct st_mpiServer_flush   op_flush;
-      struct st_mpiServer_preload     op_preload;
+      struct st_mpiServer_preload op_preload;
       struct st_mpiServer_end     op_end;
     } u_st_mpiServer_msg ;
   };
+
+  
 
 
   /*
    *  API
    */
-
-#ifdef _LARGEFILE64_
-  #define LSEEK lseek64
-#else
-  #define LSEEK lseek
-#endif
 
   char *mpiServer_op2string    ( int op_code ) ;
   int   mpiServer_do_operation ( struct st_th *th, int * the_end );

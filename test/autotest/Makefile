@@ -191,17 +191,17 @@ OS = __LINUX__
 PACKAGE = expand
 PACKAGE_BUGREPORT = fgcarbal@inf.uc3m.es
 PACKAGE_NAME = Expand
-PACKAGE_STRING = Expand 1.9.0
+PACKAGE_STRING = Expand 1.0.0
 PACKAGE_TARNAME = expand
 PACKAGE_URL = 
-PACKAGE_VERSION = 1.9.0
+PACKAGE_VERSION = 1.0.0
 PATH_SEPARATOR = :
 POSIXIOSERVICE = 
 RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = 1.9.0
+VERSION = 1.0.0
 abs_builddir = /local_test/expand/test/autotest
 abs_srcdir = /local_test/expand/test/autotest
 abs_top_builddir = /local_test/expand
@@ -486,8 +486,8 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 		echo '# Signature of the current package.' && \
 		echo 'm4_define([AT_PACKAGE_NAME],      [Expand])' && \
 		echo 'm4_define([AT_PACKAGE_TARNAME],   [expand])' && \
-		echo 'm4_define([AT_PACKAGE_VERSION],   [1.9.0])' && \
-		echo 'm4_define([AT_PACKAGE_STRING],    [Expand 1.9.0])' && \
+		echo 'm4_define([AT_PACKAGE_VERSION],   [1.0.0])' && \
+		echo 'm4_define([AT_PACKAGE_STRING],    [Expand 1.0.0])' && \
 		echo 'm4_define([AT_PACKAGE_BUGREPORT], [fgcarbal@inf.uc3m.es])'; \
 	} >'$(srcdir)/package.m4'
 

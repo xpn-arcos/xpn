@@ -73,7 +73,7 @@
              break ;
         case MPISERVER_DISCONNECT:      ret = "DISCONNECT" ;
              break ;
-        case MPISERVER_GETNAME:         ret = "GETNAME" ;
+        case MPISERVER_GETNODENAME:     ret = "GETNODENAME" ;
              break ;
         case MPISERVER_END:             ret = "END" ;
              break ;
@@ -86,8 +86,6 @@
   /*
    * OPERATIONAL FUNCTIONS
    */
-
-  void  mpiServer_op_getname     ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ; //NEW
 
   void  mpiServer_op_open        ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
   void  mpiServer_op_creat       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
@@ -102,10 +100,11 @@
   void  mpiServer_op_rmdir       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
 
   void  mpiServer_op_flush       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
-  int   mpiServer_op_preload     ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
+  void  mpiServer_op_preload     ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
   
-  void  mpiServer_op_fstat       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
-  void  mpiServer_op_getid       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
+  void  mpiServer_op_getnodename ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ; //NEW
+  void  mpiServer_op_fstat       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ; //TODO: implement
+  void  mpiServer_op_getid       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ; //TODO: call in switch
 
   /**********************************
   Read the operation to realize
@@ -120,18 +119,6 @@
 
     switch(th->type_op)
     {
-      //Connection API
-      case MPISERVER_DISCONNECT:
-        break;
-
-      case MPISERVER_FINALIZE:
-        *the_end = 1;
-        break;
-
-      case MPISERVER_GETNAME:
-        mpiServer_op_getname(th->params, th->sd, &head, th->rank_client_id); //NEW
-        break;
-
       //File API
       case MPISERVER_OPEN_FILE:
         ret = mpiServer_comm_read_data(th->params, th->sd, (char *)&(head.u_st_mpiServer_msg.op_open), sizeof(struct st_mpiServer_open), th->rank_client_id);
@@ -200,7 +187,7 @@
       case MPISERVER_PRELOAD_FILE:
         ret = mpiServer_comm_read_data(th->params, th->sd, (char *)&(head.u_st_mpiServer_msg.op_preload), sizeof(struct st_mpiServer_preload), th->rank_client_id);
         if (ret != -1) {
-            ret = mpiServer_op_preload(th->params, th->sd, &head, th->rank_client_id);
+            mpiServer_op_preload(th->params, th->sd, &head, th->rank_client_id);
         }
         break;
       case MPISERVER_FLUSH_FILE:
@@ -209,28 +196,25 @@
             mpiServer_op_flush(th->params, th->sd, &head, th->rank_client_id);
         }
         break;
+
+      //Connection API
+      case MPISERVER_DISCONNECT:
+        break;
+
+      case MPISERVER_FINALIZE:
+        *the_end = 1;
+        break;
+
+      //FS Metadata API
+      case MPISERVER_GETNODENAME:
+        mpiServer_op_getnodename(th->params, th->sd, &head, th->rank_client_id); //NEW
+        break;
+
     }
 
     DEBUG_END() ;
 
     return 0;
-  }
-
-
-
-  //Connection API
-
-  void  mpiServer_op_getname ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) //NEW
-  {
-    char serv_name [1024]; //Other value??
-
-    // Get server host name
-    gethostname(serv_name, sizeof(serv_name));
-
-    mpiServer_comm_write_data(params, sd, (char *)&serv_name, sizeof(serv_name), rank_client_id);
-
-    // show debug info
-    debug_info("[OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name);
   }
 
 
@@ -453,6 +437,8 @@
     }
 
     //TODO
+    rank_client_id = rank_client_id;
+    //TODO
 
     // do setattr
     debug_info("[OPS] SETATTR operation to be implemented !!\n");
@@ -497,14 +483,13 @@
 
   //Optimization API
 
-  int mpiServer_op_preload ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
+  void mpiServer_op_preload ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
   {
     int ret;
     int  fd_dest, fd_orig;
 
     int BLOCKSIZE = head->u_st_mpiServer_msg.op_preload.block_size;
     char buffer [BLOCKSIZE];
-    char path [PATH_MAX];
 
     // do preload
     /*ret = mpiServer_d2xpn(params,
@@ -516,7 +501,7 @@
     if (fd_orig == -1)
     {
         perror("Error on open operation\n");
-        return -1;
+        return;
     }
 
     char *protocol;
@@ -535,7 +520,7 @@
     {
         perror("Error on creat operation\n");
         close(fd_orig);
-        return -1;
+        return;
     }
 
 
@@ -550,7 +535,7 @@
             perror("Error on lseek operation\n");
             close(fd_orig);
             close(fd_dest);
-            return -1;
+            return;
         }
 
         read_bytes = read(fd_orig, &buffer, BLOCKSIZE);
@@ -558,7 +543,7 @@
             perror("Error on read operation\n");
             close(fd_orig);
             close(fd_dest);
-            return -1;
+            return;
         }
 
         if (read_bytes > 0)
@@ -568,7 +553,7 @@
                 perror("Error on read operation\n");
                 close(fd_orig);
                 close(fd_dest);
-                return -1;
+                return;
             }
         }
 
@@ -588,7 +573,7 @@
                                                         head->u_st_mpiServer_msg.op_preload.virtual_path,
                                                         head->u_st_mpiServer_msg.op_preload.storage_path,
                                                         ret);
-    return 0;
+    return;
   }
   
   void mpiServer_op_flush ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id)
@@ -598,7 +583,6 @@
 
     int BLOCKSIZE = head->u_st_mpiServer_msg.op_flush.block_size;
     char buffer [BLOCKSIZE];
-    char path [PATH_MAX];
 
     char *protocol;
     char *user;
@@ -617,7 +601,7 @@
     {
         perror("open: ");
         printf("Error on open operation on '%s'\n", file);
-        return -1;
+        return;
     }
 
 
@@ -627,7 +611,7 @@
     {
         perror("open: ");
         printf("Error on open operation on '%s'\n", head->u_st_mpiServer_msg.op_flush.storage_path);
-        return -1;
+        return;
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
@@ -639,7 +623,7 @@
         read_bytes = read(fd_orig, &buffer, BLOCKSIZE);
         if(read_bytes == -1){
             perror("Error on read operation\n");
-            return -1;
+            return;
         }
 
         if (read_bytes > 0)
@@ -649,7 +633,7 @@
             write_bytes = write(fd_dest, &buffer, read_bytes);
             if(write_bytes==-1){
                 perror("Error on read operation\n");
-                return -1;
+                return;
             }
         }
 
@@ -666,6 +650,28 @@
     debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_flush.virtual_path);
   }
 
+
+
+  //FS Metadata API
+
+  void  mpiServer_op_getnodename ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) //NEW
+  {
+    DEBUG_BEGIN() ;
+
+    char serv_name [HOST_NAME_MAX];
+
+    // Get server host name
+    gethostname(serv_name, HOST_NAME_MAX);
+
+    head = head; // Avoid unused parameter 
+
+    // show debug info
+    debug_info("[OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name);
+
+    mpiServer_comm_write_data(params, sd, (char *)&serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
+
+    DEBUG_END() ;
+  }
 
 
   void mpiServer_op_getid ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id)

@@ -35,6 +35,8 @@
     int flag = 0 ;
     char srv_name[1024] ;
 
+    memset(params, 0, sizeof(mpiClient_param_st)); // Initialize params 
+
     debug_info("[COMM] begin mpiClient_comm_init(...)\n") ;
 
     // MPI_Init
@@ -160,8 +162,8 @@
     }
 
     // Free locality bitmap
-    free(params->locality); //NEW
-
+    FREE_AND_NULL(params->locality); //NEW
+    
     // Disconnect
     ret = MPI_Comm_disconnect(&(params->server)) ;
     if (MPI_SUCCESS != ret) {
@@ -198,12 +200,12 @@
     int ret;
     int size;
     int data;
-    char cli_name  [1024]; //Other value??
-    char serv_name [1024]; //Other value??
+    char cli_name  [HOST_NAME_MAX];
+    char serv_name [HOST_NAME_MAX];
     MPI_Status status ;
 
     // Get client host name
-    gethostname(cli_name, sizeof(cli_name));
+    gethostname(cli_name, HOST_NAME_MAX);
 
     // Get number of servers
     MPI_Comm_remote_size(params->server, &size);
@@ -212,16 +214,18 @@
     memset(params->locality, 0, size);
 
     // Ask name of all servers
-    for (int i = 0; i < size; i++) { 
-      data = MPISERVER_GETNAME;
+    for (int i = 0; i < size; i++) {
+      data = MPISERVER_GETNODENAME;
       ret = MPI_Send( &data, 1, MPI_INT, i, 0, params->server );
       if (MPI_SUCCESS != ret) {
+        FREE_AND_NULL(params->locality) //NEW
         debug_warning("Server[?]: MPI_Send fails :-(") ;
         return -1;
       }
 
-      ret = MPI_Recv(serv_name, sizeof(serv_name), MPI_CHAR, i, 1, params->server, &status);
+      ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, i, 1, params->server, &status);
       if (MPI_SUCCESS != ret) {
+        FREE_AND_NULL(params->locality) //NEW
         debug_warning("Server[?]: MPI_Recv fails :-(") ;
         return -1;
       }
