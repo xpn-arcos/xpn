@@ -45,6 +45,7 @@
   #define MPISERVER_FINALIZE       16
   #define MPISERVER_GETID          17
   #define MPISERVER_DISCONNECT     18
+  #define MPISERVER_GETNAME        19
   #define MPISERVER_END            -1
 
 
