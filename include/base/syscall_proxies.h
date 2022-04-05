@@ -1,60 +1,60 @@
   // File API
-  int (*real_open)(char *, int, mode_t);
-  int (*real_open64)(char *, int, mode_t);
+  int dlsym_open(char *, int, mode_t);
+  int dlsym_open64(char *, int, mode_t);
 
-  int (*real_creat)(const char *, mode_t);
+  int dlsym_creat(const char *, mode_t);
 
-  int (*real_ftruncate)(int, off_t);
+  int dlsym_ftruncate(int, off_t);
 
-  ssize_t (*real_read)(int, void*, size_t);
+  ssize_t dlsym_read(int, void*, size_t);
 
-  ssize_t (*real_write)(int, const void*, size_t);
+  ssize_t dlsym_write(int, const void*, size_t);
 
-  off_t (*real_lseek)(int, off_t, int);
+  off_t dlsym_lseek(int, off_t, int);
 
-  int (*real_lxstat64)(int, const char *, struct stat64 *);
-  int (*real_xstat64)(int, const char *, struct stat64 *);
-  int (*real_fxstat64)(int, int, struct stat64 *);
-  int (*real_lstat)(int, char *, struct stat *);
-  int (*real_stat)(int, char *, struct stat *);
-  int (*real_fstat)(int, int, struct stat *);
+  int dlsym_lxstat64(int, const char *, struct stat64 *);
+  int dlsym_xstat64(int, const char *, struct stat64 *);
+  int dlsym_fxstat64(int, int, struct stat64 *);
+  int dlsym_lstat(int, char *, struct stat *);
+  int dlsym_stat(int, char *, struct stat *);
+  int dlsym_fstat(int, int, struct stat *);
 
-  int (*real_close)(int);
+  int dlsym_close(int);
 
-  int (*real_unlink)(char *);
+  int dlsym_unlink(char *);
 
   
 
   // Directory API
-  DIR* (*real_opendir)(char*);
-  DIR* (*real_opendir64)(char*);
+  DIR* dlsym_opendir(char*);
+  DIR* dlsym_opendir64(char*);
 
-  int (*real_mkdir)(char *, mode_t);
+  int dlsym_mkdir(char *, mode_t);
 
-  struct dirent * (*real_readdir)(DIR *);
+  struct dirent * dlsym_readdir(DIR *);
 
-  int (*real_closedir)(DIR*);
+  int dlsym_closedir(DIR*);
 
-  int (*real_rmdir)(char *);
+  int dlsym_rmdir(char *);
 
 
 
   // Proccess API
-  int (*real_fork)();
+  int dlsym_fork(void);
 
-  int (*real_dup)(int);
-  int (*real_dup2)(int, int);
+  int dlsym_dup(int);
+  int dlsym_dup2(int, int);
 
-  void (*real_exit)(int);
+  void dlsym_exit(int);
 
 
 
   // Manager API
-  int (*real_chdir)(char *);
+  int dlsym_chdir(char *);
 
-  int (*real_chmod)(char *, mode_t);
-  int (*real_fchmod)(int, mode_t);
+  int dlsym_chmod(char *, mode_t);
+  int dlsym_fchmod(int, mode_t);
 
-  int (*real_chown)(char *, uid_t, gid_t);
+  int dlsym_chown(char *, uid_t, gid_t);
 
-  int (*real_fcntl)(int, int, long);
+  int dlsym_fcntl(int, int, long);

@@ -134,14 +134,7 @@
 
     int fork()
     {
-        int ret;
-    #ifdef DEBUG_BYPASS_FORK
-        printf("antes de fork...\n");
-    #endif
-        //ret = fork();
-        int (*real_fork)();
-        real_fork = dlsym(RTLD_NEXT,"fork");
-        ret = real_fork();
+        int ret = dlsym_fork();
         if(0 == ret){
             // We want the children to be initialized
             xpn_adaptor_initCalled = 0;
@@ -214,42 +207,16 @@
     #endif
             if(fd<0)
             {
-                //ret = -1;
                 ret = fd;
-            } else{
+            } 
+            else{
                 fdret=fd+PLUSXPN;
                 ret = fdret;
             }
         }// If xpn
-        else
-        {
-            // Not an XPN partition. We must link with the standard library.
-    #ifdef DEBUG_BYPASS_OPEN
-            printf("El path es => %s\n",path);
-            printf("antes open\n");
-    #endif
-            //fd=open((char *)path,flags,mode);
-            int (*real_open)(char *, int, mode_t);
-            real_open = dlsym(RTLD_NEXT,"open");
-            fd = real_open((char *)path, flags, mode);
-    #ifdef DEBUG_BYPASS_OPEN
-            printf("xpn.bypass: open(%s,%o) devuelve %d\n",path,flags,fd);
-    #endif
-            if(fd<0){
-    #ifdef DEBUG_BYPASS_OPEN
-                printf("open = %d\n",fd);
-                perror("open");
-    #endif
-                ret = -1;
-            }
-    #ifdef DEBUG_BYPASS_OPEN
-            //printf("antes insertar en tabla\n");
-    #endif
-            fdret=fd;
-            if(fdret==-1) {
-                ret = -1;
-            }
-            ret = fdret;
+        else // Not an XPN partition. We must link with the standard library.
+        {   
+            return dlsym_open(path, flags, mode);
         }// Else
     #ifdef DEBUG_BYPASS_OPEN
         printf("xpn.bypass: bypass->open(%s,%o,%o) devuelve %d\n\n",path,flags,mode,ret);
@@ -283,35 +250,12 @@
             } else{
                 fdret=fd+PLUSXPN;
             }
-            return(fdret);
+
+            return fdret;
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-    #ifdef DEBUG_BYPASS_OPEN64
-            printf("El path es => %s\n",path+strlen(xpn_adaptor_partition_prefix));
-            printf("antes open64\n");
-    #endif
-            //fd=open64((char *)path,flags,mode);
-            
-            int (*real_open64)(char *, int, mode_t);
-            real_open64 = dlsym(RTLD_NEXT,"open64");
-            fd = real_open64((char *)path, flags, mode);
-
-            if(fd<0){
-    #ifdef DEBUG_BYPASS_OPEN64
-                printf("open64 = %d\n",fd);
-                perror("open64");
-    #endif
-                return(-1);
-            }
-    #ifdef DEBUG_BYPASS_OPEN64
-            printf("antes insertar en tabla\n");
-    #endif
-            fdret=fd;
-            if(fdret==-1) {
-                return(-1);
-            }
-            return(fdret);
+            return dlsym_open64(path, flags, mode);
         }// Else
     }
     
@@ -333,11 +277,7 @@
         }
         else // Not an XPN partition. We must link with the standard library
         {
-            //ret=close(fd);
-            int (*real_close)(int);
-            real_close = dlsym(RTLD_NEXT,"close");
-            ret = real_close(fd);
-            return(ret);
+            return dlsym_close(fd);
         }// Else
     }
 
@@ -376,35 +316,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-    #ifdef DEBUG_BYPASS_CREAT
-            printf("NO ES EXPAND!\n");
-    #endif
-            //fd=creat(path,mode);
-            int (*real_creat)(const char *, mode_t);
-            real_creat = dlsym(RTLD_NEXT,"creat");
-            fd = real_creat(path,mode);
-    #ifdef DEBUG_BYPASS_CREAT
-            printf("fd=creat(path,mode) devuelve %d\n",fd);
-    #endif
-            if(fd<0)
-            {
-    #ifdef DEBUG_BYPASS_CREAT
-                printf("new_creat devuelve fd=%d\n",fd);
-    #endif
-                return(-1);
-            }
-
-            fdret=fd;
-
-            if(fdret==-1)
-            {
-    #ifdef DEBUG_BYPASS_CREAT
-                printf("(No es xpn) fdret=-1\n");
-    #endif
-                return(-1);
-            }
-
-            return(fdret);
+            return dlsym_creat(path,mode);
         } // Else
     }
 
@@ -423,10 +335,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(chdir((char *)path));
-            int (*real_chdir)(char *);
-            real_chdir = dlsym(RTLD_NEXT,"chdir");
-            return real_chdir((char *)path);
+            return dlsym_chdir((char *)path);
         } // Else
     }
 
@@ -478,13 +387,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-    #ifdef DEBUG_BYPASS_MKDIR
-            printf("antes de mkdir de linux...\n");
-    #endif
-            //return(mkdir((char *)path,mode));
-            int (*real_mkdir)(char *, mode_t);
-            real_mkdir = dlsym(RTLD_NEXT,"mkdir");
-            return real_mkdir((char *)path,mode);
+            return dlsym_mkdir((char *)path,mode);
         } // Else
     }
 
@@ -508,10 +411,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(rmdir((char *)path));
-            int (*real_rmdir)(char *);
-            real_rmdir = dlsym(RTLD_NEXT,"rmdir");
-            return real_rmdir((char *)path);
+            return dlsym_rmdir((char *)path);
         } // Else
     }
 
@@ -530,10 +430,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(unlink((char *)path));
-            int (*real_unlink)(char *);
-            real_unlink = dlsym(RTLD_NEXT,"unlink");
-            return real_unlink((char *)path);
+            return dlsym_unlink((char *)path);
         } // Else
     }
 
@@ -552,15 +449,11 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(chown((char *)path, owner, group));
-            int (*real_chown)(char *, uid_t, gid_t);
-            real_chown = dlsym(RTLD_NEXT,"chown");
-            return real_chown((char *)path, owner, group);
+            return dlsym_chown((char *)path, owner, group);
         } // Else
     }
 
     int ftruncate(int fd, off_t length)
-
     {
 
     #ifdef DEBUG_BYPASS_FTRUNCATE
@@ -571,14 +464,11 @@
 
         if(fd>=PLUSXPN)
         {
-            return(xpn_ftruncate(fd-PLUSXPN,length));
+            return xpn_ftruncate(fd-PLUSXPN,length);
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(ftruncate(fd, length));
-            int (*real_ftruncate)(int, off_t);
-            real_ftruncate = dlsym(RTLD_NEXT,"ftruncate");
-            return real_ftruncate(fd, length);
+            return dlsym_ftruncate(fd, length);
         } // Else
     }
 
@@ -597,10 +487,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(dup(fd));
-            int (*real_dup)(int);
-            real_dup = dlsym(RTLD_NEXT,"dup");
-            return real_dup(fd);
+            return dlsym_dup(fd);
         } // Else
     }
 
@@ -619,10 +506,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(dup2(fd,fd2));
-            int (*real_dup2)(int, int);
-            real_dup2 = dlsym(RTLD_NEXT,"dup2");
-            return real_dup2(fd, fd2);
+            return dlsym_dup2(fd, fd2);
         } // Else
     }
 
@@ -666,28 +550,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-    #ifdef DEBUG_BYPASS_OPENDIR
-            printf("no xpn opendir...\n");
-    #endif
-            //ret=(DIR *) opendir((char *)dirname);
-            DIR* (*real_opendir)(char*);
-            real_opendir = dlsym(RTLD_NEXT,"opendir");
-            ret = real_opendir((char *)dirname);
-
-            /*
-            memcpy(&fd, ret,sizeof(int));
-    #ifdef DEBUG_BYPASS_OPENDIR
-            printf("no xpn: opendir...fd=%d\n",fd);
-            printf("no xpn: opendir...ret=%d\n",*ret);
-    #endif
-            fdret=fd;
-            if(fdret==-1)
-            {
-                return(NULL);
-            }
-            memcpy(ret,&fdret,sizeof(int));
-            */
-            return ret;
+            return dlsym_opendir((char *)dirname);
         } // Else
     }
 
@@ -736,22 +599,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //memcpy(dirp,&(fdstable[fd]),sizeof(int));
-            //ret=readdir64(dirp);
-            DIR* (*real_opendir64)(char*);
-            real_opendir64 = dlsym(RTLD_NEXT,"readdir64");
-            ret = real_opendir64(dirp);
-    #ifdef DEBUG_BYPASS_READDIR64
-            printf("despues del autentico readdir()...\n");
-            printf("No es xpn: readdir devuelve %d\n",&ret);
-    #endif
-            //memcpy(dirp,&fd,sizeof(int));
-    #ifdef DEBUG_BYPASS_READDIR64
-            printf("despues de memcpy()...\n");
-    #endif
-    #ifdef DEBUG_BYPASS_READDIR64
-            printf("No es xpn: readdir devuelve %s\n",ret->d_name);
-    #endif
+            return dlsym_opendir(dirp);
         } // Else
         return(ret);
     }
@@ -792,23 +640,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //memcpy(dirp,&(fdstable[fd]),sizeof(int));
-            //ret=readdir(dirp);
-            struct dirent * (*real_readdir)(DIR *);
-            real_readdir = dlsym(RTLD_NEXT,"readdir");
-            ret = real_readdir(dirp);
-
-    #ifdef DEBUG_BYPASS_READDIR
-            printf("despues del autentico readdir()...\n");
-            //printf("No es xpn: readdir devuelve %s\n",ret->d_name);
-    #endif
-            //memcpy(dirp,&fd,sizeof(int));
-    #ifdef DEBUG_BYPASS_READDIR
-            printf("despues de memcpy() 2...\n");
-    #endif
-    #ifdef DEBUG_BYPASS_READDIR
-            //printf("No es xpn: readdir devuelve %s\n",ret->d_name);
-    #endif
+            return dlsym_readdir(dirp);
         } // Else
         return ret;
     }
@@ -845,22 +677,40 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //temp = fdstable[fd];
-            //memcpy(dirp, &temp,sizeof(int));
-            //ret=closedir(dirp);
-            int (*real_closedir)(DIR*);
-            real_closedir = dlsym(RTLD_NEXT,"closedir");
-            ret = real_closedir(dirp);
-
-            /*
-            if(ret==0)
-            {
-                fdstable[fd]=-1;
-            }
-            */
-            return ret;
+            return dlsym_closedir(dirp);
         } // Else
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // For the moment we intercept __*stat64
 
@@ -1149,6 +999,34 @@
         return ret;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     int chmod(const char *path, mode_t mode)
     {
 
@@ -1164,10 +1042,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(chmod((char *)path, mode));
-            int (*real_chmod)(char *, mode_t);
-            real_chmod = dlsym(RTLD_NEXT,"chmod");
-            return real_chmod((char *)path, mode);
+            return dlsym_chmod((char *)path, mode);
         } // Else
     }
 
@@ -1186,10 +1061,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(fchmod(fd,mode));
-            int (*real_fchmod)(int, mode_t);
-            real_fchmod = dlsym(RTLD_NEXT,"fchmod");
-            return real_fchmod(fd,mode);
+            return dlsym_fchmod(fd,mode);
         } // Else
     }
 
@@ -1214,10 +1086,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //ret = read(fd,buf, nbyte);
-            ssize_t (*real_read)(int, void*, size_t);
-            real_read = dlsym(RTLD_NEXT,"read");
-            ret = real_read(fd,buf, nbyte);
+            return dlsym_read(fd,buf, nbyte);
         } // Else
         return ret;
     }
@@ -1239,10 +1108,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(write(fd, (void *)buf, nbyte));
-            ssize_t (*real_write)(int, const void*, size_t);
-            real_write = dlsym(RTLD_NEXT,"write");
-            ret = real_write(fd, buf, nbyte);
+            return dlsym_write(fd, buf, nbyte);
         } // Else
 
         return ret;
@@ -1263,10 +1129,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //return(lseek(fd,offset, whence));
-            off_t (*real_lseek)(int, off_t, int);
-            real_lseek = dlsym(RTLD_NEXT,"lseek");
-            return real_lseek(fd,offset, whence);
+            return dlsym_lseek(fd,offset, whence);
         } // Else
     }
 
@@ -1294,13 +1157,10 @@
     int fcntl(int fd, int cmd, long arg){
         //printf("Antes de pachaaa\n");
         if(fd >= PLUSXPN){
-            printf("pachaaa\n");
+            //TODO
             return 0;
         } else {
-            //return(fcntl(fd, cmd, arg));
-            int (*real_fcntl)(int, int, long);
-            real_fcntl = dlsym(RTLD_NEXT,"fcntl");
-            return real_fcntl(fd, cmd, arg);
+            return dlsym_fcntl(fd, cmd, arg);
         }
     }
 
@@ -1312,7 +1172,8 @@
 
 
 
-    void exit(int status){
+    void exit(int status)
+    {
         //printf("EXIT BYPASS\n");
 
         if (xpn_adaptor_initCalled == 1)
@@ -1320,10 +1181,9 @@
             xpn_destroy();
         }
         
-        void (*real_exit)(int);
-        real_exit = dlsym(RTLD_NEXT,"exit");
-        real_exit(status);
+        dlsym_exit(status);
     }
+
 
     int MPI_Init (int *argc, char ***argv)
     {
