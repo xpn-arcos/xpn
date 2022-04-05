@@ -209,21 +209,6 @@
 
   //File API
 
-  void mpiServer_op_creat ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
-  {
-    int fd;
-    char *s;
-
-    // do creat
-    s = head->u_st_mpiServer_msg.op_creat.path;
-    fd = mpiServer_file_creat(params, s, 0777) ;
-
-    mpiServer_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id) ;
-
-    // show debug info
-    debug_info("[OPS] (ID=%s) CREAT(%s)=%d\n", params->srv_name, s, fd);
-  }
-
   void mpiServer_op_open ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
   {
     int fd;
@@ -237,6 +222,21 @@
 
     // show debug info
     debug_info("[OPS] (ID=%s) OPEN(%s)=%d\n", params->srv_name, s, fd);
+  }
+
+  void mpiServer_op_creat ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
+  {
+    int fd;
+    char *s;
+
+    // do creat
+    s = head->u_st_mpiServer_msg.op_creat.path;
+    fd = mpiServer_file_creat(params, s, 0777) ;
+
+    mpiServer_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id) ;
+
+    // show debug info
+    debug_info("[OPS] (ID=%s) CREAT(%s)=%d\n", params->srv_name, s, fd);
   }
 
   void mpiServer_op_read ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
@@ -436,7 +436,6 @@
   
 
   //Directory API
-
   void mpiServer_op_mkdir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
   {
     int ret;
@@ -465,23 +464,6 @@
     // show debug info
     debug_info("[OPS] (ID=%s) RMDIR(%s) \n", params->srv_name, s);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -656,22 +638,7 @@
     debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpiServer_msg.op_flush.virtual_path);
   }
 
-  
 
-
-
-  
-
-  
-
-
-
-
- 
-
-  
-
-  
 
   void mpiServer_op_getid ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id)
   {

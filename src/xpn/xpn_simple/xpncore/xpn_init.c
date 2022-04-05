@@ -152,7 +152,10 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
         memset(xpn_parttable[i].data_serv, 0, xpn_parttable[i].data_nserv*sizeof(struct nfi_server));
 
-        for(j=0;j<xpn_parttable[i].data_nserv;j++){         
+        for(j=0;j<xpn_parttable[i].data_nserv;j++){  
+
+            //TODO: AQUI??
+
             res = XpnGetServer(fd, &(xpn_parttable[i]), &(xpn_parttable[i].data_serv[j]), XPN_DATA_SERVER);
             if(res<0){
                 XpnPartitionClose(fd);
