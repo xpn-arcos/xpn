@@ -217,6 +217,7 @@
   }
 
 
+
   //Connection API
 
   void  mpiServer_op_getname ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) //NEW

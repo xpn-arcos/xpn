@@ -220,10 +220,10 @@
         return -1;
       }
 
-      ret = MPI_Recv(serv_name, sizeof(serv_name), MPI_CHAR, i, 0, params->server, &status);
+      ret = MPI_Recv(serv_name, sizeof(serv_name), MPI_CHAR, i, 1, params->server, &status);
       if (MPI_SUCCESS != ret) {
-          debug_warning("Server[?]: MPI_Recv fails :-(") ;
-          return -1;
+        debug_warning("Server[?]: MPI_Recv fails :-(") ;
+        return -1;
       }
 
       if (strcmp(cli_name, serv_name) == 0)

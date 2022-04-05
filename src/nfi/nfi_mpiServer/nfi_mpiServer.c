@@ -326,6 +326,13 @@
               return -1 ;
           }
 
+          ret = mpiClient_comm_locality (&(server_aux->params)); //NEW
+          if (ret < 0) {
+              free(serv->ops);
+              free(server_aux);
+              return -1 ;
+          }
+
           //serv->protocol = MPISERVER;
 
           dbgnfi_info("[NFI] nfi_mpiServer_init(ID=%s): end\n",server_aux->id);
