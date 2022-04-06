@@ -1,3 +1,25 @@
+
+  /*
+   *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *
+   *  This file is part of mpiServer.
+   *
+   *  mpiServer is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  mpiServer is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with mpiServer.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */ 
+
+
   /* ... Include / Inclusion ........................................... */
 
   #include "base/syscall_poxis.h"
@@ -11,7 +33,7 @@
   int (*real_open)(char *, int, mode_t) = NULL;
   int dlsym_open(char *path, int flags, mode_t mode)
   {
-    debug_info("dlsym_open: Before open\n");
+    debug_info("dlsym_open: before open...\n");
     debug_info("dlsym_open: Path => %s\n",path);
 
     if (real_open == NULL){
@@ -25,10 +47,11 @@
     return fd;
   }
 
+
   int (*real_open64)(char *, int, mode_t) = NULL;
   int dlsym_open64(char *path, int flags, mode_t mode)
   {
-    debug_info("dlsym_open64: Before open\n");
+    debug_info("dlsym_open64: before open64...\n");
     debug_info("dlsym_open64: Path => %s\n",path);
 
     if (real_open64 == NULL){
@@ -46,7 +69,7 @@
   int (*real_creat)(const char *, mode_t) = NULL;
   int dlsym_creat(const char *path, mode_t mode)
   {
-    debug_info("dlsym_creat: Before creat\n");
+    debug_info("dlsym_cleat: before creat...\n");
     debug_info("dlsym_creat: Path => %s\n",path);
 
     if (real_creat == NULL){
@@ -64,7 +87,7 @@
   int (*real_ftruncate)(int, off_t) = NULL;
   int dlsym_ftruncate(int fd, off_t length)
   {
-    debug_info("Before ftruncate....\n");
+    debug_info("dlsym_ftruncate: before ftruncate...\n");
 
     if (real_ftruncate == NULL){
         real_ftruncate = dlsym(RTLD_NEXT,"ftruncate");
@@ -77,7 +100,7 @@
   ssize_t (*real_read)(int, void*, size_t) = NULL;
   ssize_t dlsym_read(int fd, void *buf, size_t nbyte)
   {
-    debug_info("Before read....\n");
+    debug_info("dlsym_read: before read...\n");
 
     if (real_read == NULL){
         real_read = dlsym(RTLD_NEXT,"read");
@@ -90,7 +113,7 @@
   ssize_t (*real_write)(int, const void*, size_t) = NULL;
   ssize_t dlsym_write(int fd, void *buf, size_t nbyte)
   {
-    debug_info("Before write....\n");
+    debug_info("dlsym_write: before write...\n");
 
     if (real_write == NULL){
         real_write = dlsym(RTLD_NEXT,"write");
@@ -103,7 +126,7 @@
   off_t (*real_lseek)(int, off_t, int) = NULL;
   off_t dlsym_lseek(int fd, off_t offset, int whence)
   {
-    debug_info("Before lseek....\n");
+    debug_info("dlsym_lseek: before lseek...\n");
 
     if (real_lseek == NULL){
         real_lseek = dlsym(RTLD_NEXT,"lseek");
@@ -113,52 +136,88 @@
   }
 
 
-
-
-
-
-
-
-
-  int dlsym_lxstat64(int, const char *, struct stat64 *)
+  int (*real_lxstat64)(int, const char *, struct stat64 *) = NULL;
+  int dlsym_lxstat64(int ver, const char *path, struct stat64 *buf)
   {
+    debug_info("dlsym_lxstat64: before _lxstat64...\n");
 
-  }
+    if (real_lxstat64 == NULL){
+        real_lxstat64 = dlsym(RTLD_NEXT,"__lxstat64");
+    }
 
-  int dlsym_xstat64(int, const char *, struct stat64 *)
-  {
-
-  }
-
-  int dlsym_fxstat64(int, int, struct stat64 *)
-  {
-
-  }
-
-  int dlsym_lstat(int, char *, struct stat *)
-  {
-
-  }
-
-  int dlsym_stat(int, char *, struct stat *)
-  {
-
-  }
-
-  int dlsym_fstat(int, int, struct stat *)
-  {
-
+    return real_lxstat64(ver,(char *)path, buf);
   }
 
 
+  int (*real_xstat64)(int, const char *, struct stat64 *) = NULL;
+  int dlsym_xstat64(int ver, const char *path, struct stat64 *buf)
+  {
+    debug_info("dlsym_xstat64: before _xstat64...\n");
+
+    if (real_xstat64 == NULL){
+        real_xstat64 = dlsym(RTLD_NEXT,"__xstat64");
+    }
+
+    return real_xstat64(ver,(char *)path, buf);
+  }
 
 
+  int (*real_fxstat64)(int, int, struct stat64 *) = NULL;
+  int dlsym_fxstat64(int ver, int fd, struct stat64 *buf)
+  {
+    debug_info("dlsym_fxstat64: before _fxstat64...\n");
+
+    if (real_fxstat64 == NULL){
+        real_fxstat64 = dlsym(RTLD_NEXT,"__xstat64");
+    }
+
+    return real_fxstat64(ver,fd, buf);
+  }
+
+
+  int (*real_lstat)(int, char *, struct stat *) = NULL;
+  int dlsym_lstat(int ver, const char *path, struct stat *buf)
+  {
+    debug_info("dlsym_lstat: before _lstat...\n");
+
+    if (real_lstat == NULL){
+        real_lstat = dlsym(RTLD_NEXT,"__lxstat");
+    }
+
+    return real_lstat(ver,fd, buf);
+  }
+
+
+  int (*real_stat)(int, char *, struct stat *) = NULL;
+  int dlsym_stat(int ver, const char *path, struct stat *buf)
+  {
+    debug_info("dlsym_stat: before _lxstat...\n");
+
+    if (real_stat == NULL){
+        real_stat = dlsym(RTLD_NEXT,"__xstat");
+    }
+
+    return real_stat(ver,fd, buf);
+  }
+
+
+  int (*real_fstat)(int, int, struct stat *) = NULL;
+  int dlsym_fstat(int ver, int fd, struct stat *buf)
+  {
+    debug_info("dlsym_fstat: before _fxstat...\n");
+
+    if (real_fstat == NULL){
+        real_fstat = dlsym(RTLD_NEXT,"__fxstat");
+    }
+
+    return real_fstat(ver,fd, buf);
+  }
 
 
   int (*real_close)(int) = NULL;
   int dlsym_close(int fd)
   {
-    debug_info("Before close....\n");
+    debug_info("dlsym_close: before close...\n");
 
     if (real_close == NULL){
         real_close = dlsym(RTLD_NEXT,"close");
@@ -182,7 +241,6 @@
 
 
   
-
   // Directory API
 
   DIR* (*real_opendir)(char*) = NULL;
@@ -222,6 +280,7 @@
     return real_mkdir((char *)path,mode);
   }
 
+
   struct dirent * (*real_readdir)(DIR *) = NULL;
   struct dirent * dlsym_readdir(DIR *dirp)
   {
@@ -233,6 +292,7 @@
     
     return real_readdir(dirp);
   }
+
 
   int (*real_closedir)(DIR*) = NULL;
   int dlsym_closedir(DIR*)
@@ -287,6 +347,7 @@
     
     return real_dup(fd);
   }
+
 
   int (*real_dup2)(int, int) = NULL;
   int dlsym_dup2(int fd, int fd2)

@@ -681,37 +681,6 @@
         } // Else
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // For the moment we intercept __*stat64
 
     //int lstat64(const char *path, struct stat64 *buf)
@@ -764,10 +733,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //ret = __lxstat64(ver,(char *)path, buf);
-            int (*real_lxstat64)(int, const char *, struct stat64 *);
-            real_lxstat64 = dlsym(RTLD_NEXT,"__lxstat64");
-            ret = real_lxstat64(ver,(char *)path, buf);
+            return dlsym_lxstat64(ver,(char *)path, buf);
         } // Else
     #ifdef DEBUG_BYPASS_LSTAT64
         printf("lstat64...devuelve %d\n",ret);
@@ -823,11 +789,7 @@
             }
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
-        {
-            //ret = __xstat64(ver,(char *)path, buf);
-            int (*real_xstat64)(int, const char *, struct stat64 *);
-            real_xstat64 = dlsym(RTLD_NEXT,"__xstat64");
-            ret = real_xstat64(ver,(char *)path, buf);
+            return dlsym_xstat64(ver,(char *)path, buf);
         } // Else
     #ifdef DEBUG_BYPASS_LSTAT64
         printf("stat64...devuelve %d\n",ret);
@@ -884,10 +846,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //ret = __fxstat64(ver,fd,buf);
-            int (*real_fxstat64)(int, int, struct stat64 *);
-            real_fxstat64 = dlsym(RTLD_NEXT,"__xstat64");
-            ret = real_fxstat64(ver,fd, buf);
+            return dlsym_fxstat64(ver,fd, buf);
         } // Else
     #ifdef DEBUG_BYPASS_FSTAT64
         printf("antes de devolver %d... \n",ret);
@@ -916,13 +875,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //ret = lstat((char *)path, buf);
-            int (*real_lstat)(int, char *, struct stat *);
-            real_lstat = dlsym(RTLD_NEXT,"__lxstat");
-            ret = real_lstat(ver,(char *)path, buf);
-    #ifdef DEBUG_BYPASS_LSTAT
-            printf("NO XPN:lstat devuelve %d\n",ret);
-    #endif
+            return dlsym_lstat(ver,(char *)path, buf);
         } // Else
         return ret;
     }
@@ -961,18 +914,11 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-    #ifdef DEBUG_BYPASS_STAT
-            printf("intercept.stat NO es XPN...");
-            printf("stat...path=>%s\n",path);
-    #endif
-            //ret = stat((char *)path, buf);
-            int (*real_stat)(int, char *, struct stat *);
-            real_stat = dlsym(RTLD_NEXT,"__xstat");
-            ret = real_stat(ver,(char *)path, buf);
-            //return(syscall(18,path,buf));
+            return dlsym_stat(ver,(char *)path, buf);
         } // Else
         return ret;
     }
+
 
     //int fstat(int fd, struct stat *buf) //old
     int __fxstat(int ver, int fd, struct stat *buf)
@@ -991,11 +937,9 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            //ret = fstat(fd,buf);
-            int (*real_fstat)(int, int, struct stat *);
-            real_fstat = dlsym(RTLD_NEXT,"__fxstat");
-            ret = real_fstat(ver,fd,buf);
+            return dlsym_fstat(ver,fd,buf);
         } // Else
+
         return ret;
     }
 
