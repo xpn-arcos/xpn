@@ -6,20 +6,21 @@
 
 //#include <fcntl.h> //comment
 //#include <stdarg.h>
-#include <dlfcn.h>
-#include <sys/stat.h>
-
-
 //#include "xpn_adaptor.h"
 //#include <xpn.h>
-#include "xpn.h" //added
-#include "syscall_proxies.h"
 //#include <expand.h>
 //#include "xpn_init.h"
 //#include "xpn_rw.h"
 //#include "xpn_open.h"
 //#include "xpn_dir.h"
 //#include "xpn_opendir.h"
+
+#include <dlfcn.h>
+#include <sys/stat.h>
+
+#include "xpn.h"
+#include "syscall_proxies.h"
+
 #include <dirent.h>
 #include <string.h>
 #include <stdlib.h>
@@ -78,17 +79,81 @@ int fdsdirtable[MAX_DIRS];
 int open(const char *path, int flags);
 int open(const char *path, int flags, mode_t mode);
 */
+
+
+// File API
+
 //int open(const char *path, int flags, ...); //comment
 int open(const char *path, int flags, mode_t mode);
-
 //int open64(const char *path, int flags, ...); //comment
 int open64(const char *path, int flags, mode_t mode);
 
-int close(int fd);
-
 int creat(const char *path, mode_t mode);
 
+int ftruncate(int fildes, off_t length);
+
+ssize_t read(int fildes, void *buf, size_t nbyte);
+ssize_t write(int fildes, const void *buf, size_t nbyte);
+
+off_t lseek(int fildes, off_t offset, int whence);
+
+//int lstat64(const char *path, struct stat64 *buf); //old
+int __lxstat64(int ver, const char *path, struct stat64 *buf);
+//int stat64(const char *path, struct stat64 *buf); //old
+int __xstat64(int ver, const char *path, struct stat64 *buf);
+//int fstat64(int fildes, struct stat64 *buf); //old
+int __fxstat64(int ver, int fildes, struct stat64 *buf);
+//int lstat(const char *path, struct stat *buf); //old
+int __lxstat(int ver, const char *path, struct stat *buf);
+//int stat(const char *path, struct stat *buf); //old
+int __xstat(int ver, const char *path, struct stat *buf);
+//int fstat(int fildes, struct stat *buf); //old
+int __fxstat(int ver, int fd, struct stat *buf);
+
+int close(int fd);
+
+int unlink(const char *path);
+
+
+
+// Directory API
+
+DIR *opendir(const char *dirname);
+
+int mkdir(const char *path, mode_t mode);
+
+struct dirent *readdir(DIR *dirp);
+struct dirent64 *readdir64(DIR *dirp);
+
+int closedir(DIR *dirp);
+
+int rmdir(const char *path);
+
+
+
+// Proccess API
+
+int fork();
+
+int dup(int fildes);
+int dup2(int fildes, int fildes2);
+
+void exit(int status);
+
+
+
+// Manager API
+
 int chdir(const char *path);
+
+int chmod(const char *path, mode_t mode);
+
+int fchmod(int fildes, mode_t mode);
+
+int chown(const char *path, uid_t owner, gid_t group);
+
+int fcntl(int fd, int cmd, long arg);
+
 
 /**************************************************
  GETCWD TIENE MUCHA CHICHA...PA LUEGO
@@ -99,60 +164,7 @@ char *getcwd(char *path, size_t size);
 **********************************************
 **********************************************/
 
-int mkdir(const char *path, mode_t mode);
-
-int rmdir(const char *path);
-
-int unlink(const char *path);
-
-int chown(const char *path, uid_t owner, gid_t group);
-
-int ftruncate(int fildes, off_t length);
-
-int dup(int fildes);
-
-int dup2(int fildes, int fildes2);
-
-DIR *opendir(const char *dirname);
-
-struct dirent *readdir(DIR *dirp);
-
-int closedir(DIR *dirp);
-
-
-//int lstat64(const char *path, struct stat64 *buf); //old
-int __lxstat64(int ver, const char *path, struct stat64 *buf);
-
-//int stat64(const char *path, struct stat64 *buf); //old
-int __xstat64(int ver, const char *path, struct stat64 *buf);
-
-//int fstat64(int fildes, struct stat64 *buf); //old
-int __fxstat64(int ver, int fildes, struct stat64 *buf);
-
-
-//int lstat(const char *path, struct stat *buf); //old
-int __lxstat(int ver, const char *path, struct stat *buf);
-
-//int stat(const char *path, struct stat *buf); //old
-int __xstat(int ver, const char *path, struct stat *buf);
-
-//int fstat(int fildes, struct stat *buf); //old
-int __fxstat(int ver, int fd, struct stat *buf);
-
-
-int chmod(const char *path, mode_t mode);
-
-int fchmod(int fildes, mode_t mode);
-
-ssize_t read(int fildes, void *buf, size_t nbyte);
-
-ssize_t write(int fildes, const void *buf, size_t nbyte);
-
-off_t lseek(int fildes, off_t offset, int whence);
-
 //int utime(const char *path, struct utimbuf *times);
 
 
 #endif
-
-
