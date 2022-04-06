@@ -216,7 +216,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library.
         {   
-            return dlsym_open(path, flags, mode);
+            return dlsym_open((char *)path, flags, mode);
         }// Else
     #ifdef DEBUG_BYPASS_OPEN
         printf("xpn.bypass: bypass->open(%s,%o,%o) devuelve %d\n\n",path,flags,mode,ret);
@@ -255,7 +255,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            return dlsym_open64(path, flags, mode);
+            return dlsym_open64((char *)path, flags, mode);
         }// Else
     }
     
@@ -599,11 +599,10 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            return dlsym_opendir(dirp);
+            return dlsym_readdir64(dirp);
         } // Else
         return(ret);
     }
-    
 
     struct dirent *readdir(DIR *dirp)
     {
@@ -789,6 +788,7 @@
             }
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
+        {    
             return dlsym_xstat64(ver,(char *)path, buf);
         } // Else
     #ifdef DEBUG_BYPASS_LSTAT64
@@ -943,34 +943,6 @@
         return ret;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     int chmod(const char *path, mode_t mode)
     {
 
@@ -1052,7 +1024,7 @@
         }// If xpn
         else // Not an XPN partition. We must link with the standard library
         {
-            return dlsym_write(fd, buf, nbyte);
+            return dlsym_write(fd, (char *) buf, nbyte);
         } // Else
 
         return ret;
@@ -1108,14 +1080,6 @@
         }
     }
 
-
-
-
-
-
-
-
-
     void exit(int status)
     {
         //printf("EXIT BYPASS\n");
@@ -1127,6 +1091,12 @@
         
         dlsym_exit(status);
     }
+
+
+
+
+
+
 
 
     int MPI_Init (int *argc, char ***argv)

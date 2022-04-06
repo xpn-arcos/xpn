@@ -208,6 +208,8 @@ am__libxpn_a_SOURCES_DIST = ../src/base/darray.c \
 	../src/base/string_misc.c \
 	../src/base/time_misc.c \
 	../src/base/urlstr.c \
+	../src/base/syscall_proxies.c \
+	../src/base/utils.c \
 	../src/nfi/common/nfi_worker.c \
 	../src/nfi/nfi_local/nfi_local.c \
 	../src/nfi/nfi_local/nfi_local_err.c \
@@ -336,7 +338,9 @@ am__objects_1 = ../src/base/darray.$(OBJEXT) \
 	../src/base/debug_msg.$(OBJEXT) \
 	../src/base/string_misc.$(OBJEXT) \
 	../src/base/time_misc.$(OBJEXT) \
-	../src/base/urlstr.$(OBJEXT)
+	../src/base/urlstr.$(OBJEXT) \
+	../src/base/syscall_proxies.$(OBJEXT) \
+	../src/base/utils.$(OBJEXT)
 am__objects_2 = ../src/nfi/common/nfi_worker.$(OBJEXT)
 am__objects_3 = ../src/nfi/nfi_local/nfi_local.$(OBJEXT) \
 	../src/nfi/nfi_local/nfi_local_err.$(OBJEXT)
@@ -499,9 +503,11 @@ am__depfiles_remade = ../src/base/$(DEPDIR)/darray.Po \
 	../src/base/$(DEPDIR)/dtable.Po \
 	../src/base/$(DEPDIR)/math_misc.Po \
 	../src/base/$(DEPDIR)/string_misc.Po \
+	../src/base/$(DEPDIR)/syscall_proxies.Po \
 	../src/base/$(DEPDIR)/time_misc.Po \
 	../src/base/$(DEPDIR)/trace_msg.Po \
 	../src/base/$(DEPDIR)/urlstr.Po \
+	../src/base/$(DEPDIR)/utils.Po \
 	../src/nfi/common/$(DEPDIR)/nfi_worker.Po \
 	../src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po \
 	../src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po \
@@ -660,6 +666,8 @@ am__noinst_HEADERS_DIST = ../include/all_system.h \
 	../include/base/trace_msg.h \
 	../include/base/trace_tags.h \
 	../include/base/urlstr.h \
+	../include/base/syscall_proxies.h \
+	../include/base/utils.h \
 	../include/nfi/nfi.h \
 	../include/nfi/nfi_lib.h \
 	../include/nfi/nfi_worker.h \
@@ -770,7 +778,7 @@ AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AUTOCONF = ${SHELL} /local_test/expand/config/missing autoconf
 AUTOHEADER = ${SHELL} /local_test/expand/config/missing autoheader
-AUTOM4TE = /usr/bin/autom4te
+AUTOM4TE = ${SHELL} /local_test/expand/config/missing autom4te
 AUTOMAKE = ${SHELL} /local_test/expand/config/missing automake-1.16
 AWK = mawk
 CC = /opt/software/install-mpich/bin/mpicc
@@ -977,7 +985,9 @@ BASE_HEADER = ../include/base/base_lib.h \
 			../include/base/time_misc.h \
 			../include/base/trace_msg.h \
 			../include/base/trace_tags.h \
-			../include/base/urlstr.h
+			../include/base/urlstr.h \
+			../include/base/syscall_proxies.h \
+			../include/base/utils.h
 
 NFI_LOCAL_HEADER = ../include/nfi/nfi_local/local_lib.h \
 			../include/nfi/nfi_local/nfi_local_err.h \
@@ -1115,7 +1125,9 @@ BASE_OBJECTS = ../src/base/darray.c \
 			../src/base/debug_msg.c \
 			../src/base/string_misc.c \
 			../src/base/time_misc.c \
-			../src/base/urlstr.c
+			../src/base/urlstr.c \
+			../src/base/syscall_proxies.c \
+			../src/base/utils.c
 
 NFI_COMMON_OBJECTS = ../src/nfi/common/nfi_worker.c
 NFI_LOCAL_OBJECTS = ../src/nfi/nfi_local/nfi_local.c \
@@ -1324,6 +1336,12 @@ clean-libLIBRARIES:
 	../src/base/$(am__dirstamp) \
 	../src/base/$(DEPDIR)/$(am__dirstamp)
 ../src/base/urlstr.$(OBJEXT):  \
+	../src/base/$(am__dirstamp) \
+	../src/base/$(DEPDIR)/$(am__dirstamp)
+../src/base/syscall_proxies.$(OBJEXT):  \
+	../src/base/$(am__dirstamp) \
+	../src/base/$(DEPDIR)/$(am__dirstamp)
+../src/base/utils.$(OBJEXT):  \
 	../src/base/$(am__dirstamp) \
 	../src/base/$(DEPDIR)/$(am__dirstamp)
 ../src/nfi/common/$(am__dirstamp):
@@ -1837,9 +1855,11 @@ include ../src/base/$(DEPDIR)/debug_msg.Po # am--include-marker
 include ../src/base/$(DEPDIR)/dtable.Po # am--include-marker
 include ../src/base/$(DEPDIR)/math_misc.Po # am--include-marker
 include ../src/base/$(DEPDIR)/string_misc.Po # am--include-marker
+include ../src/base/$(DEPDIR)/syscall_proxies.Po # am--include-marker
 include ../src/base/$(DEPDIR)/time_misc.Po # am--include-marker
 include ../src/base/$(DEPDIR)/trace_msg.Po # am--include-marker
 include ../src/base/$(DEPDIR)/urlstr.Po # am--include-marker
+include ../src/base/$(DEPDIR)/utils.Po # am--include-marker
 include ../src/nfi/common/$(DEPDIR)/nfi_worker.Po # am--include-marker
 include ../src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po # am--include-marker
 include ../src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po # am--include-marker
@@ -2176,9 +2196,11 @@ distclean: distclean-am
 	-rm -f ../src/base/$(DEPDIR)/dtable.Po
 	-rm -f ../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/string_misc.Po
+	-rm -f ../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../src/base/$(DEPDIR)/time_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../src/base/$(DEPDIR)/urlstr.Po
+	-rm -f ../src/base/$(DEPDIR)/utils.Po
 	-rm -f ../src/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po
 	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po
@@ -2349,9 +2371,11 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../src/base/$(DEPDIR)/dtable.Po
 	-rm -f ../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/string_misc.Po
+	-rm -f ../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../src/base/$(DEPDIR)/time_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../src/base/$(DEPDIR)/urlstr.Po
+	-rm -f ../src/base/$(DEPDIR)/utils.Po
 	-rm -f ../src/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po
 	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po

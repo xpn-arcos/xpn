@@ -13,6 +13,7 @@
 //#include "xpn_adaptor.h"
 //#include <xpn.h>
 #include "xpn.h" //added
+#include "syscall_proxies.h"
 //#include <expand.h>
 //#include "xpn_init.h"
 //#include "xpn_rw.h"
@@ -20,8 +21,8 @@
 //#include "xpn_dir.h"
 //#include "xpn_opendir.h"
 #include <dirent.h>
-#include <string.h> //added
-#include <stdlib.h> //added
+#include <string.h>
+#include <stdlib.h>
 
 //#define RTLD_NEXT ((void *) -1l)
 #define LEN_PREFIX	4

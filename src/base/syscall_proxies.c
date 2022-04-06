@@ -22,7 +22,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "base/syscall_poxis.h"
+  #include "base/syscall_proxies.h"
 
 
 
@@ -184,7 +184,7 @@
         real_lstat = dlsym(RTLD_NEXT,"__lxstat");
     }
 
-    return real_lstat(ver,fd, buf);
+    return real_lstat(ver,(char *)path, buf);
   }
 
 
@@ -197,7 +197,7 @@
         real_stat = dlsym(RTLD_NEXT,"__xstat");
     }
 
-    return real_stat(ver,fd, buf);
+    return real_stat(ver,(char *)path, buf);
   }
 
 
@@ -294,8 +294,21 @@
   }
 
 
+  struct dirent64 * (*real_readdir64)(DIR *) = NULL;
+  struct dirent64 * dlsym_readdir64(DIR *dirp)
+  {
+    debug_info("dlsym_readdir64: before readdir64...\n");
+
+    if (real_readdir64 == NULL){
+        real_readdir64 = dlsym(RTLD_NEXT,"readdir64");
+    }
+    
+    return real_readdir64(dirp);
+  }
+
+
   int (*real_closedir)(DIR*) = NULL;
-  int dlsym_closedir(DIR*)
+  int dlsym_closedir(DIR* dirp)
   {
     debug_info("dlsym_closedir: before closedir...\n");
 
@@ -371,7 +384,7 @@
         real_exit = dlsym(RTLD_NEXT,"exit");
     }
     
-    return real_exit(status);
+    real_exit(status);
   }
 
 
@@ -413,7 +426,7 @@
         real_fchmod = dlsym(RTLD_NEXT,"fchmod");
     }
     
-    return real_chmod(fd,mode);
+    return real_fchmod(fd,mode);
   }
 
 

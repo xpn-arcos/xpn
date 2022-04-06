@@ -208,6 +208,8 @@ am__libxpn_a_SOURCES_DIST = @top_srcdir@/src/base/darray.c \
 	@top_srcdir@/src/base/string_misc.c \
 	@top_srcdir@/src/base/time_misc.c \
 	@top_srcdir@/src/base/urlstr.c \
+	@top_srcdir@/src/base/syscall_proxies.c \
+	@top_srcdir@/src/base/utils.c \
 	@top_srcdir@/src/nfi/common/nfi_worker.c \
 	@top_srcdir@/src/nfi/nfi_local/nfi_local.c \
 	@top_srcdir@/src/nfi/nfi_local/nfi_local_err.c \
@@ -336,7 +338,9 @@ am__objects_1 = @top_srcdir@/src/base/darray.$(OBJEXT) \
 	@top_srcdir@/src/base/debug_msg.$(OBJEXT) \
 	@top_srcdir@/src/base/string_misc.$(OBJEXT) \
 	@top_srcdir@/src/base/time_misc.$(OBJEXT) \
-	@top_srcdir@/src/base/urlstr.$(OBJEXT)
+	@top_srcdir@/src/base/urlstr.$(OBJEXT) \
+	@top_srcdir@/src/base/syscall_proxies.$(OBJEXT) \
+	@top_srcdir@/src/base/utils.$(OBJEXT)
 am__objects_2 = @top_srcdir@/src/nfi/common/nfi_worker.$(OBJEXT)
 am__objects_3 = @top_srcdir@/src/nfi/nfi_local/nfi_local.$(OBJEXT) \
 	@top_srcdir@/src/nfi/nfi_local/nfi_local_err.$(OBJEXT)
@@ -499,9 +503,11 @@ am__depfiles_remade = @top_srcdir@/src/base/$(DEPDIR)/darray.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/dtable.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/math_misc.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/string_misc.Po \
+	@top_srcdir@/src/base/$(DEPDIR)/syscall_proxies.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/time_misc.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/urlstr.Po \
+	@top_srcdir@/src/base/$(DEPDIR)/utils.Po \
 	@top_srcdir@/src/nfi/common/$(DEPDIR)/nfi_worker.Po \
 	@top_srcdir@/src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po \
 	@top_srcdir@/src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po \
@@ -660,6 +666,8 @@ am__noinst_HEADERS_DIST = @top_srcdir@/include/all_system.h \
 	@top_srcdir@/include/base/trace_msg.h \
 	@top_srcdir@/include/base/trace_tags.h \
 	@top_srcdir@/include/base/urlstr.h \
+	@top_srcdir@/include/base/syscall_proxies.h \
+	@top_srcdir@/include/base/utils.h \
 	@top_srcdir@/include/nfi/nfi.h \
 	@top_srcdir@/include/nfi/nfi_lib.h \
 	@top_srcdir@/include/nfi/nfi_worker.h \
@@ -977,7 +985,9 @@ BASE_HEADER = @top_srcdir@/include/base/base_lib.h \
 			@top_srcdir@/include/base/time_misc.h \
 			@top_srcdir@/include/base/trace_msg.h \
 			@top_srcdir@/include/base/trace_tags.h \
-			@top_srcdir@/include/base/urlstr.h
+			@top_srcdir@/include/base/urlstr.h \
+			@top_srcdir@/include/base/syscall_proxies.h \
+			@top_srcdir@/include/base/utils.h
 
 NFI_LOCAL_HEADER = @top_srcdir@/include/nfi/nfi_local/local_lib.h \
 			@top_srcdir@/include/nfi/nfi_local/nfi_local_err.h \
@@ -1115,7 +1125,9 @@ BASE_OBJECTS = @top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/debug_msg.c \
 			@top_srcdir@/src/base/string_misc.c \
 			@top_srcdir@/src/base/time_misc.c \
-			@top_srcdir@/src/base/urlstr.c
+			@top_srcdir@/src/base/urlstr.c \
+			@top_srcdir@/src/base/syscall_proxies.c \
+			@top_srcdir@/src/base/utils.c
 
 NFI_COMMON_OBJECTS = @top_srcdir@/src/nfi/common/nfi_worker.c
 NFI_LOCAL_OBJECTS = @top_srcdir@/src/nfi/nfi_local/nfi_local.c \
@@ -1324,6 +1336,12 @@ clean-libLIBRARIES:
 	@top_srcdir@/src/base/$(am__dirstamp) \
 	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/base/urlstr.$(OBJEXT):  \
+	@top_srcdir@/src/base/$(am__dirstamp) \
+	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/base/syscall_proxies.$(OBJEXT):  \
+	@top_srcdir@/src/base/$(am__dirstamp) \
+	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/base/utils.$(OBJEXT):  \
 	@top_srcdir@/src/base/$(am__dirstamp) \
 	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/nfi/common/$(am__dirstamp):
@@ -1837,9 +1855,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/dtable.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/math_misc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/string_misc.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/syscall_proxies.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/time_misc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/urlstr.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/utils.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/nfi/common/$(DEPDIR)/nfi_worker.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po@am__quote@ # am--include-marker
@@ -2176,9 +2196,11 @@ distclean: distclean-am
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/dtable.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/math_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/string_misc.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/time_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/urlstr.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/utils.Po
 	-rm -f @top_srcdir@/src/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f @top_srcdir@/src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po
 	-rm -f @top_srcdir@/src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po
@@ -2349,9 +2371,11 @@ maintainer-clean: maintainer-clean-am
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/dtable.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/math_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/string_misc.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/time_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/urlstr.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/utils.Po
 	-rm -f @top_srcdir@/src/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f @top_srcdir@/src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po
 	-rm -f @top_srcdir@/src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po
