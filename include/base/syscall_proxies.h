@@ -1,10 +1,17 @@
-  
+#ifndef _SYSCALL_PROXIES_H
+#define _SYSCALL_PROXIES_H
+
   #include <dlfcn.h>
   #include <sys/stat.h>
   #include <dirent.h>
   #include <stdlib.h>
 
   #include "utils.h"
+
+
+ #ifdef  __cplusplus
+    extern "C" {
+ #endif
 
 
   // File API
@@ -66,3 +73,10 @@
   int dlsym_chown(char *path, uid_t owner, gid_t group);
   
   int dlsym_fcntl(int fd, int cmd, long arg);
+
+
+  #ifdef  __cplusplus
+    }
+  #endif
+
+#endif

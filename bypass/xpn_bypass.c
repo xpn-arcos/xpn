@@ -1,31 +1,27 @@
-/****************************************************************************************************
- *                                                                                                  *
- * xpn.bypass                                                                                       *
- *                                                                                                  *
- * This interface definition intercepts system calls (actually, libc wrappers)                      *
- * and redirect them to "expand" file system.                                                       *
- *                                                                                                  *
- *                                                                                                  *
- * Usage:                                                                                           *
- *    sys_call(/xpn/PNFS/<path/to/file>)                                                            *
- *                                                                                                  *
- *                                                                                                  *
- * Grupo de arquitectura de computadores, sistemas y paralelismo. Universidad Carlos III de Madrid. *
- * Computers architecture, systems and paralelism group. Carlos III of Madrid University.           *
- *                                                                                                  *
- * http://arcos.inf.uc3m.es                                                                         *
- *                                                                                                  *
- *                                                                                                  *
- *                                                                                                  *
- * This program is released under the GNU General Public License.                                   *
- * See the file COPYING for details.                                                                *
- *                                                                                                  *
- ****************************************************************************************************/
+
+  /*
+   *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *
+   *  This file is part of mpiServer.
+   *
+   *  mpiServer is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  mpiServer is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with mpiServer.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */ 
 
 
   // some definitions
   #include "xpn_bypass.h"
-  #include "mpi.h"
 
   /**
    * This variable indicates if expand has already been initialized or not.
@@ -96,7 +92,7 @@
   //int open(const char *path, int flags, [mode_t mode])
   int open(const char *path, int flags, mode_t mode)
   {
-    int ret, fd, fdret;
+    int ret, fd;
 
     debug_info("Before open(%s,%o,%o)...\n",path,flags,mode);
     debug_info("Path => %s\n",path);
@@ -118,8 +114,7 @@
         ret = fd;
       } 
       else{
-        fdret=fd+PLUSXPN;
-        ret = fdret;
+        ret = fd+PLUSXPN;
       }
 
       return ret;
@@ -532,9 +527,6 @@
 
   DIR *opendir(const char *dirname)
   {
-    DIR *ret;
-    int fd,fdret;
-
     debug_info("Before opendir(%s)...\n", dirname);
 
     // We must initialize expand if it has not been initialized yet.
@@ -542,17 +534,7 @@
 
     if(!strncmp(xpn_adaptor_partition_prefix,dirname,strlen(xpn_adaptor_partition_prefix))) //TODO:Aqui falla
     {
-      ret=xpn_opendir((char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
-      memcpy(&fd, ret,sizeof(int)); // TODO: 真真真真Y esto para que???????
-      if(fd<-1)
-      {
-        return (DIR *)fd; // TODO: Devolver ret?
-      } 
-      else {
-        fdret=fd+PLUSXPN;
-        memcpy(ret,&fdret,sizeof(int));
-        return ret;
-      }
+      return xpn_opendir((char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -628,7 +610,7 @@
       memcpy(dirp,&(fdaux),sizeof(int));
       aux=xpn_readdir(dirp);
 
-      if (aux > 0){
+      if (aux != NULL){
         ret = (struct dirent64 *)malloc(sizeof(struct dirent64));
         ret->d_ino = (__ino64_t)aux->d_ino;
         ret->d_off = (__off64_t)aux->d_off;

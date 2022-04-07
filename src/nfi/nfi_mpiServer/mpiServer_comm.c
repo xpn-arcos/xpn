@@ -35,6 +35,7 @@
     int flag = 0 ;
     char srv_name[1024] ;
 
+
     memset(params, 0, sizeof(mpiClient_param_st)); // Initialize params 
 
     debug_info("[COMM] begin mpiClient_comm_init(...)\n") ;
@@ -214,6 +215,8 @@
     memset(params->locality, 0, size);
 
     // Ask name of all servers
+
+    //TODO: cuando se encuentra la primera no se hacen mas
     for (int i = 0; i < size; i++) {
       data = MPISERVER_GETNODENAME;
       ret = MPI_Send( &data, 1, MPI_INT, i, 0, params->server );

@@ -4,17 +4,6 @@
 
 #define _GNU_SOURCE
 
-//#include <fcntl.h> //comment
-//#include <stdarg.h>
-//#include "xpn_adaptor.h"
-//#include <xpn.h>
-//#include <expand.h>
-//#include "xpn_init.h"
-//#include "xpn_rw.h"
-//#include "xpn_open.h"
-//#include "xpn_dir.h"
-//#include "xpn_opendir.h"
-
 #include <dlfcn.h>
 #include <sys/stat.h>
 
@@ -23,7 +12,8 @@
 
 #include <dirent.h>
 #include <string.h>
-#include <stdlib.h>
+#include "mpi.h"
+//#include <stdlib.h>
 
 //#define RTLD_NEXT ((void *) -1l)
 #define LEN_PREFIX	4
