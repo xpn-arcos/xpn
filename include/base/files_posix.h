@@ -33,7 +33,7 @@
     int  file_posix_init     ( void ) ;
     int  file_posix_finalize ( void ) ;
 
-    int  file_posix_open  ( long *fd, const char *path_name, int flags ) ;
+    int  file_posix_open  ( const char *path_name, int flags ) ;
     int  file_posix_close ( int fd ) ;
     int  file_posix_read  ( int fd, void *buffer, int buffer_size ) ;
     int  file_posix_write ( int fd, void *buffer, int buffer_size ) ;

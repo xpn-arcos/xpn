@@ -43,18 +43,17 @@ int  file_posix_finalize ( void )
     return 1 ;
 }
 
-int  file_posix_open  ( long *fd, const char *path_name, int flags )
+int  file_posix_open  ( const char *path_name, int flags )
 {
-     int  ret ;
+     int ret ;
 
-     // Check params...
-     (*fd) = open(path_name, flags, 0755) ;
-     if ((*fd) < 0) {
- 	 return -1 ;
-     }
+     // Open file
+     ret = open(path_name, flags, 0755) ;
+     if (ret < 0)
+	 perror("open: ") ;
 
-     // Return OK
-     return 1 ;
+     // Return OK/KO
+     return ret ;
 }
 
 int   file_posix_close ( int fd )
@@ -63,6 +62,8 @@ int   file_posix_close ( int fd )
 
      // Close file
      ret = close(fd) ;
+     if (ret < 0)
+	 perror("close: ") ;
 
      // Return OK/KO
      return ret ;
