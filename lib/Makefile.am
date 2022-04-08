@@ -22,6 +22,7 @@ BASE_HEADER=		@top_srcdir@/include/base/base_lib.h \
 			@top_srcdir@/include/base/trace_tags.h \
 			@top_srcdir@/include/base/urlstr.h \
 			@top_srcdir@/include/base/syscall_proxies.h \
+			@top_srcdir@/include/base/files_posix.h \
 			@top_srcdir@/include/base/utils.h
 NFI_LOCAL_HEADER=	@top_srcdir@/include/nfi/nfi_local/local_lib.h \
 			@top_srcdir@/include/nfi/nfi_local/nfi_local_err.h \
@@ -202,6 +203,7 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/time_misc.c \
 			@top_srcdir@/src/base/urlstr.c \
 			@top_srcdir@/src/base/syscall_proxies.c \
+			@top_srcdir@/src/base/files_posix.h \
 			@top_srcdir@/src/base/utils.c
 
 NFI_COMMON_OBJECTS=	@top_srcdir@/src/nfi/common/nfi_worker.c
