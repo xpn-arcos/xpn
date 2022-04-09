@@ -22,7 +22,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-    
+
      #include "files_posix.h"
 
 
@@ -100,125 +100,177 @@
       return strlen(s);
      }
 
-    int mpiServer_create_spacename ( mpiServer_param_st *params, char *path )
-    {
-      int i;
-      char dir[MAXPATHLEN];
-
-      // check params...
-      if (NULL == params) {
-        return -1;
-      }
-
-      debug_info("[OPS] (ID=%s) mpiServer_create_spacename: %s\n", params->srv_name, path);
-      for (i=0; 0 != aux_get_dirs(path, i, dir); i++)
-      {
-        mkdir(dir, 0777);
-      }
-
-      return 0;
-     }
-
 
     /*
      * API
      */
 
-    int  files_posix_open ( char *pathname, int flags )
+    int  files_posix_mkpath ( char *pathname )
     {
-      return open(pathname, flags) ;
+	 int ret ;
+         char dir[MAXPATHLEN] ;
+
+         DEBUG_BEGIN() ;
+
+         for (int i=0; aux_get_dirs(path, i, dir) != 0; i++)
+         {
+              ret = mkdir(dir, 0770) ;
+	      if (ret < 0) {
+                  debug_warning("[FILE_POSIX]: cannot mkdir(%s)\n", dir) ;
+                  perror("mkdir: ") ;
+	      }
+         }
+
+         DEBUG_END() ;
+
+	 // Return OK
+         return 1 ;
     }
 
-    int  files_posix_creat ( mpiServer_param_st *params, char *pathname, mode_t mode )
+    int  files_posix_creat ( char *pathname, int flags, mode_t mode )
     {
-      int fd ;
+	 int ret ;
 
-      fd = open(pathname, O_CREAT | O_RDWR, mode);
-      if (fd == -1)
-      {
-        mpiServer_create_spacename(params, pathname);
-        fd = open(pathname, O_CREAT | O_RDWR, 0660);
-      }
+         DEBUG_BEGIN() ;
 
-      return fd ;
+         // Check params
+         if (NULL == pathname) {
+             debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
+         }
+         if (0 == mode) {
+             debug_warning("[FILE_POSIX]: mode is zero\n") ;
+         }
+
+	 // Try to open file
+         ret = open(pathname, flags, mode) ;
+         if (ret < 0) {
+             debug_warning("[FILE_POSIX]: open(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret) ;
+             perror("open: ") ;
+         }
+
+         DEBUG_END() ;
+
+	 // Return OK/KO
+	 return ret ;
+    }
+
+    int  files_posix_open ( char *pathname, int flags )
+    {
+	 int ret ;
+
+         DEBUG_BEGIN() ;
+
+         // Check params
+         if (NULL == pathname) {
+             debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
+         }
+
+	 // Try to open file
+         ret = open(pathname, flags) ;
+         if (ret < 0) {
+             debug_warning("[FILE_POSIX]: open(pathname:%s, flags:%d) -> %d\n", pathname, flags, ret) ;
+             perror("open: ") ;
+         }
+
+         DEBUG_END() ;
+
+	 // Return OK/KO
+	 return ret ;
     }
 
     int  files_posix_close ( int fd )
     {
-      return close(fd) ;
+	 int ret ;
+
+         DEBUG_BEGIN() ;
+
+         // Check params
+         if (fd < 0){
+             debug_warning("[FILE_POSIX]: close file with fd < 0\n") ;
+         }
+
+	 // Try to close file
+         ret = close(fd) ;
+         if (ret < 0) {
+             debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
+             perror("close: ") ;
+         }
+
+         DEBUG_END() ;
+
+	 // Return OK/KO
+	 return ret ;
     }
 
-    long files_posix_read_buffer ( mpiServer_param_st *params, int read_fd2, void *buffer, int buffer_size )
+    long files_posix_read_buffer ( int read_fd2, void *buffer, int buffer_size )
     {
-      ssize_t read_num_bytes       = -1 ;
-      ssize_t read_remaining_bytes = buffer_size ;
-      void   *read_buffer          = buffer ;
+         ssize_t read_num_bytes       = -1 ;
+         ssize_t read_remaining_bytes = buffer_size ;
+         void   *read_buffer          = buffer ;
 
-      // check arguments...
-      if (NULL == params) {
-        debug_warning("WARNING[%s]:\t read with NULL mpiServer_param_st *.\n", params->srv_name) ;
-      }
+         // check arguments...
+         if (NULL == buffer) {
+             debug_warning("[FILE_POSIX]: read_buffer with NULL buffer\n") ;
+         }
 
-      while (read_remaining_bytes > 0)
-      {
-        /* Read from local file... */
-        read_num_bytes = read(read_fd2, read_buffer, read_remaining_bytes) ;
+         while (read_remaining_bytes > 0)
+         {
+             /* Read from local file... */
+             read_num_bytes = read(read_fd2, read_buffer, read_remaining_bytes) ;
 
-        /* Check errors */
-        if (read_num_bytes == -1) {
-          perror("read: ") ;
-          debug_error("ERROR[%s]:\t read fails to read data.\n", params->srv_name) ;
-          return -1 ;
-        }
+             /* Check errors */
+             if (read_num_bytes == -1) {
+                 perror("read: ") ;
+                 debug_error("[FILE_POSIX]: read fails to read data.\n") ;
+                 return -1 ;
+             }
 
-        /* Check end of file */
-        if (read_num_bytes == 0)
-        {
-          debug_error("INFO[%s]:\t end of file, readed %ld.\n", params->srv_name, 
-                                                                (buffer_size - read_remaining_bytes)) ;
+             /* Check end of file */
+             if (read_num_bytes == 0)
+             {
+                 debug_error("[FILE_POSIX]: end of file, readed %ld.\n", (buffer_size - read_remaining_bytes)) ;
+                 return (buffer_size - read_remaining_bytes) ;
+             }
 
-          return (buffer_size - read_remaining_bytes) ;
-        }
+             read_remaining_bytes -= read_num_bytes ;
+             read_buffer          += read_num_bytes ;
+         }
 
-        read_remaining_bytes -= read_num_bytes ;
-        read_buffer          += read_num_bytes ;
-      }
-
-      return buffer_size ;
+         return buffer_size ;
     }
 
-    long files_posix_write_buffer ( mpiServer_param_st *params, int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
+    long files_posix_write_buffer ( int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
     {
-      ssize_t write_num_bytes       = -1 ;
-      ssize_t write_remaining_bytes = num_readed_bytes ;
-      void   *write_buffer          = buffer ;
+         ssize_t write_num_bytes       = -1 ;
+         ssize_t write_remaining_bytes = num_readed_bytes ;
+         void   *write_buffer          = buffer ;
 
-      // check arguments...
-      if (NULL == params) {
-        debug_warning("WARNING[%s]:\t read with NULL mpiServer_param_st *.\n", params->srv_name) ;
-      }
-      if (num_readed_bytes > buffer_size) {
-        debug_error("ERROR[%s]:\t write for %d bytes from a buffer with only %d bytes.\n", params->srv_name, num_readed_bytes, buffer_size) ;
-        return -1 ;
-      }
+         // check arguments...
+         if (NULL == buffer) {
+             debug_warning("[FILE_POSIX]: read_buffer with NULL buffer\n") ;
+         }
+         if (num_readed_bytes > buffer_size) {
+             debug_error("[FILE_POSIX]: write for %d bytes from a buffer with only %d bytes.\n", num_readed_bytes, buffer_size) ;
+             return -1 ;
+         }
 
-      while (write_remaining_bytes > 0)
-      {
-        /* Write into local file (write_fd2)... */
-        write_num_bytes = write(write_fd2, write_buffer, write_remaining_bytes) ;
+         while (write_remaining_bytes > 0)
+         {
+             /* Write into local file (write_fd2)... */
+             write_num_bytes = write(write_fd2, write_buffer, write_remaining_bytes) ;
 
-        /* Check errors */
-        if (write_num_bytes == -1) {
-          perror("write: ") ;
-          debug_error("ERROR[%s]:\t write fails to write data.\n", params->srv_name) ;
-          return -1 ;
-        }
+             /* Check errors */
+             if (write_num_bytes == -1) {
+                 perror("write: ") ;
+                 debug_error("[FILE_POSIX]: write fails to write data.\n") ;
+                 return -1 ;
+             }
 
-        write_remaining_bytes -= write_num_bytes ;
-        write_buffer          += write_num_bytes ;
-      }
+             write_remaining_bytes -= write_num_bytes ;
+             write_buffer          += write_num_bytes ;
+         }
 
-      return num_readed_bytes ;
+         return num_readed_bytes ;
      }
 
 

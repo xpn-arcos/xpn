@@ -204,29 +204,19 @@ int nfi_local_reconnect(struct nfi_server *serv)
  * **********************************************************/
 int nfi_local_disconnect(struct nfi_server *serv)
 {
-	struct nfi_local_server *server_aux;
-	
-	
-	if (serv == NULL)
-		return 0;
-	
-	server_aux = (struct nfi_local_server *)serv->private_info;
-	if(server_aux != NULL){
-		free(serv->private_info);
+	// Check arguments
+	if (serv == NULL) {
+	    return 0;
 	}
 	
-	if(serv->url != NULL){
-		free(serv->url);
-	}
-	
-	if(serv->server != NULL){
-		free(serv->server);
-	}
-	
-	//serv->protocol = -1;
+	// Free and null
+	FREE_AND_NULL(serv->private_info) ;
+	FREE_AND_NULL(serv->url) ;
+	FREE_AND_NULL(serv->server) ;
 	
 	nfi_worker_end(serv->wrk);
 	
+	// Return OOK
 	return 0;
 }
 
@@ -322,16 +312,6 @@ int nfi_local_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct n
 	XPN_DEBUG_BEGIN_ARGS1(fh_aux->path)
 	
 	res = stat(fh_aux->path, &st);
-	/*********BORRAR********************/
-	//if (res < 0){
-	//	char s[255];
-	//	extern int errno;
-	//
-	//	sprintf(s,"nfi_local_getattr: %s", fh_aux->path);
-	//	perror(s);
-	//	printf("%s : %d\n", s, errno);
-	//}
-	/*********BORRAR********************/
 	if(res < 0){
 		//fprintf(stderr,"nfi_local_getattr: Fail stat %s in server %s.\n",fh_aux->path,serv->server);
 		fprintf(stderr,"nfi_local_getattr: Fail stat %s.\n",fh_aux->path);
@@ -403,7 +383,7 @@ int nfi_local_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct n
 	return 0;
 }
 
-int nfi_local_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
+int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho )
 {
 	char dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
 	int res;
@@ -460,6 +440,7 @@ int nfi_local_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
 		XPN_DEBUG_END_ARGS1(url)
 		return res;
 	}
+
 	fho->url = (char *)malloc(strlen(url)+1);
 	if(fho->url == NULL){
 		local_err(LOCALERR_MEMORY);
@@ -482,8 +463,8 @@ int nfi_local_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
 	server_aux = (struct nfi_local_server *) serv->private_info;
 	
 	res = open(dir, O_RDWR);
-	
-	if (res < 0){
+	if (res < 0)
+	{
 		res = open(dir, O_RDONLY);
 		if(res < 0){
 			XPN_DEBUG("nfi_local_open: Fail open %s in server %s.\n",dir,serv->server);
@@ -535,7 +516,7 @@ int nfi_local_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
 	return res;
 }
 
-int nfi_local_close(struct nfi_server *serv,  struct nfi_fhandle *fh)
+int nfi_local_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 {	
 	struct nfi_local_fhandle *fh_aux;
 	
