@@ -114,7 +114,7 @@
 
          for (int i=0; aux_get_dirs(path, i, dir) != 0; i++)
          {
-              ret = mkdir(dir, 0770) ;
+              ret = real_posix_mkdir(dir, 0770) ;
 	      if (ret < 0) {
                   debug_warning("[FILE_POSIX]: cannot mkdir(%s)\n", dir) ;
                   perror("mkdir: ") ;
@@ -142,7 +142,7 @@
          }
 
 	 // Try to open file
-         ret = open(pathname, flags, mode) ;
+         ret = real_posix_creat(pathname, flags, mode) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: open(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret) ;
              perror("open: ") ;
@@ -166,7 +166,7 @@
          }
 
 	 // Try to open file
-         ret = open(pathname, flags) ;
+         ret = real_posix_open(pathname, flags) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: open(pathname:%s, flags:%d) -> %d\n", pathname, flags, ret) ;
              perror("open: ") ;
@@ -190,7 +190,7 @@
          }
 
 	 // Try to close file
-         ret = close(fd) ;
+         ret = real_posix_close(fd) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
              perror("close: ") ;
@@ -216,7 +216,7 @@
          while (read_remaining_bytes > 0)
          {
              /* Read from local file... */
-             read_num_bytes = read(read_fd2, read_buffer, read_remaining_bytes) ;
+             read_num_bytes = real_posix_read(read_fd2, read_buffer, read_remaining_bytes) ;
 
              /* Check errors */
              if (read_num_bytes == -1) {
@@ -257,7 +257,7 @@
          while (write_remaining_bytes > 0)
          {
              /* Write into local file (write_fd2)... */
-             write_num_bytes = write(write_fd2, write_buffer, write_remaining_bytes) ;
+             write_num_bytes = real_posix_write(write_fd2, write_buffer, write_remaining_bytes) ;
 
              /* Check errors */
              if (write_num_bytes == -1) {

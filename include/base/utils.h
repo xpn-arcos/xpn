@@ -16,12 +16,14 @@
 
   /* ... Defines / Definiciones ........................................... */
 
+/* TODO: moved into files_posix.h !!
   // File
 #ifdef _LARGEFILE64_
     typedef long long int offset_t;
 #else 
     typedef off_t offset_t;
 #endif
+*/
 
   // Debug
 #ifdef DEBUG
