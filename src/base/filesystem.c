@@ -22,8 +22,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-
-     #include "files_posix.h"
+     #include "filesystem.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -105,7 +104,7 @@
      * API
      */
 
-    int  files_posix_mkpath ( char *pathname )
+    int  filesystem_mkpath ( char *pathname )
     {
 	 int ret ;
          char dir[MAXPATHLEN] ;
@@ -127,7 +126,7 @@
          return 1 ;
     }
 
-    int  files_posix_creat ( char *pathname, int flags, mode_t mode )
+    int  filesystem_creat ( char *pathname, int flags, mode_t mode )
     {
 	 int ret ;
 
@@ -154,7 +153,7 @@
 	 return ret ;
     }
 
-    int  files_posix_open ( char *pathname, int flags )
+    int  filesystem_open ( char *pathname, int flags )
     {
 	 int ret ;
 
@@ -178,7 +177,7 @@
 	 return ret ;
     }
 
-    int  files_posix_close ( int fd )
+    int  filesystem_close ( int fd )
     {
 	 int ret ;
 
@@ -202,7 +201,7 @@
 	 return ret ;
     }
 
-    long files_posix_read_buffer ( int read_fd2, void *buffer, int buffer_size )
+    long filesystem_read_buffer ( int read_fd2, void *buffer, int buffer_size )
     {
          ssize_t read_num_bytes       = -1 ;
          ssize_t read_remaining_bytes = buffer_size ;
@@ -239,7 +238,7 @@
          return buffer_size ;
     }
 
-    long files_posix_write_buffer ( int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
+    long filesystem_write_buffer ( int write_fd2, void *buffer, int buffer_size, int num_readed_bytes )
     {
          ssize_t write_num_bytes       = -1 ;
          ssize_t write_remaining_bytes = num_readed_bytes ;
