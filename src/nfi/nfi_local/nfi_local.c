@@ -1,19 +1,6 @@
 
 #include "nfi/nfi_local/local_lib.h"
 
-/*
- * TODO:
- *  -> local_tcp, local_udp ??????????????
- *  -> local_xxx a nfi_local_xxx
- *  -> local_misc.[ch]:
- *     -> ParseURL
- *
- * -> pasar CLIENT * a servidor (es comn a todos...)
- * -> Poner todo a punteros
- * -> struct nfi_fhandle ** Paso de puntero par�etro por referencia
- *
- */
-
 
 /************************************************************
  * PRIVATE FUNCTIONS TO USE local SERVERS	            *
@@ -66,6 +53,23 @@ void LOCALtoNFIInfo(struct nfi_info *nfi_inf, struct nfi_info *local_inf)
 {
 }
 */
+
+      int nfi_local_keepConnected ( struct nfi_server *serv )
+      {
+#ifdef NFI_DYNAMIC
+	  if (serv->private_info == NULL)
+          {
+	      res = nfi_local_reconnect(serv) ;
+	      if (res <0) {
+                  serv->private_info = NULL;
+		  return -1;
+	      }
+	  }
+#endif
+
+          // return OK
+          return (serv->private_info != NULL) ;
+      }
 
 
  // 
@@ -291,24 +295,18 @@ int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 	    return -1;
 	}
 
+	// Check fields...
 	if (fh->priv_fh == NULL) {
 	    debug_error("fh->priv_fh argument is NULL.\n") ;
 	    return -1;
 	}
-
-#ifdef NFI_DYNAMIC
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res <0) {
-		    return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL) {
-	    debug_error("serv->private_info argument is NULL.\n") ;
+	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
 	}
-#endif
+
+	// Do stat
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
@@ -345,39 +343,24 @@ int nfi_local_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 	    return -1;
 	}
 
+	// CHeck fields...
 	if (fh->priv_fh == NULL) {
 	    debug_error("fh->priv_fh argument is NULL.\n") ;
 	    return -1;
 	}
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res <0) {
-		    return -1;
-		}
-	}
-#else
-
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
 	}
-#endif
 
+	// Do stat
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
 	NFItoLOCALattr(&st, attr) ;
-	/* no se comp hacer el setattr */
-	/*
-	res = stat(fh_aux->path, &st) ;
-	*/
-	res = truncate(fh_aux->path, st.st_size) ;
-	if (res < 0) {
-		debug_error("nfi_local_setattr: Fail stat %s.\n", fh_aux->path) ;
-		return -1;
-	}
+
+	/* TODO: hacer el setattr */
 
 	DEBUG_END();
 
@@ -405,26 +388,20 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
 	    return -1;
 	}
 
+	// do local opendir...
 	if (url[strlen(url)-1] == '/') {
 		res = nfi_local_opendir(serv, url, fho) ;
 		return res;
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res < 0) {
-			res = -1;
-			return res;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
 	}
-#endif
 
+	// Get fields...
 	res = ParseURL(url, NULL, NULL, NULL, server, NULL, dir) ;
 	if (res < 0) {
 	    debug_error("LOCALERR_URL.\n") ;
@@ -505,6 +482,7 @@ int nfi_local_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 	    return -1;
 	}
 
+	// Do close
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh ;
 	if (fh_aux != NULL) {
 	    files_posix_close(fh_aux->fd) ;
@@ -545,20 +523,14 @@ ssize_t nfi_local_read ( struct nfi_server *serv,
 	    return -1;
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res < 0) {
-			return -1;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
 	}
-#endif
 
+	// Do read
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
@@ -602,20 +574,14 @@ ssize_t nfi_local_write ( struct nfi_server *serv,
 	    return -1;
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res < 0) {
-			return -1;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
 	}
-#endif
 
+	// Do write
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
@@ -652,25 +618,20 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *att
 	    return -1;
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res < 0) {
-			return -1;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
 	}
-#endif
+
+	// Get fields...
 	res = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
 	if (res < 0) {
 	    debug_error("nfi_local_create: url '%s' incorrect.\n", url) ;
 	    return -1;
 	}
-	/* private_info file handle */
+
 	fh_aux = (struct nfi_local_fhandle *)malloc(sizeof(struct nfi_local_fhandle)) ;
 	if (fh_aux == NULL) {
 	    debug_error("LOCALERR_MEMORY\n") ;
@@ -678,10 +639,9 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *att
 	}
 
 	bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
-
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
-	/* create the file into the directory */
+	// Do create
 	fd = files_posix_open(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
 	if (fd < 0) {
 	    debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
@@ -730,19 +690,12 @@ int nfi_local_remove ( struct nfi_server *serv,  char *url )
 	    return -1;
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res <0) {
-			return -1;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
-        }
-#endif
+	}
 
 	server_aux = (struct nfi_local_server *)serv->private_info;
 
@@ -751,7 +704,8 @@ int nfi_local_remove ( struct nfi_server *serv,  char *url )
 		debug_error("nfi_local_remove: url '%s' incorrect.\n", url) ;
 		return -1;
 	}
-	/* remove the file into the directory */
+
+	// Do unlink
 	res = real_posix_unlink(dir) ;
 	if (res < 0) {
 		debug_error("nfi_local_remove: Fail remove %s in server %s.\n", dir, serv->server) ;
@@ -778,19 +732,13 @@ int nfi_local_rename (__attribute__((__unused__)) struct nfi_server *server, __a
 	    return -1;
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res <0) {
-			return -1;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
-        }
-#endif
+	}
+
 	server_aux = (strcut nfi_local_server *)serv->private_info;
 	*/
 
@@ -807,7 +755,6 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr
 	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
 	int res;
 	struct stat st;		/* LOCAL attributes */
-        struct nfi_local_server *server_aux;
         struct nfi_local_fhandle *fh_aux;
 
 	DEBUG_BEGIN();
@@ -822,29 +769,20 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr
 	    return -1;
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res <0) {
-			return -1;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
-        }
-#endif
+	}
 
-	server_aux = (struct nfi_local_server *)serv->private_info;
-
+	// Get fields...
 	res = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
 	if (res < 0) {
 		debug_error("nfi_local_mkdir: url '%s' incorrect.\n", url) ;
 		return -1;
 	}
 
-	/* private_info file handle */
 	fh_aux = (struct nfi_local_fhandle *)malloc(sizeof(struct nfi_local_fhandle)) ;
 	if (fh_aux == NULL) {
 	    debug_error("LOCALERR_MEMORY\n") ;
@@ -853,7 +791,7 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr
 
 	bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
 
-	/* create the dir into the directory */
+	// Do mkdir
 	res = real_posix_mkdir(dir, /*attr->at_mode*/ 0777) ;
 	if ((res < 0) && (errno != EEXIST))
 	{
@@ -884,7 +822,6 @@ int nfi_local_rmdir ( struct nfi_server *serv,  char *url )
 {
 	int res;
 	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
-	struct nfi_local_server *server_aux;
 
 	DEBUG_BEGIN();
 
@@ -894,28 +831,21 @@ int nfi_local_rmdir ( struct nfi_server *serv,  char *url )
 	    return -1;
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res <0) {
-			return -1;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
 	}
-#endif
 
-	server_aux = (struct nfi_local_server *)serv->private_info;
-
+	// Get fields...
 	res = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
 	if (res < 0) {
 		debug_error("nfi_local_rmdir: url '%s' incorrect.\n", url) ;
 		return -1;
 	}
 
+	// Do rmdir
 	res = real_posix_rmdir(dir) ;
 	if (res < 0)
 	{
@@ -948,21 +878,14 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
 	    return -1;
 	}
 
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res <0) {
-			res = -1;
-			return res;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
 	}
-#endif
 
+	// Get fields...
 	res = ParseURL(url, NULL, NULL, NULL, server, NULL, dir) ;
 	if (res < 0) {
 		debug_error("nfi_local_opendir: url %s incorrect.\n", url) ;
@@ -984,6 +907,7 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
 
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
+	// Do opendir
 	fh_aux->dir = real_posix_opendir(dir) ;
 	if (fh_aux->dir == NULL) {
 	    free(fh_aux) ;
@@ -992,17 +916,17 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
 	    return -1;
 	}
 
-	fh_aux->fd = res;
+	fh_aux->fd   = res;
 	strcpy(fh_aux->path, dir) ;
-	fho->type = NFIDIR;
-	fho->server = NULL;
-	fho->server = serv;
+	fho->type    = NFIDIR;
+	fho->server  = NULL;
+	fho->server  = serv;
 	fho->priv_fh = (void *) fh_aux;
-	res = 0;
 
 	DEBUG_END();
 
-	return res;
+	// Return OK
+	return 0 ;
 }
 
 int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, char *entry, unsigned char *type )
@@ -1032,19 +956,12 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, char *
 	    return -1;
 	}
 
-#ifdef NFI_DYNAMIC
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res <0) {
-			return -1;
-		}
-	}
-#else
-	if (serv->private_info == NULL) {
-	    debug_error("fh->private_info field is NULL.\n") ;
+	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
-        }
-#endif
+	}
 
 	server_aux = (struct nfi_local_server *)serv->private_info;
 	fh_aux = (struct nfi_local_fhandle *)fh->priv_fh;
@@ -1053,8 +970,7 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, char *
 	ent = real_posix_readdir(fh_aux->dir) ;
 
 	if (ent == NULL) {
-		//printf("nfi_local_readdir: ent=%p, errno=%d, EBADF=%d\n", ent, errno, EBADF) ;
-		//perror("nfi_local_readdir: readdir") ;
+		debug_error("nfi_local_readdir: readdir") ;
 		return 1;
 	}
 	if (type==NULL) {
@@ -1084,6 +1000,7 @@ int nfi_local_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 	    return -1;
 	}
 
+	// Do closedir
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	if (fh_aux != NULL) {
 	    real_posix_closedir(fh_aux->dir) ;
@@ -1119,20 +1036,12 @@ int nfi_local_statfs ( __attribute__((__unused__)) struct nfi_server *serv, __at
 	    return -1;
 	}
 
-
-#ifdef NFI_DYNAMIC
-	if (serv->private_info == NULL) {
-		res = nfi_local_reconnect(serv) ;
-		if (res <0) {
-			return -1;
-		}
-	}
-#else
+	// Check fields...
+        nfi_local_keepConnected(serv) ;
 	if (serv->private_info == NULL) {
 	    debug_error("serv->private_info field is NULL.\n") ;
 	    return -1;
-        }
-#endif
+	}
 
 	server_aux = (struct nfi_local_server *)serv->private_info;
 	res = local_statfs(server_aux->fh, &localinf, server_aux->cl) ;
