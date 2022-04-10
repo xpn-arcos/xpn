@@ -5,7 +5,7 @@ Expand: XPN Parallel File System
 *Authors*: Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, David Garcia Fernandez
 
 
-## 0. Dependencies
+## 1. Dependencies
 
 C develop tools and minixml (http://www.minixml.org):
 
@@ -33,14 +33,16 @@ apt-get -y --force-yes install libglobus-ftp-client-dev libglobus-xio-dev libglo
 #tasksel install globus-gridftp
 apt-get -y --force-yes install globus-gridftp-server-progs globus-gass-copy-progs globus-common-progs globus-gsi-cert-utils-progs globus-proxy-utils
 ```
+
 * Other useful Globus' stuff:
-globus-gss-assist-progs globus-simple-ca
+```
+apt-get -y install globus-gss-assist-progs globus-simple-ca
+```
 
 
 ### HTTP + WebDAV
 
 * For HTTP and WebDAV support (src/nfi/nfi_http/):
-
 ```
 aptitude install libtool libexpat1-dev libfuse-dev libattr1-dev lynx libkrb5-dev libssl-dev
 ```
@@ -50,12 +52,14 @@ To disable SSl for HTTP, then the following actions must be taken:
     - libkrb5-dev
     - libssl-dev
   - In 'src/nfi/nfi_http/fusedav/src/fusedav.c:1541' comment the following fragment of code:
+~~~~
     if (!ne_has_support(NE_FEATURE_SSL) ||
         !ne_has_support(NE_FEATURE_TS_SSL) ||
         !ne_has_support(NE_FEATURE_LFS)) {
         fprintf(stderr, "fusedav requires libneon built with SSL, SSL thread safety and LFS enabled.\n");
         goto finish;
     }
+~~~~    
   - In 'src/nfi/nfi_http/fusedav/libneon/configure.gnu' replace "--enable-threadsafe-ssl=posix --with-ssl=openssl" with "--without-gssapi".
   - In 'src/nfi/nfi_http/fusedav/configure.gnu' remove  "-lgssapi_krb5 -lssl" from the "LIBS" parameter.
   - In 'configure.ac' remove "-lgssapi_krb5 -lssl" from the "LIBS" parameter in the HTTP block.
@@ -107,16 +111,24 @@ aptitude install flex linux-libc-dev
 ```
 
 
-## 1. Build
+## 2. Build
 
 See INSTALL for details. Briefly:
-
-[./autogen.sh]
+1. Only the first time:
+```
+./autogen.sh
+```  
+2. Each time you compile:
+```
 ./configure [<options>]
-make
-(optional) doxygen doc/doxygen-XPN.cfg
-(optional) make check
-(optional) make install
+make -j
+```
+3. Optional:
+```
+doxygen doc/doxygen-XPN.cfg
+make check
+make install
+```
 
 For example:
 ```
@@ -129,7 +141,7 @@ make install
 ```
 
 
-## 2. Execution
+## 3. Execution
 
 - mpiServer:
 ```
@@ -137,23 +149,16 @@ make install
 ```
 
 
-## 3. Source structure
+## 4. Source structure
 
 Expand 2.0 sources has four main levels:
-
-- xpni
-  eXPaNd Interface provides many enhanced functionality 
-  like Fault-Tolerance support, locking, etc.
-
-- xpn
+- xpni:
+  eXPaNd Interface provides many enhanced functionality like Fault-Tolerance support, locking, etc.
+- xpn:
   eXPaNd implements a Parallel File System using NFI interfaces.
-
-- nfi
-  Network File Interface provides access to several 
-  storage protocols (local and network protocols) like
-  NFS, FTP, etc.
-
-- base
+- nfi:
+  Network File Interface provides access to several storage protocols (local and network protocols) like NFS, FTP, etc.
+- base:
   Base interface provides independent access to operating system resources. 
   Portability is provided in this layer.
 
