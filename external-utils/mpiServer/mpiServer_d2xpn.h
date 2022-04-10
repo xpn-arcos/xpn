@@ -11,8 +11,8 @@
    #include <sys/errno.h>
 
    #include "all_system.h"
+   #include "base/utils.h"
    #include "mpiServer_params.h"
-   #include "mpiServer_utils.h"
    #include "mpiServer_ops.h"
 
    #include "xpn.h"

@@ -2,8 +2,8 @@
 #define _MPISERVER_COMM_H_
 
   #include "all_system.h"
+  #include "base/utils.h"
   #include "mpiServer_params.h"
-  #include "mpiServer_utils.h"
 
 
   /*

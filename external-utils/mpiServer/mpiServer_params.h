@@ -5,8 +5,8 @@
   #include <stdio.h>
   #include <string.h>
   #include "mpi.h"
+  #include "base/utils.h"
   #include "mpiServer_conf.h"
-  #include "mpiServer_utils.h"
 
 
   //Constants

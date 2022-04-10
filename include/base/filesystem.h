@@ -33,13 +33,16 @@
 
 #ifdef _LARGEFILE64_
      typedef long long int offset_t;
+     #define LSEEK lseek64
 #else
      typedef off_t offset_t;
+     #define LSEEK lseek
 #endif
+
 
   // DLSYM
 #ifdef FILESYSTEM_DLSYM
-     #define real_posix_creat(path,flags,mode)                dlsym_creat(path,flags,mode)
+     #define real_posix_creat(path,mode)                      dlsym_creat(path,mode)
      #define real_posix_open(path,flags)                      dlsym_open(path,flags)
      #define real_posix_close(fd)                             dlsym_close(fd)
 
@@ -47,7 +50,7 @@
      #define real_posix_read(fd,buffer,buffer_size)           dlsym_read(fd,buffer,buffer_size)
      #define real_posix_write(fd,buffer,buffer_size)          dlsym_write(fd,buffer,buffer_size)
 
-     #define real_posix_mkdir(pathname)                       dlsym_mkdir(pathname)
+     #define real_posix_mkdir(pathname,mode)                  dlsym_mkdir(pathname,mode)
      #define real_posix_rmdir(pathname)                       dlsym_rmdir(pathname)
      #define real_posix_unlink(pathname)                      dlsym_unlink(pathname)
      #define real_posix_stat(pathname,info)                   dlsym_stat(pathname,info)
@@ -56,7 +59,7 @@
      #define real_posix_readdir(dirptr)                       dlsym_readdir(dirptr)
      #define real_posix_closedir(dirptr)                      dlsym_closedir(dirptr)
 #else
-     #define real_posix_creat(path,flags,mode)                creat(path,flags,mode)
+     #define real_posix_creat(path,mode)                      creat(path,mode)
      #define real_posix_open(path,flags)                      open(path,flags)
      #define real_posix_close(fd)                             close(fd)
 
@@ -64,7 +67,7 @@
      #define real_posix_read(fd,buffer,buffer_size)           read(fd,buffer,buffer_size)
      #define real_posix_write(fd,buffer,buffer_size)          write(fd,buffer,buffer_size)
 
-     #define real_posix_mkdir(pathname)                       mkdir(pathname)
+     #define real_posix_mkdir(pathname,mode)                  mkdir(pathname,mode)
      #define real_posix_rmdir(pathname)                       rmdir(pathname)
      #define real_posix_unlink(pathname)                      unlink(pathname)
      #define real_posix_stat(pathname,info)                   stat(pathname,info)
@@ -77,7 +80,7 @@
 
    /* ... Functions / Funciones ......................................... */
 
-     int  filesystem_creat        ( char *pathname, int flags, mode_t mode ) ;
+     int  filesystem_creat        ( char *pathname, mode_t mode ) ;
      int  filesystem_open         ( char *pathname, int flags ) ;
      int  filesystem_close        ( int fd ) ;
 

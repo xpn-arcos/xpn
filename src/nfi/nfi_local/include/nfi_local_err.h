@@ -1,3 +1,4 @@
+
 #ifndef _NFI_LOCAL_ERR_H_
 #define _NFI_LOCAL_ERR_H_
 
@@ -22,7 +23,7 @@ enum nfi_local_err{
 };
 
 
-void local_err(int err);
-
+void local_err ( int err ) ;
 
 #endif
+

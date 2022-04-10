@@ -1,9 +1,13 @@
+
 #include "nfi/nfi_local/local_lib.h"
+
 extern int errno;
 
 /* this interface must be changed */
-void local_err(int err){
-	switch(err){
+void local_err ( int err )
+{
+	switch (err)
+	{
 		case LOCALERR_PARAM:
 			errno = -1;
 			break;
@@ -32,4 +36,5 @@ void local_err(int err){
 			errno = -1;
 			break;
 	}
-};
+}
+

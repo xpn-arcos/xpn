@@ -25,7 +25,7 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "all_system.h"
-      #include "mpiServer_params.h"
+      #include "base/utils.h"
       #include <sys/stat.h>
       #include <sys/types.h>
 
@@ -34,9 +34,12 @@
 
 #ifdef _LARGEFILE64_
      typedef long long int offset_t;
+     #define LSEEK lseek64
 #else
      typedef off_t offset_t;
+     #define LSEEK lseek
 #endif
+
 
   // DLSYM
 #ifdef FILESYSTEM_DLSYM

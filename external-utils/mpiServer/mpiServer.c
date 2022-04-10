@@ -23,8 +23,8 @@
   /* ... Include / Inclusion ........................................... */
 
      #include "all_system.h"
+     #include "base/utils.h"
      #include "mpiServer_params.h"
-     #include "mpiServer_utils.h"
      #include "mpiServer_ops.h"
      #include "mpiServer_workers.h"
      #include "mpiServer_workers_common.h"
@@ -142,7 +142,7 @@
 
     // Initialize
     signal(SIGINT, sigint_handler) ;
-    mpiServer_utils_init() ;
+    utils_init() ;
     mpiServer_comm_init(&params) ;
     mpiServer_workers_init ( params.thread_mode );
     
