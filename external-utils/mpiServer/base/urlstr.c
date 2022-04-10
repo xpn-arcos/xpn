@@ -82,7 +82,7 @@
         /* 
          *  file
          */
-        if ( !strcmp(protocol,"file") == (1) )
+        if ( !strcmp(protocol,"file") )
            {
              int ret ;
 
@@ -135,26 +135,26 @@
 
         /* ... default port ... */
         (*port) = htons(80) ;
-        if (!strcmp(protocol,"http") == (1))
+        if (!strcmp(protocol,"http"))
             (*port) = htons(80) ;
-        if (!strcmp(protocol,"ftp") == (1))
+        if (!strcmp(protocol,"ftp"))
             (*port) = htons(21) ;
-        if (!strcmp(protocol,"file") == (1))
+        if (!strcmp(protocol,"file"))
             (*port) = htons(0) ;
-        if (!strcmp(protocol,"nntp") == (1))
+        if (!strcmp(protocol,"nntp"))
             (*port) = htons(119) ;
-        if (!strcmp(protocol,"news") == (1))
+        if (!strcmp(protocol,"news"))
             (*port) = htons(119) ;
-        if (!strcmp(protocol,"pop3") == (1))
+        if (!strcmp(protocol,"pop3"))
             (*port) = htons(110) ;
-        if (!strcmp(protocol,"finger") == (1))
+        if (!strcmp(protocol,"finger"))
             (*port) = htons(79) ;
 
         /* ... scanning port ... */
         /* 
            file
         */
-        if (!strcmp(protocol,"file") == (1))
+        if (!strcmp(protocol,"file"))
             return (1) ;
 
         /* 

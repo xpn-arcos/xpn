@@ -1,13 +1,16 @@
 #ifndef _MPISERVER_OPS_H_
 #define _MPISERVER_OPS_H_
 
-  #include <libgen.h>
-
-  #include "all_system.h"
-  #include "mpiServer_params.h"
-  #include "mpiServer_utils.h"
-  #include "base/urlstr.h" //TODO: cp base into make install
-  #include "mpiServer_workers_common.h"
+    #include <libgen.h>
+    #include "all_system.h"
+    #include "base/filesystem.h"
+    #include "base/urlstr.h"
+    #include "mpiServer_ops.h"
+    #include "mpiServer_comm.h"
+    #include "mpiServer_d2xpn.h"
+    #include "mpiServer_params.h"
+    #include "mpiServer_utils.h"
+    #include "mpiServer_workers_common.h"
 
 
   /*

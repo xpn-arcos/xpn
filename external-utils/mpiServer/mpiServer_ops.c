@@ -21,10 +21,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-    #include "mpiServer_ops.h"
-    #include "mpiServer_file.h"
-    #include "mpiServer_comm.h"
-    #include "mpiServer_d2xpn.h"
+     #include "mpiServer_ops.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -218,17 +215,19 @@
   }
 
 
-
-  //File API
+  //
+  // File API
+  //
 
   void mpiServer_op_open ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
   {
-    int fd;
-    char *s;
+    int fd ;
+    char *s ;
+
+    s = head->u_st_mpiServer_msg.op_open.path ;
 
     // do open
-    s = head->u_st_mpiServer_msg.op_open.path;
-    fd = mpiServer_file_open(s, O_RDWR) ;
+    fd = filesystem_open(s, O_RDWR) ;
 
     mpiServer_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id);
 
@@ -238,12 +237,17 @@
 
   void mpiServer_op_creat ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
   {
-    int fd;
-    char *s;
+    int fd ;
+    char *s ;
+
+    s = head->u_st_mpiServer_msg.op_creat.path;
 
     // do creat
-    s = head->u_st_mpiServer_msg.op_creat.path;
-    fd = mpiServer_file_creat(params, s, 0777) ;
+    fd = filesystem_creat(s, 0770) ; // TODO: mpiServer_op_creat don't use 'mode' from client ?
+    if (fd == -1) {
+        filesystem_mkpath(s) ;
+        fd = filesystem_creat(s, 0770) ;
+    }
 
     mpiServer_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id) ;
 
@@ -286,7 +290,7 @@
 
       // lseek and read data...
       LSEEK(head->u_st_mpiServer_msg.op_read.fd, head->u_st_mpiServer_msg.op_read.offset + cont, SEEK_SET);
-      req.size = mpiServer_file_read_buffer(params, head->u_st_mpiServer_msg.op_read.fd, buffer, to_read);
+      req.size = filesystem_read_buffer(head->u_st_mpiServer_msg.op_read.fd, buffer, to_read);
       // if error then send as "how many bytes" -1
       if (req.size < 0)
       {
@@ -355,7 +359,7 @@
       // read data from MPI and write into the file
       mpiServer_comm_read_data(params, sd, buffer, to_write, rank_client_id);
       LSEEK(head->u_st_mpiServer_msg.op_write.fd, head->u_st_mpiServer_msg.op_write.offset + cont, SEEK_SET);
-      req.size = mpiServer_file_write_buffer(params, head->u_st_mpiServer_msg.op_write.fd, buffer, to_write, to_write) ;
+      req.size = filesystem_write_buffer(head->u_st_mpiServer_msg.op_write.fd, buffer, to_write, to_write) ;
 
       // update counters
       cont = cont + req.size ; // Received bytes
@@ -382,7 +386,7 @@
     }
 
     // do close
-    int ret = mpiServer_file_close(head->u_st_mpiServer_msg.op_close.fd) ;
+    int ret = filesystem_close(head->u_st_mpiServer_msg.op_close.fd) ;
 
     mpiServer_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id);
 
