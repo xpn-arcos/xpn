@@ -5,7 +5,7 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "all_system.h"
-      //#include "string_misc.h"
+      #include "string_misc.h"
 
 
  #ifdef  __cplusplus

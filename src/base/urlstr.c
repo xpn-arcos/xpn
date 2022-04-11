@@ -8,7 +8,7 @@
    /* ... Functions / Funciones ......................................... */
 
       static
-      int8_t    URLSTR_Match_protocol    ( char    **protocol,
+      int       URLSTR_Match_protocol    ( char    **protocol,
                                            char    **str )
       {
         static char *URLSTR_protocols[] = 
@@ -16,13 +16,6 @@
                  "http",
                  "ftp",
                  "file",
-                 "news",
-                 "nntp",
-                 "pop3",
-                 "mailto",
-                 "gopher",
-                 "telnet",
-                 "finger",
                  "tcpServer",
                  "mpiServer",
                  NULL
@@ -55,7 +48,7 @@
       }
 
       static
-      int8_t    URLSTR_Match_user     (  char    **user,
+      int       URLSTR_Match_user     (  char    **user,
                                          char    **str )
       {
         char *pch ;
@@ -71,7 +64,7 @@
       }
 
       static
-      int8_t    URLSTR_Match_machine  (  char    **machine,
+      int       URLSTR_Match_machine  (  char    **machine,
                                          char     *protocol,
                                          char    **str )
       {
@@ -82,7 +75,7 @@
         /* 
          *  file
          */
-        if ( STRING_MISC_Equal(protocol,"file") == (1) )
+        if ( STRING_MISC_Equal(protocol,"file")  )
            {
              int ret ;
 
@@ -127,7 +120,7 @@
       }
 
       static
-      int8_t    URLSTR_Match_port     (  int      *port,
+      int       URLSTR_Match_port     (  int      *port,
                                          char     *protocol,
                                          char     **str )
       {
@@ -135,26 +128,26 @@
 
         /* ... default port ... */
         (*port) = htons(80) ;
-        if (STRING_MISC_Equal(protocol,"http") == (1))
+        if (STRING_MISC_Equal(protocol,"http") )
             (*port) = htons(80) ;
-        if (STRING_MISC_Equal(protocol,"ftp") == (1))
+        if (STRING_MISC_Equal(protocol,"ftp") )
             (*port) = htons(21) ;
-        if (STRING_MISC_Equal(protocol,"file") == (1))
+        if (STRING_MISC_Equal(protocol,"file") )
             (*port) = htons(0) ;
-        if (STRING_MISC_Equal(protocol,"nntp") == (1))
+        if (STRING_MISC_Equal(protocol,"nntp") )
             (*port) = htons(119) ;
-        if (STRING_MISC_Equal(protocol,"news") == (1))
+        if (STRING_MISC_Equal(protocol,"news") )
             (*port) = htons(119) ;
-        if (STRING_MISC_Equal(protocol,"pop3") == (1))
+        if (STRING_MISC_Equal(protocol,"pop3") )
             (*port) = htons(110) ;
-        if (STRING_MISC_Equal(protocol,"finger") == (1))
+        if (STRING_MISC_Equal(protocol,"finger") )
             (*port) = htons(79) ;
 
         /* ... scanning port ... */
         /* 
            file
         */
-        if (STRING_MISC_Equal(protocol,"file") == (1))
+        if (STRING_MISC_Equal(protocol,"file") )
             return (1) ;
 
         /* 
@@ -185,7 +178,7 @@
       }
 
       static
-      int8_t    URLSTR_Match_file     (  char    **file,
+      int       URLSTR_Match_file     (  char    **file,
                                          char    **str )
       {
         char *pch1 ;
@@ -223,7 +216,7 @@
       }
 
       static
-      int8_t    URLSTR_Match_relative (  char     **relative,
+      int       URLSTR_Match_relative (  char     **relative,
                                          char     **str )
       {
         char *pch1, *pch2 ;
@@ -255,7 +248,7 @@
       }
 
       static
-      int8_t    URLSTR_Match_params   (  char    **params,
+      int       URLSTR_Match_params   (  char    **params,
                                          char    **str )
       {
         char *pch1 ;
@@ -285,7 +278,7 @@
      * @return true (1) if parsing was madden or error (-1) if
                any error is found.
      */
-     int8_t    URLSTR_Match_url      (  char    **protocol,
+     int       URLSTR_Match_url      (  char    **protocol,
                                          char    **user,
                                          char    **machine,
                                          int      *port,
@@ -294,7 +287,7 @@
                                          char    **params,
                                          char    **str )
      {
-        int8_t ok ;
+        int    ok ;
 
         ok = URLSTR_Match_protocol(protocol,str) ;
         if (0 == ok) return (0) ;
@@ -327,7 +320,7 @@
      * @return true (1) if parsing was madden or error (-1) if
                any error is found.
      */
-     int8_t    URLSTR_ParseURL
+     int       URLSTR_ParseURL
      (
           /*IN */ char  *urlstr,
           /*OUT*/ char **protocol,
@@ -339,12 +332,13 @@
           /*OUT*/ char **params
      )
      {
-        char     *pch, *fch ;
-        int8_t   ok ;
+        char *pch, *fch ;
+        int   ok ;
 
         fch = pch = STRING_MISC_StrDup(urlstr) ;
-        if (NULL == pch) 
+        if (NULL == pch) {
             return (-1);
+	}
 
         ok  = URLSTR_Match_url(protocol,
                                user,

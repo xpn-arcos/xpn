@@ -167,7 +167,7 @@
          }
 
 	 // Try to open the file
-         ret = real_posix_open(pathname, flags, mode) ;
+         ret = real_posix_open2(pathname, flags, mode) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: open2(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret) ;
              perror("open: ") ;

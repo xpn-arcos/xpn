@@ -8,7 +8,7 @@
    /* ... Functions / Funciones ......................................... */
 
       static
-      int    URLSTR_Match_protocol    ( char    **protocol,
+      int       URLSTR_Match_protocol    ( char    **protocol,
                                            char    **str )
       {
         static char *URLSTR_protocols[] = 
@@ -16,13 +16,6 @@
                  "http",
                  "ftp",
                  "file",
-                 "news",
-                 "nntp",
-                 "pop3",
-                 "mailto",
-                 "gopher",
-                 "telnet",
-                 "finger",
                  "tcpServer",
                  "mpiServer",
                  NULL
@@ -37,10 +30,10 @@
               if (ret == 0)
                  {
                    if (strcmp("news",URLSTR_protocols[i]) == 0)
-                            (*protocol) = strdup("nntp") ;
-                       else (*protocol) = strdup(URLSTR_protocols[i]) ;
+                            (*protocol) = STRING_MISC_StrDup("nntp") ;
+                       else (*protocol) = STRING_MISC_StrDup(URLSTR_protocols[i]) ;
 
-                   (*str) = (*str) + strlen(URLSTR_protocols[i]) ;
+                   (*str) = (*str) + STRING_MISC_StrLen(URLSTR_protocols[i]) ;
                    if ( (**str) == ':' )
                         (*str) ++ ;
                    if ( (**str) == '/' )
@@ -50,12 +43,12 @@
                    return (1) ;
                  }
             }
-        (*protocol) = strdup("http") ;
+        (*protocol) = STRING_MISC_StrDup("http") ;
         return (1) ;
       }
 
       static
-      int    URLSTR_Match_user     (  char    **user,
+      int       URLSTR_Match_user     (  char    **user,
                                          char    **str )
       {
         char *pch ;
@@ -65,13 +58,13 @@
              return (1) ;
 
         pch[0] = '\0' ;
-        (*user) = strdup((*str)) ;
+        (*user) = STRING_MISC_StrDup((*str)) ;
         (*str) = pch + 1 ;
         return (1) ;
       }
 
       static
-      int    URLSTR_Match_machine  (  char    **machine,
+      int       URLSTR_Match_machine  (  char    **machine,
                                          char     *protocol,
                                          char    **str )
       {
@@ -82,11 +75,11 @@
         /* 
          *  file
          */
-        if ( !strcmp(protocol,"file") )
+        if ( STRING_MISC_Equal(protocol,"file")  )
            {
              int ret ;
 
-             (*machine) = strdup("localhost") ;
+             (*machine) = STRING_MISC_StrDup("localhost") ;
              ret = strncmp((*str),"localhost",strlen("localhost")) ;
              if (ret == 0)
                  (*str) = (*str) + strlen("localhost") ;
@@ -102,14 +95,14 @@
            {
              if (pch1 == NULL)
                 {
-                  (*machine) = strdup((*str)) ;
-                  (*str) = (*str) + strlen((*str)) ;
+                  (*machine) = STRING_MISC_StrDup((*str)) ;
+                  (*str) = (*str) + STRING_MISC_StrLen((*str)) ;
                   return (1) ;
                 }
              if (pch1 != NULL)
                 {
                   pch1[0] = '\0' ;
-                  (*machine) = strdup((*str)) ;
+                  (*machine) = STRING_MISC_StrDup((*str)) ;
                   (*str) = pch1 ;
                   pch1[0] = '/' ;
                   return (1) ;
@@ -118,7 +111,7 @@
         if (pch2 != NULL)
            {
              pch2[0] = '\0' ;
-             (*machine) = strdup((*str)) ;
+             (*machine) = STRING_MISC_StrDup((*str)) ;
              pch2[0] = ':' ;
              (*str) = pch2 ;
              return (1) ;
@@ -127,7 +120,7 @@
       }
 
       static
-      int    URLSTR_Match_port     (  int      *port,
+      int       URLSTR_Match_port     (  int      *port,
                                          char     *protocol,
                                          char     **str )
       {
@@ -135,26 +128,26 @@
 
         /* ... default port ... */
         (*port) = htons(80) ;
-        if (!strcmp(protocol,"http"))
+        if (STRING_MISC_Equal(protocol,"http") )
             (*port) = htons(80) ;
-        if (!strcmp(protocol,"ftp"))
+        if (STRING_MISC_Equal(protocol,"ftp") )
             (*port) = htons(21) ;
-        if (!strcmp(protocol,"file"))
+        if (STRING_MISC_Equal(protocol,"file") )
             (*port) = htons(0) ;
-        if (!strcmp(protocol,"nntp"))
+        if (STRING_MISC_Equal(protocol,"nntp") )
             (*port) = htons(119) ;
-        if (!strcmp(protocol,"news"))
+        if (STRING_MISC_Equal(protocol,"news") )
             (*port) = htons(119) ;
-        if (!strcmp(protocol,"pop3"))
+        if (STRING_MISC_Equal(protocol,"pop3") )
             (*port) = htons(110) ;
-        if (!strcmp(protocol,"finger"))
+        if (STRING_MISC_Equal(protocol,"finger") )
             (*port) = htons(79) ;
 
         /* ... scanning port ... */
         /* 
            file
         */
-        if (!strcmp(protocol,"file"))
+        if (STRING_MISC_Equal(protocol,"file") )
             return (1) ;
 
         /* 
@@ -170,7 +163,7 @@
         if (pch2 == NULL)
            {
              (*port) = htons(atoi(pch1)) ;
-             (*str)  = (*str) + strlen((*str)) ;
+             (*str)  = (*str) + STRING_MISC_StrLen((*str)) ;
              return (1) ;
            }
         if (pch2 != NULL)
@@ -185,7 +178,7 @@
       }
 
       static
-      int    URLSTR_Match_file     (  char    **file,
+      int       URLSTR_Match_file     (  char    **file,
                                          char    **str )
       {
         char *pch1 ;
@@ -194,8 +187,8 @@
         if (pch1 != NULL)
            {
              pch1[0] = '\0' ;
-             (*file) = strdup((*str)) ;
-             (*str)  = (*str) + strlen(pch1) ;
+             (*file) = STRING_MISC_StrDup((*str)) ;
+             (*str)  = (*str) + STRING_MISC_StrLen(pch1) ;
              pch1[0] = '#' ;
              return (1) ;
            }
@@ -204,7 +197,7 @@
         if (pch1 != NULL)
            {
              pch1[0] = '\0' ;
-             (*file) = strdup((*str)) ;
+             (*file) = STRING_MISC_StrDup((*str)) ;
              pch1[0] = '?' ;
              (*str)  = pch1 ;
              return (1) ;
@@ -213,17 +206,17 @@
         /* ... all is file ... */
         if ((*str)[0] != '\0')
            {
-             (*file) = strdup((*str)) ;
-             (*str)  = (*str) + strlen((*str)) ;
+             (*file) = STRING_MISC_StrDup((*str)) ;
+             (*str)  = (*str) + STRING_MISC_StrLen((*str)) ;
              return (1) ;
            }
 
-        (*file) = strdup("/") ;
+        (*file) = STRING_MISC_StrDup("/") ;
         return (1) ;
       }
 
       static
-      int    URLSTR_Match_relative (  char     **relative,
+      int       URLSTR_Match_relative (  char     **relative,
                                          char     **str )
       {
         char *pch1, *pch2 ;
@@ -237,15 +230,15 @@
         pch2 = strchr(pch1,'?') ;
         if (pch2 == NULL)
            {
-             (*relative) = strdup((*str)) ;
-             (*str)      = (*str) + strlen((*str)) ;
+             (*relative) = STRING_MISC_StrDup((*str)) ;
+             (*str)      = (*str) + STRING_MISC_StrLen((*str)) ;
              return (1) ;
            }
 
         if (pch2 != NULL)
            {
              pch2[0]     = '\0' ;
-             (*relative) = strdup(pch1) ;
+             (*relative) = STRING_MISC_StrDup(pch1) ;
              (*str)      = pch2 ;
              pch2[0]     = '?' ;
              return (1) ;
@@ -255,7 +248,7 @@
       }
 
       static
-      int    URLSTR_Match_params   (  char    **params,
+      int       URLSTR_Match_params   (  char    **params,
                                          char    **str )
       {
         char *pch1 ;
@@ -266,8 +259,8 @@
             return (1) ;
 
         pch1 ++ ; /* skip '?' */
-        (*params) = strdup(pch1) ;
-        (*str)    = (*str) + strlen((*str)) ;
+        (*params) = STRING_MISC_StrDup(pch1) ;
+        (*str)    = (*str) + STRING_MISC_StrLen((*str)) ;
         return (1) ;
       }
 
@@ -285,7 +278,7 @@
      * @return true (1) if parsing was madden or error (-1) if
                any error is found.
      */
-     int    URLSTR_Match_url      (  char    **protocol,
+     int       URLSTR_Match_url      (  char    **protocol,
                                          char    **user,
                                          char    **machine,
                                          int      *port,
@@ -294,7 +287,7 @@
                                          char    **params,
                                          char    **str )
      {
-        int ok ;
+        int    ok ;
 
         ok = URLSTR_Match_protocol(protocol,str) ;
         if (0 == ok) return (0) ;
@@ -327,7 +320,7 @@
      * @return true (1) if parsing was madden or error (-1) if
                any error is found.
      */
-     int    URLSTR_ParseURL
+     int       URLSTR_ParseURL
      (
           /*IN */ char  *urlstr,
           /*OUT*/ char **protocol,
@@ -339,12 +332,13 @@
           /*OUT*/ char **params
      )
      {
-        char     *pch, *fch ;
+        char *pch, *fch ;
         int   ok ;
 
-        fch = pch = strdup(urlstr) ;
-        if (NULL == pch) 
+        fch = pch = STRING_MISC_StrDup(urlstr) ;
+        if (NULL == pch) {
             return (-1);
+	}
 
         ok  = URLSTR_Match_url(protocol,
                                user,

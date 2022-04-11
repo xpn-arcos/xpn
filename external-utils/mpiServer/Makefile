@@ -4,8 +4,8 @@
 #--------------------------
 
 MAKE         = make -s
-#CC           = /opt/software/install-mpich/bin/mpicc
-CC           = mpicc
+CC           = /opt/software/install-mpich/bin/mpicc
+#CC           = mpicc
 #CC           = /home/dcamarma/mpich-install/bin/mpicc
 SOURCE_PATH  = ./
 #EXPAND_DIR   = $(HOME)/expand/trunk/expand
@@ -21,6 +21,8 @@ OBJECTS_MPISERVER      = mpiServer.o \
 		         mpiServer_d2xpn.o \
 			 base/filesystem.o \
 			 base/urlstr.o \
+			 base/string_misc.o \
+			 base/debug_msg.o \
 			 base/utils.o
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDEBUG
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDEBUG

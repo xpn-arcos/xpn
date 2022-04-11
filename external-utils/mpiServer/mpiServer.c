@@ -142,7 +142,7 @@
 
     // Initialize
     signal(SIGINT, sigint_handler) ;
-    utils_init() ;
+    debug_msg_init() ;
     mpiServer_comm_init(&params) ;
     mpiServer_workers_init ( params.thread_mode );
     

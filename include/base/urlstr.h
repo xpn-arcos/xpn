@@ -15,7 +15,7 @@
 
    /* ... Functions / Funciones ......................................... */
 
-      int8_t    URLSTR_ParseURL 
+      int    URLSTR_ParseURL 
       (
          /*IN */ char  *urlstr,
           /*OUT*/ char **protocol,
