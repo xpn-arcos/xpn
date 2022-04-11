@@ -25,6 +25,7 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "all_system.h"
+      #include "base/utils.h"
       #include <sys/stat.h>
       #include <sys/types.h>
 
@@ -33,20 +34,44 @@
 
 #ifdef _LARGEFILE64_
      typedef long long int offset_t;
-     #define LSEEK lseek64
+     #define LSEEK real_posix_lseek64
 #else
      typedef off_t offset_t;
-     #define LSEEK lseek
+     #define LSEEK real_posix_lseek
 #endif
 
 
-  // DLSYM
+   /* ... Functions / Funciones ......................................... */
+
+     int  filesystem_creat     ( char *pathname, mode_t mode ) ;
+     int  filesystem_open      ( char *pathname, int flags ) ;
+     int  filesystem_close     ( int fd ) ;
+
+     long filesystem_read      ( int read_fd2,  void *buffer, int buffer_size ) ;
+     long filesystem_write     ( int write_fd2, void *buffer, int num_bytes_to_write ) ;
+
+     int  filesystem_mkpath    ( char *pathname ) ;
+     int  filesystem_mkdir     ( char *pathname, mode_t mode ) ;
+     int  filesystem_rmdir     ( char *pathname ) ;
+
+     DIR           *filesystem_opendir  ( char *name ) ;
+     struct dirent *filesystem_readdir  ( DIR  *dirp ) ;
+     int            filesystem_closedir ( DIR  *dirp ) ;
+
+     off_t filesystem_lseek    ( int fd, off_t offset, int whence ) ;
+     int   filesystem_unlink   ( char *pathname ) ;
+     int   filesystem_stat     ( char *pathname, struct stat *sinfo ) ;
+
+
+  /* ... Macros / Macros .................................................. */
+
 #ifdef FILESYSTEM_DLSYM
      #define real_posix_creat(path,mode)                      dlsym_creat(path,mode)
      #define real_posix_open(path,flags)                      dlsym_open(path,flags)
      #define real_posix_close(fd)                             dlsym_close(fd)
 
      #define real_posix_lseek(fd,offset,whence)               dlsym_lseek(fd,offset,whence)
+     #define real_posix_lseek64(fd,offset,whence)             dlsym_lseek64(fd,offset,whence)
      #define real_posix_read(fd,buffer,buffer_size)           dlsym_read(fd,buffer,buffer_size)
      #define real_posix_write(fd,buffer,buffer_size)          dlsym_write(fd,buffer,buffer_size)
 
@@ -64,6 +89,7 @@
      #define real_posix_close(fd)                             close(fd)
 
      #define real_posix_lseek(fd,offset,whence)               lseek(fd,offset,whence)
+     #define real_posix_lseek64(fd,offset,whence)             lseek64(fd,offset,whence)
      #define real_posix_read(fd,buffer,buffer_size)           read(fd,buffer,buffer_size)
      #define real_posix_write(fd,buffer,buffer_size)          write(fd,buffer,buffer_size)
 
@@ -76,18 +102,6 @@
      #define real_posix_readdir(dirptr)                       readdir(dirptr)
      #define real_posix_closedir(dirptr)                      closedir(dirptr)
 #endif
-
-
-   /* ... Functions / Funciones ......................................... */
-
-     int  filesystem_creat        ( char *pathname, mode_t mode ) ;
-     int  filesystem_open         ( char *pathname, int flags ) ;
-     int  filesystem_close        ( int fd ) ;
-
-     long filesystem_read_buffer  ( int read_fd2,  void *buffer, int buffer_size ) ;
-     long filesystem_write_buffer ( int write_fd2, void *buffer, int buffer_size, int num_readed_bytes ) ;
-
-     int  filesystem_mkpath       ( char *pathname ) ;
 
 
 #endif
