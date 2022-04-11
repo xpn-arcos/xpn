@@ -155,6 +155,30 @@
 	 return ret ;
     }
 
+    int  filesystem_open2 ( char *pathname, int flags, mode_t mode )
+    {
+	 int ret ;
+
+         DEBUG_BEGIN() ;
+
+         // Check params
+         if (NULL == pathname) {
+             debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
+         }
+
+	 // Try to open the file
+         ret = real_posix_open(pathname, flags, mode) ;
+         if (ret < 0) {
+             debug_warning("[FILE_POSIX]: open2(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret) ;
+             perror("open: ") ;
+         }
+
+         DEBUG_END() ;
+
+	 // Return OK/KO
+	 return ret ;
+    }
+
     int  filesystem_close ( int fd )
     {
 	 int ret ;

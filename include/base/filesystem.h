@@ -45,6 +45,7 @@
 
      int  filesystem_creat     ( char *pathname, mode_t mode ) ;
      int  filesystem_open      ( char *pathname, int flags ) ;
+     int  filesystem_open2     ( char *pathname, int flags, mode_t mode ) ;
      int  filesystem_close     ( int fd ) ;
 
      long filesystem_read      ( int read_fd2,  void *buffer, int buffer_size ) ;
@@ -68,6 +69,7 @@
 #ifdef FILESYSTEM_DLSYM
      #define real_posix_creat(path,mode)                      dlsym_creat(path,mode)
      #define real_posix_open(path,flags)                      dlsym_open(path,flags)
+     #define real_posix_open2(path,flags,mode)                dlsym_open(path,flags,mode)
      #define real_posix_close(fd)                             dlsym_close(fd)
 
      #define real_posix_lseek(fd,offset,whence)               dlsym_lseek(fd,offset,whence)
@@ -86,6 +88,7 @@
 #else
      #define real_posix_creat(path,mode)                      creat(path,mode)
      #define real_posix_open(path,flags)                      open(path,flags)
+     #define real_posix_open2(path,flags,mode)                open(path,flags,mode)
      #define real_posix_close(fd)                             close(fd)
 
      #define real_posix_lseek(fd,offset,whence)               lseek(fd,offset,whence)

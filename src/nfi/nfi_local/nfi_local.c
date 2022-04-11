@@ -310,7 +310,7 @@ int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
-	res = stat(fh_aux->path, &st) ;
+	res = filesystem_stat(fh_aux->path, &st) ;
 	if (res < 0) {
 	    debug_error("nfi_local_getattr: Fail stat %s.\n", fh_aux->path) ;
 	    return res;
@@ -424,10 +424,10 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
 	// Open file...
-	res = files_posix_open(dir, O_RDWR) ;
+	res = filesystem_open(dir, O_RDWR) ;
 	if (res < 0)
 	{
-	    debug_error("files_posix_open fails to open '%s' in server %s.\n", dir, serv->server) ;
+	    debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
 	    free(fh_aux) ;
 	    free(fho->url) ;
 	    return -1;
@@ -436,7 +436,7 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
 	fh_aux->fd = res;
 	strcpy(fh_aux->path, dir) ;
 
-	res = stat(fh_aux->path, &st) ;
+	res = filesystem_stat(fh_aux->path, &st) ;
 	if (res < 0) {
 	    debug_error("LOCALERR_GETATTR.\n") ;
 	    free(fh_aux) ;
@@ -445,25 +445,23 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
 	}
 
 	if (S_ISDIR(st.st_mode)) {
-		fho->type = NFIDIR;
+	    fho->type = NFIDIR ;
+	}
+	else if (S_ISREG(st.st_mode)) {
+	    fho->type = NFIFILE ;
 	} else {
-		if (S_ISREG(st.st_mode)) {
-			fho->type = NFIFILE;
-		} else {
-	                debug_error("LOCALERR_GETATTR.\n") ;
-			free(fh_aux) ;
-			free(fho->url) ;
-			return -1;
-		}
+	    debug_error("LOCALERR_GETATTR.\n") ;
+	    free(fh_aux) ;
+	    free(fho->url) ;
+	    return -1;
 	}
 
 	fho->server = serv;
 	fho->priv_fh = (void *) fh_aux;
-	res = 0;
 
 	DEBUG_END();
 
-	return res;
+	return 0;
 }
 
 int nfi_local_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
@@ -485,7 +483,7 @@ int nfi_local_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 	// Do close
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh ;
 	if (fh_aux != NULL) {
-	    files_posix_close(fh_aux->fd) ;
+	    filesystem_close(fh_aux->fd) ;
 	}
 
 	/* free memory */
@@ -539,7 +537,7 @@ ssize_t nfi_local_read ( struct nfi_server *serv,
 	    return -1;
 	}
 
-	real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
+	filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
 	new_size = files_posix_read_buffer(fh_aux->fd, buffer, size) ;
 	debug_info("read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, new_size)
 	if (new_size < 0) {
@@ -585,8 +583,8 @@ ssize_t nfi_local_write ( struct nfi_server *serv,
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
-	real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
-	new_size = files_posix_write_buffer(fh_aux->fd, buffer, size) ;
+	filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
+	new_size = filesystem_write_buffer(fh_aux->fd, buffer, size) ;
 	debug_info("write %s off %ld size %zu (ret:%zd)", fh->url, (long int)offset, size, new_size)
 	if (new_size < 0) {
 	    debug_error("files_posix_write_buffer writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, new_size, errno) ;
@@ -642,7 +640,7 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *att
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
 	// Do create
-	fd = files_posix_open(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
+	fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
 	if (fd < 0) {
 	    debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
 	    free(fh_aux) ;
@@ -661,7 +659,7 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *att
 	}
 	
 	memset(&st, 0, sizeof(struct stat)) ;
-	res = real_posix_stat(fh_aux->path, &st) ;
+	res = filesystem_stat(fh_aux->path, &st) ;
 	if (res < 0) {
 	    debug_error("real_posix_stat fails to stat '%s' in server '%s'.\n", fh_aux->path, serv->server) ;
 	    free(fh->url) ;
@@ -706,7 +704,7 @@ int nfi_local_remove ( struct nfi_server *serv,  char *url )
 	}
 
 	// Do unlink
-	res = real_posix_unlink(dir) ;
+	res = filesystem_unlink(dir) ;
 	if (res < 0) {
 		debug_error("nfi_local_remove: Fail remove %s in server %s.\n", dir, serv->server) ;
 		return -1;
@@ -792,7 +790,7 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr
 	bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
 
 	// Do mkdir
-	res = real_posix_mkdir(dir, /*attr->at_mode*/ 0777) ;
+	res = filesystem_mkdir(dir, /*attr->at_mode*/ 0777) ;
 	if ((res < 0) && (errno != EEXIST))
 	{
 		debug_error("nfi_local_mkdir: Fail mkdir %s.\n", dir) ;
@@ -846,7 +844,7 @@ int nfi_local_rmdir ( struct nfi_server *serv,  char *url )
 	}
 
 	// Do rmdir
-	res = real_posix_rmdir(dir) ;
+	res = filesystem_rmdir(dir) ;
 	if (res < 0)
 	{
 		debug_error(stderr,"nfi_local_rmdir: Fail rmdir %s.\n", dir) ;
@@ -908,7 +906,7 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
 	// Do opendir
-	fh_aux->dir = real_posix_opendir(dir) ;
+	fh_aux->dir = filesystem_opendir(dir) ;
 	if (fh_aux->dir == NULL) {
 	    free(fh_aux) ;
 	    free(fho->url) ;
@@ -967,7 +965,7 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, char *
 	fh_aux = (struct nfi_local_fhandle *)fh->priv_fh;
 
 	entry[0] = '\0';
-	ent = real_posix_readdir(fh_aux->dir) ;
+	ent = filesystem_readdir(fh_aux->dir) ;
 
 	if (ent == NULL) {
 		debug_error("nfi_local_readdir: readdir") ;
@@ -1003,7 +1001,7 @@ int nfi_local_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 	// Do closedir
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	if (fh_aux != NULL) {
-	    real_posix_closedir(fh_aux->dir) ;
+	    filesystem_closedir(fh_aux->dir) ;
 	}
 
         /* free memory */
