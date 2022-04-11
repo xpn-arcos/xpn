@@ -12,6 +12,52 @@
 
    /* ... Functions / Funciones ......................................... */
 
+      // Debug API
+      void debug_msg_init ( void )
+      {
+           setbuf(stdout, NULL) ;
+           setbuf(stderr, NULL) ;
+      }
+
+      int debug_msg_printf ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... )
+      {
+         va_list valist ;
+         int ret ;
+      
+         va_start(valist, msg_fmt) ;
+         switch (src_type)
+         {
+              case  3:
+                    fprintf(fd, "[%s:%4ld] [INFO] ", src_fname, src_line) ;
+                    ret = vfprintf(fd, msg_fmt, valist) ;
+                    break;
+      
+              case  2:
+                    fprintf(fd, "[%s:%4ld] [WARN] ", src_fname, src_line) ;
+                    ret = vfprintf(fd, msg_fmt, valist) ;
+                    break;
+      
+              case  1:
+                    fprintf(fd, "[%s:%4ld] [ERROR] ", src_fname, src_line) ;
+                    ret = vfprintf(fd, msg_fmt, valist) ;
+                    break;
+      
+              default:
+                    ret = vfprintf(fd, msg_fmt, valist) ;
+                    break;
+         }
+         va_end(valist) ;
+      
+         // fflush(fd) ;
+      
+         return ret ;
+      }
+      
+
+      //
+      // Extra Debug API
+      //
+
       void   DEBUG_MSG_setPrinter 
       ( 
         /*IN*/      int (*printer) (const char   *, va_list) 
@@ -80,7 +126,6 @@
        	     va_end(vl) ;
            }
       }
-
 
    /* ................................................................... */
 
