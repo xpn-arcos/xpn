@@ -203,7 +203,7 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/time_misc.c \
 			@top_srcdir@/src/base/urlstr.c \
 			@top_srcdir@/src/base/syscall_proxies.c \
-			@top_srcdir@/src/base/filesystem.h \
+			@top_srcdir@/src/base/filesystem.c \
 			@top_srcdir@/src/base/utils.c
 
 NFI_COMMON_OBJECTS=	@top_srcdir@/src/nfi/common/nfi_worker.c

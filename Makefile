@@ -168,7 +168,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/compile \
 	$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/Makefile.in \
 	./config/compile ./config/config.guess ./config/config.sub \
 	./config/depcomp ./config/install-sh ./config/missing AUTHORS \
-	COPYING ChangeLog INSTALL NEWS README
+	COPYING CHANGELOG.md INSTALL README.md
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -211,13 +211,13 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /local_test/expand/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} /local_test/xpn/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /local_test/expand/config/missing autoconf
-AUTOHEADER = ${SHELL} /local_test/expand/config/missing autoheader
-AUTOM4TE = ${SHELL} /local_test/expand/config/missing autom4te
-AUTOMAKE = ${SHELL} /local_test/expand/config/missing automake-1.16
+AUTOCONF = ${SHELL} /local_test/xpn/config/missing autoconf
+AUTOHEADER = ${SHELL} /local_test/xpn/config/missing autoheader
+AUTOM4TE = ${SHELL} /local_test/xpn/config/missing autom4te
+AUTOMAKE = ${SHELL} /local_test/xpn/config/missing automake-1.16
 AWK = mawk
 CC = /opt/software/install-mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
@@ -254,7 +254,7 @@ LTLIBOBJS =
 LTP_PATH = ${abs_top_srcdir}/test/autotest/ltp-full-20080731
 LTP_VERSION = 20080731
 MAKE = make
-MAKEINFO = ${SHELL} /local_test/expand/config/missing makeinfo
+MAKEINFO = ${SHELL} /local_test/xpn/config/missing makeinfo
 MKDIR_P = /bin/mkdir -p
 M_HEADERS = 
 NFI_FTP = 
@@ -293,10 +293,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 1.0.0
-abs_builddir = /local_test/expand
-abs_srcdir = /local_test/expand
-abs_top_builddir = /local_test/expand
-abs_top_srcdir = /local_test/expand
+abs_builddir = /local_test/xpn
+abs_srcdir = /local_test/xpn
+abs_top_builddir = /local_test/xpn
+abs_top_srcdir = /local_test/xpn
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -323,7 +323,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /local_test/expand/config/install-sh
+install_sh = ${SHELL} /local_test/xpn/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale

@@ -168,7 +168,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/compile \
 	$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/Makefile.in \
 	./config/compile ./config/config.guess ./config/config.sub \
 	./config/depcomp ./config/install-sh ./config/missing AUTHORS \
-	COPYING ChangeLog INSTALL NEWS README
+	COPYING CHANGELOG.md INSTALL README.md
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)

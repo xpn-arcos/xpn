@@ -538,10 +538,10 @@ ssize_t nfi_local_read ( struct nfi_server *serv,
 	}
 
 	filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
-	new_size = files_posix_read_buffer(fh_aux->fd, buffer, size) ;
+	new_size = filesystem_read(fh_aux->fd, buffer, size) ;
 	debug_info("read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, new_size)
 	if (new_size < 0) {
-	    debug_error("files_posix_read_buffer reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, new_size, errno) ;
+	    debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, new_size, errno) ;
 	    return -1;
 	}
 
@@ -584,7 +584,7 @@ ssize_t nfi_local_write ( struct nfi_server *serv,
 	server_aux = (struct nfi_local_server *) serv->private_info;
 
 	filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
-	new_size = filesystem_write_buffer(fh_aux->fd, buffer, size) ;
+	new_size = filesystem_write(fh_aux->fd, buffer, size) ;
 	debug_info("write %s off %ld size %zu (ret:%zd)", fh->url, (long int)offset, size, new_size)
 	if (new_size < 0) {
 	    debug_error("files_posix_write_buffer writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, new_size, errno) ;

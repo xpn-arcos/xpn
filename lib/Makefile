@@ -209,6 +209,7 @@ am__libxpn_a_SOURCES_DIST = ../src/base/darray.c \
 	../src/base/time_misc.c \
 	../src/base/urlstr.c \
 	../src/base/syscall_proxies.c \
+	../src/base/filesystem.c \
 	../src/base/utils.c \
 	../src/nfi/common/nfi_worker.c \
 	../src/nfi/nfi_local/nfi_local.c \
@@ -340,6 +341,7 @@ am__objects_1 = ../src/base/darray.$(OBJEXT) \
 	../src/base/time_misc.$(OBJEXT) \
 	../src/base/urlstr.$(OBJEXT) \
 	../src/base/syscall_proxies.$(OBJEXT) \
+	../src/base/filesystem.$(OBJEXT) \
 	../src/base/utils.$(OBJEXT)
 am__objects_2 = ../src/nfi/common/nfi_worker.$(OBJEXT)
 am__objects_3 = ../src/nfi/nfi_local/nfi_local.$(OBJEXT) \
@@ -501,6 +503,7 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ../src/base/$(DEPDIR)/darray.Po \
 	../src/base/$(DEPDIR)/debug_msg.Po \
 	../src/base/$(DEPDIR)/dtable.Po \
+	../src/base/$(DEPDIR)/filesystem.Po \
 	../src/base/$(DEPDIR)/math_misc.Po \
 	../src/base/$(DEPDIR)/string_misc.Po \
 	../src/base/$(DEPDIR)/syscall_proxies.Po \
@@ -667,6 +670,7 @@ am__noinst_HEADERS_DIST = ../include/all_system.h \
 	../include/base/trace_tags.h \
 	../include/base/urlstr.h \
 	../include/base/syscall_proxies.h \
+	../include/base/filesystem.h \
 	../include/base/utils.h \
 	../include/nfi/nfi.h \
 	../include/nfi/nfi_lib.h \
@@ -773,13 +777,13 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /local_test/expand/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} /local_test/xpn/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /local_test/expand/config/missing autoconf
-AUTOHEADER = ${SHELL} /local_test/expand/config/missing autoheader
-AUTOM4TE = ${SHELL} /local_test/expand/config/missing autom4te
-AUTOMAKE = ${SHELL} /local_test/expand/config/missing automake-1.16
+AUTOCONF = ${SHELL} /local_test/xpn/config/missing autoconf
+AUTOHEADER = ${SHELL} /local_test/xpn/config/missing autoheader
+AUTOM4TE = ${SHELL} /local_test/xpn/config/missing autom4te
+AUTOMAKE = ${SHELL} /local_test/xpn/config/missing automake-1.16
 AWK = mawk
 CC = /opt/software/install-mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
@@ -816,7 +820,7 @@ LTLIBOBJS =
 LTP_PATH = ${abs_top_srcdir}/test/autotest/ltp-full-20080731
 LTP_VERSION = 20080731
 MAKE = make
-MAKEINFO = ${SHELL} /local_test/expand/config/missing makeinfo
+MAKEINFO = ${SHELL} /local_test/xpn/config/missing makeinfo
 MKDIR_P = /bin/mkdir -p
 M_HEADERS = 
 NFI_FTP = 
@@ -905,10 +909,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 1.0.0
-abs_builddir = /local_test/expand/lib
-abs_srcdir = /local_test/expand/lib
-abs_top_builddir = /local_test/expand
-abs_top_srcdir = /local_test/expand
+abs_builddir = /local_test/xpn/lib
+abs_srcdir = /local_test/xpn/lib
+abs_top_builddir = /local_test/xpn
+abs_top_srcdir = /local_test/xpn
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -935,7 +939,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /local_test/expand/config/install-sh
+install_sh = ${SHELL} /local_test/xpn/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -987,6 +991,7 @@ BASE_HEADER = ../include/base/base_lib.h \
 			../include/base/trace_tags.h \
 			../include/base/urlstr.h \
 			../include/base/syscall_proxies.h \
+			../include/base/filesystem.h \
 			../include/base/utils.h
 
 NFI_LOCAL_HEADER = ../include/nfi/nfi_local/local_lib.h \
@@ -1127,6 +1132,7 @@ BASE_OBJECTS = ../src/base/darray.c \
 			../src/base/time_misc.c \
 			../src/base/urlstr.c \
 			../src/base/syscall_proxies.c \
+			../src/base/filesystem.c \
 			../src/base/utils.c
 
 NFI_COMMON_OBJECTS = ../src/nfi/common/nfi_worker.c
@@ -1339,6 +1345,9 @@ clean-libLIBRARIES:
 	../src/base/$(am__dirstamp) \
 	../src/base/$(DEPDIR)/$(am__dirstamp)
 ../src/base/syscall_proxies.$(OBJEXT):  \
+	../src/base/$(am__dirstamp) \
+	../src/base/$(DEPDIR)/$(am__dirstamp)
+../src/base/filesystem.$(OBJEXT):  \
 	../src/base/$(am__dirstamp) \
 	../src/base/$(DEPDIR)/$(am__dirstamp)
 ../src/base/utils.$(OBJEXT):  \
@@ -1853,6 +1862,7 @@ distclean-compile:
 include ../src/base/$(DEPDIR)/darray.Po # am--include-marker
 include ../src/base/$(DEPDIR)/debug_msg.Po # am--include-marker
 include ../src/base/$(DEPDIR)/dtable.Po # am--include-marker
+include ../src/base/$(DEPDIR)/filesystem.Po # am--include-marker
 include ../src/base/$(DEPDIR)/math_misc.Po # am--include-marker
 include ../src/base/$(DEPDIR)/string_misc.Po # am--include-marker
 include ../src/base/$(DEPDIR)/syscall_proxies.Po # am--include-marker
@@ -2194,6 +2204,7 @@ distclean: distclean-am
 		-rm -f ../src/base/$(DEPDIR)/darray.Po
 	-rm -f ../src/base/$(DEPDIR)/debug_msg.Po
 	-rm -f ../src/base/$(DEPDIR)/dtable.Po
+	-rm -f ../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/syscall_proxies.Po
@@ -2369,6 +2380,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ../src/base/$(DEPDIR)/darray.Po
 	-rm -f ../src/base/$(DEPDIR)/debug_msg.Po
 	-rm -f ../src/base/$(DEPDIR)/dtable.Po
+	-rm -f ../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/syscall_proxies.Po
