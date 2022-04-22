@@ -479,7 +479,7 @@ int nfi_local_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 	    debug_error("fh argument is NULL.\n") ;
 	    return -1;
 	}
-
+	
 	// Do close
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh ;
 	if (fh_aux != NULL) {
@@ -585,7 +585,7 @@ ssize_t nfi_local_write ( struct nfi_server *serv,
 
 	filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
 	new_size = filesystem_write(fh_aux->fd, buffer, size) ;
-	debug_info("write %s off %ld size %zu (ret:%zd)", fh->url, (long int)offset, size, new_size)
+	debug_info("write %s off %ld size %zu (ret:%zd)\n", fh->url, (long int)offset, size, new_size);
 	if (new_size < 0) {
 	    debug_error("files_posix_write_buffer writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, new_size, errno) ;
 	    return -1;

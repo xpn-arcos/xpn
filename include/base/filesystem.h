@@ -80,7 +80,7 @@
      #define real_posix_mkdir(pathname,mode)                  dlsym_mkdir(pathname,mode)
      #define real_posix_rmdir(pathname)                       dlsym_rmdir(pathname)
      #define real_posix_unlink(pathname)                      dlsym_unlink(pathname)
-     #define real_posix_stat(pathname,info)                   dlsym_stat(pathname,info)
+     #define real_posix_stat(pathname,info)                   dlsym_lxstat64(1,pathname,info)
 
      #define real_posix_opendir(pathname)                     dlsym_opendir(pathname)
      #define real_posix_readdir(dirptr)                       dlsym_readdir(dirptr)

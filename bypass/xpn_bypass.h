@@ -13,7 +13,6 @@
 #include <dirent.h>
 #include <string.h>
 #include "mpi.h"
-//#include <stdlib.h>
 
 //#define RTLD_NEXT ((void *) -1l)
 #define LEN_PREFIX	4
@@ -128,7 +127,7 @@ int fork();
 int dup(int fildes);
 int dup2(int fildes, int fildes2);
 
-void exit(int status);
+void exit(int status) ;
 
 
 

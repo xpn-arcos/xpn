@@ -924,12 +924,10 @@
 
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
-
     value = getenv("IS_MPI_SERVER") ;
     if (NULL == value){
       return PMPI_Init(argc, argv);
     }
-
     return MPI_SUCCESS;
   }
 
