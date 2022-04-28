@@ -523,8 +523,8 @@
 
       int nfi_mpiServer_open ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
       {
-          char dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
-          int ret;
+          char   dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
+          int    ret, res;
           struct nfi_mpiServer_server *server_aux;
           struct nfi_mpiServer_fhandle *fh_aux;
           struct st_mpiServer_msg msg;
@@ -561,13 +561,29 @@
 
           server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 
-          /*****************************************/
-          msg.type = MPISERVER_OPEN_FILE;
-          strcpy(msg.id, server_aux->id);
-          strcpy(msg.u_st_mpiServer_msg.op_open.path,dir);
 
-          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ;
-          strcpy(fh_aux->path, dir);
+          /************** LOCAL *****************/
+          if(server_aux->params.locality[server_aux->sd.rank_id])
+	  {
+		  fh_aux->fd = filesystem_open(dir, O_RDWR) ;
+		  if (fh_aux->fd < 0)
+		  {
+		      debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
+		      free(fh_aux) ;
+		      free(fho->url) ;
+		      return -1;
+		  }
+		  strcpy(fh_aux->path, dir);
+          }
+          /************** SERVER ****************/
+          else {
+	          msg.type = MPISERVER_OPEN_FILE;
+	          strcpy(msg.id, server_aux->id);
+	          strcpy(msg.u_st_mpiServer_msg.op_open.path,dir);
+
+	          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ;
+	          strcpy(fh_aux->path, dir);
+	  }
           /*****************************************/
 
           fho->type = NFIFILE;
@@ -583,8 +599,8 @@
 
       int nfi_mpiServer_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh)
       {
-          char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
-          int ret;
+          char   server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+          int    ret, res;
           struct nfi_mpiServer_server *server_aux;
           struct nfi_mpiServer_fhandle *fh_aux;
           struct st_mpiServer_msg msg;
@@ -615,12 +631,25 @@
           server_aux = (struct nfi_mpiServer_server *) serv->private_info;
           /* create the file into the directory */
 
-          /*****************************************/
-          msg.type = MPISERVER_CREAT_FILE;
-          strcpy(msg.id, server_aux->id);
-          strcpy(msg.u_st_mpiServer_msg.op_creat.path,dir);
-          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ; 
-          strcpy(fh_aux->path, dir);
+          /************** LOCAL *****************/
+          if (server_aux->params.locality[server_aux->sd.rank_id])
+	  {
+          	  fh_aux->fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
+		  if (fh_aux->fd < 0) {
+		      debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
+		      free(fh_aux) ;
+		      return -1;
+		  }
+		  strcpy(fh_aux->path, dir);
+          }
+          /************** SERVER ****************/
+          else {
+	          msg.type = MPISERVER_CREAT_FILE;
+	          strcpy(msg.id, server_aux->id);
+	          strcpy(msg.u_st_mpiServer_msg.op_creat.path,dir);
+	          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ; 
+	          strcpy(fh_aux->path, dir);
+	  }
           /*****************************************/
 
           fh->type = NFIFILE;

@@ -630,8 +630,6 @@ LTP_PATH
 LTP_VERSION
 AUTOM4TE
 M_HEADERS
-LIBFUSE_A
-FUSE
 subdirs
 ENABLE_HTTP_FALSE
 ENABLE_HTTP_TRUE
@@ -797,7 +795,6 @@ enable_tcpserver
 enable_mpiserver
 enable_ioproxy_rpc
 enable_http
-enable_fuse
 with_ltp
 '
       ac_precious_vars='build_alias
@@ -1460,8 +1457,6 @@ Optional Features:
   --enable-ioproxy-rpc@<:@=/path/to/ioproxy-rpc/@:>@ (Don't use '~') 
                           Enable ioproxy-rpc module.
   --enable-http           Enable http module.
-  --enable-fuse@<:@=/path/to/fuse/@:>@ (Don't use '~') 
-                          Enable FUSE module.
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -5784,22 +5779,7 @@ subdirs="$subdirs $FUSEDAV"
 
 fi
 
-### END OF HTTP BLOCK. Do not remove this line. ###
 ### END OF AC_ARG_ENABLE BLOCK. Do not remove this line. ###
-
-@%:@ Check whether --enable-fuse was given.
-if test "${enable_fuse+set}" = set; then :
-  enableval=$enable_fuse; FUSE="fuse"
-                case "${enableval}" in
-                  yes) ;;
-                  no) FUSE="" ;;
-                  *) LIBFUSE_A="$enable_fuse/lib/libfuse.a" ;;
-                esac
-
-fi
-
-
-
 
 CPPFLAGS="$CDEFS $INCLUDEFLAGS $M_HEADERS $CPPFLAGS"
 LDFLAGS="$LIBLINK $LIBS"
@@ -5835,7 +5815,7 @@ ac_config_files="$ac_config_files test/autotest/testsuite.at"
 #
 # Build makefile and headers...
 #
-ac_config_files="$ac_config_files Makefile lib/Makefile fuse/Makefile utils/Makefile src/nfi/nfi_gsoap/PosixIOService/Makefile external-utils/xpnuploader/Makefile test/autotest/Makefile"
+ac_config_files="$ac_config_files Makefile lib/Makefile utils/Makefile src/nfi/nfi_gsoap/PosixIOService/Makefile test/autotest/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6617,10 +6597,8 @@ do
     "test/autotest/testsuite.at") CONFIG_FILES="$CONFIG_FILES test/autotest/testsuite.at" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
-    "fuse/Makefile") CONFIG_FILES="$CONFIG_FILES fuse/Makefile" ;;
     "utils/Makefile") CONFIG_FILES="$CONFIG_FILES utils/Makefile" ;;
     "src/nfi/nfi_gsoap/PosixIOService/Makefile") CONFIG_FILES="$CONFIG_FILES src/nfi/nfi_gsoap/PosixIOService/Makefile" ;;
-    "external-utils/xpnuploader/Makefile") CONFIG_FILES="$CONFIG_FILES external-utils/xpnuploader/Makefile" ;;
     "test/autotest/Makefile") CONFIG_FILES="$CONFIG_FILES test/autotest/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;

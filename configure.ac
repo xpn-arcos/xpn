@@ -415,20 +415,7 @@ if test x$FUSEDAV != x; then
   AC_CONFIG_SUBDIRS([$FUSEDAV])
 fi
 
-### END OF HTTP BLOCK. Do not remove this line. ###
 ### END OF AC_ARG_ENABLE BLOCK. Do not remove this line. ###
-
-AC_ARG_ENABLE(  [fuse],
-                [AS_HELP_STRING([--enable-fuse@<:@=/path/to/fuse/@:>@ (Don't use '~')],[Enable FUSE module.])],
-                [FUSE="fuse"]
-                [case "${enableval}" in
-                  yes) ;;
-                  no) FUSE="" ;;
-                  *) LIBFUSE_A="$enable_fuse/lib/libfuse.a" ;;
-                esac]
-)
-AC_SUBST(FUSE)
-AC_SUBST(LIBFUSE_A)
 
 CPPFLAGS="$CDEFS $INCLUDEFLAGS $M_HEADERS $CPPFLAGS"
 LDFLAGS="$LIBLINK $LIBS"
@@ -456,5 +443,5 @@ AC_CONFIG_FILES([test/autotest/testsuite.at])
 #
 # Build makefile and headers...
 #
-AC_CONFIG_FILES([Makefile lib/Makefile fuse/Makefile utils/Makefile src/nfi/nfi_gsoap/PosixIOService/Makefile external-utils/xpnuploader/Makefile test/autotest/Makefile])
+AC_CONFIG_FILES([Makefile lib/Makefile utils/Makefile src/nfi/nfi_gsoap/PosixIOService/Makefile test/autotest/Makefile])
 AC_OUTPUT

@@ -9,11 +9,11 @@ sudo mkdir -p /opt/xpn
 
 # configure
 ./autogen.sh
-./configure --prefix=/opt/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver
+./configure --prefix=/opt/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver="/opt/software/install-mpich/bin"
 
 # compile
 make clean
-make -j 8
+make -j
 
 # install
 make install

@@ -393,7 +393,7 @@ on `(hostname || uname -n) 2>/dev/null | sed 1q`
 "
 
 # Files that config.status was made for.
-config_files=" test/autotest/testsuite.at Makefile lib/Makefile fuse/Makefile utils/Makefile src/nfi/nfi_gsoap/PosixIOService/Makefile external-utils/xpnuploader/Makefile test/autotest/Makefile"
+config_files=" test/autotest/testsuite.at Makefile lib/Makefile utils/Makefile src/nfi/nfi_gsoap/PosixIOService/Makefile test/autotest/Makefile"
 config_headers=" include/config.h"
 config_commands=" depfiles test/autotest/atconfig"
 
@@ -553,10 +553,8 @@ do
     "test/autotest/testsuite.at") CONFIG_FILES="$CONFIG_FILES test/autotest/testsuite.at" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
-    "fuse/Makefile") CONFIG_FILES="$CONFIG_FILES fuse/Makefile" ;;
     "utils/Makefile") CONFIG_FILES="$CONFIG_FILES utils/Makefile" ;;
     "src/nfi/nfi_gsoap/PosixIOService/Makefile") CONFIG_FILES="$CONFIG_FILES src/nfi/nfi_gsoap/PosixIOService/Makefile" ;;
-    "external-utils/xpnuploader/Makefile") CONFIG_FILES="$CONFIG_FILES external-utils/xpnuploader/Makefile" ;;
     "test/autotest/Makefile") CONFIG_FILES="$CONFIG_FILES test/autotest/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
@@ -631,8 +629,6 @@ S["LTP_PATH"]="${abs_top_srcdir}/test/autotest/ltp-full-20080731"
 S["LTP_VERSION"]="20080731"
 S["AUTOM4TE"]="${SHELL} /local_test/xpn/config/missing autom4te"
 S["M_HEADERS"]=""
-S["LIBFUSE_A"]=""
-S["FUSE"]=""
 S["subdirs"]=""
 S["ENABLE_HTTP_FALSE"]=""
 S["ENABLE_HTTP_TRUE"]="#"

@@ -99,8 +99,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
-CONFIG_CLEAN_FILES = src/nfi/nfi_gsoap/PosixIOService/Makefile \
-	external-utils/xpnuploader/Makefile
+CONFIG_CLEAN_FILES = src/nfi/nfi_gsoap/PosixIOService/Makefile
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -163,12 +162,11 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/compile \
 	$(top_srcdir)/./config/config.sub \
 	$(top_srcdir)/./config/install-sh \
 	$(top_srcdir)/./config/missing \
-	$(top_srcdir)/external-utils/xpnuploader/Makefile.in \
 	$(top_srcdir)/include/config.h.in \
 	$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/Makefile.in \
 	./config/compile ./config/config.guess ./config/config.sub \
 	./config/depcomp ./config/install-sh ./config/missing AUTHORS \
-	COPYING CHANGELOG.md INSTALL README.md
+	COPYING ChangeLog INSTALL NEWS README
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -233,7 +231,6 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-FUSE = @FUSE@
 FUSEDAV = @FUSEDAV@
 GREP = @GREP@
 GSOAP_BIN_DIR = @GSOAP_BIN_DIR@
@@ -246,7 +243,6 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
-LIBFUSE_A = @LIBFUSE_A@
 LIBLINK = @LIBLINK@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -349,8 +345,8 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = @FUSEDAV@ @POSIXIOSERVICE@ lib @FUSE@ utils test/autotest
-EXTRA_DIST = autogen.sh create_module.sh delete_module.sh
+SUBDIRS = @FUSEDAV@ @POSIXIOSERVICE@ lib utils test/autotest
+EXTRA_DIST = autogen.sh
 all: all-recursive
 
 .SUFFIXES:
@@ -403,8 +399,6 @@ $(top_srcdir)/include/config.h.in:  $(am__configure_deps)
 distclean-hdr:
 	-rm -f include/config.h include/stamp-h1
 src/nfi/nfi_gsoap/PosixIOService/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-external-utils/xpnuploader/Makefile: $(top_builddir)/config.status $(top_srcdir)/external-utils/xpnuploader/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 # This directory's subdirectories are mostly independent; you can cd
