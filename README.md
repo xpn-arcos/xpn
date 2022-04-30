@@ -1,8 +1,11 @@
 # Expand 1.0r1
-Expand: XPN Parallel File System
+Expand: XPN Ad-Hoc Parallel File System
 
 *Licence*: GNU GENERAL PUBLIC LICENSE Version 3</br>
 *Authors*: Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, David Garcia Fernandez
+
+*Web*:    https://xpn-arcos.github.io/arcos-xpn.github.io/
+*Source*: https://github.com/xpn-arcos/xpn
 
 
 ## 1. Dependencies
@@ -10,7 +13,8 @@ Expand: XPN Parallel File System
 C develop tools and minixml (http://www.minixml.org):
 
 ```
-sudo apt-get install -y autoconf automake gcc g++ make flex libtool
+sudo apt-get install -y autoconf automake gcc g++ make
+sudo apt-get install -y flex libtool sudo apt install doxygen
 sudo apt-get install -y libmpich-dev libmxml-dev
 ```
 
@@ -43,20 +47,24 @@ make install
 
 - mpiServer:
 ```
+  hydra_nameserver &
   mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} -genv LD_PRELOAD=<bypass path> ./<program path>
 ```
 
-
-## 4. Source structure
-
-Expand 1.0r1 sources has four main levels:
-* xpni:
-  eXPaNd Interface provides many enhanced functionality like Fault-Tolerance support, locking, etc.
-* xpn:
-  eXPaNd implements a Parallel File System using NFI interfaces.
-* nfi:
-  Network File Interface provides access to several storage protocols (local and network protocols) like NFS, FTP, etc.
-* base:
-  Base interface provides independent access to operating system resources. 
-  Portability is provided in this layer.
+For example:
+   * To start MPICH hydra nameserver:
+```
+HYDRA_HOSTNAME=$(hostname)
+hydra_nameserver &
+sleep 1
+```
+   * To start one mpiServer with 8 processes:
+```
+mpirun -np 8 -nameserver ${HYDRA_HOSTNAME} -machinefile machines ./src_servers/mpiServer/mpiServer.exe
+sleep 1
+```
+   * To start one client with 2 processes:
+```
+mpirun -np 2 -nameserver ${HYDRA_HOSTNAME} -machinefile machines ./test/IOP-ION/IONMPI /PNFS/
+```
 

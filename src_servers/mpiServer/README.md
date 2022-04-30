@@ -10,7 +10,7 @@ make clean; make
 
 ## Execution:
 
-   * To start MPICH hydra:
+   * To start MPICH hydra nameserver:
 ```
 HYDRA_HOSTNAME=$(hostname)
 hydra_nameserver &
