@@ -437,11 +437,11 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/work/xpn-dcamarmas'
+ac_pwd='/home/acaldero/work/xpn-dcamarmas'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/usr/bin/mkdir -p'
-AWK='mawk'
+AWK='gawk'
 test -n "$AWK" || AWK=awk
 # The default lists apply if the user does not specify any file.
 ac_need_defaults=:
@@ -675,17 +675,17 @@ S["am__tar"]="$${TAR-tar} chof - \"$$tardir\""
 S["AMTAR"]="$${TAR-tar}"
 S["am__leading_dot"]="."
 S["SET_MAKE"]=""
-S["AWK"]="mawk"
+S["AWK"]="gawk"
 S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/usr/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]=""
-S["install_sh"]="${SHELL} /work/xpn-dcamarmas/config/install-sh"
-S["MAKEINFO"]="${SHELL} /work/xpn-dcamarmas/config/missing makeinfo"
-S["AUTOHEADER"]="${SHELL} /work/xpn-dcamarmas/config/missing autoheader"
-S["AUTOMAKE"]="${SHELL} /work/xpn-dcamarmas/config/missing automake-1.16"
-S["AUTOCONF"]="${SHELL} /work/xpn-dcamarmas/config/missing autoconf"
-S["ACLOCAL"]="${SHELL} /work/xpn-dcamarmas/config/missing aclocal-1.16"
+S["install_sh"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/install-sh"
+S["MAKEINFO"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing makeinfo"
+S["AUTOHEADER"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoheader"
+S["AUTOMAKE"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing automake-1.16"
+S["AUTOCONF"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoconf"
+S["ACLOCAL"]="${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing aclocal-1.16"
 S["VERSION"]="1.0"
 S["PACKAGE"]="expand"
 S["CYGPATH_W"]="echo"
