@@ -28,11 +28,6 @@
 	#include "nfi_mpiServer/mpiServer_lib.h"
 #endif
 // END OF ENABLE_MPISERVER BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_HTTP BLOCK. Do not remove this line. //
-#ifdef ENABLE_HTTP
-	#include "nfi_http/http_lib.h"
-#endif
-// END OF ENABLE_HTTP BLOCK. Do not remove this line. //
 // END OF ENABLE_MODULE BLOCK. Do not remove this line. //
 
 #endif

@@ -439,7 +439,7 @@
   }
 
   //int stat(const char *path, struct stat *buf) //old
-  int __xstat(int ver, const char *path, struct stat *buf) //TODO
+  int __xstat(int ver, const char *path, struct stat *buf) // TODO
   {
     char path2[1024];
 
@@ -451,12 +451,12 @@
 
     if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
     {
-      if (0 == strncmp(path,"/xpn/htdocs",11)){ //TODO
-        printf("into TODO\n");
-        sprintf(path2,"/export/home/pato11-1/users/bbergua/httpd-2.0.48/htdocs%s",path+11);
-        return stat(path2, buf);
+      if (0 == strncmp(path,"/xpn/htdocs",11)) {
+	  // TODO
+          printf("into TODO\n");
+          return stat(path, buf);
       } else {
-        return xpn_stat((char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
+          return xpn_stat((char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
       }
     }
     // Not an XPN partition. We must link with the standard library
