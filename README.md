@@ -1,14 +1,14 @@
-# Expand 1.0r1
-Expand: XPN Ad-Hoc Parallel File System
+# XPN 1.0r1
+*Expand Ad-Hoc Parallel File System*
 
 *Licence*: GNU GENERAL PUBLIC LICENSE Version 3</br>
 *Authors*: Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, David Garcia Fernandez
 
-*Web*:    https://xpn-arcos.github.io/arcos-xpn.github.io/
+*Web*:    https://xpn-arcos.github.io/arcos-xpn.github.io/  \
 *Source*: https://github.com/xpn-arcos/xpn
 
 
-## 1. Dependencies
+## 1. Install dependencies
 
 C develop tools and minixml (http://www.minixml.org):
 
@@ -19,19 +19,9 @@ sudo apt-get install -y libmpich-dev libmxml-dev
 ```
 
 
-## 2. Build
+## 2. Build XPN
 
-Briefly, the main steps to build Expand are:
-```
-./autogen.sh
-./configure [<options>]
-make clean
-make -j
-doxygen doc/doxygen-XPN.cfg
-make install
-```
-
-For example (if MPICH is installed at '/opt/software/install-mpich'):
+As an example of build scenario (if MPICH is installed at '/opt/software/install-mpich'):
 ```
 ./autogen.sh
 mkdir -p /opt/xpn 
@@ -45,10 +35,11 @@ make install
 
 ## 3. Execution
 
-- mpiServer:
+### 3.1 mpiServer ###
 ```
   hydra_nameserver &
-  mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} -genv LD_PRELOAD=<bypass path> ./<program path>
+  sleep 1 ; mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} <mpiServer.exe>
+  sleep 1 ; mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} -genv LD_PRELOAD=<bypass path> ./<program path>
 ```
 
 For example:
