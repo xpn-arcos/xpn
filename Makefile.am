@@ -1,3 +1,3 @@
-SUBDIRS = @FUSEDAV@ @POSIXIOSERVICE@ lib utils test/autotest
+SUBDIRS = lib utils
 
 EXTRA_DIST = autogen.sh

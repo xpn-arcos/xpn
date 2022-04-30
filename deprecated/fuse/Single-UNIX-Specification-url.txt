@@ -1,2 +1,0 @@
-http://www.unix.org/single_unix_specification/
-http://www.opengroup.org/onlinepubs/009695399/toc.htm

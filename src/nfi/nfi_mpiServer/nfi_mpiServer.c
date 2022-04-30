@@ -801,7 +801,7 @@
           filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
           ret = filesystem_read(fh_aux->fd, buffer, size) ;
           debug_info("read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret)
-          if (new_size < 0) {
+          if (ret < 0) {
               debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
               return -1;
           }

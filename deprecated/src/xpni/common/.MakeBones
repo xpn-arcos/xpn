@@ -1,6 +1,0 @@
-OBJECTS
-xpni_fmeta.c
-xpni_fit.c
-xpni_fsit.c
-xpni_file.c
-xpni_dir.c

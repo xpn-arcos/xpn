@@ -1,1 +1,0 @@
-€ý5/XSTAT_SWITCH( __xstat64, stat, "__xstat64", "bypass_agent_action_stat", int, const char \*, struct stat64, char \*, bypass_convert_stat64 )i//:x
