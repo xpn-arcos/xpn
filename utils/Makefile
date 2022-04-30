@@ -234,14 +234,14 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /local_test/expand/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /local_test/expand/config/missing autoconf
-AUTOHEADER = ${SHELL} /local_test/expand/config/missing autoheader
-AUTOM4TE = ${SHELL} /local_test/expand/config/missing autom4te
-AUTOMAKE = ${SHELL} /local_test/expand/config/missing automake-1.16
-AWK = mawk
+AR = ar
+AUTOCONF = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoconf
+AUTOHEADER = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoheader
+AUTOMAKE = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing automake-1.16
+AWK = gawk
 CC = /opt/software/install-mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
@@ -254,42 +254,23 @@ DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
-EGREP = /bin/grep -E
+EGREP = /usr/bin/grep -E
 EXEEXT = 
-FUSE = 
-FUSEDAV = 
-GREP = /bin/grep
-GSOAP_BIN_DIR = 
-GSOAP_IMPORT_DIR = 
-GSOAP_INCLUDE_DIR = 
-GSOAP_LIB_DIR = 
+GREP = /usr/bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = -lpthread -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
-LIBFUSE_A = 
 LIBLINK = -lpthread
 LIBOBJS = 
 LIBS = -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
 LTLIBOBJS = 
-LTP_PATH = ${abs_top_srcdir}/test/autotest/ltp-full-20080731
-LTP_VERSION = 20080731
 MAKE = make
-MAKEINFO = ${SHELL} /local_test/expand/config/missing makeinfo
-MKDIR_P = /bin/mkdir -p
+MAKEINFO = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing makeinfo
+MKDIR_P = /usr/bin/mkdir -p
 M_HEADERS = 
-NFI_FTP = 
-NFI_FTP_OBJECTS = 
-NFI_GRIDFTP = 
-NFI_GRIDFTP_OBJECTS = 
-NFI_GSOAP = 
-NFI_GSOAP_OBJECTS = 
-NFI_HTTP = 
-NFI_HTTP_OBJECTS = 
-NFI_IOPROXY_RPC = 
-NFI_IOPROXY_RPC_OBJECTS = 
 NFI_MPISERVER = nfi_mpiserver
 NFI_MPISERVER_OBJECTS = $(NFI_MPISERVER_OBJECTS)
 NFI_NFS = 
@@ -298,28 +279,26 @@ NFI_NFS3_OBJECTS = $(NFI_NFS3_OBJECTS)
 NFI_NFS_OBJECTS = 
 NFI_TCPSERVER = nfi_tcpserver
 NFI_TCPSERVER_OBJECTS = $(NFI_TCPSERVER_OBJECTS)
-NFI_XIO = 
-NFI_XIO_OBJECTS = 
 OBJEXT = o
 OS = __LINUX__
 PACKAGE = expand
 PACKAGE_BUGREPORT = fgcarbal@inf.uc3m.es
 PACKAGE_NAME = Expand
-PACKAGE_STRING = Expand 1.9.0
+PACKAGE_STRING = Expand 1.0
 PACKAGE_TARNAME = expand
 PACKAGE_URL = 
-PACKAGE_VERSION = 1.9.0
+PACKAGE_VERSION = 1.0
 PATH_SEPARATOR = :
-POSIXIOSERVICE = 
 RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = 1.9.0
-abs_builddir = /local_test/expand/utils
-abs_srcdir = /local_test/expand/utils
-abs_top_builddir = /local_test/expand
-abs_top_srcdir = /local_test/expand
+VERSION = 1.0
+abs_builddir = /home/acaldero/work/xpn-dcamarmas/utils
+abs_srcdir = /home/acaldero/work/xpn-dcamarmas/utils
+abs_top_builddir = /home/acaldero/work/xpn-dcamarmas
+abs_top_srcdir = /home/acaldero/work/xpn-dcamarmas
+ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -346,7 +325,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /local_test/expand/config/install-sh
+install_sh = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -362,7 +341,6 @@ runstatedir = ${localstatedir}/run
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
-subdirs = 
 sysconfdir = ${prefix}/etc
 target = x86_64-pc-linux-gnu
 target_alias = 
@@ -388,9 +366,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu utils/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign utils/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu utils/Makefile
+	  $(AUTOMAKE) --foreign utils/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \

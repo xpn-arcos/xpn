@@ -263,11 +263,3 @@ add_library(xpn ${LIBXPN_SOURCES})
 # so we add a "lib" prefix (which is default on other platforms anyway):
 #SET_TARGET_PROPERTIES(xpn-static PROPERTIES PREFIX "lib")
 
-
-# Bindings
-option (ENABLE_JAVA "Enable JAVA binding." OFF)
-option (ENABLE_PYTHON "Enable Python binding." OFF)
-if (ENABLE_JAVA OR ENABLE_PYTHON)
-	add_subdirectory (bindings)
-endif( ENABLE_JAVA OR ENABLE_PYTHON)
-

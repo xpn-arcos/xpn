@@ -1,6 +1,0 @@
-OBJECTS
-nfi_nfs3.c
-nfi_nfs3_err.c
-nfs3.c
-nfs3_clnt.c
-nfs3_xdr.c

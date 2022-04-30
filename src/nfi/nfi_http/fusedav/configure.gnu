@@ -1,1 +1,0 @@
-./configure NEON_CFLAGS="-D_LARGEFILE64_SOURCE -DNE_LFS -I../libneon/src" NEON_LIBS="-L../libneon/src/.libs -lneon" CPPFLAGS="-D_FILE_OFFSET_BITS=64 -I../libneon/src" LDFLAGS="-L../src/libneon/src/.libs" LIBS="-lexpat -lgssapi_krb5 -lssl"

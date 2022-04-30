@@ -416,50 +416,6 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 	}
 #endif
 // END OF ENABLE_NFS3 BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_FTP BLOCK. Do not remove this line. //
-#ifdef ENABLE_FTP
-	else if (strcmp(prt,"ftp") == 0){	
-		ret = nfi_ftp_init(url, serv, NULL);//TODO: sustituir XXX por el struct nfi_fhandle * apropiado
-		if(ret < 0){
-			xpn_err(XPNERR_INITSERV);
-			return -1;
-		}
-	}
-#endif
-// END OF ENABLE_FTP BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_XIO BLOCK. Do not remove this line. //
-#ifdef ENABLE_XIO
-	else if (strcmp(prt,"xio") == 0){	
-		ret = nfi_xio_init(url, serv, NULL);
-		if(ret < 0){
-			xpn_err(XPNERR_INITSERV);
-			return -1;
-		}
-	}
-#endif
-// END OF ENABLE_XIO BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_GSOAP BLOCK. Do not remove this line. //
-#ifdef ENABLE_GSOAP
-	else if (strcmp(prt,"gsoap") == 0){
-		ret = nfi_gsoap_init(url, serv, NULL);
-		if(ret < 0){
-			xpn_err(XPNERR_INITSERV);
-			return -1;
-		}
-	}
-#endif
-// END OF ENABLE_GSOAP BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_GRIDFTP BLOCK. Do not remove this line. //
-#ifdef ENABLE_GRIDFTP
-	else if ((strcmp(prt,"gridftp") == 0) || (strcmp(prt,"gsiftp") == 0)){	
-		ret = nfi_gridftp_init(url, serv, NULL);
-		if(ret < 0){
-			xpn_err(XPNERR_INITSERV);
-			return -1;
-		}
-	}
-#endif
-// END OF ENABLE_GRIDFTP BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_TCPSERVER BLOCK. Do not remove this line. //
 #ifdef ENABLE_TCPSERVER
 	else if (strcmp(prt,"tcpServer") == 0){
@@ -484,17 +440,6 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 	}
 #endif
 // END OF ENABLE_MPISERVER BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_IOPROXY_RPC BLOCK. Do not remove this line. //
-#ifdef ENABLE_IOPROXY_RPC
-	else if (strcmp(prt,"ioproxy-rpc") == 0){
-		ret = nfi_ioproxy-rpc_init(url, serv, NULL);
-		if(ret < 0){
-			xpn_err(XPNERR_INITSERV);
-			return -1;
-		}
-	}
-#endif
-// END OF ENABLE_IOPROXY_RPC BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_HTTP BLOCK. Do not remove this line. //
 #ifdef ENABLE_HTTP
 	else if ((strcmp(prt,"http") == 0) || (strcmp(prt,"webdav") == 0)){

@@ -1,1 +1,0 @@
-€ý5/extern "C" struct dirent64 \* readdir64( DIR \*dir ) {i/*€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€kd€ý=*/:x

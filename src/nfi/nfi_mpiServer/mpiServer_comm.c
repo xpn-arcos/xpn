@@ -35,6 +35,9 @@
     int flag = 0 ;
     char srv_name[1024] ;
 
+
+    memset(params, 0, sizeof(mpiClient_param_st)); // Initialize params 
+
     debug_info("[COMM] begin mpiClient_comm_init(...)\n") ;
 
     // MPI_Init
@@ -42,11 +45,11 @@
 
     if (!flag)
     {
-        ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: server->argc, server->argv from upper layers?
-        if (MPI_SUCCESS != ret) {
-            debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
-            return -1 ;
-        }
+      ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: server->argc, server->argv from upper layers?
+      if (MPI_SUCCESS != ret) {
+        debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
+        return -1 ;
+      }
     }
 
     MPI_Query_thread(&claimed) ;
@@ -57,15 +60,15 @@
     // params->rank = comm_rank()
     ret = MPI_Comm_rank(MPI_COMM_WORLD, &(params->rank)) ;
     if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Comm_rank fails :-(", params->rank) ;
-        return -1 ;
+      debug_error("Server[%d]: MPI_Comm_rank fails :-(", params->rank) ;
+      return -1 ;
     }
 
     // params->size = comm_size()
     ret = MPI_Comm_size(MPI_COMM_WORLD, &(params->size)) ;
     if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Comm_size fails :-(", params->size) ;
-        return -1 ;
+      debug_error("Server[%d]: MPI_Comm_size fails :-(", params->size) ;
+      return -1 ;
     }
 
     debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
@@ -98,14 +101,14 @@
     // Disconnect
     ret = MPI_Comm_disconnect(&(params->server)) ;
     if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
-        return -1 ;
+      debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
+      return -1 ;
     }
 
     ret = MPI_Finalize();
     if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
-        return -1 ;
+      debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
+      return -1 ;
     }
 
     debug_info("[COMM] end mpiClient_comm_destroy(...)\n") ;
@@ -126,15 +129,15 @@
     sprintf(srv_name, "mpiServer.%d", 0) ;
     ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, params->port_name) ;
     if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Lookup_name fails :-(", params->rank) ;
-        return -1 ;
+      debug_error("Server[%d]: MPI_Lookup_name fails :-(", params->rank) ;
+      return -1 ;
     }
 
     // Connect...
     ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &(params->server)) ;
     if (MPI_SUCCESS != ret) {
-        debug_error("Client[%d]: MPI_Comm_connect fails :-(", params->rank) ;
-        return -1 ;
+      debug_error("Client[%d]: MPI_Comm_connect fails :-(", params->rank) ;
+      return -1 ;
     }
 
     // Return OK
@@ -159,6 +162,9 @@
       }
     }
 
+    // Free locality bitmap
+    FREE_AND_NULL(params->locality); //NEW
+    
     // Disconnect
     ret = MPI_Comm_disconnect(&(params->server)) ;
     if (MPI_SUCCESS != ret) {
@@ -171,16 +177,76 @@
 
     if (!flag)
     {
-        ret = PMPI_Finalize();
-        if (MPI_SUCCESS != ret) {
-            debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
-            return -1 ;
-        }
+      ret = PMPI_Finalize();
+      if (MPI_SUCCESS != ret) {
+        debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
+        return -1 ;
+      }
     }
 
     // Return OK
     return 1 ;
   }
+
+
+
+
+
+
+
+
+
+  int mpiClient_comm_locality ( mpiClient_param_st *params ) //NEW
+  {
+    int ret;
+    int size;
+    int data;
+    char cli_name  [HOST_NAME_MAX];
+    char serv_name [HOST_NAME_MAX];
+    MPI_Status status ;
+
+    // Get client host name
+    gethostname(cli_name, HOST_NAME_MAX);
+
+    // Get number of servers
+    MPI_Comm_remote_size(params->server, &size);
+
+    params->locality = (int *) malloc(size * sizeof(int));
+    memset(params->locality, 0, size);
+
+    // Ask name of all servers
+
+    //TODO: cuando se encuentra la primera no se hacen mas
+    for (int i = 0; i < size; i++) {
+      data = MPISERVER_GETNODENAME;
+      ret = MPI_Send( &data, 1, MPI_INT, i, 0, params->server );
+      if (MPI_SUCCESS != ret) {
+        FREE_AND_NULL(params->locality) //NEW
+        debug_warning("Server[?]: MPI_Send fails :-(") ;
+        return -1;
+      }
+
+      ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, i, 1, params->server, &status);
+      if (MPI_SUCCESS != ret) {
+        FREE_AND_NULL(params->locality) //NEW
+        debug_warning("Server[?]: MPI_Recv fails :-(") ;
+        return -1;
+      }
+
+      if (strcmp(cli_name, serv_name) == 0)
+      {
+        params->locality[i] = 1;
+      }
+    }
+      
+    // Return OK
+    return 1;
+  }
+
+
+
+
+
 
 
 
@@ -192,11 +258,11 @@
 
     // Check params
     if (size == 0) {
-        return 0;
+      return 0;
     }
     if (size < 0) {
-        debug_warning("Server[?]: size < 0") ;
-        return -1;
+      debug_warning("Server[?]: size < 0") ;
+      return -1;
     }
 
     // Send message

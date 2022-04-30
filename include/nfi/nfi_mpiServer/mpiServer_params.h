@@ -23,9 +23,11 @@
         char  srv_name[MPI_MAX_PORT_NAME] ;
         MPI_Comm server ;
 
+        int *locality ; //NEW
+
         // server arguments
-	int    argc ;
-	char **argv ;
+        int    argc ;
+        char **argv ;
    } mpiClient_param_st ;
 
 

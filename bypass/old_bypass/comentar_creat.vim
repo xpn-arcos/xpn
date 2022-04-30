@@ -1,1 +1,0 @@
-€ý5/extern\ "C"\ int\ creat(\ const\ char\ \*path,\ mode_t\ mode\ )i/*€kd€kd€kd€kd€kd€kd€kd€kd*/:x

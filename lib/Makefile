@@ -98,60 +98,24 @@ target_triplet = x86_64-pc-linux-gnu
 ### BEGIN OF ENABLE_NFS3_HEADER BLOCK. Do not remove this line. ###
 am__append_2 = $(NFI_NFS3_HEADER)
 ### END OF ENABLE_NFS3_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_FTP_HEADER BLOCK. Do not remove this line. ###
-#am__append_3 = $(NFI_FTP_HEADER)
-### END OF ENABLE_FTP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_XIO_HEADER BLOCK. Do not remove this line. ###
-#am__append_4 = $(NFI_XIO_HEADER)
-### END OF ENABLE_XIO_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_GSOAP_HEADER BLOCK. Do not remove this line. ###
-#am__append_5 = $(NFI_GSOAP_HEADER)
-### END OF ENABLE_GSOAP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_GRIDFTP_HEADER BLOCK. Do not remove this line. ###
-#am__append_6 = $(NFI_GRIDFTP_HEADER)
-### END OF ENABLE_GRIDFTP_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
-am__append_7 = $(NFI_TCPSERVER_HEADER)
+am__append_3 = $(NFI_TCPSERVER_HEADER)
 ### END OF ENABLE_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_MPISERVER_HEADER BLOCK. Do not remove this line. ###
-am__append_8 = $(NFI_MPISERVER_HEADER)
-### END OF ENABLE_MPISERVER_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_IOPROXY_RPC_HEADER BLOCK. Do not remove this line. ###
-#am__append_9 = $(NFI_IOPROXY_RPC_HEADER)
-### END OF ENABLE_IOPROXY_RPC_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_HTTP_HEADER BLOCK. Do not remove this line. ###
-#am__append_10 = $(NFI_HTTP_HEADER)
+am__append_4 = $(NFI_MPISERVER_HEADER)
 
 ### BEGIN OF NFI_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_NFS_OBJECTS BLOCK. Do not remove this line. ###
-#am__append_11 = $(NFI_NFS_OBJECTS)
+#am__append_5 = $(NFI_NFS_OBJECTS)
 ### END OF ENABLE_NFS_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_NFS3_OBJECTS BLOCK. Do not remove this line. ###
-am__append_12 = $(NFI_NFS3_OBJECTS)
+am__append_6 = $(NFI_NFS3_OBJECTS)
 ### END OF ENABLE_NFS3_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_FTP_OBJECTS BLOCK. Do not remove this line. ###
-#am__append_13 = $(NFI_FTP_OBJECTS)
-### END OF ENABLE_FTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_XIO_OBJECTS BLOCK. Do not remove this line. ###
-#am__append_14 = $(NFI_XIO_OBJECTS)
-### END OF ENABLE_XIO_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_GSOAP_OBJECTS BLOCK. Do not remove this line. ###
-#am__append_15 = $(NFI_GSOAP_OBJECTS)
-### END OF ENABLE_GSOAP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-#am__append_16 = $(NFI_GRIDFTP_OBJECTS)
-### END OF ENABLE_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
-am__append_17 = $(NFI_TCPSERVER_OBJECTS)
+am__append_7 = $(NFI_TCPSERVER_OBJECTS)
 ### END OF ENABLE_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
-am__append_18 = $(NFI_MPISERVER_OBJECTS)
-### END OF ENABLE_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
-#am__append_19 = $(NFI_IOPROXY_RPC_OBJECTS)
-### END OF ENABLE_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_HTTP_OBJECTS BLOCK. Do not remove this line. ###
-#am__append_20 = $(NFI_HTTP_OBJECTS)
+am__append_8 = $(NFI_MPISERVER_OBJECTS)
 subdir = lib
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -192,7 +156,6 @@ am__uninstall_files_from_dir = { \
   }
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LIBRARIES = $(lib_LIBRARIES)
-AR = ar
 ARFLAGS = cru
 AM_V_AR = $(am__v_AR_$(V))
 am__v_AR_ = $(am__v_AR_$(AM_DEFAULT_VERBOSITY))
@@ -208,6 +171,9 @@ am__libxpn_a_SOURCES_DIST = ../src/base/darray.c \
 	../src/base/string_misc.c \
 	../src/base/time_misc.c \
 	../src/base/urlstr.c \
+	../src/base/syscall_proxies.c \
+	../src/base/filesystem.c \
+	../src/base/utils.c \
 	../src/nfi/common/nfi_worker.c \
 	../src/nfi/nfi_local/nfi_local.c \
 	../src/nfi/nfi_local/nfi_local_err.c \
@@ -221,26 +187,12 @@ am__libxpn_a_SOURCES_DIST = ../src/base/darray.c \
 	../src/nfi/nfi_nfs3/nfs3.c \
 	../src/nfi/nfi_nfs3/nfs3_clnt.c \
 	../src/nfi/nfi_nfs3/nfs3_xdr.c \
-	../src/nfi/nfi_ftp/ftp.c \
-	../src/nfi/nfi_ftp/list_dir.c \
-	../src/nfi/nfi_ftp/nfi_ftp.c \
-	../src/nfi/nfi_ftp/nfi_ftp_err.c \
-	../src/nfi/nfi_xio/nfi_xio.c \
-	../src/nfi/nfi_xio/nfi_xio_err.c \
-	../src/nfi/nfi_gsoap/nfi_gsoap.c \
-	../src/nfi/nfi_gsoap/nfi_gsoap_err.c \
-	../src/nfi/nfi_gridftp/nfi_gridftp.c \
-	../src/nfi/nfi_gridftp/nfi_gridftp_err.c \
 	../src/nfi/nfi_tcpServer/nfi_tcpServer.c \
 	../src/nfi/nfi_tcpServer/tcpServer_comm.c \
 	../src/nfi/nfi_tcpServer/nfi_tcpServer_err.c \
 	../src/nfi/nfi_mpiServer/nfi_mpiServer.c \
 	../src/nfi/nfi_mpiServer/mpiServer_comm.c \
 	../src/nfi/nfi_mpiServer/nfi_mpiServer_err.c \
-	../src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.c \
-	../src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.c \
-	../src/nfi/nfi_http/nfi_http.c \
-	../src/nfi/nfi_http/nfi_http_err.c \
 	../src/xpn/xpn_simple/xpncore/xpn_cwd.c \
 	../src/xpn/xpn_simple/xpncore/xpn_dir.c \
 	../src/xpn/xpn_simple/xpncore/xpn_err.c \
@@ -336,7 +288,10 @@ am__objects_1 = ../src/base/darray.$(OBJEXT) \
 	../src/base/debug_msg.$(OBJEXT) \
 	../src/base/string_misc.$(OBJEXT) \
 	../src/base/time_misc.$(OBJEXT) \
-	../src/base/urlstr.$(OBJEXT)
+	../src/base/urlstr.$(OBJEXT) \
+	../src/base/syscall_proxies.$(OBJEXT) \
+	../src/base/filesystem.$(OBJEXT) \
+	../src/base/utils.$(OBJEXT)
 am__objects_2 = ../src/nfi/common/nfi_worker.$(OBJEXT)
 am__objects_3 = ../src/nfi/nfi_local/nfi_local.$(OBJEXT) \
 	../src/nfi/nfi_local/nfi_local_err.$(OBJEXT)
@@ -352,42 +307,19 @@ am__objects_6 = ../src/nfi/nfi_nfs3/nfi_nfs3.$(OBJEXT) \
 	../src/nfi/nfi_nfs3/nfs3_clnt.$(OBJEXT) \
 	../src/nfi/nfi_nfs3/nfs3_xdr.$(OBJEXT)
 am__objects_7 = $(am__objects_6)
-am__objects_8 = ../src/nfi/nfi_ftp/ftp.$(OBJEXT) \
-	../src/nfi/nfi_ftp/list_dir.$(OBJEXT) \
-	../src/nfi/nfi_ftp/nfi_ftp.$(OBJEXT) \
-	../src/nfi/nfi_ftp/nfi_ftp_err.$(OBJEXT)
-#am__objects_9 = $(am__objects_8)
-am__objects_10 = ../src/nfi/nfi_xio/nfi_xio.$(OBJEXT) \
-	../src/nfi/nfi_xio/nfi_xio_err.$(OBJEXT)
-#am__objects_11 = $(am__objects_10)
-am__objects_12 = ../src/nfi/nfi_gsoap/nfi_gsoap.$(OBJEXT) \
-	../src/nfi/nfi_gsoap/nfi_gsoap_err.$(OBJEXT)
-#am__objects_13 = $(am__objects_12)
-am__objects_14 =  \
-	../src/nfi/nfi_gridftp/nfi_gridftp.$(OBJEXT) \
-	../src/nfi/nfi_gridftp/nfi_gridftp_err.$(OBJEXT)
-#am__objects_15 = $(am__objects_14)
-am__objects_16 =  \
+am__objects_8 =  \
 	../src/nfi/nfi_tcpServer/nfi_tcpServer.$(OBJEXT) \
 	../src/nfi/nfi_tcpServer/tcpServer_comm.$(OBJEXT) \
 	../src/nfi/nfi_tcpServer/nfi_tcpServer_err.$(OBJEXT)
-am__objects_17 = $(am__objects_16)
-am__objects_18 =  \
+am__objects_9 = $(am__objects_8)
+am__objects_10 =  \
 	../src/nfi/nfi_mpiServer/nfi_mpiServer.$(OBJEXT) \
 	../src/nfi/nfi_mpiServer/mpiServer_comm.$(OBJEXT) \
 	../src/nfi/nfi_mpiServer/nfi_mpiServer_err.$(OBJEXT)
-am__objects_19 = $(am__objects_18)
-am__objects_20 = ../src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.$(OBJEXT) \
-	../src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.$(OBJEXT)
-#am__objects_21 = $(am__objects_20)
-am__objects_22 = ../src/nfi/nfi_http/nfi_http.$(OBJEXT) \
-	../src/nfi/nfi_http/nfi_http_err.$(OBJEXT)
-#am__objects_23 = $(am__objects_22)
-am__objects_24 = $(am__objects_2) $(am__objects_3) $(am__objects_5) \
-	$(am__objects_7) $(am__objects_9) $(am__objects_11) \
-	$(am__objects_13) $(am__objects_15) $(am__objects_17) \
-	$(am__objects_19) $(am__objects_21) $(am__objects_23)
-am__objects_25 =  \
+am__objects_11 = $(am__objects_10)
+am__objects_12 = $(am__objects_2) $(am__objects_3) $(am__objects_5) \
+	$(am__objects_7) $(am__objects_9) $(am__objects_11)
+am__objects_13 =  \
 	../src/xpn/xpn_simple/xpncore/xpn_cwd.$(OBJEXT) \
 	../src/xpn/xpn_simple/xpncore/xpn_dir.$(OBJEXT) \
 	../src/xpn/xpn_simple/xpncore/xpn_err.$(OBJEXT) \
@@ -408,14 +340,14 @@ am__objects_25 =  \
 	../src/xpn/xpn_simple/xpncore/xpn_fileno.$(OBJEXT) \
 	../src/xpn/xpn_simple/xpncore/xpn_setbuf.$(OBJEXT) \
 	../src/xpn/xpn_simple/xpncore/xpn_setvbuf.$(OBJEXT)
-am__objects_26 = ../src/xpn/xpn_simple/policy/xpn_policy_cwd.$(OBJEXT) \
+am__objects_14 = ../src/xpn/xpn_simple/policy/xpn_policy_cwd.$(OBJEXT) \
 	../src/xpn/xpn_simple/policy/xpn_policy_err.$(OBJEXT) \
 	../src/xpn/xpn_simple/policy/xpn_policy_init.$(OBJEXT) \
 	../src/xpn/xpn_simple/policy/xpn_policy_open.$(OBJEXT) \
 	../src/xpn/xpn_simple/policy/xpn_policy_opendir.$(OBJEXT) \
 	../src/xpn/xpn_simple/policy/xpn_policy_rw.$(OBJEXT)
-am__objects_27 = $(am__objects_25) $(am__objects_26)
-am__objects_28 = ../src/xpni/common/xpni_fit.$(OBJEXT) \
+am__objects_15 = $(am__objects_13) $(am__objects_14)
+am__objects_16 = ../src/xpni/common/xpni_fit.$(OBJEXT) \
 	../src/xpni/common/xpni_fmeta.$(OBJEXT) \
 	../src/xpni/common/xpni_fsit.$(OBJEXT) \
 	../src/xpni/common/xpni_file.$(OBJEXT) \
@@ -467,7 +399,7 @@ am__objects_28 = ../src/xpni/common/xpni_fit.$(OBJEXT) \
 	../src/xpni/xpni_log/xpni_log_write.$(OBJEXT) \
 	../src/xpni/xpni_log/xpni_log_opendir.$(OBJEXT) \
 	../src/xpni/xpni_log/xpni_log_elog.$(OBJEXT)
-am__objects_29 = ../src/xpn2/xpn2_close.$(OBJEXT) \
+am__objects_17 = ../src/xpn2/xpn2_close.$(OBJEXT) \
 	../src/xpn2/xpn2_destroy.$(OBJEXT) \
 	../src/xpn2/xpn2_init.$(OBJEXT) \
 	../src/xpn2/xpn2_open.$(OBJEXT) \
@@ -476,8 +408,8 @@ am__objects_29 = ../src/xpn2/xpn2_close.$(OBJEXT) \
 	../src/xpn2/xpn2_write.$(OBJEXT) \
 	../src/xpn2/xpn2_ioctl.$(OBJEXT) \
 	../src/xpn2/xpn2_lseek.$(OBJEXT)
-am_libxpn_a_OBJECTS = $(am__objects_1) $(am__objects_24) \
-	$(am__objects_27) $(am__objects_28) $(am__objects_29)
+am_libxpn_a_OBJECTS = $(am__objects_1) $(am__objects_12) \
+	$(am__objects_15) $(am__objects_16) $(am__objects_17)
 libxpn_a_OBJECTS = $(am_libxpn_a_OBJECTS)
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -497,24 +429,15 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ../src/base/$(DEPDIR)/darray.Po \
 	../src/base/$(DEPDIR)/debug_msg.Po \
 	../src/base/$(DEPDIR)/dtable.Po \
+	../src/base/$(DEPDIR)/filesystem.Po \
 	../src/base/$(DEPDIR)/math_misc.Po \
 	../src/base/$(DEPDIR)/string_misc.Po \
+	../src/base/$(DEPDIR)/syscall_proxies.Po \
 	../src/base/$(DEPDIR)/time_misc.Po \
 	../src/base/$(DEPDIR)/trace_msg.Po \
 	../src/base/$(DEPDIR)/urlstr.Po \
+	../src/base/$(DEPDIR)/utils.Po \
 	../src/nfi/common/$(DEPDIR)/nfi_worker.Po \
-	../src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po \
-	../src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po \
-	../src/nfi/nfi_ftp/$(DEPDIR)/nfi_ftp.Po \
-	../src/nfi/nfi_ftp/$(DEPDIR)/nfi_ftp_err.Po \
-	../src/nfi/nfi_gridftp/$(DEPDIR)/nfi_gridftp.Po \
-	../src/nfi/nfi_gridftp/$(DEPDIR)/nfi_gridftp_err.Po \
-	../src/nfi/nfi_gsoap/$(DEPDIR)/nfi_gsoap.Po \
-	../src/nfi/nfi_gsoap/$(DEPDIR)/nfi_gsoap_err.Po \
-	../src/nfi/nfi_http/$(DEPDIR)/nfi_http.Po \
-	../src/nfi/nfi_http/$(DEPDIR)/nfi_http_err.Po \
-	../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/nfi_ioproxy-rpc.Po \
-	../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/nfi_ioproxy-rpc_err.Po \
 	../src/nfi/nfi_local/$(DEPDIR)/nfi_local.Po \
 	../src/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po \
 	../src/nfi/nfi_mpiServer/$(DEPDIR)/mpiServer_comm.Po \
@@ -533,8 +456,6 @@ am__depfiles_remade = ../src/base/$(DEPDIR)/darray.Po \
 	../src/nfi/nfi_tcpServer/$(DEPDIR)/nfi_tcpServer.Po \
 	../src/nfi/nfi_tcpServer/$(DEPDIR)/nfi_tcpServer_err.Po \
 	../src/nfi/nfi_tcpServer/$(DEPDIR)/tcpServer_comm.Po \
-	../src/nfi/nfi_xio/$(DEPDIR)/nfi_xio.Po \
-	../src/nfi/nfi_xio/$(DEPDIR)/nfi_xio_err.Po \
 	../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_cwd.Po \
 	../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_err.Po \
 	../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_init.Po \
@@ -645,7 +566,6 @@ am__can_run_installinfo = \
 am__noinst_HEADERS_DIST = ../include/all_system.h \
 	../include/config.h ../include/config.h.in \
 	../include/config_linux.h \
-	../include/config_win32.h \
 	../include/expand.h \
 	../include/expand_lib.h \
 	../include/xpn_debug.h \
@@ -660,6 +580,9 @@ am__noinst_HEADERS_DIST = ../include/all_system.h \
 	../include/base/trace_msg.h \
 	../include/base/trace_tags.h \
 	../include/base/urlstr.h \
+	../include/base/syscall_proxies.h \
+	../include/base/filesystem.h \
+	../include/base/utils.h \
 	../include/nfi/nfi.h \
 	../include/nfi/nfi_lib.h \
 	../include/nfi/nfi_worker.h \
@@ -674,20 +597,6 @@ am__noinst_HEADERS_DIST = ../include/all_system.h \
 	../include/nfi/nfi_nfs3/nfi_nfs3.h \
 	../include/nfi/nfi_nfs3/nfs3.h \
 	../include/nfi/nfi_nfs3/nfs3_lib.h \
-	../include/nfi/nfi_ftp/ftp.h \
-	../include/nfi/nfi_ftp/ftp_lib.h \
-	../include/nfi/nfi_ftp/list_dir.h \
-	../include/nfi/nfi_ftp/nfi_ftp_err.h \
-	../include/nfi/nfi_ftp/nfi_ftp.h \
-	../include/nfi/nfi_xio/nfi_xio_err.h \
-	../include/nfi/nfi_xio/nfi_xio.h \
-	../include/nfi/nfi_xio/xio_lib.h \
-	../include/nfi/nfi_gsoap/gsoap_lib.h \
-	../include/nfi/nfi_gsoap/nfi_gsoap_err.h \
-	../include/nfi/nfi_gsoap/nfi_gsoap.h \
-	../include/nfi/nfi_gridftp/gridftp_lib.h \
-	../include/nfi/nfi_gridftp/nfi_gridftp_err.h \
-	../include/nfi/nfi_gridftp/nfi_gridftp.h \
 	../include/nfi/nfi_tcpServer/ \
 	../include/nfi/nfi_tcpServer/tcpServer_comm.h \
 	../include/nfi/nfi_tcpServer/tcpServer_conf.h \
@@ -701,12 +610,6 @@ am__noinst_HEADERS_DIST = ../include/all_system.h \
 	../include/nfi/nfi_mpiServer/mpiServer_lib.h \
 	../include/nfi/nfi_mpiServer/nfi_mpiServer_err.h \
 	../include/nfi/nfi_mpiServer/nfi_mpiServer.h \
-	../include/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.h \
-	../include/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.h \
-	../include/nfi/nfi_ioproxy-rpc/ioproxy-rpc_lib.h \
-	../include/nfi/nfi_http/nfi_http_err.h \
-	../include/nfi/nfi_http/nfi_http.h \
-	../include/nfi/nfi_http/http_lib.h \
 	../include/xpn/xpn_lib.h \
 	../include/xpn/xpn_simple/xpn_cwd.h \
 	../include/xpn/xpn_simple/xpn_dir.h \
@@ -765,14 +668,14 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /local_test/expand/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /local_test/expand/config/missing autoconf
-AUTOHEADER = ${SHELL} /local_test/expand/config/missing autoheader
-AUTOM4TE = ${SHELL} /local_test/expand/config/missing autom4te
-AUTOMAKE = ${SHELL} /local_test/expand/config/missing automake-1.16
-AWK = mawk
+AR = ar
+AUTOCONF = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoconf
+AUTOHEADER = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoheader
+AUTOMAKE = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing automake-1.16
+AWK = gawk
 CC = /opt/software/install-mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
@@ -785,64 +688,23 @@ DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
-EGREP = /bin/grep -E
+EGREP = /usr/bin/grep -E
 EXEEXT = 
-FUSE = 
-FUSEDAV = 
-GREP = /bin/grep
-GSOAP_BIN_DIR = 
-GSOAP_IMPORT_DIR = 
-GSOAP_INCLUDE_DIR = 
-GSOAP_LIB_DIR = 
+GREP = /usr/bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = -lpthread -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
-LIBFUSE_A = 
 LIBLINK = -lpthread
 LIBOBJS = 
 LIBS = -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
 LTLIBOBJS = 
-LTP_PATH = ${abs_top_srcdir}/test/autotest/ltp-full-20080731
-LTP_VERSION = 20080731
 MAKE = make
-MAKEINFO = ${SHELL} /local_test/expand/config/missing makeinfo
-MKDIR_P = /bin/mkdir -p
+MAKEINFO = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing makeinfo
+MKDIR_P = /usr/bin/mkdir -p
 M_HEADERS = 
-NFI_FTP = 
-### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_FTP_OBJECTS BLOCK. Do not remove this line. ###
-NFI_FTP_OBJECTS = ../src/nfi/nfi_ftp/ftp.c \
-			../src/nfi/nfi_ftp/list_dir.c \
-			../src/nfi/nfi_ftp/nfi_ftp.c \
-			../src/nfi/nfi_ftp/nfi_ftp_err.c
-
-NFI_GRIDFTP = 
-### END OF NFI_GSOAP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-NFI_GRIDFTP_OBJECTS = ../src/nfi/nfi_gridftp/nfi_gridftp.c \
-			../src/nfi/nfi_gridftp/nfi_gridftp_err.c
-
-NFI_GSOAP = 
-### END OF NFI_XIO_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_GSOAP_OBJECTS BLOCK. Do not remove this line. ###
-NFI_GSOAP_OBJECTS = ../src/nfi/nfi_gsoap/nfi_gsoap.c \
-			../src/nfi/nfi_gsoap/nfi_gsoap_err.c
-
-NFI_HTTP = 
-### END OF NFI_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
-NFI_HTTP_OBJECTS = ../src/nfi/nfi_http/nfi_http.c \
-			../src/nfi/nfi_http/nfi_http_err.c
-
-NFI_IOPROXY_RPC = 
-### END OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
-NFI_IOPROXY_RPC_OBJECTS = ../src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.c \
-			../src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.c
-
 NFI_MPISERVER = nfi_mpiserver
 ### END OF NFI_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
@@ -869,38 +731,32 @@ NFI_NFS_OBJECTS = ../src/nfi/nfi_nfs/nfi_nfs.c \
 			../src/nfi/nfi_nfs/nfs_xdr.c
 
 NFI_TCPSERVER = nfi_tcpserver
-### END OF NFI_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
+### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_TCPSERVER_OBJECTS = ../src/nfi/nfi_tcpServer/nfi_tcpServer.c \
 			../src/nfi/nfi_tcpServer/tcpServer_comm.c \
 			../src/nfi/nfi_tcpServer/nfi_tcpServer_err.c
-
-NFI_XIO = 
-### END OF NFI_FTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_XIO_OBJECTS BLOCK. Do not remove this line. ###
-NFI_XIO_OBJECTS = ../src/nfi/nfi_xio/nfi_xio.c \
-			../src/nfi/nfi_xio/nfi_xio_err.c
 
 OBJEXT = o
 OS = __LINUX__
 PACKAGE = expand
 PACKAGE_BUGREPORT = fgcarbal@inf.uc3m.es
 PACKAGE_NAME = Expand
-PACKAGE_STRING = Expand 1.9.0
+PACKAGE_STRING = Expand 1.0
 PACKAGE_TARNAME = expand
 PACKAGE_URL = 
-PACKAGE_VERSION = 1.9.0
+PACKAGE_VERSION = 1.0
 PATH_SEPARATOR = :
-POSIXIOSERVICE = 
 RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = 1.9.0
-abs_builddir = /local_test/expand/lib
-abs_srcdir = /local_test/expand/lib
-abs_top_builddir = /local_test/expand
-abs_top_srcdir = /local_test/expand
+VERSION = 1.0
+abs_builddir = /home/acaldero/work/xpn-dcamarmas/lib
+abs_srcdir = /home/acaldero/work/xpn-dcamarmas/lib
+abs_top_builddir = /home/acaldero/work/xpn-dcamarmas
+abs_top_srcdir = /home/acaldero/work/xpn-dcamarmas
+ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -927,7 +783,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /local_test/expand/config/install-sh
+install_sh = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -943,7 +799,6 @@ runstatedir = ${localstatedir}/run
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
-subdirs = 
 sysconfdir = ${prefix}/etc
 target = x86_64-pc-linux-gnu
 target_alias = 
@@ -962,7 +817,6 @@ COMMON_HEADER = ../include/all_system.h \
 			../include/config.h \
 			../include/config.h.in \
 			../include/config_linux.h \
-			../include/config_win32.h \
 			../include/expand.h \
 			../include/expand_lib.h \
 			../include/xpn_debug.h
@@ -977,7 +831,10 @@ BASE_HEADER = ../include/base/base_lib.h \
 			../include/base/time_misc.h \
 			../include/base/trace_msg.h \
 			../include/base/trace_tags.h \
-			../include/base/urlstr.h
+			../include/base/urlstr.h \
+			../include/base/syscall_proxies.h \
+			../include/base/filesystem.h \
+			../include/base/utils.h
 
 NFI_LOCAL_HEADER = ../include/nfi/nfi_local/local_lib.h \
 			../include/nfi/nfi_local/nfi_local_err.h \
@@ -998,32 +855,6 @@ NFI_NFS3_HEADER = ../include/nfi/nfi_nfs3/nfi_nfs3_err.h \
 			../include/nfi/nfi_nfs3/nfs3_lib.h
 
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_FTP_HEADER BLOCK. Do not remove this line. ###
-NFI_FTP_HEADER = ../include/nfi/nfi_ftp/ftp.h \
-			../include/nfi/nfi_ftp/ftp_lib.h \
-			../include/nfi/nfi_ftp/list_dir.h \
-			../include/nfi/nfi_ftp/nfi_ftp_err.h \
-			../include/nfi/nfi_ftp/nfi_ftp.h
-
-### END OF NFI_FTP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_XIO_HEADER BLOCK. Do not remove this line. ###
-NFI_XIO_HEADER = ../include/nfi/nfi_xio/nfi_xio_err.h \
-			../include/nfi/nfi_xio/nfi_xio.h \
-			../include/nfi/nfi_xio/xio_lib.h
-
-### END OF NFI_XIO_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_GSOAP_HEADER BLOCK. Do not remove this line. ###
-NFI_GSOAP_HEADER = ../include/nfi/nfi_gsoap/gsoap_lib.h \
-			../include/nfi/nfi_gsoap/nfi_gsoap_err.h \
-			../include/nfi/nfi_gsoap/nfi_gsoap.h
-
-### END OF NFI_GSOAP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_GRIDFTP_HEADER BLOCK. Do not remove this line. ###
-NFI_GRIDFTP_HEADER = ../include/nfi/nfi_gridftp/gridftp_lib.h \
-			../include/nfi/nfi_gridftp/nfi_gridftp_err.h \
-			../include/nfi/nfi_gridftp/nfi_gridftp.h
-
-### END OF NFI_GRIDFTP_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_TCPSERVER_HEADER = ../include/nfi/nfi_tcpServer/ \
 			../include/nfi/nfi_tcpServer/tcpServer_comm.h \
@@ -1043,12 +874,6 @@ NFI_MPISERVER_HEADER = ../include/nfi/nfi_mpiServer/ \
 			../include/nfi/nfi_mpiServer/nfi_mpiServer.h
 
 ### END OF NFI_MPISERVER_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_IOPROXY_RPC_HEADER BLOCK. Do not remove this line. ###
-NFI_IOPROXY_RPC_HEADER = ../include/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.h \
-			../include/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.h \
-			../include/nfi/nfi_ioproxy-rpc/ioproxy-rpc_lib.h
-
-### END OF NFI_IOPROXY_RPC_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
 NFI_HTTP_HEADER = ../include/nfi/nfi_http/nfi_http_err.h \
 			../include/nfi/nfi_http/nfi_http.h \
@@ -1060,10 +885,8 @@ NFI_HEADER = ../include/nfi/nfi.h \
 	../include/nfi/nfi_lib.h \
 	../include/nfi/nfi_worker.h $(NFI_LOCAL_HEADER) \
 	$(am__append_1) $(am__append_2) $(am__append_3) \
-	$(am__append_4) $(am__append_5) $(am__append_6) \
-	$(am__append_7) $(am__append_8) $(am__append_9) \
-	$(am__append_10)
-### END OF ENABLE_HTTP_HEADER BLOCK. Do not remove this line. ###
+	$(am__append_4)
+### END OF ENABLE_MPISERVER_HEADER BLOCK. Do not remove this line. ###
 ### END OF NFI_HEADER BLOCK. Do not remove this line. ###
 XPN_HEADER = ../include/xpn/xpn_lib.h \
 			../include/xpn/xpn_simple/xpn_cwd.h \
@@ -1115,20 +938,26 @@ BASE_OBJECTS = ../src/base/darray.c \
 			../src/base/debug_msg.c \
 			../src/base/string_misc.c \
 			../src/base/time_misc.c \
-			../src/base/urlstr.c
+			../src/base/urlstr.c \
+			../src/base/syscall_proxies.c \
+			../src/base/filesystem.c \
+			../src/base/utils.c
 
 NFI_COMMON_OBJECTS = ../src/nfi/common/nfi_worker.c
 NFI_LOCAL_OBJECTS = ../src/nfi/nfi_local/nfi_local.c \
 			../src/nfi/nfi_local/nfi_local_err.c
 
+### END OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
+NFI_HTTP_OBJECTS = ../src/nfi/nfi_http/nfi_http.c \
+			../src/nfi/nfi_http/nfi_http_err.c
+
 ### END OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
 NFI_OBJECTS = $(NFI_COMMON_OBJECTS) $(NFI_LOCAL_OBJECTS) \
-	$(am__append_11) $(am__append_12) $(am__append_13) \
-	$(am__append_14) $(am__append_15) $(am__append_16) \
-	$(am__append_17) $(am__append_18) $(am__append_19) \
-	$(am__append_20)
-### END OF ENABLE_HTTP_OBJECTS BLOCK. Do not remove this line. ###
+	$(am__append_5) $(am__append_6) $(am__append_7) \
+	$(am__append_8)
+### END OF ENABLE_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_OBJECTS BLOCK. Do not remove this line. ###
 XPN_CORE_OBJECTS = ../src/xpn/xpn_simple/xpncore/xpn_cwd.c \
 			../src/xpn/xpn_simple/xpncore/xpn_dir.c \
@@ -1245,9 +1074,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu lib/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign lib/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu lib/Makefile
+	  $(AUTOMAKE) --foreign lib/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -1326,6 +1155,15 @@ clean-libLIBRARIES:
 ../src/base/urlstr.$(OBJEXT):  \
 	../src/base/$(am__dirstamp) \
 	../src/base/$(DEPDIR)/$(am__dirstamp)
+../src/base/syscall_proxies.$(OBJEXT):  \
+	../src/base/$(am__dirstamp) \
+	../src/base/$(DEPDIR)/$(am__dirstamp)
+../src/base/filesystem.$(OBJEXT):  \
+	../src/base/$(am__dirstamp) \
+	../src/base/$(DEPDIR)/$(am__dirstamp)
+../src/base/utils.$(OBJEXT):  \
+	../src/base/$(am__dirstamp) \
+	../src/base/$(DEPDIR)/$(am__dirstamp)
 ../src/nfi/common/$(am__dirstamp):
 	@$(MKDIR_P) ../src/nfi/common
 	@: > ../src/nfi/common/$(am__dirstamp)
@@ -1389,60 +1227,6 @@ clean-libLIBRARIES:
 ../src/nfi/nfi_nfs3/nfs3_xdr.$(OBJEXT):  \
 	../src/nfi/nfi_nfs3/$(am__dirstamp) \
 	../src/nfi/nfi_nfs3/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_ftp/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_ftp
-	@: > ../src/nfi/nfi_ftp/$(am__dirstamp)
-../src/nfi/nfi_ftp/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_ftp/$(DEPDIR)
-	@: > ../src/nfi/nfi_ftp/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_ftp/ftp.$(OBJEXT):  \
-	../src/nfi/nfi_ftp/$(am__dirstamp) \
-	../src/nfi/nfi_ftp/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_ftp/list_dir.$(OBJEXT):  \
-	../src/nfi/nfi_ftp/$(am__dirstamp) \
-	../src/nfi/nfi_ftp/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_ftp/nfi_ftp.$(OBJEXT):  \
-	../src/nfi/nfi_ftp/$(am__dirstamp) \
-	../src/nfi/nfi_ftp/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_ftp/nfi_ftp_err.$(OBJEXT):  \
-	../src/nfi/nfi_ftp/$(am__dirstamp) \
-	../src/nfi/nfi_ftp/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_xio/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_xio
-	@: > ../src/nfi/nfi_xio/$(am__dirstamp)
-../src/nfi/nfi_xio/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_xio/$(DEPDIR)
-	@: > ../src/nfi/nfi_xio/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_xio/nfi_xio.$(OBJEXT):  \
-	../src/nfi/nfi_xio/$(am__dirstamp) \
-	../src/nfi/nfi_xio/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_xio/nfi_xio_err.$(OBJEXT):  \
-	../src/nfi/nfi_xio/$(am__dirstamp) \
-	../src/nfi/nfi_xio/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_gsoap/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_gsoap
-	@: > ../src/nfi/nfi_gsoap/$(am__dirstamp)
-../src/nfi/nfi_gsoap/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_gsoap/$(DEPDIR)
-	@: > ../src/nfi/nfi_gsoap/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_gsoap/nfi_gsoap.$(OBJEXT):  \
-	../src/nfi/nfi_gsoap/$(am__dirstamp) \
-	../src/nfi/nfi_gsoap/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_gsoap/nfi_gsoap_err.$(OBJEXT):  \
-	../src/nfi/nfi_gsoap/$(am__dirstamp) \
-	../src/nfi/nfi_gsoap/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_gridftp/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_gridftp
-	@: > ../src/nfi/nfi_gridftp/$(am__dirstamp)
-../src/nfi/nfi_gridftp/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_gridftp/$(DEPDIR)
-	@: > ../src/nfi/nfi_gridftp/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_gridftp/nfi_gridftp.$(OBJEXT):  \
-	../src/nfi/nfi_gridftp/$(am__dirstamp) \
-	../src/nfi/nfi_gridftp/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_gridftp/nfi_gridftp_err.$(OBJEXT):  \
-	../src/nfi/nfi_gridftp/$(am__dirstamp) \
-	../src/nfi/nfi_gridftp/$(DEPDIR)/$(am__dirstamp)
 ../src/nfi/nfi_tcpServer/$(am__dirstamp):
 	@$(MKDIR_P) ../src/nfi/nfi_tcpServer
 	@: > ../src/nfi/nfi_tcpServer/$(am__dirstamp)
@@ -1473,30 +1257,6 @@ clean-libLIBRARIES:
 ../src/nfi/nfi_mpiServer/nfi_mpiServer_err.$(OBJEXT):  \
 	../src/nfi/nfi_mpiServer/$(am__dirstamp) \
 	../src/nfi/nfi_mpiServer/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_ioproxy-rpc/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_ioproxy-rpc
-	@: > ../src/nfi/nfi_ioproxy-rpc/$(am__dirstamp)
-../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)
-	@: > ../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.$(OBJEXT):  \
-	../src/nfi/nfi_ioproxy-rpc/$(am__dirstamp) \
-	../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.$(OBJEXT):  \
-	../src/nfi/nfi_ioproxy-rpc/$(am__dirstamp) \
-	../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_http/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_http
-	@: > ../src/nfi/nfi_http/$(am__dirstamp)
-../src/nfi/nfi_http/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../src/nfi/nfi_http/$(DEPDIR)
-	@: > ../src/nfi/nfi_http/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_http/nfi_http.$(OBJEXT):  \
-	../src/nfi/nfi_http/$(am__dirstamp) \
-	../src/nfi/nfi_http/$(DEPDIR)/$(am__dirstamp)
-../src/nfi/nfi_http/nfi_http_err.$(OBJEXT):  \
-	../src/nfi/nfi_http/$(am__dirstamp) \
-	../src/nfi/nfi_http/$(DEPDIR)/$(am__dirstamp)
 ../src/xpn/xpn_simple/xpncore/$(am__dirstamp):
 	@$(MKDIR_P) ../src/xpn/xpn_simple/xpncore
 	@: > ../src/xpn/xpn_simple/xpncore/$(am__dirstamp)
@@ -1810,17 +1570,11 @@ mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f ../src/base/*.$(OBJEXT)
 	-rm -f ../src/nfi/common/*.$(OBJEXT)
-	-rm -f ../src/nfi/nfi_ftp/*.$(OBJEXT)
-	-rm -f ../src/nfi/nfi_gridftp/*.$(OBJEXT)
-	-rm -f ../src/nfi/nfi_gsoap/*.$(OBJEXT)
-	-rm -f ../src/nfi/nfi_http/*.$(OBJEXT)
-	-rm -f ../src/nfi/nfi_ioproxy-rpc/*.$(OBJEXT)
 	-rm -f ../src/nfi/nfi_local/*.$(OBJEXT)
 	-rm -f ../src/nfi/nfi_mpiServer/*.$(OBJEXT)
 	-rm -f ../src/nfi/nfi_nfs/*.$(OBJEXT)
 	-rm -f ../src/nfi/nfi_nfs3/*.$(OBJEXT)
 	-rm -f ../src/nfi/nfi_tcpServer/*.$(OBJEXT)
-	-rm -f ../src/nfi/nfi_xio/*.$(OBJEXT)
 	-rm -f ../src/xpn/xpn_simple/policy/*.$(OBJEXT)
 	-rm -f ../src/xpn/xpn_simple/xpncore/*.$(OBJEXT)
 	-rm -f ../src/xpn2/*.$(OBJEXT)
@@ -1835,24 +1589,15 @@ distclean-compile:
 include ../src/base/$(DEPDIR)/darray.Po # am--include-marker
 include ../src/base/$(DEPDIR)/debug_msg.Po # am--include-marker
 include ../src/base/$(DEPDIR)/dtable.Po # am--include-marker
+include ../src/base/$(DEPDIR)/filesystem.Po # am--include-marker
 include ../src/base/$(DEPDIR)/math_misc.Po # am--include-marker
 include ../src/base/$(DEPDIR)/string_misc.Po # am--include-marker
+include ../src/base/$(DEPDIR)/syscall_proxies.Po # am--include-marker
 include ../src/base/$(DEPDIR)/time_misc.Po # am--include-marker
 include ../src/base/$(DEPDIR)/trace_msg.Po # am--include-marker
 include ../src/base/$(DEPDIR)/urlstr.Po # am--include-marker
+include ../src/base/$(DEPDIR)/utils.Po # am--include-marker
 include ../src/nfi/common/$(DEPDIR)/nfi_worker.Po # am--include-marker
-include ../src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po # am--include-marker
-include ../src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po # am--include-marker
-include ../src/nfi/nfi_ftp/$(DEPDIR)/nfi_ftp.Po # am--include-marker
-include ../src/nfi/nfi_ftp/$(DEPDIR)/nfi_ftp_err.Po # am--include-marker
-include ../src/nfi/nfi_gridftp/$(DEPDIR)/nfi_gridftp.Po # am--include-marker
-include ../src/nfi/nfi_gridftp/$(DEPDIR)/nfi_gridftp_err.Po # am--include-marker
-include ../src/nfi/nfi_gsoap/$(DEPDIR)/nfi_gsoap.Po # am--include-marker
-include ../src/nfi/nfi_gsoap/$(DEPDIR)/nfi_gsoap_err.Po # am--include-marker
-include ../src/nfi/nfi_http/$(DEPDIR)/nfi_http.Po # am--include-marker
-include ../src/nfi/nfi_http/$(DEPDIR)/nfi_http_err.Po # am--include-marker
-include ../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/nfi_ioproxy-rpc.Po # am--include-marker
-include ../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/nfi_ioproxy-rpc_err.Po # am--include-marker
 include ../src/nfi/nfi_local/$(DEPDIR)/nfi_local.Po # am--include-marker
 include ../src/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po # am--include-marker
 include ../src/nfi/nfi_mpiServer/$(DEPDIR)/mpiServer_comm.Po # am--include-marker
@@ -1871,8 +1616,6 @@ include ../src/nfi/nfi_nfs3/$(DEPDIR)/nfs3_xdr.Po # am--include-marker
 include ../src/nfi/nfi_tcpServer/$(DEPDIR)/nfi_tcpServer.Po # am--include-marker
 include ../src/nfi/nfi_tcpServer/$(DEPDIR)/nfi_tcpServer_err.Po # am--include-marker
 include ../src/nfi/nfi_tcpServer/$(DEPDIR)/tcpServer_comm.Po # am--include-marker
-include ../src/nfi/nfi_xio/$(DEPDIR)/nfi_xio.Po # am--include-marker
-include ../src/nfi/nfi_xio/$(DEPDIR)/nfi_xio_err.Po # am--include-marker
 include ../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_cwd.Po # am--include-marker
 include ../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_err.Po # am--include-marker
 include ../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_init.Po # am--include-marker
@@ -2126,16 +1869,6 @@ distclean-generic:
 	-rm -f ../src/base/$(am__dirstamp)
 	-rm -f ../src/nfi/common/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../src/nfi/common/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_ftp/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_gridftp/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_gridftp/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_gsoap/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_gsoap/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_http/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_http/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_ioproxy-rpc/$(am__dirstamp)
 	-rm -f ../src/nfi/nfi_local/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../src/nfi/nfi_local/$(am__dirstamp)
 	-rm -f ../src/nfi/nfi_mpiServer/$(DEPDIR)/$(am__dirstamp)
@@ -2146,8 +1879,6 @@ distclean-generic:
 	-rm -f ../src/nfi/nfi_nfs3/$(am__dirstamp)
 	-rm -f ../src/nfi/nfi_tcpServer/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../src/nfi/nfi_tcpServer/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_xio/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../src/nfi/nfi_xio/$(am__dirstamp)
 	-rm -f ../src/xpn/xpn_simple/policy/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../src/xpn/xpn_simple/policy/$(am__dirstamp)
 	-rm -f ../src/xpn/xpn_simple/xpncore/$(DEPDIR)/$(am__dirstamp)
@@ -2174,24 +1905,15 @@ distclean: distclean-am
 		-rm -f ../src/base/$(DEPDIR)/darray.Po
 	-rm -f ../src/base/$(DEPDIR)/debug_msg.Po
 	-rm -f ../src/base/$(DEPDIR)/dtable.Po
+	-rm -f ../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/string_misc.Po
+	-rm -f ../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../src/base/$(DEPDIR)/time_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../src/base/$(DEPDIR)/urlstr.Po
+	-rm -f ../src/base/$(DEPDIR)/utils.Po
 	-rm -f ../src/nfi/common/$(DEPDIR)/nfi_worker.Po
-	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po
-	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po
-	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/nfi_ftp.Po
-	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/nfi_ftp_err.Po
-	-rm -f ../src/nfi/nfi_gridftp/$(DEPDIR)/nfi_gridftp.Po
-	-rm -f ../src/nfi/nfi_gridftp/$(DEPDIR)/nfi_gridftp_err.Po
-	-rm -f ../src/nfi/nfi_gsoap/$(DEPDIR)/nfi_gsoap.Po
-	-rm -f ../src/nfi/nfi_gsoap/$(DEPDIR)/nfi_gsoap_err.Po
-	-rm -f ../src/nfi/nfi_http/$(DEPDIR)/nfi_http.Po
-	-rm -f ../src/nfi/nfi_http/$(DEPDIR)/nfi_http_err.Po
-	-rm -f ../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/nfi_ioproxy-rpc.Po
-	-rm -f ../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/nfi_ioproxy-rpc_err.Po
 	-rm -f ../src/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f ../src/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po
 	-rm -f ../src/nfi/nfi_mpiServer/$(DEPDIR)/mpiServer_comm.Po
@@ -2210,8 +1932,6 @@ distclean: distclean-am
 	-rm -f ../src/nfi/nfi_tcpServer/$(DEPDIR)/nfi_tcpServer.Po
 	-rm -f ../src/nfi/nfi_tcpServer/$(DEPDIR)/nfi_tcpServer_err.Po
 	-rm -f ../src/nfi/nfi_tcpServer/$(DEPDIR)/tcpServer_comm.Po
-	-rm -f ../src/nfi/nfi_xio/$(DEPDIR)/nfi_xio.Po
-	-rm -f ../src/nfi/nfi_xio/$(DEPDIR)/nfi_xio_err.Po
 	-rm -f ../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_cwd.Po
 	-rm -f ../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_err.Po
 	-rm -f ../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_init.Po
@@ -2347,24 +2067,15 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ../src/base/$(DEPDIR)/darray.Po
 	-rm -f ../src/base/$(DEPDIR)/debug_msg.Po
 	-rm -f ../src/base/$(DEPDIR)/dtable.Po
+	-rm -f ../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/string_misc.Po
+	-rm -f ../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../src/base/$(DEPDIR)/time_misc.Po
 	-rm -f ../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../src/base/$(DEPDIR)/urlstr.Po
+	-rm -f ../src/base/$(DEPDIR)/utils.Po
 	-rm -f ../src/nfi/common/$(DEPDIR)/nfi_worker.Po
-	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/ftp.Po
-	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/list_dir.Po
-	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/nfi_ftp.Po
-	-rm -f ../src/nfi/nfi_ftp/$(DEPDIR)/nfi_ftp_err.Po
-	-rm -f ../src/nfi/nfi_gridftp/$(DEPDIR)/nfi_gridftp.Po
-	-rm -f ../src/nfi/nfi_gridftp/$(DEPDIR)/nfi_gridftp_err.Po
-	-rm -f ../src/nfi/nfi_gsoap/$(DEPDIR)/nfi_gsoap.Po
-	-rm -f ../src/nfi/nfi_gsoap/$(DEPDIR)/nfi_gsoap_err.Po
-	-rm -f ../src/nfi/nfi_http/$(DEPDIR)/nfi_http.Po
-	-rm -f ../src/nfi/nfi_http/$(DEPDIR)/nfi_http_err.Po
-	-rm -f ../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/nfi_ioproxy-rpc.Po
-	-rm -f ../src/nfi/nfi_ioproxy-rpc/$(DEPDIR)/nfi_ioproxy-rpc_err.Po
 	-rm -f ../src/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f ../src/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po
 	-rm -f ../src/nfi/nfi_mpiServer/$(DEPDIR)/mpiServer_comm.Po
@@ -2383,8 +2094,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../src/nfi/nfi_tcpServer/$(DEPDIR)/nfi_tcpServer.Po
 	-rm -f ../src/nfi/nfi_tcpServer/$(DEPDIR)/nfi_tcpServer_err.Po
 	-rm -f ../src/nfi/nfi_tcpServer/$(DEPDIR)/tcpServer_comm.Po
-	-rm -f ../src/nfi/nfi_xio/$(DEPDIR)/nfi_xio.Po
-	-rm -f ../src/nfi/nfi_xio/$(DEPDIR)/nfi_xio_err.Po
 	-rm -f ../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_cwd.Po
 	-rm -f ../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_err.Po
 	-rm -f ../src/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_init.Po

@@ -99,8 +99,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
-CONFIG_CLEAN_FILES = src/nfi/nfi_gsoap/PosixIOService/Makefile \
-	external-utils/xpnuploader/Makefile
+CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -158,17 +157,16 @@ ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
-am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/compile \
+am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/ar-lib \
+	$(top_srcdir)/./config/compile \
 	$(top_srcdir)/./config/config.guess \
 	$(top_srcdir)/./config/config.sub \
 	$(top_srcdir)/./config/install-sh \
 	$(top_srcdir)/./config/missing \
-	$(top_srcdir)/external-utils/xpnuploader/Makefile.in \
-	$(top_srcdir)/include/config.h.in \
-	$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/Makefile.in \
+	$(top_srcdir)/include/config.h.in ./config/ar-lib \
 	./config/compile ./config/config.guess ./config/config.sub \
 	./config/depcomp ./config/install-sh ./config/missing AUTHORS \
-	COPYING ChangeLog INSTALL NEWS README
+	COPYING config.guess config.sub
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -211,14 +209,14 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /local_test/expand/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /local_test/expand/config/missing autoconf
-AUTOHEADER = ${SHELL} /local_test/expand/config/missing autoheader
-AUTOM4TE = ${SHELL} /local_test/expand/config/missing autom4te
-AUTOMAKE = ${SHELL} /local_test/expand/config/missing automake-1.16
-AWK = mawk
+AR = ar
+AUTOCONF = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoconf
+AUTOHEADER = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoheader
+AUTOMAKE = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing automake-1.16
+AWK = gawk
 CC = /opt/software/install-mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
@@ -231,42 +229,23 @@ DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
-EGREP = /bin/grep -E
+EGREP = /usr/bin/grep -E
 EXEEXT = 
-FUSE = 
-FUSEDAV = 
-GREP = /bin/grep
-GSOAP_BIN_DIR = 
-GSOAP_IMPORT_DIR = 
-GSOAP_INCLUDE_DIR = 
-GSOAP_LIB_DIR = 
+GREP = /usr/bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = -lpthread -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
-LIBFUSE_A = 
 LIBLINK = -lpthread
 LIBOBJS = 
 LIBS = -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
 LTLIBOBJS = 
-LTP_PATH = ${abs_top_srcdir}/test/autotest/ltp-full-20080731
-LTP_VERSION = 20080731
 MAKE = make
-MAKEINFO = ${SHELL} /local_test/expand/config/missing makeinfo
-MKDIR_P = /bin/mkdir -p
+MAKEINFO = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing makeinfo
+MKDIR_P = /usr/bin/mkdir -p
 M_HEADERS = 
-NFI_FTP = 
-NFI_FTP_OBJECTS = 
-NFI_GRIDFTP = 
-NFI_GRIDFTP_OBJECTS = 
-NFI_GSOAP = 
-NFI_GSOAP_OBJECTS = 
-NFI_HTTP = 
-NFI_HTTP_OBJECTS = 
-NFI_IOPROXY_RPC = 
-NFI_IOPROXY_RPC_OBJECTS = 
 NFI_MPISERVER = nfi_mpiserver
 NFI_MPISERVER_OBJECTS = $(NFI_MPISERVER_OBJECTS)
 NFI_NFS = 
@@ -275,28 +254,26 @@ NFI_NFS3_OBJECTS = $(NFI_NFS3_OBJECTS)
 NFI_NFS_OBJECTS = 
 NFI_TCPSERVER = nfi_tcpserver
 NFI_TCPSERVER_OBJECTS = $(NFI_TCPSERVER_OBJECTS)
-NFI_XIO = 
-NFI_XIO_OBJECTS = 
 OBJEXT = o
 OS = __LINUX__
 PACKAGE = expand
 PACKAGE_BUGREPORT = fgcarbal@inf.uc3m.es
 PACKAGE_NAME = Expand
-PACKAGE_STRING = Expand 1.9.0
+PACKAGE_STRING = Expand 1.0
 PACKAGE_TARNAME = expand
 PACKAGE_URL = 
-PACKAGE_VERSION = 1.9.0
+PACKAGE_VERSION = 1.0
 PATH_SEPARATOR = :
-POSIXIOSERVICE = 
 RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = 1.9.0
-abs_builddir = /local_test/expand
-abs_srcdir = /local_test/expand
-abs_top_builddir = /local_test/expand
-abs_top_srcdir = /local_test/expand
+VERSION = 1.0
+abs_builddir = /home/acaldero/work/xpn-dcamarmas
+abs_srcdir = /home/acaldero/work/xpn-dcamarmas
+abs_top_builddir = /home/acaldero/work/xpn-dcamarmas
+abs_top_srcdir = /home/acaldero/work/xpn-dcamarmas
+ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -323,7 +300,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /local_test/expand/config/install-sh
+install_sh = ${SHELL} /home/acaldero/work/xpn-dcamarmas/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -339,7 +316,6 @@ runstatedir = ${localstatedir}/run
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
-subdirs = 
 sysconfdir = ${prefix}/etc
 target = x86_64-pc-linux-gnu
 target_alias = 
@@ -349,8 +325,8 @@ target_vendor = pc
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-SUBDIRS =   lib  utils test/autotest
-EXTRA_DIST = autogen.sh create_module.sh delete_module.sh
+SUBDIRS = lib utils
+EXTRA_DIST = autogen.sh
 all: all-recursive
 
 .SUFFIXES:
@@ -360,15 +336,15 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
-	      echo ' cd $(srcdir) && $(AUTOMAKE) --gnu'; \
-	      $(am__cd) $(srcdir) && $(AUTOMAKE) --gnu \
+	      echo ' cd $(srcdir) && $(AUTOMAKE) --foreign'; \
+	      $(am__cd) $(srcdir) && $(AUTOMAKE) --foreign \
 		&& exit 0; \
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu Makefile
+	  $(AUTOMAKE) --foreign Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -402,10 +378,6 @@ $(top_srcdir)/include/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f include/config.h include/stamp-h1
-src/nfi/nfi_gsoap/PosixIOService/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-external-utils/xpnuploader/Makefile: $(top_builddir)/config.status $(top_srcdir)/external-utils/xpnuploader/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.

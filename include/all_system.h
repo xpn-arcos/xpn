@@ -21,8 +21,6 @@
 	#include "config.h"
 #elif defined(LINUX)
 	#include "config_linux.h"
-#elif defined(WIN32)
-	#include "config_win32.h"
 #endif
 
 
@@ -32,7 +30,9 @@
 /*
  * Include common headers
  */
-#include <stdlib.h>
+#ifndef NOT_TO_USE_STDLIB_H
+        #include <stdlib.h>
+#endif
 #include <stdio.h>
 #include <errno.h>
 #include <stdarg.h>
@@ -41,7 +41,6 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
 
 //#include <linux/linux.h>
 //#include <sys/ioctl.h>
@@ -98,7 +97,9 @@
 #endif
 
 #if defined(HAVE_FCNTL_H)
-        #include <fcntl.h>
+        #ifndef NOT_TO_USE_FCNTL_H
+            #include <fcntl.h>
+        #endif
 #endif
 
 

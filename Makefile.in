@@ -99,8 +99,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
-CONFIG_CLEAN_FILES = src/nfi/nfi_gsoap/PosixIOService/Makefile \
-	external-utils/xpnuploader/Makefile
+CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -158,17 +157,16 @@ ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
-am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/compile \
+am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/ar-lib \
+	$(top_srcdir)/./config/compile \
 	$(top_srcdir)/./config/config.guess \
 	$(top_srcdir)/./config/config.sub \
 	$(top_srcdir)/./config/install-sh \
 	$(top_srcdir)/./config/missing \
-	$(top_srcdir)/external-utils/xpnuploader/Makefile.in \
-	$(top_srcdir)/include/config.h.in \
-	$(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/Makefile.in \
+	$(top_srcdir)/include/config.h.in ./config/ar-lib \
 	./config/compile ./config/config.guess ./config/config.sub \
 	./config/depcomp ./config/install-sh ./config/missing AUTHORS \
-	COPYING ChangeLog INSTALL NEWS README
+	COPYING config.guess config.sub
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -214,9 +212,9 @@ distcleancheck_listfiles = find . -type f -print
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
+AR = @AR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
-AUTOM4TE = @AUTOM4TE@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 CC = @CC@
@@ -233,40 +231,21 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-FUSE = @FUSE@
-FUSEDAV = @FUSEDAV@
 GREP = @GREP@
-GSOAP_BIN_DIR = @GSOAP_BIN_DIR@
-GSOAP_IMPORT_DIR = @GSOAP_IMPORT_DIR@
-GSOAP_INCLUDE_DIR = @GSOAP_INCLUDE_DIR@
-GSOAP_LIB_DIR = @GSOAP_LIB_DIR@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
-LIBFUSE_A = @LIBFUSE_A@
 LIBLINK = @LIBLINK@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LTLIBOBJS = @LTLIBOBJS@
-LTP_PATH = @LTP_PATH@
-LTP_VERSION = @LTP_VERSION@
 MAKE = @MAKE@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
 M_HEADERS = @M_HEADERS@
-NFI_FTP = @NFI_FTP@
-NFI_FTP_OBJECTS = @NFI_FTP_OBJECTS@
-NFI_GRIDFTP = @NFI_GRIDFTP@
-NFI_GRIDFTP_OBJECTS = @NFI_GRIDFTP_OBJECTS@
-NFI_GSOAP = @NFI_GSOAP@
-NFI_GSOAP_OBJECTS = @NFI_GSOAP_OBJECTS@
-NFI_HTTP = @NFI_HTTP@
-NFI_HTTP_OBJECTS = @NFI_HTTP_OBJECTS@
-NFI_IOPROXY_RPC = @NFI_IOPROXY_RPC@
-NFI_IOPROXY_RPC_OBJECTS = @NFI_IOPROXY_RPC_OBJECTS@
 NFI_MPISERVER = @NFI_MPISERVER@
 NFI_MPISERVER_OBJECTS = @NFI_MPISERVER_OBJECTS@
 NFI_NFS = @NFI_NFS@
@@ -275,8 +254,6 @@ NFI_NFS3_OBJECTS = @NFI_NFS3_OBJECTS@
 NFI_NFS_OBJECTS = @NFI_NFS_OBJECTS@
 NFI_TCPSERVER = @NFI_TCPSERVER@
 NFI_TCPSERVER_OBJECTS = @NFI_TCPSERVER_OBJECTS@
-NFI_XIO = @NFI_XIO@
-NFI_XIO_OBJECTS = @NFI_XIO_OBJECTS@
 OBJEXT = @OBJEXT@
 OS = @OS@
 PACKAGE = @PACKAGE@
@@ -287,7 +264,6 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-POSIXIOSERVICE = @POSIXIOSERVICE@
 RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -297,6 +273,7 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -339,7 +316,6 @@ runstatedir = @runstatedir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
-subdirs = @subdirs@
 sysconfdir = @sysconfdir@
 target = @target@
 target_alias = @target_alias@
@@ -349,8 +325,8 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = @FUSEDAV@ @POSIXIOSERVICE@ lib @FUSE@ utils test/autotest
-EXTRA_DIST = autogen.sh create_module.sh delete_module.sh
+SUBDIRS = lib utils
+EXTRA_DIST = autogen.sh
 all: all-recursive
 
 .SUFFIXES:
@@ -360,15 +336,15 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
-	      echo ' cd $(srcdir) && $(AUTOMAKE) --gnu'; \
-	      $(am__cd) $(srcdir) && $(AUTOMAKE) --gnu \
+	      echo ' cd $(srcdir) && $(AUTOMAKE) --foreign'; \
+	      $(am__cd) $(srcdir) && $(AUTOMAKE) --foreign \
 		&& exit 0; \
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu Makefile
+	  $(AUTOMAKE) --foreign Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -402,10 +378,6 @@ $(top_srcdir)/include/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f include/config.h include/stamp-h1
-src/nfi/nfi_gsoap/PosixIOService/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/nfi/nfi_gsoap/PosixIOService/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-external-utils/xpnuploader/Makefile: $(top_builddir)/config.status $(top_srcdir)/external-utils/xpnuploader/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.
