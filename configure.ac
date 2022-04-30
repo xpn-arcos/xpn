@@ -21,7 +21,7 @@ AC_PROG_RANLIB
 #
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE(subdir-objects)
+AM_INIT_AUTOMAKE([1.0 foreign subdir-objects])
 AM_CONDITIONAL([am__fastdepCC], [test x$am__fastdepCC = xam__fastdepCC])
 AM_CONDITIONAL([AMDEP], [test x$amdep = xamdep])
 AM_PROG_CC_C_O

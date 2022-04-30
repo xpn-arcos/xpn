@@ -566,7 +566,6 @@ am__can_run_installinfo = \
 am__noinst_HEADERS_DIST = ../include/all_system.h \
 	../include/config.h ../include/config.h.in \
 	../include/config_linux.h \
-	../include/config_win32.h \
 	../include/expand.h \
 	../include/expand_lib.h \
 	../include/xpn_debug.h \
@@ -818,7 +817,6 @@ COMMON_HEADER = ../include/all_system.h \
 			../include/config.h \
 			../include/config.h.in \
 			../include/config_linux.h \
-			../include/config_win32.h \
 			../include/expand.h \
 			../include/expand_lib.h \
 			../include/xpn_debug.h
@@ -1076,9 +1074,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu lib/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign lib/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu lib/Makefile
+	  $(AUTOMAKE) --foreign lib/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \

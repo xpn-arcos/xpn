@@ -11,8 +11,6 @@
 	#include "config.h"
 #elif defined(LINUX)
 	#include "config_linux.h"
-#elif defined(WIN32)
-	#include "config_win32.h"
 #endif
 
 
