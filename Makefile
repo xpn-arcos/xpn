@@ -99,7 +99,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = src_bypass/Makefile \
+	src_servers/tcpServer/Makefile src_servers/mpiServer/Makefile
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -163,10 +164,13 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/ar-lib \
 	$(top_srcdir)/./config/config.sub \
 	$(top_srcdir)/./config/install-sh \
 	$(top_srcdir)/./config/missing \
-	$(top_srcdir)/include/config.h.in ./config/ar-lib \
-	./config/compile ./config/config.guess ./config/config.sub \
-	./config/depcomp ./config/install-sh ./config/missing AUTHORS \
-	COPYING config.guess config.sub
+	$(top_srcdir)/include/config.h.in \
+	$(top_srcdir)/src_bypass/Makefile.in \
+	$(top_srcdir)/src_servers/mpiServer/Makefile.in \
+	$(top_srcdir)/src_servers/tcpServer/Makefile.in \
+	./config/ar-lib ./config/compile ./config/config.guess \
+	./config/config.sub ./config/depcomp ./config/install-sh \
+	./config/missing AUTHORS COPYING config.guess config.sub
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -325,7 +329,7 @@ target_vendor = pc
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-SUBDIRS = lib utils
+SUBDIRS = lib utils src_bypass src_servers/tcpServer src_servers/mpiServer
 EXTRA_DIST = autogen.sh
 all: all-recursive
 
@@ -378,6 +382,12 @@ $(top_srcdir)/include/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f include/config.h include/stamp-h1
+src_bypass/Makefile: $(top_builddir)/config.status $(top_srcdir)/src_bypass/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+src_servers/tcpServer/Makefile: $(top_builddir)/config.status $(top_srcdir)/src_servers/tcpServer/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+src_servers/mpiServer/Makefile: $(top_builddir)/config.status $(top_srcdir)/src_servers/mpiServer/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.

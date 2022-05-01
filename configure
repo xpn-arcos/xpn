@@ -5629,7 +5629,7 @@ LDFLAGS="$LIBLINK $LIBS"
 #
 # Build makefile and headers...
 #
-ac_config_files="$ac_config_files Makefile lib/Makefile utils/Makefile"
+ac_config_files="$ac_config_files Makefile lib/Makefile utils/Makefile src_bypass/Makefile src_servers/tcpServer/Makefile src_servers/mpiServer/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6385,6 +6385,9 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "lib/Makefile") CONFIG_FILES="$CONFIG_FILES lib/Makefile" ;;
     "utils/Makefile") CONFIG_FILES="$CONFIG_FILES utils/Makefile" ;;
+    "src_bypass/Makefile") CONFIG_FILES="$CONFIG_FILES src_bypass/Makefile" ;;
+    "src_servers/tcpServer/Makefile") CONFIG_FILES="$CONFIG_FILES src_servers/tcpServer/Makefile" ;;
+    "src_servers/mpiServer/Makefile") CONFIG_FILES="$CONFIG_FILES src_servers/mpiServer/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

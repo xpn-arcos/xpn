@@ -155,8 +155,7 @@
     /* thread process */
     void tcpServer_worker_run(void *arg)
     {
-      int op, sd;
-      struct st_tcpServer_msg head;
+      int    sd;
       struct st_th *th;
 
       int cont_aux;
@@ -365,7 +364,7 @@
     void worker_function ( struct st_th th )
     {
         struct st_tcpServer_msg head;
-        int ret;
+        //int ret;
         int op;
 
         do

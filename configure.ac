@@ -240,6 +240,6 @@ AC_SUBST(M_HEADERS)
 #
 # Build makefile and headers...
 #
-AC_CONFIG_FILES([Makefile lib/Makefile utils/Makefile])
+AC_CONFIG_FILES([Makefile lib/Makefile utils/Makefile src_bypass/Makefile src_servers/tcpServer/Makefile src_servers/mpiServer/Makefile])
 AC_OUTPUT
 
