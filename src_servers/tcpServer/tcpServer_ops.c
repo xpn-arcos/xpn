@@ -29,73 +29,7 @@
 
    /* ... Functions / Funciones ......................................... */
 
-int aux_clear_dirs(char *path)
-{
-  unsigned long i=0;
-  int j;
-  char ant = '\0', s[255];
-
-  j=0;
-  for (i=0;i < strlen(path); i++)
-  {
-    switch(path[i])
-    {
-      case '/':
-        if(ant != '/'){
-          ant = s[j] = '/';
-          j++;
-        }
-        break;
-      default:
-        ant = s[j] = path[i];
-        j++;
-    }
-
-    s[j] = '\0';
-  }
-
-  strcpy(path, s);
-  return 0;
-}
-
-int aux_get_dirs(char *path, int n, char *s)
-{
-  unsigned long i=0;
-  int j=0, ant=-1, pos=-1;
-  int cont=-1;
-  char new_path[MAXPATHLEN];
-
-  strcpy(new_path, path);
-
-  path = new_path;
-  aux_clear_dirs(path);
-  s[0] = '\0';
-  if (path == NULL) {
-    return 0;
-  }
-
-  for(i=0; i<strlen(path) && cont<(n+1); i++){
-    if (path[i] == '/'){
-      if(ant == -1){
-        ant = pos = i;
-      }
-      pos = i;
-      cont++;
-    }
-  }
-
-  if(cont<(n+1)){
-    return 0;
-  }
-
-  for(j=ant; j<pos; j++){
-    s[j] = path[j];
-  }
-
-  s[j] = '\0';
-
-  return strlen(s);
-}
+int aux_get_dirs ( char *path, int n, char *s ) ;
 
 int tcpServer_create_spacename(char *path)
 {
