@@ -10,11 +10,11 @@
 
 ## 1. Install dependencies
 
-XPN needs the typical C develop tools and [minixml](http://www.minixml.org):
+XPN needs the typical C development tools and the [minixml](http://www.minixml.org):
 
 ```
 sudo apt-get install -y autoconf automake gcc g++ make \
-                        flex libtool sudo apt install doxygen \
+                        flex libtool doxygen \
                         libmpich-dev libmxml-dev
 ```
 
@@ -28,7 +28,6 @@ mkdir -p /opt/xpn
 ./configure --prefix=/opt/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver=/opt/software/install-mpich/bin
 make clean
 make -j
-doxygen doc/doxygen-XPN.cfg
 make install
 ```
 
@@ -37,12 +36,12 @@ make install
 
 ### 3.1 mpiServer ###
   The typical executions has 3 main steps:
-  - First, to launch hydra nameserver: `hydra_nameserver &`
-  - Next, to launch the parallel mpiServer: `mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} <mpiServer.exe>`
-  - Finally, to launch the XPN client: `mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} -genv LD_PRELOAD=<bypass path> ./<program path>`
+  - First, execute hydra nameserver: `hydra_nameserver &`
+  - Next, launch the mpiServer:      `mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} <mpiServer.exe>`
+  - Finally, launch the XPN client:  `mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} -genv LD_PRELOAD=<bypass path> ./<program path>`
 
 For example:
-   * To start a 8 process mpiServer and 2 process client:
+   * To start an 8 process mpiServer and 2 process client:
 ```
 HYDRA_HOSTNAME=$(hostname)
 hydra_nameserver &
