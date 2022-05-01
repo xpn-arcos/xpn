@@ -16,11 +16,8 @@ struct __dirstream{
 
 
 DIR* xpn_opendir(const char *path);
-
 int xpn_closedir(DIR *dirp);
-
 struct dirent* xpn_readdir(DIR *dirp);
-
 void xpn_rewinddir(DIR *dirp);
 
 

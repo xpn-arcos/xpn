@@ -12,14 +12,6 @@
     extern "C" {
 #endif
 
-#ifndef KB
-	#define KB (1024)
-#endif
-
-#ifndef MB
-	#define MB (KB*KB)
-#endif	
-
 struct nfi_tcpServer_server{
 	char id[NFIMAXPATHLEN];
 	char path[NFIMAXPATHLEN];
@@ -44,41 +36,21 @@ int nfi_tcpServer_reconnect(struct nfi_server *server);
 int nfi_tcpServer_disconnect(struct nfi_server *server);
 
 int nfi_tcpServer_getattr(struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr);
-
 int nfi_tcpServer_setattr(struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr);
 
 int nfi_tcpServer_open(struct nfi_server *server, char *url, struct nfi_fhandle *fho);
-
 int nfi_tcpServer_close(struct nfi_server *server, struct nfi_fhandle *fh);
-
-ssize_t nfi_tcpServer_read(struct nfi_server *server, struct nfi_fhandle *fh, 
-		void *buffer, 
-		off_t offset, 
-		size_t size
-		);
-
-ssize_t nfi_tcpServer_write(struct nfi_server *server, struct nfi_fhandle *fh, 
-		void *buffer, 
-		off_t offset, 
-		size_t size
-		);
+ssize_t nfi_tcpServer_read(struct nfi_server *server, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size);
+ssize_t nfi_tcpServer_write(struct nfi_server *server, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size);
 
 int nfi_tcpServer_create(struct nfi_server *server, char *url,  struct nfi_attr *attr, struct nfi_fhandle  *fh);
-
 int nfi_tcpServer_remove(struct nfi_server *server, char *url);
-
 int nfi_tcpServer_rename(struct nfi_server *server, char *old_url, char *new_url);
-
 int nfi_tcpServer_mkdir(struct nfi_server *server, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
-
 int nfi_tcpServer_rmdir(struct nfi_server *server, char *url);
-
 int nfi_tcpServer_opendir(struct nfi_server *server, char *url, struct nfi_fhandle *fho);
-
 int nfi_tcpServer_readdir(struct nfi_server *server, struct nfi_fhandle *fhd, char *entry , unsigned char *type);
-
 int nfi_tcpServer_closedir(struct nfi_server *server, struct nfi_fhandle *fh);
-
 int nfi_tcpServer_statfs(struct nfi_server *server, struct nfi_info *inf);
 
 

@@ -9,7 +9,8 @@
     extern "C" {
  #endif
 
-int XpnGetAbsolutePath(const char *path, char *path_part);
+
+    int XpnGetAbsolutePath(const char *path, char *path_part);
 
 
  #ifdef  __cplusplus
