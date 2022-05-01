@@ -242,6 +242,8 @@ int nfi_local_destroy ( struct nfi_server *serv )
 {
 	DEBUG_BEGIN();
 
+	serv = serv ;
+
 // TODO: When is this called?
 
 /*
@@ -309,6 +311,10 @@ int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 	// Do stat
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_local_server *) serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 
 	res = filesystem_stat(fh_aux->path, &st) ;
 	if (res < 0) {
@@ -326,10 +332,8 @@ int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 
 int nfi_local_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
 {
-	int res;
 	struct stat st;
 	struct nfi_local_server *server_aux;
-	struct nfi_local_fhandle *fh_aux;
 
 	DEBUG_BEGIN();
 
@@ -355,8 +359,11 @@ int nfi_local_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 	}
 
 	// Do stat
-	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_local_server *) serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 
 	NFItoLOCALattr(&st, attr) ;
 
@@ -422,6 +429,10 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
 	}
 
 	server_aux = (struct nfi_local_server *) serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 
 	// Open file...
 	res = filesystem_open(dir, O_RDWR) ;
@@ -536,6 +547,10 @@ ssize_t nfi_local_read ( struct nfi_server *serv,
 	    debug_error("nfi_local_read: fh_aux == NULL\n") ;
 	    return -1;
 	}
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 
 	filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
 	new_size = filesystem_read(fh_aux->fd, buffer, size) ;
@@ -582,6 +597,10 @@ ssize_t nfi_local_write ( struct nfi_server *serv,
 	// Do write
 	fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_local_server *) serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 
 	filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
 	new_size = filesystem_write(fh_aux->fd, buffer, size) ;
@@ -638,6 +657,10 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *att
 
 	bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
 	server_aux = (struct nfi_local_server *) serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 
 	// Do create
 	fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
@@ -696,6 +719,10 @@ int nfi_local_remove ( struct nfi_server *serv,  char *url )
 	}
 
 	server_aux = (struct nfi_local_server *)serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 
 	res = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
 	if (res < 0) {
@@ -738,6 +765,10 @@ int nfi_local_rename (__attribute__((__unused__)) struct nfi_server *server, __a
 	}
 
 	server_aux = (strcut nfi_local_server *)serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 	*/
 
 	// TODO !!
@@ -904,6 +935,10 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
 	}
 
 	server_aux = (struct nfi_local_server *) serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 
 	// Do opendir
 	fh_aux->dir = filesystem_opendir(dir) ;
@@ -961,8 +996,12 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, char *
 	    return -1;
 	}
 
-	server_aux = (struct nfi_local_server *)serv->private_info;
 	fh_aux = (struct nfi_local_fhandle *)fh->priv_fh;
+	server_aux = (struct nfi_local_server *)serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 
 	entry[0] = '\0';
 	ent = filesystem_readdir(fh_aux->dir) ;
@@ -1042,6 +1081,10 @@ int nfi_local_statfs ( __attribute__((__unused__)) struct nfi_server *serv, __at
 	}
 
 	server_aux = (struct nfi_local_server *)serv->private_info;
+	if (server_aux == NULL) {
+	    debug_error("LOCALERR_MEMORY\n") ;
+	    return -1;
+	}
 	res = local_statfs(server_aux->fh, &localinf, server_aux->cl) ;
 	if (res <0) {
 		debug_error("LOCALERR_STATFS") ;

@@ -22,9 +22,7 @@
           char    *fname
       )
       {
-
         int   ret ;
-
 
         /* Debugging */
 	#if defined(XPNI_DEBUG)
@@ -50,10 +48,12 @@
         ret = xpni_fmeta_initByValues(fmeta,
 			              8192,1,1,"xpni_null",fname,
                                       0,NULL,NULL,NULL,NULL,NULL,NULL);
+	if (ret < 0) {
+	    return -1 ;
+	}
 
         /* Return ok */
 	return (1);
-
       }
 
       int xpni_dir_open

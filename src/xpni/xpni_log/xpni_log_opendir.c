@@ -11,7 +11,6 @@
 
       DIR * xpni_log_opendir ( int dd )  
       {
-
         DIR  *ret;
 	struct timeval  t1, t2 ;
 
@@ -31,8 +30,8 @@
 	xpni_log_elog(&t1,&t2,"xpni_lowfsi_opendir",dd,-1,-1);
 
         /* update directory description */
-        if ((int)ret >= 0) {
-            xpni_fit_set_XPN_DATA_FD(dd,(int)ret) ; /* sizeof(int) === sizeof(DIR *) */
+        if ((long)ret >= 0) {
+            xpni_fit_set_XPN_DATA_FD(dd, (long)ret) ; /* sizeof(int) === sizeof(DIR *) */
 	}
 
         /* return xpn directory descriptor */

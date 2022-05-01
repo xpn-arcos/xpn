@@ -10,9 +10,7 @@
 
       DIR * xpni_null_opendir ( int dd )  
       {
-
         DIR  *ret;
-
 
         /* debugging */
 	#if defined(XPNI_DEBUG)
@@ -24,7 +22,7 @@
 	ret = xpni_lowfsi_opendir(xpni_fit_get_XPN_FNAME(dd));
 
         /* update directory description */
-        xpni_fit_set_XPN_DATA_FD(dd,(int)ret) ; /* sizeof(int) === sizeof(DIR *) */
+        xpni_fit_set_XPN_DATA_FD(dd,(long)ret) ; /* sizeof(int) === sizeof(DIR *) */
 
 	return ret;
 

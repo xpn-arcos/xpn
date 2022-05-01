@@ -33,7 +33,7 @@
   {
     int ret, provided, claimed ;
     int flag = 0 ;
-    char srv_name[1024] ;
+    // char srv_name[1024] ;
 
 
     memset(params, 0, sizeof(mpiClient_param_st)); // Initialize params 
@@ -245,11 +245,6 @@
 
 
 
-
-
-
-
-
   ssize_t mpiClient_write_operation ( struct nfi_mpiServer_connector fd, char *data, ssize_t size, char *msg_id )
   {
     int ret ;
@@ -258,12 +253,13 @@
 
     // Check params
     if (size == 0) {
-      return 0;
+        return 0;
     }
     if (size < 0) {
-      debug_warning("Server[?]: size < 0") ;
-      return -1;
+        debug_warning("Server[?]: size < 0") ;
+        return -1;
     }
+    msg_id = msg_id ; // TODO: msg_id is used?
 
     // Send message
     //ret = MPI_Send(data, size, MPI_CHAR, fd.rank_id, 0, fd.comm) ;
@@ -282,6 +278,7 @@
   ssize_t mpiClient_write_data ( struct nfi_mpiServer_connector fd, char *data, ssize_t size, char *msg_id )
   {
     int ret ;
+    int rank;
 
     debug_info("[COMM] server: begin comm_write_data(...)\n") ;
 
@@ -293,11 +290,9 @@
         debug_warning("Server[?]: size < 0") ;
         return -1;
     }
+    msg_id = msg_id ; // TODO: msg_id is used?
 
     // Send message
-
-
-    int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     ret = MPI_Send(data, size, MPI_CHAR, fd.rank_id, 1, fd.comm) ;
     if (MPI_SUCCESS != ret) {
@@ -326,6 +321,7 @@
         debug_warning("Server[?]: size < 0") ;
         return  -1;
     }
+    msg_id = msg_id ; // TODO: msg_id is used?
 
     // Get message
     ret = MPI_Recv(data, size, MPI_CHAR, fd.rank_id, 1, fd.comm, &status);

@@ -29,7 +29,8 @@ int silent = 0;
 int very_silent = 0;
 int debug = 0;
 
-void print_bar() {
+void print_bar()
+{
 	int bar_expected_length;
 	
 	memcpy(&t_old_transfer, &t_end_transfer, sizeof(struct timeval));
@@ -52,10 +53,9 @@ void print_bar() {
 	}
 }
 
-void progression_bar() {
-	int i;
-	
-	for (i = 0 ; i < BAR_LENGTH ; i++)
+void *progression_bar ( __attribute__((unused)) void *arg )
+{
+	for (int i = 0 ; i < BAR_LENGTH ; i++)
 		bar[i] = ' ';
 	bar[BAR_LENGTH] = '\0';
 	
@@ -75,13 +75,15 @@ void progression_bar() {
 	}
 	
 	pthread_exit(0);
+	return NULL ;
 }
 
 const char *argp_program_version = "xpncp_f 1.0";
-const char *argp_program_bug_address = "<bbergua@arcos.inf.uc3m.es>";
+const char *argp_program_bug_address = "<https://github.com/xpn-arcos/xpn>" ;
 static char doc[] = "A copy program for Expand partitions that uses fread/fwrite";
 
-char *help_filter (int key, const char *text, __attribute__((__unused__)) void *input) {
+char *help_filter (int key, const char *text, __attribute__((__unused__)) void *input)
+{
   switch (key)
   {
     case ARGP_KEY_HELP_PRE_DOC:
