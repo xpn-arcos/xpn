@@ -1,3 +1,4 @@
+
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -24,7 +25,8 @@ void usage() {
 	printf("Usage: %s [-h] | [-b <buffer_size_in_KB>] <dest>\n", program_name);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 	char *dest;
 	int ret, fdd;
 	ssize_t nr;

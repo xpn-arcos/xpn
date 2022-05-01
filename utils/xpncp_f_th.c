@@ -29,13 +29,14 @@ int silent = 0;
 int very_silent = 0;
 int debug = 0;
 
-void print_bar() {
+void print_bar()
+{
 	int bar_expected_length;
-	
+
 	memcpy(&t_old_transfer, &t_end_transfer, sizeof(struct timeval));
-	
+
 	gettimeofday(&t_end_transfer, NULL);
-	
+
 	transfer_t = (t_end_transfer.tv_sec-t_old_transfer.tv_sec)+(double)(t_end_transfer.tv_usec-t_old_transfer.tv_usec)/1000000;
 	transfer_bw = (sum-sum_old)/transfer_t;
 	if (st.st_size > 0) {
@@ -45,36 +46,36 @@ void print_bar() {
 			bar_length++;
 		}
 	}
-	
+
 	if (!silent) {
 		printf("%c[%s] %zd %.3f MB/s", (char)13, bar, sum, transfer_bw/MB);
 		fflush(NULL);
 	}
 }
 
-void progression_bar() {
-	int i;
-	
-	for (i = 0 ; i < BAR_LENGTH ; i++)
+void *progression_bar ( __attribute__((unused)) void *arg )
+{
+	for (int i = 0 ; i < BAR_LENGTH ; i++)
 		bar[i] = ' ';
 	bar[BAR_LENGTH] = '\0';
-	
+
 	memcpy(&t_end_transfer, &t_ini_transfer, sizeof(struct timeval));
-	
+
 	bar_length = 0;
 	sum_old = 0;
-	
+
 	if (!very_silent) {
 		printf("\n");
 	}
-	
+
 	while(1) {
 		print_bar();
 		sum_old = sum;
 		sleep(1);
 	}
-	
+
 	pthread_exit(0);
+	return NULL;
 }
 
 struct write_args {
@@ -95,7 +96,8 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t xpn_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-void write_func(void *func_args) {
+void *write_func ( void *func_args )
+{
 	struct write_args *args = (struct write_args *)func_args;
 	struct timeval t_ini_trans, t_end_trans;
 	size_t nw;
@@ -144,14 +146,15 @@ void write_func(void *func_args) {
 	}
 
 	pthread_exit(0);
-		
+        return NULL ;
 }
 
 const char *argp_program_version = "xpncp_f_th 1.0";
-const char *argp_program_bug_address = "<bbergua@arcos.inf.uc3m.es>";
+const char *argp_program_bug_address = "<https://github.com/xpn-arcos/xpn>" ;
 static char doc[] = "A copy program for Expand partitions that uses fread/fwrite and threads";
 
-char *help_filter (int key, const char *text, __attribute__((__unused__)) void *input) {
+char *help_filter (int key, const char *text, __attribute__((__unused__)) void *input)
+{
   switch (key)
   {
     case ARGP_KEY_HELP_PRE_DOC:
@@ -419,25 +422,25 @@ int main(int argc, char *argv[]) {
 	debug = arguments.debug;
 	source = arguments.source;
 	dest = arguments.dest;
-	
+
 	if (strncmp(source, xpnprefix, strlen(xpnprefix)) == 0) {
 		source = source + strlen(xpnprefix);
 		xpnsource = 1;
 	}
-	
+
 	if (strncmp(dest, xpnprefix, strlen(xpnprefix)) == 0) {
 		dest = dest + strlen(xpnprefix);
 		xpndest = 1;
 	}
-	
+
 	isxpn = xpnsource | xpndest;
 
 	if (debug) {
 		printf("xpnsource=%d, xpndest=%d, isxpn=%d\n", xpnsource, xpndest, isxpn);
-	
+
 		printf("source = '%s'\n", source);
 		printf("dest = '%s'\n", dest);
-	
+
 		printf("buffer_size = %zu\n", buffer_size);
 	}
 
@@ -474,40 +477,40 @@ int main(int argc, char *argv[]) {
 		in_transfer_t = out_transfer_t = 0;
 		gettimeofday(&t_ini_transfer, NULL);
 	}
-	
+
 	if (!silent)
 		pthread_create(&thread_bar, NULL, (void * (*)(void *))progression_bar, NULL);
-	
+
 	if (xpnsource)
 		fds = xpn_fopen(source, "r");
 	else
 		fds = fopen(source, "r");
-	
+
 	if(fds == NULL) {
 		perror("Error opening source");
 		printf("Error opening source '%s': fd = %p\n", source, fds);
 		exit(-1);
 	}
-	
+
 	if (internal_buffer_size > 0) {
 		if (xpnsource)
 			xpn_setvbuf(fds, (char *) NULL, _IOFBF, internal_buffer_size);
 		else
 			setvbuf(fds, (char *) NULL, _IOFBF, internal_buffer_size);
 	}
-	
+
 	if (xpndest)
 		fdd = xpn_fopen(dest, "w");
 	else
 		fdd = fopen(dest, "w");
-	
+
 	if(fdd == NULL) {
 		printf("Error opening dest '%s': fd = %p\n", dest, fdd);
 		exit(-1);
 	}
 
 	array_bufs = malloc(2*(st.st_size/buffer_size+1)*sizeof(struct buffer_st));
-	
+
 	args.fdd = fdd;
 	args.xpnsource = xpnsource;
 	args.xpndest = xpndest;
@@ -565,12 +568,12 @@ int main(int argc, char *argv[]) {
 	} while (sum_r < st.st_size);
 	//} while (((unsigned int)nr==buffer_size) && (sum_r < st.st_size));
 	//last++;
-	
+
 	if (xpnsource)
 		xpn_fclose(fds);
 	else
 		fclose(fds);
-	
+
 	if ((silent) && (!very_silent))
 		printf("Transfer done\n");
 	if (!very_silent)
@@ -590,19 +593,19 @@ int main(int argc, char *argv[]) {
 	}
 	if ((silent) && (!very_silent))
 		printf(" done\n");
-	
+
 	if (!silent) {
 		pthread_cancel(thread_bar);
 		print_bar();
 		printf("\n");
 	}
-	
+
 	if (!very_silent) {
 		in_transfer_bw  = sum/in_transfer_t;
 		printf("\n");
 		printf("Input transfer time = %.3f s\n", in_transfer_t);
 		printf("Input transfer bandwidth = %.3f B/s = %.3f KB/s = %.3f MB/s\n", in_transfer_bw, in_transfer_bw/KB, in_transfer_bw/MB);
-		
+
 		out_transfer_bw = sum/out_transfer_t;
 		printf("\n");
 		printf("Output transfer time = %.3f s\n", out_transfer_t);
@@ -615,7 +618,7 @@ int main(int argc, char *argv[]) {
 		printf("Total transfer time = %.3f s\n", transfer_t);
 		printf("Total transfer bandwidth = %.3f B/s = %.3f KB/s = %.3f MB/s\n", transfer_bw, transfer_bw/KB, transfer_bw/MB);
 	}
-	
+
 	if (isxpn) {
 		xpn_destroy();
 		if (!very_silent) {
@@ -627,11 +630,11 @@ int main(int argc, char *argv[]) {
 			printf("Total bandwidth = %.3f B/s = %.3f KB/s = %.3f MB/s\n", total_bw, total_bw/KB, total_bw/MB);
 		}
 	}
-	
+
 	if (!very_silent) {
 		printf("\n");
 	}
-	
+
 	exit(0);
 }
 
