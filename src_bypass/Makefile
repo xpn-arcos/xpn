@@ -10,17 +10,17 @@
 #CC=/home/dcamarma/mpich-install/bin/mpicc
 FLAGS=-Wall -Wextra -fpic -DLINUX
 INCLUDE=-I../include -I../include/base -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
-##### !#@" ##INCLUDE=-I/opt/xpn/include/ -I../include/base -I../include -DNOT_TO_USE_FCNTL_H
-XPN=/opt/xpn/lib/libxpn.a
 LIBS=-lmxml -lpthread -ldl
 OBJ=xpn_bypass.o
+XPN_LIB=/opt/xpn/lib
+LIBXPN=$(XPN_LIB)/libxpn.a
 
 all:
 	$(CC) $(FLAGS) $(INCLUDE) -c xpn_bypass.c
-	$(CC) -shared -o xpn_bypass.so $(OBJ) $(XPN) $(LIBS)
+	$(CC) -shared -o xpn_bypass.so $(OBJ) $(LIBXPN) $(LIBS)
 
 install:
-	cp -f $(OBJ) $(XPN)
+	cp -f $(OBJ) $(XPN_LIB)
 
 clean:
 	rm -f *.o
