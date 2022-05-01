@@ -7,7 +7,6 @@
 ```
 make clean
 make
-cp *.exe /home/lmsan/bin/
 ```
 
 ## Execution:
@@ -19,9 +18,9 @@ export XPN_PROFILE=${HOME}/conf/xpn.profile.xml
 export MYSERVER_FILE=${HOME}/conf/xpn.dns
 export MYSERVER_HOME=${HOME}/expand/src_servers/tcpServer
 
-#parametro: id del nodo
+# argument: node id.
 I=$1
 
-${MYSERVER_HOME}/expand/exter/tcpServer.exe -n node$I -p 9999 -f ${MYSERVER_FILE}
+${MYSERVER_HOME}/tcpServer.exe -n node$I -p 9999 -f ${MYSERVER_FILE}
 ```
 
