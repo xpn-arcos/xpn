@@ -17,7 +17,7 @@ ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
 
 # configure
 echo "3) configure..."
-sudo mkdir -p /opt/xpn 
+[ ! -d "/opt/xpn" ] && sudo mkdir -p /opt/xpn 
 ./configure --prefix=/opt/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver="/opt/software/install-mpich/bin"
 
 # compile
