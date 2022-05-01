@@ -49,6 +49,9 @@ all_object:  $(OBJECTS_MPISERVER)
 #all_exe:  $(MPISERVER_EXE) $(D2XPN_EXE) $(XPN2D_EXE) $(XPN2XPN_EXE) $(RMXPN_EXE)
 all_exe:  $(MPISERVER_EXE)
 
+install:  $(MPISERVER_EXE)
+	@cp -a $(MPISERVER_EXE) $(EXPAND_DIR)/bin
+
 %.o: %.c
 	@echo -n "                    "
 	@echo -n "$< [.." 
