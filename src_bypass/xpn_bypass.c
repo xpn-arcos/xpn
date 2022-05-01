@@ -441,7 +441,7 @@
   //int stat(const char *path, struct stat *buf) //old
   int __xstat(int ver, const char *path, struct stat *buf) // TODO
   {
-    char path2[1024];
+    //char path2[1024];
 
     debug_info("Before stat...\n");
     debug_info("stat...path =>%s\n",path);
