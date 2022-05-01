@@ -3,8 +3,7 @@
 
 #include "xpn_simple/xpn_simple_lib.h"
 
-
-/*******************************
+/*
 char* 		xpn_getcwd	(char *path, size_t size);
 int 		xpn_mkdir	(const char *path, mode_t perm) ;
 int 		xpn_rmdir	(const char *path) ;
@@ -33,5 +32,7 @@ int 		xpn_ftruncate	(int fd, off_t length);
 int 		xpn_dup		(int fd);
 
 int 		xpn_dup2(int fd, int fd2);
-**********************************************/
+*/
+
 #endif
+

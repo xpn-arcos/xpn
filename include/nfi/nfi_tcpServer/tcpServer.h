@@ -40,27 +40,6 @@ and server
 #define TCPSERVER_END 		-1
 
 
-
-#ifndef KB
-	#define KB (1024)
-#endif
-
-#ifndef MB
-	#define MB (KB*KB)
-#endif
-
-#ifndef GB
-	#define GB (MB*MB)
-#endif
-
-#ifndef TRUE
-	#define TRUE 1
-#endif
-#ifndef FALSE
-	#define FALSE 0
-#endif
-
-
 /* buffer size */
 //#define BUFFER_SIZE (2*MB)
 

@@ -2,17 +2,26 @@
 #define _ALL_H_SYSTEM_H
 
 
+/*
+ * Common sizes
+ */
 #ifndef KB
 	#define KB	(1024)
 #endif
-
 #ifndef MB
 	#define MB	(KB*KB)
 #endif
-
 #ifndef GB
 	#define GB	(KB*KB*KB)
 #endif
+
+#ifndef TRUE
+	#define TRUE 1
+#endif
+#ifndef FALSE
+	#define FALSE 0
+#endif
+
 
 /*
  * Get config*.h
@@ -130,20 +139,6 @@
 	#define O_FSYNC          O_SYNC
 	#define O_ASYNC          020000
 #endif
-
-
-
-/*
- * Include adaptors headers
- */
-
-/*
- * TODO: back-porting of posthr2win...
- *
-#ifdef WIN32
-	#include "posthr2win.h"
-#endif
-*/
 
 
 #endif /* _ALL_H_SYSTEM_H */

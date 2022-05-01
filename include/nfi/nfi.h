@@ -31,15 +31,15 @@ struct nfi_ops;
 struct nfi_worker;
 
 struct nfi_server{
-	int id;							/* id of the server			*/
-	//int  protocol;				/* protocol 				*/ // It is never used
-	char *server;					/* server address 			*/
-	char *url; 						/* URL of this server -> protocol 	*/
-										/* + server 				*/
-										/* + path + more info (port, ...)	*/
+	int id;				/* id of the server			*/
+	//int  protocol;		/* protocol 				*/ // It is never used
+	char *server;			/* server address 			*/
+	char *url; 			/* URL of this server -> protocol 	*/
+					/* + server 				*/
+					/* + path + more info (port, ...)	*/
 	int block_size;
-	void  *private_info;			/* info private				*/
-	struct nfi_ops *ops;			/* operations				*/
+	void  *private_info;		/* info private				*/
+	struct nfi_ops *ops;		/* operations				*/
 	struct nfi_worker *wrk;		/* this struct has the thread		*/
 };
 
@@ -59,7 +59,6 @@ struct nfi_info{
         u_long at_bavail;
 };
 
-
 struct nfi_attr{
 	int 	at_type; 	/* FILE or DIR			*/	
 	mode_t 	at_mode;	/* protection			*/
@@ -76,9 +75,6 @@ struct nfi_attr{
 					     
 };
 
-
-
-
 struct nfi_fhandle 
 {
 	int type;			/* file or directory 		*/
@@ -88,50 +84,29 @@ struct nfi_fhandle
 };
 
 
-
-
 struct nfi_ops 
 {
 	int (*nfi_reconnect)(struct nfi_server *serv);
-	
 	int (*nfi_disconnect)(struct nfi_server *serv);
-
 	//int (*nfi_destroy)(struct nfi_server *serv);
-	/* aux */
-	int (*nfi_preload)(struct nfi_server *serv, char *url, char *virtual_path, char* storage_path, int opt); 
-	
-	int (*nfi_flush)(struct nfi_server *serv, char *url, char *virtual_path, char* storage_path, int opt); 
-	/* end aux */
 	int (*nfi_getattr)(struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
-
 	int (*nfi_setattr)(struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
-
 	int (*nfi_open)(struct nfi_server *serv, char *url, struct nfi_fhandle *fho); 
-
 	int (*nfi_create)(struct nfi_server *serv, char *url,  struct nfi_attr *attr, struct nfi_fhandle  *fh);
-
 	int (*nfi_close)(struct nfi_server *serv, struct nfi_fhandle *fh);
-
 	int (*nfi_remove)(struct nfi_server *serv, char *url);
-
 	int (*nfi_rename)(struct nfi_server *serv, char *old_url, char *new_url);
-
 	ssize_t (*nfi_read)(struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size);
-
 	ssize_t (*nfi_write)(struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size);
-
 	int (*nfi_mkdir)(struct nfi_server *serv, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
-
 	int (*nfi_rmdir)(struct nfi_server *serv, char *url);
-
 	int (*nfi_opendir)(struct nfi_server *serv, char *url, struct nfi_fhandle *fho);
-
 	int (*nfi_readdir)(struct nfi_server *serv, struct nfi_fhandle *fhd, char *entry, unsigned char *type);
-
 	int (*nfi_closedir)(struct nfi_server *serv, struct nfi_fhandle *fh);
-
 	int (*nfi_statfs)(struct nfi_server *serv, struct nfi_info *inf);
 
+	int (*nfi_preload)(struct nfi_server *serv, char *url, char *virtual_path, char* storage_path, int opt); 
+	int (*nfi_flush)(struct nfi_server *serv, char *url, char *virtual_path, char* storage_path, int opt); 
 };
 
 

@@ -65,10 +65,7 @@ struct xpn_filedesc{
 /* global  */
 extern struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
 
-
 int xpn_init_file_table();
-
-
 int xpn_destroy_file_table();
 
 
