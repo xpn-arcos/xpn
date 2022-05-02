@@ -1,3 +1,2 @@
-SUBDIRS = @FUSEDAV@ @POSIXIOSERVICE@ lib @FUSE@ utils test/autotest
-
-EXTRA_DIST = autogen.sh create_module.sh delete_module.sh
+SUBDIRS = lib utils src_bypass src_servers/tcpServer src_servers/mpiServer
+EXTRA_DIST = autogen.sh

@@ -13,7 +13,7 @@ extern "C" {
 
 // xpn_cwd.c
 char* 		xpn_getcwd	(char *path, size_t size);
-int		xpn_chdir	(char *path);
+int		    xpn_chdir	(char *path);
 
 // xpn_dir.c
 int 		xpn_mkdir	(const char *path, mode_t perm) ;
@@ -24,8 +24,8 @@ int 		xpn_init();
 int 		xpn_destroy();
 
 // xpn_open.c
-//int 		xpn_flush	(char *virtual_path, char *storage_path); // Auxiliary function
-//int 		xpn_preload	(char *virtual_path, char *storage_path); // Auxiliary function
+int 		xpn_flush	(const char *virtual_path, const char *storage_path); // Auxiliary function
+int 		xpn_preload	(const char *virtual_path, const char *storage_path); // Auxiliary function
 int 		xpn_creat	(const char *path, mode_t perm);
 int 		xpn_open	(const char *path, int flags , ...);
 int 		xpn_close	(int fd);

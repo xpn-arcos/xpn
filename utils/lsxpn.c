@@ -1,10 +1,10 @@
+
 #include <stdlib.h>
 #include <string.h>
 #include <sys/param.h>
 #include <stdio.h>
 #include <sys/file.h>
 #include <sys/fcntl.h>
-//#include <sys/stat.h>
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/wait.h>
@@ -15,7 +15,8 @@
 
 #define NFSMAXPATHLEN 1024
 
-void get_perm(int attr, char *attrstr){
+void get_perm(int attr, char *attrstr)
+{
         attrstr[0]= S_ISDIR(attr)  ? 'd' : '-' ;
         attrstr[1]= (attr & S_IRUSR) ? 'r' : '-' ;
         attrstr[2]= (attr & S_IWUSR) ? 'w' : '-' ;
@@ -27,10 +28,10 @@ void get_perm(int attr, char *attrstr){
         attrstr[8]= (attr & S_IWOTH) ? 'w' : '-' ;
         attrstr[9]= (attr & S_IXOTH) ? 'x' : '-' ;
 	attrstr[10]= '\0';
-	
 }
 
-void del_slash(char *path){
+void del_slash(char *path)
+{
 	int i,j,k;
 	char pathAux[NFSMAXPATHLEN];
 
@@ -57,12 +58,11 @@ void del_slash(char *path){
 
 int main(int argc, char *argv[])
 {
-  
   char *destino;
   int ret;
   DIR *fdp;
   struct dirent *dr;
-  char aux[NFSMAXPATHLEN];
+  char aux[2*NFSMAXPATHLEN];
   char aux2[NFSMAXPATHLEN];
   
   struct stat st;
@@ -70,13 +70,14 @@ int main(int argc, char *argv[])
   char attrstr[11];
   struct passwd *pass;
   
+  // Arguments
   if(argc !=2){
     printf("Incorrect number of parameters. Usage \"lsxpn <path>\"\n");
     exit(0);
   }
   destino=argv[1];
 
-  
+  // XPN
   if((ret=xpn_init())<0){
     printf("Error in init %d\n",ret);
     exit(-1);
@@ -92,8 +93,10 @@ int main(int argc, char *argv[])
     exit(-1);
   } 
   i=0;  
-  while(( dr = xpn_readdir(fdp)) != NULL){
-	  if((strcmp(dr->d_name,".")!=0)&&(strcmp(dr->d_name,"..")!=0)){
+  while(( dr = xpn_readdir(fdp)) != NULL)
+  {
+	  if((strcmp(dr->d_name,".")!=0)&&(strcmp(dr->d_name,"..")!=0))
+	  {
 		/*printf("%s/%s\n",aux2,dr->d_name);*/
 		sprintf(aux,"%s/%s",aux2,dr->d_name);
 	  	ret= xpn_stat(aux,&st);
@@ -129,3 +132,4 @@ int main(int argc, char *argv[])
   xpn_destroy();
   exit(0);
 }
+

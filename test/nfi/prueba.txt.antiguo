@@ -1,8 +1,0 @@
-init nfs://pato11/export/home/pato11/PNFS/
-creat nfs://pato11/export/home/pato11/PNFS/pepe.txt
-mkdir nfs://pato11/export/home/pato11/PNFS/directorio
-mkdir nfs://pato11/export/home/pato11/PNFS/directorio/a
-mkdir nfs://pato11/export/home/pato11/PNFS/directorio/a/b
-creat nfs://pato11/export/home/pato11/PNFS/directorio/pepe.txt
-rmdir nfs://pato11/export/home/pato11/PNFS/directorio
-rm nfs://pato11/export/home/pato11/PNFS/pepe.txt

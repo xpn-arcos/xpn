@@ -1,7 +1,0 @@
-#!/bin/sh
-
-echo ""
-
-echo -n " Documentation for XPN sources..."
-doxygen doc/doxygen-XPN.cfg
-

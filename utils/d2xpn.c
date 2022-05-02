@@ -1,9 +1,9 @@
+
 #include <stdlib.h>
 #include <sys/param.h>
 #include <stdio.h>
 #include <sys/file.h>
 #include <sys/fcntl.h>
-//#include <sys/stat.h>
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/wait.h>
@@ -22,11 +22,11 @@
 
 int main(int argc, char *argv[])
 {
-  
   char *origen,*destino;
   int fdp,fd,s,sp,sum;
   char buffer[DATAM];
 
+  // Arguments
   if(argc !=3){
     printf("Incorrect number of parameters.\n");
     printf("Usage: %s <origin> <destination>\n",argv[0]);
@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
   origen=argv[1];
   destino=argv[2];
   
+  // XPN
   if((fd=xpn_init())<0){
     printf("Error in init %d\n",fd);
     exit(-1);
@@ -76,3 +77,4 @@ int main(int argc, char *argv[])
 
   exit(0);
 }
+

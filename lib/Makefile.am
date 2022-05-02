@@ -6,7 +6,6 @@ COMMON_HEADER=		@top_srcdir@/include/all_system.h \
 			@top_srcdir@/include/config.h \
 			@top_srcdir@/include/config.h.in \
 			@top_srcdir@/include/config_linux.h \
-			@top_srcdir@/include/config_win32.h \
 			@top_srcdir@/include/expand.h \
 			@top_srcdir@/include/expand_lib.h \
 			@top_srcdir@/include/xpn_debug.h
@@ -20,7 +19,10 @@ BASE_HEADER=		@top_srcdir@/include/base/base_lib.h \
 			@top_srcdir@/include/base/time_misc.h \
 			@top_srcdir@/include/base/trace_msg.h \
 			@top_srcdir@/include/base/trace_tags.h \
-			@top_srcdir@/include/base/urlstr.h
+			@top_srcdir@/include/base/urlstr.h \
+			@top_srcdir@/include/base/syscall_proxies.h \
+			@top_srcdir@/include/base/filesystem.h \
+			@top_srcdir@/include/base/utils.h
 NFI_LOCAL_HEADER=	@top_srcdir@/include/nfi/nfi_local/local_lib.h \
 			@top_srcdir@/include/nfi/nfi_local/nfi_local_err.h \
 			@top_srcdir@/include/nfi/nfi_local/nfi_local.h
@@ -37,42 +39,23 @@ NFI_NFS3_HEADER=	@top_srcdir@/include/nfi/nfi_nfs3/nfi_nfs3_err.h \
 			@top_srcdir@/include/nfi/nfi_nfs3/nfs3.h \
 			@top_srcdir@/include/nfi/nfi_nfs3/nfs3_lib.h
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_FTP_HEADER BLOCK. Do not remove this line. ###
-NFI_FTP_HEADER=		@top_srcdir@/include/nfi/nfi_ftp/ftp.h \
-			@top_srcdir@/include/nfi/nfi_ftp/ftp_lib.h \
-			@top_srcdir@/include/nfi/nfi_ftp/list_dir.h \
-			@top_srcdir@/include/nfi/nfi_ftp/nfi_ftp_err.h \
-			@top_srcdir@/include/nfi/nfi_ftp/nfi_ftp.h
-### END OF NFI_FTP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_XIO_HEADER BLOCK. Do not remove this line. ###
-NFI_XIO_HEADER=		@top_srcdir@/include/nfi/nfi_xio/nfi_xio_err.h \
-			@top_srcdir@/include/nfi/nfi_xio/nfi_xio.h \
-			@top_srcdir@/include/nfi/nfi_xio/xio_lib.h
-### END OF NFI_XIO_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_GSOAP_HEADER BLOCK. Do not remove this line. ###
-NFI_GSOAP_HEADER=	@top_srcdir@/include/nfi/nfi_gsoap/gsoap_lib.h \
-			@top_srcdir@/include/nfi/nfi_gsoap/nfi_gsoap_err.h \
-			@top_srcdir@/include/nfi/nfi_gsoap/nfi_gsoap.h
-### END OF NFI_GSOAP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_GRIDFTP_HEADER BLOCK. Do not remove this line. ###
-NFI_GRIDFTP_HEADER=	@top_srcdir@/include/nfi/nfi_gridftp/gridftp_lib.h \
-			@top_srcdir@/include/nfi/nfi_gridftp/nfi_gridftp_err.h \
-			@top_srcdir@/include/nfi/nfi_gridftp/nfi_gridftp.h
-### END OF NFI_GRIDFTP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_MYSERVER_HEADER BLOCK. Do not remove this line. ###
-NFI_MYSERVER_HEADER=	@top_srcdir@/include/nfi/nfi_myServer/ \
-			@top_srcdir@/include/nfi/nfi_myServer/myServer_comm.h \
-			@top_srcdir@/include/nfi/nfi_myServer/myServer_conf.h \
-			@top_srcdir@/include/nfi/nfi_myServer/myServer.h \
-			@top_srcdir@/include/nfi/nfi_myServer/myServer_lib.h \
-			@top_srcdir@/include/nfi/nfi_myServer/nfi_myServer_err.h \
-			@top_srcdir@/include/nfi/nfi_myServer/nfi_myServer.h
-### END OF NFI_MYSERVER_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_IOPROXY_RPC_HEADER BLOCK. Do not remove this line. ###
-NFI_IOPROXY_RPC_HEADER=	@top_srcdir@/include/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.h \
-			@top_srcdir@/include/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.h \
-			@top_srcdir@/include/nfi/nfi_ioproxy-rpc/ioproxy-rpc_lib.h
-### END OF NFI_IOPROXY_RPC_HEADER BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
+NFI_TCPSERVER_HEADER=	@top_srcdir@/include/nfi/nfi_tcpServer/ \
+			@top_srcdir@/include/nfi/nfi_tcpServer/tcpServer_comm.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/tcpServer_conf.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/tcpServer.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/tcpServer_lib.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/nfi_tcpServer_err.h \
+			@top_srcdir@/include/nfi/nfi_tcpServer/nfi_tcpServer.h
+### END OF NFI_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_MPISERVER_HEADER BLOCK. Do not remove this line. ###
+NFI_MPISERVER_HEADER=	@top_srcdir@/include/nfi/nfi_mpiServer/ \
+			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_comm.h \
+			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_conf.h \
+			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_lib.h \
+			@top_srcdir@/include/nfi/nfi_mpiServer/nfi_mpiServer_err.h \
+			@top_srcdir@/include/nfi/nfi_mpiServer/nfi_mpiServer.h
+### END OF NFI_MPISERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
 NFI_HTTP_HEADER=	@top_srcdir@/include/nfi/nfi_http/nfi_http_err.h \
 			@top_srcdir@/include/nfi/nfi_http/nfi_http.h \
@@ -96,41 +79,16 @@ if ENABLE_NFS3
 NFI_HEADER+=$(NFI_NFS3_HEADER)
 endif
 ### END OF ENABLE_NFS3_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_FTP_HEADER BLOCK. Do not remove this line. ###
-if ENABLE_FTP
-NFI_HEADER+=$(NFI_FTP_HEADER)
+### BEGIN OF ENABLE_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
+if ENABLE_TCPSERVER
+NFI_HEADER+=$(NFI_TCPSERVER_HEADER)
 endif
-### END OF ENABLE_FTP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_XIO_HEADER BLOCK. Do not remove this line. ###
-if ENABLE_XIO
-NFI_HEADER+=$(NFI_XIO_HEADER)
+### END OF ENABLE_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_MPISERVER_HEADER BLOCK. Do not remove this line. ###
+if ENABLE_MPISERVER
+NFI_HEADER+=$(NFI_MPISERVER_HEADER)
 endif
-### END OF ENABLE_XIO_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_GSOAP_HEADER BLOCK. Do not remove this line. ###
-if ENABLE_GSOAP
-NFI_HEADER+=$(NFI_GSOAP_HEADER)
-endif
-### END OF ENABLE_GSOAP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_GRIDFTP_HEADER BLOCK. Do not remove this line. ###
-if ENABLE_GRIDFTP
-NFI_HEADER+=$(NFI_GRIDFTP_HEADER)
-endif
-### END OF ENABLE_GRIDFTP_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_MYSERVER_HEADER BLOCK. Do not remove this line. ###
-if ENABLE_MYSERVER
-NFI_HEADER+=$(NFI_MYSERVER_HEADER)
-endif
-### END OF ENABLE_MYSERVER_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_IOPROXY_RPC_HEADER BLOCK. Do not remove this line. ###
-if ENABLE_IOPROXY_RPC
-NFI_HEADER+=$(NFI_IOPROXY_RPC_HEADER)
-endif
-### END OF ENABLE_IOPROXY_RPC_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_HTTP_HEADER BLOCK. Do not remove this line. ###
-if ENABLE_HTTP
-NFI_HEADER+=$(NFI_HTTP_HEADER)
-endif
-### END OF ENABLE_HTTP_HEADER BLOCK. Do not remove this line. ###
+### END OF ENABLE_MPISERVER_HEADER BLOCK. Do not remove this line. ###
 ### END OF NFI_HEADER BLOCK. Do not remove this line. ###
 
 XPN_HEADER=		@top_srcdir@/include/xpn/xpn_lib.h \
@@ -185,7 +143,10 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/debug_msg.c \
 			@top_srcdir@/src/base/string_misc.c \
 			@top_srcdir@/src/base/time_misc.c \
-			@top_srcdir@/src/base/urlstr.c
+			@top_srcdir@/src/base/urlstr.c \
+			@top_srcdir@/src/base/syscall_proxies.c \
+			@top_srcdir@/src/base/filesystem.c \
+			@top_srcdir@/src/base/utils.c
 
 NFI_COMMON_OBJECTS=	@top_srcdir@/src/nfi/common/nfi_worker.c
 NFI_LOCAL_OBJECTS=	@top_srcdir@/src/nfi/nfi_local/nfi_local.c \
@@ -205,33 +166,16 @@ NFI_NFS3_OBJECTS=	@top_srcdir@/src/nfi/nfi_nfs3/nfi_nfs3.c \
 			@top_srcdir@/src/nfi/nfi_nfs3/nfs3_clnt.c \
 			@top_srcdir@/src/nfi/nfi_nfs3/nfs3_xdr.c
 ### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_FTP_OBJECTS BLOCK. Do not remove this line. ###
-NFI_FTP_OBJECTS=	@top_srcdir@/src/nfi/nfi_ftp/ftp.c \
-			@top_srcdir@/src/nfi/nfi_ftp/list_dir.c \
-			@top_srcdir@/src/nfi/nfi_ftp/nfi_ftp.c \
-			@top_srcdir@/src/nfi/nfi_ftp/nfi_ftp_err.c
-### END OF NFI_FTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_XIO_OBJECTS BLOCK. Do not remove this line. ###
-NFI_XIO_OBJECTS=	@top_srcdir@/src/nfi/nfi_xio/nfi_xio.c \
-			@top_srcdir@/src/nfi/nfi_xio/nfi_xio_err.c
-### END OF NFI_XIO_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_GSOAP_OBJECTS BLOCK. Do not remove this line. ###
-NFI_GSOAP_OBJECTS=	@top_srcdir@/src/nfi/nfi_gsoap/nfi_gsoap.c \
-			@top_srcdir@/src/nfi/nfi_gsoap/nfi_gsoap_err.c
-### END OF NFI_GSOAP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-NFI_GRIDFTP_OBJECTS=	@top_srcdir@/src/nfi/nfi_gridftp/nfi_gridftp.c \
-			@top_srcdir@/src/nfi/nfi_gridftp/nfi_gridftp_err.c
-### END OF NFI_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_MYSERVER_OBJECTS BLOCK. Do not remove this line. ###
-NFI_MYSERVER_OBJECTS=	@top_srcdir@/src/nfi/nfi_myServer/nfi_myServer.c \
-			@top_srcdir@/src/nfi/nfi_myServer/myServer_comm.c \
-			@top_srcdir@/src/nfi/nfi_myServer/nfi_myServer_err.c
-### END OF NFI_MYSERVER_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
-NFI_IOPROXY_RPC_OBJECTS=	@top_srcdir@/src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.c \
-			@top_srcdir@/src/nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.c
-### END OF NFI_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
+NFI_TCPSERVER_OBJECTS=	@top_srcdir@/src/nfi/nfi_tcpServer/nfi_tcpServer.c \
+			@top_srcdir@/src/nfi/nfi_tcpServer/tcpServer_comm.c \
+			@top_srcdir@/src/nfi/nfi_tcpServer/nfi_tcpServer_err.c
+### END OF NFI_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
+NFI_MPISERVER_OBJECTS=	@top_srcdir@/src/nfi/nfi_mpiServer/nfi_mpiServer.c \
+			@top_srcdir@/src/nfi/nfi_mpiServer/mpiServer_comm.c \
+			@top_srcdir@/src/nfi/nfi_mpiServer/nfi_mpiServer_err.c
+### END OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
 NFI_HTTP_OBJECTS=	@top_srcdir@/src/nfi/nfi_http/nfi_http.c \
 			@top_srcdir@/src/nfi/nfi_http/nfi_http_err.c
@@ -251,41 +195,16 @@ if ENABLE_NFS3
 NFI_OBJECTS+=$(NFI_NFS3_OBJECTS)
 endif
 ### END OF ENABLE_NFS3_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_FTP_OBJECTS BLOCK. Do not remove this line. ###
-if ENABLE_FTP
-NFI_OBJECTS+=$(NFI_FTP_OBJECTS)
+### BEGIN OF ENABLE_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
+if ENABLE_TCPSERVER
+NFI_OBJECTS+=$(NFI_TCPSERVER_OBJECTS)
 endif
-### END OF ENABLE_FTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_XIO_OBJECTS BLOCK. Do not remove this line. ###
-if ENABLE_XIO
-NFI_OBJECTS+=$(NFI_XIO_OBJECTS)
+### END OF ENABLE_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
+if ENABLE_MPISERVER
+NFI_OBJECTS+=$(NFI_MPISERVER_OBJECTS)
 endif
-### END OF ENABLE_XIO_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_GSOAP_OBJECTS BLOCK. Do not remove this line. ###
-if ENABLE_GSOAP
-NFI_OBJECTS+=$(NFI_GSOAP_OBJECTS)
-endif
-### END OF ENABLE_GSOAP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-if ENABLE_GRIDFTP
-NFI_OBJECTS+=$(NFI_GRIDFTP_OBJECTS)
-endif
-### END OF ENABLE_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_MYSERVER_OBJECTS BLOCK. Do not remove this line. ###
-if ENABLE_MYSERVER
-NFI_OBJECTS+=$(NFI_MYSERVER_OBJECTS)
-endif
-### END OF ENABLE_MYSERVER_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
-if ENABLE_IOPROXY_RPC
-NFI_OBJECTS+=$(NFI_IOPROXY_RPC_OBJECTS)
-endif
-### END OF ENABLE_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_HTTP_OBJECTS BLOCK. Do not remove this line. ###
-if ENABLE_HTTP
-NFI_OBJECTS+=$(NFI_HTTP_OBJECTS)
-endif
-### END OF ENABLE_HTTP_OBJECTS BLOCK. Do not remove this line. ###
+### END OF ENABLE_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_OBJECTS BLOCK. Do not remove this line. ###
 
 XPN_CORE_OBJECTS=	@top_srcdir@/src/xpn/xpn_simple/xpncore/xpn_cwd.c \

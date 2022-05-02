@@ -12,8 +12,9 @@
     extern "C" {
  #endif
 
-int xpn_mkdir(const char *path, mode_t perm) ;
-int xpn_rmdir(const char *path) ;
+
+   int xpn_mkdir(const char *path, mode_t perm) ;
+   int xpn_rmdir(const char *path) ;
 
 
  #ifdef  __cplusplus

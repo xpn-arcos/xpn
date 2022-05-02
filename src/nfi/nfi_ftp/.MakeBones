@@ -1,5 +1,0 @@
-OBJECTS
-ftp.c
-list_dir.c
-nfi_ftp.c
-nfi_ftp_err.c

@@ -1023,15 +1023,18 @@ int nfs3_create(fhandle3 *fhin, char *file, mode_t mode, fhandle3 *fhout, __attr
 #endif 	
     return -(int)res.status;
   }
-  if(fhout != NULL)
-  /* se copia el manejador */
+
+  if (fhout != NULL)
+  {
+    /* se copia el manejador */
     fhout->fhandle3_len = res.diropres3_u.resok.obj.post_op_fh3_u.handle.fhandle3_len;
     fhout->fhandle3_val = res.diropres3_u.resok.obj.post_op_fh3_u.handle.fhandle3_val;
-  /* si se desean los atributos del fichero, se copian los datos recogidos */
-  //if(at != NULL){
-    //memcpy(at, &res.diropres_u.fhand_attr.attributes, sizeof(fattr));
-	  // TODO 
-  //}
+    /* si se desean los atributos del fichero, se copian los datos recogidos */
+    //if(at != NULL){
+    //   memcpy(at, &res.diropres_u.fhand_attr.attributes, sizeof(fattr));
+    //   // TODO 
+    //}
+  }
 #ifdef DEBUG_NFS
   printf("successfully CREATE (%s,%d) STATUS (%d)\n", file, mode, -(int)res.status);
   printfh3("Create end: ", fhout);

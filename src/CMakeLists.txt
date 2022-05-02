@@ -53,12 +53,18 @@ set (NFI_GRIDFTP_OBJECTS	nfi/nfi_gridftp/nfi_gridftp.c
 				nfi/nfi_gridftp/nfi_gridftp_err.c
     )
 ### END OF NFI_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_MYSERVER_OBJECTS BLOCK. Do not remove this line. ###
-set (NFI_MYSERVER_OBJECTS	nfi/nfi_myServer/nfi_myServer.c
-				nfi/nfi_myServer/myServer_comm.c
-				nfi/nfi_myServer/nfi_myServer_err.c
+### BEGIN OF NFI_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
+set (NFI_TCPSERVER_OBJECTS	nfi/nfi_tcpServer/nfi_tcpServer.c
+				nfi/nfi_tcpServer/tcpServer_comm.c
+				nfi/nfi_tcpServer/nfi_tcpServer_err.c
     )
-### END OF NFI_MYSERVER_OBJECTS BLOCK. Do not remove this line. ###
+### END OF NFI_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
+set (NFI_MPISERVER_OBJECTS	nfi/nfi_mpiServer/nfi_mpiServer.c
+				nfi/nfi_mpiServer/mpiServer_comm.c
+				nfi/nfi_mpiServer/nfi_mpiServer_err.c
+    )
+### END OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
 set (NFI_IOPROXY_RPC_OBJECTS	nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.c
 				nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.c
@@ -104,11 +110,16 @@ if (ENABLE_GRIDFTP)
 	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_GRIDFTP_OBJECTS})
 endif (ENABLE_GRIDFTP)
 ### END OF ENABLE_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_MYSERVER_OBJECTS BLOCK. Do not remove this line. ###
-if (ENABLE_MYSERVER)
-	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_MYSERVER_OBJECTS})
-endif (ENABLE_MYSERVER)
-### END OF ENABLE_MYSERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
+if (ENABLE_TCPSERVER)
+	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_TCPSERVER_OBJECTS})
+endif (ENABLE_TCPSERVER)
+### END OF ENABLE_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
+if (ENABLE_MPISERVER)
+	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_MPISERVER_OBJECTS})
+endif (ENABLE_MPISERVER)
+### END OF ENABLE_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
 if (ENABLE_IOPROXY_RPC)
 	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_IOPROXY_RPC_OBJECTS})
@@ -251,12 +262,4 @@ add_library(xpn ${LIBXPN_SOURCES})
 # This conflicts with the "xpn.lib" import library corresponding to "xpn.dll",
 # so we add a "lib" prefix (which is default on other platforms anyway):
 #SET_TARGET_PROPERTIES(xpn-static PROPERTIES PREFIX "lib")
-
-
-# Bindings
-option (ENABLE_JAVA "Enable JAVA binding." OFF)
-option (ENABLE_PYTHON "Enable Python binding." OFF)
-if (ENABLE_JAVA OR ENABLE_PYTHON)
-	add_subdirectory (bindings)
-endif( ENABLE_JAVA OR ENABLE_PYTHON)
 

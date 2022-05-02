@@ -7,7 +7,7 @@
 <!-- gsoap://server.company.com/dir/ -->
 
 
-<!-- USE "export MYSERVER_FILE=<file>" -->
+<!-- USE "export TCPSERVER_FILE=<file>" -->
 <!-- myServer://server.company.com/dir/ -->
 
 <!-- ioproxy://server.company.com/dir/ -->

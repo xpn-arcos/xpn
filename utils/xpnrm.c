@@ -1,3 +1,4 @@
+
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -14,7 +15,8 @@ void usage() {
 	printf("Usage: %s [-h] <file>\n", program_name);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 	char *source;
 	int ret;
 	int isxpn = 0, xpnsource = 0;
