@@ -212,7 +212,7 @@
     MPI_Comm_remote_size(params->server, &size);
 
     params->locality = (int *) malloc(size * sizeof(int));
-    memset(params->locality, 0, size);
+    memset(params->locality, 0, size * sizeof(int));
 
     // Ask name of all servers
 
@@ -238,6 +238,12 @@
         params->locality[i] = 1;
       }
     }
+
+    printf("CLI NAME %s BUFF ", cli_name);
+    for(int i = 0; i < size; i++) {
+        printf("%d ", params->locality[i]);
+    }
+    printf("\n");
       
     // Return OK
     return 1;
