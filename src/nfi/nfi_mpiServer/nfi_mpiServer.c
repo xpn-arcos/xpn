@@ -301,7 +301,7 @@
           return -1 ;
         }
 
-        ret = mpiClient_comm_locality (&(server_aux->params)) ; //NEW //Ajustar
+        ret = mpiClient_comm_locality (&(server_aux->params)) ;
         if (ret < 0) {
           free(serv->ops) ;
           free(server_aux) ;

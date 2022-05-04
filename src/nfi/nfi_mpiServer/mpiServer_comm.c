@@ -117,8 +117,6 @@
     return 1 ;
   }
 
-
-
   int mpiClient_comm_connect ( mpiClient_param_st *params )
   {
     int ret ;
@@ -188,14 +186,6 @@
     return 1 ;
   }
 
-
-
-
-
-
-
-
-
   int mpiClient_comm_locality ( mpiClient_param_st *params ) //NEW
   {
     int ret;
@@ -215,8 +205,6 @@
     memset(params->locality, 0, size * sizeof(int));
 
     // Ask name of all servers
-
-    //TODO: cuando se encuentra la primera no se hacen mas
     for (int i = 0; i < size; i++) {
       data = MPISERVER_GETNODENAME;
       ret = MPI_Send( &data, 1, MPI_INT, i, 0, params->server );
@@ -238,12 +226,6 @@
         params->locality[i] = 1;
       }
     }
-
-    printf("CLI NAME %s BUFF ", cli_name);
-    for(int i = 0; i < size; i++) {
-        printf("%d ", params->locality[i]);
-    }
-    printf("\n");
       
     // Return OK
     return 1;
