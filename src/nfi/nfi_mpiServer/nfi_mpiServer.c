@@ -31,7 +31,7 @@
        * Communication
        */
 
-      int mpiServer_write_operation ( struct nfi_mpiServer_connector sd, struct st_mpiServer_msg *head )
+      int mpiServer_write_operation ( MPI_Comm sd, struct st_mpiServer_msg *head )
       {
         int ret;
 
@@ -131,7 +131,8 @@
 
         // send request...
         debug_info("[NFI] (ID=%s): %s: -> ...\n", server_aux->id, msg->id) ;
-        ret = mpiServer_write_operation(server_aux->sd, msg) ;
+        //ret = mpiServer_write_operation(server_aux->sd, msg) ;
+        ret = mpiServer_write_operation(server_aux->params.server, msg) ;
         if (ret < 0) {
           return -1 ;
         }
@@ -139,7 +140,8 @@
         // read response...
         debug_info("[NFI] (ID=%s): %s: <- ...\n", server_aux->id, msg->id) ;
         bzero(req, req_size) ;
-        ret = mpiClient_read_data(server_aux->sd, req, req_size, msg->id) ;
+        //ret = mpiClient_read_data(server_aux->sd, req, req_size, msg->id) ;
+        ret = mpiClient_read_data(server_aux->params.server, req, req_size, msg->id) ;
         if (ret < 0) {
           return -1 ;
         }
@@ -323,35 +325,35 @@
         struct nfi_mpiServer_server *server_aux;
         //struct st_mpiServer_msg msg;
 
-        static int init = 0;
-        static MPI_Comm comm;
+        //static int init = 0;
+        //static MPI_Comm comm;
         static int id_server = 0;
-        static struct nfi_mpiServer_server server_aux2;
+        //static struct nfi_mpiServer_server server_aux2;
 
         server_aux = (struct nfi_mpiServer_server *) (serv->private_info) ;
 
-        if (init == 0)
-        {
-          ret = mpiClient_comm_connect(&(server_aux->params)) ;
-          if (ret < 0) {
-              return -1 ;
-          }
-
-          init = 1;
-          comm = server_aux->params.server;
-          server_aux2 = *server_aux;
-        }
-        else{
-          server_aux->params = server_aux2.params;
+        //if (init == 0)
+        //{
+        ret = mpiClient_comm_connect(&(server_aux->params)) ;
+        if (ret < 0) {
+            return -1 ;
         }
 
-        server_aux->sd.comm = comm ; //Comunidador
-        server_aux->sd.rank_id = id_server ; //rank
+        //  init = 1;
+        //  comm = server_aux->params.server;
+        //  server_aux2 = *server_aux;
+        //}
+        //else{
+        //  server_aux->params = server_aux2.params;
+        //}
 
-        id_server++;
+        //server_aux->sd.comm = comm ; //Comunidador
+        //server_aux->sd.rank_id = id_server ; //rank
 
-        int rank;
-        MPI_Comm_rank (MPI_COMM_WORLD, &rank) ;
+        //id_server++;
+
+        //int rank;
+        //MPI_Comm_rank (MPI_COMM_WORLD, &rank) ;
 
         //.....................................
         /*strcpy(msg.id, "GETID") ;
@@ -490,7 +492,8 @@
 
         // Remote disconnect...
         msg.type = -1;
-        mpiServer_write_operation(server_aux->sd, &msg) ;
+        //mpiServer_write_operation(server_aux->sd, &msg) ;
+        mpiServer_write_operation(server_aux->params.server, &msg) ;
 
         // Finalize MPI communication...
         ret = mpiClient_comm_destroy(&(server_aux->params)) ;
@@ -559,7 +562,8 @@
         server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 
         /************** LOCAL *****************/
-        if(server_aux->params.locality[server_aux->sd.rank_id])
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)
         {
           fh_aux->fd = filesystem_open(dir, O_RDWR) ;
           if (fh_aux->fd < 0)
@@ -628,8 +632,8 @@
         /* create the file into the directory */
 
         /************** LOCAL *****************/
-        if (server_aux->params.locality[server_aux->sd.rank_id])
-        {
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)        {
           fh_aux->fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
           if (fh_aux->fd < 0) {
             debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
@@ -691,7 +695,8 @@
         fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 
         /************** LOCAL *****************/
-        if (server_aux->params.locality[server_aux->sd.rank_id])
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)
         {
           filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
           ret = filesystem_read(fh_aux->fd, buffer, size) ;
@@ -716,7 +721,8 @@
             printf("[NFI]read: -> size %d \n",msg.u_st_mpiServer_msg.op_read.size) ;
           #endif
 
-          ret = mpiServer_write_operation(server_aux->sd, &msg) ;
+          //ret = mpiServer_write_operation(server_aux->sd, &msg) ;
+          ret = mpiServer_write_operation(server_aux->params.server, &msg) ;
           if(ret == -1){
             perror("ERROR: (1)nfi_mpiServer_read: Error on write operation") ;
             fprintf(stderr,"ERROR: (1)nfi_mpiServer_read: Error on write operation\n") ;
@@ -727,7 +733,8 @@
           cont = 0 ;
 
           do {
-            ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_read_req), msg.id) ;
+            //ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_read_req), msg.id) ;
+            ret = mpiClient_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpiServer_read_req), msg.id) ;
             debug_info("[NFI] nfi_mpiServer_read(ID=%s): (1)mpiClient_read_data = %d.\n",server_aux->id, ret) ;
             if(ret == -1){
               perror("ERROR: (2)nfi_mpiServer_read: Error on write operation") ;
@@ -737,7 +744,8 @@
 
             if(req.size > 0){
               debug_info("[NFI] nfi_mpiServer_read(ID=%s): (2)mpiClient_read_data = %d. size = %d\n",server_aux->id, ret, req.size) ;
-              ret = mpiClient_read_data(server_aux->sd, (char *)buffer+cont, req.size, msg.id) ;
+              //ret = mpiClient_read_data(server_aux->sd, (char *)buffer+cont, req.size, msg.id) ;
+              ret = mpiClient_read_data(server_aux->params.server, (char *)buffer+cont, req.size, msg.id) ;
               debug_info("[NFI] nfi_mpiServer_read(ID=%s): (2)mpiClient_read_data = %d.\n",server_aux->id, ret) ;
               if(ret == -1){
                 perror("ERROR: (3)nfi_mpiServer_read: Error on write operation") ;
@@ -795,7 +803,8 @@
         server_aux = (struct nfi_mpiServer_server  *) serv->private_info;
 
         /************** LOCAL *****************/
-        if (server_aux->params.locality[server_aux->sd.rank_id])
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)
         {
           filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
           ret = filesystem_write(fh_aux->fd, buffer, size) ;
@@ -819,7 +828,8 @@
             printf("[NFI]write: -> size %d \n",msg.u_st_mpiServer_msg.op_write.size) ;
           #endif
 
-          ret = mpiServer_write_operation(server_aux->sd, &msg) ;
+          //ret = mpiServer_write_operation(server_aux->sd, &msg) ;
+          ret = mpiServer_write_operation(server_aux->params.server, &msg) ;
           if(ret == -1){
             fprintf(stderr,"(1)ERROR: nfi_mpiServer_write(ID=%s): Error on write operation\n",server_aux->id) ;
             return -1;
@@ -839,13 +849,15 @@
           do{
             if (diff > buffer_size)
             {
-              ret = mpiClient_write_data(server_aux->sd, (char *)buffer + cont, buffer_size, msg.id) ;
+              //ret = mpiClient_write_data(server_aux->sd, (char *)buffer + cont, buffer_size, msg.id) ;
+              ret = mpiClient_write_data(server_aux->params.server, (char *)buffer + cont, buffer_size, msg.id) ;
               if(ret == -1){
                 fprintf(stderr,"(2)ERROR: nfi_mpiServer_read(ID=%s): Error on write operation\n",server_aux->id) ;
               }
             }
             else{
-              ret = mpiClient_write_data(server_aux->sd, (char *)buffer + cont, diff, msg.id) ;
+              //ret = mpiClient_write_data(server_aux->sd, (char *)buffer + cont, diff, msg.id) ;
+              ret = mpiClient_write_data(server_aux->params.server, (char *)buffer + cont, diff, msg.id) ;
               if(ret == -1){
                 fprintf(stderr,"(2)ERROR: nfi_mpiServer_read(ID=%s): Error on write operation\n",server_aux->id) ;
               }
@@ -856,7 +868,8 @@
 
           } while ((diff > 0) && (ret != 0)) ;
 
-          ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_write_req), msg.id) ;
+          //ret = mpiClient_read_data(server_aux->sd, (char *)&req, sizeof(struct st_mpiServer_write_req), msg.id) ;
+          ret = mpiClient_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpiServer_write_req), msg.id) ;
           if(ret == -1){
             fprintf(stderr,"(3)ERROR: nfi_mpiServer_write(ID=%s): Error on write operation\n",server_aux->id) ;
             return -1;
@@ -901,7 +914,8 @@
           server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 
           /************** LOCAL *****************/
-          if (server_aux->params.locality[server_aux->sd.rank_id])
+          //if(server_aux->params.locality[server_aux->sd.rank_id])
+          if(server_aux->params.locality)
           {
             if (fh_aux != NULL) {
               filesystem_close(fh_aux->fd) ;
@@ -961,7 +975,8 @@
         }
 
         /************** LOCAL *****************/
-        if(server_aux->params.locality[server_aux->sd.rank_id])
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)
         {
           ret = filesystem_unlink(dir) ;
           if (ret < 0)
@@ -1029,7 +1044,8 @@
         server_aux = (struct nfi_mpiServer_server  *) serv->private_info;
 
         /************** LOCAL *****************/
-        if(server_aux->params.locality[server_aux->sd.rank_id])
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)
         {
           req.status = filesystem_stat(fh_aux->path, &req.attr) ;
           if (req.status < 0) {
@@ -1111,7 +1127,8 @@
         server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 
         /************** LOCAL *****************/
-        if(server_aux->params.locality[server_aux->sd.rank_id])
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)
         {
           fh_aux->dir = filesystem_opendir(dir) ;
           if (fh_aux->dir == NULL) {
@@ -1175,7 +1192,8 @@
         bzero(fh_aux, sizeof(struct nfi_mpiServer_fhandle)) ;
 
         /************** LOCAL *****************/
-        if(server_aux->params.locality[server_aux->sd.rank_id])
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)
         {
           ret = filesystem_mkdir(dir, /*attr->at_mode*/ 0777) ;
           if ((ret < 0) && (errno != EEXIST))
@@ -1241,7 +1259,8 @@
         entry[0] = '\0';
 
         /************** LOCAL *****************/
-        if(server_aux->params.locality[server_aux->sd.rank_id])
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)
         {
           ent = filesystem_readdir(fh_aux->dir) ;
         }
@@ -1289,7 +1308,8 @@
           fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 
           /************** LOCAL *****************/
-          if(server_aux->params.locality[server_aux->sd.rank_id])
+          //if(server_aux->params.locality[server_aux->sd.rank_id])
+          if(server_aux->params.locality)
           {
             filesystem_closedir(fh_aux->dir);
           }
@@ -1336,7 +1356,8 @@
         }
 
         /************** LOCAL *****************/
-        if(server_aux->params.locality[server_aux->sd.rank_id])
+        //if(server_aux->params.locality[server_aux->sd.rank_id])
+        if(server_aux->params.locality)
         {
           ret = filesystem_rmdir(url) ;
           if (ret < 0)

@@ -23,7 +23,8 @@
         char  srv_name[MPI_MAX_PORT_NAME] ;
         MPI_Comm server ;
 
-        int *locality ; //NEW
+        // locality
+        int locality ;
 
         // server arguments
         int    argc ;

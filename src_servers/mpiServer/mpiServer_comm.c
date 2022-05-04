@@ -67,13 +67,19 @@
     MPI_Info_set(info, "ompi_global_scope", "true") ;
     sprintf(params->srv_name, "mpiServer.%d", params->rank) ;
 
-    if (params->rank == 0)
+    /*if (params->rank == 0)
     {
       ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
       if (MPI_SUCCESS != ret) {
         debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
         return -1 ;
       }
+    }*/
+
+    ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
+    if (MPI_SUCCESS != ret) {
+      debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
+      return -1 ;
     }
 
     debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
@@ -95,13 +101,19 @@
     MPI_Close_port(params->port_name) ;
 
     // Unpublish port name
-    if (params->rank == 0)
+    /*if (params->rank == 0)
     {
       ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
       if (MPI_SUCCESS != ret) {
         debug_error("Server[%d]: MPI_Unpublish_name fails :-(", params->rank) ;
         return -1 ;
       }
+    }*/
+
+    ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
+    if (MPI_SUCCESS != ret) {
+      debug_error("Server[%d]: MPI_Unpublish_name fails :-(", params->rank) ;
+      return -1 ;
     }
 
     // Finalize
@@ -124,7 +136,7 @@
     DEBUG_BEGIN() ;
 
     // Accept
-    ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &(params->client)) ;
+    ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(params->client)) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Comm_accept fails :-(", params->rank) ;
       return -1 ;
