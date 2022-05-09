@@ -127,7 +127,8 @@
 
     // Lookup port name
     //sprintf(srv_name, "mpiServer.%d", params->rank) ;
-    sprintf(srv_name, "mpiServer.%d", 0) ;
+    sprintf(srv_name, "mpiServer.%s", params->srv_name) ;
+    //sprintf(srv_name, "mpiServer.%d", 0) ;
     ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, params->port_name) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Lookup_name fails :-(", params->rank) ;

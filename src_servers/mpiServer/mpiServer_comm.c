@@ -65,7 +65,10 @@
     // Publish port name
     MPI_Info_create(&info) ;
     MPI_Info_set(info, "ompi_global_scope", "true") ;
-    sprintf(params->srv_name, "mpiServer.%d", params->rank) ;
+    //sprintf(params->srv_name, "mpiServer.%d", params->rank) ;
+    char serv_name [HOST_NAME_MAX];
+    gethostname(serv_name, HOST_NAME_MAX);
+    sprintf(params->srv_name, "mpiServer.%s", serv_name) ;
 
     /*if (params->rank == 0)
     {

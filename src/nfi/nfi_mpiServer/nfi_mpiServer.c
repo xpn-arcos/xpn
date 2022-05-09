@@ -331,6 +331,8 @@
         //static struct nfi_mpiServer_server server_aux2;
 
         server_aux = (struct nfi_mpiServer_server *) (serv->private_info) ;
+        strcpy(&(server_aux->params.srv_name), server) ;
+        
 
         //if (init == 0)
         //{
