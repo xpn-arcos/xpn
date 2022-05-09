@@ -22,7 +22,11 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include "filesystem.h"
+    #include "filesystem.h"
+
+  /* ... Varibles ........................................... */
+
+    //pthread_attr_t filesystem_attr;
 
 
   /* ... Functions / Funciones ......................................... */
@@ -104,9 +108,45 @@
      * API
      */
 
+    /*int  filesystem_init ( void )
+    {
+      pthread_attr_init(&filesystem_attr);
+      int ret = pthread_attr_setdetachstate(&filesystem_attr, PTHREAD_CREATE_DETACHED);
+      if (ret !=0 ) {
+        perror("pthread_attr_setdetachstate: ");
+        return ret;
+      }
+
+      return 0;
+    }*/
+
+    void *filesystem_async_close (void *arg)
+    {
+      // Try to close file
+      int ret = real_posix_close((int)(long)arg) ;
+      if (ret < 0) {
+        debug_warning("[FILE_POSIX]: async_close(fd:%d) -> %d\n", (int)(long)arg, ret) ;
+        perror("async_close: ") ;
+      }
+
+      pthread_exit(NULL);
+    }
+
+    /*int  filesystem_destroy ( void )
+    {
+      int ret = pthread_attr_destroy(&filesystem_attr);
+      if (ret !=0 ) {
+        perror("pthread_attr_destroy: ");
+        return ret;
+      }
+
+      return 0;
+    }*/
+
+
     int  filesystem_creat ( char *pathname, mode_t mode )
     {
-	 int ret ;
+	       int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -157,7 +197,7 @@
 
     int  filesystem_open2 ( char *pathname, int flags, mode_t mode )
     {
-	 int ret ;
+	       int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -166,7 +206,7 @@
              debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
          }
 
-	 // Try to open the file
+	     // Try to open the file
          ret = real_posix_open2(pathname, flags, mode) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: open2(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret) ;
@@ -175,13 +215,13 @@
 
          DEBUG_END() ;
 
-	 // Return OK/KO
-	 return ret ;
+      	 // Return OK/KO
+      	 return ret ;
     }
 
     int  filesystem_close ( int fd )
     {
-	 int ret ;
+	       int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -190,17 +230,33 @@
              debug_warning("[FILE_POSIX]: close file with fd < 0\n") ;
          }
 
-	 // Try to close file
-         ret = real_posix_close(fd) ;
-         if (ret < 0) {
-             debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
-             perror("close: ") ;
-         }
+         // Try to close file
+         #ifdef ASYNC_CLOSE
+          pthread_t thid;
+
+          ret = pthread_create(&thid, NULL, filesystem_async_close, (void *) (long) fd);
+          ret = pthread_detach(thid);
+
+          if (ret < 0) {                     
+            ret = real_posix_close(fd) ;
+            if (ret < 0) {
+              debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
+              perror("close: ") ;
+            }                                                                                                 
+          }  
+
+         #else
+           ret = real_posix_close(fd) ;
+           if (ret < 0) {
+               debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
+               perror("close: ") ;
+           }
+         #endif
 
          DEBUG_END() ;
 
-	 // Return OK/KO
-	 return ret ;
+         // Return OK/KO
+         return ret ;
     }
 
     long filesystem_read ( int read_fd2, void *buffer, int buffer_size )
