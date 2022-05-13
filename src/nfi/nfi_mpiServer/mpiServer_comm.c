@@ -128,6 +128,9 @@
     // Lookup port name
     //sprintf(srv_name, "mpiServer.%d", params->rank) ;
     sprintf(srv_name, "mpiServer.%s", params->srv_name) ;
+
+    printf("%s\n", srv_name);
+
     //sprintf(srv_name, "mpiServer.%d", 0) ;
     ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, params->port_name) ;
     if (MPI_SUCCESS != ret) {

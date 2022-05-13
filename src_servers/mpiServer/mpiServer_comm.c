@@ -79,6 +79,8 @@
       }
     }*/
 
+    printf("%s\n", params->srv_name);
+
     ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
