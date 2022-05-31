@@ -146,7 +146,7 @@
 
     int  filesystem_creat ( char *pathname, mode_t mode )
     {
-           int ret ;
+	       int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -158,7 +158,7 @@
              debug_warning("[FILE_POSIX]: mode is zero\n") ;
          }
 
-     // Try to creat the file
+	 // Try to creat the file
          ret = real_posix_creat(pathname, mode) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: open(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret) ;
@@ -167,13 +167,13 @@
 
          DEBUG_END() ;
 
-     // Return OK/KO
-     return ret ;
+	 // Return OK/KO
+	 return ret ;
     }
 
     int  filesystem_open ( char *pathname, int flags )
     {
-     int ret ;
+	 int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -182,7 +182,7 @@
              debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
          }
 
-     // Try to open the file
+	 // Try to open the file
          ret = real_posix_open(pathname, flags) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: open(pathname:%s, flags:%d) -> %d\n", pathname, flags, ret) ;
@@ -191,13 +191,13 @@
 
          DEBUG_END() ;
 
-     // Return OK/KO
-     return ret ;
+	 // Return OK/KO
+	 return ret ;
     }
 
     int  filesystem_open2 ( char *pathname, int flags, mode_t mode )
     {
-           int ret ;
+	       int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -206,7 +206,7 @@
              debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
          }
 
-         // Try to open the file
+	     // Try to open the file
          ret = real_posix_open2(pathname, flags, mode) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: open2(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret) ;
@@ -215,13 +215,13 @@
 
          DEBUG_END() ;
 
-         // Return OK/KO
-         return ret ;
+      	 // Return OK/KO
+      	 return ret ;
     }
 
     int  filesystem_close ( int fd )
     {
-           int ret ;
+	       int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -328,7 +328,7 @@
 
      int  filesystem_mkpath ( char *pathname )
      {
-     int ret ;
+	 int ret ;
          char dir[MAXPATHLEN] ;
 
          DEBUG_BEGIN() ;
@@ -336,21 +336,21 @@
          for (int i=0; aux_get_dirs(pathname, i, dir) != 0; i++)
          {
               ret = real_posix_mkdir(dir, 0770) ;
-          if (ret < 0) {
+	      if (ret < 0) {
                   debug_warning("[FILE_POSIX]: cannot mkdir(%s)\n", dir) ;
                   perror("mkdir: ") ;
-          }
+	      }
          }
 
          DEBUG_END() ;
 
-     // Return OK
+	 // Return OK
          return 1 ;
      }
 
      int  filesystem_mkdir ( char *pathname, mode_t mode )
      {
-     int ret ;
+	 int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -359,7 +359,7 @@
              debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
          }
 
-     // Try to mkdir
+	 // Try to mkdir
          ret = real_posix_mkdir(pathname, mode) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: mkdir(pathname:%s, mode:%d) -> %d\n", pathname, mode, ret) ;
@@ -368,13 +368,13 @@
 
          DEBUG_END() ;
 
-     // Return OK/KO
-     return ret ;
+	 // Return OK/KO
+	 return ret ;
      }
 
      int  filesystem_rmdir ( char *pathname )
      {
-     int ret ;
+	 int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -383,7 +383,7 @@
              debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
          }
 
-     // Try to rmdir
+	 // Try to rmdir
          ret = real_posix_rmdir(pathname) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: rmdir(pathname:%s) -> %d\n", pathname, ret) ;
@@ -392,13 +392,13 @@
 
          DEBUG_END() ;
 
-     // Return OK/KO
-     return ret ;
+	 // Return OK/KO
+	 return ret ;
      }
 
      DIR  *filesystem_opendir  ( char *pathname )
      {
-     DIR *ret ;
+	 DIR *ret ;
 
          DEBUG_BEGIN() ;
 
@@ -407,7 +407,7 @@
              debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
          }
 
-     // Try to open the directory
+	 // Try to open the directory
          ret = real_posix_opendir(pathname) ;
          if (NULL == ret) {
              debug_warning("[FILE_POSIX]: opendir(pathname:%s) -> %p\n", pathname, ret) ;
@@ -416,13 +416,13 @@
 
          DEBUG_END() ;
 
-     // Return DIR*
-     return ret ;
+	 // Return DIR*
+	 return ret ;
      }
 
      struct dirent *filesystem_readdir  ( DIR  *dirp )
      {
-     struct dirent *ret ;
+	 struct dirent *ret ;
 
          DEBUG_BEGIN() ;
 
@@ -431,7 +431,7 @@
              debug_warning("[FILE_POSIX]: dirp is NULL\n") ;
          }
 
-     // Try to read next entry of the directory
+	 // Try to read next entry of the directory
          ret = real_posix_readdir(dirp) ;
          if (NULL == ret) {
              debug_warning("[FILE_POSIX]: readdir(dirp:%p) -> %p\n", dirp, ret) ;
@@ -440,13 +440,13 @@
 
          DEBUG_END() ;
 
-     // Return DIR*
-     return ret ;
+	 // Return DIR*
+	 return ret ;
      }
 
      int  filesystem_closedir ( DIR  *dirp )
      {
-     int ret ;
+	 int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -455,7 +455,7 @@
              debug_warning("[FILE_POSIX]: dirp is NULL\n") ;
          }
 
-     // Try to close the directory session
+	 // Try to close the directory session
          ret = real_posix_closedir(dirp) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: closedir(dirp:%p) -> %p\n", dirp, ret) ;
@@ -464,13 +464,13 @@
 
          DEBUG_END() ;
 
-     // Return DIR*
-     return ret ;
+	 // Return DIR*
+	 return ret ;
      }
 
      off_t filesystem_lseek ( int fd, off_t offset, int whence )
      {
-     int ret ;
+	 int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -479,7 +479,7 @@
              debug_warning("[FILE_POSIX]: fd is negative\n") ;
          }
 
-     // Try to lseek the file
+	 // Try to lseek the file
          ret = real_posix_lseek(fd, offset, whence) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: lseek(fd:%s, offset:%ld, whence:%d) -> %d\n", fd, offset, whence, ret) ;
@@ -488,13 +488,13 @@
 
          DEBUG_END() ;
 
-     // Return OK/KO
-     return ret ;
+	 // Return OK/KO
+	 return ret ;
      }
 
      int   filesystem_unlink ( char *pathname )
      {
-     int ret ;
+	 int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -503,7 +503,7 @@
              debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
          }
 
-     // Try to unlink a file
+	 // Try to unlink a file
          ret = real_posix_unlink(pathname) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: unlink(pathname:%s) -> %d\n", pathname, ret) ;
@@ -512,13 +512,13 @@
 
          DEBUG_END() ;
 
-     // Return OK/KO
-     return ret ;
+	 // Return OK/KO
+	 return ret ;
      }
 
      int   filesystem_stat ( char *pathname, struct stat *sinfo )
      {
-     int ret ;
+	 int ret ;
 
          DEBUG_BEGIN() ;
 
@@ -530,7 +530,7 @@
              debug_warning("[FILE_POSIX]: sinfo is NULL\n") ;
          }
 
-     // Try to stat the file
+	 // Try to stat the file
          ret = real_posix_stat(pathname, sinfo) ;
          if (ret < 0) {
              debug_warning("[FILE_POSIX]: stat(pathname:%s, sinfo:%p) -> %d\n", pathname, sinfo, ret) ;
@@ -539,8 +539,8 @@
 
          DEBUG_END() ;
 
-     // Return OK/KO
-     return ret ;
+	 // Return OK/KO
+	 return ret ;
      }
 
 

@@ -26,6 +26,7 @@
 
       #include "all_system.h"
       #include "base/utils.h"
+      #include <pthread.h> 
       #include <sys/stat.h>
       #include <sys/types.h>
 
@@ -40,8 +41,12 @@
      #define LSEEK real_posix_lseek
 #endif
 
+     #define ASYNC_CLOSE
+
 
    /* ... Functions / Funciones ......................................... */
+     //int  filesystem_init      ( void );
+     //int  filesystem_destroy   ( void );
 
      int  filesystem_creat     ( char *pathname, mode_t mode ) ;
      int  filesystem_open      ( char *pathname, int flags ) ;
