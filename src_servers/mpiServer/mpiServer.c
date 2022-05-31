@@ -101,17 +101,45 @@
 
   void mpiServer_run ( struct st_th th )
   {
+    int ret ;
+    struct st_mpiServer_msg head ;
+    int rank_client_id;
+
     // check params...
     if (NULL == th.params) {
       debug_warning("[WORKERS] (ID=%d): NULL params", th.id) ;
       return;
     }
 
-    debug_info("[WORKERS] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpiServer_op2string(th.type_op), th.type_op);
+    int disconnect = 0;
+    while (!disconnect)
+    {
+      ret = mpiServer_comm_read_operation(th.params, th.sd, (char *)&head.type, sizeof(head.type), &rank_client_id);
+      if (ret == -1) {
+        debug_info("[OPS] (ID=%s)  mpiServer_comm_readdata fail\n") ;
+        return;
+      }
 
-    mpiServer_do_operation ( &th,  &the_end );
+      if (head.type == MPISERVER_DISCONNECT || head.type == MPISERVER_FINALIZE)
+      {
+        debug_info("DISCONNECT received\n");
+        disconnect = 1;
+      }
 
-    debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(th.type_op));
+      th.type_op = head.type;
+      th.rank_client_id = rank_client_id;
+
+      debug_info("[WORKERS] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpiServer_op2string(type_op), type_op);
+
+      mpiServer_do_operation ( &th,  &the_end );
+
+      debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(type_op));
+
+    }
+
+    debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", rank_client_id);
+    mpiServer_comm_close(&params) ;
+
   }
 
 
@@ -123,8 +151,9 @@
   {
     MPI_Comm sd ;
     int ret ;
-    struct st_mpiServer_msg head ;
-    int rank_client_id, disconnect;
+    //struct st_mpiServer_msg head ;
+    //int rank_client_id, disconnect;
+    //int rank_client_id;
 
     // Get parameters..
     ret = mpiServer_params_get(&params, argc, argv) ;
@@ -156,7 +185,10 @@
         continue ;
       }
 
-      disconnect = 0;
+      //mpiServer_workers_launch( &params, sd, head.type, rank_client_id, mpiServer_run ) ;
+      mpiServer_workers_launch( &params, sd, mpiServer_run ) ;
+
+      /*disconnect = 0;
       while (!disconnect)
       {
         ret = mpiServer_comm_read_operation(&params, sd, (char *)&head.type, sizeof(head.type), &rank_client_id);
@@ -181,7 +213,7 @@
       }
 
       debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", rank_client_id);
-      mpiServer_comm_close(&params) ;
+      mpiServer_comm_close(&params) ;*/
    
     }
 

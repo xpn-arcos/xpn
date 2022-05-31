@@ -220,14 +220,14 @@
     // Ask name of all servers
     for (int i = 0; i < size; i++) {
       data = MPISERVER_GETNODENAME;
-      ret = MPI_Send( &data, 1, MPI_INT, i, 0, params->server );
+      ret = MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
       if (MPI_SUCCESS != ret) {
         //FREE_AND_NULL(params->locality)
         debug_warning("Server[?]: MPI_Send fails :-(") ;
         return -1;
       }
 
-      ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, i, 1, params->server, &status);
+      ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, 0, 1, params->server, &status);
       if (MPI_SUCCESS != ret) {
         //FREE_AND_NULL(params->locality)
         debug_warning("Server[?]: MPI_Recv fails :-(") ;
