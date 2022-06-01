@@ -156,7 +156,7 @@
 
   struct st_mpiServer_msg
   {
-    char type ;
+    int type ;
     char id[MPISERVER_ID] ;
     union {
       struct st_mpiServer_open    op_open;

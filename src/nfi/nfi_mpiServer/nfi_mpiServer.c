@@ -36,7 +36,7 @@
         int ret;
 
         debug_info("[NFI] (ID=%s) mpiClient_write_data: begin               HEAD_TYPE:%d\n", head->id, sizeof(head->type)) ;
-        ret = mpiClient_write_operation(sd, (char *)&head->type, sizeof(head->type), head->id) ;
+        ret = mpiClient_write_operation(sd, (char *)&(head->type), 1, head->id) ;
         if (ret == -1){
             debug_warning("Server[?]: mpiClient_write_data fails :-(") ;
             return -1;
@@ -233,7 +233,6 @@
         struct st_mpiServer_msg msg;
         char server[MAXPATHLEN], dir[MAXPATHLEN], prt[MAXPATHLEN];
 
-
         debug_info("[NFI] nfi_mpiServer_init: begin\n") ;
 
         // check arguments...
@@ -288,6 +287,8 @@
         }
         serv->private_info = (void *)server_aux;
 
+        printf("ANTES INIT\n");
+
         // initialize MPI Client communication side...
         ret = mpiClient_comm_init(&(server_aux->params)) ;
         if (ret < 0) {
@@ -296,6 +297,8 @@
           return -1 ;
         }
 
+        printf("ANTES CONNECT\n");
+
         ret = nfi_mpiServer_connect(serv, url, prt, server, dir) ;
         if (ret < 0) {
           free(serv->ops) ;
@@ -303,14 +306,18 @@
           return -1 ;
         }
 
-        ret = mpiClient_comm_locality (&(server_aux->params)) ;
+        printf("ANTES LOCALITY\n");
+
+        /*ret = mpiClient_comm_locality (&(server_aux->params)) ;
         if (ret < 0) {
           free(serv->ops) ;
           free(server_aux) ;
           return -1 ;
-        }
+        }*/
 
         //serv->protocol = MPISERVER;
+
+        printf("END\n");
 
         debug_info("[NFI] nfi_mpiServer_init(ID=%s): end\n",server_aux->id) ;
 
@@ -327,7 +334,7 @@
 
         //static int init = 0;
         //static MPI_Comm comm;
-        static int id_server = 0;
+        //static int id_server = 0;
         //static struct nfi_mpiServer_server server_aux2;
 
         server_aux = (struct nfi_mpiServer_server *) (serv->private_info) ;
@@ -336,6 +343,7 @@
 
         //if (init == 0)
         //{
+
         ret = mpiClient_comm_connect(&(server_aux->params)) ;
         if (ret < 0) {
             return -1 ;

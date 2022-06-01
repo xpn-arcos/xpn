@@ -17,8 +17,8 @@ ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
 
 # configure
 echo "3) configure..."
-[ ! -d "/opt/xpn" ] && sudo mkdir -p /opt/xpn 
-./configure --prefix=/opt/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver="/opt/software/install-mpich/bin"
+[ ! -d "/home/dcamarma/xpn-install" ] && sudo mkdir -p /home/dcamarma/xpn-install 
+./configure --prefix=/home/dcamarma/xpn-install --enable-nfs3 --enable-tcpserver --enable-mpiserver="/home/dcamarma/mpich-install/bin"
 
 # compile
 echo "4) make..."

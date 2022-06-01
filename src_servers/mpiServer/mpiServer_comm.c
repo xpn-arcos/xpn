@@ -190,12 +190,11 @@
 
     // Get message
     ret = MPI_Recv(data, size, MPI_INT, MPI_ANY_SOURCE, 0, fd, &status);
-    //ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, 0, fd, &status);
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
     }
 
-    *rank_client_id = status.MPI_SOURCE;
+    *rank_client_id = status.MPI_SOURCE; //TODO: eliminar??
 
     debug_info("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
 
@@ -225,7 +224,7 @@
     }
 
     // Send message
-    ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 1, fd) ;
+    ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 1, fd) ; //TODO: cambiar rank por 0??
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
     }

@@ -129,6 +129,10 @@
     //sprintf(srv_name, "mpiServer.%d", params->rank) ;
     sprintf(srv_name, "mpiServer.%s", params->srv_name) ;
 
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    printf("CONNECT SERVER %d\n", rank );
+
     printf("%s\n", srv_name);
 
     //sprintf(srv_name, "mpiServer.%d", 0) ;
@@ -141,6 +145,7 @@
     // Connect...
     //ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &(params->server)) ;
     ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(params->server)) ;
+
     if (MPI_SUCCESS != ret) {
       debug_error("Client[%d]: MPI_Comm_connect fails :-(", params->rank) ;
       return -1 ;

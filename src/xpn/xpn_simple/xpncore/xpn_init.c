@@ -156,8 +156,11 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
             //TODO: AQUI??
 
+            printf("N SERVER %d  ITER %d\n", xpn_parttable[i].data_nserv, j);
+
             res = XpnGetServer(fd, &(xpn_parttable[i]), &(xpn_parttable[i].data_serv[j]), XPN_DATA_SERVER);
             if(res<0){
+
                 XpnPartitionClose(fd);
                     for(j=0;j<i;j++){
                     xpn_destroy_servers(&(xpn_parttable[j]));
