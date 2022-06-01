@@ -63,8 +63,6 @@
 
         th.type_op = head.type;
 
-        printf("OP %d SIZE %d\n", th.type_op, sizeof(head.type));
-
         if (th.type_op == MPISERVER_DISCONNECT || th.type_op == MPISERVER_FINALIZE)
         {
           debug_info("DISCONNECT received\n");

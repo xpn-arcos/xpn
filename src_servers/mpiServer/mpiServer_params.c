@@ -36,7 +36,7 @@
     if(params->thread_mode == TH_POOL)
       printf("\t-tp:\t\tThread Pool Activated\n") ;
     if(params->thread_mode == TH_OP)
-      printf("\t-tp:\t\tThread Pool Deactivated (Using Thread per Operation)\n") ;
+      printf("\t-tp:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
   }
   
   void mpiServer_params_show_usage ( void )

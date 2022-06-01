@@ -4,8 +4,7 @@
 #--------------------------
 
  MAKE         = make -s
- CC           = /opt/software/install-mpich/bin/mpicc
-#CC           = /home/dcamarma/mpich-install/bin/mpicc
+ CC           = @CC@
  SOURCE_PATH  = ./
  EXPAND_DIR   = @prefix@
  OBJECTS_MPISERVER      = mpiServer.o \

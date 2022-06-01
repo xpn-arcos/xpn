@@ -102,7 +102,6 @@
   }
 
 
-  //void mpiServer_worker_pool_enqueue ( MPI_Comm sd, mpiServer_param_st *params, int op_type, int rank_client_id, void (*worker_function)(struct st_th))
   void mpiServer_worker_pool_enqueue ( MPI_Comm sd, mpiServer_param_st *params, void (*worker_function)(struct st_th))
   {
     DEBUG_BEGIN() ;
@@ -119,8 +118,6 @@
 
     st_worker.sd                = sd;
     st_worker.params            = params ;
-    //st_worker.type_op           = op_type ;
-    //st_worker.rank_client_id    = rank_client_id ;
     st_worker.function          = worker_function ;
 
     debug_info("[WORKERS] client(%d): mpiServer_worker_pool_enqueue(...) enqueue\n", rank_client_id);
