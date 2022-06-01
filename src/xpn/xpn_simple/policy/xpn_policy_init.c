@@ -321,8 +321,6 @@ int XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partitio
 
 int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) struct xpn_partition *part, struct nfi_server *serv, int type)
 {
-	
-	printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
 
 	int ret;
 	char prt[10];
@@ -435,20 +433,11 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 #ifdef ENABLE_MPISERVER
 	else if (strcmp(prt,"mpiServer") == 0){
 		//printf("[XPN]nfi_mpiServer_init: %s\n",url);
-
-
-		printf("SERVER   %s\n", url);
-
-
 		ret = nfi_mpiServer_init(url, serv, NULL);
 		if(ret < 0){
-			printf("SERVER EERRRRR   %s\n", url);
 			xpn_err(XPNERR_INITSERV);
 			return -1;
 		}
-
-		printf("SERVER ENDDD   %s\n", url);
-
 	}
 #endif
 // END OF ENABLE_MPISERVER BLOCK. Do not remove this line. //

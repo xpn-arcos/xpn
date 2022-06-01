@@ -78,7 +78,10 @@
       }
 
       debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.rank_client_id);
-      mpiServer_comm_close(th.params) ;
+
+      //th.params->client = th.sd;
+
+      mpiClient_comm_close(th.sd) ;
     }
 
 

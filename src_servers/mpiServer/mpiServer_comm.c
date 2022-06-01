@@ -153,12 +153,17 @@
     return params->client ;
   }
   
-  int mpiServer_comm_close ( mpiServer_param_st *params )
+  int mpiClient_comm_close ( MPI_Comm fd )
   {
     int ret ;
 
+    if (fd == MPI_COMM_NULL)
+    {
+      return 1;
+    }
+
     // Disconnect
-    ret = MPI_Comm_disconnect(&(params->client)) ;
+    ret = MPI_Comm_disconnect(&fd) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
       return -1 ;
