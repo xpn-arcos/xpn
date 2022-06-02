@@ -143,28 +143,24 @@
       return -1 ;
     }
 
+    // To identify client type
+    int data = 0;
+    ret = MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
+    if (MPI_SUCCESS != ret) {
+      debug_warning("Server[?]: MPI_Recv fails :-(") ;
+    }
+
     // Return OK
     return 1 ;
   }
 
-  //TODO: revisar
   int mpiClient_comm_disconnect ( mpiClient_param_st *params )
   {
     int ret ;
     int data;
     int size;
 
-    //MPI_Barrier(MPI_COMM_WORLD);
-
-    debug_info("[COMM] mpiClient_comm_disconnect nservers\n") ; //
-    /*if (params->rank==0) {
-      MPI_Comm_remote_size(params->server, &size);
-
-      for (int i = 0; i < size; i++) { 
-        data = MPISERVER_DISCONNECT;
-        MPI_Send( &data, 1, MPI_INT, i, 0, params->server );
-      }
-    }*/
+    debug_info("[COMM] mpiClient_comm_disconnect nservers\n") ;
 
     data = MPISERVER_DISCONNECT;
     MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
@@ -192,8 +188,6 @@
     return 1 ;
   }
 
-
-  //TODO: revisar
   int mpiClient_comm_locality ( mpiClient_param_st *params )
   {
     int ret;

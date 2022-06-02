@@ -90,6 +90,8 @@
     int mpiServer_up ( void )
     {
       MPI_Comm sd ;
+      struct st_mpiServer_msg head ;
+      int rank_client_id;
 
       // Initialize
       debug_msg_init() ;
@@ -107,7 +109,20 @@
           continue ;
         }
 
-        mpiServer_workers_launch( &params, sd, mpiServer_run ) ;
+        int ret = mpiServer_comm_read_operation(&params, sd, (char *)&(head.type), 1, &(rank_client_id));
+        if (ret == -1) {
+          debug_info("[OPS] (ID=%s)  mpiServer_comm_readdata fail\n") ;
+          return -1;
+        }
+
+        if (head.type == MPISERVER_FINALIZE)
+        {
+          the_end = 1;
+        }
+        else{
+          mpiServer_workers_launch( &params, sd, mpiServer_run ) ;
+        }
+
       }
 
       // Wait and finalize for all current workers
@@ -120,46 +135,52 @@
       return 0 ;
     }
 
-    //TODO: rediseñar
     int mpiServer_down ( int argc, char *argv[] ) {
 
-      int rank, nservers, ret, buf;
+      int  ret, buf;
       char port_name[MPI_MAX_PORT_NAME];
       char srv_name[1024] ;
+      char hydra_name[1024] ;
       MPI_Comm server;
+      FILE *file;
 
       MPI_Init(&argc, &argv);
-      MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-      // Lookup port name
-      sprintf(srv_name, "mpiServer.%d", 0) ; //TODO: cambiar
-      ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name) ;
-      if (MPI_SUCCESS != ret) {
-          printf("MPI_Lookup_name fails\n") ;
-          return -1;
-      }
-      // Connect with servers
-      ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &server ); //TODO: cambiar a self
-      if (MPI_SUCCESS != ret) {
-          printf("MPI_Comm_connect fails\n") ;
+      printf("FILE %s\n", params.host_file);
+
+      // open file
+      file = fopen(params.host_file, "r");
+      if (file == NULL) {
+          printf("Invalid file %s\n", params.host_file);
           return -1;
       }
 
-      //Get number of servers
-      MPI_Comm_remote_size(server, &nservers);
+      while (fscanf(file, "%[^\n] ", srv_name) != EOF) {
 
-      //Finalize all servers
-      MPI_Barrier(MPI_COMM_WORLD);
+        // Lookup port name
+        sprintf(hydra_name, "mpiServer.%s", srv_name);
 
-      if (rank == 0)
-      {
-        for (int i = 0; i < nservers; i++) { 
-          buf = MPISERVER_FINALIZE; 
-          MPI_Send( &buf, 1, MPI_INT, i, 0, server );
+        ret = MPI_Lookup_name(hydra_name, MPI_INFO_NULL, port_name) ;
+        if (MPI_SUCCESS != ret) {
+            printf("MPI_Lookup_name fails\n") ;
+            return -1;
         }
+
+        // Connect with servers
+        ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &server ); //TODO: cambiar a self
+        if (MPI_SUCCESS != ret) {
+            printf("MPI_Comm_connect fails\n") ;
+            return -1;
+        }
+
+        buf = MPISERVER_FINALIZE; 
+        MPI_Send( &buf, 1, MPI_INT, 0, 0, server );
+
+        MPI_Comm_disconnect( &server );
       }
 
-      MPI_Comm_disconnect( &server );
+      fclose(file);
+
       MPI_Finalize();
 
       return 0;

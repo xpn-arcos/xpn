@@ -802,7 +802,7 @@ configure:5380: $? = 0
 configure:5380: result: yes
 configure:5386: checking for _doprnt
 configure:5386: gcc -o conftest -g -O2   conftest.c -lpthread  >&5
-/tmp/ccLf4yVX.o: In function `main':
+/tmp/ccbv8Mhk.o: In function `main':
 /home/dcamarma/xpn/conftest.c:79: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:5386: $? = 1

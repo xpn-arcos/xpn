@@ -70,17 +70,6 @@
     gethostname(serv_name, HOST_NAME_MAX);
     sprintf(params->srv_name, "mpiServer.%s", serv_name) ;
 
-    /*if (params->rank == 0)
-    {
-      ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
-      if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
-        return -1 ;
-      }
-    }*/
-
-    printf("%s\n", params->srv_name);
-
     ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
@@ -106,15 +95,6 @@
     MPI_Close_port(params->port_name) ;
 
     // Unpublish port name
-    /*if (params->rank == 0)
-    {
-      ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
-      if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Unpublish_name fails :-(", params->rank) ;
-        return -1 ;
-      }
-    }*/
-
     ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Unpublish_name fails :-(", params->rank) ;
