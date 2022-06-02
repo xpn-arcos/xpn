@@ -146,8 +146,6 @@
 
       MPI_Init(&argc, &argv);
 
-      printf("FILE %s\n", params.host_file);
-
       // open file
       file = fopen(params.host_file, "r");
       if (file == NULL) {
