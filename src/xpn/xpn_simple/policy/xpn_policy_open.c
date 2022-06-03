@@ -429,14 +429,18 @@ int XpnGetAtrib(int fd, struct stat *st) {
 	
 	memset(&attr, 0, sizeof(struct nfi_attr));
 	memset(st, 0, sizeof(struct stat));
+
+	
 	
 	switch (xpn_file_table[fd]->mdata->type_policy) {
 		case POLICY_RAID1:
 			/* For RAID1, we need to take the file size of only one server */
 			n=1;
+			
 			/* Then, proceed as in RAID0 case */
 		case POLICY_RAID0:
 			/* For RAID0, we need to add the sizes of the file in every server */
+			
 			for(i=0;i<n;i++){
 				res = XpnGetFh(xpn_file_table[fd]->mdata,
 						&(xpn_file_table[fd]->data_vfh->nfih[i]),
@@ -456,9 +460,10 @@ int XpnGetAtrib(int fd, struct stat *st) {
 			}
 			break;
 		default:
+			
 			return -1;
 	}
-	
+
 	free(servers);
 	
 	//st->st_dev     = 9;                 /* device */

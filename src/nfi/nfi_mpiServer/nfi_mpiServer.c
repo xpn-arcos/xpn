@@ -534,7 +534,6 @@
         server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)
         {
           fh_aux->fd = filesystem_open(dir, O_RDWR) ;
@@ -604,7 +603,6 @@
         /* create the file into the directory */
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)        {
           fh_aux->fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
           if (fh_aux->fd < 0) {
@@ -667,7 +665,6 @@
         fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)
         {
           filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
@@ -773,7 +770,6 @@
         server_aux = (struct nfi_mpiServer_server  *) serv->private_info;
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)
         {
           filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
@@ -880,7 +876,6 @@
           server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 
           /************** LOCAL *****************/
-          //if(server_aux->params.locality[server_aux->sd.rank_id])
           if(server_aux->params.locality)
           {
             if (fh_aux != NULL) {
@@ -941,7 +936,6 @@
         }
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)
         {
           ret = filesystem_unlink(dir) ;
@@ -1010,7 +1004,6 @@
         server_aux = (struct nfi_mpiServer_server  *) serv->private_info;
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)
         {
           req.status = filesystem_stat(fh_aux->path, &req.attr) ;
@@ -1093,7 +1086,6 @@
         server_aux = (struct nfi_mpiServer_server *) serv->private_info;
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)
         {
           fh_aux->dir = filesystem_opendir(dir) ;
@@ -1158,7 +1150,6 @@
         bzero(fh_aux, sizeof(struct nfi_mpiServer_fhandle)) ;
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)
         {
           ret = filesystem_mkdir(dir, /*attr->at_mode*/ 0777) ;
@@ -1225,7 +1216,6 @@
         entry[0] = '\0';
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)
         {
           ent = filesystem_readdir(fh_aux->dir) ;
@@ -1274,7 +1264,6 @@
           fh_aux = (struct nfi_mpiServer_fhandle *) fh->priv_fh;
 
           /************** LOCAL *****************/
-          //if(server_aux->params.locality[server_aux->sd.rank_id])
           if(server_aux->params.locality)
           {
             filesystem_closedir(fh_aux->dir);
@@ -1322,7 +1311,6 @@
         }
 
         /************** LOCAL *****************/
-        //if(server_aux->params.locality[server_aux->sd.rank_id])
         if(server_aux->params.locality)
         {
           ret = filesystem_rmdir(url) ;

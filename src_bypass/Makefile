@@ -3,8 +3,8 @@
 #
 
 
- prefix = /home/dcamarma/xpn-install
- CC     = /home/dcamarma/mpich-install/bin/mpicc
+ prefix = /opt/xpn
+ CC     = /opt/software/install-mpich/bin/mpicc
  FLAGS=-Wall -Wextra -fpic -DLINUX
  INCLUDE=-I../include -I../include/base -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
  LIBS=-lmxml -lpthread -ldl

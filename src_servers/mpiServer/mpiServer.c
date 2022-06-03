@@ -140,7 +140,7 @@
       int  ret, buf;
       char port_name[MPI_MAX_PORT_NAME];
       char srv_name[1024] ;
-      char hydra_name[1024] ;
+      char hydra_name[2048] ;
       MPI_Comm server;
       FILE *file;
 
