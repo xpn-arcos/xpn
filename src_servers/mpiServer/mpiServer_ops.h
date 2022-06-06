@@ -126,6 +126,18 @@
     char path[MPISERVER_MAXPATHLEN];
   };
 
+  struct st_mpiServer_opendir{  //NEW
+    char path[MPISERVER_MAXPATHLEN];
+  };
+
+  struct st_mpiServer_readdir{  //NEW
+    DIR * dir;
+  };
+
+  struct st_mpiServer_closedir{  //NEW
+    DIR * dir;
+  };
+
   struct st_mpiServer_rmdir{
     char path[MPISERVER_MAXPATHLEN];
   };
@@ -159,20 +171,23 @@
     int type ;
     char id[MPISERVER_ID] ;
     union {
-      struct st_mpiServer_open    op_open;
-      struct st_mpiServer_creat   op_creat;
-      struct st_mpiServer_close   op_close;
-      struct st_mpiServer_read    op_read;
-      struct st_mpiServer_write   op_write;
-      struct st_mpiServer_rm      op_rm;    
-      struct st_mpiServer_mkdir   op_mkdir;
-      struct st_mpiServer_rmdir   op_rmdir;
-      struct st_mpiServer_getattr op_getattr;
-      struct st_mpiServer_setattr op_setattr;
+      struct st_mpiServer_open     op_open;
+      struct st_mpiServer_creat    op_creat;
+      struct st_mpiServer_close    op_close;
+      struct st_mpiServer_read     op_read;
+      struct st_mpiServer_write    op_write;
+      struct st_mpiServer_rm       op_rm;    
+      struct st_mpiServer_mkdir    op_mkdir;
+      struct st_mpiServer_opendir  op_opendir;
+      struct st_mpiServer_readdir  op_readdir;
+      struct st_mpiServer_closedir op_closedir;
+      struct st_mpiServer_rmdir    op_rmdir;
+      struct st_mpiServer_getattr  op_getattr;
+      struct st_mpiServer_setattr  op_setattr;
 
-      struct st_mpiServer_flush   op_flush;
-      struct st_mpiServer_preload op_preload;
-      struct st_mpiServer_end     op_end;
+      struct st_mpiServer_flush    op_flush;
+      struct st_mpiServer_preload  op_preload;
+      struct st_mpiServer_end      op_end;
     } u_st_mpiServer_msg ;
   };
 

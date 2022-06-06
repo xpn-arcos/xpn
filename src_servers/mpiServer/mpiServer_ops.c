@@ -94,6 +94,8 @@
   void  mpiServer_op_getattr     ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
 
   void  mpiServer_op_mkdir       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
+  void  mpiServer_op_opendir     ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
+  void  mpiServer_op_readdir     ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
   void  mpiServer_op_rmdir       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
 
   void  mpiServer_op_flush       ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id ) ;
@@ -453,6 +455,20 @@
 
   
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   //Directory API
   void mpiServer_op_mkdir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
   {
@@ -469,6 +485,66 @@
     debug_info("[OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, s) ;
   }
 
+
+  //NEW
+  void mpiServer_op_opendir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
+  {
+    DIR* ret;
+    char *s;
+
+    // do mkdir
+    s = head->u_st_mpiServer_msg.op_opendir.path ;
+    ret = filesystem_opendir(s) ;
+
+    mpiServer_comm_write_data(params, sd,(char *)&ret, sizeof(DIR *), rank_client_id) ;
+
+    // show debug info
+    debug_info("[OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, s) ;
+  }
+
+
+  //NEW
+  void mpiServer_op_readdir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
+  {
+    struct dirent * ret;
+    DIR* s;
+
+    // do mkdir
+    s = head->u_st_mpiServer_msg.op_readdir.dir ;
+    ret = filesystem_readdir(s) ;
+
+    mpiServer_comm_write_data(params, sd,(char *)&ret, sizeof(struct dirent *), rank_client_id) ;
+
+    // show debug info
+    debug_info("[OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s) ;
+  }
+
+  //NEW
+  void mpiServer_op_closedir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
+  {
+    int ret;
+    DIR* s;
+
+    // do mkdir
+    s = head->u_st_mpiServer_msg.op_closedir.dir ;
+    ret = filesystem_closedir(s) ;
+
+    mpiServer_comm_write_data(params, sd,(char *)&ret, sizeof(int), rank_client_id) ;
+
+    // show debug info
+    debug_info("[OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s) ;
+  }
+
+
+
+
+
+
+
+
+
+
+
   void mpiServer_op_rmdir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
   {
     int ret;
@@ -476,6 +552,7 @@
 
     // do rmdir
     s = head->u_st_mpiServer_msg.op_rmdir.path ;
+
     ret = filesystem_rmdir(s) ;
     mpiServer_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 
@@ -498,7 +575,7 @@
     char *relative;
     char *params1;
 
-    int BLOCKSIZE = head->u_st_mpiServer_msg.op_preload.block_size;
+    int  BLOCKSIZE = head->u_st_mpiServer_msg.op_preload.block_size;
     char buffer [BLOCKSIZE];
 
     // Open origin file
