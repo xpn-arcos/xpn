@@ -214,7 +214,7 @@
 
     if (strcmp(cli_name, serv_name) == 0)
     {
-      params->locality = 1;
+      params->locality = 0; //CUIDADO
     }
     else
     {

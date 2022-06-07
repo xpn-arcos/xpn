@@ -106,6 +106,18 @@
                   debug_info("[NFI] (ID=%s) MDKIR operation\n", head->id) ;
                   ret = mpiClient_write_data(sd, (char *)&head->u_st_mpiServer_msg.op_mkdir, sizeof(struct st_mpiServer_mkdir), head->id) ;
                   break;
+          case MPISERVER_OPENDIR_DIR:
+                  debug_info("[NFI] (ID=%s) OPENDIR operation\n", head->id) ;
+                  ret = mpiClient_write_data(sd, (char *)&head->u_st_mpiServer_msg.op_opendir, sizeof(struct st_mpiServer_opendir), head->id) ;
+                  break;
+          case MPISERVER_READDIR_DIR:
+                  debug_info("[NFI] (ID=%s) READDIR operation\n", head->id) ;
+                  ret = mpiClient_write_data(sd, (char *)&head->u_st_mpiServer_msg.op_readdir, sizeof(struct st_mpiServer_readdir), head->id) ;
+                  break;
+          case MPISERVER_CLOSEDIR_DIR:
+                  debug_info("[NFI] (ID=%s) CLOSEDIR operation\n", head->id) ;
+                  ret = mpiClient_write_data(sd, (char *)&head->u_st_mpiServer_msg.op_closedir, sizeof(struct st_mpiServer_closedir), head->id) ;
+                  break;
           case MPISERVER_RMDIR_DIR:
                   debug_info("[NFI] (ID=%s) RMDIR operation\n", head->id) ;
                   ret = mpiClient_write_data(sd, (char *)&head->u_st_mpiServer_msg.op_rmdir, sizeof(struct st_mpiServer_rmdir), head->id) ;
@@ -129,6 +141,8 @@
       {
         ssize_t ret ;
 
+        printf("AQUI 1.1\n");
+
         // send request...
         debug_info("[NFI] (ID=%s): %s: -> ...\n", server_aux->id, msg->id) ;
         ret = mpiServer_write_operation(server_aux->params.server, msg) ;
@@ -136,13 +150,18 @@
           return -1 ;
         }
 
+        printf("AQUI 1.2 %p %d\n", req, req_size);
+
         // read response...
         debug_info("[NFI] (ID=%s): %s: <- ...\n", server_aux->id, msg->id) ;
         bzero(req, req_size) ;
+        printf("AQUI 1.3\n");
         ret = mpiClient_read_data(server_aux->params.server, req, req_size, msg->id) ;
         if (ret < 0) {
           return -1 ;
         }
+
+        printf("AQUI 1.4\n");
 
         // return OK
         return 0 ;
@@ -1197,8 +1216,9 @@
           msg.type = MPISERVER_OPENDIR_DIR;
           strcpy(msg.id, server_aux->id) ;
           strcpy(msg.u_st_mpiServer_msg.op_opendir.path, dir) ;
-
-          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->dir), sizeof(DIR *)) ; //NEW
+          printf("AQUI 1\n");
+          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->dir), sizeof(DIR*)) ; //NEW
+          printf("AQUI 2\n");
         }
 
         //fh_aux->fd = ret;
@@ -1249,7 +1269,7 @@
           strcpy(msg.id, server_aux->id) ;
           msg.u_st_mpiServer_msg.op_readdir.dir, fh_aux->dir ;
 
-          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(ent), sizeof(struct dirent *)) ; //NEW
+          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(ent), sizeof(struct dirent)) ; //NEW
         }
 
         if(ent == NULL){
@@ -1260,7 +1280,7 @@
         }
 
         strcpy(entry, ent->d_name) ;
-        printf("[NFI]ent->d_name = %s S_ISDIR(%o) = %o\n", ent->d_name, ent->d_type,S_ISDIR(ent->d_type)) ;
+        //printf("[NFI]ent->d_name = %s S_ISDIR(%o) = %o\n", ent->d_name, ent->d_type,S_ISDIR(ent->d_type)) ;
         *type = ent->d_type;
 
         return 0;

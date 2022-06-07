@@ -209,7 +209,9 @@
     }
 
     // Send message
-    ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 1, fd) ; //TODO: cambiar rank por 0??
+    printf("AQUI 11\n");
+    ret = MPI_Send(data, size, MPI_CHAR, 0, 1, fd) ;
+    printf("AQUI 12\n");
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
     }

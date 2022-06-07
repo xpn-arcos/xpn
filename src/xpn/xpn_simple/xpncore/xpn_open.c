@@ -354,10 +354,14 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
 				return res;
 			}
 		}
-		
+
 		free(servers);
 
 		res = XpnSearchSlotFile(pd, abs_path, vfh, mdata, mode);
+	}
+	else{
+		//CUIDADO
+		xpn_file_table[i]->links++;
 	}
 	
 	XPN_DEBUG_END_ARGS1(path)

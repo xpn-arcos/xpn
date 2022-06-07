@@ -89,9 +89,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
     pthread_mutex_lock(&xpn_init_mutex);
 
     if(!xpn_initialize) {
-        XPN_DEBUG("Initializing");
+        XPN_DEBUG("Initializing\n");
     } else {
-        XPN_DEBUG("Already initialized");
+        XPN_DEBUG("Already initialized\n");
 
         pthread_mutex_unlock(&xpn_init_mutex);
         
@@ -117,7 +117,7 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
         xpn_parttable[i].initialized = 0;
 
         xpn_parttable[i].id = XpnGetIdPartition(fd, xpn_parttable[i].name);
-        XPN_DEBUG("Partition %d: name=%s", xpn_parttable[i].id, xpn_parttable[i].name)
+        XPN_DEBUG("Partition %d: name=%s\n", xpn_parttable[i].id, xpn_parttable[i].name);
 
         /* compruebo los errores???? */
         if(XpnGetInfoPartition(fd, &(xpn_parttable[i]))==-1){
@@ -130,7 +130,7 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
             return res;
         }
         xpn_parttable[i].data_nserv = XpnGetNumServersPartition(fd, &(xpn_parttable[i]) , XPN_DATA_SERVER);
-        XPN_DEBUG("Partition %d: data_nserv=%d", xpn_parttable[i].id, xpn_parttable[i].data_nserv)
+        XPN_DEBUG("Partition %d: data_nserv=%d\n", xpn_parttable[i].id, xpn_parttable[i].data_nserv);
 
         xpn_parttable[i].data_serv=(struct nfi_server *)malloc(xpn_parttable[i].data_nserv*sizeof(struct nfi_server));
         if (xpn_parttable[i].data_serv == NULL) {
@@ -142,7 +142,6 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
             XPN_DEBUG_END
             return res;
         }
-
         memset(xpn_parttable[i].data_serv, 0, xpn_parttable[i].data_nserv*sizeof(struct nfi_server));
 
         for(j=0;j<xpn_parttable[i].data_nserv;j++){  
@@ -165,7 +164,7 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
                 return res;
             }
         }
-        XPN_DEBUG("Partition %d end", xpn_parttable[i].id)
+        XPN_DEBUG("Partition %d end", xpn_parttable[i].id);
 
         i++;        
         if(i == XPN_MAX_PART){
@@ -218,7 +217,6 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
         xpn_parttable[i].id = -1;
     }
     xpn_init_cwd();
-
     xpn_initialize = 1;
 
     pthread_mutex_unlock(&xpn_init_mutex);
