@@ -52,6 +52,72 @@
       va_end(vargs);
   }
   */
+
+
+
+
+
+
+  void fdsdirtable_init ( void ){
+    for (int i = 0; i < MAX_DIRS; ++i)
+    {
+      fdsdirtable[i] = NULL;
+    }
+  }
+
+  int fdsdirtable_search ( DIR * dir ) {
+    for (int i = 0; i < MAX_DIRS; ++i)
+    {
+      if ( fdsdirtable[i] == dir ){
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  int fdsdirtable_put ( DIR * dir ){
+    for (int i = 0; i < MAX_DIRS; ++i)
+    {
+      if ( fdsdirtable[i] == NULL ){
+        fdsdirtable[i] = dir;
+        return 0;
+      }
+    }
+
+    return -1;
+  }
+
+  int fdsdirtable_remove ( DIR * dir ){
+    for (int i = 0; i < MAX_DIRS; ++i)
+    {
+      if ( fdsdirtable[i] == dir ){
+        fdsdirtable[i] = NULL;
+        return 0;
+      }
+    }
+
+    return -1;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   
   /**
    * This function checks if expand has already been initialized.
@@ -81,10 +147,12 @@
       }
       else
       {
+        fdsdirtable_init (); //NEW
         xpn_adaptor_initCalled = 1;
       }
     }
   }
+
 
 
   // File API
@@ -525,24 +593,6 @@
 
   // Directory API
 
-  DIR *opendir(const char *dirname)
-  {
-    debug_info("Before opendir(%s)...\n", dirname);
-
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
-    if(!strncmp(xpn_adaptor_partition_prefix,dirname,strlen(xpn_adaptor_partition_prefix))) //TODO:Aqui falla
-    {
-      return xpn_opendir((char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
-    }
-    // Not an XPN partition. We must link with the standard library
-    else
-    {
-      return dlsym_opendir((char *)dirname);
-    }
-  }
-
   int mkdir(const char *path, mode_t mode)
   {
     debug_info("Before mkdir...\n");
@@ -562,6 +612,37 @@
     }
   }
 
+  DIR *opendir(const char *dirname)
+  {
+    debug_info("Before opendir(%s)...\n", dirname);
+
+    DIR * ret;
+
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    if(!strncmp(xpn_adaptor_partition_prefix,dirname,strlen(xpn_adaptor_partition_prefix))) //TODO:Aqui falla
+    {
+      ret = xpn_opendir((char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
+
+      if ( ret != NULL ){
+        fdsdirtable_put ( ret );
+      }
+
+      /*for (int i = 0; i < MAX_DIRS; ++i)
+      {
+        printf("%p\n", fdsdirtable[i]);
+      }*/
+
+      return ret;
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      return dlsym_opendir((char *)dirname);
+    }
+  }
+
   struct dirent *readdir(DIR *dirp)
   {
     int fd,fdaux;
@@ -572,17 +653,12 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    memcpy(&fd, dirp,sizeof(int));
-    if(fd >= PLUSXPN)
+    if( fdsdirtable_search( dirp ) != -1 )
     {
-      fdaux=fd-PLUSXPN;
-      memcpy(dirp,&(fdaux),sizeof(int));
-
       ret=xpn_readdir(dirp);
 
       debug_info("After xpn_readdir()...\n");
 
-      memcpy(dirp,&fd,sizeof(int));
       return ret;
     }
     // Not an XPN partition. We must link with the standard library
@@ -603,11 +679,10 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    memcpy(&fd, dirp,sizeof(int));
-    if(fd >= PLUSXPN)
+    //memcpy(&fd, dirp,sizeof(int));
+
+    if( fdsdirtable_search( dirp ) != -1 )
     {
-      fdaux=fd-PLUSXPN;
-      memcpy(dirp,&(fdaux),sizeof(int));
       aux=xpn_readdir(dirp);
 
       if (aux != NULL){
@@ -621,7 +696,6 @@
 
       debug_info("After xpn_readdir()...\n");
 
-      memcpy(dirp,&fd,sizeof(int));
       return ret;
     }
     // Not an XPN partition. We must link with the standard library
@@ -640,20 +714,18 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    memcpy(&fd, dirp,sizeof(int));
-    //if(fdstable[fd]>=PLUSXPN)
-    if (fd >= PLUSXPN)
+    if( fdsdirtable_search( dirp ) != -1 )
     {
-      //temp = fdstable[fd]-PLUSXPN;
-      temp = fd-PLUSXPN;
-      memcpy(dirp, &temp,sizeof(int));
-      ret=xpn_closedir(dirp);
-      /*
-      if (ret==0)
+
+      ret=xpn_closedir( dirp );
+
+      fdsdirtable_remove( dirp );
+
+      /*for (int i = 0; i < MAX_DIRS; ++i)
       {
-          fdstable[fd]=-1;
-      }
-      */
+        printf("%p\n", fdsdirtable[i]);
+      }*/
+
       debug_info("closedir return %d\n",ret);
       return ret;
     }

@@ -17,13 +17,16 @@
 //#define RTLD_NEXT ((void *) -1l)
 #define LEN_PREFIX	4
 #define MAX_FDS		512
-#define MAX_DIRS	512
+#define MAX_DIRS	32
 #define PLUSXPN		65000
 #define XPN_TYPE	1
 #define NORMAL_TYPE	0
 
 #undef __USE_FILE_OFFSET64
 #undef __USE_LARGEFILE64
+
+
+DIR * fdsdirtable[MAX_DIRS]; //NEW
 
 
 /*struct stat64
