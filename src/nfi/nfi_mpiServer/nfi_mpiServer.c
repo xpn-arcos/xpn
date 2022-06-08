@@ -150,18 +150,18 @@
           return -1 ;
         }
 
-        printf("AQUI 1.2 %p %d\n", req, req_size);
+        printf("AQUI 1.2 %d %d\n", req, req_size);
 
         // read response...
         debug_info("[NFI] (ID=%s): %s: <- ...\n", server_aux->id, msg->id) ;
-        bzero(req, req_size) ;
+        //bzero(req, req_size) ;
         printf("AQUI 1.3\n");
         ret = mpiClient_read_data(server_aux->params.server, req, req_size, msg->id) ;
         if (ret < 0) {
           return -1 ;
         }
 
-        printf("AQUI 1.4\n");
+        printf("AQUI 1.4 %p\n", req);
 
         // return OK
         return 0 ;
@@ -1141,30 +1141,6 @@
         return 0;
       }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       int nfi_mpiServer_opendir(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho)
       {
         char dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
@@ -1216,9 +1192,14 @@
           msg.type = MPISERVER_OPENDIR_DIR;
           strcpy(msg.id, server_aux->id) ;
           strcpy(msg.u_st_mpiServer_msg.op_opendir.path, dir) ;
-          printf("AQUI 1\n");
-          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->dir), sizeof(DIR*)) ; //NEW
-          printf("AQUI 2\n");
+          printf("AQUI 1 %p %d\n",fh_aux->dir, sizeof(DIR *));
+
+          unsigned long long aux;
+
+          //nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->dir), sizeof(DIR*)) ; //NEW
+          nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(aux), sizeof(DIR*)) ; //NEW
+          printf("AQUI 2 %ld\n", aux);
+          fh_aux->dir = aux;
         }
 
         //fh_aux->fd = ret;
@@ -1232,6 +1213,13 @@
 
         return 0;
       }
+
+
+
+
+
+
+
 
       int nfi_mpiServer_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, char *entry, unsigned char *type)
       {
@@ -1267,7 +1255,7 @@
           msg.type = MPISERVER_READDIR_DIR;
 
           strcpy(msg.id, server_aux->id) ;
-          msg.u_st_mpiServer_msg.op_readdir.dir, fh_aux->dir ;
+          msg.u_st_mpiServer_msg.op_readdir.dir = fh_aux->dir ;
 
           nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(ent), sizeof(struct dirent)) ; //NEW
         }
@@ -1285,6 +1273,16 @@
 
         return 0;
       }
+
+
+
+
+
+
+
+
+
+
 
       int nfi_mpiServer_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
       {
@@ -1315,7 +1313,7 @@
             msg.type = MPISERVER_CLOSEDIR_DIR;
 
             strcpy(msg.id, server_aux->id) ;
-            msg.u_st_mpiServer_msg.op_closedir.dir, fh_aux->dir ;
+            msg.u_st_mpiServer_msg.op_closedir.dir = fh_aux->dir ;
 
             nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ; //NEW
 
@@ -1328,29 +1326,6 @@
 
         return 0;
       }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       int nfi_mpiServer_rmdir(struct nfi_server *serv,  char *url)
       {

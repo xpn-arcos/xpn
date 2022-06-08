@@ -472,21 +472,6 @@
     debug_info("[OPS] (ID=%s) SETATTR(...)\n", params->srv_name) ;
   }
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   //Directory API
   void mpiServer_op_mkdir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
@@ -515,14 +500,27 @@
     s = head->u_st_mpiServer_msg.op_opendir.path ;
     ret = filesystem_opendir(s) ;
 
-    printf("AQUI 1\n");
-    mpiServer_comm_write_data(params, sd,(char *)&ret, sizeof(DIR *), rank_client_id) ;
+    unsigned long long aux;
+    aux = ret;
+
+    printf("AQUI 1 %p\n", &ret);
+    printf("AQUI 18 %p %ld %d\n", ret, aux,  sizeof(DIR *));
+   
+
+    //mpiServer_comm_write_data(params, sd,(char *)ret, (int) sizeof(DIR *), rank_client_id) ;
+    mpiServer_comm_write_data(params, sd,(char *)&aux, (int) sizeof(DIR *), rank_client_id) ;
 
     printf("AQUI 2\n");
 
     // show debug info
     debug_info("[OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, s) ;
   }
+
+
+
+
+
+
 
 
   //NEW
@@ -541,6 +539,14 @@
     debug_info("[OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s) ;
   }
 
+
+
+
+
+
+
+
+
   //NEW
   void mpiServer_op_closedir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
   {
@@ -556,16 +562,6 @@
     // show debug info
     debug_info("[OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s) ;
   }
-
-
-
-
-
-
-
-
-
-
 
   void mpiServer_op_rmdir ( mpiServer_param_st *params, MPI_Comm sd, struct st_mpiServer_msg *head, int rank_client_id )
   {
