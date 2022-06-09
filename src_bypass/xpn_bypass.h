@@ -104,6 +104,8 @@ int __fxstat(int ver, int fd, struct stat *buf);
 
 int close(int fd);
 
+int rename(const char *old_path, const char *new_path);
+
 int unlink(const char *path);
 
 

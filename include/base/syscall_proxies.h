@@ -35,6 +35,8 @@
   int dlsym_fstat(int ver, int fd, struct stat *buf);
   
   int dlsym_close(int fd);
+
+  int dlsym_rename(const char *old_path, const char *new_path);
   
   int dlsym_unlink(char *path);
 

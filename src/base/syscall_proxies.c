@@ -227,6 +227,19 @@
   }
 
 
+  int (*real_rename)(const char *, const  char *) = NULL;
+  int dlsym_rename(const char *old_path, const char *new_path)
+  {
+    debug_info("dlsym_rename: before rename...\n");
+
+    if (real_rename == NULL){
+        real_rename = dlsym(RTLD_NEXT,"rename");
+    }
+
+    return real_rename(old_path, new_path);
+  }
+
+
   int (*real_unlink)(char *) = NULL;
   int dlsym_unlink(char *path)
   {

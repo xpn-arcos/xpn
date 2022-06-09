@@ -167,7 +167,8 @@
     
     // Disconnect
     ret = MPI_Comm_disconnect(&(params->server)) ;
-    if (MPI_SUCCESS != ret) {
+    if (MPI_SUCCESS != ret)
+    {
       debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
       return -1 ;
     }
@@ -178,7 +179,8 @@
     if (!flag)
     {
       ret = PMPI_Finalize();
-      if (MPI_SUCCESS != ret) {
+      if (MPI_SUCCESS != ret)
+      {
         debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
         return -1 ;
       }
@@ -214,7 +216,7 @@
 
     if (strcmp(cli_name, serv_name) == 0)
     {
-      params->locality = 1; //CUIDADO
+      params->locality = 1;
     }
     else
     {

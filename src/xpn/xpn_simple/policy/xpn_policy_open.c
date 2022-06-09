@@ -258,7 +258,9 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
 				return -1;
 			}
 			
-			p->first_node = hash(path, xpn_parttable[i].data_nserv);
+			//p->first_node = hash(path, xpn_parttable[i].data_nserv);
+			p->first_node = 0;
+
 			mdata->policy = (void *)p;
 			
 			mdata->sizem = sizeof(struct policy)
@@ -361,7 +363,9 @@ int XpnReadMetadata(	struct xpn_metadata *mdata,
 	
 	switch(mdata->type_policy){
 		default:
-			n = hash(path, nserv);
+			//n = hash(path, nserv);
+			n = 0;
+
 			res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
 			if(res < 0){
 				res = -1;

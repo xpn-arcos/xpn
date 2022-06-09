@@ -571,6 +571,27 @@
     }
   }
 
+  int rename(const char *old_path, const char *new_path)
+  {
+    debug_info("Before rename....\n");
+
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    if(!strncmp(xpn_adaptor_partition_prefix,old_path,strlen(xpn_adaptor_partition_prefix)) && !strncmp(xpn_adaptor_partition_prefix,new_path,strlen(xpn_adaptor_partition_prefix)))
+    {
+      debug_info("Old Path => %s\n",old_path+strlen(xpn_adaptor_partition_prefix));
+      debug_info("New Path => %s\n",new_path+strlen(xpn_adaptor_partition_prefix));
+
+      return xpn_rename((char *)(old_path+strlen(xpn_adaptor_partition_prefix)), (char *)(new_path+strlen(xpn_adaptor_partition_prefix)));
+    }
+    // Not an XPN partition. We must link with the standard library
+    else 
+    {
+      return dlsym_rename(old_path, new_path);
+    }
+  }
+
   int unlink(const char *path)
   {
     debug_info("Before unlink...\n");
@@ -645,7 +666,6 @@
 
   struct dirent *readdir(DIR *dirp)
   {
-    int fd,fdaux;
     struct dirent *ret;
 
     debug_info("Before readdir...\n");
@@ -670,7 +690,6 @@
 
   struct dirent64 *readdir64(DIR *dirp)
   {
-    int fd,fdaux;
     struct dirent *aux;
     struct dirent64 *ret = NULL;
 
@@ -707,7 +726,7 @@
 
   int closedir(DIR *dirp)
   {
-    int fd,ret,temp;
+    int ret;
 
     debug_info("Before closedir...\n");
 

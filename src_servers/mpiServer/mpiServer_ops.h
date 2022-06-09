@@ -36,8 +36,9 @@
   #define MPISERVER_WRITE_FILE     3
   #define MPISERVER_CLOSE_FILE     4
   #define MPISERVER_RM_FILE        5
-  #define MPISERVER_GETATTR_FILE   6
-  #define MPISERVER_SETATTR_FILE   7
+  #define MPISERVER_RENAME_FILE    6
+  #define MPISERVER_GETATTR_FILE   7
+  #define MPISERVER_SETATTR_FILE   8
 
   // Directory operations
   #define MPISERVER_MKDIR_DIR      20
@@ -102,6 +103,11 @@
     int fd;
   };
 
+  struct st_mpiServer_rename{
+    char old_url[MPISERVER_MAXPATHLEN];
+    char new_url[MPISERVER_MAXPATHLEN];
+  };
+
   struct st_mpiServer_rm{
     char path[MPISERVER_MAXPATHLEN];
   };
@@ -132,6 +138,11 @@
 
   struct st_mpiServer_readdir{  //NEW
     DIR * dir;
+  };
+
+  struct st_mpiServer_direntry{  //NEW
+    int end; //If end = 1 exist entry; 0 not exist
+    struct dirent ret;
   };
 
   struct st_mpiServer_closedir{  //NEW
@@ -176,7 +187,8 @@
       struct st_mpiServer_close    op_close;
       struct st_mpiServer_read     op_read;
       struct st_mpiServer_write    op_write;
-      struct st_mpiServer_rm       op_rm;    
+      struct st_mpiServer_rm       op_rm;
+      struct st_mpiServer_rename   op_rename;
       struct st_mpiServer_mkdir    op_mkdir;
       struct st_mpiServer_opendir  op_opendir;
       struct st_mpiServer_readdir  op_readdir;

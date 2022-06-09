@@ -326,6 +326,56 @@
          return num_bytes_to_write ;
      }
 
+
+
+
+
+
+
+
+
+
+
+
+     int  filesystem_rename ( char *old_pathname, char *new_pathname )
+     {
+         int ret ;
+
+         DEBUG_BEGIN() ;
+
+         // Check params
+         if (NULL == old_pathname) {
+             debug_warning("[FILE_POSIX]: old_pathname is NULL\n") ;
+         }
+         if (NULL == new_pathname) {
+             debug_warning("[FILE_POSIX]: new_pathname is NULL\n") ;
+         }
+
+         // Try to open the file
+         ret = real_posix_rename(old_pathname, new_pathname) ;
+         if (ret < 0) {
+             debug_warning("[FILE_POSIX]: rename(old_pathname:%s, new_pathname:%s)\n", old_pathname, new_pathname) ;
+             perror("rename: ") ;
+         }
+
+         DEBUG_END() ;
+
+         // Return OK/KO
+         return ret ;
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
      int  filesystem_mkpath ( char *pathname )
      {
 	 int ret ;
