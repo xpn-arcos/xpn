@@ -15,24 +15,32 @@
 #include "mpi.h"
 
 //#define RTLD_NEXT ((void *) -1l)
-#define LEN_PREFIX	4
-#define MAX_FDS		512
-#define MAX_DIRS	32
-#define PLUSXPN		65000
-#define XPN_TYPE	1
-#define NORMAL_TYPE	0
+#define MAX_FDS   1024
+#define MAX_DIRS  32
+#define PLUSXPN   65000
 
 #undef __USE_FILE_OFFSET64
 #undef __USE_LARGEFILE64
 
 
-DIR * fdsdirtable[MAX_DIRS]; //NEW
+#define FD_FREE 0
+#define FD_SYS  1
+#define FD_XPN  2
+
+struct generic_fd{
+  int type;
+  int real_fd;
+};
+
+
+struct generic_fd fdstable[MAX_FDS];
+DIR * fdsdirtable[MAX_DIRS];
 
 
 /*struct stat64
   {
-	__dev_t st_dev;                     // Device.
-	unsigned int __pad1;
+  __dev_t st_dev;                     // Device.
+  unsigned int __pad1;
         __ino_t __st_ino;                   // 32bit file serial number.
         __mode_t st_mode;                   // File mode.
         __nlink_t st_nlink;                 // Link count.
@@ -54,11 +62,11 @@ DIR * fdsdirtable[MAX_DIRS]; //NEW
 
 struct dirent64
   {
-	__ino64_t d_ino;
-	__off64_t d_off;
-	unsigned short int d_reclen;
-	unsigned char d_type;
-	char d_name[256];           // We must not include limits.h! 
+  __ino64_t d_ino;
+  __off64_t d_off;
+  unsigned short int d_reclen;
+  unsigned char d_type;
+  char d_name[256];           // We must not include limits.h! 
   };*/
 
 

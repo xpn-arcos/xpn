@@ -58,6 +58,8 @@
 
   // Proccess API
   int dlsym_fork(void);
+
+  int dlsym_pipe(int pipefd[2]);
   
   int dlsym_dup(int fd);
   int dlsym_dup2(int fd, int fd2);

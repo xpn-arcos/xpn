@@ -545,29 +545,29 @@
 
      int   filesystem_stat ( char *pathname, struct stat *sinfo )
      {
-     int ret ;
+        int ret ;
 
-         DEBUG_BEGIN() ;
+        DEBUG_BEGIN() ;
 
-         // Check params
-         if (NULL == pathname) {
-             debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
-         }
-         if (NULL == sinfo) {
-             debug_warning("[FILE_POSIX]: sinfo is NULL\n") ;
-         }
+        // Check params
+        if (NULL == pathname) {
+            debug_warning("[FILE_POSIX]: pathname is NULL\n") ;
+        }
+        if (NULL == sinfo) {
+            debug_warning("[FILE_POSIX]: sinfo is NULL\n") ;
+        }
 
-     // Try to stat the file
-         ret = real_posix_stat(pathname, sinfo) ;
-         if (ret < 0) {
-             debug_warning("[FILE_POSIX]: stat(pathname:%s, sinfo:%p) -> %d\n", pathname, sinfo, ret) ;
-             perror("stat: ") ;
-         }
+        // Try to stat the file
+        ret = real_posix_stat(pathname, sinfo) ;
+        if (ret < 0) {
+            debug_warning("[FILE_POSIX]: stat(pathname:%s, sinfo:%p) -> %d\n", pathname, sinfo, ret) ;
+            perror("stat: ") ;
+        }
 
-         DEBUG_END() ;
+        DEBUG_END() ;
 
-     // Return OK/KO
-     return ret ;
+        // Return OK/KO
+        return ret ;
      }
 
 

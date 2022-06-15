@@ -324,6 +324,9 @@
           return -1 ;
         }
 
+        //initialize dlsym calls
+        dlsym_init ( );
+
         debug_info("[NFI] nfi_mpiServer_init(ID=%s): end\n",server_aux->id) ;
 
         // return OK
