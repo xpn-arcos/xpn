@@ -205,8 +205,6 @@
         virtual_fd.type    = FD_XPN;
         virtual_fd.real_fd = fd;
 
-        debug_info("FD XPN %d\n", fd);
-
         ret = fdstable_put ( virtual_fd );
       }
     }
@@ -225,15 +223,9 @@
         virtual_fd.type    = FD_SYS;
         virtual_fd.real_fd = fd;
 
-        debug_info("FD SYS %d\n", fd);
-
         ret = fdstable_put ( virtual_fd );
-
-        debug_info("FD SYS RET %d\n", ret);
       }
     }
-
-    debug_info("OPEN ERROR\n");
 
     return ret;
   }
@@ -267,8 +259,6 @@
         virtual_fd.type    = FD_XPN;
         virtual_fd.real_fd = fd;
 
-        debug_info("FD XPN %d\n", fd);
-
         ret = fdstable_put ( virtual_fd );
       }
     }
@@ -286,8 +276,6 @@
 
         virtual_fd.type    = FD_SYS;
         virtual_fd.real_fd = fd;
-
-        debug_info("FD SYS %d\n", fd);
 
         ret = fdstable_put ( virtual_fd );
       }
@@ -323,8 +311,6 @@
         virtual_fd.type    = FD_XPN;
         virtual_fd.real_fd = fd;
 
-        debug_info("CREATE FD XPN %d\n", fd);
-
         ret = fdstable_put ( virtual_fd );
       }
     }
@@ -342,8 +328,6 @@
 
         virtual_fd.type    = FD_SYS;
         virtual_fd.real_fd = fd;
-
-        debug_info("CREATE FD SYS %d\n", fd);
 
         ret = fdstable_put ( virtual_fd );
       }
@@ -388,8 +372,6 @@
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
-    debug_info("READ %d %d %d\n", fd, virtual_fd.real_fd, virtual_fd.type);
-
     if(virtual_fd.type == FD_XPN)
     { 
       return xpn_read(virtual_fd.real_fd, buf, nbyte);
@@ -415,8 +397,6 @@
     xpn_adaptor_keepInit ();
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
-
-    debug_info("WRITE %d %d\n", fd, virtual_fd.real_fd);
 
     if(virtual_fd.type == FD_XPN)
     {
@@ -697,8 +677,6 @@
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
-    debug_info("CLOSE %d %d\n", fd, virtual_fd.real_fd);
-
     if(virtual_fd.type == FD_XPN)
     {
       ret = xpn_close(virtual_fd.real_fd);
@@ -757,17 +735,6 @@
       return dlsym_unlink((char *)path);
     }
   }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

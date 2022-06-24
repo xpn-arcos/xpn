@@ -47,53 +47,6 @@ DIR *xpn_opendir(const char *path)
 	return dirp;
 }
 
-int xpn_closedir(DIR *dirp)
-{
-  int i;
-  
-  if((NULL == dirp)||(dirp->fd<0)||(dirp->fd>XPN_MAX_FILE-1)){
-	  // set errno
-	  return -1;
-  }
-  
-
-	if(xpn_file_table[dirp->fd] == NULL){
-		// xpn_err
-		return -1;
-	}
-
-	xpn_file_table[dirp->fd]->links--;
-	if(xpn_file_table[dirp->fd]->links == 0){
-        	for(i=0;i<xpn_file_table[dirp->fd]->data_vfh->n_nfih;i++){
-                	if(xpn_file_table[dirp->fd]->data_vfh->nfih[i] != NULL){
-				if(xpn_file_table[dirp->fd]->data_vfh->nfih[i]->priv_fh != NULL){
-					xpn_file_table[dirp->fd]->data_vfh->nfih[i]->server->ops->nfi_closedir(
-							xpn_file_table[dirp->fd]->data_vfh->nfih[i]->server,
-							xpn_file_table[dirp->fd]->data_vfh->nfih[i]);	
-				}
-				free(xpn_file_table[dirp->fd]->data_vfh->nfih[i]);
-			}
-		}
-
-		free(xpn_file_table[dirp->fd]->data_vfh->nfih);
-		free(xpn_file_table[dirp->fd]->data_vfh);
-
-		free(xpn_file_table[dirp->fd]->mdata->policy);
-		free(xpn_file_table[dirp->fd]->mdata);
-
-		free(xpn_file_table[dirp->fd]);	
-		xpn_file_table[dirp->fd] = NULL;
-	}
-	
-
-  free(dirp);
-
-  // set errno
-  xpn_err(XPN_OK);
-  return 0;
-  //return -1;
-}
-
 struct dirent* xpn_readdir(DIR *dirp)
 {
 	int res;
@@ -135,6 +88,57 @@ struct dirent* xpn_readdir(DIR *dirp)
 	XPN_DEBUG_END
 	return dirnt;	
 }
+
+int xpn_closedir(DIR *dirp)
+{
+  int i;
+  
+  if((NULL == dirp)||(dirp->fd<0)||(dirp->fd>XPN_MAX_FILE-1)){
+	  // set errno
+	  return -1;
+  }
+  
+
+	if(xpn_file_table[dirp->fd] == NULL){
+		// xpn_err
+		return -1;
+	}
+
+	xpn_file_table[dirp->fd]->links--;
+
+	if(xpn_file_table[dirp->fd]->links == 0){
+    for(i=0;i<xpn_file_table[dirp->fd]->data_vfh->n_nfih;i++){
+       if(xpn_file_table[dirp->fd]->data_vfh->nfih[i] != NULL){
+				if(xpn_file_table[dirp->fd]->data_vfh->nfih[i]->priv_fh != NULL){
+					xpn_file_table[dirp->fd]->data_vfh->nfih[i]->server->ops->nfi_closedir(
+					xpn_file_table[dirp->fd]->data_vfh->nfih[i]->server,
+					xpn_file_table[dirp->fd]->data_vfh->nfih[i]);	
+				}
+
+				free(xpn_file_table[dirp->fd]->data_vfh->nfih[i]);
+			}
+		}
+
+		free(xpn_file_table[dirp->fd]->data_vfh->nfih);
+		free(xpn_file_table[dirp->fd]->data_vfh);
+
+		free(xpn_file_table[dirp->fd]->mdata->policy);
+		free(xpn_file_table[dirp->fd]->mdata);
+
+		free(xpn_file_table[dirp->fd]);	
+		xpn_file_table[dirp->fd] = NULL;
+	}
+	
+
+  free(dirp);
+
+  // set errno
+  xpn_err(XPN_OK);
+  return 0;
+  //return -1;
+}
+
+
 
 void xpn_rewinddir(__attribute__((__unused__)) DIR *dirp)
 {

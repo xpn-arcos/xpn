@@ -315,7 +315,9 @@ int XpnGetFh(	struct xpn_metadata *mdata,
 			
 			XpnGetURLServer(servers, path, url_serv);
 			
-			if(path[strlen(path)-1] == '/') {
+			/*if(path[strlen(path)-1] == '/') {
+
+				printf("XpnGetFh 1\n");
 				// Default Value
 				nfi_worker_thread(servers->wrk, XpnGetThreads(op_xpn_opendir, 0, 0));
 				
@@ -325,10 +327,28 @@ int XpnGetFh(	struct xpn_metadata *mdata,
 			} else {
 				// Default Value
 				nfi_worker_thread(servers->wrk, XpnGetThreads(op_xpn_open, 0, 0));
+
+				printf("XpnGetFh 2\n");
 				
 				res = servers->ops->nfi_open(servers,
 							url_serv,
 							fh_aux);
+			}*/
+
+			// Default Value
+			nfi_worker_thread(servers->wrk, XpnGetThreads(op_xpn_open, 0, 0));
+			res = servers->ops->nfi_open(servers,
+						url_serv,
+						fh_aux);
+
+			//If no file
+			if (res<0) {
+				// Default Value
+				nfi_worker_thread(servers->wrk, XpnGetThreads(op_xpn_opendir, 0, 0));
+				
+				res = servers->ops->nfi_opendir(servers,
+							url_serv,
+							fh_aux); // FIXME: When do we do nfi_closedir()?
 			}
 			
 			if(res<0){
@@ -410,7 +430,7 @@ int XpnReadMetadata(	struct xpn_metadata *mdata,
 	return res;
 }
 
-int XpnGetAtrib(int fd, struct stat *st) {
+int XpnGetAtrib(int fd, struct stat *st) { //TODO: mirar type
 	int res,i,n;
 	struct nfi_server **servers;
 	struct nfi_attr attr;
@@ -433,8 +453,6 @@ int XpnGetAtrib(int fd, struct stat *st) {
 	
 	memset(&attr, 0, sizeof(struct nfi_attr));
 	memset(st, 0, sizeof(struct stat));
-
-	
 	
 	switch (xpn_file_table[fd]->mdata->type_policy) {
 		case POLICY_RAID1:
@@ -444,7 +462,11 @@ int XpnGetAtrib(int fd, struct stat *st) {
 			/* Then, proceed as in RAID0 case */
 		case POLICY_RAID0:
 			/* For RAID0, we need to add the sizes of the file in every server */
-			
+
+
+
+
+
 			for(i=0;i<n;i++){
 				res = XpnGetFh(xpn_file_table[fd]->mdata,
 						&(xpn_file_table[fd]->data_vfh->nfih[i]),
@@ -459,9 +481,16 @@ int XpnGetAtrib(int fd, struct stat *st) {
 						xpn_file_table[fd]->data_vfh->nfih[i]->server,
 						xpn_file_table[fd]->data_vfh->nfih[i],
 						&attr);
-				if (attr.at_size > 0)
+				if (attr.at_size > 0){
 					st->st_size += attr.at_size; /* total size, in bytes */
+				}
+
+				if (1 == attr.at_type)	/* It is a directory */
+				{
+					break;
+				}
 			}
+			
 			break;
 		default:
 			
@@ -469,16 +498,21 @@ int XpnGetAtrib(int fd, struct stat *st) {
 	}
 
 	free(servers);
+
+
 	
 	//st->st_dev     = 9;                 /* device */
 	//st->st_ino     = 1;                 /* inode */
-	//if (0 == attr.at_type){	/* It is a file */
-	//	st->st_mode = S_IFREG | 0777;
-	//}
-	//if (1 == attr.at_type){	/* It is a directory */
-	//	st->st_mode = S_IFDIR | 0777;
-	//}
+
 	st->st_mode    = attr.at_mode ;     /* protection */
+
+	if (0 == attr.at_type){	/* It is a file */
+		st->st_mode = S_IFREG | st->st_mode;
+	}
+	if (1 == attr.at_type){	/* It is a directory */
+		st->st_mode = S_IFDIR | st->st_mode;
+	}
+
 	st->st_nlink   = attr.at_nlink;     /* number of hard links */
 	//st->st_uid     = attr.at_uid;     /* user ID of owner */
 	st->st_uid     = getuid() ;         /* user ID of owner */

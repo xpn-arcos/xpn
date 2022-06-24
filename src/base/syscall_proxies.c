@@ -64,21 +64,7 @@
   int (*real_socket)(int, int, int) = NULL;
   int (*real_setsockopt)(int, int, int, const void *, socklen_t) = NULL;
 
-  void dlsym_init ( void )
-  { 
-    real_open   = dlsym(RTLD_NEXT,"open") ;
-    real_open64 = dlsym(RTLD_NEXT,"open64") ;
-    real_creat  = dlsym(RTLD_NEXT,"creat") ;
-    real_read   = dlsym(RTLD_NEXT,"read") ;
-    real_write  = dlsym(RTLD_NEXT,"write") ;
-    real_close  = dlsym(RTLD_NEXT,"close") ;
-
-    real_opendir     = dlsym(RTLD_NEXT,"opendir") ;
-    real_opendir64   = dlsym(RTLD_NEXT,"opendir64") ;
-    real_readdir     = dlsym(RTLD_NEXT,"readdir") ;
-    real_readdir64   = dlsym(RTLD_NEXT,"readdir64") ;
-    real_closedir    = dlsym(RTLD_NEXT,"closedir") ;
-  }
+  
 
   // File API
   int dlsym_open(char *path, int flags, mode_t mode)

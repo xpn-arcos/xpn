@@ -324,9 +324,6 @@
           return -1 ;
         }
 
-        //initialize dlsym calls
-        dlsym_init ( );
-
         debug_info("[NFI] nfi_mpiServer_init(ID=%s): end\n",server_aux->id) ;
 
         // return OK
@@ -572,6 +569,14 @@
           strcpy(msg.u_st_mpiServer_msg.op_open.path,dir) ;
 
           nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ;
+
+          if (fh_aux->fd < 0)
+          {
+            debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
+            free(fh_aux) ;
+            free(fho->url) ;
+            return -1;
+          }
           strcpy(fh_aux->path, dir) ;
         }
         /*****************************************/
@@ -1150,6 +1155,7 @@
             free(fh_aux) ;
             return -1;
           }
+          fh_aux->fd = ret; //Cuidado
         }
         /************** SERVER ****************/
         else {
@@ -1179,7 +1185,7 @@
 
         //LOCALtoNFIattr(attr, &st) ; //TODO
 
-        return 0;
+        return ret;
       }
 
       int nfi_mpiServer_opendir(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho)
@@ -1250,7 +1256,7 @@
         fho->server = serv;
         fho->priv_fh = (void *) fh_aux;
 
-        return 0;
+        return 0; //CUIDADO
       }
 
 
