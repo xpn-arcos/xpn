@@ -156,6 +156,8 @@ int chown(const char *path, uid_t owner, gid_t group);
 
 int fcntl(int fd, int cmd, long arg);
 
+int access(const char *path, int mode); //NEW
+
 
 /**************************************************
  GETCWD TIENE MUCHA CHICHA...PA LUEGO

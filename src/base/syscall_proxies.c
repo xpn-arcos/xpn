@@ -61,10 +61,11 @@
   int (*real_fchmod)(int, mode_t) = NULL;
   int (*real_chown)(char *, uid_t, gid_t) = NULL;
   int (*real_fcntl)(int, int, long) = NULL;
+  int (*real_access)(const char *, int) = NULL;
   int (*real_socket)(int, int, int) = NULL;
   int (*real_setsockopt)(int, int, int, const void *, socklen_t) = NULL;
 
-  
+
 
   // File API
   int dlsym_open(char *path, int flags, mode_t mode)
@@ -481,4 +482,20 @@
     }
     
     return real_fcntl(fd, cmd, arg);
+  }
+
+
+  int dlsym_access(const char *path, int mode){
+    debug_info("dlsym_access: before access...\n");
+    debug_info("dlsym_access: Path => %s\n",path);
+
+    if (real_access == NULL) {
+        real_access = dlsym(RTLD_NEXT,"access");
+    }
+    
+    int ret = real_access((char *)path, mode);
+
+    debug_info("dlsym_access: (%s,%d) return %d\n",path,mode,ret);
+
+    return ret;
   }

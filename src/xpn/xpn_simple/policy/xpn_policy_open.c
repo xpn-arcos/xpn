@@ -477,10 +477,11 @@ int XpnGetAtrib(int fd, struct stat *st) { //TODO: mirar type
 					return res;
 				}
 
-				xpn_file_table[fd]->data_vfh->nfih[i]->server->ops->nfi_getattr(
+				res = xpn_file_table[fd]->data_vfh->nfih[i]->server->ops->nfi_getattr(
 						xpn_file_table[fd]->data_vfh->nfih[i]->server,
 						xpn_file_table[fd]->data_vfh->nfih[i],
 						&attr);
+
 				if (attr.at_size > 0){
 					st->st_size += attr.at_size; /* total size, in bytes */
 				}
@@ -526,7 +527,7 @@ int XpnGetAtrib(int fd, struct stat *st) { //TODO: mirar type
 	st->st_mtime   = attr.at_mtime ;    /* time of last modification */
 	st->st_ctime   = attr.at_ctime ;    /* time of last change */
 	
-	res = 0;
+	//res = 0;
 	XPN_DEBUG_END_CUSTOM("%d", fd)
 	return res;
 }

@@ -1120,7 +1120,7 @@ int xpn_stat(const char *path, struct stat *sb)
 			}
 		}
 	}
-	
+
 	XPN_DEBUG_END_ARGS1(path)
 	return res;
 }

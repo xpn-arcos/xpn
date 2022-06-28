@@ -65,7 +65,7 @@
   }
 
   struct generic_fd fdstable_get ( int fd ){
-    //printf("GET FSTABLE %d  %d  %d\n", fd, fdstable[fd].type, fdstable[fd].real_fd);
+    //debug_info("GET FSTABLE %d  %d  %d\n", fd, fdstable[fd].type, fdstable[fd].real_fd);
     return fdstable[fd];
   }
 
@@ -74,7 +74,7 @@
     {
       if ( fdstable[i].type == FD_FREE ){
         fdstable[i] = fd;
-        //printf("PUT FSTABLE %d  %d  %d\n", i, fdstable[i].type, fdstable[i].real_fd);
+        //debug_info("PUT FSTABLE %d  %d  %d\n", i, fdstable[i].type, fdstable[i].real_fd);
         return i;
       }
     }
@@ -159,7 +159,7 @@
 
       if (ret < 0)
       {
-        printf("xpn_init: Expand couldn't be initialized\n");
+        debug_info("xpn_init: Expand couldn't be initialized\n");
         //xpn_adaptor_log("xpn_init: Expand couldn't be initialized\n");
         xpn_adaptor_initCalled = 0;
       }
@@ -721,6 +721,7 @@
   int unlink(const char *path)
   {
     debug_info("Before unlink...\n");
+    debug_info("PATH %s\n", path);
 
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
@@ -884,6 +885,7 @@
   int rmdir(const char *path)
   {
     debug_info("Before rmdir...\n");
+    debug_info("PATH %s\n", path);
 
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
@@ -916,7 +918,7 @@
 
   int pipe(int pipefd[2])
   {
-    printf("Before pipe()\n");
+    debug_info("Before pipe()\n");
     int ret = dlsym_pipe(pipefd);
     
     if(ret > 0)
@@ -930,8 +932,8 @@
       virtual_fd2.type    = FD_SYS;
       virtual_fd2.real_fd = pipefd[1];
 
-      printf("PIPE FD1 SYS %d\n", pipefd[0]);
-      printf("PIPE FD2 SYS %d\n", pipefd[1]);
+      debug_info("PIPE FD1 SYS %d\n", pipefd[0]);
+      debug_info("PIPE FD2 SYS %d\n", pipefd[1]);
 
       pipefd[0] = fdstable_put ( virtual_fd );
       pipefd[1] = fdstable_put ( virtual_fd );
@@ -1145,6 +1147,37 @@
     }
 
     return -1;
+  }
+
+  int access(const char *path, int mode){
+    debug_info("Before access...\n");
+
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    {
+      struct stat64 stats;
+      if (__lxstat64(_STAT_VER, path, &stats)){
+        return -1;
+      }
+
+      if (mode == F_OK){
+        return 0;     /* The file exists. */
+      }
+
+      if ((mode & X_OK) == 0 || (stats.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)))
+      {
+        return 0;
+      }
+
+      return -1;
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      return dlsym_access(path, mode);
+    }
   }
 
   /**************************************************

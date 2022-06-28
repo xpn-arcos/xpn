@@ -78,6 +78,8 @@
   
   int dlsym_fcntl(int fd, int cmd, long arg);
 
+  int dlsym_access(const char *path, int mode);
+
 
   #ifdef  __cplusplus
     }

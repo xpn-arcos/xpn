@@ -473,6 +473,7 @@
     // do getattr
     s = head->u_st_mpiServer_msg.op_getattr.path ;
     req.status = filesystem_stat(s, &req.attr) ;
+
     mpiServer_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpiServer_attr_req), rank_client_id) ;
 
     // show debug info
