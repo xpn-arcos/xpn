@@ -29,12 +29,13 @@
    * 1 indicates that expand has already been initialized.
    */
   static int xpn_adaptor_initCalled = 0;
+  static int xpn_adaptor_initCalled_getenv = 0; //env variable obtained
 
   /**
    * This variable contains the prefix which will be considerated as expand partition.
    */
   char *xpn_adaptor_partition_prefix = "xpn://"; //Original
-  //char *xpn_adaptor_partition_prefix = ""; //New
+  //char *xpn_adaptor_partition_prefix = "/xpn/";
     
   /*
   char *xpn_adaptor_flog_name  = "/tmp/EXPAND.LOG" ;
@@ -143,12 +144,24 @@
 
     debug_info("Before xpn_adaptor_keepInit\n");
 
+    if (xpn_adaptor_initCalled_getenv == 0)
+    {
+      char * xpn_adaptor_initCalled_env = getenv("INITCALLED");
+      xpn_adaptor_initCalled = 0;
+      if (xpn_adaptor_initCalled_env != NULL)
+      {
+        xpn_adaptor_initCalled = atoi(xpn_adaptor_initCalled_env);
+      }
+      xpn_adaptor_initCalled_getenv = 1;
+    }
+    
     if (0 == xpn_adaptor_initCalled)
     {
       // If expand has not been initialized, then initialize it.
       debug_info("Before xpn_init()\n");
 
       xpn_adaptor_initCalled = 1; //TODO: Delete
+      setenv("INITCALLED", "1", 1);
 
       fdstable_init ();
       fdsdirtable_init ();
@@ -162,12 +175,15 @@
         debug_info("xpn_init: Expand couldn't be initialized\n");
         //xpn_adaptor_log("xpn_init: Expand couldn't be initialized\n");
         xpn_adaptor_initCalled = 0;
+        setenv("INITCALLED", "0", 1);
       }
       else
       {
         xpn_adaptor_initCalled = 1;
+        setenv("INITCALLED", "1", 1);
       }
     }
+    debug_info("End xpn_adaptor_keepInit\n");
   }
 
 
@@ -237,6 +253,7 @@
 
     debug_info("Before open64.... %s\n",path);
     debug_info("1) Path => %s\n",path+strlen(xpn_adaptor_partition_prefix));
+    debug_info("2) flags => %d\n",flags);
 
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
@@ -281,7 +298,7 @@
       }
     }
 
-    debug_info("OPEN64 ERROR\n");
+    debug_info("OPEN64 %d\n", ret);
 
     return ret;
   }
@@ -671,6 +688,7 @@
   {
     int ret;
     debug_info("Before close....\n");
+    debug_info("FD = %d\n", fd);
 
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
@@ -744,6 +762,7 @@
   int mkdir(const char *path, mode_t mode)
   {
     debug_info("Before mkdir...\n");
+    debug_info("PATH %s\n", path);
 
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();

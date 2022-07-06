@@ -156,7 +156,7 @@ int chown(const char *path, uid_t owner, gid_t group);
 
 int fcntl(int fd, int cmd, long arg);
 
-int access(const char *path, int mode); //NEW
+int access(const char *path, int mode);
 
 
 /**************************************************

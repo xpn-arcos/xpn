@@ -104,6 +104,8 @@
       {
         debug_info("[MAIN] mpiServer_accept_comm()\n") ;
 
+        params.client = NULL;
+
         sd = mpiServer_comm_accept(&params) ;
         if (sd == -1) {
           continue ;

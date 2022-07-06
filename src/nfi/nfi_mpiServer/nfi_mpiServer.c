@@ -344,7 +344,6 @@
             return -1 ;
         }
 
-
         //.....................................
         /*strcpy(msg.id, "GETID") ;
         msg.type = MPISERVER_GETID;

@@ -145,11 +145,11 @@
 
     // To identify client type
     int data = 0;
-    ret = MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
+    ret = MPI_Send(&data, 1, MPI_INT, 0, 0, params->server );
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[?]: MPI_Recv fails :-(") ;
     }
-
+    
     // Return OK
     return 1 ;
   }
@@ -202,6 +202,7 @@
     gethostname(cli_name, HOST_NAME_MAX);
 
     data = MPISERVER_GETNODENAME;
+
     ret = MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[?]: MPI_Send fails :-(") ;
