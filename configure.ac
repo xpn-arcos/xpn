@@ -71,17 +71,25 @@ AC_CHECK_FUNCS(gethostname gettimeofday select socket strdup strerror)
 AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 
 
-if test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu"
+if test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
   OS="__LINUX__"
-  #CC="g++"
+  CC="/usr/bin/mpicc"
+  if test -d "/gpfs/apps/MN4"; then
+     AC_MSG_RESULT("MN");
+     CC="/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpicc"
+  elif test -d "/mnt/home/soft/mpich"; then
+     AC_MSG_RESULT("PICASSO");
+     CC="/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/bin/mpicc"
+  else
+     AC_MSG_RESULT("LINUX");
+     CC="/opt/software/install-mpich/bin/mpicc"
+  fi
   MAKE="make"
- #AC_MSG_RESULT("$CFLAGS");
-  CFLAGS="-fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra" #ADDED
- #AC_MSG_RESULT("$CFLAGS");
+  CFLAGS="-fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"
-  LIBS="$LIBS -L\$(HOME)/mxml/usr/lib -lmxml -ldl"
+  LIBS="$LIBS -L\$(HOME)/bin/mxml/lib -lmxml -ldl"
   AC_SUBST(OS)
   AC_SUBST(CC)
   AC_SUBST(MAKE)
@@ -137,7 +145,7 @@ else
 fi
 
 INCLUDEFLAGS="\
--I\$(HOME)/mxml/usr/include \
+-I\$(HOME)/bin/mxml/include \
 -I\$(top_srcdir)/include \
 -I\$(top_srcdir)/include/base \
 -I\$(top_srcdir)/include/xpn \
