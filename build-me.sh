@@ -58,6 +58,12 @@ case $1 in
      ;;
    "picasso")
      module load mpich/3.3.1_gcc9
+
+       rm -fr $INSTALL_PATH/base
+     mkdir -p $INSTALL_PATH/base/lib
+     rm -fr                          $INSTALL_PATH/base/lib/libmpfr.so.4
+     ln -s  /usr/lib64/libmpfr.so.6  $INSTALL_PATH/base/lib/libmpfr.so.4
+     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PATH/base/lib/
      ;;
    *)
      PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen libmpich-dev libmxml-dev"
