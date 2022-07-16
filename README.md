@@ -10,8 +10,9 @@
 
 ## 1. Install dependencies
 
-XPN needs the typical C development tools and the [minixml](http://www.minixml.org):
+XPN needs the typical C development tools and the [minixml](http://www.minixml.org).
 
+If you are administrator of your local machine then you need to execute:
 ```
 sudo apt-get install -y autoconf automake gcc g++ make \
                         flex libtool doxygen \
@@ -36,6 +37,14 @@ mkdir -p /opt/xpn
 make clean
 make -j
 make install
+```
+
+Alternatively, you can use:
+```
+git clone https://github.com/michaelrsweet/mxml.git
+git clone https://github.com/dcamarmas/xpn.git
+cd xpn
+./build-me.sh linux
 ```
 
 
