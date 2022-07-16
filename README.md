@@ -23,13 +23,16 @@ sudo apt-get install -y autoconf automake gcc g++ make \
 
 As an example of build scenario:
 * MPICH is installed at '/opt/software/install-mpich'
-* Instalation directory is '/opt/xpn'
+* Installation directory will be '/opt/xpn'
 
-Then, to build Expand:
+Then, to build Expand you need to execute:
 ```
 ./autogen.sh
 mkdir -p /opt/xpn 
-./configure --prefix=/opt/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver=/opt/software/install-mpich/bin
+./configure --prefix=/opt/xpn \
+            --enable-nfs3 \
+            --enable-tcpserver \
+            --enable-mpiserver=/opt/software/install-mpich/bin
 make clean
 make -j
 make install
