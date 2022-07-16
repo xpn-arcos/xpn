@@ -828,8 +828,8 @@ configure:5318: $? = 0
 configure:5318: result: yes
 configure:5324: checking for _doprnt
 configure:5324: gcc -o conftest -g -O2   conftest.c -lpthread  >&5
-/usr/bin/ld: /tmp/ccIh4MA3.o: in function `main':
-/home/acaldero/work/xpn-dcamarmas/conftest.c:79: undefined reference to `_doprnt'
+/usr/bin/ld: /tmp/ccfgtJ1b.o: in function `main':
+/home/acaldero/work/xpn/conftest.c:79: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:5324: $? = 1
 configure: failed program was:
@@ -1014,10 +1014,8 @@ config.status:928: creating include/config.h
 config.status:1109: include/config.h is unchanged
 config.status:1157: executing depfiles commands
 config.status:1234: cd lib       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
-make: Nothing to be done for 'am--depfiles'.
 config.status:1239: $? = 0
 config.status:1234: cd utils       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
-make: Nothing to be done for 'am--depfiles'.
 config.status:1239: $? = 0
 
 ## ---------------- ##
@@ -1115,7 +1113,7 @@ am_cv_prog_cc_c_o=yes
 ## Output variables. ##
 ## ----------------- ##
 
-ACLOCAL='${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing aclocal-1.16'
+ACLOCAL='${SHELL} /home/acaldero/work/xpn/config/missing aclocal-1.16'
 AMDEPBACKSLASH='\'
 AMDEP_FALSE='#'
 AMDEP_TRUE=''
@@ -1125,9 +1123,9 @@ AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
 AM_DEFAULT_VERBOSITY='1'
 AM_V='$(V)'
 AR='ar'
-AUTOCONF='${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoconf'
-AUTOHEADER='${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing autoheader'
-AUTOMAKE='${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing automake-1.16'
+AUTOCONF='${SHELL} /home/acaldero/work/xpn/config/missing autoconf'
+AUTOHEADER='${SHELL} /home/acaldero/work/xpn/config/missing autoheader'
+AUTOMAKE='${SHELL} /home/acaldero/work/xpn/config/missing automake-1.16'
 AWK='gawk'
 CC='/opt/software/install-mpich//bin/mpicc'
 CCDEPMODE='depmode=gcc3'
@@ -1162,7 +1160,7 @@ LIBOBJS=''
 LIBS='-lpthread  -L$(HOME)/bin/mxml/lib -lmxml -ldl'
 LTLIBOBJS=''
 MAKE='make'
-MAKEINFO='${SHELL} /home/acaldero/work/xpn-dcamarmas/config/missing makeinfo'
+MAKEINFO='${SHELL} /home/acaldero/work/xpn/config/missing makeinfo'
 MKDIR_P='/usr/bin/mkdir -p'
 M_HEADERS=''
 NFI_MPISERVER='nfi_mpiserver'
@@ -1220,7 +1218,7 @@ host_vendor='pc'
 htmldir='${docdir}'
 includedir='${prefix}/include'
 infodir='${datarootdir}/info'
-install_sh='${SHELL} /home/acaldero/work/xpn-dcamarmas/config/install-sh'
+install_sh='${SHELL} /home/acaldero/work/xpn/config/install-sh'
 libdir='${exec_prefix}/lib'
 libexecdir='${exec_prefix}/libexec'
 localedir='${datarootdir}/locale'

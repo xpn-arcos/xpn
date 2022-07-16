@@ -21,7 +21,11 @@ sudo apt-get install -y autoconf automake gcc g++ make \
 
 ## 2. Build XPN 
 
-As an example of build scenario (if MPICH is installed at '/opt/software/install-mpich'):
+As an example of build scenario:
+* MPICH is installed at '/opt/software/install-mpich'
+* Instalation directory is '/opt/xpn'
+
+Then, to build Expand:
 ```
 ./autogen.sh
 mkdir -p /opt/xpn 

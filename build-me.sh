@@ -1,8 +1,27 @@
 #!/bin/bash
 #set -x
 
+# 
+#  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+#  
+#  This file is part of Expand.
+#  
+#  Expand is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#  
+#  Expand is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Lesser General Public License for more details.
+#  
+#  You should have received a copy of the GNU Lesser General Public License
+#  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+#  
+
 # arguments
-if [ "$#" != 2 ]; then
+if [ "$#" != 1 ]; then
     echo "Usage: $0 [mn | picasso | linux]"
     exit
 fi
@@ -55,22 +74,30 @@ mkdir -p $INSTALL_PATH/mxml/lib64
 ln    -s $INSTALL_PATH/mxml/lib64  $INSTALL_PATH/mxml/lib
 
 # 1) MXML
-echo "3) preparing mxml..."
-cd ../mxml
-./configure --prefix=$INSTALL_PATH/mxml
-make clean
-make -j 8
-make install
+if [ -d ../mxml ]; then
+   echo "3) preparing mxml..."
+   pushd .
+   cd ../mxml
+   ./configure --prefix=$INSTALL_PATH/mxml
+   make clean
+   make -j 8
+   make install
+   popd
+fi
 
 ## 2) XPN
-echo "4) preparing xpn..."
-cd ../xpn
-ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-./configure --prefix=$INSTALL_PATH/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver="$MPICH_PATH/bin"
-make clean
-make -j 8
-#doxygen doc/doxygen-XPN.cfg
-make install
+if [ -d ../xpn ]; then
+   echo "4) preparing xpn..."
+   pushd .
+   cd ../xpn
+   ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
+   ./configure --prefix=$INSTALL_PATH/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver="$MPICH_PATH/bin"
+   make clean
+   make -j 8
+   #doxygen doc/doxygen-XPN.cfg
+   make install
+   popd
+fi
 
 # Stop
 echo "End."
