@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.0r2
+* Ported to MN
+* 15/07/2022
+
 ## 1.0r1
 * mpiServer improved
 * tcpServer improved
