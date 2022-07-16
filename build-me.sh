@@ -27,14 +27,18 @@ if [ "$#" != 1 ]; then
 fi
 
 # initial configuration...
+BASE_PATH=$(dirname $0)
+MXML_SRC_PATH=$BASE_PATH/../mxml
+ XPN_SRC_PATH=$BASE_PATH/../xpn
+
 case $1 in
    "mn")
      MPICH_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/
-     INSTALL_PATH=/home/uc3m15/uc3m15672/bin/
+     INSTALL_PATH=$HOME/bin/
      ;;
    "picasso")
      MPICH_PATH=/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/
-     INSTALL_PATH=/mnt/home/users/uc3m15_res/uc3m15672/bin/
+     INSTALL_PATH=$HOME/bin/
      ;;
    *)
      MPICH_PATH=/opt/software/install-mpich/
@@ -74,10 +78,10 @@ mkdir -p $INSTALL_PATH/mxml/lib64
 ln    -s $INSTALL_PATH/mxml/lib64  $INSTALL_PATH/mxml/lib
 
 # 1) MXML
-if [ -d ../mxml ]; then
+if [ -d $MXML_SRC_PATH ]; then
    echo "3) preparing mxml..."
    pushd .
-   cd ../mxml
+   cd $MXML_SRC_PATH
    ./configure --prefix=$INSTALL_PATH/mxml
    make clean
    make -j 8
@@ -86,10 +90,10 @@ if [ -d ../mxml ]; then
 fi
 
 ## 2) XPN
-if [ -d ../xpn ]; then
+if [ -d $XPN_SRC_PATH ]; then
    echo "4) preparing xpn..."
    pushd .
-   cd ../xpn
+   cd $XPN_SRC_PATH
    ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
    ./configure --prefix=$INSTALL_PATH/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver="$MPICH_PATH/bin"
    make clean

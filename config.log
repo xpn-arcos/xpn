@@ -828,7 +828,7 @@ configure:5318: $? = 0
 configure:5318: result: yes
 configure:5324: checking for _doprnt
 configure:5324: gcc -o conftest -g -O2   conftest.c -lpthread  >&5
-/usr/bin/ld: /tmp/ccfgtJ1b.o: in function `main':
+/usr/bin/ld: /tmp/ccL4ejF8.o: in function `main':
 /home/acaldero/work/xpn/conftest.c:79: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:5324: $? = 1

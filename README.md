@@ -43,8 +43,7 @@ Alternatively, you can use:
 ```
 git clone https://github.com/michaelrsweet/mxml.git
 git clone https://github.com/dcamarmas/xpn.git
-cd xpn
-./build-me.sh linux
+./xpn/build-me.sh linux
 ```
 
 
