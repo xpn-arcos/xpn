@@ -20,50 +20,74 @@
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #  
 
-# arguments
-if [ "$#" != 1 ]; then
-    echo ""
-    echo " build-me-compact"
-    echo " ----------------"
+function usage {
     echo ""
     echo " Usage:"
     echo " $0 <platform>"
     echo " Where:"
     echo " * platform = mn | picasso | tucan"
     echo ""
+}
+
+# Start
+echo ""
+echo " build-me-compact"
+echo " ----------------"
+echo ""
+echo " Begin."
+
+# 1) arguments
+if [ "$#" != 1 ]; then
+    usage
     exit
 fi
 
-# initial configuration...
+# 2) initial configuration...
 case $1 in
    "mn")
+     # working path...
      MPICH_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/
      INSTALL_PATH=$HOME/bin/
 
+     # load modules...
      module load "impi/2017.4"
      ;;
    "picasso")
+     # working path...
      MPICH_PATH=/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/
      INSTALL_PATH=$HOME/bin/
 
+     # load modules...
      module load mpich/3.3.1_gcc9
+
+     # patch for libmpfr.so.4
+       rm -fr $INSTALL_PATH/base
+     mkdir -p $INSTALL_PATH/base/lib
+     rm -fr                          $INSTALL_PATH/base/lib/libmpfr.so.4
+     ln -s  /usr/lib64/libmpfr.so.6  $INSTALL_PATH/base/lib/libmpfr.so.4
+     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PATH/base/lib/
      ;;
    "tucan")
+     # working path...
      MPICH_PATH=/opt/software/install-mpich/
      INSTALL_PATH=/opt/xpn
 
+     # install software (if needed)...
      PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen libmpich-dev libmxml-dev"
      for P in $PKG_NAMES; do
          apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
      done
      ;;
    *)
-     echo "Unknown platform '"$1"'"
+     echo " Unknown platform '"$1"'"
+     usage
      exit
      ;;
 esac
 
-# preconfigure build-me...
+# 3) preconfigure build-me...
 ./build-me.sh -m $MPICH_PATH -i $INSTALL_PATH
 
+# Stop
+echo " End."
 

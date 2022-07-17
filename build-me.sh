@@ -51,14 +51,17 @@ while getopts "m:i:" opt; do
 	     ;;
     esac
 done
+
 if [ "$MPICH_PATH" == "" ]; then
    echo " Error:"
    echo " * Empty MPICH_PATH"
+   usage
    exit
 fi
 if [ "$INSTALL_PATH" == "" ]; then
    echo " Error:"
    echo " * Empty INSTALL_PATH"
+   usage
    exit
 fi
 
@@ -76,14 +79,6 @@ ln    -s $INSTALL_PATH/xpn/lib64   $INSTALL_PATH/xpn/lib
   rm -fr $INSTALL_PATH/mxml
 mkdir -p $INSTALL_PATH/mxml/lib64
 ln    -s $INSTALL_PATH/mxml/lib64  $INSTALL_PATH/mxml/lib
-
-# <begin picasso>
-  rm -fr $INSTALL_PATH/base
-mkdir -p $INSTALL_PATH/base/lib
-rm -fr                          $INSTALL_PATH/base/lib/libmpfr.so.4
-ln -s  /usr/lib64/libmpfr.so.6  $INSTALL_PATH/base/lib/libmpfr.so.4
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PATH/base/lib/
-# </begin picasso>
 
 # 2.a) MXML
 if [ -d $MXML_SRC_PATH ]; then
