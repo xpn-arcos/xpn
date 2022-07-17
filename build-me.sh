@@ -20,54 +20,54 @@
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #  
 
-# arguments
-if [ "$#" != 1 ]; then
-    echo "Usage: $0 [mn | picasso | linux]"
-    exit
+function usage {
+    echo ""
+    echo " Usage:"
+    echo " $0 -m <MPI path> -i <Install path>"
+    echo " Where:"
+    echo " * <MPI     path> = full path where the MPI implementation (MPICH) is installed."
+    echo " * <Install path> = full path where MXML and XPN is going to be installed."
+    echo ""
+}
+
+# Start
+echo ""
+echo " build-me"
+echo " --------"
+echo ""
+echo "Begin."
+
+# 1.a) arguments...
+while getopts "m:i:" opt; do
+    case "${opt}" in
+          m) MPICH_PATH=${OPTARG}
+	     ;;
+          i) INSTALL_PATH=${OPTARG}
+	     ;;
+	  *) echo " Error:"
+	     echo " * Unknown option: ${opt}"
+             usage
+	     exit
+	     ;;
+    esac
+done
+if [ "$MPICH_PATH" == "" ]; then
+   echo " Error:"
+   echo " * Empty MPICH_PATH"
+   exit
+fi
+if [ "$INSTALL_PATH" == "" ]; then
+   echo " Error:"
+   echo " * Empty INSTALL_PATH"
+   exit
 fi
 
-# initial configuration...
+# 1.b) initial configuration...
 BASE_PATH=$(dirname $0)
 MXML_SRC_PATH=$BASE_PATH/../mxml
  XPN_SRC_PATH=$BASE_PATH/../xpn
 
-case $1 in
-   "mn")
-     MPICH_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/
-     INSTALL_PATH=$HOME/bin/
-     ;;
-   "picasso")
-     MPICH_PATH=/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/
-     INSTALL_PATH=$HOME/bin/
-     ;;
-   *)
-     MPICH_PATH=/opt/software/install-mpich/
-     INSTALL_PATH=/opt/xpn
-     ;;
-esac
-
-
-# Start
-echo "Begin."
-
-# pre-requisites
-echo "1) check packages..."
-case $1 in
-   "mn")
-     module load "impi/2017.4"
-     ;;
-   "picasso")
-     module load mpich/3.3.1_gcc9
-     ;;
-   *)
-     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen libmpich-dev libmxml-dev"
-     for P in $PKG_NAMES; do
-         apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
-     done
-     ;;
-esac
-
-# directories
+# 1.c) directories
 echo "2) preparing install directories..."
   rm -fr $INSTALL_PATH/xpn
 mkdir -p $INSTALL_PATH/xpn/lib64
@@ -77,7 +77,7 @@ ln    -s $INSTALL_PATH/xpn/lib64   $INSTALL_PATH/xpn/lib
 mkdir -p $INSTALL_PATH/mxml/lib64
 ln    -s $INSTALL_PATH/mxml/lib64  $INSTALL_PATH/mxml/lib
 
-# 1) MXML
+# 2.a) MXML
 if [ -d $MXML_SRC_PATH ]; then
    echo "3) preparing mxml..."
    pushd .
@@ -89,7 +89,7 @@ if [ -d $MXML_SRC_PATH ]; then
    popd
 fi
 
-## 2) XPN
+## 2.b) XPN
 if [ -d $XPN_SRC_PATH ]; then
    echo "4) preparing xpn..."
    pushd .
