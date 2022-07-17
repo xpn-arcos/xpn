@@ -35,7 +35,7 @@ echo ""
 echo " build-me"
 echo " --------"
 echo ""
-echo "Begin."
+echo " Begin."
 
 # 1.a) arguments...
 while getopts "m:i:" opt; do
@@ -77,6 +77,14 @@ ln    -s $INSTALL_PATH/xpn/lib64   $INSTALL_PATH/xpn/lib
 mkdir -p $INSTALL_PATH/mxml/lib64
 ln    -s $INSTALL_PATH/mxml/lib64  $INSTALL_PATH/mxml/lib
 
+# <begin picasso>
+  rm -fr $INSTALL_PATH/base
+mkdir -p $INSTALL_PATH/base/lib
+rm -fr                          $INSTALL_PATH/base/lib/libmpfr.so.4
+ln -s  /usr/lib64/libmpfr.so.6  $INSTALL_PATH/base/lib/libmpfr.so.4
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PATH/base/lib/
+# </begin picasso>
+
 # 2.a) MXML
 if [ -d $MXML_SRC_PATH ]; then
    echo "3) preparing mxml..."
@@ -104,5 +112,5 @@ if [ -d $XPN_SRC_PATH ]; then
 fi
 
 # Stop
-echo "End."
+echo " End."
 
