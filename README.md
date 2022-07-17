@@ -42,7 +42,7 @@ As an example scenario we will consider the following one:
 To build Expand you need to execute:
 ```
 cd $HOME/src
-./xpn/build-me-compact.sh -m /opt/software/install-mpich/bin path -i /opt/xpn"
+./xpn/build-me.sh -m /opt/software/install-mpich/bin path -i /opt/xpn"
 ```
 
 Alternatively, you can use:
