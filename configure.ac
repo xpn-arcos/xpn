@@ -24,7 +24,6 @@ AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([1.0 foreign subdir-objects])
 AM_CONDITIONAL([am__fastdepCC], [test x$am__fastdepCC = xam__fastdepCC])
 AM_CONDITIONAL([AMDEP], [test x$amdep = xamdep])
-AM_PROG_CC_C_O
 AM_PROG_AR
 
 #
@@ -32,6 +31,7 @@ AM_PROG_AR
 #
 AC_PROG_MAKE_SET
 AC_PROG_CC([mpicc icc gcc])
+AM_PROG_CC_C_O
 
 
 #
