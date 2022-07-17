@@ -71,6 +71,8 @@ case $1 in
      # working path...
      MPICH_PATH=/opt/software/install-mpich/
      INSTALL_PATH=/opt/xpn
+    #MPICH_PATH=/opt/software/install-mpich/
+    #MPICH_PATH=/home/dcamarma/mpich-install/
 
      # install software (if needed)...
      PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen libmpich-dev libmxml-dev"
@@ -86,7 +88,8 @@ case $1 in
 esac
 
 # 3) preconfigure build-me...
-./build-me.sh -m $MPICH_PATH -i $INSTALL_PATH
+BASE_PATH=$(dirname $0)
+$BASE_PATH/build-me.sh -m $MPICH_PATH -i $INSTALL_PATH
 
 # Stop
 echo " End."

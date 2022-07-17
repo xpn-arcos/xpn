@@ -31,6 +31,7 @@ AM_PROG_AR
 # Checks for programs.
 #
 AC_PROG_MAKE_SET
+AC_PROG_CC([mpicc icc gcc])
 
 
 #
@@ -74,22 +75,12 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 if test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
   OS="__LINUX__"
-  CC="/usr/bin/mpicc"
-  if test -d "/gpfs/apps/MN4"; then
-     AC_MSG_RESULT("MN");
-     CC="/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpicc"
-  elif test -d "/mnt/home/soft/mpich"; then
-     AC_MSG_RESULT("PICASSO");
-     CC="/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/bin/mpicc"
-  else
-     AC_MSG_RESULT("LINUX");
-     CC="/opt/software/install-mpich/bin/mpicc"
-  fi
+  CC="mpicc"
   MAKE="make"
   CFLAGS="-fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"
-  LIBS="$LIBS -L\$(HOME)/bin/mxml/lib -lmxml -ldl"
+  LIBS+="-L\$(HOME)/bin/mxml/lib -lmxml -ldl"
   AC_SUBST(OS)
   AC_SUBST(CC)
   AC_SUBST(MAKE)

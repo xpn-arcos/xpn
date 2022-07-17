@@ -5,8 +5,6 @@
 
  MAKE         = make -s
  CC=@CC@
-#CC          = /opt/software/install-mpich/bin/mpicc
-#CC          = /home/dcamarma/mpich-install/bin/mpicc
  EXPAND_DIR   = @prefix@
  OBJECTS_TCPSERVER  = tcpServer.o \
 		      tcpServer_utils.o \
