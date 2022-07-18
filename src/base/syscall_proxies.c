@@ -28,15 +28,51 @@
 
   /* ... Functions / Funciones ......................................... */
 
+  int (*real_open)(char *, int, mode_t) = NULL;
+  int (*real_open64)(char *, int, mode_t) = NULL;
+  int (*real_creat)(const char *, mode_t) = NULL;
+  int (*real_ftruncate)(int, off_t) = NULL;
+  ssize_t (*real_read)(int, void*, size_t) = NULL;
+  ssize_t (*real_write)(int, const void*, size_t) = NULL;
+  off_t (*real_lseek)(int, off_t, int) = NULL;
+  int (*real_lxstat64)(int, const char *, struct stat64 *) = NULL;
+  int (*real_xstat64)(int, const char *, struct stat64 *) = NULL;
+  int (*real_fxstat64)(int, int, struct stat64 *) = NULL;
+  int (*real_lstat)(int, char *, struct stat *) = NULL;
+  int (*real_stat)(int, char *, struct stat *) = NULL;
+  int (*real_fstat)(int, int, struct stat *) = NULL;
+  int (*real_close)(int) = NULL;
+  int (*real_rename)(const char *, const  char *) = NULL;
+  int (*real_unlink)(char *) = NULL;
+  DIR* (*real_opendir)(char*) = NULL;
+  DIR* (*real_opendir64)(char*) = NULL;
+  int (*real_mkdir)(char *, mode_t) = NULL;
+  struct dirent * (*real_readdir)(DIR *) = NULL;
+  struct dirent64 * (*real_readdir64)(DIR *) = NULL;
+  int (*real_closedir)(DIR*) = NULL;
+  int (*real_rmdir)(char *) = NULL;
+  int (*real_fork)() = NULL;
+  int (*real_pipe)(int) = NULL;
+  int (*real_dup)(int) = NULL;
+  int (*real_dup2)(int, int) = NULL;
+  void (*real_exit)(int) = NULL;
+  int (*real_chdir)(char *) = NULL;
+  int (*real_chmod)(char *, mode_t) = NULL;
+  int (*real_fchmod)(int, mode_t) = NULL;
+  int (*real_chown)(char *, uid_t, gid_t) = NULL;
+  int (*real_fcntl)(int, int, long) = NULL;
+  int (*real_access)(const char *, int) = NULL;
+  char* (*real_realpath)(const char *restrict, char *restrict) = NULL;
+
+
 
   // File API
-  int (*real_open)(char *, int, mode_t) = NULL;
   int dlsym_open(char *path, int flags, mode_t mode)
   {
     debug_info("dlsym_open: before open...\n");
     debug_info("dlsym_open: Path => %s\n",path);
 
-    if (real_open == NULL){
+    if (real_open == NULL) {
         real_open = dlsym(RTLD_NEXT,"open");
     }
     
@@ -48,7 +84,6 @@
   }
 
 
-  int (*real_open64)(char *, int, mode_t) = NULL;
   int dlsym_open64(char *path, int flags, mode_t mode)
   {
     debug_info("dlsym_open64: before open64...\n");
@@ -66,7 +101,6 @@
   }
 
 
-  int (*real_creat)(const char *, mode_t) = NULL;
   int dlsym_creat(const char *path, mode_t mode)
   {
     debug_info("dlsym_cleat: before creat...\n");
@@ -84,7 +118,6 @@
   }
 
 
-  int (*real_ftruncate)(int, off_t) = NULL;
   int dlsym_ftruncate(int fd, off_t length)
   {
     debug_info("dlsym_ftruncate: before ftruncate...\n");
@@ -97,7 +130,6 @@
   }
 
 
-  ssize_t (*real_read)(int, void*, size_t) = NULL;
   ssize_t dlsym_read(int fd, void *buf, size_t nbyte)
   {
     debug_info("dlsym_read: before read...\n");
@@ -110,7 +142,6 @@
   }
 
 
-  ssize_t (*real_write)(int, const void*, size_t) = NULL;
   ssize_t dlsym_write(int fd, void *buf, size_t nbyte)
   {
     debug_info("dlsym_write: before write...\n");
@@ -123,7 +154,6 @@
   }
 
 
-  off_t (*real_lseek)(int, off_t, int) = NULL;
   off_t dlsym_lseek(int fd, off_t offset, int whence)
   {
     debug_info("dlsym_lseek: before lseek...\n");
@@ -136,7 +166,6 @@
   }
 
 
-  int (*real_lxstat64)(int, const char *, struct stat64 *) = NULL;
   int dlsym_lxstat64(int ver, const char *path, struct stat64 *buf)
   {
     debug_info("dlsym_lxstat64: before _lxstat64...\n");
@@ -149,7 +178,6 @@
   }
 
 
-  int (*real_xstat64)(int, const char *, struct stat64 *) = NULL;
   int dlsym_xstat64(int ver, const char *path, struct stat64 *buf)
   {
     debug_info("dlsym_xstat64: before _xstat64...\n");
@@ -161,8 +189,6 @@
     return real_xstat64(ver,(char *)path, buf);
   }
 
-
-  int (*real_fxstat64)(int, int, struct stat64 *) = NULL;
   int dlsym_fxstat64(int ver, int fd, struct stat64 *buf)
   {
     debug_info("dlsym_fxstat64: before _fxstat64...\n");
@@ -175,7 +201,6 @@
   }
 
 
-  int (*real_lstat)(int, char *, struct stat *) = NULL;
   int dlsym_lstat(int ver, const char *path, struct stat *buf)
   {
     debug_info("dlsym_lstat: before _lstat...\n");
@@ -188,7 +213,6 @@
   }
 
 
-  int (*real_stat)(int, char *, struct stat *) = NULL;
   int dlsym_stat(int ver, const char *path, struct stat *buf)
   {
     debug_info("dlsym_stat: before _lxstat...\n");
@@ -201,7 +225,6 @@
   }
 
 
-  int (*real_fstat)(int, int, struct stat *) = NULL;
   int dlsym_fstat(int ver, int fd, struct stat *buf)
   {
     debug_info("dlsym_fstat: before _fxstat...\n");
@@ -214,7 +237,6 @@
   }
 
 
-  int (*real_close)(int) = NULL;
   int dlsym_close(int fd)
   {
     debug_info("dlsym_close: before close...\n");
@@ -227,7 +249,18 @@
   }
 
 
-  int (*real_unlink)(char *) = NULL;
+  int dlsym_rename(const char *old_path, const char *new_path)
+  {
+    debug_info("dlsym_rename: before rename...\n");
+
+    if (real_rename == NULL){
+        real_rename = dlsym(RTLD_NEXT,"rename");
+    }
+
+    return real_rename(old_path, new_path);
+  }
+
+
   int dlsym_unlink(char *path)
   {
     debug_info("dlsym_unlink: before unlink...\n");
@@ -243,7 +276,6 @@
   
   // Directory API
 
-  DIR* (*real_opendir)(char*) = NULL;
   DIR* dlsym_opendir(char *dirname)
   {
     debug_info("dlsym_opendir: before opendir...\n");
@@ -255,7 +287,6 @@
     return real_opendir((char *)dirname);
   }
 
-  DIR* (*real_opendir64)(char*) = NULL;
   DIR* dlsym_opendir64(char *dirname)
   {
     debug_info("dlsym_opendir64: before opendir64...\n");
@@ -268,7 +299,6 @@
   }
 
 
-  int (*real_mkdir)(char *, mode_t) = NULL;
   int dlsym_mkdir(char *path, mode_t mode)
   {
     debug_info("dlsym_mkdir: before mkdir...\n");
@@ -281,7 +311,6 @@
   }
 
 
-  struct dirent * (*real_readdir)(DIR *) = NULL;
   struct dirent * dlsym_readdir(DIR *dirp)
   {
     debug_info("dlsym_readdir: before readdir...\n");
@@ -294,7 +323,6 @@
   }
 
 
-  struct dirent64 * (*real_readdir64)(DIR *) = NULL;
   struct dirent64 * dlsym_readdir64(DIR *dirp)
   {
     debug_info("dlsym_readdir64: before readdir64...\n");
@@ -307,7 +335,6 @@
   }
 
 
-  int (*real_closedir)(DIR*) = NULL;
   int dlsym_closedir(DIR* dirp)
   {
     debug_info("dlsym_closedir: before closedir...\n");
@@ -320,7 +347,6 @@
   }
 
 
-  int (*real_rmdir)(char *) = NULL;
   int dlsym_rmdir(char *path)
   {
     debug_info("dlsym_rmdir: before rmdir...\n");
@@ -336,7 +362,6 @@
 
 
   // Proccess API
-  int (*real_fork)() = NULL;
   int dlsym_fork(void)
   {
     debug_info("dlsym_fork: before fork...\n");
@@ -349,7 +374,17 @@
   }
 
 
-  int (*real_dup)(int) = NULL;
+  int dlsym_pipe(int pipefd[2]){
+    debug_info("dlsym_pipe: before pipe...\n");
+
+    if (real_pipe == NULL){
+        real_pipe = dlsym(RTLD_NEXT,"pipe");
+    }
+    
+    return real_pipe(pipefd);
+  }
+
+
   int dlsym_dup(int fd)
   {
     debug_info("dlsym_dup: before dup...\n");
@@ -362,7 +397,6 @@
   }
 
 
-  int (*real_dup2)(int, int) = NULL;
   int dlsym_dup2(int fd, int fd2)
   {
     debug_info("dlsym_dup2: before dup2...\n");
@@ -375,7 +409,6 @@
   }
 
 
-  void (*real_exit)(int) = NULL;
   void dlsym_exit(int status)
   {
     debug_info("dlsym_exit: before exit...\n");
@@ -391,7 +424,6 @@
 
 
   // Manager API
-  int (*real_chdir)(char *) = NULL;
   int dlsym_chdir(char * path)
   {
     debug_info("dlsym_chdir: before chdir...\n");
@@ -404,7 +436,6 @@
   }
 
 
-  int (*real_chmod)(char *, mode_t) = NULL;
   int dlsym_chmod( char *path, mode_t mode)
   {
     debug_info("dlsym_chmod: before chmod...\n");
@@ -417,7 +448,6 @@
   }
 
 
-  int (*real_fchmod)(int, mode_t) = NULL;
   int dlsym_fchmod(int fd, mode_t mode)
   {
     debug_info("dlsym_fchmod: before fchmod...\n");
@@ -430,7 +460,6 @@
   }
 
 
-  int (*real_chown)(char *, uid_t, gid_t) = NULL;
   int dlsym_chown(char *path, uid_t owner, gid_t group)
   {
     debug_info("dlsym_chown: before chown...\n");
@@ -443,7 +472,6 @@
   }
 
 
-  int (*real_fcntl)(int, int, long) = NULL;
   int dlsym_fcntl(int fd, int cmd, long arg)
   {
     debug_info("dlsym_fcntl: before fcntl...\n");
@@ -453,4 +481,36 @@
     }
     
     return real_fcntl(fd, cmd, arg);
+  }
+
+
+  int dlsym_access(const char *path, int mode){
+    debug_info("dlsym_access: before access...\n");
+    debug_info("dlsym_access: Path => %s\n",path);
+
+    if (real_access == NULL) {
+        real_access = dlsym(RTLD_NEXT,"access");
+    }
+    
+    int ret = real_access((char *)path, mode);
+
+    debug_info("dlsym_access: (%s,%d) return %d\n",path,mode,ret);
+
+    return ret;
+  }
+  
+
+  char *dlsym_realpath(const char *restrict path, char *restrict resolved_path){
+    debug_info("dlsym_realpath: before realpath...\n");
+    debug_info("dlsym_realpath: Path => %s\n",path);
+
+    if (real_realpath == NULL) {
+        real_realpath = dlsym(RTLD_NEXT,"realpath");
+    }
+    
+    char* ret = real_realpath((char *)path, (char *)resolved_path);
+
+    debug_info("dlsym_access: (%s,%s) return %s\n",path,resolved_path,ret);
+
+    return ret;
   }

@@ -82,7 +82,7 @@
     thid = (pthread_t *)malloc(POOL_MAX_THREADS * sizeof(pthread_t)) ;
     if (NULL == thid) {
         perror("malloc: ");
-	return -1;
+  return -1;
     }
 
     // starting threads...
@@ -102,7 +102,7 @@
   }
 
 
-  void mpiServer_worker_pool_enqueue ( MPI_Comm sd, mpiServer_param_st *params, int op_type, int rank_client_id, void (*worker_function)(struct st_th))
+  void mpiServer_worker_pool_enqueue ( MPI_Comm sd, mpiServer_param_st *params, void (*worker_function)(struct st_th))
   {
     DEBUG_BEGIN() ;
 
@@ -118,8 +118,6 @@
 
     st_worker.sd                = sd;
     st_worker.params            = params ;
-    st_worker.type_op           = op_type ;
-    st_worker.rank_client_id    = rank_client_id ;
     st_worker.function          = worker_function ;
 
     debug_info("[WORKERS] client(%d): mpiServer_worker_pool_enqueue(...) enqueue\n", rank_client_id);
@@ -185,11 +183,11 @@
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&m_pool_end);
 
-
-    for (int i = 0; i < POOL_MAX_THREADS; ++i)
+    //TODO
+    /*for (int i = 0; i < POOL_MAX_THREADS; ++i)
     {
       mpiServer_worker_pool_enqueue ( (MPI_Comm)0, NULL, MPISERVER_FINALIZE, 0, NULL );
-    }
+    }*/
 
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) lock\n");
     pthread_mutex_lock(&m_pool);

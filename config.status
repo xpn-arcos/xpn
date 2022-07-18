@@ -663,7 +663,7 @@ S["CPPFLAGS"]="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFS
 ")/include/xpn/xpn_simple -I$(top_srcdir)/include/nfi -I$(top_srcdir)/include/nfi/nfi_local -I$(top_srcdir)/include/xpni/xpni_ft -I$(top_srcdir)/incl"\
 "ude/xpni/xpni_log -I$(top_srcdir)/include/nfi/nfi_nfs3 -I$(top_srcdir)/include/nfi/nfi_tcpServer -I$(top_srcdir)/include/nfi/nfi_mpiServer  "
 S["LDFLAGS"]="-lpthread -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl"
-S["CFLAGS"]="-fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra"
+S["CFLAGS"]="-fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra -std=c11"
 S["CC"]="/opt/software/install-mpich/bin/mpicc"
 S["AMDEP_FALSE"]="#"
 S["AMDEP_TRUE"]=""

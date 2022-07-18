@@ -79,6 +79,7 @@
     return 1 ;
   }
 
+  //TODO: revisar
   int mpiClient_comm_destroy ( mpiClient_param_st *params )
   {
     int ret ;
@@ -87,16 +88,19 @@
 
     debug_info("[COMM] begin mpiClient_comm_destroy(...)\n") ;
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
-    MPI_Comm_size(params->server, &size);
+    //MPI_Comm_size(params->server, &size);
     debug_info("[COMM] mpiClient_comm_disconnect nservers: %d\n", size) ;
-    if (params->rank==0) {  
+    /*if (params->rank==0) {  
       for (int i = 0; i < size; i++) { 
         data[0] = MPISERVER_DISCONNECT;
         MPI_Send( data, 1, MPI_INT, i, 0, params->server );
       }
-    }
+    }*/
+
+    data[0] = MPISERVER_DISCONNECT;
+    MPI_Send( data, 1, MPI_INT, 0, 0, params->server );
 
     // Disconnect
     ret = MPI_Comm_disconnect(&(params->server)) ;
@@ -124,7 +128,8 @@
 
     // Lookup port name
     //sprintf(srv_name, "mpiServer.%d", params->rank) ;
-    sprintf(srv_name, "mpiServer.%d", 0) ;
+    sprintf(srv_name, "mpiServer.%s", params->srv_name) ;
+
     ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, params->port_name) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Lookup_name fails :-(", params->rank) ;
@@ -132,10 +137,17 @@
     }
 
     // Connect...
-    ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &(params->server)) ;
+    ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(params->server)) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Client[%d]: MPI_Comm_connect fails :-(", params->rank) ;
       return -1 ;
+    }
+
+    // To identify client type
+    int data = 0;
+    ret = MPI_Send(&data, 1, MPI_INT, 0, 0, params->server );
+    if (MPI_SUCCESS != ret) {
+      debug_warning("Server[?]: MPI_Recv fails :-(") ;
     }
 
     // Return OK
@@ -148,24 +160,15 @@
     int data;
     int size;
 
-    MPI_Barrier(MPI_COMM_WORLD);
+    debug_info("[COMM] mpiClient_comm_disconnect nservers\n") ;
 
-    debug_info("[COMM] mpiClient_comm_disconnect nservers\n") ; //
-    if (params->rank==0) {
-      MPI_Comm_remote_size(params->server, &size);
-
-      for (int i = 0; i < size; i++) { 
-        data = MPISERVER_DISCONNECT;
-        MPI_Send( &data, 1, MPI_INT, i, 0, params->server );
-      }
-    }
-
-    // Free locality bitmap
-    FREE_AND_NULL(params->locality); //NEW
+    data = MPISERVER_DISCONNECT;
+    MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
     
     // Disconnect
     ret = MPI_Comm_disconnect(&(params->server)) ;
-    if (MPI_SUCCESS != ret) {
+    if (MPI_SUCCESS != ret)
+    {
       debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
       return -1 ;
     }
@@ -176,7 +179,8 @@
     if (!flag)
     {
       ret = PMPI_Finalize();
-      if (MPI_SUCCESS != ret) {
+      if (MPI_SUCCESS != ret)
+      {
         debug_error("Server[%d]: MPI_Finalize fails :-(", params->rank) ;
         return -1 ;
       }
@@ -186,10 +190,9 @@
     return 1 ;
   }
 
-  int mpiClient_comm_locality ( mpiClient_param_st *params ) //NEW
+  int mpiClient_comm_locality ( mpiClient_param_st *params )
   {
     int ret;
-    int size;
     int data;
     char cli_name  [HOST_NAME_MAX];
     char serv_name [HOST_NAME_MAX];
@@ -198,42 +201,34 @@
     // Get client host name
     gethostname(cli_name, HOST_NAME_MAX);
 
-    // Get number of servers
-    MPI_Comm_remote_size(params->server, &size);
+    data = MPISERVER_GETNODENAME;
 
-    params->locality = (int *) malloc(size * sizeof(int));
-    memset(params->locality, 0, size * sizeof(int));
+    ret = MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
+    if (MPI_SUCCESS != ret) {
+      debug_warning("Server[?]: MPI_Send fails :-(") ;
+      return -1;
+    }
 
-    // Ask name of all servers
-    for (int i = 0; i < size; i++) {
-      data = MPISERVER_GETNODENAME;
-      ret = MPI_Send( &data, 1, MPI_INT, i, 0, params->server );
-      if (MPI_SUCCESS != ret) {
-        FREE_AND_NULL(params->locality) //NEW
-        debug_warning("Server[?]: MPI_Send fails :-(") ;
-        return -1;
-      }
+    ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, 0, 1, params->server, &status);
+    if (MPI_SUCCESS != ret) {
+      debug_warning("Server[?]: MPI_Recv fails :-(") ;
+      return -1;
+    }
 
-      ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, i, 1, params->server, &status);
-      if (MPI_SUCCESS != ret) {
-        FREE_AND_NULL(params->locality) //NEW
-        debug_warning("Server[?]: MPI_Recv fails :-(") ;
-        return -1;
-      }
-
-      if (strcmp(cli_name, serv_name) == 0)
-      {
-        params->locality[i] = 1;
-      }
+    if (strcmp(cli_name, serv_name) == 0)
+    {
+      params->locality = 1;
+    }
+    else
+    {
+      params->locality = 0;
     }
       
     // Return OK
     return 1;
   }
 
-
-
-  ssize_t mpiClient_write_operation ( struct nfi_mpiServer_connector fd, char *data, ssize_t size, char *msg_id )
+  ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
   {
     int ret ;
 
@@ -250,8 +245,7 @@
     msg_id = msg_id ; // TODO: msg_id is used?
 
     // Send message
-    //ret = MPI_Send(data, size, MPI_CHAR, fd.rank_id, 0, fd.comm) ;
-    ret = MPI_Send(data, size, MPI_INT, fd.rank_id, 0, fd.comm) ;
+    ret = MPI_Send(data, size, MPI_INT, 0, 0, fd) ;
     if (MPI_SUCCESS != ret) {
         debug_warning("Server[?]: MPI_Recv fails :-(") ;
         size = 0 ;
@@ -263,7 +257,7 @@
     return size;
   }
   
-  ssize_t mpiClient_write_data ( struct nfi_mpiServer_connector fd, char *data, ssize_t size, char *msg_id )
+  ssize_t mpiClient_write_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
   {
     int ret ;
     int rank;
@@ -282,7 +276,7 @@
 
     // Send message
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    ret = MPI_Send(data, size, MPI_CHAR, fd.rank_id, 1, fd.comm) ;
+    ret = MPI_Send(data, size, MPI_CHAR, 0, 1, fd) ;
     if (MPI_SUCCESS != ret) {
         debug_warning("Server[?]: MPI_Recv fails :-(") ;
         size = 0 ;
@@ -294,7 +288,7 @@
     return size;
   }
 
-  ssize_t mpiClient_read_data ( struct nfi_mpiServer_connector fd, char *data, ssize_t size, char *msg_id )
+  ssize_t mpiClient_read_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
   {
     int ret ;
     MPI_Status status ;
@@ -312,13 +306,11 @@
     msg_id = msg_id ; // TODO: msg_id is used?
 
     // Get message
-    ret = MPI_Recv(data, size, MPI_CHAR, fd.rank_id, 1, fd.comm, &status);
+    ret = MPI_Recv(data, size, MPI_CHAR, 0, 1, fd, &status);
     if (MPI_SUCCESS != ret) {
         debug_warning("Server[?]: MPI_Recv fails :-(") ;
         size = 0 ;
     }
-
-    // TODO: status holds the mpi_rank and tag to be used to answer in case of a high-level function that reads a request... how we can return (size, rank, tag, ...) with this 'descriptor'-based interface?
 
     debug_info("[COMM] server: end comm_read_data(...)\n") ;
 

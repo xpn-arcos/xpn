@@ -48,7 +48,7 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
 	xpn_file_table[i]->part 	= XpnSearchPart(pd);
 	xpn_file_table[i]->offset 	= 0;
 	xpn_file_table[i]->block_size 	= xpn_file_table[i]->part->block_size;
-	xpn_file_table[i]->mdata 	= mdata;
+	xpn_file_table[i]->mdata 	    = mdata;
 	xpn_file_table[i]->data_vfh 	= vfh;
 	xpn_file_table[i]->size_threads	= XpnGetSizeThreads(xpn_file_table[i]->part);
 	
@@ -307,6 +307,7 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
 	}
 
 	res = XpnSearchFile(abs_path);
+
 	if (res < 0) { // FIXME: CAUTION, this caused the call to fail some changes before, although now it seems to work.
 		/* params:
 		 * flag operation, partition id, absolute path, file descriptor, pointer to server
@@ -326,7 +327,6 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
 				XPN_DEBUG_END_ARGS1(path)
 				return res;
 			}
-			
 			if(vfh == NULL){
 				vfh = (struct xpn_fh *)malloc(sizeof(struct xpn_fh));
 				if(vfh == NULL){
@@ -341,7 +341,6 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
 					vfh->nfih[i] = NULL;
 				}
 			}
-
 			/* read the metadata */
 			memset(mdata, 0, sizeof(struct xpn_metadata));
 			res = XpnReadMetadata(mdata, n, servers, vfh, abs_path, pd);
@@ -354,10 +353,14 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
 				return res;
 			}
 		}
-		
+
 		free(servers);
 
 		res = XpnSearchSlotFile(pd, abs_path, vfh, mdata, mode);
+	}
+	else{
+		//CUIDADO
+		xpn_file_table[i]->links++;
 	}
 	
 	XPN_DEBUG_END_ARGS1(path)
@@ -727,7 +730,7 @@ int xpn_open(const char *path, int flags , ...)
 			return res;
 		}
 	}
-	
+
 	vfh = NULL;
 	mdata = NULL;
 	
@@ -795,12 +798,12 @@ int xpn_close(int fd)
 	
 	xpn_file_table[fd]->links--;
 	if(xpn_file_table[fd]->links == 0){
-        	for(i=0;i<xpn_file_table[fd]->data_vfh->n_nfih;i++){
-                	if(xpn_file_table[fd]->data_vfh->nfih[i] != NULL){
+        for(i=0;i<xpn_file_table[fd]->data_vfh->n_nfih;i++){
+            if(xpn_file_table[fd]->data_vfh->nfih[i] != NULL){
 				if(xpn_file_table[fd]->data_vfh->nfih[i]->priv_fh != NULL){
 					xpn_file_table[fd]->data_vfh->nfih[i]->server->ops->nfi_close(
-							xpn_file_table[fd]->data_vfh->nfih[i]->server,
-							xpn_file_table[fd]->data_vfh->nfih[i]);
+					xpn_file_table[fd]->data_vfh->nfih[i]->server,
+					xpn_file_table[fd]->data_vfh->nfih[i]);
 				}
 				free(xpn_file_table[fd]->data_vfh->nfih[i]);
 			}
@@ -941,7 +944,7 @@ int xpn_rename(const char *path, const char *newpath)
 		/* */
 		return -1;
 	}
-	
+
 	res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
 	if(res<0){
 		free(servers);
@@ -970,6 +973,7 @@ int xpn_rename(const char *path, const char *newpath)
 		// Default Value
 		nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_rename,pd, 0));
 		/* worker */
+
 		nfi_worker_do_rename(	servers[i]->wrk,
 					url_serv,
 					newurl_serv);
@@ -989,12 +993,12 @@ int xpn_rename(const char *path, const char *newpath)
 		if(vfh_aux->nfih[i] != NULL){
 			if(vfh_aux->nfih[i]->priv_fh != NULL){
 				vfh_aux->nfih[i]->server->ops->nfi_close(
-					vfh_aux->nfih[i]->server,
-					vfh_aux->nfih[i]);
-				}
-				free(vfh_aux->nfih[i]);
+				vfh_aux->nfih[i]->server,
+				vfh_aux->nfih[i]);
 			}
+			free(vfh_aux->nfih[i]);
 		}
+	}
 	free(vfh_aux->nfih);
 	free(vfh_aux);
 	free(mdata_aux);
@@ -1082,9 +1086,9 @@ int xpn_stat(const char *path, struct stat *sb)
 		XPN_DEBUG_END_ARGS1(path)
 		return res;
 	}
-	
 	//debug=1;
 	fd = XpnSearchFile(abs_path2);
+
 	//debug=0;
 	//printf("xpn_stat: XpnSearchFile(%s->%s) = %d\n", path, abs_path2, fd);
 	
@@ -1096,16 +1100,18 @@ int xpn_stat(const char *path, struct stat *sb)
 		if(fd>=0){
 			res = XpnGetAtrib(fd, sb);
 			xpn_close(fd);
-		} else {
+		} 
+		else {
 			new_path=malloc(strlen(path)+2);
-			strcpy(new_path, "/");
-			strcat(new_path,abs_path);
+			strcpy(new_path, abs_path);
+			strcat(new_path,"/");
 			dir = xpn_opendir(new_path);
 			free(new_path);
 			if (dir != NULL) {
 				res = XpnGetAtrib(fd, sb);
 				xpn_closedir(dir);
-			} else {
+			}
+			else {
 				errno = ENOENT;
 				res = -1;
 				XPN_DEBUG_END_ARGS1(path)
@@ -1113,7 +1119,7 @@ int xpn_stat(const char *path, struct stat *sb)
 			}
 		}
 	}
-	
+
 	XPN_DEBUG_END_ARGS1(path)
 	return res;
 }

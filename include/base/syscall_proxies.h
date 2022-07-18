@@ -8,7 +8,6 @@
 
   #include "utils.h"
 
-
  #ifdef  __cplusplus
     extern "C" {
  #endif
@@ -35,6 +34,8 @@
   int dlsym_fstat(int ver, int fd, struct stat *buf);
   
   int dlsym_close(int fd);
+
+  int dlsym_rename(const char *old_path, const char *new_path);
   
   int dlsym_unlink(char *path);
 
@@ -56,6 +57,8 @@
 
   // Proccess API
   int dlsym_fork(void);
+
+  int dlsym_pipe(int pipefd[2]);
   
   int dlsym_dup(int fd);
   int dlsym_dup2(int fd, int fd2);
@@ -73,6 +76,10 @@
   int dlsym_chown(char *path, uid_t owner, gid_t group);
   
   int dlsym_fcntl(int fd, int cmd, long arg);
+
+  int dlsym_access(const char *path, int mode);
+
+  char *dlsym_realpath(const char *restrict path, char *restrict resolved_path);
 
 
   #ifdef  __cplusplus

@@ -2,13 +2,9 @@
 # This Makefile is for expand bypass (syscalls interceptions) library
 #
 
-#gcc -Wall -Wextra -fpic -DLINUX -I/opt/xpn/include/ -c xpn_bypass.c
-#gcc -shared -o xpn_bypass.so *.o -Wl,--trace /opt/xpn/lib/libxpn.a -lmxml -lpthread
-
 
  prefix = /opt/xpn
- CC=/opt/software/install-mpich/bin/mpicc
-#CC=/home/dcamarma/mpich-install/bin/mpicc
+ CC     = /opt/software/install-mpich/bin/mpicc
  FLAGS=-Wall -Wextra -fpic -DLINUX
  INCLUDE=-I../include -I../include/base -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
  LIBS=-lmxml -lpthread -ldl
