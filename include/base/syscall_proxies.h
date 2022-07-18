@@ -8,7 +8,6 @@
 
   #include "utils.h"
 
-
  #ifdef  __cplusplus
     extern "C" {
  #endif
@@ -79,6 +78,8 @@
   int dlsym_fcntl(int fd, int cmd, long arg);
 
   int dlsym_access(const char *path, int mode);
+
+  char *dlsym_realpath(const char *restrict path, char *restrict resolved_path);
 
 
   #ifdef  __cplusplus

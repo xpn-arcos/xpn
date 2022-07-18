@@ -27,13 +27,21 @@ uname -v = #127-Ubuntu SMP Wed May 18 14:30:56 UTC 2022
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
+PATH: /home/dcamarma/.nvm/versions/node/v8.16.2/bin
+PATH: /home/dcamarma/.local/bin
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
 PATH: /usr/sbin
 PATH: /usr/bin
 PATH: /sbin
 PATH: /bin
+PATH: /usr/games
+PATH: /usr/local/games
 PATH: /snap/bin
+PATH: /usr/local/go/bin
+PATH: /home/dcamarma/go/bin
+PATH: /usr/local/go/bin
+PATH: /home/dcamarma/go/bin
 
 
 ## ----------- ##
@@ -809,7 +817,7 @@ configure:5318: $? = 0
 configure:5318: result: yes
 configure:5324: checking for _doprnt
 configure:5324: gcc -o conftest -g -O2   conftest.c -lpthread  >&5
-/usr/bin/ld: /tmp/cc8Wa25C.o: in function `main':
+/usr/bin/ld: /tmp/ccwIXfWw.o: in function `main':
 /local_test/xpn/conftest.c:79: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:5324: $? = 1
@@ -1112,7 +1120,7 @@ AWK='mawk'
 CC='/opt/software/install-mpich/bin/mpicc'
 CCDEPMODE='depmode=gcc3'
 CDEFS='-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER'
-CFLAGS='-fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra'
+CFLAGS='-fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra -std=c11'
 CPP='gcc -E'
 CPPFLAGS='-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER -I$(HOME)/mxml/usr/include -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn -I$(top_srcdir)/include/xpn/xpn_simple -I$(top_srcdir)/include/nfi -I$(top_srcdir)/include/nfi/nfi_local -I$(top_srcdir)/include/xpni/xpni_ft -I$(top_srcdir)/include/xpni/xpni_log -I$(top_srcdir)/include/nfi/nfi_nfs3 -I$(top_srcdir)/include/nfi/nfi_tcpServer -I$(top_srcdir)/include/nfi/nfi_mpiServer  '
 CYGPATH_W='echo'

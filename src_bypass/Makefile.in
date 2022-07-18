@@ -5,7 +5,7 @@
 
  prefix = @prefix@
  CC     = @CC@
- FLAGS=-Wall -Wextra -fpic -DLINUX
+ FLAGS=-Wall -Wextra -fpic -DLINUX -std=c11
  INCLUDE=-I../include -I../include/base -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
  LIBS=-lmxml -lpthread -ldl
  XPN_LIB=${prefix}/lib

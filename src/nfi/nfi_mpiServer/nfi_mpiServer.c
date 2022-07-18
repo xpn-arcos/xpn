@@ -526,9 +526,9 @@
         server_aux = (struct nfi_mpiServer_server *) serv->private_info;
         debug_info("[NFI] nfi_mpiServer_open(ID=%s): begin %s\n",server_aux->id,url) ;
 
-        if (url[strlen(url)-1] == '/'){
+        /*if (url[strlen(url)-1] == '/'){
           return nfi_mpiServer_opendir(serv, url, fho) ;
-        }
+        }*/
 
         ret = ParseURL(url, NULL, NULL, NULL, server,  NULL,  dir) ;
         if (ret < 0) {
@@ -1258,13 +1258,6 @@
         return 0; //CUIDADO
       }
 
-
-
-
-
-
-
-
       int nfi_mpiServer_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, char *entry, unsigned char *type)
       {
         struct dirent *ent;
@@ -1325,29 +1318,8 @@
           *type = ret_entry.ret.d_type;
         }
 
-        /*if(ent == NULL){
-              return 1;
-        }
-        if(type==NULL){
-              return 0;
-        }*/
-
-        //strcpy(entry, ent->d_name) ;
-        //printf("[NFI]ent->d_name = %s S_ISDIR(%o) = %o\n", ent->d_name, ent->d_type,S_ISDIR(ent->d_type)) ;
-        //*type = ent->d_type;
-
         return 0;
       }
-
-
-
-
-
-
-
-
-
-
 
       int nfi_mpiServer_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
       {

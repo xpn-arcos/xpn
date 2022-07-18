@@ -62,8 +62,7 @@
   int (*real_chown)(char *, uid_t, gid_t) = NULL;
   int (*real_fcntl)(int, int, long) = NULL;
   int (*real_access)(const char *, int) = NULL;
-  int (*real_socket)(int, int, int) = NULL;
-  int (*real_setsockopt)(int, int, int, const void *, socklen_t) = NULL;
+  char* (*real_realpath)(const char *restrict, char *restrict) = NULL;
 
 
 
@@ -496,6 +495,22 @@
     int ret = real_access((char *)path, mode);
 
     debug_info("dlsym_access: (%s,%d) return %d\n",path,mode,ret);
+
+    return ret;
+  }
+  
+
+  char *dlsym_realpath(const char *restrict path, char *restrict resolved_path){
+    debug_info("dlsym_realpath: before realpath...\n");
+    debug_info("dlsym_realpath: Path => %s\n",path);
+
+    if (real_realpath == NULL) {
+        real_realpath = dlsym(RTLD_NEXT,"realpath");
+    }
+    
+    char* ret = real_realpath((char *)path, (char *)resolved_path);
+
+    debug_info("dlsym_access: (%s,%s) return %s\n",path,resolved_path,ret);
 
     return ret;
   }

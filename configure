@@ -5426,7 +5426,7 @@ then
   #CC="g++"
   MAKE="make"
  #AC_MSG_RESULT("$CFLAGS");
-  CFLAGS="-fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra" #ADDED
+  CFLAGS="-fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra -std=c11" #ADDED
  #AC_MSG_RESULT("$CFLAGS");
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"

@@ -1106,7 +1106,6 @@ int xpn_stat(const char *path, struct stat *sb)
 			strcpy(new_path, abs_path);
 			strcat(new_path,"/");
 			dir = xpn_opendir(new_path);
-
 			free(new_path);
 			if (dir != NULL) {
 				res = XpnGetAtrib(fd, sb);

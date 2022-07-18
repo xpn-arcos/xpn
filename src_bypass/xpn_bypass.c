@@ -34,8 +34,8 @@
   /**
    * This variable contains the prefix which will be considerated as expand partition.
    */
-  char *xpn_adaptor_partition_prefix = "xpn://"; //Original
-  //char *xpn_adaptor_partition_prefix = "/xpn/";
+  //char *xpn_adaptor_partition_prefix = "xpn://"; //Original
+  char *xpn_adaptor_partition_prefix = "/tmp/expand/";
     
   /*
   char *xpn_adaptor_flog_name  = "/tmp/EXPAND.LOG" ;
@@ -53,6 +53,10 @@
       va_end(vargs);
   }
   */
+
+  int is_prefix(const char * prefix, const char * path){
+    return ( !strncmp(prefix,path,strlen(prefix)) && strlen(path) > strlen(prefix) );
+  }
 
 
 
@@ -190,19 +194,25 @@
 
   // File API
 
-  //int open(const char *path, int flags, [mode_t mode])
-  int open(const char *path, int flags, mode_t mode)
+  int open(const char *path, int flags, ...)
   {
     int ret, fd;
+    va_list ap;
 
-    debug_info("Before open(%s,%o,%o)...\n",path,flags,mode);
-    debug_info("Path => %s\n",path);
+    va_start(ap, flags);
+
+    mode_t mode = va_arg(ap, mode_t);
+
+    debug_info("Before open.... %s\n",path);
+    debug_info("1) Path => %s\n",path);
+    debug_info("2) flags => %d\n",flags);
+    debug_info("3) mode => %d\n",mode);
 
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
     // This if checks if variable path passed as argument starts with the expand prefix.
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       // It is an XPN partition, so we redirect the syscall to expand syscall
       debug_info("Path => %s\n",path + strlen(xpn_adaptor_partition_prefix));
@@ -227,6 +237,7 @@
     // Not an XPN partition. We must link with the standard library.
     else 
     {
+      debug_info("dlsym_open\n");
       fd = dlsym_open((char *)path, flags, mode);
 
       if(fd<0)
@@ -242,23 +253,29 @@
         ret = fdstable_put ( virtual_fd );
       }
     }
+    va_end(ap);
 
     return ret;
   }
 
-
-  int open64(const char *path, int flags, mode_t mode)
+  int open64(const char *path, int flags, ...)
   {
     int fd, ret;
+    va_list ap;
+
+    va_start(ap, flags);
+
+    mode_t mode = va_arg(ap, mode_t);
 
     debug_info("Before open64.... %s\n",path);
-    debug_info("1) Path => %s\n",path+strlen(xpn_adaptor_partition_prefix));
+    debug_info("1) Path => %s\n",path);
     debug_info("2) flags => %d\n",flags);
+    debug_info("3) mode => %d\n",mode);
 
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       debug_info("Path => %s\n",path+strlen(xpn_adaptor_partition_prefix));
 
@@ -298,7 +315,7 @@
       }
     }
 
-    debug_info("OPEN64 %d\n", ret);
+    va_end(ap);
 
     return ret;
   }
@@ -312,7 +329,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       fd = xpn_creat((char *)(path+strlen(xpn_adaptor_partition_prefix)),mode);
 
@@ -470,7 +487,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       ret = xpn_stat((char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
 
@@ -518,7 +535,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       ret = xpn_stat((char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
 
@@ -616,7 +633,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       debug_info("XPN:lstat:path = %s\n",path+strlen(xpn_adaptor_partition_prefix));
       ret = xpn_stat((char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
@@ -641,7 +658,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       if (0 == strncmp(path,"/xpn/htdocs",11)) {
     // TODO
@@ -722,7 +739,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,old_path,strlen(xpn_adaptor_partition_prefix)) && !strncmp(xpn_adaptor_partition_prefix,new_path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, old_path) && is_prefix(xpn_adaptor_partition_prefix, new_path))
     {
       debug_info("Old Path => %s\n",old_path+strlen(xpn_adaptor_partition_prefix));
       debug_info("New Path => %s\n",new_path+strlen(xpn_adaptor_partition_prefix));
@@ -744,7 +761,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       return(xpn_unlink((char *)(path+strlen(xpn_adaptor_partition_prefix))));
     }
@@ -767,7 +784,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       debug_info("Before xpn_mkdir(%s)...\n",((char *)(path+strlen(xpn_adaptor_partition_prefix))));
       return xpn_mkdir( ((char *)(path+strlen(xpn_adaptor_partition_prefix))) ,mode );
@@ -784,18 +801,15 @@
     debug_info("Before opendir(%s)...\n", dirname);
 
     DIR * ret;
-
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,dirname,strlen(xpn_adaptor_partition_prefix))) //TODO:Aqui falla
+    if(is_prefix(xpn_adaptor_partition_prefix, dirname))
     {
       ret = xpn_opendir((char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
-
       if ( ret != NULL ){
         fdsdirtable_put ( ret );
       }
-
       /*for (int i = 0; i < MAX_DIRS; ++i)
       {
         debug_info("%p\n", fdsdirtable[i]);
@@ -909,7 +923,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       return xpn_rmdir( ((char *)(path+strlen(xpn_adaptor_partition_prefix))) );
     }
@@ -955,7 +969,7 @@
       debug_info("PIPE FD2 SYS %d\n", pipefd[1]);
 
       pipefd[0] = fdstable_put ( virtual_fd );
-      pipefd[1] = fdstable_put ( virtual_fd );
+      pipefd[1] = fdstable_put ( virtual_fd2 );
     }
 
     return ret;
@@ -1076,7 +1090,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       return(xpn_chdir((char *)(path+strlen(xpn_adaptor_partition_prefix))));
     }
@@ -1094,7 +1108,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       return(xpn_chmod((char *)(path+strlen(xpn_adaptor_partition_prefix)), mode));
     }
@@ -1137,7 +1151,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       return(xpn_chown((char *)(path+strlen(xpn_adaptor_partition_prefix)), owner, group));
     }
@@ -1174,7 +1188,7 @@
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
 
-    if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
       struct stat64 stats;
       if (__lxstat64(_STAT_VER, path, &stats)){
@@ -1199,6 +1213,30 @@
     }
   }
 
+  char * __realpath_chk(const char * path, char * resolved_path, size_t resolved_len){
+    debug_info("Before __realpath_chk...\n");
+    debug_info("PATH %s\n", path);
+
+    (void)resolved_len;
+
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    {
+      debug_info("Before xpn___realpath_chk...\n");
+      strcpy(resolved_path, path);
+      return resolved_path;
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("Before dlsym_realpath...\n");
+      return dlsym_realpath(path, resolved_path);
+    }
+  }
+
+
   /**************************************************
   GETCWD TIENE MUCHA CHICHA...PA LUEGO
   ***************************************************
@@ -1212,7 +1250,7 @@
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+      if(is_prefix(xpn_adaptor_partition_prefix, path))
       {
           // If xpn
           return(xpn_chdir(path+strlen(xpn_adaptor_partition_prefix)));
@@ -1235,7 +1273,7 @@
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      if(!strncmp(xpn_adaptor_partition_prefix,path,strlen(xpn_adaptor_partition_prefix)))
+      if(is_prefix(xpn_adaptor_partition_prefix, path))
       {
           return(xpn_utime(path+strlen(xpn_adaptor_partition_prefix), times));
       }// If xpn

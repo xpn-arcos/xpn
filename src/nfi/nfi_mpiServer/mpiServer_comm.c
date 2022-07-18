@@ -149,7 +149,7 @@
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[?]: MPI_Recv fails :-(") ;
     }
-    
+
     // Return OK
     return 1 ;
   }

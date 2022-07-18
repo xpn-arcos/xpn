@@ -6,6 +6,7 @@
 
 #include <dlfcn.h>
 #include <sys/stat.h>
+#include <stdarg.h>
 
 #include "xpn.h"
 #include "syscall_proxies.h"
@@ -83,10 +84,8 @@ int open(const char *path, int flags, mode_t mode);
 
 // File API
 
-//int open(const char *path, int flags, ...); //comment
-int open(const char *path, int flags, mode_t mode);
-//int open64(const char *path, int flags, ...); //comment
-int open64(const char *path, int flags, mode_t mode);
+int open(const char *path, int flags, ...);
+int open64(const char *path, int flags, ...);
 
 int creat(const char *path, mode_t mode);
 
@@ -97,17 +96,11 @@ ssize_t write(int fildes, const void *buf, size_t nbyte);
 
 off_t lseek(int fildes, off_t offset, int whence);
 
-//int lstat64(const char *path, struct stat64 *buf); //old
 int __lxstat64(int ver, const char *path, struct stat64 *buf);
-//int stat64(const char *path, struct stat64 *buf); //old
 int __xstat64(int ver, const char *path, struct stat64 *buf);
-//int fstat64(int fildes, struct stat64 *buf); //old
 int __fxstat64(int ver, int fildes, struct stat64 *buf);
-//int lstat(const char *path, struct stat *buf); //old
 int __lxstat(int ver, const char *path, struct stat *buf);
-//int stat(const char *path, struct stat *buf); //old
 int __xstat(int ver, const char *path, struct stat *buf);
-//int fstat(int fildes, struct stat *buf); //old
 int __fxstat(int ver, int fd, struct stat *buf);
 
 int close(int fd);
@@ -121,14 +114,12 @@ int unlink(const char *path);
 // Directory API
 
 DIR *opendir(const char *dirname);
-
 int mkdir(const char *path, mode_t mode);
 
 struct dirent *readdir(DIR *dirp);
 struct dirent64 *readdir64(DIR *dirp);
 
 int closedir(DIR *dirp);
-
 int rmdir(const char *path);
 
 
@@ -136,10 +127,8 @@ int rmdir(const char *path);
 // Proccess API
 
 int fork();
-
 int dup(int fildes);
 int dup2(int fildes, int fildes2);
-
 void exit(int status) ;
 
 
@@ -147,16 +136,12 @@ void exit(int status) ;
 // Manager API
 
 int chdir(const char *path);
-
 int chmod(const char *path, mode_t mode);
-
 int fchmod(int fildes, mode_t mode);
-
 int chown(const char *path, uid_t owner, gid_t group);
-
 int fcntl(int fd, int cmd, long arg);
-
 int access(const char *path, int mode);
+char * __realpath_chk(const char * path, char * resolved_path, size_t resolved_len);
 
 
 /**************************************************
