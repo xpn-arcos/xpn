@@ -676,12 +676,12 @@ AUTOCONF = ${SHELL} /local_test/xpn/config/missing autoconf
 AUTOHEADER = ${SHELL} /local_test/xpn/config/missing autoheader
 AUTOMAKE = ${SHELL} /local_test/xpn/config/missing automake-1.16
 AWK = mawk
-CC = /opt/software/install-mpich/bin/mpicc
+CC = /opt/software/install-mpich//bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
-CFLAGS = -fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra -std=c11
+CFLAGS = -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
 CPP = gcc -E
-CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER -I$(HOME)/mxml/usr/include -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn -I$(top_srcdir)/include/xpn/xpn_simple -I$(top_srcdir)/include/nfi -I$(top_srcdir)/include/nfi/nfi_local -I$(top_srcdir)/include/xpni/xpni_ft -I$(top_srcdir)/include/xpni/xpni_log -I$(top_srcdir)/include/nfi/nfi_nfs3 -I$(top_srcdir)/include/nfi/nfi_tcpServer -I$(top_srcdir)/include/nfi/nfi_mpiServer  
+CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER -I$(HOME)/bin/mxml/include -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn -I$(top_srcdir)/include/xpn/xpn_simple -I$(top_srcdir)/include/nfi -I$(top_srcdir)/include/nfi/nfi_local -I$(top_srcdir)/include/xpni/xpni_ft -I$(top_srcdir)/include/xpni/xpni_log -I$(top_srcdir)/include/nfi/nfi_nfs3 -I$(top_srcdir)/include/nfi/nfi_tcpServer -I$(top_srcdir)/include/nfi/nfi_mpiServer  
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -696,10 +696,10 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = -lpthread -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
+LDFLAGS = -lpthread -lpthread -L$(HOME)/bin/mxml/lib -lmxml -ldl
 LIBLINK = -lpthread
 LIBOBJS = 
-LIBS = -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
+LIBS = -lpthread -L$(HOME)/bin/mxml/lib -lmxml -ldl
 LTLIBOBJS = 
 MAKE = make
 MAKEINFO = ${SHELL} /local_test/xpn/config/missing makeinfo
@@ -792,7 +792,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /opt/xpn
+prefix = /opt/xpn/xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run

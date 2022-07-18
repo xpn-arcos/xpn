@@ -4,8 +4,8 @@
 #--------------------------
 
  MAKE         = make -s
- CC           = /opt/software/install-mpich/bin/mpicc
- EXPAND_DIR   = /opt/xpn
+ CC           = /opt/software/install-mpich//bin/mpicc
+ EXPAND_DIR   = /opt/xpn/xpn
  OBJECTS_TCPSERVER  = tcpServer.o \
 		      tcpServer_utils.o \
 		      tcpServer_params.o \
@@ -18,9 +18,9 @@
 #OBJECTS_XPN2XPN       = xpn2xpn_lock.o
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDBG_OPS -DDBG_WORKERS -DDBG_COMM
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDBG_OPS -DDBG_WORKERS
-MYFLAGS                = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_ -std=c11
+MYFLAGS                = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
 MYHEADERS              =  -I$(EXPAND_DIR)/include
-MYLIBS                 =  -L$(EXPAND_DIR)/lib  -L${HOME}/mxml/lib  -lpthread -lxpn -lmxml -ldl
+MYLIBS                 =  -L$(EXPAND_DIR)/lib  -L${HOME}/bin/mxml/lib  -lpthread -lxpn -lmxml -ldl
 
 
 TCPSERVER_EXE = tcpServer.exe

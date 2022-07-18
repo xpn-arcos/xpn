@@ -24,13 +24,14 @@ AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([1.0 foreign subdir-objects])
 AM_CONDITIONAL([am__fastdepCC], [test x$am__fastdepCC = xam__fastdepCC])
 AM_CONDITIONAL([AMDEP], [test x$amdep = xamdep])
-AM_PROG_CC_C_O
 AM_PROG_AR
 
 #
 # Checks for programs.
 #
 AC_PROG_MAKE_SET
+AC_PROG_CC([mpicc icc gcc])
+AM_PROG_CC_C_O
 
 
 #
@@ -71,17 +72,15 @@ AC_CHECK_FUNCS(gethostname gettimeofday select socket strdup strerror)
 AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 
 
-if test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu"
+if test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
   OS="__LINUX__"
-  #CC="g++"
+  CC="mpicc"
   MAKE="make"
- #AC_MSG_RESULT("$CFLAGS");
-  CFLAGS="-fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra" #ADDED
- #AC_MSG_RESULT("$CFLAGS");
+  CFLAGS="-fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"
-  LIBS="$LIBS -L\$(HOME)/mxml/usr/lib -lmxml -ldl"
+  LIBS+="-L\$(HOME)/bin/mxml/lib -lmxml -ldl"
   AC_SUBST(OS)
   AC_SUBST(CC)
   AC_SUBST(MAKE)
@@ -137,7 +136,7 @@ else
 fi
 
 INCLUDEFLAGS="\
--I\$(HOME)/mxml/usr/include \
+-I\$(HOME)/bin/mxml/include \
 -I\$(top_srcdir)/include \
 -I\$(top_srcdir)/include/base \
 -I\$(top_srcdir)/include/xpn \

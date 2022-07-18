@@ -1,4 +1,4 @@
-# XPN 1.0r1
+# XPN 1.0r2
 *Expand Ad-Hoc Parallel File System*
 
  * ℹ️ *Homepage*: https://xpn-arcos.github.io/arcos-xpn.github.io/ 
@@ -10,25 +10,50 @@
 
 ## 1. Install dependencies
 
-XPN needs the typical C development tools and the [minixml](http://www.minixml.org):
+XPN needs the typical C development tools and MPICH installed.
 
+If you are administrator of your local machine then you need to execute:
 ```
 sudo apt-get install -y autoconf automake gcc g++ make \
                         flex libtool doxygen \
-                        libmpich-dev libmxml-dev
+                        libmpich-dev
 ```
 
 
-## 2. Build XPN 
+## 2. Download source code
 
-As an example of build scenario (if MPICH is installed at '/opt/software/install-mpich'):
+You need to download the source code of [XPN](https://xpn-arcos.github.io/arcos-xpn.github.io/) and [minixml](http://www.minixml.org).
+
+You can download both by executing:
 ```
-./autogen.sh
-mkdir -p /opt/xpn 
-./configure --prefix=/opt/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver=/opt/software/install-mpich/bin
-make clean
-make -j
-make install
+mkdir $HOME/src
+cd    $HOME/src
+git clone https://github.com/michaelrsweet/mxml.git
+git clone https://github.com/dcamarmas/xpn.git
+```
+
+
+## 3. Build XPN 
+
+As an example scenario we will consider the following one:
+* MPICH is installed at '/opt/software/install-mpich'
+* Installation directory will be '/opt/xpn'
+
+To build Expand you need to execute:
+```
+cd $HOME/src
+./xpn/build-me.sh -m /opt/software/install-mpich/bin path -i /opt/xpn
+```
+
+Alternatively, you can use:
+```
+cd $HOME/src
+./xpn/build-me-compact.sh tucan
+```
+
+Please, for help execute:
+```
+./xpn/build-me-compact.sh
 ```
 
 

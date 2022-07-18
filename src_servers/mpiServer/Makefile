@@ -4,10 +4,10 @@
 #--------------------------
 
  MAKE         = make -s
- CC           = /opt/software/install-mpich/bin/mpicc
+ CC           = /opt/software/install-mpich//bin/mpicc
  SOURCE_PATH  = ./
- EXPAND_DIR   = /opt/xpn
- OBJECTS_MPISERVER      = mpiServer.o \
+ EXPAND_DIR   = /opt/xpn/xpn
+ OBJECTS_MPISERVER     = mpiServer.o \
 		         mpiServer_params.o \
 		         mpiServer_comm.o \
 		         mpiServer_ops.o \
@@ -21,9 +21,9 @@
 			 base/debug_msg.o \
 			 base/utils.o
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDEBUG
-MYFLAGS                = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_ -std=c11
+MYFLAGS                = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
 MYHEADERS              =  -I. -I$(EXPAND_DIR)/include
-MYLIBS                 =  -L$(EXPAND_DIR)/lib  -lpthread -lxpn -lmxml -ldl
+MYLIBS                 =  -L$(EXPAND_DIR)/lib -L../../../mxml -lpthread -lxpn -lmxml -ldl
 
 MPISERVER_EXE = mpiServer.exe
 
