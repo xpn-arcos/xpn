@@ -10,7 +10,7 @@
  INCLUDE=-I../include -I../include/base -I../../mxml -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
  LIBS=-lxpn -lmxml -lpthread -ldl
 
- XPN_LIB=${prefix}/lib
+ XPN_LIB=../../xpn/lib
  MXML_LIB=../../mxml
 
 
