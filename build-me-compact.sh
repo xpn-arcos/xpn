@@ -80,8 +80,8 @@ case $1 in
      ;;
     "tucan")
      # working path...
-     MPICH_PATH=/home/dcamarma/mpich-install/
-     INSTALL_PATH=/home/dcamarma/xpn-install/
+     MPICH_PATH=/home/dcamarma/mpich-install
+     INSTALL_PATH=/home/dcamarma/bin/
 
      # install software (if needed)...
      PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen libmpich-dev libmxml-dev"
