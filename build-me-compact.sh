@@ -69,8 +69,8 @@ case $1 in
      ;;
    "lab21")
      # working path...
-     MPICH_PATH=/opt/software/install-mpich/
-     INSTALL_PATH=/opt/xpn
+     MPICH_PATH=/opt/software/install-mpich
+     INSTALL_PATH=/opt
 
      # install software (if needed)...
      PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen libmpich-dev libmxml-dev"

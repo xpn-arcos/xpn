@@ -676,7 +676,7 @@ AUTOCONF = ${SHELL} /local_test/xpn/config/missing autoconf
 AUTOHEADER = ${SHELL} /local_test/xpn/config/missing autoheader
 AUTOMAKE = ${SHELL} /local_test/xpn/config/missing automake-1.16
 AWK = mawk
-CC = /opt/software/install-mpich//bin/mpicc
+CC = /opt/software/install-mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
 CFLAGS = -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
@@ -792,7 +792,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /opt/xpn/xpn
+prefix = /opt/xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run

@@ -379,6 +379,8 @@
           nfi_worker_init(serv->wrk, serv, 0) ;
         }
 #endif
+
+        return 0;
       }
 
 
