@@ -415,17 +415,19 @@ int main(int argc, char *argv[]) {
 	if (!silent)
 		pthread_create(&thread, NULL, (void * (*)(void *))progression_bar, NULL);
 	
+	fds = NULL ;
 	if (xpnsource)
 		fds = xpn_fopen(source, "r");
 	else
 		fds = fopen(source, "r");
 	
-	if(fds == NULL) {
+	if (fds == NULL) {
 		perror("Error opening source");
 		fprintf(stderr, "Error opening source '%s': fd = %p\n", source, fds);
 		exit(-1);
 	}
 
+	fdd = NULL ;
 	if (!read_only) {
 		if (xpndest)
 			fdd = xpn_fopen(dest, "w");

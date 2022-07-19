@@ -337,7 +337,7 @@
         struct nfi_mpiServer_server *server_aux;
 
         server_aux = (struct nfi_mpiServer_server *) (serv->private_info) ;
-        strcpy(&(server_aux->params.srv_name), server) ;
+        strcpy(server_aux->params.srv_name, server) ;
 
         ret = mpiClient_comm_connect(&(server_aux->params)) ;
         if (ret < 0) {
@@ -1245,7 +1245,7 @@
 
           //nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(fh_aux->dir), sizeof(DIR*)) ; //NEW
           nfi_mpiServer_doRequest(server_aux, &msg, (char *)&(aux), sizeof(DIR*)) ; //NEW
-          fh_aux->dir = aux;
+          fh_aux->dir = (DIR *)aux;
         }
 
         //fh_aux->fd = ret;

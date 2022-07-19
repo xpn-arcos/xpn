@@ -189,7 +189,7 @@
     return size;
   }
 
-  ssize_t mpiServer_comm_write_data ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id)
+  ssize_t mpiServer_comm_write_data ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id )
   {
     int ret ;
 
@@ -197,16 +197,17 @@
 
     // Check params
     if (size == 0){
-      return 0;
+        return 0;
     }
     if (size < 0){
-      debug_warning("Server[%d]: size < 0", params->rank) ;
-      return -1;
+        debug_warning("Server[%d]: size < 0", params->rank) ;
+        return -1;
     }
     if (NULL == params) {
-      debug_warning("Server[%d]: NULL params", params->rank) ;
-      return -1;
+        debug_warning("Server[%d]: NULL params", params->rank) ;
+        return -1;
     }
+    (void)rank_client_id ; // Avoid warning of unused parameter
 
     // Send message
     ret = MPI_Send(data, size, MPI_CHAR, 0, 1, fd) ;

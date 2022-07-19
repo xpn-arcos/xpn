@@ -104,7 +104,7 @@
       {
         debug_info("[MAIN] mpiServer_accept_comm()\n") ;
 
-        params.client = NULL;
+        params.client = MPI_COMM_NULL ;
 
         sd = mpiServer_comm_accept(&params) ;
         if (sd == -1) {

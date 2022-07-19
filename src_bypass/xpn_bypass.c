@@ -1069,14 +1069,15 @@
     return -1;
   }
 
-  void exit(int status)
+  void exit ( int status )
   {
-    if (xpn_adaptor_initCalled == 1)
-    {
-      xpn_destroy();
-    }
-    
-    dlsym_exit(status);
+      if (xpn_adaptor_initCalled == 1)
+      {
+          xpn_destroy();
+      }
+ 
+      dlsym_exit(status) ;
+      __builtin_unreachable() ;
   }
 
 

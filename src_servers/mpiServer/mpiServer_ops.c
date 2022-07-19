@@ -530,11 +530,10 @@
     s = head->u_st_mpiServer_msg.op_opendir.path ;
     ret = filesystem_opendir(s) ;
 
-    unsigned long long aux;
-    aux = ret;
+    unsigned long long aux ;
+    aux = (unsigned long long)ret ;  // TODO: why not "(char *)&ret" ?
 
-    //mpiServer_comm_write_data(params, sd,(char *)ret, (int) sizeof(DIR *), rank_client_id) ;
-    mpiServer_comm_write_data(params, sd,(char *)&aux, (int) sizeof(DIR *), rank_client_id) ;
+    mpiServer_comm_write_data(params, sd, (char *)&aux, (int)sizeof(DIR *), rank_client_id) ;
 
     // show debug info
     debug_info("[OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, s) ;

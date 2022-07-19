@@ -52,7 +52,7 @@
   int (*real_closedir)(DIR*) = NULL;
   int (*real_rmdir)(char *) = NULL;
   int (*real_fork)() = NULL;
-  int (*real_pipe)(int) = NULL;
+  int (*real_pipe)(int *) = NULL;
   int (*real_dup)(int) = NULL;
   int (*real_dup2)(int, int) = NULL;
   void (*real_exit)(int) = NULL;
@@ -374,7 +374,8 @@
   }
 
 
-  int dlsym_pipe(int pipefd[2]){
+  int dlsym_pipe(int pipefd[2])
+  {
     debug_info("dlsym_pipe: before pipe...\n");
 
     if (real_pipe == NULL){
