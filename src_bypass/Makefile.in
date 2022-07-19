@@ -19,7 +19,7 @@ all:
 	$(CC) -shared -o xpn_bypass.so xpn_bypass.o -L$(XPN_LIB) -L$(MXML_LIB) $(LIBS)
 
 install:
-	cp -f xpn_bypass.so $(XPN_LIB)
+	cp -f xpn_bypass.so ${prefix}/lib
 
 clean:
 	rm -f *.o
