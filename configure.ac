@@ -77,10 +77,10 @@ then
   OS="__LINUX__"
   CC="mpicc"
   MAKE="make"
-  CFLAGS="-fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
+  CFLAGS="-I../../mxml -I../../xpn/include -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"
-  LIBS+="-L\$(HOME)/bin/mxml/lib -lmxml -ldl"
+  LIBS+="-L../../mxml -L../../xpn/lib -lmxml -ldl"
   AC_SUBST(OS)
   AC_SUBST(CC)
   AC_SUBST(MAKE)
@@ -136,7 +136,6 @@ else
 fi
 
 INCLUDEFLAGS="\
--I\$(HOME)/bin/mxml/include \
 -I\$(top_srcdir)/include \
 -I\$(top_srcdir)/include/base \
 -I\$(top_srcdir)/include/xpn \

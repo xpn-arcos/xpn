@@ -25,7 +25,7 @@ function usage {
     echo " Usage:"
     echo " $0 <platform>"
     echo " Where:"
-    echo " * platform = mn | picasso | tucan | lab21"
+    echo " * platform = mn4 | cte-arm | picasso | tucan | lab21"
     echo ""
 }
 
@@ -44,14 +44,24 @@ fi
 
 # 2) initial configuration...
 case $1 in
-   "mn")
+   "mn4")
      # working path...
      MPICH_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/
-     INSTALL_PATH=$HOME/bin/
+     INSTALL_PATH=$HOME/mn4/bin/
 
      # load modules...
      module load "impi/2017.4"
      ;;
+
+   "cte-arm")
+     # working path...
+     MPICH_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/
+     INSTALL_PATH=$HOME/cte-arm/bin/
+
+     # load modules...
+     module load "impi/2017.4"
+     ;;
+
    "picasso")
      # working path...
      MPICH_PATH=/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/
@@ -67,28 +77,31 @@ case $1 in
      ln -s  /usr/lib64/libmpfr.so.6  $INSTALL_PATH/base/lib/libmpfr.so.4
      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PATH/base/lib/
      ;;
+
    "lab21")
      # working path...
-     MPICH_PATH=/opt/software/install-mpich
-     INSTALL_PATH=/opt
+     MPICH_PATH=/opt/software/install-mpich/
+     INSTALL_PATH=/opt/
 
      # install software (if needed)...
-     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen libmpich-dev libmxml-dev"
+     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
      for P in $PKG_NAMES; do
          apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
      done
      ;;
+
     "tucan")
      # working path...
-     MPICH_PATH=/home/dcamarma/mpich-install
+     MPICH_PATH=/home/dcamarma/mpich-install/
      INSTALL_PATH=/home/dcamarma/bin/
 
      # install software (if needed)...
-     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen libmpich-dev libmxml-dev"
+     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
      for P in $PKG_NAMES; do
          apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
      done
      ;;
+
    *)
      echo " Unknown platform '"$1"'"
      usage

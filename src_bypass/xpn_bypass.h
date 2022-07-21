@@ -86,6 +86,7 @@ int open(const char *path, int flags, mode_t mode);
 
 int open(const char *path, int flags, ...);
 int open64(const char *path, int flags, ...);
+int __open_2(const char *path, int flags, ...);
 
 int creat(const char *path, mode_t mode);
 

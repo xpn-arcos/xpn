@@ -320,6 +320,70 @@
     return ret;
   }
 
+  int __open_2(const char *path, int flags, ...)
+  {
+    int ret, fd;
+    va_list ap;
+
+    va_start(ap, flags);
+
+    mode_t mode = va_arg(ap, mode_t);
+
+    debug_info("Before open2.... %s\n",path);
+    debug_info("1) Path => %s\n",path);
+    debug_info("2) flags => %d\n",flags);
+    debug_info("3) mode => %d\n",mode);
+
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    // This if checks if variable path passed as argument starts with the expand prefix.
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    {
+      // It is an XPN partition, so we redirect the syscall to expand syscall
+      debug_info("Path => %s\n",path + strlen(xpn_adaptor_partition_prefix));
+
+      fd = xpn_open((char *)(path + strlen(xpn_adaptor_partition_prefix)), flags, mode);
+
+      debug_info("xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
+
+      if(fd<0)
+      {
+        ret = fd;
+      } 
+      else{
+        struct generic_fd virtual_fd;
+
+        virtual_fd.type    = FD_XPN;
+        virtual_fd.real_fd = fd;
+
+        ret = fdstable_put ( virtual_fd );
+      }
+    }
+    // Not an XPN partition. We must link with the standard library.
+    else 
+    {
+      debug_info("dlsym_open\n");
+      fd = dlsym_open((char *)path, flags, mode);
+
+      if(fd<0)
+      {
+        ret = fd;
+      } 
+      else{
+        struct generic_fd virtual_fd;
+
+        virtual_fd.type    = FD_SYS;
+        virtual_fd.real_fd = fd;
+
+        ret = fdstable_put ( virtual_fd );
+      }
+    }
+    va_end(ap);
+
+    return ret;
+  }
+
   int creat(const char *path, mode_t mode)
   {
     int fd,ret;
