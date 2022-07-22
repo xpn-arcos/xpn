@@ -37,7 +37,13 @@ echo " --------"
 echo ""
 echo " Begin."
 
-# 1.a) arguments...
+
+# 1) Arguments...
+
+## base path
+BASE_PATH=$(dirname $0)
+
+## get arguments
 while getopts "m:i:" opt; do
     case "${opt}" in
           m) MPICH_PATH=${OPTARG}
@@ -52,6 +58,7 @@ while getopts "m:i:" opt; do
     esac
 done
 
+## check arguments
 if [ "$MPICH_PATH" == "" ]; then
    echo " Error:"
    echo " * Empty MPICH_PATH"
@@ -65,18 +72,19 @@ if [ "$INSTALL_PATH" == "" ]; then
    exit
 fi
 
-# 1.b) initial configuration...
-BASE_PATH=$(dirname $0)
 
-# 2.a) MXML
+# 2) XPN and dependencies...
+echo "XPN + MXML..."
+
+## MXML
 MXML_SRC_PATH=$BASE_PATH/../mxml
 if [ -d $MXML_SRC_PATH ]; then
-   echo "mxml: preparing directories..."
+   echo " * MXML: preparing directories..."
      rm -fr $INSTALL_PATH/mxml
    mkdir -p $INSTALL_PATH/mxml/lib64
    ln    -s $INSTALL_PATH/mxml/lib64  $INSTALL_PATH/mxml/lib
 
-   echo "mxml: compiling and installing mxml..."
+   echo " * MXML: compiling and installing..."
    pushd .
    cd $MXML_SRC_PATH
    ./configure --prefix=$INSTALL_PATH/mxml
@@ -86,15 +94,15 @@ if [ -d $MXML_SRC_PATH ]; then
    popd
 fi
 
-## 2.b) XPN
+## XPN
 XPN_SRC_PATH=$BASE_PATH/../xpn
 if [ -d $XPN_SRC_PATH ]; then
-   echo "xpn: preparing directories..."
+   echo " * XPN: preparing directories..."
      rm -fr $INSTALL_PATH/xpn
    mkdir -p $INSTALL_PATH/xpn/lib64
    ln    -s $INSTALL_PATH/xpn/lib64   $INSTALL_PATH/xpn/lib
 
-   echo "xpn: compiling and installing mxml..."
+   echo " * XPN: compiling and installing..."
    pushd .
    cd $XPN_SRC_PATH
    ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
@@ -106,15 +114,19 @@ if [ -d $XPN_SRC_PATH ]; then
    popd
 fi
 
-# 2.c) IOR
+
+# Benchmarks
+echo "IOR + IO500..."
+
+## IOR
 IOR_SRC_PATH=$BASE_PATH/../ior
 if [ -d $IOR_SRC_PATH ]; then
-   echo " * cleaning IOR..."
+   echo " * IOR: preparing directories..."
      rm -fr $INSTALL_PATH/ior
    mkdir -p $INSTALL_PATH/ior/lib64
    ln    -s $INSTALL_PATH/ior/lib64   $INSTALL_PATH/ior/lib
 
-   echo " * compiling and installing IOR..."
+   echo " * IOR: compiling and installing..."
    pushd .
    cd $IOR_SRC_PATH
    ./configure --prefix=$INSTALL_PATH/ior
@@ -123,6 +135,28 @@ if [ -d $IOR_SRC_PATH ]; then
    make install
    popd
 fi
+
+## IO500
+IO500_SRC_PATH=$BASE_PATH/../io500
+if [ -d $IO500_SRC_PATH ]; then
+   echo " * IO500: preparing directories..."
+     rm -fr $INSTALL_PATH/io500
+   mkdir -p $INSTALL_PATH/io500/lib64
+   ln    -s $INSTALL_PATH/io500/lib64   $INSTALL_PATH/io500/lib
+
+   echo " * IO500 DISCLAIMER:"
+   echo "   ** Please remember IO500 needs to git clone some components the first time."
+   echo "   ** If you don't have access to perform git clone then please ./prepare.sh in other machine first and copy the resulting directory."
+   echo ""
+   echo " * IO500: compiling and installing..."
+   pushd .
+   cd $IO500_SRC_PATH
+   sed "s/INSTALL_DIR/#INSTALL_DIR/g" prepare.sh > prepare-alt.sh
+   env INSTALL_DIR=$INSTALL_PATH/io500 ./prepare-alt.sh
+   rm -fr prepare-alt.sh
+   popd
+fi
+
 
 # Stop
 echo " End."

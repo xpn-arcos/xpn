@@ -25,7 +25,7 @@ function usage {
     echo " Usage:"
     echo " $0 <platform>"
     echo " Where:"
-    echo " * platform = mn4 | cte-arm | picasso | tucan | lab21"
+    echo " * platform = mn4 | cte-arm | picasso | tucan | lab21 | generic"
     echo ""
 }
 
@@ -55,11 +55,12 @@ case $1 in
 
    "cte-arm")
      # working path...
-     MPICH_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/
-     INSTALL_PATH=$HOME/cte-arm/bin/
+     MPICH_PATH= /fefs/apps/OPENMPI/4.0.5/GCC/
+     INSTALL_PATH=$HOME/ctearm/bin/
 
      # load modules...
-     module load "impi/2017.4"
+     module load fuji
+     module load gcc openmpi
      ;;
 
    "picasso")
@@ -102,8 +103,20 @@ case $1 in
      done
      ;;
 
+    "generic")
+     # working path...
+     MPICH_PATH=/usr/
+     INSTALL_PATH=$HOME/bin/
+
+     # install software (if needed)...
+     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
+     for P in $PKG_NAMES; do
+         apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
+     done
+     ;;
+
    *)
-     echo " Unknown platform '"$1"'"
+     echo " ERROR: unknown platform '"$1"' :-("
      usage
      exit
      ;;

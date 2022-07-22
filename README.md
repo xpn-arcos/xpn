@@ -32,6 +32,8 @@ git clone https://github.com/michaelrsweet/mxml.git
 git clone https://github.com/dcamarmas/xpn.git
 ```
 
+You must do both 'git clone' requests in the same directory ($HOME/src).
+
 
 ## 3. Build XPN 
 
@@ -42,16 +44,11 @@ As an example scenario we will consider the following one:
 To build Expand you need to execute:
 ```
 cd $HOME/src
-./xpn/build-me.sh -m /opt/software/install-mpich/bin path -i /opt/xpn
+./xpn/build-me.sh -m /opt/software/install-mpich/bin -i /opt/xpn
 ```
 
-Alternatively, you can use:
-```
-cd $HOME/src
-./xpn/build-me-compact.sh tucan
-```
-
-Please, for help execute:
+For some predefined platforms 'build-me-compact.sh' offers a default configuration by simply specifying the platform as a parameter.
+Please for help execute:
 ```
 ./xpn/build-me-compact.sh
 ```
