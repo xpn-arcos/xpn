@@ -4,8 +4,8 @@
 #--------------------------
 
  MAKE         = make -s
- CC           = /home/dcamarma/mpich-install/bin/mpicc
- EXPAND_DIR   = /home/dcamarma/bin//xpn
+ CC           = /usr//bin/mpicc
+ EXPAND_DIR   = /home/acaldero/bin//xpn
  OBJECTS_TCPSERVER  = tcpServer.o \
 		      tcpServer_utils.o \
 		      tcpServer_params.o \

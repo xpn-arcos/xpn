@@ -4,9 +4,9 @@
 #--------------------------
 
  MAKE         = make -s
- CC           = /home/dcamarma/mpich-install/bin/mpicc
+ CC           = /usr//bin/mpicc
  SOURCE_PATH  = ./
- EXPAND_DIR   = /home/dcamarma/bin//xpn
+ EXPAND_DIR   = /home/acaldero/bin//xpn
  OBJECTS_MPISERVER     = mpiServer.o \
 		         mpiServer_params.o \
 		         mpiServer_comm.o \

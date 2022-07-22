@@ -148,13 +148,18 @@ if [ -d $IO500_SRC_PATH ]; then
    echo "   ** Please remember IO500 needs to git clone some components the first time."
    echo "   ** If you don't have access to perform git clone then please ./prepare.sh in other machine first and copy the resulting directory."
    echo ""
+
    echo " * IO500: compiling and installing..."
    pushd .
    cd $IO500_SRC_PATH
-   sed "s/INSTALL_DIR/#INSTALL_DIR/g" prepare.sh > prepare-alt.sh
-   env INSTALL_DIR=$INSTALL_PATH/io500 ./prepare-alt.sh
-   rm -fr prepare-alt.sh
-   popd
+   cat ./build/pfind/prepare.sh | sed "s/git clone/#git clone/g" > ./build/pfind/prepare-alt.sh
+   chmod a+x ./build/pfind/prepare-alt.sh
+   sed -i "s/^VERSION=/#VERSION=/g" Makefile
+   cat prepare.sh | sed "s/^INSTALL_DIR/#INSTALL_DIR/g" | sed "s/git_co https/#git_co https/g" | sed "s|./prepare.sh|./prepare-alt.sh|g" > prepare-alt.sh
+   chmod a+x prepare-alt.sh
+   env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICH_PATH/bin/mpicc MPICC=$MPICH_PATH/bin/mpicc CFLAGS="-std=c11"  ./prepare-alt.sh
+   #rm -fr prepare-alt.sh
+
 fi
 
 

@@ -3,20 +3,16 @@
 #
 
 
- prefix = /home/dcamarma/bin//xpn
- CC=/home/dcamarma/mpich-install/bin/mpicc
+ prefix = /home/acaldero/bin//xpn
+ CC=/usr//bin/mpicc
 
  FLAGS=-Wall -Wextra -fpic -DLINUX -std=c11
  INCLUDE=-I../include -I../include/base -I../../mxml -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
- LIBS=-lxpn -lmxml -lpthread -ldl
-
- XPN_LIB=../../xpn/lib
- MXML_LIB=../../mxml
-
+ LIBS=-L../../xpn/lib -L../../mxml -lxpn -lmxml -lpthread -ldl
 
 all:
 	$(CC) $(FLAGS) $(INCLUDE) -c xpn_bypass.c
-	$(CC) -shared -o xpn_bypass.so xpn_bypass.o -L$(XPN_LIB) -L$(MXML_LIB) $(LIBS)
+	$(CC) -shared -o xpn_bypass.so xpn_bypass.o $(LIBS)
 
 install:
 	cp -f xpn_bypass.so ${prefix}/lib
