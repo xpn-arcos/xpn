@@ -29,6 +29,14 @@ function usage {
     echo ""
 }
 
+function install_if_not_installed {
+     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
+     for P in $PKG_NAMES; do
+         apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
+     done
+}
+
+
 # Start
 echo ""
 echo " build-me-compact"
@@ -55,12 +63,16 @@ case $1 in
 
    "cte-arm")
      # working path...
-     MPICH_PATH= /fefs/apps/OPENMPI/4.0.5/GCC/
+     MPICH_PATH=/apps/OPENMPI/4.0.5/GCC/
      INSTALL_PATH=$HOME/ctearm/bin/
 
      # load modules...
      module load fuji
-     module load gcc openmpi
+     #module load gcc openmpi
+
+     # patch for cross-compiling
+     export    CC=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpicc
+     export MPICC=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpicc
      ;;
 
    "picasso")
@@ -85,10 +97,7 @@ case $1 in
      INSTALL_PATH=/opt/
 
      # install software (if needed)...
-     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
-     for P in $PKG_NAMES; do
-         apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
-     done
+     install_if_not_installed
      ;;
 
     "tucan")
@@ -97,10 +106,7 @@ case $1 in
      INSTALL_PATH=/home/dcamarma/bin/
 
      # install software (if needed)...
-     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
-     for P in $PKG_NAMES; do
-         apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
-     done
+     install_if_not_installed
      ;;
 
     "generic")
@@ -109,10 +115,7 @@ case $1 in
      INSTALL_PATH=$HOME/bin/
 
      # install software (if needed)...
-     PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
-     for P in $PKG_NAMES; do
-         apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
-     done
+     install_if_not_installed
      ;;
 
    *)
