@@ -15,6 +15,9 @@
 #include <string.h>
 #include "mpi.h"
 
+//#include<pthread.h>
+
+
 //#define RTLD_NEXT ((void *) -1l)
 #define MAX_FDS   1024
 #define MAX_DIRS  32
@@ -86,7 +89,7 @@ int open(const char *path, int flags, mode_t mode);
 
 int open(const char *path, int flags, ...);
 int open64(const char *path, int flags, ...);
-int __open_2(const char *path, int flags, ...);
+//int __open_2(const char *path, int flags, ...);
 
 int creat(const char *path, mode_t mode);
 
@@ -106,7 +109,7 @@ int __fxstat(int ver, int fd, struct stat *buf);
 
 int close(int fd);
 
-int rename(const char *old_path, const char *new_path);
+//int rename(const char *old_path, const char *new_path);
 
 int unlink(const char *path);
 
@@ -143,6 +146,11 @@ int chown(const char *path, uid_t owner, gid_t group);
 int fcntl(int fd, int cmd, long arg);
 int access(const char *path, int mode);
 char * __realpath_chk(const char * path, char * resolved_path, size_t resolved_len);
+
+
+
+//Memory API
+void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 
 
 /**************************************************

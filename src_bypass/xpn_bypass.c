@@ -62,33 +62,47 @@
 
   // fd table management
 
+  //pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
   void fdstable_init ( void ){
+    //pthread_mutex_lock(&mutex);
     for (int i = 0; i < MAX_FDS; ++i)
-    {
+    { 
       fdstable[i].type = FD_FREE;
     }
+    //pthread_mutex_unlock(&mutex);
   }
 
   struct generic_fd fdstable_get ( int fd ){
     //debug_info("GET FSTABLE %d  %d  %d\n", fd, fdstable[fd].type, fdstable[fd].real_fd);
-    return fdstable[fd];
+    //pthread_mutex_lock(&mutex);
+    struct generic_fd ret = fdstable[fd];
+    //pthread_mutex_unlock(&mutex);
+
+    return ret;
   }
 
   int fdstable_put ( struct generic_fd fd ){
-    for (int i = 0; i < MAX_FDS; ++i)
+    for (int i = 3; i < MAX_FDS; ++i)
     {
+      //pthread_mutex_lock(&mutex);
       if ( fdstable[i].type == FD_FREE ){
         fdstable[i] = fd;
         //debug_info("PUT FSTABLE %d  %d  %d\n", i, fdstable[i].type, fdstable[i].real_fd);
+        //pthread_mutex_unlock(&mutex);
         return i;
       }
+      //pthread_mutex_unlock(&mutex);
     }
 
     return -1;
   }
 
   int fdstable_remove ( int fd ){
+    //pthread_mutex_lock(&mutex);
     fdstable[fd].type = FD_FREE;
+    //pthread_mutex_unlock(&mutex);
+
     return 0;
   }
 
@@ -176,7 +190,7 @@
 
       if (ret < 0)
       {
-        debug_info("xpn_init: Expand couldn't be initialized\n");
+        printf("xpn_init: Expand couldn't be initialized\n");
         //xpn_adaptor_log("xpn_init: Expand couldn't be initialized\n");
         xpn_adaptor_initCalled = 0;
         setenv("INITCALLED", "0", 1);
@@ -838,6 +852,7 @@
 
 
 
+
   // Directory API
 
   int mkdir(const char *path, mode_t mode)
@@ -1299,6 +1314,32 @@
       debug_info("Before dlsym_realpath...\n");
       return dlsym_realpath(path, resolved_path);
     }
+  }
+
+
+
+  //Memory API
+
+  void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset){
+    debug_info("Before mmap...\n");
+
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    struct generic_fd virtual_fd = fdstable_get ( fd );
+
+    debug_info("MMAP %d %d\n", fd, virtual_fd.real_fd);
+
+    // Not an XPN partition. We must link with the standard library
+    if (virtual_fd.type == FD_SYS)
+    {
+      return dlsym_mmap(addr, length, prot, flags, virtual_fd.real_fd, offset);
+    }
+    else{
+      return dlsym_mmap(addr, length, prot, flags, fd, offset);
+    }
+
+    return -1;
   }
 
 

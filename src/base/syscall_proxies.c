@@ -63,6 +63,7 @@
   int (*real_fcntl)(int, int, long) = NULL;
   int (*real_access)(const char *, int) = NULL;
   char* (*real_realpath)(const char *restrict, char *restrict) = NULL;
+  void *(*real_mmap)(void *, size_t, int, int, int, off_t) = NULL;
 
 
 
@@ -512,6 +513,26 @@
     char* ret = real_realpath((char *)path, (char *)resolved_path);
 
     debug_info("dlsym_access: (%s,%s) return %s\n",path,resolved_path,ret);
+
+    return ret;
+  }
+
+
+
+
+  // Memory API
+
+  void *dlsym_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset){
+    debug_info("dlsym_mmap: before mmap...\n");
+    debug_info("dlsym_mmap: fd => %d\n",fd);
+
+    if (real_mmap == NULL) {
+        real_mmap = dlsym(RTLD_NEXT,"mmap");
+    }
+    
+    char* ret = real_mmap(addr, length, prot, flags, fd, offset);
+
+    debug_info("dlsym_mmap: (%d) return %p\n",fd,ret);
 
     return ret;
   }

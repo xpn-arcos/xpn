@@ -82,6 +82,11 @@
   char *dlsym_realpath(const char *restrict path, char *restrict resolved_path);
 
 
+  // Memory API
+
+  void *dlsym_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
+
+
   #ifdef  __cplusplus
     }
   #endif
