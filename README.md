@@ -1,4 +1,4 @@
-# XPN 1.0r2
+# XPN 1.2
 *Expand Ad-Hoc Parallel File System*
 
  * ℹ️ *Homepage*: https://xpn-arcos.github.io/arcos-xpn.github.io/ 
@@ -68,6 +68,7 @@ For example:
 HYDRA_HOSTNAME=$(hostname)
 hydra_nameserver &
 sleep 1
+echo localhost > machines
 mpirun -np 8 -nameserver ${HYDRA_HOSTNAME} -machinefile machines ./src_servers/mpiServer/mpiServer.exe
 sleep 1
 mpirun -np 2 -nameserver ${HYDRA_HOSTNAME} -machinefile machines ./test/IOP-ION/IONMPI /PNFS/
