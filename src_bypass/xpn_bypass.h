@@ -19,8 +19,8 @@
 
 
 //#define RTLD_NEXT ((void *) -1l)
-#define MAX_FDS   1024
-#define MAX_DIRS  32
+#define MAX_FDS   4069
+#define MAX_DIRS  4096
 #define PLUSXPN   65000
 
 #undef __USE_FILE_OFFSET64
@@ -75,21 +75,11 @@ struct dirent64
 
 
 
-/*
-int fdstable[MAX_FDS];
-int fdsdirtable[MAX_DIRS];
-*/
-/*
-int open(const char *path, int flags);
-int open(const char *path, int flags, mode_t mode);
-*/
-
-
 // File API
 
 int open(const char *path, int flags, ...);
 int open64(const char *path, int flags, ...);
-//int __open_2(const char *path, int flags, ...);
+int __open_2(const char *path, int flags, ...);
 
 int creat(const char *path, mode_t mode);
 
@@ -109,7 +99,7 @@ int __fxstat(int ver, int fd, struct stat *buf);
 
 int close(int fd);
 
-//int rename(const char *old_path, const char *new_path);
+int rename(const char *old_path, const char *new_path);
 
 int unlink(const char *path);
 
