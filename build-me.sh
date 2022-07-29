@@ -129,6 +129,7 @@ if [ -d $IOR_SRC_PATH ]; then
    echo " * IOR: compiling and installing..."
    pushd .
    cd $IOR_SRC_PATH
+   export MPICC=$MPICH_PATH/bin/mpicc
    ./configure --prefix=$INSTALL_PATH/ior
    make clean
    make -j 8
