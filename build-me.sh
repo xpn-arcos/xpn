@@ -156,6 +156,7 @@ if [ -d $IO500_SRC_PATH ]; then
    cat ./build/pfind/prepare.sh | sed "s/git clone/#git clone/g" > ./build/pfind/prepare-alt.sh
    chmod a+x ./build/pfind/prepare-alt.sh
    sed -i "s/^VERSION=/#VERSION=/g" Makefile
+   export MPICH_PATH=$MPICH_PATH
    sed -i 's/CC = mpicc/CC = ${MPICH_PATH}\/bin\/mpicc/g' Makefile
    cat prepare.sh | sed "s/^INSTALL_DIR/#INSTALL_DIR/g" | sed "s/git_co https/#git_co https/g" | sed "s|./prepare.sh|./prepare-alt.sh|g" > prepare-alt.sh
    chmod a+x prepare-alt.sh

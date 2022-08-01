@@ -225,7 +225,7 @@ CC = /home/dcamarma/mpich-install//bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
 CFLAGS = -I../../mxml -I../../xpn/include -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPP = /home/dcamarma/mpich-install/bin/mpicc -E
+CPP = gcc -E
 CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn -I$(top_srcdir)/include/xpn/xpn_simple -I$(top_srcdir)/include/nfi -I$(top_srcdir)/include/nfi/nfi_local -I$(top_srcdir)/include/xpni/xpni_ft -I$(top_srcdir)/include/xpni/xpni_log -I$(top_srcdir)/include/nfi/nfi_nfs3 -I$(top_srcdir)/include/nfi/nfi_tcpServer -I$(top_srcdir)/include/nfi/nfi_mpiServer  
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
@@ -278,7 +278,7 @@ abs_srcdir = /home/dcamarma/src/xpn
 abs_top_builddir = /home/dcamarma/src/xpn
 abs_top_srcdir = /home/dcamarma/src/xpn
 ac_ct_AR = ar
-ac_ct_CC = /home/dcamarma/mpich-install/bin/mpicc
+ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
 am__quote = 
