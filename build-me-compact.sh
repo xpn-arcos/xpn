@@ -88,6 +88,7 @@ case $1 in
      mkdir -p $INSTALL_PATH/base/lib
      rm -fr                          $INSTALL_PATH/base/lib/libmpfr.so.4
      ln -s  /usr/lib64/libmpfr.so.6  $INSTALL_PATH/base/lib/libmpfr.so.4
+     ln -s  /usr/lib64/libslurm.so   $INSTALL_PATH/base/lib/libslurm.so.32
      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PATH/base/lib/
      ;;
 
