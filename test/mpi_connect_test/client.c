@@ -10,6 +10,7 @@
 int main(int argc, char **argv)
 {
 	int  ret ;
+	int  provided, flag, claimed;
 	int  initial_rank, initial_size ;
 	char port_name[MPI_MAX_PORT_NAME] ;
 	MPI_Comm inter_comm ;
@@ -19,9 +20,6 @@ int main(int argc, char **argv)
 	printf(" >> Client\n") ;
 
 	printf(" >> before MPI_Init\n") ;
-#ifdef TEST_THREADS
-	int  provided, flag, claimed;
-
 	MPI_Initialized(&flag);
 	if (!flag)
 	{
@@ -37,9 +35,6 @@ int main(int argc, char **argv)
 	if (claimed != MPI_THREAD_MULTIPLE) {
 	    printf(" >> MPI_Query_thread: MPI_THREAD_MULTIPLE not supported\n");
 	}
-#else
-	MPI_Init(&argc, &argv);
-#endif
 	printf(" >> after  MPI_Init\n") ;
 
 	MPI_Comm_rank(MPI_COMM_SELF, &initial_rank);

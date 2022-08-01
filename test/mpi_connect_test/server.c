@@ -10,6 +10,7 @@
 int main ( int argc, char **argv )
 {
 	int  data, ret;
+	int  provided ;
 	int  initial_rank, initial_size;
 	char port_name[MPI_MAX_PORT_NAME];
 	MPI_Comm   inter_comm;
@@ -21,13 +22,7 @@ int main ( int argc, char **argv )
 	printf(" >> Hydra: %s\n", getenv("I_MPI_HYDRA_NAMESERVER")) ;
 
 	printf(" >> before MPI_Init\n") ;
-#ifdef TEST_THREADS
-	int  provided ;
-
         MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
-#else
-	MPI_Init(&argc, &argv);
-#endif
 	printf(" >> after  MPI_Init\n") ;
 
 	MPI_Comm_rank(MPI_COMM_SELF, &initial_rank);
