@@ -24,7 +24,7 @@ int main ( int argc, char **argv )
 #ifdef TEST_THREADS
 	int  provided ;
 
-      //MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
+        MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
 #else
 	MPI_Init(&argc, &argv);
 #endif
