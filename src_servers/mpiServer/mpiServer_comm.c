@@ -65,15 +65,15 @@
     // Publish port name
     MPI_Info_create(&info) ;
     MPI_Info_set(info, "ompi_global_scope", "true") ;
-    sprintf(params->srv_name, "mpiServer.%d", params->rank) ;
+    //sprintf(params->srv_name, "mpiServer.%d", params->rank) ;
+    char serv_name [HOST_NAME_MAX];
+    gethostname(serv_name, HOST_NAME_MAX);
+    sprintf(params->srv_name, "mpiServer.%s", serv_name) ;
 
-    if (params->rank == 0)
-    {
-      ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
-      if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
-        return -1 ;
-      }
+    ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
+    if (MPI_SUCCESS != ret) {
+      debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
+      return -1 ;
     }
 
     debug_info("[COMM] server %d available at %s\n", params->rank, params->port_name) ;
@@ -95,13 +95,10 @@
     MPI_Close_port(params->port_name) ;
 
     // Unpublish port name
-    if (params->rank == 0)
-    {
-      ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
-      if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Unpublish_name fails :-(", params->rank) ;
-        return -1 ;
-      }
+    ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
+    if (MPI_SUCCESS != ret) {
+      debug_error("Server[%d]: MPI_Unpublish_name fails :-(", params->rank) ;
+      return -1 ;
     }
 
     // Finalize
@@ -124,7 +121,7 @@
     DEBUG_BEGIN() ;
 
     // Accept
-    ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &(params->client)) ;
+    ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(params->client)) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Comm_accept fails :-(", params->rank) ;
       return -1 ;
@@ -136,12 +133,17 @@
     return params->client ;
   }
   
-  int mpiServer_comm_close ( mpiServer_param_st *params )
+  int mpiClient_comm_close ( MPI_Comm fd )
   {
     int ret ;
 
+    if (fd == MPI_COMM_NULL)
+    {
+      return 1;
+    }
+
     // Disconnect
-    ret = MPI_Comm_disconnect(&(params->client)) ;
+    ret = MPI_Comm_disconnect(&fd) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
       return -1 ;
@@ -173,12 +175,11 @@
 
     // Get message
     ret = MPI_Recv(data, size, MPI_INT, MPI_ANY_SOURCE, 0, fd, &status);
-    //ret = MPI_Recv(data, size, MPI_CHAR, MPI_ANY_SOURCE, 0, fd, &status);
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
     }
 
-    *rank_client_id = status.MPI_SOURCE;
+    *rank_client_id = status.MPI_SOURCE; //TODO: eliminar??
 
     debug_info("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
 
@@ -188,7 +189,7 @@
     return size;
   }
 
-  ssize_t mpiServer_comm_write_data ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id)
+  ssize_t mpiServer_comm_write_data ( mpiServer_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id )
   {
     int ret ;
 
@@ -196,19 +197,20 @@
 
     // Check params
     if (size == 0){
-      return 0;
+        return 0;
     }
     if (size < 0){
-      debug_warning("Server[%d]: size < 0", params->rank) ;
-      return -1;
+        debug_warning("Server[%d]: size < 0", params->rank) ;
+        return -1;
     }
     if (NULL == params) {
-      debug_warning("Server[%d]: NULL params", params->rank) ;
-      return -1;
+        debug_warning("Server[%d]: NULL params", params->rank) ;
+        return -1;
     }
+    (void)rank_client_id ; // Avoid warning of unused parameter
 
     // Send message
-    ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 1, fd) ;
+    ret = MPI_Send(data, size, MPI_CHAR, 0, 1, fd) ;
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
     }

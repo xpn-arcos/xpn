@@ -28,7 +28,8 @@
     int  size ;
     int  rank ;
     char port_name[MPI_MAX_PORT_NAME] ;
-    char  srv_name[MPI_MAX_PORT_NAME] ;
+    char srv_name[MPI_MAX_PORT_NAME] ;
+    char host_file[PATH_MAX] ;
 
     // server configuration
     int thread_mode;

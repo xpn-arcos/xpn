@@ -321,6 +321,7 @@ int XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partitio
 
 int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) struct xpn_partition *part, struct nfi_server *serv, int type)
 {
+
 	int ret;
 	char prt[10];
 	char *url=serv->url;

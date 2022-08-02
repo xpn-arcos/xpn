@@ -21,7 +21,7 @@
 
 struct xpn_fh{
 	int n_nfih;
-        struct nfi_fhandle **nfih; 	/* NFI handler              	*/
+    struct nfi_fhandle **nfih; 	/* NFI handler              	*/
 };
 
 

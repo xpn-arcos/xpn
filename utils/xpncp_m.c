@@ -313,7 +313,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 /* Our argp parser. */
 static struct argp argp = { options, parse_opt, 0, doc, 0, help_filter, 0 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 	int do_stat = 1;
 	char *source, *dest;
 	int ret;
@@ -445,7 +446,7 @@ int main(int argc, char *argv[]) {
 		fdd = open(dest, O_CREAT|O_RDWR|O_TRUNC|O_NONBLOCK|O_LARGEFILE, 00644);
 		if (fdd >= 0) {
 			lseek(fdd, st.st_size-1, SEEK_SET);
-			write(fdd, "", 1);
+			ret = write(fdd, "", 1);
 			lseek(fdd, 0, SEEK_SET);
 			dest_map = mmap(0, st.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fdd, 0);
 			if (dest_map == MAP_FAILED) {

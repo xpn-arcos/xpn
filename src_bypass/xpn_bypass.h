@@ -6,6 +6,7 @@
 
 #include <dlfcn.h>
 #include <sys/stat.h>
+#include <stdarg.h>
 
 #include "xpn.h"
 #include "syscall_proxies.h"
@@ -14,22 +15,36 @@
 #include <string.h>
 #include "mpi.h"
 
+//#include<pthread.h>
+
+
 //#define RTLD_NEXT ((void *) -1l)
-#define LEN_PREFIX	4
-#define MAX_FDS		512
-#define MAX_DIRS	512
-#define PLUSXPN		65000
-#define XPN_TYPE	1
-#define NORMAL_TYPE	0
+#define MAX_FDS   4069
+#define MAX_DIRS  4096
+#define PLUSXPN   65000
 
 #undef __USE_FILE_OFFSET64
 #undef __USE_LARGEFILE64
 
 
+#define FD_FREE 0
+#define FD_SYS  1
+#define FD_XPN  2
+
+struct generic_fd{
+  int type;
+  int real_fd;
+};
+
+
+struct generic_fd fdstable[MAX_FDS];
+DIR * fdsdirtable[MAX_DIRS];
+
+
 /*struct stat64
   {
-	__dev_t st_dev;                     // Device.
-	unsigned int __pad1;
+  __dev_t st_dev;                     // Device.
+  unsigned int __pad1;
         __ino_t __st_ino;                   // 32bit file serial number.
         __mode_t st_mode;                   // File mode.
         __nlink_t st_nlink;                 // Link count.
@@ -51,31 +66,20 @@
 
 struct dirent64
   {
-	__ino64_t d_ino;
-	__off64_t d_off;
-	unsigned short int d_reclen;
-	unsigned char d_type;
-	char d_name[256];           // We must not include limits.h! 
+  __ino64_t d_ino;
+  __off64_t d_off;
+  unsigned short int d_reclen;
+  unsigned char d_type;
+  char d_name[256];           // We must not include limits.h! 
   };*/
 
 
 
-/*
-int fdstable[MAX_FDS];
-int fdsdirtable[MAX_DIRS];
-*/
-/*
-int open(const char *path, int flags);
-int open(const char *path, int flags, mode_t mode);
-*/
-
-
 // File API
 
-//int open(const char *path, int flags, ...); //comment
-int open(const char *path, int flags, mode_t mode);
-//int open64(const char *path, int flags, ...); //comment
-int open64(const char *path, int flags, mode_t mode);
+int open(const char *path, int flags, ...);
+int open64(const char *path, int flags, ...);
+int __open_2(const char *path, int flags, ...);
 
 int creat(const char *path, mode_t mode);
 
@@ -86,20 +90,16 @@ ssize_t write(int fildes, const void *buf, size_t nbyte);
 
 off_t lseek(int fildes, off_t offset, int whence);
 
-//int lstat64(const char *path, struct stat64 *buf); //old
 int __lxstat64(int ver, const char *path, struct stat64 *buf);
-//int stat64(const char *path, struct stat64 *buf); //old
 int __xstat64(int ver, const char *path, struct stat64 *buf);
-//int fstat64(int fildes, struct stat64 *buf); //old
 int __fxstat64(int ver, int fildes, struct stat64 *buf);
-//int lstat(const char *path, struct stat *buf); //old
 int __lxstat(int ver, const char *path, struct stat *buf);
-//int stat(const char *path, struct stat *buf); //old
 int __xstat(int ver, const char *path, struct stat *buf);
-//int fstat(int fildes, struct stat *buf); //old
 int __fxstat(int ver, int fd, struct stat *buf);
 
 int close(int fd);
+
+int rename(const char *old_path, const char *new_path);
 
 int unlink(const char *path);
 
@@ -108,14 +108,12 @@ int unlink(const char *path);
 // Directory API
 
 DIR *opendir(const char *dirname);
-
 int mkdir(const char *path, mode_t mode);
 
 struct dirent *readdir(DIR *dirp);
 struct dirent64 *readdir64(DIR *dirp);
 
 int closedir(DIR *dirp);
-
 int rmdir(const char *path);
 
 
@@ -123,10 +121,8 @@ int rmdir(const char *path);
 // Proccess API
 
 int fork();
-
 int dup(int fildes);
 int dup2(int fildes, int fildes2);
-
 void exit(int status) ;
 
 
@@ -134,14 +130,17 @@ void exit(int status) ;
 // Manager API
 
 int chdir(const char *path);
-
 int chmod(const char *path, mode_t mode);
-
 int fchmod(int fildes, mode_t mode);
-
 int chown(const char *path, uid_t owner, gid_t group);
-
 int fcntl(int fd, int cmd, long arg);
+int access(const char *path, int mode);
+char * __realpath_chk(const char * path, char * resolved_path, size_t resolved_len);
+
+
+
+//Memory API
+void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 
 
 /**************************************************

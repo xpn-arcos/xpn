@@ -213,42 +213,42 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /work/xpn-dcamarmas/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} /home/dcamarma/xpn/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /work/xpn-dcamarmas/config/missing autoconf
-AUTOHEADER = ${SHELL} /work/xpn-dcamarmas/config/missing autoheader
-AUTOMAKE = ${SHELL} /work/xpn-dcamarmas/config/missing automake-1.16
+AUTOCONF = ${SHELL} /home/dcamarma/xpn/config/missing autoconf
+AUTOHEADER = ${SHELL} /home/dcamarma/xpn/config/missing autoheader
+AUTOMAKE = ${SHELL} /home/dcamarma/xpn/config/missing automake-1.16
 AWK = mawk
-CC = /opt/software/install-mpich/bin/mpicc
+CC = /opt/software/install-mpich//bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER
-CFLAGS = -fPIC -O0 -g -g3 -ggdb -ggdb3 -Wall -Wextra
+CFLAGS = -I../../mxml -I../../xpn/include -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
 CPP = gcc -E
-CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER -I$(HOME)/mxml/usr/include -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn -I$(top_srcdir)/include/xpn/xpn_simple -I$(top_srcdir)/include/nfi -I$(top_srcdir)/include/nfi/nfi_local -I$(top_srcdir)/include/xpni/xpni_ft -I$(top_srcdir)/include/xpni/xpni_log -I$(top_srcdir)/include/nfi/nfi_nfs3 -I$(top_srcdir)/include/nfi/nfi_tcpServer -I$(top_srcdir)/include/nfi/nfi_mpiServer  
+CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_NFS3 -DENABLE_TCPSERVER -DENABLE_MPISERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn -I$(top_srcdir)/include/xpn/xpn_simple -I$(top_srcdir)/include/nfi -I$(top_srcdir)/include/nfi/nfi_local -I$(top_srcdir)/include/xpni/xpni_ft -I$(top_srcdir)/include/xpni/xpni_log -I$(top_srcdir)/include/nfi/nfi_nfs3 -I$(top_srcdir)/include/nfi/nfi_tcpServer -I$(top_srcdir)/include/nfi/nfi_mpiServer  
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
-EGREP = /usr/bin/grep -E
+EGREP = /bin/grep -E
 EXEEXT = 
-GREP = /usr/bin/grep
+GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = -lpthread -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
+LDFLAGS = -lpthread -lpthread -L../../mxml -L../../xpn/lib -lmxml -ldl
 LIBLINK = -lpthread
 LIBOBJS = 
-LIBS = -lpthread  -L$(HOME)/mxml/usr/lib -lmxml -ldl
+LIBS = -lpthread -L../../mxml -L../../xpn/lib -lmxml -ldl
 LTLIBOBJS = 
 MAKE = make
-MAKEINFO = ${SHELL} /work/xpn-dcamarmas/config/missing makeinfo
-MKDIR_P = /usr/bin/mkdir -p
+MAKEINFO = ${SHELL} /home/dcamarma/xpn/config/missing makeinfo
+MKDIR_P = /bin/mkdir -p
 M_HEADERS = 
 NFI_MPISERVER = nfi_mpiserver
 NFI_MPISERVER_OBJECTS = $(NFI_MPISERVER_OBJECTS)
@@ -273,10 +273,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 1.0
-abs_builddir = /work/xpn-dcamarmas
-abs_srcdir = /work/xpn-dcamarmas
-abs_top_builddir = /work/xpn-dcamarmas
-abs_top_srcdir = /work/xpn-dcamarmas
+abs_builddir = /home/dcamarma/xpn
+abs_srcdir = /home/dcamarma/xpn
+abs_top_builddir = /home/dcamarma/xpn
+abs_top_srcdir = /home/dcamarma/xpn
 ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
@@ -304,7 +304,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /work/xpn-dcamarmas/config/install-sh
+install_sh = ${SHELL} /home/dcamarma/xpn/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -313,7 +313,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /opt/xpn
+prefix = /opt//xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
@@ -330,7 +330,7 @@ top_build_prefix =
 top_builddir = .
 top_srcdir = .
 SUBDIRS = lib utils src_bypass src_servers/tcpServer src_servers/mpiServer
-EXTRA_DIST = autogen.sh
+EXTRA_DIST = AUTHORS COPYING README.md
 all: all-recursive
 
 .SUFFIXES:

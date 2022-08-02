@@ -26,6 +26,7 @@
 
       #include "all_system.h"
       #include "base/utils.h"
+      #include <pthread.h> 
       #include <sys/stat.h>
       #include <sys/types.h>
 
@@ -40,8 +41,12 @@
      #define LSEEK real_posix_lseek
 #endif
 
+     #define ASYNC_CLOSE
+
 
    /* ... Functions / Funciones ......................................... */
+     //int  filesystem_init      ( void );
+     //int  filesystem_destroy   ( void );
 
      int  filesystem_creat     ( char *pathname, mode_t mode ) ;
      int  filesystem_open      ( char *pathname, int flags ) ;
@@ -50,6 +55,8 @@
 
      long filesystem_read      ( int read_fd2,  void *buffer, int buffer_size ) ;
      long filesystem_write     ( int write_fd2, void *buffer, int num_bytes_to_write ) ;
+
+     int  filesystem_rename    ( char *old_pathname, char *new_pathname ) ;
 
      int  filesystem_mkpath    ( char *pathname ) ;
      int  filesystem_mkdir     ( char *pathname, mode_t mode ) ;
@@ -77,10 +84,12 @@
      #define real_posix_read(fd,buffer,buffer_size)           dlsym_read(fd,buffer,buffer_size)
      #define real_posix_write(fd,buffer,buffer_size)          dlsym_write(fd,buffer,buffer_size)
 
+     #define real_posix_rename(old_path, new_path)            dlsym_rename(old_path, new_path)
+
      #define real_posix_mkdir(pathname,mode)                  dlsym_mkdir(pathname,mode)
      #define real_posix_rmdir(pathname)                       dlsym_rmdir(pathname)
      #define real_posix_unlink(pathname)                      dlsym_unlink(pathname)
-     #define real_posix_stat(pathname,info)                   dlsym_lxstat64(1,pathname,info)
+     #define real_posix_stat(pathname,info)                   dlsym_stat(pathname,info)
 
      #define real_posix_opendir(pathname)                     dlsym_opendir(pathname)
      #define real_posix_readdir(dirptr)                       dlsym_readdir(dirptr)
@@ -95,6 +104,8 @@
      #define real_posix_lseek64(fd,offset,whence)             lseek64(fd,offset,whence)
      #define real_posix_read(fd,buffer,buffer_size)           read(fd,buffer,buffer_size)
      #define real_posix_write(fd,buffer,buffer_size)          write(fd,buffer,buffer_size)
+
+     #define real_posix_rename(old_path, new_path)            rename(old_path, new_path)
 
      #define real_posix_mkdir(pathname,mode)                  mkdir(pathname,mode)
      #define real_posix_rmdir(pathname)                       rmdir(pathname)

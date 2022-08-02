@@ -36,15 +36,19 @@
     if(params->thread_mode == TH_POOL)
       printf("\t-tp:\t\tThread Pool Activated\n") ;
     if(params->thread_mode == TH_OP)
-      printf("\t-tp:\t\tThread Pool Deactivated (Using Thread per Operation)\n") ;
+      printf("\t-tp:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
   }
   
   void mpiServer_params_show_usage ( void )
   {
     printf("Usage:\n");
+    printf("\t-up: turn on servers\n") ;
+    printf("\t-down: shutdown servers\n") ;
+    printf("\t-f <path>: file of servers to be shutdown\n") ;
     printf("\t-io <int>: IOsize\n") ;
     printf("\t-d <string>: name of the base directory\n") ;
     printf("\t-tp: use thread pool\n") ;
+
   }
   
   int mpiServer_params_get ( mpiServer_param_st *params, int argc, char *argv[] )
@@ -85,38 +89,37 @@
             case 'n':
               strcpy(params->name, argv[i+1]);
               i++;
-              break;          
+              break;*/          
             case 'f':
-              strcpy(params->file, argv[i+1]);
+              strcpy(params->host_file, argv[i+1]);
               i++;
               break;          
-            */
             case 'd':
               if ((strlen(argv[i]) == 5) && (argv[i][2] == 'o') && (argv[i][3] == 'w') && (argv[i][4] == 'n')){
                 params->exec_mode = SERV_DOWN;
               }
               else{
                 strcpy(params->dirbase, argv[i+1]);
+                i++;
               }
-              i++;
               break;
             case 't':
               if ((strlen(argv[i]) == 3) && (argv[i][2] == 'p')){
-                 params->thread_mode = TH_POOL;
+                params->thread_mode = TH_POOL;
+                i++;
               }
-              i++;
               break;
             case 'u':
               if ((strlen(argv[i]) == 3) && (argv[i][2] == 'p')){
-                 params->exec_mode = SERV_UP;
+                params->exec_mode = SERV_UP;
+                i++;
               }
-              i++;
               break;
             case 'r':
               if ((strlen(argv[i]) == 6) && (argv[i][2] == 'e') && (argv[i][3] == 's') && (argv[i][4] == 'e') && (argv[i][5] == 't')){
-                  params->exec_mode = SERV_RESET;
+                params->exec_mode = SERV_RESET;
+                i++;
               }
-              i++;
               break;
             case 'h':
               return -1;

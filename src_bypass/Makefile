@@ -2,24 +2,20 @@
 # This Makefile is for expand bypass (syscalls interceptions) library
 #
 
-#gcc -Wall -Wextra -fpic -DLINUX -I/opt/xpn/include/ -c xpn_bypass.c
-#gcc -shared -o xpn_bypass.so *.o -Wl,--trace /opt/xpn/lib/libxpn.a -lmxml -lpthread
 
+ prefix = /opt//xpn
+ CC=/opt/software/install-mpich//bin/mpicc
 
- prefix = /opt/xpn
- CC=/opt/software/install-mpich/bin/mpicc
-#CC=/home/dcamarma/mpich-install/bin/mpicc
- FLAGS=-Wall -Wextra -fpic -DLINUX
- INCLUDE=-I../include -I../include/base -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
- LIBS=-lmxml -lpthread -ldl
- XPN_LIB=${prefix}/lib
+ FLAGS=-Wall -Wextra -fpic -DLINUX -std=c11
+ INCLUDE=-I../include -I../include/base -I../../mxml -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
+ LIBS=-L../../xpn/lib -L../../mxml -lxpn -lmxml -lpthread -ldl
 
 all:
 	$(CC) $(FLAGS) $(INCLUDE) -c xpn_bypass.c
-	$(CC) -shared -o xpn_bypass.so xpn_bypass.o $(XPN_LIB)/libxpn.a $(LIBS)
+	$(CC) -shared -o xpn_bypass.so xpn_bypass.o $(LIBS)
 
 install:
-	cp -f xpn_bypass.o $(XPN_LIB)
+	cp -f xpn_bypass.so ${prefix}/lib
 
 clean:
 	rm -f *.o

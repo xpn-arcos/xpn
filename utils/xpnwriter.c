@@ -109,9 +109,9 @@ int main(int argc, char *argv[])
 		printf("Escribiendo un bloque de %d bytes\n", nr);
 #endif
 		if (xpndest)
-			xpn_write(fdd, buffer, nr);
+			ret = xpn_write(fdd, buffer, nr);
 		else
-			write(fdd, buffer, nr);
+			ret = write(fdd, buffer, nr);
 #ifdef DEBUG
 		printf("Escrito un bloque de %d bytes\n", nr);
 #endif
