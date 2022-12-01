@@ -1,4 +1,4 @@
-# XPN 1.2
+# XPN 1.4
 *Expand Ad-Hoc Parallel File System*
 
  * ℹ️ *Homepage*: https://xpn-arcos.github.io/arcos-xpn.github.io/ 
