@@ -1,8 +1,10 @@
+
 #include "xpn/xpn_simple/xpn_cwd.h"
 
 struct xpn_cwd xpn_cwddir;
 
-void xpn_init_cwd(){
+void xpn_init_cwd()
+{
 	xpn_cwddir.xpn_cwd_path[0] ='\0'; 
 }
 

@@ -1,8 +1,9 @@
+
 #include "xpn/xpn_simple/xpn_dir.h"
 
 
-int xpn_mkdir(const char *path, mode_t perm){
-
+int xpn_mkdir(const char *path, mode_t perm)
+{
   char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
   struct nfi_server **servers;
   struct xpn_metadata *mdata_aux;
