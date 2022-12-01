@@ -49,14 +49,13 @@
 int xpn_fillbuf(register FILE *stream);
 int xpn_fillbuf_noret(register FILE *stream);
 
-size_t
-xpn_fread(void *ptr, size_t size, size_t nmemb, register FILE *stream)
+size_t xpn_fread(void *ptr, size_t size, size_t nmemb, register FILE *stream)
 {
 	register char *cp = (char *)ptr;
 	register int c;
 	size_t ndone = 0;
 	register size_t s;
-	size_t res = -1;
+	size_t res = (size_t) -1;
 
 	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
 
@@ -160,7 +159,7 @@ xpn_fread_prefetch(void *ptr, size_t size, size_t nmemb, register FILE *stream)
 	size_t ndone = 0;
 	register size_t s;
 	struct _prefetch_t **_prefetch_addr = (struct _prefetch_t **) &stream->_chain->_prefetch_rel_addr;
-	size_t res = -1;
+	size_t res = (size_t) -1;
 
 	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
 

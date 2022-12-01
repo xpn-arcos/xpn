@@ -21,7 +21,9 @@
 #ifndef FALSE
 	#define FALSE 0
 #endif
-
+#ifndef LARGEFILE_SOURCE
+	#define LARGEFILE_SOURCE 1
+#endif
 
 /*
  * Get config*.h
@@ -51,6 +53,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <semaphore.h>
+
 //#include <linux/linux.h>
 //#include <sys/ioctl.h>
 //#include <dlfcn.h>
@@ -58,6 +62,10 @@
 /*
  * Include detected headers
  */
+#if defined(HAVE_SYS_PARAM_H)
+	#include <sys/param.h>
+#endif
+
 #if defined(HAVE_DIRENT_H)
 	#include <dirent.h>
 #endif

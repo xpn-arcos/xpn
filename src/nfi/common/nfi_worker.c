@@ -15,7 +15,7 @@ void *nfi_worker_run ( struct nfi_worker *args )
 {
   struct nfi_worker *wrk;
   ssize_t aux, ret;
-  int i;
+  int i, is_true ;
 
   pthread_mutex_lock(&(global_mt)) ;
   wrk = args;
@@ -23,7 +23,10 @@ void *nfi_worker_run ( struct nfi_worker *args )
   pthread_cond_signal(&(global_cnd)) ;
   pthread_mutex_unlock(&(global_mt)) ;
 
-  while(1){
+  ret = -1;
+  is_true = 1;
+  while(is_true)
+  {
 	  pthread_mutex_lock(&(wrk->mt)) ;
 	  while(!(wrk->ready))
 		  pthread_cond_wait(&(wrk->cnd),
@@ -95,10 +98,10 @@ void *nfi_worker_run ( struct nfi_worker *args )
 			  for(i=0; i<wrk->arg.n_io;i++){
 				 //TODO: wrk->arg.io[i].res = aux = wrk->server->ops->nfi_read(wrk->server,
 				 aux = wrk->server->ops->nfi_read(wrk->server,
-					   		wrk->arg.fh,
-							wrk->arg.io[i].buffer,
-							wrk->arg.io[i].offset,
-							wrk->arg.io[i].size) ;
+					   	 wrk->arg.fh,
+							 wrk->arg.io[i].buffer,
+							 wrk->arg.io[i].offset,
+							 wrk->arg.io[i].size) ;
 
 			   	if(aux<0){
 					ret = aux;
@@ -169,10 +172,8 @@ void *nfi_worker_run ( struct nfi_worker *args )
 	  wrk->arg.result = ret;
 	  wrk->ready = 0;
 	  pthread_cond_signal(&(wrk->cnd)) ;
-          pthread_mutex_unlock(&(wrk->mt)) ;
+    pthread_mutex_unlock(&(wrk->mt)) ;
   }
-
-  return NULL ;
 }
 #endif
 

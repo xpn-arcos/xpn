@@ -14,7 +14,8 @@
 
 
   // File API
-  int dlsym_open(char *path, int flags, mode_t mode);
+  int dlsym_open(char *path, int flags);
+  int dlsym_open2(char *path, int flags, mode_t mode);
   int dlsym_open64(char *path, int flags, mode_t mode);
   
   int dlsym_creat(const char *path, mode_t mode);
@@ -92,3 +93,6 @@
   #endif
 
 #endif
+
+
+ 

@@ -122,7 +122,7 @@ int tcpServer_write_data_test(int fd, char *id){
 	//ret = write(fd, buffer_temp, CONST_TEMP); //TODO
 
 	ssize_t (*real_write)(int, const void*, size_t);
-	real_write = dlsym(RTLD_NEXT,"write");
+	real_write = (ssize_t (*)(int, const void*, size_t)) dlsym(RTLD_NEXT,"write");
 	ret = real_write(fd, buffer_temp, CONST_TEMP);
 
 
@@ -139,7 +139,7 @@ int tcpServer_write_data_test(int fd, char *id){
 	//ret = read(fd, buffer_temp, CONST_TEMP); //TODO
 
 	ssize_t (*real_read)(int, void*, size_t);
-	real_read = dlsym(RTLD_NEXT,"read");
+	real_read = (ssize_t (*)(int, void*, size_t)) dlsym(RTLD_NEXT,"read");
 	ret = real_read(fd, buffer_temp, CONST_TEMP);
 
 
@@ -185,7 +185,7 @@ int tcpServer_read_data_test(int fd, char *id){
 	//ret = read(fd, buffer_temp, CONST_TEMP); //TODO
 
 	ssize_t (*real_read)(int, void*, size_t);
-	real_read = dlsym(RTLD_NEXT,"read");
+	real_read = (ssize_t (*)(int, void*, size_t)) dlsym(RTLD_NEXT,"read");
 	ret = real_read(fd, buffer_temp, CONST_TEMP);
 
 	if(ret != CONST_TEMP ){
@@ -216,7 +216,7 @@ int tcpServer_read_data_test(int fd, char *id){
 	//ret = write(fd, buffer_temp, CONST_TEMP); //TODO
 
 	ssize_t (*real_write)(int, const void*, size_t);
-	real_write = dlsym(RTLD_NEXT,"write");
+	real_write = (ssize_t (*)(int, const void*, size_t)) dlsym(RTLD_NEXT,"write");
 	ret = real_write(fd, buffer_temp, CONST_TEMP);
 
 
@@ -355,7 +355,7 @@ ssize_t tcpServer_write_data(int fd, char *data, ssize_t size, char *id){
 		//ret = write(fd, data+cont, size-cont); //TODO
 
 		ssize_t (*real_write)(int, const void*, size_t);
-		real_write = dlsym(RTLD_NEXT,"write");
+		real_write = (ssize_t (*)(int, const void*, size_t)) dlsym(RTLD_NEXT,"write");
 		ret = real_write(fd, data+cont, size-cont);
 
 //		printf("[NFI]write COMM: -> size %d \n",ret);
@@ -415,7 +415,7 @@ ssize_t tcpServer_read_data(int fd, char *data, ssize_t size, char *id){
 //		printf("REQ PRE READ %s\n", data);
 
 		ssize_t (*real_read)(int, void*, size_t);
-		real_read = dlsym(RTLD_NEXT,"read");
+		real_read = (ssize_t (*)(int, void*, size_t)) dlsym(RTLD_NEXT,"read");
 		ret = real_read(fd, data+cont, size-cont);
 
 //		printf("REQ POST READ %s -- RET %d\n", data, ret);

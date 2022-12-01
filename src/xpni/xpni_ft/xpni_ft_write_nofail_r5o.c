@@ -19,7 +19,7 @@
         int block_offset1;     /* Offset inside associated to first data block */
         int block_index2;      /* Index of associated last data block */
         int block_offset2;     /* Offset inside associated to last data block */
-        int SA;                /* Server will be read/write */
+        //int SA;                /* Server will be read/write */
         int SPi;               /* Server for Parity */
         int IPi;               /* Index for Parity */
         int SDi;               /* Server for Data */
@@ -172,7 +172,7 @@
                                    to_write);
 
                /* write the new parity block */
-               SA = SPi;
+               //SA = SPi;
                ret = xpni_lowfsi_pwrite(xpni_fit_get_XPN_MDATA_FD(fd), 
                                         buffer_parity, 
                                         parity_offseti, 
@@ -185,7 +185,7 @@
 
 
                /* write data */
-               SA = SDi;
+               //SA = SDi;
                ret = xpni_lowfsi_pwrite(xpni_fit_get_XPN_DATA_FD(fd), 
                                         block_bufferi,
                                         offseti, 

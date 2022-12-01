@@ -43,7 +43,6 @@
    /* ... Functions / Funciones ......................................... */
 
       int     nfi_mpiServer_init      ( char *url, struct nfi_server *serv, struct nfi_attr_server *attr ) ;
-      int     nfi_mpiServer_destroy   ( struct nfi_server *server ) ;
 
       int     nfi_mpiServer_connect   ( struct nfi_server *server, char *url, char* prt, char* serv, char* dir ) ;
       int     nfi_mpiServer_reconnect ( struct nfi_server *server ) ;
@@ -81,3 +80,5 @@
 
 
 #endif
+
+

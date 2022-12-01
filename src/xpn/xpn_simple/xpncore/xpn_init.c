@@ -9,7 +9,6 @@ int xpn_destroy_servers(struct xpn_partition *part)
 {
     int i;
     struct nfi_server *serv;
-    int mpi_server_disconnect = 0 ;
 
     for(i=0;i<part->data_nserv;i++){
         serv = part->data_serv;

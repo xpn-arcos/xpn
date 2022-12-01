@@ -44,14 +44,14 @@
 	if (NULL == fname)
 	     return (-1) ;
 
-        /*
-         * TODO: 
-	 *   remove getting values based on file name and
-         *   get block_size and servers_count from xpn API with fd
-         *
-	 *   IF (ALLREADY_OPENED) then fm_sc = xpn_file_table[fd]->mdata->nserv;
-	 *   ELSE (there is a xpn_stat ???)
-         */
+    /*
+     * TODO: 
+     *   remove getting values based on file name and
+     *   get block_size and servers_count from xpn API with fd
+     *
+     *   IF (ALLREADY_OPENED) then fm_sc = xpn_file_table[fd]->mdata->nserv;
+     *   ELSE (there is a xpn_stat ?)
+     */
 
 	fname_aux1 = STRING_MISC_StrDup(fname) ;
         if (NULL == fname_aux1) {

@@ -213,12 +213,12 @@ int tcpServer_accept_comm()
 {
 	struct sockaddr_in client_addr;
 	int sc, flag;
-	int size = sizeof(struct sockaddr_in);
+	socklen_t size = sizeof(struct sockaddr_in);
 
         debug_info("[COMM] begin tcpServer_accept_comm()\n");
 
 	debug_info("[COMM] antes accept conection ....\n");
-	sc = accept(global_sock, (struct sockaddr *)&client_addr, (socklen_t *restrict)&size);
+	sc = accept(global_sock, (struct sockaddr *)&client_addr, &size);
 	if (sc == -1) {
 		perror("accept: ");
 	}

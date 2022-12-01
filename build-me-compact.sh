@@ -54,7 +54,7 @@ fi
 case $1 in
    "mn4")
      # working path...
-     MPICH_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/
+     MPICC_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpicc
      INSTALL_PATH=$HOME/mn4/bin/
 
      # load modules...
@@ -63,21 +63,21 @@ case $1 in
 
    "cte-arm")
      # working path...
-     MPICH_PATH=/apps/OPENMPI/4.0.5/GCC/
-     INSTALL_PATH=$HOME/ctearm/bin/
+     MPICC_PATH=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpifcc
+     INSTALL_PATH=$HOME/cte-arm/bin/
 
      # load modules...
      module load fuji
      #module load gcc openmpi
 
      # patch for cross-compiling
-     export    CC=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpicc
-     export MPICC=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpicc
+     export    CC=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpifcc
+     export MPICC=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpifcc
      ;;
 
    "picasso")
      # working path...
-     MPICH_PATH=/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/
+     MPICC_PATH=/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/bin/mpicc
      INSTALL_PATH=$HOME/bin/
 
      # load modules...
@@ -94,7 +94,7 @@ case $1 in
 
    "lab21")
      # working path...
-     MPICH_PATH=/opt/software/install-mpich/
+     MPICC_PATH=/opt/software/install-mpich/bin/mpicc
      INSTALL_PATH=/opt/
 
      # install software (if needed)...
@@ -103,7 +103,7 @@ case $1 in
 
     "tucan")
      # working path...
-     MPICH_PATH=/home/dcamarma/mpich-install/
+     MPICC_PATH=/home/dcamarma/mpich-install/bin/mpicc
      INSTALL_PATH=/home/dcamarma/bin/
 
      # install software (if needed)...
@@ -112,7 +112,7 @@ case $1 in
 
     "generic")
      # working path...
-     MPICH_PATH=/usr/
+     MPICC_PATH=/usr/bin/mpicc
      INSTALL_PATH=$HOME/bin/
 
      # install software (if needed)...
@@ -128,7 +128,7 @@ esac
 
 # 3) preconfigure build-me...
 BASE_PATH=$(dirname $0)
-$BASE_PATH/build-me.sh -m $MPICH_PATH -i $INSTALL_PATH
+$BASE_PATH/build-me.sh -m $MPICC_PATH -i $INSTALL_PATH
 
 # Stop
 echo " End."

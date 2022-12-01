@@ -43,43 +43,44 @@
 
     void mpiServer_run ( struct st_th th )
     {
-      int ret ;
-      struct st_mpiServer_msg head ;
+      debug_info("[WORKERS] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpiServer_op2string(th.type_op), th.type_op);
 
+      mpiServer_do_operation ( &th,  &the_end );
+
+      debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(th.type_op));
+    }
+
+    void mpiServer_dispatcher ( struct st_th th )
+    {
+      int ret ;
+      
       // check params...
       if (NULL == th.params) {
-        debug_warning("[WORKERS] (ID=%d): NULL params", th.id) ;
+        printf("[WORKERS] (ID=%d): NULL params", th.id) ;
         return;
       }
 
       int disconnect = 0;
       while (!disconnect)
       {
-        ret = mpiServer_comm_read_operation(th.params, th.sd, (char *)&(head.type), 1, &(th.rank_client_id));
+        ret = mpiServer_comm_read_operation(th.params, th.sd, (char *)&(th.type_op), 1, &(th.rank_client_id));
         if (ret == -1) {
           debug_info("[OPS] (ID=%s)  mpiServer_comm_readdata fail\n") ;
           return;
         }
-
-        th.type_op = head.type;
 
         if (th.type_op == MPISERVER_DISCONNECT || th.type_op == MPISERVER_FINALIZE)
         {
           debug_info("DISCONNECT received\n");
           disconnect = 1;
         }
-
-        debug_info("[WORKERS] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpiServer_op2string(th.type_op), th.type_op);
-
-        mpiServer_do_operation ( &th,  &the_end );
-
-        debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpiServer_op2string(th.type_op));
-
+        else{
+          //Launch worker per operation
+          mpiServer_workers_launch( &params, th.sd, th.type_op, th.rank_client_id, mpiServer_run ) ;
+        }
       }
 
       debug_info("[WORKERS] mpiServer_worker_run (ID=%d) close\n", th.rank_client_id);
-
-      //th.params->client = th.sd;
 
       mpiClient_comm_close(th.sd) ;
     }
@@ -92,12 +93,32 @@
       MPI_Comm sd ;
       struct st_mpiServer_msg head ;
       int rank_client_id;
+      int ret;
 
       // Initialize
       debug_msg_init() ;
       mpiServer_comm_init(&params) ;
-      mpiServer_workers_init ( params.thread_mode );
+      mpiServer_workers_init(params.thread_mode);
+
+      //Initialize semaphore for server disks
+      ret = sem_init(&(params.disk_sem), 0, 1);
+      if (ret == -1)
+      {
+        return -1; //TODO: message
+      }
+
+      //Initialize semaphore for clients
+      char serv_name [HOST_NAME_MAX];
+      gethostname(serv_name, HOST_NAME_MAX);
+      sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
       
+      sem_t *sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
+      if (sem_server == 0)
+      {
+        printf("Semaphore error\n");
+        return -1;
+      }
+
       // Loop: receiving + processing
       the_end = 0;
       while (!the_end)
@@ -107,11 +128,11 @@
         params.client = MPI_COMM_NULL ;
 
         sd = mpiServer_comm_accept(&params) ;
-        if (sd == -1) {
+        if (sd == MPI_COMM_NULL) {
           continue ;
         }
 
-        int ret = mpiServer_comm_read_operation(&params, sd, (char *)&(head.type), 1, &(rank_client_id));
+        ret = mpiServer_comm_read_operation(&params, sd, (char *)&(head.type), 1, &(rank_client_id));
         if (ret == -1) {
           debug_info("[OPS] (ID=%s)  mpiServer_comm_readdata fail\n") ;
           return -1;
@@ -120,11 +141,12 @@
         if (head.type == MPISERVER_FINALIZE)
         {
           the_end = 1;
+          continue;
         }
         else{
-          mpiServer_workers_launch( &params, sd, mpiServer_run ) ;
+          //Launch dispatcher per aplication
+          mpiServer_workers_launch( &params, sd, 0, 0, mpiServer_dispatcher ) ;
         }
-
       }
 
       // Wait and finalize for all current workers
@@ -133,50 +155,55 @@
       debug_info("[MAIN] mpiServer_comm_destroy\n");
       mpiServer_comm_destroy(&params) ;
 
+      //Close semaphores
+      sem_destroy(&(params.disk_sem));
+      sem_unlink(params.sem_name_server);
+
       // return OK 
       return 0 ;
     }
 
-    int mpiServer_down ( int argc, char *argv[] ) {
-
+    int mpiServer_down ( int argc, char *argv[] )
+    {
       int  ret, buf;
       char port_name[MPI_MAX_PORT_NAME];
       char srv_name[1024] ;
-      char hydra_name[2048] ;
+      char dns_name[2048] ;
       MPI_Comm server;
       FILE *file;
+
+      printf("----------------\n");
+      printf("Stopping servers\n");
+      printf("----------------\n\n");
 
       MPI_Init(&argc, &argv);
 
       // open file
       file = fopen(params.host_file, "r");
       if (file == NULL) {
-          printf("Invalid file %s\n", params.host_file);
-          return -1;
+        printf("Invalid file %s\n", params.host_file);
+        return -1;
       }
 
       while (fscanf(file, "%[^\n] ", srv_name) != EOF) {
-
         // Lookup port name
-        sprintf(hydra_name, "mpiServer.%s", srv_name);
-
-        ret = MPI_Lookup_name(hydra_name, MPI_INFO_NULL, port_name) ;
-        if (MPI_SUCCESS != ret) {
-            printf("MPI_Lookup_name fails\n") ;
-            return -1;
+        ret = mpiServer_dns_lookup (srv_name, port_name);
+        if (ret == -1)
+        {
+          printf("Server %s not found\n", dns_name) ;
+          continue;
         }
 
         // Connect with servers
-        ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &server ); //TODO: cambiar a self
+        ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &server );
         if (MPI_SUCCESS != ret) {
-            printf("MPI_Comm_connect fails\n") ;
-            return -1;
+          printf("MPI_Comm_connect fails\n") ;
+          continue;
         }
-
         buf = MPISERVER_FINALIZE; 
         MPI_Send( &buf, 1, MPI_INT, 0, 0, server );
 
-        MPI_Comm_disconnect( &server );
+        //MPI_Comm_disconnect( &server ); //TODO: fail
       }
 
       fclose(file);
@@ -184,7 +211,6 @@
       MPI_Finalize();
 
       return 0;
-
     }
 
   
@@ -202,12 +228,13 @@
       ret = mpiServer_params_get(&params, argc, argv) ;
       if (ret < 0) {
         mpiServer_params_show_usage() ;
-        exit(-1) ;
+        return -1;
       }
 
-      mpiServer_params_show(&params) ;
-
-      if (params.exec_mode != SERV_UP)
+      char * exec_name = basename(argv[0]);
+      printf("%s\n", exec_name);
+      
+      if (strcasecmp(exec_name, "xpn_stop_mpiserver") == 0)
       {
         ret = mpiServer_down (argc, argv);
       }
@@ -216,7 +243,6 @@
       }
 
       return ret;
-
      }
 
 

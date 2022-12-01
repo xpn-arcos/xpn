@@ -19,7 +19,7 @@
         int block_offset1;     /* Offset inside associated to first data block */
         int block_index2;      /* Index of associated last data block */
         int block_offset2;     /* Offset inside associated to last data block */
-        int SA;                /* Server will be read/write */
+        //int SA;                /* Server will be read/write */
         int SPi;               /* Server for Parity */
         int IPi;               /* Index for Parity */
         int SDi;               /* Server for Data */
@@ -43,9 +43,9 @@
         int block_i;           /* Auxiliar counter for blocks */
         int offseti;           /* Auxiliar counter for data block offset */
         int block_offseti;     /* Auxiliar counter for data block offset */
-	int end_index2;        /* Index of last block */
-	int row1, row2;        /* Index of first and last row */
-	int index1, index2;    /* Index of first and last block */
+    	int end_index2;        /* Index of last block */
+    	int row1, row2;        /* Index of first and last row */
+    	int index1, index2;    /* Index of first and last block */
 
 
         /* debugging */
@@ -207,7 +207,7 @@
                                    fmeta.block_size);
 
                /* write new parity */
-               SA = SPi;
+               //SA = SPi;
                if (SPi != 1) /* if (SPi != <servidor_falla>) */
                {
                   ret = xpni_lowfsi_pwrite(xpni_fit_get_XPN_DATA_FD(fd), 
@@ -221,7 +221,7 @@
                }
 
                /* write data */
-               SA = SDi;
+               //SA = SDi;
                if (SDi != 1) /* if (SDi != <servidor_falla>) */
                {
 		  /* <rebuild data block> */

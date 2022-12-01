@@ -25,6 +25,7 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "all_system.h"
+      #include "syscall_proxies.h"
       #include "base/utils.h"
       #include <pthread.h> 
       #include <sys/stat.h>
@@ -41,7 +42,8 @@
      #define LSEEK real_posix_lseek
 #endif
 
-     #define ASYNC_CLOSE
+     #define ASYNC_CLOSE 1
+     #define FILESYSTEM_DLSYM 1
 
 
    /* ... Functions / Funciones ......................................... */
@@ -76,7 +78,7 @@
 #ifdef FILESYSTEM_DLSYM
      #define real_posix_creat(path,mode)                      dlsym_creat(path,mode)
      #define real_posix_open(path,flags)                      dlsym_open(path,flags)
-     #define real_posix_open2(path,flags,mode)                dlsym_open(path,flags,mode)
+     #define real_posix_open2(path,flags,mode)                dlsym_open2(path,flags,mode)
      #define real_posix_close(fd)                             dlsym_close(fd)
 
      #define real_posix_lseek(fd,offset,whence)               dlsym_lseek(fd,offset,whence)
@@ -89,7 +91,9 @@
      #define real_posix_mkdir(pathname,mode)                  dlsym_mkdir(pathname,mode)
      #define real_posix_rmdir(pathname)                       dlsym_rmdir(pathname)
      #define real_posix_unlink(pathname)                      dlsym_unlink(pathname)
-     #define real_posix_stat(pathname,info)                   dlsym_stat(pathname,info)
+     //#define real_posix_stat(pathname,info)                   dlsym_xstat64(pathname,info)
+     #define real_posix_stat(pathname,info)                   stat(pathname,info)
+
 
      #define real_posix_opendir(pathname)                     dlsym_opendir(pathname)
      #define real_posix_readdir(dirptr)                       dlsym_readdir(dirptr)

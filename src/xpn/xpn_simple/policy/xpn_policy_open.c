@@ -215,9 +215,10 @@ int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos){
 				return pos;
 			}
 			if(pos == -1){
-				return (p->first_node)%(mdata->data_nserv);
-			}else{
-				return (p->first_node+pos)%(mdata->data_nserv);
+				pos = (p->first_node)%(mdata->data_nserv);
+			}
+			else{
+				pos = (p->first_node+pos)%(mdata->data_nserv);
 			}
 			break;
 	}

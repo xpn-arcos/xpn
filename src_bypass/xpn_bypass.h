@@ -1,5 +1,5 @@
-#ifndef _XPN_LIB_H_
-#define _XPN_LIB_H_
+#ifndef _XPN_BYPASS_H_
+#define _XPN_BYPASS_H_
 
 
 #define _GNU_SOURCE
@@ -15,13 +15,13 @@
 #include <string.h>
 #include "mpi.h"
 
-//#include<pthread.h>
+//#include<pthread.h> //Mutex
 
 
 //#define RTLD_NEXT ((void *) -1l)
 #define MAX_FDS   4069
 #define MAX_DIRS  4096
-#define PLUSXPN   65000
+#define PLUSXPN   1000
 
 #undef __USE_FILE_OFFSET64
 #undef __USE_LARGEFILE64
@@ -37,49 +37,12 @@ struct generic_fd{
 };
 
 
-struct generic_fd fdstable[MAX_FDS];
-DIR * fdsdirtable[MAX_DIRS];
-
-
-/*struct stat64
-  {
-  __dev_t st_dev;                     // Device.
-  unsigned int __pad1;
-        __ino_t __st_ino;                   // 32bit file serial number.
-        __mode_t st_mode;                   // File mode.
-        __nlink_t st_nlink;                 // Link count.
-        __uid_t st_uid;                     // User ID of the file's owner.
-        __gid_t st_gid;                     // Group ID of the file's group.
-        __dev_t st_rdev;                    // Device number, if device.
-        unsigned int __pad2;
-        __off64_t st_size;                  // Size of file, in bytes.
-        __blksize_t st_blksize;             // Optimal block size for I/O.
-        __blkcnt64_t st_blocks;             // Number 512-byte blocks allocated.
-        __time_t st_atime;                  // Time of last access.
-        unsigned long int __unused1;
-        __time_t st_mtime;                  // Time of last modification.
-        unsigned long int __unused2;
-        __time_t st_ctime;                  // Time of last status change.
-        unsigned long int __unused3;
-        __ino64_t st_ino;                   // File serial number.
-};
-
-struct dirent64
-  {
-  __ino64_t d_ino;
-  __off64_t d_off;
-  unsigned short int d_reclen;
-  unsigned char d_type;
-  char d_name[256];           // We must not include limits.h! 
-  };*/
-
 
 
 // File API
 
 int open(const char *path, int flags, ...);
 int open64(const char *path, int flags, ...);
-int __open_2(const char *path, int flags, ...);
 
 int creat(const char *path, mode_t mode);
 
@@ -107,8 +70,8 @@ int unlink(const char *path);
 
 // Directory API
 
-DIR *opendir(const char *dirname);
 int mkdir(const char *path, mode_t mode);
+DIR *opendir(const char *dirname);
 
 struct dirent *readdir(DIR *dirp);
 struct dirent64 *readdir64(DIR *dirp);
@@ -135,24 +98,7 @@ int fchmod(int fildes, mode_t mode);
 int chown(const char *path, uid_t owner, gid_t group);
 int fcntl(int fd, int cmd, long arg);
 int access(const char *path, int mode);
-char * __realpath_chk(const char * path, char * resolved_path, size_t resolved_len);
-
-
-
-//Memory API
-void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
-
-
-/**************************************************
- GETCWD TIENE MUCHA CHICHA...PA LUEGO
-***************************************************
-
-char *getcwd(char *path, size_t size);
-
-**********************************************
-**********************************************/
-
-//int utime(const char *path, struct utimbuf *times);
+char *realpath(const char *restrict path, char *restrict resolved_path);
 
 
 #endif

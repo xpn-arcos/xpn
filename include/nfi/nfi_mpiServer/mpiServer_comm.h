@@ -5,6 +5,7 @@
       #include "mpiServer_params.h"
       #include "base/utils.h"
       #include "mpiServer_ops.h"
+      #include "mpiServer_ns.h"
 
       /*
        *  API

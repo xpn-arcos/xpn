@@ -109,7 +109,6 @@
 #endif
     	             return (-1) ;
                 }
-                break ;
         }
 
         /* Return ok */

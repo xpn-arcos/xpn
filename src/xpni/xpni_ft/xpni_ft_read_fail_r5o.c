@@ -18,9 +18,9 @@
 
         int ret ;
         int block_index1;      /* Index of associated first data block */
-        int block_offset1;     /* Offset inside associated to first data block */
+        //int block_offset1;     /* Offset inside associated to first data block */
         int block_index2;      /* Index of associated last data block */
-        int block_offset2;     /* Offset inside associated to last data block */
+        //int block_offset2;     /* Offset inside associated to last data block */
         int SPi;               /* Server for Parity */
         int IPi;               /* Index for Parity */
         int SDi;               /* Server for Data */
@@ -39,9 +39,9 @@
         fmeta = xpni_fit_get_XPN_FMETA(fd) ;
         
         block_index1   = (offset)      / fmeta.block_size ;
-        block_offset1  = (offset)      % fmeta.block_size ;
+        //block_offset1  = (offset)      % fmeta.block_size ;
         block_index2   = (offset+size) / fmeta.block_size ;
-        block_offset2  = (offset+size) % fmeta.block_size ;
+        //block_offset2  = (offset+size) % fmeta.block_size ;
 
 	toRecover = 0 ;
 	for (i=block_index1; i<block_index2; i++)

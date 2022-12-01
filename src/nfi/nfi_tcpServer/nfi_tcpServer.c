@@ -437,9 +437,9 @@ int nfi_tcpServer_destroy(struct nfi_server *serv)
 
   if(server_aux != NULL){
     //printf("[NFI]Cierro la conexion\n");
-    msg.type = -1;
-          tcpServer_write_operation(server_aux->sd, &msg);
-          close(server_aux->sd);
+    msg.type = (char) -1;
+    tcpServer_write_operation(server_aux->sd, &msg);
+    close(server_aux->sd);
     free(serv->private_info);
   }
 
@@ -462,7 +462,7 @@ int nfi_tcpServer_destroy(struct nfi_server *serv)
 
 
 /************************************************************
- * GENERIC FUNCTIONS              *
+ * GENERIC FUNCTIONS                                        *
  ************************************************************/
 
 int nfi_tcpServer_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr){
@@ -1701,3 +1701,4 @@ int nfi_tcpServer_statfs(struct nfi_server *serv,  struct nfi_info *inf)
 */  
   return 0;
 }
+

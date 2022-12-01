@@ -178,7 +178,8 @@
                   return(-1);
            } 
             
-           global_transfer_buffer = malloc(sizeof(char)*(params->IOsize * KB));
+            //TODO
+           /*global_transfer_buffer = malloc(sizeof(char)*(params->IOsize * KB));
            sum = 0;
            do {
       		debug_info("d2xpn(%d): before read(%d,%d)\n", params->rank, params->IOsize * KB, sum);
@@ -212,7 +213,7 @@
             
            gettimeofday(&t2, NULL);
            transfer_time = (t2.tv_sec + t2.tv_usec/1000000.0) - (t1.tv_sec + t1.tv_usec/1000000.0);
-           printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, (params->IOsize * KB));
+           printf("Name\t%s\tTransfer_time\t%f\tSize\t%d\n", origen, transfer_time, (params->IOsize * KB));*/
             
            return(0);
       }

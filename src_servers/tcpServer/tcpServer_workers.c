@@ -103,7 +103,7 @@
 
         debug_info("[WORKERS] pthread_create: antes create_thread tcpServer_worker_run\n");
         //usleep(100);
-        ret = pthread_create(&th_worker, &tattr, (void *)(tcpServer_worker_run), (void *)&st_worker);
+        ret = pthread_create(&th_worker, &tattr, (void *(*)(void *))(tcpServer_worker_run), (void *)&st_worker);
 
         debug_info("[WORKERS] pthread_create: desp. create_thread tcpServer_worker_run = %d\n", ret);
         if (ret != 0) {
@@ -139,7 +139,7 @@
 
         for (int i = 0; i < MAX_THREADS; i++){
           debug_info("[WORKERS] pthread_create: create_thread tcpServer_launch_worker_pool\n") ;
-          if (pthread_create(&thid[i], NULL, (void *)(worker_pool_function), NULL) !=0){
+          if (pthread_create(&thid[i], NULL, (void *(*)(void *))(worker_pool_function), NULL) !=0){
             perror("Error creating thread pool\n");
             return -1;
           }
@@ -153,7 +153,7 @@
 
 
     /* thread process */
-    void tcpServer_worker_run(void *arg)
+    void * tcpServer_worker_run ( void *arg )
     {
       int    sd;
       struct st_th *th;
@@ -289,11 +289,12 @@
 
       debug_info("[WORKERS] end tcpServer_worker_run (ID=%s): end\n", id);
       pthread_exit(0);
+      return NULL;
     }
 
 
-
-    void tcpServer_worker_pool_enqueue ( int sd, int id ){
+    void tcpServer_worker_pool_enqueue ( int sd, int id )
+    {
         DEBUG_BEGIN() ;
 
         debug_info("[WORKERS] client(%d): tcpServer_worker_pool_enqueue(...) lock\n", id);
@@ -370,7 +371,7 @@
         do
         {
             /* */
-            head.type = TCPSERVER_END;
+            head.type = (char) TCPSERVER_END;
             strcpy(head.id, (char*) &th.id);
             debug_info("[WORKERS] tcpServer_read_operation begin (%d)\n", th.id);
             op = tcpServer_read_operation(th.sd, &head);
@@ -463,9 +464,10 @@
 
     void worker_pool_function ( void )
     {
+        int is_true = 1;
         struct st_th th;
 
-        while(1)
+        while(is_true)
         {
           // Dequeue operation
           th = tcpServer_worker_pool_dequeue ( the_end );

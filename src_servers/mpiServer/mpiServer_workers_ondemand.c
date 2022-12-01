@@ -42,7 +42,7 @@
       *  Internal
       */
 
-     void mpiServer_worker_run ( void *arg )
+     void *mpiServer_worker_run ( void *arg )
      {
          struct st_th th;
   
@@ -79,6 +79,7 @@
 
          // end
          pthread_exit(0);
+	 return NULL;
      }
 
 
@@ -102,7 +103,7 @@
        return 0;
      }
 
-     int mpiServer_worker_ondemand_launch ( mpiServer_param_st * params, MPI_Comm sd, void (*worker_function)(struct st_th) )
+     int mpiServer_worker_ondemand_launch ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) )
      {
        int ret;
        pthread_attr_t th_attr;
@@ -120,11 +121,13 @@
        st_worker.sd             = sd;
        st_worker.id             = th_cont++;
        st_worker.params         = params ;
+       st_worker.type_op        = type_op ;
+       st_worker.rank_client_id = rank_client_id ;
        st_worker.function       = worker_function ;
 
        // create thread...
        debug_info("[WORKERS] pthread_create: create_thread mpiServer_worker_run\n") ;
-       ret = pthread_create(&th_worker, &th_attr, (void *)(mpiServer_worker_run), (void *)&st_worker);
+       ret = pthread_create(&th_worker, &th_attr, (void *(*)(void *))(mpiServer_worker_run), (void *)&st_worker);
        if (ret != 0){
          debug_error("[WORKERS] pthread_create %d\n", ret);
          perror("pthread_create: Error en create_thread: ");

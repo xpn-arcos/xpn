@@ -10,8 +10,8 @@
    * Constants
    */
 
-  #define MAX_THREADS 32
-  #define MAX_OPERATIONS 256
+  #define MAX_THREADS 2048
+  #define MAX_OPERATIONS 1024
   #define STACK_SIZE (256*KB)
 
 

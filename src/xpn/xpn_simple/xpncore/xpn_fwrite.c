@@ -55,7 +55,7 @@ xpn_fwrite(const void *ptr, size_t size, size_t nmemb,
 	register const unsigned char *cp = (const unsigned char *)ptr;
 	register size_t s;
 	size_t ndone = 0;
-	size_t res = -1;
+	size_t res = (size_t) -1;
 
 	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
 	XPN_DEBUG("stream->_count = %d _buf = %p _ptr = %p count = %d", stream->_count, stream->_buf, stream->_ptr, (int)(stream->_ptr - stream->_buf))

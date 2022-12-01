@@ -31,7 +31,7 @@
         int end_indexi;        /* Index of associate end block */
         int end_offseti;       /* Offset inside associate end block */
         int begin_indexi;      /* Index of associate begin data block */
-        int begin_offseti;     /* Offset inside associate begin data block */
+        //int begin_offseti;     /* Offset inside associate begin data block */
         char *buffer_i;        /* Auxiliar pointer */
         int offset_start;      /* Offset of beginning of segment to read */
         int offset_end;        /* Ending Offset of segment to read */
@@ -41,10 +41,10 @@
         int row;               /* Auxiliar counter for rows */
         int block_i;           /* Auxiliar counter for blocks */
         int end_index2;        /* Index of last block */
-	int row1, row2;        /* Index of first and last row */
-	int index1, index2;    /* Index of first and last block */
-	char *buffer_row;
-	int toRecover, i, j;
+    	int row1, row2;        /* Index of first and last row */
+    	int index1, index2;    /* Index of first and last block */
+    	char *buffer_row;
+    	int toRecover, i, j;
 
 
         /* debugging */
@@ -66,78 +66,76 @@
         block_offset2  = (offset+size) % fmeta.block_size ;
 
 
-	/*
-	 *
-	 */
-	toRecover = 0 ;
-	for (i=block_index1; i<block_index2; i++)
-	{
-           ret = MATH_MISC_locateInRAID5withInternalParity(i,
-                                                           fmeta.servers_count,
-                                                           &SPi,&IPi,&SDi,&IDi);
-	   if (1 == SDi) { 
-	       toRecover++ ;
-	   }
-	}
+    	/*
+    	 *
+    	 */
+    	toRecover = 0 ;
+    	for (i=block_index1; i<block_index2; i++)
+    	{
+           ret = MATH_MISC_locateInRAID5withInternalParity(i,fmeta.servers_count, &SPi,&IPi,&SDi,&IDi);
+    	   if (1 == SDi) { 
+    	       toRecover++ ;
+    	   }
+    	}
 
-	if (0 != toRecover)
-	{
-		buffer_row = (char *)malloc(fmeta.block_size*fmeta.servers_count);
-		if (NULL == buffer_row)
-		            return (-1) ;
-		memset(buffer_row,0,fmeta.block_size*fmeta.servers_count);
+    	if (0 != toRecover)
+    	{
+    		buffer_row = (char *)malloc(fmeta.block_size*fmeta.servers_count);
+    		if (NULL == buffer_row)
+    		            return (-1) ;
+    		memset(buffer_row,0,fmeta.block_size*fmeta.servers_count);
 
-	        for (i=0; i<toRecover; i++)
-		{
-	                for (j=0; j<fmeta.servers_count-1; j++) 
-			{
-				ret = xpni_lowfsi_pread(xpni_fit_get_XPN_DATA_FD(fd),
-							 buffer_row,
-							 (int)0,
-							 fmeta.block_size) ;
-			}
+    	        for (i=0; i<toRecover; i++)
+    		{
+    	                for (j=0; j<fmeta.servers_count-1; j++) 
+    			{
+    				ret = xpni_lowfsi_pread(xpni_fit_get_XPN_DATA_FD(fd),
+    							 buffer_row,
+    							 (int)0,
+    							 fmeta.block_size) ;
+    			}
 
-			ret = MATH_MISC_Xor(buffer_row,
-			                    buffer_row,
-				            buffer_row,
-				            fmeta.block_size);
-		}
+    			ret = MATH_MISC_Xor(buffer_row,
+    			                    buffer_row,
+    				            buffer_row,
+    				            fmeta.block_size);
+    		}
 
-		free(buffer_row);
-	}
+    		free(buffer_row);
+    	}
 
 
         /* 
          * Read physical block positions
          */                                             
 
-	/* Absolute index of last block */
+	   /* Absolute index of last block */
         ret = MATH_MISC_locateInRAID5withInternalParity(block_index1,
                                                         fmeta.servers_count,
                                                         &SPi,&IPi,&SDi,&IDi);
-	index1 = IDi * fmeta.servers_count + SDi ;
+	   index1 = IDi * fmeta.servers_count + SDi ;
 
         if (block_offset2 == 0)
-	{
+	    {
            ret = MATH_MISC_locateInRAID5withInternalParity(block_index2 - 1,
                                                            fmeta.servers_count,
                                                            &SPi,&IPi,&SDi,&IDi);
-	   index2     = IDi * fmeta.servers_count + SDi ;
-	   end_index2 = index2 + 1;
-	}
-	else
-	{
+	       index2     = IDi * fmeta.servers_count + SDi ;
+	       end_index2 = index2 + 1;
+	    }
+    	else
+    	{
            ret = MATH_MISC_locateInRAID5withInternalParity(block_index2,
                                                            fmeta.servers_count,
                                                            &SPi,&IPi,&SDi,&IDi);
-	   index2     = IDi * fmeta.servers_count + SDi ;
-	   end_index2 = index2 ;
-	}
+    	   index2     = IDi * fmeta.servers_count + SDi ;
+    	   end_index2 = index2 ;
+	    }
 
-	/* Physical rows to read... */
-	row1 = index1 / fmeta.servers_count ;
-	row2 = index2 / fmeta.servers_count ;
-	rows = row2 - row1 + 1;
+    	/* Physical rows to read... */
+    	row1 = index1 / fmeta.servers_count ;
+    	row2 = index2 / fmeta.servers_count ;
+    	rows = row2 - row1 + 1;
 
         buffer_i = (char *)buffer;
 
@@ -158,7 +156,7 @@
             else
                  end_indexi = end_index2 ;
 
-            begin_offseti  = begin_indexi  * fmeta.block_size;
+            //begin_offseti  = begin_indexi  * fmeta.block_size;
             end_offseti    = end_indexi    * fmeta.block_size;
             parity_offseti = parity_indexi * fmeta.block_size;
             data_offseti   = data_indexi   * fmeta.block_size;
@@ -198,7 +196,7 @@
                   offset_start = data_offseti ;
                   offset_end   = end_offseti ;
                   segment_size = offset_end - offset_start ;
-        	  ret = xpni_lowfsi_pread(xpni_fit_get_XPN_DATA_FD(fd),
+        	       ret = xpni_lowfsi_pread(xpni_fit_get_XPN_DATA_FD(fd),
 				          buffer_i,
 				          offset_start,
 				          segment_size);
@@ -210,12 +208,12 @@
                 block_i = block_i - (block_i % (fmeta.servers_count - 1));
             block_i = block_i + fmeta.servers_count - 1;
 
-	    /*
+	        /*
             if (0 == row) 
                  block_i = (block_i - SDi) + fmeta.servers_count;
             else
                  block_i = (block_i)       + fmeta.servers_count;
-	    */
+	       */
         }
 
 

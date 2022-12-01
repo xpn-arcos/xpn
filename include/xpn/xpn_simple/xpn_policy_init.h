@@ -79,7 +79,9 @@ struct conf_connect_st{
 	int type;
 	union{
 	  FILE *f;
+#ifdef ENABLE_NFS3
 	  CLIENT *cl;
+#endif
 	  int fd;
 #ifdef ENABLE_MXML
 	  struct xml_connect_st xml;

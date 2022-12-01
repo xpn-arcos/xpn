@@ -289,8 +289,8 @@
                  return (buffer_size - read_remaining_bytes) ;
              }
 
-             read_remaining_bytes -= read_num_bytes ;
-             read_buffer          += read_num_bytes ;
+             read_remaining_bytes = read_remaining_bytes - read_num_bytes ;
+             read_buffer          = (void *)((char *) read_buffer + read_num_bytes) ;
          }
 
          return buffer_size ;
@@ -319,8 +319,8 @@
                  return -1 ;
              }
 
-             write_remaining_bytes -= write_num_bytes ;
-             write_buffer          += write_num_bytes ;
+             write_remaining_bytes = write_remaining_bytes - write_num_bytes ;
+             write_buffer          = (void *)((char *) write_buffer + write_num_bytes) ;
          }
 
          return num_bytes_to_write ;

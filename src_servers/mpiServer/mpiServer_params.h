@@ -4,6 +4,7 @@
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
+  #include <semaphore.h>
   #include "mpi.h"
   #include "base/utils.h"
   #include "mpiServer_conf.h"
@@ -13,9 +14,6 @@
   #define TH_POOL 1
   #define TH_OP   2
 
-  #define SERV_UP    1
-  #define SERV_DOWN  2
-  #define SERV_RESET 3
 
 
   /*
@@ -29,16 +27,21 @@
     int  rank ;
     char port_name[MPI_MAX_PORT_NAME] ;
     char srv_name[MPI_MAX_PORT_NAME] ;
+    char dns_file[PATH_MAX] ;
     char host_file[PATH_MAX] ;
 
     // server configuration
     int thread_mode;
-    int exec_mode;
+
+    //Semaphore for clients
+    char sem_name_server [MAXPATHLEN];
+
+    //Semaphore for server disk
+    sem_t disk_sem;
 
     // associated client
     MPI_Comm client ;
-    char dirbase[255] ;
-    int  IOsize ;
+    char dirbase[PATH_MAX] ;
 
     // server arguments
     int    argc ;

@@ -31,7 +31,7 @@
         int end_indexi;        /* Index of associate end block */
         int end_offseti;       /* Offset inside associate end block */
         int begin_indexi;      /* Index of associate begin data block */
-        int begin_offseti;     /* Offset inside associate begin data block */
+        //int begin_offseti;     /* Offset inside associate begin data block */
         char *buffer_i;        /* Auxiliar pointer */
         int offset_start;      /* Offset of beginning of segment to read */
         int offset_end;        /* Ending Offset of segment to read */
@@ -115,7 +115,7 @@
             else
                  end_indexi = end_index2 ;
 
-            begin_offseti  = begin_indexi  * fmeta.block_size;
+            //begin_offseti  = begin_indexi  * fmeta.block_size;
             end_offseti    = end_indexi    * fmeta.block_size;
             parity_offseti = parity_indexi * fmeta.block_size;
             data_offseti   = data_indexi   * fmeta.block_size;

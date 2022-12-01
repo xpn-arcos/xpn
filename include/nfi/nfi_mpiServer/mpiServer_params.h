@@ -7,6 +7,8 @@
    #include "mpi.h"
    #include "mpiServer_conf.h"
 
+   #include <semaphore.h>
+
 
    /*
     * Datatype
@@ -24,6 +26,8 @@
         MPI_Comm server ;
 
         int locality ;
+        char sem_name_server [MAXPATHLEN];
+        sem_t * sem_server ;
 
         // server arguments
         int    argc ;

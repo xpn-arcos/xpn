@@ -36,23 +36,6 @@
    */
   //char *xpn_adaptor_partition_prefix = "xpn://"; //Original
   char *xpn_adaptor_partition_prefix = "/tmp/expand/";
-    
-  /*
-  char *xpn_adaptor_flog_name  = "/tmp/EXPAND.LOG" ;
-  void xpn_adaptor_log ( char * msg, ... )
-  {
-      FILE *flog;
-      va_list vargs;
-
-      va_start(vargs,msg);
-      flog = fopen(xpn_adaptor_flog_name,"a+");
-      if (NULL != flog) {
-          vfdebug_info(flog,msg,vargs);
-          fclose(flog);
-      }
-      va_end(vargs);
-  }
-  */
 
   int is_prefix(const char * prefix, const char * path){
     return ( !strncmp(prefix,path,strlen(prefix)) && strlen(path) > strlen(prefix) );
@@ -62,6 +45,8 @@
 
   // fd table management
 
+  struct generic_fd fdstable[MAX_FDS];
+
   //pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
   void fdstable_init ( void ){
@@ -69,6 +54,7 @@
     for (int i = 0; i < MAX_FDS; ++i)
     { 
       fdstable[i].type = FD_FREE;
+      fdstable[i].real_fd = -1;
     }
     //pthread_mutex_unlock(&mutex);
   }
@@ -76,21 +62,34 @@
   struct generic_fd fdstable_get ( int fd ){
     //debug_info("GET FSTABLE %d  %d  %d\n", fd, fdstable[fd].type, fdstable[fd].real_fd);
     //pthread_mutex_lock(&mutex);
-    struct generic_fd ret = fdstable[fd];
+
+    struct generic_fd ret;
+
+    if (fd >= PLUSXPN)
+    {
+      fd = fd - PLUSXPN;
+      ret = fdstable[fd];
+    }
+    else
+    {
+      ret.type = FD_SYS;
+      ret.real_fd = fd;
+    }
+
     //pthread_mutex_unlock(&mutex);
 
     return ret;
   }
 
   int fdstable_put ( struct generic_fd fd ){
-    for (int i = 3; i < MAX_FDS; ++i)
+    for (int i = 0; i < MAX_FDS; ++i)
     {
       //pthread_mutex_lock(&mutex);
       if ( fdstable[i].type == FD_FREE ){
         fdstable[i] = fd;
         //debug_info("PUT FSTABLE %d  %d  %d\n", i, fdstable[i].type, fdstable[i].real_fd);
         //pthread_mutex_unlock(&mutex);
-        return i;
+        return i + PLUSXPN;
       }
       //pthread_mutex_unlock(&mutex);
     }
@@ -100,13 +99,21 @@
 
   int fdstable_remove ( int fd ){
     //pthread_mutex_lock(&mutex);
+    if (fd < PLUSXPN)
+    {
+      return 0;
+    }
+    
     fdstable[fd].type = FD_FREE;
+    fdstable[fd].real_fd = -1;
     //pthread_mutex_unlock(&mutex);
 
     return 0;
   }
 
   // Dir table management
+
+  DIR * fdsdirtable[MAX_DIRS];
 
   void fdsdirtable_init ( void ){
     for (int i = 0; i < MAX_DIRS; ++i)
@@ -191,7 +198,6 @@
       if (ret < 0)
       {
         printf("xpn_init: Expand couldn't be initialized\n");
-        //xpn_adaptor_log("xpn_init: Expand couldn't be initialized\n");
         xpn_adaptor_initCalled = 0;
         setenv("INITCALLED", "0", 1);
       }
@@ -222,16 +228,17 @@
     debug_info("2) flags => %d\n",flags);
     debug_info("3) mode => %d\n",mode);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     // This if checks if variable path passed as argument starts with the expand prefix.
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
       // It is an XPN partition, so we redirect the syscall to expand syscall
+      debug_info("xpn_open\n");
       debug_info("Path => %s\n",path + strlen(xpn_adaptor_partition_prefix));
 
-      fd = xpn_open((char *)(path + strlen(xpn_adaptor_partition_prefix)), flags, mode);
+      fd = xpn_open((const char *)(path + strlen(xpn_adaptor_partition_prefix)), flags, mode);
 
       debug_info("xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
 
@@ -252,20 +259,8 @@
     else 
     {
       debug_info("dlsym_open\n");
-      fd = dlsym_open((char *)path, flags, mode);
 
-      if(fd<0)
-      {
-        ret = fd;
-      } 
-      else{
-        struct generic_fd virtual_fd;
-
-        virtual_fd.type    = FD_SYS;
-        virtual_fd.real_fd = fd;
-
-        ret = fdstable_put ( virtual_fd );
-      }
+      ret = dlsym_open2((char *)path, flags, mode);
     }
     va_end(ap);
 
@@ -286,14 +281,15 @@
     debug_info("2) flags => %d\n",flags);
     debug_info("3) mode => %d\n",mode);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_open\n");
       debug_info("Path => %s\n",path+strlen(xpn_adaptor_partition_prefix));
 
-      fd=xpn_open((char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
+      fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
 
       debug_info("xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
 
@@ -313,86 +309,11 @@
     // Not an XPN partition. We must link with the standard library
     else
     {
-      fd = dlsym_open64((char *)path, flags, mode);
+      debug_info("dlsym_open64\n");
 
-      if(fd<0)
-      {
-        ret = fd;
-      } 
-      else{
-        struct generic_fd virtual_fd;
-
-        virtual_fd.type    = FD_SYS;
-        virtual_fd.real_fd = fd;
-
-        ret = fdstable_put ( virtual_fd );
-      }
+      ret = dlsym_open64((char *)path, flags, mode);
     }
 
-    va_end(ap);
-
-    return ret;
-  }
-
-  int __open_2(const char *path, int flags, ...)
-  {
-    int ret, fd;
-    va_list ap;
-
-    va_start(ap, flags);
-
-    mode_t mode = va_arg(ap, mode_t);
-
-    debug_info("Before open2.... %s\n",path);
-    debug_info("1) Path => %s\n",path);
-    debug_info("2) flags => %d\n",flags);
-    debug_info("3) mode => %d\n",mode);
-
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
-    // This if checks if variable path passed as argument starts with the expand prefix.
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
-    {
-      // It is an XPN partition, so we redirect the syscall to expand syscall
-      debug_info("Path => %s\n",path + strlen(xpn_adaptor_partition_prefix));
-
-      fd = xpn_open((char *)(path + strlen(xpn_adaptor_partition_prefix)), flags, mode);
-
-      debug_info("xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
-
-      if(fd<0)
-      {
-        ret = fd;
-      } 
-      else{
-        struct generic_fd virtual_fd;
-
-        virtual_fd.type    = FD_XPN;
-        virtual_fd.real_fd = fd;
-
-        ret = fdstable_put ( virtual_fd );
-      }
-    }
-    // Not an XPN partition. We must link with the standard library.
-    else 
-    {
-      debug_info("dlsym_open\n");
-      fd = dlsym_open((char *)path, flags, mode);
-
-      if(fd<0)
-      {
-        ret = fd;
-      } 
-      else{
-        struct generic_fd virtual_fd;
-
-        virtual_fd.type    = FD_SYS;
-        virtual_fd.real_fd = fd;
-
-        ret = fdstable_put ( virtual_fd );
-      }
-    }
     va_end(ap);
 
     return ret;
@@ -404,14 +325,16 @@
 
     debug_info("Before creat....\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      fd = xpn_creat((char *)(path+strlen(xpn_adaptor_partition_prefix)),mode);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
 
-      debug_info("The file is %s",(char *)(path+strlen(xpn_adaptor_partition_prefix)));
+      debug_info("xpn_creat\n");
+
+      fd = xpn_creat((const char *)(path+strlen(xpn_adaptor_partition_prefix)),mode);
+
+      debug_info("The file is %s",(const char *)(path+strlen(xpn_adaptor_partition_prefix)));
 
       if(fd<0)
       {
@@ -429,20 +352,9 @@
     // Not an XPN partition. We must link with the standard library
     else
     {
-      fd = dlsym_creat(path,mode);
+      debug_info("dlsym_creat\n");
 
-      if(fd<0)
-      {
-        ret = fd;
-      } 
-      else{
-        struct generic_fd virtual_fd;
-
-        virtual_fd.type    = FD_SYS;
-        virtual_fd.real_fd = fd;
-
-        ret = fdstable_put ( virtual_fd );
-      }
+      ret = dlsym_creat(path,mode);
     }
 
     return ret;
@@ -452,25 +364,25 @@
   {
     debug_info("Before ftruncate...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
     if(virtual_fd.type == FD_XPN)
     {
-      return xpn_ftruncate(virtual_fd.real_fd, length);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_ftruncate\n");
+      ret = xpn_ftruncate(virtual_fd.real_fd, length);
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_ftruncate(virtual_fd.real_fd, length);
-    }
     else{
-      return dlsym_ftruncate(fd, length);
+      debug_info("dlsym_ftruncate\n");
+      ret = dlsym_ftruncate(fd, length);
     }
 
-    return -1;
+    return ret;
   }
 
   ssize_t read(int fd, void *buf, size_t nbyte)
@@ -479,25 +391,25 @@
     debug_info("read(fd=%d,*buf,nbyte=%ld)\n",fd,nbyte);
     debug_info("buffer= %s\n",buf);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
     if(virtual_fd.type == FD_XPN)
-    { 
-      return xpn_read(virtual_fd.real_fd, buf, nbyte);
+    {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_read\n");
+      ret = xpn_read(virtual_fd.real_fd, buf, nbyte);
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_read(virtual_fd.real_fd, buf, nbyte);
-    }
     else{
-      return dlsym_read(fd, buf, nbyte);
+      debug_info("dlsym_read\n");
+      ret = dlsym_read(fd, buf, nbyte);
     }
 
-    return -1;
+    return ret;
   }
 
   ssize_t write(int fd, const void *buf, size_t nbyte)
@@ -505,55 +417,52 @@
     debug_info("Before write...\n");
     debug_info("write(fd=%d,*buf=%s,nbyte=%ld)\n", fd, buf, nbyte);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
     if(virtual_fd.type == FD_XPN)
     {
-      return xpn_write(virtual_fd.real_fd, (void *)buf, nbyte);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_write\n");
+      ret = xpn_write(virtual_fd.real_fd, (void *)buf, nbyte);
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_write(virtual_fd.real_fd, (void *)buf, nbyte);
-    }
     else{
-      return dlsym_write(fd, (void *)buf, nbyte);
+      debug_info("dlsym_write\n");
+      ret = dlsym_write(fd, (void *)buf, nbyte);
     }
 
-    return -1;
+    return ret;
   }
 
   off_t lseek(int fd, off_t offset, int whence)
   {
     debug_info("Before lseek...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
     if(virtual_fd.type == FD_XPN)
     {
-      return xpn_lseek(virtual_fd.real_fd, offset, whence);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_lseek\n");
+      ret = xpn_lseek(virtual_fd.real_fd, offset, whence);
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_lseek(virtual_fd.real_fd, offset, whence);
-    }
     else{
-      return dlsym_lseek(fd, offset, whence);
+      debug_info("dlsym_lseek\n");
+      ret = dlsym_lseek(fd, offset, whence);
     }
 
-    return -1;
+    return ret;
   }
 
-  // For the moment we intercept __*stat64
-
-  //int lstat64(const char *path, struct stat64 *buf)
   int __lxstat64(int ver, const char *path, struct stat64 *buf)
   {
     int ret;
@@ -562,12 +471,14 @@
     debug_info("Before lstat64... %s\n",path);
     debug_info("lstat64...path = %s\n",path+strlen(xpn_adaptor_partition_prefix));
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      ret = xpn_stat((char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_stat\n");
+
+      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
 
       if(ret > 0){
         buf->st_dev = (__dev_t)st.st_dev;
@@ -597,11 +508,11 @@
     // Not an XPN partition. We must link with the standard library
     else
     {
-      return dlsym_lxstat64(ver,(char *)path, buf);
+      debug_info("dlsym_lxstat64\n");
+      return dlsym_lxstat64(ver,(const char *)path, buf);
     }
   }
 
-  //int stat64(const char *path, struct stat64 *buf)
   int __xstat64(int ver, const char *path, struct stat64 *buf)
   {
     int ret;
@@ -610,12 +521,14 @@
     debug_info("Before stat64... %s\n",path);
     debug_info("stat64...path = %s\n",path);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      ret = xpn_stat((char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_stat\n");
+
+      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
 
       if(ret > 0){
         buf->st_dev     = (__dev_t)st.st_dev;
@@ -644,12 +557,12 @@
     }
     // Not an XPN partition. We must link with the standard library
     else
-    {    
-      return dlsym_xstat64(ver,(char *)path, buf);
+    {
+      debug_info("dlsym_xstat64\n");
+      return dlsym_xstat64(ver,(const char *)path, buf);
     }    
   }
 
-  //int fstat64(int fd, struct stat64 *buf)
   int __fxstat64(int ver, int fd, struct stat64 *buf)
   {
     int ret;
@@ -657,13 +570,15 @@
 
     debug_info(" Before fstat64... %d\n",fd);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
     if(virtual_fd.type == FD_XPN)
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_fstat\n");
+
       ret = xpn_fstat(virtual_fd.real_fd, &st);
 
       if(ret > 0){
@@ -690,42 +605,40 @@
       }
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      ret = dlsym_fxstat64(ver,virtual_fd.real_fd, buf);
-    }
     else{
+      debug_info("dlsym_fxstat64\n");
       return dlsym_fxstat64(ver,fd, buf);
     }
 
     return ret;
   }
 
-  //int lstat(const char *path, struct stat *buf) //old
   int __lxstat(int ver, const char *path, struct stat *buf)
   {
     int ret;
 
     debug_info("Before lstat... %s\n",path);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_stat\n");
       debug_info("XPN:lstat:path = %s\n",path+strlen(xpn_adaptor_partition_prefix));
-      ret = xpn_stat((char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
+
+      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
-      ret = dlsym_lstat(ver,(char *)path, buf);
+      debug_info("dlsym_lstat\n");
+      ret = dlsym_lstat(ver,(const char *)path, buf);
     }
 
     return ret;
   }
 
-  //int stat(const char *path, struct stat *buf) //old
   int __xstat(int ver, const char *path, struct stat *buf) // TODO
   {
     //char path2[1024];
@@ -733,100 +646,96 @@
     debug_info("Before stat...\n");
     debug_info("stat...path =>%s\n",path);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      if (0 == strncmp(path,"/xpn/htdocs",11)) {
-    // TODO
-          debug_info("into TODO\n");
-          return stat(path, buf);
-      } else {
-          return xpn_stat((char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
-      }
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_stat\n");
+
+      return xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
+      
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
-      return dlsym_stat(ver,(char *)path, buf);
+      debug_info("dlsym_stat\n");
+      return dlsym_stat(ver,(const char *)path, buf);
     } 
   }
 
-  //int fstat(int fd, struct stat *buf) //old
   int __fxstat(int ver, int fd, struct stat *buf)
   {
     debug_info("Before fstat...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
     if(virtual_fd.type == FD_XPN)
     {
-      return xpn_fstat(virtual_fd.real_fd,buf);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_fstat\n");
+      ret = xpn_fstat(virtual_fd.real_fd,buf);
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_fstat(ver,virtual_fd.real_fd,buf);
-    }
     else{
-      return dlsym_fstat(ver,fd,buf);
+      debug_info("dlsym_fstat\n");
+      ret = dlsym_fstat(ver,fd,buf);
     }
-
-    return -1;
+    debug_info("fstat res: %d\n", ret);
+    return ret;
   }
 
   int close(int fd)
   {
-    int ret;
     debug_info("Before close....\n");
     debug_info("FD = %d\n", fd);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
     if(virtual_fd.type == FD_XPN)
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_close\n");
+
       ret = xpn_close(virtual_fd.real_fd);
       fdstable_remove ( fd );
-      return ret;
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      ret = dlsym_close(virtual_fd.real_fd);
-      fdstable_remove ( fd );
-      return ret;
-    }
     else{
-      return dlsym_close(fd);
+      debug_info("dlsym_close\n");
+      ret = dlsym_close(fd);
     }
 
-    return -1;
+    return ret;
   }
 
   int rename(const char *old_path, const char *new_path)
   {
     debug_info("Before rename....\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, old_path) && is_prefix(xpn_adaptor_partition_prefix, new_path))
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_rename\n");
       debug_info("Old Path => %s\n",old_path+strlen(xpn_adaptor_partition_prefix));
       debug_info("New Path => %s\n",new_path+strlen(xpn_adaptor_partition_prefix));
 
-      return xpn_rename((char *)(old_path+strlen(xpn_adaptor_partition_prefix)), (char *)(new_path+strlen(xpn_adaptor_partition_prefix)));
+      return xpn_rename((const char *)(old_path+strlen(xpn_adaptor_partition_prefix)), (const char *)(new_path+strlen(xpn_adaptor_partition_prefix)));
     }
     // Not an XPN partition. We must link with the standard library
     else 
     {
+      debug_info("dlsym_rename\n");
       return dlsym_rename(old_path, new_path);
     }
   }
@@ -836,16 +745,18 @@
     debug_info("Before unlink...\n");
     debug_info("PATH %s\n", path);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      return(xpn_unlink((char *)(path+strlen(xpn_adaptor_partition_prefix))));
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_unlink\n");
+      return(xpn_unlink((const char *)(path+strlen(xpn_adaptor_partition_prefix))));
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_unlink\n");
       return dlsym_unlink((char *)path);
     }
   }
@@ -860,17 +771,20 @@
     debug_info("Before mkdir...\n");
     debug_info("PATH %s\n", path);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      debug_info("Before xpn_mkdir(%s)...\n",((char *)(path+strlen(xpn_adaptor_partition_prefix))));
-      return xpn_mkdir( ((char *)(path+strlen(xpn_adaptor_partition_prefix))) ,mode );
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_mkdir\n");
+      debug_info("Before xpn_mkdir(%s)...\n",((const char *)(path+strlen(xpn_adaptor_partition_prefix))));
+
+      return xpn_mkdir( ((const char *)(path+strlen(xpn_adaptor_partition_prefix))) ,mode );
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_mkdir\n");
       return dlsym_mkdir((char *)path,mode);
     }
   }
@@ -880,25 +794,25 @@
     debug_info("Before opendir(%s)...\n", dirname);
 
     DIR * ret;
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
 
     if(is_prefix(xpn_adaptor_partition_prefix, dirname))
     {
-      ret = xpn_opendir((char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_opendir\n");
+
+      ret = xpn_opendir((const char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
       if ( ret != NULL ){
         fdsdirtable_put ( ret );
       }
-      /*for (int i = 0; i < MAX_DIRS; ++i)
-      {
-        debug_info("%p\n", fdsdirtable[i]);
-      }*/
 
       return ret;
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_opendir\n");
       return dlsym_opendir((char *)dirname);
     }
   }
@@ -909,12 +823,14 @@
 
     debug_info("Before readdir...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if( fdsdirtable_search( dirp ) != -1 )
     {
-      ret=xpn_readdir(dirp);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_readdir\n");
+
+      ret = xpn_readdir(dirp);
 
       debug_info("After xpn_readdir()...\n");
 
@@ -923,6 +839,7 @@
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_readdir\n");
       return dlsym_readdir(dirp);
     }
   }
@@ -934,13 +851,15 @@
 
     debug_info("Before readdir64...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     //memcpy(&fd, dirp,sizeof(int));
 
     if( fdsdirtable_search( dirp ) != -1 )
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_readdir\n");
+
       aux=xpn_readdir(dirp);
 
       if (aux != NULL){
@@ -959,6 +878,7 @@
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_readdir64\n");
       return dlsym_readdir64(dirp);
     } 
   }
@@ -969,20 +889,16 @@
 
     debug_info("Before closedir...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if( fdsdirtable_search( dirp ) != -1 )
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
 
-      ret=xpn_closedir( dirp );
+      debug_info("xpn_closedir\n");
+
+      ret = xpn_closedir( dirp );
 
       fdsdirtable_remove( dirp );
-
-      /*for (int i = 0; i < MAX_DIRS; ++i)
-      {
-        debug_info("%p\n", fdsdirtable[i]);
-      }*/
 
       debug_info("closedir return %d\n",ret);
       return ret;
@@ -990,6 +906,7 @@
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_closedir\n");
       return dlsym_closedir(dirp);
     }
   }
@@ -999,16 +916,18 @@
     debug_info("Before rmdir...\n");
     debug_info("PATH %s\n", path);
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      return xpn_rmdir( ((char *)(path+strlen(xpn_adaptor_partition_prefix))) );
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_rmdir\n");
+      return xpn_rmdir( ((const char *)(path+strlen(xpn_adaptor_partition_prefix))) );
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_rmdir\n");
       return dlsym_rmdir((char *)path);
     }
   }
@@ -1032,72 +951,16 @@
   {
     debug_info("Before pipe()\n");
     int ret = dlsym_pipe(pipefd);
-    
-    if(ret > 0)
-    {
-      struct generic_fd virtual_fd;
-      struct generic_fd virtual_fd2;
-
-      virtual_fd.type    = FD_SYS;
-      virtual_fd.real_fd = pipefd[0];
-
-      virtual_fd2.type    = FD_SYS;
-      virtual_fd2.real_fd = pipefd[1];
-
-      debug_info("PIPE FD1 SYS %d\n", pipefd[0]);
-      debug_info("PIPE FD2 SYS %d\n", pipefd[1]);
-
-      pipefd[0] = fdstable_put ( virtual_fd );
-      pipefd[1] = fdstable_put ( virtual_fd2 );
-    }
 
     return ret;
   }
 
-  /*
-  int execve(const char *filename, char *const *argv, char *const *envp)
-
-  {
-      int ret, num_filas, i;
-      char **aux;
-      char *envpAux[2];
-  #ifdef DEBUG_BYPASS_EXECVE
-      debug_info("antes de execve...\n");
-  #endif
-      if (NULL != envp){
-          
-          num_filas = 0;
-          while (envp[num_filas] != NULL){
-  #ifdef DEBUG_BYPASS_EXECVE
-              debug_info("%s\n",envp[num_filas]);
-  #endif
-              num_filas++;
-          }
-          aux = (char**)malloc((num_filas+1)*sizeof(char*));  
-          aux[0] = preload;
-      }
-      if (NULL != envp){
-          i = 0;
-              while (num_filas>i){
-              aux[i+1] = envp[i];
-                  i++;
-          }
-      } else {
-          aux = envpAux;
-          envpAux[0] = preload;
-          envpAux[1] = NULL;
-      }
-      ret = execve(filename,argv,aux);
-      return(ret);
-  }
-  */
 
   int dup(int fd)
   {
     debug_info("Before dup...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
@@ -1105,26 +968,26 @@
 
     if(virtual_fd.type == FD_XPN)
     {
-      return xpn_dup(virtual_fd.real_fd);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_dup\n");
+      ret = xpn_dup(virtual_fd.real_fd);
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_dup(virtual_fd.real_fd);
-    }
     else{
-      return dlsym_dup(fd);
+      debug_info("dlsym_dup\n");
+      ret = dlsym_dup(fd);
     }
 
-    return -1;
+    return ret;
   }
 
   int dup2(int fd, int fd2)
   {
     debug_info("Before dup2...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    int ret = -1;
 
     struct generic_fd virtual_fd  = fdstable_get ( fd );
     struct generic_fd virtual_fd2 = fdstable_get ( fd2 );
@@ -1134,29 +997,32 @@
 
     if(virtual_fd.type == FD_XPN)
     {
-      return xpn_dup2(virtual_fd.real_fd, virtual_fd2.real_fd);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_dup2\n");
+      ret = xpn_dup2(virtual_fd.real_fd, virtual_fd2.real_fd);
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_dup2(virtual_fd.real_fd, virtual_fd2.real_fd);
-    }
     else{
-      return dlsym_dup2(fd, fd2);
+      debug_info("dlsym_dup2\n");
+      ret = dlsym_dup2(fd, fd2);
     }
 
-    return -1;
+    return ret;
   }
 
   void exit ( int status )
   {
-      if (xpn_adaptor_initCalled == 1)
-      {
-          xpn_destroy();
-      }
- 
-      dlsym_exit(status) ;
-      __builtin_unreachable() ;
+    debug_info("Before exit...\n");
+
+    if (xpn_adaptor_initCalled == 1)
+    {
+      xpn_destroy();
+    }
+
+    dlsym_exit(status) ;
+    __builtin_unreachable() ;
   }
 
 
@@ -1167,16 +1033,18 @@
   {
     debug_info("antes de chdir....\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_chdir\n");
       return(xpn_chdir((char *)(path+strlen(xpn_adaptor_partition_prefix))));
     }
     // Not an XPN partition. We must link with the standard library
     else 
     {
+      debug_info("dlsym_chdir\n");
       return dlsym_chdir((char *)path);
     }
   }
@@ -1185,16 +1053,18 @@
   {
     debug_info("Before chmod...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      return(xpn_chmod((char *)(path+strlen(xpn_adaptor_partition_prefix)), mode));
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_chmod\n");
+      return(xpn_chmod((const char *)(path+strlen(xpn_adaptor_partition_prefix)), mode));
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_chmod\n");
       return dlsym_chmod((char *)path, mode);
     }
   }
@@ -1203,73 +1073,77 @@
   {
     debug_info("Before fchmod...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
     if(virtual_fd.type == FD_XPN)
     {
-      return xpn_fchmod(fd,mode);
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_fchmod\n");
+      ret = xpn_fchmod(fd,mode);
     }
     // Not an XPN partition. We must link with the standard library
-    else if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_fchmod(virtual_fd.real_fd,mode);
-    }
     else{
-      return dlsym_fchmod(fd,mode);
+      debug_info("dlsym_fchmod\n");
+      ret = dlsym_fchmod(fd,mode);
     }
 
-    return -1;
+    return ret;
   }
 
   int chown(const char *path, uid_t owner, gid_t group)
   {
     debug_info("Before chown...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      return(xpn_chown((char *)(path+strlen(xpn_adaptor_partition_prefix)), owner, group));
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_chown\n");
+      return(xpn_chown((const char *)(path+strlen(xpn_adaptor_partition_prefix)), owner, group));
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_chown\n");
       return dlsym_chown((char *)path, owner, group);
     }
   }
 
   int fcntl(int fd, int cmd, long arg) //TODO
   {
+    int ret = -1;
+
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
     if(virtual_fd.type == FD_XPN)
     {
+      debug_info("xpn_fcntl\n");
       //TODO
-      return 0;
-    } 
-    else if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_fcntl(virtual_fd.real_fd, cmd, arg);
+      ret = 0;
     }
     else{
-      return dlsym_fcntl(fd, cmd, arg);
+      debug_info("dlsym_fcntl\n");
+      ret = dlsym_fcntl(fd, cmd, arg);
     }
 
-    return -1;
+    return ret;
   }
 
   int access(const char *path, int mode){
     debug_info("Before access...\n");
 
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_access\n");
+
       struct stat64 stats;
       if (__lxstat64(_STAT_VER, path, &stats)){
         return -1;
@@ -1289,22 +1163,22 @@
     // Not an XPN partition. We must link with the standard library
     else
     {
+      debug_info("dlsym_access\n");
       return dlsym_access(path, mode);
     }
   }
 
-  char * __realpath_chk(const char * path, char * resolved_path, size_t resolved_len){
-    debug_info("Before __realpath_chk...\n");
+  char *realpath(const char *restrict path, char *restrict resolved_path)
+  {
+    debug_info("Before realpath...\n");
     debug_info("PATH %s\n", path);
-
-    (void)resolved_len;
-
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
 
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
-      debug_info("Before xpn___realpath_chk...\n");
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("Before realpath...\n");
       strcpy(resolved_path, path);
       return resolved_path;
     }
@@ -1318,79 +1192,6 @@
 
 
 
-  //Memory API
-
-  void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset){
-    debug_info("Before mmap...\n");
-
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
-    struct generic_fd virtual_fd = fdstable_get ( fd );
-
-    debug_info("MMAP %d %d\n", fd, virtual_fd.real_fd);
-
-    // Not an XPN partition. We must link with the standard library
-    if (virtual_fd.type == FD_SYS)
-    {
-      return dlsym_mmap(addr, length, prot, flags, virtual_fd.real_fd, offset);
-    }
-    else{
-      return dlsym_mmap(addr, length, prot, flags, fd, offset);
-    }
-
-    return -1;
-  }
-
-
-  /**************************************************
-  GETCWD TIENE MUCHA CHICHA...PA LUEGO
-  ***************************************************
-  char *getcwd(char *path, size_t size)
-  {
-
-  #ifdef DEBUG_BYPASS_GETCWD
-      debug_info("antes de getcwd...\n");
-  #endif
-
-      // We must initialize expand if it has not been initialized yet.
-      xpn_adaptor_keepInit ();
-
-      if(is_prefix(xpn_adaptor_partition_prefix, path))
-      {
-          // If xpn
-          return(xpn_chdir(path+strlen(xpn_adaptor_partition_prefix)));
-      }
-      else // Not an XPN partition. We must link with the standard library
-      {
-          return(chdir(path));
-      }
-  }
-  *******************************************************/
-
-  /*
-  int utime(char *path, struct utimbuf *times)
-  {
-
-  #ifdef DEBUG_BYPASS_UTIME
-      debug_info("antes de utime...\n");
-  #endif
-
-      // We must initialize expand if it has not been initialized yet.
-      xpn_adaptor_keepInit ();
-
-      if(is_prefix(xpn_adaptor_partition_prefix, path))
-      {
-          return(xpn_utime(path+strlen(xpn_adaptor_partition_prefix), times));
-      }// If xpn
-      else // Not an XPN partition. We must link with the standard library
-      {
-          return(utime(path, times));
-      } // Else
-  }
-  */
-
-
 
   // MPI API
 
@@ -1398,9 +1199,12 @@
   {
     char *value;
 
+    debug_info("Before MPI_Init\n");
+
     // We must initialize expand if it has not been initialized yet.
     xpn_adaptor_keepInit ();
-    value = getenv("IS_MPI_SERVER") ;
+
+    value = getenv("XPN_IS_MPISERVER") ;
     if (NULL == value){
       return PMPI_Init(argc, argv);
     }
@@ -1411,7 +1215,7 @@
   {
     char *value;
 
-    value = getenv("IS_MPI_SERVER") ;
+    value = getenv("XPN_IS_MPISERVER") ;
     if (NULL != value && xpn_adaptor_initCalled == 1){
       xpn_destroy();
     }

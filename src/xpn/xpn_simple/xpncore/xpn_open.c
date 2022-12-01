@@ -208,7 +208,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
 	/* wait */
 	err = 0;
 	for(j=0;j<n;j++){	
-		i = XpnGetMetadataPos(mdata_aux, j); 
+		i = XpnGetMetadataPos(mdata_aux, j);
 		res = nfi_worker_wait(servers[i]->wrk);
 		/* error checking */
 		if((res<0)&&(!err)){
@@ -223,7 +223,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
 		}else{
 			if((res>=0)&&(err)){
 				XpnGetURLServer(servers[i], abs_path, url_serv);
-				nfi_worker_do_remove(servers[i]->wrk, url_serv); 
+				nfi_worker_do_remove(servers[i]->wrk, url_serv);
 				nfi_worker_wait(servers[i]->wrk);
 			}
 		*/
@@ -282,10 +282,9 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
 	return res;
 }
 
-int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata *mdata, int mode)
+int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadata *mdata, int mode )
 {
 	char abs_path[MAX_PATH_LEN];
-	
 	struct nfi_server **servers;
 	int n, pd, i;
 	int res = -1;
@@ -293,34 +292,35 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
 	XPN_DEBUG_BEGIN_ARGS1(path)
 	
 	res = XpnGetAbsolutePath(path, abs_path); /* this function generates the absolute path */
-	if(res<0){
+	if (res < 0) {
 		xpn_err(XPNERR_PATH_NOEXIST);
 		XPN_DEBUG_END_ARGS1(path)
 		return res;
 	}
 	
 	pd = XpnGetPartition(abs_path); /* returns partition id and remove partition name from abs_path */
-	if(pd<0){
+	if (pd < 0) {
 		xpn_err(XPNERR_PART_NOEXIST);
 		XPN_DEBUG_END_ARGS1(path)
 		return pd;
 	}
 
 	res = XpnSearchFile(abs_path);
-
-	if (res < 0) { // FIXME: CAUTION, this caused the call to fail some changes before, although now it seems to work.
+	if (res < 0)
+	{
+		// FIXME: CAUTION, this caused the call to fail some changes before, although now it seems to work.
 		/* params:
 		 * flag operation, partition id, absolute path, file descriptor, pointer to server
 		 */
 		servers = NULL;
 		n = XpnGetServers(op_xpn_open, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
-		if(n<=0){
+		if (n <= 0) {
 			/*free(servers);*/
 			XPN_DEBUG_END_ARGS1(path)
 			return res;
 		}
-		
-		if(mdata == NULL){
+		if (mdata == NULL)
+		{
 			mdata = (struct xpn_metadata *)malloc(sizeof(struct xpn_metadata));
 			if(mdata == NULL){
 				free(servers);
@@ -355,12 +355,12 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
 		}
 
 		free(servers);
-
 		res = XpnSearchSlotFile(pd, abs_path, vfh, mdata, mode);
 	}
-	else{
-		//CUIDADO
-		xpn_file_table[i]->links++;
+	else
+	{
+		// CUIDADO
+		xpn_file_table[res]->links++;
 	}
 	
 	XPN_DEBUG_END_ARGS1(path)
@@ -379,7 +379,7 @@ int xpn_internal_fresize(__attribute__((__unused__)) int fd, __attribute__((__un
 
 int xpn_internal_remove(const char *path)
 {
-	char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN]; 
+	char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
 	int res, err, i, n, pd;
 	struct nfi_server **servers;
 	
@@ -442,11 +442,7 @@ int xpn_internal_remove(const char *path)
 }
 
 
-
-
-
-
-/*****************************************************************/
+/************************* TODO ****************************************/
 int xpn_preload(const char *virtual_path, const char *storage_path)
 {
 	char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
@@ -548,38 +544,12 @@ int xpn_preload(const char *virtual_path, const char *storage_path)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int xpn_flush(const char *virtual_path, const char *storage_path)
 {
 	char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
 	struct nfi_server **servers;
 	struct xpn_metadata *mdata;
-	int res,/* err,*/ i,  n, pd;
+	int res, i,  n, pd;
 	
 	
 	if(virtual_path == NULL){
@@ -658,6 +628,8 @@ int xpn_flush(const char *virtual_path, const char *storage_path)
 	
 	return 0;
 }
+/************************* </TODO> ****************************************/
+
 
 int xpn_creat(const char *path, mode_t perm)
 {
@@ -796,25 +768,68 @@ int xpn_close(int fd)
 		return res;
 	}
 	
+	/*int n_threads = 0;
+	struct nfi_server **servers;
+	servers = NULL;
+	int n = XpnGetServers(op_xpn_close, xpn_file_table[fd]->part->id, NULL, -1, &servers, XPN_DATA_SERVER);
+	if(n<=0){
+		free(servers);
+		res = -1;
+		return res;
+	}*/
+
 	xpn_file_table[fd]->links--;
 	if(xpn_file_table[fd]->links == 0){
         for(i=0;i<xpn_file_table[fd]->data_vfh->n_nfih;i++){
             if(xpn_file_table[fd]->data_vfh->nfih[i] != NULL){
 				if(xpn_file_table[fd]->data_vfh->nfih[i]->priv_fh != NULL){
+					/*n_threads++;
+
+					// Default Value
+					nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_close, xpn_file_table[fd]->part->id, 0));
+					
+					// Worker
+					nfi_worker_do_close(servers[i]->wrk, xpn_file_table[fd]->data_vfh->nfih[i]);*/
+										
+					//TODO: old
 					xpn_file_table[fd]->data_vfh->nfih[i]->server->ops->nfi_close(
 					xpn_file_table[fd]->data_vfh->nfih[i]->server,
 					xpn_file_table[fd]->data_vfh->nfih[i]);
 				}
+				//TODO: old
 				free(xpn_file_table[fd]->data_vfh->nfih[i]);
 			}
 		}
-		
+
+		/* wait */
+		/*int err = 0;
+		for(int j=0;j<n_threads;j++){
+			res = nfi_worker_wait(servers[j]->wrk);
+			if((res<0)&&(!err)){
+				err = 1;
+			}
+		}*/
+
+		/*for(i=0;i<xpn_file_table[fd]->data_vfh->n_nfih;i++){
+            if(xpn_file_table[fd]->data_vfh->nfih[i] != NULL){
+				if(xpn_file_table[fd]->data_vfh->nfih[i]->priv_fh != NULL){
+					free(xpn_file_table[fd]->data_vfh->nfih[i]);
+				}
+			}
+		}*/
+
+		//free(servers);
 		free(xpn_file_table[fd]->data_vfh->nfih);
 		free(xpn_file_table[fd]->data_vfh);
 		free(xpn_file_table[fd]->mdata->policy);
 		free(xpn_file_table[fd]->mdata);
 		free(xpn_file_table[fd]);	
 		xpn_file_table[fd] = NULL;
+
+		// tratamiento de errores
+		/*if(err){
+			return -1;
+		}	*/	
 	}
 	xpn_err(XPN_OK);
 	
@@ -1100,7 +1115,7 @@ int xpn_stat(const char *path, struct stat *sb)
 		if(fd>=0){
 			res = XpnGetAtrib(fd, sb);
 			xpn_close(fd);
-		} 
+		}
 		else {
 			new_path=malloc(strlen(path)+2);
 			strcpy(new_path, abs_path);

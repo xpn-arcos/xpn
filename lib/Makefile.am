@@ -50,6 +50,7 @@ NFI_TCPSERVER_HEADER=	@top_srcdir@/include/nfi/nfi_tcpServer/ \
 ### END OF NFI_TCPSERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPISERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPISERVER_HEADER=	@top_srcdir@/include/nfi/nfi_mpiServer/ \
+			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_ns.h \
 			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_comm.h \
 			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_conf.h \
 			@top_srcdir@/include/nfi/nfi_mpiServer/mpiServer_lib.h \
@@ -173,6 +174,7 @@ NFI_TCPSERVER_OBJECTS=	@top_srcdir@/src/nfi/nfi_tcpServer/nfi_tcpServer.c \
 ### END OF NFI_TCPSERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_MPISERVER_OBJECTS=	@top_srcdir@/src/nfi/nfi_mpiServer/nfi_mpiServer.c \
+			@top_srcdir@/src/nfi/nfi_mpiServer/mpiServer_ns.c \
 			@top_srcdir@/src/nfi/nfi_mpiServer/mpiServer_comm.c \
 			@top_srcdir@/src/nfi/nfi_mpiServer/nfi_mpiServer_err.c
 ### END OF NFI_MPISERVER_OBJECTS BLOCK. Do not remove this line. ###
@@ -251,20 +253,8 @@ XPNI_OBJECTS=		@top_srcdir@/src/xpni/common/xpni_fit.c \
 			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_metaData.c \
 			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_open.c \
 			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_read.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_read_fail_r5i.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_read_fail_r5o.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_read_nofail_r5i.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_read_nofail_r5o.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_read_r5i.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_read_r5o.c \
 			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_register.c \
 			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_write.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_write_fail_r5i.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_write_fail_r5o.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_write_nofail_r5i.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_write_nofail_r5o.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_write_r5i.c \
-			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_write_r5o.c \
 			@top_srcdir@/src/xpni/xpni_ft/xpni_ft_opendir.c \
 			@top_srcdir@/src/xpni/xpni_null/xpni_null_close.c \
 			@top_srcdir@/src/xpni/xpni_null/xpni_null_destroy.c \

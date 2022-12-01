@@ -10,13 +10,24 @@
 
 ## 1. Install dependencies
 
-XPN needs the typical C development tools and MPICH installed.
+XPN needs the typical C development tools and a MPI implementation installed.
 
+### 1.1 Install dependencies on a Linux machine
 If you are administrator of your local machine then you need to execute:
 ```
 sudo apt-get install -y autoconf automake gcc g++ make \
                         flex libtool doxygen \
                         libmpich-dev
+```
+
+### 1.2 Load dependencies
+If you are an user of a cluster with already installed software then you might try the following:
+```bash
+module available
+module purge
+module load gcc/11.2.0
+module load openmpi/4.1.2
+module list
 ```
 
 
@@ -29,16 +40,16 @@ You can download both by executing:
 mkdir $HOME/src
 cd    $HOME/src
 git clone https://github.com/michaelrsweet/mxml.git
-git clone https://github.com/dcamarmas/xpn.git
+git clone https://github.com/xpn-arcos/xpn.git
 ```
 
-You must do both 'git clone' requests in the same directory ($HOME/src).
+You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
 
 
 ## 3. Build XPN 
 
 As an example scenario we will consider the following one:
-* MPICH is installed at '/opt/software/install-mpich'
+* MPI distribution is installed at '/opt/software/install-mpich'
 * Installation directory will be '/opt/xpn'
 
 To build Expand you need to execute:
@@ -47,8 +58,9 @@ cd $HOME/src
 ./xpn/build-me.sh -m /opt/software/install-mpich/bin -i /opt/xpn
 ```
 
+### 3.1 Build XPN on some predefined platforms
 For some predefined platforms 'build-me-compact.sh' offers a default configuration by simply specifying the platform as a parameter.
-Please for help execute:
+Please for help try to execute:
 ```
 ./xpn/build-me-compact.sh
 ```
@@ -58,19 +70,15 @@ Please for help execute:
 
 ### 3.1 mpiServer ###
   The typical executions has 3 main steps:
-  - First, execute hydra nameserver: `hydra_nameserver &`
-  - Next, launch the mpiServer:      `mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} <mpiServer.exe>`
-  - Finally, launch the XPN client:  `mpiexec -np <# of processes> -nameserver ${HYDRA_HOSTNAME} -genv LD_PRELOAD=<bypass path> ./<program path>`
+  - First, launch the mpiServer:   `mpiexec -np <# of processes> <mpiServer.exe>`
+  - Then,  launch the XPN client:  `mpiexec -np <# of processes> -genv LD_PRELOAD=<bypass path> ./<program path>`
 
 For example:
-   * To start an 8 process mpiServer and 2 process client:
+   * To start an 8-processes mpiServer and 2-processes client:
 ```
-HYDRA_HOSTNAME=$(hostname)
-hydra_nameserver &
-sleep 1
 echo localhost > machines
-mpirun -np 8 -nameserver ${HYDRA_HOSTNAME} -machinefile machines ./src_servers/mpiServer/mpiServer.exe
+mpirun -np 8 -machinefile machines ./src_servers/mpiServer/mpiServer.exe
 sleep 1
-mpirun -np 2 -nameserver ${HYDRA_HOSTNAME} -machinefile machines ./test/IOP-ION/IONMPI /PNFS/
+mpirun -np 2 -machinefile machines ./test/IOP-ION/IONMPI /PNFS/
 ```
 

@@ -46,7 +46,7 @@ BASE_PATH=$(dirname $0)
 ## get arguments
 while getopts "m:i:" opt; do
     case "${opt}" in
-          m) MPICH_PATH=${OPTARG}
+          m) MPICC_PATH=${OPTARG}
              ;;
           i) INSTALL_PATH=${OPTARG}
              ;;
@@ -59,9 +59,9 @@ while getopts "m:i:" opt; do
 done
 
 ## check arguments
-if [ "$MPICH_PATH" == "" ]; then
+if [ "$MPICC_PATH" == "" ]; then
    echo " Error:"
-   echo " * Empty MPICH_PATH"
+   echo " * Empty MPICC_PATH"
    usage
    exit
 fi
@@ -106,7 +106,7 @@ if [ -d $XPN_SRC_PATH ]; then
    pushd .
    cd $XPN_SRC_PATH
    ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-   ./configure --prefix=$INSTALL_PATH/xpn --enable-nfs3 --enable-tcpserver --enable-mpiserver="$MPICH_PATH/bin"
+   ./configure --prefix=$INSTALL_PATH/xpn --enable-tcpserver --enable-mpiserver="$MPICC_PATH"
    make clean
    make -j 8
    #doxygen doc/doxygen-XPN.cfg
@@ -129,7 +129,8 @@ if [ -d $IOR_SRC_PATH ]; then
    echo " * IOR: compiling and installing..."
    pushd .
    cd $IOR_SRC_PATH
-   export MPICC=$MPICH_PATH/bin/mpicc
+   export MPICC=$MPICC_PATH
+   export CC=$MPICC_PATH
    ./configure --prefix=$INSTALL_PATH/ior
    make clean
    make -j 8
@@ -156,12 +157,12 @@ if [ -d $IO500_SRC_PATH ]; then
    cat ./build/pfind/prepare.sh | sed "s/git clone/#git clone/g" > ./build/pfind/prepare-alt.sh
    chmod a+x ./build/pfind/prepare-alt.sh
    sed -i "s/^VERSION=/#VERSION=/g" Makefile
-   export MPICH_PATH=$MPICH_PATH
-   sed -i 's/CC = mpicc/CC = ${MPICH_PATH}\/bin\/mpicc/g' Makefile
+   export MPICC_PATH=$MPICC_PATH
+   sed -i 's/CC = mpicc/CC = ${MPICC_PATH}/g' Makefile
    cat prepare.sh | sed "s/^INSTALL_DIR/#INSTALL_DIR/g" | sed "s/git_co https/#git_co https/g" | sed "s|./prepare.sh|./prepare-alt.sh|g" > prepare-alt.sh
    chmod a+x prepare-alt.sh
-   #env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICH_PATH/bin/mpicc MPICC=$MPICH_PATH/bin/mpicc CFLAGS="-std=c11"  ./prepare-alt.sh
-   env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICH_PATH/bin/mpicc MPICC=$MPICH_PATH/bin/mpicc  ./prepare-alt.sh
+   #env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICC_PATH/bin/mpicc MPICC=$MPICC_PATH/bin/mpicc CFLAGS="-std=c11"  ./prepare-alt.sh
+   env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICC_PATH MPICC=$MPICC_PATH  ./prepare-alt.sh
    #rm -fr prepare-alt.sh
 
 fi

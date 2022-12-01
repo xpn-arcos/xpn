@@ -43,10 +43,16 @@
 #include <stdint.h>
 #include <math.h>
 
+#include <semaphore.h>
+
 
 /*
  * Include detected headers
  */
+
+#if defined(HAVE_SYS_PARAM_H)
+	#include <sys/param.h>
+#endif
 
 #if defined(HAVE_DIRENT_H)
 	#include <dirent.h>
@@ -83,6 +89,7 @@
 	#include <windows.h>
 #endif
 
+#if defined(ENABLE_NFS3)
 #if defined(HAVE_RPC_RPC_H)
 	#include <rpc/rpc.h>
 #endif
@@ -93,6 +100,7 @@
 
 #if defined(HAVE_RPC_TYPES_H)
 	#include <rpc/types.h>
+#endif
 #endif
 
 #if defined(HAVE_FCNTL_H)

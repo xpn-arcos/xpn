@@ -12,8 +12,8 @@
 
 
 /* max number of file descriptors */
-#define XPN_MAX_FILE 	128
-#define XPN_MAX_PATH	255
+#define XPN_MAX_FILE 	1024
+#define XPN_MAX_PATH	1024
 
 /* FILE or DIR */
 #define XPN_FILE 	0

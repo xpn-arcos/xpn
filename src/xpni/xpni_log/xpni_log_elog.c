@@ -24,7 +24,6 @@
          /*IN*/  int             size
       )
       {
-
          struct timeval  diff ;
          float           diff_ms ;
          float           t1_ms ;
@@ -79,7 +78,6 @@
 
 	 /* return 'ret' */
          return ret ;
-
       }
 
       int xpni_log_vprintf
@@ -88,10 +86,9 @@
          ...
       )
       {
-
         va_list  vl ;
 	char    *fname ;
-	int      ret ;
+	int      ret = -1 ;
 
 
         va_start(vl,einfo) ;
@@ -122,7 +119,6 @@
 	/* return 'ret' */
         va_end(vl) ;
 	return ret;
-
       }
 
 

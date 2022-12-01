@@ -1,16 +1,14 @@
-# Process this file with autoconf to produce a configure script.
 #
 #  Expand's configure.ac
 #  ---------------------
 #
-#   Process this file with autoconf to produce
-#   a configure script.
+#   Process this file with autoconf to produce a configure script.
 #
 
 #
 # begin
 #
-AC_INIT([Expand],[1.0],[fgcarbal@inf.uc3m.es],[expand])
+AC_INIT([Expand],[1.2],[fgcarbal@inf.uc3m.es],[expand])
 AC_CONFIG_AUX_DIR(./config)
 AC_CONFIG_HEADER(include/config.h)
 AC_PROG_INSTALL
@@ -20,6 +18,8 @@ AC_PROG_RANLIB
 # Canonicalize the configuration name.
 #
 AC_CANONICAL_TARGET
+AC_CANONICAL_HOST
+AC_CANONICAL_BUILD
 
 AM_INIT_AUTOMAKE([1.0 foreign subdir-objects])
 AM_CONDITIONAL([am__fastdepCC], [test x$am__fastdepCC = xam__fastdepCC])
@@ -30,16 +30,13 @@ AM_PROG_AR
 # Checks for programs.
 #
 AC_PROG_MAKE_SET
-AC_PROG_CC([mpicc icc gcc])
+AC_PROG_CC([gcc mpicc icc mpifcc])
 AM_PROG_CC_C_O
-
 
 #
 # Checks for libraries.
 #
-# Replace `main' with a function in -lpthread:
-AC_CHECK_LIB(pthread, main)
-
+AC_CHECK_LIB(pthread,pthread_create)
 
 #
 # Checks for header files.
@@ -63,7 +60,6 @@ AC_CHECK_SIZEOF(char *,4)
 AC_CHECK_SIZEOF(ptrdiff_t,4)
 AC_CHECK_SIZEOF(size_t,4)
 
-
 #
 # Checks for library functions.
 #
@@ -71,8 +67,19 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname gettimeofday select socket strdup strerror)
 AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 
-
-if test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
+#
+# Set initial variables depending on $target_cpu and $target_os...
+#
+if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
+then
+  OS="__LINUX__"
+  CC="mpifcc"
+  MAKE="make"
+  CFLAGS="-I../../mxml -I../../xpn/include -fPIC -O2 -g -std=c11"
+  CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  LIBLINK="-lpthread"
+  LIBS+="-L../../mxml -L../../xpn/lib -lmxml -ldl"
+elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
   OS="__LINUX__"
   CC="mpicc"
@@ -81,13 +88,6 @@ then
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"
   LIBS+="-L../../mxml -L../../xpn/lib -lmxml -ldl"
-  AC_SUBST(OS)
-  AC_SUBST(CC)
-  AC_SUBST(MAKE)
-  AC_SUBST(CFLAGS)
-  AC_SUBST(CDEFS)
-  AC_SUBST(LIBLINK)
-  AC_MSG_RESULT("$target_os");
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
 then
   OS="__AIX__"
@@ -96,13 +96,6 @@ then
   CFLAGS="-O2 -Wall -Wextra"
   CDEFS="-D_REENTRANT"
   LIBLINK="-lpthread "
-  AC_SUBST(OS)
-  AC_SUBST(CC)
-  AC_SUBST(MAKE)
-  AC_SUBST(CFLAGS)
-  AC_SUBST(CDEFS)
-  AC_SUBST(LIBLINK)
-  AC_MSG_RESULT("AIX");
 elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
 then
   OS="__IRIX__"
@@ -111,13 +104,6 @@ then
   CFLAGS="-O2 -Wall -Wextra"
   CDEFS="-D_REENTRANT -DPOSIX_THREADS"
   LIBLINK="-lpthread "
-  AC_SUBST(OS)
-  AC_SUBST(CC)
-  AC_SUBST(MAKE)
-  AC_SUBST(CFLAGS)
-  AC_SUBST(CDEFS)
-  AC_SUBST(LIBLINK)
-  AC_MSG_RESULT("IRIX6.5");
 else
   OS="__LINUX__"
   #CC="g++"
@@ -126,15 +112,21 @@ else
  #CDEFS="-D_REENTRANT -DPOSIX_THREADS -DLINUX -DDEBUG -DDEBUG_NFS -DXPNI_LOWFSI_POSIX -DXPNI_LOWFSI_XPN"
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN"
   LIBLINK="-lpthread "
-  AC_SUBST(OS)
-  AC_SUBST(CC)
-  AC_SUBST(MAKE)
-  AC_SUBST(CFLAGS)
-  AC_SUBST(CDEFS)
-  AC_SUBST(LIBLINK)
-  AC_MSG_RESULT("no defined \(using Linux configuration as default configuration\)");
+  AC_MSG_RESULT("Using Linux configuration as default configuration...");
 fi
 
+AC_SUBST(OS)
+AC_SUBST(CC)
+AC_SUBST(MAKE)
+AC_SUBST(CFLAGS)
+AC_SUBST(CDEFS)
+AC_SUBST(LIBLINK)
+AC_MSG_RESULT("$target_cpu");
+AC_MSG_RESULT("$target_os");
+
+#
+# Set Include_Flags
+#
 INCLUDEFLAGS="\
 -I\$(top_srcdir)/include \
 -I\$(top_srcdir)/include/base \
@@ -145,7 +137,6 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpni/xpni_ft \
 -I\$(top_srcdir)/include/xpni/xpni_log"
 
-### BEGIN OF AC_ARG_ENABLE BLOCK. Do not remove this line. ###
 
 ### BEGIN OF NFS BLOCK. Do not remove this line. ###
 #
@@ -212,7 +203,7 @@ AC_ARG_ENABLE(  [mpiserver],
                   [case "${enableval}" in
                     yes) CC="mpicc";;
                     no)  CC="mpicc" ;;
-                    *)   CC="$enableval/mpicc" ;;
+                    *)   CC="$enableval" ;;
                   esac]
                   [CDEFS="$CDEFS -DENABLE_MPISERVER"]
                   [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_mpiServer"]

@@ -56,6 +56,7 @@ void print_bar()
 
 void *progression_bar ( __attribute__((unused)) void *arg )
 {
+	int is_true = 1;
 	for (int i = 0 ; i < BAR_LENGTH ; i++)
 		bar[i] = ' ';
 	bar[BAR_LENGTH] = '\0';
@@ -69,7 +70,7 @@ void *progression_bar ( __attribute__((unused)) void *arg )
 		printf("\n");
 	}
 
-	while(1) {
+	while(is_true) {
 		print_bar();
 		sum_old = sum;
 		sleep(1);
@@ -164,36 +165,41 @@ const char *argp_program_version = "xpncp_m 1.0";
 const char *argp_program_bug_address = "<https://github.com/xpn-arcos/xpn>" ;
 static char doc[] = "A fast copy program for Expand partitions that uses mmap for local files";
 
-char *help_filter (int key, const char *text, __attribute__((__unused__)) void *input) {
+char *help_filter (int key, const char *text, __attribute__((__unused__)) void *input)
+{
+	char * ret;
   switch (key)
   {
     case ARGP_KEY_HELP_PRE_DOC:
       //printf("\nARGP_KEY_HELP_PRE_DOC text='%s' input='%s'\n", text, (char *)input);
-      return (char *)text;
+      ret = (char *)text;
       break;
     case ARGP_KEY_HELP_POST_DOC:
       //printf("\nARGP_KEY_HELP_POST_DOC text='%s' input='%s'\n", text, (char *)input);
-      return (char *)text;
+      ret = (char *)text;
       break;
     case ARGP_KEY_HELP_HEADER:
       //printf("\nARGP_KEY_HELP_HEADER text='%s' input='%s'\n", text, (char *)input);
-      return (char *)text;
+      ret = (char *)text;
       break;
     case ARGP_KEY_HELP_EXTRA:
       //printf("\nARGP_KEY_HELP_EXTRA text='%s' input='%s'\n", text, (char *)input);
-      return (char *)text;
+      ret = (char *)text;
       break;
     case ARGP_KEY_HELP_DUP_ARGS_NOTE:
       //printf("\nARGP_KEY_HELP_DUP_ARGS_NOTE text='%s' input='%s'\n", text, (char *)input);
-      return (char *)text;
+      ret = (char *)text;
       break;
     case ARGP_KEY_HELP_ARGS_DOC:
       //printf("\nARGP_KEY_HELP_ARGS_DOC text='%s' input='%s'\n", text, (char *)input);
-      return strdup("<source> <destination>");
+      ret = strdup("<source> <destination>");
       break;
     default:
-      return (char *)text;
+      ret = (char *)text;
+      break;
   }
+
+  return ret;
 }
 
 /* The options we understand. */
@@ -290,7 +296,6 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
       break;
     case ARGP_KEY_ARG:
       return ARGP_ERR_UNKNOWN;
-      break;
     case ARGP_KEY_ARGS:
       arguments->source = state->argv[state->next];
       //TODO: Handle several input files

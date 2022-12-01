@@ -50,9 +50,10 @@
 
   void worker_pool_function ( void )
   {
+    int is_true = 1;
     struct st_th th;
 
-    while(1)
+    while(is_true)
     {
         // Dequeue operation
         th = mpiServer_worker_pool_dequeue ( );
@@ -78,18 +79,18 @@
     pthread_mutex_init(&m_pool_end,NULL);
 
     // malloc threads...
-    POOL_MAX_THREADS = 3 * sysconf(_SC_NPROCESSORS_ONLN) ;  // "3*" is for oversubscription
+    POOL_MAX_THREADS = POOL_OVERSUSCRIPTION * sysconf(_SC_NPROCESSORS_ONLN) ;  // "2*" is for oversubscription
     thid = (pthread_t *)malloc(POOL_MAX_THREADS * sizeof(pthread_t)) ;
     if (NULL == thid) {
         perror("malloc: ");
-  return -1;
+      return -1;
     }
 
     // starting threads...
     for (int i = 0; i < POOL_MAX_THREADS; i++)
     {
       debug_info("[WORKERS] pthread_create: create_thread mpiServer_worker_pool_init\n") ;
-      if (pthread_create(&thid[i], NULL, (void *)(worker_pool_function), NULL) !=0)
+      if (pthread_create(&thid[i], NULL, (void *(*)(void *))(worker_pool_function), NULL) !=0)
       {
         perror("Error creating thread pool\n");
         return -1;
@@ -102,7 +103,7 @@
   }
 
 
-  void mpiServer_worker_pool_enqueue ( MPI_Comm sd, mpiServer_param_st *params, void (*worker_function)(struct st_th))
+  void mpiServer_worker_pool_enqueue ( mpiServer_param_st *params, MPI_Comm sd, int op_type, int rank_client_id, void (*worker_function)(struct st_th))
   {
     DEBUG_BEGIN() ;
 
@@ -118,6 +119,8 @@
 
     st_worker.sd                = sd;
     st_worker.params            = params ;
+    st_worker.type_op           = op_type ;
+    st_worker.rank_client_id    = rank_client_id ;
     st_worker.function          = worker_function ;
 
     debug_info("[WORKERS] client(%d): mpiServer_worker_pool_enqueue(...) enqueue\n", rank_client_id);
@@ -183,11 +186,10 @@
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&m_pool_end);
 
-    //TODO
-    /*for (int i = 0; i < POOL_MAX_THREADS; ++i)
+    for (int i = 0; i < POOL_MAX_THREADS; ++i)
     {
-      mpiServer_worker_pool_enqueue ( (MPI_Comm)0, NULL, MPISERVER_FINALIZE, 0, NULL );
-    }*/
+      mpiServer_worker_pool_enqueue ( NULL, (MPI_Comm)0, MPISERVER_FINALIZE, 0, NULL );
+    }
 
     debug_info("[WORKERS] : mpiServer_worker_pool_destroy(...) lock\n");
     pthread_mutex_lock(&m_pool);

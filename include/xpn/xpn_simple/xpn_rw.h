@@ -15,7 +15,9 @@
 
 ssize_t xpn_read(int fd, void *buffer, size_t size);
 ssize_t xpn_write(int fd, const void *buffer, size_t size);
+ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset);
 ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset);
+ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset);
 ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset);
 off_t xpn_lseek(int fd, off_t offset, int flag);
 ssize_t xpn_reader (void *cookie, char *buffer, size_t size);

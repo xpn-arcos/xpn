@@ -94,7 +94,6 @@ void XpnPartitionClose(struct conf_connect_st *fconf)
 
 int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
 {
-	int ret;
 	#ifdef ENABLE_MXML
 		char *value;
 	#endif
@@ -102,7 +101,7 @@ int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
 	switch(fconf->type){
 		
 		case CONF_FILE:
-			if((ret = fscanf(fconf->connect_u.f, "%s", name))==EOF){
+			if(fscanf(fconf->connect_u.f, "%s", name)==EOF){
 				return 0;
 			}
 			break;
@@ -139,7 +138,6 @@ int XpnGetIdPartition(__attribute__((__unused__)) struct conf_connect_st *fconf,
 
 int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *part)
 {
-	int ret;
 	char type[10];
 #ifdef ENABLE_MXML
 	char *value = NULL;
@@ -150,10 +148,8 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
 	
 	switch(fconf->type){
 	case CONF_FILE:			
-		if((ret = fscanf(fconf->connect_u.f, "%zu %d %s", 
-				&(part->block_size), 
-				&(part->data_nserv), 
-				type)) == EOF){
+		if(fscanf(fconf->connect_u.f, "%zu %d %s", &(part->block_size), &(part->data_nserv), type) == EOF)
+		{
 			return -1;
 		}
 		part->block_size = part->block_size * KB;
@@ -293,7 +289,6 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
 
 			return 1;
 #endif
-		break;
 		
 	default:
 		return -1;

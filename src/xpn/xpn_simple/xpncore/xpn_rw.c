@@ -15,7 +15,15 @@ ssize_t xpn_read(int fd, void *buffer, size_t size)
 	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu", fd, size)
 
 	if (xpn_file_table[fd] != NULL)	
-		res = xpn_pread(fd, buffer, size, xpn_file_table[fd]->offset);
+	{
+		if (size > xpn_file_table[fd]->block_size)
+		{
+			res = xpn_pread(fd, buffer, size, xpn_file_table[fd]->offset);
+		}
+		else{
+			res = xpn_sread(fd, buffer, size, xpn_file_table[fd]->offset);
+		}
+	}
 	else {
 		XpnShowFileTable();
 		errno = EBADF;
@@ -31,8 +39,15 @@ ssize_t xpn_write(int fd, const void *buffer, size_t size)
 	
 	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu", fd, size)
 
-	if (xpn_file_table[fd] != NULL)	
-		res = xpn_pwrite(fd, buffer, size, xpn_file_table[fd]->offset);
+	if (xpn_file_table[fd] != NULL){
+		if (size >= xpn_file_table[fd]->block_size)
+		{
+			res = xpn_pwrite(fd, buffer, size, xpn_file_table[fd]->offset);
+		}
+		else{
+			res = xpn_swrite(fd, buffer, size, xpn_file_table[fd]->offset);
+		}
+	}
 	else {
 		XpnShowFileTable();
 		errno = EBADF;
@@ -40,6 +55,115 @@ ssize_t xpn_write(int fd, const void *buffer, size_t size)
 
 	XPN_DEBUG_END_CUSTOM("%d, %zu", fd, size)
 	return res;
+}
+
+ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
+{
+	off_t new_offset, l_offset;
+	size_t initial_size;
+	size_t l_size;
+	int l_serv;
+	size_t count = 0;
+	struct nfi_server **servers;
+	int n, res;
+
+	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
+
+	if((fd<0)||(fd>XPN_MAX_FILE)||(xpn_file_table[fd] == NULL)){
+		XpnShowFileTable();
+		errno = EBADF;
+		res = -1;
+		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
+		return res;
+	}
+	
+	if(buffer == NULL){
+		errno = EFAULT;
+		res = -1;
+		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
+		return res;
+	}
+	
+	if(size == 0){
+		res = 0;
+		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
+		return res;
+	}
+	
+	if(xpn_file_table[fd]->mode == O_WRONLY){
+		res = -1;
+		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
+		return res;
+	}
+	
+	if(xpn_file_table[fd]->type == XPN_DIR){
+		res = -1;
+		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
+		return res;
+	}
+
+	/* params:
+	 * flag operation, partition id, absolute path, file descriptor, 
+	 * pointer to servers */
+	servers = NULL;
+	n = XpnGetServers(op_xpn_read, 
+		   	          xpn_file_table[fd]->part->id, 
+			          NULL, 
+			          fd,
+			          &servers,
+			          XPN_DATA_SERVER);
+	if(n<=0){
+		if (servers != NULL){
+			free(servers);
+		}
+		return -1;
+	}
+
+	initial_size = size;
+	new_offset = offset;
+	count = 0;
+
+	while(size > count){
+		XpnGetBlock(fd, new_offset, &l_offset, &l_serv);
+
+		l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
+
+		// If l_size > the remaining bytes to read/write, then adjust l_size
+		if ((size - count) < l_size){
+			l_size = size - count;
+		}
+
+		if (xpn_file_table[fd]->data_vfh->nfih[l_serv] == NULL)
+		{
+			res = XpnGetFh( xpn_file_table[fd]->mdata,
+					&(xpn_file_table[fd]->data_vfh->nfih[l_serv]),
+					servers[l_serv],
+					xpn_file_table[fd]->path);
+
+			if(res<0){
+				break;
+			}
+		}
+		
+		res = servers[l_serv]->ops->nfi_read(servers[l_serv],
+											  xpn_file_table[fd]->data_vfh->nfih[l_serv],
+											  (char *)buffer + count,
+											  l_offset,
+											  l_size) ;
+		if(res<0){
+			break;
+		}
+
+		count = l_size + count;
+		new_offset = offset + count;
+	}
+
+	free(servers);
+
+	if (size == count)
+		return initial_size;
+	else 
+		return -1;
 }
 
 ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
@@ -250,6 +374,102 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 	return res;
 }
 
+ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
+{
+	off_t new_offset, l_offset;
+	size_t initial_size;
+	size_t l_size;
+	int l_serv;
+	size_t count = 0;
+	struct nfi_server **servers;
+	int n, res;
+
+	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
+
+	if((fd<0)||(fd>XPN_MAX_FILE)){
+		return -1;
+	}
+	
+	if((xpn_file_table[fd] == NULL)||(buffer == NULL)){
+		return -1;
+	}
+	
+	if(size == 0){
+		return 0;
+	}
+	
+	if(xpn_file_table[fd]->mode == O_RDONLY){
+		return -1;
+	}
+	
+	if(xpn_file_table[fd]->type == XPN_DIR){
+		return -1;
+	}
+
+	/* params:
+	 * flag operation, partition id, absolute path, file descriptor, 
+	 * pointer to servers */
+	servers = NULL;
+	n = XpnGetServers(op_xpn_write, 
+		   	          xpn_file_table[fd]->part->id, 
+			          NULL, 
+			          fd,
+			          &servers,
+			          XPN_DATA_SERVER);
+	if(n<=0){
+		if (servers != NULL){
+			free(servers);
+		}
+		return -1;
+	}
+
+	initial_size = size;
+	new_offset = offset;
+	count = 0;
+
+	while(size > count){
+		XpnGetBlock(fd, new_offset, &l_offset, &l_serv);
+	
+		l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
+
+		// If l_size > the remaining bytes to read/write, then adjust l_size
+		if ((size - count) < l_size){
+			l_size = size - count;
+		}
+
+		if (xpn_file_table[fd]->data_vfh->nfih[l_serv] == NULL)
+		{
+			res = XpnGetFh( xpn_file_table[fd]->mdata,
+					&(xpn_file_table[fd]->data_vfh->nfih[l_serv]),
+					servers[l_serv],
+					xpn_file_table[fd]->path);
+
+			if(res<0){
+				break;
+			}
+		}
+
+		res = servers[l_serv]->ops->nfi_write(servers[l_serv],
+											  xpn_file_table[fd]->data_vfh->nfih[l_serv],
+											  (char *)buffer + count,
+											  l_offset,
+											  l_size) ;
+		if(res<0){
+			break;
+		}
+
+		count = l_size + count;
+		new_offset = offset + count;
+	}
+
+	free(servers);
+
+	if (size == count)
+		return initial_size;
+	else 
+		return -1;
+}
+
 ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 {
 	ssize_t *res_v, total;
@@ -456,15 +676,19 @@ off_t xpn_lseek(int fd, off_t offset, int flag)
 			if(offset<0) {
 				errno = EINVAL;
 				return (off_t)-1;
-			} else
+			} 
+			else{
 				xpn_file_table[fd]->offset = offset;
+			}
 			break;
 		case SEEK_CUR:
 			if(xpn_file_table[fd]->offset+offset<0) {
 				errno = EINVAL;
 				return (off_t)-1;
-			} else
+			}
+			else{
 				xpn_file_table[fd]->offset += offset;
+			}
 			break;
 		case SEEK_END:
 			if(xpn_fstat(fd, &st)<0) {
@@ -474,13 +698,14 @@ off_t xpn_lseek(int fd, off_t offset, int flag)
 			if(st.st_size + offset<0) {
 				errno = EINVAL;
 				return (off_t)-1;
-			} else
+			}
+			else{
 				xpn_file_table[fd]->offset = st.st_size + offset;
+			}
 			break;
 		default:
 			errno = EINVAL;
 			return (off_t)-1;
-			break;
 	}
 	
 	return xpn_file_table[fd]->offset;

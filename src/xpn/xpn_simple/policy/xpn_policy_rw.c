@@ -153,7 +153,7 @@ void XpnReadBlocksPolicyRAID0_AllInOne_Finish(int fd, void *buffer, size_t size,
 	count = 0;
 	for (i = 0 ; i < num_servers ; i++) {
 		for (j = 0 ; j < ion[i] ; j++) {
-			memcpy(io[i][j].buffer, new_buffer + count, io[i][j].size);
+			memcpy(io[i][j].buffer, ((char *)new_buffer) + count, io[i][j].size);
 
 			count += io[i][j].size;
 		}
@@ -187,7 +187,7 @@ void XpnWriteBlocksPolicyRAID0_AllInOne(int fd, const void *buffer, size_t size,
 	for (i = 0 ; i < num_servers ; i++) {
 		if (ion[i] > 0) {
 			for (j = 0 ; j < ion[i] ; j++) {
-				memcpy(new_buffer + count, io[i][j].buffer, io[i][j].size);
+				memcpy(((char *)new_buffer) + count, io[i][j].buffer, io[i][j].size);
 
 				count += io[i][j].size;
 

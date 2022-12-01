@@ -38,9 +38,5 @@
 	#define MPISERVER_PORT_DEFAULT	9999
 #endif
 
-#ifndef MPISERVER_IOSIZE_DEFAULT
-	#define MPISERVER_IOSIZE_DEFAULT	(MB)
-#endif
-
 
 #endif

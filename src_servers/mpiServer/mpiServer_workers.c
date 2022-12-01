@@ -44,19 +44,19 @@
          return 1;
      }
 
-     int mpiServer_workers_launch ( mpiServer_param_st * params, MPI_Comm sd, void (*worker_function)(struct st_th) )
+     int mpiServer_workers_launch ( mpiServer_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) )
      {
       if (params->thread_mode == TH_OP)
       {
         debug_info("[MAIN] mpiServer_worker_ondemand_launch (ID=%d)\n", rank_client_id) ;
-        mpiServer_worker_ondemand_launch( params, sd, worker_function ) ;
+        mpiServer_worker_ondemand_launch( params, sd, type_op, rank_client_id, worker_function ) ;
       }
 
       // Enqueue the operation on the buffer
       if (params->thread_mode == TH_POOL)
       {
         debug_info("[MAIN] mpiServer_worker_pool_enqueue (ID=%d)\n", rank_client_id);
-        mpiServer_worker_pool_enqueue ( sd, params, worker_function );
+        mpiServer_worker_pool_enqueue ( params, sd, type_op, rank_client_id, worker_function );
       }
 
       return 1;

@@ -99,6 +99,7 @@
 	#include <windows.h>
 #endif
 
+#if defined(ENABLE_NFS3)
 #if defined(HAVE_RPC_RPC_H)
 	#include <rpc/rpc.h>
 #endif
@@ -109,6 +110,7 @@
 
 #if defined(HAVE_RPC_TYPES_H)
 	#include <rpc/types.h>
+#endif
 #endif
 
 #if defined(HAVE_FCNTL_H)

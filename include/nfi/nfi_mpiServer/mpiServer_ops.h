@@ -21,15 +21,21 @@
   /* Operations */
 
   // File operations
-  #define MPISERVER_OPEN_FILE      0
-  #define MPISERVER_CREAT_FILE     1
-  #define MPISERVER_READ_FILE      2
-  #define MPISERVER_WRITE_FILE     3
-  #define MPISERVER_CLOSE_FILE     4
+  #define MPISERVER_OPEN_FILE_WS   0
+  #define MPISERVER_CREAT_FILE_WS  1
+  #define MPISERVER_READ_FILE_WS   2
+  #define MPISERVER_WRITE_FILE_WS  3
+  #define MPISERVER_CLOSE_FILE_WS  4
   #define MPISERVER_RM_FILE        5
   #define MPISERVER_RENAME_FILE    6
   #define MPISERVER_GETATTR_FILE   7
   #define MPISERVER_SETATTR_FILE   8
+
+  // File operations without session
+  #define MPISERVER_OPEN_FILE_WOS      100
+  #define MPISERVER_CREAT_FILE_WOS     101
+  #define MPISERVER_READ_FILE_WOS      102
+  #define MPISERVER_WRITE_FILE_WOS     103
 
   // Directory operations
   #define MPISERVER_MKDIR_DIR      20
@@ -71,6 +77,7 @@
 
   struct st_mpiServer_read{
     int fd;
+    char path[MPISERVER_MAXPATHLEN];
     offset_t offset;
     size_t size;
   };
@@ -82,6 +89,7 @@
 
   struct st_mpiServer_write{
     int fd;
+    char path[MPISERVER_MAXPATHLEN];
     offset_t offset;
     size_t size;
   };
