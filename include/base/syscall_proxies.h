@@ -82,6 +82,8 @@
 
   char *dlsym_realpath(const char *restrict path, char *restrict resolved_path);
 
+  int dlsym_fsync(int fd);
+
 
   // Memory API
 

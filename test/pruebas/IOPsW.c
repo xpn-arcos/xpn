@@ -258,7 +258,9 @@ static void PrintResult(int cid, int lb, struct timeval *timet, float trw, float
 
 static void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr, float med_br)
 {
-  int n_users;
+    int n_users;
+
+    n_users=1;
 
     printf("==================================================\n");
     sprintf(str, "Bandwidth. (Write):  %f MB/s \n",med_w/n);
@@ -274,14 +276,14 @@ static void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr,
     printf(str);
 
     sprintf(str, "BW %2.4f; BSR %2.4f; BRR %2.4f;  AVG %2.4f \n",
-        n_users * (med_w/n), n_users * (med_fr/n), n_users * (med_br/n),
-       n_users * (med_w+med_fr+med_br)/(3*n));
+            n_users * (med_w/n), n_users * (med_fr/n), n_users * (med_br/n),
+            n_users * (med_w+med_fr+med_br)/(3*n));
     printf(str);
     sprintf(str,"T. Time %2.4f \n", ((float)ttot->tv_sec +  
 		(float)ttot->tv_usec/USECPSEC));
     printf(str);
     sprintf(str, "BW %2.4f; BSR %2.4f; BRR %2.4f;  AVG %2.4f \n",
-        (med_w/n), (med_fr/n), (med_br/n), (med_w+med_fr+med_br)/(3*n));
+            (med_w/n), (med_fr/n), (med_br/n), (med_w+med_fr+med_br)/(3*n));
     printf(str);
 
 

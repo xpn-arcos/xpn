@@ -8,9 +8,9 @@
 #
 # begin
 #
-AC_INIT([Expand],[1.2],[fgcarbal@inf.uc3m.es],[expand])
+AC_INIT([Expand],[2.0],[fgcarbal@inf.uc3m.es],[expand])
 AC_CONFIG_AUX_DIR(./config)
-AC_CONFIG_HEADER(include/config.h)
+AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 
@@ -41,7 +41,9 @@ AC_CHECK_LIB(pthread,pthread_create)
 #
 # Checks for header files.
 #
-AC_HEADER_STDC
+## AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h sys/time.h netinet/tcp.h netinet/in.h pthread.h windows.h sys/param.h dirent.h rpc/rpc.h rpc/clnt.h rpc/types.h)
 
@@ -49,7 +51,8 @@ AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h sys/time.h neti
 # Checks for typedefs, structures, and compiler characteristics.
 #
 AC_C_CONST
-AC_HEADER_TIME
+AC_CHECK_HEADERS_ONCE([sys/time.h])
+
 AC_CHECK_TYPE(ptrdiff_t,long)
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
@@ -70,48 +73,70 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
+IFLAGS="    -I../../mxml    -I../../xpn/include    -I../../xpn/include/xpn_client    -I../../xpn/include/base "
+IFLAGS+="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+LFLAGS="    -L../../mxml    -L../../xpn/lib "
+LFLAGS+="-L../../../mxml -L../../../xpn/lib "
+
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
   OS="__LINUX__"
   CC="mpifcc"
   MAKE="make"
-  CFLAGS="-I../../mxml -I../../xpn/include -fPIC -O2 -g -std=c11"
+
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"
-  LIBS+="-L../../mxml -L../../xpn/lib -lmxml -ldl"
+
+  CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
   OS="__LINUX__"
   CC="mpicc"
   MAKE="make"
-  CFLAGS="-I../../mxml -I../../xpn/include -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
+
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"
-  LIBS+="-L../../mxml -L../../xpn/lib -lmxml -ldl"
+
+  CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
 then
   OS="__AIX__"
-  #CC="g++"
+  CC="mpicc"
   MAKE="make"
-  CFLAGS="-O2 -Wall -Wextra"
+
   CDEFS="-D_REENTRANT"
   LIBLINK="-lpthread "
+
+  CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+
 elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
 then
   OS="__IRIX__"
-  #CC="g++"
+  CC="mpicc"
   MAKE="gmake"
-  CFLAGS="-O2 -Wall -Wextra"
+
   CDEFS="-D_REENTRANT -DPOSIX_THREADS"
   LIBLINK="-lpthread "
+
+  CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+
 else
   OS="__LINUX__"
-  #CC="g++"
+  #CC="mpicc"
   MAKE="make"
-  CFLAGS="-O2 -Wall -Wextra"
- #CDEFS="-D_REENTRANT -DPOSIX_THREADS -DLINUX -DDEBUG -DDEBUG_NFS -DXPNI_LOWFSI_POSIX -DXPNI_LOWFSI_XPN"
+
   CDEFS="-D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN"
   LIBLINK="-lpthread "
+
+  CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+
   AC_MSG_RESULT("Using Linux configuration as default configuration...");
 fi
 
@@ -130,12 +155,16 @@ AC_MSG_RESULT("$target_os");
 INCLUDEFLAGS="\
 -I\$(top_srcdir)/include \
 -I\$(top_srcdir)/include/base \
--I\$(top_srcdir)/include/xpn \
--I\$(top_srcdir)/include/xpn/xpn_simple \
--I\$(top_srcdir)/include/nfi \
--I\$(top_srcdir)/include/nfi/nfi_local \
--I\$(top_srcdir)/include/xpni/xpni_ft \
--I\$(top_srcdir)/include/xpni/xpni_log"
+-I\$(top_srcdir)/include/xpn_client/ \
+-I\$(top_srcdir)/include/xpn_client/xpn \
+-I\$(top_srcdir)/include/xpn_client/xpn/xpn_simple \
+-I\$(top_srcdir)/include/xpn_client/nfi \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
+-I\$(top_srcdir)/include/xpn_client/xpni/ \
+-I\$(top_srcdir)/include/xpn_client/xpni/common \
+-I\$(top_srcdir)/include/xpn_client/xpni/xpni_null \
+-I\$(top_srcdir)/include/xpn_client/xpni/xpni_ft \
+-I\$(top_srcdir)/include/xpn_client/xpni/xpni_log"
 
 
 ### BEGIN OF NFS BLOCK. Do not remove this line. ###
@@ -146,7 +175,7 @@ AC_ARG_ENABLE(  [nfs],
     [AS_HELP_STRING([--enable-nfs],[Enable NFS v2 module.])],
     [
       [CDEFS="$CDEFS -DENABLE_NFS"]
-      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_nfs"]
+      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_nfs"]
       [NFI_NFS="nfi_nfs"]
       [NFI_NFS_OBJECTS="\$(NFI_NFS_OBJECTS)"]
     ]
@@ -164,7 +193,7 @@ AC_ARG_ENABLE(  [nfs3],
     [AS_HELP_STRING([--enable-nfs3],[Enable NFS v3 module.])],
     [
       [CDEFS="$CDEFS -DENABLE_NFS3"]
-      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_nfs3"]
+      [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_nfs3"]
       [NFI_NFS3="nfi_nfs3"]
       [NFI_NFS3_OBJECTS="\$(NFI_NFS3_OBJECTS)"]
     ]
@@ -175,47 +204,47 @@ AM_CONDITIONAL([ENABLE_NFS3], [test "$NFI_NFS3" = "nfi_nfs3"])
 ### END OF NFS3 BLOCK. Do not remove this line. ###
 
 
-### BEGIN OF TCPSERVER BLOCK. Do not remove this line. ###
+### BEGIN OF TCP_SERVER BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if gridftp is enabled.
 #
-AC_ARG_ENABLE(  [tcpserver],
-                [AS_HELP_STRING([--enable-tcpserver],[Enable tcpServer module.])],
+AC_ARG_ENABLE(  [tcp_server],
+                [AS_HELP_STRING([--enable-tcp_server],[Enable tcp_server module.])],
                 [
-                  [CDEFS="$CDEFS -DENABLE_TCPSERVER"]
-                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_tcpServer"]
-                  [NFI_TCPSERVER="nfi_tcpserver"]
-                  [NFI_TCPSERVER_OBJECTS="\$(NFI_TCPSERVER_OBJECTS)"]
+                  [CDEFS="$CDEFS -DENABLE_TCP_SERVER"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"]
+                  [NFI_TCP_SERVER="nfi_tcp_server"]
+                  [NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"]
                 ]
 )
-AC_SUBST(NFI_TCPSERVER)
-AC_SUBST(NFI_TCPSERVER_OBJECTS)
-AM_CONDITIONAL([ENABLE_TCPSERVER], [test "$NFI_TCPSERVER" = "nfi_tcpserver"])
-### END OF TCPSERVER BLOCK. Do not remove this line. ###
+AC_SUBST(NFI_TCP_SERVER)
+AC_SUBST(NFI_TCP_SERVER_OBJECTS)
+AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
+### END OF TCP_SERVER BLOCK. Do not remove this line. ###
 
-### BEGIN OF MPISERVER BLOCK. Do not remove this line. ###
+### BEGIN OF MPI_SERVER BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if gridftp is enabled.
 #
-AC_ARG_ENABLE(  [mpiserver],
-                [AS_HELP_STRING([--enable-mpiserver@<:@=/path/to/mpi/@:>@ (Don't use '~')],[Enable mpiServer module.])],
+AC_ARG_ENABLE(  [mpi_server],
+                [AS_HELP_STRING([--enable-mpi_server@<:@=/path/to/mpi/@:>@ (Don't use '~')],[Enable mpi_server module.])],
                 [
                   [case "${enableval}" in
                     yes) CC="mpicc";;
                     no)  CC="mpicc" ;;
                     *)   CC="$enableval" ;;
                   esac]
-                  [CDEFS="$CDEFS -DENABLE_MPISERVER"]
-                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/nfi/nfi_mpiServer"]
-                  [NFI_MPISERVER="nfi_mpiserver"]
-                  [NFI_MPISERVER_OBJECTS="\$(NFI_MPISERVER_OBJECTS)"]
+                  [CDEFS="$CDEFS -DENABLE_MPI_SERVER"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server"]
+                  [NFI_MPI_SERVER="nfi_mpi_server"]
+                  [NFI_MPI_SERVER_OBJECTS="\$(NFI_MPI_SERVER_OBJECTS)"]
                 ]
 )
 AC_SUBST(CC)
-AC_SUBST(NFI_MPISERVER)
-AC_SUBST(NFI_MPISERVER_OBJECTS)
-AM_CONDITIONAL([ENABLE_MPISERVER], [test "$NFI_MPISERVER" = "nfi_mpiserver"])
-### END OF MPISERVER BLOCK. Do not remove this line. ###
+AC_SUBST(NFI_MPI_SERVER)
+AC_SUBST(NFI_MPI_SERVER_OBJECTS)
+AM_CONDITIONAL([ENABLE_MPI_SERVER], [test "$NFI_MPI_SERVER" = "nfi_mpi_server"])
+### END OF MPI_SERVER BLOCK. Do not remove this line. ###
 
 
 CPPFLAGS="$CDEFS $INCLUDEFLAGS $M_HEADERS $CPPFLAGS"
@@ -229,6 +258,6 @@ AC_SUBST(M_HEADERS)
 #
 # Build makefile and headers...
 #
-AC_CONFIG_FILES([Makefile lib/Makefile utils/Makefile src_bypass/Makefile src_servers/tcpServer/Makefile src_servers/mpiServer/Makefile])
+AC_CONFIG_FILES([Makefile src/base/Makefile src/xpn_client/Makefile src/utils/Makefile src/bypass/Makefile src/mpi_server/Makefile src/tcp_server/Makefile])
 AC_OUTPUT
 

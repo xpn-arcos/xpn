@@ -52,9 +52,9 @@ cat $DAT_NAME | grep -v "$FIRST_LINE" | awk -f 2_avg.awk > 0.data
 rm -fr *.awk
 
 #
-cat 0.data | grep raid5outer | awk '{ print $'$COL1'" "$'$COL2' }' > 1.data
-cat 0.data | grep raid5inner | awk '{ print $'$COL1'" "$'$COL2' }' > 2.data
-cat 0.data | grep raid5inner | awk '{ print $'$COL1' }' > i.data
+grep raid5outer 0.data | awk '{ print $'$COL1'" "$'$COL2' }' > 1.data
+grep raid5inner 0.data | awk '{ print $'$COL1'" "$'$COL2' }' > 2.data
+grep raid5inner 0.data | awk '{ print $'$COL1' }' > i.data
 
 #
 dos2unix 1.data
@@ -63,7 +63,7 @@ join 1.data 2.data | awk '{ print $2" "$3 }' > 3.data
 dos2unix 3.data
 
 #
-cat i.data | sed 's/\.0\{6,25\}//g' > 4.data
+sed 's/\.0\{6,25\}//g' i.data > 4.data
 mv 4.data i.data
 cat > 2_draw.sed << EOF5
 s/32768/32KB/g

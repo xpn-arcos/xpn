@@ -32,7 +32,7 @@
                                 /*IN*/  char  *str2 )
      {
          /* easy cases */
-         if ( (str1 == str2) )
+         if (str1 == str2)
                return (1) ;
          if ( (str1 == NULL) || (str2 == NULL) )
                return (0) ;

@@ -1,14 +1,18 @@
 
 # Changelog
 
+## 2.0
+* Source cleanup
+* 01/12/2022
+
 ## 1.2
 * added IOR and mdtest support
 * Ported to MN and Picasso
 * 15/07/2022
 
 ## 1.1
-* mpiServer improved
-* tcpServer improved
+* mpi_server improved
+* tcp_server improved
 * 08/04/2022
 
 ## 1.0 

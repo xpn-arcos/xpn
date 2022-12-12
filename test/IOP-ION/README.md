@@ -8,9 +8,9 @@
 
 
 
-## 1. Example of Execution with mpiServer
+## 1. Example of Execution with mpi_server
 
-   * To start an 2 process mpiServer and 1 process client:
+   * To start an 2 process mpi_server and 1 process client:
 ```
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/bin/base/lib:${HOME}/bin/mxml/lib:${HOME}/bin/xpn/lib
 echo localhost > machines
@@ -18,7 +18,7 @@ sleep 1
 HYDRA_HOSTNAME=$(hostname)
 hydra_nameserver &
 sleep 1
-mpirun -np 2 -nameserver ${HYDRA_HOSTNAME} -machinefile machines ../../src_servers/mpiServer/mpiServer.exe
+mpirun -np 2 -nameserver ${HYDRA_HOSTNAME} -machinefile machines ../../src_servers/mpi_server/mpi_server.exe
 sleep 1
 mpirun -np 1 -nameserver ${HYDRA_HOSTNAME} -machinefile machines ./IONMPI /PNFS/
 ```

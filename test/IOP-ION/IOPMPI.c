@@ -340,25 +340,26 @@ static void TakeSample
     //if (( f=xpn_open(fname,O_CREAT|O_RDWR,0777)) < 0)
 
    /* lo abren todos */
-   if(type == 0){
-    
+   if (type == 0)
+   {
     	//printf ("antes del open -*%s*-",fname);
+
 #ifdef XPN
-	if (( f=xpn_open(fname,O_CREAT|O_RDWR,0777)) < 0)
+	if ((f=xpn_open(fname,O_CREAT|O_RDWR,0777)) < 0)
 #elif MPI
-   	if (MPI_File_open(MPI_COMM_SELF, fname, MPI_MODE_CREATE | MPI_MODE_RDWR,
-			                   MPI_INFO_NULL, &fh) <0)
+   	if (MPI_File_open(MPI_COMM_SELF, fname, MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &fh) <0)
 #else
-	if (( f=open(fname,O_CREAT|O_RDWR,0777)) < 0)
+	if ((f=open(fname,O_CREAT|O_RDWR,0777)) < 0)
 #endif
    	{
     		sprintf(str, "IOC.TakeSample: failed to create file %s\n", fname);
     		printf(str);
     	}
     	printf("%d > creo %s\n", cid, fname);
-	    printf("%d > escribiendo %s\n", cid, fname);
-	    ForwWriting(cid, ncid, f, lbuf, buffer_esc, timew);   
-	    MPI_Barrier(MPI_COMM_WORLD);
+
+	printf("%d > escribiendo %s\n", cid, fname);
+	ForwWriting(cid, ncid, f, lbuf, buffer_esc, timew);   
+	MPI_Barrier(MPI_COMM_WORLD);
    }
 /*
    if(type == 1){

@@ -30,7 +30,7 @@ rm -rf hdf5-1.4.5-post8 $HDF5
 tar zxvf hdf5-1.4.5-post8.tar.gz
 cd hdf5-1.4.5-post8
 cp src/H5detect.c src/H5detect.c.bak
-cat src/H5detect.c.bak | sed '727{s/assert/\/*assert/;s/;/;*\//}' > src/H5detect.c
+sed '727{s/assert/\/*assert/;s/;/;*\//}' src/H5detect.c.bak > src/H5detect.c
 env CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DH5_HAVE_PARALLEL" CC=$MPICH/bin/mpicc ./configure --enable-parallel --disable-shared --prefix=$HDF5 2>&1 | tee build-log.txt
 make 2>&1 | tee -a build-log.txt
 make install 2>&1 | tee -a build-log.txt

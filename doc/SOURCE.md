@@ -1,4 +1,4 @@
-# Expand 1.0r1
+# Expand
 Expand: XPN Parallel File System
 
 *Licence*: GNU GENERAL PUBLIC LICENSE Version 3</br>
@@ -7,7 +7,7 @@ Expand: XPN Parallel File System
 
 ## 1. Source structure
 
-Expand 1.0r1 sources has four main levels:
+The Expand client source code (src/xpn_client) has four main levels:
 * xpni:
   eXPaNd Interface provides many enhanced functionality like Fault-Tolerance support, locking, etc.
 * xpn:

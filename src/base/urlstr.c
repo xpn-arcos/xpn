@@ -16,8 +16,8 @@
                  "http",
                  "ftp",
                  "file",
-                 "tcpServer",
-                 "mpiServer",
+                 "tcp_server",
+                 "mpi_server",
                  NULL
                } ;
         int i, ret ;

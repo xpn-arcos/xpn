@@ -1,0 +1,27 @@
+<!-- USE "export XPN_CONF=<file>" -->
+
+<!-- PROTOCOLS SUPPORTED -->
+<!-- file:///dir/ -->
+<!-- nfs://server.company.com/dir/ -->
+<!-- xio://server.company.com/dir/ -->
+<!-- gsoap://server.company.com/dir/ -->
+
+
+<!-- USE "export TCP_SERVER_FILE=<file>" -->
+<!-- myServer://server.company.com/dir/ -->
+
+<!-- ioproxy://server.company.com/dir/ -->
+
+
+<!-- Example -->
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xpn_conf>
+	<partition name="XPN" type="NORMAL" bsize="64k" >
+                <data_node id="" url="file:///tmp"/>
+                <data_node id="" url="nfs://machine.mycompany.com/tmp"/>
+                <data_node id="" url="nfs3://machine.mycompany.com/tmp"/>
+                <data_node id="" url="xio://machine.mycompany.com/tmp"/>
+                <data_node id="" url="gsoap://machine.mycompany.com:80/tmp"/>
+	</partition>
+</xpn_conf>
