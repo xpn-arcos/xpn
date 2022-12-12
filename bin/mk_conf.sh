@@ -6,11 +6,12 @@
 #
 # Default values
 #
-CONFNAME="$HOME/temp/config.xml"
-MACHINEFILE="$HOME/temp/machinefile"
+CONFNAME="$HOME/tmp/config.xml"
+MACHINEFILE="$HOME/tmp/machinefile"
 XPN_PARTITION_BSIZE="512k"
 XPN_PARTITION_TYPE="NORMAL"
 XPN_PARTITION_NAME="xpn"
+XPN_STORAGE_PATH="/tmp"
 
 #
 # Auxiliar functions
@@ -24,56 +25,59 @@ intro() {
 }
 
 usage() {
-   echo "Usage: $0 -conf /tmp/cfg.xml \\"
-   echo "          -machinefile /tmp/machinefile \\"
-   echo "          [-part_size <512k|...>] \\"
-   echo "          [-part_type <NORMAL|...>] \\"
-   echo "          [-part_name <xpn|...>]"
+   echo "Usage: $0 --conf ~/tmp/config.xml \\"
+   echo "          --machinefile ~/tmp/machinefile \\"
+   echo "          [--part_size <64|512k|1m|...>] \\"
+   echo "          [--part_type NORMAL] \\"
+   echo "          [--part_name <partition name>] \\"
+   echo "          [--storage_path <server local storage path>]"
    echo ""
 }
 
 info() {
    echo " * configuration file name: "$CONFNAME
-   echo " * machinefile: "$MACHINEFILE
+   echo " * machinefile:    "$MACHINEFILE
    echo " * partition size: "$XPN_PARTITION_BSIZE
    echo " * partition type: "$XPN_PARTITION_TYPE
    echo " * partition name: "$XPN_PARTITION_NAME
+   echo " * storage path:   "$XPN_STORAGE_PATH
    echo ""
 }
 
 get_opts() {
    # Taken the general idea from https://stackoverflow.com/questions/70951038/how-to-use-getopt-long-option-in-bash-script
    mkconf_name=$(basename "$0")
-   mkconf_short_opt=c:,m:,s:,t:,n:
-   mkconf_long_opt=conf:,machinefile:,part_size:,part_type:,part_name:,help
+   mkconf_short_opt=c:,m:,s:,t:,n,p:
+   mkconf_long_opt=conf:,machinefile:,part_size:,part_type:,part_name:,storage_path:,help
    TEMP=$(getopt -o $mkconf_short_opt --long $mkconf_long_opt --name "$mkconf_name" -- "$@")
    eval set -- "${TEMP}"
 
    while :; do
-       case "${1}" in
-           -c | --conf        ) CONFNAME=$2;             shift 2 ;;
-           -m | --machinefile ) MACHINEFILE=$2;          shift 2 ;;
-           -s | --part_size   ) XPN_PARTITION_BSIZE=$2;  shift 2 ;;
-           -t | --part_type   ) XPN_PARTITION_TYPE=$2;   shift 2 ;;
-           -n | --part_name   ) XPN_PARTITION_NAME=$2;   shift 2 ;;
-	   --help             ) intro; usage;  exit 0 ;;
-           --                 ) shift;    break ;;
-	   *                  ) intro; echo " > ERROR: parsing arguments found an error :-/"; usage; exit 1 ;;
-       esac
+      case "${1}" in
+         -c | --conf         ) CONFNAME=$2;             shift 2 ;;
+         -m | --machinefile  ) MACHINEFILE=$2;          shift 2 ;;
+         -s | --part_size    ) XPN_PARTITION_BSIZE=$2;  shift 2 ;;
+         -t | --part_type    ) XPN_PARTITION_TYPE=$2;   shift 2 ;;
+         -n | --part_name    ) XPN_PARTITION_NAME=$2;   shift 2 ;;
+         -p | --storage_path ) XPN_STORAGE_PATH=$2;     shift 2 ;;
+         --help              ) intro; usage;  exit 0 ;;
+         --                  ) shift;         break ;;
+         *                   ) intro; echo " > ERROR: parsing arguments found an error :-/"; usage; exit 1 ;;
+      esac
    done
 }
 
 check_opts() {
    if [ ! -f $MACHINEFILE ]; then
-	echo " > ERROR: machinefile $MACHINEFILE does not exits :-/"
-	exit 1
+      echo " > ERROR: machinefile $MACHINEFILE does not exits :-/"
+      exit 1
    fi
 
    # TODO: more checks around partition size, type, etc.
 }
 
 mk_conf_file() {
-   echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"    >  ${CONFNAME}
+   echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"    > ${CONFNAME}
    echo "<xpn_conf>"                                        >> ${CONFNAME}
 
    XPN_PARTITION="<partition "
@@ -87,7 +91,7 @@ mk_conf_file() {
    while IFS= read -r line
    do
       XPN_DATA_NODE="<data_node "
-      XPN_DATA_NODE=$XPN_DATA_NODE" url=\"mpiServer://$line/$TMPDIR\" "
+      XPN_DATA_NODE=$XPN_DATA_NODE" url=\"mpiServer://$line/$XPN_STORAGE_PATH\" "
       XPN_DATA_NODE=$XPN_DATA_NODE" id=\"id${ITER}\" "
       XPN_DATA_NODE=$XPN_DATA_NODE" />"
       echo "    ${XPN_DATA_NODE}"  >> ${CONFNAME}
