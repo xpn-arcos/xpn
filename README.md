@@ -3,6 +3,7 @@
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
 ![version](https://img.shields.io/badge/version-2.0-blue)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://www.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xpn-arcos/xpn&amp;utm_campaign=Badge_Grade)
 
 * *Homepage*: https://xpn-arcos.github.io/xpn-arcos.github.io/
 * *Source*:   https://github.com/xpn-arcos/xpn
@@ -16,14 +17,12 @@
 XPN needs the typical C development tools and a MPI implementation installed:
   * If you are administrator of your local machine then you need to execute:
     ```
-    sudo apt-get install -y autoconf automake gcc g++ make flex libtool doxygen libmpich-dev
+    sudo apt-get install -y <developer packages for gcc, make and MPI>
     ```
   * If you are an user of a cluster with already installed software then you might try the following:
     ```bash
-    module available
     module load <your compiler module>
-    module load <your mpi module>
-    module list
+    module load <your MPI module>
     ```
 
 
@@ -48,8 +47,9 @@ cd $HOME/src
 ./xpn/build-me.sh -m <MPICC_PATH> -i <INSTALL_PATH>
 ```
 Where:
-  * MPICC_PATH is the full path to your mpicc compiler (e.g.: /usr/bin/mpicc) 
-  * INSTALL_PATH is the full path of the directory where XPN is going to be installed (e.g.: $HOME/bin_xpn)
+  * MPICC_PATH is the full path to your mpicc compiler.
+  * INSTALL_PATH is the full path of the directory where XPN and MXML are going to be installed.
+
 
 
 ## 4. Executing XPN
@@ -60,14 +60,29 @@ First, you need to get familiar with 4 special files:
   * ```<XPN configuration file>``` for XPN, it is a xml file with the configuration for the partition at the XPN servers where files are stored.
   * ```<server file>``` is a text file with the list of the servers to be stopped (one host name per line).
 
-Then, you need to get familiar with 3 special environment variables for XPN:
+Then, you need to get familiar with 3 special environment variables for XPN client:
   * ```XPN_DNS```  for the full path to the nameserver file.
   * ```XPN_CONF``` for the full path to the XPN configuration file.
-  * ```XPN_IS_MPISERVER``` is used to at the Expand client to inform that the Expand servers are based on MPI. 
+  * ```XPN_IS_MPI_SERVER``` is used to at the Expand client to inform that the Expand servers are based on MPI. 
 
 ### 4.1 Ad-Hoc Expand (based on MPI)
-The typical executions has 3 main steps:
-- First, launch the Expand MPI server (xpn_mpi_server):  
+The typical executions has 4 main steps:
+- First, generate the XPN configuration file:  
+
+    ```
+    cd $HOME/src/xpn/bin
+    ./mk_conf.sh --conf ~/tmp/config.xml \
+                 --machinefile ~/tmp/machinefile \
+                 --part_size 512k \
+                 --part_name xpn \
+                 --storage_path /tmp
+    ```
+    Where:
+    * ```--part_size``` is the partition size (by default in bytes but "k" can be used for kilobytes and "m" for megabytes).
+    * ```--part_name``` is the partition name (a string without whitespaces).
+    * ```--storage_path``` is where the data is stogare in the servers (is the same for all servers).
+    
+- Then, launch the Expand MPI server (xpn_mpi_server):  
 
     ```
     mpiexec -np <number of processes> \
@@ -87,7 +102,7 @@ The typical executions has 3 main steps:
             -genv XPN_DNS <nameserver file> \
             -genv XPN_CONF <XPN configuration file> \
             -genv LD_PRELOAD LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so \
-            -genv XPN_IS_MPISERVER 1 \
+            -genv XPN_IS_MPI_SERVER 1 \
             <program path>
     ```
 
@@ -103,13 +118,39 @@ The typical executions has 3 main steps:
 
 ## 5. XPN Examples
 
+### 5.1 Debian Linux machine
+
 As an build example scenario we will consider the following one:
 * MPI distribution is installed at '/opt/software/install-mpich'
 * Installation directory will be '/opt/xpn'
 
-To build Expand in this case you need to execute:
-```
-cd $HOME/src
-./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i /opt/xpn
-```
+(1) Installing dependencies:
+  ```
+  sudo apt-get install -y autoconf automake gcc g++ make flex libtool doxygen libmpich-dev
+  ```
 
+(2) To build Expand in this case you need to execute:
+   ```
+   cd $HOME/src;
+   ./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i /opt/xpn
+   ```
+
+
+### 5.2 Front-end node of a cluster with shared home
+
+As an build example scenario we will consider the following one:
+* MPI distribution is installed at '/opt/software/install-mpich'
+* Installation directory will be $HOME/xpn_bin
+
+(1) Installing dependencies:
+  ```
+  module available
+  module load icc
+  module load "impi/2017.4"
+  ```
+
+(2) To build Expand in this case you need to execute:
+```
+cd $HOME/src;
+./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
+```
