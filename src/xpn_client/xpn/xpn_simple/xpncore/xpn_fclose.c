@@ -32,8 +32,11 @@
 
 #include <xpn.h>
 
-int
-xpn_fclose(FILE *fp)
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-unused-vars */
+/* eslint-disable block-scoped-var */
+
+int xpn_fclose(FILE *fp)
 {
 	register int /*i, */retval = 0;
 	struct _prefetch_t **_prefetch_addr = (struct _prefetch_t **) &fp->_chain->_prefetch_rel_addr;

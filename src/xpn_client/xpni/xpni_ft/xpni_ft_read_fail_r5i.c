@@ -4,6 +4,10 @@
 
       #include "xpni/xpni_ft/xpni_ft_read.h"
 
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-unused-vars */
+/* eslint-disable block-scoped-var */
+
 
    /* ... Functions / Funciones ......................................... */
 

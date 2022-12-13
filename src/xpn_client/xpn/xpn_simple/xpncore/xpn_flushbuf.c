@@ -32,6 +32,10 @@
 
 #include <xpn.h>
 
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-unused-vars */
+/* eslint-disable block-scoped-var */
+
 static int
 xpn_flushbuf_do_write(int d, char *buf, int nbytes)
 {

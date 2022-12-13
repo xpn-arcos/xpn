@@ -28,6 +28,10 @@
   
   /* ... Functions / Funciones ......................................... */
 
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-unused-vars */
+/* eslint-disable block-scoped-var */
+
   int mpiClient_comm_init ( mpiClient_param_st *params )
   {
     int ret, provided, claimed ;

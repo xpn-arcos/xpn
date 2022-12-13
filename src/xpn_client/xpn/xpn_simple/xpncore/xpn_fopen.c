@@ -37,6 +37,10 @@
 
 #include <xpn.h>
 
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-unused-vars */
+/* eslint-disable block-scoped-var */
+
 FILE * xpn_fopen(const char *name, const char *mode)
 {
 	//register int i;
