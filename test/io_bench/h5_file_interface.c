@@ -7,6 +7,11 @@
 #include "hdf5_flash.h"
 #include <mpi.h>
 
+
+  /* eslint-disable no-use-before-define */
+  /* eslint-disable no-unused-vars */
+  /* eslint-disable block-scoped-var */
+
 /* define an info object to store MPI-IO information */
 static MPI_Info FILE_INFO_TEMPLATE;
 

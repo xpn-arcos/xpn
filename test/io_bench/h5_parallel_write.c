@@ -17,6 +17,11 @@
 #include <mpi.h>
 
 
+  /* eslint-disable no-use-before-define */
+  /* eslint-disable no-unused-vars */
+  /* eslint-disable block-scoped-var */
+
+
 /* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
 
 void h5_write_header_info_(int* MyPE,

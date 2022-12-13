@@ -1,3 +1,8 @@
+
+  /* eslint-disable no-use-before-define */
+  /* eslint-disable no-unused-vars */
+  /* eslint-disable block-scoped-var */
+
 #include "nfi_tcp_server.h"
 
 /*

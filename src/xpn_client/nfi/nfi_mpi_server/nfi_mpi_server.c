@@ -20,6 +20,11 @@
  */
 
 
+  /* eslint-disable no-use-before-define */
+  /* eslint-disable no-unused-vars */
+  /* eslint-disable block-scoped-var */
+
+
   /* ... Include / Inclusion ........................................... */
 
       #include "nfi_mpi_server.h"

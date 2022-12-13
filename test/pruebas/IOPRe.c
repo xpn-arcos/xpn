@@ -21,6 +21,11 @@
 #define FALSE 0
 
 
+  /* eslint-disable no-use-before-define */
+  /* eslint-disable no-unused-vars */
+  /* eslint-disable block-scoped-var */
+
+
 #define TASA_TRANSF(t) ((float)TAMFILE/(float) (t.tv_sec * USECPSEC + t.tv_usec))
 
 char *  TAKE_SAMPLE_DIR; 
