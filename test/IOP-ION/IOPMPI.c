@@ -28,10 +28,6 @@
 
 #define TASA_TRANSF(t) (t)
 
-  /* eslint-disable no-use-before-define */
-  /* eslint-disable no-unused-vars */
-  /* eslint-disable block-scoped-var */
-
 
 char *  TAKE_SAMPLE_DIR; 
 char buffer_basura[512*KB];

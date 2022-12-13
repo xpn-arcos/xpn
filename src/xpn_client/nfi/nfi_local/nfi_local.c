@@ -1,8 +1,4 @@
 
-  /* eslint-disable no-use-before-define */
-  /* eslint-disable no-unused-vars */
-  /* eslint-disable block-scoped-var */
-
 #include "nfi/nfi_local/local_lib.h"
 
 

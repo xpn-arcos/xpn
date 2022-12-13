@@ -7,10 +7,6 @@
 #include <unistd.h>
 
 
-  /* eslint-disable no-use-before-define */
-  /* eslint-disable no-unused-vars */
-  /* eslint-disable block-scoped-var */
-
 
 #define USECPSEC 1000000
 //#include "expand.h"

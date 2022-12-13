@@ -4,10 +4,6 @@
 
 
 
-  /* eslint-disable no-use-before-define */
-  /* eslint-disable no-unused-vars */
-  /* eslint-disable block-scoped-var */
-
 
 #define	NFI_NOOPT	-1
 #define	NFI_EXIT  	0
