@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -18,6 +18,11 @@
    *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
    *
    */
+
+
+  /* eslint-disable no-use-before-define */
+  /* eslint-disable no-unused-vars */
+  /* eslint-disable block-scoped-var */
 
 
   /* ... Include / Inclusion ........................................... */

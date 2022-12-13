@@ -1,4 +1,9 @@
 
+  /* eslint-disable no-use-before-define */
+  /* eslint-disable no-unused-vars */
+  /* eslint-disable block-scoped-var */
+
+
    /* ... Include / Inclusion ........................................... */
 
       #include "xpni/xpni_ft/xpni_ft_write.h"
