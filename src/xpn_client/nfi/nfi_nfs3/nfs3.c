@@ -1,8 +1,4 @@
 
-  /* eslint-disable no-use-before-define */
-  /* eslint-disable no-unused-vars */
-  /* eslint-disable block-scoped-var */
-
 #include "nfi/nfi_nfs3/nfs3.h"
 //#define DEBUG_NFS 1
 //#define DEBUG_MNT 1

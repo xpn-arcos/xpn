@@ -20,10 +20,6 @@
    */
 
 
-  /* eslint-disable no-use-before-define */
-  /* eslint-disable no-unused-vars */
-  /* eslint-disable block-scoped-var */
-
 
 /*
  * fread.c - read a number of members into an array

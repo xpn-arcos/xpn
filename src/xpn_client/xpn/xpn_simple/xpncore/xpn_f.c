@@ -15,10 +15,6 @@
 #include <xpn.h>
 
 
-  /* eslint-disable no-use-before-define */
-  /* eslint-disable no-unused-vars */
-  /* eslint-disable block-scoped-var */
-
 
 extern struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
 
