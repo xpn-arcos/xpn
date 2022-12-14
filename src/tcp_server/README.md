@@ -3,7 +3,7 @@
  ----------
 
 ## Compile:
-   * To compile tcp_server:
+ * To compile tcp_server:
 ```
 make clean
 make
@@ -11,7 +11,7 @@ make
 
 ## Execution:
 
-   * To start one tcp_server:
+ * To start one tcp_server:
 ```
 export XPN_CONF=${HOME}/conf/xpn.conf.xml
 export XPN_PROFILE=${HOME}/conf/xpn.profile.xml

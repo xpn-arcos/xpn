@@ -80,9 +80,9 @@ echo "XPN + MXML..."
 MXML_SRC_PATH=$BASE_PATH/../mxml
 if [ -d $MXML_SRC_PATH ]; then
    echo " * MXML: preparing directories..."
-     rm -fr $INSTALL_PATH/mxml
-   mkdir -p $INSTALL_PATH/mxml/lib64
-   ln    -s $INSTALL_PATH/mxml/lib64  $INSTALL_PATH/mxml/lib
+     rm -fr "$INSTALL_PATH/mxml"
+   mkdir -p "$INSTALL_PATH/mxml/lib64"
+   ln    -s "$INSTALL_PATH/mxml/lib64"  "$INSTALL_PATH/mxml/lib"
 
    echo " * MXML: compiling and installing..."
    pushd .
@@ -98,9 +98,9 @@ fi
 XPN_SRC_PATH=$BASE_PATH/../xpn
 if [ -d $XPN_SRC_PATH ]; then
    echo " * XPN: preparing directories..."
-     rm -fr $INSTALL_PATH/xpn
-   mkdir -p $INSTALL_PATH/xpn/lib64
-   ln    -s $INSTALL_PATH/xpn/lib64   $INSTALL_PATH/xpn/lib
+     rm -fr "$INSTALL_PATH/xpn"
+   mkdir -p "$INSTALL_PATH/xpn/lib64"
+   ln    -s "$INSTALL_PATH/xpn/lib64"   "$INSTALL_PATH/xpn/lib"
 
    echo " * XPN: compiling and installing..."
    pushd .

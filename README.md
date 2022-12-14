@@ -47,22 +47,22 @@ cd $HOME/src
 ./xpn/build-me.sh -m <MPICC_PATH> -i <INSTALL_PATH>
 ```
 Where:
-  * MPICC_PATH is the full path to your mpicc compiler.
-  * INSTALL_PATH is the full path of the directory where XPN and MXML are going to be installed.
+ * MPICC_PATH is the full path to your mpicc compiler.
+ * INSTALL_PATH is the full path of the directory where XPN and MXML are going to be installed.
 
 
 
 ## 4. Executing XPN
 
 First, you need to get familiar with 4 special files:
-  * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line).
-  * ```<nameserver file>``` for XPN, it will be (at runtime) a text file with the list of host names where XPN servers are executing.
-  * ```<XPN configuration file>``` for XPN, it is a xml file with the configuration for the partition at the XPN servers where files are stored.
-  * ```<server file>``` is a text file with the list of the servers to be stopped (one host name per line).
+ * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
+ * ```<XPN configuration file>``` for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers.
+ * ```<nameserver file>``` for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing.
+ * ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
-Then, you need to get familiar with 3 special environment variables for XPN client:
-  * ```XPN_DNS```  for the full path to the nameserver file.
-  * ```XPN_CONF``` for the full path to the XPN configuration file.
+Then, you need to get familiar with 2 special environment variables for XPN clients:
+ * ```XPN_DNS```  with the full path to the nameserver file to be used.
+ * ```XPN_CONF``` with the full path to the XPN configuration file to be used.
 
 ### 4.1 Ad-Hoc Expand (based on MPI)
 The typical executions has 4 main steps:
@@ -97,10 +97,10 @@ The typical executions has 4 main steps:
     ```
     mpiexec -np <number of processes> \
             -hostfile <full path to the hostfile> \
-            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-            -genv XPN_DNS <nameserver file> \
+            -genv XPN_DNS  <nameserver file> \
             -genv XPN_CONF <XPN configuration file> \
-            -genv LD_PRELOAD LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so \
+            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
+            -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
             <program path>
     ```
 
@@ -108,8 +108,8 @@ The typical executions has 4 main steps:
 
     ```
     mpiexec -np 1 \
-            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
             -genv XPN_DNS <nameserver file> \
+            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
             <INSTALL_PATH>/bin/xpn_stop_mpi_server -f <server file>
     ```
 
