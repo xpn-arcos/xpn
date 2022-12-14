@@ -3,8 +3,8 @@
 #
 
 
- prefix = /root/bin//xpn
- CC=/usr/bin/mpicc
+ prefix = /home/uc3m15/uc3m15971/mn4/bin//xpn
+ CC=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpicc
 
  FLAGS=-Wall -Wextra -fpic -DLINUX -std=c11
  INCLUDE=-I../../include -I../../include/base -I../../include/xpn_client -I../../../mxml -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H

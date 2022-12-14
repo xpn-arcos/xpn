@@ -17,7 +17,6 @@
 #include <mpi.h>
 
 
-
 /* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
 
 void h5_write_header_info_sp_(int* MyPE,

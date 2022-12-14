@@ -15,7 +15,6 @@
 #include <xpn.h>
 
 
-
 extern struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
 
 int buffer_size=64*1024;
