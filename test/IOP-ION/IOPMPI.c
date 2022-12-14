@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -9,11 +10,10 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/tcp.h>
+#include "mpi.h"
 
 
 #define USECPSEC 1000000
-//#include "expand.h"
-#include "mpi.h"
 
 #define LFNAME 128 
 #define KB 1024
@@ -27,7 +27,6 @@
 #define FALSE 0
 
 #define TASA_TRANSF(t) (t)
-
 
 char *  TAKE_SAMPLE_DIR; 
 char buffer_basura[512*KB];

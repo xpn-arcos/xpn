@@ -20,7 +20,6 @@
 #define FALSE 0
 
 
-
 #define TASA_TRANSF(t) ((float)TAMFILE/(float) (t.tv_sec * USECPSEC + t.tv_usec))
 
 char *  TAKE_SAMPLE_DIR; 

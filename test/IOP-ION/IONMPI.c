@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -6,13 +7,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include "mpi.h"
 
 
 #define USECPSEC 1000000
-//#include "expand.h"
-//#include "xpn.h"
-#include "mpi.h"
-
 #define LFNAME 128 
 #define KB 1024
 #define MB (KB*KB)

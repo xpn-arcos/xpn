@@ -63,7 +63,6 @@ First, you need to get familiar with 4 special files:
 Then, you need to get familiar with 3 special environment variables for XPN client:
   * ```XPN_DNS```  for the full path to the nameserver file.
   * ```XPN_CONF``` for the full path to the XPN configuration file.
-  * ```XPN_IS_MPI_SERVER``` is used to at the Expand client to inform that the Expand servers are based on MPI. 
 
 ### 4.1 Ad-Hoc Expand (based on MPI)
 The typical executions has 4 main steps:
@@ -102,7 +101,6 @@ The typical executions has 4 main steps:
             -genv XPN_DNS <nameserver file> \
             -genv XPN_CONF <XPN configuration file> \
             -genv LD_PRELOAD LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so \
-            -genv XPN_IS_MPI_SERVER 1 \
             <program path>
     ```
 

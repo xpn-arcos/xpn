@@ -31,6 +31,9 @@
 /* Define to 1 if you have the `memmove' function. */
 #define HAVE_MEMMOVE 1
 
+/* Define to 1 if you have the <memory.h> header file. */
+#define HAVE_MEMORY_H 1
+
 /* Define to 1 if you have the `memset' function. */
 #define HAVE_MEMSET 1
 
@@ -44,13 +47,13 @@
 #define HAVE_PTHREAD_H 1
 
 /* Define to 1 if you have the <rpc/clnt.h> header file. */
-/* #undef HAVE_RPC_CLNT_H */
+#define HAVE_RPC_CLNT_H 1
 
 /* Define to 1 if you have the <rpc/rpc.h> header file. */
-/* #undef HAVE_RPC_RPC_H */
+#define HAVE_RPC_RPC_H 1
 
 /* Define to 1 if you have the <rpc/types.h> header file. */
-/* #undef HAVE_RPC_TYPES_H */
+#define HAVE_RPC_TYPES_H 1
 
 /* Define to 1 if you have the `select' function. */
 #define HAVE_SELECT 1
@@ -60,9 +63,6 @@
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
-
-/* Define to 1 if you have the <stdio.h> header file. */
-#define HAVE_STDIO_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
@@ -106,6 +106,9 @@
 /* Define to 1 if you have the <windows.h> header file. */
 /* #undef HAVE_WINDOWS_H */
 
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+/* #undef NO_MINUS_C_MINUS_O */
+
 /* Name of package */
 #define PACKAGE "expand"
 
@@ -145,9 +148,7 @@
 /* The size of `unsigned short', as computed by sizeof. */
 #define SIZEOF_UNSIGNED_SHORT 2
 
-/* Define to 1 if all of the C90 standard headers exist (not just the ones
-   required in a freestanding environment). This macro is provided for
-   backward compatibility; new code need not use it. */
+/* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
 /* Version number of package */
@@ -156,7 +157,7 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
 
-/* Define as a signed integer type capable of holding a process identifier. */
+/* Define to `int' if <sys/types.h> does not define. */
 /* #undef pid_t */
 
 /* Define to `long' if <sys/types.h> does not define. */
