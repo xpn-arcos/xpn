@@ -824,7 +824,7 @@ configure:5850: $? = 0
 configure:5850: result: yes
 configure:5856: checking for _doprnt
 configure:5856: icc -o conftest -g -O2   conftest.c -lpthread  >&5
-/scratch/tmp/iccK62ZQu.o: In function `main':
+/scratch/tmp/iccA1sLAr.o: In function `main':
 /gpfs/home/uc3m15/uc3m15971/mn4/src/xpn/conftest.c:79: undefined reference to `_doprnt'
 configure:5856: $? = 1
 configure: failed program was:
@@ -1077,7 +1077,7 @@ am_cv_make_support_nested_variables=yes
 ## Output variables. ##
 ## ----------------- ##
 
-ACLOCAL='${SHELL} /home/uc3m15/uc3m15971/mn4/src/xpn/config/missing aclocal-1.13'
+ACLOCAL='${SHELL} /gpfs/home/uc3m15/uc3m15971/mn4/src/xpn/config/missing aclocal-1.13'
 AMDEPBACKSLASH='\'
 AMDEP_FALSE='#'
 AMDEP_TRUE=''
@@ -1087,9 +1087,9 @@ AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
 AM_DEFAULT_VERBOSITY='1'
 AM_V='$(V)'
 AR='ar'
-AUTOCONF='${SHELL} /home/uc3m15/uc3m15971/mn4/src/xpn/config/missing autoconf'
-AUTOHEADER='${SHELL} /home/uc3m15/uc3m15971/mn4/src/xpn/config/missing autoheader'
-AUTOMAKE='${SHELL} /home/uc3m15/uc3m15971/mn4/src/xpn/config/missing automake-1.13'
+AUTOCONF='${SHELL} /gpfs/home/uc3m15/uc3m15971/mn4/src/xpn/config/missing autoconf'
+AUTOHEADER='${SHELL} /gpfs/home/uc3m15/uc3m15971/mn4/src/xpn/config/missing autoheader'
+AUTOMAKE='${SHELL} /gpfs/home/uc3m15/uc3m15971/mn4/src/xpn/config/missing automake-1.13'
 AWK='gawk'
 CC='/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpicc'
 CCDEPMODE='depmode=gcc3'
@@ -1124,7 +1124,7 @@ LIBOBJS=''
 LIBS='    -L../../mxml    -L../../xpn/lib -L../../../mxml -L../../../xpn/lib  -lmxml -ldl -lpthread'
 LTLIBOBJS=''
 MAKE='make'
-MAKEINFO='${SHELL} /home/uc3m15/uc3m15971/mn4/src/xpn/config/missing makeinfo'
+MAKEINFO='${SHELL} /gpfs/home/uc3m15/uc3m15971/mn4/src/xpn/config/missing makeinfo'
 MKDIR_P='/usr/bin/mkdir -p'
 M_HEADERS=''
 NFI_MPI_SERVER='nfi_mpi_server'
@@ -1182,7 +1182,7 @@ host_vendor='pc'
 htmldir='${docdir}'
 includedir='${prefix}/include'
 infodir='${datarootdir}/info'
-install_sh='${SHELL} /home/uc3m15/uc3m15971/mn4/src/xpn/config/install-sh'
+install_sh='${SHELL} /gpfs/home/uc3m15/uc3m15971/mn4/src/xpn/config/install-sh'
 libdir='${exec_prefix}/lib'
 libexecdir='${exec_prefix}/libexec'
 localedir='${datarootdir}/locale'

@@ -27,6 +27,12 @@
       #include "all_system.h"
       #include "base/utils.h"
 
+      #include <netdb.h>
+
+      #include <sys/socket.h>
+      #include <netinet/in.h>
+      #include <arpa/inet.h>
+
 
       /*
        *  API
