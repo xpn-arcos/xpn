@@ -84,7 +84,7 @@ int mylock ( char *file )
 	int fd;
 
 #if defined (DBG_XPN) || defined(_DBGXPN_)
-  	printf("d2xpn: mylock(%s)\n", file);
+  	printf("d2xpn: mylock(%s)\n", (NULL==file) ? "null" : file);
 #endif
 
 	// check params...

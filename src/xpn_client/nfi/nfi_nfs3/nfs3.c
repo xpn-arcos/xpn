@@ -825,7 +825,7 @@ ssize_t nfs3_read(fhandle3 *fh, void *data, off_t offset, size_t size, CLIENT *c
     
   }
 #ifdef DEBUG_NFS
-  printf("successfully READ (%d, %d) STATUS (%d)\n", (uint)size, (uint)offset, i);
+  printf("successfully READ (%d, %d) STATUS (%lu)\n", (uint)size, (uint)offset, i);
 #endif  
   
   

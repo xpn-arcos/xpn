@@ -10,7 +10,7 @@
 #include "mpi.h"
 #include "time.h"
 
-#define LFNAME 128 
+#define LFNAME 128
 #define KB 1024
 #define MB (KB*KB)
 //#define LBUFMIN (1*KB)
@@ -29,7 +29,7 @@
 
 #define TASA_TRANSF(t) ((float)TAMFILE/(float) (t.tv_sec * USECPSEC + t.tv_usec))
 
-char *  TAKE_SAMPLE_DIR; 
+char *  TAKE_SAMPLE_DIR;
 char buffer_basura[512*KB];
 char buffer_esc[LBUFMAX];
 char buffer_lec[LBUFMAX];
@@ -48,14 +48,14 @@ static int GetCheckArgs(int argc, char **argv, char *dir, int *cid, int *ncid)
 {
     if (argc==2)
     {
-       strcpy(dir,argv[1]); 
+       strcpy(dir,argv[1]);
        (*cid)=0;
        (*ncid)=1;
        return(1);
     }
     else if (argc==4)
     {
-       strcpy(dir,argv[1]); 
+       strcpy(dir,argv[1]);
        (*cid)=atoi(argv[2]);
        (*ncid)=atoi(argv[3]);
        return(1);
@@ -72,7 +72,7 @@ static int GetCheckArgs(int argc, char **argv, char *dir, int *cid, int *ncid)
 static void ForwWriting
 (
 	int cid, int ncid,
-	int f, int lb, char *buf, 
+	int f, int lb, char *buf,
 	struct timeval *tim
 )
 {
@@ -86,7 +86,7 @@ static void ForwWriting
     iter= TAMFILE/lb;
     iter= iter/ncid;
 
-    Timer(&ti);    
+    Timer(&ti);
 
     for ( ; iter>0; iter--)
     {
@@ -103,12 +103,12 @@ static void ForwWriting
           exit(1);
        }
 
-       offset = offset + ncid*lb; 
+       offset = offset + ncid*lb;
 
 
     }
 
-    Timer(&tf);    
+    Timer(&tf);
     DiffTime(&ti, &tf, tim);
 }
 
@@ -118,8 +118,8 @@ static void ForwWriting
  */
 static void ForwReading
 (
-	int cid, int ncid, 
-	int f, int lb, char *bufl, char *bufe, 
+	int cid, int ncid,
+	int f, int lb, char *bufl, char *bufe,
 	struct timeval *tim
 )
 {
@@ -133,7 +133,7 @@ static void ForwReading
     iter= TAMFILE/lb;
     iter= iter/ncid;
 
-    Timer(&ti);   
+    Timer(&ti);
 
     for ( ; iter>0; iter--)
     {
@@ -153,18 +153,18 @@ static void ForwReading
 
     }
 
-    Timer(&tf);   
+    Timer(&tf);
     DiffTime(&ti, &tf, tim);
 }
 
-/* 
+/*
  * This function is similar to ForwReading, but here the reads are
  * beginning in the end of the file.
  */
 static void BackwReading
 (
-	int cid, int ncid, 
-	int f, int lb, char *bufl, char *bufe, 
+	int cid, int ncid,
+	int f, int lb, char *bufl, char *bufe,
 	struct timeval *tim
 )
 {
@@ -175,7 +175,7 @@ static void BackwReading
     offset=TAMFILE;
     iter= TAMFILE/lb;
 
-    Timer(&ti);   
+    Timer(&ti);
 
     for(;iter>0;iter--){
 
@@ -193,20 +193,20 @@ static void BackwReading
        }
     }
 
-    Timer(&tf);   
+    Timer(&tf);
     DiffTime(&ti, &tf, tim);
 }
 
-/* 
- * This function creats a new file, and is performanced a Writing, 
+/*
+ * This function creats a new file, and is performanced a Writing,
  * ForwReading and BackReading function.
  */
 static void TakeSample
 (
 	int cid, int ncid,
-	int lbuf, char *dir, 
-	struct timeval *timew, 
-	struct timeval *timefr, 
+	int lbuf, char *dir,
+	struct timeval *timew,
+	struct timeval *timefr,
 	struct timeval *timebr
 )
 {
@@ -215,7 +215,7 @@ static void TakeSample
 
     dir=TAKE_SAMPLE_DIR;
     sprintf (fname, "%s/%s.%d.%d", dir, "IOC", ncid, lbuf);
- 
+
     // goto only_read;
 
     if (cid == 0)   /* lo crea el cero */
@@ -238,7 +238,7 @@ static void TakeSample
        perror("open:");
        exit(-1);
     }
- 
+
 
    //printf("Writing \n");
    ForwWriting(cid, ncid, f, lbuf, buffer_esc, timew);
@@ -249,7 +249,7 @@ static void TakeSample
    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    return;
    //only_read:
-   
+
    MPI_Barrier(MPI_COMM_WORLD);
 
     if (( f=open (fname,O_RDONLY)) < 0)
@@ -258,7 +258,7 @@ static void TakeSample
        perror("open:");
        exit(-1);
     }
- 
+
     printf("%d > leo %s\n", cid, fname);
    ForwReading(cid, ncid, f, lbuf, buffer_lec, buffer_esc, timefr);
 
@@ -267,7 +267,7 @@ static void TakeSample
    close(f);
 
    if (cid == 0){
-	   
+	
    	//ret = unlink(fname);
 	if(ret<0)
 		printf("error en borrado %s = %d\n",fname,ret);
@@ -293,8 +293,9 @@ static void PrintResult(int cid, int lb, struct timeval *timet, float trw, float
 
 static void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr, float med_br)
 {
-  int n_users;
+    int n_users;
 
+    n_users = 1;
     printf("==================================================\n");
     sprintf(str, "Bandwidth. (Write):  %f MB/s \n",med_w/n);
     printf(str);
@@ -304,7 +305,7 @@ static void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr,
     printf(str);
     sprintf(str, "Average Bandwidth:  %f MB/s \n",(med_w+med_fr+med_br)/(3*n));
     printf(str);
-    sprintf(str, "Total time:  %f s. \n\n",((float)ttot->tv_sec + 
+    sprintf(str, "Total time:  %f s. \n\n",((float)ttot->tv_sec +
 		(float)ttot->tv_usec/USECPSEC));
     printf(str);
 
@@ -312,14 +313,12 @@ static void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr,
         n_users * (med_w/n), n_users * (med_fr/n), n_users * (med_br/n),
        n_users * (med_w+med_fr+med_br)/(3*n));
     printf(str);
-    sprintf(str,"T. Time %2.4f \n", ((float)ttot->tv_sec +  
+    sprintf(str,"T. Time %2.4f \n", ((float)ttot->tv_sec +
 		(float)ttot->tv_usec/USECPSEC));
     printf(str);
     sprintf(str, "BW %2.4f; BSR %2.4f; BRR %2.4f;  AVG %2.4f \n",
         (med_w/n), (med_fr/n), (med_br/n), (med_w+med_fr+med_br)/(3*n));
     printf(str);
-
-
 }
 
 int main(int argc, char **argv)
@@ -327,7 +326,7 @@ int main(int argc, char **argv)
     int lbuf, nit=0;
     struct timeval timei, timef, timedif, tini, tfin, tdif;
     char dir[LFNAME];
-    float trw, trfr,  trbr; 
+    float trw, trfr,  trbr;
     float trw_med=0, trfr_med=0,  trbr_med=0;
     struct timeval timew, timefr, timebr;
     int ncid, cid;
@@ -367,8 +366,8 @@ int main(int argc, char **argv)
       TakeSample(cid, ncid, lbuf, dir, &timew, &timefr, &timebr);
       Timer(&timef);
       DiffTime(&timei, &timef, &timedif);
-      trw=TASA_TRANSF(timew); 
-      trfr=TASA_TRANSF(timefr); 
+      trw=TASA_TRANSF(timew);
+      trfr=TASA_TRANSF(timefr);
       trbr=TASA_TRANSF(timebr);
       trw_med+=trw; trfr_med+=trfr; trbr_med+=trbr;
       PrintResult(cid, lbuf, &timedif, trw, trfr, trbr);
@@ -382,7 +381,7 @@ int main(int argc, char **argv)
     //
 
     //printf("acabo.....\n");
-    MPI_Finalize(); 
+    MPI_Finalize();
 
     exit(0);
 }

@@ -122,33 +122,50 @@ As an build example scenario we will consider the following one:
 * MPI distribution is installed at '/opt/software/install-mpich'
 * Installation directory will be '/opt/xpn'
 
-(1) Installing dependencies:
+(1) Install dependencies:
   ```
   sudo apt-get install -y autoconf automake gcc g++ make flex libtool doxygen libmpich-dev
   ```
 
-(2) To build Expand in this case you need to execute:
+(2) Download the source code of XPN and mxml:
+  ```
+  mkdir $HOME/src
+  cd    $HOME/src
+  git clone https://github.com/michaelrsweet/mxml.git
+  git clone https://github.com/xpn-arcos/xpn.git
+  ```
+
+(3) To build Expand in this case you need to execute:
    ```
-   cd $HOME/src;
+   cd $HOME/src
    ./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i /opt/xpn
    ```
 
 
-### 5.2 Front-end node of a cluster with shared home
+### 5.2 Front-end node of a cluster with local storage per-node and shared home
 
 As an build example scenario we will consider the following one:
 * MPI distribution is installed at '/opt/software/install-mpich'
 * Installation directory will be $HOME/xpn_bin
 
-(1) Installing dependencies:
+(1) Install dependencies:
   ```
   module available
   module load icc
   module load "impi/2017.4"
   ```
 
-(2) To build Expand in this case you need to execute:
-```
-cd $HOME/src;
-./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
-```
+(2) Download the source code of XPN and mxml:
+  ```
+  mkdir $HOME/src
+  cd    $HOME/src
+  git clone https://github.com/michaelrsweet/mxml.git
+  git clone https://github.com/xpn-arcos/xpn.git
+  ```
+
+(3) To build Expand in this case you need to execute:
+  ```
+  cd $HOME/src;
+  ./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
+  ```
+
