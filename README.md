@@ -142,7 +142,8 @@ As an build example scenario we will consider the following one:
    ```
 
 
-### 5.2 Front-end node of a cluster with local storage per-node and shared home
+### 5.2 Front-end node of a cluster
+Imagine you have a cluter with local storage (HDD, SSD, RAM Drive) per-node and shared home.
 
 As an build example scenario we will consider the following one:
 * MPI distribution is installed at '/opt/software/install-mpich'
