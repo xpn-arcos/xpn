@@ -12,7 +12,7 @@ while [ $i -le $NUM_ITER ]
 do
 	rm -f t.txt
 	/usr/bin/time -f "%e" -o t.txt globusrun-ws -submit -F gridimadrid.ciemat.es -S -f cp_globus.xml
-	T=`cat t.txt`
+	T=$(cat t.txt)
 	SUM="$SUM + $T"
 	let "i+=1"
 done
