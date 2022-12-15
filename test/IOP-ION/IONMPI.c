@@ -102,6 +102,7 @@ static void ForwWriting
 #endif
 
        memset(buf, 'a', lb);
+       ret = -1;
 #ifdef XPN
        if ((ret = xpn_write(f,buf,lb))!= lb)
 #elif MPI

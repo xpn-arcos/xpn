@@ -22,7 +22,7 @@
 
         /* debugging */
         #if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_ft_sread_r5o(%d,%p,%d,%d); \n",
+            printf("[%s:%d] xpni_ft_sread_r5o(%d,%p,%d,%lu); \n",
                    __FILE__,__LINE__,fd,buffer,(int)offset,size);
         #endif
 
@@ -49,7 +49,7 @@
 			default:
                              ret = (-1);
 #if defined(XPNI_DEBUG)
-                             printf("[%s:%d] xpni_ft_sread_r5o(%d,%p,%d,%d): %d fail(s)\n",
+                             printf("[%s:%d] xpni_ft_sread_r5o(%d,%p,%d,%lu): %d fail(s)\n",
                                     __FILE__,__LINE__,fd,buffer,(int)offset,size,fmeta_nerrors);
 #endif
 			     break;
@@ -60,7 +60,7 @@
 	{
             ret = (-1);
 #if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_ft_sread_r5o(%d,%p,%d,%d): Unknow file system tag: '%s' (not %s or %s)\n",
+            printf("[%s:%d] xpni_ft_sread_r5o(%d,%p,%d,%lu): Unknow file system tag: '%s' (not %s or %s)\n",
                    __FILE__,__LINE__,fd,buffer,(int)offset,size,
 		   fmeta_fsTag,FS_TAG_RAID5OUTER,FS_TAG_RAID5OUTER);
 #endif

@@ -34,6 +34,7 @@
     struct hostent *serv_entry;
     char *ip;
     char *param_srv_ip;
+    char param_srv_ip[HOST_NAME_MAX];
 
     gethostname(serv_name, HOST_NAME_MAX); //get hostname
     serv_entry = gethostbyname(serv_name); //find host information

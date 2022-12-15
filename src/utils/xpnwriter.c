@@ -79,10 +79,8 @@ int main(int argc, char *argv[])
 	isxpn = xpndest;
 #ifdef DEBUG
 	printf("xpndest=%d, isxpn=%d\n", xpndest, isxpn);
-	
 	printf("dest = '%s'\n", dest);
-
-	printf("buffer_size = %d\n", buffer_size);
+	printf("buffer_size = %lu\n", buffer_size);
 #endif
 	if (isxpn) {
 		ret = xpn_init();

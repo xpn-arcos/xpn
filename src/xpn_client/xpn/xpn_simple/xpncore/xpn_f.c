@@ -407,16 +407,16 @@ int xpn_fseek(FILE *stream, long offset, int whence) { //FIXME: Needs lots of de
 
 switch(whence){
 	case SEEK_SET:
-		fprintf(stderr, "Calling xpn_fseek(%d, %d, SEEK_SET)\n", stream->_fileno, offset);
+		fprintf(stderr, "Calling xpn_fseek(%d, %lu, SEEK_SET)\n", stream->_fileno, offset);
 		break;
 	case SEEK_CUR:
-		fprintf(stderr, "Calling xpn_fseek(%d, %d, SEEK_CUR)\n", stream->_fileno, offset);
+		fprintf(stderr, "Calling xpn_fseek(%d, %lu, SEEK_CUR)\n", stream->_fileno, offset);
 		break;
 	case SEEK_END:
-		fprintf(stderr, "Calling xpn_fseek(%d, %d, SEEK_END)\n", stream->_fileno, offset);
+		fprintf(stderr, "Calling xpn_fseek(%d, %lu, SEEK_END)\n", stream->_fileno, offset);
 		break;
 	default:
-		fprintf(stderr, "Calling xpn_fseek(%d, %d, %d)\n", stream->_fileno, offset, whence);
+		fprintf(stderr, "Calling xpn_fseek(%d, %lu, %d)\n", stream->_fileno, offset, whence);
 		break;
 }
 	off = stream->_IO_write_ptr;

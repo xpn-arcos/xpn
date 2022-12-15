@@ -26,8 +26,7 @@
 
         /* Debugging */
 	#if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_dir_initByName(%p,%s); \n",
-                   __FILE__,__LINE__,fmeta,fname);
+            printf("[%s:%d] xpni_dir_initByName(%p,%s); \n", __FILE__, __LINE__, fmeta, (NULL==fname) ? "null" : fname);
 	#endif
 
 	/* Check params */
