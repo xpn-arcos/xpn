@@ -1,3 +1,6 @@
+#!/bin/sh
+set -x
+
 ./prueba.sh 1 &
 ./prueba.sh 2 &
 ./prueba.sh 3 &

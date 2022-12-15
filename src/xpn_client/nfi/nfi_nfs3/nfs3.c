@@ -16,7 +16,7 @@ void printfh3(char *s, fhandle3 *fh){
         printf("%s ",s);
         for(j=0;j<FHSIZE3-1;j++){
                 i = fh->fhandle3_val[j]+256;
-                printf("%d:",i%256);
+                printf("%u:",i%256);
 		//if (j==FHSIZE3/2){
         	//	printf("\n");
 		//}
