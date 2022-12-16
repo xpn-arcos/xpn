@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -31,8 +31,16 @@
   int mpi_server_dns_publish ( char * param_srv_name, char * dns_file, char * port_name )
   {
     char serv_name [HOST_NAME_MAX];
-    gethostname(serv_name, HOST_NAME_MAX);
+    struct hostent *serv_entry;
+    char *ip;
+    char param_srv_ip[HOST_NAME_MAX];
+
+    gethostname(serv_name, HOST_NAME_MAX); //get hostname
+    serv_entry = gethostbyname(serv_name); //find host information
+    ip = inet_ntoa(*((struct in_addr*) serv_entry->h_addr_list[0])); //Convert into IP string
+
     sprintf(param_srv_name, "mpi_server.%s", serv_name) ;
+    sprintf(param_srv_ip,   "mpi_server.%s", ip) ;
 
     FILE * dns_fd = fopen(dns_file, "a");
     if (dns_fd == NULL)
@@ -41,7 +49,7 @@
       return -1;
     }
 
-    fprintf(dns_fd, "%s %s\n", param_srv_name, port_name);
+    fprintf(dns_fd, "%s %s %s\n", param_srv_name, param_srv_ip, port_name);
 
     fclose(dns_fd);
 
@@ -78,8 +86,9 @@
 
     int found = 0;
     char aux_name[1024];
+    char aux_name_2[1024];
     char port_name [HOST_NAME_MAX];
-    while(fscanf(dns_fd, "%s %s", aux_name, port_name) != EOF)
+    while(fscanf(dns_fd, "%s %s %s", aux_name, aux_name_2, port_name) != EOF)
     {
       if (strcmp(aux_name, aux_srv_name) == 0)
       {
@@ -89,7 +98,7 @@
       else
       {
         //Copy the line
-        fprintf(new_dns_fd, "%s %s\n", aux_name, port_name);
+        fprintf(new_dns_fd, "%s %s %s\n", aux_name, aux_name_2, port_name);
       }
     }
 
@@ -113,6 +122,7 @@
     int    found = 0 ;
     char   srv_name[1024] ;
     char   aux_name[1024] ;
+    char   aux_name_2[1024] ;
     char * dns_file ;
     FILE * dns_fd ;
 
@@ -133,9 +143,9 @@
     }
 
     sprintf(srv_name, "mpi_server.%s", param_srv_name);
-    while(fscanf(dns_fd, "%s %s", aux_name, port_name) != EOF)
+    while(fscanf(dns_fd, "%s %s %s", aux_name, aux_name_2, port_name) != EOF)
     {
-      if (strcmp(aux_name, srv_name) == 0)
+      if (strcmp(aux_name, srv_name) == 0 || strcmp(aux_name_2, srv_name) == 0)
       {
         found = 1;
         break;

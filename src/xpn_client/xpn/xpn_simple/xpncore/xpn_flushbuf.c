@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2022 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
    *
    *  This file is part of Expand.
    *
@@ -18,6 +18,7 @@
    *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
    *
    */
+
 
 /*
  * flushbuf.c - flush a buffer

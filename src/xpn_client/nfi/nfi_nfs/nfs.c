@@ -1,10 +1,9 @@
+
+
 #include "nfi/nfi_nfs/nfs.h"
 
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-unused-vars */
-/* eslint-disable block-scoped-var */
-
-void printfh(fhandle fh){
+void printfh(fhandle fh)
+{
 	unsigned int i,j;
 
 	printf("FH: ");
@@ -15,7 +14,6 @@ void printfh(fhandle fh){
 	i = fh[31]+256;
 	printf("%d",i%256);
 	printf("\n");
-	
 }
 
 /*int getFirstDir(char *dir, char *path)

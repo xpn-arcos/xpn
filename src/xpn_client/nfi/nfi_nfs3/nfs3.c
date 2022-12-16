@@ -1,3 +1,5 @@
+
+
 #include "nfi/nfi_nfs3/nfs3.h"
 //#define DEBUG_NFS 1
 //#define DEBUG_MNT 1
@@ -14,7 +16,7 @@ void printfh3(char *s, fhandle3 *fh){
         printf("%s ",s);
         for(j=0;j<FHSIZE3-1;j++){
                 i = fh->fhandle3_val[j]+256;
-                printf("%d:",i%256);
+                printf("%u:",i%256);
 		//if (j==FHSIZE3/2){
         	//	printf("\n");
 		//}
@@ -823,7 +825,7 @@ ssize_t nfs3_read(fhandle3 *fh, void *data, off_t offset, size_t size, CLIENT *c
     
   }
 #ifdef DEBUG_NFS
-  printf("successfully READ (%d, %d) STATUS (%d)\n", (uint)size, (uint)offset, i);
+  printf("successfully READ (%d, %d) STATUS (%lu)\n", (uint)size, (uint)offset, i);
 #endif  
   
   

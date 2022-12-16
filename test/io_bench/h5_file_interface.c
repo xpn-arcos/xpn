@@ -1,3 +1,4 @@
+
 /* This file contains the routines that open and close the HDF5 files */
 
 #include <stdio.h>
@@ -6,6 +7,7 @@
 #include <hdf5.h>
 #include "hdf5_flash.h"
 #include <mpi.h>
+
 
 /* define an info object to store MPI-IO information */
 static MPI_Info FILE_INFO_TEMPLATE;

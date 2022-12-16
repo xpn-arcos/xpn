@@ -99,7 +99,7 @@
         /* debugging */
 	#if defined(XPNI_DEBUG)
             printf("[%s:%d] xpni_fmeta_changeFileSystemTag(%p,%s); \n",
-                   __FILE__,__LINE__,fmeta,new_fs_tag);
+                   __FILE__, __LINE__, fmeta, (new_fs_tag) ? new_fs_tag : "NULL");
 	#endif
 
 	/* check params */

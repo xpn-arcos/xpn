@@ -1,7 +1,7 @@
+
 #include <stdio.h>
 #include "nfi.h"
 #include "base/string_misc.h"
-
 
 
 #define	NFI_NOOPT	-1

@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -6,12 +7,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-
-#define USECPSEC 1000000
-//#include "expand.h"
-//#include "xpn.h"
 #include "mpi.h"
 
+
+#define USECPSEC 1000000
 #define LFNAME 128 
 #define KB 1024
 #define MB (KB*KB)
@@ -103,6 +102,7 @@ static void ForwWriting
 #endif
 
        memset(buf, 'a', lb);
+       ret = -1;
 #ifdef XPN
        if ((ret = xpn_write(f,buf,lb))!= lb)
 #elif MPI

@@ -1,3 +1,5 @@
+
+
 #include "nfi_tcp_server.h"
 
 /*
@@ -233,7 +235,7 @@ int nfi_tcp_server_init(char *url, struct nfi_server *serv, struct nfi_attr_serv
 #endif  
 
 #ifdef DBG_NFI 
-  printf("[NFI]nfi_tcp_server_init: sizeof(struct st_tcp_server_msg) = %d.\n", sizeof(struct st_tcp_server_msg));
+  printf("[NFI]nfi_tcp_server_init: sizeof(struct st_tcp_server_msg) = %lu.\n", sizeof(struct st_tcp_server_msg));
 #endif  
   
   if(serv == NULL){

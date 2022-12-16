@@ -25,7 +25,7 @@ then
 fi
 
 mkdir xpn_utils_bundle
-cp $FILES xpn_utils_bundle/
-cp $LIBS xpn_utils_bundle/
+cp "$FILES" xpn_utils_bundle/
+cp "$LIBS"  xpn_utils_bundle/
 tar zcvf xpn_utils_bundle.tar.gz xpn_utils_bundle/
-rm -rf xpn_utils_bundle/
+rm -rf   xpn_utils_bundle/

@@ -4,9 +4,9 @@
 #--------------------------
 
  MAKE         = make -s
- CC           = /usr/bin/mpicc
+ CC           = /gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpicc
  SOURCE_PATH  = ./
- EXPAND_DIR   = /root/bin//xpn
+ EXPAND_DIR   = /home/uc3m15/uc3m15971/mn4/bin//xpn
  OBJECTS_MPI_SERVER     = ../../src/mpi_server/mpi_server.o \
 		          ../../src/mpi_server/mpi_server_params.o \
 		          ../../src/mpi_server/mpi_server_comm.o \
