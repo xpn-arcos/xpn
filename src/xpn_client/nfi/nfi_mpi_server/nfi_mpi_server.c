@@ -835,9 +835,9 @@
         {
           filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
 
-          if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+          //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
           ret = filesystem_read(fh_aux->fd, buffer, size) ;
-          if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+          //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
           debug_info("read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret)
           if (ret < 0) {
@@ -947,9 +947,9 @@
           }
           filesystem_lseek(fd, offset, SEEK_SET) ;
 
-          if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+          //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
           ret = filesystem_read(fd, buffer, size) ;
-          if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+          //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
           debug_info("read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret)
           if (ret < 0) {
@@ -1077,10 +1077,10 @@
         {
           filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
 
-          if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+          //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
           ret = filesystem_write(fh_aux->fd, buffer, size) ;
           debug_info("write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret);
-          if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+          //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
           if (ret < 0) {
               debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
@@ -1201,19 +1201,19 @@
           }
           filesystem_lseek(fd, offset, SEEK_SET) ;
 
-          if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+          //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
           ret = filesystem_write(fd, buffer, size) ;
           debug_info("write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret);
 
           if (ret < 0) {
             filesystem_close(fd);
             debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
-            if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+            //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
             return -1;
           }
           filesystem_close(fd);
-          if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+          //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
         }
         /************** SERVER ****************/
@@ -1331,9 +1331,9 @@
           if(server_aux->params.locality)
           {
             if (fh_aux != NULL) {
-              if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+              //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
               ret = filesystem_close(fh_aux->fd) ;
-              if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+              //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
             }
           }
           /************** SERVER ****************/
