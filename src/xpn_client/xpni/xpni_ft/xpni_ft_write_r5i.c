@@ -22,8 +22,8 @@
 
         /* debugging */
         #if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_ft_swrite_r5i(%d,%p,%d,%d); \n",
-                   __FILE__,__LINE__,fd,buffer,(int)offset,size);
+            printf("[%s:%d] xpni_ft_swrite_r5i(%d,%p,%lu,%lu); \n",
+                   __FILE__,__LINE__,fd,buffer,(unsigned long)offset,(unsigned long)size);
         #endif
 
         /* check params */
@@ -49,8 +49,8 @@
 			default:
                              ret = (-1);
 #if defined(XPNI_DEBUG)
-                             printf("[%s:%d] xpni_ft_swrite_r5i(%d,%p,%d,%d): %d fail(s)\n",
-                                    __FILE__,__LINE__,fd,buffer,(int)offset,size,fmeta_nerrors);
+                             printf("[%s:%d] xpni_ft_swrite_r5i(%d,%p,%lu,%lu): %d fail(s)\n",
+                                    __FILE__,__LINE__,fd,buffer,(unsigned long)offset,(unsigned long)size,fmeta_nerrors);
 #endif
 			     break;
 		}
@@ -60,8 +60,8 @@
 	{
             ret = (-1);
 #if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_ft_swrite_r5i(%d,%p,%d,%d): Unknow file system tag: '%s' (not %s or %s)\n",
-                   __FILE__,__LINE__,fd,buffer,(int)offset,size,
+            printf("[%s:%d] xpni_ft_swrite_r5i(%d,%p,%lu,%lu): Unknow file system tag: '%s' (not %s or %s)\n",
+                   __FILE__,__LINE__,fd,buffer,(unsigned long)offset,(unsigned long)size,
 		   fmeta_fsTag,FS_TAG_RAID5INNER,FS_TAG_RAID5OUTER);
 #endif
 	}

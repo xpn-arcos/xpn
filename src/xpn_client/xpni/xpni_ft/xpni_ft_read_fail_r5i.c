@@ -49,8 +49,7 @@
 
         /* debugging */
         #if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_ft_sread_r5i(%d,%p,%d,%d); \n",
-                   __FILE__,__LINE__,fd,buffer,(int)offset,size);
+            printf("[%s:%d] xpni_ft_sread_r5i(%d,%p,%d,%lu); \n", __FILE__,__LINE__,fd,buffer,(int)offset,(unsigned long)size);
         #endif
 
 

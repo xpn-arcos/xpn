@@ -146,18 +146,18 @@ int tcp_server_d2xpn ( char *origen, char *destino, int opt )
   struct timeval t1, t2;
 
 
-  if (opt < 0) {
-#ifdef DBG_XPN
-      printf("d2xpn(%d): warning opt is %d\n",  private_id, opt);
-#endif
-  }
-
 	//pthread_mutex_lock(&mutex_id);
 #ifdef DBG_XPN
         private_id = static_id++;
 #endif
 	//pthread_mutex_unlock(&mutex_id);
 	
+
+  if (opt < 0) {
+#ifdef DBG_XPN
+      printf("d2xpn(%d): warning opt is %d\n",  private_id, opt);
+#endif
+  }
 
 #ifdef DBG_XPN
 	printf("d2xpn(%d): Origen: %s\n",  private_id, origen);

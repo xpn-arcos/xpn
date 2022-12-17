@@ -24,8 +24,8 @@
 
         /* debugging */
 	#if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_log_swrite(%d,%p,%d,%d); \n",
-                   __FILE__,__LINE__,fd,buffer,(int)offset,size);
+            printf("[%s:%d] xpni_log_swrite(%d,%p,%lu,%lu); \n",
+                   __FILE__,__LINE__,fd,buffer,(unsigned long)offset,(unsigned long)size);
 	#endif
 
         /* passthru... */

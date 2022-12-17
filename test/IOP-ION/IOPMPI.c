@@ -250,6 +250,7 @@ static void ForwReading
 
         memset(bufl, 'a', lb);
         ret = -1;
+	count = 0;
 #ifdef XPN
 	if ( (count = xpn_read(f, bufl, lb)) != lb )
 #elif MPI

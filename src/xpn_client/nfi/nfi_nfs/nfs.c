@@ -9,10 +9,10 @@ void printfh(fhandle fh)
 	printf("FH: ");
 	for(j=0;j<31;j++){
 		i = fh[j]+256;
-		printf("%d:",i%256);
+		printf("%u:", (unsigned int)(i%256));
 	}
 	i = fh[31]+256;
-	printf("%d",i%256);
+	printf("%u",i%256);
 	printf("\n");
 }
 
@@ -168,10 +168,13 @@ void close_connection_mount(CLIENT *cl)
 {
   /* elimino la autenticacion */
   auth_destroy(cl->cl_auth);
+
   /* elimino la estructura */
   clnt_destroy(cl);
+
   /* la inicializo */
-  cl=NULL;
+  // cl=NULL; // <- for that you need CLIENT **cl and *cl=NULL...
+
 #ifdef DEBUG_MNT
   printf("Close connection MNT\n");
 #endif
@@ -450,10 +453,13 @@ void close_connection_nfs(CLIENT *cl)
 {
   /* elimino la autenticacion */
   auth_destroy(cl->cl_auth);
+
   /* elimino la estructura */
   clnt_destroy(cl);
+
   /* la inicializo */
-  cl=NULL;
+  //cl=NULL; <- for that, CLIENT **cl and *cl=NULL
+
 #ifdef DEBUG_NFS
   printf("Close connection NFS\n");
 #endif

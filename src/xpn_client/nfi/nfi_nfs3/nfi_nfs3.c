@@ -222,7 +222,6 @@ int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)
 		return -1;
 	}
 	if((strcmp(prt, "nfs3hilos") == 0)  ||
-	   (strcmp(prt, "nfs3hilos") == 0) ||
 	   (strcmp(prt, "nfs3udphilos") == 0) ||	   
 	   (strcmp(prt, "nfs3tcphilos") == 0)){
 #if defined(DEBUG_NFI)

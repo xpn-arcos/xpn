@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 #ifdef DEBUG
 	printf("xpndest=%d, isxpn=%d\n", xpndest, isxpn);
 	printf("dest = '%s'\n", dest);
-	printf("buffer_size = %lu\n", buffer_size);
+	printf("buffer_size = %lu\n", (unsigned long)buffer_size);
 #endif
 	if (isxpn) {
 		ret = xpn_init();
@@ -104,14 +104,14 @@ int main(int argc, char *argv[])
 		nr = fread(buffer, sizeof(char), buffer_size, stdin);
 		
 #ifdef DEBUG
-		printf("Escribiendo un bloque de %d bytes\n", nr);
+		printf("Escribiendo un bloque de %lu bytes\n", (unsigned long)nr);
 #endif
 		if (xpndest)
 			ret = xpn_write(fdd, buffer, nr);
 		else
 			ret = write(fdd, buffer, nr);
 #ifdef DEBUG
-		printf("Escrito un bloque de %d bytes\n", nr);
+		printf("Escrito un bloque de %lu bytes\n", (unsigned long)nr);
 #endif
 	} while (nr>0);
 	

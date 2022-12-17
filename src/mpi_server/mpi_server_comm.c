@@ -242,7 +242,7 @@
         return -1;
     }
     if (NULL == params) {
-        debug_warning("Server[%d]: NULL params", params->rank) ;
+        debug_warning("Server[?]: NULL params") ;
         return -1;
     }
 
