@@ -128,8 +128,8 @@ EOF1
 
 #
 gnuplot < 2_draw.gp 
-rm -fr *.data
-rm -fr *.gp
+rm -fr ./*.data
+rm -fr ./*.gp
 
 #
 ##kghostview $EPS_NAME &

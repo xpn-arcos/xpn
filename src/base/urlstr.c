@@ -119,7 +119,7 @@
                   (*str) = (*str) + STRING_MISC_StrLen((*str)) ;
                   return (1) ;
                 }
-             if (pch1 != NULL)
+	     else // if (pch1 != NULL)
                 {
                   pch1[0] = '\0' ;
                   (*machine) = STRING_MISC_StrDup((*str)) ;
@@ -186,7 +186,7 @@
              (*str)  = (*str) + STRING_MISC_StrLen((*str)) ;
              return (1) ;
            }
-        if (pch2 != NULL)
+	else // if (pch2 != NULL)
            {
              pch2[0] = '\0' ;
              (*port) = htons(atoi(pch1)) ;

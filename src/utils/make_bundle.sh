@@ -5,7 +5,7 @@ if [ $# -ge 1 ]
 then
 	FILES=$@
 else
-	FILES=$(/bin/ls -1 *.c | sed s/.c$//g)
+	FILES=$(/bin/ls -1 ./*.c | sed s/.c$//g)
 fi
 
 echo "Making bundle of $FILES"
