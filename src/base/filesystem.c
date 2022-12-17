@@ -74,14 +74,15 @@
       int cont=-1;
       char new_path[MAXPATHLEN];
 
-      strcpy(new_path, path);
+      if (path == NULL) {
+          return 0;
+      }
 
+      strcpy(new_path, path);
       path = new_path;
+
       aux_clear_dirs(path);
       s[0] = '\0';
-      if (path == NULL) {
-        return 0;
-      }
 
       for (i=0; i<strlen(path) && cont<(n+1); i++)
       {
