@@ -318,9 +318,10 @@ printf("_IO_backup_base=%p\n", f->_IO_backup_base);
 printf("_IO_save_end=%p\n", f->_IO_save_end);
 */
 	buf2 = malloc(64*1024);
+	setbuffer(f, buf2, 64*1024);
+
 /*
 printf("buf2=%p, %d\n", buf2, 64*1024);
-	//setbuffer(f, buf2, 64*1024);
 printf("_IO_read_ptr=%p\n", f->_IO_read_ptr);
 printf("_IO_read_end=%p\n", f->_IO_read_end);
 printf("_IO_read_base=%p\n", f->_IO_read_base);

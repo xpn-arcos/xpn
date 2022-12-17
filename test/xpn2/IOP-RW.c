@@ -370,7 +370,7 @@ static void PrintResult
 	time_in_sec = (float)timet->tv_sec + (float)timet->tv_usec/USECPSEC ;
 
         sprintf(str,
-    	        "%10s\t%3s\t%3s\t%8s\n", 
+    	        "%10s\t%8p\t%3s\t%8s\n", 
 	        dir, comm_size, comm_rank, time_in_sec);
         printf(str);
 #endif

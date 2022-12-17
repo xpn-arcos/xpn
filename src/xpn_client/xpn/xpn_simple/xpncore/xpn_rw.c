@@ -244,8 +244,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 			  &servers,
 			  XPN_DATA_SERVER);
 	if(n<=0){
-		if (servers != NULL)
-			free(servers);
+		if (servers != NULL) free(servers);
 
 		res = -1;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
@@ -254,7 +253,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 	
 	io = (struct nfi_worker_io **)malloc(sizeof(struct nfi_worker_io *)*n);
 	if(io == NULL){
-		free(servers);
+		if (servers != NULL) free(servers);
 
 		res = -1;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
@@ -263,8 +262,8 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 	
 	ion = (int *)malloc(sizeof(int)*n);
 	if(ion == NULL){
+		if (servers != NULL) free(servers);
 		free(io);
-		free(servers);
 
 		res = -1;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
@@ -283,7 +282,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 	for(i=0; i<n; i++){
 		io[i] = (struct nfi_worker_io *)malloc(sizeof(struct nfi_worker_io)*max);
 		if(io[i] == NULL){
-			free(servers);
+		        if (servers != NULL) free(servers);
 			for(j=0;j<i;j++){
 				free(io[j]);
 			}
@@ -304,7 +303,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 	// Calculate which blocks to read from each server
 	new_buffer = XpnReadBlocks(fd, buffer, size, offset, &io, &ion, n);
 	if(new_buffer == NULL){
-		free(servers);
+		if (servers != NULL) free(servers);
 		for(i=0;i<n;i++){
 			free(io[i]);
 		}
@@ -328,7 +327,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 					servers[i],
 					xpn_file_table[fd]->path);
 			if(res<0){
-				free(servers);
+		                if (servers != NULL) free(servers);
 				for(i=0;i<n;i++){
 					free(io[i]);
 				}
@@ -352,7 +351,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 	
 	res_v = (ssize_t *)malloc(sizeof(ssize_t)*n);
 	if(res_v == NULL){
-		free(servers);
+		if (servers != NULL) free(servers);
 		for(j=0;j<n;j++){
 			free(io[j]);
 		}
@@ -385,7 +384,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 			xpn_file_table[fd]->offset += total;
 	}
 
-	free(servers);
+	if (servers != NULL) free(servers);
 	for(j=0;j<n;j++){
 		free(io[j]);
 	}
