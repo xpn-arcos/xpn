@@ -453,10 +453,13 @@ void close_connection_nfs(CLIENT *cl)
 {
   /* elimino la autenticacion */
   auth_destroy(cl->cl_auth);
+
   /* elimino la estructura */
   clnt_destroy(cl);
+
   /* la inicializo */
-  cl=NULL;
+  //cl=NULL; <- for that, CLIENT **cl and *cl=NULL
+
 #ifdef DEBUG_NFS
   printf("Close connection NFS\n");
 #endif

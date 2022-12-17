@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 		else
 			ret = write(fdd, buffer, nr);
 #ifdef DEBUG
-		printf("Escrito un bloque de %d bytes\n", nr);
+		printf("Escrito un bloque de %lu bytes\n", (unsigned long)nr);
 #endif
 	} while (nr>0);
 	

@@ -340,7 +340,7 @@ ssize_t tcp_server_write_data(int fd, char *data, ssize_t size, char *id){
 
 	
 #ifdef DBG_COMM
-	printf("[NFI_COMM]client: write_data(%d): %d ID=%s --th:%d--\n",fd,size,id,(int)pthread_self());
+	printf("[NFI_COMM]client: write_data(%d): %lu ID=%s --th:%d--\n", fd, (unsigned long)size, id, (int)pthread_self());
 #endif
 
 	if(size == 0){
