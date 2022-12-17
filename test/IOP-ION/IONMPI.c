@@ -254,8 +254,9 @@ static void TakeSample
     //if (( f=xpn_open(fname,O_CREAT|O_RDWR,0777)) < 0)
 
    /* lo abren todos */
-   if(type == 0){
-    
+   if (type == 0)
+   {
+        f = -1; 
     	//printf ("antes del open -*%s*-",fname); 
 #ifdef XPN
 	if (( f=xpn_open(fname,O_CREAT|O_RDWR,0777)) < 0)

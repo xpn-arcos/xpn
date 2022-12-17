@@ -47,9 +47,9 @@ BEGIN {
 EOF2
 
 #
-FIRST_LINE=`cat $DAT_NAME | head -1`
+FIRST_LINE=$(cat $DAT_NAME | head -1)
 cat $DAT_NAME | grep -v "$FIRST_LINE" | awk -f 2_avg.awk > 0.data
-rm -fr *.awk
+rm -fr ./*.awk
 
 #
 grep raid5outer 0.data | awk '{ print $'$COL1'" "$'$COL2' }' > 1.data
@@ -83,17 +83,17 @@ N=1
 L=0
 NL=`wc -l i.data | awk '{print $1}'`
 XTICS="set xtics ( "
-while [ $N -le $NL ]; do
+while [ "$N" -le "$NL" ]; do
 
        IX=`head -$N i.data | tail -1`
        XTICS=$XTICS"\"$IX\" $L"
 
-       N=`expr $N + 1`
-       if [ $N -le $NL ]; then
+       N=$(expr $N + 1)
+       if [ "$N" -le "$NL" ]; then
            XTICS=$XTICS", "
        fi
 
-       L=`expr $L + 1`
+       L=$(expr $L + 1)
 
 done
 XTICS=$XTICS" )"

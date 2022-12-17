@@ -19,14 +19,14 @@ for X in $TYPE; do
 		for I in $PATOS; do
 			for J in $LBUF; do
 				$DIR/sync.sh
-				$DIR/lanza.sh IONW /PNFS $J $I xpn.$Y.$X.conf
+				$DIR/lanza.sh IONW /PNFS "$J" "$I" xpn.$Y.$X.conf
 				#sleep 5
 			done
 			$DIR/sync.sh 
 			#sleep 10
 			for J in $LBUF; do
 				$DIR/sync.sh
-				$DIR/lanza.sh IONR /PNFS $J $I xpn.$Y.$X.conf
+				$DIR/lanza.sh IONR /PNFS "$J" "$I" xpn.$Y.$X.conf
 				#sleep 5
 			done
 			$DIR/delete.sh
@@ -56,14 +56,14 @@ for X in $TYPE; do
 		for I in $PATOS; do
 			for J in $LBUF; do
 				$DIR/sync.sh
-				$DIR/lanza.sh IONW /PNFS $J $I xpn.$Y.$X.conf
+				$DIR/lanza.sh IONW /PNFS "$J" "$I" xpn.$Y.$X.conf
 				#sleep 5
 			done
 			$DIR/sync.sh 
 			#sleep 10
 			for J in $LBUF; do
 				$DIR/sync.sh
-				$DIR/lanza.sh IONR /PNFS $J $I xpn.$Y.$X.conf
+				$DIR/lanza.sh IONR /PNFS "$J" "$I" xpn.$Y.$X.conf
 				#sleep 5
 			done
 			$DIR/delete.sh
@@ -91,14 +91,14 @@ for X in $TYPE; do
 		for I in $PATOS; do
 			for J in $LBUF; do
 				$DIR/sync.sh
-				$DIR/lanza.sh IONW /PNFS $J $I xpn.3.$Y.$X.conf
+				$DIR/lanza.sh IONW /PNFS "$J" "$I" xpn.3.$Y.$X.conf
 				#sleep 5
 			done
 			$DIR/sync.sh 
 			#sleep 10
 			for J in $LBUF; do
 				$DIR/sync.sh
-				$DIR/lanza.sh IONR /PNFS $J $I xpn.3.$Y.$X.conf
+				$DIR/lanza.sh IONR /PNFS "$J" "$I" xpn.3.$Y.$X.conf
 				#sleep 5
 			done
 			$DIR/delete.sh
@@ -120,14 +120,14 @@ $DIR/sync.sh
 for I in $PATOS; do
 	for J in $LBUF; do
 		$DIR/sync.sh
-		$DIR/lanza1.sh IONsW /export/temp/pato23/ $J $I tcp
+		$DIR/lanza1.sh IONsW /export/temp/pato23/ "$J" "$I" tcp
 		#sleep 5
 	done
 	$DIR/sync.sh 
 	#sleep 10
 	for J in $LBUF; do
 		$DIR/sync.sh
-		$DIR/lanza1.sh IONsR /export/temp/pato23/ $J $I tcp
+		$DIR/lanza1.sh IONsR /export/temp/pato23/ "$J" "$I" tcp
 		#sleep 5
 	done
 	$DIR/delete.sh
@@ -143,15 +143,16 @@ $DIR/sync.sh
 for I in $PATOS; do
 	for J in $LBUF; do
 		$DIR/sync.sh
-		$DIR/lanza1.sh IONsW /export/temp/pato23/ $J $I udp
+		$DIR/lanza1.sh IONsW /export/temp/pato23/ "$J" "$I" udp
 		#sleep 5
 	done
 	$DIR/sync.sh 
 	#sleep 10
 	for J in $LBUF; do
 		$DIR/sync.sh
-		$DIR/lanza1.sh IONsR /export/temp/pato23/ $J $I udp
+		$DIR/lanza1.sh IONsR /export/temp/pato23/ "$J" "$I" udp
 		#sleep 5
 	done
 	$DIR/delete.sh
 done
+

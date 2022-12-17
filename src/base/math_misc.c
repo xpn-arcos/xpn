@@ -93,7 +93,7 @@
       	 */
       	if (i < 0)
       		return (-1);
-      	if (m < 0)
+      	if (m < 2)
       		return (-1);
       
 
