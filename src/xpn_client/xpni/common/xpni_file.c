@@ -35,7 +35,7 @@
         /* Debugging */
 	#if defined(XPNI_DEBUG)
             printf("[%s:%d] xpni_file_initByName(%p,%s); \n",
-                   __FILE__,__LINE__,fmeta,fname);
+                   __FILE__,__LINE__,fmeta,fname ? fname : "NULL");
 	#endif
 
 	/* Check params */

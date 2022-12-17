@@ -22,8 +22,8 @@
 
         /* debugging */
         #if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_ft_swrite(%d,%p,%d,%d); \n",
-                   __FILE__,__LINE__,fd,buffer,(int)offset,size);
+            printf("[%s:%d] xpni_ft_swrite(%d,%p,%d,%lu); \n",
+                   __FILE__,__LINE__,fd,buffer,(int)offset,(unsigned long)size);
         #endif
 
         /* check params */
@@ -50,8 +50,8 @@
 			default:
                              ret = (-1);
 #if defined(XPNI_DEBUG)
-                             printf("[%s:%d] xpni_ft_swrite(%d,%p,%d,%d): %d fail(s)\n",
-                                    __FILE__,__LINE__,fd,buffer,(int)offset,size,fmeta_nerrors);
+                             printf("[%s:%d] xpni_ft_swrite(%d,%p,%d,%lu): %d fail(s)\n",
+                                    __FILE__,__LINE__,fd,buffer,(int)offset,(unsigned long)size,fmeta_nerrors);
 #endif
 			     break;
 		}
@@ -73,8 +73,8 @@
 			default:
                              ret = (-1);
 #if defined(XPNI_DEBUG)
-                             printf("[%s:%d] xpni_ft_swrite(%d,%p,%d,%d): %d fail(s)\n",
-                                    __FILE__,__LINE__,fd,buffer,(int)offset,size,fmeta_nerrors);
+                             printf("[%s:%d] xpni_ft_swrite(%d,%p,%d,%lu): %d fail(s)\n",
+                                    __FILE__,__LINE__,fd,buffer,(int)offset,(unsigned long)size,fmeta_nerrors);
 #endif
 			     break;
 		}

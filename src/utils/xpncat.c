@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 #ifdef DEBUG
 	printf("xpnsource=%d, isxpn=%d\n", xpnsource, isxpn);
 	printf("source = '%s'\n", source);
-	printf("buffer_size = %u\n", buffer_size);
+	printf("buffer_size = %lu\n", (unsigned long)buffer_size);
 #endif
 
 	if (isxpn) {
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 		if (st.st_size-sum < (ssize_t)buffer_size)
 			buffer_size = st.st_size-sum;
 #ifdef DEBUG
-		printf("Leyendo un bloque de %ld bytes\n", buffer_size);
+		printf("Leyendo un bloque de %lu bytes\n", (unsigned long)buffer_size);
 #endif
 
 		if (xpnsource)
