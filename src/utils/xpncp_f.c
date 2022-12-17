@@ -465,8 +465,10 @@ int main(int argc, char *argv[]) {
 		if (st.st_size-sum < (ssize_t)buffer_size)
 			buffer_size = st.st_size-sum;
 
-		if (debug)
-			printf("Copying a block of %zu bytes\n", buffer_size);
+		if (debug) {
+			// printf("Copying a block of %zu bytes\n", buffer_size);
+			   printf("Copying a block of %lu bytes\n", (unsigned long)buffer_size);
+		}
 		
 		if (xpnsource) {
 			if (do_prefetch)
@@ -474,10 +476,12 @@ int main(int argc, char *argv[]) {
 			else
 				nr = xpn_fread(buffer, 1, buffer_size, fds);
 		} else
-			nr = fread(buffer, 1, buffer_size, fds);
+			        nr = fread(buffer, 1, buffer_size, fds);
 
-		if (debug)
-			printf("Read a block of %zu bytes\n", nr);
+		if (debug) {
+			// printf("Read a block of %zu bytes\n", nr);
+			   printf("Read a block of %lu bytes\n", (unsigned long)nr);
+		}
 
 		if (do_processing)
 			usleep(processing_time);
@@ -490,10 +494,13 @@ int main(int argc, char *argv[]) {
 		else
 			nw = nr;
 
-		if (debug)
-			printf("Written a block of %zu bytes\n", nw);
+		if (debug) {
+			// printf("Written a block of %zu bytes\n", nw);
+			   printf("Written a block of %lu bytes\n", (unsigned long)nw);
+		}
 		
 		sum = sum + nw;
+
 	} while ((nr==(ssize_t)buffer_size) && (nw > 0));
 	
 	if (xpnsource)

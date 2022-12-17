@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 		nr = fread(buffer, sizeof(char), buffer_size, stdin);
 		
 #ifdef DEBUG
-		printf("Escribiendo un bloque de %d bytes\n", nr);
+		printf("Escribiendo un bloque de %lu bytes\n", (unsigned long)nr);
 #endif
 		if (xpndest)
 			ret = xpn_write(fdd, buffer, nr);

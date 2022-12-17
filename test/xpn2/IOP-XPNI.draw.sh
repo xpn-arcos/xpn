@@ -81,11 +81,11 @@ rm -fr 2_draw.sed
 
 N=1
 L=0
-NL=`wc -l i.data | awk '{print $1}'`
+NL=$(wc -l i.data | awk '{print $1}')
 XTICS="set xtics ( "
 while [ "$N" -le "$NL" ]; do
 
-       IX=`head -$N i.data | tail -1`
+       IX=$(head -$N i.data | tail -1)
        XTICS=$XTICS"\"$IX\" $L"
 
        N=$(expr $N + 1)

@@ -154,7 +154,7 @@ void *write_func(void *func_args)
 		next++;
 
 		if (debug)
-			printf("Written a block of %lu bytes\n", sum_w);
+			printf("Written a block of %lu bytes\n", (unsigned long)sum_w);
 	}
 
 	pthread_exit(0);
