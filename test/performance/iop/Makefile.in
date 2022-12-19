@@ -1,5 +1,6 @@
 
- CC            	= /opt/mpich/bin/mpicc
+ CC             = @CC@
+#CC             = /opt/mpich/bin/mpicc
  CFLAGS	       	= -g -Wall -DHAVE_CONFIG_H
  SOURCE_PATH   	= .
  INCLUDE_PATH	= -I../../../include/base -I../../../include/xpn_client -I../../../include/
