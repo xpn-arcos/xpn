@@ -16,13 +16,13 @@ void printfh3(char *s, fhandle3 *fh){
         printf("%s ",s);
         for(j=0;j<FHSIZE3-1;j++){
                 i = fh->fhandle3_val[j]+256;
-                printf("%u:",i%256);
+                printf("i%256: %u",i%256);
 		//if (j==FHSIZE3/2){
         	//	printf("\n");
 		//}
         }
         i = fh->fhandle3_val[FHSIZE3-1]+256;
-        printf("%d",i%256);
+        printf("i%256: %u", i%256);
         printf("\n");
 
   return;
@@ -144,17 +144,22 @@ CLIENT* create_connection_mount3(char *name, int type)
 void close_connection_mount3(CLIENT *cl)
 {
   /* elimino la autenticacion */
-	//printf("1 cl->cl_auth = %p\n",cl->cl_auth);
-	//printf("1 cl = %p\n",cl);
-  if(!cl){
-  	if(!cl->cl_auth){
-  		auth_destroy(cl->cl_auth);
+  //printf("1 cl->cl_auth = %p\n",cl->cl_auth);
+  //printf("1 cl = %p\n",cl);
+
+  if (!cl)
+  {
+  	if (!cl->cl_auth){
+  	    auth_destroy(cl->cl_auth);
   	}
+
   	/* elimino la estructura */
   	clnt_destroy(cl);
   }
+
   /* la inicializo */
-  cl=NULL;
+  // cl=NULL; // <- for that you need CLIENT **cl and *cl=NULL...
+
 #ifdef DEBUG_MNT
   printf("Close connection MNT3\n");
 #endif
@@ -443,14 +448,18 @@ void close_connection_nfs3(CLIENT *cl)
 {
   /* elimino la autenticacion */
   if(!cl){
+
   	if(!cl->cl_auth){
   		auth_destroy(cl->cl_auth);
 	}
+
   	/* elimino la estructura */
   	clnt_destroy(cl);
   }
+
   /* la inicializo */
-  cl=NULL;
+  // cl=NULL; <- for that, CLIENT **cl and *cl=NULL
+
 #ifdef DEBUG_NFS
   printf("Close connection NFS\n");
 #endif

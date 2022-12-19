@@ -260,8 +260,9 @@ static void PrintResult(int cid, int lb, struct timeval *timet, float trw, float
 
 static void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr, float med_br)
 {
-  int n_users;
+    int n_users;
 
+    n_users = 1;
     printf("==================================================\n");
     sprintf(str, "Bandwidth. (Write):  %f MB/s \n",med_w/n);
     printf(str);

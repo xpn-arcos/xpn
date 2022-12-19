@@ -18,8 +18,8 @@
 
         /* debugging */
 	#if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_null_sread(%d,%p,%d,%lu); \n",
-                   __FILE__,__LINE__,fd,buffer,(int)offset,size);
+            printf("[%s:%d] xpni_null_sread(%d,%p,%lu,%lu); \n",
+                   __FILE__,__LINE__,fd,buffer,(unsigned long)offset,(unsigned long)size);
 	#endif
 
 	return xpni_lowfsi_pread(xpni_fit_get_XPN_DATA_FD(fd),

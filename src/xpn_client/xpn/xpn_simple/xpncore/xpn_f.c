@@ -416,7 +416,7 @@ switch(whence){
 		fprintf(stderr, "Calling xpn_fseek(%d, %lu, SEEK_END)\n", stream->_fileno, offset);
 		break;
 	default:
-		fprintf(stderr, "Calling xpn_fseek(%d, %lu, %d)\n", stream->_fileno, offset, whence);
+		fprintf(stderr, "Calling xpn_fseek(%d, %lu, %d)\n", stream->_fileno, (unsigned long)offset, whence);
 		break;
 }
 	off = stream->_IO_write_ptr;

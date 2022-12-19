@@ -51,8 +51,8 @@
 
         /* debugging */
         #if defined(XPNI_DEBUG)
-            printf("[%s:%d] xpni_ft_swrite_nofail_r5i(%d,%p,%d,%d); \n",
-                   __FILE__,__LINE__,fd,buffer,(int)offset,size);
+            printf("[%s:%d] xpni_ft_swrite_nofail_r5i(%d,%p,%lu,%lu); \n",
+                   __FILE__,__LINE__,fd,buffer,(unsigned long)offset,(unsigned long)size);
         #endif
 
 

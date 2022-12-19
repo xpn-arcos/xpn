@@ -26,7 +26,7 @@ while [ $i -le $NUM_ITER ]
 do
 	rm -f t.txt
 	/usr/bin/time -f "%e" -o t.txt globusrun-ws -submit -F gridimadrid.ciemat.es -J -S -f cp_expand_4KB.xml
-	T=`cat t.txt`
+	T=$(cat t.txt)
 	SUM="$SUM + $T"
 	let "i+=1"
 done
@@ -40,7 +40,7 @@ while [ $i -le $NUM_ITER ]
 do
 	rm -f t.txt
 	/usr/bin/time -f "%e" -o t.txt globusrun-ws -submit -F gridimadrid.ciemat.es -J -S -f cp_expand_64KB.xml
-	T=`cat t.txt`
+	T=$(cat t.txt)
 	SUM="$SUM + $T"
 	let "i+=1"
 done
@@ -54,7 +54,7 @@ while [ $i -le $NUM_ITER ]
 do
 	rm -f t.txt
 	/usr/bin/time -f "%e" -o t.txt globusrun-ws -submit -F gridimadrid.ciemat.es -J -S -f cp_expand_256KB.xml
-	T=`cat t.txt`
+	T=$(cat t.txt)
 	SUM="$SUM + $T"
 	let "i+=1"
 done
@@ -62,3 +62,4 @@ echo "($SUM)/$NUM_ITER" >> tiempos.txt
 
 echo ""
 cat tiempos.txt
+

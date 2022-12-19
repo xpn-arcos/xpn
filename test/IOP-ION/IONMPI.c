@@ -11,7 +11,7 @@
 
 
 #define USECPSEC 1000000
-#define LFNAME 128 
+#define LFNAME 128
 #define KB 1024
 #define MB (KB*KB)
 
@@ -24,7 +24,7 @@
 
 #define TASA_TRANSF(t) (t)
 
-char *  TAKE_SAMPLE_DIR; 
+char *  TAKE_SAMPLE_DIR;
 char buffer_basura[512*KB];
 char buffer_esc[LBUFMAX];
 //char *buffer_esc;
@@ -49,14 +49,14 @@ static int GetCheckArgs(int argc, char **argv, char *dir, int *cid, int *ncid)
 {
     if (argc==2)
     {
-       strcpy(dir,argv[1]); 
+       strcpy(dir,argv[1]);
        (*cid)=0;
        (*ncid)=1;
        return(1);
     }
     else if (argc==4)
     {
-       strcpy(dir,argv[1]); 
+       strcpy(dir,argv[1]);
        (*cid)=atoi(argv[2]);
        (*ncid)=atoi(argv[3]);
        return(1);
@@ -73,7 +73,7 @@ static int GetCheckArgs(int argc, char **argv, char *dir, int *cid, int *ncid)
 static void ForwWriting
 (
 	int cid, int ncid,
-	int f, int lb, char *buf, 
+	int f, int lb, char *buf,
 	double *tim
 )
 {
@@ -88,7 +88,7 @@ static void ForwWriting
     iter= TAMFILE/lb;
     iter= iter/ncid;
 	//printf("iter = %d ncid = %d\n",iter, ncid);
-    //Timer(&ti); 
+    //Timer(&ti);
 	ti = MPI_Wtime();
     for ( ; iter>0; iter--)
     {
@@ -117,11 +117,11 @@ static void ForwWriting
        }
 
 //	   printf("%d> write off %d size %d \n",cid,offset,lb);
-       offset = offset + ncid*lb; 
-       //offset = offset + lb; 
+       offset = offset + ncid*lb;
+       //offset = offset + lb;
 
     }
-    //Timer(&tf); 
+    //Timer(&tf);
 	tf = MPI_Wtime();
     //DiffTime(&ti, &tf, tim);
 	*tim = tf - ti;
@@ -133,8 +133,8 @@ static void ForwWriting
  */
 static void ForwReading
 (
-	int cid, int ncid, 
-	int f, int lb, char *bufl, char *bufe, 
+	int cid, int ncid,
+	int f, int lb, char *bufl, char *bufe,
 	double *tim
 )
 {
@@ -148,7 +148,7 @@ static void ForwReading
     iter= TAMFILE/lb;
     iter= iter/ncid;
 
-    //Timer(&ti);   
+    //Timer(&ti);
 	ti = MPI_Wtime();
     for ( ; iter>0; iter--)
     {
@@ -163,6 +163,7 @@ static void ForwReading
 #endif
         memset(bufl, 'a', lb);
 
+        count = 0;
 #ifdef XPN
 	if ( (count = xpn_read(f, bufl, lb)) != lb )
 #elif MPI
@@ -185,15 +186,15 @@ static void ForwReading
 	*tim = tf - ti;
 }
 
-/* 
+/*
  * This function is similar to ForwReading, but here the reads are
  * beginning in the end of the file.
  */
   /*
 static void BackwReading
 (
-	int cid, int ncid, 
-	int f, int lb, char *bufl, char *bufe, 
+	int cid, int ncid,
+	int f, int lb, char *bufl, char *bufe,
 	double *tim
 )
 {
@@ -204,7 +205,7 @@ static void BackwReading
     offset=TAMFILE;
     iter= TAMFILE/lb;
 
-    Timer(&ti);   
+    Timer(&ti);
 
     for(;iter>0;iter--){
 
@@ -222,21 +223,21 @@ static void BackwReading
        }
     }
 
-    Timer(&tf);   
+    Timer(&tf);
     DiffTime(&ti, &tf, tim);
 }
 */
 
-/* 
- * This function creats a new file, and is performanced a Writing, 
+/*
+ * This function creats a new file, and is performanced a Writing,
  * ForwReading and BackReading function.
  */
 static void TakeSample
 (
 	int cid, int ncid,
-	int lbuf, char *dir, 
-	double *timew, 
-	double *timefr, 
+	int lbuf, char *dir,
+	double *timew,
+	double *timefr,
 	double *timebr,
 	int type
 )
@@ -247,16 +248,17 @@ static void TakeSample
 
     dir=TAKE_SAMPLE_DIR;
 	
-    //sprintf (fname, "xpn:/%s/%s.%d.%d.%d", dir, "ION", ncid, cid, lbuf); 
-    //sprintf (fname, "xpn:/%s/%s.%d.%d", dir, "ION", ncid, lbuf); 
-    
-	sprintf (fname, "%s/%s.%d.%d", dir, "ION", ncid, lbuf); 
+    //sprintf (fname, "xpn:/%s/%s.%d.%d.%d", dir, "ION", ncid, cid, lbuf);
+    //sprintf (fname, "xpn:/%s/%s.%d.%d", dir, "ION", ncid, lbuf);
+
+	sprintf (fname, "%s/%s.%d.%d", dir, "ION", ncid, lbuf);
     //if (( f=xpn_open(fname,O_CREAT|O_RDWR,0777)) < 0)
 
    /* lo abren todos */
-   if(type == 0){
-    
-    	//printf ("antes del open -*%s*-",fname); 
+   if (type == 0)
+   {
+        f = -1;
+    	//printf ("antes del open -*%s*-",fname);
 #ifdef XPN
 	if (( f=xpn_open(fname,O_CREAT|O_RDWR,0777)) < 0)
 #elif MPI
@@ -271,27 +273,29 @@ static void TakeSample
     	}
     	printf("%d > creo %s\n", cid, fname);
 	    printf("%d > escribiendo %s\n", cid, fname);
-	    ForwWriting(cid, ncid, f, lbuf, buffer_esc, timew);   
+	    ForwWriting(cid, ncid, f, lbuf, buffer_esc, timew);
     	printf("%d > despues de ForwWriting %s\n", cid, fname);
 	    MPI_Barrier(MPI_COMM_WORLD);
     	printf("%d > MPI_Barrier %s\n", cid, fname);
    }
 
-   if(type == 1){
-    printf("%d > antes de open %s\n", cid, fname);
+   if(type == 1)
+   {
+      f=-1;
+      printf("%d > antes de open %s\n", cid, fname);
 #ifdef XPN
-    if (( f=xpn_open(fname,O_RDWR,0777)) < 0)
+      if (( f=xpn_open(fname,O_RDWR,0777)) < 0)
 #elif MPI
-    if (MPI_File_open(MPI_COMM_SELF, fname, MPI_MODE_RDWR,
+      if (MPI_File_open(MPI_COMM_SELF, fname, MPI_MODE_RDWR,
 			                   MPI_INFO_NULL, &fh) <0)
 #else
-    if (( f=open(fname,O_RDWR,0777)) < 0)
+      if (( f=open(fname,O_RDWR,0777)) < 0)
 #endif
-    {
+      {
     	sprintf(str, "IOC.TakeSample: failed to create file %s\n", fname);
     	printf(str);
-    }	
-    printf("%d > open %s\n", cid, fname);
+      }  	
+      printf("%d > open %s\n", cid, fname);
 	printf("%d > leo %s\n", cid, fname);
 	ForwReading(cid, ncid, f, lbuf, buffer_lec, buffer_esc, timefr);
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -349,7 +353,7 @@ static void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr,
     printf(str);
     sprintf(str, "Average Bandwidth:  %f MB/s \n",(med_w+med_fr+med_br)/(3*n));
     printf(str);
-    sprintf(str, "Total time:  %f s. \n\n",((float)ttot->tv_sec + 
+    sprintf(str, "Total time:  %f s. \n\n",((float)ttot->tv_sec +
 		(float)ttot->tv_usec/USECPSEC));
     printf(str);
 
@@ -357,7 +361,7 @@ static void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr,
         n_users * (med_w/n), n_users * (med_fr/n), n_users * (med_br/n),
        n_users * (med_w+med_fr+med_br)/(3*n));
     printf(str);
-    sprintf(str,"T. Time %2.4f \n", ((float)ttot->tv_sec +  
+    sprintf(str,"T. Time %2.4f \n", ((float)ttot->tv_sec +
 		(float)ttot->tv_usec/USECPSEC));
     printf(str);
     sprintf(str, "BW %2.4f; BSR %2.4f; BRR %2.4f;  AVG %2.4f \n",
@@ -372,7 +376,7 @@ int main(int argc, char **argv)
     int lbuf, nit=0;
     double timei, timef, timedif, tini, tfin, tdif;
     char dir[LFNAME];
-    float trw, trfr,  trbr; 
+    float trw, trfr,  trbr;
     float trw_med=0, trfr_med=0,  trbr_med=0;
     double timew, timefr, timebr;
     int ncid, cid;
@@ -382,10 +386,10 @@ int main(int argc, char **argv)
     char **endptr;
 
     ret = MPI_Init(&argc, &argv);
-    
+
     setbuf(stdout, NULL);
     setbuf(stderr, NULL);
-    
+
 	if (ret < 0) {
 	    printf("Error en MPI_Init\n");
 	    exit(0);
@@ -414,7 +418,7 @@ int main(int argc, char **argv)
     printf("PROCESO(%s) %s -  %d de %d \n", argv[0] , processor_name, cid, ncid);
 
     MPI_Barrier(MPI_COMM_WORLD);
-    
+
     lbuf = LBUFMAX;
     //lbuf = LBufMax;
     memset (buffer_esc, '7', LBUFMAX);
@@ -423,7 +427,7 @@ int main(int argc, char **argv)
 
     //Timer(&tini);
     tini = MPI_Wtime();
-    
+
     for ( ; lbuf>=LBUFMIN; lbuf/=2)
     {
       //sleep(2);
@@ -435,18 +439,18 @@ int main(int argc, char **argv)
       timef = MPI_Wtime();
       //DiffTime(&timei, &timef, &timedif);
       timedif = timef - timei;
-      trw=TASA_TRANSF(timew); 
-      trfr=TASA_TRANSF(timefr); 
+      trw=TASA_TRANSF(timew);
+      trfr=TASA_TRANSF(timefr);
       trbr=TASA_TRANSF(timebr);
       trw_med+=trw; trfr_med+=trfr; trbr_med+=trbr;
       PrintResult(cid, lbuf, timedif, trw, trfr, trbr,0);
       nit++;
     }
-    
+
     lbuf = LBUFMAX;
     //lbuf = LBufMax;
     MPI_Barrier(MPI_COMM_WORLD);
-    
+
     for ( ; lbuf>=LBUFMIN; lbuf/=2)
     {
       //sleep(2);
@@ -458,8 +462,8 @@ int main(int argc, char **argv)
       timef = MPI_Wtime();
       //DiffTime(&timei, &timef, &timedif);
       timedif = timef - timei;
-      trw=TASA_TRANSF(timew); 
-      trfr=TASA_TRANSF(timefr); 
+      trw=TASA_TRANSF(timew);
+      trfr=TASA_TRANSF(timefr);
       trbr=TASA_TRANSF(timebr);
       trw_med+=trw; trfr_med+=trfr; trbr_med+=trbr;
       PrintResult(cid, lbuf, timedif, trw, trfr, trbr,1);
@@ -471,7 +475,6 @@ int main(int argc, char **argv)
     MPI_Barrier(MPI_COMM_WORLD);
 
     //PrintSummary(&tdif, nit, trw_med, trfr_med, trbr_med);
-    //
 
 #ifdef XPN
     ret = xpn_destroy();
@@ -481,7 +484,7 @@ int main(int argc, char **argv)
     }
 #endif
 
-    MPI_Finalize(); 
+    MPI_Finalize();
 
     exit(0);
 }

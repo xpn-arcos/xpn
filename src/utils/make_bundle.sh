@@ -5,14 +5,14 @@ if [ $# -ge 1 ]
 then
 	FILES=$@
 else
-	FILES=`/bin/ls -1 *.c | sed s/.c$//g`
+	FILES=$(/bin/ls -1 ./*.c | sed s/.c$//g)
 fi
 
 echo "Making bundle of $FILES"
 
 for f in $FILES
 do
-	if [ ! -f $f ]
+	if [ ! -f "$f" ]
 	then
 		echo "Warning: Binary '$f' does not exist!"
 	fi

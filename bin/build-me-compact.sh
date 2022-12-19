@@ -26,7 +26,7 @@ function usage {
     echo " Usage:"
     echo " $0 <platform>"
     echo " Where:"
-    echo " * platform = mn4 | cte-arm | picasso | tucan | lab21 | generic"
+    echo " * platform = mn4 | cte-arm-fuji | cte-arm-mpich | picasso | tucan | lab21 | generic"
     echo ""
 }
 
@@ -62,18 +62,27 @@ case $1 in
      module load "impi/2017.4"
      ;;
 
-   "cte-arm")
+   "cte-arm-fuji")
      # working path...
      MPICC_PATH=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpifcc
      INSTALL_PATH=$HOME/cte-arm/bin/
 
      # load modules...
      module load fuji
-     #module load gcc openmpi
 
      # patch for cross-compiling
      export    CC=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpifcc
      export MPICC=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpifcc
+     ;;
+
+    "cte-arm-mpich")
+     # working path...
+     MPICC_PATH=/gpfs/home/uc3m15/uc3m15971/cte-arm/bin/mpich/bin/mpicc
+     INSTALL_PATH=$HOME/cte-arm/bin/
+
+     # patch for cross-compiling
+     export    CC=/gpfs/home/uc3m15/uc3m15971/cte-arm/bin/mpich/bin/mpicc
+     export MPICC=/gpfs/home/uc3m15/uc3m15971/cte-arm/bin/mpich/bin/mpicc
      ;;
 
    "picasso")

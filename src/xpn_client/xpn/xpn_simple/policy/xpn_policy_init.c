@@ -206,7 +206,7 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
        		value = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_partition_node,
 							XML_TAG_ATTR_THREADS);
 #ifdef _DBG_					
-					printf("[XPN]XML_TAG_ATTR_THREADS = %s\n", value);
+					printf("[XPN]XML_TAG_ATTR_THREADS = %s\n", value ? value : "NULL");
 #endif
 
 			if(value == NULL){

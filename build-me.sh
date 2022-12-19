@@ -78,7 +78,7 @@ echo "XPN + MXML..."
 
 ## MXML
 MXML_SRC_PATH=$BASE_PATH/../mxml
-if [ -d $MXML_SRC_PATH ]; then
+if [ -d "$MXML_SRC_PATH" ]; then
    echo " * MXML: preparing directories..."
      rm -fr "$INSTALL_PATH/mxml"
    mkdir -p "$INSTALL_PATH/mxml/lib64"
@@ -86,7 +86,7 @@ if [ -d $MXML_SRC_PATH ]; then
 
    echo " * MXML: compiling and installing..."
    pushd .
-   cd $MXML_SRC_PATH
+   cd "$MXML_SRC_PATH"
    ./configure --prefix=$INSTALL_PATH/mxml
    make clean
    make -j 8
@@ -96,7 +96,7 @@ fi
 
 ## XPN
 XPN_SRC_PATH=$BASE_PATH/../xpn
-if [ -d $XPN_SRC_PATH ]; then
+if [ -d "$XPN_SRC_PATH" ]; then
    echo " * XPN: preparing directories..."
      rm -fr "$INSTALL_PATH/xpn"
    mkdir -p "$INSTALL_PATH/xpn/lib64"
@@ -104,7 +104,7 @@ if [ -d $XPN_SRC_PATH ]; then
 
    echo " * XPN: compiling and installing..."
    pushd .
-   cd $XPN_SRC_PATH
+   cd "$XPN_SRC_PATH"
    ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
    ./configure --prefix=$INSTALL_PATH/xpn --enable-tcp_server --enable-mpi_server="$MPICC_PATH"
    make clean

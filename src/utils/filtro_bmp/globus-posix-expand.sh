@@ -37,7 +37,7 @@ while [ $i -le $NUM_ITER ]
 do
 	rm -f t.txt
 	/usr/bin/time -f "%e" -o t.txt globusrun-ws -submit -F gridimadrid.ciemat.es -J -S -f expand/filtro_bmp_expand_4KB.xml
-	T=`cat t.txt`
+	T=$(cat t.txt)
 	echo -n " + $T" >> tiempos.txt
 	let "i+=1"
 done
@@ -50,7 +50,7 @@ while [ $i -le $NUM_ITER ]
 do
 	rm -f t.txt
 	/usr/bin/time -f "%e" -o t.txt globusrun-ws -submit -F gridimadrid.ciemat.es -J -S -f expand/filtro_bmp_expand_64KB.xml
-	T=`cat t.txt`
+	T=$(cat t.txt)
 	echo -n " + $T" >> tiempos.txt
 	let "i+=1"
 done
