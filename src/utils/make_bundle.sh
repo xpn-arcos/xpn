@@ -19,7 +19,7 @@ do
 done
 
 LIBS="`ldd $FILES | grep '=>' | cut -d '>' -f 2- | cut -d '(' -f 1 | sort | uniq`"
-if echo $LIBS | grep globus
+if echo "$LIBS" | grep globus
 then
 	LIBS="$LIBS /usr/lib/libglobus_thread_pthread.so"
 fi

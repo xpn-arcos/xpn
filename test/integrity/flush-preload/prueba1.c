@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <netdb.h>
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])
+{
+     struct hostent *hp;
 
-struct hostent *hp;
      hp = gethostbyname(argv[1]);
-	if(hp == NULL){
+     if (hp == NULL){
 		perror("Errore en gethostbyname");
-	}else{
+     } else {
 		printf("All Ok\n");
-	}
-	return 0;
+     }
+
+     return 0;
 }

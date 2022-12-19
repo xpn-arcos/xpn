@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 #endif
 
 	// header (1/2)
-	if (me != 0)
+	if (0 == me)
 	    printf("len_bytes;avg_time_sec;rate_Mbytes_sec\n") ;
 
 	lenbuf = 1 ;
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
                         	us_rate = 0.0;
 
 	                // values (2/2)
-	                if (me != 0)
+	                if (0 == me)
                	            printf("%e;%e;%e\n", (double)lenbuf, (double)avg_time, (double)us_rate);
                	         // printf("len_bytes=%e avg_time_sec=%e rate_Mbytes_sec=%e\n", (double)lenbuf, (double)avg_time, (double)us_rate);
                 }
