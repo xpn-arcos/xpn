@@ -1,0 +1,25 @@
+
+ CC            	= /opt/mpich/bin/mpicc
+ CFLAGS	       	= -g -Wall -DHAVE_CONFIG_H
+ SOURCE_PATH   	= .
+ INCLUDE_PATH	= -I../../../include/base -I../../../include/xpn_client -I../../../include/
+ LIB_PATH       = -L../../../include/base -L../../../include/xpn_client
+ LIBLINK       	= -lpthread  -lbase  -lxpn
+ OBJETOS1      	= ./iop.o \
+		 ./time.o
+
+all:    iop
+
+iop: $(OBJETOS1)
+	@$(CC)  $(CFLAGS) $(OBJETOS1)  $(LIB_PATH) $(LIBLINK) -o iop
+
+%.o: %.c
+	@echo "     $< ..." 
+	@$(CC)  $(CFLAGS) $(INCLUDE_PATH) -c $*.c  
+
+clean: 
+	@echo "   Removing trash..."
+	@rm -fr *.o 
+	@rm -fr ./iop
+	@echo "   Trash succesfully removed !."
+
