@@ -32,10 +32,6 @@
 
 #include <xpn.h>
 
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-unused-vars */
-/* eslint-disable block-scoped-var */
-
 int xpn_fclose(FILE *fp)
 {
 	register int /*i, */retval = 0;
