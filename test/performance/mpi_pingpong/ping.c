@@ -1,15 +1,23 @@
 
-/* ....................................................................
+/*
+ *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
- * Copyright Alejandro Calderon (1997-1999)
- * <acaldero@laurel.datsi.fi.upm.es>
- * See documentation for more information.
+ *  This file is part of Expand.
  *
- * permission is hereby granted to copy, modify and redistribute this code
- * in terms of the GNU Library General Public License, Version 2 or later,
- * at your option.
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * .................................................................... */
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 
 #include <stdlib.h>
@@ -85,8 +93,8 @@ int main(int argc, char *argv[])
 	}
 #endif
 
-	// header (1/2)
-	if (me != 0)
+	// header...
+	if (0 == me)
 	    printf("len_bytes;avg_time_sec;rate_Mbytes_sec\n") ;
 
 	lenbuf = 1 ;
@@ -95,42 +103,20 @@ int main(int argc, char *argv[])
 		avg_time = 0.0;
 		if (me == 0)
 		{
-			for(j = 0; j < PRUEBAS; j++)
+			for (j = 0; j < PRUEBAS; j++)
                 	{
-				ret=MPI_Recv(buf,lenbuf,MPI_CHAR,1,1,
-						MPI_COMM_WORLD, &status);
-                                /*
-                		if (ret != MPI_SUCCESS)
-                        		perror("Error en MPI_Recv");
-                                */
-
-				ret=MPI_Send(buf,lenbuf,MPI_CHAR,1,1,
-					MPI_COMM_WORLD);
-                                /*
-                		if (ret != MPI_SUCCESS)
-                        		perror("Error en MPI_Send\n");
-                                */
+				MPI_Recv(buf,lenbuf,MPI_CHAR,1,1, MPI_COMM_WORLD, &status);
+				MPI_Send(buf,lenbuf,MPI_CHAR,1,1, MPI_COMM_WORLD);
 			}
 		}
 		else
 		{
-			for(j = 0; j < PRUEBAS; j++)
+			for (j = 0; j < PRUEBAS; j++)
                         {
 				start_time = MPI_Wtime();
 
-				ret=MPI_Send(buf,lenbuf,MPI_CHAR,0,1,
-                                        MPI_COMM_WORLD);
-
-                                /*
-                        	if (ret != MPI_SUCCESS)
-                                	perror("Error en MPI_Send\n");
-                                */
-				ret=MPI_Recv(buf,lenbuf,MPI_CHAR,0,1,
-                                                MPI_COMM_WORLD, &status);
-                                /*
-                        	if (ret != MPI_SUCCESS)
-                                	perror("Error en MPI_Recv");
-                                */
+				MPI_Send(buf,lenbuf,MPI_CHAR,0,1, MPI_COMM_WORLD);
+				MPI_Recv(buf,lenbuf,MPI_CHAR,0,1, MPI_COMM_WORLD, &status);
 
 				used_time = (MPI_Wtime() - start_time);
 				avg_time = avg_time + used_time;
@@ -138,13 +124,11 @@ int main(int argc, char *argv[])
 
                 	avg_time =  avg_time / (float)  PRUEBAS;
 			if (avg_time > 0)    /* rate is megabytes per second */
-                        	us_rate = (double)((nproc * lenbuf)/
-					(avg_time*(double)1000000));
-                	else
-                        	us_rate = 0.0;
+                             us_rate = (double)((nproc * lenbuf) / (avg_time*(double)1000000));
+                	else us_rate = 0.0;
 
-	                // values (2/2)
-	                if (me != 0)
+	                // ... and values
+	                if (0 == me)
                	            printf("%e;%e;%e\n", (double)lenbuf, (double)avg_time, (double)us_rate);
                	         // printf("len_bytes=%e avg_time_sec=%e rate_Mbytes_sec=%e\n", (double)lenbuf, (double)avg_time, (double)us_rate);
                 }
@@ -159,7 +143,7 @@ int main(int argc, char *argv[])
 
 	MPI_Finalize();
         free(buf);
-	exit(0);
 
+	return 0;
 }
 

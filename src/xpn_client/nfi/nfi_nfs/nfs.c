@@ -843,7 +843,7 @@ ssize_t nfs_read(fhandle fh, void *data, off_t offset, size_t size, CLIENT *cl)
 	/* si lo leido < que lo que se pide -> EOF */
 	if(res.readres_u.fich_read.data.nfsdata_len < rd){
 #ifdef DEBUG_NFS
-	  printf("successfully READ (%d, %d) STATUS (%d)\n", (uint)size, (uint)offset, (uint)i);
+	  printf("successfully READ (%u, %u) STATUS (%lu)\n", (unsigned)size, (unsigned)offset, (unsigned long)i);
 #endif 
 	  return (ssize_t)i;
 	}
@@ -852,7 +852,7 @@ ssize_t nfs_read(fhandle fh, void *data, off_t offset, size_t size, CLIENT *cl)
     
   }
 #ifdef DEBUG_NFS
-  printf("successfully READ (%d, %d) STATUS (%d)\n", (uint)size, (uint)offset, i);
+  printf("successfully READ (%u, %u) STATUS (%lu)\n", (unsigned)size, (unsigned)offset, (unsigned long)i);
 #endif  
   
   

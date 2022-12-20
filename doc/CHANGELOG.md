@@ -6,7 +6,6 @@
   * This version provides:
     * Simplifiyed build system based on build-me script.  
     * Platforms: MPICH and Intel MPI.
-    * Benchmarks supported: IOR, MdTest and IO500.
-    * API: POXIS (through syscall interception library) and native XPN.
-    * Features: data locality, MPI Ad-Hoc servers, thread on-demand or thread pool for MPI servers
-
+    * Benchmarks tested: IOR, MdTest and IO500.
+    * API: POSIX (through syscall interception library) and native XPN (similar to POSIX).
+    * Main features: data locality, MPI Ad-Hoc servers, thread on-demand or thread pool for MPI servers

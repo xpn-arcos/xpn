@@ -3,10 +3,9 @@
  CFLAGS	       	= -g -Wall -DHAVE_CONFIG_H
  SOURCE_PATH   	= .
  INCLUDE_PATH	= -I../../../include/base -I../../../include/xpn_client -I../../../include/
- LIB_PATH       = -L../../../include/base -L../../../include/xpn_client
- LIBLINK       	= -lpthread  -lbase  -lxpn
- OBJETOS1      	= ./iop.o \
-		 ./time.o
+ LIB_PATH       = -L../../../src/base     -L../../../src/xpn_client
+ LIBLINK       	= -lbase  -lxpn  -ldl  -lmxml  -lpthread
+ OBJETOS1      	= ./iop.o ./time.o
 
 all:    iop
 

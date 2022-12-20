@@ -1,7 +1,7 @@
 #!/bin/sh
 
 BASE_PATH=$(dirname $0)
-if [ `echo $BASE_PATH | head -c 1` != "/" ]
+if [ $(echo $BASE_PATH | head -c 1) != "/" ]
 then
 	BASE_PATH="$PWD/$BASE_PATH"
 fi
