@@ -398,7 +398,7 @@ ssize_t tcp_server_read_data(int fd, char *data, ssize_t size, char *id){
 
 
 #ifdef DBG_COMM
-	printf("[NFI_COMM]client: read_data(%d): %d ID=%s --th:%d--\n",fd,size,id,(int)pthread_self());
+	printf("[NFI_COMM]client: read_data(%d): %lu ID=%s --th:%d--\n",fd,(unsigned long)size,id,(int)pthread_self());
 #endif
 
 	if(size == 0){
@@ -422,7 +422,7 @@ ssize_t tcp_server_read_data(int fd, char *data, ssize_t size, char *id){
 
 
 #ifdef DBG_COMM
-	printf("[NFI_COMM]client: read_data(%d): %d = %d ID=%s --th:%d--\n",fd,size,ret,id,(int)pthread_self());
+	printf("[NFI_COMM]client: read_data(%d): %lu = %d ID=%s --th:%d--\n",fd,(unsigned long)size,ret,id,(int)pthread_self());
 #endif
                 if(ret <= 0){                                                                                               
                         perror("client: Error read_comm:");                                                                 
@@ -440,7 +440,7 @@ ssize_t tcp_server_read_data(int fd, char *data, ssize_t size, char *id){
 		return ret;
 	}
 #ifdef DBG_COMM
-	printf("[NFI_COMM]client: read_data(%d): %d de %d ID=%s --th:%d--\n",fd,cont,size,id,(int)pthread_self());
+	printf("[NFI_COMM]client: read_data(%d): %d de %lu ID=%s --th:%d--\n",fd,cont,(unsigned long)size,id,(int)pthread_self());
 #endif	
 #ifdef DBG_COMM
 	tcp_server_read_data_test(fd, id);

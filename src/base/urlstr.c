@@ -128,7 +128,7 @@
                   return (1) ;
                 }
            }
-        if (pch2 != NULL)
+	else // if (pch2 != NULL)
            {
              pch2[0] = '\0' ;
              (*machine) = STRING_MISC_StrDup((*str)) ;

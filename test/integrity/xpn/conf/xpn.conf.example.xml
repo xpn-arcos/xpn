@@ -1,0 +1,29 @@
+<!-- PROTOCOLS SUPPORTED -->
+<!-- file:///dir/ -->
+<!-- nfs:/server/dir/ -->
+
+<!-- USE "export MYSERVER_FILE=<file>" -->
+<!-- myServer:/server/dir/ -->
+
+<!-- ioproxy:/server/dir/ -->
+<!-- xio:/server/dir/ -->
+<!-- gsoap:/server/dir/ -->
+
+<!-- USE "export XPN_CONF=<file>" -->
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xpn_conf>
+	<partition name="PNFS1" type="NORMAL" >
+		<data_node id="" url="file:///storage/1/"/>
+	</partition>
+	<partition name="PNFS2" type="NORMAL" >
+		<data_node id="" url="file:///storage/2/"/>
+		<data_node id="" url="file:///storage/3/"/>
+	</partition>
+	<partition name="PNFS3" type="NORMAL" >
+		<data_node id="" url="myServer://node0/storage/2/"/>
+		<data_node id="" url="myServer://node1/storage/3/"/>
+	</partition>	
+
+	
+</xpn_conf>
