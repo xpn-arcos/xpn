@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=all
-set -x
+#set -x
 
 # 
 #  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
