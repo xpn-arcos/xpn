@@ -23,12 +23,12 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "mpi_server_ns.h"
+  #include "ns.h"
 
 
   /* ... Functions / Funciones ......................................... */
 
-  int mpi_server_dns_publish ( char * param_srv_name, char * dns_file, char * port_name )
+  int ns_publish ( char * param_srv_name, char * dns_file, char * port_name )
   {
     char serv_name [HOST_NAME_MAX];
     struct hostent *serv_entry;
@@ -50,14 +50,13 @@
     }
 
     fprintf(dns_fd, "%s %s %s\n", param_srv_name, param_srv_ip, port_name);
-
     fclose(dns_fd);
 
     return 0;
   }
 
 
-  int mpi_server_dns_unpublish ( char * dns_file )
+  int ns_unpublish ( char * dns_file )
   {
     char serv_name    [HOST_NAME_MAX];
     char aux_srv_name [2*HOST_NAME_MAX];
@@ -117,7 +116,7 @@
   }
 
 
-  int mpi_server_dns_lookup ( char * param_srv_name, char * port_name )
+  int ns_lookup ( char * param_srv_name, char * port_name )
   {
     int    found = 0 ;
     char   srv_name[1024] ;

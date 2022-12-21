@@ -174,7 +174,7 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/base/debug_msg.c \
 	../../src/base/string_misc.c \
 	../../src/base/time_misc.c \
-	../../src/base/urlstr.c \
+	../../src/base/urlstr.c ../../src/base/ns.c \
 	../../src/base/syscall_proxies.c \
 	../../src/base/filesystem.c \
 	../../src/base/utils.c \
@@ -195,7 +195,6 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
 	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.c \
 	../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
-	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.c \
 	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
 	../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c \
@@ -282,6 +281,7 @@ am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/string_misc.$(OBJEXT) \
 	../../src/base/time_misc.$(OBJEXT) \
 	../../src/base/urlstr.$(OBJEXT) \
+	../../src/base/ns.$(OBJEXT) \
 	../../src/base/syscall_proxies.$(OBJEXT) \
 	../../src/base/filesystem.$(OBJEXT) \
 	../../src/base/utils.$(OBJEXT)
@@ -309,7 +309,6 @@ am__objects_8 = ../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.$(OBJEXT)
 	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.$(OBJEXT)
 am__objects_9 = $(am__objects_8)
 am__objects_10 = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.$(OBJEXT) \
-	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.$(OBJEXT) \
 	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.$(OBJEXT) \
 	../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.$(OBJEXT)
 am__objects_11 = $(am__objects_10)
@@ -416,6 +415,7 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/dtable.Po \
 	../../src/base/$(DEPDIR)/filesystem.Po \
 	../../src/base/$(DEPDIR)/math_misc.Po \
+	../../src/base/$(DEPDIR)/ns.Po \
 	../../src/base/$(DEPDIR)/string_misc.Po \
 	../../src/base/$(DEPDIR)/syscall_proxies.Po \
 	../../src/base/$(DEPDIR)/time_misc.Po \
@@ -426,7 +426,6 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po \
 	../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_comm.Po \
-	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_ns.Po \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server.Po \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server_err.Po \
 	../../src/xpn_client/nfi/nfi_nfs/$(DEPDIR)/nfi_nfs.Po \
@@ -555,6 +554,7 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/base/trace_msg.h \
 	../../include/base/trace_tags.h \
 	../../include/base/urlstr.h \
+	../../include/base/ns.h \
 	../../include/base/syscall_proxies.h \
 	../../include/base/filesystem.h \
 	../../include/base/utils.h \
@@ -578,7 +578,6 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_lib.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h \
-	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
@@ -648,7 +647,6 @@ NFI_MPI_SERVER = nfi_mpi_server
 ### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
-			../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.c \
 			../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
 			../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c
 
@@ -771,6 +769,7 @@ BASE_HEADER = ../../include/base/base_lib.h \
 			../../include/base/trace_msg.h \
 			../../include/base/trace_tags.h \
 			../../include/base/urlstr.h \
+			../../include/base/ns.h \
 			../../include/base/syscall_proxies.h \
 			../../include/base/filesystem.h \
 			../../include/base/utils.h
@@ -804,8 +803,7 @@ NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_c
 
 ### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
-NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.h \
-			../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
+NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 			../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 			../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
 			../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
@@ -839,6 +837,7 @@ BASE_OBJECTS = ../../src/base/darray.c \
 			../../src/base/string_misc.c \
 			../../src/base/time_misc.c \
 			../../src/base/urlstr.c \
+			../../src/base/ns.c \
 			../../src/base/syscall_proxies.c \
 			../../src/base/filesystem.c \
 			../../src/base/utils.c
@@ -1038,6 +1037,9 @@ clean-libLIBRARIES:
 ../../src/base/urlstr.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/ns.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/syscall_proxies.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
@@ -1129,8 +1131,6 @@ clean-libLIBRARIES:
 	@$(MKDIR_P) ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)
 	@: > ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
 ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.$(OBJEXT): ../../src/xpn_client/nfi/nfi_mpi_server/$(am__dirstamp) \
-	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.$(OBJEXT): ../../src/xpn_client/nfi/nfi_mpi_server/$(am__dirstamp) \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
 ../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.$(OBJEXT): ../../src/xpn_client/nfi/nfi_mpi_server/$(am__dirstamp) \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
@@ -1408,6 +1408,7 @@ include ../../src/base/$(DEPDIR)/debug_msg.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/dtable.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/filesystem.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/math_misc.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/ns.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/string_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/syscall_proxies.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/time_misc.Po # am--include-marker
@@ -1418,7 +1419,6 @@ include ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po # am--include-ma
 include ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_comm.Po # am--include-marker
-include ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_ns.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server_err.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_nfs/$(DEPDIR)/nfi_nfs.Po # am--include-marker
@@ -1716,6 +1716,7 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/dtable.Po
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
+	-rm -f ../../src/base/$(DEPDIR)/ns.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../../src/base/$(DEPDIR)/time_misc.Po
@@ -1726,7 +1727,6 @@ distclean: distclean-am
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_comm.Po
-	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_ns.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs/$(DEPDIR)/nfi_nfs.Po
@@ -1868,6 +1868,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/dtable.Po
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
+	-rm -f ../../src/base/$(DEPDIR)/ns.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../../src/base/$(DEPDIR)/time_misc.Po
@@ -1878,7 +1879,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_comm.Po
-	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_ns.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs/$(DEPDIR)/nfi_nfs.Po

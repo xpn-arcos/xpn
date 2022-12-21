@@ -22,6 +22,7 @@ BASE_HEADER=		@top_srcdir@/include/base/base_lib.h \
 			@top_srcdir@/include/base/trace_msg.h \
 			@top_srcdir@/include/base/trace_tags.h \
 			@top_srcdir@/include/base/urlstr.h \
+			@top_srcdir@/include/base/ns.h \
 			@top_srcdir@/include/base/syscall_proxies.h \
 			@top_srcdir@/include/base/filesystem.h \
 			@top_srcdir@/include/base/utils.h
@@ -51,8 +52,7 @@ NFI_TCP_SERVER_HEADER=	@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_se
 			@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
 ### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
-NFI_MPI_SERVER_HEADER=	@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
+NFI_MPI_SERVER_HEADER=	@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 			@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 			@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
 			@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
@@ -145,6 +145,7 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/string_misc.c \
 			@top_srcdir@/src/base/time_misc.c \
 			@top_srcdir@/src/base/urlstr.c \
+			@top_srcdir@/src/base/ns.c \
 			@top_srcdir@/src/base/syscall_proxies.c \
 			@top_srcdir@/src/base/filesystem.c \
 			@top_srcdir@/src/base/utils.c
@@ -174,7 +175,6 @@ NFI_TCP_SERVER_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_s
 ### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
-			@top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.c \
 			@top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
 			@top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c
 ### END OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###

@@ -18,7 +18,7 @@ do
 	fi
 done
 
-LIBS="`ldd $FILES | grep '=>' | cut -d '>' -f 2- | cut -d '(' -f 1 | sort | uniq`"
+LIBS=$(ldd $FILES | grep '=>' | cut -d '>' -f 2- | cut -d '(' -f 1 | sort | uniq)
 if echo "$LIBS" | grep globus
 then
 	LIBS="$LIBS /usr/lib/libglobus_thread_pthread.so"
@@ -29,3 +29,4 @@ cp "$FILES" xpn_utils_bundle/
 cp "$LIBS"  xpn_utils_bundle/
 tar zcvf xpn_utils_bundle.tar.gz xpn_utils_bundle/
 rm -rf   xpn_utils_bundle/
+
