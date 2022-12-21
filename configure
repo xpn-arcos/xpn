@@ -6174,7 +6174,7 @@ LDFLAGS="$LIBLINK $LIBS"
 #
 # Build makefile and headers...
 #
-ac_config_files="$ac_config_files Makefile src/base/Makefile src/xpn_client/Makefile src/utils/Makefile src/bypass/Makefile src/mpi_server/Makefile src/tcp_server/Makefile"
+ac_config_files="$ac_config_files Makefile src/base/Makefile src/xpn_client/Makefile src/utils/Makefile src/bypass/Makefile src/mpi_server/Makefile src/tcp_server/Makefile test/integrity/xpn/Makefile test/integrity/mpi_connect_accept/Makefile test/performance/mpi_pingpong/Makefile test/performance/iop/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6938,6 +6938,10 @@ do
     "src/bypass/Makefile") CONFIG_FILES="$CONFIG_FILES src/bypass/Makefile" ;;
     "src/mpi_server/Makefile") CONFIG_FILES="$CONFIG_FILES src/mpi_server/Makefile" ;;
     "src/tcp_server/Makefile") CONFIG_FILES="$CONFIG_FILES src/tcp_server/Makefile" ;;
+    "test/integrity/xpn/Makefile") CONFIG_FILES="$CONFIG_FILES test/integrity/xpn/Makefile" ;;
+    "test/integrity/mpi_connect_accept/Makefile") CONFIG_FILES="$CONFIG_FILES test/integrity/mpi_connect_accept/Makefile" ;;
+    "test/performance/mpi_pingpong/Makefile") CONFIG_FILES="$CONFIG_FILES test/performance/mpi_pingpong/Makefile" ;;
+    "test/performance/iop/Makefile") CONFIG_FILES="$CONFIG_FILES test/performance/iop/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

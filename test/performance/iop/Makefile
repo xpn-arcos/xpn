@@ -1,11 +1,21 @@
 
- CC            	= /opt/mpich/bin/mpicc
+
+#
+# Definitions
+#
+
+ CC             = /usr/bin/mpicc
  CFLAGS	       	= -g -Wall -DHAVE_CONFIG_H
  SOURCE_PATH   	= .
  INCLUDE_PATH	= -I../../../include/base -I../../../include/xpn_client -I../../../include/
  LIB_PATH       = -L../../../src/base     -L../../../src/xpn_client
  LIBLINK       	= -lbase  -lxpn  -ldl  -lmxml  -lpthread
  OBJETOS1      	= ./iop.o ./time.o
+
+
+#
+# Rules
+#
 
 all:    iop
 

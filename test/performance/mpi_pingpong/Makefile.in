@@ -1,32 +1,22 @@
-#---------------------- ping' MAKEFILE -------------------- 
- 
 
-#--------------------------
+
+#
 # Definitions
-#-------------------------- 
+#
 
- MAKE           = make -s
- CC             = @CC@
-#CC             = /opt/mpich/bin/mpicc
- LIB_PATH       = -L/usr/lib
- INCLUDE_PATH   = -I./
- SOURCE_PATH    = .
- CFLAGS         = -Wall -O2
- LIBLINK        = -lpthread
-
-
-#--------------------------
-# Objects
-#-------------------------- 
-
-OBJS   = \
-            $(SOURCE_PATH)/ping.o
-
+ MAKE          = make -s
+ CC            = @CC@
+ LIB_PATH      = -L/usr/lib
+ INCLUDE_PATH  = -I./
+ SOURCE_PATH   = .
+ CFLAGS        = -Wall -O2
+ LIBLINK       = -lpthread
+ OBJS          =  $(SOURCE_PATH)/ping.o
 
  
-#--------------------------
+#
 # Rules
-#-------------------------- 
+#
 
 all:    init    ping
 refast: clean   ping
@@ -58,5 +48,4 @@ clean:
 	@echo "   Removing trash..."
 	@rm -fr $(OBJS) ./ping
 	@echo "   Done!"
-
 

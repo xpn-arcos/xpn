@@ -1,30 +1,23 @@
-#---------------------- mpiclntsrv' MAKEFILE -------------------- 
- 
 
-#--------------------------
+
+#
 # Definitions
-#-------------------------- 
+#
 
- MAKE           = make -s
- CC             = /opt/mpich/bin/mpicc
- LIB_PATH       = -L/usr/lib
- INCLUDE_PATH   = -I./
- SOURCE_PATH    = .
- CFLAGS         = -Wall -O2
- LIBLINK        = -lpthread
-
-
-#--------------------------
-# Objects
-#-------------------------- 
-
-OBJS_CLNT  = $(SOURCE_PATH)/client.o
-OBJS_SRV   = $(SOURCE_PATH)/server.o
+ MAKE          = make -s
+ CC            = /usr/bin/mpicc
+ LIB_PATH      = -L/usr/lib
+ INCLUDE_PATH  = -I./
+ SOURCE_PATH   = .
+ CFLAGS        = -Wall -O2
+ LIBLINK       = -lpthread
+ OBJS_CLNT     = $(SOURCE_PATH)/client.o
+ OBJS_SRV      = $(SOURCE_PATH)/server.o
 
  
-#--------------------------
+#
 # Rules
-#-------------------------- 
+#
 
 all:    init    client server
 refast: clean   client server
@@ -61,4 +54,5 @@ clean:
 	@echo "   Removing trash..."
 	@rm -fr   ./*.o ./client ./server  tag.txt
 	@echo "   Done!"
+
 
