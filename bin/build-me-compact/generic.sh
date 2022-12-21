@@ -34,6 +34,8 @@ INSTALL_PATH=$HOME/bin/
 BASE_PATH=$(dirname $0)
 
 # 3) preconfigure build-me...
-$BASE_PATH/../../build-me.sh         -m $MPICC_PATH -i $INSTALL_PATH
-$BASE_PATH/../build-me-benchmarks.sh -m $MPICC_PATH -i $INSTALL_PATH
+$BASE_PATH/../build-me/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../mxml
+$BASE_PATH/../build-me/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../xpn
+$BASE_PATH/../build-me/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../ior
+$BASE_PATH/../build-me/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../io500
 
