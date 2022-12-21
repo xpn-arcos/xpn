@@ -100,7 +100,10 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES = src/bypass/Makefile src/mpi_server/Makefile \
-	src/tcp_server/Makefile
+	src/tcp_server/Makefile test/integrity/xpn/Makefile \
+	test/integrity/mpi_connect_accept/Makefile \
+	test/performance/mpi_pingpong/Makefile \
+	test/performance/iop/Makefile
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -167,10 +170,14 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/ar-lib \
 	$(top_srcdir)/include/config.h.in \
 	$(top_srcdir)/src/bypass/Makefile.in \
 	$(top_srcdir)/src/mpi_server/Makefile.in \
-	$(top_srcdir)/src/tcp_server/Makefile.in ./config/ar-lib \
-	./config/compile ./config/config.guess ./config/config.sub \
-	./config/depcomp ./config/install-sh ./config/missing AUTHORS \
-	COPYING config.guess config.sub
+	$(top_srcdir)/src/tcp_server/Makefile.in \
+	$(top_srcdir)/test/integrity/mpi_connect_accept/Makefile.in \
+	$(top_srcdir)/test/integrity/xpn/Makefile.in \
+	$(top_srcdir)/test/performance/iop/Makefile.in \
+	$(top_srcdir)/test/performance/mpi_pingpong/Makefile.in \
+	./config/ar-lib ./config/compile ./config/config.guess \
+	./config/config.sub ./config/depcomp ./config/install-sh \
+	./config/missing AUTHORS COPYING config.guess config.sub
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -387,6 +394,14 @@ src/bypass/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/bypass/Make
 src/mpi_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/mpi_server/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 src/tcp_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/tcp_server/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/integrity/xpn/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/integrity/xpn/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/integrity/mpi_connect_accept/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/integrity/mpi_connect_accept/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/performance/mpi_pingpong/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/performance/mpi_pingpong/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/performance/iop/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/performance/iop/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 # This directory's subdirectories are mostly independent; you can cd

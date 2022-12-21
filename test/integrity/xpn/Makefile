@@ -1,4 +1,5 @@
 
+
 #
 # Definitions
 #
@@ -6,8 +7,8 @@
  MAKE         = make -s
  CC           = /usr/bin/mpicc
  MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
- MYLIBPATH    = -L../../../src/base -L../../../include/xpn_client
- LIBRARIES    = -lpthread -lxpn_client
+ MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
+ LIBRARIES    = -lxpn -lmxml -lpthread -ldl
  MYFLAGS      = -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H
 
 

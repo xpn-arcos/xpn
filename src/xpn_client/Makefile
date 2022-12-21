@@ -91,9 +91,9 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = x86_64-conda-linux-gnu
-host_triplet = x86_64-conda-linux-gnu
-target_triplet = x86_64-conda-linux-gnu
+build_triplet = x86_64-pc-linux-gnu
+host_triplet = x86_64-pc-linux-gnu
+target_triplet = x86_64-pc-linux-gnu
 
 ### BEGIN OF NFI_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_NFS_HEADER BLOCK. Do not remove this line. ###
@@ -174,7 +174,7 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/base/debug_msg.c \
 	../../src/base/string_misc.c \
 	../../src/base/time_misc.c \
-	../../src/base/urlstr.c \
+	../../src/base/urlstr.c ../../src/base/ns.c \
 	../../src/base/syscall_proxies.c \
 	../../src/base/filesystem.c \
 	../../src/base/utils.c \
@@ -195,7 +195,6 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
 	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.c \
 	../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
-	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.c \
 	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
 	../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c \
@@ -282,6 +281,7 @@ am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/string_misc.$(OBJEXT) \
 	../../src/base/time_misc.$(OBJEXT) \
 	../../src/base/urlstr.$(OBJEXT) \
+	../../src/base/ns.$(OBJEXT) \
 	../../src/base/syscall_proxies.$(OBJEXT) \
 	../../src/base/filesystem.$(OBJEXT) \
 	../../src/base/utils.$(OBJEXT)
@@ -309,7 +309,6 @@ am__objects_8 = ../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.$(OBJEXT)
 	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.$(OBJEXT)
 am__objects_9 = $(am__objects_8)
 am__objects_10 = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.$(OBJEXT) \
-	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.$(OBJEXT) \
 	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.$(OBJEXT) \
 	../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.$(OBJEXT)
 am__objects_11 = $(am__objects_10)
@@ -416,6 +415,7 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/dtable.Po \
 	../../src/base/$(DEPDIR)/filesystem.Po \
 	../../src/base/$(DEPDIR)/math_misc.Po \
+	../../src/base/$(DEPDIR)/ns.Po \
 	../../src/base/$(DEPDIR)/string_misc.Po \
 	../../src/base/$(DEPDIR)/syscall_proxies.Po \
 	../../src/base/$(DEPDIR)/time_misc.Po \
@@ -426,7 +426,6 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po \
 	../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_comm.Po \
-	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_ns.Po \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server.Po \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server_err.Po \
 	../../src/xpn_client/nfi/nfi_nfs/$(DEPDIR)/nfi_nfs.Po \
@@ -555,6 +554,7 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/base/trace_msg.h \
 	../../include/base/trace_tags.h \
 	../../include/base/urlstr.h \
+	../../include/base/ns.h \
 	../../include/base/syscall_proxies.h \
 	../../include/base/filesystem.h \
 	../../include/base/utils.h \
@@ -578,7 +578,6 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_lib.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h \
-	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
@@ -610,17 +609,17 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = ${SHELL} /home/acaldero/work/xpn/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AR = /opt/anaconda3/bin/x86_64-conda-linux-gnu-ar
+AR = ar
 AUTOCONF = ${SHELL} /home/acaldero/work/xpn/config/missing autoconf
 AUTOHEADER = ${SHELL} /home/acaldero/work/xpn/config/missing autoheader
 AUTOMAKE = ${SHELL} /home/acaldero/work/xpn/config/missing automake-1.16
-AWK = mawk
+AWK = gawk
 CC = /usr/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
 CFLAGS =     -I../../mxml    -I../../xpn/include    -I../../xpn/include/xpn_client    -I../../xpn/include/base -I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPP = /opt/anaconda3/bin/x86_64-conda-linux-gnu-cpp
-CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /opt/anaconda3/include
+CPP = gcc -E
+CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -648,7 +647,6 @@ NFI_MPI_SERVER = nfi_mpi_server
 ### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
-			../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.c \
 			../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
 			../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c
 
@@ -691,39 +689,39 @@ PACKAGE_TARNAME = expand
 PACKAGE_URL = 
 PACKAGE_VERSION = 2.0
 PATH_SEPARATOR = :
-RANLIB = /opt/anaconda3/bin/x86_64-conda-linux-gnu-ranlib
+RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/bash
-STRIP = /opt/anaconda3/bin/x86_64-conda-linux-gnu-strip
+STRIP = 
 VERSION = 2.0
 abs_builddir = /home/acaldero/work/xpn/src/xpn_client
 abs_srcdir = /home/acaldero/work/xpn/src/xpn_client
 abs_top_builddir = /home/acaldero/work/xpn
 abs_top_srcdir = /home/acaldero/work/xpn
-ac_ct_AR = 
-ac_ct_CC = 
+ac_ct_AR = ar
+ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
 am__quote = 
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build = x86_64-conda-linux-gnu
-build_alias = x86_64-conda-linux-gnu
+build = x86_64-pc-linux-gnu
+build_alias = 
 build_cpu = x86_64
 build_os = linux-gnu
-build_vendor = conda
+build_vendor = pc
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = x86_64-conda-linux-gnu
-host_alias = x86_64-conda-linux-gnu
+host = x86_64-pc-linux-gnu
+host_alias = 
 host_cpu = x86_64
 host_os = linux-gnu
-host_vendor = conda
+host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
@@ -744,11 +742,11 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
 sysconfdir = ${prefix}/etc
-target = x86_64-conda-linux-gnu
+target = x86_64-pc-linux-gnu
 target_alias = 
 target_cpu = x86_64
 target_os = linux-gnu
-target_vendor = conda
+target_vendor = pc
 top_build_prefix = ../../
 top_builddir = ../..
 top_srcdir = ../..
@@ -771,6 +769,7 @@ BASE_HEADER = ../../include/base/base_lib.h \
 			../../include/base/trace_msg.h \
 			../../include/base/trace_tags.h \
 			../../include/base/urlstr.h \
+			../../include/base/ns.h \
 			../../include/base/syscall_proxies.h \
 			../../include/base/filesystem.h \
 			../../include/base/utils.h
@@ -804,8 +803,7 @@ NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_c
 
 ### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
-NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.h \
-			../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
+NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 			../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 			../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
 			../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
@@ -839,6 +837,7 @@ BASE_OBJECTS = ../../src/base/darray.c \
 			../../src/base/string_misc.c \
 			../../src/base/time_misc.c \
 			../../src/base/urlstr.c \
+			../../src/base/ns.c \
 			../../src/base/syscall_proxies.c \
 			../../src/base/filesystem.c \
 			../../src/base/utils.c
@@ -1038,6 +1037,9 @@ clean-libLIBRARIES:
 ../../src/base/urlstr.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/ns.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/syscall_proxies.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
@@ -1129,8 +1131,6 @@ clean-libLIBRARIES:
 	@$(MKDIR_P) ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)
 	@: > ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
 ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.$(OBJEXT): ../../src/xpn_client/nfi/nfi_mpi_server/$(am__dirstamp) \
-	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_ns.$(OBJEXT): ../../src/xpn_client/nfi/nfi_mpi_server/$(am__dirstamp) \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
 ../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.$(OBJEXT): ../../src/xpn_client/nfi/nfi_mpi_server/$(am__dirstamp) \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
@@ -1408,6 +1408,7 @@ include ../../src/base/$(DEPDIR)/debug_msg.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/dtable.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/filesystem.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/math_misc.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/ns.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/string_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/syscall_proxies.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/time_misc.Po # am--include-marker
@@ -1418,7 +1419,6 @@ include ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po # am--include-ma
 include ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_comm.Po # am--include-marker
-include ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_ns.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server_err.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_nfs/$(DEPDIR)/nfi_nfs.Po # am--include-marker
@@ -1716,6 +1716,7 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/dtable.Po
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
+	-rm -f ../../src/base/$(DEPDIR)/ns.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../../src/base/$(DEPDIR)/time_misc.Po
@@ -1726,7 +1727,6 @@ distclean: distclean-am
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_comm.Po
-	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_ns.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs/$(DEPDIR)/nfi_nfs.Po
@@ -1868,6 +1868,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/dtable.Po
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
+	-rm -f ../../src/base/$(DEPDIR)/ns.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../../src/base/$(DEPDIR)/time_misc.Po
@@ -1878,7 +1879,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_comm.Po
-	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/mpi_server_ns.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/nfi_mpi_server_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs/$(DEPDIR)/nfi_nfs.Po

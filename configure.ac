@@ -258,6 +258,18 @@ AC_SUBST(M_HEADERS)
 #
 # Build makefile and headers...
 #
-AC_CONFIG_FILES([Makefile src/base/Makefile src/xpn_client/Makefile src/utils/Makefile src/bypass/Makefile src/mpi_server/Makefile src/tcp_server/Makefile])
+AC_CONFIG_FILES([ \
+		  Makefile \
+		  src/base/Makefile \
+		  src/xpn_client/Makefile \
+		  src/utils/Makefile \
+		  src/bypass/Makefile \
+		  src/mpi_server/Makefile \
+		  src/tcp_server/Makefile\
+		  test/integrity/xpn/Makefile \
+		  test/integrity/mpi_connect_accept/Makefile \
+                  test/performance/mpi_pingpong/Makefile \
+		  test/performance/iop/Makefile \
+		])
 AC_OUTPUT
 

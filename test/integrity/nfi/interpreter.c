@@ -115,6 +115,7 @@ int read_nfi_cmd()
 	if(strcmp("end",command) == 0){
 		cmd = NFI_END;
 	}
+
 	return cmd;
 }
 
@@ -128,6 +129,7 @@ int read_protocol(char *url)
 	if(ret <0){
 		return -1;
 	}
+
 	prot = -1;
 	if(strcmp(str_prot,"nfs") == 0){
 		prot = NFI_NFS2;
@@ -138,10 +140,11 @@ int read_protocol(char *url)
 
 void read_params(int cmd)
 {
-
 	char url[255], entry[255];
 	int ret, offset, size;
-	switch(cmd){
+
+	switch(cmd)
+	{
 		case NFI_EXIT:
 			switch(protocol){
 				case NFI_NFS2:
@@ -152,6 +155,7 @@ void read_params(int cmd)
 					break;
 			}
 			break;
+
 		case NFI_END:
 			switch(protocol){
 				case NFI_NFS2:
@@ -162,8 +166,9 @@ void read_params(int cmd)
 					break;
 			}
 			break;
+
 		case NFI_INIT:
-			ret = scanf("%s",url);
+			ret = scanf("%250s",url);
 
                         switch(protocol){
                             case NFI_NFS2:
@@ -173,16 +178,16 @@ void read_params(int cmd)
                             default:
                                  break;
                         }
-		
+
 			protocol = read_protocol(url);
 			switch(protocol){
 				case NFI_NFS2:
 					ret = nfi_nfs_init(url, &server);
-					if(ret<0){					
+					if(ret<0){
 						printf("rnfi> Error operation INIT\n");
 						protocol = -1;
 					}else{
-					
+
 						printf("rnfi> Successfully operation INIT\n");
 					}
 					break;
@@ -191,44 +196,45 @@ void read_params(int cmd)
 					break;
 			}
 			break;
+
 		case NFI_OPEN:
-			ret = scanf("%s",url);
-		
+			ret = scanf("%250s",url);
+
 			if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
-		
+
 			if(fh_open_file == 1){
-				/* close */			
+				/* close */
 				nfi_worker_do_close(server.wrk, &fh);
 				ret = nfi_worker_wait(server.wrk);
 				fh_open_file = 0;
 			}
-		
+
 			nfi_worker_do_open(server.wrk, url, &fh);
 			ret = nfi_worker_wait(server.wrk);
-		
+
 			if (ret<0){
 				printf("rnfi> Error operation OPEN\n");
 			}else{
 				printf("rnfi> Successfully operation OPEN\n");
 				fh_open_file = 1;
 			}
-		
+
 			break;
+
 		case NFI_CLOSE:
-		
 			if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
-		
+
 			if(fh_open_file == 0){
 				printf("rnfi> Error file not open\n");
                                 break;
 			}
-		
+
 			nfi_worker_do_close(server.wrk, &fh);
 			ret = nfi_worker_wait(server.wrk);
 
@@ -237,12 +243,13 @@ void read_params(int cmd)
 			}else{
 				printf("rnfi> Successfully operation CLOSE\n");
 			}
-		
+
 		  	fh_open_file = 0;
 			break;
+
 		case NFI_RMDIR:
-			ret = scanf("%s",url);
-		 
+			ret = scanf("%250s",url);
+
 			if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
 				break;
@@ -256,15 +263,13 @@ void read_params(int cmd)
 				printf("rnfi> Successfully operation RMDIR\n");
 			}
 			break;
+
 		case NFI_MKDIR:
-		
-			ret = scanf("%s",url);
+			ret = scanf("%250s",url);
 			bzero(&attr, sizeof(struct nfi_attr));
 			attr.at_mode = 0777;
-			nfi_worker_do_mkdir(server.wrk,
-		                                 url,
-		                        	 &attr,&fh);
-		
+			nfi_worker_do_mkdir(server.wrk, url, &attr,&fh);
+
   			ret = nfi_worker_wait(server.wrk);
 			if (ret<0){
 				printf("rnfi> Error operation MKDIR\n");
@@ -272,9 +277,9 @@ void read_params(int cmd)
 				printf("rnfi> Successfully operation MKDIR\n");
 			}
 			break;
+
 		case NFI_CREAT:
-		
-			ret = scanf("%s",url);
+			ret = scanf("%250s",url);
 
 		 	if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
@@ -292,8 +297,9 @@ void read_params(int cmd)
 				printf("rnfi> Successfully operation CREAT\n");
 			}
 			break;
+
 		case NFI_UNLINK:
-                        ret = scanf("%s",url);
+                        ret = scanf("%250s",url);
 
 			if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
@@ -308,20 +314,19 @@ void read_params(int cmd)
 			      printf("rnfi> Successfully operation UNLINK\n");
 			}
 			break;
+
 		case NFI_WRITE:
-		
 			ret = scanf("%d%d", &offset, &size);
 			if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
-		
+
 			if(fh_open_file == 0){
 				printf("rnfi> Error file not open\n");
                                 break;
 			}
 
-		
 			io.buffer = (void *)buff;
 			io.offset = offset;
 			io.size   = size;
@@ -331,27 +336,27 @@ void read_params(int cmd)
 
 			nfi_worker_do_write(server.wrk, &io, 1);
 			ret = nfi_worker_wait(server.wrk);
-		
+
                         if (ret<0){
                         	printf("rnfi> Error operation WRITE %d\n",ret);
 			}else{
 			        printf("rnfi> Successfully operation WRITE\n");
 			}
-		
-			break;
-		case NFI_READ:
 
+			break;
+
+		case NFI_READ:
 			ret = scanf("%d%d", &offset, &size);
 			if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
-		
+
 			if(fh_open_file == 0){
 				printf("rnfi> Error file not open\n");
                                 break;
 			}
-		
+
 			io.buffer = (void *)buff;
 			io.offset = offset;
 			io.size   = size;
@@ -361,33 +366,32 @@ void read_params(int cmd)
 
 			nfi_worker_do_read(server.wrk, &io, 1);
 			ret = nfi_worker_wait(server.wrk);
-		
+
                         if (ret<0){
                         	printf("rnfi> Error operation READ %d\n",ret);
 			}else{
 			        printf("rnfi> Successfully operation READ\n");
 			}
-		
+
 			break;
+
 		case NFI_OPENDIR:
-		
-			ret = scanf("%s",url);
+			ret = scanf("%250s",url);
 			if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
-		
+
 			if(fh_open_dir == 1){
 
 				nfi_worker_do_closedir(server.wrk, &fhdir);
-				ret = nfi_worker_wait(server.wrk);			
+				ret = nfi_worker_wait(server.wrk);
                                 fh_open_dir = 0;
 			}
 
-
 			nfi_worker_do_opendir(server.wrk, url, &fhdir);
 			ret = nfi_worker_wait(server.wrk);
-		
+
                         if (ret<0){
                         	printf("rnfi> Error operation OPENDIR\n");
 			}else{
@@ -397,12 +401,11 @@ void read_params(int cmd)
 			break;
 
 		case NFI_CLOSEDIR:
-		
 			if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
-		
+
 			if(fh_open_dir == 0){
 				printf("rnfi> Error dir not open\n");
                                 break;
@@ -410,7 +413,7 @@ void read_params(int cmd)
 
 			nfi_worker_do_closedir(server.wrk, &fhdir);
 			ret = nfi_worker_wait(server.wrk);
-		
+
                         if (ret<0){
                         	printf("rnfi> Error operation CLOSEDIR\n");
 			}else{
@@ -418,31 +421,31 @@ void read_params(int cmd)
 			}
 			fh_open_dir = 0;
 			break;
-		
+
 		case NFI_READDIR:
-		
 			if(protocol == -1){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
-		
+
 			if(fh_open_dir == 0){
 				printf("rnfi> Error dir not open\n");
                                 break;
 			}
 			nfi_worker_do_readdir(server.wrk, &fhdir, entry);
 			ret = nfi_worker_wait(server.wrk);
-		
+
                         if (ret<0){
                         	printf("rnfi> Error operation READDIR\n");
 			}else{
 			        printf("rnfi> Successfully operation READDIR %s\n",entry);
 			}
 			break;
+
 		default:
 			printf("rnfi> Operation not implemented\n");
 			break;
-		
+
 	}
 }
 
@@ -453,8 +456,8 @@ int main(int argc, char *argv[])
 	do{
 		printf("nfi> ");
 		cmd = read_nfi_cmd();
-		read_params(cmd);		
-	
+		read_params(cmd);
+
 	}while(cmd != NFI_EXIT);
 
 	return 0;

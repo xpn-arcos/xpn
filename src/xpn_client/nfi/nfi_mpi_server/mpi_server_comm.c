@@ -124,7 +124,7 @@
     // Lookup port name
     int lookpu_retries = 0;
     do{
-      ret = mpi_server_dns_lookup (params->srv_name, params->port_name);
+      ret = ns_lookup (params->srv_name, params->port_name);
       if (ret == -1)
       {
         if (lookpu_retries == 0)
