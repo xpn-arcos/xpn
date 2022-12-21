@@ -1,40 +1,31 @@
-#---------------------- ping' MAKEFILE -------------------- 
- 
-
-#--------------------------
-# Sistema base
-#-------------------------- 
-
-CC             = /opt/mpich/bin/mpicc
-LIB_PATH       = -L/usr/lib
-INCLUDE_PATH   = -I./
-SOURCE_PATH    = .
-CFLAGS         = -Wall -O2
-LIBLINK        = -lpthread
 
 
+#
+# Definitions
+#
 
-#--------------------------
-# Objetos
-#-------------------------- 
-
-OBJETOS   = \
-            $(SOURCE_PATH)/ping.o
-
+ MAKE          = make -s
+ CC            = /usr/bin/mpicc
+ LIB_PATH      = -L/usr/lib
+ INCLUDE_PATH  = -I./
+ SOURCE_PATH   = .
+ CFLAGS        = -Wall -O2
+ LIBLINK       = -lpthread
+ OBJS          =  $(SOURCE_PATH)/ping.o
 
  
-#--------------------------
-# Reglas de compilacion ...
-#-------------------------- 
+#
+# Rules
+#
 
 all:    init    ping
 refast: clean   ping
 fast:   ping
 
-ping: $(OBJETOS)
+ping: $(OBJS)
 	@echo "   Building ping :"
 	@echo "     ping ..."
-	@$(CC)  $(CFLAGS) -o ping  $(OBJETOS) $(LIBLINK)
+	@$(CC)  $(CFLAGS) -o ping  $(OBJS) $(LIBLINK)
 
 
 init:
@@ -55,10 +46,6 @@ init:
 
 clean: 
 	@echo "   Removing trash..."
-	@rm -fr $(OBJETOS) ./ping
+	@rm -fr $(OBJS) ./ping
 	@echo "   Done!"
-
-
-
-# ---------------------- ping' MAKEFILE -------------------- 
 

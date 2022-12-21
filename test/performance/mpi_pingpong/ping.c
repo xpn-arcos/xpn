@@ -128,9 +128,8 @@ int main(int argc, char *argv[])
                 	else us_rate = 0.0;
 
 	                // ... and values
-	                if (0 == me)
-               	            printf("%e;%e;%e\n", (double)lenbuf, (double)avg_time, (double)us_rate);
-               	         // printf("len_bytes=%e avg_time_sec=%e rate_Mbytes_sec=%e\n", (double)lenbuf, (double)avg_time, (double)us_rate);
+               	        printf("%e;%e;%e\n", (double)lenbuf, (double)avg_time, (double)us_rate);
+               	     // printf("len_bytes=%e avg_time_sec=%e rate_Mbytes_sec=%e\n", (double)lenbuf, (double)avg_time, (double)us_rate);
                 }
 
                 lenbuf *= 2;

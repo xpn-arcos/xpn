@@ -1,11 +1,11 @@
 
+
 #
 # Definitions
 #
 
  MAKE         = make -s
  CC           = @CC@
-#CC           = /opt/mpich/bin/mpicc
  MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
  MYLIBPATH    = -L../../../src/base -L../../../include/xpn_client
  SOURCE_PATH  = ./
@@ -29,3 +29,4 @@ interpreter:
 clean:
 	rm -f $(SOURCE_PATH)*.o
 	rm -f $(SOURCE_PATH)/interpreter 
+

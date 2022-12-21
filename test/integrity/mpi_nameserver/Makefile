@@ -59,7 +59,7 @@ init:
 
 clean: 
 	@echo "   Removing trash..."
-	@rm -fr $(OBJS) ./client ./server
+	@rm -fr   ./*.o ./client ./server
 	@echo "   Done!"
 
 

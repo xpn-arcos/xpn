@@ -85,9 +85,9 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = x86_64-conda-linux-gnu
-host_triplet = x86_64-conda-linux-gnu
-target_triplet = x86_64-conda-linux-gnu
+build_triplet = x86_64-pc-linux-gnu
+host_triplet = x86_64-pc-linux-gnu
+target_triplet = x86_64-pc-linux-gnu
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -100,7 +100,10 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES = src/bypass/Makefile src/mpi_server/Makefile \
-	src/tcp_server/Makefile
+	src/tcp_server/Makefile test/integrity/xpn/Makefile \
+	test/integrity/mpi_connect_accept/Makefile \
+	test/performance/mpi_pingpong/Makefile \
+	test/performance/iop/Makefile
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -167,10 +170,14 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/ar-lib \
 	$(top_srcdir)/include/config.h.in \
 	$(top_srcdir)/src/bypass/Makefile.in \
 	$(top_srcdir)/src/mpi_server/Makefile.in \
-	$(top_srcdir)/src/tcp_server/Makefile.in ./config/ar-lib \
-	./config/compile ./config/config.guess ./config/config.sub \
-	./config/depcomp ./config/install-sh ./config/missing AUTHORS \
-	COPYING config.guess config.sub
+	$(top_srcdir)/src/tcp_server/Makefile.in \
+	$(top_srcdir)/test/integrity/mpi_connect_accept/Makefile.in \
+	$(top_srcdir)/test/integrity/xpn/Makefile.in \
+	$(top_srcdir)/test/performance/iop/Makefile.in \
+	$(top_srcdir)/test/performance/mpi_pingpong/Makefile.in \
+	./config/ar-lib ./config/compile ./config/config.guess \
+	./config/config.sub ./config/depcomp ./config/install-sh \
+	./config/missing AUTHORS COPYING config.guess config.sub
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -216,17 +223,17 @@ distcleancheck_listfiles = find . -type f -print
 ACLOCAL = ${SHELL} /home/acaldero/work/xpn/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AR = /opt/anaconda3/bin/x86_64-conda-linux-gnu-ar
+AR = ar
 AUTOCONF = ${SHELL} /home/acaldero/work/xpn/config/missing autoconf
 AUTOHEADER = ${SHELL} /home/acaldero/work/xpn/config/missing autoheader
 AUTOMAKE = ${SHELL} /home/acaldero/work/xpn/config/missing automake-1.16
-AWK = mawk
+AWK = gawk
 CC = /usr/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
 CFLAGS =     -I../../mxml    -I../../xpn/include    -I../../xpn/include/xpn_client    -I../../xpn/include/base -I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPP = /opt/anaconda3/bin/x86_64-conda-linux-gnu-cpp
-CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /opt/anaconda3/include
+CPP = gcc -E
+CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -268,39 +275,39 @@ PACKAGE_TARNAME = expand
 PACKAGE_URL = 
 PACKAGE_VERSION = 2.0
 PATH_SEPARATOR = :
-RANLIB = /opt/anaconda3/bin/x86_64-conda-linux-gnu-ranlib
+RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/bash
-STRIP = /opt/anaconda3/bin/x86_64-conda-linux-gnu-strip
+STRIP = 
 VERSION = 2.0
 abs_builddir = /home/acaldero/work/xpn
 abs_srcdir = /home/acaldero/work/xpn
 abs_top_builddir = /home/acaldero/work/xpn
 abs_top_srcdir = /home/acaldero/work/xpn
-ac_ct_AR = 
-ac_ct_CC = 
+ac_ct_AR = ar
+ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
 am__quote = 
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build = x86_64-conda-linux-gnu
-build_alias = x86_64-conda-linux-gnu
+build = x86_64-pc-linux-gnu
+build_alias = 
 build_cpu = x86_64
 build_os = linux-gnu
-build_vendor = conda
+build_vendor = pc
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host = x86_64-conda-linux-gnu
-host_alias = x86_64-conda-linux-gnu
+host = x86_64-pc-linux-gnu
+host_alias = 
 host_cpu = x86_64
 host_os = linux-gnu
-host_vendor = conda
+host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
@@ -321,11 +328,11 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
 sysconfdir = ${prefix}/etc
-target = x86_64-conda-linux-gnu
+target = x86_64-pc-linux-gnu
 target_alias = 
 target_cpu = x86_64
 target_os = linux-gnu
-target_vendor = conda
+target_vendor = pc
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
@@ -387,6 +394,14 @@ src/bypass/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/bypass/Make
 src/mpi_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/mpi_server/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 src/tcp_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/tcp_server/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/integrity/xpn/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/integrity/xpn/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/integrity/mpi_connect_accept/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/integrity/mpi_connect_accept/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/performance/mpi_pingpong/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/performance/mpi_pingpong/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/performance/iop/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/performance/iop/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 # This directory's subdirectories are mostly independent; you can cd
