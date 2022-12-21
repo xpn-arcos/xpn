@@ -26,8 +26,8 @@
   #include "all_system.h"
   #include "base/utils.h"
   #include "base/time_misc.h"
+  #include "base/ns.h"
   #include "mpi_server_params.h"
-  #include "mpi_server_ns.h"
 
 
   /*

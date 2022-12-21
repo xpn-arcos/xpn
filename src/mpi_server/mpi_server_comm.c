@@ -73,7 +73,7 @@
     }
 
     // Generate DNS file
-    ret = mpi_server_dns_publish(params->srv_name, params->dns_file, params->port_name);
+    ret = ns_publish(params->srv_name, params->dns_file, params->port_name);
     if (ret < 0)
     {
       return -1;
@@ -123,9 +123,9 @@
     {
       if(params->rank == i){
         // Unpublish port name
-        ret = mpi_server_dns_unpublish (params->dns_file);
+        ret = ns_unpublish (params->dns_file);
         if (ret < 0) {
-          debug_error("Server[%d]: mpi_server_dns_unpublish fails :-(", params->rank) ;
+          debug_error("Server[%d]: ns_unpublish fails :-(", params->rank) ;
           return -1 ;
         }
       }

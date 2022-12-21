@@ -150,6 +150,7 @@ am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/string_misc.$(OBJEXT) \
 	../../src/base/time_misc.$(OBJEXT) \
 	../../src/base/urlstr.$(OBJEXT) \
+	../../src/base/ns.$(OBJEXT) \
 	../../src/base/syscall_proxies.$(OBJEXT) \
 	../../src/base/filesystem.$(OBJEXT) \
 	../../src/base/utils.$(OBJEXT)
@@ -175,6 +176,7 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/dtable.Po \
 	../../src/base/$(DEPDIR)/filesystem.Po \
 	../../src/base/$(DEPDIR)/math_misc.Po \
+	../../src/base/$(DEPDIR)/ns.Po \
 	../../src/base/$(DEPDIR)/string_misc.Po \
 	../../src/base/$(DEPDIR)/syscall_proxies.Po \
 	../../src/base/$(DEPDIR)/time_misc.Po \
@@ -354,6 +356,7 @@ BASE_HEADER = ../../include/base/base_lib.h \
 			../../include/base/trace_msg.h \
 			../../include/base/trace_tags.h \
 			../../include/base/urlstr.h \
+			../../include/base/ns.h \
 			../../include/base/syscall_proxies.h \
 			../../include/base/filesystem.h \
 			../../include/base/utils.h
@@ -366,6 +369,7 @@ BASE_SOURCE = ../../src/base/darray.c \
 			../../src/base/string_misc.c \
 			../../src/base/time_misc.c \
 			../../src/base/urlstr.c \
+			../../src/base/ns.c \
 			../../src/base/syscall_proxies.c \
 			../../src/base/filesystem.c \
 			../../src/base/utils.c
@@ -468,6 +472,9 @@ clean-libLIBRARIES:
 ../../src/base/urlstr.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/ns.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/syscall_proxies.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
@@ -495,6 +502,7 @@ include ../../src/base/$(DEPDIR)/debug_msg.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/dtable.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/filesystem.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/math_misc.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/ns.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/string_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/syscall_proxies.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/time_misc.Po # am--include-marker
@@ -682,6 +690,7 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/dtable.Po
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
+	-rm -f ../../src/base/$(DEPDIR)/ns.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../../src/base/$(DEPDIR)/time_misc.Po
@@ -739,6 +748,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/dtable.Po
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
+	-rm -f ../../src/base/$(DEPDIR)/ns.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f ../../src/base/$(DEPDIR)/time_misc.Po

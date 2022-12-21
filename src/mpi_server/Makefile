@@ -3,30 +3,31 @@
 # Variables
 #--------------------------
 
- MAKE         = make -s
- CC           = /usr/bin/mpicc
- SOURCE_PATH  = ./
- EXPAND_DIR   = /home/acaldero/bin//xpn
- OBJECTS_MPI_SERVER     = ../../src/mpi_server/mpi_server.o \
-		          ../../src/mpi_server/mpi_server_params.o \
-		          ../../src/mpi_server/mpi_server_comm.o \
-		          ../../src/mpi_server/mpi_server_ops.o \
-		          ../../src/mpi_server/mpi_server_workers.o \
-		          ../../src/mpi_server/mpi_server_workers_ondemand.o \
-		          ../../src/mpi_server/mpi_server_workers_pool.o \
-		          ../../src/mpi_server/mpi_server_d2xpn.o \
-			  ../../src/mpi_server/base/filesystem.o \
-			  ../../src/base/urlstr.o \
-			  ../../src/base/string_misc.o \
-			  ../../src/base/debug_msg.o \
-			  ../../src/base/utils.o \
-			  ../../src/base/time_misc.o
-MYFLAGS                = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
-MYHEADERS              = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/mpi_server
-MYLIBS                 = -L../../src/xpn_client -L../../../mxml -lpthread -lxpn -lmxml -ldl
+ MAKE                 = make -s
+ CC                   = /usr/bin/mpicc
+ SOURCE_PATH          = ./
+ EXPAND_DIR           = /home/acaldero/bin//xpn
+ OBJECTS_MPI_SERVER   = ../../src/mpi_server/mpi_server.o \
+		        ../../src/mpi_server/mpi_server_params.o \
+		        ../../src/mpi_server/mpi_server_comm.o \
+		        ../../src/mpi_server/mpi_server_ops.o \
+		        ../../src/mpi_server/mpi_server_workers.o \
+		        ../../src/mpi_server/mpi_server_workers_ondemand.o \
+		        ../../src/mpi_server/mpi_server_workers_pool.o \
+		        ../../src/mpi_server/mpi_server_d2xpn.o \
+			../../src/mpi_server/base/filesystem.o \
+			../../src/base/urlstr.o \
+			../../src/base/string_misc.o \
+			../../src/base/debug_msg.o \
+			../../src/base/utils.o \
+			../../src/base/time_misc.o \
+			../../src/base/ns.o
+MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
+MYHEADERS            = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/mpi_server
+MYLIBS               = -L../../src/xpn_client -L../../../mxml -lxpn -lmxml -ldl -lpthread
 
-MPI_SERVER_EXE      = xpn_mpi_server
-MPI_SERVER_EXE_STOP = xpn_stop_mpi_server
+MPI_SERVER_EXE       = xpn_mpi_server
+MPI_SERVER_EXE_STOP  = xpn_stop_mpi_server
 
 
 #--------------------------

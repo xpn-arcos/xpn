@@ -67,8 +67,8 @@
 			default:
                              ret = (-1);
 #if defined(XPNI_DEBUG)
-                             printf("[%s:%d] xpni_ft_sread(%d,%p,%d,%d): %d fail(s)\n",
-                                    __FILE__,__LINE__,fd,buffer,(int)offset,size,fmeta_nerrors);
+                             printf("[%s:%d] xpni_ft_sread(%d,%p,%lu,%lu): %d fail(s)\n",
+                                    __FILE__,__LINE__,fd,buffer,(unsigned long)offset,(unsigned long)size,fmeta_nerrors);
 #endif
 			     break;
 		}

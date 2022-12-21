@@ -187,7 +187,7 @@
 
       while (fscanf(file, "%[^\n] ", srv_name) != EOF) {
         // Lookup port name
-        ret = mpi_server_dns_lookup (srv_name, port_name);
+        ret = ns_lookup (srv_name, port_name);
         if (ret == -1)
         {
           printf("Server %s not found\n", dns_name) ;

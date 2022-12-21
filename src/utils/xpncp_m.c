@@ -521,9 +521,9 @@ int main(int argc, char *argv[])
 		if (debug) {
 				//fprintf(stderr, " read(%zu)    read block %zu (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", buffer_size, last, buf->buffer, nr, (unsigned char)buf->buffer[0], (unsigned char)buf->buffer[1], (unsigned char)buf->buffer[2], (unsigned char)buf->buffer[3], (unsigned char)buf->buffer[nr-4], (unsigned char)buf->buffer[nr-3], (unsigned char)buf->buffer[nr-2], (unsigned char)buf->buffer[nr-1]);
 			if (xpnsource && xpndest)
-				fprintf(stderr, " read(%zu)    read block %lu (%p) of %zd bytes\n", buffer_size, last, buf->buffer, nr);
+				fprintf(stderr, " read(%zu)    read block %lu (%p) of %zd bytes\n", (unsigned long)buffer_size, last, buf->buffer, nr);
 			else
-				fprintf(stderr, " read(%zu)    read block of %zd bytes\n", buffer_size, nr);
+				fprintf(stderr, " read(%zu)    read block of %zd bytes\n", (unsigned long)buffer_size, nr);
 		}
 
 		if (nr > 0) {
