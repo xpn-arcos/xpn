@@ -35,7 +35,7 @@
       printf("\t-tp:\t\tThread Pool Activated\n") ;
     }
     if(params->thread_mode == TH_OP){
-      printf("\t-tp:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
+      printf("\t-ntp:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
     }
     printf("\t-d <string>:\t%s\n",   params->dirbase) ;
   }
@@ -46,6 +46,7 @@
     printf("\t-f <path>: file of servers to be shutdown\n") ;
     printf("\t-ns: file for service name\n") ;
     printf("\t-tp: use thread pool\n") ;
+    printf("\t-ntp: use thread per Client\n") ;
     printf("\t-d <string>: name of the base directory\n") ;
   }
   
@@ -58,7 +59,7 @@
     params->argv = argv ;
     params->size = 0 ;
     params->rank = 0 ;
-    params->thread_mode = TH_OP   ;
+    params->thread_mode = TH_POOL ;
     strcpy(params->port_name, "") ;
     strcpy(params->srv_name,  "") ;
     strcpy(params->dirbase,   MPI_SERVER_DIRBASE_DEFAULT) ;
@@ -75,6 +76,10 @@
             case 'n':
               if ((strlen(argv[i]) == 3) && (argv[i][2] == 's')){
                 strcpy(params->dns_file, argv[i+1]);
+                i++;
+              }
+              if ((strlen(argv[i]) == 4) && (argv[i][2] == 't') && (argv[i][3] == 'p')){
+                params->thread_mode = TH_OP;
                 i++;
               }
               break;           

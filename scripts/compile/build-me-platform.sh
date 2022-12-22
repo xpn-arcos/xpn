@@ -24,8 +24,8 @@
 
 # Header
 echo ""
-echo " build-me-compact"
-echo " ----------------"
+echo " platform"
+echo " --------"
 echo ""
 
 # Check arguments
@@ -45,25 +45,25 @@ BASE_PATH=$(dirname $0)
 
 case $1 in
    "mn4")
-     $BASE_PATH/build-me-compact/mn4.sh
+     $BASE_PATH/platform/mn4.sh
      ;;
    "cte-arm-fuji")
-     $BASE_PATH/build-me-compact/cte-arm-fuji.sh
+     $BASE_PATH/platform/cte-arm-fuji.sh
      ;;
     "cte-arm-mpich")
-     $BASE_PATH/build-me-compact/cte-arm-mpich.sh
+     $BASE_PATH/platform/cte-arm-mpich.sh
      ;;
    "picasso")
-     $BASE_PATH/build-me-compact/picasso.sh
+     $BASE_PATH/platform/picasso.sh
      ;;
    "lab21")
-     $BASE_PATH/build-me-compact/lab21.sh
+     $BASE_PATH/platform/lab21.sh
      ;;
     "tucan")
-     $BASE_PATH/build-me-compact/tucan.sh
+     $BASE_PATH/platform/tucan.sh
      ;;
     "generic")
-     $BASE_PATH/build-me-compact/generic.sh
+     $BASE_PATH/platform/generic.sh
      ;;
 
    *)
