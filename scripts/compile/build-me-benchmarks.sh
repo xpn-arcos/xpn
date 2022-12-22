@@ -33,7 +33,7 @@ function usage {
 
 # Start
 echo ""
-echo " build-me"
+echo " build-me (benchmarks)"
 echo " --------"
 echo ""
 echo " Begin."
@@ -75,12 +75,8 @@ fi
 
 
 # Benchmarks
-
-echo "IOR..."
-$BASE_PATH/software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../ior
-
-echo "IO500..."
-$BASE_PATH/software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../io500
+$BASE_PATH/software/ior.sh    -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../ior
+$BASE_PATH/software/io500.sh  -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../io500
 
 echo " End."
 

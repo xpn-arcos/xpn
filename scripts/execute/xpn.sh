@@ -1,156 +1,141 @@
 #!/bin/bash
+#set -x
 
-
+#
+#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#
+#  This file is part of Expand.
+#
+#  Expand is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  Expand is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public License
+#  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 start_mpi_servers() {
+    BASE_DIR="./scripts/execute/"
+
     if [[ ${VERBOSE} == true ]]; then
-        echo "### rootdir: ${ROOTDIR}"
-        echo "### node_num: ${NODE_NUM}"
-        echo "### additional daemon args: ${ARGS}"
+        echo " * rootdir: ${DIR_ROOT}"
+        echo " * node_num: ${NODE_NUM}"
+        echo " * additional daemon args: ${ARGS}"
     fi
 
+    ${BASE_DIR}/mk_conf.sh --conf /tmp/config.xml \
+                           --machinefile ${HOSTFILE} \
+                           --part_size 512k \
+                           --part_name xpn \
+                           --storage_path /tmp
+
+    mpiexec -np       ${NODE_NUM} \
+            -hostfile ${HOSTFILE} \
+            -genv LD_LIBRARY_PATH ../mxml/lib:$LD_LIBRARY_PATH \
+            src/mpi_server/xpn_mpi_server -ns /tmp/dns.txt &
 }
 
 stop_mpi_servers() {
+    if [[ ${VERBOSE} == true ]]; then
+        echo " * rootdir: ${DIR_ROOT}"
+        echo " * node_num: ${NODE_NUM}"
+        echo " * additional daemon args: ${ARGS}"
+    fi
 
+    mpiexec -np 1 \
+            -genv XPN_DNS /tmp/dns.txt \
+            -genv LD_LIBRARY_PATH ../mxml/lib:$LD_LIBRARY_PATH \
+            src/mpi_server/xpn_stop_mpi_server -f ${HOSTFILE}
 }
-
 
 usage_short() {
-    echo "
-usage: xpn.sh [-h/--help] [-a/--args <daemon_args>] [-f/--foreground <false>]
-        [-c/--config <configuration file>] 
-        [-n/--numnodes <jobsize>]   
-        [-l/--hostfile <host file>] 
-        [-r/--rootdir <path>] 
-        [-v/--verbose <false>] {start,stop}
-    "
+    echo ""
+    echo " Usage: xpn.sh [-h/--help] [-a/--args <daemon_args>] [-f/--foreground <false>]"
+    echo "               [-c/--config <configuration file>]"
+    echo "               [-n/--numnodes <jobsize>]"
+    echo "               [-l/--hostfile <host file>]"
+    echo "               [-r/--rootdir <path>]"
+    echo "               [-v/--verbose <false>] {start,stop}"
+    echo ""
+}
+
+usage_details() {
+    echo ""
+    echo " This script simplifies the starting and stopping XPN ad-hoc servers."
+    echo " The script looks for the 'xpn.cfg' file in the same directory where"
+    echo " additional permanent configurations can be set."
+    echo ""
+    echo " positional arguments:"
+    echo "     command                  Command to execute: 'start' and 'stop'"
+    echo ""
+    echo " optional arguments:"
+    echo "     -h, --help               Shows this help message and exits"
+    echo "     -a, --args <arguments>   Add various additional daemon arguments."
+    echo "     -f, --foreground         Starts the script in the foreground. Daemons are stopped by pressing 'q'."
+    echo "     -c, --config   <path>    Path to configuration file. By defaults looks for a 'xpn.cfg' in this directory."
+    echo "     -n, --numnodes <n>       XPN servers are started on n nodes."
+    echo "     -r, --rootdir  <path>    The rootdir path for XPN daemons."
+    echo "     -v, --verbose            Increase verbosity"
+    echo ""
 }
 
 
-help_msg() {
-    usage_short
-    echo "
-    This script simplifies the starting and stopping XPN ad-hoc servers. 
-    The script looks for the 'xpn.cfg' file in the same directory where
-    additional permanent configurations can be set.
-
-    positional arguments:
-            command                  Command to execute: 'start' and 'stop'
-
-    optional arguments:
-            -h, --help               Shows this help message and exits
-            -a, --args <daemon_arguments>
-                                     Add various additional daemon arguments.
-            -f, --foreground         Starts the script in the foreground. Daemons are stopped by pressing 'q'.
-            -c, --config   <path>    Path to configuration file. By defaults looks for a 'xpn.cfg' in this directory.
-            -n, --numnodes <n>       XPN servers are started on n nodes.
-            -r, --rootdir  <path>    The rootdir path for GekkoFS daemons.
-            -v, --verbose            Increase verbosity
-            "
-}
-
-
-# Try to get xpn.cfg from arguments
-CONFIGPATH=""
-argv=("$@")
-
-for i in "${argv[@]}"; do
-    if [[ "${argv[i]}" == "-c" || "${argv[i]}" == "--config" ]]; then
-        CONFIGPATH=$(readlink -mn "${argv[i+1]}")
-        break
-    fi
-done
-
-# get default xpn.cfg if wasn't given as arguments
-SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-
-if [[ -z ${CONFIGPATH} ]]; then
-      CONFIGPATH="${SCRIPTDIR}/xpn.cfg"
-fi
-if [[ ! -f ${CONFIGPATH} ]]; then
-    >&2 echo ">> No xpn.cfg file found at '${CONFIGPATH}'."
-    exit 1
-fi
-
-# load xpn.cfg
-source "$CONFIGPATH"
-
-# more variables (default values)
-VERBOSE=false
+## default values
+ACTION=""
+DIR_ROOT="/tmp/"
 NODE_NUM=1
-ROOTDIR=${DAEMON_ROOTDIR}
-HOSTSFILE=${HOSTFILE_PATH}
-ARGS=${DAEMON_ARGS}
+ARGS=""
+FILE_CONFIG=xpn.cfg
 RUN_FOREGROUND=false
+VERBOSE=false
+HOSTFILE=machinefile
 
-# parse input
-POSITIONAL=()
-while [[ $# -gt 0 ]]; do
-    key="$1"
-
-    case ${key} in
-    -r | --rootdir)
-        ROOTDIR=$2
-        shift # past argument
-        shift # past value
-        ;;
-    -n | --numnodes)
-        NODE_NUM=$2
-        shift # past argument
-        shift # past value
-        ;;
-    -a | --args)
-        ARGS="${ARGS} $2"
-        shift # past argument
-        shift # past value
-        ;;
-    -f | --foreground)
-        RUN_FOREGROUND=true
-        shift # past argument
-        ;;
-    -c | --config)
-            # skip. was handled above
-            shift # past argument
-            shift # past value
-            ;;
-    -h | --help)
-        help_msg
-        exit
-        ;;
-    -v | --verbose)
-        VERBOSE=true
-        shift # past argument
-        ;;
-    *) # unknown option
-        POSITIONAL+=("$1") # save it in an array for later
-        shift              # past argument
-        ;;
+## get arguments
+while getopts "r:n:a:c:fvh" opt; do
+    case "${opt}" in
+	  r) DIR_ROOT=${OPTARG}
+             ;;
+          n) NODE_NUM=${OPTARG}
+             ;;
+          a) ARGS=${OPTARG}
+             ;;
+          c) FILE_CONFIG=${OPTARG}
+             ;;
+          f) RUN_FOREGROUND=true
+             ;;
+          v) VERBOSE=true
+             ;;
+          h) usage_short
+             usage_details
+	     exit
+             ;;
     esac
 done
-set -- "${POSITIONAL[@]}" # restore positional parameters
 
-# check arguments
-if [[ -z ${1+x} ]]; then
-    echo "ERROR: Positional arguments missing."
-    usage_short
-    exit 1
-fi
-command="${1}"
+shift $(($OPTIND - 1))
+ACTION=$*
 
-if [[ ${command} != *"start"* ]] && [[ ${command} != *"stop"* ]]; then
-    echo "ERROR: command ${command} not supported"
-    usage_short
-    exit 1
+# load xpn.cfg
+if [ -f "$FILE_CONFIG" ]; then
+     source "$FILE_CONFIG"
 fi
 
-# Run 
-if [[ ${command} == "start" ]]; then
-    start_mpi_servers
-elif [[ ${command} == "stop" ]]; then
-    stop_mpi_servers
-fi
-if [[ ${VERBOSE} == true ]]; then
-    echo "Nothing left to do. Exiting :)"
-fi
+# run 
+case "${ACTION}" in
+      start) start_mpi_servers
+             ;;
+      stop)  stop_mpi_servers
+             ;;
+      *)     echo ""
+             echo " ERROR: ACTION '${ACTION}' not supported"
+             usage_short
+	     exit 1
+             ;;
+esac
 
