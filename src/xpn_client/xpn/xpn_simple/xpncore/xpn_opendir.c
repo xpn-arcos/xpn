@@ -31,41 +31,41 @@ DIR *xpn_opendir(const char *path)
 	int res = -1;
 	//char path_aux[255];
 	char path_aux[MAX_PATH_LEN];
-	
+
 	XPN_DEBUG_BEGIN_ARGS1(path)
-	
+
 	if ((path == NULL)||(strlen(path)==0)||(strlen(path)>MAX_PATH_LEN)) {
 		errno = ENOENT;
 		XPN_DEBUG_END_ARGS1(path)
 		return NULL;
 	}
-	
+
 	strcpy(path_aux,path);
-	
+
 	//if(path_aux[strlen(path_aux)-1] != '/')
 	//	  path_aux[strlen(path_aux)-1] = '/';
-	
+
 	if (path_aux[strlen(path)-1] != '/') {
 		path_aux[strlen(path)] = '/';
 		path_aux[strlen(path)+1] = '\0';
 	}
-	
+
 	res = xpn_open(path_aux, O_RDONLY);
 	if (res < 0) {
 		errno = ENOENT;
 		XPN_DEBUG_END_ARGS1(path)
 		return NULL;
 	}
-	
+
 	dirp = (DIR *)malloc(sizeof(DIR));
 	if (dirp == NULL) {
 		XPN_DEBUG_END_ARGS1(path)
 		return NULL;
 	}
 	dirp->fd = res;
-	
+
 	XPN_DEBUG_END_ARGS1(path)
-	
+
 	return dirp;
 }
 
@@ -89,7 +89,7 @@ struct dirent* xpn_readdir(DIR *dirp)
 
 	dirnt = (struct dirent *)malloc(sizeof(struct dirent));
 	memset(dirnt, 0, sizeof(struct dirent));
-	
+
 	/*
 	printf("xpn: struct dirent {             %d-%p\n",sizeof(struct dirent),dirnt);
 	printf("    ino_t          d_ino;        %d+%d\n",sizeof(ino_t),(int)&dirnt->d_ino-(int)dirnt);
@@ -99,7 +99,7 @@ struct dirent* xpn_readdir(DIR *dirp)
 	printf("    char           d_name[256];  %d+%d\n",sizeof(struct dirent)-sizeof(ino_t)-sizeof(off_t)-sizeof(unsigned short)-sizeof(unsigned char),(int)&dirnt->d_name-(int)dirnt);
 	printf("}\n");
 	*/
-	
+
 	res = XpnGetEntry(dirp->fd, dirnt->d_name, &(dirnt->d_type));
 	if(res != 0){
 		free(dirnt);
@@ -108,7 +108,7 @@ struct dirent* xpn_readdir(DIR *dirp)
 	}
 
 	XPN_DEBUG_END
-	return dirnt;	
+	return dirnt;
 }
 
 int xpn_closedir(DIR *dirp)
@@ -134,7 +134,7 @@ int xpn_closedir(DIR *dirp)
 				if(xpn_file_table[dirp->fd]->data_vfh->nfih[i]->priv_fh != NULL){
 					xpn_file_table[dirp->fd]->data_vfh->nfih[i]->server->ops->nfi_closedir(
 					xpn_file_table[dirp->fd]->data_vfh->nfih[i]->server,
-					xpn_file_table[dirp->fd]->data_vfh->nfih[i]);	
+					xpn_file_table[dirp->fd]->data_vfh->nfih[i]);
 				}
 
 				free(xpn_file_table[dirp->fd]->data_vfh->nfih[i]);
@@ -147,10 +147,10 @@ int xpn_closedir(DIR *dirp)
 		free(xpn_file_table[dirp->fd]->mdata->policy);
 		free(xpn_file_table[dirp->fd]->mdata);
 
-		free(xpn_file_table[dirp->fd]);	
+		free(xpn_file_table[dirp->fd]);
 		xpn_file_table[dirp->fd] = NULL;
 	}
-	
+
 
   free(dirp);
 
@@ -160,8 +160,7 @@ int xpn_closedir(DIR *dirp)
   //return -1;
 }
 
-
-
 void xpn_rewinddir(__attribute__((__unused__)) DIR *dirp)
 {
 }
+

@@ -714,7 +714,12 @@
     debug_info("[OPS] (ID=%s) GETATTR(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_getattr.path) ;
   }
 
-  void mpi_server_op_setattr ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
+  void mpi_server_op_setattr (
+		               mpi_server_param_st *params,
+		               MPI_Comm sd, 
+			       struct st_mpi_server_msg *head, 
+			       __attribute__((__unused__)) int rank_client_id
+		             )
   {
     // check params...
     if (sd < 0) {
@@ -728,7 +733,7 @@
     }
 
     //TODO
-    rank_client_id = rank_client_id;
+    // rank_client_id = rank_client_id;
     //TODO
 
     // do setattr
@@ -975,7 +980,12 @@
 
   //FS Metadata API
 
-  void  mpi_server_op_getnodename ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) //NEW
+  void  mpi_server_op_getnodename ( 
+		                    mpi_server_param_st *params,
+		                    MPI_Comm sd, 
+	                            __attribute__((__unused__)) struct st_mpi_server_msg *head, 
+	                            int rank_client_id
+				  )
   {
     char serv_name[HOST_NAME_MAX];
 
@@ -984,7 +994,9 @@
     // Get server host name
     gethostname(serv_name, HOST_NAME_MAX) ;
 
-    head = head; // Avoid unused parameter 
+    // <TODO>
+    // head = head; // Avoid unused parameter 
+    // </TODO>
 
     // show debug info
     debug_info("[OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name) ;

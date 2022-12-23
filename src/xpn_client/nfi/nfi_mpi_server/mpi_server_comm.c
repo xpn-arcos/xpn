@@ -270,7 +270,7 @@
     return 1;
   }
 
-  ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
+  ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, __attribute__((__unused__)) char *msg_id )
   {
     int ret ;
 
@@ -284,7 +284,10 @@
         debug_warning("Server[?]: size < 0") ;
         return -1;
     }
-    msg_id = msg_id ; // TODO: msg_id is used?
+
+    // TODO
+    // msg_id = msg_id ; // TODO: msg_id is used?
+    // TODO
 
     // Send message
     ret = MPI_Send(data, size, MPI_INT, 0, 0, fd) ;

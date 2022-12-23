@@ -238,11 +238,12 @@ int nfi_local_disconnect ( struct nfi_server *serv )
  * Destroy LOCAL operations				    *
  ************************************************************/
 
-int nfi_local_destroy ( struct nfi_server *serv )
+int nfi_local_destroy ( __attribute__((__unused__)) struct nfi_server *serv )
 {
 	DEBUG_BEGIN();
 
-	serv = serv ;
+	// TODO
+	// serv = serv ;
 
 // TODO: When is this called?
 

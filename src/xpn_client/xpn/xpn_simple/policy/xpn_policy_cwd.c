@@ -14,3 +14,4 @@ int XpnGetAbsolutePath(const char *path, char *path_part)
 	path_part[strlen(path)+1] = '\0';
 	return 0;
 }
+

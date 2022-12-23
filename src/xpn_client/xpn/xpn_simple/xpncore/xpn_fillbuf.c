@@ -48,7 +48,7 @@ int xpn_fillbuf(register FILE *stream)
 		XPN_DEBUG_END_CUSTOM("%d", fileno(stream))
 		return EOF;
 	}
-	if (io_testflag(stream, (_IOEOF | _IOERR ))) { 
+	if (io_testflag(stream, (_IOEOF | _IOERR ))) {
 		XPN_DEBUG_END_CUSTOM("%d", fileno(stream))
 		return EOF;
 	}
@@ -63,7 +63,7 @@ int xpn_fillbuf(register FILE *stream)
 
 	if (!io_testflag(stream, _IOREADING))
 		stream->_flags |= _IOREADING;
-	
+
 	if (!io_testflag(stream, _IONBF) && !stream->_buf) {
 		stream->_buf = (char *) malloc(BUFSIZ+1);
 		if (!stream->_buf) {
@@ -96,7 +96,7 @@ int xpn_fillbuf(register FILE *stream)
 		if (stream->_count == 0) {
 			stream->_flags |= _IOEOF;
 		}
-		else 
+		else
 			stream->_flags |= _IOERR;
 
 		XPN_DEBUG_END_CUSTOM("%d", fileno(stream))

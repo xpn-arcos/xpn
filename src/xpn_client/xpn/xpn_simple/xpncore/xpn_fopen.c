@@ -54,7 +54,7 @@ FILE * xpn_fopen(const char *name, const char *mode)
 
 	switch(*mode++) {
 	case 'r':
-		flags |= _IOREAD | _IOREADING;	
+		flags |= _IOREAD | _IOREADING;
 		rwmode = O_RDONLY;
 		break;
 	case 'w':
@@ -97,7 +97,7 @@ FILE * xpn_fopen(const char *name, const char *mode)
 			(void) _close(fd);
 			fd = _open(name, rwmode);
 		}
-			
+
 	}
 
 	if (fd < 0) {
@@ -110,9 +110,9 @@ FILE * xpn_fopen(const char *name, const char *mode)
 		XPN_DEBUG_END_CUSTOM("%s, %s", name, mode)
 		return (FILE *)NULL;
 	}
-	
+
 	//if ( S_ISFIFO(st.st_mode) ) flags |= _IOFIFO;
-	
+
 	if (( stream = (FILE *) malloc(sizeof(FILE))) == NULL ) {
 		_close(fd);
 		XPN_DEBUG_END_CUSTOM("%s, %s", name, mode)
