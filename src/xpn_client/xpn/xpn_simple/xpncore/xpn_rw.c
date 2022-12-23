@@ -36,7 +36,7 @@ ssize_t xpn_read(int fd, void *buffer, size_t size)
 
 	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu", fd, size)
 
-	if (xpn_file_table[fd] != NULL)	
+	if (xpn_file_table[fd] != NULL)
 	{
 		if ((unsigned long)(size) > (unsigned long)(xpn_file_table[fd]->block_size))
 		{
@@ -58,7 +58,7 @@ ssize_t xpn_read(int fd, void *buffer, size_t size)
 ssize_t xpn_write(int fd, const void *buffer, size_t size)
 {
 	ssize_t res = -1;
-	
+
 	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu", fd, size)
 
 	if (xpn_file_table[fd] != NULL)
@@ -99,26 +99,26 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	if(buffer == NULL){
 		errno = EFAULT;
 		res = -1;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	if(size == 0){
 		res = 0;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	if(xpn_file_table[fd]->mode == O_WRONLY){
 		res = -1;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	if(xpn_file_table[fd]->type == XPN_DIR){
 		res = -1;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
@@ -165,12 +165,12 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 				break;
 			}
 		}
-		
+
 		res = servers[l_serv]->ops->nfi_read(servers[l_serv],
-											  xpn_file_table[fd]->data_vfh->nfih[l_serv],
-											  (char *)buffer + count,
-											  l_offset,
-											  l_size) ;
+							  xpn_file_table[fd]->data_vfh->nfih[l_serv],
+							  (char *)buffer + count,
+							  l_offset,
+							  l_size) ;
 		if(res<0){
 			break;
 		}
@@ -190,14 +190,14 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 {
 	ssize_t *res_v, total;
-	int res, n, i, j, err;	
+	int res, n, i, j, err;
 	struct nfi_server **servers;
 	struct nfi_worker_io **io;
 	int *ion, max;
 	void *new_buffer;
-	
+
 	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-	
+
 	if((fd<0)||(fd>XPN_MAX_FILE)||(xpn_file_table[fd] == NULL)){
 		XpnShowFileTable();
 		errno = EBADF;
@@ -205,32 +205,32 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	if(buffer == NULL){
 		errno = EFAULT;
 		res = -1;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	if(size == 0){
 		res = 0;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	if(xpn_file_table[fd]->mode == O_WRONLY){
 		res = -1;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	if(xpn_file_table[fd]->type == XPN_DIR){
 		res = -1;
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	/* params:
 	 * flag operation, partition id, absolute path, file descriptor,
 	 * pointer to servers */
@@ -248,7 +248,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	io = (struct nfi_worker_io **)malloc(sizeof(struct nfi_worker_io *)*n);
 	if(io == NULL){
 		if (servers != NULL) { free(servers); servers=NULL; }
@@ -257,7 +257,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	ion = (int *)malloc(sizeof(int)*n);
 	if(ion == NULL){
 		if (servers != NULL) { free(servers); servers=NULL; }
@@ -267,9 +267,9 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	bzero(ion, sizeof(int)*n);
-	
+
 	// calculate the maximum number of operations
 	max = (size/xpn_file_table[fd]->block_size) + 1;
 	if(size%xpn_file_table[fd]->block_size != 0){
@@ -292,7 +292,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 			return res;
 		}
 	}
-	
+
 	for(i=0; i<n; i++){
 		io[i][0].offset = 0;
 		io[i][0].size = 0;
@@ -309,7 +309,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 		free(ion);
 		return -1;
 	}
-	
+
 #ifdef POSIX_THREADS
 	// TODO: Expand is not reentrant. Using only one 'wrk' (struct nfi_worker) inside servers[i] (struct nfi_server) does not allow two nfi operations at the same time
 	//pthread_mutex_lock(&(global_mt)); // It is better to do this in clients when necessary
@@ -318,7 +318,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 	// operation
 	for(j=0; j<n; j++){
 		i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
-		
+
 		if(ion[i] != 0){
 			res = XpnGetFh( xpn_file_table[fd]->mdata,
 					&(xpn_file_table[fd]->data_vfh->nfih[i]),
@@ -336,9 +336,9 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 				XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 				return res;
 			}
-			
+
 			// Default Value
-			nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_read, xpn_file_table[fd]->part->id, size));	
+			nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_read, xpn_file_table[fd]->part->id, size));
 
 			nfi_worker_do_read(servers[i]->wrk,
 					xpn_file_table[fd]->data_vfh->nfih[i],
@@ -346,7 +346,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 					ion[i]);
 		}
 	}
-	
+
 	res_v = (ssize_t *)malloc(sizeof(ssize_t)*n);
 	if(res_v == NULL){
 		if (servers != NULL) { free(servers); servers=NULL; }
@@ -367,7 +367,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 		if(res_v[i] < 0)
 			err = 1;
 	}
-	
+
 #ifdef POSIX_THREADS
 	//pthread_mutex_unlock(&(global_mt));
 #endif
@@ -377,7 +377,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 	total = -1;
 	if (!err) {
 		total = XpnReadGetTotalBytes(fd, res_v, n);
-	
+
 		if(total > 0)
 			xpn_file_table[fd]->offset += total;
 	}
@@ -388,7 +388,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 	}
 	free(io);
 	free(ion);
-	
+
 	res = total;
 	XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 	return res;
@@ -409,19 +409,19 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
 	if((fd<0)||(fd>XPN_MAX_FILE)){
 		return -1;
 	}
-	
+
 	if((xpn_file_table[fd] == NULL)||(buffer == NULL)){
 		return -1;
 	}
-	
+
 	if(size == 0){
 		return 0;
 	}
-	
+
 	if(xpn_file_table[fd]->mode == O_RDONLY){
 		return -1;
 	}
-	
+
 	if(xpn_file_table[fd]->type == XPN_DIR){
 		return -1;
 	}
@@ -445,9 +445,10 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
 	new_offset = offset;
 	count = 0;
 
-	while(size > count){
+	while(size > count)
+	{
 		XpnGetBlock(fd, new_offset, &l_offset, &l_serv);
-	
+
 		l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
 
 		// If l_size > the remaining bytes to read/write, then adjust l_size
@@ -468,10 +469,10 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
 		}
 
 		res = servers[l_serv]->ops->nfi_write(servers[l_serv],
-											  xpn_file_table[fd]->data_vfh->nfih[l_serv],
-											  (char *)buffer + count,
-											  l_offset,
-											  l_size) ;
+							  xpn_file_table[fd]->data_vfh->nfih[l_serv],
+							  (char *)buffer + count,
+							  l_offset,
+							  l_size) ;
 		if(res<0){
 			break;
 		}
@@ -496,25 +497,25 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 	struct nfi_worker_io **io;
 	int *ion, max;
 	void *new_buffer;
-	
+
 	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-	
+
 	if((fd<0)||(fd>XPN_MAX_FILE)){
 		return -1;
 	}
-	
+
 	if((xpn_file_table[fd] == NULL)||(buffer == NULL)){
 		return -1;
 	}
-	
+
 	if(size == 0){
 		return 0;
 	}
-	
+
 	if(xpn_file_table[fd]->mode == O_RDONLY){
 		return -1;
 	}
-	
+
 	if(xpn_file_table[fd]->type == XPN_DIR){
 		return -1;
 	}
@@ -536,14 +537,14 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 		XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 		return res;
 	}
-	
+
 	io = (struct nfi_worker_io **)malloc(sizeof(struct nfi_worker_io *)*n);
 	if(io == NULL){
 	        if (servers != NULL) { free(servers); servers=NULL; }
 		res = -1;
 		return res;
 	}
-	
+
 	ion = (int *)malloc(sizeof(int)*n);
 	if(ion == NULL){
 	        if (servers != NULL) { free(servers); servers=NULL; }
@@ -552,13 +553,13 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 		return res;
 	}
 	bzero(ion, sizeof(int)*n);
-	
+
 	// calculate the maximum number of operations
 	max = (size/xpn_file_table[fd]->block_size) + 1;
 	if(size%xpn_file_table[fd]->block_size != 0){
 		max++;
 	}
-	
+
 	// create
 	for(i=0; i<n; i++){
 		io[i] = (struct nfi_worker_io *)malloc(sizeof(struct nfi_worker_io)*max);
@@ -572,12 +573,12 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 			return -1;
 		}
 	}
-	
+
 	for(i=0; i<n; i++){
 		io[i][0].offset = 0;
 		io[i][0].size = 0;
 	}
-	
+
 	// Calculate which blocks to write to each server
 	new_buffer = XpnWriteBlocks(fd, buffer, size, offset, &io, &ion, n);
 	if(new_buffer == NULL){
@@ -597,13 +598,13 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
 	for(j=0; j<n; j++){
 		i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
-		
+
 		if(ion[i] != 0){
 			res = XpnGetFh( xpn_file_table[fd]->mdata,
 					&(xpn_file_table[fd]->data_vfh->nfih[i]),
 					servers[i],
 					xpn_file_table[fd]->path);
-			
+
 			if(res<0){
 	                        if (servers != NULL) { free(servers); servers=NULL; }
 				for(i=0;i<n;i++){
@@ -631,14 +632,14 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 */
 			// Default Value
 			nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_write ,xpn_file_table[fd]->part->id, size));
-			
+
 			nfi_worker_do_write(servers[i]->wrk,
 					xpn_file_table[fd]->data_vfh->nfih[i],
 					io[i],
 					ion[i]);
 		}
 	}
-	
+
 	res_v = (ssize_t *)malloc(sizeof(ssize_t)*n);
 	if(res_v == NULL){
                 if (servers != NULL) { free(servers); servers=NULL; }
@@ -669,18 +670,18 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 	total = -1;
 	if (!err) {
 		total = XpnWriteGetTotalBytes(fd, res_v, n);
-	
+
 		if(total > 0)
 			xpn_file_table[fd]->offset += total;
 	}
-	
+
         if (servers != NULL) { free(servers); servers=NULL; }
 	for(j=0;j<n;j++){
 		free(io[j]);
 	}
 	free(io);
 	free(ion);
-	
+
 	res = total;
 	XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 	return res;
@@ -689,8 +690,9 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 off_t xpn_lseek(int fd, off_t offset, int flag)
 {
 	struct stat st;
-	
-	switch (flag) {
+
+	switch (flag)
+	{
 		case SEEK_SET:
 			if(offset<0) {
 				errno = EINVAL;
@@ -700,6 +702,7 @@ off_t xpn_lseek(int fd, off_t offset, int flag)
 				xpn_file_table[fd]->offset = offset;
 			}
 			break;
+
 		case SEEK_CUR:
 			if(xpn_file_table[fd]->offset+offset<0) {
 				errno = EINVAL;
@@ -709,6 +712,7 @@ off_t xpn_lseek(int fd, off_t offset, int flag)
 				xpn_file_table[fd]->offset += offset;
 			}
 			break;
+
 		case SEEK_END:
 			if(xpn_fstat(fd, &st)<0) {
 				errno = EBADF;
@@ -722,11 +726,12 @@ off_t xpn_lseek(int fd, off_t offset, int flag)
 				xpn_file_table[fd]->offset = st.st_size + offset;
 			}
 			break;
+
 		default:
 			errno = EINVAL;
 			return (off_t)-1;
 	}
-	
+
 	return xpn_file_table[fd]->offset;
 }
 

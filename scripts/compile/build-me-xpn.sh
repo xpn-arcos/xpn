@@ -74,11 +74,8 @@ fi
 
 
 # 2) XPN and dependencies...
-echo "MXML..."
-$BASE_PATH/software/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../mxml
-
-echo "XPN..."
-$BASE_PATH/software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../xpn
+$BASE_PATH/software/mxml.sh                  -i $INSTALL_PATH -s $BASE_PATH/../../../mxml
+$BASE_PATH/software/xpn.sh    -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../xpn
 
 echo " End."
 

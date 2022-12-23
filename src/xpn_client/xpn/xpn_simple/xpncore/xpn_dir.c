@@ -62,7 +62,7 @@ int xpn_mkdir(const char *path, mode_t perm)
   for(i=0;i<n;i++){
 
 	  XpnGetURLServer(servers[i], abs_path, url_serv);
-	
+
 	  vfh_aux->nfih[i] = (struct nfi_fhandle*)malloc(sizeof(struct nfi_fhandle));
 	  memset(vfh_aux->nfih[i], 0, sizeof(struct nfi_fhandle));
 	  if(vfh_aux->nfih[i] == NULL){
@@ -78,9 +78,10 @@ int xpn_mkdir(const char *path, mode_t perm)
   }
   /* wait */
   err = 0;
-  for(i=0;i<n;i++){
+  for(i=0;i<n;i++)
+  {
 	ret = nfi_worker_wait(servers[i]->wrk);
-	
+
 	/* tratamiento de errores */
 	if((ret<0)&&(!err)){
 		/* erase the file create before de server number i */
@@ -102,6 +103,7 @@ int xpn_mkdir(const char *path, mode_t perm)
 		}
 	}
   }
+
   /* tratamiento de errores */
   if(err){
 	xpn_err(XPNERR_CREATE);
@@ -122,8 +124,10 @@ int xpn_mkdir(const char *path, mode_t perm)
 
 	return -1;
   }
+
   mdata_aux = (struct xpn_metadata *)malloc(sizeof(struct xpn_metadata));
-  if(mdata_aux == NULL){
+  if(mdata_aux == NULL)
+  {
   	free(servers);
 	/* tambien los punteros indirectos */
 	for(i=0;i<n;i++){
@@ -170,10 +174,8 @@ int xpn_mkdir(const char *path, mode_t perm)
   return 0;
 }
 
-
 int xpn_rmdir(const char *path)
 {
-
   char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
   int ret, err, i, n, pd;
   struct nfi_server **servers;

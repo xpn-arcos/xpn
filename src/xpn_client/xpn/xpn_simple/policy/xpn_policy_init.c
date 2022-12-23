@@ -17,7 +17,7 @@ char *param_get ( char *key )
 struct conf_connect_st* XpnPartitionOpen(){
 	static struct conf_connect_st desc;
     char conf[MAX_PATH_LEN];
-	
+
 	desc.type = CONF_DEFAULT;
 	switch (desc.type){
 		case CONF_FILE:
@@ -39,7 +39,7 @@ struct conf_connect_st* XpnPartitionOpen(){
 			}else{
 				strcpy(desc.connect_u.xml.conf_n, XPN_CONF_DEFAULT);
 			}
-			
+
 			if(param_get(XPN_PROFILE) != NULL){
 				strcpy(desc.connect_u.xml.profile_n, param_get(XPN_PROFILE));
 			}else{
@@ -54,18 +54,18 @@ struct conf_connect_st* XpnPartitionOpen(){
 				fprintf(stderr,"xpn_init: Can't open %s\n",desc.connect_u.xml.conf_n);
 				return NULL;
 			}
-			
+
 			desc.connect_u.xml.conf_tree = mxmlLoadFile(NULL, desc.connect_u.xml.conf_f, MXML_NO_CALLBACK);
 			if (desc.connect_u.xml.conf_tree == NULL){
 				fclose(desc.connect_u.xml.conf_f);
 				fprintf(stderr,"(1)xpn_init: %s is empty.\n", desc.connect_u.xml.conf_n);
 				return NULL;
 			}
-			
+
 			desc.connect_u.xml.conf_partition_node = desc.connect_u.xml.conf_tree;
 			desc.connect_u.xml.profile_f = fopen(desc.connect_u.xml.profile_n, "r");
-			
-#endif			
+
+#endif
 			break;
 		}
 #if defined(DEBUG_NFI)
@@ -97,9 +97,9 @@ int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
 	#ifdef ENABLE_MXML
 		char *value;
 	#endif
-	
+
 	switch(fconf->type){
-		
+
 		case CONF_FILE:
 			if(fscanf(fconf->connect_u.f, "%s", name)==EOF){
 				return 0;
@@ -112,12 +112,12 @@ int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
 											XML_TAG_ELEM_PARTITION, NULL, NULL, MXML_DESCEND);
 			if(fconf->connect_u.xml.conf_partition_node == NULL)
 				return 0;
-			
+
 			value = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_partition_node, XML_TAG_ATTR_NAME);
 			if(value == NULL){
 				return 0;
 			}
-			
+
 			strcpy(name, value);
 			fconf->connect_u.xml.conf_meta_node = fconf->connect_u.xml.conf_partition_node;
 			fconf->connect_u.xml.conf_data_node = fconf->connect_u.xml.conf_partition_node;
@@ -132,7 +132,7 @@ int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
 int XpnGetIdPartition(__attribute__((__unused__)) struct conf_connect_st *fconf, __attribute__((__unused__)) char *name)
 {
 	static int cont=0;
-	
+
 	return (cont++);
 }
 
@@ -145,15 +145,15 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
 	mxml_node_t* node;
 #endif
 	bzero(type, 10);
-	
+
 	switch(fconf->type){
-	case CONF_FILE:			
+	case CONF_FILE:
 		if(fscanf(fconf->connect_u.f, "%zu %d %s", &(part->block_size), &(part->data_nserv), type) == EOF)
 		{
 			return -1;
 		}
 		part->block_size = part->block_size * KB;
-		
+
 		if ((strcmp(type,"RAID0") == 0) || (strcmp(type,"NORMAL") == 0)){ // FIXME: previously was 'value', now changed to 'type' but not tested
 			part->type = POLICY_RAID0;
 		} else if (strcmp(type,"RAID1") == 0){
@@ -172,27 +172,27 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
 					//fprintf(stderr,"(2)xpn_init: %s is empty.\n", fconf->connect_u.xml.profile_n);
 					//return 0;
 				//}
-				
-				//if (fconf->connect_u.xml.profile_tree != NULL){	
+
+				//if (fconf->connect_u.xml.profile_tree != NULL){
 					fconf->connect_u.xml.profile_partition_node = fconf->connect_u.xml.profile_tree;
 				//}
 			}
-			
+
 			value = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_partition_node,
 								XML_TAG_ATTR_BLOCKSIZE);
 			if(value == NULL){
 				value = XML_DEFAULT_ATTR_BLOCKSIZE;
 			}
-			
+
 			part->block_size = getSizeFactor(value);
-			
+
 			value = NULL;
 			value = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_partition_node,
 								XML_TAG_ATTR_TYPE);
 			if(value == NULL){
-				value = XML_DEFAULT_ATTR_TYPE;        
+				value = XML_DEFAULT_ATTR_TYPE;
 			}
-			
+
 			if ((strcmp(value,"RAID0") == 0) || (strcmp(value,"NORMAL") == 0)){
 				part->type = POLICY_RAID0;
 			} else if (strcmp(value,"RAID1") == 0 ){
@@ -200,12 +200,12 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
 			} else {
 				part->type = -1;
 			}
-			
+
 			/* THREADS */
 			value = NULL;
        		value = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_partition_node,
 							XML_TAG_ATTR_THREADS);
-#ifdef _DBG_					
+#ifdef _DBG_
 					printf("[XPN]XML_TAG_ATTR_THREADS = %s\n", value ? value : "NULL");
 #endif
 
@@ -236,7 +236,7 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
 #endif
 					break;
 			}
-			
+
 			/*N DATASERVERS*/
 			part->data_nserv = 0;
 			node = fconf->connect_u.xml.conf_partition_node;
@@ -289,11 +289,11 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
 
 			return 1;
 #endif
-		
+
 	default:
 		return -1;
 	}
-	
+
 	return 1;
 }
 
@@ -336,7 +336,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 											XML_TAG_ELEM_DATANODE, NULL, NULL, MXML_DESCEND);
 					if(fconf->connect_u.xml.conf_data_node == NULL)
 						return 0;
-					
+
 					url = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_data_node, XML_TAG_ATTR_URL);
 					break;
 				case XPN_META_SERVER:
@@ -346,7 +346,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 											MXML_DESCEND);
 					if(fconf->connect_u.xml.conf_meta_node == NULL)
 						return 0;
-					
+
 					url = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_meta_node, XML_TAG_ATTR_URL);
 					break;
 			}
@@ -359,7 +359,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 			fprintf(stderr, "[XPN] Conf type %d not recognized\n", fconf->type);
 			break;
 	}
-	
+
 	XPN_DEBUG("url=%s", url);
 
 	ret = ParseURL(url,
@@ -381,7 +381,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 	if (strcmp(prt,"file") == 0) {
 		//printf("[XPN]nfi_local_init: %s\n",url);
 		ret = nfi_local_init(url, serv, NULL);
-		
+
 		if(ret < 0){
 			xpn_err(XPNERR_INITSERV);
 			return -1;
@@ -402,7 +402,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 // END OF ENABLE_NFS BLOCK. Do not remove this line. //
 // BEGIN OF ENABLE_NFS3 BLOCK. Do not remove this line. //
 #ifdef ENABLE_NFS3
-	else if (strcmp(prt,"nfs3") == 0){	
+	else if (strcmp(prt,"nfs3") == 0){
 		//printf("[XPN]nfi_nfs3_init: %s\n",url);
 		ret = nfi_nfs3_init(url, serv, NULL);
 		if(ret < 0){
@@ -464,43 +464,43 @@ int XpnGetPartition(char *path) /* return partition's id */
 {
 	int i;
 	char part[MAX_PATH_LEN];
-	
+
 	i=0;
-	
+
 	getNamePart(part, path);
 	//printf("[XPN]part = %s\n",part);
 	//printf("[XPN]xpn_parttable[%d].name = %s\n",i,xpn_parttable[i].name);
 	while((i<XPN_MAX_PART)&&(strcmp(part,xpn_parttable[i].name) != 0)){
 		i++;
 	}
-	
+
 	//printf("[XPN]xpn_parttable[i].id = %d\n",xpn_parttable[i].id);
-	
+
 	if(i==XPN_MAX_PART){
 		fprintf(stderr, "Error: Partition '%s' does not exist in the conf file.\n", part);
 		return -1;
 	}
-	
+
 	return xpn_parttable[i].id ;
 }
 
 struct xpn_partition* XpnSearchPart(int pd)
 {
 	int i=0;
-	
+
 	while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd))
 		i++;
-	
+
 	if(i == XPN_MAX_PART)
 		return NULL;
-	
+
 	return (&xpn_parttable[i]);
-	
+
 }
 
 void XpnShowPartitionTable() {
 	int i=0;
-	
+
 	while((i < XPN_MAX_PART) && (xpn_parttable[i].name != NULL) && (strcmp("", xpn_parttable[i].name) != 0)){
 		printf("[XPN]xpn_parttable[%d].name = %s\n", i, xpn_parttable[i].name);
 		i++;
