@@ -24,10 +24,6 @@
 
     #include "filesystem.h"
 
-  /* ... Varibles ........................................... */
-
-    //pthread_attr_t filesystem_attr;
-
 
   /* ... Functions / Funciones ......................................... */
 
@@ -108,23 +104,6 @@
       return strlen(s);
      }
 
-
-    /*
-     * API
-     */
-
-    /*int  filesystem_init ( void )
-    {
-      pthread_attr_init(&filesystem_attr);
-      int ret = pthread_attr_setdetachstate(&filesystem_attr, PTHREAD_CREATE_DETACHED);
-      if (ret !=0 ) {
-        //perror("pthread_attr_setdetachstate: ");
-        return ret;
-      }
-
-      return 0;
-    }*/
-
     void *filesystem_async_close (void *arg)
     {
       // Try to close file
@@ -137,17 +116,10 @@
       pthread_exit(NULL);
     }
 
-    /*int  filesystem_destroy ( void )
-    {
-      int ret = pthread_attr_destroy(&filesystem_attr);
-      if (ret !=0 ) {
-        //perror("pthread_attr_destroy: ");
-        return ret;
-      }
 
-      return 0;
-    }*/
-
+    /*
+     * API
+     */
 
     int  filesystem_creat ( char *pathname, mode_t mode )
     {
@@ -242,21 +214,16 @@
           ret = pthread_create(&thid, NULL, filesystem_async_close, (void *) (long) fd);
           ret = pthread_detach(thid);
 
-          if (ret < 0) {                     
-            ret = real_posix_close(fd) ;
-            if (ret < 0) {
-              debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
-              //perror("close: ") ;
-            }                                                                                                 
+          if (ret > -1) {                     
+              return ret ;
           }  
+         #endif
 
-         #else
            ret = real_posix_close(fd) ;
            if (ret < 0) {
                debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
                //perror("close: ") ;
            }
-         #endif
 
          DEBUG_END() ;
 
@@ -577,3 +544,4 @@
 
 
   /* ................................................................... */
+

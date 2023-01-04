@@ -869,7 +869,7 @@ configure:5846: $? = 0
 configure:5846: result: yes
 configure:5852: checking for _doprnt
 configure:5852: gcc -o conftest -g -O2   conftest.c -lpthread  >&5
-/usr/bin/ld: /tmp/ccaycXfP.o: in function `main':
+/usr/bin/ld: /tmp/ccokzyrD.o: in function `main':
 /home/acaldero/work/xpn/conftest.c:79: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:5852: $? = 1
@@ -1060,13 +1060,10 @@ config.status:936: creating include/config.h
 config.status:1117: include/config.h is unchanged
 config.status:1165: executing depfiles commands
 config.status:1242: cd src/base       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
-make: Nothing to be done for 'am--depfiles'.
 config.status:1247: $? = 0
 config.status:1242: cd src/xpn_client       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
-make: Nothing to be done for 'am--depfiles'.
 config.status:1247: $? = 0
 config.status:1242: cd src/utils       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
-make: Nothing to be done for 'am--depfiles'.
 config.status:1247: $? = 0
 
 ## ---------------- ##
