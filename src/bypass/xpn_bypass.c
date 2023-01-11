@@ -45,21 +45,45 @@
 
   // fd table management
 
-  struct generic_fd fdstable[MAX_FDS];
+  //struct generic_fd fdstable[MAX_FDS];
+  struct generic_fd * fdstable = NULL;
+  long fdstable_size = 0L;
 
   //pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-  void fdstable_init ( void ){
+  void fdstable_realloc ( void )
+  {
+    long old_size = fdstable_size;
+    fdstable_size = fdstable_size + (long)MAX_FDS;
+
+    if ( NULL == fdstable ){
+      fdstable = (struct generic_fd *) malloc(fdstable_size * sizeof(struct generic_fd));
+    }
+    else{
+      fdstable = (struct generic_fd *)realloc((struct generic_fd *)fdstable, fdstable_size * sizeof(struct generic_fd));
+    }
+
+    if ( NULL == fdstable ){
+      printf("[bypass] Error: out of memory\n");
+      exit(-1);
+    }
+    
     //pthread_mutex_lock(&mutex);
-    for (int i = 0; i < MAX_FDS; ++i)
-    { 
+    for (int i = old_size; i < fdstable_size; ++i)
+    {
       fdstable[i].type = FD_FREE;
       fdstable[i].real_fd = -1;
     }
     //pthread_mutex_unlock(&mutex);
   }
 
-  struct generic_fd fdstable_get ( int fd ){
+  void fdstable_init ( void )
+  {
+    fdstable_realloc();
+  }
+
+  struct generic_fd fdstable_get ( int fd )
+  {
     //debug_info("GET FSTABLE %d  %d  %d\n", fd, fdstable[fd].type, fdstable[fd].real_fd);
     //pthread_mutex_lock(&mutex);
 
@@ -81,8 +105,9 @@
     return ret;
   }
 
-  int fdstable_put ( struct generic_fd fd ){
-    for (int i = 0; i < MAX_FDS; ++i)
+  int fdstable_put ( struct generic_fd fd )
+  {
+    for (int i = 0; i < fdstable_size; ++i)
     {
       //pthread_mutex_lock(&mutex);
       if ( fdstable[i].type == FD_FREE ){
@@ -94,10 +119,24 @@
       //pthread_mutex_unlock(&mutex);
     }
 
+    long old_size = fdstable_size;
+
+    fdstable_realloc();
+
+    //pthread_mutex_lock(&mutex);
+    if ( fdstable[old_size].type == FD_FREE ){
+      fdstable[old_size] = fd;
+      //debug_info("PUT FSTABLE %d  %d  %d\n", i, fdstable[i].type, fdstable[i].real_fd);
+      //pthread_mutex_unlock(&mutex);
+      return old_size + PLUSXPN;
+    }
+    //pthread_mutex_unlock(&mutex);
+
     return -1;
   }
 
-  int fdstable_remove ( int fd ){
+  int fdstable_remove ( int fd )
+  {
     //pthread_mutex_lock(&mutex);
     if (fd < PLUSXPN)
     {
@@ -114,15 +153,20 @@
   // Dir table management
 
   DIR * fdsdirtable[MAX_DIRS];
+  //DIR ** fdsdirtable;
 
-  void fdsdirtable_init ( void ){
+  void fdsdirtable_init ( void )
+  {
+    //fdsdirtable = (DIR **) malloc(MAX_DIRS * sizeof(DIR *));
+
     for (int i = 0; i < MAX_DIRS; ++i)
     {
       fdsdirtable[i] = NULL;
     }
   }
 
-  int fdsdirtable_search ( DIR * dir ) {
+  int fdsdirtable_search ( DIR * dir )
+  {
     for (int i = 0; i < MAX_DIRS; ++i)
     {
       if ( fdsdirtable[i] == dir ){
@@ -133,7 +177,8 @@
     return -1;
   }
 
-  int fdsdirtable_put ( DIR * dir ){
+  int fdsdirtable_put ( DIR * dir )
+  {
     for (int i = 0; i < MAX_DIRS; ++i)
     {
       if ( fdsdirtable[i] == NULL ){
@@ -145,7 +190,8 @@
     return -1;
   }
 
-  int fdsdirtable_remove ( DIR * dir ){
+  int fdsdirtable_remove ( DIR * dir )
+  {
     for (int i = 0; i < MAX_DIRS; ++i)
     {
       if ( fdsdirtable[i] == dir ){
