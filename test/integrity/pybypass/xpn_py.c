@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 
@@ -38,16 +39,20 @@ int write2 ( int fd, char *buffer, int buffer_size )
 	return ret ;
 }
 
-char buffer[1024] ; // TODO: warning with return something from global
 
 char * read2 ( int fd )
 {
-	int  ret ;
+	int     ret ;
+        struct  stat st;
+        char   *buffer ;
 
-	ret = read(fd, buffer, 1024) ;
+        fstat(fd, &st);
+	buffer = malloc(st.st_size) ;
+
+	ret = read(fd, buffer, st.st_size) ;
 	printf("%d = xpn_read(fd:%d, buffer:'%.10s...', buffer_size:%d)\n", ret, fd, buffer, 1024) ;
 
-	return buffer ;
+	return buffer ;  // TODO: free buffer... how?
 }
 
 int close2 ( int fd )
