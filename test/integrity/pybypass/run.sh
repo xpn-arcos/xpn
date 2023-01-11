@@ -3,17 +3,22 @@ set -x
 
 
 # Try 1
-#env LD_PRELOAD=../../../src/bypass/xpn_bypass.so:$LD_PRELOAD \
-#    XPN_CONF=./xpn.conf \
-#    python3 ./main.py
+echo " ### PRELOAD ####################################"
+env LD_PRELOAD=../../../src/bypass/xpn_bypass.so:$LD_PRELOAD \
+    XPN_CONF=./xpn.conf \
+    python3 ./main_preload.py
 
 
 # Try 2
+echo " ### DECORATOR ##################################"
 gcc -fPIC -shared -o xpn_py.so xpn_py.c
 
 env XPN_CONF=./xpn.conf \
-    python3 ./main.py
+    python3 ./main_decorator.py
 
+
+# Clean
+echo " ################################################"
 rm -fr xpn_py.so
 rm -fr demo.txt
 
