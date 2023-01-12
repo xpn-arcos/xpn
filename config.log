@@ -848,7 +848,7 @@ configure:5846: $? = 0
 configure:5846: result: yes
 configure:5852: checking for _doprnt
 configure:5852: gcc -o conftest -g -O2   conftest.c -lpthread  >&5
-/usr/bin/ld: /tmp/cc7wUZvO.o: in function `main':
+/usr/bin/ld: /tmp/ccMfL2jr.o: in function `main':
 /home/dcamarma/Desktop/Diego/Repositorios/dcamarmas/xpn/conftest.c:79: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:5852: $? = 1

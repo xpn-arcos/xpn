@@ -15,7 +15,7 @@ for i in range(0,1024):
 buff_w.append('\n')
 
 # write and read buffer
-fname = "demo.txt"
+fname = "/tmp/expand/P1/demo.txt"
 
 f = open(fname, "w")
 f.write(str(buff_w))
