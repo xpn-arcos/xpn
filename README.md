@@ -107,6 +107,20 @@ The typical executions has 4 main steps:
             -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
             <INSTALL_PATH>/bin/xpn_stop_mpi_server -f <server file>
     ```
+    
+Summary:
+
+```mermaid
+sequenceDiagram
+    session    ->> mk_conf.sh: generate the XPN configuration file
+    mk_conf.sh ->> xpn.conf: generate the xpn.conf file
+    session    ->> xpn_mpi_server: launch the Expand MPI server
+    xpn.conf  -->> xpn_mpi_server: read the XPN configuration file
+    session    ->> XPN client: launch the program that will use Expand
+    xpn.conf  -->> XPN client: read the XPN configuration file
+    session    ->> xpn_mpi_server: stop the MPI server
+```
+
 
 ## 5. XPN Examples
 
