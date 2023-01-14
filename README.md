@@ -1,9 +1,9 @@
-# XPN 2.0
+# XPN 2.1
 
 *Expand Ad-Hoc Parallel File System*
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-![version](https://img.shields.io/badge/version-2.0-blue)
+![version](https://img.shields.io/badge/version-2.1-blue)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://www.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xpn-arcos/xpn&amp;utm_campaign=Badge_Grade)
 
 * *Homepage*: <https://xpn-arcos.github.io/xpn-arcos.github.io/>
@@ -130,6 +130,19 @@ As an build example scenario we will consider the following one:
 * MPI distribution is installed at '/opt/software/install-mpich'
 * Installation directory will be '/opt/xpn'
 
+```mermaid
+stateDiagram-v2
+    direction LR
+    state "1. Install dependencies"                     as step1
+    state "2. Download the source code of XPN and mxml" as step2
+    state "3. Build Expand"                             as step3
+    [*] --> step1
+    step1 --> step2
+    step2 --> step3
+    step3 --> [*]
+```
+
+
 (1) Install dependencies:
   ```
   sudo apt-get install -y autoconf automake gcc g++ make flex libtool doxygen libmpich-dev
@@ -149,6 +162,7 @@ As an build example scenario we will consider the following one:
    ./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i /opt/xpn
    ```
 
+
 ### 5.2 Front-end node of a cluster
 
 Imagine you have a cluter with local storage (HDD, SSD, RAM Drive) per-node and shared home.
@@ -156,6 +170,19 @@ Imagine you have a cluter with local storage (HDD, SSD, RAM Drive) per-node and 
 As an build example scenario we will consider the following one:
 * MPI distribution is installed at '/opt/software/install-mpich'
 * Installation directory will be $HOME/xpn_bin
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    state "1. Install dependencies"                     as step1
+    state "2. Download the source code of XPN and mxml" as step2
+    state "3. Build Expand"                             as step3
+    [*] --> step1
+    step1 --> step2
+    step2 --> step3
+    step3 --> [*]
+```
+
 
 (1) Install dependencies:
   ```
