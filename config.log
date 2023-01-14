@@ -39,23 +39,6 @@ PATH: /usr/games
 PATH: /usr/local/games
 PATH: /usr/lib/wsl/lib
 PATH: /mnt/c/Program Files/WindowsApps/Microsoft.WindowsTerminal_1.15.3465.0_x64__8wekyb3d8bbwe
-PATH: /mnt/c/Windows/system32
-PATH: /mnt/c/Windows
-PATH: /mnt/c/Windows/System32/Wbem
-PATH: /mnt/c/Windows/System32/WindowsPowerShell/v1.0/
-PATH: /mnt/c/Windows/System32/OpenSSH/
-PATH: /mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common
-PATH: /mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR
-PATH: /mnt/c/MiKTeX/miktex/bin/x64/
-PATH: /mnt/c/Program Files/Microsoft SQL Server/130/Tools/Binn/
-PATH: /mnt/c/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/
-PATH: /mnt/c/Program Files/AutoFirma/AutoFirma
-PATH: /mnt/c/Program Files/dotnet/
-PATH: /mnt/c/Program Files/gs/gs9.56.1/bin
-PATH: /mnt/c/Program Files (x86)/HP/IdrsOCR_15.2.10.1114/
-PATH: /mnt/c/Program Files/Docker/Docker/resources/bin
-PATH: /mnt/c/Users/acald/AppData/Local/Microsoft/WindowsApps
-PATH: /mnt/c/Users/acald/.dotnet/tools
 PATH: /snap/bin
 
 
@@ -869,7 +852,7 @@ configure:5846: $? = 0
 configure:5846: result: yes
 configure:5852: checking for _doprnt
 configure:5852: gcc -o conftest -g -O2   conftest.c -lpthread  >&5
-/usr/bin/ld: /tmp/ccQwdNG6.o: in function `main':
+/usr/bin/ld: /tmp/cc3nDGwV.o: in function `main':
 /home/acaldero/work/xpn/conftest.c:79: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:5852: $? = 1
