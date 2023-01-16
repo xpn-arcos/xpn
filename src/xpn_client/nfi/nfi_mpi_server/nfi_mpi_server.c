@@ -27,9 +27,6 @@
 
   /* ... Global Variable / Variable Globales ........................... */
 
-  int xpn_session  = 0;
-  int xpn_locality = 1;
-
 
   /* ... Functions / Funciones ......................................... */
 
@@ -286,18 +283,40 @@
     }
     serv->private_info = (void *)server_aux;
 
+    // Initialize params 
+    memset(&(server_aux->params), 0, sizeof(mpiClient_param_st));
+
+    // thread mode checking
+    char * env_thread = getenv("XPN_THREAD");
+    if (env_thread != NULL)
+    {
+      server_aux->params.xpn_thread = atoi(env_thread);
+    }
+    else
+    {
+      server_aux->params.xpn_thread = 1;
+    }
+
     // Session mode checking
     char * env_session = getenv("XPN_SESSION");
     if (env_session != NULL)
     {
-      xpn_session = atoi(env_session);
+      server_aux->params.xpn_session = atoi(env_session);
+    }
+    else
+    {
+      server_aux->params.xpn_session = 0;
     }
 
     // Locality mode checking
     char * env_locality = getenv("XPN_LOCALITY");
     if (env_locality != NULL)
     {
-      xpn_locality = atoi(env_locality);
+      server_aux->params.xpn_locality = atoi(env_locality);
+    }
+    else
+    {
+      server_aux->params.xpn_locality = 1;
     }
 
     // initialize MPI Client communication side...
@@ -315,14 +334,11 @@
       return -1 ;
     }
 
-    if (xpn_locality)
-    {
-      ret = mpiClient_comm_locality (&(server_aux->params)) ;
-      if (ret < 0) {
-        free(serv->ops) ;
-        free(server_aux) ;
-        return -1 ;
-      }
+    ret = mpiClient_comm_locality (&(server_aux->params)) ;
+    if (ret < 0) {
+      free(serv->ops) ;
+      free(server_aux) ;
+      return -1 ;
     }
 
     debug_info("[NFI] nfi_mpi_server_init(ID=%s): end\n",server_aux->id) ;
@@ -464,8 +480,12 @@
     int nfi_mpi_server_open_ws  ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho );
     int nfi_mpi_server_open_wos ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho );
 
-    if (xpn_session)
-    {
+    struct nfi_mpi_server_server *server_aux;
+    // private_info...
+    server_aux = (struct nfi_mpi_server_server *) serv->private_info;
+
+    if (server_aux->params.xpn_session )
+    { 
       return nfi_mpi_server_open_ws ( serv, url, fho );
     }
     else
@@ -646,7 +666,11 @@
     int nfi_mpi_server_create_ws  (struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh);
     int nfi_mpi_server_create_wos (struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh);
 
-    if (xpn_session)
+    struct nfi_mpi_server_server *server_aux;
+    // private_info...
+    server_aux = (struct nfi_mpi_server_server *) serv->private_info;
+
+    if (server_aux->params.xpn_session )
     {
       return nfi_mpi_server_create_ws( serv, url, attr, fh );
     }
@@ -806,7 +830,11 @@
     ssize_t nfi_mpi_server_read_ws  ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size );
     ssize_t nfi_mpi_server_read_wos ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size );
 
-    if (xpn_session)
+    struct nfi_mpi_server_server *server_aux;
+    // private_info...
+    server_aux = (struct nfi_mpi_server_server *) serv->private_info;
+
+    if (server_aux->params.xpn_session )
     {
       return nfi_mpi_server_read_ws ( serv, fh, buffer, offset, size );
     }
@@ -1044,7 +1072,11 @@
     ssize_t nfi_mpi_server_write_ws  ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size );
     ssize_t nfi_mpi_server_write_wos ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size );
 
-    if (xpn_session)
+    struct nfi_mpi_server_server *server_aux;
+    // private_info...
+    server_aux = (struct nfi_mpi_server_server *) serv->private_info;
+
+    if (server_aux->params.xpn_session )
     {
       return nfi_mpi_server_write_ws ( serv, fh, buffer, offset, size );
     }
@@ -1306,7 +1338,11 @@
     int nfi_mpi_server_close_ws  ( struct nfi_server *serv,  struct nfi_fhandle *fh );
     int nfi_mpi_server_close_wos ( struct nfi_server *serv,  struct nfi_fhandle *fh );
 
-    if (xpn_session)
+    struct nfi_mpi_server_server *server_aux;
+    // private_info...
+    server_aux = (struct nfi_mpi_server_server *) serv->private_info;
+
+    if (server_aux->params.xpn_session )
     {
       return nfi_mpi_server_close_ws ( serv, fh );
     }
