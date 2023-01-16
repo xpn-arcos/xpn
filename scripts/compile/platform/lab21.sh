@@ -30,7 +30,7 @@ done
 
 # 2) working path...
 MPICC_PATH=/opt/software/install-mpich/bin/mpicc
-INSTALL_PATH=/opt/
+INSTALL_PATH=/local_test/bin/
 BASE_PATH=$(dirname $0)
 
 # 3) preconfigure build-me...

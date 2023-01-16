@@ -3,7 +3,7 @@
 #
 
 
- prefix = /opt//xpn
+ prefix = /local_test/bin//xpn
  CC=/opt/software/install-mpich/bin/mpicc
 
  FLAGS=-Wall -Wextra -fpic -DLINUX -std=c11
