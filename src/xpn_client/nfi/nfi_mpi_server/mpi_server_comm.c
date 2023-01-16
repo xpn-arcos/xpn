@@ -34,20 +34,31 @@
 
     debug_info("[CLI-COMM] begin mpiClient_comm_init(...)\n") ;
 
-    // Initialize params 
-    memset(params, 0, sizeof(mpiClient_param_st));
-
     // MPI_Init
     MPI_Initialized(&flag);
 
     if (!flag)
     {
       // TODO: server->argc, server->argv from upper layers?
-      ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided);
-      if (MPI_SUCCESS != ret)
+
+      // Threads disable
+      if (!params->xpn_thread)
+      { 
+        ret = MPI_Init(NULL, NULL);
+        if (MPI_SUCCESS != ret)
+        {
+          debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
+          return -1 ;
+        }
+      }
+      else
       {
-        debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
-        return -1 ;
+        ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided);
+        if (MPI_SUCCESS != ret)
+        {
+          debug_error("Server[%d]: MPI_Init_thread fails :-(", -1) ;
+          return -1 ;
+        }
       }
     }
 
@@ -230,6 +241,14 @@
     MPI_Status status ;
 
     debug_info("[CLI-COMM] begin mpiClient_comm_locality\n") ;
+
+    // Locality disable
+    if (!params->xpn_locality)
+    { 
+      debug_info("[CLI-COMM] mpiClient_comm_locality disable\n") ;
+      params->locality = 0;
+      return 1;
+    }
 
     // Get client host name
     gethostname(cli_name, HOST_NAME_MAX);
