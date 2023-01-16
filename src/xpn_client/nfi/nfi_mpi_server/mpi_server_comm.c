@@ -40,11 +40,25 @@
     if (!flag)
     {
       // TODO: server->argc, server->argv from upper layers?
-      ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided);
-      if (MPI_SUCCESS != ret)
+
+      // Threads disable
+      if (!params->xpn_thread)
+      { 
+        ret = MPI_Init(NULL, NULL);
+        if (MPI_SUCCESS != ret)
+        {
+          debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
+          return -1 ;
+        }
+      }
+      else
       {
-        debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
-        return -1 ;
+        ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided);
+        if (MPI_SUCCESS != ret)
+        {
+          debug_error("Server[%d]: MPI_Init_thread fails :-(", -1) ;
+          return -1 ;
+        }
       }
     }
 
