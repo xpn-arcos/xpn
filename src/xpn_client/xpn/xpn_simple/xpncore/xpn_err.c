@@ -4,12 +4,11 @@
 //extern int errno;
 extern int xpn_errno;
 
-int xpn_err(__attribute__((__unused__)) int err)
+int xpn_err ( __attribute__((__unused__)) int err )
 {
 	// TODO
-	err = err;
+	// err = err;
 
 	return 0;	
 }
-
 

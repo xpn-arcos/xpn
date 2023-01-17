@@ -92,7 +92,7 @@ xpn_fflush(FILE *stream)
 		return 0;
 
 	stream->_flags |= _IOERR;
-	return EOF; 
+	return EOF;
 }
 
 /*void

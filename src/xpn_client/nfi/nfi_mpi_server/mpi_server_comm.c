@@ -32,8 +32,6 @@
     int ret, provided, claimed ;
     int flag = 0 ;
 
-    memset(params, 0, sizeof(mpiClient_param_st)); // Initialize params 
-
     debug_info("[CLI-COMM] begin mpiClient_comm_init(...)\n") ;
 
     // MPI_Init
@@ -41,38 +39,53 @@
 
     if (!flag)
     {
-      ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided) ; // TODO: server->argc, server->argv from upper layers?
-      if (MPI_SUCCESS != ret)
+      // TODO: server->argc, server->argv from upper layers?
+
+      // Threads disable
+      if (!params->xpn_thread)
+      { 
+        ret = MPI_Init(NULL, NULL);
+        if (MPI_SUCCESS != ret)
+        {
+          debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
+          return -1 ;
+        }
+      }
+      else
       {
-        debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
-        return -1 ;
+        ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided);
+        if (MPI_SUCCESS != ret)
+        {
+          debug_error("Server[%d]: MPI_Init_thread fails :-(", -1) ;
+          return -1 ;
+        }
       }
     }
 
     MPI_Query_thread(&claimed);
     if (claimed != MPI_THREAD_MULTIPLE) {
-      printf("MPI_Init: your MPI implementation seem not supporting thereads\n") ;
+        printf("MPI_Init: your MPI implementation seem not supporting thereads\n") ;
     }
 
     // params->rank = comm_rank()
     ret = MPI_Comm_rank(MPI_COMM_WORLD, &(params->rank)) ;
     if (MPI_SUCCESS != ret) {
-      debug_error("Server[%d]: MPI_Comm_rank fails :-(", params->rank) ;
-      return -1 ;
+        debug_error("Server[%d]: MPI_Comm_rank fails :-(", params->rank) ;
+        return -1 ;
     }
 
     // params->size = comm_size()
     ret = MPI_Comm_size(MPI_COMM_WORLD, &(params->size)) ;
     if (MPI_SUCCESS != ret) {
-      debug_error("Server[%d]: MPI_Comm_size fails :-(", params->size) ;
-      return -1 ;
+        debug_error("Server[%d]: MPI_Comm_size fails :-(", params->size) ;
+        return -1 ;
     }
 
-    //Indicates mpi_server are the used protocolo 
+    // set is_mpi_server as the used protocol
     setenv("XPN_IS_MPI_SERVER", "1", 1);
 
     debug_info("[CLI-COMM] server %d available at %s\n", params->rank, params->port_name) ;
-    debug_info("[CLI-COMM] server %d accepting...\n",    params->rank) ;
+
     debug_info("[CLI-COMM] end mpiClient_comm_init(...)\n") ;
 
     // Return OK
@@ -122,12 +135,12 @@
     debug_info("[CLI-COMM] begin mpiClient_comm_connect(...)\n") ;
 
     // Lookup port name
-    int lookpu_retries = 0;
+    int lookup_retries = 0;
     do{
       ret = ns_lookup (params->srv_name, params->port_name);
       if (ret == -1)
       {
-        if (lookpu_retries == 0)
+        if (lookup_retries == 0)
         { 
           char cli_name  [HOST_NAME_MAX];
           gethostname(cli_name, HOST_NAME_MAX);
@@ -135,10 +148,10 @@
           printf("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
           printf("----------------------------------------------------------------\n\n");
         }
-        lookpu_retries++;
+        lookup_retries++;
         sleep(2);
       }
-    } while(ret == -1 && lookpu_retries < 150);
+    } while(ret == -1 && lookup_retries < 150);
 
     if (ret == -1)
     {
@@ -229,6 +242,14 @@
 
     debug_info("[CLI-COMM] begin mpiClient_comm_locality\n") ;
 
+    // Locality disable
+    if (!params->xpn_locality)
+    { 
+      debug_info("[CLI-COMM] mpiClient_comm_locality disable\n") ;
+      params->locality = 0;
+      return 1;
+    }
+
     // Get client host name
     gethostname(cli_name, HOST_NAME_MAX);
 
@@ -268,7 +289,7 @@
     return 1;
   }
 
-  ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
+  ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, __attribute__((__unused__)) char *msg_id )
   {
     int ret ;
 
@@ -282,7 +303,10 @@
         debug_warning("Server[?]: size < 0") ;
         return -1;
     }
-    msg_id = msg_id ; // TODO: msg_id is used?
+
+    // TODO
+    // msg_id = msg_id ; // TODO: msg_id is used?
+    // TODO
 
     // Send message
     ret = MPI_Send(data, size, MPI_INT, 0, 0, fd) ;
@@ -355,3 +379,4 @@
     // Return bytes read
     return size;
   }
+

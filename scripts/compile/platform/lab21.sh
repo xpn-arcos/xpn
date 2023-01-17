@@ -23,19 +23,19 @@
 
 
 # 1) software (if needed)...
+PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
+for P in $PKG_NAMES; do
+    apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
+done
 
 # 2) working path...
-MPICC_PATH=/gpfs/home/uc3m15/uc3m15971/cte-arm/bin/mpich/bin/mpicc
-INSTALL_PATH=$HOME/cte-arm/bin/
+MPICC_PATH=/opt/software/install-mpich/bin/mpicc
+INSTALL_PATH=/local_test/bin/
 BASE_PATH=$(dirname $0)
 
-# patch for cross-compiling
-export    CC=$MPICC_PATH
-export MPICC=$MPICC_PATH
-
 # 3) preconfigure build-me...
-$BASE_PATH/../build-me/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../mxml
-$BASE_PATH/../build-me/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../xpn
-$BASE_PATH/../build-me/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../ior
-$BASE_PATH/../build-me/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../io500
+$BASE_PATH/../software/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../../mxml
+$BASE_PATH/../software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
+$BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
+$BASE_PATH/../software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
 

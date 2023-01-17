@@ -23,24 +23,20 @@
 
 
 # 1) software (if needed)...
-module load mpich/3.3.1_gcc9
+module load fuji
 
 # 2) working path...
-MPICC_PATH=/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/bin/mpicc
-INSTALL_PATH=$HOME/bin/
+MPICC_PATH=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpifcc
+INSTALL_PATH=$HOME/cte-arm/bin/
 BASE_PATH=$(dirname $0)
 
-# patch for libmpfr.so.4
-  rm -fr $INSTALL_PATH/base
-mkdir -p $INSTALL_PATH/base/lib
-rm -fr                          $INSTALL_PATH/base/lib/libmpfr.so.4
-ln -s  /usr/lib64/libmpfr.so.6  $INSTALL_PATH/base/lib/libmpfr.so.4
-ln -s  /usr/lib64/libslurm.so   $INSTALL_PATH/base/lib/libslurm.so.32
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PATH/base/lib/
+# patch for cross-compiling
+export    CC=$MPICC_PATH
+export MPICC=$MPICC_PATH
 
 # 3) preconfigure build-me...
-$BASE_PATH/../build-me/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../mxml
-$BASE_PATH/../build-me/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../xpn
-$BASE_PATH/../build-me/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../ior
-$BASE_PATH/../build-me/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../io500
+$BASE_PATH/../software/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../../mxml
+$BASE_PATH/../software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
+$BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
+$BASE_PATH/../software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
 

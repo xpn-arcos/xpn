@@ -23,8 +23,8 @@
 
 
 //#define RTLD_NEXT ((void *) -1l)
-#define MAX_FDS   4069
-#define MAX_DIRS  4096
+#define MAX_FDS   10000
+#define MAX_DIRS  10000
 #define PLUSXPN   1000
 
 #undef __USE_FILE_OFFSET64

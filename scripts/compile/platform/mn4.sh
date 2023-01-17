@@ -23,20 +23,16 @@
 
 
 # 1) software (if needed)...
-module load fuji
+module load "impi/2017.4"
 
 # 2) working path...
-MPICC_PATH=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpifcc
-INSTALL_PATH=$HOME/cte-arm/bin/
+MPICC_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpicc
+INSTALL_PATH=$HOME/mn4/bin/
 BASE_PATH=$(dirname $0)
 
-# patch for cross-compiling
-export    CC=$MPICC_PATH
-export MPICC=$MPICC_PATH
-
 # 3) preconfigure build-me...
-$BASE_PATH/../build-me/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../mxml
-$BASE_PATH/../build-me/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../xpn
-$BASE_PATH/../build-me/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../ior
-$BASE_PATH/../build-me/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../io500
+$BASE_PATH/../software/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../../mxml
+$BASE_PATH/../software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
+$BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
+$BASE_PATH/../software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
 

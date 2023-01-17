@@ -45,21 +45,46 @@
 
   // fd table management
 
-  struct generic_fd fdstable[MAX_FDS];
+  struct generic_fd * fdstable = NULL;
+  long fdstable_size = 0L;
+  long fdstable_first_free = 0L;
 
   //pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-  void fdstable_init ( void ){
+  void fdstable_realloc ( void )
+  {
+    long old_size = fdstable_size;
+
+    if ( NULL == fdstable ){
+      fdstable_size = (long)MAX_FDS;
+      fdstable = (struct generic_fd *) malloc(fdstable_size * sizeof(struct generic_fd));
+    }
+    else{
+      fdstable_size = fdstable_size * 2;
+      fdstable = (struct generic_fd *) realloc((struct generic_fd *)fdstable, fdstable_size * sizeof(struct generic_fd));
+    }
+
+    if ( NULL == fdstable ){
+      printf("[bypass] Error: out of memory\n");
+      exit(-1);
+    }
+    
     //pthread_mutex_lock(&mutex);
-    for (int i = 0; i < MAX_FDS; ++i)
-    { 
+    for (int i = old_size; i < fdstable_size; ++i)
+    {
       fdstable[i].type = FD_FREE;
       fdstable[i].real_fd = -1;
     }
     //pthread_mutex_unlock(&mutex);
   }
 
-  struct generic_fd fdstable_get ( int fd ){
+  void fdstable_init ( void )
+  {
+    fdstable_realloc();
+  }
+
+  struct generic_fd fdstable_get ( int fd )
+  {
     //debug_info("GET FSTABLE %d  %d  %d\n", fd, fdstable[fd].type, fdstable[fd].real_fd);
     //pthread_mutex_lock(&mutex);
 
@@ -81,12 +106,14 @@
     return ret;
   }
 
-  int fdstable_put ( struct generic_fd fd ){
-    for (int i = 0; i < MAX_FDS; ++i)
+  int fdstable_put ( struct generic_fd fd )
+  {
+    for (int i = fdstable_first_free; i < fdstable_size; ++i)
     {
       //pthread_mutex_lock(&mutex);
       if ( fdstable[i].type == FD_FREE ){
         fdstable[i] = fd;
+        fdstable_first_free = (long)(i + 1);
         //debug_info("PUT FSTABLE %d  %d  %d\n", i, fdstable[i].type, fdstable[i].real_fd);
         //pthread_mutex_unlock(&mutex);
         return i + PLUSXPN;
@@ -94,36 +121,84 @@
       //pthread_mutex_unlock(&mutex);
     }
 
+    long old_size = fdstable_size;
+
+    fdstable_realloc();
+
+    //pthread_mutex_lock(&mutex);
+    if ( fdstable[old_size].type == FD_FREE ){
+      fdstable[old_size] = fd;
+      //debug_info("PUT FSTABLE %d  %d  %d\n", i, fdstable[i].type, fdstable[i].real_fd);
+      //pthread_mutex_unlock(&mutex);
+      return old_size + PLUSXPN;
+    }
+    //pthread_mutex_unlock(&mutex);
+
     return -1;
   }
 
-  int fdstable_remove ( int fd ){
+  int fdstable_remove ( int fd )
+  {
     //pthread_mutex_lock(&mutex);
     if (fd < PLUSXPN)
     {
       return 0;
     }
-    
+    fd = fd - PLUSXPN;
     fdstable[fd].type = FD_FREE;
     fdstable[fd].real_fd = -1;
+
+    if ( fd < fdstable_first_free )
+    {
+      fdstable_first_free = fd;
+    }
     //pthread_mutex_unlock(&mutex);
 
     return 0;
   }
 
+
+
   // Dir table management
 
-  DIR * fdsdirtable[MAX_DIRS];
+  DIR ** fdsdirtable = NULL;
+  long fdsdirtable_size = 0L;
+  long fdsdirtable_first_free = 0L;
 
-  void fdsdirtable_init ( void ){
-    for (int i = 0; i < MAX_DIRS; ++i)
+  void fdsdirtable_realloc ( void )
+  {
+    long old_size = fdsdirtable_size;
+    
+    if ( NULL == fdsdirtable ){
+      fdsdirtable_size = (long)MAX_DIRS;
+      fdsdirtable = (DIR **) malloc(MAX_DIRS * sizeof(DIR *));
+    }
+    else{
+      fdsdirtable_size = fdsdirtable_size * 2;
+      fdsdirtable = (DIR **) realloc((DIR **)fdsdirtable, fdsdirtable_size * sizeof(DIR *));
+    }
+
+    if ( NULL == fdsdirtable ){
+      printf("[bypass] Error: out of memory\n");
+      exit(-1);
+    }
+    
+    //pthread_mutex_lock(&mutex);
+    for (int i = old_size; i < fdsdirtable_size; ++i)
     {
       fdsdirtable[i] = NULL;
     }
+    //pthread_mutex_unlock(&mutex);
   }
 
-  int fdsdirtable_search ( DIR * dir ) {
-    for (int i = 0; i < MAX_DIRS; ++i)
+  void fdsdirtable_init ( void )
+  {
+    fdsdirtable_realloc();
+  }
+
+  int fdsdirtable_get ( DIR * dir )
+  {
+    for (int i = 0; i < fdsdirtable_size; ++i)
     {
       if ( fdsdirtable[i] == dir ){
         return i;
@@ -133,23 +208,41 @@
     return -1;
   }
 
-  int fdsdirtable_put ( DIR * dir ){
-    for (int i = 0; i < MAX_DIRS; ++i)
+  int fdsdirtable_put ( DIR * dir )
+  {
+    for (int i = fdsdirtable_first_free; i < fdsdirtable_size; ++i)
     {
       if ( fdsdirtable[i] == NULL ){
         fdsdirtable[i] = dir;
+        fdsdirtable_first_free = (long)(i + 1);
         return 0;
       }
+    }
+
+    long old_size = fdstable_size;
+
+    fdsdirtable_realloc();
+
+    if ( fdsdirtable[old_size] == NULL ){
+      fdsdirtable[old_size] = dir;
+      return 0;
     }
 
     return -1;
   }
 
-  int fdsdirtable_remove ( DIR * dir ){
-    for (int i = 0; i < MAX_DIRS; ++i)
+  int fdsdirtable_remove ( DIR * dir )
+  {
+    for (int i = 0; i < fdsdirtable_size; ++i)
     {
       if ( fdsdirtable[i] == dir ){
         fdsdirtable[i] = NULL;
+
+        if ( i < fdsdirtable_first_free )
+        {
+          fdsdirtable_first_free = i;
+        }
+
         return 0;
       }
     }
@@ -218,10 +311,11 @@
   {
     int ret, fd;
     va_list ap;
+    mode_t mode = 0;
 
     va_start(ap, flags);
 
-    mode_t mode = va_arg(ap, mode_t);
+    mode = va_arg(ap, mode_t);
 
     debug_info("Before open.... %s\n",path);
     debug_info("1) Path => %s\n",path);
@@ -238,7 +332,12 @@
       debug_info("xpn_open\n");
       debug_info("Path => %s\n",path + strlen(xpn_adaptor_partition_prefix));
 
-      fd = xpn_open((const char *)(path + strlen(xpn_adaptor_partition_prefix)), flags, mode);
+      if (mode != 0){
+        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags, mode);
+      }
+      else{
+        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
+      }
 
       debug_info("xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
 
@@ -271,10 +370,11 @@
   {
     int fd, ret;
     va_list ap;
+    mode_t mode = 0;
 
     va_start(ap, flags);
 
-    mode_t mode = va_arg(ap, mode_t);
+    mode = va_arg(ap, mode_t);
 
     debug_info("Before open64.... %s\n",path);
     debug_info("1) Path => %s\n",path);
@@ -289,7 +389,12 @@
       debug_info("xpn_open\n");
       debug_info("Path => %s\n",path+strlen(xpn_adaptor_partition_prefix));
 
-      fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
+      if (mode != 0){
+        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags, mode);
+      }
+      else{
+        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
+      }
 
       debug_info("xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
 
@@ -823,7 +928,7 @@
 
     debug_info("Before readdir...\n");
 
-    if( fdsdirtable_search( dirp ) != -1 )
+    if( fdsdirtable_get( dirp ) != -1 )
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -853,7 +958,7 @@
 
     //memcpy(&fd, dirp,sizeof(int));
 
-    if( fdsdirtable_search( dirp ) != -1 )
+    if( fdsdirtable_get( dirp ) != -1 )
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -889,7 +994,7 @@
 
     debug_info("Before closedir...\n");
 
-    if( fdsdirtable_search( dirp ) != -1 )
+    if( fdsdirtable_get( dirp ) != -1 )
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
