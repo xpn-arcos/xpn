@@ -42,22 +42,7 @@
     ret = -1;
     switch (wrk->arg.operation)
     {
-      case op_getattr:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_getattr\n",__FILE__,(unsigned long int)pthread_self());
-        ret = wrk->server->ops->nfi_getattr(wrk->server, wrk->arg.fh, wrk->arg.attr) ;
-        break;
-      case op_setattr:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_setattr\n",__FILE__,(unsigned long int)pthread_self());
-        ret = wrk->server->ops->nfi_setattr(wrk->server, wrk->arg.fh, wrk->arg.attr) ;
-        break;
-      case op_preload:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_preload\n",__FILE__,(unsigned long int)pthread_self());
-        ret = wrk->server->ops->nfi_preload(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt) ;
-        break;
-      case op_flush:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_flush\n",__FILE__,(unsigned long int)pthread_self());
-        ret = wrk->server->ops->nfi_flush(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt) ;
-        break;
+      // Files
       case op_open:
         debug_info("[%s] nfi_worker_run(%lu) -> nfi_open\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_open(wrk->server, wrk->arg.url, wrk->arg.fh) ;
@@ -69,14 +54,6 @@
       case op_close:
         debug_info("[%s] nfi_worker_run(%lu) -> nfi_close\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_close(wrk->server, wrk->arg.fh) ;
-        break;
-      case op_remove:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_remove\n",__FILE__,(unsigned long int)pthread_self());
-        ret = wrk->server->ops->nfi_remove(wrk->server, wrk->arg.url) ;
-        break;
-      case op_rename:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_rename\n",__FILE__,(unsigned long int)pthread_self());
-        ret = wrk->server->ops->nfi_rename(wrk->server, wrk->arg.url, wrk->arg.newurl) ;
         break;
       case op_read:
         debug_info("[%s] nfi_worker_run(%lu) -> nfi_read\n",__FILE__,(unsigned long int)pthread_self());
@@ -110,6 +87,26 @@
           ret = ret + aux;
         }
         break;
+
+      // Metadata
+      case op_remove:
+        debug_info("[%s] nfi_worker_run(%lu) -> nfi_remove\n",__FILE__,(unsigned long int)pthread_self());
+        ret = wrk->server->ops->nfi_remove(wrk->server, wrk->arg.url) ;
+        break;
+      case op_rename:
+        debug_info("[%s] nfi_worker_run(%lu) -> nfi_rename\n",__FILE__,(unsigned long int)pthread_self());
+        ret = wrk->server->ops->nfi_rename(wrk->server, wrk->arg.url, wrk->arg.newurl) ;
+        break;
+      case op_getattr:
+        debug_info("[%s] nfi_worker_run(%lu) -> nfi_getattr\n",__FILE__,(unsigned long int)pthread_self());
+        ret = wrk->server->ops->nfi_getattr(wrk->server, wrk->arg.fh, wrk->arg.attr) ;
+        break;
+      case op_setattr:
+        debug_info("[%s] nfi_worker_run(%lu) -> nfi_setattr\n",__FILE__,(unsigned long int)pthread_self());
+        ret = wrk->server->ops->nfi_setattr(wrk->server, wrk->arg.fh, wrk->arg.attr) ;
+        break;
+
+      // Directories
       case op_mkdir:
         debug_info("[%s] nfi_worker_run(%lu) -> nfi_mkdir\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_mkdir(wrk->server, wrk->arg.url, wrk->arg.attr, wrk->arg.fh) ;
@@ -130,9 +127,19 @@
         debug_info("[%s] nfi_worker_run(%lu) -> nfi_closedir\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_closedir(wrk->server, wrk->arg.fh) ;
         break;
+
+      // File system
       case op_statfs:
         debug_info("[%s] nfi_worker_run(%lu) -> nfi_statfs\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_statfs(wrk->server, wrk->arg.inf) ;
+        break;
+      case op_preload:
+        debug_info("[%s] nfi_worker_run(%lu) -> nfi_preload\n",__FILE__,(unsigned long int)pthread_self());
+        ret = wrk->server->ops->nfi_preload(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt) ;
+        break;
+      case op_flush:
+        debug_info("[%s] nfi_worker_run(%lu) -> nfi_flush\n",__FILE__,(unsigned long int)pthread_self());
+        ret = wrk->server->ops->nfi_flush(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt) ;
         break;
     }
 
@@ -144,28 +151,273 @@
   }
 
 
-  int nfi_worker_do_getattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_getattr;
-    wrk->arg.fh = fh;
-    wrk->arg.attr = attr;
+  /*
+   * Files
+   */
 
+  int nfi_worker_do_open(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_open;
+      wrk->arg.fh = fh;
+      strcpy(wrk->arg.url,url) ;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_open;
+      wrk->arg.fh = fh;
+      strcpy(wrk->arg.url,url) ;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_create(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_create;
+      wrk->arg.fh = fh;
+      strcpy(wrk->arg.url,url) ;
+      wrk->arg.attr = attr;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_create;
+      wrk->arg.fh = fh;
+      strcpy(wrk->arg.url,url) ;
+      wrk->arg.attr = attr;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_close(struct nfi_worker *wrk, struct nfi_fhandle *fh)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_close;
+      wrk->arg.fh = fh;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_close;
+      wrk->arg.fh = fh;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_read(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n)
+  {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
       /* wake up thread */
-      wrk->ready = 1;
       pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
+
+      /* pack request */
+      wrk->arg.operation = op_read;
+      wrk->arg.fh = fh;
+      wrk->arg.io = io;
+      wrk->arg.n_io = n;
+
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
       pthread_mutex_unlock(&(wrk->mt)) ;
     }
     else
     {
-      wrk->arg.result = nfi_do_operation ( wrk );
+      /* pack request */
+      wrk->arg.operation = op_read;
+      wrk->arg.fh = fh;
+      wrk->arg.io = io;
+      wrk->arg.n_io = n;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_write ( struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n )
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_write;
+      wrk->arg.fh = fh;
+      wrk->arg.io = io;
+      wrk->arg.n_io = n;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else{
+      /* pack request */
+      wrk->arg.operation = op_write;
+      wrk->arg.fh = fh;
+      wrk->arg.io = io;
+      wrk->arg.n_io = n;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  /*
+   * Metadata
+   */
+
+  int nfi_worker_do_remove(struct nfi_worker *wrk, char *url)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_remove;
+      strcpy(wrk->arg.url,url) ;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_remove;
+      strcpy(wrk->arg.url,url) ;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_rename(struct nfi_worker *wrk, char *old_url, char *new_url)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_rename;
+      strcpy(wrk->arg.url,old_url) ;
+      strcpy(wrk->arg.newurl,new_url) ;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_rename;
+      strcpy(wrk->arg.url,old_url) ;
+      strcpy(wrk->arg.newurl,new_url) ;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_getattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_getattr;
+      wrk->arg.fh = fh;
+      wrk->arg.attr = attr;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_getattr;
+      wrk->arg.fh = fh;
+      wrk->arg.attr = attr;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
     }
 
     return 0;
@@ -174,25 +426,235 @@
 
   int nfi_worker_do_setattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr)
   {
-    /* pack petition */
-    wrk->arg.operation = op_setattr;
-    wrk->arg.fh = fh;
-    wrk->arg.attr = attr;
 
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread){
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_setattr;
+      wrk->arg.fh = fh;
+      wrk->arg.attr = attr;
+
       /* wake up thread */
       wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
+      pthread_cond_signal(&(wrk->cnd)) ;
       pthread_mutex_unlock(&(wrk->mt)) ;
     }
     else
     {
-      wrk->arg.result = nfi_do_operation ( wrk );
+      /* pack request */
+      wrk->arg.operation = op_setattr;
+      wrk->arg.fh = fh;
+      wrk->arg.attr = attr;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  /*
+   * Directories
+   */
+
+  int nfi_worker_do_mkdir(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_mkdir;
+      strcpy(wrk->arg.url,url) ;
+      wrk->arg.attr = attr;
+      wrk->arg.fh = fh;
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_mkdir;
+      strcpy(wrk->arg.url,url) ;
+      wrk->arg.attr = attr;
+      wrk->arg.fh = fh;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_rmdir(struct nfi_worker *wrk, char *url)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_rmdir;
+      strcpy(wrk->arg.url,url) ;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_rmdir;
+      strcpy(wrk->arg.url,url) ;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_opendir(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_opendir;
+      strcpy(wrk->arg.url,url);
+      wrk->arg.fh = fh;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_opendir;
+      strcpy(wrk->arg.url,url);
+      wrk->arg.fh = fh;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_readdir(struct nfi_worker *wrk, struct nfi_fhandle *fh, char *entry, unsigned char *type)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if(wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_readdir;
+      wrk->arg.type = type;
+      wrk->arg.entry = entry;
+      wrk->arg.fh = fh;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_readdir;
+      wrk->arg.type = type;
+      wrk->arg.entry = entry;
+      wrk->arg.fh = fh;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  int nfi_worker_do_closedir(struct nfi_worker *wrk, struct nfi_fhandle *fh)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if (wrk->thread)
+    { 
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_closedir;
+      wrk->arg.fh = fh;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_closedir;
+      wrk->arg.fh = fh;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
+    }
+
+    return 0;
+  }
+
+
+  /*
+   * File system
+   */
+
+  int nfi_worker_do_statfs (struct nfi_worker *wrk, struct nfi_info *inf)
+  {
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if (wrk->thread)
+    {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_statfs;
+      wrk->arg.inf = inf;
+
+      /* wake up thread */
+      wrk->ready = 1;
+      pthread_cond_signal(&(wrk->cnd)) ;
+      pthread_mutex_unlock(&(wrk->mt)) ;
+    }
+    else
+    {
+      /* pack request */
+      wrk->arg.operation = op_statfs;
+      wrk->arg.inf = inf;
+
+      /* do operation */
+      wrk->arg.result = nfi_do_operation(wrk);
     }
 
     return 0;
@@ -201,7 +663,7 @@
 
   int nfi_worker_do_flush(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt)
   {
-    /* pack petition */
+    /* pack request */
     wrk->arg.operation = op_flush;
     strcpy(wrk->arg.url, url) ;
     strcpy(wrk->arg.virtual_path, virtual_path) ;
@@ -227,16 +689,15 @@
     }
     else
     {
-      wrk->arg.result = nfi_do_operation ( wrk );
+      wrk->arg.result = nfi_do_operation(wrk);
     }
 
     return 0;
   }
 
-
   int nfi_worker_do_preload(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt)
   {
-    /* pack petition */
+    /* pack request */
     wrk->arg.operation = op_preload;
     strcpy(wrk->arg.url, url) ;
     strcpy(wrk->arg.virtual_path, virtual_path) ;
@@ -262,378 +723,9 @@
     }
     else
     {
-      wrk->arg.result = nfi_do_operation ( wrk );
+      wrk->arg.result = nfi_do_operation(wrk);
     }
 
     return 0;
   }
 
-
-  int nfi_worker_do_open(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_open;
-    wrk->arg.fh = fh;
-    strcpy(wrk->arg.url,url) ;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_create(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_create;
-    wrk->arg.fh = fh;
-    strcpy(wrk->arg.url,url) ;
-    wrk->arg.attr = attr;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-
-    }
-    else{
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_close(struct nfi_worker *wrk, struct nfi_fhandle *fh)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_close;
-    wrk->arg.fh = fh;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_remove(struct nfi_worker *wrk, char *url)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_remove;
-    strcpy(wrk->arg.url,url) ;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else{
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_rename(struct nfi_worker *wrk, char *old_url, char *new_url)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_rename;
-    strcpy(wrk->arg.url,old_url) ;
-    strcpy(wrk->arg.newurl,new_url) ;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_read(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n)
-  {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      pthread_mutex_lock(&(wrk->mt)) ;
-
-      /* pack petition */
-      wrk->arg.operation = op_read;
-      wrk->arg.fh = fh;
-      wrk->arg.io = io;
-      wrk->arg.n_io = n;
-
-      wrk->ready = 1;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else{
-      /* pack petition */
-      wrk->arg.operation = op_read;
-      wrk->arg.fh = fh;
-      wrk->arg.io = io;
-      wrk->arg.n_io = n;
-
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_write(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n)
-  {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      pthread_mutex_lock(&(wrk->mt)) ;
-
-      /* pack petition */
-      wrk->arg.operation = op_write;
-      wrk->arg.fh = fh;
-      wrk->arg.io = io;
-      wrk->arg.n_io = n;
-
-      wrk->ready = 1;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else{
-      /* pack petition */
-      wrk->arg.operation = op_write;
-      wrk->arg.fh = fh;
-      wrk->arg.io = io;
-      wrk->arg.n_io = n;
-
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_mkdir(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_mkdir;
-    strcpy(wrk->arg.url,url) ;
-    wrk->arg.attr = attr;
-    wrk->arg.fh = fh;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread){
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_rmdir(struct nfi_worker *wrk, char *url)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_rmdir;
-    strcpy(wrk->arg.url,url) ;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else{
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_opendir(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_opendir;
-    strcpy(wrk->arg.url,url);
-    wrk->arg.fh = fh;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_readdir(struct nfi_worker *wrk, struct nfi_fhandle *fh, char *entry, unsigned char *type)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_readdir;
-    wrk->arg.type = type;
-    wrk->arg.entry = entry;
-    wrk->arg.fh = fh;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if(wrk->thread)
-    {
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else{
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_closedir(struct nfi_worker *wrk, struct nfi_fhandle *fh)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_closedir;
-    wrk->arg.fh = fh;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if (wrk->thread)
-    { 
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else{
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
-
-
-  int nfi_worker_do_statfs(struct nfi_worker *wrk, struct nfi_info *inf)
-  {
-    /* pack petition */
-    wrk->arg.operation = op_statfs;
-    wrk->arg.inf = inf;
-
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
-    if (wrk->thread)
-    {
-      /* wake up thread */
-      wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else {
-      wrk->arg.result = nfi_do_operation ( wrk );
-    }
-
-    return 0;
-  }
