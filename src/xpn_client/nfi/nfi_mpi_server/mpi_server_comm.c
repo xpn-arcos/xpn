@@ -99,10 +99,10 @@
     debug_info("[CLI-COMM] begin mpiClient_comm_destroy(...)\n") ;
 
     if (params->size < 0)
-       {
-         debug_error("Server[%d]: number of process is negative :-(", params->rank) ;
-         return -1 ;
-       }
+    {
+      debug_error("Server[%d]: number of process is negative :-(", params->rank) ;
+      return -1 ;
+    }
 
     MPI_Barrier(MPI_COMM_WORLD);
 
