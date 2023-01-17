@@ -67,6 +67,8 @@ NFI_HTTP_HEADER=	@top_srcdir@/include/xpn_client/nfi/nfi_http/nfi_http_err.h \
 
 NFI_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi.h \
 			@top_srcdir@/include/xpn_client/nfi/nfi_lib.h \
+			@top_srcdir@/include/xpn_client/nfi/nfi_worker_task.h \
+			@top_srcdir@/include/xpn_client/nfi/nfi_ops.h \
 			@top_srcdir@/include/xpn_client/nfi/nfi_worker.h
 
 NFI_HEADER+=$(NFI_LOCAL_HEADER)
@@ -150,7 +152,8 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/filesystem.c \
 			@top_srcdir@/src/base/utils.c
 
-NFI_COMMON_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/common/nfi_worker.c
+NFI_COMMON_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/common/nfi_ops.c \
+			@top_srcdir@/src/xpn_client/nfi/common/nfi_worker.c
 NFI_LOCAL_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local.c \
 			@top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local_err.c
 ### BEGIN OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
