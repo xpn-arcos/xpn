@@ -3,6 +3,7 @@
 
 #include "nfi/nfi.h"
 #include "nfi/nfi_worker.h"
+#include "nfi/nfi_ops.h"
 #include "nfi/nfi_lib.h"
 
 

@@ -41,6 +41,9 @@ struct nfi_server{
   void  *private_info;    /* info private       */
   struct nfi_ops *ops;    /* operations       */
   struct nfi_worker *wrk; /* this struct has the thread   */
+
+  // Execution configuration
+  int xpn_thread;
 };
 
 

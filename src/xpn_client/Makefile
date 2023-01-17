@@ -178,6 +178,7 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/base/syscall_proxies.c \
 	../../src/base/filesystem.c \
 	../../src/base/utils.c \
+	../../src/xpn_client/nfi/common/nfi_ops.c \
 	../../src/xpn_client/nfi/common/nfi_worker.c \
 	../../src/xpn_client/nfi/nfi_local/nfi_local.c \
 	../../src/xpn_client/nfi/nfi_local/nfi_local_err.c \
@@ -286,6 +287,7 @@ am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/filesystem.$(OBJEXT) \
 	../../src/base/utils.$(OBJEXT)
 am__objects_2 =  \
+	../../src/xpn_client/nfi/common/nfi_ops.$(OBJEXT) \
 	../../src/xpn_client/nfi/common/nfi_worker.$(OBJEXT)
 am__objects_3 =  \
 	../../src/xpn_client/nfi/nfi_local/nfi_local.$(OBJEXT) \
@@ -422,6 +424,7 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/trace_msg.Po \
 	../../src/base/$(DEPDIR)/urlstr.Po \
 	../../src/base/$(DEPDIR)/utils.Po \
+	../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po \
 	../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po \
 	../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po \
 	../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po \
@@ -560,6 +563,8 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/base/utils.h \
 	../../include/xpn_client/nfi/nfi.h \
 	../../include/xpn_client/nfi/nfi_lib.h \
+	../../include/xpn_client/nfi/nfi_worker_task.h \
+	../../include/xpn_client/nfi/nfi_ops.h \
 	../../include/xpn_client/nfi/nfi_worker.h \
 	../../include/xpn_client/nfi/nfi_local/local_lib.h \
 	../../include/xpn_client/nfi/nfi_local/nfi_local_err.h \
@@ -616,10 +621,10 @@ AUTOMAKE = ${SHELL} /local_test/src/xpn/config/missing automake-1.16
 AWK = mawk
 CC = /opt/software/install-mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
-CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
+CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
 CFLAGS =     -I../../mxml    -I../../xpn/include    -I../../xpn/include/xpn_client    -I../../xpn/include/base -I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
 CPP = gcc -E
-CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
+CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -819,6 +824,8 @@ NFI_HTTP_HEADER = ../../include/xpn_client/nfi/nfi_http/nfi_http_err.h \
 ### END OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 NFI_HEADER = ../../include/xpn_client/nfi/nfi.h \
 	../../include/xpn_client/nfi/nfi_lib.h \
+	../../include/xpn_client/nfi/nfi_worker_task.h \
+	../../include/xpn_client/nfi/nfi_ops.h \
 	../../include/xpn_client/nfi/nfi_worker.h \
 	$(NFI_LOCAL_HEADER) $(am__append_1) $(am__append_2) \
 	$(am__append_3) $(am__append_4)
@@ -842,7 +849,9 @@ BASE_OBJECTS = ../../src/base/darray.c \
 			../../src/base/filesystem.c \
 			../../src/base/utils.c
 
-NFI_COMMON_OBJECTS = ../../src/xpn_client/nfi/common/nfi_worker.c
+NFI_COMMON_OBJECTS = ../../src/xpn_client/nfi/common/nfi_ops.c \
+			../../src/xpn_client/nfi/common/nfi_worker.c
+
 NFI_LOCAL_OBJECTS = ../../src/xpn_client/nfi/nfi_local/nfi_local.c \
 			../../src/xpn_client/nfi/nfi_local/nfi_local_err.c
 
@@ -1055,6 +1064,9 @@ clean-libLIBRARIES:
 ../../src/xpn_client/nfi/common/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../src/xpn_client/nfi/common/$(DEPDIR)
 	@: > ../../src/xpn_client/nfi/common/$(DEPDIR)/$(am__dirstamp)
+../../src/xpn_client/nfi/common/nfi_ops.$(OBJEXT):  \
+	../../src/xpn_client/nfi/common/$(am__dirstamp) \
+	../../src/xpn_client/nfi/common/$(DEPDIR)/$(am__dirstamp)
 ../../src/xpn_client/nfi/common/nfi_worker.$(OBJEXT):  \
 	../../src/xpn_client/nfi/common/$(am__dirstamp) \
 	../../src/xpn_client/nfi/common/$(DEPDIR)/$(am__dirstamp)
@@ -1415,6 +1427,7 @@ include ../../src/base/$(DEPDIR)/time_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/trace_msg.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/urlstr.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/utils.Po # am--include-marker
+include ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po # am--include-marker
 include ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po # am--include-marker
@@ -1723,6 +1736,7 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../../src/base/$(DEPDIR)/urlstr.Po
 	-rm -f ../../src/base/$(DEPDIR)/utils.Po
+	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po
@@ -1875,6 +1889,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../../src/base/$(DEPDIR)/urlstr.Po
 	-rm -f ../../src/base/$(DEPDIR)/utils.Po
+	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po

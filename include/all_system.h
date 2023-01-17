@@ -131,6 +131,10 @@
           #define NULL_DEVICE_PATH  "NUL"
 #endif
 
+#if !defined(PATH_MAX)
+          #define PATH_MAX  1024
+#endif
+
 #if !defined(HAVE_FCNTL_H)
 	#define O_ACCMODE          0003
 	#define O_RDONLY             00

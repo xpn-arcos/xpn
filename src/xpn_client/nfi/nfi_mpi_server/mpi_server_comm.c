@@ -59,26 +59,26 @@
           debug_error("Server[%d]: MPI_Init_thread fails :-(", -1) ;
           return -1 ;
         }
-      }
-    }
 
-    MPI_Query_thread(&claimed);
-    if (claimed != MPI_THREAD_MULTIPLE) {
-        printf("MPI_Init: your MPI implementation seem not supporting thereads\n") ;
+        MPI_Query_thread(&claimed);
+        if (claimed != MPI_THREAD_MULTIPLE) {
+          printf("MPI_Init: your MPI implementation seem not supporting thereads\n") ;
+        }
+      }
     }
 
     // params->rank = comm_rank()
     ret = MPI_Comm_rank(MPI_COMM_WORLD, &(params->rank)) ;
     if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Comm_rank fails :-(", params->rank) ;
-        return -1 ;
+      debug_error("Server[%d]: MPI_Comm_rank fails :-(", params->rank) ;
+      return -1 ;
     }
 
     // params->size = comm_size()
     ret = MPI_Comm_size(MPI_COMM_WORLD, &(params->size)) ;
     if (MPI_SUCCESS != ret) {
-        debug_error("Server[%d]: MPI_Comm_size fails :-(", params->size) ;
-        return -1 ;
+      debug_error("Server[%d]: MPI_Comm_size fails :-(", params->size) ;
+      return -1 ;
     }
 
     // set is_mpi_server as the used protocol
@@ -99,10 +99,10 @@
     debug_info("[CLI-COMM] begin mpiClient_comm_destroy(...)\n") ;
 
     if (params->size < 0)
-       {
-         debug_error("Server[%d]: number of process is negative :-(", params->rank) ;
-         return -1 ;
-       }
+    {
+      debug_error("Server[%d]: number of process is negative :-(", params->rank) ;
+      return -1 ;
+    }
 
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -311,8 +311,8 @@
     // Send message
     ret = MPI_Send(data, size, MPI_INT, 0, 0, fd) ;
     if (MPI_SUCCESS != ret) {
-        debug_warning("Server[?]: MPI_Recv fails :-(") ;
-        size = 0 ;
+      debug_warning("Server[?]: MPI_Recv fails :-(") ;
+      size = 0 ;
     }
 
     debug_info("[CLI-COMM] end mpiClient_write_operation(...)\n") ;
@@ -362,16 +362,16 @@
         return  0;
     }
     if (size < 0){
-        debug_warning("Server[?]: size < 0") ;
-        return  -1;
+      debug_warning("Server[?]: size < 0") ;
+      return  -1;
     }
     msg_id = msg_id ; // TODO: msg_id is used?
 
     // Get message
     ret = MPI_Recv(data, size, MPI_CHAR, 0, 1, fd, &status);
     if (MPI_SUCCESS != ret) {
-        debug_warning("Server[?]: MPI_Recv fails :-(") ;
-        size = 0 ;
+      debug_warning("Server[?]: MPI_Recv fails :-(") ;
+      size = 0 ;
     }
 
     debug_info("[CLI-COMM] end mpiClient_read_data(...)\n") ;

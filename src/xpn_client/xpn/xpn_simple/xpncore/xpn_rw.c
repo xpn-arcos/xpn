@@ -23,9 +23,7 @@
 #include "xpn/xpn_simple/xpn_rw.h"
 
 
-#ifdef POSIX_THREADS
 //extern pthread_mutex_t global_mt;
-#endif
 
 void XpnShowFileTable();
 
@@ -310,10 +308,8 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 		return -1;
 	}
 
-#ifdef POSIX_THREADS
 	// TODO: Expand is not reentrant. Using only one 'wrk' (struct nfi_worker) inside servers[i] (struct nfi_server) does not allow two nfi operations at the same time
 	//pthread_mutex_lock(&(global_mt)); // It is better to do this in clients when necessary
-#endif
 
 	// operation
 	for(j=0; j<n; j++){
@@ -368,9 +364,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 			err = 1;
 	}
 
-#ifdef POSIX_THREADS
 	//pthread_mutex_unlock(&(global_mt));
-#endif
 
 	XpnReadBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
 
@@ -591,10 +585,8 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 		return -1;
 	}
 
-#ifdef POSIX_THREADS
 	// TODO: Expand is not reentrant. Using only one 'wrk' (struct nfi_worker) inside servers[i] (struct nfi_server) does not allow two nfi operations at the same time
 	//pthread_mutex_lock(&(global_mt)); // It is better to do this in clients when necessary
-#endif
 
 	for(j=0; j<n; j++){
 		i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
@@ -661,9 +653,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 			err = 1;
 	}
 
-#ifdef POSIX_THREADS
 	//pthread_mutex_unlock(&(global_mt));
-#endif
 
 	XpnWriteBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
 

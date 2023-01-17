@@ -291,10 +291,12 @@
     if (env_thread != NULL)
     {
       server_aux->params.xpn_thread = atoi(env_thread);
+      serv->xpn_thread = atoi(env_thread);
     }
     else
     {
-      server_aux->params.xpn_thread = 1;
+      server_aux->params.xpn_thread = 0;
+      serv->xpn_thread = 0;
     }
 
     // Session mode checking
