@@ -66,9 +66,9 @@
           ret = ret + aux;
 
           // Remove???
-          if(wrk->arg.io[i].size > (unsigned int)aux){
+          /*if(wrk->arg.io[i].size > (unsigned int)aux){
             break;
-          }
+          }*/
         }
         break;
       case op_write:

@@ -11,23 +11,25 @@
 
 enum nfi_work{
   noop        = -1,
-  op_getattr  =  0,
-  op_setattr  =  1,
-  op_open     =  2,
-  op_create   =  3,
+  op_open     =  0,
+  op_create   =  1,
+  op_read     =  2,
+  op_write    =  3,
   op_close    =  4,
   op_remove   =  5,
   op_rename   =  6,
-  op_read     =  7,
-  op_write    =  8,
-  op_mkdir    =  9,
-  op_rmdir    = 10,
-  op_opendir  = 11,
-  op_readdir  = 12,
-  op_closedir = 13,
-  op_preload  = 14,
-  op_flush    = 15,
-  op_statfs   = 16,
+  op_getattr  =  7,
+  op_setattr  =  8,
+
+  op_mkdir    = 20,
+  op_rmdir    = 21,
+  op_opendir  = 22,
+  op_readdir  = 23,
+  op_closedir = 24,
+
+  op_statfs   = 60,
+  op_preload  = 61,
+  op_flush    = 62,
 };
 
 int nfi_do_operation ( struct nfi_worker *wrk );
