@@ -72,7 +72,7 @@
       long unsigned i=0;
       long j=0, ant=-1, pos=-1;
       int cont=-1;
-      char new_path[MAXPATHLEN];
+      char new_path[PATH_MAX];
 
       if (path == NULL) {
         return 0;
@@ -361,7 +361,7 @@
      int  filesystem_mkpath ( char *pathname )
      {
      int ret ;
-         char dir[MAXPATHLEN] ;
+         char dir[PATH_MAX] ;
 
          DEBUG_BEGIN() ;
 

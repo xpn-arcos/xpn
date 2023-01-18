@@ -70,11 +70,12 @@ void *nfi_worker_run ( struct nfi_worker *args )
 }
 
 
-int nfi_worker_thread ( struct nfi_worker *wrk, int thread )
+//TODO: remove
+/*int nfi_worker_thread ( struct nfi_worker *wrk, int thread )
 {
   wrk->thread = thread;
   return wrk->thread;
-}
+}*/
 
 
 int nfi_worker_init(struct nfi_worker *wrk, struct nfi_server *serv, int thread)
@@ -86,7 +87,8 @@ int nfi_worker_init(struct nfi_worker *wrk, struct nfi_server *serv, int thread)
   {
     /* init the global condition and mutex */
     global_busy = 1;
-    if(!create_m){
+    if(!create_m)
+    {
       create_m = 1;
       pthread_mutex_init(&(global_mt), NULL) ;
       pthread_cond_init(&(global_cnd), NULL) ;

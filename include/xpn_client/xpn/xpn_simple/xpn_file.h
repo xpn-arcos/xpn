@@ -13,7 +13,6 @@
 
 /* max number of file descriptors */
 #define XPN_MAX_FILE 	1024
-#define XPN_MAX_PATH	1024
 
 /* FILE or DIR */
 #define XPN_FILE 	0
@@ -46,7 +45,7 @@ struct xpn_attr{
 /* File table */
 struct xpn_filedesc{
         int id;         /* id of file                                   */
-	char path[MAX_PATH_LEN];/* absolute path 			*/
+	char path[PATH_MAX];/* absolute path 			*/
         int type;       /* indicate FILE or DIR                         */
         int links;      /* number of links that this file has           */
 	mode_t mode;	/* O_RDONLY, O_WRONLY,....			*/

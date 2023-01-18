@@ -267,7 +267,7 @@
       return -1;
     }
 
-    ret = MPI_Recv(params->sem_name_server, MAXPATHLEN, MPI_CHAR, 0, 1, params->server, &status);
+    ret = MPI_Recv(params->sem_name_server, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[?]: MPI_Recv fails :-(") ;
       return -1;

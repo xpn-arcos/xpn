@@ -31,7 +31,7 @@
     MPI_Comm server ;
 
     int locality ;
-    char sem_name_server [MAXPATHLEN];
+    char sem_name_server [PATH_MAX];
     sem_t * sem_server ;
 
     // server arguments
