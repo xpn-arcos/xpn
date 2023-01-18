@@ -35,9 +35,9 @@ start_mpi_servers() {
                            --part_name xpn \
                            --storage_path /tmp
 
-    mpiexec -np       ${NODE_NUM} \
-            -hostfile ${HOSTFILE} \
-            -genv LD_LIBRARY_PATH ../mxml/lib:$LD_LIBRARY_PATH \
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
             src/mpi_server/xpn_mpi_server -ns /tmp/dns.txt &
 }
 
@@ -118,7 +118,7 @@ while getopts "r:n:a:c:fvh" opt; do
     esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 ACTION=$*
 
 # load xpn.cfg

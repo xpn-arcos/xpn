@@ -63,50 +63,50 @@ Then, you need to get familiar with 2 special environment variables for XPN clie
 The typical executions has 4 main steps:
 - First, generate the XPN configuration file:
 
-    ```
+  ```
     cd $HOME/src/xpn/bin
     ./mk_conf.sh --conf ~/tmp/config.xml \
                  --machinefile ~/tmp/machinefile \
                  --part_size 512k \
                  --part_name xpn \
                  --storage_path /tmp
-    ```
-    Where:
-    * ```--part_size``` is the partition size (by default in bytes but "k" can be used for kilobytes and "m" for megabytes).
-    * ```--part_name``` is the partition name (a string without whitespaces).
-    * ```--storage_path``` is where the data is stogare in the servers (is the same for all servers).
+  ```
+  Where:
+  * ```--part_size``` is the partition size (by default in bytes but "k" can be used for kilobytes and "m" for megabytes).
+  * ```--part_name``` is the partition name (a string without whitespaces).
+  * ```--storage_path``` is where the data is stogare in the servers (is the same for all servers).
 
 - Then, launch the Expand MPI server (xpn_mpi_server):
 
-    ```
-    mpiexec -np <number of processes> \
-            -hostfile <full path to the hostfile> \
-            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-            <INSTALL_PATH>/bin/xpn_mpi_server -ns <nameserver file> -tp &
-    ```
+  ```
+  mpiexec -np <number of processes> \
+          -hostfile <full path to the hostfile> \
+          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
+          <INSTALL_PATH>/bin/xpn_mpi_server -ns <nameserver file> -tp &
+  ```
 
-    To use a thread pool to serve the requests add the -tp flag.
+  To use a thread pool to serve the requests add the -tp flag.
 
 - Then,  launch the program that will use Expand (XPN client):
 
-    ```
-    mpiexec -np <number of processes> \
-            -hostfile <full path to the hostfile> \
-            -genv XPN_DNS  <nameserver file> \
-            -genv XPN_CONF <XPN configuration file> \
-            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-            -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-            <program path>
-    ```
+  ```
+  mpiexec -np <number of processes> \
+          -hostfile <full path to the hostfile> \
+          -genv XPN_DNS  <nameserver file> \
+          -genv XPN_CONF <XPN configuration file> \
+          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
+          -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+          <program path>
+  ```
 
 - At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
 
-    ```
-    mpiexec -np 1 \
-            -genv XPN_DNS <nameserver file> \
-            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-            <INSTALL_PATH>/bin/xpn_stop_mpi_server -f <server file>
-    ```
+  ```
+  mpiexec -np 1 \
+          -genv XPN_DNS <nameserver file> \
+          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
+          <INSTALL_PATH>/bin/xpn_stop_mpi_server -f <server file>
+  ```
     
 Summary:
 

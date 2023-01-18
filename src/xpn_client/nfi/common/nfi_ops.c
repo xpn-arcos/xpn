@@ -663,32 +663,40 @@
 
   int nfi_worker_do_flush(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt)
   {
-    /* pack request */
-    wrk->arg.operation = op_flush;
-    strcpy(wrk->arg.url, url) ;
-    strcpy(wrk->arg.virtual_path, virtual_path) ;
-    strcpy(wrk->arg.storage_path, storage_path) ;
-    wrk->arg.opt = opt;
-    if(wrk->server->ops->nfi_flush == NULL)
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if (wrk->server->ops->nfi_flush == NULL)
     {
       wrk->arg.result = -1;
       return -1;
     }
 
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
     if(wrk->thread)
     {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_flush;
+      strcpy(wrk->arg.url, url) ;
+      strcpy(wrk->arg.virtual_path, virtual_path) ;
+      strcpy(wrk->arg.storage_path, storage_path) ;
+      wrk->arg.opt = opt;
+
       /* wake up thread */
       wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
+      pthread_cond_signal(&(wrk->cnd)) ;
       pthread_mutex_unlock(&(wrk->mt)) ;
     }
     else
     {
+      /* pack request */
+      wrk->arg.operation = op_flush;
+      strcpy(wrk->arg.url, url) ;
+      strcpy(wrk->arg.virtual_path, virtual_path) ;
+      strcpy(wrk->arg.storage_path, storage_path) ;
+      wrk->arg.opt = opt;
+
+      /* do operation */
       wrk->arg.result = nfi_do_operation(wrk);
     }
 
@@ -697,32 +705,40 @@
 
   int nfi_worker_do_preload(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt)
   {
-    /* pack request */
-    wrk->arg.operation = op_preload;
-    strcpy(wrk->arg.url, url) ;
-    strcpy(wrk->arg.virtual_path, virtual_path) ;
-    strcpy(wrk->arg.storage_path, storage_path) ;
-    wrk->arg.opt = opt;
-    if(wrk->server->ops->nfi_preload == NULL)
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+
+    if (wrk->server->ops->nfi_preload == NULL)
     {
       wrk->arg.result = -1;
       return -1;
     }
 
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
-
     if(wrk->thread)
     {
+      pthread_mutex_lock(&(wrk->mt)) ;
+
+      /* pack request */
+      wrk->arg.operation = op_preload;
+      strcpy(wrk->arg.url, url) ;
+      strcpy(wrk->arg.virtual_path, virtual_path) ;
+      strcpy(wrk->arg.storage_path, storage_path) ;
+      wrk->arg.opt = opt;
+
       /* wake up thread */
       wrk->ready = 1;
-      pthread_mutex_lock(&(wrk->mt)) ;
-      if (wrk->ready){
-        pthread_cond_signal(&(wrk->cnd)) ;
-      }
+      pthread_cond_signal(&(wrk->cnd)) ;
       pthread_mutex_unlock(&(wrk->mt)) ;
     }
     else
     {
+      /* pack request */
+      wrk->arg.operation = op_preload;
+      strcpy(wrk->arg.url, url) ;
+      strcpy(wrk->arg.virtual_path, virtual_path) ;
+      strcpy(wrk->arg.storage_path, storage_path) ;
+      wrk->arg.opt = opt;
+
+      /* do operation */
       wrk->arg.result = nfi_do_operation(wrk);
     }
 

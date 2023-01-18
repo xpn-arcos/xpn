@@ -54,18 +54,24 @@
   void fdstable_realloc ( void )
   {
     long old_size = fdstable_size;
+    struct generic_fd * fdstable_aux = fdstable;
 
-    if ( NULL == fdstable ){
+    if ( NULL == fdstable )
+    {
       fdstable_size = (long)MAX_FDS;
       fdstable = (struct generic_fd *) malloc(fdstable_size * sizeof(struct generic_fd));
     }
-    else{
+    else
+    {
       fdstable_size = fdstable_size * 2;
       fdstable = (struct generic_fd *) realloc((struct generic_fd *)fdstable, fdstable_size * sizeof(struct generic_fd));
     }
 
-    if ( NULL == fdstable ){
-      printf("[bypass] Error: out of memory\n");
+    if ( NULL == fdstable )
+    {
+      printf("[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
+      if (fdstable_aux != NULL)
+	  free(fdstable_aux) ;
       exit(-1);
     }
     
@@ -167,7 +173,8 @@
 
   void fdsdirtable_realloc ( void )
   {
-    long old_size = fdsdirtable_size;
+    long          old_size = fdsdirtable_size;
+    DIR ** fdsdirtable_aux = fdsdirtable;
     
     if ( NULL == fdsdirtable ){
       fdsdirtable_size = (long)MAX_DIRS;
@@ -178,14 +185,16 @@
       fdsdirtable = (DIR **) realloc((DIR **)fdsdirtable, fdsdirtable_size * sizeof(DIR *));
     }
 
-    if ( NULL == fdsdirtable ){
-      printf("[bypass] Error: out of memory\n");
+    if ( NULL == fdsdirtable )
+    {
+      printf("[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
+      if (NULL != fdsdirtable_aux)
+	  free(fdsdirtable_aux) ;
       exit(-1);
     }
     
     //pthread_mutex_lock(&mutex);
-    for (int i = old_size; i < fdsdirtable_size; ++i)
-    {
+    for (int i = old_size; i < fdsdirtable_size; ++i) {
       fdsdirtable[i] = NULL;
     }
     //pthread_mutex_unlock(&mutex);

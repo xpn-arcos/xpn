@@ -18,8 +18,6 @@
 #   along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import os
-import io
 import ctypes
 import ctypes.util
 
