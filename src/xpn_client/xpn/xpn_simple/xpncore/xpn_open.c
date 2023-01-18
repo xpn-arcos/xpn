@@ -156,6 +156,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   if(n<=0)
   {
     //free(servers);
+
     res = -1;
     XPN_DEBUG_END_ARGS1(path)
     return res;
