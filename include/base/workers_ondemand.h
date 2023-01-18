@@ -31,7 +31,7 @@
     *  Datatype
     */
 
-   struct {
+   struct wod {
 
         int             busy_worker;
         pthread_mutex_t m_worker;
@@ -39,7 +39,9 @@
         pthread_cond_t  c_nworkers;
         long            n_workers;
 
-   } worker_ondemand_t ;
+   } ;
+
+   typedef struct wod worker_ondemand_t;
 
 
    /*

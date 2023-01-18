@@ -34,35 +34,37 @@
      void *worker_run ( void *arg )
      {
          struct st_th th;
+         struct st_th *th_aux;
+         th_aux = (struct st_th *)arg;
   
          DEBUG_BEGIN() ;
 
          // prolog... 
          debug_info("[WORKERS] client(%d): worker_run(...) lock\n", th.id);
-         pthread_mutex_lock(&m_worker);
+         pthread_mutex_lock(&(th_aux->w->m_worker));
          debug_info("[WORKERS] client(%d): worker_run(...) copy arguments\n", th.id);
          memcpy(&th, arg, sizeof(struct st_th)) ;
          debug_info("[WORKERS] client(%d): worker_run(...) busy_worker = FALSE\n", th.id);
-         busy_worker = FALSE;
+         th_aux->w->busy_worker = FALSE;
          debug_info("[WORKERS] client(%d): worker_run(...) n_workers++\n", th.id);
-         n_workers++ ;
+         th_aux->w->n_workers++ ;
          debug_info("[WORKERS] client(%d): worker_run(...) signal c_worker\n", th.id);
-         pthread_cond_broadcast(&c_worker); // pthread_cond_signal(&c_worker);
+         pthread_cond_broadcast(&(th_aux->w->c_worker)); // pthread_cond_signal(&c_worker);
          debug_info("[WORKERS] client(%d): worker_run(...) unlock\n", th.id);
-         pthread_mutex_unlock(&m_worker);
+         pthread_mutex_unlock(&(th_aux->w->m_worker));
   
          // do function code...
          th.function(th) ;
 
          // epilog...
          debug_info("[WORKERS] client(%d): worker_run(...) lock\n", th.id);
-         pthread_mutex_lock(&m_worker);
+         pthread_mutex_lock(&(th_aux->w->m_worker));
          debug_info("[WORKERS] client(%d): worker_run(...) n_workers--\n", th.id);
-         n_workers-- ;
+         th_aux->w->n_workers-- ;
          debug_info("[WORKERS] client(%d): worker_run(...) signal c_nworkers\n", th.id);
-         pthread_cond_broadcast(&c_nworkers); // pthread_cond_signal(&c_nworkers);
+         pthread_cond_broadcast(&(th_aux->w->c_nworkers)); // pthread_cond_signal(&c_nworkers);
          debug_info("[WORKERS] client(%d): worker_run(...) unlock\n", th.id);
-         pthread_mutex_unlock(&m_worker);
+         pthread_mutex_unlock(&(th_aux->w->m_worker));
 
          DEBUG_END() ;
 
@@ -111,6 +113,7 @@
        st_worker          = th_arg ;
        st_worker.id       = th_cont++;
        st_worker.function = worker_function ;
+       st_worker.w        = w;
 
        // create thread...
        debug_info("[WORKERS] pthread_create: create_thread worker_run\n") ;
@@ -162,4 +165,3 @@
 
 
   /* ................................................................... */
-

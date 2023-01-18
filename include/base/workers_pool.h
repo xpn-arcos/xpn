@@ -34,7 +34,7 @@
     * Datatype
     */
 
-   struct {
+   typedef struct {
 
       pthread_mutex_t m_pool ;
       pthread_cond_t c_pool_no_full ;
@@ -49,7 +49,7 @@
       int deq_pos ;
       int enq_pos ;
       int pool_end ;
-
+      
    } worker_pool_t ;
 
 

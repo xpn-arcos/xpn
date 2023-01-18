@@ -25,11 +25,19 @@
   #include "mpi_server_workers.h"
 
 
+  /* ... Global variables / Variables globales ......................... */
+
+    worker_t worker;
+
+
   /* ... Functions / Funciones ......................................... */
 
-     int mpi_server_workers_init ( int thread_mode )
-     {
-         if (thread_mode == TH_OP) //REVISAR
+    int mpi_server_workers_init ( int thread_mode )
+    {
+      workers_init ( &worker, thread_mode );
+
+
+         /*if (thread_mode == TH_OP) //REVISAR
          {
            debug_info("[MAIN] mpi_server_worker_ondemand_init\n");
            mpi_server_worker_ondemand_init() ;
@@ -39,14 +47,24 @@
          {
            debug_info("[MAIN] mpi_server_worker_pool_init\n");
            mpi_server_worker_pool_init ( );
-         }
+         }*/
 
-         return 1;
-     }
+      return 1;
+    }
 
-     int mpi_server_workers_launch ( mpi_server_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) )
-     {
-      if (params->thread_mode == TH_OP)
+    int mpi_server_workers_launch ( mpi_server_param_st * params, MPI_Comm sd, int type_op, int rank_client_id, void (*worker_function)(struct st_th) )
+    {
+      struct st_th th_arg;
+      th_arg.params = params;
+      th_arg.sd = sd;
+      th_arg.function = worker_function;
+      th_arg.type_op = type_op;
+      th_arg.rank_client_id = rank_client_id;
+
+      workers_launch ( &worker, th_arg, worker_function );
+
+
+      /*if (params->thread_mode == TH_OP)
       {
         debug_info("[MAIN] mpi_server_worker_ondemand_launch (ID=%d)\n", rank_client_id) ;
         mpi_server_worker_ondemand_launch( params, sd, type_op, rank_client_id, worker_function ) ;
@@ -57,14 +75,16 @@
       {
         debug_info("[MAIN] mpi_server_worker_pool_enqueue (ID=%d)\n", rank_client_id);
         mpi_server_worker_pool_enqueue ( params, sd, type_op, rank_client_id, worker_function );
-      }
+      }*/
 
       return 1;
      }
 
-     void mpi_server_workers_destroy ( int thread_mode )
-     {
-      if (thread_mode == TH_OP)
+    void mpi_server_workers_destroy ( int thread_mode )
+    {
+      workers_destroy  ( &worker );
+
+      /*if (thread_mode == TH_OP)
       {
         debug_info("[WORKERS] mpi_server_workers_ondemand_destroy\n");
         mpi_server_workers_ondemand_destroy() ;
@@ -75,8 +95,8 @@
       {
         debug_info("[WORKERS] mpi_server_worker_pool_destroy\n");
         mpi_server_worker_pool_destroy();
-      }
-     }
+      }*/
+    }
 
 
   /* ................................................................... */
