@@ -70,11 +70,12 @@ void *nfi_worker_run ( struct nfi_worker *args )
 }
 
 
-int nfi_worker_thread ( struct nfi_worker *wrk, int thread )
+//TODO: remove
+/*int nfi_worker_thread ( struct nfi_worker *wrk, int thread )
 {
   wrk->thread = thread;
   return wrk->thread;
-}
+}*/
 
 
 int nfi_worker_init(struct nfi_worker *wrk, struct nfi_server *serv, int thread)
