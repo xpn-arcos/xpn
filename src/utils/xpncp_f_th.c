@@ -131,7 +131,9 @@ void *write_func ( void *func_args )
 		}
 
 		if (debug)
-			fprintf(stderr, "write(%zd) written block %zd (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", array_bufs[next]->buffer_length, next, array_bufs[next]->buffer, nw, (unsigned char)array_bufs[next]->buffer[0], (unsigned char)array_bufs[next]->buffer[1], (unsigned char)array_bufs[next]->buffer[2], (unsigned char)array_bufs[next]->buffer[3], (unsigned char)array_bufs[next]->buffer[nw-4], (unsigned char)array_bufs[next]->buffer[nw-3], (unsigned char)array_bufs[next]->buffer[nw-2], (unsigned char)array_bufs[next]->buffer[nw-1]);
+			fprintf(stderr,
+				"write(%zd) written block %zd (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n",
+				array_bufs[next]->buffer_length, next, array_bufs[next]->buffer, (ssize_t)nw, (unsigned char)array_bufs[next]->buffer[0], (unsigned char)array_bufs[next]->buffer[1], (unsigned char)array_bufs[next]->buffer[2], (unsigned char)array_bufs[next]->buffer[3], (unsigned char)array_bufs[next]->buffer[nw-4], (unsigned char)array_bufs[next]->buffer[nw-3], (unsigned char)array_bufs[next]->buffer[nw-2], (unsigned char)array_bufs[next]->buffer[nw-1]);
 
 		sum += nw;
 

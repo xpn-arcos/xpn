@@ -1,6 +1,4 @@
 
-import os
-import io
 from ctypes import *
 
 

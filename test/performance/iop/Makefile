@@ -4,7 +4,7 @@
 # Definitions
 #
 
- CC             = /opt/software/install-mpich/bin/mpicc
+ CC             = /usr/bin/mpicc
  CFLAGS	       	= -g -Wall -DHAVE_CONFIG_H
  SOURCE_PATH   	= .
  INCLUDE_PATH	= -I../../../include/base -I../../../include/xpn_client -I../../../include/

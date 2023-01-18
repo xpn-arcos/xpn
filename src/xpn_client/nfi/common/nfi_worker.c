@@ -84,7 +84,7 @@ int nfi_worker_init(struct nfi_worker *wrk, struct nfi_server *serv, int thread)
 
   if (!global_busy)
   {
-    // init the global condition and mutex */
+    /* init the global condition and mutex */
     global_busy = 1;
     if(!create_m){
       create_m = 1;
@@ -93,8 +93,8 @@ int nfi_worker_init(struct nfi_worker *wrk, struct nfi_server *serv, int thread)
     }
   }
 
-  // init the nfi_worker */
-  // pointer reference to the server */
+  /* init the nfi_worker */
+  /* pointer reference to the server */
   wrk->server = serv;
 
   thread = 1; // FIXME: Needed since the last changes in the threads architecture
@@ -105,7 +105,7 @@ int nfi_worker_init(struct nfi_worker *wrk, struct nfi_server *serv, int thread)
     pthread_mutex_init(&(wrk->mt), NULL) ;
     pthread_cond_init(&(wrk->cnd), NULL) ;
 
-    // create the thread */
+    /* create the thread */
     pthread_attr_init(&attr) ;
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED) ;
     pthread_attr_setstacksize (&attr , (256*KB) ) ;
@@ -176,6 +176,7 @@ int nfi_worker_end(struct nfi_worker *wrk)
   }
 
   free(wrk) ;
+  wrk = NULL ;
   return 0;
 }
 
