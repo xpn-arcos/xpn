@@ -231,7 +231,7 @@
   {
     int ret ;
     struct nfi_mpi_server_server *server_aux;
-    char server[MAXPATHLEN], dir[MAXPATHLEN], prt[MAXPATHLEN];
+    char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
 
     debug_info("[NFI] nfi_mpi_server_init: begin\n") ;
 
@@ -440,7 +440,7 @@
   int nfi_mpi_server_reconnect(struct nfi_server *serv)
   {
     /* Don't see the serv result */
-    char   server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+    char   server[PATH_MAX], dir[PATH_MAX];
     int    ret;
     struct nfi_mpi_server_server *server_aux;
 
@@ -498,7 +498,7 @@
 
   int nfi_mpi_server_open_ws ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
   {
-    char   dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
+    char   dir[PATH_MAX], server[PATH_MAX];
     int    ret ;
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
@@ -581,7 +581,7 @@
 
   int nfi_mpi_server_open_wos ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
   {
-    char   dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
+    char   dir[PATH_MAX], server[PATH_MAX];
     int    ret ;
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
@@ -684,7 +684,7 @@
 
   int nfi_mpi_server_create_ws (struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh)
   {
-    char   server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+    char   server[PATH_MAX], dir[PATH_MAX];
     int    ret ;
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
@@ -754,7 +754,7 @@
 
   int nfi_mpi_server_create_wos (struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh)
   {
-    char   server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+    char   server[PATH_MAX], dir[PATH_MAX];
     int    ret ;
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
@@ -1410,7 +1410,7 @@
 
   int nfi_mpi_server_remove(struct nfi_server *serv,  char *url)
   {
-    char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+    char server[PATH_MAX], dir[PATH_MAX];
     int ret;
     struct nfi_mpi_server_server *server_aux;
     struct st_mpi_server_msg msg;
@@ -1465,7 +1465,7 @@
   int nfi_mpi_server_rename(struct nfi_server *serv,  char *old_url, char *new_url)
   {
     int ret;
-    char server[NFIMAXPATHLEN], old_path[NFIMAXPATHLEN], new_path[NFIMAXPATHLEN];
+    char server[PATH_MAX], old_path[PATH_MAX], new_path[PATH_MAX];
     struct nfi_mpi_server_server *server_aux;
     struct st_mpi_server_msg msg;
 
@@ -1595,7 +1595,7 @@
 
   int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh)
   {
-    char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+    char server[PATH_MAX], dir[PATH_MAX];
     int ret;
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
@@ -1668,7 +1668,7 @@
 
   int nfi_mpi_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho)
   {
-    char dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
+    char dir[PATH_MAX], server[PATH_MAX];
     int ret;
     struct st_mpi_server_msg msg;
     struct nfi_mpi_server_server *server_aux;
@@ -1848,7 +1848,7 @@
     int ret;
     struct nfi_mpi_server_server *server_aux;
     struct st_mpi_server_msg msg;
-    char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+    char server[PATH_MAX], dir[PATH_MAX];
 
     // Check arguments...
     NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
@@ -1894,7 +1894,7 @@
 
   int nfi_mpi_server_preload(struct nfi_server *serv, char *url, char *virtual_path, char *storage_path, int opt)
   {
-    //char dir[NFIMAXPATHLEN];
+    //char dir[PATH_MAX];
     int ret;
     struct nfi_mpi_server_server *server_aux;
     struct st_mpi_server_msg msg;
@@ -1941,7 +1941,7 @@
 
   int nfi_mpi_server_flush ( struct nfi_server *serv,  char *url, char *virtual_path, char *storage_path, int opt )
   {
-    //char dir[NFIMAXPATHLEN];
+    //char dir[PATH_MAX];
     int ret;
     struct nfi_mpi_server_server *server_aux;
     struct st_mpi_server_msg msg;

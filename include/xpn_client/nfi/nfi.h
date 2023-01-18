@@ -24,8 +24,6 @@
 #define NFINULL   -1
 
 
-#define NFIMAXPATHLEN 255
-
 /* info of the servers */
 struct nfi_ops;
 struct nfi_worker;

@@ -8,8 +8,8 @@ ssize_t XpnGetSizeThreads(struct xpn_partition *p){
 
 void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
 {
-	char dir[MAX_PATH_LEN];
-	char dir_aux[MAX_PATH_LEN];
+	char dir[PATH_MAX];
+	char dir_aux[PATH_MAX];
 	int abs_path_len;
 	int put_slash;
 	int pos_abs_path;
@@ -293,7 +293,7 @@ int XpnGetFh(	struct xpn_metadata *mdata,
 		char *path)
 {
 	int res;
-	char url_serv[MAX_PATH_LEN];
+	char url_serv[PATH_MAX];
 	struct nfi_fhandle *fh_aux;
 
 	XPN_DEBUG_BEGIN

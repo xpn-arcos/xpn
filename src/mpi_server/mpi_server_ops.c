@@ -1005,7 +1005,7 @@
     debug_info("[OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name) ;
 
     mpi_server_comm_write_data(params, sd, (char *)serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
-    mpi_server_comm_write_data(params, sd, (char *)params->sem_name_server, MAXPATHLEN, rank_client_id); // Send one single message
+    mpi_server_comm_write_data(params, sd, (char *)params->sem_name_server, PATH_MAX, rank_client_id); // Send one single message
 
     DEBUG_END() ;
   }

@@ -16,7 +16,7 @@ char *param_get ( char *key )
 
 struct conf_connect_st* XpnPartitionOpen(){
 	static struct conf_connect_st desc;
-    char conf[MAX_PATH_LEN];
+    char conf[PATH_MAX];
 
 	desc.type = CONF_DEFAULT;
 	switch (desc.type){
@@ -463,7 +463,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 int XpnGetPartition(char *path) /* return partition's id */
 {
 	int i;
-	char part[MAX_PATH_LEN];
+	char part[PATH_MAX];
 
 	i=0;
 

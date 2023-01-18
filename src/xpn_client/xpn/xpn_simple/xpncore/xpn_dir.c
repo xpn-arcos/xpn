@@ -4,7 +4,7 @@
 
 int xpn_mkdir(const char *path, mode_t perm)
 {
-  char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
+  char abs_path[PATH_MAX], url_serv[PATH_MAX];
   struct nfi_server **servers;
   struct xpn_metadata *mdata_aux;
   struct nfi_attr attr;
@@ -176,7 +176,7 @@ int xpn_mkdir(const char *path, mode_t perm)
 
 int xpn_rmdir(const char *path)
 {
-  char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
+  char abs_path[PATH_MAX], url_serv[PATH_MAX];
   int ret, err, i, n, pd;
   struct nfi_server **servers;
 

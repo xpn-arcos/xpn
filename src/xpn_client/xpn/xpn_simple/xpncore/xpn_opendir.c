@@ -30,11 +30,11 @@ DIR *xpn_opendir(const char *path)
 	DIR *dirp = NULL;
 	int res = -1;
 	//char path_aux[255];
-	char path_aux[MAX_PATH_LEN];
+	char path_aux[PATH_MAX];
 
 	XPN_DEBUG_BEGIN_ARGS1(path)
 
-	if ((path == NULL)||(strlen(path)==0)||(strlen(path)>MAX_PATH_LEN)) {
+	if ((path == NULL)||(strlen(path)==0)||(strlen(path)>PATH_MAX)) {
 		errno = ENOENT;
 		XPN_DEBUG_END_ARGS1(path)
 		return NULL;

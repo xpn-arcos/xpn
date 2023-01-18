@@ -37,22 +37,22 @@
 
     DEBUG_BEGIN() ;
 
-    debug_info("[%s] %s(%lu) op: %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(),wrk->arg.operation);
+    printf("[%s] %s(%lu) op: %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(),wrk->arg.operation);
 
     ret = -1;
     switch (wrk->arg.operation)
     {
       // Files
       case op_open:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_open\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_open\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_open(wrk->server, wrk->arg.url, wrk->arg.fh) ;
         break;
       case op_create:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_create\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_create\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_create(wrk->server, wrk->arg.url, wrk->arg.attr, wrk->arg.fh) ;
         break;
       case op_read:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_read\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_read\n",__FILE__,(unsigned long int)pthread_self());
         ret = 0;
         for(int i=0; i < wrk->arg.n_io; i++)
         {
@@ -60,23 +60,25 @@
           aux = wrk->server->ops->nfi_read(wrk->server, wrk->arg.fh, wrk->arg.io[i].buffer, wrk->arg.io[i].offset, wrk->arg.io[i].size) ;
           if(aux < 0){
             ret = aux;
-            break; //TODO: 'remove' ?????
+            break;
           }
 
           ret = ret + aux;
+
+          // Remove???
           if(wrk->arg.io[i].size > (unsigned int)aux){
             break;
           }
         }
         break;
       case op_write:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_write\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_write\n",__FILE__,(unsigned long int)pthread_self());
         ret = 0;
-        for(int i=0; i<wrk->arg.n_io;i++)
+        for(int i=0; i < wrk->arg.n_io; i++)
         {
           //TODO: wrk->arg.io[i].res = aux = wrk->server->ops->nfi_write(wrk->server,
           aux = wrk->server->ops->nfi_write(wrk->server, wrk->arg.fh, wrk->arg.io[i].buffer, wrk->arg.io[i].offset, wrk->arg.io[i].size) ;
-          if(aux<0){
+          if(aux < 0){
             ret = aux;
             break;
           }
@@ -84,66 +86,66 @@
         }
         break;
       case op_close:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_close\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_close\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_close(wrk->server, wrk->arg.fh) ;
         break;
 
       // Metadata
       case op_remove:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_remove\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_remove\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_remove(wrk->server, wrk->arg.url) ;
         break;
       case op_rename:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_rename\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_rename\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_rename(wrk->server, wrk->arg.url, wrk->arg.newurl) ;
         break;
       case op_getattr:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_getattr\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_getattr\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_getattr(wrk->server, wrk->arg.fh, wrk->arg.attr) ;
         break;
       case op_setattr:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_setattr\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_setattr\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_setattr(wrk->server, wrk->arg.fh, wrk->arg.attr) ;
         break;
 
       // Directories
       case op_mkdir:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_mkdir\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_mkdir\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_mkdir(wrk->server, wrk->arg.url, wrk->arg.attr, wrk->arg.fh) ;
         break;
       case op_opendir:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_opendir\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_opendir\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_opendir(wrk->server, wrk->arg.url, wrk->arg.fh) ;
         break;
       case op_readdir:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_readdir\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_readdir\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_readdir(wrk->server, wrk->arg.fh, wrk->arg.entry, wrk->arg.type) ;
         break;
       case op_closedir:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_closedir\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_closedir\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_closedir(wrk->server, wrk->arg.fh) ;
         break;
       case op_rmdir:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_rmdir\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_rmdir\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_rmdir(wrk->server, wrk->arg.url) ;
         break;
 
       // File system
       case op_statfs:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_statfs\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_statfs\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_statfs(wrk->server, wrk->arg.inf) ;
         break;
       case op_preload:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_preload\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_preload\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_preload(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt) ;
         break;
       case op_flush:
-        debug_info("[%s] nfi_worker_run(%lu) -> nfi_flush\n",__FILE__,(unsigned long int)pthread_self());
+        printf("[%s] nfi_worker_run(%lu) -> nfi_flush\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_flush(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt) ;
         break;
     }
 
-    debug_info("[%s] nfi_worker_run(%lu) -> end op: %d\n",__FILE__,(unsigned long int)pthread_self(),wrk->arg.operation);
+    printf("[%s] nfi_worker_run(%lu) -> end op: %d\n",__FILE__,(unsigned long int)pthread_self(),wrk->arg.operation);
 
     DEBUG_END() ;
 
@@ -157,7 +159,7 @@
 
   int nfi_worker_do_open(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -190,7 +192,7 @@
 
   int nfi_worker_do_create(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -225,7 +227,7 @@
 
   int nfi_worker_do_read(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -260,7 +262,7 @@
 
   int nfi_worker_do_write ( struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n )
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -294,7 +296,7 @@
 
   int nfi_worker_do_close(struct nfi_worker *wrk, struct nfi_fhandle *fh)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -329,7 +331,7 @@
 
   int nfi_worker_do_remove(struct nfi_worker *wrk, char *url)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -360,7 +362,7 @@
 
   int nfi_worker_do_rename(struct nfi_worker *wrk, char *old_url, char *new_url)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -393,7 +395,7 @@
 
   int nfi_worker_do_getattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -427,7 +429,7 @@
   int nfi_worker_do_setattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr)
   {
 
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -464,7 +466,7 @@
 
   int nfi_worker_do_mkdir(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -498,7 +500,7 @@
 
   int nfi_worker_do_opendir(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -531,7 +533,7 @@
 
   int nfi_worker_do_readdir(struct nfi_worker *wrk, struct nfi_fhandle *fh, char *entry, unsigned char *type)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -566,7 +568,7 @@
 
   int nfi_worker_do_closedir(struct nfi_worker *wrk, struct nfi_fhandle *fh)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if (wrk->thread)
     { 
@@ -597,7 +599,7 @@
 
   int nfi_worker_do_rmdir(struct nfi_worker *wrk, char *url)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if(wrk->thread)
     {
@@ -632,7 +634,7 @@
 
   int nfi_worker_do_statfs (struct nfi_worker *wrk, struct nfi_info *inf)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if (wrk->thread)
     {
@@ -663,7 +665,7 @@
 
   int nfi_worker_do_flush(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if (wrk->server->ops->nfi_flush == NULL)
     {
@@ -703,9 +705,10 @@
     return 0;
   }
 
+
   int nfi_worker_do_preload(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt)
   {
-    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     if (wrk->server->ops->nfi_preload == NULL)
     {

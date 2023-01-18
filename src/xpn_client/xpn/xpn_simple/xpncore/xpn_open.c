@@ -109,7 +109,7 @@ int XpnSearchFile(const char *path)
 
 int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struct xpn_metadata **mdata)
 {
-  char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
+  char abs_path[PATH_MAX], url_serv[PATH_MAX];
   struct nfi_server **servers;
   struct xpn_metadata *mdata_aux;
   struct nfi_attr attr;
@@ -307,7 +307,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
 
 int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadata *mdata, int mode )
 {
-  char abs_path[MAX_PATH_LEN];
+  char abs_path[PATH_MAX];
   struct nfi_server **servers;
   int n, pd, i;
   int res = -1;
@@ -402,7 +402,7 @@ int xpn_internal_fresize(__attribute__((__unused__)) int fd, __attribute__((__un
 
 int xpn_internal_remove(const char *path)
 {
-  char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
+  char abs_path[PATH_MAX], url_serv[PATH_MAX];
   int res, err, i, n, pd;
   struct nfi_server **servers;
 
@@ -468,7 +468,7 @@ int xpn_internal_remove(const char *path)
 /************************* TODO ****************************************/
 int xpn_preload(const char *virtual_path, const char *storage_path)
 {
-  char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
+  char abs_path[PATH_MAX], url_serv[PATH_MAX];
   struct nfi_server **servers;
   struct xpn_metadata *mdata;
   int res, i, n, pd;
@@ -570,7 +570,7 @@ int xpn_preload(const char *virtual_path, const char *storage_path)
 
 int xpn_flush(const char *virtual_path, const char *storage_path)
 {
-  char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
+  char abs_path[PATH_MAX], url_serv[PATH_MAX];
   struct nfi_server **servers;
   struct xpn_metadata *mdata;
   int res, i, n, pd;
@@ -664,7 +664,7 @@ int xpn_creat(const char *path, mode_t perm)
 
   XPN_DEBUG_BEGIN_ARGS1(path)
 
-  if((path == NULL)||(strlen(path)>MAX_PATH_LEN)){
+  if((path == NULL)||(strlen(path)>PATH_MAX)){
     res = -1;
     XPN_DEBUG_END_ARGS1(path)
     return res;
@@ -712,7 +712,7 @@ int xpn_open(const char *path, int flags , ...)
 
   XPN_DEBUG_BEGIN_ARGS1(path)
 
-  if((path == NULL)||(strlen(path)>MAX_PATH_LEN)){
+  if((path == NULL)||(strlen(path)>PATH_MAX)){
     XPN_DEBUG_END_ARGS1(path)
     return res;
   }
@@ -877,8 +877,8 @@ int xpn_unlink(const char *path)
 
 int xpn_rename(const char *path, const char *newpath)
 {
-  char abs_path[MAX_PATH_LEN], url_serv[MAX_PATH_LEN];
-  char newabs_path[MAX_PATH_LEN], newurl_serv[MAX_PATH_LEN];
+  char abs_path[PATH_MAX], url_serv[PATH_MAX];
+  char newabs_path[PATH_MAX], newurl_serv[PATH_MAX];
   struct nfi_server **servers;
   struct xpn_metadata *mdata_aux;
   int res, err, i, n, pd, newpd;
@@ -1093,8 +1093,8 @@ int xpn_fstat(int fd, struct stat *sb)
 // FIXME: If the user has already opened the max number of files he is allowed to, then this call will fail with EMFILE.
 int xpn_stat(const char *path, struct stat *sb)
 {
-  char abs_path[MAX_PATH_LEN];
-  char abs_path2[MAX_PATH_LEN];
+  char abs_path[PATH_MAX];
+  char abs_path2[PATH_MAX];
   int res, pd, fd;
   DIR *dir;
   char *new_path;
