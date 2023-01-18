@@ -84,6 +84,8 @@
     {
       workers_destroy  ( &worker );
 
+      thread_mode = thread_mode; // to be removed...
+
       /*if (thread_mode == TH_OP)
       {
         debug_info("[WORKERS] mpi_server_workers_ondemand_destroy\n");

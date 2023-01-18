@@ -31,7 +31,7 @@
    *  Internal
    */
 
-  void worker_pool_function ( void *arg )
+  void *worker_pool_function ( void *arg )
   {
     int is_true = 1;
     struct st_th th;
@@ -45,6 +45,7 @@
     }
 
     pthread_exit(0);
+    return NULL ;
   }
 
 
@@ -105,7 +106,7 @@
     st_worker          = th_arg ;
     st_worker.id       = th_cont++;
     st_worker.function = worker_function ;
-    st_worker.w        = w;
+    st_worker.w        = NULL ; // TODO = w; ??
 
     debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", rank_client_id);
     w->operations_buffer[w->enq_pos] = st_worker;
@@ -141,7 +142,7 @@
     w->deq_pos = (w->deq_pos + 1) % MAX_OPERATIONS;
     w->n_operation--;
 
-    if ( w->pool_end == 1 || th.type_op == MPI_SERVER_FINALIZE ) {
+    if ( w->pool_end == 1 || th.type_op == TH_FINALIZE ) {
       debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) unlock end\n", th.id);
       pthread_mutex_unlock(&(w->m_pool));
       debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) exit\n", th.id);
@@ -161,6 +162,8 @@
 
   void worker_pool_destroy ( worker_pool_t *w )
   {
+    struct st_th th_arg ;
+
     DEBUG_BEGIN() ;
 
     // update pool_end...
@@ -170,9 +173,16 @@
     debug_info("[WORKERS] : worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&(w->m_pool_end));
 
-    for (int i = 0; i < w->POOL_MAX_THREADS; ++i)
-    {
-      worker_pool_enqueue ( NULL, (MPI_Comm)0, MPI_SERVER_FINALIZE, 0, NULL );
+    // prepare arguments...
+    th_arg.params         = NULL ;
+    th_arg.sd             = 0L ;
+    th_arg.function       = NULL ;
+    th_arg.id             = 0 ;
+    th_arg.type_op        = TH_FINALIZE ;
+    th_arg.rank_client_id = 0 ;
+
+    for (int i = 0; i < w->POOL_MAX_THREADS; ++i) {
+      worker_pool_enqueue(w, th_arg, NULL) ;
     }
 
     debug_info("[WORKERS] : worker_pool_destroy(...) lock\n");

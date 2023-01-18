@@ -12,8 +12,6 @@
 						@top_srcdir@/src/mpi_server/mpi_server_comm.o \
 						@top_srcdir@/src/mpi_server/mpi_server_ops.o \
 						@top_srcdir@/src/mpi_server/mpi_server_workers.o \
-						@top_srcdir@/src/mpi_server/mpi_server_workers_ondemand.o \
-						@top_srcdir@/src/mpi_server/mpi_server_workers_pool.o \
 						@top_srcdir@/src/mpi_server/mpi_server_d2xpn.o \
 						@top_srcdir@/src/mpi_server/base/filesystem.o \
 						@top_srcdir@/src/base/urlstr.o \
