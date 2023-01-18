@@ -86,7 +86,8 @@ int nfi_worker_init(struct nfi_worker *wrk, struct nfi_server *serv, int thread)
   {
     /* init the global condition and mutex */
     global_busy = 1;
-    if(!create_m){
+    if(!create_m)
+    {
       create_m = 1;
       pthread_mutex_init(&(global_mt), NULL) ;
       pthread_cond_init(&(global_cnd), NULL) ;
