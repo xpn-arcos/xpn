@@ -13,13 +13,13 @@
 #endif
 
 struct nfi_tcp_server_server{
-	char id[NFIMAXPATHLEN];
-	char path[NFIMAXPATHLEN];
+	char id[PATH_MAX];
+	char path[PATH_MAX];
 	int sd;
 };
 
 struct nfi_tcp_server_fhandle{
-	char path[NFIMAXPATHLEN];
+	char path[PATH_MAX];
 	int fd;
 	DIR *dir;
 };

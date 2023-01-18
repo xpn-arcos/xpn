@@ -23,19 +23,24 @@
 
 
 # 1) software (if needed)...
-PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
-for P in $PKG_NAMES; do
-    apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
-done
+module load mpich/3.3.1_gcc9
 
 # 2) working path...
-MPICC_PATH=/home/dcamarma/mpich-install/bin/mpicc
-INSTALL_PATH=/home/dcamarma/bin/
+MPICC_PATH=/mnt/home/soft/mpich/programs/x86_64/mpich-3.3.1/bin/mpicc
+INSTALL_PATH=$HOME/bin/
 BASE_PATH=$(dirname $0)
 
+# patch for libmpfr.so.4
+  rm -fr $INSTALL_PATH/base
+mkdir -p $INSTALL_PATH/base/lib
+rm -fr                          $INSTALL_PATH/base/lib/libmpfr.so.4
+ln -s  /usr/lib64/libmpfr.so.6  $INSTALL_PATH/base/lib/libmpfr.so.4
+ln -s  /usr/lib64/libslurm.so   $INSTALL_PATH/base/lib/libslurm.so.32
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PATH/base/lib/
+
 # 3) preconfigure build-me...
-$BASE_PATH/../build-me/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../mxml
-$BASE_PATH/../build-me/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../xpn
-$BASE_PATH/../build-me/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../ior
-$BASE_PATH/../build-me/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../io500
+$BASE_PATH/../software/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../../mxml
+$BASE_PATH/../software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
+$BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
+$BASE_PATH/../software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
 

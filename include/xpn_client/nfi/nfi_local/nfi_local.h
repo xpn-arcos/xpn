@@ -15,11 +15,11 @@
 
 
 struct nfi_local_server{
-	char path[NFIMAXPATHLEN];
+	char path[PATH_MAX];
 };
 
 struct nfi_local_fhandle{
-	char path[NFIMAXPATHLEN];
+	char path[PATH_MAX];
 	int fd;
 	DIR *dir;
 };

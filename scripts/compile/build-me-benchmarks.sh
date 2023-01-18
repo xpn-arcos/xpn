@@ -33,7 +33,7 @@ function usage {
 
 # Start
 echo ""
-echo " build-me"
+echo " build-me (benchmarks)"
 echo " --------"
 echo ""
 echo " Begin."
@@ -43,7 +43,6 @@ echo " Begin."
 
 ## base path
 BASE_PATH=$(dirname $0)
-BASE_PATH=${BASE_PATH}/..
 
 ## get arguments
 while getopts "m:i:" opt; do
@@ -76,57 +75,8 @@ fi
 
 
 # Benchmarks
-echo "IOR + IO500..."
+$BASE_PATH/software/ior.sh    -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../ior
+$BASE_PATH/software/io500.sh  -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../io500
 
-## IOR
-IOR_SRC_PATH=$BASE_PATH/../ior
-if [ -d "$IOR_SRC_PATH" ]; then
-   echo " * IOR: preparing directories..."
-     rm -fr "$INSTALL_PATH/ior"
-   mkdir -p "$INSTALL_PATH/ior/lib64"
-   ln    -s "$INSTALL_PATH/ior/lib64"   "$INSTALL_PATH/ior/lib"
-
-   echo " * IOR: compiling and installing..."
-   pushd .
-   cd "$IOR_SRC_PATH"
-   export MPICC=$MPICC_PATH
-   export CC=$MPICC_PATH
-   ./configure --prefix="$INSTALL_PATH/ior"
-   make clean
-   make -j 8
-   make install
-   popd
-fi
-
-## IO500
-IO500_SRC_PATH=$BASE_PATH/../io500
-if [ -d "$IO500_SRC_PATH" ]; then
-   echo " * IO500: preparing directories..."
-     rm -fr "$INSTALL_PATH/io500"
-   mkdir -p "$INSTALL_PATH/io500/lib64"
-   ln    -s "$INSTALL_PATH/io500/lib64"   "$INSTALL_PATH/io500/lib"
-
-   echo " * IO500 DISCLAIMER:"
-   echo "   ** Please remember IO500 needs to git clone some components the first time."
-   echo "   ** If you don't have access to perform git clone then please ./prepare.sh in other machine first and copy the resulting directory."
-   echo ""
-
-   echo " * IO500: compiling and installing..."
-   pushd .
-   cd "$IO500_SRC_PATH"
-   sed "s/git clone/#git clone/g" ./build/pfind/prepare.sh > ./build/pfind/prepare-alt.sh
-   chmod a+x ./build/pfind/prepare-alt.sh
-   sed -i "s/^VERSION=/#VERSION=/g" Makefile
-   export MPICC_PATH=$MPICC_PATH
-   sed -i 's/CC = mpicc/CC = ${MPICC_PATH}/g' Makefile
-   cat prepare.sh | sed "s/^INSTALL_DIR/#INSTALL_DIR/g" | sed "s/git_co https/#git_co https/g" | sed "s|./prepare.sh|./prepare-alt.sh|g" > prepare-alt.sh
-   chmod a+x prepare-alt.sh
-   env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICC_PATH MPICC=$MPICC_PATH  ./prepare-alt.sh
-   #rm -fr prepare-alt.sh
-
-fi
-
-
-# Stop
 echo " End."
 

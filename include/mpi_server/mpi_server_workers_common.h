@@ -43,13 +43,13 @@
 
   struct st_th
   {
-      mpi_server_param_st *params ;
-      MPI_Comm sd ;
-      void (*function)(struct st_th) ;
+    mpi_server_param_st *params ;
+    MPI_Comm sd ;
+    void (*function)(struct st_th) ;
 
-      int id ;
-      int type_op ;
-      int rank_client_id ;
+    int id ;
+    int type_op ;
+    int rank_client_id ;
   };
 
 #endif

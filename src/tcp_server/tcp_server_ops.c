@@ -33,7 +33,7 @@ int aux_get_dirs ( char *path, int n, char *s ) ;
 
 int tcp_server_create_spacename(char *path)
 {
-  char dir[MAXPATHLEN];
+  char dir[PATH_MAX];
   int i;
 
   debug_info("[OPS] (%s) tcp_server_create_spacename: %s\n", TCP_SERVER_ALIAS_NAME_STRING, path);

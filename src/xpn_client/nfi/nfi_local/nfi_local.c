@@ -82,7 +82,7 @@ void LOCALtoNFIInfo(struct nfi_info *nfi_inf, struct nfi_info *local_inf)
 int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused__)) struct nfi_attr_server *attr )
 {
 	int res;
-	char server[MAXPATHLEN], dir[MAXPATHLEN], prt[MAXPATHLEN];
+	char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
 	struct nfi_local_server *server_aux;
 
 	DEBUG_BEGIN();
@@ -180,7 +180,7 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
 int nfi_local_reconnect ( struct nfi_server *serv )
 {
 	/* Don't see the serv result */
-	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+	char server[PATH_MAX], dir[PATH_MAX];
 	int res;
 	struct nfi_local_server *server_aux;
 
@@ -238,11 +238,12 @@ int nfi_local_disconnect ( struct nfi_server *serv )
  * Destroy LOCAL operations				    *
  ************************************************************/
 
-int nfi_local_destroy ( struct nfi_server *serv )
+int nfi_local_destroy ( __attribute__((__unused__)) struct nfi_server *serv )
 {
 	DEBUG_BEGIN();
 
-	serv = serv ;
+	// TODO
+	// serv = serv ;
 
 // TODO: When is this called?
 
@@ -377,7 +378,7 @@ int nfi_local_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 
 int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho )
 {
-	char dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
+	char dir[PATH_MAX], server[PATH_MAX];
 	int res;
 	struct stat st;
 	struct nfi_local_server *server_aux;
@@ -617,7 +618,7 @@ ssize_t nfi_local_write ( struct nfi_server *serv,
 
 int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh )
 {
-	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+	char server[PATH_MAX], dir[PATH_MAX];
 	int res, fd;
 	struct nfi_local_server *server_aux;
 	struct nfi_local_fhandle *fh_aux;
@@ -699,7 +700,7 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *att
 
 int nfi_local_remove ( struct nfi_server *serv,  char *url )
 {
-	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+	char server[PATH_MAX], dir[PATH_MAX];
 	int res;
 	struct nfi_local_server *server_aux;
 
@@ -781,7 +782,7 @@ int nfi_local_rename (__attribute__((__unused__)) struct nfi_server *server, __a
 
 int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh )
 {
-	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+	char server[PATH_MAX], dir[PATH_MAX];
 	int res;
 	struct stat st;		/* LOCAL attributes */
         struct nfi_local_fhandle *fh_aux;
@@ -850,7 +851,7 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr
 int nfi_local_rmdir ( struct nfi_server *serv,  char *url )
 {
 	int res;
-	char server[NFIMAXPATHLEN], dir[NFIMAXPATHLEN];
+	char server[PATH_MAX], dir[PATH_MAX];
 
 	DEBUG_BEGIN();
 
@@ -890,7 +891,7 @@ int nfi_local_rmdir ( struct nfi_server *serv,  char *url )
 
 int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 {
-	char dir[NFIMAXPATHLEN], server[NFIMAXPATHLEN];
+	char dir[PATH_MAX], server[PATH_MAX];
 	int res;
 	struct nfi_local_server *server_aux;
 	struct nfi_local_fhandle *fh_aux;

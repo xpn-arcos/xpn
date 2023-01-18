@@ -24,8 +24,8 @@
       struct nfi_mpi_server_server
       {
          // old stuff of XPN
-         char id[NFIMAXPATHLEN];
-         char path[NFIMAXPATHLEN];
+         char id[PATH_MAX];
+         char path[PATH_MAX];
          //struct nfi_mpi_server_connector sd;
 
          // client stub
@@ -34,7 +34,7 @@
 
       struct nfi_mpi_server_fhandle
       {
-         char path[NFIMAXPATHLEN];
+         char path[PATH_MAX];
          int  fd;
          DIR *dir;
       };

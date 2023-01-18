@@ -238,7 +238,7 @@ int tcp_server_connect(char *server){
 	struct hostent *hp;
 	struct sockaddr_in server_addr;
 	int port, sd, ret; 
-	char newserver[MAXPATHLEN];
+	char newserver[PATH_MAX];
 
 	int flag = 1;
 
@@ -254,7 +254,7 @@ int tcp_server_connect(char *server){
 	}
 	**************************************************/
 
-	bzero(newserver, MAXPATHLEN);
+	bzero(newserver, PATH_MAX);
 #ifdef DBG_COMM
 	//printf("[NFI_COMM]----TRANSLATE server = %s URL = %s\n",server, url);	
 #endif	

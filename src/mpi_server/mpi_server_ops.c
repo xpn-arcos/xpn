@@ -104,6 +104,7 @@
   void  mpi_server_op_write_ws    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_write_wos   ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_close_ws    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
+  
   void  mpi_server_op_rm          ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_rename      ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_setattr     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
@@ -190,6 +191,8 @@
             mpi_server_op_close_ws(th->params, th->sd, &head, th->rank_client_id) ;
         }
         break;
+        
+      // Metadata API
       case MPI_SERVER_RM_FILE:
         ret = mpi_server_comm_read_data(th->params, th->sd, (char *)&(head.u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_rm), th->rank_client_id) ;
         if (ret != -1) {
@@ -247,7 +250,7 @@
         }
         break;
 
-      //Optimization API
+      //File system API
       case MPI_SERVER_PRELOAD_FILE:
         ret = mpi_server_comm_read_data(th->params, th->sd, (char *)&(head.u_st_mpi_server_msg.op_preload), sizeof(struct st_mpi_server_preload), th->rank_client_id) ;
         if (ret != -1) {
@@ -714,7 +717,12 @@
     debug_info("[OPS] (ID=%s) GETATTR(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_getattr.path) ;
   }
 
-  void mpi_server_op_setattr ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
+  void mpi_server_op_setattr (
+		               mpi_server_param_st *params,
+		               MPI_Comm sd, 
+			       struct st_mpi_server_msg *head, 
+			       __attribute__((__unused__)) int rank_client_id
+		             )
   {
     // check params...
     if (sd < 0) {
@@ -728,7 +736,7 @@
     }
 
     //TODO
-    rank_client_id = rank_client_id;
+    // rank_client_id = rank_client_id;
     //TODO
 
     // do setattr
@@ -975,7 +983,12 @@
 
   //FS Metadata API
 
-  void  mpi_server_op_getnodename ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) //NEW
+  void  mpi_server_op_getnodename ( 
+		                    mpi_server_param_st *params,
+		                    MPI_Comm sd, 
+	                            __attribute__((__unused__)) struct st_mpi_server_msg *head, 
+	                            int rank_client_id
+				  )
   {
     char serv_name[HOST_NAME_MAX];
 
@@ -984,13 +997,15 @@
     // Get server host name
     gethostname(serv_name, HOST_NAME_MAX) ;
 
-    head = head; // Avoid unused parameter 
+    // <TODO>
+    // head = head; // Avoid unused parameter 
+    // </TODO>
 
     // show debug info
     debug_info("[OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name) ;
 
     mpi_server_comm_write_data(params, sd, (char *)serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
-    mpi_server_comm_write_data(params, sd, (char *)params->sem_name_server, MAXPATHLEN, rank_client_id); // Send one single message
+    mpi_server_comm_write_data(params, sd, (char *)params->sem_name_server, PATH_MAX, rank_client_id); // Send one single message
 
     DEBUG_END() ;
   }
