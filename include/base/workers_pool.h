@@ -26,8 +26,10 @@
    #include "all_system.h"
    #include "workers_common.h"
 
-   //Thread count multiplier
+   // Thread count multiplier
    #define POOL_OVERSUSCRIPTION 2
+   // End pool
+   #define TH_FINALIZE 200
 
 
    /*

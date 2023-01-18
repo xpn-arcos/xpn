@@ -97,11 +97,9 @@
 
            default:
                 debug_info("[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
-                return -1 ;
                 break ;
        }
      }
 
 
   /* ................................................................... */
-

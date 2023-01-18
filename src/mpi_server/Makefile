@@ -4,16 +4,14 @@
 #--------------------------
 
  MAKE                 = make -s
- CC                   = /opt/software/install-mpich/bin/mpicc
+ CC                   = /usr/bin/mpicc
  SOURCE_PATH          = ./
- EXPAND_DIR           = /local_test/bin//xpn
+ EXPAND_DIR           = /home/acaldero/bin//xpn
  OBJECTS_MPI_SERVER   = ../../src/mpi_server/mpi_server.o \
 						../../src/mpi_server/mpi_server_params.o \
 						../../src/mpi_server/mpi_server_comm.o \
 						../../src/mpi_server/mpi_server_ops.o \
 						../../src/mpi_server/mpi_server_workers.o \
-						../../src/mpi_server/mpi_server_workers_ondemand.o \
-						../../src/mpi_server/mpi_server_workers_pool.o \
 						../../src/mpi_server/mpi_server_d2xpn.o \
 						../../src/mpi_server/base/filesystem.o \
 						../../src/base/urlstr.o \

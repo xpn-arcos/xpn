@@ -41,6 +41,7 @@
    * Datatype
    */
 
+/*
   struct st_th
   {
     mpi_server_param_st *params ;
@@ -51,5 +52,6 @@
     int type_op ;
     int rank_client_id ;
   };
+*/
 
 #endif
