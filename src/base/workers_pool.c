@@ -89,6 +89,7 @@
   void worker_pool_enqueue ( worker_pool_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
   {
     struct st_th st_worker;
+    static int th_cont = 0;
 
     DEBUG_BEGIN() ;
 
@@ -104,6 +105,7 @@
     st_worker          = th_arg ;
     st_worker.id       = th_cont++;
     st_worker.function = worker_function ;
+    st_worker.w        = w;
 
     debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", rank_client_id);
     w->operations_buffer[w->enq_pos] = st_worker;
@@ -201,4 +203,3 @@
 
 
   /* ................................................................... */
-

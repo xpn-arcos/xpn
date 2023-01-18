@@ -27,13 +27,17 @@
    #include "workers_common.h"
    #include "workers_ondemand.h"
    #include "workers_pool.h"
-
+   #include "base/debug_msg.h"
+   
+   //Constants
+   #define TH_POOL 1
+   #define TH_OP   2
 
    /*
     * Datatype
     */
 
-   struct {
+   typedef struct {
 
       worker_ondemand_t w1 ;
       worker_pool_t     w2 ;

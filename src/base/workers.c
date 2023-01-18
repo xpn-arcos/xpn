@@ -50,7 +50,7 @@
                 break ;
 
            default:
-                mfs_print(DBG_INFO, "[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
+                debug_info("[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
                 return -1 ;
                 break ;
        }
@@ -73,7 +73,7 @@
                 break ;
 
            default:
-                mfs_print(DBG_INFO, "[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
+                debug_info("[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
                 return -1 ;
                 break ;
        }
@@ -96,7 +96,7 @@
                 break ;
 
            default:
-                mfs_print(DBG_INFO, "[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
+                debug_info("[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
                 return -1 ;
                 break ;
        }
@@ -104,4 +104,3 @@
 
 
   /* ................................................................... */
-
