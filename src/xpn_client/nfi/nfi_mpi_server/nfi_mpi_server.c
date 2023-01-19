@@ -393,7 +393,7 @@
     if (server_aux->params.xpn_thread)
     {
       debug_info("[NFI] workers_init()\n") ;
-      workers_init ( &(serv->wrk.wb)), TH_POOL ); //TODO mode
+      ret = workers_init ( &(serv->wrk->wb), TH_POOL ); //TODO mode
     }
 
     debug_info("[NFI] nfi_mpi_server_connect(): end\n") ;
@@ -425,7 +425,7 @@
     if (server_aux->params.xpn_thread)
     {
       debug_info("[NFI] workers_destroy()\n") ;
-      workers_destroy ( &(serv->wrk.wb) );
+      workers_destroy ( &(serv->wrk->wb) );
     }
 
     // MPI Disconnect...

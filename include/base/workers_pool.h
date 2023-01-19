@@ -39,8 +39,8 @@
    typedef struct {
 
       pthread_mutex_t m_pool ;
-      pthread_cond_t c_pool_no_full ;
-      pthread_cond_t c_poll_no_empty ;
+      pthread_cond_t  c_pool_no_full ;
+      pthread_cond_t  c_poll_no_empty ;
       pthread_mutex_t m_pool_end ;
 
       int POOL_MAX_THREADS ;

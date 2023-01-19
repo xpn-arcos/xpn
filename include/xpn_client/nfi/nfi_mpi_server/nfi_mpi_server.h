@@ -30,15 +30,15 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "all_system.h"
+      #include "base/utils.h"
+      #include "base/string_misc.h"
+      #include "base/workers.h"
       #include "mpi_server_conf.h"
       #include "mpi_server_ops.h"
       #include "mpi_server_comm.h"
       #include "mpi_server_params.h"
-      #include "base/utils.h"
-      #include "base/string_misc.h"
       #include "nfi_mpi_server_err.h"
       #include "nfi.h"
-      #include "base/workers.h"
 
 
    /* ... Data structures / Estructuras de datos ........................ */
