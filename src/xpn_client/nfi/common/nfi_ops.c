@@ -196,39 +196,31 @@
 
     if(wrk->thread)
     {
+// <<OLD code>> //
       pthread_mutex_lock(&(wrk->mt)) ;
 
       // Pack request
+      wrk->arg.fh        = fh;
+      wrk->arg.attr      = attr;
       wrk->arg.operation = op_create;
-      wrk->arg.fh = fh;
-      strcpy(wrk->arg.url,url) ;
-      wrk->arg.attr = attr;
+      strcpy(wrk->arg.url, url) ;
 
       // Wake up thread
       wrk->ready = 1;
       pthread_cond_signal(&(wrk->cnd)) ;
       pthread_mutex_unlock(&(wrk->mt)) ;
-
+// <</OLD code>> //
 
 /*
-      wrk->arg.operation = op_create;
-      wrk->arg.fh = fh;
-      strcpy(wrk->arg.url,url) ;
-      wrk->arg.attr = attr;
+      // Pack request
+      wrk->arg.fh        = fh ;
+      wrk->arg.attr      = attr ;
+      wrk->arg.operation = op_create ;
+      strcpy(wrk->arg.url, url) ;
 
-      struct st_th th_arg ;
-
-      th_arg.params         = wrk ;
-      th_arg.sd             = 0L ;
-      th_arg.function       = nfi_do_operation ;
-      th_arg.id             =  0 ;
-      th_arg.type_op        = op_create ;
-      th_arg.rank_client_id = 0 ;
-
-      workers_launch( &(wrk->wb), th_arg, nfi_do_operation);
+      // Launch thread
+      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
 */
-
-
     }
     else
     {

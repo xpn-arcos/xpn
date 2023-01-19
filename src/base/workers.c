@@ -81,6 +81,38 @@
     return 1;
   }
 
+  int workers_launch2 ( worker_t *w, void (*worker_function)(struct st_th), void *args )
+  {
+    struct st_th th_arg ;
+
+    th_arg.params         = args ;
+    th_arg.sd             = 0L ;
+    th_arg.function       = worker_function ;
+    th_arg.id             = 0 ;
+    th_arg.type_op        = 0 ;
+    th_arg.rank_client_id = 0 ;
+
+    switch (w->thread_mode)
+    {
+     case TH_OP:
+      debug_info("[WORKER] worker_ondemand_launch\n") ;
+      worker_ondemand_launch(&(w->w1), th_arg, worker_function ) ;
+      break ;
+
+     case TH_POOL:
+      debug_info("[WORKER] worker_pool_enqueue\n");
+      worker_pool_enqueue(   &(w->w2), th_arg, worker_function ) ;
+      break ;
+
+     default:
+      debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
+      return -1 ;
+      break ;
+    }
+
+    return 1;
+  }
+
   void workers_destroy ( worker_t *w )
   {
     switch (w->thread_mode)

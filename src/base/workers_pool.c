@@ -123,9 +123,9 @@
 
   struct st_th worker_pool_dequeue ( worker_pool_t *w )
   {
-    DEBUG_BEGIN() ;
-
     struct st_th th;
+
+    DEBUG_BEGIN() ;
 
     debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) lock\n", th.id);
     pthread_mutex_lock(&(w->m_pool));
@@ -169,17 +169,13 @@
     // update pool_end...
     debug_info("[WORKERS] client: worker_pool_destroy(...) lock\n");
     pthread_mutex_lock(&(w->m_pool_end));
-    w->pool_end=1;
+    w->pool_end = 1;
     debug_info("[WORKERS] : worker_pool_destroy(...) unlock\n");
     pthread_mutex_unlock(&(w->m_pool_end));
 
     // prepare arguments...
-    th_arg.params         = NULL ;
-    th_arg.sd             = 0L ;
-    th_arg.function       = NULL ;
-    th_arg.id             = 0 ;
-    th_arg.type_op        = TH_FINALIZE ;
-    th_arg.rank_client_id = 0 ;
+    memset(&th_arg, 0, sizeof(struct st_th)) ;
+    th_arg.type_op = TH_FINALIZE ;
 
     for (int i = 0; i < w->POOL_MAX_THREADS; ++i) {
       worker_pool_enqueue(w, th_arg, NULL) ;

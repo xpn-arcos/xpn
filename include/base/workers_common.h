@@ -41,13 +41,13 @@
 
   struct st_th
   {
-      void *params ;
-      long  sd ;
+      void  *params ;
+      long   sd ;
       void (*function)(struct st_th) ;
 
-      int id ;
-      int type_op ;
-      int rank_client_id ;
+      int   id ;
+      int   type_op ;
+      int   rank_client_id ;
 
       void *w; // worker_ondemand/worker_pool as void *
   };
