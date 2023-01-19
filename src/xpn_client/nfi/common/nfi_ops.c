@@ -208,6 +208,27 @@
       wrk->ready = 1;
       pthread_cond_signal(&(wrk->cnd)) ;
       pthread_mutex_unlock(&(wrk->mt)) ;
+
+
+/*
+      wrk->arg.operation = op_create;
+      wrk->arg.fh = fh;
+      strcpy(wrk->arg.url,url) ;
+      wrk->arg.attr = attr;
+
+      struct st_th th_arg ;
+
+      th_arg.params         = wrk ;
+      th_arg.sd             = 0L ;
+      th_arg.function       = nfi_do_operation ;
+      th_arg.id             =  0 ;
+      th_arg.type_op        = op_create ;
+      th_arg.rank_client_id = 0 ;
+
+      workers_launch( &(wrk->wb), th_arg, nfi_do_operation);
+*/
+
+
     }
     else
     {

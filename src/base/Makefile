@@ -153,6 +153,9 @@ am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/ns.$(OBJEXT) \
 	../../src/base/syscall_proxies.$(OBJEXT) \
 	../../src/base/filesystem.$(OBJEXT) \
+	../../src/base/workers.$(OBJEXT) \
+	../../src/base/workers_ondemand.$(OBJEXT) \
+	../../src/base/workers_pool.$(OBJEXT) \
 	../../src/base/utils.$(OBJEXT)
 am_libbase_a_OBJECTS = $(am__objects_1)
 libbase_a_OBJECTS = $(am_libbase_a_OBJECTS)
@@ -182,7 +185,10 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/time_misc.Po \
 	../../src/base/$(DEPDIR)/trace_msg.Po \
 	../../src/base/$(DEPDIR)/urlstr.Po \
-	../../src/base/$(DEPDIR)/utils.Po
+	../../src/base/$(DEPDIR)/utils.Po \
+	../../src/base/$(DEPDIR)/workers.Po \
+	../../src/base/$(DEPDIR)/workers_ondemand.Po \
+	../../src/base/$(DEPDIR)/workers_pool.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -346,33 +352,39 @@ top_build_prefix = ../../
 top_builddir = ../..
 top_srcdir = ../..
 BASE_HEADER = ../../include/base/base_lib.h \
-			../../include/base/darray.h \
-			../../include/base/debug_msg.h \
-			../../include/base/debug_tags.h \
-			../../include/base/dtable.h \
-			../../include/base/math_misc.h \
-			../../include/base/string_misc.h \
-			../../include/base/time_misc.h \
-			../../include/base/trace_msg.h \
-			../../include/base/trace_tags.h \
-			../../include/base/urlstr.h \
-			../../include/base/ns.h \
-			../../include/base/syscall_proxies.h \
-			../../include/base/filesystem.h \
-			../../include/base/utils.h
+				../../include/base/darray.h \
+				../../include/base/debug_msg.h \
+				../../include/base/debug_tags.h \
+				../../include/base/dtable.h \
+				../../include/base/math_misc.h \
+				../../include/base/string_misc.h \
+				../../include/base/time_misc.h \
+				../../include/base/trace_msg.h \
+				../../include/base/trace_tags.h \
+				../../include/base/urlstr.h \
+				../../include/base/ns.h \
+				../../include/base/syscall_proxies.h \
+				../../include/base/filesystem.h \
+				../../include/base/workers.h \
+				../../include/base/workers_ondemand.h \
+				../../include/base/workers_pool.h\
+				../../include/base/utils.h
 
 BASE_SOURCE = ../../src/base/darray.c \
-			../../src/base/dtable.c \
-			../../src/base/math_misc.c \
-			../../src/base/trace_msg.c \
-			../../src/base/debug_msg.c \
-			../../src/base/string_misc.c \
-			../../src/base/time_misc.c \
-			../../src/base/urlstr.c \
-			../../src/base/ns.c \
-			../../src/base/syscall_proxies.c \
-			../../src/base/filesystem.c \
-			../../src/base/utils.c
+				../../src/base/dtable.c \
+				../../src/base/math_misc.c \
+				../../src/base/trace_msg.c \
+				../../src/base/debug_msg.c \
+				../../src/base/string_misc.c \
+				../../src/base/time_misc.c \
+				../../src/base/urlstr.c \
+				../../src/base/ns.c \
+				../../src/base/syscall_proxies.c \
+				../../src/base/filesystem.c \
+				../../src/base/workers.c \
+				../../src/base/workers_ondemand.c \
+				../../src/base/workers_pool.c \
+				../../src/base/utils.c
 
 lib_LIBRARIES = libbase.a
 libbase_a_SOURCES = $(BASE_SOURCE)
@@ -481,6 +493,15 @@ clean-libLIBRARIES:
 ../../src/base/filesystem.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/workers.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/workers_ondemand.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/workers_pool.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/utils.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
@@ -509,6 +530,9 @@ include ../../src/base/$(DEPDIR)/time_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/trace_msg.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/urlstr.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/utils.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/workers.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/workers_ondemand.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/workers_pool.Po # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -697,6 +721,9 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../../src/base/$(DEPDIR)/urlstr.Po
 	-rm -f ../../src/base/$(DEPDIR)/utils.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_pool.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -755,6 +782,9 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../../src/base/$(DEPDIR)/urlstr.Po
 	-rm -f ../../src/base/$(DEPDIR)/utils.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_pool.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

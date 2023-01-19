@@ -27,7 +27,6 @@
 
   /* ... Global Variable / Variable Globales ........................... */
 
-  worker_t worker;
 
 
   /* ... Functions / Funciones ......................................... */
@@ -378,7 +377,7 @@
     memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
 
     
-    if (strcmp("mpi_server", prt) == 0)
+    /*if (strcmp("mpi_server", prt) == 0)
     {
       debug_info("[NFI] mpi_server\n") ;
       debug_info("[NFI] nfi_worker_init(1,ID=%s): \n",server_aux->id) ;
@@ -388,14 +387,14 @@
     {
       debug_info("[NFI] nfi_worker_init(0,ID=%s): \n",server_aux->id) ;
       nfi_worker_init(serv->wrk, serv, 0) ;
-    }
+    }*/
     
 
-    /*if (server_aux->params.xpn_thread)
+    if (server_aux->params.xpn_thread)
     {
       debug_info("[NFI] workers_init()\n") ;
-      workers_init ( &worker, TH_POOL ); //TODO mode
-    }*/
+      workers_init ( &(serv->wrk.wb)), TH_POOL ); //TODO mode
+    }
 
     debug_info("[NFI] nfi_mpi_server_connect(): end\n") ;
 
@@ -423,11 +422,11 @@
     }
 
     // Thread destroy...
-    /*if (server_aux->params.xpn_thread)
+    if (server_aux->params.xpn_thread)
     {
       debug_info("[NFI] workers_destroy()\n") ;
-      workers_destroy ( &worker );
-    }*/
+      workers_destroy ( &(serv->wrk.wb) );
+    }
 
     // MPI Disconnect...
     ret = mpiClient_comm_disconnect(&(server_aux->params)) ;
