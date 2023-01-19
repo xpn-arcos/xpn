@@ -33,7 +33,6 @@
     #include "mpi_server_comm.h"
     #include "mpi_server_d2xpn.h"
     #include "mpi_server_params.h"
-    #include "mpi_server_workers_common.h"
 
 
   /*

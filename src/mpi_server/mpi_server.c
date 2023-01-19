@@ -26,10 +26,6 @@
     #include "base/utils.h"
     #include "mpi_server_params.h"
     #include "mpi_server_ops.h"
-    //#include "mpi_server_workers.h"
-    //#include "mpi_server_workers_common.h"
-    //#include "mpi_server_workers_ondemand.h"
-    //#include "mpi_server_workers_pool.h"
     #include "base/workers.h"
     #include "mpi_server_comm.h"
     #include "mpi_server_d2xpn.h"
@@ -38,7 +34,7 @@
   /* ... Global variables / Variables globales ......................... */
 
     mpi_server_param_st params;
-    worker_t worker; //NEW
+    worker_t worker;
     int the_end = 0;
 
   /* ... Auxiliar Functions / Funciones Auxiliares ......................................... */
@@ -78,16 +74,14 @@
         }
         else{
           //Launch worker per operation
-          //mpi_server_workers_launch( &params, th.sd, th.type_op, th.rank_client_id, mpi_server_run ) ;
+          struct st_th th_arg;
+          th_arg.params = &params;
+          th_arg.sd = th.sd;
+          th_arg.function = mpi_server_run;
+          th_arg.type_op = th.type_op;
+          th_arg.rank_client_id = th.rank_client_id;
 
-          struct st_th th_arg; //NEW
-          th_arg.params = &params; //NEW
-          th_arg.sd = th.sd; //NEW
-          th_arg.function = mpi_server_run; //NEW
-          th_arg.type_op = th.type_op; //NEW
-          th_arg.rank_client_id = th.rank_client_id;//NEW
-
-          workers_launch ( &worker, th_arg, mpi_server_run ); //NEW
+          workers_launch ( &worker, th_arg, mpi_server_run );
         }
       }
 
@@ -110,8 +104,7 @@
       // Initialize
       debug_msg_init() ;
       mpi_server_comm_init(&params) ;
-      //mpi_server_workers_init(params.thread_mode);
-      workers_init ( &worker, params.thread_mode ); //NEW
+      workers_init ( &worker, params.thread_mode );
 
 
       //Initialize semaphore for server disks
@@ -159,23 +152,19 @@
         }
         else{
           //Launch dispatcher per aplication
-          //mpi_server_workers_launch( &params, sd, 0, 0, mpi_server_dispatcher ) ;
+          struct st_th th_arg;
+          th_arg.params = &params;
+          th_arg.sd = sd;
+          th_arg.function = mpi_server_dispatcher;
+          th_arg.type_op = 0;
+          th_arg.rank_client_id = 0;
 
-          struct st_th th_arg; //NEW
-          th_arg.params = &params; //NEW
-          th_arg.sd = sd; //NEW
-          th_arg.function = mpi_server_dispatcher; //NEW
-          th_arg.type_op = 0; //NEW
-          th_arg.rank_client_id = 0;//NEW
-
-          workers_launch ( &worker, th_arg, mpi_server_dispatcher ); //NEW
-
+          workers_launch ( &worker, th_arg, mpi_server_dispatcher );
         }
       }
 
       // Wait and finalize for all current workers
-      debug_info("[WORKERS] mpi_server_workers_destroy\n");
-      //mpi_server_workers_destroy ( params.thread_mode );
+      debug_info("[WORKERS] workers_destroy\n");
       workers_destroy  ( &worker );
       debug_info("[MAIN] mpi_server_comm_destroy\n");
       mpi_server_comm_destroy(&params) ;

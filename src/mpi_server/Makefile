@@ -11,7 +11,6 @@
 						../../src/mpi_server/mpi_server_params.o \
 						../../src/mpi_server/mpi_server_comm.o \
 						../../src/mpi_server/mpi_server_ops.o \
-						../../src/mpi_server/mpi_server_workers.o \
 						../../src/mpi_server/mpi_server_d2xpn.o \
 						../../src/mpi_server/base/filesystem.o \
 						../../src/base/urlstr.o \
