@@ -28,6 +28,7 @@
   /* ... Global Variable / Variable Globales ........................... */
 
 
+
   /* ... Functions / Funciones ......................................... */
 
   /*
@@ -149,8 +150,9 @@
 
   int nfi_mpi_server_keepConnected ( struct nfi_server *serv )
   {
-    if (NULL == serv) 
-  return -1;
+    if (NULL == serv){
+      return -1;
+    }
 
 #ifdef NFI_DYNAMIC
     if (serv->private_info == NULL)
@@ -363,7 +365,7 @@
 
     ret = mpiClient_comm_connect(&(server_aux->params)) ;
     if (ret < 0) {
-        return -1 ;
+      return -1 ;
     }
 
     // copy 'url' string...
@@ -374,7 +376,8 @@
     serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker)) ;
     memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
 
-    if (strcmp("mpi_server", prt) == 0)
+    
+    /*if (strcmp("mpi_server", prt) == 0)
     {
       debug_info("[NFI] mpi_server\n") ;
       debug_info("[NFI] nfi_worker_init(1,ID=%s): \n",server_aux->id) ;
@@ -384,7 +387,16 @@
     {
       debug_info("[NFI] nfi_worker_init(0,ID=%s): \n",server_aux->id) ;
       nfi_worker_init(serv->wrk, serv, 0) ;
+    }*/
+    
+
+    if (server_aux->params.xpn_thread)
+    {
+      debug_info("[NFI] workers_init()\n") ;
+      workers_init ( &(serv->wrk.wb)), TH_POOL ); //TODO mode
     }
+
+    debug_info("[NFI] nfi_mpi_server_connect(): end\n") ;
 
     return 0;
   }
@@ -409,12 +421,19 @@
       return 0;
     }
 
+    // Thread destroy...
+    if (server_aux->params.xpn_thread)
+    {
+      debug_info("[NFI] workers_destroy()\n") ;
+      workers_destroy ( &(serv->wrk.wb) );
+    }
+
     // MPI Disconnect...
     ret = mpiClient_comm_disconnect(&(server_aux->params)) ;
     if (ret < 0) {
       debug_error("[NFI]: mpiClient_comm_disconnect fails :-(") ;
     }
-
+    
     // MPI Finalize...
     ret = mpiClient_comm_destroy ( &(server_aux->params) );
     if (ret < 0) {

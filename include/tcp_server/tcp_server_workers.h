@@ -21,7 +21,7 @@ int tcp_server_init_worker_pool ( void );
 
 //int tcp_server_launch_worker(int sd, pthread_t *th);
 int tcp_server_launch_worker      ( int sd );
-int tcp_server_launch_worker_pool ( void (*worker_pool_function)(void) );
+int tcp_server_launch_worker_pool ( void (*worker_pool_function2)(void) );
 
 
 void *       tcp_server_worker_run(void *arg);
@@ -29,8 +29,8 @@ void *       tcp_server_worker_run(void *arg);
 void         tcp_server_worker_pool_enqueue ( int sd, int id );
 struct st_th tcp_server_worker_pool_dequeue ( int the_end );
 
-void worker_function      ( struct st_th th );
-void worker_pool_function ( void );
+void worker_function       ( struct st_th th );
+void worker_pool_function2 ( void );
 
 void tcp_server_destroy_worker_pool ( void );
 

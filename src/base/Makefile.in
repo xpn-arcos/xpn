@@ -153,6 +153,9 @@ am__objects_1 = @top_srcdir@/src/base/darray.$(OBJEXT) \
 	@top_srcdir@/src/base/ns.$(OBJEXT) \
 	@top_srcdir@/src/base/syscall_proxies.$(OBJEXT) \
 	@top_srcdir@/src/base/filesystem.$(OBJEXT) \
+	@top_srcdir@/src/base/workers.$(OBJEXT) \
+	@top_srcdir@/src/base/workers_ondemand.$(OBJEXT) \
+	@top_srcdir@/src/base/workers_pool.$(OBJEXT) \
 	@top_srcdir@/src/base/utils.$(OBJEXT)
 am_libbase_a_OBJECTS = $(am__objects_1)
 libbase_a_OBJECTS = $(am_libbase_a_OBJECTS)
@@ -182,7 +185,10 @@ am__depfiles_remade = @top_srcdir@/src/base/$(DEPDIR)/darray.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/time_misc.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/urlstr.Po \
-	@top_srcdir@/src/base/$(DEPDIR)/utils.Po
+	@top_srcdir@/src/base/$(DEPDIR)/utils.Po \
+	@top_srcdir@/src/base/$(DEPDIR)/workers.Po \
+	@top_srcdir@/src/base/$(DEPDIR)/workers_ondemand.Po \
+	@top_srcdir@/src/base/$(DEPDIR)/workers_pool.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -346,33 +352,39 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 BASE_HEADER = @top_srcdir@/include/base/base_lib.h \
-			@top_srcdir@/include/base/darray.h \
-			@top_srcdir@/include/base/debug_msg.h \
-			@top_srcdir@/include/base/debug_tags.h \
-			@top_srcdir@/include/base/dtable.h \
-			@top_srcdir@/include/base/math_misc.h \
-			@top_srcdir@/include/base/string_misc.h \
-			@top_srcdir@/include/base/time_misc.h \
-			@top_srcdir@/include/base/trace_msg.h \
-			@top_srcdir@/include/base/trace_tags.h \
-			@top_srcdir@/include/base/urlstr.h \
-			@top_srcdir@/include/base/ns.h \
-			@top_srcdir@/include/base/syscall_proxies.h \
-			@top_srcdir@/include/base/filesystem.h \
-			@top_srcdir@/include/base/utils.h
+				@top_srcdir@/include/base/darray.h \
+				@top_srcdir@/include/base/debug_msg.h \
+				@top_srcdir@/include/base/debug_tags.h \
+				@top_srcdir@/include/base/dtable.h \
+				@top_srcdir@/include/base/math_misc.h \
+				@top_srcdir@/include/base/string_misc.h \
+				@top_srcdir@/include/base/time_misc.h \
+				@top_srcdir@/include/base/trace_msg.h \
+				@top_srcdir@/include/base/trace_tags.h \
+				@top_srcdir@/include/base/urlstr.h \
+				@top_srcdir@/include/base/ns.h \
+				@top_srcdir@/include/base/syscall_proxies.h \
+				@top_srcdir@/include/base/filesystem.h \
+				@top_srcdir@/include/base/workers.h \
+				@top_srcdir@/include/base/workers_ondemand.h \
+				@top_srcdir@/include/base/workers_pool.h\
+				@top_srcdir@/include/base/utils.h
 
 BASE_SOURCE = @top_srcdir@/src/base/darray.c \
-			@top_srcdir@/src/base/dtable.c \
-			@top_srcdir@/src/base/math_misc.c \
-			@top_srcdir@/src/base/trace_msg.c \
-			@top_srcdir@/src/base/debug_msg.c \
-			@top_srcdir@/src/base/string_misc.c \
-			@top_srcdir@/src/base/time_misc.c \
-			@top_srcdir@/src/base/urlstr.c \
-			@top_srcdir@/src/base/ns.c \
-			@top_srcdir@/src/base/syscall_proxies.c \
-			@top_srcdir@/src/base/filesystem.c \
-			@top_srcdir@/src/base/utils.c
+				@top_srcdir@/src/base/dtable.c \
+				@top_srcdir@/src/base/math_misc.c \
+				@top_srcdir@/src/base/trace_msg.c \
+				@top_srcdir@/src/base/debug_msg.c \
+				@top_srcdir@/src/base/string_misc.c \
+				@top_srcdir@/src/base/time_misc.c \
+				@top_srcdir@/src/base/urlstr.c \
+				@top_srcdir@/src/base/ns.c \
+				@top_srcdir@/src/base/syscall_proxies.c \
+				@top_srcdir@/src/base/filesystem.c \
+				@top_srcdir@/src/base/workers.c \
+				@top_srcdir@/src/base/workers_ondemand.c \
+				@top_srcdir@/src/base/workers_pool.c \
+				@top_srcdir@/src/base/utils.c
 
 lib_LIBRARIES = libbase.a
 libbase_a_SOURCES = $(BASE_SOURCE)
@@ -481,6 +493,15 @@ clean-libLIBRARIES:
 @top_srcdir@/src/base/filesystem.$(OBJEXT):  \
 	@top_srcdir@/src/base/$(am__dirstamp) \
 	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/base/workers.$(OBJEXT):  \
+	@top_srcdir@/src/base/$(am__dirstamp) \
+	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/base/workers_ondemand.$(OBJEXT):  \
+	@top_srcdir@/src/base/$(am__dirstamp) \
+	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/base/workers_pool.$(OBJEXT):  \
+	@top_srcdir@/src/base/$(am__dirstamp) \
+	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/base/utils.$(OBJEXT):  \
 	@top_srcdir@/src/base/$(am__dirstamp) \
 	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
@@ -509,6 +530,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/urlstr.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/utils.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/workers.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/workers_ondemand.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/workers_pool.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -697,6 +721,9 @@ distclean: distclean-am
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/urlstr.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/utils.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers_pool.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -755,6 +782,9 @@ maintainer-clean: maintainer-clean-am
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/urlstr.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/utils.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers_pool.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

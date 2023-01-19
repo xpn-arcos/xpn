@@ -233,8 +233,6 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
       return res;
     }
 
-    // Default Value
-    //nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_creat,pd, 0));
     // Worker
     servers[i]->wrk->thread = servers[i]->xpn_thread;
     nfi_worker_do_create(servers[i]->wrk, url_serv, &attr, vfh_aux->nfih[i]);
@@ -464,8 +462,6 @@ int xpn_internal_remove(const char *path)
   for(i=0;i<n;i++)
   {
     XpnGetURLServer(servers[i], abs_path, url_serv);
-    // Default Value
-    //nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_remove,pd, 0));
 
     // Worker
     servers[i]->wrk->thread = servers[i]->xpn_thread;
@@ -573,8 +569,7 @@ int xpn_preload(const char *virtual_path, const char *storage_path)
   for (int j = 0; j < n; ++j)
   {
     XpnGetURLServer(servers[j], abs_path, url_serv);
-    // Default Value
-    //nfi_worker_thread(servers[j]->wrk, XpnGetThreads(op_xpn_preload, pd, 0));
+
     // Worker
     servers[i]->wrk->thread = servers[i]->xpn_thread;
     nfi_worker_do_preload( servers[j]->wrk, url_serv, (char *)url_serv, (char *)storage_path, 1);
@@ -666,8 +661,6 @@ int xpn_flush(const char *virtual_path, const char *storage_path)
   {
     XpnGetURLServer(servers[j], abs_path, url_serv);
 
-    // Default Value
-    //nfi_worker_thread(servers[j]->wrk, XpnGetThreads(op_xpn_flush, pd, 0));
     // Worker
     servers[i]->wrk->thread = servers[i]->xpn_thread;
     nfi_worker_do_flush(servers[j]->wrk, url_serv, (char *)url_serv, (char *)storage_path, 1);
@@ -838,7 +831,8 @@ int xpn_close(int fd)
     return res;
   }
 
-  /*int n_threads = 0;
+  /*
+  int n_threads = 0;
   struct nfi_server **servers;
   servers = NULL;
   int n = XpnGetServers(op_xpn_close, xpn_file_table[fd]->part->id, NULL, -1, &servers, XPN_DATA_SERVER);
@@ -846,7 +840,8 @@ int xpn_close(int fd)
     free(servers);
     res = -1;
     return res;
-  }*/
+  }
+  */
 
   xpn_file_table[fd]->links--;
   if(xpn_file_table[fd]->links == 0)
@@ -857,11 +852,7 @@ int xpn_close(int fd)
       {
         if(xpn_file_table[fd]->data_vfh->nfih[i]->priv_fh != NULL)
         {
-          /*n_threads++;
-
-          // Default Value
-          //nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_close, xpn_file_table[fd]->part->id, 0));
-          */
+          //n_threads++;
 
           // Worker
           //servers[i]->wrk->thread = servers[i]->xpn_thread;
@@ -1074,8 +1065,7 @@ int xpn_rename(const char *path, const char *newpath)
   {
     XpnGetURLServer(servers[i], abs_path, url_serv);
     XpnGetURLServer(servers[i], newabs_path, newurl_serv);
-    // Default Value
-    //nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_rename,pd, 0));
+
     // Worker
     servers[i]->wrk->thread = servers[i]->xpn_thread;
     nfi_worker_do_rename( servers[i]->wrk, url_serv, newurl_serv);

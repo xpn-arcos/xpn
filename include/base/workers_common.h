@@ -24,7 +24,7 @@
 #define _WORKERS_COMMON_H_
 
   #include "all_system.h"
-
+  #include "base/debug_msg.h"
 
   /*
    * Constants
@@ -39,6 +39,8 @@
    * Datatype
    */
 
+  typedef struct wod worker_ondemand_t;
+
   struct st_th
   {
       void *params ;
@@ -48,6 +50,8 @@
       int id ;
       int type_op ;
       int rank_client_id ;
+
+      worker_ondemand_t *w;
   };
 
 #endif
