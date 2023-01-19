@@ -838,7 +838,8 @@ int xpn_close(int fd)
     return res;
   }
 
-  /*int n_threads = 0;
+  /*
+  int n_threads = 0;
   struct nfi_server **servers;
   servers = NULL;
   int n = XpnGetServers(op_xpn_close, xpn_file_table[fd]->part->id, NULL, -1, &servers, XPN_DATA_SERVER);
@@ -846,7 +847,8 @@ int xpn_close(int fd)
     free(servers);
     res = -1;
     return res;
-  }*/
+  }
+  */
 
   xpn_file_table[fd]->links--;
   if(xpn_file_table[fd]->links == 0)
