@@ -28,16 +28,16 @@
 struct nfi_ops;
 struct nfi_worker;
 
-struct nfi_server{
+struct nfi_server {
   int id;                 /* id of the server */
-  //int  protocol;        /* protocol         */ // It is never used
+//int  protocol;          /* protocol         */ // It is never used
   char *server;           /* server address   */
   char *url;              /* URL of this server -> protocol   */
                           /* + server         */
                           /* + path + more info (port, ...) */
-  int block_size;
+  int    block_size;
   void  *private_info;    /* info private       */
-  struct nfi_ops *ops;    /* operations       */
+  struct nfi_ops    *ops; /* operations       */
   struct nfi_worker *wrk; /* this struct has the thread   */
 
   // Execution configuration

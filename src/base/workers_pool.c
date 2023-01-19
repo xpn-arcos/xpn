@@ -104,9 +104,9 @@
     debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) copy arguments\n", rank_client_id);
 
     st_worker          = th_arg ;
-    st_worker.id       = th_cont++;
+    st_worker.id       = th_cont++ ;
     st_worker.function = worker_function ;
-    st_worker.w        = NULL ; // TODO = w; ??
+    st_worker.w        = w ;
 
     debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", rank_client_id);
     w->operations_buffer[w->enq_pos] = st_worker;

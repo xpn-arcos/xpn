@@ -63,12 +63,12 @@
     switch (w->thread_mode)
     {
      case TH_OP:
-      debug_info("[WORKER] worker_ondemand_launch (ID=%d)\n", th_arg.rank_client_id) ;
+      debug_info("[WORKER] worker_ondemand_launch\n") ;
       worker_ondemand_launch(&(w->w1), th_arg, worker_function ) ;
       break ;
 
      case TH_POOL:
-      debug_info("[WORKER] worker_pool_enqueue (ID=%d)\n", th_arg.rank_client_id);
+      debug_info("[WORKER] worker_pool_enqueue\n");
       worker_pool_enqueue(   &(w->w2), th_arg, worker_function ); // Enqueue the operation on the buffer
       break ;
 

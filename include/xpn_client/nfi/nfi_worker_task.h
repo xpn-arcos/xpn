@@ -4,6 +4,7 @@
 
 #include "all_system.h"
 #include "debug_msg.h"
+#include "workers.h"
 
 
  #ifdef  __cplusplus
@@ -49,8 +50,8 @@ struct nfi_worker {
    // NEW
 	worker_t wb ; 
 
-	struct nfi_server *server;
-	struct nfi_worker_args arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant
+	struct nfi_server      *server;
+	struct nfi_worker_args  arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant
 };
 
 
