@@ -84,7 +84,7 @@
     {
       workers_destroy  ( &worker );
 
-      thread_mode = thread_mode; // to be removed...
+      //thread_mode = thread_mode; // to be removed...
 
       /*if (thread_mode == TH_OP)
       {
