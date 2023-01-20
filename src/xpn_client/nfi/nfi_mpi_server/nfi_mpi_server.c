@@ -388,12 +388,19 @@
       debug_info("[NFI] nfi_worker_init(0,ID=%s): \n",server_aux->id) ;
       nfi_worker_init(serv->wrk, serv, 0) ;
     }*/
-    
+
+    serv->wrk->server = serv ;    
 
     if (server_aux->params.xpn_thread)
     {
       debug_info("[NFI] workers_init()\n") ;
-      ret = workers_init ( &(serv->wrk->wb), TH_POOL ); //TODO mode
+
+      if(serv->wrk->thread) {
+        ret = workers_init ( &(serv->wrk->wb), TH_POOL ); //TODO mode
+      } 
+      else {
+        ret = workers_init ( &(serv->wrk->wb), TH_NOT );
+      }
     }
 
     debug_info("[NFI] nfi_mpi_server_connect(): end\n") ;

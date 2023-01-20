@@ -36,6 +36,7 @@
 
   #define TH_POOL 1
   #define TH_OP   2
+  #define TH_NOT  3
 
   /*
    * Datatype
@@ -54,12 +55,10 @@
    *  API
    */
 
-  int  workers_init     ( worker_t *w, int thread_mode ) ;
-  int  workers_launch   ( worker_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) ) ;
-  void workers_destroy  ( worker_t *w ) ;
-
-  int  workers_launch2  ( worker_t *w, void (*worker_function)(struct st_th), void *args ) ;
-  int  workers_run2     ( worker_t *w, void (*worker_function)(struct st_th), void *args ) ;
+  int  workers_init       ( worker_t *w, int thread_mode ) ;
+  int  workers_launch     ( worker_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) ) ;
+  int  workers_launch_nfi ( worker_t *w, void (*worker_function)(struct st_th), void *args ) ;
+  void workers_destroy    ( worker_t *w ) ;
 
 
 #endif
