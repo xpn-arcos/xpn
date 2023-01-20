@@ -288,17 +288,19 @@
     // Initialize params 
     memset(&(server_aux->params), 0, sizeof(mpiClient_param_st));
 
-    // thread mode checking
+    // thread checking
     char * env_thread = getenv("XPN_THREAD");
     if (env_thread != NULL)
     {
       server_aux->params.xpn_thread = atoi(env_thread);
       serv->xpn_thread = atoi(env_thread);
+      server_aux->params.xpn_thread_mode = atoi(env_thread);
     }
     else
     {
       server_aux->params.xpn_thread = 0;
       serv->xpn_thread = 0;
+      server_aux->params.xpn_thread_mode = TH_POOL;
     }
 
     // Session mode checking
@@ -396,7 +398,7 @@
       debug_info("[NFI] workers_init()\n") ;
 
       if(serv->wrk->thread) {
-        ret = workers_init ( &(serv->wrk->wb), TH_POOL ); //TODO mode
+        ret = workers_init ( &(serv->wrk->wb), server_aux->params.xpn_thread_mode );
       } 
       else {
         ret = workers_init ( &(serv->wrk->wb), TH_NOT );
