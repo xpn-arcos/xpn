@@ -58,7 +58,8 @@ void *nfi_worker_run ( struct nfi_worker *args )
       pthread_cond_wait(&(wrk->cnd), &(wrk->mt)) ;
     }
 
-    ret = nfi_do_operation(wrk) ;
+    // ret = nfi_do_operation(wrk) ;
+    ret = 1 ; // TMP
 
     wrk->arg.result = ret;
     wrk->ready = 0;

@@ -32,7 +32,7 @@ enum nfi_work{
   op_flush    = 62,
 };
 
-int nfi_do_operation ( struct nfi_worker *wrk );
+void nfi_do_operation ( struct st_th th_arg ) ;
 
 int nfi_worker_do_open(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fho);
 int nfi_worker_do_create(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh);
