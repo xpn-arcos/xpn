@@ -170,12 +170,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -192,12 +187,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -214,12 +204,7 @@
     wrk->arg.n_io = n;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -236,12 +221,7 @@
     wrk->arg.n_io = n;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -256,12 +236,7 @@
     wrk->arg.fh = fh;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -280,12 +255,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -301,12 +271,7 @@
     strcpy(wrk->arg.newurl,new_url) ;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -322,12 +287,7 @@
     wrk->arg.attr = attr;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -344,12 +304,7 @@
     wrk->arg.attr = attr;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -370,12 +325,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -391,12 +341,7 @@
     wrk->arg.fh = fh;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -413,12 +358,7 @@
     wrk->arg.fh = fh;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -433,12 +373,7 @@
     wrk->arg.operation = op_closedir;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -453,12 +388,7 @@
     strcpy(wrk->arg.url,url) ;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -477,12 +407,7 @@
     wrk->arg.inf = inf;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -505,12 +430,7 @@
     wrk->arg.opt = opt;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -533,12 +453,7 @@
     wrk->arg.opt = opt;
 
     // Do operation
-    if(wrk->thread) {
-      workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
-    else {
-      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
-    }
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
