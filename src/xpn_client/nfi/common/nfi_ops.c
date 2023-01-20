@@ -174,7 +174,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -196,7 +196,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -218,7 +218,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -240,7 +240,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -260,7 +260,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -284,7 +284,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -305,7 +305,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -326,7 +326,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -348,7 +348,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -374,7 +374,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -395,7 +395,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -417,7 +417,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -437,7 +437,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -457,7 +457,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -481,7 +481,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -509,7 +509,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
@@ -537,7 +537,7 @@
       workers_launch2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
     else {
-      wrk->arg.result = workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
+      workers_run2( &(wrk->wb), nfi_do_operation, wrk ) ;
     }
 
     return 0;
