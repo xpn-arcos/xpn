@@ -58,6 +58,7 @@
     return 1;
   }
 
+
   int workers_launch ( worker_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
   {
     switch (w->thread_mode)
@@ -80,6 +81,7 @@
 
     return 1;
   }
+
 
   int workers_launch2 ( worker_t *w, void (*worker_function)(struct st_th), void *args )
   {
@@ -113,6 +115,24 @@
     return 1;
   }
 
+
+  int workers_run2 ( worker_t *w, void (*worker_function)(struct st_th), void *args )
+  {
+    struct st_th th_arg ;
+
+    th_arg.params         = args ;
+    th_arg.sd             = 0L ;
+    th_arg.function       = worker_function ;
+    th_arg.id             = 0 ;
+    th_arg.type_op        = 0 ;
+    th_arg.rank_client_id = 0 ;
+
+    worker_function(th_arg);
+
+    return 1;
+  }
+
+
   void workers_destroy ( worker_t *w )
   {
     switch (w->thread_mode)
@@ -135,3 +155,4 @@
 
 
   /* ................................................................... */
+

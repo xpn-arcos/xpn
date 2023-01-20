@@ -28,8 +28,12 @@
   #include "workers_ondemand.h"
   #include "workers_pool.h"
   #include "base/debug_msg.h"
-  
-  //Constants
+ 
+
+  /*
+   * Constants
+   */
+
   #define TH_POOL 1
   #define TH_OP   2
 
@@ -52,8 +56,10 @@
 
   int  workers_init     ( worker_t *w, int thread_mode ) ;
   int  workers_launch   ( worker_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) ) ;
-  int  workers_launch2  ( worker_t *w, void (*worker_function)(struct st_th), void *args ) ;
   void workers_destroy  ( worker_t *w ) ;
+
+  int  workers_launch2  ( worker_t *w, void (*worker_function)(struct st_th), void *args ) ;
+  int  workers_run2     ( worker_t *w, void (*worker_function)(struct st_th), void *args ) ;
 
 
 #endif
