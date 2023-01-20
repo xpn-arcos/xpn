@@ -29,13 +29,16 @@
   /* ... Functions / Funciones ......................................... */
 
   /*
-   * Read the operation to realize
+   * Perform the operation
    */
-  int nfi_do_operation ( struct nfi_worker *wrk ) 
-  { 
+
+  void nfi_do_operation ( struct st_th th_arg )
+  {
     ssize_t aux, ret;
 
     DEBUG_BEGIN() ;
+
+    struct nfi_worker *wrk = (struct nfi_worker *)(th_arg.params) ;
 
     debug_info("[%s] %s(%lu) op: %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(),wrk->arg.operation);
 
@@ -149,7 +152,7 @@
 
     DEBUG_END() ;
 
-    return ret;
+    wrk->arg.result = ret ;
   }
 
 
@@ -161,30 +164,13 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_open;
+    wrk->arg.fh = fh;
+    strcpy(wrk->arg.url, url) ;
 
-      // Pack request
-      wrk->arg.operation = op_open;
-      wrk->arg.fh = fh;
-      strcpy(wrk->arg.url,url) ;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_open;
-      wrk->arg.fh = fh;
-      strcpy(wrk->arg.url,url) ;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -194,32 +180,14 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_create ;
+    wrk->arg.fh        = fh ;
+    wrk->arg.attr      = attr ;
+    strcpy(wrk->arg.url, url) ;
 
-      // Pack request
-      wrk->arg.operation = op_create;
-      wrk->arg.fh = fh;
-      strcpy(wrk->arg.url,url) ;
-      wrk->arg.attr = attr;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_create;
-      wrk->arg.fh = fh;
-      strcpy(wrk->arg.url,url) ;
-      wrk->arg.attr = attr;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -229,32 +197,14 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      // Wake up thread
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_read;
+    wrk->arg.fh = fh;
+    wrk->arg.io = io;
+    wrk->arg.n_io = n;
 
-      // Pack request
-      wrk->arg.operation = op_read;
-      wrk->arg.fh = fh;
-      wrk->arg.io = io;
-      wrk->arg.n_io = n;
-
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_read;
-      wrk->arg.fh = fh;
-      wrk->arg.io = io;
-      wrk->arg.n_io = n;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -264,31 +214,14 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_write;
+    wrk->arg.fh = fh;
+    wrk->arg.io = io;
+    wrk->arg.n_io = n;
 
-      // Pack request
-      wrk->arg.operation = op_write;
-      wrk->arg.fh = fh;
-      wrk->arg.io = io;
-      wrk->arg.n_io = n;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else{
-      // Pack request
-      wrk->arg.operation = op_write;
-      wrk->arg.fh = fh;
-      wrk->arg.io = io;
-      wrk->arg.n_io = n;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -298,28 +231,12 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_close;
+    wrk->arg.fh = fh;
 
-      // Pack request
-      wrk->arg.operation = op_close;
-      wrk->arg.fh = fh;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_close;
-      wrk->arg.fh = fh;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -333,28 +250,12 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_remove;
+    strcpy(wrk->arg.url, url) ;
 
-      // Pack request
-      wrk->arg.operation = op_remove;
-      strcpy(wrk->arg.url,url) ;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_remove;
-      strcpy(wrk->arg.url,url) ;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -364,30 +265,13 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_rename;
+    strcpy(wrk->arg.url,old_url) ;
+    strcpy(wrk->arg.newurl,new_url) ;
 
-      // Pack request
-      wrk->arg.operation = op_rename;
-      strcpy(wrk->arg.url,old_url) ;
-      strcpy(wrk->arg.newurl,new_url) ;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_rename;
-      strcpy(wrk->arg.url,old_url) ;
-      strcpy(wrk->arg.newurl,new_url) ;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -397,30 +281,13 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_getattr;
+    wrk->arg.fh = fh;
+    wrk->arg.attr = attr;
 
-      // Pack request
-      wrk->arg.operation = op_getattr;
-      wrk->arg.fh = fh;
-      wrk->arg.attr = attr;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_getattr;
-      wrk->arg.fh = fh;
-      wrk->arg.attr = attr;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -431,30 +298,13 @@
 
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_setattr;
+    wrk->arg.fh = fh;
+    wrk->arg.attr = attr;
 
-      // Pack request
-      wrk->arg.operation = op_setattr;
-      wrk->arg.fh = fh;
-      wrk->arg.attr = attr;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_setattr;
-      wrk->arg.fh = fh;
-      wrk->arg.attr = attr;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -468,64 +318,30 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.fh = fh;
+    wrk->arg.attr = attr;
+    wrk->arg.operation = op_mkdir;
+    strcpy(wrk->arg.url, url) ;
 
-      // Pack request
-      wrk->arg.operation = op_mkdir;
-      strcpy(wrk->arg.url,url) ;
-      wrk->arg.attr = attr;
-      wrk->arg.fh = fh;
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_mkdir;
-      strcpy(wrk->arg.url,url) ;
-      wrk->arg.attr = attr;
-      wrk->arg.fh = fh;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_opendir(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh)
+  int nfi_worker_do_opendir ( struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_opendir;
+    strcpy(wrk->arg.url, url);
+    wrk->arg.fh = fh;
 
-      // Pack request
-      wrk->arg.operation = op_opendir;
-      strcpy(wrk->arg.url,url);
-      wrk->arg.fh = fh;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_opendir;
-      strcpy(wrk->arg.url,url);
-      wrk->arg.fh = fh;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -535,32 +351,14 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_readdir;
+    wrk->arg.type = type;
+    wrk->arg.entry = entry;
+    wrk->arg.fh = fh;
 
-      // Pack request
-      wrk->arg.operation = op_readdir;
-      wrk->arg.type = type;
-      wrk->arg.entry = entry;
-      wrk->arg.fh = fh;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_readdir;
-      wrk->arg.type = type;
-      wrk->arg.entry = entry;
-      wrk->arg.fh = fh;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -570,28 +368,12 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if (wrk->thread)
-    { 
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.fh = fh;
+    wrk->arg.operation = op_closedir;
 
-      // Pack request
-      wrk->arg.operation = op_closedir;
-      wrk->arg.fh = fh;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_closedir;
-      wrk->arg.fh = fh;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -601,28 +383,12 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_rmdir;
+    strcpy(wrk->arg.url,url) ;
 
-      // Pack request
-      wrk->arg.operation = op_rmdir;
-      strcpy(wrk->arg.url,url) ;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_rmdir;
-      strcpy(wrk->arg.url,url) ;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -636,28 +402,12 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if (wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_statfs;
+    wrk->arg.inf = inf;
 
-      // Pack request
-      wrk->arg.operation = op_statfs;
-      wrk->arg.inf = inf;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_statfs;
-      wrk->arg.inf = inf;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -667,40 +417,20 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if (wrk->server->ops->nfi_flush == NULL)
-    {
+    if (wrk->server->ops->nfi_flush == NULL) {
       wrk->arg.result = -1;
       return -1;
     }
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_flush;
+    strcpy(wrk->arg.url, url) ;
+    strcpy(wrk->arg.virtual_path, virtual_path) ;
+    strcpy(wrk->arg.storage_path, storage_path) ;
+    wrk->arg.opt = opt;
 
-      // Pack request
-      wrk->arg.operation = op_flush;
-      strcpy(wrk->arg.url, url) ;
-      strcpy(wrk->arg.virtual_path, virtual_path) ;
-      strcpy(wrk->arg.storage_path, storage_path) ;
-      wrk->arg.opt = opt;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_flush;
-      strcpy(wrk->arg.url, url) ;
-      strcpy(wrk->arg.virtual_path, virtual_path) ;
-      strcpy(wrk->arg.storage_path, storage_path) ;
-      wrk->arg.opt = opt;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -710,40 +440,20 @@
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
-    if (wrk->server->ops->nfi_preload == NULL)
-    {
+    if (wrk->server->ops->nfi_preload == NULL) {
       wrk->arg.result = -1;
       return -1;
     }
 
-    if(wrk->thread)
-    {
-      pthread_mutex_lock(&(wrk->mt)) ;
+    // Pack request
+    wrk->arg.operation = op_preload;
+    strcpy(wrk->arg.url, url) ;
+    strcpy(wrk->arg.virtual_path, virtual_path) ;
+    strcpy(wrk->arg.storage_path, storage_path) ;
+    wrk->arg.opt = opt;
 
-      // Pack request
-      wrk->arg.operation = op_preload;
-      strcpy(wrk->arg.url, url) ;
-      strcpy(wrk->arg.virtual_path, virtual_path) ;
-      strcpy(wrk->arg.storage_path, storage_path) ;
-      wrk->arg.opt = opt;
-
-      // Wake up thread
-      wrk->ready = 1;
-      pthread_cond_signal(&(wrk->cnd)) ;
-      pthread_mutex_unlock(&(wrk->mt)) ;
-    }
-    else
-    {
-      // Pack request
-      wrk->arg.operation = op_preload;
-      strcpy(wrk->arg.url, url) ;
-      strcpy(wrk->arg.virtual_path, virtual_path) ;
-      strcpy(wrk->arg.storage_path, storage_path) ;
-      wrk->arg.opt = opt;
-
-      // Do operation
-      wrk->arg.result = nfi_do_operation(wrk);
-    }
+    // Do operation
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }

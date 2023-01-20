@@ -4,6 +4,7 @@
 
 #include "all_system.h"
 #include "debug_msg.h"
+#include "workers.h"
 
 
  #ifdef  __cplusplus
@@ -11,13 +12,13 @@
  #endif
 
 
-struct nfi_worker_io{
+struct nfi_worker_io {
 	off_t offset;
 	size_t size;
 	void *buffer;
 };
 
-struct nfi_worker_args{
+struct nfi_worker_args {
 	int operation;
 	ssize_t result;
 
@@ -37,16 +38,20 @@ struct nfi_worker_args{
 	unsigned char *type;
 };
 
-struct nfi_worker{
+struct nfi_worker {
 	int thread;
 
+   // OLD
 	pthread_t pth;
 	pthread_mutex_t mt;
 	pthread_cond_t cnd;
-
 	int ready;
-	struct nfi_server *server;
-	struct nfi_worker_args arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant
+
+   // NEW
+	worker_t wb ; 
+
+	struct nfi_server      *server;
+	struct nfi_worker_args  arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant
 };
 
 

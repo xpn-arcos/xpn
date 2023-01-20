@@ -177,6 +177,9 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/base/urlstr.c ../../src/base/ns.c \
 	../../src/base/syscall_proxies.c \
 	../../src/base/filesystem.c \
+	../../src/base/workers.c \
+	../../src/base/workers_ondemand.c \
+	../../src/base/workers_pool.c \
 	../../src/base/utils.c \
 	../../src/xpn_client/nfi/common/nfi_ops.c \
 	../../src/xpn_client/nfi/common/nfi_worker.c \
@@ -285,6 +288,9 @@ am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/ns.$(OBJEXT) \
 	../../src/base/syscall_proxies.$(OBJEXT) \
 	../../src/base/filesystem.$(OBJEXT) \
+	../../src/base/workers.$(OBJEXT) \
+	../../src/base/workers_ondemand.$(OBJEXT) \
+	../../src/base/workers_pool.$(OBJEXT) \
 	../../src/base/utils.$(OBJEXT)
 am__objects_2 =  \
 	../../src/xpn_client/nfi/common/nfi_ops.$(OBJEXT) \
@@ -424,6 +430,9 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/trace_msg.Po \
 	../../src/base/$(DEPDIR)/urlstr.Po \
 	../../src/base/$(DEPDIR)/utils.Po \
+	../../src/base/$(DEPDIR)/workers.Po \
+	../../src/base/$(DEPDIR)/workers_ondemand.Po \
+	../../src/base/$(DEPDIR)/workers_pool.Po \
 	../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po \
 	../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po \
 	../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po \
@@ -560,6 +569,9 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/base/ns.h \
 	../../include/base/syscall_proxies.h \
 	../../include/base/filesystem.h \
+	../../include/base/workers.h \
+	../../include/base/workers_ondemand.h \
+	../../include/base/workers_pool.h \
 	../../include/base/utils.h \
 	../../include/xpn_client/nfi/nfi.h \
 	../../include/xpn_client/nfi/nfi_lib.h \
@@ -652,33 +664,33 @@ NFI_MPI_SERVER = nfi_mpi_server
 ### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
-			../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
-			../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c
+						../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
+						../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c
 
 NFI_NFS = 
 NFI_NFS3 = 
 ### END OF NFI_NFS_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 NFI_NFS3_OBJECTS = ../../src/xpn_client/nfi/nfi_nfs3/nfi_nfs3.c \
-			../../src/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.c \
-			../../src/xpn_client/nfi/nfi_nfs3/nfs3.c \
-			../../src/xpn_client/nfi/nfi_nfs3/nfs3_clnt.c \
-			../../src/xpn_client/nfi/nfi_nfs3/nfs3_xdr.c
+					../../src/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.c \
+					../../src/xpn_client/nfi/nfi_nfs3/nfs3.c \
+					../../src/xpn_client/nfi/nfi_nfs3/nfs3_clnt.c \
+					../../src/xpn_client/nfi/nfi_nfs3/nfs3_xdr.c
 
 ### BEGIN OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_OBJECTS BLOCK. Do not remove this line. ###
 NFI_NFS_OBJECTS = ../../src/xpn_client/nfi/nfi_nfs/nfi_nfs.c \
-			../../src/xpn_client/nfi/nfi_nfs/nfi_nfs_err.c \
-			../../src/xpn_client/nfi/nfi_nfs/nfs.c \
-			../../src/xpn_client/nfi/nfi_nfs/nfs_clnt.c \
-			../../src/xpn_client/nfi/nfi_nfs/nfs_xdr.c
+					../../src/xpn_client/nfi/nfi_nfs/nfi_nfs_err.c \
+					../../src/xpn_client/nfi/nfi_nfs/nfs.c \
+					../../src/xpn_client/nfi/nfi_nfs/nfs_clnt.c \
+					../../src/xpn_client/nfi/nfi_nfs/nfs_xdr.c
 
 NFI_TCP_SERVER = nfi_tcp_server
 ### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.c \
-			../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
-			../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.c
+						../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
+						../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.c
 
 
 #############
@@ -756,69 +768,72 @@ top_build_prefix = ../../
 top_builddir = ../..
 top_srcdir = ../..
 COMMON_HEADER = ../../include/config.h \
-			../../include/config.h.in \
-			../../include/config_linux.h \
-			../../include/all_system.h \
-			../../include/xpn_client/expand.h \
-			../../include/xpn_client/expand_lib.h \
-			../../include/xpn_client/xpn_debug.h
+				../../include/config.h.in \
+				../../include/config_linux.h \
+				../../include/all_system.h \
+				../../include/xpn_client/expand.h \
+				../../include/xpn_client/expand_lib.h \
+				../../include/xpn_client/xpn_debug.h
 
 BASE_HEADER = ../../include/base/base_lib.h \
-			../../include/base/darray.h \
-			../../include/base/debug_msg.h \
-			../../include/base/debug_tags.h \
-			../../include/base/dtable.h \
-			../../include/base/math_misc.h \
-			../../include/base/string_misc.h \
-			../../include/base/time_misc.h \
-			../../include/base/trace_msg.h \
-			../../include/base/trace_tags.h \
-			../../include/base/urlstr.h \
-			../../include/base/ns.h \
-			../../include/base/syscall_proxies.h \
-			../../include/base/filesystem.h \
-			../../include/base/utils.h
+				../../include/base/darray.h \
+				../../include/base/debug_msg.h \
+				../../include/base/debug_tags.h \
+				../../include/base/dtable.h \
+				../../include/base/math_misc.h \
+				../../include/base/string_misc.h \
+				../../include/base/time_misc.h \
+				../../include/base/trace_msg.h \
+				../../include/base/trace_tags.h \
+				../../include/base/urlstr.h \
+				../../include/base/ns.h \
+				../../include/base/syscall_proxies.h \
+				../../include/base/filesystem.h \
+				../../include/base/workers.h \
+				../../include/base/workers_ondemand.h \
+				../../include/base/workers_pool.h \
+				../../include/base/utils.h
 
 NFI_LOCAL_HEADER = ../../include/xpn_client/nfi/nfi_local/local_lib.h \
-			../../include/xpn_client/nfi/nfi_local/nfi_local_err.h \
-			../../include/xpn_client/nfi/nfi_local/nfi_local.h
+					../../include/xpn_client/nfi/nfi_local/nfi_local_err.h \
+					../../include/xpn_client/nfi/nfi_local/nfi_local.h
 
 ### BEGIN OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS_HEADER = ../../include/xpn_client/nfi/nfi_nfs/nfi_nfs_err.h \
-			../../include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
-			../../include/xpn_client/nfi/nfi_nfs/nfs.h \
-			../../include/xpn_client/nfi/nfi_nfs/nfs_lib.h
+					../../include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
+					../../include/xpn_client/nfi/nfi_nfs/nfs.h \
+					../../include/xpn_client/nfi/nfi_nfs/nfs_lib.h
 
 ### END OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS3_HEADER = ../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
-			../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
-			../../include/xpn_client/nfi/nfi_nfs3/nfs3.h \
-			../../include/xpn_client/nfi/nfi_nfs3/nfs3_lib.h
+					../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
+					../../include/xpn_client/nfi/nfi_nfs3/nfs3.h \
+					../../include/xpn_client/nfi/nfi_nfs3/nfs3_lib.h
 
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
-			../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
-			../../include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
-			../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_lib.h \
-			../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
-			../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
+						../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
+						../../include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
+						../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_lib.h \
+						../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
+						../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
 
 ### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
-			../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
-			../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
-			../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
-			../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
+						../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
+						../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
+						../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
+						../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 
 ### END OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
 NFI_HTTP_HEADER = ../../include/xpn_client/nfi/nfi_http/nfi_http_err.h \
-			../../include/xpn_client/nfi/nfi_http/nfi_http.h \
-			../../include/xpn_client/nfi/nfi_http/http_lib.h
+					../../include/xpn_client/nfi/nfi_http/nfi_http.h \
+					../../include/xpn_client/nfi/nfi_http/http_lib.h
 
 ### END OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
@@ -837,28 +852,31 @@ XPN_HEADER = ../../include/xpn_client/xpn.h
 # OBJECTS #
 ###########
 BASE_OBJECTS = ../../src/base/darray.c \
-			../../src/base/dtable.c \
-			../../src/base/math_misc.c \
-			../../src/base/trace_msg.c \
-			../../src/base/debug_msg.c \
-			../../src/base/string_misc.c \
-			../../src/base/time_misc.c \
-			../../src/base/urlstr.c \
-			../../src/base/ns.c \
-			../../src/base/syscall_proxies.c \
-			../../src/base/filesystem.c \
-			../../src/base/utils.c
+					../../src/base/dtable.c \
+					../../src/base/math_misc.c \
+					../../src/base/trace_msg.c \
+					../../src/base/debug_msg.c \
+					../../src/base/string_misc.c \
+					../../src/base/time_misc.c \
+					../../src/base/urlstr.c \
+					../../src/base/ns.c \
+					../../src/base/syscall_proxies.c \
+					../../src/base/filesystem.c \
+					../../src/base/workers.c \
+					../../src/base/workers_ondemand.c \
+					../../src/base/workers_pool.c \
+					../../src/base/utils.c
 
 NFI_COMMON_OBJECTS = ../../src/xpn_client/nfi/common/nfi_ops.c \
-			../../src/xpn_client/nfi/common/nfi_worker.c
+					../../src/xpn_client/nfi/common/nfi_worker.c
 
 NFI_LOCAL_OBJECTS = ../../src/xpn_client/nfi/nfi_local/nfi_local.c \
-			../../src/xpn_client/nfi/nfi_local/nfi_local_err.c
+					../../src/xpn_client/nfi/nfi_local/nfi_local_err.c
 
 ### END OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
 NFI_HTTP_OBJECTS = ../../src/xpn_client/nfi/nfi_http/nfi_http.c \
-			../../src/xpn_client/nfi/nfi_http/nfi_http_err.c
+					../../src/xpn_client/nfi/nfi_http/nfi_http_err.c
 
 ### END OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
@@ -868,84 +886,84 @@ NFI_OBJECTS = $(NFI_COMMON_OBJECTS) $(NFI_LOCAL_OBJECTS) \
 ### END OF ENABLE_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_OBJECTS BLOCK. Do not remove this line. ###
 XPN_CORE_OBJECTS = ../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_dir.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_err.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_file.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_init.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_open.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_opendir.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fopen.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fclose.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fread.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fwrite.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fflush.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fillbuf.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_flushbuf.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fseek.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_ftell.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fileno.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_setbuf.c \
-			../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_setvbuf.c
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_dir.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_err.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_file.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_init.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_open.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_opendir.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fopen.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fclose.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fread.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fwrite.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fflush.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fillbuf.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_flushbuf.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fseek.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_ftell.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_fileno.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_setbuf.c \
+					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_setvbuf.c
 
 XPN_POLICY_OBJECTS = ../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c \
-			../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.c \
-			../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
-			../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
-			../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
-			../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.c
+					../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.c \
+					../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
+					../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
+					../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
+					../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.c
 
 XPN_OBJECTS = $(XPN_CORE_OBJECTS) $(XPN_POLICY_OBJECTS)
 XPNI_OBJECTS = ../../src/xpn_client/xpni/common/xpni_fit.c \
-			../../src/xpn_client/xpni/common/xpni_fmeta.c \
-			../../src/xpn_client/xpni/common/xpni_fsit.c \
-			../../src/xpn_client/xpni/common/xpni_file.c \
-			../../src/xpn_client/xpni/common/xpni_dir.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_close.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_destroy.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_exportFile.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_importFile.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_init.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_lseek.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_metaData.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_open.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_read.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_register.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_write.c \
-			../../src/xpn_client/xpni/xpni_ft/xpni_ft_opendir.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_close.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_destroy.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_init.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_open.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_read.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_register.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_write.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_importFile.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_exportFile.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_lseek.c \
-			../../src/xpn_client/xpni/xpni_null/xpni_null_opendir.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_close.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_destroy.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_exportFile.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_importFile.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_init.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_lseek.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_open.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_read.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_register.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_write.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_opendir.c \
-			../../src/xpn_client/xpni/xpni_log/xpni_log_elog.c
+					../../src/xpn_client/xpni/common/xpni_fmeta.c \
+					../../src/xpn_client/xpni/common/xpni_fsit.c \
+					../../src/xpn_client/xpni/common/xpni_file.c \
+					../../src/xpn_client/xpni/common/xpni_dir.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_close.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_destroy.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_exportFile.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_importFile.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_init.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_lseek.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_metaData.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_open.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_read.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_register.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_write.c \
+					../../src/xpn_client/xpni/xpni_ft/xpni_ft_opendir.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_close.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_destroy.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_init.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_open.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_read.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_register.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_write.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_importFile.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_exportFile.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_lseek.c \
+					../../src/xpn_client/xpni/xpni_null/xpni_null_opendir.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_close.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_destroy.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_exportFile.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_importFile.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_init.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_lseek.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_open.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_read.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_register.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_write.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_opendir.c \
+					../../src/xpn_client/xpni/xpni_log/xpni_log_elog.c
 
 XPN2_OBJECTS = ../../src/xpn_client/xpn2/xpn2_close.c \
-			../../src/xpn_client/xpn2/xpn2_destroy.c \
-			../../src/xpn_client/xpn2/xpn2_init.c \
-			../../src/xpn_client/xpn2/xpn2_open.c \
-			../../src/xpn_client/xpn2/xpn2_creat.c \
-			../../src/xpn_client/xpn2/xpn2_read.c \
-			../../src/xpn_client/xpn2/xpn2_write.c \
-			../../src/xpn_client/xpn2/xpn2_ioctl.c \
-			../../src/xpn_client/xpn2/xpn2_lseek.c
+					../../src/xpn_client/xpn2/xpn2_destroy.c \
+					../../src/xpn_client/xpn2/xpn2_init.c \
+					../../src/xpn_client/xpn2/xpn2_open.c \
+					../../src/xpn_client/xpn2/xpn2_creat.c \
+					../../src/xpn_client/xpn2/xpn2_read.c \
+					../../src/xpn_client/xpn2/xpn2_write.c \
+					../../src/xpn_client/xpn2/xpn2_ioctl.c \
+					../../src/xpn_client/xpn2/xpn2_lseek.c
 
 lib_LIBRARIES = libxpn.a
 libxpn_a_SOURCES = $(BASE_OBJECTS) $(NFI_OBJECTS) $(XPN_OBJECTS) $(XPNI_OBJECTS) $(XPN2_OBJECTS)
@@ -1053,6 +1071,15 @@ clean-libLIBRARIES:
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/filesystem.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/workers.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/workers_ondemand.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/workers_pool.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/utils.$(OBJEXT):  \
@@ -1427,6 +1454,9 @@ include ../../src/base/$(DEPDIR)/time_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/trace_msg.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/urlstr.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/utils.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/workers.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/workers_ondemand.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/workers_pool.Po # am--include-marker
 include ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po # am--include-marker
 include ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po # am--include-marker
@@ -1736,6 +1766,9 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../../src/base/$(DEPDIR)/urlstr.Po
 	-rm -f ../../src/base/$(DEPDIR)/utils.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_pool.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
@@ -1889,6 +1922,9 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../../src/base/$(DEPDIR)/urlstr.Po
 	-rm -f ../../src/base/$(DEPDIR)/utils.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_pool.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po

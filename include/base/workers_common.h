@@ -39,19 +39,17 @@
    * Datatype
    */
 
-  typedef struct wod worker_ondemand_t;
-
   struct st_th
   {
-      void *params ;
-      long  sd ;
+      void  *params ;
+      long   sd ;
       void (*function)(struct st_th) ;
 
-      int id ;
-      int type_op ;
-      int rank_client_id ;
+      int   id ;
+      int   type_op ;
+      int   rank_client_id ;
 
-      worker_ondemand_t *w;
+      void *w; // worker_ondemand/worker_pool as void *
   };
 
 #endif

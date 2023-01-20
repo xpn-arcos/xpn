@@ -100,12 +100,10 @@
       int rank_client_id;
       int ret;
 
-
       // Initialize
       debug_msg_init() ;
       mpi_server_comm_init(&params) ;
       workers_init ( &worker, params.thread_mode );
-
 
       //Initialize semaphore for server disks
       ret = sem_init(&(params.disk_sem), 0, 1);

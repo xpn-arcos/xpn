@@ -356,8 +356,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
         return res;
       }
 
-      // Default Value
-      //nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_read, xpn_file_table[fd]->part->id, size));
+      //Worker
       servers[i]->wrk->thread = servers[i]->xpn_thread;
       nfi_worker_do_read(servers[i]->wrk, xpn_file_table[fd]->data_vfh->nfih[i], io[i], ion[i]);
     }
@@ -673,8 +672,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
       }
       */
 
-      // Default Value
-      //nfi_worker_thread(servers[i]->wrk, XpnGetThreads(op_xpn_write ,xpn_file_table[fd]->part->id, size));
+      //Worker
       servers[i]->wrk->thread = servers[i]->xpn_thread;
       nfi_worker_do_write(servers[i]->wrk, xpn_file_table[fd]->data_vfh->nfih[i], io[i], ion[i]);
     }
