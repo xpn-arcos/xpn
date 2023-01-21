@@ -235,14 +235,14 @@
       char * exec_name = NULL ;
 
       // Welcome...
-      printf("") ;
-      printf(" mpi_server") ;
-      printf(" ----------") ;
-      printf("") ;
-      printf(" Begin.") ;
-      printf("") ;
+      printf("\n") ;
+      printf(" mpi_server\n") ;
+      printf(" ----------\n") ;
+      printf("\n") ;
+      printf(" Begin.\n") ;
+      printf("\n") ;
 
-      char * exec_name = basename(argv[0]);
+      exec_name = basename(argv[0]);
       printf(" * action=%s\n", exec_name);
 
       // Get arguments..
