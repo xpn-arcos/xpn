@@ -149,6 +149,9 @@ void read_params(int cmd)
 			switch(protocol){
 				case NFI_NFS2:
 					ret = nfi_nfs_destroy(&server);
+					if (ret<0) {
+					  printf("rnfi> Error on nfi_nfs_destroy\n");
+					}
 					protocol = -1;
 					break;
 				default:
@@ -160,6 +163,9 @@ void read_params(int cmd)
 			switch(protocol){
 				case NFI_NFS2:
 					ret = nfi_nfs_destroy(&server);
+					if (ret<0) {
+					  printf("rnfi> Error on nfi_nfs_destroy\n");
+					}
 					protocol = -1;
 					break;
 				default:
@@ -173,6 +179,9 @@ void read_params(int cmd)
                         switch(protocol){
                             case NFI_NFS2:
                                  ret = nfi_nfs_destroy(&server);
+				 if (ret<0) {
+				   printf("rnfi> Error on nfi_nfs_destroy\n");
+				 }
                                  protocol = -1;
                                  break;
                             default:

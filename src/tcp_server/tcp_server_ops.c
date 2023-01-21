@@ -288,10 +288,11 @@ void tcp_server_op_rm ( int sd, struct st_tcp_server_msg *head )
 
 long op_read_buffer (int read_fd2, void *buffer, int buffer_size )
 {
-     ssize_t read_num_bytes       = -1 ;
+     ssize_t read_num_bytes ;
      ssize_t read_remaining_bytes = buffer_size ;
      void   *read_buffer          = buffer ;
 
+     read_num_bytes = -1 ;
      while (read_remaining_bytes > 0)
      {
      /* Read from local file... */

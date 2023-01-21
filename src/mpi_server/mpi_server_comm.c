@@ -74,8 +74,8 @@
 
     // Generate DNS file
     ret = ns_publish(params->srv_name, params->dns_file, params->port_name);
-    if (ret < 0)
-    {
+    if (ret < 0) {
+      debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank) ;
       return -1;
     }
 
@@ -110,6 +110,7 @@
     return 1 ;
   }
   
+
   int mpi_server_comm_destroy ( mpi_server_param_st *params )
   {
     int ret ;
@@ -121,7 +122,8 @@
 
     for (int i = 0; i < params->size; ++i)
     {
-      if(params->rank == i){
+      if(params->rank == i)
+      {
         // Unpublish port name
         ret = ns_unpublish (params->dns_file);
         if (ret < 0) {
@@ -129,6 +131,7 @@
           return -1 ;
         }
       }
+
       MPI_Barrier(MPI_COMM_WORLD);
     }
 
@@ -152,6 +155,7 @@
     return 1 ;
   }
   
+
   MPI_Comm mpi_server_comm_accept ( mpi_server_param_st *params )
   {
     int ret ;
@@ -170,20 +174,21 @@
     // Return client MPI_Comm
     return params->client ;
   }
+
   
   int mpiClient_comm_close ( MPI_Comm fd )
   {
     int ret ;
 
-    if (fd == MPI_COMM_NULL)
-    {
+    if (fd == MPI_COMM_NULL) {
+      debug_error("Server[]: ERROR: MPI_COMM_NULL as communication descriptor :-(") ;
       return 1;
     }
 
     // Disconnect
     ret = MPI_Comm_disconnect(&fd) ;
     if (MPI_SUCCESS != ret) {
-      debug_error("Server[%d]: MPI_Comm_disconnect fails :-(", params->rank) ;
+      debug_error("Server[]: ERROR: MPI_Comm_disconnect fails :-(") ;
       return -1 ;
     }
 
@@ -191,6 +196,7 @@
     return 1 ;
   }
   
+
   ssize_t mpi_server_comm_read_operation ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int *rank_client_id )
   {
     int ret ;
@@ -199,16 +205,16 @@
     DEBUG_BEGIN() ;
 
     // Check params
+    if (NULL == params) {
+      debug_warning("Server[%d]: ERROR: NULL arguments", -1) ;
+      return -1;
+    }
     if (size == 0) {
       return  0;
     }
     if (size < 0){
-      debug_warning("Server[%d]: size < 0", params->rank) ;
+      debug_warning("Server[%d]: ERROR: size < 0", params->rank) ;
       return  -1;
-    }
-    if (NULL == params) {
-      debug_warning("Server[%d]: NULL params") ;
-      return -1;
     }
 
     // Get message
@@ -227,6 +233,7 @@
     return size;
   }
 
+
   ssize_t mpi_server_comm_write_data ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id )
   {
     int ret ;
@@ -234,22 +241,22 @@
     DEBUG_BEGIN() ;
 
     // Check params
+    if (NULL == params) {
+        debug_warning("Server[%d]: ERROR: NULL params", -1) ;
+        return -1;
+    }
     if (size == 0){
         return 0;
     }
     if (size < 0){
-        debug_warning("Server[%d]: size < 0", params->rank) ;
-        return -1;
-    }
-    if (NULL == params) {
-        debug_warning("Server[?]: NULL params") ;
+        debug_warning("Server[%d]: ERROR: size < 0", params->rank) ;
         return -1;
     }
 
     // Send message
     ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 1, fd) ;
     if (MPI_SUCCESS != ret) {
-      debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
+      debug_warning("Server[%d]: ERROR: MPI_Recv fails :-(", params->rank) ;
     }
 
     DEBUG_END() ;
@@ -257,6 +264,7 @@
     // Return bytes written
     return size;
   }
+
 
   ssize_t mpi_server_comm_read_data ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int rank_client_id )
   {
@@ -266,22 +274,22 @@
     DEBUG_BEGIN() ;
 
     // Check params
+    if (NULL == params) {
+      debug_warning("Server[-1]: ERROR: NULL params", -1) ;
+      return -1;
+    }
     if (size == 0) {
       return  0;
     }
     if (size < 0){
-      debug_warning("Server[%d]: size < 0", params->rank) ;
+      debug_warning("Server[%d]: ERROR: size < 0", params->rank) ;
       return  -1;
-    }
-    if (NULL == params) {
-      debug_warning("Server[%d]: NULL params", params->rank) ;
-      return -1;
     }
 
     // Get message
     ret = MPI_Recv(data, size, MPI_CHAR, rank_client_id, 1, fd, &status);
     if (MPI_SUCCESS != ret) {
-      debug_warning("Server[%d]: MPI_Recv fails :-(", params->rank) ;
+      debug_warning("Server[%d]: ERROR: MPI_Recv fails :-(", params->rank) ;
     }
 
     debug_info("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
@@ -291,3 +299,7 @@
     // Return bytes read
     return size;
   }
+
+
+ /* ................................................................... */
+
