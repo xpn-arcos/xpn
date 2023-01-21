@@ -205,16 +205,16 @@
     DEBUG_BEGIN() ;
 
     // Check params
+    if (NULL == params) {
+      debug_warning("Server[%d]: ERROR: NULL arguments", -1) ;
+      return -1;
+    }
     if (size == 0) {
       return  0;
     }
     if (size < 0){
       debug_warning("Server[%d]: ERROR: size < 0", params->rank) ;
       return  -1;
-    }
-    if (NULL == params) {
-      debug_warning("Server[%d]: ERROR: NULL arguments", params->rank) ;
-      return -1;
     }
 
     // Get message
@@ -241,15 +241,15 @@
     DEBUG_BEGIN() ;
 
     // Check params
+    if (NULL == params) {
+        debug_warning("Server[%d]: ERROR: NULL params", -1) ;
+        return -1;
+    }
     if (size == 0){
         return 0;
     }
     if (size < 0){
         debug_warning("Server[%d]: ERROR: size < 0", params->rank) ;
-        return -1;
-    }
-    if (NULL == params) {
-        debug_warning("Server[%d]: ERROR: NULL params", params->rank) ;
         return -1;
     }
 
@@ -274,16 +274,16 @@
     DEBUG_BEGIN() ;
 
     // Check params
+    if (NULL == params) {
+      debug_warning("Server[-1]: ERROR: NULL params", -1) ;
+      return -1;
+    }
     if (size == 0) {
       return  0;
     }
     if (size < 0){
       debug_warning("Server[%d]: ERROR: size < 0", params->rank) ;
       return  -1;
-    }
-    if (NULL == params) {
-      debug_warning("Server[%d]: ERROR: NULL params", params->rank) ;
-      return -1;
     }
 
     // Get message

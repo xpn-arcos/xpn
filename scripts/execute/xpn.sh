@@ -50,7 +50,7 @@ stop_mpi_servers() {
 
     mpiexec -np 1 \
             -genv XPN_DNS /tmp/dns.txt \
-            -genv LD_LIBRARY_PATH ../mxml/lib:$LD_LIBRARY_PATH \
+            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
             src/mpi_server/xpn_stop_mpi_server -f ${HOSTFILE}
 }
 
