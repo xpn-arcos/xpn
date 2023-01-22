@@ -3,7 +3,7 @@
 #
 
 
- prefix = /root/bin//xpn
+ prefix = /home/acaldero/bin//xpn
  CC=/usr/bin/mpicc
 
  FLAGS=-Wall -Wextra -fpic -DLINUX -std=c11
