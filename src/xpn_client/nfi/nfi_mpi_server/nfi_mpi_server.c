@@ -305,23 +305,19 @@
 
     // Session mode checking
     char * env_session = getenv("XPN_SESSION");
-    if (env_session != NULL)
-    {
+    if (env_session != NULL) {
       server_aux->params.xpn_session = atoi(env_session);
     }
-    else
-    {
+    else {
       server_aux->params.xpn_session = 0;
     }
 
     // Locality mode checking
     char * env_locality = getenv("XPN_LOCALITY");
-    if (env_locality != NULL)
-    {
+    if (env_locality != NULL) {
       server_aux->params.xpn_locality = atoi(env_locality);
     }
-    else
-    {
+    else {
       server_aux->params.xpn_locality = 1;
     }
 
@@ -377,20 +373,6 @@
     // new server wrk...
     serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker)) ;
     memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
-
-    
-    /*if (strcmp("mpi_server", prt) == 0)
-    {
-      debug_info("[NFI] mpi_server\n") ;
-      debug_info("[NFI] nfi_worker_init(1,ID=%s): \n",server_aux->id) ;
-      nfi_worker_init(serv->wrk, serv, 1) ;
-    }
-    else
-    {
-      debug_info("[NFI] nfi_worker_init(0,ID=%s): \n",server_aux->id) ;
-      nfi_worker_init(serv->wrk, serv, 0) ;
-    }*/
-
     serv->wrk->server = serv ;    
 
     if (server_aux->params.xpn_thread)
@@ -438,13 +420,13 @@
     }
 
     // MPI Disconnect...
-    ret = mpiClient_comm_disconnect(&(server_aux->params)) ;
+    ret = mpiClient_comm_disconnect( &(server_aux->params) ) ;
     if (ret < 0) {
       debug_error("[NFI]: mpiClient_comm_disconnect fails :-(") ;
     }
     
     // MPI Finalize...
-    ret = mpiClient_comm_destroy ( &(server_aux->params) );
+    ret = mpiClient_comm_destroy( &(server_aux->params) );
     if (ret < 0) {
       debug_error("[NFI]: mpiClient_comm_destroy fails :-(") ;
     }
