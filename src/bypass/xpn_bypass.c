@@ -311,11 +311,10 @@
   {
     int ret, fd;
     va_list ap;
-    mode_t mode = 0;
 
     va_start(ap, flags);
 
-    mode = va_arg(ap, mode_t);
+    mode_t mode = va_arg(ap, mode_t);
 
     debug_info("Before open.... %s\n",path);
     debug_info("1) Path => %s\n",path);
@@ -332,12 +331,7 @@
       debug_info("xpn_open\n");
       debug_info("Path => %s\n",path + strlen(xpn_adaptor_partition_prefix));
 
-      if (mode != 0){
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags, mode);
-      }
-      else{
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
-      }
+      fd = xpn_open((const char *)(path + strlen(xpn_adaptor_partition_prefix)), flags, mode);
 
       debug_info("xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
 
@@ -370,11 +364,10 @@
   {
     int fd, ret;
     va_list ap;
-    mode_t mode = 0;
 
     va_start(ap, flags);
 
-    mode = va_arg(ap, mode_t);
+    mode_t mode = va_arg(ap, mode_t);
 
     debug_info("Before open64.... %s\n",path);
     debug_info("1) Path => %s\n",path);
@@ -389,12 +382,7 @@
       debug_info("xpn_open\n");
       debug_info("Path => %s\n",path+strlen(xpn_adaptor_partition_prefix));
 
-      if (mode != 0){
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags, mode);
-      }
-      else{
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
-      }
+      fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
 
       debug_info("xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
 

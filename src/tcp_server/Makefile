@@ -4,8 +4,8 @@
 #--------------------------
 
  MAKE         = make -s
- CC           = /opt/software/install-mpich/bin/mpicc
- EXPAND_DIR   = /local_test/bin//xpn
+ CC           = /usr/bin/mpicc
+ EXPAND_DIR   = /home/elias/bin//xpn
  OBJECTS_TCP_SERVER  = tcp_server.o \
 		       tcp_server_utils.o \
 		       tcp_server_params.o \
@@ -20,7 +20,7 @@
 #MYFLAGS               = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC -D_MALLOC_ -DDBG_OPS -DDBG_WORKERS
 MYFLAGS                = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
 MYHEADERS              =  -I. -I../../include  -I../../include/xpn_client -I../../include/tcp_server
-MYLIBS                 =  -L../../src/xpn_client -L../../../mxml -lpthread -lxpn -lmxml -ldl
+MYLIBS                 =  -L../../src/xpn_client -L../../../mxml -lpthread -lxpn -lmxml -ldl -lmosquitto
 
 TCP_SERVER_EXE      = tcp_server
 TCP_SERVER_EXE_STOP = xpn_stop_tcp_server
@@ -51,18 +51,17 @@ install: $(TCP_SERVER_EXE)
 	$(CC) $(MYFLAGS) $(MYHEADERS) -c $< -o $@
 
 $(TCP_SERVER_EXE): $(OBJECTS_TCP_SERVER)
-	$(CC) -o $(TCP_SERVER_EXE)  $(OBJECTS_TCP_SERVER)  $(MYLIBS) 
+	$(CC) -o $(TCP_SERVER_EXE)  $(OBJECTS_TCP_SERVER)  $(MYLIBS)
 
 $(XPN2D_EXE): $(OBJECTS_XPN2D)
-	@$(CC) -o $(XPN2D_EXE)  $(OBJECTS_XPN2D) $(MYLIBS) 
+	@$(CC) -o $(XPN2D_EXE)  $(OBJECTS_XPN2D) $(MYLIBS)
 $(D2XPN_EXE): $(OBJECTS_D2XPN)
-	@$(CC) -o  $(D2XPN_EXE) $(OBJECTS_D2XPN) $(MYLIBS) 
+	@$(CC) -o  $(D2XPN_EXE) $(OBJECTS_D2XPN) $(MYLIBS)
 $(XPN2XPN_EXE): $(OBJECTS_XPN2XPN)
-	@$(CC) -o  $(XPN2XPN_EXE) $(OBJECTS_XPN2XPN)  $(MYLIBS) 
+	@$(CC) -o  $(XPN2XPN_EXE) $(OBJECTS_XPN2XPN)  $(MYLIBS)
 $(RMXPN_EXE): $(OBJECTS_RMXPN)
-	@$(CC) -o  $(RMXPN_EXE) $(OBJECTS_RMXPN)  $(MYLIBS) 
+	@$(CC) -o  $(RMXPN_EXE) $(OBJECTS_RMXPN)  $(MYLIBS)
 
 clean:
 	rm -f $(OBJECTS_TCP_SERVER) $(OBJECTS_D2XPN) $(OBJECTS_XPN2D) $(OBJECTS_RMXPN)
 	rm -f $(TCP_SERVER_EXE) $(D2XPN_EXE) $(XPN2D_EXE) $(RMXPN_EXE)
-

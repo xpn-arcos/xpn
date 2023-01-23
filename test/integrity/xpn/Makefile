@@ -5,10 +5,10 @@
 #
 
  MAKE         = make -s
- CC           = /opt/software/install-mpich/bin/mpicc
+ CC           = /usr/bin/mpicc
  MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
  MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
- LIBRARIES    = -lxpn -lmxml -lpthread -ldl
+ LIBRARIES    = -lxpn -lmxml -lpthread -ldl -lmosquitto
  MYFLAGS      = -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H
 
 
@@ -29,5 +29,4 @@ open-read-close: open-read-close.o
 
 clean:
 	rm -f ./*.o
-	rm -f ./open-write-close ./open-read-close 
-
+	rm -f ./open-write-close ./open-read-close
