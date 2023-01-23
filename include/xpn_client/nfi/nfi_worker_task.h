@@ -48,8 +48,8 @@ struct nfi_worker {
 	int ready;
 
    // NEW
-	worker_t wb ; 
-	// TODO: th_arg *wait_obj ;
+	worker_t     wb ; 
+        struct st_th warg ;
 
 	struct nfi_server      *server;
 	struct nfi_worker_args  arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant

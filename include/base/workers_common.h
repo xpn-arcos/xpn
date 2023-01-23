@@ -52,13 +52,11 @@
 
       void *w; // worker_ondemand/worker_pool as void *
 
-/*
       // wait of this thread (launch + wait)
       pthread_t       th_worker;
       pthread_mutex_t m_wait;
       pthread_cond_t  c_wait;
       int             r_wait;    
-*/
 
   };
 
