@@ -33,6 +33,7 @@
 
    typedef struct {
 
+        // number of active threads (launch + destroy)
         int             busy_worker;
         pthread_mutex_t m_worker;
         pthread_cond_t  c_worker;

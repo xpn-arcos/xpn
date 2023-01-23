@@ -40,6 +40,7 @@
     printf("\t-d <string>:\t%s\n",   params->dirbase) ;
   }
   
+
   void mpi_server_params_show_usage ( void )
   {
     printf("Usage:\n");
@@ -50,6 +51,7 @@
     printf("\t-d <string>: name of the base directory\n") ;
   }
   
+
   int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] )
   {
     DEBUG_BEGIN() ;

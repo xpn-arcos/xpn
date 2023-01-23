@@ -29,8 +29,9 @@ struct nfi_local_fhandle{
 int nfi_local_init(char *url, struct nfi_server *serv, struct nfi_attr_server *attr);
 int nfi_local_destroy(struct nfi_server *server);
 
-int nfi_local_reconnect(struct nfi_server *server);
+int nfi_local_connect( struct nfi_server *serv, char *url, char* prt, char* server, char* dir ) ;
 int nfi_local_disconnect(struct nfi_server *server);
+int nfi_local_reconnect(struct nfi_server *server);
 
 int nfi_local_getattr(struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr);
 int nfi_local_setattr(struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr);

@@ -30,27 +30,33 @@
 
   int workers_init ( worker_t *w, int thread_mode )
   {
+    // check arguments...
     if (NULL == w) {
       debug_error("[WORKER] worker_init with NULL worker_t\n");
       return -1 ;
     }
 
+    // initialize...
     w->thread_mode = thread_mode ;
 
     switch (w->thread_mode)
     {
       case TH_OP:
-        debug_info("[WORKER] worker_ondemand_init\n") ;
+        printf("[WORKER] worker_ondemand_init\n") ;
         worker_ondemand_init(&(w->w1)) ;
         break ;
 
       case TH_POOL:
-        debug_info("[WORKER] worker_pool_init\n") ;
+        printf("[WORKER] worker_pool_init\n") ;
         worker_pool_init(&(w->w2));
         break ;
 
+      case TH_NOT:
+        printf("[WORKER] worker without threads\n") ;
+        break ;
+
       default:
-        debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
+        printf("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
         return -1 ;
         break ;
     }
@@ -61,6 +67,13 @@
 
   int workers_launch ( worker_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
   {
+    // check arguments...
+    if (NULL == w) {
+      debug_error("[WORKER] worker_launch with NULL worker_t\n");
+      return -1 ;
+    }
+
+    // lauch worker...
     switch (w->thread_mode)
     {
       case TH_OP:
@@ -74,6 +87,7 @@
         break ;
 
      case TH_NOT:
+        debug_info("[WORKER] worker without threads\n") ;
         break ;
 
      default:
@@ -90,12 +104,16 @@
   {
     struct st_th th_arg ;
 
-    th_arg.params         = args ;
-    th_arg.sd             = 0L ;
-    th_arg.function       = worker_function ;
-    th_arg.id             = 0 ;
-    th_arg.type_op        = 0 ;
-    th_arg.rank_client_id = 0 ;
+    // check arguments...
+    if (NULL == w) {
+      debug_error("[WORKER] worker_launch_nfi with NULL worker_t\n");
+      return -1 ;
+    }
+
+    // initialize local th_arg...
+    memset(&th_arg, 0, sizeof(struct st_th)) ;
+    th_arg.params   = args ;
+    th_arg.function = worker_function ;
 
     switch (w->thread_mode)
     {
@@ -126,6 +144,13 @@
 
   void workers_destroy ( worker_t *w )
   {
+    // check arguments...
+    if (NULL == w) {
+      debug_error("[WORKER] worker_destroy with NULL worker_t\n");
+      return ;
+    }
+
+    // destroy...
     switch (w->thread_mode)
     {
       case TH_OP:
@@ -139,6 +164,7 @@
         break ;
 
       case TH_NOT:
+        debug_info("[WORKER] worker without threads\n") ;
         break ;
 
       default:

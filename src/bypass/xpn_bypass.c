@@ -433,6 +433,65 @@
     return ret;
   }
 
+  int __open_2(const char *path, int flags, ...)
+  {
+    int fd, ret;
+    va_list ap;
+    mode_t mode = 0;
+
+    va_start(ap, flags);
+
+    mode = va_arg(ap, mode_t);
+
+    debug_info("Before __open_2.... %s\n",path);
+    debug_info("1) Path => %s\n",path);
+    debug_info("2) flags => %d\n",flags);
+    debug_info("3) mode => %d\n",mode);
+
+    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("xpn_open\n");
+      debug_info("Path => %s\n",path+strlen(xpn_adaptor_partition_prefix));
+
+      if (mode != 0){
+        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags, mode);
+      }
+      else{
+        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
+      }
+
+      debug_info("xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
+
+      if(fd<0)
+      {
+        ret = fd;
+      } 
+      else{
+        struct generic_fd virtual_fd;
+
+        virtual_fd.type    = FD_XPN;
+        virtual_fd.real_fd = fd;
+
+        ret = fdstable_put ( virtual_fd );
+      }
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("dlsym___open_2\n");
+
+      ret = dlsym___open_2((char *)path, flags);
+    }
+
+    va_end(ap);
+
+    return ret;
+  }
+
+
   int creat(const char *path, mode_t mode)
   {
     int fd,ret;
