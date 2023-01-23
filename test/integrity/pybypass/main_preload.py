@@ -7,19 +7,21 @@ from ctypes import *
 #
 
 # fill buffer with 1024 'a'
-buff_w = []
+buff = []
 for i in range(0,1024):
-    buff_w.append('a')
-buff_w.append('\n')
+    buff.append('a')
+buff.append('\n')
+buff_w = ''.join(buff)
 
 # write and read buffer
 fname = "/tmp/expand/P1/demo.txt"
+#fname = "/tmp/demo.txt"
 
-f = open(fname, "w")
+f = open(fname, "w", encoding="utf-8")
 f.write(str(buff_w))
 f.close()
 
-f = open(fname, "r")
+f = open(fname, "r", encoding="utf-8")
 buff_r = f.read()
 f.close()
 
