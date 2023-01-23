@@ -1206,7 +1206,7 @@ int xpn_stat(const char *path, struct stat *sb)
     }
     else 
     {
-      new_path=malloc(strlen(path)+2);
+      new_path=malloc(strlen(abs_path)+2);
       strcpy(new_path, abs_path);
       strcat(new_path,"/");
 

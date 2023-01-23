@@ -18,7 +18,6 @@
   {
     // Execution configuration
     int xpn_thread ;
-    int xpn_thread_mode ;
     int xpn_session ;
     int xpn_locality ;
 

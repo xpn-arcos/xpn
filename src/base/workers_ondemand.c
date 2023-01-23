@@ -38,16 +38,16 @@
          DEBUG_BEGIN() ;
 
          struct st_th *th_aux = (struct st_th *)arg;
-	 if (NULL == th_aux) {
-	     debug_info("ERROR: worker_run receive arg == NULL\n");
-	     return NULL;
-	 }
+         if (NULL == th_aux) {
+             debug_info("ERROR: worker_run receive arg == NULL\n");
+             return NULL;
+         }
 
-	 worker_ondemand_t *w_aux = (worker_ondemand_t *)th_aux->w;
-	 if (NULL == w_aux) {
-	     debug_info("ERROR: worker_run receive arg->w == NULL\n");
-	     return NULL;
-	 }
+         worker_ondemand_t *w_aux = (worker_ondemand_t *)th_aux->w;
+         if (NULL == w_aux) {
+             debug_info("ERROR: worker_run receive arg->w == NULL\n");
+             return NULL;
+         }
 
          // prolog... 
          pthread_mutex_lock(&(w_aux->m_worker));
@@ -60,6 +60,14 @@
          // do function code...
          th.function(th) ;
 
+         /*
+         pthread_mutex_lock(&(w_aux->m_wait));
+         w_aux->r_wait = FALSE;
+         pthread_cond_signal(&(w_aux->c_wait)); 
+         pthread_mutex_unlock(&(w_aux->m_wait));
+
+         */
+
          // epilog...
          pthread_mutex_lock(&(w_aux->m_worker));
          w_aux->n_workers-- ;
@@ -70,7 +78,7 @@
 
          // end
          pthread_exit(0);
-	 return NULL;
+         return NULL;
      }
 
 
@@ -94,6 +102,35 @@
        return 0;
      }
 
+/*
+struct st_th:
+
+        // wait of this thread (launch + wait)
+        pthread_mutex_t m_wait;
+        pthread_cond_t  c_wait;
+        int             r_wait;    
+*/
+
+
+/*
+     int worker_ondemand_wait ( worker_ondemand_t *w, struct st_th th_arg )
+     {
+       DEBUG_BEGIN() ;
+
+       pthread_mutex_lock(&(th_arg.m_wait));
+       while (th_arg.r_wait == TRUE) {
+         pthread_cond_wait(&(th_arg.c_wait), &(w->m_wait));
+       }
+
+       w->r_wait = TRUE;
+       pthread_mutex_unlock(&(th_arg.m_wait));
+
+       DEBUG_END() ;
+
+       return 0;
+      }
+*/
+
      int worker_ondemand_launch ( worker_ondemand_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
      {
        int ret;
@@ -103,6 +140,9 @@
        static int     th_cont = 0;
 
        DEBUG_BEGIN() ;
+
+
+// TODO: inicializar th_arg.*_wait :-)
 
        pthread_attr_init(&th_attr);
        pthread_attr_setdetachstate(&th_attr, PTHREAD_CREATE_DETACHED);

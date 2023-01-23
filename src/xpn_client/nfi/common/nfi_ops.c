@@ -187,7 +187,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
 
     return 0;
   }
