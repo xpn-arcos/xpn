@@ -294,13 +294,11 @@
     {
       server_aux->params.xpn_thread = atoi(env_thread);
       serv->xpn_thread = atoi(env_thread);
-      server_aux->params.xpn_thread_mode = atoi(env_thread);
     }
     else
     {
-      server_aux->params.xpn_thread = 0;
-      serv->xpn_thread = 0;
-      server_aux->params.xpn_thread_mode = TH_POOL;
+      server_aux->params.xpn_thread = TH_NOT;
+      serv->xpn_thread = TH_NOT;
     }
 
     // Session mode checking
@@ -375,12 +373,12 @@
     memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
     serv->wrk->server = serv ;
 
-    if (server_aux->params.xpn_thread)
+    if (server_aux->params.xpn_thread != TH_NOT)
     {
       debug_info("[NFI] workers_init()\n") ;
 
       if(serv->wrk->thread) {
-        ret = workers_init ( &(serv->wrk->wb), server_aux->params.xpn_thread_mode );
+        ret = workers_init ( &(serv->wrk->wb), server_aux->params.xpn_thread );
       }
       else {
         ret = workers_init ( &(serv->wrk->wb), TH_NOT );
@@ -413,7 +411,7 @@
     }
 
     // Thread destroy...
-    if (server_aux->params.xpn_thread)
+    if (server_aux->params.xpn_thread != TH_NOT)
     {
       debug_info("[NFI] workers_destroy()\n") ;
       workers_destroy ( &(serv->wrk->wb) );
@@ -544,9 +542,12 @@
     /************** REMOTE ****************/
     else
     {
-      if (server_aux->params.xpn_session)
-           msg.type = MPI_SERVER_OPEN_FILE_WS;
-      else msg.type = MPI_SERVER_OPEN_FILE_WOS;
+      if (server_aux->params.xpn_session){
+        msg.type = MPI_SERVER_OPEN_FILE_WS;
+      }
+      else{
+        msg.type = MPI_SERVER_OPEN_FILE_WOS;
+      }
       strcpy(msg.id, server_aux->id) ;
       strcpy(msg.u_st_mpi_server_msg.op_open.path,dir) ;
 
@@ -618,16 +619,19 @@
         return -1;
       }
       if (! server_aux->params.xpn_session) {
-            filesystem_close(fh_aux->fd);
+        filesystem_close(fh_aux->fd);
       }
       strcpy(fh_aux->path, dir) ;
     }
     /************** REMOTE ****************/
     else
     {
-      if (server_aux->params.xpn_session)
-           msg.type = MPI_SERVER_CREAT_FILE_WS;
-      else msg.type = MPI_SERVER_CREAT_FILE_WOS;
+      if (server_aux->params.xpn_session){
+        msg.type = MPI_SERVER_CREAT_FILE_WS;
+      }
+      else{
+        msg.type = MPI_SERVER_CREAT_FILE_WOS;
+      }
       strcpy(msg.id, server_aux->id) ;
       strcpy(msg.u_st_mpi_server_msg.op_creat.path,dir) ;
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ;
@@ -695,7 +699,7 @@
       }
       else
       {
-	int fd;
+        int fd;
 
         fd = filesystem_open(fh_aux->path, O_RDONLY);
         if (fd < 0) {
@@ -707,7 +711,7 @@
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
         ret = filesystem_read(fd, buffer, size) ;
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-	//
+        //
 
         filesystem_close(fd);
 
@@ -729,16 +733,20 @@
         msg.type = MPI_SERVER_READ_FILE_WOS;
         strcpy(msg.u_st_mpi_server_msg.op_read.path, fh_aux->path);
       }
-        strcpy(msg.id, server_aux->id) ;
-        msg.u_st_mpi_server_msg.op_read.offset   = offset;
-        msg.u_st_mpi_server_msg.op_read.size     = size;
+
+      strcpy(msg.id, server_aux->id) ;
+      msg.u_st_mpi_server_msg.op_read.offset   = offset;
+      msg.u_st_mpi_server_msg.op_read.size     = size;
 
       #ifdef  DBG_IO
-      if (server_aux->params.xpn_session)
-           printf("[NFI]read: -> fd     %d \n",msg.u_st_mpi_server_msg.op_read.fd) ;
-      else printf("[NFI]read: -> path   %s \n",msg.u_st_mpi_server_msg.op_read.path) ;
-           printf("[NFI]read: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_read.offset) ;
-           printf("[NFI]read: -> size   %d \n",msg.u_st_mpi_server_msg.op_read.size) ;
+      if (server_aux->params.xpn_session){
+        printf("[NFI]read: -> fd     %d \n",msg.u_st_mpi_server_msg.op_read.fd) ;
+      }
+      else {
+        printf("[NFI]read: -> path   %s \n",msg.u_st_mpi_server_msg.op_read.path) ;
+      }
+      printf("[NFI]read: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_read.offset) ;
+      printf("[NFI]read: -> size   %d \n",msg.u_st_mpi_server_msg.op_read.size) ;
       #endif
 
       //ret = mpi_server_write_operation(server_aux->sd, &msg) ;
@@ -830,8 +838,8 @@
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
         if (ret < 0) {
-            debug_error("filesystem_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
-            return -1;
+          debug_error("filesystem_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
+          return -1;
         }
       }
       else
@@ -869,7 +877,7 @@
       }
       else
       {
-	msg.type = MPI_SERVER_WRITE_FILE_WOS;
+        msg.type = MPI_SERVER_WRITE_FILE_WOS;
         strcpy(msg.u_st_mpi_server_msg.op_write.path, fh_aux->path);
       }
         strcpy(msg.id, server_aux->id) ;
@@ -877,11 +885,14 @@
         msg.u_st_mpi_server_msg.op_write.size   = size;
 
       #ifdef  DBG_IO
-        if (server_aux->params.xpn_session)
-             printf("[NFI]write: -> fd     %d \n",msg.u_st_mpi_server_msg.op_write.fd) ;
-	else printf("[NFI]write: -> path   %s \n",msg.u_st_mpi_server_msg.op_write.path) ;
-             printf("[NFI]write: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_write.offset) ;
-             printf("[NFI]write: -> size   %d \n",msg.u_st_mpi_server_msg.op_write.size) ;
+        if (server_aux->params.xpn_session){
+          printf("[NFI]write: -> fd     %d \n",msg.u_st_mpi_server_msg.op_write.fd) ;
+        }
+        else {
+          printf("[NFI]write: -> path   %s \n",msg.u_st_mpi_server_msg.op_write.path) ;
+        }
+        printf("[NFI]write: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_write.offset) ;
+        printf("[NFI]write: -> size   %d \n",msg.u_st_mpi_server_msg.op_write.size) ;
       #endif
 
       ret = mpi_server_write_operation(server_aux->params.server, &msg) ;
@@ -897,7 +908,7 @@
 
       // Max buffer size
       if (buffer_size > MAX_BUFFER_SIZE) {
-          buffer_size = MAX_BUFFER_SIZE;
+        buffer_size = MAX_BUFFER_SIZE;
       }
 
       do
@@ -910,7 +921,7 @@
           }
         }
         else
-	{
+        {
           ret = mpiClient_write_data(server_aux->params.server, (char *)buffer + cont, diff, msg.id) ;
           if (ret == -1) {
             fprintf(stderr,"(2)ERROR: nfi_mpi_server_read(ID=%s): Error on write operation\n",server_aux->id) ;
@@ -923,13 +934,15 @@
       } while ((diff > 0) && (ret != 0)) ;
 
       ret = mpiClient_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_write_req), msg.id) ;
-      if (ret == -1) {
+      if (ret == -1) 
+      {
         fprintf(stderr,"(3)ERROR: nfi_mpi_server_write(ID=%s): Error on write operation\n",server_aux->id) ;
         return -1;
       }
 
       debug_info("[NFI] nfi_mpi_server_write(ID=%s): write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size) ;
-      if (req.size < 0) {
+      if (req.size < 0)
+      {
         fprintf(stderr,"ERROR: nfi_mpi_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size) ;
         mpi_server_err(MPI_SERVERERR_WRITE) ;
         return -1;
@@ -962,13 +975,15 @@
     debug_info("[NFI] nfi_mpi_server_close(ID=%s): begin\n",server_aux->id) ;
 
     // without session -> just return ok
-    if (! server_aux->params.xpn_session) {
+    if (! server_aux->params.xpn_session)
+    {
       debug_info("[NFI] nfi_mpi_server_close(ID=%s): end\n", server_aux->id) ;
       return 1;
     }
 
     // if fh-<priv_fh is NULL -> return -1
-    if (NULL == fh->priv_fh) {
+    if (NULL == fh->priv_fh)
+    {
       debug_info("[NFI] nfi_mpi_server_close(ID=%s): end\n", server_aux->id) ;
       return -1;
     }
@@ -980,7 +995,7 @@
     if (server_aux->params.locality)
     {
         if (fh_aux != NULL)
-	{
+        {
           //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
           ret = filesystem_close(fh_aux->fd) ;
           //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
@@ -989,11 +1004,11 @@
     /************** REMOTE ****************/
     else
     {
-        msg.type = MPI_SERVER_CLOSE_FILE_WS;
-        strcpy(msg.id, server_aux->id) ;
-        msg.u_st_mpi_server_msg.op_close.fd = fh_aux->fd;
-        nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
-        debug_info("[NFI] nfi_mpi_server_close(ID=%s): close -> %d \n",server_aux->id,msg.u_st_mpi_server_msg.op_close.fd) ;
+      msg.type = MPI_SERVER_CLOSE_FILE_WS;
+      strcpy(msg.id, server_aux->id) ;
+      msg.u_st_mpi_server_msg.op_close.fd = fh_aux->fd;
+      nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
+      debug_info("[NFI] nfi_mpi_server_close(ID=%s): close -> %d \n",server_aux->id,msg.u_st_mpi_server_msg.op_close.fd) ;
     }
 
     /* free memory */
