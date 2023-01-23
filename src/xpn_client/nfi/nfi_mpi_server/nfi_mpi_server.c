@@ -373,17 +373,8 @@
     memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
     serv->wrk->server = serv ;
 
-    if (server_aux->params.xpn_thread != TH_NOT)
-    {
-      debug_info("[NFI] workers_init()\n") ;
-
-      if(serv->wrk->thread) {
-        ret = workers_init ( &(serv->wrk->wb), server_aux->params.xpn_thread );
-      }
-      else {
-        ret = workers_init ( &(serv->wrk->wb), TH_NOT );
-      }
-    }
+    debug_info("[NFI] workers_init()\n") ;
+    ret = workers_init ( &(serv->wrk->wb), server_aux->params.xpn_thread );
 
     debug_info("[NFI] nfi_mpi_server_connect(): end\n") ;
 

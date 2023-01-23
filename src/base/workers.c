@@ -42,21 +42,21 @@
     switch (w->thread_mode)
     {
       case TH_OP:
-        debug_info("[WORKER] worker_ondemand_init\n") ;
+        printf("[WORKER] worker_ondemand_init\n") ;
         worker_ondemand_init(&(w->w1)) ;
         break ;
 
       case TH_POOL:
-        debug_info("[WORKER] worker_pool_init\n") ;
+        printf("[WORKER] worker_pool_init\n") ;
         worker_pool_init(&(w->w2));
         break ;
 
       case TH_NOT:
-        debug_info("[WORKER] worker without threads\n") ;
+        printf("[WORKER] worker without threads\n") ;
         break ;
 
       default:
-        debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
+        printf("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
         return -1 ;
         break ;
     }
