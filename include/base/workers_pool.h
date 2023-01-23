@@ -61,8 +61,11 @@
 
    int          worker_pool_init    ( worker_pool_t *w ) ;
    void         worker_pool_destroy ( worker_pool_t *w ) ;
+
    void         worker_pool_enqueue ( worker_pool_t *w, struct st_th th_arg, void (*worker_function)(struct st_th)) ;
    struct st_th worker_pool_dequeue ( worker_pool_t *w ) ;
+
+   int          worker_pool_wait    ( worker_pool_t *w, struct st_th th_arg ) ;
 
 
 #endif

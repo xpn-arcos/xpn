@@ -49,6 +49,7 @@ struct nfi_worker {
 
    // NEW
 	worker_t wb ; 
+	// TODO: th_arg *wait_obj ;
 
 	struct nfi_server      *server;
 	struct nfi_worker_args  arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant

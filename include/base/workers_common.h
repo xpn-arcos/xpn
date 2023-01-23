@@ -26,13 +26,14 @@
   #include "all_system.h"
   #include "base/debug_msg.h"
 
+
   /*
    * Constants
    */
 
-  #define MAX_THREADS 2048
-  #define MAX_OPERATIONS 1024
-  #define STACK_SIZE (256*KB)
+  #define MAX_THREADS     2048
+  #define MAX_OPERATIONS  1024
+  #define STACK_SIZE     (256*KB)
 
 
   /*
@@ -50,7 +51,17 @@
       int   rank_client_id ;
 
       void *w; // worker_ondemand/worker_pool as void *
+
+/*
+      // wait of this thread (launch + wait)
+      pthread_t       th_worker;
+      pthread_mutex_t m_wait;
+      pthread_cond_t  c_wait;
+      int             r_wait;    
+*/
+
   };
+
 
 #endif
 

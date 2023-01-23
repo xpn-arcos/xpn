@@ -142,6 +142,40 @@
   }
 
 
+  int workers_wait_nfi ( worker_t *w, struct st_th th_arg )
+  {
+    // check arguments...
+    if (NULL == w) {
+      debug_error("[WORKER] worker_launch_nfi with NULL worker_t\n");
+      return -1 ;
+    }
+
+    switch (w->thread_mode)
+    {
+      case TH_OP:
+        debug_info("[WORKER] worker_ondemand_wait\n") ;
+        worker_ondemand_wait(&(w->w1), th_arg) ;
+        break ;
+
+      case TH_POOL:
+        debug_info("[WORKER] worker_pool_wait\n");
+        worker_pool_wait(   &(w->w2), th_arg) ;
+        break ;
+
+      case TH_NOT:
+        debug_info("[WORKER] worker_wait without threads\n");
+        break ;
+
+      default:
+        debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
+        return -1 ;
+        break ;
+    }
+
+    return 1;
+  }
+
+
   void workers_destroy ( worker_t *w )
   {
     // check arguments...
