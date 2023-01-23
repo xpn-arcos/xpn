@@ -994,12 +994,12 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-        if (fh_aux != NULL)
-        {
-          //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-          ret = filesystem_close(fh_aux->fd) ;
-          //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-        }
+      if (fh_aux != NULL)
+      {
+        //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+        ret = filesystem_close(fh_aux->fd) ;
+        //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+      }
     }
     /************** REMOTE ****************/
     else
@@ -1014,8 +1014,8 @@
     /* free memory */
     free(fh->priv_fh) ;
     fh->priv_fh = NULL;
-    fh->type = NFINULL;
-    fh->server = NULL;
+    fh->type    = NFINULL;
+    fh->server  = NULL;
 
     debug_info("[NFI] nfi_mpi_server_close(ID=%s): end\n",server_aux->id) ;
 
