@@ -61,10 +61,10 @@
          th.function(th) ;
 
 	 // wakeup worker_ondemand_wait(...)
-         pthread_mutex_lock(&(th_aux->m_wait));
-         th_aux->r_wait = FALSE;
-         pthread_cond_signal(&(th_aux->c_wait)); 
-         pthread_mutex_unlock(&(th_aux->m_wait));
+         pthread_mutex_lock(&(th.m_wait));
+         th.r_wait = FALSE;
+         pthread_cond_signal(&(th.c_wait)); 
+         pthread_mutex_unlock(&(th.m_wait));
 
          // epilog...
          pthread_mutex_lock(&(w_aux->m_worker));

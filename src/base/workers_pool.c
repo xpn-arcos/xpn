@@ -33,21 +33,21 @@
 
      void *worker_pool_function ( void *arg )
      {
-       int is_true = 1;
-       struct st_th th_aux;
+       int is_true = 1 ;
+       struct st_th th ;
        worker_pool_t *w = (worker_pool_t *) arg ;
 
        while (is_true)
        {
           // Dequeue operation
-          th_aux = worker_pool_dequeue(w) ;
-          th_aux.function(th_aux) ;
+          th = worker_pool_dequeue(w) ;
+          th.function(th) ;
 
 	  // wakeup worker_pool_wait(...)
-          pthread_mutex_lock(&(th_aux.m_wait));
-          th_aux.r_wait = FALSE;
-          pthread_cond_signal(&(th_aux.c_wait)); 
-          pthread_mutex_unlock(&(th_aux.m_wait));
+          pthread_mutex_lock(&(th.m_wait));
+          th.r_wait = FALSE;
+          pthread_cond_signal(&(th.c_wait)); 
+          pthread_mutex_unlock(&(th.m_wait));
        }
 
        pthread_exit(0);
