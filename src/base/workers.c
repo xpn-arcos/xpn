@@ -83,7 +83,7 @@
 
      case TH_POOL:
         debug_info("[WORKER] worker_pool_enqueue\n");
-        worker_pool_enqueue(   &(w->w2), th_arg, worker_function ); // Enqueue the operation on the buffer
+        worker_pool_enqueue(   &(w->w2), &th_arg, worker_function ); // Enqueue the operation on the buffer
         break ;
 
      case TH_NOT:
@@ -116,7 +116,7 @@
     // th_arg->th_worker = NULL ;
     pthread_mutex_init (&(th_arg->m_wait), NULL) ;
     pthread_cond_init  (&(th_arg->c_wait), NULL) ;
-    th_arg->r_wait = TRUE ;
+    th_arg->r_wait  = TRUE ;
     th_arg->wait4me = TRUE ;
 
     switch (w->thread_mode)
@@ -128,7 +128,7 @@
 
       case TH_POOL:
         debug_info("[WORKER] worker_pool_enqueue\n");
-        worker_pool_enqueue(   &(w->w2), *th_arg, worker_function ) ;
+        worker_pool_enqueue(   &(w->w2), th_arg, worker_function ) ;
         break ;
 
       case TH_NOT:

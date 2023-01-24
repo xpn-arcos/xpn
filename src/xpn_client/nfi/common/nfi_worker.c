@@ -138,6 +138,7 @@ int nfi_worker_init(struct nfi_worker *wrk, struct nfi_server *serv, int thread)
 }
 
 
+// OLD
 ssize_t nfi_worker_wait ( struct nfi_worker *wrk )
 {
   ssize_t ret;
@@ -190,3 +191,24 @@ int nfi_worker_destroy()
 
   return 0;
 }
+
+
+
+// NEW //////////////////////////////////////////
+
+int  nfiworker_launch ( void (*worker_function)(struct st_th), struct nfi_worker *wrk )
+{
+  return workers_launch_nfi( &(wrk->wb), &(wrk->warg), worker_function, (void *)wrk ) ;
+}
+
+ssize_t nfiworker_wait ( struct nfi_worker *wrk )
+{
+  ssize_t ret ;
+
+  workers_wait_nfi( &(wrk->wb), &(wrk->warg) ) ;
+  ret = wrk->arg.result ;
+
+  return ret ;
+}
+
+

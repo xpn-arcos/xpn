@@ -170,7 +170,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -187,7 +187,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -204,7 +204,7 @@
     wrk->arg.n_io = n;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -221,7 +221,7 @@
     wrk->arg.n_io = n;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -236,7 +236,7 @@
     wrk->arg.fh = fh;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -255,7 +255,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -271,7 +271,7 @@
     strcpy(wrk->arg.newurl,new_url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -287,7 +287,7 @@
     wrk->arg.attr = attr;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -304,7 +304,7 @@
     wrk->arg.attr = attr;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -325,7 +325,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -341,7 +341,7 @@
     wrk->arg.fh = fh;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -358,7 +358,7 @@
     wrk->arg.fh = fh;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -373,7 +373,7 @@
     wrk->arg.operation = op_closedir;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -388,7 +388,7 @@
     strcpy(wrk->arg.url,url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -407,7 +407,7 @@
     wrk->arg.inf = inf;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -430,7 +430,7 @@
     wrk->arg.opt = opt;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -453,7 +453,7 @@
     wrk->arg.opt = opt;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
+    nfiworker_launch( nfi_do_operation, wrk ) ;
 
     return 0;
   }
