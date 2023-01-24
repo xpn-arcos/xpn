@@ -13,45 +13,46 @@
 
 
 struct nfi_worker_io {
-	off_t offset;
-	size_t size;
-	void *buffer;
+  off_t offset;
+  size_t size;
+  void *buffer;
 };
 
 struct nfi_worker_args {
-	int operation;
-	ssize_t result;
+  int operation;
+  ssize_t result;
 
-	char url[PATH_MAX];
-	char virtual_path[PATH_MAX];
-	char storage_path[PATH_MAX];
-	char newurl[PATH_MAX];
-	struct nfi_fhandle *fh;
-	struct nfi_attr *attr;
-	int opt;
+  char url[PATH_MAX];
+  char virtual_path[PATH_MAX];
+  char storage_path[PATH_MAX];
+  char newurl[PATH_MAX];
+  struct nfi_fhandle *fh;
+  struct nfi_attr *attr;
+  int opt;
 
-	struct nfi_info *inf;
+  struct nfi_info *inf;
 
-	int n_io;
-	struct nfi_worker_io *io;
-	char *entry;
-	unsigned char *type;
+  int n_io;
+  struct nfi_worker_io *io;
+  char *entry;
+  unsigned char *type;
 };
 
 struct nfi_worker {
-	int thread;
+  int thread;
 
-   // OLD
-	pthread_t pth;
-	pthread_mutex_t mt;
-	pthread_cond_t cnd;
-	int ready;
+  // OLD
+  pthread_t pth;
+  pthread_mutex_t mt;
+  pthread_cond_t cnd;
+  int ready;
 
-   // NEW
-	worker_t wb ; 
+  // NEW
+  worker_t     wb ; 
+  struct st_th warg ;
 
-	struct nfi_server      *server;
-	struct nfi_worker_args  arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant
+  struct nfi_server      *server;
+  struct nfi_worker_args  arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant
 };
 
 

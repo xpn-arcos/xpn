@@ -82,6 +82,7 @@
         th_arg.function = mpi_server_run;
         th_arg.type_op  = th.type_op;
         th_arg.rank_client_id = th.rank_client_id;
+        th_arg.wait4me  = FALSE;
 
         workers_launch ( &worker, th_arg, mpi_server_run );
       }
@@ -155,6 +156,7 @@
         th_arg.function = mpi_server_dispatcher;
         th_arg.type_op  = 0;
         th_arg.rank_client_id = 0;
+        th_arg.wait4me  = FALSE;
 
         workers_launch( &worker, th_arg, mpi_server_dispatcher );
       }
