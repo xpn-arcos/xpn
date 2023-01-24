@@ -160,7 +160,7 @@
    * Files
    */
 
-  int nfi_worker_do_open(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh)
+  int nfi_worker_do_open ( struct nfi_worker *wrk, char *url, struct nfi_fhandle *fh )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -170,13 +170,13 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_create(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh)
+  int nfi_worker_do_create ( struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -187,13 +187,13 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_read(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n)
+  int nfi_worker_do_read ( struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -204,7 +204,7 @@
     wrk->arg.n_io = n;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -221,13 +221,13 @@
     wrk->arg.n_io = n;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_close(struct nfi_worker *wrk, struct nfi_fhandle *fh)
+  int nfi_worker_do_close ( struct nfi_worker *wrk, struct nfi_fhandle *fh )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -236,7 +236,7 @@
     wrk->arg.fh = fh;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -246,7 +246,7 @@
    * Metadata
    */
 
-  int nfi_worker_do_remove(struct nfi_worker *wrk, char *url)
+  int nfi_worker_do_remove ( struct nfi_worker *wrk, char *url )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -255,13 +255,13 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_rename(struct nfi_worker *wrk, char *old_url, char *new_url)
+  int nfi_worker_do_rename ( struct nfi_worker *wrk, char *old_url, char *new_url )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -271,13 +271,13 @@
     strcpy(wrk->arg.newurl,new_url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_getattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr)
+  int nfi_worker_do_getattr ( struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -287,13 +287,13 @@
     wrk->arg.attr = attr;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_setattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr)
+  int nfi_worker_do_setattr ( struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
 
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
@@ -304,7 +304,7 @@
     wrk->arg.attr = attr;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -314,7 +314,7 @@
    * Directories
    */
 
-  int nfi_worker_do_mkdir(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh)
+  int nfi_worker_do_mkdir ( struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -325,7 +325,7 @@
     strcpy(wrk->arg.url, url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -341,13 +341,13 @@
     wrk->arg.fh = fh;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_readdir(struct nfi_worker *wrk, struct nfi_fhandle *fh, char *entry, unsigned char *type)
+  int nfi_worker_do_readdir ( struct nfi_worker *wrk, struct nfi_fhandle *fh, char *entry, unsigned char *type )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -358,13 +358,13 @@
     wrk->arg.fh = fh;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_closedir(struct nfi_worker *wrk, struct nfi_fhandle *fh)
+  int nfi_worker_do_closedir ( struct nfi_worker *wrk, struct nfi_fhandle *fh )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -373,13 +373,13 @@
     wrk->arg.operation = op_closedir;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_rmdir(struct nfi_worker *wrk, char *url)
+  int nfi_worker_do_rmdir ( struct nfi_worker *wrk, char *url )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -388,7 +388,7 @@
     strcpy(wrk->arg.url,url) ;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
@@ -398,7 +398,7 @@
    * File system
    */
 
-  int nfi_worker_do_statfs (struct nfi_worker *wrk, struct nfi_info *inf)
+  int nfi_worker_do_statfs ( struct nfi_worker *wrk, struct nfi_info *inf )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -407,13 +407,13 @@
     wrk->arg.inf = inf;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_flush(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt)
+  int nfi_worker_do_flush ( struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -430,13 +430,13 @@
     wrk->arg.opt = opt;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }
 
 
-  int nfi_worker_do_preload(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt)
+  int nfi_worker_do_preload ( struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
@@ -453,7 +453,7 @@
     wrk->arg.opt = opt;
 
     // Do operation
-    workers_launch_nfi( &(wrk->wb), nfi_do_operation, wrk ) ;
+    workers_launch_nfi( &(wrk->wb), &(wrk->warg), nfi_do_operation, wrk ) ;
 
     return 0;
   }

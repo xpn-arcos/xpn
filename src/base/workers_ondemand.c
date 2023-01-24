@@ -60,13 +60,11 @@
          // do function code...
          th.function(th) ;
 
-         /*
-         pthread_mutex_lock(&(w_aux->m_wait));
-         w_aux->r_wait = FALSE;
-         pthread_cond_signal(&(w_aux->c_wait)); 
-         pthread_mutex_unlock(&(w_aux->m_wait));
-
-         */
+	 // wakeup worker_ondemand_wait(...)
+         pthread_mutex_lock(&(th.m_wait));
+         th.r_wait = FALSE;
+         pthread_cond_signal(&(th.c_wait)); 
+         pthread_mutex_unlock(&(th.m_wait));
 
          // epilog...
          pthread_mutex_lock(&(w_aux->m_worker));
@@ -102,34 +100,6 @@
        return 0;
      }
 
-/*
-struct st_th:
-
-        // wait of this thread (launch + wait)
-        pthread_mutex_t m_wait;
-        pthread_cond_t  c_wait;
-        int             r_wait;    
-*/
-
-
-/*
-     int worker_ondemand_wait ( worker_ondemand_t *w, struct st_th th_arg )
-     {
-       DEBUG_BEGIN() ;
-
-       pthread_mutex_lock(&(th_arg.m_wait));
-       while (th_arg.r_wait == TRUE) {
-         pthread_cond_wait(&(th_arg.c_wait), &(w->m_wait));
-       }
-
-       w->r_wait = TRUE;
-       pthread_mutex_unlock(&(th_arg.m_wait));
-
-       DEBUG_END() ;
-
-       return 0;
-      }
-*/
 
      int worker_ondemand_launch ( worker_ondemand_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
      {
@@ -140,9 +110,6 @@ struct st_th:
        static int     th_cont = 0;
 
        DEBUG_BEGIN() ;
-
-
-// TODO: inicializar th_arg.*_wait :-)
 
        pthread_attr_init(&th_attr);
        pthread_attr_setdetachstate(&th_attr, PTHREAD_CREATE_DETACHED);
@@ -181,6 +148,25 @@ struct st_th:
        return 0;
      }
 
+
+     int worker_ondemand_wait ( struct st_th *th_arg )
+     {
+       DEBUG_BEGIN() ;
+
+       pthread_mutex_lock(&(th_arg->m_wait));
+       while (th_arg->r_wait == TRUE) {
+         pthread_cond_wait(&(th_arg->c_wait), &(th_arg->m_wait));
+       }
+
+       th_arg->r_wait = TRUE;
+       pthread_mutex_unlock(&(th_arg->m_wait));
+
+       DEBUG_END() ;
+
+       return 0;
+     }
+
+
      void workers_ondemand_destroy ( worker_ondemand_t *w )
      {
        DEBUG_BEGIN() ;
@@ -196,6 +182,7 @@ struct st_th:
        debug_info("[WORKERS] pthread_create: unlock workers_ondemand_wait\n");
        pthread_mutex_unlock(&(w->m_worker));
 
+       // destroy resources
        pthread_cond_destroy  (&(w->c_worker));
        pthread_cond_destroy  (&(w->c_nworkers));
        pthread_mutex_destroy (&(w->m_worker));

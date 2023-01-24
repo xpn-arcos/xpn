@@ -55,9 +55,13 @@ First, you need to get familiar with 4 special files:
 * ```<nameserver file>``` for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing.
 * ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
-Then, you need to get familiar with 2 special environment variables for XPN clients:
-* ```XPN_DNS```  with the full path to the nameserver file to be used.
-* ```XPN_CONF``` with the full path to the XPN configuration file to be used.
+Then, you need to get familiar with 5 special environment variables for XPN clients:
+* ```XPN_DNS```      with the full path to the nameserver file to be used (mandatory).
+* ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
+* ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
+* ```XPN_SESSION```  with value 0 for without session and value 1 for with session (optional, default: 0).
+* ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
+
 
 ### 4.1 Ad-Hoc Expand (based on MPI)
 The typical executions has 4 main steps:
