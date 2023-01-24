@@ -60,13 +60,11 @@
          // do function code...
          th.function(th) ;
 
-         /*
-         pthread_mutex_lock(&(w_aux->m_wait));
-         w_aux->r_wait = FALSE;
-         pthread_cond_signal(&(w_aux->c_wait)); 
-         pthread_mutex_unlock(&(w_aux->m_wait));
-
-         */
+	 // wakeup worker_ondemand_wait(...)
+         pthread_mutex_lock(&(th_aux->m_wait));
+         th_aux->r_wait = FALSE;
+         pthread_cond_signal(&(th_aux->c_wait)); 
+         pthread_mutex_unlock(&(th_aux->m_wait));
 
          // epilog...
          pthread_mutex_lock(&(w_aux->m_worker));
