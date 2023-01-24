@@ -42,21 +42,21 @@
     switch (w->thread_mode)
     {
       case TH_OP:
-        printf("[WORKER] worker_ondemand_init\n") ;
+        debug_info("[WORKER] worker_ondemand_init\n") ;
         worker_ondemand_init(&(w->w1)) ;
         break ;
 
       case TH_POOL:
-        printf("[WORKER] worker_pool_init\n") ;
+        debug_info("[WORKER] worker_pool_init\n") ;
         worker_pool_init(&(w->w2));
         break ;
 
       case TH_NOT:
-        printf("[WORKER] worker without threads\n") ;
+        debug_info("[WORKER] worker without threads\n") ;
         break ;
 
       default:
-        printf("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
+        debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
         return -1 ;
         break ;
     }
@@ -78,7 +78,7 @@
     {
       case TH_OP:
         debug_info("[WORKER] worker_ondemand_launch\n") ;
-        worker_ondemand_launch(&(w->w1), th_arg, worker_function ) ;
+        worker_ondemand_launch(&(w->w1), &th_arg, worker_function ) ;
         break ;
 
      case TH_POOL:
@@ -113,16 +113,17 @@
     th_arg->params   = args ;
     th_arg->function = worker_function ;
 
- // th_arg->th_worker = NULL ;
+    // th_arg->th_worker = NULL ;
     pthread_mutex_init (&(th_arg->m_wait), NULL) ;
     pthread_cond_init  (&(th_arg->c_wait), NULL) ;
-    th_arg->r_wait = 0 ;
+    th_arg->r_wait = TRUE ;
+    th_arg->wait4me = TRUE ;
 
     switch (w->thread_mode)
     {
       case TH_OP:
         debug_info("[WORKER] worker_ondemand_launch\n") ;
-        worker_ondemand_launch(&(w->w1), *th_arg, worker_function ) ;
+        worker_ondemand_launch(&(w->w1), th_arg, worker_function ) ;
         break ;
 
       case TH_POOL:
