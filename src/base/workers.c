@@ -157,12 +157,12 @@
     {
       case TH_OP:
         debug_info("[WORKER] worker_ondemand_wait\n") ;
-        worker_ondemand_wait(&(w->w1), *th_arg) ;
+        worker_ondemand_wait(th_arg) ;
         break ;
 
       case TH_POOL:
         debug_info("[WORKER] worker_pool_wait\n");
-        worker_pool_wait(   &(w->w2), *th_arg) ;
+        worker_pool_wait(th_arg) ;
         break ;
 
       case TH_NOT:

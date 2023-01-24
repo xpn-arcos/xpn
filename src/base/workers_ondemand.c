@@ -118,8 +118,6 @@
        pthread_attr_setstacksize  (&th_attr, STACK_SIZE);
        w->busy_worker = TRUE;
 
-// TODO: inicializar th_arg.*_wait :-)
-
        // prepare arguments...
        st_worker          = th_arg ;
        st_worker.id       = th_cont++;
@@ -153,19 +151,17 @@
      }
 
 
-     int worker_ondemand_wait ( worker_ondemand_t *w, struct st_th th_arg )
+     int worker_ondemand_wait ( struct st_th *th_arg )
      {
        DEBUG_BEGIN() ;
 
-/*
-       pthread_mutex_lock(&(th_arg.m_wait));
-       while (th_arg.r_wait == TRUE) {
-         pthread_cond_wait(&(th_arg.c_wait), &(w->m_wait));
+       pthread_mutex_lock(&(th_arg->m_wait));
+       while (th_arg->r_wait == TRUE) {
+         pthread_cond_wait(&(th_arg->c_wait), &(th_arg->m_wait));
        }
 
-       th_arg.r_wait = TRUE;
-       pthread_mutex_unlock(&(th_arg.m_wait));
-*/
+       th_arg->r_wait = TRUE;
+       pthread_mutex_unlock(&(th_arg->m_wait));
 
        DEBUG_END() ;
 

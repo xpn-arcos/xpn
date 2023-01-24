@@ -105,8 +105,6 @@
 
        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) copy arguments\n", rank_client_id);
 
-// TODO: inicializar th_arg.*_wait :-)
-
        // prepare arguments...
        st_worker          = th_arg ;
        st_worker.id       = th_cont++ ;
@@ -169,19 +167,17 @@
      }
 
 
-     int worker_pool_wait ( worker_pool_t *w, struct st_th th_arg )
+     int worker_pool_wait ( struct st_th *th_arg )
      {
        DEBUG_BEGIN() ;
 
-/*
-       pthread_mutex_lock(&(th_arg.m_wait));
-       while (th_arg.r_wait == TRUE) {
-         pthread_cond_wait(&(th_arg.c_wait), &(w->m_wait));
+       pthread_mutex_lock(&(th_arg->m_wait));
+       while (th_arg->r_wait == TRUE) {
+         pthread_cond_wait(&(th_arg->c_wait), &(th_arg->m_wait));
        }
 
-       th_arg.r_wait = TRUE;
-       pthread_mutex_unlock(&(th_arg.m_wait));
-*/
+       th_arg->r_wait = TRUE;
+       pthread_mutex_unlock(&(th_arg->m_wait));
 
        DEBUG_END() ;
 

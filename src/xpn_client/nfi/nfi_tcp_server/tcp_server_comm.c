@@ -8,8 +8,6 @@ struct tcp_server_node_st{
 	char name[255];
 };
 
-
-
 static int load = 0;
 static struct tcp_server_node_st tcp_server_node[MAX_TCP_SERVER_NODES];
 static int num_tcp_server_nodes = 0;
@@ -17,14 +15,15 @@ static int num_tcp_server_nodes = 0;
 
 
 	
-void tcp_server_readFile(){
-
+void tcp_server_readFile()
+{
 	FILE *fd;
 	char *name = NULL;
 	
 #ifdef DBG_COMM
 	printf("[NFI_COMM]begin the translation\n");
 #endif
+
 	name = getenv(TCP_SERVER_FILE);
 	if((name == NULL)|| (strcmp(name, "") == 0)){
 		name = TCP_SERVER_FILE_DEFAULT;		
@@ -35,6 +34,7 @@ void tcp_server_readFile(){
 		fprintf(stderr,"tcp_server_readFile: can't open %s\n",name);
 		exit(-1);
 	}
+
 	while(EOF != fscanf(fd,"%s %s %d",
 		tcp_server_node[num_tcp_server_nodes].name,
 		tcp_server_node[num_tcp_server_nodes].host,
@@ -54,13 +54,15 @@ void tcp_server_readFile(){
 			}
 		}
 		fclose(fd);
+
 #ifdef DBG_COMM
 	printf("[NFI_COMM]end the translation\n");
 #endif
 }
 
 
-void tcp_server_translate(char *server, char *newserver, int *port){
+void tcp_server_translate(char *server, char *newserver, int *port)
+{
     int i;
 	
 	/*************************************/
@@ -79,10 +81,12 @@ void tcp_server_translate(char *server, char *newserver, int *port){
 #ifdef DBG_COMM
 	printf("[NFI_COMM]Buscando 2 ... %s\n",server);
 #endif
-	for(i=0;i<num_tcp_server_nodes;i++){
-		if(strcmp(server, tcp_server_node[i].name) == 0){
+	for(i=0;i<num_tcp_server_nodes;i++)
+	{
+		if(strcmp(server, tcp_server_node[i].name) == 0)
+		{
 			strcpy(newserver, tcp_server_node[i].host);
-			 
+			
 			 /*
 			 printf("[NFI_COMM]Encontrado ... %s %d\n",
 				tcp_server_node[i].host,
@@ -98,6 +102,7 @@ void tcp_server_translate(char *server, char *newserver, int *port){
 			break;
 		}
 	}
+
 	if(i == num_tcp_server_nodes){
 		fprintf(stderr,"translate: error %s not found (%d)\n",server,num_tcp_server_nodes);
 		exit(-1);
@@ -105,7 +110,8 @@ void tcp_server_translate(char *server, char *newserver, int *port){
 }
 
 
-int tcp_server_write_data_test(int fd, char *id){
+int tcp_server_write_data_test(int fd, char *id)
+{
 	/*****************************TEST****************************************/
 	int ret;	
 	char buffer_temp[CONST_TEMP], aux;
@@ -167,10 +173,8 @@ int tcp_server_write_data_test(int fd, char *id){
 }
 
 
-
-
-int tcp_server_read_data_test(int fd, char *id){
-
+int tcp_server_read_data_test(int fd, char *id)
+{
 	/*****************************TEST****************************************/
 	int ret;	
 	char buffer_temp[CONST_TEMP], aux;
@@ -232,12 +236,13 @@ int tcp_server_read_data_test(int fd, char *id){
 	return 0;
 }
 
-/*********************************************************************/
-int tcp_server_connect(char *server){
 
+/*********************************************************************/
+int tcp_server_connect(char *server)
+{
 	struct hostent *hp;
 	struct sockaddr_in server_addr;
-	int port, sd, ret; 
+	int port, sd, ret;
 	char newserver[PATH_MAX];
 
 	int flag = 1;
@@ -330,7 +335,9 @@ int tcp_server_connect(char *server){
 	return sd;
 }
 
-ssize_t tcp_server_write_data(int fd, char *data, ssize_t size, char *id){
+
+ssize_t tcp_server_write_data(int fd, char *data, ssize_t size, char *id)
+{
 	int ret = 0;
 	int cont = 0;
 
@@ -364,8 +371,8 @@ ssize_t tcp_server_write_data(int fd, char *data, ssize_t size, char *id){
 #ifdef DBG_COMM
 	printf("[NFI_COMM]client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long)size, ret, id, (int)pthread_self());
 #endif
-                if(ret <= 0){                                                                                               
-                        perror("client: Error write_comm:");                                                                 
+                if(ret <= 0){
+                        perror("client: Error write_comm:");
                 }
 		cont += ret;
 	}while((ret>0)&&(cont!=size));
@@ -386,8 +393,9 @@ ssize_t tcp_server_write_data(int fd, char *data, ssize_t size, char *id){
 	return size;
 }
 
-ssize_t tcp_server_read_data(int fd, char *data, ssize_t size, char *id){
-	        
+
+ssize_t tcp_server_read_data(int fd, char *data, ssize_t size, char *id)
+{
 	int ret = 0;
 	int cont = 0;
 
@@ -424,8 +432,8 @@ ssize_t tcp_server_read_data(int fd, char *data, ssize_t size, char *id){
 #ifdef DBG_COMM
 	printf("[NFI_COMM]client: read_data(%d): %lu = %d ID=%s --th:%d--\n",fd,(unsigned long)size,ret,id,(int)pthread_self());
 #endif
-                if(ret <= 0){                                                                                               
-                        perror("client: Error read_comm:");                                                                 
+                if(ret <= 0){
+                        perror("client: Error read_comm:");
                 }
 		cont += ret;
 
@@ -447,7 +455,5 @@ ssize_t tcp_server_read_data(int fd, char *data, ssize_t size, char *id){
 #endif
 	return size;
 }
-
-
 
 
