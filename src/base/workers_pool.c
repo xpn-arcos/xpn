@@ -43,7 +43,7 @@
           th = worker_pool_dequeue(w) ;
           th.function(th) ;
 
-	        // wakeup worker_pool_wait(...)
+          // wakeup worker_pool_wait(...)
           if ( TRUE == th.wait4me )
           {
             pthread_mutex_lock(&(th.m_wait));
@@ -97,9 +97,8 @@
       }
 
 
-      void worker_pool_enqueue ( worker_pool_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
+      void worker_pool_enqueue ( worker_pool_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) )
       {
-        struct st_th st_worker;
         static int th_cont = 0;
 
         DEBUG_BEGIN() ;
@@ -115,14 +114,13 @@
         debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) copy arguments\n", rank_client_id);
 
         // prepare arguments...
-        st_worker          = th_arg ;
-        st_worker.id       = th_cont++ ;
-        st_worker.function = worker_function ;
-        st_worker.w        = w ;
+        th_arg->id       = th_cont++ ;
+        th_arg->function = worker_function ;
+        th_arg->w        = w ;
 
         // enqueue
         debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", rank_client_id);
-        w->operations_buffer[w->enq_pos] = st_worker;
+        w->operations_buffer[w->enq_pos] = *th_arg;
         w->enq_pos = (w->enq_pos + 1) % MAX_OPERATIONS;
         w->n_operation++;
 
@@ -180,8 +178,6 @@
       {
         DEBUG_BEGIN() ;
 
-        printf("ESPERANDO\n");
-
         pthread_mutex_lock(&(th_arg->m_wait));
         while (th_arg->r_wait == TRUE) {
           pthread_cond_wait(&(th_arg->c_wait), &(th_arg->m_wait));
@@ -189,8 +185,6 @@
 
         th_arg->r_wait = TRUE;
         pthread_mutex_unlock(&(th_arg->m_wait));
-
-        printf("ESPERAN FIN\n");
 
         DEBUG_END() ;
 

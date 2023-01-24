@@ -17,6 +17,11 @@
     int     nfi_worker_destroy ( );
 
 
+    // NEW //////////////////////////////////////////
+    int     nfiworker_launch ( void (*worker_function)(struct st_th), struct nfi_worker *wrk ) ;
+    ssize_t nfiworker_wait   ( struct nfi_worker *wrk ) ;
+
+
  #ifdef  __cplusplus
     }
  #endif

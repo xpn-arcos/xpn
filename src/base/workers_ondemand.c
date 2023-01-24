@@ -109,7 +109,6 @@
         int ret;
         pthread_attr_t th_attr;
         pthread_t      th_worker;
-        struct st_th   st_worker;
         static int     th_cont = 0;
 
         DEBUG_BEGIN() ;
@@ -120,12 +119,6 @@
         w->busy_worker = TRUE;
 
         // prepare arguments...
-        /*
-        st_worker          = th_arg ;
-        st_worker.id       = th_cont++;
-        st_worker.function = worker_function ;
-        st_worker.w        = (void *)w;
-        */
         th_arg->id       = th_cont++;
         th_arg->function = worker_function ;
         th_arg->w        = (void *)w;
@@ -133,7 +126,7 @@
         // create thread...
         debug_info("[WORKERS] pthread_create: create_thread worker_run\n") ;
         ret = pthread_create(&th_worker, &th_attr, (void *(*)(void *))(worker_run), (void *)th_arg);
-        if (ret != 0){
+        if (ret != 0) {
           debug_error("[WORKERS] pthread_create %d\n", ret);
           perror("pthread_create: Error en create_thread: ");
         }
@@ -141,8 +134,7 @@
         // wait to copy args...
         debug_info("[WORKERS] pthread_create: lock worker_run\n");
         pthread_mutex_lock(&(w->m_worker));
-        while (w->busy_worker == TRUE)
-        {
+        while (w->busy_worker == TRUE) {
           debug_info("[WORKERS] pthread_create: wait worker_run\n");
           pthread_cond_wait(&(w->c_worker), &(w->m_worker));
         }
