@@ -210,7 +210,7 @@
         th_arg.type_op = TH_FINALIZE ;
 
         for (int i = 0; i < w->POOL_MAX_THREADS; ++i) {
-          worker_pool_enqueue(w, th_arg, NULL) ;
+          worker_pool_enqueue(w, &th_arg, NULL) ;
         }
 
         debug_info("[WORKERS] : worker_pool_destroy(...) lock\n");
