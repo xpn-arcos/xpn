@@ -198,14 +198,25 @@ int nfi_worker_destroy()
 
 int  nfiworker_launch ( void (*worker_function)(struct st_th), struct nfi_worker *wrk )
 {
-  return workers_launch_nfi( &(wrk->wb), &(wrk->warg), worker_function, (void *)wrk ) ;
+  // initialize wrk->warg...
+  memset(&(wrk->warg), 0, sizeof(struct st_th)) ;
+  wrk->warg.params   = (void *)wrk ;
+  wrk->warg.function = worker_function ;
+
+  // wrk->warg.th_worker = <NULL> ;
+  pthread_mutex_init (&(wrk->warg.m_wait), NULL) ;
+  pthread_cond_init  (&(wrk->warg.c_wait), NULL) ;
+  wrk->warg.r_wait  = TRUE ;
+  wrk->warg.wait4me = TRUE ;
+
+  return workers_launch( &(wrk->wb), &(wrk->warg), worker_function ) ;
 }
 
 ssize_t nfiworker_wait ( struct nfi_worker *wrk )
 {
   ssize_t ret ;
 
-  workers_wait_nfi( &(wrk->wb), &(wrk->warg) ) ;
+  workers_wait( &(wrk->wb), &(wrk->warg) ) ;
   ret = wrk->arg.result ;
 
   return ret ;

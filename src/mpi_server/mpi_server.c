@@ -84,7 +84,7 @@
         th_arg.rank_client_id = th.rank_client_id;
         th_arg.wait4me  = FALSE;
 
-        workers_launch ( &worker, th_arg, mpi_server_run );
+        workers_launch ( &worker, &th_arg, mpi_server_run );
       }
 
       debug_info("[WORKERS] mpi_server_worker_run (ID=%d) close\n", th.rank_client_id);
@@ -158,7 +158,7 @@
         th_arg.rank_client_id = 0;
         th_arg.wait4me  = FALSE;
 
-        workers_launch( &worker, th_arg, mpi_server_dispatcher );
+        workers_launch( &worker, &th_arg, mpi_server_dispatcher );
       }
 
       // Wait and finalize for all current workers

@@ -65,7 +65,7 @@
   }
 
 
-  int workers_launch ( worker_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
+  int workers_launch ( worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) )
   {
     // check arguments...
     if (NULL == w) {
@@ -78,12 +78,12 @@
     {
       case TH_OP:
         debug_info("[WORKER] worker_ondemand_launch\n") ;
-        worker_ondemand_launch(&(w->w1), &th_arg, worker_function ) ;
+        worker_ondemand_launch(&(w->w1), th_arg, worker_function ) ;
         break ;
 
      case TH_POOL:
         debug_info("[WORKER] worker_pool_enqueue\n");
-        worker_pool_enqueue(   &(w->w2), &th_arg, worker_function ); // Enqueue the operation on the buffer
+        worker_pool_enqueue(   &(w->w2), th_arg, worker_function ); // Enqueue the operation on the buffer
         break ;
 
      case TH_NOT:
@@ -100,53 +100,7 @@
   }
 
 
-  int workers_launch_nfi ( worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th), void *args )
-  {
-    // check arguments...
-    if (NULL == w) {
-      debug_error("[WORKER] worker_launch_nfi with NULL worker_t\n");
-      return -1 ;
-    }
-
-    // initialize th_arg...
-    memset(th_arg, 0, sizeof(struct st_th)) ;
-    th_arg->params   = args ;
-    th_arg->function = worker_function ;
-
-    // th_arg->th_worker = NULL ;
-    pthread_mutex_init (&(th_arg->m_wait), NULL) ;
-    pthread_cond_init  (&(th_arg->c_wait), NULL) ;
-    th_arg->r_wait  = TRUE ;
-    th_arg->wait4me = TRUE ;
-
-    switch (w->thread_mode)
-    {
-      case TH_OP:
-        debug_info("[WORKER] worker_ondemand_launch\n") ;
-        worker_ondemand_launch(&(w->w1), th_arg, worker_function ) ;
-        break ;
-
-      case TH_POOL:
-        debug_info("[WORKER] worker_pool_enqueue\n");
-        worker_pool_enqueue(   &(w->w2), th_arg, worker_function ) ;
-        break ;
-
-      case TH_NOT:
-        debug_info("[WORKER] worker without threads\n");
-        worker_function(*th_arg);
-        break ;
-
-      default:
-        debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
-        return -1 ;
-        break ;
-    }
-
-    return 1;
-  }
-
-
-  int workers_wait_nfi ( worker_t *w, struct st_th *th_arg )
+  int workers_wait ( worker_t *w, struct st_th *th_arg )
   {
     // check arguments...
     if (NULL == w) {
