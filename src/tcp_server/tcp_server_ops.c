@@ -53,50 +53,43 @@ char * tcp_server_op2string(int op_code) {
   char * ret = "Unknown";
 
   switch (op_code) {
-    case TCP_SERVER_OPEN_FILE:
-    ret = "OPEN";
+    case TCP_SERVER_OPEN_FILE:      ret = "OPEN";
     break;
-    case TCP_SERVER_CREAT_FILE:
-    ret = "CREAT";
+    case TCP_SERVER_OPEN_FILE_WOS:  ret = "OPEN_WOS";
     break;
-    case TCP_SERVER_READ_FILE:
-    ret = "READ";
+    case TCP_SERVER_CREAT_FILE:     ret = "CREAT";
     break;
-    case TCP_SERVER_WRITE_FILE:
-    ret = "WRITE";
+    case TCP_SERVER_CREAT_FILE_WOS: ret = "CREAT_WOS";
     break;
-    case TCP_SERVER_CLOSE_FILE:
-    ret = "CLOSE";
+    case TCP_SERVER_READ_FILE:      ret = "READ";
     break;
-    case TCP_SERVER_RM_FILE:
-    ret = "RM";
+    case TCP_SERVER_READ_FILE_WOS:  ret = "READ_WOS";
     break;
-    case TCP_SERVER_GETATTR_FILE:
-    ret = "GETATTR";
+    case TCP_SERVER_WRITE_FILE:     ret = "WRITE";
     break;
-    case TCP_SERVER_SETATTR_FILE:
-    ret = "SETATTR";
+    case TCP_SERVER_WRITE_FILE_WOS: ret = "WRITE_WOS";
     break;
-    case TCP_SERVER_MKDIR_DIR:
-    ret = "MKDIR";
+    case TCP_SERVER_CLOSE_FILE:     ret = "CLOSE";
     break;
-    case TCP_SERVER_RMDIR_DIR:
-    ret = "RMDIR";
+    case TCP_SERVER_RM_FILE:        ret = "RM";
     break;
-    case TCP_SERVER_FLUSH_FILE:
-    ret = "FLUSH";
+    case TCP_SERVER_GETATTR_FILE:   ret = "GETATTR";
     break;
-    case TCP_SERVER_PRELOAD_FILE:
-    ret = "PRELOAD";
+    case TCP_SERVER_SETATTR_FILE:   ret = "SETATTR";
     break;
-    case TCP_SERVER_GETID:
-    ret = "GETID";
+    case TCP_SERVER_MKDIR_DIR:      ret = "MKDIR";
     break;
-    case TCP_SERVER_FINALIZE:
-    ret = "FINALIZE";
+    case TCP_SERVER_RMDIR_DIR:      ret = "RMDIR";
     break;
-    case TCP_SERVER_END:
-    ret = "END";
+    case TCP_SERVER_FLUSH_FILE:     ret = "FLUSH";
+    break;
+    case TCP_SERVER_PRELOAD_FILE:   ret = "PRELOAD";
+    break;
+    case TCP_SERVER_GETID:          ret = "GETID";
+    break;
+    case TCP_SERVER_FINALIZE:       ret = "FINALIZE";
+    break;
+    case TCP_SERVER_END:            ret = "END";
     break;
   }
 
@@ -118,13 +111,25 @@ int tcp_server_read_operation(int sd, struct st_tcp_server_msg * head) {
     case TCP_SERVER_OPEN_FILE:
     ret = tcp_server_comm_read_data(sd, (char * ) & (head -> u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), head -> id);
     break;
+    case TCP_SERVER_OPEN_FILE_WOS:
+    ret = tcp_server_comm_read_data(sd, (char * ) & (head -> u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), head -> id);
+    break;
     case TCP_SERVER_CREAT_FILE:
+    ret = tcp_server_comm_read_data(sd, (char * ) & (head -> u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), head -> id);
+    break;
+    case TCP_SERVER_CREAT_FILE_WOS:
     ret = tcp_server_comm_read_data(sd, (char * ) & (head -> u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), head -> id);
     break;
     case TCP_SERVER_READ_FILE:
     ret = tcp_server_comm_read_data(sd, (char * ) & (head -> u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), head -> id);
     break;
+    case TCP_SERVER_READ_FILE_WOS:
+    ret = tcp_server_comm_read_data(sd, (char * ) & (head -> u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), head -> id);
+    break;
     case TCP_SERVER_WRITE_FILE:
+    ret = tcp_server_comm_read_data(sd, (char * ) & (head -> u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), head -> id);
+    break;
+    case TCP_SERVER_WRITE_FILE_WOS:
     ret = tcp_server_comm_read_data(sd, (char * ) & (head -> u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), head -> id);
     break;
     case TCP_SERVER_CLOSE_FILE:
@@ -197,7 +202,21 @@ void tcp_server_op_open(int sd, struct st_tcp_server_msg * head) {
   }
 
   printf("[%d]\tEND OPEN MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
+
+  printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER\n\n", __LINE__);
+
+  rc = mosquitto_unsubscribe(mosqtcpserver, NULL, s);
+  if(rc != MOSQ_ERR_SUCCESS){
+    fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
+    mosquitto_disconnect(mosqtcpserver);
+  }
+
+  printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
 }
+
+
+
+
 
 void tcp_server_op_creat(int sd, struct st_tcp_server_msg * head) {
   int fd;
@@ -231,7 +250,18 @@ void tcp_server_op_creat(int sd, struct st_tcp_server_msg * head) {
   }
 
   printf("[%d]\tEND CREATE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
+  printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER\n\n", __LINE__);
+
+  rc = mosquitto_unsubscribe(mosqtcpserver, NULL, s);
+  if(rc != MOSQ_ERR_SUCCESS){
+    fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
+    mosquitto_disconnect(mosqtcpserver);
+  }
+
+  printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
 }
+
+
 
 
 
@@ -261,6 +291,9 @@ void tcp_server_op_flush(int sd, struct st_tcp_server_msg * head) {
   debug_info("[OPS] (%s) end FLUSH operation from ID=%s\n", TCP_SERVER_ALIAS_NAME_STRING, head -> id);
 }
 
+
+
+
 void tcp_server_op_preload(int sd, struct st_tcp_server_msg * head) {
   int ret;
 
@@ -286,6 +319,9 @@ void tcp_server_op_preload(int sd, struct st_tcp_server_msg * head) {
 
 
 
+
+
+
   void tcp_server_op_close(int sd, struct st_tcp_server_msg * head) {
     debug_info("[OPS] (%s) begin close: fd %d ID=%s\n", TCP_SERVER_ALIAS_NAME_STRING,
     head -> u_st_tcp_server_msg.op_close.fd,
@@ -302,17 +338,17 @@ void tcp_server_op_preload(int sd, struct st_tcp_server_msg * head) {
 
 
 
-    printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER\n\n", __LINE__);
-
-    int rc;
-
-    rc = mosquitto_unsubscribe(mosqtcpserver, NULL, head -> u_st_tcp_server_msg.op_creat.path);
-    if(rc != MOSQ_ERR_SUCCESS){
-      fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-      mosquitto_disconnect(mosqtcpserver);
-    }
-
-    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, head -> u_st_tcp_server_msg.op_creat.path);
+    // printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER\n\n", __LINE__);
+    //
+    // int rc;
+    //
+    // rc = mosquitto_unsubscribe(mosqtcpserver, NULL, head -> u_st_tcp_server_msg.op_creat.path);
+    // if(rc != MOSQ_ERR_SUCCESS){
+    //   fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
+    //   mosquitto_disconnect(mosqtcpserver);
+    // }
+    //
+    // printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, head -> u_st_tcp_server_msg.op_creat.path);
 
   }
 
