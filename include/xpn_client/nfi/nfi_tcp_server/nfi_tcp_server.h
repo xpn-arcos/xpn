@@ -6,6 +6,7 @@
 #include "base/string_misc.h"
 #include "nfi_tcp_server_err.h"
 #include "nfi.h"
+#include <mosquitto.h>
 
 
 #ifdef  __cplusplus

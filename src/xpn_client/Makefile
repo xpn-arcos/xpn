@@ -164,7 +164,7 @@ ARFLAGS = cru
 AM_V_AR = $(am__v_AR_$(V))
 am__v_AR_ = $(am__v_AR_$(AM_DEFAULT_VERBOSITY))
 am__v_AR_0 = @echo "  AR      " $@;
-am__v_AR_1 = 
+am__v_AR_1 =
 libxpn_a_AR = $(AR) $(ARFLAGS)
 libxpn_a_LIBADD =
 am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
@@ -402,11 +402,11 @@ am__v_P_1 = :
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN     " $@;
-am__v_GEN_1 = 
+am__v_GEN_1 =
 AM_V_at = $(am__v_at_$(V))
 am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
 am__v_at_0 = @
-am__v_at_1 = 
+am__v_at_1 =
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/./config/depcomp
 am__maybe_remake_depfiles = depfiles
@@ -522,13 +522,13 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 AM_V_CC = $(am__v_CC_$(V))
 am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))
 am__v_CC_0 = @echo "  CC      " $@;
-am__v_CC_1 = 
+am__v_CC_1 =
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
-am__v_CCLD_1 = 
+am__v_CCLD_1 =
 SOURCES = $(libxpn_a_SOURCES)
 DIST_SOURCES = $(am__libxpn_a_SOURCES_DIST)
 am__can_run_installinfo = \
@@ -616,18 +616,18 @@ CC = /usr/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
 CFLAGS =     -I../../mxml    -I../../xpn/include    -I../../xpn/include/xpn_client    -I../../xpn/include/base -I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
+CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server
 CSCOPE = cscope
 CTAGS = ctags
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
-ECHO_C = 
+ECHO_C =
 ECHO_N = -n
-ECHO_T = 
+ECHO_T =
 EGREP = /usr/bin/grep -E
 ETAGS = etags
-EXEEXT = 
+EXEEXT =
 GREP = /usr/bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
@@ -636,13 +636,13 @@ INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 LDFLAGS = -lpthread     -L../../mxml    -L../../xpn/lib -L../../../mxml -L../../../xpn/lib  -lmxml -ldl -lpthread -lmosquitto
 LIBLINK = -lpthread
-LIBOBJS = 
+LIBOBJS =
 LIBS =     -L../../mxml    -L../../xpn/lib -L../../../mxml -L../../../xpn/lib  -lmxml -ldl -lpthread -lmosquitto
-LTLIBOBJS = 
+LTLIBOBJS =
 MAKE = make
 MAKEINFO = ${SHELL} '/home/elias/Desktop/xpn/config/missing' makeinfo
 MKDIR_P = /usr/bin/mkdir -p
-M_HEADERS = 
+M_HEADERS =
 NFI_MPI_SERVER = nfi_mpi_server
 ### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
@@ -650,8 +650,8 @@ NFI_MPI_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.
 			../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
 			../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c
 
-NFI_NFS = 
-NFI_NFS3 = 
+NFI_NFS =
+NFI_NFS3 =
 ### END OF NFI_NFS_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 NFI_NFS3_OBJECTS = ../../src/xpn_client/nfi/nfi_nfs3/nfi_nfs3.c \
@@ -686,13 +686,13 @@ PACKAGE_BUGREPORT = fgcarbal@inf.uc3m.es
 PACKAGE_NAME = Expand
 PACKAGE_STRING = Expand 2.0
 PACKAGE_TARNAME = expand
-PACKAGE_URL = 
+PACKAGE_URL =
 PACKAGE_VERSION = 2.0
 PATH_SEPARATOR = :
 RANLIB = ranlib
-SET_MAKE = 
+SET_MAKE =
 SHELL = /bin/bash
-STRIP = 
+STRIP =
 VERSION = 2.0
 abs_builddir = /home/elias/Desktop/xpn/src/xpn_client
 abs_srcdir = /home/elias/Desktop/xpn/src/xpn_client
@@ -702,12 +702,12 @@ ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
-am__quote = 
+am__quote =
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
 build = x86_64-pc-linux-gnu
-build_alias = 
+build_alias =
 build_cpu = x86_64
 build_os = linux-gnu
 build_vendor = pc
@@ -718,7 +718,7 @@ docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
 host = x86_64-pc-linux-gnu
-host_alias = 
+host_alias =
 host_cpu = x86_64
 host_os = linux-gnu
 host_vendor = pc
@@ -743,7 +743,7 @@ sharedstatedir = ${prefix}/com
 srcdir = .
 sysconfdir = ${prefix}/etc
 target = x86_64-pc-linux-gnu
-target_alias = 
+target_alias =
 target_cpu = x86_64
 target_os = linux-gnu
 target_vendor = pc
@@ -1378,7 +1378,7 @@ clean-libLIBRARIES:
 	../../src/xpn_client/xpn2/$(am__dirstamp) \
 	../../src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
 
-libxpn.a: $(libxpn_a_OBJECTS) $(libxpn_a_DEPENDENCIES) $(EXTRA_libxpn_a_DEPENDENCIES) 
+libxpn.a: $(libxpn_a_OBJECTS) $(libxpn_a_DEPENDENCIES) $(EXTRA_libxpn_a_DEPENDENCIES)
 	$(AM_V_at)-rm -f libxpn.a
 	$(AM_V_AR)$(libxpn_a_AR) libxpn.a $(libxpn_a_OBJECTS) $(libxpn_a_LIBADD)
 	$(AM_V_at)$(RANLIB) libxpn.a
