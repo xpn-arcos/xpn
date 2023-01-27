@@ -33,23 +33,29 @@
 
       void *worker_pool_function ( void *arg )
       {
-        int is_true = 1 ;
-        struct st_th th ;
-        worker_pool_t *w = (worker_pool_t *) arg ;
+        int            is_true ;
+        worker_pool_t *w ;
+        struct st_th  th ;
+        struct st_th *th_shadow ;
 
+        w = (worker_pool_t *)arg ;
+        is_true = 1 ;
         while (is_true)
         {
           // Dequeue operation
           th = worker_pool_dequeue(w) ;
+
+          // do function code...
           th.function(th) ;
 
-          // wakeup worker_pool_wait(...)
-          if ( TRUE == th.wait4me )
+          // if (th.wait4me) -> wakeup worker_pool_wait(...)
+          th_shadow = (struct st_th *)(th.v) ;
+          if ( (NULL != th_shadow) && (TRUE == th.wait4me) )
           {
-            pthread_mutex_lock(&(th.m_wait));
-            th.r_wait = FALSE;
-            pthread_cond_signal(&(th.c_wait)); 
-            pthread_mutex_unlock(&(th.m_wait));
+             pthread_mutex_lock(&(th_shadow->m_wait)) ;
+             th_shadow->r_wait = FALSE ;
+             pthread_cond_signal(&(th_shadow->c_wait)) ;
+             pthread_mutex_unlock(&(th_shadow->m_wait)) ;
           }
         }
 
@@ -117,6 +123,7 @@
         th_arg->id       = th_cont++ ;
         th_arg->function = worker_function ;
         th_arg->w        = w ;
+        th_arg->v        = (void *)th_arg ;
 
         // enqueue
         debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", rank_client_id);
@@ -169,7 +176,7 @@
         pthread_mutex_unlock(&(w->m_pool));
 
         DEBUG_END() ;
-    
+
         return th;
       }
 
