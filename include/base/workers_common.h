@@ -43,21 +43,25 @@
   struct st_th
   {
       void  *params ;
-      long   sd ;
       void (*function)(struct st_th) ;
 
+      // server stuff
       int   id ;
       int   type_op ;
       int   rank_client_id ;
+      long  sd ;
 
-      void *w; // worker_ondemand/worker_pool as void *
+      // w: worker_ondemand/worker_pool as void *
+      void *w ;
+      // v: original st_th as void *
+      void *v ;
 
-      // wait of this thread (launch + wait)
+      // client stuff
       pthread_t       th_worker;
       pthread_mutex_t m_wait;
       pthread_cond_t  c_wait;
       int             r_wait;
-      int             wait4me;
+      int             wait4me; // (wait4me==1) ? launch + wait : launch
 
   };
 

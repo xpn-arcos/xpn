@@ -106,7 +106,8 @@ int xpn_mkdir(const char *path, mode_t perm)
   err = 0;
   for(i=0;i<n;i++)
   {
-    ret = nfi_worker_wait(servers[i]->wrk);
+ // ret = nfi_worker_wait(servers[i]->wrk); // OLD
+    ret = nfiworker_wait(servers[i]->wrk);
 
     // Control error
     if((ret<0)&&(!err))
@@ -249,14 +250,17 @@ int xpn_rmdir(const char *path)
 
   // Wait
   err = 0;
-  for(i=0;i<n;i++){
-    ret = nfi_worker_wait(servers[i]->wrk);
-    // Control error
+  for (i=0;i<n;i++)
+  {
+ // ret = nfi_worker_wait(servers[i]->wrk); // OLD
+    ret = nfiworker_wait(servers[i]->wrk);
+    // Error checking
     if((ret<0)&&(!err)){
       err = 1;
     }
   }
-  // Control error
+
+  // Error checking
   if(err)
   {
     xpn_err(XPNERR_REMOVE);

@@ -34,42 +34,47 @@
       void *worker_run ( void *arg )
       {
         struct st_th th;
- 
+
         DEBUG_BEGIN() ;
 
-        struct st_th *th_aux = (struct st_th *)arg;
+	// get initial pointers...
+        struct st_th *th_aux = (struct st_th *)arg ;
         if (NULL == th_aux) {
-            debug_info("ERROR: worker_run receive arg == NULL\n");
-            return NULL;
+            debug_info("ERROR: worker_run receive arg == NULL\n") ;
+            return NULL ;
         }
-
-        worker_ondemand_t *w_aux = (worker_ondemand_t *)th_aux->w;
+        worker_ondemand_t *w_aux = (worker_ondemand_t *)th_aux->w ;
         if (NULL == w_aux) {
-            debug_info("ERROR: worker_run receive arg->w == NULL\n");
-            return NULL;
+            debug_info("ERROR: worker_run receive arg->w == NULL\n") ;
+            return NULL ;
+        }
+        struct st_th *th_shadow = (struct st_th *)(th_aux->v) ;
+        if (NULL == th_shadow) {
+            debug_info("ERROR: worker_run receive arg->v == NULL\n") ;
+            return NULL ;
         }
 
-        // prolog... 
+        // prolog: copy arguments and update n_workers
         pthread_mutex_lock(&(w_aux->m_worker));
         memcpy(&th, arg, sizeof(struct st_th)) ;
         w_aux->busy_worker = FALSE;
         w_aux->n_workers++ ;
         pthread_cond_broadcast(&(w_aux->c_worker)); // pthread_cond_signal(&c_worker);
         pthread_mutex_unlock(&(w_aux->m_worker));
- 
+
         // do function code...
         th.function(th) ;
 
-        // wakeup worker_ondemand_wait(...)
+        // do wakeup worker_ondemand_wait(...) if needed
         if ( TRUE == th.wait4me )
         {
-          pthread_mutex_lock(&(th_aux->m_wait));
-          th_aux->r_wait = FALSE;
-          pthread_cond_broadcast(&(th_aux->c_wait)); 
-          pthread_mutex_unlock(&(th_aux->m_wait));
+          pthread_mutex_lock(&(th_shadow->m_wait));
+          th_shadow->r_wait = FALSE;
+          pthread_cond_broadcast(&(th_shadow->c_wait));
+          pthread_mutex_unlock(&(th_shadow->m_wait));
         }
 
-        // epilog...
+        // epilog:  update n_workers
         pthread_mutex_lock(&(w_aux->m_worker));
         w_aux->n_workers-- ;
         pthread_cond_broadcast(&(w_aux->c_nworkers)); // pthread_cond_signal(&c_nworkers);
@@ -109,7 +114,6 @@
         int ret;
         pthread_attr_t th_attr;
         pthread_t      th_worker;
-        struct st_th   st_worker;
         static int     th_cont = 0;
 
         DEBUG_BEGIN() ;
@@ -120,20 +124,15 @@
         w->busy_worker = TRUE;
 
         // prepare arguments...
-        /*
-        st_worker          = th_arg ;
-        st_worker.id       = th_cont++;
-        st_worker.function = worker_function ;
-        st_worker.w        = (void *)w;
-        */
-        th_arg->id       = th_cont++;
+        th_arg->id       = th_cont++ ;
         th_arg->function = worker_function ;
-        th_arg->w        = (void *)w;
+        th_arg->w        = (void *)w ;
+        th_arg->v        = (void *)th_arg ;
 
         // create thread...
         debug_info("[WORKERS] pthread_create: create_thread worker_run\n") ;
         ret = pthread_create(&th_worker, &th_attr, (void *(*)(void *))(worker_run), (void *)th_arg);
-        if (ret != 0){
+        if (ret != 0) {
           debug_error("[WORKERS] pthread_create %d\n", ret);
           perror("pthread_create: Error en create_thread: ");
         }
@@ -141,8 +140,7 @@
         // wait to copy args...
         debug_info("[WORKERS] pthread_create: lock worker_run\n");
         pthread_mutex_lock(&(w->m_worker));
-        while (w->busy_worker == TRUE)
-        {
+        while (w->busy_worker == TRUE) {
           debug_info("[WORKERS] pthread_create: wait worker_run\n");
           pthread_cond_wait(&(w->c_worker), &(w->m_worker));
         }

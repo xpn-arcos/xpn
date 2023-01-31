@@ -33,23 +33,29 @@
 
       void *worker_pool_function ( void *arg )
       {
-        int is_true = 1 ;
-        struct st_th th ;
-        worker_pool_t *w = (worker_pool_t *) arg ;
+        int            is_true ;
+        worker_pool_t *w ;
+        struct st_th  th ;
+        struct st_th *th_shadow ;
 
+        w = (worker_pool_t *)arg ;
+        is_true = 1 ;
         while (is_true)
         {
           // Dequeue operation
           th = worker_pool_dequeue(w) ;
+
+          // do function code...
           th.function(th) ;
 
-	        // wakeup worker_pool_wait(...)
-          if ( TRUE == th.wait4me )
+          // if (th.wait4me) -> wakeup worker_pool_wait(...)
+          th_shadow = (struct st_th *)(th.v) ;
+          if ( (NULL != th_shadow) && (TRUE == th.wait4me) )
           {
-            pthread_mutex_lock(&(th.m_wait));
-            th.r_wait = FALSE;
-            pthread_cond_signal(&(th.c_wait)); 
-            pthread_mutex_unlock(&(th.m_wait));
+             pthread_mutex_lock(&(th_shadow->m_wait)) ;
+             th_shadow->r_wait = FALSE ;
+             pthread_cond_signal(&(th_shadow->c_wait)) ;
+             pthread_mutex_unlock(&(th_shadow->m_wait)) ;
           }
         }
 
@@ -97,9 +103,8 @@
       }
 
 
-      void worker_pool_enqueue ( worker_pool_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
+      void worker_pool_enqueue ( worker_pool_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) )
       {
-        struct st_th st_worker;
         static int th_cont = 0;
 
         DEBUG_BEGIN() ;
@@ -115,14 +120,14 @@
         debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) copy arguments\n", rank_client_id);
 
         // prepare arguments...
-        st_worker          = th_arg ;
-        st_worker.id       = th_cont++ ;
-        st_worker.function = worker_function ;
-        st_worker.w        = w ;
+        th_arg->id       = th_cont++ ;
+        th_arg->function = worker_function ;
+        th_arg->w        = w ;
+        th_arg->v        = (void *)th_arg ;
 
         // enqueue
         debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", rank_client_id);
-        w->operations_buffer[w->enq_pos] = st_worker;
+        w->operations_buffer[w->enq_pos] = *th_arg;
         w->enq_pos = (w->enq_pos + 1) % MAX_OPERATIONS;
         w->n_operation++;
 
@@ -171,7 +176,7 @@
         pthread_mutex_unlock(&(w->m_pool));
 
         DEBUG_END() ;
-    
+
         return th;
       }
 
@@ -180,8 +185,6 @@
       {
         DEBUG_BEGIN() ;
 
-        printf("ESPERANDO\n");
-
         pthread_mutex_lock(&(th_arg->m_wait));
         while (th_arg->r_wait == TRUE) {
           pthread_cond_wait(&(th_arg->c_wait), &(th_arg->m_wait));
@@ -189,8 +192,6 @@
 
         th_arg->r_wait = TRUE;
         pthread_mutex_unlock(&(th_arg->m_wait));
-
-        printf("ESPERAN FIN\n");
 
         DEBUG_END() ;
 
@@ -216,7 +217,7 @@
         th_arg.type_op = TH_FINALIZE ;
 
         for (int i = 0; i < w->POOL_MAX_THREADS; ++i) {
-          worker_pool_enqueue(w, th_arg, NULL) ;
+          worker_pool_enqueue(w, &th_arg, NULL) ;
         }
 
         debug_info("[WORKERS] : worker_pool_destroy(...) lock\n");
