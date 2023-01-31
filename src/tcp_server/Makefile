@@ -4,8 +4,8 @@
 #--------------------------
 
  MAKE         = make -s
- CC           = /usr/bin/mpicc
- EXPAND_DIR   = /home/acaldero/bin//xpn
+ CC           = /opt/software/install-mpich/bin/mpicc
+ EXPAND_DIR   = /local_test/bin//xpn
  OBJECTS_TCP_SERVER  = tcp_server.o \
 		       tcp_server_utils.o \
 		       tcp_server_params.o \
