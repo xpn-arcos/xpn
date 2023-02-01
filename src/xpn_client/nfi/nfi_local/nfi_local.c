@@ -514,7 +514,14 @@
       return -1;
     }
 
-    //LOCALtoNFIattr(attr, &st) ;
+    res = filesystem_stat(dir, &st) ;
+    if (res < 0)
+    {
+      debug_error("nfi_local_getattr: Fail stat %s.\n", dir) ;
+      return res;
+    }
+
+    LOCALtoNFIattr(attr, &st) ;
 
     DEBUG_END();
 
@@ -839,7 +846,7 @@
       return res;
     }
 
-    //LOCALtoNFIattr(attr, &st) ;
+    LOCALtoNFIattr(attr, &st) ;
 
     DEBUG_END();
 
@@ -964,7 +971,14 @@
       return -1;
     }
 
-    //LOCALtoNFIattr(attr, &st) ;
+    res = filesystem_stat(dir, &st) ;
+    if (res < 0)
+    {
+      debug_error("nfi_local_getattr: Fail stat %s.\n", dir) ;
+      return res;
+    }
+
+    LOCALtoNFIattr(attr, &st) ;
 
     DEBUG_END();
 

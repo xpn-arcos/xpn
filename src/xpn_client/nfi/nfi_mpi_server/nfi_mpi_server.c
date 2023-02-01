@@ -582,6 +582,7 @@
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
     struct st_mpi_server_msg msg;
+    struct st_mpi_server_attr_req req;
     char   server[PATH_MAX], dir[PATH_MAX];
 
     // Check arguments...
@@ -618,6 +619,14 @@
         FREE_AND_NULL(fh_aux) ;
         return -1;
       }
+
+      //Get stat
+      ret = filesystem_stat(dir, &(req.attr)) ;
+      if (ret < 0) {
+        debug_error("nfi_mpi_server_create: Fail stat %s.\n", dir) ;
+        return ret;
+      }
+
       if (server_aux->params.xpn_session == 0) {
         filesystem_close(fh_aux->fd);
       }
@@ -636,6 +645,13 @@
       strcpy(msg.u_st_mpi_server_msg.op_creat.path,dir) ;
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ;
       strcpy(fh_aux->path, dir) ;
+
+      //Get stat
+      msg.type = MPI_SERVER_GETATTR_FILE;
+      strcpy(msg.id, server_aux->id) ;
+      strcpy(msg.u_st_mpi_server_msg.op_getattr.path, dir) ;
+
+      nfi_mpi_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req)) ;
     }
     /*****************************************/
 
@@ -649,6 +665,8 @@
       FREE_AND_NULL(fh_aux) ;
       return -1;
     }
+
+    MPI_SERVERtoNFIattr(attr, &req.attr) ;
 
     debug_info("[NFI-MPI] nfi_mpi_server_create(ID=%s): end\n",server_aux->id) ;
 
@@ -1153,7 +1171,6 @@
     NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM) ;
 
     // copy private information...
-    server_aux = (struct nfi_mpi_server_server  *) serv->private_info;
     fh_aux     = (struct nfi_mpi_server_fhandle *) fh->priv_fh;
     server_aux = (struct nfi_mpi_server_server  *) serv->private_info;
 
@@ -1214,6 +1231,7 @@
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
     struct st_mpi_server_msg msg;
+    struct st_mpi_server_attr_req req;
 
     // Check arguments...
     NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
@@ -1248,6 +1266,13 @@
         return -1;
       }
       fh_aux->fd = ret; //Cuidado
+
+      //Get stat
+      ret = filesystem_stat(dir, &(req.attr)) ;
+      if (ret < 0) {
+        debug_error("nfi_mpi_server_create: Fail stat %s.\n", dir) ;
+        return ret;
+      }
     }
     /************** SERVER ****************/
     else {
@@ -1263,6 +1288,13 @@
         FREE_AND_NULL(fh_aux) ;
         return -1;
       }
+
+            //Get stat
+      msg.type = MPI_SERVER_GETATTR_FILE;
+      strcpy(msg.id, server_aux->id) ;
+      strcpy(msg.u_st_mpi_server_msg.op_getattr.path, dir) ;
+
+      nfi_mpi_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req)) ;
     }
 
     fh->type = NFIDIR;
@@ -1275,7 +1307,7 @@
       return -1;
     }
 
-    //LOCALtoNFIattr(attr, &st) ; //TODO
+    MPI_SERVERtoNFIattr(attr, &req.attr) ;
 
     return ret;
   }
