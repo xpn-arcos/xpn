@@ -39,7 +39,7 @@
   {
     int ret;
 
-    debug_info("[NFI] (ID=%s) mpiClient_write_data: begin               HEAD_TYPE:%d\n", head->id, sizeof(head->type)) ;
+    debug_info("[NFI-MPI] (ID=%s) mpiClient_write_data: begin               HEAD_TYPE:%d\n", head->id, sizeof(head->type)) ;
     ret = mpiClient_write_operation(sd, (char *)&(head->type), 1, head->id) ;
     if (ret == -1){
         debug_warning("Server[?]: mpiClient_write_data fails :-(") ;
@@ -49,76 +49,76 @@
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank) ;
 
-    debug_info("[NFI] (ID=%s) write_operation: %d -> \n", head->id, head->type) ;
+    debug_info("[NFI-MPI] (ID=%s) write_operation: %d -> \n", head->id, head->type) ;
     switch (head->type)
     {
       //File API
       case MPI_SERVER_OPEN_FILE_WS:
       case MPI_SERVER_OPEN_FILE_WOS:
-              debug_info("[NFI] (ID=%s) OPEN operation ---------------------  %ld\n", head->id, sizeof(struct st_mpi_server_open)) ;
+              debug_info("[NFI-MPI] (ID=%s) OPEN operation ---------------------  %ld\n", head->id, sizeof(struct st_mpi_server_open)) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_open, sizeof(struct st_mpi_server_open), head->id) ;
               break;
       case MPI_SERVER_CREAT_FILE_WS:
       case MPI_SERVER_CREAT_FILE_WOS:
-              debug_info("[NFI] (ID=%s) CREAT operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) CREAT operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_creat, sizeof(struct st_mpi_server_creat), head->id) ;
               break;
       case MPI_SERVER_READ_FILE_WS:
       case MPI_SERVER_READ_FILE_WOS:
-              debug_info("[NFI] (ID=%s) READ operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) READ operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_read, sizeof(struct st_mpi_server_read), head->id) ;
               break;
       case MPI_SERVER_WRITE_FILE_WS:
       case MPI_SERVER_WRITE_FILE_WOS:
-              debug_info("[NFI] (ID=%s) WRITE operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) WRITE operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_write, sizeof(struct st_mpi_server_write), head->id) ;
               break;
       case MPI_SERVER_CLOSE_FILE_WS:
-              debug_info("[NFI] (ID=%s) CLOSE operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) CLOSE operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_close, sizeof(struct st_mpi_server_close), head->id) ;
               break;
       case MPI_SERVER_RM_FILE:
-              debug_info("[NFI] (ID=%s) RM operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) RM operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_rm, sizeof(struct st_mpi_server_rm), head->id) ;
               break;
       case MPI_SERVER_RENAME_FILE:
-              debug_info("[NFI] (ID=%s) RENAME operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) RENAME operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_rename, sizeof(struct st_mpi_server_rename), head->id) ;
               break;
       case MPI_SERVER_GETATTR_FILE:
-              debug_info("[NFI] (ID=%s) GETATTR operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) GETATTR operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_getattr, sizeof(struct st_mpi_server_getattr), head->id) ;
               break;
 
       //Directory API
       case MPI_SERVER_MKDIR_DIR:
-              debug_info("[NFI] (ID=%s) MDKIR operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) MDKIR operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_mkdir, sizeof(struct st_mpi_server_mkdir), head->id) ;
               break;
       case MPI_SERVER_OPENDIR_DIR:
-              debug_info("[NFI] (ID=%s) OPENDIR operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) OPENDIR operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_opendir, sizeof(struct st_mpi_server_opendir), head->id) ;
               break;
       case MPI_SERVER_READDIR_DIR:
-              debug_info("[NFI] (ID=%s) READDIR operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) READDIR operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_readdir, sizeof(struct st_mpi_server_readdir), head->id) ;
               break;
       case MPI_SERVER_CLOSEDIR_DIR:
-              debug_info("[NFI] (ID=%s) CLOSEDIR operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) CLOSEDIR operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_closedir, sizeof(struct st_mpi_server_closedir), head->id) ;
               break;
       case MPI_SERVER_RMDIR_DIR:
-              debug_info("[NFI] (ID=%s) RMDIR operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) RMDIR operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_rmdir, sizeof(struct st_mpi_server_rmdir), head->id) ;
               break;
 
       //Optimization API
       case MPI_SERVER_FLUSH_FILE:
-              debug_info("[NFI] (ID=%s) FLUSH operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) FLUSH operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_flush, sizeof(struct st_mpi_server_flush), head->id) ;
               break;
       case MPI_SERVER_PRELOAD_FILE:
-              debug_info("[NFI] (ID=%s) PRELOAD operation\n", head->id) ;
+              debug_info("[NFI-MPI] (ID=%s) PRELOAD operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_preload, sizeof(struct st_mpi_server_preload), head->id) ;
               break;
     }
@@ -131,14 +131,14 @@
     ssize_t ret ;
 
     // send request...
-    debug_info("[NFI] (ID=%s): %s: -> ...\n", server_aux->id, msg->id) ;
+    debug_info("[NFI-MPI] (ID=%s): %s: -> ...\n", server_aux->id, msg->id) ;
     ret = mpi_server_write_operation(server_aux->params.server, msg) ;
     if (ret < 0) {
       return -1 ;
     }
 
     // read response...
-    debug_info("[NFI] (ID=%s): %s: <- ...\n", server_aux->id, msg->id) ;
+    debug_info("[NFI-MPI] (ID=%s): %s: <- ...\n", server_aux->id, msg->id) ;
     ret = mpiClient_read_data(server_aux->params.server, req, req_size, msg->id) ;
     if (ret < 0) {
       return -1 ;
@@ -227,7 +227,7 @@
    */
 
    /************************************************************
-    * Init Local                                                *
+    * Init Local                                               *
     ************************************************************/
   int nfi_mpi_server_init ( char *url, struct nfi_server *serv, struct nfi_attr_server *attr )
   {
@@ -235,7 +235,12 @@
     struct nfi_mpi_server_server *server_aux;
     char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
 
-    debug_info("[NFI] nfi_mpi_server_init: begin\n") ;
+    debug_info("[NFI-MPI] nfi_mpi_server_init: begin\n") ;
+
+    // check params...
+    if (serv == NULL) {
+      return 0;
+    }
 
     // new nfi_ops with mpi_server functions...
     serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops)) ;
@@ -272,15 +277,16 @@
     {
       mpi_server_err(MPI_SERVERERR_URL) ;
       debug_error("nfi_mpi_server_init: incorrect url '%s'.\n", url) ;
-      free(serv->ops) ;
+      FREE_AND_NULL(serv->ops) ;
       return -1;
     }
 
     // new nfi_mpiserver_server...
     server_aux = (struct nfi_mpi_server_server *)malloc(sizeof(struct nfi_mpi_server_server)) ;
-    if (server_aux == NULL) {
+    if (server_aux == NULL)
+    {
       mpi_server_err(MPI_SERVERERR_MEMORY) ;
-      free(serv->ops) ;
+      FREE_AND_NULL(serv->ops) ;
       return -1;
     }
     serv->private_info = (void *)server_aux;
@@ -341,7 +347,7 @@
       return -1 ;
     }
 
-    debug_info("[NFI] nfi_mpi_server_init(ID=%s): end\n",server_aux->id) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_init(ID=%s): end\n",server_aux->id) ;
 
     // return OK
     return 0;
@@ -355,6 +361,11 @@
   {
     int ret ;
     struct nfi_mpi_server_server *server_aux;
+
+    // check params...
+    if (serv == NULL) {
+      return 0;
+    }
 
     server_aux = (struct nfi_mpi_server_server *) (serv->private_info) ;
     strcpy(server_aux->params.srv_name, server) ;
@@ -373,10 +384,10 @@
     memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
     serv->wrk->server = serv ;
 
-    debug_info("[NFI] workers_init()\n") ;
-    ret = workers_init ( &(serv->wrk->wb), server_aux->params.xpn_thread );
+    debug_info("[NFI-MPI] workers_init()\n") ;
+    ret = workers_init ( &(serv->wrk->wb), serv->xpn_thread );
 
-    debug_info("[NFI] nfi_mpi_server_connect(): end\n") ;
+    debug_info("[NFI-MPI] nfi_mpi_server_connect(): end\n") ;
 
     return 0;
   }
@@ -390,7 +401,7 @@
     int ret ;
     struct nfi_mpi_server_server *server_aux;
 
-    debug_info("[NFI] nfi_mpi_server_disconnect(): begin\n") ;
+    debug_info("[NFI-MPI] nfi_mpi_server_disconnect(): begin\n") ;
 
     // check params...
     if (serv == NULL) {
@@ -404,29 +415,30 @@
     // Thread destroy...
     if (server_aux->params.xpn_thread != TH_NOT)
     {
-      debug_info("[NFI] workers_destroy()\n") ;
+      debug_info("[NFI-MPI] workers_destroy()\n") ;
       workers_destroy ( &(serv->wrk->wb) );
     }
 
     // MPI Disconnect...
     ret = mpiClient_comm_disconnect( &(server_aux->params) ) ;
     if (ret < 0) {
-      debug_error("[NFI]: mpiClient_comm_disconnect fails :-(") ;
+      debug_error("[NFI-MPI]: mpiClient_comm_disconnect fails :-(") ;
     }
 
     // MPI Finalize...
     ret = mpiClient_comm_destroy( &(server_aux->params) );
     if (ret < 0) {
-      debug_error("[NFI]: mpiClient_comm_destroy fails :-(") ;
+      debug_error("[NFI-MPI]: mpiClient_comm_destroy fails :-(") ;
     }
 
     // free private_info, 'url' string and 'server' string...
+    FREE_AND_NULL(serv->ops) ;
     FREE_AND_NULL(serv->private_info) ;
     FREE_AND_NULL(serv->url) ;
     FREE_AND_NULL(serv->server) ;
 
     //serv->protocol = -1;
-    debug_info("[NFI] nfi_mpi_server_disconnect(): end\n") ;
+    debug_info("[NFI-MPI] nfi_mpi_server_disconnect(): end\n") ;
 
     // return OK
     return 0;
@@ -490,7 +502,7 @@
 
     // private_info...
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_open(ID=%s): begin %s\n",server_aux->id,url) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_open(ID=%s): begin %s\n",server_aux->id,url) ;
 
     /*if (url[strlen(url)-1] == '/'){
       return nfi_mpi_server_opendir(serv, url, fho) ;
@@ -561,7 +573,7 @@
     fho->server  = serv;
     fho->priv_fh = (void *) fh_aux;
 
-    debug_info("[NFI] nfi_mpi_server_open(ID=%s): end\n",server_aux->id) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_open(ID=%s): end\n",server_aux->id) ;
 
     return 0;
   }
@@ -583,7 +595,7 @@
 
     // private_info...
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_create(ID=%s): begin %s\n", server_aux->id, url) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_create(ID=%s): begin %s\n", server_aux->id, url) ;
 
     // url -> server + dir
     ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir) ;
@@ -641,17 +653,13 @@
       return -1;
     }
 
-    debug_info("[NFI] nfi_mpi_server_create(ID=%s): end\n",server_aux->id) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_create(ID=%s): end\n",server_aux->id) ;
 
     return 0;
   }
 
 
-  ssize_t nfi_mpi_server_read ( struct nfi_server *serv,
-                                struct nfi_fhandle *fh,
-                                void *buffer,
-                                off_t offset,
-                                size_t size )
+  ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
   {
 
     int ret, cont, diff;
@@ -668,7 +676,7 @@
 
     // private_info
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_read(%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_read(%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size) ;
 
     fh_aux = (struct nfi_mpi_server_fhandle *) fh->priv_fh;
 
@@ -731,13 +739,13 @@
 
       #ifdef  DBG_IO
       if (server_aux->params.xpn_session){
-        printf("[NFI]read: -> fd     %d \n",msg.u_st_mpi_server_msg.op_read.fd) ;
+        printf("[NFI-MPI]read: -> fd     %d \n",msg.u_st_mpi_server_msg.op_read.fd) ;
       }
       else {
-        printf("[NFI]read: -> path   %s \n",msg.u_st_mpi_server_msg.op_read.path) ;
+        printf("[NFI-MPI]read: -> path   %s \n",msg.u_st_mpi_server_msg.op_read.path) ;
       }
-      printf("[NFI]read: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_read.offset) ;
-      printf("[NFI]read: -> size   %d \n",msg.u_st_mpi_server_msg.op_read.size) ;
+      printf("[NFI-MPI]read: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_read.offset) ;
+      printf("[NFI-MPI]read: -> size   %d \n",msg.u_st_mpi_server_msg.op_read.size) ;
       #endif
 
       //ret = mpi_server_write_operation(server_aux->sd, &msg) ;
@@ -753,16 +761,16 @@
       do
       {
         ret = mpiClient_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_read_req), msg.id) ;
-        debug_info("[NFI] nfi_mpi_server_read(ID=%s): (1)mpiClient_read_data = %d.\n",server_aux->id, ret) ;
+        debug_info("[NFI-MPI] nfi_mpi_server_read(ID=%s): (1)mpiClient_read_data = %d.\n",server_aux->id, ret) ;
         if (ret == -1){
           fprintf(stderr,"ERROR: (2)nfi_mpi_server_read: Error on write operation\n") ;
           return -1;
         }
 
         if (req.size > 0) {
-          debug_info("[NFI] nfi_mpi_server_read(ID=%s): (2)mpiClient_read_data = %d. size = %d\n",server_aux->id, ret, req.size) ;
+          debug_info("[NFI-MPI] nfi_mpi_server_read(ID=%s): (2)mpiClient_read_data = %d. size = %d\n",server_aux->id, ret, req.size) ;
           ret = mpiClient_read_data(server_aux->params.server, (char *)buffer+cont, req.size, msg.id) ;
-          debug_info("[NFI] nfi_mpi_server_read(ID=%s): (2)mpiClient_read_data = %d.\n",server_aux->id, ret) ;
+          debug_info("[NFI-MPI] nfi_mpi_server_read(ID=%s): (2)mpiClient_read_data = %d.\n",server_aux->id, ret) ;
           if (ret == -1) {
             fprintf(stderr,"ERROR: (3)nfi_mpi_server_read: Error on read operation\n") ;
           }
@@ -782,17 +790,13 @@
       ret = cont;
     }
 
-    debug_info("[NFI] nfi_mpi_server_read(ID=%s): end\n",server_aux->id) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_read(ID=%s): end\n",server_aux->id) ;
 
     return ret;
   }
 
 
-  ssize_t nfi_mpi_server_write ( struct nfi_server *serv,
-                                 struct nfi_fhandle *fh,
-                                 void *buffer,
-                                 off_t offset,
-                                 size_t size )
+  ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
   {
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
@@ -812,7 +816,7 @@
 
     // private_info...
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_write(ID=%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_write(ID=%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size) ;
 
     fh_aux     = (struct nfi_mpi_server_fhandle *) fh->priv_fh;
     server_aux = (struct nfi_mpi_server_server  *) serv->private_info;
@@ -877,13 +881,13 @@
 
       #ifdef  DBG_IO
         if (server_aux->params.xpn_session){
-          printf("[NFI]write: -> fd     %d \n",msg.u_st_mpi_server_msg.op_write.fd) ;
+          printf("[NFI-MPI]write: -> fd     %d \n",msg.u_st_mpi_server_msg.op_write.fd) ;
         }
         else {
-          printf("[NFI]write: -> path   %s \n",msg.u_st_mpi_server_msg.op_write.path) ;
+          printf("[NFI-MPI]write: -> path   %s \n",msg.u_st_mpi_server_msg.op_write.path) ;
         }
-        printf("[NFI]write: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_write.offset) ;
-        printf("[NFI]write: -> size   %d \n",msg.u_st_mpi_server_msg.op_write.size) ;
+        printf("[NFI-MPI]write: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_write.offset) ;
+        printf("[NFI-MPI]write: -> size   %d \n",msg.u_st_mpi_server_msg.op_write.size) ;
       #endif
 
       ret = mpi_server_write_operation(server_aux->params.server, &msg) ;
@@ -931,7 +935,7 @@
         return -1;
       }
 
-      debug_info("[NFI] nfi_mpi_server_write(ID=%s): write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size) ;
+      debug_info("[NFI-MPI] nfi_mpi_server_write(ID=%s): write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size) ;
       if (req.size < 0)
       {
         fprintf(stderr,"ERROR: nfi_mpi_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size) ;
@@ -942,7 +946,7 @@
       ret = cont;
     }
 
-    debug_info("[NFI] nfi_mpi_server_write(ID=%s): end\n",server_aux->id) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_write(ID=%s): end\n",server_aux->id) ;
 
     return ret;
   }
@@ -963,19 +967,19 @@
 
     // private_info...
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_close(ID=%s): begin\n",server_aux->id) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_close(ID=%s): begin\n",server_aux->id) ;
 
     // without session -> just return ok
     if (! server_aux->params.xpn_session)
     {
-      debug_info("[NFI] nfi_mpi_server_close(ID=%s): end\n", server_aux->id) ;
+      debug_info("[NFI-MPI] nfi_mpi_server_close(ID=%s): end\n", server_aux->id) ;
       return 1;
     }
 
     // if fh-<priv_fh is NULL -> return -1
     if (NULL == fh->priv_fh)
     {
-      debug_info("[NFI] nfi_mpi_server_close(ID=%s): end\n", server_aux->id) ;
+      debug_info("[NFI-MPI] nfi_mpi_server_close(ID=%s): end\n", server_aux->id) ;
       return -1;
     }
 
@@ -999,7 +1003,7 @@
       strcpy(msg.id, server_aux->id) ;
       msg.u_st_mpi_server_msg.op_close.fd = fh_aux->fd;
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
-      debug_info("[NFI] nfi_mpi_server_close(ID=%s): close -> %d \n",server_aux->id,msg.u_st_mpi_server_msg.op_close.fd) ;
+      debug_info("[NFI-MPI] nfi_mpi_server_close(ID=%s): close -> %d \n",server_aux->id,msg.u_st_mpi_server_msg.op_close.fd) ;
     }
 
     /* free memory */
@@ -1008,7 +1012,7 @@
     fh->type    = NFINULL;
     fh->server  = NULL;
 
-    debug_info("[NFI] nfi_mpi_server_close(ID=%s): end\n",server_aux->id) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_close(ID=%s): end\n",server_aux->id) ;
 
     // Return OK
     return ret;
@@ -1030,7 +1034,7 @@
 
     // private_info...
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_remove(%s): begin %s\n",server_aux->id, url) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_remove(%s): begin %s\n",server_aux->id, url) ;
     if (server_aux == NULL){
       mpi_server_err(MPI_SERVERERR_PARAM) ;
       return -1;
@@ -1064,7 +1068,7 @@
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
     }
 
-    debug_info("[NFI] nfi_mpi_server_remove(ID=%s): end \n",server_aux->id) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_remove(ID=%s): end \n",server_aux->id) ;
 
     return ret;
   }
@@ -1086,7 +1090,7 @@
 
     // private_info...
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_remove(%s): begin %s\n",server_aux->id, url) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_remove(%s): begin %s\n",server_aux->id, url) ;
     if (server_aux == NULL){
       mpi_server_err(MPI_SERVERERR_PARAM) ;
       return -1;
@@ -1128,7 +1132,7 @@
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
     }
 
-    debug_info("[NFI] nfi_mpi_server_remove(ID=%s): end \n",server_aux->id) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_remove(ID=%s): end \n",server_aux->id) ;
 
     return ret;
   }
@@ -1141,7 +1145,7 @@
     struct st_mpi_server_msg msg;
     struct st_mpi_server_attr_req req;
 
-    debug_info("[NFI] nfi_mpi_server_getattr (...): begin\n") ;
+    debug_info("[NFI-MPI] nfi_mpi_server_getattr (...): begin\n") ;
 
     // check arguments...
     NULL_RET_ERR(serv,            MPI_SERVERERR_PARAM) ;
@@ -1177,7 +1181,7 @@
 
     MPI_SERVERtoNFIattr(attr, &req.attr) ;
 
-    debug_info("[NFI] nfi_mpi_server_getattr (...): end\n") ;
+    debug_info("[NFI-MPI] nfi_mpi_server_getattr (...): end\n") ;
 
     // return status
     return req.status;
@@ -1522,7 +1526,7 @@
 
     // get private_info...
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_preload(ID=%s): begin %s - %s \n", server_aux->id, virtual_path, storage_path) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_preload(ID=%s): begin %s - %s \n", server_aux->id, virtual_path, storage_path) ;
 
     if (url[strlen(url)-1] == '/'){
         mpi_server_err(MPI_SERVERERR_PARAM) ;
@@ -1530,7 +1534,7 @@
     }
 
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_preload(ID=%s): preload %s in server %s.\n",server_aux->id,virtual_path,serv->server) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_preload(ID=%s): preload %s in server %s.\n",server_aux->id,virtual_path,serv->server) ;
 
     /*****************************************/
     msg.type = MPI_SERVER_PRELOAD_FILE;
@@ -1544,9 +1548,9 @@
     nfi_mpi_server_doRequest(server_aux, &msg, (char *)&ret, sizeof(int)) ;
     /*****************************************/
 
-    debug_info("[NFI] nfi_mpi_server_preload(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_preload(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret) ;
     if (ret == -1) {
-      printf("[NFI]Error en el preload\n") ;
+      printf("[NFI-MPI]Error en el preload\n") ;
     }
 
     return ret;
@@ -1569,7 +1573,7 @@
 
     // private_info...
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_flush(ID=%s): begin %s - %s \n", server_aux->id,virtual_path, storage_path) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_flush(ID=%s): begin %s - %s \n", server_aux->id,virtual_path, storage_path) ;
 
     if (url[strlen(url)-1] == '/') {
       mpi_server_err(MPI_SERVERERR_PARAM) ;
@@ -1577,7 +1581,7 @@
     }
 
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI] nfi_mpi_server_flush(ID=%s): open %s in server %s.\n",server_aux->id,virtual_path,serv->server) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_flush(ID=%s): open %s in server %s.\n",server_aux->id,virtual_path,serv->server) ;
 
     /*****************************************/
     msg.type = MPI_SERVER_FLUSH_FILE;
@@ -1591,7 +1595,7 @@
     nfi_mpi_server_doRequest(server_aux, &msg, (char *)&ret, sizeof(int)) ;
     /*****************************************/
 
-    debug_info("[NFI] nfi_mpi_server_flush(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_flush(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret) ;
 
     return 0;
   }
