@@ -232,8 +232,8 @@
       return 0;
     }
     
-    debug_info("[NFI_LOCAL] workers_init()\n") ;
-    ret = workers_init ( &(serv->wrk->wb), serv->xpn_thread );
+    debug_info("[NFI-LOCAL] nfiworker_init()\n") ;
+    ret = nfiworker_init(serv);
 
     debug_info("[NFI-LOCAL] nfi_local_connect(): end\n") ;
 
@@ -260,11 +260,9 @@
       return 0;
     }
     
-    if (serv->xpn_thread != TH_NOT)
-    {
-      debug_info("[NFI-LOCAL] workers_destroy()\n") ;
-      workers_destroy ( &(serv->wrk->wb) );
-    }
+    // Thread destroy...
+    debug_info("[NFI-LOCAL] nfiworker_destroy()\n") ;
+    nfiworker_destroy(serv);
 
     // free private_info, 'url' string and 'server' string...
     FREE_AND_NULL(serv->ops) ;
@@ -351,13 +349,6 @@
       return -1;
     }
 
-    // do local opendir...
-    if (url[strlen(url)-1] == '/')
-    {
-      res = nfi_local_opendir(serv, url, fho) ;
-      return res;
-    }
-
     // Check fields...
     nfi_local_keepConnected(serv) ;
     if (serv->private_info == NULL) {
@@ -383,7 +374,7 @@
     fh_aux = (struct nfi_local_fhandle *)malloc(sizeof(struct nfi_local_fhandle)) ;
     if (fh_aux == NULL)
     { 
-      free(fho->url) ;
+      FREE_AND_NULL(fho->url) ;
       debug_error("LOCALERR_MEMORY\n") ;
       return -1;
     }
@@ -399,8 +390,8 @@
     if (res < 0)
     {
       debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
-      free(fh_aux) ;
-      free(fho->url) ;
+      FREE_AND_NULL(fh_aux) ;
+      FREE_AND_NULL(fho->url) ;
       return -1;
     }
 
@@ -411,8 +402,8 @@
     if (res < 0)
     {
       debug_error("LOCALERR_GETATTR.\n") ;
-      free(fh_aux) ;
-      free(fho->url) ;
+      FREE_AND_NULL(fh_aux) ;
+      FREE_AND_NULL(fho->url) ;
       return -1 ;
     }
 
@@ -425,8 +416,8 @@
     else
     {
       debug_error("LOCALERR_GETATTR.\n") ;
-      free(fh_aux) ;
-      free(fho->url) ;
+      FREE_AND_NULL(fh_aux) ;
+      FREE_AND_NULL(fho->url) ;
       return -1;
     }
 
@@ -497,7 +488,7 @@
     if (fd < 0)
     {
       debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
-      free(fh_aux) ;
+      FREE_AND_NULL(fh_aux) ;
       return -1;
     }
     fh->server = serv;
@@ -508,7 +499,7 @@
     fh->url = STRING_MISC_StrDup(url) ;
     if (fh->url == NULL)
     {
-      free(fh_aux) ;
+      FREE_AND_NULL(fh_aux) ;
       debug_error("LOCALERR_MEMORY\n") ;
       return -1;
     }
@@ -518,12 +509,12 @@
     if (res < 0)
     {
       debug_error("real_posix_stat fails to stat '%s' in server '%s'.\n", fh_aux->path, serv->server) ;
-      free(fh->url) ;
-      free(fh_aux) ;
+      FREE_AND_NULL(fh->url) ;
+      FREE_AND_NULL(fh_aux) ;
       return -1;
     }
 
-    LOCALtoNFIattr(attr, &st) ;
+    //LOCALtoNFIattr(attr, &st) ;
 
     DEBUG_END();
 
@@ -731,35 +722,60 @@
   }
 
 
-  int nfi_local_rename (__attribute__((__unused__)) struct nfi_server *server, __attribute__((__unused__)) char *old_url, __attribute__((__unused__)) char *new_url )
+  int nfi_local_rename (struct nfi_server *server, char *old_url, char *new_url )
   {
-    DEBUG_BEGIN();
-
-    /*
+    int ret;
     struct nfi_local_server *server_aux;
     struct nfi_local_fhandle *fh_aux;
+    char old_path[PATH_MAX], new_path[PATH_MAX];
 
-    // Check arguments
-    if (server == NULL) {
-        debug_error("server argument is NULL.\n") ;
-        return -1;
+    DEBUG_BEGIN();
+
+    // Check arguments...
+    if (server == NULL)
+    {
+      debug_error("serv argument is NULL.\n") ;
+      return -1;
+    }
+    if (old_url == NULL)
+    {
+      debug_error("old_url argument is NULL.\n") ;
+      return -1;
+    }
+    if (new_url == NULL)
+    {
+      debug_error("new_url argument is NULL.\n") ;
+      return -1;
     }
 
     // Check fields...
-    nfi_local_keepConnected(serv) ;
-    if (serv->private_info == NULL) {
-        debug_error("serv->private_info field is NULL.\n") ;
-        return -1;
+    nfi_local_keepConnected(server) ;
+    if (server->private_info == NULL) {
+      debug_error("serv->private_info field is NULL.\n") ;
+      return -1;
     }
 
-    server_aux = (strcut nfi_local_server *)serv->private_info;
-    if (server_aux == NULL) {
-        debug_error("LOCALERR_MEMORY\n") ;
-        return -1;
+    // Get fields...
+    ret = ParseURL(old_url, NULL, NULL, NULL, server, NULL, old_path);
+    if (ret < 0)
+    {
+      debug_error("LOCALERR_URL.\n") ;
+      return -1 ;
     }
-    */
 
-    // TODO !!
+    ret = ParseURL(new_url, NULL, NULL, NULL, server, NULL, new_path);
+    if (ret < 0)
+    {
+      debug_error("LOCALERR_URL.\n") ;
+      return -1 ;
+    }
+
+    ret = filesystem_rename(old_path, new_path) ;
+    if (ret < 0)
+    {
+      debug_error("filesystem_rename fails to rename '%s' in server %s.\n", old_path, serv->server) ;
+      return -1;
+    }
 
     DEBUG_END();
 
@@ -823,7 +839,7 @@
       return res;
     }
 
-    LOCALtoNFIattr(attr, &st) ;
+    //LOCALtoNFIattr(attr, &st) ;
 
     DEBUG_END();
 
@@ -934,7 +950,7 @@
     if ((res < 0) && (errno != EEXIST))
     {
       debug_error("nfi_local_mkdir: Fail mkdir %s.\n", dir) ;
-      free(fh_aux) ;
+      FREE_AND_NULL(fh_aux) ;
       return -1;
     }
 
@@ -943,12 +959,12 @@
 
     fh->url = STRING_MISC_StrDup(url) ;
     if (fh->url == NULL) {
-      free(fh_aux) ;
+      FREE_AND_NULL(fh_aux) ;
       debug_error("LOCALERR_MEMORY\n") ;
       return -1;
     }
 
-    LOCALtoNFIattr(attr, &st) ;
+    //LOCALtoNFIattr(attr, &st) ;
 
     DEBUG_END();
 
@@ -1004,7 +1020,7 @@
     fh_aux = (struct nfi_local_fhandle *)malloc(sizeof(struct nfi_local_fhandle)) ;
     if (fh_aux == NULL)
     {
-      free(fho->url) ;
+      FREE_AND_NULL(fho->url) ;
       debug_error("LOCALERR_MEMORY\n") ;
       return -1;
     }
@@ -1020,8 +1036,8 @@
     fh_aux->dir = filesystem_opendir(dir) ;
     if (fh_aux->dir == NULL)
     {
-      free(fh_aux) ;
-      free(fho->url) ;
+      FREE_AND_NULL(fh_aux) ;
+      FREE_AND_NULL(fho->url) ;
       debug_error("real_posix_opendir fails to open directory '%s' in server '%s'.\n", dir, serv->server) ;
       return -1;
     }

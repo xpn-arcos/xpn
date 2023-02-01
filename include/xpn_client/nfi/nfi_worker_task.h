@@ -5,6 +5,7 @@
 #include "all_system.h"
 #include "debug_msg.h"
 #include "workers.h"
+#include "nfi.h"
 
 
  #ifdef  __cplusplus

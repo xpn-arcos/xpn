@@ -39,8 +39,10 @@
 
 
     // NEW //////////////////////////////////////////
+    int     nfiworker_init(struct nfi_server *serv) ;
     int     nfiworker_launch ( void (*worker_function)(struct st_th), struct nfi_worker *wrk ) ;
     ssize_t nfiworker_wait   ( struct nfi_worker *wrk ) ;
+    void    nfiworker_destroy(struct nfi_server *serv) ;
 
 
  #ifdef  __cplusplus

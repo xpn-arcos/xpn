@@ -328,22 +328,22 @@
     // initialize MPI Client communication side...
     ret = mpiClient_comm_init(&(server_aux->params)) ;
     if (ret < 0) {
-      free(serv->ops) ;
-      free(server_aux) ;
+      FREE_AND_NULL(serv->ops) ;
+      FREE_AND_NULL(server_aux) ;
       return -1 ;
     }
 
     ret = nfi_mpi_server_connect(serv, url, prt, server, dir) ;
     if (ret < 0) {
-      free(serv->ops) ;
-      free(server_aux) ;
+      FREE_AND_NULL(serv->ops) ;
+      FREE_AND_NULL(server_aux) ;
       return -1 ;
     }
 
     ret = mpiClient_comm_locality (&(server_aux->params)) ;
     if (ret < 0) {
-      free(serv->ops) ;
-      free(server_aux) ;
+      FREE_AND_NULL(serv->ops) ;
+      FREE_AND_NULL(server_aux) ;
       return -1 ;
     }
 
@@ -384,8 +384,8 @@
     memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
     serv->wrk->server = serv ;
 
-    debug_info("[NFI-MPI] workers_init()\n") ;
-    ret = workers_init ( &(serv->wrk->wb), serv->xpn_thread );
+    debug_info("[NFI-MPI] nfiworker_init()\n") ;
+    ret = nfiworker_init(serv);
 
     debug_info("[NFI-MPI] nfi_mpi_server_connect(): end\n") ;
 
@@ -413,11 +413,8 @@
     }
 
     // Thread destroy...
-    if (server_aux->params.xpn_thread != TH_NOT)
-    {
-      debug_info("[NFI-MPI] workers_destroy()\n") ;
-      workers_destroy ( &(serv->wrk->wb) );
-    }
+    debug_info("[NFI-MPI] nfiworker_destroy()\n") ;
+    nfiworker_destroy(serv);
 
     // MPI Disconnect...
     ret = mpiClient_comm_disconnect( &(server_aux->params) ) ;
@@ -522,7 +519,7 @@
     fh_aux = (struct nfi_mpi_server_fhandle *)malloc(sizeof(struct nfi_mpi_server_fhandle)) ;
     if (fh_aux == NULL) {
       mpi_server_err(MPI_SERVERERR_MEMORY) ;
-      free(fho->url) ;
+      FREE_AND_NULL(fho->url) ;
       return -1;
     }
 
@@ -533,11 +530,11 @@
       if (fh_aux->fd < 0)
       {
         debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
-        free(fh_aux) ;
-        free(fho->url) ;
+        FREE_AND_NULL(fh_aux) ;
+        FREE_AND_NULL(fho->url) ;
         return -1;
       }
-      if (server_aux->params.xpn_session ) {
+      if (server_aux->params.xpn_session == 0) {
         filesystem_close(fh_aux->fd);
       }
       strcpy(fh_aux->path, dir) ;
@@ -559,8 +556,8 @@
       if (fh_aux->fd < 0)
       {
         debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
-        free(fh_aux) ;
-        free(fho->url) ;
+        FREE_AND_NULL(fh_aux) ;
+        FREE_AND_NULL(fho->url) ;
         return -1;
       }
       strcpy(fh_aux->path, dir) ;
@@ -618,10 +615,10 @@
       fh_aux->fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
       if (fh_aux->fd < 0) {
         debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
-        free(fh_aux) ;
+        FREE_AND_NULL(fh_aux) ;
         return -1;
       }
-      if (! server_aux->params.xpn_session) {
+      if (server_aux->params.xpn_session == 0) {
         filesystem_close(fh_aux->fd);
       }
       strcpy(fh_aux->path, dir) ;
@@ -649,7 +646,7 @@
     fh->url = strdup(url) ;
     if (fh->url == NULL) {
       mpi_server_err(MPI_SERVERERR_MEMORY) ;
-      free(fh_aux) ;
+      FREE_AND_NULL(fh_aux) ;
       return -1;
     }
 
@@ -970,7 +967,7 @@
     debug_info("[NFI-MPI] nfi_mpi_server_close(ID=%s): begin\n",server_aux->id) ;
 
     // without session -> just return ok
-    if (! server_aux->params.xpn_session)
+    if (server_aux->params.xpn_session == 0)
     {
       debug_info("[NFI-MPI] nfi_mpi_server_close(ID=%s): end\n", server_aux->id) ;
       return 1;
@@ -1007,7 +1004,7 @@
     }
 
     /* free memory */
-    free(fh->priv_fh) ;
+    FREE_AND_NULL(fh->priv_fh) ;
     fh->priv_fh = NULL;
     fh->type    = NFINULL;
     fh->server  = NULL;
@@ -1247,7 +1244,7 @@
       if ((ret < 0) && (errno != EEXIST))
       {
         debug_error("nfi_local_mkdir: Fail mkdir %s.\n", dir) ;
-        free(fh_aux) ;
+        FREE_AND_NULL(fh_aux) ;
         return -1;
       }
       fh_aux->fd = ret; //Cuidado
@@ -1263,7 +1260,7 @@
       if ((fh_aux->fd < 0)&&(errno != EEXIST)) {
         mpi_server_err(MPI_SERVERERR_MKDIR) ;
         fprintf(stderr,"nfi_mpi_server_mkdir: Fail mkdir %s in server %s.\n",dir,serv->server) ;
-        free(fh_aux) ;
+        FREE_AND_NULL(fh_aux) ;
         return -1;
       }
     }
@@ -1274,7 +1271,7 @@
     fh->url = STRING_MISC_StrDup(url) ;
     if(fh->url == NULL){
       mpi_server_err(MPI_SERVERERR_MEMORY) ;
-      free(fh_aux) ;
+      FREE_AND_NULL(fh_aux) ;
       return -1;
     }
 
@@ -1312,7 +1309,7 @@
     fh_aux = (struct nfi_mpi_server_fhandle *)malloc(sizeof(struct nfi_mpi_server_fhandle)) ;
     if (fh_aux == NULL){
       mpi_server_err(MPI_SERVERERR_MEMORY) ;
-      free(fho->url) ;
+      FREE_AND_NULL(fho->url) ;
       return -1;
     }
 
@@ -1323,8 +1320,8 @@
     {
       fh_aux->dir = filesystem_opendir(dir) ;
       if (fh_aux->dir == NULL) {
-        free(fh_aux) ;
-        free(fho->url) ;
+        FREE_AND_NULL(fh_aux) ;
+        FREE_AND_NULL(fho->url) ;
         debug_error("real_posix_opendir fails to open directory '%s' in server '%s'.\n", dir, serv->server) ;
         return -1;
       }
