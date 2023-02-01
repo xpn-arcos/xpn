@@ -88,6 +88,7 @@
 
      case TH_NOT:
         debug_info("[WORKER] worker without threads\n") ;
+        worker_function(*th_arg);
         break ;
 
      default:
