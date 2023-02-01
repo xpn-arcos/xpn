@@ -137,7 +137,7 @@ int xpn_mkdir(const char *path, mode_t perm)
   }
 
   // Control error
-  if(err)
+  /*if(err)
   {
     xpn_err(XPNERR_CREATE);
     free(servers);
@@ -155,6 +155,14 @@ int xpn_mkdir(const char *path, mode_t perm)
     }
     free(vfh_aux->nfih);
 
+    return -1;
+  }*/
+  
+  // Error checking
+  if(err)
+  {
+    xpn_err(XPNERR_REMOVE);
+    free(servers);
     return -1;
   }
 
