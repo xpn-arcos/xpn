@@ -63,6 +63,7 @@ extern int xpn_debug; // In src/xpn/xpn_simple/xpncore/xpn_init.c
     #define DEBUG_NFS_ERR
     #define DEBUG_NFS_ERRW
     // xpn
+    #define XPN_DEBUG
 #endif
 
 #endif

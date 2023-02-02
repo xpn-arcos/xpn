@@ -26,7 +26,7 @@
 
 #include  <stdio.h>
 #include  "xpn/xpn_simple/loc_incl.h"
-#include  "xpn_debug.h"
+#include  "base_debug.h"
 
 int xpn_flushbuf(int c, FILE * stream);
 

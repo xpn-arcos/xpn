@@ -27,7 +27,7 @@
 #include  <stdio.h>
 #include  <stdlib.h>
 #include  "xpn/xpn_simple/loc_incl.h"
-#include  "xpn_debug.h"
+#include  "base_debug.h"
 
 //extern void (*_clean)(void);
 

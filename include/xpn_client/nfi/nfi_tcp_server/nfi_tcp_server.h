@@ -1,11 +1,12 @@
 #ifndef _NFI_TCP_SERVER_H
 #define _NFI_TCP_SERVER_H
 
-#include "tcp_server.h"
-#include "all_system.h"
-#include "base/string_misc.h"
-#include "nfi_tcp_server_err.h"
-#include "nfi.h"
+    #include "tcp_server.h"
+    #include "all_system.h"
+    #include "base/string_misc.h"
+    #include "nfi_tcp_server_err.h"
+    #include "nfi.h"
+    #include "nfi_worker.h"
 
 
 #ifdef  __cplusplus

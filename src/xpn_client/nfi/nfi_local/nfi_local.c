@@ -729,17 +729,18 @@
   }
 
 
-  int nfi_local_rename (struct nfi_server *server, char *old_url, char *new_url )
+  int nfi_local_rename (struct nfi_server *serv, char *old_url, char *new_url )
   {
     int ret;
     struct nfi_local_server *server_aux;
     struct nfi_local_fhandle *fh_aux;
     char old_path[PATH_MAX], new_path[PATH_MAX];
+    char server[PATH_MAX];
 
     DEBUG_BEGIN();
 
     // Check arguments...
-    if (server == NULL)
+    if (serv == NULL)
     {
       debug_error("serv argument is NULL.\n") ;
       return -1;
@@ -756,8 +757,8 @@
     }
 
     // Check fields...
-    nfi_local_keepConnected(server) ;
-    if (server->private_info == NULL) {
+    nfi_local_keepConnected(serv) ;
+    if (serv->private_info == NULL) {
       debug_error("serv->private_info field is NULL.\n") ;
       return -1;
     }
