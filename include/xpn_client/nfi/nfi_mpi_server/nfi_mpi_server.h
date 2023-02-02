@@ -39,6 +39,7 @@
     #include "mpi_server_params.h"
     #include "nfi_mpi_server_err.h"
     #include "nfi.h"
+    #include "nfi_worker.h"
 
 
   /* ... Data structures / Estructuras de datos ........................ */

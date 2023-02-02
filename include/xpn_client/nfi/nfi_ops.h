@@ -2,12 +2,14 @@
 #define _NFI_OPS_H_
 
 
-#include "nfi_worker_task.h"
-
-
 #ifdef  __cplusplus
   extern "C" {
 #endif
+
+
+#include "nfi_worker_task.h"
+#include "nfi_worker.h"
+
 
 enum nfi_work{
   noop        = -1,

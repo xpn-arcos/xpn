@@ -34,6 +34,7 @@
     #include "base/filesystem.h"
     #include "nfi/nfi.h"
     #include "nfi/nfi_local/nfi_local_err.h"
+    #include "nfi_worker.h"
 
 
   /* ... Data structures / Estructuras de datos ........................ */
