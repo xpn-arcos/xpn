@@ -26,7 +26,7 @@
 
 #include  <stdio.h>
 #include  "xpn/xpn_simple/loc_incl.h"
-#include  "xpn_debug.h"
+#include  "base_debug.h"
 
 int xpn_fillbuf(register FILE *stream);
 int xpn_fillbuf_noret(register FILE *stream);

@@ -28,7 +28,7 @@
 #include  <stdlib.h>
 #include  <signal.h>
 #include  "xpn/xpn_simple/loc_incl.h"
-#include  "xpn_debug.h"
+#include  "base_debug.h"
 
 #include <xpn.h>
 

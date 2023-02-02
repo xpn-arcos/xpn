@@ -1,13 +1,16 @@
+
 #ifndef _NFI_H
 #define _NFI_H
-
-
-#include "nfi_worker.h"
-
 
  #ifdef  __cplusplus
     extern "C" {
  #endif
+
+
+#include "all_system.h"
+#include "debug_msg.h"
+#include "workers.h"
+
 
 /* PROTOCOLS */
 /*

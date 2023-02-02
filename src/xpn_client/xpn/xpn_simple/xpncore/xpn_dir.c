@@ -106,7 +106,6 @@ int xpn_mkdir(const char *path, mode_t perm)
   err = 0;
   for(i=0;i<n;i++)
   {
- // ret = nfi_worker_wait(servers[i]->wrk); // OLD
     ret = nfiworker_wait(servers[i]->wrk);
 
     // Control error
@@ -117,7 +116,7 @@ int xpn_mkdir(const char *path, mode_t perm)
       for(j=0; j<i; j++)
       {
         /*
-          XpnGetURLServer(servers[j], abs_path, url_serv);
+        XpnGetURLServer(servers[j], abs_path, url_serv);
         nfi_worker_do_rmdir(servers[j]->wrk, url_serv);
         nfi_worker_wait(servers[j]->wrk);
         */
@@ -128,7 +127,7 @@ int xpn_mkdir(const char *path, mode_t perm)
       if((ret>=0)&&(err))
       {
         /*
-          XpnGetURLServer(servers[i], abs_path, url_serv);
+        XpnGetURLServer(servers[i], abs_path, url_serv);
         nfi_worker_do_rmdir(servers[i]->wrk, url_serv);
         nfi_worker_wait(servers[i]->wrk);
         */
@@ -174,7 +173,7 @@ int xpn_mkdir(const char *path, mode_t perm)
     for(i=0;i<n;i++){
       if(vfh_aux->nfih[i] != NULL){
         if(vfh_aux->nfih[i]->priv_fh != NULL){
-            vfh_aux->nfih[i]->server->ops->nfi_close( vfh_aux->nfih[i]->server, vfh_aux->nfih[i]);
+          vfh_aux->nfih[i]->server->ops->nfi_close( vfh_aux->nfih[i]->server, vfh_aux->nfih[i]);
         }
 
         free(vfh_aux->nfih[i]);
@@ -260,7 +259,6 @@ int xpn_rmdir(const char *path)
   err = 0;
   for (i=0;i<n;i++)
   {
- // ret = nfi_worker_wait(servers[i]->wrk); // OLD
     ret = nfiworker_wait(servers[i]->wrk);
     // Error checking
     if((ret<0)&&(!err)){

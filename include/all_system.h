@@ -1,3 +1,4 @@
+
 /*
    *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
@@ -23,29 +24,6 @@
 
 
 /*
- * Common sizes
- */
-#ifndef KB
-  #define KB  (1024)
-#endif
-#ifndef MB
-  #define MB  (KB*KB)
-#endif
-#ifndef GB
-  #define GB  (KB*KB*KB)
-#endif
-
-#ifndef TRUE
-  #define TRUE 1
-#endif
-#ifndef FALSE
-  #define FALSE 0
-#endif
-#ifndef LARGEFILE_SOURCE
-  #define LARGEFILE_SOURCE 1
-#endif
-
-/*
  * Get config*.h
  */
 #if   defined(HAVE_CONFIG_H)
@@ -55,14 +33,17 @@
 #endif
 
 
-#include "xpn_debug.h"
+/*
+ * Get "base_debug.h"
+ */
+#include "base_debug.h"
 
 
 /*
  * Include common headers
  */
 #ifndef NOT_TO_USE_STDLIB_H
-        #include <stdlib.h>
+  #include <stdlib.h>
 #endif
 #include <stdio.h>
 #include <errno.h>
@@ -75,9 +56,6 @@
 
 #include <semaphore.h>
 
-//#include <linux/linux.h>
-//#include <sys/ioctl.h>
-//#include <dlfcn.h>
 
 /*
  * Include detected headers
@@ -134,9 +112,34 @@
 #endif
 
 #if defined(HAVE_FCNTL_H)
-        #ifndef NOT_TO_USE_FCNTL_H
-            #include <fcntl.h>
-        #endif
+  #ifndef NOT_TO_USE_FCNTL_H
+      #include <fcntl.h>
+  #endif
+#endif
+
+
+/*
+ * Common sizes
+ */
+#ifndef KB
+  #define KB  (1024)
+#endif
+#ifndef MB
+  #define MB  (KB*KB)
+#endif
+#ifndef GB
+  #define GB  (KB*KB*KB)
+#endif
+
+#ifndef TRUE
+  #define TRUE 1
+#endif
+#ifndef FALSE
+  #define FALSE 0
+#endif
+
+#ifndef LARGEFILE_SOURCE
+  #define LARGEFILE_SOURCE 1
 #endif
 
 
@@ -145,14 +148,14 @@
  */
 
 #if defined(HAVE_UNISTD_H)
-          #define NULL_DEVICE_PATH  "/dev/null"
+  #define NULL_DEVICE_PATH  "/dev/null"
 #endif
 #if defined(HAVE_WINDOWS_H)
-          #define NULL_DEVICE_PATH  "NUL"
+  #define NULL_DEVICE_PATH  "NUL"
 #endif
 
 #if !defined(PATH_MAX)
-          #define PATH_MAX  1024
+  #define PATH_MAX  1024
 #endif
 
 #define PROTOCOL_MAXLEN 20
@@ -173,7 +176,6 @@
   #define O_FSYNC          O_SYNC
   #define O_ASYNC          020000
 #endif
-
 
 #endif /* _ALL_H_SYSTEM_H */
 
