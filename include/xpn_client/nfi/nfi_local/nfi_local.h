@@ -44,7 +44,7 @@
 
     struct nfi_local_fhandle{
       char path[PATH_MAX];
-      int fd;
+      int  fd;
       DIR *dir;
     };
 
