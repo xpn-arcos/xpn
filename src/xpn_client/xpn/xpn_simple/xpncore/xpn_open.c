@@ -243,7 +243,6 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   for(j=0;j<n;j++)
   {
     i = XpnGetMetadataPos(mdata_aux, j) ;
- // res = nfi_worker_wait(servers[i]->wrk) ; // OLD
     res = nfiworker_wait(servers[i]->wrk) ;
     // error checking 
     if((res<0)&&(!err))
@@ -473,7 +472,6 @@ int xpn_internal_remove(const char *path)
   err = 0;
   for(i=0;i<n;i++)
   {
- // res = nfi_worker_wait(servers[i]->wrk) ; // OLD
     res = nfiworker_wait(servers[i]->wrk);
     // error checking 
     if((res<0)&&(!err)){
@@ -579,7 +577,6 @@ int xpn_preload(const char *virtual_path, const char *storage_path)
 
   // Wait
   for (int j = 0; j < n; ++j){
- // res = nfi_worker_wait(servers[j]->wrk) ; // OLD
     res = nfiworker_wait(servers[i]->wrk) ;
   }
 
@@ -671,7 +668,6 @@ int xpn_flush(const char *virtual_path, const char *storage_path)
 
   // Wait
   for (int j = 0; j < n; ++j){
- // res = nfi_worker_wait(servers[j]->wrk) ; // OLD
     res = nfiworker_wait(servers[i]->wrk) ;
   }
 
@@ -1078,7 +1074,6 @@ int xpn_rename(const char *path, const char *newpath)
   err = 0;
   for(i=0;i<n;i++)
   {
- // res = nfi_worker_wait(servers[i]->wrk) ; // OLD
     res = nfiworker_wait(servers[i]->wrk) ;
     if((!err)&&(res<0)){
       err = 1;

@@ -384,7 +384,6 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
   err = 0;
   for(i=0; i<n; i++)
   {
- // res_v[i] = nfi_worker_wait(servers[i]->wrk) ; // OLD
     res_v[i] = nfiworker_wait(servers[i]->wrk);
     if (res_v[i] < 0) {
       err = 1;
@@ -700,7 +699,6 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   err = 0;
   for(i=0; i<n; i++)
   {
- // res_v[i] = nfi_worker_wait(servers[i]->wrk) ; // OLD
     res_v[i] = nfiworker_wait(servers[i]->wrk);
     if (res_v[i] < 0) {
       err = 1;

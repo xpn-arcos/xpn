@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
    *
    *  This file is part of Expand.
    *
@@ -195,6 +195,11 @@ int nfi_worker_destroy()
 
 // NEW //////////////////////////////////////////
 
+int nfiworker_init(struct nfi_server *serv)
+{
+  return workers_init ( &(serv->wrk->wb), serv->xpn_thread );
+}
+
 int  nfiworker_launch ( void (*worker_function)(struct st_th), struct nfi_worker *wrk )
 {
   // initialize wrk->warg...
@@ -221,4 +226,10 @@ ssize_t nfiworker_wait ( struct nfi_worker *wrk )
   return ret ;
 }
 
-
+void nfiworker_destroy(struct nfi_server *serv)
+{
+  if (serv->xpn_thread != TH_NOT)
+  {
+    workers_destroy ( &(serv->wrk->wb));
+  }
+}
