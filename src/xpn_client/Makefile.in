@@ -554,9 +554,9 @@ am__nobase_include_HEADERS_DIST = @top_srcdir@/include/config.h \
 	@top_srcdir@/include/all_system.h \
 	@top_srcdir@/include/xpn_client/expand.h \
 	@top_srcdir@/include/xpn_client/expand_lib.h \
-	@top_srcdir@/include/xpn_client/xpn_debug.h \
 	@top_srcdir@/include/base/base_lib.h \
 	@top_srcdir@/include/base/darray.h \
+	@top_srcdir@/include/base/base_debug.h \
 	@top_srcdir@/include/base/debug_msg.h \
 	@top_srcdir@/include/base/debug_tags.h \
 	@top_srcdir@/include/base/dtable.h \
@@ -772,11 +772,11 @@ COMMON_HEADER = @top_srcdir@/include/config.h \
 				@top_srcdir@/include/config_linux.h \
 				@top_srcdir@/include/all_system.h \
 				@top_srcdir@/include/xpn_client/expand.h \
-				@top_srcdir@/include/xpn_client/expand_lib.h \
-				@top_srcdir@/include/xpn_client/xpn_debug.h
+				@top_srcdir@/include/xpn_client/expand_lib.h
 
 BASE_HEADER = @top_srcdir@/include/base/base_lib.h \
 				@top_srcdir@/include/base/darray.h \
+				@top_srcdir@/include/base/base_debug.h \
 				@top_srcdir@/include/base/debug_msg.h \
 				@top_srcdir@/include/base/debug_tags.h \
 				@top_srcdir@/include/base/dtable.h \

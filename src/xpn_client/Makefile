@@ -554,9 +554,9 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/all_system.h \
 	../../include/xpn_client/expand.h \
 	../../include/xpn_client/expand_lib.h \
-	../../include/xpn_client/xpn_debug.h \
 	../../include/base/base_lib.h \
 	../../include/base/darray.h \
+	../../include/base/base_debug.h \
 	../../include/base/debug_msg.h \
 	../../include/base/debug_tags.h \
 	../../include/base/dtable.h \
@@ -772,11 +772,11 @@ COMMON_HEADER = ../../include/config.h \
 				../../include/config_linux.h \
 				../../include/all_system.h \
 				../../include/xpn_client/expand.h \
-				../../include/xpn_client/expand_lib.h \
-				../../include/xpn_client/xpn_debug.h
+				../../include/xpn_client/expand_lib.h
 
 BASE_HEADER = ../../include/base/base_lib.h \
 				../../include/base/darray.h \
+				../../include/base/base_debug.h \
 				../../include/base/debug_msg.h \
 				../../include/base/debug_tags.h \
 				../../include/base/dtable.h \
