@@ -21,7 +21,8 @@
 
 
   /* ... Include / Inclusion ........................................... */
-  #include "nfi/nfi_local/local_lib.h"
+
+  #include "nfi_local.h"
 
 
   /* ... Global Variable / Variable Globales ........................... */
@@ -31,57 +32,8 @@
   /* ... Functions / Funciones ......................................... */
 
   /*
-   * PRIVATE FUNCTIONS TO USE local SERVERS
+   * Communication
    */
-
-  void NFItoLOCALattr ( struct stat *att, struct nfi_attr *nfi_att )
-  {
-    if (nfi_att->at_type == NFIFILE) {
-      att->st_mode = nfi_att->at_mode | S_IFREG;  /* protection */
-    }
-
-    if (nfi_att->at_type == NFIDIR) {
-      att->st_mode = nfi_att->at_mode | S_IFDIR;  /* protection */
-    }
-
-    att->st_nlink = nfi_att->at_nlink;      /* number of hard links   */
-    att->st_uid = nfi_att->at_uid;          /* user ID of owner   */
-    att->st_gid = nfi_att->at_gid;          /* group ID of owner    */
-    att->st_size  = nfi_att->at_size;       /* total size, in bytes   */
-    att->st_blksize = nfi_att->at_blksize;  /* blocksize for filesystem I/O */
-    att->st_blocks  = nfi_att->at_blocks;   /* number of blocks allocated */
-    att->st_atime = nfi_att->at_atime;      /* time of last access    */
-    att->st_mtime = nfi_att->at_mtime;      /* time of last modification  */
-    att->st_ctime = nfi_att->at_ctime;      /* time of last status change */
-  }
-
-  void LOCALtoNFIattr ( struct nfi_attr *nfi_att, struct stat *att )
-  {
-    if (S_ISREG(att->st_mode)) {
-      nfi_att->at_type = NFIFILE;
-    }
-    if (S_ISDIR(att->st_mode)) {
-      nfi_att->at_type = NFIDIR;
-    }
-
-    nfi_att->at_mode  = att->st_mode        /*&(S_IRWXU|S_IRWXG|S_IRWXO)*/;   /* protection   */
-    nfi_att->at_nlink = att->st_nlink;      /* number of hard links   */
-    nfi_att->at_uid   = att->st_uid;        /* user ID of owner   */
-    nfi_att->at_gid   = att->st_gid;        /* group ID of owner    */
-    nfi_att->at_size  = att->st_size;       /* total size, in bytes   */
-    nfi_att->at_blksize = att->st_blksize;  /* blocksize for filesystem I/O */
-    nfi_att->at_blocks  = att->st_blocks;   /* number of blocks allocated */
-    nfi_att->at_atime = att->st_atime;      /* time of last access    */
-    nfi_att->at_mtime = att->st_mtime;      /* time of last modification  */
-    nfi_att->at_ctime = att->st_ctime;      /* time of last status change */
-  }
-
-
-  void LOCALtoNFIInfo(struct nfi_info *nfi_inf, struct nfi_info *local_inf)
-  {
-    //TODO
-  }
-
 
   int nfi_local_keepConnected ( struct nfi_server *serv )
   {
@@ -107,6 +59,59 @@
 
 
   /*
+   * PRIVATE FUNCTIONS TO USE local SERVERS
+   */
+
+  void NFItoLOCALattr ( struct stat *att, struct nfi_attr *nfi_att )
+  {
+    if (nfi_att->at_type == NFIFILE) {
+      att->st_mode = nfi_att->at_mode | S_IFREG;  // protection
+    }
+
+    if (nfi_att->at_type == NFIDIR) {
+      att->st_mode = nfi_att->at_mode | S_IFDIR;  // protection
+    }
+
+    att->st_nlink   = nfi_att->at_nlink;   // number of hard links
+    att->st_uid     = nfi_att->at_uid;     // user ID of owner
+    att->st_gid     = nfi_att->at_gid;     // group ID of owner
+    att->st_size    = nfi_att->at_size;    // total size, in bytes
+    att->st_blksize = nfi_att->at_blksize; // blocksize for filesystem I/O
+    att->st_blocks  = nfi_att->at_blocks;  // number of blocks allocated
+    att->st_atime   = nfi_att->at_atime;   // time of last access
+    att->st_mtime   = nfi_att->at_mtime;   // time of last modification
+    att->st_ctime   = nfi_att->at_ctime;   // time of last status change
+  }
+
+  void LOCALtoNFIattr ( struct nfi_attr *nfi_att, struct stat *att )
+  {
+    if (S_ISREG(att->st_mode)) {
+      nfi_att->at_type = NFIFILE;
+    }
+    if (S_ISDIR(att->st_mode)) {
+      nfi_att->at_type = NFIDIR;
+    }
+
+    nfi_att->at_mode    = att->st_mode;    // &(S_IRWXU|S_IRWXG|S_IRWXO);   // protection
+    nfi_att->at_nlink   = att->st_nlink;   // number of hard links
+    nfi_att->at_uid     = att->st_uid;     // user ID of owner
+    nfi_att->at_gid     = att->st_gid;     // group ID of owner
+    nfi_att->at_size    = att->st_size;    // total size, in bytes
+    nfi_att->at_blksize = att->st_blksize; // blocksize for filesystem I/O
+    nfi_att->at_blocks  = att->st_blocks;  // number of blocks allocated
+    nfi_att->at_atime   = att->st_atime;   // time of last access
+    nfi_att->at_mtime   = att->st_mtime;   // time of last modification
+    nfi_att->at_ctime   = att->st_ctime;   // time of last status change
+  }
+
+
+  void LOCALtoNFIInfo( struct nfi_info *nfi_inf, struct nfi_info *local_inf )
+  {
+    //TODO
+  }
+
+
+  /*
    * PUBLIC FUNCTIONS TO USE LOCAL
    */
 
@@ -119,10 +124,10 @@
     char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
     struct nfi_local_server *server_aux;
 
-    debug_info("[NFI-LOCAL] nfi_local_init: begin\n") ;
+    DEBUG_BEGIN();
 
-    // Check arguments
-    if (NULL == serv) {
+    // check params...
+    if (serv == NULL) {
       debug_error("ERROR: serv argument is NULL.\n") ;
       return -1 ;
     }
@@ -152,12 +157,16 @@
     serv->ops->nfi_closedir = nfi_local_closedir;
     serv->ops->nfi_rmdir    = nfi_local_rmdir;
 
+    //serv->ops->nfi_preload        = nfi_mpi_server_preload;
+    //serv->ops->nfi_flush          = nfi_mpi_server_flush;
+
     serv->ops->nfi_statfs   = nfi_local_statfs;
 
     // ParseURL...
     ret = ParseURL(url,  prt, NULL, NULL, server, NULL, dir) ;
     if (ret < 0)
     {
+      mpi_server_err(LOCALERR_URL) ;
       debug_error("ERROR: nfi_local_init found incorrect URL '%s'.\n", url) ;
       FREE_AND_NULL(serv->ops) ;
       return -1;
@@ -172,10 +181,19 @@
       return -1;
     }
 
-    // Fill serv_aux...
-    bzero(server_aux, sizeof(struct nfi_local_server)) ;
+    // Initialize serv_aux...
+    memset(server_aux, 0, sizeof(struct nfi_local_server)) ;
 
-    //serv->protocol = LOCAL;
+    serv->xpn_thread = TH_NOT ;
+    char *env_thread = getenv("XPN_THREAD");
+    if (env_thread != NULL)
+    {
+      serv->xpn_thread = atoi(env_thread) ;
+    }
+
+
+    // copy 'url' string...
+    //serv->protocol = LOCAL; //TODO: delete
     strcpy(server_aux->path, dir) ;
     serv->private_info = (void *)server_aux;
 
@@ -192,22 +210,60 @@
       debug_error("ERROR: out of memory\n") ;
       return -1;
     }
-    
-    serv->xpn_thread = 0 ;
-    char *env_thread = getenv("XPN_THREAD");
-    if (env_thread != NULL)
-    {
-      serv->xpn_thread = atoi(env_thread) ;
-    }
+
 
     // nfi_worker...
     serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker)) ;
     memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
-    serv->wrk->server = serv ;    
+    serv->wrk->server = serv ;
+
+    debug_info("[NFI-LOCAL] nfiworker_init()\n") ;
+    ret = nfiworker_init(serv);
 
     ret = nfi_local_connect(serv, url, prt, server, dir) ;
+    if (ret < 0) {
+      FREE_AND_NULL(serv->ops) ;
+      FREE_AND_NULL(server_aux) ;
+      return -1 ;
+    }
 
-    debug_info("[NFI-LOCAL] nfi_mpi_local_init(ID=%s): end\n",server_aux->id) ;
+    DEBUG_END();
+
+    // Return OK
+    return 0;
+  }
+
+
+  /************************************************************
+   * Destroy to the server                                    *
+   * **********************************************************/
+  int nfi_local_destroy ( struct nfi_server *serv )
+  {
+    struct nfi_local_server *server_aux;
+
+    DEBUG_BEGIN();
+
+    // Check arguments
+    if (serv == NULL) {
+      return -1;
+    }
+
+    server_aux = (struct nfi_local_server *) (serv->private_info) ;
+    if (server_aux == NULL) {
+      return -1;
+    }
+    
+    // Thread destroy...
+    debug_info("[NFI-LOCAL] nfiworker_destroy()\n") ;
+    nfiworker_destroy(serv);
+
+    // free private_info, 'url' string and 'server' string...
+    FREE_AND_NULL(serv->ops) ;
+    FREE_AND_NULL(serv->private_info) ;
+    FREE_AND_NULL(serv->url) ;
+    FREE_AND_NULL(serv->server) ;
+
+    DEBUG_END();
 
     // Return OK
     return 0;
@@ -222,22 +278,21 @@
     int ret ;
     struct nfi_local_server *server_aux;
 
+    DEBUG_BEGIN();
+
     // check params...
     if (serv == NULL) {
-      return 0;
+      return -1;
     }
 
     server_aux = (struct nfi_local_server *) (serv->private_info) ;
     if (server_aux == NULL) {
-      return 0;
+      return -1;
     }
-    
-    debug_info("[NFI-LOCAL] nfiworker_init()\n") ;
-    ret = nfiworker_init(serv);
 
-    debug_info("[NFI-LOCAL] nfi_local_connect(): end\n") ;
+    DEBUG_END();
 
-    return ret;
+    return 0;
   }
 
 
@@ -248,29 +303,21 @@
   {
     struct nfi_local_server *server_aux;
 
-    debug_info("[NFI-LOCAL] nfi_local_disconnect(): begin\n") 
+    DEBUG_BEGIN();
 
     // Check arguments
     if (serv == NULL) {
-      return 0;
+      return -1;
     }
 
     server_aux = (struct nfi_local_server *) (serv->private_info) ;
     if (server_aux == NULL) {
-      return 0;
+      return -1;
     }
-    
-    // Thread destroy...
-    debug_info("[NFI-LOCAL] nfiworker_destroy()\n") ;
-    nfiworker_destroy(serv);
 
-    // free private_info, 'url' string and 'server' string...
-    FREE_AND_NULL(serv->ops) ;
-    FREE_AND_NULL(serv->private_info) ;
-    FREE_AND_NULL(serv->url) ;
-    FREE_AND_NULL(serv->server) ;
+    FREE_AND_NULL(serv->private_info);
 
-    debug_info("[NFI-LOCAL] nfi_mpi_server_disconnect(): end\n") ;
+    DEBUG_END();
 
     // Return OK
     return 0;
@@ -282,24 +329,24 @@
    ************************************************************/
   int nfi_local_reconnect ( struct nfi_server *serv ) //TODO
   {
-    /* Don't see the serv result */
-    //char server[PATH_MAX], dir[PATH_MAX];
-    //int res;
+    // Don't see the serv result
+    int res;
+    char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_local_server *server_aux;
 
     DEBUG_BEGIN();
 
     // Check arguments
     if (serv == NULL) {
-      return 0;
+      return -1;
     }
 
     server_aux = (struct nfi_local_server *) (serv->private_info) ;
     if (server_aux == NULL) {
-      return 0;
+      return -1;
     }
 
-    /*
+    
     res = ParseURL(serv->url,  NULL, NULL, NULL, server, NULL, dir) ;
     if (res < 0) {
         debug_error("nfi_local_reconnect: incorrect '%s' URL.\n", serv->url) ;
@@ -314,8 +361,7 @@
 
     strcpy(server_aux->path, dir) ;
     serv->private_info = (void *)server_aux;
-    */
-
+    
     DEBUG_END();
 
     // Return OK

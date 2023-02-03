@@ -1,5 +1,5 @@
 
-#include "nfi/nfi_local/local_lib.h"
+#include "nfi_local.h"
 
 extern int errno;
 

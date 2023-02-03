@@ -179,21 +179,22 @@
   void NFItoMPI_SERVERattr ( struct stat *att, struct nfi_attr *nfi_att )
   {
     if (nfi_att->at_type == NFIFILE){
-      att->st_mode = nfi_att->at_mode | S_IFREG;     /* protection */
+      att->st_mode = nfi_att->at_mode | S_IFREG; // protection
     }
 
     if (nfi_att->at_type == NFIDIR){
-      att->st_mode = nfi_att->at_mode | S_IFDIR;     /* protection */
+      att->st_mode = nfi_att->at_mode | S_IFDIR; // protection
     }
 
-    att->st_size         = nfi_att->at_size;      /* size */
-    att->st_uid          = nfi_att->at_uid;       /* user ID of owner */
-    att->st_gid          = nfi_att->at_gid;       /* group ID of owner */
-    att->st_blksize      = nfi_att->at_blksize;   /* blocksize for filesystem I/O */
-    att->st_blocks       = nfi_att->at_blocks;    /* number of blocks allocated */
-    att->st_atime        = nfi_att->at_atime;     /* time of last access */
-    att->st_mtime        = nfi_att->at_mtime;     /* time of last modification */
-    att->st_ctime        = nfi_att->at_ctime;     /* time of last change */
+    att->st_nlink   = nfi_att->at_nlink;   // number of hard links
+    att->st_uid     = nfi_att->at_uid;     // user ID of owner
+    att->st_gid     = nfi_att->at_gid;     // group ID of owner
+    att->st_size    = nfi_att->at_size;    // size
+    att->st_blksize = nfi_att->at_blksize; // blocksize for filesystem I/O
+    att->st_blocks  = nfi_att->at_blocks;  // number of blocks allocated
+    att->st_atime   = nfi_att->at_atime;   // time of last access
+    att->st_mtime   = nfi_att->at_mtime;   // time of last modification
+    att->st_ctime   = nfi_att->at_ctime;   // time of last change
   }
 
   void MPI_SERVERtoNFIattr ( struct nfi_attr *nfi_att, struct stat *att )
@@ -205,18 +206,19 @@
       nfi_att->at_type = NFIDIR;
     }
 
-    nfi_att->at_size    = att->st_size;                             /* size */
-    nfi_att->at_mode    = att->st_mode&(S_IRWXU|S_IRWXG|S_IRWXO) ;  /* protection */
-    nfi_att->at_uid     = att->st_uid;                              /* user ID of owner */
-    nfi_att->at_gid     = att->st_gid;                              /* group ID of owner */
-    nfi_att->at_blksize = att->st_blksize;                          /* blocksize for filesystem I/O*/
-    nfi_att->at_blocks  = att->st_blocks;                           /* number of blocks allocated */
-    nfi_att->at_atime   = att->st_atime;                            /* time of last access */
-    nfi_att->at_mtime   = att->st_mtime;                            /* time of last modification */
-    nfi_att->at_ctime   = att->st_ctime;                            /* time of last change */
+    nfi_att->at_mode    = att->st_mode&(S_IRWXU|S_IRWXG|S_IRWXO) ; // protection
+    nfi_att->at_nlink   = att->st_nlink;                           // number of hard links
+    nfi_att->at_uid     = att->st_uid;                             // user ID of owner
+    nfi_att->at_gid     = att->st_gid;                             // group ID of owner
+    nfi_att->at_size    = att->st_size;                            // total size, in bytes
+    nfi_att->at_blksize = att->st_blksize;                         // blocksize for filesystem I/O
+    nfi_att->at_blocks  = att->st_blocks;                          // number of blocks allocated
+    nfi_att->at_atime   = att->st_atime;                           // time of last access
+    nfi_att->at_mtime   = att->st_mtime;                           // time of last modification
+    nfi_att->at_ctime   = att->st_ctime;                           // time of last change
   }
 
-  void MPI_SERVERtoNFIInfo(struct nfi_info *nfi_inf, struct nfi_info *mpi_server_inf)
+  void MPI_SERVERtoNFIInfo( struct nfi_info *nfi_inf, struct nfi_info *mpi_server_inf )
   {
     //TODO
   }
@@ -226,20 +228,21 @@
    * PUBLIC FUNCTIONS TO USE MPI_SERVER
    */
 
-   /************************************************************
-    * Init Local                                               *
-    ************************************************************/
+  /************************************************************
+   * Init mpi_server                                               *
+   ************************************************************/
   int nfi_mpi_server_init ( char *url, struct nfi_server *serv, struct nfi_attr_server *attr )
   {
     int ret ;
-    struct nfi_mpi_server_server *server_aux;
     char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
+    struct nfi_mpi_server_server *server_aux;
 
-    debug_info("[NFI-MPI] nfi_mpi_server_init: begin\n") ;
+    DEBUG_BEGIN();
 
     // check params...
     if (serv == NULL) {
-      return 0;
+      debug_error("ERROR: serv argument is NULL.\n") ;
+      return -1;
     }
 
     // new nfi_ops with mpi_server functions...
@@ -285,44 +288,38 @@
     server_aux = (struct nfi_mpi_server_server *)malloc(sizeof(struct nfi_mpi_server_server)) ;
     if (server_aux == NULL)
     {
-      mpi_server_err(MPI_SERVERERR_MEMORY) ;
+      debug_error("ERROR: out of memory\n") ;
       FREE_AND_NULL(serv->ops) ;
       return -1;
     }
+
     serv->private_info = (void *)server_aux;
 
     // Initialize params
     memset(&(server_aux->params), 0, sizeof(mpiClient_param_st));
 
     // thread checking
+    server_aux->params.xpn_thread = TH_NOT;
+    serv->xpn_thread = TH_NOT;
     char * env_thread = getenv("XPN_THREAD");
     if (env_thread != NULL)
     {
       server_aux->params.xpn_thread = atoi(env_thread);
       serv->xpn_thread = atoi(env_thread);
     }
-    else
-    {
-      server_aux->params.xpn_thread = TH_NOT;
-      serv->xpn_thread = TH_NOT;
-    }
 
     // Session mode checking
+    server_aux->params.xpn_session = 0;
     char * env_session = getenv("XPN_SESSION");
     if (env_session != NULL) {
       server_aux->params.xpn_session = atoi(env_session);
     }
-    else {
-      server_aux->params.xpn_session = 0;
-    }
 
     // Locality mode checking
+    server_aux->params.xpn_locality = 1;
     char * env_locality = getenv("XPN_LOCALITY");
     if (env_locality != NULL) {
       server_aux->params.xpn_locality = atoi(env_locality);
-    }
-    else {
-      server_aux->params.xpn_locality = 1;
     }
 
     // initialize MPI Client communication side...
@@ -332,6 +329,19 @@
       FREE_AND_NULL(server_aux) ;
       return -1 ;
     }
+
+    // copy 'url' string...
+    serv->url = strdup(url) ;
+    NULL_RET_ERR(serv->url, MPI_SERVERERR_MEMORY) ;
+
+
+    // new server wrk...
+    serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker)) ;
+    memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
+    serv->wrk->server = serv ;
+
+    debug_info("[NFI-MPI] nfiworker_init()\n") ;
+    ret = nfiworker_init(serv);
 
     ret = nfi_mpi_server_connect(serv, url, prt, server, dir) ;
     if (ret < 0) {
@@ -347,61 +357,22 @@
       return -1 ;
     }
 
-    debug_info("[NFI-MPI] nfi_mpi_server_init(ID=%s): end\n",server_aux->id) ;
+    DEBUG_END();
 
     // return OK
     return 0;
   }
 
 
-  /*********************************************************
-   * Connect to the server                                 *
-   * *******************************************************/
-  int nfi_mpi_server_connect(struct nfi_server *serv, char *url, char* prt, char* server, char* dir)
-  {
-    int ret ;
-    struct nfi_mpi_server_server *server_aux;
-
-    // check params...
-    if (serv == NULL) {
-      return 0;
-    }
-
-    server_aux = (struct nfi_mpi_server_server *) (serv->private_info) ;
-    strcpy(server_aux->params.srv_name, server) ;
-
-    ret = mpiClient_comm_connect(&(server_aux->params)) ;
-    if (ret < 0) {
-      return -1 ;
-    }
-
-    // copy 'url' string...
-    serv->url = strdup(url) ;
-    NULL_RET_ERR(serv->url, MPI_SERVERERR_MEMORY) ;
-
-    // new server wrk...
-    serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker)) ;
-    memset(serv->wrk, 0, sizeof(struct nfi_worker)) ;
-    serv->wrk->server = serv ;
-
-    debug_info("[NFI-MPI] nfiworker_init()\n") ;
-    ret = nfiworker_init(serv);
-
-    debug_info("[NFI-MPI] nfi_mpi_server_connect(): end\n") ;
-
-    return 0;
-  }
-
-
   /************************************************************
-   * Disconnect to the server                                 *
+   * Destroy mpi_server                                       *
    * **********************************************************/
-  int nfi_mpi_server_disconnect ( struct nfi_server *serv )
+  int nfi_mpi_server_destroy ( struct nfi_server *serv )
   {
     int ret ;
     struct nfi_mpi_server_server *server_aux;
 
-    debug_info("[NFI-MPI] nfi_mpi_server_disconnect(): begin\n") ;
+    DEBUG_BEGIN();
 
     // check params...
     if (serv == NULL) {
@@ -416,12 +387,6 @@
     debug_info("[NFI-MPI] nfiworker_destroy()\n") ;
     nfiworker_destroy(serv);
 
-    // MPI Disconnect...
-    ret = mpiClient_comm_disconnect( &(server_aux->params) ) ;
-    if (ret < 0) {
-      debug_error("[NFI-MPI]: mpiClient_comm_disconnect fails :-(") ;
-    }
-
     // MPI Finalize...
     ret = mpiClient_comm_destroy( &(server_aux->params) );
     if (ret < 0) {
@@ -435,7 +400,75 @@
     FREE_AND_NULL(serv->server) ;
 
     //serv->protocol = -1;
-    debug_info("[NFI-MPI] nfi_mpi_server_disconnect(): end\n") ;
+    DEBUG_END();
+
+    // return OK
+    return 0;
+  }
+
+
+  /*********************************************************
+   * Connect to the server                                 *
+   * *******************************************************/
+  int nfi_mpi_server_connect(struct nfi_server *serv, char *url, char* prt, char* server, char* dir)
+  {
+    int ret ;
+    struct nfi_mpi_server_server *server_aux;
+
+    DEBUG_BEGIN();
+
+    // check params...
+    if (serv == NULL) {
+      return -1;
+    }
+
+    server_aux = (struct nfi_mpi_server_server *) (serv->private_info) ;
+    if (server_aux == NULL) {
+      return -1;
+    }
+
+
+    strcpy(server_aux->params.srv_name, server) ;
+
+    ret = mpiClient_comm_connect(&(server_aux->params)) ;
+    if (ret < 0) {
+      return -1 ;
+    }
+
+    DEBUG_END();
+
+    return 0;
+  }
+
+
+  /************************************************************
+   * Disconnect to the server                                 *
+   * **********************************************************/
+  int nfi_mpi_server_disconnect ( struct nfi_server *serv )
+  {
+    int ret ;
+    struct nfi_mpi_server_server *server_aux;
+
+    DEBUG_BEGIN();
+
+    // check params...
+    if (serv == NULL) {
+      return 0;
+    }
+    server_aux = (struct nfi_mpi_server_server *)serv->private_info;
+    if (server_aux == NULL) {
+      return 0;
+    }
+
+    // MPI Disconnect...
+    ret = mpiClient_comm_disconnect( &(server_aux->params) ) ;
+    if (ret < 0) {
+      debug_error("[NFI-MPI]: mpiClient_comm_disconnect fails :-(") ;
+    }
+
+    FREE_AND_NULL(serv->private_info);
+
+    DEBUG_END();
 
     // return OK
     return 0;
@@ -447,10 +480,17 @@
    ************************************************************/
   int nfi_mpi_server_reconnect(struct nfi_server *serv)
   {
-    /* Don't see the serv result */
-    char   server[PATH_MAX], dir[PATH_MAX];
+    // Don't see the serv result
     int    ret;
+    char   server[PATH_MAX], dir[PATH_MAX];
     struct nfi_mpi_server_server *server_aux;
+
+    DEBUG_BEGIN();
+
+    // Check arguments
+    if (serv == NULL) {
+      return -1;
+    }
 
     // ParseURL...
     ret = ParseURL(serv->url,  NULL, NULL, NULL, server,  NULL,  dir) ;
@@ -473,6 +513,8 @@
       debug_error("nfi_mpi_server_reconnect: mpiClient_comm_connect fails.\n") ;
       return -1;
     }
+
+    DEBUG_END();
 
     // return OK
     return 0;

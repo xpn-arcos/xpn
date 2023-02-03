@@ -30,34 +30,29 @@ BASE_HEADER=	@top_srcdir@/include/base/base_lib.h \
 				@top_srcdir@/include/base/workers_pool.h \
 				@top_srcdir@/include/base/utils.h
 
-NFI_LOCAL_HEADER=	@top_srcdir@/include/xpn_client/nfi/nfi_local/local_lib.h \
-					@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local_err.h \
+NFI_LOCAL_HEADER=	@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local_err.h \
 					@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local.h
 ### BEGIN OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfi_nfs_err.h \
 					@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
-					@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfs.h \
-					@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfs_lib.h
+					@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfs.h
 ### END OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS3_HEADER=	@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 					@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
-					@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfs3.h \
-					@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfs3_lib.h
+					@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfs3.h
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_HEADER=	@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
 						@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
 						@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
-						@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_lib.h \
 						@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 						@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
 ### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_HEADER=	@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 						@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
-						@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
 						@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
 						@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 ### END OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
