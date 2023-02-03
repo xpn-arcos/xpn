@@ -1,4 +1,4 @@
-#include "mpi_server_lib.h"
+#include "nfi_mpi_server.h"
 
 extern int errno;
 

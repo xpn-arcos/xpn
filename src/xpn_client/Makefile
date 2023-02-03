@@ -578,26 +578,21 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/xpn_client/nfi/nfi_worker_task.h \
 	../../include/xpn_client/nfi/nfi_ops.h \
 	../../include/xpn_client/nfi/nfi_worker.h \
-	../../include/xpn_client/nfi/nfi_local/local_lib.h \
 	../../include/xpn_client/nfi/nfi_local/nfi_local_err.h \
 	../../include/xpn_client/nfi/nfi_local/nfi_local.h \
 	../../include/xpn_client/nfi/nfi_nfs/nfi_nfs_err.h \
 	../../include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
 	../../include/xpn_client/nfi/nfi_nfs/nfs.h \
-	../../include/xpn_client/nfi/nfi_nfs/nfs_lib.h \
 	../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 	../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
 	../../include/xpn_client/nfi/nfi_nfs3/nfs3.h \
-	../../include/xpn_client/nfi/nfi_nfs3/nfs3_lib.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
-	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_lib.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
-	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h \
 	../../include/xpn_client/xpn.h
@@ -794,30 +789,26 @@ BASE_HEADER = ../../include/base/base_lib.h \
 				../../include/base/workers_pool.h \
 				../../include/base/utils.h
 
-NFI_LOCAL_HEADER = ../../include/xpn_client/nfi/nfi_local/local_lib.h \
-					../../include/xpn_client/nfi/nfi_local/nfi_local_err.h \
+NFI_LOCAL_HEADER = ../../include/xpn_client/nfi/nfi_local/nfi_local_err.h \
 					../../include/xpn_client/nfi/nfi_local/nfi_local.h
 
 ### BEGIN OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS_HEADER = ../../include/xpn_client/nfi/nfi_nfs/nfi_nfs_err.h \
 					../../include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
-					../../include/xpn_client/nfi/nfi_nfs/nfs.h \
-					../../include/xpn_client/nfi/nfi_nfs/nfs_lib.h
+					../../include/xpn_client/nfi/nfi_nfs/nfs.h
 
 ### END OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS3_HEADER = ../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 					../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
-					../../include/xpn_client/nfi/nfi_nfs3/nfs3.h \
-					../../include/xpn_client/nfi/nfi_nfs3/nfs3_lib.h
+					../../include/xpn_client/nfi/nfi_nfs3/nfs3.h
 
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
 						../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
 						../../include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
-						../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_lib.h \
 						../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 						../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
 
@@ -825,7 +816,6 @@ NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_c
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 						../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
-						../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
 						../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
 						../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 
