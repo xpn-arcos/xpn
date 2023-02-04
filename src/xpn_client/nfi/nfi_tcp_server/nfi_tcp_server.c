@@ -210,8 +210,9 @@ void TCP_SERVERtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
         nfi_att->at_ctime = att->st_ctime;    /* time of last change */
 }
 
-void TCP_SERVERtoNFIInfo(struct nfi_info *nfi_inf, struct nfi_info *tcp_server_inf)
+void TCP_SERVERtoNFIInfo ( __attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *tcp_server_inf )
 {
+	// TODO
 }
 
 /************************************************************
@@ -1658,7 +1659,7 @@ int nfi_tcp_server_closedir(struct nfi_server *serv,  struct nfi_fhandle *fh)
 }
 
 
-int nfi_tcp_server_statfs(struct nfi_server *serv,  struct nfi_info *inf)
+int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__))  struct nfi_info *inf)
 {/*
   
   struct tcp_server_info tcp_serverinf;

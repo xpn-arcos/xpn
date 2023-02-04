@@ -105,7 +105,7 @@
   }
 
 
-  void LOCALtoNFIInfo( struct nfi_info *nfi_inf, struct nfi_info *local_inf )
+  void LOCALtoNFIInfo( __attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *local_inf )
   {
     //TODO
   }
@@ -166,7 +166,7 @@
     ret = ParseURL(url,  prt, NULL, NULL, server, NULL, dir) ;
     if (ret < 0)
     {
-      mpi_server_err(LOCALERR_URL) ;
+      // mpi_server_err(LOCALERR_URL) ;
       debug_error("ERROR: nfi_local_init found incorrect URL '%s'.\n", url) ;
       FREE_AND_NULL(serv->ops) ;
       return -1;
@@ -273,9 +273,8 @@
   /*********************************************************
    * Connect to the server                                 *
    * *******************************************************/
-  int nfi_local_connect ( struct nfi_server *serv, char *url, char* prt, char* server, char* dir )
+  int nfi_local_connect ( struct nfi_server *serv, __attribute__((__unused__)) char *url, __attribute__((__unused__)) char* prt, __attribute__((__unused__)) char* server, __attribute__((__unused__)) char* dir )
   {
-    int ret ;
     struct nfi_local_server *server_aux;
 
     DEBUG_BEGIN();
@@ -778,8 +777,6 @@
   int nfi_local_rename (struct nfi_server *serv, char *old_url, char *new_url )
   {
     int ret;
-    struct nfi_local_server *server_aux;
-    struct nfi_local_fhandle *fh_aux;
     char old_path[PATH_MAX], new_path[PATH_MAX];
     char server[PATH_MAX];
 
