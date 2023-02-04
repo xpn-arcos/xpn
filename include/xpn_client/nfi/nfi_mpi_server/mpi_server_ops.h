@@ -1,10 +1,13 @@
 #ifndef _MPI_SERVER_OPS_H_
 #define _MPI_SERVER_OPS_H_
 
+
+  #define ASYNC_CLOSE 1
+  #define FILESYSTEM_DLSYM 1
   #include "all_system.h"
   #include "mpi_server_params.h"
-  #include "base/filesystem.h"
   #include "base/utils.h"
+  #include "base/filesystem.h"
 
 
   /*
@@ -14,6 +17,7 @@
 #ifndef MPI_SERVER_ID
   #define MPI_SERVER_ID 32
 #endif
+
 
   /* Operations */
 

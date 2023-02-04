@@ -218,7 +218,7 @@
     nfi_att->at_ctime   = att->st_ctime;                           // time of last change
   }
 
-  void MPI_SERVERtoNFIInfo( struct nfi_info *nfi_inf, struct nfi_info *mpi_server_inf )
+  void MPI_SERVERtoNFIInfo( __attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *mpi_server_inf )
   {
     //TODO
   }
@@ -410,7 +410,7 @@
   /*********************************************************
    * Connect to the server                                 *
    * *******************************************************/
-  int nfi_mpi_server_connect(struct nfi_server *serv, char *url, char* prt, char* server, char* dir)
+  int nfi_mpi_server_connect ( struct nfi_server *serv, __attribute__((__unused__)) char *url, __attribute__((__unused__)) char* prt, char* server, __attribute__((__unused__)) char* dir )
   {
     int ret ;
     struct nfi_mpi_server_server *server_aux;
@@ -1672,7 +1672,7 @@
   }
 
   //TODO
-  int nfi_mpi_server_statfs(struct nfi_server *serv,  struct nfi_info *inf)
+  int nfi_mpi_server_statfs(__attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__))  struct nfi_info *inf)
   {
     /*
       struct mpi_server_info mpi_serverinf;

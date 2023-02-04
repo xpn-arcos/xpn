@@ -618,15 +618,15 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /local_test/src/xpn/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} /home/acaldero/work/xpn/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /local_test/src/xpn/config/missing autoconf
-AUTOHEADER = ${SHELL} /local_test/src/xpn/config/missing autoheader
-AUTOMAKE = ${SHELL} /local_test/src/xpn/config/missing automake-1.16
-AWK = mawk
-CC = /opt/software/install-mpich/bin/mpicc
+AUTOCONF = ${SHELL} /home/acaldero/work/xpn/config/missing autoconf
+AUTOHEADER = ${SHELL} /home/acaldero/work/xpn/config/missing autoheader
+AUTOMAKE = ${SHELL} /home/acaldero/work/xpn/config/missing automake-1.16
+AWK = gawk
+CC = /usr/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
 CFLAGS =     -I../../mxml    -I../../xpn/include    -I../../xpn/include/xpn_client    -I../../xpn/include/base -I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
@@ -638,9 +638,9 @@ DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
-EGREP = /bin/grep -E
+EGREP = /usr/bin/grep -E
 EXEEXT = 
-GREP = /bin/grep
+GREP = /usr/bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
@@ -652,40 +652,40 @@ LIBOBJS =
 LIBS =     -L../../mxml    -L../../xpn/lib -L../../../mxml -L../../../xpn/lib  -lmxml -ldl -lpthread
 LTLIBOBJS = 
 MAKE = make
-MAKEINFO = ${SHELL} /local_test/src/xpn/config/missing makeinfo
-MKDIR_P = /bin/mkdir -p
+MAKEINFO = ${SHELL} /home/acaldero/work/xpn/config/missing makeinfo
+MKDIR_P = /usr/bin/mkdir -p
 M_HEADERS = 
 NFI_MPI_SERVER = nfi_mpi_server
 ### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
-						../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
-						../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c
+			../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
+			../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c
 
 NFI_NFS = 
 NFI_NFS3 = 
 ### END OF NFI_NFS_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 NFI_NFS3_OBJECTS = ../../src/xpn_client/nfi/nfi_nfs3/nfi_nfs3.c \
-					../../src/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.c \
-					../../src/xpn_client/nfi/nfi_nfs3/nfs3.c \
-					../../src/xpn_client/nfi/nfi_nfs3/nfs3_clnt.c \
-					../../src/xpn_client/nfi/nfi_nfs3/nfs3_xdr.c
+			../../src/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.c \
+			../../src/xpn_client/nfi/nfi_nfs3/nfs3.c \
+			../../src/xpn_client/nfi/nfi_nfs3/nfs3_clnt.c \
+			../../src/xpn_client/nfi/nfi_nfs3/nfs3_xdr.c
 
 ### BEGIN OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_OBJECTS BLOCK. Do not remove this line. ###
 NFI_NFS_OBJECTS = ../../src/xpn_client/nfi/nfi_nfs/nfi_nfs.c \
-					../../src/xpn_client/nfi/nfi_nfs/nfi_nfs_err.c \
-					../../src/xpn_client/nfi/nfi_nfs/nfs.c \
-					../../src/xpn_client/nfi/nfi_nfs/nfs_clnt.c \
-					../../src/xpn_client/nfi/nfi_nfs/nfs_xdr.c
+			../../src/xpn_client/nfi/nfi_nfs/nfi_nfs_err.c \
+			../../src/xpn_client/nfi/nfi_nfs/nfs.c \
+			../../src/xpn_client/nfi/nfi_nfs/nfs_clnt.c \
+			../../src/xpn_client/nfi/nfi_nfs/nfs_xdr.c
 
 NFI_TCP_SERVER = nfi_tcp_server
 ### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.c \
-						../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
-						../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.c
+			../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
+			../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.c
 
 
 #############
@@ -706,10 +706,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 2.0
-abs_builddir = /local_test/src/xpn/src/xpn_client
-abs_srcdir = /local_test/src/xpn/src/xpn_client
-abs_top_builddir = /local_test/src/xpn
-abs_top_srcdir = /local_test/src/xpn
+abs_builddir = /home/acaldero/work/xpn/src/xpn_client
+abs_srcdir = /home/acaldero/work/xpn/src/xpn_client
+abs_top_builddir = /home/acaldero/work/xpn
+abs_top_srcdir = /home/acaldero/work/xpn
 ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
@@ -737,7 +737,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /local_test/src/xpn/config/install-sh
+install_sh = ${SHELL} /home/acaldero/work/xpn/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -746,7 +746,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /local_test/bin//xpn
+prefix = /home/acaldero/bin//xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
@@ -790,40 +790,40 @@ BASE_HEADER = ../../include/base/base_lib.h \
 				../../include/base/utils.h
 
 NFI_LOCAL_HEADER = ../../include/xpn_client/nfi/nfi_local/nfi_local_err.h \
-					../../include/xpn_client/nfi/nfi_local/nfi_local.h
+				../../include/xpn_client/nfi/nfi_local/nfi_local.h
 
 ### BEGIN OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS_HEADER = ../../include/xpn_client/nfi/nfi_nfs/nfi_nfs_err.h \
-					../../include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
-					../../include/xpn_client/nfi/nfi_nfs/nfs.h
+				../../include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
+				../../include/xpn_client/nfi/nfi_nfs/nfs.h
 
 ### END OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS3_HEADER = ../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
-					../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
-					../../include/xpn_client/nfi/nfi_nfs3/nfs3.h
+				../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
+				../../include/xpn_client/nfi/nfi_nfs3/nfs3.h
 
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
-						../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
-						../../include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
-						../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
-						../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
+				../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
+				../../include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
+				../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
+				../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
 
 ### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
-						../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
-						../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
-						../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
+				../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
+				../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
+				../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 
 ### END OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
 NFI_HTTP_HEADER = ../../include/xpn_client/nfi/nfi_http/nfi_http_err.h \
-					../../include/xpn_client/nfi/nfi_http/nfi_http.h \
-					../../include/xpn_client/nfi/nfi_http/http_lib.h
+				../../include/xpn_client/nfi/nfi_http/nfi_http.h \
+				../../include/xpn_client/nfi/nfi_http/http_lib.h
 
 ### END OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
@@ -842,31 +842,31 @@ XPN_HEADER = ../../include/xpn_client/xpn.h
 # OBJECTS #
 ###########
 BASE_OBJECTS = ../../src/base/darray.c \
-					../../src/base/dtable.c \
-					../../src/base/math_misc.c \
-					../../src/base/trace_msg.c \
-					../../src/base/debug_msg.c \
-					../../src/base/string_misc.c \
-					../../src/base/time_misc.c \
-					../../src/base/urlstr.c \
-					../../src/base/ns.c \
-					../../src/base/syscall_proxies.c \
-					../../src/base/filesystem.c \
-					../../src/base/workers.c \
-					../../src/base/workers_ondemand.c \
-					../../src/base/workers_pool.c \
-					../../src/base/utils.c
+			../../src/base/dtable.c \
+			../../src/base/math_misc.c \
+			../../src/base/trace_msg.c \
+			../../src/base/debug_msg.c \
+			../../src/base/string_misc.c \
+			../../src/base/time_misc.c \
+			../../src/base/urlstr.c \
+			../../src/base/ns.c \
+			../../src/base/syscall_proxies.c \
+			../../src/base/filesystem.c \
+			../../src/base/workers.c \
+			../../src/base/workers_ondemand.c \
+			../../src/base/workers_pool.c \
+			../../src/base/utils.c
 
 NFI_COMMON_OBJECTS = ../../src/xpn_client/nfi/common/nfi_ops.c \
-					../../src/xpn_client/nfi/common/nfi_worker.c
+			../../src/xpn_client/nfi/common/nfi_worker.c
 
 NFI_LOCAL_OBJECTS = ../../src/xpn_client/nfi/nfi_local/nfi_local.c \
-					../../src/xpn_client/nfi/nfi_local/nfi_local_err.c
+			../../src/xpn_client/nfi/nfi_local/nfi_local_err.c
 
 ### END OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
 NFI_HTTP_OBJECTS = ../../src/xpn_client/nfi/nfi_http/nfi_http.c \
-					../../src/xpn_client/nfi/nfi_http/nfi_http_err.c
+			../../src/xpn_client/nfi/nfi_http/nfi_http_err.c
 
 ### END OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
@@ -957,6 +957,7 @@ XPN2_OBJECTS = ../../src/xpn_client/xpn2/xpn2_close.c \
 
 lib_LIBRARIES = libxpn.a
 libxpn_a_SOURCES = $(BASE_OBJECTS) $(NFI_OBJECTS) $(XPN_OBJECTS) $(XPNI_OBJECTS) $(XPN2_OBJECTS)
+AM_CFLAGS = -DASYNC_CLOSE=1 -DFILESYSTEM_DLSYM=1 
 noinst_HEADERS = $(BASE_HEADER)
 nobase_includedir = $(includedir)/xpn_client
 nobase_include_HEADERS = $(COMMON_HEADER) $(BASE_HEADER) $(NFI_HEADER) $(XPN_HEADER)
