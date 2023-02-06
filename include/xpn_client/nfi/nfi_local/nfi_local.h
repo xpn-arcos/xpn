@@ -78,6 +78,8 @@
     int     nfi_local_rmdir      ( struct nfi_server *server, char *url ) ;
 
     int     nfi_local_statfs     ( struct nfi_server *server, struct nfi_info *inf ) ;
+    //int   nfi_local_preload    ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt ) ;
+    //int   nfi_local_flush      ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt ) ;
 
 
   /* ................................................................... */

@@ -160,7 +160,6 @@
       int ret = nfi_mpi_server_reconnect(serv) ;
       if (ret < 0)
       {
-        /* mpi_server_err() ; not necessary */
         serv->private_info = NULL;
         return -1;
       }
@@ -1065,7 +1064,7 @@
       debug_info("[NFI-MPI] nfi_mpi_server_close(ID=%s): close -> %d \n",server_aux->id,msg.u_st_mpi_server_msg.op_close.fd) ;
     }
 
-    /* free memory */
+    // free memory
     FREE_AND_NULL(fh->priv_fh) ;
     fh->type    = NFINULL;
     fh->server  = NULL;
@@ -1224,7 +1223,7 @@
     {
       req.status = filesystem_stat(fh_aux->path, &(req.attr)) ;
       if (((int) req.status) < 0) {
-        debug_error("nfi_local_getattr: Fail stat %s.\n", fh_aux->path) ;
+        debug_error("nfi_mpi_server_getattr: Fail stat %s.\n", fh_aux->path) ;
         return req.status;
       }
     }
@@ -1273,18 +1272,6 @@
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
   int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh)
   {
     int ret;
@@ -1312,10 +1299,9 @@
       return -1;
     }
 
-    /* private_info file handle */
+    // private_info file handle
     fh_aux = (struct nfi_mpi_server_fhandle *)malloc(sizeof(struct nfi_mpi_server_fhandle)) ;
     NULL_RET_ERR(fh_aux, MPI_SERVERERR_MEMORY) ;
-
     bzero(fh_aux, sizeof(struct nfi_mpi_server_fhandle)) ;
 
     /************** LOCAL *****************/
@@ -1324,7 +1310,7 @@
       ret = filesystem_mkdir(dir, /*attr->at_mode*/ 0777) ;
       if ((ret < 0) && (errno != EEXIST))
       {
-        debug_error("nfi_local_mkdir: Fail mkdir %s.\n", dir) ;
+        debug_error("nfi_mpi_server_mkdir: Fail mkdir %s.\n", dir) ;
         FREE_AND_NULL(fh_aux) ;
         return -1;
       }
@@ -1352,7 +1338,7 @@
         return -1;
       }
 
-            //Get stat
+      //Get stat
       msg.type = MPI_SERVER_GETATTR_FILE;
       strcpy(msg.id, server_aux->id) ;
       strcpy(msg.u_st_mpi_server_msg.op_getattr.path, dir) ;
@@ -1372,16 +1358,21 @@
 
     MPI_SERVERtoNFIattr(attr, &req.attr) ;
 
+    DEBUG_END();
+
     return ret;
   }
 
+
   int nfi_mpi_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho)
   {
-    char dir[PATH_MAX], server[PATH_MAX];
     int ret;
-    struct st_mpi_server_msg msg;
+    char dir[PATH_MAX], server[PATH_MAX];
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
+    struct st_mpi_server_msg msg;
+
+    DEBUG_BEGIN();
 
     // Check arguments...
     NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
@@ -1429,30 +1420,30 @@
 
       unsigned long long aux;
 
-      //nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(fh_aux->dir), sizeof(DIR*)) ; //NEW
-      nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(aux), sizeof(DIR*)) ; //NEW
+      nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(aux), sizeof(DIR*)) ;
       fh_aux->dir = (DIR *)aux;
     }
 
-    //fh_aux->fd = ret;
     strcpy(fh_aux->path, dir) ;
     fho->type = NFIDIR;
-
-    fho->server = NULL;
-    fho->priv_fh = NULL;
     fho->server = serv;
     fho->priv_fh = (void *) fh_aux;
 
-    return 0; //CUIDADO
+    DEBUG_END();
+
+    return 0;
   }
+
 
   int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, char *entry, unsigned char *type)
   {
-    struct dirent *ent;
-    struct st_mpi_server_direntry ret_entry;
-    struct st_mpi_server_msg msg;
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
+    struct st_mpi_server_msg msg;
+    struct st_mpi_server_direntry ret_entry;
+    struct dirent *ent;
+
+    DEBUG_BEGIN();
 
     // Check arguments...
     NULL_RET_ERR(serv,        MPI_SERVERERR_PARAM) ;
@@ -1477,10 +1468,11 @@
       ent = filesystem_readdir(fh_aux->dir) ;
 
       if(ent == NULL){
-          return 1;
+        debug_error("nfi_mpi_server_readdir: readdir") ;
+        return 1;
       }
       if(type==NULL){
-            return 0;
+        return 0;
       }
 
       strcpy(entry, ent->d_name) ;
@@ -1506,8 +1498,11 @@
       *type = ret_entry.ret.d_type;
     }
 
+    DEBUG_END();
+
     return 0;
   }
+
 
   int nfi_mpi_server_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
   {
@@ -1515,6 +1510,8 @@
     struct st_mpi_server_msg msg;
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
+
+    DEBUG_BEGIN();
 
     // Check arguments...
     NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
@@ -1544,20 +1541,24 @@
 
       }
 
-      /* free memory */
+      // free memory
       FREE_AND_NULL(fh->priv_fh) ;
-
     }
+
+    DEBUG_END();
 
     return 0;
   }
 
+
   int nfi_mpi_server_rmdir(struct nfi_server *serv,  char *url)
   {
     int ret;
+    char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_mpi_server_server *server_aux;
     struct st_mpi_server_msg msg;
-    char server[PATH_MAX], dir[PATH_MAX];
+
+    DEBUG_BEGIN();
 
     // Check arguments...
     NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
@@ -1581,7 +1582,7 @@
       ret = filesystem_rmdir(dir) ;
       if (ret < 0)
       {
-        debug_error(stderr,"nfi_local_rmdir: Fail rmdir %s.\n", dir) ;
+        debug_error(stderr,"nfi_mpi_server_rmdir: Fail rmdir %s.\n", dir) ;
         return -1;
       }
     }
@@ -1598,8 +1599,46 @@
       }
     }
 
+    DEBUG_END();
+
     return 0;
   }
+
+
+  int nfi_mpi_server_statfs(__attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__))  struct nfi_info *inf)
+  {
+    DEBUG_BEGIN();
+
+    /*
+    struct mpi_server_info mpi_serverinf;
+    int ret;
+    struct nfi_mpi_server_server *server_aux;
+
+    // Check arguments...
+    NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
+    NULL_RET_ERR(inf,  MPI_SERVERERR_PARAM) ;
+    nfi_mpi_server_keepConnected(serv) ;
+    NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM) ;
+
+    // private_info...
+    server_aux = (struct nfi_mpi_server_server *)serv->private_info;
+
+    ret = mpi_server_statfs(server_aux->fh, &mpi_serverinf, server_aux->cl) ;
+    if (ret <0).{
+      mpi_server_err(MPI_SERVERERR_STATFS) ;
+      return -1;
+    }
+
+    MPItoNFIInfo(inf, &mpi_serverinf) ;
+    */
+
+    //TODO
+
+    DEBUG_END();
+
+    return 0;
+  }
+
 
   int nfi_mpi_server_preload(struct nfi_server *serv, char *url, char *virtual_path, char *storage_path, int opt)
   {
@@ -1607,6 +1646,8 @@
     int ret;
     struct nfi_mpi_server_server *server_aux;
     struct st_mpi_server_msg msg;
+
+    DEBUG_BEGIN();
 
     // Check arguments...
     NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
@@ -1645,8 +1686,11 @@
       printf("[NFI-MPI]Error en el preload\n") ;
     }
 
+    DEBUG_END();
+
     return ret;
   }
+
 
   int nfi_mpi_server_flush ( struct nfi_server *serv,  char *url, char *virtual_path, char *storage_path, int opt )
   {
@@ -1654,6 +1698,8 @@
     int ret;
     struct nfi_mpi_server_server *server_aux;
     struct st_mpi_server_msg msg;
+
+    DEBUG_BEGIN();
 
     // Check arguments...
     NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
@@ -1687,36 +1733,7 @@
     nfi_mpi_server_doRequest(server_aux, &msg, (char *)&ret, sizeof(int)) ;
     /*****************************************/
 
-    debug_info("[NFI-MPI] nfi_mpi_server_flush(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret) ;
-
-    return 0;
-  }
-
-  //TODO
-  int nfi_mpi_server_statfs(__attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__))  struct nfi_info *inf)
-  {
-    /*
-      struct mpi_server_info mpi_serverinf;
-      int ret;
-      struct nfi_mpi_server_server *server_aux;
-
-      // Check arguments...
-      NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
-      NULL_RET_ERR(inf,  MPI_SERVERERR_PARAM) ;
-      nfi_mpi_server_keepConnected(serv) ;
-      NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM) ;
-
-      // private_info...
-      server_aux = (struct nfi_mpi_server_server *)serv->private_info;
-
-      ret = mpi_server_statfs(server_aux->fh, &mpi_serverinf, server_aux->cl) ;
-      if (ret <0).{
-            mpi_server_err(MPI_SERVERERR_STATFS) ;
-            return -1;
-      }
-
-      MPItoNFIInfo(inf, &mpi_serverinf) ;
-    */
+    DEBUG_END();
 
     return 0;
   }
