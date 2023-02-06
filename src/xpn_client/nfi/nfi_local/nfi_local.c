@@ -44,8 +44,8 @@
 #ifdef NFI_DYNAMIC
     if (serv->private_info == NULL)
     {
-      res = nfi_local_reconnect(serv) ;
-      if (res <0)
+      ret = nfi_local_reconnect(serv) ;
+      if (ret <0)
       {
         serv->private_info = NULL;
         return -1;
@@ -134,7 +134,7 @@
 
     // Alloc for serv->ops...
     serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops)) ;
-    NULL_RET_ERR(serv->ops, MPI_SERVERERR_MEMORY) ;
+    NULL_RET_ERR(serv->ops, LOCALERR_MEMORY) ;
 
     // Fill serv->ops...
     bzero(serv->ops, sizeof(struct nfi_ops)) ;
@@ -166,7 +166,7 @@
     ret = ParseURL(url,  prt, NULL, NULL, server, NULL, dir) ;
     if (ret < 0)
     {
-      // mpi_server_err(LOCALERR_URL) ;
+      // local_err(LOCALERR_URL) ;
       debug_error("ERROR: nfi_local_init found incorrect URL '%s'.\n", url) ;
       FREE_AND_NULL(serv->ops) ;
       return -1;
@@ -197,14 +197,14 @@
     strcpy(server_aux->path, dir) ;
     serv->private_info = (void *)server_aux;
 
-    serv->server = STRING_MISC_StrDup(server) ; // server address
+    serv->server = STRING_MISC_StrDup(server) ; // server addrets
     if (serv->server == NULL)
     {
       debug_error("ERROR: out of memory\n") ;
       return -1;
     }
 
-    serv->url = STRING_MISC_StrDup(url) ; // server address
+    serv->url = STRING_MISC_StrDup(url) ; // server addrets
     if (serv->url == NULL)
     {
       debug_error("ERROR: out of memory\n") ;
@@ -328,8 +328,8 @@
    ************************************************************/
   int nfi_local_reconnect ( struct nfi_server *serv ) //TODO
   {
-    // Don't see the serv result
-    int res;
+    // Don't see the serv retult
+    int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_local_server *server_aux;
 
@@ -345,17 +345,16 @@
       return -1;
     }
 
-    
-    res = ParseURL(serv->url,  NULL, NULL, NULL, server, NULL, dir) ;
-    if (res < 0) {
-        debug_error("nfi_local_reconnect: incorrect '%s' URL.\n", serv->url) ;
-        return -1;
+    ret = ParseURL(serv->url,  NULL, NULL, NULL, server, NULL, dir) ;
+    if (ret < 0) {
+      debug_error("nfi_local_reconnect: incorrect '%s' URL.\n", serv->url) ;
+      return -1;
     }
 
     server_aux = (struct nfi_local_server *)malloc(sizeof(struct nfi_local_server)) ;
     if (server_aux == NULL) {
-        debug_error("LOCALERR_MEMORY\n") ;
-        return -1;
+      debug_error("LOCALERR_MEMORY\n") ;
+      return -1;
     }
 
     strcpy(server_aux->path, dir) ;
@@ -374,65 +373,41 @@
 
   int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho )
   {
+    int ret;
     char dir[PATH_MAX], server[PATH_MAX];
-    int res;
-    struct stat st;
-    struct nfi_local_server *server_aux;
     struct nfi_local_fhandle *fh_aux;
 
     DEBUG_BEGIN();
 
     // Check arguments...
-    if (serv == NULL)
-    {
-      debug_error("serv argument is NULL.\n") ;
-      return -1;
-    }
-    if (fho == NULL)
-    {
-      debug_error("fho argument is NULL.\n") ;
-      return -1;
-    }
-
-    // Check fields...
+    NULL_RET_ERR(serv, LOCALERR_PARAM) ;
+    NULL_RET_ERR(fho,  LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
-    if (serv->private_info == NULL) {
-      debug_error("serv->private_info field is NULL.\n") ;
-      return -1;
-    }
+    NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
-    // Get fields...
-    res = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
-    if (res < 0)
+    // from url -> server + dir
+    ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+    if (ret < 0)
     {
-      debug_error("LOCALERR_URL.\n") ;
+      fprintf(stderr,"nfi_local_open: url %s incorrect.\n",url) ;
+      local_err(LOCALERR_URL) ;
       return -1 ;
     }
 
-    fho->url = STRING_MISC_StrDup(url) ;
-    if (fho->url == NULL)
-    {
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
+    fho->url = strdup(url) ;
+    NULL_RET_ERR(fho->url, LOCALERR_MEMORY) ;
 
     fh_aux = (struct nfi_local_fhandle *)malloc(sizeof(struct nfi_local_fhandle)) ;
     if (fh_aux == NULL)
     { 
+      local_err(LOCALERR_MEMORY) ;
       FREE_AND_NULL(fho->url) ;
-      debug_error("LOCALERR_MEMORY\n") ;
       return -1;
     }
 
-    server_aux = (struct nfi_local_server *) serv->private_info;
-    if (server_aux == NULL) {
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
-
-    // Open file...
-    res = filesystem_open(dir, O_RDWR) ;
-    if (res < 0)
+    // Do open
+    fh_aux->fd = filesystem_open2(dir, O_RDWR, S_IRWXU) ;
+    if (fh_aux->fd < 0)
     {
       debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
       FREE_AND_NULL(fh_aux) ;
@@ -440,32 +415,10 @@
       return -1;
     }
 
-    fh_aux->fd = res;
     strcpy(fh_aux->path, dir) ;
 
-    res = filesystem_stat(fh_aux->path, &st) ;
-    if (res < 0)
-    {
-      debug_error("LOCALERR_GETATTR.\n") ;
-      FREE_AND_NULL(fh_aux) ;
-      FREE_AND_NULL(fho->url) ;
-      return -1 ;
-    }
-
-    if (S_ISDIR(st.st_mode)) {
-      fho->type = NFIDIR ;
-    }
-    else if (S_ISREG(st.st_mode)) {
-      fho->type = NFIFILE ;
-    } 
-    else
-    {
-      debug_error("LOCALERR_GETATTR.\n") ;
-      FREE_AND_NULL(fh_aux) ;
-      FREE_AND_NULL(fho->url) ;
-      return -1;
-    }
-
+    fho->type    = NFIFILE;
+    fho->priv_fh = NULL;
     fho->server = serv;
     fho->priv_fh = (void *) fh_aux;
 
@@ -477,81 +430,46 @@
 
   int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh )
   {
+    int ret;
     char server[PATH_MAX], dir[PATH_MAX];
-    int res, fd;
-    struct nfi_local_server *server_aux;
     struct nfi_local_fhandle *fh_aux;
     struct stat st;
 
     DEBUG_BEGIN();
 
-    // Check params
-    if (serv == NULL)
-    {
-      debug_error("serv argument is NULL.\n") ;
-      return -1;
-    }
-    if (attr == NULL)
-    {
-      debug_error("attr argument is NULL.\n") ;
-      return -1;
-    }
-
-    // Check fields...
+    // Check arguments...
+    NULL_RET_ERR(serv, LOCALERR_PARAM) ;
+    NULL_RET_ERR(attr, LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
-    if (serv->private_info == NULL)
+    NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
+
+    // url -> server + dir
+    ret = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
+    if (ret < 0)
     {
-      debug_error("serv->private_info field is NULL.\n") ;
+      fprintf(stderr,"ERROR: nfi_local_create: url %s incorrect.\n",url) ;
+      local_err(LOCALERR_URL) ;
       return -1;
     }
 
-    // Get fields...
-    res = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
-    if (res < 0)
-    {
-      debug_error("nfi_local_create: url '%s' incorrect.\n", url) ;
-      return -1;
-    }
-
+    // private_info file handle
     fh_aux = (struct nfi_local_fhandle *)malloc(sizeof(struct nfi_local_fhandle)) ;
-    if (fh_aux == NULL)
-    {
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
-
+    NULL_RET_ERR(fh_aux, LOCALERR_MEMORY) ;
     bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
-    server_aux = (struct nfi_local_server *) serv->private_info;
-    if (server_aux == NULL)
-    {
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
-
-    // Do create
-    fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
-    if (fd < 0)
+    
+    // Do creat
+    fh_aux->fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
+    if (fh_aux->fd < 0)
     {
       debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
       FREE_AND_NULL(fh_aux) ;
       return -1;
     }
-    fh->server = serv;
-    fh_aux->fd = fd;
-    strcpy(fh_aux->path, dir) ;
-    fh->priv_fh = (void *)fh_aux;
 
-    fh->url = STRING_MISC_StrDup(url) ;
-    if (fh->url == NULL)
-    {
-      FREE_AND_NULL(fh_aux) ;
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
-    
+    // Get stat of the file
     memset(&st, 0, sizeof(struct stat)) ;
-    res = filesystem_stat(fh_aux->path, &st) ;
-    if (res < 0)
+    ret = filesystem_stat(dir, &st) ;
+    if (ret < 0)
     {
       debug_error("real_posix_stat fails to stat '%s' in server '%s'.\n", fh_aux->path, serv->server) ;
       FREE_AND_NULL(fh->url) ;
@@ -559,127 +477,91 @@
       return -1;
     }
 
-    res = filesystem_stat(dir, &st) ;
-    if (res < 0)
+    fh->type   = NFIFILE;
+    fh->server = serv;
+    fh->priv_fh = (void *)fh_aux;
+
+    fh->url = strdup(url) ;
+    if (fh->url == NULL)
     {
-      debug_error("nfi_local_getattr: Fail stat %s.\n", dir) ;
-      return res;
+      local_err(LOCALERR_MEMORY) ;
+      FREE_AND_NULL(fh_aux) ;
+      return -1;
     }
 
     LOCALtoNFIattr(attr, &st) ;
 
     DEBUG_END();
 
-    return fd;
+    return 0;
   }
 
 
   ssize_t nfi_local_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
   {
-    ssize_t new_size;
-    struct nfi_local_server *server_aux;
+    ssize_t ret;
     struct nfi_local_fhandle *fh_aux;
 
     DEBUG_BEGIN();
 
-    // Check params
-    if (serv == NULL)
-    {
-      debug_error("serv argument is NULL.\n") ;
-      return -1;
-    }
-    if (fh == NULL)
-    {
-        debug_error("fh argument is NULL.\n") ;
-        return -1;
-    }
-
-    // Check fields...
+    // Check arguments...
+    NULL_RET_ERR(serv, LOCALERR_PARAM) ;
+    NULL_RET_ERR(fh,   LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
-    if (serv->private_info == NULL)
-    {
-        debug_error("serv->private_info field is NULL.\n") ;
-        return -1;
-    }
+    NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
+
+    // private_info
+    fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
     // Do read
-    fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
-    server_aux = (struct nfi_local_server *) serv->private_info;
-
-    if (fh_aux == NULL)
-    {
-      debug_error("nfi_local_read: fh_aux == NULL\n") ;
-      return -1;
-    }
-    if (server_aux == NULL)
-    {
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
-
     filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
-    new_size = filesystem_read(fh_aux->fd, buffer, size) ;
-    debug_info("read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, new_size)
-    if (new_size < 0)
+    ret = filesystem_read(fh_aux->fd, buffer, size) ;
+
+    debug_info("read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret)
+    if (ret < 0)
     {
-      debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, new_size, errno) ;
+      debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
       return -1;
     }
 
     DEBUG_END();
 
-    return new_size;
+    return ret;
   }
 
   ssize_t nfi_local_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
   {
-    ssize_t new_size;
-    struct nfi_local_server *server_aux;
+    ssize_t ret;
     struct nfi_local_fhandle *fh_aux;
 
     DEBUG_BEGIN();
 
-    // Check params
-    if (serv == NULL)
-    {
-      debug_error("serv argument is NULL.\n") ;
-      return -1;
-    }
-    if (fh == NULL)
-    {
-      debug_error("fh argument is NULL.\n") ;
-      return -1;
+    // Check arguments...
+    if (size == 0){
+      return 0;
     }
 
-    // Check fields...
+    NULL_RET_ERR(serv, LOCALERR_PARAM) ;
+    NULL_RET_ERR(fh,   LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
-    if (serv->private_info == NULL)
-    {
-      debug_error("serv->private_info field is NULL.\n") ;
-      return -1;
-    }
+    NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
-    // Do write
+    // private_info...
     fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
-    server_aux = (struct nfi_local_server *) serv->private_info;
-    if (server_aux == NULL)
-    {
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
-
+    
+    // Do write
     filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
-    new_size = filesystem_write(fh_aux->fd, buffer, size) ;
-    debug_info("write %s off %ld size %zu (ret:%zd)\n", fh->url, (long int)offset, size, new_size);
-    if (new_size < 0)
+    ret = filesystem_write(fh_aux->fd, buffer, size) ;
+    debug_info("write %s off %ld size %zu (ret:%zd)\n", fh->url, (long int)offset, size, ret);
+    if (ret < 0)
     {
-      debug_error("files_posix_write_buffer writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, new_size, errno) ;
+      debug_error("files_posix_write_buffer writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
       return -1;
     }
 
     DEBUG_END();
 
-    return new_size;
+    return ret;
   }
 
 
@@ -689,29 +571,24 @@
 
     DEBUG_BEGIN();
 
-    // Check params
-    if (serv == NULL)
-    {
-      debug_error("serv argument is NULL.\n") ;
-      return -1;
-    }
-    if (fh == NULL)
-    {
-      debug_error("fh argument is NULL.\n") ;
-      return -1;
-    }
+    // Check arguments...
+    NULL_RET_ERR(serv, LOCALERR_PARAM) ;
+    NULL_RET_ERR(fh,   LOCALERR_PARAM) ;
+    nfi_local_keepConnected(serv) ;
+    NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
     
-    // Do close
+    // private_info
     fh_aux = (struct nfi_local_fhandle *) fh->priv_fh ;
+
+    // Do close
     if (fh_aux != NULL)
     {
       filesystem_close(fh_aux->fd) ;
     }
 
-    /* free memory */
+    // free memory
     FREE_AND_NULL(fh->priv_fh) ;
     FREE_AND_NULL(fh->url) ;
-
     fh->type   = NFINULL ;
     fh->server = NULL ;
 
@@ -724,44 +601,29 @@
 
   int nfi_local_remove ( struct nfi_server *serv,  char *url )
   {
+    int ret;
     char server[PATH_MAX], dir[PATH_MAX];
-    int res;
-    struct nfi_local_server *server_aux;
 
     DEBUG_BEGIN();
 
-    // Check arguments
-    if (serv == NULL)
-    {
-      debug_error("serv argument is NULL.\n") ;
-      return -1;
-    }
-
-    // Check fields...
+    // Check arguments...
+    NULL_RET_ERR(serv, LOCALERR_PARAM) ;
+    NULL_RET_ERR(url,  LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
-    if (serv->private_info == NULL)
-    {
-      debug_error("serv->private_info field is NULL.\n") ;
-      return -1;
-    }
+    NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
-    server_aux = (struct nfi_local_server *)serv->private_info;
-    if (server_aux == NULL)
+    // from url -> server + dir
+    ret = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
+    if (ret < 0)
     {
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
-
-    res = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
-    if (res < 0)
-    {
-      debug_error("nfi_local_remove: url '%s' incorrect.\n", url) ;
+      fprintf(stderr,"nfi_local_remove: url %s incorrect.\n",url) ;
+      local_err(LOCALERR_URL) ;
       return -1;
     }
 
     // Do unlink
-    res = filesystem_unlink(dir) ;
-    if (res < 0)
+    ret = filesystem_unlink(dir) ;
+    if (ret < 0)
     {
       debug_error("nfi_local_remove: Fail remove %s in server %s.\n", dir, serv->server) ;
       return -1;
@@ -777,48 +639,32 @@
   int nfi_local_rename (struct nfi_server *serv, char *old_url, char *new_url )
   {
     int ret;
-    char old_path[PATH_MAX], new_path[PATH_MAX];
-    char server[PATH_MAX];
+    char server[PATH_MAX], old_path[PATH_MAX], new_path[PATH_MAX];
 
     DEBUG_BEGIN();
 
     // Check arguments...
-    if (serv == NULL)
-    {
-      debug_error("serv argument is NULL.\n") ;
-      return -1;
-    }
-    if (old_url == NULL)
-    {
-      debug_error("old_url argument is NULL.\n") ;
-      return -1;
-    }
-    if (new_url == NULL)
-    {
-      debug_error("new_url argument is NULL.\n") ;
-      return -1;
-    }
-
-    // Check fields...
+    NULL_RET_ERR(serv,     LOCALERR_PARAM) ;
+    NULL_RET_ERR(old_url,  LOCALERR_PARAM) ;
+    NULL_RET_ERR(new_url,  LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
-    if (serv->private_info == NULL) {
-      debug_error("serv->private_info field is NULL.\n") ;
-      return -1;
-    }
+    NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // Get fields...
     ret = ParseURL(old_url, NULL, NULL, NULL, server, NULL, old_path);
     if (ret < 0)
     {
-      debug_error("LOCALERR_URL.\n") ;
-      return -1 ;
+      fprintf(stderr,"nfi_local_open: url %s incorrect.\n",old_url) ;
+      local_err(LOCALERR_URL) ;
+      return -1;
     }
 
     ret = ParseURL(new_url, NULL, NULL, NULL, server, NULL, new_path);
     if (ret < 0)
     {
-      debug_error("LOCALERR_URL.\n") ;
-      return -1 ;
+      fprintf(stderr,"nfi_local_open: url %s incorrect.\n",new_path) ;
+      local_err(LOCALERR_URL) ;
+      return -1;
     }
 
     ret = filesystem_rename(old_path, new_path) ;
@@ -837,57 +683,29 @@
 
   int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
-    int res;
-    struct stat st;
-    struct nfi_local_server *server_aux;
+    int ret;
     struct nfi_local_fhandle *fh_aux;
+    struct stat st;
 
     DEBUG_BEGIN();
 
-    // Check arguments
-    if (attr == NULL)
-    {
-      debug_error("attr argument is NULL.\n") ;
-      return -1;
-    }
-    if (serv == NULL)
-    {
-      debug_error("serv argument is NULL.\n") ;
-      return -1;
-    }
-    if (fh == NULL)
-    {
-      debug_error("fh argument is NULL.\n") ;
-      return -1;
-    }
-
-    // Check fields...
-    if (fh->priv_fh == NULL)
-    {
-      debug_error("fh->priv_fh argument is NULL.\n") ;
-      return -1;
-    }
+    // check arguments...
+    NULL_RET_ERR(serv,            LOCALERR_PARAM) ;
+    NULL_RET_ERR(fh,              LOCALERR_PARAM) ;
+    NULL_RET_ERR(attr,            LOCALERR_PARAM) ;
+    NULL_RET_ERR(fh->priv_fh,     LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
-    if (serv->private_info == NULL)
-    {
-      debug_error("serv->private_info field is NULL.\n") ;
-      return -1;
-    }
+    NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
+
+    // copy private information...
+    fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
     // Do stat
-    fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
-    server_aux = (struct nfi_local_server *) serv->private_info;
-    if (server_aux == NULL)
-    {
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
-
-    res = filesystem_stat(fh_aux->path, &st) ;
-    if (res < 0)
+    ret = filesystem_stat(fh_aux->path, &st) ;
+    if (ret < 0)
     {
       debug_error("nfi_local_getattr: Fail stat %s.\n", fh_aux->path) ;
-      return res;
+      return ret;
     }
 
     LOCALtoNFIattr(attr, &st) ;
@@ -901,47 +719,20 @@
   int nfi_local_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
     struct stat st;
-    struct nfi_local_server *server_aux;
 
     DEBUG_BEGIN();
 
-    // Check arguments
-    if (attr == NULL)
-    {
-      debug_error("attr argument is NULL.\n") ;
-      return -1;
-    }
-    if (serv == NULL)
-    {
-      debug_error("serv argument is NULL.\n") ;
-      return -1;
-    }
-
-    // CHeck fields...
-    if (fh->priv_fh == NULL)
-    {
-      debug_error("fh->priv_fh argument is NULL.\n") ;
-      return -1;
-    }
-
+    // Check arguments...
+    NULL_RET_ERR(serv, LOCALERR_PARAM) ;
+    NULL_RET_ERR(fh,   LOCALERR_PARAM) ;
+    NULL_RET_ERR(attr, LOCALERR_PARAM) ;
+    NULL_RET_ERR(fh->priv_fh, LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
-    if (serv->private_info == NULL)
-    {
-      debug_error("serv->private_info field is NULL.\n") ;
-      return -1;
-    }
+    NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
-    // Do stat
-    server_aux = (struct nfi_local_server *) serv->private_info;
-    if (server_aux == NULL)
-    {
-      debug_error("LOCALERR_MEMORY\n") ;
-      return -1;
-    }
+    // TODO: setattr
 
     NFItoLOCALattr(&st, attr) ;
-
-    /* TODO: hacer el setattr */
 
     DEBUG_END();
 
@@ -950,12 +741,22 @@
   }
 
 
+
+
+
+
+
+
+
+
+
+
   int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh )
   {
+    int ret;
     char server[PATH_MAX], dir[PATH_MAX];
-    int res;
-    struct stat st;   /* LOCAL attributes */
     struct nfi_local_fhandle *fh_aux;
+    struct stat st;
 
     DEBUG_BEGIN();
 
@@ -980,8 +781,8 @@
     }
 
     // Get fields...
-    res = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
-    if (res < 0)
+    ret = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
+    if (ret < 0)
     {
       debug_error("nfi_local_mkdir: url '%s' incorrect.\n", url) ;
       return -1;
@@ -997,8 +798,8 @@
     bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
 
     // Do mkdir
-    res = filesystem_mkdir(dir, /*attr->at_mode*/ 0777) ;
-    if ((res < 0) && (errno != EEXIST))
+    ret = filesystem_mkdir(dir, /*attr->at_mode*/ 0777) ;
+    if ((ret < 0) && (errno != EEXIST))
     {
       debug_error("nfi_local_mkdir: Fail mkdir %s.\n", dir) ;
       FREE_AND_NULL(fh_aux) ;
@@ -1015,11 +816,11 @@
       return -1;
     }
 
-    res = filesystem_stat(dir, &st) ;
-    if (res < 0)
+    ret = filesystem_stat(dir, &st) ;
+    if (ret < 0)
     {
       debug_error("nfi_local_getattr: Fail stat %s.\n", dir) ;
-      return res;
+      return ret;
     }
 
     LOCALtoNFIattr(attr, &st) ;
@@ -1034,7 +835,7 @@
   int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
   {
     char dir[PATH_MAX], server[PATH_MAX];
-    int res;
+    int ret;
     struct nfi_local_server *server_aux;
     struct nfi_local_fhandle *fh_aux;
 
@@ -1061,8 +862,8 @@
     }
 
     // Get fields...
-    res = ParseURL(url, NULL, NULL, NULL, server, NULL, dir) ;
-    if (res < 0)
+    ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir) ;
+    if (ret < 0)
     {
       debug_error("nfi_local_opendir: url %s incorrect.\n", url) ;
       return -1 ;
@@ -1100,7 +901,7 @@
       return -1;
     }
 
-    fh_aux->fd   = res;
+    fh_aux->fd   = ret;
     strcpy(fh_aux->path, dir) ;
     fho->type    = NFIDIR;
     fho->server  = NULL;
@@ -1216,7 +1017,7 @@
 
   int nfi_local_rmdir ( struct nfi_server *serv,  char *url )
   {
-    int res;
+    int ret;
     char server[PATH_MAX], dir[PATH_MAX];
 
     DEBUG_BEGIN();
@@ -1237,16 +1038,16 @@
     }
 
     // Get fields...
-    res = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
-    if (res < 0)
+    ret = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
+    if (ret < 0)
     {
       debug_error("nfi_local_rmdir: url '%s' incorrect.\n", url) ;
       return -1;
     }
 
     // Do rmdir
-    res = filesystem_rmdir(dir) ;
-    if (res < 0)
+    ret = filesystem_rmdir(dir) ;
+    if (ret < 0)
     {
       debug_error(stderr,"nfi_local_rmdir: Fail rmdir %s.\n", dir) ;
       return -1;
@@ -1266,7 +1067,7 @@
 
     /*
     struct local_info localinf;
-    int res;
+    int ret;
           struct nfi_local_server *server_aux;
 
     // Check params
@@ -1292,8 +1093,8 @@
         debug_error("LOCALERR_MEMORY\n") ;
         return -1;
     }
-    res = local_statfs(server_aux->fh, &localinf, server_aux->cl) ;
-    if (res <0) {
+    ret = local_statfs(server_aux->fh, &localinf, server_aux->cl) ;
+    if (ret <0) {
       debug_error("LOCALERR_STATFS") ;
       return -1;
     }
