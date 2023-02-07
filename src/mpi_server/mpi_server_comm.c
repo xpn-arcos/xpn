@@ -225,7 +225,7 @@
 
     *rank_client_id = status.MPI_SOURCE;
 
-    debug_info("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
+    debug_info("[SERV-COMM] MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
 
     DEBUG_END() ;
 
@@ -292,7 +292,7 @@
       debug_warning("Server[%d]: ERROR: MPI_Recv fails :-(", params->rank) ;
     }
 
-    debug_info("MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
+    debug_info("[SERV-COMM] MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
 
     DEBUG_END() ;
 

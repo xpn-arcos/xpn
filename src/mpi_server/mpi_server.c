@@ -42,11 +42,11 @@
 
     void mpi_server_run ( struct st_th th )
     {
-      debug_info("[WORKERS] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpi_server_op2string(th.type_op), th.type_op);
+      debug_info("[MPI-SERVER] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpi_server_op2string(th.type_op), th.type_op);
 
       mpi_server_do_operation ( &th,  &the_end );
 
-      debug_info("[WORKERS] (ID=%d) end to do operation '%s'\n", th.id, mpi_server_op2string(th.type_op));
+      debug_info("[MPI-SERVER] (ID=%d) end to do operation '%s'\n", th.id, mpi_server_op2string(th.type_op));
     }
 
     void mpi_server_dispatcher ( struct st_th th )
@@ -65,13 +65,13 @@
       {
         ret = mpi_server_comm_read_operation(th.params, th.sd, (char *)&(th.type_op), 1, &(th.rank_client_id));
         if (ret == -1) {
-          debug_info("[WORKERS] ERROR: mpi_server_comm_readdata fail\n") ;
+          debug_info("[MPI-SERVER] ERROR: mpi_server_comm_readdata fail\n") ;
           return;
         }
 
         if (th.type_op == MPI_SERVER_DISCONNECT || th.type_op == MPI_SERVER_FINALIZE)
         {
-          debug_info("[WORKERS] INFO: DISCONNECT received\n");
+          debug_info("[MPI-SERVER] INFO: DISCONNECT received\n");
           disconnect = 1;
 	  continue;
         }
@@ -87,7 +87,7 @@
         workers_launch ( &worker, &th_arg, mpi_server_run );
       }
 
-      debug_info("[WORKERS] mpi_server_worker_run (ID=%d) close\n", th.rank_client_id);
+      debug_info("[MPI-SERVER] mpi_server_worker_run (ID=%d) close\n", th.rank_client_id);
 
       mpiClient_comm_close(th.sd) ;
     }
@@ -130,7 +130,7 @@
       the_end = 0;
       while (!the_end)
       {
-        debug_info("[MAIN] mpi_server_accept_comm()\n") ;
+        debug_info("[MPI-SERVER] mpi_server_accept_comm()\n") ;
 
         params.client = MPI_COMM_NULL ;
 
@@ -141,7 +141,7 @@
 
         ret = mpi_server_comm_read_operation(&params, sd, (char *)&(head.type), 1, &(rank_client_id));
         if (ret == -1) {
-          printf("[MAIN] ERROR: mpi_server_comm_readdata fail\n") ;
+          printf("[MPI-SERVER] ERROR: mpi_server_comm_readdata fail\n") ;
           return -1;
         }
 
@@ -162,9 +162,9 @@
       }
 
       // Wait and finalize for all current workers
-      debug_info("[WORKERS] workers_destroy\n");
+      debug_info("[MPI-SERVER] workers_destroy\n");
       workers_destroy( &worker );
-      debug_info("[MAIN] mpi_server_comm_destroy\n");
+      debug_info("[MPI-SERVER] mpi_server_comm_destroy\n");
       mpi_server_comm_destroy(&params) ;
 
       // Close semaphores
