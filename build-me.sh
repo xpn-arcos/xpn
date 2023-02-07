@@ -1,1 +1,1 @@
-scripts/compile/build-me-xpn.sh
+./scripts/compile/build-me-xpn.sh

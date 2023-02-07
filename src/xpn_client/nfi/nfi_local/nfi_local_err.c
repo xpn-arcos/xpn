@@ -3,7 +3,7 @@
 
 extern int errno;
 
-/* this interface must be changed */
+// TODO: this interface must be changed
 void local_err ( int err )
 {
   switch (err)
