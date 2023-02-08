@@ -302,7 +302,7 @@
     mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) OPEN(%s)=%d\n", params->srv_name, s, fd) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", params->srv_name, s, fd) ;
   }
 
   void mpi_server_op_open_wos ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -320,7 +320,7 @@
     filesystem_close(fd);
 
     // show debug info
-    debug_info("[OPS] (ID=%s) OPEN(%s)=%d\n", params->srv_name, s, fd) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", params->srv_name, s, fd) ;
   }
 
   void mpi_server_op_creat_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -340,7 +340,7 @@
     mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) CREAT(%s)=%d\n", params->srv_name, s, fd) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", params->srv_name, s, fd) ;
   }
 
   void mpi_server_op_creat_wos ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -362,7 +362,7 @@
     filesystem_close(fd);
 
     // show debug info
-    debug_info("[OPS] (ID=%s) CREAT(%s)=%d\n", params->srv_name, s, fd) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", params->srv_name, s, fd) ;
   }
 
   void mpi_server_op_read_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -371,7 +371,7 @@
     char *buffer;
     long  size, diff, to_read, cont ;
 
-    debug_info("[OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n", params->srv_name,
+    debug_info("[MPI-SERVER-OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n", params->srv_name,
                                                                            head->u_st_mpi_server_msg.op_read.fd,
                                                                            (int)head->u_st_mpi_server_msg.op_read.offset,
                                                                            head->u_st_mpi_server_msg.op_read.size) ;
@@ -412,12 +412,12 @@
       }
       // send (how many + data) to client...
       mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_read_req), rank_client_id) ;
-      debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size) ;
+      debug_info("[MPI-SERVER-OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size) ;
 
       // send data to client...
       if (req.size > 0) {
         mpi_server_comm_write_data(params, sd, buffer, req.size, rank_client_id) ;
-        debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name) ;
+        debug_info("[MPI-SERVER-OPS] (ID=%s) op_read: send data\n", params->srv_name) ;
       }
       cont = cont + req.size; //Send bytes
       diff = head->u_st_mpi_server_msg.op_read.size - cont;
@@ -428,7 +428,7 @@
     FREE_AND_NULL(buffer) ;
 
     // debugging information
-    debug_info("[OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",  params->srv_name,
+    debug_info("[MPI-SERVER-OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",  params->srv_name,
                                                                           head->u_st_mpi_server_msg.op_read.fd,
                                                                           (int)head->u_st_mpi_server_msg.op_read.offset,
                                                                           size) ;
@@ -440,7 +440,7 @@
     char *buffer;
     long  size, diff, to_read, cont ;
 
-    debug_info("[OPS] (ID=%s) begin read: path %s offset %d size %d ID=x\n", params->srv_name,
+    debug_info("[MPI-SERVER-OPS] (ID=%s) begin read: path %s offset %d size %d ID=x\n", params->srv_name,
                                                                            head->u_st_mpi_server_msg.op_read.path,
                                                                            (int)head->u_st_mpi_server_msg.op_read.offset,
                                                                            head->u_st_mpi_server_msg.op_read.size) ;
@@ -495,12 +495,12 @@
       }
       // send (how many + data) to client...
       mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_read_req), rank_client_id) ;
-      debug_info("[OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size) ;
+      debug_info("[MPI-SERVER-OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size) ;
 
       // send data to client...
       if (req.size > 0) {
         mpi_server_comm_write_data(params, sd, buffer, req.size, rank_client_id) ;
-        debug_info("[OPS] (ID=%s) op_read: send data\n", params->srv_name) ;
+        debug_info("[MPI-SERVER-OPS] (ID=%s) op_read: send data\n", params->srv_name) ;
       }
       cont = cont + req.size; //Send bytes
       diff = head->u_st_mpi_server_msg.op_read.size - cont;
@@ -513,7 +513,7 @@
     FREE_AND_NULL(buffer) ;
 
     // debugging information
-    debug_info("[OPS] (ID=%s) end READ: path %s offset %d size %d ID=x\n",  params->srv_name,
+    debug_info("[MPI-SERVER-OPS] (ID=%s) end READ: path %s offset %d size %d ID=x\n",  params->srv_name,
                                                                           head->u_st_mpi_server_msg.op_read.path,
                                                                           (int)head->u_st_mpi_server_msg.op_read.offset,
                                                                           size) ;
@@ -525,7 +525,7 @@
     char *buffer;
     int   size, diff, cont, to_write ;
 
-    debug_info("[OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.fd) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.fd) ;
 
     // initialize counters
     cont = 0 ;
@@ -572,7 +572,7 @@
     FREE_AND_NULL(buffer) ;
 
     // for debugging purpouses
-    debug_info("[OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.fd) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.fd) ;
   }
 
   void mpi_server_op_write_wos ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -581,7 +581,7 @@
     char *buffer;
     int   size, diff, cont, to_write ;
 
-    debug_info("[OPS] (ID=%s) begin write: path %s ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.path) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) begin write: path %s ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.path) ;
 
     // initialize counters
     cont = 0 ;
@@ -642,7 +642,7 @@
     FREE_AND_NULL(buffer) ;
 
     // for debugging purpouses
-    debug_info("[OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.fd) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.fd) ;
   }
 
   void mpi_server_op_close_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -658,7 +658,7 @@
     mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) CLOSE(fd=%d)\n", params->srv_name, head->u_st_mpi_server_msg.op_close.fd) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) CLOSE(fd=%d)\n", params->srv_name, head->u_st_mpi_server_msg.op_close.fd) ;
   }
 
   void mpi_server_op_rm ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -677,7 +677,7 @@
     mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
   }
 
   void mpi_server_op_rename ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -699,7 +699,7 @@
     mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
   }
 
   void mpi_server_op_getattr ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -714,7 +714,7 @@
     mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_attr_req), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) GETATTR(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_getattr.path) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_getattr.path) ;
   }
 
   void mpi_server_op_setattr (
@@ -740,10 +740,10 @@
     //TODO
 
     // do setattr
-    debug_info("[OPS] SETATTR operation to be implemented !!\n") ;
+    debug_info("[MPI-SERVER-OPS] SETATTR operation to be implemented !!\n") ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) SETATTR(...)\n", params->srv_name) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) SETATTR(...)\n", params->srv_name) ;
   }
 
 
@@ -760,7 +760,7 @@
     mpi_server_comm_write_data(params, sd,(char *)&ret,sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, s) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, s) ;
   }
 
   void mpi_server_op_opendir ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -778,7 +778,7 @@
     mpi_server_comm_write_data(params, sd, (char *)&aux, (int)sizeof(DIR *), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, s) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, s) ;
   }
 
   void mpi_server_op_readdir ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -802,7 +802,7 @@
     mpi_server_comm_write_data(params, sd,(char *)&ret_entry, sizeof(struct st_mpi_server_direntry), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s) ;
   }
 
   void mpi_server_op_closedir ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -817,7 +817,7 @@
     mpi_server_comm_write_data(params, sd,(char *)&ret, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s) ;
   }
 
   void mpi_server_op_rmdir ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -832,7 +832,7 @@
     mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) RMDIR(%s) \n", params->srv_name, s) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) RMDIR(%s) \n", params->srv_name, s) ;
   }
 
 
@@ -907,7 +907,7 @@
     mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n",  params->srv_name,
+    debug_info("[MPI-SERVER-OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n",  params->srv_name,
                                                         head->u_st_mpi_server_msg.op_preload.virtual_path,
                                                         head->u_st_mpi_server_msg.op_preload.storage_path,
                                                         ret) ;
@@ -977,7 +977,7 @@
     mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_flush.virtual_path) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_flush.virtual_path) ;
   }
 
 
@@ -1002,7 +1002,7 @@
     // </TODO>
 
     // show debug info
-    debug_info("[OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name) ;
 
     mpi_server_comm_write_data(params, sd, (char *)serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
     mpi_server_comm_write_data(params, sd, (char *)params->sem_name_server, PATH_MAX, rank_client_id); // Send one single message
@@ -1016,7 +1016,7 @@
     mpi_server_comm_write_data(params, sd,(char *)head->id, MPI_SERVER_ID, rank_client_id) ;
 
     // show debug info
-    debug_info("[OPS] (ID=%s) GETID(...)\n", params->srv_name) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) GETID(...)\n", params->srv_name) ;
   }
 
 
