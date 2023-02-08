@@ -73,8 +73,7 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
-IFLAGS="    -I../../mxml    -I../../xpn/include    -I../../xpn/include/xpn_client    -I../../xpn/include/base "
-IFLAGS+="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+IFLAGS="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
 LFLAGS="    -L../../mxml    -L../../xpn/lib "
 LFLAGS+="-L../../../mxml -L../../../xpn/lib "
 
