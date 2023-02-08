@@ -685,7 +685,7 @@ int xpn_flush(const char *virtual_path, const char *storage_path)
 /************************* </TODO> ****************************************/
 
 
-int xpn_creat(const char *path, mode_t perm)
+int xpn_simple_creat(const char *path, mode_t perm)
 {
   struct xpn_fh *vfh;
   struct xpn_metadata *mdata;
@@ -809,7 +809,7 @@ int xpn_open(const char *path, int flags , ...)
   return res;
 }
 
-int xpn_close(int fd)
+int xpn_simple_close(int fd)
 {
   int res, i;
 
@@ -906,7 +906,7 @@ int xpn_close(int fd)
   return res;
 }
 
-int xpn_unlink(const char *path)
+int xpn_simple_unlink(const char *path)
 {
   int res;
 
@@ -918,7 +918,7 @@ int xpn_unlink(const char *path)
   return res;
 }
 
-int xpn_rename(const char *path, const char *newpath)
+int xpn_simple_rename(const char *path, const char *newpath)
 {
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
   char newabs_path[PATH_MAX], newurl_serv[PATH_MAX];
@@ -1126,7 +1126,7 @@ int xpn_rename(const char *path, const char *newpath)
   return 0;
 }
 
-int xpn_fstat(int fd, struct stat *sb)
+int xpn_simple_fstat(int fd, struct stat *sb)
 {
   int res;
 
@@ -1148,7 +1148,7 @@ int xpn_fstat(int fd, struct stat *sb)
 }
 
 // FIXME: If the user has already opened the max number of files he is allowed to, then this call will fail with EMFILE.
-int xpn_stat(const char *path, struct stat *sb)
+int xpn_simple_stat(const char *path, struct stat *sb)
 {
   char abs_path[PATH_MAX];
   char abs_path2[PATH_MAX];
@@ -1233,37 +1233,37 @@ int xpn_stat(const char *path, struct stat *sb)
   return res;
 }
 
-int xpn_chown(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group)
+int xpn_simple_chown(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group)
 {
   return 0;
 }
 
-int xpn_fchown(int __attribute__((__unused__)) fd, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group)
+int xpn_simple_fchown(int __attribute__((__unused__)) fd, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group)
 {
   return 0;
 }
 
-int xpn_chmod(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) mode_t mode)
+int xpn_simple_chmod(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) mode_t mode)
 {
   return 0;
 }
 
-int xpn_fchmod(__attribute__((__unused__)) int fd, __attribute__((__unused__)) mode_t mode)
+int xpn_simple_fchmod(__attribute__((__unused__)) int fd, __attribute__((__unused__)) mode_t mode)
 {
   return 0;
 }
 
-int xpn_truncate(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) off_t length)
+int xpn_simple_truncate(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) off_t length)
 {
   return 0;
 }
 
-int xpn_ftruncate(__attribute__((__unused__)) int fd, __attribute__((__unused__)) off_t length)
+int xpn_simple_ftruncate(__attribute__((__unused__)) int fd, __attribute__((__unused__)) off_t length)
 {
   return 0;
 }
 
-int xpn_dup(int fd)
+int xpn_simple_dup(int fd)
 {
   int i;
 
@@ -1289,7 +1289,7 @@ int xpn_dup(int fd)
   return i;
 }
 
-int xpn_dup2(int fd, int fd2)
+int xpn_simple_dup2(int fd, int fd2)
 {
   if((fd > XPN_MAX_FILE-1)||(fd <0)){
     return -1;
@@ -1309,3 +1309,4 @@ int xpn_dup2(int fd, int fd2)
 
   return 0;
 }
+

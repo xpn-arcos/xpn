@@ -67,7 +67,7 @@ int xpn_destroy_servers(struct xpn_partition *part)
 }
   
 
-int xpn_destroy()
+int xpn_simple_destroy ( void )
 {
   int res = 0;
   int i;
@@ -268,7 +268,8 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
   return res;
 }
 
-int xpn_init()
+int xpn_simple_init ( void )
 {
   return xpn_init_partition(NULL);
 }
+
