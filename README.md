@@ -41,7 +41,7 @@ You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
 To build Expand you need to execute:
 ```
 cd $HOME/src
-./xpn/build-me.sh -m <MPICC_PATH> -i <INSTALL_PATH>
+./xpn/build-me -m <MPICC_PATH> -i <INSTALL_PATH>
 ```
 Where:
 * MPICC_PATH is the full path to your mpicc compiler.
@@ -163,7 +163,7 @@ stateDiagram-v2
 (3) To build Expand in this case you need to execute:
    ```
    cd $HOME/src
-   ./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i /opt/xpn
+   ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i /opt/xpn
    ```
 
 
@@ -206,6 +206,6 @@ stateDiagram-v2
 (3) To build Expand in this case you need to execute:
   ```
   cd $HOME/src;
-  ./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
+  ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
   ```
 

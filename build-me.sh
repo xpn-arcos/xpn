@@ -1,1 +1,0 @@
-./scripts/compile/build-me-xpn.sh
