@@ -82,7 +82,9 @@ mkdir -p "$INSTALL_PATH/io500"
 echo " * LZ4: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
+export CC=${MPICC_PATH}
+export MPICC=${MPICC_PATH}
 make clean
-make install
+make
 popd
 

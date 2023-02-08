@@ -63,7 +63,7 @@
       int disconnect = 0;
       while (!disconnect)
       {
-        ret = mpi_server_comm_read_operation(th.params, th.sd, (char *)&(th.type_op), 1, &(th.rank_client_id));
+        ret = mpi_server_comm_read_operation(th.params, (MPI_Comm) th.sd, (char *)&(th.type_op), 1, &(th.rank_client_id));
         if (ret == -1) {
           debug_info("[MPI-SERVER] ERROR: mpi_server_comm_readdata fail\n") ;
           return;
@@ -78,7 +78,7 @@
 
         // Launch worker per operation
         th_arg.params   = &params;
-        th_arg.sd       = th.sd;
+        th_arg.sd       = (MPI_Comm) th.sd;
         th_arg.function = mpi_server_run;
         th_arg.type_op  = th.type_op;
         th_arg.rank_client_id = th.rank_client_id;
@@ -89,7 +89,7 @@
 
       debug_info("[MPI-SERVER] mpi_server_worker_run (ID=%d) close\n", th.rank_client_id);
 
-      mpiClient_comm_close(th.sd) ;
+      mpiClient_comm_close((MPI_Comm)th.sd) ;
     }
 
 
