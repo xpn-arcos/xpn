@@ -20,26 +20,45 @@
    */
 
 
-#include "xpn/xpn_simple/xpn_cwd.h"
+   /* ... Include / Inclusion ........................................... */
 
-struct xpn_cwd xpn_cwddir;
+      #include "xpn.h"
 
-void xpn_init_cwd()
-{
-  xpn_cwddir.xpn_cwd_path[0] ='\0';
-}
 
-char* xpn_simple_getcwd(char *path, size_t size)
-{
-  strncpy(path, xpn_cwddir.xpn_cwd_path, size);
-  return xpn_cwddir.xpn_cwd_path;
-}
+   /* ... Functions / Funciones ......................................... */
 
-int xpn_simple_chdir(char *path)
-{
-  /* comprobar que la particion existe */
-  /* comprobar . y .. */
-  strcpy(xpn_cwddir.xpn_cwd_path ,path);
-  return 0;
-}
+
+/*
+
+      size_t xpn_fread ( void *ptr, size_t size, size_t nmemb, register FILE *stream )
+      {
+      }
+
+      size_t xpn_fwrite ( const void *ptr, size_t size, size_t nmemb, register FILE *stream )
+      {
+      }
+
+      int xpn_fseek(FILE *stream, long int offset, int whence)
+      {
+      }
+
+      long xpn_ftell(FILE *stream)
+      {
+      }
+
+      int xpn_fflush(FILE *stream)
+      {
+      }
+
+      int xpn_preload(const char *virtual_path, const char *storage_path)
+      {
+      }
+
+      int xpn_flush(const char *virtual_path, const char *storage_path)
+      {
+      }
+
+*/
+
+   /* ................................................................... */
 

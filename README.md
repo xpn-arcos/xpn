@@ -69,10 +69,10 @@ The typical executions has 4 main steps:
 
   ```
     cd $HOME/src/xpn/bin
-    ./mk_conf.sh --conf ~/tmp/config.xml \
-                 --machinefile ~/tmp/machinefile \
-                 --part_size 512k \
-                 --part_name xpn \
+    ./mk_conf.sh --conf         ~/tmp/config.xml \
+                 --machinefile  ~/tmp/machinefile \
+                 --part_size    512k \
+                 --part_name    xpn \
                  --storage_path /tmp
   ```
   Where:
@@ -83,10 +83,7 @@ The typical executions has 4 main steps:
 - Then, launch the Expand MPI server (xpn_mpi_server):
 
   ```
-  mpiexec -np <number of processes> \
-          -hostfile <full path to the hostfile> \
-          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-          <INSTALL_PATH>/bin/xpn_mpi_server -ns <nameserver file> -tp &
+  ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
   ```
 
   To use a thread pool to serve the requests add the -tp flag.
@@ -106,10 +103,7 @@ The typical executions has 4 main steps:
 - At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
 
   ```
-  mpiexec -np 1 \
-          -genv XPN_DNS <nameserver file> \
-          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-          <INSTALL_PATH>/bin/xpn_stop_mpi_server -f <server file>
+  ./xpn -v -l <full path to the hostfile>  stop
   ```
     
 Summary:

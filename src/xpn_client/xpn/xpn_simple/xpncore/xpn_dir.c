@@ -23,7 +23,7 @@
 #include "xpn/xpn_simple/xpn_dir.h"
 
 
-int xpn_mkdir(const char *path, mode_t perm)
+int xpn_simple_mkdir(const char *path, mode_t perm)
 {
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
   struct nfi_server **servers;
@@ -212,7 +212,7 @@ int xpn_mkdir(const char *path, mode_t perm)
   return 0;
 }
 
-int xpn_rmdir(const char *path)
+int xpn_simple_rmdir(const char *path)
 {
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
   int ret, err, i, n, pd;
