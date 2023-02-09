@@ -59,9 +59,6 @@
  * Headers 
  */ 
  
-/* Define to 1 if you have the <sys/param.h> header file. */
-#undef HAVE_SYS_PARAM_H
- 
 /* Define if you have <sys/wait.h> that is POSIX.1 compatible.  */ 
 #undef HAVE_SYS_WAIT_H 
  

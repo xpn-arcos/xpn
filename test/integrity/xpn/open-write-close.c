@@ -10,8 +10,8 @@ int main ( int argc, char *argv[] )
 	int  fd1 ;
 	char buffer[BUFF_SIZE] ;
 
-	printf("env XPN_CONF=./xpn.conf\n");
-	setenv("XPN_CONF",  "./xpn.conf", 1);
+	printf("setenv XPN_CONF ./\n");
+	setenv("XPN_CONF", "./", 1);
 
         // xpn-init
 	ret = xpn_init();
@@ -21,8 +21,8 @@ int main ( int argc, char *argv[] )
 	}
 
 	// test 1
-	fd1 = xpn_creat("/P1/test_1", 00777);
-	printf("%d = xpn_creat('%s', %o)\n", ret, "/P1/test_1", 00777);
+	fd1 = xpn_creat("/XPN/test_1", 00777);
+	printf("%d = xpn_creat('%s', %o)\n", ret, "/XPN/test_1", 00777);
 
 	memset(buffer, 'a', BUFF_SIZE) ;
 	printf("memset(buffer, 'a', %d)\n", BUFF_SIZE) ;

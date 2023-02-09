@@ -20,6 +20,11 @@
 	#define FALSE 0
 #endif
 
+/* MAXPATHLEN */
+#ifndef MAXPATHLEN
+	#define MAXPATHLEN 255
+#endif
+
 #ifndef MAX_BUFFER_SIZE
 	#define MAX_BUFFER_SIZE (1*MB)
 #endif

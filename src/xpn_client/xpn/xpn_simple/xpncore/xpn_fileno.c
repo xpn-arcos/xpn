@@ -27,6 +27,6 @@
 
 int xpn_fileno ( FILE *stream )
 {
-  return stream->_fileno;
+	return stream->_fileno;
 }
 

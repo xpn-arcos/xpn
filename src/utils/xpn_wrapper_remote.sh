@@ -1,7 +1,7 @@
 #!/bin/sh
 
-BASE_PATH=$(dirname "$0")
-if [ $(echo "$BASE_PATH" | head -c 1) != "/" ]
+BASE_PATH=$(dirname $0)
+if [ $(echo $BASE_PATH | head -c 1) != "/" ]
 then
 	BASE_PATH="$PWD/$BASE_PATH"
 fi
@@ -16,11 +16,11 @@ then
 	exit
 fi
 
-XPN_CONF="$1"
-XPN_IN="$2"
-XPN_OUT="$3"
+XPN_CONF=$1
+XPN_IN=$2
+XPN_OUT=$3
 shift 3
 
 export XPN_CONF
 
-"$BASE_PATH/xpncat" "$XPN_IN" | $@ | "$BASE_PATH/xpnwriter" "$XPN_OUT"
+$BASE_PATH/xpncat $XPN_IN | $@ | $BASE_PATH/xpnwriter $XPN_OUT
