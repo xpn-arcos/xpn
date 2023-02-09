@@ -227,12 +227,8 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.c \
-	../../src/xpn_client/xpn_fs.c \
-	../../src/xpn_client/xpn_file.c \
-	../../src/xpn_client/xpn_io.c \
-	../../src/xpn_client/xpn_directory.c \
-	../../src/xpn_client/xpn_ffile.c \
-	../../src/xpn_client/xpn_fio.c
+	../../src/xpn_client/xpn_unistd.c \
+	../../src/xpn_client/xpn_stdio.c
 am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/dtable.$(OBJEXT) \
@@ -305,12 +301,8 @@ am__objects_14 = ../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.$(OBJ
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.$(OBJEXT)
-am__objects_15 = ../../src/xpn_client/xpn_fs.$(OBJEXT) \
-	../../src/xpn_client/xpn_file.$(OBJEXT) \
-	../../src/xpn_client/xpn_io.$(OBJEXT) \
-	../../src/xpn_client/xpn_directory.$(OBJEXT) \
-	../../src/xpn_client/xpn_ffile.$(OBJEXT) \
-	../../src/xpn_client/xpn_fio.$(OBJEXT)
+am__objects_15 = ../../src/xpn_client/xpn_unistd.$(OBJEXT) \
+	../../src/xpn_client/xpn_stdio.$(OBJEXT)
 am__objects_16 = $(am__objects_13) $(am__objects_14) $(am__objects_15)
 am_libxpn_a_OBJECTS = $(am__objects_1) $(am__objects_12) \
 	$(am__objects_16)
@@ -345,12 +337,8 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/workers.Po \
 	../../src/base/$(DEPDIR)/workers_ondemand.Po \
 	../../src/base/$(DEPDIR)/workers_pool.Po \
-	../../src/xpn_client/$(DEPDIR)/xpn_directory.Po \
-	../../src/xpn_client/$(DEPDIR)/xpn_ffile.Po \
-	../../src/xpn_client/$(DEPDIR)/xpn_file.Po \
-	../../src/xpn_client/$(DEPDIR)/xpn_fio.Po \
-	../../src/xpn_client/$(DEPDIR)/xpn_fs.Po \
-	../../src/xpn_client/$(DEPDIR)/xpn_io.Po \
+	../../src/xpn_client/$(DEPDIR)/xpn_stdio.Po \
+	../../src/xpn_client/$(DEPDIR)/xpn_unistd.Po \
 	../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po \
 	../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po \
 	../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po \
@@ -772,12 +760,8 @@ XPN_POLICY_OBJECTS = ../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c
 					../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
 					../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.c
 
-XPN_EP_OBJECTS = ../../src/xpn_client/xpn_fs.c \
-					../../src/xpn_client/xpn_file.c \
-					../../src/xpn_client/xpn_io.c \
-					../../src/xpn_client/xpn_directory.c \
-                                        ../../src/xpn_client/xpn_ffile.c \
-					../../src/xpn_client/xpn_fio.c
+XPN_EP_OBJECTS = ../../src/xpn_client/xpn_unistd.c \
+					../../src/xpn_client/xpn_stdio.c
 
 XPN_OBJECTS = $(XPN_CORE_OBJECTS) $(XPN_POLICY_OBJECTS) $(XPN_EP_OBJECTS)
 lib_LIBRARIES = libxpn.a
@@ -1061,22 +1045,10 @@ clean-libLIBRARIES:
 ../../src/xpn_client/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../src/xpn_client/$(DEPDIR)
 	@: > ../../src/xpn_client/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/xpn_fs.$(OBJEXT):  \
+../../src/xpn_client/xpn_unistd.$(OBJEXT):  \
 	../../src/xpn_client/$(am__dirstamp) \
 	../../src/xpn_client/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/xpn_file.$(OBJEXT):  \
-	../../src/xpn_client/$(am__dirstamp) \
-	../../src/xpn_client/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/xpn_io.$(OBJEXT):  \
-	../../src/xpn_client/$(am__dirstamp) \
-	../../src/xpn_client/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/xpn_directory.$(OBJEXT):  \
-	../../src/xpn_client/$(am__dirstamp) \
-	../../src/xpn_client/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/xpn_ffile.$(OBJEXT):  \
-	../../src/xpn_client/$(am__dirstamp) \
-	../../src/xpn_client/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/xpn_fio.$(OBJEXT):  \
+../../src/xpn_client/xpn_stdio.$(OBJEXT):  \
 	../../src/xpn_client/$(am__dirstamp) \
 	../../src/xpn_client/$(DEPDIR)/$(am__dirstamp)
 
@@ -1116,12 +1088,8 @@ include ../../src/base/$(DEPDIR)/utils.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/workers.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/workers_ondemand.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/workers_pool.Po # am--include-marker
-include ../../src/xpn_client/$(DEPDIR)/xpn_directory.Po # am--include-marker
-include ../../src/xpn_client/$(DEPDIR)/xpn_ffile.Po # am--include-marker
-include ../../src/xpn_client/$(DEPDIR)/xpn_file.Po # am--include-marker
-include ../../src/xpn_client/$(DEPDIR)/xpn_fio.Po # am--include-marker
-include ../../src/xpn_client/$(DEPDIR)/xpn_fs.Po # am--include-marker
-include ../../src/xpn_client/$(DEPDIR)/xpn_io.Po # am--include-marker
+include ../../src/xpn_client/$(DEPDIR)/xpn_stdio.Po # am--include-marker
+include ../../src/xpn_client/$(DEPDIR)/xpn_unistd.Po # am--include-marker
 include ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po # am--include-marker
 include ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po # am--include-marker
@@ -1377,12 +1345,8 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/workers.Po
 	-rm -f ../../src/base/$(DEPDIR)/workers_ondemand.Po
 	-rm -f ../../src/base/$(DEPDIR)/workers_pool.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_directory.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_ffile.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_file.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_fio.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_fs.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_io.Po
+	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_stdio.Po
+	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_unistd.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
@@ -1490,12 +1454,8 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/workers.Po
 	-rm -f ../../src/base/$(DEPDIR)/workers_ondemand.Po
 	-rm -f ../../src/base/$(DEPDIR)/workers_pool.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_directory.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_ffile.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_file.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_fio.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_fs.Po
-	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_io.Po
+	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_stdio.Po
+	-rm -f ../../src/xpn_client/$(DEPDIR)/xpn_unistd.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po
 	-rm -f ../../src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po

@@ -764,7 +764,7 @@ off_t xpn_simple_lseek ( int fd, off_t offset, int flag )
       break;
 
     case SEEK_END:
-      if(xpn_fstat(fd, &st)<0)
+      if(xpn_simple_fstat(fd, &st)<0)
       {
         errno = EBADF;
         return (off_t)-1;

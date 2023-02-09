@@ -37,7 +37,7 @@
 
 #include <xpn.h>
 
-FILE * xpn_fopen(const char *name, const char *mode)
+FILE * xpn_simple_fopen(const char *name, const char *mode)
 {
   //register int i;
   int rwmode = 0, rwflags = 0;

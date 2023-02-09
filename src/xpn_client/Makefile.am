@@ -223,12 +223,8 @@ XPN_POLICY_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_poli
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.c
 
-XPN_EP_OBJECTS=		                @top_srcdir@/src/xpn_client/xpn_fs.c \
-					@top_srcdir@/src/xpn_client/xpn_file.c \
-					@top_srcdir@/src/xpn_client/xpn_io.c \
-					@top_srcdir@/src/xpn_client/xpn_directory.c \
-                                        @top_srcdir@/src/xpn_client/xpn_ffile.c \
-					@top_srcdir@/src/xpn_client/xpn_fio.c
+XPN_EP_OBJECTS=		                @top_srcdir@/src/xpn_client/xpn_unistd.c \
+					@top_srcdir@/src/xpn_client/xpn_stdio.c
 
 XPN_OBJECTS=$(XPN_CORE_OBJECTS) $(XPN_POLICY_OBJECTS) $(XPN_EP_OBJECTS)
 
