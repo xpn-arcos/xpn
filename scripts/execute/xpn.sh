@@ -29,6 +29,12 @@ start_mpi_servers() {
         echo " * additional daemon args: ${ARGS}"
     fi
 
+    if [[ ! -f ${HOSTFILE} ]]; then
+        echo ""
+        echo " ERROR: HOSTFILE '${HOSTFILE}' does not exist"
+        exit -1
+    fi
+
     ${BASE_DIR}/mk_conf.sh --conf /tmp/config.xml \
                            --machinefile ${HOSTFILE} \
                            --part_size 512k \
@@ -38,7 +44,25 @@ start_mpi_servers() {
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            src/mpi_server/xpn_mpi_server -ns /tmp/dns.txt &
+            src/mpi_server/xpn_mpi_server -ns /tmp/dns.txt ${ARGS} &
+
+    sleep 3
+
+    if [[ ${RUN_FOREGROUND} == true ]]; then
+        echo "Press 'q' to exit"
+        while : ; do
+            read -n 1 k <&1
+            if [[ $k = q ]] ; then
+                echo
+                echo "Shutting down ..."
+                stop_mpi_servers
+                break
+            else
+                echo "Press 'q' to exit"
+            fi
+        done
+    fi
+
 }
 
 stop_mpi_servers() {
@@ -68,7 +92,7 @@ usage_short() {
 usage_details() {
     echo ""
     echo " This script simplifies the starting and stopping XPN ad-hoc servers."
-    echo " The script looks for the 'xpn.cfg' file in the same directory where"
+    echo " The script looks for the 'xpn_start.cfg' file in the same directory where"
     echo " additional permanent configurations can be set."
     echo ""
     echo " positional arguments:"
@@ -78,9 +102,10 @@ usage_details() {
     echo "     -h, --help               Shows this help message and exits"
     echo "     -a, --args <arguments>   Add various additional daemon arguments."
     echo "     -f, --foreground         Starts the script in the foreground. Daemons are stopped by pressing 'q'."
-    echo "     -c, --config   <path>    Path to configuration file. By defaults looks for a 'xpn.cfg' in this directory."
+    echo "     -c, --config   <path>    Path to configuration file. By defaults looks for a 'xpn_start.cfg' in this directory."
     echo "     -n, --numnodes <n>       XPN servers are started on n nodes."
     echo "     -r, --rootdir  <path>    The rootdir path for XPN daemons."
+    echo "     -l, --hostfile <path>    File with the hosts to be used to execute daemons (one per line)."
     echo "     -v, --verbose            Increase verbosity"
     echo ""
 }
@@ -91,37 +116,40 @@ ACTION=""
 DIR_ROOT="/tmp/"
 NODE_NUM=1
 ARGS=""
-FILE_CONFIG=xpn.cfg
+#FILE_CONFIG=$(dirname "$(readlink -f "$0")")/xpn_start.cfg
+FILE_CONFIG=""
 RUN_FOREGROUND=false
 VERBOSE=false
 HOSTFILE=machinefile
 
 ## get arguments
-while getopts "r:n:a:c:fvh" opt; do
+while getopts "r:n:a:c:l:fvh" opt; do
     case "${opt}" in
-	  r) DIR_ROOT=${OPTARG}
-             ;;
-          n) NODE_NUM=${OPTARG}
-             ;;
-          a) ARGS=${OPTARG}
-             ;;
-          c) FILE_CONFIG=${OPTARG}
-             ;;
-          f) RUN_FOREGROUND=true
-             ;;
-          v) VERBOSE=true
-             ;;
-          h) usage_short
-             usage_details
-	     exit
-             ;;
+  	  r) DIR_ROOT=${OPTARG}
+         ;;
+      n) NODE_NUM=${OPTARG}
+         ;;
+      a) ARGS=${OPTARG}
+         ;;
+      c) FILE_CONFIG=${OPTARG}
+         ;;
+      f) RUN_FOREGROUND=true
+         ;;
+      l) HOSTFILE=${OPTARG}
+         ;;
+      v) VERBOSE=true
+         ;;
+      h) usage_short
+         usage_details
+  	     exit
+         ;;
     esac
 done
 
 shift $((OPTIND - 1))
 ACTION=$*
 
-# load xpn.cfg
+# load xpn_start.cfg
 if [ -f "$FILE_CONFIG" ]; then
      source "$FILE_CONFIG"
 fi
