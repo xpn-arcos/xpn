@@ -177,7 +177,11 @@ am__libxpn_a_SOURCES_DIST = @top_srcdir@/src/base/darray.c \
 	@top_srcdir@/src/base/urlstr.c @top_srcdir@/src/base/ns.c \
 	@top_srcdir@/src/base/syscall_proxies.c \
 	@top_srcdir@/src/base/filesystem.c \
+	@top_srcdir@/src/base/workers.c \
+	@top_srcdir@/src/base/workers_ondemand.c \
+	@top_srcdir@/src/base/workers_pool.c \
 	@top_srcdir@/src/base/utils.c \
+	@top_srcdir@/src/xpn_client/nfi/common/nfi_ops.c \
 	@top_srcdir@/src/xpn_client/nfi/common/nfi_worker.c \
 	@top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local.c \
 	@top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local_err.c \
@@ -223,55 +227,8 @@ am__libxpn_a_SOURCES_DIST = @top_srcdir@/src/base/darray.c \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.c \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_fit.c \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_fmeta.c \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_fsit.c \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_file.c \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_dir.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_close.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_destroy.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_exportFile.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_importFile.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_init.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_lseek.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_metaData.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_open.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_read.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_register.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_write.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_opendir.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_close.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_destroy.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_init.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_open.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_read.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_register.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_write.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_importFile.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_exportFile.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_lseek.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_opendir.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_close.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_destroy.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_exportFile.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_importFile.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_init.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_lseek.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_open.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_read.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_register.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_write.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_opendir.c \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_elog.c \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_close.c \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_destroy.c \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_init.c \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_open.c \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_creat.c \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_read.c \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_write.c \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_ioctl.c \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_lseek.c
+	@top_srcdir@/src/xpn_client/xpn_unistd.c \
+	@top_srcdir@/src/xpn_client/xpn_stdio.c
 am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_1 = @top_srcdir@/src/base/darray.$(OBJEXT) \
 	@top_srcdir@/src/base/dtable.$(OBJEXT) \
@@ -284,8 +241,12 @@ am__objects_1 = @top_srcdir@/src/base/darray.$(OBJEXT) \
 	@top_srcdir@/src/base/ns.$(OBJEXT) \
 	@top_srcdir@/src/base/syscall_proxies.$(OBJEXT) \
 	@top_srcdir@/src/base/filesystem.$(OBJEXT) \
+	@top_srcdir@/src/base/workers.$(OBJEXT) \
+	@top_srcdir@/src/base/workers_ondemand.$(OBJEXT) \
+	@top_srcdir@/src/base/workers_pool.$(OBJEXT) \
 	@top_srcdir@/src/base/utils.$(OBJEXT)
 am__objects_2 =  \
+	@top_srcdir@/src/xpn_client/nfi/common/nfi_ops.$(OBJEXT) \
 	@top_srcdir@/src/xpn_client/nfi/common/nfi_worker.$(OBJEXT)
 am__objects_3 =  \
 	@top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local.$(OBJEXT) \
@@ -340,60 +301,11 @@ am__objects_14 = @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cw
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.$(OBJEXT) \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.$(OBJEXT) \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.$(OBJEXT)
-am__objects_15 = $(am__objects_13) $(am__objects_14)
-am__objects_16 =  \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_fit.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_fmeta.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_fsit.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_file.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/common/xpni_dir.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_close.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_destroy.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_exportFile.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_importFile.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_init.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_lseek.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_metaData.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_open.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_read.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_register.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_write.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_opendir.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_close.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_destroy.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_init.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_open.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_read.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_register.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_write.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_importFile.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_exportFile.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_lseek.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_opendir.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_close.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_destroy.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_exportFile.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_importFile.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_init.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_lseek.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_open.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_read.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_register.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_write.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_opendir.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_elog.$(OBJEXT)
-am__objects_17 =  \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_close.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_destroy.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_init.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_open.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_creat.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_read.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_write.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_ioctl.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpn2/xpn2_lseek.$(OBJEXT)
+am__objects_15 = @top_srcdir@/src/xpn_client/xpn_unistd.$(OBJEXT) \
+	@top_srcdir@/src/xpn_client/xpn_stdio.$(OBJEXT)
+am__objects_16 = $(am__objects_13) $(am__objects_14) $(am__objects_15)
 am_libxpn_a_OBJECTS = $(am__objects_1) $(am__objects_12) \
-	$(am__objects_15) $(am__objects_16) $(am__objects_17)
+	$(am__objects_16)
 libxpn_a_OBJECTS = $(am_libxpn_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -422,6 +334,12 @@ am__depfiles_remade = @top_srcdir@/src/base/$(DEPDIR)/darray.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/urlstr.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/utils.Po \
+	@top_srcdir@/src/base/$(DEPDIR)/workers.Po \
+	@top_srcdir@/src/base/$(DEPDIR)/workers_ondemand.Po \
+	@top_srcdir@/src/base/$(DEPDIR)/workers_pool.Po \
+	@top_srcdir@/src/xpn_client/$(DEPDIR)/xpn_stdio.Po \
+	@top_srcdir@/src/xpn_client/$(DEPDIR)/xpn_unistd.Po \
+	@top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po \
 	@top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po \
 	@top_srcdir@/src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po \
 	@top_srcdir@/src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po \
@@ -466,56 +384,7 @@ am__depfiles_remade = @top_srcdir@/src/base/$(DEPDIR)/darray.Po \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_opendir.Po \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_rw.Po \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_setbuf.Po \
-	@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_setvbuf.Po \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_close.Po \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_creat.Po \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_destroy.Po \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_init.Po \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_ioctl.Po \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_lseek.Po \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_open.Po \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_read.Po \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_write.Po \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_dir.Po \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_file.Po \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fit.Po \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fmeta.Po \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fsit.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_close.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_destroy.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_exportFile.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_importFile.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_init.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_lseek.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_metaData.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_open.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_opendir.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_read.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_register.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_write.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_close.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_destroy.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_elog.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_exportFile.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_importFile.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_init.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_lseek.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_open.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_opendir.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_read.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_register.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_write.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_close.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_destroy.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_exportFile.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_importFile.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_init.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_lseek.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_open.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_opendir.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_read.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_register.Po \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_write.Po
+	@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_setvbuf.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -542,9 +411,9 @@ am__nobase_include_HEADERS_DIST = @top_srcdir@/include/config.h \
 	@top_srcdir@/include/all_system.h \
 	@top_srcdir@/include/xpn_client/expand.h \
 	@top_srcdir@/include/xpn_client/expand_lib.h \
-	@top_srcdir@/include/xpn_client/xpn_debug.h \
 	@top_srcdir@/include/base/base_lib.h \
 	@top_srcdir@/include/base/darray.h \
+	@top_srcdir@/include/base/base_debug.h \
 	@top_srcdir@/include/base/debug_msg.h \
 	@top_srcdir@/include/base/debug_tags.h \
 	@top_srcdir@/include/base/dtable.h \
@@ -557,30 +426,30 @@ am__nobase_include_HEADERS_DIST = @top_srcdir@/include/config.h \
 	@top_srcdir@/include/base/ns.h \
 	@top_srcdir@/include/base/syscall_proxies.h \
 	@top_srcdir@/include/base/filesystem.h \
+	@top_srcdir@/include/base/workers.h \
+	@top_srcdir@/include/base/workers_ondemand.h \
+	@top_srcdir@/include/base/workers_pool.h \
 	@top_srcdir@/include/base/utils.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_lib.h \
+	@top_srcdir@/include/xpn_client/nfi/nfi_worker_task.h \
+	@top_srcdir@/include/xpn_client/nfi/nfi_ops.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_worker.h \
-	@top_srcdir@/include/xpn_client/nfi/nfi_local/local_lib.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local_err.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfi_nfs_err.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfs.h \
-	@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfs_lib.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfs3.h \
-	@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfs3_lib.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
-	@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_lib.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
-	@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h \
 	@top_srcdir@/include/xpn_client/xpn.h
@@ -751,74 +620,74 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 COMMON_HEADER = @top_srcdir@/include/config.h \
-			@top_srcdir@/include/config.h.in \
-			@top_srcdir@/include/config_linux.h \
-			@top_srcdir@/include/all_system.h \
-			@top_srcdir@/include/xpn_client/expand.h \
-			@top_srcdir@/include/xpn_client/expand_lib.h \
-			@top_srcdir@/include/xpn_client/xpn_debug.h
+				@top_srcdir@/include/config.h.in \
+				@top_srcdir@/include/config_linux.h \
+				@top_srcdir@/include/all_system.h \
+				@top_srcdir@/include/xpn_client/expand.h \
+				@top_srcdir@/include/xpn_client/expand_lib.h
 
 BASE_HEADER = @top_srcdir@/include/base/base_lib.h \
-			@top_srcdir@/include/base/darray.h \
-			@top_srcdir@/include/base/debug_msg.h \
-			@top_srcdir@/include/base/debug_tags.h \
-			@top_srcdir@/include/base/dtable.h \
-			@top_srcdir@/include/base/math_misc.h \
-			@top_srcdir@/include/base/string_misc.h \
-			@top_srcdir@/include/base/time_misc.h \
-			@top_srcdir@/include/base/trace_msg.h \
-			@top_srcdir@/include/base/trace_tags.h \
-			@top_srcdir@/include/base/urlstr.h \
-			@top_srcdir@/include/base/ns.h \
-			@top_srcdir@/include/base/syscall_proxies.h \
-			@top_srcdir@/include/base/filesystem.h \
-			@top_srcdir@/include/base/utils.h
+				@top_srcdir@/include/base/darray.h \
+				@top_srcdir@/include/base/base_debug.h \
+				@top_srcdir@/include/base/debug_msg.h \
+				@top_srcdir@/include/base/debug_tags.h \
+				@top_srcdir@/include/base/dtable.h \
+				@top_srcdir@/include/base/math_misc.h \
+				@top_srcdir@/include/base/string_misc.h \
+				@top_srcdir@/include/base/time_misc.h \
+				@top_srcdir@/include/base/trace_msg.h \
+				@top_srcdir@/include/base/trace_tags.h \
+				@top_srcdir@/include/base/urlstr.h \
+				@top_srcdir@/include/base/ns.h \
+				@top_srcdir@/include/base/syscall_proxies.h \
+				@top_srcdir@/include/base/filesystem.h \
+				@top_srcdir@/include/base/workers.h \
+				@top_srcdir@/include/base/workers_ondemand.h \
+				@top_srcdir@/include/base/workers_pool.h \
+				@top_srcdir@/include/base/utils.h
 
-NFI_LOCAL_HEADER = @top_srcdir@/include/xpn_client/nfi/nfi_local/local_lib.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local_err.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local.h
+NFI_LOCAL_HEADER = @top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local_err.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local.h
 
 ### BEGIN OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS_HEADER = @top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfi_nfs_err.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfs.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfs_lib.h
+				@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfi_nfs.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfs.h
 
 ### END OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS3_HEADER = @top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfs3.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfs3_lib.h
+				@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfs3.h
 
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_HEADER = @top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_lib.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
+				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
 
 ### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_HEADER = @top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_lib.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
+				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 
 ### END OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
 NFI_HTTP_HEADER = @top_srcdir@/include/xpn_client/nfi/nfi_http/nfi_http_err.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_http/nfi_http.h \
-			@top_srcdir@/include/xpn_client/nfi/nfi_http/http_lib.h
+				@top_srcdir@/include/xpn_client/nfi/nfi_http/nfi_http.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_http/http_lib.h
 
 ### END OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 NFI_HEADER = @top_srcdir@/include/xpn_client/nfi/nfi.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_lib.h \
+	@top_srcdir@/include/xpn_client/nfi/nfi_worker_task.h \
+	@top_srcdir@/include/xpn_client/nfi/nfi_ops.h \
 	@top_srcdir@/include/xpn_client/nfi/nfi_worker.h \
 	$(NFI_LOCAL_HEADER) $(am__append_1) $(am__append_2) \
 	$(am__append_3) $(am__append_4)
@@ -840,9 +709,14 @@ BASE_OBJECTS = @top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/ns.c \
 			@top_srcdir@/src/base/syscall_proxies.c \
 			@top_srcdir@/src/base/filesystem.c \
+			@top_srcdir@/src/base/workers.c \
+			@top_srcdir@/src/base/workers_ondemand.c \
+			@top_srcdir@/src/base/workers_pool.c \
 			@top_srcdir@/src/base/utils.c
 
-NFI_COMMON_OBJECTS = @top_srcdir@/src/xpn_client/nfi/common/nfi_worker.c
+NFI_COMMON_OBJECTS = @top_srcdir@/src/xpn_client/nfi/common/nfi_ops.c \
+			@top_srcdir@/src/xpn_client/nfi/common/nfi_worker.c
+
 NFI_LOCAL_OBJECTS = @top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local.c \
 			@top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local_err.c
 
@@ -859,87 +733,40 @@ NFI_OBJECTS = $(NFI_COMMON_OBJECTS) $(NFI_LOCAL_OBJECTS) \
 ### END OF ENABLE_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_OBJECTS BLOCK. Do not remove this line. ###
 XPN_CORE_OBJECTS = @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_dir.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_err.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_file.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_init.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_open.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_opendir.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fopen.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fclose.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fread.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fwrite.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fflush.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fillbuf.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_flushbuf.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fseek.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_ftell.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fileno.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_setbuf.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_setvbuf.c
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_dir.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_err.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_file.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_init.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_open.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_opendir.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fopen.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fclose.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fread.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fwrite.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fflush.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fillbuf.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_flushbuf.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fseek.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_ftell.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fileno.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_setbuf.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_setvbuf.c
 
 XPN_POLICY_OBJECTS = @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
-			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.c
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.c
 
-XPN_OBJECTS = $(XPN_CORE_OBJECTS) $(XPN_POLICY_OBJECTS)
-XPNI_OBJECTS = @top_srcdir@/src/xpn_client/xpni/common/xpni_fit.c \
-			@top_srcdir@/src/xpn_client/xpni/common/xpni_fmeta.c \
-			@top_srcdir@/src/xpn_client/xpni/common/xpni_fsit.c \
-			@top_srcdir@/src/xpn_client/xpni/common/xpni_file.c \
-			@top_srcdir@/src/xpn_client/xpni/common/xpni_dir.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_close.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_destroy.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_exportFile.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_importFile.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_init.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_lseek.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_metaData.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_open.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_read.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_register.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_write.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_opendir.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_close.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_destroy.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_init.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_open.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_read.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_register.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_write.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_importFile.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_exportFile.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_lseek.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_opendir.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_close.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_destroy.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_exportFile.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_importFile.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_init.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_lseek.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_open.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_read.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_register.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_write.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_opendir.c \
-			@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_elog.c
+XPN_EP_OBJECTS = @top_srcdir@/src/xpn_client/xpn_unistd.c \
+					@top_srcdir@/src/xpn_client/xpn_stdio.c
 
-XPN2_OBJECTS = @top_srcdir@/src/xpn_client/xpn2/xpn2_close.c \
-			@top_srcdir@/src/xpn_client/xpn2/xpn2_destroy.c \
-			@top_srcdir@/src/xpn_client/xpn2/xpn2_init.c \
-			@top_srcdir@/src/xpn_client/xpn2/xpn2_open.c \
-			@top_srcdir@/src/xpn_client/xpn2/xpn2_creat.c \
-			@top_srcdir@/src/xpn_client/xpn2/xpn2_read.c \
-			@top_srcdir@/src/xpn_client/xpn2/xpn2_write.c \
-			@top_srcdir@/src/xpn_client/xpn2/xpn2_ioctl.c \
-			@top_srcdir@/src/xpn_client/xpn2/xpn2_lseek.c
-
+XPN_OBJECTS = $(XPN_CORE_OBJECTS) $(XPN_POLICY_OBJECTS) $(XPN_EP_OBJECTS)
 lib_LIBRARIES = libxpn.a
-libxpn_a_SOURCES = $(BASE_OBJECTS) $(NFI_OBJECTS) $(XPN_OBJECTS) $(XPNI_OBJECTS) $(XPN2_OBJECTS)
+libxpn_a_SOURCES = $(BASE_OBJECTS) $(NFI_OBJECTS) $(XPN_OBJECTS) $(XPN2_OBJECTS)
+AM_CFLAGS = -DASYNC_CLOSE=1 -DFILESYSTEM_DLSYM=1 
 noinst_HEADERS = $(BASE_HEADER)
 nobase_includedir = $(includedir)/xpn_client
 nobase_include_HEADERS = $(COMMON_HEADER) $(BASE_HEADER) $(NFI_HEADER) $(XPN_HEADER)
@@ -1046,6 +873,15 @@ clean-libLIBRARIES:
 @top_srcdir@/src/base/filesystem.$(OBJEXT):  \
 	@top_srcdir@/src/base/$(am__dirstamp) \
 	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/base/workers.$(OBJEXT):  \
+	@top_srcdir@/src/base/$(am__dirstamp) \
+	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/base/workers_ondemand.$(OBJEXT):  \
+	@top_srcdir@/src/base/$(am__dirstamp) \
+	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/base/workers_pool.$(OBJEXT):  \
+	@top_srcdir@/src/base/$(am__dirstamp) \
+	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/base/utils.$(OBJEXT):  \
 	@top_srcdir@/src/base/$(am__dirstamp) \
 	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
@@ -1055,6 +891,9 @@ clean-libLIBRARIES:
 @top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) @top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)
 	@: > @top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/xpn_client/nfi/common/nfi_ops.$(OBJEXT):  \
+	@top_srcdir@/src/xpn_client/nfi/common/$(am__dirstamp) \
+	@top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/xpn_client/nfi/common/nfi_worker.$(OBJEXT):  \
 	@top_srcdir@/src/xpn_client/nfi/common/$(am__dirstamp) \
 	@top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/$(am__dirstamp)
@@ -1200,183 +1039,18 @@ clean-libLIBRARIES:
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.$(OBJEXT): @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(am__dirstamp) \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/common/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpni/common
-	@: > @top_srcdir@/src/xpn_client/xpni/common/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)
-	@: > @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/common/xpni_fit.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/common/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/common/xpni_fmeta.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/common/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/common/xpni_fsit.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/common/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/common/xpni_file.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/common/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/common/xpni_dir.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/common/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpni/xpni_ft
-	@: > @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)
-	@: > @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_close.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_destroy.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_exportFile.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_importFile.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_init.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_lseek.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_metaData.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_open.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_read.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_register.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_write.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_opendir.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpni/xpni_null
-	@: > @top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)
-	@: > @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_close.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_destroy.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_init.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_open.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_read.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_register.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_write.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_importFile.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_exportFile.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_lseek.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_opendir.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpni/xpni_log
-	@: > @top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)
-	@: > @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_close.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_destroy.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_exportFile.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_importFile.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_init.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_lseek.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_open.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_read.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_register.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_write.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_opendir.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_elog.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpn2
-	@: > @top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)
-	@: > @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/xpn2_close.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/xpn2_destroy.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/xpn2_init.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/xpn2_open.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/xpn2_creat.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/xpn2_read.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/xpn2_write.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/xpn2_ioctl.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn2/xpn2_lseek.$(OBJEXT):  \
-	@top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/xpn_client/$(am__dirstamp):
+	@$(MKDIR_P) @top_srcdir@/src/xpn_client
+	@: > @top_srcdir@/src/xpn_client/$(am__dirstamp)
+@top_srcdir@/src/xpn_client/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) @top_srcdir@/src/xpn_client/$(DEPDIR)
+	@: > @top_srcdir@/src/xpn_client/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/xpn_client/xpn_unistd.$(OBJEXT):  \
+	@top_srcdir@/src/xpn_client/$(am__dirstamp) \
+	@top_srcdir@/src/xpn_client/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/xpn_client/xpn_stdio.$(OBJEXT):  \
+	@top_srcdir@/src/xpn_client/$(am__dirstamp) \
+	@top_srcdir@/src/xpn_client/$(DEPDIR)/$(am__dirstamp)
 
 libxpn.a: $(libxpn_a_OBJECTS) $(libxpn_a_DEPENDENCIES) $(EXTRA_libxpn_a_DEPENDENCIES) 
 	$(AM_V_at)-rm -f libxpn.a
@@ -1386,6 +1060,7 @@ libxpn.a: $(libxpn_a_OBJECTS) $(libxpn_a_DEPENDENCIES) $(EXTRA_libxpn_a_DEPENDEN
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f @top_srcdir@/src/base/*.$(OBJEXT)
+	-rm -f @top_srcdir@/src/xpn_client/*.$(OBJEXT)
 	-rm -f @top_srcdir@/src/xpn_client/nfi/common/*.$(OBJEXT)
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_local/*.$(OBJEXT)
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/*.$(OBJEXT)
@@ -1394,11 +1069,6 @@ mostlyclean-compile:
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/*.$(OBJEXT)
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/*.$(OBJEXT)
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/*.$(OBJEXT)
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/*.$(OBJEXT)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/*.$(OBJEXT)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/*.$(OBJEXT)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/*.$(OBJEXT)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -1415,6 +1085,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/urlstr.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/utils.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/workers.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/workers_ondemand.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/workers_pool.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/$(DEPDIR)/xpn_stdio.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/$(DEPDIR)/xpn_unistd.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po@am__quote@ # am--include-marker
@@ -1460,55 +1136,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_rw.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_setbuf.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_setvbuf.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_close.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_creat.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_destroy.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_init.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_ioctl.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_lseek.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_open.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_read.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_write.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_dir.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_file.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fit.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fmeta.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fsit.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_close.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_destroy.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_exportFile.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_importFile.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_init.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_lseek.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_metaData.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_open.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_opendir.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_read.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_register.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_write.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_close.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_destroy.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_elog.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_exportFile.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_importFile.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_init.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_lseek.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_open.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_opendir.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_read.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_register.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_write.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_close.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_destroy.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_exportFile.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_importFile.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_init.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_lseek.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_open.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_opendir.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_read.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_register.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_write.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -1676,6 +1303,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
 	-rm -f @top_srcdir@/src/base/$(am__dirstamp)
+	-rm -f @top_srcdir@/src/xpn_client/$(DEPDIR)/$(am__dirstamp)
+	-rm -f @top_srcdir@/src/xpn_client/$(am__dirstamp)
 	-rm -f @top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/$(am__dirstamp)
 	-rm -f @top_srcdir@/src/xpn_client/nfi/common/$(am__dirstamp)
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_local/$(DEPDIR)/$(am__dirstamp)
@@ -1692,16 +1321,6 @@ distclean-generic:
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(am__dirstamp)
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/$(am__dirstamp)
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/$(am__dirstamp)
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -1723,6 +1342,12 @@ distclean: distclean-am
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/urlstr.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/utils.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers_pool.Po
+	-rm -f @top_srcdir@/src/xpn_client/$(DEPDIR)/xpn_stdio.Po
+	-rm -f @top_srcdir@/src/xpn_client/$(DEPDIR)/xpn_unistd.Po
+	-rm -f @top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po
 	-rm -f @top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po
@@ -1768,55 +1393,6 @@ distclean: distclean-am
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_rw.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_setbuf.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_setvbuf.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_close.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_creat.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_destroy.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_init.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_ioctl.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_lseek.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_open.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_read.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_write.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_dir.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_file.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fit.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fmeta.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fsit.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_close.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_destroy.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_exportFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_importFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_init.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_lseek.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_metaData.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_open.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_opendir.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_read.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_register.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_write.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_close.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_destroy.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_elog.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_exportFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_importFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_init.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_lseek.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_open.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_opendir.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_read.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_register.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_write.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_close.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_destroy.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_exportFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_importFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_init.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_lseek.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_open.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_opendir.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_read.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_register.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_write.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1875,6 +1451,12 @@ maintainer-clean: maintainer-clean-am
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/urlstr.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/utils.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/workers_pool.Po
+	-rm -f @top_srcdir@/src/xpn_client/$(DEPDIR)/xpn_stdio.Po
+	-rm -f @top_srcdir@/src/xpn_client/$(DEPDIR)/xpn_unistd.Po
+	-rm -f @top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/nfi_ops.Po
 	-rm -f @top_srcdir@/src/xpn_client/nfi/common/$(DEPDIR)/nfi_worker.Po
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local.Po
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_local/$(DEPDIR)/nfi_local_err.Po
@@ -1920,55 +1502,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_rw.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_setbuf.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/$(DEPDIR)/xpn_setvbuf.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_close.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_creat.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_destroy.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_init.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_ioctl.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_lseek.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_open.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_read.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn2/$(DEPDIR)/xpn2_write.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_dir.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_file.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fit.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fmeta.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/common/$(DEPDIR)/xpni_fsit.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_close.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_destroy.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_exportFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_importFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_init.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_lseek.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_metaData.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_open.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_opendir.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_read.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_register.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_ft/$(DEPDIR)/xpni_ft_write.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_close.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_destroy.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_elog.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_exportFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_importFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_init.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_lseek.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_open.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_opendir.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_read.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_register.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_log/$(DEPDIR)/xpni_log_write.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_close.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_destroy.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_exportFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_importFile.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_init.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_lseek.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_open.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_opendir.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_read.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_register.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpni/xpni_null/$(DEPDIR)/xpni_null_write.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -2022,25 +1555,7 @@ uninstall-am: uninstall-libLIBRARIES uninstall-nobase_includeHEADERS
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_rw.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_simple_lib.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/loc_incl.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_null/xpni_null.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_log/xpni_log.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_log/xpni_log_elog.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_ft/xpni_ft.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_ft/xpni_ft_metaData.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_ft/xpni_ft_read.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_ft/xpni_ft_write.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_lowfsi_xpn.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_lowfsi_printf.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_lowfsi_posix.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_lowfsi.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_fstag.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_fsit.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_fmeta.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_fit.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_file.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_dir.h \
-			@top_srcdir@/include/xpn_client/xpn2.h
+			@top_srcdir@/include/xpn_client/xpn/xpn.h
 
 install-data-hook:
 	mkdir -p $(includedir)

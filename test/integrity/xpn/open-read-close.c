@@ -10,8 +10,8 @@ int main ( int argc, char *argv[] )
 	int  fd1 ;
 	char buffer[BUFF_SIZE] ;
 
-	printf("setenv XPN_CONF ./\n");
-	setenv("XPN_CONF", "./", 1);
+	printf("env XPN_CONF=./xpn.conf\n");
+	setenv("XPN_CONF",  "./xpn.conf", 1);
 
         // xpn-init
 	ret = xpn_init();
@@ -21,8 +21,8 @@ int main ( int argc, char *argv[] )
 	}
 
 	// test 2
-	fd1 = xpn_open("/XPN/test_1", O_RDWR);
-	printf("%d = xpn_open('%s', %x)\n", ret, "/XPN/test_1", O_RDWR);
+	fd1 = xpn_open("/P1/test_1", O_RDWR);
+	printf("%d = xpn_open('%s', %x)\n", ret, "/P1/test_1", O_RDWR);
 
 	ret = xpn_lseek(fd1, 0, SEEK_SET);
 	printf("%d = xpn_lseek(%d, %d, %d)\n", ret, fd1, 0, SEEK_SET);

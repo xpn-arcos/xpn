@@ -134,12 +134,12 @@
         return 0;
     }
 
-    int tcp_server_launch_worker_pool ( void (*worker_pool_function)(void) ){
+    int tcp_server_launch_worker_pool ( void (*worker_pool_function2)(void) ){
         DEBUG_BEGIN() ;
 
         for (int i = 0; i < MAX_THREADS; i++){
           debug_info("[WORKERS] pthread_create: create_thread tcp_server_launch_worker_pool\n") ;
-          if (pthread_create(&thid[i], NULL, (void *(*)(void *))(worker_pool_function), NULL) !=0){
+          if (pthread_create(&thid[i], NULL, (void *(*)(void *))(worker_pool_function2), NULL) !=0){
             perror("Error creating thread pool\n");
             return -1;
           }
@@ -462,7 +462,7 @@
         } while (op != TCP_SERVER_END);
     }
 
-    void worker_pool_function ( void )
+    void worker_pool_function2 ( void )
     {
         int is_true = 1;
         struct st_th th;

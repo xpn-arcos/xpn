@@ -1,8 +1,8 @@
-#include "mpi_server_lib.h"
+#include "nfi_mpi_server.h"
 
 extern int errno;
 
-/* this interface must be changed */
+// TODO: this interface must be changed
 void mpi_server_err(int err)
 {
 	switch(err)

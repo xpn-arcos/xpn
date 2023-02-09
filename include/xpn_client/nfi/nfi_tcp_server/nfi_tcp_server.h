@@ -1,11 +1,12 @@
 #ifndef _NFI_TCP_SERVER_H
 #define _NFI_TCP_SERVER_H
 
-#include "tcp_server.h"
-#include "all_system.h"
-#include "base/string_misc.h"
-#include "nfi_tcp_server_err.h"
-#include "nfi.h"
+    #include "tcp_server.h"
+    #include "all_system.h"
+    #include "base/string_misc.h"
+    #include "nfi_tcp_server_err.h"
+    #include "nfi.h"
+    #include "nfi_worker.h"
 
 
 #ifdef  __cplusplus
@@ -13,13 +14,13 @@
 #endif
 
 struct nfi_tcp_server_server{
-	char id[NFIMAXPATHLEN];
-	char path[NFIMAXPATHLEN];
+	char id[PATH_MAX];
+	char path[PATH_MAX];
 	int sd;
 };
 
 struct nfi_tcp_server_fhandle{
-	char path[NFIMAXPATHLEN];
+	char path[PATH_MAX];
 	int fd;
 	DIR *dir;
 };

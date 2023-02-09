@@ -2,17 +2,17 @@
 
 /**
  * Calculates the server and the offset in that server of the given offset of a file.
- * 
+ *
  * @param fd[in] A file descriptor.
  * @param offset[in] The original offset.
  * @param local_offset[out] The offset in the server.
  * @param serv[out] The server in which is located the given offset.
- * 
+ *
  * @return Returns 0 on success or -1 on error.
  */
 int XpnGetBlock(int fd, off_t offset, off_t *local_offset, int *serv){
 	struct policy *p;
-	
+
 	switch(xpn_file_table[fd]->mdata->type_policy){
 		case POLICY_RAID0:
 			// Calculate the server
@@ -386,7 +386,7 @@ int XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, struct 
 /**
  * Calculates how the blocks have to be written to the servers. io_out is an operation matrix. io_out[i] (row 'i' in io_out)
  * contains the required operations in server 'i'. While ion_out[i] is the number of operations in server 'i' (io_out[i]).
- * 
+ *
  * @param fd[in] A file descriptor.
  * @param buffer[in] The original buffer.
  * @param size[in] The original size.
@@ -394,10 +394,11 @@ int XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, struct 
  * @param io_out[out] The operation matrix.
  * @param ion_out[out] The length of every row in io_out.
  * @param num_servers[in] The number of servers.
- * 
+ *
  * @return Returns 0 on success or -1 on error.
  */
-void *XpnWriteBlocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers){
+void *XpnWriteBlocks ( int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
+{
 	int optimize = 1; // Optimize by default
 	//int optimize = 0; // Do not optimize
 	void *new_buffer = (void *)buffer;
@@ -422,12 +423,21 @@ void *XpnWriteBlocks(int fd, const void *buffer, size_t size, off_t offset, stru
 		default:
 			return NULL;
 	}
-	
+
 	return new_buffer;
 }
 
-int XpnWriteBlocksFinish(int fd, const void *buffer, __attribute__((__unused__)) size_t size, __attribute__((__unused__)) off_t offset, __attribute__((__unused__)) struct nfi_worker_io ***io_out, __attribute__((__unused__)) int **ion_out, __attribute__((__unused__)) int num_servers, void *new_buffer) {
-	switch(xpn_file_table[fd]->mdata->type_policy){
+int XpnWriteBlocksFinish ( int fd,
+		           const void *buffer, 
+			   __attribute__((__unused__)) size_t size, 
+			   __attribute__((__unused__)) off_t offset, 
+			   __attribute__((__unused__)) struct nfi_worker_io ***io_out, 
+			   __attribute__((__unused__)) int **ion_out, 
+			   __attribute__((__unused__)) int num_servers, 
+			   void *new_buffer)
+{
+	switch(xpn_file_table[fd]->mdata->type_policy)
+	{
 		case POLICY_RAID0:
 			if (buffer != new_buffer)
 				free(new_buffer);
@@ -441,7 +451,8 @@ int XpnWriteBlocksFinish(int fd, const void *buffer, __attribute__((__unused__))
 	return 0;
 }
 
-ssize_t XpnReadGetTotalBytes(int fd, ssize_t *res_v, int num_servers) {
+ssize_t XpnReadGetTotalBytes(int fd, ssize_t *res_v, int num_servers) 
+{
 	ssize_t res = -1;
 	int i;
 
@@ -459,11 +470,13 @@ ssize_t XpnReadGetTotalBytes(int fd, ssize_t *res_v, int num_servers) {
 	return res;
 }
 
-ssize_t XpnWriteGetTotalBytes(int fd, ssize_t *res_v, int num_servers) {
+ssize_t XpnWriteGetTotalBytes(int fd, ssize_t *res_v, int num_servers) 
+{
 	ssize_t res = -1;
 	int i;
 
-	switch(xpn_file_table[fd]->mdata->type_policy){
+	switch(xpn_file_table[fd]->mdata->type_policy)
+	{
 		case POLICY_RAID0:
 			res = 0;
 			for (i = 0 ; i < num_servers ; i++)
