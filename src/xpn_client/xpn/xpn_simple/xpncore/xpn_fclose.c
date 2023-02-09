@@ -32,7 +32,7 @@
 
 #include <xpn.h>
 
-int xpn_fclose(FILE *fp)
+int xpn_simple_fclose(FILE *fp)
 {
   register int /*i, */retval = 0;
   struct _prefetch_t **_prefetch_addr = (struct _prefetch_t **) &fp->_chain->_prefetch_rel_addr;
@@ -82,3 +82,4 @@ int xpn_fclose(FILE *fp)
   XPN_DEBUG_END_CUSTOM("%d", fileno(fp))
   return retval;
 }
+

@@ -15,10 +15,10 @@ struct __dirstream{
 };
 
 
-DIR* xpn_opendir(const char *path);
-int xpn_closedir(DIR *dirp);
-struct dirent* xpn_readdir(DIR *dirp);
-void xpn_rewinddir(DIR *dirp);
+DIR *           xpn_simple_opendir(const char *path) ;
+int             xpn_simple_closedir(DIR *dirp) ;
+struct dirent * xpn_simple_readdir(DIR *dirp) ;
+void            xpn_simple_rewinddir(DIR *dirp) ;
 
 
  #ifdef  __cplusplus

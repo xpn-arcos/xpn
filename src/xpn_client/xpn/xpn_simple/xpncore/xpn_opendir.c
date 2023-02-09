@@ -25,7 +25,8 @@
 #include "xpn/xpn_simple/xpn_opendir.h"
 #include "xpn/xpn_simple/xpn_policy_opendir.h"
 
-DIR *xpn_opendir(const char *path)
+
+DIR *xpn_simple_opendir(const char *path)
 {
   DIR *dirp = NULL;
   int res = -1;
@@ -73,7 +74,7 @@ DIR *xpn_opendir(const char *path)
   return dirp;
 }
 
-struct dirent* xpn_readdir(DIR *dirp)
+struct dirent* xpn_simple_readdir(DIR *dirp)
 {
   int res;
   struct dirent *dirnt = NULL;
@@ -116,7 +117,7 @@ struct dirent* xpn_readdir(DIR *dirp)
   return dirnt;
 }
 
-int xpn_closedir(DIR *dirp)
+int xpn_simple_closedir(DIR *dirp)
 {
   int i;
   
@@ -165,7 +166,7 @@ int xpn_closedir(DIR *dirp)
   //return -1;
 }
 
-void xpn_rewinddir(__attribute__((__unused__)) DIR *dirp)
+void xpn_simple_rewinddir(__attribute__((__unused__)) DIR *dirp)
 {
   
 }

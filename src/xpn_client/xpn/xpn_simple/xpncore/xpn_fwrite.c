@@ -30,7 +30,7 @@
 
 int xpn_flushbuf(int c, FILE * stream);
 
-size_t xpn_fwrite(const void *ptr, size_t size, size_t nmemb, register FILE *stream)
+size_t xpn_simple_fwrite(const void *ptr, size_t size, size_t nmemb, register FILE *stream)
 {
   register const unsigned char *cp = (const unsigned char *)ptr;
   register size_t s;
@@ -62,3 +62,4 @@ size_t xpn_fwrite(const void *ptr, size_t size, size_t nmemb, register FILE *str
   XPN_DEBUG_END_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
   return ndone;
 }
+
