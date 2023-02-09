@@ -72,10 +72,10 @@
       long unsigned i=0;
       long j=0, ant=-1, pos=-1;
       int cont=-1;
-      char new_path[PATH_MAX];
+      char new_path[MAXPATHLEN];
 
       if (path == NULL) {
-        return 0;
+          return 0;
       }
 
       strcpy(new_path, path);
@@ -242,13 +242,13 @@
           ret = pthread_create(&thid, NULL, filesystem_async_close, (void *) (long) fd);
           ret = pthread_detach(thid);
 
-          if (ret < 0) {
+          if (ret < 0) {                     
             ret = real_posix_close(fd) ;
             if (ret < 0) {
               debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
               //perror("close: ") ;
-            }
-          }
+            }                                                                                                 
+          }  
 
          #else
            ret = real_posix_close(fd) ;
@@ -361,7 +361,7 @@
      int  filesystem_mkpath ( char *pathname )
      {
      int ret ;
-         char dir[PATH_MAX] ;
+         char dir[MAXPATHLEN] ;
 
          DEBUG_BEGIN() ;
 

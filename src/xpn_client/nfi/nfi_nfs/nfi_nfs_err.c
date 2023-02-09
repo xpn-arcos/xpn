@@ -1,13 +1,10 @@
-
-#include "nfi_nfs.h"
+#include "nfi/nfi_nfs/nfs_lib.h"
 
 extern int errno;
 
 /* this interface must be changed */
-void nfs_err(int err)
-{
-	switch(err)
-	{
+void nfs_err(int err){
+	switch(err){
 		case NFSERR_PARAM:
 			errno = -1;
 			break;

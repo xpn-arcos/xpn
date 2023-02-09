@@ -1,23 +1,22 @@
 #ifndef _MPI_SERVER_OPS_H_
 #define _MPI_SERVER_OPS_H_
 
-
-  #define ASYNC_CLOSE 1
-  #define FILESYSTEM_DLSYM 1
   #include "all_system.h"
   #include "mpi_server_params.h"
-  #include "base/utils.h"
   #include "base/filesystem.h"
+  #include "base/utils.h"
 
 
   /*
    *  Constants
    */
 
+#ifndef MPI_SERVER_MAXPATHLEN
+  #define MPI_SERVER_MAXPATHLEN 128
+#endif
 #ifndef MPI_SERVER_ID
   #define MPI_SERVER_ID 32
 #endif
-
 
   /* Operations */
 
@@ -65,7 +64,7 @@
    */
 
   struct st_mpi_server_open{
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
   };
 
   struct st_mpi_server_open_req{
@@ -73,12 +72,12 @@
   };
 
   struct st_mpi_server_creat{
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
   };
 
   struct st_mpi_server_read{
     int fd;
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
     offset_t offset;
     size_t size;
   };
@@ -90,7 +89,7 @@
 
   struct st_mpi_server_write{
     int fd;
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
     offset_t offset;
     size_t size;
   };
@@ -104,20 +103,20 @@
   };
 
   struct st_mpi_server_rm{
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
   };
 
   struct st_mpi_server_rename{
-    char old_url[PATH_MAX];
-    char new_url[PATH_MAX];
+    char old_url[MPI_SERVER_MAXPATHLEN];
+    char new_url[MPI_SERVER_MAXPATHLEN];
   };
 
   struct st_mpi_server_getattr{ 
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
   };
 
   struct st_mpi_server_setattr{ 
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
     struct stat attr;
   };
 
@@ -129,11 +128,11 @@
 
   
   struct st_mpi_server_mkdir{  
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
   };
 
   struct st_mpi_server_opendir{  //NEW
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
   };
 
   struct st_mpi_server_readdir{  //NEW
@@ -150,21 +149,21 @@
   };
 
   struct st_mpi_server_rmdir{
-    char path[PATH_MAX];
+    char path[MPI_SERVER_MAXPATHLEN];
   };
 
   //TODO: define MPI_SERVER_OPENDIR_DIR, MPI_SERVER_READDIR_DIR, MPI_SERVER_CLOSEDIR_DIR
 
   struct st_mpi_server_flush{
-    char storage_path[PATH_MAX];
-    char virtual_path[PATH_MAX];
+    char storage_path[MPI_SERVER_MAXPATHLEN];
+    char virtual_path[MPI_SERVER_MAXPATHLEN];
     int  block_size;
     char opt;
   };
 
   struct st_mpi_server_preload{
-    char storage_path[PATH_MAX];
-    char virtual_path[PATH_MAX];
+    char storage_path[MPI_SERVER_MAXPATHLEN];
+    char virtual_path[MPI_SERVER_MAXPATHLEN];
     int  block_size;
     char opt;
   };

@@ -11,17 +11,16 @@
     extern "C" {
  #endif
 
+struct xpn_cwd{
+	char xpn_cwd_path[MAX_PATH_LEN];	
+};
 
-   struct xpn_cwd {
-     char xpn_cwd_path[PATH_MAX];	
-   };
+extern struct xpn_cwd xpn_cwddir;
 
-   extern struct xpn_cwd xpn_cwddir;
+void xpn_init_cwd();
+char* xpn_getcwd(char *path, size_t size);
 
-   void xpn_init_cwd();
-
-   char* xpn_simple_getcwd(char *path, size_t size) ;
-   int   xpn_simple_chdir(char *path) ;
+int xpn_chdir(char *path);
 
 
  #ifdef  __cplusplus

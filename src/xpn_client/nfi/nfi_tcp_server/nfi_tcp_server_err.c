@@ -1,12 +1,10 @@
-#include "nfi_tcp_server.h"
+#include "tcp_server_lib.h"
 
 extern int errno;
 
 /* this interface must be changed */
-void tcp_server_err(int err)
-{
-	switch(err)
-	{
+void tcp_server_err(int err){
+	switch(err){
 		case TCP_SERVERERR_PARAM:
 			errno = -1;
 			break;

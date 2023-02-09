@@ -1,9 +1,9 @@
-# XPN 2.1
+# XPN 2.0
 
 *Expand Ad-Hoc Parallel File System*
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-![version](https://img.shields.io/badge/version-2.1-blue)
+![version](https://img.shields.io/badge/version-2.0-blue)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://www.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xpn-arcos/xpn&amp;utm_campaign=Badge_Grade)
 
 * *Homepage*: <https://xpn-arcos.github.io/xpn-arcos.github.io/>
@@ -41,7 +41,7 @@ You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
 To build Expand you need to execute:
 ```
 cd $HOME/src
-./xpn/build-me -m <MPICC_PATH> -i <INSTALL_PATH>
+./xpn/build-me.sh -m <MPICC_PATH> -i <INSTALL_PATH>
 ```
 Where:
 * MPICC_PATH is the full path to your mpicc compiler.
@@ -55,70 +55,58 @@ First, you need to get familiar with 4 special files:
 * ```<nameserver file>``` for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing.
 * ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
-Then, you need to get familiar with 5 special environment variables for XPN clients:
-* ```XPN_DNS```      with the full path to the nameserver file to be used (mandatory).
-* ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
-* ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
-* ```XPN_SESSION```  with value 0 for without session and value 1 for with session (optional, default: 0).
-* ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
-
+Then, you need to get familiar with 2 special environment variables for XPN clients:
+* ```XPN_DNS```  with the full path to the nameserver file to be used.
+* ```XPN_CONF``` with the full path to the XPN configuration file to be used.
 
 ### 4.1 Ad-Hoc Expand (based on MPI)
 The typical executions has 4 main steps:
 - First, generate the XPN configuration file:
 
-  ```
+    ```
     cd $HOME/src/xpn/bin
-    ./mk_conf.sh --conf         ~/tmp/config.xml \
-                 --machinefile  ~/tmp/machinefile \
-                 --part_size    512k \
-                 --part_name    xpn \
+    ./mk_conf.sh --conf ~/tmp/config.xml \
+                 --machinefile ~/tmp/machinefile \
+                 --part_size 512k \
+                 --part_name xpn \
                  --storage_path /tmp
-  ```
-  Where:
-  * ```--part_size``` is the partition size (by default in bytes but "k" can be used for kilobytes and "m" for megabytes).
-  * ```--part_name``` is the partition name (a string without whitespaces).
-  * ```--storage_path``` is where the data is stogare in the servers (is the same for all servers).
+    ```
+    Where:
+    * ```--part_size``` is the partition size (by default in bytes but "k" can be used for kilobytes and "m" for megabytes).
+    * ```--part_name``` is the partition name (a string without whitespaces).
+    * ```--storage_path``` is where the data is stogare in the servers (is the same for all servers).
 
 - Then, launch the Expand MPI server (xpn_mpi_server):
 
-  ```
-  ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
-  ```
+    ```
+    mpiexec -np <number of processes> \
+            -hostfile <full path to the hostfile> \
+            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
+            <INSTALL_PATH>/bin/xpn_mpi_server -ns <nameserver file> -tp &
+    ```
 
-  To use a thread pool to serve the requests add the -tp flag.
+    To use a thread pool to serve the requests add the -tp flag.
 
 - Then,  launch the program that will use Expand (XPN client):
 
-  ```
-  mpiexec -np <number of processes> \
-          -hostfile <full path to the hostfile> \
-          -genv XPN_DNS  <nameserver file> \
-          -genv XPN_CONF <XPN configuration file> \
-          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-          -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-          <program path>
-  ```
+    ```
+    mpiexec -np <number of processes> \
+            -hostfile <full path to the hostfile> \
+            -genv XPN_DNS  <nameserver file> \
+            -genv XPN_CONF <XPN configuration file> \
+            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
+            -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+            <program path>
+    ```
 
 - At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
 
-  ```
-  ./xpn -v -l <full path to the hostfile>  stop
-  ```
-    
-Summary:
-
-```mermaid
-sequenceDiagram
-    session    ->> mk_conf.sh: generate the XPN configuration file
-    mk_conf.sh ->> xpn.conf: generate the xpn.conf file
-    session    ->> xpn_mpi_server: launch the Expand MPI server
-    xpn.conf  -->> xpn_mpi_server: read the XPN configuration file
-    session    ->> XPN client: launch the program that will use Expand
-    xpn.conf  -->> XPN client: read the XPN configuration file
-    session    ->> xpn_mpi_server: stop the MPI server
-```
-
+    ```
+    mpiexec -np 1 \
+            -genv XPN_DNS <nameserver file> \
+            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
+            <INSTALL_PATH>/bin/xpn_stop_mpi_server -f <server file>
+    ```
 
 ## 5. XPN Examples
 
@@ -127,19 +115,6 @@ sequenceDiagram
 As an build example scenario we will consider the following one:
 * MPI distribution is installed at '/opt/software/install-mpich'
 * Installation directory will be '/opt/xpn'
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "1. Install dependencies"                     as step1
-    state "2. Download the source code of XPN and mxml" as step2
-    state "3. Build Expand"                             as step3
-    [*] --> step1
-    step1 --> step2
-    step2 --> step3
-    step3 --> [*]
-```
-
 
 (1) Install dependencies:
   ```
@@ -157,9 +132,8 @@ stateDiagram-v2
 (3) To build Expand in this case you need to execute:
    ```
    cd $HOME/src
-   ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i /opt/xpn
+   ./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i /opt/xpn
    ```
-
 
 ### 5.2 Front-end node of a cluster
 
@@ -168,19 +142,6 @@ Imagine you have a cluter with local storage (HDD, SSD, RAM Drive) per-node and 
 As an build example scenario we will consider the following one:
 * MPI distribution is installed at '/opt/software/install-mpich'
 * Installation directory will be $HOME/xpn_bin
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "1. Install dependencies"                     as step1
-    state "2. Download the source code of XPN and mxml" as step2
-    state "3. Build Expand"                             as step3
-    [*] --> step1
-    step1 --> step2
-    step2 --> step3
-    step3 --> [*]
-```
-
 
 (1) Install dependencies:
   ```
@@ -200,6 +161,6 @@ stateDiagram-v2
 (3) To build Expand in this case you need to execute:
   ```
   cd $HOME/src;
-  ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
+  ./xpn/build-me.sh -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
   ```
 

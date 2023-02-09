@@ -13,8 +13,8 @@
  #endif
 
 
-   int xpn_simple_mkdir(const char *path, mode_t perm) ;
-   int xpn_simple_rmdir(const char *path) ;
+   int xpn_mkdir(const char *path, mode_t perm) ;
+   int xpn_rmdir(const char *path) ;
 
 
  #ifdef  __cplusplus

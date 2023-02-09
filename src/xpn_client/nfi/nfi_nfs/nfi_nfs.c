@@ -1,5 +1,4 @@
-
-#include "nfi_nfs.h"
+#include "nfi/nfi_nfs/nfs_lib.h"
 
 /*
  * TODO:
@@ -22,7 +21,7 @@
  ************************************************************/
 void NFItoNFSattr(fattr *nfs_att, struct nfi_attr *nfi_att)
 {
-	switch(nfi_att->at_type){
+	switch(nfi_att->at_type){	
 		case NFIDIR:
 			nfs_att->type = NFDIR;
 			break;
@@ -30,7 +29,7 @@ void NFItoNFSattr(fattr *nfs_att, struct nfi_attr *nfi_att)
                         nfs_att->type = NFREG;
                         break;
 	}
-
+	
         nfs_att->mode 	= (u_long)nfi_att->at_mode;
         /* u_long nlink; */
         nfs_att->uid 	= (u_long)nfi_att->at_uid;
@@ -47,13 +46,13 @@ void NFItoNFSattr(fattr *nfs_att, struct nfi_attr *nfi_att)
         nfs_att->mtime.useconds	= (u_long)0;
         nfs_att->ctime.seconds	= (u_long)nfi_att->at_ctime;
         nfs_att->ctime.useconds	= (u_long)0;
-
+	
 }
 
 void NFStoNFIattr(struct nfi_attr *nfi_att, fattr *nfs_att){
 
 
-	switch(nfs_att->type){
+	switch(nfs_att->type){	
 		case NFDIR:
 			nfi_att->at_type = NFIDIR;
 			break;
@@ -63,7 +62,7 @@ void NFStoNFIattr(struct nfi_attr *nfi_att, fattr *nfs_att){
 		default:
 			break;
 	}
-
+	
         nfi_att->at_mode = (mode_t)nfs_att->mode;
         /* u_long nlink; */
         nfi_att->at_uid = (uid_t)nfs_att->uid;
@@ -80,7 +79,7 @@ void NFStoNFIattr(struct nfi_attr *nfi_att, fattr *nfs_att){
 			+ (1000*nfs_att->mtime.useconds);
 	nfi_att->at_ctime = (time_t)nfs_att->ctime.seconds
 	                + (1000*nfs_att->ctime.useconds);
-		
+			
 	nfi_att->private_info = NULL;
 }
 
@@ -104,42 +103,42 @@ int nfi_nfs_init(char *url, struct nfi_server *serv, __attribute__((__unused__))
 	char server[NFSPATHLEN], dir[NFSPATHLEN], prt[NFSPATHLEN];
 	int ret;
 	struct nfi_nfs_server *server_aux;
-
-
+	
+	
 	if(serv == NULL){
 		nfs_err(NFSERR_PARAM);
 		fprintf(stderr,"nfi_nfs_init: serv is null. Don't inicialize this variable\n");
 		return -1;
 	}
-	
+		
 	/* functions */
-	serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops));
+	serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops));	
 	if (serv->ops == NULL){
 		nfs_err(NFSERR_MEMORY);
 		fprintf(stderr,"nfi_nfs_init: serv->ops is null. Can't reserve memory\n");
 		return -1;
 	}
-
+	
 	serv->ops->nfi_reconnect  = nfi_nfs_reconnect;
 	serv->ops->nfi_disconnect = nfi_nfs_disconnect;
-
+	
 	serv->ops->nfi_preload	= NULL;
 	serv->ops->nfi_flush	= NULL;
-
+	
 	serv->ops->nfi_getattr	= nfi_nfs_getattr;
 	serv->ops->nfi_setattr	= nfi_nfs_setattr;
-
+	
 	serv->ops->nfi_open	= nfi_nfs_open;
 	serv->ops->nfi_close	= nfi_nfs_close;
-
+	
 	serv->ops->nfi_read	= nfi_nfs_read;
 	serv->ops->nfi_write	= nfi_nfs_write;
-
+	
 	serv->ops->nfi_create	= nfi_nfs_create;
 	serv->ops->nfi_remove	= nfi_nfs_remove;
 	serv->ops->nfi_rename	= nfi_nfs_rename;
-
-	serv->ops->nfi_mkdir	= nfi_nfs_mkdir;
+	
+	serv->ops->nfi_mkdir	= nfi_nfs_mkdir;	
 	serv->ops->nfi_rmdir	= nfi_nfs_rmdir;
 	serv->ops->nfi_opendir	= nfi_nfs_opendir;
 	serv->ops->nfi_readdir	= nfi_nfs_readdir;
@@ -159,8 +158,8 @@ int nfi_nfs_init(char *url, struct nfi_server *serv, __attribute__((__unused__))
 		fprintf(stderr,"nfi_nfs_init: url %s incorrect.\n",url);
 		return -1;
 	}
-	server_aux->cl = (CLIENT *)create_connection_mount(server, NFS_UDP);
-
+	server_aux->cl = (CLIENT *)create_connection_mount(server, NFS_UDP);	
+	
 	if(server_aux->cl == NULL){
 		nfs_err(NFSERR_MNTCONNECTION);
 		fprintf(stderr,"nfi_nfs_init: server_aux is null. Can't reserve memory\n");
@@ -178,9 +177,9 @@ int nfi_nfs_init(char *url, struct nfi_server *serv, __attribute__((__unused__))
 		free(server_aux);
 		return -1;
 	}
-
+	
         close_connection_mount(server_aux->cl);
-/*
+/*	
  	if((strcmp(prt, "nfs2tcp") == 0) ||
 	   (strcmp(prt, "nfs2tcphilos") == 0)){
 #if defined(DEBUG_NFI)
@@ -192,7 +191,7 @@ int nfi_nfs_init(char *url, struct nfi_server *serv, __attribute__((__unused__))
 	else{
 		server_aux->cl = create_connection_nfs(server, NFS_UDP);
 	}
-*/
+*/	
 	if(server_aux->cl == NULL){
 		nfs_err(NFSERR_NFSCONNECTION);
 		fprintf(stderr,"nfi_nfs_init: Can't connect with NFS service of %s\n",server);
@@ -212,7 +211,7 @@ int nfi_nfs_init(char *url, struct nfi_server *serv, __attribute__((__unused__))
 		return -1;
 	}
 	strcpy(serv->server, server);
-
+	
 	serv->url = (char *)malloc(sizeof(char)*(strlen(url)+1));	/* server address */
 	if(serv->url == NULL){
 		nfs_err(NFSERR_MEMORY);
@@ -235,7 +234,7 @@ int nfi_nfs_init(char *url, struct nfi_server *serv, __attribute__((__unused__))
 	}
 	if((strcmp(prt, "nfshilos") == 0)  ||
 	   (strcmp(prt, "nfs2hilos") == 0) ||
-	   (strcmp(prt, "nfs2udphilos") == 0) ||
+	   (strcmp(prt, "nfs2udphilos") == 0) ||	   
 	   (strcmp(prt, "nfs2tcphilos") == 0)){
 #if defined(DEBUG_NFI)
 		printf("nfs2hilos\n");
@@ -266,7 +265,7 @@ int nfi_nfs_disconnect(struct nfi_server *serv)
          if(server_aux != NULL){
 	         if( server_aux->cl != NULL)
 		         close_connection_nfs( server_aux->cl);
- 	
+ 		
 		 ret = ParseURL(serv->url, NULL, NULL, NULL, NULL,  NULL,  dir);
 		 if(ret < 0){
 		        nfs_err(NFSERR_URL);
@@ -279,7 +278,7 @@ int nfi_nfs_disconnect(struct nfi_server *serv)
                       ret = nfs_umount(dir, server_aux->cl);
                       close_connection_mount(server_aux->cl);
                  }
-	
+		 
                  free(serv->private_info);
         }
 
@@ -292,9 +291,9 @@ int nfi_nfs_disconnect(struct nfi_server *serv)
 	}
 
 	//serv->protocol = -1;
-
+ 
 	nfi_worker_end(serv->wrk);
-
+	
 	return 0;
 }
 
@@ -343,7 +342,7 @@ int nfi_nfs_reconnect(struct nfi_server *serv)
 	}
 
         close_connection_mount(server_aux->cl);
- 
+ 	
 	server_aux->cl = create_connection_nfs(server, NFS_UDP);
 	if(server_aux->cl == NULL){
 		nfs_err(NFSERR_NFSCONNECTION);
@@ -352,7 +351,7 @@ int nfi_nfs_reconnect(struct nfi_server *serv)
 		return -1;
 	}
 
-
+	
 	serv->private_info = (void *)server_aux;
 	return 0;
 }
@@ -367,21 +366,21 @@ int nfi_nfs_destroy(struct nfi_server *serv)
 	struct nfi_nfs_server *server_aux;
         char dir[NFSPATHLEN];
 	int ret;
-
+	
 	if (serv == NULL)
 		return 0;
 
 	if(serv->ops != NULL)
 		free(serv->ops);
-
+	
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
-
+	
 	if(server_aux != NULL){
 		if( server_aux->cl != NULL)
 			close_connection_nfs( server_aux->cl);
 
-	
-	
+		
+		
 		ret = ParseURL(serv->url, NULL, NULL, NULL, NULL,  NULL,  dir);
 		if(ret < 0){
 			nfs_err(NFSERR_URL);
@@ -389,13 +388,13 @@ int nfi_nfs_destroy(struct nfi_server *serv)
 					fprintf(stderr,"nfi_nfs_destroy: url %s incorrect.\n",serv->url);
 			return -1;
 		}
-
+	
 		server_aux->cl = create_connection_mount(serv->server, NFS_UDP);
 		if(server_aux->cl != NULL){
-			ret = nfs_umount(dir, server_aux->cl);	
+			ret = nfs_umount(dir, server_aux->cl);		
 			close_connection_mount(server_aux->cl);
 		}
-	
+		
 
 		free(serv->private_info);
 	}
@@ -411,9 +410,9 @@ int nfi_nfs_destroy(struct nfi_server *serv)
 	}
 
 	//serv->protocol = -1;
-
+	
 	nfi_worker_end(serv->wrk);
-
+	
 	return 0;
 }
 
@@ -425,33 +424,33 @@ int nfi_nfs_destroy(struct nfi_server *serv)
  ************************************************************/
 
 int nfi_nfs_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr){
-
+	
 	int ret;
 	fattr fatt;
-
+	
 	struct nfi_nfs_server *server_aux;
 	struct nfi_nfs_fhandle *fh_aux;
-
-
-	if (attr == NULL){	
+	
+	
+	if (attr == NULL){		
 		nfs_err(NFSERR_PARAM);
 		fprintf(stderr,"nfi_nfs_getattr: attr parameter incorrect\n");
 		return -1;
 	}
 
-
-	if (serv == NULL){	
+	
+	if (serv == NULL){		
 		nfs_err(NFSERR_PARAM);
 		fprintf(stderr,"nfi_nfs_getattr: serv parameter incorrect\n");
 		return -1;
-	}
-
-
-	if (fh == NULL){	
+	}	
+	
+	
+	if (fh == NULL){		
 		nfs_err(NFSERR_PARAM);
 		fprintf(stderr,"nfi_nfs_getattr: fh parameter incorrect\n");
 		return -1;
-	}
+	}	
 
 	if (fh->priv_fh == NULL){
 		nfs_err(NFSERR_PARAM);
@@ -459,13 +458,13 @@ int nfi_nfs_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -475,7 +474,7 @@ int nfi_nfs_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi
 #endif
 	fh_aux = (struct nfi_nfs_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_nfs_server *) serv->private_info;
-
+	
 	ret = nfs_getattr(fh_aux->fh, &fatt, server_aux->cl);
 	if(ret < 0){
 		nfs_err(NFSERR_GETATTR);
@@ -496,44 +495,44 @@ int nfi_nfs_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi
 	struct nfi_nfs_server *server_aux;
 	struct nfi_nfs_fhandle *fh_aux;
 
-
-	if (attr == NULL){	
+	
+	if (attr == NULL){		
 		nfs_err(NFSERR_PARAM);
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
-
-	if (serv == NULL){	
+	
+	if (serv == NULL){		
+		nfs_err(NFSERR_PARAM);
+		return -1;
+	}
+	
+	if (fh->priv_fh == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
-	if (fh->priv_fh == NULL){	
-		nfs_err(NFSERR_PARAM);
-		return -1;
-	}
-
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
-               nfs_err(NFSERR_PARAM);		
+               nfs_err(NFSERR_PARAM);			  
                return -1;
         }
 #endif
 
-
+	
 	NFItoNFSattr(&fatt,attr);
-
+	
 	fh_aux = (struct nfi_nfs_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_nfs_server *) serv->private_info;
-
+	
 	ret = nfs_setattr(fh_aux->fh, &fatt, server_aux->cl);
 	if(ret < 0){
 		nfs_err(NFSERR_GETATTR);
@@ -547,28 +546,28 @@ int nfi_nfs_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi
 int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 {
 	char dir[NFSPATHLEN], server[NFSPATHLEN];
-	int ret;
+	int ret;	
 	struct nfi_nfs_server *server_aux;
 	struct nfi_nfs_fhandle *fh_aux;
-
 	
-	if (serv == NULL){	
+		
+	if (serv == NULL){		
+		nfs_err(NFSERR_PARAM);
+		return -1;
+	}
+	
+	if (fho == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
-	if (fho == NULL){	
-		nfs_err(NFSERR_PARAM);
-		return -1;
-	}
-
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -583,15 +582,15 @@ int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 		fprintf(stderr,"nfs_open: url %s incorrect.\n",url);
 		return -1;
 	}
-
+	
 	fho->url = (char *)malloc(strlen(url)+1);
 	if(fho->url == NULL){
 		nfs_err(NFSERR_MEMORY);
-		return -1;
+		return -1;	
 	}
-
+	
 	strcpy(fho->url, url);
-
+	
 	fh_aux = (struct nfi_nfs_fhandle *)malloc(sizeof(struct nfi_nfs_fhandle));
 	if (fh_aux == NULL){
 		nfs_err(NFSERR_MEMORY);
@@ -599,16 +598,16 @@ int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 		free(fho->url);
 		return -1;
 	}
-	
+		
 	server_aux = (struct nfi_nfs_server *) serv->private_info;
-
+	
 	getDirWithURL(serv->url, dir);
-
+	
 	/* obtaine the NFS file handle */
-	ret = nfs_lookup(server_aux->fh,
-			dir,
-			fh_aux->fh,
-			NULL,
+	ret = nfs_lookup(server_aux->fh, 
+			dir, 
+			fh_aux->fh, 
+			NULL, 
 			server_aux->cl);
 
 #define DBG_NFI 0
@@ -636,9 +635,9 @@ int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 	fho->priv_fh = NULL;
 	fho->server = serv;
 	fho->priv_fh = (void *) fh_aux;
-
-	return 0;
-
+	
+	return 0;	
+	
 }
 
 
@@ -649,13 +648,13 @@ int nfi_nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 		//fprintf(stderr,"nfi_nfs_open: Fail %s\n",url);
 		return -1;
 	}
-
+	
 	if (fho->type != NFIFILE){
 		nfi_nfs_close(serv, fho);
 		fprintf(stderr,"nfi_nfs_open: Fail %s isn't a FILE.\n",url);
 		return -1;
 	}
-	
+		
 	return 0;
 }
 
@@ -663,66 +662,66 @@ int nfi_nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 
 
 int nfi_nfs_close(struct nfi_server *server,  struct nfi_fhandle *fh){
-	if (server == NULL){	
+	if (server == NULL){		
 		nfs_err(NFSERR_PARAM);
 		fprintf(stderr,"nfi_nfs_close: server is null.\n");
 		return -1;
 	}
-	if (fh == NULL){	
+	if (fh == NULL){		
 		nfs_err(NFSERR_PARAM);
 		fprintf(stderr,"nfi_nfs_close: fh is null.\n");
 		return -1;
-	}
+	}	
 
 	if (fh->priv_fh != NULL){
 		/* free memory */
 		//fprintf(stderr,"nfi_nfs_close: fh->priv_fh is null.\n");
 		free(fh->priv_fh);
 		fh->priv_fh = NULL;
-	
+		
 	}
-	
+		
 	if (fh->url != NULL){
 		free(fh->url);
 	}
-
+	
 	fh->type = NFINULL;
 	fh->server = NULL;
-
+	
 	return 0;
 }
 
-ssize_t nfi_nfs_read(	struct nfi_server *serv,
-			struct nfi_fhandle *fh,
-			void *buffer,
-			off_t offset,
+ssize_t nfi_nfs_read(	struct nfi_server *serv,  
+			struct nfi_fhandle *fh, 
+			void *buffer, 
+			off_t offset, 
 			size_t size)
 {
-
+	
 	ssize_t new_size;
-
+	
 	struct nfi_nfs_server *server_aux;
 	struct nfi_nfs_fhandle *fh_aux;
-
-	if (serv == NULL){	
+	
+	if (serv == NULL){		
+		nfs_err(NFSERR_PARAM);
+		return -1;
+	}
+	
+	
+	if (fh == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
 
-	if (fh == NULL){	
-		nfs_err(NFSERR_PARAM);
-		return -1;
-	}
-
-
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -731,62 +730,62 @@ ssize_t nfi_nfs_read(	struct nfi_server *serv,
         }
 #endif
 
-
+	
 	fh_aux = (struct nfi_nfs_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_nfs_server *) serv->private_info;
-
-
-
-//fprintf(stderr, "nfs_read(offset=%d, size=%d)", offset, size);
-	new_size = nfs_read(fh_aux->fh,
-			    (char *)buffer,
-			    offset,
-			    size,
+	
+	
+	
+//fprintf(stderr, "nfs_read(offset=%d, size=%d)", offset, size);	
+	new_size = nfs_read(fh_aux->fh, 
+			    (char *)buffer, 
+			    offset, 
+			    size, 
 			    server_aux->cl);
-//fprintf(stderr, "=%d\n", new_size);
+//fprintf(stderr, "=%d\n", new_size);	
 #ifdef  DBG_NFI
 	//fprintf(stderr,"nfi_nfs_read: read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)new_size);
 #endif
-
+	
 	if(new_size < 0){
 		nfs_err(NFSERR_READ);
 		fprintf(stderr,"nfi_nfs_read: Fail read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)new_size);
 		return -1;
 	}
 
-
+	
 	return new_size;
 }
 
-ssize_t nfi_nfs_write(	struct nfi_server *serv,
-			struct nfi_fhandle *fh,
-			void *buffer,
-			off_t offset,
+ssize_t nfi_nfs_write(	struct nfi_server *serv,  
+			struct nfi_fhandle *fh, 
+			void *buffer, 
+			off_t offset, 
 			size_t size)
-{
-
+{	
+	
 	ssize_t new_size;
         struct nfi_nfs_server *server_aux;
         struct nfi_nfs_fhandle *fh_aux;
-
-	if (serv == NULL){	
+	
+	if (serv == NULL){		
+		nfs_err(NFSERR_PARAM);
+		return -1;
+	}
+	
+	
+	if (fh == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
-
-	if (fh == NULL){	
-		nfs_err(NFSERR_PARAM);
-		return -1;
-	}
-
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -794,16 +793,16 @@ ssize_t nfi_nfs_write(	struct nfi_server *serv,
                return -1;
         }
 #endif
-
+	
 
         fh_aux = (struct nfi_nfs_fhandle *) fh->priv_fh;
         server_aux = (struct nfi_nfs_server *) serv->private_info;
 
-
-	new_size = nfs_write(fh_aux->fh,
-			(char *)buffer,
-			offset,
-			size,
+	
+	new_size = nfs_write(fh_aux->fh, 
+			(char *)buffer, 
+			offset, 
+			size, 
 			server_aux->cl);
 #define DBG_NFI 0
 #ifdef  DBG_NFI
@@ -816,7 +815,7 @@ ssize_t nfi_nfs_write(	struct nfi_server *serv,
 		return -1;
 	}
 
-
+	
 	return new_size;
 }
 
@@ -826,7 +825,7 @@ int nfi_nfs_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 	int ret;
 	fhandle fhAux;
 	fattr fatt;		/* NFS attributes */
-
+	
         struct nfi_nfs_server *server_aux;
         struct nfi_nfs_fhandle *fh_aux;
 
@@ -839,23 +838,23 @@ int nfi_nfs_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 		return ret;
 	}
 
-	if (serv == NULL){	
+	if (serv == NULL){		
+		nfs_err(NFSERR_PARAM);
+		return -1;
+	}
+	
+	if (attr == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
-	if (attr == NULL){	
-		nfs_err(NFSERR_PARAM);
-		return -1;
-	}
-
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -864,7 +863,7 @@ int nfi_nfs_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
         }
 #endif
 
-
+	
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		nfs_err(NFSERR_URL);
@@ -872,16 +871,16 @@ int nfi_nfs_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 		return -1;
 	}
 
-
+	
 	/* elimina del dir la parte del fichero */
 	ret = getNameFile(file, dir);
 	if(ret < 0){
 		nfs_err(NFSERR_URL);
-	
+		
 		fprintf(stderr,"nfi_nfs_create: url %s incorrect.\n",url);
 		return -1;
 	}
-
+	
 	/* private_info file handle */
 	fh_aux = (struct nfi_nfs_fhandle *)malloc(sizeof(struct nfi_nfs_fhandle));
 	if (fh_aux == NULL){
@@ -889,18 +888,18 @@ int nfi_nfs_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 		fprintf(stderr,"nfi_nfs_create: fh_aux is null. Can't reserve memory\n");
 		return -1;
 	}
-
+	
 	bzero(fh_aux, sizeof(struct nfi_nfs_fhandle));
 
 
     	server_aux = (struct nfi_nfs_server *) serv->private_info;
 	getDirWithURL(serv->url,dir);
 	/* obtain the directory file handle */
-
-	ret = nfs_lookup(server_aux->fh,
-			dir,
-			fhAux,
-			NULL,
+	
+	ret = nfs_lookup(server_aux->fh, 
+			dir, 
+			fhAux, 
+			NULL, 
 			server_aux->cl);
 	if(ret < 0){
 		nfs_err(NFSERR_LOOKUP);
@@ -910,11 +909,11 @@ int nfi_nfs_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 	}
 
 	/* create the file into the directory */
-	ret = nfs_create(fhAux,
-			  file,
-			  attr->at_mode,
-			  fh_aux->fh,
-			  &fatt,
+	ret = nfs_create(fhAux, 
+			  file, 
+			  attr->at_mode, 
+			  fh_aux->fh, 
+			  &fatt, 
 			  server_aux->cl);
 
 	if(ret < 0){
@@ -925,7 +924,7 @@ int nfi_nfs_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 	}
 	fh->server = serv;
         fh->priv_fh = (void *)fh_aux;
-
+	
         fh->url = (char *)malloc(strlen(url)+1);
         if(fh->url == NULL){
                nfs_err(NFSERR_MEMORY);
@@ -933,7 +932,7 @@ int nfi_nfs_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
                return -1;
         }
         strcpy(fh->url, url);
-
+	
 	NFStoNFIattr(attr, &fatt);
 
 	return 0;
@@ -946,22 +945,22 @@ int nfi_nfs_remove(struct nfi_server *serv,  char *url)
 	int ret;
 	fhandle fhAux;
 
-
+	
         struct nfi_nfs_server *server_aux;
-
-
-	if (serv == NULL){	
+	
+	
+	if (serv == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
-
-#ifdef NFI_DYNAMIC
+	
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -969,10 +968,10 @@ int nfi_nfs_remove(struct nfi_server *serv,  char *url)
                return -1;
         }
 #endif
-
-
+	
+	
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
-
+	
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		nfs_err(NFSERR_URL);
@@ -986,13 +985,13 @@ int nfi_nfs_remove(struct nfi_server *serv,  char *url)
 		fprintf(stderr,"nfi_nfs_remove: url %s incorrect.\n",url);
 		return -1;
 	}
-
+	
 	getDirWithURL(serv->url,dir);
         /* obtain the directory file handle */
-	ret = nfs_lookup(server_aux->fh,
-			dir,
-			fhAux,
-			NULL,
+	ret = nfs_lookup(server_aux->fh, 
+			dir, 
+			fhAux, 
+			NULL, 
 			server_aux->cl);
 
 	if(ret < 0){
@@ -1002,16 +1001,16 @@ int nfi_nfs_remove(struct nfi_server *serv,  char *url)
 	}
 
 	/* remove the file into the directory */
-	ret = nfs_remove(fhAux,
-			  file, 				
+	ret = nfs_remove(fhAux, 
+			  file, 					
 			  server_aux->cl);
-
+	
 	if(ret < 0){
 		//fprintf(stderr,"nfi_nfs_remove: Fail remove %s in server %s (ret:%d).\n",dir,serv->server,ret);
 		nfs_err(NFSERR_REMOVE);
 		return -1;
 	}
-
+	
 
 
 	return 0;
@@ -1019,25 +1018,25 @@ int nfi_nfs_remove(struct nfi_server *serv,  char *url)
 
 int nfi_nfs_rename(struct nfi_server *serv,  char *old_url, char *new_url)
 {
-
+	
         struct nfi_nfs_server *server_aux;
         fhandle fhAux_src, fhAux_dest;
         char server[NFSPATHLEN], dir_src[NFSPATHLEN], file_src[NFSPATHLEN], dir_dest[NFSPATHLEN], file_dest[NFSPATHLEN];
         int ret;
 
-
-	if (serv == NULL){	
+	
+	if (serv == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
-			nfs_err(); not necessary
+			nfs_err(); not necessary 
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1083,7 +1082,7 @@ int nfi_nfs_rename(struct nfi_server *serv,  char *old_url, char *new_url)
 
 	getDirWithURL(serv->url,dir_src);
 	getDirWithURL(serv->url,dir_dest);
-
+        
 	/* obtain the directory file handle */
         ret = nfs_lookup(server_aux->fh,
                         dir_src,
@@ -1112,14 +1111,14 @@ int nfi_nfs_rename(struct nfi_server *serv,  char *old_url, char *new_url)
         }
 
 
-	ret = nfs_rename(fhAux_src, file_src, fhAux_dest, file_dest, server_aux->cl);
+	ret = nfs_rename(fhAux_src, file_src, fhAux_dest, file_dest, server_aux->cl);	
 	if(ret < 0){
 		//fprintf(stderr,"nfi_nfs_remove: Fail remove %s in server %s (ret:%d).\n",dir,serv->server,ret);
 		nfs_err(NFSERR_REMOVE);
 		return -1;
 	}
 
-
+	
 	return 0;
 }
 
@@ -1129,29 +1128,29 @@ int nfi_nfs_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, st
 	int ret;
 	fhandle fhAux;
 	fattr fatt;		/* NFS attributes */
-
-
+	
+	
         struct nfi_nfs_server *server_aux;
         struct nfi_nfs_fhandle *fh_aux;
+	
 
-
-	if (serv == NULL){	
+	if (serv == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
-	if (attr == NULL){	
+	if (attr == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1159,15 +1158,15 @@ int nfi_nfs_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, st
                return -1;
         }
 #endif
-
+	
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
-
+	
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		nfs_err(NFSERR_URL);
 		return -1;
 	}
-
+	
 	/* elimina del dir la parte del fichero */
 	ret = getNameFile(file, dir);
 	if(ret < 0){
@@ -1175,7 +1174,7 @@ int nfi_nfs_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, st
 		fprintf(stderr,"nfi_nfs_mkdir: url %s incorrect.\n",url);
 		return -1;
 	}
-
+	
 	/* private_info file handle */
 	fh_aux = (struct nfi_nfs_fhandle *)malloc(sizeof(struct nfi_nfs_fhandle));
 	if (fh_aux == NULL){
@@ -1183,16 +1182,16 @@ int nfi_nfs_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, st
 		nfs_err(NFSERR_MEMORY);
 		return -1;
 	}
-
-
+	
+	
 	bzero(fh_aux, sizeof(struct nfi_nfs_fhandle));
-
+	
 	getDirWithURL(serv->url,dir);
 	/* obtain the directory file handle */
-	ret = nfs_lookup(server_aux->fh,
-			dir,
-			fhAux,
-			NULL,
+	ret = nfs_lookup(server_aux->fh, 
+			dir, 
+			fhAux, 
+			NULL, 
 			server_aux->cl);
 
 	if(ret < 0){
@@ -1203,13 +1202,13 @@ int nfi_nfs_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, st
 	}
 
 	/* create the dir into the directory */
-	ret = nfs_mkdir(fhAux,
-			  file,
-			  attr->at_mode,
-			  fh_aux->fh,
-			  &fatt,
+	ret = nfs_mkdir(fhAux, 
+			  file, 
+			  attr->at_mode, 
+			  fh_aux->fh, 
+			  &fatt, 
 			  server_aux->cl);
-
+	
 	if(ret < 0){
 		nfs_err(NFSERR_MKDIR);
 		fprintf(stderr,"nfi_nfs_mkdir: Fail mkdir %s in server %s (ret:%d).\n",serv->url,serv->server,ret);
@@ -1218,7 +1217,7 @@ int nfi_nfs_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, st
 	}
 
         fh->priv_fh = (void *)fh_aux;
-
+	
         fh->url = (char *)malloc(strlen(url)+1);
         if(fh->url == NULL){
                nfs_err(NFSERR_MEMORY);
@@ -1226,7 +1225,7 @@ int nfi_nfs_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, st
                return -1;
         }
         strcpy(fh->url, url);
-
+	
 	NFStoNFIattr(attr, &fatt);
 
 
@@ -1238,23 +1237,23 @@ int nfi_nfs_rmdir(struct nfi_server *serv,  char *url)
 	char server[NFSPATHLEN], dir[NFSPATHLEN], file[NFSPATHLEN];
 	int ret;
 	fhandle fhAux;
-
-
+	
+	
         struct nfi_nfs_server *server_aux;
 
-	if (serv == NULL){	
+	if (serv == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
 
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1263,9 +1262,9 @@ int nfi_nfs_rmdir(struct nfi_server *serv,  char *url)
         }
 #endif
 
-
+	
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
-
+	
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		nfs_err(NFSERR_URL);
@@ -1279,13 +1278,13 @@ int nfi_nfs_rmdir(struct nfi_server *serv,  char *url)
 		fprintf(stderr,"nfi_nfs_mkdir: url %s incorrect.\n",url);
 		return -1;
 	}
-
+	
 	getDirWithURL(serv->url,dir);
 	/* obtain the directory file handle */
-	ret = nfs_lookup(server_aux->fh,
-			dir,
-			fhAux,
-			NULL,
+	ret = nfs_lookup(server_aux->fh, 
+			dir, 
+			fhAux, 
+			NULL, 
 			server_aux->cl);
 
 	if(ret < 0){
@@ -1295,15 +1294,15 @@ int nfi_nfs_rmdir(struct nfi_server *serv,  char *url)
 	}
 
 	/* remove the dir into the directory */
-	ret = nfs_rmdir(fhAux,
-			  file, 				
+	ret = nfs_rmdir(fhAux, 
+			  file, 					
 			  server_aux->cl);
 	if(ret < 0){
 		nfs_err(NFSERR_REMOVE);
 		fprintf(stderr,"nfi_nfs_rmdir: Fail rmdir %s in server %s (ret:%d).\n",serv->url,serv->server,ret);
 		return -1;
 	}
-
+	
 	return 0;
 }
 
@@ -1324,24 +1323,24 @@ int nfi_nfs_opendir(struct nfi_server *server,  char *url, struct nfi_fhandle *f
 int nfi_nfs_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, char *entry, __attribute__((__unused__)) unsigned char *type)
 {
 	int ret;
-
-
+	
+	
         struct nfi_nfs_server *server_aux;
         struct nfi_nfs_fhandle *fh_aux;
 
-
-	if (serv == NULL){	
+	
+	if (serv == NULL){		
+		nfs_err(NFSERR_PARAM);
+		return -1;
+	}
+	
+	
+	if (fh == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
-
-	if (fh == NULL){	
-		nfs_err(NFSERR_PARAM);
-		return -1;
-	}
-
-	if (fh->priv_fh == NULL){	
+	if (fh->priv_fh == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
@@ -1351,13 +1350,13 @@ int nfi_nfs_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, char *entry
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 			/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1365,30 +1364,30 @@ int nfi_nfs_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, char *entry
                return -1;
         }
 #endif
-
+	
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
 	fh_aux = (struct nfi_nfs_fhandle *)fh->priv_fh;
-
+	
 	if(fh_aux->eofdir){
 		entry[0] = '\0';
 		return 0;
 	}
-
+	
 	ret = nfs_readdir(fh_aux->fh, fh_aux->cookie, entry, server_aux->cl);
 	if((ret < 0)&&(ret != NFSERR_EOFDIR)){
 		nfs_err(NFSERR_READDIR);
-		return -1;	
+		return -1;		
 	}
 
 	if(ret == NFSERR_EOFDIR){
 		fh_aux->eofdir = 1;
 	}
-
+	
 	return 0;
 }
 
 int nfi_nfs_closedir(struct nfi_server *serv,  struct nfi_fhandle *fh)
-{
+{	
 	return nfi_nfs_close(serv, fh);
 }
 
@@ -1396,28 +1395,28 @@ int nfi_nfs_closedir(struct nfi_server *serv,  struct nfi_fhandle *fh)
 int nfi_nfs_statfs(struct nfi_server *serv,  struct nfi_info *inf)
 {
 	struct nfs_info nfsinf;
-	int ret;
+	int ret;	
         struct nfi_nfs_server *server_aux;
 
-
-	if (serv == NULL){	
+	
+	if (serv == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
-	if (inf == NULL){	
+	if (inf == NULL){		
 		nfs_err(NFSERR_PARAM);
 		return -1;
 	}
 
 
-#ifdef NFI_DYNAMIC
+#ifdef NFI_DYNAMIC	
 	if (serv->private_info == NULL){
 		ret = nfi_nfs_reconnect(serv);
 		if(ret <0){
 		/* nfs_err(); not necessary */
 			return -1;
-		}
+		}	
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1425,11 +1424,11 @@ int nfi_nfs_statfs(struct nfi_server *serv,  struct nfi_info *inf)
                return -1;
         }
 #endif
-
+	
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
 	ret = nfs_statfs(server_aux->fh, &nfsinf, server_aux->cl);
 	if(ret <0){
-		nfs_err(NFSERR_STATFS);
+		nfs_err(NFSERR_STATFS);	
 		return -1;
 	}
 

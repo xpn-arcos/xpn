@@ -44,10 +44,10 @@
      #define LSEEK real_posix_lseek
 #endif
 
-// <IMPORTANT>: next two lines MUST be before each file in xpn_client that uses filesystem.h BUT NOT in mpi_server that uses filesystem.h
-//   #define ASYNC_CLOSE 1
-//   #define FILESYSTEM_DLSYM 1
-// </IMPORTANT>
+// <TODO: next two lines MUST be before each file in xpn_client that uses filesystem.h BUT NOT in mpi_server that uses filesystem.h>
+     #define ASYNC_CLOSE 1
+     #define FILESYSTEM_DLSYM 1
+// </TODO>
 
 
    /* ... Functions / Funciones ......................................... */

@@ -12,14 +12,13 @@
  #endif
 
 
-   #define XPN_MAX_PART 128
+#define XPN_MAX_PART 128
 
-   extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
+extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
 
-   int xpn_init_partition(char *partname);
-
-   int xpn_simple_destroy ( void ) ;
-   int xpn_simple_init ( void ) ;
+int xpn_init();
+int xpn_init_partition(char *partname);
+int xpn_destroy();
 
 
  #ifdef  __cplusplus

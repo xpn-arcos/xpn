@@ -31,16 +31,16 @@ int xpn_setvbuf(register FILE *stream, char *buf, int mode, size_t size);
 
 void xpn_setbuf(register FILE *stream, char *buf)
 {
-  (void) xpn_setvbuf(stream, buf, (buf ? _IOFBF : _IONBF), (size_t) BUFSIZ);
+	(void) xpn_setvbuf(stream, buf, (buf ? _IOFBF : _IONBF), (size_t) BUFSIZ);
 }
 
 void xpn_setbuffer(register FILE *stream, char *buf, size_t size)
 {
-  (void) xpn_setvbuf(stream, buf, (buf ? _IOFBF : _IONBF), size);
+	(void) xpn_setvbuf(stream, buf, (buf ? _IOFBF : _IONBF), size);
 }
 
 void xpn_setlinebuf(register FILE *stream)
 {
-  (void ) xpn_setvbuf(stream, (char *) NULL, _IOLBF, 0);
+	(void ) xpn_setvbuf(stream, (char *) NULL, _IOLBF, 0);
 }
 
