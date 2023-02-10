@@ -15,9 +15,10 @@
  #endif
 
 
-int   xpn_open(const char *path, int flags, ...);
+//int   xpn_open(const char *path, int flags, ...);
 FILE *xpn_fopencookie(const char *path, const char *mode);
 
+int   xpn_simple_open(const char *path, int flags, mode_t mode) ;
 int   xpn_simple_creat(const char *path, mode_t perm) ;
 FILE *xpn_simple_fopen(const char *filename, const char *mode) ;
 int   xpn_simple_close(int fd) ;

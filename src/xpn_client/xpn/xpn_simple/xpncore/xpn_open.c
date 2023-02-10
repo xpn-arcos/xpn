@@ -735,10 +735,8 @@ int xpn_simple_creat(const char *path, mode_t perm)
   return res;
 }
 
-int xpn_open(const char *path, int flags , ...)
+int xpn_simple_open(const char *path, int flags, mode_t mode)
 {
-  mode_t mode;
-  va_list ap;
   struct xpn_fh *vfh;
   struct xpn_metadata *mdata;
   int md;
@@ -752,12 +750,8 @@ int xpn_open(const char *path, int flags , ...)
     return res;
   }
 
-  mode = 0;
   if ((flags & O_CREAT) > 0)
   {
-    va_start(ap, flags);
-    mode = va_arg(ap, mode_t);
-    va_end(ap);
     if (mode > 0177777)
     {
       XPN_DEBUG_END_ARGS1(path)
@@ -1202,7 +1196,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
   } 
   else 
   {
-    fd = xpn_open(abs_path, O_RDONLY);
+    fd = xpn_simple_open(abs_path, O_RDONLY, 0);
     if(fd>=0)
     {
       res = XpnGetAtrib(fd, sb);

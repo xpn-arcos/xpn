@@ -34,12 +34,20 @@
 
       int xpn_init( void )
       {
-          return xpn_simple_init() ;
+          int ret = -1 ;
+
+          ret = xpn_simple_init() ;
+
+	  return ret ;
       }
 
       int xpn_destroy( void )
       {
-          return xpn_simple_destroy() ;
+          int ret = -1 ;
+
+          ret = xpn_simple_destroy() ;
+
+	  return ret ;
       }
 
 
@@ -49,21 +57,41 @@
 
       int xpn_creat(const char *path, mode_t perm)
       {
-          return xpn_simple_creat(path, perm) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_creat(path, perm) ;
+
+	  return ret ;
       }
 
-/*
-      int xpn_open(const char *path, int flags , ...)
+      int xpn_open(const char *path, int flags, ...)
       {
-          TODO: pack ... into stdarg
+          va_list ap ;
+          int     ret  = -1 ;
+          mode_t  mode = 0 ;
 
-          return xpn_simple_open2(const char *path, int flags , args) ;
+	  // get mode
+          if ((flags & O_CREAT) > 0)
+          {
+            va_start(ap, flags);
+            mode = va_arg(ap, mode_t);
+            va_end(ap);
+          }
+
+	  // call simple_open
+          ret = xpn_simple_open(path, flags, mode) ;
+
+	  // return ret
+	  return ret ;
       }
-*/
 
       int xpn_close(int fd)
       {
-          return xpn_simple_close(fd) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_close(fd) ;
+
+	  return ret ;
       }
 
 
@@ -73,17 +101,29 @@
 
       ssize_t xpn_read  ( int fd, void *buffer, size_t size )
       {
-	  return xpn_simple_read(fd, buffer, size) ;
+          ssize_t ret = -1 ;
+
+	  ret = xpn_simple_read(fd, buffer, size) ;
+
+	  return ret ;
       }
 
       ssize_t xpn_write ( int fd, const void *buffer, size_t size )
       {
-	  return xpn_simple_write(fd, buffer, size) ;
+          ssize_t ret = -1 ;
+
+	  ret = xpn_simple_write(fd, buffer, size) ;
+
+	  return ret ;
       }
 
       off_t   xpn_lseek ( int fd, off_t offset, int flag )
       {
-          return xpn_simple_lseek(fd, offset, flag) ;
+          off_t ret = -1 ;
+
+          ret = xpn_simple_lseek(fd, offset, flag) ;
+
+	  return ret ;
       }
 
 
@@ -93,12 +133,20 @@
 
       char* xpn_getcwd(char *path, size_t size)
       {
-            return xpn_simple_getcwd(path, size) ;
+          char * ret = NULL ;
+
+          ret = xpn_simple_getcwd(path, size) ;
+
+	  return ret ;
       }
 
       int xpn_chdir(char *path)
       {
-          return xpn_simple_chdir(path) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_chdir(path) ;
+
+	  return ret ;
       }
 
 
@@ -108,12 +156,20 @@
 
       int xpn_mkdir(const char *path, mode_t perm)
       {
-          return xpn_simple_mkdir(path, perm) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_mkdir(path, perm) ;
+
+	  return ret ;
       }
 
       int xpn_rmdir(const char *path)
       {
-          return xpn_simple_rmdir(path) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_rmdir(path) ;
+
+	  return ret ;
       }
 
 
@@ -123,17 +179,29 @@
 
       DIR *xpn_opendir ( const char *path )
       {
-          return xpn_simple_opendir(path) ;
+          DIR *ret = NULL ;
+
+          ret = xpn_simple_opendir(path) ;
+
+	  return ret ;
       }
 
       struct dirent* xpn_readdir ( DIR *dirp )
       {
-          return xpn_simple_readdir(dirp) ;
+          struct dirent* ret = NULL ;
+
+          ret = xpn_simple_readdir(dirp) ;
+
+	  return ret ;
       }
 
       int  xpn_closedir ( DIR *dirp )
       {
-          return xpn_simple_closedir(dirp) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_closedir(dirp) ;
+
+	  return ret ;
       }
 
       void  xpn_rewinddir ( DIR *dirp )
@@ -148,52 +216,92 @@
 
       int xpn_unlink(const char *path)
       {
-          return xpn_simple_unlink(path) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_unlink(path) ;
+
+	  return ret ;
       }
 
       int xpn_rename(const char *path, const char *newpath)
       {
-          return xpn_simple_rename(path, newpath) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_rename(path, newpath) ;
+
+	  return ret ;
       }
 
       int xpn_truncate( const char *path,  off_t length)
       {
-          return xpn_simple_truncate(path, length) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_truncate(path, length) ;
+
+	  return ret ;
       }
 
       int xpn_ftruncate( int fd,  off_t length)
       {
-          return xpn_simple_ftruncate(fd, length) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_ftruncate(fd, length) ;
+
+	  return ret ;
       }
 
       int xpn_stat(const char *path, struct stat *sb)
       {
-          return xpn_simple_stat(path, sb) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_stat(path, sb) ;
+
+	  return ret ;
       }
 
       int xpn_fstat(int fd, struct stat *sb)
       {
-          return xpn_simple_fstat(fd, sb) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_fstat(fd, sb) ;
+
+	  return ret ;
       }
 
       int xpn_chown( const char *path,  uid_t owner,  gid_t group)
       {
-          return xpn_simple_chown(path, owner, group) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_chown(path, owner, group) ;
+
+	  return ret ;
       }
 
       int xpn_fchown(int  fd,  uid_t owner,  gid_t group)
       {
-          return xpn_simple_fchown(fd, owner, group) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_fchown(fd, owner, group) ;
+
+	  return ret ;
       }
 
       int xpn_chmod( const char *path,  mode_t mode)
       {
-          return xpn_simple_chmod(path, mode) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_chmod(path, mode) ;
+
+	  return ret ;
       }
 
       int xpn_fchmod( int fd,  mode_t mode)
       {
-          return xpn_simple_fchmod(fd, mode) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_fchmod(fd, mode) ;
+
+	  return ret ;
       }
 
 
@@ -203,12 +311,20 @@
 
       int xpn_dup(int fd)
       {
-          return xpn_simple_dup(fd) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_dup(fd) ;
+
+	  return ret ;
       }
 
       int xpn_dup2(int fd, int fd2)
       {
-          return xpn_simple_dup2(fd, fd2) ;
+          int ret = -1 ;
+
+          ret = xpn_simple_dup2(fd, fd2) ;
+
+	  return ret ;
       }
 
 

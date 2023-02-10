@@ -93,7 +93,7 @@ FILE *xpn_fopencookie(const char *path, const char *mode)
   }
 
   fd = (int *)malloc(sizeof(int));
-  *fd = xpn_open((char *)path, flags);
+  *fd = xpn_simple_open((char *)path, flags, 07000);
 
   io_functions.read = xpn_reader;
   io_functions.write = xpn_writer;
@@ -250,7 +250,7 @@ FILE *xpn_simple_fopen(const char *filename, const char *mode)
 
   if (flags >= 0)
   {
-    fd = xpn_open(filename, flags, 0666);
+    fd = xpn_simple_open(filename, flags, 07000);
     if (fd >= 0)
     {
       stream = malloc(sizeof(FILE));

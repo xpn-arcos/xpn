@@ -36,7 +36,7 @@
 
 #include <xpn.h>
 
-long xpn_ftell(FILE *stream)
+long xpn_simple_ftell(FILE *stream)
 {
   long result;
   int adjust = 0;
@@ -58,3 +58,4 @@ long xpn_ftell(FILE *stream)
   result += (long) adjust;
   return result;
 }
+
