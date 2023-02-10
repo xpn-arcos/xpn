@@ -36,7 +36,7 @@
 
 #include <xpn.h>
 
-int xpn_fseek(FILE *stream, long int offset, int whence)
+int xpn_simple_fseek(FILE *stream, long int offset, int whence)
 {
   int adjust = 0;
   long pos;
@@ -70,3 +70,4 @@ int xpn_fseek(FILE *stream, long int offset, int whence)
   
   return ((pos == -1) ? -1 : 0);
 }
+

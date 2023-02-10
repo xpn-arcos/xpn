@@ -58,19 +58,16 @@
           return xpn_simple_fwrite(ptr, size, nmemb, stream) ;
       }
 
-/*
       int xpn_fflush(FILE *stream)
       {
           return xpn_simple_fflush(stream) ;
       }
-*/
 
 
       //
       // fseek - ftell
       //
 
-/*
       int xpn_fseek(FILE *stream, long int offset, int whence)
       {
           return xpn_simple_fseek(stream, offset, whence) ;
@@ -80,7 +77,6 @@
       {
           return xpn_simple_ftell(stream) ;
       }
-*/
 
 
       //

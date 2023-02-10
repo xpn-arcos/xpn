@@ -230,7 +230,7 @@
   /************************************************************
    * Init mpi_server                                               *
    ************************************************************/
-  int nfi_mpi_server_init ( char *url, struct nfi_server *serv, struct nfi_attr_server *attr )
+  int nfi_mpi_server_init ( char *url, struct nfi_server *serv, __attribute__((__unused__)) struct nfi_attr_server *attr )
   {
     int ret ;
     char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
@@ -1265,6 +1265,8 @@
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
 
     // TODO: setattr
+    server_aux = server_aux ;
+    fh_aux     = fh_aux ;
 
     DEBUG_END();
 
