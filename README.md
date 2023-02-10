@@ -64,23 +64,8 @@ Then, you need to get familiar with 5 special environment variables for XPN clie
 
 
 ### 4.1 Ad-Hoc Expand (based on MPI)
-The typical executions has 4 main steps:
-- First, generate the XPN configuration file:
-
-  ```
-    cd $HOME/src/xpn/bin
-    ./mk_conf.sh --conf         ~/tmp/config.xml \
-                 --machinefile  ~/tmp/machinefile \
-                 --part_size    512k \
-                 --part_name    xpn \
-                 --storage_path /tmp
-  ```
-  Where:
-  * ```--part_size``` is the partition size (by default in bytes but "k" can be used for kilobytes and "m" for megabytes).
-  * ```--part_name``` is the partition name (a string without whitespaces).
-  * ```--storage_path``` is where the data is stogare in the servers (is the same for all servers).
-
-- Then, launch the Expand MPI server (xpn_mpi_server):
+The typical executions has 3 main steps:
+- First, launch the Expand MPI server (xpn_mpi_server):
 
   ```
   ./xpn -v -n <number of processes> -l <full path to the hostfile>  start

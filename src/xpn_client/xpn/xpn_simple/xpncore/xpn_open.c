@@ -1136,7 +1136,7 @@ int xpn_simple_fstat(int fd, struct stat *sb)
     return res;
   }
 
-  res = XpnGetAtrib(fd , sb);
+  res = XpnGetAtribFd(fd , sb);
 
   XPN_DEBUG_END_CUSTOM("%d", fd)
 
@@ -1184,7 +1184,12 @@ int xpn_simple_stat(const char *path, struct stat *sb)
     XPN_DEBUG_END_ARGS1(path)
     return res;
   }
-  //debug=1;
+
+  res = XpnGetAtribPath(abs_path2, sb);
+
+
+  //TODO: old version delete
+  /*//debug=1;
   fd = XpnSearchFile(abs_path2);
 
   //debug=0;
@@ -1199,7 +1204,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
     fd = xpn_simple_open(abs_path, O_RDONLY, 0);
     if(fd>=0)
     {
-      res = XpnGetAtrib(fd, sb);
+      res = XpnGetAtribFd(fd, sb);
       xpn_simple_close(fd);
     }
     else 
@@ -1214,7 +1219,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
 
       if (dir != NULL)
       {
-        res = XpnGetAtrib(fd, sb);
+        res = XpnGetAtribFd(fd, sb);
         xpn_simple_closedir(dir);
       }
       else 
@@ -1225,7 +1230,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
         return res;
       }
     }
-  }
+  }*/
 
   XPN_DEBUG_END_ARGS1(path)
   return res;

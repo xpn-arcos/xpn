@@ -468,8 +468,8 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
   return res;
 }
 
-//TODO: mirar type
-int XpnGetAtrib ( int fd, struct stat *st )
+
+int XpnGetAtribFd ( int fd, struct stat *st )
 {
   int res,i,n;
   struct nfi_server **servers;
@@ -558,6 +558,158 @@ int XpnGetAtrib ( int fd, struct stat *st )
   //res = 0;
   XPN_DEBUG_END_CUSTOM("%d", fd)
   return res;
+}
+
+int XpnGetAtribPath ( char * path, struct stat *st )
+{
+  int ret, res, err, i, j, n, pd;
+  char url_serv[PATH_MAX];
+  struct nfi_server **servers;
+  struct nfi_attr *attr;
+  struct xpn_fh *vfh_aux;
+
+  //XPN_DEBUG_BEGIN_CUSTOM("%s", path)
+
+
+  pd = XpnGetPartition(path); // returns partition id and remove partition name from path 
+  if (pd < 0)
+  {
+    xpn_err(XPNERR_PART_NOEXIST);
+    XPN_DEBUG_END_ARGS1(path)
+    return pd;
+  }
+
+  /* params:
+   * flag operation , partition id,absolute path, file descript., pointer to server*/
+  servers = NULL;
+  n = XpnGetServers(op_xpn_getattr, pd, path, -1, &servers, XPN_DATA_SERVER);
+  if(n<=0){
+    /*free(servers);*/
+    return -1;
+  }
+
+  attr = (struct nfi_attr *) malloc(n * sizeof(struct nfi_attr));
+  bzero(attr, n* sizeof(struct nfi_attr));
+
+  vfh_aux = (struct xpn_fh *)malloc(sizeof(struct xpn_fh));
+  /* construccion del vfh */
+  if(vfh_aux == NULL)
+  {
+    xpn_err(XPNERR_NOMEMORY);
+    free(servers);
+    return -1;
+  }
+
+  vfh_aux->n_nfih = n;
+  vfh_aux->nfih = (struct nfi_fhandle **)malloc(sizeof(struct nfi_fhandle*) * n);
+  if(vfh_aux->nfih == NULL)
+  {
+    free(vfh_aux);
+    xpn_err(XPNERR_NOMEMORY);
+    free(servers);
+    return -1;
+  }
+
+  for(i=0;i<n;i++)
+  {
+    vfh_aux->nfih[i] = NULL;
+
+    XpnGetURLServer(servers[i], path, url_serv);
+
+    vfh_aux->nfih[i] = (struct nfi_fhandle*)malloc(sizeof(struct nfi_fhandle));
+    memset(vfh_aux->nfih[i], 0, sizeof(struct nfi_fhandle));
+    if(vfh_aux->nfih[i] == NULL)
+    {
+      free(servers);
+      return -1;
+    }
+    // Worker
+    nfi_worker_do_getattr(servers[i]->wrk, vfh_aux->nfih[i], &(attr[i]));
+
+  }
+  // Wait
+  err = 0;
+  for(i=0;i<n;i++)
+  {
+    ret = nfiworker_wait(servers[i]->wrk);
+
+    // Control error
+    if((ret<0)&&(!err))
+    {
+      /* erase the file create before de server number i */
+      err = 1;
+      for(j=0; j<i; j++)
+      {
+        /*
+        XpnGetURLServer(servers[j], abs_path, url_serv);
+        nfi_worker_do_rmdir(servers[j]->wrk, url_serv);
+        nfi_worker_wait(servers[j]->wrk);
+        */
+      }
+    }
+    else
+    {
+      if((ret>=0)&&(err))
+      {
+        /*
+        XpnGetURLServer(servers[i], abs_path, url_serv);
+        nfi_worker_do_rmdir(servers[i]->wrk, url_serv);
+        nfi_worker_wait(servers[i]->wrk);
+        */
+      }
+    }
+  }
+
+  // Error checking
+  if(err)
+  {
+    xpn_err(XPNERR_REMOVE);
+    free(servers);
+    return -1;
+  }
+
+  for(i=0;i<n;i++)
+  {
+    if (attr[i].at_size > 0){
+      st->st_size += attr[i].at_size; /* total size, in bytes */
+    }
+
+    if (1 == attr[i].at_type)  /* It is a directory */
+    {
+      break;
+    }
+  }
+
+  free(servers);
+
+  //st->st_dev     = 9;                 /* device */
+  //st->st_ino     = 1;                 /* inode */
+
+  st->st_mode    = attr[0].at_mode ;     /* protection */
+
+  if (0 == attr[0].at_type){ /* It is a file */
+    st->st_mode = S_IFREG | st->st_mode;
+  }
+  if (1 == attr[0].at_type){ /* It is a directory */
+    st->st_mode = S_IFDIR | st->st_mode;
+  }
+
+  st->st_nlink   = attr[0].at_nlink;     /* number of hard links */
+  //st->st_uid     = attr.at_uid;     /* user ID of owner */
+  st->st_uid     = getuid() ;         /* user ID of owner */
+  //st->st_gid     = attr.at_gid ;    /* group ID of owner */
+  st->st_gid     = getgid() ;         /* group ID of owner */
+  //st->st_rdev    = 0;                 /* device type (if inode device) */
+  //st->st_blksize = attr.at_blksize ;  /* blocksize for filesystem I/O */
+  st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O */
+  st->st_blocks  = attr[0].at_blocks ;   /* number of blocks allocated */
+  st->st_atime   = attr[0].at_atime ;    /* time of last access */
+  st->st_mtime   = attr[0].at_mtime ;    /* time of last modification */
+  st->st_ctime   = attr[0].at_ctime ;    /* time of last change */
+
+  //ret = 0;
+  //XPN_DEBUG_END_CUSTOM("%s", path)
+  return ret;
 }
 
 /*
