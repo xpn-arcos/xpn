@@ -83,12 +83,10 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
     return -1;
   }
 
-  for(i=0;i<n;i++){
-    vfh_aux->nfih[i] = NULL;
-  }
-
   for(i=0;i<n;i++)
   {
+    vfh_aux->nfih[i] = NULL;
+
     XpnGetURLServer(servers[i], abs_path, url_serv);
 
     vfh_aux->nfih[i] = (struct nfi_fhandle*)malloc(sizeof(struct nfi_fhandle));
