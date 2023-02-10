@@ -23,10 +23,29 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "xpn.h"
+      #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
 
 
    /* ... Functions / Funciones ......................................... */
 
+      //
+      // init - destroy
+      //
+
+      int xpn_init( void )
+      {
+          return xpn_simple_init() ;
+      }
+
+      int xpn_destroy( void )
+      {
+          return xpn_simple_destroy() ;
+      }
+
+
+      //
+      // open - close - creat
+      //
 
       int xpn_creat(const char *path, mode_t perm)
       {
@@ -47,6 +66,85 @@
           return xpn_simple_close(fd) ;
       }
 
+
+      //
+      // read - write - lseek
+      //
+
+      ssize_t xpn_read  ( int fd, void *buffer, size_t size )
+      {
+	  return xpn_simple_read(fd, buffer, size) ;
+      }
+
+      ssize_t xpn_write ( int fd, const void *buffer, size_t size )
+      {
+	  return xpn_simple_write(fd, buffer, size) ;
+      }
+
+      off_t   xpn_lseek ( int fd, off_t offset, int flag )
+      {
+          return xpn_simple_lseek(fd, offset, flag) ;
+      }
+
+
+      //
+      // cwd - chdir
+      //
+
+      char* xpn_getcwd(char *path, size_t size)
+      {
+            return xpn_simple_getcwd(path, size) ;
+      }
+
+      int xpn_chdir(char *path)
+      {
+          return xpn_simple_chdir(path) ;
+      }
+
+
+      //
+      // mkdir - rmdir
+      //
+
+      int xpn_mkdir(const char *path, mode_t perm)
+      {
+          return xpn_simple_mkdir(path, perm) ;
+      }
+
+      int xpn_rmdir(const char *path)
+      {
+          return xpn_simple_rmdir(path) ;
+      }
+
+
+      //
+      // opendir - closedir - readdir
+      //
+
+      DIR *xpn_opendir ( const char *path )
+      {
+          return xpn_simple_opendir(path) ;
+      }
+
+      struct dirent* xpn_readdir ( DIR *dirp )
+      {
+          return xpn_simple_readdir(dirp) ;
+      }
+
+      int  xpn_closedir ( DIR *dirp )
+      {
+          return xpn_simple_closedir(dirp) ;
+      }
+
+      void  xpn_rewinddir ( DIR *dirp )
+      {
+          return xpn_simple_rewinddir(dirp) ;
+      }
+
+
+      //
+      // unlink - rename - etc.
+      //
 
       int xpn_unlink(const char *path)
       {
@@ -99,6 +197,10 @@
       }
 
 
+      //
+      // dup - dup2
+      //
+
       int xpn_dup(int fd)
       {
           return xpn_simple_dup(fd) ;
@@ -106,7 +208,7 @@
 
       int xpn_dup2(int fd, int fd2)
       {
-          return xpn_dup2(fd, fd2) ;
+          return xpn_simple_dup2(fd, fd2) ;
       }
 
 

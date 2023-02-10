@@ -31,7 +31,7 @@
 int xpn_fillbuf(register FILE *stream);
 int xpn_fillbuf_noret(register FILE *stream);
 
-size_t xpn_fread(void *ptr, size_t size, size_t nmemb, register FILE *stream)
+size_t xpn_simple_fread(void *ptr, size_t size, size_t nmemb, register FILE *stream)
 {
   register char *cp = (char *)ptr;
   register int c;
@@ -185,3 +185,4 @@ size_t xpn_fread_prefetch(void *ptr, size_t size, size_t nmemb, register FILE *s
   XPN_DEBUG_END_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
   return ndone;
 }
+

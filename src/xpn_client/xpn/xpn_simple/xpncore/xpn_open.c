@@ -494,7 +494,8 @@ int xpn_internal_remove(const char *path)
 
 
 /************************* TODO ****************************************/
-int xpn_preload(const char *virtual_path, const char *storage_path)
+
+int xpn_simple_preload(const char *virtual_path, const char *storage_path)
 {
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
   struct nfi_server **servers;
@@ -598,7 +599,7 @@ int xpn_preload(const char *virtual_path, const char *storage_path)
 }
 
 
-int xpn_flush(const char *virtual_path, const char *storage_path)
+int xpn_simple_flush(const char *virtual_path, const char *storage_path)
 {
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
   struct nfi_server **servers;
@@ -682,6 +683,7 @@ int xpn_flush(const char *virtual_path, const char *storage_path)
 
   return 0;
 }
+
 /************************* </TODO> ****************************************/
 
 
@@ -1147,7 +1149,9 @@ int xpn_simple_fstat(int fd, struct stat *sb)
   return res;
 }
 
+
 // FIXME: If the user has already opened the max number of files he is allowed to, then this call will fail with EMFILE.
+// FIXME: xpn_simple_stat really need to perform xpn_open+opendir?
 int xpn_simple_stat(const char *path, struct stat *sb)
 {
   char abs_path[PATH_MAX];
@@ -1190,11 +1194,11 @@ int xpn_simple_stat(const char *path, struct stat *sb)
   fd = XpnSearchFile(abs_path2);
 
   //debug=0;
-  //printf("xpn_stat: XpnSearchFile(%s->%s) = %d\n", path, abs_path2, fd);
+  //printf("xpn_simple_stat: XpnSearchFile(%s->%s) = %d\n", path, abs_path2, fd);
 
   // If the file/directory is opened then just return its attributes, else open it and close it.
   if (fd>=0){
-    res = xpn_fstat(fd, sb);
+    res = xpn_simple_fstat(fd, sb);
   } 
   else 
   {
@@ -1202,7 +1206,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
     if(fd>=0)
     {
       res = XpnGetAtrib(fd, sb);
-      xpn_close(fd);
+      xpn_simple_close(fd);
     }
     else 
     {
@@ -1210,14 +1214,14 @@ int xpn_simple_stat(const char *path, struct stat *sb)
       strcpy(new_path, abs_path);
       strcat(new_path,"/");
 
-      dir = xpn_opendir(new_path);
+      dir = xpn_simple_opendir(new_path);
 
       free(new_path);
 
       if (dir != NULL)
       {
         res = XpnGetAtrib(fd, sb);
-        xpn_closedir(dir);
+        xpn_simple_closedir(dir);
       }
       else 
       {

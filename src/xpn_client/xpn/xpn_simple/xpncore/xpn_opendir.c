@@ -25,6 +25,7 @@
 #include "xpn/xpn_simple/xpn_opendir.h"
 #include "xpn/xpn_simple/xpn_policy_opendir.h"
 
+
 DIR *xpn_simple_opendir(const char *path)
 {
   DIR *dirp = NULL;

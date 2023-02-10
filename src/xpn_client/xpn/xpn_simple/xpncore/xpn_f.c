@@ -44,17 +44,17 @@ int buffer_size=64*1024;
 /************************************************************************/
 ssize_t xpn_reader (void *cookie, char *buffer, size_t size)
 {
-  return xpn_read(*((int *)cookie), buffer, size);
+  return xpn_simple_read(*((int *)cookie), buffer, size);
 }
 
 ssize_t xpn_writer (void *cookie, const char *buffer, size_t size)
 {
-  return xpn_write(*((int *)cookie), (char *)buffer, size);
+  return xpn_simple_write(*((int *)cookie), (char *)buffer, size);
 }
 
 int xpn_seeker (void *cookie, __off64_t *position, int whence)
 {
-  return xpn_lseek(*((int *)cookie), (off_t)*position, whence);
+  return xpn_simple_lseek(*((int *)cookie), (off_t)*position, whence);
 }
 
 int xpn_cleaner (void *cookie)
@@ -63,7 +63,7 @@ int xpn_cleaner (void *cookie)
 
   fd = *((int *)cookie);
   free(cookie);
-  return xpn_close(fd);
+  return xpn_simple_close(fd);
 }
 
 FILE *xpn_fopencookie(const char *path, const char *mode)
@@ -112,14 +112,14 @@ FILE *xpn_fopencookie(const char *path, const char *mode)
 int xpn_fgetc(FILE *flujo) {
   unsigned char car;
 
-  xpn_fread(&car, sizeof(unsigned char), 1, flujo);
+  xpn_simple_fread(&car, sizeof(unsigned char), 1, flujo);
 
   return (int)car;
 }
 
 char *xpn_fgets(char *s, int tam, FILE *flujo) {
   bzero(s, tam*sizeof(char));
-  xpn_fread(s, sizeof(char), tam-1, flujo);
+  xpn_simple_fread(s, sizeof(char), tam-1, flujo);
   return s;
 }
 
@@ -127,7 +127,7 @@ int xpn_getc(FILE *flujo) {
   return xpn_fgetc(flujo);
 }
 
-size_t xpn_fread(void *ptr, size_t size, size_t nmemb, FILE *stream) {
+size_t xpn_simple_fread(void *ptr, size_t size, size_t nmemb, FILE *stream) {
   size_t count;
   size_t already_read;
 
@@ -145,7 +145,7 @@ size_t xpn_fread(void *ptr, size_t size, size_t nmemb, FILE *stream) {
     stream->_IO_write_ptr = stream->_IO_buf_base;
     stream->_IO_write_end = stream->_IO_buf_base;
 
-    count = xpn_read(stream->_fileno, stream->_IO_buf_base, stream->_IO_buf_end - stream->_IO_buf_base);
+    count = xpn_simple_read(stream->_fileno, stream->_IO_buf_base, stream->_IO_buf_end - stream->_IO_buf_base);
     stream->_IO_read_end = stream->_IO_read_base + count;
   }
 
@@ -160,7 +160,7 @@ size_t xpn_fread(void *ptr, size_t size, size_t nmemb, FILE *stream) {
     memcpy(ptr, stream->_IO_read_ptr, stream->_IO_read_end - stream->_IO_read_ptr);
     already_read = stream->_IO_read_end - stream->_IO_read_ptr;
     stream->_IO_read_ptr = stream->_IO_buf_base;
-    count = xpn_read(stream->_fileno, stream->_IO_buf_base, stream->_IO_buf_end - stream->_IO_buf_base);
+    count = xpn_simple_read(stream->_fileno, stream->_IO_buf_base, stream->_IO_buf_end - stream->_IO_buf_base);
     stream->_IO_read_end = stream->_IO_read_base + count;
     //fprintf(stderr, "[2/2] R: _IO_read_ptr=%p, size=%d\n", stream->_IO_read_ptr, stream->_IO_read_end - stream->_IO_read_ptr);
     memcpy((char *)((int)ptr + already_read), stream->_IO_read_base, size*nmemb - already_read);
@@ -208,7 +208,7 @@ size_t xpn_fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream) {
     memcpy(stream->_IO_read_ptr, ptr, stream->_IO_buf_end - stream->_IO_read_ptr);
     already_read = stream->_IO_buf_end - stream->_IO_read_ptr;
     stream->_IO_read_ptr = stream->_IO_buf_base;
-    xpn_write(stream->_fileno, stream->_IO_write_base, stream->_IO_buf_end - stream->_IO_write_base);
+    xpn_simple_write(stream->_fileno, stream->_IO_write_base, stream->_IO_buf_end - stream->_IO_write_base);
     stream->_IO_write_base = stream->_IO_buf_base;
     //fprintf(stderr, "[2/2] W: _IO_read_ptr=%p, size=%d\n", stream->_IO_read_ptr, stream->_IO_buf_end - stream->_IO_read_ptr);
     memcpy((char *)((int)ptr + already_read), stream->_IO_read_base, size*nmemb - already_read);
@@ -223,7 +223,7 @@ size_t xpn_fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream) {
 }
 */
 
-FILE *xpn_fopen(const char *filename, const char *mode)
+FILE *xpn_simple_fopen(const char *filename, const char *mode)
 {
   FILE *stream = NULL;
   int fd = 0;
@@ -262,17 +262,17 @@ FILE *xpn_fopen(const char *filename, const char *mode)
   return stream;
 }
 
-int xpn_fclose(FILE *stream)
+int xpn_simple_fclose(FILE *stream)
 {
   int ret = 0;
 
   if (stream != NULL)
   {
     //if ((stream->_IO_write_end - stream->_IO_write_base) > 0)
-    //  xpn_write(stream->_fileno, stream->_IO_write_base, stream->_IO_write_end - stream->_IO_write_base);
-    xpn_fflush(stream);
+    //  xpn_simple_write(stream->_fileno, stream->_IO_write_base, stream->_IO_write_end - stream->_IO_write_base);
+    xpn_simple_fflush(stream);
 
-    ret = xpn_close(stream->_fileno);
+    ret = xpn_simple_close(stream->_fileno);
     if (stream->_IO_buf_base != NULL) {
       //free(stream->_IO_buf_base); // FIXME
       stream->_IO_buf_base = NULL;
@@ -295,7 +295,7 @@ int xpn_fclose(FILE *stream)
 /* FAST BUT NOT SAFE VERSION */
 /*****************************/
 
-//FIXME: xpn_fread/xpn_fwrite/xpn_fseek fail when Reading AND Writing
+//FIXME: xpn_simple_fread/xpn_simple_fwrite/xpn_simple_fseek fail when Reading AND Writing
 
 int xpn_flushbuf(FILE *stream)
 {
@@ -317,9 +317,9 @@ int xpn_flushbuf(FILE *stream)
   else if (stream->_IO_write_ptr != stream->_IO_write_base)
   {
     //if (stream->_IO_read_end-stream->_IO_read_base > 0)
-    //xpn_lseek(stream->_fileno, -(stream->_IO_read_end-stream->_IO_read_base), SEEK_CUR);
+    //xpn_simple_lseek(stream->_fileno, -(stream->_IO_read_end-stream->_IO_read_base), SEEK_CUR);
     fprintf(stderr, "xpn_flushbuf: Antes offset=%d\n", xpn_file_table[stream->_fileno]->offset);
-    xpn_write(stream->_fileno, stream->_IO_write_base, stream->_IO_write_end-stream->_IO_write_base);
+    xpn_simple_write(stream->_fileno, stream->_IO_write_base, stream->_IO_write_end-stream->_IO_write_base);
     fprintf(stderr, "xpn_flushbuf: Despues offset=%d\n", xpn_file_table[stream->_fileno]->offset);
     stream->_IO_write_base = stream->_IO_buf_base;
     stream->_IO_write_ptr  = stream->_IO_buf_base;
@@ -350,9 +350,9 @@ void xpn_fillbuf(FILE *stream)
   }
 
   fprintf(stderr, "xpn_fillbuf: Antes offset=%d\n", xpn_file_table[stream->_fileno]->offset);
-  fprintf(stderr, "xpn_read (%d, buf, %d)", stream->_fileno, buffer_size);
+  fprintf(stderr, "xpn_simple_read (%d, buf, %d)", stream->_fileno, buffer_size);
 
-  size = xpn_read(stream->_fileno, stream->_IO_buf_base, buffer_size);
+  size = xpn_simple_read(stream->_fileno, stream->_IO_buf_base, buffer_size);
 
   fprintf(stderr, "=%d\n", size);
   fprintf(stderr, "xpn_fillbuf: Despues offset=%d\n", xpn_file_table[stream->_fileno]->offset);
@@ -392,7 +392,7 @@ int xpn_fgetc(FILE *stream)
   return xpn_getc(stream);
 }
 
-size_t xpn_fread(void *ptr, size_t size, size_t nmemb, register FILE *stream)
+size_t xpn_simple_fread(void *ptr, size_t size, size_t nmemb, register FILE *stream)
 {
   register char *cp = ptr;
   //register int c;
@@ -444,7 +444,7 @@ int xpn_fputc(int c, FILE *stream)
   return xpn_putc(c, stream);
 }
 
-size_t xpn_fwrite(const void *ptr, size_t size, size_t nmemb, register FILE *stream)
+size_t xpn_simple_fwrite(const void *ptr, size_t size, size_t nmemb, register FILE *stream)
 {
   register const unsigned char *cp = ptr;
   register size_t s;
@@ -472,7 +472,7 @@ size_t xpn_fwrite(const void *ptr, size_t size, size_t nmemb, register FILE *str
   return ndone;
 }
 
-int xpn_fseek(FILE *stream, long offset, int whence)
+int xpn_simple_fseek(FILE *stream, long offset, int whence)
 { 
   //FIXME: Needs lots of debugging!
   int off;
@@ -480,34 +480,34 @@ int xpn_fseek(FILE *stream, long offset, int whence)
    switch(whence)
    {
       case SEEK_SET:
-        fprintf(stderr, "Calling xpn_fseek(%d, %lu, SEEK_SET)\n", stream->_fileno, (unsigned long)offset);
+        fprintf(stderr, "Calling xpn_simple_fseek(%d, %lu, SEEK_SET)\n", stream->_fileno, (unsigned long)offset);
         break;
       case SEEK_CUR:
-        fprintf(stderr, "Calling xpn_fseek(%d, %lu, SEEK_CUR)\n", stream->_fileno, (unsigned long)offset);
+        fprintf(stderr, "Calling xpn_simple_fseek(%d, %lu, SEEK_CUR)\n", stream->_fileno, (unsigned long)offset);
         break;
       case SEEK_END:
-        fprintf(stderr, "Calling xpn_fseek(%d, %lu, SEEK_END)\n", stream->_fileno, (unsigned long)offset);
+        fprintf(stderr, "Calling xpn_simple_fseek(%d, %lu, SEEK_END)\n", stream->_fileno, (unsigned long)offset);
         break;
       default:
-        fprintf(stderr, "Calling xpn_fseek(%d, %lu, %d)\n", stream->_fileno, (unsigned long)offset, whence);
+        fprintf(stderr, "Calling xpn_simple_fseek(%d, %lu, %d)\n", stream->_fileno, (unsigned long)offset, whence);
         break;
    }
 
    off = stream->_IO_write_ptr;
    xpn_flushbuf(stream);
-   fprintf(stderr, "xpn_fseek: Before offset=%d\n", xpn_file_table[stream->_fileno]->offset);
-   xpn_lseek(stream->_fileno, offset, whence);
-   fprintf(stderr, "xpn_fseek: After offset=%d\n", xpn_file_table[stream->_fileno]->offset);
+   fprintf(stderr, "xpn_simple_fseek: Before offset=%d\n", xpn_file_table[stream->_fileno]->offset);
+   xpn_simple_lseek(stream->_fileno, offset, whence);
+   fprintf(stderr, "xpn_simple_fseek: After offset=%d\n", xpn_file_table[stream->_fileno]->offset);
 
    return 0;
 }
 
-long xpn_ftell(FILE *stream)
+long xpn_simple_ftell(FILE *stream)
 {
   return xpn_file_table[stream->_fileno]->offset-(stream->_IO_read_end-stream->_IO_read_ptr);
 }
 
-int xpn_fflush(FILE *stream)
+int xpn_simple_fflush(FILE *stream)
 {
   if (stream != NULL){
     return xpn_flushbuf(stream);
@@ -523,30 +523,30 @@ int xpn_fflush(FILE *stream)
 /* SAFE BUT NOT FAST VERSION */
 /*****************************/
 
-size_t xpn_fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+size_t xpn_simple_fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
-  //fprintf(stderr, "SAFE xpn_fread\n");
-  return xpn_read(stream->_fileno, ptr, size*nmemb);
+  //fprintf(stderr, "SAFE xpn_simple_read\n");
+  return xpn_simple_read(stream->_fileno, ptr, size*nmemb);
 }
 
-size_t xpn_fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
+size_t xpn_simple_fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
-  //fprintf(stderr, "SAFE xpn_fwrite\n");
-  return xpn_write(stream->_fileno, ptr, size*nmemb);
+  //fprintf(stderr, "SAFE xpn_simple_fwrite\n");
+  return xpn_simple_write(stream->_fileno, ptr, size*nmemb);
 }
 
 int xpn_fgetc(FILE *flujo)
 {
   unsigned char car;
 
-  xpn_fread(&car, sizeof(unsigned char), 1, flujo);
+  xpn_simple_fread(&car, sizeof(unsigned char), 1, flujo);
   return (int)car;
 }
 
 char *xpn_fgets(char *s, int tam, FILE *flujo)
 {
   bzero(s, tam*sizeof(char));
-  xpn_fread(s, sizeof(char), tam-1, flujo);
+  xpn_simple_fread(s, sizeof(char), tam-1, flujo);
   return s;
 }
 
@@ -555,24 +555,24 @@ int xpn_getc(FILE *flujo)
   return xpn_fgetc(flujo);
 }
 
-int xpn_fseek(FILE *stream, long offset, int whence)
+int xpn_simple_fseek(FILE *stream, long offset, int whence)
 {
-  //fprintf(stderr, "SAFE xpn_fseek\n");
-  xpn_lseek(stream->_fileno, offset, whence);
+  //fprintf(stderr, "SAFE xpn_simple_lseek\n");
+  xpn_simple_lseek(stream->_fileno, offset, whence);
   return 0;
 }
 
-long xpn_ftell(FILE *stream)
+long xpn_simple_ftell(FILE *stream)
 {
   return xpn_file_table[stream->_fileno]->offset;
 }
 
 void xpn_rewind(FILE *stream)
 {
-  xpn_fseek(stream, 0, 0);
+  xpn_simple_fseek(stream, 0, 0);
 }
 
-int xpn_fflush(FILE *stream)
+int xpn_simple_fflush(FILE *stream)
 {
   return 0;
 }
