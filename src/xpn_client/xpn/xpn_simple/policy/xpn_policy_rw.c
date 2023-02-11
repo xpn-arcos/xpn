@@ -326,24 +326,32 @@ void XpnWriteBlocksPolicyRAID1_AllInOne(__attribute__((__unused__)) int fd, cons
  *
  * @return Returns a pointer to a new buffer on success, or NULL on error.
  */
-void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers){
+void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
+{
 	int optimize = 1; // Optimize by default
-	//int optimize = 0; // Do not optimize
+      //int optimize = 0; // Do not optimize
 	void *new_buffer = (void *)buffer;
 
-	switch(xpn_file_table[fd]->mdata->type_policy){
+	switch(xpn_file_table[fd]->mdata->type_policy)
+	{
 		case POLICY_RAID0:
-			if (optimize) {
+			if (optimize)
+			{
 				new_buffer = malloc(size);
-				if (new_buffer == NULL)
+				if (NULL == new_buffer) {
 					perror("XpnReadBlocks: Error in malloc");
-				else
-					XpnReadBlocksPolicyRAID0_AllInOne(fd, new_buffer, size, offset, io_out, ion_out, num_servers);
-			} else
+					return new_buffer ;
+				}
+
+				XpnReadBlocksPolicyRAID0_AllInOne(fd, new_buffer, size, offset, io_out, ion_out, num_servers);
+			}
+			else {
 				XpnRWBlocksPolicyBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
+			}
 			break;
 		case POLICY_RAID1:
-			if (optimize) {
+			if (optimize)
+			{
 				off_t l_offset;
 				int l_serv;
 
@@ -356,8 +364,10 @@ void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struc
 					// If so, then apply the optimizaction
 					XpnReadBlocksPolicyRAID1_AllInOne(fd, buffer, size, offset, io_out, ion_out, num_servers);
 				}
-			} else
+			}
+			else {
 				XpnRWBlocksPolicyBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
+			}
 			break;
 		default:
 			return NULL;
@@ -366,16 +376,20 @@ void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struc
 	return new_buffer;
 }
 
-int XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer) {
-	switch(xpn_file_table[fd]->mdata->type_policy){
+int XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer)
+{
+	switch(xpn_file_table[fd]->mdata->type_policy)
+	{
 		case POLICY_RAID0:
 			if (buffer != new_buffer) {
 				XpnReadBlocksPolicyRAID0_AllInOne_Finish(fd, buffer, size, offset, io_out, ion_out, num_servers, new_buffer);
 				free(new_buffer);
 			}
 			break;
+
 		case POLICY_RAID1:
 			break;
+
 		default:
 			return -1;
 	}
@@ -414,12 +428,14 @@ void *XpnWriteBlocks ( int fd, const void *buffer, size_t size, off_t offset, st
 			} else
 				XpnRWBlocksPolicyBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
 			break;
+
 		case POLICY_RAID1:
 			if (optimize)
 				XpnWriteBlocksPolicyRAID1_AllInOne(fd, buffer, size, offset, io_out, ion_out, num_servers);
 			else
 				XpnWriteBlocksPolicyRAID1_BlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
 			break;
+
 		default:
 			return NULL;
 	}
@@ -442,8 +458,10 @@ int XpnWriteBlocksFinish ( int fd,
 			if (buffer != new_buffer)
 				free(new_buffer);
 			break;
+
 		case POLICY_RAID1:
 			break;
+
 		default:
 			return -1;
 	}
@@ -456,13 +474,15 @@ ssize_t XpnReadGetTotalBytes(int fd, ssize_t *res_v, int num_servers)
 	ssize_t res = -1;
 	int i;
 
-	switch(xpn_file_table[fd]->mdata->type_policy){
+	switch(xpn_file_table[fd]->mdata->type_policy)
+	{
 		case POLICY_RAID0:
 		case POLICY_RAID1:
 			res = 0;
 			for (i = 0 ; i < num_servers ; i++)
 				res += res_v[i];
 			break;
+
 		default:
 			return -1;
 	}
@@ -482,11 +502,13 @@ ssize_t XpnWriteGetTotalBytes(int fd, ssize_t *res_v, int num_servers)
 			for (i = 0 ; i < num_servers ; i++)
 				res += res_v[i];
 			break;
+
 		case POLICY_RAID1:
 			res = res_v[0];
 			for (i = 1 ; i < num_servers ; i++)
 				res = (res_v[i]<res)?res_v[i]:res;
 			break;
+
 		default:
 			return -1;
 	}

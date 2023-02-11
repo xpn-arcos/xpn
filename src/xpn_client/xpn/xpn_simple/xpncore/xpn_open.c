@@ -1150,9 +1150,9 @@ int xpn_simple_stat(const char *path, struct stat *sb)
 {
   char abs_path[PATH_MAX];
   char abs_path2[PATH_MAX];
-  int res, pd, fd;
-  DIR *dir;
-  char *new_path;
+  int res, pd;
+  //DIR *dir;
+  //char *new_path;
 
   XPN_DEBUG_BEGIN_ARGS1(path)
 

@@ -5,10 +5,18 @@ and server
 #ifndef _TCP_SERVER_CLIENT_H_
 #define _TCP_SERVER_CLIENT_H_
 
+  /* ... Include / Inclusion ........................................... */
 
-#include "all_system.h"
-#include "tcp_server_conf.h"
-#include "tcp_server_comm.h"
+    #include "all_system.h"
+    #include "base/utils.h"
+    #include "base/string_misc.h"
+    #include "base/debug_msg.h"
+    #include "base/workers.h"
+    #include "tcp_server_conf.h"
+    #include "tcp_server_comm.h"
+    #include "nfi.h"
+    #include "nfi_worker.h"
+
 
 #define _LARGEFILE64_ 1
 
