@@ -71,8 +71,6 @@ The typical executions has 3 main steps:
   ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
   ```
 
-  To use a thread pool to serve the requests add the -tp flag.
-
 - Then,  launch the program that will use Expand (XPN client):
 
   ```
@@ -95,13 +93,15 @@ Summary:
 
 ```mermaid
 sequenceDiagram
-    session    ->> mk_conf.sh: generate the XPN configuration file
-    mk_conf.sh ->> xpn.conf: generate the xpn.conf file
-    session    ->> xpn_mpi_server: launch the Expand MPI server
-    xpn.conf  -->> xpn_mpi_server: read the XPN configuration file
-    session    ->> XPN client: launch the program that will use Expand
-    xpn.conf  -->> XPN client: read the XPN configuration file
-    session    ->> xpn_mpi_server: stop the MPI server
+    session        ->> xpn_mpi_server: launch the Expand MPI server
+    xpn_mpi_server ->> mk_conf.sh: generate the XPN configuration file
+    mk_conf.sh     ->> xpn.conf: generate the xpn.conf file
+    xpn.conf      -->> xpn_mpi_server: read the XPN configuration file
+    session        ->> XPN client: launch the program that will use Expand
+    xpn.conf      -->> XPN client: read the XPN configuration file
+    XPN client    -->> xpn_mpi_server: write and read data
+    XPN client    -->> session: execution ends
+    session        ->> xpn_mpi_server: stop the MPI server
 ```
 
 
