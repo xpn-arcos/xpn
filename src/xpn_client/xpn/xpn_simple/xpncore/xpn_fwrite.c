@@ -24,41 +24,41 @@
  * fwrite.c - write a number of array elements on a file
  */
 
-#include	<stdio.h>
-#include	"xpn/xpn_simple/loc_incl.h"
-#include	"xpn_debug.h"
+#include  <stdio.h>
+#include  "xpn/xpn_simple/loc_incl.h"
+#include  "base_debug.h"
 
 int xpn_flushbuf(int c, FILE * stream);
 
-size_t
-xpn_fwrite(const void *ptr, size_t size, size_t nmemb,
-	    register FILE *stream)
+size_t xpn_fwrite(const void *ptr, size_t size, size_t nmemb, register FILE *stream)
 {
-	register const unsigned char *cp = (const unsigned char *)ptr;
-	register size_t s;
-	size_t ndone = 0;
-	size_t res = (size_t) -1;
+  register const unsigned char *cp = (const unsigned char *)ptr;
+  register size_t s;
+  size_t ndone = 0;
+  size_t res = (size_t) -1;
 
-	XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
-	XPN_DEBUG("stream->_count = %d _buf = %p _ptr = %p count = %d", stream->_count, stream->_buf, stream->_ptr, (int)(stream->_ptr - stream->_buf))
+  XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
+  XPN_DEBUG("stream->_count = %d _buf = %p _ptr = %p count = %d", stream->_count, stream->_buf, stream->_ptr, (int)(stream->_ptr - stream->_buf))
 
-	if (size)
-		while ( ndone < nmemb ) {
-			s = size;
-			do {
-				if (xpn_putc(*cp, stream)
-					== EOF) {
-					res = ndone;
-					XPN_DEBUG_END_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
-					return ndone;
-				}
-				cp++;
-			} 
-			while (--s);
-			ndone++;
-		}
+  if (size){
+    while ( ndone < nmemb )
+    {
+      s = size;
+      do
+      {
+        if (xpn_putc(*cp, stream)
+          == EOF) {
+          res = ndone;
+          XPN_DEBUG_END_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
+          return ndone;
+        }
+        cp++;
+      } while (--s);
+      ndone++;
+    }
+  }
 
-	res = ndone;
-	XPN_DEBUG_END_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
-	return ndone;
+  res = ndone;
+  XPN_DEBUG_END_CUSTOM("%d, %zu, %zu", fileno(stream), size, nmemb)
+  return ndone;
 }

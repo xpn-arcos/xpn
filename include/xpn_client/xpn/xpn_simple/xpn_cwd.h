@@ -12,7 +12,7 @@
  #endif
 
 struct xpn_cwd{
-	char xpn_cwd_path[MAX_PATH_LEN];	
+	char xpn_cwd_path[PATH_MAX];	
 };
 
 extern struct xpn_cwd xpn_cwddir;

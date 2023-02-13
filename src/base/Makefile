@@ -153,6 +153,9 @@ am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/ns.$(OBJEXT) \
 	../../src/base/syscall_proxies.$(OBJEXT) \
 	../../src/base/filesystem.$(OBJEXT) \
+	../../src/base/workers.$(OBJEXT) \
+	../../src/base/workers_ondemand.$(OBJEXT) \
+	../../src/base/workers_pool.$(OBJEXT) \
 	../../src/base/utils.$(OBJEXT)
 am_libbase_a_OBJECTS = $(am__objects_1)
 libbase_a_OBJECTS = $(am_libbase_a_OBJECTS)
@@ -182,7 +185,10 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/time_misc.Po \
 	../../src/base/$(DEPDIR)/trace_msg.Po \
 	../../src/base/$(DEPDIR)/urlstr.Po \
-	../../src/base/$(DEPDIR)/utils.Po
+	../../src/base/$(DEPDIR)/utils.Po \
+	../../src/base/$(DEPDIR)/workers.Po \
+	../../src/base/$(DEPDIR)/workers_ondemand.Po \
+	../../src/base/$(DEPDIR)/workers_pool.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -225,29 +231,29 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/acaldero/work/xpn/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} /local_test/src/xpn/config/missing aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /home/acaldero/work/xpn/config/missing autoconf
-AUTOHEADER = ${SHELL} /home/acaldero/work/xpn/config/missing autoheader
-AUTOMAKE = ${SHELL} /home/acaldero/work/xpn/config/missing automake-1.16
-AWK = gawk
-CC = /usr/bin/mpicc
+AUTOCONF = ${SHELL} /local_test/src/xpn/config/missing autoconf
+AUTOHEADER = ${SHELL} /local_test/src/xpn/config/missing autoheader
+AUTOMAKE = ${SHELL} /local_test/src/xpn/config/missing automake-1.16
+AWK = mawk
+CC = /opt/software/install-mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
-CDEFS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
-CFLAGS =     -I../../mxml    -I../../xpn/include    -I../../xpn/include/xpn_client    -I../../xpn/include/base -I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
+CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
+CFLAGS = -I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
 CPP = gcc -E
-CPPFLAGS = -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
+CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/xpni/ -I$(top_srcdir)/include/xpn_client/xpni/common -I$(top_srcdir)/include/xpn_client/xpni/xpni_null -I$(top_srcdir)/include/xpn_client/xpni/xpni_ft -I$(top_srcdir)/include/xpn_client/xpni/xpni_log -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
-EGREP = /usr/bin/grep -E
+EGREP = /bin/grep -E
 EXEEXT = 
-GREP = /usr/bin/grep
+GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
@@ -259,8 +265,8 @@ LIBOBJS =
 LIBS =     -L../../mxml    -L../../xpn/lib -L../../../mxml -L../../../xpn/lib  -lmxml -ldl -lpthread
 LTLIBOBJS = 
 MAKE = make
-MAKEINFO = ${SHELL} /home/acaldero/work/xpn/config/missing makeinfo
-MKDIR_P = /usr/bin/mkdir -p
+MAKEINFO = ${SHELL} /local_test/src/xpn/config/missing makeinfo
+MKDIR_P = /bin/mkdir -p
 M_HEADERS = 
 NFI_MPI_SERVER = nfi_mpi_server
 NFI_MPI_SERVER_OBJECTS = $(NFI_MPI_SERVER_OBJECTS)
@@ -289,10 +295,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 2.0
-abs_builddir = /home/acaldero/work/xpn/src/base
-abs_srcdir = /home/acaldero/work/xpn/src/base
-abs_top_builddir = /home/acaldero/work/xpn
-abs_top_srcdir = /home/acaldero/work/xpn
+abs_builddir = /local_test/src/xpn/src/base
+abs_srcdir = /local_test/src/xpn/src/base
+abs_top_builddir = /local_test/src/xpn
+abs_top_srcdir = /local_test/src/xpn
 ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
@@ -320,7 +326,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/acaldero/work/xpn/config/install-sh
+install_sh = ${SHELL} /local_test/src/xpn/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -329,7 +335,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/acaldero/bin//xpn
+prefix = /local_test/bin//xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
@@ -346,33 +352,39 @@ top_build_prefix = ../../
 top_builddir = ../..
 top_srcdir = ../..
 BASE_HEADER = ../../include/base/base_lib.h \
-			../../include/base/darray.h \
-			../../include/base/debug_msg.h \
-			../../include/base/debug_tags.h \
-			../../include/base/dtable.h \
-			../../include/base/math_misc.h \
-			../../include/base/string_misc.h \
-			../../include/base/time_misc.h \
-			../../include/base/trace_msg.h \
-			../../include/base/trace_tags.h \
-			../../include/base/urlstr.h \
-			../../include/base/ns.h \
-			../../include/base/syscall_proxies.h \
-			../../include/base/filesystem.h \
-			../../include/base/utils.h
+				../../include/base/darray.h \
+				../../include/base/debug_msg.h \
+				../../include/base/debug_tags.h \
+				../../include/base/dtable.h \
+				../../include/base/math_misc.h \
+				../../include/base/string_misc.h \
+				../../include/base/time_misc.h \
+				../../include/base/trace_msg.h \
+				../../include/base/trace_tags.h \
+				../../include/base/urlstr.h \
+				../../include/base/ns.h \
+				../../include/base/syscall_proxies.h \
+				../../include/base/filesystem.h \
+				../../include/base/workers.h \
+				../../include/base/workers_ondemand.h \
+				../../include/base/workers_pool.h\
+				../../include/base/utils.h
 
 BASE_SOURCE = ../../src/base/darray.c \
-			../../src/base/dtable.c \
-			../../src/base/math_misc.c \
-			../../src/base/trace_msg.c \
-			../../src/base/debug_msg.c \
-			../../src/base/string_misc.c \
-			../../src/base/time_misc.c \
-			../../src/base/urlstr.c \
-			../../src/base/ns.c \
-			../../src/base/syscall_proxies.c \
-			../../src/base/filesystem.c \
-			../../src/base/utils.c
+				../../src/base/dtable.c \
+				../../src/base/math_misc.c \
+				../../src/base/trace_msg.c \
+				../../src/base/debug_msg.c \
+				../../src/base/string_misc.c \
+				../../src/base/time_misc.c \
+				../../src/base/urlstr.c \
+				../../src/base/ns.c \
+				../../src/base/syscall_proxies.c \
+				../../src/base/filesystem.c \
+				../../src/base/workers.c \
+				../../src/base/workers_ondemand.c \
+				../../src/base/workers_pool.c \
+				../../src/base/utils.c
 
 lib_LIBRARIES = libbase.a
 libbase_a_SOURCES = $(BASE_SOURCE)
@@ -481,6 +493,15 @@ clean-libLIBRARIES:
 ../../src/base/filesystem.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/workers.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/workers_ondemand.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
+../../src/base/workers_pool.$(OBJEXT):  \
+	../../src/base/$(am__dirstamp) \
+	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/utils.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
@@ -509,6 +530,9 @@ include ../../src/base/$(DEPDIR)/time_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/trace_msg.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/urlstr.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/utils.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/workers.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/workers_ondemand.Po # am--include-marker
+include ../../src/base/$(DEPDIR)/workers_pool.Po # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -697,6 +721,9 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../../src/base/$(DEPDIR)/urlstr.Po
 	-rm -f ../../src/base/$(DEPDIR)/utils.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_pool.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -755,6 +782,9 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/trace_msg.Po
 	-rm -f ../../src/base/$(DEPDIR)/urlstr.Po
 	-rm -f ../../src/base/$(DEPDIR)/utils.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_ondemand.Po
+	-rm -f ../../src/base/$(DEPDIR)/workers_pool.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

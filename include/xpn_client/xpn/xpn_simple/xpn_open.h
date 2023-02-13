@@ -7,6 +7,7 @@
 #include "xpn_policy_cwd.h"
 #include "xpn_init.h"
 #include "xpn_rw.h"
+#include "base/workers.h"
 
 
  #ifdef  __cplusplus
