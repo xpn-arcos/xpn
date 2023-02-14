@@ -111,7 +111,7 @@ XPN_HEADER= 		@top_srcdir@/include/xpn_client/xpn.h
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_rw.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_rw.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_simple_lib.h \
-			@top_srcdir@/include/xpn_client/xpn/xpn_simple/loc_incl.h \
+			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_stdio.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn.h
 
 
@@ -203,18 +203,7 @@ XPN_CORE_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_open.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_opendir.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fopen.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fclose.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fread.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fwrite.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fflush.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fillbuf.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_flushbuf.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fseek.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_ftell.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fileno.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_setbuf.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_setvbuf.c
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.c
 
 XPN_POLICY_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.c \

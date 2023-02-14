@@ -564,32 +564,45 @@ int XpnGetAtribPath ( char * path, struct stat *st )
 {
   int ret, res, err, i, j, n, pd;
   char url_serv[PATH_MAX];
+  char aux_path[PATH_MAX];
   struct nfi_server **servers;
   struct nfi_attr *attr;
   struct xpn_fh *vfh_aux;
 
   //XPN_DEBUG_BEGIN_CUSTOM("%s", path)
 
+  printf("XpnGetAtribPath PATH %s\n", path);
 
-  pd = XpnGetPartition(path); // returns partition id and remove partition name from path 
+  strcpy(aux_path, path);
+
+  pd = XpnGetPartition(aux_path); // returns partition id and remove partition name from path 
   if (pd < 0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
-    XPN_DEBUG_END_ARGS1(path)
+    XPN_DEBUG_END_ARGS1(aux_path)
     return pd;
   }
+
+  printf("AUX_PATH: %s - PART %d\n", aux_path, pd);
 
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
-  n = XpnGetServers(op_xpn_getattr, pd, path, -1, &servers, XPN_DATA_SERVER);
+  n = XpnGetServers(op_xpn_getattr, pd, aux_path, -1, &servers, XPN_DATA_SERVER);
   if(n<=0){
     /*free(servers);*/
     return -1;
   }
 
+  printf("AUX_PATH: %s - NSERV %d\n", aux_path, n);
+
+
+
+
+
+
   attr = (struct nfi_attr *) malloc(n * sizeof(struct nfi_attr));
-  bzero(attr, n* sizeof(struct nfi_attr));
+  memset(attr, 0, n* sizeof(struct nfi_attr));
 
   vfh_aux = (struct xpn_fh *)malloc(sizeof(struct xpn_fh));
   /* construccion del vfh */
@@ -614,7 +627,9 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   {
     vfh_aux->nfih[i] = NULL;
 
-    XpnGetURLServer(servers[i], path, url_serv);
+    XpnGetURLServer(servers[i], aux_path, url_serv);
+
+    printf("SERV: %d - PATH %s\n", n, url_serv);
 
     vfh_aux->nfih[i] = (struct nfi_fhandle*)malloc(sizeof(struct nfi_fhandle));
     memset(vfh_aux->nfih[i], 0, sizeof(struct nfi_fhandle));
@@ -623,10 +638,13 @@ int XpnGetAtribPath ( char * path, struct stat *st )
       free(servers);
       return -1;
     }
+
+    vfh_aux->nfih[i]->url = url_serv;
+
     // Worker
     nfi_worker_do_getattr(servers[i]->wrk, vfh_aux->nfih[i], &(attr[i]));
-
   }
+
   // Wait
   err = 0;
   for(i=0;i<n;i++)
@@ -663,6 +681,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   // Error checking
   if(err)
   {
+    printf("errror\n");
     xpn_err(XPNERR_REMOVE);
     free(servers);
     return -1;
@@ -701,7 +720,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   st->st_gid     = getgid() ;         /* group ID of owner */
   //st->st_rdev    = 0;                 /* device type (if inode device) */
   //st->st_blksize = attr.at_blksize ;  /* blocksize for filesystem I/O */
-  st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O */
+  //st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O */ TODO
   st->st_blocks  = attr[0].at_blocks ;   /* number of blocks allocated */
   st->st_atime   = attr[0].at_atime ;    /* time of last access */
   st->st_mtime   = attr[0].at_mtime ;    /* time of last modification */
