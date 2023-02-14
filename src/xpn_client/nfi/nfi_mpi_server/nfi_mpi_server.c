@@ -1202,7 +1202,7 @@
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_mpi_server_server *server_aux;
-    struct nfi_mpi_server_fhandle *fh_aux;
+  //struct nfi_mpi_server_fhandle *fh_aux;
     struct st_mpi_server_msg msg;
     struct st_mpi_server_attr_req req;
 

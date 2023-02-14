@@ -563,8 +563,7 @@
   ssize_t read(int fd, void *buf, size_t nbyte)
   {         
     printf("[bypass] Before read...\n");
-    printf("[bypass] read(fd=%d,*buf,nbyte=%ld)\n",fd,nbyte);
-    printf("[bypass] buffer= %s\n",buf);
+    printf("[bypass] read(fd=%d, buf=%p, nbyte=%ld)\n", fd, buf, nbyte);
 
     int ret = -1;
 
@@ -590,7 +589,7 @@
   ssize_t write(int fd, const void *buf, size_t nbyte)
   {
     printf("[bypass] Before write...\n");
-    printf("[bypass] write(fd=%d,*buf=%s,nbyte=%ld)\n", fd, buf, nbyte);
+    printf("[bypass] write(fd=%d, buf=%p, nbyte=%ld)\n", fd, buf, nbyte);
 
     int ret = -1;
 
@@ -981,7 +980,8 @@
       if ( ret != NULL ){
         fdsdirtable_put ( ret );
       }
-      printf("BYPASS OPENDIR RET %d\n", ret);
+
+      printf("BYPASS OPENDIR RET %p\n", ret);
       return ret;
     }
     // Not an XPN partition. We must link with the standard library

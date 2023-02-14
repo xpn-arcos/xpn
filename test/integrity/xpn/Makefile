@@ -5,7 +5,7 @@
 #
 
  MAKE         = make -s
- CC           = /opt/software/install-mpich/bin/mpicc
+ CC           = /usr/bin/mpicc
  MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
  MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
  LIBRARIES    = -lxpn -lmxml -lpthread -ldl
