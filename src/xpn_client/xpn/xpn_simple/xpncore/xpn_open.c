@@ -1144,97 +1144,64 @@ int xpn_simple_fstat(int fd, struct stat *sb)
 }
 
 
+
+
+
+
+
 // FIXME: If the user has already opened the max number of files he is allowed to, then this call will fail with EMFILE.
 // FIXME: xpn_simple_stat really need to perform xpn_open+opendir?
 int xpn_simple_stat(const char *path, struct stat *sb)
 {
   char abs_path[PATH_MAX];
-  char abs_path2[PATH_MAX];
-  int res, pd;
-  //DIR *dir;
-  //char *new_path;
+  int res = -1;
 
   XPN_DEBUG_BEGIN_ARGS1(path)
 
   if ((path == NULL) || (strlen(path) == 0))
   {
-    //xpn_err(XPNERR_PARAM);
     errno = ENOENT;
     res = -1;
     XPN_DEBUG_END_ARGS1(path)
     return res;
   }
 
+  if (sb == NULL)
+  {
+    errno = ENOENT;
+    XPN_DEBUG_END_ARGS1(path)
+    return res;
+  }
+
+  printf("xpn_simple_stat 1 PATH %s\n", path);
+
   res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path 
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
-    res = -1;
     XPN_DEBUG_END_ARGS1(path)
     return res;
   }
 
-  strcpy(abs_path2, abs_path);
+  printf("xpn_simple_stat 2 PATH %s\n", abs_path);
 
-  pd = XpnGetPartition(abs_path2); // return partition's id and remove partition name from abs_path 
-  if(pd<0)
+  res = XpnGetAtribPath(abs_path, sb);
+  if(res<0)
   {
-    xpn_err(XPNERR_PART_NOEXIST);
-    res = -1;
+    xpn_err(XPNERR_PATH_NOEXIST); //TODO: review error code
     XPN_DEBUG_END_ARGS1(path)
     return res;
   }
-
-  res = XpnGetAtribPath(abs_path2, sb);
-
-
-  //TODO: old version delete
-  /*//debug=1;
-  fd = XpnSearchFile(abs_path2);
-
-  //debug=0;
-  //printf("xpn_simple_stat: XpnSearchFile(%s->%s) = %d\n", path, abs_path2, fd);
-
-  // If the file/directory is opened then just return its attributes, else open it and close it.
-  if (fd>=0){
-    res = xpn_simple_fstat(fd, sb);
-  } 
-  else 
-  {
-    fd = xpn_simple_open(abs_path, O_RDONLY, 0);
-    if(fd>=0)
-    {
-      res = XpnGetAtribFd(fd, sb);
-      xpn_simple_close(fd);
-    }
-    else 
-    {
-      new_path=malloc(strlen(abs_path)+2);
-      strcpy(new_path, abs_path);
-      strcat(new_path,"/");
-
-      dir = xpn_simple_opendir(new_path);
-
-      free(new_path);
-
-      if (dir != NULL)
-      {
-        res = XpnGetAtribFd(fd, sb);
-        xpn_simple_closedir(dir);
-      }
-      else 
-      {
-        errno = ENOENT;
-        res = -1;
-        XPN_DEBUG_END_ARGS1(path)
-        return res;
-      }
-    }
-  }*/
 
   XPN_DEBUG_END_ARGS1(path)
   return res;
 }
+
+
+
+
+
+
 
 int xpn_simple_chown(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group)
 {

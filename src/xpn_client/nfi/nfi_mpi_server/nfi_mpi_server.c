@@ -1199,6 +1199,8 @@
 
   int nfi_mpi_server_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
+    int ret;
+    char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
     struct st_mpi_server_msg msg;
@@ -1207,23 +1209,33 @@
     DEBUG_BEGIN();
 
     // check arguments...
-    NULL_RET_ERR(serv,            MPI_SERVERERR_PARAM) ;
-    NULL_RET_ERR(fh,              MPI_SERVERERR_PARAM) ;
-    NULL_RET_ERR(attr,            MPI_SERVERERR_PARAM) ;
-    NULL_RET_ERR(fh->priv_fh,     MPI_SERVERERR_PARAM) ;
+    NULL_RET_ERR(serv,               MPI_SERVERERR_PARAM) ;
+    NULL_RET_ERR(fh,                 MPI_SERVERERR_PARAM) ;
+    NULL_RET_ERR(attr,               MPI_SERVERERR_PARAM) ;
+    //NULL_RET_ERR(fh->priv_fh,        MPI_SERVERERR_PARAM) ;
     nfi_mpi_server_keepConnected(serv) ;
     NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM) ;
 
     // copy private information...
-    fh_aux     = (struct nfi_mpi_server_fhandle *) fh->priv_fh;
+    //fh_aux     = (struct nfi_mpi_server_fhandle *) fh->priv_fh; //TODO: fstat
     server_aux = (struct nfi_mpi_server_server  *) serv->private_info;
+
+    printf("URL NFI %s\n", fh->url);
+
+    ret = ParseURL(fh->url, NULL, NULL, NULL, server,  NULL,  dir) ;
+    if (ret < 0) {
+      fprintf(stderr,"nfi_mpi_server_getattr: url %s incorrect.\n",dir) ;
+      mpi_server_err(MPI_SERVERERR_URL) ;
+      return -1;
+    }
 
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      req.status = filesystem_stat(fh_aux->path, &(req.attr)) ;
+      printf("PATH NFI %s\n", dir);
+      req.status = filesystem_stat(dir, &(req.attr)) ;
       if (((int) req.status) < 0) {
-        debug_error("nfi_mpi_server_getattr: Fail stat %s.\n", fh_aux->path) ;
+        debug_error("nfi_mpi_server_getattr: Fail stat %s.\n", dir) ;
         return req.status;
       }
     }
@@ -1232,7 +1244,7 @@
     {
       msg.type = MPI_SERVER_GETATTR_FILE;
       strcpy(msg.id, server_aux->id) ;
-      strcpy(msg.u_st_mpi_server_msg.op_getattr.path, fh_aux->path) ;
+      strcpy(msg.u_st_mpi_server_msg.op_getattr.path, dir) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req)) ;
     }
