@@ -78,6 +78,11 @@
           return xpn_simple_ftell(stream) ;
       }
 
+      void xpn_rewind(FILE *stream)
+      {
+          xpn_simple_rewind(stream) ;
+      }
+
 
       //
       // flush - preload
@@ -94,5 +99,42 @@
       }
 
 
+      //
+      // fgetc - fgets - getc
+      //
+
+      int    xpn_fgetc(FILE *stream)
+      {
+          return xpn_simple_fgetc(stream);
+      }
+
+      char * xpn_fgets(char *s, int tam, FILE *stream)
+      {
+          return xpn_simple_fgets(s, tam, stream);
+      }
+
+      int    xpn_getc(FILE *stream)
+      {
+          return xpn_simple_getc(stream);
+      }
+
+
+      //
+      // fileno - ferror
+      //
+
+      int xpn_fileno ( FILE *stream )
+      {
+          return xpn_simple_fileno(stream) ;
+      }
+
+
+      int xpn_ferror(FILE *stream)
+      {
+          return xpn_simple_ferror(stream) ;
+      }
+
+
    /* ................................................................... */
+
 
