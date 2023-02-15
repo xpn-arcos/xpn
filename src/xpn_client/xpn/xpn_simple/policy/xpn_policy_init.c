@@ -1,3 +1,4 @@
+
 #include "xpn/xpn_simple/xpn_policy_init.h"
 
 extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
@@ -6,13 +7,16 @@ extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
 char *param_get ( char *key )
 {
   char *ret = NULL ;
+
   /* get value */
   if (NULL != key) {
     ret = getenv(key);
   }
+
   /* return final value */
   return ret ;
 }
+
 
 struct conf_connect_st* XpnPartitionOpen()
 {
@@ -36,6 +40,7 @@ struct conf_connect_st* XpnPartitionOpen()
         return NULL;
       }
       break;
+
     case CONF_MXML:
 #ifdef ENABLE_MXML
       if(param_get(XPN_CONF) != NULL){
@@ -76,10 +81,10 @@ struct conf_connect_st* XpnPartitionOpen()
 #endif
       break;
     }
-#if defined(DEBUG_NFI)
-#endif
+
   return &desc;
 }
+
 
 void XpnPartitionClose(struct conf_connect_st *fconf)
 {
@@ -88,6 +93,7 @@ void XpnPartitionClose(struct conf_connect_st *fconf)
     case CONF_FILE:
       fclose(fconf->connect_u.f);
       break;
+
     case CONF_MXML:
 #ifdef ENABLE_MXML
       if (fconf->connect_u.xml.profile_f){
@@ -98,6 +104,7 @@ void XpnPartitionClose(struct conf_connect_st *fconf)
       }
 #endif
       break;
+
     default:
       break;
   }
@@ -116,6 +123,7 @@ int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
         return 0;
       }
       break;
+
     case CONF_MXML:
 #ifdef ENABLE_MXML
       fconf->connect_u.xml.conf_partition_node = mxmlFindElement(fconf->connect_u.xml.conf_partition_node, fconf->connect_u.xml.conf_tree, XML_TAG_ELEM_PARTITION, NULL, NULL, MXML_DESCEND);
@@ -133,11 +141,14 @@ int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
       fconf->connect_u.xml.conf_data_node = fconf->connect_u.xml.conf_partition_node;
 #endif
       break;
+
     default:
       break;
   }
+
   return 1;
 }
+
 
 int XpnGetIdPartition(__attribute__((__unused__)) struct conf_connect_st *fconf, __attribute__((__unused__)) char *name)
 {
@@ -153,26 +164,16 @@ int XpnGetIdPartition(__attribute__((__unused__)) struct conf_connect_st *fconf,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *part)
 {
-  char type[10];
 #ifdef ENABLE_MXML
   char *value = NULL;
   char *value_th = NULL;
   mxml_node_t* node;
 #endif
-  bzero(type, 10);
+  char type[20]; // TODO: 20??
+
+  memset(type, 0, 20);
 
   switch(fconf->type)
   {
@@ -192,6 +193,7 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
         part->type = -1;
       }
       break;
+
     case CONF_MXML:
 #ifdef ENABLE_MXML
         if(fconf->connect_u.xml.profile_f != NULL)
@@ -237,9 +239,7 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
         value = NULL;
         value = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_partition_node, XML_TAG_ATTR_THREADS);
 
-#ifdef _DBG_
-        printf("[XPN]XML_TAG_ATTR_THREADS = %s\n", value ? value : "NULL");
-#endif
+        debug_info("[XPN]XML_TAG_ATTR_THREADS = %s\n", value ? value : "NULL");
 
         if(value == NULL){
           value = XML_DEFAULT_ATTR_THREADS;
@@ -253,20 +253,15 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
             {
               value_th = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_partition_node, XML_TAG_ATTR_TH_THRESHOLD); // This is property 'th_limit'
               //value_th = value;
-#ifdef _DBG_
-              printf("[XPN]XML_TAG_ATTR_TH_THRESHOLD = %s\n", value_th);
-#endif
+              debug_info("[XPN]XML_TAG_ATTR_TH_THRESHOLD = %s\n", value_th);
             }
 
             break;
+
           default:
-#ifdef _DBG_
-            printf("[XPN]part->name = %s\n", part->name);
-#endif
+            debug_info("[XPN]part->name = %s\n", part->name);
             part->size_threads = -1;
-#ifdef _DBG_
-            printf("[XPN]part->size_threads: %d\n",part->size_threads);
-#endif
+            debug_info("[XPN]part->size_threads: %d\n",part->size_threads);
             break;
         }
 
@@ -306,9 +301,7 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
         }
 
         /* THREADS THRESHOLD */
-  #ifdef _DBG_
-        printf("[XPN]part->data_nserv * part->block_size: %d * %d\n", part->data_nserv, part->block_size);
-  #endif
+        debug_info("[XPN]part->data_nserv * part->block_size: %d * %d\n", part->data_nserv, part->block_size);
 
         if (value_th == NULL) {
           part->size_threads =  part->data_nserv * part->block_size; // if th_limit is not set, then th_limit = num_servers * block_size
@@ -317,9 +310,7 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
           part->size_threads = getSizeFactor(value_th); // else th_limit = as defined in conf file
         }
 
-  #ifdef _DBG_
-        printf("[XPN]part->size_threads: %d\n", part->size_threads);
-  #endif
+        debug_info("[XPN]part->size_threads: %d\n", part->size_threads);
 
         return 1;
   #endif
@@ -331,7 +322,8 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
   return 1;
 }
 
-int XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partition *part, int type)
+
+int XpnGetNumServersPartition ( struct conf_connect_st *fconf, struct xpn_partition *part, int type )
 {
   switch(fconf->type)
   {
@@ -347,15 +339,18 @@ int XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partitio
       }
       break;
   }
+
   return -1;
 }
+
 
 int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) struct xpn_partition *part, struct nfi_server *serv, int type)
 {
   int ret;
   char prt[PROTOCOL_MAXLEN];
-  char *url=serv->url;
+  char *url ;
 
+  url = serv->url ;
   switch(fconf->type)
   {
     case CONF_FILE:
@@ -420,8 +415,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
       return -1;
     }
   }
-// BEGIN OF ENABLE_MODULE BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_NFS BLOCK. Do not remove this line. //
+
 #ifdef ENABLE_NFS
   else if ((strcmp(prt,"nfs") == 0) || (strcmp(prt,"nfs2") == 0))
   {
@@ -434,8 +428,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
     }
   }
 #endif
-// END OF ENABLE_NFS BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_NFS3 BLOCK. Do not remove this line. //
+
 #ifdef ENABLE_NFS3
   else if (strcmp(prt,"nfs3") == 0)
   {
@@ -448,8 +441,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
     }
   }
 #endif
-// END OF ENABLE_NFS3 BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_TCP_SERVER BLOCK. Do not remove this line. //
+
 #ifdef ENABLE_TCP_SERVER
   else if (strcmp(prt,"tcp_server") == 0)
   {
@@ -462,8 +454,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
     }
   }
 #endif
-// END OF ENABLE_TCP_SERVER BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_MPI_SERVER BLOCK. Do not remove this line. //
+
 #ifdef ENABLE_MPI_SERVER
   else if (strcmp(prt,"mpi_server") == 0)
   {
@@ -476,8 +467,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
     }
   }
 #endif
-// END OF ENABLE_MPI_SERVER BLOCK. Do not remove this line. //
-// BEGIN OF ENABLE_HTTP BLOCK. Do not remove this line. //
+
 #ifdef ENABLE_HTTP
   else if ((strcmp(prt,"http") == 0) || (strcmp(prt,"webdav") == 0))
   {
@@ -489,8 +479,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
     }
   }
 #endif
-// END OF ENABLE_HTTP BLOCK. Do not remove this line. //
-// END OF ENABLE_MODULE BLOCK. Do not remove this line. //
+
   else {
     printf("[XPN] Protocol '%s' not recognized\n", prt);
     xpn_err(XPNERR_INVALURL);
@@ -498,26 +487,21 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
   }
 
   // Default Value
-  //nfi_worker_thread(serv->wrk, 0);
   return 1;
 }
 
 
-int XpnGetPartition(char *path) /* return partition's id */
+int XpnGetPartition ( char *path ) /* return partition's id */
 {
   int i;
   char part[PATH_MAX];
 
-  i=0;
-
   getNamePart(part, path);
-  //printf("[XPN]part = %s\n",part);
-  //printf("[XPN]xpn_parttable[%d].name = %s\n",i,xpn_parttable[i].name);
+
+  i=0;
   while((i<XPN_MAX_PART)&&(strcmp(part,xpn_parttable[i].name) != 0)){
     i++;
   }
-
-  //printf("[XPN]xpn_parttable[i].id = %d\n",xpn_parttable[i].id);
 
   if(i==XPN_MAX_PART)
   {
@@ -528,7 +512,8 @@ int XpnGetPartition(char *path) /* return partition's id */
   return xpn_parttable[i].id ;
 }
 
-struct xpn_partition* XpnSearchPart(int pd)
+
+struct xpn_partition* XpnSearchPart ( int pd )
 {
   int i=0;
 
@@ -543,7 +528,8 @@ struct xpn_partition* XpnSearchPart(int pd)
   return &(xpn_parttable[i]);
 }
 
-void XpnShowPartitionTable()
+
+void XpnShowPartitionTable ( void )
 {
   int i=0;
 
@@ -553,3 +539,4 @@ void XpnShowPartitionTable()
     i++;
   }
 }
+

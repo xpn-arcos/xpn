@@ -239,7 +239,7 @@ void xpn_simple_rewind(FILE *stream)
 }
 
 
-int xpn_simple_fflush(FILE *stream)
+int xpn_simple_fflush ( __attribute__((__unused__)) FILE *stream )
 {
   return 0;
 }
@@ -251,8 +251,10 @@ int xpn_simple_fileno ( FILE *stream )
 }
 
 
-int xpn_simple_ferror(FILE *stream)
+int xpn_simple_ferror ( __attribute__((__unused__)) FILE *stream )
 {
+  // TODO: update errno or xpn_errno?
+ 
   return 0;
 }
 
