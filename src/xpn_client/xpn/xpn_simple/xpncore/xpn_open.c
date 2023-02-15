@@ -1143,14 +1143,6 @@ int xpn_simple_fstat(int fd, struct stat *sb)
   return res;
 }
 
-
-
-
-
-
-
-// FIXME: If the user has already opened the max number of files he is allowed to, then this call will fail with EMFILE.
-// FIXME: xpn_simple_stat really need to perform xpn_open+opendir?
 int xpn_simple_stat(const char *path, struct stat *sb)
 {
   char abs_path[PATH_MAX];
@@ -1173,8 +1165,6 @@ int xpn_simple_stat(const char *path, struct stat *sb)
     return res;
   }
 
-  printf("xpn_simple_stat 1 PATH %s\n", path);
-
   res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path 
   if(res<0)
   {
@@ -1182,8 +1172,6 @@ int xpn_simple_stat(const char *path, struct stat *sb)
     XPN_DEBUG_END_ARGS1(path)
     return res;
   }
-
-  printf("xpn_simple_stat 2 PATH %s\n", abs_path);
 
   res = XpnGetAtribPath(abs_path, sb);
   if(res<0)
@@ -1196,12 +1184,6 @@ int xpn_simple_stat(const char *path, struct stat *sb)
   XPN_DEBUG_END_ARGS1(path)
   return res;
 }
-
-
-
-
-
-
 
 int xpn_simple_chown(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group)
 {

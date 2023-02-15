@@ -571,8 +571,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
 
   //XPN_DEBUG_BEGIN_CUSTOM("%s", path)
 
-  printf("XpnGetAtribPath PATH %s\n", path);
-
   strcpy(aux_path, path);
 
   pd = XpnGetPartition(aux_path); // returns partition id and remove partition name from path 
@@ -583,8 +581,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     return pd;
   }
 
-  printf("AUX_PATH: %s - PART %d\n", aux_path, pd);
-
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
@@ -593,13 +589,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     /*free(servers);*/
     return -1;
   }
-
-  printf("AUX_PATH: %s - NSERV %d\n", aux_path, n);
-
-
-
-
-
 
   attr = (struct nfi_attr *) malloc(n * sizeof(struct nfi_attr));
   memset(attr, 0, n* sizeof(struct nfi_attr));
@@ -628,8 +617,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     vfh_aux->nfih[i] = NULL;
 
     XpnGetURLServer(servers[i], aux_path, url_serv);
-
-    printf("SERV: %d - PATH %s\n", n, url_serv);
 
     vfh_aux->nfih[i] = (struct nfi_fhandle*)malloc(sizeof(struct nfi_fhandle));
     memset(vfh_aux->nfih[i], 0, sizeof(struct nfi_fhandle));
@@ -681,7 +668,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   // Error checking
   if(err)
   {
-    printf("errror\n");
     xpn_err(XPNERR_REMOVE);
     free(servers);
     return -1;

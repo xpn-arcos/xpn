@@ -102,7 +102,7 @@
         ret = wrk->server->ops->nfi_rename(wrk->server, wrk->arg.url, wrk->arg.newurl) ;
         break;
       case op_getattr:
-        printf("[%s] nfi_worker_run(%lu) -> nfi_getattr\n",__FILE__,(unsigned long int)pthread_self());
+        debug_info("[%s] nfi_worker_run(%lu) -> nfi_getattr\n",__FILE__,(unsigned long int)pthread_self());
         ret = wrk->server->ops->nfi_getattr(wrk->server, wrk->arg.fh, wrk->arg.attr) ;
         break;
       case op_setattr:
@@ -278,7 +278,7 @@
 
   int nfi_worker_do_getattr ( struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
-    printf("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
+    debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     // Pack request
     wrk->arg.operation = op_getattr;

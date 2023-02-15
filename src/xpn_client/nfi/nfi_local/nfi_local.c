@@ -684,7 +684,8 @@
   int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
     int ret;
-    struct nfi_local_fhandle *fh_aux;
+    char server[PATH_MAX], dir[PATH_MAX];
+  //struct nfi_local_fhandle *fh_aux;
     struct stat st;
 
     DEBUG_BEGIN();
@@ -693,18 +694,24 @@
     NULL_RET_ERR(serv,            LOCALERR_PARAM) ;
     NULL_RET_ERR(fh,              LOCALERR_PARAM) ;
     NULL_RET_ERR(attr,            LOCALERR_PARAM) ;
-    NULL_RET_ERR(fh->priv_fh,     LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
     NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // copy private information...
-    fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
+    //fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
+
+    ret = ParseURL(fh->url, NULL, NULL, NULL, server,  NULL,  dir) ;
+    if (ret < 0) {
+      fprintf(stderr,"nfi_mpi_server_getattr: url %s incorrect.\n",dir) ;
+      mpi_server_err(LOCALERR_URL) ;
+      return -1;
+    }
 
     // Do stat
-    ret = filesystem_stat(fh_aux->path, &st) ;
+    ret = filesystem_stat(dir, &st) ;
     if (ret < 0)
     {
-      debug_error("nfi_local_getattr: Fail stat %s.\n", fh_aux->path) ;
+      debug_error("nfi_local_getattr: Fail stat %s.\n", dir) ;
       return ret;
     }
 
