@@ -656,6 +656,7 @@
 
       if(ret > 0){
         buf->st_dev = (__dev_t)st.st_dev;
+        buf->st_ino = (__ino64_t)st.st_ino;
         //buf->__st_ino   = (__ino_t)st.st_ino;
         buf->st_mode    = (__mode_t)st.st_mode;
         buf->st_nlink   = (__nlink_t)st.st_nlink;
@@ -666,13 +667,14 @@
         buf->st_size    = (__off64_t)st.st_size;
         buf->st_blksize = (__blksize_t)st.st_blksize;
         buf->st_blocks  = (__blkcnt64_t)st.st_blocks;
-        //buf->st_atime = (__time_t)st.st_atime;
+
+        buf->st_atime = (__time_t)st.st_atime;
         //buf->__unused1;
-        //buf->st_mtime = (__time_t)st.st_mtime;
+        buf->st_mtime = (__time_t)st.st_mtime;
         //buf->__unused2;
-        //buf->st_ctime = (__time_t)st.st_ctime;
+        buf->st_ctime = (__time_t)st.st_ctime;
         //buf->__unused3 =
-        buf->st_ino = (__ino64_t)st.st_ino;
+        
 
         //ret = 0;
       }
@@ -707,6 +709,7 @@
       if(ret > 0){
         buf->st_dev     = (__dev_t)st.st_dev;
         //buf->__st_ino   = (__ino_t)st.st_ino;
+        buf->st_ino     = (__ino64_t)st.st_ino;
         buf->st_mode    = (__mode_t)st.st_mode;
         buf->st_nlink   = (__nlink_t)st.st_nlink;
         buf->st_uid = (__uid_t)st.st_uid;
@@ -716,13 +719,14 @@
         buf->st_size    = (__off64_t)st.st_size;
         buf->st_blksize     = (__blksize_t)st.st_blksize;
         buf->st_blocks  = (__blkcnt64_t)st.st_blocks;
-        //buf->st_atime     = (__time_t)st.st_atime;
+
+        buf->st_atime     = (__time_t)st.st_atime;
         //buf->__unused1;
-        //buf->st_mtime     = (__time_t)st.st_mtime;
+        buf->st_mtime     = (__time_t)st.st_mtime;
         //buf->__unused2;
-        //buf->st_ctime     = (__time_t)st.st_ctime;
+        buf->st_ctime     = (__time_t)st.st_ctime;
         //buf->__unused3 =
-        buf->st_ino     = (__ino64_t)st.st_ino;
+        
 
         //ret = 0;
       }
@@ -733,7 +737,23 @@
     else
     {
       printf("[bypass] dlsym_xstat64\n");
-      return dlsym_xstat64(ver,(const char *)path, buf);
+      ret = dlsym_xstat64(ver,(const char *)path, buf);
+
+      
+      printf("File type:                ");
+
+       switch (buf->st_mode & S_IFMT) {
+        case S_IFBLK:  printf("block device\n");            break;
+        case S_IFCHR:  printf("character device\n");        break;
+        case S_IFDIR:  printf("directory\n");               break;
+        case S_IFIFO:  printf("FIFO/pipe\n");               break;
+        case S_IFLNK:  printf("symlink\n");                 break;
+        case S_IFREG:  printf("regular file\n");            break;
+        case S_IFSOCK: printf("socket\n");                  break;
+        default:       printf("unknown?\n");                break;
+        }
+
+      return ret;
     }    
   }
 
@@ -758,6 +778,7 @@
       if(ret > 0){
         buf->st_dev     = (__dev_t)st.st_dev;
         //buf->__st_ino   = (__ino_t)st.st_ino;
+        buf->st_ino     = (__ino64_t)st.st_ino;
         buf->st_mode    = (__mode_t)st.st_mode;
         buf->st_nlink   = (__nlink_t)st.st_nlink;
         buf->st_uid = (__uid_t)st.st_uid;
@@ -767,13 +788,14 @@
         buf->st_size    = (__off64_t)st.st_size;
         buf->st_blksize     = (__blksize_t)st.st_blksize;
         buf->st_blocks  = (__blkcnt64_t)st.st_blocks;
-        //buf->st_atime     = (__time_t)st.st_atime;
+
+        buf->st_atime     = (__time_t)st.st_atime;
         //buf->__unused1;
-        //buf->st_mtime     = (__time_t)st.st_mtime;
+        buf->st_mtime     = (__time_t)st.st_mtime;
         //buf->__unused2;
-        //buf->st_ctime     = (__time_t)st.st_ctime;
+        buf->st_ctime     = (__time_t)st.st_ctime;
         //buf->__unused3 = ;
-        buf->st_ino     = (__ino64_t)st.st_ino;
+        
 
         //ret = 0;
       }
@@ -1065,6 +1087,7 @@
         ret->d_type = aux->d_type;
         strcpy(ret->d_name, aux->d_name);
         //ret->d_name = aux->d_name;
+        printf("TYPE ret %d - aux %d- name %s\n", ret->d_type, aux->d_type, ret->d_name);
       }
 
       printf("[bypass] After xpn_readdir()...\n");
@@ -1075,7 +1098,16 @@
     else
     {
       printf("[bypass] dlsym_readdir64\n");
-      return dlsym_readdir64(dirp);
+      ret = dlsym_readdir64(dirp);
+      if (ret != NULL)
+      {
+        printf("TYPE delsy ret %d - name %s\n", ret->d_type, ret->d_name);
+      }
+      else{
+        printf("DELSY NULL\n");
+      }
+      
+      return ret;
     } 
   }
 
