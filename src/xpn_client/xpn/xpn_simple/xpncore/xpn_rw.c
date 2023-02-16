@@ -36,13 +36,15 @@ ssize_t xpn_simple_read(int fd, void *buffer, size_t size)
 
   if (xpn_file_table[fd] != NULL)
   {
-    if ((unsigned long)(size) > (unsigned long)(xpn_file_table[fd]->block_size))
+    //TODO
+    /*if ((unsigned long)(size) > (unsigned long)(xpn_file_table[fd]->block_size))
     {
       res = xpn_pread(fd, buffer, size, xpn_file_table[fd]->offset);
     }
     else {
       res = xpn_sread(fd, buffer, size, xpn_file_table[fd]->offset);
-    }
+    }*/
+    res = xpn_pread(fd, buffer, size, xpn_file_table[fd]->offset);
   }
   else 
   {
@@ -62,13 +64,15 @@ ssize_t xpn_simple_write ( int fd, const void *buffer, size_t size )
 
   if (xpn_file_table[fd] != NULL)
   {
-    if ((unsigned long)(size) >= (unsigned long)(xpn_file_table[fd]->block_size))
+    //TODO
+    /*if ((unsigned long)(size) >= (unsigned long)(xpn_file_table[fd]->block_size))
     {
       res = xpn_pwrite(fd, buffer, size, xpn_file_table[fd]->offset);
     }
     else {
       res = xpn_swrite(fd, buffer, size, xpn_file_table[fd]->offset);
-    }
+    }*/
+    res = xpn_pwrite(fd, buffer, size, xpn_file_table[fd]->offset);
   }
   else
   {

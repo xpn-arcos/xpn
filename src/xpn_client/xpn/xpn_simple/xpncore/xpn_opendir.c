@@ -54,7 +54,6 @@ DIR *xpn_simple_opendir(const char *path)
   }
 
   res = xpn_simple_open(path_aux, O_RDONLY, 0);
-  printf("RET DIR %d\n", res);
   if (res < 0)
   {
     errno = ENOENT;

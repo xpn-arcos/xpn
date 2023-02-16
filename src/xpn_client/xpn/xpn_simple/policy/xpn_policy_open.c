@@ -501,6 +501,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     case POLICY_RAID0:
       /* For RAID0, we need to add the sizes of the file in every server */
 
+      st->st_size = 0;
       for(i=0;i<n;i++)
       {
         res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
@@ -673,6 +674,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     return -1;
   }
 
+  st->st_size = 0;
   for(i=0;i<n;i++)
   {
     if (attr[i].at_size > 0){

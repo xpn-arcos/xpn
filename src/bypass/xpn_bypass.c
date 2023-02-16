@@ -1042,6 +1042,7 @@
         ret->d_off = (__off64_t)aux->d_off;
         ret->d_reclen = aux->d_reclen;
         ret->d_type = aux->d_type;
+        strcpy(ret->d_name, aux->d_name);
         //ret->d_name = aux->d_name;
       }
 
