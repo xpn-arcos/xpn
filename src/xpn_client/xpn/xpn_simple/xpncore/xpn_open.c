@@ -1126,6 +1126,8 @@ int xpn_simple_fstat(int fd, struct stat *sb)
 {
   int res;
 
+  printf("-------------------------------- xpn_simple_fstat\n");
+
   XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
   if(fd<0)

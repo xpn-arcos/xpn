@@ -198,6 +198,10 @@
 
   void MPI_SERVERtoNFIattr ( struct nfi_attr *nfi_att, struct stat *att )
   {
+    nfi_att->st_dev = att->st_dev;
+    nfi_att->st_ino = att->st_ino;
+
+
     if (S_ISREG(att->st_mode)) {
       nfi_att->at_type = NFIFILE;
     }
