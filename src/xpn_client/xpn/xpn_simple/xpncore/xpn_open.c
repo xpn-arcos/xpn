@@ -750,6 +750,16 @@ int xpn_simple_open(const char *path, int flags, mode_t mode)
     return res;
   }
 
+  if ((flags & O_DIRECTORY) > 0)
+  {
+    struct stat sb;
+    xpn_simple_stat(path, &sb);
+    if ((sb.st_mode & S_IFMT) != S_IFDIR)
+    {
+      return ENOTDIR;
+    }
+  }
+
   if ((flags & O_CREAT) > 0)
   {
     if (mode > 0177777)
