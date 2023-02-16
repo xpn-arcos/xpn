@@ -1212,15 +1212,12 @@
     NULL_RET_ERR(serv,               MPI_SERVERERR_PARAM) ;
     NULL_RET_ERR(fh,                 MPI_SERVERERR_PARAM) ;
     NULL_RET_ERR(attr,               MPI_SERVERERR_PARAM) ;
-    //NULL_RET_ERR(fh->priv_fh,        MPI_SERVERERR_PARAM) ;
     nfi_mpi_server_keepConnected(serv) ;
     NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM) ;
 
     // copy private information...
     //fh_aux     = (struct nfi_mpi_server_fhandle *) fh->priv_fh; //TODO: fstat
     server_aux = (struct nfi_mpi_server_server  *) serv->private_info;
-
-    printf("URL NFI %s\n", fh->url);
 
     ret = ParseURL(fh->url, NULL, NULL, NULL, server,  NULL,  dir) ;
     if (ret < 0) {
@@ -1232,7 +1229,6 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      printf("PATH NFI %s\n", dir);
       req.status = filesystem_stat(dir, &(req.attr)) ;
       if (((int) req.status) < 0) {
         debug_error("nfi_mpi_server_getattr: Fail stat %s.\n", dir) ;
