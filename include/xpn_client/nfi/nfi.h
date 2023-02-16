@@ -64,6 +64,9 @@ struct nfi_info{
 };
 
 struct nfi_attr{
+  dev_t     st_dev;     /* ID of device containing file */
+  ino_t     st_ino;     /* inode number */
+
   int   at_type;      /* FILE or DIR      */  
   mode_t  at_mode;    /* protection     */
   nlink_t at_nlink;   /* number of hard links   */

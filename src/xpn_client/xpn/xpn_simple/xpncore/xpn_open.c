@@ -750,6 +750,16 @@ int xpn_simple_open(const char *path, int flags, mode_t mode)
     return res;
   }
 
+  if ((flags & O_DIRECTORY) > 0)
+  {
+    struct stat sb;
+    xpn_simple_stat(path, &sb);
+    if ((sb.st_mode & S_IFMT) != S_IFDIR)
+    {
+      return ENOTDIR;
+    }
+  }
+
   if ((flags & O_CREAT) > 0)
   {
     if (mode > 0177777)
@@ -1125,6 +1135,8 @@ int xpn_simple_rename(const char *path, const char *newpath)
 int xpn_simple_fstat(int fd, struct stat *sb)
 {
   int res;
+
+  printf("-------------------------------- xpn_simple_fstat\n");
 
   XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 

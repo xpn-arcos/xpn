@@ -27,7 +27,7 @@
 
   /* ... Global Variable / Variable Globales ........................... */
 
-
+  #define FILESYSTEM_DLSYM 1
 
   /* ... Functions / Funciones ......................................... */
 
@@ -198,6 +198,10 @@
 
   void MPI_SERVERtoNFIattr ( struct nfi_attr *nfi_att, struct stat *att )
   {
+    nfi_att->st_dev = att->st_dev;
+    nfi_att->st_ino = att->st_ino;
+
+
     if (S_ISREG(att->st_mode)) {
       nfi_att->at_type = NFIFILE;
     }
@@ -565,16 +569,16 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      fh_aux->fd = filesystem_open2(dir, O_RDWR, S_IRWXU) ;
+      fh_aux->fd = real_posix_open2(dir, O_RDWR, S_IRWXU) ;
       if (fh_aux->fd < 0)
       {
-        debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
+        debug_error("real_posix_open fails to open '%s' in server %s.\n", dir, serv->server) ;
         FREE_AND_NULL(fh_aux) ;
         FREE_AND_NULL(fho->url) ;
         return -1;
       }
       if (server_aux->params.xpn_session == 0) {
-        filesystem_close(fh_aux->fd);
+        real_posix_close(fh_aux->fd);
       }
       strcpy(fh_aux->path, dir) ;
     }
@@ -594,7 +598,7 @@
 
       if (fh_aux->fd < 0)
       {
-        debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
+        debug_error("real_posix_open fails to open '%s' in server %s.\n", dir, serv->server) ;
         FREE_AND_NULL(fh_aux) ;
         FREE_AND_NULL(fho->url) ;
         return -1;
@@ -653,7 +657,7 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      fh_aux->fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
+      fh_aux->fd = real_posix_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
       if (fh_aux->fd < 0) {
         debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
         FREE_AND_NULL(fh_aux) ;
@@ -661,14 +665,14 @@
       }
 
       //Get stat
-      ret = filesystem_stat(dir, &(req.attr)) ;
+      ret = real_posix_stat(dir, &(req.attr)) ;
       if (ret < 0) {
         debug_error("nfi_mpi_server_create: Fail stat %s.\n", dir) ;
         return ret;
       }
 
       if (server_aux->params.xpn_session == 0) {
-        filesystem_close(fh_aux->fd);
+        real_posix_close(fh_aux->fd);
       }
       strcpy(fh_aux->path, dir) ;
     }
@@ -741,14 +745,14 @@
     {
       if (server_aux->params.xpn_session)
       {
-        filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
+        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-        ret = filesystem_read(fh_aux->fd, buffer, size) ;
+        ret = real_posix_read(fh_aux->fd, buffer, size) ;
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
         debug_info("[NFI-MPI] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret)
         if (ret < 0) {
-          debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
+          debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
         }
       }
@@ -756,23 +760,23 @@
       {
         int fd;
 
-        fd = filesystem_open(fh_aux->path, O_RDONLY);
+        fd = real_posix_open(fh_aux->path, O_RDONLY);
         if (fd < 0) {
-          debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
+          debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
         }
 
-        filesystem_lseek(fd, offset, SEEK_SET) ;
+        real_posix_lseek(fd, offset, SEEK_SET) ;
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-        ret = filesystem_read(fd, buffer, size) ;
+        ret = real_posix_read(fd, buffer, size) ;
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
         //
 
-        filesystem_close(fd);
+        real_posix_close(fd);
 
         debug_info("[NFI-MPI] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret)
         if (ret < 0) {
-          debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
+          debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
         }
       }
@@ -882,14 +886,14 @@
     {
       if (server_aux->params.xpn_session)
       {
-        filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
+        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-        ret = filesystem_write(fh_aux->fd, buffer, size) ;
+        ret = real_posix_write(fh_aux->fd, buffer, size) ;
         debug_info("[NFI-MPI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret);
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
         if (ret < 0) {
-          debug_error("filesystem_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
+          debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
         }
       }
@@ -897,22 +901,22 @@
       {
         int fd;
 
-        fd = filesystem_open(fh_aux->path, O_WRONLY); // WOS
+        fd = real_posix_open(fh_aux->path, O_WRONLY); // WOS
         if (fd < 0) {
-          debug_error("filesystem_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
+          debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
         }
 
-        filesystem_lseek(fd, offset, SEEK_SET) ;
+        real_posix_lseek(fd, offset, SEEK_SET) ;
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-        ret = filesystem_write(fd, buffer, size) ;
+        ret = real_posix_write(fd, buffer, size) ;
         debug_info("[NFI-MPI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret);
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-        filesystem_close(fd); // WOS
+        real_posix_close(fd); // WOS
 
         if (ret < 0) {
-          debug_error("filesystem_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
+          debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
         }
       }
@@ -1050,7 +1054,7 @@
       if (fh_aux != NULL)
       {
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-        ret = filesystem_close(fh_aux->fd) ;
+        ret = real_posix_close(fh_aux->fd) ;
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
       }
     }
@@ -1108,10 +1112,10 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      ret = filesystem_unlink(dir) ;
+      ret = real_posix_unlink(dir) ;
       if (ret < 0)
       {
-        debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
+        debug_error("real_posix_open fails to open '%s' in server %s.\n", dir, serv->server) ;
         return -1;
       }
     }
@@ -1172,10 +1176,10 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      ret = filesystem_rename(old_path, new_path) ;
+      ret = real_posix_rename(old_path, new_path) ;
       if (ret < 0)
       {
-        debug_error("filesystem_rename fails to rename '%s' in server %s.\n", old_path, serv->server) ;
+        debug_error("real_posix_rename fails to rename '%s' in server %s.\n", old_path, serv->server) ;
         return -1;
       }
     }
@@ -1229,7 +1233,7 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      req.status = filesystem_stat(dir, &(req.attr)) ;
+      req.status = real_posix_stat(dir, &(req.attr)) ;
       if (((int) req.status) < 0) {
         debug_error("nfi_mpi_server_getattr: Fail stat %s.\n", dir) ;
         return req.status;
@@ -1317,7 +1321,7 @@
     /************** LOCAL *****************/
     if(server_aux->params.locality)
     {
-      ret = filesystem_mkdir(dir, /*attr->at_mode*/ 0777) ;
+      ret = real_posix_mkdir(dir, /*attr->at_mode*/ 0777) ;
       if ((ret < 0) && (errno != EEXIST))
       {
         debug_error("nfi_mpi_server_mkdir: Fail mkdir %s.\n", dir) ;
@@ -1327,7 +1331,7 @@
       fh_aux->fd = ret; //Cuidado
 
       //Get stat
-      ret = filesystem_stat(dir, &(req.attr)) ;
+      ret = real_posix_stat(dir, &(req.attr)) ;
       if (ret < 0) {
         debug_error("nfi_mpi_server_create: Fail stat %s.\n", dir) ;
         return ret;
@@ -1414,7 +1418,7 @@
     /************** LOCAL *****************/
     if(server_aux->params.locality)
     {
-      fh_aux->dir = filesystem_opendir(dir) ;
+      fh_aux->dir = real_posix_opendir(dir) ;
       if (fh_aux->dir == NULL) {
         FREE_AND_NULL(fh_aux) ;
         FREE_AND_NULL(fho->url) ;
@@ -1475,7 +1479,7 @@
     /************** LOCAL *****************/
     if(server_aux->params.locality)
     {
-      ent = filesystem_readdir(fh_aux->dir) ;
+      ent = real_posix_readdir(fh_aux->dir) ;
 
       if(ent == NULL){
         debug_error("nfi_mpi_server_readdir: readdir") ;
@@ -1538,7 +1542,7 @@
       /************** LOCAL *****************/
       if(server_aux->params.locality)
       {
-        filesystem_closedir(fh_aux->dir);
+        real_posix_closedir(fh_aux->dir);
       }
       /************** SERVER ****************/
       else {
@@ -1589,7 +1593,7 @@
     /************** LOCAL *****************/
     if(server_aux->params.locality)
     {
-      ret = filesystem_rmdir(dir) ;
+      ret = real_posix_rmdir(dir) ;
       if (ret < 0)
       {
         debug_error(stderr,"nfi_mpi_server_rmdir: Fail rmdir %s.\n", dir) ;
