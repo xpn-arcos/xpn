@@ -50,8 +50,6 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
 
   XPN_DEBUG_BEGIN_ARGS1(path)
 
-XpnShowFileTable();
-
   i=0;
   while((i<XPN_MAX_FILE-1)&&(xpn_file_table[i] != NULL)){ // FIXME? Por que i<XPN_MAX_FILE-1, no deberia ser i<XPN_MAX_FILE
     i++;
@@ -59,13 +57,11 @@ XpnShowFileTable();
 
   if(i == XPN_MAX_FILE){
     // xpn_err() ? 
-    printf("ERROR 1\n");
     return -1;
   }
 
   xpn_file_table[i]= (struct xpn_filedesc *)malloc(sizeof(struct xpn_filedesc));
   if(xpn_file_table[i] == NULL){
-    printf("ERROR 2\n");
     return -1;
   }
 
@@ -83,8 +79,6 @@ XpnShowFileTable();
 
   res = i;
   XPN_DEBUG_END_ARGS1(path)
-
-XpnShowFileTable();
 
   return res;
 }
@@ -409,8 +403,6 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
 
     free(servers);
     res = XpnSearchSlotFile(pd, abs_path, vfh, mdata, mode);
-
-    printf("TYPE %d - RES %d - abs %s\n", mdata->type, res, abs_path);
   }
   else
   {
@@ -573,7 +565,6 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
   XpnCreateMetadata(mdata, pd, abs_path);
 
   i = XpnGetMetadataPos(mdata, -1); //TODO: pasar por parametro
-  printf("metadata %d\n", i) ;
 
   for (int j = 0; j < n; ++j)
   {
@@ -1144,8 +1135,6 @@ int xpn_simple_rename(const char *path, const char *newpath)
 int xpn_simple_fstat(int fd, struct stat *sb)
 {
   int res;
-
-  printf("-------------------------------- xpn_simple_fstat\n");
 
   XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
