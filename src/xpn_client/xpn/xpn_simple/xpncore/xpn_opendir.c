@@ -67,7 +67,10 @@ DIR *xpn_simple_opendir(const char *path)
     XPN_DEBUG_END_ARGS1(path)
     return NULL;
   }
-  dirp->fd = res;
+
+  // fill the dirp info
+  dirp->fd   = res;
+  dirp->path = strdup(path_aux) ;
 
   XPN_DEBUG_END_ARGS1(path)
 
@@ -157,7 +160,7 @@ int xpn_simple_closedir(DIR *dirp)
     xpn_file_table[dirp->fd] = NULL;
   }
 
-
+  free(dirp->path) ;
   free(dirp);
 
   // set errno

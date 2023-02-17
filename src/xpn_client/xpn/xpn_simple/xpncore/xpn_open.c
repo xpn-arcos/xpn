@@ -756,7 +756,8 @@ int xpn_simple_open(const char *path, int flags, mode_t mode)
     xpn_simple_stat(path, &sb);
     if ((sb.st_mode & S_IFMT) != S_IFDIR)
     {
-      return ENOTDIR;
+      errno = ENOTDIR;
+      return -1;
     }
   }
 

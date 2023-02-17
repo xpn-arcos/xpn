@@ -328,10 +328,10 @@
 
     mode = va_arg(ap, mode_t);
 
-    printf("[bypass] Before open.... %s\n",path);
-    printf("[bypass] 1) Path => %s\n",path);
-    printf("[bypass] 2) flags => %d\n",flags);
-    printf("[bypass] 3) mode => %d\n",mode);
+    printf("[bypass] Before open.... %s\n", path);
+    printf("[bypass] 1) Path  => %s\n", path);
+    printf("[bypass] 2) Flags => %d\n", flags);
+    printf("[bypass] 3) Mode  => %d\n", mode);
 
     // This if checks if variable path passed as argument starts with the expand prefix.
     if(is_prefix(xpn_adaptor_partition_prefix, path))
@@ -562,10 +562,10 @@
 
   ssize_t read(int fd, void *buf, size_t nbyte)
   {         
+    int ret = -1;
+
     printf("[bypass] Before read...\n");
     printf("[bypass] read(fd=%d, buf=%p, nbyte=%ld)\n", fd, buf, nbyte);
-
-    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
@@ -576,6 +576,19 @@
 
       printf("[bypass] xpn_read\n");
       ret = xpn_read(virtual_fd.real_fd, buf, nbyte);
+
+      ///////////////////////// BEGIN TESTING CODE ////////////////////////////
+      printf(" >>>>> ret: %d, errno: %d\n", ret, errno) ;
+      struct stat st;
+      // at open time we must check if S_ISDIR and store it in our fdstable as a attribute, then here only check it
+      xpn_fstat(virtual_fd.real_fd, &st);
+      if (S_ISDIR(st.st_mode))
+      {
+          ret = -1 ;
+          errno = EISDIR ;
+      }
+      printf(" >>>>> ret: %d, errno: %d\n", ret, errno) ;
+      ///////////////////////// END TESTING CODE ////////////////////////////
     }
     // Not an XPN partition. We must link with the standard library
     else{
@@ -642,8 +655,8 @@
     int ret;
     struct stat st;
 
-    printf("[bypass] Before lstat64... %s\n",path);
-    printf("[bypass] lstat64...path = %s\n",path+strlen(xpn_adaptor_partition_prefix));
+    printf("[bypass] Before lstat64... %s\n", path);
+    printf("[bypass] lstat64...path = %s\n",  path+strlen(xpn_adaptor_partition_prefix));
 
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
@@ -654,29 +667,21 @@
 
       ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
 
-      if(ret > 0){
-        buf->st_dev = (__dev_t)st.st_dev;
-        buf->st_ino = (__ino64_t)st.st_ino;
-        //buf->__st_ino   = (__ino_t)st.st_ino;
+      if (ret > 0)
+      {
+        buf->st_dev     = (__dev_t)st.st_dev;
+        buf->st_ino     = (__ino64_t)st.st_ino;
         buf->st_mode    = (__mode_t)st.st_mode;
         buf->st_nlink   = (__nlink_t)st.st_nlink;
-        buf->st_uid = (__uid_t)st.st_uid;
-        buf->st_gid = (__gid_t)st.st_gid;
+        buf->st_uid     = (__uid_t)st.st_uid;
+        buf->st_gid     = (__gid_t)st.st_gid;
         buf->st_rdev    = (__dev_t)st.st_rdev;
-        //buf->__pad2 = st.st_;
         buf->st_size    = (__off64_t)st.st_size;
         buf->st_blksize = (__blksize_t)st.st_blksize;
         buf->st_blocks  = (__blkcnt64_t)st.st_blocks;
-
-        buf->st_atime = (__time_t)st.st_atime;
-        //buf->__unused1;
-        buf->st_mtime = (__time_t)st.st_mtime;
-        //buf->__unused2;
-        buf->st_ctime = (__time_t)st.st_ctime;
-        //buf->__unused3 =
-        
-
-        //ret = 0;
+        buf->st_atime   = (__time_t)st.st_atime;
+        buf->st_mtime   = (__time_t)st.st_mtime;
+        buf->st_ctime   = (__time_t)st.st_ctime;
       }
 
       return ret;
@@ -697,7 +702,7 @@
     printf("[bypass] Before stat64... %s\n",path);
     printf("[bypass] stat64...path = %s\n",path);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_prefix(xpn_adaptor_partition_prefix, path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -706,29 +711,21 @@
 
       ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
 
-      if(ret > 0){
+      if (ret > 0)
+      {
         buf->st_dev     = (__dev_t)st.st_dev;
-        //buf->__st_ino   = (__ino_t)st.st_ino;
         buf->st_ino     = (__ino64_t)st.st_ino;
         buf->st_mode    = (__mode_t)st.st_mode;
         buf->st_nlink   = (__nlink_t)st.st_nlink;
-        buf->st_uid = (__uid_t)st.st_uid;
-        buf->st_gid = (__gid_t)st.st_gid;
+        buf->st_uid     = (__uid_t)st.st_uid;
+        buf->st_gid     = (__gid_t)st.st_gid;
         buf->st_rdev    = (__dev_t)st.st_rdev;
-        //buf->__pad2 = st.st_;
         buf->st_size    = (__off64_t)st.st_size;
-        buf->st_blksize     = (__blksize_t)st.st_blksize;
+        buf->st_blksize = (__blksize_t)st.st_blksize;
         buf->st_blocks  = (__blkcnt64_t)st.st_blocks;
-
-        buf->st_atime     = (__time_t)st.st_atime;
-        //buf->__unused1;
-        buf->st_mtime     = (__time_t)st.st_mtime;
-        //buf->__unused2;
-        buf->st_ctime     = (__time_t)st.st_ctime;
-        //buf->__unused3 =
-        
-
-        //ret = 0;
+        buf->st_atime   = (__time_t)st.st_atime;
+        buf->st_mtime   = (__time_t)st.st_mtime;
+        buf->st_ctime   = (__time_t)st.st_ctime;
       }
 
       return ret;
@@ -775,33 +772,26 @@
 
       ret = xpn_fstat(virtual_fd.real_fd, &st);
 
-      if(ret > 0){
+      if (ret > 0)
+      {
         buf->st_dev     = (__dev_t)st.st_dev;
-        //buf->__st_ino   = (__ino_t)st.st_ino;
         buf->st_ino     = (__ino64_t)st.st_ino;
         buf->st_mode    = (__mode_t)st.st_mode;
         buf->st_nlink   = (__nlink_t)st.st_nlink;
-        buf->st_uid = (__uid_t)st.st_uid;
-        buf->st_gid = (__gid_t)st.st_gid;
+        buf->st_uid     = (__uid_t)st.st_uid;
+        buf->st_gid     = (__gid_t)st.st_gid;
         buf->st_rdev    = (__dev_t)st.st_rdev;
-        //buf->__pad2 = st.st_;
         buf->st_size    = (__off64_t)st.st_size;
-        buf->st_blksize     = (__blksize_t)st.st_blksize;
+        buf->st_blksize = (__blksize_t)st.st_blksize;
         buf->st_blocks  = (__blkcnt64_t)st.st_blocks;
-
-        buf->st_atime     = (__time_t)st.st_atime;
-        //buf->__unused1;
-        buf->st_mtime     = (__time_t)st.st_mtime;
-        //buf->__unused2;
-        buf->st_ctime     = (__time_t)st.st_ctime;
-        //buf->__unused3 = ;
-        
-
-        //ret = 0;
+        buf->st_atime   = (__time_t)st.st_atime;
+        buf->st_mtime   = (__time_t)st.st_mtime;
+        buf->st_ctime   = (__time_t)st.st_ctime;
       }
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       printf("[bypass] dlsym_fxstat64\n");
       return dlsym_fxstat64(ver,fd, buf);
     }
@@ -894,7 +884,7 @@
     // Not an XPN partition. We must link with the standard library
     else{
       printf("[bypass] dlsym_fstat\n");
-      ret = dlsym_fstat(ver,fd,buf);
+      ret = dlsym_fstat(ver, fd, buf);
     }
     printf("[bypass] fstat res: %d\n", ret);
 
@@ -1034,7 +1024,15 @@
     }
   }
 
-  struct dirent *readdir(DIR *dirp)
+//// BEGIN TESTING CODE ////////
+struct __dirstream
+{
+      int   fd ;
+      char *path ;
+};
+//// END TESTING CODE ////////
+
+  struct dirent *readdir ( DIR *dirp )
   {
     struct dirent *ret;
 
@@ -1048,6 +1046,33 @@
       printf("[bypass] xpn_readdir\n");
 
       ret = xpn_readdir(dirp);
+
+//// BEGIN TESTING CODE ////////
+      if (ret != NULL)
+      {
+          printf(" readdir:\n") ;
+          printf(" * ret->d_ino:%x\n",    (long)ret->d_ino) ;
+          printf(" * ret->d_off:%x\n",    (long)ret->d_off) ;
+          printf(" * ret->d_reclen:%x\n", (long)ret->d_reclen) ;
+          printf(" * ret->d_type:%x\n",   (long)ret->d_type) ;
+          printf(" * ret->d_name:%s\n",   ret->d_name) ;
+
+	  char full_path[PATH_MAX] ;
+	  strcpy(full_path, dirp->path) ;
+	  strcat(full_path, ret->d_name) ;
+          struct stat st;
+          xpn_stat(full_path, &st);
+	  ret->d_ino    = st.st_ino;
+	  ret->d_reclen = sizeof(struct dirent) ;
+
+          printf(" readdir (patched !):\n") ;
+          printf(" * ret->d_ino:%x\n",    (long)ret->d_ino) ;
+          printf(" * ret->d_off:%x\n",    (long)ret->d_off) ;
+          printf(" * ret->d_reclen:%x\n", (long)ret->d_reclen) ;
+          printf(" * ret->d_type:%x\n",   (long)ret->d_type) ;
+          printf(" * ret->d_name:%s\n",   ret->d_name) ;
+      }
+//// END TESTING CODE ////////
 
       printf("[bypass] After xpn_readdir()...\n");
 

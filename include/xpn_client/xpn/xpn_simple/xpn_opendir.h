@@ -32,8 +32,10 @@
  #endif
 
 
-struct __dirstream{
-      int fd;
+struct __dirstream
+{
+      int   fd ;
+      char *path ;
 };
 
 
