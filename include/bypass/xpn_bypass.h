@@ -98,6 +98,8 @@ int __fxstat64 (int ver,       int fildes, struct stat64 *buf);
 int __lxstat   (int ver, const char *path, struct stat   *buf);
 int __xstat    (int ver, const char *path, struct stat   *buf);
 int __fxstat   (int ver,           int fd, struct stat   *buf);
+int   fstatat64(int dfd, const char *path, struct stat64 *buf, int flags);
+int newfstatat (int dfd, const char *path, struct stat64 *buf, int flags);
 
 int rename     (const char *old_path, const char *new_path);
 int unlink     (const char *path);

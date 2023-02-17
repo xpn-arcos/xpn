@@ -27,44 +27,45 @@
 
   /* ... Variables / Variables ......................................... */
 
-  int (*real_open)(char *, int, mode_t) = NULL;
-  int (*real_open64)(char *, int, mode_t) = NULL;
-  int (*real___open_2)(char *, int) = NULL ;
-  int (*real_creat)(const char *, mode_t) = NULL;
-  int (*real_ftruncate)(int, off_t) = NULL;
+  int     (*real_open)(char *, int, mode_t) = NULL;
+  int     (*real_open64)(char *, int, mode_t) = NULL;
+  int     (*real___open_2)(char *, int) = NULL ;
+  int     (*real_creat)(const char *, mode_t) = NULL;
+  int     (*real_ftruncate)(int, off_t) = NULL;
   ssize_t (*real_read)(int, void*, size_t) = NULL;
   ssize_t (*real_write)(int, const void*, size_t) = NULL;
-  off_t (*real_lseek)(int, off_t, int) = NULL;
-  int (*real_lxstat64)(int, const char *, struct stat64 *) = NULL;
-  int (*real_xstat64)(int, const char *, struct stat64 *) = NULL;
-  int (*real_fxstat64)(int, int, struct stat64 *) = NULL;
-  int (*real_lstat)(int, char *, struct stat *) = NULL;
-  int (*real_stat)(int, char *, struct stat *) = NULL;
-  int (*real_fstat)(int, int, struct stat *) = NULL;
-  int (*real_close)(int) = NULL;
-  int (*real_rename)(const char *, const  char *) = NULL;
-  int (*real_unlink)(char *) = NULL;
-  DIR* (*real_opendir)(char*) = NULL;
-  DIR* (*real_opendir64)(char*) = NULL;
-  int (*real_mkdir)(char *, mode_t) = NULL;
-  struct dirent * (*real_readdir)(DIR *) = NULL;
+  off_t   (*real_lseek)(int, off_t, int) = NULL;
+  int     (*real_lxstat64)(int, const char *, struct stat64 *) = NULL;
+  int     (*real_xstat64)(int, const char *, struct stat64 *) = NULL;
+  int     (*real_fxstat64)(int, int, struct stat64 *) = NULL;
+  int     (*real_lstat)(int, char *, struct stat *) = NULL;
+  int     (*real_stat)(int, char *, struct stat *) = NULL;
+  int     (*real_fstat)(int, int, struct stat *) = NULL;
+  int     (*real_fstatat64)(int, const char *, struct stat64 *, int) = NULL;
+  int     (*real_close)(int) = NULL;
+  int     (*real_rename)(const char *, const  char *) = NULL;
+  int     (*real_unlink)(char *) = NULL;
+  DIR*    (*real_opendir)(char*) = NULL;
+  DIR*    (*real_opendir64)(char*) = NULL;
+  int     (*real_mkdir)(char *, mode_t) = NULL;
+  struct dirent   * (*real_readdir)(DIR *) = NULL;
   struct dirent64 * (*real_readdir64)(DIR *) = NULL;
-  int (*real_closedir)(DIR*) = NULL;
-  int (*real_rmdir)(char *) = NULL;
-  int (*real_fork)() = NULL;
-  int (*real_pipe)(int *) = NULL;
-  int (*real_dup)(int) = NULL;
-  int (*real_dup2)(int, int) = NULL;
-  void (*real_exit)(int) = NULL;
-  int (*real_chdir)(char *) = NULL;
-  int (*real_chmod)(char *, mode_t) = NULL;
-  int (*real_fchmod)(int, mode_t) = NULL;
-  int (*real_chown)(char *, uid_t, gid_t) = NULL;
-  int (*real_fcntl)(int, int, long) = NULL;
-  int (*real_access)(const char *, int) = NULL;
-  char* (*real_realpath)(const char *restrict, char *restrict) = NULL;
-  int (*real_fsync)(int) = NULL;
-  void *(*real_mmap)(void *, size_t, int, int, int, off_t) = NULL;
+  int     (*real_closedir)(DIR*) = NULL;
+  int     (*real_rmdir)(char *) = NULL;
+  int     (*real_fork)() = NULL;
+  int     (*real_pipe)(int *) = NULL;
+  int     (*real_dup)(int) = NULL;
+  int     (*real_dup2)(int, int) = NULL;
+  void     (*real_exit)(int) = NULL;
+  int     (*real_chdir)(char *) = NULL;
+  int     (*real_chmod)(char *, mode_t) = NULL;
+  int     (*real_fchmod)(int, mode_t) = NULL;
+  int     (*real_chown)(char *, uid_t, gid_t) = NULL;
+  int     (*real_fcntl)(int, int, long) = NULL;
+  int     (*real_access)(const char *, int) = NULL;
+  char*   (*real_realpath)(const char *restrict, char *restrict) = NULL;
+  int     (*real_fsync)(int) = NULL;
+  void*   (*real_mmap)(void *, size_t, int, int, int, off_t) = NULL;
 
 
   /* ... Functions / Funciones ......................................... */
@@ -268,6 +269,17 @@
     }
 
     return real_fstat(ver,fd, buf);
+  }
+
+  int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags)
+  {
+    debug_info("dlsym_fstatat64: before fstatat64...\n");
+
+    if (real_fstatat64 == NULL){
+        real_fstatat64 = (int (*)(int, const char *, struct stat64 *, int)) dlsym(RTLD_NEXT,"fstatat64");
+    }
+
+    return real_fstatat64(dfd,(char *)path, buf, flags);
   }
 
   int dlsym_close(int fd)
