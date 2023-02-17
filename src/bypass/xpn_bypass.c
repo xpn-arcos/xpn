@@ -170,11 +170,14 @@
 
   int fdstable_remove ( int fd )
   {
+    printf("REMOVE TABLE %d\n", fd);
+
     //pthread_mutex_lock(&mutex);
     if (fd < PLUSXPN)
     {
       return 0;
     }
+
     fd = fd - PLUSXPN;
     fdstable[fd].type = FD_FREE;
     fdstable[fd].real_fd = -1;
@@ -526,12 +529,7 @@
         ret = fd;
       } 
       else{
-        struct generic_fd virtual_fd;
-
-        virtual_fd.type    = FD_XPN;
-        virtual_fd.real_fd = fd;
-
-        ret = fdstable_put ( virtual_fd );
+        ret = add_xpn_file_to_fdstable(fd) ;
       }
     }
     // Not an XPN partition. We must link with the standard library
@@ -585,7 +583,6 @@
       xpn_adaptor_keepInit ();
 
       printf("[bypass] xpn_read\n");
-      ret = xpn_read(virtual_fd.real_fd, buf, nbyte);
 
       ///////////////////////// BEGIN TESTING CODE ////////////////////////////
       printf(" >>>>> ret: %d, errno: %d\n", ret, errno) ;
@@ -596,6 +593,8 @@
       }
       printf(" >>>>> ret: %d, errno: %d\n", ret, errno) ;
       ///////////////////////// END TESTING CODE ////////////////////////////
+
+      ret = xpn_read(virtual_fd.real_fd, buf, nbyte);
     }
     // Not an XPN partition. We must link with the standard library
     else{
@@ -674,7 +673,7 @@
 
       ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
 
-      if (ret > 0)
+      if (ret >= 0)
       {
         buf->st_dev     = (__dev_t)st.st_dev;
         buf->st_ino     = (__ino64_t)st.st_ino;
@@ -690,6 +689,23 @@
         buf->st_mtime   = (__time_t)st.st_mtime;
         buf->st_ctime   = (__time_t)st.st_ctime;
       }
+
+      printf("[bypass] xpn_stat after\n");
+
+      printf("BUF %o - %d ----- ST %o - %d >> buf:%d - st:%d\n", buf->st_mode, S_ISDIR(buf->st_mode), st.st_mode, S_ISDIR(st.st_mode), sizeof(buf->st_mode), sizeof(st.st_mode));
+
+      printf("File type:                ");
+
+       switch (st.st_mode & S_IFMT) {
+        case S_IFBLK:  printf("block device\n");            break;
+        case S_IFCHR:  printf("character device\n");        break;
+        case S_IFDIR:  printf("directory\n");               break;
+        case S_IFIFO:  printf("FIFO/pipe\n");               break;
+        case S_IFLNK:  printf("symlink\n");                 break;
+        case S_IFREG:  printf("regular file\n");            break;
+        case S_IFSOCK: printf("socket\n");                  break;
+        default:       printf("unknown?\n");                break;
+        }
 
       return ret;
     }
@@ -718,7 +734,7 @@
 
       ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
 
-      if (ret > 0)
+      if (ret >= 0)
       {
         buf->st_dev     = (__dev_t)st.st_dev;
         buf->st_ino     = (__ino64_t)st.st_ino;
@@ -779,7 +795,7 @@
 
       ret = xpn_fstat(virtual_fd.real_fd, &st);
 
-      if (ret > 0)
+      if (ret >= 0)
       {
         buf->st_dev     = (__dev_t)st.st_dev;
         buf->st_ino     = (__ino64_t)st.st_ino;
@@ -1017,9 +1033,24 @@
       ret = xpn_opendir((const char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
       if ( ret != NULL ){
         fdsdirtable_put ( ret );
-      }
+//////////////////////////////////////////////////////////////////////
+        struct generic_fd virtual_fd;
+        int fd;
+        int vfd;
 
-      printf("OPENDIR FIN ret: %p\n", ret);
+        fd = dirfd(ret);
+
+        virtual_fd.type    = FD_XPN;
+        virtual_fd.real_fd = fd;
+        virtual_fd.is_file = 0;
+
+        vfd = fdstable_put ( virtual_fd );
+
+        ret->fd = vfd;
+
+        printf("OPENDIR FIN ret: %p - FD: %d - VFD: %d\n", ret, fd, vfd);
+//////////////////////////////////////////////////////////////////////
+      }
 
       return ret;
     }
@@ -1045,6 +1076,10 @@
 
       printf("[bypass] xpn_readdir\n");
 
+      //printf(" >> readdir %s\n", dirp->path);
+
+      dirp->fd = dirp->fd - 1000;
+
       ret = xpn_readdir(dirp);
 
       if (ret != NULL)
@@ -1056,6 +1091,8 @@
           printf(" * ret->d_type:%x\n",   (long)ret->d_type) ;
           printf(" * ret->d_name:%s\n",   ret->d_name) ;
       }
+
+      dirp->fd = dirp->fd + 1000;
 
       printf("[bypass] After xpn_readdir()...\n");
 
@@ -1083,6 +1120,8 @@
 
       printf("[bypass] xpn_readdir\n");
 
+      dirp->fd = dirp->fd - 1000;
+
       aux=xpn_readdir(dirp);
 
       if (aux != NULL){
@@ -1105,6 +1144,8 @@
           printf(" * ret->d_type:%x\n",   (long)ret->d_type) ;
           printf(" * ret->d_name:%s\n",   ret->d_name) ;
       }
+
+      dirp->fd = dirp->fd + 1000;
 
       printf("[bypass] After xpn_readdir()...\n");
 
@@ -1138,11 +1179,16 @@
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      printf("[bypass] xpn_closedir\n");
+      printf("[bypass] xpn_closedir %d\n", dirp->fd);
+
+      int vfd = dirp->fd;
+
+      dirp->fd = dirp->fd - 1000;
 
       ret = xpn_closedir( dirp );
 
       fdsdirtable_remove( dirp );
+      fdstable_remove ( vfd );
 
       printf("[bypass] closedir return %d\n",ret);
       return ret;

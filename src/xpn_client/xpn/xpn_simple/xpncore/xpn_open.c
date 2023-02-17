@@ -31,15 +31,17 @@ int ino_counter = 0;
 
 
 /*****************************************************************/
-void XpnShowFileTable()
+void XpnShowFileTable ( void )
 {
   int i=0;
 
+  printf("<file_table %d>\n", XPN_MAX_FILE);
   while ((i<XPN_MAX_FILE) && (xpn_file_table[i] != NULL) && (xpn_file_table[i]->path != NULL))
   {
-    XPN_DEBUG("%d %s", i, xpn_file_table[i]->path)
+    printf(" * i:%d -- path:%s\n", i, xpn_file_table[i]->path);
     i++;
   }
+  printf("</file_table>\n");
 }
 
 int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadata *mdata, int mode)
@@ -48,6 +50,8 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
 
   XPN_DEBUG_BEGIN_ARGS1(path)
 
+XpnShowFileTable();
+
   i=0;
   while((i<XPN_MAX_FILE-1)&&(xpn_file_table[i] != NULL)){ // FIXME? Por que i<XPN_MAX_FILE-1, no deberia ser i<XPN_MAX_FILE
     i++;
@@ -55,13 +59,13 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
 
   if(i == XPN_MAX_FILE){
     // xpn_err() ? 
+    printf("ERROR 1\n");
     return -1;
   }
 
   xpn_file_table[i]= (struct xpn_filedesc *)malloc(sizeof(struct xpn_filedesc));
-
   if(xpn_file_table[i] == NULL){
-    // xpn_err() ? 
+    printf("ERROR 2\n");
     return -1;
   }
 
@@ -79,6 +83,8 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
 
   res = i;
   XPN_DEBUG_END_ARGS1(path)
+
+XpnShowFileTable();
 
   return res;
 }
@@ -403,6 +409,8 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
 
     free(servers);
     res = XpnSearchSlotFile(pd, abs_path, vfh, mdata, mode);
+
+    printf("TYPE %d - RES %d - abs %s\n", mdata->type, res, abs_path);
   }
   else
   {
