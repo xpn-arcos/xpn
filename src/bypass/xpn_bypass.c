@@ -81,6 +81,7 @@
     {
       fdstable[i].type = FD_FREE;
       fdstable[i].real_fd = -1;
+      fdstable[i].is_file = -1;
     }
     //pthread_mutex_unlock(&mutex);
   }
@@ -144,6 +145,29 @@
     return -1;
   }
 
+  int add_xpn_file_to_fdstable ( int fd )
+  {
+        int    ret;
+        struct stat st;
+        struct generic_fd virtual_fd;
+
+        virtual_fd.type    = FD_XPN;
+        virtual_fd.real_fd = fd;
+
+        xpn_fstat(virtual_fd.real_fd, &st);
+        if (S_ISDIR(st.st_mode))
+        {
+          virtual_fd.is_file = 0;
+        }
+        else{
+          virtual_fd.is_file = 1;
+        }
+
+        ret = fdstable_put ( virtual_fd );
+
+        return ret ;
+  }
+
   int fdstable_remove ( int fd )
   {
     //pthread_mutex_lock(&mutex);
@@ -154,6 +178,7 @@
     fd = fd - PLUSXPN;
     fdstable[fd].type = FD_FREE;
     fdstable[fd].real_fd = -1;
+    fdstable[fd].is_file = -1;
 
     if ( fd < fdstable_first_free )
     {
@@ -315,7 +340,6 @@
   }
 
 
-
   // File API
 
   int open(const char *path, int flags, ...)
@@ -357,12 +381,7 @@
         ret = fd;
       } 
       else{
-        struct generic_fd virtual_fd;
-
-        virtual_fd.type    = FD_XPN;
-        virtual_fd.real_fd = fd;
-
-        ret = fdstable_put ( virtual_fd );
+        ret = add_xpn_file_to_fdstable(fd) ;
       }
     }
     // Not an XPN partition. We must link with the standard library.
@@ -377,6 +396,7 @@
     return ret;
   }
 
+  
   int open64(const char *path, int flags, ...)
   {
     int fd, ret;
@@ -414,12 +434,7 @@
         ret = fd;
       } 
       else{
-        struct generic_fd virtual_fd;
-
-        virtual_fd.type    = FD_XPN;
-        virtual_fd.real_fd = fd;
-
-        ret = fdstable_put ( virtual_fd );
+        ret = add_xpn_file_to_fdstable(fd) ;
       }
     }
     // Not an XPN partition. We must link with the standard library
@@ -472,12 +487,7 @@
         ret = fd;
       } 
       else{
-        struct generic_fd virtual_fd;
-
-        virtual_fd.type    = FD_XPN;
-        virtual_fd.real_fd = fd;
-
-        ret = fdstable_put ( virtual_fd );
+        ret = add_xpn_file_to_fdstable(fd) ;
       }
     }
     // Not an XPN partition. We must link with the standard library
@@ -579,10 +589,7 @@
 
       ///////////////////////// BEGIN TESTING CODE ////////////////////////////
       printf(" >>>>> ret: %d, errno: %d\n", ret, errno) ;
-      struct stat st;
-      // at open time we must check if S_ISDIR and store it in our fdstable as a attribute, then here only check it
-      xpn_fstat(virtual_fd.real_fd, &st);
-      if (S_ISDIR(st.st_mode))
+      if (virtual_fd.is_file == 0)
       {
           ret = -1 ;
           errno = EISDIR ;
@@ -1024,13 +1031,6 @@
     }
   }
 
-//// BEGIN TESTING CODE ////////
-struct __dirstream
-{
-      int   fd ;
-      char *path ;
-};
-//// END TESTING CODE ////////
 
   struct dirent *readdir ( DIR *dirp )
   {
@@ -1046,33 +1046,6 @@ struct __dirstream
       printf("[bypass] xpn_readdir\n");
 
       ret = xpn_readdir(dirp);
-
-//// BEGIN TESTING CODE ////////
-      if (ret != NULL)
-      {
-          printf(" readdir:\n") ;
-          printf(" * ret->d_ino:%x\n",    (long)ret->d_ino) ;
-          printf(" * ret->d_off:%x\n",    (long)ret->d_off) ;
-          printf(" * ret->d_reclen:%x\n", (long)ret->d_reclen) ;
-          printf(" * ret->d_type:%x\n",   (long)ret->d_type) ;
-          printf(" * ret->d_name:%s\n",   ret->d_name) ;
-
-	  char full_path[PATH_MAX] ;
-	  strcpy(full_path, dirp->path) ;
-	  strcat(full_path, ret->d_name) ;
-          struct stat st;
-          xpn_stat(full_path, &st);
-	  ret->d_ino    = st.st_ino;
-	  ret->d_reclen = sizeof(struct dirent) ;
-
-          printf(" readdir (patched !):\n") ;
-          printf(" * ret->d_ino:%x\n",    (long)ret->d_ino) ;
-          printf(" * ret->d_off:%x\n",    (long)ret->d_off) ;
-          printf(" * ret->d_reclen:%x\n", (long)ret->d_reclen) ;
-          printf(" * ret->d_type:%x\n",   (long)ret->d_type) ;
-          printf(" * ret->d_name:%s\n",   ret->d_name) ;
-      }
-//// END TESTING CODE ////////
 
       printf("[bypass] After xpn_readdir()...\n");
 
@@ -1093,8 +1066,6 @@ struct __dirstream
 
     printf("[bypass] Before readdir64...\n");
 
-    //memcpy(&fd, dirp,sizeof(int));
-
     if( fdsdirtable_get( dirp ) != -1 )
     {
       // We must initialize expand if it has not been initialized yet.
@@ -1111,7 +1082,7 @@ struct __dirstream
         ret->d_reclen = aux->d_reclen;
         ret->d_type = aux->d_type;
         strcpy(ret->d_name, aux->d_name);
-        //ret->d_name = aux->d_name;
+
         printf("TYPE ret %d - aux %d- name %s\n", ret->d_type, aux->d_type, ret->d_name);
       }
 
