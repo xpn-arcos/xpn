@@ -27,7 +27,7 @@
 
   /* ... Global Variable / Variable Globales ........................... */
 
-
+  #define FILESYSTEM_DLSYM 1
   
   /* ... Functions / Funciones ......................................... */
 
@@ -406,10 +406,10 @@
     }
 
     // Do open
-    fh_aux->fd = filesystem_open2(dir, O_RDWR, S_IRWXU) ;
+    fh_aux->fd = real_posix_open2(dir, O_RDWR, S_IRWXU) ;
     if (fh_aux->fd < 0)
     {
-      debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
+      debug_error("real_posix_open fails to open '%s' in server %s.\n", dir, serv->server) ;
       FREE_AND_NULL(fh_aux) ;
       FREE_AND_NULL(fho->url) ;
       return -1;
@@ -458,7 +458,7 @@
     bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
     
     // Do creat
-    fh_aux->fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
+    fh_aux->fd = real_posix_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
     if (fh_aux->fd < 0)
     {
       debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
@@ -468,7 +468,7 @@
 
     // Get stat of the file
     memset(&st, 0, sizeof(struct stat)) ;
-    ret = filesystem_stat(dir, &st) ;
+    ret = real_posix_stat(dir, &st) ;
     if (ret < 0)
     {
       debug_error("real_posix_stat fails to stat '%s' in server '%s'.\n", fh_aux->path, serv->server) ;
@@ -514,13 +514,13 @@
     fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
     // Do read
-    filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
-    ret = filesystem_read(fh_aux->fd, buffer, size) ;
+    real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
+    ret = real_posix_read(fh_aux->fd, buffer, size) ;
 
     debug_info("[NFI-LOCAL] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret)
     if (ret < 0)
     {
-      debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
+      debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
       return -1;
     }
 
@@ -550,8 +550,8 @@
     fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
     
     // Do write
-    filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
-    ret = filesystem_write(fh_aux->fd, buffer, size) ;
+    real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
+    ret = real_posix_write(fh_aux->fd, buffer, size) ;
     debug_info("[NFI-LOCAL] write %s off %ld size %zu (ret:%zd)\n", fh->url, (long int)offset, size, ret);
     if (ret < 0)
     {
@@ -583,7 +583,7 @@
     // Do close
     if (fh_aux != NULL)
     {
-      filesystem_close(fh_aux->fd) ;
+      real_posix_close(fh_aux->fd) ;
     }
 
     // free memory
@@ -622,7 +622,7 @@
     }
 
     // Do unlink
-    ret = filesystem_unlink(dir) ;
+    ret = real_posix_unlink(dir) ;
     if (ret < 0)
     {
       debug_error("nfi_local_remove: Fail remove %s in server %s.\n", dir, serv->server) ;
@@ -667,10 +667,10 @@
       return -1;
     }
 
-    ret = filesystem_rename(old_path, new_path) ;
+    ret = real_posix_rename(old_path, new_path) ;
     if (ret < 0)
     {
-      debug_error("filesystem_rename fails to rename '%s' in server %s.\n", old_path, serv->server) ;
+      debug_error("real_posix_rename fails to rename '%s' in server %s.\n", old_path, serv->server) ;
       return -1;
     }
 
@@ -708,7 +708,7 @@
     }
 
     // Do stat
-    ret = filesystem_stat(dir, &st) ;
+    ret = real_posix_stat(dir, &st) ;
     if (ret < 0)
     {
       debug_error("nfi_local_getattr: Fail stat %s.\n", dir) ;
@@ -778,7 +778,7 @@
     bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
 
     // Do mkdir
-    ret = filesystem_mkdir(dir, /*attr->at_mode*/ 0777) ;
+    ret = real_posix_mkdir(dir, /*attr->at_mode*/ 0777) ;
     if ((ret < 0) && (errno != EEXIST))
     {
       debug_error("nfi_local_mkdir: Fail mkdir %s.\n", dir) ;
@@ -787,7 +787,7 @@
     }
 
     // Do stat
-    ret = filesystem_stat(dir, &st) ;
+    ret = real_posix_stat(dir, &st) ;
     if (ret < 0)
     {
       debug_error("nfi_local_getattr: Fail stat %s.\n", dir) ;
@@ -849,7 +849,7 @@
     }
 
     // Do opendir
-    fh_aux->dir = filesystem_opendir(dir) ;
+    fh_aux->dir = real_posix_opendir(dir) ;
     if (fh_aux->dir == NULL)
     {
       FREE_AND_NULL(fh_aux) ;
@@ -894,7 +894,7 @@
     memset(entry, 0, sizeof(struct dirent)) ;
 
     // Do readdir
-    ent = filesystem_readdir(fh_aux->dir) ;
+    ent = real_posix_readdir(fh_aux->dir) ;
     if (ent == NULL)
     {
       debug_error("nfi_local_readdir: readdir") ;
@@ -923,7 +923,7 @@
     // Do closedir
     if (fh->priv_fh != NULL){
       fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
-      filesystem_closedir(fh_aux->dir) ;
+      real_posix_closedir(fh_aux->dir) ;
     }
 
     // free memory
@@ -960,7 +960,7 @@
     }
 
     // Do rmdir
-    ret = filesystem_rmdir(dir) ;
+    ret = real_posix_rmdir(dir) ;
     if (ret < 0)
     {
       debug_error(stderr,"nfi_local_rmdir: Fail rmdir %s.\n", dir) ;

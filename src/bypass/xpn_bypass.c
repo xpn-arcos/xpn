@@ -632,6 +632,7 @@
       ret = dlsym_read(fd, buf, nbyte);
     }
 
+    errno = 0;
     return ret;
   }
 
@@ -824,6 +825,7 @@
   int __lxstat(int ver, const char *path, struct stat *buf)
   {
     int ret;
+    struct stat st;
 
     debug_info("[bypass] Before __lxstat... %s\n",path);
 
@@ -835,7 +837,24 @@
       debug_info("[bypass] xpn_stat\n");
       debug_info("[bypass] XPN:lstat:path = %s\n",path+strlen(xpn_adaptor_partition_prefix));
 
-      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
+      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
+
+      if ((ret >= 0) && (sizeof(st.st_ino) > 4))
+      {
+        buf->st_dev     = (__dev_t)st.st_dev ;
+        buf->st_ino     = (__ino_t)st.st_ino ;
+        buf->st_mode    = (__mode_t)st.st_mode ;
+        buf->st_nlink   = (__nlink_t)st.st_nlink ;
+        buf->st_uid     = (__uid_t)st.st_uid ;
+        buf->st_gid     = (__gid_t)st.st_gid ;
+        buf->st_rdev    = (__dev_t)st.st_rdev ;
+        buf->st_size    = (__off_t)st.st_size ;
+        buf->st_blksize = (__blksize_t)st.st_blksize ;
+        buf->st_blocks  = (__blkcnt_t)st.st_blocks ;
+        buf->st_atime   = (__time_t)st.st_atime ;
+        buf->st_mtime   = (__time_t)st.st_mtime ;
+        buf->st_ctime   = (__time_t)st.st_ctime ;
+      }
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -852,6 +871,7 @@
     //char path2[1024];
 
     int ret;
+    struct stat st;
 
     debug_info("[bypass] Before __xstat...\n");
     debug_info("[bypass] __xstat...path =>%s\n",path);
@@ -863,7 +883,24 @@
 
       debug_info("[bypass] xpn_stat\n");
 
-      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);      
+      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
+
+      if ((ret >= 0) && (sizeof(st.st_ino) > 4))
+      {
+        buf->st_dev     = (__dev_t)st.st_dev ;
+        buf->st_ino     = (__ino_t)st.st_ino ;
+        buf->st_mode    = (__mode_t)st.st_mode ;
+        buf->st_nlink   = (__nlink_t)st.st_nlink ;
+        buf->st_uid     = (__uid_t)st.st_uid ;
+        buf->st_gid     = (__gid_t)st.st_gid ;
+        buf->st_rdev    = (__dev_t)st.st_rdev ;
+        buf->st_size    = (__off_t)st.st_size ;
+        buf->st_blksize = (__blksize_t)st.st_blksize ;
+        buf->st_blocks  = (__blkcnt_t)st.st_blocks ;
+        buf->st_atime   = (__time_t)st.st_atime ;
+        buf->st_mtime   = (__time_t)st.st_mtime ;
+        buf->st_ctime   = (__time_t)st.st_ctime ;
+      }    
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -877,10 +914,11 @@
 
   int __fxstat(int ver, int fd, struct stat *buf)
   {
+    int ret = -1;
+    struct stat st;
+
     debug_info("[bypass] Before __fxstat...\n");
     debug_info("[bypass] __fxstat fd %d\n", fd);
-
-    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
@@ -890,7 +928,24 @@
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass] xpn_fstat\n");
-      ret = xpn_fstat(virtual_fd.real_fd,buf);
+      ret = xpn_fstat(virtual_fd.real_fd,&st);
+
+      if ((ret >= 0) && (sizeof(st.st_ino) > 4))
+      {
+        buf->st_dev     = (__dev_t)st.st_dev ;
+        buf->st_ino     = (__ino_t)st.st_ino ;
+        buf->st_mode    = (__mode_t)st.st_mode ;
+        buf->st_nlink   = (__nlink_t)st.st_nlink ;
+        buf->st_uid     = (__uid_t)st.st_uid ;
+        buf->st_gid     = (__gid_t)st.st_gid ;
+        buf->st_rdev    = (__dev_t)st.st_rdev ;
+        buf->st_size    = (__off_t)st.st_size ;
+        buf->st_blksize = (__blksize_t)st.st_blksize ;
+        buf->st_blocks  = (__blkcnt_t)st.st_blocks ;
+        buf->st_atime   = (__time_t)st.st_atime ;
+        buf->st_mtime   = (__time_t)st.st_mtime ;
+        buf->st_ctime   = (__time_t)st.st_ctime ;
+      }    
     }
     // Not an XPN partition. We must link with the standard library
     else{
