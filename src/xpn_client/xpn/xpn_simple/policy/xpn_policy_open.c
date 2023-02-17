@@ -484,7 +484,6 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     /*free(servers);*/
     res = -1;
     XPN_DEBUG_END_CUSTOM("%d", fd)
-    printf("SALIDA 1\n");
     return res;
   }
 
@@ -509,7 +508,6 @@ int XpnGetAtribFd ( int fd, struct stat *st )
         if (res<0)
         {
           XPN_DEBUG_END_CUSTOM("%d", fd)
-          printf("SALIDA 2\n");
           return res;
         }
 
@@ -528,16 +526,10 @@ int XpnGetAtribFd ( int fd, struct stat *st )
       break;
 
     default:
-      printf("SALIDA 3\n");
       return -1;
   }
 
   free(servers);
-
-  printf("SALIDA 4\n");
-
-  printf("XpnGetAtribFd dev: %d\n", attr.st_dev);
-  printf("XpnGetAtribFd inode: %d\n", attr.st_ino);
 
   st->st_dev     = attr.st_dev;                 /* device */
   st->st_ino     = attr.st_ino;                 /* inode */
@@ -552,12 +544,8 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   }
 
   st->st_nlink   = attr.at_nlink;     /* number of hard links */
-  //st->st_uid     = attr.at_uid;     /* user ID of owner */
   st->st_uid     = getuid() ;         /* user ID of owner */
-  //st->st_gid     = attr.at_gid ;    /* group ID of owner */
   st->st_gid     = getgid() ;         /* group ID of owner */
-  //st->st_rdev    = 0;                 /* device type (if inode device) */
-  //st->st_blksize = attr.at_blksize ;  /* blocksize for filesystem I/O */
   st->st_blksize = xpn_file_table[fd]->block_size ;  /* blocksize for filesystem I/O */
   st->st_blocks  = attr.at_blocks ;   /* number of blocks allocated */
   st->st_atime   = attr.at_atime ;    /* time of last access */
@@ -587,7 +575,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   {
     xpn_err(XPNERR_PART_NOEXIST);
     XPN_DEBUG_END_ARGS1(aux_path)
-    printf("SALIDA 1\n");
     return pd;
   }
 
@@ -597,7 +584,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   n = XpnGetServers(op_xpn_getattr, pd, aux_path, -1, &servers, XPN_DATA_SERVER);
   if(n<=0){
     /*free(servers);*/
-    printf("SALIDA 2\n");
     return -1;
   }
 
@@ -610,7 +596,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   {
     xpn_err(XPNERR_NOMEMORY);
     free(servers);
-    printf("SALIDA 3\n");
     return -1;
   }
 
@@ -621,7 +606,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     free(vfh_aux);
     xpn_err(XPNERR_NOMEMORY);
     free(servers);
-    printf("SALIDA 4\n");
     return -1;
   }
 
@@ -636,7 +620,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     if(vfh_aux->nfih[i] == NULL)
     {
       free(servers);
-      printf("SALIDA 5\n");
       return -1;
     }
 
@@ -684,7 +667,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   {
     xpn_err(XPNERR_REMOVE);
     free(servers);
-    printf("SALIDA 6\n");
     return -1;
   }
 
@@ -703,11 +685,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
 
   free(servers);
 
-  printf("SALIDA 7\n");
-
-  printf("XpnGetAtribPath dev: %d\n", attr[0].st_dev);
-  printf("XpnGetAtribPath inode: %d\n", attr[0].st_ino);
-
   st->st_dev     = attr[0].st_dev;                 /* device */
   st->st_ino     = attr[0].st_ino;                 /* inode */
 
@@ -721,31 +698,13 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   }
 
   st->st_nlink   = attr[0].at_nlink;     /* number of hard links */
-  //st->st_uid     = attr.at_uid;     /* user ID of owner */
   st->st_uid     = getuid() ;         /* user ID of owner */
-  //st->st_gid     = attr.at_gid ;    /* group ID of owner */
   st->st_gid     = getgid() ;         /* group ID of owner */
-  //st->st_rdev    = 0;                 /* device type (if inode device) */
-  //st->st_blksize = attr.at_blksize ;  /* blocksize for filesystem I/O */
   //st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O */ TODO
   st->st_blocks  = attr[0].at_blocks ;   /* number of blocks allocated */
   st->st_atime   = attr[0].at_atime ;    /* time of last access */
   st->st_mtime   = attr[0].at_mtime ;    /* time of last modification */
   st->st_ctime   = attr[0].at_ctime ;    /* time of last change */
-
-
-  printf("File type:                ");
-
-       switch (st->st_mode & S_IFMT) {
-        case S_IFBLK:  printf("block device\n");            break;
-        case S_IFCHR:  printf("character device\n");        break;
-        case S_IFDIR:  printf("directory\n");               break;
-        case S_IFIFO:  printf("FIFO/pipe\n");               break;
-        case S_IFLNK:  printf("symlink\n");                 break;
-        case S_IFREG:  printf("regular file\n");            break;
-        case S_IFSOCK: printf("socket\n");                  break;
-        default:       printf("unknown?\n");                break;
-        }
 
   //ret = 0;
   //XPN_DEBUG_END_CUSTOM("%s", path)

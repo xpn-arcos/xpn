@@ -1321,7 +1321,7 @@ int nfi_nfs_opendir(struct nfi_server *server,  char *url, struct nfi_fhandle *f
 
 }
 
-int nfi_nfs_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, char *entry, __attribute__((__unused__)) unsigned char *type)
+int nfi_nfs_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, struct dirent *entry )
 {
 	int ret;
 
@@ -1370,10 +1370,11 @@ int nfi_nfs_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, char *entry
 	fh_aux = (struct nfi_nfs_fhandle *)fh->priv_fh;
 
 	if(fh_aux->eofdir){
-		entry[0] = '\0';
+		entry->d_name[0] = '\0';
 		return 0;
 	}
 
+	// TODO: update nfs_readdir to new header
 	ret = nfs_readdir(fh_aux->fh, fh_aux->cookie, entry, server_aux->cl);
 	if((ret < 0)&&(ret != NFSERR_EOFDIR)){
 		nfs_err(NFSERR_READDIR);

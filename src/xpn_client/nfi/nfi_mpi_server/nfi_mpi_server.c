@@ -799,13 +799,13 @@
 
       #ifdef  DBG_IO
       if (server_aux->params.xpn_session){
-        printf("[NFI-MPI]read: -> fd     %d \n",msg.u_st_mpi_server_msg.op_read.fd) ;
+        printf("[NFI-MPI] read: -> fd     %d \n",msg.u_st_mpi_server_msg.op_read.fd) ;
       }
       else {
-        printf("[NFI-MPI]read: -> path   %s \n",msg.u_st_mpi_server_msg.op_read.path) ;
+        printf("[NFI-MPI] read: -> path   %s \n",msg.u_st_mpi_server_msg.op_read.path) ;
       }
-      printf("[NFI-MPI]read: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_read.offset) ;
-      printf("[NFI-MPI]read: -> size   %d \n",msg.u_st_mpi_server_msg.op_read.size) ;
+      printf("[NFI-MPI] read: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_read.offset) ;
+      printf("[NFI-MPI] read: -> size   %d \n",msg.u_st_mpi_server_msg.op_read.size) ;
       #endif
 
       //ret = mpi_server_write_operation(server_aux->sd, &msg) ;
@@ -941,13 +941,13 @@
 
       #ifdef  DBG_IO
         if (server_aux->params.xpn_session){
-          printf("[NFI-MPI]write: -> fd     %d \n",msg.u_st_mpi_server_msg.op_write.fd) ;
+          printf("[NFI-MPI] write: -> fd     %d \n",msg.u_st_mpi_server_msg.op_write.fd) ;
         }
         else {
-          printf("[NFI-MPI]write: -> path   %s \n",msg.u_st_mpi_server_msg.op_write.path) ;
+          printf("[NFI-MPI] write: -> path   %s \n",msg.u_st_mpi_server_msg.op_write.path) ;
         }
-        printf("[NFI-MPI]write: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_write.offset) ;
-        printf("[NFI-MPI]write: -> size   %d \n",msg.u_st_mpi_server_msg.op_write.size) ;
+        printf("[NFI-MPI] write: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_write.offset) ;
+        printf("[NFI-MPI] write: -> size   %d \n",msg.u_st_mpi_server_msg.op_write.size) ;
       #endif
 
       ret = mpi_server_write_operation(server_aux->params.server, &msg) ;
@@ -1449,7 +1449,7 @@
   }
 
 
-  int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, char *entry, unsigned char *type)
+  int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, struct dirent *entry )
   {
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
@@ -1474,23 +1474,19 @@
     server_aux = (struct nfi_mpi_server_server *)serv->private_info;
     fh_aux = (struct nfi_mpi_server_fhandle *)fh->priv_fh;
 
-    entry[0] = '\0';
+    // clean all entry content
+    memset(entry, 0, sizeof(struct dirent)) ;
 
     /************** LOCAL *****************/
     if(server_aux->params.locality)
     {
       ent = real_posix_readdir(fh_aux->dir) ;
-
-      if(ent == NULL){
+      if (ent == NULL){
         debug_error("nfi_mpi_server_readdir: readdir") ;
-        return 1;
-      }
-      if(type==NULL){
-        return 0;
+        return -1;
       }
 
-      strcpy(entry, ent->d_name) ;
-      *type = ent->d_type;
+      memcpy(entry, ent, sizeof(struct dirent)) ;
     }
     /************** SERVER ****************/
     else {
@@ -1502,14 +1498,10 @@
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_mpi_server_direntry)) ; //NEW
 
       if(ret_entry.end == 0){
-          return 1;
-      }
-      if(type==NULL){
-            return 0;
+          return -1;
       }
 
-      strcpy(entry, ret_entry.ret.d_name) ;
-      *type = ret_entry.ret.d_type;
+      memcpy(entry, &(ret_entry.ret), sizeof(struct dirent)) ;
     }
 
     DEBUG_END();
@@ -1697,7 +1689,7 @@
 
     debug_info("[NFI-MPI] nfi_mpi_server_preload(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret) ;
     if (ret == -1) {
-      printf("[NFI-MPI]Error en el preload\n") ;
+      printf("[NFI-MPI] Error en el preload\n") ;
     }
 
     DEBUG_END();

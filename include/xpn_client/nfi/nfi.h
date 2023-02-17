@@ -107,7 +107,7 @@ struct nfi_ops
   int     (*nfi_mkdir)(struct nfi_server *serv, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
   int     (*nfi_rmdir)(struct nfi_server *serv, char *url);
   int     (*nfi_opendir)(struct nfi_server *serv, char *url, struct nfi_fhandle *fho);
-  int     (*nfi_readdir)(struct nfi_server *serv, struct nfi_fhandle *fhd, char *entry, unsigned char *type);
+  int     (*nfi_readdir)(struct nfi_server *serv, struct nfi_fhandle *fhd, struct dirent *entry) ;
   int     (*nfi_closedir)(struct nfi_server *serv, struct nfi_fhandle *fh);
   int     (*nfi_statfs)(struct nfi_server *serv, struct nfi_info *inf);
 

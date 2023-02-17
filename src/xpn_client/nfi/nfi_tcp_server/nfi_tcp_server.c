@@ -1494,7 +1494,7 @@ int nfi_tcp_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
 }
 
 
-int nfi_tcp_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, char *entry, unsigned char *type)
+int nfi_tcp_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, struct dirent *entry)
 {
   struct dirent *ent;
   struct nfi_tcp_server_server *server_aux;
@@ -1539,19 +1539,16 @@ int nfi_tcp_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, cha
   server_aux = (struct nfi_tcp_server_server *)serv->private_info;
   fh_aux = (struct nfi_tcp_server_fhandle *)fh->priv_fh;
 
-  entry[0] = '\0';
+  entry->d_name[0] = '\0';
   ent = readdir(fh_aux->dir);
 
   if(ent == NULL){
     return 1;
   }
-  if(type==NULL){
-    return 0;
-  }
-  strcpy(entry, ent->d_name);
-  //printf("[NFI-TCP] ent->d_name = %s S_ISDIR(%o) = %o\n", ent->d_name, ent->d_type,S_ISDIR(ent->d_type));
-//  *type = ent->d_type;
 
+  // TODO
+  // memcpy(entry, ent, sizeof(struct dirent)) ;
+ 
   return 0;
 }
 

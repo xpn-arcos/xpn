@@ -84,8 +84,8 @@
 
     int     nfi_mpi_server_mkdir      ( struct nfi_server *server, char *url, struct nfi_attr    *attr, struct nfi_fhandle *fh ) ;
     int     nfi_mpi_server_opendir    ( struct nfi_server *server, char *url, struct nfi_fhandle *fho ) ;
-    int     nfi_mpi_server_readdir    ( struct nfi_server *server, struct nfi_fhandle *fhd, char *entry , unsigned char *type ) ;
-    int     nfi_mpi_server_closedir   ( struct nfi_server *server, struct nfi_fhandle *fh ) ;
+    int     nfi_mpi_server_readdir    ( struct nfi_server *server, struct nfi_fhandle *fhd, struct dirent *entry ) ;
+    int     nfi_mpi_server_closedir   ( struct nfi_server *server, struct nfi_fhandle *fhd ) ;
     int     nfi_mpi_server_rmdir      ( struct nfi_server *server, char *url ) ;
 
     int     nfi_mpi_server_statfs     ( struct nfi_server *server, struct nfi_info *inf ) ;
