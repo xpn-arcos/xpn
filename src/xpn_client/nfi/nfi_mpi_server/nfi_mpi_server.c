@@ -1449,7 +1449,7 @@
   }
 
 
-  int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, char *entry, unsigned char *type)
+  int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, struct dirent *entry )
   {
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
@@ -1474,23 +1474,19 @@
     server_aux = (struct nfi_mpi_server_server *)serv->private_info;
     fh_aux = (struct nfi_mpi_server_fhandle *)fh->priv_fh;
 
-    entry[0] = '\0';
+    // clean all entry content
+    memset(entry, 0, sizeof(struct dirent)) ;
 
     /************** LOCAL *****************/
     if(server_aux->params.locality)
     {
       ent = real_posix_readdir(fh_aux->dir) ;
-
-      if(ent == NULL){
+      if (ent == NULL){
         debug_error("nfi_mpi_server_readdir: readdir") ;
-        return 1;
-      }
-      if(type==NULL){
-        return 0;
+        return -1;
       }
 
-      strcpy(entry, ent->d_name) ;
-      *type = ent->d_type;
+      memcpy(entry, ent, sizeof(struct dirent)) ;
     }
     /************** SERVER ****************/
     else {
@@ -1502,14 +1498,10 @@
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_mpi_server_direntry)) ; //NEW
 
       if(ret_entry.end == 0){
-          return 1;
-      }
-      if(type==NULL){
-            return 0;
+          return -1;
       }
 
-      strcpy(entry, ret_entry.ret.d_name) ;
-      *type = ret_entry.ret.d_type;
+      memcpy(entry, &(ret_entry.ret), sizeof(struct dirent)) ;
     }
 
     DEBUG_END();

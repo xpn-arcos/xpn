@@ -869,7 +869,7 @@
     return 0 ;
   }
 
-  int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, char *entry, unsigned char *type )
+  int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct dirent *entry )
   {
     struct nfi_local_fhandle *fh_aux;
     struct dirent *ent;
@@ -890,20 +890,18 @@
     // private_info...
     fh_aux = (struct nfi_local_fhandle *)fh->priv_fh;
 
+    // cleaning entry values...
+    memset(entry, 0, sizeof(struct dirent)) ;
+
     // Do readdir
-    entry[0] = '\0';
     ent = filesystem_readdir(fh_aux->dir) ;
     if (ent == NULL)
     {
       debug_error("nfi_local_readdir: readdir") ;
-      return 1;
-    }
-    if (type==NULL) {
-      return 0;
+      return -1;
     }
 
-    strcpy(entry, ent->d_name) ;
-    *type = ent->d_type;
+    memcpy(entry, ent, sizeof(struct dirent)) ;
 
     // Return OK
     return 0;

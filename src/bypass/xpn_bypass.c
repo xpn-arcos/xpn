@@ -1047,6 +1047,16 @@
 
       ret = xpn_readdir(dirp);
 
+      if (ret != NULL)
+      {
+          printf(" readdir:\n") ;
+          printf(" * ret->d_ino:%d\n",    (long)ret->d_ino) ;
+          printf(" * ret->d_off:%d\n",    (long)ret->d_off) ;
+          printf(" * ret->d_reclen:%d\n", (long)ret->d_reclen) ;
+          printf(" * ret->d_type:%x\n",   (long)ret->d_type) ;
+          printf(" * ret->d_name:%s\n",   ret->d_name) ;
+      }
+
       printf("[bypass] After xpn_readdir()...\n");
 
       return ret;
@@ -1084,6 +1094,16 @@
         strcpy(ret->d_name, aux->d_name);
 
         printf("TYPE ret %d - aux %d- name %s\n", ret->d_type, aux->d_type, ret->d_name);
+      }
+
+      if (ret != NULL)
+      {
+          printf(" readdir:\n") ;
+          printf(" * ret->d_ino:%d\n",    (long)ret->d_ino) ;
+          printf(" * ret->d_off:%d\n",    (long)ret->d_off) ;
+          printf(" * ret->d_reclen:%d\n", (long)ret->d_reclen) ;
+          printf(" * ret->d_type:%x\n",   (long)ret->d_type) ;
+          printf(" * ret->d_name:%s\n",   ret->d_name) ;
       }
 
       printf("[bypass] After xpn_readdir()...\n");

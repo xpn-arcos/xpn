@@ -1228,7 +1228,7 @@ int nfi_nfs3_opendir(struct nfi_server *server,  char *url, struct nfi_fhandle *
 
 }
 
-int nfi_nfs3_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, char *entry, __attribute__((__unused__)) unsigned char *type)
+int nfi_nfs3_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, struct dirent *entry)
 {
 	int ret;
 	
@@ -1277,10 +1277,11 @@ int nfi_nfs3_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, char *entr
 	fh_aux = (struct nfi_nfs3_fhandle *)fh->priv_fh;
 	
 	if(fh_aux->eofdir){
-		entry[0] = '\0';
+		entry->d_name[0] = '\0';
 		return 0;
 	}
 	
+	// TODO: update nfs3_readdir with the new header
 	ret = nfs3_readdir(&fh_aux->fh, fh_aux->cookie, entry, server_aux->cl);
 	if((ret < 0)&&(ret != NFS3ERR_EOFDIR)){
 		fprintf(stderr,"nfi_nfs3_readdir: Fail readdir %s in server %s (ret:%d).\n",fh->url,serv->server,ret);

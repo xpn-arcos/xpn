@@ -121,7 +121,7 @@
         break;
       case op_readdir:
         debug_info("[%s] nfi_worker_run(%lu) -> nfi_readdir\n",__FILE__,(unsigned long int)pthread_self());
-        ret = wrk->server->ops->nfi_readdir(wrk->server, wrk->arg.fh, wrk->arg.entry, wrk->arg.type) ;
+        ret = wrk->server->ops->nfi_readdir(wrk->server, wrk->arg.fh, wrk->arg.entry) ;
         break;
       case op_closedir:
         debug_info("[%s] nfi_worker_run(%lu) -> nfi_closedir\n",__FILE__,(unsigned long int)pthread_self());

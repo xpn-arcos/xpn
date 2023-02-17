@@ -108,7 +108,7 @@ struct dirent* xpn_simple_readdir(DIR *dirp)
   printf("}\n");
   */
 
-  res = XpnGetEntry(dirp->fd, dirnt->d_name, &(dirnt->d_type));
+  res = XpnGetEntry(dirp->fd, dirnt);
   if(res != 0)
   {
     free(dirnt);
