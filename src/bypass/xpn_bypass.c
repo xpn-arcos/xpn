@@ -42,14 +42,14 @@
   }
 
 
-
+  //
   // fd table management
+  //
 
   struct generic_fd * fdstable = NULL;
   long fdstable_size = 0L;
   long fdstable_first_free = 0L;
 
-  //pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
   void fdstable_realloc ( void )
   {
@@ -76,14 +76,12 @@
       exit(-1);
     }
     
-    //pthread_mutex_lock(&mutex);
     for (int i = old_size; i < fdstable_size; ++i)
     {
       fdstable[i].type = FD_FREE;
       fdstable[i].real_fd = -1;
       fdstable[i].is_file = -1;
     }
-    //pthread_mutex_unlock(&mutex);
   }
 
   void fdstable_init ( void )
@@ -94,7 +92,6 @@
   struct generic_fd fdstable_get ( int fd )
   {
     //debug_info("[bypass] GET FSTABLE %d  %d  %d\n", fd, fdstable[fd].type, fdstable[fd].real_fd);
-    //pthread_mutex_lock(&mutex);
 
     struct generic_fd ret;
 
@@ -109,8 +106,6 @@
       ret.real_fd = fd;
     }
 
-    //pthread_mutex_unlock(&mutex);
-
     return ret;
   }
 
@@ -118,29 +113,23 @@
   {
     for (int i = fdstable_first_free; i < fdstable_size; ++i)
     {
-      //pthread_mutex_lock(&mutex);
       if ( fdstable[i].type == FD_FREE ){
         fdstable[i] = fd;
         fdstable_first_free = (long)(i + 1);
         //debug_info("[bypass] PUT FSTABLE %d  %d  %d\n", i, fdstable[i].type, fdstable[i].real_fd);
-        //pthread_mutex_unlock(&mutex);
         return i + PLUSXPN;
       }
-      //pthread_mutex_unlock(&mutex);
     }
 
     long old_size = fdstable_size;
 
     fdstable_realloc();
 
-    //pthread_mutex_lock(&mutex);
     if ( fdstable[old_size].type == FD_FREE ){
       fdstable[old_size] = fd;
       //debug_info("[bypass] PUT FSTABLE %d  %d  %d\n", i, fdstable[i].type, fdstable[i].real_fd);
-      //pthread_mutex_unlock(&mutex);
       return old_size + PLUSXPN;
     }
-    //pthread_mutex_unlock(&mutex);
 
     return -1;
   }
@@ -151,52 +140,51 @@
     struct stat st;
     struct generic_fd virtual_fd;
 
+    // check arguments
+    if (fd < 0) {
+        return fd ;
+    } 
+
+    // fstat(fd...
+    xpn_fstat(fd, &st);
+
+    // setup virtual_fd
     virtual_fd.type    = FD_XPN;
     virtual_fd.real_fd = fd;
+    virtual_fd.is_file = (S_ISDIR(st.st_mode)) ? 0 : 1 ;
 
-    xpn_fstat(virtual_fd.real_fd, &st);
-    if (S_ISDIR(st.st_mode))
-    {
-      virtual_fd.is_file = 0;
-    }
-    else{
-      virtual_fd.is_file = 1;
-    }
-
+    // insert into fdstable
     ret = fdstable_put ( virtual_fd );
-
     return ret ;
   }
 
   int fdstable_remove ( int fd )
   {
-    //pthread_mutex_lock(&mutex);
-    if (fd < PLUSXPN)
-    {
-      return 0;
+    if (fd < PLUSXPN) {
+        return 0;
     }
 
     fd = fd - PLUSXPN;
-    fdstable[fd].type = FD_FREE;
+    fdstable[fd].type    = FD_FREE;
     fdstable[fd].real_fd = -1;
     fdstable[fd].is_file = -1;
 
-    if ( fd < fdstable_first_free )
-    {
-      fdstable_first_free = fd;
+    if (fd < fdstable_first_free) {
+        fdstable_first_free = fd;
     }
-    //pthread_mutex_unlock(&mutex);
 
     return 0;
   }
 
 
-
+  //
   // Dir table management
+  //
 
   DIR ** fdsdirtable = NULL;
   long fdsdirtable_size = 0L;
   long fdsdirtable_first_free = 0L;
+
 
   void fdsdirtable_realloc ( void )
   {
@@ -221,11 +209,9 @@
       exit(-1);
     }
     
-    //pthread_mutex_lock(&mutex);
     for (int i = old_size; i < fdsdirtable_size; ++i) {
       fdsdirtable[i] = NULL;
     }
-    //pthread_mutex_unlock(&mutex);
   }
 
   void fdsdirtable_init ( void )
@@ -413,13 +399,7 @@
 
       debug_info("[bypass] xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
 
-      if(fd<0)
-      {
-        ret = fd;
-      } 
-      else{
-        ret = add_xpn_file_to_fdstable(fd) ;
-      }
+      ret = add_xpn_file_to_fdstable(fd) ;
     }
     // Not an XPN partition. We must link with the standard library.
     else 
@@ -466,13 +446,7 @@
 
       debug_info("[bypass] xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
 
-      if(fd<0)
-      {
-        ret = fd;
-      } 
-      else{
-        ret = add_xpn_file_to_fdstable(fd) ;
-      }
+      ret = add_xpn_file_to_fdstable(fd) ;
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -494,7 +468,6 @@
     mode_t mode = 0;
 
     va_start(ap, flags);
-
     mode = va_arg(ap, mode_t);
 
     debug_info("[bypass] Before __open_2.... %s\n",path);
@@ -519,20 +492,14 @@
 
       debug_info("[bypass] xpn.bypass: xpn_open(%s,%o) return %d\n",path+strlen(xpn_adaptor_partition_prefix),flags,fd);
 
-      if(fd<0)
-      {
-        ret = fd;
-      } 
-      else{
-        ret = add_xpn_file_to_fdstable(fd) ;
-      }
+      ret = add_xpn_file_to_fdstable(fd) ;
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
-      debug_info("[bypass] dlsym___open_2\n");
-
+      debug_info("[bypass] try to dlsym___open_2 %s\n", path);
       ret = dlsym___open_2((char *)path, flags);
+      debug_info("[bypass] dlsym___open_2 %s -> %d\n", path, ret);
     }
 
     va_end(ap);
@@ -552,26 +519,17 @@
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      debug_info("[bypass] xpn_creat\n");
-
+      debug_info("[bypass] try to creat %s", (const char *)(path+strlen(xpn_adaptor_partition_prefix)));
       fd = xpn_creat((const char *)(path+strlen(xpn_adaptor_partition_prefix)),mode);
-
-      debug_info("[bypass] The file is %s",(const char *)(path+strlen(xpn_adaptor_partition_prefix)));
-
-      if(fd<0)
-      {
-        ret = fd;
-      } 
-      else{
-        ret = add_xpn_file_to_fdstable(fd) ;
-      }
+      ret = add_xpn_file_to_fdstable(fd) ;
+      debug_info("[bypass] creat %s -> %d", (const char *)(path+strlen(xpn_adaptor_partition_prefix)), ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
-      debug_info("[bypass] dlsym_creat\n");
-
-      ret = dlsym_creat(path,mode);
+      debug_info("[bypass] try to dlsym_creat %s\n", path);
+      ret = dlsym_creat(path, mode);
+      debug_info("[bypass] dlsym_creat %s -> %d\n", path, ret);
     }
 
     return ret;
@@ -594,7 +552,8 @@
       ret = xpn_ftruncate(virtual_fd.real_fd, length);
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_ftruncate\n");
       ret = dlsym_ftruncate(fd, length);
     }
@@ -618,30 +577,29 @@
 
       debug_info("[bypass] xpn_read\n");
 
-      if (virtual_fd.is_file == 0)
-      {
-          ret = -1 ;
+      if (virtual_fd.is_file == 0) {
           errno = EISDIR ;
+	  return -1 ;
       }
 
       ret = xpn_read(virtual_fd.real_fd, buf, nbyte);
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_read\n");
       ret = dlsym_read(fd, buf, nbyte);
     }
 
-    errno = 0;
     return ret;
   }
 
   ssize_t write(int fd, const void *buf, size_t nbyte)
   {
+    int ret = -1;
+
     debug_info("[bypass] Before write...\n");
     debug_info("[bypass] write(fd=%d, buf=%p, nbyte=%ld)\n", fd, buf, nbyte);
-
-    int ret = -1;
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
@@ -651,10 +609,17 @@
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass] xpn_write\n");
+
+      if (virtual_fd.is_file == 0) {
+          errno = EISDIR ;
+	  return -1 ;
+      }
+
       ret = xpn_write(virtual_fd.real_fd, (void *)buf, nbyte);
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_write\n");
       ret = dlsym_write(fd, (void *)buf, nbyte);
     }
@@ -664,9 +629,9 @@
 
   off_t lseek(int fd, off_t offset, int whence)
   {
-    debug_info("[bypass] Before lseek...\n");
-
     int ret = -1;
+
+    debug_info("[bypass] Before lseek...\n");
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
@@ -679,7 +644,8 @@
       ret = xpn_lseek(virtual_fd.real_fd, offset, whence);
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_lseek\n");
       ret = dlsym_lseek(fd, offset, whence);
     }
@@ -948,7 +914,8 @@
       }    
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_fstat\n");
       ret = dlsym_fstat(ver, fd, buf);
     }
@@ -976,7 +943,8 @@
       fdstable_remove ( fd );
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_close\n");
       ret = dlsym_close(fd);
     }
@@ -1258,7 +1226,8 @@
       ret = xpn_dup(virtual_fd.real_fd);
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_dup\n");
       ret = dlsym_dup(fd);
     }
@@ -1287,7 +1256,8 @@
       ret = xpn_dup2(virtual_fd.real_fd, virtual_fd2.real_fd);
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_dup2\n");
       ret = dlsym_dup2(fd, fd2);
     }
@@ -1369,7 +1339,8 @@
       ret = xpn_fchmod(fd,mode);
     }
     // Not an XPN partition. We must link with the standard library
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_fchmod\n");
       ret = dlsym_fchmod(fd,mode);
     }
@@ -1409,7 +1380,8 @@
       //TODO
       ret = 0;
     }
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_fcntl\n");
       ret = dlsym_fcntl(fd, cmd, arg);
     }
@@ -1485,7 +1457,8 @@
       //TODO
       ret = 0;
     }
-    else{
+    else
+    {
       debug_info("[bypass] dlsym_fsync\n");
       ret = dlsym_fsync(fd);
     }

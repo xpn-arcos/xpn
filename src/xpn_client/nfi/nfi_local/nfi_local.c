@@ -701,9 +701,10 @@
     //fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
     ret = ParseURL(fh->url, NULL, NULL, NULL, server,  NULL,  dir) ;
-    if (ret < 0) {
+    if (ret < 0)
+    {
       fprintf(stderr,"nfi_mpi_server_getattr: url %s incorrect.\n",dir) ;
-      mpi_server_err(LOCALERR_URL) ;
+      // mpi_server_err(LOCALERR_URL) ;
       return -1;
     }
 

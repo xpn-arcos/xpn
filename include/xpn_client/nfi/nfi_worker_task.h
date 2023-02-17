@@ -20,23 +20,23 @@ struct nfi_worker_io {
 };
 
 struct nfi_worker_args {
-  int operation;
+  int     operation;
   ssize_t result;
 
-  char url[PATH_MAX];
-  char virtual_path[PATH_MAX];
-  char storage_path[PATH_MAX];
-  char newurl[PATH_MAX];
-  struct nfi_fhandle *fh;
-  struct nfi_attr *attr;
-  int opt;
+  char   url          [PATH_MAX];
+  char   virtual_path [PATH_MAX];
+  char   storage_path [PATH_MAX];
+  char   newurl       [PATH_MAX];
+  struct nfi_fhandle   * fh;
+  struct nfi_attr      * attr;
+  int                    opt;
 
-  struct nfi_info *inf;
+  struct nfi_info      * inf;
 
-  int n_io;
-  struct nfi_worker_io *io;
-  char *entry;
-  unsigned char *type;
+  int                    n_io;
+  struct nfi_worker_io * io;
+  struct dirent        * entry;
+  unsigned char        * type;
 };
 
 struct nfi_worker {
