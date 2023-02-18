@@ -92,14 +92,14 @@ ssize_t write  (int fildes, const void *buf, size_t nbyte);
 
 off_t   lseek  (int fildes, off_t offset, int whence);
 
-int __lxstat64 (int ver, const char *path, struct stat64 *buf);
-int __xstat64  (int ver, const char *path, struct stat64 *buf);
-int __fxstat64 (int ver,       int fildes, struct stat64 *buf);
-int __lxstat   (int ver, const char *path, struct stat   *buf);
-int __xstat    (int ver, const char *path, struct stat   *buf);
-int __fxstat   (int ver,           int fd, struct stat   *buf);
-int   fstatat64(int dfd, const char *path, struct stat64 *buf, int flags);
-int newfstatat (int dfd, const char *path, struct stat64 *buf, int flags);
+int __lxstat     (int ver, const char *path, struct stat   *buf);
+int __lxstat64   (int ver, const char *path, struct stat64 *buf);
+int __xstat      (int ver, const char *path, struct stat   *buf);
+int __xstat64    (int ver, const char *path, struct stat64 *buf);
+int __fxstat     (int ver,           int fd, struct stat   *buf);
+int __fxstat64   (int ver,       int fildes, struct stat64 *buf);
+int __fxstatat   (int ver, int dirfd, const char *path, struct stat   *buf, int flags) ;
+int __fxstatat64 (int ver, int dirfd, const char *path, struct stat64 *buf, int flags) ;
 
 int rename     (const char *old_path, const char *new_path);
 int unlink     (const char *path);

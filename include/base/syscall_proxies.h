@@ -58,6 +58,7 @@
   int dlsym_lstat     (int ver, const char *path, struct stat   *buf);
   int dlsym_lxstat64  (int ver, const char *path, struct stat64 *buf);
   int dlsym_xstat64   (int ver, const char *path, struct stat64 *buf);
+  int dlsym_fstatat   (int dfd, const char *path, struct stat   *buf, int flags);
   int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags);
 
   int dlsym_rename (const char *old_path, const char *new_path);

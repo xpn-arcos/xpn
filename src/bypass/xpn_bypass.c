@@ -702,7 +702,9 @@
     struct stat st;
 
     debug_info("[bypass] >> Before __lxstat64...\n");
-    debug_info("[bypass]    1) Path  => %s\n", path);
+    debug_info("[bypass]    1) Ver   => %d\n", ver);
+    debug_info("[bypass]    2) Path  => %s\n", path);
+    debug_info("[bypass]    3) Buf   => %p\n", buf);
 
     if(is_prefix(xpn_adaptor_partition_prefix, path))
     {
@@ -881,10 +883,11 @@
 
     debug_info("[bypass] >> Before __fxstat...\n");
     debug_info("[bypass]    1) fd  => %d\n", fd);
+    debug_info("[bypass]    2) buf => %p\n", buf);
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
-    if(virtual_fd.type == FD_XPN)
+    if (virtual_fd.type == FD_XPN)
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -905,17 +908,20 @@
     return ret;
   }
 
-  int fstatat64(int dirfd, const char *path, struct stat64 *buf, int flags)
+/*
+  int __fxstatat64 (__attribute__((__unused__)) int ver, int dirfd, const char *path, struct stat64 *buf, int flags)
   {
     int    ret = -1;
     struct stat st;
 
-    debug_info("[bypass] >> Before fstatat...\n");
-    debug_info("[bypass]    * path:  %s\n", path);
+    debug_info("[bypass] >> Before __fxstatat64...\n");
+    debug_info("[bypass]    * ver:   %d\n", ver);
     debug_info("[bypass]    * dirfd: %d\n", dirfd);
+    debug_info("[bypass]    * path:  %s\n", path);
+    debug_info("[bypass]    * buf:   %p\n", buf);
     debug_info("[bypass]    * flags: %o\n", flags);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_prefix(xpn_adaptor_partition_prefix, path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -938,16 +944,16 @@
       debug_info("[bypass]\t dlsym_fstatat64 -> %d\n", ret);
     }
 
-    debug_info("[bypass] << After fstatat...\n");
+    debug_info("[bypass] << After __fxstatat64...\n");
     return ret;
   }
 
-  int newfstatat(int dirfd, const char *path, struct stat64 *buf, int flags)
+  int __fxstatat (__attribute__((__unused__)) int ver, int dirfd, const char *path, struct stat *buf, int flags )
   {
-    int    ret = -1;
-    struct stat st;
+    int  ret = -1;
 
-    debug_info("[bypass] >> Before newfstatat...\n");
+    debug_info("[bypass] >> Before __fxstatat...\n");
+    debug_info("[bypass]    * ver:   %d\n", ver);
     debug_info("[bypass]    * path:  %s\n", path);
     debug_info("[bypass]    * dirfd: %d\n", dirfd);
     debug_info("[bypass]    * flags: %o\n", flags);
@@ -961,23 +967,21 @@
       // TODO: use flags (see man fstatat
 
       debug_info("[bypass]\t before xpn_stat %s\n", path+strlen(xpn_adaptor_partition_prefix));
-      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
-      if (ret >= 0) {
-          stat_to_stat64(buf, &st) ;
-      }
+      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
       debug_info("[bypass]\t xpn_stat %s -> %d\n", path+strlen(xpn_adaptor_partition_prefix), ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
-      debug_info("[bypass]\t dlsym_fstatat64\n");
-      ret = dlsym_fstatat64(dirfd, path, buf, flags) ;
-      debug_info("[bypass]\t dlsym_fstatat64 -> %d\n", ret);
+      debug_info("[bypass]\t dlsym_fstatat %d,%p,%p,%d\n", dirfd, path, buf, flags);
+      ret = dlsym_fstatat(dirfd, path, buf, flags) ;
+      debug_info("[bypass]\t dlsym_fstatat %d,%p,%p,%d -> %d\n", dirfd, path, buf, flags, ret);
     }
 
-    debug_info("[bypass] << After newfstatat...\n");
+    debug_info("[bypass] << After __fxstatat...\n");
     return ret;
   }
+*/
 
 
   int close(int fd)
@@ -1464,7 +1468,10 @@
     return ret;
   }
 
-  int access(const char *path, int mode){
+  int access(const char *path, int mode)
+  {
+    struct stat64 stats;
+
     debug_info("[bypass] Before access...\n");
 
     if(is_prefix(xpn_adaptor_partition_prefix, path))
@@ -1474,7 +1481,6 @@
 
       debug_info("[bypass] xpn_access\n");
 
-      struct stat64 stats;
       if (__lxstat64(_STAT_VER, path, &stats)){
         return -1;
       }
