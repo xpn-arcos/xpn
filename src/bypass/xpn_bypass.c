@@ -50,9 +50,16 @@
    * Auxiliar functions
    */ 
 
-  int is_prefix(const char * prefix, const char * path)
+  int          is_xpn_prefix   ( const char * path )
   {
-    return ( !strncmp(prefix,path,strlen(prefix)) && strlen(path) > strlen(prefix) );
+    const char *prefix = (const char *)xpn_adaptor_partition_prefix ;
+
+    return ( !strncmp(prefix, path, strlen(prefix)) && strlen(path) > strlen(prefix) );
+  }
+
+  const char * skip_xpn_prefix ( const char * path )
+  {
+    return (const char *)(path + strlen(xpn_adaptor_partition_prefix)) ;
   }
 
 
@@ -328,7 +335,7 @@
    */
   int xpn_adaptor_keepInit ( void )
   {
-    int ret;
+    int    ret ;
     char * xpn_adaptor_initCalled_env = NULL ;
 
     if (xpn_adaptor_initCalled_getenv == 0)
@@ -342,6 +349,7 @@
       xpn_adaptor_initCalled_getenv = 1;
     }
     
+    ret = 0 ;
     if (0 == xpn_adaptor_initCalled)
     {
       // If expand has not been initialized, then initialize it.
@@ -390,7 +398,7 @@
     debug_info("[bypass]    3) Mode  => %d\n", mode);
 
     // This if checks if variable path passed as argument starts with the expand prefix.
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -399,13 +407,13 @@
       debug_info("[bypass]\t xpn_open (%s,%o)\n",path + strlen(xpn_adaptor_partition_prefix), flags);
 
       if (mode != 0){
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags, mode);
+        fd=xpn_open(skip_xpn_prefix(path), flags, mode);
       }
       else{
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
+        fd=xpn_open(skip_xpn_prefix(path), flags);
       }
 
-      debug_info("[bypass]\t xpn_open (%s,%o) -> %d\n",path+strlen(xpn_adaptor_partition_prefix), flags, fd);
+      debug_info("[bypass]\t xpn_open (%s,%o) -> %d\n", skip_xpn_prefix(path), flags, fd);
 
       ret = add_xpn_file_to_fdstable(fd) ;
     }
@@ -438,7 +446,7 @@
     debug_info("[bypass]    2) flags => %d\n", flags);
     debug_info("[bypass]    3) mode  => %d\n", mode);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -446,13 +454,13 @@
       debug_info("[bypass]\t xpn_open (%s,%o)\n",path + strlen(xpn_adaptor_partition_prefix), flags);
 
       if (mode != 0){
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags, mode);
+        fd=xpn_open(skip_xpn_prefix(path), flags, mode);
       }
       else{
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
+        fd=xpn_open(skip_xpn_prefix(path), flags);
       }
 
-      debug_info("[bypass]\t xpn_open (%s,%o) -> %d\n",path+strlen(xpn_adaptor_partition_prefix), flags, fd);
+      debug_info("[bypass]\t xpn_open (%s,%o) -> %d\n", skip_xpn_prefix(path), flags, fd);
 
       ret = add_xpn_file_to_fdstable(fd) ;
     }
@@ -484,7 +492,7 @@
     debug_info("[bypass]    2) flags => %d\n", flags);
     debug_info("[bypass]    3) mode  => %d\n", mode);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -492,13 +500,13 @@
       debug_info("[bypass]\t xpn_open (%s,%o)\n",path + strlen(xpn_adaptor_partition_prefix), flags);
 
       if (mode != 0){
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags, mode);
+        fd=xpn_open(skip_xpn_prefix(path), flags, mode);
       }
       else{
-        fd=xpn_open((const char *)(path+strlen(xpn_adaptor_partition_prefix)),flags);
+        fd=xpn_open(skip_xpn_prefix(path), flags);
       }
 
-      debug_info("[bypass]\t xpn_open (%s,%o) -> %d\n",path+strlen(xpn_adaptor_partition_prefix), flags, fd);
+      debug_info("[bypass]\t xpn_open (%s,%o) -> %d\n", skip_xpn_prefix(path), flags, fd);
 
       ret = add_xpn_file_to_fdstable(fd) ;
     }
@@ -523,15 +531,15 @@
 
     debug_info("[bypass] >> Before creat....\n");
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      debug_info("[bypass]\t try to creat %s", (const char *)(path+strlen(xpn_adaptor_partition_prefix)));
-      fd = xpn_creat((const char *)(path+strlen(xpn_adaptor_partition_prefix)),mode);
+      debug_info("[bypass]\t try to creat %s", skip_xpn_prefix(path));
+      fd = xpn_creat((const char *)skip_xpn_prefix(path),mode);
       ret = add_xpn_file_to_fdstable(fd) ;
-      debug_info("[bypass]\t creat %s -> %d", (const char *)(path+strlen(xpn_adaptor_partition_prefix)), ret);
+      debug_info("[bypass]\t creat %s -> %d", skip_xpn_prefix(path), ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -706,19 +714,19 @@
     debug_info("[bypass]    2) Path  => %s\n", path);
     debug_info("[bypass]    3) Buf   => %p\n", buf);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      debug_info("[bypass]\t try to xpn_stat %s\n", path+strlen(xpn_adaptor_partition_prefix));
+      debug_info("[bypass]\t try to xpn_stat %s\n", skip_xpn_prefix(path));
 
-      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
+      ret = xpn_stat(skip_xpn_prefix(path), &st);
       if (ret >= 0) {
           stat_to_stat64(buf, &st) ;
       }
 
-      debug_info("[bypass]\t xpn_stat %s -> %d\n", path+strlen(xpn_adaptor_partition_prefix), ret);
+      debug_info("[bypass]\t xpn_stat %s -> %d\n", skip_xpn_prefix(path), ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -740,14 +748,14 @@
     debug_info("[bypass] >> Before __xstat64...\n");
     debug_info("[bypass]    1) Path  => %s\n", path);
 
-    if (is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix( path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass]\t xpn_stat\n");
 
-      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
+      ret = xpn_stat(skip_xpn_prefix(path), &st);
       if (ret >= 0) {
           stat_to_stat64(buf, &st) ;
       }
@@ -828,14 +836,14 @@
     debug_info("[bypass] >> Before __lxstat...\n");
     debug_info("[bypass]    1) Path  => %s\n", path);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      debug_info("[bypass]\t xpn_stat %s\n",       path+strlen(xpn_adaptor_partition_prefix));
-      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
-      debug_info("[bypass]\t xpn_stat %s -> %d\n", path+strlen(xpn_adaptor_partition_prefix), ret);
+      debug_info("[bypass]\t xpn_stat %s\n",       skip_xpn_prefix(path));
+      ret = xpn_stat(skip_xpn_prefix(path), buf);
+      debug_info("[bypass]\t xpn_stat %s -> %d\n", skip_xpn_prefix(path), ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -856,14 +864,14 @@
     debug_info("[bypass] >> Before __xstat...\n");
     debug_info("[bypass]    1) Path  => %s\n", path);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      debug_info("[bypass]\t xpn_stat %s\n",       path+strlen(xpn_adaptor_partition_prefix));
-      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
-      debug_info("[bypass]\t xpn_stat %s -> %d\n", path+strlen(xpn_adaptor_partition_prefix), ret);
+      debug_info("[bypass]\t xpn_stat %s\n",       skip_xpn_prefix(path));
+      ret = xpn_stat(skip_xpn_prefix(path), buf);
+      debug_info("[bypass]\t xpn_stat %s -> %d\n", skip_xpn_prefix(path), ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -921,7 +929,7 @@
     debug_info("[bypass]    * buf:   %p\n", buf);
     debug_info("[bypass]    * flags: %o\n", flags);
 
-    if (is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix( path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -929,12 +937,12 @@
       // TODO: if path is relative -> use dirfd as CWD
       // TODO: use flags (see man fstatat
 
-      debug_info("[bypass]\t before xpn_stat %s\n", path+strlen(xpn_adaptor_partition_prefix));
-      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), &st);
+      debug_info("[bypass]\t before xpn_stat %s\n", skip_xpn_prefix(path));
+      ret = xpn_stat(skip_xpn_prefix(path), &st);
       if (ret >= 0) {
           stat_to_stat64(buf, &st) ;
       }
-      debug_info("[bypass]\t xpn_stat %s -> %d\n", path+strlen(xpn_adaptor_partition_prefix), ret);
+      debug_info("[bypass]\t xpn_stat %s -> %d\n", skip_xpn_prefix(path), ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -958,7 +966,7 @@
     debug_info("[bypass]    * dirfd: %d\n", dirfd);
     debug_info("[bypass]    * flags: %o\n", flags);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -966,9 +974,9 @@
       // TODO: if path is relative -> use dirfd as CWD
       // TODO: use flags (see man fstatat
 
-      debug_info("[bypass]\t before xpn_stat %s\n", path+strlen(xpn_adaptor_partition_prefix));
-      ret = xpn_stat((const char *)(path+strlen(xpn_adaptor_partition_prefix)), buf);
-      debug_info("[bypass]\t xpn_stat %s -> %d\n", path+strlen(xpn_adaptor_partition_prefix), ret);
+      debug_info("[bypass]\t before xpn_stat %s\n", skip_xpn_prefix(path));
+      ret = xpn_stat(skip_xpn_prefix(path), buf);
+      debug_info("[bypass]\t xpn_stat %s -> %d\n", skip_xpn_prefix(path), ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -1023,16 +1031,16 @@
     debug_info("[bypass]    1) old Path %s\n", old_path);
     debug_info("[bypass]    2) new Path %s\n", new_path);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, old_path) && is_prefix(xpn_adaptor_partition_prefix, new_path))
+    if(is_xpn_prefix( old_path) && is_xpn_prefix( new_path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass]\t xpn_rename\n");
-      debug_info("[bypass]\t Old Path => %s\n",old_path+strlen(xpn_adaptor_partition_prefix));
-      debug_info("[bypass]\t New Path => %s\n",new_path+strlen(xpn_adaptor_partition_prefix));
+      debug_info("[bypass]\t Old Path => %s\n", skip_xpn_prefix(old_path));
+      debug_info("[bypass]\t New Path => %s\n", skip_xpn_prefix(new_path));
 
-      ret = xpn_rename((const char *)(old_path+strlen(xpn_adaptor_partition_prefix)), (const char *)(new_path+strlen(xpn_adaptor_partition_prefix)));
+      ret = xpn_rename(skip_xpn_prefix(old_path), skip_xpn_prefix(new_path));
     }
     // Not an XPN partition. We must link with the standard library
     else 
@@ -1053,13 +1061,13 @@
     debug_info("[bypass] >> Before unlink...\n");
     debug_info("[bypass]    1) Path %s\n", path);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass]\t xpn_unlink\n");
-      ret = (xpn_unlink((const char *)(path+strlen(xpn_adaptor_partition_prefix))));
+      ret = (xpn_unlink(skip_xpn_prefix(path)));
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -1082,14 +1090,14 @@
     debug_info("[bypass] >> Before mkdir...\n");
     debug_info("[bypass]    * Path %s\n", path);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      debug_info("[bypass]\t xpn_mkdir %s\n",       ((const char *)(path+strlen(xpn_adaptor_partition_prefix))));
-      ret = xpn_mkdir( ((const char *)(path+strlen(xpn_adaptor_partition_prefix))) ,mode );
-      debug_info("[bypass]\t xpn_mkdir %s -> %d\n", ((const char *)(path+strlen(xpn_adaptor_partition_prefix))), ret);
+      debug_info("[bypass]\t xpn_mkdir %s\n",       (skip_xpn_prefix(path)));
+      ret = xpn_mkdir( (skip_xpn_prefix(path)) ,mode );
+      debug_info("[bypass]\t xpn_mkdir %s -> %d\n", (skip_xpn_prefix(path)), ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -1110,7 +1118,7 @@
     debug_info("[bypass] >> Before opendir...\n");
     debug_info("[bypass]    * dirname %s\n", dirname);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, dirname))
+    if(is_xpn_prefix( dirname))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -1237,13 +1245,13 @@
     debug_info("[bypass] >> Before rmdir...\n");
     debug_info("[bypass]    * path %s\n", path);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass]\t xpn_rmdir\n");
-      ret = xpn_rmdir( ((const char *)(path+strlen(xpn_adaptor_partition_prefix))) );
+      ret = xpn_rmdir( (skip_xpn_prefix(path)) );
       debug_info("[bypass]\t xpn_rmdir -> %d\n", ret);
     }
     // Not an XPN partition. We must link with the standard library
@@ -1365,13 +1373,13 @@
   {
     debug_info("[bypass] antes de chdir....\n");
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass] xpn_chdir\n");
-      return(xpn_chdir((char *)(path+strlen(xpn_adaptor_partition_prefix))));
+      return(xpn_chdir((char *)skip_xpn_prefix(path)));
     }
     // Not an XPN partition. We must link with the standard library
     else 
@@ -1385,13 +1393,13 @@
   {
     debug_info("[bypass] Before chmod...\n");
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass] xpn_chmod\n");
-      return(xpn_chmod((const char *)(path+strlen(xpn_adaptor_partition_prefix)), mode));
+      return(xpn_chmod(skip_xpn_prefix(path), mode));
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -1431,13 +1439,13 @@
   {
     debug_info("[bypass] Before chown...\n");
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass] xpn_chown\n");
-      return(xpn_chown((const char *)(path+strlen(xpn_adaptor_partition_prefix)), owner, group));
+      return(xpn_chown(skip_xpn_prefix(path), owner, group));
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -1474,7 +1482,7 @@
 
     debug_info("[bypass] Before access...\n");
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
@@ -1509,7 +1517,7 @@
     debug_info("[bypass] Before realpath...\n");
     debug_info("[bypass] Path %s\n", path);
 
-    if(is_prefix(xpn_adaptor_partition_prefix, path))
+    if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
