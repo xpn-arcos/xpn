@@ -140,7 +140,8 @@ int read_protocol(char *url)
 
 void read_params(int cmd)
 {
-	char url[255], entry[255];
+	char url[255] ;
+	struct dirent entry ;
 	int ret, offset, size;
 
 	switch(cmd)
@@ -441,13 +442,13 @@ void read_params(int cmd)
 				printf("rnfi> Error dir not open\n");
                                 break;
 			}
-			nfi_worker_do_readdir(server.wrk, &fhdir, entry);
+			nfi_worker_do_readdir(server.wrk, &fhdir, &entry);
 			ret = nfi_worker_wait(server.wrk);
 
                         if (ret<0){
                         	printf("rnfi> Error operation READDIR\n");
 			}else{
-			        printf("rnfi> Successfully operation READDIR %s\n",entry);
+			        printf("rnfi> Successfully operation READDIR %s\n", entry.d_name);
 			}
 			break;
 

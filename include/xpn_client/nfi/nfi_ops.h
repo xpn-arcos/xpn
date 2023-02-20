@@ -47,11 +47,11 @@ int nfi_worker_do_rename(struct nfi_worker *wrk, char *old_url, char *new_url);
 int nfi_worker_do_getattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
 int nfi_worker_do_setattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
 
-int nfi_worker_do_mkdir(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
-int nfi_worker_do_opendir(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fho);
-int nfi_worker_do_readdir(struct nfi_worker *wrk, struct nfi_fhandle *fhd, char *entry,unsigned char *type);
-int nfi_worker_do_closedir(struct nfi_worker *wrk, struct nfi_fhandle *fh);
-int nfi_worker_do_rmdir(struct nfi_worker *wrk, char *url);
+int nfi_worker_do_mkdir     (struct nfi_worker *wrk, char *url,               struct nfi_attr *attr, struct nfi_fhandle *fh);
+int nfi_worker_do_opendir   (struct nfi_worker *wrk, char *url,               struct nfi_fhandle *fho);
+int nfi_worker_do_readdir   (struct nfi_worker *wrk, struct nfi_fhandle *fhd, struct dirent *entry) ;
+int nfi_worker_do_closedir  (struct nfi_worker *wrk, struct nfi_fhandle *fh);
+int nfi_worker_do_rmdir     (struct nfi_worker *wrk, char *url);
 
 int nfi_worker_do_statfs(struct nfi_worker *wrk, struct nfi_info *inf);
 int nfi_worker_do_preload(struct nfi_worker *wrk, char *url, char *virtual_path,char *storage_path,int opt);

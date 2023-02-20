@@ -346,15 +346,14 @@
   }
 
 
-  int nfi_worker_do_readdir ( struct nfi_worker *wrk, struct nfi_fhandle *fh, char *entry, unsigned char *type )
+  int nfi_worker_do_readdir ( struct nfi_worker *wrk, struct nfi_fhandle *fh, struct dirent *entry )
   {
     debug_info("[%s] %s (%lu) with_threads = %d\n",__FILE__,__FUNCTION__,(unsigned long int)pthread_self(), wrk->thread);
 
     // Pack request
     wrk->arg.operation = op_readdir;
-    wrk->arg.type = type;
-    wrk->arg.entry = entry;
-    wrk->arg.fh = fh;
+    wrk->arg.entry     = entry;
+    wrk->arg.fh        = fh;
 
     // Do operation
     nfiworker_launch( nfi_do_operation, wrk ) ;
