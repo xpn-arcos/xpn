@@ -39,7 +39,7 @@ int xpn_simple_chdir(char *path)
 {
   /* comprobar que la particion existe */
   /* comprobar . y .. */
-  strcpy(xpn_cwddir.xpn_cwd_path ,path);
+  strcpy(xpn_cwddir.xpn_cwd_path, path);
   return 0;
 }
 

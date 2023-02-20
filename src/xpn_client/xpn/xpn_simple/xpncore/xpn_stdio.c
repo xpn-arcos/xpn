@@ -163,8 +163,8 @@ int xpn_simple_fclose(FILE *stream)
       stream->_IO_buf_base = NULL;
     }
     free(stream);
-  } 
-  else 
+  }
+  else
   {
     ret = EOF;
     errno = EBADF;
@@ -254,7 +254,7 @@ int xpn_simple_fileno ( FILE *stream )
 int xpn_simple_ferror ( __attribute__((__unused__)) FILE *stream )
 {
   // TODO: update errno or xpn_errno?
- 
+
   return 0;
 }
 

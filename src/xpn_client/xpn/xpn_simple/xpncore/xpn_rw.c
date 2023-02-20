@@ -130,7 +130,7 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
   n = XpnGetServers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
   if(n<=0)
   {
-    if (servers != NULL){ 
+    if (servers != NULL){
       free(servers); servers=NULL;
     }
     return -1;
@@ -168,7 +168,7 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
   while((size > count) && (res > 0));
 
   if (servers != NULL) {
-    free(servers); 
+    free(servers);
     servers=NULL;
   }
 

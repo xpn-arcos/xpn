@@ -171,6 +171,6 @@ int xpn_simple_closedir(DIR *dirp)
 
 void xpn_simple_rewinddir(__attribute__((__unused__)) DIR *dirp)
 {
-  
+   // TODO
 }
 

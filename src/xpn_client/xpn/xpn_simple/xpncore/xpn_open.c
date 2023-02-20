@@ -56,7 +56,7 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
   }
 
   if(i == XPN_MAX_FILE){
-    // xpn_err() ? 
+    // xpn_err() ?
     return -1;
   }
 
@@ -89,7 +89,7 @@ int XpnSearchFile(const char *path)
 
   XPN_DEBUG_BEGIN_ARGS1(path)
 
-  while (i<XPN_MAX_FILE) 
+  while (i<XPN_MAX_FILE)
   {
     if ( (xpn_file_table[i] != NULL) && (xpn_file_table[i]->path != NULL) && (strcmp(xpn_file_table[i]->path, path) == 0) ){
       break;
@@ -100,7 +100,7 @@ int XpnSearchFile(const char *path)
 
   if(i == XPN_MAX_FILE){
     res = -1;
-  } 
+  }
   else {
     res = i;
   }
@@ -130,7 +130,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     return res;
   }
 
-  res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path 
+  res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
@@ -139,7 +139,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     return res;
   }
 
-  pd = XpnGetPartition(abs_path); // return partition's id and remove partition name from abs_path 
+  pd = XpnGetPartition(abs_path); // return partition's id and remove partition name from abs_path
   if(pd<0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
@@ -167,7 +167,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
 
   vfh_aux = (struct xpn_fh *)malloc(sizeof(struct xpn_fh));
 
-  // vfh construction 
+  // vfh construction
   if(vfh_aux == NULL)
   {
     xpn_err(XPNERR_NOMEMORY);
@@ -196,7 +196,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   if(mdata_aux == NULL)
   {
     free(servers);
-    // also indirect pointers 
+    // also indirect pointers
     for(i=0;i<n;i++)
     {
       if(vfh_aux->nfih[i] != NULL)
@@ -244,11 +244,11 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   {
     i = XpnGetMetadataPos(mdata_aux, j) ;
     res = nfiworker_wait(servers[i]->wrk) ;
-    // error checking 
+    // error checking
     if((res<0)&&(!err))
     {
       err = 1;
-      // erase the file create before de server number i 
+      // erase the file create before de server number i
     /*
       for(j=0; j<i; j++){
         XpnGetURLServer(servers[j], abs_path, url_serv);
@@ -265,7 +265,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     }
   }
 
-  // error checking 
+  // error checking
   if(err)
   {
     xpn_err(XPNERR_CREATE);
@@ -291,7 +291,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   if(res<0)
   {
     free(servers);
-    // also indirect pointers 
+    // also indirect pointers
     for(i=0;i<n;i++)
     {
       if(vfh_aux->nfih[i] != NULL)
@@ -330,7 +330,7 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
 
   XPN_DEBUG_BEGIN_ARGS1(path)
 
-  res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path 
+  res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path
   if (res < 0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
@@ -338,7 +338,7 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
     return res;
   }
 
-  pd = XpnGetPartition(abs_path); // returns partition id and remove partition name from abs_path 
+  pd = XpnGetPartition(abs_path); // returns partition id and remove partition name from abs_path
   if (pd < 0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
@@ -387,7 +387,7 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
           vfh->nfih[i] = NULL;
         }
       }
-      // read the metadata 
+      // read the metadata
       memset(mdata, 0, sizeof(struct xpn_metadata));
       res = XpnReadMetadata(mdata, n, servers, vfh, abs_path, pd);
       if(res<0)
@@ -435,14 +435,14 @@ int xpn_internal_remove(const char *path)
     return -1;
   }
 
-  res = XpnGetAbsolutePath(path, abs_path); // esta funcion genera el path absoluto 
+  res = XpnGetAbsolutePath(path, abs_path); // esta funcion genera el path absoluto
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
     return -1;
   }
 
-  pd = XpnGetPartition(abs_path); // return partition's id 
+  pd = XpnGetPartition(abs_path); // return partition's id
   if(pd<0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
@@ -455,7 +455,7 @@ int xpn_internal_remove(const char *path)
   servers = NULL;
   n = XpnGetServers(op_xpn_remove, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
   if(n<=0){
-    // free(servers); 
+    // free(servers);
     return -1;
   }
 
@@ -473,13 +473,13 @@ int xpn_internal_remove(const char *path)
   for(i=0;i<n;i++)
   {
     res = nfiworker_wait(servers[i]->wrk);
-    // error checking 
+    // error checking
     if((res<0)&&(!err)){
       err = 1;
     }
   }
 
-  // error checking 
+  // error checking
   if(err)
   {
     xpn_err(XPNERR_REMOVE);
@@ -520,7 +520,7 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
     return res;
   }
 
-  res = XpnGetAbsolutePath(virtual_path, abs_path); // esta funcion genera el path absoluto 
+  res = XpnGetAbsolutePath(virtual_path, abs_path); // esta funcion genera el path absoluto
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
@@ -529,7 +529,7 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
     return res;
   }
 
-  pd = XpnGetPartition(abs_path); // return partition's id 
+  pd = XpnGetPartition(abs_path); // return partition's id
   if(pd<0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
@@ -583,7 +583,7 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
   free(servers);
   free(mdata);
 
-  // error checking 
+  // error checking
   if(res)
   {
     xpn_err(XPNERR_PARAM);
@@ -618,14 +618,14 @@ int xpn_simple_flush(const char *virtual_path, const char *storage_path)
     return -1;
   }
 
-  res = XpnGetAbsolutePath(virtual_path, abs_path); // esta funcion genera el path absoluto 
+  res = XpnGetAbsolutePath(virtual_path, abs_path); // esta funcion genera el path absoluto
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
     return -1;
   }
 
-  pd = XpnGetPartition(abs_path); // return partition's id 
+  pd = XpnGetPartition(abs_path); // return partition's id
   if(pd<0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
@@ -674,7 +674,7 @@ int xpn_simple_flush(const char *virtual_path, const char *storage_path)
   free(servers);
   free(mdata);
 
-  // error checking 
+  // error checking
   /*if(err){
     xpn_err(XPNERR_PARAM);
     return -1;
@@ -736,23 +736,23 @@ int xpn_simple_creat(const char *path, mode_t perm)
 
 int xpn_simple_open(const char *path, int flags, mode_t mode)
 {
-  struct xpn_fh *vfh;
+  int res = -1;
+  struct xpn_fh       *vfh;
   struct xpn_metadata *mdata;
   int md;
-  int res = -1;
+  struct stat sb;
 
-  XPN_DEBUG_BEGIN_ARGS1(path)
+  XPN_DEBUG_BEGIN_ARGS1(path) ;
 
-  if((path == NULL)||(strlen(path)>PATH_MAX))
+  if ((path == NULL)||(strlen(path)>PATH_MAX))
   {
-    XPN_DEBUG_END_ARGS1(path)
+    XPN_DEBUG_END_ARGS1(path) ;
     return res;
   }
 
+  xpn_simple_stat(path, &sb);
   if ((flags & O_DIRECTORY) > 0)
   {
-    struct stat sb;
-    xpn_simple_stat(path, &sb);
     if ((sb.st_mode & S_IFMT) != S_IFDIR)
     {
       errno = ENOTDIR;
@@ -764,90 +764,64 @@ int xpn_simple_open(const char *path, int flags, mode_t mode)
   {
     if (mode > 0177777)
     {
-      XPN_DEBUG_END_ARGS1(path)
-      return res;
+      XPN_DEBUG_END_ARGS1(path);
+      return -1;
     }
   }
 
-  vfh = NULL;
+  vfh   = NULL;
   mdata = NULL;
 
-  /*
-  flags = flags & (O_TRUNC | O_CREAT | O_RDWR | O_WRONLY |  O_RDONLY);
-  if( (flags != (O_TRUNC | O_CREAT | O_RDWR )) &&
-      (flags != (O_TRUNC | O_CREAT | O_WRONLY )) &&
-      (flags != (O_TRUNC | O_CREAT | O_RDONLY )) &&
-      (flags != (O_CREAT | O_RDWR )) &&
-      (flags != (O_CREAT | O_WRONLY)) &&
-      (flags != (O_CREAT | O_RDONLY )) &&
-      (flags != (O_RDWR )) &&
-      (flags != (O_RDONLY)) &&
-      (flags != (O_WRONLY)) ){
-    XPN_DEBUG_END_ARGS1(path)
-    return res;
-  }
-  */
-  if( (O_WRONLY == (flags & O_WRONLY)) || (O_RDWR == (flags & O_RDWR)) )
+  if ( (O_WRONLY == (flags & O_WRONLY)) || (O_RDWR == (flags & O_RDWR)) )
   {
-    if(O_TRUNC == (flags & O_TRUNC)){
+    if (O_TRUNC == (flags & O_TRUNC)) {
       res = xpn_internal_remove(path);
-      // res = xpn_internal_resize(path, 0)
+      // res = xpn_internal_resize(path, 0);
     }
-    if(  (O_TRUNC == (flags & O_TRUNC)) ||((O_CREAT == (flags & O_CREAT)) && (mode != 0))  )
+    if ( (O_TRUNC == (flags & O_TRUNC)) || ((O_CREAT == (flags & O_CREAT)) && (mode != 0)) )
     {
       //mode = mode & MASK;
       res = xpn_internal_creat(path, mode, &vfh, &mdata);
       if (res < 0)
       {
-        XPN_DEBUG_END_ARGS1(path)
+        XPN_DEBUG_END_ARGS1(path);
         return res;
       }
     }
   }
 
   md = (flags & O_RDWR)|(flags & O_RDONLY)|(flags & O_WRONLY);
-
   res = xpn_internal_open(path, vfh, mdata, md);
+  if (res >= 0) {
+      xpn_file_table[res]->st = sb ;
+  }
 
   xpn_err(XPN_OK);
 
-  XPN_DEBUG_END_ARGS1(path)
+  XPN_DEBUG_END_ARGS1(path);
+
   return res;
 }
 
-int xpn_simple_close(int fd)
+int xpn_simple_close ( int fd )
 {
   int res, i;
 
-  XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
+  XPN_DEBUG_BEGIN_CUSTOM("%d", fd);
 
-  if((fd<0)||(fd>XPN_MAX_FILE-1))
+  if ((fd<0)||(fd>XPN_MAX_FILE-1))
   {
-    // xpn_err 
-    res = -1;
-    XPN_DEBUG_END_CUSTOM("%d", fd)
-    return res;
+    // xpn_err
+    XPN_DEBUG_END_CUSTOM("%d", fd);
+    return -1;
   }
 
-  if(xpn_file_table[fd] == NULL)
+  if (xpn_file_table[fd] == NULL)
   {
-    // xpn_err 
-    res = -1;
-    XPN_DEBUG_END_CUSTOM("%d", fd)
-    return res;
+    // xpn_err
+    XPN_DEBUG_END_CUSTOM("%d", fd);
+    return -1;
   }
-
-  /*
-  int n_threads = 0;
-  struct nfi_server **servers;
-  servers = NULL;
-  int n = XpnGetServers(op_xpn_close, xpn_file_table[fd]->part->id, NULL, -1, &servers, XPN_DATA_SERVER);
-  if(n<=0){
-    free(servers);
-    res = -1;
-    return res;
-  }
-  */
 
   xpn_file_table[fd]->links--;
   if(xpn_file_table[fd]->links == 0)
@@ -905,11 +879,12 @@ int xpn_simple_close(int fd)
       return -1;
     } */
   }
+
   xpn_err(XPN_OK);
 
-  res = 0;
   XPN_DEBUG_END_CUSTOM("%d", fd)
-  return res;
+
+  return 0;
 }
 
 int xpn_simple_unlink(const char *path)
@@ -921,6 +896,7 @@ int xpn_simple_unlink(const char *path)
   res = xpn_internal_remove(path);
 
   XPN_DEBUG_END_ARGS1(path)
+
   return res;
 }
 
@@ -945,28 +921,28 @@ int xpn_simple_rename(const char *path, const char *newpath)
     return -1;
   }
 
-  res = XpnGetAbsolutePath(path, abs_path); // esta funcion genera el path absoluto 
+  res = XpnGetAbsolutePath(path, abs_path); // esta funcion genera el path absoluto
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
     return -1;
   }
 
-  res = XpnGetAbsolutePath(newpath, newabs_path); // esta funcion genera el path absoluto 
+  res = XpnGetAbsolutePath(newpath, newabs_path); // esta funcion genera el path absoluto
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
     return -1;
   }
 
-  pd = XpnGetPartition(abs_path); // return partition's id 
+  pd = XpnGetPartition(abs_path); // return partition's id
   if(pd<0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
     return -1;
   }
 
-  newpd = XpnGetPartition(newabs_path); // return partition's id 
+  newpd = XpnGetPartition(newabs_path); // return partition's id
   if(newpd<0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
@@ -989,7 +965,7 @@ int xpn_simple_rename(const char *path, const char *newpath)
 
   vfh_aux = (struct xpn_fh *)malloc(sizeof(struct xpn_fh));
 
-  // construccion del vfh 
+  // construccion del vfh
   if(vfh_aux == NULL)
   {
     xpn_err(XPNERR_NOMEMORY);
@@ -1025,7 +1001,7 @@ int xpn_simple_rename(const char *path, const char *newpath)
   if(res<0)
   {
     free(servers);
-    // tambien los punteros indirectos 
+    // tambien los punteros indirectos
     for(i=0;i<n;i++)
     {
       if(vfh_aux->nfih[i] != NULL)
@@ -1048,7 +1024,7 @@ int xpn_simple_rename(const char *path, const char *newpath)
   if(res<0)
   {
     free(servers);
-    // tambien los punteros indirectos 
+    // tambien los punteros indirectos
     for(i=0;i<n;i++)
     {
       if(vfh_aux->nfih[i] != NULL)
@@ -1087,7 +1063,7 @@ int xpn_simple_rename(const char *path, const char *newpath)
   }
 
   free(servers);
-  // tambien los punteros indirectos 
+  // tambien los punteros indirectos
   for(i=0;i<n;i++)
   {
     if(vfh_aux->nfih[i] != NULL)
@@ -1103,14 +1079,14 @@ int xpn_simple_rename(const char *path, const char *newpath)
   free(vfh_aux);
   free(mdata_aux);
 
-  // error checking 
+  // error checking
   if(err)
   {
     res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
     if(res<0)
     {
       free(servers);
-      // tambien los punteros indirectos 
+      // tambien los punteros indirectos
       for(i=0;i<n;i++)
       {
         if(vfh_aux->nfih[i] != NULL)
@@ -1138,18 +1114,22 @@ int xpn_simple_fstat(int fd, struct stat *sb)
 
   XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
-  if(fd<0)
+  if (fd < 0)
   {
     errno = EBADF;
-    res = -1;
     XPN_DEBUG_END_CUSTOM("%d", fd)
-    return res;
+    return -1;
   }
 
+  // TODO: update xpn_file_table[res].st on read & write
+
+  // TODO: comment XpnGetAtribFd instead (*sb)
+  // (*sb) = xpn_file_table[res].st ;
   res = XpnGetAtribFd(fd , sb);
 
   XPN_DEBUG_END_CUSTOM("%d", fd)
 
+  // TODO: if (*sb) then return 0
   return res;
 }
 
@@ -1163,19 +1143,18 @@ int xpn_simple_stat(const char *path, struct stat *sb)
   if ((path == NULL) || (strlen(path) == 0))
   {
     errno = ENOENT;
-    res = -1;
     XPN_DEBUG_END_ARGS1(path)
-    return res;
+    return -1;
   }
 
   if (sb == NULL)
   {
     errno = ENOENT;
     XPN_DEBUG_END_ARGS1(path)
-    return res;
+    return -1;
   }
 
-  res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path 
+  res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
@@ -1186,7 +1165,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
   res = XpnGetAtribPath(abs_path, sb);
   if(res<0)
   {
-    xpn_err(XPNERR_PATH_NOEXIST); //TODO: review error code
+    xpn_err(XPNERR_PATH_NOEXIST); // TODO: review error code
     XPN_DEBUG_END_ARGS1(path)
     return res;
   }
@@ -1202,26 +1181,31 @@ int xpn_simple_chown(__attribute__((__unused__)) const char *path, __attribute__
 
 int xpn_simple_fchown(int __attribute__((__unused__)) fd, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group)
 {
+  // TODO
   return 0;
 }
 
 int xpn_simple_chmod(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) mode_t mode)
 {
+  // TODO
   return 0;
 }
 
 int xpn_simple_fchmod(__attribute__((__unused__)) int fd, __attribute__((__unused__)) mode_t mode)
 {
+  // TODO
   return 0;
 }
 
 int xpn_simple_truncate(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) off_t length)
 {
+  // TODO
   return 0;
 }
 
 int xpn_simple_ftruncate(__attribute__((__unused__)) int fd, __attribute__((__unused__)) off_t length)
 {
+  // TODO
   return 0;
 }
 
@@ -1242,7 +1226,7 @@ int xpn_simple_dup(int fd)
     i++;
   }
   if(i == XPN_MAX_FILE){
-    // xpn_err() ? 
+    // xpn_err() ?
     return -1;
   }
   xpn_file_table[i] = xpn_file_table[fd];
