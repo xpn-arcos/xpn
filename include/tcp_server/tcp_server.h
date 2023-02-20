@@ -1,4 +1,4 @@
-/** 
+/**
 Only include the necessary data to realize the comunication between client
 and server
 */
@@ -23,6 +23,12 @@ and server
 #define TCP_SERVER_RM_FILE	    5
 #define TCP_SERVER_GETATTR_FILE	6
 #define TCP_SERVER_SETATTR_FILE	7
+
+// File operations without session
+#define TCP_SERVER_OPEN_FILE_WOS      100
+#define TCP_SERVER_CREAT_FILE_WOS     101
+#define TCP_SERVER_READ_FILE_WOS      102
+#define TCP_SERVER_WRITE_FILE_WOS     103
 
 #define TCP_SERVER_MKDIR_DIR	    8
 #define TCP_SERVER_RMDIR_DIR	    9
@@ -64,25 +70,32 @@ and server
 /* buffer size */
 //#define BUFFER_SIZE (2*MB)
 
-/* TCP_SERVER_ID */
+/* TCP_SERVER_MAXPATHLEN */
+#ifndef TCP_SERVER_MAXPATHLEN
+	//#define TCP_SERVER_MAXPATHLEN 255
+	#define TCP_SERVER_MAXPATHLEN 128
+#endif
+
+/* TCP_SERVER_MAXPATHLEN */
 #ifndef TCP_SERVER_ID
 	#define TCP_SERVER_ID 32
 #endif
 
 
 struct st_tcp_server_open{
-	char path[PATH_MAX];
+	char path[TCP_SERVER_MAXPATHLEN];
 };
 
 struct st_tcp_server_creat{
-	char path[PATH_MAX];
+	char path[TCP_SERVER_MAXPATHLEN];
 };
 
 struct st_tcp_server_read{
 	int fd;
-#ifdef _LARGEFILE64_
+	char path[TCP_SERVER_MAXPATHLEN];
+	#ifdef _LARGEFILE64_
 	long long int offset;
-#else	
+#else
 	off_t offset;
 #endif
 	size_t size;
@@ -90,7 +103,8 @@ struct st_tcp_server_read{
 
 struct st_tcp_server_write{
 	int fd;
-#ifdef _LARGEFILE64_
+	char path[TCP_SERVER_MAXPATHLEN];
+	#ifdef _LARGEFILE64_
 	long long int offset;
 #else
 	off_t offset;
@@ -116,42 +130,42 @@ struct st_tcp_server_close{
 };
 
 struct st_tcp_server_rm{
-	char path[PATH_MAX];
+	char path[TCP_SERVER_MAXPATHLEN];
 };
 
-struct st_tcp_server_mkdir{	
-	char path[PATH_MAX];
+struct st_tcp_server_mkdir{
+	char path[TCP_SERVER_MAXPATHLEN];
 };
 
 struct st_tcp_server_rmdir{
-	char path[PATH_MAX];
+	char path[TCP_SERVER_MAXPATHLEN];
 };
 
 
-struct st_tcp_server_getattr{	
-	char path[PATH_MAX];
+struct st_tcp_server_getattr{
+	char path[TCP_SERVER_MAXPATHLEN];
 };
 
-struct st_tcp_server_setattr{	
-	char path[PATH_MAX];
+struct st_tcp_server_setattr{
+	char path[TCP_SERVER_MAXPATHLEN];
 	struct stat attr;
 };
 
 struct st_tcp_server_attr_req{
-	char status;	
+	char status;
 	struct stat attr;
 };
 
 
 struct st_tcp_server_flush{
-	char storage_path[PATH_MAX];
-	char virtual_path[PATH_MAX];
+	char storage_path[TCP_SERVER_MAXPATHLEN];
+	char virtual_path[TCP_SERVER_MAXPATHLEN];
 	char opt;
 };
 
 struct st_tcp_server_preload{
-	char storage_path[PATH_MAX];
-	char virtual_path[PATH_MAX];
+	char storage_path[TCP_SERVER_MAXPATHLEN];
+	char virtual_path[TCP_SERVER_MAXPATHLEN];
 	char opt;
 };
 
@@ -171,7 +185,7 @@ struct st_tcp_server_msg{
 		struct st_tcp_server_read 	op_read;
 		struct st_tcp_server_write 	op_write;
 		struct st_tcp_server_close 	op_close;
-		struct st_tcp_server_rm 		op_rm;		
+		struct st_tcp_server_rm 		op_rm;
 		struct st_tcp_server_mkdir 	op_mkdir;
 		struct st_tcp_server_rmdir 	op_rmdir;
 		struct st_tcp_server_getattr 	op_getattr;

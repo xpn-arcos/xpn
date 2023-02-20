@@ -75,13 +75,13 @@
          char *pch ;
 
          /* check params */
-         if (NULL == str) 
+         if (NULL == str)
              return NULL;
 
          /* alloc memory for the clone... */
          lenstr = STRING_MISC_StrLen(str) + 1 ;
          pch = (char *)malloc(lenstr) ;
-         if (NULL == pch) 
+         if (NULL == pch)
              return NULL;
 
          /* copy contents */
@@ -207,38 +207,46 @@
         }
         return (int)num%nServ;
       }
-      
-      
-      
+
+
+
       int getURLProtocol(char *url, char *protocol)
       {
-      
       	int i,j;
-      	i = 0;
-      	
+
       	if(url == NULL){
+          printf("[%s:%d] ERROR: url is NULL\n", __FILE__, __LINE__);
       		return -1;
       	}
-      	
-      	while((url[i] != '\0')&&(url[i] != ':'))
-      		i++;
-      	j = i;
-      	
+
+        // find ':'
+        i = 0;
+      	while((url[i] != '\0')&&(url[i] != ':'))  {
+          i++;
+        }
+        j = i;
+
       	if(url[i] != ':'){
+          printf("[%s:%d] ERROR: missing ':' within the url.\n", __FILE__, __LINE__);
+          printf("Usage: protocol_name://server:port//dir\n");
       		return -1;
       	}
-      
+
       
       	i++;
       	if(url[i] != '/'){
+          printf("[%s:%d] ERROR: missing first '/' within the url.\n", __FILE__, __LINE__);
+          printf("Usage: protocol_name://server:port//dir\n");
       		return -1;
       	}
-      
+
       	i++;
       	if(url[i] != '/'){
+          printf("[%s:%d] ERROR: missing second '/' within the url.\n", __FILE__, __LINE__);
+          printf("Usage: protocol_name://server:port//dir\n");
       		return -1;
       	}
-      
+
       	i++;
       	if(protocol != NULL){
       		strncpy(protocol, url, j);
@@ -246,42 +254,42 @@
       	}
       	return i;
       }
-      
+
       /*
       int getURLLogin(char *url, char *login)
       {
       	return 0;
       }
-      
+
       int getURLPasswd(char *url, char *passwd)
       {
       	return 0;
       }
       */
-      
+
       int getURLServer(char *url, char *server)
       {
       	int i,j;
-      	
+
       	if((i=getURLProtocol(url, NULL))<0){
       		return -1;
       	}
       	j = i;
       	while((url[j]!='\0')&&(url[j]!=':')&&(url[j]!='/'))
       		j++;
-      
+
       	if(server != NULL){
       		strncpy(server, url+i, j-i);
       		server[j-i] = '\0';
       	}
       	return j;
       }
-      
-      
+
+
       int getURLPort(char *url, char *port)
       {
       	int i,j;
-      	
+
       	if((i=getURLServer(url, NULL))<0){
       		return -1;
       	}
@@ -298,7 +306,7 @@
 	}
       	return j;
       }
-      
+
       int getURLDir(char *url, char *dir)
       {
       	int i;
@@ -317,14 +325,14 @@
 
       	return strlen(url);
       }
-      
+
       /******************************************************/
-     
+
       int clear_slash(char *path){
 	size_t i;
 	int j;
 	char ant = '\0', s[255];
-	
+
 	j=0;
 	for(i=0;i < strlen(path); i++){
 		switch(path[i]){
@@ -337,12 +345,12 @@
 			default:
 				ant = s[j] = path[i];
 				j++;
-				
+
 		}
 
 		s[j] = '\0';
 	}
-	
+
 	strcpy(path, s);
 	return 0;
 }
@@ -356,8 +364,8 @@
       		char *dir)
       {
       	char *urlaux;
-      
-      	
+
+
       	urlaux = url;
       	if(protocol != NULL){
       		/* return the next position */
@@ -365,7 +373,7 @@
       			return -1;
       		}
       	}
-      
+
       	urlaux = url;
       	if(login != NULL){
       		/* return the next position */
@@ -376,7 +384,7 @@
       		}
       		*/
       	}
-      
+
       	urlaux = url;
       	if(passwd != NULL){
       		/* return the next position */
@@ -387,7 +395,7 @@
       		}
       		*/
       	}
-      
+
       	urlaux = url;
       	if(server != NULL){
       		/* return the next position */
@@ -395,8 +403,8 @@
       			return -1;
       		}
       	}
-      	
-      
+
+
       	urlaux = url;
       	if(port != NULL){
       		/* return the next position */
@@ -405,7 +413,7 @@
       			//return -1;
       		}
       	}
-      
+
       	urlaux = url;
       	if(dir != NULL){
       		/* return the next position */
@@ -413,84 +421,84 @@
       			return -1;
       		}
 		clear_slash(dir);
-      	}	
-      	
-      	return 0;	
+      	}
+
+      	return 0;
       }
-      
-      
-      
-      
-      
+
+
+
+
+
       int getNameFile(char *file, char *dir)
       {
       	int i,j;
-      
+
       	i = strlen(dir);
       		if(i == 0){
       		file[0]='\0';
       		return 0; /* ? */
       	}
-      
+
       	while((i>=0)&&(dir[i] == '/'))
       		i--;
       	if(i == 0){
       		file[0]='\0';
       		return 0; /* ? */
       	}
-      
+
       	/* */
       	j = i;
       	while((j>=0)&&(dir[j] != '/'))
       		j--;
-      	
+
       	if(dir[j] == '/'){
       		j++;
       	}
-      
+
       	strncpy(file, dir+j, i-j);
-      	
+
       	dir[j] = '\0';
       	file[i-j] = '\0';
-      	
+
       	return 0;
       }
-      
-      
+
+
       int getNamePart(char *part, char *dir){
       	int i,j;
-      	
+
       	//Printf("original dir = %s\n", dir);
       	if(dir[0] != '/')
-      		return -1;	
+      		return -1;
       	i =1;
       	while((dir[i] != '\0')&&(dir[i] != '/'))
       		i++;
       	strncpy(part, dir+1, i-1);
       	part[i-1] = '\0';
       	j = 0;
-      	while(dir[i] != '\0'){		
+      	while(dir[i] != '\0'){
       		dir[j] = dir[i];
       		j++;
       		i++;
       	}
-      	
+
       	dir[j] = '\0';
       	return 0;
       }
-      
-      
+
+
       int getDirWithURL(char *url, char *dir)
       {
       	char dir_aux[255]; /* change for a const*/
       	int i,j;
-      	
+
       	getURLDir(url, dir_aux);
       	i = 0;
       	while((dir_aux[i] != '\0')&&(dir_aux[i] == dir[i]))
       		i++;
-      	
-      	
+
+
       	if(dir_aux[i] != '\0')
       		return -1;
       	if(dir_aux[i] == dir[i]){
@@ -544,7 +552,7 @@ int getFirstDir(char *dir, char *path)
         //printf("++ dir = %s path = %s ++\n",dir, path);
         return j;
 }
-                                    
+
 int getSizeFactor(char *name){
 
         switch(name[strlen(name)-1] ){
@@ -579,4 +587,3 @@ int getSizeFactor(char *name){
 
 
   /* ...................................................................... */
-

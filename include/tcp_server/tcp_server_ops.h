@@ -15,12 +15,18 @@
 #endif
 
     int tcp_server_read_operation(int sd, struct st_tcp_server_msg *head);
+
     void tcp_server_op_open(int sd, struct st_tcp_server_msg *head);
+    void tcp_server_op_open_wos(int sd, struct st_tcp_server_msg *head);
     void tcp_server_op_creat(int sd, struct st_tcp_server_msg *head);
-    void tcp_server_op_close(int sd, struct st_tcp_server_msg *head);
-    void tcp_server_op_rm(int sd, struct st_tcp_server_msg *head);
+    void tcp_server_op_creat_wos(int sd, struct st_tcp_server_msg *head);
     void tcp_server_op_read(int sd, struct st_tcp_server_msg *head);
+    void tcp_server_op_read_wos(int sd, struct st_tcp_server_msg *head);
     void tcp_server_op_write(int sd, struct st_tcp_server_msg *head);
+    void tcp_server_op_write_wos(int sd, struct st_tcp_server_msg *head);
+    void tcp_server_op_close(int sd, struct st_tcp_server_msg *head);
+
+    void tcp_server_op_rm(int sd, struct st_tcp_server_msg *head);
     void tcp_server_op_rmdir(int sd, struct st_tcp_server_msg *head);
     void tcp_server_op_mkdir(int sd, struct st_tcp_server_msg *head);
     void tcp_server_op_fstat(int sd, struct st_tcp_server_msg *head);
