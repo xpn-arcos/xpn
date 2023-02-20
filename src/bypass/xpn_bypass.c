@@ -92,7 +92,7 @@
     {
       fprintf(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
       if (fdstable_aux != NULL){
-	      free(fdstable_aux) ;
+        free(fdstable_aux) ;
       }
       exit(-1);
     }
@@ -223,7 +223,7 @@
     {
       fprintf(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
       if (NULL != fdsdirtable_aux){
-	      free(fdsdirtable_aux) ;
+        free(fdsdirtable_aux) ;
       }
       exit(-1);
     }
@@ -600,7 +600,7 @@
 
       if (virtual_fd.is_file == 0) {
           errno = EISDIR ;
-	  return -1 ;
+    return -1 ;
       }
 
       debug_info("[bypass]\t try to xpn_read %d, %p, %ld\n", virtual_fd.real_fd, buf, nbyte);
@@ -637,7 +637,7 @@
 
       if (virtual_fd.is_file == 0) {
           errno = EISDIR ;
-	  return -1 ;
+    return -1 ;
       }
 
       debug_info("[bypass]\t try to xpn_write %d, %p, %ld\n", virtual_fd.real_fd, buf, nbyte);
@@ -685,24 +685,24 @@
     return ret;
   }
 
-      int stat_to_stat64 ( struct stat64 *buf, struct stat *st )
-      {
-        buf->st_dev     = (__dev_t)      st->st_dev;
-        buf->st_ino     = (__ino64_t)    st->st_ino;
-        buf->st_mode    = (__mode_t)     st->st_mode;
-        buf->st_nlink   = (__nlink_t)    st->st_nlink;
-        buf->st_uid     = (__uid_t)      st->st_uid;
-        buf->st_gid     = (__gid_t)      st->st_gid;
-        buf->st_rdev    = (__dev_t)      st->st_rdev;
-        buf->st_size    = (__off64_t)    st->st_size;
-        buf->st_blksize = (__blksize_t)  st->st_blksize;
-        buf->st_blocks  = (__blkcnt64_t) st->st_blocks;
-        buf->st_atime   = (__time_t)     st->st_atime;
-        buf->st_mtime   = (__time_t)     st->st_mtime;
-        buf->st_ctime   = (__time_t)     st->st_ctime;
+  int stat_to_stat64 ( struct stat64 *buf, struct stat *st )
+  {
+    buf->st_dev     = (__dev_t)      st->st_dev;
+    buf->st_ino     = (__ino64_t)    st->st_ino;
+    buf->st_mode    = (__mode_t)     st->st_mode;
+    buf->st_nlink   = (__nlink_t)    st->st_nlink;
+    buf->st_uid     = (__uid_t)      st->st_uid;
+    buf->st_gid     = (__gid_t)      st->st_gid;
+    buf->st_rdev    = (__dev_t)      st->st_rdev;
+    buf->st_size    = (__off64_t)    st->st_size;
+    buf->st_blksize = (__blksize_t)  st->st_blksize;
+    buf->st_blocks  = (__blkcnt64_t) st->st_blocks;
+    buf->st_atime   = (__time_t)     st->st_atime;
+    buf->st_mtime   = (__time_t)     st->st_mtime;
+    buf->st_ctime   = (__time_t)     st->st_ctime;
 
-	return 0 ;
-      }
+    return 0 ;
+  }
 
   int __lxstat64(int ver, const char *path, struct stat64 *buf)
   {
@@ -810,24 +810,24 @@
     return ret;
   }
 
-      int stat64_to_stat ( struct stat *buf, struct stat64 *st )
-      {
-        buf->st_dev     = (__dev_t)     st->st_dev ;
-        buf->st_ino     = (__ino_t)     st->st_ino ;
-        buf->st_mode    = (__mode_t)    st->st_mode ;
-        buf->st_nlink   = (__nlink_t)   st->st_nlink ;
-        buf->st_uid     = (__uid_t)     st->st_uid ;
-        buf->st_gid     = (__gid_t)     st->st_gid ;
-        buf->st_rdev    = (__dev_t)     st->st_rdev ;
-        buf->st_size    = (__off_t)     st->st_size ;
-        buf->st_blksize = (__blksize_t) st->st_blksize ;
-        buf->st_blocks  = (__blkcnt_t)  st->st_blocks ;
-        buf->st_atime   = (__time_t)    st->st_atime ;
-        buf->st_mtime   = (__time_t)    st->st_mtime ;
-        buf->st_ctime   = (__time_t)    st->st_ctime ;
+  int stat64_to_stat ( struct stat *buf, struct stat64 *st )
+  {
+    buf->st_dev     = (__dev_t)     st->st_dev ;
+    buf->st_ino     = (__ino_t)     st->st_ino ;
+    buf->st_mode    = (__mode_t)    st->st_mode ;
+    buf->st_nlink   = (__nlink_t)   st->st_nlink ;
+    buf->st_uid     = (__uid_t)     st->st_uid ;
+    buf->st_gid     = (__gid_t)     st->st_gid ;
+    buf->st_rdev    = (__dev_t)     st->st_rdev ;
+    buf->st_size    = (__off_t)     st->st_size ;
+    buf->st_blksize = (__blksize_t) st->st_blksize ;
+    buf->st_blocks  = (__blkcnt_t)  st->st_blocks ;
+    buf->st_atime   = (__time_t)    st->st_atime ;
+    buf->st_mtime   = (__time_t)    st->st_mtime ;
+    buf->st_ctime   = (__time_t)    st->st_ctime ;
 
-	return 0 ;
-      }
+    return 0 ;
+  }
 
   int __lxstat(int ver, const char *path, struct stat *buf)
   {
