@@ -48,7 +48,7 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
 {
   int i, res;
 
-  XPN_DEBUG_BEGIN_ARGS1(path)
+  XPN_DEBUG_BEGIN_ARGS1(path) ;
 
   i=0;
   while((i<XPN_MAX_FILE-1)&&(xpn_file_table[i] != NULL)){ // FIXME? Por que i<XPN_MAX_FILE-1, no deberia ser i<XPN_MAX_FILE
@@ -78,7 +78,7 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
   xpn_file_table[i]->size_threads = XpnGetSizeThreads(xpn_file_table[i]->part);
 
   res = i;
-  XPN_DEBUG_END_ARGS1(path)
+  XPN_DEBUG_END_ARGS1(path) ;
 
   return res;
 }
@@ -87,7 +87,7 @@ int XpnSearchFile(const char *path)
 {
   int res, i=0;
 
-  XPN_DEBUG_BEGIN_ARGS1(path)
+  XPN_DEBUG_BEGIN_ARGS1(path) ;
 
   while (i<XPN_MAX_FILE)
   {
@@ -120,32 +120,29 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   int res, err, i, j, n, pd;
   struct xpn_fh *vfh_aux;
 
-  XPN_DEBUG_BEGIN_ARGS1(path)
+  XPN_DEBUG_BEGIN_ARGS1(path) ;
 
   if(path == NULL)
   {
     xpn_err(XPNERR_PARAM);
-    res = -1;
     XPN_DEBUG_END
-    return res;
+    return -1;
   }
 
   res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
-    res = -1;
-    XPN_DEBUG_END_ARGS1(path)
-    return res;
+    XPN_DEBUG_END_ARGS1(path) ;
+    return -1;
   }
 
   pd = XpnGetPartition(abs_path); // return partition's id and remove partition name from abs_path
   if(pd<0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
-    res = -1;
-    XPN_DEBUG_END_ARGS1(path)
-    return res;
+    XPN_DEBUG_END_ARGS1(path) ;
+    return -1;
   }
 
   /* params:
@@ -156,10 +153,8 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   if(n<=0)
   {
     //free(servers);
-
-    res = -1;
-    XPN_DEBUG_END_ARGS1(path)
-    return res;
+    XPN_DEBUG_END_ARGS1(path) ;
+    return -1;
   }
 
   bzero(&attr, sizeof(struct nfi_attr));
@@ -172,9 +167,8 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   {
     xpn_err(XPNERR_NOMEMORY);
     free(servers);
-    res = -1;
-    XPN_DEBUG_END_ARGS1(path)
-    return res;
+    XPN_DEBUG_END_ARGS1(path) ;
+    return -1;
   }
 
   vfh_aux->n_nfih = n;
@@ -183,9 +177,8 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   {
     xpn_err(XPNERR_NOMEMORY);
     free(servers);
-    res = -1;
-    XPN_DEBUG_END_ARGS1(path)
-    return res;
+    XPN_DEBUG_END_ARGS1(path) ;
+    return -1;
   }
 
   for(i=0;i<n;i++){
@@ -211,9 +204,9 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     free(vfh_aux->nfih);
     free(vfh_aux);
     free(mdata_aux);
-    res = -1;
-    XPN_DEBUG_END_ARGS1(path)
-    return res;
+
+    XPN_DEBUG_END_ARGS1(path) ;
+    return -1;
   }
 
   XpnCreateMetadata(mdata_aux, pd, abs_path);
@@ -229,7 +222,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     {
       free(servers);
       res = -1;
-      XPN_DEBUG_END_ARGS1(path)
+      XPN_DEBUG_END_ARGS1(path) ;
       return res;
     }
 
@@ -282,9 +275,9 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     }
 
     free(vfh_aux->nfih);
-    res = -1;
-    XPN_DEBUG_END_ARGS1(path)
-    return res;
+    XPN_DEBUG_END_ARGS1(path) ;
+
+    return -1;
   }
 
   res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, abs_path);
@@ -306,19 +299,18 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     free(vfh_aux->nfih);
     free(vfh_aux);
     free(mdata_aux);
-    res = -1;
-    XPN_DEBUG_END_ARGS1(path)
-    return res;
+
+    XPN_DEBUG_END_ARGS1(path) ;
+    return -1;
   }
 
   (*vfh )= vfh_aux;
   (*mdata )= mdata_aux;
   free(servers);
 
-  xpn_err(XPNERR_PARAM);
-  res = 0;
-  XPN_DEBUG_END_ARGS1(path)
-  return res;
+  xpn_err(0);
+  XPN_DEBUG_END_ARGS1(path) ;
+  return 0;
 }
 
 int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadata *mdata, int mode )
@@ -328,13 +320,13 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
   int n, pd, i;
   int res = -1;
 
-  XPN_DEBUG_BEGIN_ARGS1(path)
+  XPN_DEBUG_BEGIN_ARGS1(path) ;
 
   res = XpnGetAbsolutePath(path, abs_path); // this function generates the absolute path
   if (res < 0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
-    XPN_DEBUG_END_ARGS1(path)
+    XPN_DEBUG_END_ARGS1(path) ;
     return res;
   }
 
@@ -342,7 +334,7 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
   if (pd < 0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
-    XPN_DEBUG_END_ARGS1(path)
+    XPN_DEBUG_END_ARGS1(path) ;
     return pd;
   }
 
@@ -358,7 +350,7 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
     if (n <= 0)
     {
       //free(servers);
-      XPN_DEBUG_END_ARGS1(path)
+      XPN_DEBUG_END_ARGS1(path) ;
       return res;
     }
 
@@ -368,7 +360,7 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
       if(mdata == NULL)
       {
         free(servers);
-        XPN_DEBUG_END_ARGS1(path)
+        XPN_DEBUG_END_ARGS1(path) ;
         return res;
       }
       if(vfh == NULL)
@@ -377,7 +369,7 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
         if(vfh == NULL)
         {
           free(servers);
-          XPN_DEBUG_END_ARGS1(path)
+          XPN_DEBUG_END_ARGS1(path) ;
           return res;
         }
 
@@ -396,7 +388,7 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
         free(vfh->nfih);
         free(vfh);
         free(mdata);
-        XPN_DEBUG_END_ARGS1(path)
+        XPN_DEBUG_END_ARGS1(path) ;
         return res;
       }
     }
@@ -409,17 +401,19 @@ int xpn_internal_open ( const char *path, struct xpn_fh *vfh, struct xpn_metadat
     xpn_file_table[res]->links++;
   }
 
-  XPN_DEBUG_END_ARGS1(path)
+  XPN_DEBUG_END_ARGS1(path) ;
   return res;
 }
 
 int xpn_internal_resize(__attribute__((__unused__)) char *path, __attribute__((__unused__)) struct xpn_fh **vfh, __attribute__((__unused__)) int size)
 {
+  // TODO
   return 0;
 }
 
 int xpn_internal_fresize(__attribute__((__unused__)) int fd, __attribute__((__unused__)) int size)
 {
+  // TODO
   return 0;
 }
 
@@ -507,35 +501,31 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
   if(virtual_path == NULL)
   {
     xpn_err(XPNERR_PARAM);
-    res = -1;
     XPN_DEBUG_END
-    return res;
+    return -1;
   }
 
   if(storage_path == NULL)
   {
     xpn_err(XPNERR_PARAM);
-    res = -1;
     XPN_DEBUG_END
-    return res;
+    return -1;
   }
 
   res = XpnGetAbsolutePath(virtual_path, abs_path); // esta funcion genera el path absoluto
   if(res<0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
-    res = -1;
     XPN_DEBUG_END
-    return res;
+    return -1;
   }
 
   pd = XpnGetPartition(abs_path); // return partition's id
   if(pd<0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
-    res = -1;
     XPN_DEBUG_END
-    return res;
+    return -1;
   }
 
   /* params:
@@ -546,9 +536,8 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
   if(n<=0)
   {
     //free(servers);
-    res = -1;
     XPN_DEBUG_END
-    return res;
+    return -1;
   }
 
   mdata = (struct xpn_metadata *)malloc(sizeof(struct xpn_metadata));
@@ -557,9 +546,8 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
     free(servers);
     free(mdata);
 
-    res = -1;
     XPN_DEBUG_END
-    return res;
+    return -1;
   }
 
   XpnCreateMetadata(mdata, pd, abs_path);
@@ -587,14 +575,12 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
   if(res)
   {
     xpn_err(XPNERR_PARAM);
-    res = -1;
     XPN_DEBUG_END
-    return res;
+    return -1;
   }
 
-  res = 0;
   XPN_DEBUG_END
-  return res;
+  return 0;
 }
 
 
@@ -692,7 +678,7 @@ int xpn_simple_creat(const char *path, mode_t perm)
   struct xpn_metadata *mdata;
   int res;
 
-  XPN_DEBUG_BEGIN_ARGS1(path)
+  XPN_DEBUG_BEGIN_ARGS1(path) ;
 
   if((path == NULL)||(strlen(path)>PATH_MAX))
   {
@@ -701,7 +687,7 @@ int xpn_simple_creat(const char *path, mode_t perm)
     return res;
   }
 
-  vfh = NULL;
+  vfh   = NULL;
   mdata = NULL;
   /*
   res = xpn_internal_resize(path, &vfh, 0);
@@ -736,17 +722,17 @@ int xpn_simple_creat(const char *path, mode_t perm)
 
 int xpn_simple_open(const char *path, int flags, mode_t mode)
 {
-  int res = -1;
-  struct xpn_fh       *vfh;
+  struct xpn_fh *vfh;
   struct xpn_metadata *mdata;
   int md;
+  int res = -1;
   struct stat sb;
 
   XPN_DEBUG_BEGIN_ARGS1(path) ;
 
   if ((path == NULL)||(strlen(path)>PATH_MAX))
   {
-    XPN_DEBUG_END_ARGS1(path) ;
+    XPN_DEBUG_END_ARGS1(path)
     return res;
   }
 
@@ -764,33 +750,34 @@ int xpn_simple_open(const char *path, int flags, mode_t mode)
   {
     if (mode > 0177777)
     {
-      XPN_DEBUG_END_ARGS1(path);
-      return -1;
+      XPN_DEBUG_END_ARGS1(path)
+      return res;
     }
   }
 
   vfh   = NULL;
   mdata = NULL;
 
-  if ( (O_WRONLY == (flags & O_WRONLY)) || (O_RDWR == (flags & O_RDWR)) )
+  if( (O_WRONLY == (flags & O_WRONLY)) || (O_RDWR == (flags & O_RDWR)) )
   {
-    if (O_TRUNC == (flags & O_TRUNC)) {
+    if (O_TRUNC == (flags & O_TRUNC)){
       res = xpn_internal_remove(path);
-      // res = xpn_internal_resize(path, 0);
+      // res = xpn_internal_resize(path, 0)
     }
-    if ( (O_TRUNC == (flags & O_TRUNC)) || ((O_CREAT == (flags & O_CREAT)) && (mode != 0)) )
+    if ( (O_TRUNC == (flags & O_TRUNC)) ||((O_CREAT == (flags & O_CREAT)) && (mode != 0)) )
     {
       //mode = mode & MASK;
       res = xpn_internal_creat(path, mode, &vfh, &mdata);
       if (res < 0)
       {
-        XPN_DEBUG_END_ARGS1(path);
+        XPN_DEBUG_END_ARGS1(path)
         return res;
       }
     }
   }
 
   md = (flags & O_RDWR)|(flags & O_RDONLY)|(flags & O_WRONLY);
+
   res = xpn_internal_open(path, vfh, mdata, md);
   if (res >= 0) {
       xpn_file_table[res]->st = sb ;
@@ -798,30 +785,42 @@ int xpn_simple_open(const char *path, int flags, mode_t mode)
 
   xpn_err(XPN_OK);
 
-  XPN_DEBUG_END_ARGS1(path);
+  XPN_DEBUG_END_ARGS1(path) ;
 
   return res;
 }
 
-int xpn_simple_close ( int fd )
+int xpn_simple_close(int fd)
 {
   int res, i;
 
-  XPN_DEBUG_BEGIN_CUSTOM("%d", fd);
+  XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
   if ((fd<0)||(fd>XPN_MAX_FILE-1))
   {
-    // xpn_err
-    XPN_DEBUG_END_CUSTOM("%d", fd);
+    xpn_err(EBADF) ;
+    XPN_DEBUG_END_CUSTOM("%d", fd)
     return -1;
   }
 
-  if (xpn_file_table[fd] == NULL)
+  if(xpn_file_table[fd] == NULL)
   {
-    // xpn_err
-    XPN_DEBUG_END_CUSTOM("%d", fd);
+    xpn_err(EBADF) ;
+    XPN_DEBUG_END_CUSTOM("%d", fd)
     return -1;
   }
+
+  /*
+  int n_threads = 0;
+  struct nfi_server **servers;
+  servers = NULL;
+  int n = XpnGetServers(op_xpn_close, xpn_file_table[fd]->part->id, NULL, -1, &servers, XPN_DATA_SERVER);
+  if(n<=0){
+    free(servers);
+    res = -1;
+    return res;
+  }
+  */
 
   xpn_file_table[fd]->links--;
   if(xpn_file_table[fd]->links == 0)
@@ -881,9 +880,7 @@ int xpn_simple_close ( int fd )
   }
 
   xpn_err(XPN_OK);
-
   XPN_DEBUG_END_CUSTOM("%d", fd)
-
   return 0;
 }
 
@@ -891,12 +888,11 @@ int xpn_simple_unlink(const char *path)
 {
   int res;
 
-  XPN_DEBUG_BEGIN_ARGS1(path)
+  XPN_DEBUG_BEGIN_ARGS1(path) ;
 
   res = xpn_internal_remove(path);
 
   XPN_DEBUG_END_ARGS1(path)
-
   return res;
 }
 
@@ -1105,6 +1101,7 @@ int xpn_simple_rename(const char *path, const char *newpath)
       return -1;
     }
   }
+
   return 0;
 }
 
@@ -1121,15 +1118,10 @@ int xpn_simple_fstat(int fd, struct stat *sb)
     return -1;
   }
 
-  // TODO: update xpn_file_table[res].st on read & write
-
-  // TODO: comment XpnGetAtribFd instead (*sb)
-  // (*sb) = xpn_file_table[res].st ;
   res = XpnGetAtribFd(fd , sb);
 
   XPN_DEBUG_END_CUSTOM("%d", fd)
 
-  // TODO: if (*sb) then return 0
   return res;
 }
 
@@ -1138,7 +1130,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
   char abs_path[PATH_MAX];
   int res = -1;
 
-  XPN_DEBUG_BEGIN_ARGS1(path)
+  XPN_DEBUG_BEGIN_ARGS1(path) ;
 
   if ((path == NULL) || (strlen(path) == 0))
   {
@@ -1165,7 +1157,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
   res = XpnGetAtribPath(abs_path, sb);
   if(res<0)
   {
-    xpn_err(XPNERR_PATH_NOEXIST); // TODO: review error code
+    xpn_err(XPNERR_PATH_NOEXIST); //TODO: review error code
     XPN_DEBUG_END_ARGS1(path)
     return res;
   }
@@ -1176,6 +1168,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
 
 int xpn_simple_chown(__attribute__((__unused__)) const char *path, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group)
 {
+  // TODO
   return 0;
 }
 

@@ -74,9 +74,11 @@ int xpn_simple_destroy ( void )
 
   XPN_DEBUG_BEGIN
 
-  if (xpn_parttable[0].id == -1) {
+  if(xpn_parttable[0].id == -1)
+  {
+    res = 0;
     XPN_DEBUG_END
-    return 0;
+    return res;
   }
 
   xpn_destroy_file_table();
@@ -90,8 +92,9 @@ int xpn_simple_destroy ( void )
     i++;
   }
 
+  res = 0;
   XPN_DEBUG_END
-  return 0;
+  return res;
 }
 
 int xpn_init_partition(__attribute__((__unused__)) char *partname)
@@ -114,17 +117,19 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
   pthread_mutex_lock(&xpn_init_mutex);
 
-  if(xpn_initialize)
+  if(!xpn_initialize){
+    XPN_DEBUG("Initializing\n");
+  }
+  else
   {
     XPN_DEBUG("Already initialized\n");
 
     pthread_mutex_unlock(&xpn_init_mutex);
 
+    res = 0;
     XPN_DEBUG_END
-    return 0;
+    return res;
   }
-
-  XPN_DEBUG("Initializing\n");
 
   fd = XpnPartitionOpen(); /* XpnPartitionOpen */
   if(fd == NULL)
@@ -134,8 +139,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
     pthread_mutex_unlock(&xpn_init_mutex);
 
+    res = -1;
     XPN_DEBUG_END
-    return -1;
+    return res;
   }
 
   i = 0;
@@ -153,8 +159,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
       pthread_mutex_unlock(&xpn_init_mutex);
 
+      res = -1;
       XPN_DEBUG_END
-      return -1;
+      return res;
     }
 
     xpn_parttable[i].data_nserv = XpnGetNumServersPartition(fd, &(xpn_parttable[i]) , XPN_DATA_SERVER);
@@ -167,8 +174,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
       pthread_mutex_unlock(&xpn_init_mutex);
 
+      res = -1;
       XPN_DEBUG_END
-      return -1;
+      return res;
     }
 
     memset(xpn_parttable[i].data_serv, 0, xpn_parttable[i].data_nserv*sizeof(struct nfi_server));
@@ -188,8 +196,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
         pthread_mutex_unlock(&xpn_init_mutex);
 
+        res = -1;
         XPN_DEBUG_END
-        return -1;
+        return res;
       }
     }
     XPN_DEBUG("Partition %d end", xpn_parttable[i].id);
@@ -205,8 +214,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
       pthread_mutex_unlock(&xpn_init_mutex);
 
+      res = -1;
       XPN_DEBUG_END
-      return -1;
+      return res;
     }
   } // while
 
@@ -221,8 +231,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
     pthread_mutex_unlock(&xpn_init_mutex);
 
+    res = -1;
     XPN_DEBUG_END
-    return -1;
+    return res;
   }
 
   XpnPartitionClose(fd);
@@ -237,8 +248,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
     pthread_mutex_unlock(&xpn_init_mutex);
 
+    res = -1;
     XPN_DEBUG_END
-    return -1;
+    return res;
   }
 
   /* Init the rest of elements of the table */
@@ -250,8 +262,10 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
   pthread_mutex_unlock(&xpn_init_mutex);
 
+  res = 0;
   XPN_DEBUG_END
-  return 0;
+
+  return res;
 }
 
 int xpn_simple_init ( void )

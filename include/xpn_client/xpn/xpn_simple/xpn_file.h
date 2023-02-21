@@ -40,14 +40,16 @@
 #define XPN_FILE 	0
 #define XPN_DIR 	1
 
-struct xpn_fh {
-	             int n_nfih;
+
+struct xpn_fh
+{
+    int n_nfih;
     struct nfi_fhandle **nfih; 	/* NFI handler              	*/
 };
 
-
-struct xpn_attr {
-	int 	at_type; 	/* FILE or DIR			*/
+struct xpn_attr
+{
+	int 	at_type; 	/* FILE or DIR			*/	
 	mode_t 	at_mode;	/* protection			*/
 	nlink_t at_nlink;	/* number of hard links		*/
 	uid_t	at_uid;		/* user ID of owner		*/
@@ -61,24 +63,25 @@ struct xpn_attr {
 	void	*private_info;
 };
 
-
 /* File table */
-struct xpn_filedesc {
-        int   id;         		/* id of file                           */
-	char  path[PATH_MAX];		/* absolute path 			*/
-        int   type;       		/* indicate FILE or DIR                 */
-        int   links;      		/* number of links that this file has   */
+struct xpn_filedesc
+{
+        int id;         		/* id of file                           */
+	char path[PATH_MAX];		/* absolute path 			*/
+        int type;       		/* indicate FILE or DIR                 */
+        int links;      		/* number of links that this file has   */
 	mode_t mode;			/* O_RDONLY, O_WRONLY,....		*/
         struct xpn_partition *part;     /* partition                    	*/
  	struct xpn_metadata *mdata; 	/* metadata				*/
         struct xpn_attr attr;   	/* attributes of the open file         	*/
-        off_t   offset;       		/* offset of the open file              */
-        ssize_t block_size;             /* size of distribution used            */
+        off_t offset;       		/* offset of the open file              */
+        ssize_t block_size;         	/* size of distribution used            */
         ssize_t size_threads;
         struct xpn_fh *data_vfh; 	/* virtual FH                         	*/
         struct xpn_fh *meta_vfh; 	/* virtual METADATA FH                  */
 	struct stat    st;
 };
+
 
 
 /* global  */
