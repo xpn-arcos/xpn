@@ -148,56 +148,47 @@ return 0;
 //return head->type;
 }
 
+/***************************************************************/
 
 /************************************************************
- * PRIVATE FUNCTIONS TO USE tcp_server SERVERS             *
- ************************************************************/
-void NFItoTCP_SERVERattr(struct stat *att, struct nfi_attr *nfi_att)
-{
-    att->st_dev = nfi_att->st_dev ;
-    att->st_ino = nfi_att->st_ino ;
+* PRIVATE FUNCTIONS TO USE tcp_server SERVERS             *
+************************************************************/
+void NFItoTCP_SERVERattr(struct stat * att, struct nfi_attr * nfi_att) {
+  if (nfi_att -> at_type == NFIFILE) {
+    att -> st_mode = nfi_att -> at_mode | S_IFREG; /* protection */
+  }
 
-    if (nfi_att->at_type == NFIFILE){
-      att->st_mode = nfi_att->at_mode | S_IFREG; // protection
-    }
+  if (nfi_att -> at_type == NFIDIR) {
+    att -> st_mode = nfi_att -> at_mode | S_IFDIR; /* protection */
+  }
 
-    if (nfi_att->at_type == NFIDIR){
-      att->st_mode = nfi_att->at_mode | S_IFDIR; // protection
-    }
-
-    att->st_nlink   = nfi_att->at_nlink;   // number of hard links
-    att->st_uid     = nfi_att->at_uid;     // user ID of owner
-    att->st_gid     = nfi_att->at_gid;     // group ID of owner
-    att->st_size    = nfi_att->at_size;    // size
-    att->st_blksize = nfi_att->at_blksize; // blocksize for filesystem I/O
-    att->st_blocks  = nfi_att->at_blocks;  // number of blocks allocated
-    att->st_atime   = nfi_att->at_atime;   // time of last access
-    att->st_mtime   = nfi_att->at_mtime;   // time of last modification
-    att->st_ctime   = nfi_att->at_ctime;   // time of last change
+  att -> st_size = nfi_att -> at_size; /* size */
+  att -> st_uid = nfi_att -> at_uid; /* user ID of owner */
+  att -> st_gid = nfi_att -> at_gid; /* group ID of owner */
+  att -> st_blksize = nfi_att -> at_blksize; /* blocksize for filesystem I/O */
+  att -> st_blocks = nfi_att -> at_blocks; /* number of blocks allocated */
+  att -> st_atime = nfi_att -> at_atime; /* time of last access */
+  att -> st_mtime = nfi_att -> at_mtime; /* time of last modification */
+  att -> st_ctime = nfi_att -> at_ctime; /* time of last change */
 }
 
-void TCP_SERVERtoNFIattr (struct nfi_attr *nfi_att, struct stat *att)
-{
-    nfi_att->st_dev = att->st_dev;
-    nfi_att->st_ino = att->st_ino;
+void TCP_SERVERtoNFIattr(struct nfi_attr * nfi_att, struct stat * att) {
+  if (S_ISREG(att -> st_mode)) {
+    nfi_att -> at_type = NFIFILE;
+  }
+  if (S_ISDIR(att -> st_mode)) {
+    nfi_att -> at_type = NFIDIR;
+  }
 
-    if (S_ISREG(att->st_mode)) {
-      nfi_att->at_type = NFIFILE;
-    }
-    if (S_ISDIR(att->st_mode)) {
-      nfi_att->at_type = NFIDIR;
-    }
-
-    nfi_att->at_mode    = att->st_mode&(S_IRWXU|S_IRWXG|S_IRWXO) ; // protection
-    nfi_att->at_nlink   = att->st_nlink;                           // number of hard links
-    nfi_att->at_uid     = att->st_uid;                             // user ID of owner
-    nfi_att->at_gid     = att->st_gid;                             // group ID of owner
-    nfi_att->at_size    = att->st_size;                            // total size, in bytes
-    nfi_att->at_blksize = att->st_blksize;                         // blocksize for filesystem I/O
-    nfi_att->at_blocks  = att->st_blocks;                          // number of blocks allocated
-    nfi_att->at_atime   = att->st_atime;                           // time of last access
-    nfi_att->at_mtime   = att->st_mtime;                           // time of last modification
-    nfi_att->at_ctime   = att->st_ctime;                           // time of last change
+  nfi_att -> at_size = att -> st_size; /* size */
+  nfi_att -> at_mode = att -> st_mode & (S_IRWXU | S_IRWXG | S_IRWXO); /* protection */
+  nfi_att -> at_uid = att -> st_uid; /* user ID of owner */
+  nfi_att -> at_gid = att -> st_gid; /* group ID of owner */
+  nfi_att -> at_blksize = att -> st_blksize; /* blocksize for filesystem I/O*/
+  nfi_att -> at_blocks = att -> st_blocks; /* number of blocks allocated */
+  nfi_att -> at_atime = att -> st_atime; /* time of last access */
+  nfi_att -> at_mtime = att -> st_mtime; /* time of last modification */
+  nfi_att -> at_ctime = att -> st_ctime; /* time of last change */
 }
 
 void TCP_SERVERtoNFIInfo(struct nfi_info * nfi_inf, struct nfi_info * tcp_server_inf) {}
@@ -1068,7 +1059,7 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv,
       //printf("[%s|%d]", __FILE__,__LINE__);
       printf("[NFI]write: -> offset %d \n", (int) msg.u_st_tcp_server_msg.op_write.offset);
       //printf("[%s|%d]", __FILE__,__LINE__);
-      printf("[NFI]write: -> size %ld \n", msg.u_st_tcp_server_msg.op_write.size);
+      printf("[NFI]write: -> size %d \n", msg.u_st_tcp_server_msg.op_write.size);
 
       ret = tcp_server_write_operation(server_aux -> sd, & msg);
       if (ret == -1) {
@@ -1301,7 +1292,7 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv,
       strcpy(fh -> url, url);
 
       //printf("[%s|%d]", __FILE__,__LINE__);
-      printf("[NFI]nfi_tcp_server_create(ID=%p): end\n", server_aux -> id);
+      printf("[NFI]nfi_tcp_server_create(ID=%d): end\n", server_aux -> id);
 
 
       /*MOSQUITTO*/
