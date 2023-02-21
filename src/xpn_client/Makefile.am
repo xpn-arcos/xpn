@@ -206,7 +206,6 @@ XPN_CORE_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.c
 
 XPN_POLICY_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
