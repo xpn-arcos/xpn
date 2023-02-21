@@ -7,7 +7,11 @@
  ************************************************************/
 void NFItoNFS3attr(fattr3 *nfs3_att, struct nfi_attr *nfi_att)
 {
-	switch(nfi_att->at_type){	
+        nfs3_att->st_dev = nfi_att->st_dev ;
+        nfs3_att->st_ino = nfi_att->st_ino ;
+
+	switch(nfi_att->at_type)
+	{
 		case NFIDIR:
 			nfs3_att->type = NF3DIR;
 			break;
@@ -15,7 +19,7 @@ void NFItoNFS3attr(fattr3 *nfs3_att, struct nfi_attr *nfi_att)
                         nfs3_att->type = NF3REG;
                         break;
 	}
-	
+
         nfs3_att->mode 	= (u_long)nfi_att->at_mode;
         /* u_long nlink; */
         nfs3_att->uid 	= (u_long)nfi_att->at_uid;
@@ -32,13 +36,15 @@ void NFItoNFS3attr(fattr3 *nfs3_att, struct nfi_attr *nfi_att)
         //nfs3_att->mtime.useconds	= (u_long)0;
         nfs3_att->ctime.seconds	= (u_long)nfi_att->at_ctime;
         //nfs3_att->ctime.useconds	= (u_long)0;
-	
 }
 
-void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs3_att){
+void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs3_att)
+{
+        nfi_att->st_dev = nfs3_att->st_dev;
+        nfi_att->st_ino = nfs3_att->st_ino;
 
-
-	switch(nfs3_att->type){	
+	switch (nfs3_att->type)
+	{
 		case NF3DIR:
 			nfi_att->at_type = NFIDIR;
 			break;
@@ -48,7 +54,7 @@ void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs3_att){
 		default:
 			break;
 	}
-	
+
         nfi_att->at_mode = (mode_t)nfs3_att->mode;
         /* u_long nlink; */
         nfi_att->at_uid = (uid_t)nfs3_att->uid;
@@ -65,15 +71,14 @@ void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs3_att){
 			//+ (1000*nfs3_att->mtime.useconds);
 	nfi_att->at_ctime = (time_t)nfs3_att->ctime.seconds;
 	                //+ (1000*nfs3_att->ctime.useconds);
-			
+
 	nfi_att->private_info = NULL;
 }
 
-void NFS3toNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) fsinfo3resok *nfs3_inf) {
+void NFS3toNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) fsinfo3resok *nfs3_inf)
+{
+    // TODO
 }
-
-
-
 
 
 
@@ -89,45 +94,45 @@ int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)
 	char server[MNTNAMLEN], dir[MNTNAMLEN], prt[MNTNAMLEN];
 	int ret;
 	struct nfi_nfs3_server *server_aux;
-	
-	
+
+
 	if(serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		fprintf(stderr,"nfi_nfs3_init: serv is null. Don't inicialize this variable\n");
 		return -1;
 	}
 	/* functions */
-	serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops));	
+	serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops));
 	if (serv->ops == NULL){
 		nfs3_err(NFS3ERR_MEMORY);
 		fprintf(stderr,"nfi_nfs3_init: serv->ops is null. Can't reserve memory\n");
 		return -1;
 	}
-	
+
 	serv->ops->nfi_reconnect  = nfi_nfs3_reconnect;
 	serv->ops->nfi_disconnect = nfi_nfs3_disconnect;
-	
+
 	serv->ops->nfi_getattr	= nfi_nfs3_getattr;
 	serv->ops->nfi_setattr	= nfi_nfs3_setattr;
-	
+
 	serv->ops->nfi_open	= nfi_nfs3_open;
 	serv->ops->nfi_close	= nfi_nfs3_close;
-	
+
 	serv->ops->nfi_read	= nfi_nfs3_read;
 	serv->ops->nfi_write	= nfi_nfs3_write;
-	
+
 	serv->ops->nfi_create	= nfi_nfs3_create;
 	serv->ops->nfi_remove	= nfi_nfs3_remove;
 	serv->ops->nfi_rename	= nfi_nfs3_rename;
-	
-	serv->ops->nfi_mkdir	= nfi_nfs3_mkdir;	
+
+	serv->ops->nfi_mkdir	= nfi_nfs3_mkdir;
 	serv->ops->nfi_rmdir	= nfi_nfs3_rmdir;
 	serv->ops->nfi_opendir	= nfi_nfs3_opendir;
 	serv->ops->nfi_readdir	= nfi_nfs3_readdir;
 	serv->ops->nfi_closedir	= nfi_nfs3_closedir;
 	serv->ops->nfi_statfs	= nfi_nfs3_statfs;
 
-	//printf("url %s\n",url);	
+	//printf("url %s\n",url);
 	ret = ParseURL(url, prt, NULL, NULL, server,  NULL,  dir);
 	if(ret <0 ){
 		nfs3_err(NFS3ERR_URL);
@@ -136,24 +141,24 @@ int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)
 		return -1;
 	}
 
-	//printf("prt %s server %s dir %s\n",prt,server,dir);	
+	//printf("prt %s server %s dir %s\n",prt,server,dir);
 	server_aux = (struct nfi_nfs3_server *)malloc(sizeof(struct nfi_nfs3_server));
 	if(server_aux == NULL){
 		nfs3_err(NFS3ERR_MEMORY);
 		fprintf(stderr,"nfi_nfs3_init: server_aux is null. Can't reserve memory\n");
 		return -1;
 	}
-	server_aux->cl = (CLIENT *)create_connection_mount3(server, NFS3_UDP);	
-	
+	server_aux->cl = (CLIENT *)create_connection_mount3(server, NFS3_UDP);
+
 	if(server_aux->cl == NULL){
 		nfs3_err(NFS3ERR_MNTCONNECTION);
 		fprintf(stderr,"nfi_nfs3_init: Can't connect with MNT service of %s\n",server);
 		free(server_aux);
 		return -1;
 	}
-	//printf("antes de mount(%s)\n",dir);	
+	//printf("antes de mount(%s)\n",dir);
 	ret = nfs3_mount(dir, &server_aux->fh, server_aux->cl );
-	//printf("desp. de mount(%s) %d\n",dir,ret);	
+	//printf("desp. de mount(%s) %d\n",dir,ret);
 #if defined(DEBUG_NFI)
 	printf("desp. de montar %d\n",ret);
 #endif
@@ -165,7 +170,7 @@ int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)
 		return -1;
 	}
 	nfs3_err(ret);
-	
+
         close_connection_mount3(server_aux->cl);
  	if((strcmp(prt, "nfs3") == 0) ||
 		(strcmp(prt, "nfs3tcp") == 0) ||
@@ -173,7 +178,7 @@ int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)
 #if defined(DEBUG_NFI)
 		printf("nfs3\n");
 #endif
-		
+
 		//printf("nfs3tcp\n");
 		server_aux->cl = create_connection_nfs3(server, NFS3_TCP);
 	}
@@ -199,7 +204,7 @@ int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)
 		return -1;
 	}
 	strcpy(serv->server, server);
-	
+
 	serv->url = (char *)malloc(sizeof(char)*(strlen(url)+1));	/* server address */
 	if(serv->url == NULL){
 		fprintf(stderr,"nfi_nfs3_init: serv->url is null. Can't reserve memory\n");
@@ -221,7 +226,7 @@ int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)
 		return -1;
 	}
 	if((strcmp(prt, "nfs3hilos") == 0)  ||
-	   (strcmp(prt, "nfs3udphilos") == 0) ||	   
+	   (strcmp(prt, "nfs3udphilos") == 0) ||
 	   (strcmp(prt, "nfs3tcphilos") == 0)){
 #if defined(DEBUG_NFI)
 		printf("nfs3hilos\n");
@@ -252,7 +257,7 @@ int nfi_nfs3_disconnect(struct nfi_server *serv)
          if(server_aux != NULL){
 	         if( server_aux->cl != NULL)
 		         close_connection_nfs3( server_aux->cl);
- 		
+ 
 		 ret = ParseURL(serv->url, NULL, NULL, NULL, NULL,  NULL,  dir);
 		 if(ret < 0){
 			fprintf(stderr,"nfi_nfs3_disconnect: url %s incorrect.\n",serv->url);
@@ -265,7 +270,7 @@ int nfi_nfs3_disconnect(struct nfi_server *serv)
                       ret = nfs3_umount(dir, server_aux->cl);
                       close_connection_mount3(server_aux->cl);
                  }
-		 
+
                  free(serv->private_info);
         }
 
@@ -278,9 +283,9 @@ int nfi_nfs3_disconnect(struct nfi_server *serv)
 	}
 
 	//serv->protocol = -1;
- 
+
 	nfi_worker_end(serv->wrk);
-	
+
 	return 0;
 }
 
@@ -330,7 +335,7 @@ int nfi_nfs3_reconnect(struct nfi_server *serv)
 		nfs3_err(-ret);
 
         close_connection_mount3(server_aux->cl);
- 	
+
 	server_aux->cl = create_connection_nfs3(server, NFS3_UDP);
 	if(server_aux->cl == NULL){
 		nfs3_err(NFS3ERR_NFSCONNECTION);
@@ -339,7 +344,7 @@ int nfi_nfs3_reconnect(struct nfi_server *serv)
 		return -1;
 	}
 
-	
+
 	serv->private_info = (void *)server_aux;
 	return 0;
 }
@@ -354,21 +359,21 @@ int nfi_nfs3_destroy(struct nfi_server *serv)
 	struct nfi_nfs3_server *server_aux;
         char dir[MNTNAMLEN];
 	int ret;
-	
+
 	if (serv == NULL)
 		return 0;
 
 	if(serv->ops != NULL)
 		free(serv->ops);
-	
+
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
-	
+
 	if(server_aux != NULL){
 		if( server_aux->cl != NULL)
 			close_connection_nfs3( server_aux->cl);
 
-		
-		
+
+
 		ret = ParseURL(serv->url, NULL, NULL, NULL, NULL,  NULL,  dir);
 		if(ret < 0){
 			nfs3_err(NFS3ERR_URL);
@@ -376,13 +381,13 @@ int nfi_nfs3_destroy(struct nfi_server *serv)
                  	free(serv->private_info);
 			return -1;
 		}
-	
+
 		server_aux->cl = create_connection_mount3(serv->server, NFS3_UDP);
 		if(server_aux->cl != NULL){
-			ret = nfs3_umount(dir, server_aux->cl);		
+			ret = nfs3_umount(dir, server_aux->cl);
 			close_connection_mount3(server_aux->cl);
 		}
-		
+
 
 		free(serv->private_info);
 	}
@@ -398,9 +403,9 @@ int nfi_nfs3_destroy(struct nfi_server *serv)
 	}
 
 	//serv->protocol = -1;
-	
+
 	nfi_worker_end(serv->wrk);
-	
+
 	return 0;
 }
 
@@ -412,33 +417,33 @@ int nfi_nfs3_destroy(struct nfi_server *serv)
  ************************************************************/
 
 int nfi_nfs3_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr){
-	
+
 	int ret;
 	fattr3 fatt;
-	
+
 	struct nfi_nfs3_server *server_aux;
 	struct nfi_nfs3_fhandle *fh_aux;
-	
-	
-	if (attr == NULL){		
+
+
+	if (attr == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		fprintf(stderr,"nfi_nfs3_getattr: attr parameter incorrect\n");
 		return -1;
 	}
 
-	
-	if (serv == NULL){		
+
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		fprintf(stderr,"nfi_nfs3_getattr: serv parameter incorrect\n");
 		return -1;
-	}	
-	
-	
-	if (fh == NULL){		
+	}
+
+
+	if (fh == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		fprintf(stderr,"nfi_nfs3_getattr: fh parameter incorrect\n");
 		return -1;
-	}	
+	}
 
 	if (fh->priv_fh == NULL){
 		nfs3_err(NFS3ERR_PARAM);
@@ -446,13 +451,13 @@ int nfi_nfs3_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nf
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC	
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -462,7 +467,7 @@ int nfi_nfs3_getattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nf
 #endif
 	fh_aux = (struct nfi_nfs3_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_nfs3_server *) serv->private_info;
-	
+
 	ret = nfs3_getattr(&fh_aux->fh, &fatt, server_aux->cl);
 	if(ret < 0){
 		nfs3_err(-ret);
@@ -484,29 +489,29 @@ int nfi_nfs3_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nf
 	struct nfi_nfs3_server *server_aux;
 	struct nfi_nfs3_fhandle *fh_aux;
 
-	
-	if (attr == NULL){		
-		nfs3_err(NFS3ERR_PARAM);
-		return -1;
-	}
-	
-	if (serv == NULL){		
-		nfs3_err(NFS3ERR_PARAM);
-		return -1;
-	}
-	
-	if (fh->priv_fh == NULL){		
+
+	if (attr == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC	
+	if (serv == NULL){
+		nfs3_err(NFS3ERR_PARAM);
+		return -1;
+	}
+
+	if (fh->priv_fh == NULL){
+		nfs3_err(NFS3ERR_PARAM);
+		return -1;
+	}
+
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -515,12 +520,12 @@ int nfi_nfs3_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nf
         }
 #endif
 
-	
+
 	NFItoNFS3attr(&fatt,attr);
-	
+
 	fh_aux = (struct nfi_nfs3_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_nfs3_server *) serv->private_info;
-	
+
 	ret = nfs3_setattr(&fh_aux->fh, &fatt, server_aux->cl);
 	if(ret < 0){
 		nfs3_err(-ret);
@@ -535,28 +540,28 @@ int nfi_nfs3_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nf
 int nfs3_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 {
 	char dir[MNTNAMLEN], server[MNTNAMLEN];
-	int ret;	
+	int ret;
 	struct nfi_nfs3_server *server_aux;
 	struct nfi_nfs3_fhandle *fh_aux;
-	
-		
-	if (serv == NULL){		
-		nfs3_err(NFS3ERR_PARAM);
-		return -1;
-	}
-	
-	if (fho == NULL){		
+
+
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC	
+	if (fho == NULL){
+		nfs3_err(NFS3ERR_PARAM);
+		return -1;
+	}
+
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -571,16 +576,16 @@ int nfs3_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 		fprintf(stderr,"nfs3_open: url %s incorrect.\n",url);
 		return -1;
 	}
-	
+
 	fho->url = (char *)malloc(strlen(url)+1);
 	if(fho->url == NULL){
 		fprintf(stderr,"nfs3_open: fho->url is null. Can't reserve memory\n");
 		nfs3_err(NFS3ERR_MEMORY);
-		return -1;	
+		return -1;
 	}
-	
+
 	strcpy(fho->url, url);
-	
+
 	fh_aux = (struct nfi_nfs3_fhandle *)malloc(sizeof(struct nfi_nfs3_fhandle));
 	if (fh_aux == NULL){
 		nfs3_err(NFS3ERR_MEMORY);
@@ -588,16 +593,16 @@ int nfs3_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 		free(fho->url);
 		return -1;
 	}
-		
+
 	server_aux = (struct nfi_nfs3_server *) serv->private_info;
-	
+
 	getDirWithURL(serv->url, dir);
-	
+
 	/* obtaine the NFS file handle */
-	ret = nfs3_lookup(&server_aux->fh, 
-			dir, 
-			&fh_aux->fh, 
-			NULL, 
+	ret = nfs3_lookup(&server_aux->fh,
+			dir,
+			&fh_aux->fh,
+			NULL,
 			server_aux->cl);
 
 
@@ -622,9 +627,9 @@ int nfs3_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 	fho->priv_fh = NULL;
 	fho->server = serv;
 	fho->priv_fh = (void *) fh_aux;
-	
-	return 0;	
-	
+
+	return 0;
+
 }
 
 
@@ -635,13 +640,13 @@ int nfi_nfs3_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 		//fprintf(stderr,"nfi_nfs3_open: Fail %s\n",url);
 		return -1;
 	}
-	
+
 	if (fho->type != NFIFILE){
 		nfi_nfs3_close(serv, fho);
 		fprintf(stderr,"nfi_nfs3_open: Fail %s isn't a FILE.\n",url);
 		return -1;
 	}
-		
+
 	return 0;
 }
 
@@ -649,63 +654,63 @@ int nfi_nfs3_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 
 
 int nfi_nfs3_close(struct nfi_server *server,  struct nfi_fhandle *fh){
-	if (server == NULL){		
+	if (server == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
-	if (fh == NULL){		
+	if (fh == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
-	}	
+	}
 
 	if (fh->priv_fh != NULL){
 		/* free memory */
 		free(fh->priv_fh);
 		fh->priv_fh = NULL;
-		
+
 	}
-		
+
 	if (fh->url != NULL){
 		free(fh->url);
 	}
-	
+
 	fh->type = NFINULL;
 	fh->server = NULL;
-	
+
 	return 0;
 }
 
-ssize_t nfi_nfs3_read(	struct nfi_server *serv,  
-			struct nfi_fhandle *fh, 
-			void *buffer, 
-			off_t offset, 
+ssize_t nfi_nfs3_read(	struct nfi_server *serv,
+			struct nfi_fhandle *fh,
+			void *buffer,
+			off_t offset,
 			size_t size)
 {
-	
+
 	ssize_t new_size;
-	
+
 	struct nfi_nfs3_server *server_aux;
 	struct nfi_nfs3_fhandle *fh_aux;
-	
-	if (serv == NULL){		
-		nfs3_err(NFS3ERR_PARAM);
-		return -1;
-	}
-	
-	
-	if (fh == NULL){		
+
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
 
-#ifdef NFI_DYNAMIC	
+	if (fh == NULL){
+		nfs3_err(NFS3ERR_PARAM);
+		return -1;
+	}
+
+
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -714,19 +719,19 @@ ssize_t nfi_nfs3_read(	struct nfi_server *serv,
         }
 #endif
 
-	
+
 	fh_aux = (struct nfi_nfs3_fhandle *) fh->priv_fh;
 	server_aux = (struct nfi_nfs3_server *) serv->private_info;
-	
-	
-//fprintf(stderr, "nfs3_read(offset=%d, size=%d)", offset, size);	
-	new_size = nfs3_read(&fh_aux->fh, 
-			    (char *)buffer, 
-			    offset, 
-			    size, 
+
+
+//fprintf(stderr, "nfs3_read(offset=%d, size=%d)", offset, size);
+	new_size = nfs3_read(&fh_aux->fh,
+			    (char *)buffer,
+			    offset,
+			    size,
 			    server_aux->cl);
-//fprintf(stderr, "=%d\n", new_size);	
-	
+//fprintf(stderr, "=%d\n", new_size);
+
 	if(new_size < 0){
 		nfs3_err(-new_size);
 		fprintf(stderr,"nfi_nfs3_read: Fail read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)new_size);
@@ -734,39 +739,39 @@ ssize_t nfi_nfs3_read(	struct nfi_server *serv,
 	}
 	nfs3_err(0);
 
-	
+
 	return new_size;
 }
 
-ssize_t nfi_nfs3_write(	struct nfi_server *serv,  
-			struct nfi_fhandle *fh, 
-			void *buffer, 
-			off_t offset, 
+ssize_t nfi_nfs3_write(	struct nfi_server *serv,
+			struct nfi_fhandle *fh,
+			void *buffer,
+			off_t offset,
 			size_t size)
-{	
-	
+{
+
 	ssize_t new_size;
         struct nfi_nfs3_server *server_aux;
         struct nfi_nfs3_fhandle *fh_aux;
-	
-	if (serv == NULL){		
-		nfs3_err(NFS3ERR_PARAM);
-		return -1;
-	}
-	
-	
-	if (fh == NULL){		
+
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC	
+
+	if (fh == NULL){
+		nfs3_err(NFS3ERR_PARAM);
+		return -1;
+	}
+
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -774,16 +779,16 @@ ssize_t nfi_nfs3_write(	struct nfi_server *serv,
                return -1;
         }
 #endif
-	
+
 
         fh_aux = (struct nfi_nfs3_fhandle *) fh->priv_fh;
         server_aux = (struct nfi_nfs3_server *) serv->private_info;
 
-	
-	new_size = nfs3_write(&fh_aux->fh, 
-			(char *)buffer, 
-			offset, 
-			size, 
+
+	new_size = nfs3_write(&fh_aux->fh,
+			(char *)buffer,
+			offset,
+			size,
 			server_aux->cl);
 	if(new_size < 0){
 		nfs3_err(new_size);
@@ -793,7 +798,7 @@ ssize_t nfi_nfs3_write(	struct nfi_server *serv,
 	}
 	nfs3_err(0);
 
-	
+
 	return new_size;
 }
 
@@ -803,27 +808,27 @@ int nfi_nfs3_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, 
 	int ret;
 	fhandle3 fhAux;
 	fattr3 fatt;		/* NFS attributes */
-	
+
         struct nfi_nfs3_server *server_aux;
         struct nfi_nfs3_fhandle *fh_aux;
-	
-	if (serv == NULL){		
-		nfs3_err(NFS3ERR_PARAM);
-		return -1;
-	}
-	
-	if (attr == NULL){		
+
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC	
+	if (attr == NULL){
+		nfs3_err(NFS3ERR_PARAM);
+		return -1;
+	}
+
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -832,7 +837,7 @@ int nfi_nfs3_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, 
         }
 #endif
 
-	
+
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		nfs3_err(NFS3ERR_URL);
@@ -840,7 +845,7 @@ int nfi_nfs3_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, 
 		return -1;
 	}
 
-	
+
 	/* elimina del dir la parte del fichero */
 	ret = getNameFile(file, dir);
 	if(ret < 0){
@@ -848,7 +853,7 @@ int nfi_nfs3_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, 
 		fprintf(stderr,"nfi_nfs3_create: url %s incorrect.\n",url);
 		return -1;
 	}
-	
+
 	/* private_info file handle */
 	fh_aux = (struct nfi_nfs3_fhandle *)malloc(sizeof(struct nfi_nfs3_fhandle));
 	if (fh_aux == NULL){
@@ -856,19 +861,19 @@ int nfi_nfs3_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, 
 		fprintf(stderr,"nfi_nfs3_create: fh_aux is null. Can't reserve memory\n");
 		return -1;
 	}
-	
+
 	bzero(fh_aux, sizeof(struct nfi_nfs3_fhandle));
 
 
         server_aux = (struct nfi_nfs3_server *) serv->private_info;
 	getDirWithURL(serv->url,dir);
 	/* obtain the directory file handle */
-	
 
-	ret = nfs3_lookup(&server_aux->fh, 
-			dir, 
-			&fhAux, 
-			NULL, 
+
+	ret = nfs3_lookup(&server_aux->fh,
+			dir,
+			&fhAux,
+			NULL,
 			server_aux->cl);
 	if(ret < 0){
 		nfs3_err(-ret);
@@ -881,11 +886,11 @@ int nfi_nfs3_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, 
 	//printf("fhAux = %d - %p \n",fhAux.fhandle3_len,
 	//		fhAux.fhandle3_val);
 	/* create the file into the directory */
-	ret = nfs3_create(&fhAux, 
-			  file, 
-			  attr->at_mode, 
-			  &fh_aux->fh, 
-			  &fatt, 
+	ret = nfs3_create(&fhAux,
+			  file,
+			  attr->at_mode,
+			  &fh_aux->fh,
+			  &fatt,
 			  server_aux->cl);
 
 	if(ret < 0){
@@ -896,7 +901,7 @@ int nfi_nfs3_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, 
 	}
 	fh->server = serv;
         fh->priv_fh = (void *)fh_aux;
-	
+
         fh->url = (char *)malloc(strlen(url)+1);
         if(fh->url == NULL){
                nfs3_err(NFS3ERR_MEMORY);
@@ -904,7 +909,7 @@ int nfi_nfs3_create(struct nfi_server *serv,  char *url, struct nfi_attr *attr, 
                return -1;
         }
         strcpy(fh->url, url);
-	
+
 	NFS3toNFIattr(attr, &fatt);
 
 	return 0;
@@ -917,22 +922,22 @@ int nfi_nfs3_remove(struct nfi_server *serv,  char *url)
 	int ret;
 	fhandle3 fhAux;
 
-	
+
         struct nfi_nfs3_server *server_aux;
-	
-	
-	if (serv == NULL){		
+
+
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
-	
-#ifdef NFI_DYNAMIC	
+
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -940,10 +945,10 @@ int nfi_nfs3_remove(struct nfi_server *serv,  char *url)
                return -1;
         }
 #endif
-	
-	
+
+
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
-	
+
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		nfs3_err(NFS3ERR_URL);
@@ -957,13 +962,13 @@ int nfi_nfs3_remove(struct nfi_server *serv,  char *url)
 		fprintf(stderr,"nfi_nfs3_remove: url %s incorrect.\n",url);
 		return -1;
 	}
-	
+
 	getDirWithURL(serv->url,dir);
         /* obtain the directory file handle */
-	ret = nfs3_lookup(&server_aux->fh, 
-			dir, 
-			&fhAux, 
-			NULL, 
+	ret = nfs3_lookup(&server_aux->fh,
+			dir,
+			&fhAux,
+			NULL,
 			server_aux->cl);
 
 	if(ret < 0){
@@ -973,10 +978,10 @@ int nfi_nfs3_remove(struct nfi_server *serv,  char *url)
 	}
 
 	/* remove the file into the directory */
-	ret = nfs3_remove(&fhAux, 
-			  file, 					
+	ret = nfs3_remove(&fhAux,
+			  file, 
 			  server_aux->cl);
-	
+
 	if(ret < 0){
 		nfs3_err(-ret);
 		//fprintf(stderr,"nfi_nfs3_remove: Fail remove %s in server %s (ret:%d).\n",dir,serv->server,ret);
@@ -984,7 +989,7 @@ int nfi_nfs3_remove(struct nfi_server *serv,  char *url)
 		return -1;
 	}
 	nfs3_err(0);
-	
+
 
 
 	return 0;
@@ -995,18 +1000,18 @@ int nfi_nfs3_rename(__attribute__((__unused__)) struct nfi_server *server, __att
 	/*
         struct nfi_nfs3_server *server_aux;
         struct nfi_nfs3_fhandle *fh_aux;
-	if (server == NULL){		
+	if (server == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC	
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
-			nfs3_err(); not necessary 
+			nfs3_err(); not necessary
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1027,29 +1032,29 @@ int nfi_nfs3_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 	int ret;
 	fhandle3 fhAux;
 	fattr3 fatt;		/* NFS attributes */
-	
-	
+
+
         struct nfi_nfs3_server *server_aux;
         struct nfi_nfs3_fhandle *fh_aux;
-	
 
-	if (serv == NULL){		
+
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
-	if (attr == NULL){		
+	if (attr == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC	
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1057,16 +1062,16 @@ int nfi_nfs3_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
                return -1;
         }
 #endif
-	
+
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
-	
+
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		nfs3_err(NFS3ERR_URL);
 		fprintf(stderr,"nfi_nfs3_mkdir: url %s incorrect.\n",url);
 		return -1;
 	}
-	
+
 	/* elimina del dir la parte del fichero */
 	ret = getNameFile(file, dir);
 	if(ret < 0){
@@ -1074,7 +1079,7 @@ int nfi_nfs3_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 		fprintf(stderr,"nfi_nfs3_mkdir: url %s incorrect.\n",url);
 		return -1;
 	}
-	
+
 	/* private_info file handle */
 	fh_aux = (struct nfi_nfs3_fhandle *)malloc(sizeof(struct nfi_nfs3_fhandle));
 	if (fh_aux == NULL){
@@ -1082,16 +1087,16 @@ int nfi_nfs3_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 		fprintf(stderr,"nfi_nfs3_mkdir: fh_aux is null. Can't reserve memory\n");
 		return -1;
 	}
-	
-	
+
+
 	bzero(fh_aux, sizeof(struct nfi_nfs3_fhandle));
-	
+
 	getDirWithURL(serv->url,dir);
 	/* obtain the directory file handle */
-	ret = nfs3_lookup(&server_aux->fh, 
-			dir, 
-			&fhAux, 
-			NULL, 
+	ret = nfs3_lookup(&server_aux->fh,
+			dir,
+			&fhAux,
+			NULL,
 			server_aux->cl);
 
 	if(ret < 0){
@@ -1104,13 +1109,13 @@ int nfi_nfs3_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 	nfs3_err(0);
 
 	/* create the dir into the directory */
-	ret = nfs3_mkdir(&fhAux, 
-			  file, 
-			  attr->at_mode, 
-			  &fh_aux->fh, 
-			  &fatt, 
+	ret = nfs3_mkdir(&fhAux,
+			  file,
+			  attr->at_mode,
+			  &fh_aux->fh,
+			  &fatt,
 			  server_aux->cl);
-	
+
 	if(ret < 0){
 		nfs3_err(NFS3ERR_MKDIR);
 		free(fh_aux);
@@ -1118,7 +1123,7 @@ int nfi_nfs3_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
 	}
 
         fh->priv_fh = (void *)fh_aux;
-	
+
         fh->url = (char *)malloc(strlen(url)+1);
         if(fh->url == NULL){
                nfs3_err(NFS3ERR_MEMORY);
@@ -1127,7 +1132,7 @@ int nfi_nfs3_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, s
                return -1;
         }
         strcpy(fh->url, url);
-	
+
 	NFS3toNFIattr(attr, &fatt);
 
 
@@ -1139,23 +1144,23 @@ int nfi_nfs3_rmdir(struct nfi_server *serv,  char *url)
 	char server[MNTNAMLEN], dir[MNTNAMLEN], file[MNTNAMLEN];
 	int ret;
 	fhandle3 fhAux;
-	
-	
+
+
         struct nfi_nfs3_server *server_aux;
 
-	if (serv == NULL){		
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
 
-#ifdef NFI_DYNAMIC	
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1164,9 +1169,9 @@ int nfi_nfs3_rmdir(struct nfi_server *serv,  char *url)
         }
 #endif
 
-	
+
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
-	
+
 	ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
 	if(ret < 0){
 		nfs3_err(NFS3ERR_URL);
@@ -1180,13 +1185,13 @@ int nfi_nfs3_rmdir(struct nfi_server *serv,  char *url)
 		fprintf(stderr,"nfi_nfs3_rmdir: url %s incorrect.\n",url);
 		return -1;
 	}
-	
+
 	getDirWithURL(serv->url,dir);
 	/* obtain the directory file handle */
-	ret = nfs3_lookup(&server_aux->fh, 
-			dir, 
-			&fhAux, 
-			NULL, 
+	ret = nfs3_lookup(&server_aux->fh,
+			dir,
+			&fhAux,
+			NULL,
 			server_aux->cl);
 
 	if(ret < 0){
@@ -1196,8 +1201,8 @@ int nfi_nfs3_rmdir(struct nfi_server *serv,  char *url)
 	}
 
 	/* remove the dir into the directory */
-	ret = nfs3_rmdir(&fhAux, 
-			  file, 					
+	ret = nfs3_rmdir(&fhAux,
+			  file, 
 			  server_aux->cl);
 	if(ret < 0){
 		nfs3_err(-ret);
@@ -1206,7 +1211,7 @@ int nfi_nfs3_rmdir(struct nfi_server *serv,  char *url)
 		return -1;
 	}
 	nfs3_err(0);
-	
+
 	return 0;
 }
 
@@ -1231,24 +1236,24 @@ int nfi_nfs3_opendir(struct nfi_server *server,  char *url, struct nfi_fhandle *
 int nfi_nfs3_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, struct dirent *entry)
 {
 	int ret;
-	
-	
+
+
         struct nfi_nfs3_server *server_aux;
         struct nfi_nfs3_fhandle *fh_aux;
 
-	
-	if (serv == NULL){		
-		nfs3_err(NFS3ERR_PARAM);
-		return -1;
-	}
-	
-	
-	if (fh == NULL){		
+
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
-	if (fh->priv_fh == NULL){		
+
+	if (fh == NULL){
+		nfs3_err(NFS3ERR_PARAM);
+		return -1;
+	}
+
+	if (fh->priv_fh == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
@@ -1258,13 +1263,13 @@ int nfi_nfs3_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, struct dir
 		return -1;
 	}
 
-#ifdef NFI_DYNAMIC	
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 			/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1272,32 +1277,32 @@ int nfi_nfs3_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, struct dir
                return -1;
         }
 #endif
-	
+
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
 	fh_aux = (struct nfi_nfs3_fhandle *)fh->priv_fh;
-	
+
 	if(fh_aux->eofdir){
 		entry->d_name[0] = '\0';
 		return 0;
 	}
-	
+
 	// TODO: update nfs3_readdir with the new header
 	ret = nfs3_readdir(&fh_aux->fh, fh_aux->cookie, entry, server_aux->cl);
 	if((ret < 0)&&(ret != NFS3ERR_EOFDIR)){
 		fprintf(stderr,"nfi_nfs3_readdir: Fail readdir %s in server %s (ret:%d).\n",fh->url,serv->server,ret);
 		nfs3_err(NFS3ERR_READDIR);
-		return -1;		
+		return -1;
 	}
 
 	if(ret == NFS3ERR_EOFDIR){
 		fh_aux->eofdir = 1;
 	}
-	
+
 	return 0;
 }
 
 int nfi_nfs3_closedir(struct nfi_server *serv,  struct nfi_fhandle *fh)
-{	
+{
 	return nfi_nfs3_close(serv, fh);
 }
 
@@ -1305,28 +1310,28 @@ int nfi_nfs3_closedir(struct nfi_server *serv,  struct nfi_fhandle *fh)
 int nfi_nfs3_statfs(struct nfi_server *serv,  struct nfi_info *inf)
 {
 	fsinfo3resok nfsinf;
-	int ret;	
+	int ret;
         struct nfi_nfs3_server *server_aux;
 
-	
-	if (serv == NULL){		
+
+	if (serv == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
-	if (inf == NULL){		
+	if (inf == NULL){
 		nfs3_err(NFS3ERR_PARAM);
 		return -1;
 	}
 
 
-#ifdef NFI_DYNAMIC	
+#ifdef NFI_DYNAMIC
 	if (serv->private_info == NULL){
 		ret = nfi_nfs3_reconnect(serv);
 		if(ret <0){
 		/* nfs3_err(); not necessary */
 			return -1;
-		}	
+		}
 	}
 #else
 	if (serv->private_info == NULL){
@@ -1334,13 +1339,13 @@ int nfi_nfs3_statfs(struct nfi_server *serv,  struct nfi_info *inf)
                return -1;
         }
 #endif
-	
+
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
 	ret = nfs3_statfs(&server_aux->fh, &nfsinf, server_aux->cl);
 	if(ret <0){
 		nfs3_err(-ret);
 		fprintf(stderr,"nfi_nfs3_fstat: Fail fstat in server %s (ret:%d).\n",serv->server,ret);
-		nfs3_err(NFS3ERR_STATFS);	
+		nfs3_err(NFS3ERR_STATFS);
 		return -1;
 	}
 	nfs3_err(0);

@@ -160,10 +160,9 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
   bzero(&attr, sizeof(struct nfi_attr));
   attr.at_mode = perm;
 
-  vfh_aux = (struct xpn_fh *)malloc(sizeof(struct xpn_fh));
-
   // vfh construction
-  if(vfh_aux == NULL)
+  vfh_aux = (struct xpn_fh *)malloc(sizeof(struct xpn_fh));
+  if (NULL == vfh_aux)
   {
     xpn_err(XPNERR_NOMEMORY);
     free(servers);
@@ -221,9 +220,8 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     if(vfh_aux->nfih[i] == NULL)
     {
       free(servers);
-      res = -1;
       XPN_DEBUG_END_ARGS1(path) ;
-      return res;
+      return -1;
     }
 
     // Worker
@@ -304,8 +302,8 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     return -1;
   }
 
-  (*vfh )= vfh_aux;
-  (*mdata )= mdata_aux;
+  (*vfh)   = vfh_aux;
+  (*mdata) = mdata_aux;
   free(servers);
 
   xpn_err(0);

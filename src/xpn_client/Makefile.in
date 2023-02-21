@@ -211,7 +211,6 @@ am__libxpn_a_SOURCES_DIST = @top_srcdir@/src/base/darray.c \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.c \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.c \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c \
-	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.c \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
@@ -274,7 +273,6 @@ am__objects_13 = @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.$(OB
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.$(OBJEXT) \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.$(OBJEXT)
 am__objects_14 = @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.$(OBJEXT) \
-	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.$(OBJEXT) \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.$(OBJEXT) \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.$(OBJEXT) \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.$(OBJEXT) \
@@ -338,7 +336,6 @@ am__depfiles_remade = @top_srcdir@/src/base/$(DEPDIR)/darray.Po \
 	@top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server_err.Po \
 	@top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/tcp_server_comm.Po \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_cwd.Po \
-	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_err.Po \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_init.Po \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_open.Po \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_opendir.Po \
@@ -710,7 +707,6 @@ XPN_CORE_OBJECTS = @top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c 
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.c
 
 XPN_POLICY_OBJECTS = @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
@@ -963,8 +959,6 @@ clean-libLIBRARIES:
 	@: > @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.$(OBJEXT): @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(am__dirstamp) \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/$(am__dirstamp)
-@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.$(OBJEXT): @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(am__dirstamp) \
-	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.$(OBJEXT): @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(am__dirstamp) \
 	@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.$(OBJEXT): @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(am__dirstamp) \
@@ -1045,7 +1039,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server_err.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/tcp_server_comm.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_cwd.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_err.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_init.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_open.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_opendir.Po@am__quote@ # am--include-marker
@@ -1291,7 +1284,6 @@ distclean: distclean-am
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server_err.Po
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/tcp_server_comm.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_cwd.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_err.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_init.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_open.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_opendir.Po
@@ -1389,7 +1381,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server_err.Po
 	-rm -f @top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/tcp_server_comm.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_cwd.Po
-	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_err.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_init.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_open.Po
 	-rm -f @top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/xpn_policy_opendir.Po
