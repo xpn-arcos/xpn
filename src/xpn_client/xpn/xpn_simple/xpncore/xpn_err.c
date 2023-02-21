@@ -31,6 +31,6 @@ int xpn_err ( int err )
   errno     = err;
   xpn_errno = err;
 
-  return 0; 
+  return 0;
 }
 

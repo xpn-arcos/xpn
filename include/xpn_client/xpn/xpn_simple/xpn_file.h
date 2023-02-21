@@ -40,14 +40,15 @@
 #define XPN_FILE 	0
 #define XPN_DIR 	1
 
-struct xpn_fh{
-	int n_nfih;
+
+struct xpn_fh
+{
+    int n_nfih;
     struct nfi_fhandle **nfih; 	/* NFI handler              	*/
 };
 
-
-
-struct xpn_attr{
+struct xpn_attr
+{
 	int 	at_type; 	/* FILE or DIR			*/	
 	mode_t 	at_mode;	/* protection			*/
 	nlink_t at_nlink;	/* number of hard links		*/
@@ -60,25 +61,25 @@ struct xpn_attr{
 	time_t  at_mtime;   	/* time of last modification 	*/
 	time_t  at_ctime;   	/* time of last status change	*/
 	void	*private_info;
-					     
 };
 
-
 /* File table */
-struct xpn_filedesc{
-        int id;         /* id of file                                   */
-	char path[PATH_MAX];/* absolute path 			*/
-        int type;       /* indicate FILE or DIR                         */
-        int links;      /* number of links that this file has           */
-	mode_t mode;	/* O_RDONLY, O_WRONLY,....			*/
-        struct xpn_partition *part;     /* partition                    */
- 	struct xpn_metadata *mdata; /* metadata				*/
-        struct xpn_attr attr;   /* attributes of the open file         	*/
-        off_t offset;       /* offset of the open file              	*/
-        ssize_t block_size;         /* size of distribution used            */
+struct xpn_filedesc
+{
+        int id;         		/* id of file                           */
+	char path[PATH_MAX];		/* absolute path 			*/
+        int type;       		/* indicate FILE or DIR                 */
+        int links;      		/* number of links that this file has   */
+	mode_t mode;			/* O_RDONLY, O_WRONLY,....		*/
+        struct xpn_partition *part;     /* partition                    	*/
+ 	struct xpn_metadata *mdata; 	/* metadata				*/
+        struct xpn_attr attr;   	/* attributes of the open file         	*/
+        off_t offset;       		/* offset of the open file              */
+        ssize_t block_size;         	/* size of distribution used            */
         ssize_t size_threads;
-        struct xpn_fh *data_vfh; /* virtual FH                         	*/
-        struct xpn_fh *meta_vfh; /* virtual METADATA FH                         	*/
+        struct xpn_fh *data_vfh; 	/* virtual FH                         	*/
+        struct xpn_fh *meta_vfh; 	/* virtual METADATA FH                  */
+	struct stat    st;
 };
 
 
@@ -86,8 +87,8 @@ struct xpn_filedesc{
 /* global  */
 extern struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
 
-int xpn_init_file_table();
-int xpn_destroy_file_table();
+int xpn_init_file_table    ( void );
+int xpn_destroy_file_table ( void );
 
 
 #ifdef  __cplusplus

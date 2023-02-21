@@ -64,27 +64,33 @@
 
   void NFItoLOCALattr ( struct stat *att, struct nfi_attr *nfi_att )
   {
-    if (nfi_att->at_type == NFIFILE) {
-      att->st_mode = nfi_att->at_mode | S_IFREG;  // protection
+    att->st_dev = nfi_att->st_dev ;
+    att->st_ino = nfi_att->st_ino ;
+
+    if (nfi_att->at_type == NFIFILE){
+      att->st_mode = nfi_att->at_mode | S_IFREG; // protection
     }
 
-    if (nfi_att->at_type == NFIDIR) {
-      att->st_mode = nfi_att->at_mode | S_IFDIR;  // protection
+    if (nfi_att->at_type == NFIDIR){
+      att->st_mode = nfi_att->at_mode | S_IFDIR; // protection
     }
 
     att->st_nlink   = nfi_att->at_nlink;   // number of hard links
     att->st_uid     = nfi_att->at_uid;     // user ID of owner
     att->st_gid     = nfi_att->at_gid;     // group ID of owner
-    att->st_size    = nfi_att->at_size;    // total size, in bytes
+    att->st_size    = nfi_att->at_size;    // size
     att->st_blksize = nfi_att->at_blksize; // blocksize for filesystem I/O
     att->st_blocks  = nfi_att->at_blocks;  // number of blocks allocated
     att->st_atime   = nfi_att->at_atime;   // time of last access
     att->st_mtime   = nfi_att->at_mtime;   // time of last modification
-    att->st_ctime   = nfi_att->at_ctime;   // time of last status change
+    att->st_ctime   = nfi_att->at_ctime;   // time of last change
   }
 
   void LOCALtoNFIattr ( struct nfi_attr *nfi_att, struct stat *att )
   {
+    nfi_att->st_dev = att->st_dev;
+    nfi_att->st_ino = att->st_ino;
+
     if (S_ISREG(att->st_mode)) {
       nfi_att->at_type = NFIFILE;
     }
@@ -92,18 +98,17 @@
       nfi_att->at_type = NFIDIR;
     }
 
-    nfi_att->at_mode    = att->st_mode;    // &(S_IRWXU|S_IRWXG|S_IRWXO);   // protection
-    nfi_att->at_nlink   = att->st_nlink;   // number of hard links
-    nfi_att->at_uid     = att->st_uid;     // user ID of owner
-    nfi_att->at_gid     = att->st_gid;     // group ID of owner
-    nfi_att->at_size    = att->st_size;    // total size, in bytes
-    nfi_att->at_blksize = att->st_blksize; // blocksize for filesystem I/O
-    nfi_att->at_blocks  = att->st_blocks;  // number of blocks allocated
-    nfi_att->at_atime   = att->st_atime;   // time of last access
-    nfi_att->at_mtime   = att->st_mtime;   // time of last modification
-    nfi_att->at_ctime   = att->st_ctime;   // time of last status change
+    nfi_att->at_mode    = att->st_mode&(S_IRWXU|S_IRWXG|S_IRWXO) ; // protection
+    nfi_att->at_nlink   = att->st_nlink;                           // number of hard links
+    nfi_att->at_uid     = att->st_uid;                             // user ID of owner
+    nfi_att->at_gid     = att->st_gid;                             // group ID of owner
+    nfi_att->at_size    = att->st_size;                            // total size, in bytes
+    nfi_att->at_blksize = att->st_blksize;                         // blocksize for filesystem I/O
+    nfi_att->at_blocks  = att->st_blocks;                          // number of blocks allocated
+    nfi_att->at_atime   = att->st_atime;                           // time of last access
+    nfi_att->at_mtime   = att->st_mtime;                           // time of last modification
+    nfi_att->at_ctime   = att->st_ctime;                           // time of last change
   }
-
 
   void LOCALtoNFIInfo( __attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *local_inf )
   {
