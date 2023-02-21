@@ -132,20 +132,20 @@
     char path[PATH_MAX];
   };
 
-  struct st_mpi_server_opendir{  //NEW
+  struct st_mpi_server_opendir{
     char path[PATH_MAX];
   };
 
-  struct st_mpi_server_readdir{  //NEW
+  struct st_mpi_server_readdir{
     DIR * dir;
   };
 
-  struct st_mpi_server_direntry{  //NEW
+  struct st_mpi_server_direntry{
     int end; //If end = 1 exist entry; 0 not exist
     struct dirent ret;
   };
 
-  struct st_mpi_server_closedir{  //NEW
+  struct st_mpi_server_closedir{
     DIR * dir;
   };
 

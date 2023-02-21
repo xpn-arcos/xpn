@@ -25,7 +25,8 @@
 #include "xpn/xpn_simple/xpn_opendir.h"
 #include "xpn/xpn_simple/xpn_policy_opendir.h"
 
-DIR *xpn_opendir(const char *path)
+
+DIR *xpn_simple_opendir(const char *path)
 {
   DIR *dirp = NULL;
   int res = -1;
@@ -52,7 +53,7 @@ DIR *xpn_opendir(const char *path)
     path_aux[strlen(path)+1] = '\0';
   }
 
-  res = xpn_open(path_aux, O_RDONLY);
+  res = xpn_simple_open(path_aux, O_RDONLY, 0);
   if (res < 0)
   {
     errno = ENOENT;
@@ -66,14 +67,17 @@ DIR *xpn_opendir(const char *path)
     XPN_DEBUG_END_ARGS1(path)
     return NULL;
   }
-  dirp->fd = res;
+
+  // fill the dirp info
+  dirp->fd   = res;
+  dirp->path = strdup(path_aux) ;
 
   XPN_DEBUG_END_ARGS1(path)
 
   return dirp;
 }
 
-struct dirent* xpn_readdir(DIR *dirp)
+struct dirent* xpn_simple_readdir(DIR *dirp)
 {
   int res;
   struct dirent *dirnt = NULL;
@@ -84,7 +88,7 @@ struct dirent* xpn_readdir(DIR *dirp)
     // set errno
     return NULL;
   }
-  
+
   if(xpn_file_table[dirp->fd] == NULL){
     // xpn_err
     return NULL;
@@ -104,7 +108,7 @@ struct dirent* xpn_readdir(DIR *dirp)
   printf("}\n");
   */
 
-  res = XpnGetEntry(dirp->fd, dirnt->d_name, &(dirnt->d_type));
+  res = XpnGetEntry(dirp->fd, dirnt);
   if(res != 0)
   {
     free(dirnt);
@@ -116,15 +120,15 @@ struct dirent* xpn_readdir(DIR *dirp)
   return dirnt;
 }
 
-int xpn_closedir(DIR *dirp)
+int xpn_simple_closedir(DIR *dirp)
 {
   int i;
-  
+
   if((NULL == dirp)||(dirp->fd<0)||(dirp->fd>XPN_MAX_FILE-1)){
     // set errno
     return -1;
   }
-  
+
   if(xpn_file_table[dirp->fd] == NULL){
     // xpn_err
     return -1;
@@ -156,7 +160,7 @@ int xpn_closedir(DIR *dirp)
     xpn_file_table[dirp->fd] = NULL;
   }
 
-
+  free(dirp->path) ;
   free(dirp);
 
   // set errno
@@ -165,8 +169,8 @@ int xpn_closedir(DIR *dirp)
   //return -1;
 }
 
-void xpn_rewinddir(__attribute__((__unused__)) DIR *dirp)
+void xpn_simple_rewinddir(__attribute__((__unused__)) DIR *dirp)
 {
-  
+   // TODO
 }
 

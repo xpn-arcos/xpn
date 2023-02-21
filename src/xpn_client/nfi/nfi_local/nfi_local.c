@@ -27,7 +27,7 @@
 
   /* ... Global Variable / Variable Globales ........................... */
 
-
+  #define FILESYSTEM_DLSYM 1
   
   /* ... Functions / Funciones ......................................... */
 
@@ -64,27 +64,33 @@
 
   void NFItoLOCALattr ( struct stat *att, struct nfi_attr *nfi_att )
   {
-    if (nfi_att->at_type == NFIFILE) {
-      att->st_mode = nfi_att->at_mode | S_IFREG;  // protection
+    att->st_dev = nfi_att->st_dev ;
+    att->st_ino = nfi_att->st_ino ;
+
+    if (nfi_att->at_type == NFIFILE){
+      att->st_mode = nfi_att->at_mode | S_IFREG; // protection
     }
 
-    if (nfi_att->at_type == NFIDIR) {
-      att->st_mode = nfi_att->at_mode | S_IFDIR;  // protection
+    if (nfi_att->at_type == NFIDIR){
+      att->st_mode = nfi_att->at_mode | S_IFDIR; // protection
     }
 
     att->st_nlink   = nfi_att->at_nlink;   // number of hard links
     att->st_uid     = nfi_att->at_uid;     // user ID of owner
     att->st_gid     = nfi_att->at_gid;     // group ID of owner
-    att->st_size    = nfi_att->at_size;    // total size, in bytes
+    att->st_size    = nfi_att->at_size;    // size
     att->st_blksize = nfi_att->at_blksize; // blocksize for filesystem I/O
     att->st_blocks  = nfi_att->at_blocks;  // number of blocks allocated
     att->st_atime   = nfi_att->at_atime;   // time of last access
     att->st_mtime   = nfi_att->at_mtime;   // time of last modification
-    att->st_ctime   = nfi_att->at_ctime;   // time of last status change
+    att->st_ctime   = nfi_att->at_ctime;   // time of last change
   }
 
   void LOCALtoNFIattr ( struct nfi_attr *nfi_att, struct stat *att )
   {
+    nfi_att->st_dev = att->st_dev;
+    nfi_att->st_ino = att->st_ino;
+
     if (S_ISREG(att->st_mode)) {
       nfi_att->at_type = NFIFILE;
     }
@@ -92,18 +98,17 @@
       nfi_att->at_type = NFIDIR;
     }
 
-    nfi_att->at_mode    = att->st_mode;    // &(S_IRWXU|S_IRWXG|S_IRWXO);   // protection
-    nfi_att->at_nlink   = att->st_nlink;   // number of hard links
-    nfi_att->at_uid     = att->st_uid;     // user ID of owner
-    nfi_att->at_gid     = att->st_gid;     // group ID of owner
-    nfi_att->at_size    = att->st_size;    // total size, in bytes
-    nfi_att->at_blksize = att->st_blksize; // blocksize for filesystem I/O
-    nfi_att->at_blocks  = att->st_blocks;  // number of blocks allocated
-    nfi_att->at_atime   = att->st_atime;   // time of last access
-    nfi_att->at_mtime   = att->st_mtime;   // time of last modification
-    nfi_att->at_ctime   = att->st_ctime;   // time of last status change
+    nfi_att->at_mode    = att->st_mode&(S_IRWXU|S_IRWXG|S_IRWXO) ; // protection
+    nfi_att->at_nlink   = att->st_nlink;                           // number of hard links
+    nfi_att->at_uid     = att->st_uid;                             // user ID of owner
+    nfi_att->at_gid     = att->st_gid;                             // group ID of owner
+    nfi_att->at_size    = att->st_size;                            // total size, in bytes
+    nfi_att->at_blksize = att->st_blksize;                         // blocksize for filesystem I/O
+    nfi_att->at_blocks  = att->st_blocks;                          // number of blocks allocated
+    nfi_att->at_atime   = att->st_atime;                           // time of last access
+    nfi_att->at_mtime   = att->st_mtime;                           // time of last modification
+    nfi_att->at_ctime   = att->st_ctime;                           // time of last change
   }
-
 
   void LOCALtoNFIInfo( __attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *local_inf )
   {
@@ -406,10 +411,10 @@
     }
 
     // Do open
-    fh_aux->fd = filesystem_open2(dir, O_RDWR, S_IRWXU) ;
+    fh_aux->fd = real_posix_open2(dir, O_RDWR, S_IRWXU) ;
     if (fh_aux->fd < 0)
     {
-      debug_error("filesystem_open fails to open '%s' in server %s.\n", dir, serv->server) ;
+      debug_error("real_posix_open fails to open '%s' in server %s.\n", dir, serv->server) ;
       FREE_AND_NULL(fh_aux) ;
       FREE_AND_NULL(fho->url) ;
       return -1;
@@ -458,7 +463,7 @@
     bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
     
     // Do creat
-    fh_aux->fd = filesystem_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
+    fh_aux->fd = real_posix_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
     if (fh_aux->fd < 0)
     {
       debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
@@ -468,7 +473,7 @@
 
     // Get stat of the file
     memset(&st, 0, sizeof(struct stat)) ;
-    ret = filesystem_stat(dir, &st) ;
+    ret = real_posix_stat(dir, &st) ;
     if (ret < 0)
     {
       debug_error("real_posix_stat fails to stat '%s' in server '%s'.\n", fh_aux->path, serv->server) ;
@@ -514,13 +519,13 @@
     fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
     // Do read
-    filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
-    ret = filesystem_read(fh_aux->fd, buffer, size) ;
+    real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
+    ret = real_posix_read(fh_aux->fd, buffer, size) ;
 
     debug_info("[NFI-LOCAL] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret)
     if (ret < 0)
     {
-      debug_error("filesystem_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
+      debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
       return -1;
     }
 
@@ -550,8 +555,8 @@
     fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
     
     // Do write
-    filesystem_lseek(fh_aux->fd, offset, SEEK_SET) ;
-    ret = filesystem_write(fh_aux->fd, buffer, size) ;
+    real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
+    ret = real_posix_write(fh_aux->fd, buffer, size) ;
     debug_info("[NFI-LOCAL] write %s off %ld size %zu (ret:%zd)\n", fh->url, (long int)offset, size, ret);
     if (ret < 0)
     {
@@ -583,7 +588,7 @@
     // Do close
     if (fh_aux != NULL)
     {
-      filesystem_close(fh_aux->fd) ;
+      real_posix_close(fh_aux->fd) ;
     }
 
     // free memory
@@ -622,7 +627,7 @@
     }
 
     // Do unlink
-    ret = filesystem_unlink(dir) ;
+    ret = real_posix_unlink(dir) ;
     if (ret < 0)
     {
       debug_error("nfi_local_remove: Fail remove %s in server %s.\n", dir, serv->server) ;
@@ -667,10 +672,10 @@
       return -1;
     }
 
-    ret = filesystem_rename(old_path, new_path) ;
+    ret = real_posix_rename(old_path, new_path) ;
     if (ret < 0)
     {
-      debug_error("filesystem_rename fails to rename '%s' in server %s.\n", old_path, serv->server) ;
+      debug_error("real_posix_rename fails to rename '%s' in server %s.\n", old_path, serv->server) ;
       return -1;
     }
 
@@ -684,7 +689,8 @@
   int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
     int ret;
-    struct nfi_local_fhandle *fh_aux;
+    char server[PATH_MAX], dir[PATH_MAX];
+  //struct nfi_local_fhandle *fh_aux;
     struct stat st;
 
     DEBUG_BEGIN();
@@ -693,18 +699,25 @@
     NULL_RET_ERR(serv,            LOCALERR_PARAM) ;
     NULL_RET_ERR(fh,              LOCALERR_PARAM) ;
     NULL_RET_ERR(attr,            LOCALERR_PARAM) ;
-    NULL_RET_ERR(fh->priv_fh,     LOCALERR_PARAM) ;
     nfi_local_keepConnected(serv) ;
     NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // copy private information...
-    fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
+    //fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
-    // Do stat
-    ret = filesystem_stat(fh_aux->path, &st) ;
+    ret = ParseURL(fh->url, NULL, NULL, NULL, server,  NULL,  dir) ;
     if (ret < 0)
     {
-      debug_error("nfi_local_getattr: Fail stat %s.\n", fh_aux->path) ;
+      fprintf(stderr,"nfi_mpi_server_getattr: url %s incorrect.\n",dir) ;
+      // mpi_server_err(LOCALERR_URL) ;
+      return -1;
+    }
+
+    // Do stat
+    ret = real_posix_stat(dir, &st) ;
+    if (ret < 0)
+    {
+      debug_error("nfi_local_getattr: Fail stat %s.\n", dir) ;
       return ret;
     }
 
@@ -771,7 +784,7 @@
     bzero(fh_aux, sizeof(struct nfi_local_fhandle)) ;
 
     // Do mkdir
-    ret = filesystem_mkdir(dir, /*attr->at_mode*/ 0777) ;
+    ret = real_posix_mkdir(dir, /*attr->at_mode*/ 0777) ;
     if ((ret < 0) && (errno != EEXIST))
     {
       debug_error("nfi_local_mkdir: Fail mkdir %s.\n", dir) ;
@@ -780,7 +793,7 @@
     }
 
     // Do stat
-    ret = filesystem_stat(dir, &st) ;
+    ret = real_posix_stat(dir, &st) ;
     if (ret < 0)
     {
       debug_error("nfi_local_getattr: Fail stat %s.\n", dir) ;
@@ -842,7 +855,7 @@
     }
 
     // Do opendir
-    fh_aux->dir = filesystem_opendir(dir) ;
+    fh_aux->dir = real_posix_opendir(dir) ;
     if (fh_aux->dir == NULL)
     {
       FREE_AND_NULL(fh_aux) ;
@@ -862,7 +875,7 @@
     return 0 ;
   }
 
-  int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, char *entry, unsigned char *type )
+  int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct dirent *entry )
   {
     struct nfi_local_fhandle *fh_aux;
     struct dirent *ent;
@@ -883,20 +896,18 @@
     // private_info...
     fh_aux = (struct nfi_local_fhandle *)fh->priv_fh;
 
+    // cleaning entry values...
+    memset(entry, 0, sizeof(struct dirent)) ;
+
     // Do readdir
-    entry[0] = '\0';
-    ent = filesystem_readdir(fh_aux->dir) ;
+    ent = real_posix_readdir(fh_aux->dir) ;
     if (ent == NULL)
     {
       debug_error("nfi_local_readdir: readdir") ;
-      return 1;
-    }
-    if (type==NULL) {
-      return 0;
+      return -1;
     }
 
-    strcpy(entry, ent->d_name) ;
-    *type = ent->d_type;
+    memcpy(entry, ent, sizeof(struct dirent)) ;
 
     // Return OK
     return 0;
@@ -918,7 +929,7 @@
     // Do closedir
     if (fh->priv_fh != NULL){
       fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
-      filesystem_closedir(fh_aux->dir) ;
+      real_posix_closedir(fh_aux->dir) ;
     }
 
     // free memory
@@ -955,7 +966,7 @@
     }
 
     // Do rmdir
-    ret = filesystem_rmdir(dir) ;
+    ret = real_posix_rmdir(dir) ;
     if (ret < 0)
     {
       debug_error(stderr,"nfi_local_rmdir: Fail rmdir %s.\n", dir) ;

@@ -1,3 +1,25 @@
+
+  /*
+   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *
+   *  This file is part of Expand.
+   *
+   *  Expand is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  Expand is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */
+
+
 #include "xpn/xpn_simple/xpn_policy_rw.h"
 
 /**
@@ -10,10 +32,12 @@
  *
  * @return Returns 0 on success or -1 on error.
  */
-int XpnGetBlock(int fd, off_t offset, off_t *local_offset, int *serv){
+int XpnGetBlock(int fd, off_t offset, off_t *local_offset, int *serv)
+{
 	struct policy *p;
 
-	switch(xpn_file_table[fd]->mdata->type_policy){
+	switch(xpn_file_table[fd]->mdata->type_policy)
+	{
 		case POLICY_RAID0:
 			// Calculate the server
 			p = (struct policy *)xpn_file_table[fd]->mdata->policy;
@@ -27,6 +51,7 @@ int XpnGetBlock(int fd, off_t offset, off_t *local_offset, int *serv){
 				* xpn_file_table[fd]->block_size)
 				+ (offset % xpn_file_table[fd]->block_size);
 			break;
+
 		case POLICY_RAID1:
 			// The server is calculated like in RAID0
 			p = (struct policy *)xpn_file_table[fd]->mdata->policy;
@@ -37,6 +62,7 @@ int XpnGetBlock(int fd, off_t offset, off_t *local_offset, int *serv){
 			// The offset does not need any calculation
 			(*local_offset) = offset;
 			break;
+
 		default:
 			return -1;
 	}
@@ -59,20 +85,23 @@ int XpnGetBlock(int fd, off_t offset, off_t *local_offset, int *serv){
  * @param num_servers[in] The number of servers.
  *
  */
-void XpnRWBlocksPolicyBlockByBlock(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers){
+void XpnRWBlocksPolicyBlockByBlock(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
+{
 	struct nfi_worker_io **io = *io_out;
 	int *ion = *ion_out;
 	off_t new_offset, l_offset;
 	int l_serv, i;
 	size_t l_size, count;
 
-	for (i = 0 ; i < num_servers ; i++)
+	for (i = 0 ; i < num_servers ; i++) {
 		ion[i] = 0;
+	}
 
 	new_offset = offset;
 	count = 0;
 
-	while(size>count){
+	while(size>count)
+	{
 		XpnGetBlock(fd, new_offset, &l_offset, &l_serv); // l_offset and l_serv will differ depending on the policy
 
 		// l_size is the remaining bytes from new_offset until the end of the block
@@ -106,7 +135,8 @@ void XpnRWBlocksPolicyBlockByBlock(int fd, const void *buffer, size_t size, off_
  * @param num_servers[in] The number of servers.
  *
  */
-void XpnReadBlocksPolicyRAID0_AllInOne(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers){
+void XpnReadBlocksPolicyRAID0_AllInOne(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
+{
 	struct nfi_worker_io **io = *io_out;
 	int *ion = *ion_out;
 	int i, j;
@@ -115,7 +145,8 @@ void XpnReadBlocksPolicyRAID0_AllInOne(int fd, const void *buffer, size_t size, 
 	XpnRWBlocksPolicyBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
 
 	count = 0;
-	for (i = 0 ; i < num_servers ; i++) {
+	for (i = 0 ; i < num_servers ; i++)
+	{
 		if (ion[i] > 0) {
 			for (j = 1 ; j < ion[i] ; j++) {
 				io[i][0].size += io[i][j].size;
@@ -142,7 +173,8 @@ void XpnReadBlocksPolicyRAID0_AllInOne(int fd, const void *buffer, size_t size, 
  * @param new_buffer[in] The disorganized buffer that needs to be ordered.
  *
  */
-void XpnReadBlocksPolicyRAID0_AllInOne_Finish(int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, const void *new_buffer){
+void XpnReadBlocksPolicyRAID0_AllInOne_Finish(int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, const void *new_buffer)
+{
 	struct nfi_worker_io **io = *io_out;
 	int *ion = *ion_out;
 	int i, j;
@@ -174,7 +206,8 @@ void XpnReadBlocksPolicyRAID0_AllInOne_Finish(int fd, void *buffer, size_t size,
  * @param new_buffer[in] The buffer used to send data (it will be modified to store the disorganized blocks before sending).
  *
  */
-void XpnWriteBlocksPolicyRAID0_AllInOne(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer){
+void XpnWriteBlocksPolicyRAID0_AllInOne(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer)
+{
 	struct nfi_worker_io **io = *io_out;
 	int *ion = *ion_out;
 	int i, j;
@@ -215,7 +248,8 @@ void XpnWriteBlocksPolicyRAID0_AllInOne(int fd, const void *buffer, size_t size,
  * @param num_servers[in] The number of servers.
  *
  */
-void XpnReadBlocksPolicyRAID1_AllInOne(__attribute__((__unused__)) int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers){
+void XpnReadBlocksPolicyRAID1_AllInOne(__attribute__((__unused__)) int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
+{
 	struct nfi_worker_io **io = *io_out;
 	int *ion = *ion_out;
 	int i;
@@ -250,7 +284,8 @@ void XpnReadBlocksPolicyRAID1_AllInOne(__attribute__((__unused__)) int fd, const
  * @param num_servers[in] The number of servers.
  *
  */
-void XpnWriteBlocksPolicyRAID1_BlockByBlock(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers){
+void XpnWriteBlocksPolicyRAID1_BlockByBlock(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
+{
 	struct nfi_worker_io **io = *io_out;
 	int *ion = *ion_out;
 	off_t new_offset, l_offset;
@@ -298,7 +333,8 @@ void XpnWriteBlocksPolicyRAID1_BlockByBlock(int fd, const void *buffer, size_t s
  * @param num_servers[in] The number of servers.
  *
  */
-void XpnWriteBlocksPolicyRAID1_AllInOne(__attribute__((__unused__)) int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers){
+void XpnWriteBlocksPolicyRAID1_AllInOne(__attribute__((__unused__)) int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
+{
 	struct nfi_worker_io **io = *io_out;
 	int *ion = *ion_out;
 	int i;
@@ -326,24 +362,33 @@ void XpnWriteBlocksPolicyRAID1_AllInOne(__attribute__((__unused__)) int fd, cons
  *
  * @return Returns a pointer to a new buffer on success, or NULL on error.
  */
-void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers){
+void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
+{
 	int optimize = 1; // Optimize by default
-	//int optimize = 0; // Do not optimize
+      //int optimize = 0; // Do not optimize
 	void *new_buffer = (void *)buffer;
 
-	switch(xpn_file_table[fd]->mdata->type_policy){
+	switch(xpn_file_table[fd]->mdata->type_policy)
+	{
 		case POLICY_RAID0:
-			if (optimize) {
+			if (optimize)
+			{
 				new_buffer = malloc(size);
-				if (new_buffer == NULL)
+				if (NULL == new_buffer) {
 					perror("XpnReadBlocks: Error in malloc");
-				else
-					XpnReadBlocksPolicyRAID0_AllInOne(fd, new_buffer, size, offset, io_out, ion_out, num_servers);
-			} else
+					return new_buffer ;
+				}
+
+				XpnReadBlocksPolicyRAID0_AllInOne(fd, new_buffer, size, offset, io_out, ion_out, num_servers);
+			}
+			else {
 				XpnRWBlocksPolicyBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
+			}
 			break;
+
 		case POLICY_RAID1:
-			if (optimize) {
+			if (optimize)
+			{
 				off_t l_offset;
 				int l_serv;
 
@@ -356,9 +401,12 @@ void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struc
 					// If so, then apply the optimizaction
 					XpnReadBlocksPolicyRAID1_AllInOne(fd, buffer, size, offset, io_out, ion_out, num_servers);
 				}
-			} else
+			}
+			else {
 				XpnRWBlocksPolicyBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
+			}
 			break;
+
 		default:
 			return NULL;
 	}
@@ -366,16 +414,20 @@ void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struc
 	return new_buffer;
 }
 
-int XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer) {
-	switch(xpn_file_table[fd]->mdata->type_policy){
+int XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer)
+{
+	switch(xpn_file_table[fd]->mdata->type_policy)
+	{
 		case POLICY_RAID0:
 			if (buffer != new_buffer) {
 				XpnReadBlocksPolicyRAID0_AllInOne_Finish(fd, buffer, size, offset, io_out, ion_out, num_servers, new_buffer);
 				free(new_buffer);
 			}
 			break;
+
 		case POLICY_RAID1:
 			break;
+
 		default:
 			return -1;
 	}
@@ -414,12 +466,14 @@ void *XpnWriteBlocks ( int fd, const void *buffer, size_t size, off_t offset, st
 			} else
 				XpnRWBlocksPolicyBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
 			break;
+
 		case POLICY_RAID1:
 			if (optimize)
 				XpnWriteBlocksPolicyRAID1_AllInOne(fd, buffer, size, offset, io_out, ion_out, num_servers);
 			else
 				XpnWriteBlocksPolicyRAID1_BlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
 			break;
+
 		default:
 			return NULL;
 	}
@@ -442,8 +496,10 @@ int XpnWriteBlocksFinish ( int fd,
 			if (buffer != new_buffer)
 				free(new_buffer);
 			break;
+
 		case POLICY_RAID1:
 			break;
+
 		default:
 			return -1;
 	}
@@ -456,13 +512,15 @@ ssize_t XpnReadGetTotalBytes(int fd, ssize_t *res_v, int num_servers)
 	ssize_t res = -1;
 	int i;
 
-	switch(xpn_file_table[fd]->mdata->type_policy){
+	switch(xpn_file_table[fd]->mdata->type_policy)
+	{
 		case POLICY_RAID0:
 		case POLICY_RAID1:
 			res = 0;
 			for (i = 0 ; i < num_servers ; i++)
 				res += res_v[i];
 			break;
+
 		default:
 			return -1;
 	}
@@ -482,11 +540,13 @@ ssize_t XpnWriteGetTotalBytes(int fd, ssize_t *res_v, int num_servers)
 			for (i = 0 ; i < num_servers ; i++)
 				res += res_v[i];
 			break;
+
 		case POLICY_RAID1:
 			res = res_v[0];
 			for (i = 1 ; i < num_servers ; i++)
 				res = (res_v[i]<res)?res_v[i]:res;
 			break;
+
 		default:
 			return -1;
 	}

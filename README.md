@@ -64,32 +64,12 @@ Then, you need to get familiar with 5 special environment variables for XPN clie
 
 
 ### 4.1 Ad-Hoc Expand (based on MPI)
-The typical executions has 4 main steps:
-- First, generate the XPN configuration file:
+The typical executions has 3 main steps:
+- First, launch the Expand MPI server (xpn_mpi_server):
 
   ```
-    cd $HOME/src/xpn/bin
-    ./mk_conf.sh --conf ~/tmp/config.xml \
-                 --machinefile ~/tmp/machinefile \
-                 --part_size 512k \
-                 --part_name xpn \
-                 --storage_path /tmp
+  ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
   ```
-  Where:
-  * ```--part_size``` is the partition size (by default in bytes but "k" can be used for kilobytes and "m" for megabytes).
-  * ```--part_name``` is the partition name (a string without whitespaces).
-  * ```--storage_path``` is where the data is stogare in the servers (is the same for all servers).
-
-- Then, launch the Expand MPI server (xpn_mpi_server):
-
-  ```
-  mpiexec -np <number of processes> \
-          -hostfile <full path to the hostfile> \
-          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-          <INSTALL_PATH>/bin/xpn_mpi_server -ns <nameserver file> -tp &
-  ```
-
-  To use a thread pool to serve the requests add the -tp flag.
 
 - Then,  launch the program that will use Expand (XPN client):
 
@@ -106,23 +86,22 @@ The typical executions has 4 main steps:
 - At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
 
   ```
-  mpiexec -np 1 \
-          -genv XPN_DNS <nameserver file> \
-          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-          <INSTALL_PATH>/bin/xpn_stop_mpi_server -f <server file>
+  ./xpn -v -l <full path to the hostfile>  stop
   ```
     
 Summary:
 
 ```mermaid
 sequenceDiagram
-    session    ->> mk_conf.sh: generate the XPN configuration file
-    mk_conf.sh ->> xpn.conf: generate the xpn.conf file
-    session    ->> xpn_mpi_server: launch the Expand MPI server
-    xpn.conf  -->> xpn_mpi_server: read the XPN configuration file
-    session    ->> XPN client: launch the program that will use Expand
-    xpn.conf  -->> XPN client: read the XPN configuration file
-    session    ->> xpn_mpi_server: stop the MPI server
+    session        ->> xpn_mpi_server: launch the Expand MPI server
+    xpn_mpi_server ->> mk_conf.sh: generate the XPN configuration file
+    mk_conf.sh     ->> xpn.conf: generate the xpn.conf file
+    xpn.conf      -->> xpn_mpi_server: read the XPN configuration file
+    session        ->> XPN client: launch the program that will use Expand
+    xpn.conf      -->> XPN client: read the XPN configuration file
+    XPN client    -->> xpn_mpi_server: write and read data
+    XPN client    -->> session: execution ends
+    session        ->> xpn_mpi_server: stop the MPI server
 ```
 
 

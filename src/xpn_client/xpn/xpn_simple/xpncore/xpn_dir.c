@@ -23,7 +23,7 @@
 #include "xpn/xpn_simple/xpn_dir.h"
 
 
-int xpn_mkdir(const char *path, mode_t perm)
+int xpn_simple_mkdir(const char *path, mode_t perm)
 {
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
   struct nfi_server **servers;
@@ -83,12 +83,10 @@ int xpn_mkdir(const char *path, mode_t perm)
     return -1;
   }
 
-  for(i=0;i<n;i++){
-    vfh_aux->nfih[i] = NULL;
-  }
-
   for(i=0;i<n;i++)
   {
+    vfh_aux->nfih[i] = NULL;
+
     XpnGetURLServer(servers[i], abs_path, url_serv);
 
     vfh_aux->nfih[i] = (struct nfi_fhandle*)malloc(sizeof(struct nfi_fhandle));
@@ -156,7 +154,7 @@ int xpn_mkdir(const char *path, mode_t perm)
 
     return -1;
   }*/
-  
+
   // Error checking
   if(err)
   {
@@ -212,7 +210,7 @@ int xpn_mkdir(const char *path, mode_t perm)
   return 0;
 }
 
-int xpn_rmdir(const char *path)
+int xpn_simple_rmdir(const char *path)
 {
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
   int ret, err, i, n, pd;

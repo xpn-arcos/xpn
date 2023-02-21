@@ -111,26 +111,8 @@ XPN_HEADER= 		@top_srcdir@/include/xpn_client/xpn.h
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_rw.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_rw.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_simple_lib.h \
-			@top_srcdir@/include/xpn_client/xpn/xpn_simple/loc_incl.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_null/xpni_null.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_log/xpni_log.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_log/xpni_log_elog.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_ft/xpni_ft.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_ft/xpni_ft_metaData.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_ft/xpni_ft_read.h \
-			@top_srcdir@/include/xpn_client/xpni/xpni_ft/xpni_ft_write.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_lowfsi_xpn.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_lowfsi_printf.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_lowfsi_posix.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_lowfsi.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_fstag.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_fsit.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_fmeta.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_fit.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_file.h \
-			@top_srcdir@/include/xpn_client/xpni/common/xpni_dir.h \
-			@top_srcdir@/include/xpn_client/xpn2.h
+			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_stdio.h \
+			@top_srcdir@/include/xpn_client/xpn/xpn.h
 
 
 ###########
@@ -221,78 +203,18 @@ XPN_CORE_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_open.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_opendir.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fopen.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fclose.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fread.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fwrite.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fflush.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fillbuf.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_flushbuf.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fseek.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_ftell.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_fileno.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_setbuf.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_setvbuf.c
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.c
 
 XPN_POLICY_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_err.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.c
 
-XPN_OBJECTS=$(XPN_CORE_OBJECTS) $(XPN_POLICY_OBJECTS)
+XPN_EP_OBJECTS=		                @top_srcdir@/src/xpn_client/xpn_unistd.c \
+					@top_srcdir@/src/xpn_client/xpn_stdio.c
 
-XPNI_OBJECTS=				@top_srcdir@/src/xpn_client/xpni/common/xpni_fit.c \
-					@top_srcdir@/src/xpn_client/xpni/common/xpni_fmeta.c \
-					@top_srcdir@/src/xpn_client/xpni/common/xpni_fsit.c \
-					@top_srcdir@/src/xpn_client/xpni/common/xpni_file.c \
-					@top_srcdir@/src/xpn_client/xpni/common/xpni_dir.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_close.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_destroy.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_exportFile.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_importFile.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_init.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_lseek.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_metaData.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_open.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_read.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_register.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_write.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_ft/xpni_ft_opendir.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_close.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_destroy.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_init.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_open.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_read.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_register.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_write.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_importFile.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_exportFile.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_lseek.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_null/xpni_null_opendir.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_close.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_destroy.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_exportFile.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_importFile.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_init.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_lseek.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_open.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_read.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_register.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_write.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_opendir.c \
-					@top_srcdir@/src/xpn_client/xpni/xpni_log/xpni_log_elog.c
-
-XPN2_OBJECTS=		@top_srcdir@/src/xpn_client/xpn2/xpn2_close.c \
-					@top_srcdir@/src/xpn_client/xpn2/xpn2_destroy.c \
-					@top_srcdir@/src/xpn_client/xpn2/xpn2_init.c \
-					@top_srcdir@/src/xpn_client/xpn2/xpn2_open.c \
-					@top_srcdir@/src/xpn_client/xpn2/xpn2_creat.c \
-					@top_srcdir@/src/xpn_client/xpn2/xpn2_read.c \
-					@top_srcdir@/src/xpn_client/xpn2/xpn2_write.c \
-					@top_srcdir@/src/xpn_client/xpn2/xpn2_ioctl.c \
-					@top_srcdir@/src/xpn_client/xpn2/xpn2_lseek.c
+XPN_OBJECTS=$(XPN_CORE_OBJECTS) $(XPN_POLICY_OBJECTS) $(XPN_EP_OBJECTS)
 
 
 #############
@@ -301,7 +223,7 @@ XPN2_OBJECTS=		@top_srcdir@/src/xpn_client/xpn2/xpn2_close.c \
 
 OBJEXT            = o
 lib_LIBRARIES     = libxpn.a
-libxpn_a_SOURCES  = $(BASE_OBJECTS) $(NFI_OBJECTS) $(XPN_OBJECTS) $(XPNI_OBJECTS) $(XPN2_OBJECTS)
+libxpn_a_SOURCES  = $(BASE_OBJECTS) $(NFI_OBJECTS) $(XPN_OBJECTS) $(XPN2_OBJECTS)
 AM_CFLAGS         = -DASYNC_CLOSE=1 -DFILESYSTEM_DLSYM=1 
 
 noinst_HEADERS         = $(BASE_HEADER)
