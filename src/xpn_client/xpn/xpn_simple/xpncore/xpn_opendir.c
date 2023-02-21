@@ -88,7 +88,7 @@ struct dirent* xpn_simple_readdir(DIR *dirp)
     // set errno
     return NULL;
   }
-  
+
   if(xpn_file_table[dirp->fd] == NULL){
     // xpn_err
     return NULL;
@@ -123,12 +123,12 @@ struct dirent* xpn_simple_readdir(DIR *dirp)
 int xpn_simple_closedir(DIR *dirp)
 {
   int i;
-  
+
   if((NULL == dirp)||(dirp->fd<0)||(dirp->fd>XPN_MAX_FILE-1)){
     // set errno
     return -1;
   }
-  
+
   if(xpn_file_table[dirp->fd] == NULL){
     // xpn_err
     return -1;
@@ -171,6 +171,6 @@ int xpn_simple_closedir(DIR *dirp)
 
 void xpn_simple_rewinddir(__attribute__((__unused__)) DIR *dirp)
 {
-  
+   // TODO
 }
 

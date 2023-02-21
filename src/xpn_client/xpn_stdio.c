@@ -22,117 +22,117 @@
 
    /* ... Include / Inclusion ........................................... */
 
-      #include "xpn.h"
-      #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
+    #include "xpn.h"
+    #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
 
 
    /* ... Functions / Funciones ......................................... */
 
 
-      //
-      // fopen - fclose
-      //
+    //
+    // fopen - fclose
+    //
 
-      FILE * xpn_fopen(const char *name, const char *mode)
-      {
-          return xpn_simple_fopen(name, mode) ;
-      }
+    FILE * xpn_fopen(const char *name, const char *mode)
+    {
+      return xpn_simple_fopen(name, mode);
+    }
 
-      int xpn_fclose(FILE *fp)
-      {
-          return xpn_simple_fclose(fp) ;
-      }
-
-
-      //
-      // fread - fwrite
-      //
-
-      size_t xpn_fread ( void *ptr, size_t size, size_t nmemb, register FILE *stream )
-      {
-          return xpn_simple_fread(ptr, size, nmemb, stream) ;
-      }
-
-      size_t xpn_fwrite ( const void *ptr, size_t size, size_t nmemb, register FILE *stream )
-      {
-          return xpn_simple_fwrite(ptr, size, nmemb, stream) ;
-      }
-
-      int xpn_fflush(FILE *stream)
-      {
-          return xpn_simple_fflush(stream) ;
-      }
+    int xpn_fclose(FILE *fp)
+    {
+      return xpn_simple_fclose(fp);
+    }
 
 
-      //
-      // fseek - ftell
-      //
+    //
+    // fread - fwrite
+    //
 
-      int xpn_fseek(FILE *stream, long int offset, int whence)
-      {
-          return xpn_simple_fseek(stream, offset, whence) ;
-      }
+    size_t xpn_fread ( void *ptr, size_t size, size_t nmemb, register FILE *stream )
+    {
+      return xpn_simple_fread(ptr, size, nmemb, stream);
+    }
 
-      long xpn_ftell(FILE *stream)
-      {
-          return xpn_simple_ftell(stream) ;
-      }
+    size_t xpn_fwrite ( const void *ptr, size_t size, size_t nmemb, register FILE *stream )
+    {
+      return xpn_simple_fwrite(ptr, size, nmemb, stream);
+    }
 
-      void xpn_rewind(FILE *stream)
-      {
-          xpn_simple_rewind(stream) ;
-      }
-
-
-      //
-      // flush - preload
-      //
-
-      int xpn_preload(const char *virtual_path, const char *storage_path)
-      {
-          return xpn_simple_preload(virtual_path, storage_path) ;
-      }
-
-      int xpn_flush(const char *virtual_path, const char *storage_path)
-      {
-          return xpn_simple_flush(virtual_path, storage_path) ;
-      }
+    int xpn_fflush(FILE *stream)
+    {
+      return xpn_simple_fflush(stream);
+    }
 
 
-      //
-      // fgetc - fgets - getc
-      //
+    //
+    // fseek - ftell
+    //
 
-      int    xpn_fgetc(FILE *stream)
-      {
-          return xpn_simple_fgetc(stream);
-      }
+    int xpn_fseek(FILE *stream, long int offset, int whence)
+    {
+      return xpn_simple_fseek(stream, offset, whence);
+    }
 
-      char * xpn_fgets(char *s, int tam, FILE *stream)
-      {
-          return xpn_simple_fgets(s, tam, stream);
-      }
+    long xpn_ftell(FILE *stream)
+    {
+      return xpn_simple_ftell(stream);
+    }
 
-      int    xpn_getc(FILE *stream)
-      {
-          return xpn_simple_getc(stream);
-      }
-
-
-      //
-      // fileno - ferror
-      //
-
-      int xpn_fileno ( FILE *stream )
-      {
-          return xpn_simple_fileno(stream) ;
-      }
+    void xpn_rewind(FILE *stream)
+    {
+      xpn_simple_rewind(stream);
+    }
 
 
-      int xpn_ferror(FILE *stream)
-      {
-          return xpn_simple_ferror(stream) ;
-      }
+    //
+    // flush - preload
+    //
+
+    int xpn_preload(const char *virtual_path, const char *storage_path)
+    {
+      return xpn_simple_preload(virtual_path, storage_path);
+    }
+
+    int xpn_flush(const char *virtual_path, const char *storage_path)
+    {
+      return xpn_simple_flush(virtual_path, storage_path);
+    }
+
+
+    //
+    // fgetc - fgets - getc
+    //
+
+    int xpn_fgetc(FILE *stream)
+    {
+      return xpn_simple_fgetc(stream);
+    }
+
+    char * xpn_fgets(char *s, int tam, FILE *stream)
+    {
+      return xpn_simple_fgets(s, tam, stream);
+    }
+
+    int xpn_getc(FILE *stream)
+    {
+      return xpn_simple_getc(stream);
+    }
+
+
+    //
+    // fileno - ferror
+    //
+
+    int xpn_fileno ( FILE *stream )
+    {
+      return xpn_simple_fileno(stream);
+    }
+
+
+    int xpn_ferror(FILE *stream)
+    {
+      return xpn_simple_ferror(stream);
+    }
 
 
    /* ................................................................... */

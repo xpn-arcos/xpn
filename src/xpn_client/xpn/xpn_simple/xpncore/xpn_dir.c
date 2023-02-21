@@ -154,7 +154,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
 
     return -1;
   }*/
-  
+
   // Error checking
   if(err)
   {
