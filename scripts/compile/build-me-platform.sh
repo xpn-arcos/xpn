@@ -28,56 +28,35 @@ echo " platform"
 echo " --------"
 echo ""
 
+BASE_PATH=$(dirname $0)
+PLATFORM_NAME=$1
+PLATFORMS_AVAILABLE=$(ls -1 ${BASE_PATH}/platform | tr -d '\n' | sed 's/.sh/ | /g' | sed 's/| $//g')
+
 # Check arguments
 if [ "$#" != 1 ]; then
     echo ""
     echo " Usage:"
     echo " $0 <platform>"
     echo " Where:"
-    echo " * platform = mn4 | unito | cte-arm-fuji | cte-arm-mpich | picasso | tucan | lab21 | generic"
+    echo " * platform = $PLATFORMS_AVAILABLE"
     echo ""
     exit
 fi
 
 # Do request
 echo " Begin."
-BASE_PATH=$(dirname $0)
 
-case $1 in
-   "mn4")
-     $BASE_PATH/platform/mn4.sh
-     ;;
-   "unito")
-     $BASE_PATH/platform/unito.sh
-     ;;
-   "cte-arm-fuji")
-     $BASE_PATH/platform/cte-arm-fuji.sh
-     ;;
-    "cte-arm-mpich")
-     $BASE_PATH/platform/cte-arm-mpich.sh
-     ;;
-   "picasso")
-     $BASE_PATH/platform/picasso.sh
-     ;;
-   "lab21")
-     $BASE_PATH/platform/lab21.sh
-     ;;
-    "tucan")
-     $BASE_PATH/platform/tucan.sh
-     ;;
-    "generic")
-     $BASE_PATH/platform/generic.sh
-     ;;
-
-   *)
+if [ ! -f ${BASE_PATH}/platform/$1.sh ]; then
      echo ""
      echo " ERROR: unknown platform '"$1"' :-("
      echo ""
      echo " Available platforms are:"
-     echo " mn4 | unito | cte-arm-fuji | cte-arm-mpich | picasso | tucan | lab21 | generic"
+     echo " $PLATFORMS_AVAILABLE"
      echo ""
-     ;;
-esac
+     exit
+else
+     ${BASE_PATH}/platform/$1.sh
+fi
 
 # Stop
 echo " End."
