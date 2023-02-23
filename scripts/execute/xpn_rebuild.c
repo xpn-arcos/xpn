@@ -6,7 +6,7 @@
 #include <fcntl.h>
 #include <linux/limits.h>
 
-//#include "mpi.h"
+#include "mpi.h"
 
 
 /*int copy_dir (path)
@@ -64,11 +64,14 @@ int copy_file (char * src_path, char * dest_path) //TODO: parallel MPI
 
 int main(int argc, char *argv[])
 {   
+  int  rank, size;
   FILE *file;
   char command[1024];
   char line [1024];
   char src_path  [PATH_MAX];
   char dest_path [PATH_MAX];
+
+  //MPI: crear árbol
 
   if ( argc < 3 )
   {
@@ -76,8 +79,11 @@ int main(int argc, char *argv[])
     return -1;
   }
 
+  MPI_Init(&argc, &argv);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-  sprintf( command, "ls -AR -1 %s > /tmp/partition_content.txt", argv[1] );
+  sprintf( command, "ls -ARl -1 %s > /tmp/partition_content.txt", argv[1] );
   system( command );
 
   file = fopen("/tmp/partition_content.txt", "r");
