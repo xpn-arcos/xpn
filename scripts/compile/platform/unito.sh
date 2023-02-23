@@ -22,42 +22,18 @@
 #  
 
 
-# Header
-echo ""
-echo " platform"
-echo " --------"
-echo ""
+# 1) software (if needed)...
 
+
+# 2) working path...
+MPICC_PATH=$HOME/opt/spack/linux-ubuntu20.04-zen/gcc-9.4.0/openmpi-4.1.3-4bpvwm3lcbftmjki6en35c4i5od6wjbr/bin/mpicc
+INSTALL_PATH=$HOME/dcamarma/bin/
 BASE_PATH=$(dirname $0)
-PLATFORM_NAME=$1
-PLATFORMS_AVAILABLE=$(ls -1 ${BASE_PATH}/platform | tr -d '\n' | sed 's/.sh/ | /g' | sed 's/| $//g')
 
-# Check arguments
-if [ "$#" != 1 ]; then
-    echo ""
-    echo " Usage:"
-    echo " $0 <platform>"
-    echo " Where:"
-    echo " * platform = $PLATFORMS_AVAILABLE"
-    echo ""
-    exit
-fi
-
-# Do request
-echo " Begin."
-
-if [ ! -f ${BASE_PATH}/platform/$1.sh ]; then
-     echo ""
-     echo " ERROR: unknown platform '"$1"' :-("
-     echo ""
-     echo " Available platforms are:"
-     echo " $PLATFORMS_AVAILABLE"
-     echo ""
-     exit
-else
-     ${BASE_PATH}/platform/$1.sh
-fi
-
-# Stop
-echo " End."
+# 3) preconfigure build-me...
+$BASE_PATH/../software/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../../mxml
+$BASE_PATH/../software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
+$BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
+$BASE_PATH/../software/lz4.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500/build/pfind/lz4/
+$BASE_PATH/../software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
 
