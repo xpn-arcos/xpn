@@ -6,7 +6,7 @@
 #include <fcntl.h>
 #include <linux/limits.h>
 
-#include "mpi.h"
+//#include "mpi.h"
 
 
 /*int copy_dir (path)
@@ -79,11 +79,11 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  MPI_Init(&argc, &argv);
+  /*MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_size(MPI_COMM_WORLD, &size);*/
 
-  sprintf( command, "ls -ARl -1 %s > /tmp/partition_content.txt", argv[1] );
+  sprintf( command, "ls -ARl %s > /tmp/partition_content.txt", argv[1] );
   system( command );
 
   file = fopen("/tmp/partition_content.txt", "r");
@@ -96,15 +96,23 @@ int main(int argc, char *argv[])
   
   while (!feof(file))
   {
-    fscanf(file, "%s\n", line);
+    fscanf(file, "%s\n", line); //Ajustar
 
-    char src_path  [PATH_MAX];
-    char dest_path [PATH_MAX];
+    printf("------- %s --------\n", line);
 
-    sprintf(  src_path, "%s/%s", argv[1], line );
+    if (line[0] == 'd')
+    {
+      printf("DIR\n");
+    }
+    if (line[0] == '-')
+    {
+      printf("FILE\n");
+    }
+
+    /*sprintf(  src_path, "%s/%s", argv[1], line );
     sprintf( dest_path, "%s/%s", argv[2], line );
 
-    copy_file (src_path, dest_path);
+    copy_file (src_path, dest_path);*/
   }
 
   //TODO: ver si es el directorio por los :

@@ -34,7 +34,7 @@ if [ "$#" != 1 ]; then
     echo " Usage:"
     echo " $0 <platform>"
     echo " Where:"
-    echo " * platform = mn4 | cte-arm-fuji | cte-arm-mpich | picasso | tucan | lab21 | generic"
+    echo " * platform = mn4 | unito | cte-arm-fuji | cte-arm-mpich | picasso | tucan | lab21 | generic"
     echo ""
     exit
 fi
@@ -46,6 +46,9 @@ BASE_PATH=$(dirname $0)
 case $1 in
    "mn4")
      $BASE_PATH/platform/mn4.sh
+     ;;
+   "unito")
+     $BASE_PATH/platform/unito.sh
      ;;
    "cte-arm-fuji")
      $BASE_PATH/platform/cte-arm-fuji.sh
@@ -71,7 +74,7 @@ case $1 in
      echo " ERROR: unknown platform '"$1"' :-("
      echo ""
      echo " Available platforms are:"
-     echo " mn4 | cte-arm-fuji | cte-arm-mpich | picasso | tucan | lab21 | generic"
+     echo " mn4 | unito | cte-arm-fuji | cte-arm-mpich | picasso | tucan | lab21 | generic"
      echo ""
      ;;
 esac
