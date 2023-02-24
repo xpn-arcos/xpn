@@ -30,6 +30,7 @@
   int mpi_server_comm_init ( mpi_server_param_st *params )
   {
     int ret, provided ;
+    MPI_Info info ;
 
     // Print server info
     char serv_name  [HOST_NAME_MAX];
@@ -78,6 +79,16 @@
       debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank) ;
       return -1;
     }
+
+    // Publish port name
+    /*MPI_Info_create(&info) ;
+    MPI_Info_set(info, "ompi_global_scope", "true") ;
+
+    ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
+    if (MPI_SUCCESS != ret) {
+      debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
+      return -1 ;
+    }*/
 
     // Print server init information
     MPI_Barrier(MPI_COMM_WORLD);

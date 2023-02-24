@@ -159,6 +159,13 @@
       return -1;
     }
 
+    // Lookup port name on nameserver
+    /*ret = MPI_Lookup_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
+    if (MPI_SUCCESS != ret) {
+      debug_error("Server[%d]: MPI_Lookup_name fails :-(", params->rank) ;
+      return -1 ;
+    }*/
+
     // Connect...
     int connect_retries = 0;
     do{
