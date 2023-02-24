@@ -74,21 +74,27 @@
     }
 
     // Generate DNS file
-    ret = ns_publish(params->srv_name, params->dns_file, params->port_name);
+    /*ret = ns_publish(params->srv_name, params->dns_file, params->port_name);
     if (ret < 0) {
       debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank) ;
       return -1;
-    }
+    }*/
 
     // Publish port name
-    /*MPI_Info_create(&info) ;
+    MPI_Info_create(&info) ;
     MPI_Info_set(info, "ompi_global_scope", "true") ;
+
+    struct hostent *serv_entry;
+    gethostname(serv_name, HOST_NAME_MAX); //get hostname
+    serv_entry = gethostbyname(serv_name); //find host information
+    sprintf(params->srv_name, "%s", serv_name) ;
+
 
     ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
       return -1 ;
-    }*/
+    }
 
     // Print server init information
     MPI_Barrier(MPI_COMM_WORLD);
