@@ -27,8 +27,6 @@
       #include "all_system.h"
       #include "base/utils.h"
 
-      #include "mpi.h"
-
 
       /*
        *  API

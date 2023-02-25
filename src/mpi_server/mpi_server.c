@@ -199,12 +199,21 @@
 
       while (fscanf(file, "%[^\n] ", srv_name) != EOF)
       {
+#ifndef(OMPI_RELEASE_VERSION)
         // Lookup port name
         ret = ns_lookup (srv_name, port_name);
         if (ret == -1) {
           printf("[MAIN] ERROR: server %s not found\n", dns_name) ;
           continue;
         }
+#else
+        // Lookup port name on nameserver
+        ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name) ;
+        if (MPI_SUCCESS != ret) {
+          printf("[MAIN] ERROR: server %s not found\n", dns_name) ;
+          continue;
+        }
+#endif
 
         // Connect with servers
         ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &server );
