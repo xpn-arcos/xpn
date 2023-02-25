@@ -27,19 +27,16 @@
       #include "all_system.h"
       #include "base/utils.h"
 
-      #include <netdb.h>
-      #include <sys/socket.h>
-      #include <netinet/in.h>
-      #include <arpa/inet.h>
+      #include "mpi.h"
 
 
       /*
        *  API
        */
 
-      int ns_publish   ( char * param_srv_name, char * dns_file, char * port_name ) ;
-      int ns_unpublish ( char * dns_file ) ;
-      int ns_lookup    ( char * param_srv_name, char * port_name ) ;
+      int ns_publish   ( char * dns_file, char * param_srv_name, char * port_name ) ;
+      int ns_unpublish ( char * dns_file, char * param_srv_name, char * port_name ) ;
+      int ns_lookup    (                  char * param_srv_name, char * port_name ) ;
 
 
 #endif

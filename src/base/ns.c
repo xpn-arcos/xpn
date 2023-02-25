@@ -23,40 +23,50 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "ns.h"
+     #include "ns.h"
 
 
   /* ... Functions / Funciones ......................................... */
 
-  int ns_publish ( char * param_srv_name, char * dns_file, char * port_name )
+  //
+  // DNS file
+  //
+
+  int ns_publish_by_dnsfile ( char * dns_file, char * param_srv_name, char * port_name )
   {
-    char serv_name [HOST_NAME_MAX];
+    char serv_name   [HOST_NAME_MAX];
+    char param_srv_ip[HOST_NAME_MAX];
     struct hostent *serv_entry;
     char *ip;
-    char param_srv_ip[HOST_NAME_MAX];
+    int ret ;
 
-    gethostname(serv_name, HOST_NAME_MAX); //get hostname
-    serv_entry = gethostbyname(serv_name); //find host information
-    ip = inet_ntoa(*((struct in_addr*) serv_entry->h_addr_list[0])); //Convert into IP string
+    gethostname(serv_name, HOST_NAME_MAX); // get hostname
+    serv_entry = gethostbyname(serv_name); // find host information
+    ip = inet_ntoa(*((struct in_addr*) serv_entry->h_addr_list[0])); // Convert into IP string
 
     sprintf(param_srv_name, "mpi_server.%s", serv_name) ;
     sprintf(param_srv_ip,   "mpi_server.%s", ip) ;
 
     FILE * dns_fd = fopen(dns_file, "a");
-    if (dns_fd == NULL)
+    if (NULL == dns_fd)
     {
-      perror("DNS File:");
+      perror("fopen on DNS File:");
       return -1;
     }
 
-    fprintf(dns_fd, "%s %s %s\n", param_srv_name, param_srv_ip, port_name);
-    fclose(dns_fd);
+    ret = fprintf(dns_fd, "%s %s %s\n", param_srv_name, param_srv_ip, port_name);
+    if (ret < 0)
+    {
+      perror("fprintf on DNS File:");
+      return -1;
+    }
 
+    fclose(dns_fd);
     return 0;
   }
 
 
-  int ns_unpublish ( char * dns_file )
+  int ns_unpublish_by_dnsfile ( char * dns_file )
   {
     char serv_name    [HOST_NAME_MAX];
     char aux_srv_name [2*HOST_NAME_MAX];
@@ -116,7 +126,7 @@
   }
 
 
-  int ns_lookup ( char * param_srv_name, char * port_name )
+  int ns_lookup_by_dnsfile ( char * param_srv_name, char * port_name )
   {
     int    found = 0 ;
     char   srv_name[1024] ;
@@ -129,7 +139,7 @@
     dns_file = getenv("XPN_DNS");
     if (dns_file == NULL)
     {
-      printf("DNS File not defined (XPN_DNS is empty)\n");
+      fprintf(stderr, "DNS File not defined (XPN_DNS is empty)\n");
       return -1;
     }
 
@@ -159,6 +169,100 @@
   
     fclose(dns_fd);
     return 0;
+  }
+
+  //
+  // MPI name service
+  //
+
+  int ns_publish_by_mpi ( char * srv_name, char * port_name )
+  {
+    int ret ;
+    char serv_name [HOST_NAME_MAX];
+    MPI_Info info ;
+
+    MPI_Info_create(&info) ;
+    MPI_Info_set(info, "ompi_global_scope", "true") ;
+
+    // Get and translate hostname
+    gethostname(serv_name, HOST_NAME_MAX); // get hostname
+
+    sprintf(srv_name, "%s", serv_name) ;
+
+    // Publish (service name, port name)
+    ret = MPI_Publish_name(srv_name, info, port_name) ;
+    if (MPI_SUCCESS != ret) {
+      debug_error("Server[%s]: MPI_Publish_name fails :-(", serv_name) ;
+      return -1 ;
+    }
+
+    return 0;
+  }
+
+
+  int ns_unpublish_by_mpi ( char * srv_name, char * port_name )
+  {
+    int ret ;
+
+    // Unpublish port name
+    ret = MPI_Unpublish_name(srv_name, MPI_INFO_NULL, port_name) ;
+    if (MPI_SUCCESS != ret) {
+        debug_error("Server[%s]: port unregistration fails :-(\n", port_name) ;
+        return -1 ;
+    }
+
+    // Close port
+    MPI_Close_port(port_name) ;
+
+    return 0;
+  }
+
+
+  int ns_lookup_by_mpi ( char * srv_name, char * port_name )
+  {
+    int ret ;
+
+    // Lookup port name on nameserver
+    ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name) ;
+    if (MPI_SUCCESS != ret) {
+      debug_error("Server[%s]: MPI_Lookup_name fails :-(", port_name) ;
+      return -1 ;
+    }
+
+    return 0;
+  }
+
+  //
+  // Public Interface
+  //
+
+  int ns_publish ( char * dns_file, char * param_srv_name, char * port_name )
+  {
+#if defined(OMPI_RELEASE_VERSION)
+    return ns_publish_by_mpi(param_srv_name, port_name) ;
+#else
+    return ns_publish_by_dnsfile(dns_file, param_srv_name, port_name) ;
+#endif
+  }
+
+
+  int ns_unpublish ( char * dns_file, char * param_srv_name, char * port_name )
+  {
+#if defined(OMPI_RELEASE_VERSION)
+    return ns_unpublish_by_mpi(param_srv_name, port_name) ;
+#else
+    return ns_unpublish_by_dnsfile(dns_file) ;
+#endif
+  }
+
+
+  int ns_lookup ( char * param_srv_name, char * port_name )
+  {
+#if defined(OMPI_RELEASE_VERSION)
+    return ns_lookup_by_mpi(param_srv_name, port_name) ;
+#else
+    return ns_lookup_by_dnsfile(param_srv_name, port_name) ;
+#endif
   }
 
 
