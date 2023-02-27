@@ -45,7 +45,7 @@ AC_CHECK_LIB(pthread,pthread_create)
 AC_PROG_EGREP
 
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h sys/time.h netinet/tcp.h netinet/in.h pthread.h windows.h sys/param.h dirent.h rpc/rpc.h rpc/clnt.h rpc/types.h)
+AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h sys/time.h netinet/tcp.h netinet/in.h pthread.h windows.h sys/param.h dirent.h rpc/rpc.h rpc/clnt.h rpc/types.h mpi.h)
 
 #
 # Checks for typedefs, structures, and compiler characteristics.

@@ -80,11 +80,15 @@
   #include <pthread.h>
 #endif
 
+#if defined(HAVE_NETINET_TCP_H)
+  #include <netinet/tcp.h>
+#endif
+
 #if defined(HAVE_NETINET_IN_H)
   #include <netinet/in.h>
-  #include <netinet/tcp.h>
   #include <netdb.h>
   #include <sys/socket.h>
+  #include <arpa/inet.h>
 #endif
 
 #if defined(HAVE_UNISTD_H)
@@ -115,6 +119,10 @@
   #ifndef NOT_TO_USE_FCNTL_H
       #include <fcntl.h>
   #endif
+#endif
+
+#if defined(HAVE_MPI_H)
+  #include <mpi.h>
 #endif
 
 

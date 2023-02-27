@@ -29,11 +29,10 @@
 
   int mpi_server_comm_init ( mpi_server_param_st *params )
   {
-    int ret, provided ;
-    MPI_Info info ;
+    int  ret, provided ;
+    char serv_name [HOST_NAME_MAX];
 
     // Print server info
-    char serv_name  [HOST_NAME_MAX];
     gethostname(serv_name, HOST_NAME_MAX);
     printf("--------------------------------\n");
     printf("Starting XPN MPI server %s\n", serv_name);
@@ -74,27 +73,29 @@
     }
 
     // Generate DNS file
-    /*ret = ns_publish(params->srv_name, params->dns_file, params->port_name);
+#ifndef (OMPI_RELEASE_VERSION)
+    ret = ns_publish(params->dns_file, params->srv_name, params->port_name);
     if (ret < 0) {
       debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank) ;
       return -1;
-    }*/
-
+    }
+#else
     // Publish port name
+    MPI_Info info ;
     MPI_Info_create(&info) ;
     MPI_Info_set(info, "ompi_global_scope", "true") ;
 
     struct hostent *serv_entry;
-    gethostname(serv_name, HOST_NAME_MAX); //get hostname
-    serv_entry = gethostbyname(serv_name); //find host information
+    gethostname(serv_name, HOST_NAME_MAX); // get hostname
+    serv_entry = gethostbyname(serv_name); // find host information
     sprintf(params->srv_name, "%s", serv_name) ;
-
 
     ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
       return -1 ;
     }
+#endif
 
     // Print server init information
     MPI_Barrier(MPI_COMM_WORLD);
@@ -139,14 +140,23 @@
 
     for (int i = 0; i < params->size; ++i)
     {
-      if(params->rank == i)
+      if (params->rank == i)
       {
+#ifndef(OMPI_RELEASE_VERSION)
         // Unpublish port name
-        ret = ns_unpublish (params->dns_file);
+        ret = ns_unpublish(params->dns_file, params->srv_name, params->port_name);
         if (ret < 0) {
           debug_error("Server[%d]: ns_unpublish fails :-(", params->rank) ;
           return -1 ;
         }
+#else
+        // Unpublish port name
+        ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
+        if (MPI_SUCCESS != ret) {
+            debug_error("Server[%d]: port unregistration fails :-(\n", params->rank) ;
+            return -1 ;
+        }
+#endif
       }
 
       MPI_Barrier(MPI_COMM_WORLD);

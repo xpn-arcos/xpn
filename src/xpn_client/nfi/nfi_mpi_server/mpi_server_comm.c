@@ -134,9 +134,10 @@
 
     debug_info("[CLI-COMM] begin mpiClient_comm_connect(...)\n") ;
 
+#ifndef(OMPI_RELEASE_VERSION)
     // Lookup port name
-    /*int lookup_retries = 0;
-    do{
+    int lookup_retries = 0;
+    do {
       ret = ns_lookup (params->srv_name, params->port_name);
       if (ret == -1)
       {
@@ -157,15 +158,15 @@
     {
       debug_error("ERROR: DNS Lookup %s Port %s\n", params->srv_name, params->port_name);
       return -1;
-    }*/
-
-
+    }
+#else
     // Lookup port name on nameserver
     ret = MPI_Lookup_name(params->srv_name, MPI_INFO_NULL, params->port_name) ;
     if (MPI_SUCCESS != ret) {
       debug_error("Server[%d]: MPI_Lookup_name fails :-(", params->rank) ;
       return -1 ;
     }
+#endif
 
     // Connect...
     int connect_retries = 0;
