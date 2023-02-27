@@ -73,7 +73,7 @@
     }
 
     // Generate DNS file
-#ifndef (OMPI_RELEASE_VERSION)
+#ifndef MPI_SERVICE_NAME
     ret = ns_publish(params->dns_file, params->srv_name, params->port_name);
     if (ret < 0) {
       debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank) ;
@@ -142,9 +142,9 @@
     {
       if (params->rank == i)
       {
-#ifndef(OMPI_RELEASE_VERSION)
+#ifndef MPI_SERVICE_NAME
         // Unpublish port name
-        ret = ns_unpublish(params->dns_file, params->srv_name, params->port_name);
+        ret = ns_unpublish(params->dns_file) ;
         if (ret < 0) {
           debug_error("Server[%d]: ns_unpublish fails :-(", params->rank) ;
           return -1 ;

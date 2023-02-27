@@ -199,7 +199,7 @@
 
       while (fscanf(file, "%[^\n] ", srv_name) != EOF)
       {
-#ifndef(OMPI_RELEASE_VERSION)
+#ifndef MPI_SERVICE_NAME
         // Lookup port name
         ret = ns_lookup (srv_name, port_name);
         if (ret == -1) {

@@ -33,7 +33,7 @@
        */
 
       int ns_publish   ( char * dns_file, char * param_srv_name, char * port_name ) ;
-      int ns_unpublish ( char * dns_file, char * param_srv_name, char * port_name ) ;
+      int ns_unpublish ( char * dns_file ) ;
       int ns_lookup    (                  char * param_srv_name, char * port_name ) ;
 
 

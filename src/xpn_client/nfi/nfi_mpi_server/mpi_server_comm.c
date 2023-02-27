@@ -134,7 +134,7 @@
 
     debug_info("[CLI-COMM] begin mpiClient_comm_connect(...)\n") ;
 
-#ifndef(OMPI_RELEASE_VERSION)
+#ifndef MPI_SERVICE_NAME
     // Lookup port name
     int lookup_retries = 0;
     do {
