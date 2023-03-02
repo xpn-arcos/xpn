@@ -29,15 +29,10 @@ class Xpn(AutotoolsPackage):
     depends_on('automake', type='build', when='@master')
     depends_on('libtool',  type='build', when='@master')
 
-
     def install(self, spec, prefix):
-        ## ./configure --prefix=$INSTALL_PATH/xpn --enable-tcp_server --enable-mpi_server="$MPICC_PATH"
         configure("--prefix=" + prefix,
                   "--enable-tcp_server",
-                  "--enable-mpi_server")
-
-        ## make -j
+                  "--enable-mpi_server=" + spec['mpich'].prefix + "/bin/mpicc")
         make()
-
-        # make install
         make("install")
+
