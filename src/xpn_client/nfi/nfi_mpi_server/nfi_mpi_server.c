@@ -595,8 +595,8 @@
       else {
         msg.type = MPI_SERVER_OPEN_FILE_WOS;
       }
-      strncpy(msg.id,                               server_aux->id, MPI_SERVER_ID-1) ;
-      strncpy(msg.u_st_mpi_server_msg.op_open.path, dir,            PATH_MAX-1) ;
+      memccpy(msg.id,                               server_aux->id, 0, MPI_SERVER_ID-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_open.path, dir,            0, PATH_MAX-1) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ;
 
@@ -608,7 +608,7 @@
         return -1;
       }
 
-      strncpy(fh_aux->path, dir, PATH_MAX-1) ;
+      memccpy(fh_aux->path, dir, 0, PATH_MAX-1) ;
     }
     /*****************************************/
 
@@ -692,8 +692,8 @@
       else {
         msg.type = MPI_SERVER_CREAT_FILE_WOS;
       }
-      strncpy(msg.id,                                server_aux->id, MPI_SERVER_ID-1) ;
-      strncpy(msg.u_st_mpi_server_msg.op_creat.path, dir,            PATH_MAX-1) ;
+      memccpy(msg.id,                                server_aux->id, 0, MPI_SERVER_ID-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_creat.path, dir,            0, PATH_MAX-1) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ;
       /*TODO?
@@ -706,13 +706,13 @@
       }
       */
 
-      strncpy(fh_aux->path, dir, PATH_MAX-1) ;
+      memccpy(fh_aux->path, dir, 0, PATH_MAX-1) ;
 
       // Get stat
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
       msg.type = MPI_SERVER_GETATTR_FILE;
-      strncpy(msg.id,                                  server_aux->id, MPI_SERVER_ID-1) ;
-      strncpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            PATH_MAX-1) ;
+      memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req)) ;
     }
@@ -810,10 +810,10 @@
       }
       else {
         msg.type = MPI_SERVER_READ_FILE_WOS;
-        strncpy(msg.u_st_mpi_server_msg.op_read.path, fh_aux->path, PATH_MAX) ;
+        memccpy(msg.u_st_mpi_server_msg.op_read.path, fh_aux->path, 0, PATH_MAX) ;
       }
 
-      strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
+      memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
       msg.u_st_mpi_server_msg.op_read.offset   = offset ;
       msg.u_st_mpi_server_msg.op_read.size     = size ;
 
@@ -953,9 +953,9 @@
       else
       {
         msg.type = MPI_SERVER_WRITE_FILE_WOS;
-        strncpy(msg.u_st_mpi_server_msg.op_write.path, fh_aux->path, PATH_MAX-1);
+        memccpy(msg.u_st_mpi_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX-1);
       }
-        strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
+        memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
         msg.u_st_mpi_server_msg.op_write.offset = offset;
         msg.u_st_mpi_server_msg.op_write.size   = size;
 
@@ -1084,7 +1084,7 @@
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
       msg.type = MPI_SERVER_CLOSE_FILE_WS;
-      strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
+      memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
       msg.u_st_mpi_server_msg.op_close.fd = fh_aux->fd;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
@@ -1148,8 +1148,8 @@
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
       msg.type = MPI_SERVER_RM_FILE;
-      strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
-      strncpy(msg.u_st_mpi_server_msg.op_rm.path, dir, PATH_MAX-1) ;
+      memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
     }
@@ -1215,9 +1215,9 @@
 
       msg.type = MPI_SERVER_RENAME_FILE;
 
-      strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
-      strncpy(msg.u_st_mpi_server_msg.op_rename.old_url, old_path, PATH_MAX-1) ;
-      strncpy(msg.u_st_mpi_server_msg.op_rename.new_url, new_path, PATH_MAX-1) ;
+      memccpy(msg.id,                                    server_aux->id, 0, MPI_SERVER_ID-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_rename.old_url, old_path,       0, PATH_MAX-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_rename.new_url, new_path,       0, PATH_MAX-1) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
     }
@@ -1272,8 +1272,8 @@
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
       msg.type = MPI_SERVER_GETATTR_FILE;
-      strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
-      strncpy(msg.u_st_mpi_server_msg.op_getattr.path, dir, PATH_MAX-1) ;
+      memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req)) ;
     }
@@ -1371,10 +1371,10 @@
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
       msg.type = MPI_SERVER_MKDIR_DIR;
-      strncpy(msg.u_st_mpi_server_msg.op_mkdir.path, dir, PATH_MAX-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_mkdir.path, dir, 0, PATH_MAX-1) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int)) ;
-      strncpy(fh_aux->path, dir, PATH_MAX-1) ;
+      memccpy(fh_aux->path, dir, 0, PATH_MAX-1) ;
 
       if ((fh_aux->fd < 0)&&(errno != EEXIST)) {
         mpi_server_err(MPI_SERVERERR_MKDIR) ;
@@ -1385,8 +1385,8 @@
 
       //Get stat
       msg.type = MPI_SERVER_GETATTR_FILE;
-      strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
-      strncpy(msg.u_st_mpi_server_msg.op_getattr.path, dir, PATH_MAX-1) ;
+      memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req)) ;
     }
@@ -1462,8 +1462,8 @@
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
       msg.type = MPI_SERVER_OPENDIR_DIR;
-      strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
-      strncpy(msg.u_st_mpi_server_msg.op_opendir.path, dir, PATH_MAX-1) ;
+      memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_opendir.path, dir,            0, PATH_MAX-1) ;
 
       unsigned long long aux;
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(aux), sizeof(DIR*)) ;
@@ -1526,7 +1526,7 @@
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
       msg.type = MPI_SERVER_READDIR_DIR;
-      strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
+      memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
       msg.u_st_mpi_server_msg.op_readdir.dir = fh_aux->dir ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_mpi_server_direntry)) ; //NEW
@@ -1575,7 +1575,7 @@
         //bzero(&msg, sizeof(struct st_mpi_server_msg));
         msg.type = MPI_SERVER_CLOSEDIR_DIR;
 
-        strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
+        memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
         msg.u_st_mpi_server_msg.op_closedir.dir = fh_aux->dir ;
 
         nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ; //NEW
@@ -1632,7 +1632,7 @@
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
       msg.type = MPI_SERVER_RMDIR_DIR;
-      strncpy(msg.u_st_mpi_server_msg.op_rmdir.path, dir, PATH_MAX-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_rmdir.path, dir, 0, PATH_MAX-1) ;
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
 
       if (ret < 0) {
@@ -1716,10 +1716,9 @@
     //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
     msg.type = MPI_SERVER_PRELOAD_FILE;
-    strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
-    //strcpy(msg.u_st_mpi_server_msg.op_preload.path,dir) ;
-    strncpy(msg.u_st_mpi_server_msg.op_preload.virtual_path, virtual_path, PATH_MAX-1) ;
-    strncpy(msg.u_st_mpi_server_msg.op_preload.storage_path, storage_path, PATH_MAX-1) ;
+    memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
+    memccpy(msg.u_st_mpi_server_msg.op_preload.virtual_path, virtual_path, 0, PATH_MAX-1) ;
+    memccpy(msg.u_st_mpi_server_msg.op_preload.storage_path, storage_path, 0, PATH_MAX-1) ;
     msg.u_st_mpi_server_msg.op_preload.block_size = serv->block_size;
     msg.u_st_mpi_server_msg.op_preload.opt        = opt;
 
@@ -1770,10 +1769,9 @@
     //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
     msg.type = MPI_SERVER_FLUSH_FILE;
-    strncpy(msg.id, server_aux->id, MPI_SERVER_ID-1) ;
-    //strcpy(msg.u_st_mpi_server_msg.op_flush.path,dir) ;
-    strncpy(msg.u_st_mpi_server_msg.op_flush.virtual_path, virtual_path, PATH_MAX-1) ;
-    strncpy(msg.u_st_mpi_server_msg.op_flush.storage_path, storage_path, PATH_MAX-1) ;
+    memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
+    memccpy(msg.u_st_mpi_server_msg.op_flush.virtual_path, virtual_path, 0, PATH_MAX-1) ;
+    memccpy(msg.u_st_mpi_server_msg.op_flush.storage_path, storage_path, 0, PATH_MAX-1) ;
     msg.u_st_mpi_server_msg.op_flush.block_size = serv->block_size;
     msg.u_st_mpi_server_msg.op_flush.opt = opt;
 
