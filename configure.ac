@@ -98,7 +98,7 @@ then
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"
 
-  CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
+  CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -Wall -Wextra -std=c11"
   LIBS=$LFLAGS" -lmxml -ldl -lpthread"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
