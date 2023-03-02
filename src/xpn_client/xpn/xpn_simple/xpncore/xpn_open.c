@@ -67,7 +67,7 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
 
   xpn_file_table[i]->id           = i;
   xpn_file_table[i]->type         = mdata->type;
-  strcpy(xpn_file_table[i]->path, path);
+  strncpy(xpn_file_table[i]->path, path, PATH_MAX-1);
   xpn_file_table[i]->mode         = mode;
   xpn_file_table[i]->links        = 1;
   xpn_file_table[i]->part         = XpnSearchPart(pd);
