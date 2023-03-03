@@ -102,7 +102,7 @@
         debug_info("[MAIN] tcp_server_init_worker_pool\n");
         tcp_server_init_worker_pool ( );
         debug_info("[MAIN] tcp_server_launch_worker_pool launch\n");
-        tcp_server_launch_worker_pool(worker_pool_function);
+        tcp_server_launch_worker_pool(worker_pool_function2);
       }
 
 

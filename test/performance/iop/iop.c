@@ -14,17 +14,20 @@
 #define LFNAME 128
 
 #ifndef KB
-#define KB 1024
+  #define KB 1024
 #endif
 #ifndef MB
-#define MB (KB*KB)
+  #define MB (KB*KB)
+#endif
+
+#ifndef TRUE
+  #define TRUE 1
+  #define FALSE 0
 #endif
 
 #define LBUFMIN (128)
 #define LBUFMAX (2*MB)
 #define TAMFILE (100 * MB)
-#define TRUE 1
-#define FALSE 0
 
 
 #define TASA_TRANSF(t) ((float)TAMFILE/(float) (t.tv_sec * USECPSEC + t.tv_usec))
@@ -44,7 +47,7 @@ int n_oper = 0;
  *                    -n_cli: number of virtual clients.
  *                    -niter: numero of iterations.
  */
-static int GetCheckArgs(int argc, char **argv, char *dir, int *cid, int *ncid)
+int GetCheckArgs(int argc, char **argv, char *dir, int *cid, int *ncid)
 {
     if (argc==2)
     {
@@ -61,7 +64,7 @@ static int GetCheckArgs(int argc, char **argv, char *dir, int *cid, int *ncid)
        return(1);
     }
 
-    printf("Uso: %s Dir; tu das %d\n", argv[0], argc );
+    printf("Uso: %s Dir; tu das %d\n", argv[0], argc);
     exit(1);
 }
 
@@ -69,7 +72,7 @@ static int GetCheckArgs(int argc, char **argv, char *dir, int *cid, int *ncid)
 /*
  * Write TAMFILE bytes in blocks of lb bytes.
  */
-static void ForwWriting
+void ForwWriting
 (
 	int cid, int ncid,
 	int f, int lb, char *buf,
@@ -91,22 +94,18 @@ static void ForwWriting
 
     for ( ; iter>0; iter--)
     {
-
        if (xpn_lseek(f,offset,SEEK_SET) < 0)
-	       perror("ERROR EN LSEEK\n");
+	       perror("ERROR: xpn_lseek\n");
 
        //memset(buf, 'a', lb);
-	//printf("%d)write %d en %d\n",cid,lb,offset);
        if ((ret = xpn_write(f,buf,lb))!= lb)
        {
-          printf("IOC.ForwWriting: Error en escritura  errno = %d\n", ret);
+          printf("ERROR: IOC.ForwWriting errno = %d\n", ret);
           exit(1);
        }
 
        offset = offset + ncid*lb;
        //offset = offset + lb;
-
-
     }
 
     Timer(&tf);
@@ -117,7 +116,7 @@ static void ForwWriting
  * Read TAMFILE bytes in blocks of lb bytes and then compares it with
  * Bufe.
  */
-static void ForwReading
+void ForwReading
 (
 	int cid, int ncid,
 	int f, int lb, char *bufl, char *bufe,
@@ -146,7 +145,7 @@ static void ForwReading
 
         if ( (count = xpn_read(f, bufl, lb)) != lb)
 	{
-		printf(str, "IOC.ForwReading: Read %d bytes (%d expected)\n", count, lb);
+		printf(str, "ERROR: IOC.ForwReading: Read %d bytes (%d expected)\n", count, lb);
 		exit(1);
 	}
         //offset = offset + ncid*lb;
@@ -161,7 +160,7 @@ static void ForwReading
  * This function is similar to ForwReading, but here the reads are
  * beginning in the end of the file.
  */
-static void BackwReading
+void BackwReading
 (
 	int cid, int ncid,
 	int f, int lb, char *bufl, char *bufe,
@@ -187,7 +186,7 @@ static void BackwReading
 
        if (xpn_read(f,bufl,lb)!= lb)
        {
-          printf("error IOC.BackReading: Error en lectura  errno = %d\n", errno);
+          printf("Error: IOC.BackReading -> errno = %d\n", errno);
           exit(1);
        }
     }
@@ -200,7 +199,7 @@ static void BackwReading
  * This function creats a new file, and is performanced a Writing,
  * ForwReading and BackReading function.
  */
-static void TakeSample
+void TakeSample
 (
 	int cid, int ncid,
 	int lbuf, char *dir,
@@ -217,19 +216,19 @@ static void TakeSample
 
     if (( f=xpn_open(fname,O_CREAT|O_RDWR,0777)) < 0)
     {
-    	printf("IOC.TakeSample: failed to create file %s\n", fname);
+    	printf("ERROR: IOC.TakeSample: failed to create file %s\n", fname);
     }
-    printf("%d > creo %s\n", cid, fname);
+    // printf("%d > creo %s\n", cid, fname);
 
 
    /* lo abren todos */
    if(type == 0){
-	   printf("%d > escribiendo %s\n", cid, fname);
+	   // printf("%d > escribiendo %s\n", cid, fname);
 	   ForwWriting(cid, ncid, f, lbuf, buffer_esc, timew);
    }
 
    if(type == 1){
-	   printf("%d > leo %s\n", cid, fname);
+	   // printf("%d > leo %s\n", cid, fname);
 	   ForwReading(cid, ncid, f, lbuf, buffer_lec, buffer_esc, timefr);
    }
 
@@ -238,31 +237,31 @@ static void TakeSample
    MPI_Barrier(MPI_COMM_WORLD);
 }
 
-static void PrintHeader(void)
+void PrintHeader(void)
 {
     printf("L_BUF N_BUF TOT(MB) E(MB/s) L_S(MB/s) L_NS(MB/s) T.TOTAL\n");
-    printf("----------------------------------------------------------\n");
+    printf("--------------------------------------------------------\n");
 }
 
-static void PrintResult(int cid, int lb, struct timeval *timet, float trw, float trfr, float trbr, int flag)
+void PrintResult(int cid, int lb, struct timeval *timet, float trw, float trfr, float trbr, int flag)
 {
 	/*
 	 sprintf(str, "%d> %6d %6d %6d %f %f %f %f s.\n", cid, lb, TAMFILE/lb, TAMFILE/MB, trw,
 		trfr, trbr, ((float)timet->tv_sec + (float)timet->tv_usec/USECPSEC));
 	*/
 
-        if (flag == 0){
-	    printf("%d\t%6d\t%f\t%f\tw\t\n", cid, lb, trw,
-	            ((float)timet->tv_sec + (float)timet->tv_usec/USECPSEC));
+        if (flag == 0) {
+	    printf("%d\t%6d\t%f\t%f\tw\t\n",
+		   cid, lb, trw, ((float)timet->tv_sec + (float)timet->tv_usec/USECPSEC));
         }
 
-        if (flag == 1){
-	    printf("%d\t%6d\t%f\t%f\tr\t\n", cid, lb, trfr,
-                    ((float)timet->tv_sec + (float)timet->tv_usec/USECPSEC));
+        if (flag == 1) {
+	    printf("%d\t%6d\t%f\t%f\tr\t\n",
+		   cid, lb, trfr, ((float)timet->tv_sec + (float)timet->tv_usec/USECPSEC));
         }
 }
 
-static void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr, float med_br)
+void PrintSummary(struct timeval *ttot, int n, float med_w, float med_fr, float med_br)
 {
     int n_users;
 
@@ -295,10 +294,11 @@ int main(int argc, char **argv)
     char processor_name[MPI_MAX_PROCESSOR_NAME];
 
     setbuf(stdout, NULL);
-    setenv("XPN_CONF","/export/home/pato11-1/proyectos/xpn/expand-2.0/test/pruebas/",1);
+    setenv("XPN_CONF", "./xpn.conf", 1);
+
     ret = MPI_Init(&argc, &argv);
     if (ret < 0) {
-	    printf("Error en MPI_Init \n");
+	    printf("Error: MPI_Init\n");
 	    exit(0);
     }
 
@@ -306,9 +306,9 @@ int main(int argc, char **argv)
     MPI_Comm_rank(MPI_COMM_WORLD,&cid);
     MPI_Get_processor_name(processor_name,&namelen);
 
-    printf("PROCESO %s -  %d de %d \n", processor_name, cid, ncid);
+    // printf("PROCESO %s -  %d de %d \n", processor_name, cid, ncid);
     if((ret = xpn_init())<0){
-	    printf("error en el init %d\n",ret);
+	    printf("Error: xpn_init -> %d\n", ret);
 	    exit(0);
     }
     MPI_Barrier(MPI_COMM_WORLD);
@@ -318,8 +318,8 @@ int main(int argc, char **argv)
     TAKE_SAMPLE_DIR = argv[1];
 
 
-
-    //PrintHeader();
+    // PrintHeader();
+    printf("cid\tlbuf\tbww\t\ttime\t\tr/w\n") ;
 
     Timer(&tini);
 
@@ -328,11 +328,11 @@ int main(int argc, char **argv)
       TakeSample(cid, ncid, lbuf, dir, &timew, &timefr, &timebr, 0);
       Timer(&timef);
       DiffTime(&timei, &timef, &timedif);
-      trw=TASA_TRANSF(timew);
-      trfr=TASA_TRANSF(timefr);
-      trbr=TASA_TRANSF(timebr);
+      trw  = TASA_TRANSF(timew);
+      trfr = TASA_TRANSF(timefr);
+      trbr = TASA_TRANSF(timebr);
       trw_med+=trw; trfr_med+=trfr; trbr_med+=trbr;
-      PrintResult(cid, lbuf, &timedif, trw, trfr, trbr,0);
+      PrintResult(cid, lbuf, &timedif, trw, trfr, trbr, 0);
       nit++;
 
     MPI_Barrier(MPI_COMM_WORLD);

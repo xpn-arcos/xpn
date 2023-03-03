@@ -28,11 +28,6 @@
 /* Support for files of > 4GB */
 #define _LARGEFILE64_ 1
 
-/* MAXPATHLEN */
-#ifndef MAXPATHLEN
-	#define MAXPATHLEN 255
-#endif
-
 /* MAX_BUFFER_SIZE */
 #ifndef MAX_BUFFER_SIZE
 //	#define MAX_BUFFER_SIZE (64*KB)

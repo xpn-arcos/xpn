@@ -1,11 +1,10 @@
 
 #ifdef WIN32
 
-#include "nfi/nfi_nfs/nfs_lib.h"
+#include "nfi_nfs.h"
 
 
-bool_t
-xdr_fhandle(xdrs, objp)
+bool_t xdr_fhandle(xdrs, objp)
 	XDR *xdrs;
 	fhandle objp;
 {
@@ -779,10 +778,9 @@ xdr_statfsres(xdrs, objp)
  * It was generated using rpcgen.
  */
 
-#include "nfi/nfi_nfs/nfs_lib.h"
+#include "nfi_nfs.h"
 
-bool_t
-xdr_fhandle (XDR *xdrs, fhandle objp)
+bool_t xdr_fhandle (XDR *xdrs, fhandle objp)
 {
 
 	 if (!xdr_opaque (xdrs, objp, FHSIZE))
@@ -790,8 +788,7 @@ xdr_fhandle (XDR *xdrs, fhandle objp)
 	return TRUE;
 }
 
-bool_t
-xdr_dirpath (XDR *xdrs, nfs_dirpath *objp)
+bool_t xdr_dirpath (XDR *xdrs, nfs_dirpath *objp)
 {
 
 	 if (!xdr_string (xdrs, objp, MNTPATHLEN))
@@ -799,8 +796,7 @@ xdr_dirpath (XDR *xdrs, nfs_dirpath *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_name (XDR *xdrs, nfs_name *objp)
+bool_t xdr_name (XDR *xdrs, nfs_name *objp)
 {
 
 	 if (!xdr_string (xdrs, objp, MNTNAMLEN))
@@ -808,8 +804,7 @@ xdr_name (XDR *xdrs, nfs_name *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_fhd (XDR *xdrs, fhd *objp)
+bool_t xdr_fhd (XDR *xdrs, fhd *objp)
 {
 
 	 if (!xdr_opaque (xdrs, objp->fh, FHSIZE))
@@ -817,8 +812,7 @@ xdr_fhd (XDR *xdrs, fhd *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_fhstatus (XDR *xdrs, fhstatus *objp)
+bool_t xdr_fhstatus (XDR *xdrs, fhstatus *objp)
 {
 
 	 if (!xdr_u_long (xdrs, &objp->status))
@@ -834,8 +828,7 @@ xdr_fhstatus (XDR *xdrs, fhstatus *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_mountlist (XDR *xdrs, mountlist *objp)
+bool_t xdr_mountlist (XDR *xdrs, mountlist *objp)
 {
 
 	 if (!xdr_pointer (xdrs, (char **)objp, sizeof (struct mountbody), (xdrproc_t) xdr_mountbody))
@@ -843,8 +836,7 @@ xdr_mountlist (XDR *xdrs, mountlist *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_mountbody (XDR *xdrs, mountbody *objp)
+bool_t xdr_mountbody (XDR *xdrs, mountbody *objp)
 {
 
 	 if (!xdr_name (xdrs, &objp->ml_hostname))
@@ -856,8 +848,7 @@ xdr_mountbody (XDR *xdrs, mountbody *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_groups (XDR *xdrs, groups *objp)
+bool_t xdr_groups (XDR *xdrs, groups *objp)
 {
 
 	 if (!xdr_pointer (xdrs, (char **)objp, sizeof (struct groupnode), (xdrproc_t) xdr_groupnode))
@@ -865,8 +856,7 @@ xdr_groups (XDR *xdrs, groups *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_groupnode (XDR *xdrs, groupnode *objp)
+bool_t xdr_groupnode (XDR *xdrs, groupnode *objp)
 {
 
 	 if (!xdr_name (xdrs, &objp->gr_name))
@@ -876,8 +866,7 @@ xdr_groupnode (XDR *xdrs, groupnode *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_exports (XDR *xdrs, exports *objp)
+bool_t xdr_exports (XDR *xdrs, exports *objp)
 {
 
 	 if (!xdr_pointer (xdrs, (char **)objp, sizeof (struct exportnode), (xdrproc_t) xdr_exportnode))
@@ -885,8 +874,7 @@ xdr_exports (XDR *xdrs, exports *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_exportnode (XDR *xdrs, exportnode *objp)
+bool_t xdr_exportnode (XDR *xdrs, exportnode *objp)
 {
 
 	 if (!xdr_dirpath (xdrs, &objp->ex_dir))
@@ -898,8 +886,7 @@ xdr_exportnode (XDR *xdrs, exportnode *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_filename (XDR *xdrs, filename *objp)
+bool_t xdr_filename (XDR *xdrs, filename *objp)
 {
 
 	 if (!xdr_string (xdrs, objp, NFSMAXNAMLEN))
@@ -907,8 +894,7 @@ xdr_filename (XDR *xdrs, filename *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_path (XDR *xdrs, path *objp)
+bool_t xdr_path (XDR *xdrs, path *objp)
 {
 
 	 if (!xdr_string (xdrs, objp, NFSMAXPATHLEN))
@@ -916,8 +902,7 @@ xdr_path (XDR *xdrs, path *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_nfscookie (XDR *xdrs, nfscookie objp)
+bool_t xdr_nfscookie (XDR *xdrs, nfscookie objp)
 {
 
 	 if (!xdr_opaque (xdrs, objp, COOKIESIZE))
@@ -925,8 +910,7 @@ xdr_nfscookie (XDR *xdrs, nfscookie objp)
 	return TRUE;
 }
 
-bool_t
-xdr_nfsdata (XDR *xdrs, nfsdata *objp)
+bool_t xdr_nfsdata (XDR *xdrs, nfsdata *objp)
 {
 
 	 if (!xdr_bytes (xdrs, (char **)&objp->nfsdata_val, (u_int *) &objp->nfsdata_len, MAXDATA))
@@ -934,8 +918,7 @@ xdr_nfsdata (XDR *xdrs, nfsdata *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_nfs_stat (XDR *xdrs, nfs_stat *objp)
+bool_t xdr_nfs_stat (XDR *xdrs, nfs_stat *objp)
 {
 
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
@@ -943,8 +926,7 @@ xdr_nfs_stat (XDR *xdrs, nfs_stat *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_ftype (XDR *xdrs, ftype *objp)
+bool_t xdr_ftype (XDR *xdrs, ftype *objp)
 {
 
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
@@ -952,8 +934,7 @@ xdr_ftype (XDR *xdrs, ftype *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_timevalNfs (XDR *xdrs, timevalNfs *objp)
+bool_t xdr_timevalNfs (XDR *xdrs, timevalNfs *objp)
 {
 
 	 if (!xdr_u_long (xdrs, &objp->seconds))
@@ -963,8 +944,7 @@ xdr_timevalNfs (XDR *xdrs, timevalNfs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_fattr (XDR *xdrs, fattr *objp)
+bool_t xdr_fattr (XDR *xdrs, fattr *objp)
 {
         register int32_t *buf;
 
@@ -1091,8 +1071,7 @@ xdr_fattr (XDR *xdrs, fattr *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_sattr (XDR *xdrs, sattr *objp)
+bool_t xdr_sattr (XDR *xdrs, sattr *objp)
 {
 
 
@@ -1160,8 +1139,7 @@ xdr_sattr (XDR *xdrs, sattr *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_attrstat (XDR *xdrs, attrstat *objp)
+bool_t xdr_attrstat (XDR *xdrs, attrstat *objp)
 {
 
 	 if (!xdr_nfs_stat (xdrs, &objp->status))
@@ -1177,8 +1155,7 @@ xdr_attrstat (XDR *xdrs, attrstat *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_diropargs (XDR *xdrs, diropargs *objp)
+bool_t xdr_diropargs (XDR *xdrs, diropargs *objp)
 {
 
 	 if (!xdr_fhandle (xdrs, objp->dir))
@@ -1188,8 +1165,7 @@ xdr_diropargs (XDR *xdrs, diropargs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_diropok (XDR *xdrs, diropok *objp)
+bool_t xdr_diropok (XDR *xdrs, diropok *objp)
 {
 
 	 if (!xdr_fhandle (xdrs, objp->file))
@@ -1199,8 +1175,7 @@ xdr_diropok (XDR *xdrs, diropok *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_diropres (XDR *xdrs, diropres *objp)
+bool_t xdr_diropres (XDR *xdrs, diropres *objp)
 {
 
 	 if (!xdr_nfs_stat (xdrs, &objp->status))
@@ -1216,8 +1191,7 @@ xdr_diropres (XDR *xdrs, diropres *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_sattrargs (XDR *xdrs, sattrargs *objp)
+bool_t xdr_sattrargs (XDR *xdrs, sattrargs *objp)
 {
 
 	 if (!xdr_fhandle (xdrs, objp->file))
@@ -1227,8 +1201,7 @@ xdr_sattrargs (XDR *xdrs, sattrargs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_readlinkres (XDR *xdrs, readlinkres *objp)
+bool_t xdr_readlinkres (XDR *xdrs, readlinkres *objp)
 {
 
 	 if (!xdr_nfs_stat (xdrs, &objp->status))
@@ -1244,8 +1217,7 @@ xdr_readlinkres (XDR *xdrs, readlinkres *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_readargs (XDR *xdrs, readargs *objp)
+bool_t xdr_readargs (XDR *xdrs, readargs *objp)
 {
 
 	 if (!xdr_fhandle (xdrs, objp->file))
@@ -1259,8 +1231,7 @@ xdr_readargs (XDR *xdrs, readargs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_datosRes (XDR *xdrs, datosRes *objp)
+bool_t xdr_datosRes (XDR *xdrs, datosRes *objp)
 {
 
 	 if (!xdr_fattr (xdrs, &objp->attributes))
@@ -1270,8 +1241,7 @@ xdr_datosRes (XDR *xdrs, datosRes *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_readres (XDR *xdrs, readres *objp)
+bool_t xdr_readres (XDR *xdrs, readres *objp)
 {
 
 	 if (!xdr_nfs_stat (xdrs, &objp->status))
@@ -1287,8 +1257,7 @@ xdr_readres (XDR *xdrs, readres *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_writeargs (XDR *xdrs, writeargs *objp)
+bool_t xdr_writeargs (XDR *xdrs, writeargs *objp)
 {
 
 
@@ -1348,8 +1317,7 @@ xdr_writeargs (XDR *xdrs, writeargs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_createargs (XDR *xdrs, createargs *objp)
+bool_t xdr_createargs (XDR *xdrs, createargs *objp)
 {
 
 	 if (!xdr_diropargs (xdrs, &objp->where))
@@ -1359,8 +1327,7 @@ xdr_createargs (XDR *xdrs, createargs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_renameargs (XDR *xdrs, renameargs *objp)
+bool_t xdr_renameargs (XDR *xdrs, renameargs *objp)
 {
 
 	 if (!xdr_diropargs (xdrs, &objp->from))
@@ -1370,8 +1337,7 @@ xdr_renameargs (XDR *xdrs, renameargs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_linkargs (XDR *xdrs, linkargs *objp)
+bool_t xdr_linkargs (XDR *xdrs, linkargs *objp)
 {
 
 	 if (!xdr_fhandle (xdrs, objp->from))
@@ -1381,8 +1347,7 @@ xdr_linkargs (XDR *xdrs, linkargs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_symlinkargs (XDR *xdrs, symlinkargs *objp)
+bool_t xdr_symlinkargs (XDR *xdrs, symlinkargs *objp)
 {
 
 	 if (!xdr_diropargs (xdrs, &objp->from))
@@ -1394,8 +1359,7 @@ xdr_symlinkargs (XDR *xdrs, symlinkargs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_readdirargs (XDR *xdrs, readdirargs *objp)
+bool_t xdr_readdirargs (XDR *xdrs, readdirargs *objp)
 {
 
 	 if (!xdr_fhandle (xdrs, objp->dir))
@@ -1407,8 +1371,7 @@ xdr_readdirargs (XDR *xdrs, readdirargs *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_entry (XDR *xdrs, entry *objp)
+bool_t xdr_entry (XDR *xdrs, entry *objp)
 {
 
 	 if (!xdr_u_long (xdrs, &objp->fileid))
@@ -1422,8 +1385,7 @@ xdr_entry (XDR *xdrs, entry *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_readdirok (XDR *xdrs, readdirok *objp)
+bool_t xdr_readdirok (XDR *xdrs, readdirok *objp)
 {
 
 	 if (!xdr_pointer (xdrs, (char **)&objp->entries, sizeof (entry), (xdrproc_t) xdr_entry))
@@ -1433,8 +1395,7 @@ xdr_readdirok (XDR *xdrs, readdirok *objp)
 	return TRUE;
 }
 
-bool_t
-xdr_readdirres (XDR *xdrs, readdirres *objp)
+bool_t xdr_readdirres (XDR *xdrs, readdirres *objp)
 {
 
 	 if (!xdr_nfs_stat (xdrs, &objp->status))
@@ -1451,10 +1412,9 @@ xdr_readdirres (XDR *xdrs, readdirres *objp)
 }
 
 	
-bool_t
-xdr_nfs_info (XDR *xdrs, nfs_info *objp)
+bool_t xdr_nfs_info (XDR *xdrs, nfs_info *objp)
 {
-       
+
         register int32_t *buf;
        if (xdrs->x_op == XDR_ENCODE) {
                buf = XDR_INLINE(xdrs,5 * BYTES_PER_XDR_UNIT);
@@ -1513,10 +1473,9 @@ xdr_nfs_info (XDR *xdrs, nfs_info *objp)
         return TRUE;
 }
 	
-bool_t
-xdr_statfsres (XDR *xdrs, statfsres *objp)
+bool_t xdr_statfsres (XDR *xdrs, statfsres *objp)
 {
-		 
+		
     if (!xdr_nfs_stat (xdrs, &objp->status))
           return FALSE;
     switch (objp->status) {
@@ -1531,3 +1490,4 @@ xdr_statfsres (XDR *xdrs, statfsres *objp)
 }
 
 #endif
+

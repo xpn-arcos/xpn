@@ -91,9 +91,8 @@ host_triplet = @host@
 target_triplet = @target@
 bin_PROGRAMS = d2xpn$(EXEEXT) lsxpn$(EXEEXT) mkdirxpn$(EXEEXT) \
 	removexpn$(EXEEXT) rmdirxpn$(EXEEXT) statfsxpn$(EXEEXT) \
-	xpn2d$(EXEEXT) xpncat$(EXEEXT) xpncp$(EXEEXT) xpncp_f$(EXEEXT) \
-	xpncp_f_th$(EXEEXT) xpncp_m$(EXEEXT) xpncp_th$(EXEEXT) \
-	xpnrm$(EXEEXT) xpnwriter$(EXEEXT)
+	xpn2d$(EXEEXT) xpncat$(EXEEXT) xpncp$(EXEEXT) xpncp_m$(EXEEXT) \
+	xpncp_th$(EXEEXT) xpnrm$(EXEEXT) xpnwriter$(EXEEXT)
 subdir = src/utils
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -142,14 +141,6 @@ xpncp_SOURCES = xpncp.c
 xpncp_OBJECTS = xpncp.$(OBJEXT)
 xpncp_LDADD = $(LDADD)
 xpncp_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-xpncp_f_SOURCES = xpncp_f.c
-xpncp_f_OBJECTS = xpncp_f.$(OBJEXT)
-xpncp_f_LDADD = $(LDADD)
-xpncp_f_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-xpncp_f_th_SOURCES = xpncp_f_th.c
-xpncp_f_th_OBJECTS = xpncp_f_th.$(OBJEXT)
-xpncp_f_th_LDADD = $(LDADD)
-xpncp_f_th_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
 xpncp_m_SOURCES = xpncp_m.c
 xpncp_m_OBJECTS = xpncp_m.$(OBJEXT)
 xpncp_m_LDADD = $(LDADD)
@@ -185,8 +176,7 @@ am__depfiles_remade = ./$(DEPDIR)/d2xpn.Po ./$(DEPDIR)/lsxpn.Po \
 	./$(DEPDIR)/mkdirxpn.Po ./$(DEPDIR)/removexpn.Po \
 	./$(DEPDIR)/rmdirxpn.Po ./$(DEPDIR)/statfsxpn.Po \
 	./$(DEPDIR)/xpn2d.Po ./$(DEPDIR)/xpncat.Po \
-	./$(DEPDIR)/xpncp.Po ./$(DEPDIR)/xpncp_f.Po \
-	./$(DEPDIR)/xpncp_f_th.Po ./$(DEPDIR)/xpncp_m.Po \
+	./$(DEPDIR)/xpncp.Po ./$(DEPDIR)/xpncp_m.Po \
 	./$(DEPDIR)/xpncp_th.Po ./$(DEPDIR)/xpnrm.Po \
 	./$(DEPDIR)/xpnwriter.Po
 am__mv = mv -f
@@ -203,11 +193,11 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = d2xpn.c lsxpn.c mkdirxpn.c removexpn.c rmdirxpn.c \
-	statfsxpn.c xpn2d.c xpncat.c xpncp.c xpncp_f.c xpncp_f_th.c \
-	xpncp_m.c xpncp_th.c xpnrm.c xpnwriter.c
+	statfsxpn.c xpn2d.c xpncat.c xpncp.c xpncp_m.c xpncp_th.c \
+	xpnrm.c xpnwriter.c
 DIST_SOURCES = d2xpn.c lsxpn.c mkdirxpn.c removexpn.c rmdirxpn.c \
-	statfsxpn.c xpn2d.c xpncat.c xpncp.c xpncp_f.c xpncp_f_th.c \
-	xpncp_m.c xpncp_th.c xpnrm.c xpnwriter.c
+	statfsxpn.c xpn2d.c xpncat.c xpncp.c xpncp_m.c xpncp_th.c \
+	xpnrm.c xpnwriter.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -465,14 +455,6 @@ xpncp$(EXEEXT): $(xpncp_OBJECTS) $(xpncp_DEPENDENCIES) $(EXTRA_xpncp_DEPENDENCIE
 	@rm -f xpncp$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(xpncp_OBJECTS) $(xpncp_LDADD) $(LIBS)
 
-xpncp_f$(EXEEXT): $(xpncp_f_OBJECTS) $(xpncp_f_DEPENDENCIES) $(EXTRA_xpncp_f_DEPENDENCIES) 
-	@rm -f xpncp_f$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(xpncp_f_OBJECTS) $(xpncp_f_LDADD) $(LIBS)
-
-xpncp_f_th$(EXEEXT): $(xpncp_f_th_OBJECTS) $(xpncp_f_th_DEPENDENCIES) $(EXTRA_xpncp_f_th_DEPENDENCIES) 
-	@rm -f xpncp_f_th$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(xpncp_f_th_OBJECTS) $(xpncp_f_th_LDADD) $(LIBS)
-
 xpncp_m$(EXEEXT): $(xpncp_m_OBJECTS) $(xpncp_m_DEPENDENCIES) $(EXTRA_xpncp_m_DEPENDENCIES) 
 	@rm -f xpncp_m$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(xpncp_m_OBJECTS) $(xpncp_m_LDADD) $(LIBS)
@@ -504,8 +486,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn2d.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncat.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp_f.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp_f_th.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp_m.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp_th.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpnrm.Po@am__quote@ # am--include-marker
@@ -669,8 +649,6 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/xpn2d.Po
 	-rm -f ./$(DEPDIR)/xpncat.Po
 	-rm -f ./$(DEPDIR)/xpncp.Po
-	-rm -f ./$(DEPDIR)/xpncp_f.Po
-	-rm -f ./$(DEPDIR)/xpncp_f_th.Po
 	-rm -f ./$(DEPDIR)/xpncp_m.Po
 	-rm -f ./$(DEPDIR)/xpncp_th.Po
 	-rm -f ./$(DEPDIR)/xpnrm.Po
@@ -729,8 +707,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/xpn2d.Po
 	-rm -f ./$(DEPDIR)/xpncat.Po
 	-rm -f ./$(DEPDIR)/xpncp.Po
-	-rm -f ./$(DEPDIR)/xpncp_f.Po
-	-rm -f ./$(DEPDIR)/xpncp_f_th.Po
 	-rm -f ./$(DEPDIR)/xpncp_m.Po
 	-rm -f ./$(DEPDIR)/xpncp_th.Po
 	-rm -f ./$(DEPDIR)/xpnrm.Po
