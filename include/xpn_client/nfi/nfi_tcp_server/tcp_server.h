@@ -5,10 +5,18 @@ and server
 #ifndef _TCP_SERVER_CLIENT_H_
 #define _TCP_SERVER_CLIENT_H_
 
+  /* ... Include / Inclusion ........................................... */
 
-#include "all_system.h"
-#include "tcp_server_conf.h"
-#include "tcp_server_comm.h"
+    #include "all_system.h"
+    #include "base/utils.h"
+    #include "base/string_misc.h"
+    #include "base/debug_msg.h"
+    #include "base/workers.h"
+    #include "tcp_server_conf.h"
+    #include "tcp_server_comm.h"
+    #include "nfi.h"
+    #include "nfi_worker.h"
+
 
 #define _LARGEFILE64_ 1
 
@@ -43,24 +51,18 @@ and server
 /* buffer size */
 //#define BUFFER_SIZE (2*MB)
 
-/* TCP_SERVER_MAXPATHLEN */
-#ifndef TCP_SERVER_MAXPATHLEN
-	//#define TCP_SERVER_MAXPATHLEN 255
-	#define TCP_SERVER_MAXPATHLEN 128
-#endif
-
-/* TCP_SERVER_MAXPATHLEN */
+/* TCP_SERVER_ID */
 #ifndef TCP_SERVER_ID
 	#define TCP_SERVER_ID 32
 #endif
 
 
 struct st_tcp_server_open{
-	char path[TCP_SERVER_MAXPATHLEN];
+	char path[PATH_MAX];
 };
 
 struct st_tcp_server_creat{
-	char path[TCP_SERVER_MAXPATHLEN];
+	char path[PATH_MAX];
 };
 
 struct st_tcp_server_read{
@@ -101,24 +103,24 @@ struct st_tcp_server_close{
 };
 
 struct st_tcp_server_rm{
-	char path[TCP_SERVER_MAXPATHLEN];
+	char path[PATH_MAX];
 };
 
 struct st_tcp_server_mkdir{	
-	char path[TCP_SERVER_MAXPATHLEN];
+	char path[PATH_MAX];
 };
 
 struct st_tcp_server_rmdir{
-	char path[TCP_SERVER_MAXPATHLEN];
+	char path[PATH_MAX];
 };
 
 
 struct st_tcp_server_getattr{	
-	char path[TCP_SERVER_MAXPATHLEN];
+	char path[PATH_MAX];
 };
 
 struct st_tcp_server_setattr{	
-	char path[TCP_SERVER_MAXPATHLEN];
+	char path[PATH_MAX];
 	struct stat attr;
 };
 
@@ -129,14 +131,14 @@ struct st_tcp_server_attr_req{
 
 
 struct st_tcp_server_flush{
-	char storage_path[TCP_SERVER_MAXPATHLEN];
-	char virtual_path[TCP_SERVER_MAXPATHLEN];
+	char storage_path[PATH_MAX];
+	char virtual_path[PATH_MAX];
 	char opt;
 };
 
 struct st_tcp_server_preload{
-	char storage_path[TCP_SERVER_MAXPATHLEN];
-	char virtual_path[TCP_SERVER_MAXPATHLEN];
+	char storage_path[PATH_MAX];
+	char virtual_path[PATH_MAX];
 	char opt;
 };
 

@@ -56,7 +56,7 @@
     int thread_mode;
 
     //Semaphore for clients
-    char sem_name_server [MAXPATHLEN];
+    char sem_name_server [PATH_MAX];
 
     //Semaphore for server disk
     sem_t disk_sem;

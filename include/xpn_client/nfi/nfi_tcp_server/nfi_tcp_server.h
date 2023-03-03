@@ -1,11 +1,12 @@
 #ifndef _NFI_TCP_SERVER_H
 #define _NFI_TCP_SERVER_H
 
-#include "tcp_server.h"
-#include "all_system.h"
-#include "base/string_misc.h"
-#include "nfi_tcp_server_err.h"
-#include "nfi.h"
+    #include "tcp_server.h"
+    #include "all_system.h"
+    #include "base/string_misc.h"
+    #include "nfi_tcp_server_err.h"
+    #include "nfi.h"
+    #include "nfi_worker.h"
 
 
 #ifdef  __cplusplus
@@ -13,13 +14,13 @@
 #endif
 
 struct nfi_tcp_server_server{
-	char id[NFIMAXPATHLEN];
-	char path[NFIMAXPATHLEN];
+	char id[PATH_MAX];
+	char path[PATH_MAX];
 	int sd;
 };
 
 struct nfi_tcp_server_fhandle{
-	char path[NFIMAXPATHLEN];
+	char path[PATH_MAX];
 	int fd;
 	DIR *dir;
 };
@@ -49,7 +50,7 @@ int nfi_tcp_server_rename(struct nfi_server *server, char *old_url, char *new_ur
 int nfi_tcp_server_mkdir(struct nfi_server *server, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
 int nfi_tcp_server_rmdir(struct nfi_server *server, char *url);
 int nfi_tcp_server_opendir(struct nfi_server *server, char *url, struct nfi_fhandle *fho);
-int nfi_tcp_server_readdir(struct nfi_server *server, struct nfi_fhandle *fhd, char *entry , unsigned char *type);
+int nfi_tcp_server_readdir(struct nfi_server *server, struct nfi_fhandle *fhd, struct dirent *entry );
 int nfi_tcp_server_closedir(struct nfi_server *server, struct nfi_fhandle *fh);
 int nfi_tcp_server_statfs(struct nfi_server *server, struct nfi_info *inf);
 

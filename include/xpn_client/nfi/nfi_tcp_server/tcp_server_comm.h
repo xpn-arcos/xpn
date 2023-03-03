@@ -1,9 +1,13 @@
 #ifndef _TCP_SERVER_COMM_H_
 #define _TCP_SERVER_COMM_H_
 
-#include "all_system.h"
+    #include "all_system.h"
+    #include "base/utils.h"
+    #include "base/string_misc.h"
+    #include "base/debug_msg.h"
 
-#include <dlfcn.h>
+    #include <dlfcn.h>
+
 
 /* ENVIROMENT VARIABLE: DNS SERVICE */
 #define TCP_SERVER_FILE "TCP_SERVER_FILE"
