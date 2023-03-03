@@ -9,7 +9,7 @@
     extern "C" {
  #endif
 
-int XpnGetEntry(int fd , char *entry, unsigned char *type);
+int XpnGetEntry(int fd , struct dirent *entry) ;
 
 
  #ifdef  __cplusplus

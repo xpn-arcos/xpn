@@ -1,7 +1,7 @@
 
 #ifdef WIN32
 
-#include "nfi/nfi_nfs/nfs_lib.h"
+#include "nfi_nfs.h"
 
 /* Default timeout can be changed using clnt_control() */
 static struct timeval TIMEOUT = { 25, 0 };
@@ -262,7 +262,7 @@ nfsproc_statfs_2(argp,res,clnt)
  * It was generated using rpcgen.
  */
 
-#include "nfi/nfi_nfs/nfs_lib.h"
+#include "nfi_nfs.h"
 
 /* Default timeout can be changed using clnt_control() */
 static struct timeval TIMEOUT = { 25, 0 };

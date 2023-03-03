@@ -28,30 +28,36 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int ns_publish ( char * param_srv_name, char * dns_file, char * port_name )
+  int ns_publish ( char * dns_file, char * param_srv_name, char * port_name )
   {
-    char serv_name [HOST_NAME_MAX];
+    char serv_name   [HOST_NAME_MAX];
+    char param_srv_ip[HOST_NAME_MAX];
     struct hostent *serv_entry;
     char *ip;
-    char param_srv_ip[HOST_NAME_MAX];
+    int ret ;
 
-    gethostname(serv_name, HOST_NAME_MAX); //get hostname
-    serv_entry = gethostbyname(serv_name); //find host information
-    ip = inet_ntoa(*((struct in_addr*) serv_entry->h_addr_list[0])); //Convert into IP string
+    gethostname(serv_name, HOST_NAME_MAX); // get hostname
+    serv_entry = gethostbyname(serv_name); // find host information
+    ip = inet_ntoa(*((struct in_addr*) serv_entry->h_addr_list[0])); // Convert into IP string
 
     sprintf(param_srv_name, "mpi_server.%s", serv_name) ;
     sprintf(param_srv_ip,   "mpi_server.%s", ip) ;
 
     FILE * dns_fd = fopen(dns_file, "a");
-    if (dns_fd == NULL)
+    if (NULL == dns_fd)
     {
-      perror("DNS File:");
+      perror("fopen on DNS File:");
       return -1;
     }
 
-    fprintf(dns_fd, "%s %s %s\n", param_srv_name, param_srv_ip, port_name);
-    fclose(dns_fd);
+    ret = fprintf(dns_fd, "%s %s %s\n", param_srv_name, param_srv_ip, port_name);
+    if (ret < 0)
+    {
+      perror("fprintf on DNS File:");
+      return -1;
+    }
 
+    fclose(dns_fd);
     return 0;
   }
 
@@ -129,7 +135,7 @@
     dns_file = getenv("XPN_DNS");
     if (dns_file == NULL)
     {
-      printf("DNS File not defined (XPN_DNS is empty)\n");
+      fprintf(stderr, "DNS File not defined (XPN_DNS is empty)\n");
       return -1;
     }
 

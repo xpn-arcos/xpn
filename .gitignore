@@ -25,3 +25,6 @@ autom4te.cache
 /install-sh
 /missing
 /stamp-h1
+/Makefile
+Makefile
+

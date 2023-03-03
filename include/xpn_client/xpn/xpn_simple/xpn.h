@@ -3,6 +3,7 @@
 
 #include "nfi/nfi.h"
 #include "nfi/nfi_worker.h"
+#include "nfi/nfi_ops.h"
 #include "nfi/nfi_lib.h"
 
 
@@ -10,14 +11,13 @@
     extern "C" {
  #endif
 
-#define MAX_PATH_LEN 255
 #define XPN_CONF "XPN_CONF"
 
 /* Paralel struct partition */
 struct xpn_partition{
 	int id;				/* id of partition */
 	int type;			/* type of file :NORMAL, RAID5,... */
-	char name[MAX_PATH_LEN];	/* name of partition */
+	char name[PATH_MAX];	/* name of partition */
 	ssize_t block_size;		/* size of distribution used */
 	ssize_t size_threads;
 	
