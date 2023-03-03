@@ -52,6 +52,7 @@ ssize_t xpn_simple_read(int fd, void *buffer, size_t size)
   }
 
   XPN_DEBUG_END_CUSTOM("%d, %zu", fd, size)
+
   return res;
 }
 
@@ -79,6 +80,7 @@ ssize_t xpn_simple_write ( int fd, const void *buffer, size_t size )
   }
 
   XPN_DEBUG_END_CUSTOM("%d, %zu", fd, size)
+
   return res;
 }
 
@@ -376,9 +378,12 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
   err = 0;
   for(i=0; i<n; i++)
   {
-    res_v[i] = nfiworker_wait(servers[i]->wrk);
-    if (res_v[i] < 0) {
-      err = 1;
+    if(ion[i] != 0)
+    {
+      res_v[i] = nfiworker_wait(servers[i]->wrk);
+      if (res_v[i] < 0) {
+        err = 1;
+      }
     }
   }
 
@@ -690,9 +695,12 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   err = 0;
   for(i=0; i<n; i++)
   {
-    res_v[i] = nfiworker_wait(servers[i]->wrk);
-    if (res_v[i] < 0) {
-      err = 1;
+    if(ion[i] != 0)
+    {
+      res_v[i] = nfiworker_wait(servers[i]->wrk);
+      if (res_v[i] < 0) {
+        err = 1;
+      }
     }
   }
 
