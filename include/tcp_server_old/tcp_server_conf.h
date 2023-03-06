@@ -1,12 +1,25 @@
 #ifndef _TCP_SERVER_CONF_H_
 #define _TCP_SERVER_CONF_H_
 
-#include "all_system.h"
+#ifndef KB
+	#define KB (1024)
+#endif
 
-/* Support for files of > 4GB */
-#define _LARGEFILE64_ 1
+#ifndef MB
+	#define MB (KB*KB)
+#endif
 
-/* MAX_BUFFER_SIZE */
+#ifndef GB
+	#define GB (MB*MB)
+#endif
+
+#ifndef TRUE
+	#define TRUE 1
+#endif
+#ifndef FALSE
+	#define FALSE 0
+#endif
+
 #ifndef MAX_BUFFER_SIZE
 	#define MAX_BUFFER_SIZE (1*MB)
 #endif
@@ -36,5 +49,20 @@
 	#define TCP_SERVER_IOSIZE_DEFAULT	(MB)
 #endif
 
+#ifndef TCP_SERVER_FLUSH_EXE
+	#define TCP_SERVER_FLUSH_EXE "xpn2d_lock.exe" //params: virtual_path , storage_path, local_path
+#endif
+
+#ifndef TCP_SERVER_PRELOAD_EXE
+	#define TCP_SERVER_PRELOAD_EXE "d2xpn_lock.exe" //params: virtual_path , storage_path, local_path
+#endif
+
+
+
+/* GLOBAL VARIABLES */
+extern char *TCP_SERVER_ALIAS_NAME_STRING;
+extern char *TCP_SERVER_FILE_STRING;
+extern char *TCP_SERVER_DIRBASE_STRING;
+extern int   TCP_SERVER_IOSIZE_INT;
 
 #endif

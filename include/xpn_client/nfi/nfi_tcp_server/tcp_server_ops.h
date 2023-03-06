@@ -1,38 +1,13 @@
-
-  /*
-   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
-   *
-   *  This file is part of Expand.
-   *
-   *  Expand is free software: you can redistribute it and/or modify
-   *  it under the terms of the GNU Lesser General Public License as published by
-   *  the Free Software Foundation, either version 3 of the License, or
-   *  (at your option) any later version.
-   *
-   *  Expand is distributed in the hope that it will be useful,
-   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   *  GNU Lesser General Public License for more details.
-   *
-   *  You should have received a copy of the GNU Lesser General Public License
-   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
-   *
-   */
-
-
 #ifndef _TCP_SERVER_OPS_H_
 #define _TCP_SERVER_OPS_H_
 
-    #include <libgen.h>
-    #include "all_system.h"
-    #include "base/filesystem.h"
-    #include "base/urlstr.h"
-    #include "base/utils.h"
-    #include "base/workers.h"
-    #include "tcp_server_ops.h"
-    #include "tcp_server_comm.h"
-    #include "tcp_server_d2xpn.h"
-    #include "tcp_server_params.h"
+
+  #define ASYNC_CLOSE 1
+  #define FILESYSTEM_DLSYM 1
+  #include "all_system.h"
+  #include "tcp_server_params.h"
+  #include "base/utils.h"
+  #include "base/filesystem.h"
 
 
   /*
@@ -43,7 +18,6 @@
   #define TCP_SERVER_ID 32
 #endif
 
-  /* Operations */
 
   /* Operations */
 
@@ -129,13 +103,13 @@
     int fd;
   };
 
+  struct st_tcp_server_rm{
+    char path[PATH_MAX];
+  };
+
   struct st_tcp_server_rename{
     char old_url[PATH_MAX];
     char new_url[PATH_MAX];
-  };
-
-  struct st_tcp_server_rm{
-    char path[PATH_MAX];
   };
 
   struct st_tcp_server_getattr{ 
@@ -158,20 +132,20 @@
     char path[PATH_MAX];
   };
 
-  struct st_tcp_server_opendir{  //NEW
+  struct st_tcp_server_opendir{
     char path[PATH_MAX];
   };
 
-  struct st_tcp_server_readdir{  //NEW
+  struct st_tcp_server_readdir{
     DIR * dir;
   };
 
-  struct st_tcp_server_direntry{  //NEW
+  struct st_tcp_server_direntry{
     int end; //If end = 1 exist entry; 0 not exist
     struct dirent ret;
   };
 
-  struct st_tcp_server_closedir{  //NEW
+  struct st_tcp_server_closedir{
     DIR * dir;
   };
 
@@ -184,14 +158,14 @@
   struct st_tcp_server_flush{
     char storage_path[PATH_MAX];
     char virtual_path[PATH_MAX];
-    int block_size;
+    int  block_size;
     char opt;
   };
 
   struct st_tcp_server_preload{
     char storage_path[PATH_MAX];
     char virtual_path[PATH_MAX];
-    int block_size;
+    int  block_size;
     char opt;
   };
 
@@ -200,7 +174,7 @@
   struct st_tcp_server_end{
     char status;
   };
-
+  
 
 
   struct st_tcp_server_msg
@@ -213,12 +187,12 @@
       struct st_tcp_server_close    op_close;
       struct st_tcp_server_read     op_read;
       struct st_tcp_server_write    op_write;
-      struct st_tcp_server_rm       op_rm;
-      struct st_tcp_server_rename   op_rename;
+      struct st_tcp_server_rm       op_rm;    
       struct st_tcp_server_mkdir    op_mkdir;
       struct st_tcp_server_opendir  op_opendir;
       struct st_tcp_server_readdir  op_readdir;
       struct st_tcp_server_closedir op_closedir;
+      struct st_tcp_server_rename   op_rename;
       struct st_tcp_server_rmdir    op_rmdir;
       struct st_tcp_server_getattr  op_getattr;
       struct st_tcp_server_setattr  op_setattr;
@@ -229,15 +203,6 @@
     } u_st_tcp_server_msg ;
   };
 
-  
-
-
-  /*
-   *  API
-   */
-
-  char *tcp_server_op2string    ( int op_code ) ;
-  int   tcp_server_do_operation ( struct st_th *th, int * the_end );
 
 #endif
 

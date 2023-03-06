@@ -6,8 +6,8 @@
     extern "C" {
  #endif
 
-enum nfi_tcp_server_err
-{
+
+enum nfi_tcp_server_err{
 	TCP_SERVERERR_PARAM = 0,
 	TCP_SERVERERR_MEMORY = 1,
 	TCP_SERVERERR_URL = 2,
@@ -25,6 +25,7 @@ enum nfi_tcp_server_err
 	TCP_SERVERERR_STATFS = 14,
 	TCP_SERVERERR_NOTDIR = 15,
 };
+
 
 void tcp_server_err(int err);
 

@@ -1,26 +1,36 @@
+
+  /*
+   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *
+   *  This file is part of Expand.
+   *
+   *  Expand is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  Expand is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */
+
+
 #ifndef _TCP_SERVER_CONF_H_
 #define _TCP_SERVER_CONF_H_
 
-#ifndef KB
-	#define KB (1024)
-#endif
+    #include "all_system.h"
 
-#ifndef MB
-	#define MB (KB*KB)
-#endif
+/* Support for files of > 4GB */
+#define _LARGEFILE64_ 1
 
-#ifndef GB
-	#define GB (MB*MB)
-#endif
-
-#ifndef TRUE
-	#define TRUE 1
-#endif
-#ifndef FALSE
-	#define FALSE 0
-#endif
-
+/* MAX_BUFFER_SIZE */
 #ifndef MAX_BUFFER_SIZE
+//	#define MAX_BUFFER_SIZE (64*KB)
 	#define MAX_BUFFER_SIZE (1*MB)
 #endif
 
@@ -45,24 +55,5 @@
 	#define TCP_SERVER_PORT_DEFAULT	9999
 #endif
 
-#ifndef TCP_SERVER_IOSIZE_DEFAULT
-	#define TCP_SERVER_IOSIZE_DEFAULT	(MB)
-#endif
-
-#ifndef TCP_SERVER_FLUSH_EXE
-	#define TCP_SERVER_FLUSH_EXE "xpn2d_lock.exe" //params: virtual_path , storage_path, local_path
-#endif
-
-#ifndef TCP_SERVER_PRELOAD_EXE
-	#define TCP_SERVER_PRELOAD_EXE "d2xpn_lock.exe" //params: virtual_path , storage_path, local_path
-#endif
-
-
-
-/* GLOBAL VARIABLES */
-extern char *TCP_SERVER_ALIAS_NAME_STRING;
-extern char *TCP_SERVER_FILE_STRING;
-extern char *TCP_SERVER_DIRBASE_STRING;
-extern int   TCP_SERVER_IOSIZE_INT;
 
 #endif

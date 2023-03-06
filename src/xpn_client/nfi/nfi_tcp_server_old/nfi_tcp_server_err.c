@@ -2,7 +2,7 @@
 
 extern int errno;
 
-// TODO: this interface must be changed
+/* this interface must be changed */
 void tcp_server_err(int err)
 {
 	switch(err)
@@ -35,5 +35,5 @@ void tcp_server_err(int err)
 			errno = -1;
 			break;
 	}
-}
+};
 

@@ -20,28 +20,22 @@
    */
 
 
-#ifndef _TCP_SERVER_D2XPN_H_
-#define _TCP_SERVER_D2XPN_H_
+#ifndef _NS_TCP_H_
+#define _NS_TCP_H_
 
-   #include <sys/param.h>
-   #include <stdio.h>
-   #include <sys/file.h>
-   #include <sys/fcntl.h>
-   #include <unistd.h>
-   #include <sys/time.h>
-   #include <sys/wait.h>
-   #include <sys/errno.h>
 
-   #include "all_system.h"
-   #include "base/utils.h"
-   #include "tcp_server_params.h"
-   #include "tcp_server_ops.h"
+      #include "all_system.h"
+      #include "base/utils.h"
 
-   #include "xpn.h"
 
-   #define PRELOAD_SYNC  0
-   #define PRELOAD_ASYNC 1
+      /*
+       *  API
+       */
 
-   int tcp_server_d2xpn ( tcp_server_param_st *params, char *origen, char *destino ) ;
+      void tcp_server_readFile  (void) ;
+      void tcp_server_translate (char * server, char * newserver, int * port) ;
+      int tcp_server_updateFile (char * name, char * file, int port) ;
+
 
 #endif
+
