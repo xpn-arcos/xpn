@@ -24,6 +24,10 @@
 
     #include "filesystem.h"
 
+  /* ... Varibles ........................................... */
+
+    //pthread_attr_t filesystem_attr;
+
 
   /* ... Functions / Funciones ......................................... */
 
@@ -68,10 +72,10 @@
       long unsigned i=0;
       long j=0, ant=-1, pos=-1;
       int cont=-1;
-      char new_path[MAXPATHLEN];
+      char new_path[PATH_MAX];
 
       if (path == NULL) {
-          return 0;
+        return 0;
       }
 
       strcpy(new_path, path);
@@ -104,6 +108,23 @@
       return strlen(s);
      }
 
+
+    /*
+     * API
+     */
+
+    /*int  filesystem_init ( void )
+    {
+      pthread_attr_init(&filesystem_attr);
+      int ret = pthread_attr_setdetachstate(&filesystem_attr, PTHREAD_CREATE_DETACHED);
+      if (ret !=0 ) {
+        //perror("pthread_attr_setdetachstate: ");
+        return ret;
+      }
+
+      return 0;
+    }*/
+
     void *filesystem_async_close (void *arg)
     {
       // Try to close file
@@ -116,10 +137,17 @@
       pthread_exit(NULL);
     }
 
+    /*int  filesystem_destroy ( void )
+    {
+      int ret = pthread_attr_destroy(&filesystem_attr);
+      if (ret !=0 ) {
+        //perror("pthread_attr_destroy: ");
+        return ret;
+      }
 
-    /*
-     * API
-     */
+      return 0;
+    }*/
+
 
     int  filesystem_creat ( char *pathname, mode_t mode )
     {
@@ -214,16 +242,21 @@
           ret = pthread_create(&thid, NULL, filesystem_async_close, (void *) (long) fd);
           ret = pthread_detach(thid);
 
-          if (ret > -1) {                     
-              return ret ;
-          }  
-         #endif
+          if (ret < 0) {
+            ret = real_posix_close(fd) ;
+            if (ret < 0) {
+              debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
+              //perror("close: ") ;
+            }
+          }
 
+         #else
            ret = real_posix_close(fd) ;
            if (ret < 0) {
                debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret) ;
                //perror("close: ") ;
            }
+         #endif
 
          DEBUG_END() ;
 
@@ -328,7 +361,7 @@
      int  filesystem_mkpath ( char *pathname )
      {
      int ret ;
-         char dir[MAXPATHLEN] ;
+         char dir[PATH_MAX] ;
 
          DEBUG_BEGIN() ;
 
@@ -544,4 +577,3 @@
 
 
   /* ................................................................... */
-

@@ -31,8 +31,9 @@
     *  Datatype
     */
 
-   struct {
+   typedef struct {
 
+        // number of active threads (launch + destroy)
         int             busy_worker;
         pthread_mutex_t m_worker;
         pthread_cond_t  c_worker;
@@ -46,9 +47,11 @@
     *  API
     */
 
-   int   worker_ondemand_init      ( worker_ondemand_t *w ) ;
-   int   worker_ondemand_launch    ( worker_ondemand_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) ) ;
-   void  workers_ondemand_destroy  ( worker_ondemand_t *w ) ;
+   int   worker_ondemand_init     ( worker_ondemand_t *w ) ;
+   void  workers_ondemand_destroy ( worker_ondemand_t *w ) ;
+
+   int   worker_ondemand_launch   ( worker_ondemand_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) ) ;
+   int   worker_ondemand_wait     ( struct st_th *th_arg ) ;
 
 
 #endif

@@ -22,85 +22,149 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include "workers.h"
+  #include "workers.h"
 
 
   /* ... Functions / Funciones ......................................... */
 
 
-     int workers_init ( worker_t *w, int thread_mode )
-     {
-       if (NULL == w) {
-           debug_error("[MAIN] worker_init with NULL worker_t\n");
-	   return -1 ;
-       }
+  int workers_init ( worker_t *w, int thread_mode )
+  {
+    // check arguments...
+    if (NULL == w) {
+      debug_error("[WORKER] worker_init with NULL worker_t\n");
+      return -1 ;
+    }
 
-       w->thread_mode = thread_mode ;
+    // initialize...
+    w->thread_mode = thread_mode ;
 
-       switch (w->thread_mode)
-       {
-           case TH_OP:
-                debug_info("[MAIN] worker_ondemand_init\n");
-                worker_ondemand_init(&(w->w1)) ;
-                break ;
+    switch (w->thread_mode)
+    {
+      case TH_OP:
+        debug_info("[WORKER] worker_ondemand_init\n") ;
+        worker_ondemand_init(&(w->w1)) ;
+        break ;
 
-           case TH_POOL:
-                debug_info("[MAIN] worker_pool_init\n");
-                worker_pool_init(&(w->w2));
-                break ;
+      case TH_POOL:
+        debug_info("[WORKER] worker_pool_init\n") ;
+        worker_pool_init(&(w->w2));
+        break ;
 
-           default:
-                mfs_print(DBG_INFO, "[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
-                return -1 ;
-                break ;
-       }
+      case TH_NOT:
+        debug_info("[WORKER] worker without threads\n") ;
+        break ;
 
-         return 1;
-     }
+      default:
+        debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
+        return -1 ;
+        break ;
+    }
 
-     int workers_launch ( worker_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
-     {
-       switch (w->thread_mode)
-       {
-           case TH_OP:
-                debug_info("[MAIN] worker_ondemand_launch (ID=%d)\n", rank_client_id) ;
-                worker_ondemand_launch(&(w->w1), th_arg, worker_function ) ;
-                break ;
+    return 1;
+  }
 
-           case TH_POOL:
-                debug_info("[MAIN] worker_pool_enqueue (ID=%d)\n", rank_client_id);
-                worker_pool_enqueue(   &(w->w2), th_arg, worker_function ); // Enqueue the operation on the buffer
-                break ;
 
-           default:
-                mfs_print(DBG_INFO, "[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
-                return -1 ;
-                break ;
-       }
+  int workers_launch ( worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) )
+  {
+    // check arguments...
+    if (NULL == w) {
+      debug_error("[WORKER] worker_launch with NULL worker_t\n");
+      return -1 ;
+    }
 
-      return 1;
-     }
+    // lauch worker...
+    switch (w->thread_mode)
+    {
+      case TH_OP:
+        debug_info("[WORKER] worker_ondemand_launch\n") ;
+        worker_ondemand_launch(&(w->w1), th_arg, worker_function ) ;
+        break ;
 
-     void workers_destroy ( worker_t *w )
-     {
-       switch (w->thread_mode)
-       {
-           case TH_OP:
-                debug_info("[WORKERS] workers_ondemand_destroy\n");
-                workers_ondemand_destroy(&(w->w1)) ;
-                break ;
+     case TH_POOL:
+        debug_info("[WORKER] worker_pool_enqueue\n");
+        worker_pool_enqueue(   &(w->w2), th_arg, worker_function ); // Enqueue the operation on the buffer
+        break ;
 
-           case TH_POOL:
-                debug_info("[WORKERS] worker_pool_destroy\n");
-                worker_pool_destroy(&(w->w2)); // Destroy worker pool
-                break ;
+     case TH_NOT:
+        debug_info("[WORKER] worker without threads\n") ;
+        worker_function(*th_arg);
+        break ;
 
-           default:
-                mfs_print(DBG_INFO, "[WORKER]: ERROR on thread_mode(%d).\n", thread_mode) ;
-                return -1 ;
-                break ;
-       }
-     }
+     default:
+        debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
+        return -1 ;
+        break ;
+    }
+
+    return 1;
+  }
+
+
+  int workers_wait ( worker_t *w, struct st_th *th_arg )
+  {
+    // check arguments...
+    if (NULL == w) {
+      debug_error("[WORKER] worker_launch_nfi with NULL worker_t\n");
+      return -1 ;
+    }
+
+    switch (w->thread_mode)
+    {
+      case TH_OP:
+        debug_info("[WORKER] worker_ondemand_wait\n") ;
+        worker_ondemand_wait(th_arg) ;
+        break ;
+
+      case TH_POOL:
+        debug_info("[WORKER] worker_pool_wait\n");
+        worker_pool_wait(th_arg) ;
+        break ;
+
+      case TH_NOT:
+        debug_info("[WORKER] worker_wait without threads\n");
+        break ;
+
+      default:
+        debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
+        return -1 ;
+        break ;
+    }
+
+    return 1;
+  }
+
+
+  void workers_destroy ( worker_t *w )
+  {
+    // check arguments...
+    if (NULL == w) {
+      debug_error("[WORKER] worker_destroy with NULL worker_t\n");
+      return ;
+    }
+
+    // destroy...
+    switch (w->thread_mode)
+    {
+      case TH_OP:
+        debug_info("[WORKER] workers_ondemand_destroy\n");
+        workers_ondemand_destroy(&(w->w1)) ;
+        break ;
+
+      case TH_POOL:
+        debug_info("[WORKER] worker_pool_destroy\n");
+        worker_pool_destroy(&(w->w2)); // Destroy worker pool
+        break ;
+
+      case TH_NOT:
+        debug_info("[WORKER] worker without threads\n") ;
+        break ;
+
+      default:
+        debug_info("[WORKER]: ERROR on thread_mode(%d).\n", w->thread_mode) ;
+        break ;
+    }
+  }
 
 
   /* ................................................................... */

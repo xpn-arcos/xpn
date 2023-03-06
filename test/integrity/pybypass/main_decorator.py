@@ -18,8 +18,6 @@
 #   along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import os
-import io
 import ctypes
 import ctypes.util
 
@@ -85,11 +83,11 @@ buff_w = ''.join(buff).encode('utf-8')
 fname = "/tmp/expand/P1/demo.txt"
 #fname = "/tmp/demo.txt"
 
-f = open(fname, "w")
+f = open(fname, "w", encoding="utf-8")
 f.write(buff_w)
 f.close()
 
-f = open(fname, "r")
+f = open(fname, "r", encoding="utf-8")
 buff_r = f.read()
 f.close()
 

@@ -259,6 +259,10 @@ int tcp_server_comm_init(char * name, int port, char * file) {
   mosquitto_subscribe_callback_set(mosqtcpserver, on_subscribe);
   mosquitto_message_callback_set(mosqtcpserver, on_message);
 
+#ifndef MOSQ_OPT_TCP_NODELAY
+  #define MOSQ_OPT_TCP_NODELAY 1
+#endif
+
   mosquitto_int_option(mosqtcpserver, MOSQ_OPT_TCP_NODELAY, 1);
 
   int rc = mosquitto_connect(mosqtcpserver, "localhost", 1883, 60);

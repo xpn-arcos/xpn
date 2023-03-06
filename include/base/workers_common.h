@@ -24,15 +24,16 @@
 #define _WORKERS_COMMON_H_
 
   #include "all_system.h"
+  #include "base/debug_msg.h"
 
 
   /*
    * Constants
    */
 
-  #define MAX_THREADS 2048
-  #define MAX_OPERATIONS 1024
-  #define STACK_SIZE (256*KB)
+  #define MAX_THREADS     2048
+  #define MAX_OPERATIONS  1024
+  #define STACK_SIZE     (256*KB)
 
 
   /*
@@ -41,14 +42,29 @@
 
   struct st_th
   {
-      void *params ;
-      long  sd ;
+      void  *params ;
       void (*function)(struct st_th) ;
 
-      int id ;
-      int type_op ;
-      int rank_client_id ;
+      // server stuff
+      int   id ;
+      int   type_op ;
+      int   rank_client_id ;
+      long  sd ;
+
+      // w: worker_ondemand/worker_pool as void *
+      void *w ;
+      // v: original st_th as void *
+      void *v ;
+
+      // client stuff
+      pthread_t       th_worker;
+      pthread_mutex_t m_wait;
+      pthread_cond_t  c_wait;
+      int             r_wait;
+      int             wait4me; // (wait4me==1) ? launch + wait : launch
+
   };
+
 
 #endif
 

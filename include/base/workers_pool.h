@@ -26,19 +26,21 @@
    #include "all_system.h"
    #include "workers_common.h"
 
-   //Thread count multiplier
+   // Thread count multiplier
    #define POOL_OVERSUSCRIPTION 2
+   // End pool
+   #define TH_FINALIZE 200
 
 
    /*
     * Datatype
     */
 
-   struct {
+   typedef struct {
 
       pthread_mutex_t m_pool ;
-      pthread_cond_t c_pool_no_full ;
-      pthread_cond_t c_poll_no_empty ;
+      pthread_cond_t  c_pool_no_full ;
+      pthread_cond_t  c_poll_no_empty ;
       pthread_mutex_t m_pool_end ;
 
       int POOL_MAX_THREADS ;
@@ -49,7 +51,7 @@
       int deq_pos ;
       int enq_pos ;
       int pool_end ;
-
+      
    } worker_pool_t ;
 
 
@@ -59,8 +61,11 @@
 
    int          worker_pool_init    ( worker_pool_t *w ) ;
    void         worker_pool_destroy ( worker_pool_t *w ) ;
-   void         worker_pool_enqueue ( worker_pool_t *w, struct st_th th_arg, void (*worker_function)(struct st_th)) ;
+
+   void         worker_pool_enqueue ( worker_pool_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th)) ;
    struct st_th worker_pool_dequeue ( worker_pool_t *w ) ;
+
+   int          worker_pool_wait    ( struct st_th *th_arg ) ;
 
 
 #endif

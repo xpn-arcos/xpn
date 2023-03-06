@@ -27,177 +27,224 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  /*
-   *  Internal
-   */
+     /*
+      *  Internal
+      */
 
-  void worker_pool_function ( void *arg )
-  {
-    int is_true = 1;
-    struct st_th th;
-    worker_pool_t *w = (worker_pool_t *) arg ;
-
-    while (is_true)
-    {
-        // Dequeue operation
-        th = worker_pool_dequeue(w) ;
-        th.function(th) ;
-    }
-
-    pthread_exit(0);
-  }
-
-
-  /*
-   *  API
-   */
-
-  int worker_pool_init ( worker_pool_t *w )
-  {
-    DEBUG_BEGIN() ;
-
-    // initialize variables...
-    pthread_mutex_init(&(w->m_pool),          NULL) ;
-    pthread_cond_init (&(w->c_pool_no_full),  NULL) ;
-    pthread_cond_init (&(w->c_poll_no_empty), NULL) ;
-    pthread_mutex_init(&(w->m_pool_end),      NULL) ;
-
-    // malloc threads...
-    w->POOL_MAX_THREADS = POOL_OVERSUSCRIPTION * sysconf(_SC_NPROCESSORS_ONLN) ;
-    w->thid = (pthread_t *)malloc(w->POOL_MAX_THREADS * sizeof(pthread_t)) ;
-    if (NULL == w->thid) {
-        perror("malloc: ");
-      return -1;
-    }
-
-    // starting threads...
-    for (int i = 0; i < w->POOL_MAX_THREADS; i++)
-    {
-      debug_info("[WORKERS] pthread_create: create_thread worker_pool_init\n") ;
-      if (pthread_create(&(w->thid[i]), NULL, (void *(*)(void *))(worker_pool_function), (void *)w) !=0)
+      void *worker_pool_function ( void *arg )
       {
-        perror("Error creating thread pool\n");
-        return -1;
+        int            is_true ;
+        worker_pool_t *w ;
+        struct st_th  th ;
+        struct st_th *th_shadow ;
+
+        w = (worker_pool_t *)arg ;
+        is_true = 1 ;
+        while (is_true)
+        {
+          // Dequeue operation
+          th = worker_pool_dequeue(w) ;
+
+          // do function code...
+          th.function(th) ;
+
+          // if (th.wait4me) -> wakeup worker_pool_wait(...)
+          th_shadow = (struct st_th *)(th.v) ;
+          if ( (NULL != th_shadow) && (TRUE == th.wait4me) )
+          {
+             pthread_mutex_lock(&(th_shadow->m_wait)) ;
+             th_shadow->r_wait = FALSE ;
+             pthread_cond_signal(&(th_shadow->c_wait)) ;
+             pthread_mutex_unlock(&(th_shadow->m_wait)) ;
+          }
+        }
+
+        pthread_exit(0);
+        return NULL ;
       }
-    }
 
-    DEBUG_END() ;
 
-    return 0;
-  }
+     /*
+      *  API
+      */
 
-  void worker_pool_enqueue ( worker_pool_t *w, struct st_th th_arg, void (*worker_function)(struct st_th) )
-  {
-    struct st_th st_worker;
+      int worker_pool_init ( worker_pool_t *w )
+      {
+        DEBUG_BEGIN() ;
 
-    DEBUG_BEGIN() ;
+        // initialize variables...
+        pthread_mutex_init(&(w->m_pool),          NULL) ;
+        pthread_cond_init (&(w->c_pool_no_full),  NULL) ;
+        pthread_cond_init (&(w->c_poll_no_empty), NULL) ;
+        pthread_mutex_init(&(w->m_pool_end),      NULL) ;
 
-    debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) lock\n", rank_client_id);
-    pthread_mutex_lock(&(w->m_pool));
-    while (w->n_operation == MAX_OPERATIONS){
-      debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) wait c_pool_no_full\n", rank_client_id);
-      pthread_cond_wait(&(w->c_pool_no_full), &(w->m_pool));
-    }
+        // malloc threads...
+        w->POOL_MAX_THREADS = POOL_OVERSUSCRIPTION * sysconf(_SC_NPROCESSORS_ONLN) ;
+        w->thid = (pthread_t *)malloc(w->POOL_MAX_THREADS * sizeof(pthread_t)) ;
+        if (NULL == w->thid) {
+            perror("malloc: ");
+            return -1;
+        }
 
-    debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) copy arguments\n", rank_client_id);
+        // starting threads...
+        for (int i = 0; i < w->POOL_MAX_THREADS; i++)
+        {
+          debug_info("[WORKERS] pthread_create: create_thread worker_pool_init\n") ;
+          if (pthread_create(&(w->thid[i]), NULL, (void *(*)(void *))(worker_pool_function), (void *)w) !=0)
+          {
+            perror("Error creating thread pool\n");
+            return -1;
+          }
+        }
 
-    st_worker          = th_arg ;
-    st_worker.id       = th_cont++;
-    st_worker.function = worker_function ;
+        DEBUG_END() ;
 
-    debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", rank_client_id);
-    w->operations_buffer[w->enq_pos] = st_worker;
-    w->enq_pos = (w->enq_pos + 1) % MAX_OPERATIONS;
-    w->n_operation++;
+        return 0;
+      }
 
-    debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) signal c_poll_no_empty\n", rank_client_id);
-    pthread_cond_signal(&(w->c_poll_no_empty));
-    debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) unlock\n", rank_client_id);
-    pthread_mutex_unlock(&(w->m_pool));
 
-    DEBUG_END() ;
-  }
+      void worker_pool_enqueue ( worker_pool_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) )
+      {
+        static int th_cont = 0;
 
-  struct st_th worker_pool_dequeue ( worker_pool_t *w )
-  {
-    DEBUG_BEGIN() ;
+        DEBUG_BEGIN() ;
 
-    struct st_th th;
+        // wayt no_full
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) lock\n", rank_client_id);
+        pthread_mutex_lock(&(w->m_pool));
+        while (w->n_operation == MAX_OPERATIONS){
+          debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) wait c_pool_no_full\n", rank_client_id);
+          pthread_cond_wait(&(w->c_pool_no_full), &(w->m_pool));
+        }
 
-    debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) lock\n", th.id);
-    pthread_mutex_lock(&(w->m_pool));
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) copy arguments\n", rank_client_id);
 
-    while (w->n_operation == 0) {
-      debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) wait c_poll_no_empty\n", th.id);
-      pthread_cond_wait(&(w->c_poll_no_empty), &(w->m_pool));
-    }
+        // prepare arguments...
+        th_arg->id       = th_cont++ ;
+        th_arg->function = worker_function ;
+        th_arg->w        = w ;
+        th_arg->v        = (void *)th_arg ;
 
-    debug_info("[WORKERS] thread id = %ld\n", pthread_self());
+        // enqueue
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", rank_client_id);
+        w->operations_buffer[w->enq_pos] = *th_arg;
+        w->enq_pos = (w->enq_pos + 1) % MAX_OPERATIONS;
+        w->n_operation++;
 
-    debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) dequeue\n", th.id);
-    th = w->operations_buffer[w->deq_pos];
-    w->deq_pos = (w->deq_pos + 1) % MAX_OPERATIONS;
-    w->n_operation--;
+        // signal no_empty
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) signal c_poll_no_empty\n", rank_client_id);
+        pthread_cond_signal(&(w->c_poll_no_empty));
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) unlock\n", rank_client_id);
+        pthread_mutex_unlock(&(w->m_pool));
 
-    if ( w->pool_end == 1 || th.type_op == MPI_SERVER_FINALIZE ) {
-      debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) unlock end\n", th.id);
-      pthread_mutex_unlock(&(w->m_pool));
-      debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) exit\n", th.id);
-      pthread_exit(0);
-    }
+        DEBUG_END() ;
+      }
 
-    debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) signal c_pool_no_full\n", th.id);
-    pthread_cond_signal(&(w->c_pool_no_full));
 
-    debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) unlock\n", th.id);
-    pthread_mutex_unlock(&(w->m_pool));
+      struct st_th worker_pool_dequeue ( worker_pool_t *w )
+      {
+        struct st_th th;
 
-    DEBUG_END() ;
+        DEBUG_BEGIN() ;
 
-    return th;
-  }
+        debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) lock\n", th.id);
+        pthread_mutex_lock(&(w->m_pool));
 
-  void worker_pool_destroy ( worker_pool_t *w )
-  {
-    DEBUG_BEGIN() ;
+        while (w->n_operation == 0) {
+          debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) wait c_poll_no_empty\n", th.id);
+          pthread_cond_wait(&(w->c_poll_no_empty), &(w->m_pool));
+        }
 
-    // update pool_end...
-    debug_info("[WORKERS] client: worker_pool_destroy(...) lock\n");
-    pthread_mutex_lock(&(w->m_pool_end));
-    w->pool_end=1;
-    debug_info("[WORKERS] : worker_pool_destroy(...) unlock\n");
-    pthread_mutex_unlock(&(w->m_pool_end));
+        debug_info("[WORKERS] thread id = %ld\n", pthread_self());
 
-    for (int i = 0; i < w->POOL_MAX_THREADS; ++i)
-    {
-      worker_pool_enqueue ( NULL, (MPI_Comm)0, MPI_SERVER_FINALIZE, 0, NULL );
-    }
+        debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) dequeue\n", th.id);
+        th = w->operations_buffer[w->deq_pos];
+        w->deq_pos = (w->deq_pos + 1) % MAX_OPERATIONS;
+        w->n_operation--;
 
-    debug_info("[WORKERS] : worker_pool_destroy(...) lock\n");
-    pthread_mutex_lock(&(w->m_pool));
-    debug_info("[WORKERS] : worker_pool_destroy(...) broadcast\n");
-    pthread_cond_broadcast(&(w->c_poll_no_empty));
-    debug_info("[WORKERS] : worker_pool_destroy(...) unlock\n");
-    pthread_mutex_unlock(&(w->m_pool));
+        if ( w->pool_end == 1 || th.type_op == TH_FINALIZE ) {
+          debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) unlock end\n", th.id);
+          pthread_mutex_unlock(&(w->m_pool));
+          debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) exit\n", th.id);
+          pthread_exit(0);
+        }
 
-    for (int i=0; i<w->POOL_MAX_THREADS; i++)
-    {
-      debug_info("[WORKERS] : worker_pool_destroy(...) join\n");
-      pthread_join(w->thid[i],NULL);
-    }
+        debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) signal c_pool_no_full\n", th.id);
+        pthread_cond_signal(&(w->c_pool_no_full));
 
-    // free threads...
-    free(w->thid) ;
-    w->thid = NULL ;
+        debug_info("[WORKERS] client(%d): worker_pool_dequeue(...) unlock\n", th.id);
+        pthread_mutex_unlock(&(w->m_pool));
 
-    debug_info("[WORKERS] : worker_pool_destroy(...) destroy\n");
-    pthread_mutex_destroy(&(w->m_pool));
-    pthread_cond_destroy (&(w->c_pool_no_full));
-    pthread_cond_destroy (&(w->c_poll_no_empty));
-    pthread_mutex_destroy(&(w->m_pool_end));
+        DEBUG_END() ;
 
-    DEBUG_END() ;
-  }
+        return th;
+      }
+
+
+      int worker_pool_wait ( struct st_th *th_arg )
+      {
+        DEBUG_BEGIN() ;
+
+        pthread_mutex_lock(&(th_arg->m_wait));
+        while (th_arg->r_wait == TRUE) {
+          pthread_cond_wait(&(th_arg->c_wait), &(th_arg->m_wait));
+        }
+
+        th_arg->r_wait = TRUE;
+        pthread_mutex_unlock(&(th_arg->m_wait));
+
+        DEBUG_END() ;
+
+        return 0;
+      }
+
+
+      void worker_pool_destroy ( worker_pool_t *w )
+      {
+        struct st_th th_arg ;
+
+        DEBUG_BEGIN() ;
+
+        // update pool_end...
+        debug_info("[WORKERS] client: worker_pool_destroy(...) lock\n");
+        pthread_mutex_lock(&(w->m_pool_end));
+        w->pool_end = 1;
+        debug_info("[WORKERS] : worker_pool_destroy(...) unlock\n");
+        pthread_mutex_unlock(&(w->m_pool_end));
+
+        // prepare arguments...
+        memset(&th_arg, 0, sizeof(struct st_th)) ;
+        th_arg.type_op = TH_FINALIZE ;
+
+        for (int i = 0; i < w->POOL_MAX_THREADS; ++i) {
+          worker_pool_enqueue(w, &th_arg, NULL) ;
+        }
+
+        debug_info("[WORKERS] : worker_pool_destroy(...) lock\n");
+        pthread_mutex_lock(&(w->m_pool));
+        debug_info("[WORKERS] : worker_pool_destroy(...) broadcast\n");
+        pthread_cond_broadcast(&(w->c_poll_no_empty));
+        debug_info("[WORKERS] : worker_pool_destroy(...) unlock\n");
+        pthread_mutex_unlock(&(w->m_pool));
+
+        for (int i=0; i<w->POOL_MAX_THREADS; i++)
+        {
+          debug_info("[WORKERS] : worker_pool_destroy(...) join\n");
+          pthread_join(w->thid[i],NULL);
+        }
+
+        // free threads...
+        free(w->thid) ;
+        w->thid = NULL ;
+
+        debug_info("[WORKERS] : worker_pool_destroy(...) destroy\n");
+        pthread_mutex_destroy(&(w->m_pool));
+        pthread_cond_destroy (&(w->c_pool_no_full));
+        pthread_cond_destroy (&(w->c_poll_no_empty));
+        pthread_mutex_destroy(&(w->m_pool_end));
+
+        DEBUG_END() ;
+      }
 
 
   /* ................................................................... */
