@@ -67,7 +67,7 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
 
   xpn_file_table[i]->id           = i;
   xpn_file_table[i]->type         = mdata->type;
-  strcpy(xpn_file_table[i]->path, path);
+  memccpy(xpn_file_table[i]->path, path, 0, PATH_MAX-1);
   xpn_file_table[i]->mode         = mode;
   xpn_file_table[i]->links        = 1;
   xpn_file_table[i]->part         = XpnSearchPart(pd);
@@ -724,8 +724,7 @@ int xpn_simple_open(const char *path, int flags, mode_t mode)
   struct xpn_metadata *mdata;
   int md;
   int res = -1;
-  struct stat sb;
-
+  
   XPN_DEBUG_BEGIN_ARGS1(path) ;
 
   if ((path == NULL)||(strlen(path)>PATH_MAX))
@@ -734,9 +733,10 @@ int xpn_simple_open(const char *path, int flags, mode_t mode)
     return res;
   }
 
-  xpn_simple_stat(path, &sb);
   if ((flags & O_DIRECTORY) > 0)
   {
+    struct stat sb;
+    xpn_simple_stat(path, &sb);
     if ((sb.st_mode & S_IFMT) != S_IFDIR)
     {
       errno = ENOTDIR;
@@ -777,9 +777,9 @@ int xpn_simple_open(const char *path, int flags, mode_t mode)
   md = (flags & O_RDWR)|(flags & O_RDONLY)|(flags & O_WRONLY);
 
   res = xpn_internal_open(path, vfh, mdata, md);
-  if (res >= 0) {
+  /*if (res >= 0) {
       xpn_file_table[res]->st = sb ;
-  }
+  }*/
 
   xpn_err(XPN_OK);
 

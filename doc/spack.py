@@ -12,13 +12,12 @@ class Xpn(AutotoolsPackage):
 
     # Package's homepage here.
     homepage = "https://github.com/xpn-arcos/xpn/"
-   #url = "https://github.com/xpn-arcos/xpn/archive/refs/tags/v2.1.0.tar.gz"
-    url = "https://github.com/acaldero/xpn/archive/refs/tags/v2.1.tar.gz"
+    url = "https://github.com/dcamarmas/xpn/archive/refs/tags/v2.1.0.tar.gz"
 
     # List of GitHub accounts to notify when the package is updated.
-    maintainers = ["dcamarmas", "acaldero", "fgcarbal"]
+    maintainers = ["xpn-arcos", "dcamarmas", "acaldero", "fgcarbal"]
 
-    version("2.1", sha256="25a15aa2b2a7bb57f457f171500d3fa1b72752e02e7daa420a8f8033518023f5")
+    version("2.1.0", sha256="a44de0e8b75de694c959cbc84d1593a07aa7cd343f7172cc39ddfd6526ed5e1d")
 
     # Variants
     variant("mpich", default=False, description="Use MPICH")
@@ -30,16 +29,10 @@ class Xpn(AutotoolsPackage):
     depends_on('automake', type='build', when='@master')
     depends_on('libtool',  type='build', when='@master')
 
-
     def install(self, spec, prefix):
-        ## ./configure --prefix=$INSTALL_PATH/xpn --enable-tcp_server --enable-mpi_server="$MPICC_PATH"
         configure("--prefix=" + prefix,
                   "--enable-tcp_server",
-                  "--enable-mpi_server")
-
-        ## make -j
+                  "--enable-mpi_server=" + spec['mpich'].prefix + "/bin/mpicc")
         make()
-
-        # make install
         make("install")
 
