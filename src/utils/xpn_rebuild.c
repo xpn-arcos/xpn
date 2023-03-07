@@ -39,9 +39,7 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  //
-  // Initialize MPI
-  //
+
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -55,9 +53,7 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-  // if (Rank == 0)  {
-  //     1- hace el ls para listar el contenido de la partición
-  // }
+
   if (rank == 0)
   {
     // ls -d... -> https://stackoverflow.com/questions/246215/how-can-i-generate-a-list-of-files-with-their-absolute-path-in-linux
@@ -72,9 +68,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  //
-  // Barrier (for get file/directory listing)
-  //
+
   MPI_Barrier(MPI_COMM_WORLD);
 
   //
@@ -83,16 +77,12 @@ int main(int argc, char *argv[])
   is_end = 0 ;
   while( ! is_end )
   {
-    // if (Rank == 0) {
-    //   leer línea
-    // }
     if (rank == 0) 
     {
       ret = fscanf(file, "%s\n", entry);
       //printf("RET: %d\n", ret);
     }
 
-    // mpi_bcast(ret, ...)
     // if (EOF) -> break
     MPI_Bcast(&ret, 1, MPI_INT, 0, MPI_COMM_WORLD);
     if (EOF == ret)
@@ -106,9 +96,6 @@ int main(int argc, char *argv[])
     //Generate source path
     sprintf( src_path, "%s/%s", argv[1], entry );
 
-    // if (Rank == 0) {
-    //    hacer stat línea
-    // }
     if (rank == 0) 
     {
       //printf("ENTRY: %s\n", src_path);
@@ -222,42 +209,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }
-
-
-
-
-
-
-
-/*
-
-   do
-   {
-       Bcast( stat.directoro | stat.fichero + path )
-
-       if (stat.directorio)
-       {
-          mkdir(path)
-       }
-       else if (stat.fichero)
-       {
-          if (rank == 0) 
-          {
-              xpn_read(BUFFER, número_servidores_antiguos * nümero_servidores_nuevos * sizeof(bloque) )
-          }
-
-          bcast(BUFFER)
-
-          bucle dependiendo cada uno de su Rank
-                 ...
-                 lseek + write(1 bloque)
-                 ...
-
-       }
-
-       mpi_barrier();
-
-   } while ( 1 )
-
-
- */
