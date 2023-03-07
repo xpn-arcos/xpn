@@ -92,7 +92,8 @@ target_triplet = @target@
 bin_PROGRAMS = d2xpn$(EXEEXT) lsxpn$(EXEEXT) mkdirxpn$(EXEEXT) \
 	removexpn$(EXEEXT) rmdirxpn$(EXEEXT) statfsxpn$(EXEEXT) \
 	xpn2d$(EXEEXT) xpncat$(EXEEXT) xpncp$(EXEEXT) xpncp_m$(EXEEXT) \
-	xpncp_th$(EXEEXT) xpnrm$(EXEEXT) xpnwriter$(EXEEXT)
+	xpncp_th$(EXEEXT) xpnrm$(EXEEXT) xpnwriter$(EXEEXT) \
+	xpn_rebuild$(EXEEXT)
 subdir = src/utils
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -133,6 +134,10 @@ xpn2d_SOURCES = xpn2d.c
 xpn2d_OBJECTS = xpn2d.$(OBJEXT)
 xpn2d_LDADD = $(LDADD)
 xpn2d_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+xpn_rebuild_SOURCES = xpn_rebuild.c
+xpn_rebuild_OBJECTS = xpn_rebuild.$(OBJEXT)
+xpn_rebuild_LDADD = $(LDADD)
+xpn_rebuild_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
 xpncat_SOURCES = xpncat.c
 xpncat_OBJECTS = xpncat.$(OBJEXT)
 xpncat_LDADD = $(LDADD)
@@ -175,10 +180,10 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/d2xpn.Po ./$(DEPDIR)/lsxpn.Po \
 	./$(DEPDIR)/mkdirxpn.Po ./$(DEPDIR)/removexpn.Po \
 	./$(DEPDIR)/rmdirxpn.Po ./$(DEPDIR)/statfsxpn.Po \
-	./$(DEPDIR)/xpn2d.Po ./$(DEPDIR)/xpncat.Po \
-	./$(DEPDIR)/xpncp.Po ./$(DEPDIR)/xpncp_m.Po \
-	./$(DEPDIR)/xpncp_th.Po ./$(DEPDIR)/xpnrm.Po \
-	./$(DEPDIR)/xpnwriter.Po
+	./$(DEPDIR)/xpn2d.Po ./$(DEPDIR)/xpn_rebuild.Po \
+	./$(DEPDIR)/xpncat.Po ./$(DEPDIR)/xpncp.Po \
+	./$(DEPDIR)/xpncp_m.Po ./$(DEPDIR)/xpncp_th.Po \
+	./$(DEPDIR)/xpnrm.Po ./$(DEPDIR)/xpnwriter.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -193,11 +198,11 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = d2xpn.c lsxpn.c mkdirxpn.c removexpn.c rmdirxpn.c \
-	statfsxpn.c xpn2d.c xpncat.c xpncp.c xpncp_m.c xpncp_th.c \
-	xpnrm.c xpnwriter.c
+	statfsxpn.c xpn2d.c xpn_rebuild.c xpncat.c xpncp.c xpncp_m.c \
+	xpncp_th.c xpnrm.c xpnwriter.c
 DIST_SOURCES = d2xpn.c lsxpn.c mkdirxpn.c removexpn.c rmdirxpn.c \
-	statfsxpn.c xpn2d.c xpncat.c xpncp.c xpncp_m.c xpncp_th.c \
-	xpnrm.c xpnwriter.c
+	statfsxpn.c xpn2d.c xpn_rebuild.c xpncat.c xpncp.c xpncp_m.c \
+	xpncp_th.c xpnrm.c xpnwriter.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -447,6 +452,10 @@ xpn2d$(EXEEXT): $(xpn2d_OBJECTS) $(xpn2d_DEPENDENCIES) $(EXTRA_xpn2d_DEPENDENCIE
 	@rm -f xpn2d$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(xpn2d_OBJECTS) $(xpn2d_LDADD) $(LIBS)
 
+xpn_rebuild$(EXEEXT): $(xpn_rebuild_OBJECTS) $(xpn_rebuild_DEPENDENCIES) $(EXTRA_xpn_rebuild_DEPENDENCIES) 
+	@rm -f xpn_rebuild$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xpn_rebuild_OBJECTS) $(xpn_rebuild_LDADD) $(LIBS)
+
 xpncat$(EXEEXT): $(xpncat_OBJECTS) $(xpncat_DEPENDENCIES) $(EXTRA_xpncat_DEPENDENCIES) 
 	@rm -f xpncat$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(xpncat_OBJECTS) $(xpncat_LDADD) $(LIBS)
@@ -484,6 +493,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rmdirxpn.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statfsxpn.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn2d.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn_rebuild.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncat.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp_m.Po@am__quote@ # am--include-marker
@@ -647,6 +657,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/rmdirxpn.Po
 	-rm -f ./$(DEPDIR)/statfsxpn.Po
 	-rm -f ./$(DEPDIR)/xpn2d.Po
+	-rm -f ./$(DEPDIR)/xpn_rebuild.Po
 	-rm -f ./$(DEPDIR)/xpncat.Po
 	-rm -f ./$(DEPDIR)/xpncp.Po
 	-rm -f ./$(DEPDIR)/xpncp_m.Po
@@ -705,6 +716,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/rmdirxpn.Po
 	-rm -f ./$(DEPDIR)/statfsxpn.Po
 	-rm -f ./$(DEPDIR)/xpn2d.Po
+	-rm -f ./$(DEPDIR)/xpn_rebuild.Po
 	-rm -f ./$(DEPDIR)/xpncat.Po
 	-rm -f ./$(DEPDIR)/xpncp.Po
 	-rm -f ./$(DEPDIR)/xpncp_m.Po
