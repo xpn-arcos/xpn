@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 {   
   int  ret, rank, size, is_end, blocksize;
 
-  FILE *file;
+  FILE *file = NULL;
   char entry [PATH_MAX];
   struct stat stat_buf;
 
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
   {
     // ls -d... -> https://stackoverflow.com/questions/246215/how-can-i-generate-a-list-of-files-with-their-absolute-path-in-linux
     sprintf(command, "tree -fainc %s | head -n -2 | tail -n +2  | sed 's|%s||g' > /tmp/partition_content.txt ", argv[1], argv[1]);
-    system(command);
+    ret = system(command);
 
     file = fopen("/tmp/partition_content.txt", "r");
     if ( NULL == file )
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
       ret = mkdir(dest_path, 0755);
       if ( ret < 0 )
       {
-        perror("mkdir (%d): ", rank);
+        perror("mkdir: ");
       }
     }
     else if (S_ISREG(stat_buf.st_mode))
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
         fd_src = open(src_path, O_RDONLY);
         if ( NULL == file )
         {
-          perror("open (%d): ", rank);
+          perror("open: ");
         }
       }
 
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
       fd_dest = open(dest_path, O_CREAT | O_WRONLY | O_TRUNC, 0755);
       if ( fd_dest < 0 )
       {
-        perror("open (%d): ", rank);
+        perror("open: ");
       }
 
       ret = -1;
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
           ret2   = write(fd_dest, buf + offset, to_write);
           if ( ret2 < 0 )
           {
-            perror("write (%d): ", rank);
+            perror("write: ");
           }
           
           offset = offset + (size * blocksize);
