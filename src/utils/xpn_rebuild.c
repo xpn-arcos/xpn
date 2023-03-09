@@ -10,6 +10,7 @@
 #include "mpi.h"
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
+#define HEADER_SIZE (0)
 
 char command[4*1024];
 char src_path [PATH_MAX+5];
@@ -26,6 +27,8 @@ int main(int argc, char *argv[])
   int fd_src, fd_dest;
   char *buf ;
   int buf_len;
+  int offset_src ;
+  int cont, cont2 ;
   
   
   //
@@ -45,31 +48,23 @@ int main(int argc, char *argv[])
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
   blocksize = atoi(argv[3]) ;
-  buf_len = size * blocksize;
 
-  buf = (char *) malloc(buf_len) ;
+  buf = (char *) malloc(blocksize) ;
   if (NULL == buf) {
     perror("malloc: ");
     return -1;
   }
 
+  // ls -d... -> https://stackoverflow.com/questions/246215/how-can-i-generate-a-list-of-files-with-their-absolute-path-in-linux
+  sprintf(command, "tree -fainc %s | head -n -2 | tail -n +2  | sed 's|%s||g' > /tmp/partition_content.txt ", argv[1], argv[1]);
+  ret = system(command);
 
-  if (rank == 0)
+  file = fopen("/tmp/partition_content.txt", "r");
+  if ( NULL == file )
   {
-    // ls -d... -> https://stackoverflow.com/questions/246215/how-can-i-generate-a-list-of-files-with-their-absolute-path-in-linux
-    sprintf(command, "tree -fainc %s | head -n -2 | tail -n +2  | sed 's|%s||g' > /tmp/partition_content.txt ", argv[1], argv[1]);
-    ret = system(command);
-
-    file = fopen("/tmp/partition_content.txt", "r");
-    if ( NULL == file )
-    {
       perror("fopen: ");
       return -1;
-    }
   }
-
-
-  MPI_Barrier(MPI_COMM_WORLD);
 
   //
   // While entry in listing... do
@@ -77,46 +72,26 @@ int main(int argc, char *argv[])
   is_end = 0 ;
   while( ! is_end )
   {
-    if (rank == 0) 
-    {
-      ret = fscanf(file, "%s\n", entry);
-      //printf("RET: %d\n", ret);
-    }
-
-    // if (EOF) -> break
-    MPI_Bcast(&ret, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    ret = fscanf(file, "%s\n", entry);
     if (EOF == ret)
     {
       is_end = 1 ;
-      break;
+      continue;
     }
-
-    MPI_Bcast(entry, PATH_MAX, MPI_CHAR, 0, MPI_COMM_WORLD);
 
     //Generate source path
     sprintf( src_path, "%s/%s", argv[1], entry );
 
-    if (rank == 0) 
-    {
-      //printf("ENTRY: %s\n", src_path);
-      ret = stat(src_path, &stat_buf);
-      if (ret < 0) {
+    ret = stat(src_path, &stat_buf);
+    if (ret < 0) {
         perror("stat: ");
-      }
-    }
-
-    MPI_Bcast( &ret, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    if ( ret < 0 )
-    {
-      continue;
+        continue;
     }
 
     //Generate destination path
-    //sprintf( dest_path, "%s/%d/%s", argv[2], rank, entry ); //Debug local
     sprintf( dest_path, "%s/%s", argv[2], entry );
+    //sprintf( dest_path, "%s/%d/%s", argv[2], rank, entry );
 
-    MPI_Bcast( dest_path, PATH_MAX+1,       MPI_CHAR, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&stat_buf, sizeof(stat_buf), MPI_CHAR, 0, MPI_COMM_WORLD);
 
     if (S_ISDIR(stat_buf.st_mode))
     {
@@ -128,69 +103,53 @@ int main(int argc, char *argv[])
     }
     else if (S_ISREG(stat_buf.st_mode))
     {      
-      if (rank == 0)
-      {
         fd_src = open(src_path, O_RDONLY);
         if ( NULL == file )
         {
           perror("open: ");
-        }
-      }
-
-      MPI_Bcast(&fd_src, 1, MPI_INT, 0, MPI_COMM_WORLD);
-      if ( fd_src < 0 )
-      {
-        continue;
-      }
-
-      fd_dest = open(dest_path, O_CREAT | O_WRONLY | O_TRUNC, 0755);
-      if ( fd_dest < 0 )
-      {
-        perror("open: ");
-      }
-
-      ret = -1;
-      do
-      {
-        if (rank == 0){
-          ret = read(fd_src, buf, buf_len);
-        }
-
-        MPI_Bcast(&ret, 1, MPI_INT, 0, MPI_COMM_WORLD);
-        if ( ret < 0 )
-        {
           continue;
         }
 
-        MPI_Bcast(buf, ret, MPI_CHAR, 0, MPI_COMM_WORLD);
+        fd_dest = open(dest_path, O_CREAT | O_WRONLY | O_TRUNC, 0755);
+        if ( fd_dest < 0 )
+        {
+          perror("open: ");
+          continue;
+        }
 
-        int ret2 ;
-        int offset = rank * blocksize ;
-        int to_write = MIN(blocksize, ret) ;
+        // Write header
+        ret = write(fd_dest, buf, HEADER_SIZE); // TODO: buf MUST be the header
+
+        offset_src = rank * blocksize ;
         do
         {
-          ret2   = write(fd_dest, buf + offset, to_write);
-          if ( ret2 < 0 )
-          {
-            perror("write: ");
-          }
-          
-          offset = offset + (size * blocksize);
+          lseek(fd_src, offset_src, SEEK_SET) ;
+
+          cont = 0;
+          buf_len = blocksize;
+          do {
+            ret = read(fd_src, buf + cont, buf_len);
+            cont    = cont + ret ;
+            buf_len = buf_len - ret ;
+          } while ( (cont < buf_len) && (ret != 0) );
+
+          cont2 = 0;
+          buf_len = cont;
+          do {
+            ret = write(fd_dest, buf + cont2, buf_len);
+            cont2    = cont2 + ret ;
+            buf_len  = buf_len - ret ;
+          } while ( (cont2 < buf_len) && (ret != 0) );
+
           //printf("rank %d; ret: %d; offset %d; nodes %d; blocksize %d\n", rank, ret2, offset, size, blocksize);
+
+          offset_src = offset_src + (size * blocksize) ;
         }
-        while(offset < ret);
-      }
-      while(ret > 0);
+        while(cont > 0);
 
-      if (rank == 0)
-      {
         close(fd_src);
-      }
-
-      close(fd_dest);
+        close(fd_dest);
     }
-
-    MPI_Barrier(MPI_COMM_WORLD);
   }
 
   if (rank == 0)
