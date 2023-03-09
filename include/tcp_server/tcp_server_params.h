@@ -27,7 +27,6 @@
   #include <stdio.h>
   #include <string.h>
   #include <semaphore.h>
-  //#include "mpi.h"
   #include "base/utils.h"
   #include "tcp_server_conf.h"
 
@@ -36,6 +35,7 @@
   #define TH_POOL 1
   #define TH_OP   2
 
+  #define TCP_MAX_PORT_NAME 1024
 
 
   /*
@@ -52,8 +52,6 @@
     char dns_file[PATH_MAX] ;
     char host_file[PATH_MAX] ;
 
-
-
     // server configuration
     int thread_mode;
 
@@ -65,12 +63,13 @@
 
     // associated client
     int  client ;
-    int   global_sock;
+    int  global_sock;
     char dirbase[PATH_MAX] ;
 
     // server arguments
     int    argc ;
     char **argv ;
+
   } tcp_server_param_st ;
 
 

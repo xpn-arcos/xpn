@@ -12,14 +12,6 @@
 #endif
 
 /* ENVIROMENT VARIABLE: DNS SERVICE */
-#ifndef TCP_SERVER_FILE
-	#define TCP_SERVER_FILE "TCP_SERVER_FILE"
-#endif
-
-#ifndef TCP_SERVER_FILE_DEFAULT
-	#define TCP_SERVER_FILE_DEFAULT "/etc/xpn/tcp_server.dns"
-#endif
-
 #ifndef TCP_SERVER_NAME_DEFAULT
 	#define TCP_SERVER_NAME_DEFAULT	"node"
 #endif

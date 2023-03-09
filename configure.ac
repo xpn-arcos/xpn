@@ -87,7 +87,8 @@ then
   LIBLINK="-lpthread"
 
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread "
+ #LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
@@ -99,7 +100,8 @@ then
   LIBLINK="-lpthread"
 
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread "
+ #LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
 then
@@ -134,7 +136,8 @@ else
   LIBLINK="-lpthread "
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread "
+ #LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
   AC_MSG_RESULT("Using Linux configuration as default configuration...");
 fi

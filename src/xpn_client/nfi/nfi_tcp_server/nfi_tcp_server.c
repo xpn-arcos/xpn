@@ -33,7 +33,8 @@
  * Communication
  */
 
-int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head) {
+int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head)
+{
     int ret;
 
     debug_info("[NFI-TCP] (ID=%s) tcpClient_write_data: begin               HEAD_TYPE:%d\n", head -> id, sizeof(head -> type));
@@ -43,11 +44,9 @@ int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head) {
         return -1;
     }
 
-    int rank = 1; // TODO: mpi_comm_rank -> transform to TCP
-    // mpi_comm_rank(TCP_COMM_WORLD, &rank) ;
-
     debug_info("[NFI-TCP] (ID=%s) write_operation: %d -> \n", head -> id, head -> type);
-    switch (head -> type) {
+    switch (head -> type)
+    {
         //File API
     case TCP_SERVER_OPEN_FILE_WS:
     case TCP_SERVER_OPEN_FILE_WOS:

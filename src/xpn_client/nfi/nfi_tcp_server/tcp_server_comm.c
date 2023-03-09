@@ -25,10 +25,10 @@
 
 /* ... Functions / Funciones ......................................... */
 
-int tcpClient_comm_init(tcpClient_param_st * params) 
+int tcpClient_comm_init ( __attribute__((__unused__)) tcpClient_param_st * params )
 {
-    int ret, provided, claimed;
-    int flag = 0;
+    // int ret, provided, claimed;
+    // int flag = 0;
 
     debug_info("[CLI-COMM] begin tcpClient_comm_init(...)\n");
 
@@ -40,7 +40,7 @@ int tcpClient_comm_init(tcpClient_param_st * params)
 }
 
 
-int tcpClient_comm_destroy ( tcpClient_param_st * params )
+int tcpClient_comm_destroy ( __attribute__((__unused__)) tcpClient_param_st * params )
 {
     debug_info("[CLI-COMM] begin tcpClient_comm_destroy(...)\n");
     
@@ -65,7 +65,6 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     do 
     {
         ret = tcp_server_translate(params -> srv_name, params -> server_name, & (params -> port_number));
-
         if (ret == -1) 
         {
             if (lookup_retries == 0) 
@@ -161,7 +160,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
 }
 
 
-int tcpClient_comm_disconnect ( tcpClient_param_st * params )
+int tcpClient_comm_disconnect ( __attribute__((__unused__)) tcpClient_param_st * params )
 {
     debug_info("[CLI-COMM] begin tcpClient_comm_disconnect nservers\n");
 
@@ -194,7 +193,7 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
 
     data = TCP_SERVER_GETNODENAME;
 
-    ret = tcpClient_write_data(params -> server, &data, 1 * sizeof(int), "<unused msg_id>") ; 
+    ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ; 
     if (ret != 0) 
     {
         debug_warning("Server[?]: TCP_Send fails :-(");
@@ -240,12 +239,11 @@ ssize_t tcpClient_write_operation ( int fd, char * data, ssize_t size, __attribu
     debug_info("[CLI-COMM] begin tcpClient_write_operation(...)\n");
 
     // Check params
-    if (size == 0) 
-    {
+    if (size == 0) {
+        debug_info("Server[?]: size == 0");
         return 0;
     }
-    if (size < 0) 
-    {
+    if (size < 0) {
         debug_warning("Server[?]: size < 0");
         return -1;
     }
@@ -255,11 +253,11 @@ ssize_t tcpClient_write_operation ( int fd, char * data, ssize_t size, __attribu
     debug_info("[CLI-COMM] end tcpClient_write_operation(...)\n");
 
     // Return bytes written
-    return size;
+    return ret;
 }
 
 
-ssize_t tcpClient_write_data(int fd, char * data, ssize_t size, char * msg_id) 
+ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
 {
     int ret;
     static ssize_t( * real_write)(int,const void * , size_t) = NULL;
@@ -312,10 +310,10 @@ ssize_t tcpClient_write_data(int fd, char * data, ssize_t size, char * msg_id)
 }
 
 
-ssize_t tcpClient_read_data(int fd, char * data, ssize_t size, char * msg_id) 
+ssize_t tcpClient_read_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
 {
     int ret;
-    static ssize_t( * real_read)(int, void * , size_t) = NULL;
+    static ssize_t (* real_read)(int, void * , size_t) = NULL;
     int cont;
 
     debug_info("[CLI-COMM] begin tcpClient_read_data(...)\n");

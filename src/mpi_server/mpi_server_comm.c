@@ -92,9 +92,9 @@
       MPI_Info_create(&info) ;
       MPI_Info_set(info, "ompi_global_scope", "true") ;
 
-      struct hostent *serv_entry;
+      //struct hostent *serv_entry;
       gethostname(serv_name, HOST_NAME_MAX); // get hostname
-      serv_entry = gethostbyname(serv_name); // find host information
+      //serv_entry = gethostbyname(serv_name); // find host information
       sprintf(params->srv_name, "%s", serv_name) ;
 
       ret = MPI_Publish_name(params->srv_name, info, params->port_name) ;

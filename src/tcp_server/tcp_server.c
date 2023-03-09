@@ -18,34 +18,26 @@
  *
  */
 
-/* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-#include "all_system.h"
-
-#include "base/utils.h"
-
-#include "tcp_server_params.h"
-
-#include "tcp_server_ops.h"
-
-#include "base/workers.h"
-
-#include "tcp_server_comm.h"
-
-#include "tcp_server_d2xpn.h"
-
-#include "base/ns_tcp.h"
+    #include "all_system.h"
+    #include "base/utils.h"
+    #include "base/workers.h"
+    #include "base/ns_tcp.h"
+    #include "tcp_server_params.h"
+    #include "tcp_server_ops.h"
+    #include "tcp_server_comm.h"
+    #include "tcp_server_d2xpn.h"
 
 
-/* ... Global variables / Variables globales ......................... */
+  /* ... Global variables / Variables globales ......................... */
 
-tcp_server_param_st params;
-worker_t worker;
-int the_end = 0;
+    tcp_server_param_st params;
+    worker_t worker;
+    int the_end = 0;
 
 
-
-/* ... Auxiliar Functions / Funciones Auxiliares ..................... */
+  /* ... Auxiliar Functions / Funciones Auxiliares ..................... */
 
 void tcp_server_run(struct st_th th) 
 {
@@ -191,14 +183,14 @@ int tcp_server_up(void)
     return 0;
 }
 
-int tcp_server_down(int argc, char * argv[]) 
+int tcp_server_down( __attribute__((__unused__)) int argc,  __attribute__((__unused__)) char * argv[]) 
 {
-    int ret, buf;
+    int ret;
+////int buf;
     int port_number;
     char srv_name[1024];
     char server_name[1024];
     char dns_name[2048];
-    int server;
     FILE * file;
 
     printf("----------------\n");
@@ -219,9 +211,6 @@ int tcp_server_down(int argc, char * argv[])
     {
         // Lookup port name
         ret = tcp_server_translate(srv_name, server_name, & (port_number));
-
-        //ret = ns_lookup (srv_name, port_name);
-
         if (ret == -1) 
         {
             printf("[MAIN] ERROR: server %s not found\n", dns_name);
@@ -235,10 +224,11 @@ int tcp_server_down(int argc, char * argv[])
             printf("[MAIN] ERROR: int_connect fails\n");
             continue;
         }
-        buf = TCP_SERVER_FINALIZE;
-        TCP_Send( & buf, 1, TCP_INT, 0, 0, server);
 
-        //int_disconnect( &server ); //TODO: fail
+	/*
+        buf = TCP_SERVER_FINALIZE;
+	tcp_server_comm_write_data(&params, sd, (char * ) & buf, sizeof(int), 0); // 0: rank_client_id
+        */
     }
 
     // Close host file

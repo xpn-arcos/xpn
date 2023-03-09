@@ -437,7 +437,7 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
 
 int XpnGetAtribFd ( int fd, struct stat *st )
 {
-  int ret, res, i, j, n, err;
+  int ret, res, i, n, err;
   struct nfi_server **servers;
   struct nfi_attr *attr;
 
@@ -538,7 +538,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
 
 int XpnGetAtribPath ( char * path, struct stat *st )
 {
-  int ret, res, err, i, j, n, pd;
+  int ret, res, err, i, n, pd;
   char url_serv[PATH_MAX];
   char aux_path[PATH_MAX];
   struct nfi_server **servers;
