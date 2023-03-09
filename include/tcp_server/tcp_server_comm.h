@@ -1,22 +1,47 @@
+
+  /*
+   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *
+   *  This file is part of Expand.
+   *
+   *  Expand is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  Expand is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */
+
+
 #ifndef _TCP_SERVER_COMM_H_
 #define _TCP_SERVER_COMM_H_
 
-#include "tcp_server.h"
-#include "tcp_server_utils.h"
+  #include "all_system.h"
+  #include "base/utils.h"
+  #include "base/time_misc.h"
+  #include "base/ns.h"
+  #include "tcp_server_params.h"
 
 
-/* Nuevo */
-#define CONST_TEMP              1024
-#define MAX_TCP_SERVER_NODES      256
+  /*
+   *  API
+   */
 
+  int      tcp_server_comm_init      ( tcp_server_param_st *params ) ;
+  int      tcp_server_comm_destroy   ( tcp_server_param_st *params ) ;
 
+  int      tcp_server_comm_accept    ( tcp_server_param_st *params ) ;
+  int      tcpClient_comm_close      ( int fd ) ;
 
-void    tcp_server_comm_reg (char *server, char *newserver, int *port);
-ssize_t tcp_server_comm_write_data(int fd, char *data, ssize_t size, char *id);
-ssize_t tcp_server_comm_read_data (int fd, char *data, ssize_t size, char *id);
-int     tcp_server_comm_init (char *name, int port, char *file);	
-int     tcp_server_accept_comm ();
-void    tcp_server_close_comm ();
-
+  ssize_t tcp_server_comm_write_data     ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
+  ssize_t tcp_server_comm_read_operation ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int *rank_client_id ) ;
+  ssize_t tcp_server_comm_read_data      ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
 
 #endif

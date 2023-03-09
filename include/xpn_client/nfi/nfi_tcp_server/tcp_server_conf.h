@@ -1,6 +1,15 @@
 #ifndef _TCP_SERVER_CONF_H_
 #define _TCP_SERVER_CONF_H_
 
+#include "all_system.h"
+
+/* Support for files of > 4GB */
+#define _LARGEFILE64_ 1
+
+/* MAX_BUFFER_SIZE */
+#ifndef MAX_BUFFER_SIZE
+	#define MAX_BUFFER_SIZE (1*MB)
+#endif
 
 /* ENVIROMENT VARIABLE: DNS SERVICE */
 #ifndef TCP_SERVER_FILE
@@ -23,34 +32,9 @@
 	#define TCP_SERVER_PORT_DEFAULT	9999
 #endif
 
-
-#ifndef KB
-	#define KB (1024)
+#ifndef TCP_SERVER_IOSIZE_DEFAULT
+	#define TCP_SERVER_IOSIZE_DEFAULT	(MB)
 #endif
 
-#ifndef MB
-	#define MB (KB*KB)
-#endif
-
-#ifndef GB
-	#define GB (MB*MB)
-#endif
-
-#ifndef TRUE
-	#define TRUE 1
-#endif
-#ifndef FALSE
-	#define FALSE 0
-#endif
-
-
-#ifndef MAX_BUFFER_SIZE
-	#define MAX_BUFFER_SIZE (1*MB)
-#endif
-
-/* GLOBAL VARIABLES */
-extern char *TCP_SERVER_ALIAS_NAME_STRING;
-extern char *TCP_SERVER_FILE_STRING;
-extern char *TCP_SERVER_DIRBASE_STRING;
 
 #endif
