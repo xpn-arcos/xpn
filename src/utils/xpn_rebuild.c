@@ -89,8 +89,8 @@ int main(int argc, char *argv[])
     }
 
     //Generate destination path
-    //sprintf( dest_path, "%s/%s", argv[2], entry );
-    sprintf( dest_path, "%s/%d/%s", argv[2], rank, entry );
+    sprintf( dest_path, "%s/%s", argv[2], entry );
+    //sprintf( dest_path, "%s/%d/%s", argv[2], rank, entry );
 
 
     if (S_ISDIR(stat_buf.st_mode))
