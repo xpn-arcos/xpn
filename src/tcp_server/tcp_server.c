@@ -43,9 +43,12 @@ tcp_server_param_st params;
 worker_t worker;
 int the_end = 0;
 
+
+
 /* ... Auxiliar Functions / Funciones Auxiliares ..................... */
 
-void tcp_server_run(struct st_th th) {
+void tcp_server_run(struct st_th th) 
+{
     debug_info("[TCP-SERVER] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, tcp_server_op2string(th.type_op), th.type_op);
 
     tcp_server_do_operation( & th, & the_end);
@@ -53,25 +56,31 @@ void tcp_server_run(struct st_th th) {
     debug_info("[TCP-SERVER] (ID=%d) end to do operation '%s'\n", th.id, tcp_server_op2string(th.type_op));
 }
 
-void tcp_server_dispatcher(struct st_th th) {
+void tcp_server_dispatcher(struct st_th th) 
+{
     int ret;
 
     // check params...
-    if (NULL == th.params) {
+    if (NULL == th.params) 
+    {
         printf("[WORKERS ID=%d] ERROR: NULL arguments", th.id);
         return;
     }
 
     struct st_th th_arg;
     int disconnect = 0;
-    while (!disconnect) {
+
+    while (!disconnect) 
+    {
         ret = tcp_server_comm_read_operation(th.params, (int) th.sd, (char * ) & (th.type_op), 1, & (th.rank_client_id));
-        if (ret == -1) {
+        if (ret == -1) 
+        {
             debug_info("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
             return;
         }
 
-        if (th.type_op == TCP_SERVER_DISCONNECT || th.type_op == TCP_SERVER_FINALIZE) {
+        if (th.type_op == TCP_SERVER_DISCONNECT || th.type_op == TCP_SERVER_FINALIZE) 
+        {
             debug_info("[TCP-SERVER] INFO: DISCONNECT received\n");
             disconnect = 1;
             continue;
@@ -93,9 +102,12 @@ void tcp_server_dispatcher(struct st_th th) {
     tcpClient_comm_close((int) th.sd); // NUEVO
 }
 
+
+
 /* ... Functions / Funciones ......................................... */
 
-int tcp_server_up(void) {
+int tcp_server_up(void) 
+{
     int sd;
     struct st_tcp_server_msg head;
     int rank_client_id;
@@ -109,7 +121,8 @@ int tcp_server_up(void) {
 
     // Initialize semaphore for server disks
     ret = sem_init( & (params.disk_sem), 0, 1);
-    if (ret == -1) {
+    if (ret == -1) 
+    {
         printf("[MAIN] ERROR: semaphore initialize fails\n");
         return -1;
     }
@@ -120,30 +133,35 @@ int tcp_server_up(void) {
     sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
 
     sem_t * sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
-    if (sem_server == 0) {
+    if (sem_server == 0) 
+    {
         printf("[MAIN] ERROR: semaphore open fails\n");
         return -1;
     }
 
     // Loop: receiving + processing
     the_end = 0;
-    while (!the_end) {
+    while (!the_end) 
+    {
         debug_info("[TCP-SERVER] tcp_server_accept_comm()\n");
 
         params.client = 0; // TO DO - What is this
 
         sd = tcp_server_comm_accept( & params);
-        if (sd == -1) {
+        if (sd == -1) 
+        {
             continue;
         }
 
         ret = tcp_server_comm_read_operation( & params, sd, (char * ) & (head.type), 1, & (rank_client_id));
-        if (ret == -1) {
+        if (ret == -1) 
+        {
             printf("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
             return -1;
         }
 
-        if (head.type == TCP_SERVER_FINALIZE) {
+        if (head.type == TCP_SERVER_FINALIZE) 
+        {
             the_end = 1;
             continue;
         }
@@ -173,7 +191,8 @@ int tcp_server_up(void) {
     return 0;
 }
 
-int tcp_server_down(int argc, char * argv[]) {
+int tcp_server_down(int argc, char * argv[]) 
+{
     int ret, buf;
     int port_number;
     char srv_name[1024];
@@ -190,25 +209,29 @@ int tcp_server_down(int argc, char * argv[]) {
 
     // Open host file
     file = fopen(params.host_file, "r");
-    if (file == NULL) {
+    if (file == NULL) 
+    {
         printf("[MAIN] ERROR: invalid file %s\n", params.host_file);
         return -1;
     }
 
-    while (fscanf(file, "%[^\n] ", srv_name) != EOF) {
+    while (fscanf(file, "%[^\n] ", srv_name) != EOF) 
+    {
         // Lookup port name
         ret = tcp_server_translate(srv_name, server_name, & (port_number));
 
         //ret = ns_lookup (srv_name, port_name);
 
-        if (ret == -1) {
+        if (ret == -1) 
+        {
             printf("[MAIN] ERROR: server %s not found\n", dns_name);
             continue;
         }
 
         // Connect with servers
         //ret = int_connect(port_number, TCP_INFO_NULL, 0, TCP_COMM_SELF, & server);    TO-DO ¿???? 
-        if (ret != 0) {
+        if (ret != 0) 
+        {
             printf("[MAIN] ERROR: int_connect fails\n");
             continue;
         }
@@ -226,11 +249,14 @@ int tcp_server_down(int argc, char * argv[]) {
     return 0;
 }
 
+
+
 /*
  * Main
  */
 
-int main(int argc, char * argv[]) {
+int main(int argc, char * argv[]) 
+{
     int ret = -1;
     char * exec_name = NULL;
 
@@ -251,15 +277,19 @@ int main(int argc, char * argv[]) {
 
     // Get arguments..
     ret = tcp_server_params_get( & params, argc, argv);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         tcp_server_params_show_usage();
         return -1;
     }
 
     // Do associate action...
-    if (strcasecmp(exec_name, "xpn_stop_tcp_server") == 0) {
+    if (strcasecmp(exec_name, "xpn_stop_tcp_server") == 0) 
+    {
         ret = tcp_server_down(argc, argv);
-    } else {
+    } 
+    else 
+    {
         ret = tcp_server_up();
     }
 
