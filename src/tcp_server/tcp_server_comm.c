@@ -25,7 +25,8 @@
 
 /* ... Functions / Funciones ......................................... */
 
-int tcp_server_comm_init(tcp_server_param_st * params) {
+int tcp_server_comm_init(tcp_server_param_st * params) 
+{
     int ret, provided;
     char serv_name[HOST_NAME_MAX];
 
@@ -47,14 +48,16 @@ int tcp_server_comm_init(tcp_server_param_st * params) {
 
     /* create the connections */
     params -> global_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (params -> global_sock < 0) {
+    if (params -> global_sock < 0) 
+    {
         perror("error en el socket:");
         return -1;
     }
 
     // tcp_nodalay
     val = 1;
-    if (setsockopt(params -> global_sock, IPPROTO_TCP, TCP_NODELAY, & val, sizeof(val)) == -1) {
+    if (setsockopt(params -> global_sock, IPPROTO_TCP, TCP_NODELAY, & val, sizeof(val)) == -1) 
+    {
         perror("setsockopt: ");
         return -1;
     }
@@ -62,13 +65,15 @@ int tcp_server_comm_init(tcp_server_param_st * params) {
     //NEW
     val = 1024 * 1024; //1 MB
 
-    if (setsockopt(params -> global_sock, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int)) == -1) {
+    if (setsockopt(params -> global_sock, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int)) == -1) 
+    {
         perror("setsockopt: ");
         return -1;
     }
 
     val = 1024 * 1024; //1 MB
-    if (setsockopt(params -> global_sock, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int)) == -1) {
+    if (setsockopt(params -> global_sock, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int)) == -1) 
+    {
         perror("setsockopt: ");
         return -1;
     }
@@ -76,7 +81,8 @@ int tcp_server_comm_init(tcp_server_param_st * params) {
     // sock_reuseaddr
     val = 1;
     ret = setsockopt(params -> global_sock, SOL_SOCKET, SO_REUSEADDR, (char * ) & val, sizeof(int));
-    if (ret == -1) {
+    if (ret == -1) 
+    {
         perror("error en el setsockopt:");
         return -1;
     }
@@ -87,7 +93,8 @@ int tcp_server_comm_init(tcp_server_param_st * params) {
 
     // bind & listen
     ret = bind(params -> global_sock, (struct sockaddr * ) & server_addr, sizeof(server_addr));
-    if (ret == -1) {
+    if (ret == -1) 
+    {
         perror("Error en el bind:");
         return -1;
     }
@@ -137,7 +144,8 @@ int tcp_server_comm_init(tcp_server_param_st * params) {
 
     ret = tcp_server_updateFile(params -> srv_name, params -> dns_file, params -> port_name);
 
-    if (ret == -1) {
+    if (ret == -1) 
+    {
         perror("[%d]\tError en tcp_server_updateFile:", __LINE__);
         return -1;
     }
@@ -162,7 +170,10 @@ int tcp_server_comm_init(tcp_server_param_st * params) {
     return 1;
 }
 
-int tcp_server_comm_destroy(tcp_server_param_st * params) {
+
+
+int tcp_server_comm_destroy(tcp_server_param_st * params) 
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -202,7 +213,10 @@ int tcp_server_comm_destroy(tcp_server_param_st * params) {
     return 1;
 }
 
-int tcp_server_comm_accept(tcp_server_param_st * params) {
+
+
+int tcp_server_comm_accept(tcp_server_param_st * params) 
+{
     struct sockaddr_in client_addr;
     int ret, sc, flag;
     socklen_t size = sizeof(struct sockaddr_in);
@@ -210,14 +224,16 @@ int tcp_server_comm_accept(tcp_server_param_st * params) {
     DEBUG_BEGIN();
 
     sc = accept(params -> global_sock, (struct sockaddr * ) & client_addr, & size);
-    if (sc == -1) {
+    if (sc == -1) 
+    {
         perror("accept: ");
     }
     debug_info("[COMM] desp. accept conection .... %d\n", sc);
 
     // tcp_nodelay
     flag = 1;
-    if (setsockopt(sc, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag)) == -1) {
+    if (setsockopt(sc, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag)) == -1) 
+    {
         perror("setsockopt: ");
         return -1;
     }
@@ -225,13 +241,15 @@ int tcp_server_comm_accept(tcp_server_param_st * params) {
     //NEW
     int val = 1024 * 1024; //1 MB
 
-    if (setsockopt(sc, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int)) == -1) {
+    if (setsockopt(sc, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int)) == -1) 
+    {
         perror("setsockopt: ");
         return -1;
     }
 
     val = 1024 * 1024; //1 MB
-    if (setsockopt(sc, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int)) == -1) {
+    if (setsockopt(sc, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int)) == -1) 
+    {
         perror("setsockopt: ");
         return -1;
     }
@@ -243,7 +261,8 @@ int tcp_server_comm_accept(tcp_server_param_st * params) {
     return params -> client;
 }
 
-int tcpClient_comm_close(int fd) {
+int tcpClient_comm_close(int fd) 
+{
 
     close(fd); //NUEVO
 
@@ -251,28 +270,33 @@ int tcpClient_comm_close(int fd) {
     return 1;
 }
 
-ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, char * data, ssize_t size, int * rank_client_id) {
+ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, char * data, ssize_t size, int * rank_client_id) 
+{
     int ret;
     //TCP_Status status ;
 
     DEBUG_BEGIN();
 
     // Check params
-    if (NULL == params) {
+    if (NULL == params) 
+    {
         debug_warning("Server[%d]: ERROR: NULL arguments", -1);
         return -1;
     }
-    if (size == 0) {
+    if (size == 0) 
+    {
         return 0;
     }
-    if (size < 0) {
+    if (size < 0) 
+    {
         debug_warning("Server[%d]: ERROR: size < 0", params -> rank);
         return -1;
     }
 
     ret = tcp_server_comm_read_data(params, fd, data, size * sizeof(int), rank_client_id); //      Nuevo
 
-    if (ret != 0) {
+    if (ret != 0) 
+    {
         debug_warning("Server: tcp_server_comm_read_op fails : %d\n", ret);
     }
 
@@ -282,6 +306,8 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
     return size; //TO-DO number of ints
 }
 
+
+
 ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, int rank_client_id) //TO-DO rank client
 {
     int ret, cont = 0;
@@ -289,14 +315,17 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     DEBUG_BEGIN();
 
     // Check params
-    if (NULL == params) {
+    if (NULL == params) 
+    {
         debug_warning("Server[%d]: ERROR: NULL params", -1);
         return -1;
     }
-    if (size == 0) {
+    if (size == 0) 
+    {
         return 0;
     }
-    if (size < 0) {
+    if (size < 0) 
+    {
         debug_warning("Server[%d]: ERROR: size < 0", params -> rank);
         return -1;
     }
@@ -304,14 +333,16 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     do {
         debug_info("[COMM] server:write_comm(%d) antes: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
         ret = write(fd, data + cont, size - cont);
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             perror("server: Error write_comm:");
         }
         debug_info("[COMM] server:write_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
         cont += ret;
     } while ((ret > 0) && (cont != size));
 
-    if (ret == -1) {
+    if (ret == -1) 
+    {
         debug_info("[COMM] server: Error write_comm(%d): -1 ID=%s:%p\n", fd, id, id);
         return ret;
     }
@@ -322,6 +353,8 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     return cont;
 }
 
+
+
 ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, int rank_client_id) //TO-DO rank client
 {
     int ret, cont = 0;
@@ -330,14 +363,17 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
     DEBUG_BEGIN();
 
     // Check params
-    if (NULL == params) {
+    if (NULL == params) 
+    {
         debug_warning("Server[-1]: ERROR: NULL params", -1);
         return -1;
     }
-    if (size == 0) {
+    if (size == 0) 
+    {
         return 0;
     }
-    if (size < 0) {
+    if (size < 0) 
+    {
         debug_warning("Server[%d]: ERROR: size < 0", params -> rank);
         return -1;
     }
@@ -345,14 +381,16 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
     do {
         debug_info("[COMM] server:read_comm(%d) antes: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
         ret = read(fd, data + cont, size - cont);
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             perror("server: Error read_comm:");
         }
         debug_info("[COMM] server:read_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
         cont += ret;
     } while ((ret > 0) && (cont != size));
 
-    if (ret == -1) {
+    if (ret == -1) 
+    {
         debug_info("[COMM] server: Error read_comm(%d): -1 ID=%s:%p\n", fd, id, id);
         return ret;
     }
