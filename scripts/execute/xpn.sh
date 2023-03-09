@@ -20,6 +20,52 @@
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+mk_conf_servers() {
+
+  CONF_NAME=$1
+  PARTITION_SIZE=$2
+  PARTITION_NAME=$3
+  STORAGE_PATH=$4
+
+  # check params
+  if [[ ${CONF_NAME} == "" ]]; then
+    echo ""
+    echo " ERROR: CONF_NAME is empty"
+    exit -1
+  fi
+  if [[ ${PARTITION_NAME} == "" ]]; then
+    echo ""
+    echo " ERROR: PARTITION_NAME is empty"
+    exit -1
+  fi
+  if [[ ${STORAGE_PATH} == "" ]]; then
+    echo ""
+    echo " ERROR: STORAGE_PATH is empty"
+    exit -1
+  fi
+  if [[ ! -f ${HOSTFILE} ]]; then
+    echo ""
+    echo " ERROR: HOSTFILE '${HOSTFILE}' does not exist"
+    exit -1
+  fi
+
+  # verbose
+  if [[ ${VERBOSE} == true ]]; then
+    echo " * CONF_NAME=${CONF_NAME}"
+    echo " * HOSTFILE=${HOSTFILE}"
+    echo " * PARTITION_SIZE=${PARTITION_SIZE}"
+    echo " * PARTITION_NAME=${PARTITION_NAME}"
+    echo " * STORAGE_PATH=${STORAGE_PATH}"
+  fi
+
+  BASE_DIR="./scripts/execute/"
+  ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
+                         --machinefile  ${HOSTFILE} \
+                         --part_size    ${PARTITION_SIZE} \
+                         --part_name    ${PARTITION_NAME} \
+                         --storage_path ${STORAGE_PATH}
+}
+
 start_mpi_servers() {
   BASE_DIR="./scripts/execute/"
 
@@ -34,12 +80,6 @@ start_mpi_servers() {
     echo " ERROR: HOSTFILE '${HOSTFILE}' does not exist"
     exit -1
   fi
-
-  ${BASE_DIR}/mk_conf.sh --conf /tmp/config.xml \
-                         --machinefile ${HOSTFILE} \
-                         --part_size 512k \
-                         --part_name xpn \
-                         --storage_path /tmp
 
   mpiexec -np       "${NODE_NUM}" \
           -hostfile "${HOSTFILE}" \
@@ -86,6 +126,26 @@ stop_mpi_servers() {
 
 rebuild_mpi_servers() {
 
+  # generar el conf del nuevo grupo de servidores
+  # 
+
+
+  # 1. start new servers and new conf file
+  start_mpi_servers
+
+  # 2. Copy
+  mpiexec -np 1 \
+          -genv XPN_DNS /tmp/dns.txt \
+          -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+
+          #-hostfile /local_test/test/machine_files/localhost \
+          #-genv XPN_CONF /local_test/test/configuration/conf.xml \
+          #-genv LD_PRELOAD /local_test/bin/xpn/lib/xpn_bypass.so \
+          #cp -R /tmp/os /tmp/expand/xpn/
+
+
+  # 3. stop old servers
+  #stop_mpi_servers
 }
 
 
@@ -172,11 +232,13 @@ fi
 
 # run 
 case "${ACTION}" in
-      start)    start_mpi_servers
+      start)    mk_conf_servers  "/tmp/config.xml" "512k" "xpn" "/tmp"
+                start_mpi_servers
                 ;;
       stop)     stop_mpi_servers
                 ;;
-      rebuild)  rebuild_mpi_servers
+      rebuild)  mk_conf_servers  "/tmp/config.xml" "512k" "xpn" "/tmp"
+                rebuild_mpi_servers
                 ;;
       *)        echo ""
                 echo " ERROR: ACTION '${ACTION}' not supported"
