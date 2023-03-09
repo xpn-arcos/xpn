@@ -38,7 +38,8 @@ mk_conf_servers() {
     echo ""
     echo " ERROR: HOSTFILE '${MACHINE_FILE}' does not exist"
     exit -1
-  fi  if [[ ${PARTITION_NAME} == "" ]]; then
+  fi 
+  if [[ ${PARTITION_NAME} == "" ]]; then
     echo ""
     echo " ERROR: PARTITION_NAME is empty"
     exit -1
