@@ -337,8 +337,6 @@ int filesystem_rename(char * old_pathname, char * new_pathname) {
     return ret;
 }
 
-
-
 int filesystem_mkpath(char * pathname) {
     int ret;
     char dir[PATH_MAX];
@@ -358,8 +356,6 @@ int filesystem_mkpath(char * pathname) {
     // Return OK
     return 1;
 }
-
-
 
 int filesystem_mkdir(char * pathname, mode_t mode) {
     int ret;

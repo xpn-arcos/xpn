@@ -995,6 +995,8 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     return ret;
 }
 
+
+
 int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
     int ret = -1;
     struct nfi_tcp_server_fhandle * fh_aux;
@@ -1014,13 +1016,14 @@ int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
     debug_info("[NFI-TCP] nfi_tcp_server_close(ID=%s): begin\n", server_aux -> id);
 
     // without session -> just return ok
-    if (server_aux -> params.xpn_session == 0) {
+    if (server_aux -> params.xpn_session == 0) 
+    {
         debug_info("[NFI-TCP] nfi_tcp_server_close(ID=%s): end\n", server_aux -> id);
         return 1;
     }
 
-    // if fh-<priv_fh is NULL -> return -1
-    if (NULL == fh -> priv_fh) {
+    if (NULL == fh -> priv_fh) 
+    {
         debug_info("[NFI-TCP] nfi_tcp_server_close(ID=%s): end\n", server_aux -> id);
         return -1;
     }
@@ -1029,15 +1032,18 @@ int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality) {
-        if (fh_aux != NULL) {
+    if (server_aux -> params.locality) 
+    {
+        if (fh_aux != NULL) 
+        {
             //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
             ret = real_posix_close(fh_aux -> fd);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
         }
     }
     /************** REMOTE ****************/
-    else {
+    else 
+    {
         //bzero(&msg, sizeof(struct st_tcp_server_msg));
 
         msg.type = TCP_SERVER_CLOSE_FILE_WS;
@@ -1059,7 +1065,10 @@ int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
     return ret;
 }
 
-int nfi_tcp_server_remove(struct nfi_server * serv, char * url) {
+
+
+int nfi_tcp_server_remove(struct nfi_server * serv, char * url) 
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1074,31 +1083,34 @@ int nfi_tcp_server_remove(struct nfi_server * serv, char * url) {
     // private_info...
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
     debug_info("[NFI-TCP] nfi_tcp_server_remove(%s): begin %s\n", server_aux -> id, url);
-    if (server_aux == NULL) {
+    if (server_aux == NULL) 
+    {
         tcp_server_err(TCP_SERVERERR_PARAM);
         return -1;
     }
 
     // from url -> server + dir
     ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         fprintf(stderr, "nfi_tcp_server_remove: url %s incorrect.\n", url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality) {
+    if (server_aux -> params.locality) 
+    {
         ret = real_posix_unlink(dir);
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             debug_error("real_posix_open fails to open '%s' in server %s.\n", dir, serv -> server);
             return -1;
         }
     }
     /************** REMOTE ****************/
-    else {
-        //bzero(&msg, sizeof(struct st_tcp_server_msg));
-
+    else 
+    {
         msg.type = TCP_SERVER_RM_FILE;
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         memccpy(msg.u_st_tcp_server_msg.op_rm.path, dir, 0, PATH_MAX - 1);
@@ -1111,7 +1123,10 @@ int nfi_tcp_server_remove(struct nfi_server * serv, char * url) {
     return ret;
 }
 
-int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_url) {
+
+
+int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_url) 
+{
     int ret;
     char server[PATH_MAX], old_path[PATH_MAX], new_path[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1129,37 +1144,41 @@ int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_u
     // private_info...
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
     debug_info("[NFI-TCP] nfi_tcp_server_remove(%s): begin %s\n", server_aux -> id, url);
-    if (server_aux == NULL) {
+    if (server_aux == NULL) 
+    {
         tcp_server_err(TCP_SERVERERR_PARAM);
         return -1;
     }
 
     ret = ParseURL(old_url, NULL, NULL, NULL, server, NULL, old_path);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         fprintf(stderr, "nfi_tcp_server_open: url %s incorrect.\n", old_url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     ret = ParseURL(new_url, NULL, NULL, NULL, server, NULL, new_path);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         fprintf(stderr, "nfi_tcp_server_open: url %s incorrect.\n", new_url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality) {
+    if (server_aux -> params.locality) 
+    {
         ret = real_posix_rename(old_path, new_path);
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             debug_error("real_posix_rename fails to rename '%s' in server %s.\n", old_path, serv -> server);
             return -1;
         }
     }
     /************** REMOTE ****************/
-    else {
-        //bzero(&msg, sizeof(struct st_tcp_server_msg));
-
+    else 
+    {
         msg.type = TCP_SERVER_RENAME_FILE;
 
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
@@ -1174,7 +1193,10 @@ int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_u
     return ret;
 }
 
-int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
+
+
+int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) 
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1196,24 +1218,26 @@ int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     ret = ParseURL(fh -> url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         fprintf(stderr, "nfi_tcp_server_getattr: url %s incorrect.\n", dir);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality) {
+    if (server_aux -> params.locality) 
+    {
         req.status = real_posix_stat(dir, & (req.attr));
-        if (((int) req.status) < 0) {
+        if (((int) req.status) < 0) 
+        {
             debug_error("nfi_tcp_server_getattr: Fail stat %s.\n", dir);
             return req.status;
         }
     }
     /************** REMOTE ****************/
-    else {
-        //bzero(&msg, sizeof(struct st_tcp_server_msg));
-
+    else 
+    {
         msg.type = TCP_SERVER_GETATTR_FILE;
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         memccpy(msg.u_st_tcp_server_msg.op_getattr.path, dir, 0, PATH_MAX - 1);
@@ -1229,7 +1253,10 @@ int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
     return req.status;
 }
 
-int nfi_tcp_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
+
+
+int nfi_tcp_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) 
+{
     struct nfi_tcp_server_server * server_aux;
     struct nfi_tcp_server_fhandle * fh_aux;
 
@@ -1255,7 +1282,10 @@ int nfi_tcp_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
     return 0;
 }
 
-int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) {
+
+
+int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) 
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1275,7 +1305,8 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         fprintf(stderr, "nfi_tcp_server_mkdir: url %s incorrect.\n", url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
@@ -1287,9 +1318,11 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
     bzero(fh_aux, sizeof(struct nfi_tcp_server_fhandle));
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality) {
+    if (server_aux -> params.locality) 
+    {
         ret = real_posix_mkdir(dir, /*attr->at_mode*/ 0777);
-        if ((ret < 0) && (errno != EEXIST)) {
+        if ((ret < 0) && (errno != EEXIST)) 
+        {
             debug_error("nfi_tcp_server_mkdir: Fail mkdir %s.\n", dir);
             FREE_AND_NULL(fh_aux);
             return -1;
@@ -1298,22 +1331,23 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
 
         //Get stat
         ret = real_posix_stat(dir, & (req.attr));
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             debug_error("nfi_tcp_server_create: Fail stat %s.\n", dir);
             return ret;
         }
     }
     /************** SERVER ****************/
-    else {
-        //bzero(&msg, sizeof(struct st_tcp_server_msg));
-
+    else 
+    {
         msg.type = TCP_SERVER_MKDIR_DIR;
         memccpy(msg.u_st_tcp_server_msg.op_mkdir.path, dir, 0, PATH_MAX - 1);
 
         nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (fh_aux -> fd), sizeof(int));
         memccpy(fh_aux -> path, dir, 0, PATH_MAX - 1);
 
-        if ((fh_aux -> fd < 0) && (errno != EEXIST)) {
+        if ((fh_aux -> fd < 0) && (errno != EEXIST)) 
+        {
             tcp_server_err(TCP_SERVERERR_MKDIR);
             fprintf(stderr, "nfi_tcp_server_mkdir: Fail mkdir %s in server %s.\n", dir, serv -> server);
             FREE_AND_NULL(fh_aux);
@@ -1332,7 +1366,8 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
     fh -> priv_fh = (void * ) fh_aux;
 
     fh -> url = STRING_MISC_StrDup(url);
-    if (fh -> url == NULL) {
+    if (fh -> url == NULL) 
+    {
         tcp_server_err(TCP_SERVERERR_MEMORY);
         FREE_AND_NULL(fh_aux);
         return -1;
@@ -1345,7 +1380,10 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
     return ret;
 }
 
-int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhandle * fho) {
+
+
+int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhandle * fho) 
+{
     int ret;
     char dir[PATH_MAX], server[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1363,7 +1401,8 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
 
     // private_info...
     ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         fprintf(stderr, "nfi_tcp_server_opendir: url %s incorrect.\n", url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
@@ -1373,7 +1412,8 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
     NULL_RET_ERR(fho -> url, TCP_SERVERERR_MEMORY);
 
     fh_aux = (struct nfi_tcp_server_fhandle * ) malloc(sizeof(struct nfi_tcp_server_fhandle));
-    if (fh_aux == NULL) {
+    if (fh_aux == NULL) 
+    {
         tcp_server_err(TCP_SERVERERR_MEMORY);
         FREE_AND_NULL(fho -> url);
         return -1;
@@ -1382,9 +1422,11 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality) {
+    if (server_aux -> params.locality) 
+    {
         fh_aux -> dir = real_posix_opendir(dir);
-        if (fh_aux -> dir == NULL) {
+        if (fh_aux -> dir == NULL) 
+        {
             FREE_AND_NULL(fh_aux);
             FREE_AND_NULL(fho -> url);
             debug_error("real_posix_opendir fails to open directory '%s' in server '%s'.\n", dir, serv -> server);
@@ -1392,9 +1434,8 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
         }
     }
     /************** SERVER ****************/
-    else {
-        //bzero(&msg, sizeof(struct st_tcp_server_msg));
-
+    else 
+    {
         msg.type = TCP_SERVER_OPENDIR_DIR;
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         memccpy(msg.u_st_tcp_server_msg.op_opendir.path, dir, 0, PATH_MAX - 1);
@@ -1415,7 +1456,10 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
     return 0;
 }
 
-int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry) {
+
+
+int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry) 
+{
     struct nfi_tcp_server_server * server_aux;
     struct nfi_tcp_server_fhandle * fh_aux;
     struct st_tcp_server_msg msg;
@@ -1428,10 +1472,13 @@ int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
     NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
     NULL_RET_ERR(fh, TCP_SERVERERR_PARAM);
     NULL_RET_ERR(fh -> priv_fh, TCP_SERVERERR_PARAM);
-    if (fh -> type != NFIDIR) {
+
+    if (fh -> type != NFIDIR) 
+    {
         tcp_server_err(TCP_SERVERERR_NOTDIR);
         return -1;
     }
+
     nfi_tcp_server_keepConnected(serv);
     NULL_RET_ERR(serv -> private_info, TCP_SERVERERR_PARAM);
 
@@ -1443,9 +1490,11 @@ int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
     memset(entry, 0, sizeof(struct dirent));
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality) {
+    if (server_aux -> params.locality) 
+    {
         ent = real_posix_readdir(fh_aux -> dir);
-        if (ent == NULL) {
+        if (ent == NULL) 
+        {
             debug_error("nfi_tcp_server_readdir: readdir");
             return -1;
         }
@@ -1453,16 +1502,16 @@ int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
         memcpy(entry, ent, sizeof(struct dirent));
     }
     /************** SERVER ****************/
-    else {
-        //bzero(&msg, sizeof(struct st_tcp_server_msg));
-
+    else 
+    {
         msg.type = TCP_SERVER_READDIR_DIR;
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         msg.u_st_tcp_server_msg.op_readdir.dir = fh_aux -> dir;
 
         nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (ret_entry), sizeof(struct st_tcp_server_direntry)); //NEW
 
-        if (ret_entry.end == 0) {
+        if (ret_entry.end == 0) 
+        {
             return -1;
         }
 
@@ -1474,7 +1523,8 @@ int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
     return 0;
 }
 
-int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
+int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) 
+{
     int ret;
     struct st_tcp_server_msg msg;
     struct nfi_tcp_server_server * server_aux;
@@ -1489,18 +1539,20 @@ int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
     NULL_RET_ERR(serv -> private_info, TCP_SERVERERR_PARAM);
 
     // do closedir...
-    if (fh -> priv_fh != NULL) {
+    if (fh -> priv_fh != NULL) 
+    {
         // private_info...
         server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
         fh_aux = (struct nfi_tcp_server_fhandle * ) fh -> priv_fh;
 
         /************** LOCAL *****************/
-        if (server_aux -> params.locality) {
+        if (server_aux -> params.locality) 
+        {
             real_posix_closedir(fh_aux -> dir);
         }
         /************** SERVER ****************/
-        else {
-            //bzero(&msg, sizeof(struct st_tcp_server_msg));
+        else 
+        {
             msg.type = TCP_SERVER_CLOSEDIR_DIR;
 
             memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
@@ -1519,7 +1571,10 @@ int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
     return 0;
 }
 
-int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url) {
+
+
+int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url) 
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1537,29 +1592,32 @@ int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url) {
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         fprintf(stderr, "nfi_tcp_server_rmdir: url %s incorrect.\n", url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality) {
+    if (server_aux -> params.locality) 
+    {
         ret = real_posix_rmdir(dir);
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             debug_error(stderr, "nfi_tcp_server_rmdir: Fail rmdir %s.\n", dir);
             return -1;
         }
     }
     /************** SERVER ****************/
-    else {
-        //bzero(&msg, sizeof(struct st_tcp_server_msg));
-
+    else 
+    {
         msg.type = TCP_SERVER_RMDIR_DIR;
         memccpy(msg.u_st_tcp_server_msg.op_rmdir.path, dir, 0, PATH_MAX - 1);
         nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (ret), sizeof(int));
 
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             fprintf(stderr, "nfi_tcp_server_rmdir: Fail rmdir %s in server %s.\n", dir, serv -> server);
             tcp_server_err(TCP_SERVERERR_REMOVE);
             return -1;
@@ -1571,7 +1629,10 @@ int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url) {
     return 0;
 }
 
-int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, __attribute__((__unused__)) struct nfi_info * inf) {
+
+
+int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, __attribute__((__unused__)) struct nfi_info * inf) 
+{
     DEBUG_BEGIN();
 
     /*
@@ -1604,7 +1665,10 @@ int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, 
     return 0;
 }
 
-int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt) {
+
+
+int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt) 
+{
     //char dir[PATH_MAX];
     int ret;
     struct nfi_tcp_server_server * server_aux;
@@ -1624,7 +1688,8 @@ int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
     debug_info("[NFI-TCP] nfi_tcp_server_preload(ID=%s): begin %s - %s \n", server_aux -> id, virtual_path, storage_path);
 
-    if (url[strlen(url) - 1] == '/') {
+    if (url[strlen(url) - 1] == '/') 
+    {
         tcp_server_err(TCP_SERVERERR_PARAM);
         return -1;
     }
@@ -1633,8 +1698,6 @@ int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_
     debug_info("[NFI-TCP] nfi_tcp_server_preload(ID=%s): preload %s in server %s.\n", server_aux -> id, virtual_path, serv -> server);
 
     /*****************************************/
-    //bzero(&msg, sizeof(struct st_tcp_server_msg));
-
     msg.type = TCP_SERVER_PRELOAD_FILE;
     memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
     memccpy(msg.u_st_tcp_server_msg.op_preload.virtual_path, virtual_path, 0, PATH_MAX - 1);
@@ -1646,7 +1709,8 @@ int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_
     /*****************************************/
 
     debug_info("[NFI-TCP] nfi_tcp_server_preload(ID=%s): end %s - %s = %d\n", server_aux -> id, virtual_path, storage_path, ret);
-    if (ret == -1) {
+    if (ret == -1) 
+    {
         printf("[NFI-TCP] Error en el preload\n");
     }
 
@@ -1655,7 +1719,10 @@ int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_
     return ret;
 }
 
-int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt) {
+
+
+int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt) 
+{
     //char dir[PATH_MAX];
     int ret;
     struct nfi_tcp_server_server * server_aux;
@@ -1675,7 +1742,8 @@ int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_pa
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
     debug_info("[NFI-TCP] nfi_tcp_server_flush(ID=%s): begin %s - %s \n", server_aux -> id, virtual_path, storage_path);
 
-    if (url[strlen(url) - 1] == '/') {
+    if (url[strlen(url) - 1] == '/') 
+    {
         tcp_server_err(TCP_SERVERERR_PARAM);
         return -1;
     }

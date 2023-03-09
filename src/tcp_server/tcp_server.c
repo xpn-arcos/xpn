@@ -21,12 +21,19 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "all_system.h"
+
 #include "base/utils.h"
+
 #include "tcp_server_params.h"
+
 #include "tcp_server_ops.h"
+
 #include "base/workers.h"
+
 #include "tcp_server_comm.h"
+
 #include "tcp_server_d2xpn.h"
+
 #include "base/ns_tcp.h"
 
 
@@ -46,8 +53,6 @@ void tcp_server_run(struct st_th th) {
     debug_info("[TCP-SERVER] (ID=%d) end to do operation '%s'\n", th.id, tcp_server_op2string(th.type_op));
 }
 
-
-
 void tcp_server_dispatcher(struct st_th th) {
     int ret;
 
@@ -59,8 +64,7 @@ void tcp_server_dispatcher(struct st_th th) {
 
     struct st_th th_arg;
     int disconnect = 0;
-    while (!disconnect) 
-    {
+    while (!disconnect) {
         ret = tcp_server_comm_read_operation(th.params, (int) th.sd, (char * ) & (th.type_op), 1, & (th.rank_client_id));
         if (ret == -1) {
             debug_info("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
@@ -86,7 +90,7 @@ void tcp_server_dispatcher(struct st_th th) {
 
     debug_info("[TCP-SERVER] tcp_server_worker_run (ID=%d) close\n", th.rank_client_id);
 
-    tcpClient_comm_close((int) th.sd);           // NUEVO
+    tcpClient_comm_close((int) th.sd); // NUEVO
 }
 
 /* ... Functions / Funciones ......................................... */
