@@ -30,15 +30,16 @@
     int   port_number;
     char  server_name[TCP_MAX_PORT_NAME];
     char  srv_name[TCP_MAX_PORT_NAME] ;
-    int server ;
+    int   server ;
 
-    int locality ;
-    char sem_name_server [PATH_MAX];
+    int     locality ;
+    char    sem_name_server [PATH_MAX];
     sem_t * sem_server ;
 
     // server arguments
     int    argc ;
     char **argv ;
+
   } tcpClient_param_st ;
 
 

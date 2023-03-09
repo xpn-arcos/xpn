@@ -47,8 +47,8 @@
     struct nfi_tcp_server_server
     {
       // old stuff of XPN
-      char id[PATH_MAX];
-      char path[PATH_MAX];
+      char   id[PATH_MAX] ;
+      char path[PATH_MAX] ;
       //struct nfi_tcp_server_connector sd;
 
       // client stub
@@ -57,9 +57,9 @@
 
     struct nfi_tcp_server_fhandle
     {
-      char path[PATH_MAX];
-      int  fd;
-      DIR *dir;
+      char path[PATH_MAX] ;
+      int  fd ;
+      DIR *dir ;
     };
 
 

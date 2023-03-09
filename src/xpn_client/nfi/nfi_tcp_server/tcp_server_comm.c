@@ -39,9 +39,6 @@ int tcpClient_comm_init(tcpClient_param_st * params) {
 }
 
 
-
-
-
 int tcpClient_comm_destroy(tcpClient_param_st * params) {
 
     debug_info("[CLI-COMM] begin tcpClient_comm_destroy(...)\n");
@@ -52,11 +49,6 @@ int tcpClient_comm_destroy(tcpClient_param_st * params) {
     // Return OK
     return 0;
 }
-
-
-
-
-
 
 
 int tcpClient_comm_connect(tcpClient_param_st * params) {
@@ -94,14 +86,14 @@ int tcpClient_comm_connect(tcpClient_param_st * params) {
 
     // Connect...
     
-    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d\n", params -> srv_name, params -> server_name, port);
+    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d\n", params -> srv_name, params -> server_name, params->port_number);
 
     sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sd < 0) {
         perror("socket:");
         return -1;
     }
-    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d ==> %d\n", params -> srv_name, params -> server_name, port, sd);
+    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d ==> %d\n", params -> srv_name, params -> server_name, params->port_number, sd);
 
 
     if (setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag)) == -1) {
@@ -130,37 +122,33 @@ int tcpClient_comm_connect(tcpClient_param_st * params) {
     if (hp == NULL) {
         //tcp_server_err(TCP_SERVERERR_MEMORY);
 
-        fprintf(stderr, "nfi_tcp_server_init: error gethostbyname %s (%s,%d)\n", params -> srv_name, params -> server_name, port);
+        fprintf(stderr, "nfi_tcp_server_init: error gethostbyname %s (%s,%d)\n", params -> srv_name, params -> server_name, params->port_number);
         return -1;
     }
 
     //printf("[NFI_COMM]server = %s-%d-%p\n",server,TCP_SERVER_PORT,hp);
-    printf("[NFI_COMM]server = %s-%d\n", params -> server_name, port);
+    printf("[NFI_COMM]server = %s-%d\n", params -> server_name, params->port_number);
 
     bzero((char * ) & server_addr, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     memcpy( & (server_addr.sin_addr), hp -> h_addr, hp -> h_length);
     //server_addr.sin_port = htons(TCP_SERVER_PORT);
-    server_addr.sin_port = htons(port);
+    server_addr.sin_port = htons(params->port_number);
     printf("[NFI_COMM]Antes de connect to %s\n", params -> server_name);
 
     //se establece la conexion
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
-    printf("[NFI_COMM]%s)connect(%s,%d) = %d\n", params -> srv_name, params -> server_name, port, ret);
+    printf("[NFI_COMM]%s)connect(%s,%d) = %d\n", params -> srv_name, params -> server_name, params->port_number, ret);
 
     if (ret == -1) {
         //tcp_server_err(TCP_SERVERERR_MEMORY);
-        fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%d)\n", params -> srv_name, params -> server_name, port);
+        fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%d)\n", params -> srv_name, params -> server_name, params->port_number);
         perror("nfi_tcp_server_init:");
         return -1;
     }
 
     return sd;
 }
-
-
-
-
 
 
 int tcpClient_comm_disconnect(tcpClient_param_st * params) {
@@ -172,11 +160,6 @@ int tcpClient_comm_disconnect(tcpClient_param_st * params) {
     // Return OK
     return 0;
 }
-
-
-
-
-
 
 
 int tcpClient_comm_locality(tcpClient_param_st * params) {
@@ -233,16 +216,9 @@ int tcpClient_comm_locality(tcpClient_param_st * params) {
 }
 
 
-
-
-
-
-
-
-
-
-ssize_t tcpClient_write_operation(int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id) {
-    int ret;
+ssize_t tcpClient_write_operation(int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id)
+{
+    int ret ;
 
     debug_info("[CLI-COMM] begin tcpClient_write_operation(...)\n");
 
@@ -264,10 +240,11 @@ ssize_t tcpClient_write_operation(int fd, char * data, ssize_t size, __attribute
 }
 
 
-ssize_t tcpClient_write_data(int fd, char * data, ssize_t size, char * msg_id) {
-    
+ssize_t tcpClient_write_data(int fd, char * data, ssize_t size, char * msg_id)
+{
     int ret;
     static ssize_t( * real_write)(int,const void * , size_t) = NULL;
+    int cont ;
 
     debug_info("[CLI-COMM] begin tcpClient_write_data(...)\n");
 
@@ -285,6 +262,7 @@ ssize_t tcpClient_write_data(int fd, char * data, ssize_t size, char * msg_id) {
         real_write = (ssize_t( * )(int,const void * , size_t)) dlsym(RTLD_NEXT, "write");
     }
 
+    cont = 0 ;
     do {
         ret = real_write(fd, data + cont, size - cont);
 
@@ -304,9 +282,6 @@ ssize_t tcpClient_write_data(int fd, char * data, ssize_t size, char * msg_id) {
     }
 
     debug_info("[NFI_COMM]client: write_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
-
-
-
     debug_info("[CLI-COMM] end tcpClient_write_data(...)\n");
 
     // Return bytes written
@@ -314,10 +289,11 @@ ssize_t tcpClient_write_data(int fd, char * data, ssize_t size, char * msg_id) {
 }
 
 
-ssize_t tcpClient_read_data(int fd, char * data, ssize_t size, char * msg_id) {
+ssize_t tcpClient_read_data(int fd, char * data, ssize_t size, char * msg_id)
+{
     int ret;
-    TCP_Status status;
     static ssize_t( * real_read)(int, void * , size_t) = NULL;
+    int cont;
 
     debug_info("[CLI-COMM] begin tcpClient_read_data(...)\n");
 
@@ -334,6 +310,7 @@ ssize_t tcpClient_read_data(int fd, char * data, ssize_t size, char * msg_id) {
         real_read = (ssize_t( * )(int, void * , size_t)) dlsym(RTLD_NEXT, "read");
     }
 
+    cont = 0;
     do {
         ret = real_read(fd, data + cont, size - cont);
 
@@ -348,14 +325,13 @@ ssize_t tcpClient_read_data(int fd, char * data, ssize_t size, char * msg_id) {
 
     if (ret == -1) {
         debug_info("[NFI_COMM]client: read_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
-
         perror("client: read_data");
         return ret;
     }
     debug_info("[NFI_COMM]client: read_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
-
     debug_info("[CLI-COMM] end tcpClient_read_data(...)\n");
 
     // Return bytes read
     return size;
 }
+
