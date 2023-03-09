@@ -91,7 +91,7 @@
    */
 
   struct st_tcp_server_open{
-    char path[PATH_MAX];
+    char path[PATH_MAX];            //TO-DO: Insert FLAGS - O_RDWR etc
   };
 
   struct st_tcp_server_open_req{

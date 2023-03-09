@@ -27,7 +27,7 @@
   #include <stdio.h>
   #include <string.h>
   #include <semaphore.h>
-  #include "mpi.h"
+  //#include "mpi.h"
   #include "base/utils.h"
   #include "tcp_server_conf.h"
 
@@ -52,6 +52,8 @@
     char dns_file[PATH_MAX] ;
     char host_file[PATH_MAX] ;
 
+
+
     // server configuration
     int thread_mode;
 
@@ -63,6 +65,7 @@
 
     // associated client
     int  client ;
+    int   global_sock;
     char dirbase[PATH_MAX] ;
 
     // server arguments

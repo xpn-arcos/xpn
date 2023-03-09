@@ -178,7 +178,8 @@ int tcp_server_comm_readdata_test(int fd, char * id) {
 }
 
 /* AUXILIAR FUNCTIONS */
-int tcp_server_comm_init(char * name, int port, char * file) {
+int tcp_server_comm_init(char * name, int port, char * file) 
+{
   struct sockaddr_in server_addr;
   int val, ret;
   char host[255];
@@ -275,6 +276,9 @@ int tcp_server_comm_init(char * name, int port, char * file) {
 
   return 0;
 }
+
+
+
 
 void tcp_server_close_comm() {
   close(global_sock);
