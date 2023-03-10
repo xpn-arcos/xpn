@@ -39,7 +39,7 @@ char *param_get ( char *key )
 }
 
 
-struct conf_connect_st* XpnPartitionOpen()
+struct conf_connect_st* XpnPartitionOpen ( void )
 {
   static struct conf_connect_st desc;
   char conf[PATH_MAX];
@@ -78,7 +78,7 @@ struct conf_connect_st* XpnPartitionOpen()
         strcpy(desc.connect_u.xml.profile_n, XPN_PROFILE_DEFAULT);
       }
 
-      XPN_DEBUG("Using XPN_CONF=%s", desc.connect_u.xml.conf_n);
+      XPN_DEBUG("Using XPN_CONF=%s",    desc.connect_u.xml.conf_n);
       XPN_DEBUG("Using XPN_PROFILE=%s", desc.connect_u.xml.profile_n);
 
       desc.connect_u.xml.conf_f = fopen(desc.connect_u.xml.conf_n, "r");
@@ -107,7 +107,7 @@ struct conf_connect_st* XpnPartitionOpen()
 }
 
 
-void XpnPartitionClose(struct conf_connect_st *fconf)
+void XpnPartitionClose ( struct conf_connect_st *fconf )
 {
   switch(fconf->type)
   {
@@ -131,7 +131,7 @@ void XpnPartitionClose(struct conf_connect_st *fconf)
   }
 }
 
-int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
+int XpnGetNextPartition ( struct conf_connect_st *fconf, char *name )
 {
   #ifdef ENABLE_MXML
     char *value;
@@ -177,10 +177,6 @@ int XpnGetIdPartition(__attribute__((__unused__)) struct conf_connect_st *fconf,
 
   return (cont++);
 }
-
-
-
-
 
 
 

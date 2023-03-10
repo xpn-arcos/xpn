@@ -109,7 +109,7 @@ mk_conf_file() {
    while read line
    do
       XPN_DATA_NODE="<data_node "
-      XPN_DATA_NODE=$XPN_DATA_NODE" url=\"mpiServer://$line/$XPN_STORAGE_PATH\" "
+      XPN_DATA_NODE=$XPN_DATA_NODE" url=\"mpi_server://$line/$XPN_STORAGE_PATH\" "
       XPN_DATA_NODE=$XPN_DATA_NODE" id=\"id${ITER}\" "
       XPN_DATA_NODE=$XPN_DATA_NODE" />"
       echo "    ${XPN_DATA_NODE}"  >> ${CONFNAME}

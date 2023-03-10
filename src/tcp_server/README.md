@@ -12,17 +12,31 @@ make
 
 ## Execution:
 
-* To start one tcp_server:
+* In order to start one tcp_server at host "localhost" and port "555", you can use:
 ```
-export XPN_CONF=${HOME}/conf/xpn.conf.xml
-export XPN_PROFILE=${HOME}/conf/xpn.profile.xml
-export MYSERVER_FILE=${HOME}/conf/xpn.dns
-export MYSERVER_HOME=${HOME}/expand/src_servers/tcp_server
+# cleanup
+rm -fr   /tmp/xpn_data/
+mkdir -p /tmp/xpn_data/
+rm -fr   /tmp/xpn_conf/
+mkdir -p /tmp/xpn_conf/
+touch    /tmp/xpn_conf/xpn.dns
+touch    /tmp/xpn_conf/machinefile
+touch    /tmp/xpn_conf/xpn.conf.xml
 
-# argument: node id.
-I=$1
+# build xpn.conf.xml
+echo localhost > /tmp/xpn_conf/machinefile
 
-${MYSERVER_HOME}/tcp_server.exe -n node$I -p 9999 -f ${MYSERVER_FILE}
+$PREFIX/scripts/execute/mk_conf.sh --conf /tmp/xpn_conf/xpn.conf.xml \
+                                   --machinefile /tmp/xpn_conf/machinefile \
+                                   --part_size 512k \
+                                   --part_name xpn \
+                                   --storage_path /tmp/xpn_data
+
+# setup the environment variables
+export XPN_PROFILE=${PREFIX}/doc/xpn.profile.example.xml
+export XPN_CONF=/tmp/xpn_conf/xpn.conf.xml
+
+# run the tcp_server...
+${PREFIX}/src/tcp_server/xpn_tcp_server -n localhost -p 555 -f /tmp/xpn_conf/xpn.dns
 ```
-
 
