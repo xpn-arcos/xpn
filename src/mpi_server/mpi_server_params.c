@@ -29,26 +29,35 @@
 
   void mpi_server_params_show ( mpi_server_param_st *params )
   {
-    printf("MPI servers Current configuration:\n");
-    printf("\t-ns <string>:\t%s\n",   params->dns_file) ;
+    DEBUG_BEGIN() ;
+
+    printf(" * MPI server current configuration:\n");
+    printf("\t-ns <path>:\t'%s'\n",   params->dns_file) ;
     if(params->thread_mode == TH_POOL){
       printf("\t-tp:\t\tThread Pool Activated\n") ;
     }
     if(params->thread_mode == TH_OP){
       printf("\t-ntp:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
     }
-    printf("\t-d <string>:\t%s\n",   params->dirbase) ;
+    printf("\t-d <path>:\t'%s'\n",   params->dirbase) ;
+    printf("\t-f <path>:\t'%s'\n",   params->host_file) ;
+
+    DEBUG_END() ;
   }
   
 
   void mpi_server_params_show_usage ( void )
   {
+    DEBUG_BEGIN() ;
+
     printf("Usage:\n");
-    printf("\t-f <path>: file of servers to be shutdown\n") ;
-    printf("\t-ns: file for service name\n") ;
-    printf("\t-tp: use thread pool\n") ;
-    printf("\t-ntp: use thread per Client\n") ;
-    printf("\t-d <string>: name of the base directory\n") ;
+    printf("\t-f  <path>: file of servers to be shutdown\n") ;
+    printf("\t-ns <path>: file for service name\n") ;
+    printf("\t-tp:  use thread-pool\n") ;
+    printf("\t-ntp: use thread per-client\n") ;
+    printf("\t-d  <string>: name of the base directory\n") ;
+
+    DEBUG_END() ;
   }
   
 

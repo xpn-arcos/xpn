@@ -29,7 +29,6 @@ int tcp_server_comm_init(tcp_server_param_st * params)
 {
     int ret;
     int val, port ;
-    char serv_name[HOST_NAME_MAX];
     struct sockaddr_in server_addr;
 
     struct timeval t0;
@@ -38,12 +37,6 @@ int tcp_server_comm_init(tcp_server_param_st * params)
     float time;
 
     DEBUG_BEGIN();
-
-    // Print server info
-    gethostname(serv_name, HOST_NAME_MAX);
-    printf("--------------------------------\n");
-    printf("Starting XPN TCP server %s\n", serv_name);
-    printf("--------------------------------\n\n");
 
     //Get timestap
     TIME_MISC_Timer( & t0);
@@ -56,7 +49,7 @@ int tcp_server_comm_init(tcp_server_param_st * params)
     params -> global_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (params -> global_sock < 0) 
     {
-        perror("error en el socket:");
+        perror("error en el socket: ");
         return -1;
     }
 
@@ -102,7 +95,7 @@ int tcp_server_comm_init(tcp_server_param_st * params)
     ret = bind(params -> global_sock, (struct sockaddr * ) & server_addr, sizeof(server_addr));
     if (ret == -1) 
     {
-        perror("Error en el bind:");
+        perror("bind: ");
         return -1;
     }
     listen(params -> global_sock, 20);
@@ -152,7 +145,7 @@ int tcp_server_comm_init(tcp_server_param_st * params)
     ret = tcp_server_updateFile(params -> srv_name, params -> dns_file, atoi(params -> port_name));
     if (ret == -1) 
     {
-        perror("Error en tcp_server_updateFile:") ;
+        perror("tcp_server_updateFile: ") ;
         return -1;
     }
 
@@ -207,7 +200,7 @@ int tcp_server_comm_destroy(tcp_server_param_st * params)
         char serv_name  [HOST_NAME_MAX];
         gethostname(serv_name, HOST_NAME_MAX);
         printf("--------------------------------\n");
-        printf("XPN MPI server %s stopped\n", serv_name);
+        printf("XPN TCP server %s stopped\n", serv_name);
         printf("--------------------------------\n\n");
     */
     DEBUG_END();
@@ -338,7 +331,7 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
         ret = write(fd, data + cont, size - cont);
         if (ret < 0) 
         {
-            perror("server: Error write_comm:");
+            perror("server: Error write_comm: ");
         }
         debug_info("[COMM] server:write_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
         cont += ret;
@@ -386,7 +379,7 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
         ret = read(fd, data + cont, size - cont);
         if (ret < 0) 
         {
-            perror("server: Error read_comm:");
+            perror("server: Error read_comm: ");
         }
         debug_info("[COMM] server:read_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
         cont += ret;

@@ -23,6 +23,7 @@
 #ifndef _TCP_SERVER_CONF_H_
 #define _TCP_SERVER_CONF_H_
 
+
     #include "all_system.h"
 
 /* Support for files of > 4GB */
@@ -52,8 +53,13 @@
 #endif
 
 #ifndef TCP_SERVER_PORT_DEFAULT
-	#define TCP_SERVER_PORT_DEFAULT	9999
+	#define TCP_SERVER_PORT_DEFAULT	55555
+#endif
+
+#ifndef TCP_SERVER_IOSIZE_DEFAULT
+        #define TCP_SERVER_IOSIZE_DEFAULT  1024
 #endif
 
 
 #endif
+

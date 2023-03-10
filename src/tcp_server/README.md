@@ -37,6 +37,6 @@ export XPN_PROFILE=${PREFIX}/doc/xpn.profile.example.xml
 export XPN_CONF=/tmp/xpn_conf/xpn.conf.xml
 
 # run the tcp_server...
-${PREFIX}/src/tcp_server/xpn_tcp_server -n localhost -p 555 -f /tmp/xpn_conf/xpn.dns
+${PREFIX}/src/tcp_server/xpn_tcp_server -n localhost -p 555 -ns /tmp/xpn_conf/xpn.dns
 ```
 
