@@ -719,15 +719,12 @@
 
   void mpi_server_op_setattr (
 		               mpi_server_param_st *params,
-		               MPI_Comm sd, 
+		               __attribute__((__unused__)) MPI_Comm sd, 
 			       struct st_mpi_server_msg *head, 
 			       __attribute__((__unused__)) int rank_client_id
 		             )
   {
     // check params...
-    if (sd < 0) {
-        return ;
-    }
     if (NULL == params) {
         return ;
     }

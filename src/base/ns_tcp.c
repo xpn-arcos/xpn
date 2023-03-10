@@ -26,15 +26,29 @@
   #include "ns_tcp.h"
 
 
+  /* ... Global Variable / Variable Globales ........................... */
+
+struct tcp_server_node_st
+{
+	char host[255];
+	int  port;
+	char name[255];
+};
+
+static int load = 0;
+static struct tcp_server_node_st tcp_server_node[MAX_TCP_SERVER_NODES];
+static int num_tcp_server_nodes = 0;
+
+
   /* ... Functions / Funciones ......................................... */
 
   
-void tcp_server_readFile() {
-
+int tcp_server_readFile ( void )
+{
     FILE * fd;
     char * name = NULL;
 
-    printf("[NFI_COMM]begin the translation\n");
+    printf("[NS_TCP] begin the translation\n");
 
     name = getenv(TCP_SERVER_FILE);
     if ((name == NULL) || (strcmp(name, "") == 0)) {
@@ -49,14 +63,8 @@ void tcp_server_readFile() {
     while (EOF != fscanf(fd, "%s %s %d",
             tcp_server_node[num_tcp_server_nodes].name,
             tcp_server_node[num_tcp_server_nodes].host, &
-            tcp_server_node[num_tcp_server_nodes].port)) {
-        /*
-        printf("[NFI_COMM]-%d> %s %s %d -\n",
-        num_tcp_server_nodes,
-        tcp_server_node[num_tcp_server_nodes].name,
-        tcp_server_node[num_tcp_server_nodes].host,
-        tcp_server_node[num_tcp_server_nodes].port);
-        */
+            tcp_server_node[num_tcp_server_nodes].port))
+    {
         num_tcp_server_nodes++;
 
         if (num_tcp_server_nodes >= MAX_TCP_SERVER_NODES) {
@@ -65,69 +73,68 @@ void tcp_server_readFile() {
         }
     }
     fclose(fd);
-    printf("[NFI_COMM]end the translation\n");
+    printf("[NS_TCP] end the translation\n");
 
+    return 0 ;
 }
 
-void tcp_server_translate(char * server, char * newserver, int * port) {
+int tcp_server_translate(char * server, char * newserver, int * port)
+{
     int i;
 
-    /*************************************/
-    printf("[NFI_COMM]Buscando 1 ... %s\n", server);
+    debug_info("[NS_TCP] Buscando 1 ... %s\n", server);
 
+    /*************************************/
     /* DON'T WORK WITH THREADS */
     if (!load) {
         load = 1;
-        printf("[NFI_COMM]Cargando Fichero ... \n");
+        printf("[NS_TCP] Cargando Fichero ... \n");
 
         tcp_server_readFile();
     }
     /*************************************/
-    printf("[NFI_COMM]Buscando 2 ... %s\n", server);
+    printf("[NS_TCP] Buscando 2 ... %s\n", server);
 
-    for (i = 0; i < num_tcp_server_nodes; i++) {
-        if (strcmp(server, tcp_server_node[i].name) == 0) {
+    for (i = 0; i < num_tcp_server_nodes; i++)
+    {
+        if (strcmp(server, tcp_server_node[i].name) == 0)
+	{
             strcpy(newserver, tcp_server_node[i].host);
+            *port = tcp_server_node[i].port;
 
-            /*
-       printf("[NFI_COMM]Encontrado ... %s %d\n",
-        tcp_server_node[i].host,
-        tcp_server_node[i].port);
-        */
-            #ifdef DBG_COMM
-                printf("[NFI_COMM]Encontrado ... %s %d\n",
-                tcp_server_node[i].host,
-                tcp_server_node[i].port);
-            #endif
-                *port = tcp_server_node[i].port;
-            break;
+            debug_info("[NS_TCP] Encontrado ... %s %d\n",
+                        tcp_server_node[i].host, tcp_server_node[i].port);
+            return 0;
         }
     }
-    if (i == num_tcp_server_nodes) {
+
+    if (i == num_tcp_server_nodes)
+    {
         fprintf(stderr, "translate: error %s not found (%d)\n", server, num_tcp_server_nodes);
-        exit(-1);
+	return -1;
     }
+
+    return 0 ;
 }
 
 
 int tcp_server_updateFile(char * name, char * file, int port)
 {
-  char host[255];
+  char   host[1024];
   FILE * f;
+
+  debug_info("[COMM] begin tcp_server_comm_init(%s, %d, %s)\n", name, port, file);
 
   // save host name and port...
   f = fopen(file, "a+");
-
   if (f == NULL) {
-    perror ( "FOPEN: " );
+    perror("FOPEN: ");
     return -1;
   }
 
-  gethostname(host, 255);
+  gethostname(host, 1024);
   fprintf(f, "%s %s %d\r\n", name, host, port);
   fclose(f);
-
-  debug_info("[COMM] begin tcp_server_comm_init(%s, %d, %s)\n", name, port, file);
 
   return 0;
 }

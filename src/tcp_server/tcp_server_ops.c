@@ -144,158 +144,160 @@ void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, struct st_t
 void tcp_server_op_fstat(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id); //TODO: implement
 void tcp_server_op_getid(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id); //TODO: call in switch
 
+
 /**********************************
 Read the operation to realize
 ***********************************/
-int tcp_server_do_operation(struct st_th * th, int * the_end) {
-
+int tcp_server_do_operation(struct st_th * th, int * the_end)
+{
     DEBUG_BEGIN();
 
     int ret;
     struct st_tcp_server_msg head;
 
-    switch (th -> type_op) {
-        //File API
-    case TCP_SERVER_OPEN_FILE_WS:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), head -> id);
-        if (ret != -1) {
-            tcp_server_op_open_ws(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_OPEN_FILE_WOS:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), head -> id);
-        if (ret != -1) {
-            tcp_server_op_open_wos(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_CREAT_FILE_WS:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), head -> id);
-        if (ret != -1) {
-            tcp_server_op_creat_ws(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_CREAT_FILE_WOS:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), head -> id);
-        if (ret != -1) {
-            tcp_server_op_creat_wos(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_READ_FILE_WS:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), head -> id);
-        if (ret != -1) {
-            tcp_server_op_read_ws(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_READ_FILE_WOS:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), head -> id);
-        if (ret != -1) {
-            tcp_server_op_read_wos(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_WRITE_FILE_WS:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), head -> id);
-        if (ret != -1) {
-            tcp_server_op_write_ws(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_WRITE_FILE_WOS:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), head -> id);
-        if (ret != -1) {
-            tcp_server_op_write_wos(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_CLOSE_FILE_WS:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_close), sizeof(struct st_tcp_server_close), head -> id);
-        if (ret != -1) {
-            tcp_server_op_close_ws(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
+    switch (th -> type_op)
+    {
+		//File API
+	    case TCP_SERVER_OPEN_FILE_WS:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_open_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_OPEN_FILE_WOS:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_open_wos(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_CREAT_FILE_WS:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_creat_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_CREAT_FILE_WOS:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_creat_wos(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_READ_FILE_WS:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_read_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_READ_FILE_WOS:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_read_wos(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_WRITE_FILE_WS:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_write_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_WRITE_FILE_WOS:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_write_wos(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_CLOSE_FILE_WS:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_close), sizeof(struct st_tcp_server_close), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_close_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
 
-        // Metadata API
-    case TCP_SERVER_RM_FILE:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_rm), sizeof(struct st_tcp_server_rm), head -> id);
-        if (ret != -1) {
-            tcp_server_op_rm(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_RENAME_FILE:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_rename), sizeof(struct st_tcp_server_rename), head -> id);
-        if (ret != -1) {
-            tcp_server_op_rename(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_GETATTR_FILE:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_getattr), sizeof(struct st_tcp_server_getattr), head -> id);
-        if (ret != -1) {
-            tcp_server_op_getattr(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_SETATTR_FILE:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_setattr), sizeof(struct st_tcp_server_setattr), head -> id);
-        if (ret != -1) {
-            tcp_server_op_setattr(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
+		// Metadata API
+	    case TCP_SERVER_RM_FILE:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_rm), sizeof(struct st_tcp_server_rm), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_rm(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_RENAME_FILE:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_rename), sizeof(struct st_tcp_server_rename), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_rename(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_GETATTR_FILE:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_getattr), sizeof(struct st_tcp_server_getattr), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_getattr(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_SETATTR_FILE:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_setattr), sizeof(struct st_tcp_server_setattr), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_setattr(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
 
-        //Directory API
-    case TCP_SERVER_MKDIR_DIR:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_mkdir), sizeof(struct st_tcp_server_mkdir), head -> id);
-        if (ret != -1) {
-            tcp_server_op_mkdir(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_OPENDIR_DIR:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_opendir), sizeof(struct st_tcp_server_opendir), head -> id);
-        if (ret != -1) {
-            tcp_server_op_opendir(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_READDIR_DIR:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_readdir), sizeof(struct st_tcp_server_readdir), head -> id);
-        if (ret != -1) {
-            tcp_server_op_readdir(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_CLOSEDIR_DIR:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_closedir), sizeof(struct st_tcp_server_closedir), head -> id);
-        if (ret != -1) {
-            tcp_server_op_closedir(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_RMDIR_DIR:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_rmdir), sizeof(struct st_tcp_server_rmdir), head -> id);
-        if (ret != -1) {
-            tcp_server_op_rmdir(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
+		//Directory API
+	    case TCP_SERVER_MKDIR_DIR:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_mkdir), sizeof(struct st_tcp_server_mkdir), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_mkdir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_OPENDIR_DIR:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_opendir), sizeof(struct st_tcp_server_opendir), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_opendir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_READDIR_DIR:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_readdir), sizeof(struct st_tcp_server_readdir), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_readdir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_CLOSEDIR_DIR:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_closedir), sizeof(struct st_tcp_server_closedir), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_closedir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_RMDIR_DIR:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_rmdir), sizeof(struct st_tcp_server_rmdir), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_rmdir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
 
-        //File system API
-    case TCP_SERVER_PRELOAD_FILE:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_preload), sizeof(struct st_tcp_server_preload), head -> id);
-        if (ret != -1) {
-            tcp_server_op_preload(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
-    case TCP_SERVER_FLUSH_FILE:
-        ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_flush), sizeof(struct st_tcp_server_flush), head -> id);
-        if (ret != -1) {
-            tcp_server_op_flush(th -> params, (int) th -> sd, & head, head -> id);
-        }
-        break;
+		//File system API
+	    case TCP_SERVER_PRELOAD_FILE:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_preload), sizeof(struct st_tcp_server_preload), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_preload(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
+	    case TCP_SERVER_FLUSH_FILE:
+		ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_flush), sizeof(struct st_tcp_server_flush), 0 /*head.id*/);
+		if (ret != -1) {
+		    tcp_server_op_flush(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		}
+		break;
 
-        //Connection API
-    case TCP_SERVER_DISCONNECT:
-        break;
+		//Connection API
+	    case TCP_SERVER_DISCONNECT:
+		break;
 
-    case TCP_SERVER_FINALIZE:
-        *
-        the_end = 1;
-        break;
+	    case TCP_SERVER_FINALIZE:
+		*
+		the_end = 1;
+		break;
 
-        //FS Metadata API
-    case TCP_SERVER_GETNODENAME:
-        tcp_server_op_getnodename(th -> params, (int) th -> sd, & head, head -> id); //NEW
-        break;
+		//FS Metadata API
+	    case TCP_SERVER_GETNODENAME:
+		tcp_server_op_getnodename(th -> params, (int) th -> sd, & head, 0 /*head.id*/); //NEW
+		break;
 
     }
 
@@ -437,7 +439,9 @@ void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp
     debug_info("[TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", params -> srv_name, s, fd);
 }
 
-void tcp_server_op_read_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) {
+
+void tcp_server_op_read_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
+{
     struct st_tcp_server_read_req req;
     char * buffer;
     long size, diff, to_read, cont;
@@ -1096,7 +1100,8 @@ void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, __attribute
     DEBUG_END();
 }
 
-void tcp_server_op_getid(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) {
+void tcp_server_op_getid(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
+{
     // do getid
     tcp_server_comm_write_data(params, sd, (char * ) head -> id, TCP_SERVER_ID, rank_client_id); //TO-DO: Check function
 

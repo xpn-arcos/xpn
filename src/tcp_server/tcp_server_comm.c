@@ -27,8 +27,17 @@
 
 int tcp_server_comm_init(tcp_server_param_st * params) 
 {
-    int ret, provided;
+    int ret;
+    int val, port ;
     char serv_name[HOST_NAME_MAX];
+    struct sockaddr_in server_addr;
+
+    struct timeval t0;
+    struct timeval t1;
+    struct timeval tf;
+    float time;
+
+    DEBUG_BEGIN();
 
     // Print server info
     gethostname(serv_name, HOST_NAME_MAX);
@@ -37,10 +46,7 @@ int tcp_server_comm_init(tcp_server_param_st * params)
     printf("--------------------------------\n\n");
 
     //Get timestap
-    struct timeval t0;
     TIME_MISC_Timer( & t0);
-
-    DEBUG_BEGIN();
 
     /*
      * Initialize socket
@@ -86,10 +92,11 @@ int tcp_server_comm_init(tcp_server_param_st * params)
         perror("error en el setsockopt:");
         return -1;
     }
-    bzero((char * ) & server_addr, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(port);
+    port = atoi(params->port_name) ;
+    bzero((char * )&server_addr, sizeof(server_addr)) ;
+    server_addr.sin_family      = AF_INET ;
+    server_addr.sin_addr.s_addr = INADDR_ANY ;
+    server_addr.sin_port        = htons(port) ;
 
     // bind & listen
     ret = bind(params -> global_sock, (struct sockaddr * ) & server_addr, sizeof(server_addr));
@@ -142,24 +149,20 @@ int tcp_server_comm_init(tcp_server_param_st * params)
      * Publish socket "name"
      */
 
-    ret = tcp_server_updateFile(params -> srv_name, params -> dns_file, params -> port_name);
-
+    ret = tcp_server_updateFile(params -> srv_name, params -> dns_file, atoi(params -> port_name));
     if (ret == -1) 
     {
-        perror("[%d]\tError en tcp_server_updateFile:", __LINE__);
+        perror("Error en tcp_server_updateFile:") ;
         return -1;
     }
 
     /*
      * Print time to be up-and-running
      */
-
-    struct timeval t1;
-    struct timeval tf;
-    float time;
-    TIME_MISC_Timer( & t1);
-    TIME_MISC_DiffTime( & t0, & t1, & tf);
-    time = TIME_MISC_TimevaltoFloat( & tf);
+    TIME_MISC_Timer(&t1);
+    TIME_MISC_DiffTime(&t0, &t1, &tf);
+    time = TIME_MISC_TimevaltoFloat(&tf);
+    printf("Started XPN TCP server %e\n", time);
 
     debug_info("[SERV-COMM] server %d available at %s\n", params -> rank, params -> port_name);
     debug_info("[SERV-COMM] server %d accepting...\n", params -> rank);
@@ -218,7 +221,7 @@ int tcp_server_comm_destroy(tcp_server_param_st * params)
 int tcp_server_comm_accept(tcp_server_param_st * params) 
 {
     struct sockaddr_in client_addr;
-    int ret, sc, flag;
+    int sc, flag;
     socklen_t size = sizeof(struct sockaddr_in);
 
     DEBUG_BEGIN();
@@ -293,7 +296,7 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
         return -1;
     }
 
-    ret = tcp_server_comm_read_data(params, fd, data, size * sizeof(int), rank_client_id); //      Nuevo
+    ret = tcp_server_comm_read_data(params, fd, data, size * sizeof(int), *rank_client_id); //      Nuevo
 
     if (ret != 0) 
     {
@@ -308,7 +311,7 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
 
 
 
-ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, int rank_client_id) //TO-DO rank client
+ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TO-DO rank client
 {
     int ret, cont = 0;
 
@@ -355,7 +358,7 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
 
 
 
-ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, int rank_client_id) //TO-DO rank client
+ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TO-DO rank client
 {
     int ret, cont = 0;
     //TCP_Status status ;
