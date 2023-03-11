@@ -35,6 +35,7 @@
     tcp_server_param_st params;
     worker_t worker;
     int the_end = 0;
+    char serv_name[HOST_NAME_MAX];
 
 
   /* ... Auxiliar Functions / Funciones Auxiliares ..................... */
@@ -79,19 +80,19 @@ void tcp_server_dispatcher(struct st_th th)
         }
 
         // Launch worker per operation
-        th_arg.params = & params;
-        th_arg.sd = (int) th.sd;
-        th_arg.function = tcp_server_run;
-        th_arg.type_op = th.type_op;
+        th_arg.params         = & params;
+        th_arg.sd             = (int) th.sd;
+        th_arg.function       = tcp_server_run;
+        th_arg.type_op        = th.type_op;
         th_arg.rank_client_id = th.rank_client_id;
-        th_arg.wait4me = FALSE;
+        th_arg.wait4me        = FALSE;
 
         workers_launch( & worker, & th_arg, tcp_server_run);
     }
 
     debug_info("[TCP-SERVER] tcp_server_worker_run (ID=%d) close\n", th.rank_client_id);
 
-    tcpClient_comm_close((int) th.sd); // NUEVO
+    tcp_server_comm_close((int) th.sd);
 }
 
 
@@ -100,34 +101,45 @@ void tcp_server_dispatcher(struct st_th th)
 
 int tcp_server_up(void) 
 {
-    int sd;
+    int ret;
     struct st_tcp_server_msg head;
     int rank_client_id;
     struct st_th th_arg;
-    int ret;
+    sem_t * sem_server ;
+    int sd;
+
+    // Feedback
+    printf("\n");
+    printf(" -------------------\n");
+    printf(" Starting servers... (%s)\n", serv_name);
+    printf(" -------------------\n");
+    printf("\n");
 
     // Initialize
     debug_msg_init();
-    tcp_server_comm_init( & params);
-    workers_init( & worker, params.thread_mode);
+    ret = tcp_server_comm_init( & params);
+    if (ret < 0) {
+        printf("[TCP-SERVER] ERROR: tcp_comm initialization fails\n");
+        return -1;
+    }
+    ret = workers_init(&worker, params.thread_mode);
+    if (ret < 0) {
+        printf("[TCP-SERVER] ERROR: workers initialization fails\n");
+        return -1;
+    }
 
     // Initialize semaphore for server disks
     ret = sem_init( & (params.disk_sem), 0, 1);
-    if (ret == -1) 
-    {
-        printf("[MAIN] ERROR: semaphore initialize fails\n");
+    if (ret < 0) {
+        printf("[TCP-SERVER] ERROR: semaphore initialization fails\n");
         return -1;
     }
 
     // Initialize semaphore for clients
-    char serv_name[HOST_NAME_MAX];
-    gethostname(serv_name, HOST_NAME_MAX);
     sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
-
-    sem_t * sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
-    if (sem_server == 0) 
-    {
-        printf("[MAIN] ERROR: semaphore open fails\n");
+    sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
+    if (sem_server == 0) {
+        printf("[TCP-SERVER] ERROR: semaphore open fails\n");
         return -1;
     }
 
@@ -137,17 +149,15 @@ int tcp_server_up(void)
     {
         debug_info("[TCP-SERVER] tcp_server_accept_comm()\n");
 
-        params.client = 0; // TO DO - What is this
+        params.client = 0; // TO DO - What is this?
 
-        sd = tcp_server_comm_accept( & params);
-        if (sd == -1) 
-        {
+        sd = tcp_server_comm_accept(& params);
+        if (sd == -1) {
             continue;
         }
 
         ret = tcp_server_comm_read_operation( & params, sd, (char * ) & (head.type), 1, & (rank_client_id));
-        if (ret == -1) 
-        {
+        if (ret == -1) {
             printf("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
             return -1;
         }
@@ -183,27 +193,39 @@ int tcp_server_up(void)
     return 0;
 }
 
-int tcp_server_down( __attribute__((__unused__)) int argc,  __attribute__((__unused__)) char * argv[]) 
+int tcp_server_down( void )
 {
-    int ret;
-////int buf;
-    int port_number;
+    int  ret, sd, data;
+    int  port_number;
     char srv_name[1024];
     char server_name[1024];
-    char dns_name[2048];
     FILE * file;
 
-    printf("----------------\n");
-    printf("Stopping servers\n");
-    printf("----------------\n\n");
+    // Feedback
+    printf("\n");
+    printf(" -------------------\n");
+    printf(" Stopping servers... (%s)\n", serv_name);
+    printf(" -------------------\n");
+    printf("\n");
 
-    //TCP_Init( & argc, & argv);
+    // Initialize
+    debug_msg_init();
+    ret = tcp_server_comm_init( & params);
+    if (ret < 0) {
+        printf("[TCP-SERVER] ERROR: tcp_comm initialization fails\n");
+        return -1;
+    }
+    ret = workers_init(&worker, params.thread_mode);
+    if (ret < 0) {
+        printf("[TCP-SERVER] ERROR: workers initialization fails\n");
+        return -1;
+    }
 
     // Open host file
     file = fopen(params.host_file, "r");
     if (file == NULL) 
     {
-        printf("[MAIN] ERROR: invalid file %s\n", params.host_file);
+        printf("[TCP-SERVER] ERROR: invalid file %s\n", params.host_file);
         return -1;
     }
 
@@ -211,34 +233,44 @@ int tcp_server_down( __attribute__((__unused__)) int argc,  __attribute__((__unu
     {
         // Lookup port name
         ret = tcp_server_translate(srv_name, server_name, & (port_number));
-        if (ret == -1) 
+        if (ret < 0)
         {
-            printf("[MAIN] ERROR: server %s not found\n", dns_name);
+            printf("[TCP-SERVER] ERROR: server %s not found\n", srv_name);
             continue;
         }
 
-        // Connect with servers
-        //ret = int_connect(port_number, TCP_INFO_NULL, 0, TCP_COMM_SELF, & server);    TO-DO ¿???? 
-        if (ret != 0) 
+        // Connect with server
+	sd = tcp_server_comm_connect(&params, server_name, port_number) ;
+        if (sd < 0) 
         {
-            printf("[MAIN] ERROR: int_connect fails\n");
+            printf("[TCP-SERVER] ERROR: connect to %s failed\n", server_name);
             continue;
         }
 
-	/*
-        buf = TCP_SERVER_FINALIZE;
-	tcp_server_comm_write_data(&params, sd, (char * ) & buf, sizeof(int), 0); // 0: rank_client_id
-        */
+        // Send shutdown request
+        data = TCP_SERVER_FINALIZE;
+        ret = tcp_server_comm_write_data(&params, sd, (char * ) &data, sizeof(int), 0); // 0: rank_client_id
+        if (ret < 0)
+        {
+            printf("[TCP-SERVER] ERROR: write SERVER_FINALIZE to %s failed\n", srv_name);
+            return -1;
+        }
+
+        // Close
+	tcp_server_comm_close(sd) ;
     }
 
     // Close host file
     fclose(file);
 
-    //TCP_Finalize();
+    // Wait and finalize for all current workers
+    debug_info("[TCP-SERVER] workers_destroy\n");
+    workers_destroy( & worker);
+    debug_info("[TCP-SERVER] tcp_server_comm_destroy\n");
+    tcp_server_comm_destroy( & params);
 
     return 0;
 }
-
 
 
 /*
@@ -247,7 +279,7 @@ int tcp_server_down( __attribute__((__unused__)) int argc,  __attribute__((__unu
 
 int main(int argc, char * argv[]) 
 {
-    int ret = -1;
+    int    ret = -1;
     char * exec_name = NULL;
 
     // Initializing...
@@ -262,28 +294,32 @@ int main(int argc, char * argv[])
     printf(" Begin.\n");
     printf("\n");
 
-    exec_name = basename(argv[0]);
-    printf(" * action=%s\n", exec_name);
-
     // Get arguments..
-    ret = tcp_server_params_get( & params, argc, argv);
-    if (ret < 0) 
+    ret = tcp_server_params_get(&params, argc, argv);
+    if (ret < 0)
     {
         tcp_server_params_show_usage();
         return -1;
     }
 
+    // Show configuration...
+    exec_name = basename(argv[0]);
+    printf(" * action=%s\n", exec_name);
+    gethostname(serv_name, HOST_NAME_MAX);
+    printf(" * host=%s\n",   serv_name);
+    tcp_server_params_show(&params);
+
     // Do associate action...
-    if (strcasecmp(exec_name, "xpn_stop_tcp_server") == 0) 
-    {
-        ret = tcp_server_down(argc, argv);
+    if (strcasecmp(exec_name, "xpn_stop_tcp_server") == 0) {
+        ret = tcp_server_down();
     } 
-    else 
-    {
+    else {
         ret = tcp_server_up();
     }
 
     return ret;
 }
 
+
 /* ................................................................... */
+

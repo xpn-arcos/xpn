@@ -1,8 +1,11 @@
 
 # Changelog
 
+## 2.2.0 - 2023-03-10
+  * TCP server rebuilt from scratch
+
 ## 2.1.0 - 2023-03-03
-  * spack support added
+  * Spack support added
   * Code refactoring
 
 ## 2.0.0 - 2022-12-12
