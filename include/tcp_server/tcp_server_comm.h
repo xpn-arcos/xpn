@@ -39,7 +39,8 @@
   int      tcp_server_comm_destroy   ( tcp_server_param_st *params ) ;
 
   int      tcp_server_comm_accept    ( tcp_server_param_st *params ) ;
-  int      tcpClient_comm_close      ( int fd ) ;
+  int      tcp_server_comm_connect   ( tcp_server_param_st * params, char *server_name, int port_number ) ;
+  int      tcp_server_comm_close     ( int fd ) ;
 
   ssize_t tcp_server_comm_write_data     ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
   ssize_t tcp_server_comm_read_operation ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int *rank_client_id ) ;

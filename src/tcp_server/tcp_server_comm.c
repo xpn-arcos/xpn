@@ -257,14 +257,89 @@ int tcp_server_comm_accept(tcp_server_param_st * params)
     return params -> client;
 }
 
-int tcpClient_comm_close(int fd) 
-{
 
-    close(fd); //NUEVO
+int tcp_server_comm_connect(tcp_server_param_st * params, char *server_name, int port_number)
+{
+    struct hostent * hp;
+    struct sockaddr_in server_addr;
+    int ret, sd, flag = 1;
+
+
+    DEBUG_BEGIN();
+    debug_info("[CLI-COMM] begin tcpClient_comm_connect(...)\n");
+
+    // Socket
+    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d\n", params -> srv_name, server_name, port_number);
+    sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sd < 0) 
+    {
+        perror("socket:");
+        return -1;
+    }
+    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d ==> %d\n", params -> srv_name, server_name, port_number, sd);
+
+    // sock-options
+    if (setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag)) == -1) 
+    {
+        perror("setsockopt: ");
+        return -1;
+    }
+
+    int val = 1024 * 1024; //1 MB
+    if (setsockopt(sd, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int)) == -1) 
+    {
+        perror("setsockopt: ");
+        return -1;
+    }
+
+    val = 1024 * 1024; //1 MB
+    if (setsockopt(sd, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int)) == -1) 
+    {
+        perror("setsockopt: ");
+        return -1;
+    }
+
+    // server_name to ip address...
+    hp = gethostbyname(server_name);
+    if (hp == NULL) 
+    {
+        //tcp_server_err(TCP_SERVERERR_MEMORY);
+        fprintf(stderr, "nfi_tcp_server_init: error gethostbyname (%s,%d)\n", server_name, port_number);
+        return -1;
+    }
+
+    // Connect...
+    printf("[NFI_COMM]server = %s-%d\n", server_name, port_number);
+
+    bzero((char * ) & server_addr, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port   = htons(port_number);
+    memcpy( & (server_addr.sin_addr), hp -> h_addr, hp -> h_length);
+
+    //se establece la conexion
+    ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
+    if (ret == -1) 
+    {
+        //tcp_server_err(TCP_SERVERERR_MEMORY);
+        fprintf(stderr, "nfi_tcp_server_init: error in connect (%s,%d)\n", server_name, port_number);
+        perror("nfi_tcp_server_init:");
+        return -1;
+    }
+
+    DEBUG_END();
+
+    return sd;
+}
+
+
+int tcp_server_comm_close(int fd) 
+{
+    close(fd);
 
     // Return OK
     return 1;
 }
+
 
 ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, char * data, ssize_t size, int * rank_client_id) 
 {
@@ -301,7 +376,6 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
     // Return bytes read
     return size; //TO-DO number of ints
 }
-
 
 
 ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TO-DO rank client
@@ -350,7 +424,6 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
 }
 
 
-
 ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TO-DO rank client
 {
     int ret, cont = 0;
@@ -397,4 +470,6 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
     return cont;
 }
 
+
 /* ................................................................... */
+
