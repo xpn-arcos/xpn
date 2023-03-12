@@ -24,10 +24,10 @@
     #include "base/utils.h"
     #include "base/workers.h"
     #include "base/ns_tcp.h"
-    #include "tcp_server_params.h"
-    #include "tcp_server_ops.h"
-    #include "tcp_server_comm.h"
-    #include "tcp_server_d2xpn.h"
+    #include "tcp_server/tcp_server_params.h"
+    #include "tcp_server/tcp_server_ops.h"
+    #include "tcp_server/tcp_server_comm.h"
+    #include "tcp_server/tcp_server_d2xpn.h"
 
 
   /* ... Global variables / Variables globales ......................... */
@@ -52,6 +52,8 @@ void tcp_server_run(struct st_th th)
 void tcp_server_dispatcher(struct st_th th) 
 {
     int ret;
+    int disconnect;
+    struct st_th th_arg;
 
     // check params...
     if (NULL == th.params) 
@@ -60,10 +62,8 @@ void tcp_server_dispatcher(struct st_th th)
         return;
     }
 
-    struct st_th th_arg;
-    int disconnect = 0;
-
-    while (!disconnect) 
+    disconnect = 0;
+    while (! disconnect) 
     {
         ret = tcp_server_comm_read_operation(th.params, (int) th.sd, (char * ) & (th.type_op), 1, & (th.rank_client_id));
         if (ret == -1) 
@@ -94,7 +94,6 @@ void tcp_server_dispatcher(struct st_th th)
 
     tcp_server_comm_close((int) th.sd);
 }
-
 
 
 /* ... Functions / Funciones ......................................... */
@@ -196,10 +195,11 @@ int tcp_server_up(void)
 int tcp_server_down( void )
 {
     int  ret, sd, data;
-    int  port_number;
     char srv_name[1024];
     char server_name[1024];
+    char port_number[1024];
     FILE * file;
+    int ns_tcp_lookup ( char * param_srv_name, char * host_name, char * port_name ) ;
 
     // Feedback
     printf("\n");
@@ -232,7 +232,7 @@ int tcp_server_down( void )
     while (fscanf(file, "%[^\n] ", srv_name) != EOF) 
     {
         // Lookup port name
-        ret = tcp_server_translate(srv_name, server_name, & (port_number));
+	ret = ns_tcp_lookup(srv_name, server_name, port_number) ;
         if (ret < 0)
         {
             printf("[TCP-SERVER] ERROR: server %s not found\n", srv_name);
@@ -240,7 +240,7 @@ int tcp_server_down( void )
         }
 
         // Connect with server
-	sd = tcp_server_comm_connect(&params, server_name, port_number) ;
+	sd = tcp_server_comm_connect(&params, server_name, atoi(port_number)) ;
         if (sd < 0) 
         {
             printf("[TCP-SERVER] ERROR: connect to %s failed\n", server_name);

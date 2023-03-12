@@ -31,7 +31,7 @@ void tcp_server_params_show(tcp_server_param_st * params)
 
     printf(" * TCP-server current configuration:\n");
     printf("\t-n  <string>:\t'%s'\n", params -> name);
-    printf("\t-p  <int>:\t'%d'\n",    params -> port);
+    printf("\t-p  <int>:\t'%s'\n",    params -> port);
     printf("\t-io <int>:\t%d\n",      params -> IOsize);
 
     printf("\t-ns <string>:\t'%s'\n", params -> dns_file);
@@ -82,7 +82,7 @@ int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
     strcpy(params -> dns_file, "");
 
     gethostname(params->name, TCP_MAX_PORT_NAME);
-    params->port    = TCP_SERVER_PORT_DEFAULT;
+    sprintf(params->port, "%d", TCP_SERVER_PORT_DEFAULT);
     params->IOsize  = TCP_SERVER_IOSIZE_DEFAULT;
 
     // update user requests
@@ -94,7 +94,7 @@ int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
             switch (argv[i][1])
 	    {
             case 'p':
-                params -> port = atoi(argv[i + 1]);
+                strcpy(params -> port, argv[i + 1]);
                 i++;
                 break;
             case 'n':
