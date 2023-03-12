@@ -157,7 +157,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     TIME_MISC_Timer(&t1);
     TIME_MISC_DiffTime(&t0, &t1, &tf);
     time = TIME_MISC_TimevaltoFloat(&tf);
-    printf("Started XPN TCP server %e\n", time);
+    printf(" > XPN TCP server started (took %e sec.)\n", time);
 
     debug_info("[SERV-COMM] server %d accepting at %s\n", params -> rank, params -> port_name);
 

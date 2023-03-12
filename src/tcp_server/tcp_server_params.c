@@ -29,7 +29,7 @@ void tcp_server_params_show(tcp_server_param_st * params)
 {
     DEBUG_BEGIN();
 
-    printf(" * TCP-server current configuration:\n");
+    printf("   * TCP-server current configuration:\n");
     printf("\t-n  <string>:\t'%s'\n", params -> name);
     printf("\t-p  <int>:\t'%s'\n",    params -> port);
     printf("\t-io <int>:\t%d\n",      params -> IOsize);

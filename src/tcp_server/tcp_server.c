@@ -110,7 +110,7 @@ int tcp_server_up(void)
     // Feedback
     printf("\n");
     printf(" -------------------\n");
-    printf(" Starting servers... (%s)\n", serv_name);
+    printf(" > Starting servers... (%s)\n", serv_name);
     printf(" -------------------\n");
     printf("\n");
 
@@ -204,7 +204,7 @@ int tcp_server_down( void )
     // Feedback
     printf("\n");
     printf(" -------------------\n");
-    printf(" Stopping servers... (%s)\n", serv_name);
+    printf(" > Stopping servers... (%s)\n", serv_name);
     printf(" -------------------\n");
     printf("\n");
 
@@ -291,7 +291,7 @@ int main(int argc, char * argv[])
     printf(" tcp_server\n");
     printf(" ----------\n");
     printf("\n");
-    printf(" Begin.\n");
+    printf(" > Begin.\n");
     printf("\n");
 
     // Get arguments..
@@ -304,9 +304,9 @@ int main(int argc, char * argv[])
 
     // Show configuration...
     exec_name = basename(argv[0]);
-    printf(" * action=%s\n", exec_name);
+    printf("   * action=%s\n", exec_name);
     gethostname(serv_name, HOST_NAME_MAX);
-    printf(" * host=%s\n",   serv_name);
+    printf("   * host=%s\n",   serv_name);
     tcp_server_params_show(&params);
 
     // Do associate action...
