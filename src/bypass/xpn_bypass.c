@@ -90,7 +90,7 @@
 
     if ( NULL == fdstable )
     {
-      fprintf(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
+      fdebug_info(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
       if (fdstable_aux != NULL){
         free(fdstable_aux) ;
       }
@@ -221,7 +221,7 @@
 
     if ( NULL == fdsdirtable )
     {
-      fprintf(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
+      fdebug_info(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
       if (NULL != fdsdirtable_aux){
         free(fdsdirtable_aux) ;
       }
@@ -343,7 +343,7 @@
       xpn_adaptor_initCalled_env = getenv("INITCALLED");
       xpn_adaptor_initCalled     = 0;
       if (xpn_adaptor_initCalled_env != NULL) {
-          xpn_adaptor_initCalled = atoi(xpn_adaptor_initCalled_env);
+        xpn_adaptor_initCalled = atoi(xpn_adaptor_initCalled_env);
       }
 
       xpn_adaptor_initCalled_getenv = 1;
@@ -365,7 +365,7 @@
 
       if (ret < 0)
       {
-        fprintf(stderr, "ERROR: Expand xpn_init couldn't be initialized :-(\n");
+        fdebug_info(stderr, "ERROR: Expand xpn_init couldn't be initialized :-(\n");
         xpn_adaptor_initCalled = 0;
         setenv("INITCALLED", "0", 1);
       }
@@ -657,6 +657,35 @@
   }
 
   off_t lseek(int fd, off_t offset, int whence)
+  {
+    int ret = -1;
+
+    debug_info("[bypass] >> Before lseek...\n");
+
+    struct generic_fd virtual_fd = fdstable_get ( fd );
+
+    if(virtual_fd.type == FD_XPN)
+    {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("[bypass]\t xpn_lseek %d,%ld,%d\n", fd, offset, whence);
+      ret = xpn_lseek(virtual_fd.real_fd, offset, whence);
+      debug_info("[bypass]\t xpn_lseek %d,%ld,%d -> %d\n", fd, offset, whence, ret);
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("[bypass]\t try to dlsym_lseek %d,%ld,%d\n", fd, offset, whence);
+      ret = dlsym_lseek(fd, offset, whence);
+      debug_info("[bypass]\t dlsym_lseek %d,%ld,%d -> %d\n", fd, offset, whence, ret);
+    }
+
+    debug_info("[bypass] << After lseek...\n");
+    return ret;
+  }
+
+  off_t lseek64(int fd, off64_t offset, int whence)
   {
     int ret = -1;
 
