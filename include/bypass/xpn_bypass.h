@@ -90,7 +90,8 @@ int ftruncate  (int fildes, off_t length);
 ssize_t read   (int fildes,       void *buf, size_t nbyte);
 ssize_t write  (int fildes, const void *buf, size_t nbyte);
 
-off_t   lseek  (int fildes, off_t offset, int whence);
+off_t   lseek   (int fildes, off_t offset, int whence);
+off64_t lseek64 (int fd,   off64_t offset, int whence);
 
 int __lxstat     (int ver, const char *path, struct stat   *buf);
 int __lxstat64   (int ver, const char *path, struct stat64 *buf);

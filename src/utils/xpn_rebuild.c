@@ -49,15 +49,11 @@ int main(int argc, char *argv[])
 
   blocksize = atoi(argv[3]) ;
 
-  buf = (char *) malloc(blocksize) ;
+  buf = (char *) malloc(blocksize + 1) ;
   if (NULL == buf) {
     perror("malloc: ");
     return -1;
   }
-
-  // ls -d... -> https://stackoverflow.com/questions/246215/how-can-i-generate-a-list-of-files-with-their-absolute-path-in-linux
-  sprintf(command, "tree -fainc %s | head -n -2 | tail -n +2  | sed 's|%s||g' > /tmp/partition_content.txt ", argv[1], argv[1]);
-  ret = system(command);
 
   file = fopen("/tmp/partition_content.txt", "r");
   if ( NULL == file )
@@ -81,17 +77,16 @@ int main(int argc, char *argv[])
 
     //Generate source path
     sprintf( src_path, "%s/%s", argv[1], entry );
-
     ret = stat(src_path, &stat_buf);
     if (ret < 0) {
         perror("stat: ");
+        printf("[ERROR] %s\n", src_path);
         continue;
     }
 
     //Generate destination path
     sprintf( dest_path, "%s/%s", argv[2], entry );
     //sprintf( dest_path, "%s/%d/%s", argv[2], rank, entry );
-
 
     if (S_ISDIR(stat_buf.st_mode))
     {
@@ -123,10 +118,14 @@ int main(int argc, char *argv[])
         offset_src = rank * blocksize ;
         do
         {
-          lseek(fd_src, offset_src, SEEK_SET) ;
+          ret = lseek(fd_src, offset_src, SEEK_SET) ;
+          if (ret < 0) {
+            perror("lseek: ");
+          }
 
           cont = 0;
           buf_len = blocksize;
+          memset(buf, 0, buf_len);
           do {
             ret = read(fd_src, buf + cont, buf_len);
             cont    = cont + ret ;
@@ -141,7 +140,8 @@ int main(int argc, char *argv[])
             buf_len  = buf_len - ret ;
           } while ( (cont2 < buf_len) && (ret != 0) );
 
-          //printf("rank %d; ret: %d; offset %d; nodes %d; blocksize %d\n", rank, ret2, offset, size, blocksize);
+          //printf("rank %d; ret: %d; offset %d; nodes %d; blocksize %d\n", rank, ret, offset_src, size, blocksize);
+          //printf("Buf: %s\n", buf);
 
           offset_src = offset_src + (size * blocksize) ;
         }
@@ -149,16 +149,6 @@ int main(int argc, char *argv[])
 
         close(fd_src);
         close(fd_dest);
-    }
-  }
-
-  if (rank == 0)
-  {
-    ret = unlink("/tmp/partition_content.txt");
-    if ( -1 == ret )
-    {
-      perror("unlink: ");
-      return -1;
     }
   }
 
