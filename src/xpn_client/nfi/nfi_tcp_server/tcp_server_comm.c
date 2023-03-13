@@ -64,7 +64,11 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     // Lookup port name
     do 
     {
-	ret = ns_tcp_lookup(params -> srv_name, params -> server_name, params -> port_number) ;
+        //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
+
+        ret = ns_tcp_lookup(params -> srv_name, params -> server_name, params -> port_number) ;
+
+        //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
         if (ret == -1) 
         {
             if (lookup_retries == 0) 
@@ -82,7 +86,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
 
     if (ret == -1) 
     {
-        debug_error("ERROR: DNS Lookup %s Port %s\n", params -> server_name, params -> port_name);
+        debug_error("ERROR: DNS Lookup %s Port %s\n", params -> server_name, params -> port);
         return -1;
     }
 
@@ -140,7 +144,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     printf("[NFI_COMM]Antes de connect to %s\n", params -> server_name);
 
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
-    printf("[NFI_COMM]%s)connect(%s,%s) = %d\n", params -> srv_name, params -> server_name, params->port_number, ret);
+    printf("[NFI_COMM]\t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
     if (ret < 0)
     {
         //tcp_server_err(TCP_SERVERERR_MEMORY);
@@ -150,7 +154,9 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         return -1;
     }
 
-    return sd;
+    params->server = sd;
+
+    return ret;
 }
 
 
@@ -187,29 +193,45 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
 
     data = TCP_SERVER_GETNODENAME;
 
+    //printf("AQUI 1 - %d\n", params->server);
+
     ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ; 
-    if (ret != 0) 
+
+    if (ret < 0) 
     {
         debug_warning("Server[?]: TCP_Send fails :-(");
         return -1;
     }
 
+    //printf("AQUI 1b - %d\n", params->server);
+
+    ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ; 
+
+    if (ret < 0) 
+    {
+        debug_warning("Server[?]: TCP_Send fails :-(");
+        return -1;
+    }
+
+    //printf("AQUI 2\n");
     ret = tcpClient_read_data( params -> server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>") ;
 
-    if (ret != 0) 
+    if (ret < 0) 
     {
         debug_warning("Server[?]: tcpClient_read_data fails :-(");
         return -1;
     }
 
+    //printf("AQUI 3\n");
     ret = tcpClient_read_data( params -> server, params -> sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
 
-    if (ret != 0) 
+    if (ret < 0) 
     {
         debug_warning("Server[?]: tcpClient_read_data fails :-(");
         return -1;
     }
 
+    // printf("AQUI 4\n");
     if (strcmp(cli_name, serv_name) == 0) 
     {
         params -> locality = 1;
@@ -257,7 +279,7 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     static ssize_t( * real_write)(int,const void * , size_t) = NULL;
     int cont ;
 
-    debug_info("[CLI-COMM] begin tcpClient_write_data(...)\n");
+    printf("[CLI-COMM] begin tcpClient_write_data(...)\n");
 
     // Check params
     if (size == 0) 
@@ -280,7 +302,7 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     {
         ret = real_write(fd, data + cont, size - cont);
 
-        debug_info("[NFI_COMM]client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
+        printf("[NFI_COMM]client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
 
         if (ret <= 0) perror("client: Error write_comm:");
         
@@ -290,14 +312,16 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
 
     if (ret == -1) 
     {
-        debug_info("[NFI_COMM]client: write_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
+        printf("[NFI_COMM]client: write_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
 
         perror("client: write_data");
         return ret;
     }
 
-    debug_info("[NFI_COMM]client: write_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
-    debug_info("[CLI-COMM] end tcpClient_write_data(...)\n");
+    printf("[NFI_COMM]client: write_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
+    printf("[CLI-COMM] end tcpClient_write_data(...)\n");
+
+    debug_info("-------------SIZE = %d\n", size);
 
     // Return bytes written
     return size;

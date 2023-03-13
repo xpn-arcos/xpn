@@ -14,14 +14,14 @@ class Xpn(AutotoolsPackage):
     # Package's homepage here.
     homepage = "https://github.com/xpn-arcos/xpn/"
     git = "https://github.com/xpn-arcos/xpn.git"
-    url = "https://github.com/dcamarmas/xpn/archive/refs/tags/v2.1.0.tar.gz"
+    url = "https://github.com/xpn-arcos/xpn/archive/refs/tags/v2.1.0.tar.gz"
 
     # List of GitHub accounts to notify when the package is updated.
     maintainers = ["xpn-arcos", "dcamarmas", "acaldero", "fgcarbal"]
 
     # versions
     version('latest', branch='master', submodules=True)
-    version("2.1.0", sha256="a44de0e8b75de694c959cbc84d1593a07aa7cd343f7172cc39ddfd6526ed5e1d")
+    version("2.1.0", sha256="7063ae410b28abe100481cda15f80d996799f8f4b487afec9028e6774cf91f7c")
 
     # Variants
     variant("mpich",     default=False, description="Use MPICH")
