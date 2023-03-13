@@ -384,7 +384,7 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
 
     // do creat
     fd = filesystem_creat(s, 0770); // TODO: tcp_server_op_creat don't use 'mode' from client ?
-    if (fd == -1) {
+    if (fd < 0) {
         filesystem_mkpath(s);
         fd = filesystem_creat(s, 0770);
     }
@@ -403,7 +403,7 @@ void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp
 
     // do creat
     fd = filesystem_creat(s, 0770); // TODO: tcp_server_op_creat don't use 'mode' from client ?
-    if (fd == -1) {
+    if (fd < 0) {
         filesystem_mkpath(s);
         fd = filesystem_creat(s, 0770);
     }
@@ -927,7 +927,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
 
     // Open origin file
     fd_orig = filesystem_open(head -> u_st_tcp_server_msg.op_preload.storage_path, O_RDONLY);
-    if (fd_orig == -1) 
+    if (fd_orig < 0) 
     {
         tcp_server_comm_write_data(params, sd, (char * ) & fd_orig, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
         return;
@@ -937,7 +937,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
 
     // Create new file
     fd_dest = filesystem_creat(file, 0777);
-    if (fd_dest == -1) 
+    if (fd_dest < 0) 
     {
         filesystem_close(fd_orig);
         tcp_server_comm_write_data(params, sd, (char * ) & fd_dest, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
@@ -950,7 +950,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
     do 
     {
         ret = filesystem_lseek(fd_orig, cont, SEEK_SET);
-        if (ret == -1) 
+        if (ret < 0) 
         {
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
@@ -959,7 +959,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
         }
 
         read_bytes = filesystem_read(fd_orig, & buffer, BLOCKSIZE);
-        if (read_bytes == -1) 
+        if (read_bytes < 0) 
         {
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
@@ -970,7 +970,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
         if (read_bytes > 0) 
         {
             write_bytes = filesystem_write(fd_dest, & buffer, read_bytes);
-            if (write_bytes == -1) 
+            if (write_bytes < 0) 
             {
                 filesystem_close(fd_orig);
                 filesystem_close(fd_dest);
@@ -1016,7 +1016,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
 
     // Open origin file
     fd_orig = filesystem_open(file, O_RDONLY);
-    if (fd_orig == -1) 
+    if (fd_orig < 0) 
     {
         printf("Error on open operation on '%s'\n", file);
         tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
@@ -1025,7 +1025,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
 
     // Create new file
     fd_dest = filesystem_open(head -> u_st_tcp_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT);
-    if (fd_dest == -1) 
+    if (fd_dest < 0) 
     {
         printf("Error on open operation on '%s'\n", head -> u_st_tcp_server_msg.op_flush.storage_path);
         filesystem_close(fd_orig);
@@ -1041,7 +1041,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
     do 
     {
         read_bytes = filesystem_read(fd_orig, & buffer, BLOCKSIZE);
-        if (read_bytes == -1) 
+        if (read_bytes < 0) 
         {
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
@@ -1053,7 +1053,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
         {
             filesystem_lseek(fd_dest, cont, SEEK_SET);
             write_bytes = filesystem_write(fd_dest, & buffer, read_bytes);
-            if (write_bytes == -1) 
+            if (write_bytes < 0) 
             {
                 filesystem_close(fd_orig);
                 filesystem_close(fd_dest);

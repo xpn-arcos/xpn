@@ -149,7 +149,7 @@ int tcp_server_up(void)
 
         params.client = 0;
         sd = tcp_server_comm_accept(& params);
-        if (sd == -1) {
+        if (sd < 0) {
             continue;
         }
 

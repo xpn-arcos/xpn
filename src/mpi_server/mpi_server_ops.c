@@ -332,7 +332,7 @@
 
     // do creat
     fd = filesystem_creat(s, 0770) ; // TODO: mpi_server_op_creat don't use 'mode' from client ?
-    if (fd == -1) {
+    if (fd < 0) {
         filesystem_mkpath(s) ;
         fd = filesystem_creat(s, 0770) ;
     }
@@ -352,7 +352,7 @@
 
     // do creat
     fd = filesystem_creat(s, 0770) ; // TODO: mpi_server_op_creat don't use 'mode' from client ?
-    if (fd == -1) {
+    if (fd < 0) {
         filesystem_mkpath(s) ;
         fd = filesystem_creat(s, 0770) ;
     }
@@ -852,7 +852,7 @@
 
     // Open origin file
     fd_orig = filesystem_open(head->u_st_mpi_server_msg.op_preload.storage_path, O_RDONLY) ;
-    if (fd_orig == -1) {
+    if (fd_orig < 0) {
         return;
     }
 
@@ -860,7 +860,7 @@
 
     // Create new file
     fd_dest = filesystem_creat(file, 0777) ;
-    if (fd_dest == -1) {
+    if (fd_dest < 0) {
         close(fd_orig) ;
         return;
     }
@@ -871,14 +871,14 @@
     do
     {
         ret = filesystem_lseek(fd_orig, cont, SEEK_SET) ;
-        if (ret == -1) {
+        if (ret < 0) {
             close(fd_orig) ;
             close(fd_dest) ;
             return;
         }
 
         read_bytes = filesystem_read(fd_orig, &buffer, BLOCKSIZE) ;
-        if (read_bytes == -1){
+        if (read_bytes < 0){
             close(fd_orig) ;
             close(fd_dest) ;
             return;
@@ -930,14 +930,14 @@
 
     // Open origin file
     fd_orig = filesystem_open(file, O_RDONLY) ;
-    if (fd_orig == -1) {
+    if (fd_orig < 0) {
         printf("Error on open operation on '%s'\n", file) ;
         return;
     }
 
     // Create new file
     fd_dest = filesystem_open(head->u_st_mpi_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT) ;
-    if (fd_dest == -1) {
+    if (fd_dest < 0) {
         printf("Error on open operation on '%s'\n", head->u_st_mpi_server_msg.op_flush.storage_path) ;
         return;
     }
@@ -950,7 +950,7 @@
     do
     {
         read_bytes = filesystem_read(fd_orig, &buffer, BLOCKSIZE) ;
-        if (read_bytes == -1) {
+        if (read_bytes < 0) {
             return;
         }
 

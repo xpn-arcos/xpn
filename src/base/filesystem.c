@@ -18,21 +18,22 @@
  *
  */
 
-/* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-#include "filesystem.h"
+     #include "filesystem.h"
 
-/* ... Varibles ........................................... */
+  /* ... Varibles ........................................... */
 
-//pthread_attr_t filesystem_attr;
+     //pthread_attr_t filesystem_attr;
 
-/* ... Functions / Funciones ......................................... */
+  /* ... Functions / Funciones ......................................... */
 
-/*
- * Internal
- */
+     /*
+      * Internal
+      */
 
-int aux_clear_dirs(char * path) {
+int aux_clear_dirs(char * path)
+{
     int j;
     char ant = '\0', s[255];
 
@@ -61,7 +62,9 @@ int aux_clear_dirs(char * path) {
     return 0;
 }
 
-int aux_get_dirs(char * path, int n, char * s) {
+
+int aux_get_dirs(char * path, int n, char * s)
+{
     long unsigned i = 0;
     long j = 0, ant = -1, pos = -1;
     int cont = -1;
@@ -79,7 +82,7 @@ int aux_get_dirs(char * path, int n, char * s) {
 
     for (i = 0; i < strlen(path) && cont < (n + 1); i++) {
         if (path[i] == '/') {
-            if (ant == -1) {
+            if (ant < 0) {
                 ant = pos = i;
             }
             pos = i;
@@ -100,6 +103,7 @@ int aux_get_dirs(char * path, int n, char * s) {
     return strlen(s);
 }
 
+
 /*
  * API
  */
@@ -116,7 +120,8 @@ int aux_get_dirs(char * path, int n, char * s) {
   return 0;
 }*/
 
-void * filesystem_async_close(void * arg) {
+void * filesystem_async_close(void * arg)
+{
     // Try to close file
     int ret = real_posix_close((int)(long) arg);
     if (ret < 0) {
@@ -138,7 +143,8 @@ void * filesystem_async_close(void * arg) {
   return 0;
 }*/
 
-int filesystem_creat(char * pathname, mode_t mode) {
+int filesystem_creat(char * pathname, mode_t mode)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -164,7 +170,8 @@ int filesystem_creat(char * pathname, mode_t mode) {
     return ret;
 }
 
-int filesystem_open(char * pathname, int flags) {
+int filesystem_open(char * pathname, int flags)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -187,7 +194,8 @@ int filesystem_open(char * pathname, int flags) {
     return ret;
 }
 
-int filesystem_open2(char * pathname, int flags, mode_t mode) {
+int filesystem_open2(char * pathname, int flags, mode_t mode)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -210,7 +218,8 @@ int filesystem_open2(char * pathname, int flags, mode_t mode) {
     return ret;
 }
 
-int filesystem_close(int fd) {
+int filesystem_close(int fd)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -249,7 +258,8 @@ int filesystem_close(int fd) {
     return ret;
 }
 
-long filesystem_read(int read_fd2, void * buffer, int buffer_size) {
+long filesystem_read(int read_fd2, void * buffer, int buffer_size)
+{
     ssize_t read_num_bytes = -1;
     ssize_t read_remaining_bytes = buffer_size;
     void * read_buffer = buffer;
@@ -264,7 +274,7 @@ long filesystem_read(int read_fd2, void * buffer, int buffer_size) {
         read_num_bytes = real_posix_read(read_fd2, read_buffer, read_remaining_bytes);
 
         /* Check errors */
-        if (read_num_bytes == -1) {
+        if (read_num_bytes < 0) {
             //perror("read: ") ;
             debug_error("[FILE_POSIX]: read fails to read data.\n");
             return -1;
@@ -283,7 +293,8 @@ long filesystem_read(int read_fd2, void * buffer, int buffer_size) {
     return buffer_size;
 }
 
-long filesystem_write(int write_fd2, void * buffer, int num_bytes_to_write) {
+long filesystem_write(int write_fd2, void * buffer, int num_bytes_to_write)
+{
     ssize_t write_num_bytes = -1;
     ssize_t write_remaining_bytes = num_bytes_to_write;
     void * write_buffer = buffer;
@@ -298,7 +309,7 @@ long filesystem_write(int write_fd2, void * buffer, int num_bytes_to_write) {
         write_num_bytes = real_posix_write(write_fd2, write_buffer, write_remaining_bytes);
 
         /* Check errors */
-        if (write_num_bytes == -1) {
+        if (write_num_bytes < 0) {
             //perror("write: ") ;
             debug_error("[FILE_POSIX]: write fails to write data.\n");
             return -1;
@@ -311,7 +322,8 @@ long filesystem_write(int write_fd2, void * buffer, int num_bytes_to_write) {
     return num_bytes_to_write;
 }
 
-int filesystem_rename(char * old_pathname, char * new_pathname) {
+int filesystem_rename(char * old_pathname, char * new_pathname)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -337,7 +349,8 @@ int filesystem_rename(char * old_pathname, char * new_pathname) {
     return ret;
 }
 
-int filesystem_mkpath(char * pathname) {
+int filesystem_mkpath(char * pathname)
+{
     int ret;
     char dir[PATH_MAX];
 
@@ -357,7 +370,8 @@ int filesystem_mkpath(char * pathname) {
     return 1;
 }
 
-int filesystem_mkdir(char * pathname, mode_t mode) {
+int filesystem_mkdir(char * pathname, mode_t mode)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -380,7 +394,8 @@ int filesystem_mkdir(char * pathname, mode_t mode) {
     return ret;
 }
 
-int filesystem_rmdir(char * pathname) {
+int filesystem_rmdir(char * pathname)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -403,7 +418,8 @@ int filesystem_rmdir(char * pathname) {
     return ret;
 }
 
-DIR * filesystem_opendir(char * pathname) {
+DIR * filesystem_opendir(char * pathname)
+{
     DIR * ret;
 
     DEBUG_BEGIN();
@@ -426,7 +442,8 @@ DIR * filesystem_opendir(char * pathname) {
     return ret;
 }
 
-struct dirent * filesystem_readdir(DIR * dirp) {
+struct dirent * filesystem_readdir(DIR * dirp)
+{
     struct dirent * ret;
 
     DEBUG_BEGIN();
@@ -449,7 +466,8 @@ struct dirent * filesystem_readdir(DIR * dirp) {
     return ret;
 }
 
-int filesystem_closedir(DIR * dirp) {
+int filesystem_closedir(DIR * dirp)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -472,7 +490,8 @@ int filesystem_closedir(DIR * dirp) {
     return ret;
 }
 
-off_t filesystem_lseek(int fd, off_t offset, int whence) {
+off_t filesystem_lseek(int fd, off_t offset, int whence)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -495,7 +514,8 @@ off_t filesystem_lseek(int fd, off_t offset, int whence) {
     return ret;
 }
 
-int filesystem_unlink(char * pathname) {
+int filesystem_unlink(char * pathname)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -518,7 +538,8 @@ int filesystem_unlink(char * pathname) {
     return ret;
 }
 
-int filesystem_stat(char * pathname, struct stat * sinfo) {
+int filesystem_stat(char * pathname, struct stat * sinfo)
+{
     int ret;
 
     DEBUG_BEGIN();
@@ -544,4 +565,6 @@ int filesystem_stat(char * pathname, struct stat * sinfo) {
     return ret;
 }
 
-/* ................................................................... */
+
+  /* ................................................................... */
+
