@@ -28,6 +28,9 @@ buff_w = ''.join(buff)
 try:
     print("fname: " + fname)
     f = open(fname, "w", encoding="utf-8")
+    #print("Name of the file: ", fo.name)
+    #print("Closed or not : ",   fo.closed)
+    #print("Opening mode : ",    fo.mode)
     f.write(str(buff_w))
     f.close()
 

@@ -150,15 +150,14 @@ int tcp_server_up(void)
     {
         debug_info("[TCP-SERVER] tcp_server_accept_comm()\n");
 
-        params.client = 0; // TO DO - What is this?
-
+        params.client = 0;
         sd = tcp_server_comm_accept(& params);
         if (sd == -1) {
             continue;
         }
 
         ret = tcp_server_comm_read_operation( & params, sd, (char * ) & (head.type), 1, & (rank_client_id));
-        printf("AQUI SERVER %d\n",ret);
+        // printf("AQUI SERVER %d\n",ret);
         if (ret == -1) {
             printf("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
             return -1;

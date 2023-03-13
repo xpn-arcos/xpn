@@ -193,7 +193,7 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
 
     data = TCP_SERVER_GETNODENAME;
 
-    printf("AQUI 1 - %d\n", params->server);
+    //printf("AQUI 1 - %d\n", params->server);
 
     ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ; 
 
@@ -203,7 +203,7 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         return -1;
     }
 
-    printf("AQUI 1b - %d\n", params->server);
+    //printf("AQUI 1b - %d\n", params->server);
 
     ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ; 
 
@@ -212,7 +212,8 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         debug_warning("Server[?]: TCP_Send fails :-(");
         return -1;
     }
-printf("AQUI 2\n");
+
+    //printf("AQUI 2\n");
     ret = tcpClient_read_data( params -> server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>") ;
 
     if (ret < 0) 
@@ -220,7 +221,8 @@ printf("AQUI 2\n");
         debug_warning("Server[?]: tcpClient_read_data fails :-(");
         return -1;
     }
-printf("AQUI 3\n");
+
+    //printf("AQUI 3\n");
     ret = tcpClient_read_data( params -> server, params -> sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
 
     if (ret < 0) 
@@ -228,7 +230,8 @@ printf("AQUI 3\n");
         debug_warning("Server[?]: tcpClient_read_data fails :-(");
         return -1;
     }
-printf("AQUI 4\n");
+
+    // printf("AQUI 4\n");
     if (strcmp(cli_name, serv_name) == 0) 
     {
         params -> locality = 1;
