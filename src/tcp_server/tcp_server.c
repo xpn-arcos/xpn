@@ -65,7 +65,9 @@ void tcp_server_dispatcher(struct st_th th)
     disconnect = 0;
     while (! disconnect) 
     {
+        printf("ANTES tcp_server_comm_read_operation\n");
         ret = tcp_server_comm_read_operation(th.params, (int) th.sd, (char * ) & (th.type_op), 1, & (th.rank_client_id));
+        printf("DESPUES tcp_server_comm_read_operation - %d\n", ret);
         if (ret == -1) 
         {
             debug_info("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
@@ -156,6 +158,7 @@ int tcp_server_up(void)
         }
 
         ret = tcp_server_comm_read_operation( & params, sd, (char * ) & (head.type), 1, & (rank_client_id));
+        printf("AQUI SERVER %d\n",ret);
         if (ret == -1) {
             printf("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
             return -1;
