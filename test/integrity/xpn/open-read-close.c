@@ -12,6 +12,7 @@ int main ( int argc, char *argv[] )
 
 	printf("env XPN_CONF=./xpn.conf\n");
 	setenv("XPN_CONF",  "./xpn.conf", 1);
+	setenv("XPN_DNS",  "/tmp/tcp_server.dns", 1);
 
         // xpn-init
 	ret = xpn_init();
