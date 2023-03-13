@@ -321,7 +321,7 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     printf("[NFI_COMM]client: write_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
     printf("[CLI-COMM] end tcpClient_write_data(...)\n");
 
-    printf("-------------SIZE = %d\n", size);
+    debug_info("-------------SIZE = %d\n", size);
 
     // Return bytes written
     return size;

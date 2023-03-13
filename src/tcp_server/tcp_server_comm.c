@@ -87,7 +87,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     }
 
     // bind & listen
-    printf("[%s][%d]\t%s\n", __FILE__, __LINE__, params->port);
+    debug_info("[%s][%d]\t%s\n", __FILE__, __LINE__, params->port);
     port = atoi(params->port) ;
     bzero((char * )&server_addr, sizeof(server_addr)) ;
     server_addr.sin_family      = AF_INET ;
@@ -147,7 +147,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
 
     // Publish socket "host name:port number"
     char * ip = ns_tcp_get_hostname() ;
-    printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%s\n", __FILE__, __LINE__, params -> dns_file, params -> name, ip, params -> port);
+    debug_info("[%s][%d]\t1-%s 2-%s 3-%s 4-%s\n", __FILE__, __LINE__, params -> dns_file, params -> name, ip, params -> port);
     
     ret = ns_tcp_publish(params -> dns_file, params -> name, ip, params -> port) ;
     if (ret < 0)
@@ -162,7 +162,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     time = TIME_MISC_TimevaltoFloat(&tf);
     printf(" > XPN TCP server started (took %e sec.)\n", time);
 
-    debug_info("[SERV-COMM] server %d accepting at %s\n", params -> rank, params -> port);
+    debug_info("[SRV_TCP_COMM] server %d accepting at %s\n", params -> rank, params -> port);
 
     DEBUG_END();
 
@@ -184,7 +184,7 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
 	{
             ret = ns_tcp_unpublish(params -> dns_file, params -> srv_name);
             if (ret < 0) {
-                debug_error("Server[%d]: ns_unpublish fails :-(", params -> rank);
+                debug_error("[SRV_TCP_COMM] server%d: ns_unpublish fails :-(", params -> rank);
                 return -1;
             }
         }
@@ -228,7 +228,7 @@ int tcp_server_comm_accept(tcp_server_param_st * params)
     {
         perror("accept: ");
     }
-    debug_info("[COMM] desp. accept conection .... %d\n", sc);
+    debug_info("[SRV_TCP_COMM] desp. accept conection .... %d\n", sc);
 
     // tcp_nodelay
     flag = 1;
@@ -273,17 +273,17 @@ int tcp_server_comm_connect(tcp_server_param_st * params, char *server_name, int
 
 
     DEBUG_BEGIN();
-    debug_info("[CLI-COMM] begin tcpClient_comm_connect(...)\n");
+    debug_info("[SRV_TCP_COMM] begin tcpClient_comm_connect(...)\n");
 
     // Socket
-    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d\n", params -> srv_name, server_name, port_number);
+    debug_info("[SRV_TCP_COMM]----SERVER = %s NEWSERVER = %s PORT = %d\n", params -> srv_name, server_name, port_number);
     sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sd < 0)
     {
         perror("socket:");
         return -1;
     }
-    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d ==> %d\n", params -> srv_name, server_name, port_number, sd);
+    debug_info("[SRV_TCP_COMM]----SERVER = %s NEWSERVER = %s PORT = %d ==> %d\n", params -> srv_name, server_name, port_number, sd);
 
     // sock-options
     ret = setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag)) ;
@@ -319,7 +319,7 @@ int tcp_server_comm_connect(tcp_server_param_st * params, char *server_name, int
     }
 
     // Connect...
-    printf("[NFI_COMM]server = %s-%d\n", server_name, port_number);
+    printf("[SRV_TCP_COMM] server = %s-%d\n", server_name, port_number);
 
     bzero((char * ) & server_addr, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
@@ -361,7 +361,7 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
     // Check params
     if (NULL == params)
     {
-        debug_warning("Server[%d]: ERROR: NULL arguments", -1);
+        debug_warning("[SRV_TCP_COMM] server %d: ERROR: NULL arguments", -1);
         return -1;
     }
     if (size == 0)
@@ -370,7 +370,7 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
     }
     if (size < 0)
     {
-        debug_warning("Server[%d]: ERROR: size < 0", params -> rank);
+        debug_warning("[SRV_TCP_COMM] server %d: ERROR: size < 0", params -> rank);
         return -1;
     }
 
@@ -378,7 +378,7 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
 
     if (ret != 0)
     {
-        debug_warning("Server: tcp_server_comm_read_op fails : %d\n", ret);
+        debug_warning("[SRV_TCP_COMM] server: tcp_server_comm_read_op fails : %d\n", ret);
     }
 
     DEBUG_END();
@@ -397,33 +397,35 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     // Check params
     if (NULL == params)
     {
-        printf("Server[%d]: ERROR: NULL params", -1);
+        fprintf(stderr, "[SRV_TCP_COMM] server %d: ERROR: NULL params", -1);
+        return -1;
+    }
+    if (size < 0)
+    {
+        fprintf(stderr, "[SRV_TCP_COMM] server %d: ERROR: size < 0", params -> rank);
         return -1;
     }
     if (size == 0)
     {
         return 0;
     }
-    if (size < 0)
-    {
-        printf("Server[%d]: ERROR: size < 0", params -> rank);
-        return -1;
-    }
 
-    do {
-        printf("[COMM] server:write_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    do
+    {
+        debug_info("[SRV_TCP_COMM] server:write_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
         ret = write(fd, data + cont, size - cont);
-        if (ret < 0)
-        {
+        if (ret < 0) {
             perror("server: Error write_comm: ");
+	    return -1;
         }
-        printf("[COMM] server:write_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+
+        debug_info("[SRV_TCP_COMM] server:write_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
         cont += ret;
     } while ((ret > 0) && (cont != size));
 
     if (ret < 0)
     {
-        printf("[COMM] server: Error write_comm(%d): -1 \n", fd);
+        debug_info("[SRV_TCP_COMM] server: Error write_comm(%d): -1 \n", fd);
         return ret;
     }
 
@@ -436,46 +438,49 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
 
 ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TODO rank client
 {
-    int ret, cont = 0;
-    //TCP_Status status ;
+    int ret ;
+    int cont = 0;
 
     DEBUG_BEGIN();
 
     // Check params
     if (NULL == params)
     {
-        printf("Server[-1]: ERROR: NULL params", -1);
+        fprintf(stderr, "[SRV_TCP_COMM]: ERROR: NULL params");
+        return -1;
+    }
+    if (size < 0)
+    {
+        fprintf(stderr, "[SRV_TCP_COMM] server %d: ERROR: size < 0", params -> rank);
         return -1;
     }
     if (size == 0)
     {
         return 0;
     }
-    if (size < 0)
-    {
-        printf("Server[%d]: ERROR: size < 0", params -> rank);
-        return -1;
-    }
 
-    do {
-        printf("[COMM] server:read_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    do
+    {
+        debug_info("[SRV_TCP_COMM] server:read_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
         ret = read(fd, data + cont, size - cont);
         if (ret < 0)
         {
-            perror("server: Error read_comm: ");
+            perror("[SRV_TCP_COMM] server: Error read_comm: ");
+	    return -1;
         }
-        printf("[COMM] server:read_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+
+        debug_info("[SRV_TCP_COMM] server:read_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
         cont += ret;
     } while ((ret > 0) && (cont != size));
 
     if (ret < 0)
     {
-        printf("[COMM] server: Error read_comm(%d): -1\n", fd);
+        debug_info("[SRV_TCP_COMM] server: Error read_comm(%d): -1\n", fd);
         return ret;
     }
 
     DEBUG_END();
-    printf("------ DEVUELVE %d\n", cont);
+
     // Return bytes read
     return cont;
 }
