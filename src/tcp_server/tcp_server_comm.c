@@ -397,7 +397,7 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     // Check params
     if (NULL == params)
     {
-        debug_warning("Server[%d]: ERROR: NULL params", -1);
+        printf("Server[%d]: ERROR: NULL params", -1);
         return -1;
     }
     if (size == 0)
@@ -406,24 +406,24 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     }
     if (size < 0)
     {
-        debug_warning("Server[%d]: ERROR: size < 0", params -> rank);
+        printf("Server[%d]: ERROR: size < 0", params -> rank);
         return -1;
     }
 
     do {
-        debug_info("[COMM] server:write_comm(%d) antes: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
+        printf("[COMM] server:write_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
         ret = write(fd, data + cont, size - cont);
         if (ret < 0)
         {
             perror("server: Error write_comm: ");
         }
-        debug_info("[COMM] server:write_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
+        printf("[COMM] server:write_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
         cont += ret;
     } while ((ret > 0) && (cont != size));
 
     if (ret < 0)
     {
-        debug_info("[COMM] server: Error write_comm(%d): -1 ID=%s:%p\n", fd, id, id);
+        printf("[COMM] server: Error write_comm(%d): -1 \n", fd);
         return ret;
     }
 
@@ -444,7 +444,7 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
     // Check params
     if (NULL == params)
     {
-        debug_warning("Server[-1]: ERROR: NULL params", -1);
+        printf("Server[-1]: ERROR: NULL params", -1);
         return -1;
     }
     if (size == 0)
@@ -453,29 +453,29 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
     }
     if (size < 0)
     {
-        debug_warning("Server[%d]: ERROR: size < 0", params -> rank);
+        printf("Server[%d]: ERROR: size < 0", params -> rank);
         return -1;
     }
 
     do {
-        debug_info("[COMM] server:read_comm(%d) antes: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
+        printf("[COMM] server:read_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
         ret = read(fd, data + cont, size - cont);
         if (ret < 0)
         {
             perror("server: Error read_comm: ");
         }
-        debug_info("[COMM] server:read_comm(%d) desp: %d = %d data %p ID=%s:%p --th:%d--\n", fd, size, ret, data, id, id, (int) pthread_self());
+        printf("[COMM] server:read_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
         cont += ret;
     } while ((ret > 0) && (cont != size));
 
     if (ret < 0)
     {
-        debug_info("[COMM] server: Error read_comm(%d): -1 ID=%s:%p\n", fd, id, id);
+        printf("[COMM] server: Error read_comm(%d): -1\n", fd);
         return ret;
     }
 
     DEBUG_END();
-
+    printf("------ DEVUELVE %d\n", cont);
     // Return bytes read
     return cont;
 }

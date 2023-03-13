@@ -202,6 +202,16 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         debug_warning("Server[?]: TCP_Send fails :-(");
         return -1;
     }
+
+    printf("AQUI 1b - %d\n", params->server);
+
+    ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ; 
+
+    if (ret < 0) 
+    {
+        debug_warning("Server[?]: TCP_Send fails :-(");
+        return -1;
+    }
 printf("AQUI 2\n");
     ret = tcpClient_read_data( params -> server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>") ;
 
