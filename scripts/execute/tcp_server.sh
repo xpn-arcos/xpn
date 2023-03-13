@@ -45,7 +45,7 @@ mkdir -p $BASE_DIR/conf/
 # (1/3) build machine file...
 touch    $BASE_DIR/conf/machinefile
 if [ ! -f $MACHINE_FILE ]; then
-    echo localhost > $BASE_DIR/conf/machinefile
+    hostname > $BASE_DIR/conf/machinefile
 else
     cp $MACHINE_FILE $BASE_DIR/conf/machinefile
 fi
