@@ -50,7 +50,8 @@
   ssize_t dlsym_read (int fd, void *buf, size_t nbyte);
   ssize_t dlsym_write(int fd, void *buf, size_t nbyte);
 
-  off_t dlsym_lseek (int fd, off_t offset, int whence);
+  off_t   dlsym_lseek   (int fd,   off_t offset, int whence);
+  off64_t dlsym_lseek64 (int fd, off64_t offset, int whence);
 
   int dlsym_fstat     (int ver, int fd, struct stat *buf);
   int dlsym_fxstat64  (int ver, int fd, struct stat64 *buf);

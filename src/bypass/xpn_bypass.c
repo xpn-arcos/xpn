@@ -90,7 +90,7 @@
 
     if ( NULL == fdstable )
     {
-      fdebug_info(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
+      fprintf(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
       if (fdstable_aux != NULL){
         free(fdstable_aux) ;
       }
@@ -221,7 +221,7 @@
 
     if ( NULL == fdsdirtable )
     {
-      fdebug_info(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
+      fprintf(stderr, "[bypass:%s:%d] Error: out of memory\n", __FILE__, __LINE__);
       if (NULL != fdsdirtable_aux){
         free(fdsdirtable_aux) ;
       }
@@ -365,7 +365,7 @@
 
       if (ret < 0)
       {
-        fdebug_info(stderr, "ERROR: Expand xpn_init couldn't be initialized :-(\n");
+        fprintf(stderr, "ERROR: Expand xpn_init couldn't be initialized :-(\n");
         xpn_adaptor_initCalled = 0;
         setenv("INITCALLED", "0", 1);
       }
@@ -685,7 +685,7 @@
     return ret;
   }
 
-  off_t lseek64(int fd, off64_t offset, int whence)
+  off64_t lseek64(int fd, off64_t offset, int whence)
   {
     int ret = -1;
 
@@ -706,7 +706,7 @@
     else
     {
       debug_info("[bypass]\t try to dlsym_lseek %d,%ld,%d\n", fd, offset, whence);
-      ret = dlsym_lseek(fd, offset, whence);
+      ret = dlsym_lseek64(fd, offset, whence);
       debug_info("[bypass]\t dlsym_lseek %d,%ld,%d -> %d\n", fd, offset, whence, ret);
     }
 
