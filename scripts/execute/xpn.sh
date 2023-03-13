@@ -83,6 +83,9 @@ start_mpi_servers() {
     exit -1
   fi
 
+  rm -f /tmp/dns.txt
+  touch /tmp/dns.txt
+
   mpiexec -np       "${NODE_NUM}" \
           -hostfile "${HOSTFILE}" \
           -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
@@ -104,7 +107,6 @@ start_mpi_servers() {
       fi
     done
   fi
-
 }
 
 

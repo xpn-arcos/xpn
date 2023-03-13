@@ -23,6 +23,7 @@
 #ifndef _TCP_SERVER_PARAMS_H_
 #define _TCP_SERVER_PARAMS_H_
 
+
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
@@ -35,7 +36,7 @@
   #define TH_POOL 1
   #define TH_OP   2
 
-  #define TCP_MAX_PORT_NAME 1024
+  #define TCP_MAX_PORT_NAME   1024
 
 
   /*
@@ -49,6 +50,11 @@
     int  rank ;
     char port_name[TCP_MAX_PORT_NAME] ;
     char srv_name[TCP_MAX_PORT_NAME] ;
+
+    char name[TCP_MAX_PORT_NAME] ;
+    char port[TCP_MAX_PORT_NAME] ;
+ // int  port ;
+    int  IOsize ;
     char dns_file[PATH_MAX] ;
     char host_file[PATH_MAX] ;
 
