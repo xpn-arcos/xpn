@@ -691,7 +691,7 @@ diff -burN mpich-1.2.4-orig/romio/adio/ad_xpn/ad_xpn_helper.c mpich-1.2.4-xpn/ro
 +    /* - make 'count' write requests... */
 +    for (i=0; i<count; i++) {
 +	    ret = xpn_write(fd->fd_sys,(vector[i]).iov_base,(vector[i]).iov_len);
-+	    if (ret == -1) {
++	    if (ret < 0) {
 +	    	    *err = -1;
 +	    	    return;
 +    	    }

@@ -74,7 +74,7 @@ int xpn_simple_destroy ( void )
 
   XPN_DEBUG_BEGIN
 
-  if(xpn_parttable[0].id == -1)
+  if(xpn_parttable[0].id < 0)
   {
     res = 0;
     XPN_DEBUG_END

@@ -65,7 +65,7 @@
       while (!disconnect)
       {
         ret = mpi_server_comm_read_operation(th.params, (MPI_Comm) th.sd, (char *)&(th.type_op), 1, &(th.rank_client_id));
-        if (ret == -1) {
+        if (ret < 0) {
           debug_info("[MPI-SERVER] ERROR: mpi_server_comm_readdata fail\n") ;
           return;
         }
@@ -125,7 +125,7 @@
 
       // Initialize semaphore for server disks
       ret = sem_init(&(params.disk_sem), 0, 1);
-      if (ret == -1) {
+      if (ret < 0) {
         printf("[MPI-SERVER] ERROR: semaphore initialize fails\n");
         return -1;
       }
@@ -152,7 +152,7 @@
         }
 
         ret = mpi_server_comm_read_operation(&params, sd, (char *)&(head.type), 1, &(rank_client_id));
-        if (ret == -1) {
+        if (ret < 0) {
           printf("[MPI-SERVER] ERROR: mpi_server_comm_readdata fail\n") ;
           return -1;
         }
@@ -221,7 +221,7 @@
         {
           // Lookup port name
           ret = ns_lookup (srv_name, port_name);
-          if (ret == -1) {
+          if (ret < 0) {
             printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name) ;
             continue;
           }

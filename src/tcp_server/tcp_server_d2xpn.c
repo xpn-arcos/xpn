@@ -136,7 +136,7 @@
 	    gettimeofday(&t1, NULL);
 	    */
            fd_lock = mylock(origen);
-           if (fd_lock == -1) {
+           if (fd_lock < 0) {
             	    printf("Err: lock %s\n", destino);
             	    perror("Error: lock");
             	    return(-1);	  
@@ -190,7 +190,7 @@
       		debug_info("d2xpn(%d): before read(%d,%d)\n", params->rank, params->IOsize * KB, sum);
       		sp = read(fd,global_transfer_buffer,params->IOsize * KB);
       		debug_info("d2xpn(%d): desp. read(%d,%d)\n", params->rank, sp, sum);
-      		if (s == -1) {
+      		if (s < 0) {
       		    break;
       		}
       	      

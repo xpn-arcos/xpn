@@ -39,7 +39,7 @@ int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head)
 
     debug_info("[NFI-TCP] (ID=%s) tcpClient_write_data: begin               HEAD_TYPE:%d\n", head -> id, sizeof(head -> type));
     ret = tcpClient_write_operation(sd, (char * ) & (head -> type), 1, head -> id);
-    if (ret == -1) {
+    if (ret < 0) {
         debug_warning("Server[?]: tcpClient_write_data fails :-(");
         return -1;
     }
@@ -812,7 +812,7 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
                 ret = tcpClient_read_data(server_aux -> params.server, (char * ) buffer + cont, req.size, msg.id);
                 debug_info("[NFI-TCP] nfi_tcp_server_read(ID=%s): (2)tcpClient_read_data = %d.\n", server_aux -> id, ret);
 
-                if (ret == -1)
+                if (ret < 0)
                 {
                     fprintf(stderr, "ERROR: (3)nfi_tcp_server_read: Error on read operation\n");
                 }
@@ -932,7 +932,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
         debug_info("[NFI-TCP] write: -> size   %d \n", msg.u_st_tcp_server_msg.op_write.size);
 
         ret = tcp_server_write_operation(server_aux -> params.server, & msg);
-        if (ret == -1) {
+        if (ret < 0) {
             fprintf(stderr, "(1)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
             return -1;
         }
@@ -967,7 +967,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
         } while ((diff > 0) && (ret != 0));
 
         ret = tcpClient_read_data(server_aux -> params.server, (char * ) & req, sizeof(struct st_tcp_server_write_req), msg.id);
-        if (ret == -1) {
+        if (ret < 0) {
             fprintf(stderr, "(3)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
             return -1;
         }

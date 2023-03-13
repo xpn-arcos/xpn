@@ -210,7 +210,7 @@ void read_params(int cmd)
 		case NFI_OPEN:
 			ret = scanf("%250s",url);
 
-			if(protocol == -1){
+			if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
@@ -235,7 +235,7 @@ void read_params(int cmd)
 			break;
 
 		case NFI_CLOSE:
-			if(protocol == -1){
+			if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
@@ -260,7 +260,7 @@ void read_params(int cmd)
 		case NFI_RMDIR:
 			ret = scanf("%250s",url);
 
-			if(protocol == -1){
+			if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
 				break;
 			}
@@ -291,7 +291,7 @@ void read_params(int cmd)
 		case NFI_CREAT:
 			ret = scanf("%250s",url);
 
-		 	if(protocol == -1){
+		 	if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
 				break;
 			}
@@ -311,7 +311,7 @@ void read_params(int cmd)
 		case NFI_UNLINK:
                         ret = scanf("%250s",url);
 
-			if(protocol == -1){
+			if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
 				break;
 			}
@@ -327,7 +327,7 @@ void read_params(int cmd)
 
 		case NFI_WRITE:
 			ret = scanf("%d%d", &offset, &size);
-			if(protocol == -1){
+			if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
@@ -357,7 +357,7 @@ void read_params(int cmd)
 
 		case NFI_READ:
 			ret = scanf("%d%d", &offset, &size);
-			if(protocol == -1){
+			if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
@@ -387,7 +387,7 @@ void read_params(int cmd)
 
 		case NFI_OPENDIR:
 			ret = scanf("%250s",url);
-			if(protocol == -1){
+			if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
@@ -411,7 +411,7 @@ void read_params(int cmd)
 			break;
 
 		case NFI_CLOSEDIR:
-			if(protocol == -1){
+			if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
@@ -433,7 +433,7 @@ void read_params(int cmd)
 			break;
 
 		case NFI_READDIR:
-			if(protocol == -1){
+			if(protocol < 0){
 				printf("rnfi> Error protocol no defined\n");
                                 break;
 			}
