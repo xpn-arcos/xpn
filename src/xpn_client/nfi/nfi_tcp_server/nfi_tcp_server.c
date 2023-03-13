@@ -336,12 +336,15 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
         return -1;
     }
 
+    printf("[%s][%d]\tnfi_tcp_server_connect - %d\n", __FILE__, __LINE__, ret);
+
     ret = tcpClient_comm_locality( & (server_aux -> params));
     if (ret < 0) {
         FREE_AND_NULL(serv -> ops);
         FREE_AND_NULL(server_aux);
         return -1;
     }
+    printf("[%s][%d]\ttcpClient_comm_locality - %d\n", __FILE__, __LINE__, ret);
 
     DEBUG_END();
 
@@ -410,6 +413,7 @@ int nfi_tcp_server_connect(struct nfi_server * serv, __attribute__((__unused__))
     }
 
     strcpy(server_aux -> params.srv_name, server);
+    printf("[%s][%d]\t%s\n",__FILE__, __LINE__, server);
 
     ret = tcpClient_comm_connect( & (server_aux -> params));
     if (ret < 0) {

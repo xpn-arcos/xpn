@@ -60,7 +60,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     }
 
     // set_sockopt
-    val = 1024 * 1024; //1 MB
+    val = params->IOsize;
 
     ret = setsockopt(params -> global_sock, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int)) ;
     if (ret < 0)
@@ -69,7 +69,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
         return -1;
     }
 
-    val = 1024 * 1024; //1 MB
+    val = params->IOsize; //1 MB
     ret = setsockopt(params -> global_sock, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int)) ;
     if (ret < 0)
     {
@@ -87,7 +87,8 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     }
 
     // bind & listen
-    port = atoi(params->port_name) ;
+    printf("[%s][%d]\t%s\n", __FILE__, __LINE__, params->port);
+    port = atoi(params->port) ;
     bzero((char * )&server_addr, sizeof(server_addr)) ;
     server_addr.sin_family      = AF_INET ;
     server_addr.sin_addr.s_addr = INADDR_ANY ;
@@ -146,7 +147,9 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
 
     // Publish socket "host name:port number"
     char * ip = ns_tcp_get_hostname() ;
-    ret = ns_tcp_publish(params -> dns_file, params -> srv_name, ip, params -> port_name) ;
+    printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%s\n", __FILE__, __LINE__, params -> dns_file, params -> name, ip, params -> port);
+    
+    ret = ns_tcp_publish(params -> dns_file, params -> name, ip, params -> port) ;
     if (ret < 0)
     {
         perror("ns_tcp_publish: ") ;
@@ -159,7 +162,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     time = TIME_MISC_TimevaltoFloat(&tf);
     printf(" > XPN TCP server started (took %e sec.)\n", time);
 
-    debug_info("[SERV-COMM] server %d accepting at %s\n", params -> rank, params -> port_name);
+    debug_info("[SERV-COMM] server %d accepting at %s\n", params -> rank, params -> port);
 
     DEBUG_END();
 
