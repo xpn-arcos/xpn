@@ -23,119 +23,151 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "ns_tcp.h"
-
-
-  /* ... Global Variable / Variable Globales ........................... */
-
-struct tcp_server_node_st
-{
-	char host[255];
-	int  port;
-	char name[255];
-};
-
-static int load = 0;
-static struct tcp_server_node_st tcp_server_node[MAX_TCP_SERVER_NODES];
-static int num_tcp_server_nodes = 0;
+     #include "base/ns_tcp.h"
 
 
   /* ... Functions / Funciones ......................................... */
 
-  
-int tcp_server_readFile ( void )
-{
-    FILE * fd;
-    char * name = NULL;
+  char * ns_tcp_get_hostname ( void )
+  {
+    char *ip;
+    char serv_name [HOST_NAME_MAX];
+    struct hostent *serv_entry;
 
-    printf("[NS_TCP] begin the translation\n");
+    gethostname(serv_name, HOST_NAME_MAX); // get hostname
+    serv_entry = gethostbyname(serv_name); // find host information
+    ip = inet_ntoa(*((struct in_addr*) serv_entry->h_addr_list[0])); // Convert into IP string
 
-    name = getenv(TCP_SERVER_FILE);
-    if ((name == NULL) || (strcmp(name, "") == 0)) {
-        name = TCP_SERVER_FILE_DEFAULT;
-    }
-
-    fd = fopen(name, "r");
-    if (fd == NULL) {
-        fprintf(stderr, "tcp_server_readFile: can't open %s\n", name);
-        exit(-1);
-    }
-    while (EOF != fscanf(fd, "%s %s %d",
-            tcp_server_node[num_tcp_server_nodes].name,
-            tcp_server_node[num_tcp_server_nodes].host, &
-            tcp_server_node[num_tcp_server_nodes].port))
-    {
-        num_tcp_server_nodes++;
-
-        if (num_tcp_server_nodes >= MAX_TCP_SERVER_NODES) {
-            fprintf(stderr, "Error: num_tcp_server_nodes >= MAX_TCP_SERVER_NODES\n");
-            exit(0);
-        }
-    }
-    fclose(fd);
-    printf("[NS_TCP] end the translation\n");
-
-    return 0 ;
-}
-
-int tcp_server_translate(char * server, char * newserver, int * port)
-{
-    int i;
-
-    debug_info("[NS_TCP] Buscando 1 ... %s\n", server);
-
-    /*************************************/
-    /* DON'T WORK WITH THREADS */
-    if (!load) {
-        load = 1;
-        printf("[NS_TCP] Cargando Fichero ... \n");
-
-        tcp_server_readFile();
-    }
-    /*************************************/
-    printf("[NS_TCP] Buscando 2 ... %s\n", server);
-
-    for (i = 0; i < num_tcp_server_nodes; i++)
-    {
-        if (strcmp(server, tcp_server_node[i].name) == 0)
-	{
-            strcpy(newserver, tcp_server_node[i].host);
-            *port = tcp_server_node[i].port;
-
-            debug_info("[NS_TCP] Encontrado ... %s %d\n",
-                        tcp_server_node[i].host, tcp_server_node[i].port);
-            return 0;
-        }
-    }
-
-    if (i == num_tcp_server_nodes)
-    {
-        fprintf(stderr, "translate: error %s not found (%d)\n", server, num_tcp_server_nodes);
-	return -1;
-    }
-
-    return 0 ;
-}
-
-
-int tcp_server_updateFile(char * name, char * file, int port)
-{
-  char   host[1024];
-  FILE * f;
-
-  debug_info("[COMM] begin tcp_server_comm_init(%s, %d, %s)\n", name, port, file);
-
-  // save host name and port...
-  f = fopen(file, "a+");
-  if (f == NULL) {
-    perror("FOPEN: ");
-    return -1;
+    return ip ;
   }
 
-  gethostname(host, 1024);
-  fprintf(f, "%s %s %d\r\n", name, host, port);
-  fclose(f);
 
-  return 0;
-}
+  int ns_tcp_publish ( char * dns_file, char * param_srv_name, char * host_name, char * port_name )
+  {
+    int    ret ;
+    FILE * dns_fd;
+
+    dns_fd = fopen(dns_file, "a+");
+    if (NULL == dns_fd)
+    {
+      perror("fopen on DNS File:");
+      return -1;
+    }
+
+    ret = fprintf(dns_fd, "%s %s %s\r\n", param_srv_name, host_name, port_name);
+    if (ret < 0)
+    {
+      perror("fprintf on DNS File:");
+      return -1;
+    }
+
+    fclose(dns_fd);
+    return 0;
+  }
+
+
+  int ns_tcp_unpublish ( char * dns_file, char * serv_name )
+  {
+    FILE * dns_fd ;
+    FILE * new_dns_fd ;
+    char new_dns_file [PATH_MAX];
+    int  new_dns_poxis_fd ;
+    int  found = 0;
+    char aux_name  [1024];
+    char aux_name_2[1024];
+    char port_name [HOST_NAME_MAX];
+
+    // open files
+    dns_fd = fopen(dns_file, "r");
+    if (NULL == dns_fd)
+    {
+      perror("DNS File:");
+      return -1;
+    }
+
+    strcpy(new_dns_file, "xpn_dns_XXXXXX");
+    new_dns_poxis_fd = mkstemp(new_dns_file);
+
+    new_dns_fd = fdopen(new_dns_poxis_fd, "w");
+    if (NULL == new_dns_fd)
+    {
+      fclose(dns_fd);
+      perror("New DNS File:");
+      return -1;
+    }
+
+    // copy filtering...
+    while(fscanf(dns_fd, "%s %s %s", aux_name, aux_name_2, port_name) != EOF)
+    {
+      if (strcmp(aux_name, serv_name) == 0)
+      {
+        //Not copy the line
+        found = 1;
+      }
+      else
+      {
+        //Copy the line
+        fprintf(new_dns_fd, "%s %s %s\n", aux_name, aux_name_2, port_name);
+      }
+    }
+
+    if (0 == found)
+    {
+      printf("Warning: Server %s not found\n", aux_name);
+    }
+
+    // close files
+    fclose(new_dns_fd);
+    fclose(dns_fd);
+
+    unlink(dns_file);
+    rename(new_dns_file, dns_file);
+
+    return 0;
+  }
+
+
+  int ns_tcp_lookup ( char * param_srv_name, char * host_name, char * port_name )
+  {
+    int    found = 0 ;
+    char   aux_name[1024] ;
+    char * dns_file ;
+    FILE * dns_fd ;
+
+    // try to get the ns_file_name
+    dns_file = getenv("XPN_DNS");
+    if (dns_file == NULL)
+    {
+      fprintf(stderr, "DNS File not defined (XPN_DNS is empty)\n");
+      return -1;
+    }
+
+    // try to open the ns_file_fd
+    dns_fd = fopen(dns_file, "r");
+    if (dns_fd == NULL)
+    {
+      perror("DNS File:");
+      return -1;
+    }
+
+    while (fscanf(dns_fd, "%s %s %s", aux_name, host_name, port_name) != EOF)
+    {
+      if (strcmp(aux_name, param_srv_name) == 0)
+      {
+        found = 1;
+        break;
+      }
+    }
+
+    fclose(dns_fd);
+
+    if (found == 0) {
+      return -1;
+    }
+  
+    return 0;
+  }
+
+
+  /* ................................................................... */
 

@@ -27,9 +27,10 @@
     int  rank ;
 
     // server port and comm
-    int   port_number;
+ // int   port_number;
+    char  srv_name   [TCP_MAX_PORT_NAME] ;
     char  server_name[TCP_MAX_PORT_NAME];
-    char  srv_name[TCP_MAX_PORT_NAME] ;
+    char  port_number[TCP_MAX_PORT_NAME];
     int   server ;
 
     int     locality ;

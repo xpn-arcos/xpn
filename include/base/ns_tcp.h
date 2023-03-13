@@ -32,30 +32,31 @@
        * ENVIROMENT VARIABLE: DNS SERVICE
        */
 
-#ifndef TCP_SERVER_FILE
-	#define TCP_SERVER_FILE "TCP_SERVER_FILE"
-#endif
+      #ifndef TCP_SERVER_FILE
+      #define TCP_SERVER_FILE "TCP_SERVER_FILE"
+      #endif
 
-#ifndef TCP_SERVER_FILE_DEFAULT
-	#define TCP_SERVER_FILE_DEFAULT "/etc/xpn/tcp_server.dns"
-#endif
+      #ifndef TCP_SERVER_FILE_DEFAULT
+      #define TCP_SERVER_FILE_DEFAULT "/etc/xpn/tcp_server.dns"
+      #endif
 
-#ifndef MAX_TCP_SERVER_NODES
-	#define MAX_TCP_SERVER_NODES 256
-#endif
+      #ifndef MAX_TCP_SERVER_NODES
+      #define MAX_TCP_SERVER_NODES 256
+      #endif
 
-#ifndef CONST_TEMP
-	#define CONST_TEMP 1024
-#endif
+      #ifndef CONST_TEMP
+      #define CONST_TEMP 1024
+      #endif
 
 
       /*
        *  API
        */
 
-      int tcp_server_readFile   ( void ) ;
-      int tcp_server_translate  ( char * server, char * newserver, int * port ) ;
-      int tcp_server_updateFile ( char * name, char * file, int port ) ;
+      char * ns_tcp_get_hostname ( void ) ;
+      int    ns_tcp_publish      ( char * dns_file, char * param_srv_name, char * host_name, char * port_name ) ;
+      int    ns_tcp_unpublish    ( char * dns_file, char * serv_name ) ;
+      int    ns_tcp_lookup       ( char * param_srv_name, char * host_name, char * port_name ) ;
 
 
 #endif

@@ -64,7 +64,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     // Lookup port name
     do 
     {
-        ret = tcp_server_translate(params -> srv_name, params -> server_name, & (params -> port_number));
+	ret = ns_tcp_lookup(params -> srv_name, params -> server_name, params -> port_number) ;
         if (ret == -1) 
         {
             if (lookup_retries == 0) 
@@ -86,27 +86,23 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         return -1;
     }
 
+    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %s\n", params -> srv_name, params -> server_name, params->port_number);
 
-    // Connect...
-    
-    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d\n", params -> srv_name, params -> server_name, params->port_number);
-
+    // Socket...
     sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sd < 0) 
     {
         perror("socket:");
         return -1;
     }
-    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %d ==> %d\n", params -> srv_name, params -> server_name, params->port_number, sd);
+    printf("[NFI_COMM]----SERVER = %s NEWSERVER = %s PORT = %s ==> %d\n", params -> srv_name, params -> server_name, params->port_number, sd);
 
-
+    // Set sockopt
     if (setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag)) == -1) 
     {
         perror("setsockopt: ");
         return -1;
     }
-
-    //NEW
 
     int val = 1024 * 1024; //1 MB
 
@@ -124,34 +120,32 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     }
 
     /**************************************************/
-
     hp = gethostbyname(params -> server_name);
     if (hp == NULL) 
     {
         //tcp_server_err(TCP_SERVERERR_MEMORY);
-
-        fprintf(stderr, "nfi_tcp_server_init: error gethostbyname %s (%s,%d)\n", params -> srv_name, params -> server_name, params->port_number);
+        fprintf(stderr, "nfi_tcp_server_init: error gethostbyname %s (%s,%s)\n",
+			params -> srv_name, params -> server_name, params->port_number);
         return -1;
     }
 
-    //printf("[NFI_COMM]server = %s-%d-%p\n",server,TCP_SERVER_PORT,hp);
-    printf("[NFI_COMM]server = %s-%d\n", params -> server_name, params->port_number);
+    printf("[NFI_COMM]server = %s-%s\n", params -> server_name, params->port_number);
 
+    // Connect...
     bzero((char * ) & server_addr, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
+  //server_addr.sin_port   = htons(TCP_SERVER_PORT);
+    server_addr.sin_port   = htons(atoi(params->port_number));
     memcpy( & (server_addr.sin_addr), hp -> h_addr, hp -> h_length);
-    //server_addr.sin_port = htons(TCP_SERVER_PORT);
-    server_addr.sin_port = htons(params->port_number);
     printf("[NFI_COMM]Antes de connect to %s\n", params -> server_name);
 
-    //se establece la conexion
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
-    printf("[NFI_COMM]%s)connect(%s,%d) = %d\n", params -> srv_name, params -> server_name, params->port_number, ret);
-
-    if (ret == -1) 
+    printf("[NFI_COMM]%s)connect(%s,%s) = %d\n", params -> srv_name, params -> server_name, params->port_number, ret);
+    if (ret < 0)
     {
         //tcp_server_err(TCP_SERVERERR_MEMORY);
-        fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%d)\n", params -> srv_name, params -> server_name, params->port_number);
+        fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%s)\n",
+		 params -> srv_name, params -> server_name, params->port_number);
         perror("nfi_tcp_server_init:");
         return -1;
     }

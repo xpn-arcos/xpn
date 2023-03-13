@@ -52,7 +52,8 @@
     char srv_name[TCP_MAX_PORT_NAME] ;
 
     char name[TCP_MAX_PORT_NAME] ;
-    int  port ;
+    char port[TCP_MAX_PORT_NAME] ;
+ // int  port ;
     int  IOsize ;
     char dns_file[PATH_MAX] ;
     char host_file[PATH_MAX] ;
