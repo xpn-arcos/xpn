@@ -87,7 +87,7 @@ int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head)
 
         //Directory API
     case TCP_SERVER_MKDIR_DIR:
-        debug_info("[NFI-TCP] (ID=%s) MDKIR operation\n", head -> id);
+        debug_info("[NFI-TCP] (ID=%s) MKDIR operation\n", head -> id);
         ret = tcpClient_write_data(sd, (char * ) & head -> u_st_tcp_server_msg.op_mkdir, sizeof(struct st_tcp_server_mkdir), head -> id);
         break;
     case TCP_SERVER_OPENDIR_DIR:
