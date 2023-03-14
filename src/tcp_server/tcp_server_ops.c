@@ -367,7 +367,7 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 
         printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
 
-        
+
         tcp_server_comm_write_data(params, sd, (char *)&rc, sizeof(int), rank_client_id) ;
     */
 
@@ -701,13 +701,13 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     int ret = -1;
 
     // check params...
-    if (NULL == params) 
+    if (NULL == params)
     {
         return;
     }
 
     // do close
-    if (head -> u_st_tcp_server_msg.op_close.fd != -1) 
+    if (head -> u_st_tcp_server_msg.op_close.fd != -1)
     {
         ret = filesystem_close(head -> u_st_tcp_server_msg.op_close.fd);
     }
@@ -720,12 +720,12 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
 
 
 
-void tcp_server_op_rm(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_rm(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     char * s;
 
     // check params...
-    if (NULL == params) 
+    if (NULL == params)
     {
         return;
     }
@@ -742,13 +742,13 @@ void tcp_server_op_rm(tcp_server_param_st * params, int sd, struct st_tcp_server
 
 
 
-void tcp_server_op_rename(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_rename(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     char * old_url;
     char * new_url;
 
     // check params...
-    if (NULL == params) 
+    if (NULL == params)
     {
         return;
     }
@@ -767,7 +767,7 @@ void tcp_server_op_rename(tcp_server_param_st * params, int sd, struct st_tcp_se
 
 
 
-void tcp_server_op_getattr(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_getattr(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     struct st_tcp_server_attr_req req;
     char * s;
@@ -784,18 +784,18 @@ void tcp_server_op_getattr(tcp_server_param_st * params, int sd, struct st_tcp_s
 
 
 
-void tcp_server_op_setattr(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, __attribute__((__unused__)) int rank_client_id) 
+void tcp_server_op_setattr(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, __attribute__((__unused__)) int rank_client_id)
 {
     // check params...
-    if (sd < 0) 
+    if (sd < 0)
     {
         return;
     }
-    if (NULL == params) 
+    if (NULL == params)
     {
         return;
     }
-    if (NULL == head) 
+    if (NULL == head)
     {
         return;
     }
@@ -815,7 +815,7 @@ void tcp_server_op_setattr(tcp_server_param_st * params, int sd, struct st_tcp_s
 
 
 //Directory API
-void tcp_server_op_mkdir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_mkdir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     int ret;
     char * s;
@@ -832,7 +832,7 @@ void tcp_server_op_mkdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
 
 
 
-void tcp_server_op_opendir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_opendir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     DIR * ret;
     char * s;
@@ -849,7 +849,7 @@ void tcp_server_op_opendir(tcp_server_param_st * params, int sd, struct st_tcp_s
 
 
 
-void tcp_server_op_readdir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_readdir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     struct dirent * ret;
     struct st_tcp_server_direntry ret_entry;
@@ -874,7 +874,7 @@ void tcp_server_op_readdir(tcp_server_param_st * params, int sd, struct st_tcp_s
 
 
 
-void tcp_server_op_closedir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_closedir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     int ret;
     DIR * s;
@@ -891,7 +891,7 @@ void tcp_server_op_closedir(tcp_server_param_st * params, int sd, struct st_tcp_
 
 
 
-void tcp_server_op_rmdir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_rmdir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     int ret;
     char * s;
@@ -910,7 +910,7 @@ void tcp_server_op_rmdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
 
 //Optimization API
 
-void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     int ret;
     int fd_dest, fd_orig;
@@ -927,7 +927,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
 
     // Open origin file
     fd_orig = filesystem_open(head -> u_st_tcp_server_msg.op_preload.storage_path, O_RDONLY);
-    if (fd_orig < 0) 
+    if (fd_orig < 0)
     {
         tcp_server_comm_write_data(params, sd, (char * ) & fd_orig, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
         return;
@@ -937,7 +937,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
 
     // Create new file
     fd_dest = filesystem_creat(file, 0777);
-    if (fd_dest < 0) 
+    if (fd_dest < 0)
     {
         filesystem_close(fd_orig);
         tcp_server_comm_write_data(params, sd, (char * ) & fd_dest, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
@@ -947,10 +947,10 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
     int cont = BLOCKSIZE * params -> rank;
     int read_bytes, write_bytes;
 
-    do 
+    do
     {
         ret = filesystem_lseek(fd_orig, cont, SEEK_SET);
-        if (ret < 0) 
+        if (ret < 0)
         {
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
@@ -959,7 +959,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
         }
 
         read_bytes = filesystem_read(fd_orig, & buffer, BLOCKSIZE);
-        if (read_bytes < 0) 
+        if (read_bytes < 0)
         {
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
@@ -967,10 +967,10 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
             return;
         }
 
-        if (read_bytes > 0) 
+        if (read_bytes > 0)
         {
             write_bytes = filesystem_write(fd_dest, & buffer, read_bytes);
-            if (write_bytes < 0) 
+            if (write_bytes < 0)
             {
                 filesystem_close(fd_orig);
                 filesystem_close(fd_dest);
@@ -997,7 +997,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
 
 
 
-void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     int ret;
     int fd_dest, fd_orig;
@@ -1016,7 +1016,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
 
     // Open origin file
     fd_orig = filesystem_open(file, O_RDONLY);
-    if (fd_orig < 0) 
+    if (fd_orig < 0)
     {
         printf("Error on open operation on '%s'\n", file);
         tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
@@ -1025,7 +1025,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
 
     // Create new file
     fd_dest = filesystem_open(head -> u_st_tcp_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT);
-    if (fd_dest < 0) 
+    if (fd_dest < 0)
     {
         printf("Error on open operation on '%s'\n", head -> u_st_tcp_server_msg.op_flush.storage_path);
         filesystem_close(fd_orig);
@@ -1038,10 +1038,10 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
     int cont = BLOCKSIZE * params -> rank;
     int read_bytes, write_bytes;
 
-    do 
+    do
     {
         read_bytes = filesystem_read(fd_orig, & buffer, BLOCKSIZE);
-        if (read_bytes < 0) 
+        if (read_bytes < 0)
         {
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
@@ -1049,11 +1049,11 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
             return;
         }
 
-        if (read_bytes > 0) 
+        if (read_bytes > 0)
         {
             filesystem_lseek(fd_dest, cont, SEEK_SET);
             write_bytes = filesystem_write(fd_dest, & buffer, read_bytes);
-            if (write_bytes < 0) 
+            if (write_bytes < 0)
             {
                 filesystem_close(fd_orig);
                 filesystem_close(fd_dest);
@@ -1078,7 +1078,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
 
 //FS Metadata API
 
-void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, __attribute__((__unused__)) struct st_tcp_server_msg * head, int rank_client_id) 
+void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, __attribute__((__unused__)) struct st_tcp_server_msg * head, int rank_client_id)
 {
     char serv_name[HOST_NAME_MAX];
 
@@ -1087,8 +1087,8 @@ void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, __attribute
     // Get server host name
     gethostname(serv_name, HOST_NAME_MAX);
 
-    // <TODO>       
-    // head = head; // Avoid unused parameter 
+    // <TODO>
+    // head = head; // Avoid unused parameter
     // </TODO>
 
     // show debug info
@@ -1109,4 +1109,6 @@ void tcp_server_op_getid(tcp_server_param_st * params, int sd, struct st_tcp_ser
     debug_info("[TCP-SERVER-OPS] (ID=%s) GETID(...)\n", params -> srv_name);
 }
 
+
 /* ................................................................... */
+
