@@ -65,11 +65,11 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     lookup_retries = 0;
     do
     {
-        //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
+        printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
 
         ret = ns_tcp_lookup(params -> srv_name, params -> server_name, params -> port_number) ;
 
-        //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
+        printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%d\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number, ret);
         if (ret < 0)
         {
             if (lookup_retries == 0)
@@ -132,7 +132,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         return -1;
     }
 
-    printf("[NFI_TCP_COMM] server = %s-%s\n", params -> server_name, params->port_number);
+    //printf("[NFI_TCP_COMM] server = %s-%s\n", params -> server_name, params->port_number);
 
     // Connect...
     bzero((char * ) & server_addr, sizeof(server_addr));
@@ -140,9 +140,9 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     server_addr.sin_port   = htons(atoi(params->port_number));
     memcpy( & (server_addr.sin_addr), hp -> h_addr, hp -> h_length);
 
-    printf("[NFI_TCP_COMM] Antes de connect to %s\n", params -> server_name);
+    //printf("[NFI_TCP_COMM] Antes de connect to %s\n", params -> server_name);
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
-    printf("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
+    //printf("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
     if (ret < 0)
     {
         //tcp_server_err(TCP_SERVERERR_MEMORY);

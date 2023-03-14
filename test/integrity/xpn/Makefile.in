@@ -16,7 +16,7 @@
 # Rules
 #
 
-all:  open-write-close open-read-close
+all:  open-write-close open-read-close creat-close-unlink open-unlink unlink rename rename2 mkdir mkdir2 rmdir rmdir2
 
 open-write-close: open-write-close.o
 	$(CC)  -o open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIES)
@@ -24,9 +24,36 @@ open-write-close: open-write-close.o
 open-read-close: open-read-close.o
 	$(CC)  -o open-read-close  open-read-close.o  $(MYLIBPATH) $(LIBRARIES)
 
+creat-close-unlink: creat-close-unlink.o
+	$(CC)  -o creat-close-unlink  creat-close-unlink.o  $(MYLIBPATH) $(LIBRARIES)
+
+open-unlink: open-unlink.o
+	$(CC)  -o open-unlink  open-unlink.o  $(MYLIBPATH) $(LIBRARIES)
+
+unlink: unlink.o
+	$(CC)  -o unlink  unlink.o  $(MYLIBPATH) $(LIBRARIES)
+
+rename: rename.o
+	$(CC)  -o rename  rename.o  $(MYLIBPATH) $(LIBRARIES)
+
+rename2: rename2.o
+	$(CC)  -o rename2  rename2.o  $(MYLIBPATH) $(LIBRARIES)
+
+mkdir: mkdir.o
+	$(CC)  -o mkdir  mkdir.o  $(MYLIBPATH) $(LIBRARIES)
+
+mkdir2: mkdir2.o
+	$(CC)  -o mkdir2  mkdir2.o  $(MYLIBPATH) $(LIBRARIES)
+
+rmdir: rmdir.o
+	$(CC)  -o rmdir  rmdir.o  $(MYLIBPATH) $(LIBRARIES)
+
+rmdir2: rmdir2.o
+	$(CC)  -o rmdir2  rmdir2.o  $(MYLIBPATH) $(LIBRARIES)
+
 %.o: %.c
 	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
 
 clean:
 	rm -f ./*.o
-	rm -f ./open-write-close ./open-read-close
+	rm -f ./open-write-close ./open-read-close ./creat-close-unlink ./open-unlink ./unlink ./rename ./rename2 ./mkdir ./mkdir2 ./rmdir ./rmdir2
