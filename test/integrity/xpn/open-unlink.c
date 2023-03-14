@@ -8,7 +8,7 @@ int main ( int argc, char *argv[] )
 {
 	int  ret ;
 	int  fd1 ;
-	char buffer[BUFF_SIZE] ;
+	//char buffer[BUFF_SIZE] ;
 
 	printf("env XPN_CONF=./xpn.conf XPN_DNS=/tmp/tcp_server.dns %s\n", argv[0]);
 	setenv("XPN_CONF",  "./xpn.conf", 1);
@@ -25,14 +25,8 @@ int main ( int argc, char *argv[] )
 	fd1 = xpn_creat("/P1/test_1", 00777);
 	printf("%d = xpn_creat('%s', %o)\n", ret, "/P1/test_1", 00777);
 
-	memset(buffer, 'a', BUFF_SIZE) ;
-	printf("memset(buffer, 'a', %d)\n", BUFF_SIZE) ;
-
-	ret = xpn_write(fd1, buffer, BUFF_SIZE);
-	printf("%d = xpn_write(%d, %p, %lu)\n", ret, fd1, buffer, (unsigned long)BUFF_SIZE);
-
-	ret = xpn_close(fd1);
-	printf("%d = xpn_close(%d)\n", ret, fd1) ;
+	ret = xpn_unlink("/P1/test_1");
+	printf("%d = xpn_unlink(%s)\n", ret, "/P1/test_1") ;
 
 		// xpn-destroy
 	printf("xpn_destroy()\n");

@@ -57,6 +57,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     struct sockaddr_in server_addr;
     int ret, sd, flag, val;
     int lookup_retries;
+    int data;
 
 
     debug_info("[NFI_TCP_COMM] begin tcpClient_comm_connect(...)\n");
@@ -65,11 +66,11 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     lookup_retries = 0;
     do
     {
-        //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
+        printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
 
         ret = ns_tcp_lookup(params -> srv_name, params -> server_name, params -> port_number) ;
 
-        //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
+        printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%d\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number, ret);
         if (ret < 0)
         {
             if (lookup_retries == 0)
@@ -132,7 +133,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         return -1;
     }
 
-    printf("[NFI_TCP_COMM] server = %s-%s\n", params -> server_name, params->port_number);
+    //printf("[NFI_TCP_COMM] server = %s-%s\n", params -> server_name, params->port_number);
 
     // Connect...
     bzero((char * ) & server_addr, sizeof(server_addr));
@@ -140,18 +141,27 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     server_addr.sin_port   = htons(atoi(params->port_number));
     memcpy( & (server_addr.sin_addr), hp -> h_addr, hp -> h_length);
 
-    printf("[NFI_TCP_COMM] Antes de connect to %s\n", params -> server_name);
+    //printf("[NFI_TCP_COMM] Antes de connect to %s\n", params -> server_name);
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
-    printf("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
     if (ret < 0)
     {
         //tcp_server_err(TCP_SERVERERR_MEMORY);
         fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%s)\n",
-		        params -> srv_name, params -> server_name, params->port_number);
+		            params -> srv_name, params -> server_name, params->port_number);
         return -1;
     }
 
     params->server = sd;
+  //printf("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
+
+    // send ok message
+    data = 0;
+    ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ;
+    if (ret < 0) {
+        debug_warning("Server[?]: TCP_Send fails :-(");
+        return -1;
+    }
+
     return ret;
 }
 
@@ -184,13 +194,10 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         return 1;
     }
 
-    // Get client host name
+    // Get client host name (send id, recv strlen, recv string)
     gethostname(cli_name, HOST_NAME_MAX);
 
     data = TCP_SERVER_GETNODENAME;
-
-    //printf("AQUI 1 - %d\n", params->server);
-
     ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ;
     if (ret < 0)
     {
@@ -198,16 +205,6 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         return -1;
     }
 
-    //printf("AQUI 1b - %d\n", params->server);
-
-    ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ;
-    if (ret < 0)
-    {
-        debug_warning("Server[?]: TCP_Send fails :-(");
-        return -1;
-    }
-
-    //printf("AQUI 2\n");
     ret = tcpClient_read_data( params -> server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>") ;
     if (ret < 0)
     {
@@ -215,7 +212,6 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         return -1;
     }
 
-    //printf("AQUI 3\n");
     ret = tcpClient_read_data( params -> server, params -> sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
     if (ret < 0)
     {
@@ -223,14 +219,12 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         return -1;
     }
 
-    // printf("AQUI 4\n");
+    // check locality
+    params -> locality = 0;
     if (strcmp(cli_name, serv_name) == 0)
     {
         params -> locality = 1;
         params -> sem_server = sem_open(params -> sem_name_server, 0);
-    } else
-    {
-        params -> locality = 0;
     }
 
     debug_info("[NFI_TCP_COMM] end tcpClient_comm_locality\n");
