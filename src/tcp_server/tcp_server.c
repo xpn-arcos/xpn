@@ -66,8 +66,15 @@ void tcp_server_dispatcher(struct st_th th)
     while (! disconnect)
     {
         ret = tcp_server_comm_read_operation(th.params, (int) th.sd, (char * ) & (th.type_op), 1, & (th.rank_client_id));
+        printf("SERVER 2 -- ret = %d\top=%d\n", ret, th.type_op);
+
         if (ret < 0) {
             debug_info("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
+            return;
+        }
+
+        if (ret == 0) {
+            debug_info("[TCP-SERVER] WARNING: tcp_server_comm_readdata broken pipe\n");
             return;
         }
 
@@ -86,7 +93,7 @@ void tcp_server_dispatcher(struct st_th th)
         th_arg.rank_client_id = th.rank_client_id;
         th_arg.wait4me        = FALSE;
 
-        workers_launch( & worker, & th_arg, tcp_server_run);
+        tcp_server_run(th_arg) ;
     }
 
     debug_info("[TCP-SERVER] tcp_server_worker_run (ID=%d) close\n", th.rank_client_id);
@@ -112,6 +119,8 @@ int tcp_server_up(void)
     printf(" > Starting servers... (%s)\n", serv_name);
     printf(" -------------------\n");
     printf("\n");
+
+    signal(SIGPIPE, SIG_IGN);
 
     // Initialize
     debug_msg_init();
@@ -154,6 +163,8 @@ int tcp_server_up(void)
         }
 
         ret = tcp_server_comm_read_operation( & params, sd, (char * ) & (head.type), 1, & (rank_client_id));
+        printf("SERVER 1 -- %d\n", head.type);
+
         if (ret < 0) {
             printf("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
             return -1;
