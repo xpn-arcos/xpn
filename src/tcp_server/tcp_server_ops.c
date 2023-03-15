@@ -155,6 +155,8 @@ int tcp_server_do_operation(struct st_th * th, int * the_end)
     int ret;
     struct st_tcp_server_msg head;
 
+    printf("SERVER DO OPERATION -- %d\n", th -> type_op);
+
     switch (th -> type_op)
     {
 		//File API
@@ -819,6 +821,8 @@ void tcp_server_op_mkdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
 {
     int ret;
     char * s;
+
+    printf("TCP_SERVER_MKDIR -- %s\n", head -> u_st_tcp_server_msg.op_mkdir.path);
 
     // do mkdir
     s = head -> u_st_tcp_server_msg.op_mkdir.path;

@@ -20,6 +20,8 @@
 
   /* ... Include / Inclusion ........................................... */
 
+    //#define DEBUG 1
+
      #include "tcp_server/tcp_server_comm.h"
 
 
@@ -85,7 +87,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
      */
 
     /*
-    printf("[%d]\tBEGIN INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+    debug_info("[%d]\tBEGIN INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
 
     mosquitto_lib_init();
 
@@ -115,7 +117,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     return 1;
     }
 
-    printf("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+    debug_info("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
     */
 
 
@@ -135,7 +137,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     TIME_MISC_Timer(&t1);
     TIME_MISC_DiffTime(&t0, &t1, &tf);
     time = TIME_MISC_TimevaltoFloat(&tf);
-    printf(" > XPN TCP server started (took %e sec.)\n", time);
+    debug_info(" > XPN TCP server started (took %e sec.)\n", time);
 
     debug_info("[SRV_TCP_COMM] server %d accepting at %s\n", params -> rank, params -> port);
 
@@ -159,7 +161,7 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
 	{
             ret = ns_tcp_unpublish(params -> dns_file, params -> srv_name);
             if (ret < 0) {
-                debug_error("[SRV_TCP_COMM] server%d: ns_unpublish fails :-(", params -> rank);
+                debug_info("[SRV_TCP_COMM] server%d: ns_unpublish fails :-(", params -> rank);
                 return -1;
             }
         }
@@ -169,19 +171,19 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
      * Destroy mosquitto
      */
     /*
-        printf("[%d]\tBEGIN DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
+        debug_info("[%d]\tBEGIN DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
         mosquitto_loop_forever(mosqtcpserver, -1, 1);
         mosquitto_lib_cleanup();
-        printf("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
+        debug_info("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
 
 
 
         // Print server info
         char serv_name  [HOST_NAME_MAX];
         gethostname(serv_name, HOST_NAME_MAX);
-        printf("--------------------------------\n");
-        printf("XPN TCP server %s stopped\n", serv_name);
-        printf("--------------------------------\n\n");
+        debug_info("--------------------------------\n");
+        debug_info("XPN TCP server %s stopped\n", serv_name);
+        debug_info("--------------------------------\n\n");
     */
     DEBUG_END();
 
@@ -291,7 +293,7 @@ int tcp_server_comm_connect ( tcp_server_param_st * params, char *server_name, i
     }
 
     // Connect...
-    printf("[SRV_TCP_COMM] server = %s-%d\n", server_name, port_number);
+    debug_info("[SRV_TCP_COMM] server = %s-%d\n", server_name, port_number);
 
     bzero((char * ) & server_addr, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
@@ -348,7 +350,7 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
     ret = tcp_server_comm_read_data(params, fd, data, size * sizeof(int), *rank_client_id); //      Nuevo
     if (ret < 0) {
         debug_warning("[SRV_TCP_COMM] server: tcp_server_comm_read_op fails : %d\n", ret);
-	return ret ;
+        return ret ;
     }
 
     DEBUG_END();
@@ -380,11 +382,14 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     cont = 0;
     do
     {
+        ret = 0;
         debug_info("[SRV_TCP_COMM] server:write_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+        //debug_info("Antes Escritura - %d\n", ret);
         ret = write(fd, data + cont, size - cont);
+        //debug_info("Despues Escritura - %d\n", ret);
         if (ret < 0) {
             perror("server: Error write_comm: ");
-	    return -1;
+	       return -1;
         }
 
         debug_info("[SRV_TCP_COMM] server:write_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
@@ -398,7 +403,6 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     }
 
     DEBUG_END();
-
     // Return bytes written
     return cont;
 }
@@ -426,11 +430,14 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
     cont = 0;
     do
     {
+        ret = 0;
         debug_info("[SRV_TCP_COMM] server:read_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+        //debug_info("Antes Lectura - %d\n", ret);
         ret = read(fd, data + cont, size - cont);
+        //debug_info("Despues Lectura - %d\n", ret);
         if (ret < 0) {
             perror("[SRV_TCP_COMM] server: Error read_comm: ");
-	    return -1;
+            return -1;
         }
 
         debug_info("[SRV_TCP_COMM] server:read_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
