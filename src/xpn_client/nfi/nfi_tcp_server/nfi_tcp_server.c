@@ -19,8 +19,8 @@
  */
 
   /* ... Include / Inclusion ........................................... */
-
-     #include "nfi_tcp_server.h"
+    //#define DEBUG 1
+    #include "nfi_tcp_server.h"
 
 
   /* ... Global Variable / Variable Globales ........................... */
@@ -39,6 +39,7 @@ int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head)
 
     debug_info("[NFI-TCP] (ID=%s) tcpClient_write_data: begin               HEAD_TYPE:%d\n", head -> id, sizeof(head -> type));
     ret = tcpClient_write_operation(sd, (char * ) & (head -> type), 1, head -> id);
+    printf ("CLIENT -- %d\n", head->type);
     if (ret < 0) {
         debug_warning("Server[?]: tcpClient_write_data fails :-(");
         return -1;
@@ -130,6 +131,7 @@ int nfi_tcp_server_doRequest(struct nfi_tcp_server_server * server_aux, struct s
     if (ret < 0) {
         return -1;
     }
+
 
     // read response...
     debug_info("[NFI-TCP] (ID=%s): %s: <- ...\n", server_aux -> id, msg -> id);
@@ -443,7 +445,7 @@ int nfi_tcp_server_disconnect(struct nfi_server * serv) {
         return 0;
     }
 
-    // MPI Disconnect...
+    // TCP Disconnect... - ALWAYS RETURNS 0
     ret = tcpClient_comm_disconnect( & (server_aux -> params));
     if (ret < 0) {
         debug_error("[NFI-TCP]: tcpClient_comm_disconnect fails :-(");
@@ -733,7 +735,7 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
             ret = real_posix_read(fh_aux -> fd, buffer, size);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fh_aux -> fd, (long int) offset, size, ret)
+            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fh_aux -> fd, (long int) offset, size, ret);
         }
         else
         {
@@ -750,7 +752,7 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
             ret = real_posix_read(fd, buffer, size);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fd, (long int) offset, size, ret)
+            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fd, (long int) offset, size, ret);
 
             real_posix_close(fd);
         }
@@ -774,7 +776,7 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
         {
             msg.type = TCP_SERVER_READ_FILE_WOS;
             memccpy(msg.u_st_tcp_server_msg.op_read.path, fh_aux -> path, 0, PATH_MAX);
-	    debug_info("[NFI-TCP] read: -> path   %s \n", msg.u_st_tcp_server_msg.op_read.path);
+	       debug_info("[NFI-TCP] read: -> path   %s \n", msg.u_st_tcp_server_msg.op_read.path);
         }
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         msg.u_st_tcp_server_msg.op_read.offset = offset;
@@ -792,7 +794,7 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
         // read n times: number of bytes + read data (n bytes)
         cont = 0;
         do
-	{
+	   {
             ret = tcpClient_read_data(server_aux -> params.server, (char * ) & req, sizeof(struct st_tcp_server_read_req), msg.id);
             debug_info("[NFI-TCP] nfi_tcp_server_read(ID=%s): (1)tcpClient_read_data = %d.\n", server_aux -> id, ret);
 
@@ -1124,7 +1126,7 @@ int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_u
 
     // private_info...
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
-    debug_info("[NFI-TCP] nfi_tcp_server_remove(%s): begin %s\n", server_aux -> id, url);
+    debug_info("[NFI-TCP] nfi_tcp_server_remove(%s): begin %s\n", server_aux -> id, new_url);
     if (server_aux == NULL)
     {
         tcp_server_err(TCP_SERVERERR_PARAM);
@@ -1589,6 +1591,7 @@ int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url)
     else
     {
         msg.type = TCP_SERVER_RMDIR_DIR;
+        printf("RMDIR - %d\n", msg.type);
         memccpy(msg.u_st_tcp_server_msg.op_rmdir.path, dir, 0, PATH_MAX - 1);
         nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (ret), sizeof(int));
 
