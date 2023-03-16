@@ -66,7 +66,6 @@ void tcp_server_dispatcher(struct st_th th)
     while (! disconnect)
     {
         ret = tcp_server_comm_read_operation(th.params, (int) th.sd, (char * ) & (th.type_op), 1, & (th.rank_client_id));
-        printf("SERVER 2 -- ret = %d\top=%d\n", ret, th.type_op);
 
         if (ret < 0) {
             debug_info("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
@@ -230,20 +229,20 @@ int tcp_server_down( void )
     }
 
     // Open host file
-    file = fopen(params.host_file, "r");
+    file = fopen(params.dns_file, "r");
     if (file == NULL)
     {
         printf("[TCP-SERVER] ERROR: invalid file %s\n", params.host_file);
         return -1;
     }
 
-    while (fscanf(file, "%[^\n] ", srv_name) != EOF)
+    while (fscanf(file, "%s %s %s", srv_name, server_name, port_number) != EOF)
     {
         // Lookup port name
 	ret = ns_tcp_lookup(srv_name, server_name, port_number) ;
         if (ret < 0)
         {
-            printf("[TCP-SERVER] ERROR: server %s not found\n", srv_name);
+            printf("[TCP-SERVER] ERROR: server %s %s %s not found\n", srv_name, server_name, port_number);
             continue;
         }
 

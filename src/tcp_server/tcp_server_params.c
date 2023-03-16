@@ -44,6 +44,10 @@ void tcp_server_params_show(tcp_server_param_st * params)
         printf("\t-ntp:\t\tThread Pool Deactivated (Using Thread per Client)\n");
     }
 
+    if (params -> mosquitto_mode == 1) {
+        printf("\t-m:\t\tmosquitto Activated\n");
+    }
+
     DEBUG_END();
 }
 
@@ -61,6 +65,8 @@ void tcp_server_params_show_usage(void)
 
     printf("\t-tp:  use thread-pool\n") ;
     printf("\t-ntp: use thread per-client\n");
+
+    printf("\t-m:   use mosquitto\n") ;
 
     DEBUG_END();
 }
@@ -85,6 +91,8 @@ int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
     gethostname(params->name, TCP_MAX_PORT_NAME);
     sprintf(params->port, "%d", TCP_SERVER_PORT_DEFAULT);
     params->IOsize  = TCP_SERVER_IOSIZE_DEFAULT;
+
+    params -> mosquitto_mode = 0 ;
 
     // update user requests
     for (int i = 0; i < argc; i++)
@@ -132,6 +140,10 @@ int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
                     i++;
                 }
                 break;
+            case 'm':
+                params -> mosquitto_mode = 1 ;
+                i++;
+                break;
             case 'h':
                 return -1;
 
@@ -149,6 +161,7 @@ int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
     DEBUG_END();
     return 1;
 }
+
 
 /* ................................................................... */
 
