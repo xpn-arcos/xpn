@@ -86,39 +86,42 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
      * Initialize mosquitto
      */
 
-    /*
-    debug_info("[%d]\tBEGIN INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
-
-    mosquitto_lib_init();
-
-    mosqtcpserver = mosquitto_new(NULL, true, NULL);
-    if(mosqtcpserver == NULL)
+    if (params -> mosquitto_mode)
     {
-    fprintf(stderr, "Error: Out of memory.\n");
-    return 1;
+	    debug_info("[%d]\tBEGIN INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+
+	    /*
+	    mosquitto_lib_init();
+
+	    mosqtcpserver = mosquitto_new(NULL, true, NULL);
+	    if(mosqtcpserver == NULL)
+	    {
+	    fprintf(stderr, "Error: Out of memory.\n");
+	    return 1;
+	    }
+
+	    mosquitto_connect_callback_set(mosqtcpserver, on_connect);
+	    mosquitto_subscribe_callback_set(mosqtcpserver, on_subscribe);
+	    mosquitto_message_callback_set(mosqtcpserver, on_message);
+
+	    #ifndef MOSQ_OPT_TCP_NODELAY
+	    #define MOSQ_OPT_TCP_NODELAY 1
+	    #endif
+
+	    mosquitto_int_option(mosqtcpserver, MOSQ_OPT_TCP_NODELAY, 1);
+
+	    int rc = mosquitto_connect(mosqtcpserver, "localhost", 1883, 60);
+
+	    if(rc != MOSQ_ERR_SUCCESS)
+	    {
+	    mosquitto_destroy(mosqtcpserver);
+	    fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO TCP_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
+	    return 1;
+	    }
+
+	    debug_info("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+	    */
     }
-
-    mosquitto_connect_callback_set(mosqtcpserver, on_connect);
-    mosquitto_subscribe_callback_set(mosqtcpserver, on_subscribe);
-    mosquitto_message_callback_set(mosqtcpserver, on_message);
-
-    #ifndef MOSQ_OPT_TCP_NODELAY
-    #define MOSQ_OPT_TCP_NODELAY 1
-    #endif
-
-    mosquitto_int_option(mosqtcpserver, MOSQ_OPT_TCP_NODELAY, 1);
-
-    int rc = mosquitto_connect(mosqtcpserver, "localhost", 1883, 60);
-
-    if(rc != MOSQ_ERR_SUCCESS)
-    {
-    mosquitto_destroy(mosqtcpserver);
-    fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO TCP_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
-    return 1;
-    }
-
-    debug_info("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
-    */
 
 
     /*
@@ -137,7 +140,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     TIME_MISC_Timer(&t1);
     TIME_MISC_DiffTime(&t0, &t1, &tf);
     time = TIME_MISC_TimevaltoFloat(&tf);
-    debug_info(" > XPN TCP server started (took %e sec.)\n", time);
+    printf(" > XPN TCP server started (took %e sec.)\n", time);
 
     debug_info("[SRV_TCP_COMM] server %d accepting at %s\n", params -> rank, params -> port);
 
@@ -170,21 +173,23 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
     /*
      * Destroy mosquitto
      */
-    /*
+    if (params -> mosquitto_mode)
+    {
+	    /*
         debug_info("[%d]\tBEGIN DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
         mosquitto_loop_forever(mosqtcpserver, -1, 1);
         mosquitto_lib_cleanup();
         debug_info("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
+	*/
+    }
 
+    // Print server info
+    char serv_name  [HOST_NAME_MAX];
+    gethostname(serv_name, HOST_NAME_MAX);
+    debug_info("--------------------------------\n");
+    debug_info("XPN TCP server %s stopped\n", serv_name);
+    debug_info("--------------------------------\n\n");
 
-
-        // Print server info
-        char serv_name  [HOST_NAME_MAX];
-        gethostname(serv_name, HOST_NAME_MAX);
-        debug_info("--------------------------------\n");
-        debug_info("XPN TCP server %s stopped\n", serv_name);
-        debug_info("--------------------------------\n\n");
-    */
     DEBUG_END();
 
     // Return OK

@@ -11,8 +11,6 @@ int main ( int argc, char *argv[] )
 	//char buffer[BUFF_SIZE] ;
 
 	printf("env XPN_CONF=./xpn.conf XPN_DNS=/tmp/tcp_server.dns %s\n", argv[0]);
-	setenv("XPN_CONF",  "./xpn.conf", 1);
-	setenv("XPN_DNS",   "/tmp/tcp_server.dns", 1);
 
 	// xpn-init
 	ret = xpn_init();
@@ -22,8 +20,8 @@ int main ( int argc, char *argv[] )
 	}
 
 	// test 1
-	fd1 = xpn_creat("/P1/test_1", 00777);
-	printf("%d = xpn_creat('%s', %o)\n", ret, "/P1/test_1", 00777);
+	//fd1 = xpn_creat("/P1/test_1", 00777);
+	//printf("%d = xpn_creat('%s', %o)\n", ret, "/P1/test_1", 00777);
 
 	ret = xpn_rename("/P1/test_1", "/P1/test_2");
 	printf("%d = xpn_rename('%s', '%s')\n", ret, "/P1/test_1", "/P1/test_2");

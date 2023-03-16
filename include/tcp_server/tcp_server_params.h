@@ -59,6 +59,7 @@
 
     // server configuration
     int thread_mode;
+    int mosquitto_mode;
 
     //Semaphore for clients
     char sem_name_server [PATH_MAX];
