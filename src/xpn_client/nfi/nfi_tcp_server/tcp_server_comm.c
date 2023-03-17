@@ -170,7 +170,7 @@ int tcpClient_comm_disconnect ( __attribute__((__unused__)) tcpClient_param_st *
 {
     debug_info("[NFI_TCP_COMM] begin tcpClient_comm_disconnect nservers\n");
 
-    // TODO: Review this function !!
+    debug_info("[NFI_TCP_COMM] end   tcpClient_comm_disconnect nservers\n");
 
     // Return OK
     return 0;
