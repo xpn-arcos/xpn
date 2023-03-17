@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 2.2.0 - 2023-03-10
+## 2.2.0 - 2023-03-17
   * TCP server rebuilt from scratch
 
 ## 2.1.0 - 2023-03-03
