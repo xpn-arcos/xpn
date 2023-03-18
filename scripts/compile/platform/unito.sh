@@ -23,10 +23,12 @@
 
 
 # 1) software (if needed)...
-
+#spack load openmpi
+spack load mpich
 
 # 2) working path...
-MPICC_PATH=$HOME/opt/spack/linux-ubuntu20.04-zen/gcc-9.4.0/openmpi-4.1.3-4bpvwm3lcbftmjki6en35c4i5od6wjbr/bin/mpicc
+#MPICC_PATH=$HOME/opt/spack/linux-ubuntu20.04-zen/gcc-9.4.0/openmpi-4.1.3-4bpvwm3lcbftmjki6en35c4i5od6wjbr/bin/mpicc
+MPICC_PATH=$HOME/opt/spack/linux-ubuntu20.04-zen/gcc-9.4.0/mpich-4.0.2-a76rmlxbneoqdvemzjsyewp2akiiuxlj/bin/mpicc
 INSTALL_PATH=$HOME/dcamarma/bin/
 BASE_PATH=$(dirname $0)
 
@@ -36,4 +38,5 @@ $BASE_PATH/../software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_P
 $BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
 $BASE_PATH/../software/lz4.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500/build/pfind/lz4/
 $BASE_PATH/../software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
+
 
