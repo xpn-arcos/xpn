@@ -37,11 +37,14 @@ void tcp_server_params_show(tcp_server_param_st * params)
     printf("\t-ns <string>:\t'%s'\n", params -> dns_file);
     printf("\t-d  <string>:\t'%s'\n", params -> dirbase);
 
-    if (params -> thread_mode == TH_POOL) {
-        printf("\t-tp:\t\tThread Pool Activated\n");
+    if(params->thread_mode == TH_NOT){
+      printf("\t-t:\t\tWithout threads\n") ;
     }
-    if (params -> thread_mode == TH_OP) {
-        printf("\t-ntp:\t\tThread Pool Deactivated (Using Thread per Client)\n");
+    if(params->thread_mode == TH_POOL){
+      printf("\t-t:\t\tThread Pool Activated\n") ;
+    }
+    if(params->thread_mode == TH_OP){
+      printf("\t-n:\t\tThread on demand\n") ;
     }
 
     if (params -> mosquitto_mode == 1) {
@@ -63,8 +66,7 @@ void tcp_server_params_show_usage(void)
     printf("\t-ns <path>: file for service name\n");
     printf("\t-d  <string>: name of the base directory\n");
 
-    printf("\t-tp:  use thread-pool\n") ;
-    printf("\t-ntp: use thread per-client\n");
+    printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
 
     printf("\t-m:   use mosquitto\n") ;
 
@@ -135,11 +137,35 @@ int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
                 i++;
                 break;
             case 't':
-                if ((strlen(argv[i]) == 3) && (argv[i][2] == 'p')) {
-                    params -> thread_mode = TH_POOL;
-                    i++;
+              if (isdigit(argv[i+1][0]))
+              {
+                int thread_mode_aux = atoi(argv[i+1]);
+                
+                if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP)
+                {
+                  params->thread_mode = thread_mode_aux;
                 }
-                break;
+                else {
+                  printf("ERROR: unknown option %s\n", argv[i+1]);
+                }
+              }
+              else
+              {
+                if (strcmp("without", argv[i+1]) == 0){
+                  params->thread_mode = TH_NOT;
+                }
+                else if (strcmp("pool", argv[i+1]) == 0){
+                  params->thread_mode = TH_POOL;
+                }
+                else if (strcmp("on_demand", argv[i+1]) == 0){
+                  params->thread_mode = TH_OP;
+                }
+                else{
+                  printf("ERROR: unknown option %s\n", argv[i+1]);
+                }
+              }
+              i++;
+              break;
             case 'm':
                 params -> mosquitto_mode = 1 ;
                 i++;

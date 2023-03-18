@@ -26,16 +26,12 @@
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
+  #include <ctype.h>
   #include <semaphore.h>
   #include "mpi.h"
   #include "base/utils.h"
   #include "mpi_server_conf.h"
-
-
-  //Constants
-  #define TH_POOL 1
-  #define TH_OP   2
-
+  #include "base/workers.h"
 
 
   /*

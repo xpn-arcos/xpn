@@ -27,15 +27,14 @@
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
+  #include <ctype.h>
   #include <semaphore.h>
   #include "base/utils.h"
   #include "tcp_server_conf.h"
+  #include "base/workers.h"
 
 
   //Constants
-  #define TH_POOL 1
-  #define TH_OP   2
-
   #define TCP_MAX_PORT_NAME   1024
 
 
