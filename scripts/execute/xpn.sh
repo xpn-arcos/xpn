@@ -131,22 +131,14 @@ rebuild_mpi_servers() {
     echo " * xpn storage path: ${XPN_STORAGE_PATH}"
   fi
 
-  # 1. Get partition content
-  mpiexec -np       "${NODE_NUM}" \
-          -hostfile "${HOSTFILE}" \
-          -genv     LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-          -genv     XPN_DNS /tmp/dns.txt \
-          -genv     XPN_CONF /local_test/test/configuration/conf.xml \
-          -genv     LD_PRELOAD src/bypass/xpn_bypass.so \
-          tree -fainc ${SOURCE_PARTITION} | head -n -2 | tail -n +2  | sed "s|${SOURCE_PARTITION}||g" > /tmp/partition_content.txt
-
-  # 2. Copy
+  # 1. Copy
   mpiexec -np       "${NODE_NUM}" \
           -hostfile "${HOSTFILE}" \
           -genv      LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
           -genv      XPN_DNS /tmp/dns.txt \
           -genv      XPN_CONF /local_test/test/configuration/conf.xml \
           -genv      LD_PRELOAD src/bypass/xpn_bypass.so \
+          -genv      XPN_LOCALITY 0\
           src/utils/xpn_rebuild ${SOURCE_PARTITION} ${XPN_STORAGE_PATH} 524288
 
   rm -f /tmp/partition_content.txt
