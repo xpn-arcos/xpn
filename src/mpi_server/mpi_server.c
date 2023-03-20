@@ -237,7 +237,7 @@
       // Close host file
       fclose(file);
 
-      MPI_Finalize();
+      //MPI_Finalize();
 
       return 0;
     }
