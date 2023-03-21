@@ -52,8 +52,7 @@ $(TCP_SERVER_EXE_STOP): $(TCP_SERVER_EXE)
 
 install:  $(TCP_SERVER_EXE)
 	cp -a                   $(TCP_SERVER_EXE) $(EXPAND_DIR)/bin
-	rm -fr $(EXPAND_DIR)/bin/$(TCP_SERVER_EXE_STOP)
-	ln -s $(EXPAND_DIR)/bin/$(TCP_SERVER_EXE) $(EXPAND_DIR)/bin/$(TCP_SERVER_EXE_STOP)
+	rm -fr $(EXPAND_DIR)/bin/$(TCP_SERVER_EXE_STOP) && ln -s $(EXPAND_DIR)/bin/$(TCP_SERVER_EXE) $(EXPAND_DIR)/bin/$(TCP_SERVER_EXE_STOP)
 
 
 clean:

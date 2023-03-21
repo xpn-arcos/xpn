@@ -33,11 +33,14 @@
 
     printf(" * MPI server current configuration:\n");
     printf("\t-ns <path>:\t'%s'\n",   params->dns_file) ;
+    if(params->thread_mode == TH_NOT){
+      printf("\t-t:\t\tWithout threads\n") ;
+    }
     if(params->thread_mode == TH_POOL){
-      printf("\t-tp:\t\tThread Pool Activated\n") ;
+      printf("\t-t:\t\tThread Pool Activated\n") ;
     }
     if(params->thread_mode == TH_OP){
-      printf("\t-ntp:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
+      printf("\t-n:\t\tThread on demand\n") ;
     }
     printf("\t-d <path>:\t'%s'\n",   params->dirbase) ;
     printf("\t-f <path>:\t'%s'\n",   params->host_file) ;
@@ -53,8 +56,7 @@
     printf("Usage:\n");
     printf("\t-f  <path>: file of servers to be shutdown\n") ;
     printf("\t-ns <path>: file for service name\n") ;
-    printf("\t-tp:  use thread-pool\n") ;
-    printf("\t-ntp: use thread per-client\n") ;
+    printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
     printf("\t-d  <string>: name of the base directory\n") ;
 
     DEBUG_END() ;
@@ -103,10 +105,34 @@
               i++;
               break;
             case 't':
-              if ((strlen(argv[i]) == 3) && (argv[i][2] == 'p')){
-                params->thread_mode = TH_POOL;
-                i++;
+              if (isdigit(argv[i+1][0]))
+              {
+                int thread_mode_aux = atoi(argv[i+1]);
+
+                if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP)
+                {
+                  params->thread_mode = thread_mode_aux;
+                }
+                else {
+                  printf("ERROR: unknown option %s\n", argv[i+1]);
+                }
               }
+              else
+              {
+                if (strcmp("without", argv[i+1]) == 0){
+                  params->thread_mode = TH_NOT;
+                }
+                else if (strcmp("pool", argv[i+1]) == 0){
+                  params->thread_mode = TH_POOL;
+                }
+                else if (strcmp("on_demand", argv[i+1]) == 0){
+                  params->thread_mode = TH_OP;
+                }
+                else{
+                  printf("ERROR: unknown option %s\n", argv[i+1]);
+                }
+              }
+              i++;
               break;
             case 'h':
               return -1;

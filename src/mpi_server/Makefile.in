@@ -52,8 +52,7 @@ $(MPI_SERVER_EXE_STOP): $(MPI_SERVER_EXE)
 
 install:  $(MPI_SERVER_EXE)
 	cp -a                   $(MPI_SERVER_EXE) $(EXPAND_DIR)/bin
-	rm -fr $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP)
-	ln -s $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE) $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP)
+	rm -fr $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP) && ln -s $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE) $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP)
 
 
 clean:
