@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal
 #
 #  This file is part of Expand.
 #
@@ -67,7 +67,9 @@ mk_conf_servers() {
                          --storage_path ${STORAGE_PATH}
 }
 
-start_mpi_servers() {
+
+start_xpn_servers() {
+
   BASE_DIR="./scripts/execute/"
 
   if [[ ${VERBOSE} == true ]]; then
@@ -86,10 +88,17 @@ start_mpi_servers() {
   rm -f /tmp/dns.txt
   touch /tmp/dns.txt
 
-  mpiexec -np       "${NODE_NUM}" \
-          -hostfile "${HOSTFILE}" \
-          -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-          src/mpi_server/xpn_mpi_server -ns /tmp/dns.txt ${ARGS} &
+  if [[ ${SERVER_TYPE} == "mpi" ]]; then
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+            src/mpi_server/xpn_mpi_server -ns /tmp/dns.txt ${ARGS} &
+  else
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+            src/tcp_server/xpn_tcp_server -ns /tmp/dns.txt ${ARGS} -p 3456 &
+  fi
 
   sleep 3
 
@@ -100,7 +109,7 @@ start_mpi_servers() {
       if [[ $k = q ]] ; then
         echo
         echo "Shutting down ..."
-        stop_mpi_servers
+        stop_xpn_servers
         break
       else
         echo "Press 'q' to exit"
@@ -110,21 +119,28 @@ start_mpi_servers() {
 }
 
 
-stop_mpi_servers() {
+stop_xpn_servers() {
 
   if [[ ${VERBOSE} == true ]]; then
     echo " * DEATH_FILE: ${DEATH_FILE}"
     echo " * additional daemon args: ${ARGS}"
   fi
 
-  mpiexec -np 1 \
-          -genv XPN_DNS /tmp/dns.txt \
-          -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-          src/mpi_server/xpn_stop_mpi_server -f ${DEATH_FILE}
+  if [[ ${SERVER_TYPE} == "mpi" ]]; then
+    mpiexec -np 1 \
+            -genv XPN_DNS /tmp/dns.txt \
+            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+            src/mpi_server/xpn_stop_mpi_server -f ${DEATH_FILE}
+  else
+    mpiexec -np 1 \
+            -genv XPN_DNS /tmp/dns.txt \
+            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+            src/tcp_server/xpn_stop_tcp_server -f ${DEATH_FILE}
+  fi
 }
 
 
-rebuild_mpi_servers() {
+rebuild_xpn_servers() {
 
   if [[ ${VERBOSE} == true ]]; then
     echo " * source partition: ${SOURCE_PARTITION}"
@@ -144,11 +160,11 @@ rebuild_mpi_servers() {
   rm -f /tmp/partition_content.txt
 
   # 2. stop old servers
-  stop_mpi_servers
+  stop_xpn_servers
 
   # 3. start new servers
   mk_conf_servers  "/tmp/config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} 
-  start_mpi_servers
+  start_xpn_servers
 }
 
 
@@ -165,6 +181,7 @@ usage_short() {
   echo "               [-v/--verbose <false>] {start,stop,rebuild}"
   echo ""
 }
+
 
 usage_details() {
   echo ""
@@ -204,6 +221,7 @@ RUN_FOREGROUND=false
 VERBOSE=false
 HOSTFILE="machinefile"
 DEATH_FILE="machinefile"
+SERVER_TYPE="mpi"
 
 ## get arguments
 while getopts "r:s:x:d:n:a:c:l:fvh" opt; do
@@ -246,11 +264,11 @@ fi
 # run 
 case "${ACTION}" in
       start)    mk_conf_servers  "/tmp/config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH}
-                start_mpi_servers
+                start_xpn_servers
                 ;;
-      stop)     stop_mpi_servers
+      stop)     stop_xpn_servers
                 ;;
-      rebuild)  rebuild_mpi_servers
+      rebuild)  rebuild_xpn_servers
                 ;;
       *)        echo ""
                 echo " ERROR: ACTION '${ACTION}' not supported"
