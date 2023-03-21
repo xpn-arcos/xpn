@@ -1,10 +1,10 @@
 
-# tcp_server
+# tcp_server for XPN
 
 
 ## Compile:
 
-* To compile tcp_server:
+* To compile the tcp_server just execute:
 ```
 make clean
 make
@@ -12,16 +12,9 @@ make
 
 ## Execution:
 
-* To start one tcp_server:
+* In order to start one tcp_server at host "localhost" and port "7555", you can use:
 ```
-export XPN_CONF=${HOME}/conf/xpn.conf.xml
-export XPN_PROFILE=${HOME}/conf/xpn.profile.xml
-export MYSERVER_FILE=${HOME}/conf/xpn.dns
-export MYSERVER_HOME=${HOME}/expand/src_servers/tcp_server
-
-# argument: node id.
-I=$1
-
-${MYSERVER_HOME}/tcp_server.exe -n node$I -p 9999 -f ${MYSERVER_FILE}
+echo localhost > machinefile
+./scripts/execute/tcp_server.sh /tmp/xpn machinefile 7555
 ```
 

@@ -249,7 +249,7 @@ int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
     return pos;
   }
 
-  if (mdata->type_policy == -1){
+  if (mdata->type_policy < 0) {
     return -1;
   }
 
@@ -260,7 +260,7 @@ int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
       if (p == NULL){
         return pos;
       }
-      if(pos == -1){
+      if(pos < 0) {
         pos = (p->first_node)%(mdata->data_nserv);
       }
       else{
@@ -295,7 +295,7 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, __attribute__((__unuse
   mdata->block_size   = xpn_parttable[i].block_size;
   mdata->type_policy  = xpn_parttable[i].type;
 
-  if (mdata->type_policy == -1) {
+  if (mdata->type_policy < 0) {
       return -1;
   }
 
@@ -336,7 +336,7 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
 
   XPN_DEBUG_BEGIN
 
-  if (mdata->type_policy == -1)
+  if (mdata->type_policy < 0)
   {
     XPN_DEBUG_END
     return -1;
@@ -389,7 +389,7 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
 
   XPN_DEBUG_BEGIN
 
-  if (mdata->type_policy == -1){
+  if (mdata->type_policy < 0) {
     return -1;
   }
 
@@ -437,7 +437,7 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
 
 int XpnGetAtribFd ( int fd, struct stat *st )
 {
-  int ret, res, i, j, n, err;
+  int ret, res, i, n, err;
   struct nfi_server **servers;
   struct nfi_attr *attr;
 
@@ -538,7 +538,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
 
 int XpnGetAtribPath ( char * path, struct stat *st )
 {
-  int ret, res, err, i, j, n, pd;
+  int ret, res, err, i, n, pd;
   char url_serv[PATH_MAX];
   char aux_path[PATH_MAX];
   struct nfi_server **servers;

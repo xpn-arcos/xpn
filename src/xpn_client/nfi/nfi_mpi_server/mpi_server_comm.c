@@ -144,7 +144,7 @@
       int lookup_retries = 0;
       do {
         ret = ns_lookup (params->srv_name, params->port_name);
-        if (ret == -1)
+        if (ret < 0)
         {
           if (lookup_retries == 0)
           { 
@@ -157,9 +157,9 @@
           lookup_retries++;
           sleep(2);
         }
-      } while(ret == -1 && lookup_retries < 150);
+      } while((ret < 0) && (lookup_retries < 150));
 
-      if (ret == -1)
+      if (ret < 0)
       {
         debug_error("ERROR: DNS Lookup %s Port %s\n", params->srv_name, params->port_name);
         return -1;

@@ -87,7 +87,8 @@ then
   LIBLINK="-lpthread"
 
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread "
+ #LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
@@ -98,8 +99,9 @@ then
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   LIBLINK="-lpthread"
 
-  CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -Wall -Wextra -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+  CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread "
+ #LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
 then
@@ -111,7 +113,7 @@ then
   LIBLINK="-lpthread "
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
 then
@@ -123,7 +125,7 @@ then
   LIBLINK="-lpthread "
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 else
   OS="__LINUX__"
@@ -134,7 +136,8 @@ else
   LIBLINK="-lpthread "
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread"
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread "
+ #LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
   AC_MSG_RESULT("Using Linux configuration as default configuration...");
 fi

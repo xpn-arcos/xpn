@@ -1,28 +1,26 @@
 #ifndef _TCP_SERVER_COMM_H_
 #define _TCP_SERVER_COMM_H_
 
-    #include "all_system.h"
-    #include "base/utils.h"
-    #include "base/string_misc.h"
-    #include "base/debug_msg.h"
+      #include "all_system.h"
+      #include "tcp_server_params.h"
+      #include "base/utils.h"
+      #include "base/ns.h"
+      #include "base/ns_tcp.h"
+      #include "tcp_server_ops.h"
 
-    #include <dlfcn.h>
+      /*
+       *  API
+       */
 
+      int     tcpClient_comm_init       ( tcpClient_param_st *params ) ;
+      int     tcpClient_comm_destroy    ( tcpClient_param_st *params ) ;
+      int     tcpClient_comm_connect    ( tcpClient_param_st *params ) ;
+      int     tcpClient_comm_disconnect ( tcpClient_param_st *params ) ;
+      int     tcpClient_comm_locality   ( tcpClient_param_st *params ) ;
 
-/* ENVIROMENT VARIABLE: DNS SERVICE */
-#define TCP_SERVER_FILE "TCP_SERVER_FILE"
-#define TCP_SERVER_FILE_DEFAULT "/etc/xpn/tcp_server.dns"
-
-
-/* Nuevo */
-#define CONST_TEMP              1024
-#define MAX_TCP_SERVER_NODES      256
-
-
-void    tcp_server_readFile();
-void    tcp_server_translate(char *server, char *newserver, int *port);
-ssize_t tcp_server_write_data(int fd, char *data, ssize_t size, char *id);
-ssize_t tcp_server_read_data(int fd, char *data, ssize_t size, char *id);
-int     tcp_server_connect(char *server);	
+      ssize_t tcpClient_write_operation ( int fd, char *data, ssize_t size, char *msg_id ) ;
+      ssize_t tcpClient_write_data      ( int fd, char *data, ssize_t size, char *msg_id ) ;
+      ssize_t tcpClient_read_data       ( int fd, char *data, ssize_t size, char *msg_id ) ;
 
 #endif
+

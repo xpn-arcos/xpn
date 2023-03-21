@@ -21,7 +21,6 @@ int copy(char * entry, char * dir_name, char * dest_prefix, int blocksize, int r
 {   
   int  ret;
 
-  FILE *file = NULL;
   struct stat stat_buf;
 
   int fd_src, fd_dest;

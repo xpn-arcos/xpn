@@ -1,123 +1,193 @@
+/*
+ *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
-  /*
-   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
-   *
-   *  This file is part of Expand.
-   *
-   *  Expand is free software: you can redistribute it and/or modify
-   *  it under the terms of the GNU Lesser General Public License as published by
-   *  the Free Software Foundation, either version 3 of the License, or
-   *  (at your option) any later version.
-   *
-   *  Expand is distributed in the hope that it will be useful,
-   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   *  GNU Lesser General Public License for more details.
-   *
-   *  You should have received a copy of the GNU Lesser General Public License
-   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
-   *
-   */
+/* ... Include / Inclusion ........................................... */
 
-
-   /* ... Include / Inclusion ........................................... */
-
-      #include "tcp_server_params.h"
+#include "tcp_server_params.h"
 
 
-   /* ... Functions / Funciones ......................................... */
+/* ... Functions / Funciones ......................................... */
 
-      void params_show_values ( struct tcp_server_param_st *params )
-      {
-         printf("Usage:\n");
-         printf("\t-n <string>:\t%s\n",params->name);
-         printf("\t-p <int>:\t%d\n",params->port);
-         printf("\t-io <int>:\t%d\n",params->IOsize);
-         printf("\t-f <string>:\t%s\n",params->file);
-         printf("\t-d <string>:\t%s\n",params->dirbase);
+void tcp_server_params_show(tcp_server_param_st * params)
+{
+    DEBUG_BEGIN();
 
-         if(params->thread_mode == TH_POOL)
-            printf("\t-tp:\t\tThread Pool Activated\n") ;
-         if(params->thread_mode == TH_OP)
-            printf("\t-tp:\t\tThread Pool Deactivated (Using Thread per Client)\n") ;
-      }
+    printf("   * TCP-server current configuration:\n");
+    printf("\t-n  <string>:\t'%s'\n", params -> name);
+    printf("\t-p  <int>:\t'%s'\n",    params -> port);
+    printf("\t-io <int>:\t%d\n",      params -> IOsize);
 
-      void params_show_usage ( void )
-      {
-         printf("Usage:\n");
-         printf("\t-n <string>: name of the server\n");
-         printf("\t-p <int>: port number\n");
-         printf("\t-io <int>: IOsize\n");
-         printf("\t-f <string>: name of the DNS file\n");
-         printf("\t-d <string>: dir base\n");
-         printf("\t-tp: use thread pool\n") ;
-      }
+    printf("\t-ns <string>:\t'%s'\n", params -> dns_file);
+    printf("\t-d  <string>:\t'%s'\n", params -> dirbase);
 
-      int params_get ( int argc, char *argv[], struct tcp_server_param_st *params )
-      {
-         int i;
+    if(params->thread_mode == TH_NOT){
+      printf("\t-t:\t\tWithout threads\n") ;
+    }
+    if(params->thread_mode == TH_POOL){
+      printf("\t-t:\t\tThread Pool Activated\n") ;
+    }
+    if(params->thread_mode == TH_OP){
+      printf("\t-n:\t\tThread on demand\n") ;
+    }
 
-         params->port   = TCP_SERVER_PORT_DEFAULT;
-         params->IOsize    = TCP_SERVER_IOSIZE_DEFAULT;
-         gethostname(params->name, 255);
-         strcpy(params->file, TCP_SERVER_FILE_DEFAULT);
-         strcpy(params->dirbase, TCP_SERVER_DIRBASE_DEFAULT);
-         params->thread_mode = TH_OP ;
+    if (params -> mosquitto_mode == 1) {
+        printf("\t-m:\t\tmosquitto Activated\n");
+    }
 
-         for (i=0;i<argc;i++)
-         {
-            switch(argv[i][0])
-            {
-               case '-':
-                  switch(argv[i][1])
-                  {
-                     case 'p':
-                        params->port = atoi(argv[i+1]);
-                        i++;
-                        break;
-                     case 'i':
-                        params->IOsize = atoi(argv[i+1]);
-                        i++;
-                        break;
-                     case 'n':
-                        strcpy(params->name, argv[i+1]);
-                        i++;
-                        break;
-                     case 'f':
-                        strcpy(params->file, argv[i+1]);
-                        i++;
-                        break;
-                     case 'd':
-                        strcpy(params->dirbase, argv[i+1]);
-                        i++;
-                        break;
-                     case 't':
-                       if ((strlen(argv[i]) == 3) && (argv[i][2] == 'p')){
-                          params->thread_mode = TH_POOL;
-                       }
-                       i++;
-                       break; 
-                     case 'h':
-                        params_show_usage();
-                        exit(0);
+    DEBUG_END();
+}
 
-                     default:
-                        break;
-                  }
-                  break;
-               default:
-                  break;
+void tcp_server_params_show_usage(void)
+{
+    DEBUG_BEGIN();
+
+    printf("Usage:\n");
+    printf("\t-n  <string>: name of the server\n");
+    printf("\t-p  <int>:    port number\n");
+    printf("\t-io <int>:    IOsize\n");
+
+    printf("\t-ns <path>: file for service name\n");
+    printf("\t-d  <string>: name of the base directory\n");
+
+    printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
+
+    printf("\t-m:   use mosquitto\n") ;
+
+    DEBUG_END();
+}
+
+int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
+{
+    DEBUG_BEGIN();
+
+    // set default values
+    params -> argc = argc;
+    params -> argv = argv;
+
+    params -> size = 0;
+    params -> rank = 0;
+    strcpy(params -> port_name, "");
+    strcpy(params -> srv_name,  "");
+
+    params -> thread_mode = TH_POOL;
+    strcpy(params -> dirbase, TCP_SERVER_DIRBASE_DEFAULT);
+    strcpy(params -> dns_file, "");
+
+    gethostname(params->name, TCP_MAX_PORT_NAME);
+    sprintf(params->port, "%d", TCP_SERVER_PORT_DEFAULT);
+    params->IOsize  = TCP_SERVER_IOSIZE_DEFAULT;
+
+    params -> mosquitto_mode = 0 ;
+
+    // update user requests
+    for (int i = 0; i < argc; i++)
+    {
+        switch (argv[i][0])
+	{
+        case '-':
+            switch (argv[i][1])
+	    {
+            case 'p':
+                strcpy(params -> port, argv[i + 1]);
+                i++;
+                break;
+            case 'n':
+                if ((strlen(argv[i]) == 2)) {
+                    strcpy(params -> name, argv[i + 1]);
+                    i++;
+                }
+                if ((strlen(argv[i]) == 3) && (argv[i][2] == 's')) {
+                    strcpy(params -> dns_file, argv[i + 1]);
+                    i++;
+                }
+                if ((strlen(argv[i]) == 4) && (argv[i][2] == 't') && (argv[i][3] == 'p')) {
+                    params -> thread_mode = TH_OP;
+                    i++;
+                }
+                break;
+            case 'i':
+                if ((strlen(argv[i]) == 3) && (argv[i][2] == 'o')) {
+                    params -> IOsize = atoi(argv[i + 1]);
+                    i++;
+                }
+                break;
+            case 'f':
+                strcpy(params -> host_file, argv[i + 1]);
+                i++;
+                break;
+            case 'd':
+                strcpy(params -> dirbase, argv[i + 1]);
+                i++;
+                break;
+            case 't':
+              if (isdigit(argv[i+1][0]))
+              {
+                int thread_mode_aux = atoi(argv[i+1]);
+                
+                if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP)
+                {
+                  params->thread_mode = thread_mode_aux;
+                }
+                else {
+                  printf("ERROR: unknown option %s\n", argv[i+1]);
+                }
+              }
+              else
+              {
+                if (strcmp("without", argv[i+1]) == 0){
+                  params->thread_mode = TH_NOT;
+                }
+                else if (strcmp("pool", argv[i+1]) == 0){
+                  params->thread_mode = TH_POOL;
+                }
+                else if (strcmp("on_demand", argv[i+1]) == 0){
+                  params->thread_mode = TH_OP;
+                }
+                else{
+                  printf("ERROR: unknown option %s\n", argv[i+1]);
+                }
+              }
+              i++;
+              break;
+            case 'm':
+                params -> mosquitto_mode = 1 ;
+                i++;
+                break;
+            case 'h':
+                return -1;
+
+            default:
+                break;
             }
-         }
+            break;
 
-         TCP_SERVER_ALIAS_NAME_STRING = params->name;
-         TCP_SERVER_FILE_STRING = params->file;
-         TCP_SERVER_DIRBASE_STRING = params->dirbase;
-         TCP_SERVER_IOSIZE_INT = params->IOsize * KB;
+        default:
+            break;
+        }
+    }
 
-         return 0;
-      }
+    // return OK
+    DEBUG_END();
+    return 1;
+}
 
 
-   /* ................................................................... */
+/* ................................................................... */
 
