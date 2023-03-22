@@ -28,8 +28,9 @@
 #include "base/time_misc.h"
 #include "base/ns_tcp.h"
 #include "tcp_server_params.h"
+#ifdef HAVE_MOSQUITTO_H
 #include <mosquitto.h>
-
+#endif
 
 
 /*

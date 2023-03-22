@@ -1,7 +1,11 @@
+
+#include "all_system.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_MOSQUITTO_H
 #include <mosquitto.h>
+#endif
 
 #define MAX_BROKERS 10
 

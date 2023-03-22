@@ -27,7 +27,7 @@
 
 #define FILESYSTEM_DLSYM 1
 
-#ifdef HAVE_LIBMOSQUITTO
+#ifdef HAVE_MOSQUITTO_H
 struct mosquitto * mosqstr;
 #endif
 
@@ -351,7 +351,7 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
 
     DEBUG_END();
 
-    #ifdef HAVE_LIBMOSQUITTO
+    #ifdef HAVE_MOSQUITTO_H
     /*INIT MOSQUITTO CLIENT SIDE */
     int rc = 0;
     server_aux -> params.xpn_mosquitto_mode = 0;
@@ -439,7 +439,7 @@ int nfi_tcp_server_destroy(struct nfi_server * serv) {
     //serv->protocol = -1;
     DEBUG_END();
 
-    #ifdef HAVE_LIBMOSQUITTO
+    #ifdef HAVE_MOSQUITTO_H
 
     if (server_aux -> params.xpn_mosquitto_mode == 1)                       //MQTT finalization
     {
@@ -990,7 +990,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
             {
                 ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
             }
-            #ifdef HAVE_LIBMOSQUITTO
+            #ifdef HAVE_MOSQUITTO_H
             else                            //MQTT sending text
             {
                 printf("CLIENTE ESCRITURA - %s\n", fh_aux -> path);

@@ -24,12 +24,12 @@
 
 #include "tcp_server/tcp_server_comm.h"
 
-#ifdef HAVE_LIBMOSQUITTO
+#ifdef HAVE_MOSQUITTO_H
     struct mosquitto *mosqtcpserver;
 #endif
 
   /* ... Functions / Funciones ......................................... */
-#ifdef HAVE_LIBMOSQUITTO
+#ifdef HAVE_MOSQUITTO_H
 
 void on_message(struct mosquitto *mosqtcpserver, void *obj, const struct mosquitto_message *msg)
 {
@@ -106,7 +106,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
      * Initialize mosquitto
      */
     
-    #ifdef HAVE_LIBMOSQUITTO
+    #ifdef HAVE_MOSQUITTO_H
 
     if ( params -> mosquitto_mode  == 1 )
     {
