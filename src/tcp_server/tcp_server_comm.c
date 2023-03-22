@@ -20,10 +20,32 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include "tcp_server/tcp_server_comm.h"
+//#define DEBUG 1
 
+#include "tcp_server/tcp_server_comm.h"
+
+#ifdef HAVE_LIBMOSQUITTO
+    struct mosquitto *mosqtcpserver;
+#endif
 
   /* ... Functions / Funciones ......................................... */
+#ifdef HAVE_LIBMOSQUITTO
+
+void on_message(struct mosquitto *mosqtcpserver, void *obj, const struct mosquitto_message *msg)
+{
+    printf("%s\n\n%s\n", msg->topic, (char *) msg->payload);
+}
+
+#endif
+
+
+
+
+
+
+
+
+
 
 int tcp_server_comm_init ( tcp_server_param_st * params )
 {
@@ -35,7 +57,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     DEBUG_BEGIN();
 
     // Get timestap
-    TIME_MISC_Timer( & t0);
+    TIME_MISC_Timer( & t0 );
 
     /*
      * Initialize socket
@@ -83,41 +105,46 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     /*
      * Initialize mosquitto
      */
+    
+    #ifdef HAVE_LIBMOSQUITTO
 
-    /*
-    printf("[%d]\tBEGIN INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
-
-    mosquitto_lib_init();
-
-    mosqtcpserver = mosquitto_new(NULL, true, NULL);
-    if(mosqtcpserver == NULL)
+    if ( params -> mosquitto_mode  == 1 )
     {
-    fprintf(stderr, "Error: Out of memory.\n");
-    return 1;
+	    printf("[%d]\tBEGIN INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+
+	    
+	    mosquitto_lib_init();
+
+	    mosqtcpserver = mosquitto_new(NULL, true, NULL);
+	    if(mosqtcpserver == NULL)
+	    {
+    	    fprintf(stderr, "Error: Out of memory.\n");
+    	    return 1;
+	    }
+
+	    //mosquitto_connect_callback_set(mosqtcpserver, on_connect);
+	    //mosquitto_subscribe_callback_set(mosqtcpserver, on_subscribe);
+	    mosquitto_message_callback_set(mosqtcpserver, on_message);
+
+	    #ifndef MOSQ_OPT_TCP_NODELAY
+	    #define MOSQ_OPT_TCP_NODELAY 1
+	    #endif
+
+	    mosquitto_int_option(mosqtcpserver, MOSQ_OPT_TCP_NODELAY, 1);
+
+	    int rc = mosquitto_connect(mosqtcpserver, "localhost", 1886, 0);
+	    if( rc != MOSQ_ERR_SUCCESS )
+	    {
+    	    mosquitto_destroy(mosqtcpserver);
+    	    fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO TCP_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
+    	    return 1;
+	    }
+        //mosquitto_loop_forever(mosqtcpserver, -1, 1);
+	    printf("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+	    
     }
 
-    mosquitto_connect_callback_set(mosqtcpserver, on_connect);
-    mosquitto_subscribe_callback_set(mosqtcpserver, on_subscribe);
-    mosquitto_message_callback_set(mosqtcpserver, on_message);
-
-    #ifndef MOSQ_OPT_TCP_NODELAY
-    #define MOSQ_OPT_TCP_NODELAY 1
     #endif
-
-    mosquitto_int_option(mosqtcpserver, MOSQ_OPT_TCP_NODELAY, 1);
-
-    int rc = mosquitto_connect(mosqtcpserver, "localhost", 1883, 60);
-
-    if(rc != MOSQ_ERR_SUCCESS)
-    {
-    mosquitto_destroy(mosqtcpserver);
-    fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO TCP_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
-    return 1;
-    }
-
-    printf("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
-    */
-
 
     /*
      * Post-initialize
@@ -158,8 +185,9 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
         if (params -> rank == i)
 	{
             ret = ns_tcp_unpublish(params -> dns_file, params -> srv_name);
-            if (ret < 0) {
-                debug_error("[SRV_TCP_COMM] server%d: ns_unpublish fails :-(", params -> rank);
+            if (ret < 0) 
+            {
+                debug_info("[SRV_TCP_COMM] server%d: ns_unpublish fails :-(", params -> rank);
                 return -1;
             }
         }
@@ -168,21 +196,22 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
     /*
      * Destroy mosquitto
      */
-    /*
-        printf("[%d]\tBEGIN DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
-        mosquitto_loop_forever(mosqtcpserver, -1, 1);
+    if (params -> mosquitto_mode)
+    {
+	    
+        debug_info("[%d]\tBEGIN DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
         mosquitto_lib_cleanup();
-        printf("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
+        debug_info("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
+	
+    }
 
+    // Print server info
+    char serv_name  [HOST_NAME_MAX];
+    gethostname(serv_name, HOST_NAME_MAX);
+    debug_info("--------------------------------\n");
+    debug_info("XPN TCP server %s stopped\n", serv_name);
+    debug_info("--------------------------------\n\n");
 
-
-        // Print server info
-        char serv_name  [HOST_NAME_MAX];
-        gethostname(serv_name, HOST_NAME_MAX);
-        printf("--------------------------------\n");
-        printf("XPN TCP server %s stopped\n", serv_name);
-        printf("--------------------------------\n\n");
-    */
     DEBUG_END();
 
     // Return OK
@@ -291,7 +320,7 @@ int tcp_server_comm_connect ( tcp_server_param_st * params, char *server_name, i
     }
 
     // Connect...
-    printf("[SRV_TCP_COMM] server = %s-%d\n", server_name, port_number);
+    debug_info("[SRV_TCP_COMM] server = %s-%d\n", server_name, port_number);
 
     bzero((char * ) & server_addr, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
@@ -348,7 +377,7 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
     ret = tcp_server_comm_read_data(params, fd, data, size * sizeof(int), *rank_client_id); //      Nuevo
     if (ret < 0) {
         debug_warning("[SRV_TCP_COMM] server: tcp_server_comm_read_op fails : %d\n", ret);
-	return ret ;
+        return ret ;
     }
 
     DEBUG_END();
@@ -380,11 +409,14 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     cont = 0;
     do
     {
+        ret = 0;
         debug_info("[SRV_TCP_COMM] server:write_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+        //debug_info("Antes Escritura - %d\n", ret);
         ret = write(fd, data + cont, size - cont);
+        //debug_info("Despues Escritura - %d\n", ret);
         if (ret < 0) {
             perror("server: Error write_comm: ");
-	    return -1;
+	       return -1;
         }
 
         debug_info("[SRV_TCP_COMM] server:write_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
@@ -398,7 +430,6 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
     }
 
     DEBUG_END();
-
     // Return bytes written
     return cont;
 }
@@ -426,11 +457,14 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
     cont = 0;
     do
     {
+        ret = 0;
         debug_info("[SRV_TCP_COMM] server:read_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+        //debug_info("Antes Lectura - %d\n", ret);
         ret = read(fd, data + cont, size - cont);
+        //debug_info("Despues Lectura - %d\n", ret);
         if (ret < 0) {
             perror("[SRV_TCP_COMM] server: Error read_comm: ");
-	    return -1;
+            return -1;
         }
 
         debug_info("[SRV_TCP_COMM] server:read_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());

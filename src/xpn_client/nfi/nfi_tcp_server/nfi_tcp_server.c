@@ -18,35 +18,38 @@
  *
  */
 
-  /* ... Include / Inclusion ........................................... */
+/* ... Include / Inclusion ........................................... */
+//#define DEBUG 1
+#include "nfi_tcp_server.h"
 
-     #include "nfi_tcp_server.h"
 
+/* ... Global Variable / Variable Globales ........................... */
 
-  /* ... Global Variable / Variable Globales ........................... */
+#define FILESYSTEM_DLSYM 1
 
-     #define FILESYSTEM_DLSYM 1
+#ifdef HAVE_LIBMOSQUITTO
+struct mosquitto * mosqstr;
+#endif
 
-  /* ... Functions / Funciones ......................................... */
+/* ... Functions / Funciones ......................................... */
 
-    /*
-     * Communication
-     */
+/*
+ * Communication
+ */
 
-int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head)
-{
+int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head) {
     int ret;
 
     debug_info("[NFI-TCP] (ID=%s) tcpClient_write_data: begin               HEAD_TYPE:%d\n", head -> id, sizeof(head -> type));
     ret = tcpClient_write_operation(sd, (char * ) & (head -> type), 1, head -> id);
+    printf("CLIENT -- %d\n", head -> type);
     if (ret < 0) {
         debug_warning("Server[?]: tcpClient_write_data fails :-(");
         return -1;
     }
 
     debug_info("[NFI-TCP] (ID=%s) write_operation: %d -> \n", head -> id, head -> type);
-    switch (head -> type)
-    {
+    switch (head -> type) {
         //File API
     case TCP_SERVER_OPEN_FILE_WS:
     case TCP_SERVER_OPEN_FILE_WOS:
@@ -87,7 +90,7 @@ int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head)
 
         //Directory API
     case TCP_SERVER_MKDIR_DIR:
-        debug_info("[NFI-TCP] (ID=%s) MDKIR operation\n", head -> id);
+        debug_info("[NFI-TCP] (ID=%s) MKDIR operation\n", head -> id);
         ret = tcpClient_write_data(sd, (char * ) & head -> u_st_tcp_server_msg.op_mkdir, sizeof(struct st_tcp_server_mkdir), head -> id);
         break;
     case TCP_SERVER_OPENDIR_DIR:
@@ -309,7 +312,7 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
         server_aux -> params.xpn_locality = atoi(env_locality);
     }
 
-    // initialize MPI Client communication side...
+    // initialize TCP Client communication side...
     ret = tcpClient_comm_init( & (server_aux -> params));
     if (ret < 0) {
         FREE_AND_NULL(serv -> ops);
@@ -347,6 +350,53 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
     debug_info("[%s][%d]\ttcpClient_comm_locality - %d\n", __FILE__, __LINE__, ret);
 
     DEBUG_END();
+
+    #ifdef HAVE_LIBMOSQUITTO
+    /*INIT MOSQUITTO CLIENT SIDE */
+    int rc = 0;
+    server_aux -> params.xpn_mosquitto_mode = 0;
+    char * env_mosquitto = getenv("XPN_MQTT");
+    if (env_mosquitto != NULL) 
+    {
+        server_aux -> params.xpn_mosquitto_mode = atoi(env_mosquitto);
+
+        if (server_aux -> params.xpn_mosquitto_mode == 1)                       //MQTT initialization
+        {
+            mosquitto_lib_init();
+            mosqstr = mosquitto_new(NULL, true, NULL);
+            if(mosqstr == NULL)
+            {
+                fprintf(stderr, "Error: Out of memory.\n");
+                return -1;
+            }
+
+            mosquitto_int_option(mosqstr, MOSQ_OPT_TCP_NODELAY, 1);
+            mosquitto_int_option(mosqstr, MOSQ_OPT_SEND_MAXIMUM, 65535);
+
+
+            rc = mosquitto_connect(mosqstr, "localhost", 1886, 0);
+
+            if(rc != MOSQ_ERR_SUCCESS)
+            {
+                mosquitto_destroy(mosqstr);
+                fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
+                return 1;
+            }
+
+            /* Run the network loop in a background thread, this call returns quickly. */
+            rc = mosquitto_loop_start(mosqstr);
+
+            if(rc != MOSQ_ERR_SUCCESS)
+            {
+                mosquitto_destroy(mosqstr);
+                fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
+                return 1;
+            }
+        }
+    }
+
+    #endif
+
 
     // return OK
     return 0;
@@ -389,6 +439,16 @@ int nfi_tcp_server_destroy(struct nfi_server * serv) {
     //serv->protocol = -1;
     DEBUG_END();
 
+    #ifdef HAVE_LIBMOSQUITTO
+
+    if (server_aux -> params.xpn_mosquitto_mode == 1)                       //MQTT finalization
+    {
+        mosquitto_lib_cleanup();
+        mosquitto_loop_stop(mosqstr, true);
+    }   
+
+    #endif
+
     // return OK
     return 0;
 }
@@ -413,7 +473,7 @@ int nfi_tcp_server_connect(struct nfi_server * serv, __attribute__((__unused__))
     }
 
     strcpy(server_aux -> params.srv_name, server);
-    debug_info("[%s][%d]\t%s\n",__FILE__, __LINE__, server);
+    debug_info("[%s][%d]\t%s\n", __FILE__, __LINE__, server);
 
     ret = tcpClient_comm_connect( & (server_aux -> params));
     if (ret < 0) {
@@ -443,7 +503,7 @@ int nfi_tcp_server_disconnect(struct nfi_server * serv) {
         return 0;
     }
 
-    // MPI Disconnect...
+    // TCP Disconnect... - ALWAYS RETURNS 0
     ret = tcpClient_comm_disconnect( & (server_aux -> params));
     if (ret < 0) {
         debug_error("[NFI-TCP]: tcpClient_comm_disconnect fails :-(");
@@ -576,6 +636,7 @@ int nfi_tcp_server_open(struct nfi_server * serv, char * url, struct nfi_fhandle
         }
 
         memccpy(fh_aux -> path, dir, 0, PATH_MAX - 1);
+
     }
     /*****************************************/
 
@@ -718,24 +779,15 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
     fh_aux = (struct nfi_tcp_server_fhandle * ) fh -> priv_fh;
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
-    {
-        if (server_aux -> params.xpn_session)
-        {
+    if (server_aux -> params.locality) {
+        if (server_aux -> params.xpn_session) {
             real_posix_lseek(fh_aux -> fd, offset, SEEK_SET);
             //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
             ret = real_posix_read(fh_aux -> fd, buffer, size);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fh_aux -> fd, (long int) offset, size, ret)
-            if (ret < 0)
-            {
-                debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
-                return -1;
-            }
-        }
-        else
-        {
+            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fh_aux -> fd, (long int) offset, size, ret);
+        } else {
             int fd;
 
             fd = real_posix_open(fh_aux -> path, O_RDONLY);
@@ -748,72 +800,61 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
             //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
             ret = real_posix_read(fd, buffer, size);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-            //
+
+            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fd, (long int) offset, size, ret);
 
             real_posix_close(fd);
+        }
 
-            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fd, (long int) offset, size, ret)
-            if (ret < 0) {
-                debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
-                return -1;
-            }
+        if (ret < 0) {
+            debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
+            return -1;
         }
     }
     /************** REMOTE ****************/
-    else
-    {
-        if (server_aux -> params.xpn_session)
-        {
+    else {
+        // send read request
+        if (server_aux -> params.xpn_session) {
             msg.type = TCP_SERVER_READ_FILE_WS;
             msg.u_st_tcp_server_msg.op_read.fd = fh_aux -> fd;
-        }
-        else
-        {
+            debug_info("[NFI-TCP] read: -> fd     %d \n", msg.u_st_tcp_server_msg.op_read.fd);
+        } else {
             msg.type = TCP_SERVER_READ_FILE_WOS;
             memccpy(msg.u_st_tcp_server_msg.op_read.path, fh_aux -> path, 0, PATH_MAX);
+            debug_info("[NFI-TCP] read: -> path   %s \n", msg.u_st_tcp_server_msg.op_read.path);
         }
-
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         msg.u_st_tcp_server_msg.op_read.offset = offset;
         msg.u_st_tcp_server_msg.op_read.size = size;
 
-        if (server_aux -> params.xpn_session) {
-            debug_info("[NFI-TCP] read: -> fd     %d \n", msg.u_st_tcp_server_msg.op_read.fd);
-	}
-        else {
-	   debug_info("[NFI-TCP] read: -> path   %s \n", msg.u_st_tcp_server_msg.op_read.path);
-	}
         debug_info("[NFI-TCP] read: -> offset %d \n", (int) msg.u_st_tcp_server_msg.op_read.offset);
         debug_info("[NFI-TCP] read: -> size   %d \n", msg.u_st_tcp_server_msg.op_read.size);
 
         ret = tcp_server_write_operation(server_aux -> params.server, & msg);
-        if (ret < 0)
-        {
+        if (ret < 0) {
             fprintf(stderr, "ERROR: (1)nfi_tcp_server_read: Error on write operation\n");
             return -1;
         }
 
         // read n times: number of bytes + read data (n bytes)
         cont = 0;
-
         do {
             ret = tcpClient_read_data(server_aux -> params.server, (char * ) & req, sizeof(struct st_tcp_server_read_req), msg.id);
             debug_info("[NFI-TCP] nfi_tcp_server_read(ID=%s): (1)tcpClient_read_data = %d.\n", server_aux -> id, ret);
 
-            if (ret < 0)
-            {
+            if (ret < 0) {
                 fprintf(stderr, "ERROR: (2)nfi_tcp_server_read: Error on write operation\n");
                 return -1;
             }
 
-            if (req.size > 0)
-            {
+            // TODO: tcp_server_ops.c:465  -> if (req.size < 0) -> error on server side so... something must be done on client side
+
+            if (req.size > 0) {
                 debug_info("[NFI-TCP] nfi_tcp_server_read(ID=%s): (2)tcpClient_read_data = %d. size = %d\n", server_aux -> id, ret, req.size);
                 ret = tcpClient_read_data(server_aux -> params.server, (char * ) buffer + cont, req.size, msg.id);
                 debug_info("[NFI-TCP] nfi_tcp_server_read(ID=%s): (2)tcpClient_read_data = %d.\n", server_aux -> id, ret);
 
-                if (ret < 0)
-                {
+                if (ret < 0) {
                     fprintf(stderr, "ERROR: (3)nfi_tcp_server_read: Error on read operation\n");
                 }
             }
@@ -862,28 +903,22 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     fh_aux = (struct nfi_tcp_server_fhandle * ) fh -> priv_fh;
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
+    if (server_aux -> params.locality) 
     {
-        if (server_aux -> params.xpn_session)
+        if (server_aux -> params.xpn_session) 
         {
             real_posix_lseek(fh_aux -> fd, offset, SEEK_SET);
             //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
             ret = real_posix_write(fh_aux -> fd, buffer, size);
-            debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fh_aux -> fd, (long int) offset, size, ret);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-            if (ret < 0) {
-                debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
-                return -1;
-            }
-        }
-        else
+            debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fh_aux -> fd, (long int) offset, size, ret);
+        } else 
         {
             int fd;
 
             fd = real_posix_open(fh_aux -> path, O_WRONLY); // WOS
-            if (fd < 0)
-            {
+            if (fd < 0) {
                 debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
                 return -1;
             }
@@ -891,89 +926,103 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
             real_posix_lseek(fd, offset, SEEK_SET);
             //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
             ret = real_posix_write(fd, buffer, size);
-            debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fd, (long int) offset, size, ret);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-            real_posix_close(fd); // WOS
+            debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fd, (long int) offset, size, ret);
 
-            if (ret < 0)
-            {
-                debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
-                return -1;
-            }
+            real_posix_close(fd); // WOS
         }
 
+        if (ret < 0) {
+            debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
+            return -1;
+        }
     }
     /************** REMOTE ****************/
-    else
+    else 
     {
-        if (server_aux -> params.xpn_session)
+        // send write request
+        if (server_aux -> params.xpn_session) 
         {
             msg.type = TCP_SERVER_WRITE_FILE_WS;
             msg.u_st_tcp_server_msg.op_write.fd = fh_aux -> fd;
-        }
-        else
+            debug_info("[NFI-TCP] write: -> fd     %d \n", msg.u_st_tcp_server_msg.op_write.fd);
+        } else 
         {
             msg.type = TCP_SERVER_WRITE_FILE_WOS;
             memccpy(msg.u_st_tcp_server_msg.op_write.path, fh_aux -> path, 0, PATH_MAX - 1);
+            debug_info("[NFI-TCP] write: -> path   %s \n", msg.u_st_tcp_server_msg.op_write.path);
         }
 
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         msg.u_st_tcp_server_msg.op_write.offset = offset;
         msg.u_st_tcp_server_msg.op_write.size = size;
 
-        if (server_aux -> params.xpn_session) {
-            debug_info("[NFI-TCP] write: -> fd     %d \n", msg.u_st_tcp_server_msg.op_write.fd);
-	}
-        else {
-	    debug_info("[NFI-TCP] write: -> path   %s \n", msg.u_st_tcp_server_msg.op_write.path);
-	}
         debug_info("[NFI-TCP] write: -> offset %d \n", (int) msg.u_st_tcp_server_msg.op_write.offset);
         debug_info("[NFI-TCP] write: -> size   %d \n", msg.u_st_tcp_server_msg.op_write.size);
 
         ret = tcp_server_write_operation(server_aux -> params.server, & msg);
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             fprintf(stderr, "(1)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
             return -1;
         }
 
+        // write n times: ...
         diff = size;
         cont = 0;
 
-        int buffer_size = size;
-
         // Max buffer size
-        if (buffer_size > MAX_BUFFER_SIZE)
+        int buffer_size = size;
+        if (buffer_size > MAX_BUFFER_SIZE) 
         {
             buffer_size = MAX_BUFFER_SIZE;
         }
 
-        do
+        do 
         {
-            if (diff > buffer_size) {
-                ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, buffer_size, msg.id);
-            }
-            else {
-                ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, diff, msg.id);
-            }
-            if (ret < 0)
+            int bytes_to_write = 0;
+
+            if( diff > buffer_size )        bytes_to_write = buffer_size;
+            else                            bytes_to_write = diff;
+
+            if (server_aux -> params.xpn_mosquitto_mode == 0)
             {
-                fprintf(stderr, "(2)ERROR: nfi_tcp_server_read(ID=%s): Error on write operation\n", server_aux -> id);
+                ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
+            }
+            #ifdef HAVE_LIBMOSQUITTO
+            else                            //MQTT sending text
+            {
+                printf("CLIENTE ESCRITURA - %s\n", fh_aux -> path);
+                ret = mosquitto_publish(mosqstr, NULL, fh_aux -> path, bytes_to_write, (char * ) buffer + cont, 0, false);
+
+                if(ret != MOSQ_ERR_SUCCESS)
+                {
+                    fprintf(stderr, "Error publishing write: %s\n", mosquitto_strerror(ret));
+                    return -1;
+                }
+            }
+            #endif
+            if (ret < 0) 
+            {
+                fprintf(stderr, "(2)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
             }
 
-            cont = cont + ret; //Send bytes
+            cont = cont + bytes_to_write; //Send bytes
             diff = size - cont;
 
         } while ((diff > 0) && (ret != 0));
 
         ret = tcpClient_read_data(server_aux -> params.server, (char * ) & req, sizeof(struct st_tcp_server_write_req), msg.id);
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             fprintf(stderr, "(3)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
             return -1;
         }
 
         debug_info("[NFI-TCP] nfi_tcp_server_write(ID=%s): write %s off %d size %d (err:%d).\n", server_aux -> id, fh -> url, (int) offset, (int) size, (int) req.size);
-        if (req.size < 0) {
+        if (req.size < 0) 
+        {
             fprintf(stderr, "ERROR: nfi_tcp_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n", server_aux -> id, fh -> url, (int) offset, (int) size, (int) req.size);
             tcp_server_err(TCP_SERVERERR_WRITE);
             return -1;
@@ -1008,14 +1057,12 @@ int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
     debug_info("[NFI-TCP] nfi_tcp_server_close(ID=%s): begin\n", server_aux -> id);
 
     // without session -> just return ok
-    if (server_aux -> params.xpn_session == 0)
-    {
+    if (server_aux -> params.xpn_session == 0) {
         debug_info("[NFI-TCP] nfi_tcp_server_close(ID=%s): end\n", server_aux -> id);
         return 1;
     }
 
-    if (NULL == fh -> priv_fh)
-    {
+    if (NULL == fh -> priv_fh) {
         debug_info("[NFI-TCP] nfi_tcp_server_close(ID=%s): end\n", server_aux -> id);
         return -1;
     }
@@ -1024,18 +1071,15 @@ int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
-    {
-        if (fh_aux != NULL)
-        {
+    if (server_aux -> params.locality) {
+        if (fh_aux != NULL) {
             //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
             ret = real_posix_close(fh_aux -> fd);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
         }
     }
     /************** REMOTE ****************/
-    else
-    {
+    else {
         //bzero(&msg, sizeof(struct st_tcp_server_msg));
 
         msg.type = TCP_SERVER_CLOSE_FILE_WS;
@@ -1059,8 +1103,7 @@ int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
 
 
 
-int nfi_tcp_server_remove(struct nfi_server * serv, char * url)
-{
+int nfi_tcp_server_remove(struct nfi_server * serv, char * url) {
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1075,34 +1118,29 @@ int nfi_tcp_server_remove(struct nfi_server * serv, char * url)
     // private_info...
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
     debug_info("[NFI-TCP] nfi_tcp_server_remove(%s): begin %s\n", server_aux -> id, url);
-    if (server_aux == NULL)
-    {
+    if (server_aux == NULL) {
         tcp_server_err(TCP_SERVERERR_PARAM);
         return -1;
     }
 
     // from url -> server + dir
     ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         fprintf(stderr, "nfi_tcp_server_remove: url %s incorrect.\n", url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
-    {
+    if (server_aux -> params.locality) {
         ret = real_posix_unlink(dir);
-        if (ret < 0)
-        {
+        if (ret < 0) {
             debug_error("real_posix_open fails to open '%s' in server %s.\n", dir, serv -> server);
             return -1;
         }
     }
     /************** REMOTE ****************/
-    else
-    {
+    else {
         msg.type = TCP_SERVER_RM_FILE;
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         memccpy(msg.u_st_tcp_server_msg.op_rm.path, dir, 0, PATH_MAX - 1);
@@ -1117,8 +1155,7 @@ int nfi_tcp_server_remove(struct nfi_server * serv, char * url)
 
 
 
-int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_url)
-{
+int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_url) {
     int ret;
     char server[PATH_MAX], old_path[PATH_MAX], new_path[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1135,42 +1172,36 @@ int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_u
 
     // private_info...
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
-    debug_info("[NFI-TCP] nfi_tcp_server_remove(%s): begin %s\n", server_aux -> id, url);
-    if (server_aux == NULL)
-    {
+    debug_info("[NFI-TCP] nfi_tcp_server_remove(%s): begin %s\n", server_aux -> id, new_url);
+    if (server_aux == NULL) {
         tcp_server_err(TCP_SERVERERR_PARAM);
         return -1;
     }
 
     ret = ParseURL(old_url, NULL, NULL, NULL, server, NULL, old_path);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         fprintf(stderr, "nfi_tcp_server_open: url %s incorrect.\n", old_url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     ret = ParseURL(new_url, NULL, NULL, NULL, server, NULL, new_path);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         fprintf(stderr, "nfi_tcp_server_open: url %s incorrect.\n", new_url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
-    {
+    if (server_aux -> params.locality) {
         ret = real_posix_rename(old_path, new_path);
-        if (ret < 0)
-        {
+        if (ret < 0) {
             debug_error("real_posix_rename fails to rename '%s' in server %s.\n", old_path, serv -> server);
             return -1;
         }
     }
     /************** REMOTE ****************/
-    else
-    {
+    else {
         msg.type = TCP_SERVER_RENAME_FILE;
 
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
@@ -1187,8 +1218,7 @@ int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_u
 
 
 
-int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr)
-{
+int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1210,26 +1240,22 @@ int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     ret = ParseURL(fh -> url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         fprintf(stderr, "nfi_tcp_server_getattr: url %s incorrect.\n", dir);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
-    {
+    if (server_aux -> params.locality) {
         req.status = real_posix_stat(dir, & (req.attr));
-        if (((int) req.status) < 0)
-        {
+        if (((int) req.status) < 0) {
             debug_error("nfi_tcp_server_getattr: Fail stat %s.\n", dir);
             return req.status;
         }
     }
     /************** REMOTE ****************/
-    else
-    {
+    else {
         msg.type = TCP_SERVER_GETATTR_FILE;
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         memccpy(msg.u_st_tcp_server_msg.op_getattr.path, dir, 0, PATH_MAX - 1);
@@ -1247,8 +1273,7 @@ int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
 
 
 
-int nfi_tcp_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr)
-{
+int nfi_tcp_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
     struct nfi_tcp_server_server * server_aux;
     struct nfi_tcp_server_fhandle * fh_aux;
 
@@ -1276,8 +1301,7 @@ int nfi_tcp_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
 
 
 
-int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh)
-{
+int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) {
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1297,8 +1321,7 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         fprintf(stderr, "nfi_tcp_server_mkdir: url %s incorrect.\n", url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
@@ -1310,11 +1333,9 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
     bzero(fh_aux, sizeof(struct nfi_tcp_server_fhandle));
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
-    {
+    if (server_aux -> params.locality) {
         ret = real_posix_mkdir(dir, /*attr->at_mode*/ 0777);
-        if ((ret < 0) && (errno != EEXIST))
-        {
+        if ((ret < 0) && (errno != EEXIST)) {
             debug_error("nfi_tcp_server_mkdir: Fail mkdir %s.\n", dir);
             FREE_AND_NULL(fh_aux);
             return -1;
@@ -1323,23 +1344,20 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
 
         //Get stat
         ret = real_posix_stat(dir, & (req.attr));
-        if (ret < 0)
-        {
+        if (ret < 0) {
             debug_error("nfi_tcp_server_create: Fail stat %s.\n", dir);
             return ret;
         }
     }
     /************** SERVER ****************/
-    else
-    {
+    else {
         msg.type = TCP_SERVER_MKDIR_DIR;
         memccpy(msg.u_st_tcp_server_msg.op_mkdir.path, dir, 0, PATH_MAX - 1);
 
         nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (fh_aux -> fd), sizeof(int));
         memccpy(fh_aux -> path, dir, 0, PATH_MAX - 1);
 
-        if ((fh_aux -> fd < 0) && (errno != EEXIST))
-        {
+        if ((fh_aux -> fd < 0) && (errno != EEXIST)) {
             tcp_server_err(TCP_SERVERERR_MKDIR);
             fprintf(stderr, "nfi_tcp_server_mkdir: Fail mkdir %s in server %s.\n", dir, serv -> server);
             FREE_AND_NULL(fh_aux);
@@ -1358,8 +1376,7 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
     fh -> priv_fh = (void * ) fh_aux;
 
     fh -> url = STRING_MISC_StrDup(url);
-    if (fh -> url == NULL)
-    {
+    if (fh -> url == NULL) {
         tcp_server_err(TCP_SERVERERR_MEMORY);
         FREE_AND_NULL(fh_aux);
         return -1;
@@ -1374,8 +1391,7 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
 
 
 
-int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhandle * fho)
-{
+int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhandle * fho) {
     int ret;
     char dir[PATH_MAX], server[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1393,8 +1409,7 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
 
     // private_info...
     ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         fprintf(stderr, "nfi_tcp_server_opendir: url %s incorrect.\n", url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
@@ -1404,8 +1419,7 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
     NULL_RET_ERR(fho -> url, TCP_SERVERERR_MEMORY);
 
     fh_aux = (struct nfi_tcp_server_fhandle * ) malloc(sizeof(struct nfi_tcp_server_fhandle));
-    if (fh_aux == NULL)
-    {
+    if (fh_aux == NULL) {
         tcp_server_err(TCP_SERVERERR_MEMORY);
         FREE_AND_NULL(fho -> url);
         return -1;
@@ -1414,11 +1428,9 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
-    {
+    if (server_aux -> params.locality) {
         fh_aux -> dir = real_posix_opendir(dir);
-        if (fh_aux -> dir == NULL)
-        {
+        if (fh_aux -> dir == NULL) {
             FREE_AND_NULL(fh_aux);
             FREE_AND_NULL(fho -> url);
             debug_error("real_posix_opendir fails to open directory '%s' in server '%s'.\n", dir, serv -> server);
@@ -1426,8 +1438,7 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
         }
     }
     /************** SERVER ****************/
-    else
-    {
+    else {
         msg.type = TCP_SERVER_OPENDIR_DIR;
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         memccpy(msg.u_st_tcp_server_msg.op_opendir.path, dir, 0, PATH_MAX - 1);
@@ -1450,8 +1461,7 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
 
 
 
-int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry)
-{
+int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry) {
     struct nfi_tcp_server_server * server_aux;
     struct nfi_tcp_server_fhandle * fh_aux;
     struct st_tcp_server_msg msg;
@@ -1465,8 +1475,7 @@ int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
     NULL_RET_ERR(fh, TCP_SERVERERR_PARAM);
     NULL_RET_ERR(fh -> priv_fh, TCP_SERVERERR_PARAM);
 
-    if (fh -> type != NFIDIR)
-    {
+    if (fh -> type != NFIDIR) {
         tcp_server_err(TCP_SERVERERR_NOTDIR);
         return -1;
     }
@@ -1482,11 +1491,9 @@ int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
     memset(entry, 0, sizeof(struct dirent));
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
-    {
+    if (server_aux -> params.locality) {
         ent = real_posix_readdir(fh_aux -> dir);
-        if (ent == NULL)
-        {
+        if (ent == NULL) {
             debug_error("nfi_tcp_server_readdir: readdir");
             return -1;
         }
@@ -1494,16 +1501,14 @@ int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
         memcpy(entry, ent, sizeof(struct dirent));
     }
     /************** SERVER ****************/
-    else
-    {
+    else {
         msg.type = TCP_SERVER_READDIR_DIR;
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         msg.u_st_tcp_server_msg.op_readdir.dir = fh_aux -> dir;
 
         nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (ret_entry), sizeof(struct st_tcp_server_direntry)); //NEW
 
-        if (ret_entry.end == 0)
-        {
+        if (ret_entry.end == 0) {
             return -1;
         }
 
@@ -1515,8 +1520,9 @@ int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
     return 0;
 }
 
-int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
-{
+
+
+int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
     int ret;
     struct st_tcp_server_msg msg;
     struct nfi_tcp_server_server * server_aux;
@@ -1531,20 +1537,17 @@ int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
     NULL_RET_ERR(serv -> private_info, TCP_SERVERERR_PARAM);
 
     // do closedir...
-    if (fh -> priv_fh != NULL)
-    {
+    if (fh -> priv_fh != NULL) {
         // private_info...
         server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
         fh_aux = (struct nfi_tcp_server_fhandle * ) fh -> priv_fh;
 
         /************** LOCAL *****************/
-        if (server_aux -> params.locality)
-        {
+        if (server_aux -> params.locality) {
             real_posix_closedir(fh_aux -> dir);
         }
         /************** SERVER ****************/
-        else
-        {
+        else {
             msg.type = TCP_SERVER_CLOSEDIR_DIR;
 
             memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
@@ -1565,8 +1568,7 @@ int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
 
 
 
-int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url)
-{
+int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url) {
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1584,32 +1586,28 @@ int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url)
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
 
     ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         fprintf(stderr, "nfi_tcp_server_rmdir: url %s incorrect.\n", url);
         tcp_server_err(TCP_SERVERERR_URL);
         return -1;
     }
 
     /************** LOCAL *****************/
-    if (server_aux -> params.locality)
-    {
+    if (server_aux -> params.locality) {
         ret = real_posix_rmdir(dir);
-        if (ret < 0)
-        {
+        if (ret < 0) {
             debug_error(stderr, "nfi_tcp_server_rmdir: Fail rmdir %s.\n", dir);
             return -1;
         }
     }
     /************** SERVER ****************/
-    else
-    {
+    else {
         msg.type = TCP_SERVER_RMDIR_DIR;
+        printf("RMDIR - %d\n", msg.type);
         memccpy(msg.u_st_tcp_server_msg.op_rmdir.path, dir, 0, PATH_MAX - 1);
         nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (ret), sizeof(int));
 
-        if (ret < 0)
-        {
+        if (ret < 0) {
             fprintf(stderr, "nfi_tcp_server_rmdir: Fail rmdir %s in server %s.\n", dir, serv -> server);
             tcp_server_err(TCP_SERVERERR_REMOVE);
             return -1;
@@ -1623,8 +1621,7 @@ int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url)
 
 
 
-int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, __attribute__((__unused__)) struct nfi_info * inf)
-{
+int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, __attribute__((__unused__)) struct nfi_info * inf) {
     DEBUG_BEGIN();
 
     /*
@@ -1659,8 +1656,7 @@ int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, 
 
 
 
-int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt)
-{
+int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt) {
     //char dir[PATH_MAX];
     int ret;
     struct nfi_tcp_server_server * server_aux;
@@ -1680,8 +1676,7 @@ int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
     debug_info("[NFI-TCP] nfi_tcp_server_preload(ID=%s): begin %s - %s \n", server_aux -> id, virtual_path, storage_path);
 
-    if (url[strlen(url) - 1] == '/')
-    {
+    if (url[strlen(url) - 1] == '/') {
         tcp_server_err(TCP_SERVERERR_PARAM);
         return -1;
     }
@@ -1709,8 +1704,7 @@ int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_
 
 
 
-int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt)
-{
+int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt) {
     //char dir[PATH_MAX];
     int ret;
     struct nfi_tcp_server_server * server_aux;
@@ -1730,8 +1724,7 @@ int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_pa
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
     debug_info("[NFI-TCP] nfi_tcp_server_flush(ID=%s): begin %s - %s \n", server_aux -> id, virtual_path, storage_path);
 
-    if (url[strlen(url) - 1] == '/')
-    {
+    if (url[strlen(url) - 1] == '/') {
         tcp_server_err(TCP_SERVERERR_PARAM);
         return -1;
     }
@@ -1757,6 +1750,4 @@ int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_pa
     return 0;
 }
 
-
-  /* ................................................................... */
-
+/* ................................................................... */

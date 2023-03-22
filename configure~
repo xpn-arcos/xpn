@@ -5758,49 +5758,6 @@ then :
 
 fi
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for mosquitto_lib_init in -lmosquitto" >&5
-printf %s "checking for mosquitto_lib_init in -lmosquitto... " >&6; }
-if test ${ac_cv_lib_mosquitto_mosquitto_lib_init+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmosquitto  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-char mosquitto_lib_init ();
-int
-main (void)
-{
-return mosquitto_lib_init ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"
-then :
-  ac_cv_lib_mosquitto_mosquitto_lib_init=yes
-else $as_nop
-  ac_cv_lib_mosquitto_mosquitto_lib_init=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_mosquitto_mosquitto_lib_init" >&5
-printf "%s\n" "$ac_cv_lib_mosquitto_mosquitto_lib_init" >&6; }
-if test "x$ac_cv_lib_mosquitto_mosquitto_lib_init" = xyes
-then :
-  printf "%s\n" "#define HAVE_LIBMOSQUITTO 1" >>confdefs.h
-
-  LIBS="-lmosquitto $LIBS"
-
-fi
-
 
 #
 # Checks for header files.
@@ -6115,12 +6072,6 @@ ac_fn_c_check_header_compile "$LINENO" "mpi.h" "ac_cv_header_mpi_h" "$ac_include
 if test "x$ac_cv_header_mpi_h" = xyes
 then :
   printf "%s\n" "#define HAVE_MPI_H 1" >>confdefs.h
-
-fi
-ac_fn_c_check_header_compile "$LINENO" "mosquitto.h" "ac_cv_header_mosquitto_h" "$ac_includes_default"
-if test "x$ac_cv_header_mosquitto_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_MOSQUITTO_H 1" >>confdefs.h
 
 fi
 
@@ -6575,7 +6526,7 @@ then
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
-  LIBLINK="-lpthread -lmosquitto"
+  LIBLINK="-lpthread"
 
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
   #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
@@ -6588,7 +6539,7 @@ then
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
-  LIBLINK="-lpthread -lmosquitto"
+  LIBLINK="-lpthread"
 
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
   #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
@@ -6601,7 +6552,7 @@ then
   MAKE="make"
 
   CDEFS="-D_REENTRANT"
-  LIBLINK="-lpthread -lmosquitto"
+  LIBLINK="-lpthread "
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
@@ -6613,7 +6564,7 @@ then
   MAKE="gmake"
 
   CDEFS="-D_REENTRANT"
-  LIBLINK="-lpthread -lmosquitto"
+  LIBLINK="-lpthread "
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
@@ -6624,7 +6575,7 @@ else
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN"
-  LIBLINK="-lpthread -lmosquitto"
+  LIBLINK="-lpthread "
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
   #LIBS=$LFLAGS" -lmxml -ldl -lpthread "

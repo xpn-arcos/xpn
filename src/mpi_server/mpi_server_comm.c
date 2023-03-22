@@ -110,7 +110,6 @@
 
     if (params->rank == 0)
     {
-      mpi_server_params_show(params) ;
       printf("\n\n");
       printf("Time to inizialize all servers: %f s\n", time);
       printf("\n");

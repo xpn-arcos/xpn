@@ -37,6 +37,7 @@ AM_PROG_CC_C_O
 # Checks for libraries.
 #
 AC_CHECK_LIB(pthread,pthread_create)
+AC_CHECK_LIB(mosquitto,mosquitto_lib_init)
 
 #
 # Checks for header files.
@@ -45,7 +46,7 @@ AC_CHECK_LIB(pthread,pthread_create)
 AC_PROG_EGREP
 
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h sys/time.h netinet/tcp.h netinet/in.h pthread.h windows.h sys/param.h dirent.h rpc/rpc.h rpc/clnt.h rpc/types.h mpi.h)
+AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h sys/time.h netinet/tcp.h netinet/in.h pthread.h windows.h sys/param.h dirent.h rpc/rpc.h rpc/clnt.h rpc/types.h mpi.h mosquitto.h)
 
 #
 # Checks for typedefs, structures, and compiler characteristics.
@@ -84,11 +85,11 @@ then
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
-  LIBLINK="-lpthread"
+  LIBLINK="-lpthread -lmosquitto"
 
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread "
- #LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
+  #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
@@ -97,11 +98,11 @@ then
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
-  LIBLINK="-lpthread"
+  LIBLINK="-lpthread -lmosquitto"
 
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread "
- #LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
+  #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
 then
@@ -110,7 +111,7 @@ then
   MAKE="make"
 
   CDEFS="-D_REENTRANT"
-  LIBLINK="-lpthread "
+  LIBLINK="-lpthread -lmosquitto"
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
@@ -122,7 +123,7 @@ then
   MAKE="gmake"
 
   CDEFS="-D_REENTRANT"
-  LIBLINK="-lpthread "
+  LIBLINK="-lpthread -lmosquitto"
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
@@ -133,11 +134,11 @@ else
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN"
-  LIBLINK="-lpthread "
+  LIBLINK="-lpthread -lmosquitto"
 
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-  LIBS=$LFLAGS" -lmxml -ldl -lpthread "
- #LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
+  #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
+  LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
   AC_MSG_RESULT("Using Linux configuration as default configuration...");
 fi

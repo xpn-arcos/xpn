@@ -40,7 +40,7 @@
 
   /* ... Auxiliar Functions / Funciones Auxiliares ..................... */
 
-void tcp_server_run(struct st_th th) 
+void tcp_server_run(struct st_th th)
 {
     debug_info("[TCP-SERVER] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, tcp_server_op2string(th.type_op), th.type_op);
 
@@ -49,29 +49,35 @@ void tcp_server_run(struct st_th th)
     debug_info("[TCP-SERVER] (ID=%d) end to do operation '%s'\n", th.id, tcp_server_op2string(th.type_op));
 }
 
-void tcp_server_dispatcher(struct st_th th) 
+void tcp_server_dispatcher(struct st_th th)
 {
     int ret;
     int disconnect;
     struct st_th th_arg;
 
     // check params...
-    if (NULL == th.params) 
+    if (NULL == th.params)
     {
         printf("[WORKERS ID=%d] ERROR: NULL arguments", th.id);
         return;
     }
 
     disconnect = 0;
-    while (! disconnect) 
+    while (! disconnect)
     {
         ret = tcp_server_comm_read_operation(th.params, (int) th.sd, (char * ) & (th.type_op), 1, & (th.rank_client_id));
+
         if (ret < 0) {
             debug_info("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
             return;
         }
 
-        if (th.type_op == TCP_SERVER_DISCONNECT || th.type_op == TCP_SERVER_FINALIZE) 
+        if (ret == 0) {
+            debug_info("[TCP-SERVER] WARNING: tcp_server_comm_readdata broken pipe\n");
+            return;
+        }
+
+        if (th.type_op == TCP_SERVER_DISCONNECT || th.type_op == TCP_SERVER_FINALIZE)
         {
             debug_info("[TCP-SERVER] INFO: DISCONNECT received\n");
             disconnect = 1;
@@ -86,7 +92,7 @@ void tcp_server_dispatcher(struct st_th th)
         th_arg.rank_client_id = th.rank_client_id;
         th_arg.wait4me        = FALSE;
 
-        workers_launch( & worker, & th_arg, tcp_server_run);
+        tcp_server_run(th_arg) ;
     }
 
     debug_info("[TCP-SERVER] tcp_server_worker_run (ID=%d) close\n", th.rank_client_id);
@@ -97,7 +103,7 @@ void tcp_server_dispatcher(struct st_th th)
 
 /* ... Functions / Funciones ......................................... */
 
-int tcp_server_up(void) 
+int tcp_server_up(void)
 {
     int ret;
     struct st_tcp_server_msg head;
@@ -112,6 +118,8 @@ int tcp_server_up(void)
     printf(" > Starting servers... (%s)\n", serv_name);
     printf(" -------------------\n");
     printf("\n");
+
+    signal(SIGPIPE, SIG_IGN);
 
     // Initialize
     debug_msg_init();
@@ -143,7 +151,7 @@ int tcp_server_up(void)
 
     // Loop: receiving + processing
     the_end = 0;
-    while (!the_end) 
+    while (!the_end)
     {
         debug_info("[TCP-SERVER] tcp_server_accept_comm()\n");
 
@@ -154,6 +162,8 @@ int tcp_server_up(void)
         }
 
         ret = tcp_server_comm_read_operation( & params, sd, (char * ) & (head.type), 1, & (rank_client_id));
+        printf("SERVER 1 -- %d\n", head.type);
+
         if (ret < 0) {
             printf("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
             return -1;
@@ -219,26 +229,26 @@ int tcp_server_down( void )
     }
 
     // Open host file
-    file = fopen(params.host_file, "r");
-    if (file == NULL) 
+    file = fopen(params.dns_file, "r");
+    if (file == NULL)
     {
         printf("[TCP-SERVER] ERROR: invalid file %s\n", params.host_file);
         return -1;
     }
 
-    while (fscanf(file, "%[^\n] ", srv_name) != EOF) 
+    while (fscanf(file, "%s %s %s", srv_name, server_name, port_number) != EOF)
     {
         // Lookup port name
 	ret = ns_tcp_lookup(srv_name, server_name, port_number) ;
         if (ret < 0)
         {
-            printf("[TCP-SERVER] ERROR: server %s not found\n", srv_name);
+            printf("[TCP-SERVER] ERROR: server %s %s %s not found\n", srv_name, server_name, port_number);
             continue;
         }
 
         // Connect with server
 	sd = tcp_server_comm_connect(&params, server_name, atoi(port_number)) ;
-        if (sd < 0) 
+        if (sd < 0)
         {
             printf("[TCP-SERVER] ERROR: connect to %s failed\n", server_name);
             continue;
@@ -274,7 +284,7 @@ int tcp_server_down( void )
  * Main
  */
 
-int main(int argc, char * argv[]) 
+int main(int argc, char * argv[])
 {
     int    ret = -1;
     char * exec_name = NULL;
@@ -309,7 +319,7 @@ int main(int argc, char * argv[])
     // Do associate action...
     if (strcasecmp(exec_name, "xpn_stop_tcp_server") == 0) {
         ret = tcp_server_down();
-    } 
+    }
     else {
         ret = tcp_server_up();
     }

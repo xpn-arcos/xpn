@@ -22,6 +22,10 @@
     int xpn_session ;
     int xpn_locality ;
 
+
+    //MQTT usage
+    int xpn_mosquitto_mode;
+
     // client identification
     int  size ;
     int  rank ;
