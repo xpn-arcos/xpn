@@ -19,6 +19,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
+/* Define to 1 if you have the `mosquitto' library (-lmosquitto). */
+/* #undef HAVE_LIBMOSQUITTO */
+
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #define HAVE_LIBPTHREAD 1
 
@@ -31,11 +34,11 @@
 /* Define to 1 if you have the `memmove' function. */
 #define HAVE_MEMMOVE 1
 
-/* Define to 1 if you have the <memory.h> header file. */
-#define HAVE_MEMORY_H 1
-
 /* Define to 1 if you have the `memset' function. */
 #define HAVE_MEMSET 1
+
+/* Define to 1 if you have the <mosquitto.h> header file. */
+/* #undef HAVE_MOSQUITTO_H */
 
 /* Define to 1 if you have the <mpi.h> header file. */
 /* #undef HAVE_MPI_H */
@@ -50,13 +53,13 @@
 #define HAVE_PTHREAD_H 1
 
 /* Define to 1 if you have the <rpc/clnt.h> header file. */
-#define HAVE_RPC_CLNT_H 1
+/* #undef HAVE_RPC_CLNT_H */
 
 /* Define to 1 if you have the <rpc/rpc.h> header file. */
-#define HAVE_RPC_RPC_H 1
+/* #undef HAVE_RPC_RPC_H */
 
 /* Define to 1 if you have the <rpc/types.h> header file. */
-#define HAVE_RPC_TYPES_H 1
+/* #undef HAVE_RPC_TYPES_H */
 
 /* Define to 1 if you have the `select' function. */
 #define HAVE_SELECT 1
@@ -66,6 +69,9 @@
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#define HAVE_STDIO_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
@@ -148,7 +154,9 @@
 /* The size of `unsigned short', as computed by sizeof. */
 #define SIZEOF_UNSIGNED_SHORT 2
 
-/* Define to 1 if you have the ANSI C header files. */
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
 #define STDC_HEADERS 1
 
 /* Version number of package */
@@ -157,7 +165,7 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
 
-/* Define to `int' if <sys/types.h> does not define. */
+/* Define as a signed integer type capable of holding a process identifier. */
 /* #undef pid_t */
 
 /* Define to `long' if <sys/types.h> does not define. */
