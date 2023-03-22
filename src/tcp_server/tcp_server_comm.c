@@ -20,12 +20,32 @@
 
   /* ... Include / Inclusion ........................................... */
 
-    //#define DEBUG 1
+//#define DEBUG 1
 
-     #include "tcp_server/tcp_server_comm.h"
+#include "tcp_server/tcp_server_comm.h"
 
+#ifdef HAVE_MOSQUITTO_H
+    struct mosquitto *mosqtcpserver;
+#endif
 
   /* ... Functions / Funciones ......................................... */
+#ifdef HAVE_MOSQUITTO_H
+
+void on_message(struct mosquitto *mosqtcpserver, void *obj, const struct mosquitto_message *msg)
+{
+    printf("%s\n\n%s\n", msg->topic, (char *) msg->payload);
+}
+
+#endif
+
+
+
+
+
+
+
+
+
 
 int tcp_server_comm_init ( tcp_server_param_st * params )
 {
@@ -37,7 +57,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     DEBUG_BEGIN();
 
     // Get timestap
-    TIME_MISC_Timer( & t0);
+    TIME_MISC_Timer( & t0 );
 
     /*
      * Initialize socket
@@ -85,23 +105,25 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     /*
      * Initialize mosquitto
      */
+    
+    #ifdef HAVE_MOSQUITTO_H
 
-    if (params -> mosquitto_mode)
+    if ( params -> mosquitto_mode  == 1 )
     {
-	    debug_info("[%d]\tBEGIN INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+	    printf("[%d]\tBEGIN INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
 
-	    /*
+	    
 	    mosquitto_lib_init();
 
 	    mosqtcpserver = mosquitto_new(NULL, true, NULL);
 	    if(mosqtcpserver == NULL)
 	    {
-	    fprintf(stderr, "Error: Out of memory.\n");
-	    return 1;
+    	    fprintf(stderr, "Error: Out of memory.\n");
+    	    return 1;
 	    }
 
-	    mosquitto_connect_callback_set(mosqtcpserver, on_connect);
-	    mosquitto_subscribe_callback_set(mosqtcpserver, on_subscribe);
+	    //mosquitto_connect_callback_set(mosqtcpserver, on_connect);
+	    //mosquitto_subscribe_callback_set(mosqtcpserver, on_subscribe);
 	    mosquitto_message_callback_set(mosqtcpserver, on_message);
 
 	    #ifndef MOSQ_OPT_TCP_NODELAY
@@ -110,19 +132,19 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
 
 	    mosquitto_int_option(mosqtcpserver, MOSQ_OPT_TCP_NODELAY, 1);
 
-	    int rc = mosquitto_connect(mosqtcpserver, "localhost", 1883, 60);
-
-	    if(rc != MOSQ_ERR_SUCCESS)
+	    int rc = mosquitto_connect(mosqtcpserver, "localhost", 1886, 0);
+	    if( rc != MOSQ_ERR_SUCCESS )
 	    {
-	    mosquitto_destroy(mosqtcpserver);
-	    fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO TCP_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
-	    return 1;
+    	    mosquitto_destroy(mosqtcpserver);
+    	    fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO TCP_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
+    	    return 1;
 	    }
-
-	    debug_info("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
-	    */
+        //mosquitto_loop_forever(mosqtcpserver, -1, 1);
+	    printf("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+	    
     }
 
+    #endif
 
     /*
      * Post-initialize
@@ -163,7 +185,8 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
         if (params -> rank == i)
 	{
             ret = ns_tcp_unpublish(params -> dns_file, params -> srv_name);
-            if (ret < 0) {
+            if (ret < 0) 
+            {
                 debug_info("[SRV_TCP_COMM] server%d: ns_unpublish fails :-(", params -> rank);
                 return -1;
             }
@@ -173,16 +196,17 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
     /*
      * Destroy mosquitto
      */
+#ifdef HAVE_MOSQUITTO_H
     if (params -> mosquitto_mode)
     {
-	    /*
+	    
         debug_info("[%d]\tBEGIN DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
-        mosquitto_loop_forever(mosqtcpserver, -1, 1);
         mosquitto_lib_cleanup();
         debug_info("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
-	*/
+	
     }
-
+#endif
+    
     // Print server info
     char serv_name  [HOST_NAME_MAX];
     gethostname(serv_name, HOST_NAME_MAX);

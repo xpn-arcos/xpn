@@ -275,7 +275,8 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
         return -1;
     }
 
-    if (NULL == real_write) {
+    if (NULL == real_write) 
+    {
         real_write = (ssize_t( * )(int,const void * , size_t)) dlsym(RTLD_NEXT, "write");
     }
 
@@ -287,9 +288,9 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
         printf("[NFI_TCP_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
 
         if (ret < 0) {
-	    perror("tcpClient_write_data: ERROR on real_write: ");
-	    return ret ;
-	}
+	       perror("tcpClient_write_data: ERROR on real_write: ");
+	       return ret ;
+	   }
 
         cont += ret;
 

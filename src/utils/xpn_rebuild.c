@@ -1,3 +1,7 @@
+
+#define _LARGEFILE_SOURCE
+#define _FILE_OFFSET_BITS 64
+
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -21,12 +25,13 @@ int copy(char * entry, char * dir_name, char * dest_prefix, int blocksize, int r
 {   
   int  ret;
 
+  FILE *file = NULL;
   struct stat stat_buf;
 
   int fd_src, fd_dest;
   char *buf ;
   int buf_len;
-  int offset_src ;
+  off64_t offset_src ;
   int cont, cont2 ;
   
   buf = (char *) malloc(blocksize + 1) ;
@@ -60,14 +65,14 @@ int copy(char * entry, char * dir_name, char * dest_prefix, int blocksize, int r
   }
   else if (S_ISREG(stat_buf.st_mode))
   {      
-    fd_src = open(src_path, O_RDONLY);
+    fd_src = open64(src_path, O_RDONLY | O_LARGEFILE);
     if ( fd_src < 0 )
     {
       perror("open 2: ");
       return -1;
     }
 
-    fd_dest = open(dest_path, O_CREAT | O_WRONLY | O_TRUNC, 0755);
+    fd_dest = open64(dest_path, O_CREAT | O_WRONLY | O_TRUNC | O_LARGEFILE, 0755);
     if ( fd_dest < 0 )
     {
       perror("open 1: ");
@@ -79,11 +84,12 @@ int copy(char * entry, char * dir_name, char * dest_prefix, int blocksize, int r
 
     offset_src = rank * blocksize ;
     do
-    {
-      ret = lseek(fd_src, offset_src, SEEK_SET) ;
-      if (ret < 0) {
-        perror("lseek: ");
-        return -1;
+    { 
+      off64_t ret_2;
+      ret_2 = lseek64(fd_src, offset_src, SEEK_SET) ;
+      if (ret_2 < 0) {
+        //perror("lseek: ");
+        break;
       }
 
       cont = 0;
@@ -101,9 +107,9 @@ int copy(char * entry, char * dir_name, char * dest_prefix, int blocksize, int r
         ret = write(fd_dest, buf + cont2, buf_len);
         cont2    = cont2 + ret ;
         buf_len  = buf_len - ret ;
-      } while ( (cont2 < buf_len) && (ret != 0) );
+      } while ( (cont2 < cont) && (ret != 0) );
 
-      //printf("rank %d; ret: %d; offset %d; nodes %d; blocksize %d\n", rank, ret, offset_src, size, blocksize);
+      //printf("rank %d; ret: %d; offset %ld; nodes %d; blocksize %d\n", rank, ret, offset_src, size, blocksize);
       //printf("Buf: %s\n", buf);
 
       offset_src = offset_src + (size * blocksize) ;
