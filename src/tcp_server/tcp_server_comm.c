@@ -196,6 +196,7 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
     /*
      * Destroy mosquitto
      */
+#ifdef HAVE_MOSQUITTO_H
     if (params -> mosquitto_mode)
     {
 	    
@@ -204,7 +205,8 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
         debug_info("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
 	
     }
-
+#endif
+    
     // Print server info
     char serv_name  [HOST_NAME_MAX];
     gethostname(serv_name, HOST_NAME_MAX);
