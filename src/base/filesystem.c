@@ -492,7 +492,7 @@ int filesystem_closedir(DIR * dirp)
 
 off_t filesystem_lseek(int fd, off_t offset, int whence)
 {
-    int ret;
+    off_t ret;
 
     DEBUG_BEGIN();
 
@@ -503,7 +503,7 @@ off_t filesystem_lseek(int fd, off_t offset, int whence)
 
     // Try to lseek the file
     ret = real_posix_lseek(fd, offset, whence);
-    if (ret < 0) {
+    if (ret == (off_t) -1) {
         debug_warning("[FILE_POSIX]: lseek(fd:%s, offset:%ld, whence:%d) -> %d\n", fd, offset, whence, ret);
         //perror("lseek: ") ;
     }

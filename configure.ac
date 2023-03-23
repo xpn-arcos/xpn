@@ -81,6 +81,7 @@ LFLAGS="    -L../../mxml    -L../../xpn/lib "
 LFLAGS+="-L../../../mxml -L../../../xpn/lib "
 
 LIBLINK=$LIBS
+LIBLINK+=" -lmxml"
 LIBS=$LFLAGS" "$LIBS
 
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"

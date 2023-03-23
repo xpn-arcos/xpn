@@ -1018,8 +1018,8 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
 
     do
     {
-        ret = filesystem_lseek(fd_orig, cont, SEEK_SET);
-        if (ret < 0)
+        off_t ret_2 = filesystem_lseek(fd_orig, cont, SEEK_SET);
+        if (ret_2 < (off_t) -1)
         {
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
