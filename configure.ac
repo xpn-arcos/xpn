@@ -37,6 +37,8 @@ AM_PROG_CC_C_O
 # Checks for libraries.
 #
 AC_CHECK_LIB(pthread,pthread_create)
+AC_CHECK_LIB(dl,dlopen)
+AC_CHECK_LIB(mxml,mxmlNewXML)
 AC_CHECK_LIB(mosquitto,mosquitto_lib_init)
 
 #
@@ -78,19 +80,17 @@ IFLAGS="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client
 LFLAGS="    -L../../mxml    -L../../xpn/lib "
 LFLAGS+="-L../../../mxml -L../../../xpn/lib "
 
+LIBLINK=$LIBS
+LIBS=$LFLAGS" "$LIBS
+
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
   OS="__LINUX__"
   CC="mpifcc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
@@ -98,13 +98,8 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
 then
@@ -112,13 +107,8 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread"
 
 elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
 then
@@ -126,26 +116,16 @@ then
   CC="mpicc"
   MAKE="gmake"
 
-  CDEFS="-D_REENTRANT"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DENABLE_MXML"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread"
 
 else
   OS="__LINUX__"
-  #CC="mpicc"
+  CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DENABLE_MXML"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
   AC_MSG_RESULT("Using Linux configuration as default configuration...");
 fi

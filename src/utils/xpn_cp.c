@@ -10,8 +10,7 @@ int main(int argc, char *argv[])
 {
 
 	char buf[BUFFER_SIZE];
-	int ret ,fd_src, fd_dest, bytes;
-	int valor_close;
+	int ret ,fd_src, fd_dest ;
 
 	if(argc < 3)
 	{

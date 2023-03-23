@@ -19,8 +19,14 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
+/* Define to 1 if you have the `dl' library (-ldl). */
+#define HAVE_LIBDL 1
+
 /* Define to 1 if you have the `mosquitto' library (-lmosquitto). */
 #define HAVE_LIBMOSQUITTO 1
+
+/* Define to 1 if you have the `mxml' library (-lmxml). */
+#define HAVE_LIBMXML 1
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #define HAVE_LIBPTHREAD 1

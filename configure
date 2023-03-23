@@ -5105,6 +5105,96 @@ _ACEOF
 
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlopen in -ldl" >&5
+$as_echo_n "checking for dlopen in -ldl... " >&6; }
+if ${ac_cv_lib_dl_dlopen+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldl  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dlopen ();
+int
+main ()
+{
+return dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_dl_dlopen=yes
+else
+  ac_cv_lib_dl_dlopen=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_dl_dlopen" >&5
+$as_echo "$ac_cv_lib_dl_dlopen" >&6; }
+if test "x$ac_cv_lib_dl_dlopen" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBDL 1
+_ACEOF
+
+  LIBS="-ldl $LIBS"
+
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for mxmlNewXML in -lmxml" >&5
+$as_echo_n "checking for mxmlNewXML in -lmxml... " >&6; }
+if ${ac_cv_lib_mxml_mxmlNewXML+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lmxml  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char mxmlNewXML ();
+int
+main ()
+{
+return mxmlNewXML ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_mxml_mxmlNewXML=yes
+else
+  ac_cv_lib_mxml_mxmlNewXML=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_mxml_mxmlNewXML" >&5
+$as_echo "$ac_cv_lib_mxml_mxmlNewXML" >&6; }
+if test "x$ac_cv_lib_mxml_mxmlNewXML" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMXML 1
+_ACEOF
+
+  LIBS="-lmxml $LIBS"
+
+fi
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for mosquitto_lib_init in -lmosquitto" >&5
 $as_echo_n "checking for mosquitto_lib_init in -lmosquitto... " >&6; }
 if ${ac_cv_lib_mosquitto_mosquitto_lib_init+:} false; then :
@@ -5999,19 +6089,17 @@ IFLAGS="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client
 LFLAGS="    -L../../mxml    -L../../xpn/lib "
 LFLAGS+="-L../../../mxml -L../../../xpn/lib "
 
+LIBLINK=$LIBS
+LIBS=$LFLAGS" "$LIBS
+
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
   OS="__LINUX__"
   CC="mpifcc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
@@ -6019,13 +6107,8 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
 then
@@ -6033,13 +6116,8 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread"
 
 elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
 then
@@ -6047,26 +6125,16 @@ then
   CC="mpicc"
   MAKE="gmake"
 
-  CDEFS="-D_REENTRANT"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DENABLE_MXML"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread"
 
 else
   OS="__LINUX__"
-  #CC="mpicc"
+  CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN"
-   LIBLINK="-lpthread -lmosquitto"
-  #LIBLINK="-lpthread"
-
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DENABLE_MXML"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-  #LIBS=$LFLAGS" -lmxml -ldl -lpthread "
-   LIBS=$LFLAGS" -lmxml -ldl -lpthread -lmosquitto"
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: \"Using Linux configuration as default configuration...\"" >&5
 $as_echo "\"Using Linux configuration as default configuration...\"" >&6; };
