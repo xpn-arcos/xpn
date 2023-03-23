@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 	}
 
 	fd_dest = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0755);
-	if(fd_src == -1)
+	if(fd_dest == -1)
 	{
 		perror("open 2: ");
 		return -1;
@@ -66,9 +66,6 @@ int main(int argc, char *argv[])
       cont2    = cont2 + ret ;
       buf_len  = buf_len - ret ;
     } while ( (cont2 < cont) && (ret > 0) );
-
-    //printf("rank %d; ret: %d; offset %d; nodes %d; blocksize %d\n", rank, ret, offset_src, size, blocksize);
-    //printf("Buf: %s\n", buf);
   }
   while(cont > 0);
 
