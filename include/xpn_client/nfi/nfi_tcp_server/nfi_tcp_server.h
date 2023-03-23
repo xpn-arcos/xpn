@@ -40,7 +40,9 @@
     #include "nfi_tcp_server_err.h"
     #include "nfi.h"
     #include "nfi_worker.h"
+    #ifdef HAVE_MOSQUITTO_H
     #include <mosquitto.h>
+    #endif
 
 
   /* ... Data structures / Estructuras de datos ........................ */

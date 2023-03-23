@@ -3,9 +3,6 @@
 
 #include "all_system.h"
 
-/* Support for files of > 4GB */
-#define _LARGEFILE64_ 1
-
 /* MAX_BUFFER_SIZE */
 #ifndef MAX_BUFFER_SIZE
 	#define MAX_BUFFER_SIZE (1*MB)
