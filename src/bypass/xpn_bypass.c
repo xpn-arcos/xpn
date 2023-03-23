@@ -658,7 +658,7 @@
 
   off_t lseek(int fd, off_t offset, int whence)
   {
-    int ret = -1;
+    off_t ret = (off_t) -1;
 
     debug_info("[bypass] >> Before lseek...\n");
 
@@ -687,9 +687,9 @@
 
   off64_t lseek64(int fd, off64_t offset, int whence)
   {
-    int ret = -1;
+    off64_t ret = (off64_t) -1;
 
-    debug_info("[bypass] >> Before lseek...\n");
+    debug_info("[bypass] >> Before lseek64...\n");
 
     struct generic_fd virtual_fd = fdstable_get ( fd );
 
@@ -698,19 +698,19 @@
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      debug_info("[bypass]\t xpn_lseek %d,%ld,%d\n", fd, offset, whence);
+      debug_info("[bypass]\t xpn_lseek64 %d,%ld,%d\n", fd, offset, whence);
       ret = xpn_lseek(virtual_fd.real_fd, offset, whence);
-      debug_info("[bypass]\t xpn_lseek %d,%ld,%d -> %d\n", fd, offset, whence, ret);
+      debug_info("[bypass]\t xpn_lseek64 %d,%ld,%d -> %d\n", fd, offset, whence, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
-      debug_info("[bypass]\t try to dlsym_lseek %d,%ld,%d\n", fd, offset, whence);
+      debug_info("[bypass]\t try to dlsym_lseek64 %d,%ld,%d\n", fd, offset, whence);
       ret = dlsym_lseek64(fd, offset, whence);
-      debug_info("[bypass]\t dlsym_lseek %d,%ld,%d -> %d\n", fd, offset, whence, ret);
+      debug_info("[bypass]\t dlsym_lseek64 %d,%ld,%d -> %d\n", fd, offset, whence, ret);
     }
 
-    debug_info("[bypass] << After lseek...\n");
+    debug_info("[bypass] << After lseek64...\n");
     return ret;
   }
 

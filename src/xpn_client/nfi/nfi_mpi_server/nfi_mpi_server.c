@@ -763,7 +763,7 @@
     {
       if (server_aux->params.xpn_session)
       {
-        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
+        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ; //TODO: check error
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
         ret = real_posix_read(fh_aux->fd, buffer, size) ;
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
@@ -784,7 +784,7 @@
           return -1;
         }
 
-        real_posix_lseek(fd, offset, SEEK_SET) ;
+        real_posix_lseek(fd, offset, SEEK_SET) ; //TODO: check error
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
         ret = real_posix_read(fd, buffer, size) ;
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
@@ -906,7 +906,7 @@
     {
       if (server_aux->params.xpn_session)
       {
-        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
+        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ; //TODO: check error
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
         ret = real_posix_write(fh_aux->fd, buffer, size) ;
         debug_info("[NFI-MPI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret);
@@ -927,7 +927,7 @@
           return -1;
         }
 
-        real_posix_lseek(fd, offset, SEEK_SET) ;
+        real_posix_lseek(fd, offset, SEEK_SET) ; //TODO: check error
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
         ret = real_posix_write(fd, buffer, size) ;
         debug_info("[NFI-MPI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret);
