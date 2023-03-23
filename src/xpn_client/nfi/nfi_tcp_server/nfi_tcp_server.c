@@ -370,7 +370,7 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
                 return -1;
             }
 
-            mosquitto_int_option(mosqstr, MOSQ_OPT_TCP_NODELAY, 1);
+        //  mosquitto_int_option(mosqstr, MOSQ_OPT_TCP_NODELAY, 1);  // TODO: uncomment this line !!
             mosquitto_int_option(mosqstr, MOSQ_OPT_SEND_MAXIMUM, 65535);
 
 
