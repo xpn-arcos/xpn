@@ -1,6 +1,7 @@
 #ifndef _XPN_POLICY_INIT_H
 #define _XPN_POLICY_INIT_H
 
+
 #ifdef ENABLE_MXML
 	#include "mxml.h"
 #endif
@@ -102,16 +103,15 @@ struct conf_connect_st{
 #endif
 
 
+struct conf_connect_st * XpnPartitionOpen ( void );
+void                     XpnPartitionClose(struct conf_connect_st *fconf);
+int                      XpnGetNextPartition(struct conf_connect_st *fconf, char *name);
+int                      XpnGetIdPartition(struct conf_connect_st *fconf, char *name);
+int                      XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *part);
+int                      XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partition *part, int type);
+struct xpn_partition*    XpnSearchPart(int pd);
 
-struct conf_connect_st * XpnPartitionOpen();
-void XpnPartitionClose(struct conf_connect_st *fconf);
-int XpnGetNextPartition(struct conf_connect_st *fconf, char *name);
-int XpnGetIdPartition(struct conf_connect_st *fconf, char *name);
-int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *part);
-int XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partition *part, int type);
-struct xpn_partition* XpnSearchPart(int pd);
-
-int XpnGetServer(struct conf_connect_st *fconf, struct xpn_partition *part, struct nfi_server *serv, int type);
+int XpnGetServer   (struct conf_connect_st *fconf, struct xpn_partition *part, struct nfi_server *serv, int type);
 int XpnGetPartition(char *path);
 
 

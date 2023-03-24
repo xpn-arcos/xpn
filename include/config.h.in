@@ -18,6 +18,15 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if you have the `dl' library (-ldl). */
+#undef HAVE_LIBDL
+
+/* Define to 1 if you have the `mosquitto' library (-lmosquitto). */
+#undef HAVE_LIBMOSQUITTO
+
+/* Define to 1 if you have the `mxml' library (-lmxml). */
+#undef HAVE_LIBMXML
+
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #undef HAVE_LIBPTHREAD
 
@@ -35,6 +44,9 @@
 
 /* Define to 1 if you have the `memset' function. */
 #undef HAVE_MEMSET
+
+/* Define to 1 if you have the <mosquitto.h> header file. */
+#undef HAVE_MOSQUITTO_H
 
 /* Define to 1 if you have the <mpi.h> header file. */
 #undef HAVE_MPI_H

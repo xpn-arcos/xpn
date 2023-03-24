@@ -332,7 +332,7 @@
 
     // do creat
     fd = filesystem_creat(s, 0770) ; // TODO: mpi_server_op_creat don't use 'mode' from client ?
-    if (fd == -1) {
+    if (fd < 0) {
         filesystem_mkpath(s) ;
         fd = filesystem_creat(s, 0770) ;
     }
@@ -352,7 +352,7 @@
 
     // do creat
     fd = filesystem_creat(s, 0770) ; // TODO: mpi_server_op_creat don't use 'mode' from client ?
-    if (fd == -1) {
+    if (fd < 0) {
         filesystem_mkpath(s) ;
         fd = filesystem_creat(s, 0770) ;
     }
@@ -399,7 +399,7 @@
       else to_read = diff ;
 
       // lseek and read data...
-      filesystem_lseek(head->u_st_mpi_server_msg.op_read.fd, head->u_st_mpi_server_msg.op_read.offset + cont, SEEK_SET) ;
+      filesystem_lseek(head->u_st_mpi_server_msg.op_read.fd, head->u_st_mpi_server_msg.op_read.offset + cont, SEEK_SET) ; //TODO: check error
       req.size = filesystem_read(head->u_st_mpi_server_msg.op_read.fd, buffer, to_read) ;
       // if error then send as "how many bytes" -1
       if (req.size < 0)
@@ -480,7 +480,7 @@
       else to_read = diff ;
 
       // lseek and read data...
-      filesystem_lseek(fd, head->u_st_mpi_server_msg.op_read.offset + cont, SEEK_SET) ;
+      filesystem_lseek(fd, head->u_st_mpi_server_msg.op_read.offset + cont, SEEK_SET) ; //TODO: check error
       req.size = filesystem_read(fd, buffer, to_read) ;
       // if error then send as "how many bytes" -1
       if (req.size < 0)
@@ -553,7 +553,7 @@
 
       // read data from MPI and write into the file
       mpi_server_comm_read_data(params, sd, buffer, to_write, rank_client_id) ;
-      filesystem_lseek(head->u_st_mpi_server_msg.op_write.fd, head->u_st_mpi_server_msg.op_write.offset + cont, SEEK_SET) ;
+      filesystem_lseek(head->u_st_mpi_server_msg.op_write.fd, head->u_st_mpi_server_msg.op_write.offset + cont, SEEK_SET) ; //TODO: check error
       //sem_wait(&disk_sem);
       req.size = filesystem_write(head->u_st_mpi_server_msg.op_write.fd, buffer, to_write) ;
       //sem_post(&disk_sem);
@@ -621,7 +621,7 @@
 
       // read data from MPI and write into the file
       mpi_server_comm_read_data(params, sd, buffer, to_write, rank_client_id) ;
-      filesystem_lseek(fd, head->u_st_mpi_server_msg.op_write.offset + cont, SEEK_SET) ;
+      filesystem_lseek(fd, head->u_st_mpi_server_msg.op_write.offset + cont, SEEK_SET) ; //TODO: check error
       //sem_wait(&disk_sem);
       req.size = filesystem_write(fd, buffer, to_write) ;
       //sem_post(&disk_sem);
@@ -719,15 +719,12 @@
 
   void mpi_server_op_setattr (
 		               mpi_server_param_st *params,
-		               MPI_Comm sd, 
+		               __attribute__((__unused__)) MPI_Comm sd, 
 			       struct st_mpi_server_msg *head, 
 			       __attribute__((__unused__)) int rank_client_id
 		             )
   {
     // check params...
-    if (sd < 0) {
-        return ;
-    }
     if (NULL == params) {
         return ;
     }
@@ -855,7 +852,7 @@
 
     // Open origin file
     fd_orig = filesystem_open(head->u_st_mpi_server_msg.op_preload.storage_path, O_RDONLY) ;
-    if (fd_orig == -1) {
+    if (fd_orig < 0) {
         return;
     }
 
@@ -863,25 +860,25 @@
 
     // Create new file
     fd_dest = filesystem_creat(file, 0777) ;
-    if (fd_dest == -1) {
+    if (fd_dest < 0) {
         close(fd_orig) ;
         return;
     }
 
-    int cont = BLOCKSIZE * params->rank;
+    off_t cont = BLOCKSIZE * params->rank;
     int read_bytes, write_bytes;
 
     do
     {
-        ret = filesystem_lseek(fd_orig, cont, SEEK_SET) ;
-        if (ret == -1) {
+        off_t ret_2 = filesystem_lseek(fd_orig, cont, SEEK_SET) ;
+        if (ret_2 == (off_t) -1) {
             close(fd_orig) ;
             close(fd_dest) ;
             return;
         }
 
         read_bytes = filesystem_read(fd_orig, &buffer, BLOCKSIZE) ;
-        if (read_bytes == -1){
+        if (read_bytes < 0){
             close(fd_orig) ;
             close(fd_dest) ;
             return;
@@ -933,14 +930,14 @@
 
     // Open origin file
     fd_orig = filesystem_open(file, O_RDONLY) ;
-    if (fd_orig == -1) {
+    if (fd_orig < 0) {
         printf("Error on open operation on '%s'\n", file) ;
         return;
     }
 
     // Create new file
     fd_dest = filesystem_open(head->u_st_mpi_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT) ;
-    if (fd_dest == -1) {
+    if (fd_dest < 0) {
         printf("Error on open operation on '%s'\n", head->u_st_mpi_server_msg.op_flush.storage_path) ;
         return;
     }
@@ -953,13 +950,13 @@
     do
     {
         read_bytes = filesystem_read(fd_orig, &buffer, BLOCKSIZE) ;
-        if (read_bytes == -1) {
+        if (read_bytes < 0) {
             return;
         }
 
         if (read_bytes > 0)
         {
-            filesystem_lseek(fd_dest, cont, SEEK_SET) ;
+            filesystem_lseek(fd_dest, cont, SEEK_SET) ; //TODO: check error
 
             write_bytes = filesystem_write(fd_dest, &buffer, read_bytes) ;
             if (write_bytes==-1) {

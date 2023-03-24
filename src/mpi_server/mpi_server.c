@@ -33,6 +33,7 @@
 
   /* ... Global variables / Variables globales ......................... */
 
+    char serv_name [HOST_NAME_MAX];
     mpi_server_param_st params;
     worker_t worker;
     int the_end = 0;
@@ -64,7 +65,7 @@
       while (!disconnect)
       {
         ret = mpi_server_comm_read_operation(th.params, (MPI_Comm) th.sd, (char *)&(th.type_op), 1, &(th.rank_client_id));
-        if (ret == -1) {
+        if (ret < 0) {
           debug_info("[MPI-SERVER] ERROR: mpi_server_comm_readdata fail\n") ;
           return;
         }
@@ -73,7 +74,7 @@
         {
           debug_info("[MPI-SERVER] INFO: DISCONNECT received\n");
           disconnect = 1;
-	  continue;
+	        continue;
         }
 
         // Launch worker per operation
@@ -103,26 +104,37 @@
       struct st_th th_arg;
       int          ret ;
 
+      printf("\n");
+      printf(" ----------------\n");
+      printf(" Starting servers (%s)\n", serv_name);
+      printf(" ----------------\n");
+      printf("\n");
+
       // Initialize
       debug_msg_init() ;
-      mpi_server_comm_init(&params) ;
-      workers_init( &worker, params.thread_mode );
+      ret = mpi_server_comm_init(&params) ;
+      if (ret < 0) {
+          printf("[MPI-SERVER] ERROR: mpi_comm initialization fails\n");
+          return -1;
+      }
+      ret = workers_init( &worker, params.thread_mode );
+      if (ret < 0) {
+          printf("[MPI-SERVER] ERROR: mpi_comm initialization fails\n");
+          return -1;
+      }
 
       // Initialize semaphore for server disks
       ret = sem_init(&(params.disk_sem), 0, 1);
-      if (ret == -1) {
-        printf("[MAIN] ERROR: semaphore initialize fails\n");
+      if (ret < 0) {
+        printf("[MPI-SERVER] ERROR: semaphore initialize fails\n");
         return -1;
       }
 
       // Initialize semaphore for clients
-      char serv_name [HOST_NAME_MAX];
-      gethostname(serv_name, HOST_NAME_MAX);
       sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
-
       sem_t *sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
       if (sem_server == 0) {
-        printf("[MAIN] ERROR: semaphore open fails\n");
+        printf("[MPI-SERVER] ERROR: semaphore open fails\n");
         return -1;
       }
 
@@ -140,7 +152,7 @@
         }
 
         ret = mpi_server_comm_read_operation(&params, sd, (char *)&(head.type), 1, &(rank_client_id));
-        if (ret == -1) {
+        if (ret < 0) {
           printf("[MPI-SERVER] ERROR: mpi_server_comm_readdata fail\n") ;
           return -1;
         }
@@ -184,41 +196,50 @@
       MPI_Comm server;
       FILE *file;
 
-      printf("----------------\n");
-      printf("Stopping servers\n");
-      printf("----------------\n\n");
+      printf("\n");
+      printf(" ----------------\n");
+      printf(" Stopping servers (%s)\n", serv_name);
+      printf(" ----------------\n");
+      printf("\n");
 
       MPI_Init(&argc, &argv);
 
       // Open host file
       file = fopen(params.host_file, "r");
       if (file == NULL) {
-        printf("[MAIN] ERROR: invalid file %s\n", params.host_file);
+        printf("[MPI-SERVER] ERROR: invalid file %s\n", params.host_file);
         return -1;
       }
 
       while (fscanf(file, "%[^\n] ", srv_name) != EOF)
       {
-#ifndef MPI_SERVICE_NAME
-        // Lookup port name
-        ret = ns_lookup (srv_name, port_name);
-        if (ret == -1) {
-          printf("[MAIN] ERROR: server %s not found\n", dns_name) ;
-          continue;
+        int version_len;
+        char version[MPI_MAX_LIBRARY_VERSION_STRING];
+        MPI_Get_library_version(version, &version_len);
+
+        if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
+        {
+          // Lookup port name
+          ret = ns_lookup (srv_name, port_name);
+          if (ret < 0) {
+            printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name) ;
+            continue;
+          }
         }
-#else
-        // Lookup port name on nameserver
-        ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name) ;
-        if (MPI_SUCCESS != ret) {
-          printf("[MAIN] ERROR: server %s not found\n", dns_name) ;
-          continue;
+        else
+        {
+          // Lookup port name on nameserver
+          ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name) ;
+          if (MPI_SUCCESS != ret) {
+            printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name) ;
+            continue;
+          }
         }
-#endif
 
         // Connect with servers
         ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &server );
         if (MPI_SUCCESS != ret) {
-          printf("[MAIN] ERROR: MPI_Comm_connect fails\n") ;
+          printf("[MPI-SERVER] ERROR: MPI_Comm_connect fails\n") ;
           continue;
         }
         buf = MPI_SERVER_FINALIZE;
@@ -230,7 +251,7 @@
       // Close host file
       fclose(file);
 
-      MPI_Finalize();
+      //MPI_Finalize();
 
       return 0;
     }
@@ -242,8 +263,12 @@
 
     int main ( int argc, char *argv[] )
     {
-      int ret = -1 ;
+      int    ret = -1 ;
       char * exec_name = NULL ;
+
+      // Initializing...
+      setbuf(stdout, NULL);
+      setbuf(stderr, NULL);
 
       // Welcome...
       printf("\n") ;
@@ -253,15 +278,19 @@
       printf(" Begin.\n") ;
       printf("\n") ;
 
-      exec_name = basename(argv[0]);
-      printf(" * action=%s\n", exec_name);
-
       // Get arguments..
       ret = mpi_server_params_get(&params, argc, argv) ;
       if (ret < 0) {
         mpi_server_params_show_usage() ;
         return -1;
       }
+
+      // Show configuration...
+      exec_name = basename(argv[0]);
+      printf(" * action=%s\n", exec_name);
+      gethostname(serv_name, HOST_NAME_MAX);
+      printf(" * host=%s\n",   serv_name);
+      mpi_server_params_show(&params);
 
       // Do associate action...
       if (strcasecmp(exec_name, "xpn_stop_mpi_server") == 0) {

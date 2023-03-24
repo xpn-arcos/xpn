@@ -41,7 +41,7 @@
 
     debug_info("[NFI-MPI] (ID=%s) mpiClient_write_data: begin               HEAD_TYPE:%d\n", head->id, sizeof(head->type)) ;
     ret = mpiClient_write_operation(sd, (char *)&(head->type), 1, head->id) ;
-    if (ret == -1){
+    if (ret < 0){
         debug_warning("Server[?]: mpiClient_write_data fails :-(") ;
         return -1;
     }
@@ -763,7 +763,7 @@
     {
       if (server_aux->params.xpn_session)
       {
-        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
+        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ; //TODO: check error
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
         ret = real_posix_read(fh_aux->fd, buffer, size) ;
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
@@ -784,7 +784,7 @@
           return -1;
         }
 
-        real_posix_lseek(fd, offset, SEEK_SET) ;
+        real_posix_lseek(fd, offset, SEEK_SET) ; //TODO: check error
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
         ret = real_posix_read(fd, buffer, size) ;
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
@@ -830,7 +830,7 @@
 
       //ret = mpi_server_write_operation(server_aux->sd, &msg) ;
       ret = mpi_server_write_operation(server_aux->params.server, &msg) ;
-      if (ret == -1) {
+      if (ret < 0) {
         fprintf(stderr,"ERROR: (1)nfi_mpi_server_read: Error on write operation\n") ;
         return -1;
       }
@@ -842,7 +842,7 @@
       {
         ret = mpiClient_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_read_req), msg.id) ;
         debug_info("[NFI-MPI] nfi_mpi_server_read(ID=%s): (1)mpiClient_read_data = %d.\n",server_aux->id, ret) ;
-        if (ret == -1){
+        if (ret < 0){
           fprintf(stderr,"ERROR: (2)nfi_mpi_server_read: Error on write operation\n") ;
           return -1;
         }
@@ -851,7 +851,7 @@
           debug_info("[NFI-MPI] nfi_mpi_server_read(ID=%s): (2)mpiClient_read_data = %d. size = %d\n",server_aux->id, ret, req.size) ;
           ret = mpiClient_read_data(server_aux->params.server, (char *)buffer+cont, req.size, msg.id) ;
           debug_info("[NFI-MPI] nfi_mpi_server_read(ID=%s): (2)mpiClient_read_data = %d.\n",server_aux->id, ret) ;
-          if (ret == -1) {
+          if (ret < 0) {
             fprintf(stderr,"ERROR: (3)nfi_mpi_server_read: Error on read operation\n") ;
           }
         }
@@ -906,7 +906,7 @@
     {
       if (server_aux->params.xpn_session)
       {
-        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ;
+        real_posix_lseek(fh_aux->fd, offset, SEEK_SET) ; //TODO: check error
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
         ret = real_posix_write(fh_aux->fd, buffer, size) ;
         debug_info("[NFI-MPI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret);
@@ -927,7 +927,7 @@
           return -1;
         }
 
-        real_posix_lseek(fd, offset, SEEK_SET) ;
+        real_posix_lseek(fd, offset, SEEK_SET) ; //TODO: check error
         //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
         ret = real_posix_write(fd, buffer, size) ;
         debug_info("[NFI-MPI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret);
@@ -971,7 +971,7 @@
       #endif
 
       ret = mpi_server_write_operation(server_aux->params.server, &msg) ;
-      if(ret == -1){
+      if(ret < 0){
         fprintf(stderr,"(1)ERROR: nfi_mpi_server_write(ID=%s): Error on write operation\n",server_aux->id) ;
         return -1;
       }
@@ -991,14 +991,14 @@
         if (diff > buffer_size)
         {
           ret = mpiClient_write_data(server_aux->params.server, (char *)buffer + cont, buffer_size, msg.id) ;
-          if (ret == -1) {
+          if (ret < 0) {
             fprintf(stderr,"(2)ERROR: nfi_mpi_server_read(ID=%s): Error on write operation\n",server_aux->id) ;
           }
         }
         else
         {
           ret = mpiClient_write_data(server_aux->params.server, (char *)buffer + cont, diff, msg.id) ;
-          if (ret == -1) {
+          if (ret < 0) {
             fprintf(stderr,"(2)ERROR: nfi_mpi_server_read(ID=%s): Error on write operation\n",server_aux->id) ;
           }
         }
@@ -1009,7 +1009,7 @@
       } while ((diff > 0) && (ret != 0)) ;
 
       ret = mpiClient_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_write_req), msg.id) ;
-      if (ret == -1) 
+      if (ret < 0) 
       {
         fprintf(stderr,"(3)ERROR: nfi_mpi_server_write(ID=%s): Error on write operation\n",server_aux->id) ;
         return -1;
@@ -1726,7 +1726,7 @@
     /*****************************************/
 
     debug_info("[NFI-MPI] nfi_mpi_server_preload(ID=%s): end %s - %s = %d\n", server_aux->id,virtual_path, storage_path, ret) ;
-    if (ret == -1) {
+    if (ret < 0) {
       printf("[NFI-MPI] Error en el preload\n") ;
     }
 

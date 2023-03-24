@@ -36,6 +36,7 @@
   ssize_t (*real_read )(int, void*, size_t)       = NULL;
   ssize_t (*real_write)(int, const void*, size_t) = NULL;
   off_t   (*real_lseek)(int, off_t, int)          = NULL;
+  off64_t (*real_lseek64)(int, off64_t, int)      = NULL;
   int     (*real_ftruncate)(int, off_t)           = NULL;
 
   int     (*real_stat     )(int, char *,       struct stat   *) = NULL;
@@ -208,7 +209,18 @@
         real_lseek = (off_t (*)(int, off_t, int)) dlsym(RTLD_NEXT,"lseek");
     }
 
-    return real_lseek(fd,offset, whence);
+    return real_lseek(fd, offset, whence);
+  }
+
+  off64_t  dlsym_lseek64(int fd, off64_t offset, int whence)
+  {
+    debug_info("dlsym_lseek64: before lseek64...\n");
+
+    if (real_lseek64 == NULL){
+        real_lseek64 = (off64_t (*)(int, off64_t, int)) dlsym(RTLD_NEXT,"lseek64");
+    }
+
+    return real_lseek64(fd, offset, whence);
   }
 
   int dlsym_lxstat64(int ver, const char *path, struct stat64 *buf)

@@ -36,13 +36,7 @@
 
   /* ... Defines / Definiciones ........................................... */
 
-#ifdef _LARGEFILE64_
-     typedef long long int offset_t;
-     #define LSEEK real_posix_lseek64
-#else
-     typedef off_t offset_t;
-     #define LSEEK real_posix_lseek
-#endif
+typedef off_t offset_t;
 
 // <IMPORTANT>: next two lines MUST be before each file in xpn_client that uses filesystem.h BUT NOT in mpi_server that uses filesystem.h
 //   #define ASYNC_CLOSE 1

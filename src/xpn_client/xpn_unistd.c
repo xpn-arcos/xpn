@@ -119,7 +119,7 @@
 
     off_t   xpn_lseek ( int fd, off_t offset, int flag )
     {
-      off_t ret = -1 ;
+      off_t ret = (off_t) -1 ;
 
       ret = xpn_simple_lseek(fd, offset, flag) ;
 

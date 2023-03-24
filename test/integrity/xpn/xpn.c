@@ -11,7 +11,6 @@ int main ( int argc, char *argv[] )
 	char buffer[BUFF_SIZE] ;
 
 	printf("setenv XPN_CONF ./\n");
-	setenv("XPN_CONF", "./", 1);
 
         // xpn-init
 	ret = xpn_init();

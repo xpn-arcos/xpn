@@ -213,13 +213,13 @@ int xpn_simple_getc(FILE *stream)
 }
 
 
-int xpn_simple_fseek(FILE *stream, long offset, int whence)
+int xpn_simple_fseek(FILE *stream, off_t offset, int whence)
 {
-  int ret ;
+  off_t ret ;
 
   ret = xpn_simple_lseek(stream->_fileno, offset, whence);
-  if (ret < 0){
-      return -1 ;
+  if (ret == (off_t) -1){
+      return (off_t) -1 ;
   }
 
   return 0;

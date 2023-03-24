@@ -125,6 +125,10 @@
   #include <mpi.h>
 #endif
 
+#if defined(HAVE_MOSQUITTO_H)
+  #include <mosquitto.h>
+#endif
+
 
 /*
  * Common sizes
