@@ -10,8 +10,7 @@ int main ( int argc, char *argv[] )
 	int  fd1 ;
 	char buffer[BUFF_SIZE] ;
 
-	printf("env XPN_CONF=./xpn.conf\n");
-	setenv("XPN_CONF",  "./xpn.conf", 1);
+	printf("env XPN_CONF=./xpn.conf XPN_DNS=/tmp/xpn/conf/xpn.dns ./%s\n", argv[0]);
 
         // xpn-init
 	ret = xpn_init();

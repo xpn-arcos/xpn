@@ -93,7 +93,7 @@ size_t		xpn_fwrite	(const void *ptr, size_t size, size_t nmemb, FILE *stream);
 int		xpn_fflush	(FILE *stream);
 
 // xpn_fseek.c
-int		xpn_fseek	(FILE *stream, long offset, int whence);
+int		xpn_fseek	(FILE *stream, off_t offset, int whence);
 
 // xpn_ftell.c
 long		xpn_ftell	(FILE *stream);
