@@ -170,117 +170,134 @@
       }
 
 
-/* ............................................................... */
+  /* ............................................................... */
 
       int getURLProtocol(char *url, char *protocol)
       {
       	int i,j;
 
-      	if(url == NULL){
-          printf("[%s:%d] ERROR: url is NULL\n", __FILE__, __LINE__);
-      		return -1;
+      	if (url == NULL) {
+           printf("[%s:%d] ERROR: url is NULL\n", __FILE__, __LINE__);
+      	   return -1;
       	}
 
         // find ':'
         i = 0;
-      	while((url[i] != '\0')&&(url[i] != ':'))  {
+      	while ((url[i] != '\0')&&(url[i] != ':'))  {
           i++;
         }
         j = i;
 
-      	if(url[i] != ':'){
+      	if (url[i] != ':') {
           printf("[%s:%d] ERROR: missing ':' within the url.\n", __FILE__, __LINE__);
           printf("Usage: protocol_name://server:port//dir\n");
-      		return -1;
+      	  return -1;
       	}
 
       
       	i++;
-      	if(url[i] != '/'){
+      	if (url[i] != '/') {
           printf("[%s:%d] ERROR: missing first '/' within the url.\n", __FILE__, __LINE__);
           printf("Usage: protocol_name://server:port//dir\n");
-      		return -1;
+      	  return -1;
       	}
 
       	i++;
-      	if(url[i] != '/'){
+      	if (url[i] != '/') {
           printf("[%s:%d] ERROR: missing second '/' within the url.\n", __FILE__, __LINE__);
           printf("Usage: protocol_name://server:port//dir\n");
-      		return -1;
+      	  return -1;
       	}
 
       	i++;
-      	if(protocol != NULL){
-      		strncpy(protocol, url, j);
-      		protocol[j] = '\0';
+      	if (protocol != NULL) {
+      	  strncpy(protocol, url, j);
+      	  protocol[j] = '\0';
       	}
+
       	return i;
       }
 
-      /*
+/*
       int getURLLogin(char *url, char *login)
       {
+        // TODO
       	return 0;
       }
 
       int getURLPasswd(char *url, char *passwd)
       {
+        // TODO
       	return 0;
       }
-      */
+*/
 
       int getURLServer(char *url, char *server)
       {
       	int i,j;
 
-      	if((i=getURLProtocol(url, NULL))<0){
-      		return -1;
+      	i = getURLProtocol(url, NULL) ;
+      	if (i < 0) {
+      	   return -1;
       	}
-      	j = i;
-      	while((url[j]!='\0')&&(url[j]!=':')&&(url[j]!='/'))
-      		j++;
 
-      	if(server != NULL){
-      		strncpy(server, url+i, j-i);
-      		server[j-i] = '\0';
+      	j = i;
+      	while ((url[j]!='\0')&&(url[j]!=':')&&(url[j]!='/')) {
+      	   j++;
+	}
+
+      	if (server != NULL) {
+     	   strncpy(server, url+i, j-i);
+      	   server[j-i] = '\0';
       	}
+
       	return j;
       }
 
 
-      int getURLPort(char *url, char *port)
+      int getURLPort ( char *url, char *port )
       {
-      	int i,j;
+      	int i, j;
 
-      	if((i=getURLServer(url, NULL))<0){
+      	i=getURLServer(url, NULL) ;
+      	if (i < 0) {
       		return -1;
       	}
-      	if(url[i] != ':'){
+
+      	if (url[i] != ':') {
       		return -1;
       	}
+
 	i++;
       	j = i;
-      	while((url[j]!='\0')&&(url[j]!='/'))
-		j++;
+      	while ((url[j]!='\0')&&(url[j]!='/')) {
+	  j++;
+	}
+
 	if(port != NULL){
 		strncpy(port, url+i, j-i);
 		port[j-i] = '\0';
 	}
+
       	return j;
       }
 
       int getURLDir(char *url, char *dir)
       {
       	int i;
-	if((i=getURLPort(url, NULL))<0){
-	     	if((i=getURLServer(url, NULL))<0){
-      			if((i=getURLProtocol(url, NULL))<0){
+
+	if ((i=getURLPort(url, NULL))<0)
+	{
+	     	if ((i=getURLServer(url, NULL))<0)
+		{
+      			if((i=getURLProtocol(url, NULL))<0)
+			{
       				return -1;
       			}
       		}
       	}
 
-      	if(dir != NULL){
+      	if (dir != NULL) {
       		strncpy(dir, url+i, strlen(url)-i);
       		dir[strlen(url)-i] = '\0';
       	}
@@ -294,30 +311,36 @@
       	int i,j;
 
       	getURLDir(url, dir_aux);
+
       	i = 0;
-      	while((dir_aux[i] != '\0')&&(dir_aux[i] == dir[i]))
+      	while((dir_aux[i] != '\0')&&(dir_aux[i] == dir[i])) {
       		i++;
+	}
 
 
-      	if(dir_aux[i] != '\0')
+      	if(dir_aux[i] != '\0') {
       		return -1;
+	}
       	if(dir_aux[i] == dir[i]){
       		//dir[0] = '\0'; /* or '/'  */
       		dir[0] = '/';
       		dir[1] = '\0';
       		return 0;
       	}
+
       	j = 0;
       	while(dir[j+i]!='\0'){
       		dir[j] = dir[j+i];
       		j++;
       	}
+
       	dir[j] = '\0';
-      	if((dir[j] == '/') &&(strlen(dir+j) == 1))
+      	if((dir[j] == '/') &&(strlen(dir+j) == 1)) {
       		dir[j-1] = '\0';
+	}
+
       	return 0;
       }
-
 
 
       /******************************************************/
@@ -329,18 +352,20 @@
 	char ant = '\0', s[255];
 
 	j=0;
-	for(i=0;i < strlen(path); i++){
-		switch(path[i]){
+	for(i=0;i < strlen(path); i++)
+	{
+		switch(path[i])
+		{
 			case '/':
 				if(ant != '/'){
 					ant = s[j] = '/';
 					j++;
 				}
 				break;
+
 			default:
 				ant = s[j] = path[i];
 				j++;
-
 		}
 
 		s[j] = '\0';
@@ -351,16 +376,15 @@
       }
 
 
-      int ParseURL(	char *url,
-      		char *protocol,
-      		char *login,
-      		char *passwd,
-      		char *server,
-      		char *port,
-      		char *dir)
+      int ParseURL( char *url,
+      		    char *protocol,
+      		    char *login,
+      		    char *passwd,
+      		    char *server,
+      		    char *port,
+      		    char *dir )
       {
       	char *urlaux;
-
 
       	urlaux = url;
       	if(protocol != NULL){
@@ -371,7 +395,7 @@
       	}
 
       	urlaux = url;
-      	if(login != NULL){
+      	if (login != NULL) {
       		/* return the next position */
       		/*
       		if(getURLLogin(urlaux, login)<0){
@@ -421,8 +445,6 @@
 
       	return 0;
       }
-
-
 
 
    /* ................................................................... */

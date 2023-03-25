@@ -862,6 +862,7 @@
     fd_dest = filesystem_creat(file, 0777) ;
     if (fd_dest < 0) {
         close(fd_orig) ;
+        free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
         return;
     }
 
@@ -874,6 +875,7 @@
         if (ret_2 == (off_t) -1) {
             close(fd_orig) ;
             close(fd_dest) ;
+            free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
             return;
         }
 
@@ -881,6 +883,7 @@
         if (read_bytes < 0){
             close(fd_orig) ;
             close(fd_dest) ;
+            free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
             return;
         }
 
@@ -890,6 +893,7 @@
             if (write_bytes==-1){
                 close(fd_orig) ;
                 close(fd_dest) ;
+                free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
                 return;
             }
         }
@@ -908,6 +912,7 @@
                                                         head->u_st_mpi_server_msg.op_preload.virtual_path,
                                                         head->u_st_mpi_server_msg.op_preload.storage_path,
                                                         ret) ;
+    free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
     return;
   }
   
@@ -932,6 +937,7 @@
     fd_orig = filesystem_open(file, O_RDONLY) ;
     if (fd_orig < 0) {
         printf("Error on open operation on '%s'\n", file) ;
+        free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
         return;
     }
 
@@ -939,6 +945,7 @@
     fd_dest = filesystem_open(head->u_st_mpi_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT) ;
     if (fd_dest < 0) {
         printf("Error on open operation on '%s'\n", head->u_st_mpi_server_msg.op_flush.storage_path) ;
+        free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
         return;
     }
 
@@ -951,6 +958,7 @@
     {
         read_bytes = filesystem_read(fd_orig, &buffer, BLOCKSIZE) ;
         if (read_bytes < 0) {
+            free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
             return;
         }
 
@@ -959,7 +967,8 @@
             filesystem_lseek(fd_dest, cont, SEEK_SET) ; //TODO: check error
 
             write_bytes = filesystem_write(fd_dest, &buffer, read_bytes) ;
-            if (write_bytes==-1) {
+            if (write_bytes < 0) {
+                free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
                 return;
             }
         }
@@ -975,6 +984,8 @@
 
     // show debug info
     debug_info("[MPI-SERVER-OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_flush.virtual_path) ;
+
+    free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
   }
 
 
