@@ -23,10 +23,13 @@
    /* ... Include / Inclusion ........................................... */
 
       #include <stdio.h>
+      #include <unistd.h>
       #include <sys/types.h>
       #include <sys/stat.h>
       #include <fcntl.h>
-      #include <unistd.h>
+      #include <dirent.h>
+      #include <string.h>
+
 
    /* ... Const / Const ................................................. */
 
@@ -40,6 +43,9 @@
       int do_cp ( char *src_path, char *dest_path )
       {
 	int ret, fd_src, fd_dest ;
+	int cont  = 0;
+	int cont2 = 0;
+	int buf_len = BUFFER_SIZE;
 
 	fd_src = open(src_path, O_RDONLY);
 	if (fd_src < 0) {
@@ -47,16 +53,14 @@
 	  return -1;
 	}
 
+	// TODO: mkdir any directory from dest_path before open it, just in case parent directories doesn't exists...
+
 	fd_dest = open(dest_path, O_WRONLY | O_CREAT | O_TRUNC, 0755);
 	if (fd_dest < 0)
 	{
 	  perror("open destination: ");
 	  return -1;
 	}
-
-	int cont  = 0;
-	int cont2 = 0;
-	int buf_len = BUFFER_SIZE;
 
 	do
 	{
@@ -97,15 +101,62 @@
 	return 0;
       }
 
-      int do_xx ( char *src_path, char *dest_path )
+      int do_cp_recursive ( char *src_path, char *dest_path )
       {
-      /*
-stat src_path
-if IS_FILE -> do_cp y return
-if IS_DIR -> ls y con cada entrada... do_cp... recursivo
-       */
+        struct stat stat_buf;
+        int ret = 0;
 
-	return 0;
+        ret = stat(src_path, &stat_buf);
+        if (ret < 0) {
+            perror("stat source: ");
+            printf("ERROR at '%s': stat failed\n", src_path);
+	    return -1;
+        }
+
+        if (S_ISREG(stat_buf.st_mode))
+        {
+            return do_cp(src_path, dest_path) ;
+        }
+	else if (S_ISDIR(stat_buf.st_mode))
+        {
+            DIR * dir = NULL;
+	    struct dirent * entry = NULL;
+            char path [PATH_MAX];
+
+	    dir = opendir(src_path);
+	    if (NULL == dir) {
+	      perror("opendir:");
+	      return -1;
+	    }
+	  
+	    entry = readdir(dir);
+	    while(entry != NULL)
+	    {
+	      if (! strcmp(entry->d_name, ".")) {
+	        entry = readdir(dir);
+	        continue;
+	      }
+	      if (! strcmp(entry->d_name, "..")) {
+	        entry = readdir(dir);
+	        continue;
+	      }
+
+	      sprintf(path, "%s/%s", src_path, entry->d_name);
+	      printf("cp '%s' ...\n", path);
+
+              do_cp_recursive(path, dest_path) ;
+
+	      entry = readdir(dir);
+	    }
+
+	    closedir(dir);
+        }
+        else
+        {
+	    printf("ERROR at '%s': not a directory or file\n", src_path);
+        }
+
+	return ret;
       }
 
 
@@ -128,7 +179,7 @@ if IS_DIR -> ls y con cada entrada... do_cp... recursivo
 	   return -1;
 	}
 
-        ret = do_cp(argv[1], argv[2]) ;
+        ret = do_cp_recursive(argv[1], argv[2]) ;
 
 	return ret ;
       }
