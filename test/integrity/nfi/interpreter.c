@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 
 #include "all_system.h"
-#include "base/string_misc.h"
+#include "base/path_misc.h"
 #include "nfi/nfi.h"
 #include "nfi/nfi_lib.h"
 #include "nfi/nfi_nfs/nfs.h"

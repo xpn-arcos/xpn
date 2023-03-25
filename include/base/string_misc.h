@@ -109,34 +109,6 @@
       ) ;
 
 
-      // TODO: Unknown for string... filesystem functions???
-      int hash (char *file,int nServ) ;
-
-      // TODO: move into filesystem.h ???
-      int getDir        ( char *arg1 ) ;
-      int multiline     ( char *text ) ;
-      int getFirstDir   ( char *dir, char *path) ;
-      int getSizeFactor ( char *name ) ;
-   
-      // TODO: move into urlstr.h ????
-      int ParseURL(   char *url,  
-      		      char *protocol, 
-		      char *login, 
-		      char *passwd, 
-		      char *server,  
-		      char *port,  
-		      char *dir);
-
-      /* get the last name of a path and erase the file name */
-      int getNameFile(char *file, char *dir);
-
-      /* get the first name of the path and erase the part name */
-      int getNamePart(char *part, char *dir);
-
-      /* erase the initial dir used in the url */
-      int getDirWithURL(char *url, char *dir);
-
-
   /* .................................................................... */
 
 #ifdef  __cplusplus
