@@ -15,8 +15,18 @@
 
   The Expand Parallel File System (a.k.a. XPN) can be installed on a cluster with local storage per-node (HDD, SSD or RAM Drive) and a shared home directory.
 
-  The general steps to deploy XPN with Spack are:
+  The general steps to deploy XPN are:
+  ```mermaid
+  flowchart LR
+    A[Start] --> B{Spack?}
+    B -- Yes --> C[use spack]
+    B -- No ---> D[install prerequisites]
+    D --> E[download source of XPN and mxml]
+    E --> F[build XPN]
+    F --> G[End]
+  ```
 
+  To deploy XPN with Spack:
   ```
   git clone https://github.com/xpn-arcos/xpn.git
   spack repo add xpn/scripts/spack
@@ -25,19 +35,6 @@
   spack load xpn
   ```
 
-  The traditional steps (without Spack) are:
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "1. Install prerequisites"                    as step1
-    state "2. Download the source code of XPN and mxml" as step2
-    state "3. Build Expand"                             as step3
-    [*] --> step1
-    step1 --> step2
-    step2 --> step3
-    step3 --> [*]
-```
 
 ### 1.1. Installing prerequisites
 
@@ -49,7 +46,7 @@ Some common use cases:
   sudo apt-get install -y autoconf automake gcc g++ make libtool libmpich-dev  
   ```
   
-* If you are an user of a cluster with already installed software then you might try the following:
+* If you are an user of a cluster with already installed software then you might try to load the compiler module and the MPI module, for example:
   ```bash
   module load icc
   module load "impi/2017.4"
