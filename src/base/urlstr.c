@@ -27,11 +27,7 @@
 
    /* ... Functions / Funciones ......................................... */
 
-      static
-      int       URLSTR_Match_protocol    ( char    **protocol,
-                                           char    **str )
-      {
-        static char *URLSTR_protocols[] = 
+      char *URLSTR_protocols[] = 
                {
                  "http",
                  "ftp",
@@ -40,20 +36,21 @@
                  "mpi_server",
                  NULL
                } ;
+
+
+   /* ... Functions / Funciones ......................................... */
+
+      int       URLSTR_Match_protocol    ( char    **protocol, char    **str )
+      {
         int i, ret ;
 
         for (i=0; URLSTR_protocols[i] != NULL; i++)
-            {
-              ret = strncmp( (*str),
-                             URLSTR_protocols[i],
-                             strlen(URLSTR_protocols[i]) ) ;
+        {
+              ret = strncmp( (*str), URLSTR_protocols[i], strlen(URLSTR_protocols[i]) ) ;
               if (ret == 0)
-                 {
-                   if (strcmp("news",URLSTR_protocols[i]) == 0)
-                            (*protocol) = STRING_MISC_StrDup("nntp") ;
-                       else (*protocol) = STRING_MISC_StrDup(URLSTR_protocols[i]) ;
-
-                   (*str) = (*str) + STRING_MISC_StrLen(URLSTR_protocols[i]) ;
+              {
+                   (*protocol) =          STRING_MISC_StrDup(URLSTR_protocols[i]) ;
+                   (*str)      = (*str) + STRING_MISC_StrLen(URLSTR_protocols[i]) ;
                    if ( (**str) == ':' )
                         (*str) ++ ;
                    if ( (**str) == '/' )
@@ -61,21 +58,22 @@
                    if ( (**str) == '/' )
                         (*str) ++ ;
                    return (1) ;
-                 }
-            }
+              }
+        }
+
         (*protocol) = STRING_MISC_StrDup("http") ;
         return (1) ;
       }
 
-      static
-      int       URLSTR_Match_user     (  char    **user,
-                                         char    **str )
+
+      int       URLSTR_Match_user     (  char    **user, char    **str )
       {
         char *pch ;
 
-        pch = strchr((*str),'@') ;
-        if (pch == NULL)
+        pch = strchr((*str), '@') ;
+        if (pch == NULL) {
              return (1) ;
+	}
 
         pch[0] = '\0' ;
         (*user) = STRING_MISC_StrDup((*str)) ;
@@ -83,10 +81,8 @@
         return (1) ;
       }
 
-      static
-      int       URLSTR_Match_machine  (  char    **machine,
-                                         char     *protocol,
-                                         char    **str )
+
+      int       URLSTR_Match_machine  (  char    **machine, char     *protocol, char    **str )
       {
         char *pch1, *pch2 ;
 
@@ -96,7 +92,7 @@
          *  file
          */
         if ( STRING_MISC_Equal(protocol,"file")  )
-           {
+        {
              int ret ;
 
              (*machine) = STRING_MISC_StrDup("localhost") ;
@@ -104,7 +100,7 @@
              if (ret == 0)
                  (*str) = (*str) + strlen("localhost") ;
              return (1) ;
-           }
+        }
 
         /* 
          *  http || ftp 
@@ -136,13 +132,12 @@
              (*str) = pch2 ;
              return (1) ;
            }
+
         return (1) ;
       }
 
-      static
-      int       URLSTR_Match_port     (  int      *port,
-                                         char     *protocol,
-                                         char     **str )
+
+      int       URLSTR_Match_port     (  int      *port, char     *protocol, char     **str )
       {
         char *pch1, *pch2 ;
 
@@ -194,12 +189,12 @@
              (*str)  = pch2 ;
              return (1) ;
            }
+
         return (1) ;
       }
 
-      static
-      int       URLSTR_Match_file     (  char    **file,
-                                         char    **str )
+
+      int       URLSTR_Match_file     (  char    **file, char    **str )
       {
         char *pch1 ;
 
@@ -235,9 +230,8 @@
         return (1) ;
       }
 
-      static
-      int       URLSTR_Match_relative (  char     **relative,
-                                         char     **str )
+
+      int       URLSTR_Match_relative (  char     **relative, char     **str )
       {
         char *pch1, *pch2 ;
 
@@ -267,9 +261,8 @@
         return (1) ;
       }
 
-      static
-      int       URLSTR_Match_params   (  char    **params,
-                                         char    **str )
+
+      int       URLSTR_Match_params   (  char    **params, char    **str )
       {
         char *pch1 ;
 
@@ -281,8 +274,10 @@
         pch1 ++ ; /* skip '?' */
         (*params) = STRING_MISC_StrDup(pch1) ;
         (*str)    = (*str) + STRING_MISC_StrLen((*str)) ;
+
         return (1) ;
       }
+
 
     /**
      * Given a URL in 'str', this function split in the
@@ -295,8 +290,7 @@
      * @param file the string where this component will be placed.
      * @param relative the string where this component will be placed.
      * @param params the string where this component will be placed.
-     * @return true (1) if parsing was madden or error (-1) if
-               any error is found.
+     * @return true (1) if parsing was madden or error (-1) if any error is found.
      */
      int       URLSTR_Match_url      (  char    **protocol,
                                          char    **user,
@@ -311,20 +305,28 @@
 
         ok = URLSTR_Match_protocol(protocol,str) ;
         if (0 == ok) return (0) ;
+
         ok = URLSTR_Match_user(user,str) ;
         if (0 == ok) return (0) ;
+
         ok = URLSTR_Match_machine(machine,*protocol,str) ;
         if (0 == ok) return (0) ;
+
         ok = URLSTR_Match_port(port,*protocol,str) ;
         if (0 == ok) return (0) ;
+
         ok = URLSTR_Match_file(file,str) ;
         if (0 == ok) return (0) ;
+
         ok = URLSTR_Match_relative(relative,str) ;
         if (0 == ok) return (0) ;
+
         ok = URLSTR_Match_params(params,str) ;
         if (0 == ok) return (0) ;
+
         return (1) ;
      }
+
 
     /**
      * Given a URL in 'urlstr', this function split in the

@@ -12,8 +12,8 @@ extern "C" {
 #endif
 
 // xpn_cwd.c
-char* 		xpn_getcwd	(char *path, size_t size);
-int		    xpn_chdir	(char *path);
+char * 		xpn_getcwd	(char *path, size_t size);
+int		xpn_chdir	(char *path);
 
 // xpn_dir.c
 int 		xpn_mkdir	(const char *path, mode_t perm) ;
@@ -43,7 +43,7 @@ int 		xpn_dup		(int fd);
 int 		xpn_dup2	(int fd, int fd2);
 
 // xpn_opendir.c
-DIR* 		xpn_opendir	(const char *path);
+DIR * 		xpn_opendir	(const char *path);
 int 		xpn_closedir	(DIR *dirp);
 struct dirent* 	xpn_readdir	(DIR *dirp);
 void 		xpn_rewinddir	(DIR *dirp);
@@ -75,7 +75,7 @@ char*		xpn_fgets	(char *s, int tam, FILE *flujo);
 /***************/
 
 // xpn_fopen.c
-FILE*		xpn_fopen	(const char *filename, const char *mode);
+FILE *		xpn_fopen	(const char *filename, const char *mode);
 
 // xpn_fclose.c
 int		xpn_fclose	(FILE *stream);
@@ -114,3 +114,4 @@ int		xpn_setvbuf	(FILE *stream, char *buf, int mode, size_t size);
 #endif
 
 #endif
+
