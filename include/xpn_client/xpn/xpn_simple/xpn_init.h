@@ -24,6 +24,7 @@
 #define _XPN_INIT_H
 
 #include "all_system.h"
+#include "base/path_misc.h"
 #include "xpn_policy_init.h"
 #include "xpn_cwd.h"
 #include "xpn_file.h"

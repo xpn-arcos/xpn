@@ -36,6 +36,7 @@
    #include "dtable.h"     
 
    #include "string_misc.h"  
+   #include "path_misc.h"  
    #include "urlstr.h" 
 
 #endif

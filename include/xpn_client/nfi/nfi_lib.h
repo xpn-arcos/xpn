@@ -3,7 +3,7 @@
 
 #include "nfi.h"
 #include "nfi_worker.h"
-#include "base/string_misc.h"
+#include "base/path_misc.h"
 
 /* protocols */
 #include "nfi_local.h"

@@ -1,9 +1,9 @@
-# XPN 2.2
+# XPN 2.3
 
 *Expand Ad-Hoc Parallel File System*
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-![version](https://img.shields.io/badge/version-2.1-blue)
+![version](https://img.shields.io/badge/version-2.3-blue)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://www.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xpn-arcos/xpn&amp;utm_campaign=Badge_Grade)
 
 * *Homepage*: <https://xpn-arcos.github.io/xpn-arcos.github.io/>
@@ -11,22 +11,54 @@
 * *Licence*:  [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/dcamarmas/xpn/blob/master/COPYING)</br>
 * *Authors*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, David Garcia Fernandez
 
-## 1. Installing dependencies
+## 1. To deploy XPN...
 
-XPN needs the typical C development tools and a MPI implementation installed:
-* If you are administrator of your local machine then you need to execute:
+  The Expand Parallel File System (a.k.a. XPN) can be installed on a cluster with local storage per-node (HDD, SSD or RAM Drive) and a shared home directory.
+
+  The general steps to deploy XPN are:
+  ```mermaid
+  flowchart LR
+    A[Start] --> B{Spack?}
+    B -- Yes --> C[use spack]
+    B -- No ---> D[install prerequisites]
+    D --> E[download source of XPN and mxml]
+    E --> F[build XPN]
+    F --> G[End]
   ```
-  sudo apt-get install -y <developer packages for gcc, make and MPI>
+
+  To deploy XPN with Spack:
   ```
-* If you are an user of a cluster with already installed software then you might try the following:
+  git clone https://github.com/xpn-arcos/xpn.git
+  spack repo add xpn/scripts/spack
+  spack info xpn
+  spack install xpn
+  spack load xpn
+  ```
+
+
+### 1.1. Installing prerequisites
+
+XPN needs the typical C development tools (gcc, make, autotools) and a MPI implementation installed.
+
+Some common use cases:
+* If you are administrator of your Linux machine then you need to execute:
+  ```
+  sudo apt-get install -y autoconf automake gcc g++ make libtool libmpich-dev  
+  ```
+  
+* If you are an user of a cluster with already installed software then you might try to load the compiler module and the MPI module, for example:
   ```bash
-  module load <your compiler module>
-  module load <your MPI module>
+  module load icc
+  module load "impi/2017.4"
   ```
+  Where "icc" is the compiler module and "impi/2017.4" is the MPI module.
 
-## 2. Download the source code of XPN
 
-You need to download the source code of [XPN](https://xpn-arcos.github.io/arcos-xpn.github.io/) and [minixml](http://www.minixml.org), you can download both by executing:
+### 1.2. Download the source code of XPN
+
+You need to download the source code of [XPN](https://xpn-arcos.github.io/arcos-xpn.github.io/) and [minixml](http://www.minixml.org).
+
+You can download both by executing:
 ```
 mkdir $HOME/src
 cd    $HOME/src
@@ -36,7 +68,8 @@ git clone https://github.com/xpn-arcos/xpn.git
 
 You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
 
-## 3. Building XPN
+
+### 1.3. Building XPN
 
 To build Expand you need to execute:
 ```
@@ -46,6 +79,17 @@ cd $HOME/src
 Where:
 * MPICC_PATH is the full path to your mpicc compiler.
 * INSTALL_PATH is the full path of the directory where XPN and MXML are going to be installed.
+
+For example:
+  ```
+  cd $HOME/src;
+  ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
+  ```
+
+Where:
+* MPI distribution is installed at '/opt/software/install-mpich'
+* Installation directory will be $HOME/xpn_bin
+
 
 ## 4. Executing XPN
 
@@ -103,88 +147,4 @@ sequenceDiagram
     XPN client    -->> session: execution ends
     session        ->> xpn_mpi_server: stop the MPI server
 ```
-
-
-## 5. XPN Examples
-
-### 5.1 Debian Linux machine
-
-As an build example scenario we will consider the following one:
-* MPI distribution is installed at '/opt/software/install-mpich'
-* Installation directory will be '/opt/xpn'
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "1. Install dependencies"                     as step1
-    state "2. Download the source code of XPN and mxml" as step2
-    state "3. Build Expand"                             as step3
-    [*] --> step1
-    step1 --> step2
-    step2 --> step3
-    step3 --> [*]
-```
-
-
-(1) Install dependencies:
-  ```
-  sudo apt-get install -y autoconf automake gcc g++ make flex libtool doxygen libmpich-dev
-  ```
-
-(2) Download the source code of XPN and mxml:
-  ```
-  mkdir $HOME/src
-  cd    $HOME/src
-  git clone https://github.com/michaelrsweet/mxml.git
-  git clone https://github.com/xpn-arcos/xpn.git
-  ```
-
-(3) To build Expand in this case you need to execute:
-   ```
-   cd $HOME/src
-   ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i /opt/xpn
-   ```
-
-
-### 5.2 Front-end node of a cluster
-
-Imagine you have a cluter with local storage (HDD, SSD, RAM Drive) per-node and shared home.
-
-As an build example scenario we will consider the following one:
-* MPI distribution is installed at '/opt/software/install-mpich'
-* Installation directory will be $HOME/xpn_bin
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "1. Install dependencies"                     as step1
-    state "2. Download the source code of XPN and mxml" as step2
-    state "3. Build Expand"                             as step3
-    [*] --> step1
-    step1 --> step2
-    step2 --> step3
-    step3 --> [*]
-```
-
-
-(1) Install dependencies:
-  ```
-  module available
-  module load icc
-  module load "impi/2017.4"
-  ```
-
-(2) Download the source code of XPN and mxml:
-  ```
-  mkdir $HOME/src
-  cd    $HOME/src
-  git clone https://github.com/michaelrsweet/mxml.git
-  git clone https://github.com/xpn-arcos/xpn.git
-  ```
-
-(3) To build Expand in this case you need to execute:
-  ```
-  cd $HOME/src;
-  ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
-  ```
 
