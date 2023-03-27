@@ -370,7 +370,7 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
                 return -1;
             }
 
-        //  mosquitto_int_option(mosqstr, MOSQ_OPT_TCP_NODELAY, 1);  // TODO: uncomment this line !!
+            mosquitto_int_option(mosqstr, MOSQ_OPT_TCP_NODELAY, 1);  // TODO: uncomment this line !!
             mosquitto_int_option(mosqstr, MOSQ_OPT_SEND_MAXIMUM, 65535);
 
 
@@ -880,6 +880,7 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
 
 ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, void * buffer, off_t offset, size_t size) {
     int ret, diff, cont;
+
     struct nfi_tcp_server_server * server_aux;
     struct nfi_tcp_server_fhandle * fh_aux;
     struct st_tcp_server_msg msg;
@@ -902,71 +903,139 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     debug_info("[NFI-TCP] nfi_tcp_server_write(ID=%s): begin off %d size %d\n", server_aux -> id, (int) offset, (int) size);
     fh_aux = (struct nfi_tcp_server_fhandle * ) fh -> priv_fh;
 
-    /************** LOCAL *****************/
-    if (server_aux -> params.locality) 
+    if (server_aux -> params.xpn_mosquitto_mode == 0)
     {
-        if (server_aux -> params.xpn_session) 
+        /************** LOCAL *****************/
+        if (server_aux -> params.locality) 
         {
-            real_posix_lseek(fh_aux -> fd, offset, SEEK_SET);
-            //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-            ret = real_posix_write(fh_aux -> fd, buffer, size);
-            //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+            if (server_aux -> params.xpn_session) 
+            {
+                real_posix_lseek(fh_aux -> fd, offset, SEEK_SET);
+                //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+                ret = real_posix_write(fh_aux -> fd, buffer, size);
+                //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-            debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fh_aux -> fd, (long int) offset, size, ret);
-        } else 
-        {
-            int fd;
+                debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fh_aux -> fd, (long int) offset, size, ret);
+            } else 
+            {
+                int fd;
 
-            fd = real_posix_open(fh_aux -> path, O_WRONLY); // WOS
-            if (fd < 0) {
+                fd = real_posix_open(fh_aux -> path, O_WRONLY); // WOS
+                if (fd < 0) {
+                    debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
+                    return -1;
+                }
+
+                real_posix_lseek(fd, offset, SEEK_SET);
+                //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+                ret = real_posix_write(fd, buffer, size);
+                //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+
+                debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fd, (long int) offset, size, ret);
+
+                real_posix_close(fd); // WOS
+            }
+
+            if (ret < 0) {
                 debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
                 return -1;
             }
-
-            real_posix_lseek(fd, offset, SEEK_SET);
-            //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-            ret = real_posix_write(fd, buffer, size);
-            //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-
-            debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fd, (long int) offset, size, ret);
-
-            real_posix_close(fd); // WOS
         }
+        /************** REMOTE ****************/
+        else 
+        {
+            // send write request
+            if (server_aux -> params.xpn_session) 
+            {
+                msg.type = TCP_SERVER_WRITE_FILE_WS;
+                msg.u_st_tcp_server_msg.op_write.fd = fh_aux -> fd;
+                printf("[NFI-TCP] write: -> fd     %d \n", msg.u_st_tcp_server_msg.op_write.fd);
+            } else 
+            {
+                msg.type = TCP_SERVER_WRITE_FILE_WOS;
+                memccpy(msg.u_st_tcp_server_msg.op_write.path, fh_aux -> path, 0, PATH_MAX - 1);
+                printf("[NFI-TCP] write: -> path   %s \n", msg.u_st_tcp_server_msg.op_write.path);
+            }
 
-        if (ret < 0) {
-            debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh -> url, (long int) offset, size, ret, errno);
-            return -1;
+            memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
+            msg.u_st_tcp_server_msg.op_write.offset = offset;
+            msg.u_st_tcp_server_msg.op_write.size = size;
+
+            debug_info("[NFI-TCP] write: -> offset %d \n", (int) msg.u_st_tcp_server_msg.op_write.offset);
+            debug_info("[NFI-TCP] write: -> size   %d \n", msg.u_st_tcp_server_msg.op_write.size);
+
+            ret = tcp_server_write_operation(server_aux -> params.server, & msg);
+            if (ret < 0) 
+            {
+                fprintf(stderr, "(1)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
+                return -1;
+            }
+
+            // write n times: ...
+            diff = size;
+            cont = 0;
+
+            // Max buffer size
+            int buffer_size = size;
+            if (buffer_size > MAX_BUFFER_SIZE) 
+            {
+                buffer_size = MAX_BUFFER_SIZE;
+            }
+
+            do 
+            {
+                int bytes_to_write = 0;
+
+                if( diff > buffer_size )        bytes_to_write = buffer_size;
+                else                            bytes_to_write = diff;
+
+                if (server_aux -> params.xpn_mosquitto_mode == 0)
+                {
+                    ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
+                }
+                /*#ifdef HAVE_MOSQUITTO_H
+                else                            //MQTT sending text
+                {
+                    printf("CLIENTE ESCRITURA - %s\n", fh_aux -> path);
+                    ret = mosquitto_publish(mosqstr, NULL, fh_aux -> path, bytes_to_write, (char * ) buffer + cont, 0, false);
+
+                    if(ret != MOSQ_ERR_SUCCESS)
+                    {
+                        fprintf(stderr, "Error publishing write: %s\n", mosquitto_strerror(ret));
+                        return -1;
+                    }
+                }
+                #endif*/
+                if (ret < 0) 
+                {
+                    fprintf(stderr, "(2)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
+                }
+
+                cont = cont + bytes_to_write; //Send bytes
+                diff = size - cont;
+
+            } while ((diff > 0) && (ret != 0));
+
+            ret = tcpClient_read_data(server_aux -> params.server, (char * ) & req, sizeof(struct st_tcp_server_write_req), msg.id);
+            if (ret < 0) 
+            {
+                fprintf(stderr, "(3)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
+                return -1;
+            }
+
+            debug_info("[NFI-TCP] nfi_tcp_server_write(ID=%s): write %s off %d size %d (err:%d).\n", server_aux -> id, fh -> url, (int) offset, (int) size, (int) req.size);
+            if (req.size < 0) 
+            {
+                fprintf(stderr, "ERROR: nfi_tcp_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n", server_aux -> id, fh -> url, (int) offset, (int) size, (int) req.size);
+                tcp_server_err(TCP_SERVERERR_WRITE);
+                return -1;
+            }
+
+            ret = cont;
         }
     }
-    /************** REMOTE ****************/
-    else 
+    else
     {
-        // send write request
-        if (server_aux -> params.xpn_session) 
-        {
-            msg.type = TCP_SERVER_WRITE_FILE_WS;
-            msg.u_st_tcp_server_msg.op_write.fd = fh_aux -> fd;
-            debug_info("[NFI-TCP] write: -> fd     %d \n", msg.u_st_tcp_server_msg.op_write.fd);
-        } else 
-        {
-            msg.type = TCP_SERVER_WRITE_FILE_WOS;
-            memccpy(msg.u_st_tcp_server_msg.op_write.path, fh_aux -> path, 0, PATH_MAX - 1);
-            debug_info("[NFI-TCP] write: -> path   %s \n", msg.u_st_tcp_server_msg.op_write.path);
-        }
-
-        memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
-        msg.u_st_tcp_server_msg.op_write.offset = offset;
-        msg.u_st_tcp_server_msg.op_write.size = size;
-
-        debug_info("[NFI-TCP] write: -> offset %d \n", (int) msg.u_st_tcp_server_msg.op_write.offset);
-        debug_info("[NFI-TCP] write: -> size   %d \n", msg.u_st_tcp_server_msg.op_write.size);
-
-        ret = tcp_server_write_operation(server_aux -> params.server, & msg);
-        if (ret < 0) 
-        {
-            fprintf(stderr, "(1)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
-            return -1;
-        }
 
         // write n times: ...
         diff = size;
@@ -982,26 +1051,24 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
         do 
         {
             int bytes_to_write = 0;
+            char *topic = malloc(strlen(fh_aux -> path) + sizeof(bytes_to_write) + sizeof(cont) + 3);
 
             if( diff > buffer_size )        bytes_to_write = buffer_size;
             else                            bytes_to_write = diff;
 
-            if (server_aux -> params.xpn_mosquitto_mode == 0)
-            {
-                ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
-            }
             #ifdef HAVE_MOSQUITTO_H
-            else                            //MQTT sending text
-            {
-                printf("CLIENTE ESCRITURA - %s\n", fh_aux -> path);
-                ret = mosquitto_publish(mosqstr, NULL, fh_aux -> path, bytes_to_write, (char * ) buffer + cont, 0, false);
 
-                if(ret != MOSQ_ERR_SUCCESS)
-                {
-                    fprintf(stderr, "Error publishing write: %s\n", mosquitto_strerror(ret));
-                    return -1;
-                }
+            sprintf(topic, "%s/%d/%d", fh_aux -> path, bytes_to_write, cont);
+            printf("CLIENTE ESCRITURA - %s - topic=%s\n", fh_aux -> path, topic);
+
+            ret = mosquitto_publish(mosqstr, NULL, topic, bytes_to_write, (char * ) buffer + cont, 1, false);
+
+            if(ret != MOSQ_ERR_SUCCESS)
+            {
+                fprintf(stderr, "Error publishing write: %s\n", mosquitto_strerror(ret));
+                return -1;
             }
+            
             #endif
             if (ret < 0) 
             {
@@ -1010,26 +1077,10 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 
             cont = cont + bytes_to_write; //Send bytes
             diff = size - cont;
-
+            free(topic);
         } while ((diff > 0) && (ret != 0));
-
-        ret = tcpClient_read_data(server_aux -> params.server, (char * ) & req, sizeof(struct st_tcp_server_write_req), msg.id);
-        if (ret < 0) 
-        {
-            fprintf(stderr, "(3)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
-            return -1;
-        }
-
-        debug_info("[NFI-TCP] nfi_tcp_server_write(ID=%s): write %s off %d size %d (err:%d).\n", server_aux -> id, fh -> url, (int) offset, (int) size, (int) req.size);
-        if (req.size < 0) 
-        {
-            fprintf(stderr, "ERROR: nfi_tcp_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n", server_aux -> id, fh -> url, (int) offset, (int) size, (int) req.size);
-            tcp_server_err(TCP_SERVERERR_WRITE);
-            return -1;
-        }
-
-        ret = cont;
     }
+
 
     DEBUG_END();
 
@@ -1085,9 +1136,10 @@ int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
         msg.type = TCP_SERVER_CLOSE_FILE_WS;
         memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
         msg.u_st_tcp_server_msg.op_close.fd = fh_aux -> fd;
+        memccpy(msg.u_st_tcp_server_msg.op_close.path, fh_aux -> path, 0, PATH_MAX - 1);
 
         nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (ret), sizeof(int));
-        debug_info("[NFI-TCP] nfi_tcp_server_close(ID=%s): close -> %d \n", server_aux -> id, msg.u_st_tcp_server_msg.op_close.fd);
+        printf("[NFI-TCP] nfi_tcp_server_close(ID=%s): close -> %d\n", server_aux -> id, msg.u_st_tcp_server_msg.op_close.fd);
     }
 
     // free memory

@@ -1,0 +1,16 @@
+
+open-write-close:135205 terminated with signal 11 at PC=7f9a2619d97d SP=7ffd9c53a9a8.  Backtrace:
+/lib/x86_64-linux-gnu/libc.so.6(+0x19d97d)[0x7f9a2619d97d]
+/lib/x86_64-linux-gnu/libc.so.6(+0x76db1)[0x7f9a26076db1]
+/lib/x86_64-linux-gnu/libc.so.6(+0x81a09)[0x7f9a26081a09]
+/lib/x86_64-linux-gnu/libc.so.6(__sprintf_chk+0xb1)[0x7f9a26134be1]
+./open-write-close(+0x102bf)[0x55ce842cb2bf]
+./open-write-close(+0xd7c9)[0x55ce842c87c9]
+./open-write-close(+0x17281)[0x55ce842d2281]
+./open-write-close(+0xdac5)[0x55ce842c8ac5]
+./open-write-close(+0x9315)[0x55ce842c4315]
+./open-write-close(+0x98d5)[0x55ce842c48d5]
+./open-write-close(+0x2cd3)[0x55ce842bdcd3]
+/lib/x86_64-linux-gnu/libc.so.6(+0x29d90)[0x7f9a26029d90]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x80)[0x7f9a26029e40]
+./open-write-close(+0x2d95)[0x55ce842bdd95]

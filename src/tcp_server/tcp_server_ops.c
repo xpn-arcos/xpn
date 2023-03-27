@@ -314,8 +314,6 @@ int tcp_server_do_operation(struct st_th * th, int * the_end)
 // File API
 //
 
-// MOSQUITTO FILE
-
 
 
 
@@ -323,9 +321,32 @@ int tcp_server_do_operation(struct st_th * th, int * the_end)
 void tcp_server_op_open_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) // WS - With Session
 {
     int fd;
-    char * s;
+    char *extra = "/#";
+    char *s = malloc(strlen(head -> u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
+    strcpy(s, head -> u_st_tcp_server_msg.op_open.path);
+    strcat(s, extra);
+    
+    //s = head -> u_st_tcp_server_msg.op_open.path;
 
-    s = head -> u_st_tcp_server_msg.op_open.path;
+    /*
+     *      MOSQUITTO OPEN FILE
+     */
+    int rc = 0;
+    if ( params -> mosquitto_mode == 1 )
+    {
+        #ifdef HAVE_MOSQUITTO_H
+        printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, s);
+
+        rc = mosquitto_subscribe(mosqtcpserver, NULL, s, 0);
+        if(rc != MOSQ_ERR_SUCCESS)
+        {
+            fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
+            mosquitto_disconnect(mosqtcpserver);
+        }
+
+        printf("[%d]\tEND OPEN MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, s);
+        #endif
+    }
 
     // do open
     fd = filesystem_open(s, O_RDWR);
@@ -333,15 +354,20 @@ void tcp_server_op_open_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
     tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", params -> srv_name, s, fd);
+    debug_info("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 }
+
+
 
 void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) //WOS - Without Session
 {
     int fd;
-    char * s;
+    char *extra = "/#";
+    char *s = malloc(strlen(head -> u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
+    strcpy(s, head -> u_st_tcp_server_msg.op_open.path);
+    strcat(s, extra);
 
-    s = head -> u_st_tcp_server_msg.op_open.path;
+    //s = head -> u_st_tcp_server_msg.op_open.path;
 
 
 
@@ -352,7 +378,7 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
     if ( params -> mosquitto_mode == 1 )
     {
         #ifdef HAVE_MOSQUITTO_H
-        printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
+        printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, s);
 
         rc = mosquitto_subscribe(mosqtcpserver, NULL, s, 0);
         if(rc != MOSQ_ERR_SUCCESS)
@@ -361,42 +387,51 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
             mosquitto_disconnect(mosqtcpserver);
         }
 
-        printf("[%d]\tEND OPEN MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
+        printf("[%d]\tEND OPEN MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, s);
+        #endif
+    }
+    
+    // do open
+    fd = filesystem_open(s, O_RDWR);
 
-        printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER\n\n", __LINE__);
+    tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
-        rc = mosquitto_unsubscribe(mosqtcpserver, NULL, s);
+    filesystem_close(fd);
+    
+
+    // show debug info
+    printf("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+
+}
+
+
+
+void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
+{
+    int fd, rc;
+    char *extra = "/#";
+    char *s = malloc(strlen(head -> u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
+    strcpy(s, head -> u_st_tcp_server_msg.op_creat.path);
+    strcat(s, extra);
+
+    //s = head -> u_st_tcp_server_msg.op_creat.path;
+
+    if ( params -> mosquitto_mode == 1 )
+    {
+        #ifdef HAVE_MOSQUITTO_H
+        printf("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, s);
+
+        rc = mosquitto_subscribe(mosqtcpserver, NULL, s, 0);
+
         if(rc != MOSQ_ERR_SUCCESS)
         {
             fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
             mosquitto_disconnect(mosqtcpserver);
         }
 
-        printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
-        tcp_server_comm_write_data(params, sd, (char * ) & rc, sizeof(int), rank_client_id);
+        printf("[%d]\tEND CREAT MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, s);
         #endif
     }
-    else
-    {
-        // do open
-        fd = filesystem_open(s, O_RDWR);
-
-        tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
-
-        filesystem_close(fd);
-    }
-
-    // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", params -> srv_name, s, fd);
-
-}
-
-void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
-{
-    int fd;
-    char * s;
-
-    s = head -> u_st_tcp_server_msg.op_creat.path;
 
     // do creat
     fd = filesystem_creat(s, 0770); // TODO: tcp_server_op_creat don't use 'mode' from client ?
@@ -408,15 +443,20 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", params -> srv_name, s, fd);
+    printf("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 }
+
+
 
 void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
     int fd;
-    char * s;
+    char *extra = "/#";
+    char *s = malloc(strlen(head -> u_st_tcp_server_msg.op_creat.path) + strlen(extra) + 1);
+    strcpy(s, head -> u_st_tcp_server_msg.op_creat.path);
+    strcat(s, extra);
 
-    s = head -> u_st_tcp_server_msg.op_creat.path;
+    //s = head -> u_st_tcp_server_msg.op_creat.path;
 
     // do creat
     fd = filesystem_creat(s, 0770); // TODO: tcp_server_op_creat don't use 'mode' from client ?
@@ -429,34 +469,28 @@ void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp
 
     #ifdef HAVE_MOSQUITTO_H
 
-    printf("[%d]\tBEGIN CREATE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
+    printf("[%d]\tBEGIN CREATE MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, s);
 
     int rc;
 
-    rc = mosquitto_subscribe(mosqtcpserver, NULL, s, 0);
+    rc = mosquitto_subscribe(mosqtcpserver, NULL, s, 1);
+
     if(rc != MOSQ_ERR_SUCCESS){
         fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
         mosquitto_disconnect(mosqtcpserver);
     }
 
-    printf("[%d]\tEND CREATE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
-    printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER\n\n", __LINE__);
-
-    rc = mosquitto_unsubscribe(mosqtcpserver, NULL, s);
-    if(rc != MOSQ_ERR_SUCCESS){
-        fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-        mosquitto_disconnect(mosqtcpserver);
-    }
-
-    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
+    printf("[%d]\tEND CREATE MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, s);
+    
 
     #endif
 
     filesystem_close(fd);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", params -> srv_name, s, fd);
+    printf("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 }
+
 
 
 void tcp_server_op_read_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -604,52 +638,56 @@ void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 
 void tcp_server_op_write_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
-    struct st_tcp_server_write_req req;
-    char * buffer;
-    int size, diff, cont, to_write;
+    printf("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
+    if( params -> mosquitto_mode == 0 )
+    {
+        struct st_tcp_server_write_req req;
+        char * buffer;
+        int size, diff, cont, to_write;
 
-    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
+        debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
 
-    // initialize counters
-    cont = 0;
-    size = (head -> u_st_tcp_server_msg.op_write.size);
-    if (size > MAX_BUFFER_SIZE) {
-        size = MAX_BUFFER_SIZE;
-    }
-    diff = head -> u_st_tcp_server_msg.op_read.size - cont;
-
-    // malloc a buffer of size...
-    buffer = (char * ) malloc(size);
-    if (NULL == buffer) {
-        req.size = -1; // TODO: check in client that -1 is treated properly... :-)
-        tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_write_req), rank_client_id);
-        return;
-    }
-
-    // loop...
-    do {
-        if (diff > size) to_write = size;
-        else to_write = diff;
-
-        // read data from TCP and write into the file
-        tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
-        filesystem_lseek(head -> u_st_tcp_server_msg.op_write.fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
-        //sem_wait(&disk_sem);
-        req.size = filesystem_write(head -> u_st_tcp_server_msg.op_write.fd, buffer, to_write);
-        //sem_post(&disk_sem);
-
-        // update counters
-        cont = cont + req.size; // Received bytes
+        // initialize counters
+        cont = 0;
+        size = (head -> u_st_tcp_server_msg.op_write.size);
+        if (size > MAX_BUFFER_SIZE) {
+            size = MAX_BUFFER_SIZE;
+        }
         diff = head -> u_st_tcp_server_msg.op_read.size - cont;
 
-    } while ((diff > 0) && (req.size != 0));
+        // malloc a buffer of size...
+        buffer = (char * ) malloc(size);
+        if (NULL == buffer) {
+            req.size = -1; // TODO: check in client that -1 is treated properly... :-)
+            tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_write_req), rank_client_id);
+            return;
+        }
 
-    // write to the client the status of the write operation
-    req.size = cont;
-    tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_write_req), rank_client_id);
+        // loop...
+        do {
+            if (diff > size) to_write = size;
+            else to_write = diff;
 
-    // free buffer
-    FREE_AND_NULL(buffer);
+            // read data from TCP and write into the file
+            tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
+            filesystem_lseek(head -> u_st_tcp_server_msg.op_write.fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
+            //sem_wait(&disk_sem);
+            req.size = filesystem_write(head -> u_st_tcp_server_msg.op_write.fd, buffer, to_write);
+            //sem_post(&disk_sem);
+
+            // update counters
+            cont = cont + req.size; // Received bytes
+            diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+
+        } while ((diff > 0) && (req.size != 0));
+
+        // write to the client the status of the write operation
+        req.size = cont;
+        tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_write_req), rank_client_id);
+
+        // free buffer
+        FREE_AND_NULL(buffer);
+    }
 
     // for debugging purpouses
     debug_info("[TCP-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
@@ -659,32 +697,6 @@ void tcp_server_op_write_ws(tcp_server_param_st * params, int sd, struct st_tcp_
 
 void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
-    #ifdef HAVE_MOSQUITTO_H
-    int rc ;
-
-    if ( params -> mosquitto_mode == 1 )
-    {
-            // MOSQUITTO OPEN (SUBSCRIBE)
-
-	    printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, head -> u_st_tcp_server_msg.op_write.path);
-
-	    rc = mosquitto_subscribe(mosqtcpserver, NULL, head -> u_st_tcp_server_msg.op_write.path, 0);
-	    if (rc != MOSQ_ERR_SUCCESS)
-	    {
-		fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-		mosquitto_disconnect(mosqtcpserver);
-	    }
-
-	    printf("[%d]\tEND OPEN MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, head -> u_st_tcp_server_msg.op_write.path);
-
-	    //mosquitto_message_callback_set(mosqtcpserver, on_message);
-
-            tcp_server_comm_write_data(params, sd, (char * ) & rc, sizeof(int), rank_client_id);
-    }
-    #endif
-
-    printf("%d\n", params -> mosquitto_mode);
-
     if( params -> mosquitto_mode == 0 )
     {
 
@@ -766,11 +778,11 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     }
 
     #ifdef HAVE_MOSQUITTO_H
-    printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER\n\n", __LINE__);
+    printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
 
-    ret = mosquitto_unsubscribe(mosqtcpserver, NULL, head -> u_st_tcp_server_msg.op_write.path);
+    ret = mosquitto_unsubscribe(mosqtcpserver, NULL, head -> u_st_tcp_server_msg.op_close.path);
 
-    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, head -> u_st_tcp_server_msg.op_write.path);
+    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, head -> u_st_tcp_server_msg.op_close.path);
     #endif
 
     // do close
@@ -782,7 +794,7 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) CLOSE(fd=%d)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_close.fd);
+    debug_info("[TCP-SERVER-OPS] (ID=%s) CLOSE(fd=%d, path=%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_close.fd, head -> u_st_tcp_server_msg.op_close.path);
 }
 
 
@@ -842,11 +854,10 @@ void tcp_server_op_getattr(tcp_server_param_st * params, int sd, struct st_tcp_s
     // do getattr
     s = head -> u_st_tcp_server_msg.op_getattr.path;
     req.status = filesystem_stat(s, & req.attr);
-
     tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_attr_req), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_getattr.path);
+    printf("[TCP-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_getattr.path);
 }
 
 
