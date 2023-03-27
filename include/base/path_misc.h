@@ -20,15 +20,13 @@
    */
 
 
-#ifndef _URLSTR_H
-#define _URLSTR_H
-
+ #ifndef _PATH_MISC_H_
+ #define _PATH_MISC_H_
 
    /* ... Include / Inclusion ........................................... */
 
       #include "all_system.h"
-      #include "string_misc.h"
-      #include "path_misc.h"
+      #include "base/string_misc.h"
 
 
  #ifdef  __cplusplus
@@ -38,27 +36,36 @@
 
    /* ... Functions / Funciones ......................................... */
 
-      int    URLSTR_ParseURL 
-      (
-         /*IN */ char  *urlstr,
-          /*OUT*/ char **protocol,
-          /*OUT*/ char **user,
-          /*OUT*/ char **machine,
-          /*OUT*/ int   *port,
-          /*OUT*/ char **file,
-          /*OUT*/ char **relative,
-          /*OUT*/ char **params
-      ) ;
-      /* - Fill 'url' with information from 'str' string. */
-      /* - Rellena 'url' con la informacion de 'str'.  */
+      int hash (char *file,int nServ) ;
+
+      int getFirstDir   ( char *dir, char *path) ;
+      int getSizeFactor ( char *name ) ;
+   
+      /* get the last name of a path and erase the file name */
+      int getNameFile(char *file, char *dir);
+
+      /* get the first name of the path and erase the part name */
+      int getNamePart(char *part, char *dir);
+
+      /* erase the initial dir used in the url */
+      int getDirWithURL(char *url, char *dir);
+
+
+      // TODO: move into urlstr.h ????
+      int ParseURL(   char *url,  
+      		      char *protocol, 
+		      char *login, 
+		      char *passwd, 
+		      char *server,  
+		      char *port,  
+		      char *dir);
 
 
   /* .................................................................... */
 
-
- #ifdef  __cplusplus
+#ifdef  __cplusplus
     }
  #endif
 
-#endif
+ #endif /* _PATH_MISC_H */
 

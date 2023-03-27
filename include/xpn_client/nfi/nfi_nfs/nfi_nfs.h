@@ -2,7 +2,7 @@
 #define _NFI_NFS_H
 
 #include "all_system.h"
-#include "base/string_misc.h"
+#include "base/path_misc.h"
 #include "nfi/nfi.h"
 #include "nfi/nfi_nfs/nfs.h"
 #include "nfi/nfi_nfs/nfi_nfs_err.h"

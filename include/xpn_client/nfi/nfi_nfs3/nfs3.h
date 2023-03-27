@@ -7,7 +7,7 @@
 #define _NFS3_PROT_H_RPCGEN
 
 #include "all_system.h"
-#include "base/string_misc.h"
+#include "base/path_misc.h"
 
 #define NFS3_TCP	1
 #define NFS3_UDP	0

@@ -37,7 +37,7 @@
       #endif
 
       #ifndef TCP_SERVER_FILE_DEFAULT
-      #define TCP_SERVER_FILE_DEFAULT "/etc/xpn/tcp_server.dns"
+      #define TCP_SERVER_FILE_DEFAULT "/tmp/tcp_server.dns"
       #endif
 
       #ifndef MAX_TCP_SERVER_NODES

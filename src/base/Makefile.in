@@ -148,6 +148,7 @@ am__objects_1 = @top_srcdir@/src/base/darray.$(OBJEXT) \
 	@top_srcdir@/src/base/trace_msg.$(OBJEXT) \
 	@top_srcdir@/src/base/debug_msg.$(OBJEXT) \
 	@top_srcdir@/src/base/string_misc.$(OBJEXT) \
+	@top_srcdir@/src/base/path_misc.$(OBJEXT) \
 	@top_srcdir@/src/base/time_misc.$(OBJEXT) \
 	@top_srcdir@/src/base/urlstr.$(OBJEXT) \
 	@top_srcdir@/src/base/ns.$(OBJEXT) \
@@ -180,6 +181,7 @@ am__depfiles_remade = @top_srcdir@/src/base/$(DEPDIR)/darray.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/filesystem.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/math_misc.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/ns.Po \
+	@top_srcdir@/src/base/$(DEPDIR)/path_misc.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/string_misc.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/syscall_proxies.Po \
 	@top_srcdir@/src/base/$(DEPDIR)/time_misc.Po \
@@ -358,6 +360,7 @@ BASE_HEADER = @top_srcdir@/include/base/base_lib.h \
 				@top_srcdir@/include/base/dtable.h \
 				@top_srcdir@/include/base/math_misc.h \
 				@top_srcdir@/include/base/string_misc.h \
+				@top_srcdir@/include/base/path_misc.h \
 				@top_srcdir@/include/base/time_misc.h \
 				@top_srcdir@/include/base/trace_msg.h \
 				@top_srcdir@/include/base/trace_tags.h \
@@ -376,6 +379,7 @@ BASE_SOURCE = @top_srcdir@/src/base/darray.c \
 				@top_srcdir@/src/base/trace_msg.c \
 				@top_srcdir@/src/base/debug_msg.c \
 				@top_srcdir@/src/base/string_misc.c \
+				@top_srcdir@/src/base/path_misc.c \
 				@top_srcdir@/src/base/time_misc.c \
 				@top_srcdir@/src/base/urlstr.c \
 				@top_srcdir@/src/base/ns.c \
@@ -478,6 +482,9 @@ clean-libLIBRARIES:
 @top_srcdir@/src/base/string_misc.$(OBJEXT):  \
 	@top_srcdir@/src/base/$(am__dirstamp) \
 	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
+@top_srcdir@/src/base/path_misc.$(OBJEXT):  \
+	@top_srcdir@/src/base/$(am__dirstamp) \
+	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
 @top_srcdir@/src/base/time_misc.$(OBJEXT):  \
 	@top_srcdir@/src/base/$(am__dirstamp) \
 	@top_srcdir@/src/base/$(DEPDIR)/$(am__dirstamp)
@@ -524,6 +531,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/filesystem.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/math_misc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/ns.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/path_misc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/string_misc.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/syscall_proxies.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@@top_srcdir@/src/base/$(DEPDIR)/time_misc.Po@am__quote@ # am--include-marker
@@ -715,6 +723,7 @@ distclean: distclean-am
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/filesystem.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/math_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/ns.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/path_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/string_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/time_misc.Po
@@ -776,6 +785,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/filesystem.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/math_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/ns.Po
+	-rm -f @top_srcdir@/src/base/$(DEPDIR)/path_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/string_misc.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/syscall_proxies.Po
 	-rm -f @top_srcdir@/src/base/$(DEPDIR)/time_misc.Po
