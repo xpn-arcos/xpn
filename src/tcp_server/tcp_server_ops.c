@@ -777,12 +777,17 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
         return;
     }
 
+    char *extra = "/#";
+    char *s = malloc(strlen(head -> u_st_tcp_server_msg.op_close.path) + strlen(extra) + 1);
+    strcpy(s, head -> u_st_tcp_server_msg.op_close.path);
+    strcat(s, extra);
+
     #ifdef HAVE_MOSQUITTO_H
     printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
 
-    ret = mosquitto_unsubscribe(mosqtcpserver, NULL, head -> u_st_tcp_server_msg.op_close.path);
+    ret = mosquitto_unsubscribe(mosqtcpserver, NULL, s);
 
-    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, head -> u_st_tcp_server_msg.op_close.path);
+    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, s);
     #endif
 
     // do close
