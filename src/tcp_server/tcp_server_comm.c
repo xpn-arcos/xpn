@@ -134,7 +134,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
 
 	    mosquitto_int_option(mosqtcpserver, MOSQ_OPT_TCP_NODELAY, 1);
 
-	    int rc = mosquitto_connect(mosqtcpserver, "localhost", 1886, 0);
+	    int rc = mosquitto_connect(mosqtcpserver, "localhost", 1883, 0);
 	    if( rc != MOSQ_ERR_SUCCESS )
 	    {
     	    mosquitto_destroy(mosqtcpserver);
@@ -215,6 +215,7 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
 	    
         debug_info("[%d]\tBEGIN DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
         mosquitto_lib_cleanup();
+        mosquitto_loop_stop(mosqtcpserver, true);
         debug_info("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
 	
     }

@@ -333,6 +333,7 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
     ret = nfiworker_init(serv);
 
     ret = nfi_tcp_server_connect(serv, url, prt, server, dir);
+    printf("\n[%d]\ŧ%s %s\n", __LINE__, url, server_aux -> params.server_name);
     if (ret < 0) {
         FREE_AND_NULL(serv -> ops);
         FREE_AND_NULL(server_aux);
@@ -374,7 +375,7 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
             mosquitto_int_option(mosqstr, MOSQ_OPT_SEND_MAXIMUM, 65535);
 
 
-            rc = mosquitto_connect(mosqstr, "localhost", 1886, 0);
+            rc = mosquitto_connect(mosqstr, server_aux -> params.server_name, 1883, 0);
 
             if(rc != MOSQ_ERR_SUCCESS)
             {
@@ -453,6 +454,8 @@ int nfi_tcp_server_destroy(struct nfi_server * serv) {
     return 0;
 }
 
+
+
 /*********************************************************
  * Connect to the server                                 *
  * *******************************************************/
@@ -485,6 +488,8 @@ int nfi_tcp_server_connect(struct nfi_server * serv, __attribute__((__unused__))
     return 0;
 }
 
+
+
 /************************************************************
  * Disconnect to the server                                 *
  * **********************************************************/
@@ -516,6 +521,8 @@ int nfi_tcp_server_disconnect(struct nfi_server * serv) {
     // return OK
     return 0;
 }
+
+
 
 /************************************************************
  * Reconnect to the MPI server                              *
@@ -649,6 +656,8 @@ int nfi_tcp_server_open(struct nfi_server * serv, char * url, struct nfi_fhandle
     return 0;
 }
 
+
+
 int nfi_tcp_server_create(struct nfi_server * serv, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) {
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
@@ -757,6 +766,8 @@ int nfi_tcp_server_create(struct nfi_server * serv, char * url, struct nfi_attr 
 
     return 0;
 }
+
+
 
 ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, void * buffer, off_t offset, size_t size) {
     int ret, cont, diff;
@@ -878,6 +889,8 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
     return ret;
 }
 
+
+
 ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, void * buffer, off_t offset, size_t size) {
     int ret, diff, cont;
 
@@ -989,23 +1002,8 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
                 if( diff > buffer_size )        bytes_to_write = buffer_size;
                 else                            bytes_to_write = diff;
 
-                if (server_aux -> params.xpn_mosquitto_mode == 0)
-                {
-                    ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
-                }
-                /*#ifdef HAVE_MOSQUITTO_H
-                else                            //MQTT sending text
-                {
-                    printf("CLIENTE ESCRITURA - %s\n", fh_aux -> path);
-                    ret = mosquitto_publish(mosqstr, NULL, fh_aux -> path, bytes_to_write, (char * ) buffer + cont, 0, false);
-
-                    if(ret != MOSQ_ERR_SUCCESS)
-                    {
-                        fprintf(stderr, "Error publishing write: %s\n", mosquitto_strerror(ret));
-                        return -1;
-                    }
-                }
-                #endif*/
+                ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
+                
                 if (ret < 0) 
                 {
                     fprintf(stderr, "(2)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
