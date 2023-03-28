@@ -32,16 +32,24 @@
   #include <dirent.h>
   #include "mpi.h"
 
+
 /* ... Const / Const ................................................. */
 
+  #ifndef _LARGEFILE_SOURCE
   #define _LARGEFILE_SOURCE
+  #endif
+
+  #ifndef _FILE_OFFSET_BITS
   #define _FILE_OFFSET_BITS 64
+  #endif
+
   #define MIN(a,b) (((a)<(b))?(a):(b))
   #define HEADER_SIZE (0)
 
   char command[4*1024];
   char src_path [PATH_MAX+5];
   char dest_path [PATH_MAX+5];
+
 
 /* ... Functions / Funciones ......................................... */
 
