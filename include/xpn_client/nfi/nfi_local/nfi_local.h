@@ -34,6 +34,7 @@
     #include "all_system.h"
     #include "base/filesystem.h"
     #include "base/path_misc.h"
+    #include "base/urlstr.h"
     #include "nfi/nfi.h"
     #include "nfi/nfi_local/nfi_local_err.h"
     #include "nfi_worker.h"
