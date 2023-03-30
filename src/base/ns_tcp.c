@@ -37,6 +37,8 @@ char * ns_tcp_get_hostname(void) {
     return ip;
 }
 
+
+
 int ns_tcp_publish(char * dns_file, char * param_srv_name, char * host_name, char * port_name) {
     int ret;
     FILE * dns_fd;
@@ -59,6 +61,8 @@ int ns_tcp_publish(char * dns_file, char * param_srv_name, char * host_name, cha
     fclose(dns_fd);
     return 0;
 }
+
+
 
 int ns_tcp_unpublish(char * dns_file, char * serv_name) {
     FILE * dns_fd;
@@ -111,6 +115,8 @@ int ns_tcp_unpublish(char * dns_file, char * serv_name) {
 
     return 0;
 }
+
+
 
 int ns_tcp_lookup(char * param_srv_name, char * host_name, char * port_name) {
     int found = 0;

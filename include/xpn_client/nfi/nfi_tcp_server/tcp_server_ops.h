@@ -101,6 +101,7 @@
 
   struct st_tcp_server_close{
     int fd;
+    char path[PATH_MAX];
   };
 
   struct st_tcp_server_rm{

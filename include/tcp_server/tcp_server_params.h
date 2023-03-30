@@ -58,7 +58,13 @@
 
     // server configuration
     int thread_mode;
+
+    //mqtt configuration
     int mosquitto_mode;
+
+    #ifdef HAVE_MOSQUITTO_H
+    struct mosquitto * mqtt;
+    #endif
 
     //Semaphore for clients
     char sem_name_server [PATH_MAX];
