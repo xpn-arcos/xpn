@@ -478,7 +478,8 @@
     return ret;
   }
 
-  /*int __open_2(const char *path, int flags, ...)
+#if (HAVE_ICC == none)
+  int __open_2(const char *path, int flags, ...)
   {
     int fd, ret;
     va_list ap;
@@ -522,7 +523,8 @@
 
     debug_info("[bypass] << After __open_2.... %s\n", path);
     return ret;
-  }*/
+  }
+#endif  
 
 
   int creat(const char *path, mode_t mode)

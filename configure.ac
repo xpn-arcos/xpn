@@ -32,6 +32,7 @@ AM_PROG_AR
 AC_PROG_MAKE_SET
 AC_PROG_CC([gcc mpicc icc mpifcc])
 AM_PROG_CC_C_O
+AC_CHECK_PROGS([HAVE_ICC], [icc], [none])
 
 #
 # Checks for libraries.
