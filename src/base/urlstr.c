@@ -27,353 +27,288 @@
 
    /* ... Functions / Funciones ......................................... */
 
-      char *URLSTR_protocols[] = 
-               {
-                 "http",
-                 "ftp",
-                 "file",
-                 "tcp_server",
-                 "mpi_server",
-                 NULL
-               } ;
 
 
    /* ... Functions / Funciones ......................................... */
 
-      int       URLSTR_Match_protocol    ( char    **protocol, char    **str )
+      int getURLProtocol(char *url, char *protocol)
       {
-        int i, ret ;
+      	int i,j;
 
-        for (i=0; URLSTR_protocols[i] != NULL; i++)
-        {
-              ret = strncmp( (*str), URLSTR_protocols[i], strlen(URLSTR_protocols[i]) ) ;
-              if (ret == 0)
-              {
-                   (*protocol) =          STRING_MISC_StrDup(URLSTR_protocols[i]) ;
-                   (*str)      = (*str) + STRING_MISC_StrLen(URLSTR_protocols[i]) ;
-                   if ( (**str) == ':' )
-                        (*str) ++ ;
-                   if ( (**str) == '/' )
-                        (*str) ++ ;
-                   if ( (**str) == '/' )
-                        (*str) ++ ;
-                   return (1) ;
-              }
+      	if (url == NULL) {
+           printf("[%s:%d] ERROR: url is NULL\n", __FILE__, __LINE__);
+      	   return -1;
+      	}
+
+        // find ':'
+        i = 0;
+      	while ((url[i] != '\0')&&(url[i] != ':'))  {
+          i++;
         }
+        j = i;
 
-        (*protocol) = STRING_MISC_StrDup("http") ;
-        return (1) ;
+      	if (url[i] != ':') {
+          printf("[%s:%d] ERROR: missing ':' within the url.\n", __FILE__, __LINE__);
+          printf("Usage: protocol_name://server:port//dir\n");
+      	  return -1;
+      	}
+
+      	i++;
+      	if (url[i] != '/') {
+          printf("[%s:%d] ERROR: missing first '/' within the url.\n", __FILE__, __LINE__);
+          printf("Usage: protocol_name://server:port//dir\n");
+      	  return -1;
+      	}
+
+      	i++;
+      	if (url[i] != '/') {
+          printf("[%s:%d] ERROR: missing second '/' within the url.\n", __FILE__, __LINE__);
+          printf("Usage: protocol_name://server:port//dir\n");
+      	  return -1;
+      	}
+
+      	i++;
+      	if (protocol != NULL) {
+      	  strncpy(protocol, url, j);
+      	  protocol[j] = '\0';
+      	}
+
+      	return i;
       }
 
 
-      int       URLSTR_Match_user     (  char    **user, char    **str )
+      int getURLServer(char *url, char *server)
       {
-        char *pch ;
+      	int i,j;
 
-        pch = strchr((*str), '@') ;
-        if (pch == NULL) {
-             return (1) ;
+      	i = getURLProtocol(url, NULL) ;
+      	if (i < 0) {
+      	   return -1;
+      	}
+
+      	j = i;
+      	while ((url[j]!='\0')&&(url[j]!=':')&&(url[j]!='/')) {
+      	   j++;
 	}
 
-        pch[0] = '\0' ;
-        (*user) = STRING_MISC_StrDup((*str)) ;
-        (*str) = pch + 1 ;
-        return (1) ;
+      	if (server != NULL) {
+     	   strncpy(server, url+i, j-i);
+      	   server[j-i] = '\0';
+      	}
+
+      	return j;
       }
 
 
-      int       URLSTR_Match_machine  (  char    **machine, char     *protocol, char    **str )
+      int getURLPort ( char *url, char *port )
       {
-        char *pch1, *pch2 ;
+      	int i, j;
 
-        (*machine) = NULL ;
+      	i=getURLServer(url, NULL) ;
+      	if (i < 0) {
+      		return -1;
+      	}
 
-        /* 
-         *  file
-         */
-        if ( STRING_MISC_Equal(protocol,"file")  )
-        {
-             int ret ;
+      	if (url[i] != ':') {
+      		return -1;
+      	}
 
-             (*machine) = STRING_MISC_StrDup("localhost") ;
-             ret = strncmp((*str),"localhost",strlen("localhost")) ;
-             if (ret == 0)
-                 (*str) = (*str) + strlen("localhost") ;
-             return (1) ;
-        }
-
-        /* 
-         *  http || ftp 
-         */
-        pch1 = strchr((*str),'/') ;
-        pch2 = strchr((*str),':') ;
-        if (pch2 == NULL)
-           {
-             if (pch1 == NULL)
-                {
-                  (*machine) = STRING_MISC_StrDup((*str)) ;
-                  (*str) = (*str) + STRING_MISC_StrLen((*str)) ;
-                  return (1) ;
-                }
-	     else // if (pch1 != NULL)
-                {
-                  pch1[0] = '\0' ;
-                  (*machine) = STRING_MISC_StrDup((*str)) ;
-                  (*str) = pch1 ;
-                  pch1[0] = '/' ;
-                  return (1) ;
-                }
-           }
-	else // if (pch2 != NULL)
-           {
-             pch2[0] = '\0' ;
-             (*machine) = STRING_MISC_StrDup((*str)) ;
-             pch2[0] = ':' ;
-             (*str) = pch2 ;
-             return (1) ;
-           }
-
-        return (1) ;
-      }
-
-
-      int       URLSTR_Match_port     (  int      *port, char     *protocol, char     **str )
-      {
-        char *pch1, *pch2 ;
-
-        /* ... default port ... */
-        (*port) = htons(80) ;
-        if (STRING_MISC_Equal(protocol,"http") )
-            (*port) = htons(80) ;
-        if (STRING_MISC_Equal(protocol,"ftp") )
-            (*port) = htons(21) ;
-        if (STRING_MISC_Equal(protocol,"file") )
-            (*port) = htons(0) ;
-        if (STRING_MISC_Equal(protocol,"nntp") )
-            (*port) = htons(119) ;
-        if (STRING_MISC_Equal(protocol,"news") )
-            (*port) = htons(119) ;
-        if (STRING_MISC_Equal(protocol,"pop3") )
-            (*port) = htons(110) ;
-        if (STRING_MISC_Equal(protocol,"finger") )
-            (*port) = htons(79) ;
-
-        /* ... scanning port ... */
-        /* 
-           file
-        */
-        if (STRING_MISC_Equal(protocol,"file") )
-            return (1) ;
-
-        /* 
-           http || ftp 
-        */
-        pch1 = strchr((*str),':') ;
-        if (pch1 == NULL)
-           {
-             return (1) ;
-           }
-        pch1 ++ ; /* skip ':' */
-        pch2 = strchr(pch1,'/') ;
-        if (pch2 == NULL)
-           {
-             (*port) = htons(atoi(pch1)) ;
-             (*str)  = (*str) + STRING_MISC_StrLen((*str)) ;
-             return (1) ;
-           }
-	else // if (pch2 != NULL)
-           {
-             pch2[0] = '\0' ;
-             (*port) = htons(atoi(pch1)) ;
-             pch2[0] = '/' ;
-             (*str)  = pch2 ;
-             return (1) ;
-           }
-
-        return (1) ;
-      }
-
-
-      int       URLSTR_Match_file     (  char    **file, char    **str )
-      {
-        char *pch1 ;
-
-        pch1 = strchr((*str),'#') ;
-        if (pch1 != NULL)
-           {
-             pch1[0] = '\0' ;
-             (*file) = STRING_MISC_StrDup((*str)) ;
-             (*str)  = (*str) + STRING_MISC_StrLen(pch1) ;
-             pch1[0] = '#' ;
-             return (1) ;
-           }
-
-        pch1 = strchr((*str),'?') ;
-        if (pch1 != NULL)
-           {
-             pch1[0] = '\0' ;
-             (*file) = STRING_MISC_StrDup((*str)) ;
-             pch1[0] = '?' ;
-             (*str)  = pch1 ;
-             return (1) ;
-           }
-
-        /* ... all is file ... */
-        if ((*str)[0] != '\0')
-           {
-             (*file) = STRING_MISC_StrDup((*str)) ;
-             (*str)  = (*str) + STRING_MISC_StrLen((*str)) ;
-             return (1) ;
-           }
-
-        (*file) = STRING_MISC_StrDup("/") ;
-        return (1) ;
-      }
-
-
-      int       URLSTR_Match_relative (  char     **relative, char     **str )
-      {
-        char *pch1, *pch2 ;
-
-        (*relative) = NULL ;
-        pch1 = strchr((*str),'#') ;
-        if (pch1 == NULL)
-             return (1) ;
-
-        pch1 ++ ; /* skip '#' */
-        pch2 = strchr(pch1,'?') ;
-        if (pch2 == NULL)
-           {
-             (*relative) = STRING_MISC_StrDup((*str)) ;
-             (*str)      = (*str) + STRING_MISC_StrLen((*str)) ;
-             return (1) ;
-           }
-
-        if (pch2 != NULL)
-           {
-             pch2[0]     = '\0' ;
-             (*relative) = STRING_MISC_StrDup(pch1) ;
-             (*str)      = pch2 ;
-             pch2[0]     = '?' ;
-             return (1) ;
-           }
-
-        return (1) ;
-      }
-
-
-      int       URLSTR_Match_params   (  char    **params, char    **str )
-      {
-        char *pch1 ;
-
-        (*params) = NULL ;
-        pch1 = strchr((*str),'?') ;
-        if (pch1 == NULL)
-            return (1) ;
-
-        pch1 ++ ; /* skip '?' */
-        (*params) = STRING_MISC_StrDup(pch1) ;
-        (*str)    = (*str) + STRING_MISC_StrLen((*str)) ;
-
-        return (1) ;
-      }
-
-
-    /**
-     * Given a URL in 'str', this function split in the
-     * common components: protocol, user, machine, etc.
-     * @param str the URL as string.
-     * @param protocol the string where this component will be placed.
-     * @param user the string where this component will be placed.
-     * @param machine the string where this component will be placed.
-     * @param port the string where this component will be placed.
-     * @param file the string where this component will be placed.
-     * @param relative the string where this component will be placed.
-     * @param params the string where this component will be placed.
-     * @return true (1) if parsing was madden or error (-1) if any error is found.
-     */
-     int       URLSTR_Match_url      (  char    **protocol,
-                                         char    **user,
-                                         char    **machine,
-                                         int      *port,
-                                         char    **file,
-                                         char    **relative,
-                                         char    **params,
-                                         char    **str )
-     {
-        int    ok ;
-
-        ok = URLSTR_Match_protocol(protocol,str) ;
-        if (0 == ok) return (0) ;
-
-        ok = URLSTR_Match_user(user,str) ;
-        if (0 == ok) return (0) ;
-
-        ok = URLSTR_Match_machine(machine,*protocol,str) ;
-        if (0 == ok) return (0) ;
-
-        ok = URLSTR_Match_port(port,*protocol,str) ;
-        if (0 == ok) return (0) ;
-
-        ok = URLSTR_Match_file(file,str) ;
-        if (0 == ok) return (0) ;
-
-        ok = URLSTR_Match_relative(relative,str) ;
-        if (0 == ok) return (0) ;
-
-        ok = URLSTR_Match_params(params,str) ;
-        if (0 == ok) return (0) ;
-
-        return (1) ;
-     }
-
-
-    /**
-     * Given a URL in 'urlstr', this function split in the
-     * common components: protocol, user, machine, etc.
-     * @param urlstr the URL as string.
-     * @param protocol the string where this component will be placed.
-     * @param user the string where this component will be placed.
-     * @param machine the string where this component will be placed.
-     * @param port the string where this component will be placed.
-     * @param file the string where this component will be placed.
-     * @param relative the string where this component will be placed.
-     * @param params the string where this component will be placed.
-     * @return true (1) if parsing was madden or error (-1) if
-               any error is found.
-     */
-     int       URLSTR_ParseURL
-     (
-          /*IN */ char  *urlstr,
-          /*OUT*/ char **protocol,
-          /*OUT*/ char **user,
-          /*OUT*/ char **machine,
-          /*OUT*/ int   *port,
-          /*OUT*/ char **file,
-          /*OUT*/ char **relative,
-          /*OUT*/ char **params
-     )
-     {
-        char *pch, *fch ;
-        int   ok ;
-
-        fch = pch = STRING_MISC_StrDup(urlstr) ;
-        if (NULL == pch) {
-            return (-1);
+	i++;
+      	j = i;
+      	while ((url[j]!='\0')&&(url[j]!='/')) {
+	  j++;
 	}
 
-        ok  = URLSTR_Match_url(protocol,
-                               user,
-                               machine,
-                               port,
-                               file,
-                               relative,
-                               params,
-                               &pch) ;
-        free(fch) ;
-        return ok ;
-     }
+	if(port != NULL){
+		strncpy(port, url+i, j-i);
+		port[j-i] = '\0';
+	}
+
+      	return j;
+      }
 
 
-  /* ...................................................................... */
+      int getURLDir(char *url, char *dir)
+      {
+      	int i;
+
+	if ((i=getURLPort(url, NULL))<0)
+	{
+	     	if ((i=getURLServer(url, NULL))<0)
+		{
+      			if((i=getURLProtocol(url, NULL))<0)
+			{
+      				return -1;
+      			}
+      		}
+      	}
+
+      	if (dir != NULL) {
+      		strncpy(dir, url+i, strlen(url)-i);
+      		dir[strlen(url)-i] = '\0';
+      	}
+
+      	return strlen(url);
+      }
+
+
+
+/*
+      int getURLLogin(char *url, char *login)
+      {
+        // TODO
+      	return 0;
+      }
+
+
+      int getURLPasswd(char *url, char *passwd)
+      {
+        // TODO
+      	return 0;
+      }
+*/
+
+
+      int clear_slash(char *path)
+      {
+	size_t i;
+	int j;
+	char ant = '\0', s[PATH_MAX];
+
+	j=0;
+	for (i=0; i < strlen(path); i++)
+	{
+		switch(path[i])
+		{
+			case '/':
+				if(ant != '/'){
+					ant = s[j] = '/';
+					j++;
+				}
+				break;
+
+			default:
+				ant = s[j] = path[i];
+				j++;
+		}
+
+		s[j] = '\0';
+	}
+
+	strcpy(path, s);
+	return 0;
+      }
+
+
+      int ParseURL( char *url,
+		    char *protocol, char *login, char *passwd, char *server, char *port, char *dir )
+      {
+      	char *urlaux;
+
+      	urlaux = url;
+      	if (protocol != NULL)
+	{
+      		/* return the next position */
+      		if(getURLProtocol(urlaux, protocol)<0){
+      			return -1;
+      		}
+      	}
+
+      	urlaux = url;
+      	if (login != NULL)
+	{
+      		/* return the next position */
+      		/*
+      		if(getURLLogin(urlaux, login)<0){
+      			//Not mandatory
+      			//return -1;
+      		}
+      		*/
+      	}
+
+      	urlaux = url;
+      	if(passwd != NULL)
+	{
+      		/* return the next position */
+      		/*
+      		if(getURLPasswd(urlaux, passwd)<0){
+      			//Not mandatory
+      			//return -1;
+      		}
+      		*/
+      	}
+
+      	urlaux = url;
+      	if(server != NULL)
+	{
+      		/* return the next position */
+      		if(getURLServer(urlaux, server)<0){
+      			return -1;
+      		}
+      	}
+
+
+      	urlaux = url;
+      	if(port != NULL)
+	{
+      		/* return the next position */
+      		if(getURLPort(urlaux, port)<0){
+      			//Not mandatory
+      			//return -1;
+      		}
+      	}
+
+      	urlaux = url;
+      	if(dir != NULL)
+	{
+      		/* return the next position */
+      		if(getURLDir(urlaux, dir)<0){
+      			return -1;
+      		}
+		clear_slash(dir);
+      	}
+
+      	return 0;
+      }
+
+
+      int getDirWithURL(char *url, char *dir)
+      {
+      	char dir_aux[PATH_MAX]; /* change for a const*/
+      	int i,j;
+
+      	getURLDir(url, dir_aux);
+
+      	i = 0;
+      	while((dir_aux[i] != '\0')&&(dir_aux[i] == dir[i])) {
+      		i++;
+	}
+
+
+      	if(dir_aux[i] != '\0') {
+      		return -1;
+	}
+      	if(dir_aux[i] == dir[i]){
+      		//dir[0] = '\0'; /* or '/'  */
+      		dir[0] = '/';
+      		dir[1] = '\0';
+      		return 0;
+      	}
+
+      	j = 0;
+      	while(dir[j+i]!='\0'){
+      		dir[j] = dir[j+i];
+      		j++;
+      	}
+
+      	dir[j] = '\0';
+      	if((dir[j] == '/') &&(strlen(dir+j) == 1)) {
+      		dir[j-1] = '\0';
+	}
+
+      	return 0;
+      }
+
+
+  /* ................................................................... */
 
