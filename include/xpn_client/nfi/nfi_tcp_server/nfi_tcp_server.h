@@ -41,6 +41,7 @@
     #include "nfi_tcp_server_err.h"
     #include "nfi.h"
     #include "nfi_worker.h"
+
     #ifdef HAVE_MOSQUITTO_H
     #include <mosquitto.h>
     #endif
@@ -54,6 +55,7 @@
       char   id[PATH_MAX] ;
       char path[PATH_MAX] ;
       //struct nfi_tcp_server_connector sd;
+      struct mosquitto * mqtt;
 
       // client stub
       tcpClient_param_st params ;
