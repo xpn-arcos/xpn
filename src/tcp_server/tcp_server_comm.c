@@ -24,12 +24,13 @@
 
 #include "tcp_server/tcp_server_comm.h"
 
-#ifdef HAVE_MOSQUITTO_H
-    struct mosquitto *mosqtcpserver;
-#endif
 
-  /* ... Functions / Funciones ......................................... */
+  /* ... Internal Functions / Funciones internas ....................... */
+
+
 #ifdef HAVE_MOSQUITTO_H
+
+struct mosquitto *mosqtcpserver;
 
 void on_message(struct mosquitto *mosqtcpserver, void *obj, const struct mosquitto_message *msg)
 {
@@ -39,13 +40,7 @@ void on_message(struct mosquitto *mosqtcpserver, void *obj, const struct mosquit
 #endif
 
 
-
-
-
-
-
-
-
+  /* ... Functions / Funciones ......................................... */
 
 int tcp_server_comm_init ( tcp_server_param_st * params )
 {

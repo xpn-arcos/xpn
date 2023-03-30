@@ -354,7 +354,7 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
         #ifdef HAVE_MOSQUITTO_H
         printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER - %s\n\n", __LINE__, s);
 
-        rc = mosquitto_subscribe(mosqtcpserver, NULL, s, 0);
+        int rc = mosquitto_subscribe(mosqtcpserver, NULL, s, 0);
         if(rc != MOSQ_ERR_SUCCESS)
         {
             fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));

@@ -173,10 +173,10 @@
       {
 	size_t i;
 	int j;
-	char ant = '\0', s[255];
+	char ant = '\0', s[PATH_MAX];
 
 	j=0;
-	for(i=0;i < strlen(path); i++)
+	for (i=0; i < strlen(path); i++)
 	{
 		switch(path[i])
 		{
@@ -201,17 +201,13 @@
 
 
       int ParseURL( char *url,
-      		    char *protocol,
-      		    char *login,
-      		    char *passwd,
-      		    char *server,
-      		    char *port,
-      		    char *dir )
+		    char *protocol, char *login, char *passwd, char *server, char *port, char *dir )
       {
       	char *urlaux;
 
       	urlaux = url;
-      	if(protocol != NULL){
+      	if (protocol != NULL)
+	{
       		/* return the next position */
       		if(getURLProtocol(urlaux, protocol)<0){
       			return -1;
@@ -219,7 +215,8 @@
       	}
 
       	urlaux = url;
-      	if (login != NULL) {
+      	if (login != NULL)
+	{
       		/* return the next position */
       		/*
       		if(getURLLogin(urlaux, login)<0){
@@ -230,7 +227,8 @@
       	}
 
       	urlaux = url;
-      	if(passwd != NULL){
+      	if(passwd != NULL)
+	{
       		/* return the next position */
       		/*
       		if(getURLPasswd(urlaux, passwd)<0){
@@ -241,7 +239,8 @@
       	}
 
       	urlaux = url;
-      	if(server != NULL){
+      	if(server != NULL)
+	{
       		/* return the next position */
       		if(getURLServer(urlaux, server)<0){
       			return -1;
@@ -250,7 +249,8 @@
 
 
       	urlaux = url;
-      	if(port != NULL){
+      	if(port != NULL)
+	{
       		/* return the next position */
       		if(getURLPort(urlaux, port)<0){
       			//Not mandatory
@@ -259,7 +259,8 @@
       	}
 
       	urlaux = url;
-      	if(dir != NULL){
+      	if(dir != NULL)
+	{
       		/* return the next position */
       		if(getURLDir(urlaux, dir)<0){
       			return -1;
@@ -273,7 +274,7 @@
 
       int getDirWithURL(char *url, char *dir)
       {
-      	char dir_aux[255]; /* change for a const*/
+      	char dir_aux[PATH_MAX]; /* change for a const*/
       	int i,j;
 
       	getURLDir(url, dir_aux);
@@ -307,6 +308,7 @@
 
       	return 0;
       }
+
 
   /* ................................................................... */
 
