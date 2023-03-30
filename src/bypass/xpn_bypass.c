@@ -478,7 +478,9 @@
     return ret;
   }
 
-#if (HAVE_ICC == none)
+
+#ifndef HAVE_ICC
+
   int __open_2(const char *path, int flags, ...)
   {
     int fd, ret;
@@ -524,6 +526,7 @@
     debug_info("[bypass] << After __open_2.... %s\n", path);
     return ret;
   }
+
 #endif  
 
 

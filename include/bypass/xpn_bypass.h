@@ -8,6 +8,8 @@
 
 #define _GNU_SOURCE
 
+#include "config.h"
+
 #include <dlfcn.h>
 #include <sys/stat.h>
 #include <stdarg.h>

@@ -32,7 +32,14 @@ AM_PROG_AR
 AC_PROG_MAKE_SET
 AC_PROG_CC([gcc mpicc icc mpifcc])
 AM_PROG_CC_C_O
-AC_CHECK_PROGS([HAVE_ICC], [icc], [none])
+
+#
+# Check __open2 support
+#
+MPICC_INTEL=$(mpicc --version | grep "Intel" | wc -l)
+if test "x$MPICC_INTEL" == "x1"; then
+   AC_DEFINE([HAVE_ICC], [1], [we have icc as mpicc compiler])
+fi
 
 #
 # Checks for libraries.
