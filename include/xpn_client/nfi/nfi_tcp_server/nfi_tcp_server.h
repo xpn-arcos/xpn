@@ -47,6 +47,13 @@
     #endif
 
 
+  /* ... Const / Const ................................................. */
+
+    #ifndef MOSQ_OPT_TCP_NODELAY
+    #define MOSQ_OPT_TCP_NODELAY 0
+    #endif
+
+
   /* ... Data structures / Estructuras de datos ........................ */
 
     struct nfi_tcp_server_server
