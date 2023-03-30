@@ -22,16 +22,56 @@
 //#define DEBUG 1
 #include "nfi_tcp_server.h"
 
-
 /* ... Global Variable / Variable Globales ........................... */
 
 #define FILESYSTEM_DLSYM 1
 
-#ifdef HAVE_MOSQUITTO_H
-struct mosquitto * mosqstr;
-#endif
+/*#ifdef HAVE_MOSQUITTO_H
+#define MAX_MQTT_BROKERS 10
+
+struct Broker {
+    struct mosquitto * mosqstr;
+    int init;
+    char ip[256];
+};
+
+struct Broker brokers[MAX_BROKERS];
+
+//struct mosquitto * mosqstr;
+#endif*/
 
 /* ... Functions / Funciones ......................................... */
+
+/*int find_pos_mqtt ( void )
+{
+    int pos = -1;
+    for (int i = 0; i < MAX_BROKERS; i++)
+    {
+        if(init = 0)
+        {
+            pos = i;
+            break;
+        }
+    }
+    return pos;
+}
+
+
+int find_broker ( char *ip )
+{
+    int pos = -1;
+    for (int i = 0; i < MAX_BROKERS; i++)
+    {
+        if(strcmp(ip, ip))
+        {
+            pos = i;
+            break;
+        }
+    }
+    return pos;
+}
+
+*/
 
 /*
  * Communication
@@ -333,8 +373,11 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
     ret = nfiworker_init(serv);
 
     ret = nfi_tcp_server_connect(serv, url, prt, server, dir);
-    printf("\n[%d]\ŧ%s %s\n", __LINE__, url, server_aux -> params.server_name);
-    if (ret < 0) {
+
+    printf("\n[%d]\t%s %s\n", __LINE__, url, server_aux -> params.server_name);
+
+    if (ret < 0) 
+    {
         FREE_AND_NULL(serv -> ops);
         FREE_AND_NULL(server_aux);
         return -1;
@@ -363,33 +406,37 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
 
         if (server_aux -> params.xpn_mosquitto_mode == 1)                       //MQTT initialization
         {
+            /*int first_av = find_pos_mqtt();
+            if (first_av == -1) return -1;*/
+
             mosquitto_lib_init();
-            mosqstr = mosquitto_new(NULL, true, NULL);
-            if(mosqstr == NULL)
+            server_aux -> mqtt = mosquitto_new(NULL, true, NULL);
+
+            if(server_aux -> mqtt == NULL)
             {
                 fprintf(stderr, "Error: Out of memory.\n");
                 return -1;
             }
 
-            mosquitto_int_option(mosqstr, MOSQ_OPT_TCP_NODELAY, 1);  // TODO: uncomment this line !!
-            mosquitto_int_option(mosqstr, MOSQ_OPT_SEND_MAXIMUM, 65535);
+            mosquitto_int_option(server_aux -> mqtt, MOSQ_OPT_TCP_NODELAY, 1);  // TODO: uncomment this line !!
+            mosquitto_int_option(server_aux -> mqtt, MOSQ_OPT_SEND_MAXIMUM, 65535);
 
 
-            rc = mosquitto_connect(mosqstr, server_aux -> params.server_name, 1883, 0);
+            rc = mosquitto_connect(server_aux -> mqtt, server_aux -> params.server_name, 1883, 0);
 
             if(rc != MOSQ_ERR_SUCCESS)
             {
-                mosquitto_destroy(mosqstr);
+                mosquitto_destroy(server_aux -> mqtt);
                 fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
                 return 1;
             }
 
             /* Run the network loop in a background thread, this call returns quickly. */
-            rc = mosquitto_loop_start(mosqstr);
+            rc = mosquitto_loop_start(server_aux -> mqtt);
 
             if(rc != MOSQ_ERR_SUCCESS)
             {
-                mosquitto_destroy(mosqstr);
+                mosquitto_destroy(server_aux -> mqtt);
                 fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
                 return 1;
             }
@@ -444,8 +491,10 @@ int nfi_tcp_server_destroy(struct nfi_server * serv) {
 
     if (server_aux -> params.xpn_mosquitto_mode == 1)                       //MQTT finalization
     {
+        
+        mosquitto_disconnect(server_aux -> mqtt);
+        mosquitto_destroy(server_aux -> mqtt);
         mosquitto_lib_cleanup();
-        mosquitto_loop_stop(mosqstr, true);
     }   
 
     #endif
@@ -1049,17 +1098,17 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
         do 
         {
             int bytes_to_write = 0;
-            char *topic = malloc(strlen(fh_aux -> path) + sizeof(bytes_to_write) + sizeof(cont) + 3);
+            char *topic = malloc(strlen(fh_aux -> path) + sizeof(bytes_to_write) + sizeof(cont) + sizeof(fh_aux -> fd) + 4);
 
             if( diff > buffer_size )        bytes_to_write = buffer_size;
             else                            bytes_to_write = diff;
 
             #ifdef HAVE_MOSQUITTO_H
 
-            sprintf(topic, "%s/%d/%d", fh_aux -> path, bytes_to_write, cont);
-            printf("CLIENTE ESCRITURA - %s - topic=%s\n", fh_aux -> path, topic);
+            sprintf(topic, "%s/%d/%d/%d", fh_aux -> path, fh_aux -> fd, bytes_to_write, cont);
+            printf("\nCLIENTE ESCRITURA - %s - topic=%s\n\n", fh_aux -> path, topic);
 
-            ret = mosquitto_publish(mosqstr, NULL, topic, bytes_to_write, (char * ) buffer + cont, 1, false);
+            ret = mosquitto_publish(server_aux -> mqtt, NULL, topic, bytes_to_write, (char * ) buffer + cont, 0, false);
 
             if(ret != MOSQ_ERR_SUCCESS)
             {

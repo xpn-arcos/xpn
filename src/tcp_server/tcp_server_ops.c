@@ -22,8 +22,6 @@
 
 #include "tcp_server_ops.h"
 
-extern struct mosquitto *mosqtcpserver;
-
 
 /* ... Functions / Funciones ......................................... */
 
@@ -326,28 +324,28 @@ void tcp_server_op_open_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
     char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
     strcpy(sm, head -> u_st_tcp_server_msg.op_open.path);
     strcat(sm, extra);
-    
-    s = head -> u_st_tcp_server_msg.op_open.path;
 
     /*
      *      MOSQUITTO OPEN FILE
      */
-    int rc = 0;
+    
     if ( params -> mosquitto_mode == 1 )
     {
         #ifdef HAVE_MOSQUITTO_H
-        printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, sm);
+        printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WS - %s - %ld\n\n", __LINE__, sm, strlen(sm));
 
-        rc = mosquitto_subscribe(mosqtcpserver, NULL, sm, 0);
+        int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
         if(rc != MOSQ_ERR_SUCCESS)
         {
             fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-            mosquitto_disconnect(mosqtcpserver);
+            mosquitto_disconnect(params -> mqtt);
         }
 
         printf("[%d]\tEND OPEN MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, sm);
         #endif
     }
+
+    s = head -> u_st_tcp_server_msg.op_open.path;
 
     // do open
     fd = filesystem_open(s, O_RDWR);
@@ -371,25 +369,30 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 
     s = head -> u_st_tcp_server_msg.op_open.path;
 
-
-
     /*
      *      MOSQUITTO OPEN FILE
      */
-    int rc = 0;
+    
     if ( params -> mosquitto_mode == 1 )
     {
         #ifdef HAVE_MOSQUITTO_H
-        printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, sm);
+        printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WOS - %s - %ld\n\n", __LINE__, sm, strlen(sm));
 
-        rc = mosquitto_subscribe(mosqtcpserver, NULL, sm, 0);
+        int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
         if(rc != MOSQ_ERR_SUCCESS)
         {
             fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-            mosquitto_disconnect(mosqtcpserver);
+            mosquitto_disconnect(params -> mqtt);
         }
 
         printf("[%d]\tEND OPEN MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, sm);
+
+        printf("[%d]\tBEGIN CLOSE OPEN MOSQUITTO TCP_SERVER - WOS \n\n", __LINE__);
+
+        mosquitto_unsubscribe(params -> mqtt, NULL, sm);
+        mosquitto_unsubscribe(params -> mqtt, NULL, s);
+
+        printf("[%d]\tEND CLOSE OPEN MOSQUITTO TCP_SERVER - WOS %s\n\n", __LINE__, s);
         #endif
     }
     
@@ -417,24 +420,24 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     strcpy(sm, head -> u_st_tcp_server_msg.op_creat.path);
     strcat(sm, extra);
 
-    s = head -> u_st_tcp_server_msg.op_creat.path;
-
     if ( params -> mosquitto_mode == 1 )
     {
         #ifdef HAVE_MOSQUITTO_H
-        printf("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, sm);
+        printf("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s - %ld\n\n", __LINE__, sm, strlen(sm));
 
-        rc = mosquitto_subscribe(mosqtcpserver, NULL, sm, 0);
+        rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
 
         if(rc != MOSQ_ERR_SUCCESS)
         {
             fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-            mosquitto_disconnect(mosqtcpserver);
+            mosquitto_disconnect(params -> mqtt);
         }
 
         printf("[%d]\tEND CREAT MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, sm);
         #endif
     }
+
+    s = head -> u_st_tcp_server_msg.op_creat.path;
 
     // do creat
     fd = filesystem_creat(s, 0770); // TODO: tcp_server_op_creat don't use 'mode' from client ?
@@ -462,6 +465,30 @@ void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp
 
     s = head -> u_st_tcp_server_msg.op_creat.path;
 
+    if ( params -> mosquitto_mode == 1 )
+    {
+        #ifdef HAVE_MOSQUITTO_H
+        printf("[%d]\tBEGIN CREATE MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, s);
+
+        int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
+
+        if(rc != MOSQ_ERR_SUCCESS)
+        {
+            fprintf(stderr, "Error subscribing creat: %s\n", mosquitto_strerror(rc));
+            mosquitto_disconnect(params -> mqtt);
+        }
+
+        printf("[%d]\tEND CREATE MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, s);
+        
+        printf("[%d]\tBEGIN CLOSE CREAT MOSQUITTO TCP_SERVER - WOS \n\n", __LINE__);
+
+        mosquitto_unsubscribe(params -> mqtt, NULL, sm);
+        mosquitto_unsubscribe(params -> mqtt, NULL, s);
+
+        printf("[%d]\tEND CLOSE CREAT MOSQUITTO TCP_SERVER - WOS %s \n\n", __LINE__, s);
+        #endif
+    }
+
     // do creat
     fd = filesystem_creat(s, 0770); // TODO: tcp_server_op_creat don't use 'mode' from client ?
     if (fd < 0) {
@@ -471,23 +498,6 @@ void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp
 
     tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
-    #ifdef HAVE_MOSQUITTO_H
-
-    printf("[%d]\tBEGIN CREATE MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, sm);
-
-    int rc;
-
-    rc = mosquitto_subscribe(mosqtcpserver, NULL, sm, 1);
-
-    if(rc != MOSQ_ERR_SUCCESS){
-        fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-        mosquitto_disconnect(mosqtcpserver);
-    }
-
-    printf("[%d]\tEND CREATE MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, sm);
-    
-
-    #endif
 
     filesystem_close(fd);
 
@@ -562,6 +572,8 @@ void tcp_server_op_read_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
     debug_info("[TCP-SERVER-OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",
         params -> srv_name, head -> u_st_tcp_server_msg.op_read.fd, (int) head -> u_st_tcp_server_msg.op_read.offset, size);
 }
+
+
 
 void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) {
     struct st_tcp_server_read_req req;
@@ -640,11 +652,13 @@ void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 }
 
 
+
 void tcp_server_op_write_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
-    printf("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
     if( params -> mosquitto_mode == 0 )
     {
+        printf("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
+    
         struct st_tcp_server_write_req req;
         char * buffer;
         int size, diff, cont, to_write;
@@ -703,7 +717,6 @@ void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp
 {
     if( params -> mosquitto_mode == 0 )
     {
-
         struct st_tcp_server_write_req req;
         char * buffer;
         int size, diff, cont, to_write;
@@ -782,18 +795,25 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     }
 
     char *extra = "/#";
-    char *s = malloc(strlen(head -> u_st_tcp_server_msg.op_close.path) + strlen(extra) + 1);
-    strcpy(s, head -> u_st_tcp_server_msg.op_close.path);
-    strcat(s, extra);
+    char *s;
+    char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_close.path) + strlen(extra) + 1);
+    strcpy(sm, head -> u_st_tcp_server_msg.op_close.path);
+    strcat(sm, extra);
 
-    #ifdef HAVE_MOSQUITTO_H
-    printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
+    s = head -> u_st_tcp_server_msg.op_close.path;
 
-    ret = mosquitto_unsubscribe(mosqtcpserver, NULL, s);
+    if( params -> mosquitto_mode == 1 )
+    {
+        #ifdef HAVE_MOSQUITTO_H
+        printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
 
-    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, s);
-    #endif
+        mosquitto_unsubscribe(params -> mqtt, NULL, sm);
+        mosquitto_unsubscribe(params -> mqtt, NULL, s);
 
+        printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, sm);
+        #endif
+    }
+    
     // do close
     if (head -> u_st_tcp_server_msg.op_close.fd != -1 &&  params -> mosquitto_mode == 0 )
     {
