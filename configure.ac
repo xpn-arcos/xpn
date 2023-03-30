@@ -34,6 +34,14 @@ AC_PROG_CC([gcc mpicc icc mpifcc])
 AM_PROG_CC_C_O
 
 #
+# Check __open2 support
+#
+MPICC_INTEL=$(mpicc --version | grep "Intel" | wc -l)
+if test "x$MPICC_INTEL" == "x1"; then
+   AC_DEFINE([HAVE_ICC], [1], [we have icc as mpicc compiler])
+fi
+
+#
 # Checks for libraries.
 #
 AC_CHECK_LIB(pthread,pthread_create)

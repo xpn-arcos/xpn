@@ -73,10 +73,18 @@
     
     if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
     {
-      ret = ns_publish(params->dns_file, params->srv_name, params->port_name);
-      if (ret < 0) {
-        debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank) ;
-        return -1;
+      for (int j=0; j < params->size; j++)
+      {
+        if (j == params->rank)
+        {
+          ret = ns_publish(params->dns_file, params->srv_name, params->port_name);
+          if (ret < 0) {
+            debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank) ;
+            return -1;
+          }
+        }
+
+        MPI_Barrier(MPI_COMM_WORLD);
       }
     }
     else

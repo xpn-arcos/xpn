@@ -5058,6 +5058,16 @@ fi
 
 
 #
+# Check __open2 support
+#
+MPICC_INTEL=$(mpicc --version | grep "Intel" | wc -l)
+if test "x$MPICC_INTEL" == "x1"; then
+
+$as_echo "#define HAVE_ICC 1" >>confdefs.h
+
+fi
+
+#
 # Checks for libraries.
 #
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_create in -lpthread" >&5
