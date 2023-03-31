@@ -62,7 +62,7 @@
 
         MPI_Query_thread(&claimed);
         if (claimed != MPI_THREAD_MULTIPLE) {
-          printf("MPI_Init: your MPI implementation seem not supporting thereads\n") ;
+          printf("MPI_Init_thread: your MPI implementation seem not supporting thereads\n") ;
         }
       }
     }

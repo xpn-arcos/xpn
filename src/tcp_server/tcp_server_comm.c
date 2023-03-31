@@ -20,27 +20,27 @@
 
   /* ... Include / Inclusion ........................................... */
 
-//#define DEBUG 1
+     //#define DEBUG 1
 
-#include "tcp_server/tcp_server_comm.h"
-
-
-  /* ... Internal Functions / Funciones internas ....................... */
+     #include "tcp_server/tcp_server_comm.h"
 
 
+  /* ... Functions / Funciones ......................................... */
+
+     // MOSQUITTO FILE
 #ifdef HAVE_MOSQUITTO_H
 
-struct mosquitto *mosqtcpserver;
-
-void on_message(struct mosquitto *mosqtcpserver, void *obj, const struct mosquitto_message *msg)
+void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_message *msg)
 {
-    printf("%s\n\n%s\n", msg->topic, (char *) msg->payload);
+    //tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
+    //filesystem_lseek(fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
+
+    //req.size = filesystem_write(fd, buffer, to_write);
+    printf("%s\t%d\n\n", msg->topic, msg->payloadlen);
 }
 
 #endif
 
-
-  /* ... Functions / Funciones ......................................... */
 
 int tcp_server_comm_init ( tcp_server_param_st * params )
 {
@@ -110,31 +110,43 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
 	    
 	    mosquitto_lib_init();
 
-	    mosqtcpserver = mosquitto_new(NULL, true, NULL);
-	    if(mosqtcpserver == NULL)
+	    params -> mqtt = mosquitto_new(NULL, true, NULL);
+
+	    if(params -> mqtt == NULL)
 	    {
     	    fprintf(stderr, "Error: Out of memory.\n");
     	    return 1;
 	    }
 
-	    //mosquitto_connect_callback_set(mosqtcpserver, on_connect);
-	    //mosquitto_subscribe_callback_set(mosqtcpserver, on_subscribe);
-	    mosquitto_message_callback_set(mosqtcpserver, on_message);
+	    //mosquitto_connect_callback_set(params -> mqtt, on_connect);
+	    //mosquitto_subscribe_callback_set(params -> mqtt, on_subscribe);
+	    mosquitto_message_callback_set(params -> mqtt, on_message);
 
 	    #ifndef MOSQ_OPT_TCP_NODELAY
 	    #define MOSQ_OPT_TCP_NODELAY 1
 	    #endif
 
-	    mosquitto_int_option(mosqtcpserver, MOSQ_OPT_TCP_NODELAY, 1);
+	    mosquitto_int_option(params -> mqtt, MOSQ_OPT_TCP_NODELAY, 1);
 
-	    int rc = mosquitto_connect(mosqtcpserver, "localhost", 1886, 0);
+	    int rc = mosquitto_connect(params -> mqtt, "localhost", 1883, 0);
 	    if( rc != MOSQ_ERR_SUCCESS )
 	    {
-    	    mosquitto_destroy(mosqtcpserver);
+    	    mosquitto_destroy(params -> mqtt);
     	    fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO TCP_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
     	    return 1;
 	    }
-        //mosquitto_loop_forever(mosqtcpserver, -1, 1);
+
+        /* Run the network loop in a background thread, this call returns quickly. */
+        rc = mosquitto_loop_start(params -> mqtt);
+
+        if(rc != MOSQ_ERR_SUCCESS)
+        {
+            mosquitto_destroy(params -> mqtt);
+            fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
+            return 1;
+        }
+
+        //mosquitto_loop_forever(params -> mqtt, -1, 1);
 	    printf("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
 	    
     }
@@ -197,6 +209,7 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
 	    
         debug_info("[%d]\tBEGIN DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
         mosquitto_lib_cleanup();
+        mosquitto_loop_stop(params -> mqtt, true);
         debug_info("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
 	
     }

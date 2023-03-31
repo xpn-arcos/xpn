@@ -25,7 +25,8 @@
 
 /* ... Functions / Funciones ......................................... */
 
-char * ns_tcp_get_hostname(void) {
+char * ns_tcp_get_hostname(void)
+{
     char * ip;
     char serv_name[HOST_NAME_MAX];
     struct hostent * serv_entry;
@@ -37,14 +38,15 @@ char * ns_tcp_get_hostname(void) {
     return ip;
 }
 
-int ns_tcp_publish(char * dns_file, char * param_srv_name, char * host_name, char * port_name) {
+
+int ns_tcp_publish(char * dns_file, char * param_srv_name, char * host_name, char * port_name)
+{
     int ret;
     FILE * dns_fd;
 
-    dns_fd = fopen(dns_file, "a+");
-
     printf("[%s][%d]\t%s\n", __FILE__, __LINE__, dns_file);
 
+    dns_fd = fopen(dns_file, "a+");
     if (NULL == dns_fd) {
         perror("fopen on DNS File");
         return -1;
@@ -60,7 +62,9 @@ int ns_tcp_publish(char * dns_file, char * param_srv_name, char * host_name, cha
     return 0;
 }
 
-int ns_tcp_unpublish(char * dns_file, char * serv_name) {
+
+int ns_tcp_unpublish(char * dns_file, char * serv_name)
+{
     FILE * dns_fd;
     FILE * new_dns_fd;
     char new_dns_file[PATH_MAX];
@@ -88,7 +92,8 @@ int ns_tcp_unpublish(char * dns_file, char * serv_name) {
     }
 
     // copy filtering...
-    while (fscanf(dns_fd, "%s %s %s", aux_name, aux_name_2, port_name) != EOF) {
+    while (fscanf(dns_fd, "%s %s %s", aux_name, aux_name_2, port_name) != EOF)
+    {
         if (strcmp(aux_name, serv_name) == 0) {
             //Not copy the line
             found = 1;
@@ -112,7 +117,9 @@ int ns_tcp_unpublish(char * dns_file, char * serv_name) {
     return 0;
 }
 
-int ns_tcp_lookup(char * param_srv_name, char * host_name, char * port_name) {
+
+int ns_tcp_lookup(char * param_srv_name, char * host_name, char * port_name)
+{
     int found = 0;
     char aux_name[1024];
     char * dns_file;
@@ -135,10 +142,8 @@ int ns_tcp_lookup(char * param_srv_name, char * host_name, char * port_name) {
     while (fscanf(dns_fd, "%s %s %s", aux_name, host_name, port_name) != EOF) 
     {
         //printf("[%s][%d]\t%s %s %s - %s\n", __FILE__, __LINE__, aux_name, host_name, port_name, param_srv_name);
-        if (strcmp(aux_name, param_srv_name) == 0) 
-        {
+        if (strcmp(aux_name, param_srv_name) == 0) {
             found = 1;
-            //printf("ENCONTRADO\n\n");
             break;
         }
     }
@@ -152,4 +157,6 @@ int ns_tcp_lookup(char * param_srv_name, char * host_name, char * port_name) {
     return 0;
 }
 
+
 /* ................................................................... */
+

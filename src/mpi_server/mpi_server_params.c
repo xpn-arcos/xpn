@@ -72,7 +72,7 @@
     params->argv = argv ;
     params->size = 0 ;
     params->rank = 0 ;
-    params->thread_mode = TH_POOL ;
+    params->thread_mode = TH_NOT ;
     strcpy(params->port_name, "") ;
     strcpy(params->srv_name,  "") ;
     strcpy(params->dirbase,   MPI_SERVER_DIRBASE_DEFAULT) ;
