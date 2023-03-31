@@ -1,9 +1,9 @@
-# XPN 2.2
+# XPN 2.3
 
 *Expand Ad-Hoc Parallel File System*
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-![version](https://img.shields.io/badge/version-2.2-blue)
+![version](https://img.shields.io/badge/version-2.3-blue)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://www.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xpn-arcos/xpn&amp;utm_campaign=Badge_Grade)
 
 * *Homepage*: <https://xpn-arcos.github.io/xpn-arcos.github.io/>
@@ -15,8 +15,22 @@
 
   The Expand Parallel File System (a.k.a. XPN) can be installed on a cluster with local storage per-node (HDD, SSD or RAM Drive) and a shared home directory.
 
-  The general steps to deploy XPN with Spack are:
+  The general steps to deploy XPN are:
+  ```mermaid
+  flowchart LR
+    A[Start] --> B{Spack?}
+    B -- Yes --> C[1.1 With Spack]
+    B -- No ---> D[install prerequisites]
+    subgraph ide1 [1.2 With autotools]
+    D --> E[download source of XPN and mxml]
+    E --> F[build XPN]
+    F --> G[End]
+    end
+  ```
 
+### 1.1. With Spack
+
+  To deploy XPN with Spack:
   ```
   git clone https://github.com/xpn-arcos/xpn.git
   spack repo add xpn/scripts/spack
@@ -25,39 +39,51 @@
   spack load xpn
   ```
 
-  The traditional steps (without Spack) are:
+### 1.2. With autotools (configure, make, make install)
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "1. Install prerequisites"                    as step1
-    state "2. Download the source code of XPN and mxml" as step2
-    state "3. Build Expand"                             as step3
-    [*] --> step1
-    step1 --> step2
-    step2 --> step3
-    step3 --> [*]
-```
-
-### 1.1. Installing prerequisites
+### 1.2.1. Installing prerequisites
 
 XPN needs the typical C development tools (gcc, make, autotools) and a MPI implementation installed.
 
-Some common use cases:
-* If you are administrator of your Linux machine then you need to execute:
-  ```
-  sudo apt-get install -y autoconf automake gcc g++ make libtool libmpich-dev  
-  ```
+* To install the C development tools:
+  * If you are an user of a cluster with modules then you might try to load the compiler module, for example:
+    ```bash
+    module load gcc
+    ```
+    Where "gcc" is the compiler module.
+
+  * If you are administrator of your Linux machine then you need to execute:
+    ```
+    sudo apt-get install -y autoconf automake gcc g++ make libtool build-essential
+    ```
   
-* If you are an user of a cluster with already installed software then you might try the following:
-  ```bash
-  module load icc
-  module load "impi/2017.4"
-  ```
-  Where "icc" is the compiler module and "impi/2017.4" is the MPI module.
+* To install the MPICH implementation of MPI:
+  * If you are an user of a cluster with already installed software then you might try to load the MPI module, for example:
+    ```bash
+    module load "impi/2017.4"
+    ```
+    Where "impi/2017.4" is the MPI module.
+
+  * From source code and with Infiniband (Omni-Path) support:
+    ```
+    wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
+    tar zxf mpich-4.1.1
+    cd      mpich-4.1.1
+    ./configure --prefix=<path where MPICH is going to be installed> \
+                --enable-threads=multiple \
+                --enable-romio \
+                --with-device=ch4:ofi:psm2 --with-libfabric=<path where your libfabric is installed>
+    make
+    make install
+    ```
+
+  * If you are administrator of your Linux machine then you need to execute:
+    ```
+    sudo apt-get install -y libmpich-dev  
+    ```
 
 
-### 1.2. Download the source code of XPN
+### 1.2.2. Download the source code of XPN
 
 You need to download the source code of [XPN](https://xpn-arcos.github.io/arcos-xpn.github.io/) and [minixml](http://www.minixml.org).
 
@@ -72,7 +98,7 @@ git clone https://github.com/xpn-arcos/xpn.git
 You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
 
 
-### 1.3. Building XPN
+### 1.2.3. Building XPN
 
 To build Expand you need to execute:
 ```
@@ -94,7 +120,7 @@ Where:
 * Installation directory will be $HOME/xpn_bin
 
 
-## 4. Executing XPN
+## 2. Executing XPN
 
 First, you need to get familiar with 4 special files:
 * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
@@ -110,7 +136,7 @@ Then, you need to get familiar with 5 special environment variables for XPN clie
 * ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
 
 
-### 4.1 Ad-Hoc Expand (based on MPI)
+### 2.1 Ad-Hoc Expand (based on MPI)
 The typical executions has 3 main steps:
 - First, launch the Expand MPI server (xpn_mpi_server):
 

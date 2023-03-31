@@ -20,14 +20,13 @@
    */
 
 
-#ifndef _XPN_INIT_H
-#define _XPN_INIT_H
+ #ifndef _PATH_MISC_H_
+ #define _PATH_MISC_H_
 
-#include "all_system.h"
-#include "base/path_misc.h"
-#include "xpn_policy_init.h"
-#include "xpn_cwd.h"
-#include "xpn_file.h"
+   /* ... Include / Inclusion ........................................... */
+
+      #include "all_system.h"
+      #include "base/string_misc.h"
 
 
  #ifdef  __cplusplus
@@ -35,19 +34,28 @@
  #endif
 
 
-   #define XPN_MAX_PART 128
+   /* ... Functions / Funciones ......................................... */
 
-   extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
+      int hash (char *file,int nServ) ;
 
-   int xpn_init_partition(char *partname);
+      int getFirstDir   ( char *dir, char *path) ;
+      int getSizeFactor ( char *name ) ;
+   
+      /* get the last name of a path and erase the file name */
+      int getNameFile(char *file, char *dir);
 
-   int xpn_simple_destroy ( void ) ;
-   int xpn_simple_init ( void ) ;
+      /* get the first name of the path and erase the part name */
+      int getNamePart(char *part, char *dir);
+
+      /* erase the initial dir used in the url */
+      int getDirWithURL(char *url, char *dir);
 
 
- #ifdef  __cplusplus
-     }
+  /* .................................................................... */
+
+#ifdef  __cplusplus
+    }
  #endif
 
-#endif
+ #endif /* _PATH_MISC_H */
 

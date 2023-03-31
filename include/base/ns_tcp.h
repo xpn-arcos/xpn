@@ -37,7 +37,7 @@
       #endif
 
       #ifndef TCP_SERVER_FILE_DEFAULT
-      #define TCP_SERVER_FILE_DEFAULT "/etc/xpn/tcp_server.dns"
+      #define TCP_SERVER_FILE_DEFAULT "/tmp/tcp_server.dns"
       #endif
 
       #ifndef MAX_TCP_SERVER_NODES
@@ -53,10 +53,10 @@
        *  API
        */
 
-      char * ns_tcp_get_hostname ( void ) ;
-      int    ns_tcp_publish      ( char * dns_file, char * param_srv_name, char * host_name, char * port_name ) ;
-      int    ns_tcp_unpublish    ( char * dns_file, char * serv_name ) ;
-      int    ns_tcp_lookup       ( char * param_srv_name, char * host_name, char * port_name ) ;
+      char *      ns_tcp_get_hostname     ( void ) ;
+      int         ns_tcp_publish          ( char * dns_file, char * param_srv_name, char * host_name, char * port_name ) ;
+      int         ns_tcp_unpublish        ( char * dns_file, char * serv_name ) ;
+      int         ns_tcp_lookup           (                  char * param_srv_name, char * host_name, char * port_name ) ;
 
 
 #endif

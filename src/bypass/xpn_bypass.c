@@ -255,7 +255,9 @@
     DIR aux_dirp ;
 
     aux_dirp = *dir ;
-    aux_dirp.fd = aux_dirp.fd - PLUSXPN ;
+    
+    struct generic_fd virtual_fd = fdstable_get ( aux_dirp.fd );
+    aux_dirp.fd = virtual_fd.real_fd;
 
     return aux_dirp ;
   }
@@ -478,7 +480,10 @@
     return ret;
   }
 
-  /*int __open_2(const char *path, int flags, ...)
+
+#ifndef HAVE_ICC
+
+  int __open_2(const char *path, int flags, ...)
   {
     int fd, ret;
     va_list ap;
@@ -522,7 +527,9 @@
 
     debug_info("[bypass] << After __open_2.... %s\n", path);
     return ret;
-  }*/
+  }
+
+#endif  
 
 
   int creat(const char *path, mode_t mode)
@@ -1552,6 +1559,28 @@
       xpn_adaptor_keepInit ();
 
       debug_info("[bypass] Before realpath...\n");
+      strcpy(resolved_path, path);
+      return resolved_path;
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("[bypass] Before dlsym_realpath...\n");
+      return dlsym_realpath(path, resolved_path);
+    }
+  }
+
+  char * __realpath_chk(const char * path, char * resolved_path, size_t resolved_len)
+  {
+    debug_info("[bypass] Before __realpath_chk...\n");
+    debug_info("[bypass] Path %s\n", path);
+
+    if (is_xpn_prefix(path))
+    {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("[bypass] Before __realpath_chk...\n");
       strcpy(resolved_path, path);
       return resolved_path;
     }

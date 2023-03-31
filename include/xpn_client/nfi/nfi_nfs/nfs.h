@@ -2,7 +2,7 @@
 #define _NFS_H_
 
 #include "all_system.h"
-#include "base/string_misc.h"
+#include "base/path_misc.h"
 
 #define NFS_TCP	1
 #define NFS_UDP	0

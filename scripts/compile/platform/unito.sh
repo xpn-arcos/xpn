@@ -24,11 +24,13 @@
 
 # 1) software (if needed)...
 #spack load openmpi
-spack load mpich
+#spack load mpich
+spack load pkg-config
 
 # 2) working path...
 #MPICC_PATH=$HOME/opt/spack/linux-ubuntu20.04-zen/gcc-9.4.0/openmpi-4.1.3-4bpvwm3lcbftmjki6en35c4i5od6wjbr/bin/mpicc
-MPICC_PATH=$HOME/opt/spack/linux-ubuntu20.04-zen/gcc-9.4.0/mpich-4.0.2-a76rmlxbneoqdvemzjsyewp2akiiuxlj/bin/mpicc
+#MPICC_PATH=$HOME/opt/spack/linux-ubuntu20.04-zen/gcc-9.4.0/mpich-4.0.2-a76rmlxbneoqdvemzjsyewp2akiiuxlj/bin/mpicc
+MPICC_PATH=$HOME/dcamarma/bin/mpich/bin/mpicc
 INSTALL_PATH=$HOME/dcamarma/bin/
 BASE_PATH=$(dirname $0)
 

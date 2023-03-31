@@ -34,7 +34,10 @@
   #include "base/workers.h"
 
 
-  //Constants
+  /*
+   * Constants
+   */
+
   #define TCP_MAX_PORT_NAME   1024
 
 
@@ -58,7 +61,13 @@
 
     // server configuration
     int thread_mode;
+
+    //mqtt configuration
     int mosquitto_mode;
+
+    #ifdef HAVE_MOSQUITTO_H
+    struct mosquitto * mqtt;
+    #endif
 
     //Semaphore for clients
     char sem_name_server [PATH_MAX];
@@ -87,3 +96,4 @@
   void tcp_server_params_show       ( tcp_server_param_st *params ) ;
 
 #endif
+

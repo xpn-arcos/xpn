@@ -39,11 +39,9 @@
    *  Constants
    */
 
-#ifndef TCP_SERVER_ID
-  #define TCP_SERVER_ID 32
-#endif
-
-  /* Operations */
+   #ifndef TCP_SERVER_ID
+   #define TCP_SERVER_ID 32
+   #endif
 
   /* Operations */
 
@@ -135,6 +133,7 @@
   struct st_tcp_server_close
   {
     int fd;
+    char path[PATH_MAX];
   };
 
   struct st_tcp_server_rename
