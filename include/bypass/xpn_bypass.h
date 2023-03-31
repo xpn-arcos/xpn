@@ -8,6 +8,8 @@
 
 #define _GNU_SOURCE
 
+#include "config.h"
+
 #include <dlfcn.h>
 #include <sys/stat.h>
 #include <stdarg.h>
@@ -81,7 +83,7 @@ struct generic_fd{
 
 int open       (const char *path, int flags, ...);
 int open64     (const char *path, int flags, ...);
-///int __open_2   (const char *path, int flags, ...);
+int __open_2   (const char *path, int flags, ...);
 int creat      (const char *path, mode_t mode);
 int close      (int fd);
 

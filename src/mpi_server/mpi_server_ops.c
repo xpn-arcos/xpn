@@ -104,7 +104,7 @@
   void  mpi_server_op_write_ws    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_write_wos   ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_close_ws    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
-  
+
   void  mpi_server_op_rm          ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_rename      ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_setattr     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
@@ -118,7 +118,7 @@
 
   void  mpi_server_op_flush       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_preload     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
-  
+
   void  mpi_server_op_getnodename ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ; //NEW
   void  mpi_server_op_fstat       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ; //TODO: implement
   void  mpi_server_op_getid       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ; //TODO: call in switch
@@ -191,7 +191,7 @@
             mpi_server_op_close_ws(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id) ;
         }
         break;
-        
+
       // Metadata API
       case MPI_SERVER_RM_FILE:
         ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_rm), th->rank_client_id) ;
@@ -719,8 +719,8 @@
 
   void mpi_server_op_setattr (
 		               mpi_server_param_st *params,
-		               __attribute__((__unused__)) MPI_Comm sd, 
-			       struct st_mpi_server_msg *head, 
+		               __attribute__((__unused__)) MPI_Comm sd,
+			       struct st_mpi_server_msg *head,
 			       __attribute__((__unused__)) int rank_client_id
 		             )
   {
@@ -790,7 +790,7 @@
 
     if (ret != NULL){
        ret_entry.end = 1;
-       ret_entry.ret = *ret; 
+       ret_entry.ret = *ret;
     }
     else{
         ret_entry.end = 0;
@@ -839,13 +839,12 @@
   {
     int   ret;
     int   fd_dest, fd_orig;
-    char *protocol;
-    char *user;
-    char *machine;
-    int   port;
-    char *file;
-    char *relative;
-    char *params1;
+    char  protocol[1024];
+    char  user[1024];
+    char  pass[1024];
+    char  machine[1024];
+    char  port[1024];
+    char  file[1024];
 
     int  BLOCKSIZE = head->u_st_mpi_server_msg.op_preload.block_size;
     char buffer [BLOCKSIZE];
@@ -856,13 +855,18 @@
         return;
     }
 
-    ret = URLSTR_ParseURL(head->u_st_mpi_server_msg.op_preload.virtual_path, &protocol, &user, &machine, &port, &file, &relative, &params1) ;   
+    ret = ParseURL(head->u_st_mpi_server_msg.op_preload.virtual_path,
+		   protocol,
+		   user,
+		   pass,
+		   machine,
+		   port,
+		   file) ;
 
     // Create new file
     fd_dest = filesystem_creat(file, 0777) ;
     if (fd_dest < 0) {
         close(fd_orig) ;
-        free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
         return;
     }
 
@@ -875,7 +879,6 @@
         if (ret_2 == (off_t) -1) {
             close(fd_orig) ;
             close(fd_dest) ;
-            free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
             return;
         }
 
@@ -883,7 +886,6 @@
         if (read_bytes < 0){
             close(fd_orig) ;
             close(fd_dest) ;
-            free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
             return;
         }
 
@@ -893,7 +895,6 @@
             if (write_bytes==-1){
                 close(fd_orig) ;
                 close(fd_dest) ;
-                free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
                 return;
             }
         }
@@ -912,32 +913,35 @@
                                                         head->u_st_mpi_server_msg.op_preload.virtual_path,
                                                         head->u_st_mpi_server_msg.op_preload.storage_path,
                                                         ret) ;
-    free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
     return;
   }
-  
+
   void mpi_server_op_flush ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id)
   {
     int   ret;
     int   fd_dest, fd_orig;
-    char *protocol;
-    char *user;
-    char *machine;
-    int   port;
-    char *file;
-    char *relative;
-    char *params1;
+    char  protocol[1024];
+    char  user[1024];
+    char  pass[1024];
+    char  machine[1024];
+    char  port[1024];
+    char  file[1024];
 
     int BLOCKSIZE = head->u_st_mpi_server_msg.op_flush.block_size;
     char buffer [BLOCKSIZE];
 
-    ret = URLSTR_ParseURL(head->u_st_mpi_server_msg.op_flush.virtual_path, &protocol, &user, &machine, &port, &file, &relative, &params1) ;  
+    ret = ParseURL(head->u_st_mpi_server_msg.op_preload.virtual_path,
+		   protocol,
+		   user,
+		   pass,
+		   machine,
+		   port,
+		   file) ;
 
     // Open origin file
     fd_orig = filesystem_open(file, O_RDONLY) ;
     if (fd_orig < 0) {
         printf("Error on open operation on '%s'\n", file) ;
-        free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
         return;
     }
 
@@ -945,7 +949,6 @@
     fd_dest = filesystem_open(head->u_st_mpi_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT) ;
     if (fd_dest < 0) {
         printf("Error on open operation on '%s'\n", head->u_st_mpi_server_msg.op_flush.storage_path) ;
-        free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
         return;
     }
 
@@ -958,7 +961,6 @@
     {
         read_bytes = filesystem_read(fd_orig, &buffer, BLOCKSIZE) ;
         if (read_bytes < 0) {
-            free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
             return;
         }
 
@@ -968,7 +970,6 @@
 
             write_bytes = filesystem_write(fd_dest, &buffer, read_bytes) ;
             if (write_bytes < 0) {
-                free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
                 return;
             }
         }
@@ -984,17 +985,15 @@
 
     // show debug info
     debug_info("[MPI-SERVER-OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_flush.virtual_path) ;
-
-    free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
   }
 
 
   //FS Metadata API
 
-  void  mpi_server_op_getnodename ( 
+  void  mpi_server_op_getnodename (
 		                    mpi_server_param_st *params,
-		                    MPI_Comm sd, 
-	                            __attribute__((__unused__)) struct st_mpi_server_msg *head, 
+		                    MPI_Comm sd,
+	                            __attribute__((__unused__)) struct st_mpi_server_msg *head,
 	                            int rank_client_id
 				  )
   {
@@ -1006,7 +1005,7 @@
     gethostname(serv_name, HOST_NAME_MAX) ;
 
     // <TODO>
-    // head = head; // Avoid unused parameter 
+    // head = head; // Avoid unused parameter
     // </TODO>
 
     // show debug info

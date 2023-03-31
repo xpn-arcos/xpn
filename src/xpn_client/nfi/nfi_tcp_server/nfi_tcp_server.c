@@ -18,13 +18,15 @@
  *
  */
 
-/* ... Include / Inclusion ........................................... */
-//#define DEBUG 1
-#include "nfi_tcp_server.h"
+   /* ... Include / Inclusion ........................................... */
 
-/* ... Global Variable / Variable Globales ........................... */
+      //#define DEBUG 1
+      #include "nfi_tcp_server.h"
 
-#define FILESYSTEM_DLSYM 1
+
+   /* ... Global Variable / Variable Globales ........................... */
+
+      #define FILESYSTEM_DLSYM 1
 
 /*#ifdef HAVE_MOSQUITTO_H
 #define MAX_MQTT_BROKERS 10
@@ -40,9 +42,11 @@ struct Broker brokers[MAX_BROKERS];
 //struct mosquitto * mosqstr;
 #endif*/
 
-/* ... Functions / Funciones ......................................... */
+   /* ... Functions / Funciones ......................................... */
 
-/*int find_pos_mqtt ( void )
+/*
+
+int find_pos_mqtt ( void )
 {
     int pos = -1;
     for (int i = 0; i < MAX_BROKERS; i++)
@@ -55,7 +59,6 @@ struct Broker brokers[MAX_BROKERS];
     }
     return pos;
 }
-
 
 int find_broker ( char *ip )
 {
@@ -73,11 +76,13 @@ int find_broker ( char *ip )
 
 */
 
+
 /*
  * Communication
  */
 
-int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head) {
+int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head)
+{
     int ret;
 
     debug_info("[NFI-TCP] (ID=%s) tcpClient_write_data: begin               HEAD_TYPE:%d\n", head -> id, sizeof(head -> type));
@@ -89,7 +94,8 @@ int tcp_server_write_operation(int sd, struct st_tcp_server_msg * head) {
     }
 
     debug_info("[NFI-TCP] (ID=%s) write_operation: %d -> \n", head -> id, head -> type);
-    switch (head -> type) {
+    switch (head -> type)
+    {
         //File API
     case TCP_SERVER_OPEN_FILE_WS:
     case TCP_SERVER_OPEN_FILE_WOS:
@@ -185,7 +191,9 @@ int nfi_tcp_server_doRequest(struct nfi_tcp_server_server * server_aux, struct s
     return 0;
 }
 
-int nfi_tcp_server_keepConnected(struct nfi_server * serv) {
+
+int nfi_tcp_server_keepConnected(struct nfi_server * serv)
+{
     if (NULL == serv) {
         return -1;
     }
@@ -204,11 +212,13 @@ int nfi_tcp_server_keepConnected(struct nfi_server * serv) {
     return (serv -> private_info != NULL);
 }
 
+
 /*
  *  PRIVATE FUNCTIONS TO USE tcp_server SERVERS
  */
 
-void NFItoTCP_SERVERattr(struct stat * att, struct nfi_attr * nfi_att) {
+void NFItoTCP_SERVERattr(struct stat * att, struct nfi_attr * nfi_att)
+{
     att -> st_dev = nfi_att -> st_dev;
     att -> st_ino = nfi_att -> st_ino;
 
@@ -231,7 +241,9 @@ void NFItoTCP_SERVERattr(struct stat * att, struct nfi_attr * nfi_att) {
     att -> st_ctime = nfi_att -> at_ctime; // time of last change
 }
 
-void TCP_SERVERtoNFIattr(struct nfi_attr * nfi_att, struct stat * att) {
+
+void TCP_SERVERtoNFIattr(struct nfi_attr * nfi_att, struct stat * att)
+{
     nfi_att -> st_dev = att -> st_dev;
     nfi_att -> st_ino = att -> st_ino;
 
@@ -254,9 +266,11 @@ void TCP_SERVERtoNFIattr(struct nfi_attr * nfi_att, struct stat * att) {
     nfi_att -> at_ctime = att -> st_ctime; // time of last change
 }
 
+
 void TCP_SERVERtoNFIInfo(__attribute__((__unused__)) struct nfi_info * nfi_inf, __attribute__((__unused__)) struct nfi_info * tcp_server_inf) {
     //TODO
 }
+
 
 /*
  * PUBLIC FUNCTIONS TO USE TCP_SERVER
@@ -265,7 +279,8 @@ void TCP_SERVERtoNFIInfo(__attribute__((__unused__)) struct nfi_info * nfi_inf, 
 /************************************************************
  * Init tcp_server                                               *
  ************************************************************/
-int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__unused__)) struct nfi_attr_server * attr) {
+int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__unused__)) struct nfi_attr_server * attr)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -376,7 +391,7 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
 
     printf("\n[%d]\t%s %s\n", __LINE__, url, server_aux -> params.server_name);
 
-    if (ret < 0) 
+    if (ret < 0)
     {
         FREE_AND_NULL(serv -> ops);
         FREE_AND_NULL(server_aux);
@@ -400,7 +415,7 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
     int rc = 0;
     server_aux -> params.xpn_mosquitto_mode = 0;
     char * env_mosquitto = getenv("XPN_MQTT");
-    if (env_mosquitto != NULL) 
+    if (env_mosquitto != NULL)
     {
         server_aux -> params.xpn_mosquitto_mode = atoi(env_mosquitto);
 
@@ -450,10 +465,12 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
     return 0;
 }
 
+
 /************************************************************
  * Destroy tcp_server                                       *
  * **********************************************************/
-int nfi_tcp_server_destroy(struct nfi_server * serv) {
+int nfi_tcp_server_destroy(struct nfi_server * serv)
+{
     int ret;
     struct nfi_tcp_server_server * server_aux;
 
@@ -491,11 +508,11 @@ int nfi_tcp_server_destroy(struct nfi_server * serv) {
 
     if (server_aux -> params.xpn_mosquitto_mode == 1)                       //MQTT finalization
     {
-        
+
         mosquitto_disconnect(server_aux -> mqtt);
         mosquitto_destroy(server_aux -> mqtt);
         mosquitto_lib_cleanup();
-    }   
+    }
 
     #endif
 
@@ -504,11 +521,11 @@ int nfi_tcp_server_destroy(struct nfi_server * serv) {
 }
 
 
-
 /*********************************************************
  * Connect to the server                                 *
  * *******************************************************/
-int nfi_tcp_server_connect(struct nfi_server * serv, __attribute__((__unused__)) char * url, __attribute__((__unused__)) char * prt, char * server, __attribute__((__unused__)) char * dir) {
+int nfi_tcp_server_connect(struct nfi_server * serv, __attribute__((__unused__)) char * url, __attribute__((__unused__)) char * prt, char * server, __attribute__((__unused__)) char * dir)
+{
     int ret;
     struct nfi_tcp_server_server * server_aux;
 
@@ -538,11 +555,11 @@ int nfi_tcp_server_connect(struct nfi_server * serv, __attribute__((__unused__))
 }
 
 
-
 /************************************************************
  * Disconnect to the server                                 *
  * **********************************************************/
-int nfi_tcp_server_disconnect(struct nfi_server * serv) {
+int nfi_tcp_server_disconnect(struct nfi_server * serv)
+{
     int ret;
     struct nfi_tcp_server_server * server_aux;
 
@@ -572,11 +589,11 @@ int nfi_tcp_server_disconnect(struct nfi_server * serv) {
 }
 
 
-
 /************************************************************
  * Reconnect to the MPI server                              *
  ************************************************************/
-int nfi_tcp_server_reconnect(struct nfi_server * serv) {
+int nfi_tcp_server_reconnect(struct nfi_server * serv)
+{
     // Don't see the serv result
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
@@ -617,11 +634,13 @@ int nfi_tcp_server_reconnect(struct nfi_server * serv) {
     return 0;
 }
 
+
 /*
  *  GENERIC FUNCTIONS
  */
 
-int nfi_tcp_server_open(struct nfi_server * serv, char * url, struct nfi_fhandle * fho) {
+int nfi_tcp_server_open(struct nfi_server * serv, char * url, struct nfi_fhandle * fho)
+{
     int ret;
     char dir[PATH_MAX], server[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -706,8 +725,8 @@ int nfi_tcp_server_open(struct nfi_server * serv, char * url, struct nfi_fhandle
 }
 
 
-
-int nfi_tcp_server_create(struct nfi_server * serv, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) {
+int nfi_tcp_server_create(struct nfi_server * serv, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -817,8 +836,8 @@ int nfi_tcp_server_create(struct nfi_server * serv, char * url, struct nfi_attr 
 }
 
 
-
-ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, void * buffer, off_t offset, size_t size) {
+ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, void * buffer, off_t offset, size_t size)
+{
     int ret, cont, diff;
     struct nfi_tcp_server_server * server_aux;
     struct nfi_tcp_server_fhandle * fh_aux;
@@ -939,8 +958,8 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
 }
 
 
-
-ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, void * buffer, off_t offset, size_t size) {
+ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, void * buffer, off_t offset, size_t size)
+{
     int ret, diff, cont;
 
     struct nfi_tcp_server_server * server_aux;
@@ -968,9 +987,9 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     if (server_aux -> params.xpn_mosquitto_mode == 0)
     {
         /************** LOCAL *****************/
-        if (server_aux -> params.locality) 
+        if (server_aux -> params.locality)
         {
-            if (server_aux -> params.xpn_session) 
+            if (server_aux -> params.xpn_session)
             {
                 real_posix_lseek(fh_aux -> fd, offset, SEEK_SET);
                 //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
@@ -978,7 +997,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
                 //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
                 debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh -> url, fh_aux -> fd, (long int) offset, size, ret);
-            } else 
+            } else
             {
                 int fd;
 
@@ -1004,15 +1023,15 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
             }
         }
         /************** REMOTE ****************/
-        else 
+        else
         {
             // send write request
-            if (server_aux -> params.xpn_session) 
+            if (server_aux -> params.xpn_session)
             {
                 msg.type = TCP_SERVER_WRITE_FILE_WS;
                 msg.u_st_tcp_server_msg.op_write.fd = fh_aux -> fd;
                 printf("[NFI-TCP] write: -> fd     %d \n", msg.u_st_tcp_server_msg.op_write.fd);
-            } else 
+            } else
             {
                 msg.type = TCP_SERVER_WRITE_FILE_WOS;
                 memccpy(msg.u_st_tcp_server_msg.op_write.path, fh_aux -> path, 0, PATH_MAX - 1);
@@ -1027,7 +1046,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
             debug_info("[NFI-TCP] write: -> size   %d \n", msg.u_st_tcp_server_msg.op_write.size);
 
             ret = tcp_server_write_operation(server_aux -> params.server, & msg);
-            if (ret < 0) 
+            if (ret < 0)
             {
                 fprintf(stderr, "(1)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
                 return -1;
@@ -1039,21 +1058,21 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 
             // Max buffer size
             int buffer_size = size;
-            if (buffer_size > MAX_BUFFER_SIZE) 
+            if (buffer_size > MAX_BUFFER_SIZE)
             {
                 buffer_size = MAX_BUFFER_SIZE;
             }
 
-            do 
+            do
             {
                 int bytes_to_write = 0;
 
                 if( diff > buffer_size )        bytes_to_write = buffer_size;
                 else                            bytes_to_write = diff;
 
-                ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
-                
-                if (ret < 0) 
+                ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id);
+
+                if (ret < 0)
                 {
                     fprintf(stderr, "(2)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
                 }
@@ -1064,14 +1083,14 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
             } while ((diff > 0) && (ret != 0));
 
             ret = tcpClient_read_data(server_aux -> params.server, (char * ) & req, sizeof(struct st_tcp_server_write_req), msg.id);
-            if (ret < 0) 
+            if (ret < 0)
             {
                 fprintf(stderr, "(3)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
                 return -1;
             }
 
             debug_info("[NFI-TCP] nfi_tcp_server_write(ID=%s): write %s off %d size %d (err:%d).\n", server_aux -> id, fh -> url, (int) offset, (int) size, (int) req.size);
-            if (req.size < 0) 
+            if (req.size < 0)
             {
                 fprintf(stderr, "ERROR: nfi_tcp_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n", server_aux -> id, fh -> url, (int) offset, (int) size, (int) req.size);
                 tcp_server_err(TCP_SERVERERR_WRITE);
@@ -1090,12 +1109,12 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 
         // Max buffer size
         int buffer_size = size;
-        if (buffer_size > MAX_BUFFER_SIZE) 
+        if (buffer_size > MAX_BUFFER_SIZE)
         {
             buffer_size = MAX_BUFFER_SIZE;
         }
 
-        do 
+        do
         {
             int bytes_to_write = 0;
             char *topic = malloc(strlen(fh_aux -> path) + sizeof(bytes_to_write) + sizeof(cont) + sizeof(fh_aux -> fd) + 4);
@@ -1115,9 +1134,9 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
                 fprintf(stderr, "Error publishing write: %s\n", mosquitto_strerror(ret));
                 return -1;
             }
-            
+
             #endif
-            if (ret < 0) 
+            if (ret < 0)
             {
                 fprintf(stderr, "(2)ERROR: nfi_tcp_server_write(ID=%s): Error on write operation\n", server_aux -> id);
             }
@@ -1135,8 +1154,8 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 }
 
 
-
-int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
+int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh)
+{
     int ret = -1;
     struct nfi_tcp_server_fhandle * fh_aux;
     struct nfi_tcp_server_server * server_aux;
@@ -1201,8 +1220,8 @@ int nfi_tcp_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
 }
 
 
-
-int nfi_tcp_server_remove(struct nfi_server * serv, char * url) {
+int nfi_tcp_server_remove(struct nfi_server * serv, char * url)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1253,8 +1272,8 @@ int nfi_tcp_server_remove(struct nfi_server * serv, char * url) {
 }
 
 
-
-int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_url) {
+int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_url)
+{
     int ret;
     char server[PATH_MAX], old_path[PATH_MAX], new_path[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1316,8 +1335,8 @@ int nfi_tcp_server_rename(struct nfi_server * serv, char * old_url, char * new_u
 }
 
 
-
-int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
+int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1371,8 +1390,8 @@ int nfi_tcp_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
 }
 
 
-
-int nfi_tcp_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
+int nfi_tcp_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr)
+{
     struct nfi_tcp_server_server * server_aux;
     struct nfi_tcp_server_fhandle * fh_aux;
 
@@ -1399,8 +1418,8 @@ int nfi_tcp_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
 }
 
 
-
-int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) {
+int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1489,8 +1508,8 @@ int nfi_tcp_server_mkdir(struct nfi_server * serv, char * url, struct nfi_attr *
 }
 
 
-
-int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhandle * fho) {
+int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhandle * fho)
+{
     int ret;
     char dir[PATH_MAX], server[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1559,8 +1578,8 @@ int nfi_tcp_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
 }
 
 
-
-int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry) {
+int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry)
+{
     struct nfi_tcp_server_server * server_aux;
     struct nfi_tcp_server_fhandle * fh_aux;
     struct st_tcp_server_msg msg;
@@ -1620,8 +1639,8 @@ int nfi_tcp_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
 }
 
 
-
-int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
+int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
+{
     int ret;
     struct st_tcp_server_msg msg;
     struct nfi_tcp_server_server * server_aux;
@@ -1666,8 +1685,8 @@ int nfi_tcp_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
 }
 
 
-
-int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url) {
+int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_tcp_server_server * server_aux;
@@ -1719,8 +1738,8 @@ int nfi_tcp_server_rmdir(struct nfi_server * serv, char * url) {
 }
 
 
-
-int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, __attribute__((__unused__)) struct nfi_info * inf) {
+int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, __attribute__((__unused__)) struct nfi_info * inf)
+{
     DEBUG_BEGIN();
 
     /*
@@ -1754,8 +1773,8 @@ int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, 
 }
 
 
-
-int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt) {
+int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt)
+{
     //char dir[PATH_MAX];
     int ret;
     struct nfi_tcp_server_server * server_aux;
@@ -1802,8 +1821,8 @@ int nfi_tcp_server_preload(struct nfi_server * serv, char * url, char * virtual_
 }
 
 
-
-int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt) {
+int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt)
+{
     //char dir[PATH_MAX];
     int ret;
     struct nfi_tcp_server_server * server_aux;
@@ -1849,4 +1868,6 @@ int nfi_tcp_server_flush(struct nfi_server * serv, char * url, char * virtual_pa
     return 0;
 }
 
+
 /* ................................................................... */
+

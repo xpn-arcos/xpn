@@ -32,6 +32,7 @@
     #include "all_system.h"
     #include "base/utils.h"
     #include "base/path_misc.h"
+    #include "base/urlstr.h"
     #include "base/workers.h"
     #include "mpi_server_conf.h"
     #include "mpi_server_ops.h"

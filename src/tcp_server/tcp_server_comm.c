@@ -20,14 +20,14 @@
 
   /* ... Include / Inclusion ........................................... */
 
-//#define DEBUG 1
+     //#define DEBUG 1
 
-#include "tcp_server/tcp_server_comm.h"
+     #include "tcp_server/tcp_server_comm.h"
 
 
   /* ... Functions / Funciones ......................................... */
 
-// MOSQUITTO FILE
+     // MOSQUITTO FILE
 #ifdef HAVE_MOSQUITTO_H
 
 void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_message *msg)
@@ -35,16 +35,11 @@ void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_messag
     //tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
     //filesystem_lseek(fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
 
-
-
     //req.size = filesystem_write(fd, buffer, to_write);
     printf("%s\t%d\n\n", msg->topic, msg->payloadlen);
 }
 
 #endif
-
-
-
 
 
 int tcp_server_comm_init ( tcp_server_param_st * params )

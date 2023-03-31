@@ -32,6 +32,7 @@
     #include "all_system.h"
     #include "base/utils.h"
     #include "base/path_misc.h"
+    #include "base/urlstr.h"
     #include "base/workers.h"
     #include "tcp_server_conf.h"
     #include "tcp_server_ops.h"
@@ -43,6 +44,13 @@
 
     #ifdef HAVE_MOSQUITTO_H
     #include <mosquitto.h>
+    #endif
+
+
+  /* ... Const / Const ................................................. */
+
+    #ifndef MOSQ_OPT_TCP_NODELAY
+    #define MOSQ_OPT_TCP_NODELAY 0
     #endif
 
 

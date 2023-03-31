@@ -39,11 +39,9 @@
    *  Constants
    */
 
-#ifndef TCP_SERVER_ID
-  #define TCP_SERVER_ID 32
-#endif
-
-  /* Operations */
+   #ifndef TCP_SERVER_ID
+   #define TCP_SERVER_ID 32
+   #endif
 
   /* Operations */
 

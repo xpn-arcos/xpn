@@ -38,22 +38,16 @@
 
    /* ... Functions / Funciones ......................................... */
 
-      int    URLSTR_ParseURL 
-      (
-         /*IN */ char  *urlstr,
-          /*OUT*/ char **protocol,
-          /*OUT*/ char **user,
-          /*OUT*/ char **machine,
-          /*OUT*/ int   *port,
-          /*OUT*/ char **file,
-          /*OUT*/ char **relative,
-          /*OUT*/ char **params
-      ) ;
-      /* - Fill 'url' with information from 'str' string. */
-      /* - Rellena 'url' con la informacion de 'str'.  */
+      int ParseURL(   char *url,  
+      		      char *protocol, 
+		      char *login, 
+		      char *passwd, 
+		      char *server,  
+		      char *port,  
+		      char *dir) ;
 
 
-  /* .................................................................... */
+   /* ................................................................... */
 
 
  #ifdef  __cplusplus

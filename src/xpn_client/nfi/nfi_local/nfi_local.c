@@ -168,7 +168,7 @@
     serv->ops->nfi_statfs   = nfi_local_statfs;
 
     // ParseURL...
-    ret = ParseURL(url,  prt, NULL, NULL, server, NULL, dir) ;
+    ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir) ;
     if (ret < 0)
     {
       // local_err(LOCALERR_URL) ;
@@ -202,15 +202,15 @@
     strcpy(server_aux->path, dir) ;
     serv->private_info = (void *)server_aux;
 
-    serv->server = STRING_MISC_StrDup(server) ; // server addrets
-    if (serv->server == NULL)
+    serv->url = STRING_MISC_StrDup(url) ; // full URL
+    if (serv->url == NULL)
     {
       debug_error("ERROR: out of memory\n") ;
       return -1;
     }
 
-    serv->url = STRING_MISC_StrDup(url) ; // server addrets
-    if (serv->url == NULL)
+    serv->server = STRING_MISC_StrDup(server) ; // URL.server
+    if (serv->server == NULL)
     {
       debug_error("ERROR: out of memory\n") ;
       return -1;
@@ -335,7 +335,7 @@
   {
     // Don't see the serv retult
     int ret;
-    char server[PATH_MAX], dir[PATH_MAX];
+    char   dir[PATH_MAX];
     struct nfi_local_server *server_aux;
 
     DEBUG_BEGIN();
@@ -350,7 +350,7 @@
       return -1;
     }
 
-    ret = ParseURL(serv->url,  NULL, NULL, NULL, server, NULL, dir) ;
+    ret = ParseURL(serv->url, NULL, NULL, NULL, NULL, NULL, dir) ;
     if (ret < 0) {
       debug_error("nfi_local_reconnect: incorrect '%s' URL.\n", serv->url) ;
       return -1;
@@ -379,7 +379,7 @@
   int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho )
   {
     int ret;
-    char dir[PATH_MAX], server[PATH_MAX];
+    char dir[PATH_MAX] ;
     struct nfi_local_fhandle *fh_aux;
 
     DEBUG_BEGIN();
@@ -391,7 +391,7 @@
     NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // from url -> server + dir
-    ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+    ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir);
     if (ret < 0)
     {
       fprintf(stderr,"nfi_local_open: url %s incorrect.\n",url) ;
@@ -436,7 +436,7 @@
   int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh )
   {
     int ret;
-    char server[PATH_MAX], dir[PATH_MAX];
+    char   dir[PATH_MAX];
     struct nfi_local_fhandle *fh_aux;
     struct stat st;
 
@@ -449,7 +449,7 @@
     NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // url -> server + dir
-    ret = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
+    ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir) ;
     if (ret < 0)
     {
       fprintf(stderr,"ERROR: nfi_local_create: url %s incorrect.\n",url) ;
@@ -607,7 +607,7 @@
   int nfi_local_remove ( struct nfi_server *serv,  char *url )
   {
     int ret;
-    char server[PATH_MAX], dir[PATH_MAX];
+    char dir[PATH_MAX];
 
     DEBUG_BEGIN();
 
@@ -618,7 +618,7 @@
     NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // from url -> server + dir
-    ret = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
+    ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir) ;
     if (ret < 0)
     {
       fprintf(stderr,"nfi_local_remove: url %s incorrect.\n",url) ;
@@ -643,8 +643,8 @@
 
   int nfi_local_rename (struct nfi_server *serv, char *old_url, char *new_url )
   {
-    int ret;
-    char server[PATH_MAX], old_path[PATH_MAX], new_path[PATH_MAX];
+    int  ret;
+    char old_path[PATH_MAX], new_path[PATH_MAX];
 
     DEBUG_BEGIN();
 
@@ -656,7 +656,7 @@
     NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // Get fields...
-    ret = ParseURL(old_url, NULL, NULL, NULL, server, NULL, old_path);
+    ret = ParseURL(old_url, NULL, NULL, NULL, NULL, NULL, old_path);
     if (ret < 0)
     {
       fprintf(stderr,"nfi_local_open: url %s incorrect.\n",old_url) ;
@@ -664,7 +664,7 @@
       return -1;
     }
 
-    ret = ParseURL(new_url, NULL, NULL, NULL, server, NULL, new_path);
+    ret = ParseURL(new_url, NULL, NULL, NULL, NULL, NULL, new_path);
     if (ret < 0)
     {
       fprintf(stderr,"nfi_local_open: url %s incorrect.\n",new_path) ;
@@ -688,8 +688,8 @@
 
   int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
-    int ret;
-    char server[PATH_MAX], dir[PATH_MAX];
+    int  ret;
+    char dir[PATH_MAX];
   //struct nfi_local_fhandle *fh_aux;
     struct stat st;
 
@@ -705,10 +705,10 @@
     // copy private information...
     //fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
-    ret = ParseURL(fh->url, NULL, NULL, NULL, server,  NULL,  dir) ;
+    ret = ParseURL(fh->url, NULL, NULL, NULL, NULL,  NULL,  dir) ;
     if (ret < 0)
     {
-      fprintf(stderr,"nfi_mpi_server_getattr: url %s incorrect.\n",dir) ;
+      fprintf(stderr,"nfi_mpi_server_getattr: url %s incorrect.\n", dir) ;
       // mpi_server_err(LOCALERR_URL) ;
       return -1;
     }
@@ -728,6 +728,7 @@
     // Return OK
     return 0;
   }
+
 
   int nfi_local_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi_attr *attr )
   {
@@ -756,8 +757,8 @@
 
   int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh )
   {
-    int ret;
-    char server[PATH_MAX], dir[PATH_MAX];
+    int    ret;
+    char   dir[PATH_MAX];
     struct nfi_local_fhandle *fh_aux;
     struct stat st;
 
@@ -770,7 +771,7 @@
     NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // Get fields...
-    ret = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
+    ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir) ;
     if (ret < 0)
     {
       fprintf(stderr,"nfi_local_mkdir: url %s incorrect.\n",url) ;
@@ -821,8 +822,8 @@
 
   int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
   {
-    int ret;
-    char dir[PATH_MAX], server[PATH_MAX];
+    int    ret;
+    char   dir[PATH_MAX];
     struct nfi_local_fhandle *fh_aux;
 
     DEBUG_BEGIN();
@@ -835,7 +836,7 @@
     NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // Get fields...
-    ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir) ;
+    ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir) ;
     if (ret < 0)
     {
       fprintf(stderr,"nfi_local_opendir: url %s incorrect.\n",url) ;
@@ -946,7 +947,7 @@
   int nfi_local_rmdir ( struct nfi_server *serv,  char *url )
   {
     int ret;
-    char server[PATH_MAX], dir[PATH_MAX];
+    char dir[PATH_MAX];
 
     DEBUG_BEGIN();
 
@@ -957,10 +958,10 @@
     NULL_RET_ERR(serv->private_info, LOCALERR_PARAM) ;
 
     // Get fields...
-    ret = ParseURL(url,  NULL, NULL, NULL, server, NULL, dir) ;
+    ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir) ;
     if (ret < 0)
     {
-      fprintf(stderr,"nfi_local_rmdir: url %s incorrect.\n",url) ;
+      fprintf(stderr,"nfi_local_rmdir: url %s incorrect.\n", url) ;
       local_err(LOCALERR_URL) ;
       return -1;
     }

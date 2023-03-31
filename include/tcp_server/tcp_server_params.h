@@ -34,7 +34,10 @@
   #include "base/workers.h"
 
 
-  //Constants
+  /*
+   * Constants
+   */
+
   #define TCP_MAX_PORT_NAME   1024
 
 
@@ -93,3 +96,4 @@
   void tcp_server_params_show       ( tcp_server_param_st *params ) ;
 
 #endif
+

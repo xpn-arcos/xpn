@@ -51,16 +51,6 @@
       int getDirWithURL(char *url, char *dir);
 
 
-      // TODO: move into urlstr.h ????
-      int ParseURL(   char *url,  
-      		      char *protocol, 
-		      char *login, 
-		      char *passwd, 
-		      char *server,  
-		      char *port,  
-		      char *dir);
-
-
   /* .................................................................... */
 
 #ifdef  __cplusplus

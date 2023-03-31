@@ -34,6 +34,14 @@ AC_PROG_CC([gcc mpicc icc mpifcc])
 AM_PROG_CC_C_O
 
 #
+# Check __open2 support
+#
+MPICC_INTEL=$(mpicc --version | grep "Intel" | wc -l)
+if test "x$MPICC_INTEL" == "x1"; then
+   AC_DEFINE([HAVE_ICC], [1], [we have icc as mpicc compiler])
+fi
+
+#
 # Checks for libraries.
 #
 AC_CHECK_LIB(pthread,pthread_create)
@@ -82,7 +90,7 @@ LFLAGS+="-L../../../mxml -L../../../xpn/lib "
 
 LIBLINK=$LIBS
 LIBLINK+=" -lmxml"
-LIBS=$LFLAGS" "$LIBS
+LIBS=$LFLAGS" "$LIBS" -lmxml"
 
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
@@ -146,16 +154,14 @@ AC_MSG_RESULT("$target_os");
 INCLUDEFLAGS="\
 -I\$(top_srcdir)/include \
 -I\$(top_srcdir)/include/base \
+-I\$(top_srcdir)/include/bypass \
 -I\$(top_srcdir)/include/xpn_client/ \
 -I\$(top_srcdir)/include/xpn_client/xpn \
 -I\$(top_srcdir)/include/xpn_client/xpn/xpn_simple \
 -I\$(top_srcdir)/include/xpn_client/nfi \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
--I\$(top_srcdir)/include/xpn_client/xpni/ \
--I\$(top_srcdir)/include/xpn_client/xpni/common \
--I\$(top_srcdir)/include/xpn_client/xpni/xpni_null \
--I\$(top_srcdir)/include/xpn_client/xpni/xpni_ft \
--I\$(top_srcdir)/include/xpn_client/xpni/xpni_log"
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_local"
 
 
 ### BEGIN OF NFS BLOCK. Do not remove this line. ###
