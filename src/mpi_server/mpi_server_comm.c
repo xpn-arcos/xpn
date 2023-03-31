@@ -29,7 +29,7 @@
 
   int mpi_server_comm_init ( mpi_server_param_st *params )
   {
-    int  ret, provided ;
+    int  ret, provided, claimed ;
     char serv_name [HOST_NAME_MAX];
 
     //Get timestap
@@ -39,10 +39,31 @@
     DEBUG_BEGIN() ;
 
     // MPI_Init
-    ret = MPI_Init_thread(&(params->argc), &(params->argv), MPI_THREAD_MULTIPLE, &provided) ;
-    if (MPI_SUCCESS != ret) {
-      debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
-      return -1 ;
+
+    // Threads disable
+    if (!params->thread_mode)
+    { 
+      ret = MPI_Init(&(params->argc), &(params->argv));
+      if (MPI_SUCCESS != ret)
+      {
+        debug_error("Server[%d]: MPI_Init fails :-(", -1) ;
+        return -1 ;
+      }
+    }
+    // Threads enable
+    else
+    {
+      ret = MPI_Init_thread(&(params->argc), &(params->argv), MPI_THREAD_MULTIPLE, &provided);
+      if (MPI_SUCCESS != ret)
+      {
+        debug_error("Server[%d]: MPI_Init_thread fails :-(", -1) ;
+        return -1 ;
+      }
+
+      MPI_Query_thread(&claimed);
+      if (claimed != MPI_THREAD_MULTIPLE) {
+        printf("MPI_Init_thread: your MPI implementation seem not supporting thereads\n") ;
+      }
     }
 
     // params->rank = comm_rank()
