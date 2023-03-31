@@ -43,29 +43,26 @@
 
 ### 1.2.1. Installing prerequisites
 
-XPN needs the typical C development tools (gcc, make, autotools) and a MPI implementation installed.
+XPN needs two elements:
+1. The typical C development tools: gcc, make, autotools
+2. An MPI implementation installed: MPICH or OpenMPI
 
-* To install the C development tools:
-  * If you are an user of a cluster with modules then you might try to load the compiler module, for example:
-    ```bash
-    module load gcc
-    ```
-    Where "gcc" is the compiler module.
+The steps to install both depends on your platform (cluster with modules, Linux packages, etc.):
 
-  * If you are administrator of your Linux machine then you need to execute:
-    ```
-    sudo apt-get install -y autoconf automake gcc g++ make libtool build-essential
-    ```
-  
-* To install the MPICH implementation of MPI:
-  * If you are an user of a cluster with already installed software then you might try to load the MPI module, for example:
-    ```bash
-    module load "impi/2017.4"
-    ```
-    Where "impi/2017.4" is the MPI module.
+| Steps to install ...                | Cluster with modules       | Linux packages      |
+| ----------------------------------- | -------------------------- | ------------------- |
+| ... the C development tools         | module load gcc            | sudo apt-get install -y autoconf automake gcc g++ make libtool build-essential |
+| ... the MPI implementation          | module load "impi/2017.4"  | sudo apt-get install -y libmpich-dev mpich mpich-doc                           |
 
-  * From source code and with Infiniband (Omni-Path) support:
-    ```
+
+In a cluster with modules, "gcc" is the example of compiler module and "impi/2017.4" is the MPI module.
+You can check your available modules by using:
+```
+module avail
+```
+
+In order to install the MPICH implementation of MPI from source code and with Infiniband (Omni-Path) support we recommend:
+```
     wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
     tar zxf mpich-4.1.1
     cd      mpich-4.1.1
@@ -75,12 +72,7 @@ XPN needs the typical C development tools (gcc, make, autotools) and a MPI imple
                 --with-device=ch4:ofi:psm2 --with-libfabric=<path where your libfabric is installed>
     make
     make install
-    ```
-
-  * If you are administrator of your Linux machine then you need to execute:
-    ```
-    sudo apt-get install -y libmpich-dev  
-    ```
+```
 
 
 ### 1.2.2. Download the source code of XPN
