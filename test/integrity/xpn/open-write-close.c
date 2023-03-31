@@ -28,7 +28,7 @@ int main ( int argc, char *argv[] )
 
 	ret = xpn_write(fd1, buffer, BUFF_SIZE);
 	printf("%d = xpn_write(%d, %p, %lu)\n", ret, fd1, buffer, (unsigned long)BUFF_SIZE);
-
+//	sleep(1);
 	ret = xpn_close(fd1);
 	printf("%d = xpn_close(%d)\n", ret, fd1) ;
 

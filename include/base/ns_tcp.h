@@ -53,10 +53,10 @@
        *  API
        */
 
-      char * ns_tcp_get_hostname ( void ) ;
-      int    ns_tcp_publish      ( char * dns_file, char * param_srv_name, char * host_name, char * port_name ) ;
-      int    ns_tcp_unpublish    ( char * dns_file, char * serv_name ) ;
-      int    ns_tcp_lookup       ( char * param_srv_name, char * host_name, char * port_name ) ;
+      char *      ns_tcp_get_hostname     ( void ) ;
+      int         ns_tcp_publish          ( char * dns_file, char * param_srv_name, char * host_name, char * port_name ) ;
+      int         ns_tcp_unpublish        ( char * dns_file, char * serv_name ) ;
+      int         ns_tcp_lookup           (                  char * param_srv_name, char * host_name, char * port_name ) ;
 
 
 #endif
