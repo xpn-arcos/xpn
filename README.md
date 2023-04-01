@@ -19,97 +19,110 @@
   ```mermaid
   flowchart LR
     A[Start] --> B{Spack?}
-    B -- Yes --> C[1.1 With Spack]
-    B -- No ---> D[install prerequisites]
-    subgraph ide1 [1.2 With autotools]
-    D --> E[download source of XPN and mxml]
-    E --> F[build XPN]
-    F --> G[End]
+    B -- Yes --> C[add repo]
+    subgraph ide1 [1.1 With spack]
+    C --> D[install software]
+    D --> E[load software]
     end
+    E --> I[End]
+    B -- No ---> F[install prerequisites]
+    subgraph ide2 [1.2 With autotools]
+    F --> G[download source code]
+    G --> H[build source code]
+    end
+    H --> I[End]
   ```
 
 ### 1.1. With Spack
 
-  To deploy XPN with Spack:
-  ```
-  git clone https://github.com/xpn-arcos/xpn.git
-  spack repo add xpn/scripts/spack
-  spack info xpn
-  spack install xpn
-  spack load xpn
-  ```
+  * To add XPN Spack repository:
+    ```
+    git clone https://github.com/xpn-arcos/xpn.git
+    spack repo add xpn/scripts/spack
+    ```
+
+  * To install XPN with Spack:
+    ```
+    spack info xpn
+    spack install xpn
+    ```
+
+  * To use XPN with Spack:
+    ```
+    spack load xpn
+    ```
+
 
 ### 1.2. With autotools (configure, make, make install)
 
-### 1.2.1. Installing prerequisites
+  * ### 1.2.1. Installing prerequisites
 
-XPN needs two elements:
-1. The typical C development tools: gcc, make, autotools
-2. An MPI implementation installed: MPICH or OpenMPI
+    XPN needs two elements:
+    1. The typical C development tools: gcc, make, autotools
+    2. An MPI implementation installed: MPICH or OpenMPI
 
-The steps to install both depends on your platform (cluster with modules, Linux packages, etc.):
+    The steps to install both depends on your platform (cluster with modules, Linux packages, etc.):
 
-| Steps to install ...                | Cluster with modules       | Linux packages      |
-| ----------------------------------- | -------------------------- | ------------------- |
-| ... the C development tools         | module load gcc            | sudo apt-get install -y autoconf automake gcc g++ make libtool build-essential |
-| ... the MPI implementation          | module load "impi/2017.4"  | sudo apt-get install -y libmpich-dev mpich mpich-doc                           |
+  | Steps to install ...                | Cluster with modules       | Linux packages      |
+  | ----------------------------------- | -------------------------- | ------------------- |
+  | ... the C development tools         | module load gcc            | sudo apt-get install -y autoconf automake gcc g++ make libtool build-essential |
+  | ... the MPI implementation          | module load "impi/2017.4"  | sudo apt-get install -y libmpich-dev mpich mpich-doc                           |
+  
+  In a cluster with modules, "gcc" is the example of compiler module and "impi/2017.4" is the MPI module.
+  You can check your available modules by using:
+ ```
+ module avail
+ ```
 
-
-In a cluster with modules, "gcc" is the example of compiler module and "impi/2017.4" is the MPI module.
-You can check your available modules by using:
-```
-module avail
-```
-
-In order to install the MPICH implementation of MPI from source code and with Infiniband (Omni-Path) support we recommend:
-```
-    wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
-    tar zxf mpich-4.1.1
-    cd      mpich-4.1.1
-    ./configure --prefix=<path where MPICH is going to be installed> \
-                --enable-threads=multiple \
-                --enable-romio \
-                --with-device=ch4:ofi:psm2 --with-libfabric=<path where your libfabric is installed>
-    make
-    make install
-```
-
-
-### 1.2.2. Download the source code of XPN
-
-You need to download the source code of [XPN](https://xpn-arcos.github.io/arcos-xpn.github.io/) and [minixml](http://www.minixml.org).
-
-You can download both by executing:
-```
-mkdir $HOME/src
-cd    $HOME/src
-git clone https://github.com/michaelrsweet/mxml.git
-git clone https://github.com/xpn-arcos/xpn.git
-```
-
-You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
+ In order to install the MPICH implementation of MPI from source code and with Infiniband (Omni-Path) support we recommend:
+ ```
+ wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
+ tar zxf mpich-4.1.1
+ cd      mpich-4.1.1
+ ./configure --prefix=<path where MPICH is going to be installed> \
+             --enable-threads=multiple \
+             --enable-romio \
+             --with-device=ch4:ofi:psm2 --with-libfabric=<path where your libfabric is installed>
+ make
+ make install
+ ```
 
 
-### 1.2.3. Building XPN
+  * ### 1.2.2. Download the source code of XPN
 
-To build Expand you need to execute:
-```
-cd $HOME/src
-./xpn/build-me -m <MPICC_PATH> -i <INSTALL_PATH>
-```
-Where:
-* MPICC_PATH is the full path to your mpicc compiler.
-* INSTALL_PATH is the full path of the directory where XPN and MXML are going to be installed.
+    You need to download the source code of [XPN](https://xpn-arcos.github.io/arcos-xpn.github.io/) and [minixml](http://www.minixml.org).
 
-For example:
-  ```
-  cd $HOME/src;
-  ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
-  ```
+    You can download both by executing:
+    ```
+    mkdir $HOME/src
+    cd    $HOME/src
+    git clone https://github.com/michaelrsweet/mxml.git
+    git clone https://github.com/xpn-arcos/xpn.git
+    ```
 
-Where:
-* MPI distribution is installed at '/opt/software/install-mpich'
-* Installation directory will be $HOME/xpn_bin
+    You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
+
+
+  * ### 1.2.3. Building XPN
+
+    To build Expand you need to execute:
+    ```
+    cd $HOME/src
+    ./xpn/build-me -m <MPICC_PATH> -i <INSTALL_PATH>
+    ```
+    Where:
+    * MPICC_PATH is the full path to your mpicc compiler.
+    * INSTALL_PATH is the full path of the directory where XPN and MXML are going to be installed.
+
+    For example:
+    ```
+    cd $HOME/src;
+    ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
+    ```
+
+    Where:
+    * MPI distribution is installed at '/opt/software/install-mpich'
+    * Installation directory will be $HOME/xpn_bin
 
 
 ## 2. Executing XPN
