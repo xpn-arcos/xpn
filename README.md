@@ -82,7 +82,8 @@
  ./configure --prefix=<path where MPICH is going to be installed> \
              --enable-threads=multiple \
              --enable-romio \
-             --with-device=ch4:ofi:psm2 --with-libfabric=<path where your libfabric is installed>
+             --with-device=ch4:ofi:psm2 \
+             --with-libfabric=<path where your libfabric is installed>
  make
  make install
  ```
@@ -108,22 +109,9 @@
     To build Expand you need to execute:
     ```
     cd $HOME/src
-    ./xpn/build-me -m <MPICC_PATH> -i <INSTALL_PATH>
+    ./xpn/build-me -m <full path to your mpicc compiler> \
+                   -i <full path to where XPN and MXML are going to be installed>
     ```
-    Where:
-    * MPICC_PATH is the full path to your mpicc compiler.
-    * INSTALL_PATH is the full path of the directory where XPN and MXML are going to be installed.
-
-    For example:
-    ```
-    cd $HOME/src;
-    ./xpn/build-me -m /opt/software/install-mpich/bin/mpicc -i $HOME/xpn_bin
-    ```
-
-    Where:
-    * MPI distribution is installed at '/opt/software/install-mpich'
-    * Installation directory will be $HOME/xpn_bin
-
 
 ## 2. Executing XPN
 
