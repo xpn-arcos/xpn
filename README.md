@@ -127,13 +127,31 @@
 
 ## 2. Executing XPN
 
-First, you need to get familiar with 4 special files:
+First, you need to get familiar with 4 special files and 5 special environment variables for XPN client:
+
+  ```mermaid
+  mindmap
+  root((XPN))
+    files
+        hostfile
+        xpn cfg file
+        nameserver
+        server file
+    environment variables
+        XPN_DNS
+        XPN_CONF
+        XPN_THREAD
+        XPN_SESSION
+        XPN_LOCALITY
+```
+
+The 4 special files are:
 * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
 * ```<XPN configuration file>``` for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers.
 * ```<nameserver file>``` for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing.
 * ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
-Then, you need to get familiar with 5 special environment variables for XPN clients:
+And the 5 special environment variables for XPN clients are:
 * ```XPN_DNS```      with the full path to the nameserver file to be used (mandatory).
 * ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
