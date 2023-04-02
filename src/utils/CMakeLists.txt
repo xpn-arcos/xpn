@@ -1,4 +1,4 @@
-set(UTILS_LIST d2xpn lsxpn mkdirxpn removexpn rmdirxpn statfsxpn xpn2d xpncat xpncp xpnrm xpnwriter)
+set(UTILS_LIST cp-local2xpn xpn-ls xpn-mkdir removexpn xpn-rmdir xpn-statfs cp-xpn2local xpn-cat xpncp xpnwriter)
 
 # add the executables
 foreach (util ${UTILS_LIST})

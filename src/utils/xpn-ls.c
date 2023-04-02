@@ -1,4 +1,25 @@
 
+  /*
+   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *
+   *  This file is part of Expand.
+   *
+   *  Expand is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  Expand is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */
+
+
 #include <stdlib.h>
 #include <string.h>
 #include <sys/param.h>
@@ -64,42 +85,44 @@ int main(int argc, char *argv[])
   struct dirent *dr;
   char aux[2*NFSMAXPATHLEN];
   char aux2[NFSMAXPATHLEN];
-  
+
   struct stat st;
   int i;
   char attrstr[11];
   struct passwd *pass;
-  
+
   // Arguments
   if(argc !=2){
-    printf("Incorrect number of parameters. Usage \"lsxpn <path>\"\n");
+    printf("ERROR: Incorrect number of parameters.\"\n");
+    printf("Usage \"%s <path>\"\n", argv[0]);
     exit(0);
   }
-  destino=argv[1];
 
   // XPN
   if((ret=xpn_init())<0){
     printf("Error in init %d\n",ret);
     exit(-1);
   }
+
+  destino=argv[1];
   strcpy(aux2,destino);
-  
- 
   del_slash(aux2);
   printf("open %s\n", aux2);
-  fdp = xpn_opendir(aux2); 
+
+  fdp = xpn_opendir(aux2);
   if(fdp == NULL){
     printf("error in ls \n");
     exit(-1);
-  } 
-  i=0;  
-  while(( dr = xpn_readdir(fdp)) != NULL)
+  }
+
+  i=0;
+  while ((dr = xpn_readdir(fdp)) != NULL)
   {
-	  if((strcmp(dr->d_name,".")!=0)&&(strcmp(dr->d_name,"..")!=0))
+	  if ((strcmp(dr->d_name,".")!=0) && (strcmp(dr->d_name,"..")!=0))
 	  {
 		/*printf("%s/%s\n",aux2,dr->d_name);*/
-		sprintf(aux,"%s/%s",aux2,dr->d_name);
-	  	ret= xpn_stat(aux,&st);
+		sprintf(aux, "%s/%s", aux2, dr->d_name);
+	  	ret= xpn_stat(aux, &st);
 		if(ret<0){
 			/*printf("stat ret = %s -> %d\n",aux,ret);*/
 			free(dr);
@@ -108,7 +131,7 @@ int main(int argc, char *argv[])
 		get_perm(st.st_mode, attrstr);
 		pass = getpwuid((uid_t)st.st_uid);
 		if(pass == NULL){
-			printf("Error in lsxpn .. %d\n",ret);
+			printf("ERROR: getpwuid = %d\n", ret);
 			free(dr);
 		        exit(-1);
 		}
@@ -124,9 +147,9 @@ int main(int argc, char *argv[])
  	  /*printf("dr->d_name = %s\n",dr->d_name); */
 	  free(dr);
   }
-  
-  printf("Total %d\n",i);
-	 
+
+  printf("Total %d\n", i);
+	
   xpn_closedir(fdp);
 
   xpn_destroy();

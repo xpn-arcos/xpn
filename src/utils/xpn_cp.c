@@ -30,10 +30,12 @@
   #include <dirent.h>
   #include <string.h>
 
+
 /* ... Const / Const ................................................. */
 
   #define BUFFER_SIZE (8192*1024)
   char buf[BUFFER_SIZE];
+
 
 /* ... Functions / Funciones ......................................... */
 
@@ -162,11 +164,11 @@
     int ret;
 
     printf("\n");
-    printf("  xpn_cp\n");
-    printf(" --------\n");
+    printf("  cp\n");
+    printf(" ----\n");
     printf("\n");
     printf("  Usage:\n");
-    printf("  %s ./xpn_copy <src_path> <dest_path>\n", argv[0]) ;
+    printf("  %s <src_path> <dest_path>\n", argv[0]) ;
     printf("\n");
 
     if (argc < 3)
@@ -181,4 +183,6 @@
     return ret ;
   }
 
+
 /* ................................................................... */
+
