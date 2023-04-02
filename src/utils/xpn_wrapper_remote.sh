@@ -23,4 +23,4 @@ shift 3
 
 export XPN_CONF
 
-"$BASE_PATH/xpncat" "$XPN_IN" | $@ | "$BASE_PATH/xpnwriter" "$XPN_OUT"
+"$BASE_PATH/xpn-cat" "$XPN_IN" | $@ | "$BASE_PATH/xpnwriter" "$XPN_OUT"

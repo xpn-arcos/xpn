@@ -1575,6 +1575,13 @@
     debug_info("[bypass] Before __realpath_chk...\n");
     debug_info("[bypass] Path %s\n", path);
 
+    // TODO: taken from https://refspecs.linuxbase.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic/libc---realpath-chk-1.html
+    // -> ... If resolved_len is less than PATH_MAX, then the function shall abort, and the program calling it shall exit.
+    //
+    //if (resolved_len < PATH_MAX) {
+    //    return -1 ;
+    //}
+
     if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
