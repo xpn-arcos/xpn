@@ -86,6 +86,7 @@ pushd .
 cd "$SRC_PATH"
 export MPICC=$MPICC_PATH
 export CC=$MPICC_PATH
+export PATH=$(dirname $MPICC_PATH):$PATH
 ./bootstrap
 ./configure --prefix="$INSTALL_PATH/ior"
 make clean

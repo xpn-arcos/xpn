@@ -84,5 +84,6 @@ ln    -s "$INSTALL_PATH/io500/lib64"   "$INSTALL_PATH/io500/lib"
 echo " * IO500: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
+export PATH=$(dirname $MPICC_PATH):$PATH
 env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICC_PATH MPICC=$MPICC_PATH  ./prepare.sh
 popd
