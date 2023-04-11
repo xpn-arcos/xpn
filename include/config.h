@@ -26,10 +26,10 @@
 #define HAVE_LIBDL 1
 
 /* Define to 1 if you have the `mosquitto' library (-lmosquitto). */
-#define HAVE_LIBMOSQUITTO 1
+/* #undef HAVE_LIBMOSQUITTO */
 
 /* Define to 1 if you have the `mxml' library (-lmxml). */
-#define HAVE_LIBMXML 1
+/* #undef HAVE_LIBMXML */
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #define HAVE_LIBPTHREAD 1
@@ -50,7 +50,7 @@
 #define HAVE_MEMSET 1
 
 /* Define to 1 if you have the <mosquitto.h> header file. */
-#define HAVE_MOSQUITTO_H 1
+/* #undef HAVE_MOSQUITTO_H */
 
 /* Define to 1 if you have the <mpi.h> header file. */
 /* #undef HAVE_MPI_H */
