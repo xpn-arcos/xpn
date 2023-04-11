@@ -2,7 +2,7 @@
 #include "all_system.h"
 #include "xpn.h"
 
-#define BUFF_SIZE (1024)
+#define BUFF_SIZE (128)
 
 int main ( int argc, char *argv[] )
 {

@@ -755,6 +755,8 @@ int nfi_tcp_server_create(struct nfi_server * serv, char * url, struct nfi_attr 
     }
     /*****************************************/
 
+    printf("CREATE ------------------- %s\n", server_aux -> params.server_name);
+
     fh -> type = NFIFILE;
     fh -> server = serv;
     fh -> priv_fh = (void * ) fh_aux;
@@ -923,7 +925,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     debug_info("[NFI-TCP] nfi_tcp_server_write(ID=%s): begin off %d size %d\n", server_aux -> id, (int) offset, (int) size);
     fh_aux = (struct nfi_tcp_server_fhandle * ) fh -> priv_fh;
 
-    printf("%s\n", server_aux -> params.server_name);
+    printf("ANTES ------------------- %s\n", server_aux -> params.server_name);
 
     if (server_aux -> params.xpn_mosquitto_mode == 0)
     {
@@ -1088,6 +1090,8 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
             diff = size - cont;
             free(topic);
         } while ((diff > 0) && (ret != 0));
+
+        ret = cont;
     }
 
 

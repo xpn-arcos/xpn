@@ -1030,7 +1030,6 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
     char * machine;
     int port;
     char * file;
-    char * relative;
     char * params1;
 
     int BLOCKSIZE = head -> u_st_tcp_server_msg.op_preload.block_size;
@@ -1044,7 +1043,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
         return;
     }
 
-    ret = URLSTR_ParseURL(head -> u_st_tcp_server_msg.op_preload.virtual_path, & protocol, & user, & machine, & port, & file, & relative, & params1);
+    ret = ParseURL(head -> u_st_tcp_server_msg.op_preload.virtual_path, & protocol, & user, & machine, & port, & file, & params1);
 
     // Create new file
     fd_dest = filesystem_creat(file, 0777);
@@ -1052,7 +1051,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
     {
         filesystem_close(fd_orig);
         tcp_server_comm_write_data(params, sd, (char * ) & fd_dest, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
-        free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+        free(protocol); free(user); free(machine); free(file); free(params1) ;  
         return;
     }
 
@@ -1067,7 +1066,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
             tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
-            free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+            free(protocol); free(user); free(machine); free(file); free(params1) ;  
             return;
         }
 
@@ -1077,7 +1076,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
             tcp_server_comm_write_data(params, sd, (char * ) & read_bytes, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
-            free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+            free(protocol); free(user); free(machine); free(file); free(params1) ;  
             return;
         }
 
@@ -1089,7 +1088,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
                 filesystem_close(fd_orig);
                 filesystem_close(fd_dest);
                 tcp_server_comm_write_data(params, sd, (char * ) & write_bytes, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
-                free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+                free(protocol); free(user); free(machine); free(file); free(params1) ;  
                 return;
             }
         }
@@ -1106,7 +1105,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
     // show debug info
     debug_info("[TCP-SERVER-OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n", params -> srv_name, head -> u_st_tcp_server_msg.op_preload.virtual_path, head -> u_st_tcp_server_msg.op_preload.storage_path, ret);
 
-    free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+    free(protocol); free(user); free(machine); free(file); free(params1) ;  
     return;
 }
 
@@ -1121,13 +1120,12 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
     char * machine;
     int port;
     char * file;
-    char * relative;
     char * params1;
 
     int BLOCKSIZE = head -> u_st_tcp_server_msg.op_flush.block_size;
     char buffer[BLOCKSIZE];
 
-    ret = URLSTR_ParseURL(head -> u_st_tcp_server_msg.op_flush.virtual_path, & protocol, & user, & machine, & port, & file, & relative, & params1);
+    ret = ParseURL(head -> u_st_tcp_server_msg.op_flush.virtual_path, & protocol, & user, & machine, & port, & file, & params1);
 
     // Open origin file
     fd_orig = filesystem_open(file, O_RDONLY);
@@ -1135,7 +1133,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
     {
         printf("Error on open operation on '%s'\n", file);
         tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
-        free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+        free(protocol); free(user); free(machine); free(file); free(params1) ;  
         return;
     }
 
@@ -1146,7 +1144,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
         printf("Error on open operation on '%s'\n", head -> u_st_tcp_server_msg.op_flush.storage_path);
         filesystem_close(fd_orig);
         tcp_server_comm_write_data(params, sd, (char * ) & fd_dest, sizeof(int), rank_client_id);
-        free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+        free(protocol); free(user); free(machine); free(file); free(params1) ;  
         return;
     }
 
@@ -1163,7 +1161,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
             filesystem_close(fd_orig);
             filesystem_close(fd_dest);
             tcp_server_comm_write_data(params, sd, (char * ) & read_bytes, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
-            free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+            free(protocol); free(user); free(machine); free(file); free(params1) ;  
             return;
         }
 
@@ -1176,7 +1174,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
                 filesystem_close(fd_orig);
                 filesystem_close(fd_dest);
                 tcp_server_comm_write_data(params, sd, (char * ) & write_bytes, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
-                free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+                free(protocol); free(user); free(machine); free(file); free(params1) ;  
                 return;
             }
         }
@@ -1192,7 +1190,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
     // show debug info
     debug_info("[TCP-SERVER-OPS] (ID=%s) FLUSH(%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_flush.virtual_path);
 
-    free(protocol); free(user); free(machine); free(file); free(relative); free(params1) ;  
+    free(protocol); free(user); free(machine); free(file); free(params1) ;  
     return;
 }
 
