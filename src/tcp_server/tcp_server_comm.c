@@ -20,26 +20,126 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     //#define DEBUG 1
+//#define DEBUG 1
 
-     #include "tcp_server/tcp_server_comm.h"
+#include "tcp_server/tcp_server_comm.h"
+#include <ctype.h>
 
 
   /* ... Functions / Funciones ......................................... */
 
-     // MOSQUITTO FILE
+// MOSQUITTO FILE
 #ifdef HAVE_MOSQUITTO_H
 
 void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_message *msg)
 {
-    //tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
-    //filesystem_lseek(fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
+    //printf("%s\t%d\n", msg->topic, msg->payloadlen);
 
-    //req.size = filesystem_write(fd, buffer, to_write);
-    printf("%s\t%d\n\n", msg->topic, msg->payloadlen);
+    // Copiar el mensaje en una variable local para manipularla
+    char topic[PATH_MAX], path[PATH_MAX];
+
+    int to_write1, offset;
+
+    strncpy(topic, msg->topic, PATH_MAX);
+
+    // Encontrar la posición del último y el penúltimo slash
+    int last_slash = -1;
+    int penultimate_slash = -1;
+    int i;
+    for (i = 0; topic[i] != '\0'; i++) {
+        if (topic[i] == '/') {
+            penultimate_slash = last_slash;
+            last_slash = i;
+        }
+    }
+
+    // Extraer el path y los dos enteros usando sscanf y las posiciones de los slashes
+    
+    if (penultimate_slash >= 0 && last_slash > penultimate_slash) 
+    {
+        // Si hay dos slashes, extraer el path y ambos enteros
+        strncpy(path, topic, penultimate_slash);
+        path[penultimate_slash] = '\0';
+        sscanf(&topic[penultimate_slash + 1], "%d/%d", &to_write1, &offset);
+
+    } else if (last_slash >= 0) 
+    {
+        // Si solo hay un slash, extraer solo el path y el primer entero
+        strncpy(path, topic, last_slash);
+        path[last_slash] = '\0';
+        sscanf(&topic[last_slash + 1], "%d", &to_write1);
+        offset = 0;
+        
+    } else {
+        // Si no hay slashes, asumir que todo es el path
+        strncpy(path, topic, PATH_MAX - 1);
+        path[PATH_MAX - 1] = '\0';
+        to_write1 = 0;
+        offset = 0;
+    }
+
+    printf("\n%s - %s %d %d\n", topic, path, to_write1, offset);
+
+
+    char * buffer;
+    int size, diff, cont = 0, to_write = 0, size_written = 0;
+
+    // initialize counters
+    size = to_write1;
+    if (size > MAX_BUFFER_SIZE) 
+    {
+        size = MAX_BUFFER_SIZE;
+    }
+    diff = size - cont;
+
+    //Open file
+    int fd = open(path, O_WRONLY|O_APPEND);
+    if (fd < 0)
+    {
+        return;
+    }
+
+    /*// malloc a buffer of size...
+    buffer = (char * ) malloc(size);
+    if (NULL == buffer) 
+    {
+        close(fd);
+        return;
+    }
+
+    bzero(buffer, MAX_BUFFER_SIZE);*/
+
+    // loop...
+    do {
+        if (diff > size) to_write = size;
+        else to_write = diff;
+
+        // read data from TCP and write into the file
+        lseek(fd, offset + cont, SEEK_SET);
+        size_written = write(fd, msg->payload, to_write);
+
+        // update counters
+        cont = cont + size_written; // Received bytes
+        diff = to_write - cont;
+
+    } while ((diff > 0) && (size_written != 0));
+
+
+    close(fd);
+    FREE_AND_NULL(buffer);
+
+    printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WOS \n\n", __LINE__);
+
+    mosquitto_unsubscribe(mqtt, NULL, path);
+
+    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WOS %s \n\n", __LINE__, path);
+
 }
 
 #endif
+
+
+
 
 
 int tcp_server_comm_init ( tcp_server_param_st * params )

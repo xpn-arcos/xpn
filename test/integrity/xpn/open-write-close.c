@@ -2,12 +2,12 @@
 #include "all_system.h"
 #include "xpn.h"
 
-#define BUFF_SIZE (1024*1024)
+#define BUFF_SIZE (1024)
 
 int main ( int argc, char *argv[] )
 {
 	int  ret ;
-	int  fd1 ;
+	int  fd, fd1, num_read ;
 	char buffer[BUFF_SIZE] ;
 
 	//printf("env XPN_CONF=./xpn.conf XPN_DNS=/tmp/tcp_server.dns %s\n", argv[0]);
@@ -20,16 +20,33 @@ int main ( int argc, char *argv[] )
 	}
 
 	// test 1
+
+	//fd = open ("./quijote.txt", O_RDONLY);
+
 	fd1 = xpn_creat("/P1/test_1", 00777);
 	printf("%d = xpn_creat('%s', %o)\n", ret, "/P1/test_1", 00777);
 
 	memset(buffer, 'a', BUFF_SIZE) ;
 	printf("memset(buffer, 'a', %d)\n", BUFF_SIZE) ;
 
-	ret = xpn_write(fd1, buffer, BUFF_SIZE);
-	printf("%d = xpn_write(%d, %p, %lu)\n", ret, fd1, buffer, (unsigned long)BUFF_SIZE);
-//	sleep(1);
+	
+	/*while ((num_read = read(fd, buffer, BUFF_SIZE)) > 0) {
+        if (xpn_write(fd1, buffer, num_read)) {
+            perror("Error al escribir en el archivo de destino");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    close(fd);*/
+
+	for (int i = 0; i < atoi(argv[1]); i++)
+	{
+		ret = xpn_write(fd1, buffer, BUFF_SIZE);
+		printf("%d = xpn_write_%d(%d, %p, %lu)\n", ret, i, fd1, buffer, (unsigned long)BUFF_SIZE);
+	}
+	//sleep(1);*/
 	ret = xpn_close(fd1);
+
 	printf("%d = xpn_close(%d)\n", ret, fd1) ;
 
 		// xpn-destroy
