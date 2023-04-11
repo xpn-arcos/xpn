@@ -163,18 +163,15 @@
   {
     int ret;
 
-    printf("\n");
-    printf("  cp\n");
-    printf(" ----\n");
-    printf("\n");
-    printf("  Usage:\n");
-    printf("  %s <src_path> <dest_path>\n", argv[0]) ;
-    printf("\n");
-
     if (argc < 3)
     {
-      printf("  >> ERROR: too few arguments :-(\n");
+      printf("[ERROR]: too few arguments\n");
       printf("\n");
+
+      printf("  Usage:\n");
+      printf("  %s <src_path> <dest_path>\n", argv[0]) ;
+      printf("\n");
+
       return -1;
     }
 
