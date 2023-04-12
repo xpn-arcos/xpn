@@ -81,6 +81,10 @@
               debug_info("[NFI-MPI] (ID=%s) RM operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_rm, sizeof(struct st_mpi_server_rm), head->id) ;
               break;
+      case MPI_SERVER_RM_FILE_ASYNC:
+              debug_info("[NFI-MPI] (ID=%s) RM_ASYNC operation\n", head->id) ;
+              ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_rm, sizeof(struct st_mpi_server_rm), head->id) ;
+              break;
       case MPI_SERVER_RENAME_FILE:
               debug_info("[NFI-MPI] (ID=%s) RENAME operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_rename, sizeof(struct st_mpi_server_rename), head->id) ;
@@ -109,6 +113,10 @@
               break;
       case MPI_SERVER_RMDIR_DIR:
               debug_info("[NFI-MPI] (ID=%s) RMDIR operation\n", head->id) ;
+              ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_rmdir, sizeof(struct st_mpi_server_rmdir), head->id) ;
+              break;
+      case MPI_SERVER_RMDIR_DIR_ASYNC:
+              debug_info("[NFI-MPI] (ID=%s) RMDIR_ASYNC operation\n", head->id) ;
               ret = mpiClient_write_data(sd, (char *)&head->u_st_mpi_server_msg.op_rmdir, sizeof(struct st_mpi_server_rmdir), head->id) ;
               break;
 
@@ -1152,6 +1160,32 @@
       memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;
 
       nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
+
+      //TODO
+      /*printf("RANK -> %d\n", server_aux->id);
+      if (server_aux->id == 0)
+      {
+        printf("SINCRONO\n");
+        msg.type = MPI_SERVER_RM_FILE;
+        memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
+        memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;
+
+        nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
+      }
+      else
+      {
+        printf("ASINCRONO\n");
+        msg.type = MPI_SERVER_RM_FILE_ASYNC;
+        memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
+        memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;
+
+        // send request...
+        debug_info("[NFI-MPI] (ID=%s): %s: -> ...\n", server_aux->id, msg->id) ;
+        ret = mpi_server_write_operation(server_aux->params.server, &msg) ;
+        if (ret < 0) {
+          return -1 ;
+        }
+      }*/
     }
 
     DEBUG_END();

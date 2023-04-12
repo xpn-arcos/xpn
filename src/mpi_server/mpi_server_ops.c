@@ -33,25 +33,27 @@
 
     switch (op_code)
     {
-        case MPI_SERVER_OPEN_FILE_WS:     ret = "OPEN" ;
+        case MPI_SERVER_OPEN_FILE_WS:    ret = "OPEN" ;
              break ;
-        case MPI_SERVER_OPEN_FILE_WOS:    ret = "OPEN_WOS" ;
+        case MPI_SERVER_OPEN_FILE_WOS:   ret = "OPEN_WOS" ;
              break ;
-        case MPI_SERVER_CREAT_FILE_WS:    ret = "CREAT" ;
+        case MPI_SERVER_CREAT_FILE_WS:   ret = "CREAT" ;
              break ;
-        case MPI_SERVER_CREAT_FILE_WOS:   ret = "CREAT_WOS" ;
+        case MPI_SERVER_CREAT_FILE_WOS:  ret = "CREAT_WOS" ;
              break ;
-        case MPI_SERVER_READ_FILE_WS:     ret = "READ" ;
+        case MPI_SERVER_READ_FILE_WS:    ret = "READ" ;
              break ;
-        case MPI_SERVER_READ_FILE_WOS:    ret = "READ_WOS" ;
+        case MPI_SERVER_READ_FILE_WOS:   ret = "READ_WOS" ;
              break ;
-        case MPI_SERVER_WRITE_FILE_WS:    ret = "WRITE" ;
+        case MPI_SERVER_WRITE_FILE_WS:   ret = "WRITE" ;
              break ;
-        case MPI_SERVER_WRITE_FILE_WOS:   ret = "WRITE_WOS" ;
+        case MPI_SERVER_WRITE_FILE_WOS:  ret = "WRITE_WOS" ;
              break ;
-        case MPI_SERVER_CLOSE_FILE_WS:    ret = "CLOSE" ;
+        case MPI_SERVER_CLOSE_FILE_WS:   ret = "CLOSE" ;
              break ;
         case MPI_SERVER_RM_FILE:         ret = "RM" ;
+             break ;
+        case MPI_SERVER_RM_FILE_ASYNC:   ret = "RM ASYNC" ;
              break ;
         case MPI_SERVER_RENAME_FILE:     ret = "RENAME" ;
              break ;
@@ -62,6 +64,8 @@
         case MPI_SERVER_MKDIR_DIR:       ret = "MKDIR" ;
              break ;
         case MPI_SERVER_RMDIR_DIR:       ret = "RMDIR" ;
+             break ;
+        case MPI_SERVER_RMDIR_DIR_ASYNC: ret = "RMDIR ASYNC" ;
              break ;
         case MPI_SERVER_OPENDIR_DIR:     ret = "OPENDIR" ;
              break ;
@@ -106,6 +110,7 @@
   void  mpi_server_op_close_ws    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
 
   void  mpi_server_op_rm          ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
+  void  mpi_server_op_rm_async    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_rename      ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_setattr     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_getattr     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
@@ -115,6 +120,7 @@
   void  mpi_server_op_readdir     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_closedir    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_rmdir       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
+  void  mpi_server_op_rmdir_async ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
 
   void  mpi_server_op_flush       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_preload     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
@@ -199,6 +205,12 @@
             mpi_server_op_rm(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id) ;
         }
         break;
+      case MPI_SERVER_RM_FILE_ASYNC:
+        ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_rm), th->rank_client_id) ;
+        if (ret != -1) {
+            mpi_server_op_rm_async(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id) ;
+        }
+        break;
       case MPI_SERVER_RENAME_FILE:
         ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rename), sizeof(struct st_mpi_server_rename), th->rank_client_id) ;
         if (ret != -1) {
@@ -247,6 +259,12 @@
         ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_rmdir), th->rank_client_id) ;
         if (ret != -1) {
             mpi_server_op_rmdir(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id) ;
+        }
+        break;
+      case MPI_SERVER_RMDIR_DIR_ASYNC:
+        ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_rmdir), th->rank_client_id) ;
+        if (ret != -1) {
+            mpi_server_op_rmdir_async(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id) ;
         }
         break;
 
@@ -677,7 +695,24 @@
     mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 
     // show debug info
-    debug_info("[MPI-SERVER-OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
+    printf("[MPI-SERVER-OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
+  }
+
+  void mpi_server_op_rm_async ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
+  {
+    char *s ;
+
+    // check params...
+    if (NULL == params) {
+        return ;
+    }
+
+    // do rm
+    s = head->u_st_mpi_server_msg.op_rm.path ;
+    int ret = filesystem_unlink(s) ;
+
+    // show debug info
+    printf("[MPI-SERVER-OPS] (ID=%s) RM_ASYNC(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
   }
 
   void mpi_server_op_rename ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -830,6 +865,20 @@
 
     // show debug info
     debug_info("[MPI-SERVER-OPS] (ID=%s) RMDIR(%s) \n", params->srv_name, s) ;
+  }
+
+  void mpi_server_op_rmdir_async ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
+  {
+    int ret;
+    char *s;
+
+    // do rmdir
+    s = head->u_st_mpi_server_msg.op_rmdir.path ;
+
+    ret = filesystem_rmdir(s) ;
+
+    // show debug info
+    debug_info("[MPI-SERVER-OPS] (ID=%s) RMDIR_ASYNC(%s) \n", params->srv_name, s) ;
   }
 
 
