@@ -32,6 +32,13 @@
 
 void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_message *msg)
 {
+    if (NULL == mqtt) {
+	printf("[%s:%d] mqtt argument is NULL :-(\n", __FILE__, __LINE__) ;
+    }
+    if (NULL == obj) {
+	printf("[%s:%d] obj  argument is NULL :-(\n", __FILE__, __LINE__) ;
+    }
+
     //tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
     //filesystem_lseek(fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
 

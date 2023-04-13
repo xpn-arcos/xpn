@@ -439,9 +439,8 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     #ifdef HAVE_MOSQUITTO_H
     printf("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s - %ld\n\n", __LINE__, sm, strlen(sm));
 
-    rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
-
-    if(rc != MOSQ_ERR_SUCCESS)
+    int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
+    if (rc != MOSQ_ERR_SUCCESS)
     {
       fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
       mosquitto_disconnect(params -> mqtt);
