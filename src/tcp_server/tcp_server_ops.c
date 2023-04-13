@@ -427,7 +427,7 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 
 void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
-  int fd, rc;
+  int  fd;
   char *s;
   char *extra = "/#";
   char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_creat.path) + strlen(extra) + 1);
@@ -805,6 +805,9 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
   strcat(sm, extra);
 
   s = head -> u_st_tcp_server_msg.op_close.path;
+  if (NULL == s) {
+      printf("op_close: null path... :-S\n") ;
+  }
 
   if( params -> mosquitto_mode == 1 )
   {
@@ -850,7 +853,7 @@ void tcp_server_op_rm(tcp_server_param_st * params, int sd, struct st_tcp_server
   debug_info("[TCP-SERVER-OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_rm.path);
 }
 
-void tcp_server_op_rm_async(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
+void tcp_server_op_rm_async(tcp_server_param_st * params, __attribute__((__unused__)) int sd, struct st_tcp_server_msg * head, __attribute__((__unused__)) int rank_client_id)
 {
   char * s;
 
@@ -862,7 +865,7 @@ void tcp_server_op_rm_async(tcp_server_param_st * params, int sd, struct st_tcp_
 
   // do rm
   s = head -> u_st_tcp_server_msg.op_rm.path;
-  int ret = filesystem_unlink(s);
+  filesystem_unlink(s);
 
   // show debug info
   debug_info("[TCP-SERVER-OPS] (ID=%s) RM_ASYNC(path=%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_rm.path);
@@ -1020,15 +1023,14 @@ void tcp_server_op_rmdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
   debug_info("[TCP-SERVER-OPS] (ID=%s) RMDIR(%s) \n", params -> srv_name, s);
 }
 
-void tcp_server_op_rmdir_async(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
+void tcp_server_op_rmdir_async(__attribute__((__unused__)) tcp_server_param_st * params, __attribute__((__unused__)) int sd, struct st_tcp_server_msg * head, __attribute__((__unused__)) int rank_client_id)
 {
-  int ret;
   char * s;
 
   // do rmdir
   s = head -> u_st_tcp_server_msg.op_rmdir.path;
 
-  ret = filesystem_rmdir(s);
+  filesystem_rmdir(s);
 
   // show debug info
   debug_info("[TCP-SERVER-OPS] (ID=%s) RMDIR_ASYNC(%s) \n", params -> srv_name, s);

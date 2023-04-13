@@ -484,14 +484,13 @@ int xpn_internal_remove(const char * path)
     nfi_worker_do_remove(servers[master_node] -> wrk, url_serv);
 
     res = nfiworker_wait(servers[master_node] -> wrk);
-
-    printf("REMOVE RET MASTER: %d -- %d\n", servers[master_node] -> wrk -> arg.result , res);
     if (res < 0)
     {
         free(servers);
         return res;
     }
 
+    // Rest of nodes...
     for (i = 0; i < n; i++) 
     {
         if (i == master_node)

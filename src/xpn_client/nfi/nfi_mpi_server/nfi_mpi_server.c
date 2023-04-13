@@ -1155,20 +1155,8 @@
     {
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
-      /*msg.type = MPI_SERVER_RM_FILE;
-      memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
-      memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;
-
-      nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;*/
-
-
-      printf("ARGS master_node %d\n", serv -> wrk -> arg.master_node);
-      printf("ARGS is_master_node %d\n", serv -> wrk -> arg.is_master_node);
-
-      //TODO
       if ((serv -> wrk -> arg.is_master_node) == 1)
       {
-        printf("SINCRONO\n");
         msg.type = MPI_SERVER_RM_FILE;
         memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
         memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;
@@ -1177,7 +1165,6 @@
       }
       else
       {
-        printf("ASINCRONO\n");
         msg.type = MPI_SERVER_RM_FILE_ASYNC;
         memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
         memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;

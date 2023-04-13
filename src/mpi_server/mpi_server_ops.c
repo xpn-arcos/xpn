@@ -710,10 +710,10 @@
     mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id) ;
 
     // show debug info
-    printf("[MPI-SERVER-OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
   }
 
-  void mpi_server_op_rm_async ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
+  void mpi_server_op_rm_async ( mpi_server_param_st *params, __attribute__((__unused__)) MPI_Comm sd, struct st_mpi_server_msg *head, __attribute__((__unused__)) int rank_client_id )
   {
     char *s ;
 
@@ -724,10 +724,10 @@
 
     // do rm
     s = head->u_st_mpi_server_msg.op_rm.path ;
-    int ret = filesystem_unlink(s) ;
+    filesystem_unlink(s) ;
 
     // show debug info
-    printf("[MPI-SERVER-OPS] (ID=%s) RM_ASYNC(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
+    debug_info("[MPI-SERVER-OPS] (ID=%s) RM_ASYNC(path=%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rm.path) ;
   }
 
   void mpi_server_op_rename ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
@@ -877,15 +877,14 @@
     debug_info("[MPI-SERVER-OPS] (ID=%s) RMDIR(%s) \n", params->srv_name, s) ;
   }
 
-  void mpi_server_op_rmdir_async ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
+  void mpi_server_op_rmdir_async ( __attribute__((__unused__)) mpi_server_param_st *params, __attribute__((__unused__)) MPI_Comm sd, struct st_mpi_server_msg *head, __attribute__((__unused__)) int rank_client_id )
   {
-    int ret;
     char *s;
 
     // do rmdir
     s = head->u_st_mpi_server_msg.op_rmdir.path ;
 
-    ret = filesystem_rmdir(s) ;
+    filesystem_rmdir(s) ;
 
     // show debug info
     debug_info("[MPI-SERVER-OPS] (ID=%s) RMDIR_ASYNC(%s) \n", params->srv_name, s) ;

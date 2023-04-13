@@ -339,7 +339,7 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
     return -1;
   }
 
-  // new nfi_mpiserver_server...
+  // new nfi_tcpserver_server...
   server_aux = (struct nfi_tcp_server_server * ) malloc(sizeof(struct nfi_tcp_server_server));
   if (server_aux == NULL) {
     debug_error("ERROR: out of memory\n");
@@ -497,7 +497,7 @@ int nfi_tcp_server_destroy(struct nfi_server * serv)
   debug_info("[NFI-TCP] nfiworker_destroy()\n");
   nfiworker_destroy(serv);
 
-  // MPI Finalize...
+  // TCP Finalize...
   ret = tcpClient_comm_destroy( & (server_aux -> params));
   if (ret < 0) {
     debug_error("[NFI-TCP]: tcpClient_comm_destroy fails :-(");
@@ -598,7 +598,7 @@ int nfi_tcp_server_disconnect(struct nfi_server * serv)
 
 
 /************************************************************
- * Reconnect to the MPI server                              *
+ * Reconnect to the TCP server                              *
  ************************************************************/
 int nfi_tcp_server_reconnect(struct nfi_server * serv)
 {
@@ -978,8 +978,9 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
   DEBUG_BEGIN();
 
   // Check arguments...
+  ret = 0 ;
   if (size == 0) {
-    return 0;
+    return ret;
   }
 
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
@@ -1272,6 +1273,42 @@ int nfi_tcp_server_remove(struct nfi_server * serv, char * url)
     memccpy(msg.u_st_tcp_server_msg.op_rm.path, dir, 0, PATH_MAX - 1);
 
     nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (ret), sizeof(int));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if ((serv -> wrk -> arg.is_master_node) == 1)
+    {
+      msg.type = TCP_SERVER_RM_FILE;
+      memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
+      memccpy(msg.u_st_tcp_server_msg.op_rm.path, dir, 0, PATH_MAX - 1);
+
+      nfi_tcp_server_doRequest(server_aux, & msg, (char * ) & (ret), sizeof(int));
+    }
+    else
+    {
+      msg.type = TCP_SERVER_RM_FILE_ASYNC;
+      memccpy(msg.id, server_aux -> id, 0, TCP_SERVER_ID - 1);
+      memccpy(msg.u_st_tcp_server_msg.op_rm.path, dir, 0, PATH_MAX - 1);
+
+      // send request...
+      debug_info("[NFI-TCP] (ID=%s): %s: -> ...\n", server_aux->id, msg->id) ;
+      ret = tcp_server_write_operation(server_aux->params.server, &msg) ;
+      if (ret >= 0) {
+        return 0 ;
+      }
+    }
   }
 
   DEBUG_END();
@@ -1770,7 +1807,7 @@ int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, 
     return -1;
   }
 
-  MPItoNFIInfo(inf, &tcp_serverinf) ;
+  TCPtoNFIInfo(inf, &tcp_serverinf) ;
   */
 
   //TODO
