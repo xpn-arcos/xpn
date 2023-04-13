@@ -334,7 +334,7 @@ void tcp_server_op_open_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
         #ifdef HAVE_MOSQUITTO_H
         printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
 
-        int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
+        int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
         if(rc != MOSQ_ERR_SUCCESS)
         {
             fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
@@ -378,7 +378,7 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
         #ifdef HAVE_MOSQUITTO_H
         printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
 
-        int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
+        int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
         if(rc != MOSQ_ERR_SUCCESS)
         {
             fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
@@ -426,7 +426,7 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
         #ifdef HAVE_MOSQUITTO_H
         printf("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
 
-        rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
+        rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
 
         if(rc != MOSQ_ERR_SUCCESS)
         {
@@ -471,7 +471,7 @@ void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp
         #ifdef HAVE_MOSQUITTO_H
         printf("[%d]\tBEGIN CREATE MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
 
-        int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, 0);
+        int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
 
         if(rc != MOSQ_ERR_SUCCESS)
         {
@@ -751,7 +751,7 @@ void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp
             return;
         }
 
-        printf("\npath = %s | to_write = %d | offset = %d\n", head -> u_st_tcp_server_msg.op_write.path, size, head -> u_st_tcp_server_msg.op_write.offset);
+        printf("\npath = %s | to_write = %d | offset = %ld\n", head -> u_st_tcp_server_msg.op_write.path, size, head -> u_st_tcp_server_msg.op_write.offset);
 
         // loop...
         do {
@@ -1030,7 +1030,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
     char * protocol;
     char * user;
     char * machine;
-    int port;
+    char * port;
     char * file;
     char * params1;
 
@@ -1045,7 +1045,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
         return;
     }
 
-    ret = ParseURL(head -> u_st_tcp_server_msg.op_preload.virtual_path, & protocol, & user, & machine, & port, & file, & params1);
+    ret = ParseURL(head -> u_st_tcp_server_msg.op_preload.virtual_path, protocol, user, machine, port, file, params1);
 
     // Create new file
     fd_dest = filesystem_creat(file, 0777);
@@ -1120,14 +1120,14 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
     char * protocol;
     char * user;
     char * machine;
-    int port;
+    char * port;
     char * file;
     char * params1;
 
     int BLOCKSIZE = head -> u_st_tcp_server_msg.op_flush.block_size;
     char buffer[BLOCKSIZE];
 
-    ret = ParseURL(head -> u_st_tcp_server_msg.op_flush.virtual_path, & protocol, & user, & machine, & port, & file, & params1);
+    ret = ParseURL(head -> u_st_tcp_server_msg.op_flush.virtual_path, protocol, user, machine, port, file, params1);
 
     // Open origin file
     fd_orig = filesystem_open(file, O_RDONLY);

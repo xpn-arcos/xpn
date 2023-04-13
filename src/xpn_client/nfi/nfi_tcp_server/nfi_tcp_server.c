@@ -364,8 +364,10 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
 
         if (server_aux -> params.xpn_mosquitto_mode == 1)                       //MQTT initialization
         {
-            /*int first_av = find_pos_mqtt();
-            if (first_av == -1) return -1;*/
+            server_aux -> params.xpn_mosquitto_qos = 0;
+            char * env_qos_mqtt = getenv("XPN_MQTT_QOS");
+            
+            if (env_qos_mqtt != NULL) server_aux -> params.xpn_mosquitto_qos = atoi(env_qos_mqtt);
 
             mosquitto_lib_init();
             server_aux -> mqtt = mosquitto_new(NULL, true, NULL);
@@ -1072,7 +1074,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
             debug_info("\nCLIENTE ESCRITURA - %s - topic=%s\n", fh_aux -> path, topic);
             debug_info("\nREMOTE MQTT- %s - %d - %d\n\n", server_aux -> params.server_name, cont, bytes_to_write);
 
-            ret = mosquitto_publish(server_aux -> mqtt, NULL, topic, bytes_to_write, (char * ) buffer + cont, 0, false);
+            ret = mosquitto_publish(server_aux -> mqtt, NULL, topic, bytes_to_write, (char * ) buffer + cont, server_aux -> params.xpn_mosquitto_qos, false);
 
             if(ret != MOSQ_ERR_SUCCESS)
             {
