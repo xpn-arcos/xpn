@@ -80,6 +80,7 @@
     if (ret < 0) {
       perror("stat: ");
       printf("[ERROR] %s\n", src_path);
+      free(buf) ;
       return -1;
     }
 
@@ -93,6 +94,7 @@
       if ( ret < 0 )
       {
         perror("mkdir: ");
+	free(buf) ;
         return -1;
       }
     }
@@ -102,6 +104,7 @@
       if ( fd_src < 0 )
       {
         perror("open 2: ");
+	free(buf) ;
         return -1;
       }
 
@@ -109,6 +112,7 @@
       if ( fd_dest < 0 )
       {
         perror("open 1: ");
+	free(buf) ;
         return -1;
       }
 
@@ -154,7 +158,6 @@
     }
     
     free(buf);
-
     return 0;
   }
 

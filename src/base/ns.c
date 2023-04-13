@@ -53,7 +53,8 @@
     ret = fprintf(dns_fd, "%s %s %s\n", param_srv_name, param_srv_ip, port_name);
     if (ret < 0)
     {
-      perror("fprintf on DNS File:");
+      fclose(dns_fd);
+      perror("fprintf on DNS File: ");
       return -1;
     }
 
