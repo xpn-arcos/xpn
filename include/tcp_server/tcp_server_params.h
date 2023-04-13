@@ -64,6 +64,7 @@
 
     //mqtt configuration
     int mosquitto_mode;
+    int mosquitto_qos;
 
     #ifdef HAVE_MOSQUITTO_H
     struct mosquitto * mqtt;

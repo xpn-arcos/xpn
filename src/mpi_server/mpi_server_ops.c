@@ -910,7 +910,7 @@
     // Open origin file
     fd_orig = filesystem_open(head->u_st_mpi_server_msg.op_preload.storage_path, O_RDONLY) ;
     if (fd_orig < 0) {
-      return;
+        return;
     }
 
     ret = ParseURL(head->u_st_mpi_server_msg.op_preload.virtual_path,
@@ -988,7 +988,7 @@
     int BLOCKSIZE = head->u_st_mpi_server_msg.op_flush.block_size;
     char buffer [BLOCKSIZE];
 
-    ret = ParseURL(head->u_st_mpi_server_msg.op_preload.virtual_path,
+    ret = ParseURL(head->u_st_mpi_server_msg.op_flush.virtual_path,
                    protocol,
                    user,
                    pass,
