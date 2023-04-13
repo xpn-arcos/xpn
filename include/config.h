@@ -29,7 +29,7 @@
 /* #undef HAVE_LIBMOSQUITTO */
 
 /* Define to 1 if you have the `mxml' library (-lmxml). */
-/* #undef HAVE_LIBMXML */
+#define HAVE_LIBMXML 1
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #define HAVE_LIBPTHREAD 1
