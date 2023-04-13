@@ -29,6 +29,7 @@
   #include <fcntl.h>
   #include <dirent.h>
   #include <string.h>
+  #include <errno.h>
 
 
 /* ... Const / Const ................................................. */
@@ -114,14 +115,27 @@
 
     if (S_ISREG(stat_buf.st_mode))
     {
+      printf("=");
+      //printf("cp '%s' '%s' ...\n", src_path, dest_path);
       return do_cp(src_path, dest_path) ;
     }
     else if (S_ISDIR(stat_buf.st_mode))
     {
       DIR * dir = NULL;
       struct dirent * entry = NULL;
-      char path [PATH_MAX];
+      char path_src [PATH_MAX];
+      char path_dst [PATH_MAX];
 
+      // mkdir in destination
+      //printf("mkdir '%s' ...\n", dest_path);
+      ret = mkdir(dest_path, stat_buf.st_mode);
+      if ((ret == -1) && (errno != EEXIST))
+      {
+        perror("mkdir:");
+        return -1;
+      }
+
+      // traverse a src tree...
       dir = opendir(src_path);
       if (NULL == dir) {
         perror("opendir:");
@@ -140,10 +154,9 @@
           continue;
         }
 
-        sprintf(path, "%s/%s", src_path, entry->d_name);
-        printf("cp '%s' ...\n", path);
-
-        do_cp_recursive(path, dest_path) ;
+        sprintf(path_src, "%s/%s",  src_path, entry->d_name);
+        sprintf(path_dst, "%s/%s", dest_path, entry->d_name);
+        do_cp_recursive(path_src, path_dst) ;
 
         entry = readdir(dir);
       }
@@ -163,22 +176,21 @@
   {
     int ret;
 
-    printf("\n");
-    printf("  cp\n");
-    printf(" ----\n");
-    printf("\n");
-    printf("  Usage:\n");
-    printf("  %s <src_path> <dest_path>\n", argv[0]) ;
-    printf("\n");
-
     if (argc < 3)
     {
-      printf("  >> ERROR: too few arguments :-(\n");
+      printf("[ERROR]: too few arguments\n");
       printf("\n");
+
+      printf("  Usage:\n");
+      printf("  %s <src_path> <dest_path>\n", argv[0]) ;
+      printf("\n");
+
       return -1;
     }
 
+    printf("Copying... \n");
     ret = do_cp_recursive(argv[1], argv[2]) ;
+    printf("\n");
 
     return ret ;
   }

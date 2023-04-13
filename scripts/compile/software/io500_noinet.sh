@@ -96,6 +96,7 @@ export MPICC_PATH=$MPICC_PATH
 sed -i 's/CC = mpicc/CC = ${MPICC_PATH}/g' Makefile
 cat prepare.sh | sed "s/^INSTALL_DIR/#INSTALL_DIR/g" | sed "s/git_co https/#git_co https/g" | sed "s|./prepare.sh|./prepare-alt.sh|g" > prepare-alt.sh
 chmod a+x prepare-alt.sh
+export PATH=$(dirname $MPICC_PATH):$PATH
 env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICC_PATH MPICC=$MPICC_PATH  ./prepare-alt.sh
 #rm -fr prepare-alt.sh
 popd
