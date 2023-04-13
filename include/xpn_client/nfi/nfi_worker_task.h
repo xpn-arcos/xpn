@@ -24,6 +24,9 @@ struct nfi_worker_args {
   ssize_t result;
 
   char   url          [PATH_MAX];
+  int    master_node;
+  int    is_master_node;
+
   char   virtual_path [PATH_MAX];
   char   storage_path [PATH_MAX];
   char   newurl       [PATH_MAX];

@@ -1570,7 +1570,7 @@
     }
   }
 
-  char * __realpath_chk(const char * path, char * resolved_path, size_t resolved_len)
+  char * __realpath_chk(const char * path, char * resolved_path, __attribute__((__unused__)) size_t resolved_len)
   {
     debug_info("[bypass] Before __realpath_chk...\n");
     debug_info("[bypass] Path %s\n", path);
