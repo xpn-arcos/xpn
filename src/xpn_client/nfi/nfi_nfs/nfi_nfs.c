@@ -544,6 +544,7 @@ int nfi_nfs_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi
 	return 0;
 }
 
+
 int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 {
 	char dir[NFSPATHLEN], server[NFSPATHLEN];
@@ -616,15 +617,16 @@ int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 	//fprintf(stderr,"nfs_open: lookup %s in server %s (err:%d).\n",dir,serv->server,ret);
 #endif
 
-	if(ret < 0){
+	if (ret < 0) {
 		//fprintf(stderr,"nfs_open: Fail lookup %s in server %s (err:%d).\n",dir,serv->server,ret);
 		//nfs_err(NFSERR_LOOKUP);
 		//free(fho->url);
-		//free(fh_aux);
-		//free(server_aux);
+		free(fh_aux) ;
 		return -1;
 	}
-	switch(ret){
+
+	switch (ret)
+	{
 		case NFREG:
 			fho->type = NFIFILE;
 			break;
@@ -638,9 +640,7 @@ int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 	fho->priv_fh = (void *) fh_aux;
 
 	return 0;
-
 }
-
 
 
 int nfi_nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )

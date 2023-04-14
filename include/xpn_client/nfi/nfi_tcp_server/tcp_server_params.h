@@ -25,6 +25,7 @@
 
     //MQTT usage
     int xpn_mosquitto_mode;
+    int xpn_mosquitto_qos;
 
     // client identification
     int  size ;
