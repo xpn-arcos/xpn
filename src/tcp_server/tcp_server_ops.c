@@ -364,7 +364,9 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
     int fd;
     char *s;
     char *extra = "/#";
-    char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
+    char *sm = NULL ;
+    
+    sm = malloc(strlen(head -> u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
     strcpy(sm, head -> u_st_tcp_server_msg.op_open.path);
     strcat(sm, extra);
 
@@ -387,7 +389,8 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
         }
 
         debug_info("[%d]\tEND OPEN MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, sm);
-/**
+
+        /**
         printf("[%d]\tBEGIN CLOSE OPEN MOSQUITTO TCP_SERVER - WOS \n\n", __LINE__);
 
         mosquitto_unsubscribe(params -> mqtt, NULL, sm);
@@ -405,10 +408,10 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 
     filesystem_close(fd);
 
-
     // show debug info
     printf("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 
+    free(sm) ; // TODO: sm should be free here ?????
 }
 
 
@@ -417,7 +420,9 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     int fd, rc;
     char *s;
     char *extra = "/#";
-    char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_creat.path) + strlen(extra) + 1);
+    char *sm = NULL ;
+    
+    sm = malloc(strlen(head -> u_st_tcp_server_msg.op_creat.path) + strlen(extra) + 1);
     strcpy(sm, head -> u_st_tcp_server_msg.op_creat.path);
     strcat(sm, extra);
 
@@ -451,6 +456,8 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
 
     // show debug info
     debug_info("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+
+    free(sm) ; // TODO: sm should be free here ?????
 }
 
 

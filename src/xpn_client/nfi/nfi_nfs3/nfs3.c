@@ -149,7 +149,7 @@ void close_connection_mount3(CLIENT *cl)
 
   if (!cl)
   {
-  	if (!cl->cl_auth){
+  	if (!(cl->cl_auth)) {
   	    auth_destroy(cl->cl_auth);
   	}
 
