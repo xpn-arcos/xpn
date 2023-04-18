@@ -28,9 +28,10 @@
   #define TCP_SERVER_WRITE_FILE_WS  3
   #define TCP_SERVER_CLOSE_FILE_WS  4
   #define TCP_SERVER_RM_FILE        5
-  #define TCP_SERVER_RENAME_FILE    6
-  #define TCP_SERVER_GETATTR_FILE   7
-  #define TCP_SERVER_SETATTR_FILE   8
+  #define TCP_SERVER_RM_FILE_ASYNC  6
+  #define TCP_SERVER_RENAME_FILE    7
+  #define TCP_SERVER_GETATTR_FILE   8
+  #define TCP_SERVER_SETATTR_FILE   9
 
   // File operations without session
   #define TCP_SERVER_OPEN_FILE_WOS      100
@@ -39,11 +40,12 @@
   #define TCP_SERVER_WRITE_FILE_WOS     103
 
   // Directory operations
-  #define TCP_SERVER_MKDIR_DIR      20
-  #define TCP_SERVER_RMDIR_DIR      21
-  #define TCP_SERVER_OPENDIR_DIR    22
-  #define TCP_SERVER_READDIR_DIR    23
-  #define TCP_SERVER_CLOSEDIR_DIR   24
+  #define TCP_SERVER_MKDIR_DIR        20
+  #define TCP_SERVER_RMDIR_DIR        21
+  #define TCP_SERVER_RMDIR_DIR_ASYNC  22
+  #define TCP_SERVER_OPENDIR_DIR      23
+  #define TCP_SERVER_READDIR_DIR      24
+  #define TCP_SERVER_CLOSEDIR_DIR     25
 
   // Import / Export operations
   #define TCP_SERVER_FLUSH_FILE     40
