@@ -249,8 +249,7 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
         return -1;
       }
 
-      //((struct policy *)mdata->policy)->first_node = hash(path, xpn_parttable[part_id].data_nserv);
-        ((struct policy *)mdata->policy)->first_node = 0; //TODO
+      ((struct policy *)mdata->policy)->first_node = hash(path, xpn_parttable[part_id].data_nserv);
 
 
       mdata->policy_size = sizeof(struct policy);
@@ -335,8 +334,7 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
   switch(mdata->type_policy)
   {
     default:
-      //n = hash(path, nserv); //TODO
-      n = 0;
+      n = hash(path, nserv);
 
       res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
       if(res < 0)
@@ -520,7 +518,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   for(i=0;i<n;i++)
   {
     if (attr[i].at_size > 0){
-      st->st_size += attr[i].at_size; // total size, in bytes
+      st->st_size += (attr[i].at_size - XPN_HEADER_SIZE); // total size, in bytes
     }
 
     if (1 == attr[i].at_type)  // It is a directory
@@ -529,26 +527,29 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     }
   }
 
-  st->st_dev     = attr[0].st_dev;       // device
-  st->st_ino     = attr[0].st_ino;       // inode
+  int master_node = ((struct policy *)xpn_file_table[fd]->mdata->policy)->first_node;
+  //int master_node = ((struct policy *)mdata->policy)->first_node;
 
-  st->st_mode    = attr[0].at_mode ;     // protection
+  st->st_dev     = attr[master_node].st_dev;       // device
+  st->st_ino     = attr[master_node].st_ino;       // inode
 
-  if (0 == attr[0].at_type){             // It is a file
+  st->st_mode    = attr[master_node].at_mode ;     // protection
+
+  if (0 == attr[master_node].at_type){             // It is a file
     st->st_mode = S_IFREG | st->st_mode;
   }
-  if (1 == attr[0].at_type){             // It is a directory
+  if (1 == attr[master_node].at_type){             // It is a directory
     st->st_mode = S_IFDIR | st->st_mode;
   }
 
-  st->st_nlink   = attr[0].at_nlink;     // number of hard links
+  st->st_nlink   = attr[master_node].at_nlink;     // number of hard links
   st->st_uid     = getuid() ;            // user ID of owner
   st->st_gid     = getgid() ;            // group ID of owner
   //st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O // TODO
-  st->st_blocks  = attr[0].at_blocks ;   // number of blocks allocated
-  st->st_atime   = attr[0].at_atime ;    // time of last access
-  st->st_mtime   = attr[0].at_mtime ;    // time of last modification
-  st->st_ctime   = attr[0].at_ctime ;    // time of last change
+  st->st_blocks  = attr[master_node].at_blocks ;   // number of blocks allocated
+  st->st_atime   = attr[master_node].at_atime ;    // time of last access
+  st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
+  st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
 
   free(servers);
   free(attr);
@@ -660,7 +661,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   for(i=0;i<n;i++)
   {
     if (attr[i].at_size > 0){
-      st->st_size += attr[i].at_size; // total size, in bytes
+      st->st_size += (attr[i].at_size - XPN_HEADER_SIZE); // total size, in bytes
     }
 
     if (1 == attr[i].at_type)  // It is a directory
@@ -669,26 +670,28 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     }
   }
 
-  st->st_dev     = attr[0].st_dev;       // device
-  st->st_ino     = attr[0].st_ino;       // inode
+  int master_node = hash(path, n);
 
-  st->st_mode    = attr[0].at_mode ;     // protection
+  st->st_dev     = attr[master_node].st_dev;       // device
+  st->st_ino     = attr[master_node].st_ino;       // inode
 
-  if (0 == attr[0].at_type){             // It is a file
+  st->st_mode    = attr[master_node].at_mode ;     // protection
+
+  if (0 == attr[master_node].at_type){             // It is a file
     st->st_mode = S_IFREG | st->st_mode;
   }
-  if (1 == attr[0].at_type){             // It is a directory
+  if (1 == attr[master_node].at_type){             // It is a directory
     st->st_mode = S_IFDIR | st->st_mode;
   }
 
-  st->st_nlink   = attr[0].at_nlink;     // number of hard links
+  st->st_nlink   = attr[master_node].at_nlink;     // number of hard links
   st->st_uid     = getuid() ;            // user ID of owner
   st->st_gid     = getgid() ;            // group ID of owner
   //st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O // TODO
-  st->st_blocks  = attr[0].at_blocks ;   // number of blocks allocated
-  st->st_atime   = attr[0].at_atime ;    // time of last access
-  st->st_mtime   = attr[0].at_mtime ;    // time of last modification
-  st->st_ctime   = attr[0].at_ctime ;    // time of last change
+  st->st_blocks  = attr[master_node].at_blocks ;   // number of blocks allocated
+  st->st_atime   = attr[master_node].at_atime ;    // time of last access
+  st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
+  st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
 
   free(servers);
   free(attr);

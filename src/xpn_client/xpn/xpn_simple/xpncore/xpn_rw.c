@@ -160,7 +160,7 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
       }
     }
 
-    res = servers[l_serv]->ops->nfi_read(servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset, l_size) ;
+    res = servers[l_serv]->ops->nfi_read(servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset+XPN_HEADER_SIZE, l_size) ;
     if(res<0) {
       return (0 == count) ? (size_t) -1 : count ;
     }
@@ -484,7 +484,7 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
       }
     }
 
-    res = servers[l_serv]->ops->nfi_write(servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset, l_size) ;
+    res = servers[l_serv]->ops->nfi_write(servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset+XPN_HEADER_SIZE, l_size) ;
     if (res<0) {
       return (0 == count) ? (size_t) -1 : count ;
     }

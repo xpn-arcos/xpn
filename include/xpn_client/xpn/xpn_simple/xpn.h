@@ -12,6 +12,7 @@
  #endif
 
 #define XPN_CONF "XPN_CONF"
+#define XPN_HEADER_SIZE 8192
 
 /* Paralel struct partition */
 struct xpn_partition {
@@ -65,7 +66,7 @@ struct xpn_metadata_header {
 	int     data_nserv;		/* number of servers */
 	ssize_t file_size;
 	int     type_policy;	   /* RAID0, RAID1 */
-	char    padding[512-(3*sizeof(int) - 2*sizeof(ssize_t))];   /* 484 = 512 bytes - 3*sizeof(int) - 2*sizeof(ssize_t) */
+	//char    padding[512-(3*sizeof(int) - 2*sizeof(ssize_t))];   /* 484 = 512 bytes - 3*sizeof(int) - 2*sizeof(ssize_t) */
 };
 
 
