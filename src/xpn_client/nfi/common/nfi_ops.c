@@ -22,8 +22,6 @@
 
 #include "nfi/nfi_ops.h"
 
-#define XPN_HEADER_SIZE 8192
-
 
 /* ... Functions / Funciones ......................................... */
 

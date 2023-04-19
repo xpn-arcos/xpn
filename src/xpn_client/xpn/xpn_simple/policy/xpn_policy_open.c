@@ -190,23 +190,6 @@ int XpnGetServers(int op, int pd, __attribute__((__unused__)) char *abs_path, in
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // TODO: move to metadata file
 
 
@@ -370,27 +353,6 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
   XPN_DEBUG_END
   return XPN_FILE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path)
