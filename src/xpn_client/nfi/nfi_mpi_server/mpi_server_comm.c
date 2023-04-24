@@ -198,20 +198,8 @@
       debug_error("Client[%d]: MPI_Comm_connect fails :-(", params->rank) ;
       return -1 ;
     }
-
-    // To identify client type
-    int data = 0;
-    int rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &(rank));
-    if (rank == 0)
-    {
-      ret = MPI_Send(&data, 1, MPI_INT, 0, 0, params->server );
-      if (MPI_SUCCESS != ret) {
-        debug_warning("Server[?]: MPI_Recv fails :-(") ;
-      }
-    }
     
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
     debug_info("[CLI-COMM] end mpiClient_comm_connect(...)\n") ;
 

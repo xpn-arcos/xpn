@@ -74,6 +74,7 @@
         {
           debug_info("[MPI-SERVER] INFO: DISCONNECT received\n");
           disconnect = 1;
+          the_end = 1;
 	        continue;
         }
 
@@ -149,17 +150,6 @@
         sd = mpi_server_comm_accept(&params) ;
         if (sd == MPI_COMM_NULL) {
           continue ;
-        }
-
-        ret = mpi_server_comm_read_operation(&params, sd, (char *)&(head.type), 1, &(rank_client_id));
-        if (ret < 0) {
-          printf("[MPI-SERVER] ERROR: mpi_server_comm_readdata fail\n") ;
-          return -1;
-        }
-
-        if (head.type == MPI_SERVER_FINALIZE) {
-          the_end = 1;
-          continue;
         }
 
         //Launch dispatcher per aplication
