@@ -1,4 +1,4 @@
-# XPN 2.3
+# XPN 2.2.2
 
 *Expand Ad-Hoc Parallel File System*
 
