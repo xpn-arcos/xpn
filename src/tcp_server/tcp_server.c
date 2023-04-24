@@ -77,10 +77,18 @@ void tcp_server_dispatcher(struct st_th th)
             return;
         }
 
-        if (th.type_op == TCP_SERVER_DISCONNECT || th.type_op == TCP_SERVER_FINALIZE)
+        if (th.type_op == TCP_SERVER_DISCONNECT)
         {
             debug_info("[TCP-SERVER] INFO: DISCONNECT received\n");
             disconnect = 1;
+            continue;
+        }
+
+        if (th.type_op == TCP_SERVER_FINALIZE)
+        {
+            debug_info("[TCP-SERVER] INFO: FINALIZE received\n");
+            disconnect = 1;
+            the_end = 1;
             continue;
         }
 
@@ -106,10 +114,7 @@ void tcp_server_dispatcher(struct st_th th)
 int tcp_server_up(void)
 {
     int ret;
-    struct st_tcp_server_msg head;
-    int rank_client_id;
     struct st_th th_arg;
-    sem_t * sem_server ;
     int sd;
 
     // Feedback
@@ -135,19 +140,19 @@ int tcp_server_up(void)
     }
 
     // Initialize semaphore for server disks
-    ret = sem_init( & (params.disk_sem), 0, 1);
+    /*ret = sem_init( & (params.disk_sem), 0, 1);
     if (ret < 0) {
         printf("[TCP-SERVER] ERROR: semaphore initialization fails\n");
         return -1;
-    }
+    }*/
 
     // Initialize semaphore for clients
-    sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
-    sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
+    /*sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
+    sem_t *sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
     if (sem_server == 0) {
         printf("[TCP-SERVER] ERROR: semaphore open fails\n");
         return -1;
-    }
+    }*/
 
     // Loop: receiving + processing
     the_end = 0;
@@ -158,19 +163,6 @@ int tcp_server_up(void)
         params.client = 0;
         sd = tcp_server_comm_accept(& params);
         if (sd < 0) {
-            continue;
-        }
-
-        ret = tcp_server_comm_read_operation( & params, sd, (char * ) & (head.type), 1, & (rank_client_id));
-        printf("SERVER 1 -- %d\n", head.type);
-
-        if (ret < 0) {
-            printf("[TCP-SERVER] ERROR: tcp_server_comm_readdata fail\n");
-            return -1;
-        }
-
-        if (head.type == TCP_SERVER_FINALIZE) {
-            the_end = 1;
             continue;
         }
 
@@ -192,8 +184,8 @@ int tcp_server_up(void)
     tcp_server_comm_destroy( & params);
 
     // Close semaphores
-    sem_destroy( & (params.disk_sem));
-    sem_unlink(params.sem_name_server);
+    //sem_destroy( & (params.disk_sem));
+    //sem_unlink(params.sem_name_server);
 
     // return OK
     return 0;
