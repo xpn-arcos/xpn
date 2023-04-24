@@ -145,7 +145,7 @@ void tcp_server_op_rmdir    (tcp_server_param_st * params, int sd, struct st_tcp
 void tcp_server_op_flush    (tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id);
 void tcp_server_op_preload  (tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id);
 
-void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id); //NEW
+void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id);
 void tcp_server_op_fstat      (tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id); //TODO: implement
 void tcp_server_op_getid      (tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id); //TODO: call in switch
 
@@ -417,7 +417,7 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 
 void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
-    int fd, rc;
+    int fd;
     char *s;
     char *extra = "/#";
     char *sm = NULL ;
@@ -429,6 +429,7 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     if ( params -> mosquitto_mode == 1 )
     {
         #ifdef HAVE_MOSQUITTO_H
+        int rc;
         printf("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
 
         rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
@@ -803,16 +804,16 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     }
 
     char *extra = "/#";
-    char *s;
     char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_close.path) + strlen(extra) + 1);
     strcpy(sm, head -> u_st_tcp_server_msg.op_close.path);
     strcat(sm, extra);
 
-    s = head -> u_st_tcp_server_msg.op_close.path;
-
     if( params -> mosquitto_mode == 1 )
     {
         #ifdef HAVE_MOSQUITTO_H
+        char *s;
+        s = head -> u_st_tcp_server_msg.op_close.path;
+
         printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
 
         mosquitto_unsubscribe(params -> mqtt, NULL, sm);
@@ -910,10 +911,6 @@ void tcp_server_op_setattr(tcp_server_param_st * params, int sd, struct st_tcp_s
     {
         return;
     }
-
-    //TODO
-    // rank_client_id = rank_client_id;
-    //TODO
 
     // do setattr
     debug_info("[TCP-SERVER-OPS] SETATTR operation to be implemented !!\n");
@@ -1212,15 +1209,11 @@ void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, __attribute
     // Get server host name
     gethostname(serv_name, HOST_NAME_MAX);
 
-    // <TODO>
-    // head = head; // Avoid unused parameter
-    // </TODO>
-
     // show debug info
     debug_info("[TCP-SERVER-OPS] (ID=%s) GETNAME=%s\n", params -> srv_name, serv_name);
 
     tcp_server_comm_write_data(params, sd, (char * ) serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
-    tcp_server_comm_write_data(params, sd, (char * ) params -> sem_name_server, PATH_MAX, rank_client_id); // Send one single message
+    //tcp_server_comm_write_data(params, sd, (char * ) params -> sem_name_server, PATH_MAX, rank_client_id); // Send one single message
 
     DEBUG_END();
 }

@@ -932,7 +932,8 @@ ssize_t nfi_tcp_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
 
 ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, void * buffer, off_t offset, size_t size)
 {
-    int ret, diff, cont;
+    int ret = -1; 
+    int diff, cont;
 
     struct nfi_tcp_server_server * server_aux;
     struct nfi_tcp_server_fhandle * fh_aux;

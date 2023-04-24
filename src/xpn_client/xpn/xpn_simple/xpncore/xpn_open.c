@@ -473,7 +473,7 @@ int xpn_internal_remove(const char * path)
     }
 
     //Master node
-    int master_node = hash(path, n);
+    int master_node = hash((char *)path, n);
     XpnGetURLServer(servers[master_node], abs_path, url_serv);
 
     // Worker
