@@ -84,9 +84,13 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
-IFLAGS="-I../../../mxml -I../../../mosquitto/include -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
-LFLAGS="    -L../../mxml  -L../../../mosquitto/lib  -L../../xpn/lib "
-LFLAGS+="-L../../../mxml  -L../../../mosquitto/lib  -L../../../xpn/lib "
+IFLAGS="-I../../mxml        -I../../bin/mosquitto/include       "
+IFLAGS+="-I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+IFLAGS+="-I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
+
+LFLAGS=" -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib "
+LFLAGS+="-L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib "
+LFLAGS+="-L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
 
 LIBLINK=$LIBS
 LIBLINK+=" -lmxml -lmosquitto"
