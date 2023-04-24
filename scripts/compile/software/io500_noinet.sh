@@ -27,8 +27,8 @@ function usage {
     echo " $0  -m <mpicc path>  -i <Install path> -s <Source path>"
     echo " Where:"
     echo " * <mpicc   path> = full path where the mpicc is installed."
-    echo " * <Install path> = full path where IOR is going to be installed."
-    echo " * <Source  path> = full path to the source code of IOR."
+    echo " * <Install path> = full path where IO500 is going to be installed."
+    echo " * <Source  path> = full path to the source code of IO500."
     echo ""
 }
 
@@ -70,27 +70,34 @@ if [ "$SRC_PATH" == "" ]; then
    exit
 fi
 if [ ! -d "$SRC_PATH" ]; then
-   echo " Skip IOR:"
+   echo " Skip IO500:"
    echo " * Directory not found: $SRC_PATH"
    exit
 fi
 
-## IOR
-echo " * IOR: preparing directories..."
-  rm -fr "$INSTALL_PATH/ior"
-mkdir -p "$INSTALL_PATH/ior/lib64"
-ln    -s "$INSTALL_PATH/ior/lib64"   "$INSTALL_PATH/ior/lib"
+## IO500
+echo " * IO500: preparing directories..."
+  rm -fr "$INSTALL_PATH/io500"
+mkdir -p "$INSTALL_PATH/io500/lib64"
+ln    -s "$INSTALL_PATH/io500/lib64"   "$INSTALL_PATH/io500/lib"
 
-echo " * IOR: compiling and installing..."
+echo " * IO500 DISCLAIMER:"
+echo "   ** Please remember IO500 needs to git clone some components the first time."
+echo "   ** If you don't have access to perform git clone then please ./prepare.sh in other machine first and copy the resulting directory."
+echo ""
+
+echo " * IO500: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
-export MPICC=$MPICC_PATH
-export CC=$MPICC_PATH
+sed "s/git clone/#git clone/g" ./build/pfind/prepare.sh > ./build/pfind/prepare-alt.sh
+chmod a+x ./build/pfind/prepare-alt.sh
+sed -i "s/^VERSION=/#VERSION=/g" Makefile
+export MPICC_PATH=$MPICC_PATH
+sed -i 's/CC = mpicc/CC = ${MPICC_PATH}/g' Makefile
+cat prepare.sh | sed "s/^INSTALL_DIR/#INSTALL_DIR/g" | sed "s/git_co https/#git_co https/g" | sed "s|./prepare.sh|./prepare-alt.sh|g" > prepare-alt.sh
+chmod a+x prepare-alt.sh
 export PATH=$(dirname $MPICC_PATH):$PATH
-./bootstrap
-./configure --prefix="$INSTALL_PATH/ior"
-make clean
-make -j 8
-make install
+env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICC_PATH MPICC=$MPICC_PATH  ./prepare-alt.sh
+#rm -fr prepare-alt.sh
 popd
 

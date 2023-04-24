@@ -27,11 +27,11 @@
   #include <stdio.h>
   #include <string.h>
   #include <ctype.h>
-  #include <semaphore.h>
   #include "mpi.h"
   #include "base/utils.h"
   #include "mpi_server_conf.h"
   #include "base/workers.h"
+  //#include <semaphore.h>
 
 
   /*
@@ -52,10 +52,10 @@
     int thread_mode;
 
     //Semaphore for clients
-    char sem_name_server [PATH_MAX];
+    //char sem_name_server [PATH_MAX];
 
     //Semaphore for server disk
-    sem_t disk_sem;
+    //sem_t disk_sem;
 
     // associated client
     MPI_Comm client ;

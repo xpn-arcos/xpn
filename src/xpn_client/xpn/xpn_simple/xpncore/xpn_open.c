@@ -472,12 +472,39 @@ int xpn_internal_remove(const char * path)
         return -1;
     }
 
+    //Master node
+    int master_node = hash((char *)path, n);
+    XpnGetURLServer(servers[master_node], abs_path, url_serv);
+
+    // Worker
+    servers[master_node] -> wrk -> thread = servers[master_node] -> xpn_thread;
+    servers[master_node] -> wrk -> arg.master_node = master_node;
+    servers[master_node] -> wrk -> arg.is_master_node = 1;
+
+    nfi_worker_do_remove(servers[master_node] -> wrk, url_serv);
+
+    res = nfiworker_wait(servers[master_node] -> wrk);
+    if (res < 0)
+    {
+        free(servers);
+        return res;
+    }
+
+    // Rest of nodes...
     for (i = 0; i < n; i++) 
     {
+        if (i == master_node)
+        {
+            continue;
+        }
+
         XpnGetURLServer(servers[i], abs_path, url_serv);
 
         // Worker
         servers[i] -> wrk -> thread = servers[i] -> xpn_thread;
+        servers[i] -> wrk -> arg.master_node = master_node;
+        servers[i] -> wrk -> arg.is_master_node = 0;
+
         nfi_worker_do_remove(servers[i] -> wrk, url_serv);
     }
 
@@ -485,6 +512,11 @@ int xpn_internal_remove(const char * path)
     err = 0;
     for (i = 0; i < n; i++) 
     {
+        if (i == master_node)
+        {
+            continue;
+        }
+
         res = nfiworker_wait(servers[i] -> wrk);
         // error checking
         if ((res < 0) && (!err)) {

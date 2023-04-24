@@ -19,6 +19,7 @@
  *
  */
 
+
 /* ... Include / Inclusion ........................................... */
 
   #include <stdio.h>
@@ -29,12 +30,8 @@
   #include <sys/stat.h>
   #include "mpi.h"
 
-/* ... Const / Const ................................................. */
-
-
 
 /* ... Functions / Funciones ......................................... */
-
 
   int list (char * dir_name, FILE * fd)
   {
@@ -94,7 +91,8 @@
     FILE * fd;
 
     if(argc < 3){
-      printf("Too few arguments: xpn_ls <directory path> <output_file>\n");
+      printf("ERROR: too few arguments.\n");
+      printf("Usage: %s <directory path> <output_file>\n", argv[0]);
       return -1;
     }
 
@@ -115,4 +113,6 @@
     return 0;
   }
 
+
 /* ................................................................... */
+

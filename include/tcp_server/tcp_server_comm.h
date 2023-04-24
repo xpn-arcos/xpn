@@ -23,29 +23,27 @@
 #ifndef _TCP_SERVER_COMM_H_
 #define _TCP_SERVER_COMM_H_
 
-#include "all_system.h"
-#include "base/utils.h"
-#include "base/time_misc.h"
-#include "base/ns_tcp.h"
-#include "tcp_server_params.h"
-#ifdef HAVE_MOSQUITTO_H
-#include <mosquitto.h>
-#endif
+   #include "all_system.h"
+   #include "base/utils.h"
+   #include "base/time_misc.h"
+   #include "base/ns_tcp.h"
+   #include "tcp_server_params.h"
 
 
-/*
-*  API
-*/
+  /*
+   *  API
+   */
 
-int      tcp_server_comm_init      ( tcp_server_param_st *params ) ;
-int      tcp_server_comm_destroy   ( tcp_server_param_st *params ) ;
+  int      tcp_server_comm_init      ( tcp_server_param_st *params ) ;
+  int      tcp_server_comm_destroy   ( tcp_server_param_st *params ) ;
 
-int      tcp_server_comm_accept    ( tcp_server_param_st *params ) ;
-int      tcp_server_comm_connect   ( tcp_server_param_st * params, char *server_name, int port_number ) ;
-int      tcp_server_comm_close     ( int fd ) ;
+  int      tcp_server_comm_accept    ( tcp_server_param_st *params ) ;
+  int      tcp_server_comm_connect   ( tcp_server_param_st * params, char *server_name, int port_number ) ;
+  int      tcp_server_comm_close     ( int fd ) ;
 
-ssize_t tcp_server_comm_write_data     ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
-ssize_t tcp_server_comm_read_operation ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int *rank_client_id ) ;
-ssize_t tcp_server_comm_read_data      ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
+  ssize_t tcp_server_comm_write_data     ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
+  ssize_t tcp_server_comm_read_operation ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int *rank_client_id ) ;
+  ssize_t tcp_server_comm_read_data      ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
 
 #endif
+
