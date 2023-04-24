@@ -84,13 +84,13 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
-IFLAGS="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
-LFLAGS="    -L../../mxml    -L../../xpn/lib "
-LFLAGS+="-L../../../mxml -L../../../xpn/lib "
+IFLAGS="-I../../../mxml -I../../../mosquitto/include -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+LFLAGS="    -L../../mxml  -L../../../mosquitto/lib  -L../../xpn/lib "
+LFLAGS+="-L../../../mxml  -L../../../mosquitto/lib  -L../../../xpn/lib "
 
 LIBLINK=$LIBS
-LIBLINK+=" -lmxml"
-LIBS=$LFLAGS" "$LIBS" -lmxml"
+LIBLINK+=" -lmxml -lmosquitto"
+LIBS=$LFLAGS" "$LIBS" -lmxml -lmosquitto"
 
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
