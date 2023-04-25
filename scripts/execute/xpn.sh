@@ -27,6 +27,7 @@ mk_conf_servers() {
   PARTITION_SIZE=$3
   PARTITION_NAME=$4
   STORAGE_PATH=$5
+  DEPLOYMENTFILE=$6
 
   # check params
   if [[ ${CONF_NAME} == "" ]]; then
@@ -59,12 +60,16 @@ mk_conf_servers() {
     echo " * STORAGE_PATH=${STORAGE_PATH}"
   fi
 
-  #BASE_DIR="./scripts/execute/"
-  ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
-                         --machinefile  ${MACHINE_FILE} \
-                         --part_size    ${PARTITION_SIZE} \
-                         --part_name    ${PARTITION_NAME} \
-                         --storage_path ${STORAGE_PATH}
+  if [[ ! -f ${DEPLOYMENTFILE} ]]; then
+    ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
+                           --machinefile  ${MACHINE_FILE} \
+                           --part_size    ${PARTITION_SIZE} \
+                           --part_name    ${PARTITION_NAME} \
+                           --storage_path ${STORAGE_PATH}
+  else
+    ${BASE_DIR}/mk_conf.sh --conf            ${CONF_NAME} \
+                           --deployment_file ${DEPLOYMENTFILE}
+  fi
 }
 
 
@@ -162,7 +167,7 @@ rebuild_xpn_servers() {
   stop_xpn_servers
 
   # 3. start new servers
-  mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} 
+  mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
   start_xpn_servers
 }
 
@@ -171,6 +176,7 @@ usage_short() {
   echo ""
   echo " Usage: xpn.sh [-h/--help] [-a/--args <daemon_args>] [-f/--foreground <false>]"
   echo "               [-c/--config <configuration file>]"
+  echo "               [-m/--deployment_file <deployment file>]"
   echo "               [-n/--numnodes <jobsize>]"
   echo "               [-l/--hostfile  <host file>]"
   echo "               [-d/--deathfile <host file>]"
@@ -196,7 +202,8 @@ usage_details() {
   echo "     -h, --help                          Shows this help message and exits"
   echo "     -a, --args <arguments>              Add various additional daemon arguments."
   echo "     -f, --foreground                    Starts the script in the foreground. Daemons are stopped by pressing 'q'."
-  echo "     -c, --config   <path>               Path to configuration file. By defaults looks for a 'xpn_start.cfg' in this directory."
+  echo "     -c, --config   <path>               Path to configuration file."
+  echo "     -m, --deployment_file   <path>      Path to deployment file."
   echo "     -n, --numnodes <n>                  XPN servers are started on n nodes."
   echo "     -r, --rootdir  <path>               The rootdir path for XPN daemons."
   echo "     -w, --workdir  <path>               The working directory path for XPN temporal files."
@@ -218,6 +225,7 @@ SOURCE_PARTITION="xpn"
 NODE_NUM=1
 ARGS=""
 FILE_CONFIG=""
+DEPLOYMENTFILE=""
 RUN_FOREGROUND=false
 VERBOSE=false
 HOSTFILE="machinefile"
@@ -226,7 +234,7 @@ SERVER_TYPE="mpi"
 
 
 ## get arguments
-while getopts "r:w:s:x:d:n:a:c:l:fvh" opt; do
+while getopts "r:w:s:x:d:n:a:c:m:l:fvh" opt; do
   case "${opt}" in
     r) DIR_ROOT=${OPTARG}
        ;;
@@ -241,6 +249,8 @@ while getopts "r:w:s:x:d:n:a:c:l:fvh" opt; do
     a) ARGS=${OPTARG}
        ;;
     c) FILE_CONFIG=${OPTARG}
+       ;;
+    m) DEPLOYMENTFILE=${OPTARG}
        ;;
     f) RUN_FOREGROUND=true
        ;;
@@ -269,7 +279,7 @@ fi
 
 # run 
 case "${ACTION}" in
-      start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH}
+      start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers
