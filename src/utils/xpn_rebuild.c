@@ -19,6 +19,7 @@
  *
  */
 
+
 /* ... Include / Inclusion ........................................... */
 
   #include <stdio.h>
@@ -44,7 +45,7 @@
   #endif
 
   #define MIN(a,b) (((a)<(b))?(a):(b))
-  #define HEADER_SIZE (0)
+  #define HEADER_SIZE 8192
 
   char command[4*1024];
   char src_path [PATH_MAX+5];
@@ -53,18 +54,17 @@
 
 /* ... Functions / Funciones ......................................... */
 
-  int copy(char * entry, char * dir_name, char * dest_prefix, int blocksize, int rank, int size)
-  {   
+  int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int rank, int size)
+  {  
     int  ret;
-
-    //FILE *file = NULL;
-    struct stat stat_buf;
 
     int fd_src, fd_dest;
     char *buf ;
     int buf_len;
     off64_t offset_src ;
     int cont, cont2 ;
+
+    printf("=");
     
     buf = (char *) malloc(blocksize + 1) ;
     if (NULL == buf) {
@@ -75,32 +75,28 @@
     //Generate source path
     //sprintf( src_path, "%s/%s", argv[1], entry );
     strcpy(src_path, entry);
-    ret = stat(src_path, &stat_buf);
-    if (ret < 0) {
-      perror("stat: ");
-      printf("[ERROR] %s\n", src_path);
-      return -1;
-    }
 
     //Generate destination path
     char * aux_entry = entry + strlen(dir_name);
     sprintf( dest_path, "%s/%s", dest_prefix, aux_entry );
 
-    if (S_ISDIR(stat_buf.st_mode))
+    if (!is_file)
     {
       ret = mkdir(dest_path, 0755);
       if ( ret < 0 )
       {
         perror("mkdir: ");
+        free(buf) ;
         return -1;
       }
     }
-    else if (S_ISREG(stat_buf.st_mode))
+    else if (is_file)
     {      
       fd_src = open64(src_path, O_RDONLY | O_LARGEFILE);
       if ( fd_src < 0 )
       {
         perror("open 2: ");
+        free(buf) ;
         return -1;
       }
 
@@ -108,11 +104,14 @@
       if ( fd_dest < 0 )
       {
         perror("open 1: ");
+        free(buf) ;
         return -1;
       }
 
       // Write header
-      ret = write(fd_dest, buf, HEADER_SIZE); // TODO: buf MUST be the header
+      char header_buf [HEADER_SIZE];
+      memset(header_buf, 0, HEADER_SIZE);
+      ret = write(fd_dest, header_buf, HEADER_SIZE);
 
       offset_src = rank * blocksize ;
       do
@@ -153,7 +152,6 @@
     }
     
     free(buf);
-
     return 0;
   }
 
@@ -188,19 +186,24 @@
       }
 
       sprintf(path, "%s/%s", dir_name, entry->d_name);
-      copy(path, dir_name, dest_prefix, blocksize, rank, size);
 
       ret = stat(path, &stat_buf);
-      if (ret < 0) {
+      if (ret < 0) 
+      {
         perror("stat: ");
         printf("%s\n", path);
         entry = readdir(dir);
         continue;
       }
 
+      int is_file = !S_ISDIR(stat_buf.st_mode);
+      copy(path, is_file, dir_name, dest_prefix, blocksize, rank, size);
+
       if (S_ISDIR(stat_buf.st_mode))
       {
-        list(path, dest_prefix, blocksize, rank, size);
+        char path_dst [PATH_MAX];
+        sprintf(path_dst, "%s/%s", dest_prefix, entry->d_name);
+        list(path, path_dst, blocksize, rank, size);
       }
 
       entry = readdir(dir);
@@ -231,7 +234,9 @@
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+    printf("Copying... \n");
     list (argv[1], argv[2], atoi(argv[3]), rank, size);
+    printf("\n");
 
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();

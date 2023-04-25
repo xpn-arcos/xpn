@@ -84,6 +84,7 @@ pushd .
 cd "$SRC_PATH"
 export CC=${MPICC_PATH}
 export MPICC=${MPICC_PATH}
+export PATH=$(dirname $MPICC_PATH):$PATH
 make clean
 make
 popd

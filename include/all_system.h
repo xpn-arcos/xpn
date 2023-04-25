@@ -45,16 +45,18 @@
 #ifndef NOT_TO_USE_STDLIB_H
   #include <stdlib.h>
 #endif
-#include <stdio.h>
-#include <errno.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <math.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
+ #include <stdio.h>
+ #include <errno.h>
+ #include <stdarg.h>
+ #include <stdint.h>
+ #include <math.h>
+ #include <ctype.h>
 
-#include <semaphore.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+
+ #include <semaphore.h>
 
 
 /*

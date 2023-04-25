@@ -28,10 +28,10 @@
   #include <stdio.h>
   #include <string.h>
   #include <ctype.h>
-  #include <semaphore.h>
   #include "base/utils.h"
   #include "tcp_server_conf.h"
   #include "base/workers.h"
+  //#include <semaphore.h>
 
 
   /*
@@ -64,16 +64,17 @@
 
     //mqtt configuration
     int mosquitto_mode;
+    int mosquitto_qos;
 
     #ifdef HAVE_MOSQUITTO_H
     struct mosquitto * mqtt;
     #endif
 
     //Semaphore for clients
-    char sem_name_server [PATH_MAX];
+    //char sem_name_server [PATH_MAX];
 
     //Semaphore for server disk
-    sem_t disk_sem;
+    //sem_t disk_sem;
 
     // associated client
     int  client ;

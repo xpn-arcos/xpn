@@ -57,7 +57,6 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     struct sockaddr_in server_addr;
     int ret, sd, flag, val;
     int lookup_retries;
-    int data;
 
 
     debug_info("[NFI_TCP_COMM] begin tcpClient_comm_connect(...)\n");
@@ -146,21 +145,12 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     if (ret < 0)
     {
         //tcp_server_err(TCP_SERVERERR_MEMORY);
-        fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%s)\n",
-		            params -> srv_name, params -> server_name, params->port_number);
+        fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%s)\n", params -> srv_name, params -> server_name, params->port_number);
         return -1;
     }
 
     params->server = sd;
-  //printf("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
-
-    // send ok message
-    data = 0;
-    ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ;
-    if (ret < 0) {
-        debug_warning("Server[?]: TCP_Send fails :-(");
-        return -1;
-    }
+    //printf("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
 
     return ret;
 }
@@ -212,19 +202,19 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         return -1;
     }
 
-    ret = tcpClient_read_data( params -> server, params -> sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
+    /*ret = tcpClient_read_data( params -> server, params -> sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
     if (ret < 0)
     {
         debug_warning("Server[?]: tcpClient_read_data fails :-(");
         return -1;
-    }
+    }*/
 
     // check locality
     params -> locality = 0;
     if (strcmp(cli_name, serv_name) == 0)
     {
         params -> locality = 1;
-        params -> sem_server = sem_open(params -> sem_name_server, 0);
+        //params -> sem_server = sem_open(params -> sem_name_server, 0);
     }
 
     debug_info("[NFI_TCP_COMM] end tcpClient_comm_locality\n");

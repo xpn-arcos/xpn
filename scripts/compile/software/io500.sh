@@ -81,22 +81,9 @@ echo " * IO500: preparing directories..."
 mkdir -p "$INSTALL_PATH/io500/lib64"
 ln    -s "$INSTALL_PATH/io500/lib64"   "$INSTALL_PATH/io500/lib"
 
-echo " * IO500 DISCLAIMER:"
-echo "   ** Please remember IO500 needs to git clone some components the first time."
-echo "   ** If you don't have access to perform git clone then please ./prepare.sh in other machine first and copy the resulting directory."
-echo ""
-
 echo " * IO500: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
-sed "s/git clone/#git clone/g" ./build/pfind/prepare.sh > ./build/pfind/prepare-alt.sh
-chmod a+x ./build/pfind/prepare-alt.sh
-sed -i "s/^VERSION=/#VERSION=/g" Makefile
-export MPICC_PATH=$MPICC_PATH
-sed -i 's/CC = mpicc/CC = ${MPICC_PATH}/g' Makefile
-cat prepare.sh | sed "s/^INSTALL_DIR/#INSTALL_DIR/g" | sed "s/git_co https/#git_co https/g" | sed "s|./prepare.sh|./prepare-alt.sh|g" > prepare-alt.sh
-chmod a+x prepare-alt.sh
-env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICC_PATH MPICC=$MPICC_PATH  ./prepare-alt.sh
-#rm -fr prepare-alt.sh
+export PATH=$(dirname $MPICC_PATH):$PATH
+env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICC_PATH MPICC=$MPICC_PATH  ./prepare.sh
 popd
-
