@@ -29,9 +29,9 @@
 
 
       //calculo del numero de servidor
-      int hash(char *file,int nServ)
+      int hash(__attribute__((__unused__)) char *file, __attribute__((__unused__)) int nServ)
       {
-        int i,max;
+        /*int i,max;
         int unsigned num;
 
         num=0;
@@ -39,7 +39,9 @@
         for(i=0;i<max;i++){
               num=(int)file[i]+num;
         }
-        return (int)num%nServ;
+        return (int)num%nServ;*/
+
+        return 0;
       }
 
 

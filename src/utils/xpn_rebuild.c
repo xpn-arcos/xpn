@@ -45,7 +45,7 @@
   #endif
 
   #define MIN(a,b) (((a)<(b))?(a):(b))
-  #define HEADER_SIZE (0)
+  #define HEADER_SIZE 8192
 
   char command[4*1024];
   char src_path [PATH_MAX+5];
@@ -109,7 +109,9 @@
       }
 
       // Write header
-      ret = write(fd_dest, buf, HEADER_SIZE); // TODO: buf MUST be the header
+      char header_buf [HEADER_SIZE];
+      memset(header_buf, 0, HEADER_SIZE);
+      ret = write(fd_dest, header_buf, HEADER_SIZE);
 
       offset_src = rank * blocksize ;
       do

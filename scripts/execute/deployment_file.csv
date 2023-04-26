@@ -1,0 +1,5 @@
+particion; block_size; part_type; protocolo ; host     ; path
+xpn1     ; 512k      ; NORMAL   ; mpi_server; compute-1; /tmp/
+         ;           ;          ; tcp_server; compute-2; /tmp/
+xpn2     ; 1024k     ; NORMAL   ; mpi_server; compute-3; /tmp/
+         ;           ;          ; tcp_server; compute-4; /tmp/

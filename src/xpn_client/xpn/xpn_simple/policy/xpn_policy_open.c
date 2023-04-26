@@ -39,11 +39,12 @@ void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
   int pos_abs_path;
   int pos_dir;
 
-  strcpy(dir, abs_path);
+  memccpy(dir, abs_path, 0, PATH_MAX-1);
   abs_path_len = strlen(abs_path);
   put_slash = 1;
   pos_abs_path = 0;
   pos_dir = 0;
+
   while (pos_abs_path < abs_path_len)
   {
     if (abs_path[pos_abs_path] == '/')
@@ -69,69 +70,16 @@ void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
 }
 
 
-int XpnGetThreads(int op, int pd, int size)
-{
-  int i, thread = 0;
 
-  /* the param op and abs_path are not used in this version */
-  switch(op)
-  {
-    case op_xpn_creat:
-    case op_xpn_open:
-    case op_xpn_close:
-      thread = 1;// default value
-      break;
-    case op_xpn_read:
-    case op_xpn_write:
 
-      if (pd >= 0)
-      {
-        i = 0;
-        while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
-          i++;
-        }
-      }
-      else
-      {
-        thread = 0;
-        break;
-      }
-
-      //printf("xpn_parttable[%d].size_threads: %d\n", i, xpn_parttable[i].size_threads);
-      switch(xpn_parttable[i].size_threads)
-      {
-        case -1:
-          thread = 0;
-          break;
-        case 0:
-          thread = 1;
-          break;
-        default:
-          if(xpn_parttable[i].size_threads <= size){
-            thread = 1;
-          }
-          else{
-            thread = 0;
-          }
-      }
-      break;
-
-    default:
-      thread = 1;
-      break;
-  }
-
-  if(thread){
-    XPN_DEBUG("Activate threads")
-  }
-  else{
-    XPN_DEBUG("Deactivate threads")
-  }
-
-  return thread;
-}
 
 /**
+ * TODO:
+ *   ** int op -> not used (!)
+ *   ** XpnGetServers(.... int type==XPN_META_SERVER) ->  XpnGetServers_mdata(....) ;
+ *   ** fd < 0 => XpnGetServers_data_by_path(....) ;
+ *   ** fd > 0 => XpnGetServers_data_by_fd(....) ;
+ * 
  * Returns the data or metadata servers.
  *
  * @param op Flag operation.
@@ -241,12 +189,77 @@ int XpnGetServers(int op, int pd, __attribute__((__unused__)) char *abs_path, in
   return n;
 }
 
+
+// TODO: move to metadata file
+
+
+int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
+{
+  int part_id = 0;
+
+  if(mdata == NULL){
+    return -1;
+  }
+
+  //TODO pd == xpn_parttable[i].id
+  while((part_id<XPN_MAX_PART) && (xpn_parttable[part_id].id != pd)){
+    part_id++;
+  }
+
+  if (part_id == XPN_MAX_PART){
+    return -1;
+  }
+
+  /* initial values */
+  bzero(mdata, sizeof(struct xpn_metadata));
+  mdata->meta_nserv   = xpn_parttable[part_id].meta_nserv;
+  mdata->data_nserv   = xpn_parttable[part_id].data_nserv;
+  mdata->id           = 0;
+  mdata->version      = 1;
+  mdata->type         = 0;
+  mdata->block_size   = xpn_parttable[part_id].block_size;
+  mdata->type_policy  = xpn_parttable[part_id].type;
+
+  if (mdata->type_policy < 0) {
+      return -1;
+  }
+
+  switch (mdata->type_policy)
+  {
+    default:
+      mdata->policy = (struct policy *)malloc(sizeof(struct policy));
+      if (NULL == mdata->policy) {
+        return -1;
+      }
+
+      ((struct policy *)mdata->policy)->first_node = hash(path, xpn_parttable[part_id].data_nserv);
+
+
+      mdata->policy_size = sizeof(struct policy);
+      break;
+  }
+  return 0;
+}
+
+/*
+ * TODO: XpnGetMetadataPos -> xpn_mdata_associated_server
+ *   (in) Logical server    0      1       3      4
+ *
+ *                                 ^
+ *                                 |
+ *   (in)                       *master*
+ *                                 |
+ *                                 v
+ *
+ *   (out) Real Servers     3      0       1      2
+ * 
+ */
 int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
 {
   struct policy *p;
 
   if(mdata == NULL){
-    return pos;
+    return -1;
   }
 
   if (mdata->type_policy < 0) {
@@ -272,52 +285,8 @@ int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
   return pos;
 }
 
-int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, __attribute__((__unused__)) char *path)
-{
-  int i;
-  struct policy *p;
 
-  i = 0;
-  while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
-    i++;
-  }
-  if (i == XPN_MAX_PART){
-    return -1;
-  }
-
-  /* initial values */
-  bzero(mdata, sizeof(struct xpn_metadata));
-  mdata->meta_nserv = xpn_parttable[i].meta_nserv;
-  mdata->data_nserv = xpn_parttable[i].data_nserv;
-  mdata->id   = 0;
-  mdata->version    = 1;
-  mdata->type   = 0;
-  mdata->block_size   = xpn_parttable[i].block_size;
-  mdata->type_policy  = xpn_parttable[i].type;
-
-  if (mdata->type_policy < 0) {
-      return -1;
-  }
-
-  switch (mdata->type_policy)
-  {
-    default:
-      p = (struct policy *)malloc(sizeof(struct policy));
-      if (p == NULL){
-        return -1;
-      }
-
-      //p->first_node = hash(path, xpn_parttable[i].data_nserv);
-      p->first_node = 0;
-
-      mdata->policy = (void *)p;
-
-      mdata->sizem = sizeof(struct policy) + sizeof(struct xpn_metadata) - sizeof(void *);
-      break;
-  }
-  return 0;
-}
-
+//TODO: we think that this function is used to write metadata into the metadata header (todo: really write into file)
 int XpnUpdateMetadata( __attribute__((__unused__)) struct xpn_metadata *mdata,
                        __attribute__((__unused__)) int nserv,
                        __attribute__((__unused__)) struct nfi_server **servers,
@@ -328,6 +297,64 @@ int XpnUpdateMetadata( __attribute__((__unused__)) struct xpn_metadata *mdata,
   return 0;
 }
 
+
+
+//TODO: we think that this function is used to read metadata from the metadata header (todo: really read header)
+int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path, int pd )
+{
+  int res, n, i;
+
+  XPN_DEBUG_BEGIN
+
+  if(mdata == NULL){
+    return -1;
+  }
+
+  if (mdata->type_policy < 0) {
+    return -1;
+  }
+
+  switch(mdata->type_policy)
+  {
+    default:
+      n = hash(path, nserv);
+
+      res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
+      if(res < 0)
+      {
+        XPN_DEBUG_END
+        return -1;
+      }
+
+      XpnCreateMetadata(mdata, pd, path);
+
+      if(fh->nfih[n]->type == NFIDIR)
+      {
+        i = 0;
+        while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
+          i++;
+        }
+
+        if(i == XPN_MAX_PART)
+        {
+          XPN_DEBUG_END
+          return -1;
+        }
+
+        mdata->type = XPN_DIR;
+        XPN_DEBUG_END
+        return XPN_DIR;
+      }
+       
+    break;
+    
+  }
+
+  XPN_DEBUG_END
+  return XPN_FILE;
+}
+
+
 int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path)
 {
   int res;
@@ -335,6 +362,10 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
   struct nfi_fhandle *fh_aux;
 
   XPN_DEBUG_BEGIN
+
+  if(mdata == NULL){
+    return -1;
+  }
 
   if (mdata->type_policy < 0)
   {
@@ -381,57 +412,6 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
 
   XPN_DEBUG_END
   return 0;
-}
-
-int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path, int pd )
-{
-  int res, n, i;
-
-  XPN_DEBUG_BEGIN
-
-  if (mdata->type_policy < 0) {
-    return -1;
-  }
-
-  switch(mdata->type_policy)
-  {
-    default:
-      //n = hash(path, nserv);
-      n = 0;
-
-      res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
-      if(res < 0)
-      {
-        XPN_DEBUG_END
-        return -1;
-      }
-
-      XpnCreateMetadata(mdata, pd, path);
-
-      if(fh->nfih[n]->type == NFIDIR)
-      {
-        i = 0;
-        while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
-          i++;
-        }
-
-        if(i == XPN_MAX_PART)
-        {
-          XPN_DEBUG_END
-          return -1;
-        }
-
-        mdata->type = XPN_DIR;
-        XPN_DEBUG_END
-        return XPN_DIR;
-      }
-       
-    break;
-    
-  }
-
-  XPN_DEBUG_END
-  return XPN_FILE;
 }
 
 
@@ -500,7 +480,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   for(i=0;i<n;i++)
   {
     if (attr[i].at_size > 0){
-      st->st_size += attr[i].at_size; // total size, in bytes
+      st->st_size += (attr[i].at_size - XPN_HEADER_SIZE); // total size, in bytes
     }
 
     if (1 == attr[i].at_type)  // It is a directory
@@ -509,26 +489,29 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     }
   }
 
-  st->st_dev     = attr[0].st_dev;       // device
-  st->st_ino     = attr[0].st_ino;       // inode
+  int master_node = ((struct policy *)xpn_file_table[fd]->mdata->policy)->first_node;
+  //int master_node = ((struct policy *)mdata->policy)->first_node;
 
-  st->st_mode    = attr[0].at_mode ;     // protection
+  st->st_dev     = attr[master_node].st_dev;       // device
+  st->st_ino     = attr[master_node].st_ino;       // inode
 
-  if (0 == attr[0].at_type){             // It is a file
+  st->st_mode    = attr[master_node].at_mode ;     // protection
+
+  if (0 == attr[master_node].at_type){             // It is a file
     st->st_mode = S_IFREG | st->st_mode;
   }
-  if (1 == attr[0].at_type){             // It is a directory
+  if (1 == attr[master_node].at_type){             // It is a directory
     st->st_mode = S_IFDIR | st->st_mode;
   }
 
-  st->st_nlink   = attr[0].at_nlink;     // number of hard links
+  st->st_nlink   = attr[master_node].at_nlink;     // number of hard links
   st->st_uid     = getuid() ;            // user ID of owner
   st->st_gid     = getgid() ;            // group ID of owner
   //st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O // TODO
-  st->st_blocks  = attr[0].at_blocks ;   // number of blocks allocated
-  st->st_atime   = attr[0].at_atime ;    // time of last access
-  st->st_mtime   = attr[0].at_mtime ;    // time of last modification
-  st->st_ctime   = attr[0].at_ctime ;    // time of last change
+  st->st_blocks  = attr[master_node].at_blocks ;   // number of blocks allocated
+  st->st_atime   = attr[master_node].at_atime ;    // time of last access
+  st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
+  st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
 
   free(servers);
   free(attr);
@@ -640,7 +623,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   for(i=0;i<n;i++)
   {
     if (attr[i].at_size > 0){
-      st->st_size += attr[i].at_size; // total size, in bytes
+      st->st_size += (attr[i].at_size - XPN_HEADER_SIZE); // total size, in bytes
     }
 
     if (1 == attr[i].at_type)  // It is a directory
@@ -649,26 +632,28 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     }
   }
 
-  st->st_dev     = attr[0].st_dev;       // device
-  st->st_ino     = attr[0].st_ino;       // inode
+  int master_node = hash(path, n);
 
-  st->st_mode    = attr[0].at_mode ;     // protection
+  st->st_dev     = attr[master_node].st_dev;       // device
+  st->st_ino     = attr[master_node].st_ino;       // inode
 
-  if (0 == attr[0].at_type){             // It is a file
+  st->st_mode    = attr[master_node].at_mode ;     // protection
+
+  if (0 == attr[master_node].at_type){             // It is a file
     st->st_mode = S_IFREG | st->st_mode;
   }
-  if (1 == attr[0].at_type){             // It is a directory
+  if (1 == attr[master_node].at_type){             // It is a directory
     st->st_mode = S_IFDIR | st->st_mode;
   }
 
-  st->st_nlink   = attr[0].at_nlink;     // number of hard links
+  st->st_nlink   = attr[master_node].at_nlink;     // number of hard links
   st->st_uid     = getuid() ;            // user ID of owner
   st->st_gid     = getgid() ;            // group ID of owner
   //st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O // TODO
-  st->st_blocks  = attr[0].at_blocks ;   // number of blocks allocated
-  st->st_atime   = attr[0].at_atime ;    // time of last access
-  st->st_mtime   = attr[0].at_mtime ;    // time of last modification
-  st->st_ctime   = attr[0].at_ctime ;    // time of last change
+  st->st_blocks  = attr[master_node].at_blocks ;   // number of blocks allocated
+  st->st_atime   = attr[master_node].at_atime ;    // time of last access
+  st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
+  st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
 
   free(servers);
   free(attr);

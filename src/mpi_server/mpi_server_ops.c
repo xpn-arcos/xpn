@@ -125,7 +125,7 @@
   void  mpi_server_op_flush       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_preload     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
 
-  void  mpi_server_op_getnodename ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ; //NEW
+  void  mpi_server_op_getnodename ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ;
   void  mpi_server_op_fstat       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ; //TODO: implement
   void  mpi_server_op_getid       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id ) ; //TODO: call in switch
 
@@ -777,10 +777,6 @@
       return ;
     }
 
-    //TODO
-    // rank_client_id = rank_client_id;
-    //TODO
-
     // do setattr
     debug_info("[MPI-SERVER-OPS] SETATTR operation to be implemented !!\n") ;
 
@@ -1057,15 +1053,11 @@
     // Get server host name
     gethostname(serv_name, HOST_NAME_MAX) ;
 
-    // <TODO>
-    // head = head; // Avoid unused parameter
-    // </TODO>
-
     // show debug info
     debug_info("[MPI-SERVER-OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name) ;
 
     mpi_server_comm_write_data(params, sd, (char *)serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
-    mpi_server_comm_write_data(params, sd, (char *)params->sem_name_server, PATH_MAX, rank_client_id); // Send one single message
+    //mpi_server_comm_write_data(params, sd, (char *)params->sem_name_server, PATH_MAX, rank_client_id); // Send one single message
 
     DEBUG_END() ;
   }

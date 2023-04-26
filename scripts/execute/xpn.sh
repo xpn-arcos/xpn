@@ -22,11 +22,12 @@
 
 mk_conf_servers() {
 
-  CONF_NAME=$1
+  CONF_NAME=${WORKDIR}/$1
   MACHINE_FILE=$2
   PARTITION_SIZE=$3
   PARTITION_NAME=$4
   STORAGE_PATH=$5
+  DEPLOYMENTFILE=$6
 
   # check params
   if [[ ${CONF_NAME} == "" ]]; then
@@ -59,21 +60,24 @@ mk_conf_servers() {
     echo " * STORAGE_PATH=${STORAGE_PATH}"
   fi
 
-  BASE_DIR="./scripts/execute/"
-  ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
-                         --machinefile  ${MACHINE_FILE} \
-                         --part_size    ${PARTITION_SIZE} \
-                         --part_name    ${PARTITION_NAME} \
-                         --storage_path ${STORAGE_PATH}
+  if [[ ! -f ${DEPLOYMENTFILE} ]]; then
+    ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
+                           --machinefile  ${MACHINE_FILE} \
+                           --part_size    ${PARTITION_SIZE} \
+                           --part_name    ${PARTITION_NAME} \
+                           --storage_path ${STORAGE_PATH}
+  else
+    ${BASE_DIR}/mk_conf.sh --conf            ${CONF_NAME} \
+                           --deployment_file ${DEPLOYMENTFILE}
+  fi
 }
 
 
 start_xpn_servers() {
 
-  BASE_DIR="./scripts/execute/"
-
   if [[ ${VERBOSE} == true ]]; then
     echo " * rootdir: ${DIR_ROOT}"
+    echo " * workdir: ${WORKDIR}"
     echo " * hostfile: ${HOSTFILE}"
     echo " * node_num: ${NODE_NUM}"
     echo " * additional daemon args: ${ARGS}"
@@ -85,19 +89,19 @@ start_xpn_servers() {
     exit -1
   fi
 
-  rm -f /tmp/dns.txt
-  touch /tmp/dns.txt
+  rm -f ${WORKDIR}/dns.txt
+  touch ${WORKDIR}/dns.txt
 
   if [[ ${SERVER_TYPE} == "mpi" ]]; then
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            src/mpi_server/xpn_mpi_server -ns /tmp/dns.txt ${ARGS} &
+            ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server -ns ${WORKDIR}/dns.txt ${ARGS} &
   else
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            src/tcp_server/xpn_tcp_server -ns /tmp/dns.txt ${ARGS} -p 3456 &
+            ${BASE_DIR}/../../src/tcp_server/xpn_tcp_server -ns ${WORKDIR}/dns.txt ${ARGS} -p 3456 &
   fi
 
   sleep 3
@@ -128,14 +132,14 @@ stop_xpn_servers() {
 
   if [[ ${SERVER_TYPE} == "mpi" ]]; then
     mpiexec -np 1 \
-            -genv XPN_DNS /tmp/dns.txt \
+            -genv XPN_DNS ${WORKDIR}/dns.txt \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            src/mpi_server/xpn_stop_mpi_server -f ${DEATH_FILE}
+            ${BASE_DIR}/../../src/mpi_server/xpn_stop_mpi_server -f ${DEATH_FILE}
   else
     mpiexec -np 1 \
-            -genv XPN_DNS /tmp/dns.txt \
+            -genv XPN_DNS${WORKDIR}/dns.txt \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            src/tcp_server/xpn_stop_tcp_server -f ${DEATH_FILE}
+            ${BASE_DIR}/../../src/tcp_server/xpn_stop_tcp_server -f ${DEATH_FILE}
   fi
 }
 
@@ -151,19 +155,19 @@ rebuild_xpn_servers() {
   mpiexec -np       "${NODE_NUM}" \
           -hostfile "${HOSTFILE}" \
           -genv      LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-          -genv      XPN_DNS /tmp/dns.txt \
+          -genv      XPN_DNS ${WORKDIR}/dns.txt \
           -genv      XPN_CONF /local_test/test/configuration/conf.xml \
           -genv      LD_PRELOAD src/bypass/xpn_bypass.so \
           -genv      XPN_LOCALITY 0\
-          src/utils/xpn_rebuild ${SOURCE_PARTITION} ${XPN_STORAGE_PATH} 524288
+          ${BASE_DIR}/../../src/utils/xpn_rebuild ${SOURCE_PARTITION} ${XPN_STORAGE_PATH} 524288
 
-  rm -f /tmp/partition_content.txt
+  rm -f ${WORKDIR}/partition_content.txt
 
   # 2. stop old servers
   stop_xpn_servers
 
   # 3. start new servers
-  mk_conf_servers  "/tmp/config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} 
+  mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
   start_xpn_servers
 }
 
@@ -172,10 +176,12 @@ usage_short() {
   echo ""
   echo " Usage: xpn.sh [-h/--help] [-a/--args <daemon_args>] [-f/--foreground <false>]"
   echo "               [-c/--config <configuration file>]"
+  echo "               [-m/--deployment_file <deployment file>]"
   echo "               [-n/--numnodes <jobsize>]"
   echo "               [-l/--hostfile  <host file>]"
   echo "               [-d/--deathfile <host file>]"
   echo "               [-r/--rootdir <path>]"
+  echo "               [-w/--workdir <path>]"
   echo "               [-s/--source_partition <xpn_partition>]"
   echo "               [-x/--xpn_storage_path <path>]"
   echo "               [-v/--verbose <false>] {start,stop,rebuild}"
@@ -196,9 +202,11 @@ usage_details() {
   echo "     -h, --help                          Shows this help message and exits"
   echo "     -a, --args <arguments>              Add various additional daemon arguments."
   echo "     -f, --foreground                    Starts the script in the foreground. Daemons are stopped by pressing 'q'."
-  echo "     -c, --config   <path>               Path to configuration file. By defaults looks for a 'xpn_start.cfg' in this directory."
+  echo "     -c, --config   <path>               Path to configuration file."
+  echo "     -m, --deployment_file   <path>      Path to deployment file."
   echo "     -n, --numnodes <n>                  XPN servers are started on n nodes."
   echo "     -r, --rootdir  <path>               The rootdir path for XPN daemons."
+  echo "     -w, --workdir  <path>               The working directory path for XPN temporal files."
   echo "     -s, --source_partition <partition>  Origin XPN partition (for the rebuild process)"
   echo "     -x, --xpn_storage_path <path>       The XPN local storage path"  
   echo "     -l, --hostfile  <path>              File with the hosts to be used to execute daemons (one per line)."
@@ -210,23 +218,27 @@ usage_details() {
 
 ## default values
 ACTION=""
+WORKDIR="/tmp/"
 DIR_ROOT="/tmp/"
 XPN_STORAGE_PATH="/tmp/"
 SOURCE_PARTITION="xpn"
 NODE_NUM=1
 ARGS=""
-#FILE_CONFIG=$(dirname "$(readlink -f "$0")")/xpn_start.cfg
 FILE_CONFIG=""
+DEPLOYMENTFILE=""
 RUN_FOREGROUND=false
 VERBOSE=false
 HOSTFILE="machinefile"
 DEATH_FILE="machinefile"
 SERVER_TYPE="mpi"
 
+
 ## get arguments
-while getopts "r:s:x:d:n:a:c:l:fvh" opt; do
+while getopts "r:w:s:x:d:n:a:c:m:l:fvh" opt; do
   case "${opt}" in
     r) DIR_ROOT=${OPTARG}
+       ;;
+    w) WORKDIR=${OPTARG}
        ;;
     s) SOURCE_PARTITION=${OPTARG}
        ;;
@@ -237,6 +249,8 @@ while getopts "r:s:x:d:n:a:c:l:fvh" opt; do
     a) ARGS=${OPTARG}
        ;;
     c) FILE_CONFIG=${OPTARG}
+       ;;
+    m) DEPLOYMENTFILE=${OPTARG}
        ;;
     f) RUN_FOREGROUND=true
        ;;
@@ -253,6 +267,8 @@ while getopts "r:s:x:d:n:a:c:l:fvh" opt; do
   esac
 done
 
+BASE_DIR=$(dirname "$(readlink -f "$0")")/
+
 shift $((OPTIND - 1))
 ACTION=$*
 
@@ -263,7 +279,7 @@ fi
 
 # run 
 case "${ACTION}" in
-      start)    mk_conf_servers  "/tmp/config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH}
+      start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers

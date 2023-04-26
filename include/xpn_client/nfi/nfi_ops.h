@@ -6,6 +6,9 @@
   extern "C" {
 #endif
 
+#ifndef XPN_HEADER_SIZE 
+  #define XPN_HEADER_SIZE 8192
+#endif   
 
 #include "nfi_worker_task.h"
 #include "nfi_worker.h"
