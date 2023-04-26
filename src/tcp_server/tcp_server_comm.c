@@ -195,6 +195,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     /*
      * Initialize mosquitto
      */
+
   
     #ifdef HAVE_MOSQUITTO_H
 
