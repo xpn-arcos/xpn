@@ -109,7 +109,7 @@
       {
            struct stat st;
            int fdp,fd,ret,fd_lock;
-           char *mpi_server_path, new_path[255];
+           char *mpi_server_path, new_path[2*PATH_MAX];
            
             
            debug_info("d2xpn(%d): Origen: %s\n",  params->rank, origen) ;

@@ -68,6 +68,7 @@ fi
 
 ## MQTT
 echo " * MQTT: preparing directories..."
+pushd .
 rm -fr "$INSTALL_PATH/mosquitto"
 mkdir -p "$INSTALL_PATH/mosquitto/"
 sed -ibak "s/WITH_CJSON:=yes/WITH_CJSON:=no/g" $HOME/src/mosquitto/config.mk
@@ -75,9 +76,7 @@ cd "$INSTALL_PATH/mosquitto/"
 cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH/mosquitto/ $HOME/src/mosquitto
 
 echo " * MQTT: compiling and installing..."
-pushd .
 make clean
 make -j 8
 make install
 popd
-
