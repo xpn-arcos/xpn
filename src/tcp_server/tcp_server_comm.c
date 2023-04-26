@@ -79,8 +79,8 @@ void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_messag
         to_write1 = 0;
         offset = 0;
     }
-
-    printf("\n%s - %s %d %d\n", topic, path, to_write1, offset);
+    
+    //printf("\n%s - %s %d %d\n", topic, path, to_write1, offset);
 
     char * buffer = NULL;
     int size, diff, cont = 0, to_write = 0, size_written = 0;
@@ -127,11 +127,11 @@ void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_messag
     close(fd);
     FREE_AND_NULL(buffer);
 
-    printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WOS \n\n", __LINE__);
+    //printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WOS \n\n", __LINE__);
 
     mosquitto_unsubscribe(mqtt, NULL, path);
 
-    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WOS %s \n\n", __LINE__, path);
+    //printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WOS %s \n\n", __LINE__, path);
 }
 
 #endif
