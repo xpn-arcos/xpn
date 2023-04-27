@@ -473,7 +473,7 @@ int xpn_internal_remove(const char * path)
     }
 
     //Master node
-    int master_node = 0; //TODO: hash
+    int master_node = hash((char *)path, n);
     XpnGetURLServer(servers[master_node], abs_path, url_serv);
 
     // Worker
@@ -503,7 +503,7 @@ int xpn_internal_remove(const char * path)
         // Worker
         servers[i] -> wrk -> thread = servers[i] -> xpn_thread;
         servers[i] -> wrk -> arg.master_node = master_node;
-        servers[i] -> wrk -> arg.is_master_node = ((servers[i] -> wrk -> arg.master_node) == i);
+        servers[i] -> wrk -> arg.is_master_node = 0;
 
         nfi_worker_do_remove(servers[i] -> wrk, url_serv);
     }

@@ -70,11 +70,19 @@
           return;
         }
 
-        if (th.type_op == MPI_SERVER_DISCONNECT || th.type_op == MPI_SERVER_FINALIZE)
+        if (th.type_op == MPI_SERVER_DISCONNECT)
         {
           debug_info("[MPI-SERVER] INFO: DISCONNECT received\n");
           disconnect = 1;
-	        continue;
+          continue;
+        }
+
+        if (th.type_op == MPI_SERVER_FINALIZE)
+        {
+          debug_info("[MPI-SERVER] INFO: FINALIZE received\n");
+          disconnect = 1;
+          the_end = 1;
+          continue;
         }
 
         // Launch worker per operation
@@ -99,8 +107,6 @@
     int mpi_server_up ( void )
     {
       MPI_Comm     sd ;
-      struct st_mpi_server_msg head ;
-      int          rank_client_id;
       struct st_th th_arg;
       int          ret ;
 
@@ -124,19 +130,19 @@
       }
 
       // Initialize semaphore for server disks
-      ret = sem_init(&(params.disk_sem), 0, 1);
+      /*ret = sem_init(&(params.disk_sem), 0, 1);
       if (ret < 0) {
         printf("[MPI-SERVER] ERROR: semaphore initialize fails\n");
         return -1;
-      }
+      }*/
 
       // Initialize semaphore for clients
-      sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
+      /*sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
       sem_t *sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
       if (sem_server == 0) {
         printf("[MPI-SERVER] ERROR: semaphore open fails\n");
         return -1;
-      }
+      }*/
 
       // Loop: receiving + processing
       the_end = 0;
@@ -149,17 +155,6 @@
         sd = mpi_server_comm_accept(&params) ;
         if (sd == MPI_COMM_NULL) {
           continue ;
-        }
-
-        ret = mpi_server_comm_read_operation(&params, sd, (char *)&(head.type), 1, &(rank_client_id));
-        if (ret < 0) {
-          printf("[MPI-SERVER] ERROR: mpi_server_comm_readdata fail\n") ;
-          return -1;
-        }
-
-        if (head.type == MPI_SERVER_FINALIZE) {
-          the_end = 1;
-          continue;
         }
 
         //Launch dispatcher per aplication
@@ -180,8 +175,8 @@
       mpi_server_comm_destroy(&params) ;
 
       // Close semaphores
-      sem_destroy(&(params.disk_sem));
-      sem_unlink(params.sem_name_server);
+      /*sem_destroy(&(params.disk_sem));
+      sem_unlink(params.sem_name_server);*/
 
       // return OK
       return 0 ;

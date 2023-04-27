@@ -6,8 +6,7 @@
   #include <string.h>
   #include "mpi.h"
   #include "mpi_server_conf.h"
-
-  #include <semaphore.h>
+  //#include <semaphore.h>
 
 
   /*
@@ -31,8 +30,8 @@
     MPI_Comm server ;
 
     int locality ;
-    char sem_name_server [PATH_MAX];
-    sem_t * sem_server ;
+    //char sem_name_server [PATH_MAX];
+    //sem_t * sem_server ;
 
     // server arguments
     int    argc ;

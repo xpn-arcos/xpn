@@ -5,8 +5,7 @@
   #include <stdio.h>
   #include <string.h>
   #include "tcp_server_conf.h"
-
-  #include <semaphore.h>
+  //#include <semaphore.h>
 
 
   /*
@@ -32,15 +31,15 @@
     int  rank ;
 
     // server port and comm
- // int   port_number;
+    // int   port_number;
     char  srv_name   [TCP_MAX_PORT_NAME] ;
     char  server_name[TCP_MAX_PORT_NAME];
     char  port_number[TCP_MAX_PORT_NAME];
     int   server ;
 
     int     locality ;
-    char    sem_name_server [PATH_MAX];
-    sem_t * sem_server ;
+    //char    sem_name_server [PATH_MAX];
+    //sem_t * sem_server ;
 
     // server arguments
     int    argc ;

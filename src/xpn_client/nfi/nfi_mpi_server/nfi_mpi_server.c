@@ -1154,23 +1154,19 @@
     else
     {
       //bzero(&msg, sizeof(struct st_mpi_server_msg));
+      memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
+      memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;
 
       if ((serv -> wrk -> arg.is_master_node) == 1)
       {
         msg.type = MPI_SERVER_RM_FILE;
-        memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
-        memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;
-
         nfi_mpi_server_doRequest(server_aux, &msg, (char *)&(ret), sizeof(int)) ;
       }
       else
       {
         msg.type = MPI_SERVER_RM_FILE_ASYNC;
-        memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1) ;
-        memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1) ;
 
         // send request...
-        debug_info("[NFI-MPI] (ID=%s): %s: -> ...\n", server_aux->id, msg->id) ;
         ret = mpi_server_write_operation(server_aux->params.server, &msg) ;
         if (ret >= 0) {
           return 0 ;

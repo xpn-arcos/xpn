@@ -57,7 +57,7 @@ void nfi_do_operation(struct st_th th_arg)
             for (int i = 0; i < wrk -> arg.n_io; i++) 
             {
                 //TODO: wrk->arg.io[i].res = aux = wrk->server->ops->nfi_read(wrk->server,
-                aux = wrk -> server -> ops -> nfi_read(wrk -> server, wrk -> arg.fh, wrk -> arg.io[i].buffer, wrk -> arg.io[i].offset, wrk -> arg.io[i].size);
+                aux = wrk -> server -> ops -> nfi_read(wrk -> server, wrk -> arg.fh, wrk -> arg.io[i].buffer, wrk -> arg.io[i].offset+XPN_HEADER_SIZE, wrk -> arg.io[i].size);
                 if (aux < 0) 
                 {
                     ret = aux;
@@ -78,7 +78,7 @@ void nfi_do_operation(struct st_th th_arg)
             for (int i = 0; i < wrk -> arg.n_io; i++) 
             {
                 //TODO: wrk->arg.io[i].res = aux = wrk->server->ops->nfi_write(wrk->server,
-                aux = wrk -> server -> ops -> nfi_write(wrk -> server, wrk -> arg.fh, wrk -> arg.io[i].buffer, wrk -> arg.io[i].offset, wrk -> arg.io[i].size);
+                aux = wrk -> server -> ops -> nfi_write(wrk -> server, wrk -> arg.fh, wrk -> arg.io[i].buffer, wrk -> arg.io[i].offset+XPN_HEADER_SIZE, wrk -> arg.io[i].size);
                 if (aux < 0) 
                 {
                     ret = aux;
