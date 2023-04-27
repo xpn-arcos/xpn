@@ -420,7 +420,6 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
-	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h \
 	../../include/xpn_client/xpn.h
@@ -644,7 +643,6 @@ NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_c
 ### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
-				../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 				../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
 				../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 

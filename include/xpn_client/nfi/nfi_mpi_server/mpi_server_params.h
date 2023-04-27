@@ -5,7 +5,6 @@
   #include <stdio.h>
   #include <string.h>
   #include "mpi.h"
-  #include "mpi_server_conf.h"
   //#include <semaphore.h>
 
 

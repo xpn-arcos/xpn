@@ -23,6 +23,7 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "mpi_server_params.h"
+  #include "base/ns.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -75,8 +76,8 @@
     params->thread_mode = TH_NOT ;
     strcpy(params->port_name, "") ;
     strcpy(params->srv_name,  "") ;
-    strcpy(params->dirbase,   MPI_SERVER_DIRBASE_DEFAULT) ;
-    strcpy(params->dns_file,  "") ;
+    strcpy(params->dirbase,   "/tmp/") ;
+    strcpy(params->dns_file,  MPI_SERVER_DNS_FILE_DEFAULT) ;
   
     // update user requests
     for (int i=0; i<argc; i++)
