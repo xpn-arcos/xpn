@@ -65,11 +65,11 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     lookup_retries = 0;
     do
     {
-        printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
+        //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
 
         ret = ns_tcp_lookup(params -> srv_name, params -> server_name, params -> port_number) ;
 
-        printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%d\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number, ret);
+        //printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%d\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number, ret);
         if (ret < 0)
         {
             if (lookup_retries == 0)
@@ -90,7 +90,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         return -1;
     }
 
-    printf("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params -> srv_name, params -> server_name, params->port_number);
+    debug_info("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params -> srv_name, params -> server_name, params->port_number);
 
     // Socket...
     sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -98,7 +98,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         perror("socket: ");
         return -1;
     }
-    printf("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s ==> %d\n", params -> srv_name, params -> server_name, params->port_number, sd);
+    debug_info("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s ==> %d\n", params -> srv_name, params -> server_name, params->port_number, sd);
 
     // Set sockopt
     flag = 1;
@@ -132,7 +132,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         return -1;
     }
 
-    //printf("[NFI_TCP_COMM] server = %s-%s\n", params -> server_name, params->port_number);
+    //debug_info("[NFI_TCP_COMM] server = %s-%s\n", params -> server_name, params->port_number);
 
     // Connect...
     bzero((char * ) & server_addr, sizeof(server_addr));
@@ -140,7 +140,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     server_addr.sin_port   = htons(atoi(params->port_number));
     memcpy( & (server_addr.sin_addr), hp -> h_addr, hp -> h_length);
 
-    //printf("[NFI_TCP_COMM] Antes de connect to %s\n", params -> server_name);
+    //debug_info("[NFI_TCP_COMM] Antes de connect to %s\n", params -> server_name);
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
     if (ret < 0)
     {
@@ -150,7 +150,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     }
 
     params->server = sd;
-    //printf("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
+    //debug_info("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
 
     return ret;
 }
@@ -254,7 +254,7 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     int ret, cont;
     static ssize_t( * real_write)(int,const void * , size_t) = NULL;
 
-    printf("[NFI_TCP_COMM] begin tcpClient_write_data(...)\n");
+    debug_info("[NFI_TCP_COMM] begin tcpClient_write_data(...)\n");
 
     // Check params
     if (size == 0) {
@@ -275,7 +275,7 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     {
         ret = real_write(fd, data + cont, size - cont);
 
-        printf("[NFI_TCP_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
+        debug_info("[NFI_TCP_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
 
         if (ret < 0) {
 	       perror("tcpClient_write_data: ERROR on real_write: ");

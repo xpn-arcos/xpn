@@ -155,7 +155,7 @@ int tcp_server_do_operation(struct st_th * th, int * the_end)
     int ret;
     struct st_tcp_server_msg head;
 
-    printf("SERVER DO OPERATION -- %d\n", th -> type_op);
+    //printf("SERVER DO OPERATION -- %d\n", th -> type_op);
 
     switch (th -> type_op)
     {
@@ -810,12 +810,12 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
         char *s;
         s = head -> u_st_tcp_server_msg.op_close.path;
 
-        printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
+        //printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
 
         mosquitto_unsubscribe(params -> mqtt, NULL, sm);
         mosquitto_unsubscribe(params -> mqtt, NULL, s);
 
-        printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, sm);
+        //printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, sm);
         #endif
     }
     
@@ -891,7 +891,7 @@ void tcp_server_op_getattr(tcp_server_param_st * params, int sd, struct st_tcp_s
     tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_attr_req), rank_client_id);
 
     // show debug info
-    printf("[TCP-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_getattr.path);
+    //printf("[TCP-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_getattr.path);
 }
 
 
@@ -928,7 +928,7 @@ void tcp_server_op_mkdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
     int ret;
     char * s;
 
-    printf("TCP_SERVER_MKDIR -- %s\n", head -> u_st_tcp_server_msg.op_mkdir.path);
+    //el sopas printf("TCP_SERVER_MKDIR -- %s\n", head -> u_st_tcp_server_msg.op_mkdir.path);
 
     // do mkdir
     s = head -> u_st_tcp_server_msg.op_mkdir.path;
