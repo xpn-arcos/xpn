@@ -1016,7 +1016,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
                 if( diff > buffer_size )        bytes_to_write = buffer_size;
                 else                            bytes_to_write = diff;
 
-                printf("\nREMOTE - %s - %d - %d\n\n", server_aux -> params.server_name, bytes_to_write, offset);
+                //printf("\nREMOTE - %s - %d - %d\n\n", server_aux -> params.server_name, bytes_to_write, offset);
                 ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
                 
                 if (ret < 0) 

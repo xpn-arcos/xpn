@@ -122,14 +122,17 @@ int ns_tcp_lookup(char * param_srv_name, char * host_name, char * port_name)
 {
   int found = 0;
   char aux_name[1024];
-  char * dns_file;
+  char   dns_file   [PATH_MAX] ;
   FILE * dns_fd;
 
   // try to get the ns_file_name
-  dns_file = getenv("XPN_DNS");
-  if (dns_file == NULL) {
-    fprintf(stderr, "DNS File not defined (XPN_DNS is empty)\n");
-    return -1;
+  char * dns_file_env = getenv("XPN_DNS");
+  if (dns_file_env == NULL)
+  {
+    strcpy(dns_file, TCP_SERVER_DNS_FILE_DEFAULT);
+  }
+  else{
+    strcpy(dns_file, dns_file_env);
   }
 
   // try to open the ns_file_fd

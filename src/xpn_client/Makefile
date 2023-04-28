@@ -416,7 +416,6 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
 	../../include/xpn_client/nfi/nfi_nfs3/nfs3.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
-	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
@@ -636,7 +635,6 @@ NFI_NFS3_HEADER = ../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
-				../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
 				../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 				../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
 

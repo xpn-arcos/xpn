@@ -41,10 +41,10 @@
       printf("\t-t:\t\tThread Pool Activated\n") ;
     }
     if(params->thread_mode == TH_OP){
-      printf("\t-n:\t\tThread on demand\n") ;
+      printf("\t-t:\t\tThread on demand\n") ;
     }
     printf("\t-d <path>:\t'%s'\n",   params->dirbase) ;
-    printf("\t-f <path>:\t'%s'\n",   params->host_file) ;
+    printf("\t-f <path>:\t'%s'\n",   params->shutdown_file) ;
 
     DEBUG_END() ;
   }
@@ -55,10 +55,10 @@
     DEBUG_BEGIN() ;
 
     printf("Usage:\n");
-    printf("\t-f  <path>: file of servers to be shutdown\n") ;
     printf("\t-ns <path>: file for service name\n") ;
     printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
     printf("\t-d  <string>: name of the base directory\n") ;
+    printf("\t-f  <path>: file of servers to be shutdown\n") ;
 
     DEBUG_END() ;
   }
@@ -98,7 +98,7 @@
               }
               break;           
             case 'f':
-              strcpy(params->host_file, argv[i+1]);
+              strcpy(params->shutdown_file, argv[i+1]);
               i++;
               break;          
             case 'd':
@@ -153,6 +153,4 @@
     return 1;
   }
 
-
   /* ................................................................... */
-
