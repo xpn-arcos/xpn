@@ -87,7 +87,7 @@ int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
     params -> thread_mode = TH_POOL;
     strcpy(params -> port_name, "");
     strcpy(params -> srv_name, "");
-    strcpy(params -> dirbase, "/tmp");
+    strcpy(params -> dirbase, TCP_SERVER_DIRBASE_DEFAULT);
     strcpy(params -> dns_file, TCP_SERVER_DNS_FILE_DEFAULT);
 
     gethostname(params -> name, TCP_MAX_PORT_NAME);

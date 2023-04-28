@@ -32,6 +32,14 @@
   #include "base/workers.h"
   //#include <semaphore.h>
 
+  /*
+   * Constants
+   */
+
+  #ifndef MPI_SERVER_DIRBASE_DEFAULT
+    #define MPI_SERVER_DIRBASE_DEFAULT "/tmp"
+  #endif
+
 
   /*
    * Datatype

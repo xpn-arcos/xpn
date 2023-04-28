@@ -324,7 +324,6 @@ void tcp_server_op_open_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
 
   // do open
   fd = filesystem_open(path, O_RDWR);
-
   tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
   // show debug info
@@ -363,7 +362,6 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
   
   // do open
   fd = filesystem_open(path, O_RDWR);
-
   tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
   filesystem_close(fd);

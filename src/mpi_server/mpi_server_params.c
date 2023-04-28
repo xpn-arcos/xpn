@@ -76,7 +76,7 @@
     params->thread_mode = TH_NOT ;
     strcpy(params->port_name, "") ;
     strcpy(params->srv_name,  "") ;
-    strcpy(params->dirbase,   "/tmp") ;
+    strcpy(params->dirbase,   MPI_SERVER_DIRBASE_DEFAULT) ;
     strcpy(params->dns_file,  MPI_SERVER_DNS_FILE_DEFAULT) ;
   
     // update user requests

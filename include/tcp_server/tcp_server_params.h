@@ -37,6 +37,10 @@
    * Constants
    */
 
+  #ifndef TCP_SERVER_DIRBASE_DEFAULT
+    #define TCP_SERVER_DIRBASE_DEFAULT "/tmp"
+  #endif
+
   #ifndef TCP_SERVER_PORT_DEFAULT
     #define TCP_SERVER_PORT_DEFAULT 9999
   #endif
@@ -75,9 +79,9 @@
     int mosquitto_mode;
     int mosquitto_qos;
 
-    #ifdef HAVE_MOSQUITTO_H
+#ifdef HAVE_MOSQUITTO_H
     struct mosquitto * mqtt;
-    #endif
+#endif
 
     //Semaphore for clients
     //char sem_name_server [PATH_MAX];
