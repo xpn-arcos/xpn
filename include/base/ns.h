@@ -27,6 +27,14 @@
       #include "all_system.h"
       #include "base/utils.h"
 
+      /* 
+       * ENVIROMENT VARIABLE: DNS SERVICE
+       */
+
+      #ifndef MPI_SERVER_DNS_FILE_DEFAULT
+        #define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
+      #endif
+
 
       /*
        *  API

@@ -29,7 +29,6 @@
   #include <ctype.h>
   #include "mpi.h"
   #include "base/utils.h"
-  #include "mpi_server_conf.h"
   #include "base/workers.h"
   //#include <semaphore.h>
 
