@@ -155,7 +155,7 @@ int tcp_server_do_operation(struct st_th * th, int * the_end)
   int ret;
   struct st_tcp_server_msg head;
 
-  printf("SERVER DO OPERATION -- %d\n", th -> type_op);
+  //printf("SERVER DO OPERATION -- %d\n", th -> type_op);
 
   switch (th -> type_op)
   {
@@ -809,12 +809,12 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
 
     s = head -> u_st_tcp_server_msg.op_close.path;
 
-    printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
+    //printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
 
     mosquitto_unsubscribe(params -> mqtt, NULL, sm);
     mosquitto_unsubscribe(params -> mqtt, NULL, s);
 
-    printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, sm);
+    //printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, sm);
   }
 #endif
 }
@@ -873,7 +873,7 @@ void tcp_server_op_getattr(tcp_server_param_st * params, int sd, struct st_tcp_s
   strcpy(path, params->dirbase);
   strcat(path, "/");
   strcat(path, head->u_st_tcp_server_msg.op_getattr.path);
-
+  
   // do getattr
   req.status = filesystem_stat(path, & req.attr);
 
@@ -917,7 +917,7 @@ void tcp_server_op_mkdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
   strcat(path, "/");
   strcat(path, head->u_st_tcp_server_msg.op_mkdir.path);
 
-  printf("TCP_SERVER_MKDIR -- %s\n", head -> u_st_tcp_server_msg.op_mkdir.path);
+  //printf("TCP_SERVER_MKDIR -- %s\n", head -> u_st_tcp_server_msg.op_mkdir.path);
 
   // do mkdir
   ret = filesystem_mkdir(path, 0777); //TO-DO: 0777 received from the client
