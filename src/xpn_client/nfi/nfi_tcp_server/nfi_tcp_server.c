@@ -534,7 +534,7 @@ int nfi_tcp_server_disconnect(struct nfi_server * serv) {
 
 
 /************************************************************
- * Reconnect to the MPI server                              *
+ * Reconnect to the TCP server                              *
  ************************************************************/
 int nfi_tcp_server_reconnect(struct nfi_server * serv) {
     // Don't see the serv result
@@ -925,7 +925,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 
     // private_info...
     server_aux = (struct nfi_tcp_server_server * ) serv -> private_info;
-    debug_info("[NFI-TCP] nfi_tcp_server_write(ID=%s): begin off %d size %d\n", server_aux -> id, (int) offset, (int) size);
+    printf("[NFI-TCP] nfi_tcp_server_write(ID=%s): begin off %d size %d\n", server_aux -> id, (int) offset, (int) size);
     fh_aux = (struct nfi_tcp_server_fhandle * ) fh -> priv_fh;
 
     debug_info("ANTES ------------------- %s\n", server_aux -> params.server_name);
@@ -1016,7 +1016,8 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
                 if( diff > buffer_size )        bytes_to_write = buffer_size;
                 else                            bytes_to_write = diff;
 
-                printf("\nREMOTE - %s - %d - %d\n\n", server_aux -> params.server_name, bytes_to_write, offset);
+                //printf("\nREMOTE - %s - %d - %d\n\n", server_aux -> params.server_name, bytes_to_write, offset);
+                
                 ret = tcpClient_write_data(server_aux -> params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
                 
                 if (ret < 0) 

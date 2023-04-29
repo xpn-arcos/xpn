@@ -200,9 +200,10 @@
       MPI_Init(&argc, &argv);
 
       // Open host file
-      file = fopen(params.host_file, "r");
-      if (file == NULL) {
-        printf("[MPI-SERVER] ERROR: invalid file %s\n", params.host_file);
+      file = fopen(params.shutdown_file, "r");
+      if (file == NULL)
+      {
+        printf("[MPI-SERVER] ERROR: invalid file %s\n", params.shutdown_file);
         return -1;
       }
 
@@ -216,7 +217,8 @@
         {
           // Lookup port name
           ret = ns_lookup (srv_name, port_name);
-          if (ret < 0) {
+          if (ret < 0)
+          {
             printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name) ;
             continue;
           }
@@ -225,7 +227,8 @@
         {
           // Lookup port name on nameserver
           ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name) ;
-          if (MPI_SUCCESS != ret) {
+          if (MPI_SUCCESS != ret)
+          {
             printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name) ;
             continue;
           }
@@ -233,10 +236,12 @@
 
         // Connect with servers
         ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &server );
-        if (MPI_SUCCESS != ret) {
+        if (MPI_SUCCESS != ret)
+        {
           printf("[MPI-SERVER] ERROR: MPI_Comm_connect fails\n") ;
           continue;
         }
+
         buf = MPI_SERVER_FINALIZE;
         MPI_Send( &buf, 1, MPI_INT, 0, 0, server );
 
@@ -275,7 +280,8 @@
 
       // Get arguments..
       ret = mpi_server_params_get(&params, argc, argv) ;
-      if (ret < 0) {
+      if (ret < 0)
+      {
         mpi_server_params_show_usage() ;
         return -1;
       }

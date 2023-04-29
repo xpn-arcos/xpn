@@ -32,8 +32,8 @@
        * ENVIROMENT VARIABLE: DNS SERVICE
        */
 
-      #ifndef TCP_SERVER_FILE_DEFAULT
-        #define TCP_SERVER_FILE_DEFAULT "/tmp/tcp_dns.txt"
+      #ifndef TCP_SERVER_DNS_FILE_DEFAULT
+        #define TCP_SERVER_DNS_FILE_DEFAULT "/tmp/tcp_dns.txt"
       #endif
 
       #ifndef MAX_TCP_SERVER_NODES

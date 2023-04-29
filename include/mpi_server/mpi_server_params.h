@@ -32,6 +32,14 @@
   #include "base/workers.h"
   //#include <semaphore.h>
 
+  /*
+   * Constants
+   */
+
+  #ifndef MPI_SERVER_DIRBASE_DEFAULT
+    #define MPI_SERVER_DIRBASE_DEFAULT "/tmp"
+  #endif
+
 
   /*
    * Datatype
@@ -44,8 +52,9 @@
     int  rank ;
     char port_name[MPI_MAX_PORT_NAME] ;
     char srv_name[MPI_MAX_PORT_NAME] ;
+    char dirbase [PATH_MAX] ;
     char dns_file[PATH_MAX] ;
-    char host_file[PATH_MAX] ;
+    char shutdown_file[PATH_MAX] ;
 
     // server configuration
     int thread_mode;
@@ -58,7 +67,6 @@
 
     // associated client
     MPI_Comm client ;
-    char dirbase[PATH_MAX] ;
 
     // server arguments
     int    argc ;
