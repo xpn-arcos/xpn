@@ -84,9 +84,13 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
-IFLAGS="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
-LFLAGS="    -L../../mxml    -L../../xpn/lib "
-LFLAGS+="-L../../../mxml -L../../../xpn/lib "
+IFLAGS="-I../../mxml        -I../../bin/mosquitto/include       "
+IFLAGS+="-I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+IFLAGS+="-I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
+
+LFLAGS=" -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib "
+LFLAGS+="-L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib "
+LFLAGS+="-L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
 
 LIBLINK=$LIBS
 LIBLINK+=" -lmxml"
@@ -218,6 +222,30 @@ AC_SUBST(NFI_TCP_SERVER)
 AC_SUBST(NFI_TCP_SERVER_OBJECTS)
 AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
 ### END OF TCP_SERVER BLOCK. Do not remove this line. ###
+
+
+### BEGIN OF MOSQUITTO BLOCK. Do not remove this line. ###
+#
+# Defines the necessary variables if gridftp is enabled.
+#
+AC_ARG_ENABLE(  [mosquitto],
+                [AS_HELP_STRING([--enable-mosquitto],[Enable mosquitto module.])],
+                [
+                  [CDEFS="$CDEFS -DENABLE_TCP_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"]
+                  [NFI_TCP_SERVER="nfi_tcp_server"]
+                  [NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"]
+                  [LIBLINK+=" -lmosquitto"]
+                  [LIBS=$LFLAGS" "$LIBS" -lmosquitto"]
+                ]
+)
+AC_SUBST(NFI_TCP_SERVER)
+AC_SUBST(NFI_TCP_SERVER_OBJECTS)
+AC_SUBST(LIBLINK)
+AC_SUBST(LIBS)
+AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
+### END OF MOSQUITTO BLOCK. Do not remove this line. ###
+
 
 ### BEGIN OF MPI_SERVER BLOCK. Do not remove this line. ###
 #

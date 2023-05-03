@@ -34,7 +34,6 @@
     #include "base/path_misc.h"
     #include "base/urlstr.h"
     #include "base/workers.h"
-    #include "mpi_server_conf.h"
     #include "mpi_server_ops.h"
     #include "mpi_server_comm.h"
     #include "mpi_server_params.h"

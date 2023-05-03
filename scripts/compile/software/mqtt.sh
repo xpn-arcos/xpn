@@ -1,8 +1,8 @@
 #!/bin/bash
-set -x
+#set -x
 
 #
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Elias Del Pozo Puñal, Alejandro Calderon Mateos
 #
 #  This file is part of Expand.
 #
@@ -23,20 +23,17 @@ set -x
 function usage {
     echo ""
     echo " Usage:"
-    echo " $0  -m <mpicc path>  -i <Install path> -s <Source path>"
+    echo " $0  -i <Install path> -s <Source path>"
     echo " Where:"
-    echo " * <mpicc   path> = full path where the mpicc is installed."
-    echo " * <Install path> = full path where XPN is going to be installed."
-    echo " * <Source  path> = full path to the source code XPN."
+    echo " * <Install path> = full path where MQTT is going to be installed."
+    echo " * <Source  path> = full path to the source code of MQTT."
     echo ""
 }
 
 
 ## get arguments
-while getopts "m:i:s:" opt; do
+while getopts "i:s:" opt; do
     case "${opt}" in
-          m) MPICC_PATH=${OPTARG}
-             ;;
           i) INSTALL_PATH=${OPTARG}
              ;;
           s) SRC_PATH=${OPTARG}
@@ -50,12 +47,6 @@ while getopts "m:i:s:" opt; do
 done
 
 ## check arguments
-if [ "$MPICC_PATH" == "" ]; then
-   echo " Error:"
-   echo " * Empty MPICC_PATH"
-   usage
-   exit
-fi
 if [ "$INSTALL_PATH" == "" ]; then
    echo " Error:"
    echo " * Empty INSTALL_PATH"
@@ -69,26 +60,23 @@ if [ "$SRC_PATH" == "" ]; then
    exit
 fi
 if [ ! -d "$SRC_PATH" ]; then
-   echo " Skip XPN:"
+   echo " Skip MQTT:"
    echo " * Directory not found: $SRC_PATH"
    exit
 fi
 
 
-## XPN
-echo " * XPN: preparing directories..."
-  rm -fr "$INSTALL_PATH/xpn"
-mkdir -p "$INSTALL_PATH/xpn/lib64"
-ln    -s "$INSTALL_PATH/xpn/lib64"   "$INSTALL_PATH/xpn/lib"
-
-echo " * XPN: compiling and installing..."
+## MQTT
+echo " * MQTT: preparing directories..."
 pushd .
-cd "$SRC_PATH"
-ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-./configure --prefix=$INSTALL_PATH/xpn --enable-tcp_server --enable-mpi_server="$MPICC_PATH"
+rm -fr "$INSTALL_PATH/mosquitto"
+mkdir -p "$INSTALL_PATH/mosquitto/"
+sed -ibak "s/WITH_CJSON:=yes/WITH_CJSON:=no/g" $HOME/src/mosquitto/config.mk
+cd "$INSTALL_PATH/mosquitto/"
+cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH/mosquitto/ $HOME/src/mosquitto
+
+echo " * MQTT: compiling and installing..."
 make clean
-make -j 16
-#doxygen doc/doxygen-XPN.cfg
+make -j 8
 make install
 popd
-

@@ -21,11 +21,13 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "tcp_server_params.h"
+#include "base/ns_tcp.h"
 
 
 /* ... Functions / Funciones ......................................... */
 
-void tcp_server_params_show(tcp_server_param_st * params) {
+void tcp_server_params_show(tcp_server_param_st * params)
+{
     DEBUG_BEGIN();
 
     printf("   * TCP-server current configuration:\n");
@@ -34,8 +36,6 @@ void tcp_server_params_show(tcp_server_param_st * params) {
     printf("\t-io <int>:\t%d\n", params -> IOsize);
 
     printf("\t-ns <string>:\t'%s'\n", params -> dns_file);
-    printf("\t-d  <string>:\t'%s'\n", params -> dirbase);
-
     if (params -> thread_mode == TH_NOT) {
         printf("\t-t:\t\tWithout threads\n");
     }
@@ -43,8 +43,11 @@ void tcp_server_params_show(tcp_server_param_st * params) {
         printf("\t-t:\t\tThread Pool Activated\n");
     }
     if (params -> thread_mode == TH_OP) {
-        printf("\t-n:\t\tThread on demand\n");
+        printf("\t-t:\t\tThread on demand\n");
     }
+
+    printf("\t-d  <string>:\t'%s'\n", params -> dirbase);
+    printf("\t-f <path>:\t'%s'\n",   params->shutdown_file) ;
 
     if (params -> mosquitto_mode == 1) {
         printf("\t-m <mqtt_qos>:\t%d\n", params -> mosquitto_qos);
@@ -53,7 +56,8 @@ void tcp_server_params_show(tcp_server_param_st * params) {
     DEBUG_END();
 }
 
-void tcp_server_params_show_usage(void) {
+void tcp_server_params_show_usage(void)
+{
     DEBUG_BEGIN();
 
     printf("Usage:\n");
@@ -62,30 +66,29 @@ void tcp_server_params_show_usage(void) {
     printf("\t-io <int>:    IOsize\n");
 
     printf("\t-ns <path>: file for service name\n");
-    printf("\t-d  <string>: name of the base directory\n");
-
     printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n");
+    printf("\t-d  <string>: name of the base directory\n") ;
+    printf("\t-f  <path>: file of servers to be shutdown\n") ;
 
     printf("\t-m <mqtt_qos_mode>:   0 (QoS 0); 1 (QoS 1); 2 (QoS 2)\n");
 
     DEBUG_END();
 }
 
-int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[]) {
+int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
+{
     DEBUG_BEGIN();
 
     // set default values
     params -> argc = argc;
     params -> argv = argv;
-
     params -> size = 0;
     params -> rank = 0;
+    params -> thread_mode = TH_POOL;
     strcpy(params -> port_name, "");
     strcpy(params -> srv_name, "");
-
-    params -> thread_mode = TH_POOL;
     strcpy(params -> dirbase, TCP_SERVER_DIRBASE_DEFAULT);
-    strcpy(params -> dns_file, "");
+    strcpy(params -> dns_file, TCP_SERVER_DNS_FILE_DEFAULT);
 
     gethostname(params -> name, TCP_MAX_PORT_NAME);
     sprintf(params -> port, "%d", TCP_SERVER_PORT_DEFAULT);
@@ -131,7 +134,7 @@ int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
                 }
                 break;
             case 'f':
-                strcpy(params -> host_file, argv[i + 1]);
+                strcpy(params -> shutdown_file, argv[i + 1]);
                 i++;
                 break;
             case 'd':
