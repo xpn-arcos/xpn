@@ -22,6 +22,7 @@
 
   #include "all_system.h"
   #include "base/utils.h"
+  #include "base/ns.h"
   #include "tcp_server/tcp_server_params.h"
   #include "tcp_server/tcp_server_ops.h"
   #include "base/workers.h"
@@ -197,7 +198,6 @@
     char server_name[1024];
     char port_number[1024];
     FILE * file;
-    int ns_tcp_lookup ( char * param_srv_name, char * host_name, char * port_name ) ;
 
     // Feedback
     printf("\n");
@@ -230,7 +230,7 @@
     while (fscanf(file, "%s %s %s", srv_name, server_name, port_number) != EOF)
     {
       // Lookup port name
-    ret = ns_tcp_lookup(srv_name, server_name, port_number) ;
+      ret = ns_lookup("tcp_server", srv_name, server_name, port_number) ;
       if (ret < 0)
       {
         printf("[TCP-SERVER] ERROR: server %s %s %s not found\n", srv_name, server_name, port_number);
@@ -238,7 +238,7 @@
       }
 
       // Connect with server
-    sd = tcp_server_comm_connect(&params, server_name, atoi(port_number)) ;
+      sd = tcp_server_comm_connect(&params, server_name, atoi(port_number)) ;
       if (sd < 0)
       {
         printf("[TCP-SERVER] ERROR: connect to %s failed\n", server_name);
@@ -255,7 +255,7 @@
       }
 
       // Close
-    tcp_server_comm_close(sd) ;
+      tcp_server_comm_close(sd) ;
     }
 
     // Close host file
