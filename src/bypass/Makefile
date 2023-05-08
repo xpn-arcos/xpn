@@ -3,8 +3,8 @@
 #
 
 
- prefix = /local_test/bin//xpn
- CC=/local_test/bin/mpich/bin/mpicc
+ prefix = /home/acaldero/bin//xpn
+ CC=/usr/bin/mpicc
 
  FLAGS=-Wall -Wextra -fpic -DLINUX -std=c11
  INCLUDE=-I../../include -I../../include/base -I../../include/xpn_client -I../../include/bypass -I../../../mxml -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H -I../../mxml        -I../../bin/mosquitto/include       -I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base -I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
