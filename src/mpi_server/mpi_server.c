@@ -216,7 +216,8 @@
         if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
         {
           // Lookup port name
-          ret = ns_lookup (srv_name, port_name);
+          char aux_srv_ip[1024] ;
+          ret = ns_lookup("mpi_server", srv_name, aux_srv_ip, port_name) ;
           if (ret < 0)
           {
             printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name) ;

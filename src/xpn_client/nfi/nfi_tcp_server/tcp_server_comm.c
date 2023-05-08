@@ -67,7 +67,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     {
         //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
 
-        ret = ns_tcp_lookup(params -> srv_name, params -> server_name, params -> port_number) ;
+        ret = ns_lookup(params -> srv_name, "tcp_server", params -> server_name, params -> port_number) ;
 
         //printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%d\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number, ret);
         if (ret < 0)

@@ -176,7 +176,6 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/base/path_misc.c \
 	../../src/base/time_misc.c \
 	../../src/base/urlstr.c ../../src/base/ns.c \
-	../../src/base/ns_tcp.c \
 	../../src/base/syscall_proxies.c \
 	../../src/base/filesystem.c \
 	../../src/base/workers.c \
@@ -230,7 +229,6 @@ am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/time_misc.$(OBJEXT) \
 	../../src/base/urlstr.$(OBJEXT) \
 	../../src/base/ns.$(OBJEXT) \
-	../../src/base/ns_tcp.$(OBJEXT) \
 	../../src/base/syscall_proxies.$(OBJEXT) \
 	../../src/base/filesystem.$(OBJEXT) \
 	../../src/base/workers.$(OBJEXT) \
@@ -308,7 +306,6 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/filesystem.Po \
 	../../src/base/$(DEPDIR)/math_misc.Po \
 	../../src/base/$(DEPDIR)/ns.Po \
-	../../src/base/$(DEPDIR)/ns_tcp.Po \
 	../../src/base/$(DEPDIR)/path_misc.Po \
 	../../src/base/$(DEPDIR)/string_misc.Po \
 	../../src/base/$(DEPDIR)/syscall_proxies.Po \
@@ -395,7 +392,6 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/base/trace_tags.h \
 	../../include/base/urlstr.h \
 	../../include/base/ns.h \
-	../../include/base/ns_tcp.h \
 	../../include/base/syscall_proxies.h \
 	../../include/base/filesystem.h \
 	../../include/base/workers.h \
@@ -609,7 +605,6 @@ BASE_HEADER = ../../include/base/base_lib.h \
 				../../include/base/trace_tags.h \
 				../../include/base/urlstr.h \
 				../../include/base/ns.h \
-				../../include/base/ns_tcp.h \
 				../../include/base/syscall_proxies.h \
 				../../include/base/filesystem.h \
 				../../include/base/workers.h \
@@ -676,7 +671,6 @@ BASE_OBJECTS = ../../src/base/darray.c \
 			../../src/base/time_misc.c \
 			../../src/base/urlstr.c \
 			../../src/base/ns.c \
-			../../src/base/ns_tcp.c \
 			../../src/base/syscall_proxies.c \
 			../../src/base/filesystem.c \
 			../../src/base/workers.c \
@@ -826,9 +820,6 @@ clean-libLIBRARIES:
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/ns.$(OBJEXT):  \
-	../../src/base/$(am__dirstamp) \
-	../../src/base/$(DEPDIR)/$(am__dirstamp)
-../../src/base/ns_tcp.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/syscall_proxies.$(OBJEXT):  \
@@ -1019,7 +1010,6 @@ include ../../src/base/$(DEPDIR)/dtable.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/filesystem.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/math_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/ns.Po # am--include-marker
-include ../../src/base/$(DEPDIR)/ns_tcp.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/path_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/string_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/syscall_proxies.Po # am--include-marker
@@ -1266,7 +1256,6 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/ns.Po
-	-rm -f ../../src/base/$(DEPDIR)/ns_tcp.Po
 	-rm -f ../../src/base/$(DEPDIR)/path_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
@@ -1365,7 +1354,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/ns.Po
-	-rm -f ../../src/base/$(DEPDIR)/ns_tcp.Po
 	-rm -f ../../src/base/$(DEPDIR)/path_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
