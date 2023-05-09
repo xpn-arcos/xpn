@@ -120,7 +120,7 @@
     // Feedback
     printf("\n");
     printf(" -------------------\n");
-    printf(" > Starting servers... (%s)\n", serv_name);
+    printf(" Starting servers... (%s)\n", serv_name);
     printf(" -------------------\n");
     printf("\n");
 
@@ -202,7 +202,7 @@
     // Feedback
     printf("\n");
     printf(" -------------------\n");
-    printf(" > Stopping servers... (%s)\n", serv_name);
+    printf(" Stopping servers... (%s)\n", serv_name);
     printf(" -------------------\n");
     printf("\n");
 
@@ -289,7 +289,7 @@
     printf(" tcp_server\n");
     printf(" ----------\n");
     printf("\n");
-    printf(" > Begin.\n");
+    printf("  Begin.\n");
     printf("\n");
 
     // Get arguments..
