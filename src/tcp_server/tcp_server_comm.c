@@ -42,7 +42,7 @@ void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_messag
 
     int to_write1, offset;
 
-    strncpy(topic, msg->topic, PATH_MAX);
+    strncpy(topic, msg->topic, PATH_MAX-1);
 
     // Encontrar la posición del último y el penúltimo slash
     int last_slash = -1;
