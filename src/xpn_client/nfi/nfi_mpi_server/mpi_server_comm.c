@@ -270,6 +270,13 @@
       return -1;
     }
 
+    //Dirbase
+    ret = MPI_Recv(params->dirbase, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
+    if (MPI_SUCCESS != ret) {
+      debug_warning("Server[?]: MPI_Recv fails :-(") ;
+      return -1;
+    }
+
     //Semaphore
     /*ret = MPI_Recv(params->sem_name_server, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
     if (MPI_SUCCESS != ret) {

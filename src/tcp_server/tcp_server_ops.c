@@ -155,135 +155,135 @@ int tcp_server_do_operation(struct st_th * th, int * the_end)
   int ret;
   struct st_tcp_server_msg head;
 
-  //printf("SERVER DO OPERATION -- %d\n", th -> type_op);
+  //printf("SERVER DO OPERATION -- %d\n", th->type_op);
 
-  switch (th -> type_op)
+  switch (th->type_op)
   {
     //File API
     case TCP_SERVER_OPEN_FILE_WS:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_open_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_open_ws(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_OPEN_FILE_WOS:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_open), sizeof(struct st_tcp_server_open), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_open_wos(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_open_wos(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_CREAT_FILE_WS:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_creat_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_creat_ws(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_CREAT_FILE_WOS:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_creat), sizeof(struct st_tcp_server_creat), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_creat_wos(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_creat_wos(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_READ_FILE_WS:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_read_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_read_ws(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_READ_FILE_WOS:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_read), sizeof(struct st_tcp_server_read), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_read_wos(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_read_wos(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_WRITE_FILE_WS:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_write_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_write_ws(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_WRITE_FILE_WOS:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_write), sizeof(struct st_tcp_server_write), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_write_wos(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_write_wos(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_CLOSE_FILE_WS:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_close), sizeof(struct st_tcp_server_close), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_close), sizeof(struct st_tcp_server_close), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_close_ws(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_close_ws(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
 
     // Metadata API
     case TCP_SERVER_RM_FILE:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_rm), sizeof(struct st_tcp_server_rm), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_rm), sizeof(struct st_tcp_server_rm), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_rm(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_rm(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_RENAME_FILE:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_rename), sizeof(struct st_tcp_server_rename), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_rename), sizeof(struct st_tcp_server_rename), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_rename(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_rename(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_GETATTR_FILE:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_getattr), sizeof(struct st_tcp_server_getattr), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_getattr), sizeof(struct st_tcp_server_getattr), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_getattr(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_getattr(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_SETATTR_FILE:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_setattr), sizeof(struct st_tcp_server_setattr), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_setattr), sizeof(struct st_tcp_server_setattr), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_setattr(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_setattr(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
 
     //Directory API
     case TCP_SERVER_MKDIR_DIR:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_mkdir), sizeof(struct st_tcp_server_mkdir), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_mkdir), sizeof(struct st_tcp_server_mkdir), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_mkdir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_mkdir(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_OPENDIR_DIR:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_opendir), sizeof(struct st_tcp_server_opendir), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_opendir), sizeof(struct st_tcp_server_opendir), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_opendir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_opendir(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_READDIR_DIR:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_readdir), sizeof(struct st_tcp_server_readdir), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_readdir), sizeof(struct st_tcp_server_readdir), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_readdir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_readdir(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_CLOSEDIR_DIR:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_closedir), sizeof(struct st_tcp_server_closedir), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_closedir), sizeof(struct st_tcp_server_closedir), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_closedir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_closedir(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_RMDIR_DIR:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_rmdir), sizeof(struct st_tcp_server_rmdir), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_rmdir), sizeof(struct st_tcp_server_rmdir), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_rmdir(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_rmdir(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
 
     //File system API
     case TCP_SERVER_PRELOAD_FILE:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_preload), sizeof(struct st_tcp_server_preload), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_preload), sizeof(struct st_tcp_server_preload), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_preload(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_preload(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
     case TCP_SERVER_FLUSH_FILE:
-    ret = tcp_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_tcp_server_msg.op_flush), sizeof(struct st_tcp_server_flush), 0 /*head.id*/);
+    ret = tcp_server_comm_read_data(th->params, (int) th->sd, (char * ) & (head.u_st_tcp_server_msg.op_flush), sizeof(struct st_tcp_server_flush), 0 /*head.id*/);
     if (ret != -1) {
-      tcp_server_op_flush(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+      tcp_server_op_flush(th->params, (int) th->sd, & head, 0 /*head.id*/);
     }
     break;
 
@@ -298,7 +298,7 @@ int tcp_server_do_operation(struct st_th * th, int * the_end)
 
     //FS Metadata API
     case TCP_SERVER_GETNODENAME:
-    tcp_server_op_getnodename(th -> params, (int) th -> sd, & head, 0 /*head.id*/); //NEW
+    tcp_server_op_getnodename(th->params, (int) th->sd, & head, 0 /*head.id*/);
     break;
 
   }
@@ -327,23 +327,23 @@ void tcp_server_op_open_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
   tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, head->u_st_tcp_server_msg.op_open.path, fd);
+  debug_info("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params->srv_name, head->u_st_tcp_server_msg.op_open.path, fd);
 
 #ifdef HAVE_MOSQUITTO_H
   char *extra = "/#";
-  char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
-  strcpy(sm, head -> u_st_tcp_server_msg.op_open.path);
+  char *sm = malloc(strlen(head->u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
+  strcpy(sm, head->u_st_tcp_server_msg.op_open.path);
   strcat(sm, extra);
 
-  if ( params -> mosquitto_mode == 1 )
+  if ( params->mosquitto_mode == 1 )
   {
-    printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
+    debug_info("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
 
-    int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
+    int rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
     if(rc != MOSQ_ERR_SUCCESS)
     {
       fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-      mosquitto_disconnect(params -> mqtt);
+      mosquitto_disconnect(params->mqtt);
     }
 
     debug_info("[%d]\tEND OPEN MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, sm);
@@ -367,30 +367,30 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
   filesystem_close(fd);
   
   // show debug info
-  printf("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, head->u_st_tcp_server_msg.op_open.path, fd);
+  debug_info("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params->srv_name, head->u_st_tcp_server_msg.op_open.path, fd);
 
 #ifdef HAVE_MOSQUITTO_H
-  if ( params -> mosquitto_mode == 1 )
+  if ( params->mosquitto_mode == 1 )
   {
     char *extra = "/#";
-    char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
-    strcpy(sm, head -> u_st_tcp_server_msg.op_open.path);
+    char *sm = malloc(strlen(head->u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
+    strcpy(sm, head->u_st_tcp_server_msg.op_open.path);
     strcat(sm, extra);
-    printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
+    debug_info("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
 
-    int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
+    int rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
     if(rc != MOSQ_ERR_SUCCESS)
     {
       fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-      mosquitto_disconnect(params -> mqtt);
+      mosquitto_disconnect(params->mqtt);
     }
 
     debug_info("[%d]\tEND OPEN MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, sm);
     /*
     printf("[%d]\tBEGIN CLOSE OPEN MOSQUITTO TCP_SERVER - WOS \n\n", __LINE__);
 
-    mosquitto_unsubscribe(params -> mqtt, NULL, sm);
-    mosquitto_unsubscribe(params -> mqtt, NULL, s);
+    mosquitto_unsubscribe(params->mqtt, NULL, sm);
+    mosquitto_unsubscribe(params->mqtt, NULL, s);
 
     printf("[%d]\tEND CLOSE OPEN MOSQUITTO TCP_SERVER - WOS %s\n\n", __LINE__, s);
     */
@@ -417,25 +417,25 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
   tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, head->u_st_tcp_server_msg.op_creat.path, fd);
+  debug_info("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params->srv_name, head->u_st_tcp_server_msg.op_creat.path, fd);
 
 #ifdef HAVE_MOSQUITTO_H
-  if ( params -> mosquitto_mode == 1 )
+  if ( params->mosquitto_mode == 1 )
   {
     char *extra = "/#";
-    char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_creat.path) + strlen(extra) + 1);
-    strcpy(sm, head -> u_st_tcp_server_msg.op_creat.path);
+    char *sm = malloc(strlen(head->u_st_tcp_server_msg.op_creat.path) + strlen(extra) + 1);
+    strcpy(sm, head->u_st_tcp_server_msg.op_creat.path);
     strcat(sm, extra);
 
     int rc;
-    printf("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
+    debug_info("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
 
-    rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
+    rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
 
     if(rc != MOSQ_ERR_SUCCESS)
     {
       fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-      mosquitto_disconnect(params -> mqtt);
+      mosquitto_disconnect(params->mqtt);
     }
 
     debug_info("[%d]\tEND CREAT MOSQUITTO TCP_SERVER WS - %s\n\n", __LINE__, sm);
@@ -465,31 +465,31 @@ void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp
   filesystem_close(fd);
 
   // show debug info
-  debug_info("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, head->u_st_tcp_server_msg.op_creat.path, fd);
+  debug_info("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params->srv_name, head->u_st_tcp_server_msg.op_creat.path, fd);
 
 #ifdef HAVE_MOSQUITTO_H
-  if ( params -> mosquitto_mode == 1 )
+  if ( params->mosquitto_mode == 1 )
   {
     char *extra = "/#";
-    char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_creat.path) + strlen(extra) + 1);
-    strcpy(sm, head -> u_st_tcp_server_msg.op_creat.path);
+    char *sm = malloc(strlen(head->u_st_tcp_server_msg.op_creat.path) + strlen(extra) + 1);
+    strcpy(sm, head->u_st_tcp_server_msg.op_creat.path);
     strcat(sm, extra);
-    printf("[%d]\tBEGIN CREATE MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
+    debug_info("[%d]\tBEGIN CREATE MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
 
-    int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
+    int rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
 
     if(rc != MOSQ_ERR_SUCCESS)
     {
       fprintf(stderr, "Error subscribing creat: %s\n", mosquitto_strerror(rc));
-      mosquitto_disconnect(params -> mqtt);
+      mosquitto_disconnect(params->mqtt);
     }
 
     debug_info("[%d]\tEND CREATE MOSQUITTO TCP_SERVER WOS - %s\n\n", __LINE__, sm);
     /*      
     printf("[%d]\tBEGIN CLOSE CREAT MOSQUITTO TCP_SERVER - WOS \n\n", __LINE__);
 
-    mosquitto_unsubscribe(params -> mqtt, NULL, sm);
-    mosquitto_unsubscribe(params -> mqtt, NULL, s);
+    mosquitto_unsubscribe(params->mqtt, NULL, sm);
+    mosquitto_unsubscribe(params->mqtt, NULL, s);
 
     printf("[%d]\tEND CLOSE CREAT MOSQUITTO TCP_SERVER - WOS %s \n\n", __LINE__, s);
     */
@@ -503,17 +503,17 @@ void tcp_server_op_read_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
   char * buffer;
   long size, diff, to_read, cont;
 
-  debug_info("[TCP-SERVER-OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n",params -> srv_name, head -> u_st_tcp_server_msg.op_read.fd, (int) head -> u_st_tcp_server_msg.op_read.offset, head -> u_st_tcp_server_msg.op_read.size);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n",params->srv_name, head->u_st_tcp_server_msg.op_read.fd, (int) head->u_st_tcp_server_msg.op_read.offset, head->u_st_tcp_server_msg.op_read.size);
 
   // initialize counters
   cont = 0;
-  size = head -> u_st_tcp_server_msg.op_read.size;
+  size = head->u_st_tcp_server_msg.op_read.size;
 
   if (size > MAX_BUFFER_SIZE) {
     size = MAX_BUFFER_SIZE;
   }
 
-  diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+  diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
   // malloc a buffer of size...
   buffer = (char * ) malloc(size);
@@ -530,8 +530,8 @@ void tcp_server_op_read_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
     else to_read = diff;
 
     // lseek and read data...
-    filesystem_lseek(head -> u_st_tcp_server_msg.op_read.fd, head -> u_st_tcp_server_msg.op_read.offset + cont, SEEK_SET);
-    req.size = filesystem_read(head -> u_st_tcp_server_msg.op_read.fd, buffer, to_read);
+    filesystem_lseek(head->u_st_tcp_server_msg.op_read.fd, head->u_st_tcp_server_msg.op_read.offset + cont, SEEK_SET);
+    req.size = filesystem_read(head->u_st_tcp_server_msg.op_read.fd, buffer, to_read);
     // if error then send as "how many bytes" -1
     if (req.size < 0) {
       req.size = -1; // TODO: check in client that -1 is treated properly... :-)
@@ -542,15 +542,15 @@ void tcp_server_op_read_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
     }
     // send (how many + data) to client...
     tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_read_req), rank_client_id);
-    debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send size %d\n", params -> srv_name, req.size);
+    debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size);
 
     // send data to client...
     if (req.size > 0) {
       tcp_server_comm_write_data(params, sd, buffer, req.size, rank_client_id);
-      debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send data\n", params -> srv_name);
+      debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send data\n", params->srv_name);
     }
     cont = cont + req.size; //Send bytes
-    diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+    diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
   } while ((diff > 0) && (req.size != 0));
 
@@ -559,7 +559,7 @@ void tcp_server_op_read_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
 
   // debugging information
   debug_info("[TCP-SERVER-OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",
-    params -> srv_name, head -> u_st_tcp_server_msg.op_read.fd, (int) head -> u_st_tcp_server_msg.op_read.offset, size);
+    params->srv_name, head->u_st_tcp_server_msg.op_read.fd, (int) head->u_st_tcp_server_msg.op_read.offset, size);
 }
 
 void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id) {
@@ -568,7 +568,7 @@ void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_
   long   size, diff, to_read, cont;
   char   path [PATH_MAX];
 
-  debug_info("[TCP-SERVER-OPS] (ID=%s) begin read: path %s offset %d size %d ID=x\n", params -> srv_name, head -> u_st_tcp_server_msg.op_read.path, (int) head -> u_st_tcp_server_msg.op_read.offset, head -> u_st_tcp_server_msg.op_read.size);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) begin read: path %s offset %d size %d ID=x\n", params->srv_name, head->u_st_tcp_server_msg.op_read.path, (int) head->u_st_tcp_server_msg.op_read.offset, head->u_st_tcp_server_msg.op_read.size);
 
   strcpy(path, params->dirbase);
   strcat(path, "/");
@@ -576,12 +576,12 @@ void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 
   // initialize counters
   cont = 0;
-  size = head -> u_st_tcp_server_msg.op_read.size;
+  size = head->u_st_tcp_server_msg.op_read.size;
   if (size > MAX_BUFFER_SIZE) {
     size = MAX_BUFFER_SIZE;
   }
 
-  diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+  diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
   //Open file
   int fd = filesystem_open(path, O_RDONLY);
@@ -607,7 +607,7 @@ void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_
     else to_read = diff;
 
     // lseek and read data...
-    filesystem_lseek(fd, head -> u_st_tcp_server_msg.op_read.offset + cont, SEEK_SET);
+    filesystem_lseek(fd, head->u_st_tcp_server_msg.op_read.offset + cont, SEEK_SET);
     req.size = filesystem_read(fd, buffer, to_read);
     // if error then send as "how many bytes" -1
 
@@ -619,16 +619,16 @@ void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_
     }
     // send (how many + data) to client...
     tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_read_req), rank_client_id);
-    debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send size %d\n", params -> srv_name, req.size);
+    debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send size %d\n", params->srv_name, req.size);
 
     // send data to client...
     if (req.size > 0) {
       tcp_server_comm_write_data(params, sd, buffer, req.size, rank_client_id);
-      debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send data\n", params -> srv_name);
+      debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send data\n", params->srv_name);
     }
 
     cont = cont + req.size; //Send bytes
-    diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+    diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
   } while ((diff > 0) && (req.size != 0));
 
@@ -639,28 +639,28 @@ void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 
   // debugging information
   debug_info("[TCP-SERVER-OPS] (ID=%s) end READ: path %s offset %d size %d ID=x\n",
-    params -> srv_name, head -> u_st_tcp_server_msg.op_read.path, (int) head -> u_st_tcp_server_msg.op_read.offset, size);
+    params->srv_name, head->u_st_tcp_server_msg.op_read.path, (int) head->u_st_tcp_server_msg.op_read.offset, size);
 }
 
 void tcp_server_op_write_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
-  if( params -> mosquitto_mode == 0 )
+  if( params->mosquitto_mode == 0 )
   {
-    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
+    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.fd);
   
     struct st_tcp_server_write_req req;
     char * buffer;
     int    size, diff, cont, to_write;
 
-    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
+    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.fd);
 
     // initialize counters
     cont = 0;
-    size = (head -> u_st_tcp_server_msg.op_write.size);
+    size = (head->u_st_tcp_server_msg.op_write.size);
     if (size > MAX_BUFFER_SIZE) {
       size = MAX_BUFFER_SIZE;
     }
-    diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+    diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
     // malloc a buffer of size...
     buffer = (char * ) malloc(size);
@@ -677,14 +677,14 @@ void tcp_server_op_write_ws(tcp_server_param_st * params, int sd, struct st_tcp_
 
       // read data from TCP and write into the file
       tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
-      filesystem_lseek(head -> u_st_tcp_server_msg.op_write.fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
+      filesystem_lseek(head->u_st_tcp_server_msg.op_write.fd, head->u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
       //sem_wait(&disk_sem);
-      req.size = filesystem_write(head -> u_st_tcp_server_msg.op_write.fd, buffer, to_write);
+      req.size = filesystem_write(head->u_st_tcp_server_msg.op_write.fd, buffer, to_write);
       //sem_post(&disk_sem);
 
       // update counters
       cont = cont + req.size; // Received bytes
-      diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+      diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
     } while ((diff > 0) && (req.size != 0));
 
@@ -697,19 +697,19 @@ void tcp_server_op_write_ws(tcp_server_param_st * params, int sd, struct st_tcp_
   }
 
   // for debugging purpouses
-  debug_info("[TCP-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.fd);
 }
 
 void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
-  if( params -> mosquitto_mode == 0 )
+  if( params->mosquitto_mode == 0 )
   {
     struct st_tcp_server_write_req req;
     char * buffer;
     int    size, diff, cont, to_write;
     char   path [PATH_MAX];
 
-    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: path %s ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.path);
+    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: path %s ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.path);
 
     strcpy(path, params->dirbase);
     strcat(path, "/");
@@ -717,11 +717,11 @@ void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp
 
     // initialize counters
     cont = 0;
-    size = (head -> u_st_tcp_server_msg.op_write.size);
+    size = (head->u_st_tcp_server_msg.op_write.size);
     if (size > MAX_BUFFER_SIZE) {
       size = MAX_BUFFER_SIZE;
     }
-    diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+    diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
     //Open file
     int fd = filesystem_open(path, O_WRONLY);
@@ -741,8 +741,6 @@ void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp
       return;
     }
 
-    printf("\npath = %s | to_write = %d | offset = %ld\n", head -> u_st_tcp_server_msg.op_write.path, size, head -> u_st_tcp_server_msg.op_write.offset);
-
     // loop...
     do {
       if (diff > size) to_write = size;
@@ -750,7 +748,7 @@ void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp
 
       // read data from TCP and write into the file
       tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
-      filesystem_lseek(fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
+      filesystem_lseek(fd, head->u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
       //sem_wait(&disk_sem);
 
 
@@ -760,7 +758,7 @@ void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp
 
       // update counters
       cont = cont + req.size; // Received bytes
-      diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+      diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
     } while ((diff > 0) && (req.size != 0));
 
@@ -773,7 +771,7 @@ void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp
   }
 
   // for debugging purpouses
-  debug_info("[TCP-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.fd);
 }
 
 void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -788,31 +786,31 @@ void tcp_server_op_close_ws(tcp_server_param_st * params, int sd, struct st_tcp_
 
   
   // do close
-  if (head -> u_st_tcp_server_msg.op_close.fd != -1 &&  params -> mosquitto_mode == 0 )
+  if (head->u_st_tcp_server_msg.op_close.fd != -1 &&  params->mosquitto_mode == 0 )
   {
-    ret = filesystem_close(head -> u_st_tcp_server_msg.op_close.fd);
+    ret = filesystem_close(head->u_st_tcp_server_msg.op_close.fd);
   }
 
   tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) CLOSE(fd=%d, path=%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_close.fd, head -> u_st_tcp_server_msg.op_close.path);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) CLOSE(fd=%d, path=%s)\n", params->srv_name, head->u_st_tcp_server_msg.op_close.fd, head->u_st_tcp_server_msg.op_close.path);
 
 #ifdef HAVE_MOSQUITTO_H
-  if( params -> mosquitto_mode == 1 )
+  if( params->mosquitto_mode == 1 )
   {
     char *s;
     char *extra = "/#";
-    char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_close.path) + strlen(extra) + 1);
-    strcpy(sm, head -> u_st_tcp_server_msg.op_close.path);
+    char *sm = malloc(strlen(head->u_st_tcp_server_msg.op_close.path) + strlen(extra) + 1);
+    strcpy(sm, head->u_st_tcp_server_msg.op_close.path);
     strcat(sm, extra);
 
-    s = head -> u_st_tcp_server_msg.op_close.path;
+    s = head->u_st_tcp_server_msg.op_close.path;
 
     //printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WS \n\n", __LINE__);
 
-    mosquitto_unsubscribe(params -> mqtt, NULL, sm);
-    mosquitto_unsubscribe(params -> mqtt, NULL, s);
+    mosquitto_unsubscribe(params->mqtt, NULL, sm);
+    mosquitto_unsubscribe(params->mqtt, NULL, s);
 
     //printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WS %s\n\n", __LINE__, sm);
   }
@@ -839,7 +837,7 @@ void tcp_server_op_rm(tcp_server_param_st * params, int sd, struct st_tcp_server
   tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_rm.path);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_tcp_server_msg.op_rm.path);
 }
 
 void tcp_server_op_rename(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -854,15 +852,15 @@ void tcp_server_op_rename(tcp_server_param_st * params, int sd, struct st_tcp_se
   }
 
   // do rename
-  old_url = head -> u_st_tcp_server_msg.op_rename.old_url;
-  new_url = head -> u_st_tcp_server_msg.op_rename.new_url;
+  old_url = head->u_st_tcp_server_msg.op_rename.old_url;
+  new_url = head->u_st_tcp_server_msg.op_rename.new_url;
 
   int ret = filesystem_rename(old_url, new_url);
 
   tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_rm.path);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) RM(path=%s)\n", params->srv_name, head->u_st_tcp_server_msg.op_rm.path);
 }
 
 void tcp_server_op_getattr(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -880,7 +878,7 @@ void tcp_server_op_getattr(tcp_server_param_st * params, int sd, struct st_tcp_s
   tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_attr_req), rank_client_id);
 
   // show debug info
-  printf("[TCP-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_getattr.path);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params->srv_name, head->u_st_tcp_server_msg.op_getattr.path);
 }
 
 void tcp_server_op_setattr(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, __attribute__((__unused__)) int rank_client_id)
@@ -903,7 +901,7 @@ void tcp_server_op_setattr(tcp_server_param_st * params, int sd, struct st_tcp_s
   debug_info("[TCP-SERVER-OPS] SETATTR operation to be implemented !!\n");
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) SETATTR(...)\n", params -> srv_name);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) SETATTR(...)\n", params->srv_name);
 }
 
 
@@ -917,15 +915,13 @@ void tcp_server_op_mkdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
   strcat(path, "/");
   strcat(path, head->u_st_tcp_server_msg.op_mkdir.path);
 
-  //printf("TCP_SERVER_MKDIR -- %s\n", head -> u_st_tcp_server_msg.op_mkdir.path);
-
   // do mkdir
   ret = filesystem_mkdir(path, 0777); //TO-DO: 0777 received from the client
 
   tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) MKDIR(%s)\n", params -> srv_name, s);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, s);
 }
 
 void tcp_server_op_opendir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -943,7 +939,7 @@ void tcp_server_op_opendir(tcp_server_param_st * params, int sd, struct st_tcp_s
   tcp_server_comm_write_data(params, sd, (char * )(unsigned long long * ) & (ret), (unsigned int) sizeof(DIR * ), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) OPENDIR(%s)\n", params -> srv_name, s);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, s);
 }
 
 void tcp_server_op_readdir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -953,7 +949,7 @@ void tcp_server_op_readdir(tcp_server_param_st * params, int sd, struct st_tcp_s
   DIR * s;
 
   // do mkdir
-  s = head -> u_st_tcp_server_msg.op_readdir.dir;
+  s = head->u_st_tcp_server_msg.op_readdir.dir;
   ret = filesystem_readdir(s);
 
   if (ret != NULL) {
@@ -966,7 +962,7 @@ void tcp_server_op_readdir(tcp_server_param_st * params, int sd, struct st_tcp_s
   tcp_server_comm_write_data(params, sd, (char * ) & ret_entry, sizeof(struct st_tcp_server_direntry), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) READDIR(%s)\n", params -> srv_name, s);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s);
 }
 
 void tcp_server_op_closedir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -975,13 +971,13 @@ void tcp_server_op_closedir(tcp_server_param_st * params, int sd, struct st_tcp_
   DIR * s;
 
   // do mkdir
-  s = head -> u_st_tcp_server_msg.op_closedir.dir;
+  s = head->u_st_tcp_server_msg.op_closedir.dir;
   ret = filesystem_closedir(s);
 
   tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) READDIR(%s)\n", params -> srv_name, s);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s);
 }
 
 void tcp_server_op_rmdir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -999,7 +995,7 @@ void tcp_server_op_rmdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
   tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) RMDIR(%s) \n", params -> srv_name, path);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) RMDIR(%s) \n", params->srv_name, path);
 }
 
 
@@ -1015,18 +1011,18 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
   char  file[1024];
   char  params1[1024];
 
-  int BLOCKSIZE = head -> u_st_tcp_server_msg.op_preload.block_size;
+  int BLOCKSIZE = head->u_st_tcp_server_msg.op_preload.block_size;
   char buffer[BLOCKSIZE];
 
   // Open origin file
-  fd_orig = filesystem_open(head -> u_st_tcp_server_msg.op_preload.storage_path, O_RDONLY);
+  fd_orig = filesystem_open(head->u_st_tcp_server_msg.op_preload.storage_path, O_RDONLY);
   if (fd_orig < 0)
   {
     tcp_server_comm_write_data(params, sd, (char * ) & fd_orig, sizeof(int), rank_client_id); // TO-DO: Check error treatment client-side
     return;
   }
 
-  ret = ParseURL(head -> u_st_tcp_server_msg.op_preload.virtual_path, protocol, user, machine, port, file, params1);
+  ret = ParseURL(head->u_st_tcp_server_msg.op_preload.virtual_path, protocol, user, machine, port, file, params1);
 
   // Create new file
   fd_dest = filesystem_creat(file, 0777);
@@ -1037,7 +1033,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
     return;
   }
 
-  int cont = BLOCKSIZE * params -> rank;
+  int cont = BLOCKSIZE * params->rank;
   int read_bytes, write_bytes;
 
   do
@@ -1072,7 +1068,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
       }
     }
 
-    cont = cont + (BLOCKSIZE * params -> size);
+    cont = cont + (BLOCKSIZE * params->size);
 
   } while (read_bytes == BLOCKSIZE);
 
@@ -1082,7 +1078,7 @@ void tcp_server_op_preload(tcp_server_param_st * params, int sd, struct st_tcp_s
   tcp_server_comm_write_data(params, sd, (char * ) & cont, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n", params -> srv_name, head -> u_st_tcp_server_msg.op_preload.virtual_path, head -> u_st_tcp_server_msg.op_preload.storage_path, ret);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) PRELOAD(%s,%s)->%d\n", params->srv_name, head->u_st_tcp_server_msg.op_preload.virtual_path, head->u_st_tcp_server_msg.op_preload.storage_path, ret);
 }
 
 void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -1096,10 +1092,10 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
   char  file[1024];
   char  params1[1024];
 
-  int BLOCKSIZE = head -> u_st_tcp_server_msg.op_flush.block_size;
+  int BLOCKSIZE = head->u_st_tcp_server_msg.op_flush.block_size;
   char buffer[BLOCKSIZE];
 
-  ret = ParseURL(head -> u_st_tcp_server_msg.op_flush.virtual_path, protocol, user, machine, port, file, params1);
+  ret = ParseURL(head->u_st_tcp_server_msg.op_flush.virtual_path, protocol, user, machine, port, file, params1);
 
   // Open origin file
   fd_orig = filesystem_open(file, O_RDONLY);
@@ -1111,10 +1107,10 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
   }
 
   // Create new file
-  fd_dest = filesystem_open(head -> u_st_tcp_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT);
+  fd_dest = filesystem_open(head->u_st_tcp_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT);
   if (fd_dest < 0)
   {
-    printf("Error on open operation on '%s'\n", head -> u_st_tcp_server_msg.op_flush.storage_path);
+    printf("Error on open operation on '%s'\n", head->u_st_tcp_server_msg.op_flush.storage_path);
     filesystem_close(fd_orig);
     tcp_server_comm_write_data(params, sd, (char * ) & fd_dest, sizeof(int), rank_client_id);
     return;
@@ -1122,7 +1118,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
 
   //TCP_Barrier(TCP_COMM_WORLD);
 
-  int cont = BLOCKSIZE * params -> rank;
+  int cont = BLOCKSIZE * params->rank;
   int read_bytes, write_bytes;
 
   do
@@ -1149,7 +1145,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
       }
     }
 
-    cont = cont + (BLOCKSIZE * params -> size);
+    cont = cont + (BLOCKSIZE * params->size);
 
   } while (read_bytes == BLOCKSIZE);
 
@@ -1158,7 +1154,7 @@ void tcp_server_op_flush(tcp_server_param_st * params, int sd, struct st_tcp_ser
   tcp_server_comm_write_data(params, sd, (char * ) & cont, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) FLUSH(%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_flush.virtual_path);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_tcp_server_msg.op_flush.virtual_path);
 }
 
 
@@ -1173,10 +1169,11 @@ void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, __attribute
   gethostname(serv_name, HOST_NAME_MAX);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) GETNAME=%s\n", params -> srv_name, serv_name);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name);
 
-  tcp_server_comm_write_data(params, sd, (char * ) serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
-  //tcp_server_comm_write_data(params, sd, (char * ) params -> sem_name_server, PATH_MAX, rank_client_id); // Send one single message
+  tcp_server_comm_write_data(params, sd, (char * ) serv_name,  HOST_NAME_MAX, rank_client_id); // Send one single message
+  tcp_server_comm_write_data(params, sd, (char * ) params->dirbase, PATH_MAX, rank_client_id); // Send one single message
+  //tcp_server_comm_write_data(params, sd, (char * ) params->sem_name_server, PATH_MAX, rank_client_id); // Send one single message
 
   DEBUG_END();
 }
@@ -1184,10 +1181,10 @@ void tcp_server_op_getnodename(tcp_server_param_st * params, int sd, __attribute
 void tcp_server_op_getid(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
   // do getid
-  tcp_server_comm_write_data(params, sd, (char * ) head -> id, TCP_SERVER_ID, rank_client_id); //TO-DO: Check function
+  tcp_server_comm_write_data(params, sd, (char * ) head->id, TCP_SERVER_ID, rank_client_id); //TO-DO: Check function
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) GETID(...)\n", params -> srv_name);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) GETID(...)\n", params->srv_name);
 }
 
 

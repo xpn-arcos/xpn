@@ -292,7 +292,7 @@
 
       //FS Metadata API
       case MPI_SERVER_GETNODENAME:
-        mpi_server_op_getnodename(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id); //NEW
+        mpi_server_op_getnodename(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id);
         break;
 
     }
@@ -1101,6 +1101,7 @@
     debug_info("[MPI-SERVER-OPS] (ID=%s) GETNAME=%s\n", params->srv_name, serv_name) ;
 
     mpi_server_comm_write_data(params, sd, (char *)serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
+    mpi_server_comm_write_data(params, sd, (char *)params->dirbase, PATH_MAX, rank_client_id); // Send one single message
     //mpi_server_comm_write_data(params, sd, (char *)params->sem_name_server, PATH_MAX, rank_client_id); // Send one single message
 
     DEBUG_END() ;

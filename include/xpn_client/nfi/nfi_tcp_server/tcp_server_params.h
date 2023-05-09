@@ -37,6 +37,7 @@
     int   server ;
 
     int     locality ;
+    char dirbase[PATH_MAX] ;
     //char    sem_name_server [PATH_MAX];
     //sem_t * sem_server ;
 
