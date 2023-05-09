@@ -337,7 +337,7 @@ void tcp_server_op_open_ws(tcp_server_param_st * params, int sd, struct st_tcp_s
 
   if ( params -> mosquitto_mode == 1 )
   {
-    printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
+    debug_info("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
 
     int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
     if(rc != MOSQ_ERR_SUCCESS)
@@ -367,7 +367,7 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
   filesystem_close(fd);
   
   // show debug info
-  printf("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, head->u_st_tcp_server_msg.op_open.path, fd);
+  debug_info("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, head->u_st_tcp_server_msg.op_open.path, fd);
 
 #ifdef HAVE_MOSQUITTO_H
   if ( params -> mosquitto_mode == 1 )
@@ -376,7 +376,7 @@ void tcp_server_op_open_wos(tcp_server_param_st * params, int sd, struct st_tcp_
     char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_open.path) + strlen(extra) + 1);
     strcpy(sm, head -> u_st_tcp_server_msg.op_open.path);
     strcat(sm, extra);
-    printf("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
+    debug_info("[%d]\tBEGIN OPEN MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
 
     int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
     if(rc != MOSQ_ERR_SUCCESS)
@@ -428,7 +428,7 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
     strcat(sm, extra);
 
     int rc;
-    printf("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
+    debug_info("[%d]\tBEGIN CREAT MOSQUITTO TCP_SERVER WS - %s\n", __LINE__, sm);
 
     rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
 
@@ -474,7 +474,7 @@ void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp
     char *sm = malloc(strlen(head -> u_st_tcp_server_msg.op_creat.path) + strlen(extra) + 1);
     strcpy(sm, head -> u_st_tcp_server_msg.op_creat.path);
     strcat(sm, extra);
-    printf("[%d]\tBEGIN CREATE MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
+    debug_info("[%d]\tBEGIN CREATE MOSQUITTO TCP_SERVER WOS - %s\n", __LINE__, sm);
 
     int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
 
@@ -741,8 +741,6 @@ void tcp_server_op_write_wos(tcp_server_param_st * params, int sd, struct st_tcp
       return;
     }
 
-    printf("\npath = %s | to_write = %d | offset = %ld\n", head -> u_st_tcp_server_msg.op_write.path, size, head -> u_st_tcp_server_msg.op_write.offset);
-
     // loop...
     do {
       if (diff > size) to_write = size;
@@ -880,7 +878,7 @@ void tcp_server_op_getattr(tcp_server_param_st * params, int sd, struct st_tcp_s
   tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_attr_req), rank_client_id);
 
   // show debug info
-  printf("[TCP-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_getattr.path);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_tcp_server_msg.op_getattr.path);
 }
 
 void tcp_server_op_setattr(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, __attribute__((__unused__)) int rank_client_id)
@@ -916,8 +914,6 @@ void tcp_server_op_mkdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
   strcpy(path, params->dirbase);
   strcat(path, "/");
   strcat(path, head->u_st_tcp_server_msg.op_mkdir.path);
-
-  //printf("TCP_SERVER_MKDIR -- %s\n", head -> u_st_tcp_server_msg.op_mkdir.path);
 
   // do mkdir
   ret = filesystem_mkdir(path, 0777); //TO-DO: 0777 received from the client
