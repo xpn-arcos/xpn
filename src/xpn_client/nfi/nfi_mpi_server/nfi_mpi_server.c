@@ -682,7 +682,12 @@
       strcat(path, "/");
       strcat(path, dir);
 
-      fh_aux->fd = real_posix_open2(path, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
+      fh_aux->fd = real_posix_open2(path, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode);
+      if (fh_aux->fd < 0) {
+        filesystem_mkpath(path) ;
+        fh_aux->fd = real_posix_open2(path, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode);
+      }
+
       if (fh_aux->fd < 0) {
         debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
         FREE_AND_NULL(fh_aux) ;
@@ -690,7 +695,7 @@
       }
 
       //Get stat
-      ret = real_posix_stat(dir, &(req.attr)) ;
+      ret = real_posix_stat(path, &(req.attr)) ;
       if (ret < 0) {
         debug_error("nfi_mpi_server_create: Fail stat %s.\n", dir) ;
         return ret;
@@ -1431,7 +1436,7 @@
       fh_aux->fd = ret; //Cuidado
 
       //Get stat
-      ret = real_posix_stat(dir, &(req.attr)) ;
+      ret = real_posix_stat(path, &(req.attr)) ;
       if (ret < 0) {
         debug_error("nfi_mpi_server_create: Fail stat %s.\n", dir) ;
         return ret;
