@@ -42,7 +42,7 @@ void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_messag
 
     int to_write1, offset;
 
-    strncpy(topic, msg->topic, PATH_MAX);
+    strncpy(topic, msg->topic, PATH_MAX-1);
 
     // Encontrar la posición del último y el penúltimo slash
     int last_slash = -1;
@@ -254,10 +254,10 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
      */
 
     // Publish socket "host name:port number"
-    char * ip = ns_tcp_get_hostname() ;
-    ret = ns_tcp_publish(params -> dns_file, params -> name, ip, params -> port) ;
+    char * ip = ns_get_host_ip() ;
+    ret = ns_publish(params -> dns_file, "tcp_server", params -> name, ip, params -> port) ;
     if (ret < 0) {
-        fprintf(stderr, "ns_tcp_publish(dns_file:%s, name:%s, ip:%s, port:%s) -> %d\n", params -> dns_file, params -> name, ip, params -> port, ret) ;
+        fprintf(stderr, "ns_publish(dns_file:%s, protocol:%s, name:%s, ip:%s, port:%s) -> %d\n", params -> dns_file, "tcp_server", params -> name, ip, params -> port, ret) ;
         return -1;
     }
 
@@ -287,7 +287,7 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
     {
         if (params -> rank == i)
 	{
-            ret = ns_tcp_unpublish(params -> dns_file, params -> srv_name);
+            ret = ns_unpublish(params -> dns_file, "tcp_server", params -> srv_name);
             if (ret < 0)
             {
                 debug_info("[SRV_TCP_COMM] server%d: ns_unpublish fails :-(", params -> rank);

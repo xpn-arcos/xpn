@@ -5,7 +5,7 @@
       #include "tcp_server_params.h"
       #include "base/utils.h"
       #include "base/ns.h"
-      #include "base/ns_tcp.h"
+      #include "base/ns.h"
       #include "tcp_server_ops.h"
 
       /*

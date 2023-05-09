@@ -1072,7 +1072,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 
             #ifdef HAVE_MOSQUITTO_H
 
-            sprintf(topic, "%s/%d/%d", fh_aux -> path, bytes_to_write, offset);
+            sprintf(topic, "%s/%d/%ld", fh_aux -> path, bytes_to_write, (long)offset);
             debug_info("\nCLIENTE ESCRITURA - %s - topic=%s\n", fh_aux -> path, topic);
             debug_info("\nREMOTE MQTT- %s - %d - %d\n\n", server_aux -> params.server_name, cont, bytes_to_write);
 

@@ -142,8 +142,9 @@
     {
       // Lookup port name
       int lookup_retries = 0;
+      char aux_srv_ip[1024] ;
       do {
-        ret = ns_lookup (params->srv_name, params->port_name);
+        ret = ns_lookup("mpi_server", params->srv_name, aux_srv_ip, params->port_name) ;
         if (ret < 0)
         {
           if (lookup_retries == 0)
