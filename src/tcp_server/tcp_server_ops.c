@@ -409,10 +409,6 @@ void tcp_server_op_creat_ws(tcp_server_param_st * params, int sd, struct st_tcp_
 
   // do creat
   fd = filesystem_creat(path, 0770); // TODO: tcp_server_op_creat don't use 'mode' from client ?
-  if (fd < 0) {
-    filesystem_mkpath(path);
-    fd = filesystem_creat(path, 0770);
-  }
 
   tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
@@ -454,10 +450,6 @@ void tcp_server_op_creat_wos(tcp_server_param_st * params, int sd, struct st_tcp
 
   // do creat
   fd = filesystem_creat(path, 0770); // TODO: tcp_server_op_creat don't use 'mode' from client ?
-  if (fd < 0) {
-    filesystem_mkpath(path);
-    fd = filesystem_creat(path, 0770);
-  }
 
   tcp_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
