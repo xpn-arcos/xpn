@@ -356,10 +356,6 @@
 
     // do creat
     fd = filesystem_creat(path, 0770) ; // TODO: mpi_server_op_creat don't use 'mode' from client ?
-    if (fd < 0) {
-      filesystem_mkpath(path) ;
-      fd = filesystem_creat(path, 0770) ;
-    }
 
     mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id) ;
 
@@ -378,10 +374,6 @@
 
     // do creat
     fd = filesystem_creat(path, 0770) ; // TODO: mpi_server_op_creat don't use 'mode' from client ?
-    if (fd < 0) {
-      filesystem_mkpath(path) ;
-      fd = filesystem_creat(path, 0770) ;
-    }
 
     mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id) ;
 

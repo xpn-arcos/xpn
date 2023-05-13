@@ -684,11 +684,6 @@
 
       fh_aux->fd = real_posix_open2(path, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode);
       if (fh_aux->fd < 0) {
-        filesystem_mkpath(path) ;
-        fh_aux->fd = real_posix_open2(path, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode);
-      }
-
-      if (fh_aux->fd < 0) {
         debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
         FREE_AND_NULL(fh_aux) ;
         return -1;
