@@ -20,6 +20,8 @@
    */
 
 
+/* ... Include / Inclusion ........................................... */
+
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -29,17 +31,16 @@
 #include <fcntl.h>
 #include <argp.h>
 
+#include "all_system.h"
 #include "xpn.h"
+
+
+/* ... Const / Const ................................................. */
 
 #define BAR_LENGTH 50
 
-#ifndef KB
-	#define KB	(1024)
-#endif
 
-#ifndef MB
-	#define MB	(KB*KB)
-#endif
+/* ... Functions / Funciones ......................................... */
 
 struct stat st;
 struct timeval t_ini_transfer, t_end_transfer, t_old_transfer;

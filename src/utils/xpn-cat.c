@@ -23,22 +23,12 @@
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <pthread.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <fcntl.h>
-
+#include "all_system.h"
 #include "xpn.h"
+
 
 #define BAR_LENGTH 50
 
-#ifndef KB
-	#define KB	(1024)
-#endif
-
-#ifndef MB
-	#define MB	(KB*KB)
-#endif
 
 struct stat st;
 ssize_t     sum;

@@ -1,5 +1,5 @@
 
-/*
+  /*
    *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
@@ -19,6 +19,7 @@
    *
    */
 
+
 #ifndef _ALL_H_SYSTEM_H
 #define _ALL_H_SYSTEM_H
 
@@ -28,8 +29,6 @@
  */
 #if   defined(HAVE_CONFIG_H)
   #include "config.h"
-#elif defined(LINUX)
-  #include "config_linux.h"
 #endif
 
 
