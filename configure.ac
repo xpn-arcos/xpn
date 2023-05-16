@@ -102,7 +102,7 @@ then
   CC="mpifcc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
@@ -111,7 +111,7 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
@@ -137,7 +137,7 @@ else
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DENABLE_MXML"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
   AC_MSG_RESULT("Using Linux configuration as default configuration...");

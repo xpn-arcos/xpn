@@ -4,9 +4,9 @@
 #--------------------------
 
  MAKE                 = make -s
- CC                   = /local_test/bin/mpich/bin/mpicc
+ CC                   = /usr/bin/mpicc
  SOURCE_PATH          = ./
- EXPAND_DIR           = /local_test/bin//xpn
+ EXPAND_DIR           = /home/acaldero/bin//xpn
  OBJECTS_TCP_SERVER   = ../../src/tcp_server/tcp_server.o \
 			../../src/tcp_server/tcp_server_params.o \
 			../../src/tcp_server/tcp_server_comm.o \
@@ -22,9 +22,9 @@
 			../../src/base/workers.o \
 			../../src/base/workers_ondemand.o \
 			../../src/base/workers_pool.o
-MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
+MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -DHAVE_STRUCT_IOVEC
 MYHEADERS            = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/tcp_server -I../../mxml        -I../../bin/mosquitto/include       -I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base -I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-MYLIBS               =  -L../../src/xpn_client -lxpn  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
+MYLIBS               =  -L../../src/xpn_client -lxpn  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmosquitto -lmxml -ldl -lpthread  -lmxml
 
 TCP_SERVER_EXE       = xpn_tcp_server
 TCP_SERVER_EXE_STOP  = xpn_stop_tcp_server

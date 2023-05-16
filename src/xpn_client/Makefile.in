@@ -374,7 +374,6 @@ am__can_run_installinfo = \
   esac
 am__nobase_include_HEADERS_DIST = @top_srcdir@/include/config.h \
 	@top_srcdir@/include/config.h.in \
-	@top_srcdir@/include/config_linux.h \
 	@top_srcdir@/include/all_system.h \
 	@top_srcdir@/include/xpn_client/expand.h \
 	@top_srcdir@/include/xpn_client/expand_lib.h \
@@ -586,7 +585,6 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 COMMON_HEADER = @top_srcdir@/include/config.h \
 				@top_srcdir@/include/config.h.in \
-				@top_srcdir@/include/config_linux.h \
 				@top_srcdir@/include/all_system.h \
 				@top_srcdir@/include/xpn_client/expand.h \
 				@top_srcdir@/include/xpn_client/expand_lib.h

@@ -5,7 +5,6 @@
 
 COMMON_HEADER=			@top_srcdir@/include/config.h \
 				@top_srcdir@/include/config.h.in \
-				@top_srcdir@/include/config_linux.h \
 				@top_srcdir@/include/all_system.h \
 				@top_srcdir@/include/xpn_client/expand.h \
 				@top_srcdir@/include/xpn_client/expand_lib.h
