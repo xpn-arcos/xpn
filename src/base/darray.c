@@ -22,9 +22,9 @@
  * @file darray.c
  * @brief File to execute operations on dynamic arrays.
  *
- * File to insert, delete, find, get elements 
+ * File to insert, delete, find, get elements
  * from a dynamic array.
- * 
+ *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  * @date  Dec 14, 2022
  * */

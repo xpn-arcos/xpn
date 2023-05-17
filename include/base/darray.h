@@ -22,9 +22,9 @@
  * @file darray.h
  * @brief Header file to execute operations on dynamic arrays.
  *
- * Header file to insert, delete, find, 
+ * Header file to insert, delete, find,
  * get elements from a dynamic array.
- * 
+ *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  * @date  Dec 14, 2022
  * @bug No known bugs.
@@ -55,14 +55,13 @@ extern "C"
       ***********************************************/
 
      /*! \var typedef void *T_POINTER
-          \brief A type definition for <TODO> .
+          \brief A type definition for a dynamic array element.
 
-          <TODO>.
      */
      typedef void *T_POINTER;
 
      /*! \var typedef T_POINTER *t_pointerDArray
-          \brief A type definition for <TODO>.
+          \brief A type definition for a dynamic array.
 
           Dynamic array, NULL end.
      */
@@ -179,12 +178,21 @@ extern "C"
                                    /*INOUT*/ long *n,
                                    /*IN*/ void (*freef)(T_POINTER));
 
+     /**
+      * @brief Return the 'orden'-th element from the dynamic array.
+      *
+      * Return the 'orden'-th element in the 't' dynamic array,
+      * in a NULL ended array.
+      *
+      * @param t a dynamic array.
+      * @param orden position (begin at 0) of element to return.
+      * @return the element at this position or NULL.
+      *
+      * \warning If order is 3, returns t[3] (i.e., the fourth).
+      * It does not check that it goes outside the array bounds.
+      */
      T_POINTER DARRAY_GetNFromDarray(/*IN*/ t_pointerDArray t,
                                      /*IN*/ long orden);
-     /* - */
-     /* - Retorna el elemento que ocupa la posicion 'orden' en la tabla.
-          OJO, si orden es 3, retorna t[3] (es decir, el cuarto)
-          NO comprueba que se salga de los limites del array. */
 
      /**
       * @brief Find i-th element in dynamic array.

@@ -86,7 +86,7 @@ void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
  * @param pd Partition id.
  * @param abs_path Absolute path.
  * @param fd File descriptor.
- * @param servers[out] The data or metadata servers to be obtained.
+ * @param servers [out] The data or metadata servers to be obtained.
  * @param type Metadata or data server.
  *
  * @return The number of data or metadata servers on success or -1 on error,
