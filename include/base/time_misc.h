@@ -1,4 +1,3 @@
-
 /*
  *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
@@ -31,67 +30,67 @@ extern "C"
 {
 #endif
 
-     /* ... Ctes / Constantes ............................................. */
+    /* ... Ctes / Constantes ............................................. */
 
 #define USECPSEC 1000000
 
-     /* ... Functions / Funciones ......................................... */
+    /* ... Functions / Funciones ......................................... */
 
-     /**
-      * Get a timestamp 't' at current time.
-      * @param t the timestamp.
-      * @par Returns
-      *   Nothing.
-      *
-      */
-     void TIME_MISC_Timer(
-         struct timeval *t);
+    /**
+     * Get a timestamp 't' at current time.
+     * @param t the timestamp.
+     * @par Returns
+     *   Nothing.
+     *
+     */
+    void TIME_MISC_Timer(
+        struct timeval *t);
 
-     /**
-      * Compute 'dig = tn - to'.
-      * @param to initial instant.
-      * @param tn final instant.
-      * @param dif the substaction value ('tn - to').
-      * @par Returns
-      *   Nothing.
-      *
-      */
-     void TIME_MISC_DiffTime(
-         struct timeval *to,
-         struct timeval *tn,
-         struct timeval *dif);
+    /**
+     * Compute 'dig = tn - to'.
+     * @param to initial instant.
+     * @param tn final instant.
+     * @param dif the substaction value ('tn - to').
+     * @par Returns
+     *   Nothing.
+     *
+     */
+    void TIME_MISC_DiffTime(
+        struct timeval *to,
+        struct timeval *tn,
+        struct timeval *dif);
 
-     /**
-      * Compute 'sum = tn + to'.
-      * @param to initial instant.
-      * @param tn final instant.
-      * @param sum the addition value ('tn + to').
-      * @par Returns
-      *   Nothing.
-      *
-      */
-     void TIME_MISC_AddTime(
-         struct timeval *to,
-         struct timeval *tn,
-         struct timeval *sum);
+    /**
+     * Compute 'sum = tn + to'.
+     * @param to initial instant.
+     * @param tn final instant.
+     * @param sum the addition value ('tn + to').
+     * @par Returns
+     *   Nothing.
+     *
+     */
+    void TIME_MISC_AddTime(
+        struct timeval *to,
+        struct timeval *tn,
+        struct timeval *sum);
 
-     /**
-      * Return a timestamp as seconds.
-      * @param timet the timestamp.
-      * @return timestamp as seconds.
-      */
-     float TIME_MISC_TimevaltoFloat(
-         struct timeval *timet);
+    /**
+     * Return a timestamp as seconds.
+     * @param timet the timestamp.
+     * @return timestamp as seconds.
+     */
+    float TIME_MISC_TimevaltoFloat(
+        struct timeval *timet);
 
-     /**
-      * Return a timestamp as microseconds.
-      * @param timet the timestamp.
-      * @return timestamp as microseconds.
-      */
-     float TIME_MISC_TimevaltoMicro(
-         struct timeval *timet);
+    /**
+     * Return a timestamp as microseconds.
+     * @param timet the timestamp.
+     * @return timestamp as microseconds.
+     */
+    float TIME_MISC_TimevaltoMicro(
+        struct timeval *timet);
 
-     /* ................................................................... */
+    /* ................................................................... */
 
 #ifdef __cplusplus
 }

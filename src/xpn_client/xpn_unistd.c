@@ -1,332 +1,320 @@
+/*
+ *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
-  /*
-   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
-   *
-   *  This file is part of Expand.
-   *
-   *  Expand is free software: you can redistribute it and/or modify
-   *  it under the terms of the GNU Lesser General Public License as published by
-   *  the Free Software Foundation, either version 3 of the License, or
-   *  (at your option) any later version.
-   *
-   *  Expand is distributed in the hope that it will be useful,
-   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   *  GNU Lesser General Public License for more details.
-   *
-   *  You should have received a copy of the GNU Lesser General Public License
-   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
-   *
-   */
+/* ... Include / Inclusion ........................................... */
 
+#include "xpn.h"
+#include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
 
-  /* ... Include / Inclusion ........................................... */
+/* ... Functions / Funciones ......................................... */
 
-    #include "xpn.h"
-    #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
+//
+// init - destroy
+//
 
+int xpn_init(void)
+{
+  int ret = -1;
 
-  /* ... Functions / Funciones ......................................... */
+  ret = xpn_simple_init();
 
-    //
-    // init - destroy
-    //
+  return ret;
+}
 
-    int xpn_init( void )
-    {
-      int ret = -1 ;
+int xpn_destroy(void)
+{
+  int ret = -1;
 
-      ret = xpn_simple_init() ;
+  ret = xpn_simple_destroy();
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int xpn_destroy( void )
-    {
-      int ret = -1 ;
+//
+// open - close - creat
+//
 
-      ret = xpn_simple_destroy() ;
+int xpn_creat(const char *path, mode_t perm)
+{
+  int ret = -1;
 
-      return ret ;
-    }
+  ret = xpn_simple_creat(path, perm);
 
+  return ret;
+}
 
-    //
-    // open - close - creat
-    //
+int xpn_open(const char *path, int flags, ...)
+{
+  va_list ap;
+  int ret = -1;
+  mode_t mode = 0;
 
-    int xpn_creat(const char *path, mode_t perm)
-    {
-      int ret = -1 ;
+  // get mode
+  if ((flags & O_CREAT) > 0)
+  {
+    va_start(ap, flags);
+    mode = va_arg(ap, mode_t);
+    va_end(ap);
+  }
 
-      ret = xpn_simple_creat(path, perm) ;
+  // call simple_open
+  ret = xpn_simple_open(path, flags, mode);
 
-      return ret ;
-    }
+  // return ret
+  return ret;
+}
 
-    int xpn_open(const char *path, int flags, ...)
-    {
-      va_list ap ;
-      int     ret  = -1 ;
-      mode_t  mode = 0 ;
+int xpn_close(int fd)
+{
+  int ret = -1;
 
-      // get mode
-      if ((flags & O_CREAT) > 0)
-      {
-        va_start(ap, flags);
-        mode = va_arg(ap, mode_t);
-        va_end(ap);
-      }
+  ret = xpn_simple_close(fd);
 
-      // call simple_open
-      ret = xpn_simple_open(path, flags, mode) ;
+  return ret;
+}
 
-      // return ret
-      return ret ;
-    }
+//
+// read - write - lseek
+//
 
-    int xpn_close(int fd)
-    {
-      int ret = -1 ;
+ssize_t xpn_read(int fd, void *buffer, size_t size)
+{
+  ssize_t ret = -1;
 
-      ret = xpn_simple_close(fd) ;
+  ret = xpn_simple_read(fd, buffer, size);
 
-      return ret ;
-    }
+  return ret;
+}
 
+ssize_t xpn_write(int fd, const void *buffer, size_t size)
+{
+  ssize_t ret = -1;
 
-    //
-    // read - write - lseek
-    //
+  ret = xpn_simple_write(fd, buffer, size);
 
-    ssize_t xpn_read  ( int fd, void *buffer, size_t size )
-    {
-      ssize_t ret = -1 ;
+  return ret;
+}
 
-      ret = xpn_simple_read(fd, buffer, size) ;
+off_t xpn_lseek(int fd, off_t offset, int flag)
+{
+  off_t ret = (off_t)-1;
 
-      return ret ;
-    }
+  ret = xpn_simple_lseek(fd, offset, flag);
 
-    ssize_t xpn_write ( int fd, const void *buffer, size_t size )
-    {
-      ssize_t ret = -1 ;
+  return ret;
+}
 
-      ret = xpn_simple_write(fd, buffer, size) ;
+//
+// cwd - chdir
+//
 
-      return ret ;
-    }
+char *xpn_getcwd(char *path, size_t size)
+{
+  char *ret = NULL;
 
-    off_t   xpn_lseek ( int fd, off_t offset, int flag )
-    {
-      off_t ret = (off_t) -1 ;
+  ret = xpn_simple_getcwd(path, size);
 
-      ret = xpn_simple_lseek(fd, offset, flag) ;
+  return ret;
+}
 
-      return ret ;
-    }
+int xpn_chdir(char *path)
+{
+  int ret = -1;
 
+  ret = xpn_simple_chdir(path);
 
-    //
-    // cwd - chdir
-    //
+  return ret;
+}
 
-    char* xpn_getcwd(char *path, size_t size)
-    {
-      char * ret = NULL ;
+//
+// mkdir - rmdir
+//
 
-      ret = xpn_simple_getcwd(path, size) ;
+int xpn_mkdir(const char *path, mode_t perm)
+{
+  int ret = -1;
 
-      return ret ;
-    }
+  ret = xpn_simple_mkdir(path, perm);
 
-    int xpn_chdir(char *path)
-    {
-      int ret = -1 ;
+  return ret;
+}
 
-      ret = xpn_simple_chdir(path) ;
+int xpn_rmdir(const char *path)
+{
+  int ret = -1;
 
-      return ret ;
-    }
+  ret = xpn_simple_rmdir(path);
 
+  return ret;
+}
 
-    //
-    // mkdir - rmdir
-    //
+//
+// opendir - closedir - readdir
+//
 
-    int xpn_mkdir(const char *path, mode_t perm)
-    {
-      int ret = -1 ;
+DIR *xpn_opendir(const char *path)
+{
+  DIR *ret = NULL;
 
-      ret = xpn_simple_mkdir(path, perm) ;
+  ret = xpn_simple_opendir(path);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int xpn_rmdir(const char *path)
-    {
-      int ret = -1 ;
+struct dirent *xpn_readdir(DIR *dirp)
+{
+  struct dirent *ret = NULL;
 
-      ret = xpn_simple_rmdir(path) ;
+  ret = xpn_simple_readdir(dirp);
 
-      return ret ;
-    }
+  return ret;
+}
 
+int xpn_closedir(DIR *dirp)
+{
+  int ret = -1;
 
-    //
-    // opendir - closedir - readdir
-    //
+  ret = xpn_simple_closedir(dirp);
 
-    DIR *xpn_opendir ( const char *path )
-    {
-      DIR *ret = NULL ;
+  return ret;
+}
 
-      ret = xpn_simple_opendir(path) ;
+void xpn_rewinddir(DIR *dirp)
+{
+  return xpn_simple_rewinddir(dirp);
+}
 
-      return ret ;
-    }
+//
+// unlink - rename - etc.
+//
 
-    struct dirent* xpn_readdir ( DIR *dirp )
-    {
-      struct dirent* ret = NULL ;
+int xpn_unlink(const char *path)
+{
+  int ret = -1;
 
-      ret = xpn_simple_readdir(dirp) ;
+  ret = xpn_simple_unlink(path);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int  xpn_closedir ( DIR *dirp )
-    {
-      int ret = -1 ;
+int xpn_rename(const char *path, const char *newpath)
+{
+  int ret = -1;
 
-      ret = xpn_simple_closedir(dirp) ;
+  ret = xpn_simple_rename(path, newpath);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    void  xpn_rewinddir ( DIR *dirp )
-    {
-      return xpn_simple_rewinddir(dirp) ;
-    }
+int xpn_truncate(const char *path, off_t length)
+{
+  int ret = -1;
 
+  ret = xpn_simple_truncate(path, length);
 
-    //
-    // unlink - rename - etc.
-    //
+  return ret;
+}
 
-    int xpn_unlink(const char *path)
-    {
-      int ret = -1 ;
+int xpn_ftruncate(int fd, off_t length)
+{
+  int ret = -1;
 
-      ret = xpn_simple_unlink(path) ;
+  ret = xpn_simple_ftruncate(fd, length);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int xpn_rename(const char *path, const char *newpath)
-    {
-      int ret = -1 ;
+int xpn_stat(const char *path, struct stat *sb)
+{
+  int ret = -1;
 
-      ret = xpn_simple_rename(path, newpath) ;
+  ret = xpn_simple_stat(path, sb);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int xpn_truncate( const char *path,  off_t length)
-    {
-      int ret = -1 ;
+int xpn_fstat(int fd, struct stat *sb)
+{
+  int ret = -1;
 
-      ret = xpn_simple_truncate(path, length) ;
+  ret = xpn_simple_fstat(fd, sb);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int xpn_ftruncate( int fd,  off_t length)
-    {
-      int ret = -1 ;
+int xpn_chown(const char *path, uid_t owner, gid_t group)
+{
+  int ret = -1;
 
-      ret = xpn_simple_ftruncate(fd, length) ;
+  ret = xpn_simple_chown(path, owner, group);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int xpn_stat(const char *path, struct stat *sb)
-    {
-      int ret = -1 ;
+int xpn_fchown(int fd, uid_t owner, gid_t group)
+{
+  int ret = -1;
 
-      ret = xpn_simple_stat(path, sb) ;
+  ret = xpn_simple_fchown(fd, owner, group);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int xpn_fstat(int fd, struct stat *sb)
-    {
-      int ret = -1 ;
+int xpn_chmod(const char *path, mode_t mode)
+{
+  int ret = -1;
 
-      ret = xpn_simple_fstat(fd, sb) ;
+  ret = xpn_simple_chmod(path, mode);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int xpn_chown( const char *path,  uid_t owner,  gid_t group)
-    {
-      int ret = -1 ;
+int xpn_fchmod(int fd, mode_t mode)
+{
+  int ret = -1;
 
-      ret = xpn_simple_chown(path, owner, group) ;
+  ret = xpn_simple_fchmod(fd, mode);
 
-      return ret ;
-    }
+  return ret;
+}
 
-    int xpn_fchown(int  fd,  uid_t owner,  gid_t group)
-    {
-      int ret = -1 ;
+//
+// dup - dup2
+//
 
-      ret = xpn_simple_fchown(fd, owner, group) ;
+int xpn_dup(int fd)
+{
+  int ret = -1;
 
-      return ret ;
-    }
+  ret = xpn_simple_dup(fd);
 
-    int xpn_chmod( const char *path,  mode_t mode)
-    {
-      int ret = -1 ;
+  return ret;
+}
 
-      ret = xpn_simple_chmod(path, mode) ;
+int xpn_dup2(int fd, int fd2)
+{
+  int ret = -1;
 
-      return ret ;
-    }
+  ret = xpn_simple_dup2(fd, fd2);
 
-    int xpn_fchmod( int fd,  mode_t mode)
-    {
-      int ret = -1 ;
+  return ret;
+}
 
-      ret = xpn_simple_fchmod(fd, mode) ;
-
-      return ret ;
-    }
-
-
-    //
-    // dup - dup2
-    //
-
-    int xpn_dup(int fd)
-    {
-      int ret = -1 ;
-
-      ret = xpn_simple_dup(fd) ;
-
-      return ret ;
-    }
-
-    int xpn_dup2(int fd, int fd2)
-    {
-      int ret = -1 ;
-
-      ret = xpn_simple_dup2(fd, fd2) ;
-
-      return ret ;
-    }
-
-
-   /* ................................................................... */
-
+/* ................................................................... */
