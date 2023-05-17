@@ -26,7 +26,8 @@
  * from a dynamic array.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
- * @date  Dec 14, 2022
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
  * */
 
 /************************************************

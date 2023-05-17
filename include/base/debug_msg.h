@@ -1,4 +1,3 @@
-
 /*
  *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
@@ -19,11 +18,24 @@
  *
  */
 
+/**
+ * @file debug_msg.h
+ * @brief Header file for executing debug messages
+ *
+ * Header file to execute debug messages of
+ * type information, warnings or error.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef DEBUG_MSG_H
 #define DEBUG_MSG_H
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "string_misc.h"
 
@@ -31,9 +43,9 @@
 extern "C"
 {
 #endif
-
-  /* ... Defines / Definiciones ........................................... */
-
+  /************************************************
+   *  ... Macros
+   ***********************************************/
   // debug messages
 #ifdef DEBUG
 #define debug_error(...) debug_msg_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
@@ -52,8 +64,9 @@ extern "C"
 #define DEBUG_END() \
   debug_info("End   %s(), errno=%d\n", __func__, errno)
 
-  /* ... Functions / Funciones ......................................... */
-
+  /************************************************
+   *  ... Functions
+   ***********************************************/
   //
   // Debug API
   //
@@ -66,8 +79,7 @@ extern "C"
   //
 
   /**
-   *
-   *  Set 'printer' dispacher.
+   *  @brief Set 'printer' dispacher.
    *  @param printer the printer function to be used.
    *  @par Returns
    *      Nothing.
@@ -77,8 +89,10 @@ extern "C"
       /*IN*/ int (*printer)(const char *, va_list));
 
   /**
+   *  @brief  Write a message.
    *
    *  Write a message using the format and the argument list given to it.
+   *
    *  @param line the line of code where message is generated.
    *  @param name the file name at the code where message is generated.
    *  @param pid  the process that send this message.
@@ -98,8 +112,10 @@ extern "C"
       /*IN*/ va_list vl);
 
   /**
+   *  @brief Write a message.
    *
    *  Write a message using the format and arguments given to it.
+   *
    *  @param line the line of code where message is generated.
    *  @param name the file name at the code where message is generated.
    *  @param pid  the process that send this message.
@@ -116,8 +132,6 @@ extern "C"
       /*IN*/ int type,
       /*IN*/ char *fto,
       ...);
-
-  /* ................................................................... */
 
 #ifdef __cplusplus
 }
