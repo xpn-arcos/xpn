@@ -18,11 +18,23 @@
  *
  */
 
+/**
+ * @file math_misc.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _MATH_MISC_H
 #define _MATH_MISC_H
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 
 #ifdef __cplusplus
@@ -30,36 +42,98 @@ extern "C"
 {
 #endif
 
-    /* ... Functions / Funciones ......................................... */
+    /************************************************
+     *  ... Functions
+     ***********************************************/
 
+    /**
+     * @brief Compute server index.
+     *
+     * Compute server index associated to a file.
+     *
+     * @param file the file name.
+     * @param nServ number of servers for this file.
+     * @return hash value computed.
+     */
     int MATH_MISC_hash(
         char *file,
         int nServ);
 
+    /**
+     * @brief Compute location of block.
+     *
+     * Compute location ('SP','IP','SD','ID') of 'i' block with 'm' servers.
+     *
+     * @param i Block index.
+     * @param m Number of servers.
+     * @param SP Server for parity.
+     * @param IP Index for parity.
+     * @param SD Server for data.
+     * @param ID Index for data.
+     * @return true (1) if element is removed and error (-1) if
+     *         a problem is found.
+     */
     int MATH_MISC_locateInRAID5withInternalParity(
-        int i,   /* block index */
-        int m,   /* how many servers */
-        int *SP, /* Server for Parity */
-        int *IP, /* Index for Parity */
-        int *SD, /* Server for Data */
-        int *ID  /* Index for Data */
-    );
+        int i,
+        int m,
+        int *SP,
+        int *IP,
+        int *SD,
+        int *ID);
 
+    /**
+     * @brief Compute location of block.
+     *
+     * Compute location ('SP','IP','SD','ID') of 'i' block with 'm' servers.
+     *
+     * @param i Block index.
+     * @param m Number of servers.
+     * @param SP Server for parity.
+     * @param IP Index for parity.
+     * @param SD Server for data.
+     * @param ID Index for data.
+     * @return true (1) if element is removed and error (-1) if
+     *         a problem is found.
+     */
     int MATH_MISC_locateInRAID5withExternalParity(
-        int i,   /* block index */
-        int m,   /* how many servers */
-        int *SP, /* Server for Parity */
-        int *IP, /* Index for Parity */
-        int *SD, /* Server for Data */
-        int *ID  /* Index for Data */
-    );
+        int i,
+        int m,
+        int *SP,
+        int *IP,
+        int *SD,
+        int *ID);
 
+    /**
+     * @brief Compute Xor operation.
+     *
+     * Compute Xor operation ('block_result') for
+     * two blocks ('block_1' and 'block_2') of 'block_size' bytes.
+     *
+     * @param block_result Resulting block.
+     * @param block_1 First block of data.
+     * @param block_2 Second block of data.
+     * @param block_size Number of bytes.
+     * @return true (1).
+     */
     int MATH_MISC_Xor(
         char *block_result,
         char *block_1,
         char *block_2,
         int block_size);
 
+    /**
+     * @brief Compute Xor operation.
+     *
+     * Compute Xor operation ('block_result') for
+     * three blocks ('block_1', 'block_2' and 'block_3') of 'block_size' bytes.
+     *
+     * @param block_result Resulting block.
+     * @param block_1 First block of data.
+     * @param block_2 Second block of data.
+     * @param block_3 Third block of data.
+     * @param block_size Number of bytes of each block.
+     * @return true (1).
+     */
     int MATH_MISC_Xor3(
         char *block_result,
         char *block_1,
@@ -67,13 +141,23 @@ extern "C"
         char *block_3,
         int block_size);
 
+    /**
+     * @brief Compute Xor operation.
+     *
+     * Compute Xor operation ('block_result') for
+     * 'nblocks' blocks at 'blocks' array of 'block_size' bytes each block.
+     *
+     * @param block_result Resulting block.
+     * @param blocks Array with all blocks.
+     * @param nblocks Number of blocks.
+     * @param block_size Number of bytes of each block.
+     * @return true (1).
+     */
     int MATH_MISC_XorN(
         char *block_result,
         char **blocks,
         int nblocks,
         int block_size);
-
-    /* .................................................................... */
 
 #ifdef __cplusplus
 }

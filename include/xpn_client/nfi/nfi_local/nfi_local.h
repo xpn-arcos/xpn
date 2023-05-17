@@ -26,8 +26,9 @@ extern "C"
 {
 #endif
 
-  /* ... Include / Inclusion ........................................... */
-
+  /************************************************
+ *  ... Includes
+ ***********************************************/
 #define ASYNC_CLOSE 1
 #define FILESYSTEM_DLSYM 1
 #include "all_system.h"

@@ -18,13 +18,26 @@
  *
  */
 
-/* ... Include / Inclusion ........................................... */
+/**
+ * @file path_misc.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "base/path_misc.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-// calculo del numero de servidor
 int hash(__attribute__((__unused__)) char *file, __attribute__((__unused__)) int nServ)
 {
         /*int i,max;
@@ -169,5 +182,3 @@ int getNamePart(char *part, char *dir)
         dir[j] = '\0';
         return 0;
 }
-
-/* ................................................................... */

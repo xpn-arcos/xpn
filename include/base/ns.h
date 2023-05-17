@@ -18,11 +18,25 @@
  *
  */
 
+/**
+ * @file ns.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _NS_H_
 #define _NS_H_
 
-#include "all_system.h"
-#include "base/utils.h"
+/************************************************
+ *  ... Includes
+ ***********************************************/
+#include "all_system.h" /// Library for 'TODO'
+#include "base/utils.h" /// Library for 'TODO'
 
 /*
  * ENVIROMENT VARIABLE: DNS SERVICE
@@ -44,15 +58,69 @@
 #define CONST_TEMP 1024
 #endif
 
-/*
- *  API
- */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief Get hostname.
+ *
+ * 'TODO'.
+ *
+ * @param srv_name 'TODO'.
+ * @par Returns
+ *      Nothing.
+ */
 void ns_get_hostname(char *srv_name);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ * 
+ * @par Parameters
+ *    None.
+ * @return 'TODO'.
+ */
 char *ns_get_host_ip(void);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dns_file 'TODO'.
+ * @param protocol 'TODO'.
+ * @param param_srv_name 'TODO'.
+ * @param srv_ip 'TODO'.
+ * @param port_name 'TODO'.
+ * @return 'TODO'.
+ */
 int ns_publish(char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dns_file 'TODO'.
+ * @param protocol 'TODO'.
+ * @param param_srv_name 'TODO'.
+ * @return 'TODO'.
+ */
 int ns_unpublish(char *dns_file, char *protocol, char *param_srv_name);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param protocol 'TODO'.
+ * @param param_srv_name 'TODO'.
+ * @param srv_ip 'TODO'.
+ * @param port_name 'TODO'.
+ * @return 'TODO'.
+ */
 int ns_lookup(char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
 
 #endif

@@ -21,8 +21,9 @@
 #ifndef _URLSTR_H
 #define _URLSTR_H
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "string_misc.h"
 #include "path_misc.h"

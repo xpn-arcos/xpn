@@ -21,8 +21,9 @@
 #ifndef _TIME_MISC_H
 #define _TIME_MISC_H
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 
 #ifdef __cplusplus

@@ -21,8 +21,9 @@
 #ifndef TRACE_TAGS_H
 #define TRACE_TAGS_H
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 
 #ifdef __cplusplus

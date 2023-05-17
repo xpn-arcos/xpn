@@ -18,15 +18,29 @@
  *
  */
 
+/**
+ * @file base_debug.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _XPN_DEBUG_H
 #define _XPN_DEBUG_H
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include <stdio.h>
 #include <errno.h>
 
-/*
- * Set debug configuration
- */
+/************************************************
+ *  ... Set debug configuration
+ ***********************************************/
 extern int xpn_debug; // In src/xpn/xpn_simple/xpncore/xpn_init.c
 
 #define PRINT_TRACE                                       \

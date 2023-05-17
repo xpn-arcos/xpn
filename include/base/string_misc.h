@@ -21,8 +21,9 @@
 #ifndef _STRING_MISC_H_
 #define _STRING_MISC_H_
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 
 #ifdef __cplusplus

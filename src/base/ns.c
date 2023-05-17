@@ -18,12 +18,25 @@
  *
  */
 
-/* ... Include / Inclusion ........................................... */
+/**
+ * @file ns.h
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "base/ns.h"
 
-/* ... Functions / Funciones ......................................... */
-
+/************************************************
+ *  ... Functions
+ ***********************************************/
 void ns_get_hostname(char *srv_name)
 {
   gethostname(srv_name, HOST_NAME_MAX); // get hostname
@@ -185,5 +198,3 @@ int ns_lookup(char *protocol, char *param_srv_name, char *srv_ip, char *port_nam
 
   return 0;
 }
-
-/* ................................................................... */

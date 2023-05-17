@@ -18,23 +18,37 @@
  *
  */
 
+/**
+ * @file base_lib.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _BASE_H_
 #define _BASE_H_
 
-#include "debug_tags.h"
-#include "trace_tags.h"
-#include "debug_msg.h"
-#include "trace_msg.h"
+/************************************************
+ *  ... Includes
+ ***********************************************/
+#include "debug_tags.h" /// Library for 'TODO'
+#include "trace_tags.h" /// Library for 'TODO'
+#include "debug_msg.h"  /// Library for 'TODO'
+#include "trace_msg.h"  /// Library for 'TODO'
 
-#include "filesystem.h"
-#include "time_misc.h"
-#include "math_misc.h"
+#include "filesystem.h" /// Library for 'TODO'
+#include "time_misc.h"  /// Library for 'TODO'
+#include "math_misc.h"  /// Library for 'TODO'
 
-#include "darray.h "
-#include "dtable.h"
+#include "darray.h " /// Library for dynamic array operations
+#include "dtable.h"  /// Library for dynamic table operations
 
-#include "string_misc.h"
-#include "path_misc.h"
-#include "urlstr.h"
+#include "string_misc.h" /// Library for 'TODO'
+#include "path_misc.h"   /// Library for 'TODO'
+#include "urlstr.h"      /// Library for 'TODO'
 
 #endif

@@ -18,19 +18,26 @@
  *
  */
 
-/* ... Include / Inclusion ........................................... */
+/**
+ * @file dtable.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "base/dtable.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-/**
- * Insert the element 'dt_info' into 'dt' dynamic table.
- * @param dt a dynamic table.
- * @param dt_info the element to be inserted.
- * @return true (1) if element is inserted and error (-1) if
- *         a problem is found.
- */
 int dtable_insert(
 	/*INOUT*/ dtable_t *dt,
 	/*IN*/ void *dt_info)
@@ -81,13 +88,6 @@ int dtable_insert(
 	return dtelto_aux->myself;
 }
 
-/**
- * Remove the element at 'fd' position into 'dt' dynamic table.
- * @param dt a dynamic table.
- * @param fd the element descriptor.
- * @return true (1) if element is removed and error (-1) if
- *         a problem is found.
- */
 int dtable_delete(
 	/*INOUT*/ dtable_t *dt,
 	/*IN*/ int fd)
@@ -109,13 +109,6 @@ int dtable_delete(
 	return (1);
 }
 
-/**
- * Get the element at 'fd' position into 'dt' dynamic table.
- * @param dt a dynamic table.
- * @param fd the element descriptor.
- * @return true (1) if element is removed and error (-1) if
- *         a problem is found.
- */
 void *dtable_get(
 	/*INOUT*/ dtable_t *dt,
 	/*IN*/ int fd)

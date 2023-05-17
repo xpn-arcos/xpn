@@ -21,8 +21,9 @@
 #ifndef TRACE_MSG_H
 #define TRACE_MSG_H
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "string_misc.h"
 #include "trace_tags.h"

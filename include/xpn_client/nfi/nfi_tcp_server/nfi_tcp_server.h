@@ -26,8 +26,9 @@ extern "C"
 {
 #endif
 
-  /* ... Include / Inclusion ........................................... */
-
+  /************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "base/utils.h"
 #include "base/path_misc.h"

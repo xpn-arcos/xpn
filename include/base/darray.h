@@ -44,7 +44,7 @@ extern "C"
 {
 #endif
      /************************************************
-      *  ... Macros
+      *  ... Constants
       ***********************************************/
 /* type sizes */
 #define c_POINTER sizeof(T_POINTER)

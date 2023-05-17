@@ -21,8 +21,9 @@
 #ifndef _UTILS_H
 #define _UTILS_H
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include <stdio.h>
 #include <stdarg.h>
 #include <sys/time.h>

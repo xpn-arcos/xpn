@@ -18,11 +18,23 @@
  *
  */
 
+/**
+ * @file path_misc.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _PATH_MISC_H_
 #define _PATH_MISC_H_
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "base/string_misc.h"
 
@@ -31,23 +43,74 @@ extern "C"
 {
 #endif
 
-  /* ... Functions / Funciones ......................................... */
+  /************************************************
+   *  ... Functions
+   ***********************************************/
 
+  /**
+   * @brief 'TODO'.
+   *
+   * 'Server number calculation'.
+   *
+   * @param file 'TODO'.
+   * @param nServ 'TODO'.
+   * @return 'TODO'.
+   */
   int hash(char *file, int nServ);
 
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param dir 'TODO'.
+   * @param path 'TODO'.
+   * @return 'TODO'.
+   */
   int getFirstDir(char *dir, char *path);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param name 'TODO'.
+   * @return 'TODO'.
+   */
   int getSizeFactor(char *name);
 
-  /* get the last name of a path and erase the file name */
+  /**
+   * @brief 'TODO'.
+   *
+   * Get the last name of a path and erase the file name.
+   *
+   * @param file 'TODO'.
+   * @param dir 'TODO'.
+   * @return 'TODO'.
+   */
   int getNameFile(char *file, char *dir);
 
-  /* get the first name of the path and erase the part name */
+  /**
+   * @brief 'TODO'.
+   *
+   * Get the first name of the path and erase the part name.
+   *
+   * @param part 'TODO'.
+   * @param dir 'TODO'.
+   * @return 'TODO'.
+   */
   int getNamePart(char *part, char *dir);
 
-  /* erase the initial dir used in the url */
+  /**
+   * @brief 'TODO'.
+   *
+   * Erase the initial dir used in the url.
+   *
+   * @param url 'TODO'.
+   * @param dir 'TODO'.
+   * @return 'TODO'.
+   */
   int getDirWithURL(char *url, char *dir);
-
-  /* .................................................................... */
 
 #ifdef __cplusplus
 }

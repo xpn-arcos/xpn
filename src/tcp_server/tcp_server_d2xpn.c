@@ -18,8 +18,9 @@
  *
  */
 
-/* ... Include / Inclusion ........................................... */
-
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "tcp_server_params.h"
 #include "tcp_server_d2xpn.h"
