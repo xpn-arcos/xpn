@@ -18,15 +18,35 @@
  *
  */
 
+/**
+ * @file urlstr.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "base/urlstr.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-/* ... Functions / Funciones ......................................... */
-
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param url 'TODO'.
+ * @param protocol 'TODO'.
+ * @return 'TODO'.
+ */
 int getURLProtocol(char *url, char *protocol)
 {
 	int i, j;
@@ -78,6 +98,15 @@ int getURLProtocol(char *url, char *protocol)
 	return i;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param url 'TODO'.
+ * @param server 'TODO'.
+ * @return 'TODO'.
+ */
 int getURLServer(char *url, char *server)
 {
 	int i, j;
@@ -103,6 +132,15 @@ int getURLServer(char *url, char *server)
 	return j;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param url 'TODO'.
+ * @param port 'TODO'.
+ * @return 'TODO'.
+ */
 int getURLPort(char *url, char *port)
 {
 	int i, j;
@@ -134,6 +172,15 @@ int getURLPort(char *url, char *port)
 	return j;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param url 'TODO'.
+ * @param dir 'TODO'.
+ * @return 'TODO'.
+ */
 int getURLDir(char *url, char *dir)
 {
 	int i;
@@ -173,6 +220,14 @@ int getURLDir(char *url, char *dir)
 	  }
 */
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path 'TODO'.
+ * @return 'TODO'.
+ */
 int clear_slash(char *path)
 {
 	size_t i;
@@ -278,6 +333,15 @@ int ParseURL(char *url,
 	return 0;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param url 'TODO'.
+ * @param dir 'TODO'.
+ * @return 'TODO'.
+ */
 int getDirWithURL(char *url, char *dir)
 {
 	char dir_aux[PATH_MAX]; /* change for a const*/

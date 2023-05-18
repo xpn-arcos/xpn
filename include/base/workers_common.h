@@ -18,23 +18,38 @@
  *
  */
 
+/**
+ * @file workers_common.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+
 #ifndef _WORKERS_COMMON_H_
 #define _WORKERS_COMMON_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "base/debug_msg.h"
 
-/*
- * Constants
- */
+/************************************************
+ *  ... Constants
+ ***********************************************/
 
 #define MAX_THREADS 2048
 #define MAX_OPERATIONS 1024
 #define STACK_SIZE (256 * KB)
 
-/*
- * Datatype
- */
+/************************************************
+ *  ... Datatype
+ ***********************************************/
 
 struct st_th
 {

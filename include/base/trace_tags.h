@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file trace_tags.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef TRACE_TAGS_H
 #define TRACE_TAGS_H
 
@@ -31,7 +42,9 @@ extern "C"
 {
 #endif
 
-   /* ... Consts / Constantes ........................................... */
+   /************************************************
+    *  ... Constants
+    ***********************************************/
 
 #define SPOT __LINE__, __FILE__, getpid(), 0
 

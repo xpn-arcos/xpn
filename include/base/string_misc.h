@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file string_misc.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _STRING_MISC_H_
 #define _STRING_MISC_H_
 
@@ -31,7 +42,9 @@ extern "C"
 {
 #endif
 
-    /* ... Functions / Funciones ......................................... */
+    /************************************************
+     *  ... Functions
+     ***********************************************/
 
     /**
      *   Return the string length of 'str'.

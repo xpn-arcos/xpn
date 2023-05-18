@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file urlstr.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _URLSTR_H
 #define _URLSTR_H
 
@@ -33,8 +44,24 @@ extern "C"
 {
 #endif
 
-   /* ... Functions / Funciones ......................................... */
+   /************************************************
+    *  ... Functions
+    ***********************************************/
 
+   /**
+    * @brief 'TODO'.
+    *
+    * 'TODO'.
+    *
+    * @param url 'TODO'.
+    * @param protocol 'TODO'.
+    * @param login 'TODO'.
+    * @param passwd 'TODO'.
+    * @param server 'TODO'.
+    * @param port 'TODO'.
+    * @param dir 'TODO'.
+    * @return 'TODO'.
+    */
    int ParseURL(char *url,
                 char *protocol,
                 char *login,

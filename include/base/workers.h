@@ -18,44 +18,105 @@
  *
  */
 
+/**
+ * @file workers.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _WORKERS_H_
 #define _WORKERS_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "workers_common.h"
 #include "workers_ondemand.h"
 #include "workers_pool.h"
 #include "base/debug_msg.h"
 
-/*
- * Constants
- */
+/************************************************
+ *  ... Constants
+ ***********************************************/
 
 #define TH_NOT 0
 #define TH_POOL 1
 #define TH_OP 2
 
-/*
- * Datatype
- */
+/************************************************
+ *  ... Datatype
+ ***********************************************/
 
+/** @struct worker_t
+ *  This is a struct
+ *
+ *  @var worker_t::w1
+ *    A 'TODO'.
+ *  @var worker_t::w2
+ *    A 'TODO'.
+ *  @var worker_t::thread_mode
+ *    A 'TODO'.
+ */
 typedef struct
 {
-
   worker_ondemand_t w1;
   worker_pool_t w2;
   int thread_mode;
-
 } worker_t;
 
-/*
- *  API
- */
+/************************************************
+ *  ... Functions: API
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param w 'TODO'.
+ * @param thread_mode 'TODO'.
+ * @return 'TODO'.
+ */
 int workers_init(worker_t *w, int thread_mode);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param w 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void workers_destroy(worker_t *w);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param w 'TODO'.
+ * @param th_arg 'TODO'.
+ * @param worker_function 'TODO'.
+ * @return 'TODO'.
+ */
 int workers_launch(worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th));
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param w 'TODO'.
+ * @param th_arg 'TODO'.
+ * @return 'TODO'.
+ */
 int workers_wait(worker_t *w, struct st_th *th_arg);
 
 #endif

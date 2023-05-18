@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file time_misc.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _TIME_MISC_H
 #define _TIME_MISC_H
 
@@ -31,11 +42,14 @@ extern "C"
 {
 #endif
 
-    /* ... Ctes / Constantes ............................................. */
-
+/************************************************
+ *  ... Constants
+ ***********************************************/
 #define USECPSEC 1000000
 
-    /* ... Functions / Funciones ......................................... */
+    /************************************************
+     *  ... Functions
+     ***********************************************/
 
     /**
      * Get a timestamp 't' at current time.
@@ -44,8 +58,7 @@ extern "C"
      *   Nothing.
      *
      */
-    void TIME_MISC_Timer(
-        struct timeval *t);
+    void TIME_MISC_Timer(struct timeval *t);
 
     /**
      * Compute 'dig = tn - to'.
@@ -56,10 +69,9 @@ extern "C"
      *   Nothing.
      *
      */
-    void TIME_MISC_DiffTime(
-        struct timeval *to,
-        struct timeval *tn,
-        struct timeval *dif);
+    void TIME_MISC_DiffTime(struct timeval *to,
+                            struct timeval *tn,
+                            struct timeval *dif);
 
     /**
      * Compute 'sum = tn + to'.
@@ -70,26 +82,23 @@ extern "C"
      *   Nothing.
      *
      */
-    void TIME_MISC_AddTime(
-        struct timeval *to,
-        struct timeval *tn,
-        struct timeval *sum);
+    void TIME_MISC_AddTime(struct timeval *to,
+                           struct timeval *tn,
+                           struct timeval *sum);
 
     /**
      * Return a timestamp as seconds.
      * @param timet the timestamp.
      * @return timestamp as seconds.
      */
-    float TIME_MISC_TimevaltoFloat(
-        struct timeval *timet);
+    float TIME_MISC_TimevaltoFloat(struct timeval *timet);
 
     /**
      * Return a timestamp as microseconds.
      * @param timet the timestamp.
      * @return timestamp as microseconds.
      */
-    float TIME_MISC_TimevaltoMicro(
-        struct timeval *timet);
+    float TIME_MISC_TimevaltoMicro(struct timeval *timet);
 
     /* ................................................................... */
 

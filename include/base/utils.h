@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file utils.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _UTILS_H
 #define _UTILS_H
 
@@ -34,8 +45,9 @@ extern "C"
 {
 #endif
 
-   /* ... Defines / Definiciones ........................................... */
-
+   /************************************************
+    *  ... Definitions
+    ***********************************************/
 // Check arguments
 #define FREE_AND_NULL(ptr) \
    if ((ptr) != NULL)      \
@@ -50,11 +62,19 @@ extern "C"
       return -1;                   \
    }
 
-   /* ... Functions / Funciones ......................................... */
+   /************************************************
+    *  ... Functions
+    ***********************************************/
 
-   //
-   // time
-   //
+   /**
+    * @brief 'TODO'.
+    *
+    * 'TODO'.
+    *
+    * @par Parameters
+    *    None.
+    * @return 'TODO'.
+    */
    long utils_get_time(void);
 
    /* .................................................................... */

@@ -18,16 +18,30 @@
  *
  */
 
+/**
+ * @file trace_msg.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "base/trace_msg.h"
 
-/* ... Globla var. / Variables glob. ................................. */
-
+/************************************************
+ *  ... Global variables
+ ***********************************************/
 int (*TRACE_MSG_PrintMsg)(const char *, va_list) = NULL;
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 void TRACE_MSG_setPrinter(
     /*IN*/ int (*printer)(const char *, va_list))

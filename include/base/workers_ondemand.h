@@ -18,19 +18,41 @@
  *
  */
 
+/**
+ * @file workers_ondemand.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _WORKERS_ONDEMAND_H_
 #define _WORKERS_ONDEMAND_H_
 
 #include "all_system.h"
 #include "workers_common.h"
 
-/*
- *  Datatype
- */
+/************************************************
+ *  ... Datatypes
+ ***********************************************/
 
+/** @struct worker_ondemand_t
+ *  This is a struct
+ *
+ *  @var worker_ondemand_t::busy_worker
+ *    A 'TODO'.
+ *  @var worker_ondemand_t::m_worker
+ *    A 'TODO'.
+ *  @var worker_ondemand_t::c_worker
+ *    A 'TODO'.
+ *  @var worker_ondemand_t::c_nworkers
+ *    A 'TODO'.
+ */
 typedef struct
 {
-
    // number of active threads (launch + destroy)
    int busy_worker;
    pthread_mutex_t m_worker;
@@ -40,14 +62,51 @@ typedef struct
 
 } worker_ondemand_t;
 
-/*
- *  API
- */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param w 'TODO'.
+ * @return 'TODO'.
+ */
 int worker_ondemand_init(worker_ondemand_t *w);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param w 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void workers_ondemand_destroy(worker_ondemand_t *w);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param w 'TODO'.
+ * @param th_arg 'TODO'.
+ * @param worker_function 'TODO'.
+ * @return 'TODO'.
+ */
 int worker_ondemand_launch(worker_ondemand_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th));
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param th_arg 'TODO'.
+ * @return 'TODO'.
+ */
 int worker_ondemand_wait(struct st_th *th_arg);
 
 #endif

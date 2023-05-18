@@ -18,17 +18,34 @@
  *
  */
 
+/**
+ * @file workers_ondemand.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "workers_ondemand.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-/*
- *  Internal
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param arg 'TODO'.
+ * @return 'TODO'.
  */
-
 void *worker_run(void *arg)
 {
   struct st_th th;
@@ -88,9 +105,9 @@ void *worker_run(void *arg)
   return NULL;
 }
 
-/*
- *  API
- */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 int worker_ondemand_init(worker_ondemand_t *w)
 {

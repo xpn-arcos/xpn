@@ -18,12 +18,25 @@
  *
  */
 
+/**
+ * @file syscall_proxies.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "base/syscall_proxies.h"
 
-/* ... Variables / Variables ......................................... */
+/************************************************
+ *  ... Variables
+ ***********************************************/
 
 int (*real_open)(char *, int, mode_t) = NULL;
 int (*real_open64)(char *, int, mode_t) = NULL;
@@ -73,11 +86,13 @@ char *(*real_realpath)(const char *restrict, char *restrict) = NULL;
 int (*real_fsync)(int) = NULL;
 void *(*real_mmap)(void *, size_t, int, int, int, off_t) = NULL;
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-//
-// File API
-//
+/************************************************
+ *  ... Functions: File API
+ ***********************************************/
 
 int dlsym_open(char *path, int flags)
 {
@@ -362,9 +377,9 @@ int dlsym_unlink(char *path)
   return real_unlink((char *)path);
 }
 
-//
-// Directory API
-//
+/************************************************
+ *  ... Functions: Directory API
+ ***********************************************/
 
 DIR *dlsym_opendir(char *dirname)
 {
@@ -450,9 +465,9 @@ int dlsym_rmdir(char *path)
   return real_rmdir((char *)path);
 }
 
-//
-// Proccess API
-//
+/************************************************
+ *  ... Functions: Proccess API
+ ***********************************************/
 
 int dlsym_fork(void)
 {
@@ -514,9 +529,9 @@ void dlsym_exit(int status)
   real_exit(status);
 }
 
-//
-// File/Directory Metadata API
-//
+/************************************************
+ *  ... Functions: Manager - File/Directory Metadata API
+ ***********************************************/
 
 int dlsym_chdir(char *path)
 {
@@ -624,9 +639,9 @@ int dlsym_fsync(int fd)
   return real_fsync(fd);
 }
 
-//
-// Memory API
-//
+/************************************************
+ *  ... Functions: Memory API
+ ***********************************************/
 
 void *dlsym_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 {

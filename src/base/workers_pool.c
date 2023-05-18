@@ -18,16 +18,29 @@
  *
  */
 
+/**
+ * @file workers_pool.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "workers_pool.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-/*
- *  Internal
- */
+/************************************************
+ *  ... Internal Functions
+ ***********************************************/
 
 void *worker_pool_function(void *arg)
 {
@@ -61,9 +74,9 @@ void *worker_pool_function(void *arg)
   return NULL;
 }
 
-/*
- *  API
- */
+/************************************************
+ *  ... Functions: API
+ ***********************************************/
 
 int worker_pool_init(worker_pool_t *w)
 {

@@ -18,18 +18,26 @@
  *
  */
 
+/**
+ * @file string_misc.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "base/string_misc.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-/**
- * Return the string length of 'str'.
- * @param str the string.
- * @return the string length.
- */
 long STRING_MISC_StrLen(/*IN*/ char *str)
 {
   /* check params */
@@ -39,12 +47,6 @@ long STRING_MISC_StrLen(/*IN*/ char *str)
   return (long)strlen(str);
 }
 
-/**
- * Return true if and only if the strings 'str1' and 'str2' are equals.
- * @param str1 the first string.
- * @param str2 the second string.
- * @return true (1) iff are equals or false (0) in other case.
- */
 int8_t STRING_MISC_Equal(/*IN*/ char *str1,
                          /*IN*/ char *str2)
 {
@@ -61,11 +63,6 @@ int8_t STRING_MISC_Equal(/*IN*/ char *str1,
   return (0);
 }
 
-/**
- * Return a string clone of 'str'.
- * @param str the string.
- * @return a clone of 'str'.
- */
 char *STRING_MISC_StrDup(/*IN*/ char *str)
 {
   int lenstr;
@@ -86,9 +83,8 @@ char *STRING_MISC_StrDup(/*IN*/ char *str)
   return pch;
 }
 
-int STRING_MISC_StrLenF(
-    /*IN*/ char *format,
-    /*IN*/ va_list argl)
+int STRING_MISC_StrLenF(/*IN*/ char *format,
+                        /*IN*/ va_list argl)
 {
   int ineed;
   static FILE *nullfd = NULL;
@@ -114,9 +110,8 @@ int STRING_MISC_StrLenF(
   return ineed;
 }
 
-char *STRING_MISC_Dvsprintf(
-    /*IN*/ char *format,
-    /*IN*/ va_list argl)
+char *STRING_MISC_Dvsprintf(/*IN*/ char *format,
+                            /*IN*/ va_list argl)
 {
   char *baux;
   int ineed;
@@ -131,9 +126,8 @@ char *STRING_MISC_Dvsprintf(
   return baux;
 }
 
-char *STRING_MISC_Dsprintf(
-    /*IN*/ char *format,
-    ...)
+char *STRING_MISC_Dsprintf(/*IN*/ char *format,
+                           ...)
 {
   char *saux;
   va_list varg;

@@ -18,15 +18,27 @@
  *
  */
 
+/**
+ * @file time_misc.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "base/time_misc.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-void TIME_MISC_Timer(
-    struct timeval *t)
+void TIME_MISC_Timer(struct timeval *t)
 {
     int i = 0;
 
@@ -37,10 +49,9 @@ void TIME_MISC_Timer(
         printf("WARNING: fail to gettimeofday in '%d' times.\n", i + 1);
 }
 
-void TIME_MISC_DiffTime(
-    struct timeval *to,
-    struct timeval *tn,
-    struct timeval *dif)
+void TIME_MISC_DiffTime(struct timeval *to,
+                        struct timeval *tn,
+                        struct timeval *dif)
 {
     long aux;
 
@@ -56,10 +67,9 @@ void TIME_MISC_DiffTime(
         */
 }
 
-void TIME_MISC_AddTime(
-    struct timeval *to,
-    struct timeval *tn,
-    struct timeval *sum)
+void TIME_MISC_AddTime(struct timeval *to,
+                       struct timeval *tn,
+                       struct timeval *sum)
 {
     long aux;
 
