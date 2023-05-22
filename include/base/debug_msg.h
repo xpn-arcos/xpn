@@ -23,20 +23,21 @@
  #ifndef DEBUG_MSG_H
  #define DEBUG_MSG_H
 
-   /* ... Include / Inclusion ........................................... */
-
-      #include "all_system.h"
-      #include "string_misc.h"
-
 
  #ifdef  __cplusplus
     extern "C" {
  #endif
 
 
-  /* ... Defines / Definiciones ........................................... */
+   /* ... Include / Inclusion ........................................... */
 
-     // debug messages
+      #include "all_system.h"
+      #include "string_misc.h"
+
+
+   /* ... Macros / Macros ............................................... */
+
+     // Message
 #ifdef DEBUG
      #define debug_error(...)    debug_msg_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
      #define debug_warning(...)  debug_msg_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
@@ -47,7 +48,8 @@
      #define debug_info(...)
 #endif
 
-     // Current function
+
+     // TRACE
      #define DEBUG_BEGIN() \
              debug_info("Begin %s()\n", __func__)
 

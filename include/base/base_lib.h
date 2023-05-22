@@ -24,9 +24,7 @@
 #define _BASE_H_
 
    #include "debug_tags.h"  
-   #include "trace_tags.h"
    #include "debug_msg.h" 
-   #include "trace_msg.h"   
 
    #include "filesystem.h"
    #include "time_misc.h"    

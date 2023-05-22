@@ -3,7 +3,7 @@
 #
 
 
- prefix = /home/acaldero/bin//xpn
+ prefix = /home/alejandro/bin//xpn
  CC=/usr/bin/mpicc
 
  FLAGS=-Wall -Wextra -fpic -DHAVE_CONFIG_H -std=c11

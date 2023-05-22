@@ -387,8 +387,6 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/base/string_misc.h \
 	../../include/base/path_misc.h \
 	../../include/base/time_misc.h \
-	../../include/base/trace_msg.h \
-	../../include/base/trace_tags.h \
 	../../include/base/urlstr.h \
 	../../include/base/ns.h \
 	../../include/base/syscall_proxies.h \
@@ -439,19 +437,19 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/acaldero/work/xpn/config/missing aclocal-1.16
+ACLOCAL = ${SHELL} '/home/alejandro/work/xpn/config/missing' aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /home/acaldero/work/xpn/config/missing autoconf
-AUTOHEADER = ${SHELL} /home/acaldero/work/xpn/config/missing autoheader
-AUTOMAKE = ${SHELL} /home/acaldero/work/xpn/config/missing automake-1.16
+AUTOCONF = ${SHELL} '/home/alejandro/work/xpn/config/missing' autoconf
+AUTOHEADER = ${SHELL} '/home/alejandro/work/xpn/config/missing' autoheader
+AUTOMAKE = ${SHELL} '/home/alejandro/work/xpn/config/missing' automake-1.16
 AWK = gawk
 CC = /usr/bin/mpicc
 CCDEPMODE = depmode=gcc3
 CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
 CFLAGS = -I../../mxml        -I../../bin/mosquitto/include       -I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base -I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPP = gcc -E
+CPP = @CPP@
 CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
@@ -467,13 +465,13 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = -lmosquitto -lmxml -ldl -lpthread  -lmxml  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmosquitto -lmxml -ldl -lpthread  -lmxml
-LIBLINK = -lmosquitto -lmxml -ldl -lpthread  -lmxml
+LDFLAGS = -ldl -lpthread  -lmxml  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -ldl -lpthread  -lmxml
+LIBLINK = -ldl -lpthread  -lmxml
 LIBOBJS = 
-LIBS =  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmosquitto -lmxml -ldl -lpthread  -lmxml
+LIBS =  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -ldl -lpthread  -lmxml
 LTLIBOBJS = 
 MAKE = make
-MAKEINFO = ${SHELL} /home/acaldero/work/xpn/config/missing makeinfo
+MAKEINFO = ${SHELL} '/home/alejandro/work/xpn/config/missing' makeinfo
 MKDIR_P = /usr/bin/mkdir -p
 M_HEADERS = 
 NFI_MPI_SERVER = nfi_mpi_server
@@ -527,10 +525,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 2.0
-abs_builddir = /home/acaldero/work/xpn/src/xpn_client
-abs_srcdir = /home/acaldero/work/xpn/src/xpn_client
-abs_top_builddir = /home/acaldero/work/xpn
-abs_top_srcdir = /home/acaldero/work/xpn
+abs_builddir = /home/alejandro/work/xpn/src/xpn_client
+abs_srcdir = /home/alejandro/work/xpn/src/xpn_client
+abs_top_builddir = /home/alejandro/work/xpn
+abs_top_srcdir = /home/alejandro/work/xpn
 ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
@@ -558,7 +556,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/acaldero/work/xpn/config/install-sh
+install_sh = ${SHELL} /home/alejandro/work/xpn/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -567,7 +565,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/acaldero/bin//xpn
+prefix = /home/alejandro/bin//xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
@@ -599,8 +597,6 @@ BASE_HEADER = ../../include/base/base_lib.h \
 				../../include/base/string_misc.h \
 				../../include/base/path_misc.h \
 				../../include/base/time_misc.h \
-				../../include/base/trace_msg.h \
-				../../include/base/trace_tags.h \
 				../../include/base/urlstr.h \
 				../../include/base/ns.h \
 				../../include/base/syscall_proxies.h \
