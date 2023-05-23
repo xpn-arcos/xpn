@@ -35,6 +35,17 @@
       #include "string_misc.h"
 
 
+   /* ... Functions / Funciones ......................................... */
+      
+      //
+      // Debug API
+      //
+
+      void debug_msg_init   ( void ) ;
+
+      int  debug_msg_printf ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... ) ;
+
+
    /* ... Macros / Macros ............................................... */
 
      // Message
@@ -55,77 +66,6 @@
 
      #define DEBUG_END() \
              debug_info("End   %s(), errno=%d\n", __func__, errno)
-
-
-   /* ... Functions / Funciones ......................................... */
-      
-      //
-      // Debug API
-      //
-
-      void debug_msg_init   ( void ) ;
-      int  debug_msg_printf ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... ) ;
-
-
-      //
-      // Extra Debug API
-      //
-
-      /**
-       *
-       *  Set 'printer' dispacher. 
-       *  @param printer the printer function to be used.
-       *  @return nothing.
-       *
-       */
-      void   DEBUG_MSG_setPrinter 
-      ( 
-        /*IN*/      int (*printer) (const   char *, va_list) 
-      ) ;
-
-      /**
-       *
-       *  Write a message using the format and the argument list given to it.
-       *  @param line the line of code where message is generated.
-       *  @param name the file name at the code where message is generated.
-       *  @param pid  the process that send this message.
-       *  @param type the type of message.
-       *  @param fto  the message format.
-       *  @param vl   the argument list.
-       *  @return nothing.
-       *
-       */
-      void   DEBUG_MSG_VPrintF    
-      ( 
-        /*IN*/      int    line,
-        /*IN*/      char  *name,
-        /*IN*/     long    pid,
-        /*IN*/      int    type,
-        /*IN*/      char  *fto,
-        /*IN*/    va_list  vl 
-      ) ;
-
-      /**
-       *
-       *  Write a message using the format and arguments given to it.
-       *  @param line the line of code where message is generated.
-       *  @param name the file name at the code where message is generated.
-       *  @param pid  the process that send this message.
-       *  @param type the type of message.
-       *  @param fto  the message format.
-       *  @return nothing.
-       *
-       */
-      void   DEBUG_MSG_PrintF     
-      ( 
-        /*IN*/      int    line,
-        /*IN*/      char  *name,
-        /*IN*/     long    pid,
-        /*IN*/      int    type,
-        /*IN*/      char  *fto, 
-        ... 
-      ) ;
-
 
    /* ................................................................... */
 

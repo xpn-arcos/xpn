@@ -6,7 +6,7 @@
  MAKE                 = make -s
  CC                   = /usr/bin/mpicc
  SOURCE_PATH          = ./
- EXPAND_DIR           = /home/alejandro/bin//xpn
+ EXPAND_DIR           = /home/acaldero/bin//xpn
  OBJECTS_TCP_SERVER   = ../../src/tcp_server/tcp_server.o \
 			../../src/tcp_server/tcp_server_params.o \
 			../../src/tcp_server/tcp_server_comm.o \
