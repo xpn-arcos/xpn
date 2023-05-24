@@ -1,0 +1,261 @@
+\doxysection{mpi\+\_\+server.\+c File Reference}
+\hypertarget{mpi__server_8c}{}\label{mpi__server_8c}\index{mpi\_server.c@{mpi\_server.c}}
+
+
+File to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include \"{}all\+\_\+system.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/utils.\+h\"{}}\newline
+{\ttfamily \#include \"{}mpi\+\_\+server\+\_\+params.\+h\"{}}\newline
+{\ttfamily \#include \"{}mpi\+\_\+server\+\_\+ops.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/workers.\+h\"{}}\newline
+{\ttfamily \#include \"{}mpi\+\_\+server\+\_\+comm.\+h\"{}}\newline
+{\ttfamily \#include \"{}mpi\+\_\+server\+\_\+d2xpn.\+h\"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{mpi__server_8c_a0ba3d7c052d4c613bbf52d004aa8cc31}{mpi\+\_\+server\+\_\+run}} (struct \mbox{\hyperlink{structst__th}{st\+\_\+th}} th)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{mpi__server_8c_acb17ab23a09869f3d4f1c7caee8ceb03}{mpi\+\_\+server\+\_\+dispatcher}} (struct \mbox{\hyperlink{structst__th}{st\+\_\+th}} th)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{mpi__server_8c_aff7a9c8aac8692b60ca0f34508d1a620}{mpi\+\_\+server\+\_\+up}} (void)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{mpi__server_8c_aa7416655eed8f50c120169f93a713169}{mpi\+\_\+server\+\_\+down}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{mpi__server_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char \mbox{\hyperlink{mpi__server_8c_aa9e8cb6581260bf6f9b428d7b127beff}{serv\+\_\+name}} \mbox{[}HOST\+\_\+\+NAME\+\_\+\+MAX\mbox{]}
+\item 
+\mbox{\hyperlink{structmpi__server__param__st}{mpi\+\_\+server\+\_\+param\+\_\+st}} \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}
+\item 
+\mbox{\hyperlink{structworker__t}{worker\+\_\+t}} \mbox{\hyperlink{mpi__server_8c_a323265f4d63285197c334e7d133622b4}{worker}}
+\item 
+int \mbox{\hyperlink{mpi__server_8c_a7c82fbc4cc51abc20d109b537e1bd357}{the\+\_\+end}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+File to \textquotesingle{}TODO\textquotesingle{}. 
+
+File to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000017}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{mpi__server_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{mpi__server_8c_a0ddf1224851353fc92bfbff6f499fa97} 
+\index{mpi\_server.c@{mpi\_server.c}!main@{main}}
+\index{main@{main}!mpi\_server.c@{mpi\_server.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_8c_source_l00317}{317}} of file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+References \mbox{\hyperlink{mpi__server_8c_source_l00239}{mpi\+\_\+server\+\_\+down()}}, \mbox{\hyperlink{mpi__server__params_8c_source_l00079}{mpi\+\_\+server\+\_\+params\+\_\+get()}}, \mbox{\hyperlink{mpi__server__params_8c_source_l00042}{mpi\+\_\+server\+\_\+params\+\_\+show()}}, \mbox{\hyperlink{mpi__server__params_8c_source_l00066}{mpi\+\_\+server\+\_\+params\+\_\+show\+\_\+usage()}}, \mbox{\hyperlink{mpi__server_8c_source_l00149}{mpi\+\_\+server\+\_\+up()}}, \mbox{\hyperlink{mpi__server_8c_source_l00047}{params}}, and \mbox{\hyperlink{mpi__server_8c_source_l00046}{serv\+\_\+name}}.
+
+\Hypertarget{mpi__server_8c_acb17ab23a09869f3d4f1c7caee8ceb03}\label{mpi__server_8c_acb17ab23a09869f3d4f1c7caee8ceb03} 
+\index{mpi\_server.c@{mpi\_server.c}!mpi\_server\_dispatcher@{mpi\_server\_dispatcher}}
+\index{mpi\_server\_dispatcher@{mpi\_server\_dispatcher}!mpi\_server.c@{mpi\_server.c}}
+\doxysubsubsection{\texorpdfstring{mpi\_server\_dispatcher()}{mpi\_server\_dispatcher()}}
+{\footnotesize\ttfamily void mpi\+\_\+server\+\_\+dispatcher (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structst__th}{st\+\_\+th}}}]{th }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{mpi__server_8c_source_l00082}{82}} of file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, \mbox{\hyperlink{all__system_8h_source_l00153}{FALSE}}, \mbox{\hyperlink{workers__common_8h_source_l00057}{st\+\_\+th\+::function}}, \mbox{\hyperlink{workers__common_8h_source_l00060}{st\+\_\+th\+::id}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00290}{mpi\+\_\+server\+\_\+comm\+\_\+read\+\_\+operation()}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00109}{MPI\+\_\+\+SERVER\+\_\+\+DISCONNECT}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00108}{MPI\+\_\+\+SERVER\+\_\+\+FINALIZE}}, \mbox{\hyperlink{mpi__server_8c_source_l00064}{mpi\+\_\+server\+\_\+run()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00268}{mpi\+Client\+\_\+comm\+\_\+close()}}, \mbox{\hyperlink{workers__common_8h_source_l00056}{st\+\_\+th\+::params}}, \mbox{\hyperlink{mpi__server_8c_source_l00047}{params}}, \mbox{\hyperlink{workers__common_8h_source_l00062}{st\+\_\+th\+::rank\+\_\+client\+\_\+id}}, \mbox{\hyperlink{workers__common_8h_source_l00063}{st\+\_\+th\+::sd}}, \mbox{\hyperlink{mpi__server_8c_source_l00049}{the\+\_\+end}}, \mbox{\hyperlink{workers__common_8h_source_l00061}{st\+\_\+th\+::type\+\_\+op}}, \mbox{\hyperlink{workers__common_8h_source_l00075}{st\+\_\+th\+::wait4me}}, \mbox{\hyperlink{mpi__server_8c_source_l00048}{worker}}, and \mbox{\hyperlink{workers_8c_source_l00077}{workers\+\_\+launch()}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00149}{mpi\+\_\+server\+\_\+up()}}.
+
+\Hypertarget{mpi__server_8c_aa7416655eed8f50c120169f93a713169}\label{mpi__server_8c_aa7416655eed8f50c120169f93a713169} 
+\index{mpi\_server.c@{mpi\_server.c}!mpi\_server\_down@{mpi\_server\_down}}
+\index{mpi\_server\_down@{mpi\_server\_down}!mpi\_server.c@{mpi\_server.c}}
+\doxysubsubsection{\texorpdfstring{mpi\_server\_down()}{mpi\_server\_down()}}
+{\footnotesize\ttfamily int mpi\+\_\+server\+\_\+down (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em argv} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{mpi__server_8c_source_l00239}{239}} of file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{xpn__bypass_8c_source_l01777}{MPI\+\_\+\+Init()}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00108}{MPI\+\_\+\+SERVER\+\_\+\+FINALIZE}}, \mbox{\hyperlink{ns_8c_source_l00144}{ns\+\_\+lookup()}}, \mbox{\hyperlink{mpi__server_8c_source_l00047}{params}}, \mbox{\hyperlink{mpi__server_8c_source_l00046}{serv\+\_\+name}}, and \mbox{\hyperlink{mpi__server_2mpi__server__params_8h_source_l00093}{mpi\+\_\+server\+\_\+param\+\_\+st\+::shutdown\+\_\+file}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00317}{main()}}.
+
+\Hypertarget{mpi__server_8c_a0ba3d7c052d4c613bbf52d004aa8cc31}\label{mpi__server_8c_a0ba3d7c052d4c613bbf52d004aa8cc31} 
+\index{mpi\_server.c@{mpi\_server.c}!mpi\_server\_run@{mpi\_server\_run}}
+\index{mpi\_server\_run@{mpi\_server\_run}!mpi\_server.c@{mpi\_server.c}}
+\doxysubsubsection{\texorpdfstring{mpi\_server\_run()}{mpi\_server\_run()}}
+{\footnotesize\ttfamily void mpi\+\_\+server\+\_\+run (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structst__th}{st\+\_\+th}}}]{th }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{mpi__server_8c_source_l00064}{64}} of file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, \mbox{\hyperlink{workers__common_8h_source_l00060}{st\+\_\+th\+::id}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00494}{mpi\+\_\+server\+\_\+do\+\_\+operation()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00041}{mpi\+\_\+server\+\_\+op2string()}}, \mbox{\hyperlink{mpi__server_8c_source_l00049}{the\+\_\+end}}, and \mbox{\hyperlink{workers__common_8h_source_l00061}{st\+\_\+th\+::type\+\_\+op}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00082}{mpi\+\_\+server\+\_\+dispatcher()}}.
+
+\Hypertarget{mpi__server_8c_aff7a9c8aac8692b60ca0f34508d1a620}\label{mpi__server_8c_aff7a9c8aac8692b60ca0f34508d1a620} 
+\index{mpi\_server.c@{mpi\_server.c}!mpi\_server\_up@{mpi\_server\_up}}
+\index{mpi\_server\_up@{mpi\_server\_up}!mpi\_server.c@{mpi\_server.c}}
+\doxysubsubsection{\texorpdfstring{mpi\_server\_up()}{mpi\_server\_up()}}
+{\footnotesize\ttfamily int mpi\+\_\+server\+\_\+up (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyParagraph}{Parameters}
+None. 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{mpi__server_8c_source_l00149}{149}} of file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+References \mbox{\hyperlink{mpi__server_2mpi__server__params_8h_source_l00105}{mpi\+\_\+server\+\_\+param\+\_\+st\+::client}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, \mbox{\hyperlink{debug__msg_8c_source_l00047}{debug\+\_\+msg\+\_\+init()}}, \mbox{\hyperlink{all__system_8h_source_l00153}{FALSE}}, \mbox{\hyperlink{workers__common_8h_source_l00057}{st\+\_\+th\+::function}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00248}{mpi\+\_\+server\+\_\+comm\+\_\+accept()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00188}{mpi\+\_\+server\+\_\+comm\+\_\+destroy()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00041}{mpi\+\_\+server\+\_\+comm\+\_\+init()}}, \mbox{\hyperlink{mpi__server_8c_source_l00082}{mpi\+\_\+server\+\_\+dispatcher()}}, \mbox{\hyperlink{workers__common_8h_source_l00056}{st\+\_\+th\+::params}}, \mbox{\hyperlink{mpi__server_8c_source_l00047}{params}}, \mbox{\hyperlink{workers__common_8h_source_l00062}{st\+\_\+th\+::rank\+\_\+client\+\_\+id}}, \mbox{\hyperlink{workers__common_8h_source_l00063}{st\+\_\+th\+::sd}}, \mbox{\hyperlink{mpi__server_8c_source_l00046}{serv\+\_\+name}}, \mbox{\hyperlink{mpi__server_8c_source_l00049}{the\+\_\+end}}, \mbox{\hyperlink{mpi__server_2mpi__server__params_8h_source_l00096}{mpi\+\_\+server\+\_\+param\+\_\+st\+::thread\+\_\+mode}}, \mbox{\hyperlink{workers__common_8h_source_l00061}{st\+\_\+th\+::type\+\_\+op}}, \mbox{\hyperlink{workers__common_8h_source_l00075}{st\+\_\+th\+::wait4me}}, \mbox{\hyperlink{mpi__server_8c_source_l00048}{worker}}, \mbox{\hyperlink{workers_8c_source_l00147}{workers\+\_\+destroy()}}, \mbox{\hyperlink{workers_8c_source_l00040}{workers\+\_\+init()}}, and \mbox{\hyperlink{workers_8c_source_l00077}{workers\+\_\+launch()}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00317}{main()}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}\label{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32} 
+\index{mpi\_server.c@{mpi\_server.c}!params@{params}}
+\index{params@{params}!mpi\_server.c@{mpi\_server.c}}
+\doxysubsubsection{\texorpdfstring{params}{params}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmpi__server__param__st}{mpi\+\_\+server\+\_\+param\+\_\+st}} params}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_8c_source_l00047}{47}} of file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00317}{main()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00248}{mpi\+\_\+server\+\_\+comm\+\_\+accept()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00188}{mpi\+\_\+server\+\_\+comm\+\_\+destroy()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00041}{mpi\+\_\+server\+\_\+comm\+\_\+init()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00365}{mpi\+\_\+server\+\_\+comm\+\_\+read\+\_\+data()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00290}{mpi\+\_\+server\+\_\+comm\+\_\+read\+\_\+operation()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00330}{mpi\+\_\+server\+\_\+comm\+\_\+write\+\_\+data()}}, \mbox{\hyperlink{mpi__server__d2xpn_8c_source_l00147}{mpi\+\_\+server\+\_\+d2xpn()}}, \mbox{\hyperlink{mpi__server_8c_source_l00082}{mpi\+\_\+server\+\_\+dispatcher()}}, \mbox{\hyperlink{mpi__server_8c_source_l00239}{mpi\+\_\+server\+\_\+down()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01092}{mpi\+\_\+server\+\_\+op\+\_\+close\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01283}{mpi\+\_\+server\+\_\+op\+\_\+closedir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00750}{mpi\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00727}{mpi\+\_\+server\+\_\+op\+\_\+creat\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01423}{mpi\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01179}{mpi\+\_\+server\+\_\+op\+\_\+getattr()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01520}{mpi\+\_\+server\+\_\+op\+\_\+getid()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01501}{mpi\+\_\+server\+\_\+op\+\_\+getnodename()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01219}{mpi\+\_\+server\+\_\+op\+\_\+mkdir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00707}{mpi\+\_\+server\+\_\+op\+\_\+open\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00689}{mpi\+\_\+server\+\_\+op\+\_\+open\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01237}{mpi\+\_\+server\+\_\+op\+\_\+opendir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01337}{mpi\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00851}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00775}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01258}{mpi\+\_\+server\+\_\+op\+\_\+readdir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01153}{mpi\+\_\+server\+\_\+op\+\_\+rename()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01109}{mpi\+\_\+server\+\_\+op\+\_\+rm()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01132}{mpi\+\_\+server\+\_\+op\+\_\+rm\+\_\+async()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01298}{mpi\+\_\+server\+\_\+op\+\_\+rmdir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01316}{mpi\+\_\+server\+\_\+op\+\_\+rmdir\+\_\+async()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01197}{mpi\+\_\+server\+\_\+op\+\_\+setattr()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01011}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00949}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__params_8c_source_l00079}{mpi\+\_\+server\+\_\+params\+\_\+get()}}, \mbox{\hyperlink{mpi__server__params_8c_source_l00042}{mpi\+\_\+server\+\_\+params\+\_\+show()}}, \mbox{\hyperlink{mpi__server_8c_source_l00149}{mpi\+\_\+server\+\_\+up()}}, \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00144}{mpi\+Client\+\_\+comm\+\_\+connect()}}, \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00108}{mpi\+Client\+\_\+comm\+\_\+destroy()}}, \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00226}{mpi\+Client\+\_\+comm\+\_\+disconnect()}}, \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00040}{mpi\+Client\+\_\+comm\+\_\+init()}}, \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00255}{mpi\+Client\+\_\+comm\+\_\+locality()}}, \mbox{\hyperlink{tcp__server_2tcp__server__comm_8c_source_l00357}{tcp\+\_\+server\+\_\+comm\+\_\+accept()}}, \mbox{\hyperlink{tcp__server_2tcp__server__comm_8c_source_l00405}{tcp\+\_\+server\+\_\+comm\+\_\+connect()}}, \mbox{\hyperlink{tcp__server_2tcp__server__comm_8c_source_l00310}{tcp\+\_\+server\+\_\+comm\+\_\+destroy()}}, \mbox{\hyperlink{tcp__server_2tcp__server__comm_8c_source_l00169}{tcp\+\_\+server\+\_\+comm\+\_\+init()}}, \mbox{\hyperlink{tcp__server_2tcp__server__comm_8c_source_l00580}{tcp\+\_\+server\+\_\+comm\+\_\+read\+\_\+data()}}, \mbox{\hyperlink{tcp__server_2tcp__server__comm_8c_source_l00494}{tcp\+\_\+server\+\_\+comm\+\_\+read\+\_\+operation()}}, \mbox{\hyperlink{tcp__server_2tcp__server__comm_8c_source_l00529}{tcp\+\_\+server\+\_\+comm\+\_\+write\+\_\+data()}}, \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00146}{tcp\+\_\+server\+\_\+d2xpn()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00819}{tcp\+\_\+server\+\_\+op\+\_\+close\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01011}{tcp\+\_\+server\+\_\+op\+\_\+closedir()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00465}{tcp\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00419}{tcp\+\_\+server\+\_\+op\+\_\+creat\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01126}{tcp\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00907}{tcp\+\_\+server\+\_\+op\+\_\+getattr()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01222}{tcp\+\_\+server\+\_\+op\+\_\+getid()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01203}{tcp\+\_\+server\+\_\+op\+\_\+getnodename()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00949}{tcp\+\_\+server\+\_\+op\+\_\+mkdir()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00372}{tcp\+\_\+server\+\_\+op\+\_\+open\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00334}{tcp\+\_\+server\+\_\+op\+\_\+open\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00967}{tcp\+\_\+server\+\_\+op\+\_\+opendir()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01045}{tcp\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00590}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00519}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00985}{tcp\+\_\+server\+\_\+op\+\_\+readdir()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00884}{tcp\+\_\+server\+\_\+op\+\_\+rename()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00861}{tcp\+\_\+server\+\_\+op\+\_\+rm()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01026}{tcp\+\_\+server\+\_\+op\+\_\+rmdir()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00925}{tcp\+\_\+server\+\_\+op\+\_\+setattr()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00741}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00678}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__params_8c_source_l00095}{tcp\+\_\+server\+\_\+params\+\_\+get()}}, \mbox{\hyperlink{tcp__server__params_8c_source_l00042}{tcp\+\_\+server\+\_\+params\+\_\+show()}}, \mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__comm_8c_source_l00063}{tcp\+Client\+\_\+comm\+\_\+connect()}}, and \mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__comm_8c_source_l00181}{tcp\+Client\+\_\+comm\+\_\+locality()}}.
+
+\Hypertarget{mpi__server_8c_aa9e8cb6581260bf6f9b428d7b127beff}\label{mpi__server_8c_aa9e8cb6581260bf6f9b428d7b127beff} 
+\index{mpi\_server.c@{mpi\_server.c}!serv\_name@{serv\_name}}
+\index{serv\_name@{serv\_name}!mpi\_server.c@{mpi\_server.c}}
+\doxysubsubsection{\texorpdfstring{serv\_name}{serv\_name}}
+{\footnotesize\ttfamily char serv\+\_\+name\mbox{[}HOST\+\_\+\+NAME\+\_\+\+MAX\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_8c_source_l00046}{46}} of file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00317}{main()}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00041}{mpi\+\_\+server\+\_\+comm\+\_\+init()}}, \mbox{\hyperlink{mpi__server_8c_source_l00239}{mpi\+\_\+server\+\_\+down()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01501}{mpi\+\_\+server\+\_\+op\+\_\+getnodename()}}, \mbox{\hyperlink{mpi__server_8c_source_l00149}{mpi\+\_\+server\+\_\+up()}}, \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00255}{mpi\+Client\+\_\+comm\+\_\+locality()}}, \mbox{\hyperlink{tcp__server_2tcp__server__comm_8c_source_l00310}{tcp\+\_\+server\+\_\+comm\+\_\+destroy()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01203}{tcp\+\_\+server\+\_\+op\+\_\+getnodename()}}, and \mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__comm_8c_source_l00181}{tcp\+Client\+\_\+comm\+\_\+locality()}}.
+
+\Hypertarget{mpi__server_8c_a7c82fbc4cc51abc20d109b537e1bd357}\label{mpi__server_8c_a7c82fbc4cc51abc20d109b537e1bd357} 
+\index{mpi\_server.c@{mpi\_server.c}!the\_end@{the\_end}}
+\index{the\_end@{the\_end}!mpi\_server.c@{mpi\_server.c}}
+\doxysubsubsection{\texorpdfstring{the\_end}{the\_end}}
+{\footnotesize\ttfamily int the\+\_\+end = 0}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_8c_source_l00049}{49}} of file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00082}{mpi\+\_\+server\+\_\+dispatcher()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00494}{mpi\+\_\+server\+\_\+do\+\_\+operation()}}, \mbox{\hyperlink{mpi__server_8c_source_l00064}{mpi\+\_\+server\+\_\+run()}}, \mbox{\hyperlink{mpi__server_8c_source_l00149}{mpi\+\_\+server\+\_\+up()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00152}{tcp\+\_\+server\+\_\+do\+\_\+operation()}}.
+
+\Hypertarget{mpi__server_8c_a323265f4d63285197c334e7d133622b4}\label{mpi__server_8c_a323265f4d63285197c334e7d133622b4} 
+\index{mpi\_server.c@{mpi\_server.c}!worker@{worker}}
+\index{worker@{worker}!mpi\_server.c@{mpi\_server.c}}
+\doxysubsubsection{\texorpdfstring{worker}{worker}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structworker__t}{worker\+\_\+t}} worker}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_8c_source_l00048}{48}} of file \mbox{\hyperlink{mpi__server_8c_source}{mpi\+\_\+server.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00082}{mpi\+\_\+server\+\_\+dispatcher()}}, and \mbox{\hyperlink{mpi__server_8c_source_l00149}{mpi\+\_\+server\+\_\+up()}}.
+

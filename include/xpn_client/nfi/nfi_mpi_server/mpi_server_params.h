@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file mpi_server_params.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _MPI_SERVER_PARAMS_H_
 #define _MPI_SERVER_PARAMS_H_
 

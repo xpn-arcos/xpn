@@ -1,0 +1,136 @@
+.TH "nfi_worker" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfi_worker \- This is a struct\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfi_worker_task\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBthread\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "pthread_t \fBpth\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "pthread_mutex_t \fBmt\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "pthread_cond_t \fBcnd\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "int \fBready\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "\fBworker_t\fP \fBwb\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "struct \fBst_th\fP \fBwarg\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "struct \fBnfi_server\fP * \fBserver\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "struct \fBnfi_worker_args\fP \fBarg\fP"
+.br
+.RI "A 'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a struct\&. 
+
+
+.PP
+Definition at line \fB147\fP of file \fBnfi_worker_task\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "nfi_worker::arg"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB162\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_mpi_server_remove()\fP, \fBnfi_worker_do_close()\fP, \fBnfi_worker_do_closedir()\fP, \fBnfi_worker_do_create()\fP, \fBnfi_worker_do_flush()\fP, \fBnfi_worker_do_getattr()\fP, \fBnfi_worker_do_mkdir()\fP, \fBnfi_worker_do_open()\fP, \fBnfi_worker_do_opendir()\fP, \fBnfi_worker_do_preload()\fP, \fBnfi_worker_do_read()\fP, \fBnfi_worker_do_readdir()\fP, \fBnfi_worker_do_remove()\fP, \fBnfi_worker_do_rename()\fP, \fBnfi_worker_do_rmdir()\fP, \fBnfi_worker_do_setattr()\fP, \fBnfi_worker_do_statfs()\fP, \fBnfi_worker_do_write()\fP, \fBnfi_worker_run()\fP, \fBnfi_worker_wait()\fP, \fBnfiworker_wait()\fP, and \fBxpn_internal_remove()\fP\&.
+.SS "nfi_worker::cnd"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB154\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_worker_end()\fP, \fBnfi_worker_init()\fP, \fBnfi_worker_run()\fP, and \fBnfi_worker_wait()\fP\&.
+.SS "nfi_worker::mt"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB153\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_worker_end()\fP, \fBnfi_worker_init()\fP, \fBnfi_worker_run()\fP, and \fBnfi_worker_wait()\fP\&.
+.SS "nfi_worker::pth"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB152\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_worker_init()\fP\&.
+.SS "nfi_worker::ready"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB155\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_worker_run()\fP, and \fBnfi_worker_wait()\fP\&.
+.SS "nfi_worker::server"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB161\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_tcp_server_init()\fP, \fBnfi_worker_do_flush()\fP, \fBnfi_worker_do_preload()\fP, and \fBnfi_worker_init()\fP\&.
+.SS "nfi_worker::thread"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB149\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_worker_do_close()\fP, \fBnfi_worker_do_closedir()\fP, \fBnfi_worker_do_create()\fP, \fBnfi_worker_do_flush()\fP, \fBnfi_worker_do_getattr()\fP, \fBnfi_worker_do_mkdir()\fP, \fBnfi_worker_do_open()\fP, \fBnfi_worker_do_opendir()\fP, \fBnfi_worker_do_preload()\fP, \fBnfi_worker_do_read()\fP, \fBnfi_worker_do_readdir()\fP, \fBnfi_worker_do_remove()\fP, \fBnfi_worker_do_rename()\fP, \fBnfi_worker_do_rmdir()\fP, \fBnfi_worker_do_setattr()\fP, \fBnfi_worker_do_statfs()\fP, \fBnfi_worker_do_write()\fP, \fBnfi_worker_end()\fP, \fBnfi_worker_init()\fP, \fBnfi_worker_wait()\fP, \fBxpn_internal_creat()\fP, \fBxpn_internal_remove()\fP, \fBxpn_pread()\fP, \fBxpn_pwrite()\fP, \fBxpn_simple_flush()\fP, \fBxpn_simple_preload()\fP, and \fBxpn_simple_rename()\fP\&.
+.SS "nfi_worker::warg"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB159\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfiworker_launch()\fP, and \fBnfiworker_wait()\fP\&.
+.SS "nfi_worker::wb"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB158\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfiworker_destroy()\fP, \fBnfiworker_init()\fP, \fBnfiworker_launch()\fP, and \fBnfiworker_wait()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

@@ -1,0 +1,51 @@
+.TH "set_time" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+set_time
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfs3\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBtime_how\fP \fBset\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   \fBnfstime3\fP \fBtime\fP"
+.br
+.ti -1c
+.RI "} \fBset_time_u\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB380\fP of file \fBnfs3\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "\fBtime_how\fP set_time::set"
+
+.PP
+Definition at line \fB382\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_set_time()\fP\&.
+.SS "union  { \&.\&.\&. }  set_time::set_time_u"
+
+.PP
+Referenced by \fBnfs3_setattr()\fP, and \fBxdr_set_time()\fP\&.
+.SS "\fBnfstime3\fP set_time::time"
+
+.PP
+Definition at line \fB385\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBnfs3_setattr()\fP, and \fBxdr_set_time()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

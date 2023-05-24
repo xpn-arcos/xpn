@@ -1,0 +1,118 @@
+\doxysection{workers\+\_\+ondemand.\+h}
+\hypertarget{workers__ondemand_8h_source}{}\label{workers__ondemand_8h_source}\index{workers\_ondemand.h@{workers\_ondemand.h}}
+\mbox{\hyperlink{workers__ondemand_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2020-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ workers\_ondemand.h}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_WORKERS\_ONDEMAND\_H\_}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_WORKERS\_ONDEMAND\_H\_}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00035}00035\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{all__system_8h}{all\_system.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00036}00036\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{workers__common_8h}{workers\_common.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00038}00038\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00039}00039\ \textcolor{comment}{\ *\ \ ...\ Datatypes}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00040}00040\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00041}00041\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00042}00042\ \textcolor{comment}{/**\ @struct\ worker\_ondemand\_t}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00043}00043\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00044}00044\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00045}00045\ \textcolor{comment}{\ *\ \ @var\ worker\_ondemand\_t::busy\_worker}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00046}00046\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00047}00047\ \textcolor{comment}{\ *\ \ @var\ worker\_ondemand\_t::m\_worker}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00048}00048\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00049}00049\ \textcolor{comment}{\ *\ \ @var\ worker\_ondemand\_t::c\_worker}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00050}00050\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00051}00051\ \textcolor{comment}{\ *\ \ @var\ worker\_ondemand\_t::c\_nworkers}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00052}00052\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00053}00053\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00054}\mbox{\hyperlink{structworker__ondemand__t}{00054}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00055}00055\ \{}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00056}00056\ \ \ \ \textcolor{comment}{//\ number\ of\ active\ threads\ (launch\ +\ destroy)}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00057}\mbox{\hyperlink{structworker__ondemand__t_a870e7009398d48d043413ee3fb7f59f1}{00057}}\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structworker__ondemand__t_a870e7009398d48d043413ee3fb7f59f1}{busy\_worker}};}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00058}\mbox{\hyperlink{structworker__ondemand__t_aced3cf8ae5ac24e9bf0bc7855a045805}{00058}}\ \ \ \ pthread\_mutex\_t\ \mbox{\hyperlink{structworker__ondemand__t_aced3cf8ae5ac24e9bf0bc7855a045805}{m\_worker}};}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00059}\mbox{\hyperlink{structworker__ondemand__t_ae5484084cc7ff754a2d812398868b90f}{00059}}\ \ \ \ pthread\_cond\_t\ \mbox{\hyperlink{structworker__ondemand__t_ae5484084cc7ff754a2d812398868b90f}{c\_worker}};}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00060}\mbox{\hyperlink{structworker__ondemand__t_a0b746dcbe4faa8d54a1da6272fd3aacd}{00060}}\ \ \ \ pthread\_cond\_t\ \mbox{\hyperlink{structworker__ondemand__t_a0b746dcbe4faa8d54a1da6272fd3aacd}{c\_nworkers}};}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00061}\mbox{\hyperlink{structworker__ondemand__t_aa05509e62248357e93910a3c991e4408}{00061}}\ \ \ \ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{structworker__ondemand__t_aa05509e62248357e93910a3c991e4408}{n\_workers}};}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00063}00063\ \}\ \mbox{\hyperlink{structworker__ondemand__t}{worker\_ondemand\_t}};}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00065}00065\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00066}00066\ \textcolor{comment}{\ *\ \ ...\ Functions}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00067}00067\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00068}00068\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00069}00069\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00070}00070\ \textcolor{comment}{\ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00071}00071\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00072}00072\ \textcolor{comment}{\ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00073}00073\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00074}00074\ \textcolor{comment}{\ *\ @param\ w\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00075}00075\ \textcolor{comment}{\ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00076}00076\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00077}00077\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{workers__ondemand_8h_ace2f29e5bc1d42d1d769087b15cd6975}{worker\_ondemand\_init}}(\mbox{\hyperlink{structworker__ondemand__t}{worker\_ondemand\_t}}\ *w);}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00078}00078\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00079}00079\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00080}00080\ \textcolor{comment}{\ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00081}00081\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00082}00082\ \textcolor{comment}{\ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00083}00083\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00084}00084\ \textcolor{comment}{\ *\ @param\ w\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00085}00085\ \textcolor{comment}{\ *\ @par\ Returns}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00086}00086\ \textcolor{comment}{\ *\ \ \ \ Nothing.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00087}00087\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00088}00088\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{workers__ondemand_8h_a2ea1a697398c987c077d56d8386626ac}{workers\_ondemand\_destroy}}(\mbox{\hyperlink{structworker__ondemand__t}{worker\_ondemand\_t}}\ *w);}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00089}00089\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00090}00090\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00091}00091\ \textcolor{comment}{\ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00092}00092\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00093}00093\ \textcolor{comment}{\ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00094}00094\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00095}00095\ \textcolor{comment}{\ *\ @param\ w\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00096}00096\ \textcolor{comment}{\ *\ @param\ th\_arg\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00097}00097\ \textcolor{comment}{\ *\ @param\ worker\_function\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00098}00098\ \textcolor{comment}{\ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00099}00099\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00100}00100\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{workers__ondemand_8h_af52f6591b612afe1fcc9959d9e94986f}{worker\_ondemand\_launch}}(\mbox{\hyperlink{structworker__ondemand__t}{worker\_ondemand\_t}}\ *w,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structst__th}{st\_th}}\ *th\_arg,\ \textcolor{keywordtype}{void}\ (*worker\_function)(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structst__th}{st\_th}}));}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00101}00101\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00102}00102\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00103}00103\ \textcolor{comment}{\ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00104}00104\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00105}00105\ \textcolor{comment}{\ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00106}00106\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00107}00107\ \textcolor{comment}{\ *\ @param\ th\_arg\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00108}00108\ \textcolor{comment}{\ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00109}00109\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00110}00110\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{workers__ondemand_8h_ab7eaa34bb1ebe9d02a4f6c9b3b281269}{worker\_ondemand\_wait}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structst__th}{st\_th}}\ *th\_arg);}
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{workers__ondemand_8h_source_l00112}00112\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

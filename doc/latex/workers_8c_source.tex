@@ -1,0 +1,185 @@
+\doxysection{workers.\+c}
+\hypertarget{workers_8c_source}{}\label{workers_8c_source}\index{workers.c@{workers.c}}
+\mbox{\hyperlink{workers_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2020-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ workers.c}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ File\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00025}00025\ \textcolor{comment}{\ *\ File\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00032}00032\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00033}00033\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00034}00034\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00035}00035\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{workers_8h}{workers.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00037}00037\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00038}00038\ \textcolor{comment}{\ *\ \ ...\ Functions}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00039}00039\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00040}\mbox{\hyperlink{workers_8c_aa379ca4faef387cd01aca4839ea27371}{00040}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{workers_8c_aa379ca4faef387cd01aca4839ea27371}{workers\_init}}(\mbox{\hyperlink{structworker__t}{worker\_t}}\ *w,\ \textcolor{keywordtype}{int}\ thread\_mode)}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00041}00041\ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00042}00042\ \ \ \textcolor{comment}{//\ check\ arguments...}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00043}00043\ \ \ \textcolor{keywordflow}{if}\ (NULL\ ==\ w)}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00044}00044\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00045}00045\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_init\ with\ NULL\ worker\_t\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00046}00046\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00047}00047\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00049}00049\ \ \ \textcolor{comment}{//\ initialize...}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00050}00050\ \ \ w-\/>\mbox{\hyperlink{structworker__t_aec5269320be69f3bf92337fe051600a6}{thread\_mode}}\ =\ thread\_mode;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00052}00052\ \ \ \textcolor{keywordflow}{switch}\ (w-\/>\mbox{\hyperlink{structworker__t_aec5269320be69f3bf92337fe051600a6}{thread\_mode}})}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00053}00053\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00054}00054\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_a50d43473a7f1083744e49509211defaa}{TH\_OP}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00055}00055\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_ondemand\_init\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00056}00056\ \ \ \ \ \mbox{\hyperlink{workers__ondemand_8c_ace2f29e5bc1d42d1d769087b15cd6975}{worker\_ondemand\_init}}(\&(w-\/>\mbox{\hyperlink{structworker__t_a8247977244a0ff2ed37c09525d77b386}{w1}}));}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00057}00057\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00059}00059\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_a613ad9ea521520445cffa86cd4c2cd95}{TH\_POOL}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00060}00060\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_pool\_init\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00061}00061\ \ \ \ \ \mbox{\hyperlink{workers__pool_8c_ac6337845b3221244e2943478207d4c3a}{worker\_pool\_init}}(\&(w-\/>\mbox{\hyperlink{structworker__t_acbe3935bc3fa86e1f2ada1ddcf8a5049}{w2}}));}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00062}00062\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00064}00064\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_ad96a506e29a9aa33600d5aaeead7230b}{TH\_NOT}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00065}00065\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\ without\ threads\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00066}00066\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00068}00068\ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00069}00069\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]:\ ERROR\ on\ thread\_mode(\%d).\(\backslash\)n"{}},\ w-\/>\mbox{\hyperlink{structworker__t_aec5269320be69f3bf92337fe051600a6}{thread\_mode}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00070}00070\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00071}00071\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00072}00072\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00074}00074\ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00075}00075\ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00077}\mbox{\hyperlink{workers_8c_a1b6e2ae047179ff2f9c9bb92162979c7}{00077}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{workers_8c_a1b6e2ae047179ff2f9c9bb92162979c7}{workers\_launch}}(\mbox{\hyperlink{structworker__t}{worker\_t}}\ *w,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structst__th}{st\_th}}\ *th\_arg,\ \textcolor{keywordtype}{void}\ (*worker\_function)(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structst__th}{st\_th}}))}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00078}00078\ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00079}00079\ \ \ \textcolor{comment}{//\ check\ arguments...}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00080}00080\ \ \ \textcolor{keywordflow}{if}\ (NULL\ ==\ w)}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00081}00081\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00082}00082\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_launch\ with\ NULL\ worker\_t\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00083}00083\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00084}00084\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00086}00086\ \ \ \textcolor{comment}{//\ lauch\ worker...}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00087}00087\ \ \ \textcolor{keywordflow}{switch}\ (w-\/>\mbox{\hyperlink{structworker__t_aec5269320be69f3bf92337fe051600a6}{thread\_mode}})}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00088}00088\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00089}00089\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_a50d43473a7f1083744e49509211defaa}{TH\_OP}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00090}00090\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_ondemand\_launch\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00091}00091\ \ \ \ \ \mbox{\hyperlink{workers__ondemand_8c_af52f6591b612afe1fcc9959d9e94986f}{worker\_ondemand\_launch}}(\&(w-\/>\mbox{\hyperlink{structworker__t_a8247977244a0ff2ed37c09525d77b386}{w1}}),\ th\_arg,\ worker\_function);}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00092}00092\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00094}00094\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_a613ad9ea521520445cffa86cd4c2cd95}{TH\_POOL}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00095}00095\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_pool\_enqueue\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00096}00096\ \ \ \ \ \mbox{\hyperlink{workers__pool_8c_aadc2926ce1c509e76224d3ce853d8333}{worker\_pool\_enqueue}}(\&(w-\/>\mbox{\hyperlink{structworker__t_acbe3935bc3fa86e1f2ada1ddcf8a5049}{w2}}),\ th\_arg,\ worker\_function);\ \textcolor{comment}{//\ Enqueue\ the\ operation\ on\ the\ buffer}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00097}00097\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00099}00099\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_ad96a506e29a9aa33600d5aaeead7230b}{TH\_NOT}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00100}00100\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\ without\ threads\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00101}00101\ \ \ \ \ worker\_function(*th\_arg);}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00102}00102\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00104}00104\ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00105}00105\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]:\ ERROR\ on\ thread\_mode(\%d).\(\backslash\)n"{}},\ w-\/>\mbox{\hyperlink{structworker__t_aec5269320be69f3bf92337fe051600a6}{thread\_mode}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00106}00106\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00107}00107\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00108}00108\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00110}00110\ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00111}00111\ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00113}\mbox{\hyperlink{workers_8c_a7b814723c5b7dfc9918e94f07b7e5ff4}{00113}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{workers_8c_a7b814723c5b7dfc9918e94f07b7e5ff4}{workers\_wait}}(\mbox{\hyperlink{structworker__t}{worker\_t}}\ *w,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structst__th}{st\_th}}\ *th\_arg)}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00114}00114\ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00115}00115\ \ \ \textcolor{comment}{//\ check\ arguments...}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00116}00116\ \ \ \textcolor{keywordflow}{if}\ (NULL\ ==\ w)}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00117}00117\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00118}00118\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_launch\_nfi\ with\ NULL\ worker\_t\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00119}00119\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00120}00120\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00122}00122\ \ \ \textcolor{keywordflow}{switch}\ (w-\/>\mbox{\hyperlink{structworker__t_aec5269320be69f3bf92337fe051600a6}{thread\_mode}})}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00123}00123\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00124}00124\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_a50d43473a7f1083744e49509211defaa}{TH\_OP}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00125}00125\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_ondemand\_wait\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00126}00126\ \ \ \ \ \mbox{\hyperlink{workers__ondemand_8c_ab7eaa34bb1ebe9d02a4f6c9b3b281269}{worker\_ondemand\_wait}}(th\_arg);}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00127}00127\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00129}00129\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_a613ad9ea521520445cffa86cd4c2cd95}{TH\_POOL}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00130}00130\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_pool\_wait\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00131}00131\ \ \ \ \ \mbox{\hyperlink{workers__pool_8c_a1f30ad23257223dea95e2c532894bf6d}{worker\_pool\_wait}}(th\_arg);}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00132}00132\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00134}00134\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_ad96a506e29a9aa33600d5aaeead7230b}{TH\_NOT}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00135}00135\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_wait\ without\ threads\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00136}00136\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00138}00138\ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00139}00139\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]:\ ERROR\ on\ thread\_mode(\%d).\(\backslash\)n"{}},\ w-\/>\mbox{\hyperlink{structworker__t_aec5269320be69f3bf92337fe051600a6}{thread\_mode}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00140}00140\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00141}00141\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00142}00142\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00144}00144\ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00145}00145\ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00146}00146\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00147}\mbox{\hyperlink{workers_8c_a14ade80367cefdd6639fc5fc43386b58}{00147}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{workers_8c_a14ade80367cefdd6639fc5fc43386b58}{workers\_destroy}}(\mbox{\hyperlink{structworker__t}{worker\_t}}\ *w)}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00148}00148\ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00149}00149\ \ \ \textcolor{comment}{//\ check\ arguments...}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00150}00150\ \ \ \textcolor{keywordflow}{if}\ (NULL\ ==\ w)}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00151}00151\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00152}00152\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_destroy\ with\ NULL\ worker\_t\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00153}00153\ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00154}00154\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00155}00155\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00156}00156\ \ \ \textcolor{comment}{//\ destroy...}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00157}00157\ \ \ \textcolor{keywordflow}{switch}\ (w-\/>\mbox{\hyperlink{structworker__t_aec5269320be69f3bf92337fe051600a6}{thread\_mode}})}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00158}00158\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00159}00159\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_a50d43473a7f1083744e49509211defaa}{TH\_OP}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00160}00160\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ workers\_ondemand\_destroy\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00161}00161\ \ \ \ \ \mbox{\hyperlink{workers__ondemand_8c_a2ea1a697398c987c077d56d8386626ac}{workers\_ondemand\_destroy}}(\&(w-\/>\mbox{\hyperlink{structworker__t_a8247977244a0ff2ed37c09525d77b386}{w1}}));}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00162}00162\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00163}00163\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00164}00164\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_a613ad9ea521520445cffa86cd4c2cd95}{TH\_POOL}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00165}00165\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\_pool\_destroy\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00166}00166\ \ \ \ \ \mbox{\hyperlink{workers__pool_8c_a75ac7d25535270b17793984217b47cf8}{worker\_pool\_destroy}}(\&(w-\/>\mbox{\hyperlink{structworker__t_acbe3935bc3fa86e1f2ada1ddcf8a5049}{w2}}));\ \textcolor{comment}{//\ Destroy\ worker\ pool}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00167}00167\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00169}00169\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{workers_8h_ad96a506e29a9aa33600d5aaeead7230b}{TH\_NOT}}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00170}00170\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]\ worker\ without\ threads\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00171}00171\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00173}00173\ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00174}00174\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[WORKER]:\ ERROR\ on\ thread\_mode(\%d).\(\backslash\)n"{}},\ w-\/>\mbox{\hyperlink{structworker__t_aec5269320be69f3bf92337fe051600a6}{thread\_mode}});}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00175}00175\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00176}00176\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00177}00177\ \}}
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{workers_8c_source_l00179}00179\ \textcolor{comment}{/*\ ...................................................................\ */}}
+
+\end{DoxyCode}

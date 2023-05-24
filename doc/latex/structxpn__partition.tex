@@ -1,0 +1,229 @@
+\doxysection{xpn\+\_\+partition Struct Reference}
+\hypertarget{structxpn__partition}{}\label{structxpn__partition}\index{xpn\_partition@{xpn\_partition}}
+
+
+Paralel struct partition.  
+
+
+
+
+{\ttfamily \#include $<$xpn.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{structxpn__partition_a6098a1bce52d34f4217b471b6f1fe1fe}{id}}
+\begin{DoxyCompactList}\small\item\em Id of partition. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structxpn__partition_a82f02195a75c5b8eaea78fd700a5c4c3}{type}}
+\begin{DoxyCompactList}\small\item\em Type of file \+:NORMAL, RAID5,.... \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{structxpn__partition_a9c36d86532765caef377aba9d20234fd}{name}} \mbox{[}\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\+\_\+\+MAX}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em Name of partition. \end{DoxyCompactList}\item 
+ssize\+\_\+t \mbox{\hyperlink{structxpn__partition_a635394e2be772a50da9bf1eb557c7ff5}{block\+\_\+size}}
+\begin{DoxyCompactList}\small\item\em Size of distribution used. \end{DoxyCompactList}\item 
+ssize\+\_\+t \mbox{\hyperlink{structxpn__partition_a4c9cb14986554358c8444db6f0bb19b1}{size\+\_\+threads}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structxpn__partition_a4cd90164ae7befb9706e012188878fdb}{initialized}}
+\begin{DoxyCompactList}\small\item\em Whether it is already initialized or not. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structxpn__partition_afe5cbfd53003770068bdbb7c8b98e005}{data\+\_\+nserv}}
+\begin{DoxyCompactList}\small\item\em Number of server. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structxpn__partition_a652b5ef058bdf4f045cd6135a15db0a8}{data\+\_\+serv}}
+\begin{DoxyCompactList}\small\item\em List of data servers in the partition. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structxpn__partition_ad8fb5db81c08920ff3580c5b4ea8a5d6}{meta\+\_\+nserv}}
+\begin{DoxyCompactList}\small\item\em Number of metadata\+\_\+server. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structxpn__partition_ab00ffd669fb0702e6caaf23df8f340c9}{meta\+\_\+serv}}
+\begin{DoxyCompactList}\small\item\em List of metadata servers in the partition. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Paralel struct partition. 
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00075}{75}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structxpn__partition_a635394e2be772a50da9bf1eb557c7ff5}\label{structxpn__partition_a635394e2be772a50da9bf1eb557c7ff5} 
+\index{xpn\_partition@{xpn\_partition}!block\_size@{block\_size}}
+\index{block\_size@{block\_size}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{block\_size}{block\_size}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::block\+\_\+size}
+
+
+
+Size of distribution used. 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00080}{80}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__policy__open_8c_source_l00209}{Xpn\+Create\+Metadata()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00213}{Xpn\+Get\+Info\+Partition()}}, and \mbox{\hyperlink{xpn__open_8c_source_l00084}{Xpn\+Search\+Slot\+File()}}.
+
+\Hypertarget{structxpn__partition_afe5cbfd53003770068bdbb7c8b98e005}\label{structxpn__partition_afe5cbfd53003770068bdbb7c8b98e005} 
+\index{xpn\_partition@{xpn\_partition}!data\_nserv@{data\_nserv}}
+\index{data\_nserv@{data\_nserv}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{data\_nserv}{data\_nserv}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::data\+\_\+nserv}
+
+
+
+Number of server. 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00085}{85}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00053}{xpn\+\_\+destroy\+\_\+servers()}}, \mbox{\hyperlink{xpn__init_8c_source_l00124}{xpn\+\_\+init\+\_\+partition()}}, \mbox{\hyperlink{xpn__policy__open_8c_source_l00209}{Xpn\+Create\+Metadata()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00213}{Xpn\+Get\+Info\+Partition()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00379}{Xpn\+Get\+Num\+Servers\+Partition()}}, and \mbox{\hyperlink{xpn__policy__open_8c_source_l00103}{Xpn\+Get\+Servers()}}.
+
+\Hypertarget{structxpn__partition_a652b5ef058bdf4f045cd6135a15db0a8}\label{structxpn__partition_a652b5ef058bdf4f045cd6135a15db0a8} 
+\index{xpn\_partition@{xpn\_partition}!data\_serv@{data\_serv}}
+\index{data\_serv@{data\_serv}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{data\_serv}{data\_serv}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::data\+\_\+serv}
+
+
+
+List of data servers in the partition. 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00086}{86}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00053}{xpn\+\_\+destroy\+\_\+servers()}}, \mbox{\hyperlink{xpn__init_8c_source_l00124}{xpn\+\_\+init\+\_\+partition()}}, and \mbox{\hyperlink{xpn__policy__open_8c_source_l00103}{Xpn\+Get\+Servers()}}.
+
+\Hypertarget{structxpn__partition_a6098a1bce52d34f4217b471b6f1fe1fe}\label{structxpn__partition_a6098a1bce52d34f4217b471b6f1fe1fe} 
+\index{xpn\_partition@{xpn\_partition}!id@{id}}
+\index{id@{id}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::id}
+
+
+
+Id of partition. 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00077}{77}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00124}{xpn\+\_\+init\+\_\+partition()}}, \mbox{\hyperlink{xpn__init_8c_source_l00094}{xpn\+\_\+simple\+\_\+destroy()}}, and \mbox{\hyperlink{xpn__policy__init_8c_source_l00550}{Xpn\+Get\+Partition()}}.
+
+\Hypertarget{structxpn__partition_a4cd90164ae7befb9706e012188878fdb}\label{structxpn__partition_a4cd90164ae7befb9706e012188878fdb} 
+\index{xpn\_partition@{xpn\_partition}!initialized@{initialized}}
+\index{initialized@{initialized}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{initialized}{initialized}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::initialized}
+
+
+
+Whether it is already initialized or not. 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00083}{83}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00124}{xpn\+\_\+init\+\_\+partition()}}.
+
+\Hypertarget{structxpn__partition_ad8fb5db81c08920ff3580c5b4ea8a5d6}\label{structxpn__partition_ad8fb5db81c08920ff3580c5b4ea8a5d6} 
+\index{xpn\_partition@{xpn\_partition}!meta\_nserv@{meta\_nserv}}
+\index{meta\_nserv@{meta\_nserv}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{meta\_nserv}{meta\_nserv}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::meta\+\_\+nserv}
+
+
+
+Number of metadata\+\_\+server. 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00088}{88}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00053}{xpn\+\_\+destroy\+\_\+servers()}}, \mbox{\hyperlink{xpn__policy__open_8c_source_l00209}{Xpn\+Create\+Metadata()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00213}{Xpn\+Get\+Info\+Partition()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00379}{Xpn\+Get\+Num\+Servers\+Partition()}}, and \mbox{\hyperlink{xpn__policy__open_8c_source_l00103}{Xpn\+Get\+Servers()}}.
+
+\Hypertarget{structxpn__partition_ab00ffd669fb0702e6caaf23df8f340c9}\label{structxpn__partition_ab00ffd669fb0702e6caaf23df8f340c9} 
+\index{xpn\_partition@{xpn\_partition}!meta\_serv@{meta\_serv}}
+\index{meta\_serv@{meta\_serv}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{meta\_serv}{meta\_serv}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::meta\+\_\+serv}
+
+
+
+List of metadata servers in the partition. 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00089}{89}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00053}{xpn\+\_\+destroy\+\_\+servers()}}, and \mbox{\hyperlink{xpn__policy__open_8c_source_l00103}{Xpn\+Get\+Servers()}}.
+
+\Hypertarget{structxpn__partition_a9c36d86532765caef377aba9d20234fd}\label{structxpn__partition_a9c36d86532765caef377aba9d20234fd} 
+\index{xpn\_partition@{xpn\_partition}!name@{name}}
+\index{name@{name}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::name}
+
+
+
+Name of partition. 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00079}{79}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__policy__init_8c_source_l00213}{Xpn\+Get\+Info\+Partition()}}, and \mbox{\hyperlink{xpn__policy__init_8c_source_l00599}{Xpn\+Show\+Partition\+Table()}}.
+
+\Hypertarget{structxpn__partition_a4c9cb14986554358c8444db6f0bb19b1}\label{structxpn__partition_a4c9cb14986554358c8444db6f0bb19b1} 
+\index{xpn\_partition@{xpn\_partition}!size\_threads@{size\_threads}}
+\index{size\_threads@{size\_threads}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{size\_threads}{size\_threads}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::size\+\_\+threads}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00081}{81}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__policy__init_8c_source_l00213}{Xpn\+Get\+Info\+Partition()}}, and \mbox{\hyperlink{xpn__policy__open_8c_source_l00041}{Xpn\+Get\+Size\+Threads()}}.
+
+\Hypertarget{structxpn__partition_a82f02195a75c5b8eaea78fd700a5c4c3}\label{structxpn__partition_a82f02195a75c5b8eaea78fd700a5c4c3} 
+\index{xpn\_partition@{xpn\_partition}!type@{type}}
+\index{type@{type}!xpn\_partition@{xpn\_partition}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily xpn\+\_\+partition\+::type}
+
+
+
+Type of file \+:NORMAL, RAID5,.... 
+
+
+
+Definition at line \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00078}{78}} of file \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source}{xpn/xpn\+\_\+simple/xpn.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__policy__open_8c_source_l00209}{Xpn\+Create\+Metadata()}}, and \mbox{\hyperlink{xpn__policy__init_8c_source_l00213}{Xpn\+Get\+Info\+Partition()}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h}{xpn/xpn\+\_\+simple/xpn.\+h}}\end{DoxyCompactItemize}

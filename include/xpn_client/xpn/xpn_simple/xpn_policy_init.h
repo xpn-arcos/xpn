@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file xpn_policy_init.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _XPN_POLICY_INIT_H
 #define _XPN_POLICY_INIT_H
 
@@ -25,6 +36,9 @@
 #include "mxml.h"
 #endif
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn_err.h"
 #include "xpn.h"
 #include "xpn_init.h"
@@ -118,15 +132,108 @@ extern "C"
 #define XPN_CONF_DEFAULT "/etc/xpn/xpn.conf"
 #endif
 
+	/************************************************
+	 *  ... Functions
+	 ***********************************************/
+
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @par Parameters
+	 *    None.
+	 * @return 'TODO'.
+	 */
 	struct conf_connect_st *XpnPartitionOpen(void);
+
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param fconf 'TODO'.
+	 * @par Returns
+	 *    Nothing.
+	 */
 	void XpnPartitionClose(struct conf_connect_st *fconf);
+
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param fconf 'TODO'.
+	 * @param name 'TODO'.
+	 * @return 'TODO'.
+	 */
 	int XpnGetNextPartition(struct conf_connect_st *fconf, char *name);
+
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param fconf 'TODO'.
+	 * @param name 'TODO'.
+	 * @return 'TODO'.
+	 */
 	int XpnGetIdPartition(struct conf_connect_st *fconf, char *name);
+
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param fconf 'TODO'.
+	 * @param part 'TODO'.
+	 * @return 'TODO'.
+	 */
 	int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *part);
+
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param fconf 'TODO'.
+	 * @param part 'TODO'.
+	 * @param type 'TODO'.
+	 * @return 'TODO'.
+	 */
 	int XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partition *part, int type);
+
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param pd 'TODO'.
+	 * @return 'TODO'.
+	 */
 	struct xpn_partition *XpnSearchPart(int pd);
 
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param fconf 'TODO'.
+	 * @param part 'TODO'.
+	 * @param serv 'TODO'.
+	 * @param type 'TODO'.
+	 * @return 'TODO'.
+	 */
 	int XpnGetServer(struct conf_connect_st *fconf, struct xpn_partition *part, struct nfi_server *serv, int type);
+
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param path 'TODO'.
+	 * @return 'TODO'.
+	 */
 	int XpnGetPartition(char *path);
 
 #ifdef __cplusplus

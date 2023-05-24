@@ -1,0 +1,124 @@
+\doxysection{xpn\+\_\+ls.\+c}
+\hypertarget{xpn__ls_8c_source}{}\label{xpn__ls_8c_source}\index{xpn\_ls.c@{xpn\_ls.c}}
+\mbox{\hyperlink{xpn__ls_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2020-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00021}00021\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00022}00022\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00023}00023\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00024}00024\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00025}00025\ \textcolor{preprocessor}{\#include\ <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00026}00026\ \textcolor{preprocessor}{\#include\ <sys/types.h>}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00027}00027\ \textcolor{preprocessor}{\#include\ <dirent.h>}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00028}00028\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00029}00029\ \textcolor{preprocessor}{\#include\ <sys/stat.h>}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00030}00030\ \textcolor{preprocessor}{\#include\ "{}mpi.h"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00032}00032\ \textcolor{comment}{/*\ ...\ Functions\ /\ Funciones\ .........................................\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00034}\mbox{\hyperlink{xpn__ls_8c_a1841fd0ec49e7fe93b4add1f1d4ee11c}{00034}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__ls_8c_a1841fd0ec49e7fe93b4add1f1d4ee11c}{list}}(\textcolor{keywordtype}{char}\ *dir\_name,\ FILE\ *fd)}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00035}00035\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00036}00036\ \ \ \textcolor{keywordtype}{int}\ ret;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00037}00037\ \ \ DIR\ *dir\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00038}00038\ \ \ \textcolor{keyword}{struct\ }stat\ stat\_buf;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00039}00039\ \ \ \textcolor{keywordtype}{char}\ path[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00041}00041\ \ \ dir\ =\ \mbox{\hyperlink{xpn__bypass_8c_ae27c7f260a652b74c43296993d14ef0b}{opendir}}(dir\_name);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00042}00042\ \ \ \textcolor{keywordflow}{if}\ (dir\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00043}00043\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00044}00044\ \ \ \ \ perror(\textcolor{stringliteral}{"{}opendir:"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00045}00045\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00046}00046\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00048}00048\ \ \ \textcolor{keyword}{struct\ }dirent\ *entry;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00049}00049\ \ \ entry\ =\ \mbox{\hyperlink{xpn__bypass_8c_a824e3b8c5995631b373ddb65cb674318}{readdir}}(dir);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00051}00051\ \ \ \textcolor{keywordflow}{while}\ (entry\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00052}00052\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{if}\ (!strcmp(entry-\/>d\_name,\ \textcolor{stringliteral}{"{}."{}}))}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00054}00054\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00055}00055\ \ \ \ \ \ \ entry\ =\ \mbox{\hyperlink{xpn__bypass_8c_a824e3b8c5995631b373ddb65cb674318}{readdir}}(dir);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00056}00056\ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00057}00057\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00059}00059\ \ \ \ \ \textcolor{keywordflow}{if}\ (!strcmp(entry-\/>d\_name,\ \textcolor{stringliteral}{"{}.."{}}))}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00060}00060\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00061}00061\ \ \ \ \ \ \ entry\ =\ \mbox{\hyperlink{xpn__bypass_8c_a824e3b8c5995631b373ddb65cb674318}{readdir}}(dir);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00062}00062\ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00063}00063\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00065}00065\ \ \ \ \ sprintf(path,\ \textcolor{stringliteral}{"{}\%s/\%s"{}},\ dir\_name,\ entry-\/>d\_name);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00066}00066\ \ \ \ \ fprintf(fd,\ \textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}},\ path);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00068}00068\ \ \ \ \ ret\ =\ stat(path,\ \&stat\_buf);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00069}00069\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00070}00070\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00071}00071\ \ \ \ \ \ \ perror(\textcolor{stringliteral}{"{}stat:\ "{}});}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00072}00072\ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}},\ path);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00073}00073\ \ \ \ \ \ \ entry\ =\ \mbox{\hyperlink{xpn__bypass_8c_a824e3b8c5995631b373ddb65cb674318}{readdir}}(dir);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00074}00074\ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00075}00075\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00077}00077\ \ \ \ \ \textcolor{keywordflow}{if}\ (S\_ISDIR(stat\_buf.st\_mode))}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00078}00078\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00079}00079\ \ \ \ \ \ \ \mbox{\hyperlink{xpn__ls_8c_a1841fd0ec49e7fe93b4add1f1d4ee11c}{list}}(path,\ fd);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00080}00080\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00082}00082\ \ \ \ \ entry\ =\ \mbox{\hyperlink{xpn__bypass_8c_a824e3b8c5995631b373ddb65cb674318}{readdir}}(dir);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00083}00083\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00085}00085\ \ \ \mbox{\hyperlink{xpn__bypass_8c_aaeac2b41e8c2c3a5f91c9bd511a8c0a6}{closedir}}(dir);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00087}00087\ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00088}00088\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00090}\mbox{\hyperlink{xpn__ls_8c_a0ddf1224851353fc92bfbff6f499fa97}{00090}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__ls_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}\ *argv[])}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00091}00091\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00092}00092\ \ \ FILE\ *fd;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00094}00094\ \ \ \textcolor{keywordflow}{if}\ (argc\ <\ 3)}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00095}00095\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00096}00096\ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ too\ few\ arguments.\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00097}00097\ \ \ \ \ printf(\textcolor{stringliteral}{"{}Usage:\ \%s\ <directory\ path>\ <output\_file>\(\backslash\)n"{}},\ argv[0]);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00098}00098\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00099}00099\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00101}00101\ \ \ \mbox{\hyperlink{xpn__bypass_8c_a85fc482f00c52ec6e5f2503b3b480c56}{MPI\_Init}}(\&argc,\ \&argv);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00103}00103\ \ \ fd\ =\ fopen(argv[2],\ \textcolor{stringliteral}{"{}w"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00104}00104\ \ \ \textcolor{keywordflow}{if}\ (fd\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00105}00105\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00106}00106\ \ \ \ \ perror(\textcolor{stringliteral}{"{}fopen:\ "{}});}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00107}00107\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00108}00108\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00110}00110\ \ \ \mbox{\hyperlink{xpn__ls_8c_a1841fd0ec49e7fe93b4add1f1d4ee11c}{list}}(argv[1],\ fd);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00112}00112\ \ \ MPI\_Barrier(MPI\_COMM\_WORLD);}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00113}00113\ \ \ \mbox{\hyperlink{xpn__bypass_8c_a91a0cf5613b31a183a5453446191f1df}{MPI\_Finalize}}();}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00115}00115\ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00116}00116\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{xpn__ls_8c_source_l00118}00118\ \textcolor{comment}{/*\ ...................................................................\ */}}
+
+\end{DoxyCode}

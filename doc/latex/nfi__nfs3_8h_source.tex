@@ -1,0 +1,89 @@
+\doxysection{nfi\+\_\+nfs3.\+h}
+\hypertarget{nfi__nfs3_8h_source}{}\label{nfi__nfs3_8h_source}\index{nfi\_nfs3.h@{nfi\_nfs3.h}}
+\mbox{\hyperlink{nfi__nfs3_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ nfi\_nfs3.h}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_NFI\_NFS3\_H}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_NFI\_NFS3\_H}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00035}00035\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00036}00036\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00037}00037\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00038}00038\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{all__system_8h}{all\_system.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00039}00039\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{path__misc_8h}{base/path\_misc.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00040}00040\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi_8h}{nfi/nfi.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00041}00041\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfs3_8h}{nfi/nfi\_nfs3/nfs3.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00042}00042\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi__nfs3__err_8h}{nfi/nfi\_nfs3/nfi\_nfs3\_err.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00044}\mbox{\hyperlink{structnfi__nfs3__server}{00044}}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs3__server}{nfi\_nfs3\_server}}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00045}00045\ \{}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00046}\mbox{\hyperlink{structnfi__nfs3__server_a67c52a81c8b51321badbb8df0f165b45}{00046}}\ \ \ \ \ \ \ \ \ CLIENT\ *\mbox{\hyperlink{structnfi__nfs3__server_a67c52a81c8b51321badbb8df0f165b45}{cl}};}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00047}\mbox{\hyperlink{structnfi__nfs3__server_a28597032b26dd773e6ec19b8de61fefc}{00047}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structfhandle3}{fhandle3}}\ \mbox{\hyperlink{structnfi__nfs3__server_a28597032b26dd773e6ec19b8de61fefc}{fh}};}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00048}00048\ \};}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00050}\mbox{\hyperlink{structnfi__nfs3__fhandle}{00050}}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs3__fhandle}{nfi\_nfs3\_fhandle}}}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00051}00051\ \{}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00052}\mbox{\hyperlink{structnfi__nfs3__fhandle_ad0908bb4c8359e9b264dd0f4009c71a7}{00052}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structnfi__nfs3__fhandle_ad0908bb4c8359e9b264dd0f4009c71a7}{eofdir}};}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00053}\mbox{\hyperlink{structnfi__nfs3__fhandle_acb6d1b7344566c7a59a1e51c2035eb55}{00053}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs3_8h_ac293eae149775f61f755fb867a1516ea}{cookieverf3}}\ \mbox{\hyperlink{structnfi__nfs3__fhandle_acb6d1b7344566c7a59a1e51c2035eb55}{cookie}};}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00054}\mbox{\hyperlink{structnfi__nfs3__fhandle_a685fc49523d1b30199dd71f925ae4726}{00054}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structfhandle3}{fhandle3}}\ \mbox{\hyperlink{structnfi__nfs3__fhandle_a685fc49523d1b30199dd71f925ae4726}{fh}};}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00055}00055\ \};}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00057}00057\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{nfi__nfs3_8h_a20fb8786d987183edbccf9eadab469b2}{NFItoNFS3attr}}(\mbox{\hyperlink{structfattr3}{fattr3}}\ *nfs\_att,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *nfi\_att);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00058}00058\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{nfi__nfs3_8h_ae31d9f9a5f42ec79fa84ff579370d1a8}{NFS3toNFIattr}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *nfi\_att,\ \mbox{\hyperlink{structfattr3}{fattr3}}\ *nfs\_att);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00059}\mbox{\hyperlink{nfi__nfs3_8h_a0e73e9142eeda2a38fc3a36fc28b7648}{00059}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{nfi__nfs3_8h_a0e73e9142eeda2a38fc3a36fc28b7648}{NFS3toNFIInfo}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__info}{nfi\_info}}\ *nfi\_inf,\ \mbox{\hyperlink{structfsinfo3resok}{fsinfo3resok}}\ *nfs\_inf);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00061}\mbox{\hyperlink{nfi__nfs3_8h_a2234dc7b4b7cb5cf0646b4e6a5d8ca41}{00061}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a2234dc7b4b7cb5cf0646b4e6a5d8ca41}{nfi\_nfs3\_init}}(\textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr__server}{nfi\_attr\_server}}\ *attr);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00062}00062\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a5542f3360aa7ae303975022fd2487e43}{nfi\_nfs3\_destroy}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00064}00064\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a73350caf046999575b3ee5455cffc138}{nfi\_nfs3\_reconnect}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00065}00065\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_aa2b09b89e7b763238ecb82303f287cbe}{nfi\_nfs3\_disconnect}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00067}00067\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_aee93d40968d8789b6dd33e5557ee3785}{nfi\_nfs3\_getattr}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00068}00068\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a9b60daf4daae95badef13b816f695f3a}{nfi\_nfs3\_setattr}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00069}00069\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a256a01047d0339eeebddf1effd0cea4f}{nfi\_nfs3\_open}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fho);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00070}00070\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a117bb5a4cc0b2c82e14cae374c837308}{nfi\_nfs3\_close}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00071}00071\ ssize\_t\ \mbox{\hyperlink{nfi__nfs3_8h_a04dcd0ec8b634bb2de0c209178902cd7}{nfi\_nfs3\_read}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh,\ \textcolor{keywordtype}{void}\ *buffer,\ off\_t\ offset,\ \textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00072}00072\ ssize\_t\ \mbox{\hyperlink{nfi__nfs3_8h_af4354179bfc236b5df7d715de197c2d8}{nfi\_nfs3\_write}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh,\ \textcolor{keywordtype}{void}\ *buffer,\ off\_t\ offset,\ \textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00073}00073\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_ac0d57c2e5d3afe8c19a79bb1c0c3e8e1}{nfi\_nfs3\_create}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00074}00074\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a260038e96e4bf582e4077bc98d954126}{nfi\_nfs3\_remove}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00075}\mbox{\hyperlink{nfi__nfs3_8h_ae6c9203ac310ac51ad7defafaa595b05}{00075}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_ae6c9203ac310ac51ad7defafaa595b05}{nfi\_nfs3\_rename}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *old\_url,\ \textcolor{keywordtype}{char}\ *new\_url);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00076}00076\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_aaa9c3b9433759889af6b83a69aa51006}{nfi\_nfs3\_mkdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00077}00077\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a69680706e5a521c3f71377d5bcc79924}{nfi\_nfs3\_rmdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00078}00078\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a53365d961aaf134c90d094dabcb0184c}{nfi\_nfs3\_opendir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fho);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00079}\mbox{\hyperlink{nfi__nfs3_8h_ad1f817ff57efc201af6a5d949e928a43}{00079}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_ad1f817ff57efc201af6a5d949e928a43}{nfi\_nfs3\_readdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fhd,\ \textcolor{keywordtype}{char}\ *entry,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *type);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00080}00080\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_aa7b5ea7c9edc8fb9f30a40804b64411a}{nfi\_nfs3\_closedir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00081}00081\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs3_8h_a5744af62ae5c305f2cf140d8e8301175}{nfi\_nfs3\_statfs}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__info}{nfi\_info}}\ *inf);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{nfi__nfs3_8h_source_l00083}00083\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

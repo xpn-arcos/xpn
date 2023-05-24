@@ -1,0 +1,515 @@
+\doxysection{tcp\+\_\+server\+\_\+ops.\+h File Reference}
+\hypertarget{tcp__server_2tcp__server__ops_8h}{}\label{tcp__server_2tcp__server__ops_8h}\index{tcp\_server\_ops.h@{tcp\_server\_ops.h}}
+
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include $<$libgen.\+h$>$}\newline
+{\ttfamily \#include \"{}all\+\_\+system.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/filesystem.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/urlstr.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/utils.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/workers.\+h\"{}}\newline
+{\ttfamily \#include \"{}tcp\+\_\+server\+\_\+ops.\+h\"{}}\newline
+{\ttfamily \#include \"{}tcp\+\_\+server\+\_\+comm.\+h\"{}}\newline
+{\ttfamily \#include \"{}tcp\+\_\+server\+\_\+d2xpn.\+h\"{}}\newline
+{\ttfamily \#include \"{}tcp\+\_\+server\+\_\+params.\+h\"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structst__tcp__server__open}{st\+\_\+tcp\+\_\+server\+\_\+open}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__open__req}{st\+\_\+tcp\+\_\+server\+\_\+open\+\_\+req}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__creat}{st\+\_\+tcp\+\_\+server\+\_\+creat}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__read}{st\+\_\+tcp\+\_\+server\+\_\+read}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__read__req}{st\+\_\+tcp\+\_\+server\+\_\+read\+\_\+req}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__write}{st\+\_\+tcp\+\_\+server\+\_\+write}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__write__req}{st\+\_\+tcp\+\_\+server\+\_\+write\+\_\+req}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__close}{st\+\_\+tcp\+\_\+server\+\_\+close}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__rename}{st\+\_\+tcp\+\_\+server\+\_\+rename}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__rm}{st\+\_\+tcp\+\_\+server\+\_\+rm}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__getattr}{st\+\_\+tcp\+\_\+server\+\_\+getattr}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__setattr}{st\+\_\+tcp\+\_\+server\+\_\+setattr}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__attr__req}{st\+\_\+tcp\+\_\+server\+\_\+attr\+\_\+req}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__mkdir}{st\+\_\+tcp\+\_\+server\+\_\+mkdir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__opendir}{st\+\_\+tcp\+\_\+server\+\_\+opendir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__readdir}{st\+\_\+tcp\+\_\+server\+\_\+readdir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__direntry}{st\+\_\+tcp\+\_\+server\+\_\+direntry}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__closedir}{st\+\_\+tcp\+\_\+server\+\_\+closedir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__rmdir}{st\+\_\+tcp\+\_\+server\+\_\+rmdir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__flush}{st\+\_\+tcp\+\_\+server\+\_\+flush}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__preload}{st\+\_\+tcp\+\_\+server\+\_\+preload}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__end}{st\+\_\+tcp\+\_\+server\+\_\+end}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__tcp__server__msg}{st\+\_\+tcp\+\_\+server\+\_\+msg}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a389397bc321b35713a85016612a44eac}{TCP\+\_\+\+SERVER\+\_\+\+ID}}~32
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a95449e42e1b807586f5be38b3658c662}{TCP\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WS}}~0
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a991eeed9ea24e15f78e0ccf2d1f44b54}{TCP\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WS}}~1
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a20065ba1489334f4035e49b88358a795}{TCP\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WS}}~2
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_aa4dc0dfb230cdf5915ccae01fd25d30f}{TCP\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WS}}~3
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_aee682dcb011fe86cadbb54c6400fb6e9}{TCP\+\_\+\+SERVER\+\_\+\+CLOSE\+\_\+\+FILE\+\_\+\+WS}}~4
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a384f9483d1ea382853d14f44d0a91c23}{TCP\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE}}~5
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a3553a05af4bf939956e878707c65a7d6}{TCP\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE\+\_\+\+ASYNC}}~6
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a97947a0bacd10e529d10dfc408ea3d7c}{TCP\+\_\+\+SERVER\+\_\+\+RENAME\+\_\+\+FILE}}~7
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_ab6f79e6dd8012b42dc6a5a865ca4e502}{TCP\+\_\+\+SERVER\+\_\+\+GETATTR\+\_\+\+FILE}}~8
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_ae75cdaf76e4d47a966504410bd8dc06b}{TCP\+\_\+\+SERVER\+\_\+\+SETATTR\+\_\+\+FILE}}~9
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a75a735b4a5a237b3b9ac96a0d23758eb}{TCP\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WOS}}~100
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a632104261929d49323b24f61f29978b0}{TCP\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WOS}}~101
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a689372ad1c76ef5b5cfc56c4ae6b7d28}{TCP\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WOS}}~102
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_ae44a71212063495d22cebbf896b36113}{TCP\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WOS}}~103
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a47b1a2ea6bb5ea2900a7ad0c19da8c5c}{TCP\+\_\+\+SERVER\+\_\+\+MKDIR\+\_\+\+DIR}}~20
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_ac4e41360ae86a06192eae94066f35b7a}{TCP\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR}}~21
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a67548b9f24f83b363df980b7945974e0}{TCP\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR\+\_\+\+ASYNC}}~22
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a5664a234966cf123eacc16ce06cd2f1b}{TCP\+\_\+\+SERVER\+\_\+\+OPENDIR\+\_\+\+DIR}}~23
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_aca3c03b483164496d27a280d5db32b6b}{TCP\+\_\+\+SERVER\+\_\+\+READDIR\+\_\+\+DIR}}~24
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a47ecece93abeff6d705ac6271499fda7}{TCP\+\_\+\+SERVER\+\_\+\+CLOSEDIR\+\_\+\+DIR}}~25
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a9072e7f40d61e36502fa9b63ba4f8720}{TCP\+\_\+\+SERVER\+\_\+\+FLUSH\+\_\+\+FILE}}~40
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_abb69d836612d91034b55eb0b9c3534da}{TCP\+\_\+\+SERVER\+\_\+\+PRELOAD\+\_\+\+FILE}}~41
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a393b7fd3a86252baf8a510e364c74266}{TCP\+\_\+\+SERVER\+\_\+\+STATFS\+\_\+\+DIR}}~60
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a5e4e32e2b1938add938f1d0f7bbaf8e8}{TCP\+\_\+\+SERVER\+\_\+\+GETNODENAME}}~61
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_aa6c09ca670d30bca0649ebde42022f43}{TCP\+\_\+\+SERVER\+\_\+\+GETID}}~62
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_af83b60c78b5694d18141a2eee97e778f}{TCP\+\_\+\+SERVER\+\_\+\+FINALIZE}}~80
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a66d66c46f203a234e32c577624015a48}{TCP\+\_\+\+SERVER\+\_\+\+DISCONNECT}}~81
+\item 
+\#define \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_a1461270bdd9cc1d5451ff106e7a3ff83}{TCP\+\_\+\+SERVER\+\_\+\+END}}~-\/1
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_adf5cb2e432f7c0b9caeb563d064749c9}{tcp\+\_\+server\+\_\+op2string}} (int op\+\_\+code)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_aa00299e70e7823dc4ca601860b33a420}{tcp\+\_\+server\+\_\+do\+\_\+operation}} (struct \mbox{\hyperlink{structst__th}{st\+\_\+th}} \texorpdfstring{$\ast$}{*}th, int \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{mpi__server_8c_a7c82fbc4cc51abc20d109b537e1bd357}{the\+\_\+end}})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file to \textquotesingle{}TODO\textquotesingle{}. 
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000088}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{tcp__server_2tcp__server__ops_8h_aee682dcb011fe86cadbb54c6400fb6e9}\label{tcp__server_2tcp__server__ops_8h_aee682dcb011fe86cadbb54c6400fb6e9} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_CLOSE\_FILE\_WS@{TCP\_SERVER\_CLOSE\_FILE\_WS}}
+\index{TCP\_SERVER\_CLOSE\_FILE\_WS@{TCP\_SERVER\_CLOSE\_FILE\_WS}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_CLOSE\_FILE\_WS}{TCP\_SERVER\_CLOSE\_FILE\_WS}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+CLOSE\+\_\+\+FILE\+\_\+\+WS~4}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00068}{68}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a47ecece93abeff6d705ac6271499fda7}\label{tcp__server_2tcp__server__ops_8h_a47ecece93abeff6d705ac6271499fda7} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_CLOSEDIR\_DIR@{TCP\_SERVER\_CLOSEDIR\_DIR}}
+\index{TCP\_SERVER\_CLOSEDIR\_DIR@{TCP\_SERVER\_CLOSEDIR\_DIR}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_CLOSEDIR\_DIR}{TCP\_SERVER\_CLOSEDIR\_DIR}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+CLOSEDIR\+\_\+\+DIR~25}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00091}{91}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a632104261929d49323b24f61f29978b0}\label{tcp__server_2tcp__server__ops_8h_a632104261929d49323b24f61f29978b0} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_CREAT\_FILE\_WOS@{TCP\_SERVER\_CREAT\_FILE\_WOS}}
+\index{TCP\_SERVER\_CREAT\_FILE\_WOS@{TCP\_SERVER\_CREAT\_FILE\_WOS}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_CREAT\_FILE\_WOS}{TCP\_SERVER\_CREAT\_FILE\_WOS}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WOS~101}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00079}{79}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a991eeed9ea24e15f78e0ccf2d1f44b54}\label{tcp__server_2tcp__server__ops_8h_a991eeed9ea24e15f78e0ccf2d1f44b54} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_CREAT\_FILE\_WS@{TCP\_SERVER\_CREAT\_FILE\_WS}}
+\index{TCP\_SERVER\_CREAT\_FILE\_WS@{TCP\_SERVER\_CREAT\_FILE\_WS}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_CREAT\_FILE\_WS}{TCP\_SERVER\_CREAT\_FILE\_WS}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WS~1}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00065}{65}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a66d66c46f203a234e32c577624015a48}\label{tcp__server_2tcp__server__ops_8h_a66d66c46f203a234e32c577624015a48} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_DISCONNECT@{TCP\_SERVER\_DISCONNECT}}
+\index{TCP\_SERVER\_DISCONNECT@{TCP\_SERVER\_DISCONNECT}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_DISCONNECT}{TCP\_SERVER\_DISCONNECT}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+DISCONNECT~81}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00110}{110}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a1461270bdd9cc1d5451ff106e7a3ff83}\label{tcp__server_2tcp__server__ops_8h_a1461270bdd9cc1d5451ff106e7a3ff83} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_END@{TCP\_SERVER\_END}}
+\index{TCP\_SERVER\_END@{TCP\_SERVER\_END}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_END}{TCP\_SERVER\_END}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+END~-\/1}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00111}{111}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_af83b60c78b5694d18141a2eee97e778f}\label{tcp__server_2tcp__server__ops_8h_af83b60c78b5694d18141a2eee97e778f} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_FINALIZE@{TCP\_SERVER\_FINALIZE}}
+\index{TCP\_SERVER\_FINALIZE@{TCP\_SERVER\_FINALIZE}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_FINALIZE}{TCP\_SERVER\_FINALIZE}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+FINALIZE~80}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00109}{109}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a9072e7f40d61e36502fa9b63ba4f8720}\label{tcp__server_2tcp__server__ops_8h_a9072e7f40d61e36502fa9b63ba4f8720} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_FLUSH\_FILE@{TCP\_SERVER\_FLUSH\_FILE}}
+\index{TCP\_SERVER\_FLUSH\_FILE@{TCP\_SERVER\_FLUSH\_FILE}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_FLUSH\_FILE}{TCP\_SERVER\_FLUSH\_FILE}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+FLUSH\+\_\+\+FILE~40}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00096}{96}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_ab6f79e6dd8012b42dc6a5a865ca4e502}\label{tcp__server_2tcp__server__ops_8h_ab6f79e6dd8012b42dc6a5a865ca4e502} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_GETATTR\_FILE@{TCP\_SERVER\_GETATTR\_FILE}}
+\index{TCP\_SERVER\_GETATTR\_FILE@{TCP\_SERVER\_GETATTR\_FILE}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_GETATTR\_FILE}{TCP\_SERVER\_GETATTR\_FILE}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+GETATTR\+\_\+\+FILE~8}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00072}{72}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_aa6c09ca670d30bca0649ebde42022f43}\label{tcp__server_2tcp__server__ops_8h_aa6c09ca670d30bca0649ebde42022f43} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_GETID@{TCP\_SERVER\_GETID}}
+\index{TCP\_SERVER\_GETID@{TCP\_SERVER\_GETID}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_GETID}{TCP\_SERVER\_GETID}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+GETID~62}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00104}{104}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a5e4e32e2b1938add938f1d0f7bbaf8e8}\label{tcp__server_2tcp__server__ops_8h_a5e4e32e2b1938add938f1d0f7bbaf8e8} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_GETNODENAME@{TCP\_SERVER\_GETNODENAME}}
+\index{TCP\_SERVER\_GETNODENAME@{TCP\_SERVER\_GETNODENAME}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_GETNODENAME}{TCP\_SERVER\_GETNODENAME}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+GETNODENAME~61}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00103}{103}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a389397bc321b35713a85016612a44eac}\label{tcp__server_2tcp__server__ops_8h_a389397bc321b35713a85016612a44eac} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_ID@{TCP\_SERVER\_ID}}
+\index{TCP\_SERVER\_ID@{TCP\_SERVER\_ID}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_ID}{TCP\_SERVER\_ID}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+ID~32}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00054}{54}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a47b1a2ea6bb5ea2900a7ad0c19da8c5c}\label{tcp__server_2tcp__server__ops_8h_a47b1a2ea6bb5ea2900a7ad0c19da8c5c} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_MKDIR\_DIR@{TCP\_SERVER\_MKDIR\_DIR}}
+\index{TCP\_SERVER\_MKDIR\_DIR@{TCP\_SERVER\_MKDIR\_DIR}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_MKDIR\_DIR}{TCP\_SERVER\_MKDIR\_DIR}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+MKDIR\+\_\+\+DIR~20}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00086}{86}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a75a735b4a5a237b3b9ac96a0d23758eb}\label{tcp__server_2tcp__server__ops_8h_a75a735b4a5a237b3b9ac96a0d23758eb} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_OPEN\_FILE\_WOS@{TCP\_SERVER\_OPEN\_FILE\_WOS}}
+\index{TCP\_SERVER\_OPEN\_FILE\_WOS@{TCP\_SERVER\_OPEN\_FILE\_WOS}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_OPEN\_FILE\_WOS}{TCP\_SERVER\_OPEN\_FILE\_WOS}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WOS~100}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00078}{78}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a95449e42e1b807586f5be38b3658c662}\label{tcp__server_2tcp__server__ops_8h_a95449e42e1b807586f5be38b3658c662} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_OPEN\_FILE\_WS@{TCP\_SERVER\_OPEN\_FILE\_WS}}
+\index{TCP\_SERVER\_OPEN\_FILE\_WS@{TCP\_SERVER\_OPEN\_FILE\_WS}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_OPEN\_FILE\_WS}{TCP\_SERVER\_OPEN\_FILE\_WS}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WS~0}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00064}{64}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a5664a234966cf123eacc16ce06cd2f1b}\label{tcp__server_2tcp__server__ops_8h_a5664a234966cf123eacc16ce06cd2f1b} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_OPENDIR\_DIR@{TCP\_SERVER\_OPENDIR\_DIR}}
+\index{TCP\_SERVER\_OPENDIR\_DIR@{TCP\_SERVER\_OPENDIR\_DIR}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_OPENDIR\_DIR}{TCP\_SERVER\_OPENDIR\_DIR}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+OPENDIR\+\_\+\+DIR~23}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00089}{89}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_abb69d836612d91034b55eb0b9c3534da}\label{tcp__server_2tcp__server__ops_8h_abb69d836612d91034b55eb0b9c3534da} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_PRELOAD\_FILE@{TCP\_SERVER\_PRELOAD\_FILE}}
+\index{TCP\_SERVER\_PRELOAD\_FILE@{TCP\_SERVER\_PRELOAD\_FILE}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_PRELOAD\_FILE}{TCP\_SERVER\_PRELOAD\_FILE}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+PRELOAD\+\_\+\+FILE~41}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00097}{97}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a689372ad1c76ef5b5cfc56c4ae6b7d28}\label{tcp__server_2tcp__server__ops_8h_a689372ad1c76ef5b5cfc56c4ae6b7d28} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_READ\_FILE\_WOS@{TCP\_SERVER\_READ\_FILE\_WOS}}
+\index{TCP\_SERVER\_READ\_FILE\_WOS@{TCP\_SERVER\_READ\_FILE\_WOS}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_READ\_FILE\_WOS}{TCP\_SERVER\_READ\_FILE\_WOS}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WOS~102}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00080}{80}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a20065ba1489334f4035e49b88358a795}\label{tcp__server_2tcp__server__ops_8h_a20065ba1489334f4035e49b88358a795} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_READ\_FILE\_WS@{TCP\_SERVER\_READ\_FILE\_WS}}
+\index{TCP\_SERVER\_READ\_FILE\_WS@{TCP\_SERVER\_READ\_FILE\_WS}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_READ\_FILE\_WS}{TCP\_SERVER\_READ\_FILE\_WS}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WS~2}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00066}{66}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_aca3c03b483164496d27a280d5db32b6b}\label{tcp__server_2tcp__server__ops_8h_aca3c03b483164496d27a280d5db32b6b} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_READDIR\_DIR@{TCP\_SERVER\_READDIR\_DIR}}
+\index{TCP\_SERVER\_READDIR\_DIR@{TCP\_SERVER\_READDIR\_DIR}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_READDIR\_DIR}{TCP\_SERVER\_READDIR\_DIR}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+READDIR\+\_\+\+DIR~24}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00090}{90}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a97947a0bacd10e529d10dfc408ea3d7c}\label{tcp__server_2tcp__server__ops_8h_a97947a0bacd10e529d10dfc408ea3d7c} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_RENAME\_FILE@{TCP\_SERVER\_RENAME\_FILE}}
+\index{TCP\_SERVER\_RENAME\_FILE@{TCP\_SERVER\_RENAME\_FILE}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_RENAME\_FILE}{TCP\_SERVER\_RENAME\_FILE}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+RENAME\+\_\+\+FILE~7}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00071}{71}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a384f9483d1ea382853d14f44d0a91c23}\label{tcp__server_2tcp__server__ops_8h_a384f9483d1ea382853d14f44d0a91c23} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_RM\_FILE@{TCP\_SERVER\_RM\_FILE}}
+\index{TCP\_SERVER\_RM\_FILE@{TCP\_SERVER\_RM\_FILE}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_RM\_FILE}{TCP\_SERVER\_RM\_FILE}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE~5}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00069}{69}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a3553a05af4bf939956e878707c65a7d6}\label{tcp__server_2tcp__server__ops_8h_a3553a05af4bf939956e878707c65a7d6} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_RM\_FILE\_ASYNC@{TCP\_SERVER\_RM\_FILE\_ASYNC}}
+\index{TCP\_SERVER\_RM\_FILE\_ASYNC@{TCP\_SERVER\_RM\_FILE\_ASYNC}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_RM\_FILE\_ASYNC}{TCP\_SERVER\_RM\_FILE\_ASYNC}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE\+\_\+\+ASYNC~6}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00070}{70}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_ac4e41360ae86a06192eae94066f35b7a}\label{tcp__server_2tcp__server__ops_8h_ac4e41360ae86a06192eae94066f35b7a} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_RMDIR\_DIR@{TCP\_SERVER\_RMDIR\_DIR}}
+\index{TCP\_SERVER\_RMDIR\_DIR@{TCP\_SERVER\_RMDIR\_DIR}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_RMDIR\_DIR}{TCP\_SERVER\_RMDIR\_DIR}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR~21}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00087}{87}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a67548b9f24f83b363df980b7945974e0}\label{tcp__server_2tcp__server__ops_8h_a67548b9f24f83b363df980b7945974e0} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_RMDIR\_DIR\_ASYNC@{TCP\_SERVER\_RMDIR\_DIR\_ASYNC}}
+\index{TCP\_SERVER\_RMDIR\_DIR\_ASYNC@{TCP\_SERVER\_RMDIR\_DIR\_ASYNC}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_RMDIR\_DIR\_ASYNC}{TCP\_SERVER\_RMDIR\_DIR\_ASYNC}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR\+\_\+\+ASYNC~22}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00088}{88}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_ae75cdaf76e4d47a966504410bd8dc06b}\label{tcp__server_2tcp__server__ops_8h_ae75cdaf76e4d47a966504410bd8dc06b} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_SETATTR\_FILE@{TCP\_SERVER\_SETATTR\_FILE}}
+\index{TCP\_SERVER\_SETATTR\_FILE@{TCP\_SERVER\_SETATTR\_FILE}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_SETATTR\_FILE}{TCP\_SERVER\_SETATTR\_FILE}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+SETATTR\+\_\+\+FILE~9}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00073}{73}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_a393b7fd3a86252baf8a510e364c74266}\label{tcp__server_2tcp__server__ops_8h_a393b7fd3a86252baf8a510e364c74266} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_STATFS\_DIR@{TCP\_SERVER\_STATFS\_DIR}}
+\index{TCP\_SERVER\_STATFS\_DIR@{TCP\_SERVER\_STATFS\_DIR}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_STATFS\_DIR}{TCP\_SERVER\_STATFS\_DIR}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+STATFS\+\_\+\+DIR~60}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00102}{102}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_ae44a71212063495d22cebbf896b36113}\label{tcp__server_2tcp__server__ops_8h_ae44a71212063495d22cebbf896b36113} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_WRITE\_FILE\_WOS@{TCP\_SERVER\_WRITE\_FILE\_WOS}}
+\index{TCP\_SERVER\_WRITE\_FILE\_WOS@{TCP\_SERVER\_WRITE\_FILE\_WOS}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_WRITE\_FILE\_WOS}{TCP\_SERVER\_WRITE\_FILE\_WOS}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WOS~103}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00081}{81}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_aa4dc0dfb230cdf5915ccae01fd25d30f}\label{tcp__server_2tcp__server__ops_8h_aa4dc0dfb230cdf5915ccae01fd25d30f} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!TCP\_SERVER\_WRITE\_FILE\_WS@{TCP\_SERVER\_WRITE\_FILE\_WS}}
+\index{TCP\_SERVER\_WRITE\_FILE\_WS@{TCP\_SERVER\_WRITE\_FILE\_WS}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_WRITE\_FILE\_WS}{TCP\_SERVER\_WRITE\_FILE\_WS}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WS~3}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00067}{67}} of file \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source}{tcp\+\_\+server/tcp\+\_\+server\+\_\+ops.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{tcp__server_2tcp__server__ops_8h_aa00299e70e7823dc4ca601860b33a420}\label{tcp__server_2tcp__server__ops_8h_aa00299e70e7823dc4ca601860b33a420} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!tcp\_server\_do\_operation@{tcp\_server\_do\_operation}}
+\index{tcp\_server\_do\_operation@{tcp\_server\_do\_operation}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{tcp\_server\_do\_operation()}{tcp\_server\_do\_operation()}}
+{\footnotesize\ttfamily int tcp\+\_\+server\+\_\+do\+\_\+operation (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structst__th}{st\+\_\+th}} \texorpdfstring{$\ast$}{*}}]{th,  }\item[{int \texorpdfstring{$\ast$}{*}}]{the\+\_\+end }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em the\+\_\+end} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{tcp__server__ops_8c_source_l00152}{152}} of file \mbox{\hyperlink{tcp__server__ops_8c_source}{tcp\+\_\+server\+\_\+ops.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00431}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+close}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00439}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+closedir}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00430}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+creat}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00444}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+flush}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00441}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+getattr}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00436}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+mkdir}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00429}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+open}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00437}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+opendir}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00445}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+preload}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00432}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+read}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00438}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+readdir}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00435}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+rename}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00434}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+rm}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00440}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+rmdir}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00442}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+setattr}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00433}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::op\+\_\+write}}, \mbox{\hyperlink{workers__common_8h_source_l00056}{st\+\_\+th\+::params}}, \mbox{\hyperlink{workers__common_8h_source_l00063}{st\+\_\+th\+::sd}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00068}{TCP\+\_\+\+SERVER\+\_\+\+CLOSE\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00091}{TCP\+\_\+\+SERVER\+\_\+\+CLOSEDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__comm_8c_source_l00580}{tcp\+\_\+server\+\_\+comm\+\_\+read\+\_\+data()}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00079}{TCP\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00065}{TCP\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00110}{TCP\+\_\+\+SERVER\+\_\+\+DISCONNECT}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00109}{TCP\+\_\+\+SERVER\+\_\+\+FINALIZE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00096}{TCP\+\_\+\+SERVER\+\_\+\+FLUSH\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00072}{TCP\+\_\+\+SERVER\+\_\+\+GETATTR\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00103}{TCP\+\_\+\+SERVER\+\_\+\+GETNODENAME}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00086}{TCP\+\_\+\+SERVER\+\_\+\+MKDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00819}{tcp\+\_\+server\+\_\+op\+\_\+close\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01011}{tcp\+\_\+server\+\_\+op\+\_\+closedir()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00465}{tcp\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00419}{tcp\+\_\+server\+\_\+op\+\_\+creat\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01126}{tcp\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00907}{tcp\+\_\+server\+\_\+op\+\_\+getattr()}}, \mbox{\hyperlink{tcp__server__ops_8c_ac9026c2669d9643636bfdf1c8755c9a5}{tcp\+\_\+server\+\_\+op\+\_\+getnodename()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00949}{tcp\+\_\+server\+\_\+op\+\_\+mkdir()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00372}{tcp\+\_\+server\+\_\+op\+\_\+open\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00334}{tcp\+\_\+server\+\_\+op\+\_\+open\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00967}{tcp\+\_\+server\+\_\+op\+\_\+opendir()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01045}{tcp\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00590}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00519}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00985}{tcp\+\_\+server\+\_\+op\+\_\+readdir()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00884}{tcp\+\_\+server\+\_\+op\+\_\+rename()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00861}{tcp\+\_\+server\+\_\+op\+\_\+rm()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01026}{tcp\+\_\+server\+\_\+op\+\_\+rmdir()}}, \mbox{\hyperlink{tcp__server__ops_8c_abab76b822801ec14d4c8192f713ce6d8}{tcp\+\_\+server\+\_\+op\+\_\+setattr()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00741}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00678}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+ws()}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00078}{TCP\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00064}{TCP\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00089}{TCP\+\_\+\+SERVER\+\_\+\+OPENDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00097}{TCP\+\_\+\+SERVER\+\_\+\+PRELOAD\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00080}{TCP\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00066}{TCP\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00090}{TCP\+\_\+\+SERVER\+\_\+\+READDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00071}{TCP\+\_\+\+SERVER\+\_\+\+RENAME\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00069}{TCP\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00087}{TCP\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00073}{TCP\+\_\+\+SERVER\+\_\+\+SETATTR\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00081}{TCP\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00067}{TCP\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_8c_source_l00049}{the\+\_\+end}}, \mbox{\hyperlink{workers__common_8h_source_l00061}{st\+\_\+th\+::type\+\_\+op}}, and \mbox{\hyperlink{structst__tcp__server__msg_a9762d972c7fff76359a111373ff26503}{st\+\_\+tcp\+\_\+server\+\_\+msg\+::u\+\_\+st\+\_\+tcp\+\_\+server\+\_\+msg}}.
+
+
+
+Referenced by \mbox{\hyperlink{tcp__server_8c_source_l00065}{tcp\+\_\+server\+\_\+run()}}.
+
+\Hypertarget{tcp__server_2tcp__server__ops_8h_adf5cb2e432f7c0b9caeb563d064749c9}\label{tcp__server_2tcp__server__ops_8h_adf5cb2e432f7c0b9caeb563d064749c9} 
+\index{tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}!tcp\_server\_op2string@{tcp\_server\_op2string}}
+\index{tcp\_server\_op2string@{tcp\_server\_op2string}!tcp\_server/tcp\_server\_ops.h@{tcp\_server/tcp\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{tcp\_server\_op2string()}{tcp\_server\_op2string()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*} tcp\+\_\+server\+\_\+op2string (\begin{DoxyParamCaption}\item[{int}]{op\+\_\+code }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em op\+\_\+code} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{tcp__server__ops_8c_source_l00028}{28}} of file \mbox{\hyperlink{tcp__server__ops_8c_source}{tcp\+\_\+server\+\_\+ops.\+c}}.
+
+
+
+References \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00068}{TCP\+\_\+\+SERVER\+\_\+\+CLOSE\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00091}{TCP\+\_\+\+SERVER\+\_\+\+CLOSEDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00079}{TCP\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00065}{TCP\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00110}{TCP\+\_\+\+SERVER\+\_\+\+DISCONNECT}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00111}{TCP\+\_\+\+SERVER\+\_\+\+END}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00109}{TCP\+\_\+\+SERVER\+\_\+\+FINALIZE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00096}{TCP\+\_\+\+SERVER\+\_\+\+FLUSH\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00072}{TCP\+\_\+\+SERVER\+\_\+\+GETATTR\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00104}{TCP\+\_\+\+SERVER\+\_\+\+GETID}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00103}{TCP\+\_\+\+SERVER\+\_\+\+GETNODENAME}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00086}{TCP\+\_\+\+SERVER\+\_\+\+MKDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00078}{TCP\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00064}{TCP\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00089}{TCP\+\_\+\+SERVER\+\_\+\+OPENDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00097}{TCP\+\_\+\+SERVER\+\_\+\+PRELOAD\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00080}{TCP\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00066}{TCP\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00090}{TCP\+\_\+\+SERVER\+\_\+\+READDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00071}{TCP\+\_\+\+SERVER\+\_\+\+RENAME\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00069}{TCP\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00087}{TCP\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00073}{TCP\+\_\+\+SERVER\+\_\+\+SETATTR\+\_\+\+FILE}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00102}{TCP\+\_\+\+SERVER\+\_\+\+STATFS\+\_\+\+DIR}}, \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00081}{TCP\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WOS}}, and \mbox{\hyperlink{tcp__server_2tcp__server__ops_8h_source_l00067}{TCP\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WS}}.
+
+
+
+Referenced by \mbox{\hyperlink{tcp__server_8c_source_l00065}{tcp\+\_\+server\+\_\+run()}}.
+

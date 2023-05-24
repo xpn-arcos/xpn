@@ -1,0 +1,340 @@
+.TH "xpncp_th.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpncp_th.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <string\&.h>\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <ctype\&.h>\fP
+.br
+\fC#include <fcntl\&.h>\fP
+.br
+\fC#include <argp\&.h>\fP
+.br
+\fC#include 'xpn\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBwrite_args\fP"
+.br
+.ti -1c
+.RI "struct \fBbuffer_st\fP"
+.br
+.ti -1c
+.RI "struct \fBarguments\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBBAR_LENGTH\fP   50"
+.br
+.ti -1c
+.RI "#define \fBKB\fP   (1024)"
+.br
+.ti -1c
+.RI "#define \fBMB\fP   (\fBKB\fP * \fBKB\fP)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBprint_bar\fP ()"
+.br
+.ti -1c
+.RI "void * \fBprogression_bar\fP (__attribute__((unused)) void *arg)"
+.br
+.ti -1c
+.RI "void * \fBwrite_func\fP (void *func_args)"
+.br
+.ti -1c
+.RI "char * \fBhelp_filter\fP (int key, const char *text, __attribute__((__unused__)) void *input)"
+.br
+.ti -1c
+.RI "static error_t \fBparse_opt\fP (int key, char *arg, struct argp_state *state)"
+.br
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "struct stat \fBst\fP"
+.br
+.ti -1c
+.RI "struct timeval t_ini_transfer t_end_transfer \fBt_old_transfer\fP"
+.br
+.ti -1c
+.RI "double \fBtransfer_t\fP"
+.br
+.ti -1c
+.RI "double \fBtransfer_bw\fP"
+.br
+.ti -1c
+.RI "ssize_t \fBsum\fP"
+.br
+.ti -1c
+.RI "ssize_t \fBsum_old\fP"
+.br
+.ti -1c
+.RI "char \fBbar\fP [\fBBAR_LENGTH\fP+1]"
+.br
+.ti -1c
+.RI "int \fBbar_length\fP"
+.br
+.ti -1c
+.RI "int \fBsilent\fP = 0"
+.br
+.ti -1c
+.RI "int \fBvery_silent\fP = 0"
+.br
+.ti -1c
+.RI "int \fBdebug\fP = 0"
+.br
+.ti -1c
+.RI "struct \fBbuffer_st\fP ** \fBarray_bufs\fP = NULL"
+.br
+.ti -1c
+.RI "ssize_t \fBnext\fP = 0"
+.br
+.ti -1c
+.RI "ssize_t \fBlast\fP = 0"
+.br
+.ti -1c
+.RI "pthread_mutex_t \fBmutex\fP = PTHREAD_MUTEX_INITIALIZER"
+.br
+.ti -1c
+.RI "pthread_cond_t \fBcond\fP = PTHREAD_COND_INITIALIZER"
+.br
+.ti -1c
+.RI "pthread_mutex_t \fBxpn_mutex\fP = PTHREAD_MUTEX_INITIALIZER"
+.br
+.ti -1c
+.RI "const char * \fBargp_program_version\fP = 'xpncp_th 1\&.0'"
+.br
+.ti -1c
+.RI "const char * \fBargp_program_bug_address\fP = 'https://github\&.com/xpn\-arcos/xpn'"
+.br
+.ti -1c
+.RI "static char \fBdoc\fP [] = 'A \fBcopy\fP program for Expand partitions that uses threads'"
+.br
+.ti -1c
+.RI "static struct argp_option \fBoptions\fP []"
+.br
+.ti -1c
+.RI "static struct argp \fBargp\fP = {\fBoptions\fP, \fBparse_opt\fP, 0, \fBdoc\fP, 0, \fBhelp_filter\fP, 0}"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define BAR_LENGTH   50"
+
+.PP
+Definition at line \fB32\fP of file \fBxpncp_th\&.c\fP\&.
+.SS "#define KB   (1024)"
+
+.PP
+Definition at line \fB35\fP of file \fBxpncp_th\&.c\fP\&.
+.SS "#define MB   (\fBKB\fP * \fBKB\fP)"
+
+.PP
+Definition at line \fB39\fP of file \fBxpncp_th\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "char * help_filter (int key, const char * text, __attribute__((__unused__)) void * input)"
+
+.PP
+Definition at line \fB192\fP of file \fBxpncp_th\&.c\fP\&.
+.SS "int main (int argc, char * argv[])"
+
+.PP
+Definition at line \fB359\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBarray_bufs\fP, \fBbuf\fP, \fBarguments::buffer_size\fP, \fBclose()\fP, \fBcond\fP, \fBarguments::debug\fP, \fBdebug\fP, \fBarguments::dest\fP, \fBarguments::do_stat\fP, \fBexit()\fP, \fBwrite_args::fdd\fP, \fBKB\fP, \fBlast\fP, \fBMB\fP, \fBmutex\fP, \fBO_CREAT\fP, \fBO_NONBLOCK\fP, \fBO_RDONLY\fP, \fBO_TRUNC\fP, \fBO_WRONLY\fP, \fBopen()\fP, \fBwrite_args::out_transfer_t\fP, \fBprint_bar()\fP, \fBprogression_bar()\fP, \fBread()\fP, \fBarguments::silent\fP, \fBsilent\fP, \fBarguments::source\fP, \fBarguments::st\fP, \fBst\fP, \fBsum\fP, \fBtransfer_bw\fP, \fBtransfer_t\fP, \fBarguments::very_silent\fP, \fBvery_silent\fP, \fBwrite_func()\fP, \fBxpn_close()\fP, \fBxpn_destroy()\fP, \fBxpn_init()\fP, \fBxpn_mutex\fP, \fBxpn_open()\fP, \fBxpn_read()\fP, \fBxpn_stat()\fP, \fBwrite_args::xpndest\fP, and \fBwrite_args::xpnsource\fP\&.
+.SS "static error_t parse_opt (int key, char * arg, struct argp_state * state)\fC [static]\fP"
+
+.PP
+Definition at line \fB253\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+References \fBarguments::buffer_size\fP, \fBarguments::debug\fP, \fBarguments::dest\fP, \fBarguments::do_stat\fP, \fBarguments::silent\fP, \fBarguments::source\fP, \fBarguments::st\fP, and \fBarguments::very_silent\fP\&.
+.SS "void print_bar (void)"
+
+.PP
+Definition at line \fB52\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+References \fBbar\fP, \fBBAR_LENGTH\fP, \fBbar_length\fP, \fBMB\fP, \fBsilent\fP, \fBst\fP, \fBsum\fP, \fBsum_old\fP, \fBt_old_transfer\fP, \fBtransfer_bw\fP, and \fBtransfer_t\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBprogression_bar()\fP\&.
+.SS "void * progression_bar (__attribute__((unused)) void * arg)"
+
+.PP
+Definition at line \fB79\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+References \fBbar\fP, \fBBAR_LENGTH\fP, \fBbar_length\fP, \fBprint_bar()\fP, \fBsum\fP, \fBsum_old\fP, and \fBvery_silent\fP\&.
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "void * write_func (void * func_args)"
+
+.PP
+Definition at line \fB129\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+References \fBarray_bufs\fP, \fBbuffer_st::buffer\fP, \fBbuffer_st::buffer_length\fP, \fBcond\fP, \fBdebug\fP, \fBwrite_args::fdd\fP, \fBfsync()\fP, \fBlast\fP, \fBmutex\fP, \fBnext\fP, \fBwrite_args::out_transfer_t\fP, \fBst\fP, \fBsum\fP, \fBvery_silent\fP, \fBwrite()\fP, \fBxpn_mutex\fP, \fBxpn_write()\fP, \fBwrite_args::xpndest\fP, and \fBwrite_args::xpnsource\fP\&.
+.PP
+Referenced by \fBmain()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "struct argp argp = {\fBoptions\fP, \fBparse_opt\fP, 0, \fBdoc\fP, 0, \fBhelp_filter\fP, 0}\fC [static]\fP"
+
+.PP
+Definition at line \fB357\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "const char* argp_program_bug_address = 'https://github\&.com/xpn\-arcos/xpn'"
+
+.PP
+Definition at line \fB189\fP of file \fBxpncp_th\&.c\fP\&.
+.SS "const char* argp_program_version = 'xpncp_th 1\&.0'"
+
+.PP
+Definition at line \fB188\fP of file \fBxpncp_th\&.c\fP\&.
+.SS "struct \fBbuffer_st\fP** array_bufs = NULL"
+
+.PP
+Definition at line \fB123\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBwrite_func()\fP\&.
+.SS "char bar[\fBBAR_LENGTH\fP+1]"
+
+.PP
+Definition at line \fB46\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBprint_bar()\fP, and \fBprogression_bar()\fP\&.
+.SS "int bar_length"
+
+.PP
+Definition at line \fB47\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBprint_bar()\fP, and \fBprogression_bar()\fP\&.
+.SS "pthread_cond_t cond = PTHREAD_COND_INITIALIZER"
+
+.PP
+Definition at line \fB126\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBwrite_func()\fP\&.
+.SS "int debug = 0"
+
+.PP
+Definition at line \fB50\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBwrite_func()\fP\&.
+.SS "char doc[] = 'A \fBcopy\fP program for Expand partitions that uses threads'\fC [static]\fP"
+
+.PP
+Definition at line \fB190\fP of file \fBxpncp_th\&.c\fP\&.
+.SS "ssize_t last = 0"
+
+.PP
+Definition at line \fB124\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBwrite_func()\fP\&.
+.SS "pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER"
+
+.PP
+Definition at line \fB125\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBwrite_func()\fP\&.
+.SS "ssize_t next = 0"
+
+.PP
+Definition at line \fB124\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBwrite_func()\fP\&.
+.SS "struct argp_option options[]\fC [static]\fP"
+\fBInitial value:\fP.PP
+.nf
+= {
+        {"buffer\-size", 'b', "BUFFER_SIZE", 0, "Buffer size", 0},
+        {"file\-size", 'i', "FILE_SIZE", 0, "File size", 0},
+        {"silent", 's', 0, 0, "Silent", 0},
+        {"very\-silent", 'S', 0, 0, "Very silent", 0},
+        {"debug", 'd', 0, 0, "Debug", 0},
+        {0, 0, 0, 0, 0, 0}}
+.fi
+
+.PP
+Definition at line \fB231\fP of file \fBxpncp_th\&.c\fP\&.
+.SS "int silent = 0"
+
+.PP
+Definition at line \fB48\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBprint_bar()\fP\&.
+.SS "struct stat st"
+
+.PP
+Definition at line \fB42\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, \fBprint_bar()\fP, and \fBwrite_func()\fP\&.
+.SS "ssize_t sum"
+
+.PP
+Definition at line \fB45\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, \fBprint_bar()\fP, \fBprogression_bar()\fP, and \fBwrite_func()\fP\&.
+.SS "ssize_t sum_old"
+
+.PP
+Definition at line \fB45\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBprint_bar()\fP, and \fBprogression_bar()\fP\&.
+.SS "struct timeval t_ini_transfer t_end_transfer t_old_transfer"
+
+.PP
+Definition at line \fB43\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBprint_bar()\fP\&.
+.SS "double transfer_bw"
+
+.PP
+Definition at line \fB44\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBprint_bar()\fP\&.
+.SS "double transfer_t"
+
+.PP
+Definition at line \fB44\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBprint_bar()\fP\&.
+.SS "int very_silent = 0"
+
+.PP
+Definition at line \fB49\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, \fBprogression_bar()\fP, and \fBwrite_func()\fP\&.
+.SS "pthread_mutex_t xpn_mutex = PTHREAD_MUTEX_INITIALIZER"
+
+.PP
+Definition at line \fB127\fP of file \fBxpncp_th\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBwrite_func()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

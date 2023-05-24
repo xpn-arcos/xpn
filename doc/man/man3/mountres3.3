@@ -1,0 +1,51 @@
+.TH "mountres3" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+mountres3
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfs3\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBmountstat3\fP \fBfhs_status\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   \fBmountres3_ok\fP \fBmountinfo\fP"
+.br
+.ti -1c
+.RI "} \fBmountres3_u\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB68\fP of file \fBnfs3\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "\fBmountstat3\fP mountres3::fhs_status"
+
+.PP
+Definition at line \fB70\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBnfs3_mount()\fP, and \fBxdr_mountres3()\fP\&.
+.SS "\fBmountres3_ok\fP mountres3::mountinfo"
+
+.PP
+Definition at line \fB73\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBnfs3_mount()\fP, and \fBxdr_mountres3()\fP\&.
+.SS "union  { \&.\&.\&. }  mountres3::mountres3_u"
+
+.PP
+Referenced by \fBnfs3_mount()\fP, and \fBxdr_mountres3()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

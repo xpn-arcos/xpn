@@ -1,0 +1,135 @@
+.TH "mpi_server_comm.h" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+mpi_server_comm.h \- Header file to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'all_system\&.h'\fP
+.br
+\fC#include 'mpi_server_params\&.h'\fP
+.br
+\fC#include 'base/utils\&.h'\fP
+.br
+\fC#include 'base/ns\&.h'\fP
+.br
+\fC#include 'mpi_server_ops\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmpiClient_comm_init\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
+.br
+.ti -1c
+.RI "int \fBmpiClient_comm_destroy\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
+.br
+.ti -1c
+.RI "int \fBmpiClient_comm_connect\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
+.br
+.ti -1c
+.RI "int \fBmpiClient_comm_disconnect\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
+.br
+.ti -1c
+.RI "int \fBmpiClient_comm_locality\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
+.br
+.ti -1c
+.RI "ssize_t \fBmpiClient_write_operation\fP (MPI_Comm fd, char *data, ssize_t size, char *msg_id)"
+.br
+.ti -1c
+.RI "ssize_t \fBmpiClient_write_data\fP (MPI_Comm fd, char *data, ssize_t size, char *msg_id)"
+.br
+.ti -1c
+.RI "ssize_t \fBmpiClient_read_data\fP (MPI_Comm fd, char *data, ssize_t size, char *msg_id)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Header file to 'TODO'\&. 
+
+Header file to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int mpiClient_comm_connect (\fBmpiClient_param_st\fP * params)"
+
+.PP
+Definition at line \fB144\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_info\fP, \fBns_lookup()\fP, \fBparams\fP, \fBmpi_server_param_st::port_name\fP, \fBmpi_server_param_st::rank\fP, and \fBmpi_server_param_st::srv_name\fP\&.
+.PP
+Referenced by \fBnfi_mpi_server_connect()\fP, and \fBnfi_mpi_server_reconnect()\fP\&.
+.SS "int mpiClient_comm_destroy (\fBmpiClient_param_st\fP * params)"
+
+.PP
+Definition at line \fB108\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_info\fP, \fBparams\fP, \fBmpi_server_param_st::rank\fP, and \fBmpi_server_param_st::size\fP\&.
+.PP
+Referenced by \fBnfi_mpi_server_destroy()\fP\&.
+.SS "int mpiClient_comm_disconnect (\fBmpiClient_param_st\fP * params)"
+
+.PP
+Definition at line \fB226\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_info\fP, \fBMPI_SERVER_DISCONNECT\fP, \fBparams\fP, and \fBmpi_server_param_st::rank\fP\&.
+.PP
+Referenced by \fBnfi_mpi_server_disconnect()\fP\&.
+.SS "int mpiClient_comm_init (\fBmpiClient_param_st\fP * params)"
+
+.PP
+Definition at line \fB40\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_info\fP, \fBMPI_Init()\fP, \fBparams\fP, \fBmpi_server_param_st::port_name\fP, \fBmpi_server_param_st::rank\fP, and \fBmpi_server_param_st::size\fP\&.
+.PP
+Referenced by \fBnfi_mpi_server_init()\fP\&.
+.SS "int mpiClient_comm_locality (\fBmpiClient_param_st\fP * params)"
+
+.PP
+Definition at line \fB255\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdebug_warning\fP, \fBmpi_server_param_st::dirbase\fP, \fBMPI_SERVER_GETNODENAME\fP, \fBparams\fP, \fBPATH_MAX\fP, and \fBserv_name\fP\&.
+.PP
+Referenced by \fBnfi_mpi_server_init()\fP\&.
+.SS "ssize_t mpiClient_read_data (MPI_Comm fd, char * data, ssize_t size, char * msg_id)"
+
+.PP
+Definition at line \fB390\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, and \fBdebug_warning\fP\&.
+.PP
+Referenced by \fBnfi_mpi_server_doRequest()\fP, \fBnfi_mpi_server_read()\fP, and \fBnfi_mpi_server_write()\fP\&.
+.SS "ssize_t mpiClient_write_data (MPI_Comm fd, char * data, ssize_t size, char * msg_id)"
+
+.PP
+Definition at line \fB358\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, and \fBdebug_warning\fP\&.
+.PP
+Referenced by \fBmpi_server_write_operation()\fP, and \fBnfi_mpi_server_write()\fP\&.
+.SS "ssize_t mpiClient_write_operation (MPI_Comm fd, char * data, ssize_t size, char * msg_id)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

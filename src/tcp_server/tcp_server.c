@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file tcp_server.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
@@ -30,15 +41,27 @@
 #include "tcp_server/tcp_server_comm.h"
 #include "tcp_server/tcp_server_d2xpn.h"
 
-/* ... Global variables / Variables globales ......................... */
-
+/************************************************
+ *  ... Global variables
+ ***********************************************/
 tcp_server_param_st params;
 worker_t worker;
 int the_end = 0;
 char serv_name[HOST_NAME_MAX];
 
-/* ... Auxiliar Functions / Funciones Auxiliares ..................... */
+/************************************************
+ *  ... Auxiliar Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param th  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_run(struct st_th th)
 {
   debug_info("[TCP-SERVER] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, tcp_server_op2string(th.type_op), th.type_op);
@@ -48,6 +71,15 @@ void tcp_server_run(struct st_th th)
   debug_info("[TCP-SERVER] (ID=%d) end to do operation '%s'\n", th.id, tcp_server_op2string(th.type_op));
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param th  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_dispatcher(struct st_th th)
 {
   int ret;
@@ -109,8 +141,19 @@ void tcp_server_dispatcher(struct st_th th)
   tcp_server_comm_close((int)th.sd);
 }
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @return 'TODO'.
+ */
 int tcp_server_up(void)
 {
   int ret;
@@ -194,6 +237,15 @@ int tcp_server_up(void)
   return 0;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @return 'TODO'.
+ */
 int tcp_server_down(void)
 {
   int ret, sd, data;
@@ -275,10 +327,9 @@ int tcp_server_down(void)
   return 0;
 }
 
-/*
- * Main
- */
-
+/************************************************
+ *  ... Main
+ ***********************************************/
 int main(int argc, char *argv[])
 {
   int ret = -1;

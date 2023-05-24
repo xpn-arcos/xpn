@@ -18,27 +18,45 @@
  *
  */
 
+/**
+ * @file mpi_server_ops.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _MPI_SERVER_OPS_H_
 #define _MPI_SERVER_OPS_H_
 
 #define ASYNC_CLOSE 1
 #define FILESYSTEM_DLSYM 1
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "mpi_server_params.h"
 #include "base/utils.h"
 #include "base/filesystem.h"
 
-/*
- *  Constants
- */
-
+/************************************************
+ *  ... Constants
+ ***********************************************/
 #ifndef MPI_SERVER_ID
 #define MPI_SERVER_ID 32
 #endif
 
-/* Operations */
+/************************************************
+ *  ... Operations
+ ***********************************************/
 
-// File operations
+/************************************************
+ *  ... Operations: File operations
+ ***********************************************/
 #define MPI_SERVER_OPEN_FILE_WS 0
 #define MPI_SERVER_CREAT_FILE_WS 1
 #define MPI_SERVER_READ_FILE_WS 2
@@ -50,13 +68,17 @@
 #define MPI_SERVER_GETATTR_FILE 8
 #define MPI_SERVER_SETATTR_FILE 9
 
-// File operations without session
+/************************************************
+ *  ... Operations: File operations without session
+ ***********************************************/
 #define MPI_SERVER_OPEN_FILE_WOS 100
 #define MPI_SERVER_CREAT_FILE_WOS 101
 #define MPI_SERVER_READ_FILE_WOS 102
 #define MPI_SERVER_WRITE_FILE_WOS 103
 
-// Directory operations
+/************************************************
+ *  ... Operations: Directory operations
+ ***********************************************/
 #define MPI_SERVER_MKDIR_DIR 20
 #define MPI_SERVER_RMDIR_DIR 21
 #define MPI_SERVER_RMDIR_DIR_ASYNC 22
@@ -64,23 +86,29 @@
 #define MPI_SERVER_READDIR_DIR 24
 #define MPI_SERVER_CLOSEDIR_DIR 25
 
-// Import / Export operations
+/************************************************
+ *  ... Operations: Import / Export operations
+ ***********************************************/
 #define MPI_SERVER_FLUSH_FILE 40
 #define MPI_SERVER_PRELOAD_FILE 41
 
-// FS Operations
+/************************************************
+ *  ... Operations: FS Operations
+ ***********************************************/
 #define MPI_SERVER_STATFS_DIR 60
 #define MPI_SERVER_GETNODENAME 61
 #define MPI_SERVER_GETID 62
 
-// Connection operatons
+/************************************************
+ *  ... Operations: Connection operatons
+ ***********************************************/
 #define MPI_SERVER_FINALIZE 80
 #define MPI_SERVER_DISCONNECT 81
 #define MPI_SERVER_END -1
 
-/*
- *  Message struct
- */
+/************************************************
+ *  ... Message struct
+ ***********************************************/
 
 struct st_mpi_server_open
 {

@@ -18,11 +18,26 @@
  *
  */
 
+/**
+ * @file tcp_server_ops.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _TCP_SERVER_OPS_H_
 #define _TCP_SERVER_OPS_H_
 
 #define ASYNC_CLOSE 1
 #define FILESYSTEM_DLSYM 1
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "tcp_server_params.h"
 #include "base/utils.h"
@@ -82,21 +97,51 @@
  *  Message struct
  */
 
+/** @struct st_tcp_server_open
+ *  This is a struct
+ *
+ *  @var st_tcp_server_open::path
+ *    A 'TODO'.
+ */
 struct st_tcp_server_open
 {
   char path[PATH_MAX];
 };
 
+/** @struct st_tcp_server_open_req
+ *  This is a struct
+ *
+ *  @var st_tcp_server_open_req::fd
+ *    A 'TODO'.
+ */
 struct st_tcp_server_open_req
 {
   int fd;
 };
 
+/** @struct st_tcp_server_creat
+ *  This is a struct
+ *
+ *  @var st_tcp_server_creat::path
+ *    A 'TODO'.
+ */
 struct st_tcp_server_creat
 {
   char path[PATH_MAX];
 };
 
+/** @struct st_tcp_server_read
+ *  This is a struct
+ *
+ *  @var st_tcp_server_read::fd
+ *    A 'TODO'.
+ *  @var st_tcp_server_read::path
+ *    A 'TODO'.
+ *  @var st_tcp_server_read::offset
+ *    A 'TODO'.
+ *  @var st_tcp_server_read::size
+ *    A 'TODO'.
+ */
 struct st_tcp_server_read
 {
   int fd;
@@ -105,12 +150,32 @@ struct st_tcp_server_read
   size_t size;
 };
 
+/** @struct st_tcp_server_read_req
+ *  This is a struct
+ *
+ *  @var st_tcp_server_read_req::size
+ *    A 'TODO'.
+ *  @var st_tcp_server_read_req::last
+ *    A 'TODO'.
+ */
 struct st_tcp_server_read_req
 {
   ssize_t size;
   char last;
 };
 
+/** @struct st_tcp_server_write
+ *  This is a struct
+ *
+ *  @var st_tcp_server_write::fd
+ *    A 'TODO'.
+ *  @var st_tcp_server_write::path
+ *    A 'TODO'.
+ *  @var st_tcp_server_write::offset
+ *    A 'TODO'.
+ *  @var st_tcp_server_write::size
+ *    A 'TODO'.
+ */
 struct st_tcp_server_write
 {
   int fd;
@@ -119,71 +184,159 @@ struct st_tcp_server_write
   size_t size;
 };
 
+/** @struct st_tcp_server_write_req
+ *  This is a struct
+ *
+ *  @var st_tcp_server_write_req::size
+ *    A 'TODO'.
+ */
 struct st_tcp_server_write_req
 {
   ssize_t size;
 };
 
+/** @struct st_tcp_server_close
+ *  This is a struct
+ *
+ *  @var st_tcp_server_close::fd
+ *    A 'TODO'.
+ *  @var st_tcp_server_close::path
+ *    A 'TODO'.
+ */
 struct st_tcp_server_close
 {
   int fd;
   char path[PATH_MAX];
 };
 
+/** @struct st_tcp_server_rm
+ *  This is a struct
+ *
+ *  @var st_tcp_server_rm::path
+ *    A 'TODO'.
+ */
 struct st_tcp_server_rm
 {
   char path[PATH_MAX];
 };
 
+/** @struct st_tcp_server_rename
+ *  This is a struct
+ *
+ *  @var st_tcp_server_rename::old_url
+ *    A 'TODO'.
+ *  @var st_tcp_server_rename::new_url
+ *    A 'TODO'.
+ */
 struct st_tcp_server_rename
 {
   char old_url[PATH_MAX];
   char new_url[PATH_MAX];
 };
 
+/** @struct st_tcp_server_getattr
+ *  This is a struct
+ *
+ *  @var st_tcp_server_getattr::path
+ *    A 'TODO'.
+ */
 struct st_tcp_server_getattr
 {
   char path[PATH_MAX];
 };
 
+/** @struct st_tcp_server_setattr
+ *  This is a struct
+ *
+ *  @var st_tcp_server_setattr::path
+ *    A 'TODO'.
+ *  @var st_tcp_server_setattr::attr
+ *    A 'TODO'.
+ */
 struct st_tcp_server_setattr
 {
   char path[PATH_MAX];
   struct stat attr;
 };
 
+/** @struct st_tcp_server_attr_req
+ *  This is a struct
+ *
+ *  @var st_tcp_server_attr_req::status
+ *    A 'TODO'.
+ *  @var st_tcp_server_attr_req::attr
+ *    A 'TODO'.
+ */
 struct st_tcp_server_attr_req
 {
   char status;
   struct stat attr;
 };
 
+/** @struct st_tcp_server_mkdir
+ *  This is a struct
+ *
+ *  @var st_tcp_server_mkdir::path
+ *    A 'TODO'.
+ */
 struct st_tcp_server_mkdir
 {
   char path[PATH_MAX];
 };
 
+/** @struct st_tcp_server_opendir
+ *  This is a struct
+ *
+ *  @var st_tcp_server_opendir::path
+ *    A 'TODO'.
+ */
 struct st_tcp_server_opendir
 {
   char path[PATH_MAX];
 };
 
+/** @struct st_tcp_server_readdir
+ *  This is a struct
+ *
+ *  @var st_tcp_server_readdir::dir
+ *    A 'TODO'.
+ */
 struct st_tcp_server_readdir
 {
   DIR *dir;
 };
 
+/** @struct st_tcp_server_direntry
+ *  This is a struct
+ *
+ *  @var st_tcp_server_direntry::end
+ *    A 'TODO'.
+ *  @var st_tcp_server_direntry::ret
+ *    A 'TODO'.
+ */
 struct st_tcp_server_direntry
 {
   int end; // If end = 1 exist entry; 0 not exist
   struct dirent ret;
 };
 
+/** @struct st_tcp_server_closedir
+ *  This is a struct
+ *
+ *  @var st_tcp_server_closedir::dir
+ *    A 'TODO'.
+ */
 struct st_tcp_server_closedir
 {
   DIR *dir;
 };
 
+/** @struct st_tcp_server_rmdir
+ *  This is a struct
+ *
+ *  @var st_tcp_server_rmdir::path
+ *    A 'TODO'.
+ */
 struct st_tcp_server_rmdir
 {
   char path[PATH_MAX];

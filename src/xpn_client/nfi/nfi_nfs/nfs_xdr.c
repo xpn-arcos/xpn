@@ -18,8 +18,22 @@
  *
  */
 
+/**
+ * @file nfs_xdr.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifdef WIN32
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "nfi_nfs.h"
 
 bool_t xdr_fhandle(xdrs, objp)

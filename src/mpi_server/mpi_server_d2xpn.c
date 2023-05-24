@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file mpi_server_d2xpn.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
@@ -28,18 +39,32 @@
 #include "xpn.h"
 #include <sys/time.h>
 
-/* ... Constants / Constantes ........................................ */
-
+/************************************************
+ *  ... Constants
+ ***********************************************/
 #define DEFAULT_PATH "/tmp"
 #define MPI_SERVER_PATH_DEFAULT "/tmp"
 
-/* ... Global variables / Variables globales ......................... */
-
+/************************************************
+ *  ... Global variables
+ ***********************************************/
 pthread_mutex_t mutex_id = PTHREAD_MUTEX_INITIALIZER;
 int static_id = 0;
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param file  'TODO'.
+ * @param new_file  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void generateName(char *file, char *new_file)
 {
    char aux[255];
@@ -70,6 +95,14 @@ void generateName(char *file, char *new_file)
    return;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param file  'TODO'.
+ * @return 'TODO'.
+ */
 int mylock(char *file)
 {
    int fd;
@@ -89,6 +122,14 @@ int mylock(char *file)
    return fd;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd  'TODO'.
+ * @return 'TODO'.
+ */
 int myunlock(int fd)
 {
    debug_info("d2xpn: myunlock(%d)\n", fd);

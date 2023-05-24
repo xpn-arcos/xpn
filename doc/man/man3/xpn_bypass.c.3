@@ -1,0 +1,1558 @@
+.TH "xpn_bypass.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn_bypass.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'xpn_bypass\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBis_xpn_prefix\fP (const char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "const char * \fBskip_xpn_prefix\fP (const char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBfdstable_realloc\fP (void)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBfdstable_init\fP (void)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "struct \fBgeneric_fd\fP \fBfdstable_get\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfdstable_put\fP (struct \fBgeneric_fd\fP fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBadd_xpn_file_to_fdstable\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfdstable_remove\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBfdsdirtable_realloc\fP (void)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBfdsdirtable_init\fP (void)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfdsdirtable_get\fP (DIR *dir)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "DIR \fBfdsdirtable_getfd\fP (DIR *dir)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfdsdirtable_put\fP (DIR *dir)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfdsdirtable_remove\fP (DIR *dir)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_adaptor_keepInit\fP (void)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBopen\fP (const char *path, int flags,\&.\&.\&.)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBopen64\fP (const char *path, int flags,\&.\&.\&.)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fB__open_2\fP (const char *path, int flags,\&.\&.\&.)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBcreat\fP (const char *path, mode_t mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBftruncate\fP (int fd, off_t length)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBread\fP (int fd, void *\fBbuf\fP, size_t nbyte)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBwrite\fP (int fd, const void *\fBbuf\fP, size_t nbyte)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "off_t \fBlseek\fP (int fd, off_t offset, int whence)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "off64_t \fBlseek64\fP (int fd, off64_t offset, int whence)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBstat_to_stat64\fP (struct stat64 *\fBbuf\fP, struct stat *\fBst\fP)"
+.br
+.ti -1c
+.RI "int \fB__lxstat64\fP (int ver, const char *path, struct stat64 *\fBbuf\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fB__xstat64\fP (int ver, const char *path, struct stat64 *\fBbuf\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fB__fxstat64\fP (int ver, int fd, struct stat64 *\fBbuf\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBstat64_to_stat\fP (struct stat *\fBbuf\fP, struct stat64 *\fBst\fP)"
+.br
+.ti -1c
+.RI "int \fB__lxstat\fP (int ver, const char *path, struct stat *\fBbuf\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fB__xstat\fP (int ver, const char *path, struct stat *\fBbuf\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fB__fxstat\fP (int ver, int fd, struct stat *\fBbuf\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBclose\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBrename\fP (const char *old_path, const char *new_path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBunlink\fP (const char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBmkdir\fP (const char *path, mode_t mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "DIR * \fBopendir\fP (const char *dirname)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "struct dirent * \fBreaddir\fP (DIR *dirp)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "struct dirent64 * \fBreaddir64\fP (DIR *dirp)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBclosedir\fP (DIR *dirp)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBrmdir\fP (const char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "pid_t \fBfork\fP (void)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBpipe\fP (int pipefd[2])"
+.br
+.ti -1c
+.RI "int \fBdup\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBdup2\fP (int fd, int fd2)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBexit\fP (int status)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBchdir\fP (const char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBchmod\fP (const char *path, mode_t mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfchmod\fP (int fd, mode_t mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBchown\fP (const char *path, uid_t owner, gid_t group)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfcntl\fP (int fd, int cmd, long arg)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBaccess\fP (const char *path, int mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "char * \fBrealpath\fP (const char *restrict path, char *restrict resolved_path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "char * \fB__realpath_chk\fP (const char *path, char *resolved_path, __attribute__((__unused__)) size_t resolved_len)"
+.br
+.ti -1c
+.RI "int \fBfsync\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBMPI_Init\fP (int *argc, char ***argv)"
+.br
+.ti -1c
+.RI "int \fBMPI_Finalize\fP (void)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static int \fBxpn_adaptor_initCalled\fP = 0"
+.br
+.RI "This variable indicates if expand has already been initialized or not\&. "
+.ti -1c
+.RI "static int \fBxpn_adaptor_initCalled_getenv\fP = 0"
+.br
+.ti -1c
+.RI "char * \fBxpn_adaptor_partition_prefix\fP = '/tmp/expand/'"
+.br
+.RI "This variable contains the prefix which will be considerated as expand partition\&. "
+.ti -1c
+.RI "struct \fBgeneric_fd\fP * \fBfdstable\fP = NULL"
+.br
+.ti -1c
+.RI "long \fBfdstable_size\fP = 0L"
+.br
+.ti -1c
+.RI "long \fBfdstable_first_free\fP = 0L"
+.br
+.ti -1c
+.RI "DIR ** \fBfdsdirtable\fP = NULL"
+.br
+.ti -1c
+.RI "long \fBfdsdirtable_size\fP = 0L"
+.br
+.ti -1c
+.RI "long \fBfdsdirtable_first_free\fP = 0L"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBxpn_bypass\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int __fxstat (int ver, int fd, struct stat * buf)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIver\fP 'TODO'\&. 
+.br
+\fIfd\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1072\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBdebug_info\fP, \fBdlsym_fstat()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::real_fd\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_fstat()\fP\&.
+.SS "int __fxstat64 (int ver, int fildes, struct stat64 * buf)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIver\fP 'TODO'\&. 
+.br
+\fIfildes\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB960\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBdebug_info\fP, \fBdlsym_fxstat64()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::real_fd\fP, \fBst\fP, \fBstat_to_stat64()\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_fstat()\fP\&.
+.SS "int __lxstat (int ver, const char * path, struct stat * buf)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIver\fP 'TODO'\&. 
+.br
+\fIpath\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1016\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBdebug_info\fP, \fBdlsym_lstat()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_stat()\fP\&.
+.SS "int __lxstat64 (int ver, const char * path, struct stat64 * buf)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIver\fP 'TODO'\&. 
+.br
+\fIpath\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB888\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBdebug_info\fP, \fBdlsym_lxstat64()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBst\fP, \fBstat_to_stat64()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_stat()\fP\&.
+.PP
+Referenced by \fBaccess()\fP\&.
+.SS "int __open_2 (const char * path, int flags,  \&.\&.\&.)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIflags\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB628\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBadd_xpn_file_to_fdstable()\fP, \fBdebug_info\fP, \fBdlsym___open_2()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, \fBxpn_adaptor_partition_prefix\fP, and \fBxpn_open()\fP\&.
+.SS "char * __realpath_chk (const char * path, char * resolved_path, __attribute__((__unused__)) size_t resolved_len)"
+
+.PP
+Definition at line \fB1724\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_realpath()\fP, \fBis_xpn_prefix()\fP, and \fBxpn_adaptor_keepInit()\fP\&.
+.SS "int __xstat (int ver, const char * path, struct stat * buf)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIver\fP 'TODO'\&. 
+.br
+\fIpath\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1044\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBdebug_info\fP, \fBdlsym_stat()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_stat()\fP\&.
+.SS "int __xstat64 (int ver, const char * path, struct stat64 * buf)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIver\fP 'TODO'\&. 
+.br
+\fIpath\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB925\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBdebug_info\fP, \fBdlsym_xstat64()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBst\fP, \fBstat_to_stat64()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_stat()\fP\&.
+.SS "int access (const char * path, int mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1664\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fB__lxstat64()\fP, \fB_STAT_VER\fP, \fBdebug_info\fP, \fBdlsym_access()\fP, \fBis_xpn_prefix()\fP, and \fBxpn_adaptor_keepInit()\fP\&.
+.SS "int add_xpn_file_to_fdstable (int fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB226\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBFD_XPN\fP, \fBfdstable_put()\fP, \fBgeneric_fd::is_file\fP, \fBgeneric_fd::real_fd\fP, \fBst\fP, \fBgeneric_fd::type\fP, and \fBxpn_fstat()\fP\&.
+.PP
+Referenced by \fB__open_2()\fP, \fBcreat()\fP, \fBopen()\fP, and \fBopen64()\fP\&.
+.SS "int chdir (const char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1557\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_chdir()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_chdir()\fP\&.
+.SS "int chmod (const char * path, mode_t mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1577\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_chmod()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_chmod()\fP\&.
+.SS "int chown (const char * path, uid_t owner, gid_t group)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIowner\fP 'TODO'\&. 
+.br
+\fIgroup\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1623\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_chown()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_chown()\fP\&.
+.SS "int close (int fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1178\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_close()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBfdstable_remove()\fP, \fBgeneric_fd::real_fd\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_close()\fP\&.
+.PP
+Referenced by \fBcopy()\fP, \fBdo_cp()\fP, \fBmain()\fP, \fBmpi_server_op_preload()\fP, and \fBtcp_server_comm_close()\fP\&.
+.SS "int closedir (DIR * dirp)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirp\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1397\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_closedir()\fP, \fBfdsdirtable_get()\fP, \fBfdsdirtable_remove()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_closedir()\fP\&.
+.PP
+Referenced by \fBdo_cp_recursive()\fP, \fBlist()\fP, and \fBlist()\fP\&.
+.SS "int creat (const char * path, mode_t mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB678\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBadd_xpn_file_to_fdstable()\fP, \fBdebug_info\fP, \fBdlsym_creat()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_creat()\fP\&.
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "int dup (int fildes)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfildes\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1482\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_dup()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::real_fd\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_dup()\fP\&.
+.SS "int dup2 (int fildes, int fildes2)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfildes\fP 'TODO'\&. 
+.br
+\fIfildes2\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1510\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_dup2()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::real_fd\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_dup2()\fP\&.
+.SS "void exit (int status)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstatus\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1540\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_exit()\fP, \fBxpn_adaptor_initCalled\fP, and \fBxpn_destroy()\fP\&.
+.PP
+Referenced by \fBfdsdirtable_realloc()\fP, \fBfdstable_realloc()\fP, and \fBmain()\fP\&.
+.SS "int fchmod (int fildes, mode_t mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfildes\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1597\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_fchmod()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_fchmod()\fP\&.
+.SS "int fcntl (int fd, int cmd, long arg)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIcmd\fP 'TODO'\&. 
+.br
+\fIarg\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1643\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_fcntl()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, and \fBgeneric_fd::type\fP\&.
+.SS "int fdsdirtable_get (DIR * dir)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB349\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBfdsdirtable\fP, and \fBfdsdirtable_size\fP\&.
+.PP
+Referenced by \fBclosedir()\fP, \fBreaddir()\fP, and \fBreaddir64()\fP\&.
+.SS "DIR fdsdirtable_getfd (DIR * dir)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB370\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBfdstable_get()\fP, and \fBgeneric_fd::real_fd\fP\&.
+.PP
+Referenced by \fBreaddir()\fP, and \fBreaddir64()\fP\&.
+.SS "void fdsdirtable_init (void)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB336\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBfdsdirtable_realloc()\fP\&.
+.PP
+Referenced by \fBxpn_adaptor_keepInit()\fP\&.
+.SS "int fdsdirtable_put (DIR * dir)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB390\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBFD_XPN\fP, \fBfdsdirtable\fP, \fBfdsdirtable_first_free\fP, \fBfdsdirtable_realloc()\fP, \fBfdsdirtable_size\fP, \fBfdstable_put()\fP, \fBfdstable_size\fP, \fBgeneric_fd::is_file\fP, \fBgeneric_fd::real_fd\fP, and \fBgeneric_fd::type\fP\&.
+.PP
+Referenced by \fBopendir()\fP\&.
+.SS "void fdsdirtable_realloc (void)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB294\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBexit()\fP, \fBfdsdirtable\fP, \fBfdsdirtable_size\fP, and \fBMAX_DIRS\fP\&.
+.PP
+Referenced by \fBfdsdirtable_init()\fP, and \fBfdsdirtable_put()\fP\&.
+.SS "int fdsdirtable_remove (DIR * dir)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB443\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBfdsdirtable\fP, \fBfdsdirtable_first_free\fP, \fBfdsdirtable_size\fP, \fBfdstable_remove()\fP, and \fBPLUSXPN\fP\&.
+.PP
+Referenced by \fBclosedir()\fP\&.
+.SS "struct \fBgeneric_fd\fP fdstable_get (int fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB163\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBFD_SYS\fP, \fBfdstable\fP, \fBPLUSXPN\fP, \fBgeneric_fd::real_fd\fP, and \fBgeneric_fd::type\fP\&.
+.PP
+Referenced by \fB__fxstat()\fP, \fB__fxstat64()\fP, \fBclose()\fP, \fBdup()\fP, \fBdup2()\fP, \fBfchmod()\fP, \fBfcntl()\fP, \fBfdsdirtable_getfd()\fP, \fBfsync()\fP, \fBftruncate()\fP, \fBlseek()\fP, \fBlseek64()\fP, \fBread()\fP, and \fBwrite()\fP\&.
+.SS "void fdstable_init (void)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB150\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBfdstable_realloc()\fP\&.
+.PP
+Referenced by \fBxpn_adaptor_keepInit()\fP\&.
+.SS "int fdstable_put (struct \fBgeneric_fd\fP fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB191\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBFD_FREE\fP, \fBfdstable\fP, \fBfdstable_first_free\fP, \fBfdstable_realloc()\fP, \fBfdstable_size\fP, \fBPLUSXPN\fP, and \fBgeneric_fd::type\fP\&.
+.PP
+Referenced by \fBadd_xpn_file_to_fdstable()\fP, and \fBfdsdirtable_put()\fP\&.
+.SS "void fdstable_realloc (void)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB106\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBexit()\fP, \fBFD_FREE\fP, \fBfdstable\fP, \fBfdstable_size\fP, \fBgeneric_fd::is_file\fP, \fBMAX_FDS\fP, \fBgeneric_fd::real_fd\fP, and \fBgeneric_fd::type\fP\&.
+.PP
+Referenced by \fBfdstable_init()\fP, and \fBfdstable_put()\fP\&.
+.SS "int fdstable_remove (int fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB257\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBFD_FREE\fP, \fBfdstable\fP, \fBfdstable_first_free\fP, \fBgeneric_fd::is_file\fP, \fBPLUSXPN\fP, \fBgeneric_fd::real_fd\fP, and \fBgeneric_fd::type\fP\&.
+.PP
+Referenced by \fBclose()\fP, and \fBfdsdirtable_remove()\fP\&.
+.SS "pid_t fork (void)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1457\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_fork()\fP, and \fBxpn_adaptor_initCalled\fP\&.
+.SS "int fsync (int fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1753\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_fsync()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, and \fBgeneric_fd::type\fP\&.
+.PP
+Referenced by \fBwrite_func()\fP\&.
+.SS "int ftruncate (int fildes, off_t length)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfildes\fP 'TODO'\&. 
+.br
+\fIlength\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB706\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_ftruncate()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::real_fd\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_ftruncate()\fP\&.
+.SS "int is_xpn_prefix (const char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB66\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBxpn_adaptor_partition_prefix\fP\&.
+.PP
+Referenced by \fB__lxstat()\fP, \fB__lxstat64()\fP, \fB__open_2()\fP, \fB__realpath_chk()\fP, \fB__xstat()\fP, \fB__xstat64()\fP, \fBaccess()\fP, \fBchdir()\fP, \fBchmod()\fP, \fBchown()\fP, \fBcreat()\fP, \fBmkdir()\fP, \fBopen()\fP, \fBopen64()\fP, \fBopendir()\fP, \fBrealpath()\fP, \fBrename()\fP, \fBrmdir()\fP, and \fBunlink()\fP\&.
+.SS "off_t lseek (int fildes, off_t offset, int whence)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfildes\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIwhence\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB811\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_lseek()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::real_fd\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_lseek()\fP\&.
+.PP
+Referenced by \fBmain()\fP\&.
+.SS "off64_t lseek64 (int fd, off64_t offset, int whence)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIwhence\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB840\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_lseek64()\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::real_fd\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_lseek()\fP\&.
+.PP
+Referenced by \fBcopy()\fP\&.
+.SS "int mkdir (const char * path, mode_t mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1269\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_mkdir()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_mkdir()\fP\&.
+.PP
+Referenced by \fBcopy()\fP, and \fBdo_cp_recursive()\fP\&.
+.SS "int MPI_Finalize (void)"
+
+.PP
+Definition at line \fB1794\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBxpn_adaptor_initCalled\fP, and \fBxpn_destroy()\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBmpi_server_comm_destroy()\fP\&.
+.SS "int MPI_Init (int * argc, char *** argv)"
+
+.PP
+Definition at line \fB1777\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, and \fBxpn_adaptor_keepInit()\fP\&.
+.PP
+Referenced by \fBmain()\fP, \fBmpi_server_comm_init()\fP, \fBmpi_server_down()\fP, and \fBmpiClient_comm_init()\fP\&.
+.SS "int open (const char * path, int flags,  \&.\&.\&.)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIflags\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB527\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBadd_xpn_file_to_fdstable()\fP, \fBdebug_info\fP, \fBdlsym_open2()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, \fBxpn_adaptor_partition_prefix\fP, and \fBxpn_open()\fP\&.
+.PP
+Referenced by \fBdo_cp()\fP, \fBmain()\fP, \fBmpi_server_d2xpn()\fP, and \fBtcp_server_d2xpn()\fP\&.
+.SS "int open64 (const char * path, int flags,  \&.\&.\&.)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIflags\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB577\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBadd_xpn_file_to_fdstable()\fP, \fBdebug_info\fP, \fBdlsym_open64()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, \fBxpn_adaptor_partition_prefix\fP, and \fBxpn_open()\fP\&.
+.PP
+Referenced by \fBcopy()\fP\&.
+.SS "DIR * opendir (const char * dirname)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirname\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1297\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_opendir()\fP, \fBfdsdirtable_put()\fP, \fBis_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, \fBxpn_adaptor_partition_prefix\fP, and \fBxpn_opendir()\fP\&.
+.PP
+Referenced by \fBdo_cp_recursive()\fP, \fBlist()\fP, and \fBlist()\fP\&.
+.SS "int pipe (int pipefd[2])"
+
+.PP
+Definition at line \fB1474\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, and \fBdlsym_pipe()\fP\&.
+.SS "ssize_t read (int fildes, void * buf, size_t nbyte)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfildes\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.br
+\fInbyte\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB735\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBdebug_info\fP, \fBdlsym_read()\fP, \fBerrno\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::is_file\fP, \fBgeneric_fd::real_fd\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_read()\fP\&.
+.PP
+Referenced by \fBcopy()\fP, \fBdo_cp()\fP, \fBmain()\fP, and \fBtcp_server_comm_read_data()\fP\&.
+.SS "struct dirent * readdir (DIR * dirp)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirp\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1329\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_readdir()\fP, \fBfdsdirtable_get()\fP, \fBfdsdirtable_getfd()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_readdir()\fP\&.
+.PP
+Referenced by \fBdo_cp_recursive()\fP, \fBlist()\fP, and \fBlist()\fP\&.
+.SS "struct dirent64 * readdir64 (DIR * dirp)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirp\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1357\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_readdir64()\fP, \fBfdsdirtable_get()\fP, \fBfdsdirtable_getfd()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_readdir()\fP\&.
+.SS "char * realpath (const char *restrict path, char *restrict resolved_path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIresolved_path\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1702\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_realpath()\fP, \fBis_xpn_prefix()\fP, and \fBxpn_adaptor_keepInit()\fP\&.
+.SS "int rename (const char * old_path, const char * new_path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIold_path\fP 'TODO'\&. 
+.br
+\fInew_path\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1209\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_rename()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_rename()\fP\&.
+.PP
+Referenced by \fBns_unpublish()\fP\&.
+.SS "int rmdir (const char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1425\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_rmdir()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_rmdir()\fP\&.
+.SS "const char * skip_xpn_prefix (const char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB81\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBxpn_adaptor_partition_prefix\fP\&.
+.PP
+Referenced by \fB__lxstat()\fP, \fB__lxstat64()\fP, \fB__open_2()\fP, \fB__xstat()\fP, \fB__xstat64()\fP, \fBchdir()\fP, \fBchmod()\fP, \fBchown()\fP, \fBcreat()\fP, \fBmkdir()\fP, \fBopen()\fP, \fBopen64()\fP, \fBrename()\fP, \fBrmdir()\fP, and \fBunlink()\fP\&.
+.SS "int stat64_to_stat (struct stat * buf, struct stat64 * st)"
+
+.PP
+Definition at line \fB997\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, and \fBst\fP\&.
+.SS "int stat_to_stat64 (struct stat64 * buf, struct stat * st)"
+
+.PP
+Definition at line \fB869\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, and \fBst\fP\&.
+.PP
+Referenced by \fB__fxstat64()\fP, \fB__lxstat64()\fP, and \fB__xstat64()\fP\&.
+.SS "int unlink (const char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1240\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBdlsym_unlink()\fP, \fBis_xpn_prefix()\fP, \fBskip_xpn_prefix()\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_unlink()\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBns_unpublish()\fP\&.
+.SS "ssize_t write (int fildes, const void * buf, size_t nbyte)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfildes\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.br
+\fInbyte\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB773\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBdebug_info\fP, \fBdlsym_write()\fP, \fBerrno\fP, \fBFD_XPN\fP, \fBfdstable_get()\fP, \fBgeneric_fd::is_file\fP, \fBgeneric_fd::real_fd\fP, \fBgeneric_fd::type\fP, \fBxpn_adaptor_keepInit()\fP, and \fBxpn_write()\fP\&.
+.PP
+Referenced by \fBcopy()\fP, \fBdo_cp()\fP, \fBmain()\fP, \fBtcp_server_comm_write_data()\fP, and \fBwrite_func()\fP\&.
+.SS "int xpn_adaptor_keepInit (void)"
+
+.PP
+'TODO'\&. This function checks if expand has already been initialized\&. If not, it initialize it\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB476\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBfdsdirtable_init()\fP, \fBfdstable_init()\fP, \fBxpn_adaptor_initCalled\fP, \fBxpn_adaptor_initCalled_getenv\fP, and \fBxpn_init()\fP\&.
+.PP
+Referenced by \fB__fxstat()\fP, \fB__fxstat64()\fP, \fB__lxstat()\fP, \fB__lxstat64()\fP, \fB__open_2()\fP, \fB__realpath_chk()\fP, \fB__xstat()\fP, \fB__xstat64()\fP, \fBaccess()\fP, \fBchdir()\fP, \fBchmod()\fP, \fBchown()\fP, \fBclose()\fP, \fBclosedir()\fP, \fBcreat()\fP, \fBdup()\fP, \fBdup2()\fP, \fBfchmod()\fP, \fBftruncate()\fP, \fBlseek()\fP, \fBlseek64()\fP, \fBmkdir()\fP, \fBMPI_Init()\fP, \fBopen()\fP, \fBopen64()\fP, \fBopendir()\fP, \fBread()\fP, \fBreaddir()\fP, \fBreaddir64()\fP, \fBrealpath()\fP, \fBrename()\fP, \fBrmdir()\fP, \fBunlink()\fP, and \fBwrite()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "DIR** fdsdirtable = NULL"
+
+.PP
+Definition at line \fB280\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+Referenced by \fBfdsdirtable_get()\fP, \fBfdsdirtable_put()\fP, \fBfdsdirtable_realloc()\fP, and \fBfdsdirtable_remove()\fP\&.
+.SS "long fdsdirtable_first_free = 0L"
+
+.PP
+Definition at line \fB282\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+Referenced by \fBfdsdirtable_put()\fP, and \fBfdsdirtable_remove()\fP\&.
+.SS "long fdsdirtable_size = 0L"
+
+.PP
+Definition at line \fB281\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+Referenced by \fBfdsdirtable_get()\fP, \fBfdsdirtable_put()\fP, \fBfdsdirtable_realloc()\fP, and \fBfdsdirtable_remove()\fP\&.
+.SS "struct \fBgeneric_fd\fP* fdstable = NULL"
+
+.PP
+Definition at line \fB92\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+Referenced by \fBfdstable_get()\fP, \fBfdstable_put()\fP, \fBfdstable_realloc()\fP, and \fBfdstable_remove()\fP\&.
+.SS "long fdstable_first_free = 0L"
+
+.PP
+Definition at line \fB94\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+Referenced by \fBfdstable_put()\fP, and \fBfdstable_remove()\fP\&.
+.SS "long fdstable_size = 0L"
+
+.PP
+Definition at line \fB93\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+Referenced by \fBfdsdirtable_put()\fP, \fBfdstable_put()\fP, and \fBfdstable_realloc()\fP\&.
+.SS "int xpn_adaptor_initCalled = 0\fC [static]\fP"
+
+.PP
+This variable indicates if expand has already been initialized or not\&. 0 indicates that expand has NOT been initialized yet\&. 1 indicates that expand has already been initialized\&. 
+.PP
+Definition at line \fB45\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+Referenced by \fBexit()\fP, \fBfork()\fP, \fBMPI_Finalize()\fP, and \fBxpn_adaptor_keepInit()\fP\&.
+.SS "int xpn_adaptor_initCalled_getenv = 0\fC [static]\fP"
+
+.PP
+Definition at line \fB46\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+Referenced by \fBxpn_adaptor_keepInit()\fP\&.
+.SS "char* xpn_adaptor_partition_prefix = '/tmp/expand/'"
+
+.PP
+This variable contains the prefix which will be considerated as expand partition\&. 
+.PP
+Definition at line \fB52\fP of file \fBxpn_bypass\&.c\fP\&.
+.PP
+Referenced by \fB__open_2()\fP, \fBis_xpn_prefix()\fP, \fBopen()\fP, \fBopen64()\fP, \fBopendir()\fP, and \fBskip_xpn_prefix()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

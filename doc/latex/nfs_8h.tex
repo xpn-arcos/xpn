@@ -1,0 +1,536 @@
+\doxysection{nfs.\+h File Reference}
+\hypertarget{nfs_8h}{}\label{nfs_8h}\index{nfs.h@{nfs.h}}
+
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include \"{}all\+\_\+system.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/path\+\_\+misc.\+h\"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a572b13ac3a3611259dcfee2b005fc436}{NFS\+\_\+\+TCP}}~1
+\item 
+\#define \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\+\_\+\+UDP}}~0
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a88e9f34cde1ca81525babef40e7fdd59}{SENDSZ}}~(unsigned int)(128 \texorpdfstring{$\ast$}{*} 1024)
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a5e66d4ba36355f0dfc1176d14fae4d39}{RECVSZ}}~(unsigned int)(128 \texorpdfstring{$\ast$}{*} 1024)
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a08f18fcc53ed9626e3ac801ad106b5dc}{MNTPATHLEN}}~1024
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a1475e6c25e5f01cd87d138b51fef3797}{MNTNAMLEN}}~255
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a36eb9b3fdae5249d235f815bdab2a745}{NFSPATHLEN}}~\mbox{\hyperlink{nfs_8h_a08f18fcc53ed9626e3ac801ad106b5dc}{MNTPATHLEN}}
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a4f6f7b14fb9a371f57efe97ea630a0b5}{FHSIZE}}~32
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a02064b2445d8041a08a1311aad2fd3ff}{MOUNT1\+\_\+\+PROGRAM}}~((u\+\_\+long)100005)
+\item 
+\#define \mbox{\hyperlink{nfs_8h_afc8a79f0748eb88347ebe46292e0f554}{MOUNT1\+\_\+\+VERSION}}~((u\+\_\+long)1)
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a637cf0514194e559fb9c9b7f7f9a548f}{NFS2\+\_\+\+PROGRAM}}~((u\+\_\+long)100003)
+\item 
+\#define \mbox{\hyperlink{nfs_8h_a19815f103115b185ee3b9857f5a55d43}{NFS2\+\_\+\+VERSION}}~((u\+\_\+long)2)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+CLIENT \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{nfs_8h_a2b4fd7a84ea3fd9799873478ef83808d}{create\+\_\+connection\+\_\+mount}} (char \texorpdfstring{$\ast$}{*}name, int type)
+\item 
+void \mbox{\hyperlink{nfs_8h_ad5b3dddef903c2a2b980f4a3d5261da5}{close\+\_\+connection\+\_\+mount}} (CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_a43af1c002ba58371c211b7987a2b9322}{nfs\+\_\+mount}} (char \texorpdfstring{$\ast$}{*}dir, fhandle fhand, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_a1f95feb1b8096d5065410294ab960ef3}{nfs\+\_\+umount}} (char \texorpdfstring{$\ast$}{*}path, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_ac5ddcd0cb041d4123b81294c53943552}{nfs\+\_\+export}} (exports \texorpdfstring{$\ast$}{*}, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+CLIENT \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{nfs_8h_a9fa52b417b69db33040d577f2b3720c1}{create\+\_\+connection\+\_\+nfs}} (char \texorpdfstring{$\ast$}{*}name, int type)
+\item 
+void \mbox{\hyperlink{nfs_8h_ac717d4d60d9b9e3b91c39c6d1f2d14e3}{close\+\_\+connection\+\_\+nfs}} (CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_ae32be937f49c11ce601aaca530acf811}{nfs\+\_\+getattr}} (fhandle fh, fattr \texorpdfstring{$\ast$}{*}fatt, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_a2a162a3606a22d3489bb35abda72a254}{nfs\+\_\+setattr}} (fhandle fh, fattr \texorpdfstring{$\ast$}{*}fatt, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_a2f49d429fe68f0801020a1a3b280ea69}{nfs\+\_\+lookup}} (fhandle fhin, char \texorpdfstring{$\ast$}{*}path, fhandle fhout, fattr \texorpdfstring{$\ast$}{*}att, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+ssize\+\_\+t \mbox{\hyperlink{nfs_8h_aac16e5c265667175431b653bfa0cf70c}{nfs\+\_\+read}} (fhandle fh, void \texorpdfstring{$\ast$}{*}data, off\+\_\+t offset, size\+\_\+t size, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+ssize\+\_\+t \mbox{\hyperlink{nfs_8h_ae65f8e9f3df4f8e470e343e2bc6f38e7}{nfs\+\_\+write}} (fhandle fh, void \texorpdfstring{$\ast$}{*}data, off\+\_\+t offset, size\+\_\+t size, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_a702ffe31ec3d9887a0c559be5fdf947f}{nfs\+\_\+create}} (fhandle fhin, char \texorpdfstring{$\ast$}{*}file, mode\+\_\+t mode, fhandle fhout, fattr \texorpdfstring{$\ast$}{*}at, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_adafda974169547ecf011dd04d5e212e8}{nfs\+\_\+remove}} (fhandle fh, char \texorpdfstring{$\ast$}{*}file, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_a06fe7cf83b055994ad667e15d306642b}{nfs\+\_\+rename}} (fhandle fh, char \texorpdfstring{$\ast$}{*}name, fhandle fhR, char \texorpdfstring{$\ast$}{*}nameR, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_af12dbf1acef5dbc27678b93f843c0e67}{nfs\+\_\+mkdir}} (fhandle fhin, char \texorpdfstring{$\ast$}{*}dir, mode\+\_\+t mode, fhandle fhout, fattr \texorpdfstring{$\ast$}{*}att, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_a4d4a34922fba4b94c1e5c6d78396f30b}{nfs\+\_\+rmdir}} (fhandle fh, char \texorpdfstring{$\ast$}{*}dir, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_a8869e0b3852f71b3d7f19ec5799135a4}{nfs\+\_\+readdir}} (fhandle fh, nfscookie cookie, char \texorpdfstring{$\ast$}{*}entry, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\item 
+int \mbox{\hyperlink{nfs_8h_a2f4436d2353c71c67d9dbe2c687e5ae3}{nfs\+\_\+statfs}} (fhandle arg, struct nfs\+\_\+info \texorpdfstring{$\ast$}{*}inf, CLIENT \texorpdfstring{$\ast$}{*}cl)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file to \textquotesingle{}TODO\textquotesingle{}. 
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000103}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{nfs_8h_a4f6f7b14fb9a371f57efe97ea630a0b5}\label{nfs_8h_a4f6f7b14fb9a371f57efe97ea630a0b5} 
+\index{nfs.h@{nfs.h}!FHSIZE@{FHSIZE}}
+\index{FHSIZE@{FHSIZE}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{FHSIZE}{FHSIZE}}
+{\footnotesize\ttfamily \#define FHSIZE~32}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00055}{55}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_a1475e6c25e5f01cd87d138b51fef3797}\label{nfs_8h_a1475e6c25e5f01cd87d138b51fef3797} 
+\index{nfs.h@{nfs.h}!MNTNAMLEN@{MNTNAMLEN}}
+\index{MNTNAMLEN@{MNTNAMLEN}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{MNTNAMLEN}{MNTNAMLEN}}
+{\footnotesize\ttfamily \#define MNTNAMLEN~255}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00050}{50}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_a08f18fcc53ed9626e3ac801ad106b5dc}\label{nfs_8h_a08f18fcc53ed9626e3ac801ad106b5dc} 
+\index{nfs.h@{nfs.h}!MNTPATHLEN@{MNTPATHLEN}}
+\index{MNTPATHLEN@{MNTPATHLEN}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{MNTPATHLEN}{MNTPATHLEN}}
+{\footnotesize\ttfamily \#define MNTPATHLEN~1024}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00049}{49}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_a02064b2445d8041a08a1311aad2fd3ff}\label{nfs_8h_a02064b2445d8041a08a1311aad2fd3ff} 
+\index{nfs.h@{nfs.h}!MOUNT1\_PROGRAM@{MOUNT1\_PROGRAM}}
+\index{MOUNT1\_PROGRAM@{MOUNT1\_PROGRAM}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{MOUNT1\_PROGRAM}{MOUNT1\_PROGRAM}}
+{\footnotesize\ttfamily \#define MOUNT1\+\_\+\+PROGRAM~((u\+\_\+long)100005)}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00058}{58}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_afc8a79f0748eb88347ebe46292e0f554}\label{nfs_8h_afc8a79f0748eb88347ebe46292e0f554} 
+\index{nfs.h@{nfs.h}!MOUNT1\_VERSION@{MOUNT1\_VERSION}}
+\index{MOUNT1\_VERSION@{MOUNT1\_VERSION}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{MOUNT1\_VERSION}{MOUNT1\_VERSION}}
+{\footnotesize\ttfamily \#define MOUNT1\+\_\+\+VERSION~((u\+\_\+long)1)}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00060}{60}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_a637cf0514194e559fb9c9b7f7f9a548f}\label{nfs_8h_a637cf0514194e559fb9c9b7f7f9a548f} 
+\index{nfs.h@{nfs.h}!NFS2\_PROGRAM@{NFS2\_PROGRAM}}
+\index{NFS2\_PROGRAM@{NFS2\_PROGRAM}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{NFS2\_PROGRAM}{NFS2\_PROGRAM}}
+{\footnotesize\ttfamily \#define NFS2\+\_\+\+PROGRAM~((u\+\_\+long)100003)}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00063}{63}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_a19815f103115b185ee3b9857f5a55d43}\label{nfs_8h_a19815f103115b185ee3b9857f5a55d43} 
+\index{nfs.h@{nfs.h}!NFS2\_VERSION@{NFS2\_VERSION}}
+\index{NFS2\_VERSION@{NFS2\_VERSION}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{NFS2\_VERSION}{NFS2\_VERSION}}
+{\footnotesize\ttfamily \#define NFS2\+\_\+\+VERSION~((u\+\_\+long)2)}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00065}{65}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_a572b13ac3a3611259dcfee2b005fc436}\label{nfs_8h_a572b13ac3a3611259dcfee2b005fc436} 
+\index{nfs.h@{nfs.h}!NFS\_TCP@{NFS\_TCP}}
+\index{NFS\_TCP@{NFS\_TCP}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{NFS\_TCP}{NFS\_TCP}}
+{\footnotesize\ttfamily \#define NFS\+\_\+\+TCP~1}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00041}{41}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}\label{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67} 
+\index{nfs.h@{nfs.h}!NFS\_UDP@{NFS\_UDP}}
+\index{NFS\_UDP@{NFS\_UDP}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{NFS\_UDP}{NFS\_UDP}}
+{\footnotesize\ttfamily \#define NFS\+\_\+\+UDP~0}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00042}{42}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_a36eb9b3fdae5249d235f815bdab2a745}\label{nfs_8h_a36eb9b3fdae5249d235f815bdab2a745} 
+\index{nfs.h@{nfs.h}!NFSPATHLEN@{NFSPATHLEN}}
+\index{NFSPATHLEN@{NFSPATHLEN}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{NFSPATHLEN}{NFSPATHLEN}}
+{\footnotesize\ttfamily \#define NFSPATHLEN~\mbox{\hyperlink{nfs_8h_a08f18fcc53ed9626e3ac801ad106b5dc}{MNTPATHLEN}}}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00052}{52}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_a5e66d4ba36355f0dfc1176d14fae4d39}\label{nfs_8h_a5e66d4ba36355f0dfc1176d14fae4d39} 
+\index{nfs.h@{nfs.h}!RECVSZ@{RECVSZ}}
+\index{RECVSZ@{RECVSZ}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{RECVSZ}{RECVSZ}}
+{\footnotesize\ttfamily \#define RECVSZ~(unsigned int)(128 \texorpdfstring{$\ast$}{*} 1024)}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00047}{47}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+\Hypertarget{nfs_8h_a88e9f34cde1ca81525babef40e7fdd59}\label{nfs_8h_a88e9f34cde1ca81525babef40e7fdd59} 
+\index{nfs.h@{nfs.h}!SENDSZ@{SENDSZ}}
+\index{SENDSZ@{SENDSZ}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{SENDSZ}{SENDSZ}}
+{\footnotesize\ttfamily \#define SENDSZ~(unsigned int)(128 \texorpdfstring{$\ast$}{*} 1024)}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8h_source_l00045}{45}} of file \mbox{\hyperlink{nfs_8h_source}{nfs.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{nfs_8h_ad5b3dddef903c2a2b980f4a3d5261da5}\label{nfs_8h_ad5b3dddef903c2a2b980f4a3d5261da5} 
+\index{nfs.h@{nfs.h}!close\_connection\_mount@{close\_connection\_mount}}
+\index{close\_connection\_mount@{close\_connection\_mount}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{close\_connection\_mount()}{close\_connection\_mount()}}
+{\footnotesize\ttfamily void close\+\_\+connection\+\_\+mount (\begin{DoxyParamCaption}\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00207}{207}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfs_8c_source_l00103}{create\+\_\+connection\+\_\+mount()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00406}{nfi\+\_\+nfs\+\_\+destroy()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00291}{nfi\+\_\+nfs\+\_\+disconnect()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00128}{nfi\+\_\+nfs\+\_\+init()}}, and \mbox{\hyperlink{nfi__nfs_8c_source_l00345}{nfi\+\_\+nfs\+\_\+reconnect()}}.
+
+\Hypertarget{nfs_8h_ac717d4d60d9b9e3b91c39c6d1f2d14e3}\label{nfs_8h_ac717d4d60d9b9e3b91c39c6d1f2d14e3} 
+\index{nfs.h@{nfs.h}!close\_connection\_nfs@{close\_connection\_nfs}}
+\index{close\_connection\_nfs@{close\_connection\_nfs}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{close\_connection\_nfs()}{close\_connection\_nfs()}}
+{\footnotesize\ttfamily void close\+\_\+connection\+\_\+nfs (\begin{DoxyParamCaption}\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00500}{500}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfs_8c_source_l00401}{create\+\_\+connection\+\_\+nfs()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00406}{nfi\+\_\+nfs\+\_\+destroy()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00291}{nfi\+\_\+nfs\+\_\+disconnect()}}, and \mbox{\hyperlink{nfi__nfs_8c_source_l00128}{nfi\+\_\+nfs\+\_\+init()}}.
+
+\Hypertarget{nfs_8h_a2b4fd7a84ea3fd9799873478ef83808d}\label{nfs_8h_a2b4fd7a84ea3fd9799873478ef83808d} 
+\index{nfs.h@{nfs.h}!create\_connection\_mount@{create\_connection\_mount}}
+\index{create\_connection\_mount@{create\_connection\_mount}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{create\_connection\_mount()}{create\_connection\_mount()}}
+{\footnotesize\ttfamily CLIENT \texorpdfstring{$\ast$}{*} create\+\_\+connection\+\_\+mount (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{int}]{type }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00103}{103}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8c_source_l00207}{close\+\_\+connection\+\_\+mount()}}, \mbox{\hyperlink{nfs_8h_source_l00050}{MNTNAMLEN}}, \mbox{\hyperlink{nfs_8h_source_l00058}{MOUNT1\+\_\+\+PROGRAM}}, \mbox{\hyperlink{nfs_8h_source_l00060}{MOUNT1\+\_\+\+VERSION}}, \mbox{\hyperlink{nfs_8h_source_l00041}{NFS\+\_\+\+TCP}}, \mbox{\hyperlink{nfs_8h_source_l00042}{NFS\+\_\+\+UDP}}, \mbox{\hyperlink{nfs_8h_source_l00047}{RECVSZ}}, and \mbox{\hyperlink{nfs_8h_source_l00045}{SENDSZ}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00406}{nfi\+\_\+nfs\+\_\+destroy()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00291}{nfi\+\_\+nfs\+\_\+disconnect()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00128}{nfi\+\_\+nfs\+\_\+init()}}, and \mbox{\hyperlink{nfi__nfs_8c_source_l00345}{nfi\+\_\+nfs\+\_\+reconnect()}}.
+
+\Hypertarget{nfs_8h_a9fa52b417b69db33040d577f2b3720c1}\label{nfs_8h_a9fa52b417b69db33040d577f2b3720c1} 
+\index{nfs.h@{nfs.h}!create\_connection\_nfs@{create\_connection\_nfs}}
+\index{create\_connection\_nfs@{create\_connection\_nfs}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{create\_connection\_nfs()}{create\_connection\_nfs()}}
+{\footnotesize\ttfamily CLIENT \texorpdfstring{$\ast$}{*} create\+\_\+connection\+\_\+nfs (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{int}]{type }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00401}{401}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8c_source_l00500}{close\+\_\+connection\+\_\+nfs()}}, \mbox{\hyperlink{nfs_8h_source_l00050}{MNTNAMLEN}}, \mbox{\hyperlink{nfs_8h_source_l00063}{NFS2\+\_\+\+PROGRAM}}, \mbox{\hyperlink{nfs_8h_source_l00065}{NFS2\+\_\+\+VERSION}}, \mbox{\hyperlink{nfs_8h_source_l00041}{NFS\+\_\+\+TCP}}, \mbox{\hyperlink{nfs_8h_source_l00042}{NFS\+\_\+\+UDP}}, \mbox{\hyperlink{nfs_8h_source_l00047}{RECVSZ}}, and \mbox{\hyperlink{nfs_8h_source_l00045}{SENDSZ}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00128}{nfi\+\_\+nfs\+\_\+init()}}, and \mbox{\hyperlink{nfi__nfs_8c_source_l00345}{nfi\+\_\+nfs\+\_\+reconnect()}}.
+
+\Hypertarget{nfs_8h_a702ffe31ec3d9887a0c559be5fdf947f}\label{nfs_8h_a702ffe31ec3d9887a0c559be5fdf947f} 
+\index{nfs.h@{nfs.h}!nfs\_create@{nfs\_create}}
+\index{nfs\_create@{nfs\_create}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_create()}{nfs\_create()}}
+{\footnotesize\ttfamily int nfs\+\_\+create (\begin{DoxyParamCaption}\item[{fhandle}]{fhin,  }\item[{char \texorpdfstring{$\ast$}{*}}]{file,  }\item[{mode\+\_\+t}]{mode,  }\item[{fhandle}]{fhout,  }\item[{fattr \texorpdfstring{$\ast$}{*}}]{at,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l01053}{1053}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}, \mbox{\hyperlink{nfs_8c_source_l00040}{printfh()}}, and \mbox{\hyperlink{nfs_8c_source_l00534}{set\+Attr()}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00884}{nfi\+\_\+nfs\+\_\+create()}}.
+
+\Hypertarget{nfs_8h_ac5ddcd0cb041d4123b81294c53943552}\label{nfs_8h_ac5ddcd0cb041d4123b81294c53943552} 
+\index{nfs.h@{nfs.h}!nfs\_export@{nfs\_export}}
+\index{nfs\_export@{nfs\_export}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_export()}{nfs\_export()}}
+{\footnotesize\ttfamily int nfs\+\_\+export (\begin{DoxyParamCaption}\item[{exports \texorpdfstring{$\ast$}{*}}]{exp,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00354}{354}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+\Hypertarget{nfs_8h_ae32be937f49c11ce601aaca530acf811}\label{nfs_8h_ae32be937f49c11ce601aaca530acf811} 
+\index{nfs.h@{nfs.h}!nfs\_getattr@{nfs\_getattr}}
+\index{nfs\_getattr@{nfs\_getattr}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_getattr()}{nfs\_getattr()}}
+{\footnotesize\ttfamily int nfs\+\_\+getattr (\begin{DoxyParamCaption}\item[{fhandle}]{fh,  }\item[{fattr \texorpdfstring{$\ast$}{*}}]{fatt,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00631}{631}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00466}{nfi\+\_\+nfs\+\_\+getattr()}}.
+
+\Hypertarget{nfs_8h_a2f49d429fe68f0801020a1a3b280ea69}\label{nfs_8h_a2f49d429fe68f0801020a1a3b280ea69} 
+\index{nfs.h@{nfs.h}!nfs\_lookup@{nfs\_lookup}}
+\index{nfs\_lookup@{nfs\_lookup}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_lookup()}{nfs\_lookup()}}
+{\footnotesize\ttfamily int nfs\+\_\+lookup (\begin{DoxyParamCaption}\item[{fhandle}]{fhin,  }\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{fhandle}]{fhout,  }\item[{fattr \texorpdfstring{$\ast$}{*}}]{att,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00693}{693}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}, \mbox{\hyperlink{path__misc_8c_source_l00056}{get\+First\+Dir()}}, \mbox{\hyperlink{nfs_8h_source_l00050}{MNTNAMLEN}}, and \mbox{\hyperlink{nfs_8c_source_l00040}{printfh()}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00884}{nfi\+\_\+nfs\+\_\+create()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l01206}{nfi\+\_\+nfs\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l01012}{nfi\+\_\+nfs\+\_\+remove()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l01093}{nfi\+\_\+nfs\+\_\+rename()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l01323}{nfi\+\_\+nfs\+\_\+rmdir()}}, and \mbox{\hyperlink{nfi__nfs_8c_source_l00597}{nfs\+\_\+open()}}.
+
+\Hypertarget{nfs_8h_af12dbf1acef5dbc27678b93f843c0e67}\label{nfs_8h_af12dbf1acef5dbc27678b93f843c0e67} 
+\index{nfs.h@{nfs.h}!nfs\_mkdir@{nfs\_mkdir}}
+\index{nfs\_mkdir@{nfs\_mkdir}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_mkdir()}{nfs\_mkdir()}}
+{\footnotesize\ttfamily int nfs\+\_\+mkdir (\begin{DoxyParamCaption}\item[{fhandle}]{fhin,  }\item[{char \texorpdfstring{$\ast$}{*}}]{dir,  }\item[{mode\+\_\+t}]{mode,  }\item[{fhandle}]{fhout,  }\item[{fattr \texorpdfstring{$\ast$}{*}}]{att,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l01262}{1262}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}, and \mbox{\hyperlink{nfs_8c_source_l00534}{set\+Attr()}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l01206}{nfi\+\_\+nfs\+\_\+mkdir()}}.
+
+\Hypertarget{nfs_8h_a43af1c002ba58371c211b7987a2b9322}\label{nfs_8h_a43af1c002ba58371c211b7987a2b9322} 
+\index{nfs.h@{nfs.h}!nfs\_mount@{nfs\_mount}}
+\index{nfs\_mount@{nfs\_mount}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_mount()}{nfs\_mount()}}
+{\footnotesize\ttfamily int nfs\+\_\+mount (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{dir,  }\item[{fhandle}]{fhand,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00241}{241}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}, and \mbox{\hyperlink{nfs_8c_source_l00040}{printfh()}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00128}{nfi\+\_\+nfs\+\_\+init()}}, and \mbox{\hyperlink{nfi__nfs_8c_source_l00345}{nfi\+\_\+nfs\+\_\+reconnect()}}.
+
+\Hypertarget{nfs_8h_aac16e5c265667175431b653bfa0cf70c}\label{nfs_8h_aac16e5c265667175431b653bfa0cf70c} 
+\index{nfs.h@{nfs.h}!nfs\_read@{nfs\_read}}
+\index{nfs\_read@{nfs\_read}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_read()}{nfs\_read()}}
+{\footnotesize\ttfamily ssize\+\_\+t nfs\+\_\+read (\begin{DoxyParamCaption}\item[{fhandle}]{fh,  }\item[{void \texorpdfstring{$\ast$}{*}}]{data,  }\item[{off\+\_\+t}]{offset,  }\item[{size\+\_\+t}]{size,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00838}{838}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00754}{nfi\+\_\+nfs\+\_\+read()}}.
+
+\Hypertarget{nfs_8h_a8869e0b3852f71b3d7f19ec5799135a4}\label{nfs_8h_a8869e0b3852f71b3d7f19ec5799135a4} 
+\index{nfs.h@{nfs.h}!nfs\_readdir@{nfs\_readdir}}
+\index{nfs\_readdir@{nfs\_readdir}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_readdir()}{nfs\_readdir()}}
+{\footnotesize\ttfamily int nfs\+\_\+readdir (\begin{DoxyParamCaption}\item[{fhandle}]{fh,  }\item[{nfscookie}]{cookie,  }\item[{char \texorpdfstring{$\ast$}{*}}]{entry,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l01408}{1408}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}, \mbox{\hyperlink{xpn-ls_8c_source_l00035}{NFSMAXPATHLEN}}, and \mbox{\hyperlink{all__system_8h_source_l00150}{TRUE}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l01417}{nfi\+\_\+nfs\+\_\+readdir()}}.
+
+\Hypertarget{nfs_8h_adafda974169547ecf011dd04d5e212e8}\label{nfs_8h_adafda974169547ecf011dd04d5e212e8} 
+\index{nfs.h@{nfs.h}!nfs\_remove@{nfs\_remove}}
+\index{nfs\_remove@{nfs\_remove}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_remove()}{nfs\_remove()}}
+{\footnotesize\ttfamily int nfs\+\_\+remove (\begin{DoxyParamCaption}\item[{fhandle}]{fh,  }\item[{char \texorpdfstring{$\ast$}{*}}]{file,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l01123}{1123}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l01012}{nfi\+\_\+nfs\+\_\+remove()}}.
+
+\Hypertarget{nfs_8h_a06fe7cf83b055994ad667e15d306642b}\label{nfs_8h_a06fe7cf83b055994ad667e15d306642b} 
+\index{nfs.h@{nfs.h}!nfs\_rename@{nfs\_rename}}
+\index{nfs\_rename@{nfs\_rename}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_rename()}{nfs\_rename()}}
+{\footnotesize\ttfamily int nfs\+\_\+rename (\begin{DoxyParamCaption}\item[{fhandle}]{fh,  }\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{fhandle}]{fhR,  }\item[{char \texorpdfstring{$\ast$}{*}}]{nameR,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l01187}{1187}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l01093}{nfi\+\_\+nfs\+\_\+rename()}}.
+
+\Hypertarget{nfs_8h_a4d4a34922fba4b94c1e5c6d78396f30b}\label{nfs_8h_a4d4a34922fba4b94c1e5c6d78396f30b} 
+\index{nfs.h@{nfs.h}!nfs\_rmdir@{nfs\_rmdir}}
+\index{nfs\_rmdir@{nfs\_rmdir}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_rmdir()}{nfs\_rmdir()}}
+{\footnotesize\ttfamily int nfs\+\_\+rmdir (\begin{DoxyParamCaption}\item[{fhandle}]{fh,  }\item[{char \texorpdfstring{$\ast$}{*}}]{dir,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l01336}{1336}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l01323}{nfi\+\_\+nfs\+\_\+rmdir()}}.
+
+\Hypertarget{nfs_8h_a2a162a3606a22d3489bb35abda72a254}\label{nfs_8h_a2a162a3606a22d3489bb35abda72a254} 
+\index{nfs.h@{nfs.h}!nfs\_setattr@{nfs\_setattr}}
+\index{nfs\_setattr@{nfs\_setattr}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_setattr()}{nfs\_setattr()}}
+{\footnotesize\ttfamily int nfs\+\_\+setattr (\begin{DoxyParamCaption}\item[{fhandle}]{fh,  }\item[{fattr \texorpdfstring{$\ast$}{*}}]{fatt,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00570}{570}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00535}{nfi\+\_\+nfs\+\_\+setattr()}}.
+
+\Hypertarget{nfs_8h_a2f4436d2353c71c67d9dbe2c687e5ae3}\label{nfs_8h_a2f4436d2353c71c67d9dbe2c687e5ae3} 
+\index{nfs.h@{nfs.h}!nfs\_statfs@{nfs\_statfs}}
+\index{nfs\_statfs@{nfs\_statfs}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_statfs()}{nfs\_statfs()}}
+{\footnotesize\ttfamily int nfs\+\_\+statfs (\begin{DoxyParamCaption}\item[{fhandle}]{arg,  }\item[{struct nfs\+\_\+info \texorpdfstring{$\ast$}{*}}]{inf,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l01528}{1528}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l01496}{nfi\+\_\+nfs\+\_\+statfs()}}.
+
+\Hypertarget{nfs_8h_a1f95feb1b8096d5065410294ab960ef3}\label{nfs_8h_a1f95feb1b8096d5065410294ab960ef3} 
+\index{nfs.h@{nfs.h}!nfs\_umount@{nfs\_umount}}
+\index{nfs\_umount@{nfs\_umount}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_umount()}{nfs\_umount()}}
+{\footnotesize\ttfamily int nfs\+\_\+umount (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00307}{307}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00406}{nfi\+\_\+nfs\+\_\+destroy()}}, and \mbox{\hyperlink{nfi__nfs_8c_source_l00291}{nfi\+\_\+nfs\+\_\+disconnect()}}.
+
+\Hypertarget{nfs_8h_ae65f8e9f3df4f8e470e343e2bc6f38e7}\label{nfs_8h_ae65f8e9f3df4f8e470e343e2bc6f38e7} 
+\index{nfs.h@{nfs.h}!nfs\_write@{nfs\_write}}
+\index{nfs\_write@{nfs\_write}!nfs.h@{nfs.h}}
+\doxysubsubsection{\texorpdfstring{nfs\_write()}{nfs\_write()}}
+{\footnotesize\ttfamily ssize\+\_\+t nfs\+\_\+write (\begin{DoxyParamCaption}\item[{fhandle}]{fh,  }\item[{void \texorpdfstring{$\ast$}{*}}]{data,  }\item[{off\+\_\+t}]{offset,  }\item[{size\+\_\+t}]{size,  }\item[{CLIENT \texorpdfstring{$\ast$}{*}}]{cl }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{nfs_8c_source_l00952}{952}} of file \mbox{\hyperlink{nfs_8c_source}{nfs.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfs_8h_source_l00055}{FHSIZE}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__nfs_8c_source_l00820}{nfi\+\_\+nfs\+\_\+write()}}.
+

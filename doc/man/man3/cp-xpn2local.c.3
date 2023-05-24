@@ -1,0 +1,67 @@
+.TH "cp-xpn2local.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+cp-xpn2local.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <sys/param\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <sys/file\&.h>\fP
+.br
+\fC#include <sys/fcntl\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+\fC#include <sys/wait\&.h>\fP
+.br
+\fC#include <sys/errno\&.h>\fP
+.br
+\fC#include 'xpn\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBDATAM\fP   (64 * \fBKB\fP)"
+.br
+.ti -1c
+.RI "#define \fBKB\fP   (1024)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define DATAM   (64 * \fBKB\fP)"
+
+.PP
+Definition at line \fB32\fP of file \fBcp\-xpn2local\&.c\fP\&.
+.SS "#define KB   (1024)"
+
+.PP
+Definition at line \fB35\fP of file \fBcp\-xpn2local\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int main (int argc, char * argv[])"
+
+.PP
+Definition at line \fB38\fP of file \fBcp\-xpn2local\&.c\fP\&.
+.PP
+References \fBclose()\fP, \fBcreat()\fP, \fBDATAM\fP, \fBexit()\fP, \fBO_RDONLY\fP, \fBO_RDWR\fP, \fBopen()\fP, \fBsum\fP, \fBwrite()\fP, \fBxpn_close()\fP, \fBxpn_destroy()\fP, \fBxpn_init()\fP, \fBxpn_open()\fP, and \fBxpn_read()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

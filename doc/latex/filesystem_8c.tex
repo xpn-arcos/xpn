@@ -1,0 +1,631 @@
+\doxysection{filesystem.\+c File Reference}
+\hypertarget{filesystem_8c}{}\label{filesystem_8c}\index{filesystem.c@{filesystem.c}}
+{\ttfamily \#include \"{}filesystem.\+h\"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{filesystem_8c_a560682f481f929c995ab5f5c539a9b4b}{aux\+\_\+clear\+\_\+dirs}} (char \texorpdfstring{$\ast$}{*}path)
+\item 
+int \mbox{\hyperlink{filesystem_8c_a7170533c285e58efbbb49fb27dac0840}{aux\+\_\+get\+\_\+dirs}} (char \texorpdfstring{$\ast$}{*}path, int n, char \texorpdfstring{$\ast$}{*}s)
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{filesystem_8c_a8c2540b7d81b5e240cd5b34f5b146bb5}{filesystem\+\_\+async\+\_\+close}} (void \texorpdfstring{$\ast$}{*}arg)
+\item 
+int \mbox{\hyperlink{filesystem_8c_a7ee712ffc3917ad2019600ec25bcc3f7}{filesystem\+\_\+creat}} (char \texorpdfstring{$\ast$}{*}pathname, mode\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em Create a file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_ad9a930c22b44d7f3fcac64b3273ec6d2}{filesystem\+\_\+open}} (char \texorpdfstring{$\ast$}{*}pathname, int flags)
+\begin{DoxyCompactList}\small\item\em Open a file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_a9914491497f07a7aae9823bea578baf4}{filesystem\+\_\+open2}} (char \texorpdfstring{$\ast$}{*}pathname, int flags, mode\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em Open a file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_ad3b44c65be3000fb544de6f50c0266bf}{filesystem\+\_\+close}} (int fd)
+\begin{DoxyCompactList}\small\item\em Close a file. \end{DoxyCompactList}\item 
+long \mbox{\hyperlink{filesystem_8c_a65edb3f502e5817df6445de146a1c400}{filesystem\+\_\+read}} (int read\+\_\+fd2, void \texorpdfstring{$\ast$}{*}buffer, int buffer\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Read a file. \end{DoxyCompactList}\item 
+long \mbox{\hyperlink{filesystem_8c_a98478fb328222480fb74e981e5358497}{filesystem\+\_\+write}} (int write\+\_\+fd2, void \texorpdfstring{$\ast$}{*}buffer, int num\+\_\+bytes\+\_\+to\+\_\+write)
+\begin{DoxyCompactList}\small\item\em Write a file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_a59cb88a8893bbf3a4751881ec1925f67}{filesystem\+\_\+rename}} (char \texorpdfstring{$\ast$}{*}old\+\_\+pathname, char \texorpdfstring{$\ast$}{*}new\+\_\+pathname)
+\begin{DoxyCompactList}\small\item\em Rename a file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_a2c50195e0c7ff6c7c36b60df42ce2bed}{filesystem\+\_\+mkpath}} (char \texorpdfstring{$\ast$}{*}pathname)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_a01f660761af6983eed5a91101ee3d34b}{filesystem\+\_\+mkdir}} (char \texorpdfstring{$\ast$}{*}pathname, mode\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_a1433b761c1f369a490d9700ce9bc2090}{filesystem\+\_\+rmdir}} (char \texorpdfstring{$\ast$}{*}pathname)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+DIR \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{filesystem_8c_a7bda437114e3c185bd148715fdaeed42}{filesystem\+\_\+opendir}} (char \texorpdfstring{$\ast$}{*}pathname)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+struct dirent \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{filesystem_8c_a3b379a767399d3a91664f746253bae41}{filesystem\+\_\+readdir}} (DIR \texorpdfstring{$\ast$}{*}dirp)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_a7f9a0338441abc56d3445f5cb7b89ef6}{filesystem\+\_\+closedir}} (DIR \texorpdfstring{$\ast$}{*}dirp)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+off\+\_\+t \mbox{\hyperlink{filesystem_8c_a6d8d2b7f192db3dbbb044f2e8001bc75}{filesystem\+\_\+lseek}} (int fd, off\+\_\+t offset, int whence)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_a01bc57f03261e56f6fc4c7b9b09321e1}{filesystem\+\_\+unlink}} (char \texorpdfstring{$\ast$}{*}pathname)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{filesystem_8c_a5659814a02c79ab1c3e0b513131edf38}{filesystem\+\_\+stat}} (char \texorpdfstring{$\ast$}{*}pathname, struct stat \texorpdfstring{$\ast$}{*}sinfo)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{filesystem_8c_a560682f481f929c995ab5f5c539a9b4b}\label{filesystem_8c_a560682f481f929c995ab5f5c539a9b4b} 
+\index{filesystem.c@{filesystem.c}!aux\_clear\_dirs@{aux\_clear\_dirs}}
+\index{aux\_clear\_dirs@{aux\_clear\_dirs}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{aux\_clear\_dirs()}{aux\_clear\_dirs()}}
+{\footnotesize\ttfamily int aux\+\_\+clear\+\_\+dirs (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00036}{36}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{filesystem_8c_source_l00070}{aux\+\_\+get\+\_\+dirs()}}.
+
+\Hypertarget{filesystem_8c_a7170533c285e58efbbb49fb27dac0840}\label{filesystem_8c_a7170533c285e58efbbb49fb27dac0840} 
+\index{filesystem.c@{filesystem.c}!aux\_get\_dirs@{aux\_get\_dirs}}
+\index{aux\_get\_dirs@{aux\_get\_dirs}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{aux\_get\_dirs()}{aux\_get\_dirs()}}
+{\footnotesize\ttfamily int aux\+\_\+get\+\_\+dirs (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{int}]{n,  }\item[{char \texorpdfstring{$\ast$}{*}}]{s }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00070}{70}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{filesystem_8c_source_l00036}{aux\+\_\+clear\+\_\+dirs()}}, and \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}.
+
+
+
+Referenced by \mbox{\hyperlink{filesystem_8c_source_l00383}{filesystem\+\_\+mkpath()}}.
+
+\Hypertarget{filesystem_8c_a8c2540b7d81b5e240cd5b34f5b146bb5}\label{filesystem_8c_a8c2540b7d81b5e240cd5b34f5b146bb5} 
+\index{filesystem.c@{filesystem.c}!filesystem\_async\_close@{filesystem\_async\_close}}
+\index{filesystem\_async\_close@{filesystem\_async\_close}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_async\_close()}{filesystem\_async\_close()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} filesystem\+\_\+async\+\_\+close (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{arg }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00132}{132}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00263}{real\+\_\+posix\+\_\+close}}.
+
+
+
+Referenced by \mbox{\hyperlink{filesystem_8c_source_l00238}{filesystem\+\_\+close()}}.
+
+\Hypertarget{filesystem_8c_ad3b44c65be3000fb544de6f50c0266bf}\label{filesystem_8c_ad3b44c65be3000fb544de6f50c0266bf} 
+\index{filesystem.c@{filesystem.c}!filesystem\_close@{filesystem\_close}}
+\index{filesystem\_close@{filesystem\_close}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_close()}{filesystem\_close()}}
+{\footnotesize\ttfamily int filesystem\+\_\+close (\begin{DoxyParamCaption}\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+Close a file. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00238}{238}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, \mbox{\hyperlink{filesystem_8c_source_l00132}{filesystem\+\_\+async\+\_\+close()}}, and \mbox{\hyperlink{filesystem_8h_source_l00263}{real\+\_\+posix\+\_\+close}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01092}{mpi\+\_\+server\+\_\+op\+\_\+close\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00750}{mpi\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01423}{mpi\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00707}{mpi\+\_\+server\+\_\+op\+\_\+open\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01337}{mpi\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00851}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01011}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00819}{tcp\+\_\+server\+\_\+op\+\_\+close\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00465}{tcp\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01126}{tcp\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00372}{tcp\+\_\+server\+\_\+op\+\_\+open\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01045}{tcp\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00590}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00741}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}.
+
+\Hypertarget{filesystem_8c_a7f9a0338441abc56d3445f5cb7b89ef6}\label{filesystem_8c_a7f9a0338441abc56d3445f5cb7b89ef6} 
+\index{filesystem.c@{filesystem.c}!filesystem\_closedir@{filesystem\_closedir}}
+\index{filesystem\_closedir@{filesystem\_closedir}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_closedir()}{filesystem\_closedir()}}
+{\footnotesize\ttfamily int filesystem\+\_\+closedir (\begin{DoxyParamCaption}\item[{DIR \texorpdfstring{$\ast$}{*}}]{dirp }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dirp} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00510}{510}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00279}{real\+\_\+posix\+\_\+closedir}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01283}{mpi\+\_\+server\+\_\+op\+\_\+closedir()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l01011}{tcp\+\_\+server\+\_\+op\+\_\+closedir()}}.
+
+\Hypertarget{filesystem_8c_a7ee712ffc3917ad2019600ec25bcc3f7}\label{filesystem_8c_a7ee712ffc3917ad2019600ec25bcc3f7} 
+\index{filesystem.c@{filesystem.c}!filesystem\_creat@{filesystem\_creat}}
+\index{filesystem\_creat@{filesystem\_creat}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_creat()}{filesystem\_creat()}}
+{\footnotesize\ttfamily int filesystem\+\_\+creat (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{pathname,  }\item[{mode\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+Create a file. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00156}{156}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00260}{real\+\_\+posix\+\_\+creat}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l00750}{mpi\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00727}{mpi\+\_\+server\+\_\+op\+\_\+creat\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01337}{mpi\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00465}{tcp\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00419}{tcp\+\_\+server\+\_\+op\+\_\+creat\+\_\+ws()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l01045}{tcp\+\_\+server\+\_\+op\+\_\+preload()}}.
+
+\Hypertarget{filesystem_8c_a6d8d2b7f192db3dbbb044f2e8001bc75}\label{filesystem_8c_a6d8d2b7f192db3dbbb044f2e8001bc75} 
+\index{filesystem.c@{filesystem.c}!filesystem\_lseek@{filesystem\_lseek}}
+\index{filesystem\_lseek@{filesystem\_lseek}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_lseek()}{filesystem\_lseek()}}
+{\footnotesize\ttfamily off\+\_\+t filesystem\+\_\+lseek (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{off\+\_\+t}]{offset,  }\item[{int}]{whence }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em offset} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em whence} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00536}{536}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00265}{real\+\_\+posix\+\_\+lseek}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01423}{mpi\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01337}{mpi\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00851}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00775}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01011}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00949}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01126}{tcp\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01045}{tcp\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00590}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00519}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00741}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00678}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+ws()}}.
+
+\Hypertarget{filesystem_8c_a01f660761af6983eed5a91101ee3d34b}\label{filesystem_8c_a01f660761af6983eed5a91101ee3d34b} 
+\index{filesystem.c@{filesystem.c}!filesystem\_mkdir@{filesystem\_mkdir}}
+\index{filesystem\_mkdir@{filesystem\_mkdir}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_mkdir()}{filesystem\_mkdir()}}
+{\footnotesize\ttfamily int filesystem\+\_\+mkdir (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{pathname,  }\item[{mode\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00406}{406}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00272}{real\+\_\+posix\+\_\+mkdir}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01219}{mpi\+\_\+server\+\_\+op\+\_\+mkdir()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00949}{tcp\+\_\+server\+\_\+op\+\_\+mkdir()}}.
+
+\Hypertarget{filesystem_8c_a2c50195e0c7ff6c7c36b60df42ce2bed}\label{filesystem_8c_a2c50195e0c7ff6c7c36b60df42ce2bed} 
+\index{filesystem.c@{filesystem.c}!filesystem\_mkpath@{filesystem\_mkpath}}
+\index{filesystem\_mkpath@{filesystem\_mkpath}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_mkpath()}{filesystem\_mkpath()}}
+{\footnotesize\ttfamily int filesystem\+\_\+mkpath (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{pathname }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00383}{383}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{filesystem_8c_source_l00070}{aux\+\_\+get\+\_\+dirs()}}, \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, and \mbox{\hyperlink{filesystem_8h_source_l00272}{real\+\_\+posix\+\_\+mkdir}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l00750}{mpi\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00727}{mpi\+\_\+server\+\_\+op\+\_\+creat\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00465}{tcp\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00419}{tcp\+\_\+server\+\_\+op\+\_\+creat\+\_\+ws()}}.
+
+\Hypertarget{filesystem_8c_ad9a930c22b44d7f3fcac64b3273ec6d2}\label{filesystem_8c_ad9a930c22b44d7f3fcac64b3273ec6d2} 
+\index{filesystem.c@{filesystem.c}!filesystem\_open@{filesystem\_open}}
+\index{filesystem\_open@{filesystem\_open}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_open()}{filesystem\_open()}}
+{\footnotesize\ttfamily int filesystem\+\_\+open (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{pathname,  }\item[{int}]{flags }\end{DoxyParamCaption})}
+
+
+
+Open a file. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em flags} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00186}{186}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00261}{real\+\_\+posix\+\_\+open}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01423}{mpi\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00707}{mpi\+\_\+server\+\_\+op\+\_\+open\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00689}{mpi\+\_\+server\+\_\+op\+\_\+open\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01337}{mpi\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00851}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01011}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01126}{tcp\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00372}{tcp\+\_\+server\+\_\+op\+\_\+open\+\_\+wos()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00334}{tcp\+\_\+server\+\_\+op\+\_\+open\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01045}{tcp\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00590}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00741}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}.
+
+\Hypertarget{filesystem_8c_a9914491497f07a7aae9823bea578baf4}\label{filesystem_8c_a9914491497f07a7aae9823bea578baf4} 
+\index{filesystem.c@{filesystem.c}!filesystem\_open2@{filesystem\_open2}}
+\index{filesystem\_open2@{filesystem\_open2}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_open2()}{filesystem\_open2()}}
+{\footnotesize\ttfamily int filesystem\+\_\+open2 (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{pathname,  }\item[{int}]{flags,  }\item[{mode\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+Open a file. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em flags} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00212}{212}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00262}{real\+\_\+posix\+\_\+open2}}.
+
+\Hypertarget{filesystem_8c_a7bda437114e3c185bd148715fdaeed42}\label{filesystem_8c_a7bda437114e3c185bd148715fdaeed42} 
+\index{filesystem.c@{filesystem.c}!filesystem\_opendir@{filesystem\_opendir}}
+\index{filesystem\_opendir@{filesystem\_opendir}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_opendir()}{filesystem\_opendir()}}
+{\footnotesize\ttfamily DIR \texorpdfstring{$\ast$}{*} filesystem\+\_\+opendir (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{name }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00458}{458}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00277}{real\+\_\+posix\+\_\+opendir}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01237}{mpi\+\_\+server\+\_\+op\+\_\+opendir()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00967}{tcp\+\_\+server\+\_\+op\+\_\+opendir()}}.
+
+\Hypertarget{filesystem_8c_a65edb3f502e5817df6445de146a1c400}\label{filesystem_8c_a65edb3f502e5817df6445de146a1c400} 
+\index{filesystem.c@{filesystem.c}!filesystem\_read@{filesystem\_read}}
+\index{filesystem\_read@{filesystem\_read}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_read()}{filesystem\_read()}}
+{\footnotesize\ttfamily long filesystem\+\_\+read (\begin{DoxyParamCaption}\item[{int}]{read\+\_\+fd2,  }\item[{void \texorpdfstring{$\ast$}{*}}]{buffer,  }\item[{int}]{buffer\+\_\+size }\end{DoxyParamCaption})}
+
+
+
+Read a file. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em read\+\_\+fd2} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buffer} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buffer\+\_\+size} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00282}{282}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00267}{real\+\_\+posix\+\_\+read}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01423}{mpi\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01337}{mpi\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00851}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00775}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01126}{tcp\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01045}{tcp\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00590}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00519}{tcp\+\_\+server\+\_\+op\+\_\+read\+\_\+ws()}}.
+
+\Hypertarget{filesystem_8c_a3b379a767399d3a91664f746253bae41}\label{filesystem_8c_a3b379a767399d3a91664f746253bae41} 
+\index{filesystem.c@{filesystem.c}!filesystem\_readdir@{filesystem\_readdir}}
+\index{filesystem\_readdir@{filesystem\_readdir}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_readdir()}{filesystem\_readdir()}}
+{\footnotesize\ttfamily struct dirent \texorpdfstring{$\ast$}{*} filesystem\+\_\+readdir (\begin{DoxyParamCaption}\item[{DIR \texorpdfstring{$\ast$}{*}}]{dirp }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dirp} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00484}{484}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00278}{real\+\_\+posix\+\_\+readdir}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01258}{mpi\+\_\+server\+\_\+op\+\_\+readdir()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00985}{tcp\+\_\+server\+\_\+op\+\_\+readdir()}}.
+
+\Hypertarget{filesystem_8c_a59cb88a8893bbf3a4751881ec1925f67}\label{filesystem_8c_a59cb88a8893bbf3a4751881ec1925f67} 
+\index{filesystem.c@{filesystem.c}!filesystem\_rename@{filesystem\_rename}}
+\index{filesystem\_rename@{filesystem\_rename}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_rename()}{filesystem\_rename()}}
+{\footnotesize\ttfamily int filesystem\+\_\+rename (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{old\+\_\+pathname,  }\item[{char \texorpdfstring{$\ast$}{*}}]{new\+\_\+pathname }\end{DoxyParamCaption})}
+
+
+
+Rename a file. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em old\+\_\+pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em new\+\_\+pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00353}{353}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00270}{real\+\_\+posix\+\_\+rename}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01153}{mpi\+\_\+server\+\_\+op\+\_\+rename()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00884}{tcp\+\_\+server\+\_\+op\+\_\+rename()}}.
+
+\Hypertarget{filesystem_8c_a1433b761c1f369a490d9700ce9bc2090}\label{filesystem_8c_a1433b761c1f369a490d9700ce9bc2090} 
+\index{filesystem.c@{filesystem.c}!filesystem\_rmdir@{filesystem\_rmdir}}
+\index{filesystem\_rmdir@{filesystem\_rmdir}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_rmdir()}{filesystem\_rmdir()}}
+{\footnotesize\ttfamily int filesystem\+\_\+rmdir (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{pathname }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00432}{432}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00273}{real\+\_\+posix\+\_\+rmdir}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01298}{mpi\+\_\+server\+\_\+op\+\_\+rmdir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01316}{mpi\+\_\+server\+\_\+op\+\_\+rmdir\+\_\+async()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l01026}{tcp\+\_\+server\+\_\+op\+\_\+rmdir()}}.
+
+\Hypertarget{filesystem_8c_a5659814a02c79ab1c3e0b513131edf38}\label{filesystem_8c_a5659814a02c79ab1c3e0b513131edf38} 
+\index{filesystem.c@{filesystem.c}!filesystem\_stat@{filesystem\_stat}}
+\index{filesystem\_stat@{filesystem\_stat}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_stat()}{filesystem\_stat()}}
+{\footnotesize\ttfamily int filesystem\+\_\+stat (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{pathname,  }\item[{struct stat \texorpdfstring{$\ast$}{*}}]{sinfo }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em sinfo} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00588}{588}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00275}{real\+\_\+posix\+\_\+stat}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01179}{mpi\+\_\+server\+\_\+op\+\_\+getattr()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00907}{tcp\+\_\+server\+\_\+op\+\_\+getattr()}}.
+
+\Hypertarget{filesystem_8c_a01bc57f03261e56f6fc4c7b9b09321e1}\label{filesystem_8c_a01bc57f03261e56f6fc4c7b9b09321e1} 
+\index{filesystem.c@{filesystem.c}!filesystem\_unlink@{filesystem\_unlink}}
+\index{filesystem\_unlink@{filesystem\_unlink}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_unlink()}{filesystem\_unlink()}}
+{\footnotesize\ttfamily int filesystem\+\_\+unlink (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{pathname }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pathname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00562}{562}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00274}{real\+\_\+posix\+\_\+unlink}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01109}{mpi\+\_\+server\+\_\+op\+\_\+rm()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01132}{mpi\+\_\+server\+\_\+op\+\_\+rm\+\_\+async()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00861}{tcp\+\_\+server\+\_\+op\+\_\+rm()}}.
+
+\Hypertarget{filesystem_8c_a98478fb328222480fb74e981e5358497}\label{filesystem_8c_a98478fb328222480fb74e981e5358497} 
+\index{filesystem.c@{filesystem.c}!filesystem\_write@{filesystem\_write}}
+\index{filesystem\_write@{filesystem\_write}!filesystem.c@{filesystem.c}}
+\doxysubsubsection{\texorpdfstring{filesystem\_write()}{filesystem\_write()}}
+{\footnotesize\ttfamily long filesystem\+\_\+write (\begin{DoxyParamCaption}\item[{int}]{write\+\_\+fd2,  }\item[{void \texorpdfstring{$\ast$}{*}}]{buffer,  }\item[{int}]{num\+\_\+bytes\+\_\+to\+\_\+write }\end{DoxyParamCaption})}
+
+
+
+Write a file. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em write\+\_\+fd2} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buffer} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em num\+\_\+bytes\+\_\+to\+\_\+write} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{filesystem_8c_source_l00321}{321}} of file \mbox{\hyperlink{filesystem_8c_source}{filesystem.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{debug__msg_8h_source_l00056}{debug\+\_\+warning}}, and \mbox{\hyperlink{filesystem_8h_source_l00268}{real\+\_\+posix\+\_\+write}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server__ops_8c_source_l01423}{mpi\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01337}{mpi\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01011}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00949}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+ws()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01126}{tcp\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l01045}{tcp\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{tcp__server__ops_8c_source_l00741}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, and \mbox{\hyperlink{tcp__server__ops_8c_source_l00678}{tcp\+\_\+server\+\_\+op\+\_\+write\+\_\+ws()}}.
+

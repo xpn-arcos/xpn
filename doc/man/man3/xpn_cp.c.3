@@ -1,0 +1,93 @@
+.TH "xpn_cp.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn_cp.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <fcntl\&.h>\fP
+.br
+\fC#include <dirent\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBBUFFER_SIZE\fP   (8192 * 1024)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBdo_cp\fP (char *\fBsrc_path\fP, char *\fBdest_path\fP)"
+.br
+.ti -1c
+.RI "int \fBdo_cp_recursive\fP (char *\fBsrc_path\fP, char *\fBdest_path\fP)"
+.br
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "char \fBbuf\fP [\fBBUFFER_SIZE\fP]"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define BUFFER_SIZE   (8192 * 1024)"
+
+.PP
+Definition at line \fB35\fP of file \fBxpn_cp\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int do_cp (char * src_path, char * dest_path)"
+
+.PP
+Definition at line \fB40\fP of file \fBxpn_cp\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBBUFFER_SIZE\fP, \fBclose()\fP, \fBdest_path\fP, \fBO_CREAT\fP, \fBO_RDONLY\fP, \fBO_TRUNC\fP, \fBO_WRONLY\fP, \fBopen()\fP, \fBread()\fP, \fBsrc_path\fP, and \fBwrite()\fP\&.
+.PP
+Referenced by \fBdo_cp_recursive()\fP\&.
+.SS "int do_cp_recursive (char * src_path, char * dest_path)"
+
+.PP
+Definition at line \fB104\fP of file \fBxpn_cp\&.c\fP\&.
+.PP
+References \fBclosedir()\fP, \fBdest_path\fP, \fBdo_cp()\fP, \fBdo_cp_recursive()\fP, \fBerrno\fP, \fBmkdir()\fP, \fBopendir()\fP, \fBPATH_MAX\fP, \fBreaddir()\fP, and \fBsrc_path\fP\&.
+.PP
+Referenced by \fBdo_cp_recursive()\fP, and \fBmain()\fP\&.
+.SS "int main (int argc, char * argv[])"
+
+.PP
+Definition at line \fB178\fP of file \fBxpn_cp\&.c\fP\&.
+.PP
+References \fBdo_cp_recursive()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "char buf[\fBBUFFER_SIZE\fP]"
+
+.PP
+Definition at line \fB36\fP of file \fBxpn_cp\&.c\fP\&.
+.PP
+Referenced by \fB__fxstat()\fP, \fB__fxstat64()\fP, \fB__lxstat()\fP, \fB__lxstat64()\fP, \fB__xstat()\fP, \fB__xstat64()\fP, \fBcopy()\fP, \fBdlsym_fstat()\fP, \fBdlsym_fstatat()\fP, \fBdlsym_fstatat64()\fP, \fBdlsym_fxstat64()\fP, \fBdlsym_lstat()\fP, \fBdlsym_lxstat64()\fP, \fBdlsym_read()\fP, \fBdlsym_stat()\fP, \fBdlsym_write()\fP, \fBdlsym_xstat64()\fP, \fBdo_cp()\fP, \fBmain()\fP, \fBmpi_server_down()\fP, \fBread()\fP, \fBstat64_to_stat()\fP, \fBstat_to_stat64()\fP, \fBwrite()\fP, and \fBxdr_pathconf3resok()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

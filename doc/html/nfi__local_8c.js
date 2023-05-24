@@ -1,0 +1,28 @@
+var nfi__local_8c =
+[
+    [ "FILESYSTEM_DLSYM", "nfi__local_8c.html#ab53067ee1959fd5f0db3d689db5263cb", null ],
+    [ "LOCALtoNFIattr", "nfi__local_8c.html#a01f25a9d9535da1edd2c06743be25639", null ],
+    [ "LOCALtoNFIInfo", "nfi__local_8c.html#a72d2ee291ef64a002ca1206c08729110", null ],
+    [ "nfi_local_close", "nfi__local_8c.html#a121c5705f2ff8f96e50265c7f169edfc", null ],
+    [ "nfi_local_closedir", "nfi__local_8c.html#a932cd3a5ecb70110fa3cae9f634b2dcc", null ],
+    [ "nfi_local_connect", "nfi__local_8c.html#a114695460b51d4741dc1752501696227", null ],
+    [ "nfi_local_create", "nfi__local_8c.html#afa9b93439e1be67a5848d6c5c10cc2bb", null ],
+    [ "nfi_local_destroy", "nfi__local_8c.html#a3c1581e8a7c5af920e33523d896b7b5f", null ],
+    [ "nfi_local_disconnect", "nfi__local_8c.html#adf6045ba9b3d107308198ea0f6af59fd", null ],
+    [ "nfi_local_getattr", "nfi__local_8c.html#aeed6d8d3d6e864578fbec0e304379b9b", null ],
+    [ "nfi_local_init", "nfi__local_8c.html#ad43be282be22d89332252ee9ab96d6a8", null ],
+    [ "nfi_local_keepConnected", "nfi__local_8c.html#aeafa1bbab378025ba7d66ef81c58d40d", null ],
+    [ "nfi_local_mkdir", "nfi__local_8c.html#a302b13f4b7976e225c53567cd6f73651", null ],
+    [ "nfi_local_open", "nfi__local_8c.html#a400be72227c15530d1e40ad3421ba2cf", null ],
+    [ "nfi_local_opendir", "nfi__local_8c.html#a34f332e2f88b7f6d4b35b3bf0f996f8a", null ],
+    [ "nfi_local_read", "nfi__local_8c.html#a40b6046b4804e5865ec7c0b0d6860d39", null ],
+    [ "nfi_local_readdir", "nfi__local_8c.html#aeb20afd9cfe924efb81b98de3e04fbaa", null ],
+    [ "nfi_local_reconnect", "nfi__local_8c.html#a27e047d34a6e56f47e07d7c9bfd4ccfd", null ],
+    [ "nfi_local_remove", "nfi__local_8c.html#a2e73e13cff9cf830fae58cab2b050997", null ],
+    [ "nfi_local_rename", "nfi__local_8c.html#a27e7eb1e880adbf4676760c3e22b1af5", null ],
+    [ "nfi_local_rmdir", "nfi__local_8c.html#af462ce63bdce000b012970a35462f39b", null ],
+    [ "nfi_local_setattr", "nfi__local_8c.html#a835d474f528b0222399c81f9265c3136", null ],
+    [ "nfi_local_statfs", "nfi__local_8c.html#aa7af429706accfc256b84afdf388e4a2", null ],
+    [ "nfi_local_write", "nfi__local_8c.html#ad16574adc3a5c30f7b06f6c2e9887bfc", null ],
+    [ "NFItoLOCALattr", "nfi__local_8c.html#a4240653d2b59c423798224840e2e32b9", null ]
+];

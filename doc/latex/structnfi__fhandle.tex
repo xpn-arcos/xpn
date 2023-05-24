@@ -1,0 +1,111 @@
+\doxysection{nfi\+\_\+fhandle Struct Reference}
+\hypertarget{structnfi__fhandle}{}\label{structnfi__fhandle}\index{nfi\_fhandle@{nfi\_fhandle}}
+
+
+This is a struct.  
+
+
+
+
+{\ttfamily \#include $<$nfi.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{structnfi__fhandle_afb201a07f6c8ea04b799fb0529034823}{type}}
+\begin{DoxyCompactList}\small\item\em File or directory. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnfi__fhandle_ad6972c8507aa2b19ef8e0197615e61a2}{url}}
+\begin{DoxyCompactList}\small\item\em Url of DIR or FILE. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnfi__fhandle_a5ee492b4c6cefc5d2883d32a3b79c67a}{server}}
+\begin{DoxyCompactList}\small\item\em Server. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnfi__fhandle_a2251df06abeb228fc5fa484511c8fd20}{priv\+\_\+fh}}
+\begin{DoxyCompactList}\small\item\em Pointer to private filehandle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This is a struct. 
+
+
+
+Definition at line \mbox{\hyperlink{nfi_8h_source_l00208}{208}} of file \mbox{\hyperlink{nfi_8h_source}{nfi.\+h}}.
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structnfi__fhandle_a2251df06abeb228fc5fa484511c8fd20}\label{structnfi__fhandle_a2251df06abeb228fc5fa484511c8fd20} 
+\index{nfi\_fhandle@{nfi\_fhandle}!priv\_fh@{priv\_fh}}
+\index{priv\_fh@{priv\_fh}!nfi\_fhandle@{nfi\_fhandle}}
+\doxysubsubsection{\texorpdfstring{priv\_fh}{priv\_fh}}
+{\footnotesize\ttfamily nfi\+\_\+fhandle\+::priv\+\_\+fh}
+
+
+
+Pointer to private filehandle. 
+
+
+
+Definition at line \mbox{\hyperlink{nfi_8h_source_l00213}{213}} of file \mbox{\hyperlink{nfi_8h_source}{nfi.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00635}{nfi\+\_\+local\+\_\+close()}}, \mbox{\hyperlink{nfi__local_8c_source_l00975}{nfi\+\_\+local\+\_\+closedir()}}, \mbox{\hyperlink{nfi__local_8c_source_l00500}{nfi\+\_\+local\+\_\+create()}}, \mbox{\hyperlink{nfi__local_8c_source_l00815}{nfi\+\_\+local\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__local_8c_source_l00444}{nfi\+\_\+local\+\_\+open()}}, \mbox{\hyperlink{nfi__local_8c_source_l00880}{nfi\+\_\+local\+\_\+opendir()}}, \mbox{\hyperlink{nfi__local_8c_source_l00568}{nfi\+\_\+local\+\_\+read()}}, \mbox{\hyperlink{nfi__local_8c_source_l00936}{nfi\+\_\+local\+\_\+readdir()}}, \mbox{\hyperlink{nfi__local_8c_source_l00791}{nfi\+\_\+local\+\_\+setattr()}}, \mbox{\hyperlink{nfi__local_8c_source_l00599}{nfi\+\_\+local\+\_\+write()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01118}{nfi\+\_\+mpi\+\_\+server\+\_\+close()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01690}{nfi\+\_\+mpi\+\_\+server\+\_\+closedir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00671}{nfi\+\_\+mpi\+\_\+server\+\_\+create()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01439}{nfi\+\_\+mpi\+\_\+server\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00568}{nfi\+\_\+mpi\+\_\+server\+\_\+open()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01543}{nfi\+\_\+mpi\+\_\+server\+\_\+opendir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00797}{nfi\+\_\+mpi\+\_\+server\+\_\+read()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01625}{nfi\+\_\+mpi\+\_\+server\+\_\+readdir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01412}{nfi\+\_\+mpi\+\_\+server\+\_\+setattr()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00949}{nfi\+\_\+mpi\+\_\+server\+\_\+write()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01192}{nfi\+\_\+tcp\+\_\+server\+\_\+close()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01706}{nfi\+\_\+tcp\+\_\+server\+\_\+closedir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00723}{nfi\+\_\+tcp\+\_\+server\+\_\+create()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01471}{nfi\+\_\+tcp\+\_\+server\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00629}{nfi\+\_\+tcp\+\_\+server\+\_\+open()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01567}{nfi\+\_\+tcp\+\_\+server\+\_\+opendir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00846}{nfi\+\_\+tcp\+\_\+server\+\_\+read()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01641}{nfi\+\_\+tcp\+\_\+server\+\_\+readdir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01444}{nfi\+\_\+tcp\+\_\+server\+\_\+setattr()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00983}{nfi\+\_\+tcp\+\_\+server\+\_\+write()}}, \mbox{\hyperlink{nfi__nfs3_8c_source_l00596}{nfs3\+\_\+open()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00597}{nfs\+\_\+open()}}, \mbox{\hyperlink{xpn__file_8c_source_l00055}{xpn\+\_\+destroy\+\_\+file\+\_\+table()}}, \mbox{\hyperlink{xpn__open_8c_source_l00177}{xpn\+\_\+internal\+\_\+creat()}}, \mbox{\hyperlink{xpn__opendir_8c_source_l00139}{xpn\+\_\+simple\+\_\+closedir()}}, \mbox{\hyperlink{xpn__dir_8c_source_l00041}{xpn\+\_\+simple\+\_\+mkdir()}}, and \mbox{\hyperlink{xpn__open_8c_source_l01037}{xpn\+\_\+simple\+\_\+rename()}}.
+
+\Hypertarget{structnfi__fhandle_a5ee492b4c6cefc5d2883d32a3b79c67a}\label{structnfi__fhandle_a5ee492b4c6cefc5d2883d32a3b79c67a} 
+\index{nfi\_fhandle@{nfi\_fhandle}!server@{server}}
+\index{server@{server}!nfi\_fhandle@{nfi\_fhandle}}
+\doxysubsubsection{\texorpdfstring{server}{server}}
+{\footnotesize\ttfamily nfi\+\_\+fhandle\+::server}
+
+
+
+Server. 
+
+
+
+Definition at line \mbox{\hyperlink{nfi_8h_source_l00212}{212}} of file \mbox{\hyperlink{nfi_8h_source}{nfi.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00635}{nfi\+\_\+local\+\_\+close()}}, \mbox{\hyperlink{nfi__local_8c_source_l00500}{nfi\+\_\+local\+\_\+create()}}, \mbox{\hyperlink{nfi__local_8c_source_l00444}{nfi\+\_\+local\+\_\+open()}}, \mbox{\hyperlink{nfi__local_8c_source_l00880}{nfi\+\_\+local\+\_\+opendir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01118}{nfi\+\_\+mpi\+\_\+server\+\_\+close()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00671}{nfi\+\_\+mpi\+\_\+server\+\_\+create()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00568}{nfi\+\_\+mpi\+\_\+server\+\_\+open()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01543}{nfi\+\_\+mpi\+\_\+server\+\_\+opendir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01192}{nfi\+\_\+tcp\+\_\+server\+\_\+close()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00723}{nfi\+\_\+tcp\+\_\+server\+\_\+create()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00629}{nfi\+\_\+tcp\+\_\+server\+\_\+open()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01567}{nfi\+\_\+tcp\+\_\+server\+\_\+opendir()}}, \mbox{\hyperlink{nfi__nfs3_8c_source_l00596}{nfs3\+\_\+open()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00597}{nfs\+\_\+open()}}, \mbox{\hyperlink{xpn__open_8c_source_l00177}{xpn\+\_\+internal\+\_\+creat()}}, \mbox{\hyperlink{xpn__open_8c_source_l00931}{xpn\+\_\+simple\+\_\+close()}}, \mbox{\hyperlink{xpn__opendir_8c_source_l00139}{xpn\+\_\+simple\+\_\+closedir()}}, \mbox{\hyperlink{xpn__dir_8c_source_l00041}{xpn\+\_\+simple\+\_\+mkdir()}}, \mbox{\hyperlink{xpn__open_8c_source_l01037}{xpn\+\_\+simple\+\_\+rename()}}, and \mbox{\hyperlink{xpn__policy__opendir_8c_source_l00044}{Xpn\+Get\+Entry()}}.
+
+\Hypertarget{structnfi__fhandle_afb201a07f6c8ea04b799fb0529034823}\label{structnfi__fhandle_afb201a07f6c8ea04b799fb0529034823} 
+\index{nfi\_fhandle@{nfi\_fhandle}!type@{type}}
+\index{type@{type}!nfi\_fhandle@{nfi\_fhandle}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily nfi\+\_\+fhandle\+::type}
+
+
+
+File or directory. 
+
+
+
+Definition at line \mbox{\hyperlink{nfi_8h_source_l00210}{210}} of file \mbox{\hyperlink{nfi_8h_source}{nfi.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00635}{nfi\+\_\+local\+\_\+close()}}, \mbox{\hyperlink{nfi__local_8c_source_l00500}{nfi\+\_\+local\+\_\+create()}}, \mbox{\hyperlink{nfi__local_8c_source_l00815}{nfi\+\_\+local\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__local_8c_source_l00444}{nfi\+\_\+local\+\_\+open()}}, \mbox{\hyperlink{nfi__local_8c_source_l00880}{nfi\+\_\+local\+\_\+opendir()}}, \mbox{\hyperlink{nfi__local_8c_source_l00936}{nfi\+\_\+local\+\_\+readdir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01118}{nfi\+\_\+mpi\+\_\+server\+\_\+close()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00671}{nfi\+\_\+mpi\+\_\+server\+\_\+create()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01439}{nfi\+\_\+mpi\+\_\+server\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00568}{nfi\+\_\+mpi\+\_\+server\+\_\+open()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01543}{nfi\+\_\+mpi\+\_\+server\+\_\+opendir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01625}{nfi\+\_\+mpi\+\_\+server\+\_\+readdir()}}, \mbox{\hyperlink{nfi__nfs3_8c_source_l00698}{nfi\+\_\+nfs3\+\_\+open()}}, \mbox{\hyperlink{nfi__nfs3_8c_source_l01308}{nfi\+\_\+nfs3\+\_\+opendir()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00702}{nfi\+\_\+nfs\+\_\+open()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l01402}{nfi\+\_\+nfs\+\_\+opendir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01192}{nfi\+\_\+tcp\+\_\+server\+\_\+close()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00723}{nfi\+\_\+tcp\+\_\+server\+\_\+create()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01471}{nfi\+\_\+tcp\+\_\+server\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00629}{nfi\+\_\+tcp\+\_\+server\+\_\+open()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01567}{nfi\+\_\+tcp\+\_\+server\+\_\+opendir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01641}{nfi\+\_\+tcp\+\_\+server\+\_\+readdir()}}, \mbox{\hyperlink{nfi__nfs3_8c_source_l00596}{nfs3\+\_\+open()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00597}{nfs\+\_\+open()}}, and \mbox{\hyperlink{xpn__policy__open_8c_source_l00322}{Xpn\+Read\+Metadata()}}.
+
+\Hypertarget{structnfi__fhandle_ad6972c8507aa2b19ef8e0197615e61a2}\label{structnfi__fhandle_ad6972c8507aa2b19ef8e0197615e61a2} 
+\index{nfi\_fhandle@{nfi\_fhandle}!url@{url}}
+\index{url@{url}!nfi\_fhandle@{nfi\_fhandle}}
+\doxysubsubsection{\texorpdfstring{url}{url}}
+{\footnotesize\ttfamily nfi\+\_\+fhandle\+::url}
+
+
+
+Url of DIR or FILE. 
+
+
+
+Definition at line \mbox{\hyperlink{nfi_8h_source_l00211}{211}} of file \mbox{\hyperlink{nfi_8h_source}{nfi.\+h}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00635}{nfi\+\_\+local\+\_\+close()}}, \mbox{\hyperlink{nfi__local_8c_source_l00975}{nfi\+\_\+local\+\_\+closedir()}}, \mbox{\hyperlink{nfi__local_8c_source_l00500}{nfi\+\_\+local\+\_\+create()}}, \mbox{\hyperlink{nfi__local_8c_source_l00748}{nfi\+\_\+local\+\_\+getattr()}}, \mbox{\hyperlink{nfi__local_8c_source_l00815}{nfi\+\_\+local\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__local_8c_source_l00444}{nfi\+\_\+local\+\_\+open()}}, \mbox{\hyperlink{nfi__local_8c_source_l00880}{nfi\+\_\+local\+\_\+opendir()}}, \mbox{\hyperlink{nfi__local_8c_source_l00568}{nfi\+\_\+local\+\_\+read()}}, \mbox{\hyperlink{nfi__local_8c_source_l00599}{nfi\+\_\+local\+\_\+write()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00671}{nfi\+\_\+mpi\+\_\+server\+\_\+create()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01346}{nfi\+\_\+mpi\+\_\+server\+\_\+getattr()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01439}{nfi\+\_\+mpi\+\_\+server\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00568}{nfi\+\_\+mpi\+\_\+server\+\_\+open()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l01543}{nfi\+\_\+mpi\+\_\+server\+\_\+opendir()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00797}{nfi\+\_\+mpi\+\_\+server\+\_\+read()}}, \mbox{\hyperlink{nfi__mpi__server_8c_source_l00949}{nfi\+\_\+mpi\+\_\+server\+\_\+write()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00723}{nfi\+\_\+tcp\+\_\+server\+\_\+create()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01386}{nfi\+\_\+tcp\+\_\+server\+\_\+getattr()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01471}{nfi\+\_\+tcp\+\_\+server\+\_\+mkdir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00629}{nfi\+\_\+tcp\+\_\+server\+\_\+open()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l01567}{nfi\+\_\+tcp\+\_\+server\+\_\+opendir()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00846}{nfi\+\_\+tcp\+\_\+server\+\_\+read()}}, \mbox{\hyperlink{nfi__tcp__server_8c_source_l00983}{nfi\+\_\+tcp\+\_\+server\+\_\+write()}}, \mbox{\hyperlink{nfi__nfs3_8c_source_l00596}{nfs3\+\_\+open()}}, \mbox{\hyperlink{nfi__nfs_8c_source_l00597}{nfs\+\_\+open()}}, and \mbox{\hyperlink{xpn__policy__open_8c_source_l00547}{Xpn\+Get\+Atrib\+Path()}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{nfi_8h}{nfi.\+h}}\end{DoxyCompactItemize}

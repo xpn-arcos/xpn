@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file nfi_tcp_server.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _NFI_TCP_SERVER_H
 #define _NFI_TCP_SERVER_H
 
@@ -27,8 +38,8 @@ extern "C"
 #endif
 
   /************************************************
- *  ... Includes
- ***********************************************/
+   *  ... Includes
+   ***********************************************/
 #include "all_system.h"
 #include "base/utils.h"
 #include "base/path_misc.h"
@@ -45,13 +56,17 @@ extern "C"
 #include <mosquitto.h>
 #endif
 
-  /* ... Const / Const ................................................. */
+/************************************************
+ *  ... Constants
+ ***********************************************/
 
 #ifndef MOSQ_OPT_TCP_NODELAY
 #define MOSQ_OPT_TCP_NODELAY 0
 #endif
 
-  /* ... Data structures / Estructuras de datos ........................ */
+/************************************************
+ *  ... Data structures
+ ***********************************************/
 
   struct nfi_tcp_server_server
   {
@@ -72,8 +87,9 @@ extern "C"
     DIR *dir;
   };
 
-  /* ... Functions / Funciones ......................................... */
-
+/************************************************
+ *  ... Functions
+ ***********************************************/
   int nfi_tcp_server_init(char *url, struct nfi_server *serv, struct nfi_attr_server *attr);
 
   int nfi_tcp_server_connect(struct nfi_server *server, char *url, char *prt, char *serv, char *dir);

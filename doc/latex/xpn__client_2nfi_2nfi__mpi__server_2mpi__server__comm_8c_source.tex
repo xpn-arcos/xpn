@@ -1,0 +1,427 @@
+\doxysection{xpn\+\_\+client/nfi/nfi\+\_\+mpi\+\_\+server/mpi\+\_\+server\+\_\+comm.c}
+\hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source}{}\label{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source}\index{mpi\_server\_comm.c@{mpi\_server\_comm.c}}
+\mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2020-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ mpi\_server\_comm.c}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ File\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00025}00025\ \textcolor{comment}{\ *\ File\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00032}00032\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00033}00033\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00034}00034\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00035}00035\ \textcolor{preprocessor}{\#include\ "{}mpi\_server\_comm.h"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00037}00037\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00038}00038\ \textcolor{comment}{\ *\ \ ...\ Functions}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00039}00039\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00040}\mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a29002231a5381474f4c8b06d3ff3e34b}{00040}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a29002231a5381474f4c8b06d3ff3e34b}{mpiClient\_comm\_init}}(\mbox{\hyperlink{structmpiClient__param__st}{mpiClient\_param\_st}}\ *\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}})}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00041}00041\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00042}00042\ \ \ \textcolor{keywordtype}{int}\ ret,\ provided,\ claimed;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00043}00043\ \ \ \textcolor{keywordtype}{int}\ flag\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00045}00045\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ begin\ mpiClient\_comm\_init(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00047}00047\ \ \ \textcolor{comment}{//\ MPI\_Init}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00048}00048\ \ \ MPI\_Initialized(\&flag);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00050}00050\ \ \ \textcolor{keywordflow}{if}\ (!flag)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00051}00051\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00052}00052\ \ \ \ \ \textcolor{comment}{//\ TODO:\ server-\/>argc,\ server-\/>argv\ from\ upper\ layers?}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00054}00054\ \ \ \ \ \textcolor{comment}{//\ Threads\ disable}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00055}00055\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>xpn\_thread)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00056}00056\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00057}00057\ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{xpn__bypass_8c_a85fc482f00c52ec6e5f2503b3b480c56}{MPI\_Init}}(NULL,\ NULL);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00058}00058\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00059}00059\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00060}00060\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}Server[\%d]:\ MPI\_Init\ fails\ :-\/("{}},\ -\/1);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00061}00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00062}00062\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00063}00063\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00064}00064\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00065}00065\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00066}00066\ \ \ \ \ \ \ ret\ =\ MPI\_Init\_thread(NULL,\ NULL,\ MPI\_THREAD\_MULTIPLE,\ \&provided);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00067}00067\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00068}00068\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00069}00069\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}Server[\%d]:\ MPI\_Init\_thread\ fails\ :-\/("{}},\ -\/1);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00070}00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00071}00071\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00073}00073\ \ \ \ \ \ \ MPI\_Query\_thread(\&claimed);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00074}00074\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (claimed\ !=\ MPI\_THREAD\_MULTIPLE)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00075}00075\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00076}00076\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}MPI\_Init\_thread:\ your\ MPI\ implementation\ seem\ not\ supporting\ thereads\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00077}00077\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00078}00078\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00079}00079\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00080}00080\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00081}00081\ \ \ \textcolor{comment}{//\ params-\/>rank\ =\ comm\_rank()}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00082}00082\ \ \ ret\ =\ MPI\_Comm\_rank(MPI\_COMM\_WORLD,\ \&(\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9942647ac0fad99bc4243527609e9283}{rank}}));}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00083}00083\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00084}00084\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00085}00085\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}Server[\%d]:\ MPI\_Comm\_rank\ fails\ :-\/("{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9942647ac0fad99bc4243527609e9283}{rank}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00086}00086\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00087}00087\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00089}00089\ \ \ \textcolor{comment}{//\ params-\/>size\ =\ comm\_size()}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00090}00090\ \ \ ret\ =\ MPI\_Comm\_size(MPI\_COMM\_WORLD,\ \&(\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a5abe616dbc43bbc65a43959259edfd7b}{size}}));}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00091}00091\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00092}00092\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00093}00093\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}Server[\%d]:\ MPI\_Comm\_size\ fails\ :-\/("{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a5abe616dbc43bbc65a43959259edfd7b}{size}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00094}00094\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00095}00095\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00097}00097\ \ \ \textcolor{comment}{//\ set\ is\_mpi\_server\ as\ the\ used\ protocol}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00098}00098\ \ \ setenv(\textcolor{stringliteral}{"{}XPN\_IS\_MPI\_SERVER"{}},\ \textcolor{stringliteral}{"{}1"{}},\ 1);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00100}00100\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ server\ \%d\ available\ at\ \%s\(\backslash\)n"{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9942647ac0fad99bc4243527609e9283}{rank}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_af60e28ec980fd45f9c78c719e5e361d2}{port\_name}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00102}00102\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ end\ mpiClient\_comm\_init(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00104}00104\ \ \ \textcolor{comment}{//\ Return\ OK}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00105}00105\ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00106}00106\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00108}\mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_ae888df34e7643c3da1ee7dcc21c519cd}{00108}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_ae888df34e7643c3da1ee7dcc21c519cd}{mpiClient\_comm\_destroy}}(\mbox{\hyperlink{structmpiClient__param__st}{mpiClient\_param\_st}}\ *\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}})}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00109}00109\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00110}00110\ \ \ \textcolor{keywordtype}{int}\ ret;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00112}00112\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ begin\ mpiClient\_comm\_destroy(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00114}00114\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a5abe616dbc43bbc65a43959259edfd7b}{size}}\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00115}00115\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00116}00116\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}Server[\%d]:\ number\ of\ process\ is\ negative\ :-\/("{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9942647ac0fad99bc4243527609e9283}{rank}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00117}00117\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00118}00118\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00120}00120\ \ \ MPI\_Barrier(MPI\_COMM\_WORLD);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00122}00122\ \ \ \textcolor{keywordtype}{int}\ flag\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00123}00123\ \ \ MPI\_Initialized(\&flag);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00125}00125\ \ \ \textcolor{keywordflow}{if}\ (!flag)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00126}00126\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00127}00127\ \ \ \ \ ret\ =\ PMPI\_Finalize();}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00128}00128\ \ \ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00129}00129\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00130}00130\ \ \ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}Server[\%d]:\ MPI\_Finalize\ fails\ :-\/("{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9942647ac0fad99bc4243527609e9283}{rank}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00131}00131\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00132}00132\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00133}00133\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00135}00135\ \ \ \textcolor{comment}{//\ Indicates\ mpi\_server\ are\ the\ used\ protocolo}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00136}00136\ \ \ unsetenv(\textcolor{stringliteral}{"{}XPN\_IS\_MPI\_SERVER"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00138}00138\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ end\ mpiClient\_comm\_destroy(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00140}00140\ \ \ \textcolor{comment}{//\ Return\ OK}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00141}00141\ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00142}00142\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00144}\mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a8b4c55e51b9148039ffc301c6e532f52}{00144}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a8b4c55e51b9148039ffc301c6e532f52}{mpiClient\_comm\_connect}}(\mbox{\hyperlink{structmpiClient__param__st}{mpiClient\_param\_st}}\ *\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}})}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00145}00145\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00146}00146\ \ \ \textcolor{keywordtype}{int}\ ret;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00148}00148\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ begin\ mpiClient\_comm\_connect(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00150}00150\ \ \ \textcolor{keywordtype}{int}\ version\_len;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00151}00151\ \ \ \textcolor{keywordtype}{char}\ version[MPI\_MAX\_LIBRARY\_VERSION\_STRING];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00152}00152\ \ \ MPI\_Get\_library\_version(version,\ \&version\_len);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00154}00154\ \ \ \textcolor{keywordflow}{if}\ (strncasecmp(version,\ \textcolor{stringliteral}{"{}Open\ MPI"{}},\ strlen(\textcolor{stringliteral}{"{}Open\ MPI"{}}))\ !=\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00155}00155\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00156}00156\ \ \ \ \ \textcolor{comment}{//\ Lookup\ port\ name}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00157}00157\ \ \ \ \ \textcolor{keywordtype}{int}\ lookup\_retries\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00158}00158\ \ \ \ \ \textcolor{keywordtype}{char}\ aux\_srv\_ip[1024];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00159}00159\ \ \ \ \ \textcolor{keywordflow}{do}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00160}00160\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00161}00161\ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{ns_8c_a65b37ee0ae99433ef43c588b253624ef}{ns\_lookup}}(\textcolor{stringliteral}{"{}mpi\_server"{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9f65344d483d863fdb5886fbe033a104}{srv\_name}},\ aux\_srv\_ip,\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_af60e28ec980fd45f9c78c719e5e361d2}{port\_name}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00162}00162\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00163}00163\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00164}00164\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (lookup\_retries\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00165}00165\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ cli\_name[HOST\_NAME\_MAX];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ gethostname(cli\_name,\ HOST\_NAME\_MAX);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00168}00168\ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}XPN\ Client\ \%s\ :\ Waiting\ for\ servers\ being\ up\ and\ runing...\(\backslash\)n"{}},\ cli\_name);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00171}00171\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00172}00172\ \ \ \ \ \ \ \ \ lookup\_retries++;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00173}00173\ \ \ \ \ \ \ \ \ sleep(2);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00174}00174\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00175}00175\ \ \ \ \ \}\ \textcolor{keywordflow}{while}\ ((ret\ <\ 0)\ \&\&\ (lookup\_retries\ <\ 150));}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00176}00176\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00177}00177\ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00178}00178\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00179}00179\ \ \ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}ERROR:\ DNS\ Lookup\ \%s\ Port\ \%s\(\backslash\)n"{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9f65344d483d863fdb5886fbe033a104}{srv\_name}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_af60e28ec980fd45f9c78c719e5e361d2}{port\_name}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00180}00180\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00181}00181\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00182}00182\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00183}00183\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00184}00184\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00185}00185\ \ \ \ \ \textcolor{comment}{//\ Lookup\ port\ name\ on\ nameserver}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00186}00186\ \ \ \ \ ret\ =\ MPI\_Lookup\_name(\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9f65344d483d863fdb5886fbe033a104}{srv\_name}},\ MPI\_INFO\_NULL,\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_af60e28ec980fd45f9c78c719e5e361d2}{port\_name}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00187}00187\ \ \ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00188}00188\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00189}00189\ \ \ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}Server[\%d]:\ MPI\_Lookup\_name\ fails\ :-\/("{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9942647ac0fad99bc4243527609e9283}{rank}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00190}00190\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00191}00191\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00192}00192\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00194}00194\ \ \ \textcolor{comment}{//\ Connect...}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00195}00195\ \ \ \textcolor{keywordtype}{int}\ connect\_retries\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00196}00196\ \ \ \textcolor{keywordflow}{do}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00197}00197\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00198}00198\ \ \ \ \ ret\ =\ MPI\_Comm\_connect(\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_af60e28ec980fd45f9c78c719e5e361d2}{port\_name}},\ MPI\_INFO\_NULL,\ 0,\ MPI\_COMM\_WORLD,\ \&(\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>server));}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00199}00199\ \ \ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00200}00200\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00201}00201\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (connect\_retries\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00202}00202\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00203}00203\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ cli\_name[HOST\_NAME\_MAX];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00204}00204\ \ \ \ \ \ \ \ \ gethostname(cli\_name,\ HOST\_NAME\_MAX);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00205}00205\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00206}00206\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}XPN\ Client\ \%s\ :\ Waiting\ for\ servers\ being\ up\ and\ runing...\(\backslash\)n"{}},\ cli\_name);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00207}00207\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00208}00208\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00209}00209\ \ \ \ \ \ \ connect\_retries++;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00210}00210\ \ \ \ \ \ \ sleep(2);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00211}00211\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00212}00212\ \ \ \}\ \textcolor{keywordflow}{while}\ (MPI\_SUCCESS\ !=\ ret\ \&\&\ connect\_retries\ <\ 150);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00213}00213\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00214}00214\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00215}00215\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00216}00216\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}Client[\%d]:\ MPI\_Comm\_connect\ fails\ :-\/("{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9942647ac0fad99bc4243527609e9283}{rank}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00217}00217\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00218}00218\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00220}00220\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ end\ mpiClient\_comm\_connect(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00221}00221\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00222}00222\ \ \ \textcolor{comment}{//\ Return\ OK}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00223}00223\ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00224}00224\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00226}\mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a8e3432627ae7101d3098523d0029cde9}{00226}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a8e3432627ae7101d3098523d0029cde9}{mpiClient\_comm\_disconnect}}(\mbox{\hyperlink{structmpiClient__param__st}{mpiClient\_param\_st}}\ *\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}})}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00227}00227\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00228}00228\ \ \ \textcolor{keywordtype}{int}\ ret;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00229}00229\ \ \ \textcolor{keywordtype}{int}\ data;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00231}00231\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ begin\ mpiClient\_comm\_disconnect\ nservers\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00232}00232\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00233}00233\ \ \ data\ =\ \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a7a3f9bdde6dec582eaea900079341368}{MPI\_SERVER\_DISCONNECT}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00234}00234\ \ \ \textcolor{keywordtype}{int}\ rank;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00235}00235\ \ \ MPI\_Comm\_rank(MPI\_COMM\_WORLD,\ \&(rank));}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00236}00236\ \ \ \textcolor{keywordflow}{if}\ (rank\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00237}00237\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00238}00238\ \ \ \ \ MPI\_Send(\&data,\ 1,\ MPI\_INT,\ 0,\ 0,\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>server);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00239}00239\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00240}00240\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00241}00241\ \ \ MPI\_Barrier(MPI\_COMM\_WORLD);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00242}00242\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00243}00243\ \ \ \textcolor{comment}{//\ Disconnect}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00244}00244\ \ \ ret\ =\ MPI\_Comm\_disconnect(\&(\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>server));}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00245}00245\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00246}00246\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00247}00247\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_ab163a9e3f1ed9f61bd7d743fdf4a161a}{debug\_error}}(\textcolor{stringliteral}{"{}Server[\%d]:\ MPI\_Comm\_disconnect\ fails\ :-\/("{}},\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a9942647ac0fad99bc4243527609e9283}{rank}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00248}00248\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00249}00249\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00250}00250\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00251}00251\ \ \ \textcolor{comment}{//\ Return\ OK}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00252}00252\ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00253}00253\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00254}00254\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00255}\mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a8fc25f861d07f6db466b1b4675248e40}{00255}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a8fc25f861d07f6db466b1b4675248e40}{mpiClient\_comm\_locality}}(\mbox{\hyperlink{structmpiClient__param__st}{mpiClient\_param\_st}}\ *\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}})}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00256}00256\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00257}00257\ \ \ \textcolor{keywordtype}{int}\ ret;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00258}00258\ \ \ \textcolor{keywordtype}{int}\ data;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00259}00259\ \ \ \textcolor{keywordtype}{char}\ cli\_name[HOST\_NAME\_MAX];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00260}00260\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{mpi__server_8c_aa9e8cb6581260bf6f9b428d7b127beff}{serv\_name}}[HOST\_NAME\_MAX];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00261}00261\ \ \ MPI\_Status\ status;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00262}00262\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00263}00263\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ begin\ mpiClient\_comm\_locality\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00264}00264\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00265}00265\ \ \ \textcolor{comment}{//\ Locality\ disable}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00266}00266\ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>xpn\_locality)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00267}00267\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00268}00268\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ mpiClient\_comm\_locality\ disable\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00269}00269\ \ \ \ \ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>locality\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00270}00270\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00271}00271\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00272}00272\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00273}00273\ \ \ \textcolor{comment}{//\ Get\ client\ host\ name}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00274}00274\ \ \ gethostname(cli\_name,\ HOST\_NAME\_MAX);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00275}00275\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00276}00276\ \ \ data\ =\ \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_ab73137698991d1409a83bdcd6fd02d2c}{MPI\_SERVER\_GETNODENAME}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00277}00277\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00278}00278\ \ \ ret\ =\ MPI\_Send(\&data,\ 1,\ MPI\_INT,\ 0,\ 0,\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>server);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00279}00279\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00280}00280\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00281}00281\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a82185c5a131fe76d2d21364ef6db6144}{debug\_warning}}(\textcolor{stringliteral}{"{}Server[?]:\ MPI\_Send\ fails\ :-\/("{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00282}00282\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00283}00283\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00284}00284\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00285}00285\ \ \ ret\ =\ MPI\_Recv(\mbox{\hyperlink{mpi__server_8c_aa9e8cb6581260bf6f9b428d7b127beff}{serv\_name}},\ HOST\_NAME\_MAX,\ MPI\_CHAR,\ 0,\ 1,\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>server,\ \&status);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00286}00286\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00287}00287\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00288}00288\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a82185c5a131fe76d2d21364ef6db6144}{debug\_warning}}(\textcolor{stringliteral}{"{}Server[?]:\ MPI\_Recv\ fails\ :-\/("{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00289}00289\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00290}00290\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00291}00291\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00292}00292\ \ \ \textcolor{comment}{//\ Dirbase}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00293}00293\ \ \ ret\ =\ MPI\_Recv(\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>\mbox{\hyperlink{structmpi__server__param__st_a6e4a98969d4e4a4d34fbd361b6872443}{dirbase}},\ \mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}},\ MPI\_CHAR,\ 0,\ 1,\ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>server,\ \&status);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00294}00294\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00295}00295\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00296}00296\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a82185c5a131fe76d2d21364ef6db6144}{debug\_warning}}(\textcolor{stringliteral}{"{}Server[?]:\ MPI\_Recv\ fails\ :-\/("{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00297}00297\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00298}00298\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00299}00299\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00300}00300\ \ \ \textcolor{comment}{//\ Semaphore}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00301}00301\ \ \ \textcolor{comment}{/*ret\ =\ MPI\_Recv(params-\/>sem\_name\_server,\ PATH\_MAX,\ MPI\_CHAR,\ 0,\ 1,\ params-\/>server,\ \&status);}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00302}00302\ \textcolor{comment}{\ \ if\ (MPI\_SUCCESS\ !=\ ret)\ \{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00303}00303\ \textcolor{comment}{\ \ \ \ debug\_warning("{}Server[?]:\ MPI\_Recv\ fails\ :-\/("{})\ ;}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00304}00304\ \textcolor{comment}{\ \ \ \ return\ -\/1;}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00305}00305\ \textcolor{comment}{\ \ \}*/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00306}00306\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00307}00307\ \ \ \textcolor{keywordflow}{if}\ (strcmp(cli\_name,\ \mbox{\hyperlink{mpi__server_8c_aa9e8cb6581260bf6f9b428d7b127beff}{serv\_name}})\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00308}00308\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00309}00309\ \ \ \ \ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>locality\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00310}00310\ \ \ \ \ \textcolor{comment}{//\ params-\/>sem\_server\ =\ sem\_open(params-\/>sem\_name\_server,\ 0);}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00311}00311\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00312}00312\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00313}00313\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00314}00314\ \ \ \ \ \mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}-\/>locality\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00315}00315\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00316}00316\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00317}00317\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ end\ mpiClient\_comm\_locality\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00318}00318\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00319}00319\ \ \ \textcolor{comment}{//\ Return\ OK}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00320}00320\ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00321}00321\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00322}00322\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00323}\mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a30405febae768179dcb1920a9a6cb0d5}{00323}}\ ssize\_t\ \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a30405febae768179dcb1920a9a6cb0d5}{mpiClient\_write\_operation}}(MPI\_Comm\ fd,\ \textcolor{keywordtype}{char}\ *data,\ ssize\_t\ size,\ \_\_attribute\_\_((\_\_unused\_\_))\ \textcolor{keywordtype}{char}\ *msg\_id)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00324}00324\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00325}00325\ \ \ \textcolor{keywordtype}{int}\ ret;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00326}00326\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00327}00327\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ begin\ mpiClient\_write\_operation(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00328}00328\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00329}00329\ \ \ \textcolor{comment}{//\ Check\ params}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00330}00330\ \ \ \textcolor{keywordflow}{if}\ (size\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00331}00331\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00332}00332\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00333}00333\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00334}00334\ \ \ \textcolor{keywordflow}{if}\ (size\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00335}00335\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00336}00336\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a82185c5a131fe76d2d21364ef6db6144}{debug\_warning}}(\textcolor{stringliteral}{"{}Server[?]:\ size\ <\ 0"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00337}00337\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00338}00338\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00339}00339\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00340}00340\ \ \ \textcolor{comment}{//\ TODO}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00341}00341\ \ \ \textcolor{comment}{//\ msg\_id\ =\ msg\_id\ ;\ //\ TODO:\ msg\_id\ is\ used?}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00342}00342\ \ \ \textcolor{comment}{//\ TODO}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00343}00343\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00344}00344\ \ \ \textcolor{comment}{//\ Send\ message}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00345}00345\ \ \ ret\ =\ MPI\_Send(data,\ size,\ MPI\_INT,\ 0,\ 0,\ fd);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00346}00346\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00347}00347\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00348}00348\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a82185c5a131fe76d2d21364ef6db6144}{debug\_warning}}(\textcolor{stringliteral}{"{}Server[?]:\ MPI\_Recv\ fails\ :-\/("{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00349}00349\ \ \ \ \ size\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00350}00350\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00351}00351\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00352}00352\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ end\ mpiClient\_write\_operation(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00353}00353\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00354}00354\ \ \ \textcolor{comment}{//\ Return\ bytes\ written}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00355}00355\ \ \ \textcolor{keywordflow}{return}\ size;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00356}00356\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00357}00357\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00358}\mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a48be510ca3595828dffb2b35a72f7d67}{00358}}\ ssize\_t\ \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a48be510ca3595828dffb2b35a72f7d67}{mpiClient\_write\_data}}(MPI\_Comm\ fd,\ \textcolor{keywordtype}{char}\ *data,\ ssize\_t\ size,\ \textcolor{keywordtype}{char}\ *msg\_id)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00359}00359\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00360}00360\ \ \ \textcolor{keywordtype}{int}\ ret;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00361}00361\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00362}00362\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ begin\ mpiClient\_write\_data(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00363}00363\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00364}00364\ \ \ \textcolor{comment}{//\ Check\ params}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00365}00365\ \ \ \textcolor{keywordflow}{if}\ (size\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00366}00366\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00367}00367\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00368}00368\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00369}00369\ \ \ \textcolor{keywordflow}{if}\ (size\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00370}00370\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00371}00371\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a82185c5a131fe76d2d21364ef6db6144}{debug\_warning}}(\textcolor{stringliteral}{"{}Server[?]:\ size\ <\ 0"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00372}00372\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00373}00373\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00374}00374\ \ \ msg\_id\ =\ msg\_id;\ \textcolor{comment}{//\ TODO:\ msg\_id\ is\ used?}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00375}00375\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00376}00376\ \ \ \textcolor{comment}{//\ Send\ message}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00377}00377\ \ \ ret\ =\ MPI\_Send(data,\ size,\ MPI\_CHAR,\ 0,\ 1,\ fd);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00378}00378\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00379}00379\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00380}00380\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a82185c5a131fe76d2d21364ef6db6144}{debug\_warning}}(\textcolor{stringliteral}{"{}Server[?]:\ MPI\_Recv\ fails\ :-\/("{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00381}00381\ \ \ \ \ size\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00382}00382\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00383}00383\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00384}00384\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ end\ mpiClient\_write\_data(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00385}00385\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00386}00386\ \ \ \textcolor{comment}{//\ Return\ bytes\ written}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00387}00387\ \ \ \textcolor{keywordflow}{return}\ size;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00388}00388\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00389}00389\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00390}\mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a9530e842129e6acba4c7aad5be5e62a8}{00390}}\ ssize\_t\ \mbox{\hyperlink{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_a9530e842129e6acba4c7aad5be5e62a8}{mpiClient\_read\_data}}(MPI\_Comm\ fd,\ \textcolor{keywordtype}{char}\ *data,\ ssize\_t\ size,\ \textcolor{keywordtype}{char}\ *msg\_id)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00391}00391\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00392}00392\ \ \ \textcolor{keywordtype}{int}\ ret;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00393}00393\ \ \ MPI\_Status\ status;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00394}00394\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00395}00395\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ begin\ mpiClient\_read\_data(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00396}00396\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00397}00397\ \ \ \textcolor{comment}{//\ Check\ params}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00398}00398\ \ \ \textcolor{keywordflow}{if}\ (size\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00399}00399\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00400}00400\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00401}00401\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00402}00402\ \ \ \textcolor{keywordflow}{if}\ (size\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00403}00403\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00404}00404\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a82185c5a131fe76d2d21364ef6db6144}{debug\_warning}}(\textcolor{stringliteral}{"{}Server[?]:\ size\ <\ 0"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00405}00405\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00406}00406\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00407}00407\ \ \ msg\_id\ =\ msg\_id;\ \textcolor{comment}{//\ TODO:\ msg\_id\ is\ used?}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00408}00408\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00409}00409\ \ \ \textcolor{comment}{//\ Get\ message}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00410}00410\ \ \ ret\ =\ MPI\_Recv(data,\ size,\ MPI\_CHAR,\ 0,\ 1,\ fd,\ \&status);}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00411}00411\ \ \ \textcolor{keywordflow}{if}\ (MPI\_SUCCESS\ !=\ ret)}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00412}00412\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00413}00413\ \ \ \ \ \mbox{\hyperlink{debug__msg_8h_a82185c5a131fe76d2d21364ef6db6144}{debug\_warning}}(\textcolor{stringliteral}{"{}Server[?]:\ MPI\_Recv\ fails\ :-\/("{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00414}00414\ \ \ \ \ size\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00415}00415\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00416}00416\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00417}00417\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}[CLI-\/COMM]\ end\ mpiClient\_read\_data(...)\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00418}00418\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00419}00419\ \ \ \textcolor{comment}{//\ Return\ bytes\ read}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00420}00420\ \ \ \textcolor{keywordflow}{return}\ size;}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__mpi__server_2mpi__server__comm_8c_source_l00421}00421\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,194 @@
+.TH "nfi_ops" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfi_ops
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfi\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int(* \fBnfi_reconnect\fP )(struct \fBnfi_server\fP *serv)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_disconnect\fP )(struct \fBnfi_server\fP *serv)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_getattr\fP )(struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_setattr\fP )(struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_open\fP )(struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_fhandle\fP *fho)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_create\fP )(struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_close\fP )(struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_remove\fP )(struct \fBnfi_server\fP *serv, char *url)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_rename\fP )(struct \fBnfi_server\fP *serv, char *old_url, char *new_url)"
+.br
+.ti -1c
+.RI "ssize_t(* \fBnfi_read\fP )(struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
+.br
+.ti -1c
+.RI "ssize_t(* \fBnfi_write\fP )(struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_mkdir\fP )(struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_rmdir\fP )(struct \fBnfi_server\fP *serv, char *url)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_opendir\fP )(struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_fhandle\fP *fho)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_readdir\fP )(struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fhd, struct dirent *entry)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_closedir\fP )(struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_statfs\fP )(struct \fBnfi_server\fP *serv, struct \fBnfi_info\fP *inf)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_preload\fP )(struct \fBnfi_server\fP *serv, char *url, char *virtual_path, char *storage_path, int opt)"
+.br
+.ti -1c
+.RI "int(* \fBnfi_flush\fP )(struct \fBnfi_server\fP *serv, char *url, char *virtual_path, char *storage_path, int opt)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB216\fP of file \fBnfi\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "int(* nfi_ops::nfi_close) (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh)"
+
+.PP
+Definition at line \fB225\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, \fBxpn_internal_creat()\fP, \fBxpn_simple_close()\fP, \fBxpn_simple_mkdir()\fP, and \fBxpn_simple_rename()\fP\&.
+.SS "int(* nfi_ops::nfi_closedir) (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh)"
+
+.PP
+Definition at line \fB234\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, and \fBxpn_simple_closedir()\fP\&.
+.SS "int(* nfi_ops::nfi_create) (struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
+
+.PP
+Definition at line \fB224\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, and \fBnfi_tcp_server_init()\fP\&.
+.SS "int(* nfi_ops::nfi_disconnect) (struct \fBnfi_server\fP *serv)"
+
+.PP
+Definition at line \fB219\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, and \fBxpn_destroy_servers()\fP\&.
+.SS "int(* nfi_ops::nfi_flush) (struct \fBnfi_server\fP *serv, char *url, char *virtual_path, char *storage_path, int opt)"
+
+.PP
+Definition at line \fB238\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, and \fBnfi_worker_do_flush()\fP\&.
+.SS "int(* nfi_ops::nfi_getattr) (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
+
+.PP
+Definition at line \fB221\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, and \fBnfi_tcp_server_init()\fP\&.
+.SS "int(* nfi_ops::nfi_mkdir) (struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
+
+.PP
+Definition at line \fB230\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, and \fBnfi_tcp_server_init()\fP\&.
+.SS "int(* nfi_ops::nfi_open) (struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_fhandle\fP *fho)"
+
+.PP
+Definition at line \fB223\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, and \fBXpnGetFh()\fP\&.
+.SS "int(* nfi_ops::nfi_opendir) (struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_fhandle\fP *fho)"
+
+.PP
+Definition at line \fB232\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, and \fBXpnGetFh()\fP\&.
+.SS "int(* nfi_ops::nfi_preload) (struct \fBnfi_server\fP *serv, char *url, char *virtual_path, char *storage_path, int opt)"
+
+.PP
+Definition at line \fB237\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, and \fBnfi_worker_do_preload()\fP\&.
+.SS "ssize_t(* nfi_ops::nfi_read) (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
+
+.PP
+Definition at line \fB228\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, and \fBxpn_sread()\fP\&.
+.SS "int(* nfi_ops::nfi_readdir) (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fhd, struct dirent *entry)"
+
+.PP
+Definition at line \fB233\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, and \fBXpnGetEntry()\fP\&.
+.SS "int(* nfi_ops::nfi_reconnect) (struct \fBnfi_server\fP *serv)"
+
+.PP
+Definition at line \fB218\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, and \fBnfi_tcp_server_init()\fP\&.
+.SS "int(* nfi_ops::nfi_remove) (struct \fBnfi_server\fP *serv, char *url)"
+
+.PP
+Definition at line \fB226\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, and \fBnfi_tcp_server_init()\fP\&.
+.SS "int(* nfi_ops::nfi_rename) (struct \fBnfi_server\fP *serv, char *old_url, char *new_url)"
+
+.PP
+Definition at line \fB227\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, and \fBnfi_tcp_server_init()\fP\&.
+.SS "int(* nfi_ops::nfi_rmdir) (struct \fBnfi_server\fP *serv, char *url)"
+
+.PP
+Definition at line \fB231\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, and \fBnfi_tcp_server_init()\fP\&.
+.SS "int(* nfi_ops::nfi_setattr) (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
+
+.PP
+Definition at line \fB222\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, and \fBnfi_tcp_server_init()\fP\&.
+.SS "int(* nfi_ops::nfi_statfs) (struct \fBnfi_server\fP *serv, struct \fBnfi_info\fP *inf)"
+
+.PP
+Definition at line \fB235\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, and \fBnfi_tcp_server_init()\fP\&.
+.SS "ssize_t(* nfi_ops::nfi_write) (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
+
+.PP
+Definition at line \fB229\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, and \fBxpn_swrite()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

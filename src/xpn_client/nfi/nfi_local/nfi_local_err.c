@@ -18,10 +18,27 @@
  *
  */
 
+/**
+ * @file nfi_local_err.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "nfi_local.h"
 
 extern int errno;
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
 // TODO: this interface must be changed
 void local_err(int err)
 {

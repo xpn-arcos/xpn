@@ -1,0 +1,2546 @@
+.TH "nfs3.h" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfs3.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'all_system\&.h'\fP
+.br
+\fC#include 'base/path_misc\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBfhandle3\fP"
+.br
+.ti -1c
+.RI "struct \fBmountres3_ok\fP"
+.br
+.ti -1c
+.RI "struct \fBmountres3\fP"
+.br
+.ti -1c
+.RI "struct \fBmountbody3\fP"
+.br
+.ti -1c
+.RI "struct \fBgroupnode3\fP"
+.br
+.ti -1c
+.RI "struct \fBexportnode3\fP"
+.br
+.ti -1c
+.RI "struct \fBspecdata3\fP"
+.br
+.ti -1c
+.RI "struct \fBnfstime3\fP"
+.br
+.ti -1c
+.RI "struct \fBfattr3\fP"
+.br
+.ti -1c
+.RI "struct \fBpost_op_attr\fP"
+.br
+.ti -1c
+.RI "struct \fBwcc_attr\fP"
+.br
+.ti -1c
+.RI "struct \fBpre_op_attr\fP"
+.br
+.ti -1c
+.RI "struct \fBwcc_data\fP"
+.br
+.ti -1c
+.RI "struct \fBpost_op_fh3\fP"
+.br
+.ti -1c
+.RI "struct \fBset_uint32\fP"
+.br
+.ti -1c
+.RI "struct \fBset_uint64\fP"
+.br
+.ti -1c
+.RI "struct \fBset_time\fP"
+.br
+.ti -1c
+.RI "struct \fBsattr3\fP"
+.br
+.ti -1c
+.RI "struct \fBdiropargs3\fP"
+.br
+.ti -1c
+.RI "struct \fBdiropres3ok\fP"
+.br
+.ti -1c
+.RI "struct \fBdiropres3\fP"
+.br
+.ti -1c
+.RI "struct \fBwccstat3\fP"
+.br
+.ti -1c
+.RI "struct \fBgetattr3res\fP"
+.br
+.ti -1c
+.RI "struct \fBsattrguard3\fP"
+.br
+.ti -1c
+.RI "struct \fBsetattr3args\fP"
+.br
+.ti -1c
+.RI "struct \fBlookup3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBlookup3res\fP"
+.br
+.ti -1c
+.RI "struct \fBaccess3args\fP"
+.br
+.ti -1c
+.RI "struct \fBaccess3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBaccess3res\fP"
+.br
+.ti -1c
+.RI "struct \fBreadlink3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBreadlink3res\fP"
+.br
+.ti -1c
+.RI "struct \fBread3args\fP"
+.br
+.ti -1c
+.RI "struct \fBread3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBread3res\fP"
+.br
+.ti -1c
+.RI "struct \fBwrite3args\fP"
+.br
+.ti -1c
+.RI "struct \fBwrite3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBwrite3res\fP"
+.br
+.ti -1c
+.RI "struct \fBcreatehow3\fP"
+.br
+.ti -1c
+.RI "struct \fBcreate3args\fP"
+.br
+.ti -1c
+.RI "struct \fBmkdir3args\fP"
+.br
+.ti -1c
+.RI "struct \fBsymlinkdata3\fP"
+.br
+.ti -1c
+.RI "struct \fBsymlink3args\fP"
+.br
+.ti -1c
+.RI "struct \fBdevicedata3\fP"
+.br
+.ti -1c
+.RI "struct \fBmknoddata3\fP"
+.br
+.ti -1c
+.RI "struct \fBmknod3args\fP"
+.br
+.ti -1c
+.RI "struct \fBrename3args\fP"
+.br
+.ti -1c
+.RI "struct \fBrename3wcc\fP"
+.br
+.ti -1c
+.RI "struct \fBrename3res\fP"
+.br
+.ti -1c
+.RI "struct \fBlink3args\fP"
+.br
+.ti -1c
+.RI "struct \fBlink3wcc\fP"
+.br
+.ti -1c
+.RI "struct \fBlink3res\fP"
+.br
+.ti -1c
+.RI "struct \fBreaddir3args\fP"
+.br
+.ti -1c
+.RI "struct \fBentry3\fP"
+.br
+.ti -1c
+.RI "struct \fBdirlist3\fP"
+.br
+.ti -1c
+.RI "struct \fBreaddir3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBreaddir3res\fP"
+.br
+.ti -1c
+.RI "struct \fBreaddirplus3args\fP"
+.br
+.ti -1c
+.RI "struct \fBentryplus3\fP"
+.br
+.ti -1c
+.RI "struct \fBdirlistplus3\fP"
+.br
+.ti -1c
+.RI "struct \fBreaddirplus3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBreaddirplus3res\fP"
+.br
+.ti -1c
+.RI "struct \fBfsstat3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBfsstat3res\fP"
+.br
+.ti -1c
+.RI "struct \fBfsinfo3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBfsinfo3res\fP"
+.br
+.ti -1c
+.RI "struct \fBpathconf3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBpathconf3res\fP"
+.br
+.ti -1c
+.RI "struct \fBcommit3args\fP"
+.br
+.ti -1c
+.RI "struct \fBcommit3resok\fP"
+.br
+.ti -1c
+.RI "struct \fBcommit3res\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBNFS3_TCP\fP   1"
+.br
+.ti -1c
+.RI "#define \fBNFS3_UDP\fP   0"
+.br
+.ti -1c
+.RI "#define \fBNFS3_SENDSZ\fP   (unsigned int)(128 * 1024)"
+.br
+.ti -1c
+.RI "#define \fBNFS3_RECVSZ\fP   (unsigned int)(128 * 1024)"
+.br
+.ti -1c
+.RI "#define \fBNFS3ERR_EOFDIR\fP   \-10011"
+.br
+.ti -1c
+.RI "#define \fBMAXDATA3\fP   (1024 * 32)"
+.br
+.ti -1c
+.RI "#define \fBMNTPATHLEN\fP   1024"
+.br
+.ti -1c
+.RI "#define \fBMNTNAMLEN\fP   255"
+.br
+.ti -1c
+.RI "#define \fBFHSIZE3\fP   64"
+.br
+.ti -1c
+.RI "#define \fBMOUNT3_PROGRAM\fP   100005"
+.br
+.ti -1c
+.RI "#define \fBMOUNT3_VERSION\fP   3"
+.br
+.ti -1c
+.RI "#define \fBMOUNTPROC3_NULL\fP   0"
+.br
+.ti -1c
+.RI "#define \fBMOUNTPROC3_MNT\fP   1"
+.br
+.ti -1c
+.RI "#define \fBMOUNTPROC3_DUMP\fP   2"
+.br
+.ti -1c
+.RI "#define \fBMOUNTPROC3_UMNT\fP   3"
+.br
+.ti -1c
+.RI "#define \fBMOUNTPROC3_UMNTALL\fP   4"
+.br
+.ti -1c
+.RI "#define \fBMOUNTPROC3_EXPORT\fP   5"
+.br
+.ti -1c
+.RI "#define \fBNFS3_FHSIZE\fP   \fBFHSIZE3\fP"
+.br
+.ti -1c
+.RI "#define \fBNFS3_COOKIEVERFSIZE\fP   8"
+.br
+.ti -1c
+.RI "#define \fBNFS3_CREATEVERFSIZE\fP   8"
+.br
+.ti -1c
+.RI "#define \fBNFS3_WRITEVERFSIZE\fP   8"
+.br
+.ti -1c
+.RI "#define \fBACCESS3_READ\fP   0x0001"
+.br
+.ti -1c
+.RI "#define \fBACCESS3_LOOKUP\fP   0x0002"
+.br
+.ti -1c
+.RI "#define \fBACCESS3_MODIFY\fP   0x0004"
+.br
+.ti -1c
+.RI "#define \fBACCESS3_EXTEND\fP   0x0008"
+.br
+.ti -1c
+.RI "#define \fBACCESS3_DELETE\fP   0x0010"
+.br
+.ti -1c
+.RI "#define \fBACCESS3_EXECUTE\fP   0x0020"
+.br
+.ti -1c
+.RI "#define \fBFSF3_LINK\fP   0x0001"
+.br
+.ti -1c
+.RI "#define \fBFSF3_SYMLINK\fP   0x0002"
+.br
+.ti -1c
+.RI "#define \fBFSF3_HOMOGENEOUS\fP   0x0008"
+.br
+.ti -1c
+.RI "#define \fBFSF3_CANSETTIME\fP   0x0010"
+.br
+.ti -1c
+.RI "#define \fBNFS3_PROGRAM\fP   100003"
+.br
+.ti -1c
+.RI "#define \fBNFS3_VERSION\fP   3"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_NULL\fP   0"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_GETATTR\fP   1"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_SETATTR\fP   2"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_LOOKUP\fP   3"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_ACCESS\fP   4"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_READLINK\fP   5"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_READ\fP   6"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_WRITE\fP   7"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_CREATE\fP   8"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_MKDIR\fP   9"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_SYMLINK\fP   10"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_MKNOD\fP   11"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_REMOVE\fP   12"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_RMDIR\fP   13"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_RENAME\fP   14"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_LINK\fP   15"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_READDIR\fP   16"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_READDIRPLUS\fP   17"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_FSSTAT\fP   18"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_FSINFO\fP   19"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_PATHCONF\fP   20"
+.br
+.ti -1c
+.RI "#define \fBNFSPROC3_COMMIT\fP   21"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef char * \fBnfs3_dirpath\fP"
+.br
+.ti -1c
+.RI "typedef char * \fBnfs3_name\fP"
+.br
+.ti -1c
+.RI "typedef enum \fBmountstat3\fP \fBmountstat3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBmountres3_ok\fP \fBmountres3_ok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBmountres3\fP \fBmountres3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBmountbody3\fP * \fBmountlist3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBmountbody3\fP \fBmountbody3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBgroupnode3\fP * \fBgroups3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBgroupnode3\fP \fBgroupnode3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBexportnode3\fP * \fBexports3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBexportnode3\fP \fBexportnode3\fP"
+.br
+.ti -1c
+.RI "typedef uint64_t \fBuint64\fP"
+.br
+.ti -1c
+.RI "typedef int64_t \fBint64\fP"
+.br
+.ti -1c
+.RI "typedef u_int \fBuint32\fP"
+.br
+.ti -1c
+.RI "typedef int \fBint32\fP"
+.br
+.ti -1c
+.RI "typedef char * \fBfilename3\fP"
+.br
+.ti -1c
+.RI "typedef char * \fBnfspath3\fP"
+.br
+.ti -1c
+.RI "typedef char \fBcookieverf3\fP[\fBNFS3_COOKIEVERFSIZE\fP]"
+.br
+.ti -1c
+.RI "typedef char \fBcreateverf3\fP[\fBNFS3_CREATEVERFSIZE\fP]"
+.br
+.ti -1c
+.RI "typedef char \fBwriteverf3\fP[\fBNFS3_WRITEVERFSIZE\fP]"
+.br
+.ti -1c
+.RI "typedef enum \fBnfsstat3\fP \fBnfsstat3\fP"
+.br
+.ti -1c
+.RI "typedef enum \fBftype3\fP \fBftype3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBspecdata3\fP \fBspecdata3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBnfstime3\fP \fBnfstime3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBfattr3\fP \fBfattr3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBpost_op_attr\fP \fBpost_op_attr\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBwcc_attr\fP \fBwcc_attr\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBpre_op_attr\fP \fBpre_op_attr\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBwcc_data\fP \fBwcc_data\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBpost_op_fh3\fP \fBpost_op_fh3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBset_uint32\fP \fBset_uint32\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBset_uint64\fP \fBset_uint64\fP"
+.br
+.ti -1c
+.RI "typedef enum \fBtime_how\fP \fBtime_how\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBset_time\fP \fBset_time\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBsattr3\fP \fBsattr3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBdiropargs3\fP \fBdiropargs3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBdiropres3ok\fP \fBdiropres3ok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBdiropres3\fP \fBdiropres3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBwccstat3\fP \fBwccstat3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBgetattr3res\fP \fBgetattr3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBsattrguard3\fP \fBsattrguard3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBsetattr3args\fP \fBsetattr3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBlookup3resok\fP \fBlookup3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBlookup3res\fP \fBlookup3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBaccess3args\fP \fBaccess3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBaccess3resok\fP \fBaccess3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBaccess3res\fP \fBaccess3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBreadlink3resok\fP \fBreadlink3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBreadlink3res\fP \fBreadlink3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBread3args\fP \fBread3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBread3resok\fP \fBread3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBread3res\fP \fBread3res\fP"
+.br
+.ti -1c
+.RI "typedef enum \fBstable_how\fP \fBstable_how\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBwrite3args\fP \fBwrite3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBwrite3resok\fP \fBwrite3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBwrite3res\fP \fBwrite3res\fP"
+.br
+.ti -1c
+.RI "typedef enum \fBcreatemode3\fP \fBcreatemode3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBcreatehow3\fP \fBcreatehow3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBcreate3args\fP \fBcreate3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBmkdir3args\fP \fBmkdir3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBsymlinkdata3\fP \fBsymlinkdata3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBsymlink3args\fP \fBsymlink3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBdevicedata3\fP \fBdevicedata3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBmknoddata3\fP \fBmknoddata3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBmknod3args\fP \fBmknod3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBrename3args\fP \fBrename3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBrename3wcc\fP \fBrename3wcc\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBrename3res\fP \fBrename3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBlink3args\fP \fBlink3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBlink3wcc\fP \fBlink3wcc\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBlink3res\fP \fBlink3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBreaddir3args\fP \fBreaddir3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBentry3\fP \fBentry3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBdirlist3\fP \fBdirlist3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBreaddir3resok\fP \fBreaddir3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBreaddir3res\fP \fBreaddir3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBreaddirplus3args\fP \fBreaddirplus3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBentryplus3\fP \fBentryplus3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBdirlistplus3\fP \fBdirlistplus3\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBreaddirplus3resok\fP \fBreaddirplus3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBreaddirplus3res\fP \fBreaddirplus3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBfsstat3resok\fP \fBfsstat3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBfsstat3res\fP \fBfsstat3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBfsinfo3resok\fP \fBfsinfo3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBfsinfo3res\fP \fBfsinfo3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBpathconf3resok\fP \fBpathconf3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBpathconf3res\fP \fBpathconf3res\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBcommit3args\fP \fBcommit3args\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBcommit3resok\fP \fBcommit3resok\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBcommit3res\fP \fBcommit3res\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBmountstat3\fP { \fBMNT3_OK\fP = 0, \fBMNT3ERR_PERM\fP = 1, \fBMNT3ERR_NOENT\fP = 2, \fBMNT3ERR_IO\fP = 5, \fBMNT3ERR_ACCES\fP = 13, \fBMNT3ERR_NOTDIR\fP = 20, \fBMNT3ERR_INVAL\fP = 22, \fBMNT3ERR_NAMETOOLONG\fP = 63, \fBMNT3ERR_NOTSUPP\fP = 10004, \fBMNT3ERR_SERVERFAULT\fP = 10006 }"
+.br
+.ti -1c
+.RI "enum \fBnfsstat3\fP { \fBNFS3_OK\fP = 0, \fBNFS3ERR_PERM\fP = 1, \fBNFS3ERR_NOENT\fP = 2, \fBNFS3ERR_IO\fP = 5, \fBNFS3ERR_NXIO\fP = 6, \fBNFS3ERR_ACCES\fP = 13, \fBNFS3ERR_EXIST\fP = 17, \fBNFS3ERR_XDEV\fP = 18, \fBNFS3ERR_NODEV\fP = 19, \fBNFS3ERR_NOTDIR\fP = 20, \fBNFS3ERR_ISDIR\fP = 21, \fBNFS3ERR_INVAL\fP = 22, \fBNFS3ERR_FBIG\fP = 27, \fBNFS3ERR_NOSPC\fP = 28, \fBNFS3ERR_ROFS\fP = 30, \fBNFS3ERR_MLINK\fP = 31, \fBNFS3ERR_NAMETOOLONG\fP = 63, \fBNFS3ERR_NOTEMPTY\fP = 66, \fBNFS3ERR_DQUOT\fP = 69, \fBNFS3ERR_STALE\fP = 70, \fBNFS3ERR_REMOTE\fP = 71, \fBNFS3ERR_BADHANDLE\fP = 10001, \fBNFS3ERR_NOT_SYNC\fP = 10002, \fBNFS3ERR_BAD_COOKIE\fP = 10003, \fBNFS3ERR_NOTSUPP\fP = 10004, \fBNFS3ERR_TOOSMALL\fP = 10005, \fBNFS3ERR_SERVERFAULT\fP = 10006, \fBNFS3ERR_BADTYPE\fP = 10007, \fBNFS3ERR_JUKEBOX\fP = 10008, \fBNFS3ERR_FPRINTNOTFOUND\fP = 10009, \fBNFS3ERR_ABORTED\fP = 10010 }"
+.br
+.ti -1c
+.RI "enum \fBftype3\fP { \fBNF3REG\fP = 1, \fBNF3DIR\fP = 2, \fBNF3BLK\fP = 3, \fBNF3CHR\fP = 4, \fBNF3LNK\fP = 5, \fBNF3SOCK\fP = 6, \fBNF3FIFO\fP = 7 }"
+.br
+.ti -1c
+.RI "enum \fBtime_how\fP { \fBDONT_CHANGE\fP = 0, \fBSET_TO_SERVER_TIME\fP = 1, \fBSET_TO_CLIENT_TIME\fP = 2 }"
+.br
+.ti -1c
+.RI "enum \fBstable_how\fP { \fBUNSTABLE\fP = 0, \fBDATA_SYNC\fP = 1, \fBFILE_SYNC\fP = 2 }"
+.br
+.ti -1c
+.RI "enum \fBcreatemode3\fP { \fBUNCHECKED\fP = 0, \fBGUARDED\fP = 1, \fBEXCLUSIVE\fP = 2 }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_null_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBmountproc3_null_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_mnt_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBmountproc3_mnt_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_dump_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBmountproc3_dump_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_umnt_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBmountproc3_umnt_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_umntall_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBmountproc3_umntall_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_export_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBmountproc3_export_3_svc\fP ()"
+.br
+.ti -1c
+.RI "int \fBmount_program_3_freeresult\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_fhandle3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_dirpath\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_name\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_mountstat3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_mountres3_ok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_mountres3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_mountlist3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_mountbody3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_groups3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_groupnode3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_exports3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_exportnode3\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_null_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_null_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_getattr_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_getattr_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_setattr_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_setattr_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_lookup_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_lookup_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_access_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_access_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_readlink_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_readlink_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_read_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_read_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_write_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_write_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_create_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_create_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_mkdir_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_mkdir_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_symlink_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_symlink_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_mknod_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_mknod_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_remove_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_remove_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_rmdir_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_rmdir_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_rename_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_rename_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_link_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_link_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_readdir_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_readdir_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_readdirplus_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_readdirplus_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_fsstat_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_fsstat_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_fsinfo_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_fsinfo_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_pathconf_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_pathconf_3_svc\fP ()"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_commit_3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBnfsproc3_commit_3_svc\fP ()"
+.br
+.ti -1c
+.RI "int \fBnfs_program_3_freeresult\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_uint64\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_int64\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_uint32\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_int32\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_filename3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_nfspath3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_cookieverf3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_createverf3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_writeverf3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_nfsstat3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_ftype3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_specdata3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_nfstime3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_fattr3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_post_op_attr\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_wcc_attr\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_pre_op_attr\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_wcc_data\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_post_op_fh3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_set_uint32\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_set_uint64\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_time_how\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_set_time\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_sattr3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_diropargs3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_diropres3ok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_diropres3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_wccstat3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_getattr3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_sattrguard3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_setattr3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_lookup3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_lookup3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_access3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_access3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_access3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_readlink3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_readlink3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_read3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_read3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_read3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_stable_how\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_write3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_write3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_write3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_createmode3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_createhow3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_create3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_mkdir3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_symlinkdata3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_symlink3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_devicedata3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_mknoddata3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_mknod3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_rename3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_rename3wcc\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_rename3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_link3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_link3wcc\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_link3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_readdir3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_entry3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_dirlist3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_readdir3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_readdir3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_readdirplus3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_entryplus3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_dirlistplus3\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_readdirplus3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_readdirplus3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_fsstat3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_fsstat3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_fsinfo3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_fsinfo3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_pathconf3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_pathconf3res\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_commit3args\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_commit3resok\fP ()"
+.br
+.ti -1c
+.RI "bool_t \fBxdr_commit3res\fP ()"
+.br
+.ti -1c
+.RI "CLIENT * \fBcreate_connection_mount3\fP (char *name, int type)"
+.br
+.ti -1c
+.RI "void \fBclose_connection_mount3\fP (CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_mount\fP (char *dir, \fBfhandle3\fP *fhand, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_umount\fP (char *path, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_export\fP (\fBexports3\fP *, CLIENT *cl)"
+.br
+.ti -1c
+.RI "CLIENT * \fBcreate_connection_nfs3\fP (char *name, int type)"
+.br
+.ti -1c
+.RI "void \fBclose_connection_nfs3\fP (CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_getattr\fP (\fBfhandle3\fP *fh, \fBfattr3\fP *fatt, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_setattr\fP (\fBfhandle3\fP *fh, \fBfattr3\fP *fatt, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_lookup\fP (\fBfhandle3\fP *fhin, char *path, \fBfhandle3\fP *fhout, \fBfattr3\fP *att, CLIENT *cl)"
+.br
+.ti -1c
+.RI "ssize_t \fBnfs3_read\fP (\fBfhandle3\fP *fh, void *data, off_t offset, size_t size, CLIENT *cl)"
+.br
+.ti -1c
+.RI "ssize_t \fBnfs3_write\fP (\fBfhandle3\fP *fh, void *data, off_t offset, size_t size, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_create\fP (\fBfhandle3\fP *fhin, char *file, mode_t mode, \fBfhandle3\fP *fhout, \fBfattr3\fP *at, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_remove\fP (\fBfhandle3\fP *fh, char *file, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_rename\fP (\fBfhandle3\fP *fh, char *name, \fBfhandle3\fP *fhR, char *nameR, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_mkdir\fP (\fBfhandle3\fP *fhin, char *dir, mode_t mode, \fBfhandle3\fP *fhout, \fBfattr3\fP *att, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_rmdir\fP (\fBfhandle3\fP *fh, char *dir, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_readdir\fP (\fBfhandle3\fP *fh, \fBcookieverf3\fP cookie, char *entry, CLIENT *cl)"
+.br
+.ti -1c
+.RI "int \fBnfs3_statfs\fP (\fBfhandle3\fP *arg, \fBfsinfo3resok\fP *inf, CLIENT *cl)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ACCESS3_DELETE   0x0010"
+
+.PP
+Definition at line \fB487\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define ACCESS3_EXECUTE   0x0020"
+
+.PP
+Definition at line \fB488\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define ACCESS3_EXTEND   0x0008"
+
+.PP
+Definition at line \fB486\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define ACCESS3_LOOKUP   0x0002"
+
+.PP
+Definition at line \fB484\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define ACCESS3_MODIFY   0x0004"
+
+.PP
+Definition at line \fB485\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define ACCESS3_READ   0x0001"
+
+.PP
+Definition at line \fB483\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define FHSIZE3   64"
+
+.PP
+Definition at line \fB30\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define FSF3_CANSETTIME   0x0010"
+
+.PP
+Definition at line \fB844\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define FSF3_HOMOGENEOUS   0x0008"
+
+.PP
+Definition at line \fB843\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define FSF3_LINK   0x0001"
+
+.PP
+Definition at line \fB841\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define FSF3_SYMLINK   0x0002"
+
+.PP
+Definition at line \fB842\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MAXDATA3   (1024 * 32)"
+
+.PP
+Definition at line \fB27\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MNTNAMLEN   255"
+
+.PP
+Definition at line \fB29\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MNTPATHLEN   1024"
+
+.PP
+Definition at line \fB28\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MOUNT3_PROGRAM   100005"
+
+.PP
+Definition at line \fB107\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MOUNT3_VERSION   3"
+
+.PP
+Definition at line \fB108\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MOUNTPROC3_DUMP   2"
+
+.PP
+Definition at line \fB138\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MOUNTPROC3_EXPORT   5"
+
+.PP
+Definition at line \fB147\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MOUNTPROC3_MNT   1"
+
+.PP
+Definition at line \fB135\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MOUNTPROC3_NULL   0"
+
+.PP
+Definition at line \fB132\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MOUNTPROC3_UMNT   3"
+
+.PP
+Definition at line \fB141\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define MOUNTPROC3_UMNTALL   4"
+
+.PP
+Definition at line \fB144\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_COOKIEVERFSIZE   8"
+
+.PP
+Definition at line \fB204\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_CREATEVERFSIZE   8"
+
+.PP
+Definition at line \fB205\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_FHSIZE   \fBFHSIZE3\fP"
+
+.PP
+Definition at line \fB203\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_PROGRAM   100003"
+
+.PP
+Definition at line \fB922\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_RECVSZ   (unsigned int)(128 * 1024)"
+
+.PP
+Definition at line \fB18\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_SENDSZ   (unsigned int)(128 * 1024)"
+
+.PP
+Definition at line \fB16\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_TCP   1"
+
+.PP
+Definition at line \fB12\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_UDP   0"
+
+.PP
+Definition at line \fB13\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_VERSION   3"
+
+.PP
+Definition at line \fB923\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3_WRITEVERFSIZE   8"
+
+.PP
+Definition at line \fB206\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFS3ERR_EOFDIR   \-10011"
+
+.PP
+Definition at line \fB25\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_ACCESS   4"
+
+.PP
+Definition at line \fB1007\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_COMMIT   21"
+
+.PP
+Definition at line \fB1058\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_CREATE   8"
+
+.PP
+Definition at line \fB1019\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_FSINFO   19"
+
+.PP
+Definition at line \fB1052\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_FSSTAT   18"
+
+.PP
+Definition at line \fB1049\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_GETATTR   1"
+
+.PP
+Definition at line \fB998\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_LINK   15"
+
+.PP
+Definition at line \fB1040\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_LOOKUP   3"
+
+.PP
+Definition at line \fB1004\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_MKDIR   9"
+
+.PP
+Definition at line \fB1022\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_MKNOD   11"
+
+.PP
+Definition at line \fB1028\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_NULL   0"
+
+.PP
+Definition at line \fB995\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_PATHCONF   20"
+
+.PP
+Definition at line \fB1055\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_READ   6"
+
+.PP
+Definition at line \fB1013\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_READDIR   16"
+
+.PP
+Definition at line \fB1043\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_READDIRPLUS   17"
+
+.PP
+Definition at line \fB1046\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_READLINK   5"
+
+.PP
+Definition at line \fB1010\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_REMOVE   12"
+
+.PP
+Definition at line \fB1031\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_RENAME   14"
+
+.PP
+Definition at line \fB1037\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_RMDIR   13"
+
+.PP
+Definition at line \fB1034\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_SETATTR   2"
+
+.PP
+Definition at line \fB1001\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_SYMLINK   10"
+
+.PP
+Definition at line \fB1025\fP of file \fBnfs3\&.h\fP\&.
+.SS "#define NFSPROC3_WRITE   7"
+
+.PP
+Definition at line \fB1016\fP of file \fBnfs3\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef struct \fBaccess3args\fP \fBaccess3args\fP"
+
+.PP
+Definition at line \fB495\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBaccess3res\fP \fBaccess3res\fP"
+
+.PP
+Definition at line \fB513\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBaccess3resok\fP \fBaccess3resok\fP"
+
+.PP
+Definition at line \fB502\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBcommit3args\fP \fBcommit3args\fP"
+
+.PP
+Definition at line \fB902\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBcommit3res\fP \fBcommit3res\fP"
+
+.PP
+Definition at line \fB920\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBcommit3resok\fP \fBcommit3resok\fP"
+
+.PP
+Definition at line \fB909\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef char cookieverf3[\fBNFS3_COOKIEVERFSIZE\fP]"
+
+.PP
+Definition at line \fB212\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBcreate3args\fP \fBcreate3args\fP"
+
+.PP
+Definition at line \fB631\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBcreatehow3\fP \fBcreatehow3\fP"
+
+.PP
+Definition at line \fB624\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef enum \fBcreatemode3\fP \fBcreatemode3\fP"
+
+.PP
+Definition at line \fB613\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef char createverf3[\fBNFS3_CREATEVERFSIZE\fP]"
+
+.PP
+Definition at line \fB214\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBdevicedata3\fP \fBdevicedata3\fP"
+
+.PP
+Definition at line \fB659\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBdirlist3\fP \fBdirlist3\fP"
+
+.PP
+Definition at line \fB750\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBdirlistplus3\fP \fBdirlistplus3\fP"
+
+.PP
+Definition at line \fB797\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBdiropargs3\fP \fBdiropargs3\fP"
+
+.PP
+Definition at line \fB406\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBdiropres3\fP \fBdiropres3\fP"
+
+.PP
+Definition at line \fB425\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBdiropres3ok\fP \fBdiropres3ok\fP"
+
+.PP
+Definition at line \fB414\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBentry3\fP \fBentry3\fP"
+
+.PP
+Definition at line \fB743\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBentryplus3\fP \fBentryplus3\fP"
+
+.PP
+Definition at line \fB790\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBexportnode3\fP \fBexportnode3\fP"
+
+.PP
+Definition at line \fB105\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBexportnode3\fP* \fBexports3\fP"
+
+.PP
+Definition at line \fB97\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBfattr3\fP \fBfattr3\fP"
+
+.PP
+Definition at line \fB305\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef char* \fBfilename3\fP"
+
+.PP
+Definition at line \fB208\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBfsinfo3res\fP \fBfsinfo3res\fP"
+
+.PP
+Definition at line \fB871\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBfsinfo3resok\fP \fBfsinfo3resok\fP"
+
+.PP
+Definition at line \fB860\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBfsstat3res\fP \fBfsstat3res\fP"
+
+.PP
+Definition at line \fB840\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBfsstat3resok\fP \fBfsstat3resok\fP"
+
+.PP
+Definition at line \fB829\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef enum \fBftype3\fP \fBftype3\fP"
+
+.PP
+Definition at line \fB264\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBgetattr3res\fP \fBgetattr3res\fP"
+
+.PP
+Definition at line \fB445\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBgroupnode3\fP \fBgroupnode3\fP"
+
+.PP
+Definition at line \fB95\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBgroupnode3\fP* \fBgroups3\fP"
+
+.PP
+Definition at line \fB88\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef int \fBint32\fP"
+
+.PP
+Definition at line \fB202\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef int64_t \fBint64\fP"
+
+.PP
+Definition at line \fB198\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBlink3args\fP \fBlink3args\fP"
+
+.PP
+Definition at line \fB708\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBlink3res\fP \fBlink3res\fP"
+
+.PP
+Definition at line \fB725\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBlink3wcc\fP \fBlink3wcc\fP"
+
+.PP
+Definition at line \fB715\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBlookup3res\fP \fBlookup3res\fP"
+
+.PP
+Definition at line \fB482\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBlookup3resok\fP \fBlookup3resok\fP"
+
+.PP
+Definition at line \fB471\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBmkdir3args\fP \fBmkdir3args\fP"
+
+.PP
+Definition at line \fB638\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBmknod3args\fP \fBmknod3args\fP"
+
+.PP
+Definition at line \fB677\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBmknoddata3\fP \fBmknoddata3\fP"
+
+.PP
+Definition at line \fB670\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBmountbody3\fP \fBmountbody3\fP"
+
+.PP
+Definition at line \fB86\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBmountbody3\fP* \fBmountlist3\fP"
+
+.PP
+Definition at line \fB78\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBmountres3\fP \fBmountres3\fP"
+
+.PP
+Definition at line \fB76\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBmountres3_ok\fP \fBmountres3_ok\fP"
+
+.PP
+Definition at line \fB66\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef enum \fBmountstat3\fP \fBmountstat3\fP"
+
+.PP
+Definition at line \fB55\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef char* \fBnfs3_dirpath\fP"
+
+.PP
+Definition at line \fB38\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef char* \fBnfs3_name\fP"
+
+.PP
+Definition at line \fB40\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef char* \fBnfspath3\fP"
+
+.PP
+Definition at line \fB210\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef enum \fBnfsstat3\fP \fBnfsstat3\fP"
+
+.PP
+Definition at line \fB252\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBnfstime3\fP \fBnfstime3\fP"
+
+.PP
+Definition at line \fB287\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBpathconf3res\fP \fBpathconf3res\fP"
+
+.PP
+Definition at line \fB894\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBpathconf3resok\fP \fBpathconf3resok\fP"
+
+.PP
+Definition at line \fB883\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBpost_op_attr\fP \fBpost_op_attr\fP"
+
+.PP
+Definition at line \fB315\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBpost_op_fh3\fP \fBpost_op_fh3\fP"
+
+.PP
+Definition at line \fB350\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBpre_op_attr\fP \fBpre_op_attr\fP"
+
+.PP
+Definition at line \fB333\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBread3args\fP \fBread3args\fP"
+
+.PP
+Definition at line \fB539\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBread3res\fP \fBread3res\fP"
+
+.PP
+Definition at line \fB563\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBread3resok\fP \fBread3resok\fP"
+
+.PP
+Definition at line \fB552\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBreaddir3args\fP \fBreaddir3args\fP"
+
+.PP
+Definition at line \fB734\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBreaddir3res\fP \fBreaddir3res\fP"
+
+.PP
+Definition at line \fB769\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBreaddir3resok\fP \fBreaddir3resok\fP"
+
+.PP
+Definition at line \fB758\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBreaddirplus3args\fP \fBreaddirplus3args\fP"
+
+.PP
+Definition at line \fB779\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBreaddirplus3res\fP \fBreaddirplus3res\fP"
+
+.PP
+Definition at line \fB816\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBreaddirplus3resok\fP \fBreaddirplus3resok\fP"
+
+.PP
+Definition at line \fB805\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBreadlink3res\fP \fBreadlink3res\fP"
+
+.PP
+Definition at line \fB531\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBreadlink3resok\fP \fBreadlink3resok\fP"
+
+.PP
+Definition at line \fB520\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBrename3args\fP \fBrename3args\fP"
+
+.PP
+Definition at line \fB684\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBrename3res\fP \fBrename3res\fP"
+
+.PP
+Definition at line \fB701\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBrename3wcc\fP \fBrename3wcc\fP"
+
+.PP
+Definition at line \fB691\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBsattr3\fP \fBsattr3\fP"
+
+.PP
+Definition at line \fB399\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBsattrguard3\fP \fBsattrguard3\fP"
+
+.PP
+Definition at line \fB455\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBset_time\fP \fBset_time\fP"
+
+.PP
+Definition at line \fB388\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBset_uint32\fP \fBset_uint32\fP"
+
+.PP
+Definition at line \fB360\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBset_uint64\fP \fBset_uint64\fP"
+
+.PP
+Definition at line \fB370\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBsetattr3args\fP \fBsetattr3args\fP"
+
+.PP
+Definition at line \fB463\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBspecdata3\fP \fBspecdata3\fP"
+
+.PP
+Definition at line \fB271\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef enum \fBstable_how\fP \fBstable_how\fP"
+
+.PP
+Definition at line \fB571\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBsymlink3args\fP \fBsymlink3args\fP"
+
+.PP
+Definition at line \fB652\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBsymlinkdata3\fP \fBsymlinkdata3\fP"
+
+.PP
+Definition at line \fB645\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef enum \fBtime_how\fP \fBtime_how\fP"
+
+.PP
+Definition at line \fB378\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef u_int \fBuint32\fP"
+
+.PP
+Definition at line \fB200\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef uint64_t \fBuint64\fP"
+
+.PP
+Definition at line \fB196\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBwcc_attr\fP \fBwcc_attr\fP"
+
+.PP
+Definition at line \fB323\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBwcc_data\fP \fBwcc_data\fP"
+
+.PP
+Definition at line \fB340\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBwccstat3\fP \fBwccstat3\fP"
+
+.PP
+Definition at line \fB435\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBwrite3args\fP \fBwrite3args\fP"
+
+.PP
+Definition at line \fB585\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBwrite3res\fP \fBwrite3res\fP"
+
+.PP
+Definition at line \fB605\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef struct \fBwrite3resok\fP \fBwrite3resok\fP"
+
+.PP
+Definition at line \fB594\fP of file \fBnfs3\&.h\fP\&.
+.SS "typedef char writeverf3[\fBNFS3_WRITEVERFSIZE\fP]"
+
+.PP
+Definition at line \fB216\fP of file \fBnfs3\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBcreatemode3\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIUNCHECKED \fP\fP
+.TP
+\fB\fIGUARDED \fP\fP
+.TP
+\fB\fIEXCLUSIVE \fP\fP
+.PP
+Definition at line \fB607\fP of file \fBnfs3\&.h\fP\&.
+.SS "enum \fBftype3\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fINF3REG \fP\fP
+.TP
+\fB\fINF3DIR \fP\fP
+.TP
+\fB\fINF3BLK \fP\fP
+.TP
+\fB\fINF3CHR \fP\fP
+.TP
+\fB\fINF3LNK \fP\fP
+.TP
+\fB\fINF3SOCK \fP\fP
+.TP
+\fB\fINF3FIFO \fP\fP
+.PP
+Definition at line \fB254\fP of file \fBnfs3\&.h\fP\&.
+.SS "enum \fBmountstat3\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIMNT3_OK \fP\fP
+.TP
+\fB\fIMNT3ERR_PERM \fP\fP
+.TP
+\fB\fIMNT3ERR_NOENT \fP\fP
+.TP
+\fB\fIMNT3ERR_IO \fP\fP
+.TP
+\fB\fIMNT3ERR_ACCES \fP\fP
+.TP
+\fB\fIMNT3ERR_NOTDIR \fP\fP
+.TP
+\fB\fIMNT3ERR_INVAL \fP\fP
+.TP
+\fB\fIMNT3ERR_NAMETOOLONG \fP\fP
+.TP
+\fB\fIMNT3ERR_NOTSUPP \fP\fP
+.TP
+\fB\fIMNT3ERR_SERVERFAULT \fP\fP
+.PP
+Definition at line \fB42\fP of file \fBnfs3\&.h\fP\&.
+.SS "enum \fBnfsstat3\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fINFS3_OK \fP\fP
+.TP
+\fB\fINFS3ERR_PERM \fP\fP
+.TP
+\fB\fINFS3ERR_NOENT \fP\fP
+.TP
+\fB\fINFS3ERR_IO \fP\fP
+.TP
+\fB\fINFS3ERR_NXIO \fP\fP
+.TP
+\fB\fINFS3ERR_ACCES \fP\fP
+.TP
+\fB\fINFS3ERR_EXIST \fP\fP
+.TP
+\fB\fINFS3ERR_XDEV \fP\fP
+.TP
+\fB\fINFS3ERR_NODEV \fP\fP
+.TP
+\fB\fINFS3ERR_NOTDIR \fP\fP
+.TP
+\fB\fINFS3ERR_ISDIR \fP\fP
+.TP
+\fB\fINFS3ERR_INVAL \fP\fP
+.TP
+\fB\fINFS3ERR_FBIG \fP\fP
+.TP
+\fB\fINFS3ERR_NOSPC \fP\fP
+.TP
+\fB\fINFS3ERR_ROFS \fP\fP
+.TP
+\fB\fINFS3ERR_MLINK \fP\fP
+.TP
+\fB\fINFS3ERR_NAMETOOLONG \fP\fP
+.TP
+\fB\fINFS3ERR_NOTEMPTY \fP\fP
+.TP
+\fB\fINFS3ERR_DQUOT \fP\fP
+.TP
+\fB\fINFS3ERR_STALE \fP\fP
+.TP
+\fB\fINFS3ERR_REMOTE \fP\fP
+.TP
+\fB\fINFS3ERR_BADHANDLE \fP\fP
+.TP
+\fB\fINFS3ERR_NOT_SYNC \fP\fP
+.TP
+\fB\fINFS3ERR_BAD_COOKIE \fP\fP
+.TP
+\fB\fINFS3ERR_NOTSUPP \fP\fP
+.TP
+\fB\fINFS3ERR_TOOSMALL \fP\fP
+.TP
+\fB\fINFS3ERR_SERVERFAULT \fP\fP
+.TP
+\fB\fINFS3ERR_BADTYPE \fP\fP
+.TP
+\fB\fINFS3ERR_JUKEBOX \fP\fP
+.TP
+\fB\fINFS3ERR_FPRINTNOTFOUND \fP\fP
+.TP
+\fB\fINFS3ERR_ABORTED \fP\fP
+.PP
+Definition at line \fB218\fP of file \fBnfs3\&.h\fP\&.
+.SS "enum \fBstable_how\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIUNSTABLE \fP\fP
+.TP
+\fB\fIDATA_SYNC \fP\fP
+.TP
+\fB\fIFILE_SYNC \fP\fP
+.PP
+Definition at line \fB565\fP of file \fBnfs3\&.h\fP\&.
+.SS "enum \fBtime_how\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIDONT_CHANGE \fP\fP
+.TP
+\fB\fISET_TO_SERVER_TIME \fP\fP
+.TP
+\fB\fISET_TO_CLIENT_TIME \fP\fP
+.PP
+Definition at line \fB372\fP of file \fBnfs3\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void close_connection_mount3 (CLIENT * cl)"
+
+.PP
+Definition at line \fB180\fP of file \fBnfs3\&.c\fP\&.
+.PP
+Referenced by \fBcreate_connection_mount3()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3_init()\fP, and \fBnfi_nfs3_reconnect()\fP\&.
+.SS "void close_connection_nfs3 (CLIENT * cl)"
+
+.PP
+Definition at line \fB492\fP of file \fBnfs3\&.c\fP\&.
+.PP
+Referenced by \fBcreate_connection_nfs3()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, and \fBnfi_nfs3_init()\fP\&.
+.SS "CLIENT * create_connection_mount3 (char * name, int type)"
+
+.PP
+Definition at line \fB76\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBclose_connection_mount3()\fP, \fBMNTNAMLEN\fP, \fBMOUNT3_PROGRAM\fP, \fBMOUNT3_VERSION\fP, \fBNFS3_RECVSZ\fP, \fBNFS3_SENDSZ\fP, \fBNFS3_TCP\fP, and \fBNFS3_UDP\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3_init()\fP, and \fBnfi_nfs3_reconnect()\fP\&.
+.SS "CLIENT * create_connection_nfs3 (char * name, int type)"
+
+.PP
+Definition at line \fB390\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBclose_connection_nfs3()\fP, \fBMNTNAMLEN\fP, \fBNFS3_PROGRAM\fP, \fBNFS3_RECVSZ\fP, \fBNFS3_SENDSZ\fP, \fBNFS3_TCP\fP, \fBNFS3_UDP\fP, and \fBNFS3_VERSION\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_init()\fP, and \fBnfi_nfs3_reconnect()\fP\&.
+.SS "int mount_program_3_freeresult ()"
+
+.SS "enum clnt_stat mountproc3_dump_3 ()"
+
+.SS "bool_t mountproc3_dump_3_svc ()"
+
+.SS "enum clnt_stat mountproc3_export_3 ()"
+
+.SS "bool_t mountproc3_export_3_svc ()"
+
+.SS "enum clnt_stat mountproc3_mnt_3 ()"
+
+.PP
+Referenced by \fBnfs3_mount()\fP\&.
+.SS "bool_t mountproc3_mnt_3_svc ()"
+
+.SS "enum clnt_stat mountproc3_null_3 ()"
+
+.SS "bool_t mountproc3_null_3_svc ()"
+
+.SS "enum clnt_stat mountproc3_umnt_3 ()"
+
+.PP
+Referenced by \fBnfs3_umount()\fP\&.
+.SS "bool_t mountproc3_umnt_3_svc ()"
+
+.SS "enum clnt_stat mountproc3_umntall_3 ()"
+
+.SS "bool_t mountproc3_umntall_3_svc ()"
+
+.SS "int nfs3_create (\fBfhandle3\fP * fhin, char * file, mode_t mode, \fBfhandle3\fP * fhout, \fBfattr3\fP * at, CLIENT * cl)"
+
+.SS "int nfs3_export (\fBexports3\fP *, CLIENT * cl)"
+
+.SS "int nfs3_getattr (\fBfhandle3\fP * fh, \fBfattr3\fP * fatt, CLIENT * cl)"
+
+.PP
+Definition at line \fB614\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBgetattr3res::attributes\fP, \fBgetattr3res::getattr3res_u\fP, \fBNFS3_OK\fP, \fBnfsproc3_getattr_3()\fP, and \fBgetattr3res::status\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_getattr()\fP\&.
+.SS "int nfs3_lookup (\fBfhandle3\fP * fhin, char * path, \fBfhandle3\fP * fhout, \fBfattr3\fP * att, CLIENT * cl)"
+
+.PP
+Definition at line \fB676\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBpost_op_attr::attributes\fP, \fBdiropargs3::dir\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBFHSIZE3\fP, \fBgetFirstDir()\fP, \fBlookup3res::lookup3res_u\fP, \fBMNTNAMLEN\fP, \fBdiropargs3::name\fP, \fBnfsproc3_lookup_3()\fP, \fBlookup3resok::obj_attributes\fP, \fBlookup3resok::object\fP, \fBpost_op_attr::post_op_attr_u\fP, \fBpost_op_attr::present\fP, \fBlookup3res::resok\fP, \fBlookup3res::status\fP, and \fBfattr3::type\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rmdir()\fP, and \fBnfs3_open()\fP\&.
+.SS "int nfs3_mkdir (\fBfhandle3\fP * fhin, char * dir, mode_t mode, \fBfhandle3\fP * fhout, \fBfattr3\fP * att, CLIENT * cl)"
+
+.SS "int nfs3_mount (char * dir, \fBfhandle3\fP * fhand, CLIENT * cl)"
+
+.PP
+Definition at line \fB223\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBmountres3_ok::auth_flavors\fP, \fBmountres3_ok::auth_flavors_len\fP, \fBmountres3_ok::auth_flavors_val\fP, \fBmountres3_ok::fhandle\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBmountres3::fhs_status\fP, \fBFHSIZE3\fP, \fBmountres3::mountinfo\fP, \fBmountproc3_mnt_3()\fP, and \fBmountres3::mountres3_u\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_init()\fP, and \fBnfi_nfs3_reconnect()\fP\&.
+.SS "ssize_t nfs3_read (\fBfhandle3\fP * fh, void * data, off_t offset, size_t size, CLIENT * cl)"
+
+.PP
+Definition at line \fB814\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBread3args::count\fP, \fBread3resok::data\fP, \fBread3resok::data_len\fP, \fBread3resok::data_val\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBread3args::file\fP, \fBMAXDATA3\fP, \fBnfsproc3_read_3()\fP, \fBread3args::offset\fP, \fBread3res::read3res_u\fP, \fBread3res::resok\fP, and \fBread3res::status\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_read()\fP\&.
+.SS "int nfs3_readdir (\fBfhandle3\fP * fh, \fBcookieverf3\fP cookie, char * entry, CLIENT * cl)"
+
+.SS "int nfs3_remove (\fBfhandle3\fP * fh, char * file, CLIENT * cl)"
+
+.PP
+Definition at line \fB1134\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBdiropargs3::dir\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBdiropargs3::name\fP, \fBnfsproc3_remove_3()\fP, and \fBwccstat3::status\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_remove()\fP\&.
+.SS "int nfs3_rename (\fBfhandle3\fP * fh, char * name, \fBfhandle3\fP * fhR, char * nameR, CLIENT * cl)"
+
+.SS "int nfs3_rmdir (\fBfhandle3\fP * fh, char * dir, CLIENT * cl)"
+
+.SS "int nfs3_setattr (\fBfhandle3\fP * fh, \fBfattr3\fP * fatt, CLIENT * cl)"
+
+.PP
+Definition at line \fB555\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBfattr3::atime\fP, \fBsattr3::atime\fP, \fBfattr3::gid\fP, \fBsattr3::gid\fP, \fBfattr3::mode\fP, \fBsattr3::mode\fP, \fBfattr3::mtime\fP, \fBsattr3::mtime\fP, \fBsetattr3args::new_attributes\fP, \fBNFS3_FHSIZE\fP, \fBNFS3_OK\fP, \fBnfsproc3_setattr_3()\fP, \fBsetattr3args::object\fP, \fBset_time::set_time_u\fP, \fBset_uint32::set_uint32_u\fP, \fBset_uint64::set_uint64_u\fP, \fBfattr3::size\fP, \fBsattr3::size\fP, \fBwccstat3::status\fP, \fBset_time::time\fP, \fBfattr3::uid\fP, \fBsattr3::uid\fP, \fBset_uint32::val\fP, and \fBset_uint64::val\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_setattr()\fP\&.
+.SS "int nfs3_statfs (\fBfhandle3\fP * arg, \fBfsinfo3resok\fP * inf, CLIENT * cl)"
+
+.SS "int nfs3_umount (char * path, CLIENT * cl)"
+
+.PP
+Definition at line \fB320\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBmountproc3_umnt_3()\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_destroy()\fP, and \fBnfi_nfs3_disconnect()\fP\&.
+.SS "ssize_t nfs3_write (\fBfhandle3\fP * fh, void * data, off_t offset, size_t size, CLIENT * cl)"
+
+.PP
+Definition at line \fB929\fP of file \fBnfs3\&.c\fP\&.
+.PP
+References \fBwrite3args::count\fP, \fBwrite3args::data\fP, \fBwrite3args::data_len\fP, \fBDATA_SYNC\fP, \fBwrite3args::data_val\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBwrite3args::file\fP, \fBFILE_SYNC\fP, \fBMAXDATA3\fP, \fBnfsproc3_write_3()\fP, \fBwrite3args::offset\fP, \fBprintfh3()\fP, \fBwrite3args::stable\fP, \fBwrite3res::status\fP, and \fBUNSTABLE\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_write()\fP\&.
+.SS "int nfs_program_3_freeresult ()"
+
+.SS "enum clnt_stat nfsproc3_access_3 ()"
+
+.SS "bool_t nfsproc3_access_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_commit_3 ()"
+
+.SS "bool_t nfsproc3_commit_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_create_3 ()"
+
+.PP
+Referenced by \fBnfs3_create()\fP\&.
+.SS "bool_t nfsproc3_create_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_fsinfo_3 ()"
+
+.SS "bool_t nfsproc3_fsinfo_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_fsstat_3 ()"
+
+.SS "bool_t nfsproc3_fsstat_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_getattr_3 ()"
+
+.PP
+Referenced by \fBnfs3_getattr()\fP\&.
+.SS "bool_t nfsproc3_getattr_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_link_3 ()"
+
+.SS "bool_t nfsproc3_link_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_lookup_3 ()"
+
+.PP
+Referenced by \fBnfs3_lookup()\fP\&.
+.SS "bool_t nfsproc3_lookup_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_mkdir_3 ()"
+
+.SS "bool_t nfsproc3_mkdir_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_mknod_3 ()"
+
+.SS "bool_t nfsproc3_mknod_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_null_3 ()"
+
+.SS "bool_t nfsproc3_null_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_pathconf_3 ()"
+
+.SS "bool_t nfsproc3_pathconf_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_read_3 ()"
+
+.PP
+Referenced by \fBnfs3_read()\fP\&.
+.SS "bool_t nfsproc3_read_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_readdir_3 ()"
+
+.SS "bool_t nfsproc3_readdir_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_readdirplus_3 ()"
+
+.SS "bool_t nfsproc3_readdirplus_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_readlink_3 ()"
+
+.SS "bool_t nfsproc3_readlink_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_remove_3 ()"
+
+.PP
+Referenced by \fBnfs3_remove()\fP\&.
+.SS "bool_t nfsproc3_remove_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_rename_3 ()"
+
+.SS "bool_t nfsproc3_rename_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_rmdir_3 ()"
+
+.SS "bool_t nfsproc3_rmdir_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_setattr_3 ()"
+
+.PP
+Referenced by \fBnfs3_setattr()\fP\&.
+.SS "bool_t nfsproc3_setattr_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_symlink_3 ()"
+
+.SS "bool_t nfsproc3_symlink_3_svc ()"
+
+.SS "enum clnt_stat nfsproc3_write_3 ()"
+
+.PP
+Referenced by \fBnfs3_write()\fP\&.
+.SS "bool_t nfsproc3_write_3_svc ()"
+
+.SS "bool_t xdr_access3args ()"
+
+.PP
+Referenced by \fBnfsproc3_access_3()\fP\&.
+.SS "bool_t xdr_access3res ()"
+
+.PP
+Referenced by \fBnfsproc3_access_3()\fP\&.
+.SS "bool_t xdr_access3resok ()"
+
+.PP
+Referenced by \fBxdr_access3res()\fP\&.
+.SS "bool_t xdr_commit3args ()"
+
+.PP
+Referenced by \fBnfsproc3_commit_3()\fP\&.
+.SS "bool_t xdr_commit3res ()"
+
+.PP
+Referenced by \fBnfsproc3_commit_3()\fP\&.
+.SS "bool_t xdr_commit3resok ()"
+
+.PP
+Referenced by \fBxdr_commit3res()\fP\&.
+.SS "bool_t xdr_cookieverf3 ()"
+
+.PP
+Referenced by \fBxdr_readdir3args()\fP, \fBxdr_readdir3resok()\fP, \fBxdr_readdirplus3args()\fP, and \fBxdr_readdirplus3resok()\fP\&.
+.SS "bool_t xdr_create3args ()"
+
+.PP
+Referenced by \fBnfsproc3_create_3()\fP\&.
+.SS "bool_t xdr_createhow3 ()"
+
+.PP
+Referenced by \fBxdr_create3args()\fP\&.
+.SS "bool_t xdr_createmode3 ()"
+
+.PP
+Referenced by \fBxdr_createhow3()\fP\&.
+.SS "bool_t xdr_createverf3 ()"
+
+.PP
+Referenced by \fBxdr_createhow3()\fP\&.
+.SS "bool_t xdr_devicedata3 ()"
+
+.PP
+Referenced by \fBxdr_mknoddata3()\fP\&.
+.SS "bool_t xdr_dirlist3 ()"
+
+.PP
+Referenced by \fBxdr_readdir3resok()\fP\&.
+.SS "bool_t xdr_dirlistplus3 ()"
+
+.PP
+Referenced by \fBxdr_readdirplus3resok()\fP\&.
+.SS "bool_t xdr_diropargs3 ()"
+
+.PP
+Referenced by \fBnfsproc3_lookup_3()\fP, \fBnfsproc3_remove_3()\fP, \fBnfsproc3_rmdir_3()\fP, \fBxdr_create3args()\fP, \fBxdr_link3args()\fP, \fBxdr_mkdir3args()\fP, \fBxdr_mknod3args()\fP, \fBxdr_rename3args()\fP, and \fBxdr_symlink3args()\fP\&.
+.SS "bool_t xdr_diropres3 ()"
+
+.PP
+Referenced by \fBnfsproc3_create_3()\fP, \fBnfsproc3_mkdir_3()\fP, \fBnfsproc3_mknod_3()\fP, and \fBnfsproc3_symlink_3()\fP\&.
+.SS "bool_t xdr_diropres3ok ()"
+
+.PP
+Referenced by \fBxdr_diropres3()\fP\&.
+.SS "bool_t xdr_dirpath ()"
+
+.SS "bool_t xdr_entry3 ()"
+
+.PP
+Referenced by \fBxdr_dirlist3()\fP, and \fBxdr_entry3()\fP\&.
+.SS "bool_t xdr_entryplus3 ()"
+
+.PP
+Referenced by \fBxdr_dirlistplus3()\fP, and \fBxdr_entryplus3()\fP\&.
+.SS "bool_t xdr_exportnode3 ()"
+
+.PP
+Referenced by \fBxdr_exports3()\fP\&.
+.SS "bool_t xdr_exports3 ()"
+
+.PP
+Referenced by \fBmountproc3_export_3()\fP, and \fBxdr_exportnode3()\fP\&.
+.SS "bool_t xdr_fattr3 ()"
+
+.PP
+Referenced by \fBxdr_getattr3res()\fP, and \fBxdr_post_op_attr()\fP\&.
+.SS "bool_t xdr_fhandle3 ()"
+
+.PP
+Referenced by \fBnfsproc3_fsinfo_3()\fP, \fBnfsproc3_fsstat_3()\fP, \fBnfsproc3_getattr_3()\fP, \fBnfsproc3_pathconf_3()\fP, \fBnfsproc3_readlink_3()\fP, \fBxdr_access3args()\fP, \fBxdr_commit3args()\fP, \fBxdr_diropargs3()\fP, \fBxdr_link3args()\fP, \fBxdr_lookup3resok()\fP, \fBxdr_mountres3_ok()\fP, \fBxdr_post_op_fh3()\fP, \fBxdr_read3args()\fP, \fBxdr_readdir3args()\fP, \fBxdr_readdirplus3args()\fP, \fBxdr_setattr3args()\fP, and \fBxdr_write3args()\fP\&.
+.SS "bool_t xdr_filename3 ()"
+
+.PP
+Referenced by \fBxdr_diropargs3()\fP, \fBxdr_entry3()\fP, \fBxdr_entryplus3()\fP, \fBxdr_groupnode3()\fP, and \fBxdr_mountbody3()\fP\&.
+.SS "bool_t xdr_fsinfo3res ()"
+
+.PP
+Referenced by \fBnfsproc3_fsinfo_3()\fP\&.
+.SS "bool_t xdr_fsinfo3resok ()"
+
+.PP
+Referenced by \fBxdr_fsinfo3res()\fP\&.
+.SS "bool_t xdr_fsstat3res ()"
+
+.PP
+Referenced by \fBnfsproc3_fsstat_3()\fP\&.
+.SS "bool_t xdr_fsstat3resok ()"
+
+.PP
+Referenced by \fBxdr_fsstat3res()\fP\&.
+.SS "bool_t xdr_ftype3 ()"
+
+.PP
+Referenced by \fBxdr_fattr3()\fP, and \fBxdr_mknoddata3()\fP\&.
+.SS "bool_t xdr_getattr3res ()"
+
+.PP
+Referenced by \fBnfsproc3_getattr_3()\fP\&.
+.SS "bool_t xdr_groupnode3 ()"
+
+.PP
+Referenced by \fBxdr_groups3()\fP\&.
+.SS "bool_t xdr_groups3 ()"
+
+.PP
+Referenced by \fBxdr_exportnode3()\fP, and \fBxdr_groupnode3()\fP\&.
+.SS "bool_t xdr_int32 ()"
+
+.SS "bool_t xdr_int64 ()"
+
+.SS "bool_t xdr_link3args ()"
+
+.PP
+Referenced by \fBnfsproc3_link_3()\fP\&.
+.SS "bool_t xdr_link3res ()"
+
+.PP
+Referenced by \fBnfsproc3_link_3()\fP\&.
+.SS "bool_t xdr_link3wcc ()"
+
+.PP
+Referenced by \fBxdr_link3res()\fP\&.
+.SS "bool_t xdr_lookup3res ()"
+
+.PP
+Referenced by \fBnfsproc3_lookup_3()\fP\&.
+.SS "bool_t xdr_lookup3resok ()"
+
+.PP
+Referenced by \fBxdr_lookup3res()\fP\&.
+.SS "bool_t xdr_mkdir3args ()"
+
+.PP
+Referenced by \fBnfsproc3_mkdir_3()\fP\&.
+.SS "bool_t xdr_mknod3args ()"
+
+.PP
+Referenced by \fBnfsproc3_mknod_3()\fP\&.
+.SS "bool_t xdr_mknoddata3 ()"
+
+.PP
+Referenced by \fBxdr_mknod3args()\fP\&.
+.SS "bool_t xdr_mountbody3 ()"
+
+.PP
+Referenced by \fBxdr_mountlist3()\fP\&.
+.SS "bool_t xdr_mountlist3 ()"
+
+.PP
+Referenced by \fBmountproc3_dump_3()\fP, and \fBxdr_mountbody3()\fP\&.
+.SS "bool_t xdr_mountres3 ()"
+
+.PP
+Referenced by \fBmountproc3_mnt_3()\fP\&.
+.SS "bool_t xdr_mountres3_ok ()"
+
+.PP
+Referenced by \fBxdr_mountres3()\fP\&.
+.SS "bool_t xdr_mountstat3 ()"
+
+.PP
+Referenced by \fBxdr_mountres3()\fP\&.
+.SS "bool_t xdr_name ()"
+
+.SS "bool_t xdr_nfspath3 ()"
+
+.PP
+Referenced by \fBmountproc3_mnt_3()\fP, \fBmountproc3_umnt_3()\fP, \fBxdr_exportnode3()\fP, \fBxdr_mountbody3()\fP, \fBxdr_readlink3resok()\fP, and \fBxdr_symlinkdata3()\fP\&.
+.SS "bool_t xdr_nfsstat3 ()"
+
+.PP
+Referenced by \fBxdr_access3res()\fP, \fBxdr_commit3res()\fP, \fBxdr_diropres3()\fP, \fBxdr_fsinfo3res()\fP, \fBxdr_fsstat3res()\fP, \fBxdr_getattr3res()\fP, \fBxdr_link3res()\fP, \fBxdr_lookup3res()\fP, \fBxdr_pathconf3res()\fP, \fBxdr_read3res()\fP, \fBxdr_readdir3res()\fP, \fBxdr_readdirplus3res()\fP, \fBxdr_readlink3res()\fP, \fBxdr_rename3res()\fP, \fBxdr_wccstat3()\fP, and \fBxdr_write3res()\fP\&.
+.SS "bool_t xdr_nfstime3 ()"
+
+.PP
+Referenced by \fBxdr_fattr3()\fP, \fBxdr_fsinfo3resok()\fP, \fBxdr_sattrguard3()\fP, \fBxdr_set_time()\fP, and \fBxdr_wcc_attr()\fP\&.
+.SS "bool_t xdr_pathconf3res ()"
+
+.PP
+Referenced by \fBnfsproc3_pathconf_3()\fP\&.
+.SS "bool_t xdr_pathconf3resok ()"
+
+.PP
+Referenced by \fBxdr_pathconf3res()\fP\&.
+.SS "bool_t xdr_post_op_attr ()"
+
+.PP
+Referenced by \fBxdr_access3res()\fP, \fBxdr_access3resok()\fP, \fBxdr_diropres3ok()\fP, \fBxdr_entryplus3()\fP, \fBxdr_fsinfo3res()\fP, \fBxdr_fsinfo3resok()\fP, \fBxdr_fsstat3res()\fP, \fBxdr_fsstat3resok()\fP, \fBxdr_link3wcc()\fP, \fBxdr_lookup3res()\fP, \fBxdr_lookup3resok()\fP, \fBxdr_pathconf3res()\fP, \fBxdr_pathconf3resok()\fP, \fBxdr_read3res()\fP, \fBxdr_read3resok()\fP, \fBxdr_readdir3res()\fP, \fBxdr_readdir3resok()\fP, \fBxdr_readdirplus3res()\fP, \fBxdr_readdirplus3resok()\fP, \fBxdr_readlink3res()\fP, \fBxdr_readlink3resok()\fP, and \fBxdr_wcc_data()\fP\&.
+.SS "bool_t xdr_post_op_fh3 ()"
+
+.PP
+Referenced by \fBxdr_diropres3ok()\fP, and \fBxdr_entryplus3()\fP\&.
+.SS "bool_t xdr_pre_op_attr ()"
+
+.PP
+Referenced by \fBxdr_wcc_data()\fP\&.
+.SS "bool_t xdr_read3args ()"
+
+.PP
+Referenced by \fBnfsproc3_read_3()\fP\&.
+.SS "bool_t xdr_read3res ()"
+
+.PP
+Referenced by \fBnfsproc3_read_3()\fP\&.
+.SS "bool_t xdr_read3resok ()"
+
+.PP
+Referenced by \fBxdr_read3res()\fP\&.
+.SS "bool_t xdr_readdir3args ()"
+
+.PP
+Referenced by \fBnfsproc3_readdir_3()\fP\&.
+.SS "bool_t xdr_readdir3res ()"
+
+.PP
+Referenced by \fBnfsproc3_readdir_3()\fP\&.
+.SS "bool_t xdr_readdir3resok ()"
+
+.PP
+Referenced by \fBxdr_readdir3res()\fP\&.
+.SS "bool_t xdr_readdirplus3args ()"
+
+.PP
+Referenced by \fBnfsproc3_readdirplus_3()\fP\&.
+.SS "bool_t xdr_readdirplus3res ()"
+
+.PP
+Referenced by \fBnfsproc3_readdirplus_3()\fP\&.
+.SS "bool_t xdr_readdirplus3resok ()"
+
+.PP
+Referenced by \fBxdr_readdirplus3res()\fP\&.
+.SS "bool_t xdr_readlink3res ()"
+
+.PP
+Referenced by \fBnfsproc3_readlink_3()\fP\&.
+.SS "bool_t xdr_readlink3resok ()"
+
+.PP
+Referenced by \fBxdr_readlink3res()\fP\&.
+.SS "bool_t xdr_rename3args ()"
+
+.PP
+Referenced by \fBnfsproc3_rename_3()\fP\&.
+.SS "bool_t xdr_rename3res ()"
+
+.PP
+Referenced by \fBnfsproc3_rename_3()\fP\&.
+.SS "bool_t xdr_rename3wcc ()"
+
+.PP
+Referenced by \fBxdr_rename3res()\fP\&.
+.SS "bool_t xdr_sattr3 ()"
+
+.PP
+Referenced by \fBxdr_createhow3()\fP, \fBxdr_devicedata3()\fP, \fBxdr_mkdir3args()\fP, \fBxdr_mknoddata3()\fP, \fBxdr_setattr3args()\fP, and \fBxdr_symlinkdata3()\fP\&.
+.SS "bool_t xdr_sattrguard3 ()"
+
+.PP
+Referenced by \fBxdr_setattr3args()\fP\&.
+.SS "bool_t xdr_set_time ()"
+
+.PP
+Referenced by \fBxdr_sattr3()\fP\&.
+.SS "bool_t xdr_set_uint32 ()"
+
+.PP
+Referenced by \fBxdr_sattr3()\fP\&.
+.SS "bool_t xdr_set_uint64 ()"
+
+.PP
+Referenced by \fBxdr_sattr3()\fP\&.
+.SS "bool_t xdr_setattr3args ()"
+
+.PP
+Referenced by \fBnfsproc3_setattr_3()\fP\&.
+.SS "bool_t xdr_specdata3 ()"
+
+.PP
+Referenced by \fBxdr_devicedata3()\fP, and \fBxdr_fattr3()\fP\&.
+.SS "bool_t xdr_stable_how ()"
+
+.PP
+Referenced by \fBxdr_write3args()\fP, and \fBxdr_write3resok()\fP\&.
+.SS "bool_t xdr_symlink3args ()"
+
+.PP
+Referenced by \fBnfsproc3_symlink_3()\fP\&.
+.SS "bool_t xdr_symlinkdata3 ()"
+
+.PP
+Referenced by \fBxdr_symlink3args()\fP\&.
+.SS "bool_t xdr_time_how ()"
+
+.PP
+Referenced by \fBxdr_set_time()\fP\&.
+.SS "bool_t xdr_uint32 ()"
+
+.PP
+Referenced by \fBxdr_access3args()\fP, \fBxdr_access3resok()\fP, \fBxdr_commit3args()\fP, \fBxdr_fattr3()\fP, \fBxdr_fsinfo3resok()\fP, \fBxdr_fsstat3resok()\fP, \fBxdr_nfstime3()\fP, \fBxdr_pathconf3resok()\fP, \fBxdr_read3args()\fP, \fBxdr_read3resok()\fP, \fBxdr_readdir3args()\fP, \fBxdr_readdirplus3args()\fP, \fBxdr_set_uint32()\fP, \fBxdr_specdata3()\fP, \fBxdr_write3args()\fP, and \fBxdr_write3resok()\fP\&.
+.SS "bool_t xdr_uint64 ()"
+
+.PP
+Referenced by \fBxdr_commit3args()\fP, \fBxdr_entry3()\fP, \fBxdr_entryplus3()\fP, \fBxdr_fattr3()\fP, \fBxdr_fsinfo3resok()\fP, \fBxdr_fsstat3resok()\fP, \fBxdr_read3args()\fP, \fBxdr_readdir3args()\fP, \fBxdr_readdirplus3args()\fP, \fBxdr_set_uint64()\fP, \fBxdr_wcc_attr()\fP, and \fBxdr_write3args()\fP\&.
+.SS "bool_t xdr_wcc_attr ()"
+
+.PP
+Referenced by \fBxdr_pre_op_attr()\fP\&.
+.SS "bool_t xdr_wcc_data ()"
+
+.PP
+Referenced by \fBxdr_commit3res()\fP, \fBxdr_commit3resok()\fP, \fBxdr_diropres3()\fP, \fBxdr_diropres3ok()\fP, \fBxdr_link3wcc()\fP, \fBxdr_rename3wcc()\fP, \fBxdr_wccstat3()\fP, \fBxdr_write3res()\fP, and \fBxdr_write3resok()\fP\&.
+.SS "bool_t xdr_wccstat3 ()"
+
+.PP
+Referenced by \fBnfsproc3_remove_3()\fP, \fBnfsproc3_rmdir_3()\fP, and \fBnfsproc3_setattr_3()\fP\&.
+.SS "bool_t xdr_write3args ()"
+
+.PP
+Referenced by \fBnfsproc3_write_3()\fP\&.
+.SS "bool_t xdr_write3res ()"
+
+.PP
+Referenced by \fBnfsproc3_write_3()\fP\&.
+.SS "bool_t xdr_write3resok ()"
+
+.PP
+Referenced by \fBxdr_write3res()\fP\&.
+.SS "bool_t xdr_writeverf3 ()"
+
+.PP
+Referenced by \fBxdr_commit3resok()\fP, and \fBxdr_write3resok()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

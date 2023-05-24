@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file mpi_server_params.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _MPI_SERVER_PARAMS_H_
 #define _MPI_SERVER_PARAMS_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,18 +44,43 @@
 #include "base/workers.h"
 // #include <semaphore.h>
 
-/*
- * Constants
- */
-
+/************************************************
+ *  ... Constants
+ ***********************************************/
 #ifndef MPI_SERVER_DIRBASE_DEFAULT
 #define MPI_SERVER_DIRBASE_DEFAULT "/tmp"
 #endif
 
-/*
- * Datatype
- */
+/************************************************
+ *  ... Datatype
+ ***********************************************/
 
+/** @struct mpi_server_param_st
+ *  This is a struct
+ *
+ *  @var mpi_server_param_st::size
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::rank
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::port_name
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::srv_name
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::dirbase
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::dns_file
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::shutdown_file
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::thread_mode
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::client
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::argc
+ *    A 'TODO'.
+ *  @var mpi_server_param_st::argv
+ *    A 'TODO'.
+ */
 typedef struct
 {
   // server identification
@@ -70,12 +109,43 @@ typedef struct
   char **argv;
 } mpi_server_param_st;
 
-/*
- * API
- */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_params_show_usage(void);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param argc  'TODO'.
+ * @param argv  'TODO'.
+ * @return 'TODO'.
+ */
 int mpi_server_params_get(mpi_server_param_st *params, int argc, char *argv[]);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_params_show(mpi_server_param_st *params);
 
 #endif

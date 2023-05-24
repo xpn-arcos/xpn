@@ -18,9 +18,27 @@
  *
  */
 
+/**
+ * @file xpn_file.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn/xpn_simple/xpn_file.h"
 
 struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
+
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 int xpn_init_file_table()
 {

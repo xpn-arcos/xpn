@@ -1,0 +1,81 @@
+\doxysection{nfi\+\_\+tcp\+\_\+server\+\_\+err.\+h}
+\hypertarget{nfi__tcp__server__err_8h_source}{}\label{nfi__tcp__server__err_8h_source}\index{nfi\_tcp\_server\_err.h@{nfi\_tcp\_server\_err.h}}
+\mbox{\hyperlink{nfi__tcp__server__err_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ nfi\_tcp\_server\_err.h}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_NFI\_TCP\_SERVER\_ERR\_H\_}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_NFI\_TCP\_SERVER\_ERR\_H\_}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00035}00035\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00036}00036\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00037}00037\ \{}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00038}00038\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00040}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1}{00040}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1}{nfi\_tcp\_server\_err}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00041}00041\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00042}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a3a4914d123b131b9c1ea34e4b8f2876b}{00042}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a3a4914d123b131b9c1ea34e4b8f2876b}{TCP\_SERVERERR\_PARAM}}\ =\ 0,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00043}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a768577dedb350fc4c1224641d815922d}{00043}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a768577dedb350fc4c1224641d815922d}{TCP\_SERVERERR\_MEMORY}}\ =\ 1,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00044}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a986622db2881842cf3b0517c8da2258d}{00044}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a986622db2881842cf3b0517c8da2258d}{TCP\_SERVERERR\_URL}}\ =\ 2,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00045}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a7183f92ce93a7eef4cd9b1542c1ea0bc}{00045}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a7183f92ce93a7eef4cd9b1542c1ea0bc}{TCP\_SERVERERR\_MNTCONNECTION}}\ =\ 3,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00046}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1ac88d3c8ed99945f62d3643c345f8526c}{00046}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1ac88d3c8ed99945f62d3643c345f8526c}{TCP\_SERVERERR\_MOUNT}}\ =\ 4,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00047}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1ac5255a7433c070324dc5bd893905e4f7}{00047}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1ac5255a7433c070324dc5bd893905e4f7}{TCP\_SERVERERR\_NFSCONNECTION}}\ =\ 5,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00048}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1aca5f17024f59f372b1e459bb443c562d}{00048}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1aca5f17024f59f372b1e459bb443c562d}{TCP\_SERVERERR\_GETATTR}}\ =\ 6,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00049}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a017b04bf79710d21bf58d455cabbc6a8}{00049}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a017b04bf79710d21bf58d455cabbc6a8}{TCP\_SERVERERR\_LOOKUP}}\ =\ 7,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00050}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a0ba0a505d35da9cde25e2273e80d1562}{00050}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a0ba0a505d35da9cde25e2273e80d1562}{TCP\_SERVERERR\_READ}}\ =\ 8,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00051}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1ab4c86775b87391f7030e49da1d6674bc}{00051}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1ab4c86775b87391f7030e49da1d6674bc}{TCP\_SERVERERR\_WRITE}}\ =\ 9,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00052}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a16a2a75a60a9faa28626039ce7e399f0}{00052}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a16a2a75a60a9faa28626039ce7e399f0}{TCP\_SERVERERR\_CREATE}}\ =\ 10,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00053}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a7bd5dd19e3d5b8cc97148bdc581d0a00}{00053}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a7bd5dd19e3d5b8cc97148bdc581d0a00}{TCP\_SERVERERR\_REMOVE}}\ =\ 11,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00054}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a730e7f2dac70f7ea5737264bf9ed55bf}{00054}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a730e7f2dac70f7ea5737264bf9ed55bf}{TCP\_SERVERERR\_MKDIR}}\ =\ 12,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00055}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a85c98bfb6a0f0290ab89139bbcaaf560}{00055}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a85c98bfb6a0f0290ab89139bbcaaf560}{TCP\_SERVERERR\_READDIR}}\ =\ 13,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00056}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1aa547f6ec428155177548e0871f3a7719}{00056}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1aa547f6ec428155177548e0871f3a7719}{TCP\_SERVERERR\_STATFS}}\ =\ 14,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00057}\mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a37853f632e6a0f6adfe406949e7fa49f}{00057}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__tcp__server__err_8h_acbe0a7e665ecc7cc93223a56c3a4feb1a37853f632e6a0f6adfe406949e7fa49f}{TCP\_SERVERERR\_NOTDIR}}\ =\ 15,}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00059}00059\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00060}00060\ \textcolor{comment}{\ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00061}00061\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00062}00062\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00063}00063\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00064}00064\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00065}00065\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param\ err\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00066}00066\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @par\ Returns}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00067}00067\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Nothing.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00068}00068\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00069}00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{nfi__tcp__server__err_8h_a718ef71d008a9e8af7f1cc6c82c4d026}{tcp\_server\_err}}(\textcolor{keywordtype}{int}\ err);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00071}00071\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00072}00072\ \}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00073}00073\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server__err_8h_source_l00075}00075\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

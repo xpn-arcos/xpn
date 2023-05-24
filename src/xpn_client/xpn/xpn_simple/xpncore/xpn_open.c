@@ -18,8 +18,21 @@
  *
  */
 
-#include "xpn/xpn_simple/xpn_open.h"
+/**
+ * @file xpn_open.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
+#include "xpn/xpn_simple/xpn_open.h"
 #include "xpn/xpn_simple/xpn_opendir.h"
 
 #define MASK 0000777
@@ -28,7 +41,21 @@ extern struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
 
 int ino_counter = 0;
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
 /*****************************************************************/
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 void XpnShowFileTable(void)
 {
     int i = 0;
@@ -42,6 +69,18 @@ void XpnShowFileTable(void)
     printf("</file_table>\n");
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param pd 'TODO'.
+ * @param path 'TODO'.
+ * @param vfh 'TODO'.
+ * @param mdata 'TODO'.
+ * @param mode 'TODO'.
+ * @return 'TODO'.
+ */
 int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadata *mdata, int mode)
 {
     int i, res;
@@ -84,6 +123,14 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
     return res;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path 'TODO'.
+ * @return 'TODO'.
+ */
 int XpnSearchFile(const char *path)
 {
     int res, i = 0;
@@ -116,6 +163,17 @@ int XpnSearchFile(const char *path)
 
 /*****************************************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path 'TODO'.
+ * @param perm 'TODO'.
+ * @param vfh 'TODO'.
+ * @param mdata 'TODO'.
+ * @return 'TODO'.
+ */
 int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struct xpn_metadata **mdata)
 {
     char abs_path[PATH_MAX], url_serv[PATH_MAX];
@@ -320,6 +378,17 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     return 0;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path 'TODO'.
+ * @param vfh 'TODO'.
+ * @param mdata 'TODO'.
+ * @param mode 'TODO'.
+ * @return 'TODO'.
+ */
 int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata *mdata, int mode)
 {
     char abs_path[PATH_MAX];
@@ -413,18 +482,45 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
     return res;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path 'TODO'.
+ * @param vfh 'TODO'.
+ * @param size 'TODO'.
+ * @return 'TODO'.
+ */
 int xpn_internal_resize(__attribute__((__unused__)) char *path, __attribute__((__unused__)) struct xpn_fh **vfh, __attribute__((__unused__)) int size)
 {
     // TODO
     return 0;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd 'TODO'.
+ * @param size 'TODO'.
+ * @return 'TODO'.
+ */
 int xpn_internal_fresize(__attribute__((__unused__)) int fd, __attribute__((__unused__)) int size)
 {
     // TODO
     return 0;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path 'TODO'.
+ * @return 'TODO'.
+ */
 int xpn_internal_remove(const char *path)
 {
     char abs_path[PATH_MAX], url_serv[PATH_MAX];

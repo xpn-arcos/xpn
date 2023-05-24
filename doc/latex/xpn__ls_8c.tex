@@ -1,0 +1,51 @@
+\doxysection{xpn\+\_\+ls.\+c File Reference}
+\hypertarget{xpn__ls_8c}{}\label{xpn__ls_8c}\index{xpn\_ls.c@{xpn\_ls.c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$sys/types.\+h$>$}\newline
+{\ttfamily \#include $<$dirent.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$sys/stat.\+h$>$}\newline
+{\ttfamily \#include \"{}mpi.\+h\"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{xpn__ls_8c_a1841fd0ec49e7fe93b4add1f1d4ee11c}{list}} (char \texorpdfstring{$\ast$}{*}dir\+\_\+name, FILE \texorpdfstring{$\ast$}{*}fd)
+\item 
+int \mbox{\hyperlink{xpn__ls_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{xpn__ls_8c_a1841fd0ec49e7fe93b4add1f1d4ee11c}\label{xpn__ls_8c_a1841fd0ec49e7fe93b4add1f1d4ee11c} 
+\index{xpn\_ls.c@{xpn\_ls.c}!list@{list}}
+\index{list@{list}!xpn\_ls.c@{xpn\_ls.c}}
+\doxysubsubsection{\texorpdfstring{list()}{list()}}
+{\footnotesize\ttfamily int list (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{dir\+\_\+name,  }\item[{FILE \texorpdfstring{$\ast$}{*}}]{fd }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{xpn__ls_8c_source_l00034}{34}} of file \mbox{\hyperlink{xpn__ls_8c_source}{xpn\+\_\+ls.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__bypass_8c_source_l01397}{closedir()}}, \mbox{\hyperlink{xpn__ls_8c_source_l00034}{list()}}, \mbox{\hyperlink{xpn__bypass_8c_source_l01297}{opendir()}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, and \mbox{\hyperlink{xpn__bypass_8c_source_l01329}{readdir()}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__ls_8c_source_l00034}{list()}}, and \mbox{\hyperlink{xpn__ls_8c_source_l00090}{main()}}.
+
+\Hypertarget{xpn__ls_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{xpn__ls_8c_a0ddf1224851353fc92bfbff6f499fa97} 
+\index{xpn\_ls.c@{xpn\_ls.c}!main@{main}}
+\index{main@{main}!xpn\_ls.c@{xpn\_ls.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{xpn__ls_8c_source_l00090}{90}} of file \mbox{\hyperlink{xpn__ls_8c_source}{xpn\+\_\+ls.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__ls_8c_source_l00034}{list()}}, \mbox{\hyperlink{xpn__bypass_8c_source_l01794}{MPI\+\_\+\+Finalize()}}, and \mbox{\hyperlink{xpn__bypass_8c_source_l01777}{MPI\+\_\+\+Init()}}.
+

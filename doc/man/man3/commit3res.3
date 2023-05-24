@@ -1,0 +1,60 @@
+.TH "commit3res" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+commit3res
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfs3\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBnfsstat3\fP \fBstatus\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   \fBcommit3resok\fP \fBresok\fP"
+.br
+.ti -1c
+.RI "   \fBwcc_data\fP \fBresfail\fP"
+.br
+.ti -1c
+.RI "} \fBcommit3res_u\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB911\fP of file \fBnfs3\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "union  { \&.\&.\&. }  commit3res::commit3res_u"
+
+.PP
+Referenced by \fBxdr_commit3res()\fP\&.
+.SS "\fBwcc_data\fP commit3res::resfail"
+
+.PP
+Definition at line \fB917\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_commit3res()\fP\&.
+.SS "\fBcommit3resok\fP commit3res::resok"
+
+.PP
+Definition at line \fB916\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_commit3res()\fP\&.
+.SS "\fBnfsstat3\fP commit3res::status"
+
+.PP
+Definition at line \fB913\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_commit3res()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

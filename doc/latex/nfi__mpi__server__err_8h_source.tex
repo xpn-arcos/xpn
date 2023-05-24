@@ -1,0 +1,72 @@
+\doxysection{nfi\+\_\+mpi\+\_\+server\+\_\+err.\+h}
+\hypertarget{nfi__mpi__server__err_8h_source}{}\label{nfi__mpi__server__err_8h_source}\index{nfi\_mpi\_server\_err.h@{nfi\_mpi\_server\_err.h}}
+\mbox{\hyperlink{nfi__mpi__server__err_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ nfi\_mpi\_server\_err.h}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_NFI\_MPI\_SERVER\_ERR\_H\_}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_NFI\_MPI\_SERVER\_ERR\_H\_}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00035}00035\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00036}00036\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00037}00037\ \{}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00038}00038\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00040}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dff}{00040}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dff}{nfi\_mpi\_server\_err}}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00041}00041\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00042}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa90cfcfcc752dfe0dacb8c413bb497fac}{00042}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa90cfcfcc752dfe0dacb8c413bb497fac}{MPI\_SERVERERR\_PARAM}}\ =\ 0,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00043}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa8bf44b0b3d4aed22ac3a913ab7d75cd5}{00043}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa8bf44b0b3d4aed22ac3a913ab7d75cd5}{MPI\_SERVERERR\_MEMORY}}\ =\ 1,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00044}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa99346335a943003690152a1dd0cbf6e9}{00044}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa99346335a943003690152a1dd0cbf6e9}{MPI\_SERVERERR\_URL}}\ =\ 2,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00045}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa8ae1d7ed18a61489d52688d4b619c733}{00045}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa8ae1d7ed18a61489d52688d4b619c733}{MPI\_SERVERERR\_MNTCONNECTION}}\ =\ 3,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00046}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa64102108ba8fa7548f29e42cacdcabfb}{00046}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa64102108ba8fa7548f29e42cacdcabfb}{MPI\_SERVERERR\_MOUNT}}\ =\ 4,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00047}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffaa9e844be64ca8740898a51d3e7e62fe5}{00047}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffaa9e844be64ca8740898a51d3e7e62fe5}{MPI\_SERVERERR\_NFSCONNECTION}}\ =\ 5,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00048}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa92a052de6d7055627a5319f8290e9a96}{00048}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa92a052de6d7055627a5319f8290e9a96}{MPI\_SERVERERR\_GETATTR}}\ =\ 6,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00049}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffaa7afd30f12847a6cee281860af12d7d7}{00049}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffaa7afd30f12847a6cee281860af12d7d7}{MPI\_SERVERERR\_LOOKUP}}\ =\ 7,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00050}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa369846cf598d274edc226de945c7b916}{00050}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa369846cf598d274edc226de945c7b916}{MPI\_SERVERERR\_READ}}\ =\ 8,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00051}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa4b197fbfd56cb0dbf2b8c4aeef7c3f86}{00051}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa4b197fbfd56cb0dbf2b8c4aeef7c3f86}{MPI\_SERVERERR\_WRITE}}\ =\ 9,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00052}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa53006a026917a9ee79273395fa738140}{00052}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa53006a026917a9ee79273395fa738140}{MPI\_SERVERERR\_CREATE}}\ =\ 10,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00053}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa4bfb37334dd20d95325e270632727d79}{00053}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa4bfb37334dd20d95325e270632727d79}{MPI\_SERVERERR\_REMOVE}}\ =\ 11,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00054}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa1e2a210a4a3e41c8102fabfd693b4c2b}{00054}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa1e2a210a4a3e41c8102fabfd693b4c2b}{MPI\_SERVERERR\_MKDIR}}\ =\ 12,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00055}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa5d1c39f33e1f8c3bf36718d8364dc5ba}{00055}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffa5d1c39f33e1f8c3bf36718d8364dc5ba}{MPI\_SERVERERR\_READDIR}}\ =\ 13,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00056}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffaf1bb0cacb7c26465b62f315776f82e85}{00056}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffaf1bb0cacb7c26465b62f315776f82e85}{MPI\_SERVERERR\_STATFS}}\ =\ 14,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00057}\mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffab5fa150b36437c3c3e12509f3436d8eb}{00057}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__mpi__server__err_8h_a403978d0d21630efd53111ea01020dffab5fa150b36437c3c3e12509f3436d8eb}{MPI\_SERVERERR\_NOTDIR}}\ =\ 15,}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{nfi__mpi__server__err_8h_ae2ec98faebe86b1902d0c969dc43d65b}{mpi\_server\_err}}(\textcolor{keywordtype}{int}\ err);}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00062}00062\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00063}00063\ \}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00064}00064\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{nfi__mpi__server__err_8h_source_l00066}00066\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

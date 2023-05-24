@@ -1,0 +1,184 @@
+\doxysection{xpn/xpn\+\_\+simple/xpn.h}
+\hypertarget{xpn_2xpn__simple_2xpn_8h_source}{}\label{xpn_2xpn__simple_2xpn_8h_source}\index{xpn.h@{xpn.h}}
+\mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ xpn.h}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_XPN\_H}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_XPN\_H}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00035}00035\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00036}00036\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00037}00037\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00038}00038\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi_8h}{nfi/nfi.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00039}00039\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi__worker_8h}{nfi/nfi\_worker.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00040}00040\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi__ops_8h}{nfi/nfi\_ops.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00041}00041\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi__lib_8h}{nfi/nfi\_lib.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00043}00043\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00044}00044\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00045}00045\ \{}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00046}00046\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00048}\mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_a55be6d4b6ee902d8bdfdf2ab256bd0e6}{00048}}\ \textcolor{preprocessor}{\#define\ XPN\_CONF\ "{}XPN\_CONF"{}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00049}\mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_ab8400c2f49c37bdd06da66cd855764db}{00049}}\ \textcolor{preprocessor}{\#define\ XPN\_HEADER\_SIZE\ 8192}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00050}00050\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00051}00051\ \textcolor{comment}{\ \ \ \ \ \ \ \ /**\ @struct\ xpn\_partition}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00052}00052\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ Paralel\ struct\ partition.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00053}00053\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00054}00054\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::id}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00055}00055\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Id\ of\ partition.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00056}00056\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::type}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00057}00057\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Type\ of\ file\ :NORMAL,\ RAID5,....}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00058}00058\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::name}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00059}00059\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Name\ of\ partition.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00060}00060\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::block\_size}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00061}00061\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Size\ of\ distribution\ used.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00062}00062\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::size\_threads}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00063}00063\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00064}00064\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::initialized}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00065}00065\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Whether\ it\ is\ already\ initialized\ or\ not.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00066}00066\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::data\_nserv}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00067}00067\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Number\ of\ server.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00068}00068\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::data\_serv}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00069}00069\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ List\ of\ data\ servers\ in\ the\ partition.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00070}00070\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::meta\_nserv}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00071}00071\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Number\ of\ metadata\_server.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00072}00072\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_partition::meta\_serv}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00073}00073\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ List\ of\ metadata\ servers\ in\ the\ partition.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00074}00074\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00075}\mbox{\hyperlink{structxpn__partition}{00075}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structxpn__partition}{xpn\_partition}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00076}00076\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00077}\mbox{\hyperlink{structxpn__partition_a6098a1bce52d34f4217b471b6f1fe1fe}{00077}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__partition_a6098a1bce52d34f4217b471b6f1fe1fe}{id}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00078}\mbox{\hyperlink{structxpn__partition_a82f02195a75c5b8eaea78fd700a5c4c3}{00078}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__partition_a82f02195a75c5b8eaea78fd700a5c4c3}{type}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00079}\mbox{\hyperlink{structxpn__partition_a9c36d86532765caef377aba9d20234fd}{00079}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structxpn__partition_a9c36d86532765caef377aba9d20234fd}{name}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00080}\mbox{\hyperlink{structxpn__partition_a635394e2be772a50da9bf1eb557c7ff5}{00080}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ssize\_t\ \mbox{\hyperlink{structxpn__partition_a635394e2be772a50da9bf1eb557c7ff5}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00081}\mbox{\hyperlink{structxpn__partition_a4c9cb14986554358c8444db6f0bb19b1}{00081}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ssize\_t\ \mbox{\hyperlink{structxpn__partition_a4c9cb14986554358c8444db6f0bb19b1}{size\_threads}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00083}\mbox{\hyperlink{structxpn__partition_a4cd90164ae7befb9706e012188878fdb}{00083}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__partition_a4cd90164ae7befb9706e012188878fdb}{initialized}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00085}\mbox{\hyperlink{structxpn__partition_afe5cbfd53003770068bdbb7c8b98e005}{00085}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__partition_afe5cbfd53003770068bdbb7c8b98e005}{data\_nserv}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00086}\mbox{\hyperlink{structxpn__partition_a652b5ef058bdf4f045cd6135a15db0a8}{00086}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *\mbox{\hyperlink{structxpn__partition_a652b5ef058bdf4f045cd6135a15db0a8}{data\_serv}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00088}\mbox{\hyperlink{structxpn__partition_ad8fb5db81c08920ff3580c5b4ea8a5d6}{00088}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__partition_ad8fb5db81c08920ff3580c5b4ea8a5d6}{meta\_nserv}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00089}\mbox{\hyperlink{structxpn__partition_ab00ffd669fb0702e6caaf23df8f340c9}{00089}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *\mbox{\hyperlink{structxpn__partition_ab00ffd669fb0702e6caaf23df8f340c9}{meta\_serv}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00090}00090\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00091}00091\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00092}00092\ \textcolor{comment}{\ \ \ \ \ \ \ \ /**\ @struct\ xpn\_metadata}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00093}00093\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ Metadata\ of\ xpn\ file.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00094}00094\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00095}00095\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::id}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00096}00096\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Id\ of\ partition.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00097}00097\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::version}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00098}00098\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Number\ of\ version}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00099}00099\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::type}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00100}00100\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Type\ of\ file:\ file\ or\ dir}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00101}00101\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::block\_size}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00102}00102\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Size\ of\ distribution\ used}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00103}00103\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::size\_threads}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00104}00104\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ 'TODO'}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00105}00105\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::data\_nserv}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00106}00106\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Number\ of\ servers}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00107}00107\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::meta\_nserv}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00108}00108\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ Number\ of\ metadata\ servers}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00109}00109\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::attr}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00110}00110\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ 'TODO'}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00111}00111\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::type\_policy}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00112}00112\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ \ RAID0,\ RAID1}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00113}00113\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::policy}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00114}00114\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ 'TODO'}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00115}00115\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata::policy\_size}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00116}00116\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ 'TODO'}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00117}00117\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00118}\mbox{\hyperlink{structxpn__metadata}{00118}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structxpn__metadata}{xpn\_metadata}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00119}00119\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00120}\mbox{\hyperlink{structxpn__metadata_a4cb0c3825deec033b0ddc506579ae861}{00120}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata_a4cb0c3825deec033b0ddc506579ae861}{id}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00121}\mbox{\hyperlink{structxpn__metadata_a222f300d24867c9794a6763440cb2b50}{00121}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata_a222f300d24867c9794a6763440cb2b50}{version}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00122}\mbox{\hyperlink{structxpn__metadata_a6cf9cf929394954aae245d7eed74c8ad}{00122}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata_a6cf9cf929394954aae245d7eed74c8ad}{type}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00123}\mbox{\hyperlink{structxpn__metadata_aa77ca4b679fbe2af462761fa06f60988}{00123}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ssize\_t\ \mbox{\hyperlink{structxpn__metadata_aa77ca4b679fbe2af462761fa06f60988}{block\_size}};\ \textcolor{comment}{/*\ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00124}\mbox{\hyperlink{structxpn__metadata_a0c93d09e41157db7a06020b99e6b4a6b}{00124}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ssize\_t\ \mbox{\hyperlink{structxpn__metadata_a0c93d09e41157db7a06020b99e6b4a6b}{size\_threads}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00125}\mbox{\hyperlink{structxpn__metadata_a9576aecac52dc11a7c845b35bab8c44d}{00125}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata_a9576aecac52dc11a7c845b35bab8c44d}{data\_nserv}};\ \textcolor{comment}{/*\ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00126}\mbox{\hyperlink{structxpn__metadata_af275d3fbefb234fa1a4434fef648373f}{00126}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata_af275d3fbefb234fa1a4434fef648373f}{meta\_nserv}};\ \textcolor{comment}{/*\ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00127}\mbox{\hyperlink{structxpn__metadata_a6b77d968b1e478154b863e6ac6790438}{00127}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ \mbox{\hyperlink{structxpn__metadata_a6b77d968b1e478154b863e6ac6790438}{attr}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00128}\mbox{\hyperlink{structxpn__metadata_acf2653e13e50361aa9507517f89efd8c}{00128}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata_acf2653e13e50361aa9507517f89efd8c}{type\_policy}};\ \textcolor{comment}{/*\ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00129}\mbox{\hyperlink{structxpn__metadata_a72d9ac55f96142fddb550bd78aa4d916}{00129}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{structxpn__metadata_a72d9ac55f96142fddb550bd78aa4d916}{policy}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00130}\mbox{\hyperlink{structxpn__metadata_ae2027d09a0740513650311a9497a1684}{00130}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata_ae2027d09a0740513650311a9497a1684}{policy\_size}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00131}00131\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00133}\mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_a0f016aff98bd25283accefc857c5d13a}{00133}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_a0f016aff98bd25283accefc857c5d13a}{xpn\_policy}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00134}00134\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00135}\mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_a0f016aff98bd25283accefc857c5d13aae9b0d0485114e19b032357b6bc27bb8c}{00135}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_a0f016aff98bd25283accefc857c5d13aae9b0d0485114e19b032357b6bc27bb8c}{POLICY\_RAID0}},}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00136}00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_a0f016aff98bd25283accefc857c5d13aabdc1bc0edfdb0fe9c2d66e3bc1b6a6c8}{POLICY\_RAID1}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00137}\mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_a0f016aff98bd25283accefc857c5d13aabdc1bc0edfdb0fe9c2d66e3bc1b6a6c8}{00137}}\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00138}00138\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00139}00139\ \textcolor{comment}{\ \ \ \ \ \ \ \ /**\ @struct\ policy}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00140}00140\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00141}00141\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00142}00142\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ policy::first\_node}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00143}00143\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ 'TODO'}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00144}00144\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00145}\mbox{\hyperlink{structpolicy}{00145}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structpolicy}{policy}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00146}00146\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00147}\mbox{\hyperlink{structpolicy_a84fffe46aa4626e6d3c80f3ee05e29f4}{00147}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structpolicy_a84fffe46aa4626e6d3c80f3ee05e29f4}{first\_node}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00148}00148\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00149}00149\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00150}00150\ \textcolor{comment}{\ \ \ \ \ \ \ \ /**\ @struct\ xpn\_metadata\_header}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00151}00151\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ Metadata\ header\ of\ xpn\ file.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00152}00152\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00153}00153\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata\_header::version}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00154}00154\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ Number\ of\ version.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00155}00155\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata\_header::block\_size}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00156}00156\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ Size\ of\ distribution\ used.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00157}00157\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata\_header::data\_nserv}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00158}00158\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ Number\ of\ servers.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00159}00159\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata\_header::file\_size}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00160}00160\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ 'TODO'}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00161}00161\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ @var\ xpn\_metadata\_header::type\_policy}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00162}00162\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \ \ RAID0,\ RAID1.}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00163}00163\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00164}\mbox{\hyperlink{structxpn__metadata__header}{00164}}\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structxpn__metadata__header}{xpn\_metadata\_header}}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00165}00165\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00166}\mbox{\hyperlink{structxpn__metadata__header_a797ab914ef94a026586f6cc11d1ec896}{00166}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata__header_a797ab914ef94a026586f6cc11d1ec896}{version}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00167}\mbox{\hyperlink{structxpn__metadata__header_a21f3db1646a35f6353b92ab01a38b975}{00167}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ssize\_t\ \mbox{\hyperlink{structxpn__metadata__header_a21f3db1646a35f6353b92ab01a38b975}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00168}\mbox{\hyperlink{structxpn__metadata__header_a089d71ead210faa5a44ea380432e0cce}{00168}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata__header_a089d71ead210faa5a44ea380432e0cce}{data\_nserv}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00169}\mbox{\hyperlink{structxpn__metadata__header_a77e3b937ac8f07fa2002d6365bc8e4b9}{00169}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ssize\_t\ \mbox{\hyperlink{structxpn__metadata__header_a77e3b937ac8f07fa2002d6365bc8e4b9}{file\_size}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00170}\mbox{\hyperlink{structxpn__metadata__header_a16edcde17fc16ff4a24337d5c136740a}{00170}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structxpn__metadata__header_a16edcde17fc16ff4a24337d5c136740a}{type\_policy}};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ char\ \ \ \ padding[512-\/(3*sizeof(int)\ -\/\ 2*sizeof(ssize\_t))];\ \ \ /*\ 484\ =\ 512\ bytes\ -\/\ 3*sizeof(int)\ -\/\ 2*sizeof(ssize\_t)\ */}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00172}00172\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00174}00174\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00175}00175\ \}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00176}00176\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00177}00177\ }
+\DoxyCodeLine{\Hypertarget{xpn_2xpn__simple_2xpn_8h_source_l00178}00178\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

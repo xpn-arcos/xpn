@@ -1,0 +1,60 @@
+.TH "fsstat3res" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+fsstat3res
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfs3\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBnfsstat3\fP \fBstatus\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   \fBfsstat3resok\fP \fBresok\fP"
+.br
+.ti -1c
+.RI "   \fBpost_op_attr\fP \fBresfail\fP"
+.br
+.ti -1c
+.RI "} \fBfsstat3res_u\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB831\fP of file \fBnfs3\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "union  { \&.\&.\&. }  fsstat3res::fsstat3res_u"
+
+.PP
+Referenced by \fBxdr_fsstat3res()\fP\&.
+.SS "\fBpost_op_attr\fP fsstat3res::resfail"
+
+.PP
+Definition at line \fB837\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_fsstat3res()\fP\&.
+.SS "\fBfsstat3resok\fP fsstat3res::resok"
+
+.PP
+Definition at line \fB836\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_fsstat3res()\fP\&.
+.SS "\fBnfsstat3\fP fsstat3res::status"
+
+.PP
+Definition at line \fB833\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_fsstat3res()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

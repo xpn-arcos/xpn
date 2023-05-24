@@ -1,0 +1,185 @@
+\doxysection{dtable.\+h File Reference}
+\hypertarget{dtable_8h}{}\label{dtable_8h}\index{dtable.h@{dtable.h}}
+
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include \"{}darray.\+h\"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structdtelto__t}{dtelto\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structdtable__t}{dtable\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{dtable_8h_af258712fd2dda0ed407ef39f2610c41c}{c\+\_\+\+DTABLE\+\_\+T}}~sizeof(\mbox{\hyperlink{structdtable__t}{dtable\+\_\+t}})
+\item 
+\#define \mbox{\hyperlink{dtable_8h_a265adcf62df326ddfd211239f17d55a9}{c\+\_\+\+DTELTO\+\_\+T}}~sizeof(\mbox{\hyperlink{structdtelto__t}{dtelto\+\_\+t}})
+\item 
+\#define \mbox{\hyperlink{dtable_8h_a8154ae57273c83fb01240a4a12e7071b}{c\+\_\+\+DTABLE\+\_\+\+T\+\_\+\+NULL}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{dtable_8h_a0145f19ad87e5b7f414d2f28edccacc5}{dtable\+\_\+insert}} (\mbox{\hyperlink{structdtable__t}{dtable\+\_\+t}} \texorpdfstring{$\ast$}{*}dt, void \texorpdfstring{$\ast$}{*}dt\+\_\+info)
+\begin{DoxyCompactList}\small\item\em Insert element. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{dtable_8h_a4f6a11e8e8607334d798e1a497d49c2f}{dtable\+\_\+delete}} (\mbox{\hyperlink{structdtable__t}{dtable\+\_\+t}} \texorpdfstring{$\ast$}{*}dt, int fd)
+\begin{DoxyCompactList}\small\item\em Remove element. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{dtable_8h_a1358eb3ffa6abdd47a265f9487f0285e}{dtable\+\_\+get}} (\mbox{\hyperlink{structdtable__t}{dtable\+\_\+t}} \texorpdfstring{$\ast$}{*}dt, int fd)
+\begin{DoxyCompactList}\small\item\em Get element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file to \textquotesingle{}TODO\textquotesingle{}. 
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000065}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{dtable_8h_source}{dtable.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{dtable_8h_af258712fd2dda0ed407ef39f2610c41c}\label{dtable_8h_af258712fd2dda0ed407ef39f2610c41c} 
+\index{dtable.h@{dtable.h}!c\_DTABLE\_T@{c\_DTABLE\_T}}
+\index{c\_DTABLE\_T@{c\_DTABLE\_T}!dtable.h@{dtable.h}}
+\doxysubsubsection{\texorpdfstring{c\_DTABLE\_T}{c\_DTABLE\_T}}
+{\footnotesize\ttfamily \#define c\+\_\+\+DTABLE\+\_\+T~sizeof(\mbox{\hyperlink{structdtable__t}{dtable\+\_\+t}})}
+
+
+
+Definition at line \mbox{\hyperlink{dtable_8h_source_l00086}{86}} of file \mbox{\hyperlink{dtable_8h_source}{dtable.\+h}}.
+
+\Hypertarget{dtable_8h_a8154ae57273c83fb01240a4a12e7071b}\label{dtable_8h_a8154ae57273c83fb01240a4a12e7071b} 
+\index{dtable.h@{dtable.h}!c\_DTABLE\_T\_NULL@{c\_DTABLE\_T\_NULL}}
+\index{c\_DTABLE\_T\_NULL@{c\_DTABLE\_T\_NULL}!dtable.h@{dtable.h}}
+\doxysubsubsection{\texorpdfstring{c\_DTABLE\_T\_NULL}{c\_DTABLE\_T\_NULL}}
+{\footnotesize\ttfamily \#define c\+\_\+\+DTABLE\+\_\+\+T\+\_\+\+NULL}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ NULL,\ 0,\ -\/1\ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{dtable_8h_source_l00088}{88}} of file \mbox{\hyperlink{dtable_8h_source}{dtable.\+h}}.
+
+\Hypertarget{dtable_8h_a265adcf62df326ddfd211239f17d55a9}\label{dtable_8h_a265adcf62df326ddfd211239f17d55a9} 
+\index{dtable.h@{dtable.h}!c\_DTELTO\_T@{c\_DTELTO\_T}}
+\index{c\_DTELTO\_T@{c\_DTELTO\_T}!dtable.h@{dtable.h}}
+\doxysubsubsection{\texorpdfstring{c\_DTELTO\_T}{c\_DTELTO\_T}}
+{\footnotesize\ttfamily \#define c\+\_\+\+DTELTO\+\_\+T~sizeof(\mbox{\hyperlink{structdtelto__t}{dtelto\+\_\+t}})}
+
+
+
+Definition at line \mbox{\hyperlink{dtable_8h_source_l00087}{87}} of file \mbox{\hyperlink{dtable_8h_source}{dtable.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{dtable_8h_a4f6a11e8e8607334d798e1a497d49c2f}\label{dtable_8h_a4f6a11e8e8607334d798e1a497d49c2f} 
+\index{dtable.h@{dtable.h}!dtable\_delete@{dtable\_delete}}
+\index{dtable\_delete@{dtable\_delete}!dtable.h@{dtable.h}}
+\doxysubsubsection{\texorpdfstring{dtable\_delete()}{dtable\_delete()}}
+{\footnotesize\ttfamily int dtable\+\_\+delete (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdtable__t}{dtable\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dt,  }\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+Remove element. 
+
+Remove the element at \textquotesingle{}fd\textquotesingle{} position into \textquotesingle{}dt\textquotesingle{} dynamic table.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dt} & a dynamic table. \\
+\hline
+{\em fd} & the element descriptor. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true (1) if element is removed and error (-\/1) if a problem is found. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{dtable_8c_source_l00091}{91}} of file \mbox{\hyperlink{dtable_8c_source}{dtable.\+c}}.
+
+
+
+References \mbox{\hyperlink{darray_8h_source_l00295}{DARRAY\+\_\+\+Get\+NFrom\+Darray}}, \mbox{\hyperlink{dtable_8h_source_l00078}{dtable\+\_\+t\+::dtable}}, \mbox{\hyperlink{dtable_8h_source_l00080}{dtable\+\_\+t\+::free\+\_\+list}}, \mbox{\hyperlink{dtable_8h_source_l00063}{dtelto\+\_\+t\+::myself}}, \mbox{\hyperlink{dtable_8h_source_l00079}{dtable\+\_\+t\+::neltos}}, and \mbox{\hyperlink{dtable_8h_source_l00062}{dtelto\+\_\+t\+::next\+\_\+free}}.
+
+\Hypertarget{dtable_8h_a1358eb3ffa6abdd47a265f9487f0285e}\label{dtable_8h_a1358eb3ffa6abdd47a265f9487f0285e} 
+\index{dtable.h@{dtable.h}!dtable\_get@{dtable\_get}}
+\index{dtable\_get@{dtable\_get}!dtable.h@{dtable.h}}
+\doxysubsubsection{\texorpdfstring{dtable\_get()}{dtable\_get()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} dtable\+\_\+get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdtable__t}{dtable\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dt,  }\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+Get element. 
+
+Get the element at \textquotesingle{}fd\textquotesingle{} position into \textquotesingle{}dt\textquotesingle{} dynamic table.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dt} & a dynamic table. \\
+\hline
+{\em fd} & the element descriptor. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{dtable_8c_source_l00112}{112}} of file \mbox{\hyperlink{dtable_8c_source}{dtable.\+c}}.
+
+
+
+References \mbox{\hyperlink{darray_8h_source_l00295}{DARRAY\+\_\+\+Get\+NFrom\+Darray}}, \mbox{\hyperlink{dtable_8h_source_l00061}{dtelto\+\_\+t\+::dt\+\_\+info}}, \mbox{\hyperlink{dtable_8h_source_l00078}{dtable\+\_\+t\+::dtable}}, and \mbox{\hyperlink{dtable_8h_source_l00079}{dtable\+\_\+t\+::neltos}}.
+
+\Hypertarget{dtable_8h_a0145f19ad87e5b7f414d2f28edccacc5}\label{dtable_8h_a0145f19ad87e5b7f414d2f28edccacc5} 
+\index{dtable.h@{dtable.h}!dtable\_insert@{dtable\_insert}}
+\index{dtable\_insert@{dtable\_insert}!dtable.h@{dtable.h}}
+\doxysubsubsection{\texorpdfstring{dtable\_insert()}{dtable\_insert()}}
+{\footnotesize\ttfamily int dtable\+\_\+insert (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdtable__t}{dtable\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dt,  }\item[{void \texorpdfstring{$\ast$}{*}}]{dt\+\_\+info }\end{DoxyParamCaption})}
+
+
+
+Insert element. 
+
+Insert the element \textquotesingle{}dt\+\_\+info\textquotesingle{} into \textquotesingle{}dt\textquotesingle{} dynamic table.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dt} & a dynamic table. \\
+\hline
+{\em dt\+\_\+info} & the element to be inserted. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true (1) if element is inserted and error (-\/1) if a problem is found. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{dtable_8c_source_l00041}{41}} of file \mbox{\hyperlink{dtable_8c_source}{dtable.\+c}}.
+
+
+
+References \mbox{\hyperlink{darray_8h_source_l00295}{DARRAY\+\_\+\+Get\+NFrom\+Darray}}, \mbox{\hyperlink{darray_8c_source_l00041}{DARRAY\+\_\+\+Ins\+End\+Darray()}}, \mbox{\hyperlink{dtable_8h_source_l00061}{dtelto\+\_\+t\+::dt\+\_\+info}}, \mbox{\hyperlink{dtable_8h_source_l00078}{dtable\+\_\+t\+::dtable}}, \mbox{\hyperlink{dtable_8h_source_l00080}{dtable\+\_\+t\+::free\+\_\+list}}, \mbox{\hyperlink{dtable_8h_source_l00063}{dtelto\+\_\+t\+::myself}}, \mbox{\hyperlink{dtable_8h_source_l00079}{dtable\+\_\+t\+::neltos}}, and \mbox{\hyperlink{dtable_8h_source_l00062}{dtelto\+\_\+t\+::next\+\_\+free}}.
+

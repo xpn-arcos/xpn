@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file nfi_mpi_server.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _NFI_MPI_SERVER_H
 #define _NFI_MPI_SERVER_H
 
@@ -27,8 +38,8 @@ extern "C"
 #endif
 
   /************************************************
- *  ... Includes
- ***********************************************/
+   *  ... Includes
+   ***********************************************/
 #include "all_system.h"
 #include "base/utils.h"
 #include "base/path_misc.h"

@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file nfi_nfs3_err.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _NFI_NFS3_ERR_H_
 #define _NFI_NFS3_ERR_H_
 

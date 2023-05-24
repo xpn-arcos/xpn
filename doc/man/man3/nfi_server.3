@@ -1,0 +1,122 @@
+.TH "nfi_server" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfi_server \- This is a struct\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfi\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBid\fP"
+.br
+.RI "Id of the server\&. "
+.ti -1c
+.RI "char * \fBserver\fP"
+.br
+.RI "Server address\&. "
+.ti -1c
+.RI "char * \fBurl\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "int \fBblock_size\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "void * \fBprivate_info\fP"
+.br
+.RI "Info private\&. "
+.ti -1c
+.RI "struct \fBnfi_ops\fP * \fBops\fP"
+.br
+.RI "Operations\&. "
+.ti -1c
+.RI "struct \fBnfi_worker\fP * \fBwrk\fP"
+.br
+.RI "This struct has the thread\&. "
+.ti -1c
+.RI "int \fBxpn_thread\fP"
+.br
+.RI "A 'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a struct\&. 
+
+
+.PP
+Definition at line \fB85\fP of file \fBnfi\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "nfi_server::block_size"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB93\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_mpi_server_flush()\fP, \fBnfi_mpi_server_preload()\fP, \fBnfi_tcp_server_flush()\fP, \fBnfi_tcp_server_preload()\fP, and \fBXpnGetServer()\fP\&.
+.SS "nfi_server::id"
+
+.PP
+Id of the server\&. 
+.PP
+Definition at line \fB87\fP of file \fBnfi\&.h\fP\&.
+.SS "nfi_server::ops"
+
+.PP
+Operations\&. 
+.PP
+Definition at line \fB95\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_local_destroy()\fP, \fBnfi_local_init()\fP, \fBnfi_mpi_server_destroy()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_destroy()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_destroy()\fP, \fBnfi_tcp_server_init()\fP, \fBnfi_worker_do_flush()\fP, \fBnfi_worker_do_preload()\fP, \fBxpn_destroy_servers()\fP, \fBxpn_internal_creat()\fP, \fBxpn_simple_close()\fP, \fBxpn_simple_closedir()\fP, \fBxpn_simple_mkdir()\fP, \fBxpn_simple_rename()\fP, \fBxpn_sread()\fP, \fBxpn_swrite()\fP, \fBXpnGetEntry()\fP, and \fBXpnGetFh()\fP\&.
+.SS "nfi_server::private_info"
+
+.PP
+Info private\&. 
+.PP
+Definition at line \fB94\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_close()\fP, \fBnfi_local_closedir()\fP, \fBnfi_local_connect()\fP, \fBnfi_local_create()\fP, \fBnfi_local_destroy()\fP, \fBnfi_local_disconnect()\fP, \fBnfi_local_getattr()\fP, \fBnfi_local_init()\fP, \fBnfi_local_keepConnected()\fP, \fBnfi_local_mkdir()\fP, \fBnfi_local_open()\fP, \fBnfi_local_opendir()\fP, \fBnfi_local_read()\fP, \fBnfi_local_readdir()\fP, \fBnfi_local_reconnect()\fP, \fBnfi_local_remove()\fP, \fBnfi_local_rename()\fP, \fBnfi_local_rmdir()\fP, \fBnfi_local_setattr()\fP, \fBnfi_local_write()\fP, \fBnfi_mpi_server_close()\fP, \fBnfi_mpi_server_closedir()\fP, \fBnfi_mpi_server_connect()\fP, \fBnfi_mpi_server_create()\fP, \fBnfi_mpi_server_destroy()\fP, \fBnfi_mpi_server_disconnect()\fP, \fBnfi_mpi_server_flush()\fP, \fBnfi_mpi_server_getattr()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_mpi_server_keepConnected()\fP, \fBnfi_mpi_server_mkdir()\fP, \fBnfi_mpi_server_open()\fP, \fBnfi_mpi_server_opendir()\fP, \fBnfi_mpi_server_preload()\fP, \fBnfi_mpi_server_read()\fP, \fBnfi_mpi_server_readdir()\fP, \fBnfi_mpi_server_reconnect()\fP, \fBnfi_mpi_server_remove()\fP, \fBnfi_mpi_server_rename()\fP, \fBnfi_mpi_server_rmdir()\fP, \fBnfi_mpi_server_setattr()\fP, \fBnfi_mpi_server_write()\fP, \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3_getattr()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_read()\fP, \fBnfi_nfs3_readdir()\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rmdir()\fP, \fBnfi_nfs3_setattr()\fP, \fBnfi_nfs3_statfs()\fP, \fBnfi_nfs3_write()\fP, \fBnfi_nfs_create()\fP, \fBnfi_nfs_destroy()\fP, \fBnfi_nfs_disconnect()\fP, \fBnfi_nfs_getattr()\fP, \fBnfi_nfs_init()\fP, \fBnfi_nfs_mkdir()\fP, \fBnfi_nfs_read()\fP, \fBnfi_nfs_readdir()\fP, \fBnfi_nfs_reconnect()\fP, \fBnfi_nfs_remove()\fP, \fBnfi_nfs_rename()\fP, \fBnfi_nfs_rmdir()\fP, \fBnfi_nfs_setattr()\fP, \fBnfi_nfs_statfs()\fP, \fBnfi_nfs_write()\fP, \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_closedir()\fP, \fBnfi_tcp_server_connect()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_destroy()\fP, \fBnfi_tcp_server_disconnect()\fP, \fBnfi_tcp_server_flush()\fP, \fBnfi_tcp_server_getattr()\fP, \fBnfi_tcp_server_init()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_preload()\fP, \fBnfi_tcp_server_read()\fP, \fBnfi_tcp_server_readdir()\fP, \fBnfi_tcp_server_reconnect()\fP, \fBnfi_tcp_server_remove()\fP, \fBnfi_tcp_server_rename()\fP, \fBnfi_tcp_server_rmdir()\fP, \fBnfi_tcp_server_setattr()\fP, \fBnfi_tcp_server_write()\fP, \fBnfs3_open()\fP, and \fBnfs_open()\fP\&.
+.SS "nfi_server::server"
+
+.PP
+Server address\&. 
+.PP
+Definition at line \fB89\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_create()\fP, \fBnfi_local_destroy()\fP, \fBnfi_local_init()\fP, \fBnfi_local_open()\fP, \fBnfi_local_opendir()\fP, \fBnfi_local_remove()\fP, \fBnfi_local_rename()\fP, \fBnfi_mpi_server_create()\fP, \fBnfi_mpi_server_destroy()\fP, \fBnfi_mpi_server_flush()\fP, \fBnfi_mpi_server_mkdir()\fP, \fBnfi_mpi_server_open()\fP, \fBnfi_mpi_server_opendir()\fP, \fBnfi_mpi_server_preload()\fP, \fBnfi_mpi_server_remove()\fP, \fBnfi_mpi_server_rename()\fP, \fBnfi_mpi_server_rmdir()\fP, \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3_getattr()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_opendir()\fP, \fBnfi_nfs3_readdir()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rmdir()\fP, \fBnfi_nfs3_setattr()\fP, \fBnfi_nfs3_statfs()\fP, \fBnfi_nfs_create()\fP, \fBnfi_nfs_destroy()\fP, \fBnfi_nfs_disconnect()\fP, \fBnfi_nfs_getattr()\fP, \fBnfi_nfs_init()\fP, \fBnfi_nfs_mkdir()\fP, \fBnfi_nfs_remove()\fP, \fBnfi_nfs_rename()\fP, \fBnfi_nfs_rmdir()\fP, \fBnfi_nfs_setattr()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_destroy()\fP, \fBnfi_tcp_server_flush()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_preload()\fP, \fBnfi_tcp_server_remove()\fP, \fBnfi_tcp_server_rename()\fP, and \fBnfi_tcp_server_rmdir()\fP\&.
+.SS "nfi_server::url"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB90\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_destroy()\fP, \fBnfi_local_init()\fP, \fBnfi_local_reconnect()\fP, \fBnfi_mpi_server_destroy()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_mpi_server_reconnect()\fP, \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rmdir()\fP, \fBnfi_nfs_create()\fP, \fBnfi_nfs_destroy()\fP, \fBnfi_nfs_disconnect()\fP, \fBnfi_nfs_init()\fP, \fBnfi_nfs_mkdir()\fP, \fBnfi_nfs_reconnect()\fP, \fBnfi_nfs_remove()\fP, \fBnfi_nfs_rename()\fP, \fBnfi_nfs_rmdir()\fP, \fBnfi_tcp_server_destroy()\fP, \fBnfi_tcp_server_init()\fP, \fBnfi_tcp_server_reconnect()\fP, \fBnfs3_open()\fP, \fBnfs_open()\fP, \fBXpnGetServer()\fP, and \fBXpnGetURLServer()\fP\&.
+.SS "nfi_server::wrk"
+
+.PP
+This struct has the thread\&. 
+.PP
+Definition at line \fB96\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_mpi_server_remove()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs_destroy()\fP, \fBnfi_nfs_disconnect()\fP, \fBnfi_nfs_init()\fP, \fBnfi_tcp_server_init()\fP, \fBnfiworker_destroy()\fP, \fBnfiworker_init()\fP, \fBxpn_internal_creat()\fP, \fBxpn_internal_remove()\fP, \fBxpn_pread()\fP, \fBxpn_pwrite()\fP, \fBxpn_simple_flush()\fP, \fBxpn_simple_preload()\fP, \fBxpn_simple_rename()\fP, and \fBxpn_simple_rmdir()\fP\&.
+.SS "nfi_server::xpn_thread"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB99\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_init()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_tcp_server_init()\fP, \fBnfiworker_destroy()\fP, \fBnfiworker_init()\fP, \fBxpn_internal_creat()\fP, \fBxpn_internal_remove()\fP, \fBxpn_pread()\fP, \fBxpn_pwrite()\fP, \fBxpn_simple_flush()\fP, \fBxpn_simple_preload()\fP, and \fBxpn_simple_rename()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

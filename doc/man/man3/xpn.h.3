@@ -1,0 +1,1239 @@
+.TH "xpn.h" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn.h \- Header file to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <sys/types\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <dirent\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "char * \fBxpn_getcwd\fP (char *path, size_t size)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_chdir\fP (char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_mkdir\fP (const char *path, mode_t perm)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_rmdir\fP (const char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_init\fP (void)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_destroy\fP (void)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_flush\fP (const char *virtual_path, const char *storage_path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_preload\fP (const char *virtual_path, const char *storage_path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_creat\fP (const char *path, mode_t perm)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_open\fP (const char *path, int flags,\&.\&.\&.)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_close\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_unlink\fP (const char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_rename\fP (const char *path, const char *newpath)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_fstat\fP (int fd, struct stat *sb)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_stat\fP (const char *path, struct stat *sb)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_chown\fP (const char *path, uid_t owner, gid_t group)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_fchown\fP (int fd, uid_t owner, gid_t group)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_chmod\fP (const char *path, mode_t mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_fchmod\fP (int fd, mode_t mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_truncate\fP (const char *path, off_t length)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_ftruncate\fP (int fd, off_t length)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_dup\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_dup2\fP (int fd, int fd2)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "DIR * \fBxpn_opendir\fP (const char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_closedir\fP (DIR *dirp)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "struct dirent * \fBxpn_readdir\fP (DIR *dirp)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBxpn_rewinddir\fP (DIR *dirp)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBxpn_read\fP (int fd, void *buffer, size_t size)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBxpn_write\fP (int fd, const void *buffer, size_t size)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBxpn_pread\fP (int fd, void *buffer, size_t size, off_t offset)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBxpn_pwrite\fP (int fd, const void *buffer, size_t size, off_t offset)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "off_t \fBxpn_lseek\fP (int fd, off_t offset, int flag)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "FILE * \fBxpn_fopen\fP (const char *filename, const char *mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_fclose\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "size_t \fBxpn_fread\fP (void *ptr, size_t size, size_t nmemb, FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "size_t \fBxpn_fread_prefetch\fP (void *ptr, size_t size, size_t nmemb, FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "size_t \fBxpn_fwrite\fP (const void *ptr, size_t size, size_t nmemb, FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_fflush\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_fseek\fP (FILE *stream, off_t offset, int whence)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "long \fBxpn_ftell\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_fileno\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBxpn_setbuf\fP (FILE *stream, char *\fBbuf\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBxpn_setbuffer\fP (FILE *stream, char *\fBbuf\fP, size_t size)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBxpn_setlinebuf\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_setvbuf\fP (FILE *stream, char *\fBbuf\fP, int mode, size_t size)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Header file to 'TODO'\&. 
+
+Header file to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBxpn\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int xpn_chdir (char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB151\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_chdir()\fP\&.
+.PP
+Referenced by \fBchdir()\fP\&.
+.SS "int xpn_chmod (const char * path, mode_t mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB294\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_chmod()\fP\&.
+.PP
+Referenced by \fBchmod()\fP\&.
+.SS "int xpn_chown (const char * path, uid_t owner, gid_t group)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIowner\fP 'TODO'\&. 
+.br
+\fIgroup\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB276\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_chown()\fP\&.
+.PP
+Referenced by \fBchown()\fP\&.
+.SS "int xpn_close (int fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB98\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_close()\fP\&.
+.PP
+Referenced by \fBclose()\fP, and \fBmain()\fP\&.
+.SS "int xpn_closedir (DIR * dirp)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirp\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB204\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_closedir()\fP\&.
+.PP
+Referenced by \fBclosedir()\fP, and \fBmain()\fP\&.
+.SS "int xpn_creat (const char * path, mode_t perm)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIperm\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB68\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_creat()\fP\&.
+.PP
+Referenced by \fBcreat()\fP\&.
+.SS "int xpn_destroy (void)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB55\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_destroy()\fP\&.
+.PP
+Referenced by \fBexit()\fP, \fBmain()\fP, and \fBMPI_Finalize()\fP\&.
+.SS "int xpn_dup (int fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB316\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_dup()\fP\&.
+.PP
+Referenced by \fBdup()\fP\&.
+.SS "int xpn_dup2 (int fd, int fd2)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIfd2\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB325\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_dup2()\fP\&.
+.PP
+Referenced by \fBdup2()\fP\&.
+.SS "int xpn_fchmod (int fd, mode_t mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB303\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_fchmod()\fP\&.
+.PP
+Referenced by \fBfchmod()\fP\&.
+.SS "int xpn_fchown (int fd, uid_t owner, gid_t group)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIowner\fP 'TODO'\&. 
+.br
+\fIgroup\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB285\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_fchown()\fP\&.
+.SS "int xpn_fclose (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB50\fP of file \fBxpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_fclose()\fP\&.
+.SS "int xpn_fflush (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB69\fP of file \fBxpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_fflush()\fP\&.
+.SS "int xpn_fileno (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB130\fP of file \fBxpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_fileno()\fP\&.
+.SS "int xpn_flush (const char * virtual_path, const char * storage_path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIvirtual_path\fP 'TODO'\&. 
+.br
+\fIstorage_path\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB102\fP of file \fBxpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_flush()\fP\&.
+.SS "FILE * xpn_fopen (const char * filename, const char * mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfilename\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB45\fP of file \fBxpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_fopen()\fP\&.
+.SS "size_t xpn_fread (void * ptr, size_t size, size_t nmemb, FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fInmemb\fP 'TODO'\&. 
+.br
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.SS "size_t xpn_fread_prefetch (void * ptr, size_t size, size_t nmemb, FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fInmemb\fP 'TODO'\&. 
+.br
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.SS "int xpn_fseek (FILE * stream, off_t offset, int whence)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIwhence\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.SS "int xpn_fstat (int fd, struct stat * sb)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIsb\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB267\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_fstat()\fP\&.
+.PP
+Referenced by \fB__fxstat()\fP, \fB__fxstat64()\fP, and \fBadd_xpn_file_to_fdstable()\fP\&.
+.SS "long xpn_ftell (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB83\fP of file \fBxpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_ftell()\fP\&.
+.SS "int xpn_ftruncate (int fd, off_t length)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIlength\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB249\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_ftruncate()\fP\&.
+.PP
+Referenced by \fBftruncate()\fP\&.
+.SS "size_t xpn_fwrite (const void * ptr, size_t size, size_t nmemb, FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fInmemb\fP 'TODO'\&. 
+.br
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.SS "char * xpn_getcwd (char * path, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB142\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_getcwd()\fP\&.
+.SS "int xpn_init (void)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB46\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_init()\fP\&.
+.PP
+Referenced by \fBmain()\fP, \fBmpi_server_d2xpn()\fP, \fBtcp_server_d2xpn()\fP, and \fBxpn_adaptor_keepInit()\fP\&.
+.SS "off_t xpn_lseek (int fd, off_t offset, int flag)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIflag\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB129\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_lseek()\fP\&.
+.PP
+Referenced by \fBlseek()\fP, and \fBlseek64()\fP\&.
+.SS "int xpn_mkdir (const char * path, mode_t perm)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIperm\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB164\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_mkdir()\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBmkdir()\fP\&.
+.SS "int xpn_open (const char * path, int flags,  \&.\&.\&.)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIflags\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB77\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBO_CREAT\fP, and \fBxpn_simple_open()\fP\&.
+.PP
+Referenced by \fB__open_2()\fP, \fBmain()\fP, \fBmpi_server_d2xpn()\fP, \fBopen()\fP, \fBopen64()\fP, and \fBtcp_server_d2xpn()\fP\&.
+.SS "DIR * xpn_opendir (const char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB186\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_opendir()\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBopendir()\fP\&.
+.SS "ssize_t xpn_pread (int fd, void * buffer, size_t size, off_t offset)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB209\fP of file \fBxpn_rw\&.c\fP\&.
+.SS "int xpn_preload (const char * virtual_path, const char * storage_path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIvirtual_path\fP 'TODO'\&. 
+.br
+\fIstorage_path\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB97\fP of file \fBxpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_preload()\fP\&.
+.SS "ssize_t xpn_pwrite (int fd, const void * buffer, size_t size, off_t offset)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB573\fP of file \fBxpn_rw\&.c\fP\&.
+.SS "ssize_t xpn_read (int fd, void * buffer, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB111\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_read()\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBread()\fP\&.
+.SS "struct dirent * xpn_readdir (DIR * dirp)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirp\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB195\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_readdir()\fP\&.
+.PP
+Referenced by \fBmain()\fP, \fBreaddir()\fP, and \fBreaddir64()\fP\&.
+.SS "int xpn_rename (const char * path, const char * newpath)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fInewpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB231\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_rename()\fP\&.
+.PP
+Referenced by \fBrename()\fP\&.
+.SS "void xpn_rewinddir (DIR * dirp)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirp\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB213\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_rewinddir()\fP\&.
+.SS "int xpn_rmdir (const char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB173\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_rmdir()\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBrmdir()\fP\&.
+.SS "void xpn_setbuf (FILE * stream, char * buf)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.SS "void xpn_setbuffer (FILE * stream, char * buf, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.SS "void xpn_setlinebuf (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.SS "int xpn_setvbuf (FILE * stream, char * buf, int mode, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.br
+\fIbuf\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.SS "int xpn_stat (const char * path, struct stat * sb)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIsb\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB258\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_stat()\fP\&.
+.PP
+Referenced by \fB__lxstat()\fP, \fB__lxstat64()\fP, \fB__xstat()\fP, \fB__xstat64()\fP, and \fBmain()\fP\&.
+.SS "int xpn_truncate (const char * path, off_t length)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIlength\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB240\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_truncate()\fP\&.
+.SS "int xpn_unlink (const char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB222\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_unlink()\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBunlink()\fP\&.
+.SS "ssize_t xpn_write (int fd, const void * buffer, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB120\fP of file \fBxpn_unistd\&.c\fP\&.
+.PP
+References \fBxpn_simple_write()\fP\&.
+.PP
+Referenced by \fBmain()\fP, \fBwrite()\fP, and \fBwrite_func()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

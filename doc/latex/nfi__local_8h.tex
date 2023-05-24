@@ -1,0 +1,760 @@
+\doxysection{nfi\+\_\+local.\+h File Reference}
+\hypertarget{nfi__local_8h}{}\label{nfi__local_8h}\index{nfi\_local.h@{nfi\_local.h}}
+
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include \"{}all\+\_\+system.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/filesystem.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/path\+\_\+misc.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/urlstr.\+h\"{}}\newline
+{\ttfamily \#include \"{}nfi/nfi.\+h\"{}}\newline
+{\ttfamily \#include \"{}nfi/nfi\+\_\+local/nfi\+\_\+local\+\_\+err.\+h\"{}}\newline
+{\ttfamily \#include \"{}nfi\+\_\+worker.\+h\"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structnfi__local__server}{nfi\+\_\+local\+\_\+server}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structnfi__local__fhandle}{nfi\+\_\+local\+\_\+fhandle}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{nfi__local_8h_a838ce24edc60a1490a2347c5be607aba}{ASYNC\+\_\+\+CLOSE}}~1
+\item 
+\#define \mbox{\hyperlink{nfi__local_8h_ab53067ee1959fd5f0db3d689db5263cb}{FILESYSTEM\+\_\+\+DLSYM}}~1
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{nfi__local_8h_af5cc59c9676c7bfd657c0c8b8d3aa93b}{nfi\+\_\+local\+\_\+init}} (char \texorpdfstring{$\ast$}{*}url, struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}serv, struct \mbox{\hyperlink{structnfi__attr__server}{nfi\+\_\+attr\+\_\+server}} \texorpdfstring{$\ast$}{*}attr)
+\begin{DoxyCompactList}\small\item\em Init Local. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_aa6f5e75d89b07ad4caecb902e4ecc901}{nfi\+\_\+local\+\_\+connect}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}serv, char \texorpdfstring{$\ast$}{*}url, char \texorpdfstring{$\ast$}{*}prt, char \texorpdfstring{$\ast$}{*}server, char \texorpdfstring{$\ast$}{*}dir)
+\begin{DoxyCompactList}\small\item\em Connect to the server. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_aa59fe2af2c8e60ad19ccd1711e574cb6}{nfi\+\_\+local\+\_\+reconnect}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server)
+\begin{DoxyCompactList}\small\item\em Reconnect to the LOCAL server. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_a5ecebf75771382b410032dbf4257a50e}{nfi\+\_\+local\+\_\+disconnect}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server)
+\begin{DoxyCompactList}\small\item\em Disconnect to the server. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_a7a48c4042468f67806f39dd28c50a409}{nfi\+\_\+local\+\_\+create}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, char \texorpdfstring{$\ast$}{*}url, struct \mbox{\hyperlink{structnfi__attr}{nfi\+\_\+attr}} \texorpdfstring{$\ast$}{*}attr, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fh)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_a5fc8f8f267c7847a352afd50e546a7d2}{nfi\+\_\+local\+\_\+open}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, char \texorpdfstring{$\ast$}{*}url, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fho)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+ssize\+\_\+t \mbox{\hyperlink{nfi__local_8h_aa0513b6032fb071b2b9949dfc4616097}{nfi\+\_\+local\+\_\+read}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fh, void \texorpdfstring{$\ast$}{*}buffer, off\+\_\+t offset, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+ssize\+\_\+t \mbox{\hyperlink{nfi__local_8h_aea3a8bdcd68d0133d78edacbed26c74d}{nfi\+\_\+local\+\_\+write}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fh, void \texorpdfstring{$\ast$}{*}buffer, off\+\_\+t offset, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_afac9cbec58899640b72425ba3e6bbe7d}{nfi\+\_\+local\+\_\+close}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fh)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_ac3fba08e8f30ae1b9866fd89bf0f9a70}{nfi\+\_\+local\+\_\+remove}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, char \texorpdfstring{$\ast$}{*}url)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_ab0d8660ec50a935002d094b6edbe811e}{nfi\+\_\+local\+\_\+rename}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, char \texorpdfstring{$\ast$}{*}old\+\_\+url, char \texorpdfstring{$\ast$}{*}new\+\_\+url)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_aff0bc00717907ce9653f19fd368e2aa5}{nfi\+\_\+local\+\_\+getattr}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fh, struct \mbox{\hyperlink{structnfi__attr}{nfi\+\_\+attr}} \texorpdfstring{$\ast$}{*}attr)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_a6f3a6869b8d00de50e05b7d38ed3e49e}{nfi\+\_\+local\+\_\+setattr}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fh, struct \mbox{\hyperlink{structnfi__attr}{nfi\+\_\+attr}} \texorpdfstring{$\ast$}{*}attr)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_a94b18fb119fe39c2fc70f781c95adc0d}{nfi\+\_\+local\+\_\+mkdir}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, char \texorpdfstring{$\ast$}{*}url, struct \mbox{\hyperlink{structnfi__attr}{nfi\+\_\+attr}} \texorpdfstring{$\ast$}{*}attr, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fh)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_a7bb34e4382b7aff25fcd4e4a1276213d}{nfi\+\_\+local\+\_\+opendir}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, char \texorpdfstring{$\ast$}{*}url, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fho)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_a4a084864ea96bb8a49f37750c5d2398e}{nfi\+\_\+local\+\_\+readdir}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fhd, struct dirent \texorpdfstring{$\ast$}{*}entry)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_a6de37d695ab135e2cdbbfc01614b7264}{nfi\+\_\+local\+\_\+closedir}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}fh)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_ae2ee592327976126a18fa5d71dfdfcf2}{nfi\+\_\+local\+\_\+rmdir}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, char \texorpdfstring{$\ast$}{*}url)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{nfi__local_8h_aca8a4615c6d7d0bea456806472539ecb}{nfi\+\_\+local\+\_\+statfs}} (struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}server, struct \mbox{\hyperlink{structnfi__info}{nfi\+\_\+info}} \texorpdfstring{$\ast$}{*}inf)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file to \textquotesingle{}TODO\textquotesingle{}. 
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000094}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{nfi__local_8h_source}{nfi\+\_\+local.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{nfi__local_8h_a838ce24edc60a1490a2347c5be607aba}\label{nfi__local_8h_a838ce24edc60a1490a2347c5be607aba} 
+\index{nfi\_local.h@{nfi\_local.h}!ASYNC\_CLOSE@{ASYNC\_CLOSE}}
+\index{ASYNC\_CLOSE@{ASYNC\_CLOSE}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{ASYNC\_CLOSE}{ASYNC\_CLOSE}}
+{\footnotesize\ttfamily \#define ASYNC\+\_\+\+CLOSE~1}
+
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8h_source_l00043}{43}} of file \mbox{\hyperlink{nfi__local_8h_source}{nfi\+\_\+local.\+h}}.
+
+\Hypertarget{nfi__local_8h_ab53067ee1959fd5f0db3d689db5263cb}\label{nfi__local_8h_ab53067ee1959fd5f0db3d689db5263cb} 
+\index{nfi\_local.h@{nfi\_local.h}!FILESYSTEM\_DLSYM@{FILESYSTEM\_DLSYM}}
+\index{FILESYSTEM\_DLSYM@{FILESYSTEM\_DLSYM}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{FILESYSTEM\_DLSYM}{FILESYSTEM\_DLSYM}}
+{\footnotesize\ttfamily \#define FILESYSTEM\+\_\+\+DLSYM~1}
+
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8h_source_l00044}{44}} of file \mbox{\hyperlink{nfi__local_8h_source}{nfi\+\_\+local.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{nfi__local_8h_afac9cbec58899640b72425ba3e6bbe7d}\label{nfi__local_8h_afac9cbec58899640b72425ba3e6bbe7d} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_close@{nfi\_local\_close}}
+\index{nfi\_local\_close@{nfi\_local\_close}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_close()}{nfi\_local\_close()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+close (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fh }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fh} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00635}{635}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{nfi__local_8h_source_l00081}{nfi\+\_\+local\+\_\+fhandle\+::fd}}, \mbox{\hyperlink{utils_8h_source_l00052}{FREE\+\_\+\+AND\+\_\+\+NULL}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{nfi_8h_source_l00059}{NFINULL}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00263}{real\+\_\+posix\+\_\+close}}, \mbox{\hyperlink{nfi_8h_source_l00212}{nfi\+\_\+fhandle\+::server}}, \mbox{\hyperlink{nfi_8h_source_l00210}{nfi\+\_\+fhandle\+::type}}, and \mbox{\hyperlink{nfi_8h_source_l00211}{nfi\+\_\+fhandle\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_a6de37d695ab135e2cdbbfc01614b7264}\label{nfi__local_8h_a6de37d695ab135e2cdbbfc01614b7264} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_closedir@{nfi\_local\_closedir}}
+\index{nfi\_local\_closedir@{nfi\_local\_closedir}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_closedir()}{nfi\_local\_closedir()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+closedir (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fh }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fh} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00975}{975}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{nfi__local_8h_source_l00082}{nfi\+\_\+local\+\_\+fhandle\+::dir}}, \mbox{\hyperlink{utils_8h_source_l00052}{FREE\+\_\+\+AND\+\_\+\+NULL}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00279}{real\+\_\+posix\+\_\+closedir}}, and \mbox{\hyperlink{nfi_8h_source_l00211}{nfi\+\_\+fhandle\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_aa6f5e75d89b07ad4caecb902e4ecc901}\label{nfi__local_8h_aa6f5e75d89b07ad4caecb902e4ecc901} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_connect@{nfi\_local\_connect}}
+\index{nfi\_local\_connect@{nfi\_local\_connect}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_connect()}{nfi\_local\_connect()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+connect (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{serv,  }\item[{char \texorpdfstring{$\ast$}{*}}]{url,  }\item[{char \texorpdfstring{$\ast$}{*}}]{prt,  }\item[{char \texorpdfstring{$\ast$}{*}}]{server,  }\item[{char \texorpdfstring{$\ast$}{*}}]{dir }\end{DoxyParamCaption})}
+
+
+
+Connect to the server. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em serv} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em prt} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em dir} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+\Hypertarget{nfi__local_8h_a7a48c4042468f67806f39dd28c50a409}\label{nfi__local_8h_a7a48c4042468f67806f39dd28c50a409} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_create@{nfi\_local\_create}}
+\index{nfi\_local\_create@{nfi\_local\_create}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_create()}{nfi\_local\_create()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+create (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{char \texorpdfstring{$\ast$}{*}}]{url,  }\item[{struct \mbox{\hyperlink{structnfi__attr}{nfi\+\_\+attr}} \texorpdfstring{$\ast$}{*}}]{attr,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fh }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em attr} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fh} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00500}{500}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{nfi_8h_source_l00183}{nfi\+\_\+attr\+::at\+\_\+mode}}, \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{nfi__local_8h_source_l00082}{nfi\+\_\+local\+\_\+fhandle\+::dir}}, \mbox{\hyperlink{nfi__local_8h_source_l00081}{nfi\+\_\+local\+\_\+fhandle\+::fd}}, \mbox{\hyperlink{utils_8h_source_l00052}{FREE\+\_\+\+AND\+\_\+\+NULL}}, \mbox{\hyperlink{nfi__local__err_8c_source_l00043}{local\+\_\+err()}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00043}{LOCALERR\+\_\+\+MEMORY}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00044}{LOCALERR\+\_\+\+URL}}, \mbox{\hyperlink{nfi__local_8c_source_l00130}{LOCALto\+NFIattr()}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{nfi_8h_source_l00057}{NFIFILE}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{all__system_8h_source_l00183}{O\+\_\+\+CREAT}}, \mbox{\hyperlink{all__system_8h_source_l00182}{O\+\_\+\+RDWR}}, \mbox{\hyperlink{all__system_8h_source_l00186}{O\+\_\+\+TRUNC}}, \mbox{\hyperlink{urlstr_8c_source_l00262}{Parse\+URL()}}, \mbox{\hyperlink{nfi__local_8h_source_l00080}{nfi\+\_\+local\+\_\+fhandle\+::path}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00262}{real\+\_\+posix\+\_\+open2}}, \mbox{\hyperlink{filesystem_8h_source_l00275}{real\+\_\+posix\+\_\+stat}}, \mbox{\hyperlink{nfi_8h_source_l00089}{nfi\+\_\+server\+::server}}, \mbox{\hyperlink{nfi_8h_source_l00212}{nfi\+\_\+fhandle\+::server}}, \mbox{\hyperlink{xpn-cat_8c_source_l00041}{st}}, \mbox{\hyperlink{nfi_8h_source_l00210}{nfi\+\_\+fhandle\+::type}}, and \mbox{\hyperlink{nfi_8h_source_l00211}{nfi\+\_\+fhandle\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_a5ecebf75771382b410032dbf4257a50e}\label{nfi__local_8h_a5ecebf75771382b410032dbf4257a50e} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_disconnect@{nfi\_local\_disconnect}}
+\index{nfi\_local\_disconnect@{nfi\_local\_disconnect}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_disconnect()}{nfi\_local\_disconnect()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+disconnect (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server }\end{DoxyParamCaption})}
+
+
+
+Disconnect to the server. 
+
+\textquotesingle{}TODO\textquotesingle{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00367}{367}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{utils_8h_source_l00052}{FREE\+\_\+\+AND\+\_\+\+NULL}}, and \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_aff0bc00717907ce9653f19fd368e2aa5}\label{nfi__local_8h_aff0bc00717907ce9653f19fd368e2aa5} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_getattr@{nfi\_local\_getattr}}
+\index{nfi\_local\_getattr@{nfi\_local\_getattr}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_getattr()}{nfi\_local\_getattr()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+getattr (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fh,  }\item[{struct \mbox{\hyperlink{structnfi__attr}{nfi\+\_\+attr}} \texorpdfstring{$\ast$}{*}}]{attr }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fh} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em attr} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00748}{748}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{nfi__local_8h_source_l00082}{nfi\+\_\+local\+\_\+fhandle\+::dir}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local_8c_source_l00130}{LOCALto\+NFIattr()}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{urlstr_8c_source_l00262}{Parse\+URL()}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00275}{real\+\_\+posix\+\_\+stat}}, \mbox{\hyperlink{xpn-cat_8c_source_l00041}{st}}, and \mbox{\hyperlink{nfi_8h_source_l00211}{nfi\+\_\+fhandle\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_af5cc59c9676c7bfd657c0c8b8d3aa93b}\label{nfi__local_8h_af5cc59c9676c7bfd657c0c8b8d3aa93b} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_init@{nfi\_local\_init}}
+\index{nfi\_local\_init@{nfi\_local\_init}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_init()}{nfi\_local\_init()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+init (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{url,  }\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{serv,  }\item[{struct \mbox{\hyperlink{structnfi__attr__server}{nfi\+\_\+attr\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{attr }\end{DoxyParamCaption})}
+
+
+
+Init Local. 
+
+\textquotesingle{}TODO\textquotesingle{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em serv} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em attr} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+\Hypertarget{nfi__local_8h_a94b18fb119fe39c2fc70f781c95adc0d}\label{nfi__local_8h_a94b18fb119fe39c2fc70f781c95adc0d} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_mkdir@{nfi\_local\_mkdir}}
+\index{nfi\_local\_mkdir@{nfi\_local\_mkdir}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_mkdir()}{nfi\_local\_mkdir()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+mkdir (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{char \texorpdfstring{$\ast$}{*}}]{url,  }\item[{struct \mbox{\hyperlink{structnfi__attr}{nfi\+\_\+attr}} \texorpdfstring{$\ast$}{*}}]{attr,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fh }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em attr} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fh} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00815}{815}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{nfi__local_8h_source_l00082}{nfi\+\_\+local\+\_\+fhandle\+::dir}}, \mbox{\hyperlink{nfi__local__err_8c_ad65a8842cc674e3ddf69355898c0ecbf}{errno}}, \mbox{\hyperlink{utils_8h_source_l00052}{FREE\+\_\+\+AND\+\_\+\+NULL}}, \mbox{\hyperlink{nfi__local__err_8c_source_l00043}{local\+\_\+err()}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00043}{LOCALERR\+\_\+\+MEMORY}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00044}{LOCALERR\+\_\+\+URL}}, \mbox{\hyperlink{nfi__local_8c_source_l00130}{LOCALto\+NFIattr()}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{nfi_8h_source_l00058}{NFIDIR}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{urlstr_8c_source_l00262}{Parse\+URL()}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00272}{real\+\_\+posix\+\_\+mkdir}}, \mbox{\hyperlink{filesystem_8h_source_l00275}{real\+\_\+posix\+\_\+stat}}, \mbox{\hyperlink{xpn-cat_8c_source_l00041}{st}}, \mbox{\hyperlink{string__misc_8c_source_l00066}{STRING\+\_\+\+MISC\+\_\+\+Str\+Dup()}}, \mbox{\hyperlink{nfi_8h_source_l00210}{nfi\+\_\+fhandle\+::type}}, and \mbox{\hyperlink{nfi_8h_source_l00211}{nfi\+\_\+fhandle\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_a5fc8f8f267c7847a352afd50e546a7d2}\label{nfi__local_8h_a5fc8f8f267c7847a352afd50e546a7d2} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_open@{nfi\_local\_open}}
+\index{nfi\_local\_open@{nfi\_local\_open}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_open()}{nfi\_local\_open()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+open (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{char \texorpdfstring{$\ast$}{*}}]{url,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fho }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fho} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00444}{444}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{nfi__local_8h_source_l00082}{nfi\+\_\+local\+\_\+fhandle\+::dir}}, \mbox{\hyperlink{nfi__local_8h_source_l00081}{nfi\+\_\+local\+\_\+fhandle\+::fd}}, \mbox{\hyperlink{utils_8h_source_l00052}{FREE\+\_\+\+AND\+\_\+\+NULL}}, \mbox{\hyperlink{nfi__local__err_8c_source_l00043}{local\+\_\+err()}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00043}{LOCALERR\+\_\+\+MEMORY}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00044}{LOCALERR\+\_\+\+URL}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{nfi_8h_source_l00057}{NFIFILE}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{all__system_8h_source_l00182}{O\+\_\+\+RDWR}}, \mbox{\hyperlink{urlstr_8c_source_l00262}{Parse\+URL()}}, \mbox{\hyperlink{nfi__local_8h_source_l00080}{nfi\+\_\+local\+\_\+fhandle\+::path}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00262}{real\+\_\+posix\+\_\+open2}}, \mbox{\hyperlink{nfi_8h_source_l00089}{nfi\+\_\+server\+::server}}, \mbox{\hyperlink{nfi_8h_source_l00212}{nfi\+\_\+fhandle\+::server}}, \mbox{\hyperlink{nfi_8h_source_l00210}{nfi\+\_\+fhandle\+::type}}, and \mbox{\hyperlink{nfi_8h_source_l00211}{nfi\+\_\+fhandle\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_a7bb34e4382b7aff25fcd4e4a1276213d}\label{nfi__local_8h_a7bb34e4382b7aff25fcd4e4a1276213d} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_opendir@{nfi\_local\_opendir}}
+\index{nfi\_local\_opendir@{nfi\_local\_opendir}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_opendir()}{nfi\_local\_opendir()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+opendir (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{char \texorpdfstring{$\ast$}{*}}]{url,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fho }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fho} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00880}{880}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{nfi__local_8h_source_l00082}{nfi\+\_\+local\+\_\+fhandle\+::dir}}, \mbox{\hyperlink{utils_8h_source_l00052}{FREE\+\_\+\+AND\+\_\+\+NULL}}, \mbox{\hyperlink{nfi__local__err_8c_source_l00043}{local\+\_\+err()}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00043}{LOCALERR\+\_\+\+MEMORY}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00044}{LOCALERR\+\_\+\+URL}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{nfi_8h_source_l00058}{NFIDIR}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{urlstr_8c_source_l00262}{Parse\+URL()}}, \mbox{\hyperlink{nfi__local_8h_source_l00080}{nfi\+\_\+local\+\_\+fhandle\+::path}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00277}{real\+\_\+posix\+\_\+opendir}}, \mbox{\hyperlink{nfi_8h_source_l00089}{nfi\+\_\+server\+::server}}, \mbox{\hyperlink{nfi_8h_source_l00212}{nfi\+\_\+fhandle\+::server}}, \mbox{\hyperlink{nfi_8h_source_l00210}{nfi\+\_\+fhandle\+::type}}, and \mbox{\hyperlink{nfi_8h_source_l00211}{nfi\+\_\+fhandle\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_aa0513b6032fb071b2b9949dfc4616097}\label{nfi__local_8h_aa0513b6032fb071b2b9949dfc4616097} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_read@{nfi\_local\_read}}
+\index{nfi\_local\_read@{nfi\_local\_read}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_read()}{nfi\_local\_read()}}
+{\footnotesize\ttfamily ssize\+\_\+t nfi\+\_\+local\+\_\+read (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fh,  }\item[{void \texorpdfstring{$\ast$}{*}}]{buffer,  }\item[{off\+\_\+t}]{offset,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fh} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buffer} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em offset} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em size} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00568}{568}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, \mbox{\hyperlink{nfi__local__err_8c_ad65a8842cc674e3ddf69355898c0ecbf}{errno}}, \mbox{\hyperlink{nfi__local_8h_source_l00081}{nfi\+\_\+local\+\_\+fhandle\+::fd}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00265}{real\+\_\+posix\+\_\+lseek}}, \mbox{\hyperlink{filesystem_8h_source_l00267}{real\+\_\+posix\+\_\+read}}, and \mbox{\hyperlink{nfi_8h_source_l00211}{nfi\+\_\+fhandle\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_a4a084864ea96bb8a49f37750c5d2398e}\label{nfi__local_8h_a4a084864ea96bb8a49f37750c5d2398e} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_readdir@{nfi\_local\_readdir}}
+\index{nfi\_local\_readdir@{nfi\_local\_readdir}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_readdir()}{nfi\_local\_readdir()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+readdir (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fhd,  }\item[{struct dirent \texorpdfstring{$\ast$}{*}}]{entry }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fhd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em entry} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00936}{936}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{nfi__local_8h_source_l00082}{nfi\+\_\+local\+\_\+fhandle\+::dir}}, \mbox{\hyperlink{nfi__local__err_8c_source_l00043}{local\+\_\+err()}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00057}{LOCALERR\+\_\+\+NOTDIR}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{nfi_8h_source_l00058}{NFIDIR}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00278}{real\+\_\+posix\+\_\+readdir}}, and \mbox{\hyperlink{nfi_8h_source_l00210}{nfi\+\_\+fhandle\+::type}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_aa59fe2af2c8e60ad19ccd1711e574cb6}\label{nfi__local_8h_aa59fe2af2c8e60ad19ccd1711e574cb6} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_reconnect@{nfi\_local\_reconnect}}
+\index{nfi\_local\_reconnect@{nfi\_local\_reconnect}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_reconnect()}{nfi\_local\_reconnect()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+reconnect (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server }\end{DoxyParamCaption})}
+
+
+
+Reconnect to the LOCAL server. 
+
+\textquotesingle{}TODO\textquotesingle{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00396}{396}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{urlstr_8c_source_l00262}{Parse\+URL()}}, \mbox{\hyperlink{nfi__local_8h_source_l00065}{nfi\+\_\+local\+\_\+server\+::path}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, and \mbox{\hyperlink{nfi_8h_source_l00090}{nfi\+\_\+server\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}, and \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}.
+
+\Hypertarget{nfi__local_8h_ac3fba08e8f30ae1b9866fd89bf0f9a70}\label{nfi__local_8h_ac3fba08e8f30ae1b9866fd89bf0f9a70} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_remove@{nfi\_local\_remove}}
+\index{nfi\_local\_remove@{nfi\_local\_remove}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_remove()}{nfi\_local\_remove()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+remove (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{char \texorpdfstring{$\ast$}{*}}]{url }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00668}{668}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{nfi__local_8h_source_l00082}{nfi\+\_\+local\+\_\+fhandle\+::dir}}, \mbox{\hyperlink{nfi__local__err_8c_source_l00043}{local\+\_\+err()}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00044}{LOCALERR\+\_\+\+URL}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{urlstr_8c_source_l00262}{Parse\+URL()}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00274}{real\+\_\+posix\+\_\+unlink}}, and \mbox{\hyperlink{nfi_8h_source_l00089}{nfi\+\_\+server\+::server}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_ab0d8660ec50a935002d094b6edbe811e}\label{nfi__local_8h_ab0d8660ec50a935002d094b6edbe811e} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_rename@{nfi\_local\_rename}}
+\index{nfi\_local\_rename@{nfi\_local\_rename}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_rename()}{nfi\_local\_rename()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+rename (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{char \texorpdfstring{$\ast$}{*}}]{old\+\_\+url,  }\item[{char \texorpdfstring{$\ast$}{*}}]{new\+\_\+url }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em old\+\_\+url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em new\+\_\+url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00704}{704}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{nfi__local__err_8c_source_l00043}{local\+\_\+err()}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00044}{LOCALERR\+\_\+\+URL}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{urlstr_8c_source_l00262}{Parse\+URL()}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00270}{real\+\_\+posix\+\_\+rename}}, and \mbox{\hyperlink{nfi_8h_source_l00089}{nfi\+\_\+server\+::server}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_ae2ee592327976126a18fa5d71dfdfcf2}\label{nfi__local_8h_ae2ee592327976126a18fa5d71dfdfcf2} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_rmdir@{nfi\_local\_rmdir}}
+\index{nfi\_local\_rmdir@{nfi\_local\_rmdir}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_rmdir()}{nfi\_local\_rmdir()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+rmdir (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{char \texorpdfstring{$\ast$}{*}}]{url }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em url} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l01004}{1004}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{nfi__local_8h_source_l00082}{nfi\+\_\+local\+\_\+fhandle\+::dir}}, \mbox{\hyperlink{nfi__local__err_8c_source_l00043}{local\+\_\+err()}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00044}{LOCALERR\+\_\+\+URL}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{urlstr_8c_source_l00262}{Parse\+URL()}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, and \mbox{\hyperlink{filesystem_8h_source_l00273}{real\+\_\+posix\+\_\+rmdir}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_a6f3a6869b8d00de50e05b7d38ed3e49e}\label{nfi__local_8h_a6f3a6869b8d00de50e05b7d38ed3e49e} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_setattr@{nfi\_local\_setattr}}
+\index{nfi\_local\_setattr@{nfi\_local\_setattr}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_setattr()}{nfi\_local\_setattr()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+setattr (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fh,  }\item[{struct \mbox{\hyperlink{structnfi__attr}{nfi\+\_\+attr}} \texorpdfstring{$\ast$}{*}}]{attr }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fh} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em attr} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00791}{791}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{nfi__local_8c_source_l00094}{NFIto\+LOCALattr()}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, and \mbox{\hyperlink{xpn-cat_8c_source_l00041}{st}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+
+\Hypertarget{nfi__local_8h_aca8a4615c6d7d0bea456806472539ecb}\label{nfi__local_8h_aca8a4615c6d7d0bea456806472539ecb} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_statfs@{nfi\_local\_statfs}}
+\index{nfi\_local\_statfs@{nfi\_local\_statfs}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_statfs()}{nfi\_local\_statfs()}}
+{\footnotesize\ttfamily int nfi\+\_\+local\+\_\+statfs (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{struct \mbox{\hyperlink{structnfi__info}{nfi\+\_\+info}} \texorpdfstring{$\ast$}{*}}]{inf }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em inf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+\Hypertarget{nfi__local_8h_aea3a8bdcd68d0133d78edacbed26c74d}\label{nfi__local_8h_aea3a8bdcd68d0133d78edacbed26c74d} 
+\index{nfi\_local.h@{nfi\_local.h}!nfi\_local\_write@{nfi\_local\_write}}
+\index{nfi\_local\_write@{nfi\_local\_write}!nfi\_local.h@{nfi\_local.h}}
+\doxysubsubsection{\texorpdfstring{nfi\_local\_write()}{nfi\_local\_write()}}
+{\footnotesize\ttfamily ssize\+\_\+t nfi\+\_\+local\+\_\+write (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structnfi__server}{nfi\+\_\+server}} \texorpdfstring{$\ast$}{*}}]{server,  }\item[{struct \mbox{\hyperlink{structnfi__fhandle}{nfi\+\_\+fhandle}} \texorpdfstring{$\ast$}{*}}]{fh,  }\item[{void \texorpdfstring{$\ast$}{*}}]{buffer,  }\item[{off\+\_\+t}]{offset,  }\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em server} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fh} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buffer} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em offset} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em size} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{nfi__local_8c_source_l00599}{599}} of file \mbox{\hyperlink{nfi__local_8c_source}{nfi\+\_\+local.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{debug__msg_8h_source_l00055}{debug\+\_\+error}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, \mbox{\hyperlink{nfi__local__err_8c_ad65a8842cc674e3ddf69355898c0ecbf}{errno}}, \mbox{\hyperlink{nfi__local_8h_source_l00081}{nfi\+\_\+local\+\_\+fhandle\+::fd}}, \mbox{\hyperlink{nfi__local__err_8h_source_l00042}{LOCALERR\+\_\+\+PARAM}}, \mbox{\hyperlink{nfi__local_8c_source_l00057}{nfi\+\_\+local\+\_\+keep\+Connected()}}, \mbox{\hyperlink{utils_8h_source_l00059}{NULL\+\_\+\+RET\+\_\+\+ERR}}, \mbox{\hyperlink{nfi_8h_source_l00213}{nfi\+\_\+fhandle\+::priv\+\_\+fh}}, \mbox{\hyperlink{nfi_8h_source_l00094}{nfi\+\_\+server\+::private\+\_\+info}}, \mbox{\hyperlink{filesystem_8h_source_l00265}{real\+\_\+posix\+\_\+lseek}}, \mbox{\hyperlink{filesystem_8h_source_l00268}{real\+\_\+posix\+\_\+write}}, and \mbox{\hyperlink{nfi_8h_source_l00211}{nfi\+\_\+fhandle\+::url}}.
+
+
+
+Referenced by \mbox{\hyperlink{nfi__local_8c_source_l00178}{nfi\+\_\+local\+\_\+init()}}.
+

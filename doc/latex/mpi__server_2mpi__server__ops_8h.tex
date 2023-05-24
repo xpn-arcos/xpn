@@ -1,0 +1,515 @@
+\doxysection{mpi\+\_\+server\+\_\+ops.\+h File Reference}
+\hypertarget{mpi__server_2mpi__server__ops_8h}{}\label{mpi__server_2mpi__server__ops_8h}\index{mpi\_server\_ops.h@{mpi\_server\_ops.h}}
+
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include $<$libgen.\+h$>$}\newline
+{\ttfamily \#include \"{}all\+\_\+system.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/filesystem.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/urlstr.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/utils.\+h\"{}}\newline
+{\ttfamily \#include \"{}base/workers.\+h\"{}}\newline
+{\ttfamily \#include \"{}mpi\+\_\+server\+\_\+ops.\+h\"{}}\newline
+{\ttfamily \#include \"{}mpi\+\_\+server\+\_\+comm.\+h\"{}}\newline
+{\ttfamily \#include \"{}mpi\+\_\+server\+\_\+d2xpn.\+h\"{}}\newline
+{\ttfamily \#include \"{}mpi\+\_\+server\+\_\+params.\+h\"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structst__mpi__server__open}{st\+\_\+mpi\+\_\+server\+\_\+open}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__open__req}{st\+\_\+mpi\+\_\+server\+\_\+open\+\_\+req}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__creat}{st\+\_\+mpi\+\_\+server\+\_\+creat}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__read}{st\+\_\+mpi\+\_\+server\+\_\+read}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__read__req}{st\+\_\+mpi\+\_\+server\+\_\+read\+\_\+req}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__write}{st\+\_\+mpi\+\_\+server\+\_\+write}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__write__req}{st\+\_\+mpi\+\_\+server\+\_\+write\+\_\+req}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__close}{st\+\_\+mpi\+\_\+server\+\_\+close}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__rename}{st\+\_\+mpi\+\_\+server\+\_\+rename}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__rm}{st\+\_\+mpi\+\_\+server\+\_\+rm}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__getattr}{st\+\_\+mpi\+\_\+server\+\_\+getattr}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__setattr}{st\+\_\+mpi\+\_\+server\+\_\+setattr}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__attr__req}{st\+\_\+mpi\+\_\+server\+\_\+attr\+\_\+req}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__mkdir}{st\+\_\+mpi\+\_\+server\+\_\+mkdir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__opendir}{st\+\_\+mpi\+\_\+server\+\_\+opendir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__readdir}{st\+\_\+mpi\+\_\+server\+\_\+readdir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__direntry}{st\+\_\+mpi\+\_\+server\+\_\+direntry}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__closedir}{st\+\_\+mpi\+\_\+server\+\_\+closedir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__rmdir}{st\+\_\+mpi\+\_\+server\+\_\+rmdir}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__flush}{st\+\_\+mpi\+\_\+server\+\_\+flush}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__preload}{st\+\_\+mpi\+\_\+server\+\_\+preload}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__end}{st\+\_\+mpi\+\_\+server\+\_\+end}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__mpi__server__msg}{st\+\_\+mpi\+\_\+server\+\_\+msg}}
+\begin{DoxyCompactList}\small\item\em This is a struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_ae1b38bbbff69f82016d0029e55e6b920}{MPI\+\_\+\+SERVER\+\_\+\+ID}}~32
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a1508ded3c957b924006397d853bd93be}{MPI\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WS}}~0
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a84778c333d7a8b516392053d28f0e04b}{MPI\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WS}}~1
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a39ea6a7522417b48401b9218f21f5a5e}{MPI\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WS}}~2
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_abf3e9750891b26c1c18c6f378f0efd8a}{MPI\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WS}}~3
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a09546cff4dfe35fedef38f34f06ee305}{MPI\+\_\+\+SERVER\+\_\+\+CLOSE\+\_\+\+FILE\+\_\+\+WS}}~4
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_ae5315dfb8744d84ae8784bca19a39e93}{MPI\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE}}~5
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a08750b650480c7d9a4ca4019acc24641}{MPI\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE\+\_\+\+ASYNC}}~6
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a45119fd4f8c858b86fd71eae3c3f36af}{MPI\+\_\+\+SERVER\+\_\+\+RENAME\+\_\+\+FILE}}~7
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_ab4e3053e99ed03ffc2eb55eb01cecc43}{MPI\+\_\+\+SERVER\+\_\+\+GETATTR\+\_\+\+FILE}}~8
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_ab6fa18390da32e08b12533d69df42754}{MPI\+\_\+\+SERVER\+\_\+\+SETATTR\+\_\+\+FILE}}~9
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a4125632a5c23f86e78cde73b427056ee}{MPI\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WOS}}~100
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a197a3b8760027bade5e330e40732adcc}{MPI\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WOS}}~101
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a705130693a4b7a4a4d9d971cfc3b0dfc}{MPI\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WOS}}~102
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a560d67fe447eda8dda180d42c6486e7a}{MPI\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WOS}}~103
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a31ab4912ce3b03d1c6e753f3c9f57375}{MPI\+\_\+\+SERVER\+\_\+\+MKDIR\+\_\+\+DIR}}~20
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a7463cf7e3f251b83e50084407245d324}{MPI\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR}}~21
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a1a641d742d677aff346705842784d5c8}{MPI\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR\+\_\+\+ASYNC}}~22
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a673ffc259cee59eda96d546795777bef}{MPI\+\_\+\+SERVER\+\_\+\+OPENDIR\+\_\+\+DIR}}~23
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a89d977434a4af657c76ffbe92db76cc1}{MPI\+\_\+\+SERVER\+\_\+\+READDIR\+\_\+\+DIR}}~24
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_ac033cce095968307b174a0be3e1fcead}{MPI\+\_\+\+SERVER\+\_\+\+CLOSEDIR\+\_\+\+DIR}}~25
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a8cbc70e670086c2d923307d5ba61914a}{MPI\+\_\+\+SERVER\+\_\+\+FLUSH\+\_\+\+FILE}}~40
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a49132b4b140753295ae1532f30588c7e}{MPI\+\_\+\+SERVER\+\_\+\+PRELOAD\+\_\+\+FILE}}~41
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a4dece1fe60d1b0efbf92bbe460ad3345}{MPI\+\_\+\+SERVER\+\_\+\+STATFS\+\_\+\+DIR}}~60
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_ab73137698991d1409a83bdcd6fd02d2c}{MPI\+\_\+\+SERVER\+\_\+\+GETNODENAME}}~61
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_abf6106de7e01c74ce83bc7b180852961}{MPI\+\_\+\+SERVER\+\_\+\+GETID}}~62
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a729dfdcfaeaf0f217589cfd513bd6c92}{MPI\+\_\+\+SERVER\+\_\+\+FINALIZE}}~80
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a7a3f9bdde6dec582eaea900079341368}{MPI\+\_\+\+SERVER\+\_\+\+DISCONNECT}}~81
+\item 
+\#define \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_aa45cba459fbf1f5fa1a7f3eea3ec7cb0}{MPI\+\_\+\+SERVER\+\_\+\+END}}~-\/1
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_a77565a7ce1651db695585e19af4e2f43}{mpi\+\_\+server\+\_\+op2string}} (int op\+\_\+code)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_ae9c9c48916afb1b475007fe35afe5ec0}{mpi\+\_\+server\+\_\+do\+\_\+operation}} (struct \mbox{\hyperlink{structst__th}{st\+\_\+th}} \texorpdfstring{$\ast$}{*}th, int \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{mpi__server_8c_a7c82fbc4cc51abc20d109b537e1bd357}{the\+\_\+end}})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file to \textquotesingle{}TODO\textquotesingle{}. 
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000084}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a09546cff4dfe35fedef38f34f06ee305}\label{mpi__server_2mpi__server__ops_8h_a09546cff4dfe35fedef38f34f06ee305} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_CLOSE\_FILE\_WS@{MPI\_SERVER\_CLOSE\_FILE\_WS}}
+\index{MPI\_SERVER\_CLOSE\_FILE\_WS@{MPI\_SERVER\_CLOSE\_FILE\_WS}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_CLOSE\_FILE\_WS}{MPI\_SERVER\_CLOSE\_FILE\_WS}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+CLOSE\+\_\+\+FILE\+\_\+\+WS~4}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00067}{67}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_ac033cce095968307b174a0be3e1fcead}\label{mpi__server_2mpi__server__ops_8h_ac033cce095968307b174a0be3e1fcead} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_CLOSEDIR\_DIR@{MPI\_SERVER\_CLOSEDIR\_DIR}}
+\index{MPI\_SERVER\_CLOSEDIR\_DIR@{MPI\_SERVER\_CLOSEDIR\_DIR}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_CLOSEDIR\_DIR}{MPI\_SERVER\_CLOSEDIR\_DIR}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+CLOSEDIR\+\_\+\+DIR~25}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00090}{90}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a197a3b8760027bade5e330e40732adcc}\label{mpi__server_2mpi__server__ops_8h_a197a3b8760027bade5e330e40732adcc} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_CREAT\_FILE\_WOS@{MPI\_SERVER\_CREAT\_FILE\_WOS}}
+\index{MPI\_SERVER\_CREAT\_FILE\_WOS@{MPI\_SERVER\_CREAT\_FILE\_WOS}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_CREAT\_FILE\_WOS}{MPI\_SERVER\_CREAT\_FILE\_WOS}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WOS~101}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00078}{78}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a84778c333d7a8b516392053d28f0e04b}\label{mpi__server_2mpi__server__ops_8h_a84778c333d7a8b516392053d28f0e04b} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_CREAT\_FILE\_WS@{MPI\_SERVER\_CREAT\_FILE\_WS}}
+\index{MPI\_SERVER\_CREAT\_FILE\_WS@{MPI\_SERVER\_CREAT\_FILE\_WS}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_CREAT\_FILE\_WS}{MPI\_SERVER\_CREAT\_FILE\_WS}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WS~1}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00064}{64}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a7a3f9bdde6dec582eaea900079341368}\label{mpi__server_2mpi__server__ops_8h_a7a3f9bdde6dec582eaea900079341368} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_DISCONNECT@{MPI\_SERVER\_DISCONNECT}}
+\index{MPI\_SERVER\_DISCONNECT@{MPI\_SERVER\_DISCONNECT}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_DISCONNECT}{MPI\_SERVER\_DISCONNECT}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+DISCONNECT~81}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00109}{109}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_aa45cba459fbf1f5fa1a7f3eea3ec7cb0}\label{mpi__server_2mpi__server__ops_8h_aa45cba459fbf1f5fa1a7f3eea3ec7cb0} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_END@{MPI\_SERVER\_END}}
+\index{MPI\_SERVER\_END@{MPI\_SERVER\_END}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_END}{MPI\_SERVER\_END}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+END~-\/1}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00110}{110}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a729dfdcfaeaf0f217589cfd513bd6c92}\label{mpi__server_2mpi__server__ops_8h_a729dfdcfaeaf0f217589cfd513bd6c92} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_FINALIZE@{MPI\_SERVER\_FINALIZE}}
+\index{MPI\_SERVER\_FINALIZE@{MPI\_SERVER\_FINALIZE}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_FINALIZE}{MPI\_SERVER\_FINALIZE}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+FINALIZE~80}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00108}{108}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a8cbc70e670086c2d923307d5ba61914a}\label{mpi__server_2mpi__server__ops_8h_a8cbc70e670086c2d923307d5ba61914a} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_FLUSH\_FILE@{MPI\_SERVER\_FLUSH\_FILE}}
+\index{MPI\_SERVER\_FLUSH\_FILE@{MPI\_SERVER\_FLUSH\_FILE}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_FLUSH\_FILE}{MPI\_SERVER\_FLUSH\_FILE}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+FLUSH\+\_\+\+FILE~40}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00095}{95}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_ab4e3053e99ed03ffc2eb55eb01cecc43}\label{mpi__server_2mpi__server__ops_8h_ab4e3053e99ed03ffc2eb55eb01cecc43} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_GETATTR\_FILE@{MPI\_SERVER\_GETATTR\_FILE}}
+\index{MPI\_SERVER\_GETATTR\_FILE@{MPI\_SERVER\_GETATTR\_FILE}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_GETATTR\_FILE}{MPI\_SERVER\_GETATTR\_FILE}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+GETATTR\+\_\+\+FILE~8}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00071}{71}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_abf6106de7e01c74ce83bc7b180852961}\label{mpi__server_2mpi__server__ops_8h_abf6106de7e01c74ce83bc7b180852961} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_GETID@{MPI\_SERVER\_GETID}}
+\index{MPI\_SERVER\_GETID@{MPI\_SERVER\_GETID}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_GETID}{MPI\_SERVER\_GETID}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+GETID~62}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00103}{103}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_ab73137698991d1409a83bdcd6fd02d2c}\label{mpi__server_2mpi__server__ops_8h_ab73137698991d1409a83bdcd6fd02d2c} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_GETNODENAME@{MPI\_SERVER\_GETNODENAME}}
+\index{MPI\_SERVER\_GETNODENAME@{MPI\_SERVER\_GETNODENAME}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_GETNODENAME}{MPI\_SERVER\_GETNODENAME}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+GETNODENAME~61}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00102}{102}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_ae1b38bbbff69f82016d0029e55e6b920}\label{mpi__server_2mpi__server__ops_8h_ae1b38bbbff69f82016d0029e55e6b920} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_ID@{MPI\_SERVER\_ID}}
+\index{MPI\_SERVER\_ID@{MPI\_SERVER\_ID}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_ID}{MPI\_SERVER\_ID}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+ID~32}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00053}{53}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a31ab4912ce3b03d1c6e753f3c9f57375}\label{mpi__server_2mpi__server__ops_8h_a31ab4912ce3b03d1c6e753f3c9f57375} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_MKDIR\_DIR@{MPI\_SERVER\_MKDIR\_DIR}}
+\index{MPI\_SERVER\_MKDIR\_DIR@{MPI\_SERVER\_MKDIR\_DIR}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_MKDIR\_DIR}{MPI\_SERVER\_MKDIR\_DIR}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+MKDIR\+\_\+\+DIR~20}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00085}{85}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a4125632a5c23f86e78cde73b427056ee}\label{mpi__server_2mpi__server__ops_8h_a4125632a5c23f86e78cde73b427056ee} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_OPEN\_FILE\_WOS@{MPI\_SERVER\_OPEN\_FILE\_WOS}}
+\index{MPI\_SERVER\_OPEN\_FILE\_WOS@{MPI\_SERVER\_OPEN\_FILE\_WOS}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_OPEN\_FILE\_WOS}{MPI\_SERVER\_OPEN\_FILE\_WOS}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WOS~100}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00077}{77}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a1508ded3c957b924006397d853bd93be}\label{mpi__server_2mpi__server__ops_8h_a1508ded3c957b924006397d853bd93be} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_OPEN\_FILE\_WS@{MPI\_SERVER\_OPEN\_FILE\_WS}}
+\index{MPI\_SERVER\_OPEN\_FILE\_WS@{MPI\_SERVER\_OPEN\_FILE\_WS}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_OPEN\_FILE\_WS}{MPI\_SERVER\_OPEN\_FILE\_WS}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WS~0}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00063}{63}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a673ffc259cee59eda96d546795777bef}\label{mpi__server_2mpi__server__ops_8h_a673ffc259cee59eda96d546795777bef} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_OPENDIR\_DIR@{MPI\_SERVER\_OPENDIR\_DIR}}
+\index{MPI\_SERVER\_OPENDIR\_DIR@{MPI\_SERVER\_OPENDIR\_DIR}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_OPENDIR\_DIR}{MPI\_SERVER\_OPENDIR\_DIR}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+OPENDIR\+\_\+\+DIR~23}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00088}{88}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a49132b4b140753295ae1532f30588c7e}\label{mpi__server_2mpi__server__ops_8h_a49132b4b140753295ae1532f30588c7e} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_PRELOAD\_FILE@{MPI\_SERVER\_PRELOAD\_FILE}}
+\index{MPI\_SERVER\_PRELOAD\_FILE@{MPI\_SERVER\_PRELOAD\_FILE}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_PRELOAD\_FILE}{MPI\_SERVER\_PRELOAD\_FILE}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+PRELOAD\+\_\+\+FILE~41}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00096}{96}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a705130693a4b7a4a4d9d971cfc3b0dfc}\label{mpi__server_2mpi__server__ops_8h_a705130693a4b7a4a4d9d971cfc3b0dfc} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_READ\_FILE\_WOS@{MPI\_SERVER\_READ\_FILE\_WOS}}
+\index{MPI\_SERVER\_READ\_FILE\_WOS@{MPI\_SERVER\_READ\_FILE\_WOS}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_READ\_FILE\_WOS}{MPI\_SERVER\_READ\_FILE\_WOS}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WOS~102}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00079}{79}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a39ea6a7522417b48401b9218f21f5a5e}\label{mpi__server_2mpi__server__ops_8h_a39ea6a7522417b48401b9218f21f5a5e} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_READ\_FILE\_WS@{MPI\_SERVER\_READ\_FILE\_WS}}
+\index{MPI\_SERVER\_READ\_FILE\_WS@{MPI\_SERVER\_READ\_FILE\_WS}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_READ\_FILE\_WS}{MPI\_SERVER\_READ\_FILE\_WS}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WS~2}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00065}{65}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a89d977434a4af657c76ffbe92db76cc1}\label{mpi__server_2mpi__server__ops_8h_a89d977434a4af657c76ffbe92db76cc1} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_READDIR\_DIR@{MPI\_SERVER\_READDIR\_DIR}}
+\index{MPI\_SERVER\_READDIR\_DIR@{MPI\_SERVER\_READDIR\_DIR}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_READDIR\_DIR}{MPI\_SERVER\_READDIR\_DIR}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+READDIR\+\_\+\+DIR~24}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00089}{89}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a45119fd4f8c858b86fd71eae3c3f36af}\label{mpi__server_2mpi__server__ops_8h_a45119fd4f8c858b86fd71eae3c3f36af} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_RENAME\_FILE@{MPI\_SERVER\_RENAME\_FILE}}
+\index{MPI\_SERVER\_RENAME\_FILE@{MPI\_SERVER\_RENAME\_FILE}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_RENAME\_FILE}{MPI\_SERVER\_RENAME\_FILE}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+RENAME\+\_\+\+FILE~7}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00070}{70}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_ae5315dfb8744d84ae8784bca19a39e93}\label{mpi__server_2mpi__server__ops_8h_ae5315dfb8744d84ae8784bca19a39e93} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_RM\_FILE@{MPI\_SERVER\_RM\_FILE}}
+\index{MPI\_SERVER\_RM\_FILE@{MPI\_SERVER\_RM\_FILE}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_RM\_FILE}{MPI\_SERVER\_RM\_FILE}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE~5}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00068}{68}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a08750b650480c7d9a4ca4019acc24641}\label{mpi__server_2mpi__server__ops_8h_a08750b650480c7d9a4ca4019acc24641} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_RM\_FILE\_ASYNC@{MPI\_SERVER\_RM\_FILE\_ASYNC}}
+\index{MPI\_SERVER\_RM\_FILE\_ASYNC@{MPI\_SERVER\_RM\_FILE\_ASYNC}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_RM\_FILE\_ASYNC}{MPI\_SERVER\_RM\_FILE\_ASYNC}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE\+\_\+\+ASYNC~6}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00069}{69}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a7463cf7e3f251b83e50084407245d324}\label{mpi__server_2mpi__server__ops_8h_a7463cf7e3f251b83e50084407245d324} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_RMDIR\_DIR@{MPI\_SERVER\_RMDIR\_DIR}}
+\index{MPI\_SERVER\_RMDIR\_DIR@{MPI\_SERVER\_RMDIR\_DIR}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_RMDIR\_DIR}{MPI\_SERVER\_RMDIR\_DIR}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR~21}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00086}{86}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a1a641d742d677aff346705842784d5c8}\label{mpi__server_2mpi__server__ops_8h_a1a641d742d677aff346705842784d5c8} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_RMDIR\_DIR\_ASYNC@{MPI\_SERVER\_RMDIR\_DIR\_ASYNC}}
+\index{MPI\_SERVER\_RMDIR\_DIR\_ASYNC@{MPI\_SERVER\_RMDIR\_DIR\_ASYNC}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_RMDIR\_DIR\_ASYNC}{MPI\_SERVER\_RMDIR\_DIR\_ASYNC}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR\+\_\+\+ASYNC~22}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00087}{87}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_ab6fa18390da32e08b12533d69df42754}\label{mpi__server_2mpi__server__ops_8h_ab6fa18390da32e08b12533d69df42754} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_SETATTR\_FILE@{MPI\_SERVER\_SETATTR\_FILE}}
+\index{MPI\_SERVER\_SETATTR\_FILE@{MPI\_SERVER\_SETATTR\_FILE}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_SETATTR\_FILE}{MPI\_SERVER\_SETATTR\_FILE}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+SETATTR\+\_\+\+FILE~9}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00072}{72}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a4dece1fe60d1b0efbf92bbe460ad3345}\label{mpi__server_2mpi__server__ops_8h_a4dece1fe60d1b0efbf92bbe460ad3345} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_STATFS\_DIR@{MPI\_SERVER\_STATFS\_DIR}}
+\index{MPI\_SERVER\_STATFS\_DIR@{MPI\_SERVER\_STATFS\_DIR}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_STATFS\_DIR}{MPI\_SERVER\_STATFS\_DIR}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+STATFS\+\_\+\+DIR~60}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00101}{101}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a560d67fe447eda8dda180d42c6486e7a}\label{mpi__server_2mpi__server__ops_8h_a560d67fe447eda8dda180d42c6486e7a} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_WRITE\_FILE\_WOS@{MPI\_SERVER\_WRITE\_FILE\_WOS}}
+\index{MPI\_SERVER\_WRITE\_FILE\_WOS@{MPI\_SERVER\_WRITE\_FILE\_WOS}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_WRITE\_FILE\_WOS}{MPI\_SERVER\_WRITE\_FILE\_WOS}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WOS~103}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00080}{80}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_abf3e9750891b26c1c18c6f378f0efd8a}\label{mpi__server_2mpi__server__ops_8h_abf3e9750891b26c1c18c6f378f0efd8a} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!MPI\_SERVER\_WRITE\_FILE\_WS@{MPI\_SERVER\_WRITE\_FILE\_WS}}
+\index{MPI\_SERVER\_WRITE\_FILE\_WS@{MPI\_SERVER\_WRITE\_FILE\_WS}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{MPI\_SERVER\_WRITE\_FILE\_WS}{MPI\_SERVER\_WRITE\_FILE\_WS}}
+{\footnotesize\ttfamily \#define MPI\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WS~3}
+
+
+
+Definition at line \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00066}{66}} of file \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source}{mpi\+\_\+server/mpi\+\_\+server\+\_\+ops.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{mpi__server_2mpi__server__ops_8h_ae9c9c48916afb1b475007fe35afe5ec0}\label{mpi__server_2mpi__server__ops_8h_ae9c9c48916afb1b475007fe35afe5ec0} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!mpi\_server\_do\_operation@{mpi\_server\_do\_operation}}
+\index{mpi\_server\_do\_operation@{mpi\_server\_do\_operation}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{mpi\_server\_do\_operation()}{mpi\_server\_do\_operation()}}
+{\footnotesize\ttfamily int mpi\+\_\+server\+\_\+do\+\_\+operation (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structst__th}{st\+\_\+th}} \texorpdfstring{$\ast$}{*}}]{th,  }\item[{int \texorpdfstring{$\ast$}{*}}]{the\+\_\+end }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em the\+\_\+end} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{mpi__server__ops_8c_source_l00494}{494}} of file \mbox{\hyperlink{mpi__server__ops_8c_source}{mpi\+\_\+server\+\_\+ops.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00061}{DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{debug__msg_8h_source_l00064}{DEBUG\+\_\+\+END}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00067}{MPI\+\_\+\+SERVER\+\_\+\+CLOSE\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00090}{MPI\+\_\+\+SERVER\+\_\+\+CLOSEDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__comm_8c_source_l00365}{mpi\+\_\+server\+\_\+comm\+\_\+read\+\_\+data()}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00078}{MPI\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00064}{MPI\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00109}{MPI\+\_\+\+SERVER\+\_\+\+DISCONNECT}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00108}{MPI\+\_\+\+SERVER\+\_\+\+FINALIZE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00095}{MPI\+\_\+\+SERVER\+\_\+\+FLUSH\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00071}{MPI\+\_\+\+SERVER\+\_\+\+GETATTR\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00102}{MPI\+\_\+\+SERVER\+\_\+\+GETNODENAME}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00085}{MPI\+\_\+\+SERVER\+\_\+\+MKDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01092}{mpi\+\_\+server\+\_\+op\+\_\+close\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01283}{mpi\+\_\+server\+\_\+op\+\_\+closedir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00750}{mpi\+\_\+server\+\_\+op\+\_\+creat\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00727}{mpi\+\_\+server\+\_\+op\+\_\+creat\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01423}{mpi\+\_\+server\+\_\+op\+\_\+flush()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01179}{mpi\+\_\+server\+\_\+op\+\_\+getattr()}}, \mbox{\hyperlink{mpi__server__ops_8c_a4244c0c4bdaf213fb3773a0a467fe9cd}{mpi\+\_\+server\+\_\+op\+\_\+getnodename()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01219}{mpi\+\_\+server\+\_\+op\+\_\+mkdir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00707}{mpi\+\_\+server\+\_\+op\+\_\+open\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00689}{mpi\+\_\+server\+\_\+op\+\_\+open\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01237}{mpi\+\_\+server\+\_\+op\+\_\+opendir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01337}{mpi\+\_\+server\+\_\+op\+\_\+preload()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00851}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00775}{mpi\+\_\+server\+\_\+op\+\_\+read\+\_\+ws()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01258}{mpi\+\_\+server\+\_\+op\+\_\+readdir()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01153}{mpi\+\_\+server\+\_\+op\+\_\+rename()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01109}{mpi\+\_\+server\+\_\+op\+\_\+rm()}}, \mbox{\hyperlink{mpi__server__ops_8c_adbb5cbfbc02389147e6ceefa44df4854}{mpi\+\_\+server\+\_\+op\+\_\+rm\+\_\+async()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01298}{mpi\+\_\+server\+\_\+op\+\_\+rmdir()}}, \mbox{\hyperlink{mpi__server__ops_8c_a93270bdf2b99926bb108002dc9396ccd}{mpi\+\_\+server\+\_\+op\+\_\+rmdir\+\_\+async()}}, \mbox{\hyperlink{mpi__server__ops_8c_a9b48a25498e0de7973dd26a38be39051}{mpi\+\_\+server\+\_\+op\+\_\+setattr()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l01011}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+wos()}}, \mbox{\hyperlink{mpi__server__ops_8c_source_l00949}{mpi\+\_\+server\+\_\+op\+\_\+write\+\_\+ws()}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00077}{MPI\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00063}{MPI\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00088}{MPI\+\_\+\+SERVER\+\_\+\+OPENDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00096}{MPI\+\_\+\+SERVER\+\_\+\+PRELOAD\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00079}{MPI\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00065}{MPI\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00089}{MPI\+\_\+\+SERVER\+\_\+\+READDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00070}{MPI\+\_\+\+SERVER\+\_\+\+RENAME\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00068}{MPI\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00069}{MPI\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE\+\_\+\+ASYNC}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00086}{MPI\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00087}{MPI\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR\+\_\+\+ASYNC}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00072}{MPI\+\_\+\+SERVER\+\_\+\+SETATTR\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00080}{MPI\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00066}{MPI\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00426}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+close}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00434}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+closedir}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00425}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+creat}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00439}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+flush}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00436}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+getattr}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00431}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+mkdir}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00424}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+open}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00432}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+opendir}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00440}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+preload}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00427}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+read}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00433}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+readdir}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00430}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+rename}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00429}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+rm}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00435}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+rmdir}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00437}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+setattr}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00428}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::op\+\_\+write}}, \mbox{\hyperlink{workers__common_8h_source_l00056}{st\+\_\+th\+::params}}, \mbox{\hyperlink{workers__common_8h_source_l00062}{st\+\_\+th\+::rank\+\_\+client\+\_\+id}}, \mbox{\hyperlink{workers__common_8h_source_l00063}{st\+\_\+th\+::sd}}, \mbox{\hyperlink{mpi__server_8c_source_l00049}{the\+\_\+end}}, \mbox{\hyperlink{workers__common_8h_source_l00061}{st\+\_\+th\+::type\+\_\+op}}, and \mbox{\hyperlink{structst__mpi__server__msg_ab8f0c814a10633c68fba2e6b3c556367}{st\+\_\+mpi\+\_\+server\+\_\+msg\+::u\+\_\+st\+\_\+mpi\+\_\+server\+\_\+msg}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00064}{mpi\+\_\+server\+\_\+run()}}.
+
+\Hypertarget{mpi__server_2mpi__server__ops_8h_a77565a7ce1651db695585e19af4e2f43}\label{mpi__server_2mpi__server__ops_8h_a77565a7ce1651db695585e19af4e2f43} 
+\index{mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}!mpi\_server\_op2string@{mpi\_server\_op2string}}
+\index{mpi\_server\_op2string@{mpi\_server\_op2string}!mpi\_server/mpi\_server\_ops.h@{mpi\_server/mpi\_server\_ops.h}}
+\doxysubsubsection{\texorpdfstring{mpi\_server\_op2string()}{mpi\_server\_op2string()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*} mpi\+\_\+server\+\_\+op2string (\begin{DoxyParamCaption}\item[{int}]{op\+\_\+code }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}
+
+
+\begin{DoxyParams}{Parameters}
+{\em op\+\_\+code} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{mpi__server__ops_8c_source_l00041}{41}} of file \mbox{\hyperlink{mpi__server__ops_8c_source}{mpi\+\_\+server\+\_\+ops.\+c}}.
+
+
+
+References \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00067}{MPI\+\_\+\+SERVER\+\_\+\+CLOSE\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00090}{MPI\+\_\+\+SERVER\+\_\+\+CLOSEDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00078}{MPI\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00064}{MPI\+\_\+\+SERVER\+\_\+\+CREAT\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00109}{MPI\+\_\+\+SERVER\+\_\+\+DISCONNECT}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00110}{MPI\+\_\+\+SERVER\+\_\+\+END}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00108}{MPI\+\_\+\+SERVER\+\_\+\+FINALIZE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00095}{MPI\+\_\+\+SERVER\+\_\+\+FLUSH\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00071}{MPI\+\_\+\+SERVER\+\_\+\+GETATTR\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00103}{MPI\+\_\+\+SERVER\+\_\+\+GETID}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00102}{MPI\+\_\+\+SERVER\+\_\+\+GETNODENAME}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00085}{MPI\+\_\+\+SERVER\+\_\+\+MKDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00077}{MPI\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00063}{MPI\+\_\+\+SERVER\+\_\+\+OPEN\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00088}{MPI\+\_\+\+SERVER\+\_\+\+OPENDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00096}{MPI\+\_\+\+SERVER\+\_\+\+PRELOAD\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00079}{MPI\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WOS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00065}{MPI\+\_\+\+SERVER\+\_\+\+READ\+\_\+\+FILE\+\_\+\+WS}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00089}{MPI\+\_\+\+SERVER\+\_\+\+READDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00070}{MPI\+\_\+\+SERVER\+\_\+\+RENAME\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00068}{MPI\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00069}{MPI\+\_\+\+SERVER\+\_\+\+RM\+\_\+\+FILE\+\_\+\+ASYNC}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00086}{MPI\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00087}{MPI\+\_\+\+SERVER\+\_\+\+RMDIR\+\_\+\+DIR\+\_\+\+ASYNC}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00072}{MPI\+\_\+\+SERVER\+\_\+\+SETATTR\+\_\+\+FILE}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00101}{MPI\+\_\+\+SERVER\+\_\+\+STATFS\+\_\+\+DIR}}, \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00080}{MPI\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WOS}}, and \mbox{\hyperlink{mpi__server_2mpi__server__ops_8h_source_l00066}{MPI\+\_\+\+SERVER\+\_\+\+WRITE\+\_\+\+FILE\+\_\+\+WS}}.
+
+
+
+Referenced by \mbox{\hyperlink{mpi__server_8c_source_l00064}{mpi\+\_\+server\+\_\+run()}}.
+

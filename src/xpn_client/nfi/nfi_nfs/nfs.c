@@ -18,8 +18,25 @@
  *
  */
 
+/**
+ * @file nfs.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "nfi/nfi_nfs/nfs.h"
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
 void printfh(fhandle fh)
 {
   unsigned int i, j;

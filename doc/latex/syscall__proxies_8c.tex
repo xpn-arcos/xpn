@@ -1,0 +1,2201 @@
+\doxysection{syscall\+\_\+proxies.\+c File Reference}
+\hypertarget{syscall__proxies_8c}{}\label{syscall__proxies_8c}\index{syscall\_proxies.c@{syscall\_proxies.c}}
+
+
+File to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include \"{}base/syscall\+\_\+proxies.\+h\"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a2a1b01e82516cc0abc94dbe2567ac5cc}{dlsym\+\_\+open}} (char \texorpdfstring{$\ast$}{*}path, int flags)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_ae6edfc2c77365cf6a3858808a12d1410}{dlsym\+\_\+open2}} (char \texorpdfstring{$\ast$}{*}path, int flags, mode\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a228de4498a836dd164284e059ffab365}{dlsym\+\_\+open64}} (char \texorpdfstring{$\ast$}{*}path, int flags, mode\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a6b110858b7eb0e77957a5fb303c3a09b}{dlsym\+\_\+\+\_\+\+\_\+open\+\_\+2}} (char \texorpdfstring{$\ast$}{*}path, int flags)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a13ce29fc7965e50085b1f1a08d3b0c90}{dlsym\+\_\+creat}} (const char \texorpdfstring{$\ast$}{*}path, mode\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a656b47c4d756635930235ddc053fa980}{dlsym\+\_\+ftruncate}} (int fd, off\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+ssize\+\_\+t \mbox{\hyperlink{syscall__proxies_8c_aef315b53b84073c0299550f5006db7fc}{dlsym\+\_\+read}} (int fd, void \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}}, size\+\_\+t nbyte)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+ssize\+\_\+t \mbox{\hyperlink{syscall__proxies_8c_a409f81fafd3153537469bbd358d44732}{dlsym\+\_\+write}} (int fd, void \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}}, size\+\_\+t nbyte)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+off\+\_\+t \mbox{\hyperlink{syscall__proxies_8c_a87fb4ae438d3a9b76e5dbcbca88bd80b}{dlsym\+\_\+lseek}} (int fd, off\+\_\+t offset, int whence)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+off64\+\_\+t \mbox{\hyperlink{syscall__proxies_8c_ae512d9e5f85d9b33d523894051631dd0}{dlsym\+\_\+lseek64}} (int fd, off64\+\_\+t offset, int whence)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_aa63e748c1adfcc0176e9e953da0745fb}{dlsym\+\_\+lxstat64}} (int ver, const char \texorpdfstring{$\ast$}{*}path, struct stat64 \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a62a1eb308b1bb04bd35129abab29fbcf}{dlsym\+\_\+xstat64}} (int ver, const char \texorpdfstring{$\ast$}{*}path, struct stat64 \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_ac1aad98ae3ea6f95a374de2431009990}{dlsym\+\_\+fxstat64}} (int ver, int fd, struct stat64 \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_aff6180862c1481803c799869e26ec80a}{dlsym\+\_\+lstat}} (int ver, const char \texorpdfstring{$\ast$}{*}path, struct stat \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_ac4213940b6b6cf4b13c9438f86f76f19}{dlsym\+\_\+stat}} (int ver, const char \texorpdfstring{$\ast$}{*}path, struct stat \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a3a644e58ae0a06c738bb866414a9da6e}{dlsym\+\_\+fstat}} (int ver, int fd, struct stat \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a0f172801af5d78bbe39f69e6852ad76b}{dlsym\+\_\+fstatat}} (int dfd, const char \texorpdfstring{$\ast$}{*}path, struct stat \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}}, int flags)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_abc50d4734ed1e79a80dcd20b6ba8e135}{dlsym\+\_\+fstatat64}} (int dfd, const char \texorpdfstring{$\ast$}{*}path, struct stat64 \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}}, int flags)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a9bb7193d9e19cf66bdef844c0104cdfc}{dlsym\+\_\+close}} (int fd)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_ae11271d95bf0e2425d9a0982c8e9c73a}{dlsym\+\_\+rename}} (const char \texorpdfstring{$\ast$}{*}old\+\_\+path, const char \texorpdfstring{$\ast$}{*}new\+\_\+path)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a4e433ad840b20e1d6b6a22f80331e30d}{dlsym\+\_\+unlink}} (char \texorpdfstring{$\ast$}{*}path)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+DIR \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_abcaedace5be2f20528302f59a7f07c7d}{dlsym\+\_\+opendir}} (char \texorpdfstring{$\ast$}{*}dirname)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+DIR \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_afe953d12f8e4b308061bf7a931cd319c}{dlsym\+\_\+opendir64}} (char \texorpdfstring{$\ast$}{*}dirname)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_adbc1cca344d44c25ba09b1033e835ae6}{dlsym\+\_\+mkdir}} (char \texorpdfstring{$\ast$}{*}path, mode\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+struct dirent \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a04e1aca02902acc07499edaea9335048}{dlsym\+\_\+readdir}} (DIR \texorpdfstring{$\ast$}{*}dirp)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+struct dirent64 \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a12cf2b73e2ecc622cb32aa13f18509b1}{dlsym\+\_\+readdir64}} (DIR \texorpdfstring{$\ast$}{*}dirp)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_ae4cd8a1110e21b41e120b3f234d6e4ad}{dlsym\+\_\+closedir}} (DIR \texorpdfstring{$\ast$}{*}dirp)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a0f476841e33b51d93873c29dee4ba4c7}{dlsym\+\_\+rmdir}} (char \texorpdfstring{$\ast$}{*}path)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a03e85dc2793740319a03ee59e86cb440}{dlsym\+\_\+fork}} (void)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a8092872bdc3fe804da18638ea2ebe3d9}{dlsym\+\_\+pipe}} (int pipefd\mbox{[}2\mbox{]})
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a751a04db784359f0f9fe22f0e67429ba}{dlsym\+\_\+dup}} (int fd)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a8831374316eeb73a0559629485b61c31}{dlsym\+\_\+dup2}} (int fd, int fd2)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{syscall__proxies_8c_a1e0a6c19baf6aad3d13c64ca6f81ad37}{dlsym\+\_\+exit}} (int status)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_af82927ba8fda63f9fd799a8121bc4d92}{dlsym\+\_\+chdir}} (char \texorpdfstring{$\ast$}{*}path)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a069f5fdf5a3044e55c9b3b78956ac87b}{dlsym\+\_\+chmod}} (char \texorpdfstring{$\ast$}{*}path, mode\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_abe5a5cf5a7e3ec5b9edd98bb223abfce}{dlsym\+\_\+fchmod}} (int fd, mode\+\_\+t mode)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_ae344913c3894a0756d95f4c9619c3465}{dlsym\+\_\+chown}} (char \texorpdfstring{$\ast$}{*}path, uid\+\_\+t owner, gid\+\_\+t group)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_ab851cd304ba3a8d92e5301d78d55d657}{dlsym\+\_\+fcntl}} (int fd, int cmd, long arg)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a776de7a6ede35e93a640e4fc714b78fd}{dlsym\+\_\+access}} (const char \texorpdfstring{$\ast$}{*}path, int mode)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a893818b78459e116c2b5acb1ba9e5ad4}{dlsym\+\_\+realpath}} (const char \texorpdfstring{$\ast$}{*}restrict path, char \texorpdfstring{$\ast$}{*}restrict resolved\+\_\+path)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{syscall__proxies_8c_a5d261d6ab482d10ec95155bd3f7a4386}{dlsym\+\_\+fsync}} (int fd)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_ab03e18b8b8066cc8e4a5864dcfe0bbfe}{dlsym\+\_\+mmap}} (void \texorpdfstring{$\ast$}{*}addr, size\+\_\+t length, int prot, int flags, int fd, off\+\_\+t offset)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}{real\+\_\+open}} )(char \texorpdfstring{$\ast$}{*}, int, mode\+\_\+t) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a13b3f4f1c540e774420a4e2ba59091d2}{real\+\_\+open64}} )(char \texorpdfstring{$\ast$}{*}, int, mode\+\_\+t) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_ae312aa85369c71f866657bb37dff9c0a}{real\+\_\+\+\_\+\+\_\+open\+\_\+2}} )(char \texorpdfstring{$\ast$}{*}, int) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a542b207814b293e59e9218104a2a38b3}{real\+\_\+creat}} )(const char \texorpdfstring{$\ast$}{*}, mode\+\_\+t) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_ab170c8f0b26f5e1e75571b808701e943}{real\+\_\+close}} )(int) = NULL
+\item 
+ssize\+\_\+t(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_ab7960403a0cae3196a844a62f6644b27}{real\+\_\+read}} )(int, void \texorpdfstring{$\ast$}{*}, size\+\_\+t) = NULL
+\item 
+ssize\+\_\+t(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_aa90b1d59886ff211e915966fbe8ce040}{real\+\_\+write}} )(int, const void \texorpdfstring{$\ast$}{*}, size\+\_\+t) = NULL
+\item 
+off\+\_\+t(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_ae752ac266e732840c81273a66d7b808f}{real\+\_\+lseek}} )(int, off\+\_\+t, int) = NULL
+\item 
+off64\+\_\+t(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_aef88583e19ca185474acff4d12528c2f}{real\+\_\+lseek64}} )(int, off64\+\_\+t, int) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a669528fe56a99b0c78c5cea94fc5f63d}{real\+\_\+ftruncate}} )(int, off\+\_\+t) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_aa189f074256a94bf6ba23c042129292b}{real\+\_\+stat}} )(int, char \texorpdfstring{$\ast$}{*}, struct stat \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a4143a7c57ea1cf979ee1843212bb3e55}{real\+\_\+xstat64}} )(int, const char \texorpdfstring{$\ast$}{*}, struct stat64 \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_ae35dcd3176695ccf13c374fa9140855c}{real\+\_\+lstat}} )(int, char \texorpdfstring{$\ast$}{*}, struct stat \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_af603a08904ba37103e41b13408528525}{real\+\_\+lxstat64}} )(int, const char \texorpdfstring{$\ast$}{*}, struct stat64 \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_aa89bd56fcc4132224537b6a5a827a320}{real\+\_\+fstat}} )(int, int, struct stat \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a06c482b6e82b77e9193fd0b240e66bbc}{real\+\_\+fxstat64}} )(int, int, struct stat64 \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a4312b1892e60c0d191fdf0991d57e97e}{real\+\_\+fstatat}} )(int, const char \texorpdfstring{$\ast$}{*}, struct stat \texorpdfstring{$\ast$}{*}, int) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a2cb7ffe3c73b60a4c2f63770b0d0a7c1}{real\+\_\+fstatat64}} )(int, const char \texorpdfstring{$\ast$}{*}, struct stat64 \texorpdfstring{$\ast$}{*}, int) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a020914ae07ff0b0194f7ee3140602716}{real\+\_\+rename}} )(const char \texorpdfstring{$\ast$}{*}, const char \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a2c9915165916b62d3be86cfc5736a3ea}{real\+\_\+unlink}} )(char \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+DIR \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a364474d13cc708210034f0f7a437d880}{real\+\_\+opendir}} )(char \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+DIR \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_abf9acbd52d36dc07aab133c803fcd771}{real\+\_\+opendir64}} )(char \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+struct dirent \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a89f96d5fbf652c1b9fdf9e9c6d53ea4b}{real\+\_\+readdir}} )(DIR \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+struct dirent64 \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a5926d800819a6578195f61636f1b879f}{real\+\_\+readdir64}} )(DIR \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a9094f37ad12ef2676a374829ebbda2be}{real\+\_\+closedir}} )(DIR \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a8142da50cfa25723af52ad741a0e828e}{real\+\_\+mkdir}} )(char \texorpdfstring{$\ast$}{*}, mode\+\_\+t) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a4c977b304707fb6497729902420d51fb}{real\+\_\+rmdir}} )(char \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_acc1c4f36eb221c29a359e654060160ed}{real\+\_\+fork}} )(void) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_aca92fb6c9192b899b6b5b7b4f7f596ba}{real\+\_\+pipe}} )(int \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a7df0d4228fa5dd287ae6d650f8296405}{real\+\_\+dup}} )(int) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_ae2748186f2529a651f30f6aea9f5e112}{real\+\_\+dup2}} )(int, int) = NULL
+\item 
+void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a4b2bcb1e1fa0bd0269c60dfd22c49df6}{real\+\_\+exit}} )(int) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a520283dc892d9483382590f4e86aad73}{real\+\_\+chdir}} )(char \texorpdfstring{$\ast$}{*}) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a6b5e20c7759cf1cf0217b478f03f0e52}{real\+\_\+chmod}} )(char \texorpdfstring{$\ast$}{*}, mode\+\_\+t) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a36c1a17e872fe41140a435838da2a777}{real\+\_\+fchmod}} )(int, mode\+\_\+t) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a4d677d3bea22eae2e627d545f261eae5}{real\+\_\+chown}} )(char \texorpdfstring{$\ast$}{*}, uid\+\_\+t, gid\+\_\+t) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a5844ba3a1a589ce3af9046f8a4a08785}{real\+\_\+fcntl}} )(int, int, long) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_ad95739f0c65d7d1b05199988a1621ad9}{real\+\_\+access}} )(const char \texorpdfstring{$\ast$}{*}, int) = NULL
+\item 
+char \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a2fbde5493821512cc1501797a0956f99}{real\+\_\+realpath}} )(const char \texorpdfstring{$\ast$}{*}restrict, char \texorpdfstring{$\ast$}{*}restrict) = NULL
+\item 
+int(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_aca1081c5be4e7e92c432a2be89724236}{real\+\_\+fsync}} )(int) = NULL
+\item 
+void \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{syscall__proxies_8c_a07fb02f43c5545b9846fd6b7219c62a5}{real\+\_\+mmap}} )(void \texorpdfstring{$\ast$}{*}, size\+\_\+t, int, int, int, off\+\_\+t) = NULL
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+File to \textquotesingle{}TODO\textquotesingle{}. 
+
+File to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000008}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{syscall__proxies_8c_a6b110858b7eb0e77957a5fb303c3a09b}\label{syscall__proxies_8c_a6b110858b7eb0e77957a5fb303c3a09b} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_\_\_open\_2@{dlsym\_\_\_open\_2}}
+\index{dlsym\_\_\_open\_2@{dlsym\_\_\_open\_2}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_\_\_open\_2()}{dlsym\_\_\_open\_2()}}
+{\footnotesize\ttfamily int dlsym\+\_\+\+\_\+\+\_\+open\+\_\+2 (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{int}]{flags }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em flags} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00153}{153}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00043}{real\+\_\+\+\_\+\+\_\+open\+\_\+2}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00628}{\+\_\+\+\_\+open\+\_\+2()}}.
+
+\Hypertarget{syscall__proxies_8c_a776de7a6ede35e93a640e4fc714b78fd}\label{syscall__proxies_8c_a776de7a6ede35e93a640e4fc714b78fd} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_access@{dlsym\_access}}
+\index{dlsym\_access@{dlsym\_access}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_access()}{dlsym\_access()}}
+{\footnotesize\ttfamily int dlsym\+\_\+access (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{int}]{mode }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00596}{596}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00084}{real\+\_\+access}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01664}{access()}}.
+
+\Hypertarget{syscall__proxies_8c_af82927ba8fda63f9fd799a8121bc4d92}\label{syscall__proxies_8c_af82927ba8fda63f9fd799a8121bc4d92} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_chdir@{dlsym\_chdir}}
+\index{dlsym\_chdir@{dlsym\_chdir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_chdir()}{dlsym\_chdir()}}
+{\footnotesize\ttfamily int dlsym\+\_\+chdir (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00536}{536}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00079}{real\+\_\+chdir}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01557}{chdir()}}.
+
+\Hypertarget{syscall__proxies_8c_a069f5fdf5a3044e55c9b3b78956ac87b}\label{syscall__proxies_8c_a069f5fdf5a3044e55c9b3b78956ac87b} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_chmod@{dlsym\_chmod}}
+\index{dlsym\_chmod@{dlsym\_chmod}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_chmod()}{dlsym\_chmod()}}
+{\footnotesize\ttfamily int dlsym\+\_\+chmod (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{mode\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00548}{548}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00080}{real\+\_\+chmod}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01577}{chmod()}}.
+
+\Hypertarget{syscall__proxies_8c_ae344913c3894a0756d95f4c9619c3465}\label{syscall__proxies_8c_ae344913c3894a0756d95f4c9619c3465} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_chown@{dlsym\_chown}}
+\index{dlsym\_chown@{dlsym\_chown}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_chown()}{dlsym\_chown()}}
+{\footnotesize\ttfamily int dlsym\+\_\+chown (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{uid\+\_\+t}]{owner,  }\item[{gid\+\_\+t}]{group }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em owner} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em group} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00572}{572}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00082}{real\+\_\+chown}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01623}{chown()}}.
+
+\Hypertarget{syscall__proxies_8c_a9bb7193d9e19cf66bdef844c0104cdfc}\label{syscall__proxies_8c_a9bb7193d9e19cf66bdef844c0104cdfc} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_close@{dlsym\_close}}
+\index{dlsym\_close@{dlsym\_close}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_close()}{dlsym\_close()}}
+{\footnotesize\ttfamily int dlsym\+\_\+close (\begin{DoxyParamCaption}\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00344}{344}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00045}{real\+\_\+close}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01178}{close()}}.
+
+\Hypertarget{syscall__proxies_8c_ae4cd8a1110e21b41e120b3f234d6e4ad}\label{syscall__proxies_8c_ae4cd8a1110e21b41e120b3f234d6e4ad} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_closedir@{dlsym\_closedir}}
+\index{dlsym\_closedir@{dlsym\_closedir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_closedir()}{dlsym\_closedir()}}
+{\footnotesize\ttfamily int dlsym\+\_\+closedir (\begin{DoxyParamCaption}\item[{DIR \texorpdfstring{$\ast$}{*}}]{dirp }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dirp} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00444}{444}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00069}{real\+\_\+closedir}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01397}{closedir()}}.
+
+\Hypertarget{syscall__proxies_8c_a13ce29fc7965e50085b1f1a08d3b0c90}\label{syscall__proxies_8c_a13ce29fc7965e50085b1f1a08d3b0c90} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_creat@{dlsym\_creat}}
+\index{dlsym\_creat@{dlsym\_creat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_creat()}{dlsym\_creat()}}
+{\footnotesize\ttfamily int dlsym\+\_\+creat (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{mode\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00170}{170}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00044}{real\+\_\+creat}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00678}{creat()}}.
+
+\Hypertarget{syscall__proxies_8c_a751a04db784359f0f9fe22f0e67429ba}\label{syscall__proxies_8c_a751a04db784359f0f9fe22f0e67429ba} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_dup@{dlsym\_dup}}
+\index{dlsym\_dup@{dlsym\_dup}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_dup()}{dlsym\_dup()}}
+{\footnotesize\ttfamily int dlsym\+\_\+dup (\begin{DoxyParamCaption}\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00496}{496}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00076}{real\+\_\+dup}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01482}{dup()}}.
+
+\Hypertarget{syscall__proxies_8c_a8831374316eeb73a0559629485b61c31}\label{syscall__proxies_8c_a8831374316eeb73a0559629485b61c31} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_dup2@{dlsym\_dup2}}
+\index{dlsym\_dup2@{dlsym\_dup2}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_dup2()}{dlsym\_dup2()}}
+{\footnotesize\ttfamily int dlsym\+\_\+dup2 (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{int}]{fd2 }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fd2} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00508}{508}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00077}{real\+\_\+dup2}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01510}{dup2()}}.
+
+\Hypertarget{syscall__proxies_8c_a1e0a6c19baf6aad3d13c64ca6f81ad37}\label{syscall__proxies_8c_a1e0a6c19baf6aad3d13c64ca6f81ad37} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_exit@{dlsym\_exit}}
+\index{dlsym\_exit@{dlsym\_exit}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_exit()}{dlsym\_exit()}}
+{\footnotesize\ttfamily void dlsym\+\_\+exit (\begin{DoxyParamCaption}\item[{int}]{status }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em status} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00520}{520}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00078}{real\+\_\+exit}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01540}{exit()}}.
+
+\Hypertarget{syscall__proxies_8c_abe5a5cf5a7e3ec5b9edd98bb223abfce}\label{syscall__proxies_8c_abe5a5cf5a7e3ec5b9edd98bb223abfce} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_fchmod@{dlsym\_fchmod}}
+\index{dlsym\_fchmod@{dlsym\_fchmod}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_fchmod()}{dlsym\_fchmod()}}
+{\footnotesize\ttfamily int dlsym\+\_\+fchmod (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{mode\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00560}{560}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00081}{real\+\_\+fchmod}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01597}{fchmod()}}.
+
+\Hypertarget{syscall__proxies_8c_ab851cd304ba3a8d92e5301d78d55d657}\label{syscall__proxies_8c_ab851cd304ba3a8d92e5301d78d55d657} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_fcntl@{dlsym\_fcntl}}
+\index{dlsym\_fcntl@{dlsym\_fcntl}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_fcntl()}{dlsym\_fcntl()}}
+{\footnotesize\ttfamily int dlsym\+\_\+fcntl (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{int}]{cmd,  }\item[{long}]{arg }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em cmd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em arg} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00584}{584}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00083}{real\+\_\+fcntl}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01643}{fcntl()}}.
+
+\Hypertarget{syscall__proxies_8c_a03e85dc2793740319a03ee59e86cb440}\label{syscall__proxies_8c_a03e85dc2793740319a03ee59e86cb440} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_fork@{dlsym\_fork}}
+\index{dlsym\_fork@{dlsym\_fork}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_fork()}{dlsym\_fork()}}
+{\footnotesize\ttfamily int dlsym\+\_\+fork (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyParagraph}{Parameters}
+None. 
+\end{DoxyParagraph}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00472}{472}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00074}{real\+\_\+fork}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01457}{fork()}}.
+
+\Hypertarget{syscall__proxies_8c_a3a644e58ae0a06c738bb866414a9da6e}\label{syscall__proxies_8c_a3a644e58ae0a06c738bb866414a9da6e} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_fstat@{dlsym\_fstat}}
+\index{dlsym\_fstat@{dlsym\_fstat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_fstat()}{dlsym\_fstat()}}
+{\footnotesize\ttfamily int dlsym\+\_\+fstat (\begin{DoxyParamCaption}\item[{int}]{ver,  }\item[{int}]{fd,  }\item[{struct stat \texorpdfstring{$\ast$}{*}}]{buf }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ver} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00308}{308}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00057}{real\+\_\+fstat}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01072}{\+\_\+\+\_\+fxstat()}}.
+
+\Hypertarget{syscall__proxies_8c_a0f172801af5d78bbe39f69e6852ad76b}\label{syscall__proxies_8c_a0f172801af5d78bbe39f69e6852ad76b} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_fstatat@{dlsym\_fstatat}}
+\index{dlsym\_fstatat@{dlsym\_fstatat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_fstatat()}{dlsym\_fstatat()}}
+{\footnotesize\ttfamily int dlsym\+\_\+fstatat (\begin{DoxyParamCaption}\item[{int}]{dfd,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{struct stat \texorpdfstring{$\ast$}{*}}]{buf,  }\item[{int}]{flags }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dfd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em flags} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00320}{320}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00059}{real\+\_\+fstatat}}.
+
+\Hypertarget{syscall__proxies_8c_abc50d4734ed1e79a80dcd20b6ba8e135}\label{syscall__proxies_8c_abc50d4734ed1e79a80dcd20b6ba8e135} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_fstatat64@{dlsym\_fstatat64}}
+\index{dlsym\_fstatat64@{dlsym\_fstatat64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_fstatat64()}{dlsym\_fstatat64()}}
+{\footnotesize\ttfamily int dlsym\+\_\+fstatat64 (\begin{DoxyParamCaption}\item[{int}]{dfd,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{struct stat64 \texorpdfstring{$\ast$}{*}}]{buf,  }\item[{int}]{flags }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dfd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em flags} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00332}{332}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00060}{real\+\_\+fstatat64}}.
+
+\Hypertarget{syscall__proxies_8c_a5d261d6ab482d10ec95155bd3f7a4386}\label{syscall__proxies_8c_a5d261d6ab482d10ec95155bd3f7a4386} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_fsync@{dlsym\_fsync}}
+\index{dlsym\_fsync@{dlsym\_fsync}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_fsync()}{dlsym\_fsync()}}
+{\footnotesize\ttfamily int dlsym\+\_\+fsync (\begin{DoxyParamCaption}\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00630}{630}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00086}{real\+\_\+fsync}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01753}{fsync()}}.
+
+\Hypertarget{syscall__proxies_8c_a656b47c4d756635930235ddc053fa980}\label{syscall__proxies_8c_a656b47c4d756635930235ddc053fa980} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_ftruncate@{dlsym\_ftruncate}}
+\index{dlsym\_ftruncate@{dlsym\_ftruncate}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_ftruncate()}{dlsym\_ftruncate()}}
+{\footnotesize\ttfamily int dlsym\+\_\+ftruncate (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{off\+\_\+t}]{length }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em length} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00187}{187}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00051}{real\+\_\+ftruncate}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00706}{ftruncate()}}.
+
+\Hypertarget{syscall__proxies_8c_ac1aad98ae3ea6f95a374de2431009990}\label{syscall__proxies_8c_ac1aad98ae3ea6f95a374de2431009990} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_fxstat64@{dlsym\_fxstat64}}
+\index{dlsym\_fxstat64@{dlsym\_fxstat64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_fxstat64()}{dlsym\_fxstat64()}}
+{\footnotesize\ttfamily int dlsym\+\_\+fxstat64 (\begin{DoxyParamCaption}\item[{int}]{ver,  }\item[{int}]{fd,  }\item[{struct stat64 \texorpdfstring{$\ast$}{*}}]{buf }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ver} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00271}{271}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00058}{real\+\_\+fxstat64}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00960}{\+\_\+\+\_\+fxstat64()}}.
+
+\Hypertarget{syscall__proxies_8c_a87fb4ae438d3a9b76e5dbcbca88bd80b}\label{syscall__proxies_8c_a87fb4ae438d3a9b76e5dbcbca88bd80b} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_lseek@{dlsym\_lseek}}
+\index{dlsym\_lseek@{dlsym\_lseek}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_lseek()}{dlsym\_lseek()}}
+{\footnotesize\ttfamily off\+\_\+t dlsym\+\_\+lseek (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{off\+\_\+t}]{offset,  }\item[{int}]{whence }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em offset} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em whence} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00223}{223}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00049}{real\+\_\+lseek}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00811}{lseek()}}.
+
+\Hypertarget{syscall__proxies_8c_ae512d9e5f85d9b33d523894051631dd0}\label{syscall__proxies_8c_ae512d9e5f85d9b33d523894051631dd0} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_lseek64@{dlsym\_lseek64}}
+\index{dlsym\_lseek64@{dlsym\_lseek64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_lseek64()}{dlsym\_lseek64()}}
+{\footnotesize\ttfamily off64\+\_\+t dlsym\+\_\+lseek64 (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{off64\+\_\+t}]{offset,  }\item[{int}]{whence }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em offset} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em whence} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00235}{235}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00050}{real\+\_\+lseek64}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00840}{lseek64()}}.
+
+\Hypertarget{syscall__proxies_8c_aff6180862c1481803c799869e26ec80a}\label{syscall__proxies_8c_aff6180862c1481803c799869e26ec80a} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_lstat@{dlsym\_lstat}}
+\index{dlsym\_lstat@{dlsym\_lstat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_lstat()}{dlsym\_lstat()}}
+{\footnotesize\ttfamily int dlsym\+\_\+lstat (\begin{DoxyParamCaption}\item[{int}]{ver,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{struct stat \texorpdfstring{$\ast$}{*}}]{buf }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ver} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00284}{284}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00055}{real\+\_\+lstat}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01016}{\+\_\+\+\_\+lxstat()}}.
+
+\Hypertarget{syscall__proxies_8c_aa63e748c1adfcc0176e9e953da0745fb}\label{syscall__proxies_8c_aa63e748c1adfcc0176e9e953da0745fb} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_lxstat64@{dlsym\_lxstat64}}
+\index{dlsym\_lxstat64@{dlsym\_lxstat64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_lxstat64()}{dlsym\_lxstat64()}}
+{\footnotesize\ttfamily int dlsym\+\_\+lxstat64 (\begin{DoxyParamCaption}\item[{int}]{ver,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{struct stat64 \texorpdfstring{$\ast$}{*}}]{buf }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ver} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00247}{247}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00056}{real\+\_\+lxstat64}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00888}{\+\_\+\+\_\+lxstat64()}}.
+
+\Hypertarget{syscall__proxies_8c_adbc1cca344d44c25ba09b1033e835ae6}\label{syscall__proxies_8c_adbc1cca344d44c25ba09b1033e835ae6} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_mkdir@{dlsym\_mkdir}}
+\index{dlsym\_mkdir@{dlsym\_mkdir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_mkdir()}{dlsym\_mkdir()}}
+{\footnotesize\ttfamily int dlsym\+\_\+mkdir (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{mode\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00408}{408}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00071}{real\+\_\+mkdir}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01269}{mkdir()}}.
+
+\Hypertarget{syscall__proxies_8c_ab03e18b8b8066cc8e4a5864dcfe0bbfe}\label{syscall__proxies_8c_ab03e18b8b8066cc8e4a5864dcfe0bbfe} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_mmap@{dlsym\_mmap}}
+\index{dlsym\_mmap@{dlsym\_mmap}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_mmap()}{dlsym\_mmap()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} dlsym\+\_\+mmap (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{addr,  }\item[{size\+\_\+t}]{length,  }\item[{int}]{prot,  }\item[{int}]{flags,  }\item[{int}]{fd,  }\item[{off\+\_\+t}]{offset }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em addr} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em length} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em prot} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em flags} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em offset} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00646}{646}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00087}{real\+\_\+mmap}}.
+
+\Hypertarget{syscall__proxies_8c_a2a1b01e82516cc0abc94dbe2567ac5cc}\label{syscall__proxies_8c_a2a1b01e82516cc0abc94dbe2567ac5cc} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_open@{dlsym\_open}}
+\index{dlsym\_open@{dlsym\_open}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_open()}{dlsym\_open()}}
+{\footnotesize\ttfamily int dlsym\+\_\+open (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{int}]{flags }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em flags} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00097}{97}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00041}{real\+\_\+open}}.
+
+\Hypertarget{syscall__proxies_8c_ae6edfc2c77365cf6a3858808a12d1410}\label{syscall__proxies_8c_ae6edfc2c77365cf6a3858808a12d1410} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_open2@{dlsym\_open2}}
+\index{dlsym\_open2@{dlsym\_open2}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_open2()}{dlsym\_open2()}}
+{\footnotesize\ttfamily int dlsym\+\_\+open2 (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{int}]{flags,  }\item[{mode\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em flags} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00115}{115}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00041}{real\+\_\+open}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00527}{open()}}.
+
+\Hypertarget{syscall__proxies_8c_a228de4498a836dd164284e059ffab365}\label{syscall__proxies_8c_a228de4498a836dd164284e059ffab365} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_open64@{dlsym\_open64}}
+\index{dlsym\_open64@{dlsym\_open64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_open64()}{dlsym\_open64()}}
+{\footnotesize\ttfamily int dlsym\+\_\+open64 (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{int}]{flags,  }\item[{mode\+\_\+t}]{mode }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em flags} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em mode} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00134}{134}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00042}{real\+\_\+open64}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00577}{open64()}}.
+
+\Hypertarget{syscall__proxies_8c_abcaedace5be2f20528302f59a7f07c7d}\label{syscall__proxies_8c_abcaedace5be2f20528302f59a7f07c7d} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_opendir@{dlsym\_opendir}}
+\index{dlsym\_opendir@{dlsym\_opendir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_opendir()}{dlsym\_opendir()}}
+{\footnotesize\ttfamily DIR \texorpdfstring{$\ast$}{*} dlsym\+\_\+opendir (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{dirname }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dirname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00384}{384}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00065}{real\+\_\+opendir}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01297}{opendir()}}.
+
+\Hypertarget{syscall__proxies_8c_afe953d12f8e4b308061bf7a931cd319c}\label{syscall__proxies_8c_afe953d12f8e4b308061bf7a931cd319c} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_opendir64@{dlsym\_opendir64}}
+\index{dlsym\_opendir64@{dlsym\_opendir64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_opendir64()}{dlsym\_opendir64()}}
+{\footnotesize\ttfamily DIR \texorpdfstring{$\ast$}{*} dlsym\+\_\+opendir64 (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{dirname }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dirname} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00396}{396}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00066}{real\+\_\+opendir64}}.
+
+\Hypertarget{syscall__proxies_8c_a8092872bdc3fe804da18638ea2ebe3d9}\label{syscall__proxies_8c_a8092872bdc3fe804da18638ea2ebe3d9} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_pipe@{dlsym\_pipe}}
+\index{dlsym\_pipe@{dlsym\_pipe}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_pipe()}{dlsym\_pipe()}}
+{\footnotesize\ttfamily int dlsym\+\_\+pipe (\begin{DoxyParamCaption}\item[{int}]{pipefd\mbox{[}2\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pipefd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00484}{484}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00075}{real\+\_\+pipe}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01474}{pipe()}}.
+
+\Hypertarget{syscall__proxies_8c_aef315b53b84073c0299550f5006db7fc}\label{syscall__proxies_8c_aef315b53b84073c0299550f5006db7fc} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_read@{dlsym\_read}}
+\index{dlsym\_read@{dlsym\_read}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_read()}{dlsym\_read()}}
+{\footnotesize\ttfamily ssize\+\_\+t dlsym\+\_\+read (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{void \texorpdfstring{$\ast$}{*}}]{buf,  }\item[{size\+\_\+t}]{nbyte }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em nbyte} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00199}{199}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00047}{real\+\_\+read}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00735}{read()}}.
+
+\Hypertarget{syscall__proxies_8c_a04e1aca02902acc07499edaea9335048}\label{syscall__proxies_8c_a04e1aca02902acc07499edaea9335048} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_readdir@{dlsym\_readdir}}
+\index{dlsym\_readdir@{dlsym\_readdir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_readdir()}{dlsym\_readdir()}}
+{\footnotesize\ttfamily struct dirent \texorpdfstring{$\ast$}{*} dlsym\+\_\+readdir (\begin{DoxyParamCaption}\item[{DIR \texorpdfstring{$\ast$}{*}}]{dirp }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dirp} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00420}{420}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00067}{real\+\_\+readdir}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01329}{readdir()}}.
+
+\Hypertarget{syscall__proxies_8c_a12cf2b73e2ecc622cb32aa13f18509b1}\label{syscall__proxies_8c_a12cf2b73e2ecc622cb32aa13f18509b1} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_readdir64@{dlsym\_readdir64}}
+\index{dlsym\_readdir64@{dlsym\_readdir64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_readdir64()}{dlsym\_readdir64()}}
+{\footnotesize\ttfamily struct dirent64 \texorpdfstring{$\ast$}{*} dlsym\+\_\+readdir64 (\begin{DoxyParamCaption}\item[{DIR \texorpdfstring{$\ast$}{*}}]{dirp }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dirp} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00432}{432}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00068}{real\+\_\+readdir64}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01357}{readdir64()}}.
+
+\Hypertarget{syscall__proxies_8c_a893818b78459e116c2b5acb1ba9e5ad4}\label{syscall__proxies_8c_a893818b78459e116c2b5acb1ba9e5ad4} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_realpath@{dlsym\_realpath}}
+\index{dlsym\_realpath@{dlsym\_realpath}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_realpath()}{dlsym\_realpath()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*} dlsym\+\_\+realpath (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}restrict}]{path,  }\item[{char \texorpdfstring{$\ast$}{*}restrict}]{resolved\+\_\+path }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em resolved\+\_\+path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00613}{613}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00085}{real\+\_\+realpath}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01724}{\+\_\+\+\_\+realpath\+\_\+chk()}}, and \mbox{\hyperlink{xpn__bypass_8c_source_l01702}{realpath()}}.
+
+\Hypertarget{syscall__proxies_8c_ae11271d95bf0e2425d9a0982c8e9c73a}\label{syscall__proxies_8c_ae11271d95bf0e2425d9a0982c8e9c73a} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_rename@{dlsym\_rename}}
+\index{dlsym\_rename@{dlsym\_rename}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_rename()}{dlsym\_rename()}}
+{\footnotesize\ttfamily int dlsym\+\_\+rename (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{old\+\_\+path,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{new\+\_\+path }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em old\+\_\+path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em new\+\_\+path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00356}{356}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00062}{real\+\_\+rename}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01209}{rename()}}.
+
+\Hypertarget{syscall__proxies_8c_a0f476841e33b51d93873c29dee4ba4c7}\label{syscall__proxies_8c_a0f476841e33b51d93873c29dee4ba4c7} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_rmdir@{dlsym\_rmdir}}
+\index{dlsym\_rmdir@{dlsym\_rmdir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_rmdir()}{dlsym\_rmdir()}}
+{\footnotesize\ttfamily int dlsym\+\_\+rmdir (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00456}{456}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00072}{real\+\_\+rmdir}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01425}{rmdir()}}.
+
+\Hypertarget{syscall__proxies_8c_ac4213940b6b6cf4b13c9438f86f76f19}\label{syscall__proxies_8c_ac4213940b6b6cf4b13c9438f86f76f19} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_stat@{dlsym\_stat}}
+\index{dlsym\_stat@{dlsym\_stat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_stat()}{dlsym\_stat()}}
+{\footnotesize\ttfamily int dlsym\+\_\+stat (\begin{DoxyParamCaption}\item[{int}]{ver,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{struct stat \texorpdfstring{$\ast$}{*}}]{buf }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ver} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00296}{296}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00053}{real\+\_\+stat}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01044}{\+\_\+\+\_\+xstat()}}.
+
+\Hypertarget{syscall__proxies_8c_a4e433ad840b20e1d6b6a22f80331e30d}\label{syscall__proxies_8c_a4e433ad840b20e1d6b6a22f80331e30d} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_unlink@{dlsym\_unlink}}
+\index{dlsym\_unlink@{dlsym\_unlink}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_unlink()}{dlsym\_unlink()}}
+{\footnotesize\ttfamily int dlsym\+\_\+unlink (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{path }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00368}{368}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00063}{real\+\_\+unlink}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l01240}{unlink()}}.
+
+\Hypertarget{syscall__proxies_8c_a409f81fafd3153537469bbd358d44732}\label{syscall__proxies_8c_a409f81fafd3153537469bbd358d44732} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_write@{dlsym\_write}}
+\index{dlsym\_write@{dlsym\_write}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_write()}{dlsym\_write()}}
+{\footnotesize\ttfamily ssize\+\_\+t dlsym\+\_\+write (\begin{DoxyParamCaption}\item[{int}]{fd,  }\item[{void \texorpdfstring{$\ast$}{*}}]{buf,  }\item[{size\+\_\+t}]{nbyte }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em nbyte} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00211}{211}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00048}{real\+\_\+write}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00773}{write()}}.
+
+\Hypertarget{syscall__proxies_8c_a62a1eb308b1bb04bd35129abab29fbcf}\label{syscall__proxies_8c_a62a1eb308b1bb04bd35129abab29fbcf} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!dlsym\_xstat64@{dlsym\_xstat64}}
+\index{dlsym\_xstat64@{dlsym\_xstat64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{dlsym\_xstat64()}{dlsym\_xstat64()}}
+{\footnotesize\ttfamily int dlsym\+\_\+xstat64 (\begin{DoxyParamCaption}\item[{int}]{ver,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{path,  }\item[{struct stat64 \texorpdfstring{$\ast$}{*}}]{buf }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ver} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em path} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em buf} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00259}{259}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__cp_8c_source_l00036}{buf}}, \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00054}{real\+\_\+xstat64}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__bypass_8c_source_l00925}{\+\_\+\+\_\+xstat64()}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{syscall__proxies_8c_ae312aa85369c71f866657bb37dff9c0a}\label{syscall__proxies_8c_ae312aa85369c71f866657bb37dff9c0a} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_\_\_open\_2@{real\_\_\_open\_2}}
+\index{real\_\_\_open\_2@{real\_\_\_open\_2}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_\_\_open\_2}{real\_\_\_open\_2}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+\+\_\+\+\_\+open\+\_\+2) (char \texorpdfstring{$\ast$}{*}, int) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{,  }\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00043}{43}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00153}{dlsym\+\_\+\+\_\+\+\_\+open\+\_\+2()}}.
+
+\Hypertarget{syscall__proxies_8c_ad95739f0c65d7d1b05199988a1621ad9}\label{syscall__proxies_8c_ad95739f0c65d7d1b05199988a1621ad9} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_access@{real\_access}}
+\index{real\_access@{real\_access}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_access}{real\_access}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+access) (const char \texorpdfstring{$\ast$}{*}, int) (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{,  }\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00084}{84}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00596}{dlsym\+\_\+access()}}.
+
+\Hypertarget{syscall__proxies_8c_a520283dc892d9483382590f4e86aad73}\label{syscall__proxies_8c_a520283dc892d9483382590f4e86aad73} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_chdir@{real\_chdir}}
+\index{real\_chdir@{real\_chdir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_chdir}{real\_chdir}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+chdir) (char \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00079}{79}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00536}{dlsym\+\_\+chdir()}}.
+
+\Hypertarget{syscall__proxies_8c_a6b5e20c7759cf1cf0217b478f03f0e52}\label{syscall__proxies_8c_a6b5e20c7759cf1cf0217b478f03f0e52} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_chmod@{real\_chmod}}
+\index{real\_chmod@{real\_chmod}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_chmod}{real\_chmod}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+chmod) (char \texorpdfstring{$\ast$}{*}, mode\+\_\+t) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{,  }\item[{mode\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00080}{80}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00548}{dlsym\+\_\+chmod()}}.
+
+\Hypertarget{syscall__proxies_8c_a4d677d3bea22eae2e627d545f261eae5}\label{syscall__proxies_8c_a4d677d3bea22eae2e627d545f261eae5} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_chown@{real\_chown}}
+\index{real\_chown@{real\_chown}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_chown}{real\_chown}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+chown) (char \texorpdfstring{$\ast$}{*}, uid\+\_\+t, gid\+\_\+t) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{,  }\item[{uid\+\_\+t}]{,  }\item[{gid\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00082}{82}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00572}{dlsym\+\_\+chown()}}.
+
+\Hypertarget{syscall__proxies_8c_ab170c8f0b26f5e1e75571b808701e943}\label{syscall__proxies_8c_ab170c8f0b26f5e1e75571b808701e943} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_close@{real\_close}}
+\index{real\_close@{real\_close}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_close}{real\_close}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+close) (int) (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00045}{45}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00344}{dlsym\+\_\+close()}}.
+
+\Hypertarget{syscall__proxies_8c_a9094f37ad12ef2676a374829ebbda2be}\label{syscall__proxies_8c_a9094f37ad12ef2676a374829ebbda2be} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_closedir@{real\_closedir}}
+\index{real\_closedir@{real\_closedir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_closedir}{real\_closedir}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+closedir) (DIR \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{DIR \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00069}{69}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00444}{dlsym\+\_\+closedir()}}.
+
+\Hypertarget{syscall__proxies_8c_a542b207814b293e59e9218104a2a38b3}\label{syscall__proxies_8c_a542b207814b293e59e9218104a2a38b3} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_creat@{real\_creat}}
+\index{real\_creat@{real\_creat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_creat}{real\_creat}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+creat) (const char \texorpdfstring{$\ast$}{*}, mode\+\_\+t) (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{,  }\item[{mode\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00044}{44}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00170}{dlsym\+\_\+creat()}}.
+
+\Hypertarget{syscall__proxies_8c_a7df0d4228fa5dd287ae6d650f8296405}\label{syscall__proxies_8c_a7df0d4228fa5dd287ae6d650f8296405} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_dup@{real\_dup}}
+\index{real\_dup@{real\_dup}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_dup}{real\_dup}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+dup) (int) (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00076}{76}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00496}{dlsym\+\_\+dup()}}.
+
+\Hypertarget{syscall__proxies_8c_ae2748186f2529a651f30f6aea9f5e112}\label{syscall__proxies_8c_ae2748186f2529a651f30f6aea9f5e112} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_dup2@{real\_dup2}}
+\index{real\_dup2@{real\_dup2}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_dup2}{real\_dup2}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+dup2) (int, int) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00077}{77}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00508}{dlsym\+\_\+dup2()}}.
+
+\Hypertarget{syscall__proxies_8c_a4b2bcb1e1fa0bd0269c60dfd22c49df6}\label{syscall__proxies_8c_a4b2bcb1e1fa0bd0269c60dfd22c49df6} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_exit@{real\_exit}}
+\index{real\_exit@{real\_exit}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_exit}{real\_exit}}
+{\footnotesize\ttfamily void(\texorpdfstring{$\ast$}{*} real\+\_\+exit) (int) (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00078}{78}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00520}{dlsym\+\_\+exit()}}.
+
+\Hypertarget{syscall__proxies_8c_a36c1a17e872fe41140a435838da2a777}\label{syscall__proxies_8c_a36c1a17e872fe41140a435838da2a777} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_fchmod@{real\_fchmod}}
+\index{real\_fchmod@{real\_fchmod}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_fchmod}{real\_fchmod}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+fchmod) (int, mode\+\_\+t) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{mode\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00081}{81}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00560}{dlsym\+\_\+fchmod()}}.
+
+\Hypertarget{syscall__proxies_8c_a5844ba3a1a589ce3af9046f8a4a08785}\label{syscall__proxies_8c_a5844ba3a1a589ce3af9046f8a4a08785} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_fcntl@{real\_fcntl}}
+\index{real\_fcntl@{real\_fcntl}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_fcntl}{real\_fcntl}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+fcntl) (int, int, long) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{int}]{,  }\item[{long}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00083}{83}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00584}{dlsym\+\_\+fcntl()}}.
+
+\Hypertarget{syscall__proxies_8c_acc1c4f36eb221c29a359e654060160ed}\label{syscall__proxies_8c_acc1c4f36eb221c29a359e654060160ed} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_fork@{real\_fork}}
+\index{real\_fork@{real\_fork}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_fork}{real\_fork}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+fork) (void) (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00074}{74}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00472}{dlsym\+\_\+fork()}}.
+
+\Hypertarget{syscall__proxies_8c_aa89bd56fcc4132224537b6a5a827a320}\label{syscall__proxies_8c_aa89bd56fcc4132224537b6a5a827a320} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_fstat@{real\_fstat}}
+\index{real\_fstat@{real\_fstat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_fstat}{real\_fstat}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+fstat) (int, int, struct stat \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{int}]{,  }\item[{struct stat \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00057}{57}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00308}{dlsym\+\_\+fstat()}}.
+
+\Hypertarget{syscall__proxies_8c_a4312b1892e60c0d191fdf0991d57e97e}\label{syscall__proxies_8c_a4312b1892e60c0d191fdf0991d57e97e} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_fstatat@{real\_fstatat}}
+\index{real\_fstatat@{real\_fstatat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_fstatat}{real\_fstatat}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+fstatat) (int, const char \texorpdfstring{$\ast$}{*}, struct stat \texorpdfstring{$\ast$}{*}, int) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{,  }\item[{struct stat \texorpdfstring{$\ast$}{*}}]{,  }\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00059}{59}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00320}{dlsym\+\_\+fstatat()}}.
+
+\Hypertarget{syscall__proxies_8c_a2cb7ffe3c73b60a4c2f63770b0d0a7c1}\label{syscall__proxies_8c_a2cb7ffe3c73b60a4c2f63770b0d0a7c1} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_fstatat64@{real\_fstatat64}}
+\index{real\_fstatat64@{real\_fstatat64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_fstatat64}{real\_fstatat64}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+fstatat64) (int, const char \texorpdfstring{$\ast$}{*}, struct stat64 \texorpdfstring{$\ast$}{*}, int) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{,  }\item[{struct stat64 \texorpdfstring{$\ast$}{*}}]{,  }\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00060}{60}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00332}{dlsym\+\_\+fstatat64()}}.
+
+\Hypertarget{syscall__proxies_8c_aca1081c5be4e7e92c432a2be89724236}\label{syscall__proxies_8c_aca1081c5be4e7e92c432a2be89724236} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_fsync@{real\_fsync}}
+\index{real\_fsync@{real\_fsync}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_fsync}{real\_fsync}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+fsync) (int) (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00086}{86}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00630}{dlsym\+\_\+fsync()}}.
+
+\Hypertarget{syscall__proxies_8c_a669528fe56a99b0c78c5cea94fc5f63d}\label{syscall__proxies_8c_a669528fe56a99b0c78c5cea94fc5f63d} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_ftruncate@{real\_ftruncate}}
+\index{real\_ftruncate@{real\_ftruncate}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_ftruncate}{real\_ftruncate}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+ftruncate) (int, off\+\_\+t) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{off\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00051}{51}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00187}{dlsym\+\_\+ftruncate()}}.
+
+\Hypertarget{syscall__proxies_8c_a06c482b6e82b77e9193fd0b240e66bbc}\label{syscall__proxies_8c_a06c482b6e82b77e9193fd0b240e66bbc} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_fxstat64@{real\_fxstat64}}
+\index{real\_fxstat64@{real\_fxstat64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_fxstat64}{real\_fxstat64}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+fxstat64) (int, int, struct stat64 \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{int}]{,  }\item[{struct stat64 \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00058}{58}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00271}{dlsym\+\_\+fxstat64()}}.
+
+\Hypertarget{syscall__proxies_8c_ae752ac266e732840c81273a66d7b808f}\label{syscall__proxies_8c_ae752ac266e732840c81273a66d7b808f} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_lseek@{real\_lseek}}
+\index{real\_lseek@{real\_lseek}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_lseek}{real\_lseek}}
+{\footnotesize\ttfamily off\+\_\+t(\texorpdfstring{$\ast$}{*} real\+\_\+lseek) (int, off\+\_\+t, int) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{off\+\_\+t}]{,  }\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00049}{49}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00223}{dlsym\+\_\+lseek()}}.
+
+\Hypertarget{syscall__proxies_8c_aef88583e19ca185474acff4d12528c2f}\label{syscall__proxies_8c_aef88583e19ca185474acff4d12528c2f} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_lseek64@{real\_lseek64}}
+\index{real\_lseek64@{real\_lseek64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_lseek64}{real\_lseek64}}
+{\footnotesize\ttfamily off64\+\_\+t(\texorpdfstring{$\ast$}{*} real\+\_\+lseek64) (int, off64\+\_\+t, int) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{off64\+\_\+t}]{,  }\item[{int}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00050}{50}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00235}{dlsym\+\_\+lseek64()}}.
+
+\Hypertarget{syscall__proxies_8c_ae35dcd3176695ccf13c374fa9140855c}\label{syscall__proxies_8c_ae35dcd3176695ccf13c374fa9140855c} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_lstat@{real\_lstat}}
+\index{real\_lstat@{real\_lstat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_lstat}{real\_lstat}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+lstat) (int, char \texorpdfstring{$\ast$}{*}, struct stat \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{char \texorpdfstring{$\ast$}{*}}]{,  }\item[{struct stat \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00055}{55}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00284}{dlsym\+\_\+lstat()}}.
+
+\Hypertarget{syscall__proxies_8c_af603a08904ba37103e41b13408528525}\label{syscall__proxies_8c_af603a08904ba37103e41b13408528525} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_lxstat64@{real\_lxstat64}}
+\index{real\_lxstat64@{real\_lxstat64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_lxstat64}{real\_lxstat64}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+lxstat64) (int, const char \texorpdfstring{$\ast$}{*}, struct stat64 \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{,  }\item[{struct stat64 \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00056}{56}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00247}{dlsym\+\_\+lxstat64()}}.
+
+\Hypertarget{syscall__proxies_8c_a8142da50cfa25723af52ad741a0e828e}\label{syscall__proxies_8c_a8142da50cfa25723af52ad741a0e828e} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_mkdir@{real\_mkdir}}
+\index{real\_mkdir@{real\_mkdir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_mkdir}{real\_mkdir}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+mkdir) (char \texorpdfstring{$\ast$}{*}, mode\+\_\+t) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{,  }\item[{mode\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00071}{71}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00408}{dlsym\+\_\+mkdir()}}.
+
+\Hypertarget{syscall__proxies_8c_a07fb02f43c5545b9846fd6b7219c62a5}\label{syscall__proxies_8c_a07fb02f43c5545b9846fd6b7219c62a5} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_mmap@{real\_mmap}}
+\index{real\_mmap@{real\_mmap}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_mmap}{real\_mmap}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} real\+\_\+mmap) (void \texorpdfstring{$\ast$}{*}, size\+\_\+t, int, int, int, off\+\_\+t) (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{,  }\item[{size\+\_\+t}]{,  }\item[{int}]{,  }\item[{int}]{,  }\item[{int}]{,  }\item[{off\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00087}{87}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00646}{dlsym\+\_\+mmap()}}.
+
+\Hypertarget{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}\label{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_open@{real\_open}}
+\index{real\_open@{real\_open}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_open}{real\_open}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+open) (char \texorpdfstring{$\ast$}{*}, int, mode\+\_\+t) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{,  }\item[{int}]{,  }\item[{mode\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00041}{41}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00097}{dlsym\+\_\+open()}}, and \mbox{\hyperlink{syscall__proxies_8c_source_l00115}{dlsym\+\_\+open2()}}.
+
+\Hypertarget{syscall__proxies_8c_a13b3f4f1c540e774420a4e2ba59091d2}\label{syscall__proxies_8c_a13b3f4f1c540e774420a4e2ba59091d2} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_open64@{real\_open64}}
+\index{real\_open64@{real\_open64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_open64}{real\_open64}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+open64) (char \texorpdfstring{$\ast$}{*}, int, mode\+\_\+t) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{,  }\item[{int}]{,  }\item[{mode\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00042}{42}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00134}{dlsym\+\_\+open64()}}.
+
+\Hypertarget{syscall__proxies_8c_a364474d13cc708210034f0f7a437d880}\label{syscall__proxies_8c_a364474d13cc708210034f0f7a437d880} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_opendir@{real\_opendir}}
+\index{real\_opendir@{real\_opendir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_opendir}{real\_opendir}}
+{\footnotesize\ttfamily DIR \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} real\+\_\+opendir) (char \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00065}{65}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00384}{dlsym\+\_\+opendir()}}.
+
+\Hypertarget{syscall__proxies_8c_abf9acbd52d36dc07aab133c803fcd771}\label{syscall__proxies_8c_abf9acbd52d36dc07aab133c803fcd771} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_opendir64@{real\_opendir64}}
+\index{real\_opendir64@{real\_opendir64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_opendir64}{real\_opendir64}}
+{\footnotesize\ttfamily DIR \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} real\+\_\+opendir64) (char \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00066}{66}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00396}{dlsym\+\_\+opendir64()}}.
+
+\Hypertarget{syscall__proxies_8c_aca92fb6c9192b899b6b5b7b4f7f596ba}\label{syscall__proxies_8c_aca92fb6c9192b899b6b5b7b4f7f596ba} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_pipe@{real\_pipe}}
+\index{real\_pipe@{real\_pipe}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_pipe}{real\_pipe}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+pipe) (int \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{int \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00075}{75}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00484}{dlsym\+\_\+pipe()}}.
+
+\Hypertarget{syscall__proxies_8c_ab7960403a0cae3196a844a62f6644b27}\label{syscall__proxies_8c_ab7960403a0cae3196a844a62f6644b27} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_read@{real\_read}}
+\index{real\_read@{real\_read}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_read}{real\_read}}
+{\footnotesize\ttfamily ssize\+\_\+t(\texorpdfstring{$\ast$}{*} real\+\_\+read) (int, void \texorpdfstring{$\ast$}{*}, size\+\_\+t) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{void \texorpdfstring{$\ast$}{*}}]{,  }\item[{size\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00047}{47}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00199}{dlsym\+\_\+read()}}, and \mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__comm_8c_source_l00326}{tcp\+Client\+\_\+read\+\_\+data()}}.
+
+\Hypertarget{syscall__proxies_8c_a89f96d5fbf652c1b9fdf9e9c6d53ea4b}\label{syscall__proxies_8c_a89f96d5fbf652c1b9fdf9e9c6d53ea4b} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_readdir@{real\_readdir}}
+\index{real\_readdir@{real\_readdir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_readdir}{real\_readdir}}
+{\footnotesize\ttfamily struct dirent \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} real\+\_\+readdir) (DIR \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{DIR \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00066}{66}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00420}{dlsym\+\_\+readdir()}}.
+
+\Hypertarget{syscall__proxies_8c_a5926d800819a6578195f61636f1b879f}\label{syscall__proxies_8c_a5926d800819a6578195f61636f1b879f} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_readdir64@{real\_readdir64}}
+\index{real\_readdir64@{real\_readdir64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_readdir64}{real\_readdir64}}
+{\footnotesize\ttfamily struct dirent64 \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} real\+\_\+readdir64) (DIR \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{DIR \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00066}{66}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00432}{dlsym\+\_\+readdir64()}}.
+
+\Hypertarget{syscall__proxies_8c_a2fbde5493821512cc1501797a0956f99}\label{syscall__proxies_8c_a2fbde5493821512cc1501797a0956f99} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_realpath@{real\_realpath}}
+\index{real\_realpath@{real\_realpath}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_realpath}{real\_realpath}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*}(\texorpdfstring{$\ast$}{*} real\+\_\+realpath) (const char \texorpdfstring{$\ast$}{*}restrict, char \texorpdfstring{$\ast$}{*}restrict) (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{restrict,  }\item[{char \texorpdfstring{$\ast$}{*}}]{restrict }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00085}{85}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00613}{dlsym\+\_\+realpath()}}.
+
+\Hypertarget{syscall__proxies_8c_a020914ae07ff0b0194f7ee3140602716}\label{syscall__proxies_8c_a020914ae07ff0b0194f7ee3140602716} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_rename@{real\_rename}}
+\index{real\_rename@{real\_rename}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_rename}{real\_rename}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+rename) (const char \texorpdfstring{$\ast$}{*}, const char \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00062}{62}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00356}{dlsym\+\_\+rename()}}.
+
+\Hypertarget{syscall__proxies_8c_a4c977b304707fb6497729902420d51fb}\label{syscall__proxies_8c_a4c977b304707fb6497729902420d51fb} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_rmdir@{real\_rmdir}}
+\index{real\_rmdir@{real\_rmdir}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_rmdir}{real\_rmdir}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+rmdir) (char \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00072}{72}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00456}{dlsym\+\_\+rmdir()}}.
+
+\Hypertarget{syscall__proxies_8c_aa189f074256a94bf6ba23c042129292b}\label{syscall__proxies_8c_aa189f074256a94bf6ba23c042129292b} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_stat@{real\_stat}}
+\index{real\_stat@{real\_stat}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_stat}{real\_stat}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+stat) (int, char \texorpdfstring{$\ast$}{*}, struct stat \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{char \texorpdfstring{$\ast$}{*}}]{,  }\item[{struct stat \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00053}{53}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00296}{dlsym\+\_\+stat()}}.
+
+\Hypertarget{syscall__proxies_8c_a2c9915165916b62d3be86cfc5736a3ea}\label{syscall__proxies_8c_a2c9915165916b62d3be86cfc5736a3ea} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_unlink@{real\_unlink}}
+\index{real\_unlink@{real\_unlink}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_unlink}{real\_unlink}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+unlink) (char \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00063}{63}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00368}{dlsym\+\_\+unlink()}}.
+
+\Hypertarget{syscall__proxies_8c_aa90b1d59886ff211e915966fbe8ce040}\label{syscall__proxies_8c_aa90b1d59886ff211e915966fbe8ce040} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_write@{real\_write}}
+\index{real\_write@{real\_write}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_write}{real\_write}}
+{\footnotesize\ttfamily ssize\+\_\+t(\texorpdfstring{$\ast$}{*} real\+\_\+write) (int, const void \texorpdfstring{$\ast$}{*}, size\+\_\+t) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{const void \texorpdfstring{$\ast$}{*}}]{,  }\item[{size\+\_\+t}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00048}{48}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00211}{dlsym\+\_\+write()}}, and \mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__comm_8c_source_l00271}{tcp\+Client\+\_\+write\+\_\+data()}}.
+
+\Hypertarget{syscall__proxies_8c_a4143a7c57ea1cf979ee1843212bb3e55}\label{syscall__proxies_8c_a4143a7c57ea1cf979ee1843212bb3e55} 
+\index{syscall\_proxies.c@{syscall\_proxies.c}!real\_xstat64@{real\_xstat64}}
+\index{real\_xstat64@{real\_xstat64}!syscall\_proxies.c@{syscall\_proxies.c}}
+\doxysubsubsection{\texorpdfstring{real\_xstat64}{real\_xstat64}}
+{\footnotesize\ttfamily int(\texorpdfstring{$\ast$}{*} real\+\_\+xstat64) (int, const char \texorpdfstring{$\ast$}{*}, struct stat64 \texorpdfstring{$\ast$}{*}) (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{,  }\item[{struct stat64 \texorpdfstring{$\ast$}{*}}]{ }\end{DoxyParamCaption}) = NULL}
+
+
+
+Definition at line \mbox{\hyperlink{syscall__proxies_8c_source_l00054}{54}} of file \mbox{\hyperlink{syscall__proxies_8c_source}{syscall\+\_\+proxies.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{syscall__proxies_8c_source_l00259}{dlsym\+\_\+xstat64()}}.
+

@@ -1,0 +1,499 @@
+.TH "xpn_policy_rw.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn_policy_rw.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'xpn/xpn_simple/xpn_policy_rw\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBXpnGetBlock\fP (int fd, off_t offset, off_t *local_offset, int *serv)"
+.br
+.RI "Calculates the server and the offset\&. "
+.ti -1c
+.RI "void \fBXpnRWBlocksPolicyBlockByBlock\fP (int fd, const void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers)"
+.br
+.RI "The blocks that have to be read/written from/to the servers are selected by round-robin: one block from each server\&. "
+.ti -1c
+.RI "void \fBXpnReadBlocksPolicyRAID0_AllInOne\fP (int fd, const void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers)"
+.br
+.RI "The blocks that have to be read from the servers are selected by round-robin (one block from each server), and then, grouped in one operation per server\&. "
+.ti -1c
+.RI "void \fBXpnReadBlocksPolicyRAID0_AllInOne_Finish\fP (int fd, void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers, const void *new_buffer)"
+.br
+.RI "This is the complementary operation to XpnRWBlocksPolicyRAID0_AllInOne\&. "
+.ti -1c
+.RI "void \fBXpnWriteBlocksPolicyRAID0_AllInOne\fP (int fd, const void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers, void *new_buffer)"
+.br
+.RI "The blocks that have to be written to the servers are selected by round-robin (one block from each server), and then, grouped in one operation per server\&. "
+.ti -1c
+.RI "void \fBXpnReadBlocksPolicyRAID1_AllInOne\fP (__attribute__((__unused__)) int fd, const void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers)"
+.br
+.RI "The blocks that have to be read from the servers are 1/n of the file from each server (being 'n' the number of servers)\&. "
+.ti -1c
+.RI "void \fBXpnWriteBlocksPolicyRAID1_BlockByBlock\fP (int fd, const void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers)"
+.br
+.RI "The blocks that have to be read/written from/to the servers are every block from every server\&. "
+.ti -1c
+.RI "void \fBXpnWriteBlocksPolicyRAID1_AllInOne\fP (__attribute__((__unused__)) int fd, const void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers)"
+.br
+.RI "The blocks that have to be written to the servers are every block from every server\&. "
+.ti -1c
+.RI "void * \fBXpnReadBlocks\fP (int fd, const void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers)"
+.br
+.RI "Read blocks\&. "
+.ti -1c
+.RI "int \fBXpnReadBlocksFinish\fP (int fd, void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers, void *new_buffer)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void * \fBXpnWriteBlocks\fP (int fd, const void *buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP ***io_out, int **ion_out, int num_servers)"
+.br
+.RI "Write blocks\&. "
+.ti -1c
+.RI "int \fBXpnWriteBlocksFinish\fP (int fd, const void *buffer, __attribute__((__unused__)) size_t size, __attribute__((__unused__)) off_t offset, __attribute__((__unused__)) struct \fBnfi_worker_io\fP ***io_out, __attribute__((__unused__)) int **ion_out, __attribute__((__unused__)) int num_servers, void *new_buffer)"
+.br
+.ti -1c
+.RI "ssize_t \fBXpnReadGetTotalBytes\fP (int fd, ssize_t *res_v, int num_servers)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBXpnWriteGetTotalBytes\fP (int fd, ssize_t *res_v, int num_servers)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBxpn_policy_rw\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int XpnGetBlock (int fd, off_t global_offset, off_t * local_offset, int * serv)"
+
+.PP
+Calculates the server and the offset\&. Calculates the server and the offset in that server of the given offset of a file\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIglobal_offset\fP [in] The original offset\&. 
+.br
+\fIlocal_offset\fP [out] The offset in the server\&. 
+.br
+\fIserv\fP [out] The server in which is located the given offset\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns 0 on success or -1 on error\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB41\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBxpn_filedesc::block_size\fP, \fBpolicy::first_node\fP, \fBPOLICY_RAID0\fP, \fBPOLICY_RAID1\fP, and \fBxpn_file_table\fP\&.
+.PP
+Referenced by \fBxpn_sread()\fP, \fBxpn_swrite()\fP, \fBXpnReadBlocks()\fP, \fBXpnRWBlocksPolicyBlockByBlock()\fP, and \fBXpnWriteBlocksPolicyRAID1_BlockByBlock()\fP\&.
+.SS "void * XpnReadBlocks (int fd, const void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers)"
+
+.PP
+Read blocks\&. Calculates how the blocks have to be read from the servers\&. io_out is an operation matrix\&. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'\&. While ion_out[i] is the number of operations in server 'i' (io_out[i])\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIbuffer\fP [in] The original buffer\&. 
+.br
+\fIsize\fP [in] The original size\&. 
+.br
+\fIoffset\fP [in] The original offset\&. 
+.br
+\fIio_out\fP [out] The operation matrix\&. 
+.br
+\fIion_out\fP [out] The length of every row in io_out\&. 
+.br
+\fInum_servers\fP [in] The number of servers\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns a pointer to a new buffer on success, or NULL on error\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB363\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, \fBPOLICY_RAID0\fP, \fBPOLICY_RAID1\fP, \fBnfi_worker_io::size\fP, \fBxpn_file_table\fP, \fBXpnGetBlock()\fP, \fBXpnReadBlocksPolicyRAID0_AllInOne()\fP, \fBXpnReadBlocksPolicyRAID1_AllInOne()\fP, and \fBXpnRWBlocksPolicyBlockByBlock()\fP\&.
+.PP
+Referenced by \fBxpn_pread()\fP\&.
+.SS "int XpnReadBlocksFinish (int fd, void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers, void * new_buffer)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIio_out\fP 'TODO'\&. 
+.br
+\fIion_out\fP 'TODO'\&. 
+.br
+\fInum_servers\fP 'TODO'\&. 
+.br
+\fInew_buffer\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB419\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, \fBPOLICY_RAID0\fP, \fBPOLICY_RAID1\fP, \fBnfi_worker_io::size\fP, \fBxpn_file_table\fP, and \fBXpnReadBlocksPolicyRAID0_AllInOne_Finish()\fP\&.
+.PP
+Referenced by \fBxpn_pread()\fP\&.
+.SS "void XpnReadBlocksPolicyRAID0_AllInOne (int fd, const void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers)"
+
+.PP
+The blocks that have to be read from the servers are selected by round-robin (one block from each server), and then, grouped in one operation per server\&. Using this policy the nfi module will perform at most one read operation per server\&. This policy requires the execution of XpnReadBlocksPolicyRAID0_AllInOne_Finish when the data have arrived, which will reorder the blocks\&. This policy is valid for read operations on a RAID0 partition\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIbuffer\fP [in] The original buffer\&. 
+.br
+\fIsize\fP [in] The original size\&. 
+.br
+\fIoffset\fP [in] The original offset\&. 
+.br
+\fIio_out\fP [out] The operation matrix\&. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'\&. 
+.br
+\fIion_out\fP [out] The length of every row in io_out\&. ion_out[i] is the number of operations in server 'i' (io_out[i])\&. 
+.br
+\fInum_servers\fP [in] The number of servers\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB138\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, \fBnfi_worker_io::size\fP, and \fBXpnRWBlocksPolicyBlockByBlock()\fP\&.
+.PP
+Referenced by \fBXpnReadBlocks()\fP\&.
+.SS "void XpnReadBlocksPolicyRAID0_AllInOne_Finish (int fd, void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers, const void * new_buffer)"
+
+.PP
+This is the complementary operation to XpnRWBlocksPolicyRAID0_AllInOne\&. The blocks that have been read and grouped by XpnReadBlocksPolicyRAID0_AllInOne are now reordered before delivering them to the user\&. This policy is valid for read operations on a RAID0 partition\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIbuffer\fP [out] The ordered buffer to be delivered to the user\&. This buffer will contain the same blocks that new_buffer, but in the right order\&. 
+.br
+\fIsize\fP [in] The original size\&. 
+.br
+\fIoffset\fP [in] The original offset\&. 
+.br
+\fIio_out\fP [out] The operation matrix\&. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'\&. 
+.br
+\fIion_out\fP [out] The length of every row in io_out\&. ion_out[i] is the number of operations in server 'i' (io_out[i])\&. 
+.br
+\fInum_servers\fP [in] The number of servers\&. 
+.br
+\fInew_buffer\fP [in] The disorganized buffer that needs to be ordered\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB178\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, \fBnfi_worker_io::size\fP, and \fBXpnRWBlocksPolicyBlockByBlock()\fP\&.
+.PP
+Referenced by \fBXpnReadBlocksFinish()\fP\&.
+.SS "void XpnReadBlocksPolicyRAID1_AllInOne (__attribute__((__unused__)) int fd, const void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers)"
+
+.PP
+The blocks that have to be read from the servers are 1/n of the file from each server (being 'n' the number of servers)\&. This policy is only valid for read operations on a RAID1 partition\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIbuffer\fP [in] The original buffer\&. 
+.br
+\fIsize\fP [in] The original size\&. 
+.br
+\fIoffset\fP [in] The original offset\&. 
+.br
+\fIio_out\fP [out] The operation matrix\&. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'\&. 
+.br
+\fIion_out\fP [out] The length of every row in io_out\&. ion_out[i] is the number of operations in server 'i' (io_out[i])\&. 
+.br
+\fInum_servers\fP [in] The number of servers\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB258\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, and \fBnfi_worker_io::size\fP\&.
+.PP
+Referenced by \fBXpnReadBlocks()\fP\&.
+.SS "ssize_t XpnReadGetTotalBytes (int fd, ssize_t * res_v, int num_servers)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIres_v\fP 'TODO'\&. 
+.br
+\fInum_servers\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB502\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBPOLICY_RAID0\fP, \fBPOLICY_RAID1\fP, and \fBxpn_file_table\fP\&.
+.PP
+Referenced by \fBxpn_pread()\fP\&.
+.SS "void XpnRWBlocksPolicyBlockByBlock (int fd, const void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers)"
+
+.PP
+The blocks that have to be read/written from/to the servers are selected by round-robin: one block from each server\&. Using this policy the nfi module will perform one read/write operation for every single block on every server, which is not optimal\&. This policy is valid for read/write operations on a RAID0 partition, and for read operations on a RAID1 partition\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIbuffer\fP [in] The original buffer\&. 
+.br
+\fIsize\fP [in] The original size\&. 
+.br
+\fIoffset\fP [in] The original offset\&. 
+.br
+\fIio_out\fP [out] The operation matrix\&. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'\&. 
+.br
+\fIion_out\fP [out] The length of every row in io_out\&. ion_out[i] is the number of operations in server 'i' (io_out[i])\&. 
+.br
+\fInum_servers\fP [in] The number of servers\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB87\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBxpn_filedesc::block_size\fP, \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, \fBnfi_worker_io::size\fP, \fBxpn_file_table\fP, and \fBXpnGetBlock()\fP\&.
+.PP
+Referenced by \fBXpnReadBlocks()\fP, \fBXpnReadBlocksPolicyRAID0_AllInOne()\fP, \fBXpnReadBlocksPolicyRAID0_AllInOne_Finish()\fP, \fBXpnWriteBlocks()\fP, and \fBXpnWriteBlocksPolicyRAID0_AllInOne()\fP\&.
+.SS "void * XpnWriteBlocks (int fd, const void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers)"
+
+.PP
+Write blocks\&. Calculates how the blocks have to be written to the servers\&. io_out is an operation matrix\&. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'\&. While ion_out[i] is the number of operations in server 'i' (io_out[i])\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIbuffer\fP [in] The original buffer\&. 
+.br
+\fIsize\fP [in] The original size\&. 
+.br
+\fIoffset\fP [in] The original offset\&. 
+.br
+\fIio_out\fP [out] The operation matrix\&. 
+.br
+\fIion_out\fP [out] The length of every row in io_out\&. 
+.br
+\fInum_servers\fP [in] The number of servers\&.
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Returns 0 on success or -1 on error\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB441\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, \fBPOLICY_RAID0\fP, \fBPOLICY_RAID1\fP, \fBnfi_worker_io::size\fP, \fBxpn_file_table\fP, \fBXpnRWBlocksPolicyBlockByBlock()\fP, \fBXpnWriteBlocksPolicyRAID0_AllInOne()\fP, \fBXpnWriteBlocksPolicyRAID1_AllInOne()\fP, and \fBXpnWriteBlocksPolicyRAID1_BlockByBlock()\fP\&.
+.PP
+Referenced by \fBxpn_pwrite()\fP\&.
+.SS "int XpnWriteBlocksFinish (int fd, const void * buffer, __attribute__((__unused__)) size_t size, __attribute__((__unused__)) off_t offset, __attribute__((__unused__)) struct \fBnfi_worker_io\fP *** io_out, __attribute__((__unused__)) int ** ion_out, __attribute__((__unused__)) int num_servers, void * new_buffer)"
+
+.PP
+Definition at line \fB476\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBnfi_worker_io::buffer\fP, \fBPOLICY_RAID0\fP, \fBPOLICY_RAID1\fP, and \fBxpn_file_table\fP\&.
+.PP
+Referenced by \fBxpn_pwrite()\fP\&.
+.SS "void XpnWriteBlocksPolicyRAID0_AllInOne (int fd, const void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers, void * new_buffer)"
+
+.PP
+The blocks that have to be written to the servers are selected by round-robin (one block from each server), and then, grouped in one operation per server\&. Using this policy the nfi module will perform at most one write operation per server\&. This policy is valid for write operations on a RAID0 partition\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIbuffer\fP [in] The original buffer\&. 
+.br
+\fIsize\fP [in] The original size\&. 
+.br
+\fIoffset\fP [in] The original offset\&. 
+.br
+\fIio_out\fP [out] The operation matrix\&. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'\&. 
+.br
+\fIion_out\fP [out] The length of every row in io_out\&. ion_out[i] is the number of operations in server 'i' (io_out[i])\&. 
+.br
+\fInum_servers\fP [in] The number of servers\&. 
+.br
+\fInew_buffer\fP [in] The buffer used to send data (it will be modified to store the disorganized blocks before sending)\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB213\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, \fBnfi_worker_io::size\fP, and \fBXpnRWBlocksPolicyBlockByBlock()\fP\&.
+.PP
+Referenced by \fBXpnWriteBlocks()\fP\&.
+.SS "void XpnWriteBlocksPolicyRAID1_AllInOne (__attribute__((__unused__)) int fd, const void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers)"
+
+.PP
+The blocks that have to be written to the servers are every block from every server\&. All the blocks are written in one operation per server\&. This policy is suitable for write operations on a RAID1 partition\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIbuffer\fP [in] The original buffer\&. 
+.br
+\fIsize\fP [in] The original size\&. 
+.br
+\fIoffset\fP [in] The original offset\&. 
+.br
+\fIio_out\fP [out] The operation matrix\&. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'\&. 
+.br
+\fIion_out\fP [out] The length of every row in io_out\&. ion_out[i] is the number of operations in server 'i' (io_out[i])\&. 
+.br
+\fInum_servers\fP [in] The number of servers\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB347\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, and \fBnfi_worker_io::size\fP\&.
+.PP
+Referenced by \fBXpnWriteBlocks()\fP\&.
+.SS "void XpnWriteBlocksPolicyRAID1_BlockByBlock (int fd, const void * buffer, size_t size, off_t offset, struct \fBnfi_worker_io\fP *** io_out, int ** ion_out, int num_servers)"
+
+.PP
+The blocks that have to be read/written from/to the servers are every block from every server\&. Every block requires one operation\&. This policy is suitable for write operations on a RAID1 partition\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP [in] A file descriptor\&. 
+.br
+\fIbuffer\fP [in] The original buffer\&. 
+.br
+\fIsize\fP [in] The original size\&. 
+.br
+\fIoffset\fP [in] The original offset\&. 
+.br
+\fIio_out\fP [out] The operation matrix\&. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'\&. 
+.br
+\fIion_out\fP [out] The length of every row in io_out\&. ion_out[i] is the number of operations in server 'i' (io_out[i])\&. 
+.br
+\fInum_servers\fP [in] The number of servers\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB296\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBxpn_filedesc::block_size\fP, \fBnfi_worker_io::buffer\fP, \fBnfi_worker_io::offset\fP, \fBnfi_worker_io::size\fP, \fBxpn_file_table\fP, and \fBXpnGetBlock()\fP\&.
+.PP
+Referenced by \fBXpnWriteBlocks()\fP\&.
+.SS "ssize_t XpnWriteGetTotalBytes (int fd, ssize_t * res_v, int num_servers)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIres_v\fP 'TODO'\&. 
+.br
+\fInum_servers\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB523\fP of file \fBxpn_policy_rw\&.c\fP\&.
+.PP
+References \fBPOLICY_RAID0\fP, \fBPOLICY_RAID1\fP, and \fBxpn_file_table\fP\&.
+.PP
+Referenced by \fBxpn_pwrite()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

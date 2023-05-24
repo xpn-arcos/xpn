@@ -1,0 +1,235 @@
+\doxysection{tcp\+\_\+server\+\_\+d2xpn.\+c File Reference}
+\hypertarget{tcp__server__d2xpn_8c}{}\label{tcp__server__d2xpn_8c}\index{tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}}
+
+
+File to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include \"{}all\+\_\+system.\+h\"{}}\newline
+{\ttfamily \#include \"{}tcp\+\_\+server\+\_\+params.\+h\"{}}\newline
+{\ttfamily \#include \"{}tcp\+\_\+server\+\_\+d2xpn.\+h\"{}}\newline
+{\ttfamily \#include \"{}xpn.\+h\"{}}\newline
+{\ttfamily \#include $<$sys/time.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{tcp__server__d2xpn_8c_a72c1937b26ce9a87266ca6c802b047a0}{DEFAULT\+\_\+\+PATH}}~\"{}/tmp\"{}
+\item 
+\#define \mbox{\hyperlink{tcp__server__d2xpn_8c_aaacf21ebcaea8062ace0d2b9072d8c9f}{TCP\+\_\+\+SERVER\+\_\+\+PATH\+\_\+\+DEFAULT}}~\"{}/tmp\"{}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{tcp__server__d2xpn_8c_a4b4c5879521f3e625489ea33999d1c82}{generate\+Name}} (char \texorpdfstring{$\ast$}{*}file, char \texorpdfstring{$\ast$}{*}new\+\_\+file)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{tcp__server__d2xpn_8c_a5b4e5a778fdc9899d0e9d7abcf0d0e99}{mylock}} (char \texorpdfstring{$\ast$}{*}file)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{tcp__server__d2xpn_8c_a7c45c203463fc0bc365c05e4621cb1c8}{myunlock}} (int fd)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{tcp__server__d2xpn_8c_a417c21a297f7d237cdcbeeccf9658de1}{tcp\+\_\+server\+\_\+d2xpn}} (\mbox{\hyperlink{structtcp__server__param__st}{tcp\+\_\+server\+\_\+param\+\_\+st}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{mpi__server_8c_a0cdf5851bb09591f0ee90bfcc722fe32}{params}}, char \texorpdfstring{$\ast$}{*}origen, char \texorpdfstring{$\ast$}{*}destino)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+pthread\+\_\+mutex\+\_\+t \mbox{\hyperlink{tcp__server__d2xpn_8c_ab3a99582769d6fae221380219575e70e}{mutex\+\_\+id}} = PTHREAD\+\_\+\+MUTEX\+\_\+\+INITIALIZER
+\item 
+int \mbox{\hyperlink{tcp__server__d2xpn_8c_ade9c941743fe8eb91014ddb5c2b50b46}{static\+\_\+id}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+File to \textquotesingle{}TODO\textquotesingle{}. 
+
+File to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000024}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{tcp__server__d2xpn_8c_source}{tcp\+\_\+server\+\_\+d2xpn.\+c}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{tcp__server__d2xpn_8c_a72c1937b26ce9a87266ca6c802b047a0}\label{tcp__server__d2xpn_8c_a72c1937b26ce9a87266ca6c802b047a0} 
+\index{tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}!DEFAULT\_PATH@{DEFAULT\_PATH}}
+\index{DEFAULT\_PATH@{DEFAULT\_PATH}!tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_PATH}{DEFAULT\_PATH}}
+{\footnotesize\ttfamily \#define DEFAULT\+\_\+\+PATH~\"{}/tmp\"{}}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00045}{45}} of file \mbox{\hyperlink{tcp__server__d2xpn_8c_source}{tcp\+\_\+server\+\_\+d2xpn.\+c}}.
+
+\Hypertarget{tcp__server__d2xpn_8c_aaacf21ebcaea8062ace0d2b9072d8c9f}\label{tcp__server__d2xpn_8c_aaacf21ebcaea8062ace0d2b9072d8c9f} 
+\index{tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}!TCP\_SERVER\_PATH\_DEFAULT@{TCP\_SERVER\_PATH\_DEFAULT}}
+\index{TCP\_SERVER\_PATH\_DEFAULT@{TCP\_SERVER\_PATH\_DEFAULT}!tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}}
+\doxysubsubsection{\texorpdfstring{TCP\_SERVER\_PATH\_DEFAULT}{TCP\_SERVER\_PATH\_DEFAULT}}
+{\footnotesize\ttfamily \#define TCP\+\_\+\+SERVER\+\_\+\+PATH\+\_\+\+DEFAULT~\"{}/tmp\"{}}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00046}{46}} of file \mbox{\hyperlink{tcp__server__d2xpn_8c_source}{tcp\+\_\+server\+\_\+d2xpn.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{tcp__server__d2xpn_8c_a4b4c5879521f3e625489ea33999d1c82}\label{tcp__server__d2xpn_8c_a4b4c5879521f3e625489ea33999d1c82} 
+\index{tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}!generateName@{generateName}}
+\index{generateName@{generateName}!tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}}
+\doxysubsubsection{\texorpdfstring{generateName()}{generateName()}}
+{\footnotesize\ttfamily void generate\+Name (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{file,  }\item[{char \texorpdfstring{$\ast$}{*}}]{new\+\_\+file }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em new\+\_\+file} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00067}{67}} of file \mbox{\hyperlink{tcp__server__d2xpn_8c_source}{tcp\+\_\+server\+\_\+d2xpn.\+c}}.
+
+
+
+References \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00045}{DEFAULT\+\_\+\+PATH}}.
+
+\Hypertarget{tcp__server__d2xpn_8c_a5b4e5a778fdc9899d0e9d7abcf0d0e99}\label{tcp__server__d2xpn_8c_a5b4e5a778fdc9899d0e9d7abcf0d0e99} 
+\index{tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}!mylock@{mylock}}
+\index{mylock@{mylock}!tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}}
+\doxysubsubsection{\texorpdfstring{mylock()}{mylock()}}
+{\footnotesize\ttfamily int mylock (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{file }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00105}{105}} of file \mbox{\hyperlink{tcp__server__d2xpn_8c_source}{tcp\+\_\+server\+\_\+d2xpn.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00051}{mutex\+\_\+id}}.
+
+
+
+Referenced by \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00146}{tcp\+\_\+server\+\_\+d2xpn()}}.
+
+\Hypertarget{tcp__server__d2xpn_8c_a7c45c203463fc0bc365c05e4621cb1c8}\label{tcp__server__d2xpn_8c_a7c45c203463fc0bc365c05e4621cb1c8} 
+\index{tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}!myunlock@{myunlock}}
+\index{myunlock@{myunlock}!tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}}
+\doxysubsubsection{\texorpdfstring{myunlock()}{myunlock()}}
+{\footnotesize\ttfamily int myunlock (\begin{DoxyParamCaption}\item[{int}]{fd }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em fd} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00132}{132}} of file \mbox{\hyperlink{tcp__server__d2xpn_8c_source}{tcp\+\_\+server\+\_\+d2xpn.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, and \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00051}{mutex\+\_\+id}}.
+
+
+
+Referenced by \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00146}{tcp\+\_\+server\+\_\+d2xpn()}}.
+
+\Hypertarget{tcp__server__d2xpn_8c_a417c21a297f7d237cdcbeeccf9658de1}\label{tcp__server__d2xpn_8c_a417c21a297f7d237cdcbeeccf9658de1} 
+\index{tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}!tcp\_server\_d2xpn@{tcp\_server\_d2xpn}}
+\index{tcp\_server\_d2xpn@{tcp\_server\_d2xpn}!tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}}
+\doxysubsubsection{\texorpdfstring{tcp\_server\_d2xpn()}{tcp\_server\_d2xpn()}}
+{\footnotesize\ttfamily int tcp\+\_\+server\+\_\+d2xpn (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structtcp__server__param__st}{tcp\+\_\+server\+\_\+param\+\_\+st}} \texorpdfstring{$\ast$}{*}}]{params,  }\item[{char \texorpdfstring{$\ast$}{*}}]{origen,  }\item[{char \texorpdfstring{$\ast$}{*}}]{destino }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em params} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em origen} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+{\em destino} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00146}{146}} of file \mbox{\hyperlink{tcp__server__d2xpn_8c_source}{tcp\+\_\+server\+\_\+d2xpn.\+c}}.
+
+
+
+References \mbox{\hyperlink{debug__msg_8h_source_l00057}{debug\+\_\+info}}, \mbox{\hyperlink{mpi__server_2mpi__server__params_8h_source_l00091}{mpi\+\_\+server\+\_\+param\+\_\+st\+::dirbase}}, \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00105}{mylock()}}, \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00132}{myunlock()}}, \mbox{\hyperlink{all__system_8h_source_l00183}{O\+\_\+\+CREAT}}, \mbox{\hyperlink{all__system_8h_source_l00180}{O\+\_\+\+RDONLY}}, \mbox{\hyperlink{all__system_8h_source_l00186}{O\+\_\+\+TRUNC}}, \mbox{\hyperlink{all__system_8h_source_l00181}{O\+\_\+\+WRONLY}}, \mbox{\hyperlink{xpn__bypass_8c_source_l00527}{open()}}, \mbox{\hyperlink{mpi__server_8c_source_l00047}{params}}, \mbox{\hyperlink{all__system_8h_source_l00169}{PATH\+\_\+\+MAX}}, \mbox{\hyperlink{mpi__server_2mpi__server__params_8h_source_l00088}{mpi\+\_\+server\+\_\+param\+\_\+st\+::rank}}, \mbox{\hyperlink{xpn-cat_8c_source_l00041}{st}}, \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00046}{TCP\+\_\+\+SERVER\+\_\+\+PATH\+\_\+\+DEFAULT}}, \mbox{\hyperlink{xpn__unistd_8c_source_l00046}{xpn\+\_\+init()}}, and \mbox{\hyperlink{xpn__unistd_8c_source_l00077}{xpn\+\_\+open()}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{tcp__server__d2xpn_8c_ab3a99582769d6fae221380219575e70e}\label{tcp__server__d2xpn_8c_ab3a99582769d6fae221380219575e70e} 
+\index{tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}!mutex\_id@{mutex\_id}}
+\index{mutex\_id@{mutex\_id}!tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}}
+\doxysubsubsection{\texorpdfstring{mutex\_id}{mutex\_id}}
+{\footnotesize\ttfamily pthread\+\_\+mutex\+\_\+t mutex\+\_\+id = PTHREAD\+\_\+\+MUTEX\+\_\+\+INITIALIZER}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00051}{51}} of file \mbox{\hyperlink{tcp__server__d2xpn_8c_source}{tcp\+\_\+server\+\_\+d2xpn.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00105}{mylock()}}, and \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00132}{myunlock()}}.
+
+\Hypertarget{tcp__server__d2xpn_8c_ade9c941743fe8eb91014ddb5c2b50b46}\label{tcp__server__d2xpn_8c_ade9c941743fe8eb91014ddb5c2b50b46} 
+\index{tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}!static\_id@{static\_id}}
+\index{static\_id@{static\_id}!tcp\_server\_d2xpn.c@{tcp\_server\_d2xpn.c}}
+\doxysubsubsection{\texorpdfstring{static\_id}{static\_id}}
+{\footnotesize\ttfamily int static\+\_\+id = 0}
+
+
+
+Definition at line \mbox{\hyperlink{tcp__server__d2xpn_8c_source_l00052}{52}} of file \mbox{\hyperlink{tcp__server__d2xpn_8c_source}{tcp\+\_\+server\+\_\+d2xpn.\+c}}.
+

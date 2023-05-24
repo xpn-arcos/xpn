@@ -1,0 +1,523 @@
+.TH "xpn_stdio.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn_stdio.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <fcntl\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include <xpn\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <strings\&.h>\fP
+.br
+\fC#include 'xpn_open\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "ssize_t \fBxpn_reader\fP (void *cookie, char *buffer, size_t size)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBxpn_writer\fP (void *cookie, const char *buffer, size_t size)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_seeker\fP (void *cookie, __off64_t *position, int whence)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_cleaner\fP (void *cookie)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "FILE * \fBxpn_fopencookie\fP (const char *path, const char *mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "FILE * \fBxpn_simple_fopen\fP (const char *filename, const char *mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_simple_fclose\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "size_t \fBxpn_simple_fread\fP (void *ptr, size_t size, size_t nmemb, FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "size_t \fBxpn_simple_fwrite\fP (const void *ptr, size_t size, size_t nmemb, FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_simple_fgetc\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "char * \fBxpn_simple_fgets\fP (char *s, int tam, FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_simple_getc\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_simple_fseek\fP (FILE *stream, off_t offset, int whence)"
+.br
+.ti -1c
+.RI "long \fBxpn_simple_ftell\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBxpn_simple_rewind\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_simple_fflush\fP (__attribute__((__unused__)) FILE *stream)"
+.br
+.ti -1c
+.RI "int \fBxpn_simple_fileno\fP (FILE *stream)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_simple_ferror\fP (__attribute__((__unused__)) FILE *stream)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "struct \fBxpn_filedesc\fP * \fBxpn_file_table\fP [\fBXPN_MAX_FILE\fP]"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int xpn_cleaner (void * cookie)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIcookie\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB73\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_close()\fP\&.
+.PP
+Referenced by \fBxpn_fopencookie()\fP\&.
+.SS "FILE * xpn_fopencookie (const char * path, const char * mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB82\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_filedesc::mode\fP, \fBO_CREAT\fP, \fBO_RDONLY\fP, \fBO_RDWR\fP, \fBO_TRUNC\fP, \fBO_WRONLY\fP, \fBxpn_filedesc::path\fP, \fBxpn_cleaner()\fP, \fBxpn_reader()\fP, \fBxpn_seeker()\fP, \fBxpn_simple_open()\fP, and \fBxpn_writer()\fP\&.
+.SS "ssize_t xpn_reader (void * cookie, char * buffer, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIcookie\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB58\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_read()\fP\&.
+.PP
+Referenced by \fBxpn_fopencookie()\fP\&.
+.SS "int xpn_seeker (void * cookie, __off64_t * position, int whence)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIcookie\fP 'TODO'\&. 
+.br
+\fIposition\fP 'TODO'\&. 
+.br
+\fIwhence\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB68\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_lseek()\fP\&.
+.PP
+Referenced by \fBxpn_fopencookie()\fP\&.
+.SS "int xpn_simple_fclose (FILE * fp)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfp\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB174\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBerrno\fP, \fBxpn_simple_close()\fP, and \fBxpn_simple_fflush()\fP\&.
+.PP
+Referenced by \fBxpn_fclose()\fP\&.
+.SS "int xpn_simple_ferror (__attribute__((__unused__)) FILE * stream)"
+
+.PP
+Definition at line \fB268\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+Referenced by \fBxpn_ferror()\fP\&.
+.SS "int xpn_simple_fflush (__attribute__((__unused__)) FILE * stream)"
+
+.PP
+Definition at line \fB258\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+Referenced by \fBxpn_fflush()\fP, and \fBxpn_simple_fclose()\fP\&.
+.SS "int xpn_simple_fgetc (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB211\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_read()\fP\&.
+.PP
+Referenced by \fBxpn_fgetc()\fP, and \fBxpn_simple_getc()\fP\&.
+.SS "char * xpn_simple_fgets (char * s, int tam, FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP 'TODO'\&. 
+.br
+\fItam\fP 'TODO'\&. 
+.br
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB220\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_fread()\fP\&.
+.PP
+Referenced by \fBxpn_fgets()\fP\&.
+.SS "int xpn_simple_fileno (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB263\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+Referenced by \fBxpn_fileno()\fP\&.
+.SS "FILE * xpn_simple_fopen (const char * filename, const char * mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfilename\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB129\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_filedesc::mode\fP, \fBO_APPEND\fP, \fBO_CREAT\fP, \fBO_RDONLY\fP, \fBO_RDWR\fP, \fBO_TRUNC\fP, \fBO_WRONLY\fP, and \fBxpn_simple_open()\fP\&.
+.PP
+Referenced by \fBxpn_fopen()\fP\&.
+.SS "size_t xpn_simple_fread (void * ptr, size_t size, size_t nmemb, FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fInmemb\fP 'TODO'\&. 
+.br
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB201\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_read()\fP\&.
+.PP
+Referenced by \fBxpn_fread()\fP, and \fBxpn_simple_fgets()\fP\&.
+.SS "int xpn_simple_fseek (FILE * stream, off_t offset, int whence)"
+
+.PP
+Definition at line \fB234\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_filedesc::offset\fP, and \fBxpn_simple_lseek()\fP\&.
+.PP
+Referenced by \fBxpn_fseek()\fP\&.
+.SS "long xpn_simple_ftell (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB247\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_filedesc::offset\fP, and \fBxpn_file_table\fP\&.
+.PP
+Referenced by \fBxpn_ftell()\fP\&.
+.SS "size_t xpn_simple_fwrite (const void * ptr, size_t size, size_t nmemb, FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIptr\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fInmemb\fP 'TODO'\&. 
+.br
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB206\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_write()\fP\&.
+.PP
+Referenced by \fBxpn_fwrite()\fP\&.
+.SS "int xpn_simple_getc (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB229\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_fgetc()\fP\&.
+.PP
+Referenced by \fBxpn_getc()\fP\&.
+.SS "void xpn_simple_rewind (FILE * stream)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIstream\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB253\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_lseek()\fP\&.
+.PP
+Referenced by \fBxpn_rewind()\fP\&.
+.SS "ssize_t xpn_writer (void * cookie, const char * buffer, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIcookie\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB63\fP of file \fBxpn/xpn_simple/xpncore/xpn_stdio\&.c\fP\&.
+.PP
+References \fBxpn_simple_write()\fP\&.
+.PP
+Referenced by \fBxpn_fopencookie()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "struct \fBxpn_filedesc\fP* xpn_file_table[\fBXPN_MAX_FILE\fP]\fC [extern]\fP"
+
+.PP
+Definition at line \fB37\fP of file \fBxpn_file\&.c\fP\&.
+.PP
+Referenced by \fBxpn_simple_ftell()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

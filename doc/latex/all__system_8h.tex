@@ -1,0 +1,319 @@
+\doxysection{all\+\_\+system.\+h File Reference}
+\hypertarget{all__system_8h}{}\label{all__system_8h}\index{all\_system.h@{all\_system.h}}
+
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include \"{}base\+\_\+debug.\+h\"{}}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$errno.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include $<$sys/types.\+h$>$}\newline
+{\ttfamily \#include $<$sys/stat.\+h$>$}\newline
+{\ttfamily \#include $<$semaphore.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a1841fd1a462d245d8c73dce55e2f45da}{KB}}~(1024)
+\item 
+\#define \mbox{\hyperlink{all__system_8h_aa6b38d492364d98453284934ed7caee9}{MB}}~(\mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}})
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a44172ac633c517cb4c9e278cef36b000}{GB}}~(\mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}})
+\item 
+\#define \mbox{\hyperlink{all__system_8h_aa8cecfc5c5c054d2875c03e77b7be15d}{TRUE}}~1
+\item 
+\#define \mbox{\hyperlink{all__system_8h_aa93f0eb578d23995850d61f7d61c55c1}{FALSE}}~0
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a054daf48a1ba6b803ae4616cbe8e2ca3}{LARGEFILE\+\_\+\+SOURCE}}~1
+\item 
+\#define \mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\+\_\+\+MAX}}~1024
+\item 
+\#define \mbox{\hyperlink{all__system_8h_ad4d796b98c583d49e83adabd74a63bf6}{MAX\+\_\+\+BUFFER\+\_\+\+SIZE}}~(1 \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_aa6b38d492364d98453284934ed7caee9}{MB}})
+\item 
+\#define \mbox{\hyperlink{all__system_8h_abc7e7860bdf86d90b21df20f23ea6004}{PROTOCOL\+\_\+\+MAXLEN}}~20
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a4dc4d45e07d2abc899bcaf04b2846a87}{O\+\_\+\+ACCMODE}}~0003
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a7a68c9ffaac7dbcd652225dd7c06a54b}{O\+\_\+\+RDONLY}}~00
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a11b644a8526139c4cc1850dac1271ced}{O\+\_\+\+WRONLY}}~01
+\item 
+\#define \mbox{\hyperlink{all__system_8h_abb0586253488ee61072b73557eeb873b}{O\+\_\+\+RDWR}}~02
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a1cf6b1de1fffedaa1d26b189e9a8d2cc}{O\+\_\+\+CREAT}}~0100  /\texorpdfstring{$\ast$}{*} not \mbox{\hyperlink{xpn__bypass_8c_ac8a4d501a786c3db60952a7883a47ced}{fcntl}} \texorpdfstring{$\ast$}{*}/
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a9f5acfe79fafe14b6694447bd0e9f10b}{O\+\_\+\+EXCL}}~0200   /\texorpdfstring{$\ast$}{*} not \mbox{\hyperlink{xpn__bypass_8c_ac8a4d501a786c3db60952a7883a47ced}{fcntl}} \texorpdfstring{$\ast$}{*}/
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a2e375ab32c7ef4581b026be28e4cc116}{O\+\_\+\+NOCTTY}}~0400 /\texorpdfstring{$\ast$}{*} not \mbox{\hyperlink{xpn__bypass_8c_ac8a4d501a786c3db60952a7883a47ced}{fcntl}} \texorpdfstring{$\ast$}{*}/
+\item 
+\#define \mbox{\hyperlink{all__system_8h_ad1d67e453fb3031f40f8cd3403773813}{O\+\_\+\+TRUNC}}~01000 /\texorpdfstring{$\ast$}{*} not \mbox{\hyperlink{xpn__bypass_8c_ac8a4d501a786c3db60952a7883a47ced}{fcntl}} \texorpdfstring{$\ast$}{*}/
+\item 
+\#define \mbox{\hyperlink{all__system_8h_ae036f789407d21f07b211552d67b3214}{O\+\_\+\+APPEND}}~02000
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a39d33ce33804efd4d52606d59071c6d8}{O\+\_\+\+NONBLOCK}}~04000
+\item 
+\#define \mbox{\hyperlink{all__system_8h_a63ba256ec18f373817941d5a4d0e2d5e}{O\+\_\+\+NDELAY}}~\mbox{\hyperlink{all__system_8h_a39d33ce33804efd4d52606d59071c6d8}{O\+\_\+\+NONBLOCK}}
+\item 
+\#define \mbox{\hyperlink{all__system_8h_aae85139bfa94236d126bb1e3b772998f}{O\+\_\+\+SYNC}}~010000
+\item 
+\#define \mbox{\hyperlink{all__system_8h_ac683f821c3bf7ce4752ff436733cd715}{O\+\_\+\+FSYNC}}~\mbox{\hyperlink{all__system_8h_aae85139bfa94236d126bb1e3b772998f}{O\+\_\+\+SYNC}}
+\item 
+\#define \mbox{\hyperlink{all__system_8h_ac5d0c9848f853f8b026b1211b93f78b1}{O\+\_\+\+ASYNC}}~020000
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file to \textquotesingle{}TODO\textquotesingle{}. 
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Copyright 2020-\/2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000059}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{all__system_8h_aa93f0eb578d23995850d61f7d61c55c1}\label{all__system_8h_aa93f0eb578d23995850d61f7d61c55c1} 
+\index{all\_system.h@{all\_system.h}!FALSE@{FALSE}}
+\index{FALSE@{FALSE}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{FALSE}{FALSE}}
+{\footnotesize\ttfamily \#define FALSE~0}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00153}{153}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a44172ac633c517cb4c9e278cef36b000}\label{all__system_8h_a44172ac633c517cb4c9e278cef36b000} 
+\index{all\_system.h@{all\_system.h}!GB@{GB}}
+\index{GB@{GB}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{GB}{GB}}
+{\footnotesize\ttfamily \#define GB~(\mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}})}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00146}{146}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a1841fd1a462d245d8c73dce55e2f45da}\label{all__system_8h_a1841fd1a462d245d8c73dce55e2f45da} 
+\index{all\_system.h@{all\_system.h}!KB@{KB}}
+\index{KB@{KB}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{KB}{KB}}
+{\footnotesize\ttfamily \#define KB~(1024)}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00140}{140}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a054daf48a1ba6b803ae4616cbe8e2ca3}\label{all__system_8h_a054daf48a1ba6b803ae4616cbe8e2ca3} 
+\index{all\_system.h@{all\_system.h}!LARGEFILE\_SOURCE@{LARGEFILE\_SOURCE}}
+\index{LARGEFILE\_SOURCE@{LARGEFILE\_SOURCE}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{LARGEFILE\_SOURCE}{LARGEFILE\_SOURCE}}
+{\footnotesize\ttfamily \#define LARGEFILE\+\_\+\+SOURCE~1}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00157}{157}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_ad4d796b98c583d49e83adabd74a63bf6}\label{all__system_8h_ad4d796b98c583d49e83adabd74a63bf6} 
+\index{all\_system.h@{all\_system.h}!MAX\_BUFFER\_SIZE@{MAX\_BUFFER\_SIZE}}
+\index{MAX\_BUFFER\_SIZE@{MAX\_BUFFER\_SIZE}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{MAX\_BUFFER\_SIZE}{MAX\_BUFFER\_SIZE}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+BUFFER\+\_\+\+SIZE~(1 \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_aa6b38d492364d98453284934ed7caee9}{MB}})}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00173}{173}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_aa6b38d492364d98453284934ed7caee9}\label{all__system_8h_aa6b38d492364d98453284934ed7caee9} 
+\index{all\_system.h@{all\_system.h}!MB@{MB}}
+\index{MB@{MB}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{MB}{MB}}
+{\footnotesize\ttfamily \#define MB~(\mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}})}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00143}{143}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a4dc4d45e07d2abc899bcaf04b2846a87}\label{all__system_8h_a4dc4d45e07d2abc899bcaf04b2846a87} 
+\index{all\_system.h@{all\_system.h}!O\_ACCMODE@{O\_ACCMODE}}
+\index{O\_ACCMODE@{O\_ACCMODE}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_ACCMODE}{O\_ACCMODE}}
+{\footnotesize\ttfamily \#define O\+\_\+\+ACCMODE~0003}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00179}{179}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_ae036f789407d21f07b211552d67b3214}\label{all__system_8h_ae036f789407d21f07b211552d67b3214} 
+\index{all\_system.h@{all\_system.h}!O\_APPEND@{O\_APPEND}}
+\index{O\_APPEND@{O\_APPEND}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_APPEND}{O\_APPEND}}
+{\footnotesize\ttfamily \#define O\+\_\+\+APPEND~02000}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00187}{187}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_ac5d0c9848f853f8b026b1211b93f78b1}\label{all__system_8h_ac5d0c9848f853f8b026b1211b93f78b1} 
+\index{all\_system.h@{all\_system.h}!O\_ASYNC@{O\_ASYNC}}
+\index{O\_ASYNC@{O\_ASYNC}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_ASYNC}{O\_ASYNC}}
+{\footnotesize\ttfamily \#define O\+\_\+\+ASYNC~020000}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00192}{192}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a1cf6b1de1fffedaa1d26b189e9a8d2cc}\label{all__system_8h_a1cf6b1de1fffedaa1d26b189e9a8d2cc} 
+\index{all\_system.h@{all\_system.h}!O\_CREAT@{O\_CREAT}}
+\index{O\_CREAT@{O\_CREAT}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_CREAT}{O\_CREAT}}
+{\footnotesize\ttfamily \#define O\+\_\+\+CREAT~0100  /\texorpdfstring{$\ast$}{*} not \mbox{\hyperlink{xpn__bypass_8c_ac8a4d501a786c3db60952a7883a47ced}{fcntl}} \texorpdfstring{$\ast$}{*}/}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00183}{183}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a9f5acfe79fafe14b6694447bd0e9f10b}\label{all__system_8h_a9f5acfe79fafe14b6694447bd0e9f10b} 
+\index{all\_system.h@{all\_system.h}!O\_EXCL@{O\_EXCL}}
+\index{O\_EXCL@{O\_EXCL}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_EXCL}{O\_EXCL}}
+{\footnotesize\ttfamily \#define O\+\_\+\+EXCL~0200   /\texorpdfstring{$\ast$}{*} not \mbox{\hyperlink{xpn__bypass_8c_ac8a4d501a786c3db60952a7883a47ced}{fcntl}} \texorpdfstring{$\ast$}{*}/}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00184}{184}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_ac683f821c3bf7ce4752ff436733cd715}\label{all__system_8h_ac683f821c3bf7ce4752ff436733cd715} 
+\index{all\_system.h@{all\_system.h}!O\_FSYNC@{O\_FSYNC}}
+\index{O\_FSYNC@{O\_FSYNC}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_FSYNC}{O\_FSYNC}}
+{\footnotesize\ttfamily \#define O\+\_\+\+FSYNC~\mbox{\hyperlink{all__system_8h_aae85139bfa94236d126bb1e3b772998f}{O\+\_\+\+SYNC}}}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00191}{191}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a63ba256ec18f373817941d5a4d0e2d5e}\label{all__system_8h_a63ba256ec18f373817941d5a4d0e2d5e} 
+\index{all\_system.h@{all\_system.h}!O\_NDELAY@{O\_NDELAY}}
+\index{O\_NDELAY@{O\_NDELAY}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_NDELAY}{O\_NDELAY}}
+{\footnotesize\ttfamily \#define O\+\_\+\+NDELAY~\mbox{\hyperlink{all__system_8h_a39d33ce33804efd4d52606d59071c6d8}{O\+\_\+\+NONBLOCK}}}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00189}{189}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a2e375ab32c7ef4581b026be28e4cc116}\label{all__system_8h_a2e375ab32c7ef4581b026be28e4cc116} 
+\index{all\_system.h@{all\_system.h}!O\_NOCTTY@{O\_NOCTTY}}
+\index{O\_NOCTTY@{O\_NOCTTY}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_NOCTTY}{O\_NOCTTY}}
+{\footnotesize\ttfamily \#define O\+\_\+\+NOCTTY~0400 /\texorpdfstring{$\ast$}{*} not \mbox{\hyperlink{xpn__bypass_8c_ac8a4d501a786c3db60952a7883a47ced}{fcntl}} \texorpdfstring{$\ast$}{*}/}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00185}{185}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a39d33ce33804efd4d52606d59071c6d8}\label{all__system_8h_a39d33ce33804efd4d52606d59071c6d8} 
+\index{all\_system.h@{all\_system.h}!O\_NONBLOCK@{O\_NONBLOCK}}
+\index{O\_NONBLOCK@{O\_NONBLOCK}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_NONBLOCK}{O\_NONBLOCK}}
+{\footnotesize\ttfamily \#define O\+\_\+\+NONBLOCK~04000}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00188}{188}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a7a68c9ffaac7dbcd652225dd7c06a54b}\label{all__system_8h_a7a68c9ffaac7dbcd652225dd7c06a54b} 
+\index{all\_system.h@{all\_system.h}!O\_RDONLY@{O\_RDONLY}}
+\index{O\_RDONLY@{O\_RDONLY}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_RDONLY}{O\_RDONLY}}
+{\footnotesize\ttfamily \#define O\+\_\+\+RDONLY~00}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00180}{180}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_abb0586253488ee61072b73557eeb873b}\label{all__system_8h_abb0586253488ee61072b73557eeb873b} 
+\index{all\_system.h@{all\_system.h}!O\_RDWR@{O\_RDWR}}
+\index{O\_RDWR@{O\_RDWR}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_RDWR}{O\_RDWR}}
+{\footnotesize\ttfamily \#define O\+\_\+\+RDWR~02}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00182}{182}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_aae85139bfa94236d126bb1e3b772998f}\label{all__system_8h_aae85139bfa94236d126bb1e3b772998f} 
+\index{all\_system.h@{all\_system.h}!O\_SYNC@{O\_SYNC}}
+\index{O\_SYNC@{O\_SYNC}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_SYNC}{O\_SYNC}}
+{\footnotesize\ttfamily \#define O\+\_\+\+SYNC~010000}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00190}{190}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_ad1d67e453fb3031f40f8cd3403773813}\label{all__system_8h_ad1d67e453fb3031f40f8cd3403773813} 
+\index{all\_system.h@{all\_system.h}!O\_TRUNC@{O\_TRUNC}}
+\index{O\_TRUNC@{O\_TRUNC}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_TRUNC}{O\_TRUNC}}
+{\footnotesize\ttfamily \#define O\+\_\+\+TRUNC~01000 /\texorpdfstring{$\ast$}{*} not \mbox{\hyperlink{xpn__bypass_8c_ac8a4d501a786c3db60952a7883a47ced}{fcntl}} \texorpdfstring{$\ast$}{*}/}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00186}{186}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_a11b644a8526139c4cc1850dac1271ced}\label{all__system_8h_a11b644a8526139c4cc1850dac1271ced} 
+\index{all\_system.h@{all\_system.h}!O\_WRONLY@{O\_WRONLY}}
+\index{O\_WRONLY@{O\_WRONLY}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{O\_WRONLY}{O\_WRONLY}}
+{\footnotesize\ttfamily \#define O\+\_\+\+WRONLY~01}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00181}{181}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}\label{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166} 
+\index{all\_system.h@{all\_system.h}!PATH\_MAX@{PATH\_MAX}}
+\index{PATH\_MAX@{PATH\_MAX}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{PATH\_MAX}{PATH\_MAX}}
+{\footnotesize\ttfamily \#define PATH\+\_\+\+MAX~1024}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00169}{169}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_abc7e7860bdf86d90b21df20f23ea6004}\label{all__system_8h_abc7e7860bdf86d90b21df20f23ea6004} 
+\index{all\_system.h@{all\_system.h}!PROTOCOL\_MAXLEN@{PROTOCOL\_MAXLEN}}
+\index{PROTOCOL\_MAXLEN@{PROTOCOL\_MAXLEN}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{PROTOCOL\_MAXLEN}{PROTOCOL\_MAXLEN}}
+{\footnotesize\ttfamily \#define PROTOCOL\+\_\+\+MAXLEN~20}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00176}{176}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+
+\Hypertarget{all__system_8h_aa8cecfc5c5c054d2875c03e77b7be15d}\label{all__system_8h_aa8cecfc5c5c054d2875c03e77b7be15d} 
+\index{all\_system.h@{all\_system.h}!TRUE@{TRUE}}
+\index{TRUE@{TRUE}!all\_system.h@{all\_system.h}}
+\doxysubsubsection{\texorpdfstring{TRUE}{TRUE}}
+{\footnotesize\ttfamily \#define TRUE~1}
+
+
+
+Definition at line \mbox{\hyperlink{all__system_8h_source_l00150}{150}} of file \mbox{\hyperlink{all__system_8h_source}{all\+\_\+system.\+h}}.
+

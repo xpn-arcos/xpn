@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file expand_lib.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _EXPAND_H
 #define _EXPAND_H
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "config.h"
 #include "base/base_lib.h"
 #include "nfi/nfi_lib.h"

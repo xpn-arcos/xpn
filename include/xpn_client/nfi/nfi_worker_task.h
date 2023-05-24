@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file nfi_worker_task.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _NFI_WORKER_TASK_H_
 #define _NFI_WORKER_TASK_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "debug_msg.h"
 #include "workers.h"
@@ -31,6 +45,16 @@ extern "C"
 {
 #endif
 
+  /** @struct nfi_worker_io
+   *  This is a struct
+   *
+   *  @var nfi_worker_io::offset
+   *    A 'TODO'.
+   *  @var nfi_worker_io::size
+   *    A 'TODO'.
+   *  @var nfi_worker_io::buffer
+   *    A 'TODO'.
+   */
   struct nfi_worker_io
   {
     off_t offset;
@@ -38,6 +62,42 @@ extern "C"
     void *buffer;
   };
 
+  /** @struct nfi_worker_args
+   *  This is a struct
+   *
+   *  @var nfi_worker_args::operation
+   *    A 'TODO'.
+   *  @var nfi_worker_args::result
+   *    A 'TODO'.
+   *  @var nfi_worker_args::url
+   *    A 'TODO'.
+   *  @var nfi_worker_args::master_node
+   *    A 'TODO'.
+   *  @var nfi_worker_args::is_master_node
+   *    A 'TODO'.
+   *  @var nfi_worker_args::virtual_path
+   *    A 'TODO'.
+   *  @var nfi_worker_args::storage_path
+   *    A 'TODO'.
+   *  @var nfi_worker_args::newurl
+   *    A 'TODO'.
+   *  @var nfi_worker_args::fh
+   *    A 'TODO'.
+   *  @var nfi_worker_args::attr
+   *    A 'TODO'.
+   *  @var nfi_worker_args::opt
+   *    A 'TODO'.
+   *  @var nfi_worker_args::inf
+   *    A 'TODO'.
+   *  @var nfi_worker_args::n_io
+   *    A 'TODO'.
+   *  @var nfi_worker_args::io
+   *    A 'TODO'.
+   *  @var nfi_worker_args::entry
+   *    A 'TODO'.
+   *  @var nfi_worker_args::type
+   *    A 'TODO'.
+   */
   struct nfi_worker_args
   {
     int operation;
@@ -62,6 +122,28 @@ extern "C"
     unsigned char *type;
   };
 
+  /** @struct nfi_worker
+   *  This is a struct
+   *
+   *  @var nfi_worker::thread
+   *    A 'TODO'.
+   *  @var nfi_worker::pth
+   *    A 'TODO'.
+   *  @var nfi_worker::mt
+   *    A 'TODO'.
+   *  @var nfi_worker::cnd
+   *    A 'TODO'.
+   *  @var nfi_worker::ready
+   *    A 'TODO'.
+   *  @var nfi_worker::wb
+   *    A 'TODO'.
+   *  @var nfi_worker::warg
+   *    A 'TODO'.
+   *  @var nfi_worker::server
+   *    A 'TODO'.
+   *  @var nfi_worker::arg
+   *    A 'TODO'.
+   */
   struct nfi_worker
   {
     int thread;

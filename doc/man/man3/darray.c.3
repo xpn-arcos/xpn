@@ -1,0 +1,413 @@
+.TH "darray.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+darray.c \- File to execute operations on dynamic arrays\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'base/darray\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int8_t \fBDARRAY_InsEndDarray\fP (\fBt_pointerDArray\fP *t, long *n, \fBT_POINTER\fP gptr)"
+.br
+.RI "Insert the element 'gptr' into the end of the dynamic array '*t' that allready has '*n' elements\&. "
+.ti -1c
+.RI "int8_t \fBDARRAY_DelEndDarray\fP (\fBt_pointerDArray\fP *t, long *n, \fBT_POINTER\fP *delGPtr)"
+.br
+.RI "Remove the last element from the dynamic array\&. "
+.ti -1c
+.RI "int8_t \fBDARRAY_DelBeginDarray\fP (\fBt_pointerDArray\fP *t, long *n, \fBT_POINTER\fP *delGPtr)"
+.br
+.RI "Remove the first element from the dynamic array\&. "
+.ti -1c
+.RI "int8_t \fBDARRAY_DelNFromDarray\fP (\fBt_pointerDArray\fP *t, long *n, long orden, \fBT_POINTER\fP *delGPtr)"
+.br
+.RI "Remove the 'orden'th element from the dynamic array\&. "
+.ti -1c
+.RI "int8_t \fBDARRAY_ChangeNFromDarray\fP (\fBt_pointerDArray\fP *t, long *n, long orden, \fBT_POINTER\fP nPtr)"
+.br
+.RI "Change the value of 'orden'th element from the dynamic array\&. "
+.ti -1c
+.RI "int8_t \fBDARRAY_FreeEltosDarray\fP (\fBt_pointerDArray\fP *t, long *n, void(*freef)(\fBT_POINTER\fP))"
+.br
+.RI "Remove all '*n' elements from the dynamic array\&. "
+.ti -1c
+.RI "\fBT_POINTER\fP \fBDARRAY_FindEltoDarray\fP (\fBt_pointerDArray\fP t, long n, \fBT_POINTER\fP gptr, int8_t(*findf)(\fBT_POINTER\fP, \fBT_POINTER\fP))"
+.br
+.RI "Find i-th element in dynamic array\&. "
+.ti -1c
+.RI "long \fBDARRAY_GetNDarray\fP (\fBt_pointerDArray\fP t)"
+.br
+.RI "Number of elements in the dynamic array\&. "
+.ti -1c
+.RI "int8_t \fBDARRAY_FreeEltosDarray2\fP (\fBt_pointerDArray\fP *t, void(*freef)(\fBT_POINTER\fP))"
+.br
+.RI "Remove all elements from the dynamic array\&. "
+.ti -1c
+.RI "int8_t \fBDARRAY_DelEltoDarray\fP (\fBt_pointerDArray\fP *t, \fBT_POINTER\fP elto)"
+.br
+.RI "Remove the element with value 'elto' from the dynamic array\&. "
+.ti -1c
+.RI "int8_t \fBDARRAY_InsEndDarray2\fP (\fBt_pointerDArray\fP *t, \fBT_POINTER\fP gptr)"
+.br
+.RI "Insert the element into the end of the dynamic array\&. "
+.ti -1c
+.RI "int8_t \fBDARRAY_DelEndDarray2\fP (\fBt_pointerDArray\fP *t, \fBT_POINTER\fP *delGPtr)"
+.br
+.RI "Remove the last element from the dynamic array\&. "
+.ti -1c
+.RI "\fBT_POINTER\fP \fBDARRAY_GetNFromDarray2\fP (\fBt_pointerDArray\fP t, long orden)"
+.br
+.RI "Return the 'orden'-th element in the 't' dynamic array, in a NULL ended array\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to execute operations on dynamic arrays\&. 
+
+File to insert, delete, find, get elements from a dynamic array\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBdarray\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int8_t DARRAY_ChangeNFromDarray (\fBt_pointerDArray\fP * t, long * n, long orden, \fBT_POINTER\fP nPtr)"
+
+.PP
+Change the value of 'orden'th element from the dynamic array\&. The value of the 'orden'-th element of the dynamic array '*t' of '*n' elements is changed to a new element ('nPtr')\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIn\fP number of elements in the dynamic array\&. 
+.br
+\fIorden\fP position (begin at 0) of element to be changed\&. 
+.br
+\fInPtr\fP element that has been changed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is changed and error (-1) if a problem is found\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB176\fP of file \fBdarray\&.c\fP\&.
+.SS "int8_t DARRAY_DelBeginDarray (\fBt_pointerDArray\fP * t, long * n, \fBT_POINTER\fP * delGPtr)"
+
+.PP
+Remove the first element from the dynamic array\&. The first element of the dynamic array '*t' of '*n' elements is removed and return that element in '*delGPtr'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIn\fP number of elements in the dynamic array\&. 
+.br
+\fIdelGPtr\fP element that has been removed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is removed and error (-1) if a problem is found\&. 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+'\fBDARRAY_DelEndDarray\fP' to remove the \fBlast\fP element\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB108\fP of file \fBdarray\&.c\fP\&.
+.PP
+References \fBc_POINTER\fP\&.
+.SS "int8_t DARRAY_DelEltoDarray (\fBt_pointerDArray\fP * t, \fBT_POINTER\fP elto)"
+
+.PP
+Remove the element with value 'elto' from the dynamic array\&. Try to delete the element 'elto' from the table 't' that is NULL ended\&. It looks for it and if it is not found it returns FALSE\&. If it finds it, it deletes it and adjusts the table\&. It does not need the data 'number of elements' because in the search it already goes through the table\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIelto\fP element that has been removed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is removed and error (-1) if a problem is found\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB280\fP of file \fBdarray\&.c\fP\&.
+.PP
+References \fBc_POINTER\fP\&.
+.SS "int8_t DARRAY_DelEndDarray (\fBt_pointerDArray\fP * t, long * n, \fBT_POINTER\fP * delGPtr)"
+
+.PP
+Remove the last element from the dynamic array\&. It deletes last element of dynamic array 't' of '*n' elements and return that element in '*delGPtr'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIn\fP number of elements in the dynamic array\&. 
+.br
+\fIdelGPtr\fP element that has been removed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is removed and error (-1) if a problem is found\&. 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+'\fBDARRAY_DelBeginDarray\fP' to remove the first element\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB78\fP of file \fBdarray\&.c\fP\&.
+.PP
+References \fBc_POINTER\fP\&.
+.PP
+Referenced by \fBDARRAY_DelEndDarray2()\fP\&.
+.SS "int8_t DARRAY_DelEndDarray2 (\fBt_pointerDArray\fP * t, \fBT_POINTER\fP * delGPtr)"
+
+.PP
+Remove the last element from the dynamic array\&. It deletes the last element of the table 't' that is NULL ended, and places in the parameter 'delGPtr' the deleted element, in case we are interested\&. The difference with the previous function is that, not knowing the number of elements, it 'counts' them, something that is inefficient\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIdelGPtr\fP element that has been removed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is removed and error (-1) if a problem is found\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB334\fP of file \fBdarray\&.c\fP\&.
+.PP
+References \fBDARRAY_DelEndDarray()\fP\&.
+.SS "int8_t DARRAY_DelNFromDarray (\fBt_pointerDArray\fP * t, long * n, long orden, \fBT_POINTER\fP * delGPtr)"
+
+.PP
+Remove the 'orden'th element from the dynamic array\&. It deletes the element of position 'order' from the dynamic array '*t', decrements the number of elements '*n' in the dynamic array and return that element that has been removed in '*delGPtr'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIn\fP number of elements in the dynamic array\&. 
+.br
+\fIorden\fP position (begin at 0) of element to remove\&. 
+.br
+\fIdelGPtr\fP element that has been removed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is removed and error (-1) if a problem is found\&. 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+'\fBDARRAY_DelBeginDarray\fP' to remove first element\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB141\fP of file \fBdarray\&.c\fP\&.
+.PP
+References \fBc_POINTER\fP\&.
+.SS "\fBT_POINTER\fP DARRAY_FindEltoDarray (\fBt_pointerDArray\fP t, long n, \fBT_POINTER\fP gptr, int8_t(*)(\fBT_POINTER\fP, \fBT_POINTER\fP) findf)"
+
+.PP
+Find i-th element in dynamic array\&. Find in the dynamic array, the first element that makes that, (*findf)(gptr,darray element) == TRUE\&. Execute '*findf' function with 'gptr' as one parameter and i-th element as the other parameter, for all '*n' elements at the dynamic array '*t'\&. Using NULL elto as end tag\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIn\fP number of elements in the dynamic array\&. 
+.br
+\fIgptr\fP element for first param to 'findf'\&. 
+.br
+\fIfindf\fP function to be used to compare i-th element and 'gptr'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the element to be find or NULL\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB226\fP of file \fBdarray\&.c\fP\&.
+.SS "int8_t DARRAY_FreeEltosDarray (\fBt_pointerDArray\fP * t, long * n, void(*)(\fBT_POINTER\fP) freef)"
+
+.PP
+Remove all '*n' elements from the dynamic array\&. It goes through the dynamic array '*t', from 0\&.\&.n applying the function 'freef' on each element to remove it\&. When finished, it does a 'free(t)'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIn\fP number of elements in the dynamic array\&. 
+.br
+\fIfreef\fP the free function to be used\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if elements are freeded and error (-1) if a problem is found\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB198\fP of file \fBdarray\&.c\fP\&.
+.SS "int8_t DARRAY_FreeEltosDarray2 (\fBt_pointerDArray\fP * t, void(*)(\fBT_POINTER\fP) freef)"
+
+.PP
+Remove all elements from the dynamic array\&. It goes through the dynamic array '*t', from 0\&.\&.n applying the function 'freef' on each element to remove it\&. When finished, it does a 'free(t)'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIfreef\fP the free function to be used\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if elements are removed and error (-1) if a problem is found\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB257\fP of file \fBdarray\&.c\fP\&.
+.SS "long DARRAY_GetNDarray (\fBt_pointerDArray\fP t)"
+
+.PP
+Number of elements in the dynamic array\&. Return the number of elements in the 't' dynamic array, in a NULL ended array\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the number of element in the 't' array\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB243\fP of file \fBdarray\&.c\fP\&.
+.SS "\fBT_POINTER\fP DARRAY_GetNFromDarray2 (\fBt_pointerDArray\fP t, long orden)"
+
+.PP
+Return the 'orden'-th element in the 't' dynamic array, in a NULL ended array\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIorden\fP position (begin at 0) of element to return\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the element at this position or NULL\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB358\fP of file \fBdarray\&.c\fP\&.
+.SS "int8_t DARRAY_InsEndDarray (\fBt_pointerDArray\fP * t, long * n, \fBT_POINTER\fP gptr)"
+
+.PP
+Insert the element 'gptr' into the end of the dynamic array '*t' that allready has '*n' elements\&. Inserts 'gptr' at the end of table 't', with '(*n)' pointers and adds one more ( (*n) = (*n) + 1 )
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIn\fP number of elements in the dynamic array\&. 
+.br
+\fIgptr\fP the element that has been inserted\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is inserted and error (-1) if a problem is found\&. 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+'\fBDARRAY_InsEndDarray2\fP' if dynamic array is NULL terminated\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB41\fP of file \fBdarray\&.c\fP\&.
+.PP
+References \fBc_POINTER\fP\&.
+.PP
+Referenced by \fBDARRAY_InsEndDarray2()\fP, and \fBdtable_insert()\fP\&.
+.SS "int8_t DARRAY_InsEndDarray2 (\fBt_pointerDArray\fP * t, \fBT_POINTER\fP gptr)"
+
+.PP
+Insert the element into the end of the dynamic array\&. Insert the element 'gptr' into the end of the dynamic array '*t' that is NULL ended\&. The difference with the previous function is that, not knowing the number of elements, it 'counts' them, which is inefficient\&. Remember, the table of pointers ends with the NULL pointer\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIt\fP a dynamic array\&. 
+.br
+\fIgptr\fP element that has been inserted\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is inserted and error (-1) if a problem is found\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB317\fP of file \fBdarray\&.c\fP\&.
+.PP
+References \fBDARRAY_InsEndDarray()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

@@ -1,0 +1,102 @@
+.TH "nfi_nfs_err.h" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfi_nfs_err.h \- Header file to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'nfs\&.h'\fP
+.br
+
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBnfi_nfs_err\fP { \fBNFSERR_PARAM\fP = 0, \fBNFSERR_MEMORY\fP = 1, \fBNFSERR_URL\fP = 2, \fBNFSERR_MNTCONNECTION\fP = 3, \fBNFSERR_MOUNT\fP = 4, \fBNFSERR_NFSCONNECTION\fP = 5, \fBNFSERR_GETATTR\fP = 6, \fBNFSERR_LOOKUP\fP = 7, \fBNFSERR_READ\fP = 8, \fBNFSERR_WRITE\fP = 9, \fBNFSERR_CREATE\fP = 10, \fBNFSERR_REMOVE\fP = 11, \fBNFSERR_MKDIR\fP = 12, \fBNFSERR_READDIR\fP = 13, \fBNFSERR_STATFS\fP = 14 }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBnfs_err\fP (int err)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Header file to 'TODO'\&. 
+
+Header file to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBnfi_nfs_err\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBnfi_nfs_err\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fINFSERR_PARAM \fP\fP
+.TP
+\fB\fINFSERR_MEMORY \fP\fP
+.TP
+\fB\fINFSERR_URL \fP\fP
+.TP
+\fB\fINFSERR_MNTCONNECTION \fP\fP
+.TP
+\fB\fINFSERR_MOUNT \fP\fP
+.TP
+\fB\fINFSERR_NFSCONNECTION \fP\fP
+.TP
+\fB\fINFSERR_GETATTR \fP\fP
+.TP
+\fB\fINFSERR_LOOKUP \fP\fP
+.TP
+\fB\fINFSERR_READ \fP\fP
+.TP
+\fB\fINFSERR_WRITE \fP\fP
+.TP
+\fB\fINFSERR_CREATE \fP\fP
+.TP
+\fB\fINFSERR_REMOVE \fP\fP
+.TP
+\fB\fINFSERR_MKDIR \fP\fP
+.TP
+\fB\fINFSERR_READDIR \fP\fP
+.TP
+\fB\fINFSERR_STATFS \fP\fP
+.PP
+Definition at line \fB42\fP of file \fBnfi_nfs_err\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void nfs_err (int err)"
+
+.PP
+Definition at line \fB40\fP of file \fBnfi_nfs_err\&.c\fP\&.
+.PP
+References \fBerrno\fP, \fBNFSERR_GETATTR\fP, \fBNFSERR_MEMORY\fP, \fBNFSERR_MNTCONNECTION\fP, \fBNFSERR_MOUNT\fP, \fBNFSERR_NFSCONNECTION\fP, \fBNFSERR_PARAM\fP, and \fBNFSERR_URL\fP\&.
+.PP
+Referenced by \fBnfi_nfs_close()\fP, \fBnfi_nfs_create()\fP, \fBnfi_nfs_destroy()\fP, \fBnfi_nfs_disconnect()\fP, \fBnfi_nfs_getattr()\fP, \fBnfi_nfs_init()\fP, \fBnfi_nfs_mkdir()\fP, \fBnfi_nfs_read()\fP, \fBnfi_nfs_readdir()\fP, \fBnfi_nfs_reconnect()\fP, \fBnfi_nfs_remove()\fP, \fBnfi_nfs_rename()\fP, \fBnfi_nfs_rmdir()\fP, \fBnfi_nfs_setattr()\fP, \fBnfi_nfs_statfs()\fP, \fBnfi_nfs_write()\fP, and \fBnfs_open()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

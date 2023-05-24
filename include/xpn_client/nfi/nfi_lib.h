@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file nfi_lib.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _NFI_LIB_H_
 #define _NFI_LIB_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "nfi.h"
 #include "nfi_worker.h"
 #include "base/path_misc.h"

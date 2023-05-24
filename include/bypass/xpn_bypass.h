@@ -18,15 +18,25 @@
  *
  */
 
+/**
+ * @file xpn_bypass.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _XPN_BYPASS_H_
 #define _XPN_BYPASS_H_
 
-//
-// Includes
-//
-
 #define _GNU_SOURCE
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "config.h"
 
 #include <dlfcn.h>
@@ -42,9 +52,9 @@
 
 // #include<pthread.h> //Mutex
 
-//
-// Const
-//
+/************************************************
+ *  ... Constants
+ ***********************************************/
 
 #ifndef _STAT_VER
 #define _STAT_VER 0
@@ -62,24 +72,49 @@
 #define FD_SYS 1
 #define FD_XPN 2
 
-//
-// Types
-//
+/************************************************
+ *  ... Typedef
+ ***********************************************/
 
+/** @struct __dirstream
+ *  This is a struct
+ *
+ *  @var __dirstream::fd
+ *    File descriptor.
+ *  @var __dirstream::allocation
+ *    Space allocated for the block.
+ *  @var __dirstream::size
+ *    Total valid data in the block.
+ *  @var __dirstream::offset
+ *    Current offset into the block.
+ *  @var __dirstream::filepos
+ *    Position of next entry to read.
+ *  @var __dirstream::path
+ *    A 'TODO'.
+ */
 struct __dirstream
 {
-  int fd; /* File descriptor.  */
+  int fd;
   //__libc_lock_define (, lock) /* Mutex lock for this structure.  */ //TODO
-  size_t allocation; /* Space allocated for the block.  */
-  size_t size;       /* Total valid data in the block.  */
-  size_t offset;     /* Current offset into the block.  */
-  off_t filepos;     /* Position of next entry to read.  */
+  size_t allocation;
+  size_t size;
+  size_t offset;
+  off_t filepos;
   /* Directory block.  */
   char data[0] __attribute__((aligned(__alignof__(void *))));
-
   char *path;
 };
 
+/** @struct generic_fd
+ *  This is a struct
+ *
+ *  @var generic_fd::type
+ *    A 'TODO'.
+ *  @var generic_fd::real_fd
+ *    A 'TODO'.
+ *  @var generic_fd::is_file
+ *    A 'TODO'.
+ */
 struct generic_fd
 {
   int type;
@@ -87,66 +122,460 @@ struct generic_fd
   int is_file;
 };
 
-//
-// API
-//
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-// File API
+/************************************************
+ *  ... File API
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param flags  'TODO'.
+ * @return 'TODO'.
+ */
 int open(const char *path, int flags, ...);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param flags  'TODO'.
+ * @return 'TODO'.
+ */
 int open64(const char *path, int flags, ...);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param flags  'TODO'.
+ * @return 'TODO'.
+ */
 int __open_2(const char *path, int flags, ...);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param mode  'TODO'.
+ * @return 'TODO'.
+ */
 int creat(const char *path, mode_t mode);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd  'TODO'.
+ * @return 'TODO'.
+ */
 int close(int fd);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fildes  'TODO'.
+ * @param length  'TODO'.
+ * @return 'TODO'.
+ */
 int ftruncate(int fildes, off_t length);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fildes  'TODO'.
+ * @param buf  'TODO'.
+ * @param nbyte  'TODO'.
+ * @return 'TODO'.
+ */
 ssize_t read(int fildes, void *buf, size_t nbyte);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fildes  'TODO'.
+ * @param buf  'TODO'.
+ * @param nbyte  'TODO'.
+ * @return 'TODO'.
+ */
 ssize_t write(int fildes, const void *buf, size_t nbyte);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fildes  'TODO'.
+ * @param offset  'TODO'.
+ * @param whence  'TODO'.
+ * @return 'TODO'.
+ */
 off_t lseek(int fildes, off_t offset, int whence);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd  'TODO'.
+ * @param offset  'TODO'.
+ * @param whence  'TODO'.
+ * @return 'TODO'.
+ */
 off64_t lseek64(int fd, off64_t offset, int whence);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ver  'TODO'.
+ * @param path  'TODO'.
+ * @param buf  'TODO'.
+ * @return 'TODO'.
+ */
 int __lxstat(int ver, const char *path, struct stat *buf);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ver  'TODO'.
+ * @param path  'TODO'.
+ * @param buf  'TODO'.
+ * @return 'TODO'.
+ */
 int __lxstat64(int ver, const char *path, struct stat64 *buf);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ver  'TODO'.
+ * @param path  'TODO'.
+ * @param buf  'TODO'.
+ * @return 'TODO'.
+ */
 int __xstat(int ver, const char *path, struct stat *buf);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ver  'TODO'.
+ * @param path  'TODO'.
+ * @param buf  'TODO'.
+ * @return 'TODO'.
+ */
 int __xstat64(int ver, const char *path, struct stat64 *buf);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ver  'TODO'.
+ * @param fd  'TODO'.
+ * @param buf  'TODO'.
+ * @return 'TODO'.
+ */
 int __fxstat(int ver, int fd, struct stat *buf);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ver  'TODO'.
+ * @param fildes  'TODO'.
+ * @param buf  'TODO'.
+ * @return 'TODO'.
+ */
 int __fxstat64(int ver, int fildes, struct stat64 *buf);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ver  'TODO'.
+ * @param dirfd  'TODO'.
+ * @param path  'TODO'.
+ * @param buf  'TODO'.
+ * @param flags  'TODO'.
+ * @return 'TODO'.
+ */
 int __fxstatat(int ver, int dirfd, const char *path, struct stat *buf, int flags);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ver  'TODO'.
+ * @param dirfd  'TODO'.
+ * @param path  'TODO'.
+ * @param buf  'TODO'.
+ * @param flags  'TODO'.
+ * @return 'TODO'.
+ */
 int __fxstatat64(int ver, int dirfd, const char *path, struct stat64 *buf, int flags);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param old_path  'TODO'.
+ * @param new_path  'TODO'.
+ * @return 'TODO'.
+ */
 int rename(const char *old_path, const char *new_path);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @return 'TODO'.
+ */
 int unlink(const char *path);
 
-// Directory API
+/************************************************
+ *  ... Directory API
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param mode  'TODO'.
+ * @return 'TODO'.
+ */
 int mkdir(const char *path, mode_t mode);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dirname  'TODO'.
+ * @return 'TODO'.
+ */
 DIR *opendir(const char *dirname);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dirp  'TODO'.
+ * @return 'TODO'.
+ */
 struct dirent *readdir(DIR *dirp);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dirp  'TODO'.
+ * @return 'TODO'.
+ */
 struct dirent64 *readdir64(DIR *dirp);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dirp  'TODO'.
+ * @return 'TODO'.
+ */
 int closedir(DIR *dirp);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @return 'TODO'.
+ */
 int rmdir(const char *path);
 
-// Proccess API
-
+/************************************************
+ *  ... Proccess API
+ ***********************************************/
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @return 'TODO'.
+ */
 int fork(void);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fildes  'TODO'.
+ * @return 'TODO'.
+ */
 int dup(int fildes);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fildes  'TODO'.
+ * @param fildes2  'TODO'.
+ * @return 'TODO'.
+ */
 int dup2(int fildes, int fildes2);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param status  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void exit(int status);
 
-// Manager API
-
+/************************************************
+ *  ... Manager API
+ ***********************************************/
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @return 'TODO'.
+ */
 int chdir(const char *path);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param mode  'TODO'.
+ * @return 'TODO'.
+ */
 int chmod(const char *path, mode_t mode);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fildes  'TODO'.
+ * @param mode  'TODO'.
+ * @return 'TODO'.
+ */
 int fchmod(int fildes, mode_t mode);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param owner  'TODO'.
+ * @param group  'TODO'.
+ * @return 'TODO'.
+ */
 int chown(const char *path, uid_t owner, gid_t group);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd  'TODO'.
+ * @param cmd  'TODO'.
+ * @param arg  'TODO'.
+ * @return 'TODO'.
+ */
 int fcntl(int fd, int cmd, long arg);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param mode  'TODO'.
+ * @return 'TODO'.
+ */
 int access(const char *path, int mode);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param resolved_path  'TODO'.
+ * @return 'TODO'.
+ */
 char *realpath(const char *restrict path, char *restrict resolved_path);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param resolved_path  'TODO'.
+ * @param resolved_len  'TODO'.
+ * @return 'TODO'.
+ */
 char *__realpath_chk(const char *path, char *resolved_path, size_t resolved_len);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd  'TODO'.
+ * @return 'TODO'.
+ */
 int fsync(int fd);
 
 #endif

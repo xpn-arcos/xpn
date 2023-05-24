@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file xpn_simple_lib.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _XPN_SIMPLE_LIB_H_
 #define _XPN_SIMPLE_LIB_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn_policy_init.h"
 #include "xpn_policy_rw.h"
 #include "xpn_policy_opendir.h"

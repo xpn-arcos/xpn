@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file nfi_ops.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _NFI_OPS_H_
 #define _NFI_OPS_H_
 
@@ -30,6 +41,9 @@ extern "C"
 #define XPN_HEADER_SIZE 8192
 #endif
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "nfi_worker_task.h"
 #include "nfi_worker.h"
 
@@ -57,27 +71,226 @@ extern "C"
     op_flush = 62,
   };
 
+  /************************************************
+   *  ... Functions
+   ***********************************************/
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param th_arg 'TODO'.
+   * @par Returns
+   *    Nothing.
+   */
   void nfi_do_operation(struct st_th th_arg);
 
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param url 'TODO'.
+   * @param fho 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_open(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fho);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param url 'TODO'.
+   * @param attr 'TODO'.
+   * @param fh 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_create(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param fh 'TODO'.
+   * @param io 'TODO'.
+   * @param n 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_read(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param fh 'TODO'.
+   * @param io 'TODO'.
+   * @param n 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_write(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io, int n);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param fh 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_close(struct nfi_worker *wrk, struct nfi_fhandle *fh);
 
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param url 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_remove(struct nfi_worker *wrk, char *url);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param old_url 'TODO'.
+   * @param new_url 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_rename(struct nfi_worker *wrk, char *old_url, char *new_url);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param fh 'TODO'.
+   * @param attr 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_getattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param fh 'TODO'.
+   * @param attr 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_setattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
 
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param url 'TODO'.
+   * @param attr 'TODO'.
+   * @param fh 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_mkdir(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param url 'TODO'.
+   * @param fho 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_opendir(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fho);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param fhd 'TODO'.
+   * @param entry 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_readdir(struct nfi_worker *wrk, struct nfi_fhandle *fhd, struct dirent *entry);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param fh 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_closedir(struct nfi_worker *wrk, struct nfi_fhandle *fh);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param url 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_rmdir(struct nfi_worker *wrk, char *url);
 
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param inf 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_statfs(struct nfi_worker *wrk, struct nfi_info *inf);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param url 'TODO'.
+   * @param virtual_path 'TODO'.
+   * @param storage_path 'TODO'.
+   * @param opt 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_preload(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param wrk 'TODO'.
+   * @param url 'TODO'.
+   * @param virtual_path 'TODO'.
+   * @param storage_path 'TODO'.
+   * @param opt 'TODO'.
+   * @return 'TODO'.
+   */
   int nfi_worker_do_flush(struct nfi_worker *wrk, char *url, char *virtual_path, char *storage_path, int opt);
 
 #ifdef __cplusplus

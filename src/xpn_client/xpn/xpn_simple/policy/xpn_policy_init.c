@@ -18,10 +18,36 @@
  *
  */
 
+/**
+ * @file xpn_policy_init.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn/xpn_simple/xpn_policy_init.h"
 
 extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param key 'TODO'.
+ * @return 'TODO'.
+ */
 char *param_get(char *key)
 {
     char *ret = NULL;
@@ -560,6 +586,16 @@ struct xpn_partition *XpnSearchPart(int pd)
     return &(xpn_parttable[i]);
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 void XpnShowPartitionTable(void)
 {
     int i = 0;

@@ -1,0 +1,207 @@
+\doxysection{worker\+\_\+pool\+\_\+t Struct Reference}
+\hypertarget{structworker__pool__t}{}\label{structworker__pool__t}\index{worker\_pool\_t@{worker\_pool\_t}}
+
+
+This is a struct.  
+
+
+
+
+{\ttfamily \#include $<$workers\+\_\+pool.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+pthread\+\_\+mutex\+\_\+t \mbox{\hyperlink{structworker__pool__t_a205bb13104b81afda031c5d28a0a70ed}{m\+\_\+pool}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+pthread\+\_\+cond\+\_\+t \mbox{\hyperlink{structworker__pool__t_ac998813c5aa7a2e0b3ba72078c8cc383}{c\+\_\+pool\+\_\+no\+\_\+full}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+pthread\+\_\+cond\+\_\+t \mbox{\hyperlink{structworker__pool__t_a79e5e63b6a4405a788fe2f0edbd15a60}{c\+\_\+poll\+\_\+no\+\_\+empty}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+pthread\+\_\+mutex\+\_\+t \mbox{\hyperlink{structworker__pool__t_ad5aedc92b4453ba2a997d3db0f9f1a45}{m\+\_\+pool\+\_\+end}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structworker__pool__t_a722ca0f019286bbc4fa2658910254e88}{POOL\+\_\+\+MAX\+\_\+\+THREADS}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+pthread\+\_\+t \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structworker__pool__t_a0ec5849d52e56e91341b048e10c5de0f}{thid}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structst__th}{st\+\_\+th}} \mbox{\hyperlink{structworker__pool__t_a0e38d8699a03f24df910721a1c4a3ec3}{operations\+\_\+buffer}} \mbox{[}\mbox{\hyperlink{workers__common_8h_a64d635a9025701bb274c73c0258c3541}{MAX\+\_\+\+OPERATIONS}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structworker__pool__t_a10e8b52e02903d5cf7e1fa6d2a772c51}{n\+\_\+operation}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structworker__pool__t_ac16119a0ab28a9ddc690eef099c52d60}{deq\+\_\+pos}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structworker__pool__t_ad87106d8f2b667a0585cfa5c5cfcb678}{enq\+\_\+pos}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structworker__pool__t_a2d125a80d4b313aa7d62fd31606de5f6}{pool\+\_\+end}}
+\begin{DoxyCompactList}\small\item\em A \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This is a struct. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00075}{75}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structworker__pool__t_a79e5e63b6a4405a788fe2f0edbd15a60}\label{structworker__pool__t_a79e5e63b6a4405a788fe2f0edbd15a60} 
+\index{worker\_pool\_t@{worker\_pool\_t}!c\_poll\_no\_empty@{c\_poll\_no\_empty}}
+\index{c\_poll\_no\_empty@{c\_poll\_no\_empty}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{c\_poll\_no\_empty}{c\_poll\_no\_empty}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::c\+\_\+poll\+\_\+no\+\_\+empty}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00079}{79}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_ac998813c5aa7a2e0b3ba72078c8cc383}\label{structworker__pool__t_ac998813c5aa7a2e0b3ba72078c8cc383} 
+\index{worker\_pool\_t@{worker\_pool\_t}!c\_pool\_no\_full@{c\_pool\_no\_full}}
+\index{c\_pool\_no\_full@{c\_pool\_no\_full}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{c\_pool\_no\_full}{c\_pool\_no\_full}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::c\+\_\+pool\+\_\+no\+\_\+full}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00078}{78}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_ac16119a0ab28a9ddc690eef099c52d60}\label{structworker__pool__t_ac16119a0ab28a9ddc690eef099c52d60} 
+\index{worker\_pool\_t@{worker\_pool\_t}!deq\_pos@{deq\_pos}}
+\index{deq\_pos@{deq\_pos}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{deq\_pos}{deq\_pos}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::deq\+\_\+pos}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00087}{87}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_ad87106d8f2b667a0585cfa5c5cfcb678}\label{structworker__pool__t_ad87106d8f2b667a0585cfa5c5cfcb678} 
+\index{worker\_pool\_t@{worker\_pool\_t}!enq\_pos@{enq\_pos}}
+\index{enq\_pos@{enq\_pos}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{enq\_pos}{enq\_pos}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::enq\+\_\+pos}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00088}{88}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_a205bb13104b81afda031c5d28a0a70ed}\label{structworker__pool__t_a205bb13104b81afda031c5d28a0a70ed} 
+\index{worker\_pool\_t@{worker\_pool\_t}!m\_pool@{m\_pool}}
+\index{m\_pool@{m\_pool}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{m\_pool}{m\_pool}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::m\+\_\+pool}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00077}{77}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_ad5aedc92b4453ba2a997d3db0f9f1a45}\label{structworker__pool__t_ad5aedc92b4453ba2a997d3db0f9f1a45} 
+\index{worker\_pool\_t@{worker\_pool\_t}!m\_pool\_end@{m\_pool\_end}}
+\index{m\_pool\_end@{m\_pool\_end}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{m\_pool\_end}{m\_pool\_end}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::m\+\_\+pool\+\_\+end}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00080}{80}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_a10e8b52e02903d5cf7e1fa6d2a772c51}\label{structworker__pool__t_a10e8b52e02903d5cf7e1fa6d2a772c51} 
+\index{worker\_pool\_t@{worker\_pool\_t}!n\_operation@{n\_operation}}
+\index{n\_operation@{n\_operation}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{n\_operation}{n\_operation}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::n\+\_\+operation}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00086}{86}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_a0e38d8699a03f24df910721a1c4a3ec3}\label{structworker__pool__t_a0e38d8699a03f24df910721a1c4a3ec3} 
+\index{worker\_pool\_t@{worker\_pool\_t}!operations\_buffer@{operations\_buffer}}
+\index{operations\_buffer@{operations\_buffer}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{operations\_buffer}{operations\_buffer}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::operations\+\_\+buffer}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00085}{85}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_a2d125a80d4b313aa7d62fd31606de5f6}\label{structworker__pool__t_a2d125a80d4b313aa7d62fd31606de5f6} 
+\index{worker\_pool\_t@{worker\_pool\_t}!pool\_end@{pool\_end}}
+\index{pool\_end@{pool\_end}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{pool\_end}{pool\_end}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::pool\+\_\+end}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00089}{89}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_a722ca0f019286bbc4fa2658910254e88}\label{structworker__pool__t_a722ca0f019286bbc4fa2658910254e88} 
+\index{worker\_pool\_t@{worker\_pool\_t}!POOL\_MAX\_THREADS@{POOL\_MAX\_THREADS}}
+\index{POOL\_MAX\_THREADS@{POOL\_MAX\_THREADS}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{POOL\_MAX\_THREADS}{POOL\_MAX\_THREADS}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::\+POOL\+\_\+\+MAX\+\_\+\+THREADS}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00082}{82}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+\Hypertarget{structworker__pool__t_a0ec5849d52e56e91341b048e10c5de0f}\label{structworker__pool__t_a0ec5849d52e56e91341b048e10c5de0f} 
+\index{worker\_pool\_t@{worker\_pool\_t}!thid@{thid}}
+\index{thid@{thid}!worker\_pool\_t@{worker\_pool\_t}}
+\doxysubsubsection{\texorpdfstring{thid}{thid}}
+{\footnotesize\ttfamily worker\+\_\+pool\+\_\+t\+::thid}
+
+
+
+A \textquotesingle{}TODO\textquotesingle{}. 
+
+
+
+Definition at line \mbox{\hyperlink{workers__pool_8h_source_l00083}{83}} of file \mbox{\hyperlink{workers__pool_8h_source}{workers\+\_\+pool.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{workers__pool_8h}{workers\+\_\+pool.\+h}}\end{DoxyCompactItemize}

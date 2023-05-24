@@ -1,0 +1,196 @@
+.TH "nfi_attr" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfi_attr \- This is a struct\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfi\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "dev_t \fBst_dev\fP"
+.br
+.RI "ID of device containing file\&. "
+.ti -1c
+.RI "ino_t \fBst_ino\fP"
+.br
+.RI "Inode number\&. "
+.ti -1c
+.RI "int \fBat_type\fP"
+.br
+.RI "FILE or DIR\&. "
+.ti -1c
+.RI "mode_t \fBat_mode\fP"
+.br
+.RI "Protection\&. "
+.ti -1c
+.RI "nlink_t \fBat_nlink\fP"
+.br
+.RI "Number of hard links\&. "
+.ti -1c
+.RI "uid_t \fBat_uid\fP"
+.br
+.RI "User ID of owner\&. "
+.ti -1c
+.RI "gid_t \fBat_gid\fP"
+.br
+.RI "Group ID of owner\&. "
+.ti -1c
+.RI "off_t \fBat_size\fP"
+.br
+.RI "Total size, in bytes\&. "
+.ti -1c
+.RI "u_long \fBat_blksize\fP"
+.br
+.RI "Blocksize for filesystem I/O\&. "
+.ti -1c
+.RI "u_long \fBat_blocks\fP"
+.br
+.RI "Number of blocks allocated\&. "
+.ti -1c
+.RI "time_t \fBat_atime\fP"
+.br
+.RI "Time of last access\&. "
+.ti -1c
+.RI "time_t \fBat_mtime\fP"
+.br
+.RI "Time of last modification\&. "
+.ti -1c
+.RI "time_t \fBat_ctime\fP"
+.br
+.RI "Time of last status change\&. "
+.ti -1c
+.RI "void * \fBprivate_info\fP"
+.br
+.RI "A 'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a struct\&. 
+
+
+.PP
+Definition at line \fB177\fP of file \fBnfi\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "nfi_attr::at_atime"
+
+.PP
+Time of last access\&. 
+.PP
+Definition at line \fB190\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFS3attr()\fP, \fBNFItoNFSattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBNFStoNFIattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+.SS "nfi_attr::at_blksize"
+
+.PP
+Blocksize for filesystem I/O\&. 
+.PP
+Definition at line \fB188\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFSattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFStoNFIattr()\fP, and \fBTCP_SERVERtoNFIattr()\fP\&.
+.SS "nfi_attr::at_blocks"
+
+.PP
+Number of blocks allocated\&. 
+.PP
+Definition at line \fB189\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFSattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFStoNFIattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+.SS "nfi_attr::at_ctime"
+
+.PP
+Time of last status change\&. 
+.PP
+Definition at line \fB192\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFS3attr()\fP, \fBNFItoNFSattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBNFStoNFIattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+.SS "nfi_attr::at_gid"
+
+.PP
+Group ID of owner\&. 
+.PP
+Definition at line \fB186\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFS3attr()\fP, \fBNFItoNFSattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBNFStoNFIattr()\fP, and \fBTCP_SERVERtoNFIattr()\fP\&.
+.SS "nfi_attr::at_mode"
+
+.PP
+Protection\&. 
+.PP
+Definition at line \fB183\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBnfi_local_create()\fP, \fBnfi_mpi_server_create()\fP, \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs_create()\fP, \fBnfi_nfs_mkdir()\fP, \fBnfi_tcp_server_create()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFS3attr()\fP, \fBNFItoNFSattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBNFStoNFIattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBxpn_internal_creat()\fP, \fBxpn_simple_mkdir()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+.SS "nfi_attr::at_mtime"
+
+.PP
+Time of last modification\&. 
+.PP
+Definition at line \fB191\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBNFStoNFIattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+.SS "nfi_attr::at_nlink"
+
+.PP
+Number of hard links\&. 
+.PP
+Definition at line \fB184\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+.SS "nfi_attr::at_size"
+
+.PP
+Total size, in bytes\&. 
+.PP
+Definition at line \fB187\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFS3attr()\fP, \fBNFItoNFSattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBNFStoNFIattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+.SS "nfi_attr::at_type"
+
+.PP
+FILE or DIR\&. 
+.PP
+Definition at line \fB182\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFS3attr()\fP, \fBNFItoNFSattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBNFStoNFIattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, and \fBXpnGetAtribFd()\fP\&.
+.SS "nfi_attr::at_uid"
+
+.PP
+User ID of owner\&. 
+.PP
+Definition at line \fB185\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFS3attr()\fP, \fBNFItoNFSattr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBNFStoNFIattr()\fP, and \fBTCP_SERVERtoNFIattr()\fP\&.
+.SS "nfi_attr::private_info"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB193\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBNFS3toNFIattr()\fP, and \fBNFStoNFIattr()\fP\&.
+.SS "nfi_attr::st_dev"
+
+.PP
+ID of device containing file\&. 
+.PP
+Definition at line \fB179\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFS3attr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+.SS "nfi_attr::st_ino"
+
+.PP
+Inode number\&. 
+.PP
+Definition at line \fB180\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBLOCALtoNFIattr()\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBNFItoLOCALattr()\fP, \fBNFItoMPI_SERVERattr()\fP, \fBNFItoNFS3attr()\fP, \fBNFItoTCP_SERVERattr()\fP, \fBNFS3toNFIattr()\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

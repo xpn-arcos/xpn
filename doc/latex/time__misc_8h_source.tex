@@ -1,0 +1,115 @@
+\doxysection{time\+\_\+misc.\+h}
+\hypertarget{time__misc_8h_source}{}\label{time__misc_8h_source}\index{time\_misc.h@{time\_misc.h}}
+\mbox{\hyperlink{time__misc_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ time\_misc.h}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_TIME\_MISC\_H}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_TIME\_MISC\_H}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00035}00035\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00036}00036\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00037}00037\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00038}00038\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{all__system_8h}{all\_system.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00040}00040\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00041}00041\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00042}00042\ \{}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00043}00043\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00045}00045\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00046}00046\ \textcolor{comment}{\ *\ \ ...\ Constants}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00047}00047\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00048}\mbox{\hyperlink{time__misc_8h_a4013575b2684711af4ee3f713ccbed1d}{00048}}\ \textcolor{preprocessor}{\#define\ USECPSEC\ 1000000}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00050}00050\ \textcolor{comment}{\ \ \ \ /************************************************}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00051}00051\ \textcolor{comment}{\ \ \ \ \ *\ \ ...\ Functions}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00052}00052\ \textcolor{comment}{\ \ \ \ \ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00053}00053\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00054}00054\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00055}00055\ \textcolor{comment}{\ \ \ \ \ *\ Get\ a\ timestamp\ 't'\ at\ current\ time.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00056}00056\ \textcolor{comment}{\ \ \ \ \ *\ @param\ t\ the\ timestamp.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00057}00057\ \textcolor{comment}{\ \ \ \ \ *\ @par\ Returns}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00058}00058\ \textcolor{comment}{\ \ \ \ \ *\ \ \ Nothing.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00059}00059\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00060}00060\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00061}00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{time__misc_8h_ac8fc58701becda502cf549f176b17067}{TIME\_MISC\_Timer}}(\textcolor{keyword}{struct}\ timeval\ *t);}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00062}00062\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00063}00063\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00064}00064\ \textcolor{comment}{\ \ \ \ \ *\ Compute\ 'dig\ =\ tn\ -\/\ to'.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00065}00065\ \textcolor{comment}{\ \ \ \ \ *\ @param\ to\ initial\ instant.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00066}00066\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tn\ final\ instant.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00067}00067\ \textcolor{comment}{\ \ \ \ \ *\ @param\ dif\ the\ substaction\ value\ ('tn\ -\/\ to').}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00068}00068\ \textcolor{comment}{\ \ \ \ \ *\ @par\ Returns}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00069}00069\ \textcolor{comment}{\ \ \ \ \ *\ \ \ Nothing.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00070}00070\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00071}00071\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00072}00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{time__misc_8h_a538ba22eeb0210266276982c1c6b4265}{TIME\_MISC\_DiffTime}}(\textcolor{keyword}{struct}\ timeval\ *to,}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ timeval\ *tn,}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ timeval\ *dif);}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00075}00075\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00076}00076\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00077}00077\ \textcolor{comment}{\ \ \ \ \ *\ Compute\ 'sum\ =\ tn\ +\ to'.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00078}00078\ \textcolor{comment}{\ \ \ \ \ *\ @param\ to\ initial\ instant.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00079}00079\ \textcolor{comment}{\ \ \ \ \ *\ @param\ tn\ final\ instant.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00080}00080\ \textcolor{comment}{\ \ \ \ \ *\ @param\ sum\ the\ addition\ value\ ('tn\ +\ to').}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00081}00081\ \textcolor{comment}{\ \ \ \ \ *\ @par\ Returns}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00082}00082\ \textcolor{comment}{\ \ \ \ \ *\ \ \ Nothing.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00083}00083\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00084}00084\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00085}00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{time__misc_8h_ae4f9f91220202113383e06ade499a9af}{TIME\_MISC\_AddTime}}(\textcolor{keyword}{struct}\ timeval\ *to,}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ timeval\ *tn,}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ timeval\ *\mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}});}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00088}00088\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00089}00089\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00090}00090\ \textcolor{comment}{\ \ \ \ \ *\ Return\ a\ timestamp\ as\ seconds.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00091}00091\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timet\ the\ timestamp.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00092}00092\ \textcolor{comment}{\ \ \ \ \ *\ @return\ timestamp\ as\ seconds.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00093}00093\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00094}00094\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{time__misc_8h_a8616bbac3f567a6e7f8b93bf685372ce}{TIME\_MISC\_TimevaltoFloat}}(\textcolor{keyword}{struct}\ timeval\ *timet);}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00095}00095\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00096}00096\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00097}00097\ \textcolor{comment}{\ \ \ \ \ *\ Return\ a\ timestamp\ as\ microseconds.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00098}00098\ \textcolor{comment}{\ \ \ \ \ *\ @param\ timet\ the\ timestamp.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00099}00099\ \textcolor{comment}{\ \ \ \ \ *\ @return\ timestamp\ as\ microseconds.}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00100}00100\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00101}00101\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{time__misc_8h_a423e94eb50bbbb180e89fc062d9df31a}{TIME\_MISC\_TimevaltoMicro}}(\textcolor{keyword}{struct}\ timeval\ *timet);}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00103}00103\ \ \ \ \ \textcolor{comment}{/*\ ...................................................................\ */}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00105}00105\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00106}00106\ \}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00107}00107\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{time__misc_8h_source_l00109}00109\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_TIME\_MISC\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

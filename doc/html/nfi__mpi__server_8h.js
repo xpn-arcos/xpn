@@ -1,0 +1,26 @@
+var nfi__mpi__server_8h =
+[
+    [ "nfi_mpi_server_server", "structnfi__mpi__server__server.html", "structnfi__mpi__server__server" ],
+    [ "nfi_mpi_server_fhandle", "structnfi__mpi__server__fhandle.html", "structnfi__mpi__server__fhandle" ],
+    [ "nfi_mpi_server_close", "nfi__mpi__server_8h.html#a60e8318218bfa1734d541916244c1223", null ],
+    [ "nfi_mpi_server_closedir", "nfi__mpi__server_8h.html#a4fcadd955c3c079469e757ab11390dcc", null ],
+    [ "nfi_mpi_server_connect", "nfi__mpi__server_8h.html#a47fe76d42628349982d1b4beede9fac3", null ],
+    [ "nfi_mpi_server_create", "nfi__mpi__server_8h.html#ab22ea67ebd04e1c62c1eea756c5e1e5e", null ],
+    [ "nfi_mpi_server_disconnect", "nfi__mpi__server_8h.html#a8c101da431e4d234396c2a31f0681bfc", null ],
+    [ "nfi_mpi_server_flush", "nfi__mpi__server_8h.html#a1c320f16e5ff41a21d436aecf1d98004", null ],
+    [ "nfi_mpi_server_getattr", "nfi__mpi__server_8h.html#ae476dfd5886941facd7e40f6e2e4eee8", null ],
+    [ "nfi_mpi_server_init", "nfi__mpi__server_8h.html#a833cf5bf3975610a935a69d6cb4222c8", null ],
+    [ "nfi_mpi_server_mkdir", "nfi__mpi__server_8h.html#a70481677f6e0823b0a5cd4adad5485ed", null ],
+    [ "nfi_mpi_server_open", "nfi__mpi__server_8h.html#aaac217c3536f3fca904d728ca251d0d8", null ],
+    [ "nfi_mpi_server_opendir", "nfi__mpi__server_8h.html#aaaa23b8ca64ea2e8be6c7654c2cc56f4", null ],
+    [ "nfi_mpi_server_preload", "nfi__mpi__server_8h.html#a4f55acaf7dc558d160ef3ed0aa0ed240", null ],
+    [ "nfi_mpi_server_read", "nfi__mpi__server_8h.html#a5cfa57a945478cf0995c958edb15176b", null ],
+    [ "nfi_mpi_server_readdir", "nfi__mpi__server_8h.html#a009021be37356179790cf474584bb7c2", null ],
+    [ "nfi_mpi_server_reconnect", "nfi__mpi__server_8h.html#a952fdeaa4c98610f95d57ae20a440387", null ],
+    [ "nfi_mpi_server_remove", "nfi__mpi__server_8h.html#aba8703535573ba65e0453abdefd9da8c", null ],
+    [ "nfi_mpi_server_rename", "nfi__mpi__server_8h.html#ae4a4a1ad152bb256541665553821d691", null ],
+    [ "nfi_mpi_server_rmdir", "nfi__mpi__server_8h.html#aa7a157da383620c1f2bd779116c09217", null ],
+    [ "nfi_mpi_server_setattr", "nfi__mpi__server_8h.html#af6f0331cd9f65787cbff325cde9833a0", null ],
+    [ "nfi_mpi_server_statfs", "nfi__mpi__server_8h.html#a4a0936d05e31fbe0240a68224b6eecf5", null ],
+    [ "nfi_mpi_server_write", "nfi__mpi__server_8h.html#a7509844afb7c6c91cb64962aa1112f47", null ]
+];

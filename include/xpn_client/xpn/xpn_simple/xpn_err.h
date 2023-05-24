@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file xpn_err.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _XPN_ERR_H_
 #define _XPN_ERR_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn.h"
 #include "nfi/nfi_lib.h"
 
@@ -54,6 +68,18 @@ extern "C"
   extern int errno;
   extern int xpn_errno;
 
+  /************************************************
+   *  ... Functions
+   ***********************************************/
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param err 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_err(int err);
 
 #ifdef __cplusplus

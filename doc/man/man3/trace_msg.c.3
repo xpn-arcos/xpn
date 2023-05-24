@@ -1,0 +1,163 @@
+.TH "trace_msg.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+trace_msg.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'base/trace_msg\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBTRACE_MSG_setPrinter\fP (int(*printer)(const char *, va_list))"
+.br
+.RI "Set 'printer' dispacher\&. "
+.ti -1c
+.RI "void \fBTRACE_MSG_doPrint\fP (char *fto,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "void \fBTRACE_MSG_VPrintF\fP (int line, char *name, long pid, int type, char *fto, va_list vl)"
+.br
+.RI "Write a message using the format and the argument list given to it\&. "
+.ti -1c
+.RI "void \fBTRACE_MSG_PrintF\fP (int line, char *name, long pid, int type, char *fto,\&.\&.\&.)"
+.br
+.RI "Write a message using the format and arguments given to it\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "int(* \fBTRACE_MSG_PrintMsg\fP )(const char *, va_list) = NULL"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBtrace_msg\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void TRACE_MSG_doPrint (char * fto,  \&.\&.\&.)"
+
+.PP
+Definition at line \fB52\fP of file \fBtrace_msg\&.c\fP\&.
+.PP
+References \fBTRACE_MSG_PrintMsg\fP\&.
+.PP
+Referenced by \fBTRACE_MSG_VPrintF()\fP\&.
+.SS "void TRACE_MSG_PrintF (int line, char * name, long pid, int type, char * fto,  \&.\&.\&.)"
+
+.PP
+Write a message using the format and arguments given to it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIline\fP The line of code where message is generated\&. 
+.br
+\fIname\fP The file name at the code where message is generated\&. 
+.br
+\fIpid\fP The process that send this message\&. 
+.br
+\fItype\fP The type of message\&. 
+.br
+\fIfto\fP The message format\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB89\fP of file \fBtrace_msg\&.c\fP\&.
+.PP
+References \fBTRACE_MSG_PrintMsg\fP, and \fBTRACE_MSG_VPrintF()\fP\&.
+.SS "void TRACE_MSG_setPrinter (int(*)(const char *, va_list) printer)"
+
+.PP
+Set 'printer' dispacher\&. Set 'printer' dispacher\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIprinter\fP The printer function to be used\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB46\fP of file \fBtrace_msg\&.c\fP\&.
+.PP
+References \fBTRACE_MSG_PrintMsg\fP\&.
+.SS "void TRACE_MSG_VPrintF (int line, char * name, long pid, int type, char * fto, va_list vl)"
+
+.PP
+Write a message using the format and the argument list given to it\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIline\fP The line of code where message is generated\&. 
+.br
+\fIname\fP The file name at the code where message is generated\&. 
+.br
+\fIpid\fP The process that send this message\&. 
+.br
+\fItype\fP The type of message\&. 
+.br
+\fIfto\fP The message format\&. 
+.br
+\fIvl\fP The argument list\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB66\fP of file \fBtrace_msg\&.c\fP\&.
+.PP
+References \fBSTRING_MISC_Dvsprintf()\fP, \fBTRACE_MSG_doPrint()\fP, and \fBTRACE_MSG_PrintMsg\fP\&.
+.PP
+Referenced by \fBTRACE_MSG_PrintF()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "int(* TRACE_MSG_PrintMsg) (const char *, va_list) (const char *, va_list) = NULL"
+
+.PP
+Definition at line \fB40\fP of file \fBtrace_msg\&.c\fP\&.
+.PP
+Referenced by \fBTRACE_MSG_doPrint()\fP, \fBTRACE_MSG_PrintF()\fP, \fBTRACE_MSG_setPrinter()\fP, and \fBTRACE_MSG_VPrintF()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

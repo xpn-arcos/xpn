@@ -18,12 +18,25 @@
  *
  */
 
+/**
+ * @file mpi_server_ops.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "mpi_server_ops.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 char *mpi_server_op2string(int op_code)
 {
@@ -120,43 +133,364 @@ char *mpi_server_op2string(int op_code)
   return ret;
 }
 
-/*
- * OPERATIONAL FUNCTIONS
- */
+/************************************************
+ *  ... Operational Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_open_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_open_wos(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_creat_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_creat_wos(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_read_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_read_wos(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_write_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_write_wos(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_close_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_rm(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_rm_async(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_rename(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_setattr(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_getattr(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_mkdir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_opendir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_readdir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_closedir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_rmdir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_rmdir_async(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_flush(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_preload(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_getnodename(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_fstat(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id); // TODO: implement
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'
+ *
+ * @param params 'TODO'.
+ * @param sd 'TODO'.
+ * @param head 'TODO'.
+ * @param rank_client_id 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_op_getid(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id); // TODO: call in switch
 
-/**********************************
-Read the operation to realize
-***********************************/
+/************************************************
+ *  ... Read the operation to realize
+ ***********************************************/
+
 int mpi_server_do_operation(struct st_th *th, int *the_end)
 {
 
@@ -348,9 +682,9 @@ int mpi_server_do_operation(struct st_th *th, int *the_end)
   return 0;
 }
 
-//
-// File API
-//
+/************************************************
+ *  ... Functions: File API
+ ***********************************************/
 
 void mpi_server_op_open_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id)
 {
@@ -879,7 +1213,9 @@ void mpi_server_op_setattr(mpi_server_param_st *params, __attribute__((__unused_
   debug_info("[MPI-SERVER-OPS] (ID=%s) SETATTR(...)\n", params->srv_name);
 }
 
-// Directory API
+/************************************************
+ *  ... Functions: Directory API
+ ***********************************************/
 void mpi_server_op_mkdir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id)
 {
   int ret;
@@ -995,8 +1331,9 @@ void mpi_server_op_rmdir_async(__attribute__((__unused__)) mpi_server_param_st *
   debug_info("[MPI-SERVER-OPS] (ID=%s) RMDIR_ASYNC(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_rmdir.path);
 }
 
-// Optimization API
-
+/************************************************
+ *  ... Functions: Optimization API
+ ***********************************************/
 void mpi_server_op_preload(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id)
 {
   int ret;
@@ -1158,8 +1495,9 @@ void mpi_server_op_flush(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi
   debug_info("[MPI-SERVER-OPS] (ID=%s) FLUSH(%s)\n", params->srv_name, head->u_st_mpi_server_msg.op_flush.virtual_path);
 }
 
-// FS Metadata API
-
+/************************************************
+ *  ... Functions: FS Metadata API
+ ***********************************************/
 void mpi_server_op_getnodename(mpi_server_param_st *params, MPI_Comm sd, __attribute__((__unused__)) struct st_mpi_server_msg *head, int rank_client_id)
 {
   char serv_name[HOST_NAME_MAX];

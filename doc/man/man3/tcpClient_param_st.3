@@ -1,0 +1,146 @@
+.TH "tcpClient_param_st" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tcpClient_param_st
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tcp_server_params\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBxpn_thread\fP"
+.br
+.ti -1c
+.RI "int \fBxpn_session\fP"
+.br
+.ti -1c
+.RI "int \fBxpn_locality\fP"
+.br
+.ti -1c
+.RI "int \fBxpn_mosquitto_mode\fP"
+.br
+.ti -1c
+.RI "int \fBxpn_mosquitto_qos\fP"
+.br
+.ti -1c
+.RI "int \fBsize\fP"
+.br
+.ti -1c
+.RI "int \fBrank\fP"
+.br
+.ti -1c
+.RI "char \fBsrv_name\fP [\fBTCP_MAX_PORT_NAME\fP]"
+.br
+.ti -1c
+.RI "char \fBserver_name\fP [\fBTCP_MAX_PORT_NAME\fP]"
+.br
+.ti -1c
+.RI "char \fBport_number\fP [\fBTCP_MAX_PORT_NAME\fP]"
+.br
+.ti -1c
+.RI "int \fBserver\fP"
+.br
+.ti -1c
+.RI "int \fBlocality\fP"
+.br
+.ti -1c
+.RI "char \fBdirbase\fP [\fBPATH_MAX\fP]"
+.br
+.ti -1c
+.RI "int \fBargc\fP"
+.br
+.ti -1c
+.RI "char ** \fBargv\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB50\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "int tcpClient_param_st::argc"
+
+.PP
+Definition at line \fB78\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.SS "char** tcpClient_param_st::argv"
+
+.PP
+Definition at line \fB79\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.SS "char tcpClient_param_st::dirbase[\fBPATH_MAX\fP]"
+
+.PP
+Definition at line \fB73\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.SS "int tcpClient_param_st::locality"
+
+.PP
+Definition at line \fB72\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_closedir()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_getattr()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_read()\fP, \fBnfi_tcp_server_readdir()\fP, \fBnfi_tcp_server_remove()\fP, \fBnfi_tcp_server_rename()\fP, \fBnfi_tcp_server_rmdir()\fP, and \fBnfi_tcp_server_write()\fP\&.
+.SS "char tcpClient_param_st::port_number[\fBTCP_MAX_PORT_NAME\fP]"
+
+.PP
+Definition at line \fB69\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.SS "int tcpClient_param_st::rank"
+
+.PP
+Definition at line \fB63\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.SS "int tcpClient_param_st::server"
+
+.PP
+Definition at line \fB70\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_read()\fP, and \fBnfi_tcp_server_write()\fP\&.
+.SS "char tcpClient_param_st::server_name[\fBTCP_MAX_PORT_NAME\fP]"
+
+.PP
+Definition at line \fB68\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_init()\fP, and \fBnfi_tcp_server_write()\fP\&.
+.SS "int tcpClient_param_st::size"
+
+.PP
+Definition at line \fB62\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.SS "char tcpClient_param_st::srv_name[\fBTCP_MAX_PORT_NAME\fP]"
+
+.PP
+Definition at line \fB67\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_connect()\fP\&.
+.SS "int tcpClient_param_st::xpn_locality"
+
+.PP
+Definition at line \fB55\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_init()\fP\&.
+.SS "int tcpClient_param_st::xpn_mosquitto_mode"
+
+.PP
+Definition at line \fB58\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_destroy()\fP, \fBnfi_tcp_server_init()\fP, and \fBnfi_tcp_server_write()\fP\&.
+.SS "int tcpClient_param_st::xpn_mosquitto_qos"
+
+.PP
+Definition at line \fB59\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_init()\fP, and \fBnfi_tcp_server_write()\fP\&.
+.SS "int tcpClient_param_st::xpn_session"
+
+.PP
+Definition at line \fB54\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_init()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_read()\fP, and \fBnfi_tcp_server_write()\fP\&.
+.SS "int tcpClient_param_st::xpn_thread"
+
+.PP
+Definition at line \fB53\fP of file \fBxpn_client/nfi/nfi_tcp_server/tcp_server_params\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_init()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

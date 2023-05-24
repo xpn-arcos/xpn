@@ -18,10 +18,28 @@
  *
  */
 
+/**
+ * @file xpn_policy_opendir.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn.h"
 #include "xpn/xpn_simple/xpn_opendir.h"
 #include "xpn/xpn_simple/xpn_policy_open.h"
 #include "xpn/xpn_simple/xpn_policy_opendir.h"
+
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 int XpnGetEntry(int fd, struct dirent *entry)
 {

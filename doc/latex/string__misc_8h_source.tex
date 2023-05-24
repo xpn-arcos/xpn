@@ -1,0 +1,129 @@
+\doxysection{string\+\_\+misc.\+h}
+\hypertarget{string__misc_8h_source}{}\label{string__misc_8h_source}\index{string\_misc.h@{string\_misc.h}}
+\mbox{\hyperlink{string__misc_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ string\_misc.h}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_STRING\_MISC\_H\_}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_STRING\_MISC\_H\_}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00035}00035\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00036}00036\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00037}00037\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00038}00038\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{all__system_8h}{all\_system.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00040}00040\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00041}00041\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00042}00042\ \{}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00043}00043\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00045}00045\ \textcolor{comment}{\ \ \ \ /************************************************}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00046}00046\ \textcolor{comment}{\ \ \ \ \ *\ \ ...\ Functions}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00047}00047\ \textcolor{comment}{\ \ \ \ \ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00048}00048\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00049}00049\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00050}00050\ \textcolor{comment}{\ \ \ \ \ *\ \ \ Return\ the\ string\ length\ of\ 'str'.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00051}00051\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00052}00052\ \textcolor{comment}{\ \ \ \ \ *\ \ \ @param\ str\ the\ string.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00053}00053\ \textcolor{comment}{\ \ \ \ \ *\ \ \ @return\ the\ string\ length.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00054}00054\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00055}00055\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00056}00056\ \ \ \ \ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{string__misc_8h_a682cce33607b3fd7a38278bf0d6ea5ed}{STRING\_MISC\_StrLen}}(\textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *str);}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00057}00057\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00058}00058\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00059}00059\ \textcolor{comment}{\ \ \ \ \ *\ \ \ Return\ true\ if\ and\ only\ if\ the\ strings\ 'str1'\ and\ 'str2'\ are\ equals.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00060}00060\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00061}00061\ \textcolor{comment}{\ \ \ \ \ *\ \ \ @param\ str1\ the\ first\ string.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00062}00062\ \textcolor{comment}{\ \ \ \ \ *\ \ \ @param\ str2\ the\ second\ string.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00063}00063\ \textcolor{comment}{\ \ \ \ \ *\ \ \ @return\ true\ (1)\ iff\ are\ equals\ or\ false\ (0)\ in\ other\ case.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00064}00064\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00065}00065\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00066}00066\ \ \ \ \ int8\_t\ \mbox{\hyperlink{string__misc_8h_aab6e06975ea45bf8579513c18723cb92}{STRING\_MISC\_Equal}}(\textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *str1,}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *str2);}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00068}00068\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00069}00069\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00070}00070\ \textcolor{comment}{\ \ \ \ \ *\ \ \ Return\ a\ string\ clone\ of\ 'str'.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00071}00071\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00072}00072\ \textcolor{comment}{\ \ \ \ \ *\ \ \ @param\ str\ the\ string.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00073}00073\ \textcolor{comment}{\ \ \ \ \ *\ \ \ @return\ a\ clone\ of\ 'str'.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00074}00074\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00075}00075\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00076}00076\ \ \ \ \ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{string__misc_8h_a83cad3507e29f38a020d44088f53be15}{STRING\_MISC\_StrDup}}(\textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *str);}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00077}00077\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00078}00078\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00079}00079\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00080}00080\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ Like\ 'strlen'\ but\ also\ accept\ a\ string\ with\ format.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00081}00081\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00082}00082\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @param\ \ format\ string\ format.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00083}00083\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @param\ \ argl\ \ \ format\ params.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00084}00084\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @return\ string\ legth.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00085}00085\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00086}00086\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00087}00087\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{string__misc_8h_a3dd382d5676700310314d18d1e7d6ccb}{STRING\_MISC\_StrLenF}}(}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00088}00088\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *format,}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00089}00089\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*IN*/}\ va\_list\ argl);}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00090}00090\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00091}00091\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00092}00092\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00093}00093\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ Like\ vsprintf,\ but\ request\ dynamic\ memory}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00094}00094\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ \ to\ write\ string\ elements\ into.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00095}00095\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00096}00096\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @param\ \ format\ string\ format.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00097}00097\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @param\ \ argl\ \ \ format\ params.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00098}00098\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @return\ string\ pointer\ or\ NULL\ if\ error.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00099}00099\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00100}00100\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00101}00101\ \ \ \ \ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{string__misc_8h_abb4e5661b69b1319201c75b48bf85f3f}{STRING\_MISC\_Dvsprintf}}(}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00102}00102\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *format,}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00103}00103\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*IN*/}\ va\_list\ argl);}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00104}00104\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00105}00105\ \textcolor{comment}{\ \ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00106}00106\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00107}00107\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ Like\ before,\ but\ with\ variable\ arguments.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00108}00108\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00109}00109\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @param\ \ format\ string\ with\ message\ format.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00110}00110\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ @return\ string\ pointer\ or\ NULL\ if\ error.}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00111}00111\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00112}00112\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00113}00113\ \ \ \ \ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{string__misc_8h_ac04c549346762b927f4231351a6b82e4}{STRING\_MISC\_Dsprintf}}(}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00114}00114\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *format,}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00115}00115\ \ \ \ \ \ \ \ \ ...);}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00117}00117\ \ \ \ \ \textcolor{comment}{/*\ ....................................................................\ */}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00119}00119\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00120}00120\ \}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00121}00121\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{string__misc_8h_source_l00123}00123\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ \_STRING\_MISC\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

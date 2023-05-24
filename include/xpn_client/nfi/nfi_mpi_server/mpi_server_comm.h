@@ -18,18 +18,32 @@
  *
  */
 
+/**
+ * @file mpi_server_comm.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _MPI_SERVER_COMM_H_
 #define _MPI_SERVER_COMM_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "mpi_server_params.h"
 #include "base/utils.h"
 #include "base/ns.h"
 #include "mpi_server_ops.h"
 
-/*
- *  API
- */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 int mpiClient_comm_init(mpiClient_param_st *params);
 int mpiClient_comm_destroy(mpiClient_param_st *params);

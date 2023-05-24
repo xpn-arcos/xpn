@@ -1,0 +1,78 @@
+.TH "read3resok" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+read3resok
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfs3\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBpost_op_attr\fP \fBfile_attributes\fP"
+.br
+.ti -1c
+.RI "\fBuint32\fP \fBcount\fP"
+.br
+.ti -1c
+.RI "bool_t \fBeof\fP"
+.br
+.ti -1c
+.RI "struct {"
+.br
+.ti -1c
+.RI "   u_int \fBdata_len\fP"
+.br
+.ti -1c
+.RI "   char * \fBdata_val\fP"
+.br
+.ti -1c
+.RI "} \fBdata\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB541\fP of file \fBnfs3\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "\fBuint32\fP read3resok::count"
+
+.PP
+Definition at line \fB544\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_read3resok()\fP\&.
+.SS "struct  { \&.\&.\&. }  read3resok::data"
+
+.PP
+Referenced by \fBnfs3_read()\fP, and \fBxdr_read3resok()\fP\&.
+.SS "u_int read3resok::data_len"
+
+.PP
+Definition at line \fB548\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBnfs3_read()\fP, and \fBxdr_read3resok()\fP\&.
+.SS "char* read3resok::data_val"
+
+.PP
+Definition at line \fB549\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBnfs3_read()\fP, and \fBxdr_read3resok()\fP\&.
+.SS "bool_t read3resok::eof"
+
+.PP
+Definition at line \fB545\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_read3resok()\fP\&.
+.SS "\fBpost_op_attr\fP read3resok::file_attributes"
+
+.PP
+Definition at line \fB543\fP of file \fBnfs3\&.h\fP\&.
+.PP
+Referenced by \fBxdr_read3resok()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

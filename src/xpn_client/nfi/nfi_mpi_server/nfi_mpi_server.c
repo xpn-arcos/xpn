@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file nfi_mpi_server.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
@@ -27,8 +38,9 @@
 
 #define FILESYSTEM_DLSYM 1
 
-/* ... Functions / Funciones ......................................... */
-
+/************************************************
+ *  ... Functions
+ ***********************************************/
 /*
  * Communication
  */

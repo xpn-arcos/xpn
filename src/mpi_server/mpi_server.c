@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file mpi_server.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
@@ -29,15 +40,27 @@
 #include "mpi_server_comm.h"
 #include "mpi_server_d2xpn.h"
 
-/* ... Global variables / Variables globales ......................... */
-
+/************************************************
+ *  ... Global variables
+ ***********************************************/
 char serv_name[HOST_NAME_MAX];
 mpi_server_param_st params;
 worker_t worker;
 int the_end = 0;
 
-/* ... Auxiliar Functions / Funciones Auxiliares ..................... */
+/************************************************
+ *  ... Auxiliar Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param th  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_run(struct st_th th)
 {
   debug_info("[MPI-SERVER] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mpi_server_op2string(th.type_op), th.type_op);
@@ -47,6 +70,15 @@ void mpi_server_run(struct st_th th)
   debug_info("[MPI-SERVER] (ID=%d) end to do operation '%s'\n", th.id, mpi_server_op2string(th.type_op));
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param th  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void mpi_server_dispatcher(struct st_th th)
 {
   int ret;
@@ -100,8 +132,20 @@ void mpi_server_dispatcher(struct st_th th)
   mpiClient_comm_close((MPI_Comm)th.sd);
 }
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 int mpi_server_up(void)
 {
   MPI_Comm sd;
@@ -183,6 +227,15 @@ int mpi_server_up(void)
   return 0;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param argc  'TODO'.
+ * @param argv  'TODO'.
+ * @return 'TODO'.
+ */
 int mpi_server_down(int argc, char *argv[])
 {
   int ret, buf;
@@ -258,10 +311,9 @@ int mpi_server_down(int argc, char *argv[])
   return 0;
 }
 
-/*
- * Main
- */
-
+/************************************************
+ *  ... Main
+ ***********************************************/
 int main(int argc, char *argv[])
 {
   int ret = -1;

@@ -1,0 +1,112 @@
+\doxysection{cp-\/xpn2local.c}
+\hypertarget{cp-xpn2local_8c_source}{}\label{cp-xpn2local_8c_source}\index{cp-\/xpn2local.c@{cp-\/xpn2local.c}}
+\mbox{\hyperlink{cp-xpn2local_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00021}00021\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00022}00022\ \textcolor{preprocessor}{\#include\ <sys/param.h>}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00023}00023\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00024}00024\ \textcolor{preprocessor}{\#include\ <sys/file.h>}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00025}00025\ \textcolor{preprocessor}{\#include\ <sys/fcntl.h>}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00026}00026\ \textcolor{preprocessor}{\#include\ <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00027}00027\ \textcolor{preprocessor}{\#include\ <sys/time.h>}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00028}00028\ \textcolor{preprocessor}{\#include\ <sys/wait.h>}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00029}00029\ \textcolor{preprocessor}{\#include\ <sys/errno.h>}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00030}00030\ \textcolor{preprocessor}{\#include\ "{}xpn.h"{}}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00032}\mbox{\hyperlink{cp-xpn2local_8c_aa4bfdf2344bca5d912d8a3de6105c530}{00032}}\ \textcolor{preprocessor}{\#define\ DATAM\ (64\ *\ KB)}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00034}00034\ \textcolor{preprocessor}{\#ifndef\ KB}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00035}\mbox{\hyperlink{cp-xpn2local_8c_a1841fd1a462d245d8c73dce55e2f45da}{00035}}\ \textcolor{preprocessor}{\#define\ KB\ (1024)}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00036}00036\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00038}\mbox{\hyperlink{cp-xpn2local_8c_a0ddf1224851353fc92bfbff6f499fa97}{00038}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{cp-xpn2local_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}\ *argv[])}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00039}00039\ \{}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00041}00041\ \ \ \textcolor{keywordtype}{char}\ *origen,\ *destino;}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00042}00042\ \ \ \textcolor{keywordtype}{int}\ fdp,\ fd,\ s,\ sp,\ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}};}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00043}00043\ \ \ \textcolor{keywordtype}{char}\ buffer[\mbox{\hyperlink{cp-xpn2local_8c_aa4bfdf2344bca5d912d8a3de6105c530}{DATAM}}];}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00045}00045\ \ \ \textcolor{comment}{//\ Arguments}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00046}00046\ \ \ \textcolor{keywordflow}{if}\ (argc\ !=\ 3)}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00047}00047\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00048}00048\ \ \ \ \ printf(\textcolor{stringliteral}{"{}Incorrect\ number\ of\ parameters\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00049}00049\ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(0);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00050}00050\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00052}00052\ \ \ origen\ =\ argv[1];}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00053}00053\ \ \ destino\ =\ argv[2];}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00055}00055\ \ \ \textcolor{comment}{//\ XPN}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00056}00056\ \ \ \textcolor{keywordflow}{if}\ ((fd\ =\ \mbox{\hyperlink{xpn__unistd_8c_a7cb8e93ed55974a01a81271a3686356a}{xpn\_init}}())\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00057}00057\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00058}00058\ \ \ \ \ printf(\textcolor{stringliteral}{"{}Error\ in\ init\ \%d\(\backslash\)n"{}},\ fd);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00059}00059\ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(-\/1);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00060}00060\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00062}00062\ \ \ fd\ =\ \mbox{\hyperlink{xpn__bypass_8c_afddc24a65767ae35f275be8ccf53e036}{creat}}(destino,\ 0777);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00063}00063\ \ \ \textcolor{keywordflow}{if}\ (fd\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00064}00064\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00065}00065\ \ \ \ \ printf(\textcolor{stringliteral}{"{}error\ in\ create\ \%d\(\backslash\)n"{}},\ fd);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00066}00066\ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(-\/1);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00067}00067\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00069}00069\ \ \ fd\ =\ \mbox{\hyperlink{xpn__bypass_8c_ad586f56cb2d7d849a4cb20dbd792b543}{open}}(destino,\ \mbox{\hyperlink{all__system_8h_abb0586253488ee61072b73557eeb873b}{O\_RDWR}});}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00070}00070\ \ \ \textcolor{keywordflow}{if}\ (fd\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00071}00071\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00072}00072\ \ \ \ \ printf(\textcolor{stringliteral}{"{}error\ in\ open\ \%d\(\backslash\)n"{}},\ fd);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00073}00073\ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(-\/1);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00074}00074\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00076}00076\ \ \ fdp\ =\ \mbox{\hyperlink{xpn__unistd_8c_a12a3afc74d0fee6bc450d92dc45790e8}{xpn\_open}}(origen,\ \mbox{\hyperlink{all__system_8h_a7a68c9ffaac7dbcd652225dd7c06a54b}{O\_RDONLY}});}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00077}00077\ \ \ \textcolor{keywordflow}{if}\ (fdp\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00078}00078\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00079}00079\ \ \ \ \ printf(\textcolor{stringliteral}{"{}error\ in\ xpn\_open\ source\ =\ \%s\ -\/>\ \%d\ \(\backslash\)n"{}},\ origen,\ fdp);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00080}00080\ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(-\/1);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00081}00081\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00082}00082\ \ \ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00083}00083\ \ \ \textcolor{keywordflow}{do}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00084}00084\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00085}00085\ \ \ \ \ sp\ =\ \mbox{\hyperlink{xpn__unistd_8c_ac37c3b95a31830ba57254624c26db553}{xpn\_read}}(fdp,\ buffer,\ \mbox{\hyperlink{cp-xpn2local_8c_aa4bfdf2344bca5d912d8a3de6105c530}{DATAM}});}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00086}00086\ \ \ \ \ \textcolor{keywordflow}{if}\ (sp\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00087}00087\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00088}00088\ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Error\ in\ read\ \%d\(\backslash\)n"{}},\ sp);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00089}00089\ \ \ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(-\/1);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00090}00090\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00092}00092\ \ \ \ \ s\ =\ \mbox{\hyperlink{xpn__bypass_8c_ae715baa65783f62834f211120258c943}{write}}(fd,\ buffer,\ sp);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00093}00093\ \ \ \ \ \textcolor{keywordflow}{if}\ (s\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00094}00094\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00095}00095\ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Error\ in\ write\ \%d\(\backslash\)n"{}},\ s);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00096}00096\ \ \ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(-\/1);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00097}00097\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00099}00099\ \ \ \ \ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}}\ =\ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}}\ +\ sp;}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00100}00100\ \ \ \}\ \textcolor{keywordflow}{while}\ (sp\ ==\ \mbox{\hyperlink{cp-xpn2local_8c_aa4bfdf2344bca5d912d8a3de6105c530}{DATAM}});}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00102}00102\ \ \ \mbox{\hyperlink{xpn__bypass_8c_aafbcde67669a1b96577e735ddebd8634}{close}}(fd);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00103}00103\ \ \ \mbox{\hyperlink{xpn__unistd_8c_a01b254138473a107ed6b31093d5d32a0}{xpn\_close}}(fdp);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00104}00104\ \ \ \mbox{\hyperlink{xpn__unistd_8c_a2892036d12124b48caab14beee6e9230}{xpn\_destroy}}();}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00105}00105\ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(0);}
+\DoxyCodeLine{\Hypertarget{cp-xpn2local_8c_source_l00106}00106\ \}}
+
+\end{DoxyCode}

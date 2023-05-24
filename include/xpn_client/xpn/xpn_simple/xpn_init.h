@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file xpn_init.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _XPN_INIT_H
 #define _XPN_INIT_H
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "all_system.h"
 #include "base/path_misc.h"
 #include "xpn_policy_init.h"
@@ -36,9 +50,40 @@ extern "C"
 
   extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param partname 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_init_partition(char *partname);
 
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @par Parameters
+   *    None.
+   * @return 'TODO'.
+   */
   int xpn_simple_destroy(void);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @par Parameters
+   *    None.
+   * @return 'TODO'.
+   */
   int xpn_simple_init(void);
 
 #ifdef __cplusplus

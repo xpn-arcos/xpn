@@ -18,21 +18,42 @@
  *
  */
 
+/**
+ * @file nfi_local.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "nfi_local.h"
 
-/* ... Global Variable / Variable Globales ........................... */
-
+/************************************************
+ *  ... Global Variable
+ ***********************************************/
 #define FILESYSTEM_DLSYM 1
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
+/************************************************
+ *  ... Communication
+ ***********************************************/
 
-/*
- * Communication
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param serv 'TODO'.
+ * @return 'TODO'.
  */
-
 int nfi_local_keepConnected(struct nfi_server *serv)
 {
   if (NULL == serv)
@@ -56,10 +77,20 @@ int nfi_local_keepConnected(struct nfi_server *serv)
   return (serv->private_info != NULL);
 }
 
-/*
- * PRIVATE FUNCTIONS TO USE local SERVERS
- */
+/************************************************************
+ * PRIVATE FUNCTIONS TO USE local SERVERS                   *
+ ************************************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param att 'TODO'.
+ * @param nfi_att 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void NFItoLOCALattr(struct stat *att, struct nfi_attr *nfi_att)
 {
   att->st_dev = nfi_att->st_dev;
@@ -86,6 +117,16 @@ void NFItoLOCALattr(struct stat *att, struct nfi_attr *nfi_att)
   att->st_ctime = nfi_att->at_ctime;     // time of last change
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param nfi_att 'TODO'.
+ * @param att 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void LOCALtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
 {
   nfi_att->st_dev = att->st_dev;
@@ -112,14 +153,24 @@ void LOCALtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
   nfi_att->at_ctime = att->st_ctime;                               // time of last change
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param nfi_inf 'TODO'.
+ * @param local_inf 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void LOCALtoNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *local_inf)
 {
   // TODO
 }
 
-/*
- * PUBLIC FUNCTIONS TO USE LOCAL
- */
+/************************************************************
+ * PUBLIC FUNCTIONS TO USE LOCAL                            *
+ ************************************************************/
 
 /************************************************************
  * Init Local                                               *
@@ -242,6 +293,14 @@ int nfi_local_init(char *url, struct nfi_server *serv, __attribute__((__unused__
 /************************************************************
  * Destroy to the server                                    *
  * **********************************************************/
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param serv 'TODO'.
+ * @return 'TODO'.
+ */
 int nfi_local_destroy(struct nfi_server *serv)
 {
   struct nfi_local_server *server_aux;
@@ -378,9 +437,9 @@ int nfi_local_reconnect(struct nfi_server *serv) // TODO
   return 0;
 }
 
-/*
- *  GENERIC FUNCTIONS
- */
+/************************************************************
+ * Generic Functions                         *
+ ************************************************************/
 
 int nfi_local_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
 {

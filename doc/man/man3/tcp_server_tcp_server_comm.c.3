@@ -1,0 +1,235 @@
+.TH "tcp_server_comm.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tcp_server_comm.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'tcp_server/tcp_server_comm\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBtcp_server_comm_init\fP (\fBtcp_server_param_st\fP *\fBparams\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBtcp_server_comm_destroy\fP (\fBtcp_server_param_st\fP *\fBparams\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBtcp_server_comm_accept\fP (\fBtcp_server_param_st\fP *\fBparams\fP)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBtcp_server_comm_connect\fP (\fBtcp_server_param_st\fP *\fBparams\fP, char *server_name, int port_number)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBtcp_server_comm_close\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBtcp_server_comm_read_operation\fP (\fBtcp_server_param_st\fP *\fBparams\fP, int fd, char *data, ssize_t size, int *rank_client_id)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBtcp_server_comm_write_data\fP (\fBtcp_server_param_st\fP *\fBparams\fP, int fd, char *data, ssize_t size, __attribute__((__unused__)) int rank_client_id)"
+.br
+.ti -1c
+.RI "ssize_t \fBtcp_server_comm_read_data\fP (\fBtcp_server_param_st\fP *\fBparams\fP, int fd, char *data, ssize_t size, __attribute__((__unused__)) int rank_client_id)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBtcp_server/tcp_server_comm\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int tcp_server_comm_accept (\fBtcp_server_param_st\fP * params)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB357\fP of file \fBtcp_server/tcp_server_comm\&.c\fP\&.
+.PP
+References \fBmpi_server_param_st::client\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, and \fBparams\fP\&.
+.PP
+Referenced by \fBtcp_server_up()\fP\&.
+.SS "int tcp_server_comm_close (int fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB482\fP of file \fBtcp_server/tcp_server_comm\&.c\fP\&.
+.PP
+References \fBclose()\fP, \fBDEBUG_BEGIN\fP, and \fBDEBUG_END\fP\&.
+.PP
+Referenced by \fBtcp_server_dispatcher()\fP, and \fBtcp_server_down()\fP\&.
+.SS "int tcp_server_comm_connect (\fBtcp_server_param_st\fP * params, char * server_name, int port_number)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.br
+\fIserver_name\fP 'TODO'\&. 
+.br
+\fIport_number\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB405\fP of file \fBtcp_server/tcp_server_comm\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBparams\fP, and \fBmpi_server_param_st::srv_name\fP\&.
+.PP
+Referenced by \fBtcp_server_down()\fP\&.
+.SS "int tcp_server_comm_destroy (\fBtcp_server_param_st\fP * params)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB310\fP of file \fBtcp_server/tcp_server_comm\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBmpi_server_param_st::dns_file\fP, \fBns_unpublish()\fP, \fBparams\fP, \fBmpi_server_param_st::rank\fP, \fBserv_name\fP, \fBmpi_server_param_st::size\fP, and \fBmpi_server_param_st::srv_name\fP\&.
+.PP
+Referenced by \fBtcp_server_down()\fP, and \fBtcp_server_up()\fP\&.
+.SS "int tcp_server_comm_init (\fBtcp_server_param_st\fP * params)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB169\fP of file \fBtcp_server/tcp_server_comm\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBmpi_server_param_st::dns_file\fP, \fBMOSQ_OPT_TCP_NODELAY\fP, \fBns_get_host_ip()\fP, \fBns_publish()\fP, \fBparams\fP, \fBmpi_server_param_st::rank\fP, \fBTIME_MISC_DiffTime()\fP, \fBTIME_MISC_Timer()\fP, and \fBTIME_MISC_TimevaltoFloat()\fP\&.
+.PP
+Referenced by \fBtcp_server_down()\fP, and \fBtcp_server_up()\fP\&.
+.SS "ssize_t tcp_server_comm_read_data (\fBtcp_server_param_st\fP * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id)"
+
+.PP
+Definition at line \fB580\fP of file \fBtcp_server/tcp_server_comm\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBparams\fP, \fBmpi_server_param_st::rank\fP, and \fBread()\fP\&.
+.PP
+Referenced by \fBtcp_server_comm_read_operation()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_write_wos()\fP, and \fBtcp_server_op_write_ws()\fP\&.
+.SS "ssize_t tcp_server_comm_read_operation (\fBtcp_server_param_st\fP * params, int fd, char * data, ssize_t size, int * rank_client_id)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.br
+\fIfd\fP 'TODO'\&. 
+.br
+\fIdata\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fIrank_client_id\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB494\fP of file \fBtcp_server/tcp_server_comm\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, \fBparams\fP, \fBmpi_server_param_st::rank\fP, and \fBtcp_server_comm_read_data()\fP\&.
+.PP
+Referenced by \fBtcp_server_dispatcher()\fP\&.
+.SS "ssize_t tcp_server_comm_write_data (\fBtcp_server_param_st\fP * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id)"
+
+.PP
+Definition at line \fB529\fP of file \fBtcp_server/tcp_server_comm\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBparams\fP, \fBmpi_server_param_st::rank\fP, and \fBwrite()\fP\&.
+.PP
+Referenced by \fBtcp_server_down()\fP, \fBtcp_server_op_close_ws()\fP, \fBtcp_server_op_closedir()\fP, \fBtcp_server_op_creat_wos()\fP, \fBtcp_server_op_creat_ws()\fP, \fBtcp_server_op_flush()\fP, \fBtcp_server_op_getattr()\fP, \fBtcp_server_op_getid()\fP, \fBtcp_server_op_getnodename()\fP, \fBtcp_server_op_mkdir()\fP, \fBtcp_server_op_open_wos()\fP, \fBtcp_server_op_open_ws()\fP, \fBtcp_server_op_opendir()\fP, \fBtcp_server_op_preload()\fP, \fBtcp_server_op_read_wos()\fP, \fBtcp_server_op_read_ws()\fP, \fBtcp_server_op_readdir()\fP, \fBtcp_server_op_rename()\fP, \fBtcp_server_op_rm()\fP, \fBtcp_server_op_rmdir()\fP, \fBtcp_server_op_write_wos()\fP, and \fBtcp_server_op_write_ws()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

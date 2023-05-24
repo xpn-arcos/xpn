@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file tcp_server_d2xpn.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _TCP_SERVER_D2XPN_H_
 #define _TCP_SERVER_D2XPN_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include <sys/param.h>
 #include <stdio.h>
 #include <sys/file.h>
@@ -40,6 +54,19 @@
 #define PRELOAD_SYNC 0
 #define PRELOAD_ASYNC 1
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param origen  'TODO'.
+ * @param destino  'TODO'.
+ * @return 'TODO'.
+ */
 int tcp_server_d2xpn(tcp_server_param_st *params, char *origen, char *destino);
 
 #endif

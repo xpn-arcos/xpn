@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file xpn_stdio.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _XPN_STDIO_H
 #define _XPN_STDIO_H
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn.h"
 #include "xpn_err.h"
 #include "xpn_policy_cwd.h"
@@ -46,25 +60,166 @@ extern "C"
 #include "xpn_open.h"
 #include <xpn.h>
 
+
   extern struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
   /************************************************************************/
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param path 'TODO'.
+   * @param mode 'TODO'.
+   * @return 'TODO'.
+   */
   FILE *xpn_fopencookie(const char *path, const char *mode);
   /************************************************************************/
 
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param filename 'TODO'.
+   * @param mode 'TODO'.
+   * @return 'TODO'.
+   */
   FILE *xpn_simple_fopen(const char *filename, const char *mode);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_simple_fclose(FILE *stream);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param ptr 'TODO'.
+   * @param size 'TODO'.
+   * @param nmemb 'TODO'.
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   size_t xpn_simple_fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param ptr 'TODO'.
+   * @param size 'TODO'.
+   * @param nmemb 'TODO'.
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   size_t xpn_simple_fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
 
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_simple_fgetc(FILE *stream);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param s 'TODO'.
+   * @param tam 'TODO'.
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   char *xpn_simple_fgets(char *s, int tam, FILE *stream);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_simple_getc(FILE *stream);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param stream 'TODO'.
+   * @param offset 'TODO'.
+   * @param whence 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_simple_fseek(FILE *stream, long offset, int whence);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   long xpn_simple_ftell(FILE *stream);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param stream 'TODO'.
+   * @par Returns
+   *    Nothing.
+   */
   void xpn_simple_rewind(FILE *stream);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_simple_fflush(FILE *stream);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_simple_fileno(FILE *stream);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param stream 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_simple_ferror(FILE *stream);
 
 #ifdef __cplusplus

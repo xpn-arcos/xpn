@@ -1,0 +1,221 @@
+.TH "math_misc.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+math_misc.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'base/math_misc\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBMATH_MISC_hash\fP (char *file, int nServ)"
+.br
+.RI "Compute server index\&. "
+.ti -1c
+.RI "int \fBMATH_MISC_locateInRAID5withInternalParity\fP (int i, int m, int *SP, int *IP, int *SD, int *ID)"
+.br
+.RI "Compute location of block\&. "
+.ti -1c
+.RI "int \fBMATH_MISC_locateInRAID5withExternalParity\fP (int i, int m, int *SP, int *IP, int *SD, int *ID)"
+.br
+.RI "Compute location of block\&. "
+.ti -1c
+.RI "int \fBMATH_MISC_Xor\fP (char *block_result, char *block_1, char *block_2, int block_size)"
+.br
+.RI "Compute Xor operation\&. "
+.ti -1c
+.RI "int \fBMATH_MISC_Xor3\fP (char *block_result, char *block_1, char *block_2, char *block_3, int block_size)"
+.br
+.RI "Compute Xor operation\&. "
+.ti -1c
+.RI "int \fBMATH_MISC_XorN\fP (char *block_result, char **blocks, int nblocks, int block_size)"
+.br
+.RI "Compute Xor operation\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBmath_misc\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int MATH_MISC_hash (char * file, int nServ)"
+
+.PP
+Compute server index\&. Compute server index associated to a file\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfile\fP the file name\&. 
+.br
+\fInServ\fP number of servers for this file\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+hash value computed\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB41\fP of file \fBmath_misc\&.c\fP\&.
+.SS "int MATH_MISC_locateInRAID5withExternalParity (int i, int m, int * SP, int * IP, int * SD, int * ID)"
+
+.PP
+Compute location of block\&. Compute location ('SP','IP','SD','ID') of 'i' block with 'm' servers\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIi\fP Block index\&. 
+.br
+\fIm\fP Number of servers\&. 
+.br
+\fISP\fP Server for parity\&. 
+.br
+\fIIP\fP Index for parity\&. 
+.br
+\fISD\fP Server for data\&. 
+.br
+\fIID\fP Index for data\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is removed and error (-1) if a problem is found\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB110\fP of file \fBmath_misc\&.c\fP\&.
+.SS "int MATH_MISC_locateInRAID5withInternalParity (int i, int m, int * SP, int * IP, int * SD, int * ID)"
+
+.PP
+Compute location of block\&. Compute location ('SP','IP','SD','ID') of 'i' block with 'm' servers\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIi\fP Block index\&. 
+.br
+\fIm\fP Number of servers\&. 
+.br
+\fISP\fP Server for parity\&. 
+.br
+\fIIP\fP Index for parity\&. 
+.br
+\fISD\fP Server for data\&. 
+.br
+\fIID\fP Index for data\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1) if element is removed and error (-1) if a problem is found\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB70\fP of file \fBmath_misc\&.c\fP\&.
+.SS "int MATH_MISC_Xor (char * block_result, char * block_1, char * block_2, int block_size)"
+
+.PP
+Compute Xor operation\&. Compute Xor operation ('block_result') for two blocks ('block_1' and 'block_2') of 'block_size' bytes\&.
+.PP
+\&.\&.\&. char res[1024], b1[1024], b2[1024]; \&.\&.\&. memset(b1, 'a', 1024); memset(b1, 'b', 1024); MATH_MISC_Xor(res, b1, b2, 1024); \&.\&.\&. // res[i] = b1[i] ^ b2[i] \&.\&.\&. MATH_MISC_Xor(b1, res, b2, 1024); \&.\&.\&. // b1 = res:(b1 ^ b2) ^ b2 = b1
+.PP
+\fBParameters\fP
+.RS 4
+\fIblock_result\fP Resulting block\&. 
+.br
+\fIblock_1\fP First block of data\&. 
+.br
+\fIblock_2\fP Second block of data\&. 
+.br
+\fIblock_size\fP Number of bytes\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1)\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB147\fP of file \fBmath_misc\&.c\fP\&.
+.SS "int MATH_MISC_Xor3 (char * block_result, char * block_1, char * block_2, char * block_3, int block_size)"
+
+.PP
+Compute Xor operation\&. Compute Xor operation ('block_result') for three blocks ('block_1', 'block_2' and 'block_3') of 'block_size' bytes\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIblock_result\fP Resulting block\&. 
+.br
+\fIblock_1\fP First block of data\&. 
+.br
+\fIblock_2\fP Second block of data\&. 
+.br
+\fIblock_3\fP Third block of data\&. 
+.br
+\fIblock_size\fP Number of bytes of each block\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1)\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB169\fP of file \fBmath_misc\&.c\fP\&.
+.SS "int MATH_MISC_XorN (char * block_result, char ** blocks, int nblocks, int block_size)"
+
+.PP
+Compute Xor operation\&. Compute Xor operation ('block_result') for 'nblocks' blocks at 'blocks' array of 'block_size' bytes each block\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIblock_result\fP Resulting block\&. 
+.br
+\fIblocks\fP Array with all blocks\&. 
+.br
+\fInblocks\fP Number of blocks\&. 
+.br
+\fIblock_size\fP Number of bytes of each block\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true (1)\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB192\fP of file \fBmath_misc\&.c\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

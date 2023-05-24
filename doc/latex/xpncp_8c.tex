@@ -1,0 +1,405 @@
+\doxysection{xpncp.\+c File Reference}
+\hypertarget{xpncp_8c}{}\label{xpncp_8c}\index{xpncp.c@{xpncp.c}}
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$sys/time.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$pthread.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include $<$fcntl.\+h$>$}\newline
+{\ttfamily \#include $<$argp.\+h$>$}\newline
+{\ttfamily \#include \"{}xpn.\+h\"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structarguments}{arguments}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{xpncp_8c_aa26ce36e9802bc0f204ab4004d5a4c0b}{BAR\+\_\+\+LENGTH}}~50
+\item 
+\#define \mbox{\hyperlink{xpncp_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}}~(1024)
+\item 
+\#define \mbox{\hyperlink{xpncp_8c_aa6b38d492364d98453284934ed7caee9}{MB}}~(\mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{xpncp_8c_ada4ae8826b879e764f747370e2371866}{print\+\_\+bar}} (void)
+\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{xpncp_8c_a0f3a90dcc01878d769af5990bb747146}{progression\+\_\+bar}} (\+\_\+\+\_\+attribute\+\_\+\+\_\+((unused)) void \texorpdfstring{$\ast$}{*}arg)
+\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{xpncp_8c_a2a95bf21f508f6067499a64f811760af}{help\+\_\+filter}} (int key, const char \texorpdfstring{$\ast$}{*}text, \+\_\+\+\_\+attribute\+\_\+\+\_\+((\+\_\+\+\_\+unused\+\_\+\+\_\+)) void \texorpdfstring{$\ast$}{*}input)
+\item 
+static error\+\_\+t \mbox{\hyperlink{xpncp_8c_a35ee63236273ebb9325c444cacf00159}{parse\+\_\+opt}} (int key, char \texorpdfstring{$\ast$}{*}arg, struct argp\+\_\+state \texorpdfstring{$\ast$}{*}state)
+\item 
+int \mbox{\hyperlink{xpncp_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+struct stat \mbox{\hyperlink{xpncp_8c_a909b9c34d788f026a675e03094d3085b}{st}}
+\item 
+struct timeval t\+\_\+ini\+\_\+transfer t\+\_\+end\+\_\+transfer \mbox{\hyperlink{xpncp_8c_a80c582a5045575f1bcf4323617c5f8cc}{t\+\_\+old\+\_\+transfer}}
+\item 
+double \mbox{\hyperlink{xpncp_8c_a82bc58bebda7803054bbb55166b24d35}{transfer\+\_\+t}}
+\item 
+double \mbox{\hyperlink{xpncp_8c_a11a9e50b6211743573fe2a41cb50c205}{transfer\+\_\+bw}}
+\item 
+ssize\+\_\+t \mbox{\hyperlink{xpncp_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}}
+\item 
+ssize\+\_\+t \mbox{\hyperlink{xpncp_8c_a092890891e08876ff749d3371b43e3f8}{sum\+\_\+old}}
+\item 
+char \mbox{\hyperlink{xpncp_8c_a0c4a4842bce6b5965a4d880f3bfe555e}{bar}} \mbox{[}\mbox{\hyperlink{xpn-cat_8c_aa26ce36e9802bc0f204ab4004d5a4c0b}{BAR\+\_\+\+LENGTH}}+1\mbox{]}
+\item 
+int \mbox{\hyperlink{xpncp_8c_a664466979d8f3e5abe8eee3519d2b4fb}{bar\+\_\+length}}
+\item 
+int \mbox{\hyperlink{xpncp_8c_a582e2ef9670c974c00e00ad10af0e629}{silent}} = 0
+\item 
+int \mbox{\hyperlink{xpncp_8c_aff855e66d22a50d1abb22ac23c758970}{very\+\_\+silent}} = 0
+\item 
+int \mbox{\hyperlink{xpncp_8c_ac3e1795766a80ec63b157951b4b9a7d4}{debug}} = 0
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{xpncp_8c_a62f73ea01c816f1996aed4c66f57c4fb}{argp\+\_\+program\+\_\+version}} = \"{}xpncp 1.\+0\"{}
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{xpncp_8c_aaa037e59f26a80a8a2e35e6f2364004d}{argp\+\_\+program\+\_\+bug\+\_\+address}} = \"{}$<$https\+://github.\+com/xpn-\/arcos/xpn$>$\"{}
+\item 
+static char \mbox{\hyperlink{xpncp_8c_af6164deb8a824f8cb2b9147cfc3174f5}{doc}} \mbox{[}$\,$\mbox{]} = \"{}A \mbox{\hyperlink{xpn__rebuild_8c_a67098a0ece25e4df618a079bb8077983}{copy}} program for Expand partitions\"{}
+\item 
+static struct argp\+\_\+option \mbox{\hyperlink{xpncp_8c_abc1fd3a47aea6a8944038c9100eb9135}{options}} \mbox{[}$\,$\mbox{]}
+\item 
+static struct argp \mbox{\hyperlink{xpncp_8c_ab70c96531b1b652d70c221cfaf3207f3}{argp}} = \{\mbox{\hyperlink{xpncp_8c_abc1fd3a47aea6a8944038c9100eb9135}{options}}, \mbox{\hyperlink{xpncp_8c_a35ee63236273ebb9325c444cacf00159}{parse\+\_\+opt}}, 0, \mbox{\hyperlink{xpncp_8c_af6164deb8a824f8cb2b9147cfc3174f5}{doc}}, 0, \mbox{\hyperlink{xpncp_8c_a2a95bf21f508f6067499a64f811760af}{help\+\_\+filter}}, 0\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{xpncp_8c_aa26ce36e9802bc0f204ab4004d5a4c0b}\label{xpncp_8c_aa26ce36e9802bc0f204ab4004d5a4c0b} 
+\index{xpncp.c@{xpncp.c}!BAR\_LENGTH@{BAR\_LENGTH}}
+\index{BAR\_LENGTH@{BAR\_LENGTH}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{BAR\_LENGTH}{BAR\_LENGTH}}
+{\footnotesize\ttfamily \#define BAR\+\_\+\+LENGTH~50}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00032}{32}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+\Hypertarget{xpncp_8c_a1841fd1a462d245d8c73dce55e2f45da}\label{xpncp_8c_a1841fd1a462d245d8c73dce55e2f45da} 
+\index{xpncp.c@{xpncp.c}!KB@{KB}}
+\index{KB@{KB}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{KB}{KB}}
+{\footnotesize\ttfamily \#define KB~(1024)}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00035}{35}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+\Hypertarget{xpncp_8c_aa6b38d492364d98453284934ed7caee9}\label{xpncp_8c_aa6b38d492364d98453284934ed7caee9} 
+\index{xpncp.c@{xpncp.c}!MB@{MB}}
+\index{MB@{MB}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{MB}{MB}}
+{\footnotesize\ttfamily \#define MB~(\mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{cp-local2xpn_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}})}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00039}{39}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{xpncp_8c_a2a95bf21f508f6067499a64f811760af}\label{xpncp_8c_a2a95bf21f508f6067499a64f811760af} 
+\index{xpncp.c@{xpncp.c}!help\_filter@{help\_filter}}
+\index{help\_filter@{help\_filter}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{help\_filter()}{help\_filter()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*} help\+\_\+filter (\begin{DoxyParamCaption}\item[{int}]{key,  }\item[{const char \texorpdfstring{$\ast$}{*}}]{text,  }\item[{\+\_\+\+\_\+attribute\+\_\+\+\_\+((\+\_\+\+\_\+unused\+\_\+\+\_\+)) void \texorpdfstring{$\ast$}{*}}]{input }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00111}{111}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+\Hypertarget{xpncp_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{xpncp_8c_a0ddf1224851353fc92bfbff6f499fa97} 
+\index{xpncp.c@{xpncp.c}!main@{main}}
+\index{main@{main}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00277}{277}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpncp_8c_source_l00275}{argp}}, \mbox{\hyperlink{xpncp_8c_source_l00160}{arguments\+::buffer\+\_\+size}}, \mbox{\hyperlink{xpn__bypass_8c_source_l01178}{close()}}, \mbox{\hyperlink{xpncp_8c_source_l00050}{debug}}, \mbox{\hyperlink{xpncp_8c_source_l00165}{arguments\+::debug}}, \mbox{\hyperlink{xpncp_8c_source_l00167}{arguments\+::dest}}, \mbox{\hyperlink{xpncp_8c_source_l00162}{arguments\+::do\+\_\+stat}}, \mbox{\hyperlink{xpn__bypass_8c_source_l01540}{exit()}}, \mbox{\hyperlink{xpncp_8c_source_l00035}{KB}}, \mbox{\hyperlink{xpncp_8c_source_l00039}{MB}}, \mbox{\hyperlink{all__system_8h_source_l00183}{O\+\_\+\+CREAT}}, \mbox{\hyperlink{all__system_8h_source_l00180}{O\+\_\+\+RDONLY}}, \mbox{\hyperlink{all__system_8h_source_l00186}{O\+\_\+\+TRUNC}}, \mbox{\hyperlink{all__system_8h_source_l00181}{O\+\_\+\+WRONLY}}, \mbox{\hyperlink{xpn__bypass_8c_source_l00527}{open()}}, \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}, \mbox{\hyperlink{xpncp_8c_source_l00079}{progression\+\_\+bar()}}, \mbox{\hyperlink{xpn__bypass_8c_source_l00735}{read()}}, \mbox{\hyperlink{xpncp_8c_source_l00048}{silent}}, \mbox{\hyperlink{xpncp_8c_source_l00163}{arguments\+::silent}}, \mbox{\hyperlink{xpncp_8c_source_l00166}{arguments\+::source}}, \mbox{\hyperlink{xpncp_8c_source_l00042}{st}}, \mbox{\hyperlink{xpncp_8c_source_l00161}{arguments\+::st}}, \mbox{\hyperlink{xpncp_8c_source_l00045}{sum}}, \mbox{\hyperlink{xpncp_8c_source_l00044}{transfer\+\_\+bw}}, \mbox{\hyperlink{xpncp_8c_source_l00044}{transfer\+\_\+t}}, \mbox{\hyperlink{xpncp_8c_source_l00049}{very\+\_\+silent}}, \mbox{\hyperlink{xpncp_8c_source_l00164}{arguments\+::very\+\_\+silent}}, \mbox{\hyperlink{xpn__bypass_8c_source_l00773}{write()}}, \mbox{\hyperlink{xpn__unistd_8c_source_l00098}{xpn\+\_\+close()}}, \mbox{\hyperlink{xpn__unistd_8c_source_l00055}{xpn\+\_\+destroy()}}, \mbox{\hyperlink{xpn__unistd_8c_source_l00046}{xpn\+\_\+init()}}, \mbox{\hyperlink{xpn__unistd_8c_source_l00077}{xpn\+\_\+open()}}, \mbox{\hyperlink{xpn__unistd_8c_source_l00111}{xpn\+\_\+read()}}, \mbox{\hyperlink{xpn__unistd_8c_source_l00258}{xpn\+\_\+stat()}}, and \mbox{\hyperlink{xpn__unistd_8c_source_l00120}{xpn\+\_\+write()}}.
+
+\Hypertarget{xpncp_8c_a35ee63236273ebb9325c444cacf00159}\label{xpncp_8c_a35ee63236273ebb9325c444cacf00159} 
+\index{xpncp.c@{xpncp.c}!parse\_opt@{parse\_opt}}
+\index{parse\_opt@{parse\_opt}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{parse\_opt()}{parse\_opt()}}
+{\footnotesize\ttfamily static error\+\_\+t parse\+\_\+opt (\begin{DoxyParamCaption}\item[{int}]{key,  }\item[{char \texorpdfstring{$\ast$}{*}}]{arg,  }\item[{struct argp\+\_\+state \texorpdfstring{$\ast$}{*}}]{state }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00171}{171}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpncp_8c_source_l00160}{arguments\+::buffer\+\_\+size}}, \mbox{\hyperlink{xpncp_8c_source_l00165}{arguments\+::debug}}, \mbox{\hyperlink{xpncp_8c_source_l00167}{arguments\+::dest}}, \mbox{\hyperlink{xpncp_8c_source_l00162}{arguments\+::do\+\_\+stat}}, \mbox{\hyperlink{xpncp_8c_source_l00163}{arguments\+::silent}}, \mbox{\hyperlink{xpncp_8c_source_l00166}{arguments\+::source}}, \mbox{\hyperlink{xpncp_8c_source_l00161}{arguments\+::st}}, and \mbox{\hyperlink{xpncp_8c_source_l00164}{arguments\+::very\+\_\+silent}}.
+
+\Hypertarget{xpncp_8c_ada4ae8826b879e764f747370e2371866}\label{xpncp_8c_ada4ae8826b879e764f747370e2371866} 
+\index{xpncp.c@{xpncp.c}!print\_bar@{print\_bar}}
+\index{print\_bar@{print\_bar}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{print\_bar()}{print\_bar()}}
+{\footnotesize\ttfamily void print\+\_\+bar (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00052}{52}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpncp_8c_source_l00046}{bar}}, \mbox{\hyperlink{xpncp_8c_source_l00032}{BAR\+\_\+\+LENGTH}}, \mbox{\hyperlink{xpncp_8c_source_l00047}{bar\+\_\+length}}, \mbox{\hyperlink{xpncp_8c_source_l00039}{MB}}, \mbox{\hyperlink{xpncp_8c_source_l00048}{silent}}, \mbox{\hyperlink{xpncp_8c_source_l00042}{st}}, \mbox{\hyperlink{xpncp_8c_source_l00045}{sum}}, \mbox{\hyperlink{xpncp_8c_source_l00045}{sum\+\_\+old}}, \mbox{\hyperlink{xpncp_8c_source_l00043}{t\+\_\+old\+\_\+transfer}}, \mbox{\hyperlink{xpncp_8c_source_l00044}{transfer\+\_\+bw}}, and \mbox{\hyperlink{xpncp_8c_source_l00044}{transfer\+\_\+t}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}, and \mbox{\hyperlink{xpncp_8c_source_l00079}{progression\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_a0f3a90dcc01878d769af5990bb747146}\label{xpncp_8c_a0f3a90dcc01878d769af5990bb747146} 
+\index{xpncp.c@{xpncp.c}!progression\_bar@{progression\_bar}}
+\index{progression\_bar@{progression\_bar}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{progression\_bar()}{progression\_bar()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} progression\+\_\+bar (\begin{DoxyParamCaption}\item[{\+\_\+\+\_\+attribute\+\_\+\+\_\+((unused)) void \texorpdfstring{$\ast$}{*}}]{arg }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00079}{79}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpncp_8c_source_l00046}{bar}}, \mbox{\hyperlink{xpncp_8c_source_l00032}{BAR\+\_\+\+LENGTH}}, \mbox{\hyperlink{xpncp_8c_source_l00047}{bar\+\_\+length}}, \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}, \mbox{\hyperlink{xpncp_8c_source_l00045}{sum}}, \mbox{\hyperlink{xpncp_8c_source_l00045}{sum\+\_\+old}}, and \mbox{\hyperlink{xpncp_8c_source_l00049}{very\+\_\+silent}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{xpncp_8c_ab70c96531b1b652d70c221cfaf3207f3}\label{xpncp_8c_ab70c96531b1b652d70c221cfaf3207f3} 
+\index{xpncp.c@{xpncp.c}!argp@{argp}}
+\index{argp@{argp}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{argp}{argp}}
+{\footnotesize\ttfamily struct argp argp = \{\mbox{\hyperlink{xpncp_8c_abc1fd3a47aea6a8944038c9100eb9135}{options}}, \mbox{\hyperlink{xpncp_8c_a35ee63236273ebb9325c444cacf00159}{parse\+\_\+opt}}, 0, \mbox{\hyperlink{xpncp_8c_af6164deb8a824f8cb2b9147cfc3174f5}{doc}}, 0, \mbox{\hyperlink{xpncp_8c_a2a95bf21f508f6067499a64f811760af}{help\+\_\+filter}}, 0\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00275}{275}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00230}{mountproc3\+\_\+dump\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00257}{mountproc3\+\_\+export\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00221}{mountproc3\+\_\+mnt\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00212}{mountproc3\+\_\+null\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00239}{mountproc3\+\_\+umnt\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00248}{mountproc3\+\_\+umntall\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00050}{nfsproc3\+\_\+access\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00203}{nfsproc3\+\_\+commit\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00086}{nfsproc3\+\_\+create\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00185}{nfsproc3\+\_\+fsinfo\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00176}{nfsproc3\+\_\+fsstat\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00023}{nfsproc3\+\_\+getattr\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00149}{nfsproc3\+\_\+link\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00041}{nfsproc3\+\_\+lookup\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00095}{nfsproc3\+\_\+mkdir\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00113}{nfsproc3\+\_\+mknod\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00014}{nfsproc3\+\_\+null\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00194}{nfsproc3\+\_\+pathconf\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00068}{nfsproc3\+\_\+read\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00158}{nfsproc3\+\_\+readdir\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00167}{nfsproc3\+\_\+readdirplus\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00059}{nfsproc3\+\_\+readlink\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00122}{nfsproc3\+\_\+remove\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00140}{nfsproc3\+\_\+rename\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00131}{nfsproc3\+\_\+rmdir\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00032}{nfsproc3\+\_\+setattr\+\_\+3()}}, \mbox{\hyperlink{nfs3__clnt_8c_source_l00104}{nfsproc3\+\_\+symlink\+\_\+3()}}, and \mbox{\hyperlink{nfs3__clnt_8c_source_l00077}{nfsproc3\+\_\+write\+\_\+3()}}.
+
+\Hypertarget{xpncp_8c_aaa037e59f26a80a8a2e35e6f2364004d}\label{xpncp_8c_aaa037e59f26a80a8a2e35e6f2364004d} 
+\index{xpncp.c@{xpncp.c}!argp\_program\_bug\_address@{argp\_program\_bug\_address}}
+\index{argp\_program\_bug\_address@{argp\_program\_bug\_address}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{argp\_program\_bug\_address}{argp\_program\_bug\_address}}
+{\footnotesize\ttfamily const char\texorpdfstring{$\ast$}{*} argp\+\_\+program\+\_\+bug\+\_\+address = \"{}$<$https\+://github.\+com/xpn-\/arcos/xpn$>$\"{}}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00108}{108}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+\Hypertarget{xpncp_8c_a62f73ea01c816f1996aed4c66f57c4fb}\label{xpncp_8c_a62f73ea01c816f1996aed4c66f57c4fb} 
+\index{xpncp.c@{xpncp.c}!argp\_program\_version@{argp\_program\_version}}
+\index{argp\_program\_version@{argp\_program\_version}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{argp\_program\_version}{argp\_program\_version}}
+{\footnotesize\ttfamily const char\texorpdfstring{$\ast$}{*} argp\+\_\+program\+\_\+version = \"{}xpncp 1.\+0\"{}}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00107}{107}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+\Hypertarget{xpncp_8c_a0c4a4842bce6b5965a4d880f3bfe555e}\label{xpncp_8c_a0c4a4842bce6b5965a4d880f3bfe555e} 
+\index{xpncp.c@{xpncp.c}!bar@{bar}}
+\index{bar@{bar}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{bar}{bar}}
+{\footnotesize\ttfamily char bar\mbox{[}\mbox{\hyperlink{xpn-cat_8c_aa26ce36e9802bc0f204ab4004d5a4c0b}{BAR\+\_\+\+LENGTH}}+1\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00046}{46}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}, and \mbox{\hyperlink{xpncp_8c_source_l00079}{progression\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_a664466979d8f3e5abe8eee3519d2b4fb}\label{xpncp_8c_a664466979d8f3e5abe8eee3519d2b4fb} 
+\index{xpncp.c@{xpncp.c}!bar\_length@{bar\_length}}
+\index{bar\_length@{bar\_length}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{bar\_length}{bar\_length}}
+{\footnotesize\ttfamily int bar\+\_\+length}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00047}{47}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}, and \mbox{\hyperlink{xpncp_8c_source_l00079}{progression\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_ac3e1795766a80ec63b157951b4b9a7d4}\label{xpncp_8c_ac3e1795766a80ec63b157951b4b9a7d4} 
+\index{xpncp.c@{xpncp.c}!debug@{debug}}
+\index{debug@{debug}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{debug}{debug}}
+{\footnotesize\ttfamily int debug = 0}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00050}{50}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}.
+
+\Hypertarget{xpncp_8c_af6164deb8a824f8cb2b9147cfc3174f5}\label{xpncp_8c_af6164deb8a824f8cb2b9147cfc3174f5} 
+\index{xpncp.c@{xpncp.c}!doc@{doc}}
+\index{doc@{doc}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{doc}{doc}}
+{\footnotesize\ttfamily char doc\mbox{[}$\,$\mbox{]} = \"{}A \mbox{\hyperlink{xpn__rebuild_8c_a67098a0ece25e4df618a079bb8077983}{copy}} program for Expand partitions\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00109}{109}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+\Hypertarget{xpncp_8c_abc1fd3a47aea6a8944038c9100eb9135}\label{xpncp_8c_abc1fd3a47aea6a8944038c9100eb9135} 
+\index{xpncp.c@{xpncp.c}!options@{options}}
+\index{options@{options}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{options}{options}}
+{\footnotesize\ttfamily struct argp\+\_\+option options\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}buffer-\/size"{}},\ \textcolor{charliteral}{'b'},\ \textcolor{stringliteral}{"{}BUFFER\_SIZE"{}},\ 0,\ \textcolor{stringliteral}{"{}Buffer\ size"{}},\ 0\},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}file-\/size"{}},\ \textcolor{charliteral}{'i'},\ \textcolor{stringliteral}{"{}FILE\_SIZE"{}},\ 0,\ \textcolor{stringliteral}{"{}File\ size"{}},\ 0\},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}silent"{}},\ \textcolor{charliteral}{'s'},\ 0,\ 0,\ \textcolor{stringliteral}{"{}Silent"{}},\ 0\},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}very-\/silent"{}},\ \textcolor{charliteral}{'S'},\ 0,\ 0,\ \textcolor{stringliteral}{"{}Very\ silent"{}},\ 0\},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{\textcolor{stringliteral}{"{}debug"{}},\ \textcolor{charliteral}{'d'},\ 0,\ 0,\ \textcolor{stringliteral}{"{}Debug"{}},\ 0\},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \{0,\ 0,\ 0,\ 0,\ 0,\ 0\}\}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00149}{149}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+\Hypertarget{xpncp_8c_a582e2ef9670c974c00e00ad10af0e629}\label{xpncp_8c_a582e2ef9670c974c00e00ad10af0e629} 
+\index{xpncp.c@{xpncp.c}!silent@{silent}}
+\index{silent@{silent}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{silent}{silent}}
+{\footnotesize\ttfamily int silent = 0}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00048}{48}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}, and \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_a909b9c34d788f026a675e03094d3085b}\label{xpncp_8c_a909b9c34d788f026a675e03094d3085b} 
+\index{xpncp.c@{xpncp.c}!st@{st}}
+\index{st@{st}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{st}{st}}
+{\footnotesize\ttfamily struct stat st}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00042}{42}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}, and \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_a7230b9a28bec93ecd5cfcbec3352a2db}\label{xpncp_8c_a7230b9a28bec93ecd5cfcbec3352a2db} 
+\index{xpncp.c@{xpncp.c}!sum@{sum}}
+\index{sum@{sum}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{sum}{sum}}
+{\footnotesize\ttfamily ssize\+\_\+t sum}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00045}{45}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}, \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}, and \mbox{\hyperlink{xpncp_8c_source_l00079}{progression\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_a092890891e08876ff749d3371b43e3f8}\label{xpncp_8c_a092890891e08876ff749d3371b43e3f8} 
+\index{xpncp.c@{xpncp.c}!sum\_old@{sum\_old}}
+\index{sum\_old@{sum\_old}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{sum\_old}{sum\_old}}
+{\footnotesize\ttfamily ssize\+\_\+t sum\+\_\+old}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00045}{45}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}, and \mbox{\hyperlink{xpncp_8c_source_l00079}{progression\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_a80c582a5045575f1bcf4323617c5f8cc}\label{xpncp_8c_a80c582a5045575f1bcf4323617c5f8cc} 
+\index{xpncp.c@{xpncp.c}!t\_old\_transfer@{t\_old\_transfer}}
+\index{t\_old\_transfer@{t\_old\_transfer}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{t\_old\_transfer}{t\_old\_transfer}}
+{\footnotesize\ttfamily struct timeval t\+\_\+ini\+\_\+transfer t\+\_\+end\+\_\+transfer t\+\_\+old\+\_\+transfer}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00043}{43}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_a11a9e50b6211743573fe2a41cb50c205}\label{xpncp_8c_a11a9e50b6211743573fe2a41cb50c205} 
+\index{xpncp.c@{xpncp.c}!transfer\_bw@{transfer\_bw}}
+\index{transfer\_bw@{transfer\_bw}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{transfer\_bw}{transfer\_bw}}
+{\footnotesize\ttfamily double transfer\+\_\+bw}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00044}{44}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}, and \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_a82bc58bebda7803054bbb55166b24d35}\label{xpncp_8c_a82bc58bebda7803054bbb55166b24d35} 
+\index{xpncp.c@{xpncp.c}!transfer\_t@{transfer\_t}}
+\index{transfer\_t@{transfer\_t}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{transfer\_t}{transfer\_t}}
+{\footnotesize\ttfamily double transfer\+\_\+t}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00044}{44}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}, and \mbox{\hyperlink{xpncp_8c_source_l00052}{print\+\_\+bar()}}.
+
+\Hypertarget{xpncp_8c_aff855e66d22a50d1abb22ac23c758970}\label{xpncp_8c_aff855e66d22a50d1abb22ac23c758970} 
+\index{xpncp.c@{xpncp.c}!very\_silent@{very\_silent}}
+\index{very\_silent@{very\_silent}!xpncp.c@{xpncp.c}}
+\doxysubsubsection{\texorpdfstring{very\_silent}{very\_silent}}
+{\footnotesize\ttfamily int very\+\_\+silent = 0}
+
+
+
+Definition at line \mbox{\hyperlink{xpncp_8c_source_l00049}{49}} of file \mbox{\hyperlink{xpncp_8c_source}{xpncp.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpncp_8c_source_l00277}{main()}}, and \mbox{\hyperlink{xpncp_8c_source_l00079}{progression\+\_\+bar()}}.
+

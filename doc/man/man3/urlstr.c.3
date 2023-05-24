@@ -1,0 +1,247 @@
+.TH "urlstr.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+urlstr.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'base/urlstr\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBgetURLProtocol\fP (char *url, char *protocol)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBgetURLServer\fP (char *url, char *server)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBgetURLPort\fP (char *url, char *port)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBgetURLDir\fP (char *url, char *dir)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBclear_slash\fP (char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBParseURL\fP (char *url, char *protocol, char *login, char *passwd, char *server, char *port, char *dir)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBgetDirWithURL\fP (char *url, char *dir)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBurlstr\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int clear_slash (char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB231\fP of file \fBurlstr\&.c\fP\&.
+.PP
+References \fBPATH_MAX\fP\&.
+.PP
+Referenced by \fBParseURL()\fP\&.
+.SS "int getDirWithURL (char * url, char * dir)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB345\fP of file \fBurlstr\&.c\fP\&.
+.PP
+References \fBgetURLDir()\fP, and \fBPATH_MAX\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rmdir()\fP, \fBnfi_nfs_create()\fP, \fBnfi_nfs_mkdir()\fP, \fBnfi_nfs_remove()\fP, \fBnfi_nfs_rename()\fP, \fBnfi_nfs_rmdir()\fP, \fBnfs3_open()\fP, and \fBnfs_open()\fP\&.
+.SS "int getURLDir (char * url, char * dir)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB184\fP of file \fBurlstr\&.c\fP\&.
+.PP
+References \fBgetURLPort()\fP, \fBgetURLProtocol()\fP, and \fBgetURLServer()\fP\&.
+.PP
+Referenced by \fBgetDirWithURL()\fP, and \fBParseURL()\fP\&.
+.SS "int getURLPort (char * url, char * port)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIport\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB144\fP of file \fBurlstr\&.c\fP\&.
+.PP
+References \fBgetURLServer()\fP\&.
+.PP
+Referenced by \fBgetURLDir()\fP, and \fBParseURL()\fP\&.
+.SS "int getURLProtocol (char * url, char * protocol)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIprotocol\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB50\fP of file \fBurlstr\&.c\fP\&.
+.PP
+Referenced by \fBgetURLDir()\fP, \fBgetURLServer()\fP, and \fBParseURL()\fP\&.
+.SS "int getURLServer (char * url, char * server)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIserver\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB110\fP of file \fBurlstr\&.c\fP\&.
+.PP
+References \fBgetURLProtocol()\fP\&.
+.PP
+Referenced by \fBgetURLDir()\fP, \fBgetURLPort()\fP, and \fBParseURL()\fP\&.
+.SS "int ParseURL (char * url, char * protocol, char * login, char * passwd, char * server, char * port, char * dir)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIprotocol\fP 'TODO'\&. 
+.br
+\fIlogin\fP 'TODO'\&. 
+.br
+\fIpasswd\fP 'TODO'\&. 
+.br
+\fIserver\fP 'TODO'\&. 
+.br
+\fIport\fP 'TODO'\&. 
+.br
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB262\fP of file \fBurlstr\&.c\fP\&.
+.PP
+References \fBclear_slash()\fP, \fBgetURLDir()\fP, \fBgetURLPort()\fP, \fBgetURLProtocol()\fP, and \fBgetURLServer()\fP\&.
+.PP
+Referenced by \fBmpi_server_op_flush()\fP, \fBmpi_server_op_preload()\fP, \fBnfi_local_create()\fP, \fBnfi_local_getattr()\fP, \fBnfi_local_init()\fP, \fBnfi_local_mkdir()\fP, \fBnfi_local_open()\fP, \fBnfi_local_opendir()\fP, \fBnfi_local_reconnect()\fP, \fBnfi_local_remove()\fP, \fBnfi_local_rename()\fP, \fBnfi_local_rmdir()\fP, \fBnfi_mpi_server_create()\fP, \fBnfi_mpi_server_getattr()\fP, \fBnfi_mpi_server_init()\fP, \fBnfi_mpi_server_mkdir()\fP, \fBnfi_mpi_server_open()\fP, \fBnfi_mpi_server_opendir()\fP, \fBnfi_mpi_server_reconnect()\fP, \fBnfi_mpi_server_remove()\fP, \fBnfi_mpi_server_rename()\fP, \fBnfi_mpi_server_rmdir()\fP, \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rmdir()\fP, \fBnfi_nfs_create()\fP, \fBnfi_nfs_destroy()\fP, \fBnfi_nfs_disconnect()\fP, \fBnfi_nfs_init()\fP, \fBnfi_nfs_mkdir()\fP, \fBnfi_nfs_reconnect()\fP, \fBnfi_nfs_remove()\fP, \fBnfi_nfs_rename()\fP, \fBnfi_nfs_rmdir()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_getattr()\fP, \fBnfi_tcp_server_init()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_reconnect()\fP, \fBnfi_tcp_server_remove()\fP, \fBnfi_tcp_server_rename()\fP, \fBnfi_tcp_server_rmdir()\fP, \fBnfs3_open()\fP, \fBnfs_open()\fP, \fBtcp_server_op_flush()\fP, \fBtcp_server_op_preload()\fP, and \fBXpnGetServer()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

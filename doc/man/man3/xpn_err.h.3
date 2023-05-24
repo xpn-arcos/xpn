@@ -1,0 +1,145 @@
+.TH "xpn_err.h" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn_err.h \- Header file to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'xpn\&.h'\fP
+.br
+\fC#include 'nfi/nfi_lib\&.h'\fP
+.br
+
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBxpn_err_code\fP { \fBXPN_OK\fP = 0, \fBXPNERR_PARAM\fP = 1, \fBXPNERR_MEMORY\fP = 2, \fBXPNERR_INVALURL\fP = 3, \fBXPNERR_CONF\fP = 4, \fBXPNERR_INITSERV\fP = 5, \fBXPNERR_GETATTR\fP = 6, \fBXPNERR_LOOKUP\fP = 7, \fBXPNERR_READ\fP = 8, \fBXPNERR_WRITE\fP = 9, \fBXPNERR_CREATE\fP = 10, \fBXPNERR_REMOVE\fP = 11, \fBXPNERR_MKDIR\fP = 12, \fBXPNERR_READDIR\fP = 13, \fBXPNERR_STATFS\fP = 14, \fBXPNERR_PATH_NOEXIST\fP = 15, \fBXPNERR_PART_NOEXIST\fP = 16, \fBXPNERR_NOMEMORY\fP = 17 }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBxpn_err\fP (int err)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "int \fBerrno\fP"
+.br
+.ti -1c
+.RI "int \fBxpn_errno\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Header file to 'TODO'\&. 
+
+Header file to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBxpn_err\&.h\fP\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBxpn_err_code\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIXPN_OK \fP\fP
+.TP
+\fB\fIXPNERR_PARAM \fP\fP
+.TP
+\fB\fIXPNERR_MEMORY \fP\fP
+.TP
+\fB\fIXPNERR_INVALURL \fP\fP
+.TP
+\fB\fIXPNERR_CONF \fP\fP
+.TP
+\fB\fIXPNERR_INITSERV \fP\fP
+.TP
+\fB\fIXPNERR_GETATTR \fP\fP
+.TP
+\fB\fIXPNERR_LOOKUP \fP\fP
+.TP
+\fB\fIXPNERR_READ \fP\fP
+.TP
+\fB\fIXPNERR_WRITE \fP\fP
+.TP
+\fB\fIXPNERR_CREATE \fP\fP
+.TP
+\fB\fIXPNERR_REMOVE \fP\fP
+.TP
+\fB\fIXPNERR_MKDIR \fP\fP
+.TP
+\fB\fIXPNERR_READDIR \fP\fP
+.TP
+\fB\fIXPNERR_STATFS \fP\fP
+.TP
+\fB\fIXPNERR_PATH_NOEXIST \fP\fP
+.TP
+\fB\fIXPNERR_PART_NOEXIST \fP\fP
+.TP
+\fB\fIXPNERR_NOMEMORY \fP\fP
+.PP
+Definition at line \fB46\fP of file \fBxpn_err\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int xpn_err (int err)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIerr\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB44\fP of file \fBxpn_err\&.c\fP\&.
+.PP
+References \fBerrno\fP, and \fBxpn_errno\fP\&.
+.PP
+Referenced by \fBxpn_init_partition()\fP, \fBxpn_internal_creat()\fP, \fBxpn_internal_open()\fP, \fBxpn_internal_remove()\fP, \fBxpn_simple_close()\fP, \fBxpn_simple_closedir()\fP, \fBxpn_simple_creat()\fP, \fBxpn_simple_flush()\fP, \fBxpn_simple_mkdir()\fP, \fBxpn_simple_open()\fP, \fBxpn_simple_preload()\fP, \fBxpn_simple_rename()\fP, \fBxpn_simple_rmdir()\fP, \fBxpn_simple_stat()\fP, \fBXpnGetAtribFd()\fP, \fBXpnGetAtribPath()\fP, and \fBXpnGetServer()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "int errno\fC [extern]\fP"
+
+.SS "int xpn_errno\fC [extern]\fP"
+
+.PP
+Definition at line \fB38\fP of file \fBxpn_err\&.c\fP\&.
+.PP
+Referenced by \fBxpn_err()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

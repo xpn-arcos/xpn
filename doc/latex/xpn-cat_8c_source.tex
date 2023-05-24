@@ -1,0 +1,191 @@
+\doxysection{xpn-\/cat.c}
+\hypertarget{xpn-cat_8c_source}{}\label{xpn-cat_8c_source}\index{xpn-\/cat.c@{xpn-\/cat.c}}
+\mbox{\hyperlink{xpn-cat_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00021}00021\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00022}00022\ \textcolor{preprocessor}{\#include\ <sys/time.h>}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00023}00023\ \textcolor{preprocessor}{\#include\ <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00024}00024\ \textcolor{preprocessor}{\#include\ <pthread.h>}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00025}00025\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00026}00026\ \textcolor{preprocessor}{\#include\ <ctype.h>}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00027}00027\ \textcolor{preprocessor}{\#include\ <fcntl.h>}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00029}00029\ \textcolor{preprocessor}{\#include\ "{}xpn.h"{}}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00031}\mbox{\hyperlink{xpn-cat_8c_aa26ce36e9802bc0f204ab4004d5a4c0b}{00031}}\ \textcolor{preprocessor}{\#define\ BAR\_LENGTH\ 50}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00033}00033\ \textcolor{preprocessor}{\#ifndef\ KB}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00034}\mbox{\hyperlink{xpn-cat_8c_a1841fd1a462d245d8c73dce55e2f45da}{00034}}\ \textcolor{preprocessor}{\#define\ KB\ (1024)}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00035}00035\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00037}00037\ \textcolor{preprocessor}{\#ifndef\ MB}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00038}\mbox{\hyperlink{xpn-cat_8c_aa6b38d492364d98453284934ed7caee9}{00038}}\ \textcolor{preprocessor}{\#define\ MB\ (KB\ *\ KB)}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00039}00039\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00041}\mbox{\hyperlink{xpn-cat_8c_a909b9c34d788f026a675e03094d3085b}{00041}}\ \textcolor{keyword}{struct\ }stat\ \mbox{\hyperlink{xpn-cat_8c_a909b9c34d788f026a675e03094d3085b}{st}};}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00042}\mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{00042}}\ ssize\_t\ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}};}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00044}\mbox{\hyperlink{xpn-cat_8c_a94935900c316b2239b8e0815acf387c6}{00044}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{xpnwriter_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}{usage}}(\textcolor{keywordtype}{char}\ *\mbox{\hyperlink{xpnwriter_8c_a289c5900d90626d909f0a85d5a0ed61d}{program\_name}})}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00045}00045\ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00046}00046\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Usage:\ \%s\ [-\/h]\ |\ [-\/b\ <buffer\_size\_in\_KB>]\ <source>\(\backslash\)n"{}},\ \mbox{\hyperlink{xpnwriter_8c_a289c5900d90626d909f0a85d5a0ed61d}{program\_name}});}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00047}00047\ \}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00049}\mbox{\hyperlink{xpn-cat_8c_a0ddf1224851353fc92bfbff6f499fa97}{00049}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn-cat_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}\ *argv[])}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00050}00050\ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00051}00051\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *source;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00052}00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ ret,\ fds;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00053}00053\ \ \ \ \ \ \ \ \ ssize\_t\ nr;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00054}00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ buffer\_size\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00055}00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *buffer;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00056}00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ isxpn\ =\ 0,\ xpnsource\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00057}00057\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *xpnprefix;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00058}00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ c;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00060}00060\ \ \ \ \ \ \ \ \ xpnprefix\ =\ \textcolor{stringliteral}{"{}xpn://"{}};}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00061}00061\ \ \ \ \ \ \ \ \ opterr\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00062}00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ ((c\ =\ getopt(argc,\ argv,\ \textcolor{stringliteral}{"{}hb:"{}}))\ !=\ -\/1)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00063}00063\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00064}00064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (c)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'h'}:}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpnwriter_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}{usage}}(argv[0]);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'b'}:}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buffer\_size\ =\ strtol(optarg,\ NULL,\ 10)\ *\ \mbox{\hyperlink{xpn-cat_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}};}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'?'}:}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (optopt\ ==\ \textcolor{charliteral}{'b'})}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Option\ -\/\%c\ requires\ an\ argument.\(\backslash\)n"{}},\ optopt);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00077}00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (isprint(optopt))}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00078}00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Unknown\ option\ \`{}-\/\%c'.\(\backslash\)n"{}},\ optopt);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00079}00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00080}00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}Unknown\ option\ character\ \`{}\(\backslash\)\(\backslash\)x\%x'.\(\backslash\)n"{}},\ optopt);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00081}00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpnwriter_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}{usage}}(argv[0]);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00082}00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00085}00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ abort();}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00088}00088\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00090}00090\ \ \ \ \ \ \ \ \ source\ =\ argv[optind];}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00092}00092\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (source\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00093}00093\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}ERROR:\ Incorrect\ number\ of\ argumets.\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpnwriter_8c_a2ef30c42cbc289d899a8be5d2d8f77d0}{usage}}(argv[0]);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00097}00097\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00099}00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strncmp(source,\ xpnprefix,\ strlen(xpnprefix))\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00100}00100\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ source\ =\ source\ +\ strlen(xpnprefix);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xpnsource\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00103}00103\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00105}00105\ \ \ \ \ \ \ \ \ isxpn\ =\ xpnsource;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00106}00106\ \textcolor{preprocessor}{\#ifdef\ DEBUG}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00107}00107\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}xpnsource=\%d,\ isxpn=\%d\(\backslash\)n"{}},\ xpnsource,\ isxpn);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00108}00108\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}source\ =\ '\%s'\(\backslash\)n"{}},\ source);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00109}00109\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}buffer\_size\ =\ \%lu\(\backslash\)n"{}},\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long})buffer\_size);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00110}00110\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00112}00112\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isxpn)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00113}00113\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{xpn__unistd_8c_a7cb8e93ed55974a01a81271a3686356a}{xpn\_init}}();}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00116}00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Error\ \%d\ while\ initializing\ expand\(\backslash\)n"{}},\ ret);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(-\/1);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00119}00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00120}00120\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00122}00122\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (xpnsource)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00123}00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn__unistd_8c_a360f1774f46552236a90df52ebff0392}{xpn\_stat}}(source,\ \&\mbox{\hyperlink{xpn-cat_8c_a909b9c34d788f026a675e03094d3085b}{st}});}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00124}00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00125}00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stat(source,\ \&\mbox{\hyperlink{xpn-cat_8c_a909b9c34d788f026a675e03094d3085b}{st}});}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00126}00126\ \textcolor{preprocessor}{\#ifdef\ DEBUG}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00127}00127\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}st.st\_size\ =\ \%d\(\backslash\)n"{}},\ (\textcolor{keywordtype}{int})\mbox{\hyperlink{xpn-cat_8c_a909b9c34d788f026a675e03094d3085b}{st}}.st\_size);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00128}00128\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00130}00130\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (buffer\_size\ <=\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00131}00131\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00132}00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{xpn-cat_8c_a909b9c34d788f026a675e03094d3085b}{st}}.st\_size\ <=\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00133}00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buffer\_size\ =\ 256\ *\ \mbox{\hyperlink{xpn-cat_8c_a1841fd1a462d245d8c73dce55e2f45da}{KB}};}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00134}00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00135}00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buffer\_size\ =\ \mbox{\hyperlink{xpn-cat_8c_a909b9c34d788f026a675e03094d3085b}{st}}.st\_size;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00136}00136\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00137}00137\ \textcolor{preprocessor}{\#ifdef\ DEBUG}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00138}00138\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}buffer\_size\ =\ \%d\(\backslash\)n"{}},\ (\textcolor{keywordtype}{int})buffer\_size);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00139}00139\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00140}00140\ \ \ \ \ \ \ \ \ buffer\ =\ (\textcolor{keywordtype}{char}\ *)malloc(buffer\_size);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00142}00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (xpnsource)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fds\ =\ \mbox{\hyperlink{xpn__unistd_8c_a12a3afc74d0fee6bc450d92dc45790e8}{xpn\_open}}(source,\ \mbox{\hyperlink{all__system_8h_a7a68c9ffaac7dbcd652225dd7c06a54b}{O\_RDONLY}});}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00144}00144\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00145}00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fds\ =\ \mbox{\hyperlink{xpn__bypass_8c_ad586f56cb2d7d849a4cb20dbd792b543}{open}}(source,\ \mbox{\hyperlink{all__system_8h_a7a68c9ffaac7dbcd652225dd7c06a54b}{O\_RDONLY}});}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00146}00146\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (fds\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00148}00148\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00149}00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Error\ opening\ source:\ fd\ =\ \%d\(\backslash\)n"{}},\ fds);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00150}00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(-\/1);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00151}00151\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00153}00153\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00154}00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{do}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00155}00155\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00156}00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{xpn-cat_8c_a909b9c34d788f026a675e03094d3085b}{st}}.st\_size\ -\/\ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}}\ <\ (ssize\_t)buffer\_size)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buffer\_size\ =\ \mbox{\hyperlink{xpn-cat_8c_a909b9c34d788f026a675e03094d3085b}{st}}.st\_size\ -\/\ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}};}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00158}00158\ \textcolor{preprocessor}{\#ifdef\ DEBUG}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Leyendo\ un\ bloque\ de\ \%lu\ bytes\(\backslash\)n"{}},\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long})buffer\_size);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00160}00160\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (xpnsource)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nr\ =\ \mbox{\hyperlink{xpn__unistd_8c_ac37c3b95a31830ba57254624c26db553}{xpn\_read}}(fds,\ buffer,\ buffer\_size);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00165}00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nr\ =\ \mbox{\hyperlink{xpn__bypass_8c_a8ac41c9217235ab53c5ae676134e0a11}{read}}(fds,\ buffer,\ buffer\_size);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00166}00166\ \textcolor{preprocessor}{\#ifdef\ DEBUG}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Leido\ un\ bloque\ de\ \%ld\ bytes\(\backslash\)n"{}},\ nr);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00168}00168\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fwrite(buffer,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{char}),\ nr,\ stdout);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}}\ =\ \mbox{\hyperlink{xpn-cat_8c_a7230b9a28bec93ecd5cfcbec3352a2db}{sum}}\ +\ nr;}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00172}00172\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{while}\ (nr\ >\ 0);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00174}00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (xpnsource)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn__unistd_8c_a01b254138473a107ed6b31093d5d32a0}{xpn\_close}}(fds);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00176}00176\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_aafbcde67669a1b96577e735ddebd8634}{close}}(fds);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00179}00179\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isxpn)}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00180}00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn__unistd_8c_a2892036d12124b48caab14beee6e9230}{xpn\_destroy}}();}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00181}00181\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00182}00182\ \ \ \ \ \ \ \ \ free(buffer);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00183}00183\ }
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00184}00184\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{xpn__bypass_8c_a55e99c539cf7723ec15e856b7e0a8cee}{exit}}(0);}
+\DoxyCodeLine{\Hypertarget{xpn-cat_8c_source_l00185}00185\ \}}
+
+\end{DoxyCode}

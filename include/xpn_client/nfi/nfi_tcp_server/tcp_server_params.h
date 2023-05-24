@@ -18,9 +18,24 @@
  *
  */
 
+/**
+ * @file tcp_server_params.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _TCP_SERVER_PARAMS_H_
 #define _TCP_SERVER_PARAMS_H_
 
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

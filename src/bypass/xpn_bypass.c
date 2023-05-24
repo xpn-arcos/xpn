@@ -18,16 +18,25 @@
  *
  */
 
-/*
- * Includes
+/**
+ * @file xpn_bypass.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
  */
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn_bypass.h"
 
-/*
- * Global variables
- */
-
+/************************************************
+ *  ... Global variables
+ ***********************************************/
 /**
  * This variable indicates if expand has already been initialized or not.
  * 0 indicates that expand has NOT been initialized yet.
@@ -42,10 +51,18 @@ static int xpn_adaptor_initCalled_getenv = 0; // env variable obtained
 // char *xpn_adaptor_partition_prefix = "xpn://"; //Original
 char *xpn_adaptor_partition_prefix = "/tmp/expand/";
 
-/*
- * Auxiliar functions
- */
+/************************************************
+ *  ... Auxiliar functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @return 'TODO'.
+ */
 int is_xpn_prefix(const char *path)
 {
   const char *prefix = (const char *)xpn_adaptor_partition_prefix;
@@ -53,6 +70,14 @@ int is_xpn_prefix(const char *path)
   return (!strncmp(prefix, path, strlen(prefix)) && strlen(path) > strlen(prefix));
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @return 'TODO'.
+ */
 const char *skip_xpn_prefix(const char *path)
 {
   return (const char *)(path + strlen(xpn_adaptor_partition_prefix));
@@ -61,11 +86,23 @@ const char *skip_xpn_prefix(const char *path)
 //
 // file descriptors table management
 //
-
+/************************************************
+ *  ... File descriptors table management
+ ***********************************************/
 struct generic_fd *fdstable = NULL;
 long fdstable_size = 0L;
 long fdstable_first_free = 0L;
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 void fdstable_realloc(void)
 {
   long old_size = fdstable_size;
@@ -100,11 +137,29 @@ void fdstable_realloc(void)
   }
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 void fdstable_init(void)
 {
   fdstable_realloc();
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd  'TODO'.
+ * @return 'TODO'.
+ */
 struct generic_fd fdstable_get(int fd)
 {
   // debug_info("[bypass] GET FSTABLE %d  %d  %d\n", fd, fdstable[fd].type, fdstable[fd].real_fd);
@@ -125,6 +180,14 @@ struct generic_fd fdstable_get(int fd)
   return ret;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd  'TODO'.
+ * @return 'TODO'.
+ */
 int fdstable_put(struct generic_fd fd)
 {
   for (int i = fdstable_first_free; i < fdstable_size; ++i)
@@ -152,6 +215,14 @@ int fdstable_put(struct generic_fd fd)
   return -1;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd  'TODO'.
+ * @return 'TODO'.
+ */
 int add_xpn_file_to_fdstable(int fd)
 {
   struct stat st;
@@ -175,6 +246,14 @@ int add_xpn_file_to_fdstable(int fd)
   return fdstable_put(virtual_fd);
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd  'TODO'.
+ * @return 'TODO'.
+ */
 int fdstable_remove(int fd)
 {
   if (fd < PLUSXPN)
@@ -195,14 +274,23 @@ int fdstable_remove(int fd)
   return 0;
 }
 
-//
-// Dir table management
-//
-
+/************************************************
+ *  ... Dir table management
+ ***********************************************/
 DIR **fdsdirtable = NULL;
 long fdsdirtable_size = 0L;
 long fdsdirtable_first_free = 0L;
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 void fdsdirtable_realloc(void)
 {
   long old_size = fdsdirtable_size;
@@ -235,11 +323,29 @@ void fdsdirtable_realloc(void)
   }
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 void fdsdirtable_init(void)
 {
   fdsdirtable_realloc();
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dir  'TODO'.
+ * @return 'TODO'.
+ */
 int fdsdirtable_get(DIR *dir)
 {
   for (int i = 0; i < fdsdirtable_size; ++i)
@@ -253,6 +359,14 @@ int fdsdirtable_get(DIR *dir)
   return -1;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dir  'TODO'.
+ * @return 'TODO'.
+ */
 DIR fdsdirtable_getfd(DIR *dir)
 {
   DIR aux_dirp;
@@ -265,6 +379,14 @@ DIR fdsdirtable_getfd(DIR *dir)
   return aux_dirp;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dir  'TODO'.
+ * @return 'TODO'.
+ */
 int fdsdirtable_put(DIR *dir)
 {
   // preparing the "file side" of the directory
@@ -310,6 +432,14 @@ int fdsdirtable_put(DIR *dir)
   return -1;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dir  'TODO'.
+ * @return 'TODO'.
+ */
 int fdsdirtable_remove(DIR *dir)
 {
   for (int i = 0; i < fdsdirtable_size; ++i)
@@ -334,8 +464,14 @@ int fdsdirtable_remove(DIR *dir)
 }
 
 /**
+ * @brief 'TODO'.
+ *
  * This function checks if expand has already been initialized.
  * If not, it initialize it.
+ *
+ * @par Parameters
+ *    None.
+ * @return 'TODO'.
  */
 int xpn_adaptor_keepInit(void)
 {
@@ -384,7 +520,9 @@ int xpn_adaptor_keepInit(void)
   return ret;
 }
 
-// File API
+/************************************************
+ *  ... File API
+ ***********************************************/
 
 int open(const char *path, int flags, ...)
 {
@@ -1124,7 +1262,9 @@ int unlink(const char *path)
   return ret;
 }
 
-// Directory API
+/************************************************
+ *  ... Directory API
+ ***********************************************/
 
 int mkdir(const char *path, mode_t mode)
 {
@@ -1310,7 +1450,9 @@ int rmdir(const char *path)
   return ret;
 }
 
-// Proccess API
+/************************************************
+ *  ... Proccess API
+ ***********************************************/
 
 pid_t fork(void)
 {
@@ -1408,7 +1550,9 @@ void exit(int status)
   __builtin_unreachable();
 }
 
-// Manager API
+/************************************************
+ *  ... Manager API
+ ***********************************************/
 
 int chdir(const char *path)
 {
@@ -1627,8 +1771,9 @@ int fsync(int fd) // TODO
   return ret;
 }
 
-// MPI API
-
+/************************************************
+ *  ... MPI API
+ ***********************************************/
 int MPI_Init(int *argc, char ***argv)
 {
   char *value;

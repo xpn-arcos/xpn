@@ -1,0 +1,143 @@
+\doxysection{trace\+\_\+msg.\+h File Reference}
+\hypertarget{trace__msg_8h}{}\label{trace__msg_8h}\index{trace\_msg.h@{trace\_msg.h}}
+
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include \"{}all\+\_\+system.\+h\"{}}\newline
+{\ttfamily \#include \"{}string\+\_\+misc.\+h\"{}}\newline
+{\ttfamily \#include \"{}trace\+\_\+tags.\+h\"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{trace__msg_8h_a953c0c2960eb7326e434ffca832010b7}{TRACE\+\_\+\+MSG\+\_\+set\+Printer}} (int(\texorpdfstring{$\ast$}{*}printer)(const char \texorpdfstring{$\ast$}{*}, va\+\_\+list))
+\begin{DoxyCompactList}\small\item\em Set \textquotesingle{}printer\textquotesingle{} dispacher. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{trace__msg_8h_a01c9f05160ab8e2c252414c50845eef7}{TRACE\+\_\+\+MSG\+\_\+\+VPrintF}} (int line, char \texorpdfstring{$\ast$}{*}name, long pid, int type, char \texorpdfstring{$\ast$}{*}fto, va\+\_\+list vl)
+\begin{DoxyCompactList}\small\item\em Write a message using the format and the argument list given to it. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{trace__msg_8h_ae62b47e3ca59f9e44725e1f0e18c7692}{TRACE\+\_\+\+MSG\+\_\+\+PrintF}} (int line, char \texorpdfstring{$\ast$}{*}name, long pid, int type, char \texorpdfstring{$\ast$}{*}fto,...)
+\begin{DoxyCompactList}\small\item\em Write a message using the format and arguments given to it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file to \textquotesingle{}TODO\textquotesingle{}. 
+
+Header file to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000073}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{trace__msg_8h_source}{trace\+\_\+msg.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{trace__msg_8h_ae62b47e3ca59f9e44725e1f0e18c7692}\label{trace__msg_8h_ae62b47e3ca59f9e44725e1f0e18c7692} 
+\index{trace\_msg.h@{trace\_msg.h}!TRACE\_MSG\_PrintF@{TRACE\_MSG\_PrintF}}
+\index{TRACE\_MSG\_PrintF@{TRACE\_MSG\_PrintF}!trace\_msg.h@{trace\_msg.h}}
+\doxysubsubsection{\texorpdfstring{TRACE\_MSG\_PrintF()}{TRACE\_MSG\_PrintF()}}
+{\footnotesize\ttfamily void TRACE\+\_\+\+MSG\+\_\+\+PrintF (\begin{DoxyParamCaption}\item[{int}]{line,  }\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{long}]{pid,  }\item[{int}]{type,  }\item[{char \texorpdfstring{$\ast$}{*}}]{fto,  }\item[{}]{... }\end{DoxyParamCaption})}
+
+
+
+Write a message using the format and arguments given to it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em line} & The line of code where message is generated. \\
+\hline
+{\em name} & The file name at the code where message is generated. \\
+\hline
+{\em pid} & The process that send this message. \\
+\hline
+{\em type} & The type of message. \\
+\hline
+{\em fto} & The message format. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{trace__msg_8c_source_l00089}{89}} of file \mbox{\hyperlink{trace__msg_8c_source}{trace\+\_\+msg.\+c}}.
+
+
+
+References \mbox{\hyperlink{trace__msg_8c_source_l00040}{TRACE\+\_\+\+MSG\+\_\+\+Print\+Msg}}, and \mbox{\hyperlink{trace__msg_8c_source_l00066}{TRACE\+\_\+\+MSG\+\_\+\+VPrint\+F()}}.
+
+\Hypertarget{trace__msg_8h_a953c0c2960eb7326e434ffca832010b7}\label{trace__msg_8h_a953c0c2960eb7326e434ffca832010b7} 
+\index{trace\_msg.h@{trace\_msg.h}!TRACE\_MSG\_setPrinter@{TRACE\_MSG\_setPrinter}}
+\index{TRACE\_MSG\_setPrinter@{TRACE\_MSG\_setPrinter}!trace\_msg.h@{trace\_msg.h}}
+\doxysubsubsection{\texorpdfstring{TRACE\_MSG\_setPrinter()}{TRACE\_MSG\_setPrinter()}}
+{\footnotesize\ttfamily void TRACE\+\_\+\+MSG\+\_\+set\+Printer (\begin{DoxyParamCaption}\item[{int(\texorpdfstring{$\ast$}{*})(const char \texorpdfstring{$\ast$}{*}, va\+\_\+list)}]{printer }\end{DoxyParamCaption})}
+
+
+
+Set \textquotesingle{}printer\textquotesingle{} dispacher. 
+
+Set \textquotesingle{}printer\textquotesingle{} dispacher.
+
+
+\begin{DoxyParams}{Parameters}
+{\em printer} & The printer function to be used. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{trace__msg_8c_source_l00046}{46}} of file \mbox{\hyperlink{trace__msg_8c_source}{trace\+\_\+msg.\+c}}.
+
+
+
+References \mbox{\hyperlink{trace__msg_8c_source_l00040}{TRACE\+\_\+\+MSG\+\_\+\+Print\+Msg}}.
+
+\Hypertarget{trace__msg_8h_a01c9f05160ab8e2c252414c50845eef7}\label{trace__msg_8h_a01c9f05160ab8e2c252414c50845eef7} 
+\index{trace\_msg.h@{trace\_msg.h}!TRACE\_MSG\_VPrintF@{TRACE\_MSG\_VPrintF}}
+\index{TRACE\_MSG\_VPrintF@{TRACE\_MSG\_VPrintF}!trace\_msg.h@{trace\_msg.h}}
+\doxysubsubsection{\texorpdfstring{TRACE\_MSG\_VPrintF()}{TRACE\_MSG\_VPrintF()}}
+{\footnotesize\ttfamily void TRACE\+\_\+\+MSG\+\_\+\+VPrintF (\begin{DoxyParamCaption}\item[{int}]{line,  }\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{long}]{pid,  }\item[{int}]{type,  }\item[{char \texorpdfstring{$\ast$}{*}}]{fto,  }\item[{va\+\_\+list}]{vl }\end{DoxyParamCaption})}
+
+
+
+Write a message using the format and the argument list given to it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em line} & The line of code where message is generated. \\
+\hline
+{\em name} & The file name at the code where message is generated. \\
+\hline
+{\em pid} & The process that send this message. \\
+\hline
+{\em type} & The type of message. \\
+\hline
+{\em fto} & The message format. \\
+\hline
+{\em vl} & The argument list. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyParagraph}{Returns}
+Nothing. 
+\end{DoxyParagraph}
+
+
+Definition at line \mbox{\hyperlink{trace__msg_8c_source_l00066}{66}} of file \mbox{\hyperlink{trace__msg_8c_source}{trace\+\_\+msg.\+c}}.
+
+
+
+References \mbox{\hyperlink{string__misc_8c_source_l00113}{STRING\+\_\+\+MISC\+\_\+\+Dvsprintf()}}, \mbox{\hyperlink{trace__msg_8c_source_l00052}{TRACE\+\_\+\+MSG\+\_\+do\+Print()}}, and \mbox{\hyperlink{trace__msg_8c_source_l00040}{TRACE\+\_\+\+MSG\+\_\+\+Print\+Msg}}.
+
+
+
+Referenced by \mbox{\hyperlink{trace__msg_8c_source_l00089}{TRACE\+\_\+\+MSG\+\_\+\+Print\+F()}}.
+

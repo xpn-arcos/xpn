@@ -1,0 +1,113 @@
+\doxysection{trace\+\_\+msg.\+c}
+\hypertarget{trace__msg_8c_source}{}\label{trace__msg_8c_source}\index{trace\_msg.c@{trace\_msg.c}}
+\mbox{\hyperlink{trace__msg_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2020-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ trace\_msg.c}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ File\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00025}00025\ \textcolor{comment}{\ *\ File\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00032}00032\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00033}00033\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00034}00034\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00035}00035\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{trace__msg_8h}{base/trace\_msg.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00037}00037\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00038}00038\ \textcolor{comment}{\ *\ \ ...\ Global\ variables}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00039}00039\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00040}\mbox{\hyperlink{trace__msg_8c_abe3d47a4a96ef4e627ad1e3b3487e5f6}{00040}}\ int\ (*\mbox{\hyperlink{trace__msg_8c_abe3d47a4a96ef4e627ad1e3b3487e5f6}{TRACE\_MSG\_PrintMsg}})(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ va\_list)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00042}00042\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00043}00043\ \textcolor{comment}{\ *\ \ ...\ Functions}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00044}00044\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00046}\mbox{\hyperlink{trace__msg_8c_a953c0c2960eb7326e434ffca832010b7}{00046}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{trace__msg_8c_a953c0c2960eb7326e434ffca832010b7}{TRACE\_MSG\_setPrinter}}(}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00047}00047\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{int}\ (*printer)(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ va\_list))}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00048}00048\ \{}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00049}00049\ \ \ \mbox{\hyperlink{trace__msg_8c_abe3d47a4a96ef4e627ad1e3b3487e5f6}{TRACE\_MSG\_PrintMsg}}\ =\ (int\ (*)(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ va\_list))printer;}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00050}00050\ \}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00052}\mbox{\hyperlink{trace__msg_8c_a27d6d628986f8efb51fc1db940ff3723}{00052}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{trace__msg_8c_a27d6d628986f8efb51fc1db940ff3723}{TRACE\_MSG\_doPrint}}(}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00053}00053\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *fto,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00054}00054\ \ \ \ \ ...)}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00055}00055\ \{}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00056}00056\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{trace__msg_8c_abe3d47a4a96ef4e627ad1e3b3487e5f6}{TRACE\_MSG\_PrintMsg}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00057}00057\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00058}00058\ \ \ \ \ va\_list\ vl;}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00060}00060\ \ \ \ \ va\_start(vl,\ fto);}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00061}00061\ \ \ \ \ (*TRACE\_MSG\_PrintMsg)(fto,\ vl);}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00062}00062\ \ \ \ \ va\_end(vl);}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00063}00063\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00064}00064\ \}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00066}\mbox{\hyperlink{trace__msg_8c_a01c9f05160ab8e2c252414c50845eef7}{00066}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{trace__msg_8c_a01c9f05160ab8e2c252414c50845eef7}{TRACE\_MSG\_VPrintF}}(}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00067}00067\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{int}\ line,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00068}00068\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *name,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00069}00069\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{long}\ pid,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00070}00070\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{int}\ type,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00071}00071\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *fto,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00072}00072\ \ \ \ \ \textcolor{comment}{/*IN*/}\ va\_list\ vl)}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00073}00073\ \{}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00074}00074\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{trace__msg_8c_abe3d47a4a96ef4e627ad1e3b3487e5f6}{TRACE\_MSG\_PrintMsg}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00075}00075\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00076}00076\ \ \ \ \ \textcolor{keywordtype}{char}\ *msg;}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00078}00078\ \ \ \ \ msg\ =\ \mbox{\hyperlink{string__misc_8c_abb4e5661b69b1319201c75b48bf85f3f}{STRING\_MISC\_Dvsprintf}}(fto,\ vl);}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00079}00079\ \ \ \ \ \mbox{\hyperlink{trace__msg_8c_a27d6d628986f8efb51fc1db940ff3723}{TRACE\_MSG\_doPrint}}(\textcolor{stringliteral}{"{}trace(\%i,\(\backslash\)"{}\%s\(\backslash\)"{},\%li,\%i,\(\backslash\)"{}\%s\(\backslash\)"{})."{}},}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00080}00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00081}00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ name,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00082}00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pid,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00083}00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ type,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ msg);}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00085}00085\ \ \ \ \ free(msg);}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00086}00086\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00087}00087\ \}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00089}\mbox{\hyperlink{trace__msg_8c_ae62b47e3ca59f9e44725e1f0e18c7692}{00089}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{trace__msg_8c_ae62b47e3ca59f9e44725e1f0e18c7692}{TRACE\_MSG\_PrintF}}(}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00090}00090\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{int}\ line,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00091}00091\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *name,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00092}00092\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{long}\ pid,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00093}00093\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{int}\ type,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00094}00094\ \ \ \ \ \textcolor{comment}{/*IN*/}\ \textcolor{keywordtype}{char}\ *fto,}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00095}00095\ \ \ \ \ ...)}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00096}00096\ \{}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00097}00097\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{trace__msg_8c_abe3d47a4a96ef4e627ad1e3b3487e5f6}{TRACE\_MSG\_PrintMsg}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00098}00098\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00099}00099\ \ \ \ \ va\_list\ vl;}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00101}00101\ \ \ \ \ va\_start(vl,\ fto);}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00102}00102\ \ \ \ \ \mbox{\hyperlink{trace__msg_8c_a01c9f05160ab8e2c252414c50845eef7}{TRACE\_MSG\_VPrintF}}(line,\ name,\ pid,\ type,\ fto,\ vl);}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00103}00103\ \ \ \ \ va\_end(vl);}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00104}00104\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00105}00105\ \}}
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{trace__msg_8c_source_l00107}00107\ \textcolor{comment}{/*\ ...................................................................\ */}}
+
+\end{DoxyCode}

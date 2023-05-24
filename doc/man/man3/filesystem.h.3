@@ -1,0 +1,629 @@
+.TH "filesystem.h" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+filesystem.h \- Header file to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'all_system\&.h'\fP
+.br
+\fC#include 'syscall_proxies\&.h'\fP
+.br
+\fC#include 'base/utils\&.h'\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBreal_posix_creat\fP(path,  mode)   \fBcreat\fP(path, mode)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_open\fP(path,  flags)   \fBopen\fP(path, flags)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_open2\fP(path,  flags,  mode)   \fBopen\fP(path, flags, mode)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_close\fP(fd)   \fBclose\fP(fd)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_lseek\fP(fd,  offset,  whence)   \fBlseek\fP(fd, offset, whence)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_lseek64\fP(fd,  offset,  whence)   \fBlseek64\fP(fd, offset, whence)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_read\fP(fd,  buffer,  buffer_size)   \fBread\fP(fd, buffer, buffer_size)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_write\fP(fd,  buffer,  buffer_size)   \fBwrite\fP(fd, buffer, buffer_size)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_rename\fP(old_path,  new_path)   \fBrename\fP(old_path, new_path)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_mkdir\fP(pathname,  mode)   \fBmkdir\fP(pathname, mode)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_rmdir\fP(pathname)   \fBrmdir\fP(pathname)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_unlink\fP(pathname)   \fBunlink\fP(pathname)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_stat\fP(pathname,  info)   stat(pathname, info)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_opendir\fP(pathname)   \fBopendir\fP(pathname)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_readdir\fP(dirptr)   \fBreaddir\fP(dirptr)"
+.br
+.ti -1c
+.RI "#define \fBreal_posix_closedir\fP(dirptr)   \fBclosedir\fP(dirptr)"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef off_t \fBoffset_t\fP"
+.br
+.RI "Library for 'TODO'\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBfilesystem_creat\fP (char *pathname, mode_t mode)"
+.br
+.RI "Create a file\&. "
+.ti -1c
+.RI "int \fBfilesystem_open\fP (char *pathname, int flags)"
+.br
+.RI "Open a file\&. "
+.ti -1c
+.RI "int \fBfilesystem_open2\fP (char *pathname, int flags, mode_t mode)"
+.br
+.RI "Open a file\&. "
+.ti -1c
+.RI "int \fBfilesystem_close\fP (int fd)"
+.br
+.RI "Close a file\&. "
+.ti -1c
+.RI "long \fBfilesystem_read\fP (int read_fd2, void *buffer, int buffer_size)"
+.br
+.RI "Read a file\&. "
+.ti -1c
+.RI "long \fBfilesystem_write\fP (int write_fd2, void *buffer, int num_bytes_to_write)"
+.br
+.RI "Write a file\&. "
+.ti -1c
+.RI "int \fBfilesystem_rename\fP (char *old_pathname, char *new_pathname)"
+.br
+.RI "Rename a file\&. "
+.ti -1c
+.RI "int \fBfilesystem_mkpath\fP (char *pathname)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfilesystem_mkdir\fP (char *pathname, mode_t mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfilesystem_rmdir\fP (char *pathname)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "DIR * \fBfilesystem_opendir\fP (char *name)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "struct dirent * \fBfilesystem_readdir\fP (DIR *dirp)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfilesystem_closedir\fP (DIR *dirp)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "off_t \fBfilesystem_lseek\fP (int fd, off_t offset, int whence)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfilesystem_unlink\fP (char *pathname)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBfilesystem_stat\fP (char *pathname, struct stat *sinfo)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Header file to 'TODO'\&. 
+
+Header file to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBfilesystem\&.h\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define real_posix_close(fd)   \fBclose\fP(fd)"
+
+.PP
+Definition at line \fB263\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_closedir(dirptr)   \fBclosedir\fP(dirptr)"
+
+.PP
+Definition at line \fB279\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_creat(path, mode)   \fBcreat\fP(path, mode)"
+
+.PP
+Definition at line \fB260\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_lseek(fd, offset, whence)   \fBlseek\fP(fd, offset, whence)"
+
+.PP
+Definition at line \fB265\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_lseek64(fd, offset, whence)   \fBlseek64\fP(fd, offset, whence)"
+
+.PP
+Definition at line \fB266\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_mkdir(pathname, mode)   \fBmkdir\fP(pathname, mode)"
+
+.PP
+Definition at line \fB272\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_open(path, flags)   \fBopen\fP(path, flags)"
+
+.PP
+Definition at line \fB261\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_open2(path, flags, mode)   \fBopen\fP(path, flags, mode)"
+
+.PP
+Definition at line \fB262\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_opendir(pathname)   \fBopendir\fP(pathname)"
+
+.PP
+Definition at line \fB277\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_read(fd, buffer, buffer_size)   \fBread\fP(fd, buffer, buffer_size)"
+
+.PP
+Definition at line \fB267\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_readdir(dirptr)   \fBreaddir\fP(dirptr)"
+
+.PP
+Definition at line \fB278\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_rename(old_path, new_path)   \fBrename\fP(old_path, new_path)"
+
+.PP
+Definition at line \fB270\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_rmdir(pathname)   \fBrmdir\fP(pathname)"
+
+.PP
+Definition at line \fB273\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_stat(pathname, info)   stat(pathname, info)"
+
+.PP
+Definition at line \fB275\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_unlink(pathname)   \fBunlink\fP(pathname)"
+
+.PP
+Definition at line \fB274\fP of file \fBfilesystem\&.h\fP\&.
+.SS "#define real_posix_write(fd, buffer, buffer_size)   \fBwrite\fP(fd, buffer, buffer_size)"
+
+.PP
+Definition at line \fB268\fP of file \fBfilesystem\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef off_t \fBoffset_t\fP"
+
+.PP
+Library for 'TODO'\&. Library for 'TODO' Library for 'TODO' Library for 'TODO' Library for 'TODO' Library for 'TODO' 
+.PP
+Definition at line \fB47\fP of file \fBfilesystem\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int filesystem_close (int fd)"
+
+.PP
+Close a file\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB238\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, \fBfilesystem_async_close()\fP, and \fBreal_posix_close\fP\&.
+.PP
+Referenced by \fBmpi_server_op_close_ws()\fP, \fBmpi_server_op_creat_wos()\fP, \fBmpi_server_op_flush()\fP, \fBmpi_server_op_open_wos()\fP, \fBmpi_server_op_preload()\fP, \fBmpi_server_op_read_wos()\fP, \fBmpi_server_op_write_wos()\fP, \fBtcp_server_op_close_ws()\fP, \fBtcp_server_op_creat_wos()\fP, \fBtcp_server_op_flush()\fP, \fBtcp_server_op_open_wos()\fP, \fBtcp_server_op_preload()\fP, \fBtcp_server_op_read_wos()\fP, and \fBtcp_server_op_write_wos()\fP\&.
+.SS "int filesystem_closedir (DIR * dirp)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirp\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB510\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_closedir\fP\&.
+.PP
+Referenced by \fBmpi_server_op_closedir()\fP, and \fBtcp_server_op_closedir()\fP\&.
+.SS "int filesystem_creat (char * pathname, mode_t mode)"
+
+.PP
+Create a file\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpathname\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB156\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_creat\fP\&.
+.PP
+Referenced by \fBmpi_server_op_creat_wos()\fP, \fBmpi_server_op_creat_ws()\fP, \fBmpi_server_op_preload()\fP, \fBtcp_server_op_creat_wos()\fP, \fBtcp_server_op_creat_ws()\fP, and \fBtcp_server_op_preload()\fP\&.
+.SS "off_t filesystem_lseek (int fd, off_t offset, int whence)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIwhence\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB536\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_lseek\fP\&.
+.PP
+Referenced by \fBmpi_server_op_flush()\fP, \fBmpi_server_op_preload()\fP, \fBmpi_server_op_read_wos()\fP, \fBmpi_server_op_read_ws()\fP, \fBmpi_server_op_write_wos()\fP, \fBmpi_server_op_write_ws()\fP, \fBtcp_server_op_flush()\fP, \fBtcp_server_op_preload()\fP, \fBtcp_server_op_read_wos()\fP, \fBtcp_server_op_read_ws()\fP, \fBtcp_server_op_write_wos()\fP, and \fBtcp_server_op_write_ws()\fP\&.
+.SS "int filesystem_mkdir (char * pathname, mode_t mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpathname\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB406\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_mkdir\fP\&.
+.PP
+Referenced by \fBmpi_server_op_mkdir()\fP, and \fBtcp_server_op_mkdir()\fP\&.
+.SS "int filesystem_mkpath (char * pathname)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpathname\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB383\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBaux_get_dirs()\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, \fBPATH_MAX\fP, and \fBreal_posix_mkdir\fP\&.
+.PP
+Referenced by \fBmpi_server_op_creat_wos()\fP, \fBmpi_server_op_creat_ws()\fP, \fBtcp_server_op_creat_wos()\fP, and \fBtcp_server_op_creat_ws()\fP\&.
+.SS "int filesystem_open (char * pathname, int flags)"
+
+.PP
+Open a file\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpathname\fP 'TODO'\&. 
+.br
+\fIflags\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB186\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_open\fP\&.
+.PP
+Referenced by \fBmpi_server_op_flush()\fP, \fBmpi_server_op_open_wos()\fP, \fBmpi_server_op_open_ws()\fP, \fBmpi_server_op_preload()\fP, \fBmpi_server_op_read_wos()\fP, \fBmpi_server_op_write_wos()\fP, \fBtcp_server_op_flush()\fP, \fBtcp_server_op_open_wos()\fP, \fBtcp_server_op_open_ws()\fP, \fBtcp_server_op_preload()\fP, \fBtcp_server_op_read_wos()\fP, and \fBtcp_server_op_write_wos()\fP\&.
+.SS "int filesystem_open2 (char * pathname, int flags, mode_t mode)"
+
+.PP
+Open a file\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpathname\fP 'TODO'\&. 
+.br
+\fIflags\fP 'TODO'\&. 
+.br
+\fImode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB212\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_open2\fP\&.
+.SS "DIR * filesystem_opendir (char * name)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB458\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_opendir\fP\&.
+.PP
+Referenced by \fBmpi_server_op_opendir()\fP, and \fBtcp_server_op_opendir()\fP\&.
+.SS "long filesystem_read (int read_fd2, void * buffer, int buffer_size)"
+
+.PP
+Read a file\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIread_fd2\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIbuffer_size\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB282\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_warning\fP, and \fBreal_posix_read\fP\&.
+.PP
+Referenced by \fBmpi_server_op_flush()\fP, \fBmpi_server_op_preload()\fP, \fBmpi_server_op_read_wos()\fP, \fBmpi_server_op_read_ws()\fP, \fBtcp_server_op_flush()\fP, \fBtcp_server_op_preload()\fP, \fBtcp_server_op_read_wos()\fP, and \fBtcp_server_op_read_ws()\fP\&.
+.SS "struct dirent * filesystem_readdir (DIR * dirp)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdirp\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB484\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_readdir\fP\&.
+.PP
+Referenced by \fBmpi_server_op_readdir()\fP, and \fBtcp_server_op_readdir()\fP\&.
+.SS "int filesystem_rename (char * old_pathname, char * new_pathname)"
+
+.PP
+Rename a file\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIold_pathname\fP 'TODO'\&. 
+.br
+\fInew_pathname\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB353\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_rename\fP\&.
+.PP
+Referenced by \fBmpi_server_op_rename()\fP, and \fBtcp_server_op_rename()\fP\&.
+.SS "int filesystem_rmdir (char * pathname)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpathname\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB432\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_rmdir\fP\&.
+.PP
+Referenced by \fBmpi_server_op_rmdir()\fP, \fBmpi_server_op_rmdir_async()\fP, and \fBtcp_server_op_rmdir()\fP\&.
+.SS "int filesystem_stat (char * pathname, struct stat * sinfo)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpathname\fP 'TODO'\&. 
+.br
+\fIsinfo\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB588\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_stat\fP\&.
+.PP
+Referenced by \fBmpi_server_op_getattr()\fP, and \fBtcp_server_op_getattr()\fP\&.
+.SS "int filesystem_unlink (char * pathname)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpathname\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB562\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_warning\fP, and \fBreal_posix_unlink\fP\&.
+.PP
+Referenced by \fBmpi_server_op_rm()\fP, \fBmpi_server_op_rm_async()\fP, and \fBtcp_server_op_rm()\fP\&.
+.SS "long filesystem_write (int write_fd2, void * buffer, int num_bytes_to_write)"
+
+.PP
+Write a file\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIwrite_fd2\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fInum_bytes_to_write\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB321\fP of file \fBfilesystem\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_warning\fP, and \fBreal_posix_write\fP\&.
+.PP
+Referenced by \fBmpi_server_op_flush()\fP, \fBmpi_server_op_preload()\fP, \fBmpi_server_op_write_wos()\fP, \fBmpi_server_op_write_ws()\fP, \fBtcp_server_op_flush()\fP, \fBtcp_server_op_preload()\fP, \fBtcp_server_op_write_wos()\fP, and \fBtcp_server_op_write_ws()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

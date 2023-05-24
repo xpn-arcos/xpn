@@ -1,0 +1,218 @@
+.TH "nfi_worker_args" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfi_worker_args \- This is a struct\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfi_worker_task\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBoperation\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "ssize_t \fBresult\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "char \fBurl\fP [\fBPATH_MAX\fP]"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "int \fBmaster_node\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "int \fBis_master_node\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "char \fBvirtual_path\fP [\fBPATH_MAX\fP]"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "char \fBstorage_path\fP [\fBPATH_MAX\fP]"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "char \fBnewurl\fP [\fBPATH_MAX\fP]"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "struct \fBnfi_fhandle\fP * \fBfh\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "struct \fBnfi_attr\fP * \fBattr\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "int \fBopt\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "struct \fBnfi_info\fP * \fBinf\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "int \fBn_io\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "struct \fBnfi_worker_io\fP * \fBio\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "struct dirent * \fBentry\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "unsigned char * \fBtype\fP"
+.br
+.RI "A 'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a struct\&. 
+
+
+.PP
+Definition at line \fB101\fP of file \fBnfi_worker_task\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "nfi_worker_args::attr"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB114\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_create()\fP, \fBnfi_worker_do_getattr()\fP, \fBnfi_worker_do_mkdir()\fP, and \fBnfi_worker_do_setattr()\fP\&.
+.SS "nfi_worker_args::entry"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB121\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, and \fBnfi_worker_do_readdir()\fP\&.
+.SS "nfi_worker_args::fh"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB113\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_close()\fP, \fBnfi_worker_do_closedir()\fP, \fBnfi_worker_do_create()\fP, \fBnfi_worker_do_getattr()\fP, \fBnfi_worker_do_mkdir()\fP, \fBnfi_worker_do_open()\fP, \fBnfi_worker_do_opendir()\fP, \fBnfi_worker_do_read()\fP, \fBnfi_worker_do_readdir()\fP, \fBnfi_worker_do_setattr()\fP, and \fBnfi_worker_do_write()\fP\&.
+.SS "nfi_worker_args::inf"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB117\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, and \fBnfi_worker_do_statfs()\fP\&.
+.SS "nfi_worker_args::io"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB120\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_read()\fP, and \fBnfi_worker_do_write()\fP\&.
+.SS "nfi_worker_args::is_master_node"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB108\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_mpi_server_remove()\fP, and \fBxpn_internal_remove()\fP\&.
+.SS "nfi_worker_args::master_node"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB107\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBxpn_internal_remove()\fP\&.
+.SS "nfi_worker_args::n_io"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB119\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_read()\fP, and \fBnfi_worker_do_write()\fP\&.
+.SS "nfi_worker_args::newurl"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB112\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, and \fBnfi_worker_do_rename()\fP\&.
+.SS "nfi_worker_args::operation"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB103\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_close()\fP, \fBnfi_worker_do_closedir()\fP, \fBnfi_worker_do_create()\fP, \fBnfi_worker_do_flush()\fP, \fBnfi_worker_do_getattr()\fP, \fBnfi_worker_do_mkdir()\fP, \fBnfi_worker_do_open()\fP, \fBnfi_worker_do_opendir()\fP, \fBnfi_worker_do_preload()\fP, \fBnfi_worker_do_read()\fP, \fBnfi_worker_do_readdir()\fP, \fBnfi_worker_do_remove()\fP, \fBnfi_worker_do_rename()\fP, \fBnfi_worker_do_rmdir()\fP, \fBnfi_worker_do_setattr()\fP, \fBnfi_worker_do_statfs()\fP, and \fBnfi_worker_do_write()\fP\&.
+.SS "nfi_worker_args::opt"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB115\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_flush()\fP, and \fBnfi_worker_do_preload()\fP\&.
+.SS "nfi_worker_args::result"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB104\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_flush()\fP, \fBnfi_worker_do_preload()\fP, \fBnfi_worker_run()\fP, \fBnfi_worker_wait()\fP, and \fBnfiworker_wait()\fP\&.
+.SS "nfi_worker_args::storage_path"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB111\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_flush()\fP, and \fBnfi_worker_do_preload()\fP\&.
+.SS "nfi_worker_args::type"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB122\fP of file \fBnfi_worker_task\&.h\fP\&.
+.SS "nfi_worker_args::url"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB106\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_create()\fP, \fBnfi_worker_do_flush()\fP, \fBnfi_worker_do_mkdir()\fP, \fBnfi_worker_do_open()\fP, \fBnfi_worker_do_opendir()\fP, \fBnfi_worker_do_preload()\fP, \fBnfi_worker_do_remove()\fP, \fBnfi_worker_do_rename()\fP, and \fBnfi_worker_do_rmdir()\fP\&.
+.SS "nfi_worker_args::virtual_path"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB110\fP of file \fBnfi_worker_task\&.h\fP\&.
+.PP
+Referenced by \fBnfi_do_operation()\fP, \fBnfi_worker_do_flush()\fP, and \fBnfi_worker_do_preload()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

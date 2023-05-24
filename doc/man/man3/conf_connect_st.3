@@ -1,0 +1,60 @@
+.TH "conf_connect_st" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+conf_connect_st
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <xpn_policy_init\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBtype\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   FILE * \fBf\fP"
+.br
+.ti -1c
+.RI "   int \fBfd\fP"
+.br
+.ti -1c
+.RI "} \fBconnect_u\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB108\fP of file \fBxpn_policy_init\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "union  { \&.\&.\&. }  conf_connect_st::connect_u"
+
+.PP
+Referenced by \fBXpnGetInfoPartition()\fP, \fBXpnGetNextPartition()\fP, \fBXpnGetServer()\fP, \fBXpnPartitionClose()\fP, and \fBXpnPartitionOpen()\fP\&.
+.SS "FILE* conf_connect_st::f"
+
+.PP
+Definition at line \fB113\fP of file \fBxpn_policy_init\&.h\fP\&.
+.PP
+Referenced by \fBXpnGetInfoPartition()\fP, \fBXpnGetNextPartition()\fP, \fBXpnGetServer()\fP, \fBXpnPartitionClose()\fP, and \fBXpnPartitionOpen()\fP\&.
+.SS "int conf_connect_st::fd"
+
+.PP
+Definition at line \fB117\fP of file \fBxpn_policy_init\&.h\fP\&.
+.PP
+Referenced by \fBxpn_init_partition()\fP\&.
+.SS "int conf_connect_st::type"
+
+.PP
+Definition at line \fB110\fP of file \fBxpn_policy_init\&.h\fP\&.
+.PP
+Referenced by \fBXpnGetInfoPartition()\fP, \fBXpnGetNextPartition()\fP, \fBXpnGetNumServersPartition()\fP, \fBXpnGetServer()\fP, \fBXpnPartitionClose()\fP, and \fBXpnPartitionOpen()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

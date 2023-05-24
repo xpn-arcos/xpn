@@ -1,0 +1,85 @@
+.TH "worker_ondemand_t" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+worker_ondemand_t \- This is a struct\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <workers_ondemand\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBbusy_worker\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "pthread_mutex_t \fBm_worker\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "pthread_cond_t \fBc_worker\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "pthread_cond_t \fBc_nworkers\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "long \fBn_workers\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a struct\&. 
+
+
+.PP
+Definition at line \fB54\fP of file \fBworkers_ondemand\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "worker_ondemand_t::busy_worker"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB57\fP of file \fBworkers_ondemand\&.h\fP\&.
+.PP
+Referenced by \fBworker_run()\fP\&.
+.SS "worker_ondemand_t::c_nworkers"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB60\fP of file \fBworkers_ondemand\&.h\fP\&.
+.PP
+Referenced by \fBworker_run()\fP\&.
+.SS "worker_ondemand_t::c_worker"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB59\fP of file \fBworkers_ondemand\&.h\fP\&.
+.PP
+Referenced by \fBworker_run()\fP\&.
+.SS "worker_ondemand_t::m_worker"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB58\fP of file \fBworkers_ondemand\&.h\fP\&.
+.PP
+Referenced by \fBworker_run()\fP\&.
+.SS "long worker_ondemand_t::n_workers"
+
+.PP
+Definition at line \fB61\fP of file \fBworkers_ondemand\&.h\fP\&.
+.PP
+Referenced by \fBworker_run()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

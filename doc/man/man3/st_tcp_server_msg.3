@@ -1,0 +1,272 @@
+.TH "st_tcp_server_msg" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+st_tcp_server_msg \- This is a struct\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tcp_server_ops\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBtype\fP"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "char \fBid\fP [\fBTCP_SERVER_ID\fP]"
+.br
+.RI "A 'TODO'\&. "
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_open\fP \fBop_open\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_creat\fP \fBop_creat\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_close\fP \fBop_close\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_read\fP \fBop_read\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_write\fP \fBop_write\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_rm\fP \fBop_rm\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_rename\fP \fBop_rename\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_mkdir\fP \fBop_mkdir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_opendir\fP \fBop_opendir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_readdir\fP \fBop_readdir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_closedir\fP \fBop_closedir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_rmdir\fP \fBop_rmdir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_getattr\fP \fBop_getattr\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_setattr\fP \fBop_setattr\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_flush\fP \fBop_flush\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_preload\fP \fBop_preload\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_end\fP \fBop_end\fP"
+.br
+.ti -1c
+.RI "} \fBu_st_tcp_server_msg\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_open\fP \fBop_open\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_creat\fP \fBop_creat\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_close\fP \fBop_close\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_read\fP \fBop_read\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_write\fP \fBop_write\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_rm\fP \fBop_rm\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_mkdir\fP \fBop_mkdir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_opendir\fP \fBop_opendir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_readdir\fP \fBop_readdir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_closedir\fP \fBop_closedir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_rename\fP \fBop_rename\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_rmdir\fP \fBop_rmdir\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_getattr\fP \fBop_getattr\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_setattr\fP \fBop_setattr\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_flush\fP \fBop_flush\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_preload\fP \fBop_preload\fP"
+.br
+.ti -1c
+.RI "   struct \fBst_tcp_server_end\fP \fBop_end\fP"
+.br
+.ti -1c
+.RI "} \fBu_st_tcp_server_msg\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a struct\&. 
+
+
+.PP
+Definition at line \fB423\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "char st_tcp_server_msg::id"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB426\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_closedir()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_flush()\fP, \fBnfi_tcp_server_getattr()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_preload()\fP, \fBnfi_tcp_server_read()\fP, \fBnfi_tcp_server_readdir()\fP, \fBnfi_tcp_server_remove()\fP, \fBnfi_tcp_server_rename()\fP, \fBnfi_tcp_server_write()\fP, \fBtcp_server_op_getid()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_close\fP st_tcp_server_msg::op_close"
+
+.PP
+Definition at line \fB431\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_close()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_close_ws()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_closedir\fP st_tcp_server_msg::op_closedir"
+
+.PP
+Definition at line \fB439\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_closedir()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_closedir()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_creat\fP st_tcp_server_msg::op_creat"
+
+.PP
+Definition at line \fB430\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_create()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_creat_wos()\fP, \fBtcp_server_op_creat_ws()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_end\fP st_tcp_server_msg::op_end"
+
+.PP
+Definition at line \fB446\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.SS "struct \fBst_tcp_server_flush\fP st_tcp_server_msg::op_flush"
+
+.PP
+Definition at line \fB444\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_flush()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_flush()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_getattr\fP st_tcp_server_msg::op_getattr"
+
+.PP
+Definition at line \fB441\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_getattr()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_getattr()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_mkdir\fP st_tcp_server_msg::op_mkdir"
+
+.PP
+Definition at line \fB436\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_mkdir()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_mkdir()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_open\fP st_tcp_server_msg::op_open"
+
+.PP
+Definition at line \fB429\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_open()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_open_wos()\fP, \fBtcp_server_op_open_ws()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_opendir\fP st_tcp_server_msg::op_opendir"
+
+.PP
+Definition at line \fB437\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_opendir()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_opendir()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_preload\fP st_tcp_server_msg::op_preload"
+
+.PP
+Definition at line \fB445\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_preload()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_preload()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_read\fP st_tcp_server_msg::op_read"
+
+.PP
+Definition at line \fB432\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_read()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_read_wos()\fP, \fBtcp_server_op_read_ws()\fP, \fBtcp_server_op_write_wos()\fP, \fBtcp_server_op_write_ws()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_readdir\fP st_tcp_server_msg::op_readdir"
+
+.PP
+Definition at line \fB438\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_readdir()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_readdir()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_rename\fP st_tcp_server_msg::op_rename"
+
+.PP
+Definition at line \fB435\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_rename()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_rename()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_rm\fP st_tcp_server_msg::op_rm"
+
+.PP
+Definition at line \fB434\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_remove()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_rename()\fP, \fBtcp_server_op_rm()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_rmdir\fP st_tcp_server_msg::op_rmdir"
+
+.PP
+Definition at line \fB440\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_rmdir()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_rmdir()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "struct \fBst_tcp_server_setattr\fP st_tcp_server_msg::op_setattr"
+
+.PP
+Definition at line \fB442\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBtcp_server_do_operation()\fP\&.
+.SS "struct \fBst_tcp_server_write\fP st_tcp_server_msg::op_write"
+
+.PP
+Definition at line \fB433\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_write()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_write_wos()\fP, \fBtcp_server_op_write_ws()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "int st_tcp_server_msg::type"
+
+.PP
+A 'TODO'\&. 
+.PP
+Definition at line \fB425\fP of file \fBtcp_server/tcp_server_ops\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_closedir()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_flush()\fP, \fBnfi_tcp_server_getattr()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_preload()\fP, \fBnfi_tcp_server_read()\fP, \fBnfi_tcp_server_readdir()\fP, \fBnfi_tcp_server_remove()\fP, \fBnfi_tcp_server_rename()\fP, \fBnfi_tcp_server_rmdir()\fP, \fBnfi_tcp_server_write()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "union  { \&.\&.\&. }  st_tcp_server_msg::u_st_tcp_server_msg"
+
+.PP
+Referenced by \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_closedir()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_flush()\fP, \fBnfi_tcp_server_getattr()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_preload()\fP, \fBnfi_tcp_server_read()\fP, \fBnfi_tcp_server_readdir()\fP, \fBnfi_tcp_server_remove()\fP, \fBnfi_tcp_server_rename()\fP, \fBnfi_tcp_server_rmdir()\fP, \fBnfi_tcp_server_write()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_op_close_ws()\fP, \fBtcp_server_op_closedir()\fP, \fBtcp_server_op_creat_wos()\fP, \fBtcp_server_op_creat_ws()\fP, \fBtcp_server_op_flush()\fP, \fBtcp_server_op_getattr()\fP, \fBtcp_server_op_mkdir()\fP, \fBtcp_server_op_open_wos()\fP, \fBtcp_server_op_open_ws()\fP, \fBtcp_server_op_opendir()\fP, \fBtcp_server_op_preload()\fP, \fBtcp_server_op_read_wos()\fP, \fBtcp_server_op_read_ws()\fP, \fBtcp_server_op_readdir()\fP, \fBtcp_server_op_rename()\fP, \fBtcp_server_op_rm()\fP, \fBtcp_server_op_rmdir()\fP, \fBtcp_server_op_write_wos()\fP, \fBtcp_server_op_write_ws()\fP, and \fBtcp_server_write_operation()\fP\&.
+.SS "union  { \&.\&.\&. }  st_tcp_server_msg::u_st_tcp_server_msg"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

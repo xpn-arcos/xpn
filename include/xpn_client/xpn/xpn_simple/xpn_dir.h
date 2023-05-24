@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file xpn_dir.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _XPN_DIR_H
 #define _XPN_DIR_H
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn.h"
 #include "xpn_err.h"
 #include "xpn_policy_init.h"
@@ -31,7 +45,29 @@ extern "C"
 {
 #endif
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param path 'TODO'.
+   * @param perm 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_simple_mkdir(const char *path, mode_t perm);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param path 'TODO'.
+   * @return 'TODO'.
+   */
   int xpn_simple_rmdir(const char *path);
 
 #ifdef __cplusplus

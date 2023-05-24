@@ -1,0 +1,151 @@
+.TH "xpn_cwd.h" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn_cwd.h \- Header file to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'xpn\&.h'\fP
+.br
+\fC#include 'xpn_err\&.h'\fP
+.br
+\fC#include 'xpn_policy_cwd\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBxpn_cwd\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBxpn_init_cwd\fP ()"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "char * \fBxpn_simple_getcwd\fP (char *path, size_t size)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_simple_chdir\fP (char *path)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "struct \fBxpn_cwd\fP \fBxpn_cwddir\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Header file to 'TODO'\&. 
+
+Header file to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBxpn_cwd\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void xpn_init_cwd ()"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB43\fP of file \fBxpn_cwd\&.c\fP\&.
+.PP
+References \fBxpn_cwd::xpn_cwd_path\fP, and \fBxpn_cwddir\fP\&.
+.PP
+Referenced by \fBxpn_init_partition()\fP\&.
+.SS "int xpn_simple_chdir (char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB54\fP of file \fBxpn_cwd\&.c\fP\&.
+.PP
+References \fBxpn_cwd::xpn_cwd_path\fP, and \fBxpn_cwddir\fP\&.
+.PP
+Referenced by \fBxpn_chdir()\fP\&.
+.SS "char * xpn_simple_getcwd (char * path, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB48\fP of file \fBxpn_cwd\&.c\fP\&.
+.PP
+References \fBxpn_cwd::xpn_cwd_path\fP, and \fBxpn_cwddir\fP\&.
+.PP
+Referenced by \fBxpn_getcwd()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "struct \fBxpn_cwd\fP xpn_cwddir\fC [extern]\fP"
+
+.PP
+Definition at line \fB37\fP of file \fBxpn_cwd\&.c\fP\&.
+.PP
+Referenced by \fBxpn_init_cwd()\fP, \fBxpn_simple_chdir()\fP, and \fBxpn_simple_getcwd()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

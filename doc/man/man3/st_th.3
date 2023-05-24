@@ -1,0 +1,140 @@
+.TH "st_th" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+st_th
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <workers_common\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "void * \fBparams\fP"
+.br
+.ti -1c
+.RI "void(* \fBfunction\fP )(struct \fBst_th\fP)"
+.br
+.ti -1c
+.RI "int \fBid\fP"
+.br
+.ti -1c
+.RI "int \fBtype_op\fP"
+.br
+.ti -1c
+.RI "int \fBrank_client_id\fP"
+.br
+.ti -1c
+.RI "long \fBsd\fP"
+.br
+.ti -1c
+.RI "void * \fBw\fP"
+.br
+.ti -1c
+.RI "void * \fBv\fP"
+.br
+.ti -1c
+.RI "pthread_t \fBth_worker\fP"
+.br
+.ti -1c
+.RI "pthread_mutex_t \fBm_wait\fP"
+.br
+.ti -1c
+.RI "pthread_cond_t \fBc_wait\fP"
+.br
+.ti -1c
+.RI "int \fBr_wait\fP"
+.br
+.ti -1c
+.RI "int \fBwait4me\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB54\fP of file \fBworkers_common\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "pthread_cond_t st_th::c_wait"
+
+.PP
+Definition at line \fB73\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBnfiworker_launch()\fP, \fBworker_ondemand_wait()\fP, \fBworker_pool_function()\fP, \fBworker_pool_wait()\fP, and \fBworker_run()\fP\&.
+.SS "void(* st_th::function) (struct \fBst_th\fP)"
+
+.PP
+Definition at line \fB57\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBmpi_server_dispatcher()\fP, \fBmpi_server_up()\fP, \fBnfiworker_launch()\fP, \fBtcp_server_dispatcher()\fP, \fBtcp_server_up()\fP, \fBworker_ondemand_launch()\fP, \fBworker_pool_enqueue()\fP, \fBworker_pool_function()\fP, and \fBworker_run()\fP\&.
+.SS "int st_th::id"
+
+.PP
+Definition at line \fB60\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBmpi_server_dispatcher()\fP, \fBmpi_server_run()\fP, \fBtcp_server_dispatcher()\fP, \fBtcp_server_run()\fP, \fBworker_ondemand_launch()\fP, \fBworker_pool_dequeue()\fP, and \fBworker_pool_enqueue()\fP\&.
+.SS "pthread_mutex_t st_th::m_wait"
+
+.PP
+Definition at line \fB72\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBnfiworker_launch()\fP, \fBworker_ondemand_wait()\fP, \fBworker_pool_function()\fP, \fBworker_pool_wait()\fP, and \fBworker_run()\fP\&.
+.SS "void* st_th::params"
+
+.PP
+Definition at line \fB56\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBmpi_server_dispatcher()\fP, \fBmpi_server_do_operation()\fP, \fBmpi_server_up()\fP, \fBnfi_do_operation()\fP, \fBnfiworker_launch()\fP, \fBtcp_server_dispatcher()\fP, \fBtcp_server_do_operation()\fP, and \fBtcp_server_up()\fP\&.
+.SS "int st_th::r_wait"
+
+.PP
+Definition at line \fB74\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBnfiworker_launch()\fP, \fBworker_ondemand_wait()\fP, \fBworker_pool_function()\fP, \fBworker_pool_wait()\fP, and \fBworker_run()\fP\&.
+.SS "int st_th::rank_client_id"
+
+.PP
+Definition at line \fB62\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBmpi_server_dispatcher()\fP, \fBmpi_server_do_operation()\fP, \fBmpi_server_up()\fP, \fBtcp_server_dispatcher()\fP, \fBtcp_server_up()\fP, and \fBworker_pool_enqueue()\fP\&.
+.SS "long st_th::sd"
+
+.PP
+Definition at line \fB63\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBmpi_server_dispatcher()\fP, \fBmpi_server_do_operation()\fP, \fBmpi_server_up()\fP, \fBtcp_server_dispatcher()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_down()\fP, and \fBtcp_server_up()\fP\&.
+.SS "pthread_t st_th::th_worker"
+
+.PP
+Definition at line \fB71\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBworker_ondemand_launch()\fP\&.
+.SS "int st_th::type_op"
+
+.PP
+Definition at line \fB61\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBmpi_server_dispatcher()\fP, \fBmpi_server_do_operation()\fP, \fBmpi_server_run()\fP, \fBmpi_server_up()\fP, \fBtcp_server_dispatcher()\fP, \fBtcp_server_do_operation()\fP, \fBtcp_server_run()\fP, \fBtcp_server_up()\fP, \fBworker_pool_dequeue()\fP, and \fBworker_pool_destroy()\fP\&.
+.SS "void* st_th::v"
+
+.PP
+Definition at line \fB68\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBworker_ondemand_launch()\fP, \fBworker_pool_enqueue()\fP, \fBworker_pool_function()\fP, and \fBworker_run()\fP\&.
+.SS "void* st_th::w"
+
+.PP
+Definition at line \fB66\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBworker_ondemand_init()\fP, \fBworker_ondemand_launch()\fP, \fBworker_pool_dequeue()\fP, \fBworker_pool_destroy()\fP, \fBworker_pool_enqueue()\fP, \fBworker_pool_function()\fP, \fBworker_pool_init()\fP, \fBworker_run()\fP, and \fBworkers_ondemand_destroy()\fP\&.
+.SS "int st_th::wait4me"
+
+.PP
+Definition at line \fB75\fP of file \fBworkers_common\&.h\fP\&.
+.PP
+Referenced by \fBmpi_server_dispatcher()\fP, \fBmpi_server_up()\fP, \fBnfiworker_launch()\fP, \fBtcp_server_dispatcher()\fP, \fBtcp_server_up()\fP, \fBworker_pool_function()\fP, and \fBworker_run()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

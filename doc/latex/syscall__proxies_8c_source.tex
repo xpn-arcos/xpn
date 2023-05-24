@@ -1,0 +1,669 @@
+\doxysection{syscall\+\_\+proxies.\+c}
+\hypertarget{syscall__proxies_8c_source}{}\label{syscall__proxies_8c_source}\index{syscall\_proxies.c@{syscall\_proxies.c}}
+\mbox{\hyperlink{syscall__proxies_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2020-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ syscall\_proxies.c}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ File\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00025}00025\ \textcolor{comment}{\ *\ File\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00032}00032\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00033}00033\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00034}00034\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00035}00035\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{syscall__proxies_8h}{base/syscall\_proxies.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00037}00037\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00038}00038\ \textcolor{comment}{\ *\ \ ...\ Variables}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00039}00039\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00041}\mbox{\hyperlink{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}{00041}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}{real\_open}})(\textcolor{keywordtype}{char}\ *,\ int,\ mode\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00042}\mbox{\hyperlink{syscall__proxies_8c_a13b3f4f1c540e774420a4e2ba59091d2}{00042}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a13b3f4f1c540e774420a4e2ba59091d2}{real\_open64}})(\textcolor{keywordtype}{char}\ *,\ int,\ mode\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00043}\mbox{\hyperlink{syscall__proxies_8c_ae312aa85369c71f866657bb37dff9c0a}{00043}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_ae312aa85369c71f866657bb37dff9c0a}{real\_\_\_open\_2}})(\textcolor{keywordtype}{char}\ *,\ int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00044}\mbox{\hyperlink{syscall__proxies_8c_a542b207814b293e59e9218104a2a38b3}{00044}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a542b207814b293e59e9218104a2a38b3}{real\_creat}})(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ mode\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00045}\mbox{\hyperlink{syscall__proxies_8c_ab170c8f0b26f5e1e75571b808701e943}{00045}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_ab170c8f0b26f5e1e75571b808701e943}{real\_close}})(int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00047}\mbox{\hyperlink{syscall__proxies_8c_ab7960403a0cae3196a844a62f6644b27}{00047}}\ ssize\_t\ (*\mbox{\hyperlink{syscall__proxies_8c_ab7960403a0cae3196a844a62f6644b27}{real\_read}})(int,\ \textcolor{keywordtype}{void}\ *,\ size\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00048}\mbox{\hyperlink{syscall__proxies_8c_aa90b1d59886ff211e915966fbe8ce040}{00048}}\ ssize\_t\ (*\mbox{\hyperlink{syscall__proxies_8c_aa90b1d59886ff211e915966fbe8ce040}{real\_write}})(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{void}\ *,\ size\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00049}\mbox{\hyperlink{syscall__proxies_8c_ae752ac266e732840c81273a66d7b808f}{00049}}\ off\_t\ (*\mbox{\hyperlink{syscall__proxies_8c_ae752ac266e732840c81273a66d7b808f}{real\_lseek}})(int,\ off\_t,\ int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00050}\mbox{\hyperlink{syscall__proxies_8c_aef88583e19ca185474acff4d12528c2f}{00050}}\ off64\_t\ (*\mbox{\hyperlink{syscall__proxies_8c_aef88583e19ca185474acff4d12528c2f}{real\_lseek64}})(int,\ off64\_t,\ int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00051}\mbox{\hyperlink{syscall__proxies_8c_a669528fe56a99b0c78c5cea94fc5f63d}{00051}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a669528fe56a99b0c78c5cea94fc5f63d}{real\_ftruncate}})(int,\ off\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00053}\mbox{\hyperlink{syscall__proxies_8c_aa189f074256a94bf6ba23c042129292b}{00053}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_aa189f074256a94bf6ba23c042129292b}{real\_stat}})(int,\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00054}\mbox{\hyperlink{syscall__proxies_8c_a4143a7c57ea1cf979ee1843212bb3e55}{00054}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a4143a7c57ea1cf979ee1843212bb3e55}{real\_xstat64}})(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat64\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00055}\mbox{\hyperlink{syscall__proxies_8c_ae35dcd3176695ccf13c374fa9140855c}{00055}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_ae35dcd3176695ccf13c374fa9140855c}{real\_lstat}})(int,\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00056}\mbox{\hyperlink{syscall__proxies_8c_af603a08904ba37103e41b13408528525}{00056}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_af603a08904ba37103e41b13408528525}{real\_lxstat64}})(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat64\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00057}\mbox{\hyperlink{syscall__proxies_8c_aa89bd56fcc4132224537b6a5a827a320}{00057}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_aa89bd56fcc4132224537b6a5a827a320}{real\_fstat}})(int,\ int,\ \textcolor{keyword}{struct\ }stat\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00058}\mbox{\hyperlink{syscall__proxies_8c_a06c482b6e82b77e9193fd0b240e66bbc}{00058}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a06c482b6e82b77e9193fd0b240e66bbc}{real\_fxstat64}})(int,\ int,\ \textcolor{keyword}{struct\ }stat64\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00059}\mbox{\hyperlink{syscall__proxies_8c_a4312b1892e60c0d191fdf0991d57e97e}{00059}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a4312b1892e60c0d191fdf0991d57e97e}{real\_fstatat}})(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat\ *,\ int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00060}\mbox{\hyperlink{syscall__proxies_8c_a2cb7ffe3c73b60a4c2f63770b0d0a7c1}{00060}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a2cb7ffe3c73b60a4c2f63770b0d0a7c1}{real\_fstatat64}})(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat64\ *,\ int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00062}\mbox{\hyperlink{syscall__proxies_8c_a020914ae07ff0b0194f7ee3140602716}{00062}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a020914ae07ff0b0194f7ee3140602716}{real\_rename}})(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00063}\mbox{\hyperlink{syscall__proxies_8c_a2c9915165916b62d3be86cfc5736a3ea}{00063}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a2c9915165916b62d3be86cfc5736a3ea}{real\_unlink}})(\textcolor{keywordtype}{char}\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00065}\mbox{\hyperlink{syscall__proxies_8c_a364474d13cc708210034f0f7a437d880}{00065}}\ DIR\ *(*real\_opendir)(\textcolor{keywordtype}{char}\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00066}\mbox{\hyperlink{syscall__proxies_8c_abf9acbd52d36dc07aab133c803fcd771}{00066}}\ DIR\ *(*real\_opendir64)(\textcolor{keywordtype}{char}\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00067}00067\ \textcolor{keyword}{struct\ }dirent\ *(*real\_readdir)(DIR\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00068}00068\ \textcolor{keyword}{struct\ }dirent64\ *(*real\_readdir64)(DIR\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00069}\mbox{\hyperlink{syscall__proxies_8c_a9094f37ad12ef2676a374829ebbda2be}{00069}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a9094f37ad12ef2676a374829ebbda2be}{real\_closedir}})(DIR\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00071}\mbox{\hyperlink{syscall__proxies_8c_a8142da50cfa25723af52ad741a0e828e}{00071}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a8142da50cfa25723af52ad741a0e828e}{real\_mkdir}})(\textcolor{keywordtype}{char}\ *,\ mode\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00072}\mbox{\hyperlink{syscall__proxies_8c_a4c977b304707fb6497729902420d51fb}{00072}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a4c977b304707fb6497729902420d51fb}{real\_rmdir}})(\textcolor{keywordtype}{char}\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00074}\mbox{\hyperlink{syscall__proxies_8c_acc1c4f36eb221c29a359e654060160ed}{00074}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_acc1c4f36eb221c29a359e654060160ed}{real\_fork}})(void)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00075}\mbox{\hyperlink{syscall__proxies_8c_aca92fb6c9192b899b6b5b7b4f7f596ba}{00075}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_aca92fb6c9192b899b6b5b7b4f7f596ba}{real\_pipe}})(\textcolor{keywordtype}{int}\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00076}\mbox{\hyperlink{syscall__proxies_8c_a7df0d4228fa5dd287ae6d650f8296405}{00076}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a7df0d4228fa5dd287ae6d650f8296405}{real\_dup}})(int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00077}\mbox{\hyperlink{syscall__proxies_8c_ae2748186f2529a651f30f6aea9f5e112}{00077}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_ae2748186f2529a651f30f6aea9f5e112}{real\_dup2}})(int,\ int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00078}\mbox{\hyperlink{syscall__proxies_8c_a4b2bcb1e1fa0bd0269c60dfd22c49df6}{00078}}\ void\ (*\mbox{\hyperlink{syscall__proxies_8c_a4b2bcb1e1fa0bd0269c60dfd22c49df6}{real\_exit}})(int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00079}\mbox{\hyperlink{syscall__proxies_8c_a520283dc892d9483382590f4e86aad73}{00079}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a520283dc892d9483382590f4e86aad73}{real\_chdir}})(\textcolor{keywordtype}{char}\ *)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00080}\mbox{\hyperlink{syscall__proxies_8c_a6b5e20c7759cf1cf0217b478f03f0e52}{00080}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a6b5e20c7759cf1cf0217b478f03f0e52}{real\_chmod}})(\textcolor{keywordtype}{char}\ *,\ mode\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00081}\mbox{\hyperlink{syscall__proxies_8c_a36c1a17e872fe41140a435838da2a777}{00081}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a36c1a17e872fe41140a435838da2a777}{real\_fchmod}})(int,\ mode\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00082}\mbox{\hyperlink{syscall__proxies_8c_a4d677d3bea22eae2e627d545f261eae5}{00082}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a4d677d3bea22eae2e627d545f261eae5}{real\_chown}})(\textcolor{keywordtype}{char}\ *,\ uid\_t,\ gid\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00083}\mbox{\hyperlink{syscall__proxies_8c_a5844ba3a1a589ce3af9046f8a4a08785}{00083}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_a5844ba3a1a589ce3af9046f8a4a08785}{real\_fcntl}})(int,\ int,\ long)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00084}\mbox{\hyperlink{syscall__proxies_8c_ad95739f0c65d7d1b05199988a1621ad9}{00084}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_ad95739f0c65d7d1b05199988a1621ad9}{real\_access}})(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00085}\mbox{\hyperlink{syscall__proxies_8c_a2fbde5493821512cc1501797a0956f99}{00085}}\ \textcolor{keywordtype}{char}\ *(*real\_realpath)(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *restrict,\ \textcolor{keywordtype}{char}\ *restrict)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00086}\mbox{\hyperlink{syscall__proxies_8c_aca1081c5be4e7e92c432a2be89724236}{00086}}\ int\ (*\mbox{\hyperlink{syscall__proxies_8c_aca1081c5be4e7e92c432a2be89724236}{real\_fsync}})(int)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00087}\mbox{\hyperlink{syscall__proxies_8c_a07fb02f43c5545b9846fd6b7219c62a5}{00087}}\ \textcolor{keywordtype}{void}\ *(*real\_mmap)(\textcolor{keywordtype}{void}\ *,\ size\_t,\ int,\ int,\ int,\ off\_t)\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00089}00089\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00090}00090\ \textcolor{comment}{\ *\ \ ...\ Functions}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00091}00091\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00093}00093\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00094}00094\ \textcolor{comment}{\ *\ \ ...\ Functions:\ File\ API}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00095}00095\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00097}\mbox{\hyperlink{syscall__proxies_8c_a2a1b01e82516cc0abc94dbe2567ac5cc}{00097}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a2a1b01e82516cc0abc94dbe2567ac5cc}{dlsym\_open}}(\textcolor{keywordtype}{char}\ *path,\ \textcolor{keywordtype}{int}\ flags)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00098}00098\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00099}00099\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open:\ before\ open...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00100}00100\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open:\ Path\ =>\ \%s\(\backslash\)n"{}},\ path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00101}00101\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open:\ flags\ =>\ \%d\(\backslash\)n"{}},\ flags);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00103}00103\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}{real\_open}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00104}00104\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00105}00105\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}{real\_open}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *,\ int,\ mode\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}open"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00106}00106\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00108}00108\ \ \ \textcolor{keywordtype}{int}\ fd\ =\ \mbox{\hyperlink{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}{real\_open}}((\textcolor{keywordtype}{char}\ *)path,\ flags,\ 0);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00110}00110\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open:\ (\%s,\%o)\ return\ \%d\(\backslash\)n"{}},\ path,\ flags,\ fd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00112}00112\ \ \ \textcolor{keywordflow}{return}\ fd;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00113}00113\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00115}\mbox{\hyperlink{syscall__proxies_8c_ae6edfc2c77365cf6a3858808a12d1410}{00115}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_ae6edfc2c77365cf6a3858808a12d1410}{dlsym\_open2}}(\textcolor{keywordtype}{char}\ *path,\ \textcolor{keywordtype}{int}\ flags,\ mode\_t\ mode)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00116}00116\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00117}00117\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open2:\ before\ open...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00118}00118\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open2:\ Path\ =>\ \%s\(\backslash\)n"{}},\ path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00119}00119\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open2:\ flags\ =>\ \%d\(\backslash\)n"{}},\ flags);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00120}00120\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open2:\ mode\ =>\ \%d\(\backslash\)n"{}},\ mode);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00122}00122\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}{real\_open}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00123}00123\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00124}00124\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}{real\_open}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *,\ int,\ mode\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}open"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00125}00125\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00127}00127\ \ \ \textcolor{keywordtype}{int}\ fd\ =\ \mbox{\hyperlink{syscall__proxies_8c_a540006469e7d3ccb671035775ee09f2f}{real\_open}}((\textcolor{keywordtype}{char}\ *)path,\ flags,\ mode);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00129}00129\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open2:\ (\%s,\%o)\ return\ \%d\(\backslash\)n"{}},\ path,\ flags,\ fd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00131}00131\ \ \ \textcolor{keywordflow}{return}\ fd;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00132}00132\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00134}\mbox{\hyperlink{syscall__proxies_8c_a228de4498a836dd164284e059ffab365}{00134}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a228de4498a836dd164284e059ffab365}{dlsym\_open64}}(\textcolor{keywordtype}{char}\ *path,\ \textcolor{keywordtype}{int}\ flags,\ mode\_t\ mode)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00135}00135\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00136}00136\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open64:\ before\ open64...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00137}00137\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open64:\ Path\ =>\ \%s\(\backslash\)n"{}},\ path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00138}00138\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open64:\ flags\ =>\ \%d\(\backslash\)n"{}},\ flags);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00139}00139\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open64:\ mode\ =>\ \%d\(\backslash\)n"{}},\ mode);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00141}00141\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a13b3f4f1c540e774420a4e2ba59091d2}{real\_open64}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00142}00142\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00143}00143\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a13b3f4f1c540e774420a4e2ba59091d2}{real\_open64}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *,\ int,\ mode\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}open64"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00144}00144\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00145}00145\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00146}00146\ \ \ \textcolor{keywordtype}{int}\ fd\ =\ \mbox{\hyperlink{syscall__proxies_8c_a13b3f4f1c540e774420a4e2ba59091d2}{real\_open64}}((\textcolor{keywordtype}{char}\ *)path,\ flags,\ mode);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00148}00148\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_open64:\ (\%s,\%o)\ return\ \%d\(\backslash\)n"{}},\ path,\ flags,\ fd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00150}00150\ \ \ \textcolor{keywordflow}{return}\ fd;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00151}00151\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00153}\mbox{\hyperlink{syscall__proxies_8c_a6b110858b7eb0e77957a5fb303c3a09b}{00153}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a6b110858b7eb0e77957a5fb303c3a09b}{dlsym\_\_\_open\_2}}(\textcolor{keywordtype}{char}\ *path,\ \textcolor{keywordtype}{int}\ flags)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00154}00154\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00155}00155\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_\_\_open\_2:\ before\ \_\_open\_2...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00156}00156\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_\_\_open\_2:\ Path\ =>\ \%s\(\backslash\)n"{}},\ path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00157}00157\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00158}00158\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_ae312aa85369c71f866657bb37dff9c0a}{real\_\_\_open\_2}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00159}00159\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00160}00160\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_ae312aa85369c71f866657bb37dff9c0a}{real\_\_\_open\_2}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *,\ int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}\_\_open"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00161}00161\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00163}00163\ \ \ \textcolor{keywordtype}{int}\ fd\ =\ \mbox{\hyperlink{syscall__proxies_8c_ae312aa85369c71f866657bb37dff9c0a}{real\_\_\_open\_2}}((\textcolor{keywordtype}{char}\ *)path,\ flags);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00165}00165\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_\_\_open\_2:\ (\%s,\%o)\ return\ \%d\(\backslash\)n"{}},\ path,\ flags,\ fd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00166}00166\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00167}00167\ \ \ \textcolor{keywordflow}{return}\ fd;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00168}00168\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00169}00169\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00170}\mbox{\hyperlink{syscall__proxies_8c_a13ce29fc7965e50085b1f1a08d3b0c90}{00170}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a13ce29fc7965e50085b1f1a08d3b0c90}{dlsym\_creat}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ mode\_t\ mode)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00171}00171\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00172}00172\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_cleat:\ before\ creat...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00173}00173\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_creat:\ Path\ =>\ \%s\(\backslash\)n"{}},\ path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00174}00174\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00175}00175\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a542b207814b293e59e9218104a2a38b3}{real\_creat}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00176}00176\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00177}00177\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a542b207814b293e59e9218104a2a38b3}{real\_creat}}\ =\ (int\ (*)(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ mode\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}creat"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00178}00178\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00179}00179\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00180}00180\ \ \ \textcolor{keywordtype}{int}\ fd\ =\ \mbox{\hyperlink{syscall__proxies_8c_a542b207814b293e59e9218104a2a38b3}{real\_creat}}(path,\ mode);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00181}00181\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00182}00182\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_creat:\ (\%s,\%o)\ return\ \%d\(\backslash\)n"{}},\ path,\ mode,\ fd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00183}00183\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00184}00184\ \ \ \textcolor{keywordflow}{return}\ fd;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00185}00185\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00187}\mbox{\hyperlink{syscall__proxies_8c_a656b47c4d756635930235ddc053fa980}{00187}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a656b47c4d756635930235ddc053fa980}{dlsym\_ftruncate}}(\textcolor{keywordtype}{int}\ fd,\ off\_t\ length)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00188}00188\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00189}00189\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_ftruncate:\ before\ ftruncate...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00190}00190\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00191}00191\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a669528fe56a99b0c78c5cea94fc5f63d}{real\_ftruncate}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00192}00192\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00193}00193\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a669528fe56a99b0c78c5cea94fc5f63d}{real\_ftruncate}}\ =\ (int\ (*)(int,\ off\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}ftruncate"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00194}00194\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00196}00196\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a669528fe56a99b0c78c5cea94fc5f63d}{real\_ftruncate}}(fd,\ length);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00197}00197\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00198}00198\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00199}\mbox{\hyperlink{syscall__proxies_8c_aef315b53b84073c0299550f5006db7fc}{00199}}\ ssize\_t\ \mbox{\hyperlink{syscall__proxies_8c_aef315b53b84073c0299550f5006db7fc}{dlsym\_read}}(\textcolor{keywordtype}{int}\ fd,\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}},\ \textcolor{keywordtype}{size\_t}\ nbyte)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00200}00200\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00201}00201\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_read:\ before\ read...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00202}00202\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00203}00203\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_ab7960403a0cae3196a844a62f6644b27}{real\_read}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00204}00204\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00205}00205\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_ab7960403a0cae3196a844a62f6644b27}{real\_read}}\ =\ (ssize\_t(*)(int,\ \textcolor{keywordtype}{void}\ *,\ size\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}read"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00206}00206\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00207}00207\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00208}00208\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_ab7960403a0cae3196a844a62f6644b27}{real\_read}}(fd,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}},\ nbyte);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00209}00209\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00210}00210\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00211}\mbox{\hyperlink{syscall__proxies_8c_a409f81fafd3153537469bbd358d44732}{00211}}\ ssize\_t\ \mbox{\hyperlink{syscall__proxies_8c_a409f81fafd3153537469bbd358d44732}{dlsym\_write}}(\textcolor{keywordtype}{int}\ fd,\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}},\ \textcolor{keywordtype}{size\_t}\ nbyte)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00212}00212\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00213}00213\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_write:\ before\ write...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00214}00214\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00215}00215\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_aa90b1d59886ff211e915966fbe8ce040}{real\_write}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00216}00216\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00217}00217\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_aa90b1d59886ff211e915966fbe8ce040}{real\_write}}\ =\ (ssize\_t(*)(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{void}\ *,\ size\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}write"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00218}00218\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00220}00220\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_aa90b1d59886ff211e915966fbe8ce040}{real\_write}}(fd,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}},\ nbyte);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00221}00221\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00222}00222\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00223}\mbox{\hyperlink{syscall__proxies_8c_a87fb4ae438d3a9b76e5dbcbca88bd80b}{00223}}\ off\_t\ \mbox{\hyperlink{syscall__proxies_8c_a87fb4ae438d3a9b76e5dbcbca88bd80b}{dlsym\_lseek}}(\textcolor{keywordtype}{int}\ fd,\ off\_t\ offset,\ \textcolor{keywordtype}{int}\ whence)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00224}00224\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00225}00225\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_lseek:\ before\ lseek...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00227}00227\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_ae752ac266e732840c81273a66d7b808f}{real\_lseek}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00228}00228\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00229}00229\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_ae752ac266e732840c81273a66d7b808f}{real\_lseek}}\ =\ (off\_t(*)(int,\ off\_t,\ int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}lseek"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00230}00230\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00231}00231\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00232}00232\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_ae752ac266e732840c81273a66d7b808f}{real\_lseek}}(fd,\ offset,\ whence);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00233}00233\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00235}\mbox{\hyperlink{syscall__proxies_8c_ae512d9e5f85d9b33d523894051631dd0}{00235}}\ off64\_t\ \mbox{\hyperlink{syscall__proxies_8c_ae512d9e5f85d9b33d523894051631dd0}{dlsym\_lseek64}}(\textcolor{keywordtype}{int}\ fd,\ off64\_t\ offset,\ \textcolor{keywordtype}{int}\ whence)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00236}00236\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00237}00237\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_lseek64:\ before\ lseek64...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00239}00239\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_aef88583e19ca185474acff4d12528c2f}{real\_lseek64}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00240}00240\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00241}00241\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_aef88583e19ca185474acff4d12528c2f}{real\_lseek64}}\ =\ (off64\_t(*)(int,\ off64\_t,\ int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}lseek64"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00242}00242\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00243}00243\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00244}00244\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_aef88583e19ca185474acff4d12528c2f}{real\_lseek64}}(fd,\ offset,\ whence);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00245}00245\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00246}00246\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00247}\mbox{\hyperlink{syscall__proxies_8c_aa63e748c1adfcc0176e9e953da0745fb}{00247}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_aa63e748c1adfcc0176e9e953da0745fb}{dlsym\_lxstat64}}(\textcolor{keywordtype}{int}\ ver,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keyword}{struct}\ stat64\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00248}00248\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00249}00249\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_lxstat64:\ before\ \_lxstat64...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00250}00250\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00251}00251\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_af603a08904ba37103e41b13408528525}{real\_lxstat64}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00252}00252\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00253}00253\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_af603a08904ba37103e41b13408528525}{real\_lxstat64}}\ =\ (int\ (*)(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat64\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}\_\_lxstat64"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00254}00254\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00255}00255\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00256}00256\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_af603a08904ba37103e41b13408528525}{real\_lxstat64}}(ver,\ (\textcolor{keywordtype}{char}\ *)path,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00257}00257\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00258}00258\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00259}\mbox{\hyperlink{syscall__proxies_8c_a62a1eb308b1bb04bd35129abab29fbcf}{00259}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a62a1eb308b1bb04bd35129abab29fbcf}{dlsym\_xstat64}}(\textcolor{keywordtype}{int}\ ver,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keyword}{struct}\ stat64\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00260}00260\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00261}00261\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_xstat64:\ before\ \_xstat64...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00262}00262\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00263}00263\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a4143a7c57ea1cf979ee1843212bb3e55}{real\_xstat64}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00264}00264\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00265}00265\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a4143a7c57ea1cf979ee1843212bb3e55}{real\_xstat64}}\ =\ (int\ (*)(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat64\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}\_\_xstat64"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00266}00266\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00267}00267\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00268}00268\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a4143a7c57ea1cf979ee1843212bb3e55}{real\_xstat64}}(ver,\ (\textcolor{keywordtype}{char}\ *)path,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00269}00269\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00270}00270\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00271}\mbox{\hyperlink{syscall__proxies_8c_ac1aad98ae3ea6f95a374de2431009990}{00271}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_ac1aad98ae3ea6f95a374de2431009990}{dlsym\_fxstat64}}(\textcolor{keywordtype}{int}\ ver,\ \textcolor{keywordtype}{int}\ fd,\ \textcolor{keyword}{struct}\ stat64\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00272}00272\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00273}00273\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_fxstat64:\ before\ \_fxstat64...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00275}00275\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a06c482b6e82b77e9193fd0b240e66bbc}{real\_fxstat64}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00276}00276\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00277}00277\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a06c482b6e82b77e9193fd0b240e66bbc}{real\_fxstat64}}\ =\ (int\ (*)(int,\ int,\ \textcolor{keyword}{struct\ }stat64\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}\_\_fxstat64"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00278}00278\ \ \ \ \ \textcolor{comment}{//\ real\_fxstat64\ =\ (int\ (*)(int,\ int,\ struct\ stat64\ *))\ dlsym(RTLD\_NEXT,"{}\_\_xstat64"{});}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00279}00279\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00280}00280\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00281}00281\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a06c482b6e82b77e9193fd0b240e66bbc}{real\_fxstat64}}(ver,\ fd,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00282}00282\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00283}00283\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00284}\mbox{\hyperlink{syscall__proxies_8c_aff6180862c1481803c799869e26ec80a}{00284}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_aff6180862c1481803c799869e26ec80a}{dlsym\_lstat}}(\textcolor{keywordtype}{int}\ ver,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keyword}{struct}\ stat\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00285}00285\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00286}00286\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_lstat:\ before\ \_lstat...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00287}00287\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00288}00288\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_ae35dcd3176695ccf13c374fa9140855c}{real\_lstat}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00289}00289\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00290}00290\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_ae35dcd3176695ccf13c374fa9140855c}{real\_lstat}}\ =\ (int\ (*)(int,\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}\_\_lxstat"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00291}00291\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00292}00292\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00293}00293\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_ae35dcd3176695ccf13c374fa9140855c}{real\_lstat}}(ver,\ (\textcolor{keywordtype}{char}\ *)path,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00294}00294\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00295}00295\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00296}\mbox{\hyperlink{syscall__proxies_8c_ac4213940b6b6cf4b13c9438f86f76f19}{00296}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_ac4213940b6b6cf4b13c9438f86f76f19}{dlsym\_stat}}(\textcolor{keywordtype}{int}\ ver,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keyword}{struct}\ stat\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00297}00297\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00298}00298\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_stat:\ before\ \_lxstat...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00299}00299\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00300}00300\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_aa189f074256a94bf6ba23c042129292b}{real\_stat}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00301}00301\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00302}00302\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_aa189f074256a94bf6ba23c042129292b}{real\_stat}}\ =\ (int\ (*)(int,\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}\_\_xstat"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00303}00303\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00304}00304\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00305}00305\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_aa189f074256a94bf6ba23c042129292b}{real\_stat}}(ver,\ (\textcolor{keywordtype}{char}\ *)path,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00306}00306\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00307}00307\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00308}\mbox{\hyperlink{syscall__proxies_8c_a3a644e58ae0a06c738bb866414a9da6e}{00308}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a3a644e58ae0a06c738bb866414a9da6e}{dlsym\_fstat}}(\textcolor{keywordtype}{int}\ ver,\ \textcolor{keywordtype}{int}\ fd,\ \textcolor{keyword}{struct}\ stat\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}})}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00309}00309\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00310}00310\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_fstat:\ before\ \_fxstat...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00311}00311\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00312}00312\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_aa89bd56fcc4132224537b6a5a827a320}{real\_fstat}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00313}00313\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00314}00314\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_aa89bd56fcc4132224537b6a5a827a320}{real\_fstat}}\ =\ (int\ (*)(int,\ int,\ \textcolor{keyword}{struct\ }stat\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}\_\_fxstat"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00315}00315\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00316}00316\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00317}00317\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_aa89bd56fcc4132224537b6a5a827a320}{real\_fstat}}(ver,\ fd,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00318}00318\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00319}00319\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00320}\mbox{\hyperlink{syscall__proxies_8c_a0f172801af5d78bbe39f69e6852ad76b}{00320}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a0f172801af5d78bbe39f69e6852ad76b}{dlsym\_fstatat}}(\textcolor{keywordtype}{int}\ dfd,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keyword}{struct}\ stat\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}},\ \textcolor{keywordtype}{int}\ flags)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00321}00321\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00322}00322\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_fstatat:\ before\ fstatat...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00323}00323\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00324}00324\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a4312b1892e60c0d191fdf0991d57e97e}{real\_fstatat}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00325}00325\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00326}00326\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a4312b1892e60c0d191fdf0991d57e97e}{real\_fstatat}}\ =\ (int\ (*)(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat\ *,\ int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}fstatat"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00327}00327\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00328}00328\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00329}00329\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a4312b1892e60c0d191fdf0991d57e97e}{real\_fstatat}}(dfd,\ (\textcolor{keywordtype}{char}\ *)path,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}},\ flags);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00330}00330\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00331}00331\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00332}\mbox{\hyperlink{syscall__proxies_8c_abc50d4734ed1e79a80dcd20b6ba8e135}{00332}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_abc50d4734ed1e79a80dcd20b6ba8e135}{dlsym\_fstatat64}}(\textcolor{keywordtype}{int}\ dfd,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keyword}{struct}\ stat64\ *\mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}},\ \textcolor{keywordtype}{int}\ flags)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00333}00333\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00334}00334\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_fstatat64:\ before\ fstatat64...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00335}00335\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00336}00336\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a2cb7ffe3c73b60a4c2f63770b0d0a7c1}{real\_fstatat64}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00337}00337\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00338}00338\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a2cb7ffe3c73b60a4c2f63770b0d0a7c1}{real\_fstatat64}}\ =\ (int\ (*)(int,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{struct\ }stat64\ *,\ int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}fstatat64"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00339}00339\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00340}00340\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00341}00341\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a2cb7ffe3c73b60a4c2f63770b0d0a7c1}{real\_fstatat64}}(dfd,\ (\textcolor{keywordtype}{char}\ *)path,\ \mbox{\hyperlink{xpn__cp_8c_a5b842f5c129f972ea4326d847932ac1b}{buf}},\ flags);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00342}00342\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00343}00343\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00344}\mbox{\hyperlink{syscall__proxies_8c_a9bb7193d9e19cf66bdef844c0104cdfc}{00344}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a9bb7193d9e19cf66bdef844c0104cdfc}{dlsym\_close}}(\textcolor{keywordtype}{int}\ fd)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00345}00345\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00346}00346\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_close:\ before\ close...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00347}00347\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00348}00348\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_ab170c8f0b26f5e1e75571b808701e943}{real\_close}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00349}00349\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00350}00350\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_ab170c8f0b26f5e1e75571b808701e943}{real\_close}}\ =\ (int\ (*)(int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}close"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00351}00351\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00352}00352\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00353}00353\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_ab170c8f0b26f5e1e75571b808701e943}{real\_close}}(fd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00354}00354\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00355}00355\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00356}\mbox{\hyperlink{syscall__proxies_8c_ae11271d95bf0e2425d9a0982c8e9c73a}{00356}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_ae11271d95bf0e2425d9a0982c8e9c73a}{dlsym\_rename}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *old\_path,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *new\_path)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00357}00357\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00358}00358\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_rename:\ before\ rename...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00359}00359\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00360}00360\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a020914ae07ff0b0194f7ee3140602716}{real\_rename}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00361}00361\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00362}00362\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a020914ae07ff0b0194f7ee3140602716}{real\_rename}}\ =\ (int\ (*)(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}rename"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00363}00363\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00364}00364\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00365}00365\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a020914ae07ff0b0194f7ee3140602716}{real\_rename}}(old\_path,\ new\_path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00366}00366\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00367}00367\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00368}\mbox{\hyperlink{syscall__proxies_8c_a4e433ad840b20e1d6b6a22f80331e30d}{00368}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a4e433ad840b20e1d6b6a22f80331e30d}{dlsym\_unlink}}(\textcolor{keywordtype}{char}\ *path)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00369}00369\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00370}00370\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_unlink:\ before\ unlink...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00371}00371\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00372}00372\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a2c9915165916b62d3be86cfc5736a3ea}{real\_unlink}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00373}00373\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00374}00374\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a2c9915165916b62d3be86cfc5736a3ea}{real\_unlink}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}unlink"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00375}00375\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00376}00376\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00377}00377\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a2c9915165916b62d3be86cfc5736a3ea}{real\_unlink}}((\textcolor{keywordtype}{char}\ *)path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00378}00378\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00379}00379\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00380}00380\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00381}00381\ \textcolor{comment}{\ *\ \ ...\ Functions:\ Directory\ API}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00382}00382\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00383}00383\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00384}\mbox{\hyperlink{syscall__proxies_8c_abcaedace5be2f20528302f59a7f07c7d}{00384}}\ DIR\ *\mbox{\hyperlink{syscall__proxies_8c_abcaedace5be2f20528302f59a7f07c7d}{dlsym\_opendir}}(\textcolor{keywordtype}{char}\ *dirname)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00385}00385\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00386}00386\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_opendir:\ before\ opendir...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00387}00387\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00388}00388\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a364474d13cc708210034f0f7a437d880}{real\_opendir}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00389}00389\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00390}00390\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a364474d13cc708210034f0f7a437d880}{real\_opendir}}\ =\ (DIR\ *\ (*)(\textcolor{keywordtype}{char}\ *))\ dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}opendir"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00391}00391\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00392}00392\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00393}00393\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a364474d13cc708210034f0f7a437d880}{real\_opendir}}((\textcolor{keywordtype}{char}\ *)dirname);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00394}00394\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00395}00395\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00396}\mbox{\hyperlink{syscall__proxies_8c_afe953d12f8e4b308061bf7a931cd319c}{00396}}\ DIR\ *\mbox{\hyperlink{syscall__proxies_8c_afe953d12f8e4b308061bf7a931cd319c}{dlsym\_opendir64}}(\textcolor{keywordtype}{char}\ *dirname)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00397}00397\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00398}00398\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_opendir64:\ before\ opendir64...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00399}00399\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00400}00400\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_abf9acbd52d36dc07aab133c803fcd771}{real\_opendir64}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00401}00401\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00402}00402\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_abf9acbd52d36dc07aab133c803fcd771}{real\_opendir64}}\ =\ (DIR\ *\ (*)(\textcolor{keywordtype}{char}\ *))\ dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}opendir64"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00403}00403\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00404}00404\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00405}00405\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_abf9acbd52d36dc07aab133c803fcd771}{real\_opendir64}}((\textcolor{keywordtype}{char}\ *)dirname);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00406}00406\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00407}00407\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00408}\mbox{\hyperlink{syscall__proxies_8c_adbc1cca344d44c25ba09b1033e835ae6}{00408}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_adbc1cca344d44c25ba09b1033e835ae6}{dlsym\_mkdir}}(\textcolor{keywordtype}{char}\ *path,\ mode\_t\ mode)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00409}00409\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00410}00410\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_mkdir:\ before\ mkdir...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00411}00411\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00412}00412\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a8142da50cfa25723af52ad741a0e828e}{real\_mkdir}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00413}00413\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00414}00414\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a8142da50cfa25723af52ad741a0e828e}{real\_mkdir}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *,\ mode\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}mkdir"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00415}00415\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00416}00416\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00417}00417\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a8142da50cfa25723af52ad741a0e828e}{real\_mkdir}}((\textcolor{keywordtype}{char}\ *)path,\ mode);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00418}00418\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00419}00419\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00420}\mbox{\hyperlink{syscall__proxies_8c_a04e1aca02902acc07499edaea9335048}{00420}}\ \textcolor{keyword}{struct\ }dirent\ *\mbox{\hyperlink{syscall__proxies_8c_a04e1aca02902acc07499edaea9335048}{dlsym\_readdir}}(DIR\ *dirp)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00421}00421\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00422}00422\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_readdir:\ before\ readdir...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00423}00423\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00424}00424\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a89f96d5fbf652c1b9fdf9e9c6d53ea4b}{real\_readdir}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00425}00425\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00426}00426\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a89f96d5fbf652c1b9fdf9e9c6d53ea4b}{real\_readdir}}\ =\ (\textcolor{keyword}{struct\ }dirent\ *\ (*)(DIR\ *))\ dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}readdir"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00427}00427\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00428}00428\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00429}00429\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a89f96d5fbf652c1b9fdf9e9c6d53ea4b}{real\_readdir}}(dirp);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00430}00430\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00431}00431\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00432}\mbox{\hyperlink{syscall__proxies_8c_a12cf2b73e2ecc622cb32aa13f18509b1}{00432}}\ \textcolor{keyword}{struct\ }dirent64\ *\mbox{\hyperlink{syscall__proxies_8c_a12cf2b73e2ecc622cb32aa13f18509b1}{dlsym\_readdir64}}(DIR\ *dirp)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00433}00433\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00434}00434\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_readdir64:\ before\ readdir64...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00435}00435\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00436}00436\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a5926d800819a6578195f61636f1b879f}{real\_readdir64}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00437}00437\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00438}00438\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a5926d800819a6578195f61636f1b879f}{real\_readdir64}}\ =\ (\textcolor{keyword}{struct\ }dirent64\ *\ (*)(DIR\ *))\ dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}readdir64"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00439}00439\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00440}00440\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00441}00441\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a5926d800819a6578195f61636f1b879f}{real\_readdir64}}(dirp);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00442}00442\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00443}00443\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00444}\mbox{\hyperlink{syscall__proxies_8c_ae4cd8a1110e21b41e120b3f234d6e4ad}{00444}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_ae4cd8a1110e21b41e120b3f234d6e4ad}{dlsym\_closedir}}(DIR\ *dirp)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00445}00445\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00446}00446\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_closedir:\ before\ closedir...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00447}00447\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00448}00448\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a9094f37ad12ef2676a374829ebbda2be}{real\_closedir}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00449}00449\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00450}00450\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a9094f37ad12ef2676a374829ebbda2be}{real\_closedir}}\ =\ (int\ (*)(DIR\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}closedir"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00451}00451\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00452}00452\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00453}00453\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a9094f37ad12ef2676a374829ebbda2be}{real\_closedir}}(dirp);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00454}00454\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00455}00455\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00456}\mbox{\hyperlink{syscall__proxies_8c_a0f476841e33b51d93873c29dee4ba4c7}{00456}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a0f476841e33b51d93873c29dee4ba4c7}{dlsym\_rmdir}}(\textcolor{keywordtype}{char}\ *path)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00457}00457\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00458}00458\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_rmdir:\ before\ rmdir...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00459}00459\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00460}00460\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a4c977b304707fb6497729902420d51fb}{real\_rmdir}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00461}00461\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00462}00462\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a4c977b304707fb6497729902420d51fb}{real\_rmdir}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}rmdir"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00463}00463\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00464}00464\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00465}00465\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a4c977b304707fb6497729902420d51fb}{real\_rmdir}}((\textcolor{keywordtype}{char}\ *)path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00466}00466\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00467}00467\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00468}00468\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00469}00469\ \textcolor{comment}{\ *\ \ ...\ Functions:\ Proccess\ API}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00470}00470\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00471}00471\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00472}\mbox{\hyperlink{syscall__proxies_8c_a03e85dc2793740319a03ee59e86cb440}{00472}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a03e85dc2793740319a03ee59e86cb440}{dlsym\_fork}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00473}00473\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00474}00474\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_fork:\ before\ fork...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00475}00475\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00476}00476\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_acc1c4f36eb221c29a359e654060160ed}{real\_fork}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00477}00477\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00478}00478\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_acc1c4f36eb221c29a359e654060160ed}{real\_fork}}\ =\ (int\ (*)())dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}fork"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00479}00479\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00480}00480\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00481}00481\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_acc1c4f36eb221c29a359e654060160ed}{real\_fork}}();}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00482}00482\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00483}00483\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00484}\mbox{\hyperlink{syscall__proxies_8c_a8092872bdc3fe804da18638ea2ebe3d9}{00484}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a8092872bdc3fe804da18638ea2ebe3d9}{dlsym\_pipe}}(\textcolor{keywordtype}{int}\ pipefd[2])}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00485}00485\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00486}00486\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_pipe:\ before\ pipe...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00487}00487\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00488}00488\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_aca92fb6c9192b899b6b5b7b4f7f596ba}{real\_pipe}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00489}00489\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00490}00490\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_aca92fb6c9192b899b6b5b7b4f7f596ba}{real\_pipe}}\ =\ (int\ (*)(\textcolor{keywordtype}{int}\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}pipe"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00491}00491\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00492}00492\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00493}00493\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_aca92fb6c9192b899b6b5b7b4f7f596ba}{real\_pipe}}(pipefd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00494}00494\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00495}00495\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00496}\mbox{\hyperlink{syscall__proxies_8c_a751a04db784359f0f9fe22f0e67429ba}{00496}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a751a04db784359f0f9fe22f0e67429ba}{dlsym\_dup}}(\textcolor{keywordtype}{int}\ fd)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00497}00497\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00498}00498\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_dup:\ before\ dup...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00499}00499\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00500}00500\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a7df0d4228fa5dd287ae6d650f8296405}{real\_dup}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00501}00501\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00502}00502\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a7df0d4228fa5dd287ae6d650f8296405}{real\_dup}}\ =\ (int\ (*)(int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}dup"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00503}00503\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00504}00504\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00505}00505\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a7df0d4228fa5dd287ae6d650f8296405}{real\_dup}}(fd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00506}00506\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00507}00507\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00508}\mbox{\hyperlink{syscall__proxies_8c_a8831374316eeb73a0559629485b61c31}{00508}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a8831374316eeb73a0559629485b61c31}{dlsym\_dup2}}(\textcolor{keywordtype}{int}\ fd,\ \textcolor{keywordtype}{int}\ fd2)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00509}00509\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00510}00510\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_dup2:\ before\ dup2...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00511}00511\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00512}00512\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_ae2748186f2529a651f30f6aea9f5e112}{real\_dup2}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00513}00513\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00514}00514\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_ae2748186f2529a651f30f6aea9f5e112}{real\_dup2}}\ =\ (int\ (*)(int,\ int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}dup2"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00515}00515\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00516}00516\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00517}00517\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_ae2748186f2529a651f30f6aea9f5e112}{real\_dup2}}(fd,\ fd2);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00518}00518\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00519}00519\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00520}\mbox{\hyperlink{syscall__proxies_8c_a1e0a6c19baf6aad3d13c64ca6f81ad37}{00520}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{syscall__proxies_8c_a1e0a6c19baf6aad3d13c64ca6f81ad37}{dlsym\_exit}}(\textcolor{keywordtype}{int}\ status)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00521}00521\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00522}00522\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_exit:\ before\ exit...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00523}00523\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00524}00524\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a4b2bcb1e1fa0bd0269c60dfd22c49df6}{real\_exit}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00525}00525\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00526}00526\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a4b2bcb1e1fa0bd0269c60dfd22c49df6}{real\_exit}}\ =\ (void\ (*)(int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}exit"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00527}00527\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00528}00528\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00529}00529\ \ \ \mbox{\hyperlink{syscall__proxies_8c_a4b2bcb1e1fa0bd0269c60dfd22c49df6}{real\_exit}}(status);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00530}00530\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00531}00531\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00532}00532\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00533}00533\ \textcolor{comment}{\ *\ \ ...\ Functions:\ Manager\ -\/\ File/Directory\ Metadata\ API}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00534}00534\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00535}00535\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00536}\mbox{\hyperlink{syscall__proxies_8c_af82927ba8fda63f9fd799a8121bc4d92}{00536}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_af82927ba8fda63f9fd799a8121bc4d92}{dlsym\_chdir}}(\textcolor{keywordtype}{char}\ *path)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00537}00537\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00538}00538\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_chdir:\ before\ chdir...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00539}00539\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00540}00540\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a520283dc892d9483382590f4e86aad73}{real\_chdir}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00541}00541\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00542}00542\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a520283dc892d9483382590f4e86aad73}{real\_chdir}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}chdir"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00543}00543\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00544}00544\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00545}00545\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a520283dc892d9483382590f4e86aad73}{real\_chdir}}((\textcolor{keywordtype}{char}\ *)path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00546}00546\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00547}00547\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00548}\mbox{\hyperlink{syscall__proxies_8c_a069f5fdf5a3044e55c9b3b78956ac87b}{00548}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a069f5fdf5a3044e55c9b3b78956ac87b}{dlsym\_chmod}}(\textcolor{keywordtype}{char}\ *path,\ mode\_t\ mode)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00549}00549\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00550}00550\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_chmod:\ before\ chmod...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00551}00551\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00552}00552\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a6b5e20c7759cf1cf0217b478f03f0e52}{real\_chmod}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00553}00553\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00554}00554\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a6b5e20c7759cf1cf0217b478f03f0e52}{real\_chmod}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *,\ mode\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}chmod"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00555}00555\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00556}00556\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00557}00557\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a6b5e20c7759cf1cf0217b478f03f0e52}{real\_chmod}}((\textcolor{keywordtype}{char}\ *)path,\ mode);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00558}00558\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00559}00559\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00560}\mbox{\hyperlink{syscall__proxies_8c_abe5a5cf5a7e3ec5b9edd98bb223abfce}{00560}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_abe5a5cf5a7e3ec5b9edd98bb223abfce}{dlsym\_fchmod}}(\textcolor{keywordtype}{int}\ fd,\ mode\_t\ mode)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00561}00561\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00562}00562\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_fchmod:\ before\ fchmod...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00563}00563\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00564}00564\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a36c1a17e872fe41140a435838da2a777}{real\_fchmod}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00565}00565\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00566}00566\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a36c1a17e872fe41140a435838da2a777}{real\_fchmod}}\ =\ (int\ (*)(int,\ mode\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}fchmod"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00567}00567\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00568}00568\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00569}00569\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a36c1a17e872fe41140a435838da2a777}{real\_fchmod}}(fd,\ mode);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00570}00570\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00571}00571\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00572}\mbox{\hyperlink{syscall__proxies_8c_ae344913c3894a0756d95f4c9619c3465}{00572}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_ae344913c3894a0756d95f4c9619c3465}{dlsym\_chown}}(\textcolor{keywordtype}{char}\ *path,\ uid\_t\ owner,\ gid\_t\ group)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00573}00573\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00574}00574\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_chown:\ before\ chown...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00575}00575\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00576}00576\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a4d677d3bea22eae2e627d545f261eae5}{real\_chown}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00577}00577\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00578}00578\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a4d677d3bea22eae2e627d545f261eae5}{real\_chown}}\ =\ (int\ (*)(\textcolor{keywordtype}{char}\ *,\ uid\_t,\ gid\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}chown"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00579}00579\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00580}00580\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00581}00581\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a4d677d3bea22eae2e627d545f261eae5}{real\_chown}}((\textcolor{keywordtype}{char}\ *)path,\ owner,\ group);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00582}00582\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00583}00583\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00584}\mbox{\hyperlink{syscall__proxies_8c_ab851cd304ba3a8d92e5301d78d55d657}{00584}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_ab851cd304ba3a8d92e5301d78d55d657}{dlsym\_fcntl}}(\textcolor{keywordtype}{int}\ fd,\ \textcolor{keywordtype}{int}\ cmd,\ \textcolor{keywordtype}{long}\ arg)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00585}00585\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00586}00586\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_fcntl:\ before\ fcntl...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00587}00587\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00588}00588\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a5844ba3a1a589ce3af9046f8a4a08785}{real\_fcntl}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00589}00589\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00590}00590\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a5844ba3a1a589ce3af9046f8a4a08785}{real\_fcntl}}\ =\ (int\ (*)(int,\ int,\ long))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}fcntl"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00591}00591\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00592}00592\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00593}00593\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_a5844ba3a1a589ce3af9046f8a4a08785}{real\_fcntl}}(fd,\ cmd,\ arg);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00594}00594\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00595}00595\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00596}\mbox{\hyperlink{syscall__proxies_8c_a776de7a6ede35e93a640e4fc714b78fd}{00596}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a776de7a6ede35e93a640e4fc714b78fd}{dlsym\_access}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keywordtype}{int}\ mode)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00597}00597\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00598}00598\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_access:\ before\ access...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00599}00599\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_access:\ Path\ =>\ \%s\(\backslash\)n"{}},\ path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00600}00600\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00601}00601\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_ad95739f0c65d7d1b05199988a1621ad9}{real\_access}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00602}00602\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00603}00603\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_ad95739f0c65d7d1b05199988a1621ad9}{real\_access}}\ =\ (int\ (*)(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *,\ int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}access"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00604}00604\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00605}00605\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00606}00606\ \ \ \textcolor{keywordtype}{int}\ ret\ =\ \mbox{\hyperlink{syscall__proxies_8c_ad95739f0c65d7d1b05199988a1621ad9}{real\_access}}((\textcolor{keywordtype}{char}\ *)path,\ mode);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00607}00607\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00608}00608\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_access:\ (\%s,\%d)\ return\ \%d\(\backslash\)n"{}},\ path,\ mode,\ ret);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00609}00609\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00610}00610\ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00611}00611\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00612}00612\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00613}\mbox{\hyperlink{syscall__proxies_8c_a893818b78459e116c2b5acb1ba9e5ad4}{00613}}\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{syscall__proxies_8c_a893818b78459e116c2b5acb1ba9e5ad4}{dlsym\_realpath}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *restrict\ path,\ \textcolor{keywordtype}{char}\ *restrict\ resolved\_path)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00614}00614\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00615}00615\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_realpath:\ before\ realpath...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00616}00616\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_realpath:\ Path\ =>\ \%s\(\backslash\)n"{}},\ path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00617}00617\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00618}00618\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a2fbde5493821512cc1501797a0956f99}{real\_realpath}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00619}00619\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00620}00620\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a2fbde5493821512cc1501797a0956f99}{real\_realpath}}\ =\ (\textcolor{keywordtype}{char}\ *(*)(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *restrict,\ \textcolor{keywordtype}{char}\ *restrict))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}realpath"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00621}00621\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00622}00622\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00623}00623\ \ \ \textcolor{keywordtype}{char}\ *ret\ =\ \mbox{\hyperlink{syscall__proxies_8c_a2fbde5493821512cc1501797a0956f99}{real\_realpath}}((\textcolor{keywordtype}{char}\ *)path,\ (\textcolor{keywordtype}{char}\ *)resolved\_path);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00624}00624\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00625}00625\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_access:\ (\%s,\%s)\ return\ \%s\(\backslash\)n"{}},\ path,\ resolved\_path,\ ret);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00626}00626\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00627}00627\ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00628}00628\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00629}00629\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00630}\mbox{\hyperlink{syscall__proxies_8c_a5d261d6ab482d10ec95155bd3f7a4386}{00630}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{syscall__proxies_8c_a5d261d6ab482d10ec95155bd3f7a4386}{dlsym\_fsync}}(\textcolor{keywordtype}{int}\ fd)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00631}00631\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00632}00632\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_fsync:\ before\ fsync...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00633}00633\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00634}00634\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_aca1081c5be4e7e92c432a2be89724236}{real\_fsync}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00635}00635\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00636}00636\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_aca1081c5be4e7e92c432a2be89724236}{real\_fsync}}\ =\ (int\ (*)(int))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}fsync"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00637}00637\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00638}00638\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00639}00639\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{syscall__proxies_8c_aca1081c5be4e7e92c432a2be89724236}{real\_fsync}}(fd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00640}00640\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00641}00641\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00642}00642\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00643}00643\ \textcolor{comment}{\ *\ \ ...\ Functions:\ Memory\ API}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00644}00644\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00645}00645\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00646}\mbox{\hyperlink{syscall__proxies_8c_ab03e18b8b8066cc8e4a5864dcfe0bbfe}{00646}}\ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{syscall__proxies_8c_ab03e18b8b8066cc8e4a5864dcfe0bbfe}{dlsym\_mmap}}(\textcolor{keywordtype}{void}\ *addr,\ \textcolor{keywordtype}{size\_t}\ length,\ \textcolor{keywordtype}{int}\ prot,\ \textcolor{keywordtype}{int}\ flags,\ \textcolor{keywordtype}{int}\ fd,\ off\_t\ offset)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00647}00647\ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00648}00648\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_mmap:\ before\ mmap...\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00649}00649\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_mmap:\ fd\ =>\ \%d\(\backslash\)n"{}},\ fd);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00650}00650\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00651}00651\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{syscall__proxies_8c_a07fb02f43c5545b9846fd6b7219c62a5}{real\_mmap}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00652}00652\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00653}00653\ \ \ \ \ \mbox{\hyperlink{syscall__proxies_8c_a07fb02f43c5545b9846fd6b7219c62a5}{real\_mmap}}\ =\ (\textcolor{keywordtype}{void}\ *(*)(\textcolor{keywordtype}{void}\ *,\ \textcolor{keywordtype}{size\_t},\ \textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int},\ \textcolor{keywordtype}{int},\ off\_t))dlsym(RTLD\_NEXT,\ \textcolor{stringliteral}{"{}mmap"{}});}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00654}00654\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00655}00655\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00656}00656\ \ \ \textcolor{keywordtype}{char}\ *ret\ =\ \mbox{\hyperlink{syscall__proxies_8c_a07fb02f43c5545b9846fd6b7219c62a5}{real\_mmap}}(addr,\ length,\ prot,\ flags,\ fd,\ offset);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00657}00657\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00658}00658\ \ \ \mbox{\hyperlink{debug__msg_8h_a4c21e9368b8d74dc2297f752b54e3a78}{debug\_info}}(\textcolor{stringliteral}{"{}dlsym\_mmap:\ (\%d)\ return\ \%p\(\backslash\)n"{}},\ fd,\ ret);}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00659}00659\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00660}00660\ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00661}00661\ \}}
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00662}00662\ }
+\DoxyCodeLine{\Hypertarget{syscall__proxies_8c_source_l00663}00663\ \textcolor{comment}{/*\ ...................................................................\ */}}
+
+\end{DoxyCode}

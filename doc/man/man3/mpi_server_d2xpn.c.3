@@ -1,0 +1,201 @@
+.TH "mpi_server_d2xpn.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+mpi_server_d2xpn.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'all_system\&.h'\fP
+.br
+\fC#include 'mpi_server_params\&.h'\fP
+.br
+\fC#include 'mpi_server_d2xpn\&.h'\fP
+.br
+\fC#include 'xpn\&.h'\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBDEFAULT_PATH\fP   '/tmp'"
+.br
+.ti -1c
+.RI "#define \fBMPI_SERVER_PATH_DEFAULT\fP   '/tmp'"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBgenerateName\fP (char *file, char *new_file)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBmylock\fP (char *file)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBmyunlock\fP (int fd)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBmpi_server_d2xpn\fP (\fBmpi_server_param_st\fP *\fBparams\fP, char *origen, char *destino)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "pthread_mutex_t \fBmutex_id\fP = PTHREAD_MUTEX_INITIALIZER"
+.br
+.ti -1c
+.RI "int \fBstatic_id\fP = 0"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBmpi_server_d2xpn\&.c\fP\&.
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define DEFAULT_PATH   '/tmp'"
+
+.PP
+Definition at line \fB45\fP of file \fBmpi_server_d2xpn\&.c\fP\&.
+.SS "#define MPI_SERVER_PATH_DEFAULT   '/tmp'"
+
+.PP
+Definition at line \fB46\fP of file \fBmpi_server_d2xpn\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void generateName (char * file, char * new_file)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfile\fP 'TODO'\&. 
+.br
+\fInew_file\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB68\fP of file \fBmpi_server_d2xpn\&.c\fP\&.
+.PP
+References \fBDEFAULT_PATH\fP\&.
+.SS "int mpi_server_d2xpn (\fBmpi_server_param_st\fP * params, char * origen, char * destino)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.br
+\fIorigen\fP 'TODO'\&. 
+.br
+\fIdestino\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB147\fP of file \fBmpi_server_d2xpn\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, \fBmpi_server_param_st::dirbase\fP, \fBMPI_SERVER_PATH_DEFAULT\fP, \fBmylock()\fP, \fBmyunlock()\fP, \fBO_CREAT\fP, \fBO_RDONLY\fP, \fBO_TRUNC\fP, \fBO_WRONLY\fP, \fBopen()\fP, \fBparams\fP, \fBPATH_MAX\fP, \fBmpi_server_param_st::rank\fP, \fBst\fP, \fBxpn_init()\fP, and \fBxpn_open()\fP\&.
+.SS "int mylock (char * file)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfile\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB106\fP of file \fBmpi_server_d2xpn\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, and \fBmutex_id\fP\&.
+.PP
+Referenced by \fBmpi_server_d2xpn()\fP\&.
+.SS "int myunlock (int fd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB133\fP of file \fBmpi_server_d2xpn\&.c\fP\&.
+.PP
+References \fBdebug_info\fP, and \fBmutex_id\fP\&.
+.PP
+Referenced by \fBmpi_server_d2xpn()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "pthread_mutex_t mutex_id = PTHREAD_MUTEX_INITIALIZER"
+
+.PP
+Definition at line \fB51\fP of file \fBmpi_server_d2xpn\&.c\fP\&.
+.PP
+Referenced by \fBmylock()\fP, and \fBmyunlock()\fP\&.
+.SS "int static_id = 0"
+
+.PP
+Definition at line \fB52\fP of file \fBmpi_server_d2xpn\&.c\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

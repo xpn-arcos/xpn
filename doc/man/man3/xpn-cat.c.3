@@ -1,0 +1,103 @@
+.TH "xpn-cat.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn-cat.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <string\&.h>\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <ctype\&.h>\fP
+.br
+\fC#include <fcntl\&.h>\fP
+.br
+\fC#include 'xpn\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBBAR_LENGTH\fP   50"
+.br
+.ti -1c
+.RI "#define \fBKB\fP   (1024)"
+.br
+.ti -1c
+.RI "#define \fBMB\fP   (\fBKB\fP * \fBKB\fP)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBusage\fP (char *\fBprogram_name\fP)"
+.br
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "struct stat \fBst\fP"
+.br
+.ti -1c
+.RI "ssize_t \fBsum\fP"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define BAR_LENGTH   50"
+
+.PP
+Definition at line \fB31\fP of file \fBxpn\-cat\&.c\fP\&.
+.SS "#define KB   (1024)"
+
+.PP
+Definition at line \fB34\fP of file \fBxpn\-cat\&.c\fP\&.
+.SS "#define MB   (\fBKB\fP * \fBKB\fP)"
+
+.PP
+Definition at line \fB38\fP of file \fBxpn\-cat\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int main (int argc, char * argv[])"
+
+.PP
+Definition at line \fB49\fP of file \fBxpn\-cat\&.c\fP\&.
+.PP
+References \fBclose()\fP, \fBexit()\fP, \fBKB\fP, \fBO_RDONLY\fP, \fBopen()\fP, \fBread()\fP, \fBst\fP, \fBsum\fP, \fBusage()\fP, \fBxpn_close()\fP, \fBxpn_destroy()\fP, \fBxpn_init()\fP, \fBxpn_open()\fP, \fBxpn_read()\fP, and \fBxpn_stat()\fP\&.
+.SS "void usage (char * program_name)"
+
+.PP
+Definition at line \fB44\fP of file \fBxpn\-cat\&.c\fP\&.
+.PP
+References \fBprogram_name\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "struct stat st"
+
+.PP
+Definition at line \fB41\fP of file \fBxpn\-cat\&.c\fP\&.
+.PP
+Referenced by \fB__fxstat64()\fP, \fB__lxstat64()\fP, \fB__xstat64()\fP, \fBadd_xpn_file_to_fdstable()\fP, \fBmain()\fP, \fBmpi_server_d2xpn()\fP, \fBnfi_local_create()\fP, \fBnfi_local_getattr()\fP, \fBnfi_local_mkdir()\fP, \fBnfi_local_setattr()\fP, \fBstat64_to_stat()\fP, \fBstat_to_stat64()\fP, \fBtcp_server_d2xpn()\fP, \fBxpn_simple_lseek()\fP, \fBXpnGetAtribFd()\fP, and \fBXpnGetAtribPath()\fP\&.
+.SS "ssize_t sum"
+
+.PP
+Definition at line \fB42\fP of file \fBxpn\-cat\&.c\fP\&.
+.PP
+Referenced by \fBmain()\fP, and \fBTIME_MISC_AddTime()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

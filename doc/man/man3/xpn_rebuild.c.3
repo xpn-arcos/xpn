@@ -1,0 +1,134 @@
+.TH "xpn_rebuild.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn_rebuild.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <unistd\&.h>\fP
+.br
+\fC#include <sys/types\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <fcntl\&.h>\fP
+.br
+\fC#include <linux/limits\&.h>\fP
+.br
+\fC#include <sys/stat\&.h>\fP
+.br
+\fC#include <dirent\&.h>\fP
+.br
+\fC#include 'mpi\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fB_LARGEFILE_SOURCE\fP"
+.br
+.ti -1c
+.RI "#define \fB_FILE_OFFSET_BITS\fP   64"
+.br
+.ti -1c
+.RI "#define \fBMIN\fP(a,  b)   (((a) < (b)) ? (a) : (b))"
+.br
+.ti -1c
+.RI "#define \fBHEADER_SIZE\fP   8192"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBcopy\fP (char *entry, int is_file, char *dir_name, char *dest_prefix, int blocksize, int rank, int size)"
+.br
+.ti -1c
+.RI "int \fBlist\fP (char *dir_name, char *dest_prefix, int blocksize, int rank, int size)"
+.br
+.ti -1c
+.RI "int \fBmain\fP (int argc, char *argv[])"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "char \fBcommand\fP [4 *1024]"
+.br
+.ti -1c
+.RI "char \fBsrc_path\fP [\fBPATH_MAX\fP+5]"
+.br
+.ti -1c
+.RI "char \fBdest_path\fP [\fBPATH_MAX\fP+5]"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define _FILE_OFFSET_BITS   64"
+
+.PP
+Definition at line \fB42\fP of file \fBxpn_rebuild\&.c\fP\&.
+.SS "#define _LARGEFILE_SOURCE"
+
+.PP
+Definition at line \fB38\fP of file \fBxpn_rebuild\&.c\fP\&.
+.SS "#define HEADER_SIZE   8192"
+
+.PP
+Definition at line \fB46\fP of file \fBxpn_rebuild\&.c\fP\&.
+.SS "#define MIN(a, b)   (((a) < (b)) ? (a) : (b))"
+
+.PP
+Definition at line \fB45\fP of file \fBxpn_rebuild\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int copy (char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int rank, int size)"
+
+.PP
+Definition at line \fB54\fP of file \fBxpn_rebuild\&.c\fP\&.
+.PP
+References \fBbuf\fP, \fBclose()\fP, \fBdest_path\fP, \fBHEADER_SIZE\fP, \fBlseek64()\fP, \fBmkdir()\fP, \fBO_CREAT\fP, \fBO_RDONLY\fP, \fBO_TRUNC\fP, \fBO_WRONLY\fP, \fBopen64()\fP, \fBread()\fP, \fBsrc_path\fP, and \fBwrite()\fP\&.
+.PP
+Referenced by \fBlist()\fP\&.
+.SS "int list (char * dir_name, char * dest_prefix, int blocksize, int rank, int size)"
+
+.PP
+Definition at line \fB158\fP of file \fBxpn_rebuild\&.c\fP\&.
+.PP
+References \fBclosedir()\fP, \fBcopy()\fP, \fBlist()\fP, \fBopendir()\fP, \fBPATH_MAX\fP, and \fBreaddir()\fP\&.
+.PP
+Referenced by \fBlist()\fP, and \fBmain()\fP\&.
+.SS "int main (int argc, char * argv[])"
+
+.PP
+Definition at line \fB218\fP of file \fBxpn_rebuild\&.c\fP\&.
+.PP
+References \fBlist()\fP, \fBMPI_Finalize()\fP, and \fBMPI_Init()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "char command[4 *1024]"
+
+.PP
+Definition at line \fB48\fP of file \fBxpn_rebuild\&.c\fP\&.
+.SS "char dest_path[\fBPATH_MAX\fP+5]"
+
+.PP
+Definition at line \fB50\fP of file \fBxpn_rebuild\&.c\fP\&.
+.PP
+Referenced by \fBcopy()\fP, \fBdo_cp()\fP, and \fBdo_cp_recursive()\fP\&.
+.SS "char src_path[\fBPATH_MAX\fP+5]"
+
+.PP
+Definition at line \fB49\fP of file \fBxpn_rebuild\&.c\fP\&.
+.PP
+Referenced by \fBcopy()\fP, \fBdo_cp()\fP, and \fBdo_cp_recursive()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

@@ -1,0 +1,105 @@
+.TH "xpn_dir.h" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn_dir.h \- Header file to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'xpn\&.h'\fP
+.br
+\fC#include 'xpn_err\&.h'\fP
+.br
+\fC#include 'xpn_policy_init\&.h'\fP
+.br
+\fC#include 'xpn_policy_open\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBxpn_simple_mkdir\fP (const char *path, mode_t perm)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_simple_rmdir\fP (const char *path)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Header file to 'TODO'\&. 
+
+Header file to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBxpn_dir\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int xpn_simple_mkdir (const char * path, mode_t perm)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.br
+\fIperm\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB41\fP of file \fBxpn_dir\&.c\fP\&.
+.PP
+References \fBnfi_attr::at_mode\fP, \fBxpn_fh::n_nfih\fP, \fBnfi_ops::nfi_close\fP, \fBnfi_worker_do_mkdir()\fP, \fBxpn_fh::nfih\fP, \fBnfiworker_wait()\fP, \fBop_xpn_mkdir\fP, \fBnfi_server::ops\fP, \fBPATH_MAX\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_fhandle::server\fP, \fBXPN_DATA_SERVER\fP, \fBxpn_err()\fP, \fBXpnCreateMetadata()\fP, \fBXPNERR_NOMEMORY\fP, \fBXPNERR_PARAM\fP, \fBXPNERR_PART_NOEXIST\fP, \fBXPNERR_PATH_NOEXIST\fP, \fBXPNERR_REMOVE\fP, \fBXpnGetAbsolutePath()\fP, \fBXpnGetPartition()\fP, \fBXpnGetServers()\fP, \fBXpnGetURLServer()\fP, and \fBXpnUpdateMetadata()\fP\&.
+.PP
+Referenced by \fBxpn_mkdir()\fP\&.
+.SS "int xpn_simple_rmdir (const char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB230\fP of file \fBxpn_dir\&.c\fP\&.
+.PP
+References \fBnfi_worker_do_rmdir()\fP, \fBnfiworker_wait()\fP, \fBop_xpn_rmdir\fP, \fBPATH_MAX\fP, \fBnfi_server::wrk\fP, \fBXPN_DATA_SERVER\fP, \fBxpn_err()\fP, \fBXPNERR_PARAM\fP, \fBXPNERR_PART_NOEXIST\fP, \fBXPNERR_PATH_NOEXIST\fP, \fBXPNERR_REMOVE\fP, \fBXpnGetAbsolutePath()\fP, \fBXpnGetPartition()\fP, \fBXpnGetServers()\fP, and \fBXpnGetURLServer()\fP\&.
+.PP
+Referenced by \fBxpn_rmdir()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

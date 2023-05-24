@@ -1,0 +1,287 @@
+.TH "nfs3_clnt.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfs3_clnt.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'nfi/nfi_nfs3/nfs3\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_null_3\fP (void *\fBargp\fP, void *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_getattr_3\fP (\fBfhandle3\fP *\fBargp\fP, \fBgetattr3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_setattr_3\fP (\fBsetattr3args\fP *\fBargp\fP, \fBwccstat3\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_lookup_3\fP (\fBdiropargs3\fP *\fBargp\fP, \fBlookup3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_access_3\fP (\fBaccess3args\fP *\fBargp\fP, \fBaccess3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_readlink_3\fP (\fBfhandle3\fP *\fBargp\fP, \fBreadlink3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_read_3\fP (\fBread3args\fP *\fBargp\fP, \fBread3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_write_3\fP (\fBwrite3args\fP *\fBargp\fP, \fBwrite3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_create_3\fP (\fBcreate3args\fP *\fBargp\fP, \fBdiropres3\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_mkdir_3\fP (\fBmkdir3args\fP *\fBargp\fP, \fBdiropres3\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_symlink_3\fP (\fBsymlink3args\fP *\fBargp\fP, \fBdiropres3\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_mknod_3\fP (\fBmknod3args\fP *\fBargp\fP, \fBdiropres3\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_remove_3\fP (\fBdiropargs3\fP *\fBargp\fP, \fBwccstat3\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_rmdir_3\fP (\fBdiropargs3\fP *\fBargp\fP, \fBwccstat3\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_rename_3\fP (\fBrename3args\fP *\fBargp\fP, \fBrename3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_link_3\fP (\fBlink3args\fP *\fBargp\fP, \fBlink3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_readdir_3\fP (\fBreaddir3args\fP *\fBargp\fP, \fBreaddir3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_readdirplus_3\fP (\fBreaddirplus3args\fP *\fBargp\fP, \fBreaddirplus3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_fsstat_3\fP (\fBfhandle3\fP *\fBargp\fP, \fBfsstat3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_fsinfo_3\fP (\fBfhandle3\fP *\fBargp\fP, \fBfsinfo3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_pathconf_3\fP (\fBfhandle3\fP *\fBargp\fP, \fBpathconf3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBnfsproc3_commit_3\fP (\fBcommit3args\fP *\fBargp\fP, \fBcommit3res\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_null_3\fP (void *\fBargp\fP, void *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_mnt_3\fP (\fBnfspath3\fP *\fBargp\fP, \fBmountres3\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_dump_3\fP (void *\fBargp\fP, \fBmountlist3\fP *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_umnt_3\fP (\fBnfspath3\fP *\fBargp\fP, void *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_umntall_3\fP (void *\fBargp\fP, void *clnt_res, CLIENT *clnt)"
+.br
+.ti -1c
+.RI "enum clnt_stat \fBmountproc3_export_3\fP (void *\fBargp\fP, \fBexports3\fP *clnt_res, CLIENT *clnt)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static struct timeval \fBTIMEOUT\fP = { 25, 0 }"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "enum clnt_stat mountproc3_dump_3 (void * argp, \fBmountlist3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB230\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBMOUNTPROC3_DUMP\fP, \fBTIMEOUT\fP, and \fBxdr_mountlist3()\fP\&.
+.SS "enum clnt_stat mountproc3_export_3 (void * argp, \fBexports3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB257\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBMOUNTPROC3_EXPORT\fP, \fBTIMEOUT\fP, and \fBxdr_exports3()\fP\&.
+.SS "enum clnt_stat mountproc3_mnt_3 (\fBnfspath3\fP * argp, \fBmountres3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB221\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBMOUNTPROC3_MNT\fP, \fBTIMEOUT\fP, \fBxdr_mountres3()\fP, and \fBxdr_nfspath3()\fP\&.
+.SS "enum clnt_stat mountproc3_null_3 (void * argp, void * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB212\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBMOUNTPROC3_NULL\fP, and \fBTIMEOUT\fP\&.
+.SS "enum clnt_stat mountproc3_umnt_3 (\fBnfspath3\fP * argp, void * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB239\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBMOUNTPROC3_UMNT\fP, \fBTIMEOUT\fP, and \fBxdr_nfspath3()\fP\&.
+.SS "enum clnt_stat mountproc3_umntall_3 (void * argp, void * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB248\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBMOUNTPROC3_UMNTALL\fP, and \fBTIMEOUT\fP\&.
+.SS "enum clnt_stat nfsproc3_access_3 (\fBaccess3args\fP * argp, \fBaccess3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB50\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_ACCESS\fP, \fBTIMEOUT\fP, \fBxdr_access3args()\fP, and \fBxdr_access3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_commit_3 (\fBcommit3args\fP * argp, \fBcommit3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB203\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_COMMIT\fP, \fBTIMEOUT\fP, \fBxdr_commit3args()\fP, and \fBxdr_commit3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_create_3 (\fBcreate3args\fP * argp, \fBdiropres3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB86\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_CREATE\fP, \fBTIMEOUT\fP, \fBxdr_create3args()\fP, and \fBxdr_diropres3()\fP\&.
+.SS "enum clnt_stat nfsproc3_fsinfo_3 (\fBfhandle3\fP * argp, \fBfsinfo3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB185\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_FSINFO\fP, \fBTIMEOUT\fP, \fBxdr_fhandle3()\fP, and \fBxdr_fsinfo3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_fsstat_3 (\fBfhandle3\fP * argp, \fBfsstat3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB176\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_FSSTAT\fP, \fBTIMEOUT\fP, \fBxdr_fhandle3()\fP, and \fBxdr_fsstat3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_getattr_3 (\fBfhandle3\fP * argp, \fBgetattr3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB23\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_GETATTR\fP, \fBTIMEOUT\fP, \fBxdr_fhandle3()\fP, and \fBxdr_getattr3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_link_3 (\fBlink3args\fP * argp, \fBlink3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB149\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_LINK\fP, \fBTIMEOUT\fP, \fBxdr_link3args()\fP, and \fBxdr_link3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_lookup_3 (\fBdiropargs3\fP * argp, \fBlookup3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB41\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_LOOKUP\fP, \fBTIMEOUT\fP, \fBxdr_diropargs3()\fP, and \fBxdr_lookup3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_mkdir_3 (\fBmkdir3args\fP * argp, \fBdiropres3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB95\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_MKDIR\fP, \fBTIMEOUT\fP, \fBxdr_diropres3()\fP, and \fBxdr_mkdir3args()\fP\&.
+.SS "enum clnt_stat nfsproc3_mknod_3 (\fBmknod3args\fP * argp, \fBdiropres3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB113\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_MKNOD\fP, \fBTIMEOUT\fP, \fBxdr_diropres3()\fP, and \fBxdr_mknod3args()\fP\&.
+.SS "enum clnt_stat nfsproc3_null_3 (void * argp, void * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB14\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_NULL\fP, and \fBTIMEOUT\fP\&.
+.SS "enum clnt_stat nfsproc3_pathconf_3 (\fBfhandle3\fP * argp, \fBpathconf3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB194\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_PATHCONF\fP, \fBTIMEOUT\fP, \fBxdr_fhandle3()\fP, and \fBxdr_pathconf3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_read_3 (\fBread3args\fP * argp, \fBread3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB68\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_READ\fP, \fBTIMEOUT\fP, \fBxdr_read3args()\fP, and \fBxdr_read3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_readdir_3 (\fBreaddir3args\fP * argp, \fBreaddir3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB158\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_READDIR\fP, \fBTIMEOUT\fP, \fBxdr_readdir3args()\fP, and \fBxdr_readdir3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_readdirplus_3 (\fBreaddirplus3args\fP * argp, \fBreaddirplus3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB167\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_READDIRPLUS\fP, \fBTIMEOUT\fP, \fBxdr_readdirplus3args()\fP, and \fBxdr_readdirplus3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_readlink_3 (\fBfhandle3\fP * argp, \fBreadlink3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB59\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_READLINK\fP, \fBTIMEOUT\fP, \fBxdr_fhandle3()\fP, and \fBxdr_readlink3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_remove_3 (\fBdiropargs3\fP * argp, \fBwccstat3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB122\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_REMOVE\fP, \fBTIMEOUT\fP, \fBxdr_diropargs3()\fP, and \fBxdr_wccstat3()\fP\&.
+.SS "enum clnt_stat nfsproc3_rename_3 (\fBrename3args\fP * argp, \fBrename3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB140\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_RENAME\fP, \fBTIMEOUT\fP, \fBxdr_rename3args()\fP, and \fBxdr_rename3res()\fP\&.
+.SS "enum clnt_stat nfsproc3_rmdir_3 (\fBdiropargs3\fP * argp, \fBwccstat3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB131\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_RMDIR\fP, \fBTIMEOUT\fP, \fBxdr_diropargs3()\fP, and \fBxdr_wccstat3()\fP\&.
+.SS "enum clnt_stat nfsproc3_setattr_3 (\fBsetattr3args\fP * argp, \fBwccstat3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB32\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_SETATTR\fP, \fBTIMEOUT\fP, \fBxdr_setattr3args()\fP, and \fBxdr_wccstat3()\fP\&.
+.SS "enum clnt_stat nfsproc3_symlink_3 (\fBsymlink3args\fP * argp, \fBdiropres3\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB104\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_SYMLINK\fP, \fBTIMEOUT\fP, \fBxdr_diropres3()\fP, and \fBxdr_symlink3args()\fP\&.
+.SS "enum clnt_stat nfsproc3_write_3 (\fBwrite3args\fP * argp, \fBwrite3res\fP * clnt_res, CLIENT * clnt)"
+
+.PP
+Definition at line \fB77\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+References \fBargp\fP, \fBNFSPROC3_WRITE\fP, \fBTIMEOUT\fP, \fBxdr_write3args()\fP, and \fBxdr_write3res()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "struct timeval TIMEOUT = { 25, 0 }\fC [static]\fP"
+
+.PP
+Definition at line \fB11\fP of file \fBnfs3_clnt\&.c\fP\&.
+.PP
+Referenced by \fBmountproc3_dump_3()\fP, \fBmountproc3_export_3()\fP, \fBmountproc3_mnt_3()\fP, \fBmountproc3_null_3()\fP, \fBmountproc3_umnt_3()\fP, \fBmountproc3_umntall_3()\fP, \fBnfsproc3_access_3()\fP, \fBnfsproc3_commit_3()\fP, \fBnfsproc3_create_3()\fP, \fBnfsproc3_fsinfo_3()\fP, \fBnfsproc3_fsstat_3()\fP, \fBnfsproc3_getattr_3()\fP, \fBnfsproc3_link_3()\fP, \fBnfsproc3_lookup_3()\fP, \fBnfsproc3_mkdir_3()\fP, \fBnfsproc3_mknod_3()\fP, \fBnfsproc3_null_3()\fP, \fBnfsproc3_pathconf_3()\fP, \fBnfsproc3_read_3()\fP, \fBnfsproc3_readdir_3()\fP, \fBnfsproc3_readdirplus_3()\fP, \fBnfsproc3_readlink_3()\fP, \fBnfsproc3_remove_3()\fP, \fBnfsproc3_rename_3()\fP, \fBnfsproc3_rmdir_3()\fP, \fBnfsproc3_setattr_3()\fP, \fBnfsproc3_symlink_3()\fP, and \fBnfsproc3_write_3()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

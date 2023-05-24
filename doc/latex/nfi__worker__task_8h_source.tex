@@ -1,0 +1,175 @@
+\doxysection{nfi\+\_\+worker\+\_\+task.\+h}
+\hypertarget{nfi__worker__task_8h_source}{}\label{nfi__worker__task_8h_source}\index{nfi\_worker\_task.h@{nfi\_worker\_task.h}}
+\mbox{\hyperlink{nfi__worker__task_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ nfi\_worker\_task.h}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_NFI\_WORKER\_TASK\_H\_}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_NFI\_WORKER\_TASK\_H\_}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00035}00035\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00036}00036\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00037}00037\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00038}00038\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{all__system_8h}{all\_system.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00039}00039\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{debug__msg_8h}{debug\_msg.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00040}00040\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{workers_8h}{workers.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00041}00041\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi_8h}{nfi.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00043}00043\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00044}00044\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00045}00045\ \{}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00046}00046\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00047}00047\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00048}00048\ \textcolor{comment}{\ \ /**\ @struct\ nfi\_worker\_io}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00049}00049\ \textcolor{comment}{\ \ \ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00050}00050\ \textcolor{comment}{\ \ \ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00051}00051\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_io::offset}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00052}00052\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00053}00053\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_io::size}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00054}00054\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00055}00055\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_io::buffer}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00056}00056\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00057}00057\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00058}\mbox{\hyperlink{structnfi__worker__io}{00058}}\ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__worker__io}{nfi\_worker\_io}}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00059}00059\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00060}\mbox{\hyperlink{structnfi__worker__io_a9e468906b52e998d2571005c880711b8}{00060}}\ \ \ \ \ off\_t\ \mbox{\hyperlink{structnfi__worker__io_a9e468906b52e998d2571005c880711b8}{offset}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00061}\mbox{\hyperlink{structnfi__worker__io_ac7c2da1973754cd7b119d369114e33d3}{00061}}\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structnfi__worker__io_ac7c2da1973754cd7b119d369114e33d3}{size}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00062}\mbox{\hyperlink{structnfi__worker__io_adac17bff3eddcdffb9a2150c61e21b02}{00062}}\ \ \ \ \ \textcolor{keywordtype}{void}\ *\mbox{\hyperlink{structnfi__worker__io_adac17bff3eddcdffb9a2150c61e21b02}{buffer}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00063}00063\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00064}00064\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00065}00065\ \textcolor{comment}{\ \ /**\ @struct\ nfi\_worker\_args}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00066}00066\ \textcolor{comment}{\ \ \ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00067}00067\ \textcolor{comment}{\ \ \ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00068}00068\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::operation}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00069}00069\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00070}00070\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::result}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00071}00071\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00072}00072\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::url}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00073}00073\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00074}00074\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::master\_node}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00075}00075\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00076}00076\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::is\_master\_node}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00077}00077\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00078}00078\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::virtual\_path}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00079}00079\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00080}00080\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::storage\_path}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00081}00081\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00082}00082\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::newurl}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00083}00083\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00084}00084\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::fh}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00085}00085\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00086}00086\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::attr}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00087}00087\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00088}00088\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::opt}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00089}00089\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00090}00090\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::inf}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00091}00091\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00092}00092\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::n\_io}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00093}00093\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00094}00094\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::io}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00095}00095\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00096}00096\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::entry}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00097}00097\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00098}00098\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker\_args::type}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00099}00099\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00100}00100\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00101}\mbox{\hyperlink{structnfi__worker__args}{00101}}\ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__worker__args}{nfi\_worker\_args}}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00102}00102\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00103}\mbox{\hyperlink{structnfi__worker__args_a4d6ff3f4ecc002ed0f6cf8075f8f9542}{00103}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structnfi__worker__args_a4d6ff3f4ecc002ed0f6cf8075f8f9542}{operation}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00104}\mbox{\hyperlink{structnfi__worker__args_a26673ee71bba7c31dd848331bf76b97e}{00104}}\ \ \ \ \ ssize\_t\ \mbox{\hyperlink{structnfi__worker__args_a26673ee71bba7c31dd848331bf76b97e}{result}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00106}\mbox{\hyperlink{structnfi__worker__args_a6421d71724afe7beb20ede4175361fef}{00106}}\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structnfi__worker__args_a6421d71724afe7beb20ede4175361fef}{url}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00107}\mbox{\hyperlink{structnfi__worker__args_a8ef2320cf27691b5135a16e85ed4c713}{00107}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structnfi__worker__args_a8ef2320cf27691b5135a16e85ed4c713}{master\_node}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00108}\mbox{\hyperlink{structnfi__worker__args_a6e9e237fcbdf058078eba17179573686}{00108}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structnfi__worker__args_a6e9e237fcbdf058078eba17179573686}{is\_master\_node}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00110}\mbox{\hyperlink{structnfi__worker__args_ab023c751559d51e32684b10f49b3369a}{00110}}\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structnfi__worker__args_ab023c751559d51e32684b10f49b3369a}{virtual\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00111}\mbox{\hyperlink{structnfi__worker__args_a0735fbe43322379b2eab47a4035d9932}{00111}}\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structnfi__worker__args_a0735fbe43322379b2eab47a4035d9932}{storage\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00112}\mbox{\hyperlink{structnfi__worker__args_a8271261b33b15be7e0ff0fa7ed928c56}{00112}}\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structnfi__worker__args_a8271261b33b15be7e0ff0fa7ed928c56}{newurl}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00113}\mbox{\hyperlink{structnfi__worker__args_afb649373bdf86710ed389f9167e195ed}{00113}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__worker__args_afb649373bdf86710ed389f9167e195ed}{fh}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00114}\mbox{\hyperlink{structnfi__worker__args_ace29cd1857785fca8fbcfd80abe24768}{00114}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *\mbox{\hyperlink{structnfi__worker__args_ace29cd1857785fca8fbcfd80abe24768}{attr}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00115}\mbox{\hyperlink{structnfi__worker__args_a445270b51630b381acc7de7c64b71027}{00115}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structnfi__worker__args_a445270b51630b381acc7de7c64b71027}{opt}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00117}\mbox{\hyperlink{structnfi__worker__args_a65d028560d9369323ebd2139d42f1acc}{00117}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__info}{nfi\_info}}\ *\mbox{\hyperlink{structnfi__worker__args_a65d028560d9369323ebd2139d42f1acc}{inf}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00119}\mbox{\hyperlink{structnfi__worker__args_a75f5de75a6a34c4b8d4d73963ed39cc6}{00119}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structnfi__worker__args_a75f5de75a6a34c4b8d4d73963ed39cc6}{n\_io}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00120}\mbox{\hyperlink{structnfi__worker__args_adcfa75c77563323193fefe96f5eb6052}{00120}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__worker__io}{nfi\_worker\_io}}\ *\mbox{\hyperlink{structnfi__worker__args_adcfa75c77563323193fefe96f5eb6052}{io}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00121}\mbox{\hyperlink{structnfi__worker__args_affa283040a516478bccec0073cc3dd6b}{00121}}\ \ \ \ \ \textcolor{keyword}{struct\ }dirent\ *\mbox{\hyperlink{structnfi__worker__args_affa283040a516478bccec0073cc3dd6b}{entry}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00122}\mbox{\hyperlink{structnfi__worker__args_a90da52a19fe80ecc33ec4c82f9325b9c}{00122}}\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{structnfi__worker__args_a90da52a19fe80ecc33ec4c82f9325b9c}{type}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00123}00123\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00124}00124\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00125}00125\ \textcolor{comment}{\ \ /**\ @struct\ nfi\_worker}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00126}00126\ \textcolor{comment}{\ \ \ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00127}00127\ \textcolor{comment}{\ \ \ *}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00128}00128\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker::thread}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00129}00129\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00130}00130\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker::pth}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00131}00131\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00132}00132\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker::mt}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00133}00133\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00134}00134\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker::cnd}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00135}00135\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00136}00136\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker::ready}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00137}00137\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00138}00138\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker::wb}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00139}00139\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00140}00140\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker::warg}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00141}00141\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00142}00142\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker::server}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00143}00143\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00144}00144\ \textcolor{comment}{\ \ \ *\ \ @var\ nfi\_worker::arg}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00145}00145\ \textcolor{comment}{\ \ \ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00146}00146\ \textcolor{comment}{\ \ \ */}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00147}\mbox{\hyperlink{structnfi__worker}{00147}}\ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__worker}{nfi\_worker}}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00148}00148\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00149}\mbox{\hyperlink{structnfi__worker_aab8115085486d59f2960d3fec4b2fbad}{00149}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structnfi__worker_aab8115085486d59f2960d3fec4b2fbad}{thread}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00151}00151\ \ \ \ \ \textcolor{comment}{//\ OLD}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00152}\mbox{\hyperlink{structnfi__worker_a1513e0c1c5ca59f5a16d9ebca6ac17ba}{00152}}\ \ \ \ \ pthread\_t\ \mbox{\hyperlink{structnfi__worker_a1513e0c1c5ca59f5a16d9ebca6ac17ba}{pth}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00153}\mbox{\hyperlink{structnfi__worker_a754227cd745e9d64062a375e0b63dda1}{00153}}\ \ \ \ \ pthread\_mutex\_t\ \mbox{\hyperlink{structnfi__worker_a754227cd745e9d64062a375e0b63dda1}{mt}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00154}\mbox{\hyperlink{structnfi__worker_a97ad9cf803e26ea174f4632b5e69a455}{00154}}\ \ \ \ \ pthread\_cond\_t\ \mbox{\hyperlink{structnfi__worker_a97ad9cf803e26ea174f4632b5e69a455}{cnd}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00155}\mbox{\hyperlink{structnfi__worker_add681f03106fb45a21e48a59edd1d555}{00155}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structnfi__worker_add681f03106fb45a21e48a59edd1d555}{ready}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00157}00157\ \ \ \ \ \textcolor{comment}{//\ NEW}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00158}\mbox{\hyperlink{structnfi__worker_a2335922bd64a6cf974e899246d5770e8}{00158}}\ \ \ \ \ \mbox{\hyperlink{structworker__t}{worker\_t}}\ \mbox{\hyperlink{structnfi__worker_a2335922bd64a6cf974e899246d5770e8}{wb}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00159}\mbox{\hyperlink{structnfi__worker_a9159fd85663c50157d4af14b44aa7ce3}{00159}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__th}{st\_th}}\ \mbox{\hyperlink{structnfi__worker_a9159fd85663c50157d4af14b44aa7ce3}{warg}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00161}\mbox{\hyperlink{structnfi__worker_ac1dbe18a939ea5a6ffc11d39ebebcc9a}{00161}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *\mbox{\hyperlink{structnfi__worker_ac1dbe18a939ea5a6ffc11d39ebebcc9a}{server}};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00162}\mbox{\hyperlink{structnfi__worker_ac6996c534b514fde57904625015dc449}{00162}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__worker__args}{nfi\_worker\_args}}\ \mbox{\hyperlink{structnfi__worker_ac6996c534b514fde57904625015dc449}{arg}};\ \textcolor{comment}{//\ TODO:\ Convert\ this\ into\ a\ list\ of\ 'struct\ nfi\_worker\_args'\ to\ make\ Expand\ reentrant}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00163}00163\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00165}00165\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00166}00166\ \}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00167}00167\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{nfi__worker__task_8h_source_l00169}00169\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

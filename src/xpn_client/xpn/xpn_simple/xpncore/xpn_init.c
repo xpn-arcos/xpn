@@ -18,12 +18,38 @@
  *
  */
 
+/**
+ * @file xpn_init.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn/xpn_simple/xpn_init.h"
 
 struct xpn_partition xpn_parttable[XPN_MAX_PART];
 pthread_mutex_t xpn_init_mutex = PTHREAD_MUTEX_INITIALIZER;
 int xpn_debug = 0;
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param part 'TODO'.
+ * @return 'TODO'.
+ */
 int xpn_destroy_servers(struct xpn_partition *part)
 {
   int i;

@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file tcp_server_comm.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
@@ -25,11 +36,23 @@
 
 #include "tcp_server/tcp_server_comm.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 // MOSQUITTO FILE
 #ifdef HAVE_MOSQUITTO_H
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param mqtt  'TODO'.
+ * @param obj  'TODO'.
+ * @param mosquitto_message  'TODO'.
+ * @return 'TODO'.
+ */
 void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_message *msg)
 {
   if (NULL == obj)

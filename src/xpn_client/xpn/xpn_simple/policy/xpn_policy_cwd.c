@@ -18,9 +18,27 @@
  *
  */
 
+/**
+ * @file xpn_policy_cwd.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn/xpn_simple/xpn_policy_cwd.h"
 
 extern struct xpn_cwd xpn_cwddir;
+
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 int XpnGetAbsolutePath(const char *path, char *path_part)
 {

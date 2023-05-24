@@ -1,0 +1,286 @@
+\doxysection{xpn\+\_\+open.\+h}
+\hypertarget{xpn__open_8h_source}{}\label{xpn__open_8h_source}\index{xpn\_open.h@{xpn\_open.h}}
+\mbox{\hyperlink{xpn__open_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2000-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ xpn\_open.h}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_XPN\_OPEN\_H}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_XPN\_OPEN\_H}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00035}00035\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00036}00036\ \textcolor{comment}{\ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00037}00037\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00038}00038\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h}{xpn.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00039}00039\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{xpn__file_8h}{xpn\_file.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00040}00040\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{xpn__policy__open_8h}{xpn\_policy\_open.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00041}00041\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{xpn__policy__cwd_8h}{xpn\_policy\_cwd.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00042}00042\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{xpn__init_8h}{xpn\_init.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00043}00043\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{xpn__rw_8h}{xpn\_rw.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00044}00044\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{workers_8h}{base/workers.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00046}00046\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00047}00047\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00048}00048\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00049}00049\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00051}00051\ \textcolor{comment}{\ \ \ /************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00052}00052\ \textcolor{comment}{\ \ \ \ *\ \ ...\ Functions}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00053}00053\ \textcolor{comment}{\ \ \ \ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00055}00055\ \ \ \ \textcolor{comment}{//\ int\ \ \ xpn\_open(const\ char\ *path,\ int\ flags,\ ...);}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00056}00056\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00057}00057\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00058}00058\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00059}00059\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00060}00060\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00061}00061\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00062}00062\ \textcolor{comment}{\ \ \ \ *\ @param\ path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00063}00063\ \textcolor{comment}{\ \ \ \ *\ @param\ mode\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00064}00064\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00065}00065\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00066}00066\ \ \ \ FILE\ *\mbox{\hyperlink{xpn__open_8h_ab6ffc09a2cf3083a4286b799233108f7}{xpn\_fopencookie}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *mode);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00067}00067\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00068}00068\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00069}00069\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00070}00070\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00071}00071\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00072}00072\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00073}00073\ \textcolor{comment}{\ \ \ \ *\ @param\ path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00074}00074\ \textcolor{comment}{\ \ \ \ *\ @param\ flags\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00075}00075\ \textcolor{comment}{\ \ \ \ *\ @param\ mode\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00076}00076\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00077}00077\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00078}00078\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_adfd91cffd600f91e46610a4ede53bbda}{xpn\_simple\_open}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keywordtype}{int}\ flags,\ mode\_t\ mode);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00079}00079\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00080}00080\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00081}00081\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00082}00082\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00083}00083\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00084}00084\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00085}00085\ \textcolor{comment}{\ \ \ \ *\ @param\ path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00086}00086\ \textcolor{comment}{\ \ \ \ *\ @param\ perm\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00087}00087\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00088}00088\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00089}00089\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_afffd875832e9020f3e93abc2617b28f8}{xpn\_simple\_creat}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ mode\_t\ perm);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00090}00090\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00091}00091\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00092}00092\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00093}00093\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00094}00094\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00095}00095\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00096}00096\ \textcolor{comment}{\ \ \ \ *\ @param\ filename\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00097}00097\ \textcolor{comment}{\ \ \ \ *\ @param\ mode\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00098}00098\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00099}00099\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00100}00100\ \ \ \ FILE\ *\mbox{\hyperlink{xpn__open_8h_a125998f421af530a5500ee1d92c5b34f}{xpn\_simple\_fopen}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *filename,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *mode);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00101}00101\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00102}00102\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00103}00103\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00104}00104\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00105}00105\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00106}00106\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00107}00107\ \textcolor{comment}{\ \ \ \ *\ @param\ fd\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00108}00108\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00109}00109\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00110}00110\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_ac1a7a0a9951862a13d65548ffda77fcf}{xpn\_simple\_close}}(\textcolor{keywordtype}{int}\ fd);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00111}00111\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00112}00112\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00113}00113\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00114}00114\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00115}00115\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00116}00116\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00117}00117\ \textcolor{comment}{\ \ \ \ *\ @param\ path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00118}00118\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00119}00119\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00120}00120\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_ab7fb8cf5a86c5e036fbdc4daa7adc98c}{xpn\_simple\_unlink}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00121}00121\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00122}00122\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00123}00123\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00124}00124\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00125}00125\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00126}00126\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00127}00127\ \textcolor{comment}{\ \ \ \ *\ @param\ path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00128}00128\ \textcolor{comment}{\ \ \ \ *\ @param\ newpath\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00129}00129\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00130}00130\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00131}00131\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_ab23447d96067e9225d8296e54bd597ac}{xpn\_simple\_rename}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *newpath);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00132}00132\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00133}00133\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00134}00134\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00135}00135\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00136}00136\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00137}00137\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00138}00138\ \textcolor{comment}{\ \ \ \ *\ @param\ fd\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00139}00139\ \textcolor{comment}{\ \ \ \ *\ @param\ sb\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00140}00140\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00141}00141\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00142}00142\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_abfae784a99f5260f637a0b946fd8c295}{xpn\_simple\_fstat}}(\textcolor{keywordtype}{int}\ fd,\ \textcolor{keyword}{struct}\ stat\ *sb);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00143}00143\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00144}00144\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00145}00145\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00146}00146\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00147}00147\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00148}00148\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00149}00149\ \textcolor{comment}{\ \ \ \ *\ @param\ fp\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00150}00150\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00151}00151\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00152}00152\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_a17792d7ce2618d81ed2ebe0041f1af42}{xpn\_simple\_fclose}}(FILE\ *fp);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00153}00153\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00154}00154\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00155}00155\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00156}00156\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00157}00157\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00158}00158\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00159}00159\ \textcolor{comment}{\ \ \ \ *\ @param\ path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00160}00160\ \textcolor{comment}{\ \ \ \ *\ @param\ sb\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00161}00161\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00162}00162\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00163}00163\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_adbd84eabc2c940fb44b3e0db22067e94}{xpn\_simple\_stat}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ \textcolor{keyword}{struct}\ stat\ *sb);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00164}00164\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00165}00165\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00166}00166\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00167}00167\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00168}00168\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00169}00169\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00170}00170\ \textcolor{comment}{\ \ \ \ *\ @param\ path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00171}00171\ \textcolor{comment}{\ \ \ \ *\ @param\ owner\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00172}00172\ \textcolor{comment}{\ \ \ \ *\ @param\ group\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00173}00173\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00174}00174\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00175}\mbox{\hyperlink{xpn__open_8h_a58c77affbd58f0fa63b00be50f232d5f}{00175}}\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_a58c77affbd58f0fa63b00be50f232d5f}{xpn\_simple\_chown}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ uid\_t\ owner,\ gid\_t\ group);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00176}00176\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00177}00177\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00178}00178\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00179}00179\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00180}00180\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00181}00181\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00182}00182\ \textcolor{comment}{\ \ \ \ *\ @param\ fd\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00183}00183\ \textcolor{comment}{\ \ \ \ *\ @param\ owner\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00184}00184\ \textcolor{comment}{\ \ \ \ *\ @param\ group\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00185}00185\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00186}00186\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00187}\mbox{\hyperlink{xpn__open_8h_a2f1416b4b78ad9bb7b98d4fcfe3cdd60}{00187}}\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_a2f1416b4b78ad9bb7b98d4fcfe3cdd60}{xpn\_simple\_fchown}}(\textcolor{keywordtype}{int}\ fd,\ uid\_t\ owner,\ gid\_t\ group);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00188}00188\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00189}00189\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00190}00190\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00191}00191\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00192}00192\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00193}00193\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00194}00194\ \textcolor{comment}{\ \ \ \ *\ @param\ path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00195}00195\ \textcolor{comment}{\ \ \ \ *\ @param\ mode\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00196}00196\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00197}00197\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00198}\mbox{\hyperlink{xpn__open_8h_ad2b5726641f6d4ddedaf2a388bccc2ba}{00198}}\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_ad2b5726641f6d4ddedaf2a388bccc2ba}{xpn\_simple\_chmod}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ mode\_t\ mode);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00199}00199\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00200}00200\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00201}00201\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00202}00202\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00203}00203\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00204}00204\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00205}00205\ \textcolor{comment}{\ \ \ \ *\ @param\ fd\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00206}00206\ \textcolor{comment}{\ \ \ \ *\ @param\ mode\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00207}00207\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00208}00208\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00209}\mbox{\hyperlink{xpn__open_8h_aac1e53dcc9740b188ca7e2ed75d60812}{00209}}\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_aac1e53dcc9740b188ca7e2ed75d60812}{xpn\_simple\_fchmod}}(\textcolor{keywordtype}{int}\ fd,\ mode\_t\ mode);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00210}00210\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00211}00211\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00212}00212\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00213}00213\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00214}00214\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00215}00215\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00216}00216\ \textcolor{comment}{\ \ \ \ *\ @param\ path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00217}00217\ \textcolor{comment}{\ \ \ \ *\ @param\ length\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00218}00218\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00219}00219\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00220}\mbox{\hyperlink{xpn__open_8h_a3feffdf2c37ce1799bbc56dd1fe24956}{00220}}\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_a3feffdf2c37ce1799bbc56dd1fe24956}{xpn\_simple\_truncate}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *path,\ off\_t\ length);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00221}00221\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00222}00222\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00223}00223\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00224}00224\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00225}00225\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00226}00226\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00227}00227\ \textcolor{comment}{\ \ \ \ *\ @param\ fd\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00228}00228\ \textcolor{comment}{\ \ \ \ *\ @param\ length\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00229}00229\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00230}00230\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00231}\mbox{\hyperlink{xpn__open_8h_a8492c5a260a64fb4a332cc7993f47519}{00231}}\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_a8492c5a260a64fb4a332cc7993f47519}{xpn\_simple\_ftruncate}}(\textcolor{keywordtype}{int}\ fd,\ off\_t\ length);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00232}00232\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00233}00233\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00234}00234\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00235}00235\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00236}00236\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00237}00237\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00238}00238\ \textcolor{comment}{\ \ \ \ *\ @param\ fd\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00239}00239\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00240}00240\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00241}00241\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_a36118f5006581ca5295eccad93025b20}{xpn\_simple\_dup}}(\textcolor{keywordtype}{int}\ fd);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00242}00242\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00243}00243\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00244}00244\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00245}00245\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00246}00246\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00247}00247\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00248}00248\ \textcolor{comment}{\ \ \ \ *\ @param\ fd\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00249}00249\ \textcolor{comment}{\ \ \ \ *\ @param\ fd2\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00250}00250\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00251}00251\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00252}00252\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_a57154f1ff6fa7cfdb9fdfcdd16808e6c}{xpn\_simple\_dup2}}(\textcolor{keywordtype}{int}\ fd,\ \textcolor{keywordtype}{int}\ fd2);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00253}00253\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00254}00254\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00255}00255\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00256}00256\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00257}00257\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00258}00258\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00259}00259\ \textcolor{comment}{\ \ \ \ *\ @param\ virtual\_path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00260}00260\ \textcolor{comment}{\ \ \ \ *\ @param\ storage\_path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00261}00261\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00262}00262\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00263}00263\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_a8fabe030907ea177fcc5020733dbfc3b}{xpn\_simple\_flush}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *virtual\_path,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *storage\_path);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00264}00264\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00265}00265\ \textcolor{comment}{\ \ \ /**}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00266}00266\ \textcolor{comment}{\ \ \ \ *\ @brief\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00267}00267\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00268}00268\ \textcolor{comment}{\ \ \ \ *\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00269}00269\ \textcolor{comment}{\ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00270}00270\ \textcolor{comment}{\ \ \ \ *\ @param\ virtual\_path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00271}00271\ \textcolor{comment}{\ \ \ \ *\ @param\ storage\_path\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00272}00272\ \textcolor{comment}{\ \ \ \ *\ @return\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00273}00273\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00274}00274\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{xpn__open_8h_a3dd995b5116f785969f434563fb2ef19}{xpn\_simple\_preload}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *virtual\_path,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *storage\_path);}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00275}00275\ }
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00276}00276\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00277}00277\ \}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00278}00278\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{xpn__open_8h_source_l00280}00280\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

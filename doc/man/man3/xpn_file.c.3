@@ -1,0 +1,112 @@
+.TH "xpn_file.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+xpn_file.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'xpn/xpn_simple/xpn_file\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBxpn_init_file_table\fP ()"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBxpn_destroy_file_table\fP ()"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "struct \fBxpn_filedesc\fP * \fBxpn_file_table\fP [\fBXPN_MAX_FILE\fP]"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBxpn_file\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int xpn_destroy_file_table (void)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB55\fP of file \fBxpn_file\&.c\fP\&.
+.PP
+References \fBxpn_filedesc::data_vfh\fP, \fBxpn_filedesc::mdata\fP, \fBxpn_fh::n_nfih\fP, \fBxpn_fh::nfih\fP, \fBxpn_metadata::policy\fP, \fBnfi_fhandle::priv_fh\fP, \fBxpn_file_table\fP, and \fBXPN_MAX_FILE\fP\&.
+.PP
+Referenced by \fBxpn_simple_destroy()\fP\&.
+.SS "int xpn_init_file_table (void)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+None\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB43\fP of file \fBxpn_file\&.c\fP\&.
+.PP
+References \fBxpn_file_table\fP, and \fBXPN_MAX_FILE\fP\&.
+.PP
+Referenced by \fBxpn_init_partition()\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "struct \fBxpn_filedesc\fP* xpn_file_table[\fBXPN_MAX_FILE\fP]"
+
+.PP
+Definition at line \fB37\fP of file \fBxpn_file\&.c\fP\&.
+.PP
+Referenced by \fBxpn_destroy_file_table()\fP, \fBxpn_init_file_table()\fP, \fBxpn_internal_open()\fP, \fBxpn_pread()\fP, \fBxpn_pwrite()\fP, \fBxpn_simple_close()\fP, \fBxpn_simple_closedir()\fP, \fBxpn_simple_dup()\fP, \fBxpn_simple_dup2()\fP, \fBxpn_simple_ftell()\fP, \fBxpn_simple_lseek()\fP, \fBxpn_simple_read()\fP, \fBxpn_simple_readdir()\fP, \fBxpn_simple_write()\fP, \fBxpn_sread()\fP, \fBxpn_swrite()\fP, \fBXpnGetAtribFd()\fP, \fBXpnGetBlock()\fP, \fBXpnGetEntry()\fP, \fBXpnGetServers()\fP, \fBXpnReadBlocks()\fP, \fBXpnReadBlocksFinish()\fP, \fBXpnReadGetTotalBytes()\fP, \fBXpnRWBlocksPolicyBlockByBlock()\fP, \fBXpnSearchFile()\fP, \fBXpnSearchSlotFile()\fP, \fBXpnShowFileTable()\fP, \fBXpnWriteBlocks()\fP, \fBXpnWriteBlocksFinish()\fP, \fBXpnWriteBlocksPolicyRAID1_BlockByBlock()\fP, and \fBXpnWriteGetTotalBytes()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

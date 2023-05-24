@@ -1,0 +1,132 @@
+\doxysection{nfi\+\_\+tcp\+\_\+server.\+h}
+\hypertarget{nfi__tcp__server_8h_source}{}\label{nfi__tcp__server_8h_source}\index{nfi\_tcp\_server.h@{nfi\_tcp\_server.h}}
+\mbox{\hyperlink{nfi__tcp__server_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00002}00002\ \textcolor{comment}{\ *\ \ Copyright\ 2020-\/2023\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00004}00004\ \textcolor{comment}{\ *\ \ This\ file\ is\ part\ of\ Expand.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00006}00006\ \textcolor{comment}{\ *\ \ Expand\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00007}00007\ \textcolor{comment}{\ *\ \ it\ under\ the\ terms\ of\ the\ GNU\ Lesser\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00008}00008\ \textcolor{comment}{\ *\ \ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00009}00009\ \textcolor{comment}{\ *\ \ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00010}00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00011}00011\ \textcolor{comment}{\ *\ \ Expand\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00012}00012\ \textcolor{comment}{\ *\ \ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00013}00013\ \textcolor{comment}{\ *\ \ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00014}00014\ \textcolor{comment}{\ *\ \ GNU\ Lesser\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00016}00016\ \textcolor{comment}{\ *\ \ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ Lesser\ General\ Public\ License}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00017}00017\ \textcolor{comment}{\ *\ \ along\ with\ Expand.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00018}00018\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00019}00019\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00020}00020\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00021}00021\ \textcolor{comment}{/**}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00022}00022\ \textcolor{comment}{\ *\ @file\ nfi\_tcp\_server.h}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00023}00023\ \textcolor{comment}{\ *\ @brief\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00024}00024\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00025}00025\ \textcolor{comment}{\ *\ Header\ file\ to\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00026}00026\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00027}00027\ \textcolor{comment}{\ *\ @authors\ Felix\ Garcia\ Carballeira,\ Diego\ Camarmas\ Alonso,\ Alejandro\ Calderon\ Mateos,\ Luis\ Miguel\ Sanchez\ Garcia,\ Borja\ Bergua\ Guerra}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00028}00028\ \textcolor{comment}{\ *\ @date\ \ Jul\ 22,\ 2021}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00029}00029\ \textcolor{comment}{\ *\ @bug\ No\ known\ bugs.}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00030}00030\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00032}00032\ \textcolor{preprocessor}{\#ifndef\ \_NFI\_TCP\_SERVER\_H}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00033}00033\ \textcolor{preprocessor}{\#define\ \_NFI\_TCP\_SERVER\_H}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00035}00035\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00036}00036\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00037}00037\ \{}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00038}00038\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00040}00040\ \textcolor{comment}{\ \ /************************************************}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00041}00041\ \textcolor{comment}{\ \ \ *\ \ ...\ Includes}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00042}00042\ \textcolor{comment}{\ \ \ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00043}00043\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{all__system_8h}{all\_system.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00044}00044\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{utils_8h}{base/utils.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00045}00045\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{path__misc_8h}{base/path\_misc.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00046}00046\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{urlstr_8h}{base/urlstr.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00047}00047\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{workers_8h}{base/workers.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00048}00048\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h}{tcp\_server\_ops.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00049}00049\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__comm_8h}{tcp\_server\_comm.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00050}00050\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__params_8h}{tcp\_server\_params.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00051}00051\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi__tcp__server__err_8h}{nfi\_tcp\_server\_err.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00052}00052\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi_8h}{nfi.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00053}00053\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{nfi__worker_8h}{nfi\_worker.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00055}00055\ \textcolor{preprocessor}{\#ifdef\ HAVE\_MOSQUITTO\_H}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00056}00056\ \textcolor{preprocessor}{\#include\ <mosquitto.h>}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00057}00057\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00059}00059\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00060}00060\ \textcolor{comment}{\ *\ \ ...\ Constants}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00061}00061\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00063}00063\ \textcolor{preprocessor}{\#ifndef\ MOSQ\_OPT\_TCP\_NODELAY}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00064}\mbox{\hyperlink{nfi__tcp__server_8h_abb643792649b58e8ba0c7932b01e9289}{00064}}\ \textcolor{preprocessor}{\#define\ MOSQ\_OPT\_TCP\_NODELAY\ 0}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00065}00065\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00067}00067\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00068}00068\ \textcolor{comment}{\ *\ \ ...\ Data\ structures}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00069}00069\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00071}\mbox{\hyperlink{structnfi__tcp__server__server}{00071}}\ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__tcp__server__server}{nfi\_tcp\_server\_server}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00072}00072\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00073}00073\ \ \ \ \ \textcolor{comment}{//\ old\ stuff\ of\ XPN}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00074}\mbox{\hyperlink{structnfi__tcp__server__server_a1962d7c443fa5f450b7ef65944fb2ac7}{00074}}\ \ \ \ \ \textcolor{keywordtype}{char}\ \textcolor{keywordtype}{id}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00075}\mbox{\hyperlink{structnfi__tcp__server__server_a04e60457ffd4ff7c2da8c64ac201fd93}{00075}}\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structnfi__tcp__server__server_a04e60457ffd4ff7c2da8c64ac201fd93}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00076}00076\ \ \ \ \ \textcolor{comment}{//\ struct\ nfi\_tcp\_server\_connector\ sd;}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00077}\mbox{\hyperlink{structnfi__tcp__server__server_a60357ef490c34a8ff4b3d7c51a441c55}{00077}}\ \ \ \ \ \textcolor{keyword}{struct\ }mosquitto\ *\mbox{\hyperlink{structnfi__tcp__server__server_a60357ef490c34a8ff4b3d7c51a441c55}{mqtt}};}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00079}00079\ \ \ \ \ \textcolor{comment}{//\ client\ stub}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00080}\mbox{\hyperlink{structnfi__tcp__server__server_ac258e71d545ebef0f4757ac8b8050731}{00080}}\ \ \ \ \ \mbox{\hyperlink{structtcpClient__param__st}{tcpClient\_param\_st}}\ \mbox{\hyperlink{structnfi__tcp__server__server_ac258e71d545ebef0f4757ac8b8050731}{params}};}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00081}00081\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00083}\mbox{\hyperlink{structnfi__tcp__server__fhandle}{00083}}\ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__tcp__server__fhandle}{nfi\_tcp\_server\_fhandle}}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00084}00084\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00085}\mbox{\hyperlink{structnfi__tcp__server__fhandle_a4c1a504220e89bd10beae4a2322dd167}{00085}}\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structnfi__tcp__server__fhandle_a4c1a504220e89bd10beae4a2322dd167}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00086}\mbox{\hyperlink{structnfi__tcp__server__fhandle_a144caca44620bff1feca549fdc1216e2}{00086}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structnfi__tcp__server__fhandle_a144caca44620bff1feca549fdc1216e2}{fd}};}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00087}\mbox{\hyperlink{structnfi__tcp__server__fhandle_a78f3d7d48d336fd70dc2d6f4a3d918b0}{00087}}\ \ \ \ \ DIR\ *\mbox{\hyperlink{structnfi__tcp__server__fhandle_a78f3d7d48d336fd70dc2d6f4a3d918b0}{dir}};}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00088}00088\ \ \ \};}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00090}00090\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00091}00091\ \textcolor{comment}{\ *\ \ ...\ Functions}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00092}00092\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00093}\mbox{\hyperlink{nfi__tcp__server_8h_abdb31eed94599f3349135405deef43d2}{00093}}\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_abdb31eed94599f3349135405deef43d2}{nfi\_tcp\_server\_init}}(\textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr__server}{nfi\_attr\_server}}\ *attr);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00095}\mbox{\hyperlink{nfi__tcp__server_8h_a391ff741dbc222c90e4ef393af26d204}{00095}}\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a391ff741dbc222c90e4ef393af26d204}{nfi\_tcp\_server\_connect}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keywordtype}{char}\ *prt,\ \textcolor{keywordtype}{char}\ *serv,\ \textcolor{keywordtype}{char}\ *dir);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00096}00096\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a5e6e59c231aa110a3768937b10c495d6}{nfi\_tcp\_server\_reconnect}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00097}00097\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a717a2332bf3298329ac8e53e8b135943}{nfi\_tcp\_server\_disconnect}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00099}00099\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_aa5fcb24a1b0a594e23de1351d79c182c}{nfi\_tcp\_server\_create}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00100}00100\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a705c23fea35be4943246d81e16a59ba1}{nfi\_tcp\_server\_open}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fho);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00101}00101\ \ \ ssize\_t\ \mbox{\hyperlink{nfi__tcp__server_8h_ab77c83b4885226c68843b2584576dad3}{nfi\_tcp\_server\_read}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh,\ \textcolor{keywordtype}{void}\ *buffer,\ off\_t\ offset,\ \textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00102}00102\ \ \ ssize\_t\ \mbox{\hyperlink{nfi__tcp__server_8h_a1a77daa723296679706785cf36e402ca}{nfi\_tcp\_server\_write}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh,\ \textcolor{keywordtype}{void}\ *buffer,\ off\_t\ offset,\ \textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00103}00103\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_af4090b59b77b730f2c8cc1620dc6acf6}{nfi\_tcp\_server\_close}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00104}00104\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a88b597429fc9be9858d7c5d7d092b161}{nfi\_tcp\_server\_remove}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00105}00105\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a4992f20f4c83d162ed4dbd9ef626b6ee}{nfi\_tcp\_server\_rename}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *old\_url,\ \textcolor{keywordtype}{char}\ *new\_url);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00107}00107\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a800e08783c8b4a2b03941f6830ac13fb}{nfi\_tcp\_server\_getattr}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00108}00108\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a4fa77f36a482eac1df6a0321253cbf2c}{nfi\_tcp\_server\_setattr}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00110}00110\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a7f842522699248944b97e1fc47290add}{nfi\_tcp\_server\_mkdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fh);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00111}00111\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_afca511ff0012428fb1614934e2385f55}{nfi\_tcp\_server\_opendir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fho);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00112}00112\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_aaf68b0913586971c400ce5ccc5fb50a6}{nfi\_tcp\_server\_readdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fhd,\ \textcolor{keyword}{struct}\ dirent\ *entry);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00113}00113\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a000628f93e7296f5a7d3e93faa787661}{nfi\_tcp\_server\_closedir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *fhd);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00114}00114\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_ad6d93f4e30e25f2d2f47de814aea8dbf}{nfi\_tcp\_server\_rmdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00116}\mbox{\hyperlink{nfi__tcp__server_8h_af3982526c85ee143bc67a4ec8d68a323}{00116}}\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_af3982526c85ee143bc67a4ec8d68a323}{nfi\_tcp\_server\_statfs}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__info}{nfi\_info}}\ *inf);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00117}00117\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a428babad13d3c1eb4237c2e42b192359}{nfi\_tcp\_server\_preload}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keywordtype}{char}\ *virtual\_path,\ \textcolor{keywordtype}{char}\ *storage\_path,\ \textcolor{keywordtype}{int}\ opt);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00118}00118\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__tcp__server_8h_a72da593b7f7ca56923c6b088b4da7cd2}{nfi\_tcp\_server\_flush}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keywordtype}{char}\ *virtual\_path,\ \textcolor{keywordtype}{char}\ *storage\_path,\ \textcolor{keywordtype}{int}\ opt);}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00120}00120\ \ \ \textcolor{comment}{/*\ ...................................................................\ */}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00122}00122\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00123}00123\ \}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00124}00124\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{nfi__tcp__server_8h_source_l00126}00126\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

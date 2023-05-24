@@ -108,6 +108,17 @@ extern "C"
      *
      * Compute Xor operation ('block_result') for
      * two blocks ('block_1' and 'block_2') of 'block_size' bytes.
+     * 
+     * ...
+     * char res[1024], b1[1024], b2[1024];
+     * ...
+     * memset(b1, 'a', 1024);
+     * memset(b1, 'b', 1024);
+     * MATH_MISC_Xor(res, b1, b2, 1024);
+     * ... // res[i] = b1[i] ^ b2[i]
+     * ...
+     * MATH_MISC_Xor(b1, res, b2, 1024);
+     * ... // b1 = res:(b1 ^ b2) ^ b2 = b1
      *
      * @param block_result Resulting block.
      * @param block_1 First block of data.

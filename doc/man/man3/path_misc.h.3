@@ -1,0 +1,215 @@
+.TH "path_misc.h" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+path_misc.h \- Header file to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'all_system\&.h'\fP
+.br
+\fC#include 'base/string_misc\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBhash\fP (char *file, int nServ)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBgetFirstDir\fP (char *dir, char *path)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBgetSizeFactor\fP (char *name)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBgetNameFile\fP (char *file, char *dir)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBgetNamePart\fP (char *part, char *dir)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBgetDirWithURL\fP (char *url, char *dir)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Header file to 'TODO'\&. 
+
+Header file to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBpath_misc\&.h\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "int getDirWithURL (char * url, char * dir)"
+
+.PP
+'TODO'\&. Erase the initial dir used in the url\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&.
+.RE
+.PP
+'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB345\fP of file \fBurlstr\&.c\fP\&.
+.PP
+References \fBgetURLDir()\fP, and \fBPATH_MAX\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rmdir()\fP, \fBnfi_nfs_create()\fP, \fBnfi_nfs_mkdir()\fP, \fBnfi_nfs_remove()\fP, \fBnfi_nfs_rename()\fP, \fBnfi_nfs_rmdir()\fP, \fBnfs3_open()\fP, and \fBnfs_open()\fP\&.
+.SS "int getFirstDir (char * dir, char * path)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIdir\fP 'TODO'\&. 
+.br
+\fIpath\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB56\fP of file \fBpath_misc\&.c\fP\&.
+.PP
+Referenced by \fBnfs3_lookup()\fP, and \fBnfs_lookup()\fP\&.
+.SS "int getNameFile (char * file, char * dir)"
+
+.PP
+'TODO'\&. Get the last name of a path and erase the file name\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfile\fP 'TODO'\&. 
+.br
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB125\fP of file \fBpath_misc\&.c\fP\&.
+.PP
+Referenced by \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rmdir()\fP, \fBnfi_nfs_create()\fP, \fBnfi_nfs_mkdir()\fP, \fBnfi_nfs_remove()\fP, \fBnfi_nfs_rename()\fP, and \fBnfi_nfs_rmdir()\fP\&.
+.SS "int getNamePart (char * part, char * dir)"
+
+.PP
+'TODO'\&. Get the first name of the path and erase the part name\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIpart\fP 'TODO'\&. 
+.br
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB162\fP of file \fBpath_misc\&.c\fP\&.
+.PP
+Referenced by \fBXpnGetPartition()\fP\&.
+.SS "int getSizeFactor (char * name)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB91\fP of file \fBpath_misc\&.c\fP\&.
+.PP
+References \fBGB\fP, \fBKB\fP, and \fBMB\fP\&.
+.PP
+Referenced by \fBXpnGetInfoPartition()\fP\&.
+.SS "int hash (char * file, int nServ)"
+
+.PP
+'TODO'\&. 'Server number calculation'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfile\fP 'TODO'\&. 
+.br
+\fInServ\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

@@ -1,0 +1,50 @@
+.TH "nfi_tcp_server_fhandle" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfi_tcp_server_fhandle
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfi_tcp_server\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "char \fBpath\fP [\fBPATH_MAX\fP]"
+.br
+.ti -1c
+.RI "int \fBfd\fP"
+.br
+.ti -1c
+.RI "DIR * \fBdir\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB83\fP of file \fBnfi_tcp_server\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "DIR* nfi_tcp_server_fhandle::dir"
+
+.PP
+Definition at line \fB87\fP of file \fBnfi_tcp_server\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_closedir()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_readdir()\fP, and \fBnfi_tcp_server_rmdir()\fP\&.
+.SS "int nfi_tcp_server_fhandle::fd"
+
+.PP
+Definition at line \fB86\fP of file \fBnfi_tcp_server\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_read()\fP, and \fBnfi_tcp_server_write()\fP\&.
+.SS "char nfi_tcp_server_fhandle::path[\fBPATH_MAX\fP]"
+
+.PP
+Definition at line \fB85\fP of file \fBnfi_tcp_server\&.h\fP\&.
+.PP
+Referenced by \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_read()\fP, and \fBnfi_tcp_server_write()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

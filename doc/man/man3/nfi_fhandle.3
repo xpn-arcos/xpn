@@ -1,0 +1,76 @@
+.TH "nfi_fhandle" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nfi_fhandle \- This is a struct\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <nfi\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBtype\fP"
+.br
+.RI "File or directory\&. "
+.ti -1c
+.RI "char * \fBurl\fP"
+.br
+.RI "Url of DIR or FILE\&. "
+.ti -1c
+.RI "struct \fBnfi_server\fP * \fBserver\fP"
+.br
+.RI "Server\&. "
+.ti -1c
+.RI "void * \fBpriv_fh\fP"
+.br
+.RI "Pointer to private filehandle\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a struct\&. 
+
+
+.PP
+Definition at line \fB208\fP of file \fBnfi\&.h\fP\&.
+.SH "Field Documentation"
+.PP 
+.SS "nfi_fhandle::priv_fh"
+
+.PP
+Pointer to private filehandle\&. 
+.PP
+Definition at line \fB213\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_close()\fP, \fBnfi_local_closedir()\fP, \fBnfi_local_create()\fP, \fBnfi_local_mkdir()\fP, \fBnfi_local_open()\fP, \fBnfi_local_opendir()\fP, \fBnfi_local_read()\fP, \fBnfi_local_readdir()\fP, \fBnfi_local_setattr()\fP, \fBnfi_local_write()\fP, \fBnfi_mpi_server_close()\fP, \fBnfi_mpi_server_closedir()\fP, \fBnfi_mpi_server_create()\fP, \fBnfi_mpi_server_mkdir()\fP, \fBnfi_mpi_server_open()\fP, \fBnfi_mpi_server_opendir()\fP, \fBnfi_mpi_server_read()\fP, \fBnfi_mpi_server_readdir()\fP, \fBnfi_mpi_server_setattr()\fP, \fBnfi_mpi_server_write()\fP, \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_closedir()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_read()\fP, \fBnfi_tcp_server_readdir()\fP, \fBnfi_tcp_server_setattr()\fP, \fBnfi_tcp_server_write()\fP, \fBnfs3_open()\fP, \fBnfs_open()\fP, \fBxpn_destroy_file_table()\fP, \fBxpn_internal_creat()\fP, \fBxpn_simple_closedir()\fP, \fBxpn_simple_mkdir()\fP, and \fBxpn_simple_rename()\fP\&.
+.SS "nfi_fhandle::server"
+
+.PP
+Server\&. 
+.PP
+Definition at line \fB212\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_close()\fP, \fBnfi_local_create()\fP, \fBnfi_local_open()\fP, \fBnfi_local_opendir()\fP, \fBnfi_mpi_server_close()\fP, \fBnfi_mpi_server_create()\fP, \fBnfi_mpi_server_open()\fP, \fBnfi_mpi_server_opendir()\fP, \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfs3_open()\fP, \fBnfs_open()\fP, \fBxpn_internal_creat()\fP, \fBxpn_simple_close()\fP, \fBxpn_simple_closedir()\fP, \fBxpn_simple_mkdir()\fP, \fBxpn_simple_rename()\fP, and \fBXpnGetEntry()\fP\&.
+.SS "nfi_fhandle::type"
+
+.PP
+File or directory\&. 
+.PP
+Definition at line \fB210\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_close()\fP, \fBnfi_local_create()\fP, \fBnfi_local_mkdir()\fP, \fBnfi_local_open()\fP, \fBnfi_local_opendir()\fP, \fBnfi_local_readdir()\fP, \fBnfi_mpi_server_close()\fP, \fBnfi_mpi_server_create()\fP, \fBnfi_mpi_server_mkdir()\fP, \fBnfi_mpi_server_open()\fP, \fBnfi_mpi_server_opendir()\fP, \fBnfi_mpi_server_readdir()\fP, \fBnfi_nfs3_open()\fP, \fBnfi_nfs3_opendir()\fP, \fBnfi_nfs_open()\fP, \fBnfi_nfs_opendir()\fP, \fBnfi_tcp_server_close()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_readdir()\fP, \fBnfs3_open()\fP, \fBnfs_open()\fP, and \fBXpnReadMetadata()\fP\&.
+.SS "nfi_fhandle::url"
+
+.PP
+Url of DIR or FILE\&. 
+.PP
+Definition at line \fB211\fP of file \fBnfi\&.h\fP\&.
+.PP
+Referenced by \fBnfi_local_close()\fP, \fBnfi_local_closedir()\fP, \fBnfi_local_create()\fP, \fBnfi_local_getattr()\fP, \fBnfi_local_mkdir()\fP, \fBnfi_local_open()\fP, \fBnfi_local_opendir()\fP, \fBnfi_local_read()\fP, \fBnfi_local_write()\fP, \fBnfi_mpi_server_create()\fP, \fBnfi_mpi_server_getattr()\fP, \fBnfi_mpi_server_mkdir()\fP, \fBnfi_mpi_server_open()\fP, \fBnfi_mpi_server_opendir()\fP, \fBnfi_mpi_server_read()\fP, \fBnfi_mpi_server_write()\fP, \fBnfi_tcp_server_create()\fP, \fBnfi_tcp_server_getattr()\fP, \fBnfi_tcp_server_mkdir()\fP, \fBnfi_tcp_server_open()\fP, \fBnfi_tcp_server_opendir()\fP, \fBnfi_tcp_server_read()\fP, \fBnfi_tcp_server_write()\fP, \fBnfs3_open()\fP, \fBnfs_open()\fP, and \fBXpnGetAtribPath()\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

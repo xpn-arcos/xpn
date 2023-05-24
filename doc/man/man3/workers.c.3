@@ -1,0 +1,157 @@
+.TH "workers.c" 3 "Wed May 24 2023" "Version Expand version 1.0r5" "Expand" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+workers.c \- File to 'TODO'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'workers\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBworkers_init\fP (\fBworker_t\fP *w, int thread_mode)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBworkers_launch\fP (\fBworker_t\fP *w, struct \fBst_th\fP *th_arg, void(*worker_function)(struct \fBst_th\fP))"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "int \fBworkers_wait\fP (\fBworker_t\fP *w, struct \fBst_th\fP *th_arg)"
+.br
+.RI "'TODO'\&. "
+.ti -1c
+.RI "void \fBworkers_destroy\fP (\fBworker_t\fP *w)"
+.br
+.RI "'TODO'\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+File to 'TODO'\&. 
+
+File to 'TODO'\&.
+.PP
+\fBAuthors\fP
+.RS 4
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+Jul 22, 2021 
+.RE
+.PP
+\fBBug\fP
+.RS 4
+No known bugs\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBworkers\&.c\fP\&.
+.SH "Function Documentation"
+.PP 
+.SS "void workers_destroy (\fBworker_t\fP * w)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIw\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB147\fP of file \fBworkers\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_info\fP, \fBTH_NOT\fP, \fBTH_OP\fP, \fBTH_POOL\fP, \fBworker_t::thread_mode\fP, \fBworker_t::w1\fP, \fBworker_t::w2\fP, \fBworker_pool_destroy()\fP, and \fBworkers_ondemand_destroy()\fP\&.
+.PP
+Referenced by \fBmpi_server_up()\fP, \fBnfiworker_destroy()\fP, \fBtcp_server_down()\fP, and \fBtcp_server_up()\fP\&.
+.SS "int workers_init (\fBworker_t\fP * w, int thread_mode)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIw\fP 'TODO'\&. 
+.br
+\fIthread_mode\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB40\fP of file \fBworkers\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_info\fP, \fBTH_NOT\fP, \fBTH_OP\fP, \fBTH_POOL\fP, \fBworker_t::thread_mode\fP, \fBworker_t::w1\fP, \fBworker_t::w2\fP, \fBworker_ondemand_init()\fP, and \fBworker_pool_init()\fP\&.
+.PP
+Referenced by \fBmpi_server_up()\fP, \fBnfiworker_init()\fP, \fBtcp_server_down()\fP, and \fBtcp_server_up()\fP\&.
+.SS "int workers_launch (\fBworker_t\fP * w, struct \fBst_th\fP * th_arg, void(*)(struct \fBst_th\fP) worker_function)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIw\fP 'TODO'\&. 
+.br
+\fIth_arg\fP 'TODO'\&. 
+.br
+\fIworker_function\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB77\fP of file \fBworkers\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_info\fP, \fBTH_NOT\fP, \fBTH_OP\fP, \fBTH_POOL\fP, \fBworker_t::thread_mode\fP, \fBworker_t::w1\fP, \fBworker_t::w2\fP, \fBworker_ondemand_launch()\fP, and \fBworker_pool_enqueue()\fP\&.
+.PP
+Referenced by \fBmpi_server_dispatcher()\fP, \fBmpi_server_up()\fP, \fBnfiworker_launch()\fP, and \fBtcp_server_up()\fP\&.
+.SS "int workers_wait (\fBworker_t\fP * w, struct \fBst_th\fP * th_arg)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIw\fP 'TODO'\&. 
+.br
+\fIth_arg\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB113\fP of file \fBworkers\&.c\fP\&.
+.PP
+References \fBdebug_error\fP, \fBdebug_info\fP, \fBTH_NOT\fP, \fBTH_OP\fP, \fBTH_POOL\fP, \fBworker_t::thread_mode\fP, \fBworker_ondemand_wait()\fP, and \fBworker_pool_wait()\fP\&.
+.PP
+Referenced by \fBnfiworker_wait()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Expand from the source code\&.

@@ -18,9 +18,27 @@
  *
  */
 
+/**
+ * @file xpn_rw.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn/xpn_simple/xpn_rw.h"
 
 // extern pthread_mutex_t global_mt;
+
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 void XpnShowFileTable();
 

@@ -18,9 +18,23 @@
  *
  */
 
+/**
+ * @file xpn_policy_opendir.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _XPN_POLICY_DIR_H
 #define _XPN_POLICY_DIR_H
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "xpn_file.h"
 #include "xpn.h"
 
@@ -29,6 +43,19 @@ extern "C"
 {
 #endif
 
+    /************************************************
+     *  ... Functions
+     ***********************************************/
+
+    /**
+     * @brief 'TODO'.
+     *
+     * 'TODO'.
+     *
+     * @param fd 'TODO'.
+     * @param entry 'TODO'.
+     * @return 'TODO'.
+     */
     int XpnGetEntry(int fd, struct dirent *entry);
 
 #ifdef __cplusplus

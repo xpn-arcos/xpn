@@ -1,0 +1,205 @@
+\doxysection{xpn\+\_\+init.\+c File Reference}
+\hypertarget{xpn__init_8c}{}\label{xpn__init_8c}\index{xpn\_init.c@{xpn\_init.c}}
+
+
+File to \textquotesingle{}TODO\textquotesingle{}.  
+
+
+{\ttfamily \#include \"{}xpn/xpn\+\_\+simple/xpn\+\_\+init.\+h\"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{xpn__init_8c_a53f15093d6571e35b4dd5ec21b18e2e7}{xpn\+\_\+destroy\+\_\+servers}} (struct \mbox{\hyperlink{structxpn__partition}{xpn\+\_\+partition}} \texorpdfstring{$\ast$}{*}part)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{xpn__init_8c_a5f92d5b5dfa6a423e23bd8db7f114701}{xpn\+\_\+simple\+\_\+destroy}} (void)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{xpn__init_8c_a572b2ca1143d509a5ec043ef80d9352d}{xpn\+\_\+init\+\_\+partition}} (\+\_\+\+\_\+attribute\+\_\+\+\_\+((\+\_\+\+\_\+unused\+\_\+\+\_\+)) char \texorpdfstring{$\ast$}{*}partname)
+\item 
+int \mbox{\hyperlink{xpn__init_8c_ae782f7c9fa6eef1f26343787e6ec3ae9}{xpn\+\_\+simple\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em \textquotesingle{}TODO\textquotesingle{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structxpn__partition}{xpn\+\_\+partition}} \mbox{\hyperlink{xpn__init_8c_a5972edbece0b7c4ea6677df3a36072fa}{xpn\+\_\+parttable}} \mbox{[}\mbox{\hyperlink{xpn__init_8h_aa1ead99ae093c62bdedd9ee4e5c9683e}{XPN\+\_\+\+MAX\+\_\+\+PART}}\mbox{]}
+\item 
+pthread\+\_\+mutex\+\_\+t \mbox{\hyperlink{xpn__init_8c_a16c73b18c810ac0c47e5692ed54f81fc}{xpn\+\_\+init\+\_\+mutex}} = PTHREAD\+\_\+\+MUTEX\+\_\+\+INITIALIZER
+\item 
+int \mbox{\hyperlink{xpn__init_8c_a388a98250f720184f7ded9f16973bfc5}{xpn\+\_\+debug}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+File to \textquotesingle{}TODO\textquotesingle{}. 
+
+File to \textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyAuthor}{Authors}
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+Jul 22, 2021 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000052}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+Definition in file \mbox{\hyperlink{xpn__init_8c_source}{xpn\+\_\+init.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{xpn__init_8c_a53f15093d6571e35b4dd5ec21b18e2e7}\label{xpn__init_8c_a53f15093d6571e35b4dd5ec21b18e2e7} 
+\index{xpn\_init.c@{xpn\_init.c}!xpn\_destroy\_servers@{xpn\_destroy\_servers}}
+\index{xpn\_destroy\_servers@{xpn\_destroy\_servers}!xpn\_init.c@{xpn\_init.c}}
+\doxysubsubsection{\texorpdfstring{xpn\_destroy\_servers()}{xpn\_destroy\_servers()}}
+{\footnotesize\ttfamily int xpn\+\_\+destroy\+\_\+servers (\begin{DoxyParamCaption}\item[{struct \mbox{\hyperlink{structxpn__partition}{xpn\+\_\+partition}} \texorpdfstring{$\ast$}{*}}]{part }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em part} & \textquotesingle{}TODO\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{xpn__init_8c_source_l00053}{53}} of file \mbox{\hyperlink{xpn__init_8c_source}{xpn\+\_\+init.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00085}{xpn\+\_\+partition\+::data\+\_\+nserv}}, \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00086}{xpn\+\_\+partition\+::data\+\_\+serv}}, \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00088}{xpn\+\_\+partition\+::meta\+\_\+nserv}}, \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00089}{xpn\+\_\+partition\+::meta\+\_\+serv}}, \mbox{\hyperlink{nfi_8h_source_l00219}{nfi\+\_\+ops\+::nfi\+\_\+disconnect}}, and \mbox{\hyperlink{nfi_8h_source_l00095}{nfi\+\_\+server\+::ops}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00124}{xpn\+\_\+init\+\_\+partition()}}, and \mbox{\hyperlink{xpn__init_8c_source_l00094}{xpn\+\_\+simple\+\_\+destroy()}}.
+
+\Hypertarget{xpn__init_8c_a572b2ca1143d509a5ec043ef80d9352d}\label{xpn__init_8c_a572b2ca1143d509a5ec043ef80d9352d} 
+\index{xpn\_init.c@{xpn\_init.c}!xpn\_init\_partition@{xpn\_init\_partition}}
+\index{xpn\_init\_partition@{xpn\_init\_partition}!xpn\_init.c@{xpn\_init.c}}
+\doxysubsubsection{\texorpdfstring{xpn\_init\_partition()}{xpn\_init\_partition()}}
+{\footnotesize\ttfamily int xpn\+\_\+init\+\_\+partition (\begin{DoxyParamCaption}\item[{\+\_\+\+\_\+attribute\+\_\+\+\_\+((\+\_\+\+\_\+unused\+\_\+\+\_\+)) char \texorpdfstring{$\ast$}{*}}]{partname }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{xpn__init_8c_source_l00124}{124}} of file \mbox{\hyperlink{xpn__init_8c_source}{xpn\+\_\+init.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00085}{xpn\+\_\+partition\+::data\+\_\+nserv}}, \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00086}{xpn\+\_\+partition\+::data\+\_\+serv}}, \mbox{\hyperlink{xpn__policy__init_8h_source_l00117}{conf\+\_\+connect\+\_\+st\+::fd}}, \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00077}{xpn\+\_\+partition\+::id}}, \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00083}{xpn\+\_\+partition\+::initialized}}, \mbox{\hyperlink{xpn__policy__init_8h_source_l00059}{XPN\+\_\+\+DATA\+\_\+\+SERVER}}, \mbox{\hyperlink{base__debug_8h_source_l00054}{XPN\+\_\+\+DEBUG}}, \mbox{\hyperlink{xpn__init_8c_source_l00039}{xpn\+\_\+debug}}, \mbox{\hyperlink{base__debug_8h_source_l00085}{XPN\+\_\+\+DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{base__debug_8h_source_l00086}{XPN\+\_\+\+DEBUG\+\_\+\+END}}, \mbox{\hyperlink{xpn__init_8c_source_l00053}{xpn\+\_\+destroy\+\_\+servers()}}, \mbox{\hyperlink{xpn__err_8c_source_l00044}{xpn\+\_\+err()}}, \mbox{\hyperlink{xpn__cwd_8c_source_l00043}{xpn\+\_\+init\+\_\+cwd()}}, \mbox{\hyperlink{xpn__file_8c_source_l00043}{xpn\+\_\+init\+\_\+file\+\_\+table()}}, \mbox{\hyperlink{xpn__init_8c_source_l00038}{xpn\+\_\+init\+\_\+mutex}}, \mbox{\hyperlink{xpn__init_8h_source_l00049}{XPN\+\_\+\+MAX\+\_\+\+PART}}, \mbox{\hyperlink{xpn__init_8c_source_l00037}{xpn\+\_\+parttable}}, \mbox{\hyperlink{xpn__err_8h_source_l00052}{XPNERR\+\_\+\+CONF}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00206}{Xpn\+Get\+Id\+Partition()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00213}{Xpn\+Get\+Info\+Partition()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00164}{Xpn\+Get\+Next\+Partition()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00379}{Xpn\+Get\+Num\+Servers\+Partition()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00399}{Xpn\+Get\+Server()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00138}{Xpn\+Partition\+Close()}}, and \mbox{\hyperlink{xpn__policy__init_8c_source_l00065}{Xpn\+Partition\+Open()}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00303}{xpn\+\_\+simple\+\_\+init()}}.
+
+\Hypertarget{xpn__init_8c_a5f92d5b5dfa6a423e23bd8db7f114701}\label{xpn__init_8c_a5f92d5b5dfa6a423e23bd8db7f114701} 
+\index{xpn\_init.c@{xpn\_init.c}!xpn\_simple\_destroy@{xpn\_simple\_destroy}}
+\index{xpn\_simple\_destroy@{xpn\_simple\_destroy}!xpn\_init.c@{xpn\_init.c}}
+\doxysubsubsection{\texorpdfstring{xpn\_simple\_destroy()}{xpn\_simple\_destroy()}}
+{\footnotesize\ttfamily int xpn\+\_\+simple\+\_\+destroy (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyParagraph}{Parameters}
+None. 
+\end{DoxyParagraph}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{xpn__init_8c_source_l00094}{94}} of file \mbox{\hyperlink{xpn__init_8c_source}{xpn\+\_\+init.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn_2xpn__simple_2xpn_8h_source_l00077}{xpn\+\_\+partition\+::id}}, \mbox{\hyperlink{nfi__worker_8c_source_l00189}{nfi\+\_\+worker\+\_\+destroy()}}, \mbox{\hyperlink{base__debug_8h_source_l00085}{XPN\+\_\+\+DEBUG\+\_\+\+BEGIN}}, \mbox{\hyperlink{base__debug_8h_source_l00086}{XPN\+\_\+\+DEBUG\+\_\+\+END}}, \mbox{\hyperlink{xpn__file_8c_source_l00055}{xpn\+\_\+destroy\+\_\+file\+\_\+table()}}, \mbox{\hyperlink{xpn__init_8c_source_l00053}{xpn\+\_\+destroy\+\_\+servers()}}, and \mbox{\hyperlink{xpn__init_8c_source_l00037}{xpn\+\_\+parttable}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__unistd_8c_source_l00055}{xpn\+\_\+destroy()}}.
+
+\Hypertarget{xpn__init_8c_ae782f7c9fa6eef1f26343787e6ec3ae9}\label{xpn__init_8c_ae782f7c9fa6eef1f26343787e6ec3ae9} 
+\index{xpn\_init.c@{xpn\_init.c}!xpn\_simple\_init@{xpn\_simple\_init}}
+\index{xpn\_simple\_init@{xpn\_simple\_init}!xpn\_init.c@{xpn\_init.c}}
+\doxysubsubsection{\texorpdfstring{xpn\_simple\_init()}{xpn\_simple\_init()}}
+{\footnotesize\ttfamily int xpn\+\_\+simple\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+\textquotesingle{}TODO\textquotesingle{}. 
+
+\textquotesingle{}TODO\textquotesingle{}.
+
+\begin{DoxyParagraph}{Parameters}
+None. 
+\end{DoxyParagraph}
+\begin{DoxyReturn}{Returns}
+\textquotesingle{}TODO\textquotesingle{}. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{xpn__init_8c_source_l00303}{303}} of file \mbox{\hyperlink{xpn__init_8c_source}{xpn\+\_\+init.\+c}}.
+
+
+
+References \mbox{\hyperlink{xpn__init_8c_source_l00124}{xpn\+\_\+init\+\_\+partition()}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__unistd_8c_source_l00046}{xpn\+\_\+init()}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{xpn__init_8c_a388a98250f720184f7ded9f16973bfc5}\label{xpn__init_8c_a388a98250f720184f7ded9f16973bfc5} 
+\index{xpn\_init.c@{xpn\_init.c}!xpn\_debug@{xpn\_debug}}
+\index{xpn\_debug@{xpn\_debug}!xpn\_init.c@{xpn\_init.c}}
+\doxysubsubsection{\texorpdfstring{xpn\_debug}{xpn\_debug}}
+{\footnotesize\ttfamily int xpn\+\_\+debug = 0}
+
+
+
+Definition at line \mbox{\hyperlink{xpn__init_8c_source_l00039}{39}} of file \mbox{\hyperlink{xpn__init_8c_source}{xpn\+\_\+init.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00124}{xpn\+\_\+init\+\_\+partition()}}.
+
+\Hypertarget{xpn__init_8c_a16c73b18c810ac0c47e5692ed54f81fc}\label{xpn__init_8c_a16c73b18c810ac0c47e5692ed54f81fc} 
+\index{xpn\_init.c@{xpn\_init.c}!xpn\_init\_mutex@{xpn\_init\_mutex}}
+\index{xpn\_init\_mutex@{xpn\_init\_mutex}!xpn\_init.c@{xpn\_init.c}}
+\doxysubsubsection{\texorpdfstring{xpn\_init\_mutex}{xpn\_init\_mutex}}
+{\footnotesize\ttfamily pthread\+\_\+mutex\+\_\+t xpn\+\_\+init\+\_\+mutex = PTHREAD\+\_\+\+MUTEX\+\_\+\+INITIALIZER}
+
+
+
+Definition at line \mbox{\hyperlink{xpn__init_8c_source_l00038}{38}} of file \mbox{\hyperlink{xpn__init_8c_source}{xpn\+\_\+init.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00124}{xpn\+\_\+init\+\_\+partition()}}.
+
+\Hypertarget{xpn__init_8c_a5972edbece0b7c4ea6677df3a36072fa}\label{xpn__init_8c_a5972edbece0b7c4ea6677df3a36072fa} 
+\index{xpn\_init.c@{xpn\_init.c}!xpn\_parttable@{xpn\_parttable}}
+\index{xpn\_parttable@{xpn\_parttable}!xpn\_init.c@{xpn\_init.c}}
+\doxysubsubsection{\texorpdfstring{xpn\_parttable}{xpn\_parttable}}
+{\footnotesize\ttfamily struct \mbox{\hyperlink{structxpn__partition}{xpn\+\_\+partition}} xpn\+\_\+parttable\mbox{[}\mbox{\hyperlink{xpn__init_8h_aa1ead99ae093c62bdedd9ee4e5c9683e}{XPN\+\_\+\+MAX\+\_\+\+PART}}\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{xpn__init_8c_source_l00037}{37}} of file \mbox{\hyperlink{xpn__init_8c_source}{xpn\+\_\+init.\+c}}.
+
+
+
+Referenced by \mbox{\hyperlink{xpn__init_8c_source_l00124}{xpn\+\_\+init\+\_\+partition()}}, \mbox{\hyperlink{xpn__init_8c_source_l00094}{xpn\+\_\+simple\+\_\+destroy()}}, \mbox{\hyperlink{xpn__policy__open_8c_source_l00209}{Xpn\+Create\+Metadata()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00550}{Xpn\+Get\+Partition()}}, \mbox{\hyperlink{xpn__policy__open_8c_source_l00103}{Xpn\+Get\+Servers()}}, \mbox{\hyperlink{xpn__policy__open_8c_source_l00322}{Xpn\+Read\+Metadata()}}, \mbox{\hyperlink{xpn__policy__init_8c_source_l00572}{Xpn\+Search\+Part()}}, and \mbox{\hyperlink{xpn__policy__init_8c_source_l00599}{Xpn\+Show\+Partition\+Table()}}.
+

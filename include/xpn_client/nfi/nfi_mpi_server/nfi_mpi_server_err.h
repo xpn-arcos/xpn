@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file nfi_mpi_server_err.h
+ * @brief Header file to 'TODO'.
+ *
+ * Header file to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 #ifndef _NFI_MPI_SERVER_ERR_H_
 #define _NFI_MPI_SERVER_ERR_H_
 

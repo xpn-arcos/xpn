@@ -25,14 +25,18 @@
 
 #include "nfi/nfi_ops.h"
 
-/* ... Global vars. / Variables globales ............................. */
+/************************************************
+ *  ... Global vars.
+ ***********************************************/
 
 static int create_m = 0;
 pthread_mutex_t global_mt;
 pthread_cond_t global_cnd;
 int global_busy;
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 void *nfi_worker_run(struct nfi_worker *args)
 {
