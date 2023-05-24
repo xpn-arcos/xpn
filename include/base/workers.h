@@ -28,6 +28,7 @@
   #include "workers_ondemand.h"
   #include "workers_pool.h"
   #include "base/debug_msg.h"
+  #include "base/trace_msg.h"
  
 
   /*

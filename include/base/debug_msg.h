@@ -35,37 +35,38 @@
       #include "string_misc.h"
 
 
+   /* ... Consts / Constantes ........................................... */
+
+      #define   INFO     3, getpid(), __FILE__, __LINE__, stdout
+      #define   WARNING  2, getpid(), __FILE__, __LINE__, stdout
+      #define   ERROR    1, getpid(), __FILE__, __LINE__, stdout
+
+
    /* ... Functions / Funciones ......................................... */
       
-      //
-      // Debug API
-      //
-
       void debug_msg_init   ( void ) ;
 
-      int  debug_msg_printf ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... ) ;
+      /*
+      int  debug_info    ( char *msg_fmt, ... ) ;
+      int  debug_warning ( char *msg_fmt, ... ) ;
+      int  debug_error   ( char *msg_fmt, ... ) ;
+      */
+
+      int  debug_msg_printf ( int src_type, long src_pid, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... ) ;
 
 
    /* ... Macros / Macros ............................................... */
 
-     // Message
 #ifdef DEBUG
-     #define debug_error(...)    debug_msg_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
-     #define debug_warning(...)  debug_msg_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
-     #define debug_info(...)     debug_msg_printf(3, __FILE__, __LINE__, stdout, __VA_ARGS__)
+     #define debug_info(...)     debug_msg_printf(3, getpid(), __FILE__, __LINE__, stdout, __VA_ARGS__)
+     #define debug_warning(...)  debug_msg_printf(2, getpid(), __FILE__, __LINE__, stderr, __VA_ARGS__)
+     #define debug_error(...)    debug_msg_printf(1, getpid(), __FILE__, __LINE__, stderr, __VA_ARGS__)
 #else
-     #define debug_error(...)
-     #define debug_warning(...)
      #define debug_info(...)
+     #define debug_warning(...)
+     #define debug_error(...)
 #endif
 
-
-     // TRACE
-     #define DEBUG_BEGIN() \
-             debug_info("Begin %s()\n", __func__)
-
-     #define DEBUG_END() \
-             debug_info("End   %s(), errno=%d\n", __func__, errno)
 
    /* ................................................................... */
 

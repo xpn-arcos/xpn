@@ -37,21 +37,27 @@
 
    /* ... Consts / Constantes ........................................... */
 
+      #define  TRACE_PRINTER_SIZE 8
+
       #define  SPOT __LINE__,__FILE__,getpid(),0
 
 
    /* ... Functions / Funciones ......................................... */
       
+      void  trace_msg_init ( void ) ;
+
       /**
        *
        *  Establece el gestor de impresión de mensajes.
        *  Set 'printer' dispacher. 
+       *  @param index   index of the printer, from zero up to TRACE_PRINTER_SIZE-1
        *  @param printer the printer function to be used.
        *  @return nothing.
        *
        */
-      void   TRACE_MSG_setPrinter 
+      int   TRACE_MSG_setPrinter 
       ( 
+        /*IN*/      int index,
         /*IN*/      int (*printer) (const   char *, va_list) 
       ) ;
 
@@ -100,6 +106,15 @@
         /*IN*/      char  *fto, 
         ... 
       ) ;
+
+
+   /* ... Macros / Macros ............................................... */
+
+     #define DEBUG_BEGIN() \
+             debug_info("Begin %s()\n", __func__)
+
+     #define DEBUG_END() \
+             debug_info("End   %s(), errno=%d\n", __func__, errno)
 
 
    /* ................................................................... */

@@ -24,10 +24,11 @@
 #define _NFI_WORKER_TASK_H_
 
 
-#include "all_system.h"
-#include "debug_msg.h"
-#include "workers.h"
-#include "nfi.h"
+   #include "all_system.h"
+   #include "debug_msg.h"
+   #include "trace_msg.h"
+   #include "workers.h"
+   #include "nfi.h"
 
 
  #ifdef  __cplusplus

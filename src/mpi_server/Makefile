@@ -24,7 +24,7 @@
 			../../src/base/workers_pool.o
 MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -DHAVE_STRUCT_IOVEC
 MYHEADERS            = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/mpi_server -I../../mxml        -I../../bin/mosquitto/include       -I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base -I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-MYLIBS               =  -L../../src/xpn_client -lxpn -lmxml  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -ldl -lpthread  -lmxml
+MYLIBS               =  -L../../src/xpn_client -lxpn -lmxml  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmosquitto -lmxml -ldl -lpthread  -lmxml
 
 MPI_SERVER_EXE       = xpn_mpi_server
 MPI_SERVER_EXE_STOP  = xpn_stop_mpi_server
