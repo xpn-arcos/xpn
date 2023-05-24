@@ -36,6 +36,10 @@
 // #define DEBUG_NFS 1
 // #define DEBUG_MNT 1
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
 void printfh3(char *s, fhandle3 *fh)
 {
   // fh->fhandle3_val = (char *)malloc(sizeof(char)*FHSIZE3);
@@ -58,6 +62,7 @@ void printfh3(char *s, fhandle3 *fh)
 
   return;
 }
+
 /****************************************************************
  * Funcion: create_conection_mount				*
  * Funcion declarada en la interfaz nfs3_mount.h	       	*

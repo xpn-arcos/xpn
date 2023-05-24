@@ -45,14 +45,93 @@
  *  ... Functions
  ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params 'TODO'.
+ * @return 'TODO'.
+ */
 int mpiClient_comm_init(mpiClient_param_st *params);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params 'TODO'.
+ * @return 'TODO'.
+ */
 int mpiClient_comm_destroy(mpiClient_param_st *params);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params 'TODO'.
+ * @return 'TODO'.
+ */
 int mpiClient_comm_connect(mpiClient_param_st *params);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params 'TODO'.
+ * @return 'TODO'.
+ */
 int mpiClient_comm_disconnect(mpiClient_param_st *params);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params 'TODO'.
+ * @return 'TODO'.
+ */
 int mpiClient_comm_locality(mpiClient_param_st *params);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd 'TODO'.
+ * @param data 'TODO'.
+ * @param size 'TODO'.
+ * @param msg_id 'TODO'.
+ * @return 'TODO'.
+ */
 ssize_t mpiClient_write_operation(MPI_Comm fd, char *data, ssize_t size, char *msg_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd 'TODO'.
+ * @param data 'TODO'.
+ * @param size 'TODO'.
+ * @param msg_id 'TODO'.
+ * @return 'TODO'.
+ */
 ssize_t mpiClient_write_data(MPI_Comm fd, char *data, ssize_t size, char *msg_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fd 'TODO'.
+ * @param data 'TODO'.
+ * @param size 'TODO'.
+ * @param msg_id 'TODO'.
+ * @return 'TODO'.
+ */
 ssize_t mpiClient_read_data(MPI_Comm fd, char *data, ssize_t size, char *msg_id);
 
 #endif

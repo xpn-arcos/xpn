@@ -41,10 +41,9 @@
 #include <string.h>
 // #include <semaphore.h>
 
-/*
- * Datatype
- */
-
+/************************************************
+ *  ... Datatype
+ ***********************************************/
 #define TCP_MAX_PORT_NAME 1024
 
 typedef struct

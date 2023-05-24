@@ -32,6 +32,9 @@
 #ifndef _NFI_NFS3_ERR_H_
 #define _NFI_NFS3_ERR_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "nfs3.h"
 
 enum nfi_nfs3_err
@@ -54,6 +57,15 @@ enum nfi_nfs3_err
 	NFS3ERR_STATFS = 15,
 };
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param err 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void nfs3_err(int err);
 
 #endif

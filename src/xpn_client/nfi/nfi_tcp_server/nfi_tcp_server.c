@@ -24,23 +24,25 @@
  *
  * File to 'TODO'.
  *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  * @date  Jul 22, 2021
  * @bug No known bugs.
  */
 
-
 /************************************************
  *  ... Includes
- ***********************************************/// #define DEBUG 1
+ ***********************************************/
+// #define DEBUG 1
 #include "nfi_tcp_server.h"
 
-/* ... Global Variable / Variable Globales ........................... */
-
+/************************************************
+ *  ... Global Variable
+ ***********************************************/
 #define FILESYSTEM_DLSYM 1
 
-/* ... Functions / Funciones ......................................... */
-
+/************************************************
+ *  ... Functions
+ ***********************************************/
 /*
  * Communication
  */
@@ -247,9 +249,6 @@ void TCP_SERVERtoNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, _
  * PUBLIC FUNCTIONS TO USE TCP_SERVER
  */
 
-/************************************************************
- * Init tcp_server                                               *
- ************************************************************/
 int nfi_tcp_server_init(char *url, struct nfi_server *serv, __attribute__((__unused__)) struct nfi_attr_server *attr)
 {
   int ret;
@@ -448,6 +447,14 @@ int nfi_tcp_server_init(char *url, struct nfi_server *serv, __attribute__((__unu
 /************************************************************
  * Destroy tcp_server                                       *
  * **********************************************************/
+ /**
+   * @brief Destroy tcp_server.
+   *
+   * 'TODO'.
+   *
+   * @param serv 'TODO'.
+   * @return 'TODO'.
+   */
 int nfi_tcp_server_destroy(struct nfi_server *serv)
 {
   int ret;
@@ -502,9 +509,6 @@ int nfi_tcp_server_destroy(struct nfi_server *serv)
   return 0;
 }
 
-/*********************************************************
- * Connect to the server                                 *
- * *******************************************************/
 int nfi_tcp_server_connect(struct nfi_server *serv, __attribute__((__unused__)) char *url, __attribute__((__unused__)) char *prt, char *server, __attribute__((__unused__)) char *dir)
 {
   int ret;
@@ -538,9 +542,6 @@ int nfi_tcp_server_connect(struct nfi_server *serv, __attribute__((__unused__)) 
   return 0;
 }
 
-/************************************************************
- * Disconnect to the server                                 *
- * **********************************************************/
 int nfi_tcp_server_disconnect(struct nfi_server *serv)
 {
   int ret;
@@ -574,9 +575,6 @@ int nfi_tcp_server_disconnect(struct nfi_server *serv)
   return 0;
 }
 
-/************************************************************
- * Reconnect to the TCP server                              *
- ************************************************************/
 int nfi_tcp_server_reconnect(struct nfi_server *serv)
 {
   // Don't see the serv result

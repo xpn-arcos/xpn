@@ -116,9 +116,6 @@ void NFS3toNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attri
  * PUBLIC FUNCTIONS TO USE NFS SERVERS			    *
  ************************************************************/
 
-/************************************************************
- * Init NFS server					    *
- ************************************************************/
 int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)) struct nfi_attr_server *attr)
 {
 	char server[MNTNAMLEN], dir[MNTNAMLEN], prt[MNTNAMLEN];
@@ -282,9 +279,6 @@ int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)
 	return 0;
 }
 
-/************************************************************
- * Disconnect to the server				    *
- * **********************************************************/
 int nfi_nfs3_disconnect(struct nfi_server *serv)
 {
 
@@ -336,9 +330,6 @@ int nfi_nfs3_disconnect(struct nfi_server *serv)
 	return 0;
 }
 
-/************************************************************
- * Reconnect to the NFS server				    *
- ************************************************************/
 int nfi_nfs3_reconnect(struct nfi_server *serv)
 {
 	/* Don't see the serv result */
@@ -396,10 +387,6 @@ int nfi_nfs3_reconnect(struct nfi_server *serv)
 	serv->private_info = (void *)server_aux;
 	return 0;
 }
-
-/************************************************************
- * Destroy NFS operations				    *
- ************************************************************/
 
 int nfi_nfs3_destroy(struct nfi_server *serv)
 {
@@ -593,6 +580,16 @@ int nfi_nfs3_setattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi
 	return 0;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param serv 'TODO'.
+ * @param url 'TODO'.
+ * @param fho 'TODO'.
+ * @return 'TODO'.
+ */
 int nfs3_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
 {
 	char dir[MNTNAMLEN], server[MNTNAMLEN];
