@@ -1791,6 +1791,22 @@ int MPI_Init(int *argc, char ***argv)
   return MPI_SUCCESS;
 }
 
+int MPI_Init_thread ( int *argc, char ***argv, int required, int *provided )
+{
+    char *value;
+
+    debug_info("[bypass] Before MPI_Init_thread\n");
+
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    value = getenv("XPN_IS_MPI_SERVER") ;
+    if (NULL == value){
+      return PMPI_Init_thread( argc, argv, required, provided );
+    }
+    return MPI_SUCCESS;
+}
+
 int MPI_Finalize(void)
 {
   char *value;

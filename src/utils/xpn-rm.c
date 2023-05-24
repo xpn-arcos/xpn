@@ -26,6 +26,7 @@
 #include <ctype.h>
 #include <fcntl.h>
 
+#include "all_system.h"
 #include "xpn.h"
 
 void usage(char *program_name)

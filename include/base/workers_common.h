@@ -38,6 +38,7 @@
  ***********************************************/
 #include "all_system.h"
 #include "base/debug_msg.h"
+#include "base/trace_msg.h"
 
 /************************************************
  *  ... Constants

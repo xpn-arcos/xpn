@@ -5,7 +5,6 @@
 
 COMMON_HEADER=			@top_srcdir@/include/config.h \
 				@top_srcdir@/include/config.h.in \
-				@top_srcdir@/include/config_linux.h \
 				@top_srcdir@/include/all_system.h \
 				@top_srcdir@/include/xpn_client/expand.h \
 				@top_srcdir@/include/xpn_client/expand_lib.h
@@ -14,14 +13,12 @@ BASE_HEADER=			@top_srcdir@/include/base/base_lib.h \
 				@top_srcdir@/include/base/darray.h \
 				@top_srcdir@/include/base/base_debug.h \
 				@top_srcdir@/include/base/debug_msg.h \
-				@top_srcdir@/include/base/debug_tags.h \
 				@top_srcdir@/include/base/dtable.h \
 				@top_srcdir@/include/base/math_misc.h \
 				@top_srcdir@/include/base/string_misc.h \
 				@top_srcdir@/include/base/path_misc.h \
 				@top_srcdir@/include/base/time_misc.h \
 				@top_srcdir@/include/base/trace_msg.h \
-				@top_srcdir@/include/base/trace_tags.h \
 				@top_srcdir@/include/base/urlstr.h \
 				@top_srcdir@/include/base/ns.h \
 				@top_srcdir@/include/base/syscall_proxies.h \

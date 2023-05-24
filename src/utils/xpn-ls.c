@@ -20,19 +20,15 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <sys/param.h>
-#include <stdio.h>
-#include <sys/file.h>
-#include <sys/fcntl.h>
-#include <unistd.h>
-#include <sys/time.h>
-#include <sys/wait.h>
-#include <sys/errno.h>
-#include <pwd.h>
 #include <sys/types.h>
+#include <pwd.h>
+
+#include "all_system.h"
 #include "xpn.h"
 
+
 #define NFSMAXPATHLEN 1024
+
 
 void get_perm(int attr, char *attrstr)
 {

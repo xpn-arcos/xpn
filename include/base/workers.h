@@ -29,6 +29,7 @@
  * @bug No known bugs.
  */
 
+
 #ifndef _WORKERS_H_
 #define _WORKERS_H_
 
@@ -40,14 +41,15 @@
 #include "workers_ondemand.h"
 #include "workers_pool.h"
 #include "base/debug_msg.h"
+#include "base/trace_msg.h"
 
 /************************************************
  *  ... Constants
  ***********************************************/
 
-#define TH_NOT 0
+#define TH_NOT  0
 #define TH_POOL 1
-#define TH_OP 2
+#define TH_OP   2
 
 /************************************************
  *  ... Datatype
@@ -120,3 +122,4 @@ int workers_launch(worker_t *w, struct st_th *th_arg, void (*worker_function)(st
 int workers_wait(worker_t *w, struct st_th *th_arg);
 
 #endif
+

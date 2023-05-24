@@ -137,355 +137,32 @@ char *mpi_server_op2string(int op_code)
  *  ... Operational Functions
  ***********************************************/
 
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_open_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_open_wos(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_creat_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_creat_wos(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_read_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_read_wos(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_write_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_write_wos(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_close_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_rm(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_rm_async(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_rename(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_setattr(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_getattr(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_mkdir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_opendir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_readdir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_closedir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_rmdir(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
+void mpi_server_op_open_ws    (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_open_wos   (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_creat_ws   (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_creat_wos  (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_read_ws    (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_read_wos   (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_write_ws   (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_write_wos  (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_close_ws   (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_rm         (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_rm_async   (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_rename     (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_setattr    (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_getattr    (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_mkdir      (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_opendir    (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_readdir    (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_closedir   (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_rmdir      (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
 void mpi_server_op_rmdir_async(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_flush(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_preload(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
+void mpi_server_op_flush      (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_preload    (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
 void mpi_server_op_getnodename(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id);
+void mpi_server_op_fstat      (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id); // TODO: implement
+void mpi_server_op_getid      (mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id); // TODO: call in switch
 
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_fstat(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id); // TODO: implement
-
-/**
- * @brief 'TODO'.
- *
- * 'TODO'
- *
- * @param params 'TODO'.
- * @param sd 'TODO'.
- * @param head 'TODO'.
- * @param rank_client_id 'TODO'.
- * @par Returns
- *    Nothing.
- */
-void mpi_server_op_getid(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id); // TODO: call in switch
 
 /************************************************
  *  ... Read the operation to realize
@@ -735,12 +412,6 @@ void mpi_server_op_creat_ws(mpi_server_param_st *params, MPI_Comm sd, struct st_
 
   // do creat
   fd = filesystem_creat(path, 0770); // TODO: mpi_server_op_creat don't use 'mode' from client ?
-  if (fd < 0)
-  {
-    filesystem_mkpath(path);
-    fd = filesystem_creat(path, 0770);
-  }
-
   mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id);
 
   // show debug info
@@ -758,12 +429,6 @@ void mpi_server_op_creat_wos(mpi_server_param_st *params, MPI_Comm sd, struct st
 
   // do creat
   fd = filesystem_creat(path, 0770); // TODO: mpi_server_op_creat don't use 'mode' from client ?
-  if (fd < 0)
-  {
-    filesystem_mkpath(path);
-    fd = filesystem_creat(path, 0770);
-  }
-
   mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id);
 
   filesystem_close(fd);

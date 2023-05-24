@@ -42,6 +42,7 @@ extern "C"
  ***********************************************/
 #include "all_system.h"
 #include "debug_msg.h"
+#include "trace_msg.h"
 #include "workers.h"
 
 /* PROTOCOLS */

@@ -39,6 +39,7 @@
 #include <stdarg.h>
 #include <sys/time.h>
 #include "base/debug_msg.h"
+#include "base/trace_msg.h"
 
 #ifdef __cplusplus
 extern "C"

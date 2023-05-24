@@ -1,0 +1,14 @@
+<!ELEMENT data_node EMPTY >
+<!ATTLIST data_node id CDATA #IMPLIED >
+<!ATTLIST data_node url CDATA #REQUIRED >
+
+<!ELEMENT metadata_node EMPTY >
+<!ATTLIST metadata_node id CDATA #IMPLIED >
+<!ATTLIST metadata_node url CDATA #REQUIRED >
+
+<!ELEMENT partition ( data_node, metadata_node ) >
+<!ATTLIST partition name NMTOKEN #REQUIRED >
+<!ATTLIST partition threads NMTOKEN #IMPLIED>
+<!ATTLIST partition threshold_threads NMTOKEN #IMPLIED >
+<!ATTLIST partition type NMTOKEN #REQUIRED >
+

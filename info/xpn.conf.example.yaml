@@ -1,0 +1,20 @@
+xpn_conf:
+  partition:
+    - data_node:
+        _id: ''
+        _url: 'file:///tmp/'
+      _name: PNFS1
+      _type: NORMAL
+    - data_node:
+        - _id: ''
+          _url: 'file:///storage/scratch/2/'
+        - _id: ''
+          _url: 'file:///storage/scratch/3/'
+      _name: PNFS2
+      _type: NORMAL
+    - data_node:
+        _id: ''
+        _url: 'tcp_server://node0/storage/3/'
+      _name: PNFS3
+      _type: NORMAL
+
