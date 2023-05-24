@@ -19,6 +19,18 @@
    *
    */
 
+  /**
+   * @file debug_msg.h
+   * @brief Header file for executing debug messages
+   *
+   * Header file to execute debug messages of
+   * type information, warnings or error.
+   *
+   * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   * @date  Jul 22, 2021
+   * @bug No known bugs.
+   */
+
 
  #ifndef DEBUG_MSG_H
  #define DEBUG_MSG_H

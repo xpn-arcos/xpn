@@ -19,6 +19,17 @@
    *
    */
 
+  /**
+   * @file trace_msg.h
+   * @brief Header file to 'TODO'.
+   *
+   * Header file to 'TODO'.
+   *
+   * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   * @date  Jul 22, 2021
+   * @bug No known bugs.
+   */
+
 
  #ifndef TRACE_MSG_H
  #define TRACE_MSG_H
@@ -77,7 +88,7 @@
        */
       void   TRACE_MSG_VPrintF    
       ( 
-        /*IN*/      int  line,
+        /*IN*/      int    line,
         /*IN*/      char  *name,
         /*IN*/     long    pid,
         /*IN*/      int    type,
@@ -99,7 +110,7 @@
        */
       void   TRACE_MSG_PrintF     
       ( 
-        /*IN*/      int  line,
+        /*IN*/      int    line,
         /*IN*/      char  *name,
         /*IN*/     long    pid,
         /*IN*/      int    type,
