@@ -34,7 +34,9 @@
  ***********************************************/
 #include "tcp_server_comm.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 int tcpClient_comm_init(__attribute__((__unused__)) tcpClient_param_st *params)
 {

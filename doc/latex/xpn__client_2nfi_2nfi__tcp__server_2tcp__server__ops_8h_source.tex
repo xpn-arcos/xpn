@@ -47,355 +47,398 @@
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00043}00043\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{utils_8h}{base/utils.h}}"{}}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00044}00044\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{filesystem_8h}{base/filesystem.h}}"{}}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00045}00045\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00046}00046\ \textcolor{comment}{/*}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00047}00047\ \textcolor{comment}{\ *\ \ Constants}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00048}00048\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00049}00049\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00050}00050\ \textcolor{preprocessor}{\#ifndef\ TCP\_SERVER\_ID}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00051}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a389397bc321b35713a85016612a44eac}{00051}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_ID\ 32}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00052}00052\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00053}00053\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00054}00054\ \textcolor{comment}{/*\ Operations\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00055}00055\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00056}00056\ \textcolor{comment}{//\ File\ operations}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00057}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a95449e42e1b807586f5be38b3658c662}{00057}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_OPEN\_FILE\_WS\ 0}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00058}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a991eeed9ea24e15f78e0ccf2d1f44b54}{00058}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_CREAT\_FILE\_WS\ 1}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00059}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a20065ba1489334f4035e49b88358a795}{00059}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_READ\_FILE\_WS\ 2}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00060}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_aa4dc0dfb230cdf5915ccae01fd25d30f}{00060}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_WRITE\_FILE\_WS\ 3}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00061}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_aee682dcb011fe86cadbb54c6400fb6e9}{00061}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_CLOSE\_FILE\_WS\ 4}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00062}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a384f9483d1ea382853d14f44d0a91c23}{00062}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RM\_FILE\ 5}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00063}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a3553a05af4bf939956e878707c65a7d6}{00063}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RM\_FILE\_ASYNC\ 6}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00064}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a97947a0bacd10e529d10dfc408ea3d7c}{00064}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RENAME\_FILE\ 7}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00065}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_ab6f79e6dd8012b42dc6a5a865ca4e502}{00065}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_GETATTR\_FILE\ 8}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00066}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_ae75cdaf76e4d47a966504410bd8dc06b}{00066}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_SETATTR\_FILE\ 9}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00067}00067\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00068}00068\ \textcolor{comment}{//\ File\ operations\ without\ session}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00069}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a75a735b4a5a237b3b9ac96a0d23758eb}{00069}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_OPEN\_FILE\_WOS\ 100}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00070}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a632104261929d49323b24f61f29978b0}{00070}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_CREAT\_FILE\_WOS\ 101}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00071}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a689372ad1c76ef5b5cfc56c4ae6b7d28}{00071}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_READ\_FILE\_WOS\ 102}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00072}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_ae44a71212063495d22cebbf896b36113}{00072}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_WRITE\_FILE\_WOS\ 103}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00073}00073\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00074}00074\ \textcolor{comment}{//\ Directory\ operations}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00075}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a47b1a2ea6bb5ea2900a7ad0c19da8c5c}{00075}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_MKDIR\_DIR\ 20}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00076}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_ac4e41360ae86a06192eae94066f35b7a}{00076}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RMDIR\_DIR\ 21}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00077}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a67548b9f24f83b363df980b7945974e0}{00077}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RMDIR\_DIR\_ASYNC\ 22}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00078}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a5664a234966cf123eacc16ce06cd2f1b}{00078}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_OPENDIR\_DIR\ 23}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00079}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_aca3c03b483164496d27a280d5db32b6b}{00079}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_READDIR\_DIR\ 24}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00080}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a47ecece93abeff6d705ac6271499fda7}{00080}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_CLOSEDIR\_DIR\ 25}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00081}00081\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00082}00082\ \textcolor{comment}{//\ Import\ /\ Export\ operations}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00083}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a9072e7f40d61e36502fa9b63ba4f8720}{00083}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_FLUSH\_FILE\ 40}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00084}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_abb69d836612d91034b55eb0b9c3534da}{00084}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_PRELOAD\_FILE\ 41}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00085}00085\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00086}00086\ \textcolor{comment}{//\ FS\ Operations}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00087}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a393b7fd3a86252baf8a510e364c74266}{00087}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_STATFS\_DIR\ 60}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00088}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a5e4e32e2b1938add938f1d0f7bbaf8e8}{00088}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_GETNODENAME\ 61}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00089}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_aa6c09ca670d30bca0649ebde42022f43}{00089}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_GETID\ 62}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00090}00090\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00091}00091\ \textcolor{comment}{//\ Connection\ operatons}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00092}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_af83b60c78b5694d18141a2eee97e778f}{00092}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_FINALIZE\ 80}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00093}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a66d66c46f203a234e32c577624015a48}{00093}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_DISCONNECT\ 81}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00094}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a1461270bdd9cc1d5451ff106e7a3ff83}{00094}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_END\ -\/1}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00095}00095\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00096}00096\ \textcolor{comment}{/*}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00097}00097\ \textcolor{comment}{\ *\ \ Message\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00098}00098\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00099}00099\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00100}00100\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_open}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00101}00101\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00102}00102\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00103}00103\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_open::path}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00104}00104\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00105}00105\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00106}00106\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__open}{st\_tcp\_server\_open}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00107}00107\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00108}00108\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__open_a56c1cab823292a2d4b434ab3234eddbc}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00109}00109\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00110}00110\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00111}00111\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_open\_req}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00112}00112\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00113}00113\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00114}00114\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_open\_req::fd}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00115}00115\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00116}00116\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00117}00117\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__open__req}{st\_tcp\_server\_open\_req}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00118}00118\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00119}00119\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__open__req_a1b7ba520368a256920045ebda7d96591}{fd}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00120}00120\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00121}00121\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00122}00122\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_creat}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00123}00123\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00124}00124\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00125}00125\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_creat::path}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00126}00126\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00127}00127\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00128}00128\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__creat}{st\_tcp\_server\_creat}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00129}00129\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00130}00130\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__creat_aafba6568d16490dc3cc148ae73bd6cf0}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00131}00131\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00132}00132\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00133}00133\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_read}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00134}00134\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00135}00135\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00136}00136\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read::fd}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00137}00137\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00138}00138\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00046}00046\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00047}00047\ \textcolor{comment}{\ *\ \ ...\ Constants}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00048}00048\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00049}00049\ \textcolor{preprocessor}{\#ifndef\ TCP\_SERVER\_ID}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00050}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a389397bc321b35713a85016612a44eac}{00050}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_ID\ 32}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00051}00051\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00053}00053\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00054}00054\ \textcolor{comment}{\ *\ \ ...\ Operations}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00055}00055\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00057}00057\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00058}00058\ \textcolor{comment}{\ *\ \ ...\ Operations:\ File\ operations}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00059}00059\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00060}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a95449e42e1b807586f5be38b3658c662}{00060}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_OPEN\_FILE\_WS\ 0}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00061}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a991eeed9ea24e15f78e0ccf2d1f44b54}{00061}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_CREAT\_FILE\_WS\ 1}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00062}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a20065ba1489334f4035e49b88358a795}{00062}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_READ\_FILE\_WS\ 2}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00063}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_aa4dc0dfb230cdf5915ccae01fd25d30f}{00063}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_WRITE\_FILE\_WS\ 3}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00064}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_aee682dcb011fe86cadbb54c6400fb6e9}{00064}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_CLOSE\_FILE\_WS\ 4}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00065}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a384f9483d1ea382853d14f44d0a91c23}{00065}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RM\_FILE\ 5}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00066}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a3553a05af4bf939956e878707c65a7d6}{00066}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RM\_FILE\_ASYNC\ 6}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00067}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a97947a0bacd10e529d10dfc408ea3d7c}{00067}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RENAME\_FILE\ 7}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00068}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_ab6f79e6dd8012b42dc6a5a865ca4e502}{00068}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_GETATTR\_FILE\ 8}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00069}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_ae75cdaf76e4d47a966504410bd8dc06b}{00069}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_SETATTR\_FILE\ 9}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00071}00071\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00072}00072\ \textcolor{comment}{\ *\ \ ...\ Operations:\ File\ operations\ without\ session}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00073}00073\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00074}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a75a735b4a5a237b3b9ac96a0d23758eb}{00074}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_OPEN\_FILE\_WOS\ 100}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00075}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a632104261929d49323b24f61f29978b0}{00075}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_CREAT\_FILE\_WOS\ 101}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00076}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a689372ad1c76ef5b5cfc56c4ae6b7d28}{00076}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_READ\_FILE\_WOS\ 102}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00077}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_ae44a71212063495d22cebbf896b36113}{00077}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_WRITE\_FILE\_WOS\ 103}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00079}00079\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00080}00080\ \textcolor{comment}{\ *\ \ ...\ Operations:\ Directory\ operations}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00081}00081\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00082}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a47b1a2ea6bb5ea2900a7ad0c19da8c5c}{00082}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_MKDIR\_DIR\ 20}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00083}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_ac4e41360ae86a06192eae94066f35b7a}{00083}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RMDIR\_DIR\ 21}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00084}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a67548b9f24f83b363df980b7945974e0}{00084}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_RMDIR\_DIR\_ASYNC\ 22}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00085}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a5664a234966cf123eacc16ce06cd2f1b}{00085}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_OPENDIR\_DIR\ 23}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00086}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_aca3c03b483164496d27a280d5db32b6b}{00086}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_READDIR\_DIR\ 24}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00087}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a47ecece93abeff6d705ac6271499fda7}{00087}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_CLOSEDIR\_DIR\ 25}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00089}00089\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00090}00090\ \textcolor{comment}{\ *\ \ ...\ Operations:\ Import\ /\ Export\ operations}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00091}00091\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00092}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a9072e7f40d61e36502fa9b63ba4f8720}{00092}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_FLUSH\_FILE\ 40}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00093}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_abb69d836612d91034b55eb0b9c3534da}{00093}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_PRELOAD\_FILE\ 41}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00095}00095\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00096}00096\ \textcolor{comment}{\ *\ \ ...\ Operations:\ FS\ Operations}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00097}00097\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00098}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a393b7fd3a86252baf8a510e364c74266}{00098}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_STATFS\_DIR\ 60}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00099}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a5e4e32e2b1938add938f1d0f7bbaf8e8}{00099}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_GETNODENAME\ 61}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00100}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_aa6c09ca670d30bca0649ebde42022f43}{00100}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_GETID\ 62}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00102}00102\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00103}00103\ \textcolor{comment}{\ *\ \ ...\ Operations:\ Connection\ operatons}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00104}00104\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00105}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_af83b60c78b5694d18141a2eee97e778f}{00105}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_FINALIZE\ 80}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00106}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a66d66c46f203a234e32c577624015a48}{00106}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_DISCONNECT\ 81}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00107}\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a1461270bdd9cc1d5451ff106e7a3ff83}{00107}}\ \textcolor{preprocessor}{\#define\ TCP\_SERVER\_END\ -\/1}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00109}00109\ \textcolor{comment}{/************************************************}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00110}00110\ \textcolor{comment}{\ *\ \ ...\ Message\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00111}00111\ \textcolor{comment}{\ ***********************************************/}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00112}00112\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00113}00113\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_open}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00114}00114\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00115}00115\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00116}00116\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_open::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00117}00117\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00118}00118\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00119}00119\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__open}{st\_tcp\_server\_open}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00120}00120\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00121}00121\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__open_a56c1cab823292a2d4b434ab3234eddbc}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00122}00122\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00123}00123\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00124}00124\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_open\_req}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00125}00125\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00126}00126\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00127}00127\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_open\_req::fd}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00128}00128\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00129}00129\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00130}00130\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__open__req}{st\_tcp\_server\_open\_req}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00131}00131\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00132}00132\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__open__req_a1b7ba520368a256920045ebda7d96591}{fd}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00133}00133\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00134}00134\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00135}00135\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_creat}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00136}00136\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00137}00137\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00138}00138\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_creat::path}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00139}00139\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00140}00140\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read::offset}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00141}00141\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00142}00142\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read::size}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00143}00143\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00144}00144\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00145}00145\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__read}{st\_tcp\_server\_read}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00146}00146\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00147}00147\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__read_a040ffbc9d43e893acae84c05a6464e62}{fd}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00148}00148\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__read_a1e8d97f1938755885d3d9bd31f3e80ac}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00149}00149\ \ \ \mbox{\hyperlink{filesystem_8h_ae5328712fa145be40b2572f8875b295d}{offset\_t}}\ \mbox{\hyperlink{structst__tcp__server__read_a1af25ce079d9257758f5aa0b84e251fa}{offset}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00150}00150\ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structst__tcp__server__read_aa8fd7e722cbb7c92bad0fb305edd3ee7}{size}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00151}00151\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00152}00152\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00153}00153\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_read\_req}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00154}00154\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00155}00155\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00156}00156\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read\_req::size}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00157}00157\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00158}00158\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read\_req::last}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00159}00159\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00160}00160\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00161}00161\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__read__req}{st\_tcp\_server\_read\_req}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00162}00162\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00163}00163\ \ \ ssize\_t\ \mbox{\hyperlink{structst__tcp__server__read__req_ae4f08ecb6f89d8e6c75b493b96ef2e41}{size}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00164}00164\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__read__req_a90798507270378e2ed3f0ca96c3b4bb2}{last}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00165}00165\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00166}00166\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00167}00167\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_write}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00168}00168\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00169}00169\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00170}00170\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write::fd}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00171}00171\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00172}00172\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write::path}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00173}00173\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00174}00174\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write::offset}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00175}00175\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00176}00176\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write::size}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00177}00177\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00178}00178\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00179}00179\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__write}{st\_tcp\_server\_write}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00180}00180\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00181}00181\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__write_ad89f9e48e949161229bc74e34af79ecc}{fd}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00182}00182\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__write_aa692de6c89f6f8fb3bdca43f100f5ecb}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00183}00183\ \ \ \mbox{\hyperlink{filesystem_8h_ae5328712fa145be40b2572f8875b295d}{offset\_t}}\ \mbox{\hyperlink{structst__tcp__server__write_a3344153b6d1ebccb98f662f385b417f0}{offset}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00184}00184\ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structst__tcp__server__write_a2f1b618670b1d13cc95741852faae3c9}{size}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00185}00185\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00186}00186\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00187}00187\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_write\_req}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00188}00188\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00189}00189\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00190}00190\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write\_req::size}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00191}00191\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00192}00192\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00193}00193\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__write__req}{st\_tcp\_server\_write\_req}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00194}00194\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00195}00195\ \ \ ssize\_t\ \mbox{\hyperlink{structst__tcp__server__write__req_a75126566d29601407595011f0eb844c5}{size}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00196}00196\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00197}00197\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00198}00198\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_close}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00199}00199\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00200}00200\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00201}00201\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_close::fd}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00202}00202\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00203}00203\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_close::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00140}00140\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00141}00141\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__creat}{st\_tcp\_server\_creat}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00142}00142\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00143}00143\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__creat_aafba6568d16490dc3cc148ae73bd6cf0}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00144}00144\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00145}00145\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00146}00146\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_read}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00147}00147\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00148}00148\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00149}00149\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read::fd}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00150}00150\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00151}00151\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00152}00152\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00153}00153\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read::offset}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00154}00154\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00155}00155\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read::size}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00156}00156\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00157}00157\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00158}00158\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__read}{st\_tcp\_server\_read}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00159}00159\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00160}00160\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__read_a040ffbc9d43e893acae84c05a6464e62}{fd}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00161}00161\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__read_a1e8d97f1938755885d3d9bd31f3e80ac}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00162}00162\ \ \ \mbox{\hyperlink{filesystem_8h_ae5328712fa145be40b2572f8875b295d}{offset\_t}}\ \mbox{\hyperlink{structst__tcp__server__read_a1af25ce079d9257758f5aa0b84e251fa}{offset}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00163}00163\ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structst__tcp__server__read_aa8fd7e722cbb7c92bad0fb305edd3ee7}{size}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00164}00164\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00165}00165\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00166}00166\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_read\_req}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00167}00167\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00168}00168\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00169}00169\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read\_req::size}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00170}00170\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00171}00171\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_read\_req::last}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00172}00172\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00173}00173\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00174}00174\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__read__req}{st\_tcp\_server\_read\_req}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00175}00175\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00176}00176\ \ \ ssize\_t\ \mbox{\hyperlink{structst__tcp__server__read__req_ae4f08ecb6f89d8e6c75b493b96ef2e41}{size}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00177}00177\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__read__req_a90798507270378e2ed3f0ca96c3b4bb2}{last}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00178}00178\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00179}00179\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00180}00180\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_write}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00181}00181\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00182}00182\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00183}00183\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write::fd}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00184}00184\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00185}00185\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00186}00186\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00187}00187\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write::offset}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00188}00188\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00189}00189\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write::size}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00190}00190\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00191}00191\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00192}00192\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__write}{st\_tcp\_server\_write}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00193}00193\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00194}00194\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__write_ad89f9e48e949161229bc74e34af79ecc}{fd}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00195}00195\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__write_aa692de6c89f6f8fb3bdca43f100f5ecb}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00196}00196\ \ \ \mbox{\hyperlink{filesystem_8h_ae5328712fa145be40b2572f8875b295d}{offset\_t}}\ \mbox{\hyperlink{structst__tcp__server__write_a3344153b6d1ebccb98f662f385b417f0}{offset}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00197}00197\ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{structst__tcp__server__write_a2f1b618670b1d13cc95741852faae3c9}{size}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00198}00198\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00199}00199\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00200}00200\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_write\_req}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00201}00201\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00202}00202\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00203}00203\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_write\_req::size}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00204}00204\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00205}00205\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00206}00206\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__close}{st\_tcp\_server\_close}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00206}00206\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__write__req}{st\_tcp\_server\_write\_req}}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00207}00207\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00208}00208\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__close_adacabab728bceeff7771d92e0677e9b7}{fd}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00209}00209\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__close_ad537828ac1cf3f1b3946f72c72be73fb}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00210}00210\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00211}00211\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00212}00212\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_rm}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00213}00213\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00214}00214\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00215}00215\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_rm::path}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00216}00216\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00217}00217\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00218}00218\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rm}{st\_tcp\_server\_rm}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00219}00219\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00220}00220\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__rm_a125a2c9955e818359b00f6c3cb4a979f}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00221}00221\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00222}00222\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00223}00223\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_rename}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00224}00224\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00225}00225\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00226}00226\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_rename::old\_url}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00227}00227\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00228}00228\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_rename::new\_url}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00208}00208\ \ \ ssize\_t\ \mbox{\hyperlink{structst__tcp__server__write__req_a75126566d29601407595011f0eb844c5}{size}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00209}00209\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00210}00210\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00211}00211\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_close}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00212}00212\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00213}00213\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00214}00214\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_close::fd}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00215}00215\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00216}00216\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_close::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00217}00217\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00218}00218\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00219}00219\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__close}{st\_tcp\_server\_close}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00220}00220\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00221}00221\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__close_adacabab728bceeff7771d92e0677e9b7}{fd}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00222}00222\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__close_ad537828ac1cf3f1b3946f72c72be73fb}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00223}00223\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00224}00224\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00225}00225\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_rm}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00226}00226\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00227}00227\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00228}00228\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_rm::path}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00229}00229\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00230}00230\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00231}00231\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rename}{st\_tcp\_server\_rename}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00231}00231\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rm}{st\_tcp\_server\_rm}}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00232}00232\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00233}00233\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__rename_aebe1d534f2214d84a097fb16e9b97d7f}{old\_url}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00234}00234\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__rename_a492697bd218bccf9589df3c27cd1e2fe}{new\_url}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00235}00235\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00236}00236\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00237}00237\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_getattr}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00238}00238\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00239}00239\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00240}00240\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_getattr::path}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00241}00241\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00242}00242\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00243}00243\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__getattr}{st\_tcp\_server\_getattr}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00244}00244\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00245}00245\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__getattr_af1a345f34e496b6a04bd386ddaffc299}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00246}00246\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00247}00247\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00248}00248\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_setattr}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00249}00249\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00250}00250\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00251}00251\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_setattr::path}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00252}00252\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00253}00253\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_setattr::attr}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00233}00233\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__rm_a125a2c9955e818359b00f6c3cb4a979f}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00234}00234\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00235}00235\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00236}00236\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_rename}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00237}00237\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00238}00238\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00239}00239\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_rename::old\_url}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00240}00240\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00241}00241\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_rename::new\_url}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00242}00242\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00243}00243\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00244}00244\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rename}{st\_tcp\_server\_rename}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00245}00245\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00246}00246\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__rename_aebe1d534f2214d84a097fb16e9b97d7f}{old\_url}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00247}00247\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__rename_a492697bd218bccf9589df3c27cd1e2fe}{new\_url}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00248}00248\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00249}00249\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00250}00250\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_getattr}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00251}00251\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00252}00252\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00253}00253\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_getattr::path}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00254}00254\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00255}00255\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00256}00256\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__setattr}{st\_tcp\_server\_setattr}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00256}00256\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__getattr}{st\_tcp\_server\_getattr}}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00257}00257\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00258}00258\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__setattr_a37416ab3e03c9e92966dad9ed90ec5a5}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00259}00259\ \ \ \textcolor{keyword}{struct\ }stat\ \mbox{\hyperlink{structst__tcp__server__setattr_a4e933446f76980bf2458437a29835b99}{attr}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00260}00260\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00261}00261\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00262}00262\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_attr\_req}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00263}00263\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00264}00264\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00265}00265\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_attr\_req::status}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00266}00266\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00267}00267\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_attr\_req::attr}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00268}00268\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00269}00269\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00270}00270\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__attr__req}{st\_tcp\_server\_attr\_req}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00271}00271\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00272}00272\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__attr__req_ac9b72713f63bdc42ad6e5537f9e2232b}{status}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00273}00273\ \ \ \textcolor{keyword}{struct\ }stat\ \mbox{\hyperlink{structst__tcp__server__attr__req_a5d3defc90adb2702a978391484b2fff1}{attr}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00274}00274\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00275}00275\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00276}00276\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_mkdir}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00277}00277\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00278}00278\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00279}00279\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_mkdir::path}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00280}00280\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00281}00281\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00282}00282\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__mkdir}{st\_tcp\_server\_mkdir}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00283}00283\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00284}00284\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__mkdir_a3c7cddbe875fc4205d92285d54ca8c97}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00285}00285\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00286}00286\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00287}00287\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_opendir}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00288}00288\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00289}00289\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00290}00290\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_opendir::path}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00291}00291\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00292}00292\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00293}00293\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__opendir}{st\_tcp\_server\_opendir}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00294}00294\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00295}00295\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__opendir_a99ee5479c0a9ec2af8b0201a54168a30}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00296}00296\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00297}00297\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00298}00298\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_readdir}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00299}00299\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00300}00300\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00301}00301\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_readdir::dir}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00302}00302\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00303}00303\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00304}00304\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__readdir}{st\_tcp\_server\_readdir}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00305}00305\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00306}00306\ \ \ DIR\ *\mbox{\hyperlink{structst__tcp__server__readdir_a597875fab461a6e45ea2a732e2ae24fd}{dir}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00307}00307\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00308}00308\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00309}00309\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_direntry}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00310}00310\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00311}00311\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00312}00312\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_direntry::end}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00313}00313\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00314}00314\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_direntry::ret}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00258}00258\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__getattr_af1a345f34e496b6a04bd386ddaffc299}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00259}00259\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00260}00260\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00261}00261\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_setattr}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00262}00262\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00263}00263\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00264}00264\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_setattr::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00265}00265\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00266}00266\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_setattr::attr}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00267}00267\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00268}00268\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00269}00269\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__setattr}{st\_tcp\_server\_setattr}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00270}00270\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00271}00271\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__setattr_a37416ab3e03c9e92966dad9ed90ec5a5}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00272}00272\ \ \ \textcolor{keyword}{struct\ }stat\ \mbox{\hyperlink{structst__tcp__server__setattr_a4e933446f76980bf2458437a29835b99}{attr}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00273}00273\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00274}00274\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00275}00275\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_attr\_req}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00276}00276\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00277}00277\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00278}00278\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_attr\_req::status}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00279}00279\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00280}00280\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_attr\_req::attr}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00281}00281\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00282}00282\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00283}00283\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__attr__req}{st\_tcp\_server\_attr\_req}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00284}00284\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00285}00285\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__attr__req_ac9b72713f63bdc42ad6e5537f9e2232b}{status}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00286}00286\ \ \ \textcolor{keyword}{struct\ }stat\ \mbox{\hyperlink{structst__tcp__server__attr__req_a5d3defc90adb2702a978391484b2fff1}{attr}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00287}00287\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00288}00288\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00289}00289\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_mkdir}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00290}00290\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00291}00291\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00292}00292\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_mkdir::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00293}00293\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00294}00294\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00295}00295\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__mkdir}{st\_tcp\_server\_mkdir}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00296}00296\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00297}00297\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__mkdir_a3c7cddbe875fc4205d92285d54ca8c97}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00298}00298\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00299}00299\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00300}00300\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_opendir}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00301}00301\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00302}00302\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00303}00303\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_opendir::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00304}00304\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00305}00305\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00306}00306\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__opendir}{st\_tcp\_server\_opendir}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00307}00307\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00308}00308\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__opendir_a99ee5479c0a9ec2af8b0201a54168a30}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00309}00309\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00310}00310\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00311}00311\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_readdir}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00312}00312\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00313}00313\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00314}00314\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_readdir::dir}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00315}00315\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00316}00316\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00317}00317\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__direntry}{st\_tcp\_server\_direntry}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00317}00317\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__readdir}{st\_tcp\_server\_readdir}}}
 \DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00318}00318\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00319}00319\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__direntry_af6ffb6717ccc39577e633e71e6ec72ae}{end}};\ \textcolor{comment}{//\ If\ end\ =\ 1\ exist\ entry;\ 0\ not\ exist}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00320}00320\ \ \ \textcolor{keyword}{struct\ }dirent\ \mbox{\hyperlink{structst__tcp__server__direntry_a8b4c87c829d8f412898c69c90a56b095}{ret}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00321}00321\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00322}00322\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00323}00323\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_closedir}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00324}00324\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00325}00325\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00326}00326\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_closedir::dir}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00327}00327\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00328}00328\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00329}00329\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__closedir}{st\_tcp\_server\_closedir}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00330}00330\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00331}00331\ \ \ DIR\ *\mbox{\hyperlink{structst__tcp__server__closedir_ac97fd9712ac0eb927629d90246220c4a}{dir}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00332}00332\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00333}00333\ \textcolor{comment}{}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00334}00334\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_rmdir}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00335}00335\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00336}00336\ \textcolor{comment}{\ *}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00337}00337\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_rmdir::path}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00338}00338\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00339}00339\ \textcolor{comment}{\ */}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00340}00340\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rmdir}{st\_tcp\_server\_rmdir}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00341}00341\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00342}00342\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__rmdir_a4d2ccb7bc9a1368bf22e209c3aff9f13}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00343}00343\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00344}00344\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00345}00345\ \textcolor{comment}{//\ TODO:\ define\ TCP\_SERVER\_OPENDIR\_DIR,\ TCP\_SERVER\_READDIR\_DIR,\ TCP\_SERVER\_CLOSEDIR\_DIR}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00346}00346\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00347}00347\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__flush}{st\_tcp\_server\_flush}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00348}00348\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00349}00349\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__flush_a724ef0c6c8c82c9a61cdc07c871cf3ad}{storage\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00350}00350\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__flush_a450e9ab5fb0f334ec8178643e0d67f34}{virtual\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00351}00351\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__flush_af20593d0b2295de1abd260367ababe75}{block\_size}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00352}00352\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__flush_a4001e22839ceedf5fda6f5076f0176e6}{opt}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00353}00353\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00354}00354\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00355}00355\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__preload}{st\_tcp\_server\_preload}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00356}00356\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00357}00357\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__preload_a0d8b2eddbdbe5c781664fe72697d6c5f}{storage\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00358}00358\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__preload_ae5546cd07ccf65708219835781dc681d}{virtual\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00359}00359\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__preload_a394a0e3f530eb01b68d5bd30ccb0471f}{block\_size}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00360}00360\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__preload_ae8dd30280a08732f778e2ff9de5fa589}{opt}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00361}00361\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00362}00362\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00363}00363\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__end}{st\_tcp\_server\_end}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00364}00364\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00365}00365\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__end_a8627b71746d35458bd26593e44885360}{status}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00366}00366\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00367}00367\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00368}00368\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__msg}{st\_tcp\_server\_msg}}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00369}00369\ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00370}00370\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__msg_a302e2e33d433a27ec945d74f1f9b509f}{type}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00371}00371\ \ \ \textcolor{keywordtype}{char}\ \textcolor{keywordtype}{id}[\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a389397bc321b35713a85016612a44eac}{TCP\_SERVER\_ID}}];}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00372}00372\ \ \ \textcolor{keyword}{union}}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00373}00373\ \ \ \{}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00374}00374\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__open}{st\_tcp\_server\_open}}\ \mbox{\hyperlink{structst__tcp__server__msg_a5acaa09ff98218f82fa0447c8855009b}{op\_open}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00375}00375\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__creat}{st\_tcp\_server\_creat}}\ \mbox{\hyperlink{structst__tcp__server__msg_a649e01780f816843415c5a1f01b0abf6}{op\_creat}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00376}00376\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__close}{st\_tcp\_server\_close}}\ \mbox{\hyperlink{structst__tcp__server__msg_a95a24471786a9823e1ffa7d9be84abbf}{op\_close}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00377}00377\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__read}{st\_tcp\_server\_read}}\ \mbox{\hyperlink{structst__tcp__server__msg_ae157c1b02ec902156fe29273ac5d5383}{op\_read}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00378}00378\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__write}{st\_tcp\_server\_write}}\ \mbox{\hyperlink{structst__tcp__server__msg_a82be0d024d6a5ae29d0757e73d04f857}{op\_write}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00379}00379\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rm}{st\_tcp\_server\_rm}}\ \mbox{\hyperlink{structst__tcp__server__msg_aeecc1fbe7ede6a77476e1ab9bf376167}{op\_rm}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00380}00380\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__mkdir}{st\_tcp\_server\_mkdir}}\ \mbox{\hyperlink{structst__tcp__server__msg_a66b4fdf97279605c2fbac38c3ff81061}{op\_mkdir}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00381}00381\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__opendir}{st\_tcp\_server\_opendir}}\ \mbox{\hyperlink{structst__tcp__server__msg_ae5788eda501aae8487b7b868dd32d5b2}{op\_opendir}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00382}00382\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__readdir}{st\_tcp\_server\_readdir}}\ \mbox{\hyperlink{structst__tcp__server__msg_a2c7343bc1869010a44c17c57443baad3}{op\_readdir}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00383}00383\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__closedir}{st\_tcp\_server\_closedir}}\ \mbox{\hyperlink{structst__tcp__server__msg_ad48245d5b833921bf3e57a96ade0b3d7}{op\_closedir}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00384}00384\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rename}{st\_tcp\_server\_rename}}\ \mbox{\hyperlink{structst__tcp__server__msg_a0b34730881ac62e5f772dbdf72959418}{op\_rename}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00385}00385\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rmdir}{st\_tcp\_server\_rmdir}}\ \mbox{\hyperlink{structst__tcp__server__msg_ad398a23af34ffccbd7c28cd232879654}{op\_rmdir}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00386}00386\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__getattr}{st\_tcp\_server\_getattr}}\ \mbox{\hyperlink{structst__tcp__server__msg_a597f293f791265795235b111ed95dac4}{op\_getattr}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00387}00387\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__setattr}{st\_tcp\_server\_setattr}}\ \mbox{\hyperlink{structst__tcp__server__msg_a3b2f70b28ec9ab4e78db27ed8a4fa4cf}{op\_setattr}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00388}00388\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00389}00389\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__flush}{st\_tcp\_server\_flush}}\ \mbox{\hyperlink{structst__tcp__server__msg_ab36d11a506363f6b0ce477f7454d6562}{op\_flush}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00390}00390\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__preload}{st\_tcp\_server\_preload}}\ \mbox{\hyperlink{structst__tcp__server__msg_a0e34919d8e4850fb193fc7dc4ca6ecef}{op\_preload}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00391}00391\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__end}{st\_tcp\_server\_end}}\ \mbox{\hyperlink{structst__tcp__server__msg_ada8285786c320dd73ed847f78c8b8eb0}{op\_end}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00392}\mbox{\hyperlink{structst__tcp__server__msg_ac8278708c2fb23a2aee211312d221e3e}{00392}}\ \ \ \}\ \mbox{\hyperlink{structst__tcp__server__msg_a9762d972c7fff76359a111373ff26503}{u\_st\_tcp\_server\_msg}};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00393}00393\ \};}
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00394}00394\ }
-\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00395}00395\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00319}00319\ \ \ DIR\ *\mbox{\hyperlink{structst__tcp__server__readdir_a597875fab461a6e45ea2a732e2ae24fd}{dir}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00320}00320\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00321}00321\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00322}00322\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_direntry}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00323}00323\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00324}00324\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00325}00325\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_direntry::end}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00326}00326\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00327}00327\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_direntry::ret}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00328}00328\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00329}00329\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00330}00330\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__direntry}{st\_tcp\_server\_direntry}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00331}00331\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00332}00332\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__direntry_af6ffb6717ccc39577e633e71e6ec72ae}{end}};\ \textcolor{comment}{//\ If\ end\ =\ 1\ exist\ entry;\ 0\ not\ exist}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00333}00333\ \ \ \textcolor{keyword}{struct\ }dirent\ \mbox{\hyperlink{structst__tcp__server__direntry_a8b4c87c829d8f412898c69c90a56b095}{ret}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00334}00334\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00335}00335\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00336}00336\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_closedir}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00337}00337\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00338}00338\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00339}00339\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_closedir::dir}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00340}00340\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00341}00341\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00342}00342\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__closedir}{st\_tcp\_server\_closedir}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00343}00343\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00344}00344\ \ \ DIR\ *\mbox{\hyperlink{structst__tcp__server__closedir_ac97fd9712ac0eb927629d90246220c4a}{dir}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00345}00345\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00346}00346\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00347}00347\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_rmdir}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00348}00348\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00349}00349\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00350}00350\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_rmdir::path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00351}00351\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00352}00352\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00353}00353\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rmdir}{st\_tcp\_server\_rmdir}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00354}00354\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00355}00355\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__rmdir_a4d2ccb7bc9a1368bf22e209c3aff9f13}{path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00356}00356\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00357}00357\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00358}00358\ \textcolor{comment}{//\ TODO:\ define\ TCP\_SERVER\_OPENDIR\_DIR,\ TCP\_SERVER\_READDIR\_DIR,\ TCP\_SERVER\_CLOSEDIR\_DIR}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00359}00359\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00360}00360\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_flush}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00361}00361\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00362}00362\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00363}00363\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_flush::storage\_path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00364}00364\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00365}00365\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_flush::virtual\_path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00366}00366\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00367}00367\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_flush::block\_size}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00368}00368\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.\ }}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00369}00369\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_flush::opt}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00370}00370\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00371}00371\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00372}00372\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__flush}{st\_tcp\_server\_flush}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00373}00373\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00374}00374\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__flush_a724ef0c6c8c82c9a61cdc07c871cf3ad}{storage\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00375}00375\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__flush_a450e9ab5fb0f334ec8178643e0d67f34}{virtual\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00376}00376\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__flush_af20593d0b2295de1abd260367ababe75}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00377}00377\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__flush_a4001e22839ceedf5fda6f5076f0176e6}{opt}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00378}00378\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00379}00379\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00380}00380\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_preload}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00381}00381\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00382}00382\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00383}00383\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_preload::storage\_path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00384}00384\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00385}00385\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_preload::virtual\_path}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00386}00386\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00387}00387\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_preload::block\_size}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00388}00388\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.\ }}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00389}00389\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_preload::opt}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00390}00390\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00391}00391\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00392}00392\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__preload}{st\_tcp\_server\_preload}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00393}00393\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00394}00394\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__preload_a0d8b2eddbdbe5c781664fe72697d6c5f}{storage\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00395}00395\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__preload_ae5546cd07ccf65708219835781dc681d}{virtual\_path}}[\mbox{\hyperlink{all__system_8h_ae688d728e1acdfe5988c7db45d6f0166}{PATH\_MAX}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00396}00396\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__preload_a394a0e3f530eb01b68d5bd30ccb0471f}{block\_size}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00397}00397\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__preload_ae8dd30280a08732f778e2ff9de5fa589}{opt}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00398}00398\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00399}00399\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00400}00400\ \textcolor{comment}{/**\ @struct\ st\_tcp\_server\_end}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00401}00401\ \textcolor{comment}{\ *\ \ This\ is\ a\ struct}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00402}00402\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00403}00403\ \textcolor{comment}{\ *\ \ @var\ st\_tcp\_server\_end::status}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00404}00404\ \textcolor{comment}{\ *\ \ \ \ A\ 'TODO'.}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00405}00405\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00406}00406\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__end}{st\_tcp\_server\_end}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00407}00407\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00408}00408\ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structst__tcp__server__end_a8627b71746d35458bd26593e44885360}{status}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00409}00409\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00410}00410\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00411}00411\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__msg}{st\_tcp\_server\_msg}}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00412}00412\ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00413}00413\ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structst__tcp__server__msg_a302e2e33d433a27ec945d74f1f9b509f}{type}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00414}00414\ \ \ \textcolor{keywordtype}{char}\ \textcolor{keywordtype}{id}[\mbox{\hyperlink{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_a389397bc321b35713a85016612a44eac}{TCP\_SERVER\_ID}}];}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00415}00415\ \ \ \textcolor{keyword}{union}}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00416}00416\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00417}00417\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__open}{st\_tcp\_server\_open}}\ \mbox{\hyperlink{structst__tcp__server__msg_a5acaa09ff98218f82fa0447c8855009b}{op\_open}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00418}00418\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__creat}{st\_tcp\_server\_creat}}\ \mbox{\hyperlink{structst__tcp__server__msg_a649e01780f816843415c5a1f01b0abf6}{op\_creat}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00419}00419\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__close}{st\_tcp\_server\_close}}\ \mbox{\hyperlink{structst__tcp__server__msg_a95a24471786a9823e1ffa7d9be84abbf}{op\_close}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00420}00420\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__read}{st\_tcp\_server\_read}}\ \mbox{\hyperlink{structst__tcp__server__msg_ae157c1b02ec902156fe29273ac5d5383}{op\_read}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00421}00421\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__write}{st\_tcp\_server\_write}}\ \mbox{\hyperlink{structst__tcp__server__msg_a82be0d024d6a5ae29d0757e73d04f857}{op\_write}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00422}00422\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rm}{st\_tcp\_server\_rm}}\ \mbox{\hyperlink{structst__tcp__server__msg_aeecc1fbe7ede6a77476e1ab9bf376167}{op\_rm}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00423}00423\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__mkdir}{st\_tcp\_server\_mkdir}}\ \mbox{\hyperlink{structst__tcp__server__msg_a66b4fdf97279605c2fbac38c3ff81061}{op\_mkdir}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00424}00424\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__opendir}{st\_tcp\_server\_opendir}}\ \mbox{\hyperlink{structst__tcp__server__msg_ae5788eda501aae8487b7b868dd32d5b2}{op\_opendir}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00425}00425\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__readdir}{st\_tcp\_server\_readdir}}\ \mbox{\hyperlink{structst__tcp__server__msg_a2c7343bc1869010a44c17c57443baad3}{op\_readdir}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00426}00426\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__closedir}{st\_tcp\_server\_closedir}}\ \mbox{\hyperlink{structst__tcp__server__msg_ad48245d5b833921bf3e57a96ade0b3d7}{op\_closedir}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00427}00427\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rename}{st\_tcp\_server\_rename}}\ \mbox{\hyperlink{structst__tcp__server__msg_a0b34730881ac62e5f772dbdf72959418}{op\_rename}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00428}00428\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__rmdir}{st\_tcp\_server\_rmdir}}\ \mbox{\hyperlink{structst__tcp__server__msg_ad398a23af34ffccbd7c28cd232879654}{op\_rmdir}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00429}00429\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__getattr}{st\_tcp\_server\_getattr}}\ \mbox{\hyperlink{structst__tcp__server__msg_a597f293f791265795235b111ed95dac4}{op\_getattr}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00430}00430\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__setattr}{st\_tcp\_server\_setattr}}\ \mbox{\hyperlink{structst__tcp__server__msg_a3b2f70b28ec9ab4e78db27ed8a4fa4cf}{op\_setattr}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00431}00431\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00432}00432\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__flush}{st\_tcp\_server\_flush}}\ \mbox{\hyperlink{structst__tcp__server__msg_ab36d11a506363f6b0ce477f7454d6562}{op\_flush}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00433}00433\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__preload}{st\_tcp\_server\_preload}}\ \mbox{\hyperlink{structst__tcp__server__msg_a0e34919d8e4850fb193fc7dc4ca6ecef}{op\_preload}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00434}00434\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structst__tcp__server__end}{st\_tcp\_server\_end}}\ \mbox{\hyperlink{structst__tcp__server__msg_ada8285786c320dd73ed847f78c8b8eb0}{op\_end}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00435}\mbox{\hyperlink{structst__tcp__server__msg_ac8278708c2fb23a2aee211312d221e3e}{00435}}\ \ \ \}\ \mbox{\hyperlink{structst__tcp__server__msg_a9762d972c7fff76359a111373ff26503}{u\_st\_tcp\_server\_msg}};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00436}00436\ \};}
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00437}00437\ }
+\DoxyCodeLine{\Hypertarget{xpn__client_2nfi_2nfi__tcp__server_2tcp__server__ops_8h_source_l00438}00438\ \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}

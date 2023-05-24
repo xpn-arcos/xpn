@@ -1,6 +1,6 @@
 var structnfi__mpi__server__server =
 [
-    [ "id", "structnfi__mpi__server__server.html#a7831c31238c5f4c708a4b8f5fb0c9211", null ],
-    [ "params", "structnfi__mpi__server__server.html#ac8b591e3d27cc499ec391a217787c311", null ],
-    [ "path", "structnfi__mpi__server__server.html#a70424e9068e166f1162271630fbc5115", null ]
+    [ "id", "structnfi__mpi__server__server.html#a93a3f3a2ef5710ba7c0036fd51ec8914", null ],
+    [ "params", "structnfi__mpi__server__server.html#a91f8fb1bb511ef48d787f77438e3f884", null ],
+    [ "path", "structnfi__mpi__server__server.html#a0b24a55ffda90dcba5f9c5961c6a7c47", null ]
 ];

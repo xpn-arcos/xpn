@@ -192,29 +192,29 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_init:\ url\ \%s\ incorrect.\(\backslash\)n"{}},\ url);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00190}00190\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00191}00191\ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ =\ (CLIENT\ *)\mbox{\hyperlink{nfs_8c_a2b4fd7a84ea3fd9799873478ef83808d}{create\_connection\_mount}}(server,\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00191}00191\ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ =\ (CLIENT\ *)\mbox{\hyperlink{nfs_8c_a2b4fd7a84ea3fd9799873478ef83808d}{create\_connection\_mount}}(server,\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00192}00192\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00193}00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00193}00193\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00194}00194\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a6efdfee52275f1141a9f5e297723e11a}{NFSERR\_MNTCONNECTION}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_init:\ server\_aux\ is\ null.\ Can't\ reserve\ memory\(\backslash\)n"{}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(server\_aux);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00199}00199\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00200}00200\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ad994b5af77c6e651c0efd457ae6d48f0}{nfs\_mount}}(dir,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00200}00200\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ad994b5af77c6e651c0efd457ae6d48f0}{nfs\_mount}}(dir,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00201}00201\ \textcolor{preprocessor}{\#if\ defined(DEBUG\_NFI)}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00202}00202\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}desp.\ de\ montar\ \%d\(\backslash\)n"{}},\ ret);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00203}00203\ \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00204}00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00205}00205\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41af76186e5e1208a5d31d4bc01279d54f6}{NFSERR\_MOUNT}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00208}00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_init:\ Can't\ mount\ \%s\ in\ server\ \%s\ (err:\%d).\(\backslash\)n"{}},\ dir,\ server,\ ret);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(server\_aux);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00211}00211\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00212}00212\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00213}00213\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00213}00213\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00214}00214\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00215}00215\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if((strcmp(prt,\ "{}nfs2tcp"{})\ ==\ 0)\ ||}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00216}00216\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (strcmp(prt,\ "{}nfs2tcphilos"{})\ ==\ 0))\{}}
@@ -222,13 +222,13 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00218}00218\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf("{}nfs2tcp\(\backslash\)n"{});}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00219}00219\ \textcolor{comment}{\ \ \ \ \ \ \ \ \#endif}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00220}00220\ \textcolor{comment}{\ \ \ \ \ \ \ \ */}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00221}00221\ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ =\ \mbox{\hyperlink{nfs_8c_a9fa52b417b69db33040d577f2b3720c1}{create\_connection\_nfs}}(server,\ \mbox{\hyperlink{nfs_8h_a572b13ac3a3611259dcfee2b005fc436}{NFS\_TCP}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00221}00221\ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ =\ \mbox{\hyperlink{nfs_8c_a9fa52b417b69db33040d577f2b3720c1}{create\_connection\_nfs}}(server,\ \mbox{\hyperlink{nfs_8h_a572b13ac3a3611259dcfee2b005fc436}{NFS\_TCP}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00222}00222\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ \ \ \ \ \ \}}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00223}00223\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\{}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00224}00224\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>cl\ =\ create\_connection\_nfs(server,\ NFS\_UDP);}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00225}00225\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00226}00226\ \textcolor{comment}{\ \ \ \ \ \ \ \ */}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00227}00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00227}00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00228}00228\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00229}00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41adaabe50ac87356471246894cf39f4be6}{NFSERR\_NFSCONNECTION}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00230}00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_init:\ Can't\ connect\ with\ NFS\ service\ of\ \%s\(\backslash\)n"{}},\ server);}
@@ -254,7 +254,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00250}00250\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00251}00251\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a2194a2cae9cf2eff9f22694ea3220bd7}{NFSERR\_MEMORY}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ac717d4d60d9b9e3b91c39c6d1f2d14e3}{close\_connection\_nfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ac717d4d60d9b9e3b91c39c6d1f2d14e3}{close\_connection\_nfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00254}00254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_init:\ serv-\/>url\ is\ null.\ Can't\ reserve\ memory\(\backslash\)n"{}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(server\_aux);}
@@ -265,7 +265,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00261}00261\ \ \ \ \ \ \ \ \ memset(serv-\/>\mbox{\hyperlink{structnfi__server_a63cc889567eb2424f9ad2e1cfd06ac9b}{wrk}},\ 0,\ \textcolor{keyword}{sizeof}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__worker}{nfi\_worker}}));}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00262}00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (serv-\/>\mbox{\hyperlink{structnfi__server_a63cc889567eb2424f9ad2e1cfd06ac9b}{wrk}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00263}00263\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ac717d4d60d9b9e3b91c39c6d1f2d14e3}{close\_connection\_nfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ac717d4d60d9b9e3b91c39c6d1f2d14e3}{close\_connection\_nfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00265}00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_init:\ serv-\/>wrk\ is\ null.\ Can't\ reserve\ memory\(\backslash\)n"{}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}});}
@@ -305,8 +305,8 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00301}00301\ \ \ \ \ \ \ \ \ server\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__server}{nfi\_nfs\_server}}\ *)serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}};}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00302}00302\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux\ !=\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00303}00303\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00304}00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ !=\ NULL)}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00305}00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ac717d4d60d9b9e3b91c39c6d1f2d14e3}{close\_connection\_nfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00304}00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00305}00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ac717d4d60d9b9e3b91c39c6d1f2d14e3}{close\_connection\_nfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00306}00306\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00307}00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{urlstr_8c_acd97428310ba9bd4a248504066134bb1}{ParseURL}}(serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}},\ NULL,\ NULL,\ NULL,\ NULL,\ NULL,\ dir);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00308}00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
@@ -316,11 +316,11 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00312}00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00313}00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00314}00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00315}00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ =\ \mbox{\hyperlink{nfs_8c_a2b4fd7a84ea3fd9799873478ef83808d}{create\_connection\_mount}}(serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}},\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00316}00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00315}00315\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ =\ \mbox{\hyperlink{nfs_8c_a2b4fd7a84ea3fd9799873478ef83808d}{create\_connection\_mount}}(serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}},\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00316}00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ !=\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00317}00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00318}00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ac2d09eb246acc72162c4b1f15e8538e4}{nfs\_umount}}(dir,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00319}00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00318}00318\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ac2d09eb246acc72162c4b1f15e8538e4}{nfs\_umount}}(dir,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00319}00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00320}00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00321}00321\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00322}00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}});}
@@ -369,8 +369,8 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00365}00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00366}00366\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00367}00367\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00368}00368\ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ =\ (CLIENT\ *)\mbox{\hyperlink{nfs_8c_a2b4fd7a84ea3fd9799873478ef83808d}{create\_connection\_mount}}(server,\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00369}00369\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00368}00368\ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ =\ (CLIENT\ *)\mbox{\hyperlink{nfs_8c_a2b4fd7a84ea3fd9799873478ef83808d}{create\_connection\_mount}}(server,\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00369}00369\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00370}00370\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00371}00371\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a6efdfee52275f1141a9f5e297723e11a}{NFSERR\_MNTCONNECTION}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00372}00372\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_reconnect:\ Can't\ connect\ with\ MNT\ service\ of\ \%s\(\backslash\)n"{}},\ server);}
@@ -378,20 +378,20 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00374}00374\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00375}00375\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00376}00376\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00377}00377\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ad994b5af77c6e651c0efd457ae6d48f0}{nfs\_mount}}(dir,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00377}00377\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ad994b5af77c6e651c0efd457ae6d48f0}{nfs\_mount}}(dir,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00378}00378\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00379}00379\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00380}00380\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41af76186e5e1208a5d31d4bc01279d54f6}{NFSERR\_MOUNT}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00381}00381\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00381}00381\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00382}00382\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_init:\ Can't\ mount\ \%s\ in\ server\ \%s\ (err:\%d).\(\backslash\)n"{}},\ dir,\ server,\ ret);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00383}00383\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(server\_aux);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00384}00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00385}00385\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00386}00386\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00387}00387\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00387}00387\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00388}00388\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00389}00389\ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ =\ \mbox{\hyperlink{nfs_8c_a9fa52b417b69db33040d577f2b3720c1}{create\_connection\_nfs}}(server,\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00390}00390\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00389}00389\ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ =\ \mbox{\hyperlink{nfs_8c_a9fa52b417b69db33040d577f2b3720c1}{create\_connection\_nfs}}(server,\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00390}00390\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00391}00391\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00392}00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41adaabe50ac87356471246894cf39f4be6}{NFSERR\_NFSCONNECTION}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00393}00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_reconnect:\ Can't\ connect\ with\ NFS\ service\ of\ \%s\(\backslash\)n"{}},\ server);}
@@ -424,8 +424,8 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00420}00420\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00421}00421\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux\ !=\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00422}00422\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ !=\ NULL)}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00424}00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ac717d4d60d9b9e3b91c39c6d1f2d14e3}{close\_connection\_nfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00424}00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ac717d4d60d9b9e3b91c39c6d1f2d14e3}{close\_connection\_nfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00425}00425\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00426}00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{urlstr_8c_acd97428310ba9bd4a248504066134bb1}{ParseURL}}(serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}},\ NULL,\ NULL,\ NULL,\ NULL,\ NULL,\ dir);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00427}00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
@@ -436,11 +436,11 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00432}00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00433}00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00434}00434\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00435}00435\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ =\ \mbox{\hyperlink{nfs_8c_a2b4fd7a84ea3fd9799873478ef83808d}{create\_connection\_mount}}(serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}},\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00436}00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}}\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00435}00435\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ =\ \mbox{\hyperlink{nfs_8c_a2b4fd7a84ea3fd9799873478ef83808d}{create\_connection\_mount}}(serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}},\ \mbox{\hyperlink{nfs_8h_afa183a3ebe0e4651491af9e0d2ad0e67}{NFS\_UDP}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00436}00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}}\ !=\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00437}00437\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00438}00438\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ac2d09eb246acc72162c4b1f15e8538e4}{nfs\_umount}}(dir,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00439}00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00438}00438\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ac2d09eb246acc72162c4b1f15e8538e4}{nfs\_umount}}(dir,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00439}00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfs_8c_ad5b3dddef903c2a2b980f4a3d5261da5}{close\_connection\_mount}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00440}00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00441}00441\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00442}00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}});}
@@ -467,7 +467,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00463}00463\ \textcolor{comment}{\ *\ GENERIC\ FUNCTIONS\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00464}00464\ \textcolor{comment}{\ ************************************************************/}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00465}00465\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00466}\mbox{\hyperlink{nfi__nfs_8c_aa4a76a3398ab90dbbd600f5888810a69}{00466}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_aa4a76a3398ab90dbbd600f5888810a69}{nfi\_nfs\_getattr}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00466}\mbox{\hyperlink{nfi__nfs_8c_aa4a76a3398ab90dbbd600f5888810a69}{00466}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_aa4a76a3398ab90dbbd600f5888810a69}{nfi\_nfs\_getattr}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00467}00467\ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00468}00468\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00469}00469\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ ret;}
@@ -490,14 +490,14 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00486}00486\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00487}00487\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00488}00488\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00489}00489\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00489}00489\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00490}00490\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00491}00491\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ad93b204513b47d2b95187ac3c8f03faa}{NFSERR\_PARAM}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00492}00492\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_getattr:\ fh\ parameter\ incorrect\(\backslash\)n"{}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00493}00493\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00494}00494\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00495}00495\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00496}00496\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>priv\_fh\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00496}00496\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>priv\_fh\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00497}00497\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00498}00498\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ad93b204513b47d2b95187ac3c8f03faa}{NFSERR\_PARAM}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00499}00499\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_getattr:\ fh-\/>priv\_fh\ parameter\ incorrect\(\backslash\)n"{}});}
@@ -521,14 +521,14 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00517}00517\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00518}00518\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00519}00519\ \textcolor{preprocessor}{\#endif}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00520}00520\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>priv\_fh;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00520}00520\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>priv\_fh;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00521}00521\ \ \ \ \ \ \ \ \ server\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__server}{nfi\_nfs\_server}}\ *)serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}};}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00522}00522\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00523}00523\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ae32be937f49c11ce601aaca530acf811}{nfs\_getattr}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}},\ \&fatt,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00523}00523\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ae32be937f49c11ce601aaca530acf811}{nfs\_getattr}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}},\ \&fatt,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00524}00524\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00525}00525\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00526}00526\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a4f9bb0fa25b791023b77b0222b95fb16}{NFSERR\_GETATTR}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00527}00527\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_getattr:\ Fail\ getattr\ \%s\ in\ server\ \%s\ (err:\%d).\(\backslash\)n"{}},\ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>url,\ serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}},\ ret);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00527}00527\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_getattr:\ Fail\ getattr\ \%s\ in\ server\ \%s\ (err:\%d).\(\backslash\)n"{}},\ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>url,\ serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}},\ ret);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00528}00528\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00529}00529\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00530}00530\ }
@@ -536,7 +536,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00532}00532\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00533}00533\ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00534}00534\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00535}\mbox{\hyperlink{nfi__nfs_8c_a24f82ec14542e003683fc4a1a5717ac1}{00535}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a24f82ec14542e003683fc4a1a5717ac1}{nfi\_nfs\_setattr}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00535}\mbox{\hyperlink{nfi__nfs_8c_a24f82ec14542e003683fc4a1a5717ac1}{00535}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a24f82ec14542e003683fc4a1a5717ac1}{nfi\_nfs\_setattr}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00536}00536\ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00537}00537\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00538}00538\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ ret;}
@@ -558,7 +558,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00554}00554\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00555}00555\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00556}00556\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00557}00557\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>priv\_fh\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00557}00557\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>priv\_fh\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00558}00558\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00559}00559\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ad93b204513b47d2b95187ac3c8f03faa}{NFSERR\_PARAM}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00560}00560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
@@ -584,14 +584,14 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00580}00580\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00581}00581\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs_8c_a548b1ec5ff7931c29dce4d104504b4e0}{NFItoNFSattr}}(\&fatt,\ attr);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00582}00582\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00583}00583\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>priv\_fh;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00583}00583\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>priv\_fh;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00584}00584\ \ \ \ \ \ \ \ \ server\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__server}{nfi\_nfs\_server}}\ *)serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}};}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00585}00585\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00586}00586\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2a162a3606a22d3489bb35abda72a254}{nfs\_setattr}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}},\ \&fatt,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00586}00586\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2a162a3606a22d3489bb35abda72a254}{nfs\_setattr}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}},\ \&fatt,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00587}00587\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00588}00588\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00589}00589\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a4f9bb0fa25b791023b77b0222b95fb16}{NFSERR\_GETATTR}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00590}00590\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_setattr:\ Fail\ setattr\ \%s\ in\ server\ \%s\ (err:\%d).\(\backslash\)n"{}},\ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>url,\ serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}},\ ret);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00590}00590\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_setattr:\ Fail\ setattr\ \%s\ in\ server\ \%s\ (err:\%d).\(\backslash\)n"{}},\ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>url,\ serv-\/>\mbox{\hyperlink{structnfi__server_a9ff15f359e567cd4109c1fdfef851a99}{server}},\ ret);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00591}00591\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00592}00592\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00593}00593\ }
@@ -666,11 +666,11 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00662}00662\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{urlstr_8c_a594db38bc6d47bbe1be1fa09645a0900}{getDirWithURL}}(serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}},\ dir);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00663}00663\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00664}00664\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ obtaine\ the\ NFS\ file\ handle\ */}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00665}00665\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00665}00665\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00666}00666\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dir,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00667}00667\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00667}00667\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00668}00668\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00669}00669\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00669}00669\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00670}00670\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00671}00671\ \textcolor{preprocessor}{\#define\ DBG\_NFI\ 0}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00672}00672\ \textcolor{preprocessor}{\#ifdef\ DBG\_NFI}}
@@ -721,7 +721,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00717}00717\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00718}00718\ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00719}00719\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00720}\mbox{\hyperlink{nfi__nfs_8c_a3b50a0df041d6b60d8134fa125b90154}{00720}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a3b50a0df041d6b60d8134fa125b90154}{nfi\_nfs\_close}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}})}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00720}\mbox{\hyperlink{nfi__nfs_8c_a3b50a0df041d6b60d8134fa125b90154}{00720}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a3b50a0df041d6b60d8134fa125b90154}{nfi\_nfs\_close}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *server,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}})}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00721}00721\ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00722}00722\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (server\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00723}00723\ \ \ \ \ \ \ \ \ \{}
@@ -729,34 +729,34 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00725}00725\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_close:\ server\ is\ null.\(\backslash\)n"{}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00726}00726\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00727}00727\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00728}00728\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00728}00728\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00729}00729\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00730}00730\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ad93b204513b47d2b95187ac3c8f03faa}{NFSERR\_PARAM}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00731}00731\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_close:\ fh\ is\ null.\(\backslash\)n"{}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00732}00732\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00733}00733\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00734}00734\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00735}00735\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>priv\_fh\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00735}00735\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>priv\_fh\ !=\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00736}00736\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00737}00737\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ free\ memory\ */}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00738}00738\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ fprintf(stderr,"{}nfi\_nfs\_close:\ fh-\/>priv\_fh\ is\ null.\(\backslash\)n"{});}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00739}00739\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>priv\_fh);}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00740}00740\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>priv\_fh\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00739}00739\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>priv\_fh);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00740}00740\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>priv\_fh\ =\ NULL;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00741}00741\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00742}00742\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00743}00743\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>url\ !=\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00743}00743\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>url\ !=\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00744}00744\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00745}00745\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>url);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00745}00745\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>url);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00746}00746\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00747}00747\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00748}00748\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>type\ =\ \mbox{\hyperlink{nfi_8h_a8d72d1d8fabde69d386ff6b0d2a79765}{NFINULL}};}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00749}00749\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>server\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00748}00748\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>type\ =\ \mbox{\hyperlink{nfi_8h_a8d72d1d8fabde69d386ff6b0d2a79765}{NFINULL}};}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00749}00749\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>server\ =\ NULL;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00750}00750\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00751}00751\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00752}00752\ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00753}00753\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00754}\mbox{\hyperlink{nfi__nfs_8c_a173fc62b20c66c81f772c2ccffe01122}{00754}}\ ssize\_t\ \mbox{\hyperlink{nfi__nfs_8c_a173fc62b20c66c81f772c2ccffe01122}{nfi\_nfs\_read}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00755}00755\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00755}00755\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00756}00756\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ *buffer,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00757}00757\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ off\_t\ offset,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00758}00758\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ size)}
@@ -773,7 +773,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00769}00769\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00770}00770\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00771}00771\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00772}00772\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00772}00772\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00773}00773\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00774}00774\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ad93b204513b47d2b95187ac3c8f03faa}{NFSERR\_PARAM}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00775}00775\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
@@ -797,15 +797,15 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00793}00793\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00794}00794\ \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00795}00795\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00796}00796\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>priv\_fh;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00796}00796\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>priv\_fh;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00797}00797\ \ \ \ \ \ \ \ \ server\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__server}{nfi\_nfs\_server}}\ *)serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}};}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00798}00798\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00799}00799\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ fprintf(stderr,\ "{}nfs\_read(offset=\%d,\ size=\%d)"{},\ offset,\ size);}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00800}00800\ \ \ \ \ \ \ \ \ new\_size\ =\ \mbox{\hyperlink{nfs_8c_aac16e5c265667175431b653bfa0cf70c}{nfs\_read}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00800}00800\ \ \ \ \ \ \ \ \ new\_size\ =\ \mbox{\hyperlink{nfs_8c_aac16e5c265667175431b653bfa0cf70c}{nfs\_read}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00801}00801\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{char}\ *)buffer,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00802}00802\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ offset,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00803}00803\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00804}00804\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00804}00804\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00805}00805\ \textcolor{comment}{//\ fprintf(stderr,\ "{}=\%d\(\backslash\)n"{},\ new\_size);}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00806}00806\ \textcolor{preprocessor}{\#ifdef\ DBG\_NFI}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00807}00807\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ fprintf(stderr,"{}nfi\_nfs\_read:\ read\ \%s\ off\ \%d\ size\ \%d\ (err:\%d).\(\backslash\)n"{},fh-\/>url,(int)offset,(int)size,(int)new\_size);}}
@@ -814,7 +814,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00810}00810\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (new\_size\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00811}00811\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00812}00812\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a41c912b4cfda8675f9b7df97111c2938}{NFSERR\_READ}});}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00813}00813\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_read:\ Fail\ read\ \%s\ off\ \%d\ size\ \%d\ (err:\%d).\(\backslash\)n"{}},\ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>url,\ (\textcolor{keywordtype}{int})offset,\ (\textcolor{keywordtype}{int})size,\ (\textcolor{keywordtype}{int})new\_size);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00813}00813\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_read:\ Fail\ read\ \%s\ off\ \%d\ size\ \%d\ (err:\%d).\(\backslash\)n"{}},\ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>url,\ (\textcolor{keywordtype}{int})offset,\ (\textcolor{keywordtype}{int})size,\ (\textcolor{keywordtype}{int})new\_size);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00814}00814\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00815}00815\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00816}00816\ }
@@ -822,7 +822,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00818}00818\ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00819}00819\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00820}\mbox{\hyperlink{nfi__nfs_8c_a94c7547089c4ef2944d0fc31c9a0366d}{00820}}\ ssize\_t\ \mbox{\hyperlink{nfi__nfs_8c_a94c7547089c4ef2944d0fc31c9a0366d}{nfi\_nfs\_write}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00821}00821\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00821}00821\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00822}00822\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ *buffer,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00823}00823\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ off\_t\ offset,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00824}00824\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ size)}
@@ -838,7 +838,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00834}00834\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00835}00835\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00836}00836\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00837}00837\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00837}00837\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00838}00838\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00839}00839\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ad93b204513b47d2b95187ac3c8f03faa}{NFSERR\_PARAM}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00840}00840\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
@@ -862,14 +862,14 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00858}00858\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00859}00859\ \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00860}00860\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00861}00861\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>priv\_fh;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00861}00861\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>priv\_fh;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00862}00862\ \ \ \ \ \ \ \ \ server\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__server}{nfi\_nfs\_server}}\ *)serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}};}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00863}00863\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00864}00864\ \ \ \ \ \ \ \ \ new\_size\ =\ \mbox{\hyperlink{nfs_8c_ae65f8e9f3df4f8e470e343e2bc6f38e7}{nfs\_write}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00864}00864\ \ \ \ \ \ \ \ \ new\_size\ =\ \mbox{\hyperlink{nfs_8c_ae65f8e9f3df4f8e470e343e2bc6f38e7}{nfs\_write}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00865}00865\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{char}\ *)buffer,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00866}00866\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ offset,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00867}00867\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ size,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00868}00868\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00868}00868\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00869}00869\ \textcolor{preprocessor}{\#define\ DBG\_NFI\ 0}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00870}00870\ \textcolor{preprocessor}{\#ifdef\ DBG\_NFI}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00871}00871\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ fprintf(stderr,"{}nfi\_nfs\_write:\ write\ \%s\ off\ \%d\ size\ \%d\ (err:\%d).\(\backslash\)n"{},fh-\/>url,(int)offset,(int)size,(int)new\_size);}}
@@ -877,7 +877,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00873}00873\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00874}00874\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (new\_size\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00875}00875\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00876}00876\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_write:\ Fail\ write\ \%s\ off\ \%d\ size\ \%d\ (err:\%d).\(\backslash\)n"{}},\ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>url,\ (\textcolor{keywordtype}{int})offset,\ (\textcolor{keywordtype}{int})size,\ (\textcolor{keywordtype}{int})new\_size);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00876}00876\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_write:\ Fail\ write\ \%s\ off\ \%d\ size\ \%d\ (err:\%d).\(\backslash\)n"{}},\ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>url,\ (\textcolor{keywordtype}{int})offset,\ (\textcolor{keywordtype}{int})size,\ (\textcolor{keywordtype}{int})new\_size);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00877}00877\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a41002614ca50ffa2cf01561958230db0}{NFSERR\_WRITE}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00878}00878\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00879}00879\ \ \ \ \ \ \ \ \ \}}
@@ -885,7 +885,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00881}00881\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ new\_size;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00882}00882\ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00883}00883\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00884}\mbox{\hyperlink{nfi__nfs_8c_a0fc9acda9c20d4b7f73a7f070a70a499}{00884}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a0fc9acda9c20d4b7f73a7f070a70a499}{nfi\_nfs\_create}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}})}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00884}\mbox{\hyperlink{nfi__nfs_8c_a0fc9acda9c20d4b7f73a7f070a70a499}{00884}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a0fc9acda9c20d4b7f73a7f070a70a499}{nfi\_nfs\_create}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}})}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00885}00885\ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00886}00886\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00887}00887\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ server[\mbox{\hyperlink{nfs_8h_a36eb9b3fdae5249d235f815bdab2a745}{NFSPATHLEN}}],\ dir[\mbox{\hyperlink{nfs_8h_a36eb9b3fdae5249d235f815bdab2a745}{NFSPATHLEN}}],\ file[\mbox{\hyperlink{nfs_8h_a36eb9b3fdae5249d235f815bdab2a745}{NFSPATHLEN}}];}
@@ -899,7 +899,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00895}00895\ \textcolor{comment}{\ \ \ \ \ \ \ \ /*************************/}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00896}00896\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ problemas\ con\ el\ test\ */}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00897}00897\ \textcolor{comment}{\ \ \ \ \ \ \ \ /*************************/}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00898}00898\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfi__nfs_8c_a7d672b165d293a824532b32e0e02b5c8}{nfs\_open}}(serv,\ url,\ \mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00898}00898\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfi__nfs_8c_a7d672b165d293a824532b32e0e02b5c8}{nfs\_open}}(serv,\ url,\ \mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00899}00899\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ !=\ -\/1)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00900}00900\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00901}00901\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
@@ -968,11 +968,11 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00964}00964\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{urlstr_8c_a594db38bc6d47bbe1be1fa09645a0900}{getDirWithURL}}(serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}},\ dir);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00965}00965\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ obtain\ the\ directory\ file\ handle\ */}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00966}00966\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00967}00967\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00967}00967\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00968}00968\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dir,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00969}00969\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fhAux,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00970}00970\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00971}00971\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00971}00971\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00972}00972\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00973}00973\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00974}00974\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ab79cadba6efdc3022ba2f2cd98be0e60}{NFSERR\_LOOKUP}});}
@@ -985,9 +985,9 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00981}00981\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a702ffe31ec3d9887a0c559be5fdf947f}{nfs\_create}}(fhAux,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00982}00982\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ file,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00983}00983\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ attr-\/>\mbox{\hyperlink{structnfi__attr_aad34ca0448fa1277cc2ab0980ce55c53}{at\_mode}},}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00984}00984\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00984}00984\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00985}00985\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&fatt,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00986}00986\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00986}00986\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00987}00987\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00988}00988\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00989}00989\ \ \ \ \ \ \ \ \ \{}
@@ -996,17 +996,17 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00992}00992\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(fh\_aux);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00993}00993\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00994}00994\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00995}00995\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>server\ =\ serv;}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00996}00996\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>priv\_fh\ =\ (\textcolor{keywordtype}{void}\ *)fh\_aux;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00995}00995\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>server\ =\ serv;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00996}00996\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>priv\_fh\ =\ (\textcolor{keywordtype}{void}\ *)fh\_aux;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00997}00997\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00998}00998\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>url\ =\ (\textcolor{keywordtype}{char}\ *)malloc(strlen(url)\ +\ 1);}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00999}00999\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>url\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00998}00998\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>url\ =\ (\textcolor{keywordtype}{char}\ *)malloc(strlen(url)\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l00999}00999\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>url\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01000}01000\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01001}01001\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a2194a2cae9cf2eff9f22694ea3220bd7}{NFSERR\_MEMORY}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01002}01002\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(stderr,\ \textcolor{stringliteral}{"{}nfi\_nfs\_init:\ fh-\/>url\ is\ null.\ Can't\ reserve\ memory\(\backslash\)n"{}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01003}01003\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01004}01004\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01005}01005\ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}}-\/>url,\ url);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01005}01005\ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}}-\/>url,\ url);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01006}01006\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01007}01007\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs_8c_aac5f9821ffec3c079686d8e1c6e758b7}{NFStoNFIattr}}(attr,\ \&fatt);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01008}01008\ }
@@ -1066,11 +1066,11 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01062}01062\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01063}01063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{urlstr_8c_a594db38bc6d47bbe1be1fa09645a0900}{getDirWithURL}}(serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}},\ dir);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01064}01064\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ obtain\ the\ directory\ file\ handle\ */}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01065}01065\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01065}01065\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01066}01066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dir,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01067}01067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fhAux,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01068}01068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01069}01069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01069}01069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01070}01070\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01071}01071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01072}01072\ \ \ \ \ \ \ \ \ \{}
@@ -1082,7 +1082,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01078}01078\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ remove\ the\ file\ into\ the\ directory\ */}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01079}01079\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_adafda974169547ecf011dd04d5e212e8}{nfs\_remove}}(fhAux,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01080}01080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ file,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01081}01081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01081}01081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01082}01082\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01083}01083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01084}01084\ \ \ \ \ \ \ \ \ \{}
@@ -1169,11 +1169,11 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01165}01165\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{urlstr_8c_a594db38bc6d47bbe1be1fa09645a0900}{getDirWithURL}}(serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}},\ dir\_dest);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01166}01166\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01167}01167\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ obtain\ the\ directory\ file\ handle\ */}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01168}01168\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01168}01168\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01169}01169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dir\_src,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01170}01170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fhAux\_src,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01171}01171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01172}01172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01172}01172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01173}01173\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01174}01174\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01175}01175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ab79cadba6efdc3022ba2f2cd98be0e60}{NFSERR\_LOOKUP}});}
@@ -1183,11 +1183,11 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01179}01179\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01180}01180\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01181}01181\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ obtain\ the\ directory\ file\ handle\ */}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01182}01182\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01182}01182\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01183}01183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dir\_dest,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01184}01184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fhAux\_dest,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01185}01185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01186}01186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01186}01186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01187}01187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01188}01188\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01189}01189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ab79cadba6efdc3022ba2f2cd98be0e60}{NFSERR\_LOOKUP}});}
@@ -1196,7 +1196,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01192}01192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01193}01193\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01194}01194\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01195}01195\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a06fe7cf83b055994ad667e15d306642b}{nfs\_rename}}(fhAux\_src,\ file\_src,\ fhAux\_dest,\ file\_dest,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01195}01195\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a06fe7cf83b055994ad667e15d306642b}{nfs\_rename}}(fhAux\_src,\ file\_src,\ fhAux\_dest,\ file\_dest,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01196}01196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01197}01197\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01198}01198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ fprintf(stderr,"{}nfi\_nfs\_remove:\ Fail\ remove\ \%s\ in\ server\ \%s\ (ret:\%d).\(\backslash\)n"{},dir,serv-\/>server,ret);}}
@@ -1207,7 +1207,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01203}01203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01204}01204\ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01205}01205\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01206}\mbox{\hyperlink{nfi__nfs_8c_a9e6e09933c7ac815080295319a1f25b5}{01206}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a9e6e09933c7ac815080295319a1f25b5}{nfi\_nfs\_mkdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}})}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01206}\mbox{\hyperlink{nfi__nfs_8c_a9e6e09933c7ac815080295319a1f25b5}{01206}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a9e6e09933c7ac815080295319a1f25b5}{nfi\_nfs\_mkdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keywordtype}{char}\ *url,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__attr}{nfi\_attr}}\ *attr,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}})}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01207}01207\ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01208}01208\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ server[\mbox{\hyperlink{nfs_8h_a36eb9b3fdae5249d235f815bdab2a745}{NFSPATHLEN}}],\ dir[\mbox{\hyperlink{nfs_8h_a36eb9b3fdae5249d235f815bdab2a745}{NFSPATHLEN}}],\ file[\mbox{\hyperlink{nfs_8h_a36eb9b3fdae5249d235f815bdab2a745}{NFSPATHLEN}}];}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01209}01209\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ ret;}
@@ -1278,11 +1278,11 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01274}01274\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01275}01275\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{urlstr_8c_a594db38bc6d47bbe1be1fa09645a0900}{getDirWithURL}}(serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}},\ dir);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01276}01276\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ obtain\ the\ directory\ file\ handle\ */}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01277}01277\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01277}01277\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01278}01278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dir,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01279}01279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fhAux,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01280}01280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01281}01281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01281}01281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01282}01282\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01283}01283\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01284}01284\ \ \ \ \ \ \ \ \ \{}
@@ -1296,9 +1296,9 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01292}01292\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_ac2c52a3d063ebac43812e4343f7365af}{nfs\_mkdir}}(fhAux,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01293}01293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ file,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01294}01294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ attr-\/>\mbox{\hyperlink{structnfi__attr_aad34ca0448fa1277cc2ab0980ce55c53}{at\_mode}},}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01295}01295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01295}01295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01296}01296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&fatt,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01297}01297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01297}01297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01298}01298\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01299}01299\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01300}01300\ \ \ \ \ \ \ \ \ \{}
@@ -1308,16 +1308,16 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01304}01304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01305}01305\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01306}01306\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01307}01307\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>priv\_fh\ =\ (\textcolor{keywordtype}{void}\ *)fh\_aux;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01307}01307\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>priv\_fh\ =\ (\textcolor{keywordtype}{void}\ *)fh\_aux;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01308}01308\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01309}01309\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>url\ =\ (\textcolor{keywordtype}{char}\ *)malloc(strlen(url)\ +\ 1);}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01310}01310\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>url\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01309}01309\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>url\ =\ (\textcolor{keywordtype}{char}\ *)malloc(strlen(url)\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01310}01310\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>url\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01311}01311\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01312}01312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a2194a2cae9cf2eff9f22694ea3220bd7}{NFSERR\_MEMORY}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01313}01313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ free(fh\_aux);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01314}01314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01315}01315\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01316}01316\ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>url,\ url);}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01316}01316\ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>url,\ url);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01317}01317\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01318}01318\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs_8c_aac5f9821ffec3c079686d8e1c6e758b7}{NFStoNFIattr}}(attr,\ \&fatt);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01319}01319\ }
@@ -1376,11 +1376,11 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01372}01372\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01373}01373\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{urlstr_8c_a594db38bc6d47bbe1be1fa09645a0900}{getDirWithURL}}(serv-\/>\mbox{\hyperlink{structnfi__server_a0ef277aa504699b270147547166a68e6}{url}},\ dir);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01374}01374\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ obtain\ the\ directory\ file\ handle\ */}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01375}01375\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01375}01375\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f49d429fe68f0801020a1a3b280ea69}{nfs\_lookup}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01376}01376\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dir,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01377}01377\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fhAux,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01378}01378\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NULL,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01379}01379\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01379}01379\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01380}01380\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01381}01381\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01382}01382\ \ \ \ \ \ \ \ \ \{}
@@ -1392,7 +1392,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01388}01388\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ remove\ the\ dir\ into\ the\ directory\ */}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01389}01389\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a4d4a34922fba4b94c1e5c6d78396f30b}{nfs\_rmdir}}(fhAux,}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01390}01390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ file,}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01391}01391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01391}01391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01392}01392\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01393}01393\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01394}01394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a830172afbf11bcf345941b9e6b37647a}{NFSERR\_REMOVE}});}
@@ -1418,7 +1418,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01414}01414\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01415}01415\ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01416}01416\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01417}\mbox{\hyperlink{nfi__nfs_8c_a886eded93c06e20a9446fce0f1cd4cc8}{01417}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a886eded93c06e20a9446fce0f1cd4cc8}{nfi\_nfs\_readdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},\ \textcolor{keyword}{struct}\ dirent\ *entry)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01417}\mbox{\hyperlink{nfi__nfs_8c_a886eded93c06e20a9446fce0f1cd4cc8}{01417}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a886eded93c06e20a9446fce0f1cd4cc8}{nfi\_nfs\_readdir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},\ \textcolor{keyword}{struct}\ dirent\ *entry)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01418}01418\ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01419}01419\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ ret;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01420}01420\ }
@@ -1431,19 +1431,19 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01427}01427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01428}01428\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01429}01429\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01430}01430\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01430}01430\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01431}01431\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01432}01432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ad93b204513b47d2b95187ac3c8f03faa}{NFSERR\_PARAM}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01433}01433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01434}01434\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01435}01435\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01436}01436\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>priv\_fh\ ==\ NULL)}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01436}01436\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>priv\_fh\ ==\ NULL)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01437}01437\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01438}01438\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41ad93b204513b47d2b95187ac3c8f03faa}{NFSERR\_PARAM}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01439}01439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01440}01440\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01441}01441\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01442}01442\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>type\ !=\ \mbox{\hyperlink{nfi_8h_a49c6d3ecd6b5513380d1210937c3dc27}{NFIDIR}})}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01442}01442\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>type\ !=\ \mbox{\hyperlink{nfi_8h_a49c6d3ecd6b5513380d1210937c3dc27}{NFIDIR}})}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01443}01443\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01444}01444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(NFSERR\_NOTDIR);}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01445}01445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
@@ -1468,16 +1468,16 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01464}01464\ \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01465}01465\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01466}01466\ \ \ \ \ \ \ \ \ server\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__server}{nfi\_nfs\_server}}\ *)serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}};}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01467}01467\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}}-\/>priv\_fh;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01467}01467\ \ \ \ \ \ \ \ \ fh\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__fhandle}{nfi\_nfs\_fhandle}}\ *)\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}}-\/>priv\_fh;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01468}01468\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01469}01469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_af62fd36348838132a28b3ad7574f5919}{eofdir}})}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01469}01469\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a0cd215dfa7ec0b4c25772cacead5a37f}{eofdir}})}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01470}01470\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01471}01471\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ entry-\/>d\_name[0]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01472}01472\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01473}01473\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01474}01474\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01475}01475\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ TODO:\ update\ nfs\_readdir\ to\ new\ header}}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01476}01476\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_aa6dc2c6a99596ba9fee45ebc3c0cb3af}{nfs\_readdir}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}},\ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a72fa8981d2b829719cfdadab1240bbdf}{cookie}},\ entry,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01476}01476\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_aa6dc2c6a99596ba9fee45ebc3c0cb3af}{nfs\_readdir}}(fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}},\ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a03e1977ebc02fa692c1c57a4d4d32378}{cookie}},\ entry,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01477}01477\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((ret\ <\ 0)\ \&\&\ (ret\ !=\ NFSERR\_EOFDIR))}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01478}01478\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01479}01479\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a97378bf2148574b77d660e988cdac7ee}{NFSERR\_READDIR}});}
@@ -1486,15 +1486,15 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01482}01482\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01483}01483\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ ==\ NFSERR\_EOFDIR)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01484}01484\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01485}01485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_af62fd36348838132a28b3ad7574f5919}{eofdir}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01485}01485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fh\_aux-\/>\mbox{\hyperlink{structnfi__nfs__fhandle_a0cd215dfa7ec0b4c25772cacead5a37f}{eofdir}}\ =\ 1;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01486}01486\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01487}01487\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01488}01488\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01489}01489\ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01490}01490\ }
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01491}\mbox{\hyperlink{nfi__nfs_8c_a2bc539f1d5dd12637a8f2b52f674c0dd}{01491}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a2bc539f1d5dd12637a8f2b52f674c0dd}{nfi\_nfs\_closedir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}})}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01491}\mbox{\hyperlink{nfi__nfs_8c_a2bc539f1d5dd12637a8f2b52f674c0dd}{01491}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_a2bc539f1d5dd12637a8f2b52f674c0dd}{nfi\_nfs\_closedir}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__fhandle}{nfi\_fhandle}}\ *\mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}})}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01492}01492\ \{}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01493}01493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{nfi__nfs_8c_a3b50a0df041d6b60d8134fa125b90154}{nfi\_nfs\_close}}(serv,\ \mbox{\hyperlink{structnfi__nfs__fhandle_aedab8969d52e06e23d6d7699a5ff0b53}{fh}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01493}01493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{nfi__nfs_8c_a3b50a0df041d6b60d8134fa125b90154}{nfi\_nfs\_close}}(serv,\ \mbox{\hyperlink{structnfi__nfs__fhandle_a9e8909bd0f4a7e8ea199ead39c598671}{fh}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01494}01494\ \}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01495}01495\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01496}\mbox{\hyperlink{nfi__nfs_8c_aa8eb36072d77bae65f68f2b05b1bb44a}{01496}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{nfi__nfs_8c_aa8eb36072d77bae65f68f2b05b1bb44a}{nfi\_nfs\_statfs}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__server}{nfi\_server}}\ *serv,\ \textcolor{keyword}{struct}\ \mbox{\hyperlink{structnfi__info}{nfi\_info}}\ *inf)}
@@ -1534,7 +1534,7 @@
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01530}01530\ \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01531}01531\ }
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01532}01532\ \ \ \ \ \ \ \ \ server\_aux\ =\ (\textcolor{keyword}{struct\ }\mbox{\hyperlink{structnfi__nfs__server}{nfi\_nfs\_server}}\ *)serv-\/>\mbox{\hyperlink{structnfi__server_a87df894da2e65b4a9cff93dc848a0e95}{private\_info}};}
-\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01533}01533\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f4436d2353c71c67d9dbe2c687e5ae3}{nfs\_statfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a9f05f6255ae38486b28647c4dca584d8}{fh}},\ \&nfsinf,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a2558f058a5fef1be22969da29675d9ec}{cl}});}
+\DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01533}01533\ \ \ \ \ \ \ \ \ ret\ =\ \mbox{\hyperlink{nfs_8c_a2f4436d2353c71c67d9dbe2c687e5ae3}{nfs\_statfs}}(server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_aeebaa0b698630602f136a6a32cbee81f}{fh}},\ \&nfsinf,\ server\_aux-\/>\mbox{\hyperlink{structnfi__nfs__server_a48c2256781dea9b9fb8c6191a293f18e}{cl}});}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01534}01534\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ret\ <\ 0)}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01535}01535\ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{nfi__nfs_8c_source_l01536}01536\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{nfi__nfs__err_8c_adc09ceeffc37ed063ea14fc4acee4470}{nfs\_err}}(\mbox{\hyperlink{nfi__nfs__err_8h_a81bf536f253335749e85fdf45d792f41a4ed172c145296cc183e9be58ff242a1d}{NFSERR\_STATFS}});}

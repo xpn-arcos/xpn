@@ -16,9 +16,11 @@ nfi_nfs3.c \- File to 'TODO'\&.
 .ti -1c
 .RI "void \fBNFItoNFS3attr\fP (\fBfattr3\fP *nfs3_att, struct \fBnfi_attr\fP *nfi_att)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "void \fBNFS3toNFIattr\fP (struct \fBnfi_attr\fP *nfi_att, \fBfattr3\fP *nfs3_att)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "void \fBNFS3toNFIInfo\fP (__attribute__((__unused__)) struct \fBnfi_info\fP *nfi_inf, __attribute__((__unused__)) \fBfsinfo3resok\fP *nfs3_inf)"
 .br
@@ -28,60 +30,77 @@ nfi_nfs3.c \- File to 'TODO'\&.
 .ti -1c
 .RI "int \fBnfi_nfs3_disconnect\fP (struct \fBnfi_server\fP *serv)"
 .br
+.RI "Disconnect to the server\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_reconnect\fP (struct \fBnfi_server\fP *serv)"
 .br
+.RI "Reconnect to the NFS server\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_destroy\fP (struct \fBnfi_server\fP *serv)"
 .br
+.RI "Destroy NFS operations\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_getattr\fP (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_setattr\fP (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfs3_open\fP (struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_fhandle\fP *fho)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_open\fP (struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_fhandle\fP *fho)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_close\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "ssize_t \fBnfi_nfs3_read\fP (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "ssize_t \fBnfi_nfs3_write\fP (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_create\fP (struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_remove\fP (struct \fBnfi_server\fP *serv, char *url)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_rename\fP (__attribute__((__unused__)) struct \fBnfi_server\fP *server, __attribute__((__unused__)) char *old_url, __attribute__((__unused__)) char *new_url)"
 .br
 .ti -1c
 .RI "int \fBnfi_nfs3_mkdir\fP (struct \fBnfi_server\fP *serv, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_rmdir\fP (struct \fBnfi_server\fP *serv, char *url)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_opendir\fP (struct \fBnfi_server\fP *server, char *url, struct \fBnfi_fhandle\fP *fho)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_readdir\fP (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh, struct dirent *entry)"
 .br
 .ti -1c
 .RI "int \fBnfi_nfs3_closedir\fP (struct \fBnfi_server\fP *serv, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_nfs3_statfs\fP (struct \fBnfi_server\fP *serv, struct \fBnfi_info\fP *inf)"
 .br
+.RI "'TODO'\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -112,45 +131,143 @@ Definition in file \fBnfi_nfs3\&.c\fP\&.
 .SS "int nfi_nfs3_close (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh)"
 
 .PP
-Definition at line \fB716\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB713\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::fh\fP, \fBNFINULL\fP, \fBnfs3_err()\fP, and \fBNFS3ERR_PARAM\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_closedir()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs3_open()\fP, and \fBnfi_nfs3_opendir()\fP\&.
-.SS "int nfi_nfs3_closedir (struct \fBnfi_server\fP * serv, struct \fBnfi_fhandle\fP * fh)"
+.SS "int nfi_nfs3_closedir (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh)"
 
 .PP
-Definition at line \fB1402\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1399\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_fhandle::fh\fP, and \fBnfi_nfs3_close()\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "int nfi_nfs3_create (struct \fBnfi_server\fP * serv, char * url, struct \fBnfi_attr\fP * attr, struct \fBnfi_fhandle\fP * fh)"
+.SS "int nfi_nfs3_create (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_attr\fP * attr, struct \fBnfi_fhandle\fP * fh)"
 
 .PP
-Definition at line \fB872\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB869\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_attr::at_mode\fP, \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBnfi_nfs3_fhandle::fh\fP, \fBgetDirWithURL()\fP, \fBgetNameFile()\fP, \fBMNTNAMLEN\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfs3_create()\fP, \fBnfs3_err()\fP, \fBnfs3_lookup()\fP, \fBNFS3ERR_CREATE\fP, \fBNFS3ERR_MEMORY\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3ERR_URL\fP, \fBNFS3toNFIattr()\fP, \fBParseURL()\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, and \fBnfi_server::url\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "int nfi_nfs3_destroy (struct \fBnfi_server\fP * serv)"
+.SS "int nfi_nfs3_destroy (struct \fBnfi_server\fP * server)"
 
 .PP
-Definition at line \fB404\fP of file \fBnfi_nfs3\&.c\fP\&.
+Destroy NFS operations\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB391\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBclose_connection_mount3()\fP, \fBclose_connection_nfs3()\fP, \fBcreate_connection_mount3()\fP, \fBMNTNAMLEN\fP, \fBnfi_worker_end()\fP, \fBnfs3_err()\fP, \fBNFS3_UDP\fP, \fBnfs3_umount()\fP, \fBNFS3ERR_URL\fP, \fBnfi_server::ops\fP, \fBParseURL()\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, \fBnfi_server::url\fP, and \fBnfi_server::wrk\fP\&.
-.SS "int nfi_nfs3_disconnect (struct \fBnfi_server\fP * serv)"
+.SS "int nfi_nfs3_disconnect (struct \fBnfi_server\fP * server)"
 
 .PP
-Definition at line \fB288\fP of file \fBnfi_nfs3\&.c\fP\&.
+Disconnect to the server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB282\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBclose_connection_mount3()\fP, \fBclose_connection_nfs3()\fP, \fBcreate_connection_mount3()\fP, \fBMNTNAMLEN\fP, \fBnfi_worker_end()\fP, \fBnfs3_err()\fP, \fBNFS3_UDP\fP, \fBnfs3_umount()\fP, \fBNFS3ERR_URL\fP, \fBParseURL()\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, \fBnfi_server::url\fP, and \fBnfi_server::wrk\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "int nfi_nfs3_getattr (struct \fBnfi_server\fP * serv, struct \fBnfi_fhandle\fP * fh, struct \fBnfi_attr\fP * attr)"
+.SS "int nfi_nfs3_getattr (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, struct \fBnfi_attr\fP * attr)"
 
 .PP
-Definition at line \fB464\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB451\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBnfi_nfs3_fhandle::fh\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfs3_err()\fP, \fBnfs3_getattr()\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3toNFIattr()\fP, \fBnfi_server::private_info\fP, and \fBnfi_server::server\fP\&.
 .PP
@@ -158,23 +275,61 @@ Referenced by \fBnfi_nfs3_init()\fP\&.
 .SS "int nfi_nfs3_init (char * url, struct \fBnfi_server\fP * serv, __attribute__((__unused__)) struct \fBnfi_attr_server\fP * attr)"
 
 .PP
-Definition at line \fB122\fP of file \fBnfi_nfs3\&.c\fP\&.
+Definition at line \fB119\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBclose_connection_mount3()\fP, \fBclose_connection_nfs3()\fP, \fBcreate_connection_mount3()\fP, \fBcreate_connection_nfs3()\fP, \fBnfi_nfs3_server::fh\fP, \fBMNTNAMLEN\fP, \fBnfi_ops::nfi_close\fP, \fBnfi_ops::nfi_closedir\fP, \fBnfi_ops::nfi_create\fP, \fBnfi_ops::nfi_disconnect\fP, \fBnfi_ops::nfi_getattr\fP, \fBnfi_ops::nfi_mkdir\fP, \fBnfi_nfs3_close()\fP, \fBnfi_nfs3_closedir()\fP, \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3_getattr()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_open()\fP, \fBnfi_nfs3_opendir()\fP, \fBnfi_nfs3_read()\fP, \fBnfi_nfs3_readdir()\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rename()\fP, \fBnfi_nfs3_rmdir()\fP, \fBnfi_nfs3_setattr()\fP, \fBnfi_nfs3_statfs()\fP, \fBnfi_nfs3_write()\fP, \fBnfi_ops::nfi_open\fP, \fBnfi_ops::nfi_opendir\fP, \fBnfi_ops::nfi_read\fP, \fBnfi_ops::nfi_readdir\fP, \fBnfi_ops::nfi_reconnect\fP, \fBnfi_ops::nfi_remove\fP, \fBnfi_ops::nfi_rename\fP, \fBnfi_ops::nfi_rmdir\fP, \fBnfi_ops::nfi_setattr\fP, \fBnfi_ops::nfi_statfs\fP, \fBnfi_worker_init()\fP, \fBnfi_ops::nfi_write\fP, \fBnfs3_err()\fP, \fBnfs3_mount()\fP, \fBNFS3_TCP\fP, \fBNFS3_UDP\fP, \fBNFS3ERR_MEMORY\fP, \fBNFS3ERR_MNTCONNECTION\fP, \fBNFS3ERR_NFSCONNECTION\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3ERR_URL\fP, \fBnfi_server::ops\fP, \fBParseURL()\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, \fBnfi_server::url\fP, and \fBnfi_server::wrk\fP\&.
 .PP
 Referenced by \fBXpnGetServer()\fP\&.
-.SS "int nfi_nfs3_mkdir (struct \fBnfi_server\fP * serv, char * url, struct \fBnfi_attr\fP * attr, struct \fBnfi_fhandle\fP * fh)"
+.SS "int nfi_nfs3_mkdir (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_attr\fP * attr, struct \fBnfi_fhandle\fP * fh)"
 
 .PP
-Definition at line \fB1107\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1104\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_attr::at_mode\fP, \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBnfi_nfs3_fhandle::fh\fP, \fBgetDirWithURL()\fP, \fBgetNameFile()\fP, \fBMNTNAMLEN\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfs3_err()\fP, \fBnfs3_lookup()\fP, \fBnfs3_mkdir()\fP, \fBNFS3ERR_MEMORY\fP, \fBNFS3ERR_MKDIR\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3ERR_URL\fP, \fBNFS3toNFIattr()\fP, \fBParseURL()\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, and \fBnfi_server::url\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "int nfi_nfs3_open (struct \fBnfi_server\fP * serv, char * url, struct \fBnfi_fhandle\fP * fho)"
+.SS "int nfi_nfs3_open (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_fhandle\fP * fho)"
 
 .PP
-Definition at line \fB698\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIfho\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB695\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_close()\fP, \fBNFIFILE\fP, \fBnfs3_open()\fP, and \fBnfi_fhandle::type\fP\&.
 .PP
@@ -182,15 +337,55 @@ Referenced by \fBnfi_nfs3_init()\fP\&.
 .SS "int nfi_nfs3_opendir (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_fhandle\fP * fho)"
 
 .PP
-Definition at line \fB1308\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIfho\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1305\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_close()\fP, \fBNFIDIR\fP, \fBnfs3_err()\fP, \fBnfs3_open()\fP, \fBnfi_server::server\fP, and \fBnfi_fhandle::type\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "ssize_t nfi_nfs3_read (struct \fBnfi_server\fP * serv, struct \fBnfi_fhandle\fP * fh, void * buffer, off_t offset, size_t size)"
+.SS "ssize_t nfi_nfs3_read (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, void * buffer, off_t offset, size_t size)"
 
 .PP
-Definition at line \fB747\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB744\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBnfi_nfs3_fhandle::fh\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfs3_err()\fP, \fBnfs3_read()\fP, \fBNFS3ERR_PARAM\fP, and \fBnfi_server::private_info\fP\&.
 .PP
@@ -198,23 +393,53 @@ Referenced by \fBnfi_nfs3_init()\fP\&.
 .SS "int nfi_nfs3_readdir (struct \fBnfi_server\fP * serv, struct \fBnfi_fhandle\fP * fh, struct dirent * entry)"
 
 .PP
-Definition at line \fB1327\fP of file \fBnfi_nfs3\&.c\fP\&.
+Definition at line \fB1324\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_fhandle::cookie\fP, \fBnfi_nfs3_fhandle::eofdir\fP, \fBnfi_nfs3_fhandle::fh\fP, \fBnfi_nfs3_reconnect()\fP, \fBNFIDIR\fP, \fBnfs3_err()\fP, \fBnfs3_readdir()\fP, \fBNFS3ERR_EOFDIR\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3ERR_READDIR\fP, \fBnfi_server::private_info\fP, and \fBnfi_server::server\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "int nfi_nfs3_reconnect (struct \fBnfi_server\fP * serv)"
+.SS "int nfi_nfs3_reconnect (struct \fBnfi_server\fP * server)"
 
 .PP
-Definition at line \fB342\fP of file \fBnfi_nfs3\&.c\fP\&.
+Reconnect to the NFS server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB333\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBclose_connection_mount3()\fP, \fBcreate_connection_mount3()\fP, \fBcreate_connection_nfs3()\fP, \fBnfi_nfs3_server::fh\fP, \fBMNTNAMLEN\fP, \fBnfs3_err()\fP, \fBnfs3_mount()\fP, \fBNFS3_UDP\fP, \fBNFS3ERR_MEMORY\fP, \fBNFS3ERR_MNTCONNECTION\fP, \fBNFS3ERR_NFSCONNECTION\fP, \fBNFS3ERR_URL\fP, \fBParseURL()\fP, \fBnfi_server::private_info\fP, and \fBnfi_server::url\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_getattr()\fP, \fBnfi_nfs3_init()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_read()\fP, \fBnfi_nfs3_readdir()\fP, \fBnfi_nfs3_remove()\fP, \fBnfi_nfs3_rmdir()\fP, \fBnfi_nfs3_setattr()\fP, \fBnfi_nfs3_statfs()\fP, \fBnfi_nfs3_write()\fP, and \fBnfs3_open()\fP\&.
-.SS "int nfi_nfs3_remove (struct \fBnfi_server\fP * serv, char * url)"
+.SS "int nfi_nfs3_remove (struct \fBnfi_server\fP * server, char * url)"
 
 .PP
-Definition at line \fB993\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB990\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBgetDirWithURL()\fP, \fBgetNameFile()\fP, \fBMNTNAMLEN\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfs3_err()\fP, \fBnfs3_lookup()\fP, \fBnfs3_remove()\fP, \fBNFS3ERR_LOOKUP\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3ERR_REMOVE\fP, \fBNFS3ERR_URL\fP, \fBParseURL()\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, and \fBnfi_server::url\fP\&.
 .PP
@@ -222,42 +447,130 @@ Referenced by \fBnfi_nfs3_init()\fP\&.
 .SS "int nfi_nfs3_rename (__attribute__((__unused__)) struct \fBnfi_server\fP * server, __attribute__((__unused__)) char * old_url, __attribute__((__unused__)) char * new_url)"
 
 .PP
-Definition at line \fB1076\fP of file \fBnfi_nfs3\&.c\fP\&.
+Definition at line \fB1073\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "int nfi_nfs3_rmdir (struct \fBnfi_server\fP * serv, char * url)"
+.SS "int nfi_nfs3_rmdir (struct \fBnfi_server\fP * server, char * url)"
 
 .PP
-Definition at line \fB1227\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1224\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBgetDirWithURL()\fP, \fBgetNameFile()\fP, \fBMNTNAMLEN\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfs3_err()\fP, \fBnfs3_lookup()\fP, \fBnfs3_rmdir()\fP, \fBNFS3ERR_LOOKUP\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3ERR_REMOVE\fP, \fBNFS3ERR_URL\fP, \fBParseURL()\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, and \fBnfi_server::url\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "int nfi_nfs3_setattr (struct \fBnfi_server\fP * serv, struct \fBnfi_fhandle\fP * fh, struct \fBnfi_attr\fP * attr)"
+.SS "int nfi_nfs3_setattr (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, struct \fBnfi_attr\fP * attr)"
 
 .PP
-Definition at line \fB534\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB521\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBnfi_nfs3_fhandle::fh\fP, \fBnfi_nfs3_reconnect()\fP, \fBNFItoNFS3attr()\fP, \fBnfs3_err()\fP, \fBnfs3_setattr()\fP, \fBNFS3ERR_PARAM\fP, \fBnfi_server::private_info\fP, and \fBnfi_server::server\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "int nfi_nfs3_statfs (struct \fBnfi_server\fP * serv, struct \fBnfi_info\fP * inf)"
+.SS "int nfi_nfs3_statfs (struct \fBnfi_server\fP * server, struct \fBnfi_info\fP * inf)"
 
 .PP
-Definition at line \fB1407\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIinf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1404\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfs3_err()\fP, \fBnfs3_statfs()\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3ERR_STATFS\fP, \fBNFS3toNFIInfo()\fP, \fBnfi_server::private_info\fP, and \fBnfi_server::server\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "ssize_t nfi_nfs3_write (struct \fBnfi_server\fP * serv, struct \fBnfi_fhandle\fP * fh, void * buffer, off_t offset, size_t size)"
+.SS "ssize_t nfi_nfs3_write (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, void * buffer, off_t offset, size_t size)"
 
 .PP
-Definition at line \fB811\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB808\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBnfi_nfs3_fhandle::fh\fP, \fBnfi_nfs3_reconnect()\fP, \fBnfs3_err()\fP, \fBnfs3_write()\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3ERR_WRITE\fP, and \fBnfi_server::private_info\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_init()\fP\&.
-.SS "void NFItoNFS3attr (\fBfattr3\fP * nfs3_att, struct \fBnfi_attr\fP * nfi_att)"
+.SS "void NFItoNFS3attr (\fBfattr3\fP * nfs_att, struct \fBnfi_attr\fP * nfi_att)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fInfs_att\fP 'TODO'\&. 
+.br
+\fInfi_att\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB40\fP of file \fBnfi_nfs3\&.c\fP\&.
@@ -268,12 +581,46 @@ Referenced by \fBnfi_nfs3_setattr()\fP\&.
 .SS "int nfs3_open (struct \fBnfi_server\fP * serv, char * url, struct \fBnfi_fhandle\fP * fho)"
 
 .PP
-Definition at line \fB596\fP of file \fBnfi_nfs3\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserv\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIfho\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB593\fP of file \fBnfi_nfs3\&.c\fP\&.
 .PP
 References \fBnfi_nfs3_server::cl\fP, \fBnfi_nfs3_server::fh\fP, \fBnfi_nfs3_fhandle::fh\fP, \fBgetDirWithURL()\fP, \fBMNTNAMLEN\fP, \fBNF3DIR\fP, \fBNF3REG\fP, \fBnfi_nfs3_reconnect()\fP, \fBNFIDIR\fP, \fBNFIFILE\fP, \fBnfs3_err()\fP, \fBnfs3_lookup()\fP, \fBNFS3ERR_MEMORY\fP, \fBNFS3ERR_PARAM\fP, \fBNFS3ERR_URL\fP, \fBParseURL()\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBnfi_fhandle::server\fP, \fBnfi_fhandle::type\fP, \fBnfi_server::url\fP, and \fBnfi_fhandle::url\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_open()\fP, and \fBnfi_nfs3_opendir()\fP\&.
-.SS "void NFS3toNFIattr (struct \fBnfi_attr\fP * nfi_att, \fBfattr3\fP * nfs3_att)"
+.SS "void NFS3toNFIattr (struct \fBnfi_attr\fP * nfi_att, \fBfattr3\fP * nfs_att)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fInfi_att\fP 'TODO'\&. 
+.br
+\fInfs_att\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Nothing\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB73\fP of file \fBnfi_nfs3\&.c\fP\&.

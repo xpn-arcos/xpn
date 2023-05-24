@@ -32,6 +32,9 @@
 #ifndef _NFI_NFS_ERR_H_
 #define _NFI_NFS_ERR_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include "nfs.h"
 
 #ifdef __cplusplus
@@ -58,6 +61,15 @@ extern "C"
 		NFSERR_STATFS = 14,
 	};
 
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param err 'TODO'.
+	 * @par Returns
+	 *    Nothing.
+	 */
 	void nfs_err(int err);
 
 #ifdef __cplusplus

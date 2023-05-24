@@ -57,6 +57,15 @@ extern "C"
 		MPI_SERVERERR_NOTDIR = 15,
 	};
 
+	/**
+	 * @brief 'TODO'.
+	 *
+	 * 'TODO'.
+	 *
+	 * @param err 'TODO'.
+	 * @par Returns
+	 *    Nothing.
+	 */
 	void mpi_server_err(int err);
 
 #ifdef __cplusplus

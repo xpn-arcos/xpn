@@ -32,15 +32,18 @@
 #ifndef _MPI_SERVER_PARAMS_H_
 #define _MPI_SERVER_PARAMS_H_
 
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "mpi.h"
 // #include <semaphore.h>
 
-/*
- * Datatype
- */
+/************************************************
+ *  ... Datatype
+ ***********************************************/
 
 typedef struct
 {

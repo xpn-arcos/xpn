@@ -16,27 +16,34 @@ mpi_server_comm.c \- File to 'TODO'\&.
 .ti -1c
 .RI "int \fBmpiClient_comm_init\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBmpiClient_comm_destroy\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBmpiClient_comm_connect\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBmpiClient_comm_disconnect\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBmpiClient_comm_locality\fP (\fBmpiClient_param_st\fP *\fBparams\fP)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "ssize_t \fBmpiClient_write_operation\fP (MPI_Comm fd, char *data, ssize_t size, __attribute__((__unused__)) char *msg_id)"
 .br
 .ti -1c
 .RI "ssize_t \fBmpiClient_write_data\fP (MPI_Comm fd, char *data, ssize_t size, char *msg_id)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "ssize_t \fBmpiClient_read_data\fP (MPI_Comm fd, char *data, ssize_t size, char *msg_id)"
 .br
+.RI "'TODO'\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -67,12 +74,40 @@ Definition in file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
 .SS "int mpiClient_comm_connect (\fBmpiClient_param_st\fP * params)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB144\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
 .PP
 References \fBdebug_error\fP, \fBdebug_info\fP, \fBns_lookup()\fP, \fBparams\fP, \fBmpi_server_param_st::port_name\fP, \fBmpi_server_param_st::rank\fP, and \fBmpi_server_param_st::srv_name\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_connect()\fP, and \fBnfi_mpi_server_reconnect()\fP\&.
 .SS "int mpiClient_comm_destroy (\fBmpiClient_param_st\fP * params)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB108\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
@@ -83,12 +118,40 @@ Referenced by \fBnfi_mpi_server_destroy()\fP\&.
 .SS "int mpiClient_comm_disconnect (\fBmpiClient_param_st\fP * params)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB226\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
 .PP
 References \fBdebug_error\fP, \fBdebug_info\fP, \fBMPI_SERVER_DISCONNECT\fP, \fBparams\fP, and \fBmpi_server_param_st::rank\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_disconnect()\fP\&.
 .SS "int mpiClient_comm_init (\fBmpiClient_param_st\fP * params)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB40\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
@@ -99,6 +162,20 @@ Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int mpiClient_comm_locality (\fBmpiClient_param_st\fP * params)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIparams\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB255\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
 .PP
 References \fBdebug_info\fP, \fBdebug_warning\fP, \fBmpi_server_param_st::dirbase\fP, \fBMPI_SERVER_GETNODENAME\fP, \fBparams\fP, \fBPATH_MAX\fP, and \fBserv_name\fP\&.
@@ -107,12 +184,52 @@ Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "ssize_t mpiClient_read_data (MPI_Comm fd, char * data, ssize_t size, char * msg_id)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIdata\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fImsg_id\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB390\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.
 .PP
 References \fBdebug_info\fP, and \fBdebug_warning\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_doRequest()\fP, \fBnfi_mpi_server_read()\fP, and \fBnfi_mpi_server_write()\fP\&.
 .SS "ssize_t mpiClient_write_data (MPI_Comm fd, char * data, ssize_t size, char * msg_id)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIfd\fP 'TODO'\&. 
+.br
+\fIdata\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.br
+\fImsg_id\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB358\fP of file \fBxpn_client/nfi/nfi_mpi_server/mpi_server_comm\&.c\fP\&.

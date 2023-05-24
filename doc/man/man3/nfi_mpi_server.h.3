@@ -36,9 +36,11 @@ nfi_mpi_server.h \- Header file to 'TODO'\&.
 .ti -1c
 .RI "struct \fBnfi_mpi_server_server\fP"
 .br
+.RI "This is a struct\&. "
 .ti -1c
 .RI "struct \fBnfi_mpi_server_fhandle\fP"
 .br
+.RI "This is a struct\&. "
 .in -1c
 .SS "Functions"
 
@@ -46,66 +48,87 @@ nfi_mpi_server.h \- Header file to 'TODO'\&.
 .ti -1c
 .RI "int \fBnfi_mpi_server_init\fP (char *url, struct \fBnfi_server\fP *serv, struct \fBnfi_attr_server\fP *attr)"
 .br
+.RI "Init mpi_server\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_connect\fP (struct \fBnfi_server\fP *server, char *url, char *prt, char *serv, char *dir)"
 .br
+.RI "Connect to the server\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_reconnect\fP (struct \fBnfi_server\fP *server)"
 .br
+.RI "Reconnect to the MPI server\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_disconnect\fP (struct \fBnfi_server\fP *server)"
 .br
+.RI "Disconnect to the server\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_create\fP (struct \fBnfi_server\fP *server, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_open\fP (struct \fBnfi_server\fP *server, char *url, struct \fBnfi_fhandle\fP *fho)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "ssize_t \fBnfi_mpi_server_read\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "ssize_t \fBnfi_mpi_server_write\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_close\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_remove\fP (struct \fBnfi_server\fP *server, char *url)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_rename\fP (struct \fBnfi_server\fP *server, char *old_url, char *new_url)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_getattr\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_setattr\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_mkdir\fP (struct \fBnfi_server\fP *server, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_opendir\fP (struct \fBnfi_server\fP *server, char *url, struct \fBnfi_fhandle\fP *fho)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_readdir\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fhd, struct dirent *entry)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_closedir\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fhd)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_rmdir\fP (struct \fBnfi_server\fP *server, char *url)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_statfs\fP (struct \fBnfi_server\fP *server, struct \fBnfi_info\fP *inf)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_preload\fP (struct \fBnfi_server\fP *server, char *url, char *virtual_path, char *storage_path, int opt)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_mpi_server_flush\fP (struct \fBnfi_server\fP *server, char *url, char *virtual_path, char *storage_path, int opt)"
 .br
+.RI "'TODO'\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -136,12 +159,44 @@ Definition in file \fBnfi_mpi_server\&.h\fP\&.
 .SS "int nfi_mpi_server_close (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB1118\fP of file \fBnfi_mpi_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBst_mpi_server_close::fd\fP, \fBnfi_mpi_server_fhandle::fd\fP, \fBFREE_AND_NULL\fP, \fBst_mpi_server_msg::id\fP, \fBnfi_mpi_server_server::id\fP, \fBmpiClient_param_st::locality\fP, \fBMPI_SERVER_CLOSE_FILE_WS\fP, \fBMPI_SERVER_ID\fP, \fBMPI_SERVERERR_PARAM\fP, \fBnfi_mpi_server_doRequest()\fP, \fBnfi_mpi_server_keepConnected()\fP, \fBNFINULL\fP, \fBNULL_RET_ERR\fP, \fBst_mpi_server_msg::op_close\fP, \fBnfi_mpi_server_server::params\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_close\fP, \fBnfi_fhandle::server\fP, \fBst_mpi_server_msg::type\fP, \fBnfi_fhandle::type\fP, \fBst_mpi_server_msg::u_st_mpi_server_msg\fP, and \fBmpiClient_param_st::xpn_session\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_closedir (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fhd)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfhd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB1690\fP of file \fBnfi_mpi_server\&.c\fP\&.
@@ -151,7 +206,49 @@ References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBst_mpi_server_closedir::dir\fP
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_connect (struct \fBnfi_server\fP * server, char * url, char * prt, char * serv, char * dir)"
 
+.PP
+Connect to the server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIprt\fP 'TODO'\&. 
+.br
+\fIserv\fP 'TODO'\&. 
+.br
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
 .SS "int nfi_mpi_server_create (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_attr\fP * attr, struct \fBnfi_fhandle\fP * fh)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB671\fP of file \fBnfi_mpi_server\&.c\fP\&.
@@ -162,12 +259,48 @@ Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_disconnect (struct \fBnfi_server\fP * server)"
 
 .PP
+Disconnect to the server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB483\fP of file \fBnfi_mpi_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBFREE_AND_NULL\fP, \fBmpiClient_comm_disconnect()\fP, \fBnfi_mpi_server_server::params\fP, and \fBnfi_server::private_info\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_flush (struct \fBnfi_server\fP * server, char * url, char * virtual_path, char * storage_path, int opt)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIvirtual_path\fP 'TODO'\&. 
+.br
+\fIstorage_path\fP 'TODO'\&. 
+.br
+\fIopt\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB1890\fP of file \fBnfi_mpi_server\&.c\fP\&.
@@ -178,6 +311,24 @@ Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_getattr (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, struct \fBnfi_attr\fP * attr)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB1346\fP of file \fBnfi_mpi_server\&.c\fP\&.
 .PP
 References \fBst_mpi_server_attr_req::attr\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBmpiClient_param_st::dirbase\fP, \fBst_mpi_server_msg::id\fP, \fBnfi_mpi_server_server::id\fP, \fBmpiClient_param_st::locality\fP, \fBmpi_server_err()\fP, \fBMPI_SERVER_GETATTR_FILE\fP, \fBMPI_SERVER_ID\fP, \fBMPI_SERVERERR_PARAM\fP, \fBMPI_SERVERERR_URL\fP, \fBMPI_SERVERtoNFIattr()\fP, \fBnfi_mpi_server_doRequest()\fP, \fBnfi_mpi_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_mpi_server_msg::op_getattr\fP, \fBnfi_mpi_server_server::params\fP, \fBParseURL()\fP, \fBst_mpi_server_getattr::path\fP, \fBnfi_mpi_server_server::path\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBreal_posix_stat\fP, \fBst_mpi_server_attr_req::status\fP, \fBst_mpi_server_msg::type\fP, \fBst_mpi_server_msg::u_st_mpi_server_msg\fP, and \fBnfi_fhandle::url\fP\&.
@@ -185,7 +336,45 @@ References \fBst_mpi_server_attr_req::attr\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\f
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_init (char * url, struct \fBnfi_server\fP * serv, struct \fBnfi_attr_server\fP * attr)"
 
+.PP
+Init mpi_server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIserv\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
 .SS "int nfi_mpi_server_mkdir (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_attr\fP * attr, struct \fBnfi_fhandle\fP * fh)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB1439\fP of file \fBnfi_mpi_server\&.c\fP\&.
@@ -196,12 +385,48 @@ Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_open (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_fhandle\fP * fho)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIfho\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB568\fP of file \fBnfi_mpi_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBdebug_info\fP, \fBnfi_mpi_server_fhandle::dir\fP, \fBmpiClient_param_st::dirbase\fP, \fBnfi_mpi_server_fhandle::fd\fP, \fBFREE_AND_NULL\fP, \fBst_mpi_server_msg::id\fP, \fBnfi_mpi_server_server::id\fP, \fBmpiClient_param_st::locality\fP, \fBmpi_server_err()\fP, \fBMPI_SERVER_ID\fP, \fBMPI_SERVER_OPEN_FILE_WOS\fP, \fBMPI_SERVER_OPEN_FILE_WS\fP, \fBMPI_SERVERERR_MEMORY\fP, \fBMPI_SERVERERR_PARAM\fP, \fBMPI_SERVERERR_URL\fP, \fBnfi_mpi_server_doRequest()\fP, \fBnfi_mpi_server_keepConnected()\fP, \fBNFIFILE\fP, \fBNULL_RET_ERR\fP, \fBO_RDWR\fP, \fBst_mpi_server_msg::op_open\fP, \fBnfi_mpi_server_server::params\fP, \fBParseURL()\fP, \fBst_mpi_server_open::path\fP, \fBnfi_mpi_server_fhandle::path\fP, \fBPATH_MAX\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_close\fP, \fBreal_posix_open2\fP, \fBnfi_server::server\fP, \fBnfi_fhandle::server\fP, \fBst_mpi_server_msg::type\fP, \fBnfi_fhandle::type\fP, \fBst_mpi_server_msg::u_st_mpi_server_msg\fP, \fBnfi_fhandle::url\fP, and \fBmpiClient_param_st::xpn_session\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_opendir (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_fhandle\fP * fho)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIfho\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB1543\fP of file \fBnfi_mpi_server\&.c\fP\&.
@@ -212,12 +437,56 @@ Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_preload (struct \fBnfi_server\fP * server, char * url, char * virtual_path, char * storage_path, int opt)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIvirtual_path\fP 'TODO'\&. 
+.br
+\fIstorage_path\fP 'TODO'\&. 
+.br
+\fIopt\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB1836\fP of file \fBnfi_mpi_server\&.c\fP\&.
 .PP
 References \fBst_mpi_server_preload::block_size\fP, \fBnfi_server::block_size\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBst_mpi_server_msg::id\fP, \fBnfi_mpi_server_server::id\fP, \fBmpi_server_err()\fP, \fBMPI_SERVER_ID\fP, \fBMPI_SERVER_PRELOAD_FILE\fP, \fBMPI_SERVERERR_PARAM\fP, \fBnfi_mpi_server_doRequest()\fP, \fBnfi_mpi_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_mpi_server_msg::op_preload\fP, \fBst_mpi_server_preload::opt\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, \fBst_mpi_server_preload::storage_path\fP, \fBst_mpi_server_msg::type\fP, \fBst_mpi_server_msg::u_st_mpi_server_msg\fP, and \fBst_mpi_server_preload::virtual_path\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "ssize_t nfi_mpi_server_read (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, void * buffer, off_t offset, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB797\fP of file \fBnfi_mpi_server\&.c\fP\&.
@@ -228,12 +497,44 @@ Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_readdir (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fhd, struct dirent * entry)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfhd\fP 'TODO'\&. 
+.br
+\fIentry\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB1625\fP of file \fBnfi_mpi_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBst_mpi_server_readdir::dir\fP, \fBnfi_mpi_server_fhandle::dir\fP, \fBst_mpi_server_direntry::end\fP, \fBst_mpi_server_msg::id\fP, \fBnfi_mpi_server_server::id\fP, \fBmpiClient_param_st::locality\fP, \fBmpi_server_err()\fP, \fBMPI_SERVER_ID\fP, \fBMPI_SERVER_READDIR_DIR\fP, \fBMPI_SERVERERR_NOTDIR\fP, \fBMPI_SERVERERR_PARAM\fP, \fBnfi_mpi_server_doRequest()\fP, \fBnfi_mpi_server_keepConnected()\fP, \fBNFIDIR\fP, \fBNULL_RET_ERR\fP, \fBst_mpi_server_msg::op_readdir\fP, \fBnfi_mpi_server_server::params\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_readdir\fP, \fBst_mpi_server_direntry::ret\fP, \fBst_mpi_server_msg::type\fP, \fBnfi_fhandle::type\fP, and \fBst_mpi_server_msg::u_st_mpi_server_msg\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_reconnect (struct \fBnfi_server\fP * server)"
+
+.PP
+Reconnect to the MPI server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB519\fP of file \fBnfi_mpi_server\&.c\fP\&.
@@ -244,12 +545,46 @@ Referenced by \fBnfi_mpi_server_init()\fP, and \fBnfi_mpi_server_keepConnected()
 .SS "int nfi_mpi_server_remove (struct \fBnfi_server\fP * server, char * url)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB1188\fP of file \fBnfi_mpi_server\&.c\fP\&.
 .PP
 References \fBnfi_worker::arg\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBdebug_info\fP, \fBmpiClient_param_st::dirbase\fP, \fBst_mpi_server_msg::id\fP, \fBnfi_mpi_server_server::id\fP, \fBnfi_worker_args::is_master_node\fP, \fBmpiClient_param_st::locality\fP, \fBmpi_server_err()\fP, \fBMPI_SERVER_ID\fP, \fBMPI_SERVER_RM_FILE\fP, \fBMPI_SERVER_RM_FILE_ASYNC\fP, \fBmpi_server_write_operation()\fP, \fBMPI_SERVERERR_PARAM\fP, \fBMPI_SERVERERR_URL\fP, \fBnfi_mpi_server_doRequest()\fP, \fBnfi_mpi_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_mpi_server_msg::op_rm\fP, \fBnfi_mpi_server_server::params\fP, \fBParseURL()\fP, \fBst_mpi_server_rm::path\fP, \fBnfi_mpi_server_server::path\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBreal_posix_unlink\fP, \fBnfi_server::server\fP, \fBmpiClient_param_st::server\fP, \fBst_mpi_server_msg::type\fP, \fBst_mpi_server_msg::u_st_mpi_server_msg\fP, and \fBnfi_server::wrk\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_rename (struct \fBnfi_server\fP * server, char * old_url, char * new_url)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIold_url\fP 'TODO'\&. 
+.br
+\fInew_url\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB1265\fP of file \fBnfi_mpi_server\&.c\fP\&.
@@ -260,12 +595,46 @@ Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_rmdir (struct \fBnfi_server\fP * server, char * url)"
 
 .PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
 Definition at line \fB1738\fP of file \fBnfi_mpi_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBnfi_mpi_server_fhandle::dir\fP, \fBmpiClient_param_st::dirbase\fP, \fBmpiClient_param_st::locality\fP, \fBmpi_server_err()\fP, \fBMPI_SERVER_RMDIR_DIR\fP, \fBMPI_SERVERERR_PARAM\fP, \fBMPI_SERVERERR_REMOVE\fP, \fBMPI_SERVERERR_URL\fP, \fBnfi_mpi_server_doRequest()\fP, \fBnfi_mpi_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_mpi_server_msg::op_rmdir\fP, \fBnfi_mpi_server_server::params\fP, \fBParseURL()\fP, \fBst_mpi_server_rmdir::path\fP, \fBnfi_mpi_server_server::path\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBreal_posix_rmdir\fP, \fBnfi_server::server\fP, \fBst_mpi_server_msg::type\fP, and \fBst_mpi_server_msg::u_st_mpi_server_msg\fP\&.
 .PP
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_setattr (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, struct \fBnfi_attr\fP * attr)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB1412\fP of file \fBnfi_mpi_server\&.c\fP\&.
@@ -275,7 +644,45 @@ References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBMPI_SERVERERR_PARAM\fP, \fBnfi
 Referenced by \fBnfi_mpi_server_init()\fP\&.
 .SS "int nfi_mpi_server_statfs (struct \fBnfi_server\fP * server, struct \fBnfi_info\fP * inf)"
 
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIinf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
 .SS "ssize_t nfi_mpi_server_write (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, void * buffer, off_t offset, size_t size)"
+
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
 
 .PP
 Definition at line \fB949\fP of file \fBnfi_mpi_server\&.c\fP\&.

@@ -36,9 +36,11 @@ nfi_tcp_server.h \- Header file to 'TODO'\&.
 .ti -1c
 .RI "struct \fBnfi_tcp_server_server\fP"
 .br
+.RI "This is a struct\&. "
 .ti -1c
 .RI "struct \fBnfi_tcp_server_fhandle\fP"
 .br
+.RI "This is a struct\&. "
 .in -1c
 .SS "Macros"
 
@@ -53,66 +55,87 @@ nfi_tcp_server.h \- Header file to 'TODO'\&.
 .ti -1c
 .RI "int \fBnfi_tcp_server_init\fP (char *url, struct \fBnfi_server\fP *serv, struct \fBnfi_attr_server\fP *attr)"
 .br
+.RI "Init tcp_server\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_connect\fP (struct \fBnfi_server\fP *server, char *url, char *prt, char *serv, char *dir)"
 .br
+.RI "Connect to the server\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_reconnect\fP (struct \fBnfi_server\fP *server)"
 .br
+.RI "Reconnect to the TCP server\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_disconnect\fP (struct \fBnfi_server\fP *server)"
 .br
+.RI "Disconnect to the server\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_create\fP (struct \fBnfi_server\fP *server, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_open\fP (struct \fBnfi_server\fP *server, char *url, struct \fBnfi_fhandle\fP *fho)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "ssize_t \fBnfi_tcp_server_read\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "ssize_t \fBnfi_tcp_server_write\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh, void *buffer, off_t offset, size_t size)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_close\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_remove\fP (struct \fBnfi_server\fP *server, char *url)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_rename\fP (struct \fBnfi_server\fP *server, char *old_url, char *new_url)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_getattr\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_setattr\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fh, struct \fBnfi_attr\fP *attr)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_mkdir\fP (struct \fBnfi_server\fP *server, char *url, struct \fBnfi_attr\fP *attr, struct \fBnfi_fhandle\fP *fh)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_opendir\fP (struct \fBnfi_server\fP *server, char *url, struct \fBnfi_fhandle\fP *fho)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_readdir\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fhd, struct dirent *entry)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_closedir\fP (struct \fBnfi_server\fP *server, struct \fBnfi_fhandle\fP *fhd)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_rmdir\fP (struct \fBnfi_server\fP *server, char *url)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_statfs\fP (struct \fBnfi_server\fP *server, struct \fBnfi_info\fP *inf)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_preload\fP (struct \fBnfi_server\fP *server, char *url, char *virtual_path, char *storage_path, int opt)"
 .br
+.RI "'TODO'\&. "
 .ti -1c
 .RI "int \fBnfi_tcp_server_flush\fP (struct \fBnfi_server\fP *server, char *url, char *virtual_path, char *storage_path, int opt)"
 .br
+.RI "'TODO'\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -122,7 +145,7 @@ Header file to 'TODO'\&.
 .PP
 \fBAuthors\fP
 .RS 4
-Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra 
+Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos 
 .RE
 .PP
 \fBDate\fP
@@ -149,7 +172,23 @@ Definition at line \fB64\fP of file \fBnfi_tcp_server\&.h\fP\&.
 .SS "int nfi_tcp_server_close (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh)"
 
 .PP
-Definition at line \fB1192\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1190\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBst_tcp_server_close::fd\fP, \fBnfi_tcp_server_fhandle::fd\fP, \fBFREE_AND_NULL\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNFINULL\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_close\fP, \fBnfi_tcp_server_server::params\fP, \fBst_tcp_server_close::path\fP, \fBnfi_tcp_server_fhandle::path\fP, \fBPATH_MAX\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_close\fP, \fBnfi_fhandle::server\fP, \fBTCP_SERVER_CLOSE_FILE_WS\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVERERR_PARAM\fP, \fBst_tcp_server_msg::type\fP, \fBnfi_fhandle::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, and \fBtcpClient_param_st::xpn_session\fP\&.
 .PP
@@ -157,17 +196,75 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_closedir (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fhd)"
 
 .PP
-Definition at line \fB1706\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfhd\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1704\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBst_tcp_server_closedir::dir\fP, \fBnfi_tcp_server_fhandle::dir\fP, \fBFREE_AND_NULL\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_closedir\fP, \fBnfi_tcp_server_server::params\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_closedir\fP, \fBTCP_SERVER_CLOSEDIR_DIR\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVERERR_PARAM\fP, \fBst_tcp_server_msg::type\fP, and \fBst_tcp_server_msg::u_st_tcp_server_msg\fP\&.
 .PP
 Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_connect (struct \fBnfi_server\fP * server, char * url, char * prt, char * serv, char * dir)"
 
+.PP
+Connect to the server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIprt\fP 'TODO'\&. 
+.br
+\fIserv\fP 'TODO'\&. 
+.br
+\fIdir\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
 .SS "int nfi_tcp_server_create (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_attr\fP * attr, struct \fBnfi_fhandle\fP * fh)"
 
 .PP
-Definition at line \fB723\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB721\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBnfi_attr::at_mode\fP, \fBst_tcp_server_attr_req::attr\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBdebug_info\fP, \fBnfi_tcp_server_fhandle::dir\fP, \fBnfi_tcp_server_fhandle::fd\fP, \fBFREE_AND_NULL\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNFIFILE\fP, \fBNULL_RET_ERR\fP, \fBO_CREAT\fP, \fBO_RDWR\fP, \fBO_TRUNC\fP, \fBst_tcp_server_msg::op_creat\fP, \fBst_tcp_server_msg::op_getattr\fP, \fBnfi_tcp_server_server::params\fP, \fBParseURL()\fP, \fBst_tcp_server_creat::path\fP, \fBst_tcp_server_getattr::path\fP, \fBnfi_tcp_server_fhandle::path\fP, \fBPATH_MAX\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_close\fP, \fBreal_posix_open2\fP, \fBreal_posix_stat\fP, \fBnfi_server::server\fP, \fBnfi_fhandle::server\fP, \fBtcpClient_param_st::server_name\fP, \fBTCP_SERVER_CREAT_FILE_WOS\fP, \fBTCP_SERVER_CREAT_FILE_WS\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_GETATTR_FILE\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVERERR_MEMORY\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_URL\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBst_tcp_server_msg::type\fP, \fBnfi_fhandle::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, \fBnfi_fhandle::url\fP, and \fBtcpClient_param_st::xpn_session\fP\&.
 .PP
@@ -175,7 +272,21 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_disconnect (struct \fBnfi_server\fP * server)"
 
 .PP
-Definition at line \fB544\fP of file \fBnfi_tcp_server\&.c\fP\&.
+Disconnect to the server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB545\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBFREE_AND_NULL\fP, \fBnfi_tcp_server_server::params\fP, \fBnfi_server::private_info\fP, and \fBtcpClient_comm_disconnect()\fP\&.
 .PP
@@ -183,7 +294,29 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_flush (struct \fBnfi_server\fP * server, char * url, char * virtual_path, char * storage_path, int opt)"
 
 .PP
-Definition at line \fB1892\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIvirtual_path\fP 'TODO'\&. 
+.br
+\fIstorage_path\fP 'TODO'\&. 
+.br
+\fIopt\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1890\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBst_tcp_server_flush::block_size\fP, \fBnfi_server::block_size\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_flush\fP, \fBst_tcp_server_flush::opt\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, \fBst_tcp_server_flush::storage_path\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_FLUSH_FILE\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVERERR_PARAM\fP, \fBst_tcp_server_msg::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, and \fBst_tcp_server_flush::virtual_path\fP\&.
 .PP
@@ -191,17 +324,73 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_getattr (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, struct \fBnfi_attr\fP * attr)"
 
 .PP
-Definition at line \fB1386\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1384\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBst_tcp_server_attr_req::attr\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_getattr\fP, \fBnfi_tcp_server_server::params\fP, \fBParseURL()\fP, \fBst_tcp_server_getattr::path\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBreal_posix_stat\fP, \fBst_tcp_server_attr_req::status\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_GETATTR_FILE\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_URL\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBst_tcp_server_msg::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, and \fBnfi_fhandle::url\fP\&.
 .PP
 Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_init (char * url, struct \fBnfi_server\fP * serv, struct \fBnfi_attr_server\fP * attr)"
 
+.PP
+Init tcp_server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIurl\fP 'TODO'\&. 
+.br
+\fIserv\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
 .SS "int nfi_tcp_server_mkdir (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_attr\fP * attr, struct \fBnfi_fhandle\fP * fh)"
 
 .PP
-Definition at line \fB1471\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1469\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBst_tcp_server_attr_req::attr\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBnfi_tcp_server_fhandle::dir\fP, \fBerrno\fP, \fBnfi_tcp_server_fhandle::fd\fP, \fBFREE_AND_NULL\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNFIDIR\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_getattr\fP, \fBst_tcp_server_msg::op_mkdir\fP, \fBnfi_tcp_server_server::params\fP, \fBParseURL()\fP, \fBst_tcp_server_getattr::path\fP, \fBst_tcp_server_mkdir::path\fP, \fBnfi_tcp_server_fhandle::path\fP, \fBPATH_MAX\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_mkdir\fP, \fBreal_posix_stat\fP, \fBnfi_server::server\fP, \fBSTRING_MISC_StrDup()\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_GETATTR_FILE\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVER_MKDIR_DIR\fP, \fBTCP_SERVERERR_MEMORY\fP, \fBTCP_SERVERERR_MKDIR\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_URL\fP, \fBTCP_SERVERtoNFIattr()\fP, \fBst_tcp_server_msg::type\fP, \fBnfi_fhandle::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, and \fBnfi_fhandle::url\fP\&.
 .PP
@@ -209,7 +398,25 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_open (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_fhandle\fP * fho)"
 
 .PP
-Definition at line \fB629\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIfho\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB627\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBdebug_info\fP, \fBnfi_tcp_server_fhandle::dir\fP, \fBnfi_tcp_server_fhandle::fd\fP, \fBFREE_AND_NULL\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNFIFILE\fP, \fBNULL_RET_ERR\fP, \fBO_RDWR\fP, \fBst_tcp_server_msg::op_open\fP, \fBnfi_tcp_server_server::params\fP, \fBParseURL()\fP, \fBst_tcp_server_open::path\fP, \fBnfi_tcp_server_fhandle::path\fP, \fBPATH_MAX\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_close\fP, \fBreal_posix_open2\fP, \fBnfi_server::server\fP, \fBnfi_fhandle::server\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVER_OPEN_FILE_WOS\fP, \fBTCP_SERVER_OPEN_FILE_WS\fP, \fBTCP_SERVERERR_MEMORY\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_URL\fP, \fBst_tcp_server_msg::type\fP, \fBnfi_fhandle::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, \fBnfi_fhandle::url\fP, and \fBtcpClient_param_st::xpn_session\fP\&.
 .PP
@@ -217,7 +424,25 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_opendir (struct \fBnfi_server\fP * server, char * url, struct \fBnfi_fhandle\fP * fho)"
 
 .PP
-Definition at line \fB1567\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIfho\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1565\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBnfi_tcp_server_fhandle::dir\fP, \fBFREE_AND_NULL\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNFIDIR\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_opendir\fP, \fBnfi_tcp_server_server::params\fP, \fBParseURL()\fP, \fBst_tcp_server_opendir::path\fP, \fBnfi_tcp_server_fhandle::path\fP, \fBPATH_MAX\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_opendir\fP, \fBnfi_server::server\fP, \fBnfi_fhandle::server\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVER_OPENDIR_DIR\fP, \fBTCP_SERVERERR_MEMORY\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_URL\fP, \fBst_tcp_server_msg::type\fP, \fBnfi_fhandle::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, and \fBnfi_fhandle::url\fP\&.
 .PP
@@ -225,7 +450,29 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_preload (struct \fBnfi_server\fP * server, char * url, char * virtual_path, char * storage_path, int opt)"
 
 .PP
-Definition at line \fB1844\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.br
+\fIvirtual_path\fP 'TODO'\&. 
+.br
+\fIstorage_path\fP 'TODO'\&. 
+.br
+\fIopt\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1842\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBst_tcp_server_preload::block_size\fP, \fBnfi_server::block_size\fP, \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_info\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_preload\fP, \fBst_tcp_server_preload::opt\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBnfi_server::server\fP, \fBst_tcp_server_preload::storage_path\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVER_PRELOAD_FILE\fP, \fBTCP_SERVERERR_PARAM\fP, \fBst_tcp_server_msg::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, and \fBst_tcp_server_preload::virtual_path\fP\&.
 .PP
@@ -233,7 +480,29 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "ssize_t nfi_tcp_server_read (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, void * buffer, off_t offset, size_t size)"
 
 .PP
-Definition at line \fB846\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB844\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBdebug_info\fP, \fBerrno\fP, \fBst_tcp_server_read::fd\fP, \fBnfi_tcp_server_fhandle::fd\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBO_RDONLY\fP, \fBst_tcp_server_read::offset\fP, \fBst_tcp_server_msg::op_read\fP, \fBnfi_tcp_server_server::params\fP, \fBst_tcp_server_read::path\fP, \fBnfi_tcp_server_fhandle::path\fP, \fBPATH_MAX\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_close\fP, \fBreal_posix_lseek\fP, \fBreal_posix_open\fP, \fBreal_posix_read\fP, \fBtcpClient_param_st::server\fP, \fBst_tcp_server_read::size\fP, \fBst_tcp_server_read_req::size\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVER_READ_FILE_WOS\fP, \fBTCP_SERVER_READ_FILE_WS\fP, \fBtcp_server_write_operation()\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_READ\fP, \fBtcpClient_read_data()\fP, \fBst_tcp_server_msg::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, \fBnfi_fhandle::url\fP, and \fBtcpClient_param_st::xpn_session\fP\&.
 .PP
@@ -241,7 +510,25 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_readdir (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fhd, struct dirent * entry)"
 
 .PP
-Definition at line \fB1641\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfhd\fP 'TODO'\&. 
+.br
+\fIentry\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1639\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBst_tcp_server_readdir::dir\fP, \fBnfi_tcp_server_fhandle::dir\fP, \fBst_tcp_server_direntry::end\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNFIDIR\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_readdir\fP, \fBnfi_tcp_server_server::params\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_readdir\fP, \fBst_tcp_server_direntry::ret\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVER_READDIR_DIR\fP, \fBTCP_SERVERERR_NOTDIR\fP, \fBTCP_SERVERERR_PARAM\fP, \fBst_tcp_server_msg::type\fP, \fBnfi_fhandle::type\fP, and \fBst_tcp_server_msg::u_st_tcp_server_msg\fP\&.
 .PP
@@ -249,7 +536,21 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_reconnect (struct \fBnfi_server\fP * server)"
 
 .PP
-Definition at line \fB580\fP of file \fBnfi_tcp_server\&.c\fP\&.
+Reconnect to the TCP server\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB578\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBNULL_RET_ERR\fP, \fBnfi_tcp_server_server::params\fP, \fBParseURL()\fP, \fBnfi_tcp_server_server::path\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBtcp_server_err()\fP, \fBTCP_SERVERERR_MEMORY\fP, \fBTCP_SERVERERR_URL\fP, \fBtcpClient_comm_connect()\fP, and \fBnfi_server::url\fP\&.
 .PP
@@ -257,7 +558,23 @@ Referenced by \fBnfi_tcp_server_init()\fP, and \fBnfi_tcp_server_keepConnected()
 .SS "int nfi_tcp_server_remove (struct \fBnfi_server\fP * server, char * url)"
 
 .PP
-Definition at line \fB1262\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1260\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_END\fP, \fBdebug_error\fP, \fBdebug_info\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_rm\fP, \fBnfi_tcp_server_server::params\fP, \fBParseURL()\fP, \fBst_tcp_server_rm::path\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBreal_posix_unlink\fP, \fBnfi_server::server\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVER_RM_FILE\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_URL\fP, \fBst_tcp_server_msg::type\fP, and \fBst_tcp_server_msg::u_st_tcp_server_msg\fP\&.
 .PP
@@ -265,7 +582,25 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_rename (struct \fBnfi_server\fP * server, char * old_url, char * new_url)"
 
 .PP
-Definition at line \fB1318\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIold_url\fP 'TODO'\&. 
+.br
+\fInew_url\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1316\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBdebug_info\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBst_tcp_server_rename::new_url\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_rename::old_url\fP, \fBst_tcp_server_msg::op_rename\fP, \fBnfi_tcp_server_server::params\fP, \fBParseURL()\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBreal_posix_rename\fP, \fBnfi_server::server\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVER_RENAME_FILE\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_URL\fP, \fBst_tcp_server_msg::type\fP, and \fBst_tcp_server_msg::u_st_tcp_server_msg\fP\&.
 .PP
@@ -273,7 +608,23 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_rmdir (struct \fBnfi_server\fP * server, char * url)"
 
 .PP
-Definition at line \fB1753\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIurl\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1751\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBdebug_info\fP, \fBnfi_tcp_server_fhandle::dir\fP, \fBtcpClient_param_st::locality\fP, \fBnfi_tcp_server_doRequest()\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBst_tcp_server_msg::op_rmdir\fP, \fBnfi_tcp_server_server::params\fP, \fBParseURL()\fP, \fBst_tcp_server_rmdir::path\fP, \fBPATH_MAX\fP, \fBnfi_server::private_info\fP, \fBreal_posix_rmdir\fP, \fBnfi_server::server\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_RMDIR_DIR\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_REMOVE\fP, \fBTCP_SERVERERR_URL\fP, \fBst_tcp_server_msg::type\fP, and \fBst_tcp_server_msg::u_st_tcp_server_msg\fP\&.
 .PP
@@ -281,17 +632,73 @@ Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_setattr (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, struct \fBnfi_attr\fP * attr)"
 
 .PP
-Definition at line \fB1444\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIattr\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB1442\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, and \fBTCP_SERVERERR_PARAM\fP\&.
 .PP
 Referenced by \fBnfi_tcp_server_init()\fP\&.
 .SS "int nfi_tcp_server_statfs (struct \fBnfi_server\fP * server, struct \fBnfi_info\fP * inf)"
 
+.PP
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIinf\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
 .SS "ssize_t nfi_tcp_server_write (struct \fBnfi_server\fP * server, struct \fBnfi_fhandle\fP * fh, void * buffer, off_t offset, size_t size)"
 
 .PP
-Definition at line \fB983\fP of file \fBnfi_tcp_server\&.c\fP\&.
+'TODO'\&. 'TODO'\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIserver\fP 'TODO'\&. 
+.br
+\fIfh\fP 'TODO'\&. 
+.br
+\fIbuffer\fP 'TODO'\&. 
+.br
+\fIoffset\fP 'TODO'\&. 
+.br
+\fIsize\fP 'TODO'\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+'TODO'\&. 
+.RE
+.PP
+
+.PP
+Definition at line \fB981\fP of file \fBnfi_tcp_server\&.c\fP\&.
 .PP
 References \fBDEBUG_BEGIN\fP, \fBDEBUG_END\fP, \fBdebug_error\fP, \fBdebug_info\fP, \fBerrno\fP, \fBst_tcp_server_write::fd\fP, \fBnfi_tcp_server_fhandle::fd\fP, \fBnfi_tcp_server_server::id\fP, \fBst_tcp_server_msg::id\fP, \fBtcpClient_param_st::locality\fP, \fBMAX_BUFFER_SIZE\fP, \fBnfi_tcp_server_server::mqtt\fP, \fBnfi_tcp_server_keepConnected()\fP, \fBNULL_RET_ERR\fP, \fBO_WRONLY\fP, \fBst_tcp_server_write::offset\fP, \fBst_tcp_server_msg::op_write\fP, \fBnfi_tcp_server_server::params\fP, \fBst_tcp_server_write::path\fP, \fBnfi_tcp_server_fhandle::path\fP, \fBPATH_MAX\fP, \fBnfi_fhandle::priv_fh\fP, \fBnfi_server::private_info\fP, \fBreal_posix_close\fP, \fBreal_posix_lseek\fP, \fBreal_posix_open\fP, \fBreal_posix_write\fP, \fBtcpClient_param_st::server\fP, \fBtcpClient_param_st::server_name\fP, \fBst_tcp_server_write::size\fP, \fBst_tcp_server_write_req::size\fP, \fBtcp_server_err()\fP, \fBTCP_SERVER_ID\fP, \fBTCP_SERVER_WRITE_FILE_WOS\fP, \fBTCP_SERVER_WRITE_FILE_WS\fP, \fBtcp_server_write_operation()\fP, \fBTCP_SERVERERR_PARAM\fP, \fBTCP_SERVERERR_WRITE\fP, \fBtcpClient_read_data()\fP, \fBtcpClient_write_data()\fP, \fBst_tcp_server_msg::type\fP, \fBst_tcp_server_msg::u_st_tcp_server_msg\fP, \fBnfi_fhandle::url\fP, \fBtcpClient_param_st::xpn_mosquitto_mode\fP, \fBtcpClient_param_st::xpn_mosquitto_qos\fP, and \fBtcpClient_param_st::xpn_session\fP\&.
 .PP

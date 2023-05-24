@@ -43,17 +43,20 @@
 #include "base/utils.h"
 #include "base/filesystem.h"
 
-/*
- *  Constants
- */
-
+/************************************************
+ *  ... Constants
+ ***********************************************/
 #ifndef TCP_SERVER_ID
 #define TCP_SERVER_ID 32
 #endif
 
-/* Operations */
+/************************************************
+ *  ... Operations
+ ***********************************************/
 
-// File operations
+/************************************************
+ *  ... Operations: File operations
+ ***********************************************/
 #define TCP_SERVER_OPEN_FILE_WS 0
 #define TCP_SERVER_CREAT_FILE_WS 1
 #define TCP_SERVER_READ_FILE_WS 2
@@ -65,13 +68,17 @@
 #define TCP_SERVER_GETATTR_FILE 8
 #define TCP_SERVER_SETATTR_FILE 9
 
-// File operations without session
+/************************************************
+ *  ... Operations: File operations without session
+ ***********************************************/
 #define TCP_SERVER_OPEN_FILE_WOS 100
 #define TCP_SERVER_CREAT_FILE_WOS 101
 #define TCP_SERVER_READ_FILE_WOS 102
 #define TCP_SERVER_WRITE_FILE_WOS 103
 
-// Directory operations
+/************************************************
+ *  ... Operations: Directory operations
+ ***********************************************/
 #define TCP_SERVER_MKDIR_DIR 20
 #define TCP_SERVER_RMDIR_DIR 21
 #define TCP_SERVER_RMDIR_DIR_ASYNC 22
@@ -79,23 +86,29 @@
 #define TCP_SERVER_READDIR_DIR 24
 #define TCP_SERVER_CLOSEDIR_DIR 25
 
-// Import / Export operations
+/************************************************
+ *  ... Operations: Import / Export operations
+ ***********************************************/
 #define TCP_SERVER_FLUSH_FILE 40
 #define TCP_SERVER_PRELOAD_FILE 41
 
-// FS Operations
+/************************************************
+ *  ... Operations: FS Operations
+ ***********************************************/
 #define TCP_SERVER_STATFS_DIR 60
 #define TCP_SERVER_GETNODENAME 61
 #define TCP_SERVER_GETID 62
 
-// Connection operatons
+/************************************************
+ *  ... Operations: Connection operatons
+ ***********************************************/
 #define TCP_SERVER_FINALIZE 80
 #define TCP_SERVER_DISCONNECT 81
 #define TCP_SERVER_END -1
 
-/*
- *  Message struct
- */
+/************************************************
+ *  ... Message struct
+ ***********************************************/
 
 /** @struct st_tcp_server_open
  *  This is a struct
@@ -344,6 +357,18 @@ struct st_tcp_server_rmdir
 
 // TODO: define TCP_SERVER_OPENDIR_DIR, TCP_SERVER_READDIR_DIR, TCP_SERVER_CLOSEDIR_DIR
 
+/** @struct st_tcp_server_flush
+ *  This is a struct
+ *
+ *  @var st_tcp_server_flush::storage_path
+ *    A 'TODO'.
+ *  @var st_tcp_server_flush::virtual_path
+ *    A 'TODO'.
+ *  @var st_tcp_server_flush::block_size
+ *    A 'TODO'. 
+ *  @var st_tcp_server_flush::opt
+ *    A 'TODO'.
+ */
 struct st_tcp_server_flush
 {
   char storage_path[PATH_MAX];
@@ -352,6 +377,18 @@ struct st_tcp_server_flush
   char opt;
 };
 
+/** @struct st_tcp_server_preload
+ *  This is a struct
+ *
+ *  @var st_tcp_server_preload::storage_path
+ *    A 'TODO'.
+ *  @var st_tcp_server_preload::virtual_path
+ *    A 'TODO'.
+ *  @var st_tcp_server_preload::block_size
+ *    A 'TODO'. 
+ *  @var st_tcp_server_preload::opt
+ *    A 'TODO'.
+ */
 struct st_tcp_server_preload
 {
   char storage_path[PATH_MAX];
@@ -360,6 +397,12 @@ struct st_tcp_server_preload
   char opt;
 };
 
+/** @struct st_tcp_server_end
+ *  This is a struct
+ *
+ *  @var st_tcp_server_end::status
+ *    A 'TODO'.
+ */
 struct st_tcp_server_end
 {
   char status;

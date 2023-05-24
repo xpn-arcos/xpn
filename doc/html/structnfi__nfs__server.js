@@ -1,5 +1,5 @@
 var structnfi__nfs__server =
 [
-    [ "cl", "structnfi__nfs__server.html#a2558f058a5fef1be22969da29675d9ec", null ],
-    [ "fh", "structnfi__nfs__server.html#a9f05f6255ae38486b28647c4dca584d8", null ]
+    [ "cl", "structnfi__nfs__server.html#a48c2256781dea9b9fb8c6191a293f18e", null ],
+    [ "fh", "structnfi__nfs__server.html#aeebaa0b698630602f136a6a32cbee81f", null ]
 ];

@@ -103,19 +103,19 @@ Definition in file \fBnfs3\&.c\fP\&.
 .SS "void close_connection_mount3 (CLIENT * cl)"
 
 .PP
-Definition at line \fB180\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB185\fP of file \fBnfs3\&.c\fP\&.
 .PP
 Referenced by \fBcreate_connection_mount3()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3_init()\fP, and \fBnfi_nfs3_reconnect()\fP\&.
 .SS "void close_connection_nfs3 (CLIENT * cl)"
 
 .PP
-Definition at line \fB492\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB497\fP of file \fBnfs3\&.c\fP\&.
 .PP
 Referenced by \fBcreate_connection_nfs3()\fP, \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, and \fBnfi_nfs3_init()\fP\&.
 .SS "CLIENT * create_connection_mount3 (char * name, int type)"
 
 .PP
-Definition at line \fB76\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB81\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBclose_connection_mount3()\fP, \fBMNTNAMLEN\fP, \fBMOUNT3_PROGRAM\fP, \fBMOUNT3_VERSION\fP, \fBNFS3_RECVSZ\fP, \fBNFS3_SENDSZ\fP, \fBNFS3_TCP\fP, and \fBNFS3_UDP\fP\&.
 .PP
@@ -123,7 +123,7 @@ Referenced by \fBnfi_nfs3_destroy()\fP, \fBnfi_nfs3_disconnect()\fP, \fBnfi_nfs3
 .SS "CLIENT * create_connection_nfs3 (char * name, int type)"
 
 .PP
-Definition at line \fB390\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB395\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBclose_connection_nfs3()\fP, \fBMNTNAMLEN\fP, \fBNFS3_PROGRAM\fP, \fBNFS3_RECVSZ\fP, \fBNFS3_SENDSZ\fP, \fBNFS3_TCP\fP, \fBNFS3_UDP\fP, and \fBNFS3_VERSION\fP\&.
 .PP
@@ -131,7 +131,7 @@ Referenced by \fBnfi_nfs3_init()\fP, and \fBnfi_nfs3_reconnect()\fP\&.
 .SS "int nfs3_create (\fBfhandle3\fP * fhin, char * file, mode_t mode, \fBfhandle3\fP * fhout, __attribute__((__unused__)) \fBfattr3\fP * at, CLIENT * cl)"
 
 .PP
-Definition at line \fB1039\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB1044\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBcreatehow3::createhow3_u\fP, \fBdiropargs3::dir\fP, \fBdiropres3::diropres3_u\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBFHSIZE3\fP, \fBpost_op_fh3::handle\fP, \fBcreate3args::how\fP, \fBsattr3::mode\fP, \fBcreatehow3::mode\fP, \fBdiropargs3::name\fP, \fBnfsproc3_create_3()\fP, \fBdiropres3ok::obj\fP, \fBcreatehow3::obj_attributes\fP, \fBpost_op_fh3::post_op_fh3_u\fP, \fBprintfh3()\fP, \fBdiropres3::resok\fP, \fBset_uint32::set\fP, \fBset_uint32::set_uint32_u\fP, \fBdiropres3::status\fP, \fBUNCHECKED\fP, \fBset_uint32::val\fP, and \fBcreate3args::where\fP\&.
 .PP
@@ -139,11 +139,11 @@ Referenced by \fBnfi_nfs3_create()\fP\&.
 .SS "int nfs3_export (__attribute__((__unused__)) \fBexports3\fP * exp, __attribute__((__unused__)) CLIENT * cli)"
 
 .PP
-Definition at line \fB370\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB375\fP of file \fBnfs3\&.c\fP\&.
 .SS "int nfs3_getattr (\fBfhandle3\fP * fh, \fBfattr3\fP * fatt, CLIENT * cl)"
 
 .PP
-Definition at line \fB614\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB619\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBgetattr3res::attributes\fP, \fBgetattr3res::getattr3res_u\fP, \fBNFS3_OK\fP, \fBnfsproc3_getattr_3()\fP, and \fBgetattr3res::status\fP\&.
 .PP
@@ -151,7 +151,7 @@ Referenced by \fBnfi_nfs3_getattr()\fP\&.
 .SS "int nfs3_lookup (\fBfhandle3\fP * fhin, char * path, \fBfhandle3\fP * fhout, \fBfattr3\fP * att, CLIENT * cl)"
 
 .PP
-Definition at line \fB676\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB681\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBpost_op_attr::attributes\fP, \fBdiropargs3::dir\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBFHSIZE3\fP, \fBgetFirstDir()\fP, \fBlookup3res::lookup3res_u\fP, \fBMNTNAMLEN\fP, \fBdiropargs3::name\fP, \fBnfsproc3_lookup_3()\fP, \fBlookup3resok::obj_attributes\fP, \fBlookup3resok::object\fP, \fBpost_op_attr::post_op_attr_u\fP, \fBpost_op_attr::present\fP, \fBlookup3res::resok\fP, \fBlookup3res::status\fP, and \fBfattr3::type\fP\&.
 .PP
@@ -159,13 +159,13 @@ Referenced by \fBnfi_nfs3_create()\fP, \fBnfi_nfs3_mkdir()\fP, \fBnfi_nfs3_remov
 .SS "int nfs3_mkdir (__attribute__((__unused__)) \fBfhandle3\fP * fhin, __attribute__((__unused__)) char * dir, __attribute__((__unused__)) mode_t mode, __attribute__((__unused__)) \fBfhandle3\fP * fhout, __attribute__((__unused__)) \fBfattr3\fP * at, __attribute__((__unused__)) CLIENT * cl)"
 
 .PP
-Definition at line \fB1227\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB1232\fP of file \fBnfs3\&.c\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_mkdir()\fP\&.
 .SS "int nfs3_mount (char * dir, \fBfhandle3\fP * fhand, CLIENT * cli)"
 
 .PP
-Definition at line \fB223\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB228\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBmountres3_ok::auth_flavors\fP, \fBmountres3_ok::auth_flavors_len\fP, \fBmountres3_ok::auth_flavors_val\fP, \fBmountres3_ok::fhandle\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBmountres3::fhs_status\fP, \fBFHSIZE3\fP, \fBmountres3::mountinfo\fP, \fBmountproc3_mnt_3()\fP, and \fBmountres3::mountres3_u\fP\&.
 .PP
@@ -173,7 +173,7 @@ Referenced by \fBnfi_nfs3_init()\fP, and \fBnfi_nfs3_reconnect()\fP\&.
 .SS "ssize_t nfs3_read (\fBfhandle3\fP * fh, void * data, off_t offset, size_t size, CLIENT * cl)"
 
 .PP
-Definition at line \fB814\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB819\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBread3args::count\fP, \fBread3resok::data\fP, \fBread3resok::data_len\fP, \fBread3resok::data_val\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBread3args::file\fP, \fBMAXDATA3\fP, \fBnfsproc3_read_3()\fP, \fBread3args::offset\fP, \fBread3res::read3res_u\fP, \fBread3res::resok\fP, and \fBread3res::status\fP\&.
 .PP
@@ -181,13 +181,13 @@ Referenced by \fBnfi_nfs3_read()\fP\&.
 .SS "int nfs3_readdir (__attribute__((__unused__)) \fBfhandle3\fP * fh, __attribute__((__unused__)) \fBcookieverf3\fP cookie, __attribute__((__unused__)) char * entr, __attribute__((__unused__)) CLIENT * cl)"
 
 .PP
-Definition at line \fB1280\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB1285\fP of file \fBnfs3\&.c\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_readdir()\fP\&.
 .SS "int nfs3_remove (\fBfhandle3\fP * fh, char * file, CLIENT * cl)"
 
 .PP
-Definition at line \fB1134\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB1139\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBdiropargs3::dir\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBdiropargs3::name\fP, \fBnfsproc3_remove_3()\fP, and \fBwccstat3::status\fP\&.
 .PP
@@ -195,17 +195,17 @@ Referenced by \fBnfi_nfs3_remove()\fP\&.
 .SS "int nfs3_rename (__attribute__((__unused__)) \fBfhandle3\fP * fh, __attribute__((__unused__)) char * name, __attribute__((__unused__)) \fBfhandle3\fP * fhR, __attribute__((__unused__)) char * nameR, __attribute__((__unused__)) CLIENT * cl)"
 
 .PP
-Definition at line \fB1200\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB1205\fP of file \fBnfs3\&.c\fP\&.
 .SS "int nfs3_rmdir (__attribute__((__unused__)) \fBfhandle3\fP * fh, __attribute__((__unused__)) char * dir, __attribute__((__unused__)) CLIENT * cl)"
 
 .PP
-Definition at line \fB1248\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB1253\fP of file \fBnfs3\&.c\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_rmdir()\fP\&.
 .SS "int nfs3_setattr (\fBfhandle3\fP * fh, \fBfattr3\fP * fatt, CLIENT * cl)"
 
 .PP
-Definition at line \fB555\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB560\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBfattr3::atime\fP, \fBsattr3::atime\fP, \fBfattr3::gid\fP, \fBsattr3::gid\fP, \fBfattr3::mode\fP, \fBsattr3::mode\fP, \fBfattr3::mtime\fP, \fBsattr3::mtime\fP, \fBsetattr3args::new_attributes\fP, \fBNFS3_FHSIZE\fP, \fBNFS3_OK\fP, \fBnfsproc3_setattr_3()\fP, \fBsetattr3args::object\fP, \fBset_time::set_time_u\fP, \fBset_uint32::set_uint32_u\fP, \fBset_uint64::set_uint64_u\fP, \fBfattr3::size\fP, \fBsattr3::size\fP, \fBwccstat3::status\fP, \fBset_time::time\fP, \fBfattr3::uid\fP, \fBsattr3::uid\fP, \fBset_uint32::val\fP, and \fBset_uint64::val\fP\&.
 .PP
@@ -213,13 +213,13 @@ Referenced by \fBnfi_nfs3_setattr()\fP\&.
 .SS "int nfs3_statfs (__attribute__((__unused__)) \fBfhandle3\fP * arg, __attribute__((__unused__)) \fBfsinfo3resok\fP * inf, __attribute__((__unused__)) CLIENT * cl)"
 
 .PP
-Definition at line \fB1301\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB1306\fP of file \fBnfs3\&.c\fP\&.
 .PP
 Referenced by \fBnfi_nfs3_statfs()\fP\&.
 .SS "int nfs3_umount (char * path, CLIENT * cli)"
 
 .PP
-Definition at line \fB320\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB325\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBmountproc3_umnt_3()\fP\&.
 .PP
@@ -227,7 +227,7 @@ Referenced by \fBnfi_nfs3_destroy()\fP, and \fBnfi_nfs3_disconnect()\fP\&.
 .SS "ssize_t nfs3_write (\fBfhandle3\fP * fh, void * data, off_t offset, size_t size, CLIENT * cl)"
 
 .PP
-Definition at line \fB929\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB934\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBwrite3args::count\fP, \fBwrite3args::data\fP, \fBwrite3args::data_len\fP, \fBDATA_SYNC\fP, \fBwrite3args::data_val\fP, \fBfhandle3::fhandle3_len\fP, \fBfhandle3::fhandle3_val\fP, \fBwrite3args::file\fP, \fBFILE_SYNC\fP, \fBMAXDATA3\fP, \fBnfsproc3_write_3()\fP, \fBwrite3args::offset\fP, \fBprintfh3()\fP, \fBwrite3args::stable\fP, \fBwrite3res::status\fP, and \fBUNSTABLE\fP\&.
 .PP
@@ -235,7 +235,7 @@ Referenced by \fBnfi_nfs3_write()\fP\&.
 .SS "void printfh3 (char * s, \fBfhandle3\fP * fh)"
 
 .PP
-Definition at line \fB39\fP of file \fBnfs3\&.c\fP\&.
+Definition at line \fB43\fP of file \fBnfs3\&.c\fP\&.
 .PP
 References \fBfhandle3::fhandle3_val\fP, and \fBFHSIZE3\fP\&.
 .PP
