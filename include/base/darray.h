@@ -1,173 +1,304 @@
+/*
+ *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
-  /*
-   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
-   *
-   *  This file is part of Expand.
-   *
-   *  Expand is free software: you can redistribute it and/or modify
-   *  it under the terms of the GNU Lesser General Public License as published by
-   *  the Free Software Foundation, either version 3 of the License, or
-   *  (at your option) any later version.
-   *
-   *  Expand is distributed in the hope that it will be useful,
-   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   *  GNU Lesser General Public License for more details.
-   *
-   *  You should have received a copy of the GNU Lesser General Public License
-   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
-   *
-   */
+/**
+ * @file darray.h
+ * @brief Header file to execute operations on dynamic arrays.
+ *
+ * Header file to insert, delete, find,
+ * get elements from a dynamic array.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
 
+#ifndef DARRAY_H
+#define DARRAY_H
 
- #ifndef DARRAY_H
- #define DARRAY_H
+/************************************************
+ *  ... Includes
+ ***********************************************/
+#include "all_system.h"
+#include <stdlib.h>
 
-   /* ... Include / Inclusion ........................................... */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+     /************************************************
+      *  ... Constants
+      ***********************************************/
+/* type sizes */
+#define c_POINTER sizeof(T_POINTER)
+#define c_POINTERTABLA sizeof(t_pointerDArray)
 
-      #include "all_system.h"
-      #include <stdlib.h>
+     /************************************************
+      *  ... Typedef
+      ***********************************************/
 
+     /*! \var typedef void *T_POINTER
+          \brief A type definition for a dynamic array element.
 
- #ifdef  __cplusplus
-    extern "C" {
- #endif
+     */
+     typedef void *T_POINTER;
 
+     /*! \var typedef T_POINTER *t_pointerDArray
+          \brief A type definition for a dynamic array.
 
-   /* ... Consts / Constantes ............................................ */
+          Dynamic array, NULL end.
+     */
+     typedef T_POINTER *t_pointerDArray;
 
-      /* type sizes */
-      #define c_POINTER        sizeof(T_POINTER)
-      #define c_POINTERTABLA   sizeof(t_pointerDArray)
+     /************************************************
+      *  ... Functions
+      ***********************************************/
 
+     /**
+      * @brief Insert the element 'gptr' into the end of the dynamic array '*t'
+      * that allready has '*n' elements.
+      *
+      * Inserts 'gptr' at the end of table 't', with '(*n)' pointers and
+      * adds one more ( (*n) = (*n) + 1 )
+      *
+      * @param t a dynamic array.
+      * @param n number of elements in the dynamic array.
+      * @param gptr the element that has been inserted.
+      * @return true (1) if element is inserted and error (-1) if
+      *         a problem is found.
+      * @see 'DARRAY_InsEndDarray2' if dynamic array is NULL terminated.
+      */
+     int8_t DARRAY_InsEndDarray(/*INOUT*/ t_pointerDArray *t,
+                                /*INOUT*/ long *n,
+                                /*IN*/ T_POINTER gptr);
 
-   /* ... Types / Tipos .................................................. */
+     /**
+      * @brief Remove the last element from the dynamic array.
+      *
+      * It deletes last element of dynamic array 't' of '*n' elements
+      * and return that element in '*delGPtr'.
+      *
+      * @param t a dynamic array.
+      * @param n number of elements in the dynamic array.
+      * @param delGPtr element that has been removed.
+      * @return true (1) if element is removed and error (-1) if
+      *         a problem is found.
+      * @see 'DARRAY_DelBeginDarray' to remove the first element.
+      */
+     int8_t DARRAY_DelEndDarray(/*INOUT*/ t_pointerDArray *t,
+                                /*INOUT*/ long *n,
+                                /*INOUT*/ T_POINTER *delGPtr);
 
-      typedef 
-      void *T_POINTER;
+     /**
+      * @brief Remove the first element from the dynamic array.
+      *
+      * The first element of the dynamic array '*t' of '*n' elements is
+      * removed and return that element in '*delGPtr'.
+      *
+      * @param t a dynamic array.
+      * @param n number of elements in the dynamic array.
+      * @param delGPtr element that has been removed.
+      * @return true (1) if element is removed and error (-1) if
+      *         a problem is found.
+      * @see 'DARRAY_DelEndDarray' to remove the last element.
+      */
+     int8_t DARRAY_DelBeginDarray(/*INOUT*/ t_pointerDArray *t,
+                                  /*INOUT*/ long *n,
+                                  /*INOUT*/ T_POINTER *delGPtr);
 
-      typedef 
-      T_POINTER  *t_pointerDArray ; /* Dynamic array, NULL end */
+     /**
+      * @brief Remove the 'orden'th element from the dynamic array.
+      *
+      * It deletes the element of position 'order' from the dynamic array '*t',
+      * decrements the number of elements '*n' in the dynamic array
+      * and return that element that has been removed in '*delGPtr'.
+      *
+      * @param t a dynamic array.
+      * @param n number of elements in the dynamic array.
+      * @param orden position (begin at 0) of element to remove.
+      * @param delGPtr element that has been removed.
+      * @return true (1) if element is removed and error (-1) if
+      *         a problem is found.
+      * @see 'DARRAY_DelBeginDarray' to remove first element.
+      */
+     int8_t DARRAY_DelNFromDarray(/*IN*/ t_pointerDArray *t,
+                                  /*INOUT*/ long *n,
+                                  /*IN*/ long orden,
+                                  /*INOUT*/ T_POINTER *delGPtr);
 
+     /**
+      * @brief Change the value of 'orden'th element from the dynamic array.
+      *
+      * The value of the 'orden'-th element of the dynamic array '*t' of
+      * '*n' elements is changed to a new element ('nPtr').
+      *
+      * @param t a dynamic array.
+      * @param n number of elements in the dynamic array.
+      * @param orden position (begin at 0) of element to be changed.
+      * @param nPtr element that has been changed.
+      * @return true (1) if element is changed and error (-1) if
+      *         a problem is found.
+      */
+     int8_t DARRAY_ChangeNFromDarray(/*IN*/ t_pointerDArray *t,
+                                     /*INOUT*/ long *n,
+                                     /*IN*/ long orden,
+                                     /*INOUT*/ T_POINTER nPtr);
 
-   /* ... Functions / Funciones .......................................... */
+     /**
+      * @brief Remove all '*n' elements from the dynamic array.
+      *
+      * It goes through the dynamic array '*t', from 0..n applying
+      * the function 'freef' on each element to remove it.
+      * When finished, it does a 'free(t)'.
+      *
+      * @param t a dynamic array.
+      * @param n number of elements in the dynamic array.
+      * @param freef the free function to be used.
+      * @return true (1) if elements are freeded and error (-1) if
+      *         a problem is found.
+      */
+     int8_t DARRAY_FreeEltosDarray(/*INOUT*/ t_pointerDArray *t,
+                                   /*INOUT*/ long *n,
+                                   /*IN*/ void (*freef)(T_POINTER));
 
-      int8_t         DARRAY_InsEndDarray ( /*INOUT*/ t_pointerDArray *t,
-                                           /*INOUT*/ long            *n,
-                                           /*IN*/    T_POINTER        gptr ) ;
-      /* - Inserts 'gptr' at the end of 't', with '(*n)' eltos and
-           adds one more ( (*n) = (*n) + 1 ) */
-      /* - Inserta el puntero 'gptr' al final de la tabla 't'
-           que tiene ya 'n' punteros. En la funcion se incrementa
-           en uno 'n', pues al final, tendra un elemento mas : 'gptr' */
+     /**
+      * @brief Return the 'orden'-th element from the dynamic array.
+      *
+      * Return the 'orden'-th element in the 't' dynamic array,
+      * in a NULL ended array.
+      *
+      * @param t a dynamic array.
+      * @param orden position (begin at 0) of element to return.
+      * @return the element at this position or NULL.
+      *
+      * \warning If order is 3, returns t[3] (i.e., the fourth).
+      * It does not check that it goes outside the array bounds.
+      */
+     T_POINTER DARRAY_GetNFromDarray(/*IN*/ t_pointerDArray t,
+                                     /*IN*/ long orden);
 
-      int8_t         DARRAY_DelEndDarray ( /*INOUT*/ t_pointerDArray *t,
-                                           /*INOUT*/ long            *n,
-                                           /*INOUT*/ T_POINTER       *delGPtr ) ;
-      /* - It deletes last element of 't' and subtracts one element
-           ( (*n) = (*n) - 1 ) */
-      /* - Borra el ultimo elemento de la tabla 't', decrementa el
-           numero de elementos en tabla ('n') y coloca en el parametro
-           delGPtr el elemento borrado, por si nos interesa */
+     /**
+      * @brief Find i-th element in dynamic array.
+      *
+      * Find in the dynamic array, the first element that makes that,
+      * (*findf)(gptr,darray element) == TRUE.
+      * Execute '*findf' function with 'gptr' as one parameter
+      * and i-th element as the other parameter, for all '*n' elements
+      * at the dynamic array '*t'.
+      * Using NULL elto as end tag.
+      *
+      * @param t a dynamic array.
+      * @param n number of elements in the dynamic array.
+      * @param gptr element for first param to 'findf'.
+      * @param findf function to be used to compare i-th element and 'gptr'.
+      * @return the element to be find or NULL.
+      */
+     T_POINTER DARRAY_FindEltoDarray(/*IN*/ t_pointerDArray t,
+                                     /*INOUT*/ long n,
+                                     /*IN*/ T_POINTER gptr,
+                                     /*IN*/ int8_t (*findf)(T_POINTER, T_POINTER));
 
-      int8_t         DARRAY_DelBeginDarray ( /*INOUT*/ t_pointerDArray *t,
-                                             /*INOUT*/ long            *n,
-                                             /*INOUT*/ T_POINTER       *delGPtr ) ;
-      /* - */
-      /* - Borra el primer elemento de la tabla 't', decrementa el
-           numero de elementos en tabla ('n') y coloca en el parametro
-           delGPtr el elemento borrado, por si nos interesa */
+     /**
+      * @brief Number of elements in the dynamic array.
+      *
+      * Return the number of elements in the 't' dynamic array,
+      * in a NULL ended array.
+      *
+      * @param t a dynamic array.
+      * @return the number of element in the 't' array.
+      */
+     long DARRAY_GetNDarray(/*IN*/ t_pointerDArray t);
 
-      int8_t         DARRAY_DelNFromDarray ( /*IN*/    t_pointerDArray *t,
-                                             /*INOUT*/ long            *n,
-                                             /*IN*/    long             orden,
-                                             /*INOUT*/ T_POINTER       *delGPtr ) ;
-      /* - */
-      /* - Borra el elemento de posicion 'orden' de la tabla 't', decrementa
-           el numero de elementos en tabla ('n') y coloca en el parametro
-           delGPtr el elemento borrado, por si nos interesa */
+     /**
+      * @brief Remove all elements from the dynamic array.
+      *
+      * It goes through the dynamic array '*t', from 0..n applying
+      * the function 'freef' on each element to remove it.
+      * When finished, it does a 'free(t)'.
+      *
+      * @param t a dynamic array.
+      * @param freef the free function to be used.
+      * @return true (1) if elements are removed and error (-1) if
+      *         a problem is found.
+      */
+     int8_t DARRAY_FreeEltosDarray2(/*INOUT*/ t_pointerDArray *t,
+                                    /*IN*/ void (*freef)(T_POINTER));
 
-      int8_t         DARRAY_ChangeNFromDarray ( /*IN*/    t_pointerDArray *t,
-                                                /*INOUT*/ long            *n,
-                                                /*IN*/    long             orden,
-                                                /*INOUT*/ T_POINTER        nPtr ) ;
-      /* - */
-      /* - Cambia Darray[orden] a 'nPtr' */
+     /**
+      * @brief Remove the element with value 'elto' from the dynamic array.
+      *
+      * Try to delete the element 'elto' from the table 't' that is NULL ended.
+      * It looks for it and if it is not found it returns FALSE.
+      * If it finds it, it deletes it and adjusts the table.
+      * It does not need the data 'number of elements' because
+      * in the search it already goes through the table.
+      *
+      * @param t a dynamic array.
+      * @param elto element that has been removed.
+      * @return true (1) if element is removed and error (-1) if
+      *         a problem is found.
+      */
+     int8_t DARRAY_DelEltoDarray(/*INOUT*/ t_pointerDArray *t,
+                                 /*IN*/ T_POINTER elto);
 
-      int8_t         DARRAY_FreeEltosDarray ( /*INOUT*/ t_pointerDArray *t,
-                                              /*INOUT*/ long            *n,
-                                              /*IN*/    void (*freef)(T_POINTER) ) ;
-      /* - */
-      /* - Se recorre la tabla, del 0..N aplicando la funcion 'freef'
-           sobre cada elemento. Cuando ha terminado, hace un 'free(t)' */
+     /**
+      * @brief Insert the element into the end of the dynamic array.
+      *
+      * Insert the element 'gptr' into the end of the dynamic array '*t'
+      * that is NULL ended. The difference with the previous function
+      * is that, not knowing the number of elements, it 'counts' them,
+      * which is inefficient. Remember, the table of pointers ends
+      * with the NULL pointer.
+      *
+      * @param t a dynamic array.
+      * @param gptr element that has been inserted.
+      * @return true (1) if element is inserted and error (-1) if
+      *         a problem is found.
+      */
+     int8_t DARRAY_InsEndDarray2(/*INOUT*/ t_pointerDArray *t,
+                                 /*IN*/ T_POINTER gptr);
 
-      T_POINTER    DARRAY_GetNFromDarray ( /*IN*/ t_pointerDArray t,
-                                           /*IN*/ long     orden ) ;
-      /* - */
-      /* - Retorna el elemento que ocupa la posicion 'orden' en la tabla.
-           OJO, si orden es 3, retorna t[3] (es decir, el cuarto) 
-           NO comprueba que se salga de los limites del array. */
+     /**
+      * @brief Remove the last element from the dynamic array.
+      *
+      * It deletes the last element of the table 't' that is NULL ended,
+      * and places in the parameter 'delGPtr' the deleted element,
+      * in case we are interested. The difference with the previous
+      * function is that, not knowing the number of elements,
+      * it 'counts' them, something that is inefficient.
+      *
+      * @param t a dynamic array.
+      * @param delGPtr element that has been removed.
+      * @return true (1) if element is removed and error (-1) if
+      *         a problem is found.
+      */
+     int8_t DARRAY_DelEndDarray2(/*INOUT*/ t_pointerDArray *t,
+                                 /*INOUT*/ T_POINTER *delGPtr);
 
-      T_POINTER    DARRAY_FindEltoDarray ( /*IN*/     t_pointerDArray  t,
-                                           /*INOUT*/  long             n,
-                                           /*IN*/     T_POINTER        gptr,
-                                           /*IN*/     int8_t (*findf)(T_POINTER,T_POINTER) ) ;
-      /* - */
-      /* - Busca el array dinamico, el primer elemento que haga que,
-           (*findf)(gptr,<elemento darray) == TRUE. */
- 
+#define DARRAY_GetNFromDarray(t, orden) \
+     (((t) == (t_pointerDArray)NULL) ? NULL : ((t)[(orden)]))
 
-      /*  Using NULL elto as end tag  *
-       * ---------------------------- */
-      long           DARRAY_GetNDarray ( /*IN*/ t_pointerDArray t ) ;
-      /* - */
-      /* - Retorna el numero de elementos de la tabla 't' */
+     /* ................................................................... */
 
-      int8_t         DARRAY_FreeEltosDarray2 ( /*INOUT*/ t_pointerDArray *t,
-                                               /*IN*/    void (*freef)(T_POINTER) ) ;
-      /* - */
-      /* - Se recorre la tabla, del 0..N aplicando la funcion 'freef'
-           sobre cada elemento. Cuando ha terminado, hace un 'free(t)' */
+#ifdef __cplusplus
+}
+#endif
 
-      int8_t         DARRAY_DelEltoDarray ( /*INOUT*/ t_pointerDArray *t,
-                                            /*IN*/    T_POINTER elto ) ;
-      /* - */
-      /* - Intenta borra el elemento 'elto' de la tabla 't'. Lo busca
-           y si no lo encuentra retorna FALSE. Si lo encuentra lo borra
-           y ajusta la tabla. No necesita el dato 'numero de elementos'
-           pues en la busqueda ya recorre la tabla */
-
-      int8_t         DARRAY_InsEndDarray2 ( /*INOUT*/ t_pointerDArray *t,
-                                            /*IN*/    T_POINTER gptr ) ; 
-      /* - */
-      /* - Inserta el puntero 'gptr' al final de la tabla 't'.
-           La diferencia con la anterior funcion es que, al no
-           conocerse el numero de elementos, 'los cuenta', algo que
-           es ineficiente. Recuerdo, la tabla de punteros termina
-           con el puntero NULL */
-
-      int8_t         DARRAY_DelEndDarray2 ( /*INOUT*/ t_pointerDArray *t,
-                                            /*INOUT*/ T_POINTER *delGPtr ) ; 
-      /* - */
-      /* - Borra el ultimo elemento de la tabla 't' y coloca en el 
-           parametro 'delGPtr' el elemento borrado, por si nos interesa.
-           La diferencia con la anterior funcion es que, al no
-           conocerse el numero de elementos, 'los cuenta', algo que
-           es terriblemente ineficiente. */
-
-
-   /* ................................................................... */
-
-      #define      DARRAY_GetNFromDarray(t,orden)    \
-                   ( ((t)==(t_pointerDArray)NULL) ? NULL : ((t)[(orden)]) ) 
-
-
-   /* ................................................................... */
-
-
- #ifdef  __cplusplus
-    }
- #endif
-
- #endif
-
+#endif

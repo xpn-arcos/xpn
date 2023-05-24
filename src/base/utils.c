@@ -1,4 +1,3 @@
-
 /*
  *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
@@ -19,25 +18,35 @@
  *
  */
 
+/**
+ * @file utils.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
 
-   /* ... Include / Inclusion ........................................... */
+/************************************************
+ *  ... Includes
+ ***********************************************/
+#include "utils.h"
 
-      #include "utils.h"
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+long utils_get_time(void)
+{
+   struct timeval timenow;
 
-   /* ... Functions / Funciones ......................................... */
+   // get timestamp
+   gettimeofday(&timenow, NULL);
 
-      long utils_get_time ( void )
-      {
-          struct timeval timenow ;
-      
-          // get timestamp
-          gettimeofday(&timenow, NULL) ;
-      
-          // return timestamp
-          return (long)timenow.tv_sec * 1000 + (long)timenow.tv_usec / 1000 ;
-      }
+   // return timestamp
+   return (long)timenow.tv_sec * 1000 + (long)timenow.tv_usec / 1000;
+}
 
-
-   /* ................................................................... */
-
+/* ................................................................... */
