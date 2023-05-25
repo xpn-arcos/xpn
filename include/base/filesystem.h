@@ -42,7 +42,9 @@
 #include <sys/stat.h>        /// Library for 'TODO'
 #include <sys/types.h>       /// Library for 'TODO'
 
-/* ... Defines / Definiciones ........................................... */
+/************************************************
+ *  ... Defines
+ ***********************************************/
 
 typedef off_t offset_t;
 

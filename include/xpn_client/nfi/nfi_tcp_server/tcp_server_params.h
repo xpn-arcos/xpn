@@ -46,6 +46,40 @@
  ***********************************************/
 #define TCP_MAX_PORT_NAME 1024
 
+/** @struct tcpClient_param_st
+   *  This is a struct
+   *
+   *  @var tcpClient_param_st::xpn_thread
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::xpn_session
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::xpn_locality
+   *    A 'TODO'.  
+     *  @var tcpClient_param_st::xpn_mosquitto_mode
+   *    A 'TODO'.
+      *  @var tcpClient_param_st::xpn_mosquitto_qos
+   *    A 'TODO'.   * 
+   *  @var tcpClient_param_st::size
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::rank
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::srv_name
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::server_name
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::port_number
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::server
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::locality
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::dirbase
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::argc
+   *    A 'TODO'.
+   *  @var tcpClient_param_st::argv
+   *    A 'TODO'.
+   */
 typedef struct
 {
   // Execution configuration
