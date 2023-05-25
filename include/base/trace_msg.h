@@ -19,15 +19,20 @@
    *
    */
 
+  /**
+   * @file trace_msg.h
+   * @brief Header file to 'TODO'.
+   *
+   * Header file to 'TODO'.
+   *
+   * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   * @date  Jul 22, 2021
+   * @bug No known bugs.
+   */
+
 
  #ifndef TRACE_MSG_H
  #define TRACE_MSG_H
-
-   /* ... Include / Inclusion ........................................... */
-
-      #include "all_system.h"
-      #include "string_misc.h"
-      #include "trace_tags.h"
 
 
  #ifdef  __cplusplus
@@ -35,18 +40,35 @@
  #endif
 
 
+   /* ... Include / Inclusion ........................................... */
+
+      #include "all_system.h"
+      #include "string_misc.h"
+
+
+   /* ... Consts / Constantes ........................................... */
+
+      #define  TRACE_PRINTER_SIZE 8
+
+      #define  SPOT __LINE__,__FILE__,getpid(),0
+
+
    /* ... Functions / Funciones ......................................... */
       
+      void  trace_msg_init ( void ) ;
+
       /**
        *
        *  Establece el gestor de impresión de mensajes.
        *  Set 'printer' dispacher. 
+       *  @param index   index of the printer, from zero up to TRACE_PRINTER_SIZE-1
        *  @param printer the printer function to be used.
        *  @return nothing.
        *
        */
-      void   TRACE_MSG_setPrinter 
+      int   TRACE_MSG_setPrinter 
       ( 
+        /*IN*/      int index,
         /*IN*/      int (*printer) (const   char *, va_list) 
       ) ;
 
@@ -66,7 +88,7 @@
        */
       void   TRACE_MSG_VPrintF    
       ( 
-        /*IN*/      int  line,
+        /*IN*/      int    line,
         /*IN*/      char  *name,
         /*IN*/     long    pid,
         /*IN*/      int    type,
@@ -88,13 +110,22 @@
        */
       void   TRACE_MSG_PrintF     
       ( 
-        /*IN*/      int  line,
+        /*IN*/      int    line,
         /*IN*/      char  *name,
         /*IN*/     long    pid,
         /*IN*/      int    type,
         /*IN*/      char  *fto, 
         ... 
       ) ;
+
+
+   /* ... Macros / Macros ............................................... */
+
+     #define DEBUG_BEGIN() \
+             debug_info("Begin %s()\n", __func__)
+
+     #define DEBUG_END() \
+             debug_info("End   %s(), errno=%d\n", __func__, errno)
 
 
    /* ................................................................... */
