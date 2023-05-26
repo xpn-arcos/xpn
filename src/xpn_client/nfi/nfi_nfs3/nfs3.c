@@ -63,21 +63,19 @@ void printfh3(char *s, fhandle3 *fh)
   return;
 }
 
-/****************************************************************
- * Funcion: create_conection_mount				*
- * Funcion declarada en la interfaz nfs3_mount.h	       	*
- *								*
- * Esta funci�n crea una conexi�n entre el cliente ya el	*
- * servidor MNT. El protocolo de conexi�n establecida puede	*
- * ser TCP o UDP, aunque por defecto se utiliza UDP.		*
- * Esta conexi�n solo puede ser utilizada por un proceso a	*
- * la vez.							*
- *							        *
- * Entrada: nombre del servidor NFS				*
- * Salida: Un puntero a una estructura CLIENT (es la conexion	*
- * realizada). Si devuelve NULL es que a ocurrido un error en	*
- * el proceso.							*
- ****************************************************************/
+/**
+ * @brief Create connection client-server.
+ *
+ * This function creates a connection between the client
+ * and the MNT server. The established connection protocol
+ * can be TCP or UDP, although UDP is used by default.
+ * This connection can only be used by one process at a time.
+ *
+ * @param name NFS server name.
+ * @param type  'TODO'.
+ * @return A pointer to a CLIENT structure (it is the connection
+ * made). If it returns NULL, an error has occurred in the process.
+ */
 CLIENT *create_connection_mount3(char *name, int type)
 {
   /* puntero a la conexi�n*/
@@ -172,16 +170,15 @@ CLIENT *create_connection_mount3(char *name, int type)
   return cli;
 }
 
-/****************************************************************
- * Funcion: close_conection_mount				*
- * Funcion declarada en la interfaz nfs3_mount.h	        *
- *								*
- * Esta funci�n elimina una conexi�n realizada a un		*
- * servidor MNT.						*
- *								*
- * Entrada: puntero a la estructura CLIENT.			*
- * Salida: no se devuelve ninguna salida.			*
- ****************************************************************/
+/**
+ * @brief Close connection client-server.
+ *
+ * This function deletes a connection made to an MNT server.
+ *
+ * @param cl Pointer to the CLIENT structure.
+ * @par Returns
+ *    Nothing.
+ */
 void close_connection_mount3(CLIENT *cl)
 {
   /* elimino la autenticacion */
@@ -207,24 +204,19 @@ void close_connection_mount3(CLIENT *cl)
 #endif
 }
 
-/****************************************************************
- * Funcion: nfs3_mount						*
- * Funcion declarada en la interfaz nfs3_mount.h		*
- *								*
- * Esta funci�n obtiene el manejador inicial. Se obtiene	*
- * montando el directorio pasado por parametro.			*
- *								*
- * Entradas:							*
- *	- el path absoluto del cual se desea obtener		*
- *	  el manejador.						*
- *	- un manejador, que sera el manejador del path		*
- *        en caso de tener exito la llamada.			*
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion MNT).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *		   y exito en caso de ser igual a 0.  		*
- ****************************************************************/
+/**
+ * @brief Get initial handler.
+ *
+ * This function obtains the initial handler.
+ * It is obtained by mounting the directory passed by parameter.
+ *
+ * @param dir The absolute path from which the handler is to be obtained.
+ * @param fhand A handler, which will be the path handler in case of a successful call.
+ * @param cli Pointer to the CLIENT structure (i.e. the MNT connection).
+ *
+ * @return An integer that indicates error in case of a
+ * negative value, and success in case of a value equal to 0.
+ */
 int nfs3_mount(char *dir, fhandle3 *fhand, CLIENT *cli)
 {
   mountres3 fh1;
@@ -307,21 +299,18 @@ int nfs3_mount(char *dir, fhandle3 *fhand, CLIENT *cli)
   return 0;
 }
 
-/****************************************************************
- * Funcion: nfs3_umount						*
- * Funcion declarada en la interfaz nfs3_mount.h		*
- *								*
- * Esta funci�n elimina la entrada en la tabla de path's	*
- * montados en el servidor.					*
- *								*
- * Entradas:							*
- *	- el path absoluto de un directorio montado		*
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion MNT).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *		   y exito en caso de ser igual a 0.		*
- ****************************************************************/
+/**
+ * @brief NFS3 umount.
+ *
+ * This function deletes the entry in the table
+ * of path's mounted on the server.
+ *
+ * @param path The absolute path of a mounted directory.
+ * @param cli Pointer to the CLIENT structure (i.e. the MNT connection).
+ *
+ * @return An integer indicating error if negative,
+ * and success in case of being equal to 0.
+ */
 int nfs3_umount(char *path, CLIENT *cli)
 {
   int res;
@@ -353,45 +342,39 @@ int nfs3_umount(char *path, CLIENT *cli)
   return 0;
 }
 
-/****************************************************************
- * Funcion: nfs3_export						*
- * Funcion declarada en la interfaz nfs3_mount.h		*
- *								*
- * Esta funci�n recoge todos los directorios exportados por un	*
- * servidor.							*
- *								*
- * Entradas:							*
- *	- un puntero a una estructura de tipo exports, que	*
- *	  en caso de exito, apuntara a una lista que		*
- *	  contiene los directorios esportados por el		*
- *	  servidor, junto a los permisos asociados al		*
- *	  directorio.						*
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion MNT).					*
-
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.			*
- ****************************************************************/
+/**
+ * @brief Directories exported.
+ *
+ * This function collects all the directories
+ * exported by a server.
+ *
+ * @param exp Pointer to a structure of type exports,
+ * which on success will point to a list containing the
+ * directories exported by the server, along with the
+ * permissions associated with the directory.
+ * @param cli Pointer to the CLIENT structure (i.e. the MNT connection).
+ *
+ * @return An integer indicating error in case of being negative, and success in case of being equal to 0.
+ */
 int nfs3_export(__attribute__((__unused__)) exports3 *exp, __attribute__((__unused__)) CLIENT *cli)
 {
   return 0;
 }
 
-/****************************************************************
- * Funcion: create_conection_nfs				*
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n crea una conexi�n entre el cliente ya el	*
- * servidor NFS. El protocolo de conexi�n establecida puede	*
- * ser TCP o UDP, aunque por defecto se utiliza UDP.		*
- * Esta conexi�n solo puede ser utilizada por un proceso a	*
- * la vez.							*
- *								*
- * Entrada: nombre del servidor NFS			        *
- * Salida: Un puntero a una estructura CLIENT (es la conexion	*
- * realizada). Si devuelve NULL es que a ocurrido un error en	*
- * el proceso.							*
- ****************************************************************/
+/**
+ * @brief Create connection.
+ *
+ * This function creates a connection between the client
+ * and the NFS server. The established connection protocol
+ * can be TCP or UDP, although UDP is used by default.
+ * This connection can only be used by one process at a time.
+ *
+ * @param name NFS server name.
+ * @param type 'TODO'
+ * @return A pointer to a CLIENT structure (this is
+ * the connection made). If it returns NULL, an error has
+ * occurred in the process.
+ */
 CLIENT *create_connection_nfs3(char *name, int type)
 {
   /* puntero a la conexi�n*/
@@ -484,16 +467,15 @@ CLIENT *create_connection_nfs3(char *name, int type)
   return cli;
 }
 
-/****************************************************************
- * Funcion: close_conection_nfs					*
- * Funcion declarada en la interfaz nfs3_nfs.h			*
- *								*
- * Esta funci�n elimina una conexi�n realizada a un	        *
- * servidor NFS.						*
- *								*
- * Entrada: puntero a la estructura CLIENT.			*
- * Salida: no se devuelve ninguna salida.			*
- ****************************************************************/
+/**
+ * @brief Close connection.
+ *
+ * This function deletes a connection made to an NFS server.
+ *
+ * @param cl Pointer to the CLIENT structure.
+ * @par Returns
+ *    Nothing.
+ */
 void close_connection_nfs3(CLIENT *cl)
 {
   /* elimino la autenticacion */
@@ -538,25 +520,17 @@ void nfs3_setAttr( sattr3 *at,unsigned int mode){
 }
 */
 
-/****************************************************************
- * Funcion: nfs3_setattr					*
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n incorpora los atributos a un objeto del sistema *
- * de ficheros del cual se tiene el manejador.                  *
- *								*
- * Entradas:							*
- *	- un manejador, que sera el manejador delobjeto del que *
- *        se desea obtener los atributos.		        *
- *      - un puntero a una estructura de tipo fatt (reservada   *
- *        por el usuario) que sera rellenada en caso de tener   *
- *        exito la llamada.		                        *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.  		        *
- ****************************************************************/
+/**
+ * @brief Set attributes.
+ *
+ * This function incorporates the attributes into a
+ * file system object for which you have the handle.
+ *
+ * @param fh A handler, which will be the handler of the object from which you want to get the attributes.
+ * @param fatt A pointer to a structure of type fatt (reserved by the user) that will be filled in case the call succeeds.
+ * @param cl A pointer to the CLIENT structure (i.e. the NFS connection).
+ * @return An integer indicating error in case of being negative, and success in case of being equal to 0.
+ */
 int nfs3_setattr(fhandle3 *fh, fattr3 *fatt, CLIENT *cl)
 {
   wccstat3 res;
@@ -597,25 +571,21 @@ int nfs3_setattr(fhandle3 *fh, fattr3 *fatt, CLIENT *cl)
   return NFS3_OK;
 }
 
-/****************************************************************
- * Funcion: nfs_getattr					*
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n obtiene los atributos del objeto del sistema    *
- * de ficheros del cual se tiene el manejador.                  *
- *								*
- * Entradas:							*
- *	- un manejador, que sera el manejador delobjeto del que *
- *        se desea obtener los atributos.		        *
- *      - un puntero a una estructura de tipo fatt (reservada   *
- *        por el usuario) que sera rellenada en caso de tener   *
- *        exito la llamada.		                        *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.  		        *
- ****************************************************************/
+/**
+ * @brief Get attributes.
+ *
+ * This function gets the attributes of the file system object
+ * for which you have the handle.
+ *
+ * @param fh  handler, which will be the handler of the object
+ * from which you want to obtain the attributes.
+ * @param fatt Pointer to a structure of type fatt
+ * (reserved by the user) that will be filled in case
+ * the call is successful.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ * @return An integer indicating error if negative,
+ * and success in case of being equal to 0.
+ */
 int nfs3_getattr(fhandle3 *fh, fattr3 *fatt, CLIENT *cl)
 {
   getattr3res res;
@@ -654,30 +624,25 @@ int nfs3_getattr(fhandle3 *fh, fattr3 *fatt, CLIENT *cl)
   return NFS3_OK;
 }
 
-/****************************************************************
- * Funcion: nfs3_lookup					        *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n obtiene el manejador de un path pasado por      *
- * parametro, mediante el manejador del directorio que contiene *
- * ese path.                                                    *
- *								*
- * Entradas:							*
- *	- el manejador del directorio.		                *
- *      - el path del cual se quiere el nuevo manejador.        *
- *      - el nuevo manejador.                                   *
- *      - un puntero a una estructura de tipo fatt (reservada   *
- *        por el usuario) que sera rellenada en caso de tener   *
- *        exito la llamada en caso de tener un valer distinto   *
- *        a NULL.		                                *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser mayor o igual a 0 (en este    *
- *         caso, indica el tipo de objeto del sistema de        *
- *         ficheros del cual se ha conseguido el manejador).    *
- ****************************************************************/
+/**
+ * @brief Get Handle.
+ *
+ * This function gets the handle to a path passed
+ * as a parameter, via the handle to the directory
+ * containing that path.
+ *
+ * @param fhin The directory handle.
+ * @param path The path from which the new handle is wanted.
+ * @param fhout The new handle.
+ * @param att Pointer to a structure of type fattr3 (reserved by the user)
+ * that will be filled in case the call succeeds if it has a value other than NULL.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ * 
+ * @return An integer that indicates error in case of being negative,
+ * and success in case of being greater or equal to 0 (in this case,
+ * it indicates the type of object of the file system from which
+ * the handler has been obtained).
+ */
 int nfs3_lookup(fhandle3 *fhin, char *path, fhandle3 *fhout, fattr3 *att, CLIENT *cl)
 {
 
@@ -795,27 +760,22 @@ int nfs3_lookup(fhandle3 *fhin, char *path, fhandle3 *fhout, fattr3 *att, CLIENT
   return 0;
 }
 
-/****************************************************************
- * Funcion: nfs3_read				                *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n lee los datos de un fichero                     *
- *								*
- * Entradas:							*
- *	- el manejador del fichero.		                *
- *      - el offset del fichero, que indica desde donde empezar *
- *        a leer.                                               *
- *      - el buffer de datos donde se guardan los datos leidos. *
- *      - el tama�o de los datos que se desean leer.            *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser mayor o igual a 0. En caso de *
- *         exito el valor devuelto es el valor de bytes leidos. *
- *         Si se leen menos bytes de los pedidos, es que se ha  *
- *         llegado al final de fichero.                         *
- ****************************************************************/
+/**
+ * @brief Read Data.
+ *
+ * This function reads data from a file.
+ *
+ * @param fh The file handle.
+ * @param data The data buffer where the read data is stored.
+ * @param offset The offset of the file, which indicates where to start reading from.
+ * @param size The size of the data to be read.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error if negative, and success
+ * if greater than or equal to 0. In case of success the returned
+ * value is the value of bytes read. If less bytes are read than
+ * requested, the end of file has been reached.
+ */
 ssize_t nfs3_read(fhandle3 *fh, void *data, off_t offset, size_t size, CLIENT *cl)
 {
   /* argumento de entrada a la llamada RPC */
@@ -910,27 +870,21 @@ ssize_t nfs3_read(fhandle3 *fh, void *data, off_t offset, size_t size, CLIENT *c
   return (ssize_t)i;
 }
 
-/****************************************************************
- * Funcion: nfs3_write				                *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n escribe datos en un fichero.                    *
- *								*
- * Entradas:							*
- *	- el manejador del fichero.		                *
- *      - el offset del fichero, que indica desde donde empezar *
- *        a escribir.                                           *
- *      - el buffer con los datos que se debean ecribir.        *
- *      - el tama�o de los datos que se desean escribir.        *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser mayor o igual a 0. En caso de *
- *         exito el valor devuelto es el valor de bytes leidos. *
- *         Si se leen menos bytes de los pedidos, es que se ha  *
- *         llegado al final de fichero.                         *
- ****************************************************************/
+/**
+ * @brief Write Data.
+ *
+ * This function writes data to a file.
+ *
+ * @param fh The file handle.
+ * @param data The buffer with the data to be written.
+ * @param offset The offset of the file, which indicates where to start writing from.
+ * @param size The size of the data to be written.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error if negative, and success if greater
+ * than or equal to 0. In case of success the returned value is the value
+ * of bytes read. If less bytes are read than requested, the end of file has been reached.
+ */
 ssize_t nfs3_write(fhandle3 *fh, void *data, off_t offset, size_t size, CLIENT *cl)
 {
   /* argumento de entrada a la llamada RPC */
@@ -1019,28 +973,24 @@ ssize_t nfs3_write(fhandle3 *fh, void *data, off_t offset, size_t size, CLIENT *
   return (ssize_t)i;
 }
 
-/****************************************************************
- * Funcion: nfs3_create				                *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n crea un fichero.                                *
- *								*
- * Entradas:							*
- *      - el nombre del fichero que se desea crear.             *
- *	- el manejador del directorio donde se va a crear el    *
- *        fichero.		                                *
- *      - los permisos de acceso del fichero a crear.           *
- *      - un manejador de salida, que en caso de exito, sera el *
- *        manejador del fichero creado.                         *
- *      - un puntero a una estructura con los atributos del     *
- *        fichero, que en caso de exito se rellenara.           *
- *        Si no se quiere utilizar pongase a NULL.              *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
+/**
+ * @brief Create file.
+ *
+ * This function creates a file.
+ *
+ * @param fhin The directory handle where the file is to be created.
+ * @param file The name of the file to be created.
+ * @param mode The access permissions of the file to be created.
+ * @param fhout An output handle, which in case of success,
+ * will be the handle of the created file.
+ * @param at A pointer to a structure with the attributes of the file,
+ * which in case of success will be filled in.
+ * If you do not want to use it, set it to NULL.
+ * @param cl A pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer that indicates error in case
+ * of being negative, and success in case of being equal to 0.
+ */
 int nfs3_create(fhandle3 *fhin, char *file, mode_t mode, fhandle3 *fhout, __attribute__((__unused__)) fattr3 *at, CLIENT *cl)
 {
   /* argumento de entrada a la llamada RPC */
@@ -1120,22 +1070,17 @@ int nfs3_create(fhandle3 *fhin, char *file, mode_t mode, fhandle3 *fhout, __attr
   return 0;
 }
 
-/****************************************************************
- * Funcion: nfs3_remove				                *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n borra un fichero.                               *
- *								*
- * Entradas:							*
- *	- el manejador del directorio donde se encuentra el     *
- *        fichero.		                                *
- *      - el nombre del fichero a borrar.                       *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
+/**
+ * @brief Remove File.
+ *
+ * This function deletes a file.
+ *
+ * @param fh The directory handle where the file is located.
+ * @param file The name of the file to delete.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error if negative, and success if 0.
+ */
 int nfs3_remove(fhandle3 *fh, char *file, CLIENT *cl)
 {
   /* argumento de entrada a la llamada RPC */
@@ -1183,126 +1128,96 @@ int nfs3_remove(fhandle3 *fh, char *file, CLIENT *cl)
   }
 }
 
-/****************************************************************
- * Funcion: nfs3_rename				                *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n renombra un fichero o directorio.               *
- *								*
- * Entradas:							*
- *	- el manejador del directorio donde se encuentra el     *
- *        fichero o directorio.	                                *
- *      - el nombre del fichero o directorio a renombrar.       *
- *	- el manejador del directorio donde se  va a encontrar  *
- *        el fichero o directorio renombrado.                   *
- *      - el nuevo nombre del fichero o directorio.             *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
+/**
+ * @brief Rename File or Directory.
+ *
+ * This function renames a file or directory.
+ *
+ * @param fh The directory handle where the file or directory is located.
+ * @param name The name of the file or directory to rename.
+ * @param fhR The directory handle of the directory where
+ * the renamed file or directory is to be found.
+ * @param nameR The new name of the file or directory.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error if negative, and success if 0.
+ */
 int nfs3_rename(__attribute__((__unused__)) fhandle3 *fh, __attribute__((__unused__)) char *name, __attribute__((__unused__)) fhandle3 *fhR, __attribute__((__unused__)) char *nameR, __attribute__((__unused__)) CLIENT *cl)
 {
   return 0;
 }
 
-/****************************************************************
- * Funcion: nfs3_mkdir				                *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n crea un directorio.                             *
- *								*
- * Entradas:							*
- *	- el manejador del directorio donde se va a crear el    *
- *        directorio.		                                *
- *      - el nombre del directorio que se desea crear.          *
- *      - los permisos de acceso del directorio a crear.        *
- *      - un manejador de salida, que en caso de exito, sera el *
- *        manejador del directorio creado.                      *
- *      - un puntero a una estructura con los atributos del     *
- *        directorio, que en caso de exito se rellenara.        *
- *        Si no se quiere utilizar pongase a NULL.              *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
+/**
+ * @brief Create a Directory.
+ *
+ * This function creates a directory.
+ *
+ * @param fhin The directory handle where the directory is to be created.
+ * @param dir The name of the directory to be created.
+ * @param mode The access permissions of the directory to be created.
+ * @param fhout An output handle, which in case of success, will be the handle of the created directory.
+ * @param at A pointer to a structure with the attributes of the directory,
+ * which in case of success will be filled in. If you do not want to use it, set it to NULL.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer that indicates error in case of being negative, and success in case of being equal to 0.
+ */
 int nfs3_mkdir(__attribute__((__unused__)) fhandle3 *fhin, __attribute__((__unused__)) char *dir, __attribute__((__unused__)) mode_t mode, __attribute__((__unused__)) fhandle3 *fhout, __attribute__((__unused__)) fattr3 *at, __attribute__((__unused__)) CLIENT *cl)
 {
   return 0;
 }
 
-/****************************************************************
- * Funcion: nfs3_rmdir				                *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n borra un directorio.                            *
- *								*
- * Entradas:							*
- *	- el manejador del directorio donde se encuentra el     *
- *        directorio.		                                *
- *      - el nombre del directorio a borrar.                    *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
+/**
+ * @brief Remove a directory.
+ *
+ * This function deletes a directory.
+ *
+ * @param fh The directory handle where the directory is located.
+ * @param dir The name of the directory to be deleted.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer that indicates error in case of being negative,
+ * and success in case of being equal to 0.
+ */
 int nfs3_rmdir(__attribute__((__unused__)) fhandle3 *fh, __attribute__((__unused__)) char *dir, __attribute__((__unused__)) CLIENT *cl)
 {
   return 0;
 }
 
-/****************************************************************
- * Funcion: nfs3_readdir				        *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n lee las entradas de un directorio.              *
- *								*
- * Entradas:							*
- *  - el manejador del directorio del cual se quiere            *
- *    leer las entradas.		                        *
- *  - Una cookie, la cual se rellena con la ultima entrada      *
- *    leida. Sirve para saber por donde se quiere empezar a     *
- *    leer las entradas. Si se quiere ller desde la primera     *
- *    entrada, la cookie tiene que tener un valor de 0.         *
- *  - el numero de entradas que se quieren leer. Este tama�o    *
- *    no puede ser muy grande ya que UDP no permite mensajes    *
- *    que mas de 8 KB en el caso de nfs2 y 64KB en el caso de   *
- *    nfs3.                                                     *
- *  - un puntero a un array de cadenas, que es donde en caso de *
- *    exito se guardaran las entradas                           *
- *  - puntero a la estructura CLIENT (es decir,		        *
- *    la conexion NFS).					        *
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual o mayor a 0. En caso de *
- *	   ser mayor o igual a 0, este n�mero indica el numero  *
- *	   de entradas leidas                                   *
- ****************************************************************/
+/**
+ * @brief Read entries.
+ *
+ * This function reads entries from a directory.
+ *
+ * @param fh The directory handle of the directory from which you want to read entries.
+ * @param cookie A cookie, which is filled with the last entry read.
+ * It is used to know where you want to start reading the entries.
+ * If you want to read from the first entry, the cookie must have a value of 0.
+ * @param entr A pointer to an array of strings, which is where,
+ * in case of success, the entries will be stored.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer that indicates error in case of being negative,
+ * and success in case of being equal or greater than 0.
+ * If greater than or equal to 0, this number indicates the number of entries read.
+ */
 int nfs3_readdir(__attribute__((__unused__)) fhandle3 *fh, __attribute__((__unused__)) cookieverf3 cookie, __attribute__((__unused__)) char *entr, __attribute__((__unused__)) CLIENT *cl)
 {
   return 0;
 }
 
-/****************************************************************
- * Funcion: nfs3_statfs				                *
- * Funcion declarada en la interfaz nfs3_nfs.h		        *
- *								*
- * Esta funci�n obtiene caracteristicas del servidor NFS.       *
- *								*
- * Entradas:							*
- *	- el manejador del directorio.                          *
- *      - un puntero a una estructura de tipo info que contiene *
- *        la informacion del servidor , en caso de exito.       *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
+/**
+ * @brief Get features Server.
+ *
+ * This function obtains features from the NFS server.
+ *
+ * @param arg The directory handle.
+ * @param inf A pointer to a structure of type info containing the server information, in case of success.
+ * @param cl A pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error in case of being negative,
+ * and success in case of being equal to 0.
+ */
 int nfs3_statfs(__attribute__((__unused__)) fhandle3 *arg, __attribute__((__unused__)) fsinfo3resok *inf, __attribute__((__unused__)) CLIENT *cl)
 {
   return 0;

@@ -38,10 +38,9 @@
 #include "all_system.h" /// Library for 'TODO'
 #include "base/utils.h" /// Library for 'TODO'
 
-/*
- * ENVIROMENT VARIABLE: DNS SERVICE
- */
-
+/************************************************
+ *  ... ENVIROMENT VARIABLE: DNS SERVICE
+ ***********************************************/
 #ifndef MPI_SERVER_DNS_FILE_DEFAULT
 #define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
 #endif

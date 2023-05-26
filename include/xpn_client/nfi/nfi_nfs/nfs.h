@@ -1539,42 +1539,305 @@ extern bool_t xdr_readdirres();
 
 #endif /* LINUX nfs.h */
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
+/**
+ * @brief Create connection client-server.
+ *
+ * This function creates a connection between the client
+ * and the MNT server. The established connection protocol
+ * can be TCP or UDP, although UDP is used by default.
+ * This connection can only be used by one process at a time.
+ *
+ * @param name NFS server name.
+ * @param type  'TODO'.
+ * @return A pointer to a CLIENT structure (it is the connection
+ * made). If it returns NULL, an error has occurred in the process.
+ */
 CLIENT *create_connection_mount(char *name, int type);
 
+/**
+ * @brief Close connection client-server.
+ *
+ * This function deletes a connection made to an MNT server.
+ *
+ * @param cl Pointer to the CLIENT structure.
+ * @par Returns
+ *    Nothing.
+ */
 void close_connection_mount(CLIENT *cl);
 
+/**
+ * @brief Get initial handler.
+ *
+ * This function obtains the initial handler.
+ * It is obtained by mounting the directory passed by parameter.
+ *
+ * @param dir The absolute path from which the handler is to be obtained.
+ * @param fhand A handler, which will be the path handler in case of a successful call.
+ * @param cl Pointer to the CLIENT structure (i.e. the MNT connection).
+ * 
+ * @return An integer that indicates error in case of a
+ * negative value, and success in case of a value equal to 0.
+ */
 int nfs_mount(char *dir, fhandle fhand, CLIENT *cl);
 
+/**
+ * @brief NFS umount.
+ *
+ * This function deletes the entry in the table
+ * of path's mounted on the server.
+ *
+ * @param path The absolute path of a mounted directory.
+ * @param cl Pointer to the CLIENT structure (i.e. the MNT connection).
+ * 
+ * @return An integer indicating error if negative,
+ * and success in case of being equal to 0.
+ */
 int nfs_umount(char *path, CLIENT *cl);
 
-int nfs_export(exports *, CLIENT *cl);
+/**
+ * @brief Directories exported.
+ *
+ * This function collects all the directories
+ * exported by a server.
+ *
+ * @param exp Pointer to a structure of type exports,
+ * which on success will point to a list containing the
+ * directories exported by the server, along with the
+ * permissions associated with the directory.
+ * @param cl Pointer to the CLIENT structure (i.e. the MNT connection).
+ * 
+ * @return An integer indicating error in case of being negative, and success in case of being equal to 0.
+ */
+int nfs_export(exports *exp, CLIENT *cl);
 
+/**
+ * @brief Create connection.
+ *
+ * This function creates a connection between the client
+ * and the NFS server. The established connection protocol
+ * can be TCP or UDP, although UDP is used by default.
+ * This connection can only be used by one process at a time.
+ *
+ * @param name NFS server name.
+ * @param type 'TODO'
+ * @return A pointer to a CLIENT structure (this is
+ * the connection made). If it returns NULL, an error has
+ * occurred in the process.
+ */
 CLIENT *create_connection_nfs(char *name, int type);
 
+/**
+ * @brief Close connection.
+ *
+ * This function deletes a connection made to an NFS server.
+ *
+ * @param cl Pointer to the CLIENT structure.
+ * @par Returns
+ *    Nothing.
+ */
 void close_connection_nfs(CLIENT *cl);
 
+/**
+ * @brief Get attributes.
+ *
+ * This function gets the attributes of the file system object
+ * for which you have the handle.
+ *
+ * @param fh  handler, which will be the handler of the object
+ * from which you want to obtain the attributes.
+ * @param fatt Pointer to a structure of type fatt
+ * (reserved by the user) that will be filled in case
+ * the call is successful.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ * @return An integer indicating error if negative,
+ * and success in case of being equal to 0.
+ */
 int nfs_getattr(fhandle fh, fattr *fatt, CLIENT *cl);
 
+/**
+ * @brief Set attributes.
+ *
+ * This function incorporates the attributes into a
+ * file system object for which you have the handle.
+ *
+ * @param fh A handler, which will be the handler of the object from which you want to get the attributes.
+ * @param fatt A pointer to a structure of type fatt (reserved by the user) that will be filled in case the call succeeds.
+ * @param cl A pointer to the CLIENT structure (i.e. the NFS connection).
+ * @return An integer indicating error in case of being negative, and success in case of being equal to 0.
+ */
 int nfs_setattr(fhandle fh, fattr *fatt, CLIENT *cl);
 
+/**
+ * @brief Get Handle.
+ *
+ * This function gets the handle to a path passed
+ * as a parameter, via the handle to the directory
+ * containing that path.
+ *
+ * @param fhin The directory handle.
+ * @param path The path from which the new handle is wanted.
+ * @param fhout The new handle.
+ * @param att Pointer to a structure of type fattr (reserved by the user)
+ * that will be filled in case the call succeeds if it has a value other than NULL.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ * 
+ * @return An integer that indicates error in case of being negative,
+ * and success in case of being greater or equal to 0 (in this case,
+ * it indicates the type of object of the file system from which
+ * the handler has been obtained).
+ */
 int nfs_lookup(fhandle fhin, char *path, fhandle fhout, fattr *att, CLIENT *cl);
 
+/**
+ * @brief Read Data.
+ *
+ * This function reads data from a file.
+ *
+ * @param fh The file handle.
+ * @param data The data buffer where the read data is stored.
+ * @param offset The offset of the file, which indicates where to start reading from.
+ * @param size The size of the data to be read.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error if negative, and success
+ * if greater than or equal to 0. In case of success the returned
+ * value is the value of bytes read. If less bytes are read than
+ * requested, the end of file has been reached.
+ */
 ssize_t nfs_read(fhandle fh, void *data, off_t offset, size_t size, CLIENT *cl);
 
+/**
+ * @brief Write Data.
+ *
+ * This function writes data to a file.
+ *
+ * @param fh The file handle.
+ * @param data The buffer with the data to be written.
+ * @param offset The offset of the file, which indicates where to start writing from.
+ * @param size The size of the data to be written.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error if negative, and success if greater
+ * than or equal to 0. In case of success the returned value is the value
+ * of bytes read. If less bytes are read than requested, the end of file has been reached.
+ */
 ssize_t nfs_write(fhandle fh, void *data, off_t offset, size_t size, CLIENT *cl);
 
+/**
+ * @brief Create file.
+ *
+ * This function creates a file.
+ *
+ * @param fhin The directory handle where the file is to be created.
+ * @param file The name of the file to be created.
+ * @param mode The access permissions of the file to be created.
+ * @param fhout An output handle, which in case of success,
+ * will be the handle of the created file.
+ * @param at A pointer to a structure with the attributes of the file,
+ * which in case of success will be filled in.
+ * If you do not want to use it, set it to NULL.
+ * @param cl A pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer that indicates error in case
+ * of being negative, and success in case of being equal to 0.
+ */
 int nfs_create(fhandle fhin, char *file, mode_t mode, fhandle fhout, fattr *at, CLIENT *cl);
 
+/**
+ * @brief Remove File.
+ *
+ * This function deletes a file.
+ *
+ * @param fh The directory handle where the file is located.
+ * @param file The name of the file to delete.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error if negative, and success if 0.
+ */
 int nfs_remove(fhandle fh, char *file, CLIENT *cl);
 
+/**
+ * @brief Rename File or Directory.
+ *
+ * This function renames a file or directory.
+ *
+ * @param fh The directory handle where the file or directory is located.
+ * @param name The name of the file or directory to rename.
+ * @param fhR The directory handle of the directory where
+ * the renamed file or directory is to be found.
+ * @param nameR The new name of the file or directory.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error if negative, and success if 0.
+ */
 int nfs_rename(fhandle fh, char *name, fhandle fhR, char *nameR, CLIENT *cl);
 
+/**
+ * @brief Create a Directory.
+ *
+ * This function creates a directory.
+ *
+ * @param fhin The directory handle where the directory is to be created.
+ * @param dir The name of the directory to be created.
+ * @param mode The access permissions of the directory to be created.
+ * @param fhout An output handle, which in case of success, will be the handle of the created directory.
+ * @param att A pointer to a structure with the attributes of the directory,
+ * which in case of success will be filled in. If you do not want to use it, set it to NULL.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer that indicates error in case of being negative, and success in case of being equal to 0.
+ */
 int nfs_mkdir(fhandle fhin, char *dir, mode_t mode, fhandle fhout, fattr *att, CLIENT *cl);
 
+/**
+ * @brief Remove a directory.
+ *
+ * This function deletes a directory.
+ *
+ * @param fh The directory handle where the directory is located.
+ * @param dir The name of the directory to be deleted.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer that indicates error in case of being negative,
+ * and success in case of being equal to 0.
+ */
 int nfs_rmdir(fhandle fh, char *dir, CLIENT *cl);
 
+/**
+ * @brief Read entries.
+ *
+ * This function reads entries from a directory.
+ *
+ * @param fh The directory handle of the directory from which you want to read entries.
+ * @param cookie A cookie, which is filled with the last entry read.
+ * It is used to know where you want to start reading the entries.
+ * If you want to read from the first entry, the cookie must have a value of 0.
+ * @param entry A pointer to an array of strings, which is where,
+ * in case of success, the entries will be stored.
+ * @param cl Pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer that indicates error in case of being negative,
+ * and success in case of being equal or greater than 0.
+ * If greater than or equal to 0, this number indicates the number of entries read.
+ */
 int nfs_readdir(fhandle fh, nfscookie cookie, char *entry, CLIENT *cl);
 
+/**
+ * @brief Get features Server.
+ *
+ * This function obtains features from the NFS server.
+ *
+ * @param arg The directory handle.
+ * @param inf A pointer to a structure of type info containing the server information, in case of success.
+ * @param cl A pointer to the CLIENT structure (i.e. the NFS connection).
+ *
+ * @return An integer indicating error in case of being negative,
+ * and success in case of being equal to 0.
+ */
 int nfs_statfs(fhandle arg, struct nfs_info *inf, CLIENT *cl);
 
 #endif /* _NFS_H */

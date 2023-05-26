@@ -24,7 +24,7 @@
  *
  * File to 'TODO'.
  *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  * @date  Jul 22, 2021
  * @bug No known bugs.
  */
@@ -34,7 +34,9 @@
  ***********************************************/
 #include "nfi_mpi_server.h"
 
-/* ... Global Variable / Variable Globales ........................... */
+/************************************************
+ *  ... Global Variables
+ ***********************************************/
 
 #define FILESYSTEM_DLSYM 1
 

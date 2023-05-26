@@ -19,84 +19,96 @@
  *
  */
 
+/**
+ * @file trace_msg.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
 
-   /* ... Include / Inclusion ........................................... */
+/************************************************
+ *  ... Includes
+ ***********************************************/
+#include "base/trace_msg.h"
 
-      #include "base/trace_msg.h"
+/************************************************
+ *  ... Globla var.
+ ***********************************************/
+int (*TRACE_MSG_PrintMsg[TRACE_PRINTER_SIZE])(const char *, va_list);
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-   /* ... Globla var. / Variables glob. ................................. */
+void trace_msg_init(void)
+{
+   int i;
 
-      int  (*TRACE_MSG_PrintMsg[TRACE_PRINTER_SIZE])(const char *, va_list) ;
+   for (i = 0; i < TRACE_PRINTER_SIZE; i++)
+   {
+      TRACE_MSG_PrintMsg[i] = NULL;
+   }
+}
 
+int trace_msg_setPrinter(int index, int (*printer)(const char *, va_list))
+{
+   if (index < 0)
+   {
+      return -1;
+   }
+   if (index > TRACE_PRINTER_SIZE)
+   {
+      return -1;
+   }
 
-   /* ... Functions / Funciones ......................................... */
+   TRACE_MSG_PrintMsg[index] = (int (*)(const char *, va_list))printer;
+   return 1;
+}
 
-      void  trace_msg_init ( void )
-      {
-         int i ;
+void TRACE_MSG_doPrint(char *fto, ...)
+{
+   if (NULL == TRACE_MSG_PrintMsg)
+   {
+      return;
+   }
 
-	 for (i=0; i<TRACE_PRINTER_SIZE; i++) {
-              TRACE_MSG_PrintMsg[i] = NULL ;
-	 }
-      }
+   va_list vl;
 
+   va_start(vl, fto);
+   (*TRACE_MSG_PrintMsg)(fto, vl);
+   va_end(vl);
+}
 
-      int  trace_msg_setPrinter ( int index, int (*printer) (const char   *, va_list) )
-      {
-	 if (index < 0) {
-	     return -1 ;
-	 }
-	 if (index > TRACE_PRINTER_SIZE) {
-	     return -1 ;
-	 }
+void TRACE_MSG_VPrintF(int line, char *name, long pid, int type, char *fto, va_list vl)
+{
+   if (NULL == TRACE_MSG_PrintMsg)
+   {
+      return;
+   }
 
-         TRACE_MSG_PrintMsg[index] = (  int (*)(const char   *, va_list)) printer ;
-	 return 1 ;
-      }
+   char *msg;
 
+   msg = STRING_MISC_Dvsprintf(fto, vl);
+   TRACE_MSG_doPrint("trace(%i,\"%s\",%li,%i,\"%s\").", line, name, pid, type, msg);
+   free(msg);
+}
 
-      void   TRACE_MSG_doPrint ( char    *fto, ... )
-      {
-        if (NULL == TRACE_MSG_PrintMsg) {
-	    return ;
-        }
+void TRACE_MSG_PrintF(int line, char *name, long pid, int type, char *fto, ...)
+{
+   if (NULL == TRACE_MSG_PrintMsg)
+   {
+      return;
+   }
 
-        va_list vl ;
+   va_list vl;
 
-        va_start(vl,fto) ;
-        (*TRACE_MSG_PrintMsg)(fto,vl) ; 
-       	va_end(vl) ;
-      }
+   va_start(vl, fto);
+   TRACE_MSG_VPrintF(line, name, pid, type, fto, vl);
+   va_end(vl);
+}
 
-
-      void   TRACE_MSG_VPrintF ( int line,  char *name,  long pid,  int type,  char *fto,  va_list  vl )
-      {
-        if (NULL == TRACE_MSG_PrintMsg) {
-	    return ;
-        }
-
-        char  *msg ;
-
-        msg = STRING_MISC_Dvsprintf(fto,vl) ;
-        TRACE_MSG_doPrint("trace(%i,\"%s\",%li,%i,\"%s\").", line, name, pid, type, msg) ;
-        free(msg) ;
-      }
-
-
-      void   TRACE_MSG_PrintF ( int line,  char *name,  long pid,  int type,  char *fto,  ... )
-      {
-        if (NULL == TRACE_MSG_PrintMsg) {
-	    return ;
-        }
-
-        va_list vl ;
-
-        va_start(vl,fto) ;
-        TRACE_MSG_VPrintF(line,name,pid,type,fto,vl) ;
-       	va_end(vl) ;
-      }
-
-
-   /* ................................................................... */
-
+/* ................................................................... */

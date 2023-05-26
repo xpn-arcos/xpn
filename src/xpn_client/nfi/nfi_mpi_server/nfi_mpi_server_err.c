@@ -36,6 +36,10 @@
 
 extern int errno;
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
 // TODO: this interface must be changed
 void mpi_server_err(int err)
 {

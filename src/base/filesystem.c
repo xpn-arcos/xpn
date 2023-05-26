@@ -18,17 +18,31 @@
  *
  */
 
+/**
+ * @file filesystem.c
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ * */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "filesystem.h"
 
-/* ... Varibles ........................................... */
+/************************************************
+ *  ... Variables
+ ***********************************************/
 
 // pthread_attr_t filesystem_attr;
 
-/* ... Functions / Funciones ......................................... */
-
+/************************************************
+ *  ... Functions
+ ***********************************************/
 /*
  * Internal
  */
