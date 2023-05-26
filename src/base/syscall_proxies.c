@@ -27,10 +27,10 @@
 
   /* ... Variables / Variables ......................................... */
 
-  int     (*real_open    )(char *, int, mode_t)   = NULL;
-  int     (*real_open64  )(char *, int, mode_t)   = NULL;
-  int     (*real___open_2)(char *, int)           = NULL;
-  int     (*real_creat   )(const char *, mode_t)  = NULL;
+  int     (*real_open    )(char *, int, mode_t)        = NULL;
+  int     (*real_open64  )(char *, int, mode_t)        = NULL;
+  int     (*real___open_2)(char *, int)                = NULL;
+  int     (*real_creat   )(const char *, mode_t)       = NULL;
   int     (*real_close   )(int) = NULL;
 
   ssize_t (*real_read )(int, void*, size_t)       = NULL;
@@ -50,6 +50,15 @@
 
   int     (*real_rename)(const char *, const  char *) = NULL;
   int     (*real_unlink)(char *) = NULL;
+
+  FILE*   (*real_fopen )(const char *, const char *) = NULL;
+  FILE*   (*real_fdopen)(int, const char *)          = NULL;
+  int     (*real_fclose)(FILE *)                     = NULL;
+
+  size_t  (*real_fread )(void *, size_t, size_t, FILE *)       = NULL;
+  size_t  (*real_fwrite)(const void *, size_t, size_t, FILE *) = NULL;
+
+  int     (*real_fseek)(FILE *, long int, int) = NULL;
 
   DIR*              (*real_opendir  )(char*) = NULL;
   DIR*              (*real_opendir64)(char*) = NULL;
@@ -347,6 +356,116 @@
 
 
   //
+  // File API (stdio)
+  //
+
+  FILE* dlsym_fopen(const char *filename, const char *mode)
+  {
+    debug_info("dlsym_fopen: before fopen...\n");
+    debug_info("dlsym_fopen: mode => %s\n",mode);
+
+    if (real_fopen == NULL) {
+        real_fopen = (FILE* (*)(const char *, const char *)) dlsym(RTLD_NEXT,"fopen");
+    }
+    
+    FILE* fd = real_fopen((const char *) filename, mode);
+
+    debug_info("dlsym_fopen: (%s,%s) return %p\n",filename,mode,fd);
+
+    return fd;
+  }
+
+  FILE* dlsym_fdopen(int fd, const char *mode)
+  {
+    debug_info("dlsym_fdopen: before fopen...\n");
+    debug_info("dlsym_fdopen: fd => %d\n",fd);
+    debug_info("dlsym_fdopen: mode => %s\n",mode);
+
+    if (real_fdopen == NULL) {
+        real_fdopen = (FILE* (*)(int, const char *)) dlsym(RTLD_NEXT,"fdopen");
+    }
+    
+    FILE* fp = real_fdopen(fd, mode);
+
+    debug_info("dlsym_fdopen: (%d,%s) return %p\n",fd,mode,fp);
+
+    return fp;
+  }
+
+  int  dlsym_fclose(FILE *stream)
+  {
+    debug_info("dlsym_fclose: before fclose...\n");
+    debug_info("dlsym_fclose: stream => %p\n",stream);
+
+    if (real_fclose == NULL) {
+        real_fclose = (int (*)(FILE*)) dlsym(RTLD_NEXT,"fclose");
+    }
+    
+    int ret = real_fclose(stream);
+
+    debug_info("dlsym_fclose: (%p) return %d\n",stream,ret);
+
+    return ret;
+  }
+
+  size_t dlsym_fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
+  {
+    debug_info("dlsym_fread: before fread...\n");
+    debug_info("dlsym_fread: ptr => %p\n",ptr);
+    debug_info("dlsym_fread: size => %d\n",size);
+    debug_info("dlsym_fread: nmemb => %d\n",nmemb);
+    debug_info("dlsym_fread: stream => %p\n",stream);
+
+    if (real_fread == NULL) {
+        real_fread = (size_t (*)(void *, size_t, size_t, FILE *)) dlsym(RTLD_NEXT,"fread");
+    }
+    
+    size_t ret = real_fread(ptr, size, nmemb, stream);
+
+    debug_info("dlsym_fread: (%p,%d,%ld,%p) return %ld\n",ptr, size, nmemb, stream, ret);
+
+    return ret;
+  }
+
+  size_t dlsym_fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
+  {
+    debug_info("dlsym_fwrite: before fwrite...\n");
+    debug_info("dlsym_fwrite: ptr => %p\n",ptr);
+    debug_info("dlsym_fwrite: size => %d\n",size);
+    debug_info("dlsym_fwrite: nmemb => %d\n",nmemb);
+    debug_info("dlsym_fwrite: stream => %p\n",stream);
+
+    if (real_fwrite == NULL) {
+        real_fwrite = (size_t (*)(const void *, size_t, size_t, FILE *)) dlsym(RTLD_NEXT,"fwrite");
+    }
+    
+    size_t ret = real_fwrite(ptr, size, nmemb, stream);
+
+    debug_info("dlsym_fwrite: (%p,%d,%ld,%p) return %ld\n",ptr, size, nmemb, stream, ret);
+
+    return ret;
+  }
+
+  int dlsym_fseek(FILE *stream, long int offset, int whence)
+  {
+    debug_info("dlsym_fseek: before fwrite...\n");
+    debug_info("dlsym_fseek: stream => %p\n",stream);
+    debug_info("dlsym_fseek: offset => %d\n",offset);
+    debug_info("dlsym_fseek: whence => %d\n",whence);
+
+    if (real_fseek == NULL) {
+        real_fseek = (int (*)(FILE *, long int, int)) dlsym(RTLD_NEXT,"fseek");
+    }
+    
+    int ret = real_fseek(stream, offset, whence);
+
+    debug_info("dlsym_fseek: (%p,%d,%d) return %d\n",stream, offset, whence, ret);
+
+    return ret;
+  }
+
+
+  //
   // Directory API
   //
 
@@ -613,4 +732,3 @@
  
 
    /* ................................................................... */
-
