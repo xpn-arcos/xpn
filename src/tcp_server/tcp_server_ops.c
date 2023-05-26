@@ -18,12 +18,25 @@
  *
  */
 
+/**
+ * @file tcp_server_ops.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
 #include "tcp_server_ops.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 char *tcp_server_op2string(int op_code)
 {
@@ -118,32 +131,329 @@ char *tcp_server_op2string(int op_code)
  * OPERATIONAL FUNCTIONS
  */
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_open_ws(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_open_wos(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_creat_ws(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_creat_wos(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_read_ws(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_read_wos(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_write_ws(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_write_wos(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_close_ws(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_rm(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_rename(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_setattr(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_getattr(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
 
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_mkdir(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_opendir(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_readdir(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_closedir(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_rmdir(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
 
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_flush(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_preload(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
 
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_getnodename(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_fstat(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id); // TODO: implement
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param params  'TODO'.
+ * @param sd  'TODO'.
+ * @param head  'TODO'.
+ * @param rank_client_id  'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void tcp_server_op_getid(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id); // TODO: call in switch
 
 /**********************************

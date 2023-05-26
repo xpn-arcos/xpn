@@ -24,11 +24,10 @@
  *
  * Header file to 'TODO'.
  *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  * @date  Jul 22, 2021
  * @bug No known bugs.
  */
-
 
 #ifndef _WORKERS_COMMON_H_
 #define _WORKERS_COMMON_H_
@@ -52,6 +51,36 @@
  *  ... Datatype
  ***********************************************/
 
+/** @struct st_th
+ *  This is a struct
+ *
+ *  @var st_th::params
+ *    A 'TODO'.
+ *  @var st_th::function
+ *    A 'TODO'.
+ *  @var st_th::id
+ *    A 'TODO'.
+ *  @var st_th::type_op
+ *    A 'TODO'.
+ *  @var st_th::rank_client_id
+ *    A 'TODO'.
+ *  @var st_th::sd
+ *    A 'TODO'.
+ *  @var st_th::w
+ *    A 'TODO'.
+ *  @var st_th::v
+ *    A 'TODO'.
+ *  @var st_th::th_worker
+ *    A 'TODO'.
+ *  @var st_th::m_wait
+ *    A 'TODO'.
+ *  @var st_th::c_wait
+ *    A 'TODO'.
+ *  @var st_th::r_wait
+ *    A 'TODO'.
+ *  @var st_th::wait4me
+ *    A 'TODO'.
+ */
 struct st_th
 {
   void *params;

@@ -19,55 +19,63 @@
  *
  */
 
+/**
+ * @file debug_msg.c
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ * */
 
-   /* ... Include / Inclusion ........................................... */
+/************************************************
+ *  ... Includes
+ ***********************************************/
+#include "base/debug_msg.h"
 
-      #include "base/debug_msg.h"
+/************************************************
+ *  ... Functions
+ ***********************************************/
+void debug_msg_init(void)
+{
+      setbuf(stdout, NULL);
+      setbuf(stderr, NULL);
+}
 
+int debug_msg_printf(int src_type, long src_pid, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ...)
+{
+      va_list valist;
+      int ret;
 
-   /* ... Functions / Funciones ......................................... */
-
-      void  debug_msg_init ( void )
+      va_start(valist, msg_fmt);
+      switch (src_type)
       {
-           setbuf(stdout, NULL) ;
-           setbuf(stderr, NULL) ;
+      case 3:
+            fprintf(fd, "[%ld][%s:%4ld] [INFO] ", src_pid, src_fname, src_line);
+            ret = vfprintf(fd, msg_fmt, valist);
+            break;
+
+      case 2:
+            fprintf(fd, "[%ld][%s:%4ld] [WARN] ", src_pid, src_fname, src_line);
+            ret = vfprintf(fd, msg_fmt, valist);
+            break;
+
+      case 1:
+            fprintf(fd, "[%ld][%s:%4ld] [ERROR] ", src_pid, src_fname, src_line);
+            ret = vfprintf(fd, msg_fmt, valist);
+            break;
+
+      default:
+            ret = vfprintf(fd, msg_fmt, valist);
+            break;
       }
+      va_end(valist);
 
+      // fflush(fd) ;
 
-      int  debug_msg_printf ( int src_type, long src_pid, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... )
-      {
-         va_list valist ;
-         int ret ;
-      
-         va_start(valist, msg_fmt) ;
-         switch (src_type)
-         {
-              case  3:
-                    fprintf(fd, "[%ld][%s:%4ld] [INFO] ", src_pid, src_fname, src_line) ;
-                    ret = vfprintf(fd, msg_fmt, valist) ;
-                    break;
-      
-              case  2:
-                    fprintf(fd, "[%ld][%s:%4ld] [WARN] ", src_pid, src_fname, src_line) ;
-                    ret = vfprintf(fd, msg_fmt, valist) ;
-                    break;
-      
-              case  1:
-                    fprintf(fd, "[%ld][%s:%4ld] [ERROR] ", src_pid, src_fname, src_line) ;
-                    ret = vfprintf(fd, msg_fmt, valist) ;
-                    break;
-      
-              default:
-                    ret = vfprintf(fd, msg_fmt, valist) ;
-                    break;
-         }
-         va_end(valist) ;
-      
-         // fflush(fd) ;
-      
-         return ret ;
-      }
+      return ret;
+}
 
-
-   /* ................................................................... */
-
+/* ................................................................... */

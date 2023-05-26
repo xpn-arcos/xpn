@@ -45,6 +45,34 @@
  *  ... Datatype
  ***********************************************/
 
+/** @struct mpiClient_param_st
+   *  This is a struct
+   *
+   *  @var mpiClient_param_st::xpn_thread
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::xpn_session
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::xpn_locality
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::size
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::rank
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::port_name
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::srv_name
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::server
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::locality
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::dirbase
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::argc
+   *    A 'TODO'.
+   *  @var mpiClient_param_st::argv
+   *    A 'TODO'.
+   */
 typedef struct
 {
   // Execution configuration

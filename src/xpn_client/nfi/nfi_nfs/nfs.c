@@ -37,6 +37,16 @@
 /************************************************
  *  ... Functions
  ***********************************************/
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param fh 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void printfh(fhandle fh)
 {
   unsigned int i, j;
@@ -85,21 +95,6 @@ void printfh(fhandle fh)
   return j;
 }*/
 
-/****************************************************************
- * Funcion: create_conection_mount				*
- * Funcion declarada en la interfaz nfs_mount.h			*
- *								*
- * Esta funci�n crea una conexi�n entre el cliente ya el	*
- * servidor MNT. El protocolo de conexi�n establecida puede	*
- * ser TCP o UDP, aunque por defecto se utiliza UDP.		*
- * Esta conexi�n solo puede ser utilizada por un proceso a	*
- * la vez.							*
- *								*
- * Entrada: nombre del servidor NFS				*
- * Salida: Un puntero a una estructura CLIENT (es la conexion	*
- * realizada). Si devuelve NULL es que a ocurrido un error en	*
- * el proceso.							*
- ****************************************************************/
 CLIENT *create_connection_mount(char *name, int type)
 {
   /* puntero a la conexi�n*/
@@ -194,16 +189,6 @@ CLIENT *create_connection_mount(char *name, int type)
   return cli;
 }
 
-/****************************************************************
- * Funcion: close_conection_mount				*
- * Funcion declarada en la interfaz nfs_mount.h	        *
- *								*
- * Esta funci�n elimina una conexi�n realizada a un		*
- * servidor MNT.						*
- *								*
- * Entrada: puntero a la estructura CLIENT.			*
- * Salida: no se devuelve ninguna salida.			*
- ****************************************************************/
 void close_connection_mount(CLIENT *cl)
 {
   /* elimino la autenticacion */
@@ -220,24 +205,6 @@ void close_connection_mount(CLIENT *cl)
 #endif
 }
 
-/****************************************************************
- * Funcion: nfs_mount						*
- * Funcion declarada en la interfaz nfs_mount.h		*
- *								*
- * Esta funci�n obtiene el manejador inicial. Se obtiene	*
- * montando el directorio pasado por parametro.			*
- *								*
- * Entradas:							*
- *	- el path absoluto del cual se desea obtener		*
- *	  el manejador.						*
- *	- un manejador, que sera el manejador del path		*
- *        en caso de tener exito la llamada.			*
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion MNT).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *		   y exito en caso de ser igual a 0.  		*
- ****************************************************************/
 int nfs_mount(char *dir, fhandle fhand, CLIENT *cli)
 {
   fhstatus fh;
@@ -289,21 +256,6 @@ int nfs_mount(char *dir, fhandle fhand, CLIENT *cli)
   return NFS_OK;
 }
 
-/****************************************************************
- * Funcion: nfs_umount						*
- * Funcion declarada en la interfaz nfs_mount.h		*
- *								*
- * Esta funci�n elimina la entrada en la tabla de path's	*
- * montados en el servidor.					*
- *								*
- * Entradas:							*
- *	- el path absoluto de un directorio montado		*
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion MNT).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *		   y exito en caso de ser igual a 0.		*
- ****************************************************************/
 int nfs_umount(char *path, CLIENT *cli)
 {
   int res;
@@ -332,25 +284,6 @@ int nfs_umount(char *path, CLIENT *cli)
   return NFS_OK;
 }
 
-/****************************************************************
- * Funcion: nfs_export						*
- * Funcion declarada en la interfaz nfs_mount.h		*
- *								*
- * Esta funci�n recoge todos los directorios exportados por un	*
- * servidor.							*
- *								*
- * Entradas:							*
- *	- un puntero a una estructura de tipo exports, que	*
- *	  en caso de exito, apuntara a una lista que		*
- *	  contiene los directorios esportados por el		*
- *	  servidor, junto a los permisos asociados al		*
- *	  directorio.						*
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion MNT).					*
-
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.			*
- ****************************************************************/
 int nfs_export(exports *exp, CLIENT *cli)
 {
 
@@ -383,21 +316,6 @@ int nfs_export(exports *exp, CLIENT *cli)
   }
 }
 
-/****************************************************************
- * Funcion: create_conection_nfs				*
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n crea una conexi�n entre el cliente ya el	*
- * servidor NFS. El protocolo de conexi�n establecida puede	*
- * ser TCP o UDP, aunque por defecto se utiliza UDP.		*
- * Esta conexi�n solo puede ser utilizada por un proceso a	*
- * la vez.							*
- *								*
- * Entrada: nombre del servidor NFS			        *
- * Salida: Un puntero a una estructura CLIENT (es la conexion	*
- * realizada). Si devuelve NULL es que a ocurrido un error en	*
- * el proceso.							*
- ****************************************************************/
 CLIENT *create_connection_nfs(char *name, int type)
 {
   /* puntero a la conexi�n*/
@@ -487,16 +405,6 @@ CLIENT *create_connection_nfs(char *name, int type)
   return cli;
 }
 
-/****************************************************************
- * Funcion: close_conection_nfs					*
- * Funcion declarada en la interfaz nfs_nfs.h			*
- *								*
- * Esta funci�n elimina una conexi�n realizada a un	        *
- * servidor NFS.						*
- *								*
- * Entrada: puntero a la estructura CLIENT.			*
- * Salida: no se devuelve ninguna salida.			*
- ****************************************************************/
 void close_connection_nfs(CLIENT *cl)
 {
   /* elimino la autenticacion */
@@ -513,11 +421,15 @@ void close_connection_nfs(CLIENT *cl)
 #endif
 }
 
-/****************************************************************
- * Esta funcion inicializa la estructura timevalNfs.            *
- * Entradas:                                                    *
- *      - un puntero a la estructura a rellenar.                *
- ****************************************************************/
+/**
+ * @brief Set attributes.
+ *
+ * This function initializes the timevalNfs structure.
+ *
+ * @param t a pointer to the structure to be filled.
+ * @par Returns
+ *    Nothing.
+ */
 void setDate(timevalNfs *t)
 {
 
@@ -525,12 +437,16 @@ void setDate(timevalNfs *t)
   t->useconds = 0;
 }
 
-/****************************************************************
- * Esta funcion inicializa la estructura sattr.                 *
- * Entradas:                                                    *
- *      - un puntero a la estructura a rellenar.                *
- *      - los permisos que el fichero va a tener                *
- ****************************************************************/
+/**
+ * @brief Set attributes.
+ *
+ * This function initializes the sattr structure.
+ *
+ * @param at a pointer to the structure to be filled.
+ * @param mode the permissions that the file will have.
+ * @par Returns
+ *    Nothing.
+ */
 void setAttr(sattr *at, unsigned int mode)
 {
 
@@ -548,25 +464,6 @@ void setAttr(sattr *at, unsigned int mode)
   setDate(&(at->mtime));
 }
 
-/****************************************************************
- * Funcion: nfs_setattr					*
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n incorpora los atributos a un objeto del sistema *
- * de ficheros del cual se tiene el manejador.                  *
- *								*
- * Entradas:							*
- *	- un manejador, que sera el manejador delobjeto del que *
- *        se desea obtener los atributos.		        *
- *      - un puntero a una estructura de tipo fatt (reservada   *
- *        por el usuario) que sera rellenada en caso de tener   *
- *        exito la llamada.		                        *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.  		        *
- ****************************************************************/
 int nfs_setattr(fhandle fh, fattr *fatt, CLIENT *cl)
 {
   attrstat at;
@@ -609,25 +506,6 @@ int nfs_setattr(fhandle fh, fattr *fatt, CLIENT *cl)
   return NFS_OK;
 }
 
-/****************************************************************
- * Funcion: nfs_getattr					*
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n obtiene los atributos del objeto del sistema    *
- * de ficheros del cual se tiene el manejador.                  *
- *								*
- * Entradas:							*
- *	- un manejador, que sera el manejador delobjeto del que *
- *        se desea obtener los atributos.		        *
- *      - un puntero a una estructura de tipo fatt (reservada   *
- *        por el usuario) que sera rellenada en caso de tener   *
- *        exito la llamada.		                        *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.  		        *
- ****************************************************************/
 int nfs_getattr(fhandle fh, fattr *fatt, CLIENT *cl)
 {
   attrstat at;
@@ -666,30 +544,6 @@ int nfs_getattr(fhandle fh, fattr *fatt, CLIENT *cl)
   return NFS_OK;
 }
 
-/****************************************************************
- * Funcion: nfs_lookup					        *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n obtiene el manejador de un path pasado por      *
- * parametro, mediante el manejador del directorio que contiene *
- * ese path.                                                    *
- *								*
- * Entradas:							*
- *	- el manejador del directorio.		                *
- *      - el path del cual se quiere el nuevo manejador.        *
- *      - el nuevo manejador.                                   *
- *      - un puntero a una estructura de tipo fatt (reservada   *
- *        por el usuario) que sera rellenada en caso de tener   *
- *        exito la llamada en caso de tener un valer distinto   *
- *        a NULL.		                                *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser mayor o igual a 0 (en este    *
- *         caso, indica el tipo de objeto del sistema de        *
- *         ficheros del cual se ha conseguido el manejador).    *
- ****************************************************************/
 int nfs_lookup(fhandle fhin, char *path, fhandle fhout, fattr *att, CLIENT *cl)
 {
   /* argumento de entrada en la llamada RPC*/
@@ -814,27 +668,6 @@ int nfs_lookup(fhandle fhin, char *path, fhandle fhout, fattr *att, CLIENT *cl)
   }
 }
 
-/****************************************************************
- * Funcion: nfs_read				                *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n lee los datos de un fichero                     *
- *								*
- * Entradas:							*
- *	- el manejador del fichero.		                *
- *      - el offset del fichero, que indica desde donde empezar *
- *        a leer.                                               *
- *      - el buffer de datos donde se guardan los datos leidos. *
- *      - el tama�o de los datos que se desean leer.            *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser mayor o igual a 0. En caso de *
- *         exito el valor devuelto es el valor de bytes leidos. *
- *         Si se leen menos bytes de los pedidos, es que se ha  *
- *         llegado al final de fichero.                         *
- ****************************************************************/
 ssize_t nfs_read(fhandle fh, void *data, off_t offset, size_t size, CLIENT *cl)
 {
   /* argumento de entrada a la llamada RPC */
@@ -928,27 +761,6 @@ ssize_t nfs_read(fhandle fh, void *data, off_t offset, size_t size, CLIENT *cl)
   return (ssize_t)i;
 }
 
-/****************************************************************
- * Funcion: nfs_write				                *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n escribe datos en un fichero.                    *
- *								*
- * Entradas:							*
- *	- el manejador del fichero.		                *
- *      - el offset del fichero, que indica desde donde empezar *
- *        a escribir.                                           *
- *      - el buffer con los datos que se debean ecribir.        *
- *      - el tama�o de los datos que se desean escribir.        *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser mayor o igual a 0. En caso de *
- *         exito el valor devuelto es el valor de bytes leidos. *
- *         Si se leen menos bytes de los pedidos, es que se ha  *
- *         llegado al final de fichero.                         *
- ****************************************************************/
 ssize_t nfs_write(fhandle fh, void *data, off_t offset, size_t size, CLIENT *cl)
 {
   /* argumento de entrada a la llamada RPC */
@@ -1028,28 +840,6 @@ ssize_t nfs_write(fhandle fh, void *data, off_t offset, size_t size, CLIENT *cl)
   return (ssize_t)i;
 }
 
-/****************************************************************
- * Funcion: nfs_create				                *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n crea un fichero.                                *
- *								*
- * Entradas:							*
- *      - el nombre del fichero que se desea crear.             *
- *	- el manejador del directorio donde se va a crear el    *
- *        fichero.		                                *
- *      - los permisos de acceso del fichero a crear.           *
- *      - un manejador de salida, que en caso de exito, sera el *
- *        manejador del fichero creado.                         *
- *      - un puntero a una estructura con los atributos del     *
- *        fichero, que en caso de exito se rellenara.           *
- *        Si no se quiere utilizar pongase a NULL.              *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
 int nfs_create(fhandle fhin, char *file, mode_t mode, fhandle fhout, fattr *at, CLIENT *cl)
 {
   /* argumento de entrada a la llamada RPC */
@@ -1104,22 +894,6 @@ int nfs_create(fhandle fhin, char *file, mode_t mode, fhandle fhout, fattr *at, 
   return NFS_OK;
 }
 
-/****************************************************************
- * Funcion: nfs_remove				                *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n borra un fichero.                               *
- *								*
- * Entradas:							*
- *	- el manejador del directorio donde se encuentra el     *
- *        fichero.		                                *
- *      - el nombre del fichero a borrar.                       *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
 int nfs_remove(fhandle fh, char *file, CLIENT *cl)
 {
   /* argumento de entrada a la llamada RPC */
@@ -1165,25 +939,6 @@ int nfs_remove(fhandle fh, char *file, CLIENT *cl)
   }
 }
 
-/****************************************************************
- * Funcion: nfs_rename				                *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n renombra un fichero o directorio.               *
- *								*
- * Entradas:							*
- *	- el manejador del directorio donde se encuentra el     *
- *        fichero o directorio.	                                *
- *      - el nombre del fichero o directorio a renombrar.       *
- *	- el manejador del directorio donde se  va a encontrar  *
- *        el fichero o directorio renombrado.                   *
- *      - el nuevo nombre del fichero o directorio.             *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
 int nfs_rename(fhandle fh, char *name, fhandle fhR, char *nameR, CLIENT *cl)
 {
   /* argumento de entrada a la llamada RPC */
@@ -1237,28 +992,6 @@ int nfs_rename(fhandle fh, char *name, fhandle fhR, char *nameR, CLIENT *cl)
   }
 }
 
-/****************************************************************
- * Funcion: nfs_mkdir				                *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n crea un directorio.                             *
- *								*
- * Entradas:							*
- *	- el manejador del directorio donde se va a crear el    *
- *        directorio.		                                *
- *      - el nombre del directorio que se desea crear.          *
- *      - los permisos de acceso del directorio a crear.        *
- *      - un manejador de salida, que en caso de exito, sera el *
- *        manejador del directorio creado.                      *
- *      - un puntero a una estructura con los atributos del     *
- *        directorio, que en caso de exito se rellenara.        *
- *        Si no se quiere utilizar pongase a NULL.              *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
 int nfs_mkdir(fhandle fhin, char *dir, mode_t mode, fhandle fhout, fattr *at, CLIENT *cl)
 {
   /* argumento de entrada en la RPC */
@@ -1317,22 +1050,6 @@ int nfs_mkdir(fhandle fhin, char *dir, mode_t mode, fhandle fhout, fattr *at, CL
   }
 }
 
-/****************************************************************
- * Funcion: nfs_rmdir				                *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n borra un directorio.                            *
- *								*
- * Entradas:							*
- *	- el manejador del directorio donde se encuentra el     *
- *        directorio.		                                *
- *      - el nombre del directorio a borrar.                    *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
 int nfs_rmdir(fhandle fh, char *dir, CLIENT *cl)
 {
   /* argumento de entrada en la RPC */
@@ -1378,33 +1095,6 @@ int nfs_rmdir(fhandle fh, char *dir, CLIENT *cl)
   return NFSERR_CONNECT;
 }
 
-/****************************************************************
- * Funcion: nfs_readdir				        *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n lee las entradas de un directorio.              *
- *								*
- * Entradas:							*
- *  - el manejador del directorio del cual se quiere            *
- *    leer las entradas.		                        *
- *  - Una cookie, la cual se rellena con la ultima entrada      *
- *    leida. Sirve para saber por donde se quiere empezar a     *
- *    leer las entradas. Si se quiere ller desde la primera     *
- *    entrada, la cookie tiene que tener un valor de 0.         *
- *  - el numero de entradas que se quieren leer. Este tama�o    *
- *    no puede ser muy grande ya que UDP no permite mensajes    *
- *    que mas de 8 KB en el caso de nfs2 y 64KB en el caso de   *
- *    nfs3.                                                     *
- *  - un puntero a un array de cadenas, que es donde en caso de *
- *    exito se guardaran las entradas                           *
- *  - puntero a la estructura CLIENT (es decir,		        *
- *    la conexion NFS).					        *
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual o mayor a 0. En caso de *
- *	   ser mayor o igual a 0, este n�mero indica el numero  *
- *	   de entradas leidas                                   *
- ****************************************************************/
 int nfs_readdir(fhandle fh, nfscookie cookie, char *entr, CLIENT *cl)
 {
   /* argumento de entrada de la llamada RPC */
@@ -1509,22 +1199,6 @@ int nfs_readdir(fhandle fh, nfscookie cookie, char *entr, CLIENT *cl)
   }
 }
 
-/****************************************************************
- * Funcion: nfs_statfs				                *
- * Funcion declarada en la interfaz nfs_nfs.h		        *
- *								*
- * Esta funci�n obtiene caracteristicas del servidor NFS.       *
- *								*
- * Entradas:							*
- *	- el manejador del directorio.                          *
- *      - un puntero a una estructura de tipo info que contiene *
- *        la informacion del servidor , en caso de exito.       *
- *	- puntero a la estructura CLIENT (es decir,		*
- *	  la conexion NFS).					*
- *								*
- * Salida: Un entero que indica error en caso de ser negativo,	*
- *	   y exito en caso de ser igual a 0.                    *
- ****************************************************************/
 int nfs_statfs(fhandle arg, struct nfs_info *inf, CLIENT *cl)
 {
   /* argumento de salida */
