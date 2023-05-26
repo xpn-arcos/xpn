@@ -35,6 +35,10 @@
 
   ssize_t (*real_read )(int, void*, size_t)       = NULL;
   ssize_t (*real_write)(int, const void*, size_t) = NULL;
+
+  ssize_t (*real_pread )(int, void *, size_t, off_t)       = NULL;
+  ssize_t (*real_pwrite)(int, const void *, size_t, off_t) = NULL;
+
   off_t   (*real_lseek)(int, off_t, int)          = NULL;
   off64_t (*real_lseek64)(int, off64_t, int)      = NULL;
   int     (*real_ftruncate)(int, off_t)           = NULL;
@@ -196,7 +200,7 @@
         real_read = (ssize_t (*)(int, void*, size_t)) dlsym(RTLD_NEXT,"read");
     }
 
-    return real_read(fd,buf, nbyte);
+    return real_read(fd, buf, nbyte);
   }
 
   ssize_t dlsym_write(int fd, void *buf, size_t nbyte)
@@ -207,7 +211,29 @@
         real_write = (ssize_t (*)(int, const void*, size_t)) dlsym(RTLD_NEXT,"write");
     }
 
-    return real_write(fd,buf, nbyte);
+    return real_write(fd, buf, nbyte);
+  }
+
+  ssize_t dlsym_pread(int fd, void *buf, size_t count, off_t offset)
+  {
+    debug_info("dlsym_pread: before pread...\n");
+
+    if (real_pread == NULL){
+        real_pread = (ssize_t (*)(int, void *, size_t, off_t)) dlsym(RTLD_NEXT,"pread");
+    }
+
+    return real_pread(fd, buf, count, offset);
+  }
+
+  ssize_t dlsym_pwrite(int fd, const void *buf, size_t count, off_t offset)
+  {
+    debug_info("dlsym_pwrite: before pwrite...\n");
+
+    if (real_pwrite == NULL){
+        real_pwrite = (ssize_t (*)(int, const void *, size_t, off_t)) dlsym(RTLD_NEXT,"pwrite");
+    }
+
+    return real_pwrite(fd, buf, count, offset);
   }
 
   off_t dlsym_lseek(int fd, off_t offset, int whence)
