@@ -28,6 +28,11 @@ for P in $PKG_NAMES; do
     apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
 done
 
+PKG_NAMES="prometheus libmicrohttpd-dev libmxml-dev"
+for P in $PKG_NAMES; do
+    apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
+done
+
 # 2) working path...
 MPICC_PATH=/local_test/bin/mpich/bin/mpicc
 INSTALL_PATH=/local_test/bin/
