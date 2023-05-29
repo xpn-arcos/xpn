@@ -124,7 +124,7 @@ void mpi_server_dispatcher(struct st_th th)
     th_arg.rank_client_id = th.rank_client_id;
     th_arg.wait4me = FALSE;
 
-    workers_launch(&worker, &th_arg, mpi_server_run);
+    base_workers_launch(&worker, &th_arg, mpi_server_run);
   }
 
   debug_info("[MPI-SERVER] mpi_server_worker_run (ID=%d) close\n", th.rank_client_id);
@@ -165,7 +165,7 @@ int mpi_server_up(void)
     printf("[MPI-SERVER] ERROR: mpi_comm initialization fails\n");
     return -1;
   }
-  ret = workers_init(&worker, params.thread_mode);
+  ret = base_workers_init(&worker, params.thread_mode);
   if (ret < 0)
   {
     printf("[MPI-SERVER] ERROR: mpi_comm initialization fails\n");
@@ -209,12 +209,12 @@ int mpi_server_up(void)
     th_arg.rank_client_id = 0;
     th_arg.wait4me = FALSE;
 
-    workers_launch(&worker, &th_arg, mpi_server_dispatcher);
+    base_workers_launch(&worker, &th_arg, mpi_server_dispatcher);
   }
 
   // Wait and finalize for all current workers
-  debug_info("[MPI-SERVER] workers_destroy\n");
-  workers_destroy(&worker);
+  debug_info("[MPI-SERVER] base_workers_destroy\n");
+  base_workers_destroy(&worker);
   debug_info("[MPI-SERVER] mpi_server_comm_destroy\n");
   mpi_server_comm_destroy(&params);
 

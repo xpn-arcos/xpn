@@ -55,7 +55,7 @@ extern "C"
      * @param nServ number of servers for this file.
      * @return hash value computed.
      */
-    int MATH_MISC_hash(
+    int base_math_misc_hash(
         char *file,
         int nServ);
 
@@ -73,7 +73,7 @@ extern "C"
      * @return true (1) if element is removed and error (-1) if
      *         a problem is found.
      */
-    int MATH_MISC_locateInRAID5withInternalParity(
+    int base_math_misc_locate_in_raid5_with_internal_parity(
         int i,
         int m,
         int *SP,
@@ -95,7 +95,7 @@ extern "C"
      * @return true (1) if element is removed and error (-1) if
      *         a problem is found.
      */
-    int MATH_MISC_locateInRAID5withExternalParity(
+    int base_math_misc_locate_in_raid5_with_external_parity(
         int i,
         int m,
         int *SP,
@@ -114,10 +114,10 @@ extern "C"
      * ...
      * memset(b1, 'a', 1024);
      * memset(b1, 'b', 1024);
-     * MATH_MISC_Xor(res, b1, b2, 1024);
+     * base_math_misc_xor(res, b1, b2, 1024);
      * ... // res[i] = b1[i] ^ b2[i]
      * ...
-     * MATH_MISC_Xor(b1, res, b2, 1024);
+     * base_math_misc_xor(b1, res, b2, 1024);
      * ... // b1 = res:(b1 ^ b2) ^ b2 = b1
      *
      * @param block_result Resulting block.
@@ -126,7 +126,7 @@ extern "C"
      * @param block_size Number of bytes.
      * @return true (1).
      */
-    int MATH_MISC_Xor(
+    int base_math_misc_xor(
         char *block_result,
         char *block_1,
         char *block_2,
@@ -145,7 +145,7 @@ extern "C"
      * @param block_size Number of bytes of each block.
      * @return true (1).
      */
-    int MATH_MISC_Xor3(
+    int base_math_misc_xor3(
         char *block_result,
         char *block_1,
         char *block_2,
@@ -164,7 +164,7 @@ extern "C"
      * @param block_size Number of bytes of each block.
      * @return true (1).
      */
-    int MATH_MISC_XorN(
+    int base_math_misc_xor_n(
         char *block_result,
         char **blocks,
         int nblocks,

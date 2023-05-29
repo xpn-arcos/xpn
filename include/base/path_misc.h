@@ -56,7 +56,7 @@ extern "C"
    * @param nServ 'TODO'.
    * @return 'TODO'.
    */
-  int hash(char *file, int nServ);
+  int base_path_misc_hash(char *file, int nServ);
 
   /**
    * @brief 'TODO'.
@@ -67,7 +67,7 @@ extern "C"
    * @param path 'TODO'.
    * @return 'TODO'.
    */
-  int getFirstDir(char *dir, char *path);
+  int base_path_misc_get_first_dir(char *dir, char *path);
 
   /**
    * @brief 'TODO'.
@@ -77,7 +77,7 @@ extern "C"
    * @param name 'TODO'.
    * @return 'TODO'.
    */
-  int getSizeFactor(char *name);
+  int base_path_misc_get_size_factor(char *name);
 
   /**
    * @brief 'TODO'.
@@ -88,7 +88,7 @@ extern "C"
    * @param dir 'TODO'.
    * @return 'TODO'.
    */
-  int getNameFile(char *file, char *dir);
+  int base_path_misc_get_name_file(char *file, char *dir);
 
   /**
    * @brief 'TODO'.
@@ -99,7 +99,7 @@ extern "C"
    * @param dir 'TODO'.
    * @return 'TODO'.
    */
-  int getNamePart(char *part, char *dir);
+  int base_path_misc_get_name_part(char *part, char *dir);
 
   /**
    * @brief 'TODO'.

@@ -680,7 +680,7 @@ int nfs3_lookup(fhandle3 *fhin, char *path, fhandle3 *fhout, fattr3 *att, CLIENT
     arg.dir.fhandle3_val = fh.fhandle3_val;
     /* separar ultimo dir del path */
 
-    end = getFirstDir(dir_aux, path_aux);
+    end = base_path_misc_get_first_dir(dir_aux, path_aux);
     arg.name = dir_aux;
 
     // printf("dir_aux = %s strlen = %d\n",arg.name,strlen(arg.name));

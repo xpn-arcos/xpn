@@ -61,7 +61,7 @@ int dtable_insert(
 			return (-1);
 		}
 
-		ret = DARRAY_InsEndDarray(&(dt->dtable),
+		ret = base_darray_insert_end(&(dt->dtable),
 								  &(dt->neltos),
 								  dtelto_aux);
 		if (0 == ret)
@@ -76,7 +76,7 @@ int dtable_insert(
 	}
 	else
 	{
-		dtelto_aux = (dtelto_t *)DARRAY_GetNFromDarray(dt->dtable,
+		dtelto_aux = (dtelto_t *)base_darray_get_orden_element(dt->dtable,
 													   dt->free_list);
 		dt->free_list = dtelto_aux->next_free;
 
@@ -101,7 +101,7 @@ int dtable_delete(
 		return (-1);
 
 	/* delete element */
-	dtelto_aux = (dtelto_t *)DARRAY_GetNFromDarray(dt->dtable, fd);
+	dtelto_aux = (dtelto_t *)base_darray_get_orden_element(dt->dtable, fd);
 	dtelto_aux->next_free = dt->free_list;
 	dt->free_list = dtelto_aux->myself;
 
@@ -122,7 +122,7 @@ void *dtable_get(
 		return NULL;
 
 	/* get element */
-	dtelto_aux = (dtelto_t *)DARRAY_GetNFromDarray(dt->dtable, fd);
+	dtelto_aux = (dtelto_t *)base_darray_get_orden_element(dt->dtable, fd);
 
 	/* return the information */
 	return dtelto_aux->dt_info;

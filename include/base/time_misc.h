@@ -58,7 +58,8 @@ extern "C"
      *   Nothing.
      *
      */
-    void TIME_MISC_Timer(struct timeval *t);
+    void base_time_misc_timer(
+        struct timeval *t);
 
     /**
      * Compute 'dig = tn - to'.
@@ -69,9 +70,10 @@ extern "C"
      *   Nothing.
      *
      */
-    void TIME_MISC_DiffTime(struct timeval *to,
-                            struct timeval *tn,
-                            struct timeval *dif);
+    void base_time_misc_diff_time(
+        struct timeval *to,
+        struct timeval *tn,
+        struct timeval *dif);
 
     /**
      * Compute 'sum = tn + to'.
@@ -82,23 +84,26 @@ extern "C"
      *   Nothing.
      *
      */
-    void TIME_MISC_AddTime(struct timeval *to,
-                           struct timeval *tn,
-                           struct timeval *sum);
+    void base_time_misc_add_time(
+        struct timeval *to,
+        struct timeval *tn,
+        struct timeval *sum);
 
     /**
      * Return a timestamp as seconds.
      * @param timet the timestamp.
      * @return timestamp as seconds.
      */
-    float TIME_MISC_TimevaltoFloat(struct timeval *timet);
+    float base_time_misc_timeval_to_seconds(
+        struct timeval *timet);
 
     /**
      * Return a timestamp as microseconds.
      * @param timet the timestamp.
      * @return timestamp as microseconds.
      */
-    float TIME_MISC_TimevaltoMicro(struct timeval *timet);
+    float base_time_misc_timeval_to_microseconds(
+        struct timeval *timet);
 
     /* ................................................................... */
 

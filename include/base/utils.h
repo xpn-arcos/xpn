@@ -76,7 +76,7 @@ extern "C"
     *    None.
     * @return 'TODO'.
     */
-   long utils_get_time(void);
+   long base_utils_get_time(void);
 
    /* .................................................................... */
 

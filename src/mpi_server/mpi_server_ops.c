@@ -1343,7 +1343,7 @@ void mpi_server_op_preload(mpi_server_param_st *params, MPI_Comm sd, struct st_m
     return;
   }
 
-  ret = ParseURL(head->u_st_mpi_server_msg.op_preload.virtual_path,
+  ret = base_urlstr_parse_url(head->u_st_mpi_server_msg.op_preload.virtual_path,
                  protocol,
                  user,
                  pass,
@@ -1422,7 +1422,7 @@ void mpi_server_op_flush(mpi_server_param_st *params, MPI_Comm sd, struct st_mpi
   int BLOCKSIZE = head->u_st_mpi_server_msg.op_flush.block_size;
   char buffer[BLOCKSIZE];
 
-  ret = ParseURL(head->u_st_mpi_server_msg.op_flush.virtual_path,
+  ret = base_urlstr_parse_url(head->u_st_mpi_server_msg.op_flush.virtual_path,
                  protocol,
                  user,
                  pass,

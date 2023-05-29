@@ -66,7 +66,7 @@ extern "C"
    * @par Returns
    *    Nothing.
    */
-  void trace_msg_init(void);
+  void base_trace_msg_init(void);
 
   /**
    *  @brief Set 'printer' dispacher.
@@ -76,7 +76,7 @@ extern "C"
    *  @par Returns
    *    Nothing.
    */
-  int TRACE_MSG_setPrinter(
+  int base_trace_msg_set_printer(
       /*IN*/ int index,
       /*IN*/ int (*printer)(const char *, va_list));
 
@@ -94,7 +94,7 @@ extern "C"
    *  @par Returns
    *    Nothing.
    */
-  void TRACE_MSG_VPrintF(
+  void base_trace_msg_variable_printf(
       /*IN*/ int line,
       /*IN*/ char *name,
       /*IN*/ long pid,
@@ -115,7 +115,7 @@ extern "C"
    *  @par Returns
    *    Nothing.
    */
-  void TRACE_MSG_PrintF(
+  void base_trace_msg_printf(
       /*IN*/ int line,
       /*IN*/ char *name,
       /*IN*/ long pid,

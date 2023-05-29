@@ -176,7 +176,7 @@ int tcp_server_comm_init(tcp_server_param_st *params)
   DEBUG_BEGIN();
 
   // Get timestap
-  TIME_MISC_Timer(&t0);
+  base_time_misc_timer(&t0);
 
   /*
    * Initialize socket
@@ -292,9 +292,9 @@ int tcp_server_comm_init(tcp_server_param_st *params)
   }
 
   // Print server init information
-  TIME_MISC_Timer(&t1);
-  TIME_MISC_DiffTime(&t0, &t1, &tf);
-  time = TIME_MISC_TimevaltoFloat(&tf);
+  base_time_misc_timer(&t1);
+  base_time_misc_diff_time(&t0, &t1, &tf);
+  time = base_time_misc_timeval_to_seconds(&tf);
   printf("\n\n");
   printf("Time to inizialize %s server: %f s\n", params->name, time);
   printf("\n");

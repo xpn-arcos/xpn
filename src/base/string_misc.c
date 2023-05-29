@@ -38,7 +38,7 @@
  *  ... Functions
  ***********************************************/
 
-long STRING_MISC_StrLen(/*IN*/ char *str)
+long base_string_misc_length(/*IN*/ char *str)
 {
   /* check params */
   if (str == NULL)
@@ -47,7 +47,7 @@ long STRING_MISC_StrLen(/*IN*/ char *str)
   return (long)strlen(str);
 }
 
-int8_t STRING_MISC_Equal(/*IN*/ char *str1,
+int8_t base_string_misc_equal(/*IN*/ char *str1,
                          /*IN*/ char *str2)
 {
   /* easy cases */
@@ -63,7 +63,7 @@ int8_t STRING_MISC_Equal(/*IN*/ char *str1,
   return (0);
 }
 
-char *STRING_MISC_StrDup(/*IN*/ char *str)
+char *base_string_misc_dup(/*IN*/ char *str)
 {
   int lenstr;
   char *pch;
@@ -73,7 +73,7 @@ char *STRING_MISC_StrDup(/*IN*/ char *str)
     return NULL;
 
   /* alloc memory for the clone... */
-  lenstr = STRING_MISC_StrLen(str) + 1;
+  lenstr = base_string_misc_length(str) + 1;
   pch = (char *)malloc(lenstr);
   if (NULL == pch)
     return NULL;
@@ -83,7 +83,7 @@ char *STRING_MISC_StrDup(/*IN*/ char *str)
   return pch;
 }
 
-int STRING_MISC_StrLenF(/*IN*/ char *format,
+int base_string_misc_length_format(/*IN*/ char *format,
                         /*IN*/ va_list argl)
 {
   int ineed;
@@ -110,13 +110,13 @@ int STRING_MISC_StrLenF(/*IN*/ char *format,
   return ineed;
 }
 
-char *STRING_MISC_Dvsprintf(/*IN*/ char *format,
+char *base_string_misc_dynamic_vsprintf(/*IN*/ char *format,
                             /*IN*/ va_list argl)
 {
   char *baux;
   int ineed;
 
-  ineed = STRING_MISC_StrLenF(format, argl);
+  ineed = base_string_misc_length_format(format, argl);
   baux = (char *)malloc(ineed + 1);
   if (NULL == baux)
     return NULL;
@@ -126,14 +126,14 @@ char *STRING_MISC_Dvsprintf(/*IN*/ char *format,
   return baux;
 }
 
-char *STRING_MISC_Dsprintf(/*IN*/ char *format,
+char *base_string_misc_dynamic_vsprintf_mul_vars(/*IN*/ char *format,
                            ...)
 {
   char *saux;
   va_list varg;
 
   va_start(varg, format);
-  saux = STRING_MISC_Dvsprintf(format, varg);
+  saux = base_string_misc_dynamic_vsprintf(format, varg);
   va_end(varg);
 
   return saux;

@@ -38,7 +38,7 @@
  *  ... Functions
  ***********************************************/
 
-int hash(__attribute__((__unused__)) char *file, __attribute__((__unused__)) int nServ)
+int base_path_misc_hash(__attribute__((__unused__)) char *file, __attribute__((__unused__)) int nServ)
 {
         /*int i,max;
         int unsigned num;
@@ -53,7 +53,7 @@ int hash(__attribute__((__unused__)) char *file, __attribute__((__unused__)) int
         return 0;
 }
 
-int getFirstDir(char *dir, char *path)
+int base_path_misc_get_first_dir(char *dir, char *path)
 {
         int i, j;
 
@@ -88,7 +88,7 @@ int getFirstDir(char *dir, char *path)
         return j;
 }
 
-int getSizeFactor(char *name)
+int base_path_misc_get_size_factor(char *name)
 {
         switch (name[strlen(name) - 1])
         {
@@ -122,7 +122,7 @@ int getSizeFactor(char *name)
         }
 }
 
-int getNameFile(char *file, char *dir)
+int base_path_misc_get_name_file(char *file, char *dir)
 {
         int i, j;
 
@@ -159,7 +159,7 @@ int getNameFile(char *file, char *dir)
         return 0;
 }
 
-int getNamePart(char *part, char *dir)
+int base_path_misc_get_name_part(char *part, char *dir)
 {
         int i, j;
 

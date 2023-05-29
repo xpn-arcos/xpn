@@ -259,7 +259,7 @@ int clear_slash(char *path)
 	return 0;
 }
 
-int ParseURL(char *url,
+int base_urlstr_parse_url(char *url,
 			 char *protocol, char *login, char *passwd, char *server, char *port, char *dir)
 {
 	char *urlaux;

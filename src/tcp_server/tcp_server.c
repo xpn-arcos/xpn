@@ -177,7 +177,7 @@ int tcp_server_up(void)
     printf("[TCP-SERVER] ERROR: tcp_comm initialization fails\n");
     return -1;
   }
-  ret = workers_init(&worker, params.thread_mode);
+  ret = base_workers_init(&worker, params.thread_mode);
   if (ret < 0)
   {
     printf("[TCP-SERVER] ERROR: workers initialization fails\n");
@@ -220,12 +220,12 @@ int tcp_server_up(void)
     th_arg.rank_client_id = 0;
     th_arg.wait4me = FALSE;
 
-    workers_launch(&worker, &th_arg, tcp_server_dispatcher);
+    base_workers_launch(&worker, &th_arg, tcp_server_dispatcher);
   }
 
   // Wait and finalize for all current workers
-  debug_info("[TCP-SERVER] workers_destroy\n");
-  workers_destroy(&worker);
+  debug_info("[TCP-SERVER] base_workers_destroy\n");
+  base_workers_destroy(&worker);
   debug_info("[TCP-SERVER] tcp_server_comm_destroy\n");
   tcp_server_comm_destroy(&params);
 
@@ -269,7 +269,7 @@ int tcp_server_down(void)
     printf("[TCP-SERVER] ERROR: tcp_comm initialization fails\n");
     return -1;
   }
-  ret = workers_init(&worker, params.thread_mode);
+  ret = base_workers_init(&worker, params.thread_mode);
   if (ret < 0)
   {
     printf("[TCP-SERVER] ERROR: workers initialization fails\n");
@@ -319,8 +319,8 @@ int tcp_server_down(void)
   fclose(file);
 
   // Wait and finalize for all current workers
-  debug_info("[TCP-SERVER] workers_destroy\n");
-  workers_destroy(&worker);
+  debug_info("[TCP-SERVER] base_workers_destroy\n");
+  base_workers_destroy(&worker);
   debug_info("[TCP-SERVER] tcp_server_comm_destroy\n");
   tcp_server_comm_destroy(&params);
 

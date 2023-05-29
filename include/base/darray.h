@@ -83,11 +83,11 @@ extern "C"
       * @param gptr the element that has been inserted.
       * @return true (1) if element is inserted and error (-1) if
       *         a problem is found.
-      * @see 'DARRAY_InsEndDarray2' if dynamic array is NULL terminated.
+      * @see 'base_darray_insert_end2' if dynamic array is NULL terminated.
       */
-     int8_t DARRAY_InsEndDarray(/*INOUT*/ t_pointerDArray *t,
-                                /*INOUT*/ long *n,
-                                /*IN*/ T_POINTER gptr);
+     int8_t base_darray_insert_end(/*INOUT*/ t_pointerDArray *t,
+                                   /*INOUT*/ long *n,
+                                   /*IN*/ T_POINTER gptr);
 
      /**
       * @brief Remove the last element from the dynamic array.
@@ -100,11 +100,11 @@ extern "C"
       * @param delGPtr element that has been removed.
       * @return true (1) if element is removed and error (-1) if
       *         a problem is found.
-      * @see 'DARRAY_DelBeginDarray' to remove the first element.
+      * @see 'base_darray_delete_begin' to remove the first element.
       */
-     int8_t DARRAY_DelEndDarray(/*INOUT*/ t_pointerDArray *t,
-                                /*INOUT*/ long *n,
-                                /*INOUT*/ T_POINTER *delGPtr);
+     int8_t base_darray_delete_end(/*INOUT*/ t_pointerDArray *t,
+                                   /*INOUT*/ long *n,
+                                   /*INOUT*/ T_POINTER *delGPtr);
 
      /**
       * @brief Remove the first element from the dynamic array.
@@ -117,11 +117,11 @@ extern "C"
       * @param delGPtr element that has been removed.
       * @return true (1) if element is removed and error (-1) if
       *         a problem is found.
-      * @see 'DARRAY_DelEndDarray' to remove the last element.
+      * @see 'base_darray_delete_end' to remove the last element.
       */
-     int8_t DARRAY_DelBeginDarray(/*INOUT*/ t_pointerDArray *t,
-                                  /*INOUT*/ long *n,
-                                  /*INOUT*/ T_POINTER *delGPtr);
+     int8_t base_darray_delete_begin(/*INOUT*/ t_pointerDArray *t,
+                                     /*INOUT*/ long *n,
+                                     /*INOUT*/ T_POINTER *delGPtr);
 
      /**
       * @brief Remove the 'orden'th element from the dynamic array.
@@ -136,12 +136,12 @@ extern "C"
       * @param delGPtr element that has been removed.
       * @return true (1) if element is removed and error (-1) if
       *         a problem is found.
-      * @see 'DARRAY_DelBeginDarray' to remove first element.
+      * @see 'base_darray_delete_begin' to remove first element.
       */
-     int8_t DARRAY_DelNFromDarray(/*IN*/ t_pointerDArray *t,
-                                  /*INOUT*/ long *n,
-                                  /*IN*/ long orden,
-                                  /*INOUT*/ T_POINTER *delGPtr);
+     int8_t base_darray_delete_orden_element(/*IN*/ t_pointerDArray *t,
+                                             /*INOUT*/ long *n,
+                                             /*IN*/ long orden,
+                                             /*INOUT*/ T_POINTER *delGPtr);
 
      /**
       * @brief Change the value of 'orden'th element from the dynamic array.
@@ -156,10 +156,10 @@ extern "C"
       * @return true (1) if element is changed and error (-1) if
       *         a problem is found.
       */
-     int8_t DARRAY_ChangeNFromDarray(/*IN*/ t_pointerDArray *t,
-                                     /*INOUT*/ long *n,
-                                     /*IN*/ long orden,
-                                     /*INOUT*/ T_POINTER nPtr);
+     int8_t base_darray_change_value_orden_element(/*IN*/ t_pointerDArray *t,
+                                                   /*INOUT*/ long *n,
+                                                   /*IN*/ long orden,
+                                                   /*INOUT*/ T_POINTER nPtr);
 
      /**
       * @brief Remove all '*n' elements from the dynamic array.
@@ -174,9 +174,9 @@ extern "C"
       * @return true (1) if elements are freeded and error (-1) if
       *         a problem is found.
       */
-     int8_t DARRAY_FreeEltosDarray(/*INOUT*/ t_pointerDArray *t,
-                                   /*INOUT*/ long *n,
-                                   /*IN*/ void (*freef)(T_POINTER));
+     int8_t base_darray_free_all_elements(/*INOUT*/ t_pointerDArray *t,
+                                          /*INOUT*/ long *n,
+                                          /*IN*/ void (*freef)(T_POINTER));
 
      /**
       * @brief Return the 'orden'-th element from the dynamic array.
@@ -191,8 +191,8 @@ extern "C"
       * \warning If order is 3, returns t[3] (i.e., the fourth).
       * It does not check that it goes outside the array bounds.
       */
-     T_POINTER DARRAY_GetNFromDarray(/*IN*/ t_pointerDArray t,
-                                     /*IN*/ long orden);
+     T_POINTER base_darray_get_orden_element(/*IN*/ t_pointerDArray t,
+                                             /*IN*/ long orden);
 
      /**
       * @brief Find i-th element in dynamic array.
@@ -210,10 +210,10 @@ extern "C"
       * @param findf function to be used to compare i-th element and 'gptr'.
       * @return the element to be find or NULL.
       */
-     T_POINTER DARRAY_FindEltoDarray(/*IN*/ t_pointerDArray t,
-                                     /*INOUT*/ long n,
-                                     /*IN*/ T_POINTER gptr,
-                                     /*IN*/ int8_t (*findf)(T_POINTER, T_POINTER));
+     T_POINTER base_darray_find_element(/*IN*/ t_pointerDArray t,
+                                        /*INOUT*/ long n,
+                                        /*IN*/ T_POINTER gptr,
+                                        /*IN*/ int8_t (*findf)(T_POINTER, T_POINTER));
 
      /**
       * @brief Number of elements in the dynamic array.
@@ -224,7 +224,7 @@ extern "C"
       * @param t a dynamic array.
       * @return the number of element in the 't' array.
       */
-     long DARRAY_GetNDarray(/*IN*/ t_pointerDArray t);
+     long base_darray_get_number_elements(/*IN*/ t_pointerDArray t);
 
      /**
       * @brief Remove all elements from the dynamic array.
@@ -238,8 +238,8 @@ extern "C"
       * @return true (1) if elements are removed and error (-1) if
       *         a problem is found.
       */
-     int8_t DARRAY_FreeEltosDarray2(/*INOUT*/ t_pointerDArray *t,
-                                    /*IN*/ void (*freef)(T_POINTER));
+     int8_t base_darray_free_all_elements2(/*INOUT*/ t_pointerDArray *t,
+                                           /*IN*/ void (*freef)(T_POINTER));
 
      /**
       * @brief Remove the element with value 'elto' from the dynamic array.
@@ -255,8 +255,8 @@ extern "C"
       * @return true (1) if element is removed and error (-1) if
       *         a problem is found.
       */
-     int8_t DARRAY_DelEltoDarray(/*INOUT*/ t_pointerDArray *t,
-                                 /*IN*/ T_POINTER elto);
+     int8_t base_darray_delete_element(/*INOUT*/ t_pointerDArray *t,
+                                       /*IN*/ T_POINTER elto);
 
      /**
       * @brief Insert the element into the end of the dynamic array.
@@ -272,8 +272,8 @@ extern "C"
       * @return true (1) if element is inserted and error (-1) if
       *         a problem is found.
       */
-     int8_t DARRAY_InsEndDarray2(/*INOUT*/ t_pointerDArray *t,
-                                 /*IN*/ T_POINTER gptr);
+     int8_t base_darray_insert_end2(/*INOUT*/ t_pointerDArray *t,
+                                    /*IN*/ T_POINTER gptr);
 
      /**
       * @brief Remove the last element from the dynamic array.
@@ -289,10 +289,10 @@ extern "C"
       * @return true (1) if element is removed and error (-1) if
       *         a problem is found.
       */
-     int8_t DARRAY_DelEndDarray2(/*INOUT*/ t_pointerDArray *t,
-                                 /*INOUT*/ T_POINTER *delGPtr);
+     int8_t base_darray_delete_end2(/*INOUT*/ t_pointerDArray *t,
+                                    /*INOUT*/ T_POINTER *delGPtr);
 
-#define DARRAY_GetNFromDarray(t, orden) \
+#define base_darray_get_orden_element(t, orden) \
      (((t) == (t_pointerDArray)NULL) ? NULL : ((t)[(orden)]))
 
      /* ................................................................... */

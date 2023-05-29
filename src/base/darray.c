@@ -38,9 +38,10 @@
 /************************************************
  *  ... Functions
  ***********************************************/
-int8_t DARRAY_InsEndDarray(/*INOUT*/ t_pointerDArray *t,
-                           /*INOUT*/ long *n,
-                           /*IN*/ T_POINTER gptr)
+
+int8_t base_darray_insert_end(/*INOUT*/ t_pointerDArray *t,
+                              /*INOUT*/ long *n,
+                              /*IN*/ T_POINTER gptr)
 {
   /* check params */
   if (NULL == n)
@@ -75,9 +76,9 @@ int8_t DARRAY_InsEndDarray(/*INOUT*/ t_pointerDArray *t,
   return (1);
 }
 
-int8_t DARRAY_DelEndDarray(/*INOUT*/ t_pointerDArray *t,
-                           /*INOUT*/ long *n,
-                           /*INOUT*/ T_POINTER *delGPtr)
+int8_t base_darray_delete_end(/*INOUT*/ t_pointerDArray *t,
+                              /*INOUT*/ long *n,
+                              /*INOUT*/ T_POINTER *delGPtr)
 {
   /* check params */
   if (NULL == t)
@@ -105,9 +106,9 @@ int8_t DARRAY_DelEndDarray(/*INOUT*/ t_pointerDArray *t,
   return (1);
 }
 
-int8_t DARRAY_DelBeginDarray(/*INOUT*/ t_pointerDArray *t,
-                             /*INOUT*/ long *n,
-                             /*INOUT*/ T_POINTER *delGPtr)
+int8_t base_darray_delete_begin(/*INOUT*/ t_pointerDArray *t,
+                                /*INOUT*/ long *n,
+                                /*INOUT*/ T_POINTER *delGPtr)
 {
   /* check params */
   if (NULL == t)
@@ -138,10 +139,10 @@ int8_t DARRAY_DelBeginDarray(/*INOUT*/ t_pointerDArray *t,
   return (1);
 }
 
-int8_t DARRAY_DelNFromDarray(/*IN*/ t_pointerDArray *t,
-                             /*INOUT*/ long *n,
-                             /*IN*/ long orden,
-                             /*INOUT*/ T_POINTER *delGPtr)
+int8_t base_darray_delete_orden_element(/*IN*/ t_pointerDArray *t,
+                                        /*INOUT*/ long *n,
+                                        /*IN*/ long orden,
+                                        /*INOUT*/ T_POINTER *delGPtr)
 {
   /* check params */
   if (NULL == t)
@@ -173,10 +174,10 @@ int8_t DARRAY_DelNFromDarray(/*IN*/ t_pointerDArray *t,
   return (1);
 }
 
-int8_t DARRAY_ChangeNFromDarray(/*IN*/ t_pointerDArray *t,
-                                /*INOUT*/ long *n,
-                                /*IN*/ long orden,
-                                /*INOUT*/ T_POINTER nPtr)
+int8_t base_darray_change_value_orden_element(/*IN*/ t_pointerDArray *t,
+                                              /*INOUT*/ long *n,
+                                              /*IN*/ long orden,
+                                              /*INOUT*/ T_POINTER nPtr)
 {
   /* check params */
   if (NULL == t)
@@ -195,9 +196,9 @@ int8_t DARRAY_ChangeNFromDarray(/*IN*/ t_pointerDArray *t,
   return (1);
 }
 
-int8_t DARRAY_FreeEltosDarray(/*INOUT*/ t_pointerDArray *t,
-                              /*INOUT*/ long *n,
-                              /*IN*/ void (*freef)(T_POINTER))
+int8_t base_darray_free_all_elements(/*INOUT*/ t_pointerDArray *t,
+                                     /*INOUT*/ long *n,
+                                     /*IN*/ void (*freef)(T_POINTER))
 {
   /* check params */
   if (NULL == t)
@@ -223,10 +224,10 @@ int8_t DARRAY_FreeEltosDarray(/*INOUT*/ t_pointerDArray *t,
   return (1);
 }
 
-T_POINTER DARRAY_FindEltoDarray(/*IN*/ t_pointerDArray t,
-                                /*INOUT*/ long n,
-                                /*IN*/ T_POINTER gptr,
-                                /*IN*/ int8_t (*findf)(T_POINTER, T_POINTER))
+T_POINTER base_darray_find_element(/*IN*/ t_pointerDArray t,
+                                   /*INOUT*/ long n,
+                                   /*IN*/ T_POINTER gptr,
+                                   /*IN*/ int8_t (*findf)(T_POINTER, T_POINTER))
 {
   long i;
 
@@ -240,7 +241,7 @@ T_POINTER DARRAY_FindEltoDarray(/*IN*/ t_pointerDArray t,
   return NULL;
 }
 
-long DARRAY_GetNDarray(/*IN*/ t_pointerDArray t)
+long base_darray_get_number_elements(/*IN*/ t_pointerDArray t)
 {
   register long i;
 
@@ -254,8 +255,8 @@ long DARRAY_GetNDarray(/*IN*/ t_pointerDArray t)
   return i;
 }
 
-int8_t DARRAY_FreeEltosDarray2(/*INOUT*/ t_pointerDArray *t,
-                               /*IN*/ void (*freef)(T_POINTER))
+int8_t base_darray_free_all_elements2(/*INOUT*/ t_pointerDArray *t,
+                                      /*IN*/ void (*freef)(T_POINTER))
 {
   /* check params */
   if (NULL == t)
@@ -277,8 +278,8 @@ int8_t DARRAY_FreeEltosDarray2(/*INOUT*/ t_pointerDArray *t,
   return (1);
 }
 
-int8_t DARRAY_DelEltoDarray(/*INOUT*/ t_pointerDArray *t,
-                            /*IN*/ T_POINTER elto)
+int8_t base_darray_delete_element(/*INOUT*/ t_pointerDArray *t,
+                                  /*IN*/ T_POINTER elto)
 {
   long c, pentry;
 
@@ -314,8 +315,8 @@ int8_t DARRAY_DelEltoDarray(/*INOUT*/ t_pointerDArray *t,
   return (1);
 }
 
-int8_t DARRAY_InsEndDarray2(/*INOUT*/ t_pointerDArray *t,
-                            /*IN*/ T_POINTER gptr)
+int8_t base_darray_insert_end2(/*INOUT*/ t_pointerDArray *t,
+                               /*IN*/ T_POINTER gptr)
 {
   long i; /* i is # eltos! */
 
@@ -328,11 +329,11 @@ int8_t DARRAY_InsEndDarray2(/*INOUT*/ t_pointerDArray *t,
   }
 
   /* InsEndDarray */
-  return DARRAY_InsEndDarray(t, &i, gptr);
+  return base_darray_insert_end(t, &i, gptr);
 }
 
-int8_t DARRAY_DelEndDarray2(/*INOUT*/ t_pointerDArray *t,
-                            /*INOUT*/ T_POINTER *delGPtr)
+int8_t base_darray_delete_end2(/*INOUT*/ t_pointerDArray *t,
+                               /*INOUT*/ T_POINTER *delGPtr)
 {
   long i; /* i is the position of NULL element! */
 
@@ -345,18 +346,12 @@ int8_t DARRAY_DelEndDarray2(/*INOUT*/ t_pointerDArray *t,
     ;
 
   /* DelEndDarray */
-  return DARRAY_DelEndDarray(t, &i, delGPtr);
+  return base_darray_delete_end(t, &i, delGPtr);
 }
 
-/**
- * Return the 'orden'-th element in the 't' dynamic array,
- * in a NULL ended array.
- * @param t a dynamic array.
- * @param orden position (begin at 0) of element to return.
- * @return the element at this position or NULL.
- */
-T_POINTER DARRAY_GetNFromDarray2(/*IN*/ t_pointerDArray t,
-                                 /*IN*/ long orden)
+T_POINTER base_darray_get_orden_element2(
+    /*IN*/ t_pointerDArray t,
+    /*IN*/ long orden)
 {
   long i;
 

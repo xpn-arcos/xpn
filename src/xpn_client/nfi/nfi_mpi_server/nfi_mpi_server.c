@@ -307,7 +307,7 @@ int nfi_mpi_server_init(char *url, struct nfi_server *serv, __attribute__((__unu
   serv->ops->nfi_statfs = nfi_mpi_server_statfs;
 
   // parse url...
-  ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, prt, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     mpi_server_err(MPI_SERVERERR_URL);
@@ -534,7 +534,7 @@ int nfi_mpi_server_reconnect(struct nfi_server *serv)
   }
 
   // ParseURL...
-  ret = ParseURL(serv->url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(serv->url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     mpi_server_err(MPI_SERVERERR_URL);
@@ -588,7 +588,7 @@ int nfi_mpi_server_open(struct nfi_server *serv, char *url, struct nfi_fhandle *
   debug_info("[NFI-MPI] nfi_mpi_server_open(ID=%s): begin %s\n", server_aux->id, url);
 
   // from url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_mpi_server_open: url %s incorrect.\n", url);
@@ -692,7 +692,7 @@ int nfi_mpi_server_create(struct nfi_server *serv, char *url, struct nfi_attr *a
   debug_info("[NFI-MPI] nfi_mpi_server_create(ID=%s): begin %s\n", server_aux->id, url);
 
   // url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "ERROR: nfi_mpi_server_create: url %s incorrect.\n", url);
@@ -1210,7 +1210,7 @@ int nfi_mpi_server_remove(struct nfi_server *serv, char *url)
   }
 
   // from url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_mpi_server_remove: url %s incorrect.\n", url);
@@ -1289,7 +1289,7 @@ int nfi_mpi_server_rename(struct nfi_server *serv, char *old_url, char *new_url)
     return -1;
   }
 
-  ret = ParseURL(old_url, NULL, NULL, NULL, server, NULL, old_path);
+  ret = base_urlstr_parse_url(old_url, NULL, NULL, NULL, server, NULL, old_path);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_mpi_server_open: url %s incorrect.\n", old_url);
@@ -1297,7 +1297,7 @@ int nfi_mpi_server_rename(struct nfi_server *serv, char *old_url, char *new_url)
     return -1;
   }
 
-  ret = ParseURL(new_url, NULL, NULL, NULL, server, NULL, new_path);
+  ret = base_urlstr_parse_url(new_url, NULL, NULL, NULL, server, NULL, new_path);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_mpi_server_open: url %s incorrect.\n", new_url);
@@ -1367,7 +1367,7 @@ int nfi_mpi_server_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, stru
   // fh_aux     = (struct nfi_mpi_server_fhandle *) fh->priv_fh; //TODO: fstat
   server_aux = (struct nfi_mpi_server_server *)serv->private_info;
 
-  ret = ParseURL(fh->url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(fh->url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_mpi_server_getattr: url %s incorrect.\n", dir);
@@ -1458,7 +1458,7 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *at
   // private_info...
   server_aux = (struct nfi_mpi_server_server *)serv->private_info;
 
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_mpi_server_mkdir: url %s incorrect.\n", url);
@@ -1527,7 +1527,7 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *at
   fh->type = NFIDIR;
   fh->priv_fh = (void *)fh_aux;
 
-  fh->url = STRING_MISC_StrDup(url);
+  fh->url = base_string_misc_dup(url);
   if (fh->url == NULL)
   {
     mpi_server_err(MPI_SERVERERR_MEMORY);
@@ -1560,7 +1560,7 @@ int nfi_mpi_server_opendir(struct nfi_server *serv, char *url, struct nfi_fhandl
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_mpi_server_opendir: url %s incorrect.\n", url);
@@ -1755,7 +1755,7 @@ int nfi_mpi_server_rmdir(struct nfi_server *serv, char *url)
   // private_info...
   server_aux = (struct nfi_mpi_server_server *)serv->private_info;
 
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_mpi_server_rmdir: url %s incorrect.\n", url);

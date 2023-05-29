@@ -29,7 +29,6 @@
  * @bug No known bugs.
  */
 
-
 #ifndef _WORKERS_H_
 #define _WORKERS_H_
 
@@ -47,9 +46,9 @@
  *  ... Constants
  ***********************************************/
 
-#define TH_NOT  0
+#define TH_NOT 0
 #define TH_POOL 1
-#define TH_OP   2
+#define TH_OP 2
 
 /************************************************
  *  ... Datatype
@@ -85,7 +84,9 @@ typedef struct
  * @param thread_mode 'TODO'.
  * @return 'TODO'.
  */
-int workers_init(worker_t *w, int thread_mode);
+int base_workers_init(
+    worker_t *w,
+    int thread_mode);
 
 /**
  * @brief 'TODO'.
@@ -96,7 +97,8 @@ int workers_init(worker_t *w, int thread_mode);
  * @par Returns
  *    Nothing.
  */
-void workers_destroy(worker_t *w);
+void base_workers_destroy(
+    worker_t *w);
 
 /**
  * @brief 'TODO'.
@@ -108,7 +110,10 @@ void workers_destroy(worker_t *w);
  * @param worker_function 'TODO'.
  * @return 'TODO'.
  */
-int workers_launch(worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th));
+int base_workers_launch(
+    worker_t *w,
+    struct st_th *th_arg,
+    void (*worker_function)(struct st_th));
 
 /**
  * @brief 'TODO'.
@@ -119,7 +124,8 @@ int workers_launch(worker_t *w, struct st_th *th_arg, void (*worker_function)(st
  * @param th_arg 'TODO'.
  * @return 'TODO'.
  */
-int workers_wait(worker_t *w, struct st_th *th_arg);
+int base_workers_wait(
+    worker_t *w,
+    struct st_th *th_arg);
 
 #endif
-

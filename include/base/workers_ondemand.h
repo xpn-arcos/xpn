@@ -74,7 +74,8 @@ typedef struct
  * @param w 'TODO'.
  * @return 'TODO'.
  */
-int worker_ondemand_init(worker_ondemand_t *w);
+int base_worker_ondemand_init(
+    worker_ondemand_t *w);
 
 /**
  * @brief 'TODO'.
@@ -85,7 +86,8 @@ int worker_ondemand_init(worker_ondemand_t *w);
  * @par Returns
  *    Nothing.
  */
-void workers_ondemand_destroy(worker_ondemand_t *w);
+void base_workers_ondemand_destroy(
+    worker_ondemand_t *w);
 
 /**
  * @brief 'TODO'.
@@ -97,7 +99,10 @@ void workers_ondemand_destroy(worker_ondemand_t *w);
  * @param worker_function 'TODO'.
  * @return 'TODO'.
  */
-int worker_ondemand_launch(worker_ondemand_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th));
+int base_worker_ondemand_launch(
+    worker_ondemand_t *w,
+    struct st_th *th_arg,
+    void (*worker_function)(struct st_th));
 
 /**
  * @brief 'TODO'.
@@ -107,6 +112,7 @@ int worker_ondemand_launch(worker_ondemand_t *w, struct st_th *th_arg, void (*wo
  * @param th_arg 'TODO'.
  * @return 'TODO'.
  */
-int worker_ondemand_wait(struct st_th *th_arg);
+int base_worker_ondemand_wait(
+    struct st_th *th_arg);
 
 #endif
