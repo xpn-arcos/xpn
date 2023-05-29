@@ -143,8 +143,7 @@ void mpi_server_dispatcher(struct st_th th)
  *
  * @par Parameters
  *    None.
- * @par Returns
- *    Nothing.
+ * @return 'TODO'.
  */
 int mpi_server_up(void)
 {
