@@ -36,7 +36,6 @@ PATH: /bin/
 PATH: /usr/games/
 PATH: /usr/local/games/
 PATH: /snap/bin/
-PATH: /snap/bin/
 
 
 ## ----------- ##
@@ -1204,12 +1203,16 @@ config.status:930: creating test/integrity/mpi_connect_accept/Makefile
 config.status:930: creating test/performance/mpi_pingpong/Makefile
 config.status:930: creating test/performance/iop/Makefile
 config.status:930: creating include/config.h
+config.status:1111: include/config.h is unchanged
 config.status:1159: executing depfiles commands
 config.status:1236: cd src/base       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
+make: Nothing to be done for 'am--depfiles'.
 config.status:1241: $? = 0
 config.status:1236: cd src/xpn_client       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
+make: Nothing to be done for 'am--depfiles'.
 config.status:1241: $? = 0
 config.status:1236: cd src/utils       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
+make: Nothing to be done for 'am--depfiles'.
 config.status:1241: $? = 0
 
 ## ---------------- ##
@@ -1307,7 +1310,7 @@ am_cv_prog_cc_c_o=yes
 ## Output variables. ##
 ## ----------------- ##
 
-ACLOCAL='${SHELL} '\''/home/dcamarma/Escritorio/Diego/Repositorios/xpn-arcos/xpn/config/missing'\'' aclocal-1.16'
+ACLOCAL='${SHELL} '\''/local_test/src/xpn/config/missing'\'' aclocal-1.16'
 AMDEPBACKSLASH='\'
 AMDEP_FALSE='#'
 AMDEP_TRUE=''
@@ -1317,9 +1320,9 @@ AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
 AM_DEFAULT_VERBOSITY='1'
 AM_V='$(V)'
 AR='ar'
-AUTOCONF='${SHELL} '\''/home/dcamarma/Escritorio/Diego/Repositorios/xpn-arcos/xpn/config/missing'\'' autoconf'
-AUTOHEADER='${SHELL} '\''/home/dcamarma/Escritorio/Diego/Repositorios/xpn-arcos/xpn/config/missing'\'' autoheader'
-AUTOMAKE='${SHELL} '\''/home/dcamarma/Escritorio/Diego/Repositorios/xpn-arcos/xpn/config/missing'\'' automake-1.16'
+AUTOCONF='${SHELL} '\''/local_test/src/xpn/config/missing'\'' autoconf'
+AUTOHEADER='${SHELL} '\''/local_test/src/xpn/config/missing'\'' autoheader'
+AUTOMAKE='${SHELL} '\''/local_test/src/xpn/config/missing'\'' automake-1.16'
 AWK='mawk'
 CC='/local_test/bin/mpich/bin/mpicc'
 CCDEPMODE='depmode=gcc3'
@@ -1356,7 +1359,7 @@ LIBOBJS=''
 LIBS='    -L../../mxml    -L../../xpn/lib -L../../../mxml -L../../../xpn/lib  -ldl -lpthread  -lmxml'
 LTLIBOBJS=''
 MAKE='make'
-MAKEINFO='${SHELL} '\''/home/dcamarma/Escritorio/Diego/Repositorios/xpn-arcos/xpn/config/missing'\'' makeinfo'
+MAKEINFO='${SHELL} '\''/local_test/src/xpn/config/missing'\'' makeinfo'
 MKDIR_P='/usr/bin/mkdir -p'
 M_HEADERS=''
 NFI_MPI_SERVER='nfi_mpi_server'
@@ -1414,7 +1417,7 @@ host_vendor='pc'
 htmldir='${docdir}'
 includedir='${prefix}/include'
 infodir='${datarootdir}/info'
-install_sh='${SHELL} /home/dcamarma/Escritorio/Diego/Repositorios/xpn-arcos/xpn/config/install-sh'
+install_sh='${SHELL} /local_test/src/xpn/config/install-sh'
 libdir='${exec_prefix}/lib'
 libexecdir='${exec_prefix}/libexec'
 localedir='${datarootdir}/locale'

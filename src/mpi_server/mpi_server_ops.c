@@ -924,6 +924,13 @@
       return;
     }
 
+    off_t ret_1 = filesystem_lseek(fd_dest, XPN_HEADER_SIZE, SEEK_SET) ;
+    if (ret_1 == (off_t) -1) {
+      close(fd_orig) ;
+      close(fd_dest) ;
+      return;
+    }
+
     off_t cont = BLOCKSIZE * params->rank;
     int read_bytes, write_bytes;
 
@@ -999,8 +1006,14 @@
       return;
     }
 
+    off_t ret_1 = filesystem_lseek(fd_orig, XPN_HEADER_SIZE, SEEK_SET) ;
+    if (ret_1 == (off_t) -1) {
+      close(fd_orig) ;
+      return;
+    }
+
     // Create new file
-    fd_dest = filesystem_open(head->u_st_mpi_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT) ;
+    fd_dest = filesystem_open2(head->u_st_mpi_server_msg.op_flush.storage_path, O_WRONLY | O_TRUNC | O_CREAT, 00644) ;
     if (fd_dest < 0) {
       printf("Error on open operation on '%s'\n", head->u_st_mpi_server_msg.op_flush.storage_path) ;
       return;

@@ -43,6 +43,8 @@
   #define MPI_SERVER_ID 32
 #endif
 
+#define XPN_HEADER_SIZE 8192
+
   /* Operations */
 
   // File operations
