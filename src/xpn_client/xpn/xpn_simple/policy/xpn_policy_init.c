@@ -268,7 +268,7 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
             value = XML_DEFAULT_ATTR_BLOCKSIZE;
         }
 
-        part->block_size = getSizeFactor(value);
+        part->block_size = base_path_misc_get_size_factor(value);
 
         value = NULL;
         value = (char *)mxmlElementGetAttr(fconf->connect_u.xml.conf_partition_node, XML_TAG_ATTR_TYPE);
@@ -361,7 +361,7 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
         }
         else
         {
-            part->size_threads = getSizeFactor(value_th); // else th_limit = as defined in conf file
+            part->size_threads = base_path_misc_get_size_factor(value_th); // else th_limit = as defined in conf file
         }
 
         debug_info("[XPN]part->size_threads: %d\n", part->size_threads);
@@ -451,7 +451,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
 
     XPN_DEBUG("url=%s", url);
 
-    ret = ParseURL(url, prt, NULL, NULL, NULL, NULL, NULL);
+    ret = base_urlstr_parse_url(url, prt, NULL, NULL, NULL, NULL, NULL);
     if (ret < 0)
     {
         xpn_err(XPNERR_INVALURL);
@@ -552,7 +552,7 @@ int XpnGetPartition(char *path) /* return partition's id */
     int i;
     char part[PATH_MAX];
 
-    getNamePart(part, path);
+    base_path_misc_get_name_part(part, path);
 
     i = 0;
     while ((i < XPN_MAX_PART) && (strcmp(part, xpn_parttable[i].name) != 0))

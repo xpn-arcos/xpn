@@ -53,7 +53,8 @@ extern "C"
      *   @return the string length.
      *
      */
-    long STRING_MISC_StrLen(/*IN*/ char *str);
+    long base_string_misc_length(
+        /*IN*/ char *str);
 
     /**
      *   Return true if and only if the strings 'str1' and 'str2' are equals.
@@ -63,8 +64,9 @@ extern "C"
      *   @return true (1) iff are equals or false (0) in other case.
      *
      */
-    int8_t STRING_MISC_Equal(/*IN*/ char *str1,
-                             /*IN*/ char *str2);
+    int8_t base_string_misc_equal(
+        /*IN*/ char *str1,
+        /*IN*/ char *str2);
 
     /**
      *   Return a string clone of 'str'.
@@ -73,7 +75,8 @@ extern "C"
      *   @return a clone of 'str'.
      *
      */
-    char *STRING_MISC_StrDup(/*IN*/ char *str);
+    char *base_string_misc_dup(
+        /*IN*/ char *str);
 
     /**
      *
@@ -84,7 +87,7 @@ extern "C"
      *     @return string legth.
      *
      */
-    int STRING_MISC_StrLenF(
+    int base_string_misc_length_format(
         /*IN*/ char *format,
         /*IN*/ va_list argl);
 
@@ -98,7 +101,7 @@ extern "C"
      *     @return string pointer or NULL if error.
      *
      */
-    char *STRING_MISC_Dvsprintf(
+    char *base_string_misc_dynamic_vsprintf(
         /*IN*/ char *format,
         /*IN*/ va_list argl);
 
@@ -110,7 +113,7 @@ extern "C"
      *     @return string pointer or NULL if error.
      *
      */
-    char *STRING_MISC_Dsprintf(
+    char *base_string_misc_dynamic_vsprintf_mul_vars(
         /*IN*/ char *format,
         ...);
 

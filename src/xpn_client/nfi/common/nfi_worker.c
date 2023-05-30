@@ -209,7 +209,7 @@ int nfi_worker_destroy()
 
 int nfiworker_init(struct nfi_server *serv)
 {
-    return workers_init(&(serv->wrk->wb), serv->xpn_thread);
+    return base_workers_init(&(serv->wrk->wb), serv->xpn_thread);
 }
 
 int nfiworker_launch(void (*worker_function)(struct st_th), struct nfi_worker *wrk)
@@ -225,14 +225,14 @@ int nfiworker_launch(void (*worker_function)(struct st_th), struct nfi_worker *w
     wrk->warg.r_wait = TRUE;
     wrk->warg.wait4me = TRUE;
 
-    return workers_launch(&(wrk->wb), &(wrk->warg), worker_function);
+    return base_workers_launch(&(wrk->wb), &(wrk->warg), worker_function);
 }
 
 ssize_t nfiworker_wait(struct nfi_worker *wrk)
 {
     ssize_t ret;
 
-    workers_wait(&(wrk->wb), &(wrk->warg));
+    base_workers_wait(&(wrk->wb), &(wrk->warg));
     ret = wrk->arg.result;
 
     return ret;
@@ -242,6 +242,6 @@ void nfiworker_destroy(struct nfi_server *serv)
 {
     if (serv->xpn_thread != TH_NOT)
     {
-        workers_destroy(&(serv->wrk->wb));
+        base_workers_destroy(&(serv->wrk->wb));
     }
 }

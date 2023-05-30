@@ -45,7 +45,7 @@ int mpi_server_comm_init(mpi_server_param_st *params)
 
   // Get timestap
   struct timeval t0;
-  TIME_MISC_Timer(&t0);
+  base_time_misc_timer(&t0);
 
   DEBUG_BEGIN();
 
@@ -161,9 +161,9 @@ int mpi_server_comm_init(mpi_server_param_st *params)
   struct timeval t1;
   struct timeval tf;
   float time;
-  TIME_MISC_Timer(&t1);
-  TIME_MISC_DiffTime(&t0, &t1, &tf);
-  time = TIME_MISC_TimevaltoFloat(&tf);
+  base_time_misc_timer(&t1);
+  base_time_misc_diff_time(&t0, &t1, &tf);
+  time = base_time_misc_timeval_to_seconds(&tf);
 
   if (params->rank == 0)
   {

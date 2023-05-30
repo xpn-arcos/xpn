@@ -582,7 +582,7 @@ int nfs_lookup(fhandle fhin, char *path, fhandle fhout, fattr *att, CLIENT *cl)
     /* se inicializan los argumentos de entrada */
     memcpy(arg.dir, fh, FHSIZE);
     /* separar ultimo dir del path */
-    end = getFirstDir(dir_aux, path_aux);
+    end = base_path_misc_get_first_dir(dir_aux, path_aux);
     arg.name = dir_aux;
     // printf("dir_aux = %s strlen = %d\n",arg.name,strlen(arg.name));
     if (strlen(arg.name) == 0)

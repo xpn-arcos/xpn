@@ -54,10 +54,9 @@ int (*TRACE_MSG_PrintMsg[TRACE_PRINTER_SIZE])(const char *, va_list);
  *  ... Functions
  ***********************************************/
 
-
 // Initialize and Finalize
 
-int trace_msg_init ( void )
+int base_trace_msg_init ( void )
 {
    int i;
 
@@ -77,7 +76,7 @@ int trace_msg_finalize ( void )
 }
 
 
-int trace_prom_init ( void )
+int base_trace_prom_init ( void )
 {
    // initialize prometheus eltos
 #ifdef HAVE_PROM_H
@@ -133,7 +132,7 @@ int trace_prom_init ( void )
    return 1;
 }
 
-int trace_prom_finalize ( void )
+int base_trace_prom_finalize ( void )
 {
    // finalize prometheus eltos
 #ifdef HAVE_PROM_H
@@ -151,14 +150,12 @@ int trace_prom_finalize ( void )
 
 // Set collector
 
-int trace_msg_setPrinter(int index, int (*printer)(const char *, va_list))
+int base_trace_msg_set_printer ( int index, int (*printer)(const char *, va_list) )
 {
-   if (index < 0)
-   {
+   if (index < 0) {
       return -1;
    }
-   if (index > TRACE_PRINTER_SIZE)
-   {
+   if (index > TRACE_PRINTER_SIZE) {
       return -1;
    }
 
@@ -170,7 +167,7 @@ int trace_msg_setPrinter(int index, int (*printer)(const char *, va_list))
 
 // Set data to collector
 
-int trace_msg_bar ( int v, const char *label )
+int base_trace_msg_bar ( int v, const char *label )
 {
   int r ;
 
@@ -190,7 +187,7 @@ int trace_msg_bar ( int v, const char *label )
   return r ;
 }
 
-void TRACE_MSG_doPrint(char *fto, ...)
+void trace_msg_do_print ( char *fto, ... )
 {
    if (NULL == TRACE_MSG_PrintMsg)
    {
@@ -204,7 +201,7 @@ void TRACE_MSG_doPrint(char *fto, ...)
    va_end(vl);
 }
 
-void TRACE_MSG_VPrintF(int line, char *name, long pid, int type, char *fto, va_list vl)
+void base_trace_msg_variable_printf(int line, char *name, long pid, int type, char *fto, va_list vl)
 {
    if (NULL == TRACE_MSG_PrintMsg)
    {
@@ -213,12 +210,12 @@ void TRACE_MSG_VPrintF(int line, char *name, long pid, int type, char *fto, va_l
 
    char *msg;
 
-   msg = STRING_MISC_Dvsprintf(fto, vl);
-   TRACE_MSG_doPrint("trace(%i,\"%s\",%li,%i,\"%s\").", line, name, pid, type, msg);
+   msg = base_string_misc_dynamic_vsprintf(fto, vl);
+   trace_msg_do_print("trace(%i,\"%s\",%li,%i,\"%s\").", line, name, pid, type, msg);
    free(msg);
 }
 
-void TRACE_MSG_PrintF(int line, char *name, long pid, int type, char *fto, ...)
+void base_trace_msg_printf(int line, char *name, long pid, int type, char *fto, ...)
 {
    if (NULL == TRACE_MSG_PrintMsg)
    {
@@ -228,7 +225,7 @@ void TRACE_MSG_PrintF(int line, char *name, long pid, int type, char *fto, ...)
    va_list vl;
 
    va_start(vl, fto);
-   TRACE_MSG_VPrintF(line, name, pid, type, fto, vl);
+   base_trace_msg_variable_printf(line, name, pid, type, fto, vl);
    va_end(vl);
 }
 

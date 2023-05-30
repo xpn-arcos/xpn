@@ -100,7 +100,8 @@ typedef struct
  * @param w 'TODO'.
  * @return 'TODO'.
  */
-int worker_pool_init(worker_pool_t *w);
+int base_worker_pool_init(
+    worker_pool_t *w);
 
 /**
  * @brief 'TODO'.
@@ -111,7 +112,8 @@ int worker_pool_init(worker_pool_t *w);
  * @par Returns
  *    Nothing.
  */
-void worker_pool_destroy(worker_pool_t *w);
+void base_worker_pool_destroy(
+    worker_pool_t *w);
 
 /**
  * @brief 'TODO'.
@@ -124,7 +126,10 @@ void worker_pool_destroy(worker_pool_t *w);
  * @par Returns
  *    Nothing.
  */
-void worker_pool_enqueue(worker_pool_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th));
+void base_worker_pool_enqueue(
+    worker_pool_t *w,
+    struct st_th *th_arg,
+    void (*worker_function)(struct st_th));
 
 /**
  * @brief 'TODO'.
@@ -134,7 +139,8 @@ void worker_pool_enqueue(worker_pool_t *w, struct st_th *th_arg, void (*worker_f
  * @param w 'TODO'.
  * @return 'TODO'.
  */
-struct st_th worker_pool_dequeue(worker_pool_t *w);
+struct st_th base_worker_pool_dequeue(
+    worker_pool_t *w);
 
 /**
  * @brief 'TODO'.
@@ -144,6 +150,7 @@ struct st_th worker_pool_dequeue(worker_pool_t *w);
  * @param th_arg 'TODO'.
  * @return 'TODO'.
  */
-int worker_pool_wait(struct st_th *th_arg);
+int base_worker_pool_wait(
+    struct st_th *th_arg);
 
 #endif

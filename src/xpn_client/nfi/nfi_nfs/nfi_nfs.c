@@ -39,7 +39,7 @@
  *  -> nfs_tcp, nfs_udp ??????????????
  *  -> nfs_xxx a nfi_nfs_xxx
  *  -> nfs_misc.[ch]:
- *     -> ParseURL
+ *     -> base_urlstr_parse_url
  *  -> nfs_error.[ch]:
  *     -> nfs_err
  *
@@ -173,7 +173,7 @@ int nfi_nfs_init(char *url, struct nfi_server *serv, __attribute__((__unused__))
 	serv->ops->nfi_closedir = nfi_nfs_closedir;
 	serv->ops->nfi_statfs = nfi_nfs_statfs;
 
-	ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, prt, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -304,7 +304,7 @@ int nfi_nfs_disconnect(struct nfi_server *serv)
 		if (server_aux->cl != NULL)
 			close_connection_nfs(server_aux->cl);
 
-		ret = ParseURL(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
+		ret = base_urlstr_parse_url(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
 		if (ret < 0)
 		{
 			nfs_err(NFSERR_URL);
@@ -349,7 +349,7 @@ int nfi_nfs_reconnect(struct nfi_server *serv)
 	int ret;
 	struct nfi_nfs_server *server_aux;
 
-	ret = ParseURL(serv->url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(serv->url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -423,7 +423,7 @@ int nfi_nfs_destroy(struct nfi_server *serv)
 		if (server_aux->cl != NULL)
 			close_connection_nfs(server_aux->cl);
 
-		ret = ParseURL(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
+		ret = base_urlstr_parse_url(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
 		if (ret < 0)
 		{
 			nfs_err(NFSERR_URL);
@@ -631,7 +631,7 @@ int nfs_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
 	}
 #endif
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -931,7 +931,7 @@ int nfi_nfs_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, st
 	}
 #endif
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -940,7 +940,7 @@ int nfi_nfs_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, st
 	}
 
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file, dir);
+	ret = base_path_misc_get_name_file(file, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1044,7 +1044,7 @@ int nfi_nfs_remove(struct nfi_server *serv, char *url)
 
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1052,7 +1052,7 @@ int nfi_nfs_remove(struct nfi_server *serv, char *url)
 		return -1;
 	}
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file, dir);
+	ret = base_path_misc_get_name_file(file, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1126,7 +1126,7 @@ int nfi_nfs_rename(struct nfi_server *serv, char *old_url, char *new_url)
 	bzero(fhAux_dest, sizeof(fhandle));
 
 	/* obtain the directory file handle */
-	ret = ParseURL(old_url, NULL, NULL, NULL, server, NULL, dir_src);
+	ret = base_urlstr_parse_url(old_url, NULL, NULL, NULL, server, NULL, dir_src);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1135,7 +1135,7 @@ int nfi_nfs_rename(struct nfi_server *serv, char *old_url, char *new_url)
 	}
 
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file_src, dir_src);
+	ret = base_path_misc_get_name_file(file_src, dir_src);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1144,7 +1144,7 @@ int nfi_nfs_rename(struct nfi_server *serv, char *old_url, char *new_url)
 	}
 
 	/* obtain the directory file handle */
-	ret = ParseURL(new_url, NULL, NULL, NULL, server, NULL, dir_dest);
+	ret = base_urlstr_parse_url(new_url, NULL, NULL, NULL, server, NULL, dir_dest);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1153,7 +1153,7 @@ int nfi_nfs_rename(struct nfi_server *serv, char *old_url, char *new_url)
 	}
 
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file_dest, dir_dest);
+	ret = base_path_misc_get_name_file(file_dest, dir_dest);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1245,7 +1245,7 @@ int nfi_nfs_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, str
 
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1253,7 +1253,7 @@ int nfi_nfs_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, str
 	}
 
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file, dir);
+	ret = base_path_misc_get_name_file(file, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1354,7 +1354,7 @@ int nfi_nfs_rmdir(struct nfi_server *serv, char *url)
 
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);
@@ -1362,7 +1362,7 @@ int nfi_nfs_rmdir(struct nfi_server *serv, char *url)
 		return -1;
 	}
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file, dir);
+	ret = base_path_misc_get_name_file(file, dir);
 	if (ret < 0)
 	{
 		nfs_err(NFSERR_URL);

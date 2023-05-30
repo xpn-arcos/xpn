@@ -250,7 +250,7 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
       return -1;
     }
 
-    ((struct policy *)mdata->policy)->first_node = hash(path, xpn_parttable[part_id].data_nserv);
+    ((struct policy *)mdata->policy)->first_node = base_path_misc_hash(path, xpn_parttable[part_id].data_nserv);
 
     mdata->policy_size = sizeof(struct policy);
     break;
@@ -338,7 +338,7 @@ int XpnReadMetadata(struct xpn_metadata *mdata, __attribute__((__unused__)) int 
   switch (mdata->type_policy)
   {
   default:
-    n = hash(path, nserv);
+    n = base_path_misc_hash(path, nserv);
 
     res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
     if (res < 0)
@@ -660,7 +660,7 @@ int XpnGetAtribPath(char *path, struct stat *st)
     }
   }
 
-  int master_node = hash(path, n);
+  int master_node = base_path_misc_hash(path, n);
 
   st->st_dev = attr[master_node].st_dev; // device
   st->st_ino = attr[master_node].st_ino; // inode

@@ -38,7 +38,7 @@
  *  ... Functions
  ***********************************************/
 
-void TIME_MISC_Timer(struct timeval *t)
+void base_time_misc_timer(struct timeval *t)
 {
     int i = 0;
 
@@ -49,7 +49,7 @@ void TIME_MISC_Timer(struct timeval *t)
         printf("WARNING: fail to gettimeofday in '%d' times.\n", i + 1);
 }
 
-void TIME_MISC_DiffTime(struct timeval *to,
+void base_time_misc_diff_time(struct timeval *to,
                         struct timeval *tn,
                         struct timeval *dif)
 {
@@ -67,7 +67,7 @@ void TIME_MISC_DiffTime(struct timeval *to,
         */
 }
 
-void TIME_MISC_AddTime(struct timeval *to,
+void base_time_misc_add_time(struct timeval *to,
                        struct timeval *tn,
                        struct timeval *sum)
 {
@@ -78,12 +78,12 @@ void TIME_MISC_AddTime(struct timeval *to,
     sum->tv_sec = (tn->tv_sec + to->tv_sec) + (aux / USECPSEC);
 }
 
-float TIME_MISC_TimevaltoFloat(struct timeval *timet)
+float base_time_misc_timeval_to_seconds(struct timeval *timet)
 {
     return ((float)(timet->tv_sec + (float)timet->tv_usec / (float)USECPSEC));
 }
 
-float TIME_MISC_TimevaltoMicro(struct timeval *timet)
+float base_time_misc_timeval_to_microseconds(struct timeval *timet)
 {
     return ((float)timet->tv_sec * (float)USECPSEC + (float)timet->tv_usec);
 }
