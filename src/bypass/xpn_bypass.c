@@ -1430,6 +1430,53 @@
     return ret;
   }
 
+  int  feof(FILE *stream)
+  {
+    debug_info("[bypass] >> Before feof....\n");
+    debug_info("[bypass]    * stream = %p\n", stream);
+
+    int ret = -1;
+
+    int fd = fileno(stream);
+    struct generic_fd virtual_fd = fdstable_get ( fd );
+
+    if(virtual_fd.type == FD_XPN)
+    {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      int ret1, ret2;
+
+      debug_info("[bypass]\t xpn_fseek %d\n", virtual_fd.real_fd);
+      ret1 = xpn_lseek(virtual_fd.real_fd, 0, SEEK_CUR);
+      if (ret != -1){
+        return ret;
+      }
+      ret2 = xpn_lseek(virtual_fd.real_fd, 0, SEEK_END);
+      if (ret != -1){
+        return ret;
+      }
+
+      if (ret1 != ret2){
+        ret = 0;
+      }
+      else{
+        ret = 1;
+      }
+      debug_info("[bypass]\t xpn_fseek %d -> %d\n", virtual_fd.real_fd, ret);
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("[bypass]\t try to dlsym_feof\n");
+      ret = dlsym_feof(stream);
+      debug_info("[bypass]\t dlsym_feof -> %d\n", ret);
+    }
+
+    debug_info("[bypass] << After feof....\n");
+    return ret;
+  }
+
 
 
   // Directory API

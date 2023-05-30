@@ -163,12 +163,13 @@ int unlink     (const char *path);
 
 FILE * fopen  (const char *path, const char *mode);
 FILE * fdopen (int fd, const char *mode);
-int  fclose   (FILE *stream);
+int    fclose (FILE *stream);
 
 size_t fread  (void *ptr, size_t size, size_t nmemb, FILE *stream);
 size_t fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream);
 
-int fseek (FILE *stream, long int offset, int whence);
+int  fseek      (FILE *stream, long int offset, int whence);
+int  dlsym_feof (FILE *stream);
 
 
 // Directory API

@@ -63,6 +63,7 @@
   size_t  (*real_fwrite)(const void *, size_t, size_t, FILE *) = NULL;
 
   int     (*real_fseek)(FILE *, long int, int) = NULL;
+  int     (*real_feof) (FILE *) = NULL;
 
   DIR*              (*real_opendir  )(char*) = NULL;
   DIR*              (*real_opendir64)(char*) = NULL;
@@ -486,6 +487,22 @@
     int ret = real_fseek(stream, offset, whence);
 
     debug_info("dlsym_fseek: (%p,%d,%d) return %d\n",stream, offset, whence, ret);
+
+    return ret;
+  }
+
+  int dlsym_feof(FILE *stream)
+  {
+    debug_info("dlsym_feof: before feof...\n");
+    debug_info("dlsym_feof: stream => %p\n",stream);
+
+    if (real_feof== NULL) {
+        real_feof = (int (*)(FILE *)) dlsym(RTLD_NEXT,"feof");
+    }
+    
+    int ret = real_feof(stream);
+
+    debug_info("dlsym_feof: (%p) return %d\n",stream, ret);
 
     return ret;
   }

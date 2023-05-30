@@ -78,6 +78,7 @@
   size_t dlsym_fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream);
 
   int dlsym_fseek     (FILE *stream, long int offset, int whence);
+  int  dlsym_feof     (FILE *stream);
 
 
   // Directory API
