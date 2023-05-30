@@ -130,8 +130,9 @@ extern "C"
       ...);
 
 
-  int trace_prom_init     ( void ) ;
-  int trace_prom_finalize ( void ) ;
+  int base_trace_prom_init     ( void ) ;
+  int base_trace_prom_finalize ( void ) ;
+  int base_trace_msg_bar       ( int v, const char *label ) ;
 
 
   /************************************************
