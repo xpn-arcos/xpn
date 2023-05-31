@@ -37,7 +37,7 @@
 /************************************************************
  * PRIVATE FUNCTIONS TO USE NFS SERVERS			    *
  ************************************************************/
-void NFItoNFS3attr(fattr3 *nfs3_att, struct nfi_attr *nfi_att)
+void nfi_to_nfs3_attr(fattr3 *nfs3_att, struct nfi_attr *nfi_att)
 {
 	nfs3_att->st_dev = nfi_att->st_dev;
 	nfs3_att->st_ino = nfi_att->st_ino;
@@ -70,7 +70,7 @@ void NFItoNFS3attr(fattr3 *nfs3_att, struct nfi_attr *nfi_att)
 	// nfs3_att->ctime.useconds	= (u_long)0;
 }
 
-void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs3_att)
+void nfs3_to_nfi_attr(struct nfi_attr *nfi_att, fattr3 *nfs3_att)
 {
 	nfi_att->st_dev = nfs3_att->st_dev;
 	nfi_att->st_ino = nfs3_att->st_ino;
@@ -107,7 +107,7 @@ void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs3_att)
 	nfi_att->private_info = NULL;
 }
 
-void NFS3toNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) fsinfo3resok *nfs3_inf)
+void nfs3_to_nfi_info(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) fsinfo3resok *nfs3_inf)
 {
 	// TODO
 }
@@ -514,7 +514,7 @@ int nfi_nfs3_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi
 	}
 
 	nfs3_err(0);
-	NFS3toNFIattr(attr, &fatt);
+	nfs3_to_nfi_attr(attr, &fatt);
 	return 0;
 }
 
@@ -563,7 +563,7 @@ int nfi_nfs3_setattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi
 	}
 #endif
 
-	NFItoNFS3attr(&fatt, attr);
+	nfi_to_nfs3_attr(&fatt, attr);
 
 	fh_aux = (struct nfi_nfs3_fhandle *)fh->priv_fh;
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
@@ -982,7 +982,7 @@ int nfi_nfs3_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
 	}
 	strcpy(fh->url, url);
 
-	NFS3toNFIattr(attr, &fatt);
+	nfs3_to_nfi_attr(attr, &fatt);
 
 	return 0;
 }
@@ -1216,7 +1216,7 @@ int nfi_nfs3_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, st
 	}
 	strcpy(fh->url, url);
 
-	NFS3toNFIattr(attr, &fatt);
+	nfs3_to_nfi_attr(attr, &fatt);
 
 	return 0;
 }
@@ -1448,6 +1448,6 @@ int nfi_nfs3_statfs(struct nfi_server *serv, struct nfi_info *inf)
 	}
 	nfs3_err(0);
 
-	NFS3toNFIInfo(inf, &nfsinf);
+	nfs3_to_nfi_info(inf, &nfsinf);
 	return 0;
 }

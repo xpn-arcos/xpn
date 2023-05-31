@@ -55,7 +55,7 @@ extern "C"
     * @param path_part 'TODO'.
     * @return 'TODO'.
     */
-   int XpnGetAbsolutePath(const char *path, char *path_part);
+   int xpn_get_absolute_path(const char *path, char *path_part);
 
 #ifdef __cplusplus
 }

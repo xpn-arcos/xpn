@@ -47,7 +47,7 @@
  * @param protocol 'TODO'.
  * @return 'TODO'.
  */
-int getURLProtocol(char *url, char *protocol)
+int urlstr_get_url_protocol(char *url, char *protocol)
 {
 	int i, j;
 
@@ -107,11 +107,11 @@ int getURLProtocol(char *url, char *protocol)
  * @param server 'TODO'.
  * @return 'TODO'.
  */
-int getURLServer(char *url, char *server)
+int urlstr_get_url_server(char *url, char *server)
 {
 	int i, j;
 
-	i = getURLProtocol(url, NULL);
+	i = urlstr_get_url_protocol(url, NULL);
 	if (i < 0)
 	{
 		return -1;
@@ -141,11 +141,11 @@ int getURLServer(char *url, char *server)
  * @param port 'TODO'.
  * @return 'TODO'.
  */
-int getURLPort(char *url, char *port)
+int urlstr_get_url_port(char *url, char *port)
 {
 	int i, j;
 
-	i = getURLServer(url, NULL);
+	i = urlstr_get_url_server(url, NULL);
 	if (i < 0)
 	{
 		return -1;
@@ -181,15 +181,15 @@ int getURLPort(char *url, char *port)
  * @param dir 'TODO'.
  * @return 'TODO'.
  */
-int getURLDir(char *url, char *dir)
+int urlstr_get_url_dir(char *url, char *dir)
 {
 	int i;
 
-	if ((i = getURLPort(url, NULL)) < 0)
+	if ((i = urlstr_get_url_port(url, NULL)) < 0)
 	{
-		if ((i = getURLServer(url, NULL)) < 0)
+		if ((i = urlstr_get_url_server(url, NULL)) < 0)
 		{
-			if ((i = getURLProtocol(url, NULL)) < 0)
+			if ((i = urlstr_get_url_protocol(url, NULL)) < 0)
 			{
 				return -1;
 			}
@@ -228,7 +228,7 @@ int getURLDir(char *url, char *dir)
  * @param path 'TODO'.
  * @return 'TODO'.
  */
-int clear_slash(char *path)
+int urlstr_clear_slash(char *path)
 {
 	size_t i;
 	int j;
@@ -268,7 +268,7 @@ int base_urlstr_parse_url(char *url,
 	if (protocol != NULL)
 	{
 		/* return the next position */
-		if (getURLProtocol(urlaux, protocol) < 0)
+		if (urlstr_get_url_protocol(urlaux, protocol) < 0)
 		{
 			return -1;
 		}
@@ -312,7 +312,7 @@ int base_urlstr_parse_url(char *url,
 	if (port != NULL)
 	{
 		/* return the next position */
-		if (getURLPort(urlaux, port) < 0)
+		if (urlstr_get_url_port(urlaux, port) < 0)
 		{
 			// Not mandatory
 			// return -1;
@@ -323,11 +323,11 @@ int base_urlstr_parse_url(char *url,
 	if (dir != NULL)
 	{
 		/* return the next position */
-		if (getURLDir(urlaux, dir) < 0)
+		if (urlstr_get_url_dir(urlaux, dir) < 0)
 		{
 			return -1;
 		}
-		clear_slash(dir);
+		urlstr_clear_slash(dir);
 	}
 
 	return 0;
@@ -347,7 +347,7 @@ int getDirWithURL(char *url, char *dir)
 	char dir_aux[PATH_MAX]; /* change for a const*/
 	int i, j;
 
-	getURLDir(url, dir_aux);
+	urlstr_get_url_dir(url, dir_aux);
 
 	i = 0;
 	while ((dir_aux[i] != '\0') && (dir_aux[i] == dir[i]))

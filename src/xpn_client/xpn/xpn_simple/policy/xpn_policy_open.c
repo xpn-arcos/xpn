@@ -557,7 +557,7 @@ int XpnGetAtribPath(char *path, struct stat *st)
 
   strcpy(aux_path, path);
 
-  pd = XpnGetPartition(aux_path); // returns partition id and remove partition name from path
+  pd = xpn_get_partition(aux_path); // returns partition id and remove partition name from path
   if (pd < 0)
   {
     xpn_err(XPNERR_PART_NOEXIST);

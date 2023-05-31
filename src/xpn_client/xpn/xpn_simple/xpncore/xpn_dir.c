@@ -53,14 +53,14 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
     return -1;
   }
 
-  ret = XpnGetAbsolutePath(path, abs_path); /* esta funcion genera el path absoluto */
+  ret = xpn_get_absolute_path(path, abs_path); /* esta funcion genera el path absoluto */
   if (ret < 0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
     return -1;
   }
 
-  pd = XpnGetPartition(abs_path); /* return partition's id */
+  pd = xpn_get_partition(abs_path); /* return partition's id */
   if (pd < 0)
   {
     xpn_err(XPNERR_PART_NOEXIST);
@@ -239,14 +239,14 @@ int xpn_simple_rmdir(const char *path)
     return -1;
   }
 
-  ret = XpnGetAbsolutePath(path, abs_path); /* esta funcion genera el path absoluto */
+  ret = xpn_get_absolute_path(path, abs_path); /* esta funcion genera el path absoluto */
   if (ret < 0)
   {
     xpn_err(XPNERR_PATH_NOEXIST);
     return -1;
   }
 
-  pd = XpnGetPartition(abs_path); /* return partition's id */
+  pd = xpn_get_partition(abs_path); /* return partition's id */
   if (pd < 0)
   {
     xpn_err(XPNERR_PART_NOEXIST);

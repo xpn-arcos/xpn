@@ -62,7 +62,7 @@ char *param_get(char *key)
     return ret;
 }
 
-struct conf_connect_st *XpnPartitionOpen(void)
+struct conf_connect_st *xpn_partition_open(void)
 {
     static struct conf_connect_st desc;
     char conf[PATH_MAX];
@@ -135,7 +135,7 @@ struct conf_connect_st *XpnPartitionOpen(void)
     return &desc;
 }
 
-void XpnPartitionClose(struct conf_connect_st *fconf)
+void xpn_partition_close(struct conf_connect_st *fconf)
 {
     switch (fconf->type)
     {
@@ -161,7 +161,7 @@ void XpnPartitionClose(struct conf_connect_st *fconf)
     }
 }
 
-int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
+int xpn_get_next_partition(struct conf_connect_st *fconf, char *name)
 {
 #ifdef ENABLE_MXML
     char *value;
@@ -203,14 +203,14 @@ int XpnGetNextPartition(struct conf_connect_st *fconf, char *name)
     return 1;
 }
 
-int XpnGetIdPartition(__attribute__((__unused__)) struct conf_connect_st *fconf, __attribute__((__unused__)) char *name)
+int xpn_get_id_partition(__attribute__((__unused__)) struct conf_connect_st *fconf, __attribute__((__unused__)) char *name)
 {
     static int cont = 0;
 
     return (cont++);
 }
 
-int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *part)
+int xpn_get_info_partition(struct conf_connect_st *fconf, struct xpn_partition *part)
 {
 #ifdef ENABLE_MXML
     char *value = NULL;
@@ -376,7 +376,7 @@ int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *par
     return 1;
 }
 
-int XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partition *part, int type)
+int xpn_get_num_servers_partition(struct conf_connect_st *fconf, struct xpn_partition *part, int type)
 {
     switch (fconf->type)
     {
@@ -396,7 +396,7 @@ int XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partitio
     return -1;
 }
 
-int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) struct xpn_partition *part, struct nfi_server *serv, int type)
+int xpn_get_server(struct conf_connect_st *fconf, __attribute__((__unused__)) struct xpn_partition *part, struct nfi_server *serv, int type)
 {
     int ret;
     char prt[PROTOCOL_MAXLEN];
@@ -547,7 +547,7 @@ int XpnGetServer(struct conf_connect_st *fconf, __attribute__((__unused__)) stru
     return 1;
 }
 
-int XpnGetPartition(char *path) /* return partition's id */
+int xpn_get_partition(char *path) /* return partition's id */
 {
     int i;
     char part[PATH_MAX];
@@ -569,7 +569,7 @@ int XpnGetPartition(char *path) /* return partition's id */
     return xpn_parttable[i].id;
 }
 
-struct xpn_partition *XpnSearchPart(int pd)
+struct xpn_partition *xpn_search_part(int pd)
 {
     int i = 0;
 

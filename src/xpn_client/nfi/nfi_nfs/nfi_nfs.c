@@ -52,7 +52,7 @@
 /************************************************************
  * PRIVATE FUNCTIONS TO USE NFS SERVERS			    *
  ************************************************************/
-void NFItoNFSattr(fattr *nfs_att, struct nfi_attr *nfi_att)
+void nfi_to_nfs_attr(fattr *nfs_att, struct nfi_attr *nfi_att)
 {
 	switch (nfi_att->at_type)
 	{
@@ -82,7 +82,7 @@ void NFItoNFSattr(fattr *nfs_att, struct nfi_attr *nfi_att)
 	nfs_att->ctime.useconds = (u_long)0;
 }
 
-void NFStoNFIattr(struct nfi_attr *nfi_att, fattr *nfs_att)
+void nfs_to_nfi_attr(struct nfi_attr *nfi_att, fattr *nfs_att)
 {
 
 	switch (nfs_att->type)
@@ -114,7 +114,7 @@ void NFStoNFIattr(struct nfi_attr *nfi_att, fattr *nfs_att)
 	nfi_att->private_info = NULL;
 }
 
-void NFStoNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfs_info *nfs_inf)
+void nfs_to_nfi_info(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfs_info *nfs_inf)
 {
 }
 
@@ -528,7 +528,7 @@ int nfi_nfs_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_
 		return -1;
 	}
 
-	NFStoNFIattr(attr, &fatt);
+	nfs_to_nfi_attr(attr, &fatt);
 	return 0;
 }
 
@@ -578,7 +578,7 @@ int nfi_nfs_setattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_
 	}
 #endif
 
-	NFItoNFSattr(&fatt, attr);
+	nfi_to_nfs_attr(&fatt, attr);
 
 	fh_aux = (struct nfi_nfs_fhandle *)fh->priv_fh;
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
@@ -1004,7 +1004,7 @@ int nfi_nfs_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, st
 	}
 	strcpy(fh->url, url);
 
-	NFStoNFIattr(attr, &fatt);
+	nfs_to_nfi_attr(attr, &fatt);
 
 	return 0;
 }
@@ -1315,7 +1315,7 @@ int nfi_nfs_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, str
 	}
 	strcpy(fh->url, url);
 
-	NFStoNFIattr(attr, &fatt);
+	nfs_to_nfi_attr(attr, &fatt);
 
 	return 0;
 }
@@ -1537,6 +1537,6 @@ int nfi_nfs_statfs(struct nfi_server *serv, struct nfi_info *inf)
 		return -1;
 	}
 
-	NFStoNFIInfo(inf, &nfsinf);
+	nfs_to_nfi_info(inf, &nfsinf);
 	return 0;
 }
