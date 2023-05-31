@@ -56,7 +56,7 @@ int ino_counter = 0;
  * @par Returns
  *    Nothing.
  */
-void XpnShowFileTable(void)
+void xpn_show_file_table(void)
 {
     int i = 0;
 
@@ -81,7 +81,7 @@ void XpnShowFileTable(void)
  * @param mode 'TODO'.
  * @return 'TODO'.
  */
-int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadata *mdata, int mode)
+int xpn_search_slot_file(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadata *mdata, int mode)
 {
     int i, res;
 
@@ -115,7 +115,7 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
     xpn_file_table[i]->block_size = xpn_file_table[i]->part->block_size;
     xpn_file_table[i]->mdata = mdata;
     xpn_file_table[i]->data_vfh = vfh;
-    xpn_file_table[i]->size_threads = XpnGetSizeThreads(xpn_file_table[i]->part);
+    xpn_file_table[i]->size_threads = xpn_get_size_threads(xpn_file_table[i]->part);
 
     res = i;
     XPN_DEBUG_END_ARGS1(path);
@@ -131,7 +131,7 @@ int XpnSearchSlotFile(int pd, char *path, struct xpn_fh *vfh, struct xpn_metadat
  * @param path 'TODO'.
  * @return 'TODO'.
  */
-int XpnSearchFile(const char *path)
+int xpn_search_file(const char *path)
 {
     int res, i = 0;
 
@@ -212,7 +212,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_creat, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+    n = xpn_get_servers(op_xpn_creat, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
     if (n <= 0)
     {
         // free(servers);
@@ -273,13 +273,13 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
         return -1;
     }
 
-    XpnCreateMetadata(mdata_aux, pd, abs_path);
+    xpn_create_metadata(mdata_aux, pd, abs_path);
 
     for (j = 0; j < n; j++)
     {
-        i = XpnGetMetadataPos(mdata_aux, j);
+        i = xpn_get_metadata_pos(mdata_aux, j);
 
-        XpnGetURLServer(servers[i], abs_path, url_serv);
+        xpn_get_url_server(servers[i], abs_path, url_serv);
         vfh_aux->nfih[i] = (struct nfi_fhandle *)malloc(sizeof(struct nfi_fhandle));
         bzero(vfh_aux->nfih[i], sizeof(struct nfi_fhandle));
         if (vfh_aux->nfih[i] == NULL)
@@ -298,7 +298,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
     err = 0;
     for (j = 0; j < n; j++)
     {
-        i = XpnGetMetadataPos(mdata_aux, j);
+        i = xpn_get_metadata_pos(mdata_aux, j);
         res = nfiworker_wait(servers[i]->wrk);
         // error checking
         if ((res < 0) && (!err))
@@ -307,13 +307,13 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
             // erase the file create before de server number i
             /*
               for(j=0; j<i; j++){
-                XpnGetURLServer(servers[j], abs_path, url_serv);
+                xpn_get_url_server(servers[j], abs_path, url_serv);
                 nfi_worker_do_remove(servers[j]->wrk, url_serv);
                 nfi_worker_wait(servers[j]->wrk);
               }
             }else{
               if((res>=0)&&(err)){
-                XpnGetURLServer(servers[i], abs_path, url_serv);
+                xpn_get_url_server(servers[i], abs_path, url_serv);
                 nfi_worker_do_remove(servers[i]->wrk, url_serv);
                 nfi_worker_wait(servers[i]->wrk);
               }
@@ -344,7 +344,7 @@ int xpn_internal_creat(const char *path, mode_t perm, struct xpn_fh **vfh, struc
         return -1;
     }
 
-    res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, abs_path);
+    res = xpn_update_metadata(mdata_aux, n, servers, vfh_aux, abs_path);
     if (res < 0)
     {
         free(servers);
@@ -414,7 +414,7 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
         return pd;
     }
 
-    res = XpnSearchFile(abs_path);
+    res = xpn_search_file(abs_path);
     if (res < 0)
     {
         // FIXME: CAUTION, this caused the call to fail some changes before, although now it seems to work.
@@ -422,7 +422,7 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
          * flag operation, partition id, absolute path, file descriptor, pointer to server
          */
         servers = NULL;
-        n = XpnGetServers(op_xpn_open, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+        n = xpn_get_servers(op_xpn_open, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
         if (n <= 0)
         {
             // free(servers);
@@ -458,7 +458,7 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
             }
             // read the metadata
             memset(mdata, 0, sizeof(struct xpn_metadata));
-            res = XpnReadMetadata(mdata, n, servers, vfh, abs_path, pd);
+            res = xpn_read_metadata(mdata, n, servers, vfh, abs_path, pd);
             if (res < 0)
             {
                 free(servers);
@@ -471,7 +471,7 @@ int xpn_internal_open(const char *path, struct xpn_fh *vfh, struct xpn_metadata 
         }
 
         free(servers);
-        res = XpnSearchSlotFile(pd, abs_path, vfh, mdata, mode);
+        res = xpn_search_slot_file(pd, abs_path, vfh, mdata, mode);
     }
     else
     {
@@ -551,7 +551,7 @@ int xpn_internal_remove(const char *path)
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_remove, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+    n = xpn_get_servers(op_xpn_remove, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
     if (n <= 0)
     {
         // free(servers);
@@ -560,7 +560,7 @@ int xpn_internal_remove(const char *path)
 
     // Master node
     int master_node = base_path_misc_hash((char *)path, n);
-    XpnGetURLServer(servers[master_node], abs_path, url_serv);
+    xpn_get_url_server(servers[master_node], abs_path, url_serv);
 
     // Worker
     servers[master_node]->wrk->thread = servers[master_node]->xpn_thread;
@@ -584,7 +584,7 @@ int xpn_internal_remove(const char *path)
             continue;
         }
 
-        XpnGetURLServer(servers[i], abs_path, url_serv);
+        xpn_get_url_server(servers[i], abs_path, url_serv);
 
         // Worker
         servers[i]->wrk->thread = servers[i]->xpn_thread;
@@ -669,7 +669,7 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_flush, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+    n = xpn_get_servers(op_xpn_flush, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
     if (n <= 0)
     {
         // free(servers);
@@ -687,13 +687,13 @@ int xpn_simple_preload(const char *virtual_path, const char *storage_path)
         return -1;
     }
 
-    XpnCreateMetadata(mdata, pd, abs_path);
+    xpn_create_metadata(mdata, pd, abs_path);
 
-    i = XpnGetMetadataPos(mdata, -1); // TODO: pasar por parametro
+    i = xpn_get_metadata_pos(mdata, -1); // TODO: pasar por parametro
 
     for (int j = 0; j < n; ++j)
     {
-        XpnGetURLServer(servers[j], abs_path, url_serv);
+        xpn_get_url_server(servers[j], abs_path, url_serv);
 
         // Worker
         servers[i]->wrk->thread = servers[i]->xpn_thread;
@@ -758,7 +758,7 @@ int xpn_simple_flush(const char *virtual_path, const char *storage_path)
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_flush, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+    n = xpn_get_servers(op_xpn_flush, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
     if (n <= 0)
     {
         // free(servers);
@@ -774,15 +774,15 @@ int xpn_simple_flush(const char *virtual_path, const char *storage_path)
         return -1;
     }
 
-    XpnCreateMetadata(mdata, pd, abs_path);
+    xpn_create_metadata(mdata, pd, abs_path);
 
-    i = XpnGetMetadataPos(mdata, -1);
+    i = xpn_get_metadata_pos(mdata, -1);
     // TODO: i variable is not used, next line avoid compilation warning
     i = i;
 
     for (int j = 0; j < n; ++j)
     {
-        XpnGetURLServer(servers[j], abs_path, url_serv);
+        xpn_get_url_server(servers[j], abs_path, url_serv);
 
         // Worker
         servers[i]->wrk->thread = servers[i]->xpn_thread;
@@ -952,7 +952,7 @@ int xpn_simple_close(int fd)
     int n_threads = 0;
     struct nfi_server **servers;
     servers = NULL;
-    int n = XpnGetServers(op_xpn_close, xpn_file_table[fd]->part->id, NULL, -1, &servers, XPN_DATA_SERVER);
+    int n = xpn_get_servers(op_xpn_close, xpn_file_table[fd]->part->id, NULL, -1, &servers, XPN_DATA_SERVER);
     if(n<=0){
       free(servers);
       res = -1;
@@ -1092,7 +1092,7 @@ int xpn_simple_rename(const char *path, const char *newpath)
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_rename, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+    n = xpn_get_servers(op_xpn_rename, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
     if (n <= 0)
     {
         // free(servers);
@@ -1134,7 +1134,7 @@ int xpn_simple_rename(const char *path, const char *newpath)
 
     memset(mdata_aux, 0, sizeof(struct xpn_metadata));
 
-    res = XpnReadMetadata(mdata_aux, n, servers, vfh_aux, abs_path, pd);
+    res = xpn_read_metadata(mdata_aux, n, servers, vfh_aux, abs_path, pd);
     if (res < 0)
     {
         free(servers);
@@ -1158,7 +1158,7 @@ int xpn_simple_rename(const char *path, const char *newpath)
         return -1;
     }
 
-    res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
+    res = xpn_update_metadata(mdata_aux, n, servers, vfh_aux, newabs_path);
     if (res < 0)
     {
         free(servers);
@@ -1184,8 +1184,8 @@ int xpn_simple_rename(const char *path, const char *newpath)
 
     for (i = 0; i < n; i++)
     {
-        XpnGetURLServer(servers[i], abs_path, url_serv);
-        XpnGetURLServer(servers[i], newabs_path, newurl_serv);
+        xpn_get_url_server(servers[i], abs_path, url_serv);
+        xpn_get_url_server(servers[i], newabs_path, newurl_serv);
 
         // Worker
         servers[i]->wrk->thread = servers[i]->xpn_thread;
@@ -1223,7 +1223,7 @@ int xpn_simple_rename(const char *path, const char *newpath)
     // error checking
     if (err)
     {
-        res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
+        res = xpn_update_metadata(mdata_aux, n, servers, vfh_aux, newabs_path);
         if (res < 0)
         {
             free(servers);
@@ -1264,7 +1264,7 @@ int xpn_simple_fstat(int fd, struct stat *sb)
         return -1;
     }
 
-    res = XpnGetAtribFd(fd, sb);
+    res = xpn_get_atrib_fd(fd, sb);
 
     XPN_DEBUG_END_CUSTOM("%d", fd)
 
@@ -1300,7 +1300,7 @@ int xpn_simple_stat(const char *path, struct stat *sb)
         return res;
     }
 
-    res = XpnGetAtribPath(abs_path, sb);
+    res = xpn_get_atrib_path(abs_path, sb);
     if (res < 0)
     {
         xpn_err(XPNERR_PATH_NOEXIST); // TODO: review error code

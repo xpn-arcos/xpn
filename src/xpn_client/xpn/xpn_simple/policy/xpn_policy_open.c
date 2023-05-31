@@ -38,12 +38,12 @@
  *  ... Functions
  ***********************************************/
 
-ssize_t XpnGetSizeThreads(struct xpn_partition *p)
+ssize_t xpn_get_size_threads(struct xpn_partition *p)
 {
   return p->size_threads;
 }
 
-void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
+void xpn_get_url_server(struct nfi_server *serv, char *abs_path, char *url_serv)
 {
   char dir[PATH_MAX];
   char dir_aux[PATH_MAX];
@@ -85,7 +85,7 @@ void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
 /**
  * TODO:
  *   ** int op -> not used (!)
- *   ** XpnGetServers(.... int type==XPN_META_SERVER) ->  XpnGetServers_mdata(....) ;
+ *   ** xpn_get_servers(.... int type==XPN_META_SERVER) ->  XpnGetServers_mdata(....) ;
  *   ** fd < 0 => XpnGetServers_data_by_path(....) ;
  *   ** fd > 0 => XpnGetServers_data_by_fd(....) ;
  *
@@ -100,7 +100,7 @@ void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
  *
  * @return The number of data or metadata servers on success or -1 on error,
  */
-int XpnGetServers(int op, int pd, __attribute__((__unused__)) char *abs_path, int fd, struct nfi_server ***servers, int type)
+int xpn_get_servers(int op, int pd, __attribute__((__unused__)) char *abs_path, int fd, struct nfi_server ***servers, int type)
 {
   struct nfi_server **serv;
   int i, j, n;
@@ -206,7 +206,7 @@ int XpnGetServers(int op, int pd, __attribute__((__unused__)) char *abs_path, in
 
 // TODO: move to metadata file
 
-int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
+int xpn_create_metadata(struct xpn_metadata *mdata, int pd, char *path)
 {
   int part_id = 0;
 
@@ -271,7 +271,7 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
  *   (out) Real Servers     3      0       1      2
  *
  */
-int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
+int xpn_get_metadata_pos(struct xpn_metadata *mdata, int pos)
 {
   struct policy *p;
 
@@ -308,7 +308,7 @@ int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
 }
 
 // TODO: we think that this function is used to write metadata into the metadata header (todo: really write into file)
-int XpnUpdateMetadata(__attribute__((__unused__)) struct xpn_metadata *mdata,
+int xpn_update_metadata(__attribute__((__unused__)) struct xpn_metadata *mdata,
                       __attribute__((__unused__)) int nserv,
                       __attribute__((__unused__)) struct nfi_server **servers,
                       __attribute__((__unused__)) struct xpn_fh *fh,
@@ -319,7 +319,7 @@ int XpnUpdateMetadata(__attribute__((__unused__)) struct xpn_metadata *mdata,
 }
 
 // TODO: we think that this function is used to read metadata from the metadata header (todo: really read header)
-int XpnReadMetadata(struct xpn_metadata *mdata, __attribute__((__unused__)) int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path, int pd)
+int xpn_read_metadata(struct xpn_metadata *mdata, __attribute__((__unused__)) int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path, int pd)
 {
   int res, n, i;
 
@@ -340,14 +340,14 @@ int XpnReadMetadata(struct xpn_metadata *mdata, __attribute__((__unused__)) int 
   default:
     n = base_path_misc_hash(path, nserv);
 
-    res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
+    res = xpn_get_fh(mdata, &(fh->nfih[n]), servers[n], path);
     if (res < 0)
     {
       XPN_DEBUG_END
       return -1;
     }
 
-    XpnCreateMetadata(mdata, pd, path);
+    xpn_create_metadata(mdata, pd, path);
 
     if (fh->nfih[n]->type == NFIDIR)
     {
@@ -375,7 +375,7 @@ int XpnReadMetadata(struct xpn_metadata *mdata, __attribute__((__unused__)) int 
   return XPN_FILE;
 }
 
-int XpnGetFh(struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path)
+int xpn_get_fh(struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path)
 {
   int res;
   char url_serv[PATH_MAX];
@@ -412,7 +412,7 @@ int XpnGetFh(struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_ser
 
     memset(fh_aux, 0, sizeof(struct nfi_fhandle));
 
-    XpnGetURLServer(servers, path, url_serv);
+    xpn_get_url_server(servers, path, url_serv);
 
     // Default Value (if file, else directory)
     res = servers->ops->nfi_open(servers, url_serv, fh_aux);
@@ -436,7 +436,7 @@ int XpnGetFh(struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_ser
   return 0;
 }
 
-int XpnGetAtribFd(int fd, struct stat *st)
+int xpn_get_atrib_fd(int fd, struct stat *st)
 {
   int ret, res, i, n, err;
   struct nfi_server **servers;
@@ -445,7 +445,7 @@ int XpnGetAtribFd(int fd, struct stat *st)
   XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
   servers = NULL;
-  n = XpnGetServers(op_xpn_getattr, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = xpn_get_servers(op_xpn_getattr, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
   if (n <= 0)
   {
     XPN_DEBUG_END_CUSTOM("%d", fd)
@@ -465,7 +465,7 @@ int XpnGetAtribFd(int fd, struct stat *st)
 
   for (i = 0; i < n; i++)
   {
-    res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
+    res = xpn_get_fh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
     if (res < 0)
     {
       XPN_DEBUG_END_CUSTOM("%d", fd)
@@ -544,7 +544,7 @@ int XpnGetAtribFd(int fd, struct stat *st)
   return ret;
 }
 
-int XpnGetAtribPath(char *path, struct stat *st)
+int xpn_get_atrib_path(char *path, struct stat *st)
 {
   int ret, res, err, i, n, pd;
   char url_serv[PATH_MAX];
@@ -568,7 +568,7 @@ int XpnGetAtribPath(char *path, struct stat *st)
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
-  n = XpnGetServers(op_xpn_getattr, pd, aux_path, -1, &servers, XPN_DATA_SERVER);
+  n = xpn_get_servers(op_xpn_getattr, pd, aux_path, -1, &servers, XPN_DATA_SERVER);
   if (n <= 0)
   {
     /*free(servers);*/
@@ -608,7 +608,7 @@ int XpnGetAtribPath(char *path, struct stat *st)
   {
     vfh_aux->nfih[i] = NULL;
 
-    XpnGetURLServer(servers[i], aux_path, url_serv);
+    xpn_get_url_server(servers[i], aux_path, url_serv);
 
     vfh_aux->nfih[i] = (struct nfi_fhandle *)malloc(sizeof(struct nfi_fhandle));
     memset(vfh_aux->nfih[i], 0, sizeof(struct nfi_fhandle));

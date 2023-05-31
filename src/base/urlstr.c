@@ -342,7 +342,7 @@ int base_urlstr_parse_url(char *url,
  * @param dir 'TODO'.
  * @return 'TODO'.
  */
-int getDirWithURL(char *url, char *dir)
+int get_dir_with_url(char *url, char *dir)
 {
 	char dir_aux[PATH_MAX]; /* change for a const*/
 	int i, j;

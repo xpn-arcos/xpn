@@ -40,7 +40,7 @@
  *  ... Functions
  ***********************************************/
 
-void XpnShowFileTable();
+void xpn_show_file_table();
 
 ssize_t xpn_simple_read(int fd, void *buffer, size_t size)
 {
@@ -51,7 +51,7 @@ ssize_t xpn_simple_read(int fd, void *buffer, size_t size)
   // checks
   if (NULL == xpn_file_table[fd])
   {
-    XpnShowFileTable();
+    xpn_show_file_table();
     errno = EBADF;
     return -1;
   }
@@ -80,7 +80,7 @@ ssize_t xpn_simple_write(int fd, const void *buffer, size_t size)
   // checks
   if (NULL == xpn_file_table[fd])
   {
-    XpnShowFileTable();
+    xpn_show_file_table();
     errno = EBADF;
     return -1;
   }
@@ -113,7 +113,7 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 
   if ((fd < 0) || (fd > XPN_MAX_FILE) || (xpn_file_table[fd] == NULL))
   {
-    XpnShowFileTable();
+    xpn_show_file_table();
     errno = EBADF;
     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
     return -1;
@@ -148,7 +148,7 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
    * flag operation, partition id, absolute path, file descriptor,
    * pointer to servers */
   servers = NULL;
-  n = XpnGetServers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = xpn_get_servers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
   if (n <= 0)
   {
     if (servers != NULL)
@@ -164,7 +164,7 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 
   do
   {
-    XpnGetBlock(fd, new_offset, &l_offset, &l_serv);
+    xpn_get_block(fd, new_offset, &l_offset, &l_serv);
 
     l_size = xpn_file_table[fd]->block_size - (new_offset % xpn_file_table[fd]->block_size);
 
@@ -176,7 +176,7 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 
     if (xpn_file_table[fd]->data_vfh->nfih[l_serv] == NULL)
     {
-      res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), servers[l_serv], xpn_file_table[fd]->path);
+      res = xpn_get_fh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), servers[l_serv], xpn_file_table[fd]->path);
       if (res < 0)
       {
         return -1;
@@ -219,7 +219,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 
   if ((fd < 0) || (fd > XPN_MAX_FILE) || (xpn_file_table[fd] == NULL))
   {
-    XpnShowFileTable();
+    xpn_show_file_table();
     errno = EBADF;
     res = -1;
     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
@@ -259,7 +259,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
    * flag operation, partition id, absolute path, file descriptor,
    * pointer to servers */
   servers = NULL;
-  n = XpnGetServers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = xpn_get_servers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
   if (n <= 0)
   {
     if (servers != NULL)
@@ -343,7 +343,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
   }
 
   // Calculate which blocks to read from each server
-  new_buffer = XpnReadBlocks(fd, buffer, size, offset, &io, &ion, n);
+  new_buffer = xpn_read_blocks(fd, buffer, size, offset, &io, &ion, n);
   if (new_buffer == NULL)
   {
     if (servers != NULL)
@@ -368,11 +368,11 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
   // operation
   for (j = 0; j < n; j++)
   {
-    i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
+    i = xpn_get_metadata_pos(xpn_file_table[fd]->mdata, j);
 
     if (ion[i] != 0)
     {
-      res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
+      res = xpn_get_fh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
       if (res < 0)
       {
         if (servers != NULL)
@@ -437,12 +437,12 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 
   // pthread_mutex_unlock(&(global_mt));
 
-  XpnReadBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
+  xpn_read_blocks_finish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
 
   total = -1;
   if (!err)
   {
-    total = XpnReadGetTotalBytes(fd, res_v, n);
+    total = xpn_read_get_total_bytes(fd, res_v, n);
 
     if (total > 0)
     {
@@ -510,7 +510,7 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
    * flag operation, partition id, absolute path, file descriptor,
    * pointer to servers */
   servers = NULL;
-  n = XpnGetServers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = xpn_get_servers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
   if (n <= 0)
   {
     if (servers != NULL)
@@ -527,7 +527,7 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
 
   do
   {
-    XpnGetBlock(fd, new_offset, &l_offset, &l_serv);
+    xpn_get_block(fd, new_offset, &l_offset, &l_serv);
 
     l_size = xpn_file_table[fd]->block_size - (new_offset % xpn_file_table[fd]->block_size);
 
@@ -539,7 +539,7 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
 
     if (xpn_file_table[fd]->data_vfh->nfih[l_serv] == NULL)
     {
-      res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), servers[l_serv], xpn_file_table[fd]->path);
+      res = xpn_get_fh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), servers[l_serv], xpn_file_table[fd]->path);
       if (res < 0)
       {
         return -1;
@@ -610,7 +610,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
    * flag operation, partition id, absolute path, file descriptor,
    * pointer to servers */
   servers = NULL;
-  n = XpnGetServers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = xpn_get_servers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
   if (n <= 0)
   {
     if (servers != NULL)
@@ -690,7 +690,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   }
 
   // Calculate which blocks to write to each server
-  new_buffer = XpnWriteBlocks(fd, buffer, size, offset, &io, &ion, n);
+  new_buffer = xpn_write_blocks(fd, buffer, size, offset, &io, &ion, n);
   if (new_buffer == NULL)
   {
     if (servers != NULL)
@@ -714,11 +714,11 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
   for (j = 0; j < n; j++)
   {
-    i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
+    i = xpn_get_metadata_pos(xpn_file_table[fd]->mdata, j);
 
     if (ion[i] != 0)
     {
-      res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
+      res = xpn_get_fh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
       if (res < 0)
       {
         if (servers != NULL)
@@ -798,12 +798,12 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
   // pthread_mutex_unlock(&(global_mt));
 
-  XpnWriteBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
+  xpn_write_blocks_finish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
 
   total = -1;
   if (!err)
   {
-    total = XpnWriteGetTotalBytes(fd, res_v, n);
+    total = xpn_write_get_total_bytes(fd, res_v, n);
 
     if (total > 0)
     {

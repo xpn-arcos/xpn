@@ -54,7 +54,7 @@
  * @param serv 'TODO'.
  * @return 'TODO'.
  */
-int nfi_local_keepConnected(struct nfi_server *serv)
+int nfi_local_keep_connected(struct nfi_server *serv)
 {
   if (NULL == serv)
   {
@@ -91,7 +91,7 @@ int nfi_local_keepConnected(struct nfi_server *serv)
  * @par Returns
  *    Nothing.
  */
-void NFItoLOCALattr(struct stat *att, struct nfi_attr *nfi_att)
+void nfi_to_local_attr(struct stat *att, struct nfi_attr *nfi_att)
 {
   att->st_dev = nfi_att->st_dev;
   att->st_ino = nfi_att->st_ino;
@@ -127,7 +127,7 @@ void NFItoLOCALattr(struct stat *att, struct nfi_attr *nfi_att)
  * @par Returns
  *    Nothing.
  */
-void LOCALtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
+void local_to_nfi_attr(struct nfi_attr *nfi_att, struct stat *att)
 {
   nfi_att->st_dev = att->st_dev;
   nfi_att->st_ino = att->st_ino;
@@ -163,7 +163,7 @@ void LOCALtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
  * @par Returns
  *    Nothing.
  */
-void LOCALtoNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *local_inf)
+void local_to_nfi_info(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *local_inf)
 {
   // TODO
 }
@@ -452,7 +452,7 @@ int nfi_local_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fho, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // from url -> server + dir
@@ -509,7 +509,7 @@ int nfi_local_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, 
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(attr, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // url -> server + dir
@@ -558,7 +558,7 @@ int nfi_local_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, 
     return -1;
   }
 
-  LOCALtoNFIattr(attr, &st);
+  local_to_nfi_attr(attr, &st);
 
   DEBUG_END();
 
@@ -575,7 +575,7 @@ ssize_t nfi_local_read(struct nfi_server *serv, struct nfi_fhandle *fh, void *bu
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // private_info
@@ -611,7 +611,7 @@ ssize_t nfi_local_write(struct nfi_server *serv, struct nfi_fhandle *fh, void *b
 
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // private_info...
@@ -641,7 +641,7 @@ int nfi_local_close(struct nfi_server *serv, struct nfi_fhandle *fh)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // private_info
@@ -675,7 +675,7 @@ int nfi_local_remove(struct nfi_server *serv, char *url)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(url, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // from url -> server + dir
@@ -712,7 +712,7 @@ int nfi_local_rename(struct nfi_server *serv, char *old_url, char *new_url)
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(old_url, LOCALERR_PARAM);
   NULL_RET_ERR(new_url, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Get fields...
@@ -758,7 +758,7 @@ int nfi_local_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nf
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
   NULL_RET_ERR(attr, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // copy private information...
@@ -780,7 +780,7 @@ int nfi_local_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nf
     return ret;
   }
 
-  LOCALtoNFIattr(attr, &st);
+  local_to_nfi_attr(attr, &st);
 
   DEBUG_END();
 
@@ -799,12 +799,12 @@ int nfi_local_setattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nf
   NULL_RET_ERR(fh, LOCALERR_PARAM);
   NULL_RET_ERR(attr, LOCALERR_PARAM);
   NULL_RET_ERR(fh->priv_fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // TODO: setattr
 
-  NFItoLOCALattr(&st, attr);
+  nfi_to_local_attr(&st, attr);
 
   DEBUG_END();
 
@@ -824,7 +824,7 @@ int nfi_local_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(attr, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Get fields...
@@ -869,7 +869,7 @@ int nfi_local_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
     return -1;
   }
 
-  LOCALtoNFIattr(attr, &st);
+  local_to_nfi_attr(attr, &st);
 
   DEBUG_END();
 
@@ -889,7 +889,7 @@ int nfi_local_opendir(struct nfi_server *serv, char *url, struct nfi_fhandle *fh
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(url, LOCALERR_PARAM);
   NULL_RET_ERR(fho, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Get fields...
@@ -949,7 +949,7 @@ int nfi_local_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, struct di
     local_err(LOCALERR_NOTDIR);
     return -1;
   }
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // private_info...
@@ -981,7 +981,7 @@ int nfi_local_closedir(struct nfi_server *serv, struct nfi_fhandle *fh)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Do closedir
@@ -1011,7 +1011,7 @@ int nfi_local_rmdir(struct nfi_server *serv, char *url)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(url, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Get fields...
@@ -1058,7 +1058,7 @@ int nfi_local_statfs(__attribute__((__unused__)) struct nfi_server *serv, __attr
   }
 
   // Check fields...
-        nfi_local_keepConnected(serv) ;
+        nfi_local_keep_connected(serv) ;
   if (serv->private_info == NULL) {
       debug_error("serv->private_info field is NULL.\n") ;
       return -1;
@@ -1075,7 +1075,7 @@ int nfi_local_statfs(__attribute__((__unused__)) struct nfi_server *serv, __attr
     return -1;
   }
 
-  LOCALtoNFIInfo(inf, &localinf) ;
+  local_to_nfi_info(inf, &localinf) ;
   */
 
   // TODO

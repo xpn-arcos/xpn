@@ -659,7 +659,7 @@ int nfs_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
 
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
 
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 
 	/* obtaine the NFS file handle */
 	ret = nfs_lookup(server_aux->fh,
@@ -961,7 +961,7 @@ int nfi_nfs_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, st
 	bzero(fh_aux, sizeof(struct nfi_nfs_fhandle));
 
 	server_aux = (struct nfi_nfs_server *)serv->private_info;
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 	/* obtain the directory file handle */
 
 	ret = nfs_lookup(server_aux->fh,
@@ -1060,7 +1060,7 @@ int nfi_nfs_remove(struct nfi_server *serv, char *url)
 		return -1;
 	}
 
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 	/* obtain the directory file handle */
 	ret = nfs_lookup(server_aux->fh,
 					 dir,
@@ -1161,8 +1161,8 @@ int nfi_nfs_rename(struct nfi_server *serv, char *old_url, char *new_url)
 		return -1;
 	}
 
-	getDirWithURL(serv->url, dir_src);
-	getDirWithURL(serv->url, dir_dest);
+	get_dir_with_url(serv->url, dir_src);
+	get_dir_with_url(serv->url, dir_dest);
 
 	/* obtain the directory file handle */
 	ret = nfs_lookup(server_aux->fh,
@@ -1272,7 +1272,7 @@ int nfi_nfs_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, str
 
 	bzero(fh_aux, sizeof(struct nfi_nfs_fhandle));
 
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 	/* obtain the directory file handle */
 	ret = nfs_lookup(server_aux->fh,
 					 dir,
@@ -1370,7 +1370,7 @@ int nfi_nfs_rmdir(struct nfi_server *serv, char *url)
 		return -1;
 	}
 
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 	/* obtain the directory file handle */
 	ret = nfs_lookup(server_aux->fh,
 					 dir,

@@ -70,7 +70,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
-  n = XpnGetServers(op_xpn_mkdir, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+  n = xpn_get_servers(op_xpn_mkdir, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
   if (n <= 0)
   {
     /*free(servers);*/
@@ -103,7 +103,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   {
     vfh_aux->nfih[i] = NULL;
 
-    XpnGetURLServer(servers[i], abs_path, url_serv);
+    xpn_get_url_server(servers[i], abs_path, url_serv);
 
     vfh_aux->nfih[i] = (struct nfi_fhandle *)malloc(sizeof(struct nfi_fhandle));
     memset(vfh_aux->nfih[i], 0, sizeof(struct nfi_fhandle));
@@ -129,7 +129,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
       for (j = 0; j < i; j++)
       {
         /*
-        XpnGetURLServer(servers[j], abs_path, url_serv);
+        xpn_get_url_server(servers[j], abs_path, url_serv);
         nfi_worker_do_rmdir(servers[j]->wrk, url_serv);
         nfi_worker_wait(servers[j]->wrk);
         */
@@ -140,7 +140,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
       if ((ret >= 0) && (err))
       {
         /*
-        XpnGetURLServer(servers[i], abs_path, url_serv);
+        xpn_get_url_server(servers[i], abs_path, url_serv);
         nfi_worker_do_rmdir(servers[i]->wrk, url_serv);
         nfi_worker_wait(servers[i]->wrk);
         */
@@ -203,8 +203,8 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
     return -1;
   }
 
-  XpnCreateMetadata(mdata_aux, pd, abs_path);
-  ret = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, abs_path);
+  xpn_create_metadata(mdata_aux, pd, abs_path);
+  ret = xpn_update_metadata(mdata_aux, n, servers, vfh_aux, abs_path);
 
   if (ret < 0)
   {
@@ -256,7 +256,7 @@ int xpn_simple_rmdir(const char *path)
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
-  n = XpnGetServers(op_xpn_rmdir, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+  n = xpn_get_servers(op_xpn_rmdir, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
   if (n <= 0)
   {
     /* free(servers); */
@@ -265,7 +265,7 @@ int xpn_simple_rmdir(const char *path)
 
   for (i = 0; i < n; i++)
   {
-    XpnGetURLServer(servers[i], abs_path, url_serv);
+    xpn_get_url_server(servers[i], abs_path, url_serv);
     // Worker
     nfi_worker_do_rmdir(servers[i]->wrk, url_serv);
   }

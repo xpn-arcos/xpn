@@ -596,7 +596,7 @@ struct xpn_partition *xpn_search_part(int pd)
  * @par Returns
  *    Nothing.
  */
-void XpnShowPartitionTable(void)
+void xpn_show_partition_table(void)
 {
     int i = 0;
 
