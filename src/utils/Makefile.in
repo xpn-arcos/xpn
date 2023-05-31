@@ -89,11 +89,12 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-bin_PROGRAMS = cp-local2xpn$(EXEEXT) xpn-ls$(EXEEXT) xpn-mkdir$(EXEEXT) \
-	xpn-rm$(EXEEXT) xpn-rmdir$(EXEEXT) xpn-statfs$(EXEEXT) \
-	cp-xpn2local$(EXEEXT) xpn-cat$(EXEEXT) xpncp$(EXEEXT) xpncp_m$(EXEEXT) \
-	xpncp_th$(EXEEXT) xpnwriter$(EXEEXT) \
-	xpn_rebuild$(EXEEXT) xpn_ls$(EXEEXT) xpn_cp$(EXEEXT)
+bin_PROGRAMS = xpn-ls$(EXEEXT) xpn-rm$(EXEEXT) xpn-cat$(EXEEXT) \
+	xpn-mkdir$(EXEEXT) xpn-rmdir$(EXEEXT) cp-local2xpn$(EXEEXT) \
+	cp-xpn2local$(EXEEXT) xpn-statfs$(EXEEXT) xpncp$(EXEEXT) \
+	xpncp_m$(EXEEXT) xpncp_th$(EXEEXT) xpnwriter$(EXEEXT) \
+	xpn_rebuild$(EXEEXT) xpn_flush$(EXEEXT) xpn_preload$(EXEEXT) \
+	xpn_cp$(EXEEXT)
 subdir = src/utils
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -106,50 +107,54 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-cp-local2xpn_SOURCES = cp-local2xpn.c
-cp-local2xpn_OBJECTS = cp-local2xpn.$(OBJEXT)
-cp-local2xpn_LDADD = $(LDADD)
-cp-local2xpn_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-xpn-ls_SOURCES = xpn-ls.c
-xpn-ls_OBJECTS = xpn-ls.$(OBJEXT)
-xpn-ls_LDADD = $(LDADD)
-xpn-ls_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-xpn-mkdir_SOURCES = xpn-mkdir.c
-xpn-mkdir_OBJECTS = xpn-mkdir.$(OBJEXT)
-xpn-mkdir_LDADD = $(LDADD)
-xpn-mkdir_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-xpn-rm_SOURCES = xpn-rm.c
-xpn-rm_OBJECTS = xpn-rm.$(OBJEXT)
-xpn-rm_LDADD = $(LDADD)
-xpn-rm_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-xpn-rmdir_SOURCES = xpn-rmdir.c
-xpn-rmdir_OBJECTS = xpn-rmdir.$(OBJEXT)
-xpn-rmdir_LDADD = $(LDADD)
-xpn-rmdir_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-xpn-statfs_SOURCES = xpn-statfs.c
-xpn-statfs_OBJECTS = xpn-statfs.$(OBJEXT)
-xpn-statfs_LDADD = $(LDADD)
-xpn-statfs_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-cp-xpn2local_SOURCES = cp-xpn2local.c
-cp-xpn2local_OBJECTS = cp-xpn2local.$(OBJEXT)
-cp-xpn2local_LDADD = $(LDADD)
-cp-xpn2local_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+cp_local2xpn_SOURCES = cp-local2xpn.c
+cp_local2xpn_OBJECTS = cp-local2xpn.$(OBJEXT)
+cp_local2xpn_LDADD = $(LDADD)
+cp_local2xpn_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+cp_xpn2local_SOURCES = cp-xpn2local.c
+cp_xpn2local_OBJECTS = cp-xpn2local.$(OBJEXT)
+cp_xpn2local_LDADD = $(LDADD)
+cp_xpn2local_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+xpn_cat_SOURCES = xpn-cat.c
+xpn_cat_OBJECTS = xpn-cat.$(OBJEXT)
+xpn_cat_LDADD = $(LDADD)
+xpn_cat_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+xpn_ls_SOURCES = xpn-ls.c
+xpn_ls_OBJECTS = xpn-ls.$(OBJEXT)
+xpn_ls_LDADD = $(LDADD)
+xpn_ls_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+xpn_mkdir_SOURCES = xpn-mkdir.c
+xpn_mkdir_OBJECTS = xpn-mkdir.$(OBJEXT)
+xpn_mkdir_LDADD = $(LDADD)
+xpn_mkdir_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+xpn_rm_SOURCES = xpn-rm.c
+xpn_rm_OBJECTS = xpn-rm.$(OBJEXT)
+xpn_rm_LDADD = $(LDADD)
+xpn_rm_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+xpn_rmdir_SOURCES = xpn-rmdir.c
+xpn_rmdir_OBJECTS = xpn-rmdir.$(OBJEXT)
+xpn_rmdir_LDADD = $(LDADD)
+xpn_rmdir_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+xpn_statfs_SOURCES = xpn-statfs.c
+xpn_statfs_OBJECTS = xpn-statfs.$(OBJEXT)
+xpn_statfs_LDADD = $(LDADD)
+xpn_statfs_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
 xpn_cp_SOURCES = xpn_cp.c
 xpn_cp_OBJECTS = xpn_cp.$(OBJEXT)
 xpn_cp_LDADD = $(LDADD)
 xpn_cp_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-xpn_ls_SOURCES = xpn_ls.c
-xpn_ls_OBJECTS = xpn_ls.$(OBJEXT)
-xpn_ls_LDADD = $(LDADD)
-xpn_ls_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+xpn_flush_SOURCES = xpn_flush.c
+xpn_flush_OBJECTS = xpn_flush.$(OBJEXT)
+xpn_flush_LDADD = $(LDADD)
+xpn_flush_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
+xpn_preload_SOURCES = xpn_preload.c
+xpn_preload_OBJECTS = xpn_preload.$(OBJEXT)
+xpn_preload_LDADD = $(LDADD)
+xpn_preload_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
 xpn_rebuild_SOURCES = xpn_rebuild.c
 xpn_rebuild_OBJECTS = xpn_rebuild.$(OBJEXT)
 xpn_rebuild_LDADD = $(LDADD)
 xpn_rebuild_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
-xpn-cat_SOURCES = xpn-cat.c
-xpn-cat_OBJECTS = xpn-cat.$(OBJEXT)
-xpn-cat_LDADD = $(LDADD)
-xpn-cat_DEPENDENCIES = @top_srcdir@/src/xpn_client/libxpn.a
 xpncp_SOURCES = xpncp.c
 xpncp_OBJECTS = xpncp.$(OBJEXT)
 xpncp_LDADD = $(LDADD)
@@ -181,12 +186,13 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/./config/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/cp-local2xpn.Po ./$(DEPDIR)/xpn-ls.Po \
-	./$(DEPDIR)/xpn-mkdir.Po ./$(DEPDIR)/xpn-rm.Po \
-	./$(DEPDIR)/xpn-rmdir.Po ./$(DEPDIR)/xpn-statfs.Po \
-	./$(DEPDIR)/cp-xpn2local.Po ./$(DEPDIR)/xpn_cp.Po \
-	./$(DEPDIR)/xpn_ls.Po ./$(DEPDIR)/xpn_rebuild.Po \
-	./$(DEPDIR)/xpn-cat.Po ./$(DEPDIR)/xpncp.Po \
+am__depfiles_remade = ./$(DEPDIR)/cp-local2xpn.Po \
+	./$(DEPDIR)/cp-xpn2local.Po ./$(DEPDIR)/xpn-cat.Po \
+	./$(DEPDIR)/xpn-ls.Po ./$(DEPDIR)/xpn-mkdir.Po \
+	./$(DEPDIR)/xpn-rm.Po ./$(DEPDIR)/xpn-rmdir.Po \
+	./$(DEPDIR)/xpn-statfs.Po ./$(DEPDIR)/xpn_cp.Po \
+	./$(DEPDIR)/xpn_flush.Po ./$(DEPDIR)/xpn_preload.Po \
+	./$(DEPDIR)/xpn_rebuild.Po ./$(DEPDIR)/xpncp.Po \
 	./$(DEPDIR)/xpncp_m.Po ./$(DEPDIR)/xpncp_th.Po \
 	./$(DEPDIR)/xpnwriter.Po
 am__mv = mv -f
@@ -202,12 +208,14 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = cp-local2xpn.c xpn-ls.c xpn-mkdir.c xpn-rm.c xpn-rmdir.c \
-	xpn-statfs.c cp-xpn2local.c xpn_cp.c xpn_ls.c xpn_rebuild.c xpn-cat.c \
-	xpncp.c xpncp_m.c xpncp_th.c xpnwriter.c
-DIST_SOURCES = cp-local2xpn.c xpn-ls.c xpn-mkdir.c xpn-rm.c xpn-rmdir.c \
-	xpn-statfs.c cp-xpn2local.c xpn_cp.c xpn_ls.c xpn_rebuild.c xpn-cat.c \
-	xpncp.c xpncp_m.c xpncp_th.c xpnwriter.c
+SOURCES = cp-local2xpn.c cp-xpn2local.c xpn-cat.c xpn-ls.c xpn-mkdir.c \
+	xpn-rm.c xpn-rmdir.c xpn-statfs.c xpn_cp.c xpn_flush.c \
+	xpn_preload.c xpn_rebuild.c xpncp.c xpncp_m.c xpncp_th.c \
+	xpnwriter.c
+DIST_SOURCES = cp-local2xpn.c cp-xpn2local.c xpn-cat.c xpn-ls.c \
+	xpn-mkdir.c xpn-rm.c xpn-rmdir.c xpn-statfs.c xpn_cp.c \
+	xpn_flush.c xpn_preload.c xpn_rebuild.c xpncp.c xpncp_m.c \
+	xpncp_th.c xpnwriter.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -429,49 +437,53 @@ uninstall-binPROGRAMS:
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
-cp-local2xpn$(EXEEXT): $(cp-local2xpn_OBJECTS) $(cp-local2xpn_DEPENDENCIES) $(EXTRA_cp-local2xpn_DEPENDENCIES) 
+cp-local2xpn$(EXEEXT): $(cp_local2xpn_OBJECTS) $(cp_local2xpn_DEPENDENCIES) $(EXTRA_cp_local2xpn_DEPENDENCIES) 
 	@rm -f cp-local2xpn$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(cp-local2xpn_OBJECTS) $(cp-local2xpn_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(LINK) $(cp_local2xpn_OBJECTS) $(cp_local2xpn_LDADD) $(LIBS)
 
-xpn-ls$(EXEEXT): $(xpn-ls_OBJECTS) $(xpn-ls_DEPENDENCIES) $(EXTRA_xpn-ls_DEPENDENCIES) 
-	@rm -f xpn-ls$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(xpn-ls_OBJECTS) $(xpn-ls_LDADD) $(LIBS)
-
-xpn-mkdir$(EXEEXT): $(xpn-mkdir_OBJECTS) $(xpn-mkdir_DEPENDENCIES) $(EXTRA_xpn-mkdir_DEPENDENCIES) 
-	@rm -f xpn-mkdir$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(xpn-mkdir_OBJECTS) $(xpn-mkdir_LDADD) $(LIBS)
-
-xpn-rm$(EXEEXT): $(xpn-rm_OBJECTS) $(xpn-rm_DEPENDENCIES) $(EXTRA_xpn-rm_DEPENDENCIES) 
-	@rm -f xpn-rm$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(xpn-rm_OBJECTS) $(xpn-rm_LDADD) $(LIBS)
-
-xpn-rmdir$(EXEEXT): $(xpn-rmdir_OBJECTS) $(xpn-rmdir_DEPENDENCIES) $(EXTRA_xpn-rmdir_DEPENDENCIES) 
-	@rm -f xpn-rmdir$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(xpn-rmdir_OBJECTS) $(xpn-rmdir_LDADD) $(LIBS)
-
-xpn-statfs$(EXEEXT): $(xpn-statfs_OBJECTS) $(xpn-statfs_DEPENDENCIES) $(EXTRA_xpn-statfs_DEPENDENCIES) 
-	@rm -f xpn-statfs$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(xpn-statfs_OBJECTS) $(xpn-statfs_LDADD) $(LIBS)
-
-cp-xpn2local$(EXEEXT): $(cp-xpn2local_OBJECTS) $(cp-xpn2local_DEPENDENCIES) $(EXTRA_cp-xpn2local_DEPENDENCIES) 
+cp-xpn2local$(EXEEXT): $(cp_xpn2local_OBJECTS) $(cp_xpn2local_DEPENDENCIES) $(EXTRA_cp_xpn2local_DEPENDENCIES) 
 	@rm -f cp-xpn2local$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(cp-xpn2local_OBJECTS) $(cp-xpn2local_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(LINK) $(cp_xpn2local_OBJECTS) $(cp_xpn2local_LDADD) $(LIBS)
+
+xpn-cat$(EXEEXT): $(xpn_cat_OBJECTS) $(xpn_cat_DEPENDENCIES) $(EXTRA_xpn_cat_DEPENDENCIES) 
+	@rm -f xpn-cat$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xpn_cat_OBJECTS) $(xpn_cat_LDADD) $(LIBS)
+
+xpn-ls$(EXEEXT): $(xpn_ls_OBJECTS) $(xpn_ls_DEPENDENCIES) $(EXTRA_xpn_ls_DEPENDENCIES) 
+	@rm -f xpn-ls$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xpn_ls_OBJECTS) $(xpn_ls_LDADD) $(LIBS)
+
+xpn-mkdir$(EXEEXT): $(xpn_mkdir_OBJECTS) $(xpn_mkdir_DEPENDENCIES) $(EXTRA_xpn_mkdir_DEPENDENCIES) 
+	@rm -f xpn-mkdir$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xpn_mkdir_OBJECTS) $(xpn_mkdir_LDADD) $(LIBS)
+
+xpn-rm$(EXEEXT): $(xpn_rm_OBJECTS) $(xpn_rm_DEPENDENCIES) $(EXTRA_xpn_rm_DEPENDENCIES) 
+	@rm -f xpn-rm$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xpn_rm_OBJECTS) $(xpn_rm_LDADD) $(LIBS)
+
+xpn-rmdir$(EXEEXT): $(xpn_rmdir_OBJECTS) $(xpn_rmdir_DEPENDENCIES) $(EXTRA_xpn_rmdir_DEPENDENCIES) 
+	@rm -f xpn-rmdir$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xpn_rmdir_OBJECTS) $(xpn_rmdir_LDADD) $(LIBS)
+
+xpn-statfs$(EXEEXT): $(xpn_statfs_OBJECTS) $(xpn_statfs_DEPENDENCIES) $(EXTRA_xpn_statfs_DEPENDENCIES) 
+	@rm -f xpn-statfs$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xpn_statfs_OBJECTS) $(xpn_statfs_LDADD) $(LIBS)
 
 xpn_cp$(EXEEXT): $(xpn_cp_OBJECTS) $(xpn_cp_DEPENDENCIES) $(EXTRA_xpn_cp_DEPENDENCIES) 
 	@rm -f xpn_cp$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(xpn_cp_OBJECTS) $(xpn_cp_LDADD) $(LIBS)
 
-xpn_ls$(EXEEXT): $(xpn_ls_OBJECTS) $(xpn_ls_DEPENDENCIES) $(EXTRA_xpn_ls_DEPENDENCIES) 
-	@rm -f xpn_ls$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(xpn_ls_OBJECTS) $(xpn_ls_LDADD) $(LIBS)
+xpn_flush$(EXEEXT): $(xpn_flush_OBJECTS) $(xpn_flush_DEPENDENCIES) $(EXTRA_xpn_flush_DEPENDENCIES) 
+	@rm -f xpn_flush$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xpn_flush_OBJECTS) $(xpn_flush_LDADD) $(LIBS)
+
+xpn_preload$(EXEEXT): $(xpn_preload_OBJECTS) $(xpn_preload_DEPENDENCIES) $(EXTRA_xpn_preload_DEPENDENCIES) 
+	@rm -f xpn_preload$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xpn_preload_OBJECTS) $(xpn_preload_LDADD) $(LIBS)
 
 xpn_rebuild$(EXEEXT): $(xpn_rebuild_OBJECTS) $(xpn_rebuild_DEPENDENCIES) $(EXTRA_xpn_rebuild_DEPENDENCIES) 
 	@rm -f xpn_rebuild$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(xpn_rebuild_OBJECTS) $(xpn_rebuild_LDADD) $(LIBS)
-
-xpn-cat$(EXEEXT): $(xpn-cat_OBJECTS) $(xpn-cat_DEPENDENCIES) $(EXTRA_xpn-cat_DEPENDENCIES) 
-	@rm -f xpn-cat$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(xpn-cat_OBJECTS) $(xpn-cat_LDADD) $(LIBS)
 
 xpncp$(EXEEXT): $(xpncp_OBJECTS) $(xpncp_DEPENDENCIES) $(EXTRA_xpncp_DEPENDENCIES) 
 	@rm -f xpncp$(EXEEXT)
@@ -496,16 +508,17 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cp-local2xpn.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cp-xpn2local.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn-cat.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn-ls.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn-mkdir.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn-rm.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn-rmdir.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn-statfs.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cp-xpn2local.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn_cp.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn_ls.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn_flush.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn_preload.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn_rebuild.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpn-cat.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp_m.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xpncp_th.Po@am__quote@ # am--include-marker
@@ -661,16 +674,17 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/cp-local2xpn.Po
+	-rm -f ./$(DEPDIR)/cp-xpn2local.Po
+	-rm -f ./$(DEPDIR)/xpn-cat.Po
 	-rm -f ./$(DEPDIR)/xpn-ls.Po
 	-rm -f ./$(DEPDIR)/xpn-mkdir.Po
 	-rm -f ./$(DEPDIR)/xpn-rm.Po
 	-rm -f ./$(DEPDIR)/xpn-rmdir.Po
 	-rm -f ./$(DEPDIR)/xpn-statfs.Po
-	-rm -f ./$(DEPDIR)/cp-xpn2local.Po
 	-rm -f ./$(DEPDIR)/xpn_cp.Po
-	-rm -f ./$(DEPDIR)/xpn_ls.Po
+	-rm -f ./$(DEPDIR)/xpn_flush.Po
+	-rm -f ./$(DEPDIR)/xpn_preload.Po
 	-rm -f ./$(DEPDIR)/xpn_rebuild.Po
-	-rm -f ./$(DEPDIR)/xpn-cat.Po
 	-rm -f ./$(DEPDIR)/xpncp.Po
 	-rm -f ./$(DEPDIR)/xpncp_m.Po
 	-rm -f ./$(DEPDIR)/xpncp_th.Po
@@ -720,17 +734,18 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -f ./$(DEPDIR)/xpn_cp.Po
-	-rm -f ./$(DEPDIR)/xpn_ls.Po
-	-rm -f ./$(DEPDIR)/xpn_rebuild.Po
+		-rm -f ./$(DEPDIR)/cp-local2xpn.Po
+	-rm -f ./$(DEPDIR)/cp-xpn2local.Po
+	-rm -f ./$(DEPDIR)/xpn-cat.Po
 	-rm -f ./$(DEPDIR)/xpn-ls.Po
 	-rm -f ./$(DEPDIR)/xpn-mkdir.Po
 	-rm -f ./$(DEPDIR)/xpn-rm.Po
 	-rm -f ./$(DEPDIR)/xpn-rmdir.Po
-	-rm -f ./$(DEPDIR)/xpn-cat.Po
 	-rm -f ./$(DEPDIR)/xpn-statfs.Po
-	-rm -f ./$(DEPDIR)/cp-local2xpn.Po
-	-rm -f ./$(DEPDIR)/cp-xpn2local.Po
+	-rm -f ./$(DEPDIR)/xpn_cp.Po
+	-rm -f ./$(DEPDIR)/xpn_flush.Po
+	-rm -f ./$(DEPDIR)/xpn_preload.Po
+	-rm -f ./$(DEPDIR)/xpn_rebuild.Po
 	-rm -f ./$(DEPDIR)/xpncp.Po
 	-rm -f ./$(DEPDIR)/xpncp_m.Po
 	-rm -f ./$(DEPDIR)/xpncp_th.Po
@@ -770,6 +785,7 @@ uninstall-am: uninstall-binPROGRAMS
 
 .PRECIOUS: Makefile
 
+#bin_PROGRAMS = xpn-ls xpn-rm xpn-cat xpn-mkdir xpn-rmdir cp-local2xpn cp-xpn2local xpn-statfs         xpncp xpncp_m xpncp_th xpnwriter      xpn_rebuild xpn_flush xpn_preload xpn_ls xpn_cp
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

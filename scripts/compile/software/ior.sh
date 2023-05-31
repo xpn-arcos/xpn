@@ -88,7 +88,7 @@ export MPICC=$MPICC_PATH
 export CC=$MPICC_PATH
 export PATH=$(dirname $MPICC_PATH):$PATH
 ./bootstrap
-./configure --prefix="$INSTALL_PATH/ior"
+./configure  --with-hdfs --with-posix  --prefix="$INSTALL_PATH/ior"
 make clean
 make -j 8
 make install

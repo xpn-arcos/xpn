@@ -23,7 +23,7 @@
 
 
 # 1) software (if needed)...
-PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
+PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen pkg-config"
 for P in $PKG_NAMES; do
     apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
 done
