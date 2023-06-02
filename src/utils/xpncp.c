@@ -18,6 +18,21 @@
  *
  */
 
+/**
+ * @file xpncp.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
+
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -49,6 +64,20 @@ int silent = 0;
 int very_silent = 0;
 int debug = 0;
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 void print_bar(void)
 {
 	int bar_expected_length;
@@ -76,6 +105,15 @@ void print_bar(void)
 	}
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param arg 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void *progression_bar(__attribute__((unused)) void *arg)
 {
 	int is_true = 1;
@@ -108,6 +146,17 @@ const char *argp_program_version = "xpncp 1.0";
 const char *argp_program_bug_address = "<https://github.com/xpn-arcos/xpn>";
 static char doc[] = "A copy program for Expand partitions";
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param key 'TODO'.
+ * @param text 'TODO'.
+ * @param input 'TODO'.
+ *
+ * @return 'TODO'.
+ */
 char *help_filter(int key, const char *text, __attribute__((__unused__)) void *input)
 {
 	char *ret;
@@ -167,6 +216,17 @@ struct arguments
 	char *dest;
 };
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param key 'TODO'.
+ * @param arg 'TODO'.
+ * @param state 'TODO'.
+ *
+ * @return 'TODO'.
+ */
 /* Parse a single option. */
 static error_t parse_opt(int key, char *arg, struct argp_state *state)
 {

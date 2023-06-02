@@ -65,7 +65,7 @@ int static_id = 0;
  * @par Returns
  *    Nothing.
  */
-void generateName(char *file, char *new_file)
+void generate_name(char *file, char *new_file)
 {
    char aux[255];
    unsigned long i;

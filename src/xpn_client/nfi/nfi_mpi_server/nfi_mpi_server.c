@@ -171,7 +171,7 @@ int nfi_mpi_server_doRequest(struct nfi_mpi_server_server *server_aux, struct st
   return 0;
 }
 
-int nfi_mpi_server_keepConnected(struct nfi_server *serv)
+int nfi_mpi_server_keep_connected(struct nfi_server *serv)
 {
   if (NULL == serv)
   {
@@ -198,7 +198,7 @@ int nfi_mpi_server_keepConnected(struct nfi_server *serv)
  *  PRIVATE FUNCTIONS TO USE mpi_server SERVERS
  */
 
-void NFItoMPI_SERVERattr(struct stat *att, struct nfi_attr *nfi_att)
+void nfi_to_mpi_server_attr(struct stat *att, struct nfi_attr *nfi_att)
 {
   att->st_dev = nfi_att->st_dev;
   att->st_ino = nfi_att->st_ino;
@@ -224,7 +224,7 @@ void NFItoMPI_SERVERattr(struct stat *att, struct nfi_attr *nfi_att)
   att->st_ctime = nfi_att->at_ctime;     // time of last change
 }
 
-void MPI_SERVERtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
+void mpi_server_to_nfi_attr(struct nfi_attr *nfi_att, struct stat *att)
 {
   nfi_att->st_dev = att->st_dev;
   nfi_att->st_ino = att->st_ino;
@@ -250,7 +250,7 @@ void MPI_SERVERtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
   nfi_att->at_ctime = att->st_ctime;                               // time of last change
 }
 
-void MPI_SERVERtoNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *mpi_server_inf)
+void mpi_server_to_nfi_info(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *mpi_server_inf)
 {
   // TODO
 }
@@ -580,7 +580,7 @@ int nfi_mpi_server_open(struct nfi_server *serv, char *url, struct nfi_fhandle *
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(fho, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -684,7 +684,7 @@ int nfi_mpi_server_create(struct nfi_server *serv, char *url, struct nfi_attr *a
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(attr, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -789,7 +789,7 @@ int nfi_mpi_server_create(struct nfi_server *serv, char *url, struct nfi_attr *a
     return -1;
   }
 
-  MPI_SERVERtoNFIattr(attr, &req.attr);
+  mpi_server_to_nfi_attr(attr, &req.attr);
 
   DEBUG_END();
 
@@ -809,7 +809,7 @@ ssize_t nfi_mpi_server_read(struct nfi_server *serv, struct nfi_fhandle *fh, voi
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(fh, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info
@@ -966,7 +966,7 @@ ssize_t nfi_mpi_server_write(struct nfi_server *serv, struct nfi_fhandle *fh, vo
 
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(fh, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -1129,7 +1129,7 @@ int nfi_mpi_server_close(struct nfi_server *serv, struct nfi_fhandle *fh)
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(fh, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -1197,7 +1197,7 @@ int nfi_mpi_server_remove(struct nfi_server *serv, char *url)
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(url, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -1277,7 +1277,7 @@ int nfi_mpi_server_rename(struct nfi_server *serv, char *old_url, char *new_url)
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(old_url, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(new_url, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -1360,7 +1360,7 @@ int nfi_mpi_server_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, stru
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(fh, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(attr, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // copy private information...
@@ -1403,7 +1403,7 @@ int nfi_mpi_server_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, stru
     nfi_mpi_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
   }
 
-  MPI_SERVERtoNFIattr(attr, &req.attr);
+  mpi_server_to_nfi_attr(attr, &req.attr);
 
   DEBUG_END();
 
@@ -1423,7 +1423,7 @@ int nfi_mpi_server_setattr(struct nfi_server *serv, struct nfi_fhandle *fh, stru
   NULL_RET_ERR(fh, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(attr, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(fh->priv_fh, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   fh_aux = (struct nfi_mpi_server_fhandle *)fh->priv_fh;
@@ -1452,7 +1452,7 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *at
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(attr, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -1535,7 +1535,7 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *at
     return -1;
   }
 
-  MPI_SERVERtoNFIattr(attr, &req.attr);
+  mpi_server_to_nfi_attr(attr, &req.attr);
 
   DEBUG_END();
 
@@ -1556,7 +1556,7 @@ int nfi_mpi_server_opendir(struct nfi_server *serv, char *url, struct nfi_fhandl
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(url, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(fho, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -1643,7 +1643,7 @@ int nfi_mpi_server_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, stru
     mpi_server_err(MPI_SERVERERR_NOTDIR);
     return -1;
   }
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -1701,7 +1701,7 @@ int nfi_mpi_server_closedir(struct nfi_server *serv, struct nfi_fhandle *fh)
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(fh, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // do closedir...
@@ -1749,7 +1749,7 @@ int nfi_mpi_server_rmdir(struct nfi_server *serv, char *url)
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(url, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...
@@ -1813,7 +1813,7 @@ int nfi_mpi_server_statfs(__attribute__((__unused__)) struct nfi_server *serv, _
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVERERR_PARAM) ;
   NULL_RET_ERR(inf,  MPI_SERVERERR_PARAM) ;
-  nfi_mpi_server_keepConnected(serv) ;
+  nfi_mpi_server_keep_connected(serv) ;
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM) ;
 
   // private_info...
@@ -1849,7 +1849,7 @@ int nfi_mpi_server_preload(struct nfi_server *serv, char *url, char *virtual_pat
   NULL_RET_ERR(url, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(virtual_path, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(storage_path, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // get private_info...
@@ -1903,7 +1903,7 @@ int nfi_mpi_server_flush(struct nfi_server *serv, char *url, char *virtual_path,
   NULL_RET_ERR(url, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(virtual_path, MPI_SERVERERR_PARAM);
   NULL_RET_ERR(storage_path, MPI_SERVERERR_PARAM);
-  nfi_mpi_server_keepConnected(serv);
+  nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVERERR_PARAM);
 
   // private_info...

@@ -18,6 +18,20 @@
  *
  */
 
+/**
+ * @file xpn-cat.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -41,6 +55,20 @@
 struct stat st;
 ssize_t sum;
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param program_name 'TODO'.
+ * 
+ * @par Returns
+ *    Nothing.
+ */
 void usage(char *program_name)
 {
 	printf("Usage: %s [-h] | [-b <buffer_size_in_KB>] <source>\n", program_name);

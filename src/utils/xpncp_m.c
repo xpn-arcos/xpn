@@ -18,6 +18,21 @@
  *
  */
 
+/**
+ * @file xpncp_m.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
+
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -50,6 +65,20 @@ int silent = 0;
 int very_silent = 0;
 int debug = 0;
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @par Returns
+ *    Nothing.
+ */
 void print_bar()
 {
 	int bar_expected_length;
@@ -77,6 +106,15 @@ void print_bar()
 	}
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param arg 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void *progression_bar(__attribute__((unused)) void *arg)
 {
 	int is_true = 1;
@@ -125,6 +163,15 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t xpn_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param func_args 'TODO'.
+ * @par Returns
+ *    Nothing.
+ */
 void *write_func(void *func_args)
 {
 	struct write_args *args = (struct write_args *)func_args;
@@ -199,6 +246,17 @@ const char *argp_program_version = "xpncp_m 1.0";
 const char *argp_program_bug_address = "<https://github.com/xpn-arcos/xpn>";
 static char doc[] = "A fast copy program for Expand partitions that uses mmap for local files";
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param key 'TODO'.
+ * @param text 'TODO'.
+ * @param input 'TODO'.
+ * 
+ * @return 'TODO'.
+ */
 char *help_filter(int key, const char *text, __attribute__((__unused__)) void *input)
 {
 	char *ret;
@@ -258,6 +316,17 @@ struct arguments
 	char *dest;
 };
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param key 'TODO'.
+ * @param arg 'TODO'.
+ * @param state 'TODO'.
+ * 
+ * @return 'TODO'.
+ */
 /* Parse a single option. */
 static error_t parse_opt(int key, char *arg, struct argp_state *state)
 {

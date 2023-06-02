@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file xpn_rebuild.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
@@ -32,8 +43,9 @@
 #include <dirent.h>
 #include "mpi.h"
 
-/* ... Const / Const ................................................. */
-
+/************************************************
+ *  ... Constants
+ ***********************************************/
 #ifndef _LARGEFILE_SOURCE
 #define _LARGEFILE_SOURCE
 #endif
@@ -49,8 +61,24 @@ char command[4 * 1024];
 char src_path[PATH_MAX + 5];
 char dest_path[PATH_MAX + 5];
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param entry 'TODO'.
+ * @param is_file 'TODO'.
+ * @param dir_name 'TODO'.
+ * @param dest_prefix 'TODO'.
+ * @param blocksize 'TODO'.
+ * @param rank 'TODO'.
+ * @param size 'TODO'.
+ * @return 'TODO'.
+ */
 int copy(char *entry, int is_file, char *dir_name, char *dest_prefix, int blocksize, int rank, int size)
 {
   int ret;
@@ -155,6 +183,18 @@ int copy(char *entry, int is_file, char *dir_name, char *dest_prefix, int blocks
   return 0;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dir_name 'TODO'.
+ * @param dest_prefix 'TODO'.
+ * @param blocksize 'TODO'.
+ * @param rank 'TODO'.
+ * @param size 'TODO'.
+ * @return 'TODO'.
+ */
 int list(char *dir_name, char *dest_prefix, int blocksize, int rank, int size)
 {
   int ret;

@@ -110,7 +110,7 @@ extern "C"
    * @param dir 'TODO'.
    * @return 'TODO'.
    */
-  int getDirWithURL(char *url, char *dir);
+  int get_dir_with_url(char *url, char *dir);
 
 #ifdef __cplusplus
 }
