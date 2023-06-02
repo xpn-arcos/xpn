@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck disable=all
 #set -x
 
 #
@@ -24,20 +23,17 @@
 function usage {
     echo ""
     echo " Usage:"
-    echo " $0  -m <mpicc path>  -i <Install path> -s <Source path>"
+    echo " $0  -i <Install path> -s <Source path>"
     echo " Where:"
-    echo " * <mpicc   path> = full path where the mpicc is installed."
-    echo " * <Install path> = full path where IOR is going to be installed."
-    echo " * <Source  path> = full path to the source code of IOR."
+    echo " * <Install path> = full path where Prometheus-client is going to be installed."
+    echo " * <Source  path> = full path to the source code of Prometheus-client."
     echo ""
 }
 
 
 ## get arguments
-while getopts "m:i:s:" opt; do
+while getopts "i:s:" opt; do
     case "${opt}" in
-          m) MPICC_PATH=${OPTARG}
-             ;;
           i) INSTALL_PATH=${OPTARG}
              ;;
           s) SRC_PATH=${OPTARG}
@@ -51,12 +47,6 @@ while getopts "m:i:s:" opt; do
 done
 
 ## check arguments
-if [ "$MPICC_PATH" == "" ]; then
-   echo " Error:"
-   echo " * Empty MPICC_PATH"
-   usage
-   exit
-fi
 if [ "$INSTALL_PATH" == "" ]; then
    echo " Error:"
    echo " * Empty INSTALL_PATH"
@@ -70,27 +60,23 @@ if [ "$SRC_PATH" == "" ]; then
    exit
 fi
 if [ ! -d "$SRC_PATH" ]; then
-   echo " Skip IOR:"
+   echo " Skip Prometheus-client:"
    echo " * Directory not found: $SRC_PATH"
    exit
 fi
 
-## IOR
-echo " * IOR: preparing directories..."
-  rm -fr "$INSTALL_PATH/ior"
-mkdir -p "$INSTALL_PATH/ior/lib64"
-ln    -s "$INSTALL_PATH/ior/lib64"   "$INSTALL_PATH/ior/lib"
 
-echo " * IOR: compiling and installing..."
+## Prometheus-client
+echo " * Prometheus-client: preparing directories..."
+  rm  -fr "$INSTALL_PATH/promcli"
+mkdir -fr "$INSTALL_PATH/promcli/lib"
+
+echo " * Prometheus-client: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
-export MPICC=$MPICC_PATH
-export CC=$MPICC_PATH
-export PATH=$(dirname $MPICC_PATH):$PATH
-./bootstrap
-./configure  --with-hdfs --with-posix  --prefix="$INSTALL_PATH/ior"
-make clean
-make -j 8
-make install
+bash auto clean
+bash auto build
+cp  -a  $(find . -name "*.so")  "$INSTALL_PATH/promcli/lib"
+cp  -a  ./prom/include          "$INSTALL_PATH/promcli/"
 popd
 

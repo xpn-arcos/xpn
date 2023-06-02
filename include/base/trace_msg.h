@@ -44,6 +44,12 @@ extern "C"
 #include "all_system.h"
 #include "string_misc.h"
 
+#ifdef HAVE_PROM_H
+#include "prom.h"
+#include "promhttp.h"
+#include "microhttpd.h"
+#endif
+
   /************************************************
    *  ... Constants
    ***********************************************/
@@ -66,7 +72,7 @@ extern "C"
    * @par Returns
    *    Nothing.
    */
-  void base_trace_msg_init(void);
+  int  base_trace_msg_init(void);
 
   /**
    *  @brief Set 'printer' dispacher.
@@ -122,6 +128,12 @@ extern "C"
       /*IN*/ int type,
       /*IN*/ char *fto,
       ...);
+
+
+  int base_trace_prom_init     ( void ) ;
+  int base_trace_prom_finalize ( void ) ;
+  int base_trace_msg_bar       ( int v, const char *label ) ;
+
 
   /************************************************
    *  ... Macros
