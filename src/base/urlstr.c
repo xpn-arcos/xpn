@@ -302,7 +302,7 @@ int base_urlstr_parse_url(char *url,
 	if (server != NULL)
 	{
 		/* return the next position */
-		if (getURLServer(urlaux, server) < 0)
+		if (urlstr_get_url_server(urlaux, server) < 0)
 		{
 			return -1;
 		}

@@ -473,7 +473,7 @@ int fdsdirtable_remove(DIR *dir)
  *    None.
  * @return 'TODO'.
  */
-int xpn_adaptor_keep_init(void)
+int xpn_adaptor_keep_init ( void )
 {
   int ret;
   char *xpn_adaptor_initCalled_env = NULL;
@@ -1116,7 +1116,7 @@ int __fxstat(int ver, int fd, struct stat *buf)
     if (is_xpn_prefix( path))
     {
       // We must initialize expand if it has not been initialized yet.
-      xpn_adaptor_keepInit ();
+      xpn_adaptor_keep_init ();
 
       // TODO: if path is relative -> use dirfd as CWD
       // TODO: use flags (see man fstatat
@@ -1153,7 +1153,7 @@ int __fxstat(int ver, int fd, struct stat *buf)
     if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
-      xpn_adaptor_keepInit ();
+      xpn_adaptor_keep_init ();
 
       // TODO: if path is relative -> use dirfd as CWD
       // TODO: use flags (see man fstatat
@@ -1798,7 +1798,7 @@ int MPI_Init_thread ( int *argc, char ***argv, int required, int *provided )
     debug_info("[bypass] Before MPI_Init_thread\n");
 
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    xpn_adaptor_keep_init();
 
     value = getenv("XPN_IS_MPI_SERVER") ;
     if (NULL == value){
