@@ -41,7 +41,7 @@
  *  ... Functions
  ***********************************************/
 
-int XpnGetEntry(int fd, struct dirent *entry)
+int xpn_get_entry(int fd, struct dirent *entry)
 {
   int n, res;
   struct nfi_server **servers;
@@ -50,13 +50,13 @@ int XpnGetEntry(int fd, struct dirent *entry)
 
   /* XpnGetServers: flag operation, partition id, absolute path, file descript., pointer to server */
   servers = NULL;
-  n = XpnGetServers(op_xpn_readdir, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = xpn_get_servers(op_xpn_readdir, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
   if (n <= 0)
   {
     return -1;
   }
 
-  res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[0]), servers[0], xpn_file_table[fd]->path);
+  res = xpn_get_fh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[0]), servers[0], xpn_file_table[fd]->path);
 
   free(servers);
 

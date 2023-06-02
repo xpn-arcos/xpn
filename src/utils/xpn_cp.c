@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file xpn_cp.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
@@ -30,13 +41,26 @@
 #include <string.h>
 #include <errno.h>
 
-/* ... Const / Const ................................................. */
+/************************************************
+ *  ... Constants
+ ***********************************************/
 
 #define BUFFER_SIZE (8192 * 1024)
 char buf[BUFFER_SIZE];
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param src_path 'TODO'.
+ * @param dest_path 'TODO'.
+ * @return 'TODO'.
+ */
 int do_cp(char *src_path, char *dest_path)
 {
   int ret, fd_src, fd_dest;
@@ -101,6 +125,15 @@ int do_cp(char *src_path, char *dest_path)
   return 0;
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param src_path 'TODO'.
+ * @param dest_path 'TODO'.
+ * @return 'TODO'.
+ */
 int do_cp_recursive(char *src_path, char *dest_path)
 {
   struct stat stat_buf;

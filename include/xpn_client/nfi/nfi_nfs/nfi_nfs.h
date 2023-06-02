@@ -90,7 +90,7 @@ extern "C"
 	 * @par Returns
 	 *    Nothing.
 	 */
-	void NFItoNFSattr(fattr *nfs_att, struct nfi_attr *nfi_att);
+	void nfi_to_nfs_attr(fattr *nfs_att, struct nfi_attr *nfi_att);
 
 	/**
 	 * @brief 'TODO'.
@@ -102,7 +102,7 @@ extern "C"
 	 * @par Returns
 	 *    Nothing.
 	 */
-	void NFStoNFIattr(struct nfi_attr *nfi_att, fattr *nfs_att);
+	void nfs_to_nfi_attr(struct nfi_attr *nfi_att, fattr *nfs_att);
 
 	/**
 	 * @brief 'TODO'.
@@ -114,7 +114,7 @@ extern "C"
 	 * @par Returns
 	 *    Nothing.
 	 */
-	void NFStoNFIInfo(struct nfi_info *nfi_inf, struct nfs_info *nfs_inf);
+	void nfs_to_nfi_info(struct nfi_info *nfi_inf, struct nfs_info *nfs_inf);
 
 	/**
 	 * @brief Init NFS server.

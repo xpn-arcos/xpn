@@ -18,6 +18,21 @@
  *
  */
 
+/**
+ * @file xpn-rm.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
+
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -28,6 +43,10 @@
 
 #include "all_system.h"
 #include "xpn.h"
+
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
 void usage(char *program_name)
 {

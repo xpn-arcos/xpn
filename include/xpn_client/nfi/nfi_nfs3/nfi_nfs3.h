@@ -85,7 +85,7 @@ struct nfi_nfs3_fhandle
  * @par Returns
  *    Nothing.
  */
-void NFItoNFS3attr(fattr3 *nfs_att, struct nfi_attr *nfi_att);
+void nfi_to_nfs3_attr(fattr3 *nfs_att, struct nfi_attr *nfi_att);
 
 /**
  * @brief 'TODO'.
@@ -97,7 +97,7 @@ void NFItoNFS3attr(fattr3 *nfs_att, struct nfi_attr *nfi_att);
  * @par Returns
  *    Nothing.
  */
-void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs_att);
+void nfs3_to_nfi_attr(struct nfi_attr *nfi_att, fattr3 *nfs_att);
 
 /**
  * @brief 'TODO'.
@@ -109,7 +109,7 @@ void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs_att);
  * @par Returns
  *    Nothing.
  */
-void NFS3toNFIInfo(struct nfi_info *nfi_inf, fsinfo3resok *nfs_inf);
+void nfs3_to_nfi_info(struct nfi_info *nfi_inf, fsinfo3resok *nfs_inf);
 
 /************************************************************
  * PUBLIC FUNCTIONS TO USE NFS SERVERS			    *

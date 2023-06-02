@@ -18,6 +18,17 @@
  *
  */
 
+/**
+ * @file xpn_ls.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
 /************************************************
  *  ... Includes
  ***********************************************/
@@ -29,8 +40,19 @@
 #include <sys/stat.h>
 #include "mpi.h"
 
-/* ... Functions / Funciones ......................................... */
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param dir_name 'TODO'.
+ * @param fd 'TODO'.
+ * @return 'TODO'.
+ */
 int list(char *dir_name, FILE *fd)
 {
   int ret;

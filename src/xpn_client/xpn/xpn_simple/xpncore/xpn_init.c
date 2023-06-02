@@ -157,7 +157,7 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
     return res;
   }
 
-  fd = XpnPartitionOpen(); /* XpnPartitionOpen */
+  fd = xpn_partition_open(); /* xpn_partition_open */
   if (fd == NULL)
   {
     xpn_err(XPNERR_CONF);
@@ -171,15 +171,15 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
   }
 
   i = 0;
-  while ((res = XpnGetNextPartition(fd, xpn_parttable[i].name)) > 0)
+  while ((res = xpn_get_next_partition(fd, xpn_parttable[i].name)) > 0)
   {
     xpn_parttable[i].initialized = 0;
 
-    xpn_parttable[i].id = XpnGetIdPartition(fd, xpn_parttable[i].name);
+    xpn_parttable[i].id = xpn_get_id_partition(fd, xpn_parttable[i].name);
     XPN_DEBUG("Partition %d: name=%s\n", xpn_parttable[i].id, xpn_parttable[i].name);
 
     /* compruebo los errores???? */
-    if (XpnGetInfoPartition(fd, &(xpn_parttable[i])) == -1)
+    if (xpn_get_info_partition(fd, &(xpn_parttable[i])) == -1)
     {
       fprintf(stderr, "(4)xpn_init: %s info incomplete.\n", xpn_parttable[i].name);
 
@@ -190,7 +190,7 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
       return res;
     }
 
-    xpn_parttable[i].data_nserv = XpnGetNumServersPartition(fd, &(xpn_parttable[i]), XPN_DATA_SERVER);
+    xpn_parttable[i].data_nserv = xpn_get_num_servers_partition(fd, &(xpn_parttable[i]), XPN_DATA_SERVER);
     XPN_DEBUG("Partition %d: data_nserv=%d\n", xpn_parttable[i].id, xpn_parttable[i].data_nserv);
 
     xpn_parttable[i].data_serv = (struct nfi_server *)malloc(xpn_parttable[i].data_nserv * sizeof(struct nfi_server));
@@ -211,11 +211,11 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
     {
       // TODO: AQUI??
 
-      res = XpnGetServer(fd, &(xpn_parttable[i]), &(xpn_parttable[i].data_serv[j]), XPN_DATA_SERVER);
+      res = xpn_get_server(fd, &(xpn_parttable[i]), &(xpn_parttable[i].data_serv[j]), XPN_DATA_SERVER);
       if (res < 0)
       {
 
-        XpnPartitionClose(fd);
+        xpn_partition_close(fd);
         for (j = 0; j < i; j++)
         {
           xpn_destroy_servers(&(xpn_parttable[j]));
@@ -234,7 +234,7 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
     i++;
     if (i == XPN_MAX_PART)
     {
-      XpnPartitionClose(fd);
+      xpn_partition_close(fd);
       for (j = 0; j < XPN_MAX_PART; j++)
       {
         xpn_destroy_servers(&(xpn_parttable[j]));
@@ -251,7 +251,7 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
   if (res < 0)
   {
-    XpnPartitionClose(fd);
+    xpn_partition_close(fd);
     for (j = 0; j < i; j++)
     {
       xpn_destroy_servers(&(xpn_parttable[j]));
@@ -266,7 +266,7 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
     return res;
   }
 
-  XpnPartitionClose(fd);
+  xpn_partition_close(fd);
 
   /* Init the file table */
   res = xpn_init_file_table();

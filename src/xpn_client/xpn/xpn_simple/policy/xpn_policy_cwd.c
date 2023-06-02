@@ -40,7 +40,7 @@ extern struct xpn_cwd xpn_cwddir;
  *  ... Functions
  ***********************************************/
 
-int XpnGetAbsolutePath(const char *path, char *path_part)
+int xpn_get_absolute_path(const char *path, char *path_part)
 {
   path_part[0] = '\0';
   if (path[0] != '/')

@@ -145,7 +145,7 @@ extern "C"
 	 *    None.
 	 * @return 'TODO'.
 	 */
-	struct conf_connect_st *XpnPartitionOpen(void);
+	struct conf_connect_st *xpn_partition_open(void);
 
 	/**
 	 * @brief 'TODO'.
@@ -156,7 +156,7 @@ extern "C"
 	 * @par Returns
 	 *    Nothing.
 	 */
-	void XpnPartitionClose(struct conf_connect_st *fconf);
+	void xpn_partition_close(struct conf_connect_st *fconf);
 
 	/**
 	 * @brief 'TODO'.
@@ -167,7 +167,7 @@ extern "C"
 	 * @param name 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetNextPartition(struct conf_connect_st *fconf, char *name);
+	int xpn_get_next_partition(struct conf_connect_st *fconf, char *name);
 
 	/**
 	 * @brief 'TODO'.
@@ -178,7 +178,7 @@ extern "C"
 	 * @param name 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetIdPartition(struct conf_connect_st *fconf, char *name);
+	int xpn_get_id_partition(struct conf_connect_st *fconf, char *name);
 
 	/**
 	 * @brief 'TODO'.
@@ -189,7 +189,7 @@ extern "C"
 	 * @param part 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetInfoPartition(struct conf_connect_st *fconf, struct xpn_partition *part);
+	int xpn_get_info_partition(struct conf_connect_st *fconf, struct xpn_partition *part);
 
 	/**
 	 * @brief 'TODO'.
@@ -201,7 +201,7 @@ extern "C"
 	 * @param type 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetNumServersPartition(struct conf_connect_st *fconf, struct xpn_partition *part, int type);
+	int xpn_get_num_servers_partition(struct conf_connect_st *fconf, struct xpn_partition *part, int type);
 
 	/**
 	 * @brief 'TODO'.
@@ -211,7 +211,7 @@ extern "C"
 	 * @param pd 'TODO'.
 	 * @return 'TODO'.
 	 */
-	struct xpn_partition *XpnSearchPart(int pd);
+	struct xpn_partition *xpn_search_part(int pd);
 
 	/**
 	 * @brief 'TODO'.
@@ -224,7 +224,7 @@ extern "C"
 	 * @param type 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetServer(struct conf_connect_st *fconf, struct xpn_partition *part, struct nfi_server *serv, int type);
+	int xpn_get_server(struct conf_connect_st *fconf, struct xpn_partition *part, struct nfi_server *serv, int type);
 
 	/**
 	 * @brief 'TODO'.
@@ -234,7 +234,7 @@ extern "C"
 	 * @param path 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetPartition(char *path);
+	int xpn_get_partition(char *path);
 
 #ifdef __cplusplus
 }

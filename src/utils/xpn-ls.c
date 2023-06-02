@@ -18,6 +18,21 @@
  *
  */
 
+/**
+ * @file xpn-ls.c
+ * @brief File to 'TODO'.
+ *
+ * File to 'TODO'.
+ *
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @date  Jul 22, 2021
+ * @bug No known bugs.
+ */
+
+/************************************************
+ *  ... Includes
+ ***********************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -26,10 +41,23 @@
 #include "all_system.h"
 #include "xpn.h"
 
-
 #define NFSMAXPATHLEN 1024
 
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param attr 'TODO'.
+ * @param attrstr 'TODO'.
+ * 
+ * @par Returns
+ *    Nothing.
+ */
 void get_perm(int attr, char *attrstr)
 {
   attrstr[0] = S_ISDIR(attr) ? 'd' : '-';
@@ -45,6 +73,16 @@ void get_perm(int attr, char *attrstr)
   attrstr[10] = '\0';
 }
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path 'TODO'.
+ * 
+ * @par Returns
+ *    Nothing.
+ */
 void del_slash(char *path)
 {
   int i, j, k;
