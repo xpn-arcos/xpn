@@ -20,9 +20,9 @@
 
 /**
  * @file syscall_proxies.h
- * @brief Header file to 'TODO'.
+ * @brief Header file to Syscall Proxies.
  *
- * Header file to 'TODO'.
+ * The proxy functions that make the jump to the libc functions are defined.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  * @date  Jul 22, 2021

@@ -43,9 +43,9 @@
  *  ... Constants
  ***********************************************/
 
-#define MAX_THREADS 2048
+#define MAX_THREADS    2048
 #define MAX_OPERATIONS 1024
-#define STACK_SIZE (256 * KB)
+#define STACK_SIZE     (256 * KB)
 
 /************************************************
  *  ... Datatype
@@ -57,11 +57,11 @@
  *  @var st_th::params
  *    A 'TODO'.
  *  @var st_th::function
- *    A 'TODO'.
+ *    Pointer to the function that you want to execute in the worker.
  *  @var st_th::id
- *    A 'TODO'.
+ *    Identification.
  *  @var st_th::type_op
- *    A 'TODO'.
+ *    Type of operation.
  *  @var st_th::rank_client_id
  *    A 'TODO'.
  *  @var st_th::sd
@@ -81,28 +81,27 @@
  *  @var st_th::wait4me
  *    A 'TODO'.
  */
-struct st_th
-{
-  void *params;
-  void (*function)(struct st_th);
+struct st_th {
+    void *params;
+    void (*function)(struct st_th);
 
-  // server stuff
-  int id;
-  int type_op;
-  int rank_client_id;
-  long sd;
+    // server stuff
+    int id;
+    int type_op;
+    int rank_client_id;
+    long sd;
 
-  // w: worker_ondemand/worker_pool as void *
-  void *w;
-  // v: original st_th as void *
-  void *v;
+    // w: worker_ondemand/worker_pool as void *
+    void *w;
+    // v: original st_th as void *
+    void *v;
 
-  // client stuff
-  pthread_t th_worker;
-  pthread_mutex_t m_wait;
-  pthread_cond_t c_wait;
-  int r_wait;
-  int wait4me; // (wait4me==1) ? launch + wait : launch
+    // client stuff
+    pthread_t th_worker;
+    pthread_mutex_t m_wait;
+    pthread_cond_t c_wait;
+    int r_wait;
+    int wait4me;  // (wait4me==1) ? launch + wait : launch
 };
 
 #endif

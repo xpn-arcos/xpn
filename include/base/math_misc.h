@@ -20,10 +20,10 @@
 
 /**
  * @file math_misc.h
- * @brief Header file to 'TODO'.
+ * @brief Header file to RAID operations.
  *
- * Header file to 'TODO'.
- *
+ * Header file to perform different operations (hash, parity, xor, etc) on RAID.
+ * 
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  * @date  Jul 22, 2021
  * @bug No known bugs.

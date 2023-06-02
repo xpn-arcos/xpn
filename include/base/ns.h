@@ -20,9 +20,10 @@
 
 /**
  * @file ns.h
- * @brief Header file to 'TODO'.
+ * @brief Header file to Name Server.
  *
- * Header file to 'TODO'.
+ * A header file that contains the functionality to operate as a DNS (domain name system). 
+ * In a DNS file the servers to be used in xpand are published, unpublished or looked up.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  * @date  Jul 22, 2021
@@ -64,7 +65,7 @@
 /**
  * @brief Get hostname.
  *
- * 'TODO'.
+ * Ask the hostname for its name.
  *
  * @param srv_name 'TODO'.
  * @par Returns
@@ -73,7 +74,7 @@
 void ns_get_hostname(char *srv_name);
 
 /**
- * @brief 'TODO'.
+ * @brief Get IP Server.
  *
  * 'TODO'.
  * 
@@ -84,9 +85,9 @@ void ns_get_hostname(char *srv_name);
 char *ns_get_host_ip(void);
 
 /**
- * @brief 'TODO'.
+ * @brief Publish Server.
  *
- * 'TODO'.
+ * When the server starts up it publishes/writes (name,ip/communicator) to the DNS file.
  *
  * @param dns_file 'TODO'.
  * @param protocol 'TODO'.
@@ -98,9 +99,9 @@ char *ns_get_host_ip(void);
 int ns_publish(char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
 
 /**
- * @brief 'TODO'.
+ * @brief Unpublish Server.
  *
- * 'TODO'.
+ * When the server is shut down the server is removed from the DNS file.
  *
  * @param dns_file 'TODO'.
  * @param protocol 'TODO'.
@@ -110,7 +111,7 @@ int ns_publish(char *dns_file, char *protocol, char *param_srv_name, char *srv_i
 int ns_unpublish(char *dns_file, char *protocol, char *param_srv_name);
 
 /**
- * @brief 'TODO'.
+ * @brief Lookup Server.
  *
  * 'TODO'.
  *
