@@ -37,7 +37,7 @@
 /************************************************
  *  ... Functions
  ***********************************************/
-int workers_init(worker_t *w, int thread_mode)
+int base_workers_init(worker_t *w, int thread_mode)
 {
   // check arguments...
   if (NULL == w)
@@ -52,13 +52,13 @@ int workers_init(worker_t *w, int thread_mode)
   switch (w->thread_mode)
   {
   case TH_OP:
-    debug_info("[WORKER] worker_ondemand_init\n");
-    worker_ondemand_init(&(w->w1));
+    debug_info("[WORKER] base_worker_ondemand_init\n");
+    base_worker_ondemand_init(&(w->w1));
     break;
 
   case TH_POOL:
-    debug_info("[WORKER] worker_pool_init\n");
-    worker_pool_init(&(w->w2));
+    debug_info("[WORKER] base_worker_pool_init\n");
+    base_worker_pool_init(&(w->w2));
     break;
 
   case TH_NOT:
@@ -74,7 +74,7 @@ int workers_init(worker_t *w, int thread_mode)
   return 1;
 }
 
-int workers_launch(worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th))
+int base_workers_launch(worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th))
 {
   // check arguments...
   if (NULL == w)
@@ -87,13 +87,13 @@ int workers_launch(worker_t *w, struct st_th *th_arg, void (*worker_function)(st
   switch (w->thread_mode)
   {
   case TH_OP:
-    debug_info("[WORKER] worker_ondemand_launch\n");
-    worker_ondemand_launch(&(w->w1), th_arg, worker_function);
+    debug_info("[WORKER] base_worker_ondemand_launch\n");
+    base_worker_ondemand_launch(&(w->w1), th_arg, worker_function);
     break;
 
   case TH_POOL:
-    debug_info("[WORKER] worker_pool_enqueue\n");
-    worker_pool_enqueue(&(w->w2), th_arg, worker_function); // Enqueue the operation on the buffer
+    debug_info("[WORKER] base_worker_pool_enqueue\n");
+    base_worker_pool_enqueue(&(w->w2), th_arg, worker_function); // Enqueue the operation on the buffer
     break;
 
   case TH_NOT:
@@ -110,7 +110,7 @@ int workers_launch(worker_t *w, struct st_th *th_arg, void (*worker_function)(st
   return 1;
 }
 
-int workers_wait(worker_t *w, struct st_th *th_arg)
+int base_workers_wait(worker_t *w, struct st_th *th_arg)
 {
   // check arguments...
   if (NULL == w)
@@ -122,13 +122,13 @@ int workers_wait(worker_t *w, struct st_th *th_arg)
   switch (w->thread_mode)
   {
   case TH_OP:
-    debug_info("[WORKER] worker_ondemand_wait\n");
-    worker_ondemand_wait(th_arg);
+    debug_info("[WORKER] base_worker_ondemand_wait\n");
+    base_worker_ondemand_wait(th_arg);
     break;
 
   case TH_POOL:
-    debug_info("[WORKER] worker_pool_wait\n");
-    worker_pool_wait(th_arg);
+    debug_info("[WORKER] base_worker_pool_wait\n");
+    base_worker_pool_wait(th_arg);
     break;
 
   case TH_NOT:
@@ -144,7 +144,7 @@ int workers_wait(worker_t *w, struct st_th *th_arg)
   return 1;
 }
 
-void workers_destroy(worker_t *w)
+void base_workers_destroy(worker_t *w)
 {
   // check arguments...
   if (NULL == w)
@@ -157,13 +157,13 @@ void workers_destroy(worker_t *w)
   switch (w->thread_mode)
   {
   case TH_OP:
-    debug_info("[WORKER] workers_ondemand_destroy\n");
-    workers_ondemand_destroy(&(w->w1));
+    debug_info("[WORKER] base_workers_ondemand_destroy\n");
+    base_workers_ondemand_destroy(&(w->w1));
     break;
 
   case TH_POOL:
-    debug_info("[WORKER] worker_pool_destroy\n");
-    worker_pool_destroy(&(w->w2)); // Destroy worker pool
+    debug_info("[WORKER] base_worker_pool_destroy\n");
+    base_worker_pool_destroy(&(w->w2)); // Destroy worker pool
     break;
 
   case TH_NOT:

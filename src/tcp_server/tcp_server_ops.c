@@ -1362,7 +1362,7 @@ void tcp_server_op_preload(tcp_server_param_st *params, int sd, struct st_tcp_se
     return;
   }
 
-  ret = ParseURL(head->u_st_tcp_server_msg.op_preload.virtual_path, protocol, user, machine, port, file, params1);
+  ret = base_urlstr_parse_url(head->u_st_tcp_server_msg.op_preload.virtual_path, protocol, user, machine, port, file, params1);
 
   // Create new file
   fd_dest = filesystem_creat(file, 0777);
@@ -1435,7 +1435,7 @@ void tcp_server_op_flush(tcp_server_param_st *params, int sd, struct st_tcp_serv
   int BLOCKSIZE = head->u_st_tcp_server_msg.op_flush.block_size;
   char buffer[BLOCKSIZE];
 
-  ret = ParseURL(head->u_st_tcp_server_msg.op_flush.virtual_path, protocol, user, machine, port, file, params1);
+  ret = base_urlstr_parse_url(head->u_st_tcp_server_msg.op_flush.virtual_path, protocol, user, machine, port, file, params1);
 
   // Open origin file
   fd_orig = filesystem_open(file, O_RDONLY);

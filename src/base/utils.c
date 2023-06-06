@@ -38,7 +38,7 @@
  *  ... Functions
  ***********************************************/
 
-long utils_get_time(void)
+long base_utils_get_time(void)
 {
    struct timeval timenow;
 

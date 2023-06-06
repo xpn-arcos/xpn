@@ -38,7 +38,7 @@
  *  ... Functions
  ***********************************************/
 
-int MATH_MISC_hash(
+int base_math_misc_hash(
     char *file,
     int nServ)
 {
@@ -67,7 +67,7 @@ int MATH_MISC_hash(
      return (int)num % nServ;
 }
 
-int MATH_MISC_locateInRAID5withInternalParity(
+int base_math_misc_locate_in_raid5_with_internal_parity(
     int i,   /* block index */
     int m,   /* how many servers */
     int *SP, /* Server for Parity */
@@ -107,7 +107,7 @@ int MATH_MISC_locateInRAID5withInternalParity(
      return (1);
 }
 
-int MATH_MISC_locateInRAID5withExternalParity(
+int base_math_misc_locate_in_raid5_with_external_parity(
     int i,   /* block index */
     int m,   /* how many servers */
     int *SP, /* Server for Parity */
@@ -144,7 +144,7 @@ int MATH_MISC_locateInRAID5withExternalParity(
      return (1);
 }
 
-int MATH_MISC_Xor(
+int base_math_misc_xor(
     char *block_result,
     char *block_1,
     char *block_2,
@@ -166,7 +166,7 @@ int MATH_MISC_Xor(
      return (1);
 }
 
-int MATH_MISC_Xor3(
+int base_math_misc_xor3(
     char *block_result,
     char *block_1,
     char *block_2,
@@ -189,7 +189,7 @@ int MATH_MISC_Xor3(
      return (1);
 }
 
-int MATH_MISC_XorN(
+int base_math_misc_xor_n(
     char *block_result,
     char **blocks,
     int nblocks,

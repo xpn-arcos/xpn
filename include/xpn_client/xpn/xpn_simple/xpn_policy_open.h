@@ -78,7 +78,7 @@ extern "C"
 	 * @param p 'TODO'.
 	 * @return 'TODO'.
 	 */
-	ssize_t XpnGetSizeThreads(struct xpn_partition *p);
+	ssize_t xpn_get_size_threads(struct xpn_partition *p);
 
 	/**
 	 * @brief 'TODO'.
@@ -91,7 +91,7 @@ extern "C"
 	 * @par Returns
 	 *    Nothing.
 	 */
-	void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv);
+	void xpn_get_url_server(struct nfi_server *serv, char *abs_path, char *url_serv);
 
 	/**
 	 * @brief 'TODO'.
@@ -106,7 +106,7 @@ extern "C"
 	 * @param type 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetServers(int op, int pd, char *abs_path, int fd, struct nfi_server ***servers, int type);
+	int xpn_get_servers(int op, int pd, char *abs_path, int fd, struct nfi_server ***servers, int type);
 
 	/**
 	 * @brief 'TODO'.
@@ -117,7 +117,7 @@ extern "C"
 	 * @param pos 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos);
+	int xpn_get_metadata_pos(struct xpn_metadata *mdata, int pos);
 
 	/**
 	 * @brief 'TODO'.
@@ -129,7 +129,7 @@ extern "C"
 	 * @param path 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path);
+	int xpn_create_metadata(struct xpn_metadata *mdata, int pd, char *path);
 
 	/**
 	 * @brief 'TODO'.
@@ -144,7 +144,7 @@ extern "C"
 	 * @param pd 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path, int pd);
+	int xpn_read_metadata(struct xpn_metadata *mdata, int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path, int pd);
 
 	/**
 	 * @brief 'TODO'.
@@ -158,7 +158,7 @@ extern "C"
 	 * @param path 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path);
+	int xpn_update_metadata(struct xpn_metadata *mdata, int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path);
 
 	/**
 	 * @brief 'TODO'.
@@ -171,7 +171,7 @@ extern "C"
 	 * @param path 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetFh(struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path);
+	int xpn_get_fh(struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path);
 
 	/**
 	 * @brief 'TODO'.
@@ -182,7 +182,7 @@ extern "C"
 	 * @param st 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetAtribFd(int fd, struct stat *st);
+	int xpn_get_atrib_fd(int fd, struct stat *st);
 
 	/**
 	 * @brief 'TODO'.
@@ -193,7 +193,7 @@ extern "C"
 	 * @param st 'TODO'.
 	 * @return 'TODO'.
 	 */
-	int XpnGetAtribPath(char *path, struct stat *st);
+	int xpn_get_atrib_path(char *path, struct stat *st);
 
 #ifdef __cplusplus
 }

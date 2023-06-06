@@ -58,7 +58,7 @@ extern "C"
      * @param serv [out] The server in which is located the given offset.
      * @return Returns 0 on success or -1 on error.
      */
-    int XpnGetBlock(int fd, off_t global_offset, off_t *local_offset, int *serv);
+    int xpn_get_block(int fd, off_t global_offset, off_t *local_offset, int *serv);
 
     /**
      * @brief Read blocks.
@@ -76,7 +76,7 @@ extern "C"
      *
      * @return Returns a pointer to a new buffer on success, or NULL on error.
      */
-    void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
+    void *xpn_read_blocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
 
     /**
      * @brief 'TODO'.
@@ -93,7 +93,7 @@ extern "C"
      * @param new_buffer 'TODO'.
      * @return 'TODO'.
      */
-    int XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer);
+    int xpn_read_blocks_finish(int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer);
 
     /**
      * @brief Write blocks.
@@ -111,7 +111,7 @@ extern "C"
      *
      * @return Returns 0 on success or -1 on error.
      */
-    void *XpnWriteBlocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
+    void *xpn_write_blocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
 
     /**
      * @brief 'TODO'.
@@ -128,7 +128,7 @@ extern "C"
      * @param new_buffer 'TODO'.
      * @return 'TODO'.
      */
-    int XpnWriteBlocksFinish(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer);
+    int xpn_write_blocks_finish(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, void *new_buffer);
 
     /**
      * @brief 'TODO'.
@@ -140,7 +140,7 @@ extern "C"
      * @param num_servers 'TODO'.
      * @return 'TODO'.
      */
-    ssize_t XpnReadGetTotalBytes(int fd, ssize_t *res_v, int num_servers);
+    ssize_t xpn_read_get_total_bytes(int fd, ssize_t *res_v, int num_servers);
 
     /**
      * @brief 'TODO'.
@@ -152,7 +152,7 @@ extern "C"
      * @param num_servers 'TODO'.
      * @return 'TODO'.
      */
-    ssize_t XpnWriteGetTotalBytes(int fd, ssize_t *res_v, int num_servers);
+    ssize_t xpn_write_get_total_bytes(int fd, ssize_t *res_v, int num_servers);
 
 #ifdef __cplusplus
 }

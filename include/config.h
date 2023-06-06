@@ -134,7 +134,7 @@
 #define PACKAGE_NAME "Expand"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Expand 2.0"
+#define PACKAGE_STRING "Expand 2.3.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "expand"
@@ -143,7 +143,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.0"
+#define PACKAGE_VERSION "2.3.0"
 
 /* The size of `char *', as computed by sizeof. */
 #define SIZEOF_CHAR_P 8
@@ -167,7 +167,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "2.0"
+#define VERSION "2.3.0"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

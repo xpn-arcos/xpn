@@ -54,7 +54,7 @@
  * @param serv 'TODO'.
  * @return 'TODO'.
  */
-int nfi_local_keepConnected(struct nfi_server *serv)
+int nfi_local_keep_connected(struct nfi_server *serv)
 {
   if (NULL == serv)
   {
@@ -91,7 +91,7 @@ int nfi_local_keepConnected(struct nfi_server *serv)
  * @par Returns
  *    Nothing.
  */
-void NFItoLOCALattr(struct stat *att, struct nfi_attr *nfi_att)
+void nfi_to_local_attr(struct stat *att, struct nfi_attr *nfi_att)
 {
   att->st_dev = nfi_att->st_dev;
   att->st_ino = nfi_att->st_ino;
@@ -127,7 +127,7 @@ void NFItoLOCALattr(struct stat *att, struct nfi_attr *nfi_att)
  * @par Returns
  *    Nothing.
  */
-void LOCALtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
+void local_to_nfi_attr(struct nfi_attr *nfi_att, struct stat *att)
 {
   nfi_att->st_dev = att->st_dev;
   nfi_att->st_ino = att->st_ino;
@@ -163,7 +163,7 @@ void LOCALtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
  * @par Returns
  *    Nothing.
  */
-void LOCALtoNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *local_inf)
+void local_to_nfi_info(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *local_inf)
 {
   // TODO
 }
@@ -221,7 +221,7 @@ int nfi_local_init(char *url, struct nfi_server *serv, __attribute__((__unused__
   serv->ops->nfi_statfs = nfi_local_statfs;
 
   // ParseURL...
-  ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, prt, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     // local_err(LOCALERR_URL) ;
@@ -254,14 +254,14 @@ int nfi_local_init(char *url, struct nfi_server *serv, __attribute__((__unused__
   strcpy(server_aux->path, dir);
   serv->private_info = (void *)server_aux;
 
-  serv->url = STRING_MISC_StrDup(url); // full URL
+  serv->url = base_string_misc_dup(url); // full URL
   if (serv->url == NULL)
   {
     debug_error("ERROR: out of memory\n");
     return -1;
   }
 
-  serv->server = STRING_MISC_StrDup(server); // URL.server
+  serv->server = base_string_misc_dup(server); // URL.server
   if (serv->server == NULL)
   {
     debug_error("ERROR: out of memory\n");
@@ -414,7 +414,7 @@ int nfi_local_reconnect(struct nfi_server *serv) // TODO
     return -1;
   }
 
-  ret = ParseURL(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
+  ret = base_urlstr_parse_url(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
   if (ret < 0)
   {
     debug_error("nfi_local_reconnect: incorrect '%s' URL.\n", serv->url);
@@ -452,11 +452,11 @@ int nfi_local_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fho, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // from url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, NULL, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_local_open: url %s incorrect.\n", url);
@@ -509,11 +509,11 @@ int nfi_local_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, 
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(attr, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, NULL, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "ERROR: nfi_local_create: url %s incorrect.\n", url);
@@ -558,7 +558,7 @@ int nfi_local_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, 
     return -1;
   }
 
-  LOCALtoNFIattr(attr, &st);
+  local_to_nfi_attr(attr, &st);
 
   DEBUG_END();
 
@@ -575,7 +575,7 @@ ssize_t nfi_local_read(struct nfi_server *serv, struct nfi_fhandle *fh, void *bu
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // private_info
@@ -611,7 +611,7 @@ ssize_t nfi_local_write(struct nfi_server *serv, struct nfi_fhandle *fh, void *b
 
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // private_info...
@@ -641,7 +641,7 @@ int nfi_local_close(struct nfi_server *serv, struct nfi_fhandle *fh)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // private_info
@@ -675,11 +675,11 @@ int nfi_local_remove(struct nfi_server *serv, char *url)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(url, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // from url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, NULL, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_local_remove: url %s incorrect.\n", url);
@@ -712,11 +712,11 @@ int nfi_local_rename(struct nfi_server *serv, char *old_url, char *new_url)
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(old_url, LOCALERR_PARAM);
   NULL_RET_ERR(new_url, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Get fields...
-  ret = ParseURL(old_url, NULL, NULL, NULL, NULL, NULL, old_path);
+  ret = base_urlstr_parse_url(old_url, NULL, NULL, NULL, NULL, NULL, old_path);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_local_open: url %s incorrect.\n", old_url);
@@ -724,7 +724,7 @@ int nfi_local_rename(struct nfi_server *serv, char *old_url, char *new_url)
     return -1;
   }
 
-  ret = ParseURL(new_url, NULL, NULL, NULL, NULL, NULL, new_path);
+  ret = base_urlstr_parse_url(new_url, NULL, NULL, NULL, NULL, NULL, new_path);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_local_open: url %s incorrect.\n", new_path);
@@ -758,13 +758,13 @@ int nfi_local_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nf
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
   NULL_RET_ERR(attr, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // copy private information...
   // fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
-  ret = ParseURL(fh->url, NULL, NULL, NULL, NULL, NULL, dir);
+  ret = base_urlstr_parse_url(fh->url, NULL, NULL, NULL, NULL, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_mpi_server_getattr: url %s incorrect.\n", dir);
@@ -780,7 +780,7 @@ int nfi_local_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nf
     return ret;
   }
 
-  LOCALtoNFIattr(attr, &st);
+  local_to_nfi_attr(attr, &st);
 
   DEBUG_END();
 
@@ -799,12 +799,12 @@ int nfi_local_setattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nf
   NULL_RET_ERR(fh, LOCALERR_PARAM);
   NULL_RET_ERR(attr, LOCALERR_PARAM);
   NULL_RET_ERR(fh->priv_fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // TODO: setattr
 
-  NFItoLOCALattr(&st, attr);
+  nfi_to_local_attr(&st, attr);
 
   DEBUG_END();
 
@@ -824,11 +824,11 @@ int nfi_local_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(attr, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Get fields...
-  ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, NULL, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_local_mkdir: url %s incorrect.\n", url);
@@ -861,7 +861,7 @@ int nfi_local_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
   fh->type = NFIDIR;
   fh->priv_fh = (void *)fh_aux;
 
-  fh->url = STRING_MISC_StrDup(url);
+  fh->url = base_string_misc_dup(url);
   if (fh->url == NULL)
   {
     local_err(LOCALERR_MEMORY);
@@ -869,7 +869,7 @@ int nfi_local_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
     return -1;
   }
 
-  LOCALtoNFIattr(attr, &st);
+  local_to_nfi_attr(attr, &st);
 
   DEBUG_END();
 
@@ -889,11 +889,11 @@ int nfi_local_opendir(struct nfi_server *serv, char *url, struct nfi_fhandle *fh
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(url, LOCALERR_PARAM);
   NULL_RET_ERR(fho, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Get fields...
-  ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, NULL, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_local_opendir: url %s incorrect.\n", url);
@@ -949,7 +949,7 @@ int nfi_local_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, struct di
     local_err(LOCALERR_NOTDIR);
     return -1;
   }
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // private_info...
@@ -981,7 +981,7 @@ int nfi_local_closedir(struct nfi_server *serv, struct nfi_fhandle *fh)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(fh, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Do closedir
@@ -1011,11 +1011,11 @@ int nfi_local_rmdir(struct nfi_server *serv, char *url)
   // Check arguments...
   NULL_RET_ERR(serv, LOCALERR_PARAM);
   NULL_RET_ERR(url, LOCALERR_PARAM);
-  nfi_local_keepConnected(serv);
+  nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCALERR_PARAM);
 
   // Get fields...
-  ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, NULL, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_local_rmdir: url %s incorrect.\n", url);
@@ -1058,7 +1058,7 @@ int nfi_local_statfs(__attribute__((__unused__)) struct nfi_server *serv, __attr
   }
 
   // Check fields...
-        nfi_local_keepConnected(serv) ;
+        nfi_local_keep_connected(serv) ;
   if (serv->private_info == NULL) {
       debug_error("serv->private_info field is NULL.\n") ;
       return -1;
@@ -1075,7 +1075,7 @@ int nfi_local_statfs(__attribute__((__unused__)) struct nfi_server *serv, __attr
     return -1;
   }
 
-  LOCALtoNFIInfo(inf, &localinf) ;
+  local_to_nfi_info(inf, &localinf) ;
   */
 
   // TODO

@@ -37,7 +37,7 @@
 /************************************************************
  * PRIVATE FUNCTIONS TO USE NFS SERVERS			    *
  ************************************************************/
-void NFItoNFS3attr(fattr3 *nfs3_att, struct nfi_attr *nfi_att)
+void nfi_to_nfs3_attr(fattr3 *nfs3_att, struct nfi_attr *nfi_att)
 {
 	nfs3_att->st_dev = nfi_att->st_dev;
 	nfs3_att->st_ino = nfi_att->st_ino;
@@ -70,7 +70,7 @@ void NFItoNFS3attr(fattr3 *nfs3_att, struct nfi_attr *nfi_att)
 	// nfs3_att->ctime.useconds	= (u_long)0;
 }
 
-void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs3_att)
+void nfs3_to_nfi_attr(struct nfi_attr *nfi_att, fattr3 *nfs3_att)
 {
 	nfi_att->st_dev = nfs3_att->st_dev;
 	nfi_att->st_ino = nfs3_att->st_ino;
@@ -107,7 +107,7 @@ void NFS3toNFIattr(struct nfi_attr *nfi_att, fattr3 *nfs3_att)
 	nfi_att->private_info = NULL;
 }
 
-void NFS3toNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) fsinfo3resok *nfs3_inf)
+void nfs3_to_nfi_info(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) fsinfo3resok *nfs3_inf)
 {
 	// TODO
 }
@@ -161,7 +161,7 @@ int nfi_nfs3_init(char *url, struct nfi_server *serv, __attribute__((__unused__)
 	serv->ops->nfi_statfs = nfi_nfs3_statfs;
 
 	// printf("url %s\n",url);
-	ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, prt, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -295,7 +295,7 @@ int nfi_nfs3_disconnect(struct nfi_server *serv)
 		if (server_aux->cl != NULL)
 			close_connection_nfs3(server_aux->cl);
 
-		ret = ParseURL(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
+		ret = base_urlstr_parse_url(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
 		if (ret < 0)
 		{
 			fprintf(stderr, "nfi_nfs3_disconnect: url %s incorrect.\n", serv->url);
@@ -337,7 +337,7 @@ int nfi_nfs3_reconnect(struct nfi_server *serv)
 	int ret;
 	struct nfi_nfs3_server *server_aux;
 
-	ret = ParseURL(serv->url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(serv->url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		fprintf(stderr, "nfi_nfs3_reconnect: url %s incorrect.\n", serv->url);
@@ -408,7 +408,7 @@ int nfi_nfs3_destroy(struct nfi_server *serv)
 		if (server_aux->cl != NULL)
 			close_connection_nfs3(server_aux->cl);
 
-		ret = ParseURL(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
+		ret = base_urlstr_parse_url(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
 		if (ret < 0)
 		{
 			nfs3_err(NFS3ERR_URL);
@@ -514,7 +514,7 @@ int nfi_nfs3_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi
 	}
 
 	nfs3_err(0);
-	NFS3toNFIattr(attr, &fatt);
+	nfs3_to_nfi_attr(attr, &fatt);
 	return 0;
 }
 
@@ -563,7 +563,7 @@ int nfi_nfs3_setattr(struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi
 	}
 #endif
 
-	NFItoNFS3attr(&fatt, attr);
+	nfi_to_nfs3_attr(&fatt, attr);
 
 	fh_aux = (struct nfi_nfs3_fhandle *)fh->priv_fh;
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
@@ -627,7 +627,7 @@ int nfs3_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
 	}
 #endif
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -656,7 +656,7 @@ int nfs3_open(struct nfi_server *serv, char *url, struct nfi_fhandle *fho)
 
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
 
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 
 	/* obtaine the NFS file handle */
 	ret = nfs3_lookup(&server_aux->fh,
@@ -907,7 +907,7 @@ int nfi_nfs3_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
 	}
 #endif
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -916,7 +916,7 @@ int nfi_nfs3_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
 	}
 
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file, dir);
+	ret = base_path_misc_get_name_file(file, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -936,7 +936,7 @@ int nfi_nfs3_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
 	bzero(fh_aux, sizeof(struct nfi_nfs3_fhandle));
 
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 	/* obtain the directory file handle */
 
 	ret = nfs3_lookup(&server_aux->fh,
@@ -982,7 +982,7 @@ int nfi_nfs3_create(struct nfi_server *serv, char *url, struct nfi_attr *attr, s
 	}
 	strcpy(fh->url, url);
 
-	NFS3toNFIattr(attr, &fatt);
+	nfs3_to_nfi_attr(attr, &fatt);
 
 	return 0;
 }
@@ -1022,7 +1022,7 @@ int nfi_nfs3_remove(struct nfi_server *serv, char *url)
 
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -1030,7 +1030,7 @@ int nfi_nfs3_remove(struct nfi_server *serv, char *url)
 		return -1;
 	}
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file, dir);
+	ret = base_path_misc_get_name_file(file, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -1038,7 +1038,7 @@ int nfi_nfs3_remove(struct nfi_server *serv, char *url)
 		return -1;
 	}
 
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 	/* obtain the directory file handle */
 	ret = nfs3_lookup(&server_aux->fh,
 					  dir,
@@ -1143,7 +1143,7 @@ int nfi_nfs3_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, st
 
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -1152,7 +1152,7 @@ int nfi_nfs3_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, st
 	}
 
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file, dir);
+	ret = base_path_misc_get_name_file(file, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -1171,7 +1171,7 @@ int nfi_nfs3_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, st
 
 	bzero(fh_aux, sizeof(struct nfi_nfs3_fhandle));
 
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 	/* obtain the directory file handle */
 	ret = nfs3_lookup(&server_aux->fh,
 					  dir,
@@ -1216,7 +1216,7 @@ int nfi_nfs3_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *attr, st
 	}
 	strcpy(fh->url, url);
 
-	NFS3toNFIattr(attr, &fatt);
+	nfs3_to_nfi_attr(attr, &fatt);
 
 	return 0;
 }
@@ -1255,7 +1255,7 @@ int nfi_nfs3_rmdir(struct nfi_server *serv, char *url)
 
 	server_aux = (struct nfi_nfs3_server *)serv->private_info;
 
-	ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+	ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -1263,7 +1263,7 @@ int nfi_nfs3_rmdir(struct nfi_server *serv, char *url)
 		return -1;
 	}
 	/* elimina del dir la parte del fichero */
-	ret = getNameFile(file, dir);
+	ret = base_path_misc_get_name_file(file, dir);
 	if (ret < 0)
 	{
 		nfs3_err(NFS3ERR_URL);
@@ -1271,7 +1271,7 @@ int nfi_nfs3_rmdir(struct nfi_server *serv, char *url)
 		return -1;
 	}
 
-	getDirWithURL(serv->url, dir);
+	get_dir_with_url(serv->url, dir);
 	/* obtain the directory file handle */
 	ret = nfs3_lookup(&server_aux->fh,
 					  dir,
@@ -1448,6 +1448,6 @@ int nfi_nfs3_statfs(struct nfi_server *serv, struct nfi_info *inf)
 	}
 	nfs3_err(0);
 
-	NFS3toNFIInfo(inf, &nfsinf);
+	nfs3_to_nfi_info(inf, &nfsinf);
 	return 0;
 }

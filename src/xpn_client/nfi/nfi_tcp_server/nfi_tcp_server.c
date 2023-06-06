@@ -161,7 +161,7 @@ int nfi_tcp_server_doRequest(struct nfi_tcp_server_server *server_aux, struct st
   return 0;
 }
 
-int nfi_tcp_server_keepConnected(struct nfi_server *serv)
+int nfi_tcp_server_keep_connected(struct nfi_server *serv)
 {
   if (NULL == serv)
   {
@@ -188,7 +188,7 @@ int nfi_tcp_server_keepConnected(struct nfi_server *serv)
  *  PRIVATE FUNCTIONS TO USE tcp_server SERVERS
  */
 
-void NFItoTCP_SERVERattr(struct stat *att, struct nfi_attr *nfi_att)
+void nfi_to_tcp_server_attr(struct stat *att, struct nfi_attr *nfi_att)
 {
   att->st_dev = nfi_att->st_dev;
   att->st_ino = nfi_att->st_ino;
@@ -214,7 +214,7 @@ void NFItoTCP_SERVERattr(struct stat *att, struct nfi_attr *nfi_att)
   att->st_ctime = nfi_att->at_ctime;     // time of last change
 }
 
-void TCP_SERVERtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
+void tcp_server_to_nfi_attr(struct nfi_attr *nfi_att, struct stat *att)
 {
   nfi_att->st_dev = att->st_dev;
   nfi_att->st_ino = att->st_ino;
@@ -240,7 +240,7 @@ void TCP_SERVERtoNFIattr(struct nfi_attr *nfi_att, struct stat *att)
   nfi_att->at_ctime = att->st_ctime;                               // time of last change
 }
 
-void TCP_SERVERtoNFIInfo(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *tcp_server_inf)
+void tcp_server_to_nfi_info(__attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *tcp_server_inf)
 {
   // TODO
 }
@@ -294,7 +294,7 @@ int nfi_tcp_server_init(char *url, struct nfi_server *serv, __attribute__((__unu
   serv->ops->nfi_statfs = nfi_tcp_server_statfs;
 
   // parse url...
-  ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, prt, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     tcp_server_err(TCP_SERVERERR_URL);
@@ -591,7 +591,7 @@ int nfi_tcp_server_reconnect(struct nfi_server *serv)
   }
 
   // ParseURL...
-  ret = ParseURL(serv->url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(serv->url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     tcp_server_err(TCP_SERVERERR_URL);
@@ -637,7 +637,7 @@ int nfi_tcp_server_open(struct nfi_server *serv, char *url, struct nfi_fhandle *
   // Check arguments...
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(fho, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
@@ -645,7 +645,7 @@ int nfi_tcp_server_open(struct nfi_server *serv, char *url, struct nfi_fhandle *
   debug_info("[NFI-TCP] nfi_tcp_server_open(ID=%s): begin %s\n", server_aux->id, url);
 
   // from url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_tcp_server_open: url %s incorrect.\n", url);
@@ -732,7 +732,7 @@ int nfi_tcp_server_create(struct nfi_server *serv, char *url, struct nfi_attr *a
   // Check arguments...
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(attr, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
@@ -740,7 +740,7 @@ int nfi_tcp_server_create(struct nfi_server *serv, char *url, struct nfi_attr *a
   debug_info("[NFI-TCP] nfi_tcp_server_create(ID=%s): begin %s\n", server_aux->id, url);
 
   // url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "ERROR: nfi_tcp_server_create: url %s incorrect.\n", url);
@@ -834,7 +834,7 @@ int nfi_tcp_server_create(struct nfi_server *serv, char *url, struct nfi_attr *a
     return -1;
   }
 
-  TCP_SERVERtoNFIattr(attr, &req.attr);
+  tcp_server_to_nfi_attr(attr, &req.attr);
 
   DEBUG_END();
 
@@ -854,7 +854,7 @@ ssize_t nfi_tcp_server_read(struct nfi_server *serv, struct nfi_fhandle *fh, voi
   // Check arguments...
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(fh, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info
@@ -998,7 +998,7 @@ ssize_t nfi_tcp_server_write(struct nfi_server *serv, struct nfi_fhandle *fh, vo
 
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(fh, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
@@ -1199,7 +1199,7 @@ int nfi_tcp_server_close(struct nfi_server *serv, struct nfi_fhandle *fh)
   // Check arguments...
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(fh, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
@@ -1267,7 +1267,7 @@ int nfi_tcp_server_remove(struct nfi_server *serv, char *url)
   // Check arguments...
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(url, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
@@ -1280,7 +1280,7 @@ int nfi_tcp_server_remove(struct nfi_server *serv, char *url)
   }
 
   // from url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_tcp_server_remove: url %s incorrect.\n", url);
@@ -1326,7 +1326,7 @@ int nfi_tcp_server_rename(struct nfi_server *serv, char *old_url, char *new_url)
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(old_url, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(new_url, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
@@ -1338,7 +1338,7 @@ int nfi_tcp_server_rename(struct nfi_server *serv, char *old_url, char *new_url)
     return -1;
   }
 
-  ret = ParseURL(old_url, NULL, NULL, NULL, server, NULL, old_path);
+  ret = base_urlstr_parse_url(old_url, NULL, NULL, NULL, server, NULL, old_path);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_tcp_server_open: url %s incorrect.\n", old_url);
@@ -1346,7 +1346,7 @@ int nfi_tcp_server_rename(struct nfi_server *serv, char *old_url, char *new_url)
     return -1;
   }
 
-  ret = ParseURL(new_url, NULL, NULL, NULL, server, NULL, new_path);
+  ret = base_urlstr_parse_url(new_url, NULL, NULL, NULL, server, NULL, new_path);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_tcp_server_open: url %s incorrect.\n", new_url);
@@ -1396,14 +1396,14 @@ int nfi_tcp_server_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, stru
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(fh, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(attr, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // copy private information...
   // fh_aux     = (struct nfi_tcp_server_fhandle *) fh->priv_fh; //TODO: fstat
   server_aux = (struct nfi_tcp_server_server *)serv->private_info;
 
-  ret = ParseURL(fh->url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(fh->url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_tcp_server_getattr: url %s incorrect.\n", dir);
@@ -1431,7 +1431,7 @@ int nfi_tcp_server_getattr(struct nfi_server *serv, struct nfi_fhandle *fh, stru
     nfi_tcp_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_tcp_server_attr_req));
   }
 
-  TCP_SERVERtoNFIattr(attr, &req.attr);
+  tcp_server_to_nfi_attr(attr, &req.attr);
 
   DEBUG_END();
 
@@ -1451,7 +1451,7 @@ int nfi_tcp_server_setattr(struct nfi_server *serv, struct nfi_fhandle *fh, stru
   NULL_RET_ERR(fh, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(attr, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(fh->priv_fh, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   fh_aux = (struct nfi_tcp_server_fhandle *)fh->priv_fh;
@@ -1480,13 +1480,13 @@ int nfi_tcp_server_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *at
   // Check arguments...
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(attr, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
   server_aux = (struct nfi_tcp_server_server *)serv->private_info;
 
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_tcp_server_mkdir: url %s incorrect.\n", url);
@@ -1547,7 +1547,7 @@ int nfi_tcp_server_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *at
   fh->type = NFIDIR;
   fh->priv_fh = (void *)fh_aux;
 
-  fh->url = STRING_MISC_StrDup(url);
+  fh->url = base_string_misc_dup(url);
   if (fh->url == NULL)
   {
     tcp_server_err(TCP_SERVERERR_MEMORY);
@@ -1555,7 +1555,7 @@ int nfi_tcp_server_mkdir(struct nfi_server *serv, char *url, struct nfi_attr *at
     return -1;
   }
 
-  TCP_SERVERtoNFIattr(attr, &req.attr);
+  tcp_server_to_nfi_attr(attr, &req.attr);
 
   DEBUG_END();
 
@@ -1576,11 +1576,11 @@ int nfi_tcp_server_opendir(struct nfi_server *serv, char *url, struct nfi_fhandl
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(url, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(fho, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_tcp_server_opendir: url %s incorrect.\n", url);
@@ -1657,7 +1657,7 @@ int nfi_tcp_server_readdir(struct nfi_server *serv, struct nfi_fhandle *fh, stru
     return -1;
   }
 
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
@@ -1713,7 +1713,7 @@ int nfi_tcp_server_closedir(struct nfi_server *serv, struct nfi_fhandle *fh)
   // Check arguments...
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(fh, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // do closedir...
@@ -1760,13 +1760,13 @@ int nfi_tcp_server_rmdir(struct nfi_server *serv, char *url)
   // Check arguments...
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(url, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...
   server_aux = (struct nfi_tcp_server_server *)serv->private_info;
 
-  ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
+  ret = base_urlstr_parse_url(url, NULL, NULL, NULL, server, NULL, dir);
   if (ret < 0)
   {
     fprintf(stderr, "nfi_tcp_server_rmdir: url %s incorrect.\n", url);
@@ -1817,7 +1817,7 @@ int nfi_tcp_server_statfs(__attribute__((__unused__)) struct nfi_server *serv, _
   // Check arguments...
   NULL_RET_ERR(serv, TCP_SERVERERR_PARAM) ;
   NULL_RET_ERR(inf,  TCP_SERVERERR_PARAM) ;
-  nfi_tcp_server_keepConnected(serv) ;
+  nfi_tcp_server_keep_connected(serv) ;
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM) ;
 
   // private_info...
@@ -1853,7 +1853,7 @@ int nfi_tcp_server_preload(struct nfi_server *serv, char *url, char *virtual_pat
   NULL_RET_ERR(url, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(virtual_path, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(storage_path, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // get private_info...
@@ -1901,7 +1901,7 @@ int nfi_tcp_server_flush(struct nfi_server *serv, char *url, char *virtual_path,
   NULL_RET_ERR(url, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(virtual_path, TCP_SERVERERR_PARAM);
   NULL_RET_ERR(storage_path, TCP_SERVERERR_PARAM);
-  nfi_tcp_server_keepConnected(serv);
+  nfi_tcp_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, TCP_SERVERERR_PARAM);
 
   // private_info...

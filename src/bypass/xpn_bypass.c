@@ -473,7 +473,7 @@ int fdsdirtable_remove(DIR *dir)
  *    None.
  * @return 'TODO'.
  */
-int xpn_adaptor_keepInit(void)
+int xpn_adaptor_keep_init ( void )
 {
   int ret;
   char *xpn_adaptor_initCalled_env = NULL;
@@ -543,7 +543,7 @@ int open(const char *path, int flags, ...)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     // It is an XPN partition, so we redirect the syscall to expand syscall
     debug_info("[bypass]\t xpn_open (%s,%o)\n", path + strlen(xpn_adaptor_partition_prefix), flags);
@@ -592,7 +592,7 @@ int open64(const char *path, int flags, ...)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_open (%s,%o)\n", path + strlen(xpn_adaptor_partition_prefix), flags);
 
@@ -642,7 +642,7 @@ int __open_2(const char *path, int flags, ...)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_open (%s,%o)\n", path + strlen(xpn_adaptor_partition_prefix), flags);
 
@@ -684,7 +684,7 @@ int creat(const char *path, mode_t mode)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t try to creat %s", skip_xpn_prefix(path));
     fd = xpn_creat((const char *)skip_xpn_prefix(path), mode);
@@ -714,7 +714,7 @@ int ftruncate(int fd, off_t length)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t try to xpn_ftruncate\n");
     ret = xpn_ftruncate(virtual_fd.real_fd, length);
@@ -746,7 +746,7 @@ ssize_t read(int fd, void *buf, size_t nbyte)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     if (virtual_fd.is_file == 0)
     {
@@ -784,7 +784,7 @@ ssize_t write(int fd, const void *buf, size_t nbyte)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     if (virtual_fd.is_file == 0)
     {
@@ -819,7 +819,7 @@ off_t lseek(int fd, off_t offset, int whence)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_lseek %d,%ld,%d\n", fd, offset, whence);
     ret = xpn_lseek(virtual_fd.real_fd, offset, whence);
@@ -848,7 +848,7 @@ off64_t lseek64(int fd, off64_t offset, int whence)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_lseek64 %d,%ld,%d\n", fd, offset, whence);
     ret = xpn_lseek(virtual_fd.real_fd, offset, whence);
@@ -898,7 +898,7 @@ int __lxstat64(int ver, const char *path, struct stat64 *buf)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t try to xpn_stat %s\n", skip_xpn_prefix(path));
 
@@ -933,7 +933,7 @@ int __xstat64(int ver, const char *path, struct stat64 *buf)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_stat\n");
 
@@ -970,7 +970,7 @@ int __fxstat64(int ver, int fd, struct stat64 *buf)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_fstat\n");
 
@@ -1023,7 +1023,7 @@ int __lxstat(int ver, const char *path, struct stat *buf)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_stat %s\n", skip_xpn_prefix(path));
     ret = xpn_stat(skip_xpn_prefix(path), buf);
@@ -1051,7 +1051,7 @@ int __xstat(int ver, const char *path, struct stat *buf) // TODO
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_stat %s\n", skip_xpn_prefix(path));
     ret = xpn_stat(skip_xpn_prefix(path), buf);
@@ -1082,7 +1082,7 @@ int __fxstat(int ver, int fd, struct stat *buf)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_fstat\n");
     ret = xpn_fstat(virtual_fd.real_fd, buf);
@@ -1116,7 +1116,7 @@ int __fxstat(int ver, int fd, struct stat *buf)
     if (is_xpn_prefix( path))
     {
       // We must initialize expand if it has not been initialized yet.
-      xpn_adaptor_keepInit ();
+      xpn_adaptor_keep_init ();
 
       // TODO: if path is relative -> use dirfd as CWD
       // TODO: use flags (see man fstatat
@@ -1153,7 +1153,7 @@ int __fxstat(int ver, int fd, struct stat *buf)
     if (is_xpn_prefix(path))
     {
       // We must initialize expand if it has not been initialized yet.
-      xpn_adaptor_keepInit ();
+      xpn_adaptor_keep_init ();
 
       // TODO: if path is relative -> use dirfd as CWD
       // TODO: use flags (see man fstatat
@@ -1187,7 +1187,7 @@ int close(int fd)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_close %d\n", virtual_fd.real_fd);
     ret = xpn_close(virtual_fd.real_fd);
@@ -1217,7 +1217,7 @@ int rename(const char *old_path, const char *new_path)
   if (is_xpn_prefix(old_path) && is_xpn_prefix(new_path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_rename\n");
     debug_info("[bypass]\t Old Path => %s\n", skip_xpn_prefix(old_path));
@@ -1247,7 +1247,7 @@ int unlink(const char *path)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_unlink\n");
     ret = (xpn_unlink(skip_xpn_prefix(path)));
@@ -1276,7 +1276,7 @@ int mkdir(const char *path, mode_t mode)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_mkdir %s\n", (skip_xpn_prefix(path)));
     ret = xpn_mkdir((skip_xpn_prefix(path)), mode);
@@ -1304,7 +1304,7 @@ DIR *opendir(const char *dirname)
   if (is_xpn_prefix(dirname))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_opendir\n");
     ret = xpn_opendir((const char *)(dirname + strlen(xpn_adaptor_partition_prefix)));
@@ -1335,7 +1335,7 @@ struct dirent *readdir(DIR *dirp)
   if (fdsdirtable_get(dirp) != -1)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_readdir\n");
     DIR aux_dirp = fdsdirtable_getfd(dirp);
@@ -1364,7 +1364,7 @@ struct dirent64 *readdir64(DIR *dirp)
   if (fdsdirtable_get(dirp) != -1)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_readdir\n");
 
@@ -1403,7 +1403,7 @@ int closedir(DIR *dirp)
   if (fdsdirtable_get(dirp) != -1)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_closedir\n");
     fdsdirtable_remove(dirp);
@@ -1432,7 +1432,7 @@ int rmdir(const char *path)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass]\t xpn_rmdir\n");
     ret = xpn_rmdir((skip_xpn_prefix(path)));
@@ -1492,7 +1492,7 @@ int dup(int fd)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass] xpn_dup\n");
     ret = xpn_dup(virtual_fd.real_fd);
@@ -1522,7 +1522,7 @@ int dup2(int fd, int fd2)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass] xpn_dup2\n");
     ret = xpn_dup2(virtual_fd.real_fd, virtual_fd2.real_fd);
@@ -1561,7 +1561,7 @@ int chdir(const char *path)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass] xpn_chdir\n");
     return (xpn_chdir((char *)skip_xpn_prefix(path)));
@@ -1581,7 +1581,7 @@ int chmod(const char *path, mode_t mode)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass] xpn_chmod\n");
     return (xpn_chmod(skip_xpn_prefix(path), mode));
@@ -1605,7 +1605,7 @@ int fchmod(int fd, mode_t mode)
   if (virtual_fd.type == FD_XPN)
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass] xpn_fchmod\n");
     ret = xpn_fchmod(fd, mode);
@@ -1627,7 +1627,7 @@ int chown(const char *path, uid_t owner, gid_t group)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass] xpn_chown\n");
     return (xpn_chown(skip_xpn_prefix(path), owner, group));
@@ -1670,7 +1670,7 @@ int access(const char *path, int mode)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass] xpn_access\n");
 
@@ -1707,7 +1707,7 @@ char *realpath(const char *restrict path, char *restrict resolved_path)
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass] Before realpath...\n");
     strcpy(resolved_path, path);
@@ -1736,7 +1736,7 @@ char *__realpath_chk(const char *path, char *resolved_path, __attribute__((__unu
   if (is_xpn_prefix(path))
   {
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit();
+    xpn_adaptor_keep_init();
 
     debug_info("[bypass] Before __realpath_chk...\n");
     strcpy(resolved_path, path);
@@ -1781,7 +1781,7 @@ int MPI_Init(int *argc, char ***argv)
   debug_info("[bypass] Before MPI_Init\n");
 
   // We must initialize expand if it has not been initialized yet.
-  xpn_adaptor_keepInit();
+  xpn_adaptor_keep_init();
 
   value = getenv("XPN_IS_MPI_SERVER");
   if (NULL == value)
@@ -1798,7 +1798,7 @@ int MPI_Init_thread ( int *argc, char ***argv, int required, int *provided )
     debug_info("[bypass] Before MPI_Init_thread\n");
 
     // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
+    xpn_adaptor_keep_init();
 
     value = getenv("XPN_IS_MPI_SERVER") ;
     if (NULL == value){

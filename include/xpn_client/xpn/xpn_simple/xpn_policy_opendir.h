@@ -56,7 +56,7 @@ extern "C"
      * @param entry 'TODO'.
      * @return 'TODO'.
      */
-    int XpnGetEntry(int fd, struct dirent *entry);
+    int xpn_get_entry(int fd, struct dirent *entry);
 
 #ifdef __cplusplus
 }

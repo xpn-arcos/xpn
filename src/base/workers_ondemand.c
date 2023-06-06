@@ -24,7 +24,7 @@
  *
  * File to 'TODO'.
  *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  * @date  Jul 22, 2021
  * @bug No known bugs.
  */
@@ -83,7 +83,7 @@ void *worker_run(void *arg)
   // do function code...
   th.function(th);
 
-  // do wakeup worker_ondemand_wait(...) if needed
+  // do wakeup base_base_worker_ondemand_wait(...) if needed
   if (TRUE == th.wait4me)
   {
     pthread_mutex_lock(&(th_shadow->m_wait));
@@ -109,7 +109,7 @@ void *worker_run(void *arg)
  *  ... Functions
  ***********************************************/
 
-int worker_ondemand_init(worker_ondemand_t *w)
+int base_worker_ondemand_init(worker_ondemand_t *w)
 {
   DEBUG_BEGIN();
 
@@ -125,7 +125,7 @@ int worker_ondemand_init(worker_ondemand_t *w)
   return 0;
 }
 
-int worker_ondemand_launch(worker_ondemand_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th))
+int base_worker_ondemand_launch(worker_ondemand_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th))
 {
   int ret;
   pthread_attr_t th_attr;
@@ -172,7 +172,7 @@ int worker_ondemand_launch(worker_ondemand_t *w, struct st_th *th_arg, void (*wo
   return 0;
 }
 
-int worker_ondemand_wait(struct st_th *th_arg)
+int base_worker_ondemand_wait(struct st_th *th_arg)
 {
   DEBUG_BEGIN();
 
@@ -190,7 +190,7 @@ int worker_ondemand_wait(struct st_th *th_arg)
   return 0;
 }
 
-void workers_ondemand_destroy(worker_ondemand_t *w)
+void base_workers_ondemand_destroy(worker_ondemand_t *w)
 {
   DEBUG_BEGIN();
 

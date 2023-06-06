@@ -62,7 +62,7 @@ extern "C"
     * @param dir 'TODO'.
     * @return 'TODO'.
     */
-   int ParseURL(char *url,
+   int base_urlstr_parse_url(char *url,
                 char *protocol,
                 char *login,
                 char *passwd,

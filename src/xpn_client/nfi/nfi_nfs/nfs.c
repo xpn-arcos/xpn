@@ -422,7 +422,7 @@ void close_connection_nfs(CLIENT *cl)
 }
 
 /**
- * @brief Set attributes.
+ * @brief Set date.
  *
  * This function initializes the timevalNfs structure.
  *
@@ -430,7 +430,7 @@ void close_connection_nfs(CLIENT *cl)
  * @par Returns
  *    Nothing.
  */
-void setDate(timevalNfs *t)
+void nfi_nfs_set_date(timevalNfs *t)
 {
 
   t->seconds = 0;
@@ -447,7 +447,7 @@ void setDate(timevalNfs *t)
  * @par Returns
  *    Nothing.
  */
-void setAttr(sattr *at, unsigned int mode)
+void nfi_nfs_set_attr(sattr *at, unsigned int mode)
 {
 
   at->mode = mode;
@@ -460,8 +460,8 @@ void setAttr(sattr *at, unsigned int mode)
   at->gid = -1;
 #endif
   at->size = 0;
-  setDate(&(at->atime));
-  setDate(&(at->mtime));
+  nfi_nfs_set_date(&(at->atime));
+  nfi_nfs_set_date(&(at->mtime));
 }
 
 int nfs_setattr(fhandle fh, fattr *fatt, CLIENT *cl)
@@ -582,7 +582,7 @@ int nfs_lookup(fhandle fhin, char *path, fhandle fhout, fattr *att, CLIENT *cl)
     /* se inicializan los argumentos de entrada */
     memcpy(arg.dir, fh, FHSIZE);
     /* separar ultimo dir del path */
-    end = getFirstDir(dir_aux, path_aux);
+    end = base_path_misc_get_first_dir(dir_aux, path_aux);
     arg.name = dir_aux;
     // printf("dir_aux = %s strlen = %d\n",arg.name,strlen(arg.name));
     if (strlen(arg.name) == 0)
@@ -858,7 +858,7 @@ int nfs_create(fhandle fhin, char *file, mode_t mode, fhandle fhout, fattr *at, 
   memcpy(args.where.dir, fhin, FHSIZE);
   args.where.name = file;
   /* se establecen ciertos atributos que tendra el fichero como los permisos */
-  setAttr(&args.attributes, mode);
+  nfi_nfs_set_attr(&args.attributes, mode);
   /****************************************************************
    * los argumentos de la llamada CREATE son :			  *
    *	ENTRADA:						  *
@@ -1007,7 +1007,7 @@ int nfs_mkdir(fhandle fhin, char *dir, mode_t mode, fhandle fhout, fattr *at, CL
   /*se rellenan los datos de entrada */
   memcpy(args.where.dir, fhin, FHSIZE);
   args.where.name = dir;
-  setAttr(&(args.attributes), mode);
+  nfi_nfs_set_attr(&(args.attributes), mode);
 
   /****************************************************************
    * los argumentos de la llamada MKDIR son :			  *
