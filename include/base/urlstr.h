@@ -1,5 +1,6 @@
 /*
- *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez
+ * Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -24,7 +25,8 @@
  *
  * Header file to 'TODO'.
  *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia,
+ * Borja Bergua Guerra
  * @date  Jul 22, 2021
  * @bug No known bugs.
  */
@@ -36,41 +38,35 @@
  *  ... Includes
  ***********************************************/
 #include "all_system.h"
-#include "string_misc.h"
 #include "path_misc.h"
+#include "string_misc.h"
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-   /************************************************
-    *  ... Functions
-    ***********************************************/
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-   /**
-    * @brief 'TODO'.
-    *
-    * 'TODO'.
-    *
-    * @param url 'TODO'.
-    * @param protocol 'TODO'.
-    * @param login 'TODO'.
-    * @param passwd 'TODO'.
-    * @param server 'TODO'.
-    * @param port 'TODO'.
-    * @param dir 'TODO'.
-    * @return 'TODO'.
-    */
-   int base_urlstr_parse_url(char *url,
-                char *protocol,
-                char *login,
-                char *passwd,
-                char *server,
-                char *port,
-                char *dir);
+/**
+ * @brief Parse URL.
+ *
+ * This function allows to obtain the different components or
+ * elements that make up a URL (protocol, server, port, etc).
+ *
+ * @param url 'TODO'.
+ * @param protocol 'TODO'.
+ * @param login 'TODO'.
+ * @param passwd 'TODO'.
+ * @param server 'TODO'.
+ * @param port 'TODO'.
+ * @param dir 'TODO'.
+ * @return 'TODO'.
+ */
+int base_urlstr_parse_url(char *url, char *protocol, char *login, char *passwd, char *server, char *port, char *dir);
 
-   /* ................................................................... */
+/* ................................................................... */
 
 #ifdef __cplusplus
 }

@@ -22,9 +22,9 @@
 
 /**
  * @file trace_msg.h
- * @brief Header file to 'TODO'.
+ * @brief Message traces.
  *
- * Header file to 'TODO'.
+ * Header file to define message traces in the functions being executed.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia,
  * Borja Bergua Guerra

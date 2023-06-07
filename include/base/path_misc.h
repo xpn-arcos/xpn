@@ -1,5 +1,6 @@
 /*
- *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez
+ * Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -20,11 +21,12 @@
 
 /**
  * @file path_misc.h
- * @brief Header file to 'TODO'.
+ * @brief Header file to Paths.
  *
- * Header file to 'TODO'.
+ * Header file to perform operations on the path (hash, first directory, factor size, get filename, etc.).
  *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia,
+ * Borja Bergua Guerra
  * @date  Jul 22, 2021
  * @bug No known bugs.
  */
@@ -39,78 +41,81 @@
 #include "base/string_misc.h"
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-  /************************************************
-   *  ... Functions
-   ***********************************************/
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-  /**
-   * @brief 'TODO'.
-   *
-   * 'Server number calculation'.
-   *
-   * @param file 'TODO'.
-   * @param nServ 'TODO'.
-   * @return 'TODO'.
-   */
-  int base_path_misc_hash(char *file, int nServ);
+/**
+ * @brief Server number calculation.
+ *
+ * This function is used to determine where (server) the first block of a file is located.
+ * It receives as input the file name, applies a hash (to distribute the workload) 
+ * and determines which server number corresponds to the master server 
+ * where the first block of the file will be located.
+ *
+ * @param file File name.
+ * @param nServ Server number.
+ *
+ * @return Master server number.
+ */
+int base_path_misc_hash(char *file, int nServ);
 
-  /**
-   * @brief 'TODO'.
-   *
-   * 'TODO'.
-   *
-   * @param dir 'TODO'.
-   * @param path 'TODO'.
-   * @return 'TODO'.
-   */
-  int base_path_misc_get_first_dir(char *dir, char *path);
+/**
+ * @brief Get first directory.
+ *
+ * Gets from the path the name of the first directory.
+ *
+ * @param dir 'TODO'.
+ * @param path 'TODO'.
+ * @return 'TODO'.
+ */
+int base_path_misc_get_first_dir(char *dir, char *path);
 
-  /**
-   * @brief 'TODO'.
-   *
-   * 'TODO'.
-   *
-   * @param name 'TODO'.
-   * @return 'TODO'.
-   */
-  int base_path_misc_get_size_factor(char *name);
+/**
+ * @brief Get size factor.
+ *
+ * 'TODO'.
+ *
+ * @param name 'TODO'.
+ * @return 'TODO'.
+ */
+int base_path_misc_get_size_factor(char *name);
 
-  /**
-   * @brief 'TODO'.
-   *
-   * Get the last name of a path and erase the file name.
-   *
-   * @param file 'TODO'.
-   * @param dir 'TODO'.
-   * @return 'TODO'.
-   */
-  int base_path_misc_get_name_file(char *file, char *dir);
+/**
+ * @brief Get name file.
+ *
+ * Get the last name of a path and erase the file name.
+ *
+ * @param file 'TODO'.
+ * @param dir 'TODO'.
+ * @return 'TODO'.
+ */
+int base_path_misc_get_name_file(char *file, char *dir);
 
-  /**
-   * @brief 'TODO'.
-   *
-   * Get the first name of the path and erase the part name.
-   *
-   * @param part 'TODO'.
-   * @param dir 'TODO'.
-   * @return 'TODO'.
-   */
-  int base_path_misc_get_name_part(char *part, char *dir);
+/**
+ * @brief Get name part.
+ *
+ * Get the first name of the path and erase the part name.
+ *
+ * @param part 'TODO'.
+ * @param dir 'TODO'.
+ * @return 'TODO'.
+ */
+int base_path_misc_get_name_part(char *part, char *dir);
 
-  /**
-   * @brief 'TODO'.
-   *
-   * Erase the initial dir used in the url.
-   *
-   * @param url 'TODO'.
-   * @param dir 'TODO'.
-   * @return 'TODO'.
-   */
-  int get_dir_with_url(char *url, char *dir);
+/**
+ * @brief Get directory with URL.
+ *
+ * Erase the initial dir used in the url.
+ *
+ * @param url 'TODO'.
+ * @param dir 'TODO'.
+ * @return 'TODO'.
+ */
+int get_dir_with_url(char *url, char *dir);
 
 #ifdef __cplusplus
 }

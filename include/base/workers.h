@@ -20,9 +20,14 @@
 
 /**
  * @file workers.h
- * @brief Header file to 'TODO'.
+ * @brief Workers.
  *
- * Header file to 'TODO'.
+ * Header file where functions are defined to manage the creation,
+ * deletion and execution of threads or workers.
+ * There are two types of threads/workers: on demand and pool.
+ * An on-demand worker is executed according to an operation code
+ * and a pool of workers follows the producer/consumer model of
+ * operations on a buffer or intermediate queue.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  * @date  Jul 22, 2021
@@ -36,19 +41,21 @@
  *  ... Includes
  ***********************************************/
 #include "all_system.h"
+#include "base/debug_msg.h"
+#include "base/trace_msg.h"
 #include "workers_common.h"
 #include "workers_ondemand.h"
 #include "workers_pool.h"
-#include "base/debug_msg.h"
-#include "base/trace_msg.h"
 
 /************************************************
  *  ... Constants
  ***********************************************/
 
-#define TH_NOT 0
-#define TH_POOL 1
-#define TH_OP 2
+#define TH_NOT 0  // No threads are executed
+#define TH_POOL \
+    1  // A pool of N threads is executed where there is an intermediate queue and there are producers and consumers of
+       // operations.
+#define TH_OP 2  // A thread is created according to an operation. That is, on demand.
 
 /************************************************
  *  ... Datatype
@@ -64,11 +71,10 @@
  *  @var worker_t::thread_mode
  *    A 'TODO'.
  */
-typedef struct
-{
-  worker_ondemand_t w1;
-  worker_pool_t w2;
-  int thread_mode;
+typedef struct {
+    worker_ondemand_t w1;
+    worker_pool_t w2;
+    int thread_mode;
 } worker_t;
 
 /************************************************
@@ -76,56 +82,55 @@ typedef struct
  ***********************************************/
 
 /**
- * @brief 'TODO'.
+ * @brief Workers init.
  *
- * 'TODO'.
+ * This function is used to create the threads,
+ * on demand or pool..., all the condition variables, mutex,
+ * create all the necessary infrastructure to execute the threads/workers.
  *
  * @param w 'TODO'.
  * @param thread_mode 'TODO'.
+ *
  * @return 'TODO'.
  */
-int base_workers_init(
-    worker_t *w,
-    int thread_mode);
+int base_workers_init(worker_t *w, int thread_mode);
 
 /**
- * @brief 'TODO'.
+ * @brief Workers destroy.
  *
- * 'TODO'.
+ * Terminate all the threads before the end of the application.
  *
  * @param w 'TODO'.
+ *
  * @par Returns
  *    Nothing.
  */
-void base_workers_destroy(
-    worker_t *w);
+void base_workers_destroy(worker_t *w);
 
 /**
- * @brief 'TODO'.
+ * @brief Workers launch.
  *
- * 'TODO'.
+ * Execute function on a worker/thread, depending if it is on demand it will start the thread
+ * and if it is pool directly executes the thread.
  *
  * @param w 'TODO'.
  * @param th_arg 'TODO'.
  * @param worker_function 'TODO'.
+ *
  * @return 'TODO'.
  */
-int base_workers_launch(
-    worker_t *w,
-    struct st_th *th_arg,
-    void (*worker_function)(struct st_th));
+int base_workers_launch(worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th));
 
 /**
- * @brief 'TODO'.
+ * @brief Workers wait.
  *
- * 'TODO'.
+ * Wait for the execution of a worker.
  *
  * @param w 'TODO'.
  * @param th_arg 'TODO'.
+ *
  * @return 'TODO'.
  */
-int base_workers_wait(
-    worker_t *w,
-    struct st_th *th_arg);
+int base_workers_wait(worker_t *w, struct st_th *th_arg);
 
 #endif

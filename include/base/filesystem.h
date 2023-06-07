@@ -20,9 +20,14 @@
 
 /**
  * @file filesystem.h
- * @brief Header file to 'TODO'.
+ * @brief Manager/Selector of file system calls.
  *
- * Header file to 'TODO'.
+ * General library to select alternative file system calls in case you do not have POSIX. 
+ * For example, a connector to the cloud (AWS), external database, etc. 
+ * 
+ * Currently two options are defined: FILESYSTEM_DLSYM or POSIX. 
+ * If FILESYSTEM_DLSYM 1 is defined, the intercept functions will be called, 
+ * otherwise the actual POSIX functions will be called every time a file system call is made.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  * @date  Jul 22, 2021

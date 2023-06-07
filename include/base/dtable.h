@@ -20,9 +20,9 @@
 
 /**
  * @file dtable.h
- * @brief Header file to 'TODO'.
+ * @brief Dynamic tables.
  *
- * Header file to 'TODO'.
+ * Header file to execute operations (insert, delete, get) on dynamic table.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  * @date  Jul 22, 2021
