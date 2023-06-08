@@ -20,9 +20,12 @@
   
   /**
    * @file base_lib.h
-   * @brief Header file to 'TODO'.
+   * @brief Library collector.
    *
-   * Header file to 'TODO'.
+   * Header file that includes the necessary libraries from the base directory. 
+   * It works as a collector of the essential/base libraries to be used in xpand. 
+   * This allows that when a new library is required, only this file is modified 
+   * and not all the .c files that implement each library.
    *
    * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
    * @date  Jul 22, 2021
@@ -37,8 +40,8 @@
 /************************************************
  *  ... Includes
  ***********************************************/
-   #include "debug_msg.h"  /// Library for 'TODO'
-   #include "trace_msg.h"  /// Library for 'TODO'
+   #include "debug_msg.h"  /// Library for debug messages.
+   #include "trace_msg.h"  /// Library to trace messages.
 
    #include "filesystem.h" /// Library for 'TODO'
    #include "time_misc.h"  /// Library for 'TODO'

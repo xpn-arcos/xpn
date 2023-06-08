@@ -1,5 +1,6 @@
 /*
- *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez
+ * Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -20,11 +21,12 @@
 
 /**
  * @file time_misc.h
- * @brief Header file to 'TODO'.
+ * @brief Header file to time operations.
  *
- * Header file to 'TODO'.
+ * Header file to perform time operations (get current time, compare times, convert, etc).
  *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia,
+ * Borja Bergua Guerra
  * @date  Jul 22, 2021
  * @bug No known bugs.
  */
@@ -38,8 +40,7 @@
 #include "all_system.h"
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /************************************************
@@ -47,65 +48,56 @@ extern "C"
  ***********************************************/
 #define USECPSEC 1000000
 
-    /************************************************
-     *  ... Functions
-     ***********************************************/
+/************************************************
+ *  ... Functions
+ ***********************************************/
 
-    /**
-     * Get a timestamp 't' at current time.
-     * @param t the timestamp.
-     * @par Returns
-     *   Nothing.
-     *
-     */
-    void base_time_misc_timer(
-        struct timeval *t);
+/**
+ * Get a timestamp 't' at current time.
+ * @param t the timestamp.
+ * @par Returns
+ *   Nothing.
+ *
+ */
+void base_time_misc_timer(struct timeval *t);
 
-    /**
-     * Compute 'dig = tn - to'.
-     * @param to initial instant.
-     * @param tn final instant.
-     * @param dif the substaction value ('tn - to').
-     * @par Returns
-     *   Nothing.
-     *
-     */
-    void base_time_misc_diff_time(
-        struct timeval *to,
-        struct timeval *tn,
-        struct timeval *dif);
+/**
+ * Compute 'dig = tn - to'.
+ * @param to initial instant.
+ * @param tn final instant.
+ * @param dif the substaction value ('tn - to').
+ * @par Returns
+ *   Nothing.
+ *
+ */
+void base_time_misc_diff_time(struct timeval *to, struct timeval *tn, struct timeval *dif);
 
-    /**
-     * Compute 'sum = tn + to'.
-     * @param to initial instant.
-     * @param tn final instant.
-     * @param sum the addition value ('tn + to').
-     * @par Returns
-     *   Nothing.
-     *
-     */
-    void base_time_misc_add_time(
-        struct timeval *to,
-        struct timeval *tn,
-        struct timeval *sum);
+/**
+ * Compute 'sum = tn + to'.
+ * @param to initial instant.
+ * @param tn final instant.
+ * @param sum the addition value ('tn + to').
+ * @par Returns
+ *   Nothing.
+ *
+ */
+void base_time_misc_add_time(struct timeval *to, struct timeval *tn, struct timeval *sum);
 
-    /**
-     * Return a timestamp as seconds.
-     * @param timet the timestamp.
-     * @return timestamp as seconds.
-     */
-    float base_time_misc_timeval_to_seconds(
-        struct timeval *timet);
+/**
+ * Return a timestamp as seconds.
+ * @param timet the timestamp.
+ * @return timestamp as seconds.
+ */
+float base_time_misc_timeval_to_seconds(struct timeval *timet);
 
-    /**
-     * Return a timestamp as microseconds.
-     * @param timet the timestamp.
-     * @return timestamp as microseconds.
-     */
-    float base_time_misc_timeval_to_microseconds(
-        struct timeval *timet);
+/**
+ * Return a timestamp as microseconds.
+ * @param timet the timestamp.
+ * @return timestamp as microseconds.
+ */
+float base_time_misc_timeval_to_microseconds(struct timeval *timet);
 
-    /* ................................................................... */
+/* ................................................................... */
 
 #ifdef __cplusplus
 }

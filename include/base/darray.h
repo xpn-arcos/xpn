@@ -20,10 +20,10 @@
 
 /**
  * @file darray.h
- * @brief Header file to execute operations on dynamic arrays.
+ * @brief Dynamic arrays.
  *
- * Header file to insert, delete, find,
- * get elements from a dynamic array.
+ * Header file to execute operations (insert, delete, find,
+ * get elements) on dynamic array.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  * @date  Jul 22, 2021

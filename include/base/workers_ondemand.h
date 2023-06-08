@@ -20,9 +20,10 @@
 
 /**
  * @file workers_ondemand.h
- * @brief Header file to 'TODO'.
+ * @brief Workers On Demand.
  *
- * Header file to 'TODO'.
+ * Header file where functions are defined to manage the creation,
+ * deletion and execution of threads or workers ondemand.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  * @date  Jul 22, 2021
@@ -43,22 +44,23 @@
  *  This is a struct
  *
  *  @var worker_ondemand_t::busy_worker
- *    A 'TODO'.
+ *   Indicates that the thread is busy and thus determine if you can send load or not.
  *  @var worker_ondemand_t::m_worker
  *    A 'TODO'.
  *  @var worker_ondemand_t::c_worker
  *    A 'TODO'.
  *  @var worker_ondemand_t::c_nworkers
  *    A 'TODO'.
+ *  @var worker_ondemand_t::n_workers
+ *    Number of workers that have been launched.
  */
-typedef struct
-{
-   // number of active threads (launch + destroy)
-   int busy_worker;
-   pthread_mutex_t m_worker;
-   pthread_cond_t c_worker;
-   pthread_cond_t c_nworkers;
-   long n_workers;
+typedef struct {
+    // number of active threads (launch + destroy)
+    int busy_worker;
+    pthread_mutex_t m_worker;
+    pthread_cond_t c_worker;
+    pthread_cond_t c_nworkers;
+    long n_workers;
 
 } worker_ondemand_t;
 
@@ -67,52 +69,46 @@ typedef struct
  ***********************************************/
 
 /**
- * @brief 'TODO'.
+ * @brief Worker ondemand init.
  *
- * 'TODO'.
+ * This function is used to create the threads.
  *
  * @param w 'TODO'.
  * @return 'TODO'.
  */
-int base_worker_ondemand_init(
-    worker_ondemand_t *w);
+int base_worker_ondemand_init(worker_ondemand_t *w);
 
 /**
- * @brief 'TODO'.
+ * @brief Worker ondemand destroy.
  *
- * 'TODO'.
+ * Terminate all the threads before the end of the application.
  *
  * @param w 'TODO'.
  * @par Returns
  *    Nothing.
  */
-void base_workers_ondemand_destroy(
-    worker_ondemand_t *w);
+void base_workers_ondemand_destroy(worker_ondemand_t *w);
 
 /**
- * @brief 'TODO'.
+ * @brief Worker ondemand launch.
  *
- * 'TODO'.
+ * A thread is executed according to an operation. That is, on demand.
  *
  * @param w 'TODO'.
  * @param th_arg 'TODO'.
  * @param worker_function 'TODO'.
  * @return 'TODO'.
  */
-int base_worker_ondemand_launch(
-    worker_ondemand_t *w,
-    struct st_th *th_arg,
-    void (*worker_function)(struct st_th));
+int base_worker_ondemand_launch(worker_ondemand_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th));
 
 /**
- * @brief 'TODO'.
+ * @brief Worker ondemand wait.
  *
- * 'TODO'.
+ * Wait for a worker.
  *
  * @param th_arg 'TODO'.
  * @return 'TODO'.
  */
-int base_worker_ondemand_wait(
-    struct st_th *th_arg);
+int base_worker_ondemand_wait(struct st_th *th_arg);
 
 #endif

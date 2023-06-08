@@ -20,9 +20,9 @@
 
 /**
  * @file syscall_proxies.h
- * @brief Header file to 'TODO'.
+ * @brief Header file to Syscall Proxies.
  *
- * Header file to 'TODO'.
+ * The proxy functions that make the jump to the libc functions are defined.
  *
  * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  * @date  Jul 22, 2021
@@ -155,6 +155,30 @@ extern "C"
    * @return 'TODO'.
    */
   ssize_t dlsym_write(int fd, void *buf, size_t nbyte);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param fd 'TODO'.
+   * @param buf 'TODO'.
+   * @param nbyte 'TODO'.
+   * @return 'TODO'.
+   */
+  ssize_t dlsym_pread (int fd, void *buf, size_t count, off_t offset);
+
+  /**
+   * @brief 'TODO'.
+   *
+   * 'TODO'.
+   *
+   * @param fd 'TODO'.
+   * @param buf 'TODO'.
+   * @param nbyte 'TODO'.
+   * @return 'TODO'.
+   */
+  ssize_t dlsym_pwrite(int fd, const void *buf, size_t count, off_t offset);
 
   /**
    * @brief 'TODO'.
@@ -298,6 +322,22 @@ extern "C"
    * @return 'TODO'.
    */
   int dlsym_unlink(char *path);
+
+
+  /************************************************
+   *  ... Functions: File API (stdio)
+   ***********************************************/
+
+  FILE* dlsym_fopen   ( const char *filename, const char *mode );
+  FILE* dlsym_fdopen  ( int fd, const char *mode );
+  int   dlsym_fclose  ( FILE *stream );
+
+  size_t dlsym_fread  ( void *ptr, size_t size, size_t nmemb, FILE *stream );
+  size_t dlsym_fwrite ( const void *ptr, size_t size, size_t nmemb, FILE *stream );
+
+  int  dlsym_fseek    ( FILE *stream, long int offset, int whence );
+  int  dlsym_feof     ( FILE *stream );
+
 
   /************************************************
    *  ... Functions: Directory API

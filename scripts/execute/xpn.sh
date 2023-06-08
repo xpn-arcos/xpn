@@ -147,7 +147,7 @@ stop_xpn_servers() {
 rebuild_xpn_servers() {
 
   if [[ ${VERBOSE} == true ]]; then
-    echo " * source partition: ${SOURCE_PARTITION}"
+    echo " * source partition: ${SOURCE_PATH}"
     echo " * xpn storage path: ${XPN_STORAGE_PATH}"
   fi
 
@@ -159,7 +159,7 @@ rebuild_xpn_servers() {
           -genv      XPN_CONF /local_test/test/configuration/conf.xml \
           -genv      LD_PRELOAD src/bypass/xpn_bypass.so \
           -genv      XPN_LOCALITY 0\
-          ${BASE_DIR}/../../src/utils/xpn_rebuild ${SOURCE_PARTITION} ${XPN_STORAGE_PATH} 524288
+          ${BASE_DIR}/../../src/utils/xpn_rebuild ${SOURCE_PATH} ${XPN_STORAGE_PATH} 524288
 
   rm -f ${WORKDIR}/partition_content.txt
 
@@ -169,6 +169,33 @@ rebuild_xpn_servers() {
   # 3. start new servers
   mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
   start_xpn_servers
+}
+
+
+preload_xpn() {
+
+  if [[ ${VERBOSE} == true ]]; then
+    echo " * source partition: ${SOURCE_PATH}"
+    echo " * xpn storage path: ${XPN_STORAGE_PATH}"
+  fi
+
+  # 1. Copy
+  mpiexec -np       "${NODE_NUM}" \
+          -hostfile "${HOSTFILE}" \
+          ${BASE_DIR}/../../src/utils/xpn_preload ${SOURCE_PATH} ${XPN_STORAGE_PATH} 524288
+}
+
+flush_xpn() {
+
+  if [[ ${VERBOSE} == true ]]; then
+    echo " * xpn storage path: ${XPN_STORAGE_PATH}"
+    echo " * destination path: ${DEST_PATH}"
+  fi
+
+  # 1. Copy
+  mpiexec -np       "${NODE_NUM}" \
+          -hostfile "${HOSTFILE}" \
+          ${BASE_DIR}/../../src/utils/xpn_flush ${XPN_STORAGE_PATH} ${DEST_PATH} 524288
 }
 
 
@@ -182,9 +209,10 @@ usage_short() {
   echo "               [-d/--deathfile <host file>]"
   echo "               [-r/--rootdir <path>]"
   echo "               [-w/--workdir <path>]"
-  echo "               [-s/--source_partition <xpn_partition>]"
+  echo "               [-s/--source_path <path>]"
+  echo "               [-t/--destination_path <path>]"
   echo "               [-x/--xpn_storage_path <path>]"
-  echo "               [-v/--verbose <false>] {start,stop,rebuild}"
+  echo "               [-v/--verbose <false>] {start,stop,rebuild,preload,flush}"
   echo ""
 }
 
@@ -196,7 +224,7 @@ usage_details() {
   echo " additional permanent configurations can be set."
   echo ""
   echo " positional arguments:"
-  echo "     command                  Command to execute: 'start', 'stop' and 'rebuild'"
+  echo "     command                  Command to execute: 'start', 'stop', 'rebuild', 'preload' and 'flush'"
   echo ""
   echo " optional arguments:"
   echo "     -h, --help                          Shows this help message and exits"
@@ -207,7 +235,8 @@ usage_details() {
   echo "     -n, --numnodes <n>                  XPN servers are started on n nodes."
   echo "     -r, --rootdir  <path>               The rootdir path for XPN daemons."
   echo "     -w, --workdir  <path>               The working directory path for XPN temporal files."
-  echo "     -s, --source_partition <partition>  Origin XPN partition (for the rebuild process)"
+  echo "     -s, --source_path <path>            Origin XPN partition for the rebuild process or path for preload"
+  echo "     -t, --destination_path <path>       Path for flush"
   echo "     -x, --xpn_storage_path <path>       The XPN local storage path"  
   echo "     -l, --hostfile  <path>              File with the hosts to be used to execute daemons (one per line)."
   echo "     -d, --deathfile <path>              File with the hosts to be used to stop    daemons (one per line)."
@@ -221,7 +250,8 @@ ACTION=""
 WORKDIR="/tmp/"
 DIR_ROOT="/tmp/"
 XPN_STORAGE_PATH="/tmp/"
-SOURCE_PARTITION="xpn"
+SOURCE_PATH="xpn"
+DEST_PATH="xpn"
 NODE_NUM=1
 ARGS=""
 FILE_CONFIG=""
@@ -234,13 +264,15 @@ SERVER_TYPE="mpi"
 
 
 ## get arguments
-while getopts "r:w:s:x:d:n:a:c:m:l:fvh" opt; do
+while getopts "r:w:s:t:x:d:n:a:c:m:l:fvh" opt; do
   case "${opt}" in
     r) DIR_ROOT=${OPTARG}
        ;;
     w) WORKDIR=${OPTARG}
        ;;
-    s) SOURCE_PARTITION=${OPTARG}
+    s) SOURCE_PATH=${OPTARG}
+       ;;
+    t) DEST_PATH=${OPTARG}
        ;;
     x) XPN_STORAGE_PATH=${OPTARG}
        ;;
@@ -286,10 +318,15 @@ case "${ACTION}" in
                 ;;
       rebuild)  rebuild_xpn_servers
                 ;;
+      preload)  preload_xpn
+                ;;
+      flush)    flush_xpn
+                ;;
       *)        echo ""
                 echo " ERROR: ACTION '${ACTION}' not supported"
                 usage_short
                 exit 1
                 ;;
 esac
+
 
