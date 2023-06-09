@@ -591,7 +591,7 @@
 
   ssize_t read(int fd, void *buf, size_t nbyte)
   {         
-    int ret = -1;
+    ssize_t ret = (ssize_t) -1;
 
     debug_info("[bypass] >> Before read...\n");
     debug_info("[bypass]    * fd=%d\n",    fd) ;
@@ -612,14 +612,14 @@
 
       debug_info("[bypass]\t try to xpn_read %d, %p, %ld\n", virtual_fd.real_fd, buf, nbyte);
       ret = xpn_read(virtual_fd.real_fd, buf, nbyte);
-      debug_info("[bypass]\t xpn_read %d, %p, %ld -> %d\n", virtual_fd.real_fd, buf, nbyte, ret);
+      debug_info("[bypass]\t xpn_read %d, %p, %ld -> %ld\n", virtual_fd.real_fd, buf, nbyte, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t try to dlsym_read %d,%p,%ld\n", fd, buf, nbyte);
       ret = dlsym_read(fd, buf, nbyte);
-      debug_info("[bypass]\t dlsym_read %d,%p,%ld -> %d\n", fd, buf, nbyte, ret);
+      debug_info("[bypass]\t dlsym_read %d,%p,%ld -> %ld\n", fd, buf, nbyte, ret);
     }
 
     debug_info("[bypass] << After read...\n");
@@ -628,7 +628,7 @@
 
   ssize_t write(int fd, const void *buf, size_t nbyte)
   {
-    int ret = -1;
+    ssize_t ret = (ssize_t) -1;
 
     debug_info("[bypass] >> Before write...\n");
     debug_info("[bypass]    * fd=%d\n",    fd) ;
@@ -643,20 +643,20 @@
       xpn_adaptor_keepInit ();
 
       if (virtual_fd.is_file == 0) {
-          errno = EISDIR ;
-    return -1 ;
+        errno = EISDIR ;
+        return -1 ;
       }
 
       debug_info("[bypass]\t try to xpn_write %d, %p, %ld\n", virtual_fd.real_fd, buf, nbyte);
       ret = xpn_write(virtual_fd.real_fd, (void *)buf, nbyte);
-      debug_info("[bypass]\t xpn_write %d, %p, %ld -> %d\n", virtual_fd.real_fd, buf, nbyte, ret);
+      debug_info("[bypass]\t xpn_write %d, %p, %ld -> %ld\n", virtual_fd.real_fd, buf, nbyte, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t try to dlsym_write %d,%p,%ld\n", fd, buf, nbyte);
       ret = dlsym_write(fd, (void *)buf, nbyte);
-      debug_info("[bypass]\t dlsym_write %d,%p,%ld -> %d\n", fd, buf, nbyte, ret);
+      debug_info("[bypass]\t dlsym_write %d,%p,%ld -> %ld\n", fd, buf, nbyte, ret);
     }
 
     debug_info("[bypass] << After write...\n");
@@ -665,7 +665,7 @@
 
   ssize_t pread(int fd, void *buf, size_t count, off_t offset)
   {
-    int ret = -1;
+    ssize_t ret = (ssize_t) -1;
 
     debug_info("[bypass] >> Before pread...\n");
     debug_info("[bypass]    * fd=%d\n",    fd) ;
@@ -693,14 +693,14 @@
       if (ret != -1){
         xpn_lseek(virtual_fd.real_fd, -ret, SEEK_CUR);
       }
-      debug_info("[bypass]\t xpn_read %d, %p, %ld -> %d\n", virtual_fd.real_fd, buf, count, ret);
+      debug_info("[bypass]\t xpn_read %d, %p, %ld -> %ld\n", virtual_fd.real_fd, buf, count, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t try to dlsym_pread %d,%p,%ld\n", fd, buf, count);
       ret = dlsym_pread(fd,buf, count, offset);
-      debug_info("[bypass]\t dlsym_pread %d,%p,%ld -> %d\n", fd, buf, count, ret);
+      debug_info("[bypass]\t dlsym_pread %d,%p,%ld -> %ld\n", fd, buf, count, ret);
     }
 
     debug_info("[bypass] << After pread...\n");
@@ -709,7 +709,7 @@
 
   ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset)
   {
-    int ret = -1;
+    ssize_t ret = (ssize_t) -1;
 
     debug_info("[bypass] >> Before pwrite...\n");
     debug_info("[bypass]    * fd=%d\n",    fd) ;
@@ -737,14 +737,14 @@
       if (ret != -1){
         xpn_lseek(virtual_fd.real_fd, -ret, SEEK_CUR);
       }
-      debug_info("[bypass]\t xpn_write %d, %p, %ld -> %d\n", virtual_fd.real_fd, buf, count, ret);
+      debug_info("[bypass]\t xpn_write %d, %p, %ld -> %ld\n", virtual_fd.real_fd, buf, count, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t try to dlsym_pwrite %d, %p, %ld, %ld\n", fd, buf, count, offset);
       ret = dlsym_pwrite(fd, buf, count, offset);
-      debug_info("[bypass]\t dlsym_pwrite %d, %p, %ld, %ld -> %d\n", fd, buf, count, offset, ret);
+      debug_info("[bypass]\t dlsym_pwrite %d, %p, %ld, %ld -> %ld\n", fd, buf, count, offset, ret);
     }
 
     debug_info("[bypass] << After pwrite...\n");
@@ -766,14 +766,14 @@
 
       debug_info("[bypass]\t xpn_lseek %d,%ld,%d\n", fd, offset, whence);
       ret = xpn_lseek(virtual_fd.real_fd, offset, whence);
-      debug_info("[bypass]\t xpn_lseek %d,%ld,%d -> %d\n", fd, offset, whence, ret);
+      debug_info("[bypass]\t xpn_lseek %d,%ld,%d -> %ld\n", fd, offset, whence, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t try to dlsym_lseek %d,%ld,%d\n", fd, offset, whence);
       ret = dlsym_lseek(fd, offset, whence);
-      debug_info("[bypass]\t dlsym_lseek %d,%ld,%d -> %d\n", fd, offset, whence, ret);
+      debug_info("[bypass]\t dlsym_lseek %d,%ld,%d -> %ld\n", fd, offset, whence, ret);
     }
 
     debug_info("[bypass] << After lseek...\n");
@@ -795,14 +795,14 @@
 
       debug_info("[bypass]\t xpn_lseek64 %d,%ld,%d\n", fd, offset, whence);
       ret = xpn_lseek(virtual_fd.real_fd, offset, whence);
-      debug_info("[bypass]\t xpn_lseek64 %d,%ld,%d -> %d\n", fd, offset, whence, ret);
+      debug_info("[bypass]\t xpn_lseek64 %d,%ld,%d -> %ld\n", fd, offset, whence, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t try to dlsym_lseek64 %d,%ld,%d\n", fd, offset, whence);
       ret = dlsym_lseek64(fd, offset, whence);
-      debug_info("[bypass]\t dlsym_lseek64 %d,%ld,%d -> %d\n", fd, offset, whence, ret);
+      debug_info("[bypass]\t dlsym_lseek64 %d,%ld,%d -> %ld\n", fd, offset, whence, ret);
     }
 
     debug_info("[bypass] << After lseek64...\n");
@@ -1261,7 +1261,7 @@
   FILE * fdopen(int fd, const char *mode)
   {
     debug_info("[bypass] >> Before fdopen....\n");
-    debug_info("[bypass]    * fd = %p\n", fd);
+    debug_info("[bypass]    * fd = %d\n", fd);
     debug_info("[bypass]    * mode = %s\n", mode);
 
     FILE *fp;
@@ -1272,7 +1272,7 @@
     {
       debug_info("[bypass]\t try to dlsym_fdopen\n");
       fp = dlsym_fdopen(1, mode);
-      debug_info("[bypass]\t dlsym_fdopen -> %d\n", ret);
+      debug_info("[bypass]\t dlsym_fdopen -> %p\n", fp);
 
       fp->_fileno = fd;
     }
@@ -1281,7 +1281,7 @@
     {
       debug_info("[bypass]\t try to dlsym_fdopen\n");
       fp = dlsym_fdopen(fd, mode);
-      debug_info("[bypass]\t dlsym_fdopen -> %d\n", ret);
+      debug_info("[bypass]\t dlsym_fdopen -> %p\n", fp);
     }
 
     debug_info("[bypass] << After fdopen....\n");
@@ -1322,7 +1322,7 @@
 
   size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
   {         
-    int ret = -1;
+    size_t ret = (size_t) -1;
 
     debug_info("[bypass] >> Before fread...\n");
     debug_info("[bypass]    * ptr=%p\n",    ptr) ;
@@ -1339,21 +1339,21 @@
       xpn_adaptor_keepInit ();
 
       if (virtual_fd.is_file == 0) {
-          errno = EISDIR ;
-          return -1 ;
+        errno = EISDIR ;
+        return -1 ;
       }
 
       int buf_size = size * nmemb;
-      debug_info("[bypass]\t try to xpn_read %d, %p, %ld\n", virtual_fd.real_fd, ptr, buf_size);
+      debug_info("[bypass]\t try to xpn_read %d, %p, %d\n", virtual_fd.real_fd, ptr, buf_size);
       ret = xpn_read(virtual_fd.real_fd, ptr, buf_size);
-      debug_info("[bypass]\t xpn_read %d, %p, %ld -> %d\n", virtual_fd.real_fd, ptr, buf_size, ret);
+      debug_info("[bypass]\t xpn_read %d, %p, %d -> %ld\n", virtual_fd.real_fd, ptr, buf_size, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t try to dlsym_fread %p,%ld,%ld,%p\n", ptr, size, nmemb, stream);
       ret = dlsym_fread(ptr, size, nmemb, stream);
-      debug_info("[bypass]\t dlsym_fread %p,%ld,%ld,%p -> %d\n", ptr, size, nmemb, stream, ret);
+      debug_info("[bypass]\t dlsym_fread %p,%ld,%ld,%p -> %ld\n", ptr, size, nmemb, stream, ret);
     }
 
     debug_info("[bypass] << After fread...\n");
@@ -1362,7 +1362,7 @@
 
   size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
   {         
-    int ret = -1;
+    size_t ret = (size_t) -1;
 
     debug_info("[bypass] >> Before fwrite...\n");
     debug_info("[bypass]    * ptr=%p\n",    ptr) ;
@@ -1379,21 +1379,21 @@
       xpn_adaptor_keepInit ();
 
       if (virtual_fd.is_file == 0) {
-          errno = EISDIR ;
-          return -1 ;
+        errno = EISDIR ;
+        return -1 ;
       }
 
       int buf_size = size * nmemb;
-      debug_info("[bypass]\t try to xpn_read %d, %p, %ld\n", virtual_fd.real_fd, ptr, buf_size);
+      debug_info("[bypass]\t try to xpn_read %d, %p, %d\n", virtual_fd.real_fd, ptr, buf_size);
       ret = xpn_write(virtual_fd.real_fd, ptr, buf_size);
-      debug_info("[bypass]\t xpn_read %d, %p, %ld -> %d\n", virtual_fd.real_fd, ptr, buf_size, ret);
+      debug_info("[bypass]\t xpn_read %d, %p, %d -> %ld\n", virtual_fd.real_fd, ptr, buf_size, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t try to dlsym_fwrite %p,%ld,%ld,%p\n", ptr, size, nmemb, stream);
       ret = dlsym_fwrite(ptr, size, nmemb, stream);
-      debug_info("[bypass]\t dlsym_fwrite %p,%ld,%ld,%p -> %d\n", ptr, size, nmemb, stream, ret);
+      debug_info("[bypass]\t dlsym_fwrite %p,%ld,%ld,%p -> %ld\n", ptr, size, nmemb, stream, ret);
     }
 
     debug_info("[bypass] << After fwrite...\n");
