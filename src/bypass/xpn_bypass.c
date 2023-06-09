@@ -591,7 +591,7 @@
 
   ssize_t read(int fd, void *buf, size_t nbyte)
   {         
-    ssize_t ret = (ssize_t) -1;
+    ssize_t ret = -1;
 
     debug_info("[bypass] >> Before read...\n");
     debug_info("[bypass]    * fd=%d\n",    fd) ;
@@ -628,7 +628,7 @@
 
   ssize_t write(int fd, const void *buf, size_t nbyte)
   {
-    ssize_t ret = (ssize_t) -1;
+    ssize_t ret = -1;
 
     debug_info("[bypass] >> Before write...\n");
     debug_info("[bypass]    * fd=%d\n",    fd) ;
@@ -665,7 +665,7 @@
 
   ssize_t pread(int fd, void *buf, size_t count, off_t offset)
   {
-    ssize_t ret = (ssize_t) -1;
+    ssize_t ret = -1;
 
     debug_info("[bypass] >> Before pread...\n");
     debug_info("[bypass]    * fd=%d\n",    fd) ;
@@ -709,7 +709,7 @@
 
   ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset)
   {
-    ssize_t ret = (ssize_t) -1;
+    ssize_t ret = -1;
 
     debug_info("[bypass] >> Before pwrite...\n");
     debug_info("[bypass]    * fd=%d\n",    fd) ;
