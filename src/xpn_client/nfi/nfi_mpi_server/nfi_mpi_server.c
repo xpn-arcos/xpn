@@ -987,7 +987,7 @@
       diff = size;
       cont = 0;
 
-      int buffer_size = size;
+      ssize_t buffer_size = size;
 
       // Max buffer size
       if (buffer_size > MAX_BUFFER_SIZE) {

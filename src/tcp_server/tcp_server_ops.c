@@ -664,57 +664,58 @@ void tcp_server_op_read_wos(tcp_server_param_st * params, int sd, struct st_tcp_
 
 void tcp_server_op_write_ws(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
 {
-    if( params -> mosquitto_mode == 0 )
-    {
-        debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
+    struct st_tcp_server_write_req req;
+    char * buffer;
+    ssize_t size, diff, cont, to_write;
 
-        struct st_tcp_server_write_req req;
-        char * buffer;
-        int size, diff, cont, to_write;
+    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
 
-        debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);
+    // if mosquitto -> return
+    if( params -> mosquitto_mode != 0 ) {
+	return ;
+    }
 
-        // initialize counters
-        cont = 0;
-        size = (head -> u_st_tcp_server_msg.op_write.size);
-        if (size > MAX_BUFFER_SIZE) {
+    // initialize counters
+    cont = 0;
+    size = (head -> u_st_tcp_server_msg.op_write.size);
+    if (size > MAX_BUFFER_SIZE) {
             size = MAX_BUFFER_SIZE;
-        }
+    }
+    diff = head -> u_st_tcp_server_msg.op_read.size - cont;
+
+    // malloc a buffer of size...
+    buffer = (char * ) malloc(size);
+    if (NULL == buffer) {
+        req.size = -1; // TODO: check in client that -1 is treated properly... :-)
+        tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_write_req), rank_client_id);
+        return;
+    }
+
+    // loop...
+    do
+    {
+        if (diff > size) to_write = size;
+        else to_write = diff;
+
+        // read data from TCP and write into the file
+        tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
+        filesystem_lseek(head -> u_st_tcp_server_msg.op_write.fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
+        //sem_wait(&disk_sem);
+        req.size = filesystem_write(head -> u_st_tcp_server_msg.op_write.fd, buffer, to_write);
+        //sem_post(&disk_sem);
+
+        // update counters
+        cont = cont + req.size; // Received bytes
         diff = head -> u_st_tcp_server_msg.op_read.size - cont;
 
-        // malloc a buffer of size...
-        buffer = (char * ) malloc(size);
-        if (NULL == buffer) {
-            req.size = -1; // TODO: check in client that -1 is treated properly... :-)
-            tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_write_req), rank_client_id);
-            return;
-        }
+    } while ((diff > 0) && (req.size != 0));
 
-        // loop...
-        do {
-            if (diff > size) to_write = size;
-            else to_write = diff;
+    // write to the client the status of the write operation
+    req.size = cont;
+    tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_write_req), rank_client_id);
 
-            // read data from TCP and write into the file
-            tcp_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
-            filesystem_lseek(head -> u_st_tcp_server_msg.op_write.fd, head -> u_st_tcp_server_msg.op_write.offset + cont, SEEK_SET);
-            //sem_wait(&disk_sem);
-            req.size = filesystem_write(head -> u_st_tcp_server_msg.op_write.fd, buffer, to_write);
-            //sem_post(&disk_sem);
-
-            // update counters
-            cont = cont + req.size; // Received bytes
-            diff = head -> u_st_tcp_server_msg.op_read.size - cont;
-
-        } while ((diff > 0) && (req.size != 0));
-
-        // write to the client the status of the write operation
-        req.size = cont;
-        tcp_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_tcp_server_write_req), rank_client_id);
-
-        // free buffer
-        FREE_AND_NULL(buffer);
-    }
+    // free buffer
+    FREE_AND_NULL(buffer);
 
     // for debugging purpouses
     debug_info("[TCP-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_tcp_server_msg.op_write.fd);

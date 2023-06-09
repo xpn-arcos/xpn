@@ -366,8 +366,9 @@ void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struc
 {
 	int optimize = 1; // Optimize by default
       //int optimize = 0; // Do not optimize
-	void *new_buffer = (void *)buffer;
+	void *new_buffer ;
 
+	new_buffer = (void *)buffer;
 	switch(xpn_file_table[fd]->mdata->type_policy)
 	{
 		case POLICY_RAID0:
@@ -379,7 +380,9 @@ void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struc
 					return new_buffer ;
 				}
 
-				XpnReadBlocksPolicyRAID0_AllInOne(fd, new_buffer, size, offset, io_out, ion_out, num_servers);
+				XpnReadBlocksPolicyRAID0_AllInOne(fd, (const void *)new_buffer, size, offset, io_out, ion_out, num_servers);
+
+				// free(new_buffer) ??????
 			}
 			else {
 				XpnRWBlocksPolicyBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);

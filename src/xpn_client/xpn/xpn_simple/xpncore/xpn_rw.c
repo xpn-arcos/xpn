@@ -86,13 +86,16 @@ ssize_t xpn_simple_write ( int fd, const void *buffer, size_t size )
 
 ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 {
+  ssize_t res;
+  ssize_t count;
   off_t new_offset, l_offset;
   size_t l_size;
   int l_serv;
-  size_t count = 0;
   struct nfi_server **servers;
-  int n, res;
+  int n;
 
+  res   = -1 ;
+  count = 0 ;
   XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 
   if((fd<0)||(fd>XPN_MAX_FILE)||(xpn_file_table[fd] == NULL))
@@ -162,12 +165,12 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 
     res = servers[l_serv]->ops->nfi_read(servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset+XPN_HEADER_SIZE, l_size) ;
     if(res<0) {
-      return (0 == count) ? (size_t) -1 : count ;
+      return (0 == count) ? -1 : count ;
     }
     count = count + res;
     new_offset = offset + count;
   }
-  while((size > count) && (res > 0));
+  while((size > (size_t) count) && (res > 0));
 
   if (servers != NULL) {
     free(servers);
@@ -183,8 +186,8 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 
 ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 {
-  ssize_t *res_v, total;
-  int res, n, i, j, err;
+  ssize_t res, *res_v, total;
+  int n, i, j, err;
   struct nfi_server **servers;
   struct nfi_worker_io **io;
   int *ion, max;
