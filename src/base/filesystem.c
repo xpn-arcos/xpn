@@ -293,7 +293,7 @@ int filesystem_close(int fd)
     return ret;
 }
 
-long filesystem_read(int read_fd2, void *buffer, int buffer_size)
+ssize_t filesystem_read(int read_fd2, void *buffer, size_t buffer_size)
 {
     ssize_t read_num_bytes = -1;
     ssize_t read_remaining_bytes = buffer_size;
@@ -332,7 +332,7 @@ long filesystem_read(int read_fd2, void *buffer, int buffer_size)
     return buffer_size;
 }
 
-long filesystem_write(int write_fd2, void *buffer, int num_bytes_to_write)
+ssize_t filesystem_write(int write_fd2, void *buffer, size_t num_bytes_to_write)
 {
     ssize_t write_num_bytes = -1;
     ssize_t write_remaining_bytes = num_bytes_to_write;

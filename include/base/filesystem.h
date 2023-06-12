@@ -119,7 +119,7 @@ int filesystem_close(int fd);
  * @param buffer_size 'TODO'.
  * @return 'TODO'.
  */
-long filesystem_read(int read_fd2, void *buffer, int buffer_size);
+ssize_t filesystem_read(int read_fd2, void *buffer, size_t buffer_size);
 
 /**
  * @brief Write a file.
@@ -131,7 +131,7 @@ long filesystem_read(int read_fd2, void *buffer, int buffer_size);
  * @param num_bytes_to_write 'TODO'.
  * @return 'TODO'.
  */
-long filesystem_write(int write_fd2, void *buffer, int num_bytes_to_write);
+ssize_t filesystem_write(int write_fd2, void *buffer, size_t num_bytes_to_write);
 
 /**
  * @brief Rename a file.
