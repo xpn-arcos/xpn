@@ -886,7 +886,7 @@
 
   ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
   {
-    int ret, diff, cont;
+    ssize_t ret, diff, cont;
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
     struct st_mpi_server_msg msg;
@@ -987,7 +987,7 @@
       diff = size;
       cont = 0;
 
-      int buffer_size = size;
+      ssize_t buffer_size = size;
 
       // Max buffer size
       if (buffer_size > MAX_BUFFER_SIZE) {

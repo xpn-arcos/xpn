@@ -387,7 +387,7 @@
   {
     struct st_mpi_server_read_req req;
     char *buffer;
-    long  size, diff, to_read, cont ;
+    ssize_t  size, diff, to_read, cont ;
 
     debug_info("[MPI-SERVER-OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n",  params->srv_name,
                                                                                        head->u_st_mpi_server_msg.op_read.fd,
@@ -459,7 +459,7 @@
   {
     struct st_mpi_server_read_req req;
     char *buffer;
-    long  size, diff, to_read, cont ;
+    ssize_t  size, diff, to_read, cont ;
 
     debug_info("[MPI-SERVER-OPS] (ID=%s) begin read: path %s offset %d size %d ID=x\n",  params->srv_name,
                                                                                          head->u_st_mpi_server_msg.op_read.path,
@@ -478,7 +478,7 @@
     if (fd < 0)
     {
       req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
-      mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id) ;
+      mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_write_req), rank_client_id) ;
       return ;
     }
 
@@ -487,7 +487,7 @@
     if (NULL == buffer)
     {
       req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
-      mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id) ;
+      mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_write_req), rank_client_id) ;
 
       filesystem_close(fd);
 
@@ -512,7 +512,7 @@
       if (req.size < 0)
       {
         req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
-        mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id) ;
+        mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_write_req), rank_client_id) ;
 
         filesystem_close(fd);
 
@@ -549,7 +549,7 @@
   {
     struct st_mpi_server_write_req req;
     char *buffer;
-    int   size, diff, cont, to_write ;
+    ssize_t size, diff, cont, to_write ;
 
     debug_info("[MPI-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.fd) ;
 
@@ -566,7 +566,7 @@
     if (NULL == buffer)
     {
       req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
-      mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id) ;
+      mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_write_req), rank_client_id) ;
       return ;
     }
 
@@ -574,12 +574,8 @@
     do
     {
       if (diff > size)
-      {
-        to_write = size ;
-      }
-      else{
-        to_write = diff ;
-      }
+           to_write = size ;
+      else to_write = diff ;
 
       // read data from MPI and write into the file
       mpi_server_comm_read_data(params, sd, buffer, to_write, rank_client_id) ;
@@ -596,7 +592,7 @@
 
     // write to the client the status of the write operation
     req.size = cont;
-    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id) ;
+    mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_write_req), rank_client_id) ;
 
     // free buffer
     FREE_AND_NULL(buffer) ;
@@ -609,7 +605,7 @@
   {
     struct st_mpi_server_write_req req;
     char *buffer;
-    int   size, diff, cont, to_write ;
+    ssize_t size, diff, cont, to_write ;
 
     debug_info("[MPI-SERVER-OPS] (ID=%s) begin write: path %s ID=xn", params->srv_name, head->u_st_mpi_server_msg.op_write.path) ;
 
@@ -932,7 +928,7 @@
     }
 
     off_t cont = BLOCKSIZE * params->rank;
-    int read_bytes, write_bytes;
+    ssize_t read_bytes, write_bytes;
 
     do
     {
@@ -1022,7 +1018,7 @@
     MPI_Barrier(MPI_COMM_WORLD) ;
 
     int cont = BLOCKSIZE * params->rank;
-    int read_bytes, write_bytes;
+    ssize_t read_bytes, write_bytes;
 
     do
     {
