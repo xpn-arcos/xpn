@@ -282,29 +282,29 @@ int nfi_mpi_server_init(char *url, struct nfi_server *serv, __attribute__((__unu
   NULL_RET_ERR(serv->ops, MPI_SERVERERR_MEMORY);
 
   bzero(serv->ops, sizeof(struct nfi_ops));
-  serv->ops->nfi_reconnect = nfi_mpi_server_reconnect;
+  serv->ops->nfi_reconnect  = nfi_mpi_server_reconnect;
   serv->ops->nfi_disconnect = nfi_mpi_server_disconnect;
 
-  serv->ops->nfi_open = nfi_mpi_server_open;
-  serv->ops->nfi_create = nfi_mpi_server_create;
-  serv->ops->nfi_read = nfi_mpi_server_read;
-  serv->ops->nfi_write = nfi_mpi_server_write;
-  serv->ops->nfi_close = nfi_mpi_server_close;
-  serv->ops->nfi_remove = nfi_mpi_server_remove;
-  serv->ops->nfi_rename = nfi_mpi_server_rename;
-  serv->ops->nfi_getattr = nfi_mpi_server_getattr;
-  serv->ops->nfi_setattr = nfi_mpi_server_setattr;
+  serv->ops->nfi_open     = nfi_mpi_server_open;
+  serv->ops->nfi_create   = nfi_mpi_server_create;
+  serv->ops->nfi_read     = nfi_mpi_server_read;
+  serv->ops->nfi_write    = nfi_mpi_server_write;
+  serv->ops->nfi_close    = nfi_mpi_server_close;
+  serv->ops->nfi_remove   = nfi_mpi_server_remove;
+  serv->ops->nfi_rename   = nfi_mpi_server_rename;
+  serv->ops->nfi_getattr  = nfi_mpi_server_getattr;
+  serv->ops->nfi_setattr  = nfi_mpi_server_setattr;
 
-  serv->ops->nfi_opendir = nfi_mpi_server_opendir;
-  serv->ops->nfi_mkdir = nfi_mpi_server_mkdir;
-  serv->ops->nfi_readdir = nfi_mpi_server_readdir;
+  serv->ops->nfi_opendir  = nfi_mpi_server_opendir;
+  serv->ops->nfi_mkdir    = nfi_mpi_server_mkdir;
+  serv->ops->nfi_readdir  = nfi_mpi_server_readdir;
   serv->ops->nfi_closedir = nfi_mpi_server_closedir;
-  serv->ops->nfi_rmdir = nfi_mpi_server_rmdir;
+  serv->ops->nfi_rmdir    = nfi_mpi_server_rmdir;
 
-  serv->ops->nfi_preload = nfi_mpi_server_preload;
-  serv->ops->nfi_flush = nfi_mpi_server_flush;
+  serv->ops->nfi_preload  = nfi_mpi_server_preload;
+  serv->ops->nfi_flush    = nfi_mpi_server_flush;
 
-  serv->ops->nfi_statfs = nfi_mpi_server_statfs;
+  serv->ops->nfi_statfs   = nfi_mpi_server_statfs;
 
   // parse url...
   ret = base_urlstr_parse_url(url, prt, NULL, NULL, server, NULL, dir);
@@ -950,7 +950,7 @@ ssize_t nfi_mpi_server_read(struct nfi_server *serv, struct nfi_fhandle *fh, voi
 
 ssize_t nfi_mpi_server_write(struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size)
 {
-  int ret, diff, cont;
+  ssize_t ret, diff, cont;
   struct nfi_mpi_server_server *server_aux;
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
@@ -1062,7 +1062,7 @@ ssize_t nfi_mpi_server_write(struct nfi_server *serv, struct nfi_fhandle *fh, vo
     diff = size;
     cont = 0;
 
-    int buffer_size = size;
+    ssize_t buffer_size = size;
 
     // Max buffer size
     if (buffer_size > MAX_BUFFER_SIZE)

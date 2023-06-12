@@ -363,9 +363,10 @@ void xpn_write_blocks_policy_raid1_all_in_one(__attribute__((__unused__)) int fd
 void *xpn_read_blocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
 {
 	int optimize = 1; // Optimize by default
-					  // int optimize = 0; // Do not optimize
-	void *new_buffer = (void *)buffer;
+			  // int optimize = 0; // Do not optimize
+	void *new_buffer ;
 
+	new_buffer = (void *)buffer;
 	switch (xpn_file_table[fd]->mdata->type_policy)
 	{
 	case POLICY_RAID0:
@@ -378,7 +379,9 @@ void *xpn_read_blocks(int fd, const void *buffer, size_t size, off_t offset, str
 				return new_buffer;
 			}
 
-			xpn_read_blocks_policy_raid0_all_in_one(fd, new_buffer, size, offset, io_out, ion_out, num_servers);
+			xpn_read_blocks_policy_raid0_all_in_one(fd, (const void *)new_buffer, size, offset, io_out, ion_out, num_servers);
+
+			// free(new_buffer) ??????
 		}
 		else
 		{
