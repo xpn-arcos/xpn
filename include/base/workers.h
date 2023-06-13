@@ -51,11 +51,12 @@
  *  ... Constants
  ***********************************************/
 
-#define TH_NOT 0  // No threads are executed
-#define TH_POOL \
-    1  // A pool of N threads is executed where there is an intermediate queue and there are producers and consumers of
-       // operations.
-#define TH_OP 2  // A thread is created according to an operation. That is, on demand.
+// No threads are executed
+#define TH_NOT 0  
+// A pool of N threads is executed where there is an intermediate queue and there are producers and consumers of operations.
+#define TH_POOL 1  
+// A thread is created according to an operation. That is, on demand.
+#define TH_OP 2  
 
 /************************************************
  *  ... Datatype
