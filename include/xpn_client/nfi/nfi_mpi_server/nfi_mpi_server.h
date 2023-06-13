@@ -95,7 +95,7 @@ extern "C"
   };
 
   /************************************************
-   *  ... Functions
+   *  ... API Functions
    ***********************************************/
 
   /**
@@ -109,6 +109,16 @@ extern "C"
    * @return 'TODO'.
    */
   int nfi_mpi_server_init(char *url, struct nfi_server *serv, struct nfi_attr_server *attr);
+
+  /**
+   * @brief Destroy mpi_server.
+   *
+   * 'TODO'.
+   *
+   * @param serv 'TODO'.
+   * @return 'TODO'.
+   */
+  int nfi_mpi_server_destroy(struct nfi_server *server);
 
   /**
    * @brief Connect to the server.
