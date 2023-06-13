@@ -975,37 +975,38 @@ void tcp_server_op_read_wos(tcp_server_param_st *params, int sd, struct st_tcp_s
 
 void tcp_server_op_write_ws(tcp_server_param_st *params, int sd, struct st_tcp_server_msg *head, int rank_client_id)
 {
-  if (params->mosquitto_mode == 0)
-  {
-    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.fd);
+  struct st_tcp_server_write_req req;
+  char *buffer;
+  int size, diff, cont, to_write;
 
-    struct st_tcp_server_write_req req;
-    char *buffer;
-    int size, diff, cont, to_write;
+  if (params->mosquitto_mode != 0) {
+      return ;
+  }
 
-    debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.fd);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.fd);
 
-    // initialize counters
-    cont = 0;
-    size = (head->u_st_tcp_server_msg.op_write.size);
-    if (size > MAX_BUFFER_SIZE)
-    {
+  debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.fd);
+
+  // initialize counters
+  cont = 0;
+  size = (head->u_st_tcp_server_msg.op_write.size);
+  if (size > MAX_BUFFER_SIZE) {
       size = MAX_BUFFER_SIZE;
-    }
-    diff = head->u_st_tcp_server_msg.op_read.size - cont;
+  }
+  diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
-    // malloc a buffer of size...
-    buffer = (char *)malloc(size);
-    if (NULL == buffer)
-    {
+  // malloc a buffer of size...
+  buffer = (char *)malloc(size);
+  if (NULL == buffer)
+  {
       req.size = -1; // TODO: check in client that -1 is treated properly... :-)
       tcp_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_tcp_server_write_req), rank_client_id);
       return;
-    }
+  }
 
-    // loop...
-    do
-    {
+  // loop...
+  do
+  {
       if (diff > size)
         to_write = size;
       else
@@ -1022,15 +1023,14 @@ void tcp_server_op_write_ws(tcp_server_param_st *params, int sd, struct st_tcp_s
       cont = cont + req.size; // Received bytes
       diff = head->u_st_tcp_server_msg.op_read.size - cont;
 
-    } while ((diff > 0) && (req.size != 0));
+  } while ((diff > 0) && (req.size != 0));
 
-    // write to the client the status of the write operation
-    req.size = cont;
-    tcp_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_tcp_server_write_req), rank_client_id);
+  // write to the client the status of the write operation
+  req.size = cont;
+  tcp_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_tcp_server_write_req), rank_client_id);
 
-    // free buffer
-    FREE_AND_NULL(buffer);
-  }
+  // free buffer
+  FREE_AND_NULL(buffer);
 
   // for debugging purpouses
   debug_info("[TCP-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_tcp_server_msg.op_write.fd);
