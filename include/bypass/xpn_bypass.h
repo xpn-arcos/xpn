@@ -1,5 +1,6 @@
 /*
- *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez
+ * Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -24,7 +25,8 @@
  *
  * Header file to 'TODO'.
  *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia,
+ * Borja Bergua Guerra
  * @date  Jul 22, 2021
  * @bug No known bugs.
  */
@@ -37,18 +39,16 @@
 /************************************************
  *  ... Includes
  ***********************************************/
-#include "config.h"
-
-#include <dlfcn.h>
-#include <sys/stat.h>
-#include <stdarg.h>
-
-#include "xpn.h"
-#include "syscall_proxies.h"
-
 #include <dirent.h>
+#include <dlfcn.h>
+#include <stdarg.h>
 #include <string.h>
+#include <sys/stat.h>
+
+#include "config.h"
 #include "mpi.h"
+#include "syscall_proxies.h"
+#include "xpn.h"
 
 // #include<pthread.h> //Mutex
 
@@ -61,64 +61,63 @@
 #endif
 
 // #define RTLD_NEXT ((void *) -1l)
-#define MAX_FDS 10000
+#define MAX_FDS  10000
 #define MAX_DIRS 10000
-#define PLUSXPN 1000
+#define PLUSXPN  1000
 
 #undef __USE_FILE_OFFSET64
 #undef __USE_LARGEFILE64
 
-#define FD_FREE 0
-#define FD_SYS 1
-#define FD_XPN 2
+#define FD_FREE   0
+#define FD_SYS    1
+#define FD_XPN    2
 
 #define O_ACCMODE 00000003
 #define O_RDONLY  00000000
 #define O_WRONLY  00000001
 #define O_RDWR    00000002
 #ifndef O_CREAT
-#define O_CREAT   00000100  /* not fcntl */
+#define O_CREAT 00000100  /* not fcntl */
 #endif
 #ifndef O_EXCL
-#define O_EXCL    00000200  /* not fcntl */
+#define O_EXCL 00000200   /* not fcntl */
 #endif
 #ifndef O_NOCTTY
-#define O_NOCTTY  00000400  /* not fcntl */
+#define O_NOCTTY 00000400 /* not fcntl */
 #endif
 #ifndef O_TRUNC
-#define O_TRUNC   00001000  /* not fcntl */
+#define O_TRUNC 00001000  /* not fcntl */
 #endif
 #ifndef O_APPEND
-#define O_APPEND  00002000
+#define O_APPEND 00002000
 #endif
 #ifndef O_NONBLOCK
-#define O_NONBLOCK  00004000
+#define O_NONBLOCK 00004000
 #endif
 #ifndef O_DSYNC
-#define O_DSYNC   00010000  /* used to be O_SYNC, see below */
+#define O_DSYNC 00010000  /* used to be O_SYNC, see below */
 #endif
 #ifndef FASYNC
-#define FASYNC    00020000  /* fcntl, for BSD compatibility */
+#define FASYNC 00020000   /* fcntl, for BSD compatibility */
 #endif
 #ifndef O_DIRECT
-#define O_DIRECT  00040000  /* direct disk access hint */
+#define O_DIRECT 00040000 /* direct disk access hint */
 #endif
 #ifndef O_LARGEFILE
 #define O_LARGEFILE 00100000
 #endif
 #ifndef O_DIRECTORY
-#define O_DIRECTORY 00200000  /* must be a directory */
+#define O_DIRECTORY 00200000 /* must be a directory */
 #endif
 #ifndef O_NOFOLLOW
-#define O_NOFOLLOW  00400000  /* don't follow links */
+#define O_NOFOLLOW 00400000  /* don't follow links */
 #endif
 #ifndef O_NOATIME
 #define O_NOATIME 01000000
 #endif
 #ifndef O_CLOEXEC
-#define O_CLOEXEC 02000000  /* set close_on_exec */
+#define O_CLOEXEC 02000000 /* set close_on_exec */
 #endif
-
 
 /************************************************
  *  ... Typedef
@@ -140,17 +139,16 @@
  *  @var __dirstream::path
  *    A 'TODO'.
  */
-struct __dirstream
-{
-  int fd;
-  //__libc_lock_define (, lock) /* Mutex lock for this structure.  */ //TODO
-  size_t allocation;
-  size_t size;
-  size_t offset;
-  off_t filepos;
-  /* Directory block.  */
-  char data[0] __attribute__((aligned(__alignof__(void *))));
-  char *path;
+struct __dirstream {
+    int fd;
+    //__libc_lock_define (, lock) /* Mutex lock for this structure.  */ //TODO
+    size_t allocation;
+    size_t size;
+    size_t offset;
+    off_t filepos;
+    /* Directory block.  */
+    char data[0] __attribute__((aligned(__alignof__(void *))));
+    char *path;
 };
 
 /** @struct generic_fd
@@ -163,11 +161,10 @@ struct __dirstream
  *  @var generic_fd::is_file
  *    A 'TODO'.
  */
-struct generic_fd
-{
-  int type;
-  int real_fd;
-  int is_file;
+struct generic_fd {
+    int type;
+    int real_fd;
+    int is_file;
 };
 
 /************************************************
@@ -185,6 +182,7 @@ struct generic_fd
  *
  * @param path  'TODO'.
  * @param flags  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int open(const char *path, int flags, ...);
@@ -196,6 +194,7 @@ int open(const char *path, int flags, ...);
  *
  * @param path  'TODO'.
  * @param flags  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int open64(const char *path, int flags, ...);
@@ -207,6 +206,7 @@ int open64(const char *path, int flags, ...);
  *
  * @param path  'TODO'.
  * @param flags  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int __open_2(const char *path, int flags, ...);
@@ -218,6 +218,7 @@ int __open_2(const char *path, int flags, ...);
  *
  * @param path  'TODO'.
  * @param mode  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int creat(const char *path, mode_t mode);
@@ -228,6 +229,7 @@ int creat(const char *path, mode_t mode);
  * 'TODO'.
  *
  * @param fd  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int close(int fd);
@@ -239,6 +241,7 @@ int close(int fd);
  *
  * @param fildes  'TODO'.
  * @param length  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int ftruncate(int fildes, off_t length);
@@ -251,6 +254,7 @@ int ftruncate(int fildes, off_t length);
  * @param fildes  'TODO'.
  * @param buf  'TODO'.
  * @param nbyte  'TODO'.
+ * 
  * @return 'TODO'.
  */
 ssize_t read(int fildes, void *buf, size_t nbyte);
@@ -260,21 +264,25 @@ ssize_t read(int fildes, void *buf, size_t nbyte);
  *
  * 'TODO'.
  *
- * @param fildes  'TODO'.
+ * @param fd  'TODO'.
  * @param buf  'TODO'.
- * @param nbyte  'TODO'.
+ * @param count  'TODO'.
+ * @param offset  'TODO'.
+ * 
  * @return 'TODO'.
  */
-ssize_t pread  (int fd, void *buf, size_t count, off_t offset);
+ssize_t pread(int fd, void *buf, size_t count, off_t offset);
 
 /**
  * @brief 'TODO'.
  *
  * 'TODO'.
  *
- * @param fildes  'TODO'.
+ * @param fd  'TODO'.
  * @param buf  'TODO'.
- * @param nbyte  'TODO'.
+ * @param count  'TODO'.
+ * @param offset  'TODO'.
+ * 
  * @return 'TODO'.
  */
 ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
@@ -287,6 +295,7 @@ ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
  * @param fildes  'TODO'.
  * @param buf  'TODO'.
  * @param nbyte  'TODO'.
+ * 
  * @return 'TODO'.
  */
 ssize_t write(int fildes, const void *buf, size_t nbyte);
@@ -299,6 +308,7 @@ ssize_t write(int fildes, const void *buf, size_t nbyte);
  * @param fildes  'TODO'.
  * @param offset  'TODO'.
  * @param whence  'TODO'.
+ * 
  * @return 'TODO'.
  */
 off_t lseek(int fildes, off_t offset, int whence);
@@ -311,6 +321,7 @@ off_t lseek(int fildes, off_t offset, int whence);
  * @param fd  'TODO'.
  * @param offset  'TODO'.
  * @param whence  'TODO'.
+ * 
  * @return 'TODO'.
  */
 off64_t lseek64(int fd, off64_t offset, int whence);
@@ -323,6 +334,7 @@ off64_t lseek64(int fd, off64_t offset, int whence);
  * @param ver  'TODO'.
  * @param path  'TODO'.
  * @param buf  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int __lxstat(int ver, const char *path, struct stat *buf);
@@ -335,6 +347,7 @@ int __lxstat(int ver, const char *path, struct stat *buf);
  * @param ver  'TODO'.
  * @param path  'TODO'.
  * @param buf  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int __lxstat64(int ver, const char *path, struct stat64 *buf);
@@ -347,6 +360,7 @@ int __lxstat64(int ver, const char *path, struct stat64 *buf);
  * @param ver  'TODO'.
  * @param path  'TODO'.
  * @param buf  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int __xstat(int ver, const char *path, struct stat *buf);
@@ -359,6 +373,7 @@ int __xstat(int ver, const char *path, struct stat *buf);
  * @param ver  'TODO'.
  * @param path  'TODO'.
  * @param buf  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int __xstat64(int ver, const char *path, struct stat64 *buf);
@@ -371,6 +386,7 @@ int __xstat64(int ver, const char *path, struct stat64 *buf);
  * @param ver  'TODO'.
  * @param fd  'TODO'.
  * @param buf  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int __fxstat(int ver, int fd, struct stat *buf);
@@ -383,6 +399,7 @@ int __fxstat(int ver, int fd, struct stat *buf);
  * @param ver  'TODO'.
  * @param fildes  'TODO'.
  * @param buf  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int __fxstat64(int ver, int fildes, struct stat64 *buf);
@@ -397,6 +414,7 @@ int __fxstat64(int ver, int fildes, struct stat64 *buf);
  * @param path  'TODO'.
  * @param buf  'TODO'.
  * @param flags  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int __fxstatat(int ver, int dirfd, const char *path, struct stat *buf, int flags);
@@ -411,6 +429,7 @@ int __fxstatat(int ver, int dirfd, const char *path, struct stat *buf, int flags
  * @param path  'TODO'.
  * @param buf  'TODO'.
  * @param flags  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int __fxstatat64(int ver, int dirfd, const char *path, struct stat64 *buf, int flags);
@@ -422,6 +441,7 @@ int __fxstatat64(int ver, int dirfd, const char *path, struct stat64 *buf, int f
  *
  * @param old_path  'TODO'.
  * @param new_path  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int rename(const char *old_path, const char *new_path);
@@ -432,22 +452,103 @@ int rename(const char *old_path, const char *new_path);
  * 'TODO'.
  *
  * @param path  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int unlink(const char *path);
 
-// File API (stdio)
+/************************************************
+ *  ... File API (stdio)
+ ***********************************************/
 
-FILE * fopen  (const char *path, const char *mode);
-FILE * fdopen (int fd, const char *mode);
-int    fclose (FILE *stream);
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param path  'TODO'.
+ * @param mode  'TODO'.
+ * 
+ * @return 'TODO'.
+ */
+FILE *fopen(const char *path, const char *mode);
 
-size_t fread  (void *ptr, size_t size, size_t nmemb, FILE *stream);
-size_t fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream);
+/**
+ * @brief 'TODO'.
+ *
+ * Create a new stream that refers to an existing system file descriptor.
+ *
+ * @param fd  'TODO'.
+ * @param mode  'TODO'.
+ * 
+ * @return 'TODO'.
+ */
+FILE *fdopen(int fd, const char *mode);
 
-int  fseek      (FILE *stream, long int offset, int whence);
-int  dlsym_feof (FILE *stream);
+/**
+ * @brief Close STREAM.
+ *
+ * This function is a possible cancellation point and therefore not 
+ * marked with __THROW.
+ *
+ * @param stream  'TODO'.
+ * 
+ * @return 'TODO'.
+ */
+int fclose(FILE *stream);
 
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ptr 'TODO'.
+ * @param size 'TODO'.
+ * @param nmemb 'TODO'.
+ * @param stream 'TODO'.
+ *  
+ * @return 'TODO'.
+ */
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param ptr 'TODO'.
+ * @param size 'TODO'.
+ * @param nmemb 'TODO'.
+ * @param stream 'TODO'.
+ *  
+ * @return 'TODO'.
+ */
+size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+
+/**
+ * @brief Seek to a certain position on STREAM.
+ *
+ * This function is a possible cancellation point and therefore not 
+ * marked with __THROW.
+ *
+ * @param stream  'TODO'.
+ * @param offset  'TODO'.
+ * @param whence  'TODO'.
+ * 
+ * @return 'TODO'.
+ */
+int fseek(FILE *stream, long int offset, int whence);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param stream 'TODO'.
+ * 
+ * @return 'TODO'.
+ */
+int feof(FILE *stream);
 
 /************************************************
  *  ... Directory API
@@ -460,6 +561,7 @@ int  dlsym_feof (FILE *stream);
  *
  * @param path  'TODO'.
  * @param mode  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int mkdir(const char *path, mode_t mode);
@@ -470,6 +572,7 @@ int mkdir(const char *path, mode_t mode);
  * 'TODO'.
  *
  * @param dirname  'TODO'.
+ * 
  * @return 'TODO'.
  */
 DIR *opendir(const char *dirname);
@@ -480,6 +583,7 @@ DIR *opendir(const char *dirname);
  * 'TODO'.
  *
  * @param dirp  'TODO'.
+ * 
  * @return 'TODO'.
  */
 struct dirent *readdir(DIR *dirp);
@@ -490,6 +594,7 @@ struct dirent *readdir(DIR *dirp);
  * 'TODO'.
  *
  * @param dirp  'TODO'.
+ * 
  * @return 'TODO'.
  */
 struct dirent64 *readdir64(DIR *dirp);
@@ -500,6 +605,7 @@ struct dirent64 *readdir64(DIR *dirp);
  * 'TODO'.
  *
  * @param dirp  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int closedir(DIR *dirp);
@@ -510,6 +616,7 @@ int closedir(DIR *dirp);
  * 'TODO'.
  *
  * @param path  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int rmdir(const char *path);
@@ -533,7 +640,19 @@ int fork(void);
  *
  * 'TODO'.
  *
+ * @param pipefd  'TODO'.
+ * 
+ * @return 'TODO'.
+ */
+int pipe(int pipefd[2]);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
  * @param fildes  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int dup(int fildes);
@@ -545,6 +664,7 @@ int dup(int fildes);
  *
  * @param fildes  'TODO'.
  * @param fildes2  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int dup2(int fildes, int fildes2);
@@ -569,6 +689,7 @@ void exit(int status);
  * 'TODO'.
  *
  * @param path  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int chdir(const char *path);
@@ -580,6 +701,7 @@ int chdir(const char *path);
  *
  * @param path  'TODO'.
  * @param mode  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int chmod(const char *path, mode_t mode);
@@ -591,6 +713,7 @@ int chmod(const char *path, mode_t mode);
  *
  * @param fildes  'TODO'.
  * @param mode  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int fchmod(int fildes, mode_t mode);
@@ -603,6 +726,7 @@ int fchmod(int fildes, mode_t mode);
  * @param path  'TODO'.
  * @param owner  'TODO'.
  * @param group  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int chown(const char *path, uid_t owner, gid_t group);
@@ -615,6 +739,7 @@ int chown(const char *path, uid_t owner, gid_t group);
  * @param fd  'TODO'.
  * @param cmd  'TODO'.
  * @param arg  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int fcntl(int fd, int cmd, long arg);
@@ -626,6 +751,7 @@ int fcntl(int fd, int cmd, long arg);
  *
  * @param path  'TODO'.
  * @param mode  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int access(const char *path, int mode);
@@ -637,6 +763,7 @@ int access(const char *path, int mode);
  *
  * @param path  'TODO'.
  * @param resolved_path  'TODO'.
+ * 
  * @return 'TODO'.
  */
 char *realpath(const char *restrict path, char *restrict resolved_path);
@@ -649,6 +776,7 @@ char *realpath(const char *restrict path, char *restrict resolved_path);
  * @param path  'TODO'.
  * @param resolved_path  'TODO'.
  * @param resolved_len  'TODO'.
+ * 
  * @return 'TODO'.
  */
 char *__realpath_chk(const char *path, char *resolved_path, size_t resolved_len);
@@ -659,8 +787,50 @@ char *__realpath_chk(const char *path, char *resolved_path, size_t resolved_len)
  * 'TODO'.
  *
  * @param fd  'TODO'.
+ * 
  * @return 'TODO'.
  */
 int fsync(int fd);
+
+/************************************************
+ *  ... MPI API
+ ***********************************************/
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param argc  'TODO'.
+ * @param argv  'TODO'.
+ *
+ * @return 'TODO'.
+ */
+int MPI_Init(int *argc, char ***argv);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @param argc  'TODO'.
+ * @param argv  'TODO'.
+ * @param required  'TODO'.
+ * @param provided  'TODO'.
+ *
+ * @return 'TODO'.
+ */
+int MPI_Init_thread(int *argc, char ***argv, int required, int *provided);
+
+/**
+ * @brief 'TODO'.
+ *
+ * 'TODO'.
+ *
+ * @par Parameters
+ *    None.
+ * @return 'TODO'.
+ */
+int MPI_Finalize(void);
 
 #endif
