@@ -41,7 +41,7 @@ echo " Begin."
 # 1) Arguments...
 
 ## base path
-BASE_PATH=$(dirname "$0")
+BASE_PATH="$(dirname "$(readlink -f "$0")")"
 
 ## get arguments
 while getopts "m:i:" opt; do

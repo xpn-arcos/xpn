@@ -262,11 +262,12 @@ AC_CONFIG_FILES([ \
 		  src/utils/Makefile \
 		  src/bypass/Makefile \
 		  src/mpi_server/Makefile \
-		  src/tcp_server/Makefile\
+		  src/tcp_server/Makefile \
 		  test/integrity/xpn/Makefile \
 		  test/integrity/mpi_connect_accept/Makefile \
-                  test/performance/mpi_pingpong/Makefile \
+		  test/performance/xpn/Makefile \
 		  test/performance/iop/Makefile \
+                  test/performance/mpi_pingpong/Makefile \
 		])
 AC_OUTPUT
 
