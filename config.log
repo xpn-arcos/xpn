@@ -1047,7 +1047,7 @@ configure:5991: $? = 0
 configure:5991: result: yes
 configure:5997: checking for _doprnt
 configure:5997: gcc -o conftest -g -O2   conftest.c -lmosquitto -lmxml -ldl -lpthread  >&5
-/usr/bin/ld: /tmp/ccmHdsrj.o: in function `main':
+/usr/bin/ld: /tmp/ccPznGFj.o: in function `main':
 /home/acaldero/work/xpn/conftest.c:83: undefined reference to `_doprnt'
 collect2: error: ld returned 1 exit status
 configure:5997: $? = 1
