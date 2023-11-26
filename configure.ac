@@ -265,6 +265,7 @@ AC_CONFIG_FILES([ \
 		  src/tcp_server/Makefile \
 		  test/integrity/xpn/Makefile \
 		  test/integrity/mpi_connect_accept/Makefile \
+		  test/integrity/bypass_c/Makefile \
 		  test/performance/xpn/Makefile \
 		  test/performance/iop/Makefile \
                   test/performance/mpi_pingpong/Makefile \

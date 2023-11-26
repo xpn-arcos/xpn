@@ -3,7 +3,11 @@
 #include <sys/time.h>
 
 
-#define BUFF_SIZE (1024*1024)
+#define KB  (1024)
+#define MB  (1024*1024)
+#define GB  (1024*1024*1024)
+
+#define BUFF_SIZE (1*MB)
 char buffer[BUFF_SIZE] ;
 
 
@@ -63,8 +67,8 @@ int main ( int argc, char *argv[] )
 
 	t_ac = get_time() - t_bc;
 
-	printf("Bytes; Total time (ms); Read time (ms)\n") ;
-	printf("%f;%f;%f\n", (double)mb * (double)BUFF_SIZE, t_ac * 1000, t_aw * 1000) ;
+	printf("Bytes (KiB); Total time (ms); Read time (ms)\n") ;
+	printf("%f;%f;%f\n", ((double)mb * (double)BUFF_SIZE) / ((double)KB), t_ac * 1000, t_aw * 1000) ;
 
 	return 0;
 }

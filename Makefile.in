@@ -102,7 +102,8 @@ CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES = src/bypass/Makefile src/mpi_server/Makefile \
 	src/tcp_server/Makefile test/integrity/xpn/Makefile \
 	test/integrity/mpi_connect_accept/Makefile \
-	test/performance/xpn/Makefile test/performance/iop/Makefile \
+	test/integrity/bypass_c/Makefile test/performance/xpn/Makefile \
+	test/performance/iop/Makefile \
 	test/performance/mpi_pingpong/Makefile
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
@@ -171,6 +172,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/ar-lib \
 	$(top_srcdir)/src/bypass/Makefile.in \
 	$(top_srcdir)/src/mpi_server/Makefile.in \
 	$(top_srcdir)/src/tcp_server/Makefile.in \
+	$(top_srcdir)/test/integrity/bypass_c/Makefile.in \
 	$(top_srcdir)/test/integrity/mpi_connect_accept/Makefile.in \
 	$(top_srcdir)/test/integrity/xpn/Makefile.in \
 	$(top_srcdir)/test/performance/iop/Makefile.in \
@@ -399,6 +401,8 @@ src/tcp_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/tcp_ser
 test/integrity/xpn/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/integrity/xpn/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 test/integrity/mpi_connect_accept/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/integrity/mpi_connect_accept/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/integrity/bypass_c/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/integrity/bypass_c/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 test/performance/xpn/Makefile: $(top_builddir)/config.status $(top_srcdir)/test/performance/xpn/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
