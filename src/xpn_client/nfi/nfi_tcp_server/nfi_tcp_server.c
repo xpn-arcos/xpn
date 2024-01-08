@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Elias del Pozo Puñal, Alejandro Calderón Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Elias del Pozo Puñal, Alejandro Calderón Mateos
  *
  *  This file is part of Expand.
  *
