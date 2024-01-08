@@ -114,6 +114,7 @@
   int dlsym_access(const char *path, int mode);
   char *dlsym_realpath(const char *restrict path, char *restrict resolved_path);
   int dlsym_fsync(int fd);
+  int dlsym_flock(int fd, int operation);
 
 
   // Memory API

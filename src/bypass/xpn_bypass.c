@@ -2030,3 +2030,30 @@
 
     return PMPI_Finalize();
   }
+
+  int flock(int fd, int operation)
+  {
+    int ret = -1;
+
+    debug_info("[bypass] >> Before flock...\n");
+    debug_info("[bypass]    * fd=%d\n",        fd) ;
+    debug_info("[bypass]    * operation=%d\n", operation) ;
+
+    struct generic_fd virtual_fd = fdstable_get ( fd );
+
+    if(virtual_fd.type == FD_XPN)
+    {
+      //TODO
+      return 0;
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("[bypass]\t try to dlsym_flock %d,%d\n", fd, operation);
+      ret = dlsym_flock(fd, operation);
+      debug_info("[bypass]\t dlsym_flock %d,%d -> %d\n", fd, operation, ret);
+    }
+
+    debug_info("[bypass] << After flock...\n");
+    return ret;
+  }

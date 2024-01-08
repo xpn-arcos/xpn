@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
    *
    *  This file is part of Expand.
    *
@@ -87,6 +87,7 @@
   int     (*real_access)(const char *, int) = NULL;
   char*   (*real_realpath)(const char *restrict, char *restrict) = NULL;
   int     (*real_fsync)(int) = NULL;
+  int     (*real_flock)(int, int) = NULL;
   void*   (*real_mmap)(void *, size_t, int, int, int, off_t) = NULL;
 
 
@@ -750,6 +751,17 @@
     }
     
     return real_fsync(fd);
+  }
+
+  int dlsym_flock(int fd, int operation)
+  {
+    debug_info("dlsym_flock: before flock...\n");
+
+    if (real_flock == NULL){
+        real_flock = (int (*)(int, int)) dlsym(RTLD_NEXT,"fsync");
+    }
+    
+    return real_flock(fd, operation);
   }
 
 
