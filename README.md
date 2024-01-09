@@ -39,7 +39,7 @@
     ```
     git clone https://github.com/xpn-arcos/xpn.git
     spack repo add xpn/scripts/spack
-    ```
+    ```w
 
   * To install XPN with Spack:
     ```
@@ -91,7 +91,7 @@
 
   * ### 1.2.2. Download the source code of XPN
 
-    You need to download the source code of [XPN](https://xpn-arcos.github.io/arcos-xpn.github.io/) and [minixml](http://www.minixml.org).
+    You need to download the source code of [XPN](https://xpn-arcos.github.io) and [minixml](http://www.minixml.org).
 
     You can download both by executing:
     ```
