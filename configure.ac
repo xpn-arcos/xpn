@@ -84,17 +84,13 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
-IFLAGS="-I../../mxml        -I../../bin/mosquitto/include       "
-IFLAGS+="-I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
-IFLAGS+="-I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
-
-LFLAGS=" -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib "
-LFLAGS+="-L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib "
-LFLAGS+="-L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
+IFLAGS="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+LFLAGS="    -L../../mxml    -L../../xpn/lib "
+LFLAGS+="-L../../../mxml -L../../../xpn/lib "
 
 LIBLINK=$LIBS
-LIBLINK+=" -lmxml -lmosquitto"
-LIBS=$LFLAGS" "$LIBS" -lmxml -lmosquitto"
+LIBLINK+=" -lmxml"
+LIBS=$LFLAGS" "$LIBS" -lmxml"
 
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
@@ -266,11 +262,13 @@ AC_CONFIG_FILES([ \
 		  src/utils/Makefile \
 		  src/bypass/Makefile \
 		  src/mpi_server/Makefile \
-		  src/tcp_server/Makefile\
+		  src/tcp_server/Makefile \
 		  test/integrity/xpn/Makefile \
 		  test/integrity/mpi_connect_accept/Makefile \
-                  test/performance/mpi_pingpong/Makefile \
+		  test/integrity/bypass_c/Makefile \
+		  test/performance/xpn/Makefile \
 		  test/performance/iop/Makefile \
+                  test/performance/mpi_pingpong/Makefile \
 		])
 AC_OUTPUT
 

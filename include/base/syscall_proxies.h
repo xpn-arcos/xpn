@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
    *
    *  This file is part of Expand.
    *
@@ -50,6 +50,9 @@
   ssize_t dlsym_read (int fd, void *buf, size_t nbyte);
   ssize_t dlsym_write(int fd, void *buf, size_t nbyte);
 
+  ssize_t dlsym_pread (int fd, void *buf, size_t count, off_t offset);
+  ssize_t dlsym_pwrite(int fd, const void *buf, size_t count, off_t offset);
+
   off_t   dlsym_lseek   (int fd,   off_t offset, int whence);
   off64_t dlsym_lseek64 (int fd, off64_t offset, int whence);
 
@@ -64,6 +67,18 @@
 
   int dlsym_rename (const char *old_path, const char *new_path);
   int dlsym_unlink (char *path);
+
+
+  // File API (stdio)
+  FILE* dlsym_fopen   (const char *filename, const char *mode);
+  FILE* dlsym_fdopen  (int fd, const char *mode);
+  int  dlsym_fclose   (FILE *stream);
+
+  size_t dlsym_fread  (void *ptr, size_t size, size_t nmemb, FILE *stream);
+  size_t dlsym_fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream);
+
+  int dlsym_fseek     (FILE *stream, long int offset, int whence);
+  int  dlsym_feof     (FILE *stream);
 
 
   // Directory API
@@ -99,6 +114,7 @@
   int dlsym_access(const char *path, int mode);
   char *dlsym_realpath(const char *restrict path, char *restrict resolved_path);
   int dlsym_fsync(int fd);
+  int dlsym_flock(int fd, int operation);
 
 
   // Memory API

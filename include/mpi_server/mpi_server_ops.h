@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -42,6 +42,8 @@
 #ifndef MPI_SERVER_ID
   #define MPI_SERVER_ID 32
 #endif
+
+#define XPN_HEADER_SIZE 8192
 
   /* Operations */
 

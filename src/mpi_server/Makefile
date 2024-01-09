@@ -4,7 +4,7 @@
 #--------------------------
 
  MAKE                 = make -s
- CC                   = /opt/software/install-mpich/bin/mpicc
+ CC                   = /local_test/bin/mpich/bin/mpicc
  SOURCE_PATH          = ./
  EXPAND_DIR           = /local_test/bin//xpn
  OBJECTS_MPI_SERVER   = ../../src/mpi_server/mpi_server.o \
@@ -24,7 +24,7 @@
 			../../src/base/workers_pool.o
 MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
 MYHEADERS            = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/mpi_server
-MYLIBS               = -L../../src/xpn_client -L../../../mxml -lxpn -lmxml -ldl -lpthread
+MYLIBS               =  -L../../src/xpn_client -lxpn -lmxml     -L../../mxml    -L../../xpn/lib -L../../../mxml -L../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
 
 MPI_SERVER_EXE       = xpn_mpi_server
 MPI_SERVER_EXE_STOP  = xpn_stop_mpi_server
@@ -52,8 +52,7 @@ $(MPI_SERVER_EXE_STOP): $(MPI_SERVER_EXE)
 
 install:  $(MPI_SERVER_EXE)
 	cp -a                   $(MPI_SERVER_EXE) $(EXPAND_DIR)/bin
-	rm -fr $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP)
-	ln -s $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE) $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP)
+	rm -fr $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP) && ln -s $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE) $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP)
 
 
 clean:

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -195,7 +195,6 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     /*
      * Initialize mosquitto
      */
-
   
     #ifdef HAVE_MOSQUITTO_H
 
