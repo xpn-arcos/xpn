@@ -785,6 +785,7 @@ enable_dependency_tracking
 enable_nfs
 enable_nfs3
 enable_tcp_server
+enable_mosquitto
 enable_mpi_server
 '
       ac_precious_vars='build_alias
@@ -1432,6 +1433,7 @@ Optional Features:
   --enable-nfs            Enable NFS v2 module.
   --enable-nfs3           Enable NFS v3 module.
   --enable-tcp_server     Enable tcp_server module.
+  --enable-mosquitto      Enable mosquitto module.
   --enable-mpi_server[=/path/to/mpi/] (Don't use '~')
                           Enable mpi_server module.
 
@@ -6832,6 +6834,38 @@ fi
 
 ### END OF TCP_SERVER BLOCK. Do not remove this line. ###
 
+### BEGIN OF MOSQUITTO BLOCK. Do not remove this line. ###
+#
+# Defines the necessary variables if gridftp is enabled.
+#
+# Check whether --enable-mosquitto was given.
+if test ${enable_mosquitto+y}
+then :
+  enableval=$enable_mosquitto;
+                  CDEFS="$CDEFS -DENABLE_TCP_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"
+                  INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"
+                  NFI_TCP_SERVER="nfi_tcp_server"
+                  NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"
+                  LIBLINK+=" -lmosquitto"
+                  LIBS=$LFLAGS" "$LIBS" -lmosquitto"
+
+
+fi
+
+
+
+
+
+ if test "$NFI_TCP_SERVER" = "nfi_tcp_server"; then
+  ENABLE_TCP_SERVER_TRUE=
+  ENABLE_TCP_SERVER_FALSE='#'
+else
+  ENABLE_TCP_SERVER_TRUE='#'
+  ENABLE_TCP_SERVER_FALSE=
+fi
+
+### END OF MOSQUITTO BLOCK. Do not remove this line. ###
+
 ### BEGIN OF MPI_SERVER BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if gridftp is enabled.
@@ -6879,6 +6913,7 @@ LDFLAGS="$LIBLINK $LIBS"
 # Build makefile and headers...
 #
 ac_config_files="$ac_config_files Makefile src/base/Makefile src/xpn_client/Makefile src/utils/Makefile src/bypass/Makefile src/mpi_server/Makefile src/tcp_server/Makefile test/integrity/xpn/Makefile test/integrity/mpi_connect_accept/Makefile test/integrity/bypass_c/Makefile test/performance/xpn/Makefile test/performance/iop/Makefile test/performance/mpi_pingpong/Makefile"
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -7031,6 +7066,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${ENABLE_NFS3_TRUE}" && test -z "${ENABLE_NFS3_FALSE}"; then
   as_fn_error $? "conditional \"ENABLE_NFS3\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${ENABLE_TCP_SERVER_TRUE}" && test -z "${ENABLE_TCP_SERVER_FALSE}"; then
+  as_fn_error $? "conditional \"ENABLE_TCP_SERVER\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${ENABLE_TCP_SERVER_TRUE}" && test -z "${ENABLE_TCP_SERVER_FALSE}"; then
@@ -8371,6 +8410,5 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 printf "%s\n" "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
-
 
 

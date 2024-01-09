@@ -223,6 +223,28 @@ AC_SUBST(NFI_TCP_SERVER_OBJECTS)
 AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
 ### END OF TCP_SERVER BLOCK. Do not remove this line. ###
 
+### BEGIN OF MOSQUITTO BLOCK. Do not remove this line. ###
+#
+# Defines the necessary variables if gridftp is enabled.
+#
+AC_ARG_ENABLE(  [mosquitto],
+                [AS_HELP_STRING([--enable-mosquitto],[Enable mosquitto module.])],
+                [
+                  [CDEFS="$CDEFS -DENABLE_TCP_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"]
+                  [NFI_TCP_SERVER="nfi_tcp_server"]
+                  [NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"]
+                  [LIBLINK+=" -lmosquitto"]
+                  [LIBS=$LFLAGS" "$LIBS" -lmosquitto"]
+                ]
+)
+AC_SUBST(NFI_TCP_SERVER)
+AC_SUBST(NFI_TCP_SERVER_OBJECTS)
+AC_SUBST(LIBLINK)
+AC_SUBST(LIBS)
+AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
+### END OF MOSQUITTO BLOCK. Do not remove this line. ###
+
 ### BEGIN OF MPI_SERVER BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if gridftp is enabled.
@@ -260,19 +282,19 @@ AC_SUBST(M_HEADERS)
 # Build makefile and headers...
 #
 AC_CONFIG_FILES([ \
-		  Makefile \
-		  src/base/Makefile \
-		  src/xpn_client/Makefile \
-		  src/utils/Makefile \
-		  src/bypass/Makefile \
-		  src/mpi_server/Makefile \
-		  src/tcp_server/Makefile \
-		  test/integrity/xpn/Makefile \
-		  test/integrity/mpi_connect_accept/Makefile \
-		  test/integrity/bypass_c/Makefile \
-		  test/performance/xpn/Makefile \
-		  test/performance/iop/Makefile \
-                  test/performance/mpi_pingpong/Makefile \
-		])
+      Makefile \
+      src/base/Makefile \
+      src/xpn_client/Makefile \
+      src/utils/Makefile \
+      src/bypass/Makefile \
+      src/mpi_server/Makefile \
+      src/tcp_server/Makefile \
+      test/integrity/xpn/Makefile \
+      test/integrity/mpi_connect_accept/Makefile \
+      test/integrity/bypass_c/Makefile \
+      test/performance/xpn/Makefile \
+      test/performance/iop/Makefile \
+      test/performance/mpi_pingpong/Makefile \
+    ])
+    
 AC_OUTPUT
-
