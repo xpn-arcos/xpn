@@ -41,29 +41,29 @@
   typedef struct
   {
     // server identification
-    int  size ;
-    int  rank ;
-    char port_name[MPI_MAX_PORT_NAME] ;
-    char srv_name[MPI_MAX_PORT_NAME] ;
-    char dns_file[PATH_MAX] ;
-    char host_file[PATH_MAX] ;
+    int size;
+    int rank;
+    char port_name[MPI_MAX_PORT_NAME];
+    char srv_name[MPI_MAX_PORT_NAME];
+    char dirbase[PATH_MAX];
+    char dns_file[PATH_MAX];
+    char shutdown_file[PATH_MAX];
 
     // server configuration
     int thread_mode;
 
-    //Semaphore for clients
-    //char sem_name_server [PATH_MAX];
+    // Semaphore for clients
+    // char sem_name_server [PATH_MAX];
 
-    //Semaphore for server disk
-    //sem_t disk_sem;
+    // Semaphore for server disk
+    // sem_t disk_sem;
 
     // associated client
-    MPI_Comm client ;
-    char dirbase[PATH_MAX] ;
+    MPI_Comm client;
 
     // server arguments
-    int    argc ;
-    char **argv ;
+    int argc;
+    char **argv;
   } mpi_server_param_st ;
 
 
