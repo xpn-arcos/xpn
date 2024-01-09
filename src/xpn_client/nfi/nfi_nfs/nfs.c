@@ -139,12 +139,7 @@ CLIENT* create_connection_mount(char *name, int type)
   }
   /* con esto se añade cierta seguridad a la comunicación entre el cliente y el servidor */ 
   /* el tipo de seguridad utilizada es UNIX (vease la Rfc de las RPCs para mas información)*/
-#ifdef LINUX
   cli->cl_auth=authunix_create(s,getuid(),getgid(),0,NULL); 
-#endif
-#ifdef WIN32
-  cli->cl_auth=authunix_create(s,501,501,0,NULL);
-#endif
 
 #ifdef DEBUG_MNT
       printf("cl: %p \n",cli);
@@ -430,11 +425,7 @@ CLIENT* create_connection_nfs(char *name, int type)
   }
   /* con esto se añade cierta seguridad a la comunicación entre el cliente y el servidor */ 
   /* el tipo de seguridad utilizada es UNIX (vease la Rfc de las RPCs para mas información)*/
-#ifdef LINUX
   cli->cl_auth=authunix_create(s,getuid(),getgid(),0,NULL); 
-#else
-  cli->cl_auth=authunix_create(s,501,501,0,NULL);
-#endif
   return cli;
 }
 
@@ -486,14 +477,8 @@ void setDate(timevalNfs *t){
 void setAttr( sattr *at,unsigned int mode){
   
   at->mode = mode;
-#ifdef LINUX
   at->uid = getuid();
   at->gid = getgid();
-#endif
-#ifdef WIN32
-   at->uid = -1;
-   at->gid = -1; 
-#endif  
   at->size = 0;
   setDate(&(at->atime));
   setDate(&(at->mtime));

@@ -28,8 +28,6 @@
  */
 #if   defined(HAVE_CONFIG_H)
   #include "config.h"
-#elif defined(LINUX)
-  #include "config_linux.h"
 #endif
 
 
