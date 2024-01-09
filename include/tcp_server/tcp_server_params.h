@@ -48,42 +48,42 @@
   typedef struct
   {
     // server identification
-    int  size ;
-    int  rank ;
-    char port_name[TCP_MAX_PORT_NAME] ;
-    char srv_name[TCP_MAX_PORT_NAME] ;
+    int size;
+    int rank;
+    char port_name[TCP_MAX_PORT_NAME];
+    char srv_name[TCP_MAX_PORT_NAME];
 
-    char name[TCP_MAX_PORT_NAME] ;
-    char port[TCP_MAX_PORT_NAME] ;
-    int  IOsize ;
-    char dns_file[PATH_MAX] ;
-    char host_file[PATH_MAX] ;
+    char name[TCP_MAX_PORT_NAME];
+    char port[TCP_MAX_PORT_NAME];
+    int IOsize;
+
+    char dirbase[PATH_MAX];
+    char dns_file[PATH_MAX];
+    char shutdown_file[PATH_MAX];
 
     // server configuration
     int thread_mode;
 
-    //mqtt configuration
+    // mqtt configuration
     int mosquitto_mode;
     int mosquitto_qos;
+  #ifdef HAVE_MOSQUITTO_H
+    struct mosquitto *mqtt;
+  #endif
 
-    #ifdef HAVE_MOSQUITTO_H
-    struct mosquitto * mqtt;
-    #endif
+    // Semaphore for clients
+    // char sem_name_server [PATH_MAX];
 
-    //Semaphore for clients
-    //char sem_name_server [PATH_MAX];
-
-    //Semaphore for server disk
-    //sem_t disk_sem;
+    // Semaphore for server disk
+    // sem_t disk_sem;
 
     // associated client
-    int  client ;
-    int  global_sock;
-    char dirbase[PATH_MAX] ;
+    int client;
+    int global_sock;
 
     // server arguments
-    int    argc ;
-    char **argv ;
+    int argc;
+    char **argv;
 
   } tcp_server_param_st ;
 

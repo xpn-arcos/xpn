@@ -119,13 +119,9 @@ CLIENT* create_connection_mount3(char *name, int type)
   }
   /* con esto se añade cierta seguridad a la comunicación entre el cliente y el servidor */ 
   /* el tipo de seguridad utilizada es UNIX (vease la Rfc de las RPCs para mas información)*/
-#ifdef LINUX
   cli->cl_auth=authunix_create(s,getuid(),getgid(),0,NULL); 
   //printf("LINUX--%p\n",cli->cl_auth);
   
-#else
-  cli->cl_auth=authunix_create(s,501,501,0,NULL);
-#endif
   return cli;
 }
 
@@ -425,11 +421,7 @@ CLIENT* create_connection_nfs3(char *name, int type)
   }
   /* con esto se añade cierta seguridad a la comunicación entre el cliente y el servidor */ 
   /* el tipo de seguridad utilizada es UNIX (vease la Rfc de las RPCs para mas información)*/
-#ifdef LINUX
   cli->cl_auth=authunix_create(s,getuid(),getgid(),0,NULL); 
-#else
-  cli->cl_auth=authunix_create(s,501,501,0,NULL);
-#endif
   return cli;
 }
 
