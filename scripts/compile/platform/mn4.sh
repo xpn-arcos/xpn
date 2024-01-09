@@ -3,7 +3,7 @@
 #set -x
 
 # 
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #  
 #  This file is part of Expand.
 #  
@@ -29,13 +29,6 @@ module load "impi/2017.4"
 MPICC_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpicc
 INSTALL_PATH=$HOME/mn4/bin/
 BASE_PATH=$(dirname $0)
-
-## software and directories for HDFS support in IOR
-# module load python/3.7.4
-# module load java/8u131
-# module load spark/3.3.1-hadoop3
-# export CFLAGS="-I/apps/SPARK/hadoop/hadoop-3.2.2/include/ -L/apps/SPARK/hadoop/hadoop-3.2.2/lib/native/"
-# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/apps/JDK/8u131/jre/lib/amd64/server/
 
 # 3) preconfigure build-me...
 $BASE_PATH/../software/mxml.sh                              -i $INSTALL_PATH -s $BASE_PATH/../../../../mxml

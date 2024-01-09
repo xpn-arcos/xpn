@@ -8,7 +8,7 @@
 #
 # begin
 #
-AC_INIT([Expand],[2.3.0],[fgcarbal@inf.uc3m.es],[expand])
+AC_INIT([Expand],[2.0],[fgcarbal@inf.uc3m.es],[expand])
 AC_CONFIG_AUX_DIR(./config)
 AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_INSTALL
@@ -84,13 +84,9 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
-IFLAGS="-I../../mxml        -I../../bin/mosquitto/include       "
-IFLAGS+="-I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
-IFLAGS+="-I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
-
-LFLAGS=" -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib "
-LFLAGS+="-L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib "
-LFLAGS+="-L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
+IFLAGS="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+LFLAGS="    -L../../mxml    -L../../xpn/lib "
+LFLAGS+="-L../../../mxml -L../../../xpn/lib "
 
 LIBLINK=$LIBS
 LIBLINK+=" -lmxml"
@@ -102,7 +98,7 @@ then
   CC="mpifcc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
@@ -111,7 +107,7 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
@@ -137,7 +133,7 @@ else
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DENABLE_MXML"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
   AC_MSG_RESULT("Using Linux configuration as default configuration...");
@@ -223,30 +219,6 @@ AC_SUBST(NFI_TCP_SERVER_OBJECTS)
 AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
 ### END OF TCP_SERVER BLOCK. Do not remove this line. ###
 
-
-### BEGIN OF MOSQUITTO BLOCK. Do not remove this line. ###
-#
-# Defines the necessary variables if gridftp is enabled.
-#
-AC_ARG_ENABLE(  [mosquitto],
-                [AS_HELP_STRING([--enable-mosquitto],[Enable mosquitto module.])],
-                [
-                  [CDEFS="$CDEFS -DENABLE_TCP_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"]
-                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"]
-                  [NFI_TCP_SERVER="nfi_tcp_server"]
-                  [NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"]
-                  [LIBLINK+=" -lmosquitto"]
-                  [LIBS=$LFLAGS" "$LIBS" -lmosquitto"]
-                ]
-)
-AC_SUBST(NFI_TCP_SERVER)
-AC_SUBST(NFI_TCP_SERVER_OBJECTS)
-AC_SUBST(LIBLINK)
-AC_SUBST(LIBS)
-AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
-### END OF MOSQUITTO BLOCK. Do not remove this line. ###
-
-
 ### BEGIN OF MPI_SERVER BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if gridftp is enabled.
@@ -290,11 +262,13 @@ AC_CONFIG_FILES([ \
 		  src/utils/Makefile \
 		  src/bypass/Makefile \
 		  src/mpi_server/Makefile \
-		  src/tcp_server/Makefile\
+		  src/tcp_server/Makefile \
 		  test/integrity/xpn/Makefile \
 		  test/integrity/mpi_connect_accept/Makefile \
-                  test/performance/mpi_pingpong/Makefile \
+		  test/integrity/bypass_c/Makefile \
+		  test/performance/xpn/Makefile \
 		  test/performance/iop/Makefile \
+                  test/performance/mpi_pingpong/Makefile \
 		])
 AC_OUTPUT
 

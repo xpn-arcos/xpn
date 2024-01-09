@@ -1,8 +1,8 @@
 #!/bin/bash
-set -x
+#set -x
 
 #
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #
 #  This file is part of Expand.
 #
@@ -87,7 +87,7 @@ cd "$SRC_PATH"
 ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
 ./configure --prefix=$INSTALL_PATH/xpn --enable-tcp_server --enable-mpi_server="$MPICC_PATH"
 make clean
-make -j 16
+make -j 8
 #doxygen doc/doxygen-XPN.cfg
 make install
 popd

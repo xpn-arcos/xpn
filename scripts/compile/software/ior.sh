@@ -3,7 +3,7 @@
 #set -x
 
 #
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #
 #  This file is part of Expand.
 #
@@ -88,8 +88,7 @@ export MPICC=$MPICC_PATH
 export CC=$MPICC_PATH
 export PATH=$(dirname $MPICC_PATH):$PATH
 ./bootstrap
-#./configure  --with-hdfs --with-posix  --prefix="$INSTALL_PATH/ior"
-./configure  --with-posix  --prefix="$INSTALL_PATH/ior"
+./configure --prefix="$INSTALL_PATH/ior"
 make clean
 make -j 8
 make install

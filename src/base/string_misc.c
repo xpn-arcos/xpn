@@ -1,5 +1,6 @@
+
 /*
- *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -18,125 +19,178 @@
  *
  */
 
-/**
- * @file string_misc.c
- * @brief File to 'TODO'.
- *
- * File to 'TODO'.
- *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
- * @date  Jul 22, 2021
- * @bug No known bugs.
- */
 
-/************************************************
- *  ... Includes
- ***********************************************/
-#include "base/string_misc.h"
+   /* ... Include / Inclusion ........................................... */
 
-/************************************************
- *  ... Functions
- ***********************************************/
+      #include "base/string_misc.h"
 
-long base_string_misc_length(/*IN*/ char *str)
-{
-  /* check params */
-  if (str == NULL)
-    return 0L;
 
-  return (long)strlen(str);
-}
+   /* ... Functions / Funciones ......................................... */
 
-int8_t base_string_misc_equal(/*IN*/ char *str1,
-                         /*IN*/ char *str2)
-{
-  /* easy cases */
-  if (str1 == str2)
-    return (1);
-  if ((str1 == NULL) || (str2 == NULL))
-    return (0);
 
-  /* use strcmp */
-  if ((strcmp(str1, str2) == 0))
-    return (1);
-
-  return (0);
-}
-
-char *base_string_misc_dup(/*IN*/ char *str)
-{
-  int lenstr;
-  char *pch;
-
-  /* check params */
-  if (NULL == str)
-    return NULL;
-
-  /* alloc memory for the clone... */
-  lenstr = base_string_misc_length(str) + 1;
-  pch = (char *)malloc(lenstr);
-  if (NULL == pch)
-    return NULL;
-
-  /* copy contents */
-  memmove(pch, str, lenstr);
-  return pch;
-}
-
-int base_string_misc_length_format(/*IN*/ char *format,
-                        /*IN*/ va_list argl)
-{
-  int ineed;
-  static FILE *nullfd = NULL;
-
-  if (nullfd == NULL)
-  {
-    nullfd = fopen(NULL_DEVICE_PATH, "w");
-    /*
-     *   we will lost one file descriptor,
-     *   because we never "fclose(nullfd)".
+    /**
+     * Return the string length of 'str'.
+     * @param str the string.
+     * @return the string length.
      */
-  }
+     long   STRING_MISC_StrLen ( /*IN*/  char  *str )
+     {
+         /* check params */
+         if (str == NULL)
+             return 0L ;
 
-  if (strchr(format, '%') != NULL)
-  {
-    ineed = vfprintf(nullfd, format, argl);
-  }
-  else /* only a string, not format */
-  {
-    ineed = strlen(format);
-  }
+         return (long)strlen(str) ;
+     }
 
-  return ineed;
-}
+    /**
+     * Return true if and only if the strings 'str1' and 'str2' are equals.
+     * @param str1 the first string.
+     * @param str2 the second string.
+     * @return true (1) iff are equals or false (0) in other case.
+     */
+     int8_t STRING_MISC_Equal ( /*IN*/  char  *str1,
+                                /*IN*/  char  *str2 )
+     {
+         /* easy cases */
+         if (str1 == str2)
+               return (1) ;
+         if ( (str1 == NULL) || (str2 == NULL) )
+               return (0) ;
 
-char *base_string_misc_dynamic_vsprintf(/*IN*/ char *format,
-                            /*IN*/ va_list argl)
-{
-  char *baux;
-  int ineed;
+         /* use strcmp */
+         if ( (strcmp(str1,str2) == 0) )
+               return (1) ;
 
-  ineed = base_string_misc_length_format(format, argl);
-  baux = (char *)malloc(ineed + 1);
-  if (NULL == baux)
-    return NULL;
+         return (0) ;
+     }
 
-  vsprintf(baux, format, argl);
+    /**
+     * Return a string clone of 'str'.
+     * @param str the string.
+     * @return a clone of 'str'.
+     */
+     char  *STRING_MISC_StrDup ( /*IN*/ char  *str )
+     {
+         int  lenstr ;
+         char *pch ;
 
-  return baux;
-}
+         /* check params */
+         if (NULL == str)
+             return NULL;
 
-char *base_string_misc_dynamic_vsprintf_mul_vars(/*IN*/ char *format,
-                           ...)
-{
-  char *saux;
-  va_list varg;
+         /* alloc memory for the clone... */
+         lenstr = STRING_MISC_StrLen(str) + 1 ;
+         pch = (char *)malloc(lenstr) ;
+         if (NULL == pch)
+             return NULL;
 
-  va_start(varg, format);
-  saux = base_string_misc_dynamic_vsprintf(format, varg);
-  va_end(varg);
+         /* copy contents */
+         memmove(pch,str,lenstr) ;
+         return pch ;
+       }
 
-  return saux;
-}
+       /**
+         *
+         *     Como 'strlen' pero permite usar
+         *  un string con formato.
+         *
+         *     Like 'strlen' but also accept
+         *  a string with format.
+         *
+         *     @param  format string format.
+         *     @param  argl   format params.
+         *     @return string legth.
+         *
+         */
+       int   STRING_MISC_StrLenF
+       (
+         /*IN*/  char     *format,
+         /*IN*/  va_list   argl
+       )
+       {
+                int       ineed ;
+         static FILE     *nullfd = NULL ;
 
-/* ...................................................................... */
+         if (nullfd == NULL)
+            {
+              nullfd = fopen (NULL_DEVICE_PATH,"w") ;
+              /*
+               *   we will lost one file descriptor,
+               *   because we never "fclose(nullfd)".
+               */
+            }
+
+         if (strchr(format,'%') != NULL)
+            {
+              ineed = vfprintf(nullfd,format,argl) ;
+            }
+       else /* only a string, not format */
+            {
+              ineed = strlen(format) ;
+            }
+
+        return ineed ;
+      }
+
+      /**
+       *
+       *     Actua igual que 'vsprintf', pero pide memoria
+       *  dinamica para el string donde se imprime.
+       *  Retorna NULL si no pudo.
+       *
+       *     Like vsprintf, but request dynamic memory
+       *  to write string elements.
+       *
+       *     @param  format string format.
+       *     @param  argl   format params.
+       *     @return string pointer or NULL if error.
+       *
+       */
+      char *STRING_MISC_Dvsprintf
+      (
+        /*IN*/  char     *format,
+        /*IN*/  va_list   argl
+      )
+      {
+        char     *baux ;
+        int       ineed ;
+
+        ineed = STRING_MISC_StrLenF(format,argl) ;
+        baux  = (char *)malloc(ineed+1) ;
+        if (NULL == baux)
+            return NULL ;
+
+        vsprintf(baux,format,argl) ;
+
+        return baux ;
+      }
+
+      /**
+        *
+        *     Igual que la anterior, solo varia los argumentos
+        *
+        *     Like before, but with open arguments.
+        *
+        *     @param  format string with message format.
+        *     @return string pointer or NULL if error.
+        *
+        */
+      char *STRING_MISC_Dsprintf
+      (
+        /*IN*/  char   *format,
+        ...
+      )
+      {
+        char   *saux ;
+        va_list varg ;
+
+        va_start(varg,format) ;
+        saux = STRING_MISC_Dvsprintf(format,varg) ;
+        va_end(varg) ;
+
+        return saux ;
+      }
+
+
+  /* ...................................................................... */
+

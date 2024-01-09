@@ -126,7 +126,7 @@ int read_protocol(char *url)
 	int prot, ret;
 	char str_prot[255];
 
-	ret = base_urlstr_parse_url(url, str_prot, NULL, NULL, NULL, NULL, NULL);
+	ret = ParseURL(url, str_prot, NULL, NULL, NULL, NULL, NULL);
 	if(ret <0){
 		return -1;
 	}

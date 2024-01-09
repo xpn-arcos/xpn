@@ -1,140 +1,140 @@
-/*
- *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
- *
- *  This file is part of Expand.
- *
- *  Expand is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  Expand is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
 
-/**
- * @file xpn_stdio.c
- * @brief File to 'TODO'.
- *
- * File to 'TODO'.
- *
- * @authors Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
- * @date  Jul 22, 2021
- * @bug No known bugs.
- */
+  /*
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *
+   *  This file is part of Expand.
+   *
+   *  Expand is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  Expand is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */
 
-/************************************************
- *  ... Includes
- ***********************************************/
-#include "xpn.h"
-#include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
 
-/************************************************
- *  ... Functions
- ***********************************************/
-//
-// fopen - fclose
-//
+   /* ... Include / Inclusion ........................................... */
 
-FILE *xpn_fopen(const char *name, const char *mode)
-{
-  return xpn_simple_fopen(name, mode);
-}
+    #include "xpn.h"
+    #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
 
-int xpn_fclose(FILE *fp)
-{
-  return xpn_simple_fclose(fp);
-}
 
-//
-// fread - fwrite
-//
+   /* ... Functions / Funciones ......................................... */
 
-size_t xpn_fread(void *ptr, size_t size, size_t nmemb, register FILE *stream)
-{
-  return xpn_simple_fread(ptr, size, nmemb, stream);
-}
 
-size_t xpn_fwrite(const void *ptr, size_t size, size_t nmemb, register FILE *stream)
-{
-  return xpn_simple_fwrite(ptr, size, nmemb, stream);
-}
+    //
+    // fopen - fclose
+    //
 
-int xpn_fflush(FILE *stream)
-{
-  return xpn_simple_fflush(stream);
-}
+    FILE * xpn_fopen(const char *name, const char *mode)
+    {
+      return xpn_simple_fopen(name, mode);
+    }
 
-//
-// fseek - ftell
-//
+    int xpn_fclose(FILE *fp)
+    {
+      return xpn_simple_fclose(fp);
+    }
 
-int xpn_fseek(FILE *stream, long int offset, int whence)
-{
-  return xpn_simple_fseek(stream, offset, whence);
-}
 
-long xpn_ftell(FILE *stream)
-{
-  return xpn_simple_ftell(stream);
-}
+    //
+    // fread - fwrite
+    //
 
-void xpn_rewind(FILE *stream)
-{
-  xpn_simple_rewind(stream);
-}
+    size_t xpn_fread ( void *ptr, size_t size, size_t nmemb, register FILE *stream )
+    {
+      return xpn_simple_fread(ptr, size, nmemb, stream);
+    }
 
-//
-// flush - preload
-//
+    size_t xpn_fwrite ( const void *ptr, size_t size, size_t nmemb, register FILE *stream )
+    {
+      return xpn_simple_fwrite(ptr, size, nmemb, stream);
+    }
 
-int xpn_preload(const char *virtual_path, const char *storage_path)
-{
-  return xpn_simple_preload(virtual_path, storage_path);
-}
+    int xpn_fflush(FILE *stream)
+    {
+      return xpn_simple_fflush(stream);
+    }
 
-int xpn_flush(const char *virtual_path, const char *storage_path)
-{
-  return xpn_simple_flush(virtual_path, storage_path);
-}
 
-//
-// fgetc - fgets - getc
-//
+    //
+    // fseek - ftell
+    //
 
-int xpn_fgetc(FILE *stream)
-{
-  return xpn_simple_fgetc(stream);
-}
+    int xpn_fseek(FILE *stream, long int offset, int whence)
+    {
+      return xpn_simple_fseek(stream, offset, whence);
+    }
 
-char *xpn_fgets(char *s, int tam, FILE *stream)
-{
-  return xpn_simple_fgets(s, tam, stream);
-}
+    long xpn_ftell(FILE *stream)
+    {
+      return xpn_simple_ftell(stream);
+    }
 
-int xpn_getc(FILE *stream)
-{
-  return xpn_simple_getc(stream);
-}
+    void xpn_rewind(FILE *stream)
+    {
+      xpn_simple_rewind(stream);
+    }
 
-//
-// fileno - ferror
-//
 
-int xpn_fileno(FILE *stream)
-{
-  return xpn_simple_fileno(stream);
-}
+    //
+    // flush - preload
+    //
 
-int xpn_ferror(FILE *stream)
-{
-  return xpn_simple_ferror(stream);
-}
+    int xpn_preload(const char *virtual_path, const char *storage_path)
+    {
+      return xpn_simple_preload(virtual_path, storage_path);
+    }
 
-/* ................................................................... */
+    int xpn_flush(const char *virtual_path, const char *storage_path)
+    {
+      return xpn_simple_flush(virtual_path, storage_path);
+    }
+
+
+    //
+    // fgetc - fgets - getc
+    //
+
+    int xpn_fgetc(FILE *stream)
+    {
+      return xpn_simple_fgetc(stream);
+    }
+
+    char * xpn_fgets(char *s, int tam, FILE *stream)
+    {
+      return xpn_simple_fgets(s, tam, stream);
+    }
+
+    int xpn_getc(FILE *stream)
+    {
+      return xpn_simple_getc(stream);
+    }
+
+
+    //
+    // fileno - ferror
+    //
+
+    int xpn_fileno ( FILE *stream )
+    {
+      return xpn_simple_fileno(stream);
+    }
+
+
+    int xpn_ferror(FILE *stream)
+    {
+      return xpn_simple_ferror(stream);
+    }
+
+
+   /* ................................................................... */
+
+

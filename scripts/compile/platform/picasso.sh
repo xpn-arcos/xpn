@@ -3,7 +3,7 @@
 #set -x
 
 # 
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Elias Del Pozo Puñal, Alejandro Calderon Mateos
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #  
 #  This file is part of Expand.
 #  
@@ -31,7 +31,7 @@ INSTALL_PATH=$HOME/bin/
 BASE_PATH=$(dirname $0)
 
 # patch for libmpfr.so.4
-rm -fr $INSTALL_PATH/base
+  rm -fr $INSTALL_PATH/base
 mkdir -p $INSTALL_PATH/base/lib
 rm -fr                          $INSTALL_PATH/base/lib/libmpfr.so.4
 ln -s  /usr/lib64/libmpfr.so.6  $INSTALL_PATH/base/lib/libmpfr.so.4
@@ -44,3 +44,4 @@ $BASE_PATH/../software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_P
 $BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
 $BASE_PATH/../software/lz4.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500/build/pfind/lz4/
 $BASE_PATH/../software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
+

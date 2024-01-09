@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #
 #  This file is part of Expand.
 #
@@ -41,7 +41,7 @@ echo " Begin."
 # 1) Arguments...
 
 ## base path
-BASE_PATH=$(dirname "$0")
+BASE_PATH="$(dirname "$(readlink -f "$0")")"
 
 ## get arguments
 while getopts "m:i:" opt; do

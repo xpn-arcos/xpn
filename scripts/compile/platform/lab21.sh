@@ -3,7 +3,7 @@
 #set -x
 
 # 
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #  
 #  This file is part of Expand.
 #  
@@ -23,12 +23,7 @@
 
 
 # 1) software (if needed)...
-PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen pkg-config"
-for P in $PKG_NAMES; do
-    apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
-done
-
-PKG_NAMES="prometheus libmicrohttpd-dev libmxml-dev"
+PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
 for P in $PKG_NAMES; do
     apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
 done

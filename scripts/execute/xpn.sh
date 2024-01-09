@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal
 #
 #  This file is part of Expand.
 #
@@ -328,5 +328,4 @@ case "${ACTION}" in
                 exit 1
                 ;;
 esac
-
 

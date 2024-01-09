@@ -5,6 +5,7 @@
 
 COMMON_HEADER=			@top_srcdir@/include/config.h \
 				@top_srcdir@/include/config.h.in \
+				@top_srcdir@/include/config_linux.h \
 				@top_srcdir@/include/all_system.h \
 				@top_srcdir@/include/xpn_client/expand.h \
 				@top_srcdir@/include/xpn_client/expand_lib.h
@@ -13,14 +14,17 @@ BASE_HEADER=			@top_srcdir@/include/base/base_lib.h \
 				@top_srcdir@/include/base/darray.h \
 				@top_srcdir@/include/base/base_debug.h \
 				@top_srcdir@/include/base/debug_msg.h \
+				@top_srcdir@/include/base/debug_tags.h \
 				@top_srcdir@/include/base/dtable.h \
 				@top_srcdir@/include/base/math_misc.h \
 				@top_srcdir@/include/base/string_misc.h \
 				@top_srcdir@/include/base/path_misc.h \
 				@top_srcdir@/include/base/time_misc.h \
 				@top_srcdir@/include/base/trace_msg.h \
+				@top_srcdir@/include/base/trace_tags.h \
 				@top_srcdir@/include/base/urlstr.h \
 				@top_srcdir@/include/base/ns.h \
+				@top_srcdir@/include/base/ns_tcp.h \
 				@top_srcdir@/include/base/syscall_proxies.h \
 				@top_srcdir@/include/base/filesystem.h \
 				@top_srcdir@/include/base/workers.h \
@@ -43,11 +47,13 @@ NFI_NFS3_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
 ### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 ### END OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
@@ -124,6 +130,7 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/time_misc.c \
 			@top_srcdir@/src/base/urlstr.c \
 			@top_srcdir@/src/base/ns.c \
+			@top_srcdir@/src/base/ns_tcp.c \
 			@top_srcdir@/src/base/syscall_proxies.c \
 			@top_srcdir@/src/base/filesystem.c \
 			@top_srcdir@/src/base/workers.c \
