@@ -174,14 +174,6 @@ int XpnGetInfoPartition(struct conf_connect_st * fconf, struct xpn_partition * p
             return -1;
         }
         part -> block_size = part -> block_size * KB;
-
-        if ((strcmp(type, "RAID0") == 0) || (strcmp(type, "NORMAL") == 0)) { // FIXME: previously was 'value', now changed to 'type' but not tested
-            part -> type = POLICY_RAID0;
-        } else if (strcmp(type, "RAID1") == 0) {
-            part -> type = POLICY_RAID1;
-        } else {
-            part -> type = -1;
-        }
         break;
 
     case CONF_MXML:
@@ -209,18 +201,13 @@ int XpnGetInfoPartition(struct conf_connect_st * fconf, struct xpn_partition * p
         part -> block_size = getSizeFactor(value);
 
         value = NULL;
-        value = (char * ) mxmlElementGetAttr(fconf -> connect_u.xml.conf_partition_node, XML_TAG_ATTR_TYPE);
+        value = (char * ) mxmlElementGetAttr(fconf -> connect_u.xml.conf_partition_node, XML_TAG_ATTR_REPLICATION_LEVEL);
         if (value == NULL) {
-            value = XML_DEFAULT_ATTR_TYPE;
+            value = XML_DEFAULT_ATTR_REPLICATION_LEVEL;
         }
 
-        if ((strcmp(value, "RAID0") == 0) || (strcmp(value, "NORMAL") == 0)) {
-            part -> type = POLICY_RAID0;
-        } else if (strcmp(value, "RAID1") == 0) {
-            part -> type = POLICY_RAID1;
-        } else {
-            part -> type = -1;
-        }
+        part -> replication_level = atoi(value);
+        debug_info("[XPN]XML_REPLICATION_LEVEL = %s\n", value ? value : "NULL");
 
         /* THREADS */
         value = NULL;

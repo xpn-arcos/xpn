@@ -25,9 +25,10 @@ mk_conf_servers() {
   CONF_NAME=${WORKDIR}/$1
   MACHINE_FILE=$2
   PARTITION_SIZE=$3
-  PARTITION_NAME=$4
-  STORAGE_PATH=$5
-  DEPLOYMENTFILE=$6
+  REPLICATION_LEVEL=$4
+  PARTITION_NAME=$5
+  STORAGE_PATH=$6
+  DEPLOYMENTFILE=$7
 
   # check params
   if [[ ${CONF_NAME} == "" ]]; then
@@ -56,6 +57,7 @@ mk_conf_servers() {
     echo " * CONF_NAME=${CONF_NAME}"
     echo " * HOSTFILE=${MACHINE_FILE}"
     echo " * PARTITION_SIZE=${PARTITION_SIZE}"
+    echo " * REPLICATION_LEVEL=${REPLICATION_LEVEL}"
     echo " * PARTITION_NAME=${PARTITION_NAME}"
     echo " * STORAGE_PATH=${STORAGE_PATH}"
   fi
@@ -64,6 +66,7 @@ mk_conf_servers() {
     ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
                            --machinefile  ${MACHINE_FILE} \
                            --part_size    ${PARTITION_SIZE} \
+                           --replication_level    ${REPLICATION_LEVEL} \
                            --part_name    ${PARTITION_NAME} \
                            --storage_path ${STORAGE_PATH}
   else
@@ -202,7 +205,8 @@ flush_xpn() {
 usage_short() {
   echo ""
   echo " Usage: xpn.sh [-h/--help] [-a/--args <daemon_args>] [-f/--foreground <false>]"
-  echo "               [-c/--config <configuration file>]"
+  echo "               [-c/--config <configuration file>]"¡
+  echo "               [-p/--replication_level <replication_level>]"
   echo "               [-m/--deployment_file <deployment file>]"
   echo "               [-n/--numnodes <jobsize>]"
   echo "               [-l/--hostfile  <host file>]"
@@ -231,6 +235,7 @@ usage_details() {
   echo "     -a, --args <arguments>              Add various additional daemon arguments."
   echo "     -f, --foreground                    Starts the script in the foreground. Daemons are stopped by pressing 'q'."
   echo "     -c, --config   <path>               Path to configuration file."
+  echo "     -p, --replication_level   <n>      Replication level n."
   echo "     -m, --deployment_file   <path>      Path to deployment file."
   echo "     -n, --numnodes <n>                  XPN servers are started on n nodes."
   echo "     -r, --rootdir  <path>               The rootdir path for XPN daemons."
@@ -261,10 +266,11 @@ VERBOSE=false
 HOSTFILE="machinefile"
 DEATH_FILE="machinefile"
 SERVER_TYPE="mpi"
+XPN_REPLICATION_LEVEL=0
 
 
 ## get arguments
-while getopts "r:w:s:t:x:d:n:a:c:m:l:fvh" opt; do
+while getopts "r:w:s:t:x:d:n:a:c:p:m:l:fvh" opt; do
   case "${opt}" in
     r) DIR_ROOT=${OPTARG}
        ;;
@@ -281,6 +287,8 @@ while getopts "r:w:s:t:x:d:n:a:c:m:l:fvh" opt; do
     a) ARGS=${OPTARG}
        ;;
     c) FILE_CONFIG=${OPTARG}
+       ;;
+    p) XPN_REPLICATION_LEVEL=${OPTARG}
        ;;
     m) DEPLOYMENTFILE=${OPTARG}
        ;;
@@ -311,7 +319,7 @@ fi
 
 # run 
 case "${ACTION}" in
-      start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+      start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers

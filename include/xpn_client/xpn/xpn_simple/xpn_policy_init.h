@@ -43,14 +43,14 @@ enum type_conf_connection{
 #define XML_TAG_ELEM_METADATANODE	"metadata_node"
 
 #define XML_TAG_ATTR_NAME		"name"
-#define XML_TAG_ATTR_TYPE		"type"
+#define XML_TAG_ATTR_REPLICATION_LEVEL		"replication_level"
 #define XML_TAG_ATTR_BLOCKSIZE		"bsize"
 #define XML_TAG_ATTR_THREADS		"threads"
 #define XML_TAG_ATTR_TH_THRESHOLD	"th_limit"
 #define XML_TAG_ATTR_URL		"url"
 #define XML_TAG_ATTR_ID		"id"
 
-#define XML_DEFAULT_ATTR_TYPE		"NORMAL"
+#define XML_DEFAULT_ATTR_REPLICATION_LEVEL		"0"
 #define XML_DEFAULT_ATTR_BLOCKSIZE	"256K"
 #define XML_DEFAULT_ATTR_THREADS	"no"
 #define XML_DEFAULT_ATTR_TH_THRESHOLD	"-1"

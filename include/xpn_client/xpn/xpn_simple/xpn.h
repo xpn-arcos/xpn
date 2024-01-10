@@ -18,6 +18,7 @@
 struct xpn_partition {
 	int id;				/* id of partition */
 	int type;			/* type of file :NORMAL, RAID5,... */
+	int replication_level;			/* replication_level of files :0, 1, 2,... */
 	char name[PATH_MAX];	/* name of partition */
 	ssize_t block_size;		/* size of distribution used */
 	ssize_t size_threads;

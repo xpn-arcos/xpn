@@ -150,8 +150,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
     xpn_parttable[i].initialized = 0;
 
     xpn_parttable[i].id = XpnGetIdPartition(fd, xpn_parttable[i].name);
-    XPN_DEBUG("Partition %d: name=%s\n", xpn_parttable[i].id, xpn_parttable[i].name);
-
+    XPN_DEBUG("Partition %d: name=%s", xpn_parttable[i].id, xpn_parttable[i].name);
+    XPN_DEBUG("Partition %d: replication_level=%d", xpn_parttable[i].id, xpn_parttable[i].replication_level);
+    
     /* compruebo los errores???? */
     if(XpnGetInfoPartition(fd, &(xpn_parttable[i]))==-1)
     {
