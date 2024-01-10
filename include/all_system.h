@@ -19,7 +19,6 @@
    *
    */
 
-
 #ifndef _ALL_H_SYSTEM_H
 #define _ALL_H_SYSTEM_H
 
@@ -61,68 +60,72 @@
 /*
  * Include detected headers
  */
-#ifdef HAVE_SYS_PARAM_H
+#if defined(HAVE_SYS_PARAM_H)
   #include <sys/param.h>
 #endif
 
-#ifdef HAVE_DIRENT_H
+#if defined(HAVE_DIRENT_H)
   #include <dirent.h>
 #endif
 
-#ifdef HAVE_STRINGS_H
+#if defined(HAVE_STRINGS_H)
   #include <strings.h>
 #endif
 
-#ifdef HAVE_STRING_H
+#if defined(HAVE_STRING_H)
   #include <string.h>
 #endif
 
-#ifdef HAVE_PTHREAD_H
+#if defined(HAVE_PTHREAD_H)
   #include <pthread.h>
 #endif
 
-#ifdef HAVE_NETINET_TCP_H
+#if defined(HAVE_NETINET_TCP_H)
   #include <netinet/tcp.h>
 #endif
 
-#ifdef HAVE_NETINET_IN_H
+#if defined(HAVE_NETINET_IN_H)
   #include <netinet/in.h>
   #include <netdb.h>
   #include <sys/socket.h>
   #include <arpa/inet.h>
 #endif
 
-#ifdef HAVE_UNISTD_H
+#if defined(HAVE_UNISTD_H)
   #include <unistd.h>
 #endif
 
-#ifdef HAVE_SYS_TIME_H
+#if defined(HAVE_SYS_TIME_H)
   #include <sys/time.h>
 #endif
 
-#ifdef HAVE_RPC_RPC_H
+#if defined(HAVE_WINDOWS_H)
+  #include <windows.h>
+#endif
+
+#if defined(HAVE_RPC_RPC_H)
   #include <rpc/rpc.h>
 #endif
 
-#ifdef HAVE_RPC_CLNT_H
+#if defined(HAVE_RPC_CLNT_H)
   #include <rpc/clnt.h>
 #endif
 
-#ifdef HAVE_RPC_TYPES_H
+#if defined(HAVE_RPC_TYPES_H)
   #include <rpc/types.h>
 #endif
 
-#ifdef HAVE_FCNTL_H
+#if defined(HAVE_FCNTL_H)
   #ifndef NOT_TO_USE_FCNTL_H
       #include <fcntl.h>
   #endif
 #endif
 
-#ifdef HAVE_MPI_H
+#if defined(HAVE_MPI_H)
   #include <mpi.h>
 #endif
 
-#ifdef HAVE_MOSQUITTO_H
+#if defined(HAVE_MOSQUITTO_H)
   #include <mosquitto.h>
 #endif
 
@@ -156,21 +159,24 @@
  *
  */
 
-#ifdef HAVE_UNISTD_H
+#if defined(HAVE_UNISTD_H)
   #define NULL_DEVICE_PATH  "/dev/null"
 #endif
+#if defined(HAVE_WINDOWS_H)
+  #define NULL_DEVICE_PATH  "NUL"
+#endif
 
-#ifndef PATH_MAX
+#if !defined(PATH_MAX)
   #define PATH_MAX  1024
 #endif
 
-#ifndef MAX_BUFFER_SIZE
+#if !defined(MAX_BUFFER_SIZE)
   #define MAX_BUFFER_SIZE (1*MB)
 #endif
 
 #define PROTOCOL_MAXLEN 20
 
-#ifndef HAVE_FCNTL_H
+#if !defined(HAVE_FCNTL_H)
   #define O_ACCMODE          0003
   #define O_RDONLY             00
   #define O_WRONLY             01
