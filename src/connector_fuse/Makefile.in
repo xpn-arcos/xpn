@@ -6,7 +6,7 @@
 EXPAND_DIR = ../..
 FUSE_PATH  = ../../../fuse
 
-CFLAGS     = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC
+CFLAGS     = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC
 INC_PATH   = -I../../include  -I../../include/xpn_client/  -I../../include/base/  -I$(FUSE_PATH)/include
 LIB_PATH   = -L../../src/xpn_client/  -L../../../fuse/lib/  -L$(FUSE_PATH)/lib/
 LIB_LINK   = -lxpn -ldl -lfuse -lpthread -lmpi -lmxml -lmosquitto  

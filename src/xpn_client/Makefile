@@ -176,7 +176,6 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/base/path_misc.c \
 	../../src/base/time_misc.c \
 	../../src/base/urlstr.c ../../src/base/ns.c \
-	../../src/base/ns_tcp.c \
 	../../src/base/syscall_proxies.c \
 	../../src/base/filesystem.c \
 	../../src/base/workers.c \
@@ -230,7 +229,6 @@ am__objects_1 = ../../src/base/darray.$(OBJEXT) \
 	../../src/base/time_misc.$(OBJEXT) \
 	../../src/base/urlstr.$(OBJEXT) \
 	../../src/base/ns.$(OBJEXT) \
-	../../src/base/ns_tcp.$(OBJEXT) \
 	../../src/base/syscall_proxies.$(OBJEXT) \
 	../../src/base/filesystem.$(OBJEXT) \
 	../../src/base/workers.$(OBJEXT) \
@@ -308,7 +306,6 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/base/$(DEPDIR)/filesystem.Po \
 	../../src/base/$(DEPDIR)/math_misc.Po \
 	../../src/base/$(DEPDIR)/ns.Po \
-	../../src/base/$(DEPDIR)/ns_tcp.Po \
 	../../src/base/$(DEPDIR)/path_misc.Po \
 	../../src/base/$(DEPDIR)/string_misc.Po \
 	../../src/base/$(DEPDIR)/syscall_proxies.Po \
@@ -377,7 +374,6 @@ am__can_run_installinfo = \
   esac
 am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/config.h.in \
-	../../include/config_linux.h \
 	../../include/all_system.h \
 	../../include/xpn_client/expand.h \
 	../../include/xpn_client/expand_lib.h \
@@ -395,7 +391,6 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/base/trace_tags.h \
 	../../include/base/urlstr.h \
 	../../include/base/ns.h \
-	../../include/base/ns_tcp.h \
 	../../include/base/syscall_proxies.h \
 	../../include/base/filesystem.h \
 	../../include/base/workers.h \
@@ -454,9 +449,9 @@ AUTOMAKE = ${SHELL} '/local_test/src/xpn/config/missing' automake-1.16
 AWK = mawk
 CC = /local_test/bin/mpich/bin/mpicc
 CCDEPMODE = depmode=gcc3
-CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
-CFLAGS = -I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
+CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
+CFLAGS = -I../../mxml        -I../../bin/mosquitto/include       -I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base -I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
+CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
 CSCOPE = cscope
 CTAGS = ctags
 CYGPATH_W = echo
@@ -474,10 +469,10 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = -lmxml -ldl -lpthread  -lmxml     -L../../mxml    -L../../xpn/lib -L../../../mxml -L../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
+LDFLAGS = -lmxml -ldl -lpthread  -lmxml  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
 LIBLINK = -lmxml -ldl -lpthread  -lmxml
 LIBOBJS = 
-LIBS =     -L../../mxml    -L../../xpn/lib -L../../../mxml -L../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
+LIBS =  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
 LTLIBOBJS = 
 MAKE = make
 MAKEINFO = ${SHELL} '/local_test/src/xpn/config/missing' makeinfo
@@ -592,7 +587,6 @@ top_builddir = ../..
 top_srcdir = ../..
 COMMON_HEADER = ../../include/config.h \
 				../../include/config.h.in \
-				../../include/config_linux.h \
 				../../include/all_system.h \
 				../../include/xpn_client/expand.h \
 				../../include/xpn_client/expand_lib.h
@@ -611,7 +605,6 @@ BASE_HEADER = ../../include/base/base_lib.h \
 				../../include/base/trace_tags.h \
 				../../include/base/urlstr.h \
 				../../include/base/ns.h \
-				../../include/base/ns_tcp.h \
 				../../include/base/syscall_proxies.h \
 				../../include/base/filesystem.h \
 				../../include/base/workers.h \
@@ -680,7 +673,6 @@ BASE_OBJECTS = ../../src/base/darray.c \
 			../../src/base/time_misc.c \
 			../../src/base/urlstr.c \
 			../../src/base/ns.c \
-			../../src/base/ns_tcp.c \
 			../../src/base/syscall_proxies.c \
 			../../src/base/filesystem.c \
 			../../src/base/workers.c \
@@ -830,9 +822,6 @@ clean-libLIBRARIES:
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/ns.$(OBJEXT):  \
-	../../src/base/$(am__dirstamp) \
-	../../src/base/$(DEPDIR)/$(am__dirstamp)
-../../src/base/ns_tcp.$(OBJEXT):  \
 	../../src/base/$(am__dirstamp) \
 	../../src/base/$(DEPDIR)/$(am__dirstamp)
 ../../src/base/syscall_proxies.$(OBJEXT):  \
@@ -1023,7 +1012,6 @@ include ../../src/base/$(DEPDIR)/dtable.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/filesystem.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/math_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/ns.Po # am--include-marker
-include ../../src/base/$(DEPDIR)/ns_tcp.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/path_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/string_misc.Po # am--include-marker
 include ../../src/base/$(DEPDIR)/syscall_proxies.Po # am--include-marker
@@ -1269,7 +1257,6 @@ distclean: distclean-am
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/ns.Po
-	-rm -f ../../src/base/$(DEPDIR)/ns_tcp.Po
 	-rm -f ../../src/base/$(DEPDIR)/path_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
@@ -1368,7 +1355,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/base/$(DEPDIR)/filesystem.Po
 	-rm -f ../../src/base/$(DEPDIR)/math_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/ns.Po
-	-rm -f ../../src/base/$(DEPDIR)/ns_tcp.Po
 	-rm -f ../../src/base/$(DEPDIR)/path_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/string_misc.Po
 	-rm -f ../../src/base/$(DEPDIR)/syscall_proxies.Po
