@@ -228,7 +228,7 @@ AM_CONDITIONAL([ENABLE_NFS3], [test "$NFI_NFS3" = "nfi_nfs3"])
 
 ### BEGIN OF MPI_SERVER BLOCK. Do not remove this line. ###
 #
-# Defines the necessary variables if gridftp is enabled.
+# Defines the necessary variables if mpi_server is enabled.
 #
 AC_ARG_ENABLE(  [mpi_server],
                 [AS_HELP_STRING([--enable-mpi_server@<:@=/path/to/mpi/@:>@ (Don't use '~')],[Enable mpi_server module.])],
@@ -313,6 +313,7 @@ AC_CONFIG_FILES([ \
       src/utils/Makefile \
       src/bypass/Makefile \
       src/mpi_server/Makefile \
+      src/sck_server/Makefile \
       src/tcp_server/Makefile \
       test/integrity/xpn/Makefile \
       test/integrity/mpi_connect_accept/Makefile \

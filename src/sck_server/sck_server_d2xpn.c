@@ -23,8 +23,8 @@
    /* ... Include / Inclusion ........................................... */
 
     #include "all_system.h"
-    #include "tcp_server_params.h"
-    #include "tcp_server_d2xpn.h"
+    #include "sck_server_params.h"
+    #include "sck_server_d2xpn.h"
 
     #include "xpn.h"
     #include <sys/time.h>
@@ -33,7 +33,7 @@
    /* ... Constants / Constantes ........................................ */
 
     #define DEFAULT_PATH "/tmp"
-    #define TCP_SERVER_PATH_DEFAULT "/tmp"
+    #define SCK_SERVER_PATH_DEFAULT "/tmp"
 
 
    /* ... Global variables / Variables globales ......................... */
@@ -105,22 +105,22 @@
        return 0;
     }
 
-    int tcp_server_d2xpn ( tcp_server_param_st *params, char *origen, char *destino )
+    int sck_server_d2xpn ( sck_server_param_st *params, char *origen, char *destino )
     {
        struct stat st;
        int fdp,fd,ret,fd_lock;
-       char *tcp_server_path, new_path[2*PATH_MAX];
+       char *sck_server_path, new_path[2*PATH_MAX];
 
 
        debug_info("d2xpn(%d): Origen: %s\n",  params->rank, origen) ;
        debug_info("d2xpn(%d): Destino: %s\n", params->rank, destino) ;
 
-       tcp_server_path = params->dirbase;
-       if (tcp_server_path  == NULL) {
-         tcp_server_path = TCP_SERVER_PATH_DEFAULT;
+       sck_server_path = params->dirbase;
+       if (sck_server_path  == NULL) {
+         sck_server_path = SCK_SERVER_PATH_DEFAULT;
        }
 
-       sprintf(new_path, "%s/%s", tcp_server_path, destino);
+       sprintf(new_path, "%s/%s", sck_server_path, destino);
 
        /*
       * Deberia comprobar si puedo hacer el lock,
@@ -165,7 +165,7 @@
        if (fd<0){
           myunlock(fd_lock);
           //xpn_destroy();  
-          printf("tcp_server_d2xpn: error in open(%s) fd (%d)\n",destino,fd);
+          printf("sck_server_d2xpn: error in open(%s) fd (%d)\n",destino,fd);
           return(-1);
        }
 

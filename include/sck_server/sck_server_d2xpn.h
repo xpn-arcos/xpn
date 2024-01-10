@@ -19,42 +19,29 @@
    *
    */
 
-#include "nfi_tcp_server.h"
 
-extern int errno;
+#ifndef _SCK_SERVER_D2XPN_H_
+#define _SCK_SERVER_D2XPN_H_
 
-// TODO: this interface must be changed
-void tcp_server_err(int err)
-{
-	switch(err)
-	{
-		case TCP_SERVERERR_PARAM:
-			errno = -1;
-			break;
-		
-		case TCP_SERVERERR_MEMORY:
-			errno = -1;
-			break;
-			
-		case TCP_SERVERERR_URL:
-			errno = -1;
-			break;
+   #include <sys/param.h>
+   #include <stdio.h>
+   #include <sys/file.h>
+   #include <sys/fcntl.h>
+   #include <unistd.h>
+   #include <sys/time.h>
+   #include <sys/wait.h>
+   #include <sys/errno.h>
 
-		case TCP_SERVERERR_MNTCONNECTION:
-			errno = -1;
-			break;
+   #include "all_system.h"
+   #include "base/utils.h"
+   #include "sck_server_params.h"
+   #include "sck_server_ops.h"
 
-		case TCP_SERVERERR_MOUNT:
-			errno = -1;
-			break;
+   #include "xpn.h"
 
-		case TCP_SERVERERR_NFSCONNECTION:
-			errno = -1;
-			break;
-			
-		case TCP_SERVERERR_GETATTR:
-			errno = -1;
-			break;
-	}
-}
+   #define PRELOAD_SYNC  0
+   #define PRELOAD_ASYNC 1
 
+   int sck_server_d2xpn ( sck_server_param_st *params, char *origen, char *destino ) ;
+
+#endif

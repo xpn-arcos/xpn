@@ -19,47 +19,42 @@
    *
    */
 
+#include "nfi_sck_server.h"
 
-#ifndef _TCP_SERVER_CONF_H_
-#define _TCP_SERVER_CONF_H_
+extern int errno;
 
+// TODO: this interface must be changed
+void sck_server_err(int err)
+{
+	switch(err)
+	{
+		case SCK_SERVERERR_PARAM:
+			errno = -1;
+			break;
+		
+		case SCK_SERVERERR_MEMORY:
+			errno = -1;
+			break;
+			
+		case SCK_SERVERERR_URL:
+			errno = -1;
+			break;
 
-#include "all_system.h"
+		case SCK_SERVERERR_MNTCONNECTION:
+			errno = -1;
+			break;
 
+		case SCK_SERVERERR_MOUNT:
+			errno = -1;
+			break;
 
-/* MAX_BUFFER_SIZE */
-#ifndef MAX_BUFFER_SIZE
-    #define MAX_BUFFER_SIZE (1*MB)
-#endif
+		case SCK_SERVERERR_NFSCONNECTION:
+			errno = -1;
+			break;
+			
+		case SCK_SERVERERR_GETATTR:
+			errno = -1;
+			break;
+	}
+}
 
-/* ENVIROMENT VARIABLE: DNS SERVICE */
-#ifndef TCP_SERVER_FILE
-    #define TCP_SERVER_FILE "TCP_SERVER_FILE"
-#endif
-
-#ifndef TCP_SERVER_FILE_DEFAULT
-    #define TCP_SERVER_FILE_DEFAULT "/etc/xpn/tcp_server.dns"
-#endif
-
-#ifndef TCP_SERVER_NAME_DEFAULT
-    #define TCP_SERVER_NAME_DEFAULT "node"
-#endif
-
-#ifndef TCP_SERVER_DIRBASE_DEFAULT
-    #define TCP_SERVER_DIRBASE_DEFAULT  "/"
-#endif
-
-#ifndef TCP_SERVER_PORT_DEFAULT
-    #define TCP_SERVER_PORT_DEFAULT 9999
-#endif
-
-#ifndef TCP_MAX_PORT_NAME
-    #define TCP_MAX_PORT_NAME 1024
-#endif
-
-#ifndef TCP_SERVER_IOSIZE_DEFAULT
-    #define TCP_SERVER_IOSIZE_DEFAULT (MB)
-#endif
-
-
-#endif

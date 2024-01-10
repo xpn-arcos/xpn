@@ -20,38 +20,38 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include "tcp_server_comm.h"
+     #include "sck_server_comm.h"
 
 
   /* ... Functions / Funciones ......................................... */
 
-int tcpClient_comm_init ( __attribute__((__unused__)) tcpClient_param_st * params )
+int sckClient_comm_init ( __attribute__((__unused__)) sckClient_param_st * params )
 {
     // int ret ;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_init(...)\n");
+    debug_info("[NFI_SCK_COMM] begin sckClient_comm_init(...)\n");
 
-    debug_info("[NFI_TCP_COMM] end tcpClient_comm_init(...)\n");
+    debug_info("[NFI_SCK_COMM] end sckClient_comm_init(...)\n");
 
     // Return OK
     return 0;
 }
 
 
-int tcpClient_comm_destroy ( __attribute__((__unused__)) tcpClient_param_st * params )
+int sckClient_comm_destroy ( __attribute__((__unused__)) sckClient_param_st * params )
 {
     // int ret ;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_destroy(...)\n");
+    debug_info("[NFI_SCK_COMM] begin sckClient_comm_destroy(...)\n");
 
-    debug_info("[NFI_TCP_COMM] end tcpClient_comm_destroy(...)\n");
+    debug_info("[NFI_SCK_COMM] end sckClient_comm_destroy(...)\n");
 
     // Return OK
     return 0;
 }
 
 
-int tcpClient_comm_connect ( tcpClient_param_st * params )
+int sckClient_comm_connect ( sckClient_param_st * params )
 {
     struct hostent * hp;
     struct sockaddr_in server_addr;
@@ -59,7 +59,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     int lookup_retries;
 
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_connect(...)\n");
+    debug_info("[NFI_SCK_COMM] begin sckClient_comm_connect(...)\n");
 
     // Lookup port name
     lookup_retries = 0;
@@ -67,7 +67,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     {
         //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params->srv_name, params->server_name, params->port_number);
 
-        ret = ns_lookup("tcp_server", params->srv_name, params->server_name, params->port_number) ;
+        ret = ns_lookup("sck_server", params->srv_name, params->server_name, params->port_number) ;
 
         //printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%d\n", __FILE__, __LINE__, params->srv_name, params->server_name, params->port_number, ret);
         if (ret < 0)
@@ -90,7 +90,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         return -1;
     }
 
-    debug_info("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params->srv_name, params->server_name, params->port_number);
+    debug_info("[NFI_SCK_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params->srv_name, params->server_name, params->port_number);
 
     // Socket...
     sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -98,7 +98,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         perror("socket: ");
         return -1;
     }
-    debug_info("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s ==> %d\n", params->srv_name, params->server_name, params->port_number, sd);
+    debug_info("[NFI_SCK_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s ==> %d\n", params->srv_name, params->server_name, params->port_number, sd);
 
     // Set sockopt
     flag = 1;
@@ -126,13 +126,13 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     hp = gethostbyname(params->server_name);
     if (hp == NULL)
     {
-        //tcp_server_err(TCP_SERVERERR_MEMORY);
-        fprintf(stderr, "nfi_tcp_server_init: error gethostbyname %s (%s,%s)\n",
+        //sck_server_err(SCK_SERVERERR_MEMORY);
+        fprintf(stderr, "nfi_sck_server_init: error gethostbyname %s (%s,%s)\n",
       params->srv_name, params->server_name, params->port_number);
         return -1;
     }
 
-    //debug_info("[NFI_TCP_COMM] server = %s-%s\n", params->server_name, params->port_number);
+    //debug_info("[NFI_SCK_COMM] server = %s-%s\n", params->server_name, params->port_number);
 
     // Connect...
     bzero((char * ) & server_addr, sizeof(server_addr));
@@ -140,46 +140,46 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     server_addr.sin_port   = htons(atoi(params->port_number));
     memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
 
-    //debug_info("[NFI_TCP_COMM] Antes de connect to %s\n", params->server_name);
+    //debug_info("[NFI_SCK_COMM] Antes de connect to %s\n", params->server_name);
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
     if (ret < 0)
     {
-        //tcp_server_err(TCP_SERVERERR_MEMORY);
-        fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%s)\n", params->srv_name, params->server_name, params->port_number);
+        //sck_server_err(SCK_SERVERERR_MEMORY);
+        fprintf(stderr, "nfi_sck_server_init: error in connect %s (%s,%s)\n", params->srv_name, params->server_name, params->port_number);
         return -1;
     }
 
     params->server = sd;
-    //debug_info("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params->srv_name, params->server_name, params->port_number, sd, ret);
+    //debug_info("[NFI_SCK_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params->srv_name, params->server_name, params->port_number, sd, ret);
 
     return ret;
 }
 
 
-int tcpClient_comm_disconnect ( __attribute__((__unused__)) tcpClient_param_st * params )
+int sckClient_comm_disconnect ( __attribute__((__unused__)) sckClient_param_st * params )
 {
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_disconnect nservers\n");
+    debug_info("[NFI_SCK_COMM] begin sckClient_comm_disconnect nservers\n");
 
-    debug_info("[NFI_TCP_COMM] end   tcpClient_comm_disconnect nservers\n");
+    debug_info("[NFI_SCK_COMM] end   sckClient_comm_disconnect nservers\n");
 
     // Return OK
     return 0;
 }
 
 
-int tcpClient_comm_locality ( tcpClient_param_st * params )
+int sckClient_comm_locality ( sckClient_param_st * params )
 {
     int ret;
     int data;
     char cli_name[HOST_NAME_MAX];
     char serv_name[HOST_NAME_MAX];
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_locality\n");
+    debug_info("[NFI_SCK_COMM] begin sckClient_comm_locality\n");
 
     // Locality disable
     if (!params->xpn_locality)
     {
-        debug_info("[NFI_TCP_COMM] tcpClient_comm_locality disable\n");
+        debug_info("[NFI_SCK_COMM] sckClient_comm_locality disable\n");
         params->locality = 0;
         return 1;
     }
@@ -187,33 +187,33 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
     // Get client host name (send id, recv strlen, recv string)
     gethostname(cli_name, HOST_NAME_MAX);
 
-    data = TCP_SERVER_GETNODENAME;
-    ret = tcpClient_write_data(params->server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ;
+    data = SCK_SERVER_GETNODENAME;
+    ret = sckClient_write_data(params->server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ;
     if (ret < 0)
     {
-        debug_warning("Server[?]: TCP_Send fails :-(");
+        debug_warning("Server[?]: SCK_Send fails :-(");
         return -1;
     }
 
-    ret = tcpClient_read_data( params->server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>") ;
+    ret = sckClient_read_data( params->server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>") ;
     if (ret < 0)
     {
-        debug_warning("Server[?]: tcpClient_read_data fails :-(");
+        debug_warning("Server[?]: sckClient_read_data fails :-(");
         return -1;
     }
 
     //Dirbase
-    ret = tcpClient_read_data( params->server, params->dirbase, PATH_MAX * sizeof(char), "<unused msg_id>") ;
+    ret = sckClient_read_data( params->server, params->dirbase, PATH_MAX * sizeof(char), "<unused msg_id>") ;
     if (ret < 0)
     {
-        debug_warning("Server[?]: tcpClient_read_data fails :-(");
+        debug_warning("Server[?]: sckClient_read_data fails :-(");
         return -1;
     }
 
-    /*ret = tcpClient_read_data( params->server, params->sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
+    /*ret = sckClient_read_data( params->server, params->sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
     if (ret < 0)
     {
-        debug_warning("Server[?]: tcpClient_read_data fails :-(");
+        debug_warning("Server[?]: sckClient_read_data fails :-(");
         return -1;
     }*/
 
@@ -225,18 +225,18 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         //params->sem_server = sem_open(params->sem_name_server, 0);
     }
 
-    debug_info("[NFI_TCP_COMM] end tcpClient_comm_locality\n");
+    debug_info("[NFI_SCK_COMM] end sckClient_comm_locality\n");
 
     // Return OK
     return 1;
 }
 
 
-ssize_t tcpClient_write_operation ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
+ssize_t sckClient_write_operation ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
 {
     int ret;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_write_operation(...)\n");
+    debug_info("[NFI_SCK_COMM] begin sckClient_write_operation(...)\n");
 
     // Check params
     if (size == 0) {
@@ -248,21 +248,21 @@ ssize_t tcpClient_write_operation ( int fd, char * data, ssize_t size, __attribu
         return -1;
     }
 
-    ret = tcpClient_write_data(fd, data, size * sizeof(int), msg_id) ;
+    ret = sckClient_write_data(fd, data, size * sizeof(int), msg_id) ;
 
-    debug_info("[NFI_TCP_COMM] end tcpClient_write_operation(...)\n");
+    debug_info("[NFI_SCK_COMM] end sckClient_write_operation(...)\n");
 
     // Return integers written
     return ret / sizeof(int);
 }
 
 
-ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
+ssize_t sckClient_write_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
 {
     int ret, cont;
     static ssize_t( * real_write)(int,const void * , size_t) = NULL;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_write_data(...)\n");
+    debug_info("[NFI_SCK_COMM] begin sckClient_write_data(...)\n");
 
     // Check params
     if (size == 0) {
@@ -283,10 +283,10 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     {
         ret = real_write(fd, data + cont, size - cont);
 
-        debug_info("[NFI_TCP_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
+        debug_info("[NFI_SCK_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
 
         if (ret < 0) {
-         perror("tcpClient_write_data: ERROR on real_write: ");
+         perror("sckClient_write_data: ERROR on real_write: ");
          return ret ;
      }
 
@@ -295,12 +295,12 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     } while ((ret > 0) && (cont != size));
 
     if (ret < 0) {
-        fprintf(stderr, "[NFI_TCP_COMM]  ERROR: write_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
+        fprintf(stderr, "[NFI_SCK_COMM]  ERROR: write_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
         return ret;
     }
 
-    debug_info("[NFI_TCP_COMM] client: write_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
-    debug_info("[NFI_TCP_COMM] end tcpClient_write_data(...)\n");
+    debug_info("[NFI_SCK_COMM] client: write_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
+    debug_info("[NFI_SCK_COMM] end sckClient_write_data(...)\n");
 
     debug_info("-------------SIZE = %d\n", size);
 
@@ -309,12 +309,12 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
 }
 
 
-ssize_t tcpClient_read_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
+ssize_t sckClient_read_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
 {
     int ret, cont;
     static ssize_t (* real_read)(int, void * , size_t) = NULL;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_read_data(...)\n");
+    debug_info("[NFI_SCK_COMM] begin sckClient_read_data(...)\n");
 
     // Check params
     if (size == 0) {
@@ -334,10 +334,10 @@ ssize_t tcpClient_read_data ( int fd, char * data, ssize_t size, __attribute__((
     {
         ret = real_read(fd, data + cont, size - cont);
 
-        debug_info("[NFI_TCP_COMM] client: read_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
+        debug_info("[NFI_SCK_COMM] client: read_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
 
         if (ret < 0) {
-            perror("tcpClient_read_data: ERROR on real_read: ");
+            perror("sckClient_read_data: ERROR on real_read: ");
       return ret ;
         }
 
@@ -346,12 +346,12 @@ ssize_t tcpClient_read_data ( int fd, char * data, ssize_t size, __attribute__((
     } while ((ret > 0) && (cont != size));
 
     if (ret < 0) {
-        fprintf(stderr, "[NFI_TCP_COMM]  client: read_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
+        fprintf(stderr, "[NFI_SCK_COMM]  client: read_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
         return ret;
     }
 
-    debug_info("[NFI_TCP_COMM] client: read_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
-    debug_info("[NFI_TCP_COMM] end tcpClient_read_data(...)\n");
+    debug_info("[NFI_SCK_COMM] client: read_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
+    debug_info("[NFI_SCK_COMM] end sckClient_read_data(...)\n");
 
     // Return bytes read
     return cont;

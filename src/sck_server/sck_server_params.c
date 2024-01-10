@@ -20,17 +20,17 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "tcp_server_params.h"
+#include "sck_server_params.h"
 #include "base/ns.h"
 
 
 /* ... Functions / Funciones ......................................... */
 
-void tcp_server_params_show(tcp_server_param_st * params)
+void sck_server_params_show(sck_server_param_st * params)
 {
   DEBUG_BEGIN();
 
-  printf("   * TCP-server current configuration:\n");
+  printf("   * SCK-server current configuration:\n");
   printf("\t-n  <string>:\t'%s'\n", params -> name);
   printf("\t-p  <int>:\t'%s'\n", params -> port);
   printf("\t-io <int>:\t%d\n", params -> IOsize);
@@ -56,7 +56,7 @@ void tcp_server_params_show(tcp_server_param_st * params)
   DEBUG_END();
 }
 
-void tcp_server_params_show_usage(void)
+void sck_server_params_show_usage(void)
 {
   DEBUG_BEGIN();
 
@@ -75,7 +75,7 @@ void tcp_server_params_show_usage(void)
   DEBUG_END();
 }
 
-int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
+int sck_server_params_get(sck_server_param_st * params, int argc, char * argv[])
 {
   DEBUG_BEGIN();
 
@@ -87,12 +87,12 @@ int tcp_server_params_get(tcp_server_param_st * params, int argc, char * argv[])
   params -> thread_mode = TH_POOL;
   strcpy(params -> port_name, "");
   strcpy(params -> srv_name, "");
-  strcpy(params -> dirbase, TCP_SERVER_DIRBASE_DEFAULT);
-  strcpy(params -> dns_file, TCP_SERVER_DNS_FILE_DEFAULT);
+  strcpy(params -> dirbase, SCK_SERVER_DIRBASE_DEFAULT);
+  strcpy(params -> dns_file, SCK_SERVER_DNS_FILE_DEFAULT);
 
-  gethostname(params -> name, TCP_MAX_PORT_NAME);
-  sprintf(params -> port, "%d", TCP_SERVER_PORT_DEFAULT);
-  params -> IOsize = TCP_SERVER_IOSIZE_DEFAULT;
+  gethostname(params -> name, SCK_MAX_PORT_NAME);
+  sprintf(params -> port, "%d", SCK_SERVER_PORT_DEFAULT);
+  params -> IOsize = SCK_SERVER_IOSIZE_DEFAULT;
 
   params -> mosquitto_mode = 0;
   params -> mosquitto_qos = 0;

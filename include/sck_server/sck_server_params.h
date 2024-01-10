@@ -20,8 +20,8 @@
    */
 
 
-#ifndef _TCP_SERVER_PARAMS_H_
-#define _TCP_SERVER_PARAMS_H_
+#ifndef _SCK_SERVER_PARAMS_H_
+#define _SCK_SERVER_PARAMS_H_
 
 
   #include <stdlib.h>
@@ -30,7 +30,7 @@
   #include <ctype.h>
   #include "base/utils.h"
   #include "base/workers.h"
-  #include "tcp_server_conf.h"
+  #include "sck_server_conf.h"
   //#include <semaphore.h>
 
 
@@ -48,11 +48,11 @@
     // server identification
     int  size ;
     int  rank ;
-    char port_name[TCP_MAX_PORT_NAME] ;
-    char srv_name[TCP_MAX_PORT_NAME] ;
+    char port_name[SCK_MAX_PORT_NAME] ;
+    char srv_name[SCK_MAX_PORT_NAME] ;
 
-    char name[TCP_MAX_PORT_NAME] ;
-    char port[TCP_MAX_PORT_NAME] ;
+    char name[SCK_MAX_PORT_NAME] ;
+    char port[SCK_MAX_PORT_NAME] ;
     int  IOsize ;
 
     char dirbase[PATH_MAX] ;
@@ -84,15 +84,15 @@
     int    argc ;
     char **argv ;
 
-  } tcp_server_param_st ;
+  } sck_server_param_st ;
 
 
   /*
    * API
    */
 
-  void tcp_server_params_show_usage ( void ) ;
-  int  tcp_server_params_get        ( tcp_server_param_st *params, int argc, char *argv[] ) ;
-  void tcp_server_params_show       ( tcp_server_param_st *params ) ;
+  void sck_server_params_show_usage ( void ) ;
+  int  sck_server_params_get        ( sck_server_param_st *params, int argc, char *argv[] ) ;
+  void sck_server_params_show       ( sck_server_param_st *params ) ;
 
 #endif

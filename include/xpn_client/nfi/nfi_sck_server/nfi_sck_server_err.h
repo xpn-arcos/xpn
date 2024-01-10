@@ -19,29 +19,40 @@
    *
    */
 
+#ifndef _NFI_SCK_SERVER_ERR_H_
+#define _NFI_SCK_SERVER_ERR_H_
 
-#ifndef _TCP_SERVER_D2XPN_H_
-#define _TCP_SERVER_D2XPN_H_
 
-   #include <sys/param.h>
-   #include <stdio.h>
-   #include <sys/file.h>
-   #include <sys/fcntl.h>
-   #include <unistd.h>
-   #include <sys/time.h>
-   #include <sys/wait.h>
-   #include <sys/errno.h>
+ #ifdef  __cplusplus
+    extern "C" {
+ #endif
 
-   #include "all_system.h"
-   #include "base/utils.h"
-   #include "tcp_server_params.h"
-   #include "tcp_server_ops.h"
+enum nfi_sck_server_err
+{
+	SCK_SERVERERR_PARAM = 0,
+	SCK_SERVERERR_MEMORY = 1,
+	SCK_SERVERERR_URL = 2,
+	SCK_SERVERERR_MNTCONNECTION = 3,
+	SCK_SERVERERR_MOUNT = 4,
+	SCK_SERVERERR_NFSCONNECTION = 5,		
+	SCK_SERVERERR_GETATTR = 6,
+	SCK_SERVERERR_LOOKUP = 7,
+	SCK_SERVERERR_READ = 8,
+	SCK_SERVERERR_WRITE = 9,
+	SCK_SERVERERR_CREATE = 10,
+	SCK_SERVERERR_REMOVE = 11,
+	SCK_SERVERERR_MKDIR = 12,
+	SCK_SERVERERR_READDIR = 13,
+	SCK_SERVERERR_STATFS = 14,
+	SCK_SERVERERR_NOTDIR = 15,
+};
 
-   #include "xpn.h"
+void sck_server_err(int err);
 
-   #define PRELOAD_SYNC  0
-   #define PRELOAD_ASYNC 1
 
-   int tcp_server_d2xpn ( tcp_server_param_st *params, char *origen, char *destino ) ;
+ #ifdef  __cplusplus
+     }
+ #endif
+
 
 #endif

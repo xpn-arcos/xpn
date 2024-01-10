@@ -7,11 +7,11 @@
  CC                   = @CC@
  SOURCE_PATH          = ./
  EXPAND_DIR           = @prefix@
- OBJECTS_TCP_SERVER   = @top_srcdir@/src/tcp_server/tcp_server.o \
-			@top_srcdir@/src/tcp_server/tcp_server_params.o \
-			@top_srcdir@/src/tcp_server/tcp_server_comm.o \
-			@top_srcdir@/src/tcp_server/tcp_server_ops.o \
-			@top_srcdir@/src/tcp_server/tcp_server_d2xpn.o \
+ OBJECTS_SCK_SERVER   = @top_srcdir@/src/sck_server/sck_server.o \
+			@top_srcdir@/src/sck_server/sck_server_params.o \
+			@top_srcdir@/src/sck_server/sck_server_comm.o \
+			@top_srcdir@/src/sck_server/sck_server_ops.o \
+			@top_srcdir@/src/sck_server/sck_server_d2xpn.o \
 			@top_srcdir@/src/base/filesystem.o \
 			@top_srcdir@/src/base/urlstr.o \
 			@top_srcdir@/src/base/string_misc.o \
@@ -23,11 +23,11 @@
 			@top_srcdir@/src/base/workers_ondemand.o \
 			@top_srcdir@/src/base/workers_pool.o
 MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
-MYHEADERS            = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/tcp_server
+MYHEADERS            = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/sck_server
 MYLIBS               =  -L../../src/xpn_client -lxpn @LIBS@
 
-TCP_SERVER_EXE       = xpn_tcp_server
-TCP_SERVER_EXE_STOP  = xpn_stop_tcp_server
+SCK_SERVER_EXE       = xpn_sck_server
+SCK_SERVER_EXE_STOP  = xpn_stop_sck_server
 
 
 #--------------------------
@@ -37,26 +37,26 @@ TCP_SERVER_EXE_STOP  = xpn_stop_tcp_server
 
 all:  all_object  all_exe
 
-all_object:  $(OBJECTS_TCP_SERVER)
+all_object:  $(OBJECTS_SCK_SERVER)
 
-all_exe:  $(TCP_SERVER_EXE) $(TCP_SERVER_EXE_STOP)
+all_exe:  $(SCK_SERVER_EXE) $(SCK_SERVER_EXE_STOP)
 
 %.o: %.c
 	$(CC) $(MYFLAGS) $(MYHEADERS) -c $< -o $@
 
-$(TCP_SERVER_EXE): $(OBJECTS_TCP_SERVER)
-	$(CC) -o $(TCP_SERVER_EXE)  $(OBJECTS_TCP_SERVER)  $(MYLIBS)
+$(SCK_SERVER_EXE): $(OBJECTS_SCK_SERVER)
+	$(CC) -o $(SCK_SERVER_EXE)  $(OBJECTS_SCK_SERVER)  $(MYLIBS)
 
-$(TCP_SERVER_EXE_STOP): $(TCP_SERVER_EXE)
-	ln -s $(TCP_SERVER_EXE) $(TCP_SERVER_EXE_STOP)
+$(SCK_SERVER_EXE_STOP): $(SCK_SERVER_EXE)
+	ln -s $(SCK_SERVER_EXE) $(SCK_SERVER_EXE_STOP)
 
-install:  $(TCP_SERVER_EXE)
-	cp -a                   $(TCP_SERVER_EXE) $(EXPAND_DIR)/bin
-	rm -fr $(EXPAND_DIR)/bin/$(TCP_SERVER_EXE_STOP) && ln -s $(EXPAND_DIR)/bin/$(TCP_SERVER_EXE) $(EXPAND_DIR)/bin/$(TCP_SERVER_EXE_STOP)
+install:  $(SCK_SERVER_EXE)
+	cp -a                   $(SCK_SERVER_EXE) $(EXPAND_DIR)/bin
+	rm -fr $(EXPAND_DIR)/bin/$(SCK_SERVER_EXE_STOP) && ln -s $(EXPAND_DIR)/bin/$(SCK_SERVER_EXE) $(EXPAND_DIR)/bin/$(SCK_SERVER_EXE_STOP)
 
 
 clean:
-	rm -f $(OBJECTS_TCP_SERVER)
-	rm -f $(TCP_SERVER_EXE)
-	rm -f $(TCP_SERVER_EXE_STOP)
+	rm -f $(OBJECTS_SCK_SERVER)
+	rm -f $(SCK_SERVER_EXE)
+	rm -f $(SCK_SERVER_EXE_STOP)
 
