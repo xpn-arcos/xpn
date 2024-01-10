@@ -4,9 +4,9 @@
 #--------------------------
 
  MAKE                 = make -s
- CC                   = /local_test/bin/mpich/bin/mpicc
+ CC                   = 
  SOURCE_PATH          = ./
- EXPAND_DIR           = /local_test/bin//xpn
+ EXPAND_DIR           = /xpn
  OBJECTS_MPI_SERVER   = ../../src/mpi_server/mpi_server.o \
 			../../src/mpi_server/mpi_server_params.o \
 			../../src/mpi_server/mpi_server_comm.o \

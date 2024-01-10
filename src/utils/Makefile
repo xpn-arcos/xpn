@@ -252,11 +252,11 @@ AUTOCONF = ${SHELL} '/local_test/src/xpn/config/missing' autoconf
 AUTOHEADER = ${SHELL} '/local_test/src/xpn/config/missing' autoheader
 AUTOMAKE = ${SHELL} '/local_test/src/xpn/config/missing' automake-1.16
 AWK = mawk
-CC = /local_test/bin/mpich/bin/mpicc
+CC = 
 CCDEPMODE = depmode=gcc3
-CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
+CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_MPI_SERVER -DENABLE_SCK_SERVER
 CFLAGS = -I../../mxml        -I../../bin/mosquitto/include       -I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base -I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
+CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_MPI_SERVER -DENABLE_SCK_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server  
 CSCOPE = cscope
 CTAGS = ctags
 CYGPATH_W = echo
@@ -289,8 +289,10 @@ NFI_NFS =
 NFI_NFS3 = 
 NFI_NFS3_OBJECTS = 
 NFI_NFS_OBJECTS = 
-NFI_TCP_SERVER = nfi_tcp_server
-NFI_TCP_SERVER_OBJECTS = $(NFI_TCP_SERVER_OBJECTS)
+NFI_SCK_SERVER = nfi_sck_server
+NFI_SCK_SERVER_OBJECTS = $(NFI_SCK_SERVER_OBJECTS)
+NFI_TCP_SERVER = 
+NFI_TCP_SERVER_OBJECTS = 
 OBJEXT = o
 OS = __LINUX__
 PACKAGE = expand
@@ -346,7 +348,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /local_test/bin//xpn
+prefix = /xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
