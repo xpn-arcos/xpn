@@ -503,6 +503,8 @@ NFI_NFS_OBJECTS = @top_srcdir@/src/xpn_client/nfi/nfi_nfs/nfi_nfs.c \
 			@top_srcdir@/src/xpn_client/nfi/nfi_nfs/nfs_clnt.c \
 			@top_srcdir@/src/xpn_client/nfi/nfi_nfs/nfs_xdr.c
 
+NFI_SCK_SERVER = @NFI_SCK_SERVER@
+NFI_SCK_SERVER_OBJECTS = @NFI_SCK_SERVER_OBJECTS@
 NFI_TCP_SERVER = @NFI_TCP_SERVER@
 ### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
