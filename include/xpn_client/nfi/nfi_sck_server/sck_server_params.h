@@ -20,13 +20,13 @@
    */
 
 
-#ifndef _TCP_SERVER_PARAMS_H_
-#define _TCP_SERVER_PARAMS_H_
+#ifndef _SCK_SERVER_PARAMS_H_
+#define _SCK_SERVER_PARAMS_H_
 
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
-  #include "tcp_server_conf.h"
+  #include "sck_server_conf.h"
   //#include <semaphore.h>
 
 
@@ -52,9 +52,9 @@
 
     // server port and comm
     // int   port_number;
-    char  srv_name   [TCP_MAX_PORT_NAME] ;
-    char  server_name[TCP_MAX_PORT_NAME];
-    char  port_number[TCP_MAX_PORT_NAME];
+    char  srv_name   [SCK_MAX_PORT_NAME] ;
+    char  server_name[SCK_MAX_PORT_NAME];
+    char  port_number[SCK_MAX_PORT_NAME];
     int   server ;
 
     int     locality ;
@@ -66,7 +66,7 @@
     int    argc ;
     char **argv ;
 
-  } tcpClient_param_st ;
+  } sckClient_param_st ;
 
 
 #endif

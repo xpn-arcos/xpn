@@ -19,40 +19,47 @@
    *
    */
 
-#ifndef _NFI_TCP_SERVER_ERR_H_
-#define _NFI_TCP_SERVER_ERR_H_
+
+#ifndef _SCK_SERVER_CONF_H_
+#define _SCK_SERVER_CONF_H_
 
 
- #ifdef  __cplusplus
-    extern "C" {
- #endif
-
-enum nfi_tcp_server_err
-{
-	TCP_SERVERERR_PARAM = 0,
-	TCP_SERVERERR_MEMORY = 1,
-	TCP_SERVERERR_URL = 2,
-	TCP_SERVERERR_MNTCONNECTION = 3,
-	TCP_SERVERERR_MOUNT = 4,
-	TCP_SERVERERR_NFSCONNECTION = 5,		
-	TCP_SERVERERR_GETATTR = 6,
-	TCP_SERVERERR_LOOKUP = 7,
-	TCP_SERVERERR_READ = 8,
-	TCP_SERVERERR_WRITE = 9,
-	TCP_SERVERERR_CREATE = 10,
-	TCP_SERVERERR_REMOVE = 11,
-	TCP_SERVERERR_MKDIR = 12,
-	TCP_SERVERERR_READDIR = 13,
-	TCP_SERVERERR_STATFS = 14,
-	TCP_SERVERERR_NOTDIR = 15,
-};
-
-void tcp_server_err(int err);
+#include "all_system.h"
 
 
- #ifdef  __cplusplus
-     }
- #endif
+/* MAX_BUFFER_SIZE */
+#ifndef MAX_BUFFER_SIZE
+    #define MAX_BUFFER_SIZE (1*MB)
+#endif
+
+/* ENVIROMENT VARIABLE: DNS SERVICE */
+#ifndef SCK_SERVER_FILE
+    #define SCK_SERVER_FILE "SCK_SERVER_FILE"
+#endif
+
+#ifndef SCK_SERVER_FILE_DEFAULT
+    #define SCK_SERVER_FILE_DEFAULT "/etc/xpn/sck_server.dns"
+#endif
+
+#ifndef SCK_SERVER_NAME_DEFAULT
+    #define SCK_SERVER_NAME_DEFAULT "node"
+#endif
+
+#ifndef SCK_SERVER_DIRBASE_DEFAULT
+    #define SCK_SERVER_DIRBASE_DEFAULT  "/"
+#endif
+
+#ifndef SCK_SERVER_PORT_DEFAULT
+    #define SCK_SERVER_PORT_DEFAULT 9999
+#endif
+
+#ifndef SCK_MAX_PORT_NAME
+    #define SCK_MAX_PORT_NAME 1024
+#endif
+
+#ifndef SCK_SERVER_IOSIZE_DEFAULT
+    #define SCK_SERVER_IOSIZE_DEFAULT (MB)
+#endif
 
 
 #endif

@@ -20,8 +20,8 @@
    */
 
 
-#ifndef _TCP_SERVER_CONF_H_
-#define _TCP_SERVER_CONF_H_
+#ifndef _SCK_SERVER_CONF_H_
+#define _SCK_SERVER_CONF_H_
 
 
 #include "all_system.h"
@@ -33,32 +33,32 @@
 #endif
 
 /* ENVIROMENT VARIABLE: DNS SERVICE */
-#ifndef TCP_SERVER_FILE
-	#define TCP_SERVER_FILE "TCP_SERVER_FILE"
+#ifndef SCK_SERVER_FILE
+	#define SCK_SERVER_FILE "SCK_SERVER_FILE"
 #endif
 
-#ifndef TCP_SERVER_FILE_DEFAULT
-	#define TCP_SERVER_FILE_DEFAULT "/etc/xpn/tcp_server.dns"
+#ifndef SCK_SERVER_FILE_DEFAULT
+	#define SCK_SERVER_FILE_DEFAULT "/etc/xpn/sck_server.dns"
 #endif
 
-#ifndef TCP_SERVER_NAME_DEFAULT
-	#define TCP_SERVER_NAME_DEFAULT	"node"
+#ifndef SCK_SERVER_NAME_DEFAULT
+	#define SCK_SERVER_NAME_DEFAULT	"node"
 #endif
 
-#ifndef TCP_SERVER_DIRBASE_DEFAULT
-	#define TCP_SERVER_DIRBASE_DEFAULT	"/"
+#ifndef SCK_SERVER_DIRBASE_DEFAULT
+	#define SCK_SERVER_DIRBASE_DEFAULT	"/"
 #endif
 
-#ifndef TCP_SERVER_PORT_DEFAULT
-	#define TCP_SERVER_PORT_DEFAULT	9999
+#ifndef SCK_SERVER_PORT_DEFAULT
+	#define SCK_SERVER_PORT_DEFAULT	9999
 #endif
 
-#ifndef TCP_MAX_PORT_NAME
-    #define TCP_MAX_PORT_NAME 1024
+#ifndef SCK_MAX_PORT_NAME
+    #define SCK_MAX_PORT_NAME 1024
 #endif
 
-#ifndef TCP_SERVER_IOSIZE_DEFAULT
-    #define TCP_SERVER_IOSIZE_DEFAULT (MB)
+#ifndef SCK_SERVER_IOSIZE_DEFAULT
+    #define SCK_SERVER_IOSIZE_DEFAULT (MB)
 #endif
 
 

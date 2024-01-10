@@ -3,8 +3,8 @@
 #
 
 
- prefix = /xpn
- CC=
+ prefix = /home/acaldero/bin//xpn
+ CC=mpicc
 
  FLAGS=-Wall -Wextra -fpic -std=c11
  INCLUDE=-I../../include -I../../include/base -I../../include/xpn_client -I../../include/bypass -I../../../mxml -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H

@@ -22,7 +22,7 @@
 
    //#define DEBUG 1
 
-   #include "tcp_server/tcp_server_comm.h"
+   #include "sck_server/sck_server_comm.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -113,7 +113,7 @@ void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_messag
     if (diff > size) to_write = size;
     else to_write = diff;
 
-    // read data from TCP and write into the file
+    // read data from socket (TCP) and write into the file
     lseek(fd, offset + cont, SEEK_SET);
     size_written = write(fd, msg->payload, to_write);
 
@@ -127,17 +127,17 @@ void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_messag
   close(fd);
   FREE_AND_NULL(buffer);
 
-  //printf("[%d]\tBEGIN CLOSE MOSQUITTO TCP_SERVER - WOS \n\n", __LINE__);
+  //printf("[%d]\tBEGIN CLOSE MOSQUITTO SCK_SERVER - WOS \n\n", __LINE__);
 
   mosquitto_unsubscribe(mqtt, NULL, path);
 
-  //printf("[%d]\tEND CLOSE MOSQUITTO TCP_SERVER - WOS %s \n\n", __LINE__, path);
+  //printf("[%d]\tEND CLOSE MOSQUITTO SCK_SERVER - WOS %s \n\n", __LINE__, path);
 }
 
 #endif
 
 
-int tcp_server_comm_init ( tcp_server_param_st * params )
+int sck_server_comm_init ( sck_server_param_st * params )
 {
   int ret, val ;
   struct sockaddr_in server_addr;
@@ -200,7 +200,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
 
   if ( params->mosquitto_mode  == 1 )
   {
-    printf("[%d]\tBEGIN INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+    printf("[%d]\tBEGIN INIT MOSQUITTO SCK_SERVER\n\n", __LINE__);
 
     
     mosquitto_lib_init();
@@ -227,7 +227,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     if( rc != MOSQ_ERR_SUCCESS )
     {
       mosquitto_destroy(params->mqtt);
-      fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO TCP_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
+      fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO SCK_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
       return 1;
     }
 
@@ -242,7 +242,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
     }
 
     //mosquitto_loop_forever(params->mqtt, -1, 1);
-    printf("[%d]\tEND INIT MOSQUITTO TCP_SERVER\n\n", __LINE__);
+    printf("[%d]\tEND INIT MOSQUITTO SCK_SERVER\n\n", __LINE__);
     
   }
 
@@ -254,10 +254,10 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
 
   // Publish socket "host name:port number"
   char *ip = ns_get_host_ip();
-  ret = ns_publish(params->dns_file, "tcp_server", params->name, ip, params->port);
+  ret = ns_publish(params->dns_file, "sck_server", params->name, ip, params->port);
   if (ret < 0)
   {
-    fprintf(stderr, "ns_publish(dns_file:%s, protocol:%s, name:%s, ip:%s, port:%s)->%d\n", params->dns_file, "tcp_server", params->name, ip, params->port, ret);
+    fprintf(stderr, "ns_publish(dns_file:%s, protocol:%s, name:%s, ip:%s, port:%s)->%d\n", params->dns_file, "sck_server", params->name, ip, params->port, ret);
     return -1;
   }
 
@@ -265,9 +265,9 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
   TIME_MISC_Timer(&t1);
   TIME_MISC_DiffTime(&t0, &t1, &tf);
   time = TIME_MISC_TimevaltoFloat(&tf);
-  printf(" > XPN TCP server started (took %e sec.)\n", time);
+  printf(" > XPN socket server started (took %e sec.)\n", time);
 
-  debug_info("[SRV_TCP_COMM] server %d accepting at %s\n", params->rank, params->port);
+  debug_info("[SRV_SCK_COMM] server %d accepting at %s\n", params->rank, params->port);
 
   DEBUG_END();
 
@@ -276,7 +276,7 @@ int tcp_server_comm_init ( tcp_server_param_st * params )
 }
 
 
-int tcp_server_comm_destroy ( tcp_server_param_st * params )
+int sck_server_comm_destroy ( sck_server_param_st * params )
 {
   int ret;
 
@@ -287,10 +287,10 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
   {
     if (params->rank == i)
     {
-      ret = ns_unpublish(params->dns_file, "tcp_server", params->srv_name);
+      ret = ns_unpublish(params->dns_file, "sck_server", params->srv_name);
       if (ret < 0)
       {
-        debug_info("[SRV_TCP_COMM] server%d: ns_unpublish fails :-(", params->rank);
+        debug_info("[SRV_SCK_COMM] server%d: ns_unpublish fails :-(", params->rank);
         return -1;
       }
     }
@@ -303,10 +303,10 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
   if (params->mosquitto_mode)
   {
     
-    debug_info("[%d]\tBEGIN DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
+    debug_info("[%d]\tBEGIN DESTROY MOSQUITTO SCK_SERVER\n\n", __LINE__);
     mosquitto_lib_cleanup();
     mosquitto_loop_stop(params->mqtt, true);
-    debug_info("[%d]\tEND DESTROY MOSQUITTO TCP_SERVER\n\n", __LINE__);
+    debug_info("[%d]\tEND DESTROY MOSQUITTO SCK_SERVER\n\n", __LINE__);
   
   }
 #endif
@@ -314,9 +314,9 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
   // Print server info
   char serv_name  [HOST_NAME_MAX];
   gethostname(serv_name, HOST_NAME_MAX);
-  debug_info("--------------------------------\n");
-  debug_info("XPN TCP server %s stopped\n", serv_name);
-  debug_info("--------------------------------\n\n");
+  debug_info("------------------------------------\n");
+  debug_info("XPN socket server %s stopped\n", serv_name);
+  debug_info("------------------------------------\n\n");
 
   DEBUG_END();
 
@@ -325,7 +325,7 @@ int tcp_server_comm_destroy ( tcp_server_param_st * params )
 }
 
 
-int tcp_server_comm_accept(tcp_server_param_st * params)
+int sck_server_comm_accept(sck_server_param_st * params)
 {
   int    ret, sc, flag;
   struct sockaddr_in client_addr;
@@ -338,7 +338,7 @@ int tcp_server_comm_accept(tcp_server_param_st * params)
   {
     perror("accept: ");
   }
-  debug_info("[SRV_TCP_COMM] desp. accept conection .... %d\n", sc);
+  debug_info("[SRV_SCK_COMM] desp. accept conection .... %d\n", sc);
 
   // tcp_nodelay
   flag = 1;
@@ -375,7 +375,7 @@ int tcp_server_comm_accept(tcp_server_param_st * params)
 }
 
 
-int tcp_server_comm_connect ( tcp_server_param_st * params, char *server_name, int port_number )
+int sck_server_comm_connect ( sck_server_param_st * params, char *server_name, int port_number )
 {
   struct hostent * hp;
   struct sockaddr_in server_addr;
@@ -384,16 +384,16 @@ int tcp_server_comm_connect ( tcp_server_param_st * params, char *server_name, i
 
   DEBUG_BEGIN();
 
-  debug_info("[SRV_TCP_COMM] begin tcpClient_comm_connect(...)\n");
+  debug_info("[SRV_SCK_COMM] begin sck_server_comm_connect(...)\n");
 
   // Socket
-  debug_info("[SRV_TCP_COMM]----SERVER = %s NEWSERVER = %s PORT = %d\n", params->srv_name, server_name, port_number);
+  debug_info("[SRV_SCK_COMM]----SERVER = %s NEWSERVER = %s PORT = %d\n", params->srv_name, server_name, port_number);
   sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (sd < 0) {
     perror("socket:");
     return -1;
   }
-  debug_info("[SRV_TCP_COMM]----SERVER = %s NEWSERVER = %s PORT = %d ==> %d\n", params->srv_name, server_name, port_number, sd);
+  debug_info("[SRV_SCK_COMM]----SERVER = %s NEWSERVER = %s PORT = %d ==> %d\n", params->srv_name, server_name, port_number, sd);
 
   // sock-options
   flag = 1 ;
@@ -420,13 +420,13 @@ int tcp_server_comm_connect ( tcp_server_param_st * params, char *server_name, i
   // server_name to ip address...
   hp = gethostbyname(server_name);
   if (NULL == hp) {
-    //tcp_server_err(TCP_SERVERERR_MEMORY);
-    fprintf(stderr, "tcp_server_comm_connect: error gethostbyname (%s,%d)\n", server_name, port_number);
+    //sck_server_err(SCK_SERVERERR_MEMORY);
+    fprintf(stderr, "sck_server_comm_connect: error gethostbyname (%s,%d)\n", server_name, port_number);
     return -1;
   }
 
   // Connect...
-  debug_info("[SRV_TCP_COMM] server = %s-%d\n", server_name, port_number);
+  debug_info("[SRV_SCK_COMM] server = %s-%d\n", server_name, port_number);
 
   bzero((char * ) & server_addr, sizeof(server_addr));
   server_addr.sin_family = AF_INET;
@@ -436,9 +436,9 @@ int tcp_server_comm_connect ( tcp_server_param_st * params, char *server_name, i
   //se establece la conexion
   ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
   if (ret < 0) {
-    //tcp_server_err(TCP_SERVERERR_MEMORY);
-    fprintf(stderr, "nfi_tcp_server_init: error in connect (%s,%d)\n", server_name, port_number);
-    perror("nfi_tcp_server_init:");
+    //sck_server_err(SCK_SERVERERR_MEMORY);
+    fprintf(stderr, "nfi_sck_server_init: error in connect (%s,%d)\n", server_name, port_number);
+    perror("nfi_sck_server_init:");
     return -1;
   }
 
@@ -448,7 +448,7 @@ int tcp_server_comm_connect ( tcp_server_param_st * params, char *server_name, i
 }
 
 
-int tcp_server_comm_close(int fd)
+int sck_server_comm_close(int fd)
 {
   DEBUG_BEGIN();
 
@@ -461,7 +461,7 @@ int tcp_server_comm_close(int fd)
 }
 
 
-ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, char * data, ssize_t size, int * rank_client_id)
+ssize_t sck_server_comm_read_operation(sck_server_param_st * params, int fd, char * data, ssize_t size, int * rank_client_id)
 {
   int ret;
 
@@ -469,20 +469,20 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
 
   // Check arguments
   if (NULL == params) {
-    debug_warning("[SRV_TCP_COMM] server ERROR: NULL params arguments");
+    debug_warning("[SRV_SCK_COMM] server ERROR: NULL params arguments");
     return -1;
   }
   if (size < 0) {
-    debug_warning("[SRV_TCP_COMM] server %d ERROR: size < 0", params->rank);
+    debug_warning("[SRV_SCK_COMM] server %d ERROR: size < 0", params->rank);
     return -1;
   }
   if (size == 0) {
     return 0;
   }
 
-  ret = tcp_server_comm_read_data(params, fd, data, size * sizeof(int), *rank_client_id); //      Nuevo
+  ret = sck_server_comm_read_data(params, fd, data, size * sizeof(int), *rank_client_id); //      Nuevo
   if (ret < 0) {
-    debug_warning("[SRV_TCP_COMM] server: tcp_server_comm_read_op fails : %d\n", ret);
+    debug_warning("[SRV_SCK_COMM] server: sck_server_comm_read_op fails : %d\n", ret);
     return ret ;
   }
 
@@ -493,7 +493,7 @@ ssize_t tcp_server_comm_read_operation(tcp_server_param_st * params, int fd, cha
 }
 
 
-ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TODO rank client
+ssize_t sck_server_comm_write_data(sck_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TODO rank client
 {
   int ret, cont;
 
@@ -501,11 +501,11 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
 
   // Check params
   if (NULL == params) {
-    fprintf(stderr, "[SRV_TCP_COMM] server %d: ERROR: NULL params", -1);
+    fprintf(stderr, "[SRV_SCK_COMM] server %d: ERROR: NULL params", -1);
     return -1;
   }
   if (size < 0) {
-    fprintf(stderr, "[SRV_TCP_COMM] server %d: ERROR: size < 0", params->rank);
+    fprintf(stderr, "[SRV_SCK_COMM] server %d: ERROR: size < 0", params->rank);
     return -1;
   }
   if (size == 0) {
@@ -516,7 +516,7 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
   do
   {
     ret = 0;
-    debug_info("[SRV_TCP_COMM] server:write_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    debug_info("[SRV_SCK_COMM] server:write_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
     //debug_info("Antes Escritura - %d\n", ret);
     ret = write(fd, data + cont, size - cont);
     //debug_info("Despues Escritura - %d\n", ret);
@@ -525,13 +525,13 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
        return -1;
     }
 
-    debug_info("[SRV_TCP_COMM] server:write_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    debug_info("[SRV_SCK_COMM] server:write_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
     cont += ret;
 
   } while ((ret > 0) && (cont != size));
 
   if (ret < 0) {
-    debug_info("[SRV_TCP_COMM] server: Error write_comm(%d): -1 \n", fd);
+    debug_info("[SRV_SCK_COMM] server: Error write_comm(%d): -1 \n", fd);
     return ret;
   }
 
@@ -541,7 +541,7 @@ ssize_t tcp_server_comm_write_data(tcp_server_param_st * params, int fd, char * 
 }
 
 
-ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TODO rank client
+ssize_t sck_server_comm_read_data(sck_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TODO rank client
 {
   int ret, cont ;
 
@@ -549,11 +549,11 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
 
   // Check arguments
   if (NULL == params) {
-    fprintf(stderr, "[SRV_TCP_COMM]: ERROR: NULL params");
+    fprintf(stderr, "[SRV_SCK_COMM]: ERROR: NULL params");
     return -1;
   }
   if (size < 0) {
-    fprintf(stderr, "[SRV_TCP_COMM] server %d: ERROR: size < 0", params->rank);
+    fprintf(stderr, "[SRV_SCK_COMM] server %d: ERROR: size < 0", params->rank);
     return -1;
   }
   if (size == 0) {
@@ -564,22 +564,22 @@ ssize_t tcp_server_comm_read_data(tcp_server_param_st * params, int fd, char * d
   do
   {
     ret = 0;
-    debug_info("[SRV_TCP_COMM] server:read_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    debug_info("[SRV_SCK_COMM] server:read_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
     //debug_info("Antes Lectura - %d\n", ret);
     ret = read(fd, data + cont, size - cont);
     //debug_info("Despues Lectura - %d\n", ret);
     if (ret < 0) {
-      perror("[SRV_TCP_COMM] server: Error read_comm: ");
+      perror("[SRV_SCK_COMM] server: Error read_comm: ");
       return -1;
     }
 
-    debug_info("[SRV_TCP_COMM] server:read_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    debug_info("[SRV_SCK_COMM] server:read_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
     cont += ret;
 
   } while ((ret > 0) && (cont != size));
 
   if (ret < 0) {
-    debug_info("[SRV_TCP_COMM] server: Error read_comm(%d): -1\n", fd);
+    debug_info("[SRV_SCK_COMM] server: Error read_comm(%d): -1\n", fd);
     return ret;
   }
 
