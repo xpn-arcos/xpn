@@ -99,10 +99,6 @@
   #include <sys/time.h>
 #endif
 
-#if defined(HAVE_WINDOWS_H)
-  #include <windows.h>
-#endif
-
 #if defined(HAVE_RPC_RPC_H)
   #include <rpc/rpc.h>
 #endif
@@ -159,11 +155,8 @@
  *
  */
 
-#if defined(HAVE_UNISTD_H)
+#if !defined(NULL_DEVICE_PATH)
   #define NULL_DEVICE_PATH  "/dev/null"
-#endif
-#if defined(HAVE_WINDOWS_H)
-  #define NULL_DEVICE_PATH  "NUL"
 #endif
 
 #if !defined(PATH_MAX)

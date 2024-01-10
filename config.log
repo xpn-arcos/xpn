@@ -1198,7 +1198,6 @@ config.status:1243: cd src/xpn_client       && sed -e '/# am--include-marker/d' 
 make: Nothing to be done for 'am--depfiles'.
 config.status:1248: $? = 0
 config.status:1243: cd src/utils       && sed -e '/# am--include-marker/d' Makefile         | make -f - am--depfiles
-make: Nothing to be done for 'am--depfiles'.
 config.status:1248: $? = 0
 
 ## ---------------- ##
