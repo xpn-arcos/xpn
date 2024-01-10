@@ -23,8 +23,6 @@
 #define _MPI_SERVER_OPS_H_
 
 
-  #define ASYNC_CLOSE 1
-  #define FILESYSTEM_DLSYM 1
   #include "all_system.h"
   #include "mpi_server_params.h"
   #include "base/utils.h"
@@ -34,6 +32,9 @@
   /*
    *  Constants
    */
+
+#define ASYNC_CLOSE 1
+#define FILESYSTEM_DLSYM 1
 
 #ifndef MPI_SERVER_ID
   #define MPI_SERVER_ID 32

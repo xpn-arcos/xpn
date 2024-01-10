@@ -30,26 +30,13 @@
   #include <ctype.h>
   #include "base/utils.h"
   #include "base/workers.h"
+  #include "tcp_server_conf.h"
   //#include <semaphore.h>
 
 
   /*
    * Constants
    */
-
-  #ifndef TCP_SERVER_DIRBASE_DEFAULT
-    #define TCP_SERVER_DIRBASE_DEFAULT "/"
-  #endif
-
-  #ifndef TCP_SERVER_PORT_DEFAULT
-    #define TCP_SERVER_PORT_DEFAULT 9999
-  #endif
-
-  #ifndef TCP_SERVER_IOSIZE_DEFAULT
-    #define TCP_SERVER_IOSIZE_DEFAULT (MB)
-  #endif
-
-  #define TCP_MAX_PORT_NAME   1024
 
 
   /*

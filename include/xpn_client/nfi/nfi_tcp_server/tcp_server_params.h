@@ -26,14 +26,13 @@
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
+  #include "tcp_server_conf.h"
   //#include <semaphore.h>
 
 
   /*
    * Datatype
    */
-
-  #define TCP_MAX_PORT_NAME 1024
 
   typedef struct
   {

@@ -30,15 +30,13 @@
   #include "mpi.h"
   #include "base/utils.h"
   #include "base/workers.h"
+  #include "mpi_server_conf.h"
   //#include <semaphore.h>
 
   /*
    * Constants
    */
 
-  #ifndef MPI_SERVER_DIRBASE_DEFAULT
-    #define MPI_SERVER_DIRBASE_DEFAULT "/"
-  #endif
 
 
   /*

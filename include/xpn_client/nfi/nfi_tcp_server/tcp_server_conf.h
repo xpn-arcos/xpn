@@ -19,31 +19,46 @@
    *
    */
 
+
 #ifndef _TCP_SERVER_CONF_H_
 #define _TCP_SERVER_CONF_H_
 
+
 #include "all_system.h"
+
 
 /* MAX_BUFFER_SIZE */
 #ifndef MAX_BUFFER_SIZE
-	#define MAX_BUFFER_SIZE (1*MB)
+    #define MAX_BUFFER_SIZE (1*MB)
 #endif
 
 /* ENVIROMENT VARIABLE: DNS SERVICE */
+#ifndef TCP_SERVER_FILE
+    #define TCP_SERVER_FILE "TCP_SERVER_FILE"
+#endif
+
+#ifndef TCP_SERVER_FILE_DEFAULT
+    #define TCP_SERVER_FILE_DEFAULT "/etc/xpn/tcp_server.dns"
+#endif
+
 #ifndef TCP_SERVER_NAME_DEFAULT
-	#define TCP_SERVER_NAME_DEFAULT	"node"
+    #define TCP_SERVER_NAME_DEFAULT "node"
 #endif
 
 #ifndef TCP_SERVER_DIRBASE_DEFAULT
-	#define TCP_SERVER_DIRBASE_DEFAULT	"/"
+    #define TCP_SERVER_DIRBASE_DEFAULT  "/"
 #endif
 
 #ifndef TCP_SERVER_PORT_DEFAULT
-	#define TCP_SERVER_PORT_DEFAULT	9999
+    #define TCP_SERVER_PORT_DEFAULT 9999
+#endif
+
+#ifndef TCP_MAX_PORT_NAME
+    #define TCP_MAX_PORT_NAME 1024
 #endif
 
 #ifndef TCP_SERVER_IOSIZE_DEFAULT
-	#define TCP_SERVER_IOSIZE_DEFAULT	(MB)
+    #define TCP_SERVER_IOSIZE_DEFAULT (MB)
 #endif
 
 
