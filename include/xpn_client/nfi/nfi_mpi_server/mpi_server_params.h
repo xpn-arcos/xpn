@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -18,6 +18,7 @@
    *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
    *
    */
+
 
 #ifndef _MPI_SERVER_PARAMS_H_
 #define _MPI_SERVER_PARAMS_H_
@@ -51,6 +52,7 @@
     MPI_Comm server ;
 
     int locality ;
+    char dirbase[PATH_MAX] ;
     //char sem_name_server [PATH_MAX];
     //sem_t * sem_server ;
 
@@ -61,4 +63,3 @@
 
 
 #endif
-

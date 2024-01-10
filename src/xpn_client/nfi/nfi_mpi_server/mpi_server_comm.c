@@ -138,19 +138,18 @@
     char version[MPI_MAX_LIBRARY_VERSION_STRING];
     MPI_Get_library_version(version, &version_len);
 
-    if (strncasecmp(version, "Open MPI", strlen("Open MPI")) != 0)
+    if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
     {
       // Lookup port name
       int lookup_retries = 0;
-      char aux_srv_ip[1024];
-      do
-      {
-        ret = ns_lookup("mpi_server", params->srv_name, aux_srv_ip, params->port_name);
+      char aux_srv_ip[1024] ;
+      do {
+        ret = ns_lookup("mpi_server", params->srv_name, aux_srv_ip, params->port_name) ;
         if (ret < 0)
         {
           if (lookup_retries == 0)
-          {
-            char cli_name[HOST_NAME_MAX];
+          { 
+            char cli_name  [HOST_NAME_MAX];
             gethostname(cli_name, HOST_NAME_MAX);
             printf("----------------------------------------------------------------\n");
             printf("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
@@ -159,7 +158,7 @@
           lookup_retries++;
           sleep(2);
         }
-      } while ((ret < 0) && (lookup_retries < 150));
+      } while((ret < 0) && (lookup_retries < 150));
 
       if (ret < 0)
       {
@@ -266,6 +265,13 @@
     }
 
     ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, 0, 1, params->server, &status);
+    if (MPI_SUCCESS != ret) {
+      debug_warning("Server[?]: MPI_Recv fails :-(") ;
+      return -1;
+    }
+
+    //Dirbase
+    ret = MPI_Recv(params->dirbase, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
     if (MPI_SUCCESS != ret) {
       debug_warning("Server[?]: MPI_Recv fails :-(") ;
       return -1;
@@ -384,4 +390,3 @@
     // Return bytes read
     return size;
   }
-
