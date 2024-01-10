@@ -28,17 +28,11 @@
 #include <ctype.h>
 #include <fcntl.h>
 
+#include "all_system.h"
 #include "xpn.h"
 
 #define BAR_LENGTH 50
 
-#ifndef KB
-	#define KB	(1024)
-#endif
-
-#ifndef MB
-	#define MB	(KB*KB)
-#endif
 
 char *program_name;
 

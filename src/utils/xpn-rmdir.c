@@ -21,14 +21,10 @@
 
 
 #include <stdlib.h>
-#include <sys/param.h>
 #include <stdio.h>
-#include <sys/file.h>
-#include <sys/fcntl.h>
 #include <unistd.h>
-#include <sys/time.h>
-#include <sys/wait.h>
-#include <sys/errno.h>
+
+#include "all_system.h"
 #include "xpn.h"
 
 
