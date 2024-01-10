@@ -29,7 +29,6 @@
   #include <string.h>
   #include <ctype.h>
   #include "base/utils.h"
-  #include "tcp_server_conf.h"
   #include "base/workers.h"
   //#include <semaphore.h>
 
@@ -37,6 +36,18 @@
   /*
    * Constants
    */
+
+  #ifndef TCP_SERVER_DIRBASE_DEFAULT
+    #define TCP_SERVER_DIRBASE_DEFAULT "/tmp"
+  #endif
+
+  #ifndef TCP_SERVER_PORT_DEFAULT
+    #define TCP_SERVER_PORT_DEFAULT 9999
+  #endif
+
+  #ifndef TCP_SERVER_IOSIZE_DEFAULT
+    #define TCP_SERVER_IOSIZE_DEFAULT (MB)
+  #endif
 
   #define TCP_MAX_PORT_NAME   1024
 
@@ -48,42 +59,43 @@
   typedef struct
   {
     // server identification
-    int size;
-    int rank;
-    char port_name[TCP_MAX_PORT_NAME];
-    char srv_name[TCP_MAX_PORT_NAME];
+    int  size ;
+    int  rank ;
+    char port_name[TCP_MAX_PORT_NAME] ;
+    char srv_name[TCP_MAX_PORT_NAME] ;
 
-    char name[TCP_MAX_PORT_NAME];
-    char port[TCP_MAX_PORT_NAME];
-    int IOsize;
+    char name[TCP_MAX_PORT_NAME] ;
+    char port[TCP_MAX_PORT_NAME] ;
+    int  IOsize ;
 
-    char dirbase[PATH_MAX];
-    char dns_file[PATH_MAX];
-    char shutdown_file[PATH_MAX];
+    char dirbase[PATH_MAX] ;
+    char dns_file[PATH_MAX] ;
+    char shutdown_file[PATH_MAX] ;
 
     // server configuration
     int thread_mode;
 
-    // mqtt configuration
+    //mqtt configuration
     int mosquitto_mode;
     int mosquitto_qos;
-  #ifdef HAVE_MOSQUITTO_H
-    struct mosquitto *mqtt;
-  #endif
 
-    // Semaphore for clients
-    // char sem_name_server [PATH_MAX];
+#ifdef HAVE_MOSQUITTO_H
+    struct mosquitto * mqtt;
+#endif
 
-    // Semaphore for server disk
-    // sem_t disk_sem;
+    //Semaphore for clients
+    //char sem_name_server [PATH_MAX];
+
+    //Semaphore for server disk
+    //sem_t disk_sem;
 
     // associated client
-    int client;
-    int global_sock;
+    int  client ;
+    int  global_sock;
 
     // server arguments
-    int argc;
-    char **argv;
+    int    argc ;
+    char **argv ;
 
   } tcp_server_param_st ;
 
@@ -97,4 +109,3 @@
   void tcp_server_params_show       ( tcp_server_param_st *params ) ;
 
 #endif
-

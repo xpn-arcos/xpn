@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -19,13 +19,13 @@
    *
    */
 
+
 #ifndef _TCP_SERVER_PARAMS_H_
 #define _TCP_SERVER_PARAMS_H_
 
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
-  #include "tcp_server_conf.h"
   //#include <semaphore.h>
 
 
@@ -59,6 +59,7 @@
     int   server ;
 
     int     locality ;
+    char dirbase[PATH_MAX] ;
     //char    sem_name_server [PATH_MAX];
     //sem_t * sem_server ;
 
@@ -70,4 +71,3 @@
 
 
 #endif
-
