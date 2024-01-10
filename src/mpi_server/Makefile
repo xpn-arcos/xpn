@@ -4,9 +4,9 @@
 #--------------------------
 
  MAKE                 = make -s
- CC                   = mpicc
+ CC                   = /usr/bin/mpicc
  SOURCE_PATH          = ./
- EXPAND_DIR           = /home/acaldero/bin//xpn
+ EXPAND_DIR           = /home/acaldero/bin/xpn
  OBJECTS_MPI_SERVER   = ../../src/mpi_server/mpi_server.o \
 			../../src/mpi_server/mpi_server_params.o \
 			../../src/mpi_server/mpi_server_comm.o \

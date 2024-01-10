@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 
 #
 #  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
