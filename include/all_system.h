@@ -1,5 +1,5 @@
 
-/*
+  /*
    *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
@@ -28,8 +28,6 @@
  */
 #if   defined(HAVE_CONFIG_H)
   #include "config.h"
-#elif defined(LINUX)
-  #include "config_linux.h"
 #endif
 
 
@@ -172,6 +170,10 @@
   #define PATH_MAX  1024
 #endif
 
+#if !defined(MAX_BUFFER_SIZE)
+  #define MAX_BUFFER_SIZE (1*MB)
+#endif
+
 #define PROTOCOL_MAXLEN 20
 
 #if !defined(HAVE_FCNTL_H)
@@ -192,4 +194,3 @@
 #endif
 
 #endif /* _ALL_H_SYSTEM_H */
-
