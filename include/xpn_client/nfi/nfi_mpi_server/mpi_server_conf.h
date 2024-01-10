@@ -22,7 +22,7 @@
 #endif
 
 #ifndef MPI_SERVER_DIRBASE_DEFAULT
-	#define MPI_SERVER_DIRBASE_DEFAULT	"/tmp"
+	#define MPI_SERVER_DIRBASE_DEFAULT	"/"
 #endif
 
 #ifndef MPI_SERVER_PORT_DEFAULT

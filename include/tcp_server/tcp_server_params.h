@@ -38,7 +38,7 @@
    */
 
   #ifndef TCP_SERVER_DIRBASE_DEFAULT
-    #define TCP_SERVER_DIRBASE_DEFAULT "/tmp"
+    #define TCP_SERVER_DIRBASE_DEFAULT "/"
   #endif
 
   #ifndef TCP_SERVER_PORT_DEFAULT
