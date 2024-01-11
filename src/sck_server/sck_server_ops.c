@@ -328,27 +328,6 @@ void sck_server_op_open_ws(sck_server_param_st * params, int sd, struct st_sck_s
 
   // show debug info
   debug_info("[%d][SCK_SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params->srv_name, head->u_st_sck_server_msg.op_open.path, fd);
-
-#ifdef HAVE_MOSQUITTO_H
-  char *extra = "/#";
-  char *sm = malloc(strlen(head->u_st_sck_server_msg.op_open.path) + strlen(extra) + 1);
-  strcpy(sm, head->u_st_sck_server_msg.op_open.path);
-  strcat(sm, extra);
-
-  if ( params->mosquitto_mode == 1 )
-  {
-    debug_info("[%d]\tBEGIN OPEN MOSQUITTO SCK_SERVER WS - %s\n", __LINE__, sm);
-
-    int rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
-    if(rc != MOSQ_ERR_SUCCESS)
-    {
-      fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-      mosquitto_disconnect(params->mqtt);
-    }
-
-    debug_info("[%d]\tEND OPEN MOSQUITTO SCK_SERVER WS - %s\n\n", __LINE__, sm);
-  }
-#endif
 }
 
 void sck_server_op_open_wos(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id) //WOS - Without Session
@@ -368,34 +347,6 @@ void sck_server_op_open_wos(sck_server_param_st * params, int sd, struct st_sck_
   
   // show debug info
   debug_info("[%d][SCK_SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params->srv_name, head->u_st_sck_server_msg.op_open.path, fd);
-
-#ifdef HAVE_MOSQUITTO_H
-  if ( params->mosquitto_mode == 1 )
-  {
-    char *extra = "/#";
-    char *sm = malloc(strlen(head->u_st_sck_server_msg.op_open.path) + strlen(extra) + 1);
-    strcpy(sm, head->u_st_sck_server_msg.op_open.path);
-    strcat(sm, extra);
-    debug_info("[%d]\tBEGIN OPEN MOSQUITTO SCK_SERVER WOS - %s\n", __LINE__, sm);
-
-    int rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
-    if(rc != MOSQ_ERR_SUCCESS)
-    {
-      fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-      mosquitto_disconnect(params->mqtt);
-    }
-
-    debug_info("[%d]\tEND OPEN MOSQUITTO SCK_SERVER WOS - %s\n\n", __LINE__, sm);
-    /*
-    printf("[%d]\tBEGIN CLOSE OPEN MOSQUITTO SCK_SERVER - WOS \n\n", __LINE__);
-
-    mosquitto_unsubscribe(params->mqtt, NULL, sm);
-    mosquitto_unsubscribe(params->mqtt, NULL, s);
-
-    printf("[%d]\tEND CLOSE OPEN MOSQUITTO SCK_SERVER - WOS %s\n\n", __LINE__, s);
-    */
-  }
-#endif
 }
 
 void sck_server_op_creat_ws(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)
@@ -414,29 +365,6 @@ void sck_server_op_creat_ws(sck_server_param_st * params, int sd, struct st_sck_
 
   // show debug info
   debug_info("[%d][SCK_SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params->srv_name, head->u_st_sck_server_msg.op_creat.path, fd);
-
-#ifdef HAVE_MOSQUITTO_H
-  if ( params->mosquitto_mode == 1 )
-  {
-    char *extra = "/#";
-    char *sm = malloc(strlen(head->u_st_sck_server_msg.op_creat.path) + strlen(extra) + 1);
-    strcpy(sm, head->u_st_sck_server_msg.op_creat.path);
-    strcat(sm, extra);
-
-    int rc;
-    debug_info("[%d]\tBEGIN CREAT MOSQUITTO SCK_SERVER WS - %s\n", __LINE__, sm);
-
-    rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
-
-    if(rc != MOSQ_ERR_SUCCESS)
-    {
-      fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-      mosquitto_disconnect(params->mqtt);
-    }
-
-    debug_info("[%d]\tEND CREAT MOSQUITTO SCK_SERVER WS - %s\n\n", __LINE__, sm);
-  }
-#endif
 }
 
 void sck_server_op_creat_wos(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)
@@ -458,35 +386,6 @@ void sck_server_op_creat_wos(sck_server_param_st * params, int sd, struct st_sck
 
   // show debug info
   debug_info("[%d][SCK_SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params->srv_name, head->u_st_sck_server_msg.op_creat.path, fd);
-
-#ifdef HAVE_MOSQUITTO_H
-  if ( params->mosquitto_mode == 1 )
-  {
-    char *extra = "/#";
-    char *sm = malloc(strlen(head->u_st_sck_server_msg.op_creat.path) + strlen(extra) + 1);
-    strcpy(sm, head->u_st_sck_server_msg.op_creat.path);
-    strcat(sm, extra);
-    debug_info("[%d]\tBEGIN CREATE MOSQUITTO SCK_SERVER WOS - %s\n", __LINE__, sm);
-
-    int rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
-
-    if(rc != MOSQ_ERR_SUCCESS)
-    {
-      fprintf(stderr, "Error subscribing creat: %s\n", mosquitto_strerror(rc));
-      mosquitto_disconnect(params->mqtt);
-    }
-
-    debug_info("[%d]\tEND CREATE MOSQUITTO SCK_SERVER WOS - %s\n\n", __LINE__, sm);
-    /*      
-    printf("[%d]\tBEGIN CLOSE CREAT MOSQUITTO SCK_SERVER - WOS \n\n", __LINE__);
-
-    mosquitto_unsubscribe(params->mqtt, NULL, sm);
-    mosquitto_unsubscribe(params->mqtt, NULL, s);
-
-    printf("[%d]\tEND CLOSE CREAT MOSQUITTO SCK_SERVER - WOS %s \n\n", __LINE__, s);
-    */
-  }
-#endif
 }
 
 void sck_server_op_read_ws(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)
@@ -636,57 +535,55 @@ void sck_server_op_read_wos(sck_server_param_st * params, int sd, struct st_sck_
 
 void sck_server_op_write_ws(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)
 {
-  if( params->mosquitto_mode == 0 )
-  {
-    debug_info("[SCK_SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_sck_server_msg.op_write.fd);
-  
-    struct st_sck_server_write_req req;
-    char * buffer;
-    int    size, diff, cont, to_write;
+  debug_info("[SCK_SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_sck_server_msg.op_write.fd);
 
-    debug_info("[SCK_SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_sck_server_msg.op_write.fd);
+  struct st_sck_server_write_req req;
+  char * buffer;
+  int    size, diff, cont, to_write;
 
-    // initialize counters
-    cont = 0;
-    size = (head->u_st_sck_server_msg.op_write.size);
-    if (size > MAX_BUFFER_SIZE) {
-      size = MAX_BUFFER_SIZE;
-    }
+  debug_info("[SCK_SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params->srv_name, head->u_st_sck_server_msg.op_write.fd);
+
+  // initialize counters
+  cont = 0;
+  size = (head->u_st_sck_server_msg.op_write.size);
+  if (size > MAX_BUFFER_SIZE) {
+    size = MAX_BUFFER_SIZE;
+  }
+  diff = head->u_st_sck_server_msg.op_read.size - cont;
+
+  // malloc a buffer of size...
+  buffer = (char * ) malloc(size);
+  if (NULL == buffer) {
+    req.size = -1; // TODO: check in client that -1 is treated properly... :-)
+    sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
+    return;
+  }
+
+  // loop...
+  do {
+    if (diff > size) to_write = size;
+    else to_write = diff;
+
+    // read data from socket (TCP) and write into the file
+    sck_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
+    filesystem_lseek(head->u_st_sck_server_msg.op_write.fd, head->u_st_sck_server_msg.op_write.offset + cont, SEEK_SET);
+    //sem_wait(&disk_sem);
+    req.size = filesystem_write(head->u_st_sck_server_msg.op_write.fd, buffer, to_write);
+    //sem_post(&disk_sem);
+
+    // update counters
+    cont = cont + req.size; // Received bytes
     diff = head->u_st_sck_server_msg.op_read.size - cont;
 
-    // malloc a buffer of size...
-    buffer = (char * ) malloc(size);
-    if (NULL == buffer) {
-      req.size = -1; // TODO: check in client that -1 is treated properly... :-)
-      sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
-      return;
-    }
+  } while ((diff > 0) && (req.size != 0));
 
-    // loop...
-    do {
-      if (diff > size) to_write = size;
-      else to_write = diff;
+  // write to the client the status of the write operation
+  req.size = cont;
+  sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
 
-      // read data from socket (TCP) and write into the file
-      sck_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
-      filesystem_lseek(head->u_st_sck_server_msg.op_write.fd, head->u_st_sck_server_msg.op_write.offset + cont, SEEK_SET);
-      //sem_wait(&disk_sem);
-      req.size = filesystem_write(head->u_st_sck_server_msg.op_write.fd, buffer, to_write);
-      //sem_post(&disk_sem);
-
-      // update counters
-      cont = cont + req.size; // Received bytes
-      diff = head->u_st_sck_server_msg.op_read.size - cont;
-
-    } while ((diff > 0) && (req.size != 0));
-
-    // write to the client the status of the write operation
-    req.size = cont;
-    sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
-
-    // free buffer
-    FREE_AND_NULL(buffer);
-  }
+  // free buffer
+  FREE_AND_NULL(buffer);
+  
 
   // for debugging purpouses
   debug_info("[SCK_SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_sck_server_msg.op_write.fd);
@@ -694,73 +591,70 @@ void sck_server_op_write_ws(sck_server_param_st * params, int sd, struct st_sck_
 
 void sck_server_op_write_wos(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)
 {
-  if( params->mosquitto_mode == 0 )
+  struct st_sck_server_write_req req;
+  char * buffer;
+  int    size, diff, cont, to_write;
+  char   path [PATH_MAX];
+
+  debug_info("[SCK_SERVER-OPS] (ID=%s) begin write: path %s ID=xn", params->srv_name, head->u_st_sck_server_msg.op_write.path);
+
+  strcpy(path, params->dirbase);
+  strcat(path, "/");
+  strcat(path, head->u_st_sck_server_msg.op_write.path);
+
+  // initialize counters
+  cont = 0;
+  size = (head->u_st_sck_server_msg.op_write.size);
+  if (size > MAX_BUFFER_SIZE) {
+    size = MAX_BUFFER_SIZE;
+  }
+  diff = head->u_st_sck_server_msg.op_read.size - cont;
+
+  //Open file
+  int fd = filesystem_open(path, O_WRONLY);
+  if (fd < 0)
   {
-    struct st_sck_server_write_req req;
-    char * buffer;
-    int    size, diff, cont, to_write;
-    char   path [PATH_MAX];
+    req.size = -1; // TODO: check in client that -1 is treated properly... :-)
+    sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
+    return;
+  }
 
-    debug_info("[SCK_SERVER-OPS] (ID=%s) begin write: path %s ID=xn", params->srv_name, head->u_st_sck_server_msg.op_write.path);
+  // malloc a buffer of size...
+  buffer = (char * ) malloc(size);
+  if (NULL == buffer) {
+    req.size = -1; // TODO: check in client that -1 is treated properly... :-)
+    sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
+    filesystem_close(fd);
+    return;
+  }
 
-    strcpy(path, params->dirbase);
-    strcat(path, "/");
-    strcat(path, head->u_st_sck_server_msg.op_write.path);
+  // loop...
+  do {
+    if (diff > size) to_write = size;
+    else to_write = diff;
 
-    // initialize counters
-    cont = 0;
-    size = (head->u_st_sck_server_msg.op_write.size);
-    if (size > MAX_BUFFER_SIZE) {
-      size = MAX_BUFFER_SIZE;
-    }
+    // read data from socket (TCP) and write into the file
+    sck_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
+    filesystem_lseek(fd, head->u_st_sck_server_msg.op_write.offset + cont, SEEK_SET);
+    //sem_wait(&disk_sem);
+
+
+    req.size = filesystem_write(fd, buffer, to_write);
+
+    //sem_post(&disk_sem);
+
+    // update counters
+    cont = cont + req.size; // Received bytes
     diff = head->u_st_sck_server_msg.op_read.size - cont;
 
-    //Open file
-    int fd = filesystem_open(path, O_WRONLY);
-    if (fd < 0)
-    {
-      req.size = -1; // TODO: check in client that -1 is treated properly... :-)
-      sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
-      return;
-    }
+  } while ((diff > 0) && (req.size != 0));
 
-    // malloc a buffer of size...
-    buffer = (char * ) malloc(size);
-    if (NULL == buffer) {
-      req.size = -1; // TODO: check in client that -1 is treated properly... :-)
-      sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
-      filesystem_close(fd);
-      return;
-    }
+  // write to the client the status of the write operation
+  req.size = cont;
+  sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
 
-    // loop...
-    do {
-      if (diff > size) to_write = size;
-      else to_write = diff;
-
-      // read data from socket (TCP) and write into the file
-      sck_server_comm_read_data(params, sd, buffer, to_write, rank_client_id);
-      filesystem_lseek(fd, head->u_st_sck_server_msg.op_write.offset + cont, SEEK_SET);
-      //sem_wait(&disk_sem);
-
-
-      req.size = filesystem_write(fd, buffer, to_write);
-
-      //sem_post(&disk_sem);
-
-      // update counters
-      cont = cont + req.size; // Received bytes
-      diff = head->u_st_sck_server_msg.op_read.size - cont;
-
-    } while ((diff > 0) && (req.size != 0));
-
-    // write to the client the status of the write operation
-    req.size = cont;
-    sck_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_sck_server_write_req), rank_client_id);
-
-    filesystem_close(fd);
-    FREE_AND_NULL(buffer);
-  }
+  filesystem_close(fd);
+  FREE_AND_NULL(buffer);
 
   // for debugging purpouses
   debug_info("[SCK_SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params->srv_name, head->u_st_sck_server_msg.op_write.fd);
@@ -778,7 +672,7 @@ void sck_server_op_close_ws(sck_server_param_st * params, int sd, struct st_sck_
 
   
   // do close
-  if (head->u_st_sck_server_msg.op_close.fd != -1 &&  params->mosquitto_mode == 0 )
+  if (head->u_st_sck_server_msg.op_close.fd != -1)
   {
     ret = filesystem_close(head->u_st_sck_server_msg.op_close.fd);
   }
@@ -787,26 +681,6 @@ void sck_server_op_close_ws(sck_server_param_st * params, int sd, struct st_sck_
 
   // show debug info
   debug_info("[SCK_SERVER-OPS] (ID=%s) CLOSE(fd=%d, path=%s)\n", params->srv_name, head->u_st_sck_server_msg.op_close.fd, head->u_st_sck_server_msg.op_close.path);
-
-#ifdef HAVE_MOSQUITTO_H
-  if( params->mosquitto_mode == 1 )
-  {
-    char *s;
-    char *extra = "/#";
-    char *sm = malloc(strlen(head->u_st_sck_server_msg.op_close.path) + strlen(extra) + 1);
-    strcpy(sm, head->u_st_sck_server_msg.op_close.path);
-    strcat(sm, extra);
-
-    s = head->u_st_sck_server_msg.op_close.path;
-
-    //printf("[%d]\tBEGIN CLOSE MOSQUITTO SCK_SERVER - WS \n\n", __LINE__);
-
-    mosquitto_unsubscribe(params->mqtt, NULL, sm);
-    mosquitto_unsubscribe(params->mqtt, NULL, s);
-
-    //printf("[%d]\tEND CLOSE MOSQUITTO SCK_SERVER - WS %s\n\n", __LINE__, sm);
-  }
-#endif
 }
 
 void sck_server_op_rm(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)
