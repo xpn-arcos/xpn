@@ -26,5 +26,8 @@ autom4te.cache
 /missing
 /stamp-h1
 /Makefile
-Makefile
-
+**/Makefile
+configure~
+configure
+include/config.h
+include/config.h.in~

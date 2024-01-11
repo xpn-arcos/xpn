@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -98,9 +98,21 @@
       {
         if (j == params->rank)
         {
-          ret = ns_publish(params->dns_file, params->srv_name, params->port_name);
-          if (ret < 0) {
-            debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank) ;
+          char *ip;
+
+          ns_get_hostname(params->srv_name);
+
+          ip = ns_get_host_ip();
+          if (ip == NULL)
+          {
+            debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank);
+            return -1;
+          }
+
+          ret = ns_publish(params->dns_file, "mpi_server", params->srv_name, ip, params->port_name);
+          if (ret < 0)
+          {
+            debug_error("Server[%d]: NS_PUBLISH fails :-(", params->rank);
             return -1;
           }
         }
@@ -176,13 +188,17 @@
         char version[MPI_MAX_LIBRARY_VERSION_STRING];
         MPI_Get_library_version(version, &version_len);
 
-        if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
+        if (strncasecmp(version, "Open MPI", strlen("Open MPI")) != 0)
         {
+          char hostname[1024];
+          ns_get_hostname(hostname);
+
           // Unpublish port name
-          ret = ns_unpublish(params->dns_file) ;
-          if (ret < 0) {
-            debug_error("Server[%d]: ns_unpublish fails :-(", params->rank) ;
-            return -1 ;
+          ret = ns_unpublish(params->dns_file, "mpi_server", hostname);
+          if (ret < 0)
+          {
+            debug_error("Server[%d]: ns_unpublish fails :-(", params->rank);
+            return -1;
           }
         }
         else{

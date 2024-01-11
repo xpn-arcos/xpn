@@ -1,9 +1,9 @@
-# XPN 2.2.2
+# XPN 2.3.0
 
 *Expand Ad-Hoc Parallel File System*
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-![version](https://img.shields.io/badge/version-2.2.2-blue)
+![version](https://img.shields.io/badge/version-2.3.0-blue)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://www.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xpn-arcos/xpn&amp;utm_campaign=Badge_Grade)
 
 * *Homepage*: <https://xpn-arcos.github.io/xpn-arcos.github.io/>
@@ -91,7 +91,7 @@
 
   * ### 1.2.2. Download the source code of XPN
 
-    You need to download the source code of [XPN](https://xpn-arcos.github.io/arcos-xpn.github.io/) and [minixml](http://www.minixml.org).
+    You need to download the source code of [XPN](https://xpn-arcos.github.io) and [minixml](http://www.minixml.org).
 
     You can download both by executing:
     ```

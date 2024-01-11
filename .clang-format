@@ -1,0 +1,10 @@
+BasedOnStyle: Google
+ColumnLimit: 120
+IndentWidth: 4
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: false
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 2

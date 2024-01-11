@@ -1,6 +1,6 @@
 
-/*
-   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+  /*
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -28,8 +28,6 @@
  */
 #if   defined(HAVE_CONFIG_H)
   #include "config.h"
-#elif defined(LINUX)
-  #include "config_linux.h"
 #endif
 
 
@@ -101,10 +99,6 @@
   #include <sys/time.h>
 #endif
 
-#if defined(HAVE_WINDOWS_H)
-  #include <windows.h>
-#endif
-
 #if defined(HAVE_RPC_RPC_H)
   #include <rpc/rpc.h>
 #endif
@@ -161,15 +155,16 @@
  *
  */
 
-#if defined(HAVE_UNISTD_H)
+#if !defined(NULL_DEVICE_PATH)
   #define NULL_DEVICE_PATH  "/dev/null"
-#endif
-#if defined(HAVE_WINDOWS_H)
-  #define NULL_DEVICE_PATH  "NUL"
 #endif
 
 #if !defined(PATH_MAX)
   #define PATH_MAX  1024
+#endif
+
+#if !defined(MAX_BUFFER_SIZE)
+  #define MAX_BUFFER_SIZE (1*MB)
 #endif
 
 #define PROTOCOL_MAXLEN 20
@@ -192,4 +187,3 @@
 #endif
 
 #endif /* _ALL_H_SYSTEM_H */
-

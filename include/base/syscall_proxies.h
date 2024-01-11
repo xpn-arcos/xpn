@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
    *
    *  This file is part of Expand.
    *
@@ -114,6 +114,7 @@
   int dlsym_access(const char *path, int mode);
   char *dlsym_realpath(const char *restrict path, char *restrict resolved_path);
   int dlsym_fsync(int fd);
+  int dlsym_flock(int fd, int operation);
 
 
   // Memory API

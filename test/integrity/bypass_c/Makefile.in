@@ -1,0 +1,32 @@
+
+
+#
+# Definitions
+#
+
+ MAKE         = make -s
+ CC           = @CC@
+ MYHEADER     = -I../../../include/ -I../../../include/base
+ MYLIBPATH    = -L../../../src/base
+ LIBRARIES    = -lpthread -ldl
+ MYFLAGS      = -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H
+
+
+#
+# Rules
+#
+
+all:  open-write-close open-read-close
+
+open-write-close: open-write-close.o
+	$(CC)  -o open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIES)
+
+open-read-close: open-read-close.o
+	$(CC)  -o open-read-close  open-read-close.o  $(MYLIBPATH) $(LIBRARIES)
+
+%.o: %.c
+	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
+
+clean:
+	rm -f ./*.o
+	rm -f ./open-write-close ./open-read-close

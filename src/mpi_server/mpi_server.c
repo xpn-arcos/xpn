@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -93,7 +93,7 @@
         th_arg.rank_client_id = th.rank_client_id;
         th_arg.wait4me  = FALSE;
 
-        workers_launch ( &worker, &th_arg, mpi_server_run );
+        base_workers_launch ( &worker, &th_arg, mpi_server_run );
       }
 
       debug_info("[MPI-SERVER] mpi_server_worker_run (ID=%d) close\n", th.rank_client_id);
@@ -123,7 +123,7 @@
           printf("[MPI-SERVER] ERROR: mpi_comm initialization fails\n");
           return -1;
       }
-      ret = workers_init( &worker, params.thread_mode );
+      ret = base_workers_init( &worker, params.thread_mode );
       if (ret < 0) {
           printf("[MPI-SERVER] ERROR: mpi_comm initialization fails\n");
           return -1;
@@ -165,12 +165,12 @@
         th_arg.rank_client_id = 0;
         th_arg.wait4me  = FALSE;
 
-        workers_launch( &worker, &th_arg, mpi_server_dispatcher );
+        base_workers_launch( &worker, &th_arg, mpi_server_dispatcher );
       }
 
       // Wait and finalize for all current workers
       debug_info("[MPI-SERVER] workers_destroy\n");
-      workers_destroy( &worker );
+      base_workers_destroy( &worker );
       debug_info("[MPI-SERVER] mpi_server_comm_destroy\n");
       mpi_server_comm_destroy(&params) ;
 
@@ -200,9 +200,9 @@
       MPI_Init(&argc, &argv);
 
       // Open host file
-      file = fopen(params.host_file, "r");
+      file = fopen(params.shutdown_file, "r");
       if (file == NULL) {
-        printf("[MPI-SERVER] ERROR: invalid file %s\n", params.host_file);
+        printf("[MPI-SERVER] ERROR: invalid file %s\n", params.shutdown_file);
         return -1;
       }
 
@@ -212,12 +212,14 @@
         char version[MPI_MAX_LIBRARY_VERSION_STRING];
         MPI_Get_library_version(version, &version_len);
 
-        if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
+        if (strncasecmp(version, "Open MPI", strlen("Open MPI")) != 0)
         {
           // Lookup port name
-          ret = ns_lookup (srv_name, port_name);
-          if (ret < 0) {
-            printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name) ;
+          char aux_srv_ip[1024];
+          ret = ns_lookup("mpi_server", srv_name, aux_srv_ip, port_name);
+          if (ret < 0)
+          {
+            printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name);
             continue;
           }
         }

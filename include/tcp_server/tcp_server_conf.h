@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -24,12 +24,11 @@
 #define _TCP_SERVER_CONF_H_
 
 
-    #include "all_system.h"
+#include "all_system.h"
 
 
 /* MAX_BUFFER_SIZE */
 #ifndef MAX_BUFFER_SIZE
-//	#define MAX_BUFFER_SIZE (64*KB)
 	#define MAX_BUFFER_SIZE (1*MB)
 #endif
 
@@ -47,17 +46,20 @@
 #endif
 
 #ifndef TCP_SERVER_DIRBASE_DEFAULT
-	#define TCP_SERVER_DIRBASE_DEFAULT	"/tmp"
+	#define TCP_SERVER_DIRBASE_DEFAULT	"/"
 #endif
 
 #ifndef TCP_SERVER_PORT_DEFAULT
-	#define TCP_SERVER_PORT_DEFAULT	55555
+	#define TCP_SERVER_PORT_DEFAULT	9999
+#endif
+
+#ifndef TCP_MAX_PORT_NAME
+    #define TCP_MAX_PORT_NAME 1024
 #endif
 
 #ifndef TCP_SERVER_IOSIZE_DEFAULT
-        #define TCP_SERVER_IOSIZE_DEFAULT  1024
+    #define TCP_SERVER_IOSIZE_DEFAULT (MB)
 #endif
 
 
 #endif
-

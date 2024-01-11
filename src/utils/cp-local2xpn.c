@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
    *
    *  This file is part of Expand.
    *
@@ -21,23 +21,12 @@
 
 
 #include <stdlib.h>
-#include <sys/param.h>
 #include <stdio.h>
-#include <sys/file.h>
-#include <sys/fcntl.h>
 #include <unistd.h>
-#include <sys/time.h>
-#include <sys/wait.h>
-#include <sys/errno.h>
+#include "all_system.h"
 #include "xpn.h"
 
-#ifndef KB
-	#define KB 1024
-#endif
 
-#ifndef MB
-	#define MB (KB*KB)
-#endif
 #define DATAM (256*KB)
 
 

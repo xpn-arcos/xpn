@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -65,11 +65,11 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     lookup_retries = 0;
     do
     {
-        printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number);
+        //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params->srv_name, params->server_name, params->port_number);
 
-        ret = ns_tcp_lookup(params -> srv_name, params -> server_name, params -> port_number) ;
+        ret = ns_lookup("tcp_server", params->srv_name, params->server_name, params->port_number) ;
 
-        printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%d\n", __FILE__, __LINE__, params -> srv_name, params -> server_name, params -> port_number, ret);
+        //printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%d\n", __FILE__, __LINE__, params->srv_name, params->server_name, params->port_number, ret);
         if (ret < 0)
         {
             if (lookup_retries == 0)
@@ -86,11 +86,11 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     } while ((ret < 0) && (lookup_retries < 150));
 
     if (ret < 0) {
-        debug_error("ERROR: DNS Lookup %s Port %s\n", params -> server_name, params -> port);
+        debug_error("ERROR: DNS Lookup %s Port %s\n", params->server_name, params->port);
         return -1;
     }
 
-    printf("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params -> srv_name, params -> server_name, params->port_number);
+    debug_info("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params->srv_name, params->server_name, params->port_number);
 
     // Socket...
     sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -98,7 +98,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         perror("socket: ");
         return -1;
     }
-    printf("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s ==> %d\n", params -> srv_name, params -> server_name, params->port_number, sd);
+    debug_info("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s ==> %d\n", params->srv_name, params->server_name, params->port_number, sd);
 
     // Set sockopt
     flag = 1;
@@ -123,34 +123,34 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     }
 
     // gethost by name
-    hp = gethostbyname(params -> server_name);
+    hp = gethostbyname(params->server_name);
     if (hp == NULL)
     {
         //tcp_server_err(TCP_SERVERERR_MEMORY);
         fprintf(stderr, "nfi_tcp_server_init: error gethostbyname %s (%s,%s)\n",
-			params -> srv_name, params -> server_name, params->port_number);
+      params->srv_name, params->server_name, params->port_number);
         return -1;
     }
 
-    //printf("[NFI_TCP_COMM] server = %s-%s\n", params -> server_name, params->port_number);
+    //debug_info("[NFI_TCP_COMM] server = %s-%s\n", params->server_name, params->port_number);
 
     // Connect...
     bzero((char * ) & server_addr, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_port   = htons(atoi(params->port_number));
-    memcpy( & (server_addr.sin_addr), hp -> h_addr, hp -> h_length);
+    memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
 
-    //printf("[NFI_TCP_COMM] Antes de connect to %s\n", params -> server_name);
+    //debug_info("[NFI_TCP_COMM] Antes de connect to %s\n", params->server_name);
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
     if (ret < 0)
     {
         //tcp_server_err(TCP_SERVERERR_MEMORY);
-        fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%s)\n", params -> srv_name, params -> server_name, params->port_number);
+        fprintf(stderr, "nfi_tcp_server_init: error in connect %s (%s,%s)\n", params->srv_name, params->server_name, params->port_number);
         return -1;
     }
 
     params->server = sd;
-    //printf("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params -> srv_name, params -> server_name, params->port_number, sd, ret);
+    //debug_info("[NFI_TCP_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params->srv_name, params->server_name, params->port_number, sd, ret);
 
     return ret;
 }
@@ -177,10 +177,10 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
     debug_info("[NFI_TCP_COMM] begin tcpClient_comm_locality\n");
 
     // Locality disable
-    if (!params -> xpn_locality)
+    if (!params->xpn_locality)
     {
         debug_info("[NFI_TCP_COMM] tcpClient_comm_locality disable\n");
-        params -> locality = 0;
+        params->locality = 0;
         return 1;
     }
 
@@ -188,21 +188,29 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
     gethostname(cli_name, HOST_NAME_MAX);
 
     data = TCP_SERVER_GETNODENAME;
-    ret = tcpClient_write_data(params -> server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ;
+    ret = tcpClient_write_data(params->server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ;
     if (ret < 0)
     {
         debug_warning("Server[?]: TCP_Send fails :-(");
         return -1;
     }
 
-    ret = tcpClient_read_data( params -> server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>") ;
+    ret = tcpClient_read_data( params->server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>") ;
     if (ret < 0)
     {
         debug_warning("Server[?]: tcpClient_read_data fails :-(");
         return -1;
     }
 
-    /*ret = tcpClient_read_data( params -> server, params -> sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
+    //Dirbase
+    ret = tcpClient_read_data( params->server, params->dirbase, PATH_MAX * sizeof(char), "<unused msg_id>") ;
+    if (ret < 0)
+    {
+        debug_warning("Server[?]: tcpClient_read_data fails :-(");
+        return -1;
+    }
+
+    /*ret = tcpClient_read_data( params->server, params->sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
     if (ret < 0)
     {
         debug_warning("Server[?]: tcpClient_read_data fails :-(");
@@ -210,11 +218,11 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
     }*/
 
     // check locality
-    params -> locality = 0;
+    params->locality = 0;
     if (strcmp(cli_name, serv_name) == 0)
     {
-        params -> locality = 1;
-        //params -> sem_server = sem_open(params -> sem_name_server, 0);
+        params->locality = 1;
+        //params->sem_server = sem_open(params->sem_name_server, 0);
     }
 
     debug_info("[NFI_TCP_COMM] end tcpClient_comm_locality\n");
@@ -254,7 +262,7 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     int ret, cont;
     static ssize_t( * real_write)(int,const void * , size_t) = NULL;
 
-    printf("[NFI_TCP_COMM] begin tcpClient_write_data(...)\n");
+    debug_info("[NFI_TCP_COMM] begin tcpClient_write_data(...)\n");
 
     // Check params
     if (size == 0) {
@@ -275,12 +283,12 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     {
         ret = real_write(fd, data + cont, size - cont);
 
-        printf("[NFI_TCP_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
+        debug_info("[NFI_TCP_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
 
         if (ret < 0) {
-	       perror("tcpClient_write_data: ERROR on real_write: ");
-	       return ret ;
-	   }
+         perror("tcpClient_write_data: ERROR on real_write: ");
+         return ret ;
+     }
 
         cont += ret;
 
@@ -330,7 +338,7 @@ ssize_t tcpClient_read_data ( int fd, char * data, ssize_t size, __attribute__((
 
         if (ret < 0) {
             perror("tcpClient_read_data: ERROR on real_read: ");
-	    return ret ;
+      return ret ;
         }
 
         cont += ret;
@@ -351,4 +359,3 @@ ssize_t tcpClient_read_data ( int fd, char * data, ssize_t size, __attribute__((
 
 
   /* ................................................................... */
-

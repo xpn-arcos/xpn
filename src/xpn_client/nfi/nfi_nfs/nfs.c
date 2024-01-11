@@ -1,4 +1,23 @@
 
+  /*
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *
+   *  This file is part of Expand.
+   *
+   *  Expand is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  Expand is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */
 
 #include "nfi/nfi_nfs/nfs.h"
 
@@ -139,12 +158,7 @@ CLIENT* create_connection_mount(char *name, int type)
   }
   /* con esto se añade cierta seguridad a la comunicación entre el cliente y el servidor */ 
   /* el tipo de seguridad utilizada es UNIX (vease la Rfc de las RPCs para mas información)*/
-#ifdef LINUX
   cli->cl_auth=authunix_create(s,getuid(),getgid(),0,NULL); 
-#endif
-#ifdef WIN32
-  cli->cl_auth=authunix_create(s,501,501,0,NULL);
-#endif
 
 #ifdef DEBUG_MNT
       printf("cl: %p \n",cli);
@@ -430,11 +444,7 @@ CLIENT* create_connection_nfs(char *name, int type)
   }
   /* con esto se añade cierta seguridad a la comunicación entre el cliente y el servidor */ 
   /* el tipo de seguridad utilizada es UNIX (vease la Rfc de las RPCs para mas información)*/
-#ifdef LINUX
   cli->cl_auth=authunix_create(s,getuid(),getgid(),0,NULL); 
-#else
-  cli->cl_auth=authunix_create(s,501,501,0,NULL);
-#endif
   return cli;
 }
 
@@ -486,14 +496,8 @@ void setDate(timevalNfs *t){
 void setAttr( sattr *at,unsigned int mode){
   
   at->mode = mode;
-#ifdef LINUX
   at->uid = getuid();
   at->gid = getgid();
-#endif
-#ifdef WIN32
-   at->uid = -1;
-   at->gid = -1; 
-#endif  
   at->size = 0;
   setDate(&(at->atime));
   setDate(&(at->mtime));

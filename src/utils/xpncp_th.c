@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
    *
    *  This file is part of Expand.
    *
@@ -29,17 +29,11 @@
 #include <fcntl.h>
 #include <argp.h>
 
+#include "all_system.h"
 #include "xpn.h"
 
 #define BAR_LENGTH 50
 
-#ifndef KB
-	#define KB	(1024)
-#endif
-
-#ifndef MB
-	#define MB	(KB*KB)
-#endif
 
 struct stat st;
 struct timeval t_ini_transfer, t_end_transfer, t_old_transfer;

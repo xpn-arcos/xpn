@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -142,8 +142,9 @@
     {
       // Lookup port name
       int lookup_retries = 0;
+      char aux_srv_ip[1024] ;
       do {
-        ret = ns_lookup (params->srv_name, params->port_name);
+        ret = ns_lookup("mpi_server", params->srv_name, aux_srv_ip, params->port_name) ;
         if (ret < 0)
         {
           if (lookup_retries == 0)
@@ -269,6 +270,13 @@
       return -1;
     }
 
+    //Dirbase
+    ret = MPI_Recv(params->dirbase, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
+    if (MPI_SUCCESS != ret) {
+      debug_warning("Server[?]: MPI_Recv fails :-(") ;
+      return -1;
+    }
+
     //Semaphore
     /*ret = MPI_Recv(params->sem_name_server, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
     if (MPI_SUCCESS != ret) {
@@ -382,4 +390,3 @@
     // Return bytes read
     return size;
   }
-
