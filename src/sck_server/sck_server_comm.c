@@ -27,116 +27,6 @@
 
   /* ... Functions / Funciones ......................................... */
 
-// MOSQUITTO FILE
-#ifdef HAVE_MOSQUITTO_H
-
-void on_message(struct mosquitto *mqtt, void *obj, const struct mosquitto_message *msg)
-{
-  if (NULL == obj) {
-    printf("ERROR: obj is NULL :-( \n") ;
-  }
-  //printf("%s\t%d\n", msg->topic, msg->payloadlen);
-
-  // Copiar el mensaje en una variable local para manipularla
-  char topic[PATH_MAX], path[PATH_MAX];
-
-  int to_write1, offset;
-
-  strncpy(topic, msg->topic, PATH_MAX);
-
-  // Encontrar la posición del último y el penúltimo slash
-  int last_slash = -1;
-  int penultimate_slash = -1;
-  for (int i = 0; topic[i] != '\0'; i++) {
-    if (topic[i] == '/') {
-      penultimate_slash = last_slash;
-      last_slash = i;
-    }
-  }
-
-  // Extraer el path y los dos enteros usando sscanf y las posiciones de los slashes
-  
-  if (penultimate_slash >= 0 && last_slash > penultimate_slash)
-  {
-    // Si hay dos slashes, extraer el path y ambos enteros
-    strncpy(path, topic, penultimate_slash);
-    path[penultimate_slash] = '\0';
-    sscanf(&topic[penultimate_slash + 1], "%d/%d", &to_write1, &offset);
-
-  }
-  else if (last_slash >= 0)
-  {
-    // Si solo hay un slash, extraer solo el path y el primer entero
-    strncpy(path, topic, last_slash);
-    path[last_slash] = '\0';
-    sscanf(&topic[last_slash + 1], "%d", &to_write1);
-    offset = 0;
-    
-  } else {
-    // Si no hay slashes, asumir que todo es el path
-    strncpy(path, topic, PATH_MAX - 1);
-    path[PATH_MAX - 1] = '\0';
-    to_write1 = 0;
-    offset = 0;
-  }
-  
-  //printf("\n%s - %s %d %d\n", topic, path, to_write1, offset);
-
-  char * buffer = NULL;
-  int size, diff, cont = 0, to_write = 0, size_written = 0;
-
-  // initialize counters
-  size = to_write1;
-  if (size > MAX_BUFFER_SIZE) {
-    size = MAX_BUFFER_SIZE;
-  }
-  diff = size - cont;
-
-  //Open file
-  int fd = open(path, O_WRONLY|O_APPEND);
-  if (fd < 0) {
-    return;
-  }
-
-  /*// malloc a buffer of size...
-  buffer = (char * ) malloc(size);
-  if (NULL == buffer)
-  {
-    close(fd);
-    return;
-  }
-
-  bzero(buffer, MAX_BUFFER_SIZE);*/
-
-  // loop...
-  do {
-    if (diff > size) to_write = size;
-    else to_write = diff;
-
-    // read data from socket (TCP) and write into the file
-    lseek(fd, offset + cont, SEEK_SET);
-    size_written = write(fd, msg->payload, to_write);
-
-    // update counters
-    cont = cont + size_written; // Received bytes
-    diff = to_write - cont;
-
-  } while ((diff > 0) && (size_written != 0));
-
-
-  close(fd);
-  FREE_AND_NULL(buffer);
-
-  //printf("[%d]\tBEGIN CLOSE MOSQUITTO SCK_SERVER - WOS \n\n", __LINE__);
-
-  mosquitto_unsubscribe(mqtt, NULL, path);
-
-  //printf("[%d]\tEND CLOSE MOSQUITTO SCK_SERVER - WOS %s \n\n", __LINE__, path);
-}
-
-#endif
-
-
 int sck_server_comm_init ( sck_server_param_st * params )
 {
   int ret, val ;
@@ -193,62 +83,6 @@ int sck_server_comm_init ( sck_server_param_st * params )
   listen(params->global_sock, 20);
 
   /*
-   * Initialize mosquitto
-   */
-  
-  #ifdef HAVE_MOSQUITTO_H
-
-  if ( params->mosquitto_mode  == 1 )
-  {
-    printf("[%d]\tBEGIN INIT MOSQUITTO SCK_SERVER\n\n", __LINE__);
-
-    
-    mosquitto_lib_init();
-
-    params->mqtt = mosquitto_new(NULL, true, NULL);
-
-    if(params->mqtt == NULL)
-    {
-      fprintf(stderr, "Error: Out of memory.\n");
-      return 1;
-    }
-
-    //mosquitto_connect_callback_set(params->mqtt, on_connect);
-    //mosquitto_subscribe_callback_set(params->mqtt, on_subscribe);
-    mosquitto_message_callback_set(params->mqtt, on_message);
-
-    #ifndef MOSQ_OPT_TCP_NODELAY
-    #define MOSQ_OPT_TCP_NODELAY 1
-    #endif
-
-    mosquitto_int_option(params->mqtt, MOSQ_OPT_TCP_NODELAY, 1);
-
-    int rc = mosquitto_connect(params->mqtt, "localhost", 1883, 0);
-    if( rc != MOSQ_ERR_SUCCESS )
-    {
-      mosquitto_destroy(params->mqtt);
-      fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO SCK_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
-      return 1;
-    }
-
-    /* Run the network loop in a background thread, this call returns quickly. */
-    rc = mosquitto_loop_start(params->mqtt);
-
-    if(rc != MOSQ_ERR_SUCCESS)
-    {
-      mosquitto_destroy(params->mqtt);
-      fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
-      return 1;
-    }
-
-    //mosquitto_loop_forever(params->mqtt, -1, 1);
-    printf("[%d]\tEND INIT MOSQUITTO SCK_SERVER\n\n", __LINE__);
-    
-  }
-
-  #endif
-
-  /*
    * Post-initialize
    */
 
@@ -295,21 +129,6 @@ int sck_server_comm_destroy ( sck_server_param_st * params )
       }
     }
   }
-
-  /*
-   * Destroy mosquitto
-   */
-#ifdef HAVE_MOSQUITTO_H
-  if (params->mosquitto_mode)
-  {
-    
-    debug_info("[%d]\tBEGIN DESTROY MOSQUITTO SCK_SERVER\n\n", __LINE__);
-    mosquitto_lib_cleanup();
-    mosquitto_loop_stop(params->mqtt, true);
-    debug_info("[%d]\tEND DESTROY MOSQUITTO SCK_SERVER\n\n", __LINE__);
-  
-  }
-#endif
   
   // Print server info
   char serv_name  [HOST_NAME_MAX];
@@ -517,9 +336,7 @@ ssize_t sck_server_comm_write_data(sck_server_param_st * params, int fd, char * 
   {
     ret = 0;
     debug_info("[SRV_SCK_COMM] server:write_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
-    //debug_info("Antes Escritura - %d\n", ret);
     ret = write(fd, data + cont, size - cont);
-    //debug_info("Despues Escritura - %d\n", ret);
     if (ret < 0) {
       perror("server: Error write_comm: ");
        return -1;
@@ -565,9 +382,7 @@ ssize_t sck_server_comm_read_data(sck_server_param_st * params, int fd, char * d
   {
     ret = 0;
     debug_info("[SRV_SCK_COMM] server:read_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
-    //debug_info("Antes Lectura - %d\n", ret);
     ret = read(fd, data + cont, size - cont);
-    //debug_info("Despues Lectura - %d\n", ret);
     if (ret < 0) {
       perror("[SRV_SCK_COMM] server: Error read_comm: ");
       return -1;

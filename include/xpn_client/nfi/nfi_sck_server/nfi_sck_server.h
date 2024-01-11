@@ -42,16 +42,8 @@
     #include "nfi.h"
     #include "nfi_worker.h"
 
-    #ifdef HAVE_MOSQUITTO_H
-    #include <mosquitto.h>
-    #endif
-
 
   /* ... Const / Const ................................................. */
-
-    #ifndef MOSQ_OPT_TCP_NODELAY
-    #define MOSQ_OPT_TCP_NODELAY 0
-    #endif
 
 
   /* ... Data structures / Estructuras de datos ........................ */
@@ -62,7 +54,6 @@
       char   id[PATH_MAX] ;
       char path[PATH_MAX] ;
       //struct nfi_sck_server_connector sd;
-      struct mosquitto * mqtt;
 
       // client stub
       sckClient_param_st params ;
