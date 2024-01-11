@@ -353,59 +353,6 @@ int nfi_sck_server_init(char * url, struct nfi_server * serv, __attribute__((__u
 
   DEBUG_END();
 
-  #ifdef HAVE_MOSQUITTO_H
-  /*INIT MOSQUITTO CLIENT SIDE */
-  int rc = 0;
-  server_aux->params.xpn_mosquitto_mode = 0;
-  char * env_mosquitto = getenv("XPN_MQTT");
-  if (env_mosquitto != NULL) 
-  {
-    server_aux->params.xpn_mosquitto_mode = atoi(env_mosquitto);
-
-    if (server_aux->params.xpn_mosquitto_mode == 1)                       //MQTT initialization
-    {
-      server_aux->params.xpn_mosquitto_qos = 0;
-      char * env_qos_mqtt = getenv("XPN_MQTT_QOS");
-      
-      if (env_qos_mqtt != NULL) server_aux->params.xpn_mosquitto_qos = atoi(env_qos_mqtt);
-
-      mosquitto_lib_init();
-      server_aux->mqtt = mosquitto_new(NULL, true, NULL);
-
-      if(server_aux->mqtt == NULL)
-      {
-        fprintf(stderr, "Error: Out of memory.\n");
-        return -1;
-      }
-
-      mosquitto_int_option(server_aux->mqtt, MOSQ_OPT_TCP_NODELAY, 1);  // TODO: uncomment this line !!
-      mosquitto_int_option(server_aux->mqtt, MOSQ_OPT_SEND_MAXIMUM, 65535);
-
-
-      rc = mosquitto_connect(server_aux->mqtt, server_aux->params.server_name, 1883, 0);
-
-      if(rc != MOSQ_ERR_SUCCESS)
-      {
-        mosquitto_destroy(server_aux->mqtt);
-        fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
-        return 1;
-      }
-
-      /* Run the network loop in a background thread, this call returns quickly. */
-      rc = mosquitto_loop_start(server_aux->mqtt);
-
-      if(rc != MOSQ_ERR_SUCCESS)
-      {
-        mosquitto_destroy(server_aux->mqtt);
-        fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
-        return 1;
-      }
-    }
-  }
-
-  #endif
-
-
   // return OK
   return 0;
 }
@@ -446,18 +393,6 @@ int nfi_sck_server_destroy(struct nfi_server * serv) {
 
   //serv->protocol = -1;
   DEBUG_END();
-
-  #ifdef HAVE_MOSQUITTO_H
-
-  if (server_aux->params.xpn_mosquitto_mode == 1)                       //MQTT finalization
-  {
-    
-    mosquitto_disconnect(server_aux->mqtt);
-    mosquitto_destroy(server_aux->mqtt);
-    mosquitto_lib_cleanup();
-  }   
-
-  #endif
 
   // return OK
   return 0;
@@ -946,124 +881,71 @@ ssize_t nfi_sck_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
   debug_info("[NFI-SCK-CLI] nfi_sck_server_write(ID=%s): begin off %d size %d\n", server_aux->id, (int) offset, (int) size);
   fh_aux = (struct nfi_sck_server_fhandle * ) fh->priv_fh;
 
-  if (server_aux->params.xpn_mosquitto_mode == 0)
+  /************** LOCAL *****************/
+  if (server_aux->params.locality) 
   {
-    /************** LOCAL *****************/
-    if (server_aux->params.locality) 
+    if (server_aux->params.xpn_session) 
     {
-      if (server_aux->params.xpn_session) 
-      {
-        real_posix_lseek(fh_aux->fd, offset, SEEK_SET);
-        //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-        ret = real_posix_write(fh_aux->fd, buffer, size);
-        //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+      real_posix_lseek(fh_aux->fd, offset, SEEK_SET);
+      //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+      ret = real_posix_write(fh_aux->fd, buffer, size);
+      //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-        debug_info("[NFI-SCK-CLI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int) offset, size, ret);
-      } else 
-      {
-        int fd;
+      debug_info("[NFI-SCK-CLI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int) offset, size, ret);
+    } else 
+    {
+      int fd;
 
-        fd = real_posix_open(fh_aux->path, O_WRONLY); // WOS
-        if (fd < 0) {
-          debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int) offset, size, ret, errno);
-          return -1;
-        }
-
-        real_posix_lseek(fd, offset, SEEK_SET);
-        //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-        ret = real_posix_write(fd, buffer, size);
-        //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-
-        debug_info("[NFI-SCK-CLI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int) offset, size, ret);
-
-        real_posix_close(fd); // WOS
-      }
-
-      if (ret < 0) {
+      fd = real_posix_open(fh_aux->path, O_WRONLY); // WOS
+      if (fd < 0) {
         debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int) offset, size, ret, errno);
         return -1;
       }
+
+      real_posix_lseek(fd, offset, SEEK_SET);
+      //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
+      ret = real_posix_write(fd, buffer, size);
+      //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+
+      debug_info("[NFI-SCK-CLI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int) offset, size, ret);
+
+      real_posix_close(fd); // WOS
     }
-    /************** REMOTE ****************/
-    else 
-    {
-      // send write request
-      if (server_aux->params.xpn_session) 
-      {
-        msg.type = SCK_SERVER_WRITE_FILE_WS;
-        msg.u_st_sck_server_msg.op_write.fd = fh_aux->fd;
-        debug_info("[NFI-SCK-CLI] write:->fd     %d \n", msg.u_st_sck_server_msg.op_write.fd);
-      } else 
-      {
-        msg.type = SCK_SERVER_WRITE_FILE_WOS;
-        memccpy(msg.u_st_sck_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX - 1);
-        debug_info("[NFI-SCK-CLI] write:->path   %s \n", msg.u_st_sck_server_msg.op_write.path);
-      }
 
-      memccpy(msg.id, server_aux->id, 0, SCK_SERVER_ID - 1);
-      msg.u_st_sck_server_msg.op_write.offset = offset;
-      msg.u_st_sck_server_msg.op_write.size = size;
-
-      debug_info("[NFI-SCK-CLI] write:->offset %d \n", (int) msg.u_st_sck_server_msg.op_write.offset);
-      debug_info("[NFI-SCK-CLI] write:->size   %d \n", msg.u_st_sck_server_msg.op_write.size);
-
-      ret = sck_server_write_operation(server_aux->params.server, & msg);
-      if (ret < 0) 
-      {
-        fprintf(stderr, "(1)ERROR: nfi_sck_server_write(ID=%s): Error on write operation\n", server_aux->id);
-        return -1;
-      }
-
-      // write n times: ...
-      diff = size;
-      cont = 0;
-
-      // Max buffer size
-      int buffer_size = size;
-      if (buffer_size > MAX_BUFFER_SIZE) 
-      {
-        buffer_size = MAX_BUFFER_SIZE;
-      }
-
-      do 
-      {
-        int bytes_to_write = 0;
-
-        if( diff > buffer_size )        bytes_to_write = buffer_size;
-        else                            bytes_to_write = diff;
-        
-        ret = sckClient_write_data(server_aux->params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
-        
-        if (ret < 0) 
-        {
-          fprintf(stderr, "(2)ERROR: nfi_sck_server_write(ID=%s): Error on write operation\n", server_aux->id);
-        }
-
-        cont = cont + bytes_to_write; //Send bytes
-        diff = size - cont;
-
-      } while ((diff > 0) && (ret != 0));
-
-      ret = sckClient_read_data(server_aux->params.server, (char * ) & req, sizeof(struct st_sck_server_write_req), msg.id);
-      if (ret < 0) 
-      {
-        fprintf(stderr, "(3)ERROR: nfi_sck_server_write(ID=%s): Error on write operation\n", server_aux->id);
-        return -1;
-      }
-
-      debug_info("[NFI-SCK-CLI] nfi_sck_server_write(ID=%s): write %s off %d size %d (err:%d).\n", server_aux->id, fh->url, (int) offset, (int) size, (int) req.size);
-      if (req.size < 0) 
-      {
-        fprintf(stderr, "ERROR: nfi_sck_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n", server_aux->id, fh->url, (int) offset, (int) size, (int) req.size);
-        sck_server_err(SCK_SERVERERR_WRITE);
-        return -1;
-      }
-
-      ret = cont;
+    if (ret < 0) {
+      debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int) offset, size, ret, errno);
+      return -1;
     }
   }
-  else
+  /************** REMOTE ****************/
+  else 
   {
+    // send write request
+    if (server_aux->params.xpn_session) 
+    {
+      msg.type = SCK_SERVER_WRITE_FILE_WS;
+      msg.u_st_sck_server_msg.op_write.fd = fh_aux->fd;
+      debug_info("[NFI-SCK-CLI] write:->fd     %d \n", msg.u_st_sck_server_msg.op_write.fd);
+    } else 
+    {
+      msg.type = SCK_SERVER_WRITE_FILE_WOS;
+      memccpy(msg.u_st_sck_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX - 1);
+      debug_info("[NFI-SCK-CLI] write:->path   %s \n", msg.u_st_sck_server_msg.op_write.path);
+    }
+
+    memccpy(msg.id, server_aux->id, 0, SCK_SERVER_ID - 1);
+    msg.u_st_sck_server_msg.op_write.offset = offset;
+    msg.u_st_sck_server_msg.op_write.size = size;
+
+    debug_info("[NFI-SCK-CLI] write:->offset %d \n", (int) msg.u_st_sck_server_msg.op_write.offset);
+    debug_info("[NFI-SCK-CLI] write:->size   %d \n", msg.u_st_sck_server_msg.op_write.size);
+
+    ret = sck_server_write_operation(server_aux->params.server, & msg);
+    if (ret < 0) 
+    {
+      fprintf(stderr, "(1)ERROR: nfi_sck_server_write(ID=%s): Error on write operation\n", server_aux->id);
+      return -1;
+    }
 
     // write n times: ...
     diff = size;
@@ -1079,37 +961,36 @@ ssize_t nfi_sck_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     do 
     {
       int bytes_to_write = 0;
-      char *topic = malloc(strlen(fh_aux->path) + sizeof(bytes_to_write) + sizeof(offset) + 3);
 
       if( diff > buffer_size )        bytes_to_write = buffer_size;
       else                            bytes_to_write = diff;
-
-      #ifdef HAVE_MOSQUITTO_H
-
-      sprintf(topic, "%s/%d/%ld", fh_aux->path, bytes_to_write, (long)offset);
-      debug_info("\nCLIENTE ESCRITURA - %s - topic=%s\n", fh_aux->path, topic);
-      debug_info("\nREMOTE MQTT- %s - %d - %d\n\n", server_aux->params.server_name, cont, bytes_to_write);
-
-      ret = mosquitto_publish(server_aux->mqtt, NULL, topic, bytes_to_write, (char * ) buffer + cont, server_aux->params.xpn_mosquitto_qos, false);
-
-      if(ret != MOSQ_ERR_SUCCESS)
-      {
-        fprintf(stderr, "Error publishing write: %s\n", mosquitto_strerror(ret));
-        free(topic);
-        return -1;
-      }
       
-      #endif
+      ret = sckClient_write_data(server_aux->params.server, (char * ) buffer + cont, bytes_to_write, msg.id); 
+      
       if (ret < 0) 
       {
         fprintf(stderr, "(2)ERROR: nfi_sck_server_write(ID=%s): Error on write operation\n", server_aux->id);
       }
 
-      free(topic);
       cont = cont + bytes_to_write; //Send bytes
       diff = size - cont;
-      
-    } while ((diff > 0) && (ret != 0));        
+
+    } while ((diff > 0) && (ret != 0));
+
+    ret = sckClient_read_data(server_aux->params.server, (char * ) & req, sizeof(struct st_sck_server_write_req), msg.id);
+    if (ret < 0) 
+    {
+      fprintf(stderr, "(3)ERROR: nfi_sck_server_write(ID=%s): Error on write operation\n", server_aux->id);
+      return -1;
+    }
+
+    debug_info("[NFI-SCK-CLI] nfi_sck_server_write(ID=%s): write %s off %d size %d (err:%d).\n", server_aux->id, fh->url, (int) offset, (int) size, (int) req.size);
+    if (req.size < 0) 
+    {
+      fprintf(stderr, "ERROR: nfi_sck_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n", server_aux->id, fh->url, (int) offset, (int) size, (int) req.size);
+      sck_server_err(SCK_SERVERERR_WRITE);
+      return -1;
+    }
 
     ret = cont;
   }
@@ -1118,7 +999,6 @@ ssize_t nfi_sck_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 
   return ret;
 }
-
 
 
 int nfi_sck_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
@@ -1184,7 +1064,6 @@ int nfi_sck_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
   // Return OK
   return ret;
 }
-
 
 
 int nfi_sck_server_remove(struct nfi_server * serv, char * url) {

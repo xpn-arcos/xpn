@@ -49,10 +49,6 @@ void sck_server_params_show(sck_server_param_st * params)
   printf("\t-d  <string>:\t'%s'\n", params -> dirbase);
   printf("\t-f <path>:\t'%s'\n",   params->shutdown_file) ;
 
-  if (params -> mosquitto_mode == 1) {
-    printf("\t-m <mqtt_qos>:\t%d\n", params -> mosquitto_qos);
-  }
-
   DEBUG_END();
 }
 
@@ -69,8 +65,6 @@ void sck_server_params_show_usage(void)
   printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n");
   printf("\t-d  <string>: name of the base directory\n") ;
   printf("\t-f  <path>: file of servers to be shutdown\n") ;
-
-  printf("\t-m <mqtt_qos_mode>:   0 (QoS 0); 1 (QoS 1); 2 (QoS 2)\n");
 
   DEBUG_END();
 }
@@ -93,9 +87,6 @@ int sck_server_params_get(sck_server_param_st * params, int argc, char * argv[])
   gethostname(params -> name, SCK_MAX_PORT_NAME);
   sprintf(params -> port, "%d", SCK_SERVER_PORT_DEFAULT);
   params -> IOsize = SCK_SERVER_IOSIZE_DEFAULT;
-
-  params -> mosquitto_mode = 0;
-  params -> mosquitto_qos = 0;
 
   // update user requests
   for (int i = 0; i < argc; i++) 
@@ -169,29 +160,6 @@ int sck_server_params_get(sck_server_param_st * params, int argc, char * argv[])
             printf("ERROR: unknown option %s\n", argv[i + 1]);
           }
         }
-        i++;
-        break;
-      case 'm':
-        params -> mosquitto_mode = 1;
-
-        if (isdigit(argv[i + 1][0])) 
-        {
-          int qos_mode_mqtt = atoi(argv[i + 1]);
-
-          if ( qos_mode_mqtt < 0 || qos_mode_mqtt > 2 )
-          {
-            printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
-          }
-          else
-          {
-            params -> mosquitto_qos = qos_mode_mqtt;
-          }
-        }
-        else
-        {
-          printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
-        }
-
         i++;
         break;
       case 'h':
