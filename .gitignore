@@ -28,4 +28,6 @@ autom4te.cache
 /Makefile
 **/Makefile
 configure~
-
+configure
+include/config.h
+include/config.h.in~
