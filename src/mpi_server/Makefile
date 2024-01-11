@@ -6,7 +6,7 @@
  MAKE                 = make -s
  CC                   = /usr/bin/mpicc
  SOURCE_PATH          = ./
- EXPAND_DIR           = /home/acaldero/bin/xpn
+ EXPAND_DIR           = /home/alejandro/bin//xpn
  OBJECTS_MPI_SERVER   = ../../src/mpi_server/mpi_server.o \
 			../../src/mpi_server/mpi_server_params.o \
 			../../src/mpi_server/mpi_server_comm.o \
@@ -22,9 +22,9 @@
 			../../src/base/workers.o \
 			../../src/base/workers_ondemand.o \
 			../../src/base/workers_pool.o
-MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
+MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE -DHAVE_STRUCT_IOVEC
 MYHEADERS            = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/mpi_server
-MYLIBS               =  -L../../src/xpn_client -lxpn -lmxml  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmosquitto -lmxml -ldl -lpthread  -lmxml
+MYLIBS               =  -L../../src/xpn_client -lxpn -lmxml  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
 
 MPI_SERVER_EXE       = xpn_mpi_server
 MPI_SERVER_EXE_STOP  = xpn_stop_mpi_server
