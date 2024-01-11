@@ -3,6 +3,9 @@
 
 ## 2.2.0 - 2023-03-17
   * TCP server rebuilt from scratch
+  * New system calls intercepted
+  * Preload and flush data operations added
+  * Minor bug fixes and improvements
 
 ## 2.1.0 - 2023-03-03
   * Spack support added
