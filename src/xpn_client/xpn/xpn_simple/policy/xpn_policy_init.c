@@ -199,13 +199,12 @@ int XpnGetInfoPartition(struct conf_connect_st * fconf, struct xpn_partition * p
         }
 
         part -> block_size = getSizeFactor(value);
-
+        
         value = NULL;
         value = (char * ) mxmlElementGetAttr(fconf -> connect_u.xml.conf_partition_node, XML_TAG_ATTR_REPLICATION_LEVEL);
-        if (value == NULL) {
+        if (value == NULL || atoi(value) < 0) {
             value = XML_DEFAULT_ATTR_REPLICATION_LEVEL;
         }
-
         part -> replication_level = atoi(value);
         debug_info("[XPN]XML_REPLICATION_LEVEL = %s\n", value ? value : "NULL");
 

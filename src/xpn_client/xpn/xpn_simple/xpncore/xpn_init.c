@@ -151,7 +151,6 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
 
     xpn_parttable[i].id = XpnGetIdPartition(fd, xpn_parttable[i].name);
     XPN_DEBUG("Partition %d: name=%s", xpn_parttable[i].id, xpn_parttable[i].name);
-    XPN_DEBUG("Partition %d: replication_level=%d", xpn_parttable[i].id, xpn_parttable[i].replication_level);
     
     /* compruebo los errores???? */
     if(XpnGetInfoPartition(fd, &(xpn_parttable[i]))==-1)
@@ -163,7 +162,8 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
       res = -1;
       XPN_DEBUG_END
       return res;
-    }
+    }    
+    XPN_DEBUG("Partition %d: replication_level=%d", xpn_parttable[i].id, xpn_parttable[i].replication_level);
 
     xpn_parttable[i].data_nserv = XpnGetNumServersPartition(fd, &(xpn_parttable[i]) , XPN_DATA_SERVER);
     XPN_DEBUG("Partition %d: data_nserv=%d\n", xpn_parttable[i].id, xpn_parttable[i].data_nserv);

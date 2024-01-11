@@ -73,6 +73,34 @@ int XpnGetBlock(int fd, off_t offset, off_t *local_offset, int *serv)
 }
 
 /**
+ * Calculates the server and the offset in that server of the given offset of a file with replication.
+ *
+ * @param fd[in] A file descriptor.
+ * @param offset[in] The original offset.
+ * @param replication[in] The replicatio of actual offset.
+ * @param local_offset[out] The offset in the server.
+ * @param serv[out] The server in which is located the given offset.
+ *
+ * @return Returns 0 on success or -1 on error.
+ */
+int XpnGetBlockReplication(int fd, off_t offset, int replication, off_t *local_offset, int *serv)
+{
+	int block = offset / xpn_file_table[fd]->block_size;
+	int block_line = block / xpn_file_table[fd]->mdata->data_nserv;
+	int Block_line_replication = block_line + replication;
+	int final_block_line = Block_line_replication + block_line * xpn_file_table[fd]->part->replication_level;
+
+	// Calculate the server
+	(*serv) = (block + replication) % xpn_file_table[fd]->mdata->data_nserv;
+	
+	// Calculate the offset in the server
+	(*local_offset) = final_block_line * xpn_file_table[fd]->block_size;
+	XPN_DEBUG("XpnGetBlockReplication(%lld) -> local_offset = %lld, serv = %d, replication = %d", (long long)offset, (long long)(*local_offset), *serv, replication);
+	
+	return 0;
+}
+
+/**
  * The blocks that have to be read/written from/to the servers are selected by round-robin: one block from each server. Using this policy the nfi module will perform one read/write operation for every single block on every server, which is not optimal.
  * This policy is valid for read/write operations on a RAID0 partition, and for read operations on a RAID1 partition.
  *

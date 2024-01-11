@@ -431,7 +431,7 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
   struct nfi_server **servers;
   int n;
 
-  XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
+  // XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset);
 
   if((fd<0)||(fd>XPN_MAX_FILE)){
     return -1;
@@ -471,28 +471,30 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
 
   do
   {
-    XpnGetBlock(fd, new_offset, &l_offset, &l_serv);
-
-    l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
-
-    // If l_size > the remaining bytes to read/write, then adjust l_size
-    if ((size - count) < l_size){
-      l_size = size - count;
-    }
-
-    if (xpn_file_table[fd]->data_vfh->nfih[l_serv] == NULL)
+    for (size_t i = 0; i < xpn_file_table[fd]->part->replication_level + 1; i++)
     {
-      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), servers[l_serv], xpn_file_table[fd]->path);
-      if(res<0){
-        return -1;
+      XpnGetBlockReplication(fd, new_offset, i, &l_offset, &l_serv);
+      
+      l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
+
+      // If l_size > the remaining bytes to read/write, then adjust l_size
+      if ((size - count) < l_size){
+      l_size = size - count;
+      }
+
+      if (xpn_file_table[fd]->data_vfh->nfih[l_serv] == NULL)
+      {
+        res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), servers[l_serv], xpn_file_table[fd]->path);
+        if(res<0){
+          return -1;
+        }
+      }
+
+      res = servers[l_serv]->ops->nfi_write(servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset+XPN_HEADER_SIZE, l_size) ;
+      if (res<0) {
+        return (0 == count) ? -1 : count ;
       }
     }
-
-    res = servers[l_serv]->ops->nfi_write(servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset+XPN_HEADER_SIZE, l_size) ;
-    if (res<0) {
-      return (0 == count) ? -1 : count ;
-    }
-
     count = count + res;
     new_offset = offset + count;
   }
