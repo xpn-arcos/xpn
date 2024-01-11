@@ -100,7 +100,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES = src/bypass/Makefile src/mpi_server/Makefile \
-	src/tcp_server/Makefile test/integrity/xpn/Makefile \
+	src/sck_server/Makefile src/tcp_server/Makefile \
+	test/integrity/xpn/Makefile \
 	test/integrity/mpi_connect_accept/Makefile \
 	test/integrity/bypass_c/Makefile test/performance/xpn/Makefile \
 	test/performance/iop/Makefile \
@@ -168,6 +169,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/ar-lib \
 	$(top_srcdir)/include/config.h.in \
 	$(top_srcdir)/src/bypass/Makefile.in \
 	$(top_srcdir)/src/mpi_server/Makefile.in \
+	$(top_srcdir)/src/sck_server/Makefile.in \
 	$(top_srcdir)/src/tcp_server/Makefile.in \
 	$(top_srcdir)/test/integrity/bypass_c/Makefile.in \
 	$(top_srcdir)/test/integrity/mpi_connect_accept/Makefile.in \
@@ -222,19 +224,19 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} '/local_test/src/xpn/config/missing' aclocal-1.16
+ACLOCAL = ${SHELL} '/home/alejandro/work/xpn/config/missing' aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} '/local_test/src/xpn/config/missing' autoconf
-AUTOHEADER = ${SHELL} '/local_test/src/xpn/config/missing' autoheader
-AUTOMAKE = ${SHELL} '/local_test/src/xpn/config/missing' automake-1.16
-AWK = mawk
-CC = /local_test/bin/mpich/bin/mpicc
+AUTOCONF = ${SHELL} '/home/alejandro/work/xpn/config/missing' autoconf
+AUTOHEADER = ${SHELL} '/home/alejandro/work/xpn/config/missing' autoheader
+AUTOMAKE = ${SHELL} '/home/alejandro/work/xpn/config/missing' automake-1.16
+AWK = gawk
+CC = /usr/bin/mpicc
 CCDEPMODE = depmode=gcc3
-CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
+CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_MPI_SERVER -DENABLE_SCK_SERVER
 CFLAGS = -I../../mxml        -I../../bin/mosquitto/include       -I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base -I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
+CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_MPI_SERVER -DENABLE_SCK_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server  
 CSCOPE = cscope
 CTAGS = ctags
 CYGPATH_W = echo
@@ -258,7 +260,7 @@ LIBOBJS =
 LIBS =  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
 LTLIBOBJS = 
 MAKE = make
-MAKEINFO = ${SHELL} '/local_test/src/xpn/config/missing' makeinfo
+MAKEINFO = ${SHELL} '/home/alejandro/work/xpn/config/missing' makeinfo
 MKDIR_P = /usr/bin/mkdir -p
 M_HEADERS = 
 NFI_MPI_SERVER = nfi_mpi_server
@@ -267,8 +269,10 @@ NFI_NFS =
 NFI_NFS3 = 
 NFI_NFS3_OBJECTS = 
 NFI_NFS_OBJECTS = 
-NFI_TCP_SERVER = nfi_tcp_server
-NFI_TCP_SERVER_OBJECTS = $(NFI_TCP_SERVER_OBJECTS)
+NFI_SCK_SERVER = nfi_sck_server
+NFI_SCK_SERVER_OBJECTS = $(NFI_SCK_SERVER_OBJECTS)
+NFI_TCP_SERVER = 
+NFI_TCP_SERVER_OBJECTS = 
 OBJEXT = o
 OS = __LINUX__
 PACKAGE = expand
@@ -284,10 +288,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 2.0
-abs_builddir = /local_test/src/xpn
-abs_srcdir = /local_test/src/xpn
-abs_top_builddir = /local_test/src/xpn
-abs_top_srcdir = /local_test/src/xpn
+abs_builddir = /home/alejandro/work/xpn
+abs_srcdir = /home/alejandro/work/xpn
+abs_top_builddir = /home/alejandro/work/xpn
+abs_top_srcdir = /home/alejandro/work/xpn
 ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
@@ -315,7 +319,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /local_test/src/xpn/config/install-sh
+install_sh = ${SHELL} /home/alejandro/work/xpn/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -324,7 +328,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /local_test/bin//xpn
+prefix = /home/alejandro/bin//xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
@@ -340,7 +344,7 @@ target_vendor = pc
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-SUBDIRS = src/base   src/xpn_client   src/utils   src/bypass   src/tcp_server  src/mpi_server  
+SUBDIRS = src/base   src/xpn_client   src/utils   src/bypass   src/mpi_server  src/sck_server  src/tcp_server  
 EXTRA_DIST = AUTHORS COPYING README.md
 all: all-recursive
 
@@ -396,6 +400,8 @@ distclean-hdr:
 src/bypass/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/bypass/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 src/mpi_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/mpi_server/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+src/sck_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/sck_server/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 src/tcp_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/tcp_server/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@

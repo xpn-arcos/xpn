@@ -34,6 +34,10 @@
 #define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
 #endif
 
+#ifndef SCK_SERVER_DNS_FILE_DEFAULT
+#define SCK_SERVER_DNS_FILE_DEFAULT "/tmp/sck_dns.txt"
+#endif
+
 #ifndef TCP_SERVER_DNS_FILE_DEFAULT
 #define TCP_SERVER_DNS_FILE_DEFAULT "/tmp/tcp_dns.txt"
 #endif

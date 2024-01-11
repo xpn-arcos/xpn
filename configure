@@ -654,14 +654,18 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
 M_HEADERS
-ENABLE_MPI_SERVER_FALSE
-ENABLE_MPI_SERVER_TRUE
-NFI_MPI_SERVER_OBJECTS
-NFI_MPI_SERVER
 ENABLE_TCP_SERVER_FALSE
 ENABLE_TCP_SERVER_TRUE
 NFI_TCP_SERVER_OBJECTS
 NFI_TCP_SERVER
+ENABLE_SCK_SERVER_FALSE
+ENABLE_SCK_SERVER_TRUE
+NFI_SCK_SERVER_OBJECTS
+NFI_SCK_SERVER
+ENABLE_MPI_SERVER_FALSE
+ENABLE_MPI_SERVER_TRUE
+NFI_MPI_SERVER_OBJECTS
+NFI_MPI_SERVER
 ENABLE_NFS3_FALSE
 ENABLE_NFS3_TRUE
 NFI_NFS3_OBJECTS
@@ -784,9 +788,9 @@ enable_silent_rules
 enable_dependency_tracking
 enable_nfs
 enable_nfs3
-enable_tcp_server
-enable_mosquitto
 enable_mpi_server
+enable_sck_server
+enable_mosquitto
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1432,10 +1436,10 @@ Optional Features:
                           speeds up one-time build
   --enable-nfs            Enable NFS v2 module.
   --enable-nfs3           Enable NFS v3 module.
-  --enable-tcp_server     Enable tcp_server module.
-  --enable-mosquitto      Enable mosquitto module.
   --enable-mpi_server[=/path/to/mpi/] (Don't use '~')
                           Enable mpi_server module.
+  --enable-sck_server     Enable sck_server module.
+  --enable-mosquitto      Enable mosquitto module.
 
 Some influential environment variables:
   CC          C compiler command
@@ -2981,6 +2985,8 @@ esac
 else
   RANLIB="$ac_cv_prog_RANLIB"
 fi
+
+
 
 
 #
@@ -5072,6 +5078,8 @@ unknown)
 esac
 
 
+
+
 #
 # Checks for programs.
 #
@@ -5714,6 +5722,8 @@ fi
 
 
 
+
+
 #
 # Check __open2 support
 #
@@ -5723,6 +5733,8 @@ if test "x$MPICC_INTEL" == "x1"; then
 printf "%s\n" "#define HAVE_ICC 1" >>confdefs.h
 
 fi
+
+
 
 #
 # Checks for libraries.
@@ -5898,6 +5910,8 @@ then :
   LIBS="-lmosquitto $LIBS"
 
 fi
+
+
 
 
 #
@@ -6173,12 +6187,6 @@ then :
   printf "%s\n" "#define HAVE_PTHREAD_H 1" >>confdefs.h
 
 fi
-ac_fn_c_check_header_compile "$LINENO" "windows.h" "ac_cv_header_windows_h" "$ac_includes_default"
-if test "x$ac_cv_header_windows_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_WINDOWS_H 1" >>confdefs.h
-
-fi
 ac_fn_c_check_header_compile "$LINENO" "sys/param.h" "ac_cv_header_sys_param_h" "$ac_includes_default"
 if test "x$ac_cv_header_sys_param_h" = xyes
 then :
@@ -6221,6 +6229,8 @@ then :
   printf "%s\n" "#define HAVE_MOSQUITTO_H 1" >>confdefs.h
 
 fi
+
+
 
 
 #
@@ -6568,6 +6578,8 @@ printf "%s\n" "#define SIZEOF_SIZE_T $ac_cv_sizeof_size_t" >>confdefs.h
 
 
 
+
+
 #
 # Checks for library functions.
 #
@@ -6659,6 +6671,8 @@ then :
 fi
 
 
+
+
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
@@ -6733,6 +6747,8 @@ printf "%s\n" "\"$target_cpu\"" >&6; };
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: \"$target_os\"" >&5
 printf "%s\n" "\"$target_os\"" >&6; };
 
+
+
 #
 # Set Include_Flags
 #
@@ -6745,8 +6761,10 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_client/xpn/xpn_simple \
 -I\$(top_srcdir)/include/xpn_client/nfi \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_local"
+
 
 
 ### BEGIN OF NFS BLOCK. Do not remove this line. ###
@@ -6777,6 +6795,7 @@ fi
 
 ### END OF NFS BLOCK. Do not remove this line. ###
 
+
 ### BEGIN OF NFS3 BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if nfs3 is enabled.
@@ -6806,69 +6825,9 @@ fi
 ### END OF NFS3 BLOCK. Do not remove this line. ###
 
 
-### BEGIN OF TCP_SERVER BLOCK. Do not remove this line. ###
-#
-# Defines the necessary variables if gridftp is enabled.
-#
-# Check whether --enable-tcp_server was given.
-if test ${enable_tcp_server+y}
-then :
-  enableval=$enable_tcp_server;
-                  CDEFS="$CDEFS -DENABLE_TCP_SERVER"
-                  INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"
-                  NFI_TCP_SERVER="nfi_tcp_server"
-                  NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"
-
-
-fi
-
-
-
- if test "$NFI_TCP_SERVER" = "nfi_tcp_server"; then
-  ENABLE_TCP_SERVER_TRUE=
-  ENABLE_TCP_SERVER_FALSE='#'
-else
-  ENABLE_TCP_SERVER_TRUE='#'
-  ENABLE_TCP_SERVER_FALSE=
-fi
-
-### END OF TCP_SERVER BLOCK. Do not remove this line. ###
-
-### BEGIN OF MOSQUITTO BLOCK. Do not remove this line. ###
-#
-# Defines the necessary variables if gridftp is enabled.
-#
-# Check whether --enable-mosquitto was given.
-if test ${enable_mosquitto+y}
-then :
-  enableval=$enable_mosquitto;
-                  CDEFS="$CDEFS -DENABLE_TCP_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"
-                  INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"
-                  NFI_TCP_SERVER="nfi_tcp_server"
-                  NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"
-                  LIBLINK+=" -lmosquitto"
-                  LIBS=$LFLAGS" "$LIBS" -lmosquitto"
-
-
-fi
-
-
-
-
-
- if test "$NFI_TCP_SERVER" = "nfi_tcp_server"; then
-  ENABLE_TCP_SERVER_TRUE=
-  ENABLE_TCP_SERVER_FALSE='#'
-else
-  ENABLE_TCP_SERVER_TRUE='#'
-  ENABLE_TCP_SERVER_FALSE=
-fi
-
-### END OF MOSQUITTO BLOCK. Do not remove this line. ###
-
 ### BEGIN OF MPI_SERVER BLOCK. Do not remove this line. ###
 #
-# Defines the necessary variables if gridftp is enabled.
+# Defines the necessary variables if mpi_server is enabled.
 #
 # Check whether --enable-mpi_server was given.
 if test ${enable_mpi_server+y}
@@ -6901,8 +6860,72 @@ fi
 ### END OF MPI_SERVER BLOCK. Do not remove this line. ###
 
 
+### BEGIN OF SCK_SERVER BLOCK. Do not remove this line. ###
+#
+# Defines the necessary variables if gridftp is enabled.
+#
+# Check whether --enable-sck_server was given.
+if test ${enable_sck_server+y}
+then :
+  enableval=$enable_sck_server;
+                  CDEFS="$CDEFS -DENABLE_SCK_SERVER"
+                  INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server"
+                  NFI_SCK_SERVER="nfi_sck_server"
+                  NFI_SCK_SERVER_OBJECTS="\$(NFI_SCK_SERVER_OBJECTS)"
+
+
+fi
+
+
+
+ if test "$NFI_SCK_SERVER" = "nfi_sck_server"; then
+  ENABLE_SCK_SERVER_TRUE=
+  ENABLE_SCK_SERVER_FALSE='#'
+else
+  ENABLE_SCK_SERVER_TRUE='#'
+  ENABLE_SCK_SERVER_FALSE=
+fi
+
+### END OF SCK_SERVER BLOCK. Do not remove this line. ###
+
+
+### BEGIN OF MQTT BLOCK. Do not remove this line. ###
+#
+# Defines the necessary variables if gridftp is enabled.
+#
+# Check whether --enable-mosquitto was given.
+if test ${enable_mosquitto+y}
+then :
+  enableval=$enable_mosquitto;
+                  CDEFS="$CDEFS -DENABLE_TCP_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"
+                  INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"
+                  NFI_TCP_SERVER="nfi_tcp_server"
+                  NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"
+                  LIBLINK+=" -lmosquitto"
+                  LIBS=$LFLAGS" "$LIBS" -lmosquitto"
+
+
+fi
+
+
+
+
+
+ if test "$NFI_TCP_SERVER" = "nfi_tcp_server"; then
+  ENABLE_TCP_SERVER_TRUE=
+  ENABLE_TCP_SERVER_FALSE='#'
+else
+  ENABLE_TCP_SERVER_TRUE='#'
+  ENABLE_TCP_SERVER_FALSE=
+fi
+
+### END OF MQTT BLOCK. Do not remove this line. ###
+
+
+
 CPPFLAGS="$CDEFS $INCLUDEFLAGS $M_HEADERS $CPPFLAGS"
 LDFLAGS="$LIBLINK $LIBS"
+
 
 
 
@@ -6912,7 +6935,7 @@ LDFLAGS="$LIBLINK $LIBS"
 #
 # Build makefile and headers...
 #
-ac_config_files="$ac_config_files Makefile src/base/Makefile src/xpn_client/Makefile src/utils/Makefile src/bypass/Makefile src/mpi_server/Makefile src/tcp_server/Makefile test/integrity/xpn/Makefile test/integrity/mpi_connect_accept/Makefile test/integrity/bypass_c/Makefile test/performance/xpn/Makefile test/performance/iop/Makefile test/performance/mpi_pingpong/Makefile"
+ac_config_files="$ac_config_files Makefile src/base/Makefile src/xpn_client/Makefile src/utils/Makefile src/bypass/Makefile src/mpi_server/Makefile src/sck_server/Makefile src/tcp_server/Makefile test/integrity/xpn/Makefile test/integrity/mpi_connect_accept/Makefile test/integrity/bypass_c/Makefile test/performance/xpn/Makefile test/performance/iop/Makefile test/performance/mpi_pingpong/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -7068,16 +7091,16 @@ if test -z "${ENABLE_NFS3_TRUE}" && test -z "${ENABLE_NFS3_FALSE}"; then
   as_fn_error $? "conditional \"ENABLE_NFS3\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${ENABLE_TCP_SERVER_TRUE}" && test -z "${ENABLE_TCP_SERVER_FALSE}"; then
-  as_fn_error $? "conditional \"ENABLE_TCP_SERVER\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${ENABLE_TCP_SERVER_TRUE}" && test -z "${ENABLE_TCP_SERVER_FALSE}"; then
-  as_fn_error $? "conditional \"ENABLE_TCP_SERVER\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
 if test -z "${ENABLE_MPI_SERVER_TRUE}" && test -z "${ENABLE_MPI_SERVER_FALSE}"; then
   as_fn_error $? "conditional \"ENABLE_MPI_SERVER\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${ENABLE_SCK_SERVER_TRUE}" && test -z "${ENABLE_SCK_SERVER_FALSE}"; then
+  as_fn_error $? "conditional \"ENABLE_SCK_SERVER\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${ENABLE_TCP_SERVER_TRUE}" && test -z "${ENABLE_TCP_SERVER_FALSE}"; then
+  as_fn_error $? "conditional \"ENABLE_TCP_SERVER\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -7675,6 +7698,7 @@ do
     "src/utils/Makefile") CONFIG_FILES="$CONFIG_FILES src/utils/Makefile" ;;
     "src/bypass/Makefile") CONFIG_FILES="$CONFIG_FILES src/bypass/Makefile" ;;
     "src/mpi_server/Makefile") CONFIG_FILES="$CONFIG_FILES src/mpi_server/Makefile" ;;
+    "src/sck_server/Makefile") CONFIG_FILES="$CONFIG_FILES src/sck_server/Makefile" ;;
     "src/tcp_server/Makefile") CONFIG_FILES="$CONFIG_FILES src/tcp_server/Makefile" ;;
     "test/integrity/xpn/Makefile") CONFIG_FILES="$CONFIG_FILES test/integrity/xpn/Makefile" ;;
     "test/integrity/mpi_connect_accept/Makefile") CONFIG_FILES="$CONFIG_FILES test/integrity/mpi_connect_accept/Makefile" ;;

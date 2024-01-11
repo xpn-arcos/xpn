@@ -1,0 +1,62 @@
+
+#--------------------------
+# Variables
+#--------------------------
+
+ MAKE                 = make -s
+ CC                   = @CC@
+ SOURCE_PATH          = ./
+ EXPAND_DIR           = @prefix@
+ OBJECTS_SCK_SERVER   = @top_srcdir@/src/sck_server/sck_server.o \
+			@top_srcdir@/src/sck_server/sck_server_params.o \
+			@top_srcdir@/src/sck_server/sck_server_comm.o \
+			@top_srcdir@/src/sck_server/sck_server_ops.o \
+			@top_srcdir@/src/sck_server/sck_server_d2xpn.o \
+			@top_srcdir@/src/base/filesystem.o \
+			@top_srcdir@/src/base/urlstr.o \
+			@top_srcdir@/src/base/string_misc.o \
+			@top_srcdir@/src/base/debug_msg.o \
+			@top_srcdir@/src/base/utils.o \
+			@top_srcdir@/src/base/time_misc.o \
+			@top_srcdir@/src/base/ns.o \
+			@top_srcdir@/src/base/workers.o \
+			@top_srcdir@/src/base/workers_ondemand.o \
+			@top_srcdir@/src/base/workers_pool.o
+MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE -DHAVE_STRUCT_IOVEC
+MYHEADERS            = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/sck_server
+MYLIBS               =  -L../../src/xpn_client -lxpn @LIBS@
+
+SCK_SERVER_EXE       = xpn_sck_server
+SCK_SERVER_EXE_STOP  = xpn_stop_sck_server
+
+
+#--------------------------
+# Compilation rules
+#--------------------------
+
+
+all:  all_object  all_exe
+
+all_object:  $(OBJECTS_SCK_SERVER)
+
+all_exe:  $(SCK_SERVER_EXE) $(SCK_SERVER_EXE_STOP)
+
+%.o: %.c
+	$(CC) $(MYFLAGS) $(MYHEADERS) -c $< -o $@
+
+$(SCK_SERVER_EXE): $(OBJECTS_SCK_SERVER)
+	$(CC) -o $(SCK_SERVER_EXE)  $(OBJECTS_SCK_SERVER)  $(MYLIBS)
+
+$(SCK_SERVER_EXE_STOP): $(SCK_SERVER_EXE)
+	ln -s $(SCK_SERVER_EXE) $(SCK_SERVER_EXE_STOP)
+
+install:  $(SCK_SERVER_EXE)
+	cp -a                   $(SCK_SERVER_EXE) $(EXPAND_DIR)/bin
+	rm -fr $(EXPAND_DIR)/bin/$(SCK_SERVER_EXE_STOP) && ln -s $(EXPAND_DIR)/bin/$(SCK_SERVER_EXE) $(EXPAND_DIR)/bin/$(SCK_SERVER_EXE_STOP)
+
+
+clean:
+	rm -f $(OBJECTS_SCK_SERVER)
+	rm -f $(SCK_SERVER_EXE)
+	rm -f $(SCK_SERVER_EXE_STOP)
+

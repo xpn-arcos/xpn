@@ -231,19 +231,19 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} '/local_test/src/xpn/config/missing' aclocal-1.16
+ACLOCAL = ${SHELL} '/home/alejandro/work/xpn/config/missing' aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} '/local_test/src/xpn/config/missing' autoconf
-AUTOHEADER = ${SHELL} '/local_test/src/xpn/config/missing' autoheader
-AUTOMAKE = ${SHELL} '/local_test/src/xpn/config/missing' automake-1.16
-AWK = mawk
-CC = /local_test/bin/mpich/bin/mpicc
+AUTOCONF = ${SHELL} '/home/alejandro/work/xpn/config/missing' autoconf
+AUTOHEADER = ${SHELL} '/home/alejandro/work/xpn/config/missing' autoheader
+AUTOMAKE = ${SHELL} '/home/alejandro/work/xpn/config/missing' automake-1.16
+AWK = gawk
+CC = /usr/bin/mpicc
 CCDEPMODE = depmode=gcc3
-CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
+CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_MPI_SERVER -DENABLE_SCK_SERVER
 CFLAGS = -I../../mxml        -I../../bin/mosquitto/include       -I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base -I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
+CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_MPI_SERVER -DENABLE_SCK_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server  
 CSCOPE = cscope
 CTAGS = ctags
 CYGPATH_W = echo
@@ -267,7 +267,7 @@ LIBOBJS =
 LIBS =  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
 LTLIBOBJS = 
 MAKE = make
-MAKEINFO = ${SHELL} '/local_test/src/xpn/config/missing' makeinfo
+MAKEINFO = ${SHELL} '/home/alejandro/work/xpn/config/missing' makeinfo
 MKDIR_P = /usr/bin/mkdir -p
 M_HEADERS = 
 NFI_MPI_SERVER = nfi_mpi_server
@@ -276,8 +276,10 @@ NFI_NFS =
 NFI_NFS3 = 
 NFI_NFS3_OBJECTS = 
 NFI_NFS_OBJECTS = 
-NFI_TCP_SERVER = nfi_tcp_server
-NFI_TCP_SERVER_OBJECTS = $(NFI_TCP_SERVER_OBJECTS)
+NFI_SCK_SERVER = nfi_sck_server
+NFI_SCK_SERVER_OBJECTS = $(NFI_SCK_SERVER_OBJECTS)
+NFI_TCP_SERVER = 
+NFI_TCP_SERVER_OBJECTS = 
 
 #############
 # LIBRARIES #
@@ -297,10 +299,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 2.0
-abs_builddir = /local_test/src/xpn/src/base
-abs_srcdir = /local_test/src/xpn/src/base
-abs_top_builddir = /local_test/src/xpn
-abs_top_srcdir = /local_test/src/xpn
+abs_builddir = /home/alejandro/work/xpn/src/base
+abs_srcdir = /home/alejandro/work/xpn/src/base
+abs_top_builddir = /home/alejandro/work/xpn
+abs_top_srcdir = /home/alejandro/work/xpn
 ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
@@ -328,7 +330,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /local_test/src/xpn/config/install-sh
+install_sh = ${SHELL} /home/alejandro/work/xpn/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -337,7 +339,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /local_test/bin//xpn
+prefix = /home/alejandro/bin//xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run

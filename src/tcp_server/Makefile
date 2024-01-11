@@ -4,9 +4,9 @@
 #--------------------------
 
  MAKE                 = make -s
- CC                   = /local_test/bin/mpich/bin/mpicc
+ CC                   = /usr/bin/mpicc
  SOURCE_PATH          = ./
- EXPAND_DIR           = /local_test/bin//xpn
+ EXPAND_DIR           = /home/alejandro/bin//xpn
  OBJECTS_TCP_SERVER   = ../../src/tcp_server/tcp_server.o \
 			../../src/tcp_server/tcp_server_params.o \
 			../../src/tcp_server/tcp_server_comm.o \
@@ -22,7 +22,7 @@
 			../../src/base/workers.o \
 			../../src/base/workers_ondemand.o \
 			../../src/base/workers_pool.o
-MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -DXPNI_LOWFSI_XPN -D_GNU_SOURCE -DBUILD_LITE -DHAVE_STRUCT_IOVEC  -D_MALLOC_
+MYFLAGS              = -g  -Wall -Wextra -static -std=c11 -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE -DHAVE_STRUCT_IOVEC
 MYHEADERS            = -I. -I$(EXPAND_DIR)/include -I../../include -I../../include/base -I../../include/xpn_client -I../../include/tcp_server
 MYLIBS               =  -L../../src/xpn_client -lxpn  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
 

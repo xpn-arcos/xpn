@@ -100,7 +100,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES = src/bypass/Makefile src/mpi_server/Makefile \
-	src/tcp_server/Makefile test/integrity/xpn/Makefile \
+	src/sck_server/Makefile src/tcp_server/Makefile \
+	test/integrity/xpn/Makefile \
 	test/integrity/mpi_connect_accept/Makefile \
 	test/integrity/bypass_c/Makefile test/performance/xpn/Makefile \
 	test/performance/iop/Makefile \
@@ -168,6 +169,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/ar-lib \
 	$(top_srcdir)/include/config.h.in \
 	$(top_srcdir)/src/bypass/Makefile.in \
 	$(top_srcdir)/src/mpi_server/Makefile.in \
+	$(top_srcdir)/src/sck_server/Makefile.in \
 	$(top_srcdir)/src/tcp_server/Makefile.in \
 	$(top_srcdir)/test/integrity/bypass_c/Makefile.in \
 	$(top_srcdir)/test/integrity/mpi_connect_accept/Makefile.in \
@@ -267,6 +269,8 @@ NFI_NFS = @NFI_NFS@
 NFI_NFS3 = @NFI_NFS3@
 NFI_NFS3_OBJECTS = @NFI_NFS3_OBJECTS@
 NFI_NFS_OBJECTS = @NFI_NFS_OBJECTS@
+NFI_SCK_SERVER = @NFI_SCK_SERVER@
+NFI_SCK_SERVER_OBJECTS = @NFI_SCK_SERVER_OBJECTS@
 NFI_TCP_SERVER = @NFI_TCP_SERVER@
 NFI_TCP_SERVER_OBJECTS = @NFI_TCP_SERVER_OBJECTS@
 OBJEXT = @OBJEXT@
@@ -340,7 +344,7 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = src/base   src/xpn_client   src/utils   src/bypass   src/tcp_server  src/mpi_server  
+SUBDIRS = src/base   src/xpn_client   src/utils   src/bypass   src/mpi_server  src/sck_server  src/tcp_server  
 EXTRA_DIST = AUTHORS COPYING README.md
 all: all-recursive
 
@@ -396,6 +400,8 @@ distclean-hdr:
 src/bypass/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/bypass/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 src/mpi_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/mpi_server/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+src/sck_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/sck_server/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 src/tcp_server/Makefile: $(top_builddir)/config.status $(top_srcdir)/src/tcp_server/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@

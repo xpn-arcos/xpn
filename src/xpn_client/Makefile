@@ -102,24 +102,30 @@ target_triplet = x86_64-pc-linux-gnu
 ### BEGIN OF ENABLE_NFS3_HEADER BLOCK. Do not remove this line. ###
 #am__append_2 = $(NFI_NFS3_HEADER)
 ### END OF ENABLE_NFS3_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
-am__append_3 = $(NFI_TCP_SERVER_HEADER)
-### END OF ENABLE_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
-am__append_4 = $(NFI_MPI_SERVER_HEADER)
+am__append_3 = $(NFI_MPI_SERVER_HEADER)
+### END OF ENABLE_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_SCK_SERVER_HEADER BLOCK. Do not remove this line. ###
+am__append_4 = $(NFI_SCK_SERVER_HEADER)
+### END OF ENABLE_SCK_SERVER_HEADER BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
+#am__append_5 = $(NFI_TCP_SERVER_HEADER)
 
 ### BEGIN OF NFI_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_NFS_OBJECTS BLOCK. Do not remove this line. ###
-#am__append_5 = $(NFI_NFS_OBJECTS)
+#am__append_6 = $(NFI_NFS_OBJECTS)
 ### END OF ENABLE_NFS_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_NFS3_OBJECTS BLOCK. Do not remove this line. ###
-#am__append_6 = $(NFI_NFS3_OBJECTS)
+#am__append_7 = $(NFI_NFS3_OBJECTS)
 ### END OF ENABLE_NFS3_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
-am__append_7 = $(NFI_TCP_SERVER_OBJECTS)
-### END OF ENABLE_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 am__append_8 = $(NFI_MPI_SERVER_OBJECTS)
+### END OF ENABLE_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+am__append_9 = $(NFI_SCK_SERVER_OBJECTS)
+### END OF ENABLE_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+#am__append_10 = $(NFI_TCP_SERVER_OBJECTS)
 subdir = src/xpn_client
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -196,12 +202,15 @@ am__libxpn_a_SOURCES_DIST = ../../src/base/darray.c \
 	../../src/xpn_client/nfi/nfi_nfs3/nfs3.c \
 	../../src/xpn_client/nfi/nfi_nfs3/nfs3_clnt.c \
 	../../src/xpn_client/nfi/nfi_nfs3/nfs3_xdr.c \
-	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.c \
-	../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
-	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.c \
 	../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
 	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
 	../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c \
+	../../src/xpn_client/nfi/nfi_sck_server/nfi_sck_server.c \
+	../../src/xpn_client/nfi/nfi_sck_server/sck_server_comm.c \
+	../../src/xpn_client/nfi/nfi_sck_server/nfi_sck_server_err.c \
+	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.c \
+	../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
+	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.c \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_dir.c \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_err.c \
@@ -255,17 +264,22 @@ am__objects_6 =  \
 	../../src/xpn_client/nfi/nfi_nfs3/nfs3_clnt.$(OBJEXT) \
 	../../src/xpn_client/nfi/nfi_nfs3/nfs3_xdr.$(OBJEXT)
 #am__objects_7 = $(am__objects_6)
-am__objects_8 = ../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.$(OBJEXT) \
-	../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.$(OBJEXT) \
-	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.$(OBJEXT)
-am__objects_9 = $(am__objects_8)
-am__objects_10 = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.$(OBJEXT) \
+am__objects_8 = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.$(OBJEXT) \
 	../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.$(OBJEXT) \
 	../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.$(OBJEXT)
+am__objects_9 = $(am__objects_8)
+am__objects_10 = ../../src/xpn_client/nfi/nfi_sck_server/nfi_sck_server.$(OBJEXT) \
+	../../src/xpn_client/nfi/nfi_sck_server/sck_server_comm.$(OBJEXT) \
+	../../src/xpn_client/nfi/nfi_sck_server/nfi_sck_server_err.$(OBJEXT)
 am__objects_11 = $(am__objects_10)
-am__objects_12 = $(am__objects_2) $(am__objects_3) $(am__objects_5) \
-	$(am__objects_7) $(am__objects_9) $(am__objects_11)
-am__objects_13 = ../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.$(OBJEXT) \
+am__objects_12 = ../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.$(OBJEXT) \
+	../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.$(OBJEXT) \
+	../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.$(OBJEXT)
+#am__objects_13 = $(am__objects_12)
+am__objects_14 = $(am__objects_2) $(am__objects_3) $(am__objects_5) \
+	$(am__objects_7) $(am__objects_9) $(am__objects_11) \
+	$(am__objects_13)
+am__objects_15 = ../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_dir.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_err.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_file.$(OBJEXT) \
@@ -274,16 +288,16 @@ am__objects_13 = ../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_opendir.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.$(OBJEXT)
-am__objects_14 = ../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.$(OBJEXT) \
+am__objects_16 = ../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.$(OBJEXT) \
 	../../src/xpn_client/xpn/xpn_simple/policy/xpn_policy_rw.$(OBJEXT)
-am__objects_15 = ../../src/xpn_client/xpn_unistd.$(OBJEXT) \
+am__objects_17 = ../../src/xpn_client/xpn_unistd.$(OBJEXT) \
 	../../src/xpn_client/xpn_stdio.$(OBJEXT)
-am__objects_16 = $(am__objects_13) $(am__objects_14) $(am__objects_15)
-am_libxpn_a_OBJECTS = $(am__objects_1) $(am__objects_12) \
-	$(am__objects_16)
+am__objects_18 = $(am__objects_15) $(am__objects_16) $(am__objects_17)
+am_libxpn_a_OBJECTS = $(am__objects_1) $(am__objects_14) \
+	$(am__objects_18)
 libxpn_a_OBJECTS = $(am_libxpn_a_OBJECTS)
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -335,6 +349,9 @@ am__depfiles_remade = ../../src/base/$(DEPDIR)/darray.Po \
 	../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3.Po \
 	../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3_clnt.Po \
 	../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3_xdr.Po \
+	../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/nfi_sck_server.Po \
+	../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/nfi_sck_server_err.Po \
+	../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/sck_server_comm.Po \
 	../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server.Po \
 	../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server_err.Po \
 	../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/tcp_server_comm.Po \
@@ -410,14 +427,18 @@ am__nobase_include_HEADERS_DIST = ../../include/config.h \
 	../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 	../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3.h \
 	../../include/xpn_client/nfi/nfi_nfs3/nfs3.h \
-	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
-	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
-	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
-	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
 	../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h \
+	../../include/xpn_client/nfi/nfi_sck_server/sck_server_comm.h \
+	../../include/xpn_client/nfi/nfi_sck_server/sck_server_conf.h \
+	../../include/xpn_client/nfi/nfi_sck_server/nfi_sck_server_err.h \
+	../../include/xpn_client/nfi/nfi_sck_server/nfi_sck_server.h \
+	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
+	../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
+	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
+	../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h \
 	../../include/xpn_client/xpn.h
 HEADERS = $(nobase_include_HEADERS) $(noinst_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
@@ -439,19 +460,19 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/./config/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} '/local_test/src/xpn/config/missing' aclocal-1.16
+ACLOCAL = ${SHELL} '/home/alejandro/work/xpn/config/missing' aclocal-1.16
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} '/local_test/src/xpn/config/missing' autoconf
-AUTOHEADER = ${SHELL} '/local_test/src/xpn/config/missing' autoheader
-AUTOMAKE = ${SHELL} '/local_test/src/xpn/config/missing' automake-1.16
-AWK = mawk
-CC = /local_test/bin/mpich/bin/mpicc
+AUTOCONF = ${SHELL} '/home/alejandro/work/xpn/config/missing' autoconf
+AUTOHEADER = ${SHELL} '/home/alejandro/work/xpn/config/missing' autoheader
+AUTOMAKE = ${SHELL} '/home/alejandro/work/xpn/config/missing' automake-1.16
+AWK = gawk
+CC = /usr/bin/mpicc
 CCDEPMODE = depmode=gcc3
-CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER
+CDEFS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_MPI_SERVER -DENABLE_SCK_SERVER
 CFLAGS = -I../../mxml        -I../../bin/mosquitto/include       -I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base -I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base  -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11
-CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_TCP_SERVER -DENABLE_MPI_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server  
+CPPFLAGS = -D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML -DENABLE_MPI_SERVER -DENABLE_SCK_SERVER -I$(top_srcdir)/include -I$(top_srcdir)/include/base -I$(top_srcdir)/include/bypass -I$(top_srcdir)/include/xpn_client/ -I$(top_srcdir)/include/xpn_client/xpn -I$(top_srcdir)/include/xpn_client/xpn/xpn_simple -I$(top_srcdir)/include/xpn_client/nfi -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_local -I$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server -I$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server  
 CSCOPE = cscope
 CTAGS = ctags
 CYGPATH_W = echo
@@ -475,11 +496,11 @@ LIBOBJS =
 LIBS =  -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib -L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib -L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib  -lmxml -ldl -lpthread  -lmxml
 LTLIBOBJS = 
 MAKE = make
-MAKEINFO = ${SHELL} '/local_test/src/xpn/config/missing' makeinfo
+MAKEINFO = ${SHELL} '/home/alejandro/work/xpn/config/missing' makeinfo
 MKDIR_P = /usr/bin/mkdir -p
 M_HEADERS = 
 NFI_MPI_SERVER = nfi_mpi_server
-### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
 			../../src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
@@ -503,8 +524,15 @@ NFI_NFS_OBJECTS = ../../src/xpn_client/nfi/nfi_nfs/nfi_nfs.c \
 			../../src/xpn_client/nfi/nfi_nfs/nfs_clnt.c \
 			../../src/xpn_client/nfi/nfi_nfs/nfs_xdr.c
 
-NFI_TCP_SERVER = nfi_tcp_server
-### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
+NFI_SCK_SERVER = nfi_sck_server
+### END OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+NFI_SCK_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_sck_server/nfi_sck_server.c \
+			../../src/xpn_client/nfi/nfi_sck_server/sck_server_comm.c \
+			../../src/xpn_client/nfi/nfi_sck_server/nfi_sck_server_err.c
+
+NFI_TCP_SERVER = 
+### END OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_TCP_SERVER_OBJECTS = ../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.c \
 			../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
@@ -529,10 +557,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 2.0
-abs_builddir = /local_test/src/xpn/src/xpn_client
-abs_srcdir = /local_test/src/xpn/src/xpn_client
-abs_top_builddir = /local_test/src/xpn
-abs_top_srcdir = /local_test/src/xpn
+abs_builddir = /home/alejandro/work/xpn/src/xpn_client
+abs_srcdir = /home/alejandro/work/xpn/src/xpn_client
+abs_top_builddir = /home/alejandro/work/xpn
+abs_top_srcdir = /home/alejandro/work/xpn
 ac_ct_AR = ar
 ac_ct_CC = gcc
 am__include = include
@@ -560,7 +588,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /local_test/src/xpn/config/install-sh
+install_sh = ${SHELL} /home/alejandro/work/xpn/config/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -569,7 +597,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /local_test/bin//xpn
+prefix = /home/alejandro/bin//xpn
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
@@ -628,13 +656,6 @@ NFI_NFS3_HEADER = ../../include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 				../../include/xpn_client/nfi/nfi_nfs3/nfs3.h
 
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
-NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
-				../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
-				../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
-				../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
-
-### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
 				../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
@@ -642,12 +663,20 @@ NFI_MPI_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_mpi_server/mpi_server_c
 				../../include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 
 ### END OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
-NFI_HTTP_HEADER = ../../include/xpn_client/nfi/nfi_http/nfi_http_err.h \
-				../../include/xpn_client/nfi/nfi_http/nfi_http.h \
-				../../include/xpn_client/nfi/nfi_http/http_lib.h
+### BEGIN OF NFI_SCK_SERVER_HEADER BLOCK. Do not remove this line. ###
+NFI_SCK_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_sck_server/sck_server_comm.h \
+				../../include/xpn_client/nfi/nfi_sck_server/sck_server_conf.h \
+				../../include/xpn_client/nfi/nfi_sck_server/nfi_sck_server_err.h \
+				../../include/xpn_client/nfi/nfi_sck_server/nfi_sck_server.h
 
-### END OF NFI_HTTP_HEADER BLOCK. Do not remove this line. ###
+### END OF NFI_SCK_SERVER_HEADER BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
+NFI_TCP_SERVER_HEADER = ../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
+				../../include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
+				../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
+				../../include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
+
+### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 NFI_HEADER = ../../include/xpn_client/nfi/nfi.h \
 	../../include/xpn_client/nfi/nfi_lib.h \
@@ -655,9 +684,11 @@ NFI_HEADER = ../../include/xpn_client/nfi/nfi.h \
 	../../include/xpn_client/nfi/nfi_ops.h \
 	../../include/xpn_client/nfi/nfi_worker.h \
 	$(NFI_LOCAL_HEADER) $(am__append_1) $(am__append_2) \
-	$(am__append_3) $(am__append_4)
-### END OF ENABLE_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
+	$(am__append_3) $(am__append_4) $(am__append_5)
+### END OF ENABLE_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### END OF NFI_HEADER BLOCK. Do not remove this line. ###
+
+### XPN_HEADER ###
 XPN_HEADER = ../../include/xpn_client/xpn.h
 
 ###########
@@ -686,18 +717,15 @@ NFI_COMMON_OBJECTS = ../../src/xpn_client/nfi/common/nfi_ops.c \
 NFI_LOCAL_OBJECTS = ../../src/xpn_client/nfi/nfi_local/nfi_local.c \
 			../../src/xpn_client/nfi/nfi_local/nfi_local_err.c
 
-### END OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
-NFI_HTTP_OBJECTS = ../../src/xpn_client/nfi/nfi_http/nfi_http.c \
-			../../src/xpn_client/nfi/nfi_http/nfi_http_err.c
-
-### END OF NFI_HTTP_OBJECTS BLOCK. Do not remove this line. ###
+### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
 NFI_OBJECTS = $(NFI_COMMON_OBJECTS) $(NFI_LOCAL_OBJECTS) \
-	$(am__append_5) $(am__append_6) $(am__append_7) \
-	$(am__append_8)
-### END OF ENABLE_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+	$(am__append_6) $(am__append_7) $(am__append_8) \
+	$(am__append_9) $(am__append_10)
+### END OF ENABLE_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_OBJECTS BLOCK. Do not remove this line. ###
+
+### XPN_CORE ###
 XPN_CORE_OBJECTS = ../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c \
 					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_dir.c \
 					../../src/xpn_client/xpn/xpn_simple/xpncore/xpn_err.c \
@@ -908,18 +936,6 @@ clean-libLIBRARIES:
 ../../src/xpn_client/nfi/nfi_nfs3/nfs3_xdr.$(OBJEXT):  \
 	../../src/xpn_client/nfi/nfi_nfs3/$(am__dirstamp) \
 	../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp):
-	@$(MKDIR_P) ../../src/xpn_client/nfi/nfi_tcp_server
-	@: > ../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp)
-../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)
-	@: > ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.$(OBJEXT): ../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp) \
-	../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.$(OBJEXT): ../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp) \
-	../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp)
-../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.$(OBJEXT): ../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp) \
-	../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp)
 ../../src/xpn_client/nfi/nfi_mpi_server/$(am__dirstamp):
 	@$(MKDIR_P) ../../src/xpn_client/nfi/nfi_mpi_server
 	@: > ../../src/xpn_client/nfi/nfi_mpi_server/$(am__dirstamp)
@@ -932,6 +948,30 @@ clean-libLIBRARIES:
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
 ../../src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.$(OBJEXT): ../../src/xpn_client/nfi/nfi_mpi_server/$(am__dirstamp) \
 	../../src/xpn_client/nfi/nfi_mpi_server/$(DEPDIR)/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_sck_server/$(am__dirstamp):
+	@$(MKDIR_P) ../../src/xpn_client/nfi/nfi_sck_server
+	@: > ../../src/xpn_client/nfi/nfi_sck_server/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)
+	@: > ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_sck_server/nfi_sck_server.$(OBJEXT): ../../src/xpn_client/nfi/nfi_sck_server/$(am__dirstamp) \
+	../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_sck_server/sck_server_comm.$(OBJEXT): ../../src/xpn_client/nfi/nfi_sck_server/$(am__dirstamp) \
+	../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_sck_server/nfi_sck_server_err.$(OBJEXT): ../../src/xpn_client/nfi/nfi_sck_server/$(am__dirstamp) \
+	../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp):
+	@$(MKDIR_P) ../../src/xpn_client/nfi/nfi_tcp_server
+	@: > ../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)
+	@: > ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.$(OBJEXT): ../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp) \
+	../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.$(OBJEXT): ../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp) \
+	../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp)
+../../src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.$(OBJEXT): ../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp) \
+	../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp)
 ../../src/xpn_client/xpn/xpn_simple/xpncore/$(am__dirstamp):
 	@$(MKDIR_P) ../../src/xpn_client/xpn/xpn_simple/xpncore
 	@: > ../../src/xpn_client/xpn/xpn_simple/xpncore/$(am__dirstamp)
@@ -999,6 +1039,7 @@ mostlyclean-compile:
 	-rm -f ../../src/xpn_client/nfi/nfi_mpi_server/*.$(OBJEXT)
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs/*.$(OBJEXT)
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs3/*.$(OBJEXT)
+	-rm -f ../../src/xpn_client/nfi/nfi_sck_server/*.$(OBJEXT)
 	-rm -f ../../src/xpn_client/nfi/nfi_tcp_server/*.$(OBJEXT)
 	-rm -f ../../src/xpn_client/xpn/xpn_simple/policy/*.$(OBJEXT)
 	-rm -f ../../src/xpn_client/xpn/xpn_simple/xpncore/*.$(OBJEXT)
@@ -1041,6 +1082,9 @@ include ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfi_nfs3_err.Po # am--includ
 include ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3_clnt.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3_xdr.Po # am--include-marker
+include ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/nfi_sck_server.Po # am--include-marker
+include ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/nfi_sck_server_err.Po # am--include-marker
+include ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/sck_server_comm.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server_err.Po # am--include-marker
 include ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/tcp_server_comm.Po # am--include-marker
@@ -1236,6 +1280,8 @@ distclean-generic:
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs/$(am__dirstamp)
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs3/$(am__dirstamp)
+	-rm -f ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../src/xpn_client/nfi/nfi_sck_server/$(am__dirstamp)
 	-rm -f ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../src/xpn_client/nfi/nfi_tcp_server/$(am__dirstamp)
 	-rm -f ../../src/xpn_client/xpn/xpn_simple/policy/$(DEPDIR)/$(am__dirstamp)
@@ -1286,6 +1332,9 @@ distclean: distclean-am
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3_clnt.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3_xdr.Po
+	-rm -f ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/nfi_sck_server.Po
+	-rm -f ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/nfi_sck_server_err.Po
+	-rm -f ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/sck_server_comm.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/tcp_server_comm.Po
@@ -1384,6 +1433,9 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3_clnt.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_nfs3/$(DEPDIR)/nfs3_xdr.Po
+	-rm -f ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/nfi_sck_server.Po
+	-rm -f ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/nfi_sck_server_err.Po
+	-rm -f ../../src/xpn_client/nfi/nfi_sck_server/$(DEPDIR)/sck_server_comm.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/nfi_tcp_server_err.Po
 	-rm -f ../../src/xpn_client/nfi/nfi_tcp_server/$(DEPDIR)/tcp_server_comm.Po
