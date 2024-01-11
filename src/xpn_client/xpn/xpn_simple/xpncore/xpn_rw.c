@@ -146,7 +146,7 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 
   do
   {
-    XpnGetBlock(fd, new_offset, &l_offset, &l_serv);
+    XpnGetBlockReplication(fd, new_offset, 0, &l_offset, &l_serv);
 
     l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
 
