@@ -31,3 +31,4 @@ configure~
 configure
 include/config.h
 include/config.h.in~
+Makefile.in
