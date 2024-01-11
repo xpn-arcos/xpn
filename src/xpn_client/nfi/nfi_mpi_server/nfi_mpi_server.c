@@ -579,7 +579,13 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      fh_aux->fd = real_posix_open2(dir, O_RDWR, S_IRWXU) ;
+      char path [PATH_MAX];
+
+      strcpy(path, server_aux->params.dirbase);
+      strcat(path, "/");
+      strcat(path, dir);
+
+      fh_aux->fd = real_posix_open2(path, O_RDWR, S_IRWXU) ;
       if (fh_aux->fd < 0)
       {
         debug_error("real_posix_open fails to open '%s' in server %s.\n", dir, serv->server) ;
@@ -670,7 +676,13 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      fh_aux->fd = real_posix_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode) ;
+      char path [PATH_MAX];
+
+      strcpy(path, server_aux->params.dirbase);
+      strcat(path, "/");
+      strcat(path, dir);
+
+      fh_aux->fd = real_posix_open2(path, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode);
       if (fh_aux->fd < 0) {
         debug_error("files_posix_open fails to creat '%s' in server '%s'.\n", dir, serv->server) ;
         FREE_AND_NULL(fh_aux) ;
@@ -678,7 +690,7 @@
       }
 
       //Get stat
-      ret = real_posix_stat(dir, &(req.attr)) ;
+      ret = real_posix_stat(path, &(req.attr)) ;
       if (ret < 0) {
         debug_error("nfi_mpi_server_create: Fail stat %s.\n", dir) ;
         return ret;
@@ -785,8 +797,13 @@
       else
       {
         int fd;
+        char path [PATH_MAX];
 
-        fd = real_posix_open(fh_aux->path, O_RDONLY);
+        strcpy(path, server_aux->params.dirbase);
+        strcat(path, "/");
+        strcat(path, fh_aux->path);
+
+        fd = real_posix_open(path, O_RDONLY);
         if (fd < 0) {
           debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
@@ -886,7 +903,7 @@
 
   ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
   {
-    ssize_t ret, diff, cont;
+    int ret, diff, cont;
     struct nfi_mpi_server_server *server_aux;
     struct nfi_mpi_server_fhandle *fh_aux;
     struct st_mpi_server_msg msg;
@@ -928,8 +945,13 @@
       else
       {
         int fd;
+        char path [PATH_MAX];
 
-        fd = real_posix_open(fh_aux->path, O_WRONLY); // WOS
+        strcpy(path, server_aux->params.dirbase);
+        strcat(path, "/");
+        strcat(path, fh_aux->path);
+
+        fd = real_posix_open(path, O_WRONLY); // WOS
         if (fd < 0) {
           debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
@@ -987,7 +1009,7 @@
       diff = size;
       cont = 0;
 
-      ssize_t buffer_size = size;
+      int buffer_size = size;
 
       // Max buffer size
       if (buffer_size > MAX_BUFFER_SIZE) {
@@ -1143,7 +1165,13 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      ret = real_posix_unlink(dir) ;
+      char path [PATH_MAX];
+
+      strcpy(path, server_aux->params.dirbase);
+      strcat(path, "/");
+      strcat(path, dir);
+
+      ret = real_posix_unlink(path) ;
       if (ret < 0)
       {
         debug_error("real_posix_open fails to open '%s' in server %s.\n", dir, serv->server) ;
@@ -1221,10 +1249,21 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      ret = real_posix_rename(old_path, new_path) ;
+      char old_name [PATH_MAX];
+      char new_name [PATH_MAX];
+
+      strcpy(old_name, server_aux->params.dirbase);
+      strcat(old_name, "/");
+      strcat(old_name, old_path);
+
+      strcpy(new_name, server_aux->params.dirbase);
+      strcat(new_name, "/");
+      strcat(new_name, new_path);
+
+      ret = real_posix_rename(old_name, new_name) ;
       if (ret < 0)
       {
-        debug_error("real_posix_rename fails to rename '%s' in server %s.\n", old_path, serv->server) ;
+        debug_error("real_posix_rename fails to rename '%s' in server %s.\n", old_name, serv->server) ;
         return -1;
       }
     }
@@ -1280,7 +1319,13 @@
     /************** LOCAL *****************/
     if (server_aux->params.locality)
     {
-      req.status = real_posix_stat(dir, &(req.attr)) ;
+      char path [PATH_MAX];
+
+      strcpy(path, server_aux->params.dirbase);
+      strcat(path, "/");
+      strcat(path, dir);
+
+      req.status = real_posix_stat(path, &(req.attr)) ;
       if (((int) req.status) < 0) {
         debug_error("nfi_mpi_server_getattr: Fail stat %s.\n", dir) ;
         return req.status;
@@ -1370,7 +1415,13 @@
     /************** LOCAL *****************/
     if(server_aux->params.locality)
     {
-      ret = real_posix_mkdir(dir, /*attr->at_mode*/ 0777) ;
+      char path [PATH_MAX];
+
+      strcpy(path, server_aux->params.dirbase);
+      strcat(path, "/");
+      strcat(path, dir);
+
+      ret = real_posix_mkdir(path, /*attr->at_mode*/ 0777) ;
       if ((ret < 0) && (errno != EEXIST))
       {
         debug_error("nfi_mpi_server_mkdir: Fail mkdir %s.\n", dir) ;
@@ -1380,7 +1431,7 @@
       fh_aux->fd = ret; //Cuidado
 
       //Get stat
-      ret = real_posix_stat(dir, &(req.attr)) ;
+      ret = real_posix_stat(path, &(req.attr)) ;
       if (ret < 0) {
         debug_error("nfi_mpi_server_create: Fail stat %s.\n", dir) ;
         return ret;
@@ -1469,7 +1520,13 @@
     /************** LOCAL *****************/
     if(server_aux->params.locality)
     {
-      fh_aux->dir = real_posix_opendir(dir) ;
+      char path [PATH_MAX];
+
+      strcpy(path, server_aux->params.dirbase);
+      strcat(path, "/");
+      strcat(path, dir);
+
+      fh_aux->dir = real_posix_opendir(path) ;
       if (fh_aux->dir == NULL) {
         FREE_AND_NULL(fh_aux) ;
         FREE_AND_NULL(fho->url) ;
@@ -1640,7 +1697,13 @@
     /************** LOCAL *****************/
     if(server_aux->params.locality)
     {
-      ret = real_posix_rmdir(dir) ;
+      char path [PATH_MAX];
+
+      strcpy(path, server_aux->params.dirbase);
+      strcat(path, "/");
+      strcat(path, dir);
+
+      ret = real_posix_rmdir(path) ;
       if (ret < 0)
       {
         debug_error(stderr,"nfi_mpi_server_rmdir: Fail rmdir %s.\n", dir) ;
@@ -1805,4 +1868,3 @@
 
 
 /* ................................................................... */
-

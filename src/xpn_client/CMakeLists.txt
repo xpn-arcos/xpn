@@ -53,18 +53,24 @@ set (NFI_GRIDFTP_OBJECTS	nfi/nfi_gridftp/nfi_gridftp.c
 				nfi/nfi_gridftp/nfi_gridftp_err.c
     )
 ### END OF NFI_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
-set (NFI_TCP_SERVER_OBJECTS	nfi/nfi_tcp_server/nfi_tcp_server.c
-				nfi/nfi_tcp_server/tcp_server_comm.c
-				nfi/nfi_tcp_server/nfi_tcp_server_err.c
-    )
-### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 set (NFI_MPI_SERVER_OBJECTS	nfi/nfi_mpi_server/nfi_mpi_server.c
 				nfi/nfi_mpi_server/mpi_server_comm.c
 				nfi/nfi_mpi_server/nfi_mpi_server_err.c
     )
 ### END OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+set (NFI_SCK_SERVER_OBJECTS	nfi/nfi_sck_server/nfi_sck_server.c
+				nfi/nfi_sck_server/sck_server_comm.c
+				nfi/nfi_sck_server/nfi_sck_server_err.c
+    )
+### END OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+set (NFI_TCP_SERVER_OBJECTS	nfi/nfi_tcp_server/nfi_tcp_server.c
+				nfi/nfi_tcp_server/tcp_server_comm.c
+				nfi/nfi_tcp_server/nfi_tcp_server_err.c
+    )
+### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
 set (NFI_IOPROXY_RPC_OBJECTS	nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.c
 				nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.c

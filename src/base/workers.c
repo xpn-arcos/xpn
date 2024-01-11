@@ -28,7 +28,7 @@
   /* ... Functions / Funciones ......................................... */
 
 
-  int workers_init ( worker_t *w, int thread_mode )
+  int base_workers_init ( worker_t *w, int thread_mode )
   {
     // check arguments...
     if (NULL == w) {
@@ -65,7 +65,7 @@
   }
 
 
-  int workers_launch ( worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) )
+  int base_workers_launch ( worker_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) )
   {
     // check arguments...
     if (NULL == w) {
@@ -101,7 +101,7 @@
   }
 
 
-  int workers_wait ( worker_t *w, struct st_th *th_arg )
+  int base_workers_wait ( worker_t *w, struct st_th *th_arg )
   {
     // check arguments...
     if (NULL == w) {
@@ -135,7 +135,7 @@
   }
 
 
-  void workers_destroy ( worker_t *w )
+  void base_workers_destroy ( worker_t *w )
   {
     // check arguments...
     if (NULL == w) {
