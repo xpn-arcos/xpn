@@ -29,16 +29,14 @@
   #include <string.h>
   #include <ctype.h>
   #include "base/utils.h"
-  #include "tcp_server_conf.h"
   #include "base/workers.h"
+  #include "tcp_server_conf.h"
   //#include <semaphore.h>
 
 
   /*
    * Constants
    */
-
-  #define TCP_MAX_PORT_NAME   1024
 
 
   /*
@@ -56,8 +54,10 @@
     char name[TCP_MAX_PORT_NAME] ;
     char port[TCP_MAX_PORT_NAME] ;
     int  IOsize ;
+
+    char dirbase[PATH_MAX] ;
     char dns_file[PATH_MAX] ;
-    char host_file[PATH_MAX] ;
+    char shutdown_file[PATH_MAX] ;
 
     // server configuration
     int thread_mode;
@@ -66,9 +66,9 @@
     int mosquitto_mode;
     int mosquitto_qos;
 
-    #ifdef HAVE_MOSQUITTO_H
+#ifdef HAVE_MOSQUITTO_H
     struct mosquitto * mqtt;
-    #endif
+#endif
 
     //Semaphore for clients
     //char sem_name_server [PATH_MAX];
@@ -79,7 +79,6 @@
     // associated client
     int  client ;
     int  global_sock;
-    char dirbase[PATH_MAX] ;
 
     // server arguments
     int    argc ;
@@ -97,4 +96,3 @@
   void tcp_server_params_show       ( tcp_server_param_st *params ) ;
 
 #endif
-

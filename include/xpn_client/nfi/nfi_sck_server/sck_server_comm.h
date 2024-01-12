@@ -19,45 +19,28 @@
    *
    */
 
-
-#ifndef _NS_TCP_H_
-#define _NS_TCP_H_
-
+#ifndef _SCK_SERVER_COMM_H_
+#define _SCK_SERVER_COMM_H_
 
       #include "all_system.h"
+      #include "sck_server_params.h"
       #include "base/utils.h"
-
-
-      /* 
-       * ENVIROMENT VARIABLE: DNS SERVICE
-       */
-
-      #ifndef TCP_SERVER_FILE
-      #define TCP_SERVER_FILE "TCP_SERVER_FILE"
-      #endif
-
-      #ifndef TCP_SERVER_FILE_DEFAULT
-      #define TCP_SERVER_FILE_DEFAULT "/tmp/tcp_server.dns"
-      #endif
-
-      #ifndef MAX_TCP_SERVER_NODES
-      #define MAX_TCP_SERVER_NODES 256
-      #endif
-
-      #ifndef CONST_TEMP
-      #define CONST_TEMP 1024
-      #endif
-
+      #include "base/ns.h"
+      #include "sck_server_ops.h"
 
       /*
        *  API
        */
 
-      char *      ns_tcp_get_hostname     ( void ) ;
-      int         ns_tcp_publish          ( char * dns_file, char * param_srv_name, char * host_name, char * port_name ) ;
-      int         ns_tcp_unpublish        ( char * dns_file, char * serv_name ) ;
-      int         ns_tcp_lookup           (                  char * param_srv_name, char * host_name, char * port_name ) ;
+      int     sckClient_comm_init       ( sckClient_param_st *params ) ;
+      int     sckClient_comm_destroy    ( sckClient_param_st *params ) ;
+      int     sckClient_comm_connect    ( sckClient_param_st *params ) ;
+      int     sckClient_comm_disconnect ( sckClient_param_st *params ) ;
+      int     sckClient_comm_locality   ( sckClient_param_st *params ) ;
 
+      ssize_t sckClient_write_operation ( int fd, char *data, ssize_t size, char *msg_id ) ;
+      ssize_t sckClient_write_data      ( int fd, char *data, ssize_t size, char *msg_id ) ;
+      ssize_t sckClient_read_data       ( int fd, char *data, ssize_t size, char *msg_id ) ;
 
 #endif
 

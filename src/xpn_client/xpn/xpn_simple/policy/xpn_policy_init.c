@@ -22,7 +22,8 @@
 
 extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
 
-char * param_get(char * key) {
+char * param_get(char * key)
+{
     char * ret = NULL;
 
     /* get value */
@@ -34,7 +35,8 @@ char * param_get(char * key) {
     return ret;
 }
 
-struct conf_connect_st * XpnPartitionOpen(void) {
+struct conf_connect_st * XpnPartitionOpen(void)
+{
     static struct conf_connect_st desc;
     char conf[PATH_MAX];
 
@@ -93,7 +95,8 @@ struct conf_connect_st * XpnPartitionOpen(void) {
     return & desc;
 }
 
-void XpnPartitionClose(struct conf_connect_st * fconf) {
+void XpnPartitionClose(struct conf_connect_st * fconf)
+{
     switch (fconf -> type) {
     case CONF_FILE:
         fclose(fconf -> connect_u.f);
@@ -115,7 +118,8 @@ void XpnPartitionClose(struct conf_connect_st * fconf) {
     }
 }
 
-int XpnGetNextPartition(struct conf_connect_st * fconf, char * name) {
+int XpnGetNextPartition(struct conf_connect_st * fconf, char * name)
+{
     #ifdef ENABLE_MXML
     char * value;
     #endif
@@ -389,17 +393,6 @@ int XpnGetServer(struct conf_connect_st * fconf, __attribute__((__unused__)) str
     }
     #endif
 
-    #ifdef ENABLE_TCP_SERVER
-    else if (strcmp(prt, "tcp_server") == 0) {
-        //printf("[XPN]nfi_tcp_server_init: %s\n",url);
-        ret = nfi_tcp_server_init(url, serv, NULL);
-        if (ret < 0) {
-            xpn_err(XPNERR_INITSERV);
-            return -1;
-        }
-    }
-    #endif
-
     #ifdef ENABLE_MPI_SERVER
     else if (strcmp(prt, "mpi_server") == 0) {
         //printf("[XPN]nfi_mpi_server_init: %s\n",url);
@@ -411,9 +404,21 @@ int XpnGetServer(struct conf_connect_st * fconf, __attribute__((__unused__)) str
     }
     #endif
 
-    #ifdef ENABLE_HTTP
-    else if ((strcmp(prt, "http") == 0) || (strcmp(prt, "webdav") == 0)) {
-        ret = nfi_http_init(url, serv, NULL);
+    #ifdef ENABLE_SCK_SERVER
+    else if (strcmp(prt, "sck_server") == 0) {
+        //printf("[XPN]nfi_sck_server_init: %s\n",url);
+        ret = nfi_sck_server_init(url, serv, NULL);
+        if (ret < 0) {
+            xpn_err(XPNERR_INITSERV);
+            return -1;
+        }
+    }
+    #endif
+
+    #ifdef ENABLE_TCP_SERVER
+    else if (strcmp(prt, "tcp_server") == 0) {
+        //printf("[XPN]nfi_tcp_server_init: %s\n",url);
+        ret = nfi_tcp_server_init(url, serv, NULL);
         if (ret < 0) {
             xpn_err(XPNERR_INITSERV);
             return -1;

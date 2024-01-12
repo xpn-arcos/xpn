@@ -29,17 +29,11 @@
 #include <sys/mman.h>
 #include <argp.h>
 
+#include "all_system.h"
 #include "xpn.h"
 
 #define BAR_LENGTH 50
 
-#ifndef KB
-	#define KB	(1024)
-#endif
-
-#ifndef MB
-	#define MB	(KB*KB)
-#endif
 
 struct stat st;
 struct timeval t_ini_transfer, t_end_transfer, t_old_transfer;
