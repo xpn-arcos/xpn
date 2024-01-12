@@ -28,6 +28,11 @@
   #endif
 
 
+  /* ... Include / Inclusion ........................................... */
+
+  
+  /* ... Const / Const ................................................. */
+
   enum nfi_sck_server_err
   {
     SCK_SERVERERR_PARAM         = 0,
@@ -49,8 +54,14 @@
   };
 
 
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
+  /* ... Functions / Funciones ......................................... */
+
   void sck_server_err(int err);
 
+  /* ................................................................... */
 
   #ifdef  __cplusplus
     }

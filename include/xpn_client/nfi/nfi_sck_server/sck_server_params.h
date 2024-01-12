@@ -23,6 +23,8 @@
 #ifndef _SCK_SERVER_PARAMS_H_
 #define _SCK_SERVER_PARAMS_H_
 
+  /* ... Include / Inclusion ........................................... */
+
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
@@ -30,14 +32,10 @@
   //#include <semaphore.h>
   
 
-  /*
-   * Constants
-   */
+  /* ... Const / Const ................................................. */
 
 
-  /*
-   * Datatype
-   */
+  /* ... Data structures / Estructuras de datos ........................ */
 
   typedef struct
   {
@@ -67,5 +65,11 @@
     int    argc;
     char **argv;
   } sckClient_param_st;
+
+
+  /* ... Functions / Funciones ......................................... */
+
+
+  /* ................................................................... */
 
 #endif

@@ -27,6 +27,10 @@
     extern "C" {
   #endif
 
+  /* ... Include / Inclusion ........................................... */
+
+
+  /* ... Const / Const ................................................. */
 
   enum nfi_mpi_server_err
   {
@@ -49,8 +53,14 @@
   };
 
 
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
+  /* ... Functions / Funciones ......................................... */
+
   void mpi_server_err(int err);
 
+  /* ................................................................... */
 
   #ifdef  __cplusplus
     }

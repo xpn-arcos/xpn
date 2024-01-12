@@ -23,8 +23,12 @@
 #ifndef _SCK_SERVER_CONF_H_
 #define _SCK_SERVER_CONF_H_
 
+  /* ... Include / Inclusion ........................................... */
+
   #include "all_system.h"
 
+
+  /* ... Const / Const ................................................. */
 
   /* MAX_BUFFER_SIZE */
   #ifndef MAX_BUFFER_SIZE
@@ -59,5 +63,14 @@
   #ifndef SCK_SERVER_IOSIZE_DEFAULT
     #define SCK_SERVER_IOSIZE_DEFAULT (MB)
   #endif
+
+  
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
+  /* ... Functions / Funciones ......................................... */
+
+
+  /* ................................................................... */
 
 #endif

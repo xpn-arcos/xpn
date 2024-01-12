@@ -23,6 +23,8 @@
 #ifndef _MPI_SERVER_OPS_H_
 #define _MPI_SERVER_OPS_H_
 
+  /* ... Include / Inclusion ........................................... */
+
   #include <libgen.h>
   #include "all_system.h"
   #include "base/filesystem.h"
@@ -35,16 +37,13 @@
   #include "mpi_server_params.h"
 
 
-  /*
-   *  Constants
-   */
+  /* ... Const / Const ................................................. */
 
   #ifndef MPI_SERVER_ID
     #define MPI_SERVER_ID 32
   #endif
 
   #define XPN_HEADER_SIZE 8192
-
 
   /* Operations */
 
@@ -89,9 +88,9 @@
   #define MPI_SERVER_END            -1
 
 
-  /*
-   *  Message struct
-   */
+  /* ... Data structures / Estructuras de datos ........................ */
+
+  /* Message struct */
 
   struct st_mpi_server_open
   {
@@ -256,11 +255,11 @@
   };
 
   
-  /*
-   *  API
-   */
+  /* ... Functions / Funciones ......................................... */
 
   char *mpi_server_op2string    ( int op_code );
   int   mpi_server_do_operation ( struct st_th *th, int * the_end );
+
+  /* ................................................................... */
 
 #endif

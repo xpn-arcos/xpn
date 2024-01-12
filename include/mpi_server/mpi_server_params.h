@@ -23,6 +23,8 @@
 #ifndef _MPI_SERVER_PARAMS_H_
 #define _MPI_SERVER_PARAMS_H_
 
+  /* ... Include / Inclusion ........................................... */
+
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
@@ -34,14 +36,10 @@
   //#include <semaphore.h>
 
 
-  /*
-   * Constants
-   */
+  /* ... Const / Const ................................................. */
 
 
-  /*
-   * Datatype
-   */
+  /* ... Data structures / Estructuras de datos ........................ */
 
   typedef struct
   {
@@ -74,12 +72,12 @@
   } mpi_server_param_st;
 
 
-  /*
-   * API
-   */
+  /* ... Functions / Funciones ......................................... */
 
   void mpi_server_params_show_usage ( void );
   int  mpi_server_params_get        ( mpi_server_param_st *params, int argc, char *argv[] );
   void mpi_server_params_show       ( mpi_server_param_st *params );
+
+  /* ................................................................... */
 
 #endif

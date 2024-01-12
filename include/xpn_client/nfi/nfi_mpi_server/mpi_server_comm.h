@@ -23,6 +23,8 @@
 #ifndef _MPI_SERVER_COMM_H_
 #define _MPI_SERVER_COMM_H_
 
+  /* ... Include / Inclusion ........................................... */
+
   #include "all_system.h"
   #include "mpi_server_params.h"
   #include "base/utils.h"
@@ -30,9 +32,13 @@
   #include "mpi_server_ops.h"
 
 
-  /*
-   *  API
-   */
+  /* ... Const / Const ................................................. */
+
+
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
+  /* ... Functions / Funciones ......................................... */
 
   int     mpiClient_comm_init       ( mpiClient_param_st *params );
   int     mpiClient_comm_destroy    ( mpiClient_param_st *params );
@@ -43,6 +49,8 @@
   ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, char *msg_id );
   ssize_t mpiClient_write_data      ( MPI_Comm fd, char *data, ssize_t size, char *msg_id );
   ssize_t mpiClient_read_data       ( MPI_Comm fd, char *data, ssize_t size, char *msg_id );
+
+  /* ................................................................... */
 
 #endif
 

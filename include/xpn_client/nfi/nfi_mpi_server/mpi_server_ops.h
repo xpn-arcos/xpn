@@ -23,15 +23,15 @@
 #ifndef _MPI_SERVER_OPS_H_
 #define _MPI_SERVER_OPS_H_
 
+  /* ... Include / Inclusion ........................................... */
+
   #include "all_system.h"
   #include "mpi_server_params.h"
   #include "base/utils.h"
   #include "base/filesystem.h"
 
 
-  /*
-   *  Constants
-   */
+  /* ... Const / Const ................................................. */
 
   #define ASYNC_CLOSE 1
   #define FILESYSTEM_DLSYM 1
@@ -39,7 +39,6 @@
   #ifndef MPI_SERVER_ID
     #define MPI_SERVER_ID 32
   #endif
-
 
   /* Operations */
 
@@ -83,6 +82,8 @@
   #define MPI_SERVER_DISCONNECT     81
   #define MPI_SERVER_END            -1
 
+
+  /* ... Data structures / Estructuras de datos ........................ */
 
   /*
    *  Message struct
@@ -249,5 +250,11 @@
       struct st_mpi_server_end      op_end;
     } u_st_mpi_server_msg;
   };
+
+
+  /* ... Functions / Funciones ......................................... */
+
+
+  /* ................................................................... */
 
 #endif

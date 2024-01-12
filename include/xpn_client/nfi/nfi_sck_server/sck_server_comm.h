@@ -23,6 +23,8 @@
 #ifndef _SCK_SERVER_COMM_H_
 #define _SCK_SERVER_COMM_H_
 
+  /* ... Include / Inclusion ........................................... */
+
   #include "all_system.h"
   #include "sck_server_params.h"
   #include "base/utils.h"
@@ -30,9 +32,13 @@
   #include "sck_server_ops.h"
 
 
-  /*
-   *  API
-   */
+  /* ... Const / Const ................................................. */
+
+
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
+  /* ... Functions / Funciones ......................................... */
 
   int     sckClient_comm_init       ( sckClient_param_st *params );
   int     sckClient_comm_destroy    ( sckClient_param_st *params );
@@ -43,6 +49,8 @@
   ssize_t sckClient_write_operation ( int fd, char *data, ssize_t size, char *msg_id );
   ssize_t sckClient_write_data      ( int fd, char *data, ssize_t size, char *msg_id );
   ssize_t sckClient_read_data       ( int fd, char *data, ssize_t size, char *msg_id );
+
+  /* ................................................................... */
 
 #endif
 

@@ -23,6 +23,8 @@
 #ifndef _MPI_SERVER_D2XPN_H_
 #define _MPI_SERVER_D2XPN_H_
 
+  /* ... Include / Inclusion ........................................... */
+
   #include <sys/param.h>
   #include <stdio.h>
   #include <sys/file.h>
@@ -39,9 +41,19 @@
 
   #include "xpn.h"
 
+
+  /* ... Const / Const ................................................. */
+  
   #define PRELOAD_SYNC  0
   #define PRELOAD_ASYNC 1
 
+  /* ... Data structures / Estructuras de datos ........................ */
+
+  
+  /* ... Functions / Funciones ......................................... */
+
   int mpi_server_d2xpn ( mpi_server_param_st *params, char *origen, char *destino );
+
+  /* ................................................................... */
 
 #endif

@@ -23,6 +23,8 @@
 #ifndef _SCK_SERVER_OPS_H_
 #define _SCK_SERVER_OPS_H_
 
+  /* ... Include / Inclusion ........................................... */
+
   #include <libgen.h>
   #include "all_system.h"
   #include "base/filesystem.h"
@@ -35,9 +37,7 @@
   #include "sck_server_params.h"
 
 
-  /*
-   *  Constants
-   */
+  /* ... Const / Const ................................................. */
 
   #ifndef SCK_SERVER_ID
     #define SCK_SERVER_ID 32
@@ -88,9 +88,9 @@
   #define SCK_SERVER_END            -1
 
 
-  /*
-   *  Message struct
-   */
+  /* ... Data structures / Estructuras de datos ........................ */
+
+  /* Message struct */
 
   struct st_sck_server_open
   {
@@ -256,12 +256,12 @@
   };
 
   
-  /*
-   *  API
-   */
+  /* ... Functions / Funciones ......................................... */
 
   char *sck_server_op2string    ( int op_code );
   int   sck_server_do_operation ( struct st_th *th, int * the_end );
+
+  /* ................................................................... */
 
 #endif
 
