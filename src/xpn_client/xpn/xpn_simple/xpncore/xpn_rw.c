@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -146,7 +146,7 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
 
   do
   {
-    XpnGetBlockReplication(fd, new_offset, 0, &l_offset, &l_serv);
+    XpnGetBlock(fd, new_offset, 0, &l_offset, &l_serv);
 
     l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
 
@@ -191,7 +191,6 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
   struct nfi_server **servers;
   struct nfi_worker_io **io;
   int *ion, max;
-  void *new_buffer;
 
   XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 
@@ -309,8 +308,8 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
   }
 
   // Calculate which blocks to read from each server
-  new_buffer = XpnReadBlocks(fd, buffer, size, offset, &io, &ion, n);
-  if(new_buffer == NULL)
+  buffer = XpnReadBlocks(fd, buffer, size, offset, &io, &ion, n);
+  if(buffer == NULL)
   {
     if (servers != NULL) {
       free(servers); servers=NULL;
@@ -390,14 +389,10 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
     }
   }
 
-  //pthread_mutex_unlock(&(global_mt));
-
-  XpnReadBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
-
   total = -1;
   if (!err)
   {
-    total = XpnReadGetTotalBytes(fd, res_v, n);
+    total = XpnRWGetTotalBytes(fd, res_v, n);
 
     if(total > 0){
       xpn_file_table[fd]->offset += total;
@@ -473,7 +468,7 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
   {
     for (size_t i = 0; i < xpn_file_table[fd]->part->replication_level + 1; i++)
     {
-      XpnGetBlockReplication(fd, new_offset, i, &l_offset, &l_serv);
+      XpnGetBlock(fd, new_offset, i, &l_offset, &l_serv);
       
       l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
 
@@ -587,6 +582,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   if(size%xpn_file_table[fd]->block_size != 0){
     max++;
   }
+  max *= xpn_file_table[fd]->part->replication_level + 1;
 
   // create
   for(i=0; i<n; i++)
@@ -628,6 +624,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
     free(io);
     free(ion);
+    free(new_buffer);
     return -1;
   }
 
@@ -652,26 +649,9 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
         free(io);
         free(ion);
+        free(new_buffer);
         return -1;
       }
-
-      /*
-      switch(xpn_file_table[fd]->size_threads)
-      {
-        case -1:
-          flag_thread = 0;
-          break;
-        case 0:
-          flag_thread = 1;
-          break;
-        default:
-          if(xpn_file_table[fd]->size_threads >= size){
-            flag_thread = 1;
-          }else{
-            flag_thread = 0;
-          }
-      }
-      */
 
       //Worker
       servers[i]->wrk->thread = servers[i]->xpn_thread;
@@ -692,6 +672,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
     free(io);
     free(ion);
+    free(new_buffer);
 
     return -1;
   }
@@ -710,17 +691,13 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
     }
   }
 
-  //pthread_mutex_unlock(&(global_mt));
-
-  XpnWriteBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
-
   total = -1;
   if (!err)
   {
-    total = XpnWriteGetTotalBytes(fd, res_v, n);
+    total = XpnRWGetTotalBytes(fd, res_v, n);
 
     if(total > 0){
-      xpn_file_table[fd]->offset += total;
+      xpn_file_table[fd]->offset += total / (xpn_file_table[fd]->part->replication_level + 1);
     }
   }
 
@@ -734,6 +711,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
   free(io);
   free(ion);
+  free(new_buffer);
 
   res = total;
   XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
