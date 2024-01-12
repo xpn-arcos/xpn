@@ -32,3 +32,4 @@ configure
 include/config.h
 include/config.h.in~
 Makefile.in
+include/config.h.in
