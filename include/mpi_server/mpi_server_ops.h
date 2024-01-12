@@ -1,49 +1,50 @@
 
-  /*
-   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
-   *
-   *  This file is part of Expand.
-   *
-   *  Expand is free software: you can redistribute it and/or modify
-   *  it under the terms of the GNU Lesser General Public License as published by
-   *  the Free Software Foundation, either version 3 of the License, or
-   *  (at your option) any later version.
-   *
-   *  Expand is distributed in the hope that it will be useful,
-   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   *  GNU Lesser General Public License for more details.
-   *
-   *  You should have received a copy of the GNU Lesser General Public License
-   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
-   *
-   */
+/*
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 
 #ifndef _MPI_SERVER_OPS_H_
 #define _MPI_SERVER_OPS_H_
 
-    #include <libgen.h>
-    #include "all_system.h"
-    #include "base/filesystem.h"
-    #include "base/urlstr.h"
-    #include "base/utils.h"
-    #include "base/workers.h"
-    #include "mpi_server_ops.h"
-    #include "mpi_server_comm.h"
-    #include "mpi_server_d2xpn.h"
-    #include "mpi_server_params.h"
+  #include <libgen.h>
+  #include "all_system.h"
+  #include "base/filesystem.h"
+  #include "base/urlstr.h"
+  #include "base/utils.h"
+  #include "base/workers.h"
+  #include "mpi_server_ops.h"
+  #include "mpi_server_comm.h"
+  #include "mpi_server_d2xpn.h"
+  #include "mpi_server_params.h"
 
 
   /*
    *  Constants
    */
 
-#ifndef MPI_SERVER_ID
-  #define MPI_SERVER_ID 32
-#endif
+  #ifndef MPI_SERVER_ID
+    #define MPI_SERVER_ID 32
+  #endif
 
-#define XPN_HEADER_SIZE 8192
+  #define XPN_HEADER_SIZE 8192
+
 
   /* Operations */
 
@@ -92,105 +93,127 @@
    *  Message struct
    */
 
-  struct st_mpi_server_open{
-    char path[PATH_MAX];
+  struct st_mpi_server_open
+  {
+    char path[PATH_MAX]; //TO-DO: Insert FLAGS - O_RDWR etc
   };
 
-  struct st_mpi_server_open_req{
+  struct st_mpi_server_open_req
+  {
    int fd;
   };
 
-  struct st_mpi_server_creat{
+  struct st_mpi_server_creat
+  {
     char path[PATH_MAX];
   };
 
-  struct st_mpi_server_read{
+  struct st_mpi_server_read
+  {
     int fd;
     char path[PATH_MAX];
     offset_t offset;
     size_t size;
   };
 
-  struct st_mpi_server_read_req{
+  struct st_mpi_server_read_req
+  {
     ssize_t size;
     char last;
   };
 
-  struct st_mpi_server_write{
+  struct st_mpi_server_write
+  {
     int fd;
     char path[PATH_MAX];
     offset_t offset;
     size_t size;
   };
 
-  struct st_mpi_server_write_req{
+  struct st_mpi_server_write_req
+  {
     ssize_t size;
   };
 
-  struct st_mpi_server_close{
+  struct st_mpi_server_close
+  {
     int fd;
   };
 
-  struct st_mpi_server_rename{
+  struct st_mpi_server_rename
+  {
     char old_url[PATH_MAX];
     char new_url[PATH_MAX];
   };
 
-  struct st_mpi_server_rm{
+  struct st_mpi_server_rm
+  {
     char path[PATH_MAX];
   };
 
-  struct st_mpi_server_getattr{ 
+  struct st_mpi_server_getattr
+  { 
     char path[PATH_MAX];
   };
 
-  struct st_mpi_server_setattr{ 
+  struct st_mpi_server_setattr
+  { 
     char path[PATH_MAX];
     struct stat attr;
   };
 
-  struct st_mpi_server_attr_req{
+  struct st_mpi_server_attr_req
+  {
     char status;  
     struct stat attr;
   };
   
 
   
-  struct st_mpi_server_mkdir{  
+  struct st_mpi_server_mkdir
+  {  
     char path[PATH_MAX];
   };
 
-  struct st_mpi_server_opendir{  //NEW
+  struct st_mpi_server_opendir
+  {
     char path[PATH_MAX];
   };
 
-  struct st_mpi_server_readdir{  //NEW
+  struct st_mpi_server_readdir
+  {
     DIR * dir;
   };
 
-  struct st_mpi_server_direntry{  //NEW
+  struct st_mpi_server_direntry
+  {
     int end; //If end = 1 exist entry; 0 not exist
     struct dirent ret;
   };
 
-  struct st_mpi_server_closedir{  //NEW
+  struct st_mpi_server_closedir
+  {
     DIR * dir;
   };
 
-  struct st_mpi_server_rmdir{
+  struct st_mpi_server_rmdir
+  {
     char path[PATH_MAX];
   };
 
   //TODO: define MPI_SERVER_OPENDIR_DIR, MPI_SERVER_READDIR_DIR, MPI_SERVER_CLOSEDIR_DIR
 
-  struct st_mpi_server_flush{
+
+  struct st_mpi_server_flush
+  {
     char storage_path[PATH_MAX];
     char virtual_path[PATH_MAX];
     int block_size;
     char opt;
   };
 
-  struct st_mpi_server_preload{
+  struct st_mpi_server_preload
+  {
     char storage_path[PATH_MAX];
     char virtual_path[PATH_MAX];
     int block_size;
@@ -198,17 +221,16 @@
   };
 
 
-
-  struct st_mpi_server_end{
+  struct st_mpi_server_end
+  {
     char status;
   };
 
 
-
   struct st_mpi_server_msg
   {
-    int type ;
-    char id[MPI_SERVER_ID] ;
+    int type;
+    char id[MPI_SERVER_ID];
     union {
       struct st_mpi_server_open     op_open;
       struct st_mpi_server_creat    op_creat;
@@ -217,29 +239,28 @@
       struct st_mpi_server_write    op_write;
       struct st_mpi_server_rm       op_rm;
       struct st_mpi_server_rename   op_rename;
+      struct st_mpi_server_getattr  op_getattr;
+      struct st_mpi_server_setattr  op_setattr;
+
       struct st_mpi_server_mkdir    op_mkdir;
       struct st_mpi_server_opendir  op_opendir;
       struct st_mpi_server_readdir  op_readdir;
       struct st_mpi_server_closedir op_closedir;
       struct st_mpi_server_rmdir    op_rmdir;
-      struct st_mpi_server_getattr  op_getattr;
-      struct st_mpi_server_setattr  op_setattr;
 
       struct st_mpi_server_flush    op_flush;
       struct st_mpi_server_preload  op_preload;
+
       struct st_mpi_server_end      op_end;
-    } u_st_mpi_server_msg ;
+    } u_st_mpi_server_msg;
   };
 
   
-
-
   /*
    *  API
    */
 
-  char *mpi_server_op2string    ( int op_code ) ;
+  char *mpi_server_op2string    ( int op_code );
   int   mpi_server_do_operation ( struct st_th *th, int * the_end );
 
 #endif
-
