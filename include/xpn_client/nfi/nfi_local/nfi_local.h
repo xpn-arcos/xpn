@@ -89,6 +89,7 @@
   //int   nfi_local_preload    ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt );
   //int   nfi_local_flush      ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt );
 
+
   /* ................................................................... */
 
   #ifdef  __cplusplus

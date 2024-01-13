@@ -260,6 +260,7 @@
   char *mpi_server_op2string    ( int op_code );
   int   mpi_server_do_operation ( struct st_th *th, int * the_end );
 
+
   /* ................................................................... */
 
 #endif

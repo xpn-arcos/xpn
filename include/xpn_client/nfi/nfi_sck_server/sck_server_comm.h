@@ -50,6 +50,7 @@
   ssize_t sckClient_write_data      ( int fd, char *data, ssize_t size, char *msg_id );
   ssize_t sckClient_read_data       ( int fd, char *data, ssize_t size, char *msg_id );
 
+
   /* ................................................................... */
 
 #endif

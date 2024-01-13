@@ -217,6 +217,7 @@
   int    fsync (int fd);
   int flock(int fd, int operation);
 
+
   /* ................................................................... */
 
 #endif

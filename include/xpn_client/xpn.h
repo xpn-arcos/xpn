@@ -19,6 +19,7 @@
  *
  */
 
+
 #ifndef _XPN_H_
 #define _XPN_H_
 
@@ -141,6 +142,7 @@
 
   // xpn_setvbuf.c
   int     xpn_setvbuf (FILE *stream, char *buf, int mode, size_t size);
+
 
   /* ................................................................... */
 

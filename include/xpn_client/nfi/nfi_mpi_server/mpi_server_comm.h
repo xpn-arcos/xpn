@@ -50,6 +50,7 @@
   ssize_t mpiClient_write_data      ( MPI_Comm fd, char *data, ssize_t size, char *msg_id );
   ssize_t mpiClient_read_data       ( MPI_Comm fd, char *data, ssize_t size, char *msg_id );
 
+
   /* ................................................................... */
 
 #endif

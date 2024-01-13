@@ -36,7 +36,7 @@
 
   /* ... Const / Const ................................................. */
 
-  /* PROTOCOLS */
+  // PROTOCOLS
   /*
   #define LOCAL    1
   #define NFS    2
@@ -45,7 +45,7 @@
   #define MPI_SERVER  10
   */
 
-  /* TYPE FILES */
+  // TYPE FILES 
   #define NFIFILE    0
   #define NFIDIR     1
   #define NFINULL   -1
@@ -53,22 +53,22 @@
 
   /* ... Data structures / Estructuras de datos ........................ */
 
-  /* info of the servers */
+  // info of the servers
   struct nfi_ops;
   struct nfi_worker;
 
   struct nfi_server 
   {
-    int id;                 /* id of the server */
-  //int  protocol;          /* protocol         */ // It is never used
-    char *server;           /* server address   */
-    char *url;              /* URL of this server -> protocol   */
-                            /* + server         */
-                            /* + path + more info (port, ...) */
+    int id;                 // id of the server 
+  //int  protocol;          // protocol          // It is never used
+    char *server;           // server address   
+    char *url;              // URL of this server -> protocol   
+                            // + server         
+                            // + path + more info (port, ...) 
     int    block_size;
-    void  *private_info;    /* info private       */
-    struct nfi_ops    *ops; /* operations       */
-    struct nfi_worker *wrk; /* this struct has the thread   */
+    void  *private_info;    // info private       
+    struct nfi_ops    *ops; // operations       
+    struct nfi_worker *wrk; // this struct has the thread   
 
     // Execution configuration
     int xpn_thread;
@@ -94,31 +94,30 @@
 
   struct nfi_attr
   {
-    dev_t     st_dev;     /* ID of device containing file */
-    ino_t     st_ino;     /* inode number */
+    dev_t     st_dev;     // ID of device containing file 
+    ino_t     st_ino;     // inode number 
 
-    int   at_type;      /* FILE or DIR      */  
-    mode_t  at_mode;    /* protection     */
-    nlink_t at_nlink;   /* number of hard links   */
-    uid_t at_uid;       /* user ID of owner   */
-    gid_t at_gid;       /* group ID of owner    */
-    off_t at_size;      /* total size, in bytes   */
-    u_long  at_blksize; /* blocksize for filesystem I/O */
-    u_long  at_blocks;  /* number of blocks allocated */
-    time_t  at_atime;   /* time of last access    */
-    time_t  at_mtime;   /* time of last modification  */
-    time_t  at_ctime;   /* time of last status change */
+    int   at_type;      // FILE or DIR        
+    mode_t  at_mode;    // protection     
+    nlink_t at_nlink;   // number of hard links   
+    uid_t at_uid;       // user ID of owner   
+    gid_t at_gid;       // group ID of owner    
+    off_t at_size;      // total size, in bytes   
+    u_long  at_blksize; // blocksize for filesystem I/O 
+    u_long  at_blocks;  // number of blocks allocated 
+    time_t  at_atime;   // time of last access    
+    time_t  at_mtime;   // time of last modification  
+    time_t  at_ctime;   // time of last status change 
     void  *private_info;  
   };
 
   struct nfi_fhandle 
   {
-    int type;                   /* file or directory    */
-    char *url;                  /* url of DIR or FILE     */
-    struct nfi_server *server;  /* server       */
-    void *priv_fh;              /* pointer to private filehandle*/
+    int type;                   // file or directory    
+    char *url;                  // url of DIR or FILE     
+    struct nfi_server *server;  // server       
+    void *priv_fh;              // pointer to private filehandle
   };
-
 
   struct nfi_ops 
   {
@@ -145,6 +144,11 @@
     int     (*nfi_flush)    (struct nfi_server *serv, char *url, char *virtual_path, char* storage_path, int opt); 
   };
 
+
+  /* ... Functions / Funciones ......................................... */
+
+
+  /* ................................................................... */
 
  #ifdef  __cplusplus
     }

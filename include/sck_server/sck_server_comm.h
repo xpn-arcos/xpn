@@ -51,6 +51,7 @@
   ssize_t sck_server_comm_read_operation ( sck_server_param_st *params, int fd, char *data, ssize_t size, int *rank_client_id );
   ssize_t sck_server_comm_read_data      ( sck_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id );
 
+
   /* ................................................................... */
   
 #endif

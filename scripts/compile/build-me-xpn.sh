@@ -20,6 +20,7 @@
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 function usage {
     echo ""
     echo " Usage:"
@@ -78,4 +79,3 @@ fi
 "$BASE_PATH"/software/xpn.sh    -m "$MPICC_PATH" -i "$INSTALL_PATH" -s "$BASE_PATH"/../../../xpn
 
 echo " End."
-

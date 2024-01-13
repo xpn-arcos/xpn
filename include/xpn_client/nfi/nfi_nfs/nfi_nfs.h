@@ -27,6 +27,7 @@
      extern "C" {
    #endif
 
+
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
@@ -84,6 +85,7 @@
   int nfi_nfs_readdir    (struct nfi_server *server, struct nfi_fhandle *fhd, char *entry , unsigned char *type);
   int nfi_nfs_closedir   (struct nfi_server *server, struct nfi_fhandle *fh);
   int nfi_nfs_statfs     (struct nfi_server *server, struct nfi_info *inf);
+
 
   /* ................................................................... */
 

@@ -54,6 +54,7 @@
   ssize_t nfiworker_wait   ( struct nfi_worker *wrk ) ;
   void    nfiworker_destroy(struct nfi_server *serv) ;
 
+
   /* ................................................................... */
 
   #ifdef  __cplusplus

@@ -79,4 +79,7 @@
   int nfi_nfs3_closedir   (struct nfi_server *server, struct nfi_fhandle *fh);
   int nfi_nfs3_statfs     (struct nfi_server *server, struct nfi_info *inf);
 
+
+  /* ................................................................... */
+
 #endif
