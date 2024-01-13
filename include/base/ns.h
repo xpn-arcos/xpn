@@ -1,3 +1,4 @@
+
 /*
  *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
@@ -18,46 +19,51 @@
  *
  */
 
+
 #ifndef _NS_H_
 #define _NS_H_
 
-/************************************************
- *  ... Includes
- ***********************************************/
-#include "all_system.h" /// Library for 'TODO'
-#include "base/utils.h" /// Library for 'TODO'
+  /* ... Include / Inclusion ........................................... */
 
-/************************************************
- *  ... ENVIROMENT VARIABLE: DNS SERVICE
- ***********************************************/
-#ifndef MPI_SERVER_DNS_FILE_DEFAULT
-#define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
-#endif
+  #include "all_system.h" /// Library for 'TODO'
+  #include "base/utils.h" /// Library for 'TODO'
 
-#ifndef SCK_SERVER_DNS_FILE_DEFAULT
-#define SCK_SERVER_DNS_FILE_DEFAULT "/tmp/sck_dns.txt"
-#endif
+  
+  /* ... Const / Const ................................................. */
 
-#ifndef TCP_SERVER_DNS_FILE_DEFAULT
-#define TCP_SERVER_DNS_FILE_DEFAULT "/tmp/tcp_dns.txt"
-#endif
+  #ifndef MPI_SERVER_DNS_FILE_DEFAULT
+    #define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
+  #endif
 
-#ifndef MAX_TCP_SERVER_NODES
-#define MAX_TCP_SERVER_NODES 256
-#endif
+  #ifndef SCK_SERVER_DNS_FILE_DEFAULT
+    #define SCK_SERVER_DNS_FILE_DEFAULT "/tmp/sck_dns.txt"
+  #endif
 
-#ifndef CONST_TEMP
-#define CONST_TEMP 1024
-#endif
+  #ifndef TCP_SERVER_DNS_FILE_DEFAULT
+    #define TCP_SERVER_DNS_FILE_DEFAULT "/tmp/tcp_dns.txt"
+  #endif
 
-/************************************************
- *  ... Functions
- ***********************************************/
-void ns_get_hostname(char *srv_name);
-char *ns_get_host_ip(void);
+  #ifndef MAX_TCP_SERVER_NODES
+    #define MAX_TCP_SERVER_NODES 256
+  #endif
 
-int ns_publish(char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
-int ns_unpublish(char *dns_file, char *protocol, char *param_srv_name);
-int ns_lookup(char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
+  #ifndef CONST_TEMP
+    #define CONST_TEMP 1024
+  #endif
+
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
+  /* ... Functions / Funciones ......................................... */
+
+  void ns_get_hostname(char *srv_name);
+  char *ns_get_host_ip(void);
+
+  int ns_publish(char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
+  int ns_unpublish(char *dns_file, char *protocol, char *param_srv_name);
+  int ns_lookup(char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
+
+
+  /* ................................................................... */
 
 #endif

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 
 #
 #  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
@@ -19,6 +19,7 @@ set -x
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
+
 
 function usage {
     echo ""
@@ -91,4 +92,3 @@ CFLAGS="-I$INSTALL_PATH/mosquitto/include" CPPFLAGS="-I$INSTALL_PATH/mosquitto/i
 #doxygen doc/doxygen-XPN.cfg
 make install
 popd
-
