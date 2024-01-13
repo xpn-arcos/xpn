@@ -21,6 +21,7 @@
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 function usage {
     echo ""
     echo " Usage:"
@@ -88,4 +89,3 @@ export PATH=$(dirname $MPICC_PATH):$PATH
 make clean
 make
 popd
-

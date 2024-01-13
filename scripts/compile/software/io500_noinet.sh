@@ -21,6 +21,7 @@
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 function usage {
     echo ""
     echo " Usage:"
@@ -100,4 +101,3 @@ export PATH=$(dirname $MPICC_PATH):$PATH
 env INSTALL_DIR=$INSTALL_PATH/io500 CC=$MPICC_PATH MPICC=$MPICC_PATH  ./prepare-alt.sh
 #rm -fr prepare-alt.sh
 popd
-
