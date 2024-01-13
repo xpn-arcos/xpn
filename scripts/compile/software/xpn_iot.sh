@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 
 #
 #  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
@@ -19,6 +19,7 @@ set -x
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
+
 
 function usage {
     echo ""
@@ -85,10 +86,9 @@ echo " * XPN: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
 ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/bin/mosquitto/lib64 CFLAGS="-I$INSTALL_PATH/mosquitto/include" CPPFLAGS="-I$INSTALL_PATH/mosquitto/include" LDFLAGS="-L$INSTALL_PATH/mosquitto/lib64" ./configure --prefix=$INSTALL_PATH/xpn --enable-tcp_server --enable-mosquitto --enable-mpi_server="$MPICC_PATH"
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/bin/mosquitto/lib64 CFLAGS="-I$INSTALL_PATH/mosquitto/include" CPPFLAGS="-I$INSTALL_PATH/mosquitto/include" LDFLAGS="-L$INSTALL_PATH/mosquitto/lib64" ./configure --prefix=$INSTALL_PATH/xpn --enable-mosquitto
 CFLAGS="-I$INSTALL_PATH/mosquitto/include" CPPFLAGS="-I$INSTALL_PATH/mosquitto/include" LDFLAGS="-L$INSTALL_PATH/mosquitto/lib64" make clean
 CFLAGS="-I$INSTALL_PATH/mosquitto/include" CPPFLAGS="-I$INSTALL_PATH/mosquitto/include" LDFLAGS="-L$INSTALL_PATH/mosquitto/lib64" make -j 16
 #doxygen doc/doxygen-XPN.cfg
 make install
 popd
-
