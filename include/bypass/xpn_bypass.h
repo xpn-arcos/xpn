@@ -181,6 +181,7 @@
   size_t fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream);
 
   int  fseek      (FILE *stream, long int offset, int whence);
+  long ftell      (FILE *stream);
   int  dlsym_feof (FILE *stream);
 
 

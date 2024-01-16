@@ -1347,6 +1347,7 @@
       int buf_size = size * nmemb;
       debug_info("[bypass]\t try to xpn_read %d, %p, %d\n", virtual_fd.real_fd, ptr, buf_size);
       ret = xpn_read(virtual_fd.real_fd, ptr, buf_size);
+      ret = ret / size; // Number of items read
       debug_info("[bypass]\t xpn_read %d, %p, %d -> %ld\n", virtual_fd.real_fd, ptr, buf_size, ret);
     }
     // Not an XPN partition. We must link with the standard library
@@ -1387,6 +1388,7 @@
       int buf_size = size * nmemb;
       debug_info("[bypass]\t try to xpn_read %d, %p, %d\n", virtual_fd.real_fd, ptr, buf_size);
       ret = xpn_write(virtual_fd.real_fd, ptr, buf_size);
+      ret = ret / size; // Number of items Written
       debug_info("[bypass]\t xpn_read %d, %p, %d -> %ld\n", virtual_fd.real_fd, ptr, buf_size, ret);
     }
     // Not an XPN partition. We must link with the standard library
@@ -1428,6 +1430,37 @@
     }
 
     debug_info("[bypass] << After fseek...\n");
+    return ret;
+  }
+
+  long ftell(FILE *stream)
+  {
+    debug_info("[bypass] >> Before ftell....\n");
+    debug_info("[bypass]    * stream = %p\n", stream);
+
+    long ret = -1;
+
+    int fd = fileno(stream);
+    struct generic_fd virtual_fd = fdstable_get ( fd );
+
+    if(virtual_fd.type == FD_XPN)
+    {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("[bypass]\t xpn_lseek %d\n", virtual_fd.real_fd);
+      ret = xpn_lseek(virtual_fd.real_fd, 0, SEEK_CUR);
+      debug_info("[bypass]\t xpn_lseek %d -> %d\n", virtual_fd.real_fd, ret);
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("[bypass]\t try to dlsym_ftell\n");
+      ret = dlsym_ftell(stream);
+      debug_info("[bypass]\t dlsym_ftell -> %d\n", ret);
+    }
+
+    debug_info("[bypass] << After ftell....\n");
     return ret;
   }
 
