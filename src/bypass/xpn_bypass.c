@@ -41,8 +41,8 @@ static int xpn_adaptor_initCalled_getenv = 0; // env variable obtained
 /**
  * This variable contains the prefix which will be considerated as expand partition.
  */
-//char *xpn_adaptor_partition_prefix = "xpn://"; //Original
-char *xpn_adaptor_partition_prefix = "/tmp/expand/";
+char *xpn_adaptor_partition_prefix = "/tmp/expand/"; // Original --> xpn://
+int   xpn_prefix_change_verified = 0;
 
 
 /* ... Auxiliar functions / Funciones auxiliares ......................................... */
@@ -50,8 +50,19 @@ char *xpn_adaptor_partition_prefix = "/tmp/expand/";
 /**
  * Check that the path contains the prefix of XPN
  */
-int          is_xpn_prefix   ( const char * path )
+int is_xpn_prefix   ( const char * path )
 {
+  if (0 == xpn_prefix_change_verified)
+  {
+    xpn_prefix_change_verified = 1;
+
+    char * env_prefix = getenv("XPN_MOUNT_POINT");
+    if (env_prefix != NULL)
+    {
+      xpn_adaptor_partition_prefix = env_prefix;
+    }
+  }
+  
   const char *prefix = (const char *)xpn_adaptor_partition_prefix;
 
   return ( !strncmp(prefix, path, strlen(prefix)) && strlen(path) > strlen(prefix) );
