@@ -53,14 +53,14 @@
   int dlsym___open_2 (char *path, int flags);
   int dlsym_close    (int fd);
 
-  int dlsym_creat(const char *path, mode_t mode);
-  int dlsym_ftruncate(int fd, off_t length);
+  int dlsym_creat     (const char *path, mode_t mode);
+  int dlsym_ftruncate (int fd, off_t length);
 
-  ssize_t dlsym_read (int fd, void *buf, size_t nbyte);
-  ssize_t dlsym_write(int fd, void *buf, size_t nbyte);
+  ssize_t dlsym_read  (int fd, void *buf, size_t nbyte);
+  ssize_t dlsym_write (int fd, void *buf, size_t nbyte);
 
-  ssize_t dlsym_pread (int fd, void *buf, size_t count, off_t offset);
-  ssize_t dlsym_pwrite(int fd, const void *buf, size_t count, off_t offset);
+  ssize_t dlsym_pread  (int fd, void *buf, size_t count, off_t offset);
+  ssize_t dlsym_pwrite (int fd, const void *buf, size_t count, off_t offset);
 
   off_t   dlsym_lseek   (int fd,   off_t offset, int whence);
   off64_t dlsym_lseek64 (int fd, off64_t offset, int whence);
@@ -76,12 +76,13 @@
 
   int dlsym_rename (const char *old_path, const char *new_path);
   int dlsym_unlink (char *path);
+  int dlsym_remove (char *path);
 
 
   // File API (stdio)
   FILE* dlsym_fopen   (const char *filename, const char *mode);
   FILE* dlsym_fdopen  (int fd, const char *mode);
-  int  dlsym_fclose   (FILE *stream);
+  int   dlsym_fclose  (FILE *stream);
 
   size_t dlsym_fread  (void *ptr, size_t size, size_t nmemb, FILE *stream);
   size_t dlsym_fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream);
@@ -92,42 +93,42 @@
 
 
   // Directory API
-  DIR* dlsym_opendir(char *dirname);
-  DIR* dlsym_opendir64(char *dirname);
-  int dlsym_closedir(DIR*);
+  DIR* dlsym_opendir   (char *dirname);
+  DIR* dlsym_opendir64 (char *dirname);
+  int  dlsym_closedir  (DIR*);
 
-  struct dirent * dlsym_readdir(DIR *dirp);
-  struct dirent64 * dlsym_readdir64(DIR *dirp);
+  struct dirent * dlsym_readdir     (DIR *dirp);
+  struct dirent64 * dlsym_readdir64 (DIR *dirp);
 
-  int dlsym_mkdir(char *path, mode_t mode);
-  int dlsym_rmdir(char *path);
+  int dlsym_mkdir (char *path, mode_t mode);
+  int dlsym_rmdir (char *path);
 
 
   // Proccess API
-  int dlsym_fork(void);
+  int dlsym_fork (void);
 
-  int dlsym_pipe(int pipefd[2]);
+  int dlsym_pipe (int pipefd[2]);
 
-  int dlsym_dup(int fd);
-  int dlsym_dup2(int fd, int fd2);
+  int dlsym_dup  (int fd);
+  int dlsym_dup2 (int fd, int fd2);
 
-  void dlsym_exit(int status);
+  void dlsym_exit (int status);
 
 
   // Manager API
-  int dlsym_chdir(char * path);
-  int dlsym_chmod( char *path, mode_t mode);
-  int dlsym_fchmod(int fd, mode_t mode);
-  int dlsym_chown(char *path, uid_t owner, gid_t group);
-  int dlsym_fcntl(int fd, int cmd, long arg);
-  int dlsym_access(const char *path, int mode);
-  char *dlsym_realpath(const char *restrict path, char *restrict resolved_path);
-  int dlsym_fsync(int fd);
-  int dlsym_flock(int fd, int operation);
+  int dlsym_chdir  (char * path);
+  int dlsym_chmod  ( char *path, mode_t mode);
+  int dlsym_fchmod (int fd, mode_t mode);
+  int dlsym_chown  (char *path, uid_t owner, gid_t group);
+  int dlsym_fcntl  (int fd, int cmd, long arg);
+  int dlsym_access (const char *path, int mode);
+  char *dlsym_realpath (const char *restrict path, char *restrict resolved_path);
+  int dlsym_fsync (int fd);
+  int dlsym_flock (int fd, int operation);
 
 
   // Memory API
-  void *dlsym_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
+  void *dlsym_mmap (void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 
 
   /* ................................................................... */

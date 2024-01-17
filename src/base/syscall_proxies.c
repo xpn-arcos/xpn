@@ -54,6 +54,7 @@
 
   int     (*real_rename)(const char *, const  char *) = NULL;
   int     (*real_unlink)(char *) = NULL;
+  int     (*real_remove)(char *) = NULL;
 
   FILE*   (*real_fopen )(const char *, const char *) = NULL;
   FILE*   (*real_fdopen)(int, const char *)          = NULL;
@@ -381,6 +382,17 @@
     }
     
     return real_unlink((char *)path);
+  }
+
+  int dlsym_remove(char *path)
+  {
+    debug_info("dlsym_unlink: before remove...\n");
+
+    if (real_remove == NULL){
+        real_remove = (int (*)(char *)) dlsym(RTLD_NEXT,"remove");
+    }
+    
+    return real_remove((char *)path);
   }
 
 

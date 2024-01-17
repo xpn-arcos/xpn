@@ -1192,12 +1192,52 @@
 
       debug_info("[bypass]\t xpn_unlink\n");
       ret = (xpn_unlink(skip_xpn_prefix(path)));
+      debug_info("[bypass]\t xpn_unlink -> %d\n", ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t dlsym_unlink\n");
       ret = dlsym_unlink((char *)path);
+      debug_info("[bypass]\t dlsym_unlink -> %d\n", ret);
+    }
+
+    return ret;
+  }
+
+  int remove(const char *path)
+  {
+    int ret = -1;
+
+    debug_info("[bypass] >> Before remove...\n");
+    debug_info("[bypass]    1) Path %s\n", path);
+
+    if (is_xpn_prefix(path))
+    {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      struct stat buf;
+      ret = xpn_stat(skip_xpn_prefix(path), &buf);
+      if ((buf.st_mode & S_IFMT) == S_IFREG) 
+      {
+        debug_info("[bypass]\t xpn_unlink\n");
+        ret = (xpn_unlink(skip_xpn_prefix(path)));
+        debug_info("[bypass]\t xpn_unlink -> %d\n", ret);
+      }
+      else if ((buf.st_mode & S_IFMT) == S_IFDIR)
+      {
+        debug_info("[bypass]\t xpn_rmdir\n");
+        ret = xpn_rmdir( (skip_xpn_prefix(path)) );
+        debug_info("[bypass]\t xpn_rmdir -> %d\n", ret);
+      }
+
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("[bypass]\t dlsym_remove\n");
+      ret = dlsym_remove((char *)path);
     }
 
     return ret;
