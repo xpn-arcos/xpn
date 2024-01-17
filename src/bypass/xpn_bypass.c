@@ -147,7 +147,6 @@ struct generic_fd fdstable_get ( int fd )
 int fdstable_put ( struct generic_fd fd )
 {
   debug_info("[bypass] >> Before fdstable_put....\n");
-  debug_info("[bypass]    1) fd  => %p\n", fd);
 
   for (int i = fdstable_first_free; i < fdstable_size; ++i)
   {
@@ -169,7 +168,7 @@ int fdstable_put ( struct generic_fd fd )
   if ( fdstable[old_size].type == FD_FREE ) {
     fdstable[old_size] = fd;
 
-    debug_info("[bypass]\t fdstable_put -> fd %d ; type: %d ; real_fd: %d\n", old_size + PLUSXPN, fdstable[i].type, fdstable[i].real_fd);
+    debug_info("[bypass]\t fdstable_put -> fd %ld ; type: %d ; real_fd: %d\n", old_size + PLUSXPN, fdstable[old_size].type, fdstable[old_size].real_fd);
     debug_info("[bypass] << After fdstable_put....\n");
 
     return old_size + PLUSXPN;
@@ -414,7 +413,6 @@ DIR fdsdirtable_getfd ( DIR * dir )
   struct generic_fd virtual_fd = fdstable_get ( aux_dirp.fd );
   aux_dirp.fd = virtual_fd.real_fd;
 
-  debug_info("[bypass]\t fdsdirtable_getfd -> %p\n", aux_dirp);
   debug_info("[bypass] << After fdsdirtable_getfd....\n");
 
   return aux_dirp;
@@ -1687,9 +1685,10 @@ size_t fread ( void *ptr, size_t size, size_t nmemb, FILE *stream )
       return -1;
     }
 
+    int buf_size = size * nmemb;
+
     debug_info("[bypass]\t try to xpn_read %d, %p, %d\n", virtual_fd.real_fd, ptr, buf_size);
 
-    int buf_size = size * nmemb;
     ret = xpn_read(virtual_fd.real_fd, ptr, buf_size);
     ret = ret / size; // Number of items read
 
@@ -1738,9 +1737,9 @@ size_t fwrite ( const void *ptr, size_t size, size_t nmemb, FILE *stream )
       return -1;
     }
 
-    debug_info("[bypass]\t try to xpn_write %d, %p, %d\n", virtual_fd.real_fd, ptr, buf_size);
-    
     int buf_size = size * nmemb;
+
+    debug_info("[bypass]\t try to xpn_write %d, %p, %d\n", virtual_fd.real_fd, ptr, buf_size);
     ret = xpn_write(virtual_fd.real_fd, ptr, buf_size);
     ret = ret / size; // Number of items Written
 
@@ -1827,7 +1826,7 @@ long ftell ( FILE *stream )
 
     ret = xpn_lseek(virtual_fd.real_fd, 0, SEEK_CUR);
 
-    debug_info("[bypass]\t xpn_lseek %d -> %d\n", virtual_fd.real_fd, ret);
+    debug_info("[bypass]\t xpn_lseek %d -> %ld\n", virtual_fd.real_fd, ret);
   }
   // Not an XPN partition. We must link with the standard library
   else
@@ -1836,7 +1835,7 @@ long ftell ( FILE *stream )
 
     ret = dlsym_ftell(stream);
 
-    debug_info("[bypass]\t dlsym_ftell -> %d\n", ret);
+    debug_info("[bypass]\t dlsym_ftell -> %ld\n", ret);
   }
 
   debug_info("[bypass] << After ftell....\n");
@@ -2147,8 +2146,8 @@ pid_t fork ( void )
 int pipe ( int pipefd[2] )
 {
   debug_info("[bypass] >> Before pipe()\n");
-  debug_info("[bypass]    1) fd1 %s\n", pipefd[0]);
-  debug_info("[bypass]    2) fd2 %s\n", pipefd[1]);
+  debug_info("[bypass]    1) fd1 %d\n", pipefd[0]);
+  debug_info("[bypass]    2) fd2 %d\n", pipefd[1]);
   debug_info("[bypass]\t try to dlsym_pipe\n");
 
   int ret = dlsym_pipe(pipefd);
