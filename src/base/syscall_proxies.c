@@ -54,6 +54,7 @@
 
   int     (*real_rename)(const char *, const  char *) = NULL;
   int     (*real_unlink)(char *) = NULL;
+  int     (*real_remove)(char *) = NULL;
 
   FILE*   (*real_fopen )(const char *, const char *) = NULL;
   FILE*   (*real_fdopen)(int, const char *)          = NULL;
@@ -63,6 +64,7 @@
   size_t  (*real_fwrite)(const void *, size_t, size_t, FILE *) = NULL;
 
   int     (*real_fseek)(FILE *, long int, int) = NULL;
+  long    (*real_ftell)(FILE *) = NULL;
   int     (*real_feof) (FILE *) = NULL;
 
   DIR*              (*real_opendir  )(char*) = NULL;
@@ -382,6 +384,17 @@
     return real_unlink((char *)path);
   }
 
+  int dlsym_remove(char *path)
+  {
+    debug_info("dlsym_unlink: before remove...\n");
+
+    if (real_remove == NULL){
+        real_remove = (int (*)(char *)) dlsym(RTLD_NEXT,"remove");
+    }
+    
+    return real_remove((char *)path);
+  }
+
 
   //
   // File API (stdio)
@@ -488,6 +501,22 @@
     int ret = real_fseek(stream, offset, whence);
 
     debug_info("dlsym_fseek: (%p,%d,%d) return %d\n",stream, offset, whence, ret);
+
+    return ret;
+  }
+
+  long dlsym_ftell(FILE *stream)
+  {
+    debug_info("dlsym_ftell: before ftell...\n");
+    debug_info("dlsym_ftell: stream => %p\n",stream);
+
+    if (real_ftell== NULL) {
+        real_ftell = (long (*)(FILE *)) dlsym(RTLD_NEXT,"ftell");
+    }
+    
+    int ret = real_ftell(stream);
+
+    debug_info("dlsym_ftell: (%p) return %d\n",stream, ret);
 
     return ret;
   }

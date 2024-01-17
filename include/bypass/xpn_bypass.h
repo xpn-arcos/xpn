@@ -153,7 +153,7 @@
   ssize_t write  (int fildes, const void *buf, size_t nbyte);
 
   ssize_t pread  (int fd, void *buf, size_t count, off_t offset);
-  ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
+  ssize_t pwrite (int fd, const void *buf, size_t count, off_t offset);
 
   off_t   lseek   (int fildes, off_t offset, int whence);
   off64_t lseek64 (int fd,   off64_t offset, int whence);
@@ -169,6 +169,7 @@
 
   int rename     (const char *old_path, const char *new_path);
   int unlink     (const char *path);
+  int remove     (const char *path);
 
 
   // File API (stdio)
@@ -181,27 +182,28 @@
   size_t fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream);
 
   int  fseek      (FILE *stream, long int offset, int whence);
+  long ftell      (FILE *stream);
   int  dlsym_feof (FILE *stream);
 
 
   // Directory API
 
-  int   mkdir  (const char *path, mode_t mode);
-  DIR * opendir(const char *dirname);
+  int   mkdir   (const char *path, mode_t mode);
+  DIR * opendir (const char *dirname);
 
-  struct dirent   *readdir  (DIR *dirp);
-  struct dirent64 *readdir64(DIR *dirp);
+  struct dirent   *readdir   (DIR *dirp);
+  struct dirent64 *readdir64 (DIR *dirp);
 
-  int closedir(DIR *dirp);
-  int rmdir   (const char *path);
+  int closedir (DIR *dirp);
+  int rmdir    (const char *path);
 
 
   // Proccess API
 
-  int fork (void);
-  int dup  (int fildes);
-  int dup2 (int fildes, int fildes2);
-  void exit(int status);
+  int fork  (void);
+  int dup   (int fildes);
+  int dup2  (int fildes, int fildes2);
+  void exit (int status);
 
 
   // Manager API
@@ -213,9 +215,9 @@
   int    fcntl    (int fd, int cmd, long arg);
   int    access   (const char *path, int mode);
   char * realpath (const char *restrict path, char *restrict resolved_path);
-  char * __realpath_chk(const char * path, char * resolved_path, size_t resolved_len);
+  char * __realpath_chk (const char * path, char * resolved_path, size_t resolved_len);
   int    fsync (int fd);
-  int flock(int fd, int operation);
+  int    flock (int fd, int operation);
 
 
   /* ................................................................... */

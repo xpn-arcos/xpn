@@ -1192,12 +1192,52 @@
 
       debug_info("[bypass]\t xpn_unlink\n");
       ret = (xpn_unlink(skip_xpn_prefix(path)));
+      debug_info("[bypass]\t xpn_unlink -> %d\n", ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
     {
       debug_info("[bypass]\t dlsym_unlink\n");
       ret = dlsym_unlink((char *)path);
+      debug_info("[bypass]\t dlsym_unlink -> %d\n", ret);
+    }
+
+    return ret;
+  }
+
+  int remove(const char *path)
+  {
+    int ret = -1;
+
+    debug_info("[bypass] >> Before remove...\n");
+    debug_info("[bypass]    1) Path %s\n", path);
+
+    if (is_xpn_prefix(path))
+    {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      struct stat buf;
+      ret = xpn_stat(skip_xpn_prefix(path), &buf);
+      if ((buf.st_mode & S_IFMT) == S_IFREG) 
+      {
+        debug_info("[bypass]\t xpn_unlink\n");
+        ret = (xpn_unlink(skip_xpn_prefix(path)));
+        debug_info("[bypass]\t xpn_unlink -> %d\n", ret);
+      }
+      else if ((buf.st_mode & S_IFMT) == S_IFDIR)
+      {
+        debug_info("[bypass]\t xpn_rmdir\n");
+        ret = xpn_rmdir( (skip_xpn_prefix(path)) );
+        debug_info("[bypass]\t xpn_rmdir -> %d\n", ret);
+      }
+
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("[bypass]\t dlsym_remove\n");
+      ret = dlsym_remove((char *)path);
     }
 
     return ret;
@@ -1270,8 +1310,9 @@
 
     if(virtual_fd.type == FD_XPN)
     {
-      debug_info("[bypass]\t try to dlsym_fdopen\n");
-      fp = dlsym_fdopen(1, mode);
+      debug_info("[bypass]\t try to dlsym_fdopen 1\n");
+      //fp = dlsym_fdopen(1, mode);
+      fp = dlsym_fopen("/dev/null", mode);
       debug_info("[bypass]\t dlsym_fdopen -> %p\n", fp);
 
       fp->_fileno = fd;
@@ -1279,7 +1320,7 @@
     // Not an XPN partition. We must link with the standard library
     else
     {
-      debug_info("[bypass]\t try to dlsym_fdopen\n");
+      debug_info("[bypass]\t try to dlsym_fdopen 2\n");
       fp = dlsym_fdopen(fd, mode);
       debug_info("[bypass]\t dlsym_fdopen -> %p\n", fp);
     }
@@ -1346,6 +1387,7 @@
       int buf_size = size * nmemb;
       debug_info("[bypass]\t try to xpn_read %d, %p, %d\n", virtual_fd.real_fd, ptr, buf_size);
       ret = xpn_read(virtual_fd.real_fd, ptr, buf_size);
+      ret = ret / size; // Number of items read
       debug_info("[bypass]\t xpn_read %d, %p, %d -> %ld\n", virtual_fd.real_fd, ptr, buf_size, ret);
     }
     // Not an XPN partition. We must link with the standard library
@@ -1386,6 +1428,7 @@
       int buf_size = size * nmemb;
       debug_info("[bypass]\t try to xpn_read %d, %p, %d\n", virtual_fd.real_fd, ptr, buf_size);
       ret = xpn_write(virtual_fd.real_fd, ptr, buf_size);
+      ret = ret / size; // Number of items Written
       debug_info("[bypass]\t xpn_read %d, %p, %d -> %ld\n", virtual_fd.real_fd, ptr, buf_size, ret);
     }
     // Not an XPN partition. We must link with the standard library
@@ -1414,9 +1457,9 @@
       // We must initialize expand if it has not been initialized yet.
       xpn_adaptor_keepInit ();
 
-      debug_info("[bypass]\t xpn_fseek %d,%ld,%d\n", fd, offset, whence);
+      debug_info("[bypass]\t xpn_fseek %d,%ld,%d\n", virtual_fd.real_fd, offset, whence);
       ret = xpn_lseek(virtual_fd.real_fd, offset, whence);
-      debug_info("[bypass]\t xpn_fseek %d,%ld,%d -> %d\n", fd, offset, whence, ret);
+      debug_info("[bypass]\t xpn_fseek %d,%ld,%d -> %d\n", virtual_fd.real_fd, offset, whence, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
@@ -1427,6 +1470,37 @@
     }
 
     debug_info("[bypass] << After fseek...\n");
+    return ret;
+  }
+
+  long ftell(FILE *stream)
+  {
+    debug_info("[bypass] >> Before ftell....\n");
+    debug_info("[bypass]    * stream = %p\n", stream);
+
+    long ret = -1;
+
+    int fd = fileno(stream);
+    struct generic_fd virtual_fd = fdstable_get ( fd );
+
+    if(virtual_fd.type == FD_XPN)
+    {
+      // We must initialize expand if it has not been initialized yet.
+      xpn_adaptor_keepInit ();
+
+      debug_info("[bypass]\t xpn_lseek %d\n", virtual_fd.real_fd);
+      ret = xpn_lseek(virtual_fd.real_fd, 0, SEEK_CUR);
+      debug_info("[bypass]\t xpn_lseek %d -> %d\n", virtual_fd.real_fd, ret);
+    }
+    // Not an XPN partition. We must link with the standard library
+    else
+    {
+      debug_info("[bypass]\t try to dlsym_ftell\n");
+      ret = dlsym_ftell(stream);
+      debug_info("[bypass]\t dlsym_ftell -> %d\n", ret);
+    }
+
+    debug_info("[bypass] << After ftell....\n");
     return ret;
   }
 
@@ -1447,7 +1521,7 @@
 
       int ret1, ret2;
 
-      debug_info("[bypass]\t xpn_fseek %d\n", virtual_fd.real_fd);
+      debug_info("[bypass]\t xpn_lseek %d\n", virtual_fd.real_fd);
       ret1 = xpn_lseek(virtual_fd.real_fd, 0, SEEK_CUR);
       if (ret != -1){
         return ret;
@@ -1463,7 +1537,7 @@
       else{
         ret = 1;
       }
-      debug_info("[bypass]\t xpn_fseek %d -> %d\n", virtual_fd.real_fd, ret);
+      debug_info("[bypass]\t xpn_lseek %d -> %d\n", virtual_fd.real_fd, ret);
     }
     // Not an XPN partition. We must link with the standard library
     else
