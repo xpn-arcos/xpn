@@ -57,7 +57,7 @@
     //struct nfi_mpi_server_connector sd;
 
     // client stub
-    mpiClient_param_st params;
+    mpi_client_param_st params;
   };
 
   struct nfi_mpi_server_fhandle
