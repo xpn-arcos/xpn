@@ -299,29 +299,29 @@ MPI_Comm mpi_server_comm_accept ( mpi_server_param_st *params )
   return params->client;
 }
 
-int mpi_server_comm_close ( MPI_Comm fd )
+int mpi_server_comm_disconnect ( MPI_Comm fd )
 {
   int ret;
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_close] >> Begin\n", -1);
+  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] >> Begin\n", -1);
 
   if (fd == MPI_COMM_NULL)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_close] ERROR: The MPI_Comm is NULL\n", -1);
+    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] ERROR: The MPI_Comm is NULL\n", -1);
     return 1;
   }
 
   // Disconnect
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_close] Disconnect\n", -1);
+  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] Disconnect\n", -1);
 
   ret = MPI_Comm_disconnect(&fd);
   if (MPI_SUCCESS != ret)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_close] ERROR: MPI_Comm_disconnect fails\n", -1);
+    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] ERROR: MPI_Comm_disconnect fails\n", -1);
     return -1;
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_close] << End\n", -1);
+  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] << End\n", -1);
 
   // Return OK
   return 1;
@@ -345,12 +345,12 @@ ssize_t mpi_server_comm_read_operation ( mpi_server_param_st *params, MPI_Comm f
   }
   if (size < 0)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] ERROR: ERROR: size < 0\n", params->rank);
+    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] ERROR: size < 0\n", params->rank);
     return  -1;
   }
 
   // Get message
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_close] Read operation\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] Read operation\n", params->rank);
 
   ret = MPI_Recv(data, size, MPI_INT, MPI_ANY_SOURCE, 0, fd, &status);
   if (MPI_SUCCESS != ret) {
@@ -383,12 +383,12 @@ ssize_t mpi_server_comm_write_data ( mpi_server_param_st *params, MPI_Comm fd, c
   }
   if (size < 0)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] ERROR: ERROR: size < 0\n", params->rank);
+    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] ERROR: size < 0\n", params->rank);
     return -1;
   }
 
   // Send message
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] Write message\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] Write data\n", params->rank);
 
   ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, 1, fd);
   if (MPI_SUCCESS != ret) {
@@ -419,12 +419,12 @@ ssize_t mpi_server_comm_read_data ( mpi_server_param_st *params, MPI_Comm fd, ch
   }
   if (size < 0)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] ERROR: ERROR: size < 0\n", params->rank);
+    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] ERROR: size < 0\n", params->rank);
     return  -1;
   }
 
   // Get message
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] Read message\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] Read data\n", params->rank);
 
   ret = MPI_Recv(data, size, MPI_CHAR, rank_client_id, 1, fd, &status);
   if (MPI_SUCCESS != ret) {

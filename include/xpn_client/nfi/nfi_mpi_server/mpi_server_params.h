@@ -65,7 +65,7 @@
     // server arguments
     int    argc;
     char **argv;
-  } mpiClient_param_st;
+  } mpi_client_param_st;
 
   /* ... Functions / Funciones ......................................... */
 
