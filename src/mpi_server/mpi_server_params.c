@@ -26,11 +26,17 @@
 #include "base/ns.h"
 
 
+/* ... Const / Const ................................................. */
+
+
+/* ... Global variables / Variables globales ........................ */
+
+
 /* ... Functions / Funciones ......................................... */
 
 void mpi_server_params_show ( mpi_server_param_st *params )
 {
-  DEBUG_BEGIN() ;
+  debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show] >> Begin\n", params->rank);
 
   printf(" * MPI server current configuration:\n");
   printf("\t-ns <path>:\t'%s'\n",   params->dns_file) ;
@@ -46,13 +52,12 @@ void mpi_server_params_show ( mpi_server_param_st *params )
   printf("\t-d <path>:\t'%s'\n",   params->dirbase) ;
   printf("\t-f <path>:\t'%s'\n",   params->shutdown_file) ;
 
-  DEBUG_END() ;
+  debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show] << End\n", params->rank);
 }
-
 
 void mpi_server_params_show_usage ( void )
 {
-  DEBUG_BEGIN() ;
+  debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show_usage] >> Begin\n", -1);
 
   printf("Usage:\n");
   printf("\t-ns <path>: file for service name\n") ;
@@ -60,13 +65,12 @@ void mpi_server_params_show_usage ( void )
   printf("\t-d  <string>: name of the base directory\n") ;
   printf("\t-f  <path>: file of servers to be shutdown\n") ;
 
-  DEBUG_END() ;
+  debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show_usage] << End\n", -1);
 }
-
 
 int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] )
 {
-  DEBUG_BEGIN() ;
+  debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_get] >> Begin\n", params->rank);
 
   // set default values
   params->argc = argc ;
@@ -80,6 +84,8 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
   strcpy(params->dns_file,  MPI_SERVER_DNS_FILE_DEFAULT) ;
 
   // update user requests
+  debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_get] Get user configuration\n", params->rank);
+
   for (int i=0; i<argc; i++)
   {
     switch (argv[i][0])
@@ -88,11 +94,13 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
         switch (argv[i][1])
         {
           case 'n':
-            if ((strlen(argv[i]) == 3) && (argv[i][2] == 's')){
+            if ((strlen(argv[i]) == 3) && (argv[i][2] == 's'))
+            {
               strcpy(params->dns_file, argv[i+1]);
               i++;
             }
-            if ((strlen(argv[i]) == 4) && (argv[i][2] == 't') && (argv[i][3] == 'p')){
+            if ((strlen(argv[i]) == 4) && (argv[i][2] == 't') && (argv[i][3] == 'p'))
+            {
               params->thread_mode = TH_OP;
               i++;
             }
@@ -110,8 +118,7 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
             {
               int thread_mode_aux = atoi(argv[i+1]);
 
-              if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP)
-              {
+              if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP) {
                 params->thread_mode = thread_mode_aux;
               }
               else {
@@ -120,16 +127,16 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
             }
             else
             {
-              if (strcmp("without", argv[i+1]) == 0){
+              if (strcmp("without", argv[i+1]) == 0) {
                 params->thread_mode = TH_NOT;
               }
-              else if (strcmp("pool", argv[i+1]) == 0){
+              else if (strcmp("pool", argv[i+1]) == 0) {
                 params->thread_mode = TH_POOL;
               }
-              else if (strcmp("on_demand", argv[i+1]) == 0){
+              else if (strcmp("on_demand", argv[i+1]) == 0) {
                 params->thread_mode = TH_OP;
               }
-              else{
+              else {
                 printf("ERROR: unknown option %s\n", argv[i+1]);
               }
             }
@@ -148,8 +155,9 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
     }
   }
 
+  debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_get] << End\n", params->rank);
+
   // return OK
-  DEBUG_END() ;
   return 1;
 }
 
