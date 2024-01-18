@@ -33,12 +33,12 @@
 
 /* ... Functions / Funciones ......................................... */
 
-int mpiClient_comm_init ( mpiClient_param_st *params )
+int mpi_client_comm_init ( mpi_client_param_st *params )
 {
   int ret, provided, claimed;
   int flag = 0;
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_init] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_init] >> Begin\n");
 
   // MPI_Init
   MPI_Initialized(&flag);
@@ -50,73 +50,73 @@ int mpiClient_comm_init ( mpiClient_param_st *params )
     // Threads disable
     if (!params->xpn_thread)
     { 
-      debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_init] MPI Init without threads\n");
+      debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_init] MPI Init without threads\n");
 
       ret = MPI_Init(NULL, NULL);
       if (MPI_SUCCESS != ret)
       {
-        printf("[MPI_CLIENT_COMM] [mpiClient_comm_init] ERROR: MPI_Init fails\n");
+        printf("[MPI_CLIENT_COMM] [mpi_client_comm_init] ERROR: MPI_Init fails\n");
         return -1;
       }
     }
     // Threads enable
     else
     {
-      debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_init] MPI Init with threads\n");
+      debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_init] MPI Init with threads\n");
 
       ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided);
       if (MPI_SUCCESS != ret)
       {
-        printf("[MPI_CLIENT_COMM] [mpiClient_comm_init] ERROR: MPI_Init_thread fails\n");
+        printf("[MPI_CLIENT_COMM] [mpi_client_comm_init] ERROR: MPI_Init_thread fails\n");
         return -1;
       }
 
       MPI_Query_thread(&claimed);
       if (claimed != MPI_THREAD_MULTIPLE) {
-        printf("[MPI_CLIENT_COMM] [mpiClient_comm_init] INFO: your MPI implementation seem not supporting thereads\n");
+        printf("[MPI_CLIENT_COMM] [mpi_client_comm_init] INFO: your MPI implementation seem not supporting thereads\n");
       }
     }
   }
 
   // params->rank = comm_rank()
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_init] Get MPI rank\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_init] Get MPI rank\n");
 
   ret = MPI_Comm_rank(MPI_COMM_WORLD, &(params->rank));
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_comm_init] ERROR: MPI_Comm_rank fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_init] ERROR: MPI_Comm_rank fails\n");
     return -1;
   }
 
   // params->size = comm_size()
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_init] Get MPI size\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_init] Get MPI size\n");
 
   ret = MPI_Comm_size(MPI_COMM_WORLD, &(params->size));
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_comm_init] ERROR: MPI_Comm_size fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_init] ERROR: MPI_Comm_size fails\n");
     return -1;
   }
 
   // set is_mpi_server as the used protocol
   setenv("XPN_IS_MPI_SERVER", "1", 1);
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_init] server %d available at %s\n", params->rank, params->port_name);
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_init] >> End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_init] server %d available at %s\n", params->rank, params->port_name);
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_init] >> End\n");
 
   // Return OK
   return 1;
 }
 
-int mpiClient_comm_destroy ( mpiClient_param_st *params )
+int mpi_client_comm_destroy ( mpi_client_param_st *params )
 {
   int ret;
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_destroy] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_destroy] >> Begin\n");
 
   if (params->size < 0)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_comm_destroy] ERROR: number of process is negative\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_destroy] ERROR: number of process is negative\n");
     return -1;
   }
 
@@ -128,12 +128,12 @@ int mpiClient_comm_destroy ( mpiClient_param_st *params )
 
   if (!flag)
   {
-    debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_destroy] MPI Finalize\n");
+    debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_destroy] MPI Finalize\n");
 
     ret = PMPI_Finalize();
     if (MPI_SUCCESS != ret)
     {
-      printf("[MPI_CLIENT_COMM] [mpiClient_comm_destroy] ERROR: PMPI_Finalize fails\n");
+      printf("[MPI_CLIENT_COMM] [mpi_client_comm_destroy] ERROR: PMPI_Finalize fails\n");
       return -1;
     }
   }
@@ -141,23 +141,23 @@ int mpiClient_comm_destroy ( mpiClient_param_st *params )
   //Indicates mpi_server are the used protocolo 
   unsetenv("XPN_IS_MPI_SERVER");
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_destroy] << End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_destroy] << End\n");
 
   // Return OK
   return 1;
 }
 
-int mpiClient_comm_connect ( mpiClient_param_st *params )
+int mpi_client_comm_connect ( mpi_client_param_st *params )
 {
   int ret;
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_connect] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] >> Begin\n");
 
   int version_len;
   char version[MPI_MAX_LIBRARY_VERSION_STRING];
   MPI_Get_library_version(version, &version_len);
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_connect] MPI Version: %s\n", version);
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] MPI Version: %s\n", version);
 
   if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
   {
@@ -168,7 +168,7 @@ int mpiClient_comm_connect ( mpiClient_param_st *params )
     do
     {
       // Lookup port name on nameserver
-      debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_connect] Lookup server %s\n", params->srv_name);
+      debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] Lookup server %s\n", params->srv_name);
 
       ret = ns_lookup("mpi_server", params->srv_name, aux_srv_ip, params->port_name);
       if (ret < 0)
@@ -188,25 +188,25 @@ int mpiClient_comm_connect ( mpiClient_param_st *params )
 
     if (ret < 0)
     {
-      printf("[MPI_CLIENT_COMM] [mpiClient_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->srv_name, params->port_name);
+      printf("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->srv_name, params->port_name);
       return -1;
     }
   }
   else
   {
     // Lookup port name on nameserver
-    debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_connect] Lookup server %s\n", params->port_name);
+    debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] Lookup server %s\n", params->port_name);
 
     ret = MPI_Lookup_name(params->srv_name, MPI_INFO_NULL, params->port_name);
     if (MPI_SUCCESS != ret)
     {
-      printf("[MPI_CLIENT_COMM] [mpiClient_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->port_name, params->port_name);
+      printf("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->port_name, params->port_name);
       return -1;
     }
   }
 
   // Connect...
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_connect] Connect port %s\n", params->port_name);
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] Connect port %s\n", params->port_name);
 
   int connect_retries = 0;
   do
@@ -229,29 +229,29 @@ int mpiClient_comm_connect ( mpiClient_param_st *params )
   
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_comm_connect] ERROR: MPI_Comm_connect fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: MPI_Comm_connect fails\n");
     return -1;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_connect] << End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] << End\n");
 
   // Return OK
   return 1;
 }
 
-int mpiClient_comm_disconnect ( mpiClient_param_st *params )
+int mpi_client_comm_disconnect ( mpi_client_param_st *params )
 {
   int ret;
   int data;
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_disconnect] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] >> Begin\n");
 
   int rank;
   data = MPI_SERVER_DISCONNECT;
   MPI_Comm_rank(MPI_COMM_WORLD, &(rank));
   if (rank == 0)
   {
-    debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_disconnect] Send disconnect message\n");
+    debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] Send disconnect message\n");
 
     MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
   }
@@ -259,22 +259,22 @@ int mpiClient_comm_disconnect ( mpiClient_param_st *params )
   MPI_Barrier(MPI_COMM_WORLD);
   
   // Disconnect
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_disconnect] Disconnect\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] Disconnect\n");
 
   ret = MPI_Comm_disconnect(&(params->server));
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_comm_disconnect] ERROR: MPI_Comm_disconnect fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: MPI_Comm_disconnect fails\n");
     return -1;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_disconnect] << End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] << End\n");
 
   // Return OK
   return 1;
 }
 
-int mpiClient_comm_locality ( mpiClient_param_st *params )
+int mpi_client_comm_locality ( mpi_client_param_st *params )
 {
   int ret;
   int data;
@@ -282,12 +282,12 @@ int mpiClient_comm_locality ( mpiClient_param_st *params )
   char serv_name [HOST_NAME_MAX];
   MPI_Status status;
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_locality] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] >> Begin\n");
 
   // Locality disable
   if (!params->xpn_locality)
   { 
-    debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_locality] Locality disable\n");
+    debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Locality disable\n");
 
     params->locality = 0;
     return 1;
@@ -298,37 +298,37 @@ int mpiClient_comm_locality ( mpiClient_param_st *params )
 
   data = MPI_SERVER_GETNODENAME;
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_locality] Send gethostname operation\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Send gethostname operation\n");
 
   ret = MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_comm_disconnect] ERROR: MPI_Send fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: MPI_Send fails\n");
     return -1;
   }
 
   ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, 0, 1, params->server, &status);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_comm_disconnect] ERROR: MPI_Recv fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: MPI_Recv fails\n");
     return -1;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_locality] Receive host name: %s\n", serv_name);
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive host name: %s\n", serv_name);
 
   //Dirbase
   ret = MPI_Recv(params->dirbase, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_comm_disconnect] ERROR: MPI_Recv fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: MPI_Recv fails\n");
     return -1;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_locality] Receive dirbase: %s\n", params->dirbase);
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive dirbase: %s\n", params->dirbase);
 
   //Semaphore
   /*
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_locality] Receive semaphore\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive semaphore\n");
 
   ret = MPI_Recv(params->sem_name_server, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
   if (MPI_SUCCESS != ret) {
@@ -347,18 +347,18 @@ int mpiClient_comm_locality ( mpiClient_param_st *params )
     params->locality = 0;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_locality] Locality: %d\n", params->locality);
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_comm_locality] << End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Locality: %d\n", params->locality);
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] << End\n");
     
   // Return OK
   return 1;
 }
 
-ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, __attribute__((__unused__)) char *msg_id )
+ssize_t mpi_client_write_operation ( MPI_Comm fd, char *data, ssize_t size, __attribute__((__unused__)) char *msg_id )
 {
   int ret;
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_write_operation] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] >> Begin\n");
 
   // Check params
   if (size == 0) {
@@ -366,7 +366,7 @@ ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, __att
   }
   if (size < 0)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_write_operation] ERROR: size < 0\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_write_operation] ERROR: size < 0\n");
     return -1;
   }
 
@@ -375,26 +375,26 @@ ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, __att
   // TODO
 
   // Send message
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_write_operation] Write operation\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] Write operation\n");
 
   ret = MPI_Send(data, size, MPI_INT, 0, 0, fd);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_write_operation] ERROR: MPI_Send < 0\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_write_operation] ERROR: MPI_Send < 0\n");
     size = 0;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_write_operation] << End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] << End\n");
 
   // Return bytes written
   return size;
 }
 
-ssize_t mpiClient_write_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
+ssize_t mpi_client_write_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
 {
   int ret;
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_write_data] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_data] >> Begin\n");
 
   // Check params
   if (size == 0) {
@@ -402,7 +402,7 @@ ssize_t mpiClient_write_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_
   }
   if (size < 0)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_write_data] ERROR: size < 0\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_write_data] ERROR: size < 0\n");
     return -1;
   }
 
@@ -411,27 +411,27 @@ ssize_t mpiClient_write_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_
   // TODO
 
   // Send message
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_write_data] Write data\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_data] Write data\n");
 
   ret = MPI_Send(data, size, MPI_CHAR, 0, 1, fd);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_write_data] ERROR: MPI_Send fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_write_data] ERROR: MPI_Send fails\n");
     size = 0;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_write_data] << End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_data] << End\n");
 
   // Return bytes written
   return size;
 }
 
-ssize_t mpiClient_read_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
+ssize_t mpi_client_read_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
 {
   int ret;
   MPI_Status status;
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_read_data] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_read_data] >> Begin\n");
 
   // Check params
   if (size == 0) {
@@ -439,7 +439,7 @@ ssize_t mpiClient_read_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_i
   }
   if (size < 0)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_read_data] ERROR: size < 0\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_read_data] ERROR: size < 0\n");
     return  -1;
   }
 
@@ -448,16 +448,16 @@ ssize_t mpiClient_read_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_i
   // TODO
 
   // Get message
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_read_data] Read data\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_read_data] Read data\n");
 
   ret = MPI_Recv(data, size, MPI_CHAR, 0, 1, fd, &status);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpiClient_read_data] ERROR: MPI_Recv fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_read_data] ERROR: MPI_Recv fails\n");
     size = 0;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpiClient_read_data] << End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_read_data] << End\n");
 
   // Return bytes read
   return size;

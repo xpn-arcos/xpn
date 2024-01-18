@@ -113,7 +113,7 @@ void mpi_server_dispatcher ( struct st_th th )
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] Client %d close\n", th.id, th.rank_client_id);
 
-  mpi_server_comm_close((MPI_Comm)th.sd);
+  mpi_server_comm_disconnect((MPI_Comm)th.sd);
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] End\n", th.id);
 }
