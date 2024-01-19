@@ -87,8 +87,7 @@ int ns_unpublish(char *dns_file, char *protocol, char *param_srv_name)
     return -1;
   }
 
-
-  sprintf(new_dns_file, "%saux", dns_file);
+  sprintf(new_dns_file, "%saux%d", dns_file, rand());
 
   new_dns_fd = fopen(new_dns_file, "w");
   if (NULL == new_dns_fd)
