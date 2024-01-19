@@ -35,22 +35,22 @@
 
   enum nfi_mpi_server_err
   {
-    MPI_SERVERERR_PARAM         = 0,
-    MPI_SERVERERR_MEMORY        = 1,
-    MPI_SERVERERR_URL           = 2,
-    MPI_SERVERERR_MNTCONNECTION = 3,
-    MPI_SERVERERR_MOUNT         = 4,
-    MPI_SERVERERR_NFSCONNECTION = 5,    
-    MPI_SERVERERR_GETATTR       = 6,
-    MPI_SERVERERR_LOOKUP        = 7,
-    MPI_SERVERERR_READ          = 8,
-    MPI_SERVERERR_WRITE         = 9,
-    MPI_SERVERERR_CREATE        = 10,
-    MPI_SERVERERR_REMOVE        = 11,
-    MPI_SERVERERR_MKDIR         = 12,
-    MPI_SERVERERR_READDIR       = 13,
-    MPI_SERVERERR_STATFS        = 14,
-    MPI_SERVERERR_NOTDIR        = 15,
+    MPI_SERVER_ERR_PARAM         = 0,
+    MPI_SERVER_ERR_MEMORY        = 1,
+    MPI_SERVER_ERR_URL           = 2,
+    MPI_SERVER_ERR_MNTCONNECTION = 3,
+    MPI_SERVER_ERR_MOUNT         = 4,
+    MPI_SERVER_ERR_NFSCONNECTION = 5,    
+    MPI_SERVER_ERR_GETATTR       = 6,
+    MPI_SERVER_ERR_LOOKUP        = 7,
+    MPI_SERVER_ERR_READ          = 8,
+    MPI_SERVER_ERR_WRITE         = 9,
+    MPI_SERVER_ERR_CREATE        = 10,
+    MPI_SERVER_ERR_REMOVE        = 11,
+    MPI_SERVER_ERR_MKDIR         = 12,
+    MPI_SERVER_ERR_READDIR       = 13,
+    MPI_SERVER_ERR_STATFS        = 14,
+    MPI_SERVER_ERR_NOTDIR        = 15,
   };
 
 

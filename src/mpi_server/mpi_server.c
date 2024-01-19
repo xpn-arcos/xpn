@@ -121,6 +121,7 @@ void mpi_server_dispatcher ( struct st_th th )
 
 /* ... Functions / Funciones ......................................... */
 
+//Start servers
 int mpi_server_up ( void )
 {
   MPI_Comm     sd;
@@ -236,6 +237,7 @@ int mpi_server_up ( void )
   return 0;
 }
 
+// Stop servers
 int mpi_server_down ( int argc, char *argv[] )
 {
   int      ret, buf;
@@ -341,15 +343,7 @@ int mpi_server_down ( int argc, char *argv[] )
   return 0;
 }
 
-
-
-
-
-
-/*
- * Main
- */
-
+//Main
 int main ( int argc, char *argv[] )
 {
   int    ret = -1;

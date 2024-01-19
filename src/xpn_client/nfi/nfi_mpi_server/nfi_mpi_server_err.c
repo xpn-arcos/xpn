@@ -36,31 +36,31 @@ extern int errno;
 /* ... Functions / Funciones ......................................... */
 
 // TODO: this interface must be changed
-void mpi_server_err(int err)
+void mpi_server_err ( int err )
 {
   debug_info("[MPI_CLIENT_ERR] [mpi_server_err] >> Begin\n");
 
   switch(err)
   {
-    case MPI_SERVERERR_PARAM:
+    case MPI_SERVER_ERR_PARAM:
       errno = -1;
       break;
-    case MPI_SERVERERR_MEMORY:
+    case MPI_SERVER_ERR_MEMORY:
       errno = -1;
       break;
-    case MPI_SERVERERR_URL:
+    case MPI_SERVER_ERR_URL:
       errno = -1;
       break;
-    case MPI_SERVERERR_MNTCONNECTION:
+    case MPI_SERVER_ERR_MNTCONNECTION:
       errno = -1;
       break;
-    case MPI_SERVERERR_MOUNT:
+    case MPI_SERVER_ERR_MOUNT:
       errno = -1;
       break;
-    case MPI_SERVERERR_NFSCONNECTION:
+    case MPI_SERVER_ERR_NFSCONNECTION:
       errno = -1;
       break;
-    case MPI_SERVERERR_GETATTR:
+    case MPI_SERVER_ERR_GETATTR:
       errno = -1;
       break;
   }
