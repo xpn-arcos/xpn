@@ -36,7 +36,7 @@ extern int errno;
 /* ... Functions / Funciones ......................................... */
 
 // TODO: this interface must be changed
-void mpi_server_err(int err)
+void mpi_server_err ( int err )
 {
   debug_info("[MPI_CLIENT_ERR] [mpi_server_err] >> Begin\n");
 

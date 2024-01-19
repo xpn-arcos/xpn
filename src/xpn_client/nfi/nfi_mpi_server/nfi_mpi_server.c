@@ -166,7 +166,6 @@ int nfi_mpi_server_do_request ( struct nfi_mpi_server_server *server_aux, struct
 
   debug_info("[SERV_ID=%s] [NFI_MPI] [nfi_mpi_server_do_request] >> End\n", server_aux->id);
 
-  // return OK
   return 0;
 }
 
@@ -192,9 +191,8 @@ int nfi_mpi_server_keep_connected ( struct nfi_server *serv )
   }
 #endif
 
-  debug_info("[ID=%d] [NFI_MPI] [nfi_mpi_server_keep_connected] >> End\n", serv->id);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_keep_connected] >> End\n", serv->id);
 
-  // return OK
   return (serv->private_info != NULL);
 }
 
@@ -223,7 +221,7 @@ void nfi_2_mpi_server_attr ( struct stat *att, struct nfi_attr *nfi_att )
   att->st_mtime   = nfi_att->at_mtime;   // time of last modification
   att->st_ctime   = nfi_att->at_ctime;   // time of last change
 
-  debug_info("[ID=%d] [NFI_MPI] [nfi_2_mpi_server_attr] >> End\n", -1);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_2_mpi_server_attr] >> End\n", -1);
 }
 
 void mpi_server_2_nfi_attr ( struct nfi_attr *nfi_att, struct stat *att )
@@ -251,7 +249,7 @@ void mpi_server_2_nfi_attr ( struct nfi_attr *nfi_att, struct stat *att )
   nfi_att->at_mtime   = att->st_mtime;                          // time of last modification
   nfi_att->at_ctime   = att->st_ctime;                          // time of last change
 
-  debug_info("[ID=%d] [NFI_MPI] [nfi_2_mpi_server_attr] >> End\n", -1);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_2_mpi_server_attr] >> End\n", -1);
 }
 
 void mpi_server_2_nfi_info( __attribute__((__unused__)) struct nfi_info *nfi_inf, __attribute__((__unused__)) struct nfi_info *mpi_server_inf )
@@ -260,8 +258,9 @@ void mpi_server_2_nfi_info( __attribute__((__unused__)) struct nfi_info *nfi_inf
 
   //TODO
 
-  debug_info("[ID=%d] [NFI_MPI] [mpi_server_2_nfi_info] >> End\n", -1);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [mpi_server_2_nfi_info] >> End\n", -1);
 }
+
 
 /* ... Functions / Funciones ......................................... */
 
@@ -284,30 +283,31 @@ int nfi_mpi_server_init ( char *url, struct nfi_server *serv, __attribute__((__u
   serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops));
   NULL_RET_ERR(serv->ops, MPI_SERVER_ERR_MEMORY);
 
+  // Fill serv->ops...
   bzero(serv->ops, sizeof(struct nfi_ops));
-  serv->ops->nfi_reconnect      = nfi_mpi_server_reconnect;
-  serv->ops->nfi_disconnect     = nfi_mpi_server_disconnect;
+  serv->ops->nfi_reconnect  = nfi_mpi_server_reconnect;
+  serv->ops->nfi_disconnect = nfi_mpi_server_disconnect;
 
-  serv->ops->nfi_open           = nfi_mpi_server_open;
-  serv->ops->nfi_create         = nfi_mpi_server_create;
-  serv->ops->nfi_read           = nfi_mpi_server_read;
-  serv->ops->nfi_write          = nfi_mpi_server_write;
-  serv->ops->nfi_close          = nfi_mpi_server_close;
-  serv->ops->nfi_remove         = nfi_mpi_server_remove;
-  serv->ops->nfi_rename         = nfi_mpi_server_rename;
-  serv->ops->nfi_getattr        = nfi_mpi_server_getattr;
-  serv->ops->nfi_setattr        = nfi_mpi_server_setattr;
+  serv->ops->nfi_open       = nfi_mpi_server_open;
+  serv->ops->nfi_create     = nfi_mpi_server_create;
+  serv->ops->nfi_read       = nfi_mpi_server_read;
+  serv->ops->nfi_write      = nfi_mpi_server_write;
+  serv->ops->nfi_close      = nfi_mpi_server_close;
+  serv->ops->nfi_remove     = nfi_mpi_server_remove;
+  serv->ops->nfi_rename     = nfi_mpi_server_rename;
+  serv->ops->nfi_getattr    = nfi_mpi_server_getattr;
+  serv->ops->nfi_setattr    = nfi_mpi_server_setattr;
 
-  serv->ops->nfi_opendir        = nfi_mpi_server_opendir;
-  serv->ops->nfi_mkdir          = nfi_mpi_server_mkdir;
-  serv->ops->nfi_readdir        = nfi_mpi_server_readdir;
-  serv->ops->nfi_closedir       = nfi_mpi_server_closedir;
-  serv->ops->nfi_rmdir          = nfi_mpi_server_rmdir;
+  serv->ops->nfi_opendir    = nfi_mpi_server_opendir;
+  serv->ops->nfi_mkdir      = nfi_mpi_server_mkdir;
+  serv->ops->nfi_readdir    = nfi_mpi_server_readdir;
+  serv->ops->nfi_closedir   = nfi_mpi_server_closedir;
+  serv->ops->nfi_rmdir      = nfi_mpi_server_rmdir;
 
-  serv->ops->nfi_preload        = nfi_mpi_server_preload;
-  serv->ops->nfi_flush          = nfi_mpi_server_flush;
+  serv->ops->nfi_preload    = nfi_mpi_server_preload;
+  serv->ops->nfi_flush      = nfi_mpi_server_flush;
 
-  serv->ops->nfi_statfs         = nfi_mpi_server_statfs;
+  serv->ops->nfi_statfs     = nfi_mpi_server_statfs;
 
   // parse url...
   ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
@@ -417,7 +417,6 @@ int nfi_mpi_server_init ( char *url, struct nfi_server *serv, __attribute__((__u
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] << End\n", serv->id);
 
-  // return OK
   return 0;
 }
 
@@ -460,10 +459,8 @@ int nfi_mpi_server_destroy ( struct nfi_server *serv )
   FREE_AND_NULL(serv->url);
   FREE_AND_NULL(serv->server);
 
-  //serv->protocol = -1;
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_destroy] << End\n", serv->id);
 
-  // return OK
   return 0;
 }
 
@@ -535,7 +532,6 @@ int nfi_mpi_server_disconnect ( struct nfi_server *serv )
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_disconnect] << End\n", serv->id);
 
-  // return OK
   return 0;
 }
 
@@ -584,7 +580,6 @@ int nfi_mpi_server_reconnect(struct nfi_server *serv)
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_reconnect] << End\n", serv->id);
 
-  // return OK
   return 0;
 }
 
@@ -634,7 +629,7 @@ int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, struct nfi_fhandl
   NULL_RET_ERR(fh_aux, MPI_SERVER_ERR_MEMORY);
   bzero(fh_aux, sizeof(struct nfi_mpi_server_fhandle));
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] nfi_mpi_server_open(%s)\n", serv->id, url);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] nfi_mpi_server_open(%s)\n", serv->id, dir);
 
   /************** LOCAL *****************/
   if (server_aux->params.locality)
@@ -696,7 +691,7 @@ int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, struct nfi_fhandl
   }
   /*****************************************/
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] nfi_mpi_server_open(%s)=%d\n", serv->id, url, fh_aux->fd);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] nfi_mpi_server_open(%s)=%d\n", serv->id, dir, fh_aux->fd);
 
   fho->type    = NFIFILE;
   fho->priv_fh = NULL;
@@ -1288,7 +1283,6 @@ int nfi_mpi_server_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] >> End\n", serv->id);
 
-  // Return OK
   return ret;
 }
 
@@ -1523,9 +1517,10 @@ int nfi_mpi_server_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] ParseURL(%s)= %s; %s\n", serv->id, fh->url, server, dir);
   
+  // copy private information...
   //fh_aux     = (struct nfi_mpi_server_fhandle *) fh->priv_fh; //TODO: fstat
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] nfi_mpi_server_getattr(%s)\n", serv->id, fh->url);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] nfi_mpi_server_getattr(%s)\n", serv->id, dir);
 
   /************** LOCAL *****************/
   if (server_aux->params.locality)
@@ -1564,13 +1559,12 @@ int nfi_mpi_server_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
   }
   /*****************************************/
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] nfi_mpi_server_getattr(%s)=%d\n", serv->id, fh->url, req.status);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] nfi_mpi_server_getattr(%s)=%d\n", serv->id, dir, req.status);
 
   mpi_server_2_nfi_attr(attr, &req.attr);
 
   debug_info("[NFI_MPI] [nfi_mpi_server_getattr] >> End\n");
 
-  // return status
   return req.status;
 }
 
@@ -1611,6 +1605,7 @@ int nfi_mpi_server_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
   return 0;
 }
 
+// Directories API
 int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh)
 {
   int ret;

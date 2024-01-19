@@ -772,9 +772,9 @@ void mpi_server_op_rm_async ( mpi_server_param_st *params, __attribute__((__unus
   strcat(path, head->u_st_mpi_server_msg.op_rm.path);
 
   // do rm
-  int ret = filesystem_unlink(path);
+  filesystem_unlink(path);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm_async] unlink(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_rm.path, ret);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm_async] unlink(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_rm.path, 0);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm_async] << End\n", params->rank);
 }
 
