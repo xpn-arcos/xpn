@@ -851,30 +851,6 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr 
   return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
 {
   int ret, cont, diff;

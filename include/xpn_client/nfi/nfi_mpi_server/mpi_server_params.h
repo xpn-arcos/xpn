@@ -51,8 +51,8 @@
     int locality;
 
     // server port and comm
-    char port_name[MPI_MAX_PORT_NAME];
-    char  srv_name[MPI_MAX_PORT_NAME];
+    char port_name [MPI_MAX_PORT_NAME];
+    char  srv_name [MPI_MAX_PORT_NAME];
 
     MPI_Comm server;
 
