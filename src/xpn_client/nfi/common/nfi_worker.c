@@ -113,7 +113,7 @@ int nfi_worker_init(struct nfi_worker * wrk, struct nfi_server * serv, int threa
     pthread_attr_setdetachstate( & attr, PTHREAD_CREATE_DETACHED);
     pthread_attr_setstacksize( & attr, (256 * KB));
 
-    debug_info("[NFI_WORKER] pthread_create(%lu)", (unsigned long int) pthread_self())
+    debug_info("[NFI_WORKER] pthread_create(%lu)", (unsigned long int) pthread_self());
 
     ret = pthread_create( & (wrk -> pth), & attr, (void * ( * )(void * ))(nfi_worker_run), (void * ) wrk);
 
@@ -149,7 +149,7 @@ ssize_t nfi_worker_wait(struct nfi_worker * wrk)
 
   if (wrk -> thread) 
   {
-    debug_info("[NFI_WORKER] nfi_worker_wait(%lu) with_threads", (unsigned long int) pthread_self())
+    debug_info("[NFI_WORKER] nfi_worker_wait(%lu) with_threads", (unsigned long int) pthread_self());
     pthread_mutex_lock( & (wrk -> mt));
 
     while (wrk -> ready) 
@@ -163,11 +163,11 @@ ssize_t nfi_worker_wait(struct nfi_worker * wrk)
 
   if (wrk -> thread) 
   {
-    debug_info("[NFI_WORKER] nfi_worker_unlock(%lu) with_threads", (unsigned long int) pthread_self())
+    debug_info("[NFI_WORKER] nfi_worker_unlock(%lu) with_threads", (unsigned long int) pthread_self());
     pthread_mutex_unlock( & (wrk -> mt));
   } else 
   {
-    debug_info("[NFI_WORKER] nfi_worker_wait(%lu) without_threads", (unsigned long int) pthread_self())
+    debug_info("[NFI_WORKER] nfi_worker_wait(%lu) without_threads", (unsigned long int) pthread_self());
   }
 
   return ret;
@@ -178,7 +178,7 @@ ssize_t nfi_worker_wait(struct nfi_worker * wrk)
 int nfi_worker_end(struct nfi_worker * wrk) 
 {
   if (wrk -> thread) {
-    debug_info("[NFI_WORKER] nfi_worker_end(%lu) with_threads", (unsigned long int) pthread_self())
+    debug_info("[NFI_WORKER] nfi_worker_end(%lu) with_threads", (unsigned long int) pthread_self());
     pthread_mutex_destroy( & (wrk -> mt));
     pthread_cond_destroy( & (wrk -> cnd));
   }

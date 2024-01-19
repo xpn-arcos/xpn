@@ -110,14 +110,14 @@
         DEBUG_BEGIN() ;
 
         // wayt no_full
-        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) lock\n", rank_client_id);
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) lock\n", th_arg->rank_client_id);
         pthread_mutex_lock(&(w->m_pool));
         while (w->n_operation == MAX_OPERATIONS){
-          debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) wait c_pool_no_full\n", rank_client_id);
+          debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) wait c_pool_no_full\n", th_arg->rank_client_id);
           pthread_cond_wait(&(w->c_pool_no_full), &(w->m_pool));
         }
 
-        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) copy arguments\n", rank_client_id);
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) copy arguments\n", th_arg->rank_client_id);
 
         // prepare arguments...
         th_arg->id       = th_cont++ ;
@@ -126,15 +126,15 @@
         th_arg->v        = (void *)th_arg ;
 
         // enqueue
-        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", rank_client_id);
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) enqueue\n", th_arg->rank_client_id);
         w->operations_buffer[w->enq_pos] = *th_arg;
         w->enq_pos = (w->enq_pos + 1) % MAX_OPERATIONS;
         w->n_operation++;
 
         // signal no_empty
-        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) signal c_poll_no_empty\n", rank_client_id);
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) signal c_poll_no_empty\n", th_arg->rank_client_id);
         pthread_cond_signal(&(w->c_poll_no_empty));
-        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) unlock\n", rank_client_id);
+        debug_info("[WORKERS] client(%d): worker_pool_enqueue(...) unlock\n", th_arg->rank_client_id);
         pthread_mutex_unlock(&(w->m_pool));
 
         DEBUG_END() ;

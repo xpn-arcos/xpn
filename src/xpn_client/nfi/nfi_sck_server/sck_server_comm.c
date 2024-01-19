@@ -86,7 +86,7 @@ int sckClient_comm_connect ( sckClient_param_st * params )
     } while ((ret < 0) && (lookup_retries < 150));
 
     if (ret < 0) {
-        debug_error("ERROR: DNS Lookup %s Port %s\n", params->server_name, params->port);
+        debug_error("ERROR: DNS Lookup %s Port %s\n", params->server_name, params->port_number);
         return -1;
     }
 

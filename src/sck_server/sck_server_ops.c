@@ -787,7 +787,7 @@ void sck_server_op_mkdir(sck_server_param_st * params, int sd, struct st_sck_ser
   sck_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[SCK_SERVER-OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, s);
+  debug_info("[SCK_SERVER-OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, sd);
 }
 
 void sck_server_op_opendir(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)
@@ -805,7 +805,7 @@ void sck_server_op_opendir(sck_server_param_st * params, int sd, struct st_sck_s
   sck_server_comm_write_data(params, sd, (char * )(unsigned long long * ) & (ret), (unsigned int) sizeof(DIR * ), rank_client_id);
 
   // show debug info
-  debug_info("[SCK_SERVER-OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, s);
+  debug_info("[SCK_SERVER-OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, sd);
 }
 
 void sck_server_op_readdir(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)
@@ -828,7 +828,7 @@ void sck_server_op_readdir(sck_server_param_st * params, int sd, struct st_sck_s
   sck_server_comm_write_data(params, sd, (char * ) & ret_entry, sizeof(struct st_sck_server_direntry), rank_client_id);
 
   // show debug info
-  debug_info("[SCK_SERVER-OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s);
+  debug_info("[SCK_SERVER-OPS] (ID=%s) READDIR(%s)\n", params->srv_name, sd);
 }
 
 void sck_server_op_closedir(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)
@@ -843,7 +843,7 @@ void sck_server_op_closedir(sck_server_param_st * params, int sd, struct st_sck_
   sck_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[SCK_SERVER-OPS] (ID=%s) READDIR(%s)\n", params->srv_name, s);
+  debug_info("[SCK_SERVER-OPS] (ID=%s) READDIR(%s)\n", params->srv_name, sd);
 }
 
 void sck_server_op_rmdir(sck_server_param_st * params, int sd, struct st_sck_server_msg * head, int rank_client_id)

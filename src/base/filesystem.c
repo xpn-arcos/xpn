@@ -160,7 +160,7 @@ int filesystem_creat(char * pathname, mode_t mode)
     // Try to creat the file
     ret = real_posix_creat(pathname, mode);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: open(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret);
+        debug_warning("[FILE_POSIX]: open(pathname:%s, mode:%d) -> %d\n", pathname, mode, ret);
         //perror("open: ") ;
     }
 

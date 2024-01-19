@@ -788,7 +788,7 @@
         ret = real_posix_read(fh_aux->fd, buffer, size) ;
         //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-        debug_info("[NFI-MPI] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret)
+        debug_info("[NFI-MPI] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret);
         if (ret < 0) {
           debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
@@ -817,7 +817,7 @@
 
         real_posix_close(fd);
 
-        debug_info("[NFI-MPI] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret)
+        debug_info("[NFI-MPI] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret);
         if (ret < 0) {
           debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno) ;
           return -1;
@@ -1226,7 +1226,7 @@
 
     // private_info...
     server_aux = (struct nfi_mpi_server_server *) serv->private_info;
-    debug_info("[NFI-MPI] nfi_mpi_server_remove(%s): begin %s\n",server_aux->id, url) ;
+    debug_info("[NFI-MPI] nfi_mpi_server_remove(%s): begin %s\n",server_aux->id, new_url) ;
     if (server_aux == NULL){
       mpi_server_err(MPI_SERVERERR_PARAM) ;
       return -1;
