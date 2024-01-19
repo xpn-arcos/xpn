@@ -883,7 +883,7 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   struct st_mpi_server_msg msg;
   struct st_mpi_server_read_req req;
 
-  debug_info("[NFI_MPI] [mpi_client_comm_init] >> Begin\n");
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] >> Begin\n", serv->id);
 
   // Check arguments...
   NULL_RET_ERR(serv, MPI_SERVER_ERR_PARAM);
@@ -891,7 +891,9 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, MPI_SERVER_ERR_PARAM);
 
-  // private_info
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] Get server private info\n", serv->id);
+
   server_aux = (struct nfi_mpi_server_server *) serv->private_info;
   if (server_aux == NULL)
   {
@@ -899,25 +901,30 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
     return -1;
   }
 
-  debug_info("[NFI_MPI] nfi_mpi_server_read(%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
+  // private_info file handle
   fh_aux = (struct nfi_mpi_server_fhandle *) fh->priv_fh;
+
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] nfi_mpi_server_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
 
   /************** LOCAL *****************/
   if(server_aux->params.locality)
   {
     if (server_aux->params.xpn_session)
     {
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] real_posix_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
+
       real_posix_lseek(fh_aux->fd, offset, SEEK_SET); //TODO: check error
+
       //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
       ret = real_posix_read(fh_aux->fd, buffer, size);
       //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-
-      debug_info("[NFI_MPI] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret)
       if (ret < 0)
       {
-        debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno);
+        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: real_posix_read reads zero bytes from '%d' in server %d\n", serv->id, fh_aux->fd, serv->server);
         return -1;
       }
+
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] real_posix_read(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
     }
     else
     {
@@ -928,32 +935,42 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
       strcat(path, "/");
       strcat(path, fh_aux->path);
 
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] real_posix_read(%s, %ld, %ld)\n", serv->id, path, offset, size);
+
       fd = real_posix_open(path, O_RDONLY);
       if (fd < 0)
       {
-        debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno);
+        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: real_posix_open fails to open '%d' in server %s.\n", serv->id, fh_aux->fd, serv->server);
         return -1;
       }
 
       real_posix_lseek(fd, offset, SEEK_SET); //TODO: check error
+
       //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
       ret = real_posix_read(fd, buffer, size);
       //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-      //
 
       real_posix_close(fd);
 
-      debug_info("[NFI_MPI] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret)
       if (ret < 0)
       {
-        debug_error("real_posix_read reads zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno);
-        return -1;
+        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: real_posix_read reads zero bytes from '%d' in server %d\n", serv->id, fh_aux->fd, serv->server);        return -1;
       }
+
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] real_posix_read(%s, %ld, %ld)=%d\n", serv->id, path, offset, size, ret);
     }
   }
   /************** REMOTE ****************/
   else
   {
+    //Debug
+    if (server_aux->params.xpn_session){
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
+    }
+    else {
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
+    }
+
     //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
     if (server_aux->params.xpn_session)
@@ -966,51 +983,41 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
       msg.type = MPI_SERVER_READ_FILE_WOS;
       memccpy(msg.u_st_mpi_server_msg.op_read.path, fh_aux->path, 0, PATH_MAX);
     }
-
     memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
     msg.u_st_mpi_server_msg.op_read.offset   = offset;
     msg.u_st_mpi_server_msg.op_read.size     = size;
-
-    #ifdef  DBG_IO
-    if (server_aux->params.xpn_session){
-      printf("[NFI_MPI] read: -> fd     %d \n", msg.u_st_mpi_server_msg.op_read.fd);
-    }
-    else {
-      printf("[NFI_MPI] read: -> path   %s \n", msg.u_st_mpi_server_msg.op_read.path);
-    }
-    printf("[NFI_MPI] read: -> offset %d \n", (int)msg.u_st_mpi_server_msg.op_read.offset);
-    printf("[NFI_MPI] read: -> size   %d \n", msg.u_st_mpi_server_msg.op_read.size);
-    #endif
 
     //ret = mpi_server_write_operation(server_aux->sd, &msg);
     ret = mpi_server_write_operation(server_aux->params.server, &msg);
     if (ret < 0)
     {
-      fprintf(stderr,"ERROR: (1)nfi_mpi_server_read: Error on write operation\n");
+      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_server_write_operation fails\n", serv->id);
       return -1;
     }
 
     // read n times: number of bytes + read data (n bytes)
     cont = 0;
-
     do
     {
       ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_read_req), msg.id);
-      debug_info("[NFI_MPI] nfi_mpi_server_read(ID=%s): (1)mpi_client_read_data = %d.\n",server_aux->id, ret);
       if (ret < 0)
       {
-        fprintf(stderr,"ERROR: (2)nfi_mpi_server_read: Error on write operation\n");
+        printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_client_read_data fails\n", serv->id);
         return -1;
       }
+      
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] mpi_client_read_data=%d.\n",serv->id, ret);
 
       if (req.size > 0)
       {
-        debug_info("[NFI_MPI] nfi_mpi_server_read(ID=%s): (2)mpi_client_read_data = %d. size = %d\n",server_aux->id, ret, req.size);
+        debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] mpi_client_read_data(%ld)\n",serv->id, req.size);
+
         ret = mpi_client_read_data(server_aux->params.server, (char *)buffer+cont, req.size, msg.id);
-        debug_info("[NFI_MPI] nfi_mpi_server_read(ID=%s): (2)mpi_client_read_data = %d.\n",server_aux->id, ret);
         if (ret < 0) {
-          fprintf(stderr,"ERROR: (3)nfi_mpi_server_read: Error on read operation\n");
+          printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_client_read_data fails\n", serv->id);
         }
+
+        debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] mpi_client_read_data(%ld)=%d\n",serv->id, req.size, ret);
       }
       cont = cont + req.size;
       diff = msg.u_st_mpi_server_msg.op_read.size - cont;
@@ -1019,19 +1026,20 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
 
     if (req.size < 0)
     {
-      fprintf(stderr,"ERROR: nfi_mpi_server_read: Fail read %s off %d size %d (err:%d).\n",fh->url,(int)offset,(int)size,(int)req.size);
+      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: nfi_mpi_server_read reads zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
       mpi_server_err(MPI_SERVER_ERR_READ);
       return -1;
     }
 
     ret = cont;
   }
+  /*****************************************/
 
-  debug_info("[NFI_MPI] [mpi_client_comm_init] >> End\n");
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] nfi_mpi_server_read(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] >> End\n", serv->id);
 
   return ret;
 }
-
 
 ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
 {
@@ -1041,7 +1049,7 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   struct st_mpi_server_msg msg;
   struct st_mpi_server_write_req req;
 
-  debug_info("[NFI_MPI] [mpi_client_comm_init] >> Begin\n");
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] >> Begin\n", serv->id);
 
   // Check arguments...
   if (size == 0){
@@ -1054,32 +1062,39 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   NULL_RET_ERR(serv->private_info, MPI_SERVER_ERR_PARAM);
 
   // private_info...
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] Get server private info\n", serv->id);
+
   server_aux = (struct nfi_mpi_server_server *) serv->private_info;
   if (server_aux == NULL)
   {
     mpi_server_err(MPI_SERVER_ERR_PARAM);
     return -1;
   }
-
-  debug_info("[NFI_MPI] nfi_mpi_server_write(ID=%s): begin off %d size %d\n",server_aux->id,(int)offset, (int)size);
+  
+  // private_info file handle
   fh_aux     = (struct nfi_mpi_server_fhandle *) fh->priv_fh;
+
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] nfi_mpi_server_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
 
   /************** LOCAL *****************/
   if (server_aux->params.locality)
   {
     if (server_aux->params.xpn_session)
     {
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
+
       real_posix_lseek(fh_aux->fd, offset, SEEK_SET); //TODO: check error
+
       //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
       ret = real_posix_write(fh_aux->fd, buffer, size);
-      debug_info("[NFI_MPI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int)offset, size, ret);
       //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-
       if (ret < 0)
       {
-        debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno);
+        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: real_posix_write writes zero bytes from '%d' in server %d\n", serv->id, fh_aux->fd, serv->server);
         return -1;
       }
+
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_write(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
     }
     else
     {
@@ -1090,32 +1105,46 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
       strcat(path, "/");
       strcat(path, fh_aux->path);
 
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_write(%s, %ld, %ld)\n", serv->id, path, offset, size);
+
       fd = real_posix_open(path, O_WRONLY); // WOS
       if (fd < 0)
       {
-        debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno);
+        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: real_posix_open fails to open '%d' in server %s.\n", serv->id, fh_aux->fd, serv->server);
         return -1;
       }
 
       real_posix_lseek(fd, offset, SEEK_SET); //TODO: check error
+
       //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
       ret = real_posix_write(fd, buffer, size);
-      debug_info("[NFI_MPI] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int)offset, size, ret);
       //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
       real_posix_close(fd); // WOS
 
       if (ret < 0)
       {
-        debug_error("real_posix_write writes zero bytes from url:%s offset:%ld size:%zu (ret:%zd) errno=%d\n", fh->url, (long int)offset, size, ret, errno);
+        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: real_posix_write writes zero bytes from '%d' in server %d\n", serv->id, fh_aux->fd, serv->server);        return -1;
         return -1;
       }
+
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_read(%s, %ld, %ld)=%d\n", serv->id, path, offset, size, ret);
     }
 
   }
   /************** REMOTE ****************/
   else
   {
+    //Debug
+    if (server_aux->params.xpn_session){
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
+    }
+    else {
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
+    }
+
+    //bzero(&msg, sizeof(struct st_mpi_server_msg));
+
     if (server_aux->params.xpn_session)
     {
       msg.type = MPI_SERVER_WRITE_FILE_WS;
@@ -1130,21 +1159,10 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
     msg.u_st_mpi_server_msg.op_write.offset = offset;
     msg.u_st_mpi_server_msg.op_write.size   = size;
 
-#ifdef  DBG_IO
-    if (server_aux->params.xpn_session){
-      printf("[NFI_MPI] write: -> fd     %d \n",msg.u_st_mpi_server_msg.op_write.fd);
-    }
-    else {
-      printf("[NFI_MPI] write: -> path   %s \n",msg.u_st_mpi_server_msg.op_write.path);
-    }
-    printf("[NFI_MPI] write: -> offset %d \n",(int)msg.u_st_mpi_server_msg.op_write.offset);
-    printf("[NFI_MPI] write: -> size   %d \n",msg.u_st_mpi_server_msg.op_write.size);
-#endif
-
     ret = mpi_server_write_operation(server_aux->params.server, &msg);
     if(ret < 0)
     {
-      fprintf(stderr,"(1)ERROR: nfi_mpi_server_write(ID=%s): Error on write operation\n",server_aux->id);
+      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_server_write_operation fails\n", serv->id);
       return -1;
     }
 
@@ -1159,22 +1177,25 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
       buffer_size = MAX_BUFFER_SIZE;
     }
 
+    // writes n times: number of bytes + write data (n bytes)
     do
     {
       if (diff > buffer_size)
       {
         ret = mpi_client_write_data(server_aux->params.server, (char *)buffer + cont, buffer_size, msg.id);
         if (ret < 0) {
-          fprintf(stderr,"(2)ERROR: nfi_mpi_server_read(ID=%s): Error on write operation\n",server_aux->id);
+          printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_write_data fails\n", serv->id);
         }
       }
       else
       {
         ret = mpi_client_write_data(server_aux->params.server, (char *)buffer + cont, diff, msg.id);
         if (ret < 0) {
-          fprintf(stderr,"(2)ERROR: nfi_mpi_server_read(ID=%s): Error on write operation\n",server_aux->id);
+          printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_write_data fails\n", serv->id);
         }
       }
+
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] mpi_client_write_data=%d.\n",serv->id, ret);
 
       cont = cont + ret; //Send bytes
       diff = size - cont;
@@ -1184,57 +1205,28 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
     ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_write_req), msg.id);
     if (ret < 0) 
     {
-      fprintf(stderr,"(3)ERROR: nfi_mpi_server_write(ID=%s): Error on write operation\n",server_aux->id);
+      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_read_data fails\n", serv->id);
       return -1;
     }
 
-    debug_info("[NFI_MPI] nfi_mpi_server_write(ID=%s): write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
+    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] mpi_client_read_data=%d.\n",serv->id, ret);
+
     if (req.size < 0)
     {
-      fprintf(stderr,"ERROR: nfi_mpi_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n",server_aux->id,fh->url,(int)offset,(int)size,(int)req.size);
+      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: nfi_mpi_server_write writes zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
       mpi_server_err(MPI_SERVER_ERR_WRITE);
       return -1;
     }
 
     ret = cont;
   }
+  /*****************************************/
 
-  debug_info("[NFI_MPI] [mpi_client_comm_init] >> End\n");
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] nfi_mpi_server_write(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] >> End\n", serv->id);
 
   return ret;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 int nfi_mpi_server_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 {
