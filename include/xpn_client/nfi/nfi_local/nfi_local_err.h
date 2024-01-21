@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -35,22 +35,22 @@
 
   enum nfi_local_err
   {
-    LOCALERR_PARAM         = 0,
-    LOCALERR_MEMORY        = 1,
-    LOCALERR_URL           = 2,
-    LOCALERR_MNTCONNECTION = 3,
-    LOCALERR_MOUNT         = 4,
-    LOCALERR_NFSCONNECTION = 5,   
-    LOCALERR_GETATTR       = 6,
-    LOCALERR_LOOKUP        = 7,
-    LOCALERR_READ          = 8,
-    LOCALERR_WRITE         = 9,
-    LOCALERR_CREATE        = 10,
-    LOCALERR_REMOVE        = 11,
-    LOCALERR_MKDIR         = 12,
-    LOCALERR_READDIR       = 13,
-    LOCALERR_STATFS        = 14,
-    LOCALERR_NOTDIR        = 15,
+    LOCAL_ERR_PARAM         = 0,
+    LOCAL_ERR_MEMORY        = 1,
+    LOCAL_ERR_URL           = 2,
+    LOCAL_ERR_MNTCONNECTION = 3,
+    LOCAL_ERR_MOUNT         = 4,
+    LOCAL_ERR_NFSCONNECTION = 5,   
+    LOCAL_ERR_GETATTR       = 6,
+    LOCAL_ERR_LOOKUP        = 7,
+    LOCAL_ERR_READ          = 8,
+    LOCAL_ERR_WRITE         = 9,
+    LOCAL_ERR_CREATE        = 10,
+    LOCAL_ERR_REMOVE        = 11,
+    LOCAL_ERR_MKDIR         = 12,
+    LOCAL_ERR_READDIR       = 13,
+    LOCAL_ERR_STATFS        = 14,
+    LOCAL_ERR_NOTDIR        = 15,
   };
   
 
