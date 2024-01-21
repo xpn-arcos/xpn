@@ -42,11 +42,11 @@
   int      mpi_server_comm_init      ( mpi_server_param_st *params );
   int      mpi_server_comm_destroy   ( mpi_server_param_st *params );
 
-  MPI_Comm mpi_server_comm_accept    ( mpi_server_param_st *params );
-  int      mpi_server_comm_close     ( MPI_Comm fd );
+  MPI_Comm mpi_server_comm_accept     ( mpi_server_param_st *params );
+  int      mpi_server_comm_disconnect ( MPI_Comm fd );
 
-  ssize_t mpi_server_comm_write_data     ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int  rank_client_id );
   ssize_t mpi_server_comm_read_operation ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int *rank_client_id );
+  ssize_t mpi_server_comm_write_data     ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int  rank_client_id );
   ssize_t mpi_server_comm_read_data      ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int  rank_client_id );
 
 

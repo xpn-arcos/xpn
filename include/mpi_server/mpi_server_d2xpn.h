@@ -52,7 +52,7 @@
   
   /* ... Functions / Funciones ......................................... */
 
-  int mpi_server_d2xpn ( mpi_server_param_st *params, char *origen, char *destino );
+  int mpi_server_d2xpn ( mpi_server_param_st *params, char *src, char *dst );
 
 
   /* ................................................................... */

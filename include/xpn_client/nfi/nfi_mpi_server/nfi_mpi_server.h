@@ -52,12 +52,12 @@
   struct nfi_mpi_server_server
   {
     // old stuff of XPN
-    char   id[PATH_MAX];
-    char path[PATH_MAX];
+    char   id [PATH_MAX];
+    char path [PATH_MAX];
     //struct nfi_mpi_server_connector sd;
 
     // client stub
-    mpiClient_param_st params;
+    mpi_client_param_st params;
   };
 
   struct nfi_mpi_server_fhandle
