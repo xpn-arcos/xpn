@@ -32,4 +32,8 @@ configure~
 configure
 include/config.h
 include/config.h.in~
-
+Makefile.in
+include/config.h.in
+src/base/Makefile.in
+src/utils/Makefile.in
+src/xpn_client/Makefile.in
