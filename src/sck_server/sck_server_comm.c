@@ -1,3 +1,4 @@
+
 /*
  *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
@@ -18,14 +19,19 @@
  *
  */
 
-  /* ... Include / Inclusion ........................................... */
 
-   //#define DEBUG 1
+/* ... Include / Inclusion ........................................... */
 
-   #include "sck_server/sck_server_comm.h"
+#include "sck_server/sck_server_comm.h"
 
 
-  /* ... Functions / Funciones ......................................... */
+/* ... Const / Const ................................................. */
+
+
+/* ... Global variables / Variables globales ........................ */
+
+
+/* ... Functions / Funciones ......................................... */
 
 int sck_server_comm_init ( sck_server_param_st * params )
 {

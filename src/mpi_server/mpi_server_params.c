@@ -39,18 +39,18 @@ void mpi_server_params_show ( mpi_server_param_st *params )
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show] >> Begin\n", params->rank);
 
   printf(" * MPI server current configuration:\n");
-  printf("\t-ns <path>:\t'%s'\n",   params->dns_file) ;
+  printf("\t-ns <path>:\t'%s'\n",   params->dns_file);
   if(params->thread_mode == TH_NOT){
-    printf("\t-t:\t\tWithout threads\n") ;
+    printf("\t-t:\t\tWithout threads\n");
   }
   if(params->thread_mode == TH_POOL){
-    printf("\t-t:\t\tThread Pool Activated\n") ;
+    printf("\t-t:\t\tThread Pool Activated\n");
   }
   if(params->thread_mode == TH_OP){
-    printf("\t-t:\t\tThread on demand\n") ;
+    printf("\t-t:\t\tThread on demand\n");
   }
-  printf("\t-d <path>:\t'%s'\n",   params->dirbase) ;
-  printf("\t-f <path>:\t'%s'\n",   params->shutdown_file) ;
+  printf("\t-d <path>:\t'%s'\n",   params->dirbase);
+  printf("\t-f <path>:\t'%s'\n",   params->shutdown_file);
 
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show] << End\n", params->rank);
 }
@@ -60,10 +60,10 @@ void mpi_server_params_show_usage ( void )
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show_usage] >> Begin\n", -1);
 
   printf("Usage:\n");
-  printf("\t-ns <path>: file for service name\n") ;
-  printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
-  printf("\t-d  <string>: name of the base directory\n") ;
-  printf("\t-f  <path>: file of servers to be shutdown\n") ;
+  printf("\t-ns <path>: file for service name\n");
+  printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n");
+  printf("\t-d  <string>: name of the base directory\n");
+  printf("\t-f  <path>: file of servers to be shutdown\n");
 
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show_usage] << End\n", -1);
 }
@@ -73,15 +73,15 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_get] >> Begin\n", params->rank);
 
   // set default values
-  params->argc = argc ;
-  params->argv = argv ;
-  params->size = 0 ;
-  params->rank = 0 ;
-  params->thread_mode = TH_NOT ;
-  strcpy(params->port_name, "") ;
-  strcpy(params->srv_name,  "") ;
-  strcpy(params->dirbase,   MPI_SERVER_DIRBASE_DEFAULT) ;
-  strcpy(params->dns_file,  MPI_SERVER_DNS_FILE_DEFAULT) ;
+  params->argc = argc;
+  params->argv = argv;
+  params->size = 0;
+  params->rank = 0;
+  params->thread_mode = TH_NOT;
+  strcpy(params->port_name, "");
+  strcpy(params->srv_name,  "");
+  strcpy(params->dirbase,   MPI_SERVER_DIRBASE_DEFAULT);
+  strcpy(params->dns_file,  MPI_SERVER_DNS_FILE_DEFAULT);
 
   // update user requests
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_get] Get user configuration\n", params->rank);
@@ -157,7 +157,6 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
 
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_get] << End\n", params->rank);
 
-  // return OK
   return 1;
 }
 
