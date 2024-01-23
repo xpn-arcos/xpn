@@ -112,8 +112,8 @@ void sck_server_dispatcher ( struct st_th th )
     th_arg.rank_client_id = th.rank_client_id;
     th_arg.wait4me        = FALSE;
 
-    sck_server_run(th_arg);
-    //base_workers_launch ( &worker, &th_arg, sck_server_run ); //TODO
+    //sck_server_run(th_arg); //TODO
+    base_workers_launch ( &worker, &th_arg, sck_server_run );
 
     debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_dispatcher] Worker launched\n", th.id);
   }
@@ -139,7 +139,7 @@ int sck_server_up ( void )
 
   printf("\n");
   printf(" -------------------\n");
-  printf(" > Starting servers... (%s)\n", serv_name);
+  printf(" Starting servers (%s)\n", serv_name);
   printf(" -------------------\n");
   printf("\n");
 
@@ -224,11 +224,11 @@ int sck_server_up ( void )
   // Wait and finalize for all current workers
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_up] Workers destroy\n", 0);
 
-  base_workers_destroy( & worker);
+  base_workers_destroy(&worker);
 
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_up] socket destroy\n", 0);
 
-  sck_server_comm_destroy( & params);
+  sck_server_comm_destroy(&params);
 
   // Close semaphores
   /*
@@ -241,7 +241,6 @@ int sck_server_up ( void )
   sem_unlink(params.sem_name_server);
   */
 
-  // return OK
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_up] >> End\n", 0);
 
   return 0;
@@ -331,7 +330,7 @@ int sck_server_down( void ) //TODO
 }
 
 //Main
-int main(int argc, char * argv[])
+int main( int argc, char *argv[] )
 {
   int    ret = -1;
   char * exec_name = NULL;
@@ -352,7 +351,8 @@ int main(int argc, char * argv[])
   debug_info("[TH_ID=%d] [SCK_SERVER] [main] Get server params\n", 0);
 
   ret = sck_server_params_get(&params, argc, argv);
-  if (ret < 0) {
+  if (ret < 0)
+  {
     sck_server_params_show_usage();
     return -1;
   }
@@ -373,7 +373,7 @@ int main(int argc, char * argv[])
   }
   else
   {
-    debug_info("[TH_ID=%d] [SCK_SERVER] [main] UP servers\n", 0);
+    debug_info("[TH_ID=%d] [SCK_SERVER] [main] Up servers\n", 0);
 
     ret = sck_server_up();
   }

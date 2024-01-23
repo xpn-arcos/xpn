@@ -214,7 +214,7 @@ int mpi_server_up ( void )
   // Wait and finalize for all current workers
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers destroy\n", 0);
 
-  base_workers_destroy( &worker );
+  base_workers_destroy(&worker);
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm destroy\n", 0);
 
@@ -231,7 +231,6 @@ int mpi_server_up ( void )
   sem_unlink(params.sem_name_server);
   */
 
-  // return OK
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] >> End\n", 0);
 
   return 0;
@@ -365,7 +364,8 @@ int main ( int argc, char *argv[] )
   debug_info("[TH_ID=%d] [MPI_SERVER] [main] Get server params\n", 0);
 
   ret = mpi_server_params_get(&params, argc, argv);
-  if (ret < 0) {
+  if (ret < 0)
+  {
     mpi_server_params_show_usage();
     return -1;
   }
@@ -386,7 +386,7 @@ int main ( int argc, char *argv[] )
   }
   else
   {
-    debug_info("[TH_ID=%d] [MPI_SERVER] [main] UP servers\n", 0);
+    debug_info("[TH_ID=%d] [MPI_SERVER] [main] Up servers\n", 0);
 
     ret = mpi_server_up ();
   }
