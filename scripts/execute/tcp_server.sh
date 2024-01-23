@@ -64,7 +64,7 @@ mkdir -p "${BASE_DIR}/conf/"
 
 # (1/3) build machine file...
 touch    "${BASE_DIR}/conf/machinefile"
-if [ ! -f $MACHINE_FILE ]; then
+if [ ! -f "$MACHINE_FILE" ]; then
     hostname > "${BASE_DIR}/conf/machinefile"
 else
     cp "${MACHINE_FILE}" "${BASE_DIR}/conf/machinefile"
@@ -72,7 +72,7 @@ fi
 
 # (2/3) build xpn.conf.xml file...
 touch "${BASE_DIR}/conf/xpn.conf.xml"
-${XPN_DIR}/scripts/execute/mk_conf.sh --conf        "${BASE_DIR}/conf/xpn.conf.xml" \
+"${XPN_DIR}"/scripts/execute/mk_conf.sh --conf        "${BASE_DIR}/conf/xpn.conf.xml" \
                                       --machinefile "${BASE_DIR}/conf/machinefile" \
                                       --part_size    512k \
                                       --part_name    xpn \
@@ -86,7 +86,7 @@ export XPN_PROFILE="${XPN_DIR}/doc/xpn.profile.example.xml"
 export XPN_CONF="${BASE_DIR}/conf/xpn.conf.xml"
 
 # run the tcp_server...
-${XPN_DIR}/src/tcp_server/xpn_tcp_server -n localhost -p "${PORT_NUMBER}" -ns "${BASE_DIR}/conf/xpn.dns"
+"${XPN_DIR}"/src/tcp_server/xpn_tcp_server -n localhost -p "${PORT_NUMBER}" -ns "${BASE_DIR}/conf/xpn.dns"
 
 # Stop
 echo " End."

@@ -41,7 +41,7 @@ int nfi_local_keep_connected ( struct nfi_server *serv )
   // check params...
   if (NULL == serv)
   {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_keep_connected] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_keep_connected] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 

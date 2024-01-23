@@ -62,13 +62,13 @@ mk_conf_servers() {
   fi
 
   if [[ ! -f ${DEPLOYMENTFILE} ]]; then
-    ${BASE_DIR}/mk_conf.sh --conf         "${CONF_NAME}" \
+    "${BASE_DIR}"/mk_conf.sh --conf         "${CONF_NAME}" \
                            --machinefile  "${MACHINE_FILE}" \
                            --part_size    "${PARTITION_SIZE}" \
                            --part_name    "${PARTITION_NAME}" \
                            --storage_path "${STORAGE_PATH}"
   else
-    ${BASE_DIR}/mk_conf.sh --conf            "${CONF_NAME}" \
+    "${BASE_DIR}"/mk_conf.sh --conf            "${CONF_NAME}" \
                            --deployment_file "${DEPLOYMENTFILE}"
   fi
 }
@@ -97,12 +97,12 @@ start_xpn_servers() {
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/mpi_server/xpn_mpi_server -ns "${WORKDIR}"/dns.txt ${ARGS} &
+            "${BASE_DIR}"/../../src/mpi_server/xpn_mpi_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
   else
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/tcp_server/xpn_tcp_server -ns "${WORKDIR}"/dns.txt ${ARGS} -p 3456 &
+            "${BASE_DIR}"/../../src/tcp_server/xpn_tcp_server -ns "${WORKDIR}"/dns.txt "${ARGS}" -p 3456 &
   fi
 
   sleep 3
@@ -312,7 +312,7 @@ fi
 
 # run 
 case "${ACTION}" in
-      start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+      start)    mk_conf_servers  "config.xml" "${HOSTFILE}" "512k" "xpn" "${XPN_STORAGE_PATH}" "${DEPLOYMENTFILE}"
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers
