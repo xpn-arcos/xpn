@@ -51,9 +51,6 @@ int mpi_server_write_operation ( MPI_Comm sd, struct st_mpi_server_msg *head )
     return -1;
   }
 
-  int rank;
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
   debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] Execute operation: %d -> \n", head->id, head->type);
 
   switch (head->type)

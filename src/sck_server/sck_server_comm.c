@@ -393,6 +393,7 @@ ssize_t sck_server_comm_write_data(sck_server_param_st * params, int fd, char * 
     }
 
     debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] Write data(%d, %d, %d)=%d\n", params->rank, fd, data + cont, size - cont, ret);
+    
     cont += ret;
 
   } while ((ret > 0) && (cont != size));
@@ -441,6 +442,7 @@ ssize_t sck_server_comm_read_data(sck_server_param_st * params, int fd, char * d
     }
 
     debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] Read data(%d, %d, %d)=%d\n", params->rank, fd, data + cont, size - cont, ret);
+    
     cont += ret;
 
   } while ((ret > 0) && (cont != size));
