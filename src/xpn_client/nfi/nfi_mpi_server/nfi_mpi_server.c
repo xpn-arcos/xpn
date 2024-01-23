@@ -769,6 +769,7 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr 
     if (ret < 0)
     {
       debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, path, serv->server);
+      FREE_AND_NULL(fh_aux);
       return ret;
     }
 
@@ -845,7 +846,7 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr 
 
 ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
 {
-  int ret, cont, diff;
+  int    ret, cont, diff;
   struct nfi_mpi_server_server *server_aux;
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
@@ -1020,7 +1021,7 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] >> Begin\n", serv->id);
 
   // Check arguments...
-  if (size == 0){
+  if (size == 0) {
     return 0;
   }
 
@@ -1098,7 +1099,6 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
       debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_read(%s, %ld, %ld)=%d\n", serv->id, path, offset, size, ret);
     }
-
   }
   /************** REMOTE ****************/
   else
