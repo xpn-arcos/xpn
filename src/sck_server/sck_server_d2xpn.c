@@ -80,11 +80,11 @@
  {
     int fd;
 
-    debug_info("[SCK_SERVER_D2XPN] [sck_server_d2xpn_lock] >> Begin: file: %s\n", file);
+    debug_info("[SCK_SERVER_D2XPN] [sck_server_d2xpn_lock] >> Begin\n");
 
     if (NULL == file)
     {
-      printf("[SCK_SERVER_D2XPN] [sck_server_d2xpn_lock] ERROR: invalid file %s\n", file);
+      printf("[SCK_SERVER_D2XPN] [sck_server_d2xpn_lock] ERROR: invalid file\n");
       return -1 ;
     }
  

@@ -168,11 +168,13 @@ int nfi_mpi_server_do_request ( struct nfi_mpi_server_server *server_aux, struct
 
 int nfi_mpi_server_keep_connected ( struct nfi_server *serv )
 {
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_keep_connected] >> Begin\n", serv->id);
-
-  if (NULL == serv) {
+  // check params...
+  if (serv == NULL) {
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_keep_connected] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_keep_connected] >> Begin\n", serv->id);
 
 #ifdef NFI_DYNAMIC
   if (serv->private_info == NULL)
@@ -267,14 +269,13 @@ int nfi_mpi_server_init ( char *url, struct nfi_server *serv, __attribute__((__u
   char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
   struct nfi_mpi_server_server *server_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] >> Begin\n", serv->id);
-
   // check params...
-  if (serv == NULL)
-  {
-    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] ERROR: serv argument is NULL\n", serv->id);
+  if (serv == NULL) {
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_init] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] >> Begin\n", serv->id);
 
   // new nfi_ops with mpi_server functions...
   serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops));
@@ -422,12 +423,13 @@ int nfi_mpi_server_destroy ( struct nfi_server *serv )
   int ret;
   struct nfi_mpi_server_server *server_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_destroy] >> Begin\n", serv->id);
-
   // check params...
   if (serv == NULL) {
-    return 0;
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_destroy] ERROR: serv argument is NULL\n", -1);
+    return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_destroy] >> Begin\n", serv->id);
 
   // private_info...
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_destroy] Get server private info\n", serv->id);
@@ -466,12 +468,13 @@ int nfi_mpi_server_connect ( struct nfi_server *serv, __attribute__((__unused__)
   int ret;
   struct nfi_mpi_server_server *server_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_connect] >> Begin\n", serv->id);
-
   // check params...
   if (serv == NULL) {
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_connect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_connect] >> Begin\n", serv->id);
 
   // private_info...
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_connect] Get server private info\n", serv->id);
@@ -502,12 +505,13 @@ int nfi_mpi_server_disconnect ( struct nfi_server *serv )
   int ret;
   struct nfi_mpi_server_server *server_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_disconnect] >> Begin\n", serv->id);
-
   // check params...
   if (serv == NULL) {
-    return 0;
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_disconnect] ERROR: serv argument is NULL\n", -1);
+    return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_disconnect] >> Begin\n", serv->id);
 
   // private_info...
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_disconnect] Get server private info\n", serv->id);
@@ -538,12 +542,13 @@ int nfi_mpi_server_reconnect(struct nfi_server *serv)
   char   server[PATH_MAX], dir[PATH_MAX];
   struct nfi_mpi_server_server *server_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_reconnect] >> Begin\n", serv->id);
-
-  // Check arguments
+  // check params...
   if (serv == NULL) {
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_reconnect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_reconnect] >> Begin\n", serv->id);
 
   // parse url...
   ret = ParseURL(serv->url,  NULL, NULL, NULL, server,  NULL,  dir);
