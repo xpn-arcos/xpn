@@ -35,22 +35,22 @@
 
   enum nfi_sck_server_err
   {
-    SCK_SERVERERR_PARAM         = 0,
-    SCK_SERVERERR_MEMORY        = 1,
-    SCK_SERVERERR_URL           = 2,
-    SCK_SERVERERR_MNTCONNECTION = 3,
-    SCK_SERVERERR_MOUNT         = 4,
-    SCK_SERVERERR_NFSCONNECTION = 5,    
-    SCK_SERVERERR_GETATTR       = 6,
-    SCK_SERVERERR_LOOKUP        = 7,
-    SCK_SERVERERR_READ          = 8,
-    SCK_SERVERERR_WRITE         = 9,
-    SCK_SERVERERR_CREATE        = 10,
-    SCK_SERVERERR_REMOVE        = 11,
-    SCK_SERVERERR_MKDIR         = 12,
-    SCK_SERVERERR_READDIR       = 13,
-    SCK_SERVERERR_STATFS        = 14,
-    SCK_SERVERERR_NOTDIR        = 15,
+    SCK_SERVER_ERR_PARAM         = 0,
+    SCK_SERVER_ERR_MEMORY        = 1,
+    SCK_SERVER_ERR_URL           = 2,
+    SCK_SERVER_ERR_MNTCONNECTION = 3,
+    SCK_SERVER_ERR_MOUNT         = 4,
+    SCK_SERVER_ERR_NFSCONNECTION = 5,    
+    SCK_SERVER_ERR_GETATTR       = 6,
+    SCK_SERVER_ERR_LOOKUP        = 7,
+    SCK_SERVER_ERR_READ          = 8,
+    SCK_SERVER_ERR_WRITE         = 9,
+    SCK_SERVER_ERR_CREATE        = 10,
+    SCK_SERVER_ERR_REMOVE        = 11,
+    SCK_SERVER_ERR_MKDIR         = 12,
+    SCK_SERVER_ERR_READDIR       = 13,
+    SCK_SERVER_ERR_STATFS        = 14,
+    SCK_SERVER_ERR_NOTDIR        = 15,
   };
 
 

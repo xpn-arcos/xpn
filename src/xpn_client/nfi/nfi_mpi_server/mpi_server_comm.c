@@ -332,19 +332,16 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
 
   ret = MPI_Recv(params->sem_name_server, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
   if (MPI_SUCCESS != ret) {
-    debug_warning("Server[?]: MPI_Recv fails :-(");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: MPI_Recv fails\n");
     return -1;
   }
   */
 
+  params->locality = 0;
   if (strcmp(cli_name, serv_name) == 0)
   {
     params->locality = 1;
     //params->sem_server = sem_open(params->sem_name_server, 0);
-  }
-  else
-  {
-    params->locality = 0;
   }
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Locality: %d\n", params->locality);
@@ -371,7 +368,7 @@ ssize_t mpi_client_write_operation ( MPI_Comm fd, char *data, ssize_t size, __at
   }
 
   // TODO
-   msg_id = msg_id; // TODO: msg_id is used?
+  msg_id = msg_id; // TODO: msg_id is used?
   // TODO
 
   // Send message

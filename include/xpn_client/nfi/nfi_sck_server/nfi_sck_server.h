@@ -57,7 +57,7 @@
     //struct nfi_sck_server_connector sd;
 
     // client stub
-    sckClient_param_st params;
+    sck_client_param_st params;
   };
 
   struct nfi_sck_server_fhandle

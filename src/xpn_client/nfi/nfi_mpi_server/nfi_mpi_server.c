@@ -51,9 +51,6 @@ int mpi_server_write_operation ( MPI_Comm sd, struct st_mpi_server_msg *head )
     return -1;
   }
 
-  int rank;
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
   debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] Execute operation: %d -> \n", head->id, head->type);
 
   switch (head->type)
@@ -772,6 +769,7 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr 
     if (ret < 0)
     {
       debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, path, serv->server);
+      FREE_AND_NULL(fh_aux);
       return ret;
     }
 
@@ -848,7 +846,7 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr 
 
 ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
 {
-  int ret, cont, diff;
+  int    ret, cont, diff;
   struct nfi_mpi_server_server *server_aux;
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
@@ -1023,7 +1021,7 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] >> Begin\n", serv->id);
 
   // Check arguments...
-  if (size == 0){
+  if (size == 0) {
     return 0;
   }
 
@@ -1101,7 +1099,6 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
       debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_read(%s, %ld, %ld)=%d\n", serv->id, path, offset, size, ret);
     }
-
   }
   /************** REMOTE ****************/
   else
@@ -1682,7 +1679,8 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *a
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] real_posix_mkdir(%s)=%d\n", serv->id, path, ret);
   }
   /************** SERVER ****************/
-  else {
+  else
+  {
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] xpn_mkdir(%s)\n", serv->id, dir);
 
     //bzero(&msg, sizeof(struct st_mpi_server_msg));
@@ -1804,7 +1802,8 @@ int nfi_mpi_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] real_posix_opendir(%s)=%p\n", serv->id, path, fh_aux->dir);
   }
   /************** SERVER ****************/
-  else {
+  else
+  {
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] xpn_opendir(%s)\n", serv->id, dir);
 
     //bzero(&msg, sizeof(struct st_mpi_server_msg));
@@ -1891,7 +1890,8 @@ int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] real_posix_readdir(%p)=%p\n", serv->id, fh_aux->dir, entry);
   }
   /************** SERVER ****************/
-  else {
+  else
+  {
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] xpn_readdir(%p)\n", serv->id, fh_aux->dir);
 
     //bzero(&msg, sizeof(struct st_mpi_server_msg));
@@ -1952,7 +1952,8 @@ int nfi_mpi_server_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] nfi_mpi_server_closedir(%p)\n", serv->id, fh_aux->dir);
 
     /************** LOCAL *****************/
-    if(server_aux->params.locality) {
+    if(server_aux->params.locality)
+    {
       debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] real_posix_closedir(%p)\n", serv->id, fh_aux->dir);
 
       real_posix_closedir(fh_aux->dir);
@@ -1970,7 +1971,7 @@ int nfi_mpi_server_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
       memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
       msg.u_st_mpi_server_msg.op_closedir.dir = fh_aux->dir;
 
-      nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int)); //NEW
+      nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
 
       debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] xpn_closedir(%p)=%d\n", serv->id, fh_aux->dir, 0);
     }
