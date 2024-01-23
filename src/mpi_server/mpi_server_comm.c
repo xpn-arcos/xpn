@@ -44,7 +44,7 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
   struct timeval t0;
   TIME_MISC_Timer(&t0);
 
-  // MPI_Init
+  // MPI init
   // Threads disable
   if (!params->thread_mode)
   { 
@@ -196,7 +196,6 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] server %d available at %s\n", params->rank, params->rank, params->port_name);
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] server %d accepting...\n",    params->rank, params->rank);
 
-  // Return OK
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] >> End\n", params->rank);
 
   return 1;
@@ -378,7 +377,7 @@ ssize_t mpi_server_comm_write_data ( mpi_server_param_st *params, MPI_Comm fd, c
     printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] ERROR: NULL arguments\n", params->rank);
     return -1;
   }
-  if (size == 0){
+  if (size == 0) {
       return 0;
   }
   if (size < 0)

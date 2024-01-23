@@ -1,3 +1,4 @@
+
 /*
  *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
@@ -18,150 +19,188 @@
  *
  */
 
-  /* ... Include / Inclusion ........................................... */
 
-   //#define DEBUG 1
+/* ... Include / Inclusion ........................................... */
 
-   #include "sck_server/sck_server_comm.h"
+#include "sck_server/sck_server_comm.h"
 
 
-  /* ... Functions / Funciones ......................................... */
+/* ... Const / Const ................................................. */
+
+
+/* ... Global variables / Variables globales ........................ */
+
+
+/* ... Functions / Funciones ......................................... */
 
 int sck_server_comm_init ( sck_server_param_st * params )
 {
-  int ret, val ;
+  int ret, val;
   struct sockaddr_in server_addr;
-  struct timeval t0, t1, tf;
-  float time;
 
-  DEBUG_BEGIN();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] >> Begin\n", params->rank);
 
   // Get timestap
-  TIME_MISC_Timer( & t0 );
+  struct timeval t0;
+  TIME_MISC_Timer(&t0);
 
-  /*
-   * Initialize socket
-   */
+  // Socket init
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Scoket init\n", params->rank);
 
-  // create the connections
   params->global_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-  if (params->global_sock < 0) {
-    perror("error en el socket: ");
+  if (params->global_sock < 0)
+  {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: socket fails\n", params->rank);
     return -1;
   }
 
   // tcp_nodalay
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] TCP nodelay\n", params->rank);
+
   val = 1;
-  ret = setsockopt(params->global_sock, IPPROTO_TCP, TCP_NODELAY, & val, sizeof(val)) ;
-  if (ret < 0) {
-    perror("setsockopt: ");
+  ret = setsockopt(params->global_sock, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
+  if (ret < 0)
+  {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: setsockopt fails\n", params->rank);
     return -1;
   }
 
   // sock_reuseaddr
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Socket reuseaddr\n", params->rank);
+
   val = 1;
-  ret = setsockopt(params->global_sock, SOL_SOCKET, SO_REUSEADDR, (char * ) & val, sizeof(int));
-  if (ret < 0) {
-    perror("error en el setsockopt:");
-    return -1;
-  }
-
-  // bind & listen
-  bzero((char * )&server_addr, sizeof(server_addr)) ;
-  server_addr.sin_family      = AF_INET ;
-  server_addr.sin_addr.s_addr = INADDR_ANY ;
-  server_addr.sin_port        = htons(atoi(params->port)) ;
-
-  debug_info("[%s][%d]\t%s\n", __FILE__, __LINE__, params->port);
-
-  ret = bind(params->global_sock, (struct sockaddr * ) & server_addr, sizeof(server_addr));
+  ret = setsockopt(params->global_sock, SOL_SOCKET, SO_REUSEADDR, (char *)&val, sizeof(int));
   if (ret < 0)
   {
-    perror("bind: ");
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: setsockopt fails\n", params->rank);
     return -1;
   }
+
+  // bind
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Socket bind\n", params->rank);
+
+  bzero((char * )&server_addr, sizeof(server_addr));
+  server_addr.sin_family      = AF_INET;
+  server_addr.sin_addr.s_addr = INADDR_ANY;
+  server_addr.sin_port        = htons(atoi(params->port));
+
+
+  ret = bind(params->global_sock, (struct sockaddr *)&server_addr, sizeof(server_addr));
+  if (ret < 0)
+  {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: bind fails\n", params->rank);
+    return -1;
+  }
+
+  // listen
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Socket listen\n", params->rank);
+
   listen(params->global_sock, 20);
 
-  /*
-   * Post-initialize
-   */
 
-  // Publish socket "host name:port number"
+  // Generate DNS file
+
+  // get IP
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Get host ip\n", params->rank);
+
   char *ip = ns_get_host_ip();
+  if (ip == NULL)
+  {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: ns_get_host_ip fails\n", params->rank);
+    return -1;
+  }
+
+  // Publish hostname
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Publish host\n", params->rank);
+
   ret = ns_publish(params->dns_file, "sck_server", params->name, ip, params->port);
   if (ret < 0)
   {
-    fprintf(stderr, "ns_publish(dns_file:%s, protocol:%s, name:%s, ip:%s, port:%s)->%d\n", params->dns_file, "sck_server", params->name, ip, params->port, ret);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: ns_publish fails\n", params->rank);
     return -1;
   }
 
-  // Print time to be up-and-running
+  // Print server init information
+  struct timeval t1;
+  struct timeval tf;
+  float time;
   TIME_MISC_Timer(&t1);
   TIME_MISC_DiffTime(&t0, &t1, &tf);
   time = TIME_MISC_TimevaltoFloat(&tf);
-  printf(" > XPN socket server started (took %e sec.)\n", time);
 
-  debug_info("[SRV_SCK_COMM] server %d accepting at %s\n", params->rank, params->port);
+  if (params->rank == 0)
+  {
+    printf("\n\n");
+    printf("Time to inizialize all servers: %f s\n", time);
+    printf("\n");
+    printf("---------------------------\n");
+    printf("All XPN SCK servers running\n");
+    printf("---------------------------\n");
+    printf("\n\n");
+  }
 
-  DEBUG_END();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] server %d available at %s\n", params->rank, params->rank, params->port_name);
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] server %d accepting...\n",    params->rank, params->rank);
 
-  // Return OK
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] >> End\n", params->rank);
+
   return 1;
 }
-
 
 int sck_server_comm_destroy ( sck_server_param_st * params )
 {
   int ret;
 
-  DEBUG_BEGIN();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] >> Begin\n", params->rank);
 
-  // Unpublish port name
+  // Update DNS file
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Update DNS file\n", params->rank);
+
   for (int i = 0; i < params->size; ++i)
   {
     if (params->rank == i)
     {
+      // Unpublish port name
+      debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Unpublish host\n", params->rank);
+
       ret = ns_unpublish(params->dns_file, "sck_server", params->srv_name);
       if (ret < 0)
       {
-        debug_info("[SRV_SCK_COMM] server%d: ns_unpublish fails :-(", params->rank);
+        printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: ns_unpublish fails\n", params->rank);
         return -1;
       }
     }
   }
   
-  // Print server info
-  char serv_name  [HOST_NAME_MAX];
-  gethostname(serv_name, HOST_NAME_MAX);
-  debug_info("------------------------------------\n");
-  debug_info("XPN socket server %s stopped\n", serv_name);
-  debug_info("------------------------------------\n\n");
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] << End\n", params->rank);
 
-  DEBUG_END();
-
-  // Return OK
   return 1;
 }
 
-
-int sck_server_comm_accept(sck_server_param_st * params)
+int sck_server_comm_accept ( sck_server_param_st * params )
 {
   int    ret, sc, flag;
   struct sockaddr_in client_addr;
   socklen_t size = sizeof(struct sockaddr_in);
 
-  DEBUG_BEGIN();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] >> Begin\n", params->rank);
 
-  sc = accept(params->global_sock, (struct sockaddr * ) & client_addr, & size);
+  // Accept
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] Accept\n", params->rank);
+
+  sc = accept(params->global_sock, (struct sockaddr *)&client_addr, & size);
   if (sc < 0)
   {
-    perror("accept: ");
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_destroy] ERROR: accept fails\n", params->rank);
+    return -1;
   }
-  debug_info("[SRV_SCK_COMM] desp. accept conection .... %d\n", sc);
 
+
+  //TODO
+  debug_info("[SRV_SCK_COMM] desp. accept conection .... %d\n", sc);
   // tcp_nodelay
   flag = 1;
-  ret = setsockopt(sc, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag)) ;
+  ret = setsockopt(sc, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag));
   if (ret < 0)
   {
     perror("setsockopt: ");
@@ -171,7 +210,7 @@ int sck_server_comm_accept(sck_server_param_st * params)
   //NEW
   int val = 1024 * 1024; //1 MB
 
-  ret = setsockopt(sc, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int)) ;
+  ret = setsockopt(sc, SOL_SOCKET, SO_SNDBUF, (char *)&val, sizeof(int));
   if (ret < 0)
   {
     perror("setsockopt: ");
@@ -179,26 +218,29 @@ int sck_server_comm_accept(sck_server_param_st * params)
   }
 
   val = 1024 * 1024; //1 MB
-  ret = setsockopt(sc, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int)) ;
+  ret = setsockopt(sc, SOL_SOCKET, SO_RCVBUF, (char *)&val, sizeof(int));
   if (ret < 0)
   {
     perror("setsockopt: ");
     return -1;
   }
+  // TODO: end
 
-  DEBUG_END();
+
+  params->client = sc;
+
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] << End\n", params->rank);
 
   // Return client int
-  params->client = sc;
   return params->client;
 }
 
-
+//TODO
 int sck_server_comm_connect ( sck_server_param_st * params, char *server_name, int port_number )
 {
   struct hostent * hp;
   struct sockaddr_in server_addr;
-  int ret, sd, flag, val ;
+  int ret, sd, flag, val;
 
 
   DEBUG_BEGIN();
@@ -215,22 +257,22 @@ int sck_server_comm_connect ( sck_server_param_st * params, char *server_name, i
   debug_info("[SRV_SCK_COMM]----SERVER = %s NEWSERVER = %s PORT = %d ==> %d\n", params->srv_name, server_name, port_number, sd);
 
   // sock-options
-  flag = 1 ;
-  ret = setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag)) ;
+  flag = 1;
+  ret = setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag));
   if (ret < 0) {
     perror("setsockopt: ");
     return -1;
   }
 
-  val = params->IOsize ; //1 MB
-  ret = setsockopt(sd, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int)) ;
+  val = params->IOsize; //1 MB
+  ret = setsockopt(sd, SOL_SOCKET, SO_SNDBUF, (char *)&val, sizeof(int));
   if (ret < 0) {
     perror("setsockopt: ");
     return -1;
   }
 
-  val = params->IOsize ; //1 MB
-  ret = setsockopt(sd, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int)) ;
+  val = params->IOsize; //1 MB
+  ret = setsockopt(sd, SOL_SOCKET, SO_RCVBUF, (char *)&val, sizeof(int));
   if (ret < 0) {
     perror("setsockopt: ");
     return -1;
@@ -247,13 +289,13 @@ int sck_server_comm_connect ( sck_server_param_st * params, char *server_name, i
   // Connect...
   debug_info("[SRV_SCK_COMM] server = %s-%d\n", server_name, port_number);
 
-  bzero((char * ) & server_addr, sizeof(server_addr));
+  bzero((char *)&server_addr, sizeof(server_addr));
   server_addr.sin_family = AF_INET;
   server_addr.sin_port   = htons(port_number);
   memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
 
   //se establece la conexion
-  ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
+  ret = connect(sd, (struct sockaddr *)&server_addr, sizeof(server_addr));
   if (ret < 0) {
     //sck_server_err(SCK_SERVERERR_MEMORY);
     fprintf(stderr, "nfi_sck_server_init: error in connect (%s,%d)\n", server_name, port_number);
@@ -266,144 +308,156 @@ int sck_server_comm_connect ( sck_server_param_st * params, char *server_name, i
   return sd;
 }
 
-
-int sck_server_comm_close(int fd)
+int sck_server_comm_close ( int fd )
 {
-  DEBUG_BEGIN();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_disconnect] >> Begin\n", -1);
 
+  // Close
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_disconnect] close\n", -1);
   close(fd);
 
-  DEBUG_END();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_disconnect] << End\n", -1);
 
   // Return OK
   return 1;
 }
 
-
 ssize_t sck_server_comm_read_operation(sck_server_param_st * params, int fd, char * data, ssize_t size, int * rank_client_id)
 {
   int ret;
 
-  DEBUG_BEGIN();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_operation] >> Begin\n", params->rank);
 
   // Check arguments
-  if (NULL == params) {
-    debug_warning("[SRV_SCK_COMM] server ERROR: NULL params arguments");
-    return -1;
-  }
-  if (size < 0) {
-    debug_warning("[SRV_SCK_COMM] server %d ERROR: size < 0", params->rank);
+  if (NULL == params)
+  {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_operation] ERROR: NULL arguments\n", params->rank);
     return -1;
   }
   if (size == 0) {
     return 0;
   }
-
-  ret = sck_server_comm_read_data(params, fd, data, size * sizeof(int), *rank_client_id); //      Nuevo
-  if (ret < 0) {
-    debug_warning("[SRV_SCK_COMM] server: sck_server_comm_read_op fails : %d\n", ret);
-    return ret ;
+  if (size < 0) {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_operation] ERROR: size < 0\n", params->rank);
+    return -1;
   }
 
-  DEBUG_END();
+  // Get message
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_disconnect] Read operation\n", params->rank);
+
+  ret = sck_server_comm_read_data(params, fd, data, size * sizeof(int), *rank_client_id);
+  if (ret < 0)
+  {
+    debug_warning("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_operation] ERROR: sck_server_comm_read_op fails\n", params->rank);
+    return ret;
+  }
+
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_operation] << End\n", params->rank);
 
   // Return int readed
-  return ret / sizeof(int) ;
+  return ret / sizeof(int);
 }
-
 
 ssize_t sck_server_comm_write_data(sck_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TODO rank client
 {
-  int ret, cont;
+  int ret;
 
-  DEBUG_BEGIN();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] >> Begin\n", params->rank);
 
   // Check params
-  if (NULL == params) {
-    fprintf(stderr, "[SRV_SCK_COMM] server %d: ERROR: NULL params", -1);
-    return -1;
-  }
-  if (size < 0) {
-    fprintf(stderr, "[SRV_SCK_COMM] server %d: ERROR: size < 0", params->rank);
+  if (NULL == params)
+  {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] ERROR: NULL arguments\n", params->rank);
     return -1;
   }
   if (size == 0) {
     return 0;
   }
+  if (size < 0)
+  {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] ERROR: size < 0\n", params->rank);
+    return -1;
+  }
 
-  cont = 0;
+  int cont = 0;
   do
   {
     ret = 0;
-    debug_info("[SRV_SCK_COMM] server:write_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] Write data(%d, %p, %ld)\n", params->rank, fd, data + cont, size - cont);
+
     ret = write(fd, data + cont, size - cont);
-    if (ret < 0) {
-      perror("server: Error write_comm: ");
-       return -1;
+    if (ret < 0)
+    {
+      printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] ERROR: write fails\n", params->rank);
+      return -1;
     }
 
-    debug_info("[SRV_SCK_COMM] server:write_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] Write data(%d, %p, %ld)=%d\n", params->rank, fd, data + cont, size - cont, ret);
+    
     cont += ret;
 
   } while ((ret > 0) && (cont != size));
 
   if (ret < 0) {
-    debug_info("[SRV_SCK_COMM] server: Error write_comm(%d): -1 \n", fd);
+    debug_warning("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] ERROR: write fails\n", params->rank);
     return ret;
   }
 
-  DEBUG_END();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] << End\n", params->rank);
+
   // Return bytes written
   return cont;
 }
 
-
 ssize_t sck_server_comm_read_data(sck_server_param_st * params, int fd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id) //TODO rank client
 {
-  int ret, cont ;
+  int ret;
 
-  DEBUG_BEGIN();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] >> Begin\n", params->rank);
 
-  // Check arguments
+  // Check params
   if (NULL == params) {
-    fprintf(stderr, "[SRV_SCK_COMM]: ERROR: NULL params");
-    return -1;
-  }
-  if (size < 0) {
-    fprintf(stderr, "[SRV_SCK_COMM] server %d: ERROR: size < 0", params->rank);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] ERROR: NULL arguments\n", params->rank);
     return -1;
   }
   if (size == 0) {
     return 0;
   }
+  if (size < 0)
+  {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] ERROR: size < 0\n", params->rank);
+    return -1;
+  }
 
-  cont = 0;
+  int cont = 0;
   do
   {
     ret = 0;
-    debug_info("[SRV_SCK_COMM] server:read_comm(%d) antes: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] Read data(%d, %p, %ld)\n", params->rank, fd, data + cont, size - cont);
+
     ret = read(fd, data + cont, size - cont);
     if (ret < 0) {
-      perror("[SRV_SCK_COMM] server: Error read_comm: ");
+      printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] ERROR: read fails\n", params->rank);
       return -1;
     }
 
-    debug_info("[SRV_SCK_COMM] server:read_comm(%d) desp: %d = %d data %p --th:%d--\n", fd, size, ret, data, (int) pthread_self());
+    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] Read data(%d, %p, %ld)=%d\n", params->rank, fd, data + cont, size - cont, ret);
+    
     cont += ret;
 
   } while ((ret > 0) && (cont != size));
 
-  if (ret < 0) {
-    debug_info("[SRV_SCK_COMM] server: Error read_comm(%d): -1\n", fd);
+  if (ret < 0)
+  {
+    debug_warning("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] ERROR: write fails\n", params->rank);
     return ret;
   }
 
-  DEBUG_END();
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] << End\n", params->rank);
 
   // Return bytes read
   return cont;
 }
 
 
-  /* ................................................................... */
-
+/* ................................................................... */

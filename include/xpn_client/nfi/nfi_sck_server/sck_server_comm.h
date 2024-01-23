@@ -40,18 +40,19 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int     sckClient_comm_init       ( sckClient_param_st *params );
-  int     sckClient_comm_destroy    ( sckClient_param_st *params );
-  int     sckClient_comm_connect    ( sckClient_param_st *params );
-  int     sckClient_comm_disconnect ( sckClient_param_st *params );
-  int     sckClient_comm_locality   ( sckClient_param_st *params );
+  int     sck_client_comm_init       ( sck_client_param_st *params );
+  int     sck_client_comm_destroy    ( sck_client_param_st *params );
 
-  ssize_t sckClient_write_operation ( int fd, char *data, ssize_t size, char *msg_id );
-  ssize_t sckClient_write_data      ( int fd, char *data, ssize_t size, char *msg_id );
-  ssize_t sckClient_read_data       ( int fd, char *data, ssize_t size, char *msg_id );
+  int     sck_client_comm_connect    ( sck_client_param_st *params );
+  int     sck_client_comm_disconnect ( sck_client_param_st *params );
+
+  int     sck_client_comm_locality   ( sck_client_param_st *params );
+
+  ssize_t sck_client_write_operation ( int fd, char *data, ssize_t size, char *msg_id );
+  ssize_t sck_client_write_data      ( int fd, char *data, ssize_t size, char *msg_id );
+  ssize_t sck_client_read_data       ( int fd, char *data, ssize_t size, char *msg_id );
 
 
   /* ................................................................... */
 
 #endif
-
