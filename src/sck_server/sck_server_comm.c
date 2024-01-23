@@ -383,7 +383,7 @@ ssize_t sck_server_comm_write_data(sck_server_param_st * params, int fd, char * 
   do
   {
     ret = 0;
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] Write data(%d, %d, %d)\n", params->rank, fd, data + cont, size - cont);
+    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] Write data(%d, %p, %ld)\n", params->rank, fd, data + cont, size - cont);
 
     ret = write(fd, data + cont, size - cont);
     if (ret < 0)
@@ -392,7 +392,7 @@ ssize_t sck_server_comm_write_data(sck_server_param_st * params, int fd, char * 
       return -1;
     }
 
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] Write data(%d, %d, %d)=%d\n", params->rank, fd, data + cont, size - cont, ret);
+    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] Write data(%d, %p, %ld)=%d\n", params->rank, fd, data + cont, size - cont, ret);
     
     cont += ret;
 
@@ -433,7 +433,7 @@ ssize_t sck_server_comm_read_data(sck_server_param_st * params, int fd, char * d
   do
   {
     ret = 0;
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] Read data(%d, %d, %d)\n", params->rank, fd, data + cont, size - cont);
+    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] Read data(%d, %p, %ld)\n", params->rank, fd, data + cont, size - cont);
 
     ret = read(fd, data + cont, size - cont);
     if (ret < 0) {
@@ -441,7 +441,7 @@ ssize_t sck_server_comm_read_data(sck_server_param_st * params, int fd, char * d
       return -1;
     }
 
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] Read data(%d, %d, %d)=%d\n", params->rank, fd, data + cont, size - cont, ret);
+    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] Read data(%d, %p, %ld)=%d\n", params->rank, fd, data + cont, size - cont, ret);
     
     cont += ret;
 

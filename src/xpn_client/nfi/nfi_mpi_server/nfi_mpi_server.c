@@ -1679,7 +1679,8 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *a
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] real_posix_mkdir(%s)=%d\n", serv->id, path, ret);
   }
   /************** SERVER ****************/
-  else {
+  else
+  {
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] xpn_mkdir(%s)\n", serv->id, dir);
 
     //bzero(&msg, sizeof(struct st_mpi_server_msg));
@@ -1801,7 +1802,8 @@ int nfi_mpi_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] real_posix_opendir(%s)=%p\n", serv->id, path, fh_aux->dir);
   }
   /************** SERVER ****************/
-  else {
+  else
+  {
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] xpn_opendir(%s)\n", serv->id, dir);
 
     //bzero(&msg, sizeof(struct st_mpi_server_msg));
@@ -1888,7 +1890,8 @@ int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] real_posix_readdir(%p)=%p\n", serv->id, fh_aux->dir, entry);
   }
   /************** SERVER ****************/
-  else {
+  else
+  {
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] xpn_readdir(%p)\n", serv->id, fh_aux->dir);
 
     //bzero(&msg, sizeof(struct st_mpi_server_msg));
@@ -1949,7 +1952,8 @@ int nfi_mpi_server_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] nfi_mpi_server_closedir(%p)\n", serv->id, fh_aux->dir);
 
     /************** LOCAL *****************/
-    if(server_aux->params.locality) {
+    if(server_aux->params.locality)
+    {
       debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] real_posix_closedir(%p)\n", serv->id, fh_aux->dir);
 
       real_posix_closedir(fh_aux->dir);
@@ -1967,7 +1971,7 @@ int nfi_mpi_server_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
       memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
       msg.u_st_mpi_server_msg.op_closedir.dir = fh_aux->dir;
 
-      nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int)); //NEW
+      nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
 
       debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] xpn_closedir(%p)=%d\n", serv->id, fh_aux->dir, 0);
     }

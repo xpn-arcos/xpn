@@ -140,7 +140,7 @@ int sck_client_comm_connect ( sck_client_param_st * params )
 
 
   // Connect...
-  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_connect] Connect port %s\n", params->port_name);
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_connect] Connect port %s\n", params->port_number);
 
   bzero((char * ) & server_addr, sizeof(server_addr));
   server_addr.sin_family = AF_INET;
@@ -322,7 +322,7 @@ ssize_t sck_client_write_data ( int fd, char * data, ssize_t size, __attribute__
   do
   {
     ret = 0;
-    debug_info("[SCK_CLIENT_COMM] [sck_client_write_data] Write data(%d, %d, %d)\n", fd, data + cont, size - cont);
+    debug_info("[SCK_CLIENT_COMM] [sck_client_write_data] Write data(%d, %p, %ld)\n", fd, data + cont, size - cont);
 
     ret = dlsym_write(fd, data + cont, size - cont);
     if (ret < 0)
@@ -331,7 +331,7 @@ ssize_t sck_client_write_data ( int fd, char * data, ssize_t size, __attribute__
       return ret;
     }
 
-    debug_info("[SCK_CLIENT_COMM] [sck_client_write_data] Write data(%d, %d, %d)=%d\n", fd, data + cont, size - cont, ret);
+    debug_info("[SCK_CLIENT_COMM] [sck_client_write_data] Write data(%d, %p, %ld)=%d\n", fd, data + cont, size - cont, ret);
 
     cont += ret;
 
@@ -369,7 +369,7 @@ ssize_t sck_client_read_data ( int fd, char * data, ssize_t size, __attribute__(
   do
   {
     ret = 0;
-    debug_info("[SCK_CLIENT_COMM] [sck_client_read_data] Read data(%d, %d, %d)\n", fd, data + cont, size - cont);
+    debug_info("[SCK_CLIENT_COMM] [sck_client_read_data] Read data(%d, %p, %ld)\n", fd, data + cont, size - cont);
 
     ret = dlsym_read(fd, data + cont, size - cont);
     if (ret < 0)
@@ -378,7 +378,7 @@ ssize_t sck_client_read_data ( int fd, char * data, ssize_t size, __attribute__(
       return ret;
     }
 
-    debug_info("[SCK_CLIENT_COMM] [sck_client_read_data] Read data(%d, %d, %d)=%d\n", fd, data + cont, size - cont, ret);
+    debug_info("[SCK_CLIENT_COMM] [sck_client_read_data] Read data(%d, %p, %ld)=%d\n", fd, data + cont, size - cont, ret);
 
     cont += ret;
 
