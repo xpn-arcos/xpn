@@ -80,11 +80,11 @@ int mpi_server_d2xpn_lock ( char *file )
 {
   int fd;
 
-  debug_info("[MPI_SERVER_D2XPN] [mpi_server_d2xpn_lock] >> Begin: file: %s\n", file);
+  debug_info("[MPI_SERVER_D2XPN] [mpi_server_d2xpn_lock] >> Begin\n");
 
   if (NULL == file)
   {
-    printf("[MPI_SERVER_D2XPN] [mpi_server_d2xpn_lock] ERROR: invalid file %s\n", file);
+    printf("[MPI_SERVER_D2XPN] [mpi_server_d2xpn_lock] ERROR: invalid file\n");
     return -1;
   }
 

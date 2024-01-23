@@ -351,6 +351,13 @@ void mpi_server_op_open_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st
   int  fd;
   char path [PATH_MAX];
 
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_ws] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_ws] >> Begin\n", params->rank);
 
   strcpy(path, params->dirbase);
@@ -370,6 +377,13 @@ void mpi_server_op_open_wos ( mpi_server_param_st *params, MPI_Comm sd, struct s
 {
   int  fd;
   char path [PATH_MAX];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_wos] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_wos] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_wos] open(%s)\n", params->rank, head->u_st_mpi_server_msg.op_open.path);
@@ -394,6 +408,13 @@ void mpi_server_op_creat_ws ( mpi_server_param_st *params, MPI_Comm sd, struct s
   int  fd;
   char path [PATH_MAX];
 
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_ws] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_ws] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_ws] creat(%s)\n", params->rank, head->u_st_mpi_server_msg.op_creat.path);
 
@@ -414,6 +435,13 @@ void mpi_server_op_creat_wos ( mpi_server_param_st *params, MPI_Comm sd, struct 
 {
   int  fd;
   char path [PATH_MAX];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_wos] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_wos] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_wos] creat(%s)\n", params->rank, head->u_st_mpi_server_msg.op_creat.path);
@@ -439,6 +467,13 @@ void mpi_server_op_read_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st
   struct st_mpi_server_read_req req;
   char  *buffer;
   long  size, diff, to_read, cont;
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] >> Begin\n",  params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] read(%d, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_read.fd, head->u_st_mpi_server_msg.op_read.offset, head->u_st_mpi_server_msg.op_read.size);
@@ -511,6 +546,13 @@ void mpi_server_op_read_wos ( mpi_server_param_st *params, MPI_Comm sd, struct s
   char * buffer;
   long   size, diff, to_read, cont;
   char   path [PATH_MAX];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] >> Begin\n",  params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] read(%s, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_read.path, head->u_st_mpi_server_msg.op_read.offset, head->u_st_mpi_server_msg.op_read.size);
@@ -602,6 +644,13 @@ void mpi_server_op_write_ws ( mpi_server_param_st *params, MPI_Comm sd, struct s
   char *buffer;
   int   size, diff, cont, to_write;
 
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_ws] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_ws] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_ws] write(%d, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_write.fd, head->u_st_mpi_server_msg.op_write.offset, head->u_st_mpi_server_msg.op_write.size);
 
@@ -662,6 +711,13 @@ void mpi_server_op_write_wos ( mpi_server_param_st *params, MPI_Comm sd, struct 
   char * buffer;
   int    size, diff, cont, to_write;
   char   path [PATH_MAX];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_wos] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_wos] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_wos] write(%s, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_write.path, head->u_st_mpi_server_msg.op_write.offset, head->u_st_mpi_server_msg.op_write.size);
@@ -737,13 +793,15 @@ void mpi_server_op_write_wos ( mpi_server_param_st *params, MPI_Comm sd, struct 
 
 void mpi_server_op_close_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id )
 {
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] close(%d)\n", params->rank, head->u_st_mpi_server_msg.op_close.fd);
-
   // check params...
-  if (NULL == params) {
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] ERROR: NULL arguments\n", -1);
     return;
   }
+
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] close(%d)\n", params->rank, head->u_st_mpi_server_msg.op_close.fd);
 
   // do close
   int ret = filesystem_close(head->u_st_mpi_server_msg.op_close.fd);
@@ -758,13 +816,15 @@ void mpi_server_op_rm ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_
 {
   char path [PATH_MAX];
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm] unlink(%s)\n", params->rank, head->u_st_mpi_server_msg.op_rm.path);
-
   // check params...
-  if (NULL == params) {
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm] ERROR: NULL arguments\n", -1);
     return;
   }
+
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm] unlink(%s)\n", params->rank, head->u_st_mpi_server_msg.op_rm.path);
 
   strcpy(path, params->dirbase);
   strcat(path, "/");
@@ -783,13 +843,15 @@ void mpi_server_op_rm_async ( mpi_server_param_st *params, __attribute__((__unus
 {
   char path [PATH_MAX];
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm_async] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm_async] unlink(%s)\n", params->rank, head->u_st_mpi_server_msg.op_rm.path);
-
   // check params...
-  if (NULL == params) {
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm_async] ERROR: NULL arguments\n", -1);
     return;
   }
+
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm_async] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm_async] unlink(%s)\n", params->rank, head->u_st_mpi_server_msg.op_rm.path);
 
   strcpy(path, params->dirbase);
   strcat(path, "/");
@@ -807,13 +869,15 @@ void mpi_server_op_rename ( mpi_server_param_st *params, MPI_Comm sd, struct st_
   char old_path [PATH_MAX];
   char new_path [PATH_MAX];
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rename] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rename] rename(%s, %s)\n", params->rank, head->u_st_mpi_server_msg.op_rename.old_url, head->u_st_mpi_server_msg.op_rename.new_url);
-
   // check params...
-  if (NULL == params) {
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rename] ERROR: NULL arguments\n", -1);
     return;
   }
+
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rename] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rename] rename(%s, %s)\n", params->rank, head->u_st_mpi_server_msg.op_rename.old_url, head->u_st_mpi_server_msg.op_rename.new_url);
 
   strcpy(old_path, params->dirbase);
   strcat(old_path, head->u_st_mpi_server_msg.op_rename.old_url);
@@ -835,6 +899,13 @@ void mpi_server_op_getattr ( mpi_server_param_st *params, MPI_Comm sd, struct st
   struct st_mpi_server_attr_req req;
   char path [PATH_MAX];
 
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_getattr] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_getattr] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_getattr] stat(%s)\n", params->rank, head->u_st_mpi_server_msg.op_getattr.path);
 
@@ -853,13 +924,16 @@ void mpi_server_op_getattr ( mpi_server_param_st *params, MPI_Comm sd, struct st
 
 void mpi_server_op_setattr (mpi_server_param_st *params, __attribute__((__unused__)) MPI_Comm sd, struct st_mpi_server_msg *head, __attribute__((__unused__)) int rank_client_id)
 {
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_setattr] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_setattr] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_setattr] SETATTR(...)\n", params->rank);
 
-  // check params...
-  if (NULL == params) {
-    return;
-  }
   if (NULL == head) {
     return;
   }
@@ -876,6 +950,13 @@ void mpi_server_op_mkdir ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
 {
   int ret;
   char path [PATH_MAX];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_mkdir] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_mkdir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_mkdir] mkdir(%s)\n", params->rank, head->u_st_mpi_server_msg.op_mkdir.path);
@@ -897,6 +978,13 @@ void mpi_server_op_opendir ( mpi_server_param_st *params, MPI_Comm sd, struct st
 {
   DIR* ret;
   char path [PATH_MAX];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_opendir] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_opendir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_opendir] opendir(%s)\n", params->rank, head->u_st_mpi_server_msg.op_opendir.path);
@@ -922,6 +1010,13 @@ void mpi_server_op_readdir ( mpi_server_param_st *params, MPI_Comm sd, struct st
   struct dirent * ret;
   struct st_mpi_server_direntry ret_entry;
   DIR* s;
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] readdir(%p)\n", params->rank, head->u_st_mpi_server_msg.op_readdir.dir);
@@ -949,6 +1044,13 @@ void mpi_server_op_closedir ( mpi_server_param_st *params, MPI_Comm sd, struct s
   int ret;
   DIR* s;
 
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_closedir] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_closedir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_closedir] closedir(%p)\n", params->rank, head->u_st_mpi_server_msg.op_closedir.dir);
 
@@ -966,6 +1068,13 @@ void mpi_server_op_rmdir ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
 {
   int ret;
   char path [PATH_MAX];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rmdir] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rmdir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rmdir] rmdir(%s)\n", params->rank, head->u_st_mpi_server_msg.op_rmdir.path);
@@ -987,6 +1096,13 @@ void mpi_server_op_rmdir_async ( __attribute__((__unused__)) mpi_server_param_st
 {
   int ret;
   char path [PATH_MAX];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rmdir_async] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rmdir_async] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rmdir_async] rmdir(%s)\n", params->rank, head->u_st_mpi_server_msg.op_rmdir.path);
@@ -1018,6 +1134,13 @@ void mpi_server_op_preload ( mpi_server_param_st *params, MPI_Comm sd, struct st
 
   int  BLOCKSIZE = head->u_st_mpi_server_msg.op_preload.block_size;
   char buffer [BLOCKSIZE];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_preload] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_preload] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_preload] preload(%s,%s)\n", params->rank, head->u_st_mpi_server_msg.op_preload.virtual_path, head->u_st_mpi_server_msg.op_preload.storage_path);
@@ -1105,6 +1228,13 @@ void mpi_server_op_flush ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
   int BLOCKSIZE = head->u_st_mpi_server_msg.op_flush.block_size;
   char buffer [BLOCKSIZE];
 
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_flush] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_flush] >> Begin\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_flush] preload(%s,%s)\n", params->rank, head->u_st_mpi_server_msg.op_flush.virtual_path, head->u_st_mpi_server_msg.op_flush.storage_path);
 
@@ -1175,6 +1305,13 @@ void mpi_server_op_flush ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
 void  mpi_server_op_getnodename (mpi_server_param_st *params, MPI_Comm sd,  __attribute__((__unused__)) struct st_mpi_server_msg *head, int rank_client_id)
 {
   char serv_name[HOST_NAME_MAX];
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_getnodename] ERROR: NULL arguments\n", -1);
+    return;
+  }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_getnodename] >> Begin\n", params->rank);
 

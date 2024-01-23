@@ -326,14 +326,15 @@ ssize_t sck_server_comm_read_operation(sck_server_param_st * params, int fd, cha
 {
   int ret;
 
-  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_operation] >> Begin\n", params->rank);
-
   // Check arguments
   if (NULL == params)
   {
-    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_operation] ERROR: NULL arguments\n", params->rank);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_operation] ERROR: NULL arguments\n", -1);
     return -1;
   }
+
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_operation] >> Begin\n", params->rank);
+
   if (size == 0) {
     return 0;
   }
@@ -362,14 +363,15 @@ ssize_t sck_server_comm_write_data(sck_server_param_st * params, int fd, char * 
 {
   int ret;
 
-  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] >> Begin\n", params->rank);
-
   // Check params
   if (NULL == params)
   {
-    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] ERROR: NULL arguments\n", params->rank);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] ERROR: NULL arguments\n", -1);
     return -1;
   }
+
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_write_data] >> Begin\n", params->rank);
+
   if (size == 0) {
     return 0;
   }
@@ -413,13 +415,14 @@ ssize_t sck_server_comm_read_data(sck_server_param_st * params, int fd, char * d
 {
   int ret;
 
-  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] >> Begin\n", params->rank);
-
   // Check params
   if (NULL == params) {
-    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] ERROR: NULL arguments\n", params->rank);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] ERROR: NULL arguments\n", -1);
     return -1;
   }
+  
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_read_data] >> Begin\n", params->rank);
+
   if (size == 0) {
     return 0;
   }
