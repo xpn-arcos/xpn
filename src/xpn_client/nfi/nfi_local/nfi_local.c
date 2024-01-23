@@ -142,7 +142,7 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
   
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 
@@ -261,7 +261,7 @@ int nfi_local_destroy ( struct nfi_server *serv )
 
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_destroy] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_destroy] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 
@@ -297,7 +297,7 @@ int nfi_local_connect ( struct nfi_server *serv, __attribute__((__unused__)) cha
 
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_connect] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_connect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 
@@ -322,7 +322,7 @@ int nfi_local_disconnect ( struct nfi_server *serv )
 
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_disconnect] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_disconnect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 
@@ -352,7 +352,7 @@ int nfi_local_reconnect ( struct nfi_server *serv ) //TODO
 
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_reconnect] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_reconnect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 

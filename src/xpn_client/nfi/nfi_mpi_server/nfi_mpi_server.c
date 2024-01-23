@@ -170,7 +170,7 @@ int nfi_mpi_server_keep_connected ( struct nfi_server *serv )
 {
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_keep_connected] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_keep_connected] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 
@@ -271,7 +271,7 @@ int nfi_mpi_server_init ( char *url, struct nfi_server *serv, __attribute__((__u
 
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_init] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_init] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 
@@ -425,7 +425,7 @@ int nfi_mpi_server_destroy ( struct nfi_server *serv )
 
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_destroy] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_destroy] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 
@@ -470,7 +470,7 @@ int nfi_mpi_server_connect ( struct nfi_server *serv, __attribute__((__unused__)
 
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_connect] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_connect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 
@@ -507,7 +507,7 @@ int nfi_mpi_server_disconnect ( struct nfi_server *serv )
 
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_disconnect] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_disconnect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 
@@ -544,7 +544,7 @@ int nfi_mpi_server_reconnect(struct nfi_server *serv)
 
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_reconnect] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_reconnect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
 

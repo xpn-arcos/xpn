@@ -492,7 +492,7 @@ int main(int argc, char *argv[]) {
 		buf->buffer_length = nr;
 
 		if (debug)
-			fprintf(stderr, " read(%ld)    read block %zu (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", buffer_size, last, buf->buffer, nr, (unsigned char)buf->buffer[0], (unsigned char)buf->buffer[1], (unsigned char)buf->buffer[2], (unsigned char)buf->buffer[3], (unsigned char)buf->buffer[nr-4], (unsigned char)buf->buffer[nr-3], (unsigned char)buf->buffer[nr-2], (unsigned char)buf->buffer[nr-1]);
+			fprintf(stderr, " read(%lu)    read block %ld (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", buffer_size, last, buf->buffer, nr, (unsigned char)buf->buffer[0], (unsigned char)buf->buffer[1], (unsigned char)buf->buffer[2], (unsigned char)buf->buffer[3], (unsigned char)buf->buffer[nr-4], (unsigned char)buf->buffer[nr-3], (unsigned char)buf->buffer[nr-2], (unsigned char)buf->buffer[nr-1]);
 
 		sum_r = sum_r + nr;
 
