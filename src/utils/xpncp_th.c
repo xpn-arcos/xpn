@@ -161,7 +161,7 @@ void *write_func ( void *func_args )
 		next++;
 
 		if (debug)
-			printf("Written a block of %zu bytes\n", nw);
+			printf("Written a block of %ld bytes\n", nw);
 	}
 
 	pthread_exit(0);
@@ -492,7 +492,7 @@ int main(int argc, char *argv[]) {
 		buf->buffer_length = nr;
 
 		if (debug)
-			fprintf(stderr, " read(%zu)    read block %zu (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", buffer_size, last, buf->buffer, nr, (unsigned char)buf->buffer[0], (unsigned char)buf->buffer[1], (unsigned char)buf->buffer[2], (unsigned char)buf->buffer[3], (unsigned char)buf->buffer[nr-4], (unsigned char)buf->buffer[nr-3], (unsigned char)buf->buffer[nr-2], (unsigned char)buf->buffer[nr-1]);
+			fprintf(stderr, " read(%ld)    read block %zu (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", buffer_size, last, buf->buffer, nr, (unsigned char)buf->buffer[0], (unsigned char)buf->buffer[1], (unsigned char)buf->buffer[2], (unsigned char)buf->buffer[3], (unsigned char)buf->buffer[nr-4], (unsigned char)buf->buffer[nr-3], (unsigned char)buf->buffer[nr-2], (unsigned char)buf->buffer[nr-1]);
 
 		sum_r = sum_r + nr;
 
