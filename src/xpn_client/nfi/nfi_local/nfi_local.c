@@ -38,11 +38,14 @@
 //Communication
 int nfi_local_keep_connected ( struct nfi_server *serv )
 {
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_keep_connected] >> Begin\n", serv->id);
-
-  if (NULL == serv) {
+  // check params...
+  if (NULL == serv)
+  {
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_keep_connected] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_keep_connected] >> Begin\n", serv->id);
 
 #ifdef NFI_DYNAMIC
   if (serv->private_info == NULL)
@@ -136,14 +139,14 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
   int ret;
   char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
   struct nfi_local_server *server_aux;
-
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] >> Begin\n", serv->id);
-
+  
   // check params...
   if (serv == NULL) {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] ERROR: serv argument is NULL\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] >> Begin\n", serv->id);
 
   // new nfi_ops with local functions...
   serv->ops = (struct nfi_ops *)malloc(sizeof(struct nfi_ops));
@@ -256,12 +259,13 @@ int nfi_local_destroy ( struct nfi_server *serv )
 {
   struct nfi_local_server *server_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_destroy] >> Begin\n", serv->id);
-
-  // Check arguments
+  // check params...
   if (serv == NULL) {
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_destroy] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_destroy] >> Begin\n", serv->id);
 
   // private_info...
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_destroy] Get server private info\n", serv->id);
@@ -291,12 +295,13 @@ int nfi_local_connect ( struct nfi_server *serv, __attribute__((__unused__)) cha
 {
   struct nfi_local_server *server_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_connect] >> Begin\n", serv->id);
-
   // check params...
   if (serv == NULL) {
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_connect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_connect] >> Begin\n", serv->id);
 
   // private_info...
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_connect] Get server private info\n", serv->id);
@@ -315,12 +320,13 @@ int nfi_local_disconnect ( struct nfi_server *serv )
 {
   struct nfi_local_server *server_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_disconnect] >> Begin\n", serv->id);
-
-  // Check arguments
+  // check params...
   if (serv == NULL) {
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_disconnect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_disconnect] >> Begin\n", serv->id);
 
   // private_info...
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_disconnect] Get server private info\n", serv->id);
@@ -344,12 +350,13 @@ int nfi_local_reconnect ( struct nfi_server *serv ) //TODO
   char   dir[PATH_MAX];
   struct nfi_local_server *server_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_reconnect] >> Begin\n", serv->id);
-
-  // Check arguments
+  // check params...
   if (serv == NULL) {
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_reconnect] ERROR: serv argument is NULL\n", -1);
     return -1;
   }
+
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_reconnect] >> Begin\n", serv->id);
 
   // parse url...
   ret = ParseURL(serv->url, NULL, NULL, NULL, NULL, NULL, dir);
