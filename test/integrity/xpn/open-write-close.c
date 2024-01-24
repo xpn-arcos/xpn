@@ -13,7 +13,7 @@ int main ( int argc, char *argv[] )
 	// Arguments
 	if (argc < 2)
 	{
-	    printf("Usage: %s <number of write requests>\n") ;
+	    printf("Usage: %s <number of write requests>\n", argv[0]) ;
 	    return -1 ;
 	}
 
