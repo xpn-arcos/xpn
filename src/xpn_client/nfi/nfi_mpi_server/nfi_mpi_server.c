@@ -748,7 +748,7 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr 
   NULL_RET_ERR(fh_aux, MPI_SERVER_ERR_MEMORY);
   bzero(fh_aux, sizeof(struct nfi_mpi_server_fhandle));
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] nfi_mpi_server_create(%s)\n", serv->id, url);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] nfi_mpi_server_create(%s)\n", serv->id, dir);
 
   /************** LOCAL *****************/
   if (server_aux->params.locality)

@@ -469,7 +469,7 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *att
   NULL_RET_ERR(fh_aux, LOCAL_ERR_MEMORY);
   bzero(fh_aux, sizeof(struct nfi_local_fhandle));
   
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] nfi_local_create(%s)\n", serv->id, url);
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] nfi_local_create(%s)\n", serv->id, dir);
 
   fh_aux->fd = real_posix_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode);
   if (fh_aux->fd < 0)
