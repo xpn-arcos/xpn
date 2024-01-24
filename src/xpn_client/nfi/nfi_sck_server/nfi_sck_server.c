@@ -748,7 +748,7 @@ int nfi_sck_server_create ( struct nfi_server * serv, char * url, struct nfi_att
   NULL_RET_ERR(fh_aux, SCK_SERVER_ERR_MEMORY);
   bzero(fh_aux, sizeof(struct nfi_sck_server_fhandle));
 
-  debug_info("[SERV_ID=%d] [NFI_SCK] [nfi_sck_server_create] nfi_sck_server_create(%s)\n", serv->id, url);
+  debug_info("[SERV_ID=%d] [NFI_SCK] [nfi_sck_server_create] nfi_sck_server_create(%s)\n", serv->id, dir);
 
   /************** LOCAL *****************/
   if (server_aux->params.locality)
