@@ -62,14 +62,14 @@ mk_conf_servers() {
   fi
 
   if [[ ! -f ${DEPLOYMENTFILE} ]]; then
-    ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
-                           --machinefile  ${MACHINE_FILE} \
-                           --part_size    ${PARTITION_SIZE} \
-                           --part_name    ${PARTITION_NAME} \
-                           --storage_path ${STORAGE_PATH}
+    "${BASE_DIR}"/mk_conf.sh --conf         "${CONF_NAME}" \
+                           --machinefile  "${MACHINE_FILE}" \
+                           --part_size    "${PARTITION_SIZE}" \
+                           --part_name    "${PARTITION_NAME}" \
+                           --storage_path "${STORAGE_PATH}"
   else
-    ${BASE_DIR}/mk_conf.sh --conf            ${CONF_NAME} \
-                           --deployment_file ${DEPLOYMENTFILE}
+    "${BASE_DIR}"/mk_conf.sh --conf            "${CONF_NAME}" \
+                           --deployment_file "${DEPLOYMENTFILE}"
   fi
 }
 
@@ -90,19 +90,19 @@ start_xpn_servers() {
     exit -1
   fi
 
-  rm -f ${WORKDIR}/dns.txt
-  touch ${WORKDIR}/dns.txt
+  rm -f "${WORKDIR}/dns.txt"
+  touch "${WORKDIR}/dns.txt"
 
   if [[ ${SERVER_TYPE} == "mpi" ]]; then
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server -ns ${WORKDIR}/dns.txt ${ARGS} &
+            "${BASE_DIR}"/../../src/mpi_server/xpn_mpi_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
   else
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            ${BASE_DIR}/../../src/tcp_server/xpn_tcp_server -ns ${WORKDIR}/dns.txt ${ARGS} -p 3456 &
+            "${BASE_DIR}"/../../src/tcp_server/xpn_tcp_server -ns "${WORKDIR}"/dns.txt "${ARGS}" -p 3456 &
   fi
 
   sleep 3
@@ -133,14 +133,14 @@ stop_xpn_servers() {
 
   if [[ ${SERVER_TYPE} == "mpi" ]]; then
     mpiexec -np 1 \
-            -genv XPN_DNS ${WORKDIR}/dns.txt \
+            -genv XPN_DNS "${WORKDIR}"/dns.txt \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            ${BASE_DIR}/../../src/mpi_server/xpn_stop_mpi_server -f ${DEATH_FILE}
+            "${BASE_DIR}"/../../src/mpi_server/xpn_stop_mpi_server -f "${DEATH_FILE}"
   else
     mpiexec -np 1 \
-            -genv XPN_DNS${WORKDIR}/dns.txt \
+            -genv XPN_DNS "${WORKDIR}"/dns.txt \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            ${BASE_DIR}/../../src/tcp_server/xpn_stop_tcp_server -f ${DEATH_FILE}
+            "${BASE_DIR}"/../../src/tcp_server/xpn_stop_tcp_server -f "${DEATH_FILE}"
   fi
 }
 
@@ -156,19 +156,19 @@ rebuild_xpn_servers() {
   mpiexec -np       "${NODE_NUM}" \
           -hostfile "${HOSTFILE}" \
           -genv      LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-          -genv      XPN_DNS ${WORKDIR}/dns.txt \
+          -genv      XPN_DNS "${WORKDIR}"/dns.txt \
           -genv      XPN_CONF /local_test/test/configuration/conf.xml \
           -genv      LD_PRELOAD src/bypass/xpn_bypass.so \
           -genv      XPN_LOCALITY 0\
-          ${BASE_DIR}/../../src/utils/xpn_rebuild ${SOURCE_PATH} ${XPN_STORAGE_PATH} 524288
+          "${BASE_DIR}"/../../src/utils/xpn_rebuild "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288
 
-  rm -f ${WORKDIR}/partition_content.txt
+  rm -f "${WORKDIR}"/partition_content.txt
 
   # 2. stop old servers
   stop_xpn_servers
 
   # 3. start new servers
-  mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+  mk_conf_servers  "config.xml" "${HOSTFILE}" "512k" "xpn" "${XPN_STORAGE_PATH}" "${DEPLOYMENTFILE}"
   start_xpn_servers
 }
 
@@ -183,7 +183,7 @@ preload_xpn() {
   # 1. Copy
   mpiexec -np       "${NODE_NUM}" \
           -hostfile "${HOSTFILE}" \
-          ${BASE_DIR}/../../src/utils/xpn_preload ${SOURCE_PATH} ${XPN_STORAGE_PATH} 524288
+          "${BASE_DIR}"/../../src/utils/xpn_preload "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288
 }
 
 flush_xpn() {
@@ -196,7 +196,7 @@ flush_xpn() {
   # 1. Copy
   mpiexec -np       "${NODE_NUM}" \
           -hostfile "${HOSTFILE}" \
-          ${BASE_DIR}/../../src/utils/xpn_flush ${XPN_STORAGE_PATH} ${DEST_PATH} 524288
+          "${BASE_DIR}"/../../src/utils/xpn_flush "${XPN_STORAGE_PATH}" "${DEST_PATH}" 524288
 }
 
 
@@ -312,7 +312,7 @@ fi
 
 # run 
 case "${ACTION}" in
-      start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+      start)    mk_conf_servers  "config.xml" "${HOSTFILE}" "512k" "xpn" "${XPN_STORAGE_PATH}" "${DEPLOYMENTFILE}"
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers
