@@ -251,7 +251,7 @@
   }
 
   
-  int mpiClient_comm_close ( MPI_Comm fd )
+  int mpi_server_comm_close ( MPI_Comm fd )
   {
     int ret ;
 

@@ -20,6 +20,7 @@
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 function usage {
     echo ""
     echo " Usage:"
@@ -79,4 +80,3 @@ bash auto build
 cp  -a  $(find . -name "*.so")  "$INSTALL_PATH/promcli/lib"
 cp  -a  ./prom/include          "$INSTALL_PATH/promcli/"
 popd
-

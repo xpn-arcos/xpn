@@ -98,7 +98,7 @@
 
       debug_info("[MPI-SERVER] mpi_server_worker_run (ID=%d) close\n", th.rank_client_id);
 
-      mpiClient_comm_close((MPI_Comm)th.sd) ;
+      mpi_server_comm_close((MPI_Comm)th.sd) ;
     }
 
 

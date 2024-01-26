@@ -817,13 +817,30 @@ int xpn_simple_open(const char * path, int flags, mode_t mode)
 
     if ((O_WRONLY == (flags & O_WRONLY)) || (O_RDWR == (flags & O_RDWR))) 
     {
-        if (O_TRUNC == (flags & O_TRUNC)) 
+        //Check if the file exists
+        struct stat sb;
+        int exists = xpn_simple_stat(path, & sb);
+
+        // O_TRUNC
+        if ((exists >= 0) && (O_TRUNC == (flags & O_TRUNC)))
         {
+            // Remove the existing file
             res = xpn_internal_remove(path);
             // res = xpn_internal_resize(path, 0)
+
+            // Create the new file
+            //mode = mode & MASK;
+            res = xpn_internal_creat(path, mode, & vfh, & mdata);
+            if (res < 0) {
+                XPN_DEBUG_END_ARGS1(path)
+                return res;
+            }
         }
-        if ((O_TRUNC == (flags & O_TRUNC)) || ((O_CREAT == (flags & O_CREAT)) && (mode != 0))) 
+
+        // O_CREAT
+        if ((exists < 0) && ((O_CREAT == (flags & O_CREAT)) && (mode != 0))) 
         {
+            // Create the new file
             //mode = mode & MASK;
             res = xpn_internal_creat(path, mode, & vfh, & mdata);
             if (res < 0) {

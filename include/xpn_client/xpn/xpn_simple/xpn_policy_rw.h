@@ -1,51 +1,64 @@
 
-  /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
-   *
-   *  This file is part of Expand.
-   *
-   *  Expand is free software: you can redistribute it and/or modify
-   *  it under the terms of the GNU Lesser General Public License as published by
-   *  the Free Software Foundation, either version 3 of the License, or
-   *  (at your option) any later version.
-   *
-   *  Expand is distributed in the hope that it will be useful,
-   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   *  GNU Lesser General Public License for more details.
-   *
-   *  You should have received a copy of the GNU Lesser General Public License
-   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
-   *
-   */
+/*
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #ifndef _XPN_POLICY_RW_H
 #define _XPN_POLICY_RW_H
 
-#include "xpn_file.h"
-#include "xpn_policy_open.h"
-
-
- #ifdef  __cplusplus
+  #ifdef  __cplusplus
     extern "C" {
- #endif
+  #endif
 
-int XpnGetBlockInvert(struct xpn_partition *part, int serv, off_t local_offset, off_t *offset);
 
-int XpnReadGetBlock(int fd, off_t offset, off_t *local_offset, int *serv);
-int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv);
+  /* ... Include / Inclusion ........................................... */
 
-void *XpnReadBlocks      (int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
-void XpnReadBlocksFinish (int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, const void *new_buffer);
+  #include "xpn_file.h"
+  #include "xpn_policy_open.h"
 
-void *XpnWriteBlocks      (int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
 
-ssize_t XpnReadGetTotalBytes (int fd, ssize_t *res_v, int num_servers);
-ssize_t XpnWriteGetTotalBytes (int fd, ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers);
+  /* ... Const / Const ................................................. */
 
- #ifdef  __cplusplus
-     }
- #endif
 
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
+  /* ... Functions / Funciones ......................................... */
+
+  int XpnGetBlockInvert(struct xpn_partition *part, int serv, off_t local_offset, off_t *offset);
+
+  int XpnReadGetBlock(int fd, off_t offset, off_t *local_offset, int *serv);
+  int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv);
+
+  void *XpnReadBlocks      (int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
+  void XpnReadBlocksFinish (int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, const void *new_buffer);
+
+  void *XpnWriteBlocks      (int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
+
+  ssize_t XpnReadGetTotalBytes (int fd, ssize_t *res_v, int num_servers);
+  ssize_t XpnWriteGetTotalBytes (int fd, ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers);
+
+ 
+  /* ................................................................... */
+
+  #ifdef  __cplusplus
+    }
+  #endif
 
 #endif
