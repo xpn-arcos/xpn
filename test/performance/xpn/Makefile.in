@@ -16,20 +16,16 @@
 # Rules
 #
 
-all:  open-write-close open-read-close rnd-write-read-cmp
-
+all:  open-write-close open-read-close
 open-write-close: open-write-close.o
 	$(CC)  -o open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIES)
 
 open-read-close: open-read-close.o
 	$(CC)  -o open-read-close  open-read-close.o  $(MYLIBPATH) $(LIBRARIES)
 
-rnd-write-read-cmp: rnd-write-read-cmp.o
-	$(CC)  -o rnd-write-read-cmp  rnd-write-read-cmp.o  $(MYLIBPATH) $(LIBRARIES)
-
 %.o: %.c
 	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
 
 clean:
 	rm -f ./*.o
-	rm -f ./open-write-close ./open-read-close ./rnd-write-read-cmp
+	rm -f ./open-write-close ./open-read-close

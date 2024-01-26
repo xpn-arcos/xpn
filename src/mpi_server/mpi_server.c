@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -184,13 +184,12 @@
 
     int mpi_server_down ( int argc, char *argv[] )
     {
-      int  ret, buf;
+      int  ret, buf, res;;
       char port_name[MPI_MAX_PORT_NAME];
       char srv_name[1024] ;
-      char dns_name[2048] ;
       MPI_Comm server;
       FILE *file;
-
+      XPN_DEBUG_BEGIN
       printf("\n");
       printf(" ----------------\n");
       printf(" Stopping servers (%s)\n", serv_name);
@@ -198,7 +197,7 @@
       printf("\n");
 
       MPI_Init(&argc, &argv);
-
+      MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
       // Open host file
       file = fopen(params.shutdown_file, "r");
       if (file == NULL) {
@@ -219,7 +218,7 @@
           ret = ns_lookup("mpi_server", srv_name, aux_srv_ip, port_name);
           if (ret < 0)
           {
-            printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name);
+            printf("[MPI-SERVER] INFO: server %s not found\n", srv_name);
             continue;
           }
         }
@@ -228,27 +227,117 @@
           // Lookup port name on nameserver
           ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name) ;
           if (MPI_SUCCESS != ret) {
-            printf("[MPI-SERVER] ERROR: server %s not found\n", dns_name) ;
+            printf("[MPI-SERVER] INFO: server %s not found\n", srv_name) ;
             continue;
           }
         }
 
+        printf("[MPI-SERVER] Connect: MPI_SERVER_FINALIZE to server %s\n", srv_name) ;
         // Connect with servers
-        ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &server );
-        if (MPI_SUCCESS != ret) {
+        MPI_Info info;
+        MPI_Info_create( &info );
+        int errclass, resultlen;
+        char err_buffer[MPI_MAX_ERROR_STRING];
+        MPI_Info_set(info, "timeout", "1");
+        ret = MPI_Comm_connect( port_name, info, 0, MPI_COMM_SELF, &server );
+        
+        MPI_Error_class(ret,&errclass);
+        MPI_Error_string(ret,err_buffer,&resultlen);
+        printf("%s", err_buffer);
+        MPI_Info_free(&info);
+        if (MPI_ERR_PORT == errclass){
+          printf("[MPI-SERVER] Info: Server %s down\n", srv_name) ;
+          continue;
+        }else if (MPI_SUCCESS != errclass) {
           printf("[MPI-SERVER] ERROR: MPI_Comm_connect fails\n") ;
           continue;
         }
+        
+        printf("[MPI-SERVER] SEND: MPI_SERVER_FINALIZE to server %s\n", srv_name) ;
         buf = MPI_SERVER_FINALIZE;
         MPI_Send( &buf, 1, MPI_INT, 0, 0, server );
 
-        //MPI_Comm_disconnect( &server ); //TODO: fail
+        printf("[MPI-SERVER] SEND finish: MPI_SERVER_FINALIZE to server %s\n", srv_name) ;
+        // MPI_Comm_disconnect( &server ); //TODO: fail
       }
-
       // Close host file
       fclose(file);
+      // MPI_Finalize();
+      XPN_DEBUG_END
+      return 0;
+    }
 
-      //MPI_Finalize();
+    int mpi_server_terminate ( int argc, char *argv[] )
+    {
+      int  ret, buf, res;
+      char port_name[MPI_MAX_PORT_NAME];
+      MPI_Comm server;
+      
+      XPN_DEBUG_BEGIN
+      printf("\n");
+      printf(" ----------------\n");
+      printf(" Stopping server (%s)\n", serv_name);
+      printf(" ----------------\n");
+      printf("\n");
+
+      MPI_Init(&argc, &argv);
+      MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
+
+      int version_len;
+      char version[MPI_MAX_LIBRARY_VERSION_STRING];
+      MPI_Get_library_version(version, &version_len);
+
+      if (strncasecmp(version, "Open MPI", strlen("Open MPI")) != 0)
+      {
+        // Lookup port name
+        char aux_srv_ip[1024];
+        ret = ns_lookup("mpi_server", params.srv_name, aux_srv_ip, port_name);
+        if (ret < 0)
+        {
+          printf("[MPI-SERVER] INFO: server %s not found\n", params.srv_name);
+          // continue;
+        }
+      }
+      else
+      {
+        // Lookup port name on nameserver
+        ret = MPI_Lookup_name(params.srv_name, MPI_INFO_NULL, port_name) ;
+        if (MPI_SUCCESS != ret) {
+          printf("[MPI-SERVER] INFO: server %s not found\n", params.srv_name) ;
+          // continue;
+        }
+      }
+
+      XPN_DEBUG("[MPI-SERVER] Connect to server %s\n", params.srv_name) ;
+      // Connect with servers
+      MPI_Info info;
+      MPI_Info_create( &info );
+      int errclass, resultlen;
+      char err_buffer[MPI_MAX_ERROR_STRING];
+      MPI_Info_set(info, "timeout", "1");
+      ret = MPI_Comm_connect( port_name, info, 0, MPI_COMM_SELF, &server );
+      
+      MPI_Error_class(ret,&errclass);
+      MPI_Error_string(ret,err_buffer,&resultlen);
+      XPN_DEBUG("%s", err_buffer);
+      MPI_Info_free(&info);
+      if (MPI_ERR_PORT == errclass){
+        printf("[MPI-SERVER] Info: Server %s down\n", params.srv_name) ;
+      }
+      if (MPI_SUCCESS != errclass) {
+        printf("[MPI-SERVER] ERROR: MPI_Comm_connect fails\n") ;
+      }
+      
+      XPN_DEBUG("[MPI-SERVER] SEND: MPI_SERVER_FINALIZE to server %s\n", params.srv_name) ;
+      buf = MPI_SERVER_FINALIZE;
+      MPI_Send( &buf, 1, MPI_INT, 0, 0, server );
+
+      XPN_DEBUG("[MPI-SERVER] SEND finish: MPI_SERVER_FINALIZE to server %s\n", params.srv_name) ;
+      MPI_Comm_disconnect( &server ); 
+      
+      XPN_DEBUG_END
+      
+      MPI_Finalize();
 
       return 0;
     }
@@ -292,8 +381,9 @@
       // Do associate action...
       if (strcasecmp(exec_name, "xpn_stop_mpi_server") == 0) {
         ret = mpi_server_down (argc, argv);
-      }
-      else {
+      }else if (strcasecmp(exec_name, "xpn_terminate_mpi_server") == 0) {
+        ret = mpi_server_terminate (argc, argv);
+      }else {
         ret = mpi_server_up ();
       }
 

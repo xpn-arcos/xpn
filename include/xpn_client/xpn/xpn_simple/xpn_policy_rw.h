@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -30,13 +30,18 @@
     extern "C" {
  #endif
 
-int XpnGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv);
+int XpnGetBlockInvert(struct xpn_partition *part, int serv, off_t local_offset, off_t *offset);
+
+int XpnReadGetBlock(int fd, off_t offset, off_t *local_offset, int *serv);
+int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv);
 
 void *XpnReadBlocks      (int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
+void XpnReadBlocksFinish (int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, const void *new_buffer);
 
 void *XpnWriteBlocks      (int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
 
-ssize_t XpnRWGetTotalBytes (int fd, ssize_t *res_v, int num_servers);
+ssize_t XpnReadGetTotalBytes (int fd, ssize_t *res_v, int num_servers);
+ssize_t XpnWriteGetTotalBytes (int fd, ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers);
 
  #ifdef  __cplusplus
      }

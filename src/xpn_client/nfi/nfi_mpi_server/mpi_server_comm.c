@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -152,13 +152,13 @@
             char cli_name  [HOST_NAME_MAX];
             gethostname(cli_name, HOST_NAME_MAX);
             printf("----------------------------------------------------------------\n");
-            printf("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
+            printf("XPN Client %s : Waiting for servers being up and runing lookup...\n", cli_name);
             printf("----------------------------------------------------------------\n\n");
           }
           lookup_retries++;
-          sleep(2);
+          sleep(1);
         }
-      } while((ret < 0) && (lookup_retries < 150));
+      } while((ret < 0) && (lookup_retries < 1));
 
       if (ret < 0)
       {
@@ -176,11 +176,23 @@
       }
     }
 
+    MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
+ 
     // Connect...
     int connect_retries = 0;
+    int errclass, resultlen;
+    char err_buffer[MPI_MAX_ERROR_STRING];
+    MPI_Info info;
+    MPI_Info_create( &info );
+    MPI_Info_set(info, "timeout", "1");
     do{
-      ret = MPI_Comm_connect(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, &(params->server)) ;
-      if (MPI_SUCCESS != ret)
+      ret = MPI_Comm_connect(params->port_name, info, 0, MPI_COMM_WORLD, &(params->server)) ;
+
+      MPI_Error_class(ret,&errclass);
+      MPI_Error_string(ret,err_buffer,&resultlen);
+      XPN_DEBUG("%s", err_buffer);
+     
+      if (MPI_SUCCESS != errclass)
       {
         if (connect_retries == 0)
         {
@@ -191,10 +203,12 @@
           printf("----------------------------------------------------------------\n\n");
         }
         connect_retries++;
-        sleep(2);
+        sleep(1);
       }
-    } while(MPI_SUCCESS != ret && connect_retries < 150);
-    
+    } while(MPI_SUCCESS != errclass && connect_retries < 1);
+    MPI_Info_free(&info);
+    if (ret == MPI_ERR_PORT)
+      return -1;
     if (MPI_SUCCESS != ret) {
       debug_error("Client[%d]: MPI_Comm_connect fails :-(", params->rank) ;
       return -1 ;

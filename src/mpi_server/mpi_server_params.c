@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -45,6 +45,7 @@
     }
     printf("\t-d <path>:\t'%s'\n",   params->dirbase) ;
     printf("\t-f <path>:\t'%s'\n",   params->shutdown_file) ;
+    printf("\t-h <host>:\t'%s'\n",   params->srv_name) ;
 
     DEBUG_END() ;
   }
@@ -59,6 +60,7 @@
     printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
     printf("\t-d  <string>: name of the base directory\n") ;
     printf("\t-f  <path>: file of servers to be shutdown\n") ;
+    printf("\t-h  <host>: host server to be shutdown\n") ;
 
     DEBUG_END() ;
   }
@@ -136,7 +138,8 @@
               i++;
               break;
             case 'h':
-              return -1;
+              strcpy(params->srv_name, argv[i+1]);
+              break;
   
             default:
               break;

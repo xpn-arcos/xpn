@@ -321,6 +321,7 @@ AC_CONFIG_FILES([ \
       test/performance/xpn/Makefile \
       test/performance/iop/Makefile \
       test/performance/mpi_pingpong/Makefile \
+      test/performance/xpn-fault-tolerant/Makefile \
     ])
     
 AC_OUTPUT

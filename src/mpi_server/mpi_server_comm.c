@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -137,6 +137,7 @@
         debug_error("Server[%d]: MPI_Publish_name fails :-(", params->rank) ;
         return -1 ;
       }
+      MPI_Info_free(&info);
     }
 
     // Print server init information
@@ -148,6 +149,8 @@
     TIME_MISC_Timer(&t1);
     TIME_MISC_DiffTime(&t0, &t1, &tf);
     time = TIME_MISC_TimevaltoFloat(&tf);
+
+    MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
 
     if (params->rank == 0)
     {

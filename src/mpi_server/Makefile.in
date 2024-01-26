@@ -28,6 +28,7 @@ MYLIBS               =  -L../../src/xpn_client -lxpn -lmxml @LIBS@
 
 MPI_SERVER_EXE       = xpn_mpi_server
 MPI_SERVER_EXE_STOP  = xpn_stop_mpi_server
+MPI_SERVER_EXE_TERMINATE  = xpn_terminate_mpi_server
 
 
 #--------------------------
@@ -39,7 +40,7 @@ all:  all_object  all_exe
 
 all_object:  $(OBJECTS_MPI_SERVER)
 
-all_exe:  $(MPI_SERVER_EXE) $(MPI_SERVER_EXE_STOP)
+all_exe:  $(MPI_SERVER_EXE) $(MPI_SERVER_EXE_STOP)  $(MPI_SERVER_EXE_TERMINATE)
 
 %.o: %.c
 	$(CC) $(MYFLAGS) $(MYHEADERS) -c $< -o $@
@@ -50,13 +51,18 @@ $(MPI_SERVER_EXE): $(OBJECTS_MPI_SERVER)
 $(MPI_SERVER_EXE_STOP): $(MPI_SERVER_EXE)
 	ln -s $(MPI_SERVER_EXE) $(MPI_SERVER_EXE_STOP)
 
+$(MPI_SERVER_EXE_TERMINATE): $(MPI_SERVER_EXE)
+	ln -s $(MPI_SERVER_EXE) $(MPI_SERVER_EXE_TERMINATE)
+
 install:  $(MPI_SERVER_EXE)
 	cp -a                   $(MPI_SERVER_EXE) $(EXPAND_DIR)/bin
 	rm -fr $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP) && ln -s $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE) $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_STOP)
+	rm -fr $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_TERMINATE) && ln -s $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE) $(EXPAND_DIR)/bin/$(MPI_SERVER_EXE_TERMINATE)
 
 
 clean:
 	rm -f $(OBJECTS_MPI_SERVER)
 	rm -f $(MPI_SERVER_EXE)
 	rm -f $(MPI_SERVER_EXE_STOP)
+	rm -f $(MPI_SERVER_EXE_TERMINATE)
 

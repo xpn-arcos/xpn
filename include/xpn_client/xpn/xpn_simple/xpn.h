@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -38,7 +38,6 @@
 /* Paralel struct partition */
 struct xpn_partition {
 	int id;				/* id of partition */
-	int type;			/* type of file :NORMAL, RAID5,... */
 	int replication_level;			/* replication_level of files :0, 1, 2,... */
 	char name[PATH_MAX];	/* name of partition */
 	ssize_t block_size;		/* size of distribution used */
@@ -64,19 +63,6 @@ struct xpn_metadata {
 	int data_nserv;		/* number of servers */
 	int meta_nserv;		/* number of metadata servers */
 	struct nfi_attr attr;
-	int type_policy;	   /* RAID0, RAID1 */
-	void *policy;
-	int policy_size;
-};
-
-
-enum xpn_policy{
-	POLICY_RAID0,
-	POLICY_RAID1
-};
-
-
-struct policy{
 	int first_node;
 };
 
@@ -87,7 +73,6 @@ struct xpn_metadata_header {
 	ssize_t block_size;	   /* size of distribution used */
 	int     data_nserv;		/* number of servers */
 	ssize_t file_size;
-	int     type_policy;	   /* RAID0, RAID1 */
 	//char    padding[512-(3*sizeof(int) - 2*sizeof(ssize_t))];   /* 484 = 512 bytes - 3*sizeof(int) - 2*sizeof(ssize_t) */
 };
 

@@ -34,20 +34,85 @@
  * @return Returns 0 on success or -1 on error.
  */
 int XpnGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv)
-{
+{	
 	int block = offset / xpn_file_table[fd]->block_size;
-	int block_line = block / xpn_file_table[fd]->mdata->data_nserv;
-	int Block_line_replication = block_line + replication;
-	int final_block_line = Block_line_replication + block_line * xpn_file_table[fd]->part->replication_level;
-
-	// Calculate the server
-	(*serv) = (block + replication) % xpn_file_table[fd]->mdata->data_nserv;
+	int block_replication = block * (xpn_file_table[fd]->part->replication_level + 1) + replication;
+	int block_line = block_replication / xpn_file_table[fd]->part->data_nserv;
+	
+	// Calculate the server	
+	(*serv) = (block_replication) % xpn_file_table[fd]->part->data_nserv;
 	
 	// Calculate the offset in the server
-	(*local_offset) = final_block_line * xpn_file_table[fd]->block_size;
-	XPN_DEBUG("offset(%lld) -> local_offset = %lld, serv = %d, repl = %d", (long long)offset, (long long)(*local_offset), *serv, replication);
-	
+	(*local_offset) = block_line * xpn_file_table[fd]->block_size + (offset % xpn_file_table[fd]->block_size);
+	XPN_DEBUG("offset(%lld) -> local_offset = %lld, serv = %d, repl = %d do=%d", (long long)offset, (long long)(*local_offset), *serv, replication, xpn_file_table[fd]->part->data_serv[*serv].error);
 	return 0;
+}
+
+/**
+ * Calculates the offset (in file) of the given offset (file in server) of a file with replication.
+ *
+ * @param fd[in] A file descriptor.
+ * @param serv[in] The server in which is located the given offset.
+ * @param local_offset[in] The offset in the server.
+ * @param offset[out] The original offset.
+ *
+ * @return Returns 0 on success or -1 on error.
+ */
+int XpnGetBlockInvert(struct xpn_partition *part, int serv, off_t local_offset, off_t *offset)
+{
+	int added_size;
+	if (local_offset % part->block_size == 0){
+		added_size = 0;
+	}else{
+		added_size = part->block_size - (local_offset % part->block_size);
+	}
+    int block_line = (local_offset + added_size) / part->block_size;
+
+	int block_replication = (block_line-1) * part->data_nserv + (serv+1);
+	
+	// round up
+    int block = 1 + ((block_replication - 1) / (part->replication_level + 1));
+
+    (*offset) = block * part->block_size - added_size;
+	XPN_DEBUG("offset(%lld) -> local_offset = %lld, serv = %d, do=%d", (long long)(*offset), (long long)local_offset, serv, part->data_serv[serv].error);
+	return 0;
+}
+
+/**
+ * Calculates the server and the offset (in server) for reads of the given offset (origin file) of a file with replication.
+ *
+ * @param fd[in] A file descriptor.
+ * @param offset[in] The original offset.
+ * @param replication[in] The replication of actual offset.
+ * @param local_offset[out] The offset in the server.
+ * @param serv[out] The server in which is located the given offset.
+ *
+ * @return Returns 0 on success or -1 on error.
+ */
+int XpnReadGetBlock(int fd, off_t offset, off_t *local_offset, int *serv)
+{
+	int replication = 0;
+	do{
+		XpnGetBlock(fd, offset, replication, local_offset, serv);
+		replication += 1;
+	}while(xpn_file_table[fd]->part->data_serv[*serv].error == -1 && replication <= xpn_file_table[fd]->part->replication_level);
+}
+
+/**
+ * Calculates the server and the offset (in server) for writes of the given offset (origin file) of a file with replication.
+ *
+ * @param fd[in] A file descriptor.
+ * @param offset[in] The original offset.
+ * @param replication[in] The replication of actual offset.
+ * @param local_offset[out] The offset in the server.
+ * @param serv[out] The server in which is located the given offset.
+ *
+ * @return Returns 0 on success or -1 on error.
+ */
+int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv)
+{
+	XpnGetBlock(fd, offset, replication, local_offset, serv);
+	return xpn_file_table[fd]->part->data_serv[*serv].error;
 }
 
 /**
@@ -79,7 +144,7 @@ void XpnReadBlocksBlockByBlock(int fd, const void *buffer, size_t size, off_t of
 
 	while(size>count)
 	{
-		XpnGetBlock(fd, new_offset, 0, &l_offset, &l_serv);
+		XpnReadGetBlock(fd, new_offset, &l_offset, &l_serv);
 
 		// l_size is the remaining bytes from new_offset until the end of the block
 		l_size = xpn_file_table[fd]->block_size -
@@ -118,7 +183,7 @@ void XpnWriteBlocksBlockByBlock(int fd, const void *buffer, size_t size, off_t o
 	struct nfi_worker_io **io = *io_out;
 	int *ion = *ion_out;
 	off_t new_offset, l_offset;
-	int l_serv, i;
+	int l_serv, i, res;
 	size_t l_size, count;
 
 	for (i = 0 ; i < num_servers ; i++) {
@@ -133,8 +198,7 @@ void XpnWriteBlocksBlockByBlock(int fd, const void *buffer, size_t size, off_t o
 		
 		for (size_t j = 0; j < xpn_file_table[fd]->part->replication_level + 1; j++)
 		{
-			XpnGetBlock(fd, new_offset, j, &l_offset, &l_serv);
-
+			res = XpnWriteGetBlock(fd, new_offset, j, &l_offset, &l_serv);
 			// l_size is the remaining bytes from new_offset until the end of the block
 			l_size = xpn_file_table[fd]->block_size -
 				(new_offset%xpn_file_table[fd]->block_size);
@@ -248,18 +312,64 @@ void XpnWriteBlocksAllInOne(int fd, const void *buffer, size_t size, off_t offse
  * @return Returns the a pointer to buffer on success, or NULL on error.
  */
 void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
-{
+{	
 	int optimize = 1; // Optimize by default
-    // int optimize = 0; // Do not optimize
+	if (xpn_file_table[fd]->part->replication_level > 0){
+    	optimize = 0; // Do not optimize
+	}
+
+	void *new_buffer;
+	new_buffer = malloc(size);
+	if (new_buffer == NULL){
+		XPN_DEBUG("Error in malloc");
+		perror("XpnWriteBlocks: Error in malloc");
+		return new_buffer;
+	}
 
 	if (optimize)
-	{
-		XpnReadBlocksAllInOne(fd, (const void *)buffer, size, offset, io_out, ion_out, num_servers);
+		XpnReadBlocksAllInOne(fd, (const void *)new_buffer, size, offset, io_out, ion_out, num_servers);
+	else 
+		XpnReadBlocksBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
+	return new_buffer;
+}
+
+/**
+ * This is the complementary operation to XpnReadBlocks. The blocks that have been read and grouped by XpnReadBlocksAllInOne are now reordered before delivering them to the user.
+ *
+ * @param fd[in] A file descriptor.
+ * @param buffer[out] The ordered buffer to be delivered to the user. This buffer will contain the same blocks that new_buffer, but in the right order.
+ * @param size[in] The original size.
+ * @param offset[in] The original offset.
+ * @param io_out[out] The operation matrix. io_out[i] (row 'i' in io_out) contains the required operations in server 'i'.
+ * @param ion_out[out] The length of every row in io_out. ion_out[i] is the number of operations in server 'i' (io_out[i]).
+ * @param num_servers[in] The number of servers.
+ * @param new_buffer[in] The disorganized buffer that needs to be ordered.
+ *
+ */
+void XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, const void *new_buffer)
+{
+	struct nfi_worker_io **io = *io_out;
+	int *ion = *ion_out;
+	int i, j;
+	size_t count;
+
+	int optimize = 1; // Optimize by default
+	if (xpn_file_table[fd]->part->replication_level > 0){
+    	optimize = 0; // Do not optimize
 	}
-	else {
-		XpnRBlocksBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
+
+	if (optimize){
+		XpnReadBlocksBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
+
+		count = 0;
+		for (i = 0 ; i < num_servers ; i++) {
+			for (j = 0 ; j < ion[i] ; j++) {
+				memcpy(io[i][j].buffer, ((char *)new_buffer) + count, io[i][j].size);
+
+				count += io[i][j].size;
+			}
+		}
 	}
-	return buffer;
 }
 
 /**
@@ -279,21 +389,46 @@ void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, struc
 void *XpnWriteBlocks ( int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
 {
 	int optimize = 1; // Optimize by default
-	// int optimize = 0; // Do not optimize
-	void *new_buffer = (void *)buffer;
+	if (xpn_file_table[fd]->part->replication_level > 0){
+    	optimize = 0; // Do not optimize
+	}
 
-	if (optimize) {
-		new_buffer = malloc(size * (xpn_file_table[fd]->part->replication_level + 1));
-		if (new_buffer == NULL){
-			XPN_DEBUG("Error in malloc");
-			perror("XpnWriteBlocks: Error in malloc");
-		}
-		else{
-			XpnWriteBlocksAllInOne(fd, buffer, size, offset, io_out, ion_out, num_servers, new_buffer);
-		}
-	} else
-		XpnWBlocksBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
+	void *new_buffer = (void *)buffer;
+	new_buffer = malloc(size * (xpn_file_table[fd]->part->replication_level + 1));
+	if (new_buffer == NULL){
+		XPN_DEBUG("Error in malloc");
+		perror("XpnWriteBlocks: Error in malloc");
+		return new_buffer;
+	}
+
+	if (optimize) 
+		XpnWriteBlocksAllInOne(fd, buffer, size, offset, io_out, ion_out, num_servers, new_buffer);
+	else
+		XpnWriteBlocksBlockByBlock(fd, buffer, size, offset, io_out, ion_out, num_servers);
 	return new_buffer;
+}
+
+
+/**
+ * Calculates the total bytes the servers read.
+ *
+ * @param fd[in] A file descriptor.
+ * @param res_v[in] The response array of the servers.
+ * @param num_servers[in] The number of servers.
+ *
+ * @return Returns total bytes read/write.
+ */
+ssize_t XpnReadGetTotalBytes(int fd, ssize_t *res_v, int num_servers) 
+{
+	ssize_t res = -1;
+	int i;
+
+	res = 0;
+	for (i = 0 ; i < num_servers ; i++){
+		res += res_v[i];
+		XPN_DEBUG("res_v[%d] = %d",i,res_v[i]);
+	}
+	return res;
 }
 
 /**
@@ -305,14 +440,29 @@ void *XpnWriteBlocks ( int fd, const void *buffer, size_t size, off_t offset, st
  *
  * @return Returns total bytes read/write.
  */
-ssize_t XpnRWGetTotalBytes(int fd, ssize_t *res_v, int num_servers) 
+ssize_t XpnWriteGetTotalBytes(int fd, ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers) 
 {
 	ssize_t res = -1;
 	int i;
 
+	int total_send = 0;
+	int total_write = 0;
+
 	res = 0;
-	for (i = 0 ; i < num_servers ; i++)
+	for (i = 0 ; i < num_servers ; i++){
 		res += res_v[i];
+
+		for (int j = 0; j < ion[i]; j++)
+		{
+			if (servers[i]->error != -1){
+				total_send += (*io)[i][j].size;
+			}
+			total_write += (*io)[i][j].size;
+		}
+	}
+	XPN_DEBUG("res = %d total_send = %d total_write = %d", res, total_send, total_write);
+	if (res == total_send)
+		return total_write;
 
 	return res;
 }

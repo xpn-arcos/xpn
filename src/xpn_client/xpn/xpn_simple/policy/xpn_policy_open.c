@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -218,26 +218,9 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
   mdata->version      = 1;
   mdata->type         = 0;
   mdata->block_size   = xpn_parttable[part_id].block_size;
-  mdata->type_policy  = xpn_parttable[part_id].type;
 
-  if (mdata->type_policy < 0) {
-      return -1;
-  }
+  mdata->first_node = hash(path, xpn_parttable[part_id].data_nserv);
 
-  switch (mdata->type_policy)
-  {
-    default:
-      mdata->policy = (struct policy *)malloc(sizeof(struct policy));
-      if (NULL == mdata->policy) {
-        return -1;
-      }
-
-      ((struct policy *)mdata->policy)->first_node = hash(path, xpn_parttable[part_id].data_nserv);
-
-
-      mdata->policy_size = sizeof(struct policy);
-      break;
-  }
   return 0;
 }
 
@@ -256,30 +239,15 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
  */
 int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
 {
-  struct policy *p;
-
   if(mdata == NULL){
     return -1;
   }
 
-  if (mdata->type_policy < 0) {
-    return -1;
+  if(pos < 0) {
+    pos = (mdata->first_node)%(mdata->data_nserv);
   }
-
-  switch(mdata->type_policy)
-  {
-    default:
-      p = (struct policy *) mdata->policy;
-      if (p == NULL){
-        return pos;
-      }
-      if(pos < 0) {
-        pos = (p->first_node)%(mdata->data_nserv);
-      }
-      else{
-        pos = (p->first_node+pos)%(mdata->data_nserv);
-      }
-      break;
+  else{
+    pos = (mdata->first_node+pos)%(mdata->data_nserv);
   }
 
   return pos;
@@ -310,44 +278,33 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
     return -1;
   }
 
-  if (mdata->type_policy < 0) {
+  n = hash(path, nserv);
+
+  res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
+  if(res < 0)
+  {
+    XPN_DEBUG_END
     return -1;
   }
 
-  switch(mdata->type_policy)
+  XpnCreateMetadata(mdata, pd, path);
+
+  if(fh->nfih[n]->type == NFIDIR)
   {
-    default:
-      n = hash(path, nserv);
+    i = 0;
+    while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
+      i++;
+    }
 
-      res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
-      if(res < 0)
-      {
-        XPN_DEBUG_END
-        return -1;
-      }
+    if(i == XPN_MAX_PART)
+    {
+      XPN_DEBUG_END
+      return -1;
+    }
 
-      XpnCreateMetadata(mdata, pd, path);
-
-      if(fh->nfih[n]->type == NFIDIR)
-      {
-        i = 0;
-        while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
-          i++;
-        }
-
-        if(i == XPN_MAX_PART)
-        {
-          XPN_DEBUG_END
-          return -1;
-        }
-
-        mdata->type = XPN_DIR;
-        XPN_DEBUG_END
-        return XPN_DIR;
-      }
-       
-    break;
-    
+    mdata->type = XPN_DIR;
+    XPN_DEBUG_END
+    return XPN_DIR;
   }
 
   XPN_DEBUG_END
@@ -361,54 +318,41 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
   char url_serv[PATH_MAX];
   struct nfi_fhandle *fh_aux;
 
-  XPN_DEBUG_BEGIN
-
+  XPN_DEBUG_BEGIN_CUSTOM("%s",path);
   if(mdata == NULL){
     return -1;
   }
 
-  if (mdata->type_policy < 0)
+  if((*fh) != NULL)
+  {
+    XPN_DEBUG_END
+    return 0;
+  }
+
+  fh_aux = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
+  if(fh_aux == NULL)
   {
     XPN_DEBUG_END
     return -1;
   }
 
-  switch(mdata->type_policy)
-  {
-    default:
-      if((*fh) != NULL)
-      {
-        XPN_DEBUG_END
-        return 0;
-      }
+  memset(fh_aux, 0, sizeof(struct nfi_fhandle));
 
-      fh_aux = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
-      if(fh_aux == NULL)
-      {
-        XPN_DEBUG_END
-        return -1;
-      }
-
-      memset(fh_aux, 0, sizeof(struct nfi_fhandle));
-
-      XpnGetURLServer(servers, path, url_serv);
-
-      // Default Value (if file, else directory)
-      res = servers->ops->nfi_open(servers, url_serv, fh_aux);
-      if (res<0) {
-          res = servers->ops->nfi_opendir(servers, url_serv, fh_aux); // FIXME: When do we do nfi_closedir()?
-      }
-
-      if(res<0)
-      {
-        free(fh_aux);
-        XPN_DEBUG_END
-        return -1;
-      }
-
-      (*fh) = fh_aux;
-      break;
+  XpnGetURLServer(servers, path, url_serv);
+  // Default Value (if file, else directory)
+  res = servers->ops->nfi_open(servers, url_serv, fh_aux);
+  if (res<0) {
+      res = servers->ops->nfi_opendir(servers, url_serv, fh_aux); // FIXME: When do we do nfi_closedir()?
   }
+
+  if(res<0)
+  {
+    free(fh_aux);
+    XPN_DEBUG_END
+    return -1;
+  }
+
+  (*fh) = fh_aux;
 
   XPN_DEBUG_END
   return 0;
@@ -444,7 +388,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   for(i=0;i<n;i++)
   {
     res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
-    if (res<0)
+    if (res<0 && xpn_file_table[fd]->part->data_serv[i].error != -1)
     {
       XPN_DEBUG_END_CUSTOM("%d", fd)
       return res;
@@ -476,21 +420,34 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     return -1;
   }
 
-  st->st_size = 0;
+  // Check if have incomplete blocks
+  int have_incompete_blocks = 0;
   for(i=0;i<n;i++)
-  {
-    if (attr[i].at_size > 0){
-      st->st_size += (attr[i].at_size - XPN_HEADER_SIZE); // total size, in bytes
-    }
-
-    if (1 == attr[i].at_type)  // It is a directory
-    {
+    if (attr[i].at_size != 0 &&
+       (attr[i].at_size - XPN_HEADER_SIZE) % xpn_file_table[fd]->part->block_size != 0){
+      have_incompete_blocks = 1;
       break;
     }
-  }
 
-  int master_node = ((struct policy *)xpn_file_table[fd]->mdata->policy)->first_node;
-  //int master_node = ((struct policy *)mdata->policy)->first_node;
+  // Get serv with the last block
+  int serv_to_calc = 0;
+  for(i=0;i<n;i++){
+    if (have_incompete_blocks){
+      if (attr[i].at_size != 0 &&
+         (attr[i].at_size - XPN_HEADER_SIZE) % xpn_file_table[fd]->part->block_size != 0 && 
+          attr[i].at_size <= attr[serv_to_calc].at_size)
+        serv_to_calc = i;
+    }else{
+      if (attr[i].at_size >= attr[serv_to_calc].at_size)
+        serv_to_calc = i;
+    }
+  }
+  
+  off_t offset = 0;
+  ret = XpnGetBlockInvert(xpn_file_table[fd]->part, serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE, &offset);
+  st->st_size = offset;
+
+  int master_node = xpn_file_table[fd]->mdata->first_node;
 
   st->st_dev     = attr[master_node].st_dev;       // device
   st->st_ino     = attr[master_node].st_ino;       // inode
@@ -516,6 +473,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   free(servers);
   free(attr);
 
+  XPN_DEBUG_END_CUSTOM("%d", fd);
   return ret;
 }
 
@@ -528,7 +486,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   struct nfi_attr *attr;
   struct xpn_fh *vfh_aux;
 
-  //XPN_DEBUG_BEGIN_CUSTOM("%s", path)
+  XPN_DEBUG_BEGIN_CUSTOM("%s", path)
 
   strcpy(aux_path, path);
 
@@ -618,19 +576,32 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     free(servers);
     return -1;
   }
-
-  st->st_size = 0;
+  // Check if have incomplete blocks
+  int have_incompete_blocks = 0;
   for(i=0;i<n;i++)
-  {
-    if (attr[i].at_size > 0){
-      st->st_size += (attr[i].at_size - XPN_HEADER_SIZE); // total size, in bytes
-    }
-
-    if (1 == attr[i].at_type)  // It is a directory
-    {
+    if (attr[i].at_size != 0 &&
+       (attr[i].at_size - XPN_HEADER_SIZE) % xpn_parttable[pd].block_size != 0){
+      have_incompete_blocks = 1;
       break;
     }
+
+  // Get serv with the last block
+  int serv_to_calc = 0;
+  for(i=0;i<n;i++){
+    if (have_incompete_blocks){
+      if (attr[i].at_size != 0 &&
+         (attr[i].at_size - XPN_HEADER_SIZE) % xpn_parttable[pd].block_size != 0 && 
+          attr[i].at_size <= attr[serv_to_calc].at_size)
+        serv_to_calc = i;
+    }else{
+      if (attr[i].at_size >= attr[serv_to_calc].at_size)
+        serv_to_calc = i;
+    }
   }
+  
+  off_t offset = 0;
+  ret = XpnGetBlockInvert(&(xpn_parttable[pd]), serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE, &offset);
+  st->st_size = offset;
 
   int master_node = hash(path, n);
 
@@ -657,6 +628,8 @@ int XpnGetAtribPath ( char * path, struct stat *st )
 
   free(servers);
   free(attr);
+
+  XPN_DEBUG_END_CUSTOM("%s", path)
 
   return ret;
 }

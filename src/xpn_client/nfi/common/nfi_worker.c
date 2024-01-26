@@ -1,5 +1,5 @@
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -210,7 +210,9 @@ int nfiworker_init(struct nfi_server * serv)
 
 
 int nfiworker_launch(void( * worker_function)(struct st_th), struct nfi_worker * wrk) 
-{
+{ 
+  if (wrk->server->error == -1)
+    return -1;
   // initialize wrk->warg...
   memset( & (wrk -> warg), 0, sizeof(struct st_th));
   wrk -> warg.params = (void * ) wrk;

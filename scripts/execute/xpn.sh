@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal, Dario Muñoz Muñoz
 #
 #  This file is part of Expand.
 #
@@ -96,10 +96,15 @@ start_xpn_servers() {
   touch ${WORKDIR}/dns.txt
 
   if [[ ${SERVER_TYPE} == "mpi" ]]; then
-    mpiexec -np       "${NODE_NUM}" \
-            -hostfile "${HOSTFILE}" \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server -ns ${WORKDIR}/dns.txt ${ARGS} &
+    for ((i=1; i<=$NODE_NUM; i++))
+    do
+        line=$(head -n $i "$HOSTFILE" | tail -n 1)
+        mpiexec -np       1 \
+          -host "${line}" \
+          -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+          ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server -ns ${WORKDIR}/dns.txt ${ARGS} &
+        sleep 0.5
+    done
   else
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
@@ -143,6 +148,27 @@ stop_xpn_servers() {
             -genv XPN_DNS${WORKDIR}/dns.txt \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
             ${BASE_DIR}/../../src/tcp_server/xpn_stop_tcp_server -f ${DEATH_FILE}
+  fi
+}
+
+terminate_xpn_server() {
+
+  if [[ ${VERBOSE} == true ]]; then
+    echo " * DEATH_FILE: ${DEATH_FILE}"
+    echo " * additional daemon args: ${ARGS}"
+  fi
+
+  if [[ ${SERVER_TYPE} == "mpi" ]]; then
+    mpiexec -np 1 \
+            -genv XPN_DNS ${WORKDIR}/dns.txt \
+            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+            ${BASE_DIR}/../../src/mpi_server/xpn_terminate_mpi_server -f ${DEATH_FILE} -h ${HOST}
+  # else
+  #   mpiexec -np 1 \
+  #           -genv XPN_DNS${WORKDIR}/dns.txt \
+  #           -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+            # -disable-auto-cleanup \
+  #           ${BASE_DIR}/../../src/tcp_server/xpn_stop_tcp_server -f ${DEATH_FILE}
   fi
 }
 
@@ -235,7 +261,7 @@ usage_details() {
   echo "     -a, --args <arguments>              Add various additional daemon arguments."
   echo "     -f, --foreground                    Starts the script in the foreground. Daemons are stopped by pressing 'q'."
   echo "     -c, --config   <path>               Path to configuration file."
-  echo "     -p, --replication_level   <n>      Replication level n."
+  echo "     -p, --replication_level   <n>       Replication level n."
   echo "     -m, --deployment_file   <path>      Path to deployment file."
   echo "     -n, --numnodes <n>                  XPN servers are started on n nodes."
   echo "     -r, --rootdir  <path>               The rootdir path for XPN daemons."
@@ -245,6 +271,7 @@ usage_details() {
   echo "     -x, --xpn_storage_path <path>       The XPN local storage path"  
   echo "     -l, --hostfile  <path>              File with the hosts to be used to execute daemons (one per line)."
   echo "     -d, --deathfile <path>              File with the hosts to be used to stop    daemons (one per line)."
+  echo "     -k, --host <host>                   Ip of the host to be used to terminate    daemons (one per line)."
   echo "     -v, --verbose                       Increase verbosity"
   echo ""
 }
@@ -265,12 +292,14 @@ RUN_FOREGROUND=false
 VERBOSE=false
 HOSTFILE="machinefile"
 DEATH_FILE="machinefile"
+HOST=""
 SERVER_TYPE="mpi"
+# SERVER_TYPE="tcp"
 XPN_REPLICATION_LEVEL=0
 
 
 ## get arguments
-while getopts "r:w:s:t:x:d:n:a:c:p:m:l:fvh" opt; do
+while getopts "r:w:s:t:x:d:k:n:a:c:p:m:l:fvh" opt; do
   case "${opt}" in
     r) DIR_ROOT=${OPTARG}
        ;;
@@ -298,6 +327,8 @@ while getopts "r:w:s:t:x:d:n:a:c:p:m:l:fvh" opt; do
        ;;
     d) DEATH_FILE=${OPTARG}
        ;;
+    k) HOST=${OPTARG}
+       ;;
     v) VERBOSE=true
        ;;
     h) usage_short
@@ -323,6 +354,8 @@ case "${ACTION}" in
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers
+                ;;
+      terminate)terminate_xpn_server
                 ;;
       rebuild)  rebuild_xpn_servers
                 ;;
