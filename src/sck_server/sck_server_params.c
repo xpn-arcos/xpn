@@ -116,11 +116,6 @@ int sck_server_params_get ( sck_server_param_st * params, int argc, char * argv[
             strcpy(params->dns_file, argv[i+1]);
             i++;
           }
-          if ((strlen(argv[i]) == 4) && (argv[i][2] == 't') && (argv[i][3] == 'p')) 
-          {
-            params->thread_mode = TH_OP;
-            i++;
-          }
           break;
         case 'f':
           strcpy(params->shutdown_file, argv[i+1]);
@@ -131,7 +126,7 @@ int sck_server_params_get ( sck_server_param_st * params, int argc, char * argv[
           i++;
           break;
         case 't':
-          if (isdigit(argv[i+1][0])) 
+          if ((i+1) < argc)
           {
             int thread_mode_aux = atoi(argv[i+1]);
 

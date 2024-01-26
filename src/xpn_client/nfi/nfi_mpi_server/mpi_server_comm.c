@@ -303,14 +303,14 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   ret = MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: MPI_Send fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Send fails\n");
     return -1;
   }
 
   ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, 0, 1, params->server, &status);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: MPI_Recv fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Recv fails\n");
     return -1;
   }
 
@@ -320,7 +320,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   ret = MPI_Recv(params->dirbase, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: MPI_Recv fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Recv fails\n");
     return -1;
   }
 
@@ -332,7 +332,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
 
   ret = MPI_Recv(params->sem_name_server, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
   if (MPI_SUCCESS != ret) {
-    printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: MPI_Recv fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Recv fails\n");
     return -1;
   }
   */
