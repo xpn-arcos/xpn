@@ -381,7 +381,7 @@ int XpnGetServer(struct conf_connect_st * fconf, __attribute__((__unused__)) str
     char cli_name[HOST_NAME_MAX];
 
     // Get server name
-    ret = ParseURL(url, prt, NULL, NULL, NULL, serv_name, NULL);
+    ret = ParseURL(url, prt, NULL, NULL, serv_name, NULL, NULL);
     if (ret < 0) {
         xpn_err(XPNERR_INVALURL);
         return -1;
@@ -394,7 +394,7 @@ int XpnGetServer(struct conf_connect_st * fconf, __attribute__((__unused__)) str
 
         if (strcmp(cli_name, serv_name) == 0)
         {
-            strcpy(ptr, "file");
+            strcpy(prt, "file");
         }
     }
     */
