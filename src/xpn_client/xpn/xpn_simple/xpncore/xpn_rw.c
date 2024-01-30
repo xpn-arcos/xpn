@@ -144,9 +144,22 @@ ssize_t xpn_sread(int fd, const void *buffer, size_t size, off_t offset)
   new_offset = offset;
   count = 0;
 
+  char *hostip = ns_get_host_ip();
+  char hostname[1024];
+  ns_get_hostname(hostname);
+  int serv_client = -1;
+  for(int i=0; i<n; i++){
+    XPN_DEBUG("serv_client: %d serv_url: %s client: %s name: %s", serv_client, servers[i]->url, hostip, hostname);
+
+    if (strstr(servers[i]->url, hostip) != NULL || strstr(servers[i]->url, hostname) != NULL){
+      serv_client = i;
+      XPN_DEBUG("serv_client: %d serv_url: %s client: %s", serv_client, servers[serv_client]->url, hostip);
+    }
+  }
+
   do
   {
-    XpnReadGetBlock(fd, new_offset, &l_offset, &l_serv);
+    XpnReadGetBlock(fd, new_offset, serv_client, &l_offset, &l_serv);
 
     l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
 
@@ -307,9 +320,22 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
     io[i][0].offset = 0;
     io[i][0].size = 0;
   }
+  
+  char *hostip = ns_get_host_ip();
+  char hostname[1024];
+  ns_get_hostname(hostname);
+  int serv_client = -1;
+  for(int i=0; i<n; i++){
+    XPN_DEBUG("serv_client: %d serv_url: %s client: %s name: %s", serv_client, servers[i]->url, hostip, hostname);
+
+    if (strstr(servers[i]->url, hostip) != NULL || strstr(servers[i]->url, hostname) != NULL){
+      serv_client = i;
+      XPN_DEBUG("serv_client: %d serv_url: %s client: %s", serv_client, servers[serv_client]->url, hostip);
+    }
+  }
 
   // Calculate which blocks to read from each server
-  new_buffer = XpnReadBlocks(fd, buffer, size, offset, &io, &ion, n);
+  new_buffer = XpnReadBlocks(fd, buffer, size, offset, serv_client, &io, &ion, n);
   if(new_buffer == NULL)
   {
     if (servers != NULL) {
@@ -393,12 +419,12 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
     }
   }
   
-  XpnReadBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
+  XpnReadBlocksFinish(fd, buffer, size, offset, serv_client, &io, &ion, n, new_buffer);
 
   total = -1;
   if (!err)
   {
-    total = XpnReadGetTotalBytes(fd, res_v, n);
+    total = XpnReadGetTotalBytes(res_v, n);
 
     if(total > 0){
       xpn_file_table[fd]->offset += total;
@@ -425,7 +451,7 @@ ssize_t xpn_pread(int fd, void *buffer, size_t size, off_t offset)
 
 ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
 {
-  ssize_t res;
+  ssize_t res = 0;
   ssize_t count = 0;
   off_t new_offset, l_offset;
   size_t l_size;
@@ -473,7 +499,7 @@ ssize_t xpn_swrite(int fd, const void *buffer, size_t size, off_t offset)
 
   do
   {
-    for (size_t i = 0; i < xpn_file_table[fd]->part->replication_level + 1; i++)
+    for (int i = 0; i < xpn_file_table[fd]->part->replication_level + 1; i++)
     {
       res_aux = XpnWriteGetBlock(fd, new_offset, i, &l_offset, &l_serv);
 			if (res_aux != -1){        
@@ -703,7 +729,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   total = -1;
   if (!err)
   {
-    total = XpnWriteGetTotalBytes(fd, res_v, n, &io, ion, servers) / (xpn_file_table[fd]->part->replication_level+1);
+    total = XpnWriteGetTotalBytes(res_v, n, &io, ion, servers) / (xpn_file_table[fd]->part->replication_level+1);
 
     if(total > 0){
       xpn_file_table[fd]->offset += total;

@@ -67,10 +67,10 @@ int xpn_destroy_servers(struct xpn_partition *part)
   return 0;
 }
 
-int xpn_mark_error_server(int index)
+int xpn_simple_mark_error_server(int index)
 {
   struct nfi_server *serv;
-  int i;
+  int i = 0;
   while(xpn_parttable[i].id != -1)
     {
       serv = xpn_parttable[i].data_serv;
@@ -170,7 +170,9 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
   {
     xpn_parttable[i].initialized = 0;
 
-    xpn_parttable[i].id = XpnGetIdPartition(fd, xpn_parttable[i].name);
+    //TODO: XpnGetIdPartition does not take into account that xpn_init xpn_destroy and xpn_init are done in one run
+    // xpn_parttable[i].id = XpnGetIdPartition(fd, xpn_parttable[i].name);
+    xpn_parttable[i].id = i;
     XPN_DEBUG("Partition %d: name=%s", xpn_parttable[i].id, xpn_parttable[i].name);
     
     /* compruebo los errores???? */

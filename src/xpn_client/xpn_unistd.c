@@ -49,7 +49,15 @@
 
       return ret ;
     }
+    
+    int xpn_mark_error_server(int index)
+    {
+      int ret = -1;
 
+      ret = xpn_simple_mark_error_server(index);
+
+      return ret;
+    }
 
     //
     // open - close - creat

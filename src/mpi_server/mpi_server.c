@@ -184,7 +184,7 @@
 
     int mpi_server_down ( int argc, char *argv[] )
     {
-      int  ret, buf, res;;
+      int  ret, buf, res = 0;
       char port_name[MPI_MAX_PORT_NAME];
       char srv_name[1024] ;
       MPI_Comm server;
@@ -269,7 +269,7 @@
 
     int mpi_server_terminate ( int argc, char *argv[] )
     {
-      int  ret, buf, res;
+      int  ret, buf, res = 0;
       char port_name[MPI_MAX_PORT_NAME];
       MPI_Comm server;
       

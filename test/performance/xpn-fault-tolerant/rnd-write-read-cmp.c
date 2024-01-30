@@ -41,7 +41,7 @@ double get_time(void)
 int cmpBuffers(const char *buffer1, const char *buffer2, size_t size) {
     for (size_t i = 0; i < size; i++) {
         if (buffer1[i] != buffer2[i]) {
-			printf("Diferent [%d] 1 %d 2 %d\n",i, buffer1[i],buffer2[i]);
+			printf("Diferent [%ld] 1 %d 2 %d\n",i, buffer1[i],buffer2[i]);
             return 1; 
         }
     }
@@ -95,7 +95,7 @@ void print_stat(int fd){
 
 int main ( int argc, char *argv[] )
 {
-	int    ret, fd1 ,res;
+	int    ret, fd1;
 	double t_bc, t_ac, t_bw, t_aw ;
 	char random_file[PATH_MAX];
 	sprintf(random_file,"/tmp/randomfile%d.txt",rand());
@@ -127,7 +127,7 @@ int main ( int argc, char *argv[] )
 	bufferRead2 = malloc(buff_size*sizeof(char)) ;
 
 	long file_size = mb_file*MB;
-	printf("MB to test: %f bytes %d\n", mb_file, file_size);
+	printf("MB to test: %f bytes %ld\n", mb_file, file_size);
 	printf("File to save data and check xpn: %s", random_file);
 
 	// xpn-creat
@@ -240,10 +240,10 @@ int main ( int argc, char *argv[] )
 	
 	struct stat sb;
 	xpn_fstat(fd1, &sb);
-	printf("File size: %lld bytes, real size: %lld bytes\n", (long long) sb.st_size, file_size);
+	printf("File size: %lld bytes, real size: %ld bytes\n", (long long) sb.st_size, file_size);
 	struct stat sb2;
 	xpn_stat(argv[1], &sb2);
-	printf("File size: %lld bytes, real size: %lld bytes\n", (long long) sb2.st_size, file_size);
+	printf("File size: %lld bytes, real size: %ld bytes\n", (long long) sb2.st_size, file_size);
 
 	ret = xpn_close(fd1);
 

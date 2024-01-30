@@ -72,7 +72,6 @@ int ns_unpublish(char *dns_file, char *protocol, char *param_srv_name)
   FILE *dns_fd;
   FILE *new_dns_fd;
   char new_dns_file[PATH_MAX];
-  int new_dns_poxis_fd;
   int found = 0;
   char aux_name[1024];
   char aux_name_2[1024];

@@ -487,7 +487,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   struct xpn_fh *vfh_aux;
 
   XPN_DEBUG_BEGIN_CUSTOM("%s", path)
-
   strcpy(aux_path, path);
 
   pd = XpnGetPartition(aux_path); // returns partition id and remove partition name from path 
@@ -578,13 +577,13 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   }
   // Check if have incomplete blocks
   int have_incompete_blocks = 0;
-  for(i=0;i<n;i++)
+  for(i=0;i<n;i++){
     if (attr[i].at_size != 0 &&
        (attr[i].at_size - XPN_HEADER_SIZE) % xpn_parttable[pd].block_size != 0){
       have_incompete_blocks = 1;
       break;
     }
-
+  }
   // Get serv with the last block
   int serv_to_calc = 0;
   for(i=0;i<n;i++){

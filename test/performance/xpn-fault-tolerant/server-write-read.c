@@ -75,7 +75,10 @@ int main ( int argc, char *argv[] )
 		for (int i = 0; i < n_error_serv; i++)
 		{
 			printf("Stop server %d\n", i);
-			realpath("./stop-server.sh",file_path);
+			char * aux_path1 = realpath("./stop-server.sh",file_path);
+			if (aux_path1 == NULL){
+				return -1;
+			}
 			res = system(file_path);
 			printf("%d = file_path(%s)\n", res, file_path);
 		}
@@ -84,7 +87,10 @@ int main ( int argc, char *argv[] )
 		for (int i = 0; i < n_error_serv; i++)
 		{
 			printf("kill server %d\n", i);
-			realpath("./kill-server.sh",file_path);
+			char * aux_path2 = realpath("./kill-server.sh",file_path);
+			if (aux_path2 == NULL){
+				return -1;
+			}
 			res = system(file_path);
 			printf("%d = file_path(%s)\n", res, file_path);
 		}
@@ -119,7 +125,7 @@ int main ( int argc, char *argv[] )
 	bufferRead2 = malloc(buff_size*sizeof(char)) ;
 
 	long file_size = mb_file*MB;
-	printf("MB to test: %f bytes %d\n", mb_file, file_size);
+	printf("MB to test: %f bytes %ld\n", mb_file, file_size);
 	printf("File to save data and check xpn: %s", random_file);
 
 	// xpn-creat
@@ -161,10 +167,10 @@ int main ( int argc, char *argv[] )
 	//test fstat and stat
 	struct stat sb;
 	xpn_fstat(fd1, &sb);
-	printf("File size: %lld bytes, real size: %lld bytes\n", (long long) sb.st_size, file_size);
+	printf("File size: %lld bytes, real size: %ld bytes\n", (long long) sb.st_size, file_size);
 	struct stat sb2;
 	xpn_stat(argv[1], &sb2);
-	printf("File size: %lld bytes, real size: %lld bytes\n", (long long) sb2.st_size, file_size);
+	printf("File size: %lld bytes, real size: %ld bytes\n", (long long) sb2.st_size, file_size);
 	
 	if (sb.st_size != file_size){
 		printf("fstat size not the same as the real size\n");

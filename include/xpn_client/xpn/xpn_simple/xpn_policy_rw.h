@@ -43,16 +43,16 @@
 
   int XpnGetBlockInvert(struct xpn_partition *part, int serv, off_t local_offset, off_t *offset);
 
-  int XpnReadGetBlock(int fd, off_t offset, off_t *local_offset, int *serv);
+  int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, int *serv);
   int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv);
 
-  void *XpnReadBlocks      (int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
-  void XpnReadBlocksFinish (int fd, void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, const void *new_buffer);
+  void *XpnReadBlocks      (int fd, const void *buffer, size_t size, off_t offset, int serv_client, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
+  void XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, int serv_client, struct nfi_worker_io ***io_out, int **ion_out, int num_servers, const void *new_buffer);
 
   void *XpnWriteBlocks      (int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
 
-  ssize_t XpnReadGetTotalBytes (int fd, ssize_t *res_v, int num_servers);
-  ssize_t XpnWriteGetTotalBytes (int fd, ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers);
+  ssize_t XpnReadGetTotalBytes (ssize_t *res_v, int num_servers);
+  ssize_t XpnWriteGetTotalBytes (ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers);
 
  
   /* ................................................................... */

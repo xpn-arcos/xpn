@@ -30,6 +30,7 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "xpn_file.h"
+  #include "xpn_policy_rw.h"
 
 
   /* ... Const / Const ................................................. */
