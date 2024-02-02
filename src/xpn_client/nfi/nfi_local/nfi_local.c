@@ -201,6 +201,9 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
     return -1;
   }
 
+  // private_info...
+  serv->private_info = (void *)server_aux;
+
   // Initialize params
   memset(server_aux, 0, sizeof(struct nfi_local_server));
 
@@ -212,23 +215,8 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
   }
 
   // copy 'url' string...
-  strcpy(server_aux->path, dir);
-  serv->private_info = (void *)server_aux;
-
-  serv->url = STRING_MISC_StrDup(url); // Full URL
-  if (serv->url == NULL)
-  {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] ERROR: out of memory.\n", serv->id);
-    return -1;
-  }
-
-  serv->server = STRING_MISC_StrDup(server); // Server URL
-  if (serv->server == NULL)
-  {
-    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] ERROR: out of memory.\n", serv->id);
-    return -1;
-  }
-
+  serv->url = strdup(url);
+  NULL_RET_ERR(serv->url, MPI_SERVER_ERR_MEMORY);
 
   // new server wrk...
   serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker));
@@ -434,6 +422,7 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
   fho->priv_fh = (void *) fh_aux;
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] nfi_local_open(%s)=%d\n", serv->id, dir, fh_aux->fd);
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] << End\n", serv->id);
 
   return 0;
 }
@@ -748,8 +737,6 @@ int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_getattr] nfi_local_getattr(%s)=%d\n", serv->id, dir, ret);
 
   local_2_nfi_attr(attr, &st);
-
-  DEBUG_END();
 
   debug_info("[NFI_LOCAL] [nfi_local_getattr] >> End\n");
 
