@@ -219,14 +219,14 @@ int sck_client_comm_locality ( sck_client_param_st * params )
   ret = sck_client_write_data(params->server, (char *)&data, 1 * sizeof(int), "<unused msg_id>");
   if (ret < 0)
   {
-    printf("[SCK_CLIENT_COMM] [sck_client_comm_disconnect] ERROR: sck_client_write_data fails\n");
+    printf("[SCK_CLIENT_COMM] [mpi_client_comm_locality] ERROR: sck_client_write_data fails\n");
     return -1;
   }
 
   ret = sck_client_read_data( params->server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>");
   if (ret < 0)
   {
-    printf("[SCK_CLIENT_COMM] [sck_client_comm_disconnect] ERROR: sck_client_read_data fails\n");
+    printf("[SCK_CLIENT_COMM] [mpi_client_comm_locality] ERROR: sck_client_read_data fails\n");
     return -1;
   }
 
@@ -236,7 +236,7 @@ int sck_client_comm_locality ( sck_client_param_st * params )
   ret = sck_client_read_data( params->server, params->dirbase, PATH_MAX * sizeof(char), "<unused msg_id>");
   if (ret < 0)
   {
-    printf("[SCK_CLIENT_COMM] [sck_client_comm_disconnect] ERROR: MPI_Recv fails\n");
+    printf("[SCK_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Recv fails\n");
     return -1;
   }
 
