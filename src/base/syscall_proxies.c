@@ -36,8 +36,10 @@
   ssize_t (*real_read )(int, void*, size_t)       = NULL;
   ssize_t (*real_write)(int, const void*, size_t) = NULL;
 
-  ssize_t (*real_pread )(int, void *, size_t, off_t)       = NULL;
-  ssize_t (*real_pwrite)(int, const void *, size_t, off_t) = NULL;
+  ssize_t (*real_pread   )(int, void *, size_t, off_t)       = NULL;
+  ssize_t (*real_pwrite  )(int, const void *, size_t, off_t) = NULL;
+  ssize_t (*real_pread64 )(int, void *, size_t, off_t)       = NULL;
+  ssize_t (*real_pwrite64)(int, const void *, size_t, off_t) = NULL;
 
   off_t   (*real_lseek)(int, off_t, int)          = NULL;
   off64_t (*real_lseek64)(int, off64_t, int)      = NULL;
@@ -93,6 +95,14 @@
   void*   (*real_mmap)(void *, size_t, int, int, int, off_t) = NULL;
 
 
+
+  int     (*real_openat  )(int, char *, int)   = NULL;
+  int     (*real_openat2 )(int, char *, int, mode_t)   = NULL;
+
+
+  
+
+
   /* ... Functions / Funciones ......................................... */
 
   //
@@ -115,7 +125,6 @@
 
     return fd;
   }
-
 
   int dlsym_open2(char *path, int flags, mode_t mode)
   {
@@ -238,6 +247,28 @@
     }
 
     return real_pwrite(fd, buf, count, offset);
+  }
+
+  ssize_t dlsym_pread64(int fd, void *buf, size_t count, off_t offset)
+  {
+    debug_info("dlsym_pread64: before pread64...\n");
+
+    if (real_pread64 == NULL){
+        real_pread64 = (ssize_t (*)(int, void *, size_t, off_t)) dlsym(RTLD_NEXT,"pread64");
+    }
+
+    return real_pread64(fd, buf, count, offset);
+  }
+
+  ssize_t dlsym_pwrite64(int fd, const void *buf, size_t count, off_t offset)
+  {
+    debug_info("dlsym_pwrite64: before pwrite64...\n");
+
+    if (real_pwrite64 == NULL){
+        real_pwrite64 = (ssize_t (*)(int, const void *, size_t, off_t)) dlsym(RTLD_NEXT,"pwrite64");
+    }
+
+    return real_pwrite64(fd, buf, count, offset);
   }
 
   off_t dlsym_lseek(int fd, off_t offset, int whence)
@@ -813,6 +844,6 @@
 
     return ret;
   } 
- 
+
 
    /* ................................................................... */

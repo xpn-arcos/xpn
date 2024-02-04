@@ -694,7 +694,61 @@ int __open_2 ( const char *path, int flags, ... )
   return ret;
 }
 
-#endif  
+#endif
+
+int openat ( int dirfd, const char *path, int flags, ... )
+{
+  int ret, fd;
+  va_list ap;
+  mode_t mode = 0;
+
+  va_start(ap, flags);
+  mode = va_arg(ap, mode_t);
+
+  debug_info("[BYPASS] >> Begin openat....\n");
+  debug_info("[BYPASS]    1) dirfd => %d\n", dirfd);
+  debug_info("[BYPASS]    2) Path  => %s\n", path);
+  debug_info("[BYPASS]    3) Flags => %d\n", flags);
+  debug_info("[BYPASS]    4) Mode  => %d\n", mode);
+
+  dirfd = dirfd ; // to avoid "warning: unused parameter ‘dirfd’"
+
+  // This if checks if variable path passed as argument starts with the expand prefix.
+  if (is_xpn_prefix(path))
+  {
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    // It is an XPN partition, so we redirect the syscall to expand syscall
+    debug_info("[BYPASS]\t xpn_open (%s,%o)\n",path + strlen(xpn_adaptor_partition_prefix), flags);
+
+    if (mode != 0) {
+      fd = xpn_open(skip_xpn_prefix(path), flags, mode);
+    }
+    else {
+      fd = xpn_open(skip_xpn_prefix(path), flags);
+    }
+
+    debug_info("[BYPASS]\t xpn_open (%s,%o) -> %d\n", skip_xpn_prefix(path), flags, fd);
+
+    ret = add_xpn_file_to_fdstable(fd);
+  }
+  // Not an XPN partition. We must link with the standard library.
+  else 
+  {
+    debug_info("[BYPASS]\t dlsym_openat (%d,%s,%o,%o)\n", dirfd, path, flags, mode);
+
+    ret = dlsym___open_2((char *)path, flags);
+
+    debug_info("[BYPASS]\t dlsym_openat (%d,%s,%o,%o) -> %d\n", dirfd, path, flags, mode, ret);
+  }
+
+  va_end(ap);
+
+  debug_info("[BYPASS] << After open.... %s\n", path);
+
+  return ret;
+}
 
 int creat ( const char *path, mode_t mode )
 {
@@ -968,6 +1022,116 @@ ssize_t pwrite ( int fd, const void *buf, size_t count, off_t offset )
   }
 
   debug_info("[BYPASS] << After pwrite...\n");
+
+  return ret;
+}
+
+ssize_t pread64 ( int fd, void *buf, size_t count, off_t offset )
+{
+  ssize_t ret = -1;
+
+  debug_info("[BYPASS] >> Begin pread64...\n");
+  debug_info("[BYPASS]    * fd=%d\n",    fd);
+  debug_info("[BYPASS]    * buf=%p\n",   buf);
+  debug_info("[BYPASS]    * count=%ld\n", count);
+  debug_info("[BYPASS]    * offset=%ld\n", offset);
+
+  struct generic_fd virtual_fd = fdstable_get ( fd );
+
+  // This if checks if variable fd passed as argument is a expand fd.
+  if(virtual_fd.type == FD_XPN)
+  {
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    // It is an XPN partition, so we redirect the syscall to expand syscall
+    if (virtual_fd.is_file == 0)
+    {
+      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+      debug_info("[BYPASS] << After pread64...\n");
+
+      errno = EISDIR;
+      return -1;
+    }
+
+    debug_info("[BYPASS]\t try to xpn_read %d, %p, %ld, %ld\n", virtual_fd.real_fd, buf, count, offset);
+
+    ret = xpn_lseek(virtual_fd.real_fd, offset, SEEK_SET);
+    if (ret != -1) {
+      ret = xpn_read(virtual_fd.real_fd, buf, count);
+    }
+    if (ret != -1) {
+      xpn_lseek(virtual_fd.real_fd, -ret, SEEK_CUR);
+    }
+
+    debug_info("[BYPASS]\t xpn_read %d, %p, %ld -> %ld\n", virtual_fd.real_fd, buf, count, ret);
+  }
+  // Not an XPN partition. We must link with the standard library
+  else
+  {
+    debug_info("[BYPASS]\t try to dlsym_pread64 %d,%p,%ld\n", fd, buf, count);
+
+    ret = dlsym_pread64(fd,buf, count, offset);
+
+    debug_info("[BYPASS]\t dlsym_pread64 %d,%p,%ld -> %ld\n", fd, buf, count, ret);
+  }
+
+  debug_info("[BYPASS] << After pread64...\n");
+
+  return ret;
+}
+
+ssize_t pwrite64 ( int fd, const void *buf, size_t count, off_t offset )
+{
+  ssize_t ret = -1;
+
+  debug_info("[BYPASS] >> Begin pwrite64...\n");
+  debug_info("[BYPASS]    * fd=%d\n",    fd);
+  debug_info("[BYPASS]    * buf=%p\n",   buf);
+  debug_info("[BYPASS]    * count=%ld\n", count);
+  debug_info("[BYPASS]    * offset=%ld\n", offset);
+
+  struct generic_fd virtual_fd = fdstable_get ( fd );
+
+  // This if checks if variable fd passed as argument is a expand fd.
+  if(virtual_fd.type == FD_XPN)
+  {
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    // It is an XPN partition, so we redirect the syscall to expand syscall
+    if (virtual_fd.is_file == 0)
+    {
+      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+      debug_info("[BYPASS] << After pwrite64...\n");
+
+      errno = EISDIR;
+      return -1;
+    }
+
+    debug_info("[BYPASS]\t try to xpn_write %d, %p, %ld, %ld\n", virtual_fd.real_fd, buf, count, offset);
+
+    ret = xpn_lseek(virtual_fd.real_fd, offset, SEEK_SET);
+    if (ret != -1) {
+      ret = xpn_write(virtual_fd.real_fd, buf, count);
+    }
+    if (ret != -1) {
+      xpn_lseek(virtual_fd.real_fd, -ret, SEEK_CUR);
+    }
+
+    debug_info("[BYPASS]\t xpn_write %d, %p, %ld -> %ld\n", virtual_fd.real_fd, buf, count, ret);
+  }
+  // Not an XPN partition. We must link with the standard library
+  else
+  {
+    debug_info("[BYPASS]\t try to dlsym_pwrite64 %d, %p, %ld, %ld\n", fd, buf, count, offset);
+
+    ret = dlsym_pwrite64(fd, buf, count, offset);
+
+    debug_info("[BYPASS]\t dlsym_pwrite64 %d, %p, %ld, %ld -> %ld\n", fd, buf, count, offset, ret);
+  }
+
+  debug_info("[BYPASS] << After pwrite64...\n");
 
   return ret;
 }
