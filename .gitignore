@@ -26,6 +26,7 @@ autom4te.cache
 /missing
 /stamp-h1
 /Makefile
+/Makefile.in
 **/Makefile
 configure~
 configure
