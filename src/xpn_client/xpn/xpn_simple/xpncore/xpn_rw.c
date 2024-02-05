@@ -276,7 +276,7 @@ int xpn_paux_free ( int n, struct nfi_server ***servers, struct nfi_worker_io **
       // free *servers
       if ( (*servers) != NULL) { 
          free( (*servers) ); 
-	 (*servers) = NULL;
+	       (*servers) = NULL;
       }
 
       // free *io
@@ -284,10 +284,10 @@ int xpn_paux_free ( int n, struct nfi_server ***servers, struct nfi_worker_io **
       {
            for (j=0; j<n; j++)
            {
-	       if ( (*io)[j] != NULL) {
+	             if ( (*io)[j] != NULL) {
                     free((*io)[j]);
                     (*io)[j] = NULL ;
-	       }
+	             }
            }
 
            free((*io));
@@ -297,13 +297,13 @@ int xpn_paux_free ( int n, struct nfi_server ***servers, struct nfi_worker_io **
       // free *ion
       if ( (*ion) != NULL) { 
            free( (*ion) ); 
-	   (*ion) = NULL;
+	         (*ion) = NULL;
       }
 
       // free *res_v
       if ( (*res_v) != NULL) { 
            free( (*res_v) ); 
-	   (*res_v) = NULL;
+	         (*res_v) = NULL;
       }
 
       return  1;
@@ -458,7 +458,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
       if (res < 0)
       {
          xpn_paux_free(n, &servers, &io, &ion, &res_v) ;
-	 if (new_buffer != NULL) { free(new_buffer); new_buffer = NULL; }
+	       if (new_buffer != NULL) { free(new_buffer); new_buffer = NULL; }
 
          res = -1;
          XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
@@ -489,11 +489,11 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   total = -1;
   if (!err)
   {
-    total = XpnReadGetTotalBytes(fd, res_v, n);
+     total = XpnReadGetTotalBytes(fd, res_v, n);
 
-    if (total > 0) {
-        xpn_file_table[fd]->offset += total;
-    }
+     if (total > 0) {
+         xpn_file_table[fd]->offset += total;
+     }
   }
   res = total;
 
@@ -684,7 +684,7 @@ ssize_t xpn_pwrite ( int fd, const void *buffer, size_t size, off_t offset )
     }
   }
 
-  //pthread_mutex_unlock(&(global_mt));
+  // pthread_mutex_unlock(&(global_mt));
 
   total = -1;
   if (!err)
