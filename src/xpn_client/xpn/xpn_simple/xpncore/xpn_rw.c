@@ -280,26 +280,30 @@ int xpn_paux_free ( int n, struct nfi_server ***servers, struct nfi_worker_io **
       }
 
       // free *io
-      for (j=0; j<n; j++)
+      if ( (*ion) != NULL)
       {
-	   if ( (*io[j]) != NULL) {
-                free((*io[j]));
-                (*io[j]) = NULL ;
-	   }
+           for (j=0; j<n; j++)
+           {
+	       if ( (*io)[j] != NULL) {
+                    free((*io)[j]);
+                    (*io)[j] = NULL ;
+	       }
+           }
+
+           free((*io));
+           (*io) = NULL;
       }
-      free((*io));
-      (*io) = NULL;
 
       // free *ion
       if ( (*ion) != NULL) { 
-         free( (*ion) ); 
-	 (*ion) = NULL;
+           free( (*ion) ); 
+	   (*ion) = NULL;
       }
 
       // free *res_v
       if ( (*res_v) != NULL) { 
-         free( (*res_v) ); 
-	 (*res_v) = NULL;
+           free( (*res_v) ); 
+	   (*res_v) = NULL;
       }
 
       return  1;
@@ -307,7 +311,8 @@ int xpn_paux_free ( int n, struct nfi_server ***servers, struct nfi_worker_io **
 
 ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
 {
-  ssize_t res, *res_v, total;
+  ssize_t res = -1;
+  ssize_t *res_v, total;
   int n, i, j, err;
   struct nfi_server **servers;
   struct nfi_worker_io **io;
@@ -373,7 +378,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
      return res;
   }
 
-  io = (struct nfi_worker_io **)malloc(sizeof(struct nfi_worker_io *)*n);
+  io = (struct nfi_worker_io **)malloc(n*sizeof(struct nfi_worker_io *));
   if (io == NULL)
   {
      if (servers != NULL) { free(servers); servers=NULL; }
@@ -383,7 +388,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
      return res;
   }
 
-  ion = (int *)malloc(sizeof(int)*n);
+  ion = (int *)malloc(n*sizeof(int));
   if (ion == NULL)
   {
      if (servers != NULL) { free(servers); servers=NULL; }
@@ -394,7 +399,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
      return res;
   }
 
-  res_v = (ssize_t *)malloc(sizeof(ssize_t)*n);
+  res_v = (ssize_t *)malloc(n*sizeof(ssize_t));
   if (res_v == NULL)
   {
      if (servers != NULL) { free(servers); servers=NULL; }
@@ -417,7 +422,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   // create nfi_worker_io structs
   for (i=0; i<n; i++)
   {
-    io[i] = (struct nfi_worker_io *)malloc(sizeof(struct nfi_worker_io)*max);
+    io[i] = (struct nfi_worker_io *)malloc(max*sizeof(struct nfi_worker_io));
     if (io[i] == NULL)
     {
       xpn_paux_free(n, &servers, &io, &ion, &res_v) ;
@@ -481,8 +486,6 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
 
   //pthread_mutex_unlock(&(global_mt));
 
-  XpnReadBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
-
   total = -1;
   if (!err)
   {
@@ -495,7 +498,8 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   res = total;
 
   xpn_paux_free(n, &servers, &io, &ion, &res_v) ;
-  if (new_buffer != NULL) { free(new_buffer); new_buffer = NULL; }
+  XpnReadBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
+  // if (new_buffer != NULL) { free(new_buffer); new_buffer = NULL; }
 
   XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 
@@ -504,7 +508,8 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
 
 ssize_t xpn_pwrite ( int fd, const void *buffer, size_t size, off_t offset )
 {
-  ssize_t res, *res_v, total;
+  ssize_t res = -1;
+  ssize_t *res_v, total;
   int n, i, j, err;
   struct nfi_server **servers;
   struct nfi_worker_io **io;
@@ -566,7 +571,7 @@ ssize_t xpn_pwrite ( int fd, const void *buffer, size_t size, off_t offset )
      return res;
   }
 
-  io = (struct nfi_worker_io **)malloc(sizeof(struct nfi_worker_io *)*n);
+  io = (struct nfi_worker_io **)malloc(n*sizeof(struct nfi_worker_io *));
   if (io == NULL)
   {
      if (servers != NULL) { free(servers); servers=NULL; }
@@ -574,7 +579,7 @@ ssize_t xpn_pwrite ( int fd, const void *buffer, size_t size, off_t offset )
      return -1 ;
   }
 
-  ion = (int *)malloc(sizeof(int)*n);
+  ion = (int *)malloc(n*sizeof(int));
   if (ion == NULL)
   {
      if (servers != NULL) { free(servers); servers=NULL; }
@@ -583,7 +588,7 @@ ssize_t xpn_pwrite ( int fd, const void *buffer, size_t size, off_t offset )
      return -1 ;
   }
 
-  res_v = (ssize_t *)malloc(sizeof(ssize_t)*n);
+  res_v = (ssize_t *)malloc(n*sizeof(ssize_t));
   if(res_v == NULL)
   {
      if (servers != NULL) { free(servers); servers=NULL; }
@@ -606,8 +611,8 @@ ssize_t xpn_pwrite ( int fd, const void *buffer, size_t size, off_t offset )
   // create nfi_worker_io structs
   for (i=0; i<n; i++)
   {
-      io[i] = (struct nfi_worker_io *)malloc(sizeof(struct nfi_worker_io)*max);
-      if (io[i] == NULL)
+      io[i] = (struct nfi_worker_io *)malloc(max*sizeof(struct nfi_worker_io));
+      if (NULL == io[i])
       {
          xpn_paux_free(n, &servers, &io, &ion, &res_v) ;
          return -1;
@@ -681,8 +686,6 @@ ssize_t xpn_pwrite ( int fd, const void *buffer, size_t size, off_t offset )
 
   //pthread_mutex_unlock(&(global_mt));
 
-  XpnWriteBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
-
   total = -1;
   if (!err)
   {
@@ -695,7 +698,8 @@ ssize_t xpn_pwrite ( int fd, const void *buffer, size_t size, off_t offset )
   res = total;
 
   xpn_paux_free(n, &servers, &io, &ion, &res_v) ;
-  if (new_buffer != NULL) { free(new_buffer); new_buffer = NULL; }
+  XpnWriteBlocksFinish(fd, buffer, size, offset, &io, &ion, n, new_buffer);
+  // if (new_buffer != NULL) { free(new_buffer); new_buffer = NULL; }
 
   XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
   return res;
