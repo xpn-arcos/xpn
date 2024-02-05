@@ -59,78 +59,78 @@ int sck_server_write_operation ( int sd, struct st_sck_server_msg * head )
     case SCK_SERVER_OPEN_FILE_WS:
     case SCK_SERVER_OPEN_FILE_WOS:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] OPEN operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_open, sizeof(struct st_sck_server_open), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_open), sizeof(struct st_sck_server_open), head->id);
       break;
     case SCK_SERVER_CREAT_FILE_WS:
     case SCK_SERVER_CREAT_FILE_WOS:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] CREAT operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_creat, sizeof(struct st_sck_server_creat), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_creat), sizeof(struct st_sck_server_creat), head->id);
       break;
     case SCK_SERVER_READ_FILE_WS:
     case SCK_SERVER_READ_FILE_WOS:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] READ operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_read, sizeof(struct st_sck_server_read), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_read), sizeof(struct st_sck_server_read), head->id);
       break;
     case SCK_SERVER_WRITE_FILE_WS:
     case SCK_SERVER_WRITE_FILE_WOS:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] WRITE operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_write, sizeof(struct st_sck_server_write), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_write), sizeof(struct st_sck_server_write), head->id);
       break;
     case SCK_SERVER_CLOSE_FILE_WS:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] CLOSE operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_close, sizeof(struct st_sck_server_close), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_close), sizeof(struct st_sck_server_close), head->id);
       break;
     case SCK_SERVER_RM_FILE:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] RM operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_rm, sizeof(struct st_sck_server_rm), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_rm), sizeof(struct st_sck_server_rm), head->id);
       break;
     case SCK_SERVER_RM_FILE_ASYNC:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] RM_ASYNC operation\n", head->id);
-      ret = sck_client_write_data(sd, (char *)&head->u_st_sck_server_msg.op_rm, sizeof(struct st_sck_server_rm), head->id);
+      ret = sck_client_write_data(sd, (char *)&(head->u_st_sck_server_msg.op_rm), sizeof(struct st_sck_server_rm), head->id);
       break;
     case SCK_SERVER_RENAME_FILE:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] RENAME operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_rename, sizeof(struct st_sck_server_rename), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_rename), sizeof(struct st_sck_server_rename), head->id);
       break;
     case SCK_SERVER_GETATTR_FILE:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] GETATTR operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_getattr, sizeof(struct st_sck_server_getattr), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_getattr), sizeof(struct st_sck_server_getattr), head->id);
       break;
 
     //Directory API
     case SCK_SERVER_MKDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] MDKIR operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_mkdir, sizeof(struct st_sck_server_mkdir), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_mkdir), sizeof(struct st_sck_server_mkdir), head->id);
       break;
     case SCK_SERVER_OPENDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] OPENDIR operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_opendir, sizeof(struct st_sck_server_opendir), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_opendir), sizeof(struct st_sck_server_opendir), head->id);
       break;
     case SCK_SERVER_READDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] READDIR operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_readdir, sizeof(struct st_sck_server_readdir), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_readdir), sizeof(struct st_sck_server_readdir), head->id);
       break;
     case SCK_SERVER_CLOSEDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] CLOSEDIR operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_closedir, sizeof(struct st_sck_server_closedir), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_closedir), sizeof(struct st_sck_server_closedir), head->id);
       break;
     case SCK_SERVER_RMDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] RMDIR operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_rmdir, sizeof(struct st_sck_server_rmdir), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_rmdir), sizeof(struct st_sck_server_rmdir), head->id);
       break;
     case SCK_SERVER_RMDIR_DIR_ASYNC:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] RMDIR_ASYNC operation\n", head->id);
-      ret = sck_client_write_data(sd, (char *)&head->u_st_sck_server_msg.op_rmdir, sizeof(struct st_sck_server_rmdir), head->id);
+      ret = sck_client_write_data(sd, (char *)&(head->u_st_sck_server_msg.op_rmdir), sizeof(struct st_sck_server_rmdir), head->id);
       break;
 
     //Optimization API
     case SCK_SERVER_FLUSH_FILE:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] FLUSH operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_flush, sizeof(struct st_sck_server_flush), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_flush), sizeof(struct st_sck_server_flush), head->id);
       break;
     case SCK_SERVER_PRELOAD_FILE:
       debug_info("[SERV_ID=%s] [NFI_SCK] [sck_server_write_operation] PRELOAD operation\n", head->id);
-      ret = sck_client_write_data(sd, (char * )&head->u_st_sck_server_msg.op_preload, sizeof(struct st_sck_server_preload), head->id);
+      ret = sck_client_write_data(sd, (char * )&(head->u_st_sck_server_msg.op_preload), sizeof(struct st_sck_server_preload), head->id);
       break;
   }
 
