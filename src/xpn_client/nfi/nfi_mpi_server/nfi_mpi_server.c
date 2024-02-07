@@ -425,8 +425,8 @@ int nfi_mpi_server_destroy ( struct nfi_server *serv )
 
   // check params...
   if (serv == NULL) {
-      printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_destroy] ERROR: serv argument is NULL\n", -1);
-      return -1;
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_destroy] ERROR: serv argument is NULL\n", -1);
+    return -1;
   }
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_destroy] >> Begin\n", serv->id);
@@ -436,7 +436,7 @@ int nfi_mpi_server_destroy ( struct nfi_server *serv )
 
   server_aux = (struct nfi_mpi_server_server *)serv->private_info;
   if (server_aux == NULL) {
-      return 0;
+    return 0;
   }
 
   // Workers destroy...
