@@ -286,7 +286,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   // Locality disable
   if (!params->xpn_locality)
   { 
-    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Locality disable\n");
+    debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Locality disable\n");
 
     params->locality = 0;
     return 1;
@@ -356,7 +356,7 @@ ssize_t mpi_client_write_operation ( MPI_Comm fd, int op )
   debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] >> Begin\n");
 
   //Message generation
-  msg[0] = (int) pthread_self();
+  msg[0] = (int) (pthread_self() % 32500);
   msg[1] = (int) op;
 
   // Send message
@@ -391,7 +391,7 @@ ssize_t mpi_client_write_data ( MPI_Comm fd, char *data, ssize_t size )
     return -1;
   }
 
-  int tag = (int) pthread_self();
+  int tag = (int) (pthread_self() % 32500);
 
   // Send message
   debug_info("[MPI_CLIENT_COMM] [mpi_client_write_data] Write data\n");
@@ -426,7 +426,7 @@ ssize_t mpi_client_read_data ( MPI_Comm fd, char *data, ssize_t size )
     return  -1;
   }
 
-  int tag = (int) pthread_self();
+  int tag = (int) (pthread_self() % 32500);
 
   // Get message
   debug_info("[MPI_CLIENT_COMM] [mpi_client_read_data] Read data\n");
