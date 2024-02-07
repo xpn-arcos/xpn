@@ -614,7 +614,7 @@ int open64 ( const char *path, int flags, ... )
 
     if (mode != 0) {
       fd = xpn_open(skip_xpn_prefix(path), flags, mode);
-    }H
+    }
     else {
       fd = xpn_open(skip_xpn_prefix(path), flags);
     }
