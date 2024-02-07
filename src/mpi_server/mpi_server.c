@@ -72,7 +72,7 @@ void mpi_server_dispatcher ( struct st_th th )
   {
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] Waiting for operation\n", th.id);
 
-    ret = mpi_server_comm_read_operation(th.params, (MPI_Comm) th.sd, (char *)&(th.type_op), 1, &(th.rank_client_id));
+    ret = mpi_server_comm_read_operation((mpi_server_param_st *) th.params, (MPI_Comm) th.sd, (char *)&(th.type_op), 1, &(th.rank_client_id));
     if (ret < 0)
     {
       debug_error("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] ERROR: read operation fail\n", th.id);
