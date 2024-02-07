@@ -22,8 +22,9 @@
 
   /* ... Include / Inclusion ........................................... */
 
-    #include "xpn.h"
-    #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
+      #include "xpn.h"
+      #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
+      #include "xpn_api_mutex.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -32,20 +33,24 @@
     // init - destroy
     //
 
-    int xpn_init( void )
+    int xpn_init ( void )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_init() ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_destroy( void )
+    int xpn_destroy ( void )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_destroy() ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -55,16 +60,18 @@
     // open - close - creat
     //
 
-    int xpn_creat(const char *path, mode_t perm)
+    int xpn_creat ( const char *path, mode_t perm )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_creat(path, perm) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_open(const char *path, int flags, ...)
+    int xpn_open ( const char *path, int flags, ... )
     {
       va_list ap ;
       int     ret  = -1 ;
@@ -79,17 +86,21 @@
       }
 
       // call simple_open
+      XPN_API_LOCK() ;
       ret = xpn_simple_open(path, flags, mode) ;
+      XPN_API_UNLOCK() ;
 
       // return ret
       return ret ;
     }
 
-    int xpn_close(int fd)
+    int xpn_close ( int fd )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_close(fd) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -103,7 +114,9 @@
     {
       ssize_t ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_read(fd, buffer, size) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -112,7 +125,9 @@
     {
       ssize_t ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_write(fd, buffer, size) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -121,7 +136,9 @@
     {
       off_t ret = (off_t) -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_lseek(fd, offset, flag) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -131,11 +148,13 @@
     // cwd - chdir
     //
 
-    char* xpn_getcwd(char *path, size_t size)
+    char* xpn_getcwd ( char *path, size_t size )
     {
       char * ret = NULL ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_getcwd(path, size) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -144,7 +163,9 @@
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_chdir(path) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -154,11 +175,13 @@
     // mkdir - rmdir
     //
 
-    int xpn_mkdir(const char *path, mode_t perm)
+    int xpn_mkdir ( const char *path, mode_t perm )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_mkdir(path, perm) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -167,7 +190,9 @@
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_rmdir(path) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -181,7 +206,9 @@
     {
       DIR *ret = NULL ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_opendir(path) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -190,7 +217,9 @@
     {
       struct dirent* ret = NULL ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_readdir(dirp) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -199,14 +228,18 @@
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_closedir(dirp) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
     void  xpn_rewinddir ( DIR *dirp )
     {
-      return xpn_simple_rewinddir(dirp) ;
+      XPN_API_LOCK() ;
+      xpn_simple_rewinddir(dirp) ;
+      XPN_API_UNLOCK() ;
     }
 
 
@@ -214,92 +247,112 @@
     // unlink - rename - etc.
     //
 
-    int xpn_unlink(const char *path)
+    int xpn_unlink ( const char *path )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_unlink(path) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_rename(const char *path, const char *newpath)
+    int xpn_rename ( const char *path, const char *newpath )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_rename(path, newpath) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_truncate( const char *path,  off_t length)
+    int xpn_truncate ( const char *path,  off_t length )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_truncate(path, length) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_ftruncate( int fd,  off_t length)
+    int xpn_ftruncate ( int fd,  off_t length )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_ftruncate(fd, length) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_stat(const char *path, struct stat *sb)
+    int xpn_stat (const char *path, struct stat *sb )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_stat(path, sb) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_fstat(int fd, struct stat *sb)
+    int xpn_fstat ( int fd, struct stat *sb )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_fstat(fd, sb) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_chown( const char *path,  uid_t owner,  gid_t group)
+    int xpn_chown ( const char *path,  uid_t owner,  gid_t group )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_chown(path, owner, group) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_fchown(int  fd,  uid_t owner,  gid_t group)
+    int xpn_fchown (int  fd,  uid_t owner,  gid_t group )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_fchown(fd, owner, group) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_chmod( const char *path,  mode_t mode)
+    int xpn_chmod ( const char *path,  mode_t mode )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_chmod(path, mode) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_fchmod( int fd,  mode_t mode)
+    int xpn_fchmod ( int fd,  mode_t mode )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_fchmod(fd, mode) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
@@ -309,20 +362,24 @@
     // dup - dup2
     //
 
-    int xpn_dup(int fd)
+    int xpn_dup ( int fd )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_dup(fd) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }
 
-    int xpn_dup2(int fd, int fd2)
+    int xpn_dup2 ( int fd, int fd2 )
     {
       int ret = -1 ;
 
+      XPN_API_LOCK() ;
       ret = xpn_simple_dup2(fd, fd2) ;
+      XPN_API_UNLOCK() ;
 
       return ret ;
     }

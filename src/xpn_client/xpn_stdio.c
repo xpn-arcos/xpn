@@ -22,8 +22,9 @@
 
    /* ... Include / Inclusion ........................................... */
 
-    #include "xpn.h"
-    #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
+      #include "xpn.h"
+      #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
+      #include "xpn_api_mutex.h"
 
 
    /* ... Functions / Funciones ......................................... */
@@ -33,14 +34,26 @@
     // fopen - fclose
     //
 
-    FILE * xpn_fopen(const char *name, const char *mode)
+    FILE * xpn_fopen ( const char *name, const char *mode )
     {
-      return xpn_simple_fopen(name, mode);
+      FILE *ret = NULL ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_fopen(name, mode) ;
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
-    int xpn_fclose(FILE *fp)
+    int xpn_fclose ( FILE *fp )
     {
-      return xpn_simple_fclose(fp);
+      int ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_fclose(fp) ;
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
 
@@ -50,17 +63,35 @@
 
     size_t xpn_fread ( void *ptr, size_t size, size_t nmemb, register FILE *stream )
     {
-      return xpn_simple_fread(ptr, size, nmemb, stream);
+      size_t ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_fread(ptr, size, nmemb, stream);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
     size_t xpn_fwrite ( const void *ptr, size_t size, size_t nmemb, register FILE *stream )
     {
-      return xpn_simple_fwrite(ptr, size, nmemb, stream);
+      size_t ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_fwrite(ptr, size, nmemb, stream);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
-    int xpn_fflush(FILE *stream)
+    int xpn_fflush ( FILE *stream )
     {
-      return xpn_simple_fflush(stream);
+      int ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_fflush(stream);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
 
@@ -68,19 +99,33 @@
     // fseek - ftell
     //
 
-    int xpn_fseek(FILE *stream, long int offset, int whence)
+    int xpn_fseek ( FILE *stream, long int offset, int whence )
     {
-      return xpn_simple_fseek(stream, offset, whence);
+      int ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_fseek(stream, offset, whence);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
-    long xpn_ftell(FILE *stream)
+    long xpn_ftell ( FILE *stream )
     {
-      return xpn_simple_ftell(stream);
+      long ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_ftell(stream);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
-    void xpn_rewind(FILE *stream)
+    void xpn_rewind ( FILE *stream )
     {
+      XPN_API_LOCK() ;
       xpn_simple_rewind(stream);
+      XPN_API_UNLOCK() ;
     }
 
 
@@ -88,14 +133,26 @@
     // flush - preload
     //
 
-    int xpn_preload(const char *virtual_path, const char *storage_path)
+    int xpn_preload ( const char *virtual_path, const char *storage_path )
     {
-      return xpn_simple_preload(virtual_path, storage_path);
+      int ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_preload(virtual_path, storage_path);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
-    int xpn_flush(const char *virtual_path, const char *storage_path)
+    int xpn_flush ( const char *virtual_path, const char *storage_path )
     {
-      return xpn_simple_flush(virtual_path, storage_path);
+      int ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_flush(virtual_path, storage_path);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
 
@@ -103,19 +160,37 @@
     // fgetc - fgets - getc
     //
 
-    int xpn_fgetc(FILE *stream)
+    int xpn_fgetc ( FILE *stream )
     {
-      return xpn_simple_fgetc(stream);
+      int ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_fgetc(stream);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
-    char * xpn_fgets(char *s, int tam, FILE *stream)
+    char * xpn_fgets ( char *s, int tam, FILE *stream )
     {
-      return xpn_simple_fgets(s, tam, stream);
+      char * ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_fgets(s, tam, stream);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
-    int xpn_getc(FILE *stream)
+    int xpn_getc ( FILE *stream )
     {
-      return xpn_simple_getc(stream);
+      int ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_getc(stream);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
 
@@ -125,13 +200,25 @@
 
     int xpn_fileno ( FILE *stream )
     {
-      return xpn_simple_fileno(stream);
+      int ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_fileno(stream);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
 
-    int xpn_ferror(FILE *stream)
+    int xpn_ferror ( FILE *stream )
     {
-      return xpn_simple_ferror(stream);
+      int ret ;
+
+      XPN_API_LOCK() ;
+      ret = xpn_simple_ferror(stream);
+      XPN_API_UNLOCK() ;
+
+      return ret ;
     }
 
 
