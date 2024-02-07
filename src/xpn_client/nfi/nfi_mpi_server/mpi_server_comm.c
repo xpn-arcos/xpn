@@ -277,7 +277,6 @@ int mpi_client_comm_disconnect ( mpi_client_param_st *params )
 int mpi_client_comm_locality ( mpi_client_param_st *params )
 {
   int ret;
-  int data;
   char cli_name  [HOST_NAME_MAX];
   char serv_name [HOST_NAME_MAX];
   MPI_Status status;
@@ -287,7 +286,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   // Locality disable
   if (!params->xpn_locality)
   { 
-    debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Locality disable\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Locality disable\n");
 
     params->locality = 0;
     return 1;
@@ -296,29 +295,27 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   // Get client host name
   gethostname(cli_name, HOST_NAME_MAX);
 
-  data = MPI_SERVER_GETNODENAME;
-
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Send gethostname operation\n");
 
-  ret = MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
-  if (MPI_SUCCESS != ret)
+  ret = mpi_client_write_operation ( params->server, MPI_SERVER_GETNODENAME );
+  if (ret < 0)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Send fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: mpi_client_write_operation fails\n");
     return -1;
   }
 
-  ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, 0, 1, params->server, &status);
-  if (MPI_SUCCESS != ret)
+  ret = mpi_client_read_data ( params->server, serv_name, HOST_NAME_MAX );
+  if (ret != HOST_NAME_MAX)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Recv fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: mpi_client_write_data fails\n");
     return -1;
   }
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive host name: %s\n", serv_name);
 
   //Dirbase
-  ret = MPI_Recv(params->dirbase, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
-  if (MPI_SUCCESS != ret)
+  ret = mpi_client_read_data ( params->server, params->dirbase, PATH_MAX );
+  if (ret != PATH_MAX)
   {
     printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Recv fails\n");
     return -1;
@@ -328,7 +325,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
 
   //Semaphore
   /*
-  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive semaphore\n");
+  printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive semaphore\n");
 
   ret = MPI_Recv(params->sem_name_server, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
   if (MPI_SUCCESS != ret) {
@@ -351,43 +348,34 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   return 1;
 }
 
-ssize_t mpi_client_write_operation ( MPI_Comm fd, char *data, ssize_t size, __attribute__((__unused__)) char *msg_id )
+ssize_t mpi_client_write_operation ( MPI_Comm fd, int op )
 {
   int ret;
+  int msg[2];
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] >> Begin\n");
 
-  // Check params
-  if (size == 0) {
-    return 0;
-  }
-  if (size < 0)
-  {
-    printf("[MPI_CLIENT_COMM] [mpi_client_write_operation] ERROR: size < 0\n");
-    return -1;
-  }
-
-  // TODO
-  msg_id = msg_id; // TODO: msg_id is used?
-  // TODO
+  //Message generation
+  msg[0] = (int) pthread_self();
+  msg[1] = (int) op;
 
   // Send message
   debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] Write operation\n");
 
-  ret = MPI_Send(data, size, MPI_INT, 0, 0, fd);
+  ret = MPI_Send(msg, 2, MPI_INT, 0, 0, fd);
   if (MPI_SUCCESS != ret)
   {
     printf("[MPI_CLIENT_COMM] [mpi_client_write_operation] ERROR: MPI_Send < 0\n");
-    size = 0;
+    return -1;
   }
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] << End\n");
 
-  // Return bytes written
-  return size;
+  // Return OK
+  return 0;
 }
 
-ssize_t mpi_client_write_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
+ssize_t mpi_client_write_data ( MPI_Comm fd, char *data, ssize_t size )
 {
   int ret;
 
@@ -403,14 +391,12 @@ ssize_t mpi_client_write_data ( MPI_Comm fd, char *data, ssize_t size, char *msg
     return -1;
   }
 
-  // TODO
-  msg_id = msg_id; // TODO: msg_id is used?
-  // TODO
+  int tag = (int) pthread_self();
 
   // Send message
   debug_info("[MPI_CLIENT_COMM] [mpi_client_write_data] Write data\n");
 
-  ret = MPI_Send(data, size, MPI_CHAR, 0, 1, fd);
+  ret = MPI_Send(data, size, MPI_CHAR, 0, tag, fd);
   if (MPI_SUCCESS != ret)
   {
     printf("[MPI_CLIENT_COMM] [mpi_client_write_data] ERROR: MPI_Send fails\n");
@@ -423,7 +409,7 @@ ssize_t mpi_client_write_data ( MPI_Comm fd, char *data, ssize_t size, char *msg
   return size;
 }
 
-ssize_t mpi_client_read_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_id )
+ssize_t mpi_client_read_data ( MPI_Comm fd, char *data, ssize_t size )
 {
   int ret;
   MPI_Status status;
@@ -440,14 +426,12 @@ ssize_t mpi_client_read_data ( MPI_Comm fd, char *data, ssize_t size, char *msg_
     return  -1;
   }
 
-  // TODO
-  msg_id = msg_id; // TODO: msg_id is used?
-  // TODO
+  int tag = (int) pthread_self();
 
   // Get message
   debug_info("[MPI_CLIENT_COMM] [mpi_client_read_data] Read data\n");
 
-  ret = MPI_Recv(data, size, MPI_CHAR, 0, 1, fd, &status);
+  ret = MPI_Recv(data, size, MPI_CHAR, 0, tag, fd, &status);
   if (MPI_SUCCESS != ret)
   {
     printf("[MPI_CLIENT_COMM] [mpi_client_read_data] ERROR: MPI_Recv fails\n");
