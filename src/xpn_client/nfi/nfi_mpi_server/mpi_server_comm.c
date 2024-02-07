@@ -277,7 +277,6 @@ int mpi_client_comm_disconnect ( mpi_client_param_st *params )
 int mpi_client_comm_locality ( mpi_client_param_st *params )
 {
   int ret;
-  int data;
   char cli_name  [HOST_NAME_MAX];
   char serv_name [HOST_NAME_MAX];
   MPI_Status status;
@@ -287,7 +286,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   // Locality disable
   if (!params->xpn_locality)
   { 
-    debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Locality disable\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Locality disable\n");
 
     params->locality = 0;
     return 1;
@@ -296,29 +295,27 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   // Get client host name
   gethostname(cli_name, HOST_NAME_MAX);
 
-  data = MPI_SERVER_GETNODENAME;
-
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Send gethostname operation\n");
 
-  ret = MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
-  if (MPI_SUCCESS != ret)
+  ret = mpi_client_write_operation ( params->server, MPI_SERVER_GETNODENAME );
+  if (ret < 0)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Send fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: mpi_client_write_operation fails\n");
     return -1;
   }
 
-  ret = MPI_Recv(serv_name, HOST_NAME_MAX, MPI_CHAR, 0, 1, params->server, &status);
-  if (MPI_SUCCESS != ret)
+  ret = mpi_client_read_data ( params->server, serv_name, HOST_NAME_MAX );
+  if (ret != HOST_NAME_MAX)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Recv fails\n");
+    printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: mpi_client_write_data fails\n");
     return -1;
   }
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive host name: %s\n", serv_name);
 
   //Dirbase
-  ret = MPI_Recv(params->dirbase, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
-  if (MPI_SUCCESS != ret)
+  ret = mpi_client_read_data ( params->server, params->dirbase, PATH_MAX );
+  if (ret != PATH_MAX)
   {
     printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Recv fails\n");
     return -1;
@@ -328,7 +325,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
 
   //Semaphore
   /*
-  debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive semaphore\n");
+  printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive semaphore\n");
 
   ret = MPI_Recv(params->sem_name_server, PATH_MAX, MPI_CHAR, 0, 1, params->server, &status);
   if (MPI_SUCCESS != ret) {

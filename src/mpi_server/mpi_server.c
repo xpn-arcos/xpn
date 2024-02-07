@@ -104,6 +104,7 @@ void mpi_server_dispatcher ( struct st_th th )
     th_arg.function       = mpi_server_run;
     th_arg.type_op        = th.type_op;
     th_arg.rank_client_id = th.rank_client_id;
+    th_arg.tag_client_id  = th.tag_client_id;
     th_arg.wait4me        = FALSE;
 
     base_workers_launch ( &worker, &th_arg, mpi_server_run );
