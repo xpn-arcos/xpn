@@ -40,98 +40,98 @@ char * mpi_server_op2string ( int op_code )
   switch (op_code)
   {
     // File operations
-    case MPI_SERVER_OPEN_FILE_WS:    
+    case MPI_SERVER_OPEN_FILE_WS:
       ret = "OPEN";
       break;
-    case MPI_SERVER_CREAT_FILE_WS:   
+    case MPI_SERVER_CREAT_FILE_WS:
       ret = "CREAT";
       break;
-    case MPI_SERVER_READ_FILE_WS:    
+    case MPI_SERVER_READ_FILE_WS:
       ret = "READ";
       break;
-    case MPI_SERVER_WRITE_FILE_WS:   
+    case MPI_SERVER_WRITE_FILE_WS:
       ret = "WRITE";
       break;
-    case MPI_SERVER_CLOSE_FILE_WS:   
+    case MPI_SERVER_CLOSE_FILE_WS:
       ret = "CLOSE";
       break;
-    case MPI_SERVER_RM_FILE:         
+    case MPI_SERVER_RM_FILE:
       ret = "RM";
       break;
-    case MPI_SERVER_RM_FILE_ASYNC:   
+    case MPI_SERVER_RM_FILE_ASYNC:
       ret = "RM_ASYNC";
       break;
-    case MPI_SERVER_RENAME_FILE:     
+    case MPI_SERVER_RENAME_FILE:
       ret = "RENAME";
       break;
-    case MPI_SERVER_GETATTR_FILE:    
+    case MPI_SERVER_GETATTR_FILE:
       ret = "GETATTR";
       break;
-    case MPI_SERVER_SETATTR_FILE:    
+    case MPI_SERVER_SETATTR_FILE:
       ret = "SETATTR";
       break;
 
     // File operations without session
-    case MPI_SERVER_OPEN_FILE_WOS:   
+    case MPI_SERVER_OPEN_FILE_WOS:
       ret = "OPEN_WOS";
       break;
-    case MPI_SERVER_CREAT_FILE_WOS:  
+    case MPI_SERVER_CREAT_FILE_WOS:
       ret = "CREAT_WOS";
       break;
-    case MPI_SERVER_READ_FILE_WOS:   
+    case MPI_SERVER_READ_FILE_WOS:
       ret = "READ_WOS";
       break;
-    case MPI_SERVER_WRITE_FILE_WOS:  
+    case MPI_SERVER_WRITE_FILE_WOS:
       ret = "WRITE_WOS";
       break;
 
     // Directory operations
-    case MPI_SERVER_MKDIR_DIR:       
+    case MPI_SERVER_MKDIR_DIR:
       ret = "MKDIR";
       break;
-    case MPI_SERVER_RMDIR_DIR:       
+    case MPI_SERVER_RMDIR_DIR:
       ret = "RMDIR";
       break;
-    case MPI_SERVER_RMDIR_DIR_ASYNC: 
+    case MPI_SERVER_RMDIR_DIR_ASYNC:
       ret = "RMDIR_ASYNC";
       break;
-    case MPI_SERVER_OPENDIR_DIR:     
+    case MPI_SERVER_OPENDIR_DIR:
       ret = "OPENDIR";
       break;
-    case MPI_SERVER_READDIR_DIR:     
+    case MPI_SERVER_READDIR_DIR:
       ret = "READDIR";
       break;
-    case MPI_SERVER_CLOSEDIR_DIR:    
+    case MPI_SERVER_CLOSEDIR_DIR:
       ret = "CLOSEDIR";
       break;
 
     // Import / Export operations
-    case MPI_SERVER_FLUSH_FILE:      
+    case MPI_SERVER_FLUSH_FILE:
       ret = "FLUSH";
       break;
-    case MPI_SERVER_PRELOAD_FILE:    
+    case MPI_SERVER_PRELOAD_FILE:
       ret = "PRELOAD";
       break;
 
     // FS Operations
-    case MPI_SERVER_STATFS_DIR:      
+    case MPI_SERVER_STATFS_DIR:
       ret = "STATFS";
       break;
-    case MPI_SERVER_FINALIZE:        
+    case MPI_SERVER_FINALIZE:
       ret = "FINALIZE";
       break;
-    case MPI_SERVER_GETID:          
+    case MPI_SERVER_GETID:
       ret = "GETID";
       break;
 
     // Connection operatons
-    case MPI_SERVER_DISCONNECT:      
+    case MPI_SERVER_DISCONNECT:
       ret = "DISCONNECT";
       break;
-    case MPI_SERVER_GETNODENAME:     
+    case MPI_SERVER_GETNODENAME:
       ret = "GETNODENAME";
       break;
-    case MPI_SERVER_END:            
+    case MPI_SERVER_END:
       ret = "END";
       break;
   }
@@ -477,7 +477,7 @@ void mpi_server_op_read_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] >> Begin\n",  params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] read(%d, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_read.fd, head->u_st_mpi_server_msg.op_read.offset, head->u_st_mpi_server_msg.op_read.size);
-  
+
   // initialize counters
   cont = 0;
   size = head->u_st_mpi_server_msg.op_read.size;
