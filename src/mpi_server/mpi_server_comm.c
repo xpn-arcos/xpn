@@ -64,7 +64,6 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
     debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] MPI Init with threads\n", params->rank);
 
     ret = MPI_Init_thread(&(params->argc), &(params->argv), MPI_THREAD_MULTIPLE, &provided);
-  //ret = MPI_Init_thread(&(params->argc), &(params->argv), MPI_THREAD_SERIALIZED, &provided);
     if (MPI_SUCCESS != ret)
     {
       printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: MPI_Init_thread fails\n", params->rank);
@@ -282,14 +281,14 @@ int mpi_server_comm_destroy ( mpi_server_param_st *params )
 MPI_Comm mpi_server_comm_accept ( mpi_server_param_st *params )
 {
   int ret;
-  MPI_Comm fd ;
+  MPI_Comm sd = MPI_COMM_NULL;
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] >> Begin\n", params->rank);
 
   // Accept
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] Accept\n", params->rank);
 
-  ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &fd);
+  ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(sd));
   if (MPI_SUCCESS != ret)
   {
     printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] ERROR: MPI_Comm_accept fails\n", params->rank);
@@ -299,7 +298,7 @@ MPI_Comm mpi_server_comm_accept ( mpi_server_param_st *params )
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] << End\n", params->rank);
 
   // Return client MPI_Comm
-  return fd ;
+  return sd;
 }
 
 int mpi_server_comm_disconnect ( MPI_Comm fd )
@@ -331,28 +330,28 @@ int mpi_server_comm_disconnect ( MPI_Comm fd )
 }
 
 // write_operation for shutdown, read_operation
-ssize_t mpi_server_comm_write_operation ( MPI_Comm fd, int op )
+ssize_t mpi_server_comm_write_operation_finalize ( MPI_Comm fd, int op )
 {
   int ret;
   int msg[2];
 
-  debug_info("[MPI_CLIENT_COMM] [mpi_server_write_operation] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] >> Begin\n");
 
   //Message generation
-  msg[0] = (int) (pthread_self() % 32450) + 1;
+  msg[0] = (int) (pthread_self() % 32499) + 1;
   msg[1] = (int) op;
 
   // Send message
-  debug_info("[MPI_CLIENT_COMM] [mpi_server_write_operation] Write operation\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] Write operation\n");
 
   ret = MPI_Send(msg, 2, MPI_INT, 0, 0, fd);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_server_write_operation] ERROR: MPI_Send < 0\n");
+    printf("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] ERROR: MPI_Send < 0\n");
     return -1;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpi_server_write_operation] << End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] << End\n");
 
   // Return OK
   return 0;
