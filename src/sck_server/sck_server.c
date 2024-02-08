@@ -38,7 +38,7 @@
 
 char                serv_name [HOST_NAME_MAX];
 sck_server_param_st params;
-worker_t            worker;
+worker_t            worker1, worker2;
 int                 the_end = 0;
 
 
@@ -48,7 +48,7 @@ void sck_server_run ( struct st_th th )
 {
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_run] >> Begin: OP '%s'; OP_ID %d\n", th.id, sck_server_op2string(th.type_op), th.type_op);
 
-  sck_server_do_operation( & th, & the_end);
+  sck_server_do_operation( &th, &the_end);
 
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_run] << End: OP:'%s'\n", th.id, sck_server_op2string(th.type_op));
 }
@@ -113,14 +113,14 @@ void sck_server_dispatcher ( struct st_th th )
     th_arg.wait4me        = FALSE;
 
     //sck_server_run(th_arg); //TODO
-    base_workers_launch ( &worker, &th_arg, sck_server_run );
+    base_workers_launch ( &worker2, &th_arg, sck_server_run );
 
     debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_dispatcher] Worker launched\n", th.id);
   }
 
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_dispatcher] Client %d close\n", th.id, th.rank_client_id);
 
-  sck_server_comm_close((int) th.sd);
+  sck_server_comm_close((int) (th.sd));
 
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_dispatcher] End\n", th.id);
 }
@@ -161,7 +161,14 @@ int sck_server_up ( void )
   // Workers initialization
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_up] Workers initialization\n", 0);
 
-  ret = base_workers_init(&worker, params.thread_mode);
+  ret = base_workers_init(&worker1, params.thread_mode);
+  if (ret < 0)
+  {
+    printf("[TH_ID=%d] [SCK_SERVER] [sck_server_up] ERROR: Workers initialization fails\n", 0);
+    return -1;
+  }
+
+  ret = base_workers_init(&worker2, params.thread_mode);
   if (ret < 0)
   {
     printf("[TH_ID=%d] [SCK_SERVER] [sck_server_up] ERROR: Workers initialization fails\n", 0);
@@ -216,7 +223,7 @@ int sck_server_up ( void )
     th_arg.rank_client_id = 0;
     th_arg.wait4me        = FALSE;
 
-    base_workers_launch( & worker, & th_arg, sck_server_dispatcher );
+    base_workers_launch( &worker1, &th_arg, sck_server_dispatcher );
 
     debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_up] Dispatcher launched\n", 0);
   }
@@ -224,7 +231,8 @@ int sck_server_up ( void )
   // Wait and finalize for all current workers
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_up] Workers destroy\n", 0);
 
-  base_workers_destroy(&worker);
+  base_workers_destroy(&worker1);
+  base_workers_destroy(&worker2);
 
   debug_info("[TH_ID=%d] [SCK_SERVER] [sck_server_up] socket destroy\n", 0);
 
@@ -268,53 +276,62 @@ int sck_server_down( void ) //TODO
   ret = sck_server_comm_init(&params);
   if (ret < 0)
   {
-  printf("[SCK_SERVER] ERROR: sck_comm initialization fails\n");
-  return -1;
+      printf("[SCK_SERVER] ERROR: sck_comm initialization fails\n");
+      return -1;
   }
-  ret = base_workers_init(&worker, params.thread_mode);
+
+  ret = base_workers_init(&worker1, params.thread_mode);
   if (ret < 0)
   {
-  printf("[SCK_SERVER] ERROR: workers initialization fails\n");
-  return -1;
+      printf("[SCK_SERVER] ERROR: workers1 initialization fails\n");
+      return -1;
   }
+
+  ret = base_workers_init(&worker1, params.thread_mode);
+  if (ret < 0)
+  {
+      printf("[SCK_SERVER] ERROR: workers2 initialization fails\n");
+      return -1;
+  }
+
 
   // Open host file
   file = fopen(params.dns_file, "r");
   if (file == NULL)
   {
-  printf("[SCK_SERVER] ERROR: invalid file %s\n", params.shutdown_file);
-  return -1;
+      printf("[SCK_SERVER] ERROR: invalid file %s\n", params.shutdown_file);
+      return -1;
   }
 
   while (fscanf(file, "%s %s %s", srv_name, server_name, port_number) != EOF)
   {
-  // Lookup port name
-  ret = ns_lookup("sck_server", srv_name, server_name, port_number);
-  if (ret < 0)
-  {
-    printf("[SCK_SERVER] ERROR: server %s %s %s not found\n", srv_name, server_name, port_number);
-    continue;
-  }
+	  // Lookup port name
+	  ret = ns_lookup("sck_server", srv_name, server_name, port_number);
+	  if (ret < 0)
+	  {
+	    printf("[SCK_SERVER] ERROR: server %s %s %s not found\n", srv_name, server_name, port_number);
+	    continue;
+	  }
 
-  // Connect with server
-  sd = sck_server_comm_connect(&params, server_name, atoi(port_number));
-  if (sd < 0)
-  {
-    printf("[SCK_SERVER] ERROR: connect to %s failed\n", server_name);
-    continue;
-  }
+	  // Connect with server
+	  sd = sck_server_comm_connect(&params, server_name, atoi(port_number));
+	  if (sd < 0)
+	  {
+	    printf("[SCK_SERVER] ERROR: connect to %s failed\n", server_name);
+	    continue;
+	  }
 
-  // Send shutdown request
-  data = SCK_SERVER_FINALIZE;
-  ret = sck_server_comm_write_data(&params, sd, (char *)&data, sizeof(int), 0); // 0: rank_client_id
-  if (ret < 0)
-  {
-    printf("[SCK_SERVER] ERROR: write SERVER_FINALIZE to %s failed\n", srv_name);
-    return -1;
-  }
+	  // Send shutdown request
+	  data = SCK_SERVER_FINALIZE;
+	  ret = sck_server_comm_write_data(&params, sd, (char *)&data, sizeof(int), 0); // 0: rank_client_id  (TODO!)
+	  if (ret < 0)
+	  {
+	    printf("[SCK_SERVER] ERROR: write SERVER_FINALIZE to %s failed\n", srv_name);
+	    return -1;
+	  }
 
-  // Close
-  sck_server_comm_close(sd);
+	  // Close
+	  sck_server_comm_close(sd);
   }
 
   // Close host file
@@ -322,7 +339,9 @@ int sck_server_down( void ) //TODO
 
   // Wait and finalize for all current workers
   debug_info("[SCK_SERVER] base_workers_destroy\n");
-  base_workers_destroy(&worker);
+  base_workers_destroy(&worker1);
+  base_workers_destroy(&worker2);
+
   debug_info("[SCK_SERVER] sck_server_comm_destroy\n");
   sck_server_comm_destroy(&params);
 
@@ -383,3 +402,4 @@ int main( int argc, char *argv[] )
 
 
 /* ................................................................... */
+
