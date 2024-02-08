@@ -194,14 +194,23 @@ int mpi_server_up ( void )
 
   // Loop: receiving + processing
   the_end = 0;
+  int number_accepted = 0 ;
   while (!the_end)
   {
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for accept\n", 0);
-
-    sd = mpi_server_comm_accept(&params);
-    if (sd == MPI_COMM_NULL) {
-      continue;
+    if ( (params.number_accepts != -1) && (number_accepted >= params.number_accepts) )
+    {
+       debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] number_accepted >= params->number_accepts\n", 0) ;
+       the_end = 1 ;
+       break ;
     }
+
+    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for accept\n", 0) ;
+
+    sd = mpi_server_comm_accept(&params) ;
+    if (sd == MPI_COMM_NULL) {
+         continue;
+    }
+    number_accepted++ ;
 
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Accept received\n", 0);
 
@@ -214,8 +223,12 @@ int mpi_server_up ( void )
     th_arg.tag_client_id  = 0;
     th_arg.wait4me        = FALSE;
 
-    int pid = fork();
+    //base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
+    base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
+    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
 
+    /*
+    int pid = fork();
     if (pid != 0)
     {
       //base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
@@ -226,6 +239,7 @@ int mpi_server_up ( void )
 
       the_end = 1;
     }
+    */
   }
 
   // Wait and finalize for all current workers
