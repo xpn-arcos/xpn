@@ -1318,8 +1318,8 @@ void  mpi_server_op_getnodename (mpi_server_param_st *params, MPI_Comm sd,  __at
   // Get server host name
   gethostname(serv_name, HOST_NAME_MAX);
 
-  mpi_server_comm_write_data(params, sd, (char *)serv_name, HOST_NAME_MAX, rank_client_id, tag_client_id); // Send one single message
-  mpi_server_comm_write_data(params, sd, (char *)params->dirbase, PATH_MAX, rank_client_id, tag_client_id); // Send one single message
+  mpi_server_comm_write_data(params, sd, (char *)(serv_name),       HOST_NAME_MAX, rank_client_id, tag_client_id); // Send one single message
+  mpi_server_comm_write_data(params, sd, (char *)(params->dirbase), PATH_MAX,      rank_client_id, tag_client_id); // Send one single message
   //mpi_server_comm_write_data(params, sd, (char *)params->sem_name_server, PATH_MAX, rank_client_id, tag_client_id); // Send one single message
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_getnodename] gethostname=%s\n", params->rank, serv_name);
@@ -1332,7 +1332,7 @@ void mpi_server_op_getid ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_getid] GETID(...)\n", params->rank);
 
   // do getid
-  mpi_server_comm_write_data(params, sd,(char *)head->id, MPI_SERVER_ID, rank_client_id, tag_client_id);
+  mpi_server_comm_write_data(params, sd, (char *)(head->id), MPI_SERVER_ID, rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_getid] GETID(...)=(...)\n", params->rank);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_getid] << END\n", params->rank);
@@ -1340,3 +1340,4 @@ void mpi_server_op_getid ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
 
 
 /* ................................................................... */
+

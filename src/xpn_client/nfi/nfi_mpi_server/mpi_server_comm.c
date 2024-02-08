@@ -279,7 +279,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   int ret;
   char cli_name  [HOST_NAME_MAX];
   char serv_name [HOST_NAME_MAX];
-  MPI_Status status;
+  //MPI_Status status;
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] >> Begin\n");
 
@@ -313,7 +313,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive host name: %s\n", serv_name);
 
-  //Dirbase
+  // Dirbase
   ret = mpi_client_read_data ( params->server, params->dirbase, PATH_MAX );
   if (ret != PATH_MAX)
   {
@@ -323,7 +323,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive dirbase: %s\n", params->dirbase);
 
-  //Semaphore
+  // Semaphore
   /*
   printf("[MPI_CLIENT_COMM] [mpi_client_comm_locality] Receive semaphore\n");
 
@@ -446,3 +446,4 @@ ssize_t mpi_client_read_data ( MPI_Comm fd, char *data, ssize_t size )
 
 
 /* ................................................................... */
+
