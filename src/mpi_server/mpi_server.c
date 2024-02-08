@@ -38,7 +38,7 @@
 
 char                serv_name [HOST_NAME_MAX];
 mpi_server_param_st params;
-worker_t            worker;
+worker_t            worker1, worker2;
 int                 the_end = 0;
 
 
@@ -72,7 +72,7 @@ void mpi_server_dispatcher ( struct st_th th )
   {
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] Waiting for operation\n", th.id);
 
-    ret = mpi_server_comm_read_operation((mpi_server_param_st *) th.params, th.sd, &(th.type_op), &(th.rank_client_id), &(th.tag_client_id));
+    ret = mpi_server_comm_read_operation((mpi_server_param_st *) th.params, (MPI_Comm)th.sd, &(th.type_op), &(th.rank_client_id), &(th.tag_client_id));
     if (ret < 0)
     {
       debug_error("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] ERROR: read operation fail\n", th.id);
@@ -100,21 +100,21 @@ void mpi_server_dispatcher ( struct st_th th )
 
     // Launch worker per operation
     th_arg.params         = &params;
-    th_arg.sd             = (MPI_Comm) th.sd;
+    th_arg.sd             = (long) th.sd;
     th_arg.function       = mpi_server_run;
     th_arg.type_op        = th.type_op;
     th_arg.rank_client_id = th.rank_client_id;
     th_arg.tag_client_id  = th.tag_client_id;
     th_arg.wait4me        = FALSE;
 
-    base_workers_launch ( &worker, &th_arg, mpi_server_run );
+    base_workers_launch ( &worker2, &th_arg, mpi_server_run );
 
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] Worker launched\n", th.id);
   }
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] Client %d close\n", th.id, th.rank_client_id);
 
-  mpi_server_comm_disconnect((MPI_Comm)th.sd);
+  mpi_server_comm_disconnect( (MPI_Comm)(th.sd) );
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] End\n", th.id);
 }
@@ -152,12 +152,20 @@ int mpi_server_up ( void )
   // Workers initialization
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers initialization\n", 0);
 
-  ret = base_workers_init( &worker, params.thread_mode );
+  ret = base_workers_init( &worker1, params.thread_mode );
   if (ret < 0)
   {
     printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Workers initialization fails\n", 0);
     return -1;
   }
+
+  ret = base_workers_init( &worker2, params.thread_mode );
+  if (ret < 0)
+  {
+    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Workers initialization fails\n", 0);
+    return -1;
+  }
+
 
   // Initialize semaphore for server disks
   /*
@@ -190,8 +198,6 @@ int mpi_server_up ( void )
   {
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for accept\n", 0);
 
-    params.client = MPI_COMM_NULL;
-
     sd = mpi_server_comm_accept(&params);
     if (sd == MPI_COMM_NULL) {
       continue;
@@ -201,21 +207,32 @@ int mpi_server_up ( void )
 
     //Launch dispatcher per aplication
     th_arg.params         = &params;
-    th_arg.sd             = sd;
+    th_arg.sd             = (long)sd;
     th_arg.function       = mpi_server_dispatcher;
     th_arg.type_op        = 0;
     th_arg.rank_client_id = 0;
+    th_arg.tag_client_id  = 0;
     th_arg.wait4me        = FALSE;
 
-    base_workers_launch( &worker, &th_arg, mpi_server_dispatcher );
+    int pid = fork();
 
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
+    if (pid != 0)
+    {
+      //base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
+
+      mpi_server_dispatcher(th_arg);
+
+      debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
+
+      the_end = 1;
+    }
   }
 
   // Wait and finalize for all current workers
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers destroy\n", 0);
 
-  base_workers_destroy(&worker);
+  base_workers_destroy( &worker1 );
+  base_workers_destroy( &worker2 );
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm destroy\n", 0);
 
@@ -240,7 +257,7 @@ int mpi_server_up ( void )
 // Stop servers
 int mpi_server_down ( int argc, char *argv[] )
 {
-  int      ret, buf;
+  int      ret;
   char     port_name [MPI_MAX_PORT_NAME];
   char     srv_name  [1024];
   MPI_Comm server;
@@ -317,12 +334,16 @@ int mpi_server_down ( int argc, char *argv[] )
     // Send finalize operation
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Send finalize operation\n", 0);
 
-    buf = MPI_SERVER_FINALIZE;
-    MPI_Send( &buf, 1, MPI_INT, 0, 0, server );
+    ret = mpi_server_comm_write_operation_finalize(server, MPI_SERVER_FINALIZE) ;
+    if (ret < 0)
+    {
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: Send finalize operation\n", 0);
+      continue;
+    }
 
-    // Comunicator diconnect
+    // Comunicator disconnect
     /*
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Comunicator diconnect\n", 0);
+    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Comunicator disconnect\n", 0);
 
     MPI_Comm_disconnect( &server ); //TODO: fail
     */
@@ -393,7 +414,7 @@ int main ( int argc, char *argv[] )
   }
 
   return ret;
- }
+}
 
 
 /* ................................................................... */

@@ -63,9 +63,6 @@
     //Semaphore for server disk
     //sem_t disk_sem;
 
-    // associated client
-    MPI_Comm client;
-
     // server arguments
     int    argc;
     char **argv;
