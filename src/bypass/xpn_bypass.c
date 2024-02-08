@@ -138,7 +138,7 @@ struct generic_fd fdstable_get ( int fd )
   debug_info("[BYPASS] >> Begin fdstable_get....\n");
   debug_info("[BYPASS]    1) fd  => %d\n", fd);
 
-  if (fd >= PLUSXPN)
+  if ((NULL != fdstable) && (fd >= PLUSXPN))
   {
     fd = fd - PLUSXPN;
     ret = fdstable[fd];
@@ -614,7 +614,7 @@ int open64 ( const char *path, int flags, ... )
 
     if (mode != 0) {
       fd = xpn_open(skip_xpn_prefix(path), flags, mode);
-    }H
+    }
     else {
       fd = xpn_open(skip_xpn_prefix(path), flags);
     }

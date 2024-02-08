@@ -35,7 +35,7 @@
 
 /* ... Global variables / Variables globales ......................... */
 
-pthread_mutex_t mutex_id  = PTHREAD_MUTEX_INITIALIZER; 
+pthread_mutex_t mutex_id  = PTHREAD_MUTEX_INITIALIZER;
 int             static_id = 0;
 
 
@@ -54,13 +54,13 @@ void mpi_server_d2xpn_generate_name ( char *file, char *new_file )
     switch(file[i])
     {
       case '/':
-        aux[j] = '_';       
+        aux[j] = '_';
         break;
-      case '_':               
+      case '_':
         aux[j] = '_';
         j++;
-        aux[j] = '_';       
-        break;              
+        aux[j] = '_';
+        break;
       default:
         aux[j] = file[i];
         break;
@@ -120,7 +120,7 @@ int mpi_server_d2xpn ( mpi_server_param_st *params, char *src, char *dst )
   struct stat st;
   int    fdp,fd,ret,fd_lock;
   char   *mpi_server_path, new_path[2*PATH_MAX];
- 
+
   debug_info("[MPI_SERVER_D2XPN] [mpi_server_d2xpn] >> Begin: src: %s; dst %s; rank %d\n", src, dst, params->rank);
 
   // Get server path
@@ -128,10 +128,10 @@ int mpi_server_d2xpn ( mpi_server_param_st *params, char *src, char *dst )
 
   mpi_server_path = params->dirbase;
   if (mpi_server_path == NULL) {
-    mpi_server_path = MPI_SERVER_DIRBASE_DEFAULT; 
+    mpi_server_path = MPI_SERVER_DIRBASE_DEFAULT;
   }
 
-  sprintf(new_path, "%s/%s", mpi_server_path, dst); 
+  sprintf(new_path, "%s/%s", mpi_server_path, dst);
 
   debug_info("[MPI_SERVER_D2XPN] [mpi_server_d2xpn] Destination file server path\n");
 
@@ -141,7 +141,7 @@ int mpi_server_d2xpn ( mpi_server_param_st *params, char *src, char *dst )
 
   //TODO
   /*
-  double transfer_time;  
+  double transfer_time;
   struct timeval t1, t2;
   gettimeofday(&t1, NULL);
   */
@@ -152,17 +152,17 @@ int mpi_server_d2xpn ( mpi_server_param_st *params, char *src, char *dst )
   if (fd_lock == -1)
   {
     printf("[MPI_SERVER_D2XPN] [mpi_server_d2xpn] ERROR: Lock source file fails\n");
-    return -1;   
+    return -1;
   }
 
   debug_info("[MPI_SERVER_D2XPN] [mpi_server_d2xpn] Stat of destination file\n");
- 
+
   ret = stat(new_path, &st);
   if (0 == ret)
   {
     debug_info("[MPI_SERVER_D2XPN] [mpi_server_d2xpn] Destination file is stored in cache\n");
     mpi_server_d2xpn_unlock(fd_lock);
-    return 0;      
+    return 0;
   }
 
   // XPN Initialization
@@ -182,20 +182,20 @@ int mpi_server_d2xpn ( mpi_server_param_st *params, char *src, char *dst )
   {
     mpi_server_d2xpn_unlock(fd_lock);
     printf("[MPI_SERVER_D2XPN] [mpi_server_d2xpn] ERROR: Source file open fails\n");
-    //xpn_destroy();    
+    //xpn_destroy();
     return -1;
-  }  
+  }
 
   debug_info("[MPI_SERVER_D2XPN] [mpi_server_d2xpn] Destination file open\n");
 
-  fdp = xpn_open(new_path,O_CREAT|O_TRUNC|O_WRONLY, 0777); 
+  fdp = xpn_open(new_path,O_CREAT|O_TRUNC|O_WRONLY, 0777);
   if (fdp < 0)
   {
     mpi_server_d2xpn_unlock(fd_lock);
     printf("[MPI_SERVER_D2XPN] [mpi_server_d2xpn] ERROR: Source file open fails\n");
-    //xpn_destroy();    
+    //xpn_destroy();
     return -1;
-  } 
+  }
 
   //TODO
   /*
@@ -214,7 +214,7 @@ int mpi_server_d2xpn ( mpi_server_param_st *params, char *src, char *dst )
     if (s == -1) {
       break;
     }
-  
+
     debug_info("[MPI_SERVER_D2XPN] [mpi_server_d2xpn] Destination file write\n");
     s = xpn_write(fdp, global_transfer_buffer, sp);
 

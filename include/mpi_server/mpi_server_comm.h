@@ -45,9 +45,10 @@
   MPI_Comm mpi_server_comm_accept     ( mpi_server_param_st *params );
   int      mpi_server_comm_disconnect ( MPI_Comm fd );
 
-  ssize_t mpi_server_comm_read_operation ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int *rank_client_id );
-  ssize_t mpi_server_comm_write_data     ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int  rank_client_id );
-  ssize_t mpi_server_comm_read_data      ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int  rank_client_id );
+  ssize_t mpi_server_comm_write_operation_finalize ( MPI_Comm fd, int op );
+  ssize_t mpi_server_comm_read_operation           ( mpi_server_param_st *params, MPI_Comm fd, int *op, int *rank_client_id, int *tag_client_id );
+  ssize_t mpi_server_comm_write_data               ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int  rank_client_id, int tag_client_id );
+  ssize_t mpi_server_comm_read_data                ( mpi_server_param_st *params, MPI_Comm fd, char *data, ssize_t size, int  rank_client_id, int tag_client_id );
 
 
   /* ................................................................... */
