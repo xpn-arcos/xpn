@@ -54,8 +54,9 @@
     char dirbase [PATH_MAX];
     char dns_file[PATH_MAX];
     char shutdown_file[PATH_MAX];
-    int thread_mode;
-    int IOsize;
+    int  thread_mode;
+    int  IOsize;
+    int  number_accepts;
 
     //Semaphore for clients
     //char sem_name_server [PATH_MAX];
@@ -66,6 +67,7 @@
     // server arguments
     int    argc;
     char **argv;
+
   } mpi_server_param_st;
 
 

@@ -356,7 +356,7 @@ ssize_t mpi_client_write_operation ( MPI_Comm fd, int op )
   debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] >> Begin\n");
 
   //Message generation
-  msg[0] = (int) (pthread_self() % 32500);
+  msg[0] = (int) (pthread_self() % 32450) + 1;
   msg[1] = (int) op;
 
   // Send message
@@ -391,7 +391,7 @@ ssize_t mpi_client_write_data ( MPI_Comm fd, char *data, ssize_t size )
     return -1;
   }
 
-  int tag = (int) (pthread_self() % 32500);
+  int tag = (int) (pthread_self() % 32450) + 1;
 
   // Send message
   debug_info("[MPI_CLIENT_COMM] [mpi_client_write_data] Write data\n");
@@ -426,7 +426,7 @@ ssize_t mpi_client_read_data ( MPI_Comm fd, char *data, ssize_t size )
     return  -1;
   }
 
-  int tag = (int) (pthread_self() % 32500);
+  int tag = (int) (pthread_self() % 32450) + 1;
 
   // Get message
   debug_info("[MPI_CLIENT_COMM] [mpi_client_read_data] Read data\n");

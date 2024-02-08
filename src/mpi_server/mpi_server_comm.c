@@ -48,7 +48,7 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
   // MPI init
   // Threads disable
   if (!params->thread_mode)
-  { 
+  {
     debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] MPI Init without threads\n", params->rank);
 
     ret = MPI_Init(&(params->argc), &(params->argv));
@@ -113,7 +113,7 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
   MPI_Get_library_version(version, &version_len);
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] MPI Version: %s\n", params->rank, version);
-  
+
   if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
   {
     for (int j=0; j < params->size; j++)
@@ -160,7 +160,7 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
     // get hostname
     debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Get host name\n", params->rank);
 
-    gethostname(serv_name, HOST_NAME_MAX); 
+    gethostname(serv_name, HOST_NAME_MAX);
     sprintf(params->srv_name, "%s", serv_name);
 
     // Publish hostname
@@ -382,7 +382,7 @@ ssize_t mpi_server_comm_read_operation ( mpi_server_param_st *params, MPI_Comm f
 
   *rank_client_id = status.MPI_SOURCE;
   *tag_client_id  = msg[0];
-  *op             = msg[1]; 
+  *op             = msg[1];
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] MPI_Recv (MPI SOURCE %d, MPI_TAG %d, OP %d, MPI_ERROR %d)\n", params->rank, *rank_client_id, *rank_client_id, *op, status.MPI_ERROR);
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] << End\n", params->rank);
@@ -439,7 +439,7 @@ ssize_t mpi_server_comm_read_data ( mpi_server_param_st *params, MPI_Comm fd, ch
     printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] ERROR: NULL arguments\n", -1);
     return -1;
   }
-  
+
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] >> Begin\n", params->rank);
 
   if (size == 0) {
