@@ -194,14 +194,23 @@ int mpi_server_up ( void )
 
   // Loop: receiving + processing
   the_end = 0;
+  int number_accepted = 0 ;
   while (!the_end)
   {
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for accept\n", 0);
-
-    sd = mpi_server_comm_accept(&params);
-    if (sd == MPI_COMM_NULL) {
-      continue;
+    if ( (params.number_accepts != -1) && (number_accepted >= params.number_accepts) )
+    {
+       debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] number_accepted >= params->number_accepts\n", 0) ;
+       the_end = 1 ;
+       continue ;
     }
+
+    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for accept\n", 0) ;
+
+    sd = mpi_server_comm_accept(&params) ;
+    if (sd == MPI_COMM_NULL) {
+         continue;
+    }
+    number_accepted++ ;
 
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Accept received\n", 0);
 
@@ -214,10 +223,7 @@ int mpi_server_up ( void )
     th_arg.tag_client_id  = 0;
     th_arg.wait4me        = FALSE;
 
-    //base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
-
-    mpi_server_dispatcher(th_arg);
-
+    base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
   }
 
@@ -234,11 +240,8 @@ int mpi_server_up ( void )
   // Close semaphores
   /*
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Semaphore for server disks destroy\n", 0);
-
   sem_destroy(&(params.disk_sem));
-
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Semaphore for clients destroy\n", 0);
-
   sem_unlink(params.sem_name_server);
   */
 
