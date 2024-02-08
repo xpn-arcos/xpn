@@ -72,7 +72,7 @@ void mpi_server_dispatcher ( struct st_th th )
   {
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] Waiting for operation\n", th.id);
 
-    ret = mpi_server_comm_read_operation((mpi_server_param_st *) th.params, th.sd, &(th.type_op), &(th.rank_client_id), &(th.tag_client_id));
+    ret = mpi_server_comm_read_operation((mpi_server_param_st *) th.params, (MPI_Comm)th.sd, &(th.type_op), &(th.rank_client_id), &(th.tag_client_id));
     if (ret < 0)
     {
       debug_error("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] ERROR: read operation fail\n", th.id);
@@ -100,7 +100,7 @@ void mpi_server_dispatcher ( struct st_th th )
 
     // Launch worker per operation
     th_arg.params         = &params;
-    th_arg.sd             = (MPI_Comm) th.sd;
+    th_arg.sd             = (long) th.sd;
     th_arg.function       = mpi_server_run;
     th_arg.type_op        = th.type_op;
     th_arg.rank_client_id = th.rank_client_id;
@@ -207,16 +207,25 @@ int mpi_server_up ( void )
 
     //Launch dispatcher per aplication
     th_arg.params         = &params;
-    th_arg.sd             = sd;
+    th_arg.sd             = (long)sd;
     th_arg.function       = mpi_server_dispatcher;
     th_arg.type_op        = 0;
     th_arg.rank_client_id = 0;
     th_arg.tag_client_id  = 0;
     th_arg.wait4me        = FALSE;
 
-    base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
+    int pid = fork();
 
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
+    if (pid != 0)
+    {
+      //base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
+
+      mpi_server_dispatcher(th_arg);
+
+      debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
+
+      the_end = 1;
+    }
   }
 
   // Wait and finalize for all current workers
@@ -325,7 +334,7 @@ int mpi_server_down ( int argc, char *argv[] )
     // Send finalize operation
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Send finalize operation\n", 0);
 
-    ret = mpi_server_comm_write_operation( server, MPI_SERVER_FINALIZE ) ;
+    ret = mpi_server_comm_write_operation_finalize(server, MPI_SERVER_FINALIZE) ;
     if (ret < 0)
     {
       printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: Send finalize operation\n", 0);
