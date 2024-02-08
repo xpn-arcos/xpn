@@ -330,7 +330,7 @@ int mpi_server_comm_disconnect ( MPI_Comm fd )
 }
 
 // write_operation for shutdown, read_operation
-ssize_t mpi_server_write_operation ( MPI_Comm fd, int op )
+ssize_t mpi_server_write_operation2 ( MPI_Comm fd, int op )
 {
   int ret;
   int msg[2];
