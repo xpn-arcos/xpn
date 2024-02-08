@@ -327,7 +327,7 @@ int mpi_server_down ( int argc, char *argv[] )
     // Send finalize operation
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Send finalize operation\n", 0);
 
-    ret = mpi_server_write_operation( server, MPI_SERVER_FINALIZE ) ;
+    ret = mpi_server_write_operation2( server, MPI_SERVER_FINALIZE ) ;
     if (ret < 0)
     {
       printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: Send finalize operation\n", 0);

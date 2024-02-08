@@ -279,7 +279,7 @@ int mpi_client_comm_locality ( mpi_client_param_st *params )
   int ret;
   char cli_name  [HOST_NAME_MAX];
   char serv_name [HOST_NAME_MAX];
-  MPI_Status status;
+  //MPI_Status status;
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_locality] >> Begin\n");
 
