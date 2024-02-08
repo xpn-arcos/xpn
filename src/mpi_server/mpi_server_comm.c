@@ -48,7 +48,7 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
   // MPI init
   // Threads disable
   if (!params->thread_mode)
-  { 
+  {
     debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] MPI Init without threads\n", params->rank);
 
     ret = MPI_Init(&(params->argc), &(params->argv));
@@ -63,8 +63,7 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
   {
     debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] MPI Init with threads\n", params->rank);
 
-    //ret = MPI_Init_thread(&(params->argc), &(params->argv), MPI_THREAD_MULTIPLE, &provided);
-    ret = MPI_Init_thread(&(params->argc), &(params->argv), MPI_THREAD_SERIALIZED, &provided);
+    ret = MPI_Init_thread(&(params->argc), &(params->argv), MPI_THREAD_MULTIPLE, &provided);
     if (MPI_SUCCESS != ret)
     {
       printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: MPI_Init_thread fails\n", params->rank);
@@ -114,7 +113,7 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
   MPI_Get_library_version(version, &version_len);
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] MPI Version: %s\n", params->rank, version);
-  
+
   if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
   {
     for (int j=0; j < params->size; j++)
@@ -161,7 +160,7 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
     // get hostname
     debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Get host name\n", params->rank);
 
-    gethostname(serv_name, HOST_NAME_MAX); 
+    gethostname(serv_name, HOST_NAME_MAX);
     sprintf(params->srv_name, "%s", serv_name);
 
     // Publish hostname
@@ -282,13 +281,14 @@ int mpi_server_comm_destroy ( mpi_server_param_st *params )
 MPI_Comm mpi_server_comm_accept ( mpi_server_param_st *params )
 {
   int ret;
+  MPI_Comm sd = MPI_COMM_NULL;
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] >> Begin\n", params->rank);
 
   // Accept
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] Accept\n", params->rank);
 
-  ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(params->client));
+  ret = MPI_Comm_accept(params->port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &(sd));
   if (MPI_SUCCESS != ret)
   {
     printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] ERROR: MPI_Comm_accept fails\n", params->rank);
@@ -298,7 +298,7 @@ MPI_Comm mpi_server_comm_accept ( mpi_server_param_st *params )
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] << End\n", params->rank);
 
   // Return client MPI_Comm
-  return params->client;
+  return sd;
 }
 
 int mpi_server_comm_disconnect ( MPI_Comm fd )
@@ -330,28 +330,28 @@ int mpi_server_comm_disconnect ( MPI_Comm fd )
 }
 
 // write_operation for shutdown, read_operation
-ssize_t mpi_server_write_operation2 ( MPI_Comm fd, int op )
+ssize_t mpi_server_comm_write_operation_finalize ( MPI_Comm fd, int op )
 {
   int ret;
   int msg[2];
 
-  debug_info("[MPI_CLIENT_COMM] [mpi_server_write_operation] >> Begin\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] >> Begin\n");
 
   //Message generation
-  msg[0] = (int) (pthread_self() % 32500);
+  msg[0] = (int) (pthread_self() % 32499) + 1;
   msg[1] = (int) op;
 
   // Send message
-  debug_info("[MPI_CLIENT_COMM] [mpi_server_write_operation] Write operation\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] Write operation\n");
 
   ret = MPI_Send(msg, 2, MPI_INT, 0, 0, fd);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_server_write_operation] ERROR: MPI_Send < 0\n");
+    printf("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] ERROR: MPI_Send < 0\n");
     return -1;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpi_server_write_operation] << End\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] << End\n");
 
   // Return OK
   return 0;
@@ -382,7 +382,7 @@ ssize_t mpi_server_comm_read_operation ( mpi_server_param_st *params, MPI_Comm f
 
   *rank_client_id = status.MPI_SOURCE;
   *tag_client_id  = msg[0];
-  *op             = msg[1]; 
+  *op             = msg[1];
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] MPI_Recv (MPI SOURCE %d, MPI_TAG %d, OP %d, MPI_ERROR %d)\n", params->rank, *rank_client_id, *rank_client_id, *op, status.MPI_ERROR);
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] << End\n", params->rank);
@@ -439,7 +439,7 @@ ssize_t mpi_server_comm_read_data ( mpi_server_param_st *params, MPI_Comm fd, ch
     printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] ERROR: NULL arguments\n", -1);
     return -1;
   }
-  
+
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] >> Begin\n", params->rank);
 
   if (size == 0) {
