@@ -420,23 +420,25 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     return -1;
   }
 
+  int serv_to_calc = 0;
   // Check if have incomplete blocks
   int have_incompete_blocks = 0;
   for(i=0;i<n;i++)
     if (attr[i].at_size != 0 &&
        (attr[i].at_size - XPN_HEADER_SIZE) % xpn_file_table[fd]->part->block_size != 0){
       have_incompete_blocks = 1;
+      serv_to_calc = i;
       break;
     }
 
   // Get serv with the last block
-  int serv_to_calc = 0;
   for(i=0;i<n;i++){
     if (have_incompete_blocks){
       if (attr[i].at_size != 0 &&
          (attr[i].at_size - XPN_HEADER_SIZE) % xpn_file_table[fd]->part->block_size != 0 && 
-          attr[i].at_size <= attr[serv_to_calc].at_size)
-        serv_to_calc = i;
+          attr[i].at_size <= attr[serv_to_calc].at_size){
+            serv_to_calc = i;
+          }
     }else{
       if (attr[i].at_size >= attr[serv_to_calc].at_size)
         serv_to_calc = i;
@@ -575,23 +577,26 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     free(servers);
     return -1;
   }
+
+  int serv_to_calc = 0;
   // Check if have incomplete blocks
   int have_incompete_blocks = 0;
-  for(i=0;i<n;i++){
+  for(i=0;i<n;i++)
     if (attr[i].at_size != 0 &&
        (attr[i].at_size - XPN_HEADER_SIZE) % xpn_parttable[pd].block_size != 0){
       have_incompete_blocks = 1;
+      serv_to_calc = i;
       break;
     }
-  }
+
   // Get serv with the last block
-  int serv_to_calc = 0;
   for(i=0;i<n;i++){
     if (have_incompete_blocks){
       if (attr[i].at_size != 0 &&
          (attr[i].at_size - XPN_HEADER_SIZE) % xpn_parttable[pd].block_size != 0 && 
-          attr[i].at_size <= attr[serv_to_calc].at_size)
-        serv_to_calc = i;
+          attr[i].at_size <= attr[serv_to_calc].at_size){
+            serv_to_calc = i;
+          }
     }else{
       if (attr[i].at_size >= attr[serv_to_calc].at_size)
         serv_to_calc = i;

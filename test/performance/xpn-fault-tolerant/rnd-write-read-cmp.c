@@ -202,21 +202,24 @@ int main ( int argc, char *argv[] )
 	fd_random = open(random_file, O_RDWR);
     while ((bytesRead = xpn_read(fd1, bufferRead, buff_size)) > 0) {
 		bytesRead2 = read(fd_random, bufferRead2, buff_size);
-		printf("bytesRead = %lld bytesRead2 = %lld\n", (long long)bytesRead, (long long)bytesRead2);
+		// printf("bytesRead = %lld bytesRead2 = %lld\n", (long long)bytesRead, (long long)bytesRead2);
+		if (bytesRead != bytesRead2){
+			printf("Error when reading xpn_read: %lld read: %lld\n",(long long)bytesRead, (long long)bytesRead2);
+		}
 		if (strncmp(bufferRead,bufferRead2,bytesRead)==0){
-			printf("The buffers are the same strncmp\n");
+			// printf("The buffers are the same strncmp\n");
 		}else{
 			printf("The buffers are different strncmp\n"); 
 			is_the_same = 0; 
 		}
 		if (memcmp(bufferRead,bufferRead2,bytesRead)==0){
-			printf("The buffers are the same memcmp\n");
+			// printf("The buffers are the same memcmp\n");
 		}else{
 			printf("The buffers are different memcmp\n"); 
 			is_the_same = 0; 
 		}
 		if (cmpBuffers(bufferRead,bufferRead2,bytesRead)==0){
-			printf("The buffers are the same cmpBuffers\n");
+			// printf("The buffers are the same cmpBuffers\n");
 		}else{
 			printf("The buffers are different cmpBuffers\n"); 
 			is_the_same = 0; 
