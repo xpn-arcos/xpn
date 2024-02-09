@@ -224,6 +224,10 @@ int mpi_server_up ( void )
     th_arg.wait4me        = FALSE;
 
     base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
+
+    struct timespec remaining, request = { 5, 100 };
+    nanosleep(&request, &remaining);
+
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
   }
 
