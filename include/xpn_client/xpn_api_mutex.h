@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -20,41 +20,41 @@
  */
 
 
-#ifndef _MPI_SERVER_D2XPN_H_
-#define _MPI_SERVER_D2XPN_H_
+#ifndef _XPN_API_MUTEX_H
+#define _XPN_API_MUTEX_H
+
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
+
 
   /* ... Include / Inclusion ........................................... */
 
-  #include <sys/param.h>
-  #include <stdio.h>
-  #include <sys/file.h>
-  #include <sys/fcntl.h>
-  #include <unistd.h>
-  #include <sys/time.h>
-  #include <sys/wait.h>
-  #include <sys/errno.h>
-
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "mpi_server_params.h"
-  #include "mpi_server_ops.h"
-
-  #include "xpn.h"
+     #include "all_system.h"
 
 
-  /* ... Const / Const ................................................. */
-  
-  #define PRELOAD_SYNC  0
-  #define PRELOAD_ASYNC 1
+  /* ... Macros / Macros ............................................... */
 
-  /* ... Data structures / Estructuras de datos ........................ */
+#ifdef _REENTRANT
 
-  
-  /* ... Functions / Funciones ......................................... */
+     extern pthread_mutex_t xpn_api_mutex ;
 
-  int mpi_server_d2xpn ( mpi_server_param_st *params, char *src, char *dst );
+     #define XPN_API_LOCK()    pthread_mutex_lock(&xpn_api_mutex)
+     #define XPN_API_UNLOCK()  pthread_mutex_unlock(&xpn_api_mutex)
+
+#else
+
+     #define XPN_API_LOCK()    (0)
+     #define XPN_API_UNLOCK()  (0)
+
+#endif
 
 
   /* ................................................................... */
 
+  #ifdef  __cplusplus
+    }
+  #endif
+
 #endif
+

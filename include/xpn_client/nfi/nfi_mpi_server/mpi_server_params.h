@@ -51,9 +51,8 @@
     int locality;
 
     // server port and comm
-    char port_name[MPI_MAX_PORT_NAME];
-    char  srv_name[MPI_MAX_PORT_NAME];
-
+    char port_name [MPI_MAX_PORT_NAME];
+    char  srv_name [MPI_MAX_PORT_NAME];
     MPI_Comm server;
 
     // server configuration
@@ -65,7 +64,7 @@
     // server arguments
     int    argc;
     char **argv;
-  } mpiClient_param_st;
+  } mpi_client_param_st;
 
   /* ... Functions / Funciones ......................................... */
 

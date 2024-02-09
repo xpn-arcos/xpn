@@ -144,6 +144,7 @@
   int open       ( const char *path, int flags, ... );
   int open64     ( const char *path, int flags, ... );
   int __open_2   ( const char *path, int flags, ... );
+  int openat     ( int dirfd, const char *pathname, int flags, ... );
   int creat      ( const char *path, mode_t mode );
   int close      ( int fd );
 
@@ -152,8 +153,10 @@
   ssize_t read   ( int fildes,       void *buf, size_t nbyte );
   ssize_t write  ( int fildes, const void *buf, size_t nbyte );
 
-  ssize_t pread  ( int fd, void *buf, size_t count, off_t offset );
-  ssize_t pwrite ( int fd, const void *buf, size_t count, off_t offset );
+  ssize_t pread    ( int fd, void *buf, size_t count, off_t offset );
+  ssize_t pwrite   ( int fd, const void *buf, size_t count, off_t offset );
+  ssize_t pread64  ( int fd, void *buf, size_t count, off_t offset );
+  ssize_t pwrite64 ( int fd, const void *buf, size_t count, off_t offset );
 
   off_t   lseek   ( int fildes, off_t offset, int whence );
   off64_t lseek64 ( int fd,   off64_t offset, int whence );

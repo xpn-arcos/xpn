@@ -69,14 +69,14 @@ fi
 
 ## MXML
 echo " * MXML: preparing directories..."
-  rm -fr "$INSTALL_PATH/mxml"
-mkdir -p "$INSTALL_PATH/mxml/lib64"
-ln    -s "$INSTALL_PATH/mxml/lib64"  "$INSTALL_PATH/mxml/lib"
+  rm -fr "${INSTALL_PATH}/mxml"
+mkdir -p "${INSTALL_PATH}/mxml/lib64"
+ln    -s "${INSTALL_PATH}/mxml/lib64"  "${INSTALL_PATH}/mxml/lib"
 
 echo " * MXML: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
-./configure --prefix=$INSTALL_PATH/mxml
+./configure --prefix="${INSTALL_PATH}/mxml"
 make clean
 make -j 8
 make install

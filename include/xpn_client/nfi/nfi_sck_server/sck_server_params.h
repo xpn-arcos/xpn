@@ -50,13 +50,13 @@
     int locality;
 
     // server port and comm
-    char  port_number[SCK_MAX_PORT_NAME];
-    char  srv_name   [SCK_MAX_PORT_NAME];
-    char  server_name[SCK_MAX_PORT_NAME];
+    char  port_number [SCK_MAX_PORT_NAME];
+    char  srv_name    [SCK_MAX_PORT_NAME];
+    char  server_name [SCK_MAX_PORT_NAME];
     int   server;
 
     // server configuration
-    char dirbase[PATH_MAX];
+    char dirbase [PATH_MAX];
 
     //char    sem_name_server [PATH_MAX];
     //sem_t * sem_server;
@@ -64,7 +64,7 @@
     // server arguments
     int    argc;
     char **argv;
-  } sckClient_param_st;
+  } sck_client_param_st;
 
 
   /* ... Functions / Funciones ......................................... */
