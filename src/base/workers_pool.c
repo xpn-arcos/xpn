@@ -86,6 +86,11 @@
             return -1;
         }
 
+        w->n_operation = 0;
+        w->deq_pos = 0;
+        w->enq_pos = 0;
+        w->pool_end = 0; 
+
         // starting threads...
         for (int i = 0; i < w->POOL_MAX_THREADS; i++)
         {
