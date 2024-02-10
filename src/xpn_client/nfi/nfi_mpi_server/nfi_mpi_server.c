@@ -169,7 +169,8 @@ int nfi_mpi_server_do_request ( struct nfi_mpi_server_server *server_aux, struct
 int nfi_mpi_server_keep_connected ( struct nfi_server *serv )
 {
   // check params...
-  if (serv == NULL) {
+  if (serv == NULL)
+  {
     printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_mpi_server_keep_connected] ERROR: serv argument is NULL\n", -1);
     return -1;
   }

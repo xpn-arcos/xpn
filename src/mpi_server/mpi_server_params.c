@@ -100,73 +100,73 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
     switch (argv[i][0])
     {
       case '-':
-		switch (argv[i][1])
-		{
-		  case 'n':
-		    if ((strlen(argv[i]) == 3) && (argv[i][2] == 's'))
-		    {
-		      strcpy(params->dns_file, argv[i+1]);
-		      i++;
-		    }
-		    break;
+        switch (argv[i][1])
+        {
+          case 'n':
+            if ((strlen(argv[i]) == 3) && (argv[i][2] == 's'))
+            {
+              strcpy(params->dns_file, argv[i+1]);
+              i++;
+            }
+            break;
 
-		  case 'f':
-		    strcpy(params->shutdown_file, argv[i+1]);
-		    i++;
-		    break;
+          case 'f':
+            strcpy(params->shutdown_file, argv[i+1]);
+            i++;
+            break;
 
-		  case 'd':
-		    strcpy(params->dirbase, argv[i+1]);
-		    i++;
-		    break;
+          case 'd':
+            strcpy(params->dirbase, argv[i+1]);
+            i++;
+            break;
 
-		  case 't':
-		    if ((i+1) < argc)
-		    {
-		      if (isdigit(argv[i+1][0]))
-		      {
-			int thread_mode_aux = atoi(argv[i+1]);
+          case 't':
+            if ((i+1) < argc)
+            {
+              if (isdigit(argv[i+1][0]))
+              {
+                int thread_mode_aux = atoi(argv[i+1]);
 
-			if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP) {
-			  params->thread_mode = thread_mode_aux;
-			}
-			else {
-			  printf("ERROR: unknown option %s\n", argv[i+1]);
-			}
-		      }
-		      else
-		      {
-			if (strcmp("without", argv[i+1]) == 0) {
-			  params->thread_mode = TH_NOT;
-			}
-			else if (strcmp("pool", argv[i+1]) == 0) {
-			  params->thread_mode = TH_POOL;
-			}
-			else if (strcmp("on_demand", argv[i+1]) == 0) {
-			  params->thread_mode = TH_OP;
-			}
-			else {
-			  printf("ERROR: unknown option %s\n", argv[i+1]);
-			}
-		      }
-		    }
-		    i++;
-		    break;
+                if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP) {
+                  params->thread_mode = thread_mode_aux;
+                }
+                else {
+                  printf("ERROR: unknown option %s\n", argv[i+1]);
+                }
+              }
+              else
+              {
+                if (strcmp("without", argv[i+1]) == 0) {
+                  params->thread_mode = TH_NOT;
+                }
+                else if (strcmp("pool", argv[i+1]) == 0) {
+                  params->thread_mode = TH_POOL;
+                }
+                else if (strcmp("on_demand", argv[i+1]) == 0) {
+                  params->thread_mode = TH_OP;
+                }
+                else {
+                  printf("ERROR: unknown option %s\n", argv[i+1]);
+                }
+              }
+            }
+            i++;
+            break;
 
-		  case 'c':
-		    params->number_accepts = strtol(argv[i+1], &end, 10) ;
-		    if (*end != '\0') {
-			params->number_accepts = -1 ;
-		    }
-		    i++;
-		    break;
+          case 'c':
+            params->number_accepts = strtol(argv[i+1], &end, 10) ;
+            if (*end != '\0') {
+              params->number_accepts = -1 ;
+            }
+            i++;
+            break;
 
-		  case 'h':
-		    return -1;
+          case 'h':
+            return -1;
 
-		  default:
-		    break;
-		}
+          default:
+            break;
+        }
         break;
 
       default:
