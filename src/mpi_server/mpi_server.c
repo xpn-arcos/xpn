@@ -60,7 +60,8 @@ void mpi_server_dispatcher ( struct st_th th )
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] >> Begin\n", th.id);
 
   // check params...
-  if (NULL == th.params) {
+  if (NULL == th.params)
+  {
     debug_error("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] ERROR: NULL arguments\n", th.id);
     return;
   }
@@ -194,23 +195,23 @@ int mpi_server_up ( void )
 
   // Loop: receiving + processing
   the_end = 0;
-  int number_accepted = 0 ;
+  int number_accepted = 0;
   while (!the_end)
   {
-    if ( (params.number_accepts != -1) && (number_accepted >= params.number_accepts) )
+    if ((params.number_accepts != -1) && (number_accepted >= params.number_accepts))
     {
-       debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] number_accepted >= params->number_accepts\n", 0) ;
-       the_end = 1 ;
-       continue ;
+       debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] number_accepted >= params->number_accepts\n", 0);
+       the_end = 1;
+       continue;
     }
 
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for accept\n", 0) ;
+    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for accept\n", 0);
 
-    sd = mpi_server_comm_accept(&params) ;
+    sd = mpi_server_comm_accept(&params);
     if (sd == MPI_COMM_NULL) {
-         continue;
+      continue;
     }
-    number_accepted++ ;
+    number_accepted++;
 
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Accept received\n", 0);
 
@@ -223,7 +224,7 @@ int mpi_server_up ( void )
     th_arg.tag_client_id  = 0;
     th_arg.wait4me        = FALSE;
 
-    base_workers_launch( &worker1, &th_arg, mpi_server_dispatcher );
+    base_workers_launch(&worker1, &th_arg, mpi_server_dispatcher);
 
     struct timespec remaining, request = { 5, 100 };
     nanosleep(&request, &remaining);
@@ -234,8 +235,8 @@ int mpi_server_up ( void )
   // Wait and finalize for all current workers
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers destroy\n", 0);
 
-  base_workers_destroy( &worker1 );
-  base_workers_destroy( &worker2 );
+  base_workers_destroy(&worker1);
+  base_workers_destroy(&worker2);
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm destroy\n", 0);
 
@@ -310,7 +311,6 @@ int mpi_server_down ( int argc, char *argv[] )
     else
     {
       // Lookup port name on nameserver
-
       debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] MPI_Lookup_name server %s\n", 0, srv_name);
 
       ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name);
@@ -334,7 +334,7 @@ int mpi_server_down ( int argc, char *argv[] )
     // Send finalize operation
     debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Send finalize operation\n", 0);
 
-    ret = mpi_server_comm_write_operation_finalize(server, MPI_SERVER_FINALIZE) ;
+    ret = mpi_server_comm_write_operation_finalize(server, MPI_SERVER_FINALIZE);
     if (ret < 0)
     {
       printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: Send finalize operation\n", 0);

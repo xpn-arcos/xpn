@@ -245,7 +245,8 @@ int mpi_server_comm_destroy ( mpi_server_param_st *params )
           return -1;
         }
       }
-      else{
+      else
+      {
         // Unpublish port name
         debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] Unpublish host\n", params->rank);
 
@@ -335,23 +336,23 @@ ssize_t mpi_server_comm_write_operation_finalize ( MPI_Comm fd, int op )
   int ret;
   int msg[2];
 
-  debug_info("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] >> Begin\n");
+  debug_info("[MPI_SERVER_COMM] [mpi_server_comm_write_operation_finalize] >> Begin\n");
 
   //Message generation
   msg[0] = (int) (pthread_self() % 32499) + 1;
   msg[1] = (int) op;
 
   // Send message
-  debug_info("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] Write operation\n");
+  debug_info("[MPI_SERVER_COMM] [mpi_server_comm_write_operation_finalize] Write operation\n");
 
   ret = MPI_Send(msg, 2, MPI_INT, 0, 0, fd);
   if (MPI_SUCCESS != ret)
   {
-    printf("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] ERROR: MPI_Send < 0\n");
+    printf("[MPI_SERVER_COMM] [mpi_server_comm_write_operation_finalize] ERROR: MPI_Send < 0\n");
     return -1;
   }
 
-  debug_info("[MPI_CLIENT_COMM] [mpi_server_comm_write_operation_finalize] << End\n");
+  debug_info("[MPI_SERVER_COMM] [mpi_server_comm_write_operation_finalize] << End\n");
 
   // Return OK
   return 0;
