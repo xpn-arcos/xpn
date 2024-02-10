@@ -39,22 +39,26 @@ void sck_server_params_show ( sck_server_param_st * params )
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show] >> Begin\n", params->rank);
 
   printf(" * SCK-server current configuration:\n");
-  printf("\t-ns <string>:\t'%s'\n", params->dns_file);
+  // * dns_file
+  printf("\t-ns <path>:\t'%s'\n", params->dns_file);
+  // * threads
   if (params->thread_mode == TH_NOT) {
-    printf("\t-t:\t\tWithout threads\n");
+    printf("\t-t  <int>:\tWithout threads\n");
   }
   if (params->thread_mode == TH_POOL) {
-    printf("\t-t:\t\tThread Pool Activated\n");
+    printf("\t-t  <int>:\tThread Pool Activated\n");
   }
   if (params->thread_mode == TH_OP) {
-    printf("\t-t:\t\tThread on demand\n");
+    printf("\t-t  <int>:\tThread on demand\n");
   }
-  printf("\t-d  <string>:\t'%s'\n", params->dirbase);
-  printf("\t-f <path>:\t'%s'\n",   params->shutdown_file);
+  // * dirbase
+  printf("\t-d  <path>:\t'%s'\n",   params->dirbase);
+  // * shutdown_file
+  printf("\t-f  <path>:\t'%s'\n",   params->shutdown_file);
 
   printf("\t-n  <string>:\t'%s'\n", params->name);
-  printf("\t-p  <int>:\t'%s'\n", params->port);
-  printf("\t-io <int>:\t%d\n", params->IOsize);
+  printf("\t-p  <int>:\t'%s'\n",    params->port);
+  printf("\t-io <int>:\t%d\n",      params->IOsize);
 
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show] << End\n", params->rank);
 }
@@ -64,10 +68,10 @@ void sck_server_params_show_usage ( void )
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show_usage] >> Begin\n", -1);
 
   printf("Usage:\n");
-  printf("\t-ns <path>: file for service name\n");
-  printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n");
+  printf("\t-ns <path>:   file for service name\n");
+  printf("\t-t  <int>:    0 (without thread); 1 (thread pool); 2 (on demand)\n");
   printf("\t-d  <string>: name of the base directory\n");
-  printf("\t-f  <path>: file of servers to be shutdown\n");
+  printf("\t-f  <path>:   file of servers to be shutdown\n");
 
   printf("\t-n  <string>: name of the server\n");
   printf("\t-p  <int>:    port number\n");

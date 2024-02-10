@@ -43,20 +43,20 @@ void mpi_server_params_show ( mpi_server_param_st *params )
   printf("\t-ns <path>:\t'%s'\n",   params->dns_file);
   // * threads
   if (params->thread_mode == TH_NOT) {
-    printf("\t-t:\t\tWithout threads\n");
+    printf("\t-t  <int>:\tWithout threads\n");
   }
   if (params->thread_mode == TH_POOL) {
-    printf("\t-t:\t\tThread Pool Activated\n");
+    printf("\t-t  <int>:\tThread Pool Activated\n");
   }
   if (params->thread_mode == TH_OP) {
-    printf("\t-t:\t\tThread on demand\n");
+    printf("\t-t  <int>:\tThread on demand\n");
   }
   // * dirbase
-  printf("\t-d <path>:\t'%s'\n",   params->dirbase);
+  printf("\t-d  <path>:\t'%s'\n",   params->dirbase);
   // * shutdown_file
-  printf("\t-f <path>:\t'%s'\n",   params->shutdown_file);
+  printf("\t-f  <path>:\t'%s'\n",   params->shutdown_file);
   // * connections
-  printf("\t-c <# accepts per server>:\t%d\n",   params->number_accepts);
+  printf("\t-c  <# accepts per server>:\t%d\n",   params->number_accepts);
 
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show] << End\n", params->rank);
 }
@@ -66,11 +66,11 @@ void mpi_server_params_show_usage ( void )
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show_usage] >> Begin\n", -1) ;
 
   printf("Usage:\n") ;
-  printf("\t-ns <path>:        file for service name\n") ;
-  printf("\t-t  <thread_mode>: 0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
-  printf("\t-d  <string>:      name of the base directory\n") ;
-  printf("\t-f  <path>:        file of servers to be shutdown\n") ;
-  printf("\t-c  <accepts>:     number of accepts per server\n") ;
+  printf("\t-ns <path>:     file for service name\n") ;
+  printf("\t-t  <int>:      0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
+  printf("\t-d  <string>:   name of the base directory\n") ;
+  printf("\t-f  <path>:     file of servers to be shutdown\n") ;
+  printf("\t-c  <accepts>:  number of accepts per server\n") ;
 
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show_usage] << End\n", -1) ;
 }
