@@ -1242,7 +1242,8 @@ void mpi_server_op_flush ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
 
   // Open origin file
   fd_orig = filesystem_open(file, O_RDONLY);
-  if (fd_orig < 0) {
+  if (fd_orig < 0)
+  {
     printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_flush] ERROR: open operation on '%s' fails\n", params->rank, file);
     mpi_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id, tag_client_id);
     return;

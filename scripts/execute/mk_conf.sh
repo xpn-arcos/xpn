@@ -48,7 +48,7 @@ intro() {
 usage() {
    echo " Usage: $0 --conf              ~/tmp/config.xml \\"
    echo "           --machinefile       ~/tmp/machinefile \\"
-   echo "           [--part_bsize       <64|512k|1m|...>] \\"
+   echo "           [--part_size        <64|512k|1m|...>] \\"
    echo "           [--part_type        NORMAL] \\"
    echo "           [--part_name        <partition name>] \\"
    echo "           [--storage_path     <server local storage path>] \\"
@@ -83,7 +83,7 @@ get_opts() {
    # Taken the general idea from https://stackoverflow.com/questions/70951038/how-to-use-getopt-long-option-in-bash-script
    mkconf_name=$(basename "$0")
    mkconf_short_opt=c:,m:,s:,t:,n,p:,x:,d:,h
-   mkconf_long_opt=conf:,machinefile:,part_bsize:,part_type:,part_name:,storage_path:,storage_protocol:,deployment_file:,help
+   mkconf_long_opt=conf:,machinefile:,part_size:,part_type:,part_name:,storage_path:,storage_protocol:,deployment_file:,help
    TEMP=$(getopt -o $mkconf_short_opt --long $mkconf_long_opt --name "$mkconf_name" -- "$@")
    eval set -- "${TEMP}"
 
@@ -91,7 +91,7 @@ get_opts() {
       case "${1}" in
          -c | --conf             ) CONFNAME=$2;             shift 2 ;;
          -m | --machinefile      ) MACHINEFILE=$2;          shift 2 ;;
-         -s | --part_bsize       ) XPN_PARTITION_BSIZE=$2;  shift 2 ;;
+         -s | --part_size        ) XPN_PARTITION_BSIZE=$2;  shift 2 ;;
          -t | --part_type        ) XPN_PARTITION_TYPE=$2;   shift 2 ;;
          -n | --part_name        ) XPN_PARTITION_NAME=$2;   shift 2 ;;
          -p | --storage_path     ) XPN_STORAGE_PATH=$2;     shift 2 ;;
@@ -115,7 +115,7 @@ check_opts() {
       exit 1
    fi
 
-   # TODO: more checks around partition bsize, type, etc.
+   # TODO: more checks around partition block size, type, etc.
 }
 
 mk_conf_file_from_args() {

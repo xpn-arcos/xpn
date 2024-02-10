@@ -446,4 +446,3 @@ ssize_t mpi_client_read_data ( MPI_Comm fd, char *data, ssize_t size )
 
 
 /* ................................................................... */
-
