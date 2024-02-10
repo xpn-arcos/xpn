@@ -98,6 +98,11 @@ start_xpn_servers() {
             -hostfile "${HOSTFILE}" \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
             "${BASE_DIR}"/../../src/mpi_server/xpn_mpi_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
+  elif [[ ${SERVER_TYPE} == "sck" ]]; then
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+            "${BASE_DIR}"/../../src/sck_server/xpn_sck_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
   else
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
@@ -136,6 +141,11 @@ stop_xpn_servers() {
             -genv XPN_DNS "${WORKDIR}"/dns.txt \
             -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
             "${BASE_DIR}"/../../src/mpi_server/xpn_stop_mpi_server -f "${DEATH_FILE}"
+  elif [[ ${SERVER_TYPE} == "sck" ]]; then
+    mpiexec -np 1 \
+            -genv XPN_DNS "${WORKDIR}"/dns.txt \
+            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+            "${BASE_DIR}"/../../src/sck_server/xpn_stop_sck_server -f "${DEATH_FILE}"
   else
     mpiexec -np 1 \
             -genv XPN_DNS "${WORKDIR}"/dns.txt \
@@ -202,7 +212,8 @@ flush_xpn() {
 
 usage_short() {
   echo ""
-  echo " Usage: xpn.sh [-h/--help] [-a/--args <daemon_args>] [-f/--foreground <false>]"
+  echo " Usage: xpn.sh [-h/--help] "
+  echo "               [-e/--execute <daemon type>] [-a/--args <daemon_args>] [-f/--foreground <false>]"
   echo "               [-c/--config <configuration file>]"
   echo "               [-m/--deployment_file <deployment file>]"
   echo "               [-n/--numnodes <jobsize>]"
@@ -229,6 +240,7 @@ usage_details() {
   echo ""
   echo " optional arguments:"
   echo "     -h, --help                          Shows this help message and exits"
+  echo "     -e, --execute <arguments>           Server type: mpi, sck or tcp."
   echo "     -a, --args <arguments>              Add various additional daemon arguments."
   echo "     -f, --foreground                    Starts the script in the foreground. Daemons are stopped by pressing 'q'."
   echo "     -c, --config   <path>               Path to configuration file."
@@ -265,8 +277,10 @@ SERVER_TYPE="mpi"
 
 
 ## get arguments
-while getopts "r:w:s:t:x:d:n:a:c:m:l:fvh" opt; do
+while getopts "e:r:w:s:t:x:d:n:a:c:m:l:fvh" opt; do
   case "${opt}" in
+    e) SERVER_TYPE=${OPTARG}
+       ;;
     r) DIR_ROOT=${OPTARG}
        ;;
     w) WORKDIR=${OPTARG}

@@ -1,6 +1,9 @@
 
 # Changelog
 
+## 2.3.0 - 2024-02-09
+  * Minor bug fixes and improvements
+
 ## 2.2.2 - 2023-06-12
   * TCP server rebuilt from scratch
   * New system calls intercepted
@@ -26,3 +29,4 @@
     * Benchmarks tested: IOR, MdTest and IO500.
     * API: POSIX (through syscall interception library) and native XPN (similar to POSIX).
     * Main features: data locality, MPI Ad-Hoc servers, thread on-demand or thread pool for MPI servers
+
