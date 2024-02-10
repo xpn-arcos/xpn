@@ -534,7 +534,6 @@ int xpn_adaptor_keepInit ( void )
 /* ... Functions / Funciones ......................................... */
 
 // File API
-
 int open ( const char *path, int flags, ... )
 {
   int ret, fd;
@@ -582,7 +581,7 @@ int open ( const char *path, int flags, ... )
 
   va_end(ap);
 
-  debug_info("[BYPASS] << After open.... %s\n", path);
+  debug_info("[BYPASS] << After open....\n");
 
   return ret;
 }
@@ -635,7 +634,7 @@ int open64 ( const char *path, int flags, ... )
 
   va_end(ap);
 
-  debug_info("[BYPASS] << After open64.... %s\n", path);
+  debug_info("[BYPASS] << After open64....\n");
 
   return ret;
 }
@@ -689,7 +688,7 @@ int __open_2 ( const char *path, int flags, ... )
 
   va_end(ap);
 
-  debug_info("[BYPASS] << After __open_2.... %s\n", path);
+  debug_info("[BYPASS] << After __open_2....\n");
 
   return ret;
 }
@@ -745,7 +744,7 @@ int openat ( int dirfd, const char *path, int flags, ... )
 
   va_end(ap);
 
-  debug_info("[BYPASS] << After open.... %s\n", path);
+  debug_info("[BYPASS] << After open....\n");
 
   return ret;
 }

@@ -30,24 +30,32 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include "all_system.h"
+  #include "all_system.h"
+
+
+  /* ... Const / Const ................................................. */
+
+
+  /* ... Data structures / Estructuras de datos ........................ */
 
 
   /* ... Macros / Macros ............................................... */
 
-#ifdef _REENTRANT
+  #ifdef _REENTRANT
 
-     extern pthread_mutex_t xpn_api_mutex ;
+    extern pthread_mutex_t xpn_api_mutex ;
 
-     #define XPN_API_LOCK()    pthread_mutex_lock(&xpn_api_mutex)
-     #define XPN_API_UNLOCK()  pthread_mutex_unlock(&xpn_api_mutex)
+    #define XPN_API_LOCK()    pthread_mutex_lock(&xpn_api_mutex)
+    #define XPN_API_UNLOCK()  pthread_mutex_unlock(&xpn_api_mutex)
 
-#else
+  #else
 
-     #define XPN_API_LOCK()    (0)
-     #define XPN_API_UNLOCK()  (0)
+    #define XPN_API_LOCK()    (0)
+    #define XPN_API_UNLOCK()  (0)
 
-#endif
+  #endif
+
+  /* ... Functions / Funciones ......................................... */
 
 
   /* ................................................................... */
@@ -57,4 +65,3 @@
   #endif
 
 #endif
-
