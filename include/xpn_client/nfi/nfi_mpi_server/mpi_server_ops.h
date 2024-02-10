@@ -55,10 +55,10 @@
   #define MPI_SERVER_SETATTR_FILE   9
 
   // File operations without session
-  #define MPI_SERVER_OPEN_FILE_WOS      100
-  #define MPI_SERVER_CREAT_FILE_WOS     101
-  #define MPI_SERVER_READ_FILE_WOS      102
-  #define MPI_SERVER_WRITE_FILE_WOS     103
+  #define MPI_SERVER_OPEN_FILE_WOS   100
+  #define MPI_SERVER_CREAT_FILE_WOS  101
+  #define MPI_SERVER_READ_FILE_WOS   102
+  #define MPI_SERVER_WRITE_FILE_WOS  103
 
   // Directory operations
   #define MPI_SERVER_MKDIR_DIR        20
@@ -69,18 +69,18 @@
   #define MPI_SERVER_CLOSEDIR_DIR     25
 
   // Import / Export operations
-  #define MPI_SERVER_FLUSH_FILE     40
-  #define MPI_SERVER_PRELOAD_FILE   41
+  #define MPI_SERVER_FLUSH_FILE    40
+  #define MPI_SERVER_PRELOAD_FILE  41
 
   // FS Operations
-  #define MPI_SERVER_STATFS_DIR     60
-  #define MPI_SERVER_GETNODENAME    61
-  #define MPI_SERVER_GETID          62
+  #define MPI_SERVER_STATFS_DIR   60
+  #define MPI_SERVER_GETNODENAME  61
+  #define MPI_SERVER_GETID        62
 
   // Connection operatons
-  #define MPI_SERVER_FINALIZE       80
-  #define MPI_SERVER_DISCONNECT     81
-  #define MPI_SERVER_END            -1
+  #define MPI_SERVER_FINALIZE    80
+  #define MPI_SERVER_DISCONNECT  81
+  #define MPI_SERVER_END         -1
 
 
   /* ... Data structures / Estructuras de datos ........................ */

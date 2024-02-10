@@ -20,24 +20,29 @@
  */
 
 
-   /* ... Include / Inclusion ........................................... */
+/* ... Include / Inclusion ........................................... */
 
-      #include "utils.h"
-
-
-   /* ... Functions / Funciones ......................................... */
-
-      long utils_get_time ( void )
-      {
-          struct timeval timenow ;
-      
-          // get timestamp
-          gettimeofday(&timenow, NULL) ;
-      
-          // return timestamp
-          return (long)timenow.tv_sec * 1000 + (long)timenow.tv_usec / 1000 ;
-      }
+#include "utils.h"
 
 
-   /* ................................................................... */
+/* ... Const / Const ................................................. */
 
+
+/* ... Global variables / Variables globales ........................ */
+
+
+/* ... Functions / Funciones ......................................... */
+
+long utils_get_time ( void )
+{
+  struct timeval timenow;
+
+  // get timestamp
+  gettimeofday(&timenow, NULL);
+
+  // return timestamp
+  return (long)timenow.tv_sec * 1000 + (long)timenow.tv_usec / 1000;
+}
+
+
+/* ................................................................... */
