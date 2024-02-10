@@ -55,10 +55,10 @@
   #define SCK_SERVER_SETATTR_FILE   9
 
   // File operations without session
-  #define SCK_SERVER_OPEN_FILE_WOS      100
-  #define SCK_SERVER_CREAT_FILE_WOS     101
-  #define SCK_SERVER_READ_FILE_WOS      102
-  #define SCK_SERVER_WRITE_FILE_WOS     103
+  #define SCK_SERVER_OPEN_FILE_WOS   100
+  #define SCK_SERVER_CREAT_FILE_WOS  101
+  #define SCK_SERVER_READ_FILE_WOS   102
+  #define SCK_SERVER_WRITE_FILE_WOS  103
 
   // Directory operations
   #define SCK_SERVER_MKDIR_DIR        20
@@ -69,18 +69,18 @@
   #define SCK_SERVER_CLOSEDIR_DIR     25
 
   // Import / Export operations
-  #define SCK_SERVER_FLUSH_FILE     40
-  #define SCK_SERVER_PRELOAD_FILE   41
+  #define SCK_SERVER_FLUSH_FILE    40
+  #define SCK_SERVER_PRELOAD_FILE  41
 
   // FS Operations
-  #define SCK_SERVER_STATFS_DIR     60
-  #define SCK_SERVER_GETNODENAME    61
-  #define SCK_SERVER_GETID          62
+  #define SCK_SERVER_STATFS_DIR   60
+  #define SCK_SERVER_GETNODENAME  61
+  #define SCK_SERVER_GETID        62
 
   // Connection operatons
-  #define SCK_SERVER_FINALIZE       80
-  #define SCK_SERVER_DISCONNECT     81
-  #define SCK_SERVER_END            -1
+  #define SCK_SERVER_FINALIZE    80
+  #define SCK_SERVER_DISCONNECT  81
+  #define SCK_SERVER_END         -1
 
 
   /* ... Data structures / Estructuras de datos ........................ */
