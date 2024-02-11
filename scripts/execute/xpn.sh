@@ -257,6 +257,38 @@ usage_details() {
   echo ""
 }
 
+get_opts() {
+   # Taken the general idea from https://stackoverflow.com/questions/70951038/how-to-use-getopt-long-option-in-bash-script
+   mkconf_name=$(basename "$0")
+   mkconf_short_opt=e:r:w:s:t:x:d:n:a:c:m:l:fvh
+   mkconf_long_opt=execute:,rootdir:,workdir:,source_path:,destination_path:,xpn_storage_path:,numnodes:,args:,config:,deployment_file:,foreground_file,hostfile:,deathfile:,verbose,help
+   TEMP=$(getopt -o $mkconf_short_opt --long $mkconf_long_opt --name "$mkconf_name" -- "$@")
+   eval set -- "${TEMP}"
+
+   while :; do
+      case "${1}" in
+         -e | --execute          ) SERVER_TYPE=$2;              shift 2 ;;
+         -r | --rootdir          ) DIR_ROOT=$2;                 shift 2 ;;
+         -w | --workdir          ) WORKDIR=$2;                  shift 2 ;;
+         -s | --source_path      ) SOURCE_PATH=$2;              shift 2 ;;
+         -t | --destination_path ) DEST_PATH=$2;                shift 2 ;;
+         -x | --xpn_storage_path ) XPN_STORAGE_PATH=$2;         shift 2 ;;
+         -n | --numnodes         ) NODE_NUM=$2;                 shift 2 ;;
+         -a | --args             ) ARGS=$2;                     shift 2 ;;
+         -c | --config           ) FILE_CONFIG=$2;              shift 2 ;;
+         -m | --deployment_file  ) DEPLOYMENTFILE=$2;           shift 2 ;;
+         -f | --foreground_file  ) RUN_FOREGROUND=true;         shift 1 ;;
+         -l | --hostfile         ) HOSTFILE=$2;                 shift 2 ;;
+         -d | --deathfile        ) DEATH_FILE=$2;               shift 2 ;;
+         -v | --verbose          ) VERBOSE=true;                shift 1 ;;
+         -h | --help             ) usage_short; usage_details;  exit 0 ;;
+         --                      ) shift;         break  ;;
+         *                       ) intro; echo " > ERROR: parsing arguments found an error :-/"; usage; exit 1 ;;
+      esac
+   done
+
+   ACTION=$*
+}
 
 ## default values
 ACTION=""
@@ -275,49 +307,9 @@ HOSTFILE="machinefile"
 DEATH_FILE="machinefile"
 SERVER_TYPE="mpi"
 
-
 ## get arguments
-while getopts "e:r:w:s:t:x:d:n:a:c:m:l:fvh" opt; do
-  case "${opt}" in
-    e) SERVER_TYPE=${OPTARG}
-       ;;
-    r) DIR_ROOT=${OPTARG}
-       ;;
-    w) WORKDIR=${OPTARG}
-       ;;
-    s) SOURCE_PATH=${OPTARG}
-       ;;
-    t) DEST_PATH=${OPTARG}
-       ;;
-    x) XPN_STORAGE_PATH=${OPTARG}
-       ;;
-    n) NODE_NUM=${OPTARG}
-       ;;
-    a) ARGS=${OPTARG}
-       ;;
-    c) FILE_CONFIG=${OPTARG}
-       ;;
-    m) DEPLOYMENTFILE=${OPTARG}
-       ;;
-    f) RUN_FOREGROUND=true
-       ;;
-    l) HOSTFILE=${OPTARG}
-       ;;
-    d) DEATH_FILE=${OPTARG}
-       ;;
-    v) VERBOSE=true
-       ;;
-    h) usage_short
-       usage_details
-       exit
-       ;;
-  esac
-done
-
 BASE_DIR=$(dirname "$(readlink -f "$0")")/
-
-shift $((OPTIND - 1))
-ACTION=$*
+get_opts $@
 
 # load xpn_start.cfg
 if [ -f "$FILE_CONFIG" ]; then
