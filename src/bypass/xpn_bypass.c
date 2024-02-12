@@ -695,60 +695,6 @@ int __open_2 ( const char *path, int flags, ... )
 
 #endif
 
-int openat ( int dirfd, const char *path, int flags, ... )
-{
-  int ret, fd;
-  va_list ap;
-  mode_t mode = 0;
-
-  va_start(ap, flags);
-  mode = va_arg(ap, mode_t);
-
-  debug_info("[BYPASS] >> Begin openat....\n");
-  debug_info("[BYPASS]    1) dirfd => %d\n", dirfd);
-  debug_info("[BYPASS]    2) Path  => %s\n", path);
-  debug_info("[BYPASS]    3) Flags => %d\n", flags);
-  debug_info("[BYPASS]    4) Mode  => %d\n", mode);
-
-  dirfd = dirfd ; // to avoid "warning: unused parameter ‘dirfd’"
-
-  // This if checks if variable path passed as argument starts with the expand prefix.
-  if (is_xpn_prefix(path))
-  {
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
-    // It is an XPN partition, so we redirect the syscall to expand syscall
-    debug_info("[BYPASS]\t xpn_open (%s,%o)\n",path + strlen(xpn_adaptor_partition_prefix), flags);
-
-    if (mode != 0) {
-      fd = xpn_open(skip_xpn_prefix(path), flags, mode);
-    }
-    else {
-      fd = xpn_open(skip_xpn_prefix(path), flags);
-    }
-
-    debug_info("[BYPASS]\t xpn_open (%s,%o) -> %d\n", skip_xpn_prefix(path), flags, fd);
-
-    ret = add_xpn_file_to_fdstable(fd);
-  }
-  // Not an XPN partition. We must link with the standard library.
-  else 
-  {
-    debug_info("[BYPASS]\t dlsym_openat (%d,%s,%o,%o)\n", dirfd, path, flags, mode);
-
-    ret = dlsym___open_2((char *)path, flags);
-
-    debug_info("[BYPASS]\t dlsym_openat (%d,%s,%o,%o) -> %d\n", dirfd, path, flags, mode, ret);
-  }
-
-  va_end(ap);
-
-  debug_info("[BYPASS] << After open....\n");
-
-  return ret;
-}
-
 int creat ( const char *path, mode_t mode )
 {
   int fd,ret;
@@ -1683,23 +1629,7 @@ int remove ( const char *path )
   return ret;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // File API (stdio)
-
 FILE *fopen ( const char *path, const char *mode )
 {
   FILE * ret;
@@ -1933,11 +1863,6 @@ size_t fwrite ( const void *ptr, size_t size, size_t nmemb, FILE *stream )
 
   return ret;
 }
-
-
-
-
-
 
 int fseek ( FILE *stream, long int offset, int whence )
 {
