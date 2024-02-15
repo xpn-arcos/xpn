@@ -339,12 +339,13 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
   memset(fh_aux, 0, sizeof(struct nfi_fhandle));
 
   XpnGetURLServer(servers, path, url_serv);
-  // Default Value (if file, else directory)
-  res = servers->ops->nfi_open(servers, url_serv, fh_aux);
-  if (res<0) {
-      res = servers->ops->nfi_opendir(servers, url_serv, fh_aux); // FIXME: When do we do nfi_closedir()?
+  if (servers->error != -1){
+    // Default Value (if file, else directory)
+    res = servers->ops->nfi_open(servers, url_serv, fh_aux);
+    if (res<0) {
+        res = servers->ops->nfi_opendir(servers, url_serv, fh_aux); // FIXME: When do we do nfi_closedir()?
+    }
   }
-
   if(res<0)
   {
     free(fh_aux);

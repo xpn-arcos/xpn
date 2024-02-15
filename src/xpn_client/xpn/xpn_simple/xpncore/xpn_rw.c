@@ -71,7 +71,7 @@ ssize_t xpn_simple_write ( int fd, const void *buffer, size_t size )
   }
 
   // action
-  if ((unsigned long)(size) >= (unsigned long)(xpn_file_table[fd]->block_size))
+  if ((unsigned long)(size) >= (unsigned long)(xpn_file_table[fd]->block_size) || xpn_file_table[fd]->part->replication_level > 0)
   {
     res = xpn_pwrite(fd, buffer, size, xpn_file_table[fd]->offset);
   }

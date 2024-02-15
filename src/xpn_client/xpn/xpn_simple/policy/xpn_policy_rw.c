@@ -96,23 +96,22 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
 	int replication = 0;
 	if (serv_client != -1){
 		do{
-		XpnGetBlock(fd, offset, replication, local_offset, serv);
-		if ((*serv) == serv_client){
-			return 0;
-		}
-		replication++;
+			XpnGetBlock(fd, offset, replication, local_offset, serv);
+			if ((*serv) == serv_client && xpn_file_table[fd]->part->data_serv[(*serv)].error != -1 ){
+				return 0;
+			}
+			replication++;
 		}while(replication <= xpn_file_table[fd]->part->replication_level);
 	}
 	
 	replication = 0;
 	if (xpn_file_table[fd]->part->replication_level != 0)
-		replication = rand() % xpn_file_table[fd]->part->replication_level;
+		replication = rand() % (xpn_file_table[fd]->part->replication_level + 1);
 
 	do{
 		XpnGetBlock(fd, offset, replication, local_offset, serv);
 		if (xpn_file_table[fd]->part->replication_level != 0)
-			replication = (replication + 1) % xpn_file_table[fd]->part->replication_level;
-
+			replication = (replication + 1) % (xpn_file_table[fd]->part->replication_level + 1);
 		retries++;
 	}while(xpn_file_table[fd]->part->data_serv[*serv].error == -1 && retries <= xpn_file_table[fd]->part->replication_level);
 	
@@ -414,9 +413,9 @@ void XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, int se
 void *XpnWriteBlocks ( int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
 {
 	int optimize = 1; // Optimize by default
-	if (xpn_file_table[fd]->part->replication_level > 0){
-    	optimize = 0; // Do not optimize
-	}
+	// if (xpn_file_table[fd]->part->replication_level > 0){
+    // 	optimize = 0; // Do not optimize
+	// }
 
 	void *new_buffer = (void *)buffer;
 	new_buffer = malloc(size * (xpn_file_table[fd]->part->replication_level + 1));

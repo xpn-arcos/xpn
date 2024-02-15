@@ -151,9 +151,9 @@
           { 
             char cli_name  [HOST_NAME_MAX];
             gethostname(cli_name, HOST_NAME_MAX);
-            printf("----------------------------------------------------------------\n");
-            printf("XPN Client %s : Waiting for servers being up and runing lookup...\n", cli_name);
-            printf("----------------------------------------------------------------\n\n");
+            debug_info("----------------------------------------------------------------\n");
+            debug_info("XPN Client %s : Waiting for servers being up and runing lookup...\n", cli_name);
+            debug_info("----------------------------------------------------------------\n\n");
           }
           lookup_retries++;
           sleep(1);
@@ -198,9 +198,9 @@
         {
           char cli_name  [HOST_NAME_MAX];
           gethostname(cli_name, HOST_NAME_MAX);
-          printf("----------------------------------------------------------------\n");
-          printf("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
-          printf("----------------------------------------------------------------\n\n");
+          debug_info("----------------------------------------------------------------\n");
+          debug_info("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
+          debug_info("----------------------------------------------------------------\n\n");
         }
         connect_retries++;
         sleep(1);
