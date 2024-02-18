@@ -278,6 +278,47 @@ int mpi_server_comm_destroy ( mpi_server_param_st *params )
   return 1;
 }
 
+int mpi_server_socket_send(char * srv_name, int code)
+{
+  int client_fd;
+  struct sockaddr_in serv_addr;
+  if ((client_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        printf("\n Socket creation error \n");
+        return -1;
+    }
+  struct hostent * hp;
+  hp = gethostbyname(srv_name);
+  serv_addr.sin_family = AF_INET;
+  serv_addr.sin_port = htons(MPI_SOCKET_PORT);
+  memcpy( & (serv_addr.sin_addr), hp->h_addr, hp->h_length);
+  int status;
+  if ((status = connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)))
+      < 0) {
+      printf("\nConnection Failed \n");
+      return -1;
+  }
+  send(client_fd, &code, sizeof(int), 0);
+  close(client_fd);
+  return 0;
+}
+
+int mpi_server_socket_accept ( int socket )
+{
+  struct sockaddr_in client_addr;
+  socklen_t size = sizeof(struct sockaddr_in);
+  // printf("socket: %d\n",socket);
+  int new_socket = accept(socket, (struct sockaddr*)&client_addr, &size);
+  if (new_socket < 0) {
+        perror("accept");
+        exit(EXIT_FAILURE);
+    }
+  int buffer;
+  read(new_socket, &buffer, sizeof(int));
+  // printf("buffer: %d\n",buffer);
+  close(new_socket);
+  return buffer;
+}
+
 // accept, disconnect
 MPI_Comm mpi_server_comm_accept ( mpi_server_param_st *params )
 {

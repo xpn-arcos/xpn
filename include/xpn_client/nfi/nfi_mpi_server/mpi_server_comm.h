@@ -34,6 +34,9 @@
 
   /* ... Const / Const ................................................. */
 
+  #define MPI_SOCKET_PORT 3456
+  #define MPI_SOCKET_ACCEPT 123
+  #define MPI_SOCKET_FINISH 666
 
   /* ... Data structures / Estructuras de datos ........................ */
 

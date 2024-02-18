@@ -120,15 +120,49 @@ void mpi_server_dispatcher ( struct st_th th )
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] End\n", th.id);
 }
 
+void mpi_server_accept()
+{
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Start accepting\n", 0);
+  MPI_Comm     sd;
+  struct st_th th_arg;
+  sd = mpi_server_comm_accept(&params);
+  if (sd == MPI_COMM_NULL) {
+    return;
+  }
+
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Accept received\n", 0);
+
+  //Launch dispatcher per aplication
+  th_arg.params         = &params;
+  th_arg.sd             = (long)sd;
+  th_arg.function       = mpi_server_dispatcher;
+  th_arg.type_op        = 0;
+  th_arg.rank_client_id = 0;
+  th_arg.tag_client_id  = 0;
+  th_arg.wait4me        = FALSE;
+
+  base_workers_launch(&worker1, &th_arg, mpi_server_dispatcher);
+}
+
+void mpi_server_finish()
+{
+  // Wait and finalize for all current workers
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers destroy\n", 0);
+
+  base_workers_destroy(&worker1);
+  base_workers_destroy(&worker2);
+
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm destroy\n", 0);
+
+  mpi_server_comm_destroy(&params);
+}
 
 /* ... Functions / Funciones ......................................... */
 
 //Start servers
 int mpi_server_up ( void )
 {
-  MPI_Comm     sd;
-  struct st_th th_arg;
-  int          ret;
+  int ret;
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] >> Begin\n", 0);
 
@@ -139,120 +173,163 @@ int mpi_server_up ( void )
   printf("\n");
 
   // Initialize server
+  int pipefd[2];
+  int pid;
 
-  // mpi_comm initialization
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm initialization\n", 0);
-
-  ret = mpi_server_comm_init(&params);
-  if (ret < 0)
-  {
-    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: mpi_comm initialization fails\n", 0);
-    return -1;
+  if (pipe(pipefd) == -1) {
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] ERROR: pipe iniciation fails\n", 0);
+      return -1;
+  }
+ 
+  /* get child process */
+  if ((pid = fork()) < 0) {
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] ERROR: fork fails\n", 0);
+      return -1;
   }
 
-  // Workers initialization
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers initialization\n", 0);
+  
+  if (pid == 0) { // Child for MPI
+    close(pipefd[1]);
+    // mpi_comm initialization
+    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm initialization\n", 0);
 
-  ret = base_workers_init( &worker1, params.thread_mode );
-  if (ret < 0)
-  {
-    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Workers initialization fails\n", 0);
-    return -1;
-  }
-
-  ret = base_workers_init( &worker2, params.thread_mode );
-  if (ret < 0)
-  {
-    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Workers initialization fails\n", 0);
-    return -1;
-  }
-
-
-  // Initialize semaphore for server disks
-  /*
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Semaphore for server disks initialization\n", 0);
-
-  ret = sem_init(&(params.disk_sem), 0, 1);
-  if (ret < 0)
-  {
-    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Semaphore for server disks initialization fails\n", 0);
-    return -1;
-  }
-  */
-
-  // Initialize semaphore for clients
-  /*
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] semaphore for clients initialization\n", 0);
-
-  sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
-  sem_t *sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
-  if (sem_server == 0)
-  {
-    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Semaphore for clients initialization fails\n", 0);
-    return -1;
-  }
-  */
-
-  // Loop: receiving + processing
-  the_end = 0;
-  int number_accepted = 0;
-  while (!the_end)
-  {
-    if ((params.number_accepts != -1) && (number_accepted >= params.number_accepts))
+    ret = mpi_server_comm_init(&params);
+    if (ret < 0)
     {
-       debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] number_accepted >= params->number_accepts\n", 0);
-       the_end = 1;
-       continue;
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: mpi_comm initialization fails\n", 0);
+      return -1;
     }
 
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for accept\n", 0);
+    // Workers initialization
+    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers initialization\n", 0);
 
-    sd = mpi_server_comm_accept(&params);
-    if (sd == MPI_COMM_NULL) {
-      continue;
+    ret = base_workers_init( &worker1, params.thread_mode );
+    if (ret < 0)
+    {
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Workers initialization fails\n", 0);
+      return -1;
     }
-    number_accepted++;
 
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Accept received\n", 0);
+    ret = base_workers_init( &worker2, params.thread_mode );
+    if (ret < 0)
+    {
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Workers initialization fails\n", 0);
+      return -1;
+    }
+    int buf;
+    ssize_t n;
+    the_end = 0;
+    ret = fcntl( pipefd[0], F_SETFL, fcntl(pipefd[0], F_GETFL) | O_NONBLOCK);
+    if (ret < 0)
+    {
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: set O_NONBLOCK pipe fails\n", 0);
+      return -1;
+    }
 
-    //Launch dispatcher per aplication
-    th_arg.params         = &params;
-    th_arg.sd             = (long)sd;
-    th_arg.function       = mpi_server_dispatcher;
-    th_arg.type_op        = 0;
-    th_arg.rank_client_id = 0;
-    th_arg.tag_client_id  = 0;
-    th_arg.wait4me        = FALSE;
-
-    base_workers_launch(&worker1, &th_arg, mpi_server_dispatcher);
-
-    struct timespec remaining, request = { 5, 100 };
-    nanosleep(&request, &remaining);
-
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
+    while(!the_end){
+      while ((n = read(pipefd[0], &buf, sizeof(buf))) == -1 && errno == EAGAIN) {
+            // Wait for data to be available
+            usleep(100000);
+        }
+        debug_info("[TH_ID=%d] [MPI_SERVER %s] [mpi_server_up] pipe recv: %d \n", 0,params.srv_name, buf);
+        switch (buf)
+        {
+        case MPI_SOCKET_ACCEPT:
+          mpi_server_accept();
+          break;
+        case MPI_SOCKET_FINISH:
+          mpi_server_finish();
+          the_end = 1;
+          break;
+        default:
+          perror("read");
+          break;
+        }
+    }
+    close(pipefd[0]);
   }
+  else // parent for socket
+  { 
+    close(pipefd[0]);
+    int server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (server_socket < 0)
+    {
+      printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: socket fails\n", 0);
+      return -1;
+    }
 
-  // Wait and finalize for all current workers
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers destroy\n", 0);
+    struct sockaddr_in server_addr;
+    
+    int val = 1;
+    ret = setsockopt(server_socket, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
+    if (ret < 0)
+    {
+      printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: setsockopt fails\n", 0);
+      return -1;
+    }
 
-  base_workers_destroy(&worker1);
-  base_workers_destroy(&worker2);
+    debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Socket reuseaddr\n", 0);
 
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm destroy\n", 0);
+    val = 1;
+    ret = setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&val, sizeof(int));
+    if (ret < 0)
+    {
+      printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: setsockopt fails\n", 0);
+      return -1;
+    }
 
-  mpi_server_comm_destroy(&params);
+    // bind
+    debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Socket bind\n", 0);
 
-  // Close semaphores
-  /*
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Semaphore for server disks destroy\n", 0);
-  sem_destroy(&(params.disk_sem));
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Semaphore for clients destroy\n", 0);
-  sem_unlink(params.sem_name_server);
-  */
+    bzero((char * )&server_addr, sizeof(server_addr));
+    server_addr.sin_family      = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port        = htons(MPI_SOCKET_PORT);
 
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] >> End\n", 0);
 
-  return 0;
+    ret = bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
+    if (ret < 0)
+    {
+      printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: bind fails\n", 0);
+      return -1;
+    }
+
+    // listen
+    debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Socket listen\n", 0);
+
+    ret = listen(server_socket, 100);
+    if (ret < 0)
+    {
+      printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: listen fails\n", 0);
+      return -1;
+    }
+
+    the_end = 0;
+    while (!the_end)
+    {
+
+      debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for socket accept\n", 0);
+      ret = mpi_server_socket_accept(server_socket);
+      debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Socket recv %d\n", 0,ret);
+      
+      if (ret == MPI_SOCKET_ACCEPT){
+        write(pipefd[1], &ret, sizeof(ret));
+      }
+
+      if (ret == MPI_SOCKET_FINISH){
+        write(pipefd[1], &ret, sizeof(ret));
+        the_end = 1;
+      }
+
+      debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
+    }
+
+    close(server_socket);
+    wait(NULL);
+
+    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] >> End\n", 0);
+  }
+  return 0;  
 }
 
 // Stop servers
@@ -261,7 +338,6 @@ int mpi_server_down ( int argc, char *argv[] )
   int      ret;
   char     port_name [MPI_MAX_PORT_NAME];
   char     srv_name  [1024];
-  MPI_Comm server;
   FILE     *file;
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] >> Begin\n", 0);
@@ -321,32 +397,7 @@ int mpi_server_down ( int argc, char *argv[] )
       }
     }
 
-    // Connect with servers
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Connect with port %s\n", 0, port_name);
-
-    ret = MPI_Comm_connect( port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &server );
-    if (MPI_SUCCESS != ret)
-    {
-      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: Conection with port %s fails\n", 0, port_name);
-      continue;
-    }
-
-    // Send finalize operation
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Send finalize operation\n", 0);
-
-    ret = mpi_server_comm_write_operation_finalize(server, MPI_SERVER_FINALIZE);
-    if (ret < 0)
-    {
-      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: Send finalize operation\n", 0);
-      continue;
-    }
-
-    // Comunicator disconnect
-    /*
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Comunicator disconnect\n", 0);
-
-    MPI_Comm_disconnect( &server ); //TODO: fail
-    */
+    mpi_server_socket_send(srv_name, MPI_SOCKET_FINISH);
   }
 
   // Close host file

@@ -147,6 +147,30 @@ int mpi_client_comm_destroy ( mpi_client_param_st *params )
   return 1;
 }
 
+int mpi_socket_send(char * srv_name, int code)
+{
+  int client_fd;
+  struct sockaddr_in serv_addr;
+  if ((client_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        printf("\n Socket creation error \n");
+        return -1;
+    }
+  struct hostent * hp;
+  hp = gethostbyname(srv_name);
+  serv_addr.sin_family = AF_INET;
+  serv_addr.sin_port = htons(MPI_SOCKET_PORT);
+  memcpy( & (serv_addr.sin_addr), hp->h_addr, hp->h_length);
+  int status;
+  if ((status = connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)))
+      < 0) {
+      printf("\nConnection Failed \n");
+      return -1;
+  }
+  send(client_fd, &code, sizeof(int), 0);
+  close(client_fd);
+  return 0;
+}
+
 int mpi_client_comm_connect ( mpi_client_param_st *params )
 {
   int ret;
@@ -205,6 +229,10 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
     }
   }
 
+  // Send connect intention
+  if (params->rank == 0)
+    mpi_socket_send(params->srv_name, MPI_SOCKET_ACCEPT);
+
   // Connect...
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] Connect port %s\n", params->port_name);
 
@@ -242,18 +270,15 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
 int mpi_client_comm_disconnect ( mpi_client_param_st *params )
 {
   int ret;
-  int data;
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] >> Begin\n");
 
   int rank;
-  data = MPI_SERVER_DISCONNECT;
   MPI_Comm_rank(MPI_COMM_WORLD, &(rank));
   if (rank == 0)
   {
     debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] Send disconnect message\n");
-
-    MPI_Send( &data, 1, MPI_INT, 0, 0, params->server );
+    mpi_client_write_operation(params->server, MPI_SERVER_DISCONNECT);
   }
   
   MPI_Barrier(MPI_COMM_WORLD);

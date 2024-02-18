@@ -33,6 +33,9 @@
 
   /* ... Const / Const ................................................. */
 
+  #define MPI_SOCKET_PORT 3456
+  #define MPI_SOCKET_ACCEPT 123
+  #define MPI_SOCKET_FINISH 666
 
   /* ... Data structures / Estructuras de datos ........................ */
 
@@ -44,6 +47,9 @@
 
   MPI_Comm mpi_server_comm_accept     ( mpi_server_param_st *params );
   int      mpi_server_comm_disconnect ( MPI_Comm fd );
+
+  int mpi_server_socket_send(char * srv_name, int code);
+  int mpi_server_socket_accept ( int server_socket );
 
   ssize_t mpi_server_comm_write_operation_finalize ( MPI_Comm fd, int op );
   ssize_t mpi_server_comm_read_operation           ( mpi_server_param_st *params, MPI_Comm fd, int *op, int *rank_client_id, int *tag_client_id );
