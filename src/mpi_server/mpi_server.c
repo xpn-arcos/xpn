@@ -209,7 +209,6 @@ int mpi_server_up ( void )
     return -1;
   }
 
-  ssize_t n;
   the_end = 0;
 
   while(!the_end){
@@ -322,7 +321,6 @@ int mpi_server_terminate ( int argc, char *argv[] )
 {
   int  ret;
   char port_name[MPI_MAX_PORT_NAME];
-  MPI_Comm server;
   
   printf("\n");
   printf(" ----------------\n");

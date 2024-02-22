@@ -94,7 +94,6 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
   // update user requests
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_get] Get user configuration\n", params->rank);
 
-  char *end = NULL ;
   for (int i=0; i<argc; i++)
   {
     switch (argv[i][0])
