@@ -796,7 +796,7 @@ int xpn_simple_open(const char * path, int flags, mode_t mode)
     if ((flags & O_DIRECTORY) > 0) 
     {
         struct stat sb;
-        xpn_simple_stat(path, & sb);
+        xpn_simple_stat(path, &sb);
         if ((sb.st_mode & S_IFMT) != S_IFDIR) 
         {
             errno = ENOTDIR;

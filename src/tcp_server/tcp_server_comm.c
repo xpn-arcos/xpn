@@ -371,6 +371,7 @@ int tcp_server_comm_accept(tcp_server_param_st * params)
 
   // Return client int
   params->client = sc;
+
   return params->client;
 }
 

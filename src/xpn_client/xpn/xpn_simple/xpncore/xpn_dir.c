@@ -22,6 +22,8 @@
 
 #include "xpn/xpn_simple/xpn_dir.h"
 
+#include "xpn/xpn_simple/xpn_open.h"
+
 
 int xpn_simple_mkdir(const char *path, mode_t perm)
 {
@@ -51,6 +53,16 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
     xpn_err(XPNERR_PART_NOEXIST);
     return -1;
   }
+
+  //Check if directory exist
+  struct stat sb;
+  ret = xpn_simple_stat(path, &sb);
+  if (ret == 0)
+  {
+    errno = EEXIST;
+    return -1;
+  }
+
 
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/

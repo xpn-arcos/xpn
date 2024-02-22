@@ -23,7 +23,7 @@
 
 # Header
 echo ""
-echo " tcp_server.sh"
+echo " sck_server.sh"
 echo " -------------"
 echo ""
 
@@ -85,8 +85,8 @@ touch    "${BASE_DIR}/conf/xpn.dns"
 export XPN_PROFILE="${XPN_DIR}/doc/xpn.profile.example.xml"
 export XPN_CONF="${BASE_DIR}/conf/xpn.conf.xml"
 
-# run the tcp_server...
-"${XPN_DIR}"/src/tcp_server/xpn_tcp_server -n localhost -p "${PORT_NUMBER}" -ns "${BASE_DIR}/conf/xpn.dns"
+# run the sck_server...
+"${XPN_DIR}"/src/sck_server/xpn_sck_server -n localhost -p "${PORT_NUMBER}" -ns "${BASE_DIR}/conf/xpn.dns"
 
 # Stop
 echo " End."

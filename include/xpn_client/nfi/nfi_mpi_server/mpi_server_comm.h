@@ -40,15 +40,17 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int     mpiClient_comm_init       ( mpiClient_param_st *params );
-  int     mpiClient_comm_destroy    ( mpiClient_param_st *params );
-  int     mpiClient_comm_connect    ( mpiClient_param_st *params );
-  int     mpiClient_comm_disconnect ( mpiClient_param_st *params );
-  int     mpiClient_comm_locality   ( mpiClient_param_st *params );
+  int     mpi_client_comm_init       ( mpi_client_param_st *params );
+  int     mpi_client_comm_destroy    ( mpi_client_param_st *params );
 
-  ssize_t mpiClient_write_operation ( MPI_Comm fd, char *data, ssize_t size, char *msg_id );
-  ssize_t mpiClient_write_data      ( MPI_Comm fd, char *data, ssize_t size, char *msg_id );
-  ssize_t mpiClient_read_data       ( MPI_Comm fd, char *data, ssize_t size, char *msg_id );
+  int     mpi_client_comm_connect    ( mpi_client_param_st *params );
+  int     mpi_client_comm_disconnect ( mpi_client_param_st *params );
+  
+  int     mpi_client_comm_locality   ( mpi_client_param_st *params );
+
+  ssize_t mpi_client_write_operation ( MPI_Comm fd, int op );
+  ssize_t mpi_client_write_data      ( MPI_Comm fd, char *data, ssize_t size );
+  ssize_t mpi_client_read_data       ( MPI_Comm fd, char *data, ssize_t size );
 
 
   /* ................................................................... */

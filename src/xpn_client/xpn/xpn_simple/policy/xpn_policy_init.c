@@ -351,15 +351,40 @@ int XpnGetServer(struct conf_connect_st * fconf, __attribute__((__unused__)) str
         break;
     }
 
+    serv -> block_size = part -> block_size; // Reference of the partition blocksize
+    
     XPN_DEBUG("url=%s", url);
-
+    
     ret = ParseURL(url, prt, NULL, NULL, NULL, NULL, NULL);
     if (ret < 0) {
         xpn_err(XPNERR_INVALURL);
         return -1;
     }
 
-    serv -> block_size = part -> block_size; // Reference of the partition blocksize
+    //TODO: locality
+    /*
+    char serv_name[PATH_MAX];
+    char cli_name[HOST_NAME_MAX];
+
+    // Get server name
+    ret = ParseURL(url, prt, NULL, NULL, serv_name, NULL, NULL);
+    if (ret < 0) {
+        xpn_err(XPNERR_INVALURL);
+        return -1;
+    }
+
+    // If the protocol is not file, then check if i am in the same node in order to change the protocol to file to exploit the locality
+    if (strcmp(prt, "file") != 0)
+    {
+        gethostname(cli_name, HOST_NAME_MAX);
+
+        if (strcmp(cli_name, serv_name) == 0)
+        {
+            strcpy(prt, "file");
+        }
+    }
+    */
+    //TODO END
 
     // crear conexion
     if (strcmp(prt, "file") == 0) {

@@ -18,344 +18,382 @@
  *
  */
 
-  /* ... Include / Inclusion ........................................... */
 
-     #include "sck_server_comm.h"
+/* ... Include / Inclusion ........................................... */
+
+#include "sck_server_comm.h"
 
 
-  /* ... Functions / Funciones ......................................... */
+/* ... Const / Const ................................................. */
 
-int sckClient_comm_init ( __attribute__((__unused__)) sckClient_param_st * params )
+
+/* ... Global variables / Variables globales ........................ */
+
+
+/* ... Functions / Funciones ......................................... */
+
+int sck_client_comm_init ( __attribute__((__unused__)) sck_client_param_st * params ) //TODO
 {
-    // int ret ;
+  // int ret;
 
-    debug_info("[NFI_SCK_COMM] begin sckClient_comm_init(...)\n");
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_init] >> Begin\n");
 
-    debug_info("[NFI_SCK_COMM] end sckClient_comm_init(...)\n");
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_init] >> End\n");
 
-    // Return OK
-    return 0;
+  // Return OK
+  return 0;
 }
 
-
-int sckClient_comm_destroy ( __attribute__((__unused__)) sckClient_param_st * params )
+int sck_client_comm_destroy ( __attribute__((__unused__)) sck_client_param_st * params ) //TODO
 {
-    // int ret ;
+  // int ret;
 
-    debug_info("[NFI_SCK_COMM] begin sckClient_comm_destroy(...)\n");
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_destroy] >> Begin\n");
 
-    debug_info("[NFI_SCK_COMM] end sckClient_comm_destroy(...)\n");
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_destroy] >> End\n");
 
-    // Return OK
-    return 0;
+  // Return OK
+  return 0;
 }
 
-
-int sckClient_comm_connect ( sckClient_param_st * params )
+int sck_client_comm_connect ( sck_client_param_st * params )
 {
-    struct hostent * hp;
-    struct sockaddr_in server_addr;
-    int ret, sd, flag, val;
-    int lookup_retries;
+  struct hostent * hp;
+  struct sockaddr_in server_addr;
+  int ret, sd, flag, val;
+  int lookup_retries;
 
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_connect] >> Begin\n");
 
-    debug_info("[NFI_SCK_COMM] begin sckClient_comm_connect(...)\n");
+  // Lookup port name
+  lookup_retries = 0;
+  do
+  {
+    // Lookup port name on nameserver
+    debug_info("[SCK_CLIENT_COMM] [sck_client_comm_connect] Lookup server %s\n", params->srv_name);
 
-    // Lookup port name
-    lookup_retries = 0;
-    do
+    ret = ns_lookup("sck_server", params->srv_name, params->server_name, params->port_number);
+    if (ret < 0)
     {
-        //printf("[%s][%d]\t1-%s 2-%s 3-%s\n", __FILE__, __LINE__, params->srv_name, params->server_name, params->port_number);
-
-        ret = ns_lookup("sck_server", params->srv_name, params->server_name, params->port_number) ;
-
-        //printf("[%s][%d]\t1-%s 2-%s 3-%s 4-%d\n", __FILE__, __LINE__, params->srv_name, params->server_name, params->port_number, ret);
-        if (ret < 0)
-        {
-            if (lookup_retries == 0)
-            {
-                char cli_name[HOST_NAME_MAX];
-                gethostname(cli_name, HOST_NAME_MAX);
-                printf("----------------------------------------------------------------\n");
-                printf("XPN Client %s : Waiting for servers being up and running...\n", cli_name);
-                printf("----------------------------------------------------------------\n\n");
-            }
-            lookup_retries++;
-            sleep(2);
-        }
-    } while ((ret < 0) && (lookup_retries < 150));
-
-    if (ret < 0) {
-        debug_error("ERROR: DNS Lookup %s Port %s\n", params->server_name, params->port_number);
-        return -1;
+      if (lookup_retries == 0)
+      {
+        char cli_name[HOST_NAME_MAX];
+        gethostname(cli_name, HOST_NAME_MAX);
+        printf("----------------------------------------------------------------\n");
+        printf("XPN Client %s : Waiting for servers being up and running...\n", cli_name);
+        printf("----------------------------------------------------------------\n\n");
+      }
+      lookup_retries++;
+      sleep(2);
     }
+  } while ((ret < 0) && (lookup_retries < 150));
 
-    debug_info("[NFI_SCK_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params->srv_name, params->server_name, params->port_number);
+  if (ret < 0) {
+    printf("[SCK_CLIENT_COMM] [sck_client_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->srv_name, params->port_number);
+    return -1;
+  }
 
-    // Socket...
-    sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sd < 0) {
-        perror("socket: ");
-        return -1;
-    }
-    debug_info("[NFI_SCK_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s ==> %d\n", params->srv_name, params->server_name, params->port_number, sd);
 
-    // Set sockopt
-    flag = 1;
-    ret = setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag)) ;
-    if (ret < 0) {
-        perror("setsockopt: ");
-        return -1;
-    }
+  // TODO: init?
+  debug_info("[SCK_CLIENT_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params->srv_name, params->server_name, params->port_number);
 
-    val = 1024 * 1024; //1 MB
-    ret = setsockopt(sd, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int)) ;
-    if (ret < 0) {
-        perror("setsockopt: ");
-        return -1;
-    }
+  // Socket...
+  sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  if (sd < 0) {
+    perror("socket: ");
+    return -1;
+  }
+  debug_info("[SCK_CLIENT_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s ==> %d\n", params->srv_name, params->server_name, params->port_number, sd);
 
-    val = 1024 * 1024; //1 MB
-    ret = setsockopt(sd, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int)) ;
-    if (ret < 0) {
-        perror("setsockopt: ");
-        return -1;
-    }
+  // Set sockopt
+  flag = 1;
+  ret = setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag));
+  if (ret < 0) {
+    perror("setsockopt: ");
+    return -1;
+  }
 
-    // gethost by name
-    hp = gethostbyname(params->server_name);
-    if (hp == NULL)
-    {
-        //sck_server_err(SCK_SERVERERR_MEMORY);
-        fprintf(stderr, "nfi_sck_server_init: error gethostbyname %s (%s,%s)\n",
-      params->srv_name, params->server_name, params->port_number);
-        return -1;
-    }
+  val = 1024 * 1024; //1 MB
+  ret = setsockopt(sd, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int));
+  if (ret < 0) {
+    perror("setsockopt: ");
+    return -1;
+  }
 
-    //debug_info("[NFI_SCK_COMM] server = %s-%s\n", params->server_name, params->port_number);
+  val = 1024 * 1024; //1 MB
+  ret = setsockopt(sd, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int));
+  if (ret < 0) {
+    perror("setsockopt: ");
+    return -1;
+  }
 
-    // Connect...
-    bzero((char * ) & server_addr, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port   = htons(atoi(params->port_number));
-    memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
+  // gethost by name
+  hp = gethostbyname(params->server_name);
+  if (hp == NULL)
+  {
+    //sck_server_err(SCK_SERVER_ERR_MEMORY);
+    fprintf(stderr, "nfi_sck_server_init: error gethostbyname %s (%s,%s)\n",
+    params->srv_name, params->server_name, params->port_number);
+    return -1;
+  }
+  // END TODO
 
-    //debug_info("[NFI_SCK_COMM] Antes de connect to %s\n", params->server_name);
+
+  // Connect...
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_connect] Connect port %s\n", params->port_number);
+
+  bzero((char * ) & server_addr, sizeof(server_addr));
+  server_addr.sin_family = AF_INET;
+  server_addr.sin_port   = htons(atoi(params->port_number));
+  memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
+
+  int connect_retries = 0;
+  do
+  {
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
     if (ret < 0)
     {
-        //sck_server_err(SCK_SERVERERR_MEMORY);
-        fprintf(stderr, "nfi_sck_server_init: error in connect %s (%s,%s)\n", params->srv_name, params->server_name, params->port_number);
-        return -1;
+      if (connect_retries == 0)
+      {
+        char cli_name  [HOST_NAME_MAX];
+        gethostname(cli_name, HOST_NAME_MAX);
+        printf("----------------------------------------------------------------\n");
+        printf("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
+        printf("----------------------------------------------------------------\n\n");
+      }
+      connect_retries++;
+      sleep(2);
     }
+  } while(ret < 0 && connect_retries < 150);
 
-    params->server = sd;
-    //debug_info("[NFI_SCK_COMM] \t%s - connect(%s,%s); sd = %d; ret = %d\n", params->srv_name, params->server_name, params->port_number, sd, ret);
+  if (ret < 0)
+  {
+    printf("[SCK_CLIENT_COMM] [sck_client_comm_connect] ERROR: connect fails\n");
+    return -1;
+  }
 
-    return ret;
+  params->server = sd;
+
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_connect] << End\n");
+
+  return ret;
 }
 
-
-int sckClient_comm_disconnect ( __attribute__((__unused__)) sckClient_param_st * params )
+int sck_client_comm_disconnect ( __attribute__((__unused__)) sck_client_param_st * params )
 {
-    debug_info("[NFI_SCK_COMM] begin sckClient_comm_disconnect nservers\n");
+  // int ret;
 
-    debug_info("[NFI_SCK_COMM] end   sckClient_comm_disconnect nservers\n");
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_disconnect] >> Begin\n");
 
-    // Return OK
-    return 0;
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_disconnect] >> End\n");
+
+  // Return OK
+  return 0;
 }
 
-
-int sckClient_comm_locality ( sckClient_param_st * params )
+int sck_client_comm_locality ( sck_client_param_st * params )
 {
-    int ret;
-    int data;
-    char cli_name[HOST_NAME_MAX];
-    char serv_name[HOST_NAME_MAX];
+  int ret;
+  int data;
+  char cli_name[HOST_NAME_MAX];
+  char serv_name[HOST_NAME_MAX];
 
-    debug_info("[NFI_SCK_COMM] begin sckClient_comm_locality\n");
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_locality] >> Begin\n");
 
-    // Locality disable
-    if (!params->xpn_locality)
-    {
-        debug_info("[NFI_SCK_COMM] sckClient_comm_locality disable\n");
-        params->locality = 0;
-        return 1;
-    }
+  // Locality disable
+  if (!params->xpn_locality)
+  {
+    debug_info("[SCK_CLIENT_COMM] [sck_client_comm_locality] Locality disable\n");
 
-    // Get client host name (send id, recv strlen, recv string)
-    gethostname(cli_name, HOST_NAME_MAX);
-
-    data = SCK_SERVER_GETNODENAME;
-    ret = sckClient_write_data(params->server, (char *)&data, 1 * sizeof(int), "<unused msg_id>") ;
-    if (ret < 0)
-    {
-        debug_warning("Server[?]: SCK_Send fails :-(");
-        return -1;
-    }
-
-    ret = sckClient_read_data( params->server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>") ;
-    if (ret < 0)
-    {
-        debug_warning("Server[?]: sckClient_read_data fails :-(");
-        return -1;
-    }
-
-    //Dirbase
-    ret = sckClient_read_data( params->server, params->dirbase, PATH_MAX * sizeof(char), "<unused msg_id>") ;
-    if (ret < 0)
-    {
-        debug_warning("Server[?]: sckClient_read_data fails :-(");
-        return -1;
-    }
-
-    /*ret = sckClient_read_data( params->server, params->sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>") ;
-    if (ret < 0)
-    {
-        debug_warning("Server[?]: sckClient_read_data fails :-(");
-        return -1;
-    }*/
-
-    // check locality
     params->locality = 0;
-    if (strcmp(cli_name, serv_name) == 0)
-    {
-        params->locality = 1;
-        //params->sem_server = sem_open(params->sem_name_server, 0);
-    }
-
-    debug_info("[NFI_SCK_COMM] end sckClient_comm_locality\n");
-
-    // Return OK
     return 1;
+  }
+
+  // Get client host name
+  gethostname(cli_name, HOST_NAME_MAX);
+
+  data = SCK_SERVER_GETNODENAME;
+
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_locality] Send gethostname operation\n");
+
+  ret = sck_client_write_data(params->server, (char *)&data, 1 * sizeof(int), "<unused msg_id>");
+  if (ret < 0)
+  {
+    printf("[SCK_CLIENT_COMM] [mpi_client_comm_locality] ERROR: sck_client_write_data fails\n");
+    return -1;
+  }
+
+  ret = sck_client_read_data( params->server, serv_name, HOST_NAME_MAX * sizeof(char), "<unused msg_id>");
+  if (ret < 0)
+  {
+    printf("[SCK_CLIENT_COMM] [mpi_client_comm_locality] ERROR: sck_client_read_data fails\n");
+    return -1;
+  }
+
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_locality] Receive host name: %s\n", serv_name);
+
+  //Dirbase
+  ret = sck_client_read_data( params->server, params->dirbase, PATH_MAX * sizeof(char), "<unused msg_id>");
+  if (ret < 0)
+  {
+    printf("[SCK_CLIENT_COMM] [mpi_client_comm_locality] ERROR: MPI_Recv fails\n");
+    return -1;
+  }
+
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_locality] Receive dirbase: %s\n", params->dirbase);
+
+  //Semaphore
+  /*
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_locality] Receive semaphore\n");
+
+  ret = sck_client_read_data( params->server, params->sem_name_server, PATH_MAX * sizeof(char), "<unused msg_id>");
+  if (ret < 0)
+  {
+    printf("[SCK_CLIENT_COMM] [sck_client_comm_disconnect] ERROR: sck_client_read_data fails\n");
+    return -1;
+  }
+  */
+
+  params->locality = 0;
+  if (strcmp(cli_name, serv_name) == 0)
+  {
+    params->locality = 1;
+    //params->sem_server = sem_open(params->sem_name_server, 0);
+  }
+
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_locality] Locality: %d\n", params->locality);
+  debug_info("[SCK_CLIENT_COMM] [sck_client_comm_locality] << End\n");
+
+  // Return OK
+  return 1;
 }
 
-
-ssize_t sckClient_write_operation ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
+ssize_t sck_client_write_operation ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
 {
-    int ret;
+  int ret;
 
-    debug_info("[NFI_SCK_COMM] begin sckClient_write_operation(...)\n");
+  debug_info("[SCK_CLIENT_COMM] [sck_client_write_operation] >> Begin\n");
 
-    // Check params
-    if (size == 0) {
-        debug_info("Server[?]: size == 0");
-        return 0;
-    }
-    if (size < 0) {
-        debug_warning("Server[?]: size < 0");
-        return -1;
-    }
+  // Check params
+  if (size == 0) {
+    return 0;
+  }
+  if (size < 0)
+  {
+    printf("[SCK_CLIENT_COMM] [sck_client_write_operation] ERROR: size < 0\n");
+    return -1;
+  }
 
-    ret = sckClient_write_data(fd, data, size * sizeof(int), msg_id) ;
+  // Send message
+  debug_info("[SCK_CLIENT_COMM] [sck_client_write_operation] Write operation\n");
 
-    debug_info("[NFI_SCK_COMM] end sckClient_write_operation(...)\n");
+  ret = sck_client_write_data(fd, data, size * sizeof(int), msg_id);
+  if (ret < 0)
+  {
+    printf("[SCK_CLIENT_COMM] [sck_client_write_operation] ERROR: sck_client_write_data fails\n");
+    return -1;
+  }
 
-    // Return integers written
-    return ret / sizeof(int);
+  debug_info("[SCK_CLIENT_COMM] [sck_client_write_operation] << End\n");
+
+  // Return integers written
+  return ret / sizeof(int);
 }
 
-
-ssize_t sckClient_write_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
+ssize_t sck_client_write_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
 {
-    int ret, cont;
-    static ssize_t( * real_write)(int,const void * , size_t) = NULL;
+  int ret;
 
-    debug_info("[NFI_SCK_COMM] begin sckClient_write_data(...)\n");
+  debug_info("[SCK_CLIENT_COMM] [sck_client_write_data] >> Begin\n");
 
-    // Check params
-    if (size == 0) {
-        return 0;
-    }
-    if (size < 0) {
-        debug_warning("Server[?]: size < 0");
-        return -1;
-    }
+  // Check params
+  if (size == 0) {
+    return 0;
+  }
+  if (size < 0) {
+    printf("[SCK_CLIENT_COMM] [sck_client_write_data] ERROR: size < 0\n");
+    return -1;
+  }
 
-    if (NULL == real_write) 
+  // Send message
+  debug_info("[SCK_CLIENT_COMM] [sck_client_write_data] Write data\n");
+
+  int cont = 0;
+  do
+  {
+    ret = 0;
+    debug_info("[SCK_CLIENT_COMM] [sck_client_write_data] Write data(%d, %p, %ld)\n", fd, data + cont, size - cont);
+
+    ret = dlsym_write(fd, data + cont, size - cont);
+    if (ret < 0)
     {
-        real_write = (ssize_t( * )(int,const void * , size_t)) dlsym(RTLD_NEXT, "write");
+      printf("[SCK_CLIENT_COMM] [sck_client_write_data] ERROR: dlsym_write fails\n");
+      return ret;
     }
 
-    cont = 0 ;
-    do
-    {
-        ret = real_write(fd, data + cont, size - cont);
+    debug_info("[SCK_CLIENT_COMM] [sck_client_write_data] Write data(%d, %p, %ld)=%d\n", fd, data + cont, size - cont, ret);
 
-        debug_info("[NFI_SCK_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
+    cont += ret;
 
-        if (ret < 0) {
-         perror("sckClient_write_data: ERROR on real_write: ");
-         return ret ;
-     }
+  } while ((ret > 0) && (cont != size));
 
-        cont += ret;
+  if (ret < 0)
+  {
+    printf("[SCK_CLIENT_COMM] [sck_client_write_data] ERROR: dlsym_write fails\n");
+    return ret;
+  }
 
-    } while ((ret > 0) && (cont != size));
+  debug_info("[SCK_CLIENT_COMM] [sck_client_write_data] << End\n");
 
-    if (ret < 0) {
-        fprintf(stderr, "[NFI_SCK_COMM]  ERROR: write_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
-        return ret;
-    }
-
-    debug_info("[NFI_SCK_COMM] client: write_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
-    debug_info("[NFI_SCK_COMM] end sckClient_write_data(...)\n");
-
-    debug_info("-------------SIZE = %d\n", size);
-
-    // Return bytes written
-    return cont;
+  // Return bytes written
+  return cont;
 }
 
-
-ssize_t sckClient_read_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
+ssize_t sck_client_read_data ( int fd, char * data, ssize_t size, __attribute__((__unused__)) char * msg_id )
 {
-    int ret, cont;
-    static ssize_t (* real_read)(int, void * , size_t) = NULL;
+  int ret;
 
-    debug_info("[NFI_SCK_COMM] begin sckClient_read_data(...)\n");
+  debug_info("[SCK_CLIENT_COMM] [sck_client_read_data] >> Begin\n");
 
-    // Check params
-    if (size == 0) {
-        return 0;
-    }
-    if (size < 0) {
-        debug_warning("Server[?]: size < 0");
-        return -1;
-    }
+  // Check params
+  if (size == 0) {
+    return 0;
+  }
+  if (size < 0)
+  {
+    printf("[SCK_CLIENT_COMM] [sck_client_read_data] ERROR: size < 0\n");
+    return -1;
+  }
 
-    if (NULL == real_read) {
-        real_read = (ssize_t( * )(int, void * , size_t)) dlsym(RTLD_NEXT, "read");
-    }
+  int cont = 0;
+  do
+  {
+    ret = 0;
+    debug_info("[SCK_CLIENT_COMM] [sck_client_read_data] Read data(%d, %p, %ld)\n", fd, data + cont, size - cont);
 
-    cont = 0;
-    do
+    ret = dlsym_read(fd, data + cont, size - cont);
+    if (ret < 0)
     {
-        ret = real_read(fd, data + cont, size - cont);
-
-        debug_info("[NFI_SCK_COMM] client: read_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
-
-        if (ret < 0) {
-            perror("sckClient_read_data: ERROR on real_read: ");
-      return ret ;
-        }
-
-        cont += ret;
-
-    } while ((ret > 0) && (cont != size));
-
-    if (ret < 0) {
-        fprintf(stderr, "[NFI_SCK_COMM]  client: read_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
-        return ret;
+      printf("[SCK_CLIENT_COMM] [sck_client_read_data] ERROR: read fails\n");
+      return ret;
     }
 
-    debug_info("[NFI_SCK_COMM] client: read_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
-    debug_info("[NFI_SCK_COMM] end sckClient_read_data(...)\n");
+    debug_info("[SCK_CLIENT_COMM] [sck_client_read_data] Read data(%d, %p, %ld)=%d\n", fd, data + cont, size - cont, ret);
 
-    // Return bytes read
-    return cont;
+    cont += ret;
+
+  } while ((ret > 0) && (cont != size));
+
+  if (ret < 0) {
+    debug_warning("[SCK_CLIENT_COMM] [sck_client_read_data] ERROR: write fails\n");
+    return ret;
+  }
+
+  debug_info("[SCK_CLIENT_COMM] [sck_client_read_data] << End\n");
+
+  // Return bytes read
+  return cont;
 }
 
 
-  /* ................................................................... */
+/* ................................................................... */

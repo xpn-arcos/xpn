@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _NFI_MPI_SERVER_ERR_H_
-#define _NFI_MPI_SERVER_ERR_H_
+#ifndef _XPN_API_MUTEX_H
+#define _XPN_API_MUTEX_H
 
   #ifdef  __cplusplus
     extern "C" {
@@ -30,36 +30,32 @@
 
   /* ... Include / Inclusion ........................................... */
 
+  #include "all_system.h"
+
 
   /* ... Const / Const ................................................. */
-
-  enum nfi_mpi_server_err
-  {
-    MPI_SERVER_ERR_PARAM         = 0,
-    MPI_SERVER_ERR_MEMORY        = 1,
-    MPI_SERVER_ERR_URL           = 2,
-    MPI_SERVER_ERR_MNTCONNECTION = 3,
-    MPI_SERVER_ERR_MOUNT         = 4,
-    MPI_SERVER_ERR_NFSCONNECTION = 5,    
-    MPI_SERVER_ERR_GETATTR       = 6,
-    MPI_SERVER_ERR_LOOKUP        = 7,
-    MPI_SERVER_ERR_READ          = 8,
-    MPI_SERVER_ERR_WRITE         = 9,
-    MPI_SERVER_ERR_CREATE        = 10,
-    MPI_SERVER_ERR_REMOVE        = 11,
-    MPI_SERVER_ERR_MKDIR         = 12,
-    MPI_SERVER_ERR_READDIR       = 13,
-    MPI_SERVER_ERR_STATFS        = 14,
-    MPI_SERVER_ERR_NOTDIR        = 15,
-  };
 
 
   /* ... Data structures / Estructuras de datos ........................ */
 
 
-  /* ... Functions / Funciones ......................................... */
+  /* ... Macros / Macros ............................................... */
 
-  void mpi_server_err(int err);
+  #ifdef _REENTRANT
+
+    extern pthread_mutex_t xpn_api_mutex ;
+
+    #define XPN_API_LOCK()    pthread_mutex_lock(&xpn_api_mutex)
+    #define XPN_API_UNLOCK()  pthread_mutex_unlock(&xpn_api_mutex)
+
+  #else
+
+    #define XPN_API_LOCK()    (0)
+    #define XPN_API_UNLOCK()  (0)
+
+  #endif
+
+  /* ... Functions / Funciones ......................................... */
 
 
   /* ................................................................... */

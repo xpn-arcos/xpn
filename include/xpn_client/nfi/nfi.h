@@ -75,7 +75,6 @@
     int xpn_thread;
   };
 
-
   struct nfi_attr_server
   {
     int type;
@@ -95,21 +94,21 @@
 
   struct nfi_attr
   {
-    dev_t     st_dev;     // ID of device containing file 
-    ino_t     st_ino;     // inode number 
+    dev_t   st_dev;     // ID of device containing file 
+    ino_t   st_ino;     // inode number 
 
-    int   at_type;      // FILE or DIR        
+    int     at_type;    // FILE or DIR        
     mode_t  at_mode;    // protection     
     nlink_t at_nlink;   // number of hard links   
-    uid_t at_uid;       // user ID of owner   
-    gid_t at_gid;       // group ID of owner    
-    off_t at_size;      // total size, in bytes   
+    uid_t   at_uid;     // user ID of owner   
+    gid_t   at_gid;     // group ID of owner    
+    off_t   at_size;    // total size, in bytes   
     u_long  at_blksize; // blocksize for filesystem I/O 
     u_long  at_blocks;  // number of blocks allocated 
     time_t  at_atime;   // time of last access    
     time_t  at_mtime;   // time of last modification  
     time_t  at_ctime;   // time of last status change 
-    void  *private_info;  
+    void    *private_info;  
   };
 
   struct nfi_fhandle 

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -22,7 +22,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "utils.h"
+#include "xpn_api_mutex.h"
 
 
 /* ... Const / Const ................................................. */
@@ -31,18 +31,16 @@
 /* ... Global variables / Variables globales ........................ */
 
 
+/* ... Macros / Macros ............................................... */
+
+#ifdef _REENTRANT
+
+  pthread_mutex_t xpn_api_mutex = PTHREAD_MUTEX_INITIALIZER ;
+
+#endif
+
+
 /* ... Functions / Funciones ......................................... */
-
-long utils_get_time ( void )
-{
-  struct timeval timenow;
-
-  // get timestamp
-  gettimeofday(&timenow, NULL);
-
-  // return timestamp
-  return (long)timenow.tv_sec * 1000 + (long)timenow.tv_usec / 1000;
-}
 
 
 /* ................................................................... */
