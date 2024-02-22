@@ -249,6 +249,9 @@ ssize_t nfiworker_wait(struct nfi_worker * wrk)
 {
   ssize_t ret;
 
+  if (wrk->server->error == -1)
+    return 0;
+
   debug_info("[NFI_WORKER] [nfiworker_wait] >> Begin\n");
 
   base_workers_wait(&(wrk->wb), &(wrk->warg));

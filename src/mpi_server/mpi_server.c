@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -19,12 +19,13 @@
  *
  */
 
-#define DEBUG
+
 /* ... Include / Inclusion ........................................... */
 
 #include "all_system.h"
 #include "base/utils.h"
 #include "base/workers.h"
+#include "base/socket.h"
 #include "mpi_server_ops.h"
 #include "mpi_server_comm.h"
 #include "mpi_server_d2xpn.h"
@@ -120,15 +121,49 @@ void mpi_server_dispatcher ( struct st_th th )
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_dispatcher] End\n", th.id);
 }
 
+void mpi_server_accept()
+{
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Start accepting\n", 0);
+  MPI_Comm     sd;
+  struct st_th th_arg;
+  sd = mpi_server_comm_accept(&params);
+  if (sd == MPI_COMM_NULL) {
+    return;
+  }
+
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Accept received\n", 0);
+
+  //Launch dispatcher per aplication
+  th_arg.params         = &params;
+  th_arg.sd             = (long)sd;
+  th_arg.function       = mpi_server_dispatcher;
+  th_arg.type_op        = 0;
+  th_arg.rank_client_id = 0;
+  th_arg.tag_client_id  = 0;
+  th_arg.wait4me        = FALSE;
+
+  base_workers_launch(&worker1, &th_arg, mpi_server_dispatcher);
+}
+
+void mpi_server_finish()
+{
+  // Wait and finalize for all current workers
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers destroy\n", 0);
+
+  base_workers_destroy(&worker1);
+  base_workers_destroy(&worker2);
+
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm destroy\n", 0);
+
+  mpi_server_comm_destroy(&params);
+}
 
 /* ... Functions / Funciones ......................................... */
 
 //Start servers
 int mpi_server_up ( void )
 {
-  MPI_Comm     sd;
-  struct st_th th_arg;
-  int          ret;
+  int ret;
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] >> Begin\n", 0);
 
@@ -139,7 +174,6 @@ int mpi_server_up ( void )
   printf("\n");
 
   // Initialize server
-
   // mpi_comm initialization
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm initialization\n", 0);
 
@@ -166,67 +200,49 @@ int mpi_server_up ( void )
     printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Workers initialization fails\n", 0);
     return -1;
   }
+  int server_socket;
 
-  // Loop: receiving + processing
-  the_end = 0;
-  int number_accepted = 0;
-  while (!the_end)
+  ret = socket_create(&server_socket);
+  if (ret < 0)
   {
-    if ((params.number_accepts != -1) && (number_accepted >= params.number_accepts))
-    {
-       debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] number_accepted >= params->number_accepts\n", 0);
-       the_end = 1;
-       continue;
-    }
-
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Waiting for accept\n", 0);
-
-    sd = mpi_server_comm_accept(&params);
-    if (sd == MPI_COMM_NULL) {
-      continue;
-    }
-    number_accepted++;
-
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Accept received\n", 0);
-
-    //Launch dispatcher per aplication
-    th_arg.params         = &params;
-    th_arg.sd             = (long)sd;
-    th_arg.function       = mpi_server_dispatcher;
-    th_arg.type_op        = 0;
-    th_arg.rank_client_id = 0;
-    th_arg.tag_client_id  = 0;
-    th_arg.wait4me        = FALSE;
-
-    base_workers_launch(&worker1, &th_arg, mpi_server_dispatcher);
-
-    // struct timespec remaining, request = { 5, 100 };
-    // nanosleep(&request, &remaining);
-
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Dispatcher launched\n", 0);
+    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Socket initialization fails\n", 0);
+    return -1;
   }
 
-  // Wait and finalize for all current workers
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] Workers destroy\n", 0);
+  ssize_t n;
+  the_end = 0;
 
-  base_workers_destroy(&worker1);
-  base_workers_destroy(&worker2);
+  while(!the_end){
+    ret = socket_accept_read(server_socket);
+    debug_info("[TH_ID=%d] [MPI_SERVER %s] [mpi_server_up] pipe recv: %d \n", 0,params.srv_name, ret);
+    switch (ret)
+    {
+    case MPI_SOCKET_ACCEPT:
+      mpi_server_accept();
+      break;
+    case MPI_SOCKET_FINISH:
+      mpi_server_finish();
+      the_end = 1;
+      break;
+    default:
+      perror("read");
+      break;
+    }
+  }
+   
+  close(server_socket);
 
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] mpi_comm destroy\n", 0);
-
-  mpi_server_comm_destroy(&params);
-
-  return 0 ;
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] >> End\n", 0);
+  return 0;  
 }
 
+// Stop servers
 int mpi_server_down ( int argc, char *argv[] )
 {
-  int  ret, buf, res = 0;
-  char port_name[MPI_MAX_PORT_NAME];
-  char srv_name[1024] ;
-  char dns_name[2048] ;
-  MPI_Comm server;
-  FILE *file;
+  int      ret;
+  char     port_name [MPI_MAX_PORT_NAME];
+  char     srv_name  [1024];
+  FILE     *file;
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] >> Begin\n", 0);
 
@@ -236,16 +252,17 @@ int mpi_server_down ( int argc, char *argv[] )
   printf(" ----------------\n");
   printf("\n");
 
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] MPI_Init\n", 0);
+
   MPI_Init(&argc, &argv);
-  MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
 
   // Open host file
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Open host file %s\n", 0, params.shutdown_file);
 
   file = fopen(params.shutdown_file, "r");
-  if (file == NULL) 
+  if (file == NULL)
   {
-    printf("[MPI-SERVER] ERROR: invalid file %s\n", params.shutdown_file);
+    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: invalid file %s\n", 0, params.shutdown_file);
     return -1;
   }
 
@@ -259,7 +276,7 @@ int mpi_server_down ( int argc, char *argv[] )
 
     if (strncasecmp(version, "Open MPI", strlen("Open MPI")) != 0)
     {
-       // Lookup port name
+      // Lookup port name
       char aux_srv_ip[1024];
 
       debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ns_lookup server %s\n", 0, srv_name);
@@ -267,7 +284,7 @@ int mpi_server_down ( int argc, char *argv[] )
       ret = ns_lookup("mpi_server", srv_name, aux_srv_ip, port_name);
       if (ret < 0)
       {
-        printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] INFO: server %s not found\n", 0, srv_name);
+        printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: server %s not found\n", 0, srv_name);
         continue;
       }
     }
@@ -279,50 +296,31 @@ int mpi_server_down ( int argc, char *argv[] )
       ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name);
       if (MPI_SUCCESS != ret)
       {
-        printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] INFO: server %s not found\n", 0, srv_name);
+        printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: server %s not found\n", 0, srv_name);
         continue;
       }
     }
 
-    // Connect with servers
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Connect with port %s\n", 0, port_name);
-    MPI_Info info;
-    MPI_Info_create( &info );
-    int errclass, resultlen;
-    char err_buffer[MPI_MAX_ERROR_STRING];
-    MPI_Info_set(info, "timeout", "1");
-    ret = MPI_Comm_connect( port_name, info, 0, MPI_COMM_SELF, &server );
-    
-    MPI_Error_class(ret,&errclass);
-    MPI_Error_string(ret,err_buffer,&resultlen);
-    printf("%s", err_buffer);
-    MPI_Info_free(&info);
-    if (MPI_ERR_PORT == errclass){
-      printf("[MPI-SERVER] Info: Server %s down\n", srv_name) ;
-      continue;
-    }else if (MPI_SUCCESS != errclass) {
-      printf("[MPI-SERVER] ERROR: MPI_Comm_connect fails\n") ;
-      continue;
-    }
-    ret = mpi_server_comm_write_operation_finalize(server, MPI_SERVER_FINALIZE);
-    if (ret < 0)
-    {
-      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: Send finalize operation\n", 0);
-      continue;
-    }
-    mpi_server_comm_disconnect(server);
+    socket_send(srv_name, MPI_SOCKET_FINISH);
   }
+
   // Close host file
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] Close host file\n", 0);
+
   fclose(file);
 
+  
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] MPI_Finalize\n", 0);
   MPI_Finalize();
-  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] >> End\n", 0);
+
+  debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] >> End\n", 0);
 
   return 0;
 }
+
 int mpi_server_terminate ( int argc, char *argv[] )
 {
-  int  ret, res = 0;
+  int  ret;
   char port_name[MPI_MAX_PORT_NAME];
   MPI_Comm server;
   
@@ -359,36 +357,11 @@ int mpi_server_terminate ( int argc, char *argv[] )
       // continue;
     }
   }
-
-  debug_info("[MPI-SERVER] Connect to server %s\n", params.srv_name) ;
-  // Connect with servers
-  MPI_Info info;
-  MPI_Info_create( &info );
-  int errclass, resultlen;
-  char err_buffer[MPI_MAX_ERROR_STRING];
-  MPI_Info_set(info, "timeout", "1");
-  ret = MPI_Comm_connect( port_name, info, 0, MPI_COMM_SELF, &server );
   
-  MPI_Error_class(ret,&errclass);
-  MPI_Error_string(ret,err_buffer,&resultlen);
-  debug_info("%s", err_buffer);
-  MPI_Info_free(&info);
-  if (MPI_ERR_PORT == errclass){
-    printf("[MPI-SERVER] Info: Server %s down\n", params.srv_name) ;
-  }
-  if (MPI_SUCCESS != errclass) {
-    printf("[MPI-SERVER] ERROR: MPI_Comm_connect fails\n") ;
-  }
-  
-  debug_info("[MPI-SERVER] SEND: MPI_SERVER_FINALIZE to server %s\n", params.srv_name) ;
-  ret = mpi_server_comm_write_operation_finalize(server, MPI_SERVER_FINALIZE);
-  if (ret < 0)
+  if (ret >= 0)
   {
-    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: Send finalize operation\n", 0);
+    ret = socket_send(params.srv_name, MPI_SOCKET_FINISH);
   }
-
-  debug_info("[MPI-SERVER] SEND finish: MPI_SERVER_FINALIZE to server %s\n", params.srv_name) ;
-  MPI_Comm_disconnect( &server ); 
   
   MPI_Finalize();
 
@@ -436,7 +409,8 @@ int main ( int argc, char *argv[] )
     debug_info("[TH_ID=%d] [MPI_SERVER] [main] Down servers\n", 0);
 
     ret = mpi_server_down (argc, argv);
-  }else if (strcasecmp(exec_name, "xpn_terminate_mpi_server") == 0) {
+  }else if (strcasecmp(exec_name, "xpn_terminate_mpi_server") == 0) 
+  {
     debug_info("[TH_ID=%d] [MPI_SERVER] [main] Terminate server\n", 0);
 
     ret = mpi_server_terminate (argc, argv);

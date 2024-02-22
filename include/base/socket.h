@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -20,41 +20,31 @@
  */
 
 
-#ifndef _MPI_SERVER_COMM_H_
-#define _MPI_SERVER_COMM_H_
+#ifndef _SOCKET_H_
+#define _SOCKET_H_
 
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #include "mpi_server_params.h"
-  #include "base/utils.h"
-  #include "base/ns.h"
-  #include "base/socket.h"
-  #include "mpi_server_ops.h"
+  #include "debug_msg.h"
 
 
   /* ... Const / Const ................................................. */
 
+  #define MPI_SOCKET_PORT 3456
+  #define MPI_SOCKET_ACCEPT 123
+  #define MPI_SOCKET_FINISH 666
 
   /* ... Data structures / Estructuras de datos ........................ */
 
 
   /* ... Functions / Funciones ......................................... */
 
-  int     mpi_client_comm_init       ( mpi_client_param_st *params );
-  int     mpi_client_comm_destroy    ( mpi_client_param_st *params );
+  int socket_accept_read ( int socket );   
+  int socket_send ( char * srv_name, int code );  
+  int socket_create ( int *out_socket );
 
-  int     mpi_client_comm_connect    ( mpi_client_param_st *params );
-  int     mpi_client_comm_disconnect ( mpi_client_param_st *params );
-  
-  int     mpi_client_comm_locality   ( mpi_client_param_st *params );
+  /* ... Macros / Macros .................................................. */
 
-  ssize_t mpi_client_write_operation ( MPI_Comm fd, int op );
-  ssize_t mpi_client_write_data      ( MPI_Comm fd, char *data, ssize_t size );
-  ssize_t mpi_client_read_data       ( MPI_Comm fd, char *data, ssize_t size );
-
-
-  /* ................................................................... */
 
 #endif
-

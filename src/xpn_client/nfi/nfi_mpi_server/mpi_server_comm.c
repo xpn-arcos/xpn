@@ -206,6 +206,16 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
   }
 
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
+  // Send connect intention
+  if (params->rank == 0)
+  {
+    ret = socket_send(params->srv_name, MPI_SOCKET_ACCEPT);
+    if (ret != 0)
+    {
+      printf("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: socket send\n");
+      return -1;
+    }
+  }
 
   // Connect...
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] Connect port %s\n", params->port_name);
@@ -254,17 +264,16 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
 int mpi_client_comm_disconnect ( mpi_client_param_st *params )
 {
   int ret;
-  int data;
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] >> Begin\n");
 
   int rank;
-  data = MPI_SERVER_DISCONNECT;
   MPI_Comm_rank(MPI_COMM_WORLD, &(rank));
   if (rank == 0)
   {
     debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] Send disconnect message\n");
-    ret = mpi_client_write_operation ( params->server, MPI_SERVER_DISCONNECT );if (ret < 0)
+    ret = mpi_client_write_operation ( params->server, MPI_SERVER_DISCONNECT );
+    if (ret < 0)
     {
       printf("[MPI_CLIENT_COMM] [mpi_client_comm_disconnect] ERROR: mpi_client_write_operation fails\n");
       return -1;
@@ -375,7 +384,7 @@ ssize_t mpi_client_write_operation ( MPI_Comm fd, int op )
   msg[1] = (int) op;
 
   // Send message
-  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] Write operation\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_operation] Write operation send tag %d\n", msg[0]);
 
   ret = MPI_Send(msg, 2, MPI_INT, 0, 0, fd);
   if (MPI_SUCCESS != ret)
@@ -409,7 +418,7 @@ ssize_t mpi_client_write_data ( MPI_Comm fd, char *data, ssize_t size )
   int tag = (int) (pthread_self() % 32450) + 1;
 
   // Send message
-  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_data] Write data\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_write_data] Write data tag %d\n", tag);
 
   ret = MPI_Send(data, size, MPI_CHAR, 0, tag, fd);
   if (MPI_SUCCESS != ret)
@@ -444,7 +453,7 @@ ssize_t mpi_client_read_data ( MPI_Comm fd, char *data, ssize_t size )
   int tag = (int) (pthread_self() % 32450) + 1;
 
   // Get message
-  debug_info("[MPI_CLIENT_COMM] [mpi_client_read_data] Read data\n");
+  debug_info("[MPI_CLIENT_COMM] [mpi_client_read_data] Read data tag %d\n", tag);
 
   ret = MPI_Recv(data, size, MPI_CHAR, 0, tag, fd, &status);
   if (MPI_SUCCESS != ret)
