@@ -729,6 +729,45 @@ int creat ( const char *path, mode_t mode )
   return ret;
 }
 
+int mkstemp (char *template)
+{
+  int ret = -1;
+
+  debug_info("[BYPASS] >> Begin mkstemp...\n");
+  debug_info("[BYPASS]    1) template %s\n", template);
+
+  // This if checks if variable path passed as argument starts with the expand prefix.
+  if (is_xpn_prefix(template))
+  {
+    // It is an XPN partition, so we redirect the syscall to expand syscall
+    debug_info("[BYPASS]\t try to creat %s", skip_xpn_prefix(template));
+
+    srand(time(NULL));
+    int n = rand()%100000;
+
+    char *str_init = strstr(template, "XXXXXX");
+    sprintf(str_init,"%06d", n);
+
+    int fd  = xpn_creat((const char *)skip_xpn_prefix(template), S_IRUSR | S_IWUSR);
+    ret = add_xpn_file_to_fdstable(fd);
+
+    debug_info("[BYPASS]\t creat %s -> %d", skip_xpn_prefix(template), ret);
+  }
+  // Not an XPN partition. We must link with the standard library
+  else
+  {
+    debug_info("[BYPASS]\t try to dlsym_mkstemp\n");
+
+    ret = dlsym_mkstemp(template);
+
+    debug_info("[BYPASS]\t dlsym_mkstemp -> %d\n", ret);
+  }
+
+  debug_info("[BYPASS] << After mkstemp...\n");
+
+  return ret;
+}
+
 int ftruncate ( int fd, off_t length )
 {
   debug_info("[BYPASS] >> Begin ftruncate...\n");
@@ -1940,6 +1979,40 @@ long ftell ( FILE *stream )
   debug_info("[BYPASS] << After ftell....\n");
 
   return ret;
+}
+
+void rewind (FILE *stream)
+{
+  debug_info("[BYPASS] >> Begin rewind....\n");
+  debug_info("[BYPASS]    1) stream = %p\n", stream);
+
+  int fd = fileno(stream);
+  struct generic_fd virtual_fd = fdstable_get ( fd );
+
+  // This if checks if variable fd passed as argument is a expand fd.
+  if(virtual_fd.type == FD_XPN)
+  {
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    // It is an XPN partition, so we redirect the syscall to expand syscall
+    debug_info("[BYPASS]\t xpn_lseek %d\n", virtual_fd.real_fd);
+
+    xpn_lseek(virtual_fd.real_fd, 0, SEEK_SET);
+
+    debug_info("[BYPASS]\t xpn_lseek %d\n", virtual_fd.real_fd);
+  }
+  // Not an XPN partition. We must link with the standard library
+  else
+  {
+    debug_info("[BYPASS]\t try to dlsym_rewind\n");
+
+    dlsym_rewind(stream);
+
+    debug_info("[BYPASS]\t dlsym_rewind\n");
+  }
+
+  debug_info("[BYPASS] << After rewind....\n");
 }
 
 int  feof(FILE *stream)
