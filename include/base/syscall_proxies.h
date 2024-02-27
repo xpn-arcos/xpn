@@ -55,6 +55,7 @@
 
   int dlsym_creat     (const char *path, mode_t mode);
   int dlsym_ftruncate (int fd, off_t length);
+  int dlsym_mkstemp   (char *template);
 
   ssize_t dlsym_read  (int fd, void *buf, size_t nbyte);
   ssize_t dlsym_write (int fd, void *buf, size_t nbyte);
@@ -91,6 +92,7 @@
 
   int  dlsym_fseek    (FILE *stream, long int offset, int whence);
   long dlsym_ftell    (FILE *stream);
+  void dlsym_rewind   (FILE *stream);
   int  dlsym_feof     (FILE *stream);
 
 
