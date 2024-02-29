@@ -77,7 +77,14 @@
 
   #endif
 
-  #define XPN_CONF    "XPN_CONF"
+  #define XPN_CONF                           "XPN_CONF"
+  #define XPN_CONF_TAG_PARTITION             "[partition]"
+  #define XPN_CONF_TAG_PARTITION_NAME        "partition_name"
+  #define XPN_CONF_TAG_REPLICATION_LEVEL     "replication_level"
+  #define XPN_CONF_TAG_BLOCKSIZE             "bsize"
+  #define XPN_CONF_TAG_SERVER_URL            "server_url"
+  #define XPN_CONF_DEFAULT_REPLICATION_LEVEL "0"
+  #define XPN_CONF_DEFAULT_BLOCKSIZE         "256K"
 
   #ifdef ENABLE_MXML
     #define XPN_PROFILE   "XPN_PROFILE"
@@ -130,6 +137,13 @@
 
 
   /* ... Functions / Funciones ......................................... */
+  
+  int XpnConfGetValueRept(char *file_data, int num_lines, char *key, char *value, int partition, int rept);
+  int XpnConfGetValue(char *file_data, int num_lines, char *key, char *value, int partition);
+  int XpnConfGetNumPartitions(char *file_data, int num_lines);
+  int XpnConfGetNumServers(char *file_data, int num_lines, int partition_index);
+  int XpnConfLoad(char **file_data, int *num_lines);
+  int XpnInitServer(char * conf_data, int num_lines, struct xpn_partition * part, struct nfi_server * serv, int server_num);
 
   struct conf_connect_st * XpnPartitionOpen ( void );
   void                     XpnPartitionClose(struct conf_connect_st *fconf);

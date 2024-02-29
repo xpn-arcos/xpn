@@ -35,6 +35,222 @@ char * param_get(char * key)
     return ret;
 }
 
+int XpnConfGetValueRept(char *file_data, int num_lines, char *key, char *value, int partition, int rept)
+{
+    char key_buf[KB];
+    char value_buf[KB];
+    char *line;
+    int i;
+    int part_index = -1;
+    int internal_rept = 0;
+    const char s[2] = "\n";
+    char *dup_data = strdup(file_data);
+    line = strtok(dup_data, s);
+    for (i = 0; i < num_lines; i++)
+    {
+        if (line == NULL)
+            break;
+        sscanf(line, "%s = %s", key_buf, value_buf);
+        line = strtok(NULL, s);
+        if (strcmp(key_buf, XPN_CONF_TAG_PARTITION) == 0)
+        {
+            part_index++;
+        }
+        if (strcmp(key_buf, key) == 0)
+        {
+            if (partition == part_index)
+            {
+                if (rept == internal_rept)
+                {
+                    strcpy(value, value_buf);
+                    return 0;
+                }
+                internal_rept++;
+            }
+        }
+    }
+    free(dup_data);
+    return -1;
+}
+
+int XpnConfGetValue(char *file_data, int num_lines, char *key, char *value, int partition)
+{
+    return XpnConfGetValueRept(file_data, num_lines, key, value, partition, 0);
+}
+
+int XpnConfGetNumPartitions(char *file_data, int num_lines)
+{
+    char value_buf[KB];
+    int partitions = 0;
+    while (partitions <= XPN_MAX_PART)
+    {
+        if (XpnConfGetValue(file_data, num_lines, XPN_CONF_TAG_PARTITION_NAME, value_buf, partitions) != 0)
+            break;
+        partitions++;
+    }
+    return partitions;
+}
+
+int XpnConfGetNumServers(char *file_data, int num_lines, int partition_index)
+{
+    char value_buf[KB];
+    int num = 0;
+    while (num < 1000000)
+    {
+        if (XpnConfGetValueRept(file_data, num_lines, XPN_CONF_TAG_SERVER_URL, value_buf, partition_index, num) != 0)
+            break;
+        num++;
+    }
+    return num;
+}
+
+int XpnConfLoad(char **file_data, int *num_lines)
+{
+    char conf[KB];
+    FILE *fd;
+    int res = 0;
+    *num_lines = 0;
+
+    if (param_get(XPN_CONF) != NULL)
+    {
+        strcpy(conf, param_get(XPN_CONF));
+    }
+    else
+    {
+        strcpy(conf, XPN_CONF_DEFAULT);
+    }
+
+    fd = fopen(conf, "r");
+    if (fd == NULL)
+    {
+        fprintf(stderr, "XpnLoadConf: Can't open %s %s\n", conf, strerror(errno));
+        return -1;
+    }
+    fseek(fd, 0L, SEEK_END);
+    size_t file_size = ftell(fd);
+    rewind(fd);
+
+    (*file_data) = malloc(sizeof(char) * file_size);
+    if ((*file_data) == NULL)
+    {
+        fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
+        return -1;
+    }
+    res = fread((*file_data), file_size * sizeof(char), 1, fd);
+    if (res != 1)
+    {
+        free((*file_data));
+        fprintf(stderr, "XpnLoadConf: Fail fread %s %s\n", conf, strerror(errno));
+        return -1;
+    }
+
+    fclose(fd);
+
+    for (size_t i = 0; i < file_size; i++)
+    {
+        if ((*file_data)[i] == '\n')
+            *num_lines = *num_lines + 1;
+    }
+    *num_lines = *num_lines + 1;
+    return 0;
+}
+
+
+int XpnInitServer(char * conf_data, int num_lines, struct xpn_partition * part, struct nfi_server * serv, int server_num)
+{
+    int ret;
+    char prt[PROTOCOL_MAXLEN];
+    char url_buf[KB];
+
+    ret = XpnConfGetValueRept(conf_data, num_lines, XPN_CONF_TAG_SERVER_URL, url_buf, part->id, server_num);
+    if (ret != 0)
+        return -1;
+
+    serv -> block_size = part -> block_size; // Reference of the partition blocksize
+    XPN_DEBUG("url=%s", url_buf);
+
+    ret = ParseURL(url_buf, prt, NULL, NULL, NULL, NULL, NULL);
+    if (ret < 0) {
+        xpn_err(XPNERR_INVALURL);
+        return -1;
+    }
+    
+    // crear conexion
+    if (strcmp(prt, "file") == 0) {
+        //printf("[XPN]nfi_local_init: %s\n",url);
+        ret = nfi_local_init(url_buf, serv, NULL);
+        if (ret < 0) {
+            xpn_err(XPNERR_INITSERV);
+            return -1;
+        }
+    }
+
+    #ifdef ENABLE_NFS
+    else if ((strcmp(prt, "nfs") == 0) || (strcmp(prt, "nfs2") == 0)) {
+        //printf("[XPN]nfi_nfs_init: %s\n",url);
+        ret = nfi_nfs_init(url_buf, serv, NULL);
+        if (ret < 0) {
+            xpn_err(XPNERR_INITSERV);
+            return -1;
+        }
+    }
+    #endif
+
+    #ifdef ENABLE_NFS3
+    else if (strcmp(prt, "nfs3") == 0) {
+        //printf("[XPN]nfi_nfs3_init: %s\n",url);
+        ret = nfi_nfs3_init(url_buf, serv, NULL);
+        if (ret < 0) {
+            xpn_err(XPNERR_INITSERV);
+            return -1;
+        }
+    }
+    #endif
+
+    #ifdef ENABLE_MPI_SERVER
+    else if (strcmp(prt, "mpi_server") == 0) {
+        //printf("[XPN]nfi_mpi_server_init: %s\n",url);
+        ret = nfi_mpi_server_init(url_buf, serv, NULL);
+        if (ret < 0) {
+            xpn_err(XPNERR_INITSERV);
+            return -1;
+        }
+    }
+    #endif
+
+    #ifdef ENABLE_SCK_SERVER
+    else if (strcmp(prt, "sck_server") == 0) {
+        //printf("[XPN]nfi_sck_server_init: %s\n",url);
+        ret = nfi_sck_server_init(url_buf, serv, NULL);
+        if (ret < 0) {
+            xpn_err(XPNERR_INITSERV);
+            return -1;
+        }
+    }
+    #endif
+
+    #ifdef ENABLE_TCP_SERVER
+    else if (strcmp(prt, "tcp_server") == 0) {
+        //printf("[XPN]nfi_tcp_server_init: %s\n",url);
+        ret = nfi_tcp_server_init(url_buf, serv, NULL);
+        if (ret < 0) {
+            xpn_err(XPNERR_INITSERV);
+            return -1;
+        }
+    }
+    #endif
+
+    else {
+        printf("[XPN] Protocol '%s' not recognized\n", prt);
+        xpn_err(XPNERR_INVALURL);
+        return -1;
+    }
+
+    // Default Value
+    return 1;
+}
+  
+
 struct conf_connect_st * XpnPartitionOpen(void)
 {
     static struct conf_connect_st desc;
