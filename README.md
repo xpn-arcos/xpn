@@ -11,11 +11,11 @@
 * *Licence*:  [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/dcamarmas/xpn/blob/master/COPYING)</br>
 * *Authors*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, David Garcia Fernandez
 
-## 1. To deploy XPN...
+## 1. To deploy Ad-Hoc XPN...
 
   The Expand Parallel File System (a.k.a. XPN) can be installed on a cluster with local storage per-node (HDD, SSD or RAM Drive) and a shared home directory.
 
-  There are only two pre-requisites that XPN needs:
+  There are only two pre-requisites that current Ad-Hoc XPN needs:
   1. The typical C development tools: gcc, make, and autotools
   2. An MPI implementation installed: MPICH 4.x
 
@@ -56,7 +56,7 @@
     Y1-- No ---> Y1B
     subgraph "2.1 Install prerequisites"
        direction LR
-       Y1B["sudo apt-get install -y autoconf automake gcc g++ make libtool build-essential<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
+       Y1B["sudo apt-get install -y build-essential gcc g++ make libtool<br>sudo apt-get install -y autoconf automake<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
     end
     Y1A --> Y2B
     Y1B --> Y2B
@@ -70,9 +70,10 @@
     Y2B --> Y3B
     subgraph "2.3 build source code"
        direction LR
-       Y3B["cd $HOME/src <br>
-            ./xpn/build-me -m 'full path to your mpicc compiler' \<br>
-                           -i 'full path to where XPN and MXML are going to be installed'"]
+       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' <br>
+            export XPN_BINPATH='full path to where XPN + MXML binaries will be installed'
+            cd $HOME/src <br>
+            ./xpn/build-me -m $XPN_MPICC -i $XPN_BINPATH"]
     end
 
     classDef lt2 text-align:left,fill:lightblue;
@@ -100,9 +101,37 @@
  ```
 
 
-## 2. Executing XPN
+## 2. Executing Ad-Hoc XPN...
 
-First, you need to get familiar with 4 special files and 5 special environment variables for XPN client:
+First, you need to get familiar with 4 special files and 2 special environment variables for XPN client:
+
+  ```mermaid
+  mindmap
+  root((XPN))
+    files
+        hostfile
+        xpn cfg file
+        nameserver
+        server file
+    environment variables
+        XPN_DNS
+        XPN_CONF
+```
+
+The 4 special files are:
+* ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
+* ```<XPN configuration file>``` for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers.
+* ```<nameserver file>``` for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing.
+* ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
+
+And the 2 special environment variables for XPN clients are:
+* ```XPN_DNS```      with the full path to the nameserver file to be used (mandatory).
+* ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
+
+
+<details>
+<summary>For Expand developers...</summary>
+You need to get familiar with 4 special files and **5** special environment variables for XPN client:
 
   ```mermaid
   mindmap
@@ -132,34 +161,32 @@ And the 5 special environment variables for XPN clients are:
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
 * ```XPN_SESSION```  with value 0 for without session and value 1 for with session (optional, default: 0).
 * ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
+</details>
 
 
-### 2.1 Ad-Hoc Expand (based on MPI)
+### 2.1 Executing Ad-Hoc Expand (based on MPI)
 The typical executions has 3 main steps:
-- First, launch the Expand MPI server (xpn_mpi_server):
+1. First, launch the Expand MPI server (xpn_mpi_server):
+   ```
+   ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
+   ```
+2. Then,  launch the program that will use Expand (XPN client):
+   ```
+   mpiexec -np <number of processes> \
+           -hostfile <full path to the hostfile> \
+           -genv XPN_DNS  <nameserver file> \
+           -genv XPN_CONF <XPN configuration file> \
+           -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
+           -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+           <program path>
+   ```
+3. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
+   ```
+   ./xpn -v -l <full path to the hostfile>  stop
+   ```
 
-  ```
-  ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
-  ```
-
-- Then,  launch the program that will use Expand (XPN client):
-
-  ```
-  mpiexec -np <number of processes> \
-          -hostfile <full path to the hostfile> \
-          -genv XPN_DNS  <nameserver file> \
-          -genv XPN_CONF <XPN configuration file> \
-          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-          -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-          <program path>
-  ```
-
-- At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
-
-  ```
-  ./xpn -v -l <full path to the hostfile>  stop
-  ```
-    
+<details>
+<summary>For Expand developers...</summary>
 Summary:
 
 ```mermaid
@@ -174,4 +201,5 @@ sequenceDiagram
     XPN client    -->> session: execution ends
     session        ->> xpn_mpi_server: stop the MPI server
 ```
+</details>
 
