@@ -23,59 +23,59 @@
   ```mermaid
   flowchart TD
     A[Start] --> B("Do you have 'Spack'?")
+    B -- Yes --> ide11
+    B -- No ---> Y1("Do you have 'modules'?")
 
-    B -- Yes --> X1
     subgraph ide1 [1 With spack]
-    subgraph "1.1 Add repo"
+    subgraph ide11 [1.1 Add repo]
        direction TB
        X1["git clone https://github.com/xpn-arcos/xpn.git </br>
           spack repo add xpn/scripts/spack"]
     end
-    X1 --> X2
-    subgraph "1.2 Install software"
+    subgraph ide12 [1.2 Install software]
        direction TB
        X2["`spack **info** xpn &nbsp;&nbsp;</br>
          spack **install** xpn`"]
     end
-    X2 --> X3
-    subgraph "1.3 Load software"
+    subgraph ide13 [1.3 Load software]
        direction LR
        X3["`spack **load** xpn`"]
     end
     classDef lt text-align:left,fill:lightgreen;
     class X1,X2,X3 lt;
+    ide11 --> ide12
+    ide12 --> ide13
     end
-    X3 --> I[End]
+    ide13 --> I[End]
 
-    B -- No ---> Y1("Do you have 'modules'?")
+    Y1-- Yes ---> ide21a
+    Y1-- No ---> ide21b
     subgraph ide2 [2 With autotools]
-    Y1-- Yes ---> Y1A
-    subgraph "2.1 Install prerequisites"
+    subgraph ide21a [2.1 Install prerequisites]
        direction LR
        Y1A["module avail <br> module load gcc<br> module load 'impi/2017.4'"]
     end
-    Y1-- No ---> Y1B
-    subgraph "2.1 Install prerequisites"
+    subgraph ide21b [2.1 Install prerequisites]
        direction LR
-       Y1B["sudo apt-get install -y build-essential gcc make libtool<br>sudo apt-get install -y autoconf automake<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
+       Y1B["sudo apt-get install -y build-essential gcc make libtool<br>sudo apt-get install -y autoconf automake git<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
     end
-    Y1A --> Y2B
-    Y1B --> Y2B
-    subgraph "2.2 Download source code"
+    subgraph ide22 [2.2 Download source code]
        direction LR
        Y2B["mkdir $HOME/src<br>
             cd    $HOME/src<br>
             git clone https://github.com/michaelrsweet/mxml.git<br>
             git clone https://github.com/xpn-arcos/xpn.git"]
     end
-    Y2B --> Y3B
-    subgraph "2.3 build source code"
+    subgraph ide23 ["2.3 build source code"]
        direction LR
        Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' <br>
             export XPN_BINPATH='full path to where XPN + MXML binaries will be installed'
             cd $HOME/src <br>
             ./xpn/build-me -m $XPN_MPICC -i $XPN_BINPATH"]
     end
+    ide21a --> ide22
+    ide21b --> ide22
+    ide22 --> ide23
 
     classDef lt2 text-align:left,fill:lightblue;
     class Y1A,Y1B lt2;
