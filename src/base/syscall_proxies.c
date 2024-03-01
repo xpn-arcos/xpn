@@ -34,6 +34,7 @@ int     (*real_open    )(char *, int, mode_t)  = NULL;
 int     (*real_open64  )(char *, int, mode_t)  = NULL;
 int     (*real___open_2)(char *, int)          = NULL;
 int     (*real_creat   )(const char *, mode_t) = NULL;
+int     (*real_mkstemp )(char*)                = NULL;
 int     (*real_close   )(int)                  = NULL;
 
 ssize_t (*real_read )(int, void*, size_t)       = NULL;
@@ -68,9 +69,10 @@ int     (*real_fclose)(FILE *)                     = NULL;
 size_t  (*real_fread )(void *, size_t, size_t, FILE *)       = NULL;
 size_t  (*real_fwrite)(const void *, size_t, size_t, FILE *) = NULL;
 
-int     (*real_fseek)(FILE *, long int, int) = NULL;
-long    (*real_ftell)(FILE *) = NULL;
-int     (*real_feof) (FILE *) = NULL;
+int     (*real_fseek )(FILE *, long int, int) = NULL;
+long    (*real_ftell )(FILE *) = NULL;
+void    (*real_rewind)(FILE *) = NULL;
+int     (*real_feof ) (FILE *) = NULL;
 
 DIR*              (*real_opendir  )(char*) = NULL;
 DIR*              (*real_opendir64)(char*) = NULL;
@@ -174,6 +176,21 @@ int dlsym_creat (const char *path, mode_t mode)
   debug_info("[SYSCALL_PROXIES] [dlsym_creat] >> End\n");
  
   return fd;
+}
+
+int dlsym_mkstemp (char *template)
+{
+  debug_info("[SYSCALL_PROXIES] [dlsym_mkstemp] >> Begin\n");
+
+  if (real_mkstemp == NULL) {
+    real_mkstemp = (int(*)(char *)) dlsym(RTLD_NEXT,"mkstemp");
+  }
+  
+  int ret = real_mkstemp(template);
+
+  debug_info("[SYSCALL_PROXIES] [dlsym_mkstemp] >> End\n");
+
+  return ret;
 }
 
 int dlsym_ftruncate (int fd, off_t length)
@@ -595,6 +612,19 @@ long dlsym_ftell (FILE *stream)
   debug_info("[SYSCALL_PROXIES] [dlsym_ftell] >> End\n");
 
   return ret;
+}
+
+void dlsym_rewind (FILE *stream)
+{
+  debug_info("[SYSCALL_PROXIES] [dlsym_rewind] >> Begin\n");
+
+  if (real_rewind == NULL) {
+    real_rewind = (void(*)(FILE *)) dlsym(RTLD_NEXT,"rewind");
+  }
+  
+  real_rewind(stream);
+
+  debug_info("[SYSCALL_PROXIES] [dlsym_rewind] >> End\n");
 }
 
 int dlsym_feof (FILE *stream)

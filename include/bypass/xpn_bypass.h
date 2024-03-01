@@ -32,6 +32,8 @@
   #include <dlfcn.h>
   #include <sys/stat.h>
   #include <stdarg.h>
+  #include <time.h>
+  #include <stdlib.h>
 
   #include "xpn.h"
   #include "syscall_proxies.h"
@@ -145,6 +147,7 @@
   int open64     ( const char *path, int flags, ... );
   int __open_2   ( const char *path, int flags, ... );
   int creat      ( const char *path, mode_t mode );
+  int mkstemp    ( char *template );
   int close      ( int fd );
 
   int ftruncate  ( int fildes, off_t length );
@@ -185,7 +188,8 @@
 
   int  fseek      ( FILE *stream, long int offset, int whence );
   long ftell      ( FILE *stream );
-  int  dlsym_feof ( FILE *stream );
+  void rewind     ( FILE *stream );
+  int  feof       ( FILE *stream );
 
 
   // Directory API
