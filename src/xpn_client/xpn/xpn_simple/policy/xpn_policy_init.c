@@ -35,23 +35,16 @@ char * param_get(char * key)
     return ret;
 }
 
-int XpnConfGetValueRept(char *file_data, int num_lines, char *key, char *value, int partition, int rept)
+int XpnConfGetValueRept(struct conf_file_data *conf_data, char *key, char *value, int partition, int rept)
 {
     char key_buf[KB];
     char value_buf[KB];
-    char *line;
     int i;
     int part_index = -1;
     int internal_rept = 0;
-    const char s[2] = "\n";
-    char *dup_data = strdup(file_data);
-    line = strtok(dup_data, s);
-    for (i = 0; i < num_lines; i++)
+    for (i = 0; i < conf_data->lines_n; i++)
     {
-        if (line == NULL)
-            break;
-        sscanf(line, "%s = %s", key_buf, value_buf);
-        line = strtok(NULL, s);
+        sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
         if (strcmp(key_buf, XPN_CONF_TAG_PARTITION) == 0)
         {
             part_index++;
@@ -69,47 +62,45 @@ int XpnConfGetValueRept(char *file_data, int num_lines, char *key, char *value, 
             }
         }
     }
-    free(dup_data);
     return -1;
 }
 
-int XpnConfGetValue(char *file_data, int num_lines, char *key, char *value, int partition)
+int XpnConfGetValue(struct conf_file_data *conf_data, char *key, char *value, int partition)
 {
-    return XpnConfGetValueRept(file_data, num_lines, key, value, partition, 0);
+    return XpnConfGetValueRept(conf_data, key, value, partition, 0);
 }
 
-int XpnConfGetNumPartitions(char *file_data, int num_lines)
+int XpnConfGetNumPartitions(struct conf_file_data *conf_data)
 {
     char value_buf[KB];
     int partitions = 0;
     while (partitions <= XPN_MAX_PART)
     {
-        if (XpnConfGetValue(file_data, num_lines, XPN_CONF_TAG_PARTITION_NAME, value_buf, partitions) != 0)
+        if (XpnConfGetValue(conf_data, XPN_CONF_TAG_PARTITION_NAME, value_buf, partitions) != 0)
             break;
         partitions++;
     }
     return partitions;
 }
 
-int XpnConfGetNumServers(char *file_data, int num_lines, int partition_index)
+int XpnConfGetNumServers(struct conf_file_data *conf_data, int partition_index)
 {
     char value_buf[KB];
     int num = 0;
     while (num < 1000000)
     {
-        if (XpnConfGetValueRept(file_data, num_lines, XPN_CONF_TAG_SERVER_URL, value_buf, partition_index, num) != 0)
+        if (XpnConfGetValueRept(conf_data, XPN_CONF_TAG_SERVER_URL, value_buf, partition_index, num) != 0)
             break;
         num++;
     }
     return num;
 }
 
-int XpnConfLoad(char **file_data, int *num_lines)
+int XpnConfLoad(struct conf_file_data *conf_data)
 {
     char conf[KB];
     FILE *fd;
     int res = 0;
-    *num_lines = 0;
 
     if (param_get(XPN_CONF) != NULL)
     {
@@ -130,39 +121,81 @@ int XpnConfLoad(char **file_data, int *num_lines)
     size_t file_size = ftell(fd);
     rewind(fd);
 
-    (*file_data) = malloc(sizeof(char) * file_size);
-    if ((*file_data) == NULL)
+    if(file_size > 10*MB)
+    {
+        fprintf(stderr, "XpnLoadConf: Error conf file bigger than 10MB, size %ldB\n", file_size);
+    }
+
+    conf_data->data = malloc(sizeof(char) * file_size);
+    if (conf_data->data == NULL)
     {
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
         return -1;
     }
-    res = fread((*file_data), file_size * sizeof(char), 1, fd);
+    res = fread(conf_data->data, file_size * sizeof(char), 1, fd);
     if (res != 1)
     {
-        free((*file_data));
+        free(conf_data->data);
         fprintf(stderr, "XpnLoadConf: Fail fread %s %s\n", conf, strerror(errno));
         return -1;
     }
 
     fclose(fd);
 
+    conf_data->lines_n = 0;
     for (size_t i = 0; i < file_size; i++)
     {
-        if ((*file_data)[i] == '\n')
-            *num_lines = *num_lines + 1;
+        if (conf_data->data[i] == '\n')
+            if (i+1 < file_size)
+                conf_data->lines_n++;
     }
-    *num_lines = *num_lines + 1;
+
+    conf_data->lines_n++;
+
+    if (conf_data->lines_n < 1)
+    {
+        free(conf_data->data);
+        return -1;
+    }
+
+    conf_data->lines = malloc(conf_data->lines_n*sizeof(char *));
+    if (conf_data->lines == NULL)
+    {
+        free(conf_data->data);
+        fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
+        return -1;
+    }
+    conf_data->lines[0] = conf_data->data;
+    size_t line_index = 1;
+    for (size_t i = 1; i < file_size; i++)
+    {
+        if (conf_data->data[i] == '\n')
+        {
+            conf_data->data[i] = '\0';
+            if (i+1 < file_size)
+            {
+                conf_data->lines[line_index] = &conf_data->data[i+1];
+                line_index++;
+            }
+        }
+    }
     return 0;
 }
 
+void XpnConfFree(struct conf_file_data *conf_data)
+{
+    free(conf_data->data);
+    free(conf_data->lines);
+}
 
-int XpnInitServer(char * conf_data, int num_lines, struct xpn_partition * part, struct nfi_server * serv, int server_num)
+
+int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part, struct nfi_server * serv, int server_num)
 {
     int ret;
     char prt[PROTOCOL_MAXLEN];
     char url_buf[KB];
 
-    ret = XpnConfGetValueRept(conf_data, num_lines, XPN_CONF_TAG_SERVER_URL, url_buf, part->id, server_num);
+    ret = XpnConfGetValueRept(conf_data, XPN_CONF_TAG_SERVER_URL, url_buf, part->id, server_num);
     if (ret != 0)
         return -1;
 

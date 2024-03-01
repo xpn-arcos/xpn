@@ -84,7 +84,7 @@
   #define XPN_CONF_TAG_BLOCKSIZE             "bsize"
   #define XPN_CONF_TAG_SERVER_URL            "server_url"
   #define XPN_CONF_DEFAULT_REPLICATION_LEVEL "0"
-  #define XPN_CONF_DEFAULT_BLOCKSIZE         "256K"
+  #define XPN_CONF_DEFAULT_BLOCKSIZE         "512K"
 
   #ifdef ENABLE_MXML
     #define XPN_PROFILE   "XPN_PROFILE"
@@ -135,15 +135,22 @@
     }connect_u;
   };
 
+  struct conf_file_data
+  {
+    char *data;         //All the data
+    ssize_t lines_n;    //Number of lines
+    char **lines;       //The pointers to the lines
+  };
 
   /* ... Functions / Funciones ......................................... */
   
-  int XpnConfGetValueRept(char *file_data, int num_lines, char *key, char *value, int partition, int rept);
-  int XpnConfGetValue(char *file_data, int num_lines, char *key, char *value, int partition);
-  int XpnConfGetNumPartitions(char *file_data, int num_lines);
-  int XpnConfGetNumServers(char *file_data, int num_lines, int partition_index);
-  int XpnConfLoad(char **file_data, int *num_lines);
-  int XpnInitServer(char * conf_data, int num_lines, struct xpn_partition * part, struct nfi_server * serv, int server_num);
+  int XpnConfGetValueRept(struct conf_file_data *conf_data, char *key, char *value, int partition, int rept);
+  int XpnConfGetValue(struct conf_file_data *conf_data, char *key, char *value, int partition);
+  int XpnConfGetNumPartitions(struct conf_file_data *conf_data);
+  int XpnConfGetNumServers(struct conf_file_data *conf_data, int partition_index);
+  int XpnConfLoad(struct conf_file_data *conf_data);
+  void XpnConfFree(struct conf_file_data *conf_data);
+  int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part, struct nfi_server * serv, int server_num);
 
   struct conf_connect_st * XpnPartitionOpen ( void );
   void                     XpnPartitionClose(struct conf_connect_st *fconf);

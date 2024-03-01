@@ -232,10 +232,10 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
 
     MPI_Error_class(ret,&errclass);
     MPI_Error_string(ret,err_buffer,&resultlen);
-    XPN_DEBUG("%s", err_buffer);
     
     if (MPI_SUCCESS != errclass)
     {
+      XPN_DEBUG("%s", err_buffer);
       if (connect_retries == 0)
       {
         char cli_name  [HOST_NAME_MAX];

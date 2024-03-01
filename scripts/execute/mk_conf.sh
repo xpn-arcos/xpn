@@ -122,6 +122,7 @@ mk_conf_file_from_args() {
    echo "[partition]"    > ${CONFNAME}
    echo "bsize = ${XPN_PARTITION_BSIZE}"                                        >> ${CONFNAME}
    echo "replication_level = ${XPN_REPLICATION_LEVEL}"                                        >> ${CONFNAME}
+   echo ""                                        >> ${CONFNAME}
    echo "partition_name = ${XPN_PARTITION_NAME}"                                        >> ${CONFNAME}
 
    ITER=1
