@@ -122,7 +122,7 @@ ssize_t xpn_sread ( int fd, const void *buffer, size_t size, off_t offset )
 
   /* params for XpnGetServers:
    * flag operation, partition id, absolute path, file descriptor, pointer to servers */
-  n = XpnGetServers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = XpnGetServers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers);
   if (n <= 0)
   {
      if (servers != NULL) { free(servers); servers=NULL; }
@@ -234,7 +234,7 @@ ssize_t xpn_swrite( int fd, const void *buffer, size_t size, off_t offset )
 
   /* params for XpnGetServers:
    * flag operation, partition id, absolute path, file descriptor, pointer to servers */
-  n = XpnGetServers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = XpnGetServers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers);
   if (n<=0)
   {
     if (servers != NULL) { free(servers); servers=NULL; }
@@ -385,7 +385,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
 
   /* params of XpnGetServers:
    * flag operation, partition id, absolute path, file descriptor, pointer to servers */
-  n = XpnGetServers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = XpnGetServers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers);
   if (n<=0)
   {
      if (servers != NULL) { free(servers); servers=NULL; }
@@ -593,7 +593,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
   /* params of XpnGetServers:
    * flag operation, partition id, absolute path, file descriptor, pointer to servers */
-  n = XpnGetServers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = XpnGetServers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers);
   if (n<=0)
   {
      if (servers != NULL) { free(servers); servers=NULL; }

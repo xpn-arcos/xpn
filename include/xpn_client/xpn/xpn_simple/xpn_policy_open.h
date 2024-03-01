@@ -63,11 +63,9 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  ssize_t XpnGetSizeThreads(struct xpn_partition *p);
-
   void XpnGetURLServer( struct nfi_server *serv, char *abs_path, char *url_serv);
 
-  int XpnGetServers(int op, int pd, char *abs_path, int fd, struct nfi_server ***servers, int type);
+  int XpnGetServers(int op, int pd, char *abs_path, int fd, struct nfi_server ***servers);
 
   int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos);
   int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path);

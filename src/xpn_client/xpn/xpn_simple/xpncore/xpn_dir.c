@@ -67,7 +67,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
-  n = XpnGetServers(op_xpn_mkdir, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+  n = XpnGetServers(op_xpn_mkdir, pd, abs_path, -1, &servers);
   if(n<=0){
     /*free(servers);*/
     return -1;
@@ -251,7 +251,7 @@ int xpn_simple_rmdir(const char *path)
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
-  n = XpnGetServers(op_xpn_rmdir, pd, abs_path, -1, &servers, XPN_DATA_SERVER);
+  n = XpnGetServers(op_xpn_rmdir, pd, abs_path, -1, &servers);
   if(n<=0){
    /* free(servers); */
     return -1;

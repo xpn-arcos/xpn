@@ -91,17 +91,14 @@
 
   * ### 1.2.2. Download the source code of XPN
 
-    You need to download the source code of [XPN](https://xpn-arcos.github.io) and [minixml](http://www.minixml.org).
+    You need to download the source code of [XPN](https://xpn-arcos.github.io).
 
-    You can download both by executing:
+    You can download by executing:
     ```
     mkdir $HOME/src
     cd    $HOME/src
-    git clone https://github.com/michaelrsweet/mxml.git
     git clone https://github.com/xpn-arcos/xpn.git
     ```
-
-    You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
 
 
   * ### 1.2.3. Building XPN
@@ -110,7 +107,7 @@
     ```
     cd $HOME/src
     ./xpn/build-me -m <full path to your mpicc compiler> \
-                   -i <full path to where XPN and MXML are going to be installed>
+                   -i <full path to where XPN are going to be installed>
     ```
 
 ## 2. Executing XPN
@@ -162,7 +159,6 @@ The typical executions has 3 main steps:
           -hostfile <full path to the hostfile> \
           -genv XPN_DNS  <nameserver file> \
           -genv XPN_CONF <XPN configuration file> \
-          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
           -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
           <program path>
   ```

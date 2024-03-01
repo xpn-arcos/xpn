@@ -49,21 +49,6 @@ int xpn_destroy_servers(struct xpn_partition *part)
 
   free(part->data_serv);
 
-  for(i=0;i<part->meta_nserv;i++)
-  {
-    serv = part->meta_serv;
-    if(serv[i].ops != NULL)
-    {
-      part->meta_serv[i].ops->nfi_disconnect(&(serv[i]));
-      //part->meta_serv[i].ops->nfi_destroy(&(serv[i]));
-      if(serv[i].ops != NULL){
-        free(serv[i].ops);
-      }
-    }
-  }
-
-  free(part->meta_serv);
-
   return 0;
 }
 
@@ -176,7 +161,6 @@ int xpn_init_partition( void )
   }
   for (i = 0; i < part_n; i++)
   {
-    xpn_parttable[i].initialized = 0;
     xpn_parttable[i].id = i;
 
     res = XpnConfGetValue(&conf_data, XPN_CONF_TAG_PARTITION_NAME, buff_value, i);

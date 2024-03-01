@@ -80,7 +80,6 @@ int XpnSearchSlotFile(int pd, char * path, struct xpn_fh * vfh, struct xpn_metad
     xpn_file_table[i] -> block_size = xpn_file_table[i] -> part -> block_size;
     xpn_file_table[i] -> mdata = mdata;
     xpn_file_table[i] -> data_vfh = vfh;
-    xpn_file_table[i] -> size_threads = XpnGetSizeThreads(xpn_file_table[i] -> part);
 
     res = i;
     XPN_DEBUG_END_ARGS1(path);
@@ -160,7 +159,7 @@ int xpn_internal_creat(const char * path, mode_t perm, struct xpn_fh ** vfh, str
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_creat, pd, abs_path, -1, & servers, XPN_DATA_SERVER);
+    n = XpnGetServers(op_xpn_creat, pd, abs_path, -1, & servers);
     if (n <= 0) 
     {
         //free(servers);
@@ -360,7 +359,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
          * flag operation, partition id, absolute path, file descriptor, pointer to server
          */
         servers = NULL;
-        n = XpnGetServers(op_xpn_open, pd, abs_path, -1, & servers, XPN_DATA_SERVER);
+        n = XpnGetServers(op_xpn_open, pd, abs_path, -1, & servers);
         if (n <= 0) 
         {
             //free(servers);
@@ -465,7 +464,7 @@ int xpn_internal_remove(const char * path)
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_remove, pd, abs_path, -1, & servers, XPN_DATA_SERVER);
+    n = XpnGetServers(op_xpn_remove, pd, abs_path, -1, & servers);
     if (n <= 0) 
     {
         // free(servers);
@@ -584,7 +583,7 @@ int xpn_simple_preload(const char * virtual_path, const char * storage_path)
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_flush, pd, abs_path, -1, & servers, XPN_DATA_SERVER);
+    n = XpnGetServers(op_xpn_flush, pd, abs_path, -1, & servers);
     if (n <= 0) 
     {
         //free(servers);
@@ -675,7 +674,7 @@ int xpn_simple_flush(const char * virtual_path, const char * storage_path)
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_flush, pd, abs_path, -1, & servers, XPN_DATA_SERVER);
+    n = XpnGetServers(op_xpn_flush, pd, abs_path, -1, & servers);
     if (n <= 0) 
     {
         //free(servers);
@@ -1033,7 +1032,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
      * flag operation, partition id, absolute path, file descriptor, pointer to server
      */
     servers = NULL;
-    n = XpnGetServers(op_xpn_rename, pd, abs_path, -1, & servers, XPN_DATA_SERVER);
+    n = XpnGetServers(op_xpn_rename, pd, abs_path, -1, & servers);
     if (n <= 0) {
         //free(servers);
         return -1;

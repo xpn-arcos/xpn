@@ -54,7 +54,6 @@ fi
 #
 AC_CHECK_LIB(pthread,pthread_create)
 AC_CHECK_LIB(dl,dlopen)
-AC_CHECK_LIB(mxml,mxmlNewXML)
 AC_CHECK_LIB(mosquitto,mosquitto_lib_init)
 
 
@@ -100,17 +99,15 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
-IFLAGS="-I../../mxml        -I../../bin/mosquitto/include       "
-IFLAGS+="-I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
-IFLAGS+="-I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
+IFLAGS="-I../../bin/mosquitto/include       "
+IFLAGS+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+IFLAGS+="-I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
 
-LFLAGS=" -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib "
-LFLAGS+="-L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib "
-LFLAGS+="-L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
+LFLAGS="-L../../bin/mosquitto/lib        -L../../xpn/lib "
+LFLAGS+="-L../../../bin/mosquitto/lib     -L../../../xpn/lib "
+LFLAGS+="-L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
 
 LIBLINK=$LIBS
-LIBLINK+=" -lmxml"
-LIBS=$LFLAGS" "$LIBS" -lmxml"
 
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
@@ -118,7 +115,7 @@ then
   CC="mpifcc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
@@ -127,7 +124,7 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
@@ -136,7 +133,7 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
 elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
@@ -145,7 +142,7 @@ then
   CC="mpicc"
   MAKE="gmake"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
 else
@@ -153,7 +150,7 @@ else
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
   AC_MSG_RESULT("Using Linux configuration as default configuration...");

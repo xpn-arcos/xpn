@@ -35,7 +35,7 @@ int XpnGetEntry(int fd, struct dirent *entry)
 
 	/* XpnGetServers: flag operation, partition id, absolute path, file descript., pointer to server */
 	servers = NULL;
-	n = XpnGetServers(op_xpn_readdir, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+	n = XpnGetServers(op_xpn_readdir, xpn_file_table[fd]->part->id, NULL, fd, &servers);
 	if(n<=0){
 	    return -1;
 	}
