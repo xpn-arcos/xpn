@@ -28,13 +28,13 @@
     subgraph ide1 [1 With spack]
     subgraph "1.1 Add repo"
        direction TB
-       X1["`git clone https://github.com/xpn-arcos/xpn.git </br>
-          spack **repo add** xpn/scripts/spack`"]
+       X1["git clone https://github.com/xpn-arcos/xpn.git </br>
+          spack repo add xpn/scripts/spack"]
     end
     X1 --> X2
     subgraph "1.2 Install software"
        direction TB
-       X2["`spack **info** xpn </br>
+       X2["`spack **info** xpn &nbsp;&nbsp;</br>
          spack **install** xpn`"]
     end
     X2 --> X3
@@ -52,7 +52,7 @@
     Y1-- Yes ---> Y1A
     subgraph "2.1 Install prerequisites"
        direction LR
-       Y1A["module avail<br> module load gcc<br> module load 'impi/2017.4'"]
+       Y1A["module avail <br> module load gcc<br> module load 'impi/2017.4'"]
     end
     Y1-- No ---> Y1B
     subgraph "2.1 Install prerequisites"
