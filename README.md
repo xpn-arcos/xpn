@@ -28,7 +28,8 @@
     subgraph ide1 [1 With spack]
     subgraph "1.1 Add repo"
        direction TB
-       X1["git clone https://github.com/xpn-arcos/xpn.git<br> spack repo add xpn/scripts/spack"]
+       X1["`git clone https://github.com/xpn-arcos/xpn.git </br>
+          spack **repo add** xpn/scripts/spack`"]
     end
     X1 --> X2
     subgraph "1.2 Install software"
@@ -56,7 +57,7 @@
     Y1-- No ---> Y1B
     subgraph "2.1 Install prerequisites"
        direction LR
-       Y1B["sudo apt-get install -y build-essential gcc g++ make libtool<br>sudo apt-get install -y autoconf automake<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
+       Y1B["sudo apt-get install -y build-essential gcc make libtool<br>sudo apt-get install -y autoconf automake<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
     end
     Y1A --> Y2B
     Y1B --> Y2B
@@ -109,24 +110,14 @@ First, you need to get familiar with 4 special files and 2 special environment v
   mindmap
   root((XPN))
     files
-        hostfile
-        xpn cfg file
-        nameserver
-        server file
+        ["`**hostfile**</br>               for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
+        ["`**XPN configuration file**</br> for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers`"]
+        ["`**nameserver file**</br>        for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing`"]
+        ["`**server file**</br>            for XPN, it is a text file with the list of the servers to be stopped (one host name per line)`"]
     environment variables
-        XPN_DNS
-        XPN_CONF
+        ["`**XPN_DNS=**'full path to the nameserver file to be used (mandatory)'`"]
+        ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
 ```
-
-The 4 special files are:
-* ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
-* ```<XPN configuration file>``` for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers.
-* ```<nameserver file>``` for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing.
-* ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
-
-And the 2 special environment variables for XPN clients are:
-* ```XPN_DNS```      with the full path to the nameserver file to be used (mandatory).
-* ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
 
 
 <details>
@@ -170,7 +161,9 @@ The typical executions has 3 main steps:
    ```
    ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
    ```
-2. Then,  launch the program that will use Expand (XPN client):
+2. Then,  launch the program that will use Expand (XPN client).
+   
+   2.1. For an MPI program:
    ```
    mpiexec -np <number of processes> \
            -hostfile <full path to the hostfile> \
@@ -180,7 +173,7 @@ The typical executions has 3 main steps:
            -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
            <program path>
    ```
-3. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
+4. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
    ```
    ./xpn -v -l <full path to the hostfile>  stop
    ```
