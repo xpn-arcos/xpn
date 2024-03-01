@@ -15,64 +15,75 @@
 
   The Expand Parallel File System (a.k.a. XPN) can be installed on a cluster with local storage per-node (HDD, SSD or RAM Drive) and a shared home directory.
 
+  There are only two pre-requisites that XPN needs:
+  1. The typical C development tools: gcc, make, and autotools
+  2. An MPI implementation installed: MPICH 4.x
+
   The general steps to deploy XPN are:
   ```mermaid
-  flowchart LR
-    A[Start] --> B{Spack?}
-    B -- Yes --> C[add repo]
-    subgraph ide1 [1.1 With spack]
-    C --> D[install software]
-    D --> E[load software]
+  flowchart TD
+    A[Start] --> B("Do you have 'Spack'?")
+
+    B -- Yes --> X1
+    subgraph ide1 [1 With spack]
+    subgraph "1.1 Add repo"
+       direction TB
+       X1["git clone https://github.com/xpn-arcos/xpn.git<br> spack repo add xpn/scripts/spack"]
     end
-    E --> I[End]
-    B -- No ---> F[install prerequisites]
-    subgraph ide2 [1.2 With autotools]
-    F --> G[download source code]
-    G --> H[build source code]
+    X1 --> X2
+    subgraph "1.2 Install software"
+       direction TB
+       X2["`spack **info** xpn </br>
+         spack **install** xpn`"]
     end
-    H --> I[End]
+    X2 --> X3
+    subgraph "1.3 Load software"
+       direction LR
+       X3["`spack **load** xpn`"]
+    end
+    classDef lt text-align:left,fill:lightgreen;
+    class X1,X2,X3 lt;
+    end
+    X3 --> I[End]
+
+    B -- No ---> Y1("Do you have 'modules'?")
+    subgraph ide2 [2 With autotools]
+    Y1-- Yes ---> Y1A
+    subgraph "2.1 Install prerequisites"
+       direction LR
+       Y1A["module avail<br> module load gcc<br> module load 'impi/2017.4'"]
+    end
+    Y1-- No ---> Y1B
+    subgraph "2.1 Install prerequisites"
+       direction LR
+       Y1B["sudo apt-get install -y autoconf automake gcc g++ make libtool build-essential<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
+    end
+    Y1A --> Y2B
+    Y1B --> Y2B
+    subgraph "2.2 Download source code"
+       direction LR
+       Y2B["mkdir $HOME/src<br>
+            cd    $HOME/src<br>
+            git clone https://github.com/michaelrsweet/mxml.git<br>
+            git clone https://github.com/xpn-arcos/xpn.git"]
+    end
+    Y2B --> Y3B
+    subgraph "2.3 build source code"
+       direction LR
+       Y3B["cd $HOME/src <br>
+            ./xpn/build-me -m 'full path to your mpicc compiler' \<br>
+                           -i 'full path to where XPN and MXML are going to be installed'"]
+    end
+
+    classDef lt2 text-align:left,fill:lightblue;
+    class Y1A,Y1B lt2;
+    end
+
+    Y3B --> I[End]
   ```
 
-### 1.1. With Spack
 
-  * To add XPN Spack repository:
-    ```
-    git clone https://github.com/xpn-arcos/xpn.git
-    spack repo add xpn/scripts/spack
-    ```
-
-  * To install XPN with Spack:
-    ```
-    spack info xpn
-    spack install xpn
-    ```
-
-  * To use XPN with Spack:
-    ```
-    spack load xpn
-    ```
-
-
-### 1.2. With autotools (configure, make, make install)
-
-  * ### 1.2.1. Installing prerequisites
-
-    XPN needs two elements:
-    1. The typical C development tools: gcc, make, autotools
-    2. An MPI implementation installed: MPICH or OpenMPI
-
-    The steps to install both depends on your platform (cluster with modules, Linux packages, etc.):
-
-  | Steps to install ...                | Cluster with modules       | Linux packages      |
-  | ----------------------------------- | -------------------------- | ------------------- |
-  | ... the C development tools         | module load gcc            | sudo apt-get install -y autoconf automake gcc g++ make libtool build-essential |
-  | ... the MPI implementation          | module load "impi/2017.4"  | sudo apt-get install -y libmpich-dev mpich mpich-doc                           |
-  
-  In a cluster with modules, "gcc" is the example of compiler module and "impi/2017.4" is the MPI module.
-  You can check your available modules by using:
- ```
- module avail
- ```
+### With MPICH from source code
 
  In order to install the MPICH implementation of MPI from source code and with Infiniband (Omni-Path) support we recommend:
  ```
@@ -88,30 +99,6 @@
  make install
  ```
 
-
-  * ### 1.2.2. Download the source code of XPN
-
-    You need to download the source code of [XPN](https://xpn-arcos.github.io) and [minixml](http://www.minixml.org).
-
-    You can download both by executing:
-    ```
-    mkdir $HOME/src
-    cd    $HOME/src
-    git clone https://github.com/michaelrsweet/mxml.git
-    git clone https://github.com/xpn-arcos/xpn.git
-    ```
-
-    You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
-
-
-  * ### 1.2.3. Building XPN
-
-    To build Expand you need to execute:
-    ```
-    cd $HOME/src
-    ./xpn/build-me -m <full path to your mpicc compiler> \
-                   -i <full path to where XPN and MXML are going to be installed>
-    ```
 
 ## 2. Executing XPN
 
