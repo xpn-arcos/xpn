@@ -43,7 +43,7 @@
        direction TB
        X3["`spack **load** xpn`"]
     end
-    classDef lt text-align:left,fill:lightgreen; 
+    classDef lt text-align:left,fill:lightgreen,color:black; 
     class X1,X2,X3 lt;
     ide11 --> ide12
     ide12 --> ide13
@@ -78,7 +78,7 @@
     ide21b --> ide22
     ide22 --> ide23
 
-    classDef lt2 text-align:left,fill:lightblue;
+    classDef lt2 text-align:left,fill:lightblue,color:black;
     class Y1A,Y1B lt2;
     end
 
@@ -163,8 +163,8 @@ The typical executions has 3 main steps:
    ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
    ```
 2. Then,  launch the program that will use Expand (XPN client).
-   
-   2.1. Example of a compiled program:
+
+   2.1. Example for the *app1* MPI application:
    ```bash
    mpiexec -np <number of processes> \
            -hostfile <full path to the hostfile> \
@@ -172,15 +172,19 @@ The typical executions has 3 main steps:
            -genv XPN_CONF <XPN configuration file> \
            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
            -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-           <program path>
+           <full path to app1>/app1
    ```
-   2.2. Example for a Python program:
+   2.2. Example for the *app2* program (a NON-MPI application):
    ```bash
-   export XPN_DNS=<nameserver file>
-   export XPN_CONF=<XPN configuration file>
-   horovodrun --gloo-timeout-seconds 120 \
-               -np 2 --network-interface "ibs1" --slots 1 \
-              python3 <python program>
+   export XPN_DNS=<full path to the nameserver file>
+   export XPN_CONF=<full path to the XPN configuration file>
+   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
+   ```
+   2.3. Example for the *app3* Python program:
+   ```bash
+   export XPN_DNS=<full path to the nameserver file>
+   export XPN_CONF=<full path to the XPN configuration file>
+   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3
    ```
 4. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
    ```bash
