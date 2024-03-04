@@ -21,11 +21,13 @@
 
   The general steps to deploy XPN are:
   ```mermaid
+  %% {init: {"flowchart": {"defaultRenderer": "elk"}} }%%
   flowchart TD
-    A[Start] --> B("Do you have 'Spack'?")
+    A([Start]) --> B("Do you have 'Spack'?")
     B -- Yes --> ide11
-    B -- No ---> Y1("Do you have 'modules'?")
+    B -- No --> Y1("Do you have 'modules'?")
 
+    %% (1) with spack
     subgraph ide1 [1 With spack]
     subgraph ide11 [1.1 Add repo]
        direction TB
@@ -38,50 +40,49 @@
          spack **install** xpn`"]
     end
     subgraph ide13 [1.3 Load software]
-       direction LR
+       direction TB
        X3["`spack **load** xpn`"]
     end
-    classDef lt text-align:left,fill:lightgreen;
+    classDef lt text-align:left,fill:lightgreen,color:black; 
     class X1,X2,X3 lt;
     ide11 --> ide12
     ide12 --> ide13
     end
-    ide13 --> I[End]
+    ide13 --> I([End])
 
-    Y1-- Yes ---> ide21a
+    Y1-- Yes --> ide21a
     Y1-- No ---> ide21b
     subgraph ide2 [2 With autotools]
     subgraph ide21a [2.1 Install prerequisites]
-       direction LR
+       direction TB
        Y1A["module avail <br> module load gcc<br> module load 'impi/2017.4'"]
     end
     subgraph ide21b [2.1 Install prerequisites]
-       direction LR
+       direction TB
        Y1B["sudo apt-get install -y build-essential gcc make libtool<br>sudo apt-get install -y autoconf automake git<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
     end
     subgraph ide22 [2.2 Download source code]
-       direction LR
-       Y2B["mkdir $HOME/src<br>
-            cd    $HOME/src<br>
+       direction TB
+       Y2B["mkdir $HOME/src </br>
+            cd    $HOME/src </br>
             git clone https://github.com/michaelrsweet/mxml.git<br>
             git clone https://github.com/xpn-arcos/xpn.git"]
     end
     subgraph ide23 ["2.3 build source code"]
        direction LR
        Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' <br>
-            export XPN_BINPATH='full path to where XPN + MXML binaries will be installed'
             cd $HOME/src <br>
-            ./xpn/build-me -m $XPN_MPICC -i $XPN_BINPATH"]
+            ./xpn/build-me -m $XPN_MPICC -i $HOME/bin"]
     end
     ide21a --> ide22
     ide21b --> ide22
     ide22 --> ide23
 
-    classDef lt2 text-align:left,fill:lightblue;
+    classDef lt2 text-align:left,fill:lightblue,color:black;
     class Y1A,Y1B lt2;
     end
 
-    Y3B --> I[End]
+    Y3B --> I([End])
   ```
 
 
@@ -158,23 +159,35 @@ And the 5 special environment variables for XPN clients are:
 ### 2.1 Executing Ad-Hoc Expand (based on MPI)
 The typical executions has 3 main steps:
 1. First, launch the Expand MPI server (xpn_mpi_server):
-   ```
+   ```bash
    ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
    ```
 2. Then,  launch the program that will use Expand (XPN client).
-   
-   2.1. For an MPI program:
-   ```
+
+   2.1. Example for the *app1* MPI application:
+   ```bash
    mpiexec -np <number of processes> \
            -hostfile <full path to the hostfile> \
            -genv XPN_DNS  <nameserver file> \
            -genv XPN_CONF <XPN configuration file> \
            -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
            -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-           <program path>
+           <full path to app1>/app1
+   ```
+   2.2. Example for the *app2* program (a NON-MPI application):
+   ```bash
+   export XPN_DNS=<full path to the nameserver file>
+   export XPN_CONF=<full path to the XPN configuration file>
+   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
+   ```
+   2.3. Example for the *app3* Python program:
+   ```bash
+   export XPN_DNS=<full path to the nameserver file>
+   export XPN_CONF=<full path to the XPN configuration file>
+   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3
    ```
 4. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
-   ```
+   ```bash
    ./xpn -v -l <full path to the hostfile>  stop
    ```
 
