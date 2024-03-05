@@ -223,7 +223,7 @@ int xpn_init_partition( void )
     // Init all servers
     for(j=0;j<xpn_parttable[i].data_nserv;j++)
     {
-      XpnInitServer(&conf_data, &(xpn_parttable[i]), &(xpn_parttable[i].data_serv[j]), j);
+      res = XpnInitServer(&conf_data, &(xpn_parttable[i]), &(xpn_parttable[i].data_serv[j]), j);
       if(res<0)
       {
         xpn_parttable[i].data_serv[j].error = -1;
