@@ -269,6 +269,8 @@ int nfi_mpi_server_init ( char *url, struct nfi_server *serv, __attribute__((__u
   int ret;
   char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
   struct nfi_mpi_server_server *server_aux;
+  char hostname[HOST_NAME_MAX];
+  char *hostip;
 
   // check params...
   if (serv == NULL) {
@@ -377,6 +379,37 @@ int nfi_mpi_server_init ( char *url, struct nfi_server *serv, __attribute__((__u
     FREE_AND_NULL(server_aux);
     return -1;
   }
+  // Server conection
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] Server conection\n", serv->id);
+
+  ret = nfi_mpi_server_connect(serv, url, prt, server, dir);
+  if (ret < 0)
+  {
+    FREE_AND_NULL(serv->ops);
+    FREE_AND_NULL(server_aux);
+    return -1;
+  }
+
+  // Check locality
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] Data locality\n", serv->id);
+
+  if (server_aux->params.xpn_locality == 1)
+  {
+    hostip = ns_get_host_ip();
+    ns_get_hostname(hostname);
+    if (strstr(server, hostip) != NULL || strstr(server, hostname) != NULL)
+    {
+      XPN_DEBUG("Locality in serv_url: %s client: %s hostname: %s", server, hostip, hostname);
+
+      // free private_info, 'url' string and 'server' string...
+      FREE_AND_NULL(serv->ops);
+      void * aux_private_info = serv->private_info;
+      ret = nfi_local_init( url, serv, attr );
+      struct nfi_local_server * priv = (struct nfi_local_server *)serv->private_info;
+      priv->private_info_mpi = aux_private_info;
+      return ret;
+    }
+  }
 
   // copy 'url' string...
   serv->url = strdup(url);
@@ -392,27 +425,16 @@ int nfi_mpi_server_init ( char *url, struct nfi_server *serv, __attribute__((__u
 
   ret = nfiworker_init(serv);
 
-  // Server conection
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] Server conection\n", serv->id);
-
-  ret = nfi_mpi_server_connect(serv, url, prt, server, dir);
-  if (ret < 0)
-  {
-    FREE_AND_NULL(serv->ops);
-    FREE_AND_NULL(server_aux);
-    return -1;
-  }
-
   // Data locality
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] Data locality\n", serv->id);
+  // debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] Data locality\n", serv->id);
 
-  ret = mpi_client_comm_locality (&(server_aux->params));
-  if (ret < 0)
-  {
-    FREE_AND_NULL(serv->ops);
-    FREE_AND_NULL(server_aux);
-    return -1;
-  }
+  // ret = mpi_client_comm_locality (&(server_aux->params));
+  // if (ret < 0)
+  // {
+  //   FREE_AND_NULL(serv->ops);
+  //   FREE_AND_NULL(server_aux);
+  //   return -1;
+  // }
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] << End\n", serv->id);
 
@@ -634,65 +656,26 @@ int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, struct nfi_fhandl
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] nfi_mpi_server_open(%s)\n", serv->id, dir);
 
-  /************** LOCAL *****************/
-  if (server_aux->params.locality)
+  // if (server_aux->params.xpn_session) {
+  //   msg.type = MPI_SERVER_OPEN_FILE_WS;
+  // }
+  // else {
+    msg.type = MPI_SERVER_OPEN_FILE_WOS;
+  // }
+
+  //memccpy(msg.id,                               server_aux->id, 0, MPI_SERVER_ID-1);
+  memccpy(msg.u_st_mpi_server_msg.op_open.path, dir,            0, PATH_MAX-1);
+
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int));
+  if (fh_aux->fd < 0)
   {
-    char path [PATH_MAX];
-
-    strcpy(path, server_aux->params.dirbase);
-    strcat(path, "/");
-    strcat(path, dir);
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] real_posix_open2(%s)\n", serv->id, path);
-
-    fh_aux->fd = real_posix_open2(path, O_RDWR, S_IRWXU);
-    if (fh_aux->fd < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] ERROR: real_posix_open2 fails to open '%s' in server %s.\n", serv->id, path, serv->server);
-      FREE_AND_NULL(fh_aux);
-      FREE_AND_NULL(fho->url);
-      return -1;
-    }
-
-    if (server_aux->params.xpn_session == 0) {
-      real_posix_close(fh_aux->fd);
-    }
-
-    strcpy(fh_aux->path, dir);
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] real_posix_open2(%s)=%d\n", serv->id, path, fh_aux->fd);
+    debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] ERROR: remote open fails to open '%s' in server %s.\n", serv->id, dir, serv->server);
+    FREE_AND_NULL(fh_aux);
+    FREE_AND_NULL(fho->url);
+    return -1;
   }
-  /************** REMOTE ****************/
-  else
-  {
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] xpn_open(%s)\n", serv->id, dir);
-
-    if (server_aux->params.xpn_session) {
-      msg.type = MPI_SERVER_OPEN_FILE_WS;
-    }
-    else {
-      msg.type = MPI_SERVER_OPEN_FILE_WOS;
-    }
-
-    //memccpy(msg.id,                               server_aux->id, 0, MPI_SERVER_ID-1);
-    memccpy(msg.u_st_mpi_server_msg.op_open.path, dir,            0, PATH_MAX-1);
-
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int));
-    if (fh_aux->fd < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] ERROR: remote open fails to open '%s' in server %s.\n", serv->id, dir, serv->server);
-      FREE_AND_NULL(fh_aux);
-      FREE_AND_NULL(fho->url);
-      return -1;
-    }
-
-    memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] xpn_open(%s)=%d\n", serv->id, dir, fh_aux->fd);
-  }
-  /*****************************************/
+  memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] nfi_mpi_server_open(%s)=%d\n", serv->id, dir, fh_aux->fd);
 
@@ -751,83 +734,36 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr 
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] nfi_mpi_server_create(%s)\n", serv->id, dir);
 
-  /************** LOCAL *****************/
-  if (server_aux->params.locality)
+  // if (server_aux->params.xpn_session) {
+  //   msg.type = MPI_SERVER_CREAT_FILE_WS;
+  // }
+  // else {
+    msg.type = MPI_SERVER_CREAT_FILE_WOS;
+  // }
+  //memccpy(msg.id,                                server_aux->id, 0, MPI_SERVER_ID-1);
+  memccpy(msg.u_st_mpi_server_msg.op_creat.path, dir,            0, PATH_MAX-1);
+
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int));
+  //TODO
+  /*
+  if (fh_aux->fd < 0)
   {
-    char path [PATH_MAX];
-
-    strcpy(path, server_aux->params.dirbase);
-    strcat(path, "/");
-    strcat(path, dir);
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] real_posix_open2(%s)\n", serv->id, path);
-
-    fh_aux->fd = real_posix_open2(path, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode);
-    if (fh_aux->fd < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] ERROR: real_posix_open2 fails to open '%s' in server %s.\n", serv->id, path, serv->server);
-      FREE_AND_NULL(fh_aux);
-      return -1;
-    }
-
-    //Get stat
-    ret = real_posix_stat(path, &(req.attr));
-    if (ret < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, path, serv->server);
-      FREE_AND_NULL(fh_aux);
-      return ret;
-    }
-
-    if (server_aux->params.xpn_session == 0) {
-      real_posix_close(fh_aux->fd);
-    }
-
-    strcpy(fh_aux->path, dir);
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] real_posix_open2(%s)=%d\n", serv->id, path, fh_aux->fd);
+    debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] ERROR: remote open fails to creat '%s' in server %s.\n", serv->id, dir, serv->server);
+    FREE_AND_NULL(fh_aux);
+    FREE_AND_NULL(fho->url);
+    return -1;
   }
-  /************** REMOTE ****************/
-  else
-  {
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
+  */
 
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] xpn_creat(%s)\n", serv->id, dir);
+  memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
 
-    if (server_aux->params.xpn_session) {
-      msg.type = MPI_SERVER_CREAT_FILE_WS;
-    }
-    else {
-      msg.type = MPI_SERVER_CREAT_FILE_WOS;
-    }
-    //memccpy(msg.id,                                server_aux->id, 0, MPI_SERVER_ID-1);
-    memccpy(msg.u_st_mpi_server_msg.op_creat.path, dir,            0, PATH_MAX-1);
+  // Get stat
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
+  msg.type = MPI_SERVER_GETATTR_FILE;
+  //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
+  memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
 
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int));
-    //TODO
-    /*
-    if (fh_aux->fd < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] ERROR: remote open fails to creat '%s' in server %s.\n", serv->id, dir, serv->server);
-      FREE_AND_NULL(fh_aux);
-      FREE_AND_NULL(fho->url);
-      return -1;
-    }
-    */
-
-    memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
-
-    // Get stat
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-    msg.type = MPI_SERVER_GETATTR_FILE;
-    //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
-    memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
-
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] xpn_creat(%s)=%d\n", serv->id, dir, fh_aux->fd);
-  }
-  /*****************************************/
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] nfi_mpi_server_create(%s)=%d\n", serv->id, url, fh_aux->fd);
 
@@ -881,134 +817,75 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] nfi_mpi_server_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
 
-  /************** LOCAL *****************/
-  if(server_aux->params.locality)
+  //Debug
+  // if (server_aux->params.xpn_session){
+  //   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
+  // }
+  // else {
+  //   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
+  // }
+
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
+
+  // if (server_aux->params.xpn_session)
+  // {
+  //   msg.type = MPI_SERVER_READ_FILE_WS;
+  //   msg.u_st_mpi_server_msg.op_read.fd = fh_aux->fd;
+  // }
+  // else
+  // {
+    msg.type = MPI_SERVER_READ_FILE_WOS;
+    memccpy(msg.u_st_mpi_server_msg.op_read.path, fh_aux->path, 0, PATH_MAX);
+  // }
+  //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
+  msg.u_st_mpi_server_msg.op_read.offset   = offset;
+  msg.u_st_mpi_server_msg.op_read.size     = size;
+
+  //ret = mpi_server_write_operation(server_aux->sd, &msg);
+  ret = mpi_server_write_operation(server_aux->params.server, &msg);
+  if (ret < 0)
   {
-    if (server_aux->params.xpn_session)
-    {
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] real_posix_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
-
-      real_posix_lseek(fh_aux->fd, offset, SEEK_SET); //TODO: check error
-
-      //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-      ret = real_posix_read(fh_aux->fd, buffer, size);
-      //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-      if (ret < 0)
-      {
-        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: real_posix_read reads zero bytes from '%d' in server %d\n", serv->id, fh_aux->fd, serv->server);
-        return -1;
-      }
-
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] real_posix_read(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
-    }
-    else
-    {
-      int fd;
-      char path [PATH_MAX];
-
-      strcpy(path, server_aux->params.dirbase);
-      strcat(path, "/");
-      strcat(path, fh_aux->path);
-
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] real_posix_read(%s, %ld, %ld)\n", serv->id, path, offset, size);
-
-      fd = real_posix_open(path, O_RDONLY);
-      if (fd < 0)
-      {
-        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: real_posix_open fails to open '%d' in server %s.\n", serv->id, fh_aux->fd, serv->server);
-        return -1;
-      }
-
-      real_posix_lseek(fd, offset, SEEK_SET); //TODO: check error
-
-      //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-      ret = real_posix_read(fd, buffer, size);
-      //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-
-      real_posix_close(fd);
-
-      if (ret < 0)
-      {
-        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: real_posix_read reads zero bytes from '%d' in server %d\n", serv->id, fh_aux->fd, serv->server);        return -1;
-      }
-
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] real_posix_read(%s, %ld, %ld)=%d\n", serv->id, path, offset, size, ret);
-    }
+    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_server_write_operation fails\n", serv->id);
+    return -1;
   }
-  /************** REMOTE ****************/
-  else
+
+  // read n times: number of bytes + read data (n bytes)
+  cont = 0;
+  do
   {
-    //Debug
-    if (server_aux->params.xpn_session){
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
-    }
-    else {
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
-    }
-
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-    if (server_aux->params.xpn_session)
-    {
-      msg.type = MPI_SERVER_READ_FILE_WS;
-      msg.u_st_mpi_server_msg.op_read.fd = fh_aux->fd;
-    }
-    else
-    {
-      msg.type = MPI_SERVER_READ_FILE_WOS;
-      memccpy(msg.u_st_mpi_server_msg.op_read.path, fh_aux->path, 0, PATH_MAX);
-    }
-    //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
-    msg.u_st_mpi_server_msg.op_read.offset   = offset;
-    msg.u_st_mpi_server_msg.op_read.size     = size;
-
-    //ret = mpi_server_write_operation(server_aux->sd, &msg);
-    ret = mpi_server_write_operation(server_aux->params.server, &msg);
+    ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_read_req));
     if (ret < 0)
     {
-      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_server_write_operation fails\n", serv->id);
+      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_client_read_data fails\n", serv->id);
       return -1;
     }
+    
+    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] mpi_client_read_data=%d.\n",serv->id, ret);
 
-    // read n times: number of bytes + read data (n bytes)
-    cont = 0;
-    do
+    if (req.size > 0)
     {
-      ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_read_req));
-      if (ret < 0)
-      {
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] mpi_client_read_data(%ld)\n",serv->id, req.size);
+
+      ret = mpi_client_read_data(server_aux->params.server, (char *)buffer+cont, req.size);
+      if (ret < 0) {
         printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_client_read_data fails\n", serv->id);
-        return -1;
       }
-      
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] mpi_client_read_data=%d.\n",serv->id, ret);
 
-      if (req.size > 0)
-      {
-        debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] mpi_client_read_data(%ld)\n",serv->id, req.size);
-
-        ret = mpi_client_read_data(server_aux->params.server, (char *)buffer+cont, req.size);
-        if (ret < 0) {
-          printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_client_read_data fails\n", serv->id);
-        }
-
-        debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] mpi_client_read_data(%ld)=%d\n",serv->id, req.size, ret);
-      }
-      cont = cont + req.size;
-      diff = msg.u_st_mpi_server_msg.op_read.size - cont;
-
-    } while ((diff > 0) && (req.size != 0));
-
-    if (req.size < 0)
-    {
-      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: nfi_mpi_server_read reads zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
-      mpi_server_err(MPI_SERVER_ERR_READ);
-      return -1;
+      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] mpi_client_read_data(%ld)=%d\n",serv->id, req.size, ret);
     }
+    cont = cont + req.size;
+    diff = msg.u_st_mpi_server_msg.op_read.size - cont;
 
-    ret = cont;
+  } while ((diff > 0) && (req.size != 0));
+
+  if (req.size < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: nfi_mpi_server_read reads zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
+    mpi_server_err(MPI_SERVER_ERR_READ);
+    return -1;
   }
-  /*****************************************/
+
+  ret = cont;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] nfi_mpi_server_read(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] >> End\n", serv->id);
@@ -1051,150 +928,90 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] nfi_mpi_server_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
 
-  /************** LOCAL *****************/
-  if (server_aux->params.locality)
+  // //Debug
+  // if (server_aux->params.xpn_session){
+  //   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
+  // }
+  // else {
+    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
+  // }
+
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
+
+  // if (server_aux->params.xpn_session)
+  // {
+  //   msg.type = MPI_SERVER_WRITE_FILE_WS;
+  //   msg.u_st_mpi_server_msg.op_write.fd     = fh_aux->fd;
+  // }
+  // else
+  // {
+    msg.type = MPI_SERVER_WRITE_FILE_WOS;
+    memccpy(msg.u_st_mpi_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX-1);
+  // }
+  //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
+  msg.u_st_mpi_server_msg.op_write.offset = offset;
+  msg.u_st_mpi_server_msg.op_write.size   = size;
+
+  ret = mpi_server_write_operation(server_aux->params.server, &msg);
+  if(ret < 0)
   {
-    if (server_aux->params.xpn_session)
+    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_server_write_operation fails\n", serv->id);
+    return -1;
+  }
+
+  diff = size;
+  cont = 0;
+
+  int buffer_size = size;
+
+  // Max buffer size
+  if (buffer_size > MAX_BUFFER_SIZE)
+  {
+    buffer_size = MAX_BUFFER_SIZE;
+  }
+
+  // writes n times: number of bytes + write data (n bytes)
+  do
+  {
+    if (diff > buffer_size)
     {
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
-
-      real_posix_lseek(fh_aux->fd, offset, SEEK_SET); //TODO: check error
-
-      //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-      ret = real_posix_write(fh_aux->fd, buffer, size);
-      //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-      if (ret < 0)
-      {
-        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: real_posix_write writes zero bytes from '%d' in server %d\n", serv->id, fh_aux->fd, serv->server);
-        return -1;
+      ret = mpi_client_write_data(server_aux->params.server, (char *)buffer + cont, buffer_size);
+      if (ret < 0) {
+        printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_write_data fails\n", serv->id);
       }
-
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_write(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
     }
     else
     {
-      int fd;
-      char path [PATH_MAX];
-
-      strcpy(path, server_aux->params.dirbase);
-      strcat(path, "/");
-      strcat(path, fh_aux->path);
-
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_write(%s, %ld, %ld)\n", serv->id, path, offset, size);
-
-      fd = real_posix_open(path, O_WRONLY); // WOS
-      if (fd < 0)
-      {
-        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: real_posix_open fails to open '%d' in server %s.\n", serv->id, fh_aux->fd, serv->server);
-        return -1;
+      ret = mpi_client_write_data(server_aux->params.server, (char *)buffer + cont, diff);
+      if (ret < 0) {
+        printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_write_data fails\n", serv->id);
       }
-
-      real_posix_lseek(fd, offset, SEEK_SET); //TODO: check error
-
-      //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-      ret = real_posix_write(fd, buffer, size);
-      //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
-
-      real_posix_close(fd); // WOS
-
-      if (ret < 0)
-      {
-        debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: real_posix_write writes zero bytes from '%d' in server %d\n", serv->id, fh_aux->fd, serv->server);        return -1;
-        return -1;
-      }
-
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] real_posix_read(%s, %ld, %ld)=%d\n", serv->id, path, offset, size, ret);
     }
-  }
-  /************** REMOTE ****************/
-  else
+
+    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] mpi_client_write_data=%d.\n",serv->id, ret);
+
+    cont = cont + ret; //Send bytes
+    diff = size - cont;
+
+  } while ((diff > 0) && (ret != 0));
+
+  ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_write_req));
+  if (ret < 0) 
   {
-    //Debug
-    if (server_aux->params.xpn_session){
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
-    }
-    else {
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
-    }
-
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-    if (server_aux->params.xpn_session)
-    {
-      msg.type = MPI_SERVER_WRITE_FILE_WS;
-      msg.u_st_mpi_server_msg.op_write.fd     = fh_aux->fd;
-    }
-    else
-    {
-      msg.type = MPI_SERVER_WRITE_FILE_WOS;
-      memccpy(msg.u_st_mpi_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX-1);
-    }
-    //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
-    msg.u_st_mpi_server_msg.op_write.offset = offset;
-    msg.u_st_mpi_server_msg.op_write.size   = size;
-
-    ret = mpi_server_write_operation(server_aux->params.server, &msg);
-    if(ret < 0)
-    {
-      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_server_write_operation fails\n", serv->id);
-      return -1;
-    }
-
-    diff = size;
-    cont = 0;
-
-    int buffer_size = size;
-
-    // Max buffer size
-    if (buffer_size > MAX_BUFFER_SIZE)
-    {
-      buffer_size = MAX_BUFFER_SIZE;
-    }
-
-    // writes n times: number of bytes + write data (n bytes)
-    do
-    {
-      if (diff > buffer_size)
-      {
-        ret = mpi_client_write_data(server_aux->params.server, (char *)buffer + cont, buffer_size);
-        if (ret < 0) {
-          printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_write_data fails\n", serv->id);
-        }
-      }
-      else
-      {
-        ret = mpi_client_write_data(server_aux->params.server, (char *)buffer + cont, diff);
-        if (ret < 0) {
-          printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_write_data fails\n", serv->id);
-        }
-      }
-
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] mpi_client_write_data=%d.\n",serv->id, ret);
-
-      cont = cont + ret; //Send bytes
-      diff = size - cont;
-
-    } while ((diff > 0) && (ret != 0));
-
-    ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_write_req));
-    if (ret < 0) 
-    {
-      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_read_data fails\n", serv->id);
-      return -1;
-    }
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] mpi_client_read_data=%d.\n",serv->id, ret);
-
-    if (req.size < 0)
-    {
-      printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: nfi_mpi_server_write writes zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
-      mpi_server_err(MPI_SERVER_ERR_WRITE);
-      return -1;
-    }
-
-    ret = cont;
+    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_read_data fails\n", serv->id);
+    return -1;
   }
-  /*****************************************/
+
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] mpi_client_read_data=%d.\n",serv->id, ret);
+
+  if (req.size < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: nfi_mpi_server_write writes zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
+    mpi_server_err(MPI_SERVER_ERR_WRITE);
+    return -1;
+  }
+
+  ret = cont;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] nfi_mpi_server_write(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] >> End\n", serv->id);
@@ -1246,36 +1063,15 @@ int nfi_mpi_server_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] nfi_mpi_server_close(%d)\n", serv->id, fh_aux->fd);
 
-  /************** LOCAL *****************/
-  if (server_aux->params.locality)
-  {
-    if (fh_aux != NULL)
-    {
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] real_posix_close(%d)\n", serv->id, fh_aux->fd);
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
-      //if(server_aux->params.sem_server != 0) sem_wait(server_aux->params.sem_server);
-      ret = real_posix_close(fh_aux->fd);
-      //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
+  msg.type = MPI_SERVER_CLOSE_FILE_WS;
+  //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
+  msg.u_st_mpi_server_msg.op_close.fd = fh_aux->fd;
 
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] real_posix_close(%d)=%d\n", serv->id, fh_aux->fd, ret);
-    }
-  }
-  /************** REMOTE ****************/
-  else
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] xpn_close(%d)\n", serv->id, fh_aux->fd);
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
 
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-    msg.type = MPI_SERVER_CLOSE_FILE_WS;
-    //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
-    msg.u_st_mpi_server_msg.op_close.fd = fh_aux->fd;
-
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] xpn_close(%d)=%d\n", serv->id, fh_aux->fd, ret);
-  }
-  /*****************************************/
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] xpn_close(%d)=%d\n", serv->id, fh_aux->fd, ret);
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] nfi_mpi_server_close(%d)=%d\n", serv->id, fh_aux->fd, ret);
 
@@ -1328,54 +1124,25 @@ int nfi_mpi_server_remove ( struct nfi_server *serv,  char *url )
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_remove] nfi_mpi_server_remove(%s)\n", serv->id, dir);
 
-  /************** LOCAL *****************/
-  if (server_aux->params.locality)
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
+  //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
+  memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1);
+
+  if ((serv -> wrk -> arg.is_master_node) == 1)
   {
-    char path [PATH_MAX];
-
-    strcpy(path, server_aux->params.dirbase);
-    strcat(path, "/");
-    strcat(path, dir);
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_remove] real_posix_unlink(%s)\n", serv->id, path);
-
-    ret = real_posix_unlink(path);
-    if (ret < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_remove] ERROR: real_posix_unlink fails to unlink '%s' in server %s.\n", serv->id, path, serv->server);
-      return -1;
-    }
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_remove] real_posix_unlink(%s)=%d\n", serv->id, path, ret);
+    msg.type = MPI_SERVER_RM_FILE;
+    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
   }
-  /************** REMOTE ****************/
   else
   {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_remove] xpn_unlink(%s)\n", serv->id, dir);
+    msg.type = MPI_SERVER_RM_FILE_ASYNC;
 
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-    //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
-    memccpy(msg.u_st_mpi_server_msg.op_rm.path, dir, 0, PATH_MAX-1);
-
-    if ((serv -> wrk -> arg.is_master_node) == 1)
-    {
-      msg.type = MPI_SERVER_RM_FILE;
-      nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
+    // send request...
+    ret = mpi_server_write_operation(server_aux->params.server, &msg);
+    if (ret >= 0) {
+      return 0;
     }
-    else
-    {
-      msg.type = MPI_SERVER_RM_FILE_ASYNC;
-
-      // send request...
-      ret = mpi_server_write_operation(server_aux->params.server, &msg);
-      if (ret >= 0) {
-        return 0;
-      }
-    }
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_remove] xpn_unlink(%s)=%d\n", serv->id, dir, ret);
   }
-  /*****************************************/
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_remove] nfi_mpi_server_remove(%s)=%d\n", serv->id, dir, ret);
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_remove] >> End\n", serv->id);
@@ -1433,48 +1200,16 @@ int nfi_mpi_server_rename ( struct nfi_server *serv,  char *old_url, char *new_u
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rename] nfi_mpi_server_rename(%s,%s)\n", serv->id, old_path, new_path);
 
-  /************** LOCAL *****************/
-  if (server_aux->params.locality)
-  {
-    char old_name [PATH_MAX];
-    char new_name [PATH_MAX];
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
-    strcpy(old_name, server_aux->params.dirbase);
-    strcat(old_name, "/");
-    strcat(old_name, old_path);
+  msg.type = MPI_SERVER_RENAME_FILE;
+  //memccpy(msg.id,                                    server_aux->id, 0, MPI_SERVER_ID-1);
+  memccpy(msg.u_st_mpi_server_msg.op_rename.old_url, old_path,       0, PATH_MAX-1);
+  memccpy(msg.u_st_mpi_server_msg.op_rename.new_url, new_path,       0, PATH_MAX-1);
 
-    strcpy(new_name, server_aux->params.dirbase);
-    strcat(new_name, "/");
-    strcat(new_name, new_path);
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
 
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rename] real_posix_rename(%s, %s)\n", serv->id, old_name, new_name);
-
-    ret = real_posix_rename(old_name, new_name);
-    if (ret < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rename] ERROR: real_posix_rename fails to rename '%s' in server %s.\n", serv->id, old_name, serv->server);
-      return -1;
-    }
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rename] real_posix_rename(%s, %s)=%d\n", serv->id, old_name, new_name, ret);
-  }
-  /************** REMOTE ****************/
-  else
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rename] xpn_rename(%s,%s)\n", serv->id, old_path, new_path);
-
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-    msg.type = MPI_SERVER_RENAME_FILE;
-    //memccpy(msg.id,                                    server_aux->id, 0, MPI_SERVER_ID-1);
-    memccpy(msg.u_st_mpi_server_msg.op_rename.old_url, old_path,       0, PATH_MAX-1);
-    memccpy(msg.u_st_mpi_server_msg.op_rename.new_url, new_path,       0, PATH_MAX-1);
-
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rename] xpn_rename(%s, %s)=%d\n", serv->id, old_path, new_path, ret);
-  }
-  /*****************************************/
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rename] xpn_rename(%s, %s)=%d\n", serv->id, old_path, new_path, ret);
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rename] nfi_mpi_server_rename(%s,%s)=%d\n", serv->id, old_path, new_path, ret);
   debug_info("[NFI_MPI] [nfi_mpi_server_rename] >> End\n");
@@ -1526,42 +1261,13 @@ int nfi_mpi_server_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] nfi_mpi_server_getattr(%s)\n", serv->id, dir);
 
-  /************** LOCAL *****************/
-  if (server_aux->params.locality)
-  {
-    char path [PATH_MAX];
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
-    strcpy(path, server_aux->params.dirbase);
-    strcat(path, "/");
-    strcat(path, dir);
+  msg.type = MPI_SERVER_GETATTR_FILE;
+  //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
+  memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
 
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] real_posix_stat(%s)\n", serv->id, path);
-
-    req.status = real_posix_stat(path, &(req.attr));
-    if (((int) req.status) < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, path, serv->server);
-      return req.status;
-    }
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] real_posix_stat(%s)=%d\n", serv->id, path, req.status);
-  }
-  /************** REMOTE ****************/
-  else
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] xpn_stat(%s)\n", serv->id, dir);
-
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-    msg.type = MPI_SERVER_GETATTR_FILE;
-    //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
-    memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
-
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] xpn_stat(%s)=%d\n", serv->id, dir, req.status);
-  }
-  /*****************************************/
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] nfi_mpi_server_getattr(%s)=%d\n", serv->id, dir, req.status);
 
@@ -1655,67 +1361,28 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *a
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] nfi_mpi_server_mkdir(%s)\n", serv->id, dir);
 
-  /************** LOCAL *****************/
-  if(server_aux->params.locality)
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
+
+  msg.type = MPI_SERVER_MKDIR_DIR;
+  memccpy(msg.u_st_mpi_server_msg.op_mkdir.path, dir, 0, PATH_MAX-1);
+
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int));
+
+  memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
+  if ((fh_aux->fd < 0)&&(errno != EEXIST))
   {
-    char path [PATH_MAX];
-
-    strcpy(path, server_aux->params.dirbase);
-    strcat(path, "/");
-    strcat(path, dir);
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] real_posix_mkdir(%s)\n", serv->id, path);
-
-    ret = real_posix_mkdir(path, /*attr->at_mode*/ 0777);
-    if ((ret < 0) && (errno != EEXIST))
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] ERROR: real_posix_mkdir fails to mkdir '%s' in server %s.\n", serv->id, path, serv->server);
-      FREE_AND_NULL(fh_aux);
-      return -1;
-    }
-    fh_aux->fd = ret; //Cuidado
-
-    //Get stat
-    ret = real_posix_stat(path, &(req.attr));
-    if (ret < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, path, serv->server);
-      return ret;
-    }
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] real_posix_mkdir(%s)=%d\n", serv->id, path, ret);
+    debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
+    mpi_server_err(MPI_SERVER_ERR_MKDIR);
+    FREE_AND_NULL(fh_aux);
+    return -1;
   }
-  /************** SERVER ****************/
-  else
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] xpn_mkdir(%s)\n", serv->id, dir);
 
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
+  //Get stat
+  msg.type = MPI_SERVER_GETATTR_FILE;
+  //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
+  memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
 
-    msg.type = MPI_SERVER_MKDIR_DIR;
-    memccpy(msg.u_st_mpi_server_msg.op_mkdir.path, dir, 0, PATH_MAX-1);
-
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int));
-
-    memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
-    if ((fh_aux->fd < 0)&&(errno != EEXIST))
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
-      mpi_server_err(MPI_SERVER_ERR_MKDIR);
-      FREE_AND_NULL(fh_aux);
-      return -1;
-    }
-
-    //Get stat
-    msg.type = MPI_SERVER_GETATTR_FILE;
-    //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
-    memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
-
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] xpn_mkdir(%s)=%d\n", serv->id, dir, ret);
-  }
-  /*****************************************/
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] nfi_mpi_server_mkdir(%s)=%d\n", serv->id, dir, ret);
 
@@ -1786,47 +1453,16 @@ int nfi_mpi_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] nfi_mpi_server_opendir(%s)\n", serv->id, dir);
   
-  /************** LOCAL *****************/
-  if(server_aux->params.locality)
-  {
-    char path [PATH_MAX];
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
-    strcpy(path, server_aux->params.dirbase);
-    strcat(path, "/");
-    strcat(path, dir);
+  msg.type = MPI_SERVER_OPENDIR_DIR;
+  //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
+  memccpy(msg.u_st_mpi_server_msg.op_opendir.path, dir,            0, PATH_MAX-1);
 
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] real_posix_opendir(%s)\n", serv->id, path);
+  unsigned long long aux;
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(aux), sizeof(DIR*));
 
-    fh_aux->dir = real_posix_opendir(path);
-    if (fh_aux->dir == NULL)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] ERROR: real_posix_opendir fails to opendir '%s' in server %s.\n", serv->id, path, serv->server);
-      FREE_AND_NULL(fh_aux);
-      FREE_AND_NULL(fho->url);
-      return -1;
-    }
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] real_posix_opendir(%s)=%p\n", serv->id, path, fh_aux->dir);
-  }
-  /************** SERVER ****************/
-  else
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] xpn_opendir(%s)\n", serv->id, dir);
-
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-    msg.type = MPI_SERVER_OPENDIR_DIR;
-    //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
-    memccpy(msg.u_st_mpi_server_msg.op_opendir.path, dir,            0, PATH_MAX-1);
-
-    unsigned long long aux;
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(aux), sizeof(DIR*));
-
-    fh_aux->dir = (DIR *)aux;
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] xpn_opendir(%s)=%p\n", serv->id, dir, fh_aux->dir);
-  }
-  /*****************************************/
+  fh_aux->dir = (DIR *)aux;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] nfi_mpi_server_opendir(%s)=%p\n", serv->id, dir, fh_aux->dir);
 
@@ -1880,44 +1516,19 @@ int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] nfi_mpi_server_readdir(%p)\n", serv->id, fh_aux->dir);
 
-  /************** LOCAL *****************/
-  if(server_aux->params.locality)
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] real_posix_readdir(%p)\n", serv->id, fh_aux->dir);
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
-    ent = real_posix_readdir(fh_aux->dir);
-    if (ent == NULL)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] ERROR: real_posix_readdir fails to open '%p' in server %s.\n", serv->id, fh_aux->dir, serv->server);
-      return -1;
-    }
+  msg.type = MPI_SERVER_READDIR_DIR;
+  //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
+  msg.u_st_mpi_server_msg.op_readdir.dir = fh_aux->dir;
 
-    memcpy(entry, ent, sizeof(struct dirent));
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] real_posix_readdir(%p)=%p\n", serv->id, fh_aux->dir, entry);
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_mpi_server_direntry));
+  
+  if (ret_entry.end == 0) {
+    return -1;
   }
-  /************** SERVER ****************/
-  else
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] xpn_readdir(%p)\n", serv->id, fh_aux->dir);
 
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-    msg.type = MPI_SERVER_READDIR_DIR;
-    //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
-    msg.u_st_mpi_server_msg.op_readdir.dir = fh_aux->dir;
-
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_mpi_server_direntry));
-    
-    if (ret_entry.end == 0) {
-      return -1;
-    }
-
-    memcpy(entry, &(ret_entry.ret), sizeof(struct dirent));
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] xpn_readdir(%p)=%p\n", serv->id, fh_aux->dir, entry);
-  }
-  /*****************************************/
+  memcpy(entry, &(ret_entry.ret), sizeof(struct dirent));
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] nfi_mpi_server_readdir(%p)=%p\n", serv->id, fh_aux->dir, entry);
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] >> End\n", serv->id);
@@ -1958,31 +1569,13 @@ int nfi_mpi_server_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] nfi_mpi_server_closedir(%p)\n", serv->id, fh_aux->dir);
 
-    /************** LOCAL *****************/
-    if(server_aux->params.locality)
-    {
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] real_posix_closedir(%p)\n", serv->id, fh_aux->dir);
+    //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
-      real_posix_closedir(fh_aux->dir);
+    msg.type = MPI_SERVER_CLOSEDIR_DIR;
+    //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
+    msg.u_st_mpi_server_msg.op_closedir.dir = fh_aux->dir;
 
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] real_posix_closedir(%p)=%d\n", serv->id, fh_aux->dir, 0);
-    }
-    /************** SERVER ****************/
-    else
-    {
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] xpn_closedir(%p)\n", serv->id, fh_aux->dir);
-
-      //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-      msg.type = MPI_SERVER_CLOSEDIR_DIR;
-      //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
-      msg.u_st_mpi_server_msg.op_closedir.dir = fh_aux->dir;
-
-      nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
-
-      debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] xpn_closedir(%p)=%d\n", serv->id, fh_aux->dir, 0);
-    }
-    /*****************************************/
+    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
 
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] nfi_mpi_server_closedir(%p)=%d\n", serv->id, fh_aux->dir, 0);
 
@@ -2033,48 +1626,19 @@ int nfi_mpi_server_rmdir(struct nfi_server *serv,  char *url)
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] nfi_mpi_server_rmdir(%s)\n", serv->id, dir);
 
-  /************** LOCAL *****************/
-  if(server_aux->params.locality)
+  //bzero(&msg, sizeof(struct st_mpi_server_msg));
+
+  msg.type = MPI_SERVER_RMDIR_DIR;
+  memccpy(msg.u_st_mpi_server_msg.op_rmdir.path, dir, 0, PATH_MAX-1);
+
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
+
+  if (ret < 0)
   {
-    char path [PATH_MAX];
-
-    strcpy(path, server_aux->params.dirbase);
-    strcat(path, "/");
-    strcat(path, dir);
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] real_posix_rmdir(%s)\n", serv->id, path);
-
-    ret = real_posix_rmdir(path);
-    if (ret < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] ERROR: real_posix_rmdir fails to rm '%s' in server %s.\n", serv->id, path, serv->server);
-      return -1;
-    }
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] real_posix_rmdir(%s)=%d\n", serv->id, path, ret);
+    debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] ERROR: xpn_rm fails to rm '%s' in server %s.\n", serv->id, dir, serv->server);
+    mpi_server_err(MPI_SERVER_ERR_REMOVE);
+    return -1;
   }
-  /************** SERVER ****************/
-  else
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] xpn_rmdir(%s)\n", serv->id, dir);
-
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-    msg.type = MPI_SERVER_RMDIR_DIR;
-    memccpy(msg.u_st_mpi_server_msg.op_rmdir.path, dir, 0, PATH_MAX-1);
-
-    nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
-
-    if (ret < 0)
-    {
-      debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] ERROR: xpn_rm fails to rm '%s' in server %s.\n", serv->id, dir, serv->server);
-      mpi_server_err(MPI_SERVER_ERR_REMOVE);
-      return -1;
-    }
-
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] xpn_rmdir(%s)=%d\n", serv->id, dir, ret);
-  }
-  /*****************************************/
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] nfi_mpi_server_rmdir(%s)=%d\n", serv->id, dir, ret);
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_rmdir] >> End\n", serv->id);

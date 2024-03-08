@@ -405,7 +405,7 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] nfi_local_open(%s)\n", serv->id, dir);
 
-  fh_aux->fd = real_posix_open2(dir, O_RDWR, S_IRWXU);
+  fh_aux->fd = filesystem_open(dir, O_RDWR);
   if (fh_aux->fd < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] ERROR: real_posix_open2 fails to open '%s' in server %s.\n", serv->id, dir, serv->server);
@@ -413,6 +413,8 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
     FREE_AND_NULL(fho->url);
     return -1;
   }
+
+  filesystem_close(fh_aux->fd);
 
   strcpy(fh_aux->path, dir);
 
@@ -460,13 +462,15 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *att
   
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] nfi_local_create(%s)\n", serv->id, dir);
 
-  fh_aux->fd = real_posix_open2(dir, O_CREAT|O_RDWR|O_TRUNC, attr->at_mode);
+  fh_aux->fd = filesystem_creat(dir, 0770);
   if (fh_aux->fd < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] ERROR: real_posix_open2 fails to open '%s' in server %s.\n", serv->id, dir, serv->server);
     FREE_AND_NULL(fh_aux);
     return -1;
   }
+
+  filesystem_close(fh_aux->fd);
 
   // Get stat of the file
   memset(&st, 0, sizeof(struct stat));
@@ -503,6 +507,7 @@ ssize_t nfi_local_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *
 {
   ssize_t ret;
   struct nfi_local_fhandle *fh_aux;
+  char   dir[PATH_MAX];
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_read] >> Begin\n", serv->id);
 
@@ -512,14 +517,24 @@ ssize_t nfi_local_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *
   nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCAL_ERR_PARAM);
 
+  ret = ParseURL(fh->url, NULL, NULL, NULL, NULL, NULL, dir);
+  if (ret < 0)
+  {
+    debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] ERROR: incorrect url '%s'.\n", serv->id, fh->url);
+    local_err(LOCAL_ERR_URL);
+    return -1;
+  }
+
   // private_info file handle
   fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_read] nfi_local_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
 
-  real_posix_lseek(fh_aux->fd, offset, SEEK_SET); //TODO: check error
+  int fd = filesystem_open(dir, O_RDONLY);
+  filesystem_lseek(fd, offset, SEEK_SET); //TODO: check error
+  ret = filesystem_read(fd, buffer, size);
 
-  ret = real_posix_read(fh_aux->fd, buffer, size);
+  filesystem_close(fd);
   if (ret < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_read] ERROR: real_posix_read reads zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
@@ -536,6 +551,7 @@ ssize_t nfi_local_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void 
 {
   ssize_t ret;
   struct nfi_local_fhandle *fh_aux;
+  char   dir[PATH_MAX];
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_write] >> Begin\n", serv->id);
 
@@ -549,14 +565,22 @@ ssize_t nfi_local_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void 
   nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, LOCAL_ERR_PARAM);
 
+  ret = ParseURL(fh->url, NULL, NULL, NULL, NULL, NULL, dir);
+  if (ret < 0)
+  {
+    debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] ERROR: incorrect url '%s'.\n", serv->id, fh->url);
+    local_err(LOCAL_ERR_URL);
+    return -1;
+  }
   // private_info file handle
   fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
   
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_write] nfi_local_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
 
-  real_posix_lseek(fh_aux->fd, offset, SEEK_SET); //TODO: check error
-
-  ret = real_posix_write(fh_aux->fd, buffer, size);
+  int fd = filesystem_open(dir, O_WRONLY);
+  filesystem_lseek(fd, offset, SEEK_SET); //TODO: check error
+  ret = filesystem_write(fd, buffer, size);
+  filesystem_close(fd);
   if (ret < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_write] ERROR: real_posix_write writes zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
@@ -589,7 +613,7 @@ int nfi_local_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
   {
     debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] nfi_local_close(%d)\n", serv->id, fh_aux->fd);
 
-    ret = real_posix_close(fh_aux->fd);
+    // ret = real_posix_close(fh_aux->fd);
 
     debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] nfi_local_close(%d)=%d\n", serv->id, fh_aux->fd, ret);
   }
@@ -631,11 +655,15 @@ int nfi_local_remove ( struct nfi_server *serv,  char *url )
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_remove] ParseURL(%s)= %s\n", serv->id, url, dir);
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_remove] nfi_local_remove(%s)\n", serv->id, dir);
-
-  ret = real_posix_unlink(dir);
+  // printf("local %s\n", dir);
+  // system("ls -lash /tmp");
+  // char hostname[HOST_NAME_MAX];
+  // ns_get_hostname(hostname);
+  // printf("local host: %s serv: %s url: %s\n",hostname,serv->url,url);
+  ret = filesystem_unlink(dir);
   if (ret < 0)
   {
-    debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_remove] ERROR: real_posix_unlink fails to unlink '%s' in server %s.\n", serv->id, dir, serv->server);
+    printf("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_remove] ERROR: real_posix_unlink fails to unlink '%s' in server %s. %s\n", serv->id, dir, serv->server, strerror(errno));
     return -1;
   }
 
@@ -682,7 +710,8 @@ int nfi_local_rename (struct nfi_server *serv, char *old_url, char *new_url )
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_rename] nfi_local_rename(%s,%s)\n", serv->id, old_path, new_path);
 
-  ret = real_posix_rename(old_path, new_path);
+  ret = filesystem_rename(old_path, new_path);
+  // ret = real_posix_rename(old_path, new_path);
   if (ret < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_rename] ERROR: real_posix_rename fails to rename '%s' in server %s.\n", serv->id, old_path, serv->server);
@@ -727,10 +756,11 @@ int nfi_local_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_getattr] nfi_local_getattr(%s)\n", serv->id, dir);
 
-  ret = real_posix_stat(dir, &st);
+  ret = filesystem_stat(dir, &st);
+  // ret = real_posix_stat(dir, &st);
   if (ret < 0)
   {
-    debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_getattr] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, dir, serv->server);
+    debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_getattr] ERROR: real_posix_stat fails to stat '%s' in server %s. %s\n", serv->id, dir, serv->server, strerror(errno));
     return ret;
   }
 
@@ -799,8 +829,7 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr
   bzero(fh_aux, sizeof(struct nfi_local_fhandle));
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] nfi_local_mkdir(%s)\n", serv->id, dir);
-
-  ret = real_posix_mkdir(dir, /*attr->at_mode*/ 0777);
+  ret = filesystem_mkdir(dir, 0777);
   if ((ret < 0) && (errno != EEXIST))
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] ERROR: real_posix_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
@@ -808,7 +837,7 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr
     return -1;
   }
 
-  ret = real_posix_stat(dir, &st);
+  ret = filesystem_stat(dir, &st);
   if (ret < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, dir, serv->server);
@@ -872,7 +901,7 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_opendir] nfi_local_opendir(%s)\n", serv->id, dir);
 
-  fh_aux->dir = real_posix_opendir(dir);
+  fh_aux->dir = filesystem_opendir(dir);
   if (fh_aux->dir == NULL)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_opendir] ERROR: real_posix_opendir fails to opendir '%s' in server %s.\n", serv->id, dir, serv->server);
@@ -919,7 +948,7 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_readdir] nfi_local_readdir(%p)\n", serv->id, fh_aux->dir);
 
-  ent = real_posix_readdir(fh_aux->dir);
+  ent = filesystem_readdir(fh_aux->dir);
   if (ent == NULL)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_readdir] ERROR: real_posix_readdir fails to open '%p' in server %s.\n", serv->id, fh_aux->dir, serv->server);
@@ -953,7 +982,7 @@ int nfi_local_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 
     debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_closedir] nfi_local_closedir(%p)\n", serv->id, fh_aux->dir);
 
-    real_posix_closedir(fh_aux->dir);
+    filesystem_closedir(fh_aux->dir);
 
     debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_closedir] nfi_local_closedir(%p)=%d\n", serv->id, fh_aux->dir, 0);
   }
@@ -993,7 +1022,7 @@ int nfi_local_rmdir ( struct nfi_server *serv,  char *url )
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_rmdir] nfi_local_rmdir(%s)\n", serv->id, dir);
 
-  ret = real_posix_rmdir(dir);
+  ret = filesystem_rmdir(dir);
   if (ret < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_rmdir] ERROR: real_posix_rmdir fails to rm '%s' in server %s.\n", serv->id, dir, serv->server);

@@ -50,6 +50,7 @@
   struct nfi_local_server
   {
     char path[PATH_MAX];
+    void * private_info_mpi;
   };
 
   struct nfi_local_fhandle
