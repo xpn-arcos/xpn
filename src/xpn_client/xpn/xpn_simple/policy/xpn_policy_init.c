@@ -65,40 +65,50 @@ int XpnConfGetValueRept(struct conf_file_data *conf_data, char *key, char *value
     return -1;
 }
 
+int XpnConfGetServer(struct conf_file_data *conf_data, char *value, int partition, int server)
+{   
+    if (partition >= conf_data->partition_n)
+        return -1;
+    
+    char key_buf[KB];
+    int server_index = 0;
+    for (size_t i = 0; i < partition; i++)
+    {   
+        server_index += conf_data->server_n[i];
+    }
+
+    server_index += server;
+    server_index = conf_data->server_url_index[server_index];
+    sscanf(conf_data->lines[server_index], "%s = %s", key_buf, value);
+    if (strcmp(key_buf, XPN_CONF_TAG_SERVER_URL) != 0)
+    {
+        return -1;
+    }
+    return 0;
+}
+
 int XpnConfGetValue(struct conf_file_data *conf_data, char *key, char *value, int partition)
 {
     return XpnConfGetValueRept(conf_data, key, value, partition, 0);
 }
 
 int XpnConfGetNumPartitions(struct conf_file_data *conf_data)
-{
-    char value_buf[KB];
-    int partitions = 0;
-    while (partitions <= XPN_MAX_PART + 1)
-    {
-        if (XpnConfGetValue(conf_data, XPN_CONF_TAG_PARTITION_NAME, value_buf, partitions) != 0)
-            break;
-        partitions++;
-    }
-    return partitions;
+{   
+    return conf_data->partition_n;
 }
 
 int XpnConfGetNumServers(struct conf_file_data *conf_data, int partition_index)
-{
-    char value_buf[KB];
-    int num = 0;
-    while (num < 1000000)
-    {
-        if (XpnConfGetValueRept(conf_data, XPN_CONF_TAG_SERVER_URL, value_buf, partition_index, num) != 0)
-            break;
-        num++;
-    }
-    return num;
+{      
+    if (partition_index >= conf_data->partition_n)
+        return -1;
+    return conf_data->server_n[partition_index];
 }
 
 int XpnConfLoad(struct conf_file_data *conf_data)
 {
     char conf[KB];
+    char key_buf[KB];
+    char value_buf[KB];
     FILE *fd;
     int res = 0;
 
@@ -178,6 +188,68 @@ int XpnConfLoad(struct conf_file_data *conf_data)
             }
         }
     }
+    // Count partitions
+    conf_data->partition_n = 0;
+    for (size_t i = 0; i < conf_data->lines_n; i++)
+    {
+        sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
+        if (strcmp(key_buf, XPN_CONF_TAG_PARTITION) == 0)
+        {
+            conf_data->partition_n++;
+        }
+    }
+
+    // Count servers
+    conf_data->server_n = malloc(conf_data->partition_n * sizeof(size_t));
+    if (conf_data->server_n == NULL)
+    {
+        free(conf_data->data);
+        free(conf_data->lines);
+        fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
+        return -1;
+    }
+    memset(conf_data->server_n, 0, conf_data->partition_n * sizeof(size_t));
+
+    size_t current_partition = -1;
+    for (size_t i = 0; i < conf_data->lines_n; i++)
+    {
+        sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
+        if (strcmp(key_buf, XPN_CONF_TAG_PARTITION) == 0)
+        {
+            current_partition++;
+        }else if (strcmp(key_buf, XPN_CONF_TAG_SERVER_URL) == 0)
+        {
+            conf_data->server_n[current_partition]++;
+        }
+    }
+
+    //Store the server_url index
+    size_t total_servers = 0;
+    for (size_t i = 0; i < conf_data->partition_n; i++)
+    {
+        total_servers += conf_data->server_n[i];
+    }
+
+    conf_data->server_url_index = malloc(total_servers * sizeof(int));
+    if (conf_data->server_url_index == NULL)
+    {
+        free(conf_data->data);
+        free(conf_data->lines);
+        free(conf_data->server_n);
+        fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
+        return -1;
+    }
+    size_t server_url_index = 0;
+    for (size_t i = 0; i < conf_data->lines_n; i++)
+    {
+        sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
+        if (strcmp(key_buf, XPN_CONF_TAG_SERVER_URL) == 0)
+        {
+            conf_data->server_url_index[server_url_index] = i;
+            server_url_index++;
+        }
+    }
+
     return 0;
 }
 
@@ -185,6 +257,8 @@ void XpnConfFree(struct conf_file_data *conf_data)
 {
     free(conf_data->data);
     free(conf_data->lines);
+    free(conf_data->server_n);
+    free(conf_data->server_url_index);
 }
 
 
@@ -194,7 +268,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
     char prt[PROTOCOL_MAXLEN];
     char url_buf[KB];
 
-    ret = XpnConfGetValueRept(conf_data, XPN_CONF_TAG_SERVER_URL, url_buf, part->id, server_num);
+    ret = XpnConfGetServer(conf_data, url_buf, part->id, server_num);
     if (ret != 0)
         return -1;
 

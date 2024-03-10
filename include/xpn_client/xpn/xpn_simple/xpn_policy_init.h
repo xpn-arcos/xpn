@@ -52,9 +52,12 @@
 
   struct conf_file_data
   {
-    char *data;         //All the data
-    ssize_t lines_n;    //Number of lines
-    char **lines;       //The pointers to the lines
+    char *data;               //All the data
+    ssize_t lines_n;          //Number of lines
+    char **lines;             //The pointers to the lines
+    size_t partition_n;       //Number of partitions
+    size_t *server_n;         //Array of number of servers in partition
+    int *server_url_index;    //Array of index to line of server_url in lines
   };
 
   /* ... Functions / Funciones ......................................... */
