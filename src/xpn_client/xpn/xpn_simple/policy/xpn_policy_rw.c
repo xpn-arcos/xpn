@@ -488,3 +488,50 @@ ssize_t XpnWriteGetTotalBytes(ssize_t *res_v, int num_servers, struct nfi_worker
 
 	return res;
 }
+
+/**
+ * Calculates the real size in bytes of a file.
+ *
+ * @param part[in] The part of the file.
+ * @param attr[in] The response array of the servers.
+ * @param n_serv[in] The number of servers.
+ *
+ * @return Returns real size in bytes.
+ */
+ssize_t XpnGetRealFileSize(struct xpn_partition *part, struct nfi_attr *attr, int n_serv)
+{
+	int i = 0;
+	int serv_to_calc = 0;
+	size_t total = 0;
+	// Check if have incomplete blocks
+	int have_incompete_blocks = 0;
+	for(i=0;i<n_serv;i++){
+		total += attr[serv_to_calc].at_size;
+		if (attr[i].at_size != 0 &&
+		(attr[i].at_size - XPN_HEADER_SIZE) % part->block_size != 0){
+			have_incompete_blocks = 1;
+			serv_to_calc = i;
+			break;
+		}
+	}
+	if (total == 0){
+		return 0;
+	}
+	// Get serv with the last block
+	for(i=0;i<n_serv;i++){
+		if (have_incompete_blocks){
+			if (attr[i].at_size != 0 &&
+				(attr[i].at_size - XPN_HEADER_SIZE) % part->block_size != 0 && 
+				attr[i].at_size <= attr[serv_to_calc].at_size){
+					serv_to_calc = i;
+				}
+		}else{
+			if (attr[i].at_size >= attr[serv_to_calc].at_size)
+				serv_to_calc = i;
+		}
+	}
+
+	off_t offset = 0;
+	XpnGetBlockInvert(part, serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE, &offset);
+	return offset;
+}
