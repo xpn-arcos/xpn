@@ -54,6 +54,7 @@
   ssize_t XpnReadGetTotalBytes (ssize_t *res_v, int num_servers);
   ssize_t XpnWriteGetTotalBytes (ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers);
 
+  ssize_t XpnGetRealFileSize(struct xpn_partition *part, struct nfi_attr *attr, int n_serv);
  
   /* ................................................................... */
 

@@ -381,34 +381,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     return -1;
   }
 
-  int serv_to_calc = 0;
-  // Check if have incomplete blocks
-  int have_incompete_blocks = 0;
-  for(i=0;i<n;i++)
-    if (attr[i].at_size != 0 &&
-       (attr[i].at_size - XPN_HEADER_SIZE) % xpn_file_table[fd]->part->block_size != 0){
-      have_incompete_blocks = 1;
-      serv_to_calc = i;
-      break;
-    }
-
-  // Get serv with the last block
-  for(i=0;i<n;i++){
-    if (have_incompete_blocks){
-      if (attr[i].at_size != 0 &&
-         (attr[i].at_size - XPN_HEADER_SIZE) % xpn_file_table[fd]->part->block_size != 0 && 
-          attr[i].at_size <= attr[serv_to_calc].at_size){
-            serv_to_calc = i;
-          }
-    }else{
-      if (attr[i].at_size >= attr[serv_to_calc].at_size)
-        serv_to_calc = i;
-    }
-  }
-  
-  off_t offset = 0;
-  ret = XpnGetBlockInvert(xpn_file_table[fd]->part, serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE, &offset);
-  st->st_size = offset;
+  st->st_size = XpnGetRealFileSize(xpn_file_table[fd]->part, attr, n);
 
   int master_node = xpn_file_table[fd]->mdata->first_node;
 
@@ -539,34 +512,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     return -1;
   }
 
-  int serv_to_calc = 0;
-  // Check if have incomplete blocks
-  int have_incompete_blocks = 0;
-  for(i=0;i<n;i++)
-    if (attr[i].at_size != 0 &&
-       (attr[i].at_size - XPN_HEADER_SIZE) % xpn_parttable[pd].block_size != 0){
-      have_incompete_blocks = 1;
-      serv_to_calc = i;
-      break;
-    }
-
-  // Get serv with the last block
-  for(i=0;i<n;i++){
-    if (have_incompete_blocks){
-      if (attr[i].at_size != 0 &&
-         (attr[i].at_size - XPN_HEADER_SIZE) % xpn_parttable[pd].block_size != 0 && 
-          attr[i].at_size <= attr[serv_to_calc].at_size){
-            serv_to_calc = i;
-          }
-    }else{
-      if (attr[i].at_size >= attr[serv_to_calc].at_size)
-        serv_to_calc = i;
-    }
-  }
-  
-  off_t offset = 0;
-  ret = XpnGetBlockInvert(&(xpn_parttable[pd]), serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE, &offset);
-  st->st_size = offset;
+  st->st_size = XpnGetRealFileSize(&(xpn_parttable[pd]), attr, n);
 
   int master_node = hash(path, n);
 
