@@ -506,7 +506,7 @@ ssize_t XpnGetRealFileSize(struct xpn_partition *part, struct nfi_attr *attr, in
 	// Check if have incomplete blocks
 	int have_incompete_blocks = 0;
 	for(i=0;i<n_serv;i++){
-		total += attr[serv_to_calc].at_size;
+		total += attr[i].at_size;
 		if (attr[i].at_size != 0 &&
 		(attr[i].at_size - XPN_HEADER_SIZE) % part->block_size != 0){
 			have_incompete_blocks = 1;

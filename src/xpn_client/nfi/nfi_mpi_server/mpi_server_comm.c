@@ -188,7 +188,7 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
 
     if (ret < 0)
     {
-      printf("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->srv_name, params->port_name);
+      debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->srv_name, params->port_name);
       return -1;
     }
   }
@@ -200,7 +200,7 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
     ret = MPI_Lookup_name(params->srv_name, MPI_INFO_NULL, params->port_name);
     if (MPI_SUCCESS != ret)
     {
-      printf("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->port_name, params->port_name);
+      debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->port_name, params->port_name);
       return -1;
     }
   }
@@ -212,7 +212,7 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
     ret = socket_send(params->srv_name, MPI_SOCKET_ACCEPT);
     if (ret != 0)
     {
-      printf("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: socket send\n");
+      debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: socket send\n");
       return -1;
     }
   }
