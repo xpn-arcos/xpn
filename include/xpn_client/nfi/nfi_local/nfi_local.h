@@ -36,6 +36,7 @@
   #include "base/urlstr.h"
   #include "nfi/nfi.h"
   #include "nfi/nfi_local/nfi_local_err.h"
+  #include "nfi/nfi_mpi_server/nfi_mpi_server.h"
   #include "nfi_worker.h"
 
 

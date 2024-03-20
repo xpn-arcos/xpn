@@ -307,6 +307,7 @@ int nfi_local_connect ( struct nfi_server *serv, __attribute__((__unused__)) cha
 int nfi_local_disconnect ( struct nfi_server *serv )
 {
   struct nfi_local_server *server_aux;
+  struct nfi_mpi_server_server *server_mpi_aux;
 
   // check params...
   if (serv == NULL) {
@@ -324,6 +325,13 @@ int nfi_local_disconnect ( struct nfi_server *serv )
     return -1;
   }
 
+  server_mpi_aux = (struct nfi_mpi_server_server *)server_aux->private_info_mpi;
+  if (server_aux != NULL) {
+    serv->private_info = server_mpi_aux;
+    nfi_mpi_server_disconnect(serv);
+    serv->private_info = server_aux;
+  }
+
   FREE_AND_NULL(serv->private_info);
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_disconnect] << End\n", serv->id);
@@ -337,6 +345,7 @@ int nfi_local_reconnect ( struct nfi_server *serv ) //TODO
   int ret;
   char   dir[PATH_MAX];
   struct nfi_local_server *server_aux;
+  struct nfi_mpi_server_server *server_mpi_aux;
 
   // check params...
   if (serv == NULL) {
@@ -344,6 +353,18 @@ int nfi_local_reconnect ( struct nfi_server *serv ) //TODO
     return -1;
   }
 
+  server_aux = (struct nfi_local_server *) (serv->private_info);
+  if (server_aux != NULL) {
+    server_mpi_aux = (struct nfi_mpi_server_server *)server_aux->private_info_mpi;
+    if (server_aux != NULL) {
+      serv->private_info = server_mpi_aux;
+      nfi_mpi_server_reconnect(serv);
+      // Update private_info_mpi
+      server_mpi_aux = (struct nfi_mpi_server_server *)serv->private_info;
+      serv->private_info = server_aux;
+      server_aux->private_info_mpi = server_mpi_aux;
+    }
+  }
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_reconnect] >> Begin\n", serv->id);
 
   // parse url...
