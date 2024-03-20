@@ -1192,6 +1192,41 @@ off64_t lseek64 ( int fd, off64_t offset, int whence )
   return ret;
 }
 
+int stat(const char *path, struct stat *buf)
+{
+  int ret;
+
+  debug_info("[BYPASS] >> Begin stat...\n");
+  debug_info("[BYPASS]    1) Path  => %s\n", path);
+
+  // This if checks if variable path passed as argument starts with the expand prefix.
+  if (is_xpn_prefix(path))
+  {
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    // It is an XPN partition, so we redirect the syscall to expand syscall
+    debug_info("[BYPASS]\t xpn_stat %s\n",       skip_xpn_prefix(path));
+
+    ret = xpn_stat(skip_xpn_prefix(path), buf);
+
+    debug_info("[BYPASS]\t xpn_stat %s -> %d\n", skip_xpn_prefix(path), ret);
+  }
+  // Not an XPN partition. We must link with the standard library
+  else
+  {
+    debug_info("[BYPASS]\t try to dlsym_stat\n");
+
+    ret = dlsym_stat(_STAT_VER,(const char *)path, buf);
+
+    debug_info("[BYPASS]\t dlsym_stat -> %d\n", ret);
+  }
+
+  debug_info("[BYPASS] << After stat...\n");
+
+  return ret;
+}
+
 int __lxstat64 ( int ver, const char *path, struct stat64 *buf )
 {
   int ret;
@@ -1379,6 +1414,43 @@ int __xstat ( int ver, const char *path, struct stat *buf )
   }
 
   debug_info("[BYPASS] << After __xstat...\n");
+
+  return ret;
+}
+
+int fstat ( int fd, struct stat *buf )
+{
+  int ret = -1;
+
+  debug_info("[BYPASS] >> Begin fstat...\n");
+  debug_info("[BYPASS]    1) fd  => %d\n", fd);
+  debug_info("[BYPASS]    2) buf => %p\n", buf);
+
+  struct generic_fd virtual_fd = fdstable_get ( fd );
+
+  if (virtual_fd.type == FD_XPN)
+  {
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    // It is an XPN partition, so we redirect the syscall to expand syscall
+    debug_info("[BYPASS]\t xpn_fstat\n");
+
+    ret = xpn_fstat(virtual_fd.real_fd, buf);
+
+    debug_info("[BYPASS]\t xpn_fstat -> %d\n", ret);
+  }
+  // Not an XPN partition. We must link with the standard library
+  else
+  {
+    debug_info("[BYPASS]\t try to dlsym_fstat\n");
+
+    ret = dlsym_fstat(_STAT_VER, fd, buf);
+
+    debug_info("[BYPASS]\t dlsym_fstat -> %d\n", ret);
+  }
+
+  debug_info("[BYPASS] << After fstat...\n");
 
   return ret;
 }
