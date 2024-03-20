@@ -20,49 +20,50 @@
  */
 
 
-#ifndef _MPI_SERVER_CONF_H_
-#define _MPI_SERVER_CONF_H_
+#ifndef _NFI_MPI_SERVER_PARAMS_H_
+#define _NFI_MPI_SERVER_PARAMS_H_
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
+  #include <stdlib.h>
+  #include <stdio.h>
+  #include <string.h>
+  #include "mpi.h"
+  #include "mpi_server/mpi_server_conf.h"
+  //#include <semaphore.h>
 
-  
+
   /* ... Const / Const ................................................. */
-
-  /* MAX_BUFFER_SIZE */
-  #ifndef MAX_BUFFER_SIZE
-    #define MAX_BUFFER_SIZE (1*MB)
-  #endif
-
-  /* ENVIROMENT VARIABLES: DNS SERVICE */
-  #ifndef MPI_SERVER_FILE
-    #define MPI_SERVER_FILE "MPI_SERVER_FILE"
-  #endif
-
-  #ifndef MPI_SERVER_FILE_DEFAULT
-    #define MPI_SERVER_FILE_DEFAULT "/etc/xpn/mpi_server.dns"
-  #endif
-
-  #ifndef MPI_SERVER_NAME_DEFAULT
-    #define MPI_SERVER_NAME_DEFAULT "node"
-  #endif
-
-  #ifndef MPI_SERVER_DIRBASE_DEFAULT
-    #define MPI_SERVER_DIRBASE_DEFAULT  "/"
-  #endif
-
-  #ifndef MPI_SERVER_PORT_DEFAULT
-    #define MPI_SERVER_PORT_DEFAULT 9999
-  #endif
-
-  #ifndef MPI_SERVER_IOSIZE_DEFAULT
-    #define MPI_SERVER_IOSIZE_DEFAULT   (MB)
-  #endif
 
 
   /* ... Data structures / Estructuras de datos ........................ */
 
+  typedef struct
+  {
+    // client identification
+    int  size;
+    int  rank;
+
+    // client execution configuration
+    int xpn_thread;
+    int xpn_locality;
+    int locality;
+
+    // server port and comm
+    char port_name [MPI_MAX_PORT_NAME];
+    char  srv_name [MPI_MAX_PORT_NAME];
+    MPI_Comm server;
+
+    // server configuration
+    char dirbase[PATH_MAX];
+
+    //char sem_name_server [PATH_MAX];
+    //sem_t * sem_server;
+    
+    // server arguments
+    int    argc;
+    char **argv;
+  } mpi_client_param_st;
 
   /* ... Functions / Funciones ......................................... */
 

@@ -126,7 +126,6 @@ First, you need to get familiar with 4 special files and 5 special environment v
         XPN_DNS
         XPN_CONF
         XPN_THREAD
-        XPN_SESSION
         XPN_LOCALITY
 ```
 
@@ -140,7 +139,6 @@ And the 5 special environment variables for XPN clients are:
 * ```XPN_DNS```      with the full path to the nameserver file to be used (mandatory).
 * ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
-* ```XPN_SESSION```  with value 0 for without session and value 1 for with session (optional, default: 0).
 * ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
 
 

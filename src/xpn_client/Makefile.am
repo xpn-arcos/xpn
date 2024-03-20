@@ -46,7 +46,6 @@ NFI_NFS3_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
-				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_conf.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 ### END OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###

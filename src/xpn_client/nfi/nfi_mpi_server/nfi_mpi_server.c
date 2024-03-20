@@ -56,37 +56,33 @@ int mpi_server_write_operation ( MPI_Comm sd, struct st_mpi_server_msg *head )
   switch (head->type)
   {
     //File API
-    case MPI_SERVER_OPEN_FILE_WS:
-    case MPI_SERVER_OPEN_FILE_WOS:
+    case MPI_SERVER_OPEN_FILE:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] OPEN operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_open), sizeof(struct st_mpi_server_open));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_open), sizeof(struct st_mpi_server_path_flags));
       break;
-    case MPI_SERVER_CREAT_FILE_WS:
-    case MPI_SERVER_CREAT_FILE_WOS:
+    case MPI_SERVER_CREAT_FILE:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] CREAT operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_creat), sizeof(struct st_mpi_server_creat));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_creat), sizeof(struct st_mpi_server_path_flags));
       break;
-    case MPI_SERVER_READ_FILE_WS:
-    case MPI_SERVER_READ_FILE_WOS:
+    case MPI_SERVER_READ_FILE:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] READ operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_read), sizeof(struct st_mpi_server_read));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_read), sizeof(struct st_mpi_server_rw));
       break;
-    case MPI_SERVER_WRITE_FILE_WS:
-    case MPI_SERVER_WRITE_FILE_WOS:
+    case MPI_SERVER_WRITE_FILE:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] WRITE operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_write), sizeof(struct st_mpi_server_write));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_write), sizeof(struct st_mpi_server_rw));
       break;
-    case MPI_SERVER_CLOSE_FILE_WS:
+    case MPI_SERVER_CLOSE_FILE:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] CLOSE operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_close), sizeof(struct st_mpi_server_close));
+      // ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_close), sizeof(struct st_mpi_server_close));
       break;
     case MPI_SERVER_RM_FILE:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] RM operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_rm));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_path));
       break;
     case MPI_SERVER_RM_FILE_ASYNC:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] RM_ASYNC operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_rm));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_path));
       break;
     case MPI_SERVER_RENAME_FILE:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] RENAME operation\n", head->id);
@@ -94,17 +90,17 @@ int mpi_server_write_operation ( MPI_Comm sd, struct st_mpi_server_msg *head )
       break;
     case MPI_SERVER_GETATTR_FILE:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] GETATTR operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_getattr), sizeof(struct st_mpi_server_getattr));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_getattr), sizeof(struct st_mpi_server_path));
       break;
 
     //Directory API
     case MPI_SERVER_MKDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] MDKIR operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_mkdir), sizeof(struct st_mpi_server_mkdir));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_mkdir), sizeof(struct st_mpi_server_path));
       break;
     case MPI_SERVER_OPENDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] OPENDIR operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_opendir), sizeof(struct st_mpi_server_opendir));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_opendir), sizeof(struct st_mpi_server_path));
       break;
     case MPI_SERVER_READDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] READDIR operation\n", head->id);
@@ -116,11 +112,11 @@ int mpi_server_write_operation ( MPI_Comm sd, struct st_mpi_server_msg *head )
       break;
     case MPI_SERVER_RMDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] RMDIR operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_rmdir));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_path));
       break;
     case MPI_SERVER_RMDIR_DIR_ASYNC:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] RMDIR_ASYNC operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_rmdir));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_path));
       break;
 
     //Optimization API
@@ -350,15 +346,6 @@ int nfi_mpi_server_init ( char *url, struct nfi_server *serv, __attribute__((__u
   }
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] Thread mode: %d\n", serv->id, serv->xpn_thread);
-
-  // Session mode
-  server_aux->params.xpn_session = 0;
-  char * env_session = getenv("XPN_SESSION");
-  if (env_session != NULL) {
-    server_aux->params.xpn_session = atoi(env_session);
-  }
-
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_init] Sesion mode: %d\n", serv->id, server_aux->params.xpn_session);
 
   // Locality mode
   server_aux->params.xpn_locality = 1;
@@ -656,15 +643,11 @@ int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, struct nfi_fhandl
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] nfi_mpi_server_open(%s)\n", serv->id, dir);
 
-  // if (server_aux->params.xpn_session) {
-  //   msg.type = MPI_SERVER_OPEN_FILE_WS;
-  // }
-  // else {
-    msg.type = MPI_SERVER_OPEN_FILE_WOS;
-  // }
+  msg.type = MPI_SERVER_OPEN_FILE;
 
   //memccpy(msg.id,                               server_aux->id, 0, MPI_SERVER_ID-1);
   memccpy(msg.u_st_mpi_server_msg.op_open.path, dir,            0, PATH_MAX-1);
+  // msg.u_st_mpi_server_msg.op_open.flags = flags; //TODO: send flags
 
   nfi_mpi_server_do_request(server_aux, &msg, (char *)&(fh_aux->fd), sizeof(int));
   if (fh_aux->fd < 0)
@@ -734,12 +717,8 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr 
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] nfi_mpi_server_create(%s)\n", serv->id, dir);
 
-  // if (server_aux->params.xpn_session) {
-  //   msg.type = MPI_SERVER_CREAT_FILE_WS;
-  // }
-  // else {
-    msg.type = MPI_SERVER_CREAT_FILE_WOS;
-  // }
+  msg.type = MPI_SERVER_CREAT_FILE;
+
   //memccpy(msg.id,                                server_aux->id, 0, MPI_SERVER_ID-1);
   memccpy(msg.u_st_mpi_server_msg.op_creat.path, dir,            0, PATH_MAX-1);
 
@@ -792,7 +771,7 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   struct nfi_mpi_server_server *server_aux;
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
-  struct st_mpi_server_read_req req;
+  struct st_mpi_server_rw_req req;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] >> Begin\n", serv->id);
 
@@ -818,25 +797,12 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] nfi_mpi_server_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
 
   //Debug
-  // if (server_aux->params.xpn_session){
-  //   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
-  // }
-  // else {
-  //   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
-  // }
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
 
   //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-  // if (server_aux->params.xpn_session)
-  // {
-  //   msg.type = MPI_SERVER_READ_FILE_WS;
-  //   msg.u_st_mpi_server_msg.op_read.fd = fh_aux->fd;
-  // }
-  // else
-  // {
-    msg.type = MPI_SERVER_READ_FILE_WOS;
-    memccpy(msg.u_st_mpi_server_msg.op_read.path, fh_aux->path, 0, PATH_MAX);
-  // }
+  msg.type = MPI_SERVER_READ_FILE;
+  memccpy(msg.u_st_mpi_server_msg.op_read.path, fh_aux->path, 0, PATH_MAX);
+  
   //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
   msg.u_st_mpi_server_msg.op_read.offset   = offset;
   msg.u_st_mpi_server_msg.op_read.size     = size;
@@ -853,7 +819,7 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   cont = 0;
   do
   {
-    ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_read_req));
+    ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_rw_req));
     if (ret < 0)
     {
       printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_client_read_data fails\n", serv->id);
@@ -899,7 +865,7 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   struct nfi_mpi_server_server *server_aux;
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
-  struct st_mpi_server_write_req req;
+  struct st_mpi_server_rw_req req;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] >> Begin\n", serv->id);
 
@@ -928,26 +894,13 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] nfi_mpi_server_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
 
-  // //Debug
-  // if (server_aux->params.xpn_session){
-  //   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
-  // }
-  // else {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
-  // }
+  //Debug
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
 
   //bzero(&msg, sizeof(struct st_mpi_server_msg));
+  msg.type = MPI_SERVER_WRITE_FILE;
+  memccpy(msg.u_st_mpi_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX-1);
 
-  // if (server_aux->params.xpn_session)
-  // {
-  //   msg.type = MPI_SERVER_WRITE_FILE_WS;
-  //   msg.u_st_mpi_server_msg.op_write.fd     = fh_aux->fd;
-  // }
-  // else
-  // {
-    msg.type = MPI_SERVER_WRITE_FILE_WOS;
-    memccpy(msg.u_st_mpi_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX-1);
-  // }
   //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
   msg.u_st_mpi_server_msg.op_write.offset = offset;
   msg.u_st_mpi_server_msg.op_write.size   = size;
@@ -995,7 +948,7 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
   } while ((diff > 0) && (ret != 0));
 
-  ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_write_req));
+  ret = mpi_client_read_data(server_aux->params.server, (char *)&req, sizeof(struct st_mpi_server_rw_req));
   if (ret < 0) 
   {
     printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: mpi_client_read_data fails\n", serv->id);
@@ -1044,46 +997,8 @@ int nfi_mpi_server_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
     return -1;
   }
 
-  // without session -> just return ok
-  if (server_aux->params.xpn_session == 0)
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] >> End\n", serv->id);
-    return 1;
-  }
-
-  // if fh->priv_fh is NULL -> return -1
-  if (NULL == fh->priv_fh)
-  {
-    debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] >> End\n", serv->id);
-    return -1;
-  }
-
-  // private_info file handle
-  fh_aux = (struct nfi_mpi_server_fhandle *) fh->priv_fh;
-
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] nfi_mpi_server_close(%d)\n", serv->id, fh_aux->fd);
-
-  //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
-  msg.type = MPI_SERVER_CLOSE_FILE_WS;
-  //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
-  msg.u_st_mpi_server_msg.op_close.fd = fh_aux->fd;
-
-  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret), sizeof(int));
-
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] xpn_close(%d)=%d\n", serv->id, fh_aux->fd, ret);
-
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] nfi_mpi_server_close(%d)=%d\n", serv->id, fh_aux->fd, ret);
-
-  // free memory
-  FREE_AND_NULL(fh->priv_fh);
-  fh->type    = NFINULL;
-  fh->server  = NULL;
-  FREE_AND_NULL(fh->url);
-
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_close] >> End\n", serv->id);
-
-  return ret;
+  return 1;
 }
 
 int nfi_mpi_server_remove ( struct nfi_server *serv,  char *url )

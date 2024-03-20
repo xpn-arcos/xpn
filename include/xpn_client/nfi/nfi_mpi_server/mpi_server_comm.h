@@ -26,11 +26,11 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #include "mpi_server_params.h"
+  #include "nfi_mpi_server_params.h"
   #include "base/utils.h"
   #include "base/ns.h"
   #include "base/socket.h"
-  #include "mpi_server_ops.h"
+  #include "mpi_server/mpi_server_ops.h"
 
 
   /* ... Const / Const ................................................. */

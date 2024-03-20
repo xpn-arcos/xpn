@@ -40,19 +40,19 @@ char * mpi_server_op2string ( int op_code )
   switch (op_code)
   {
     // File operations
-    case MPI_SERVER_OPEN_FILE_WS:
+    case MPI_SERVER_OPEN_FILE:
       ret = "OPEN";
       break;
-    case MPI_SERVER_CREAT_FILE_WS:
+    case MPI_SERVER_CREAT_FILE:
       ret = "CREAT";
       break;
-    case MPI_SERVER_READ_FILE_WS:
+    case MPI_SERVER_READ_FILE:
       ret = "READ";
       break;
-    case MPI_SERVER_WRITE_FILE_WS:
+    case MPI_SERVER_WRITE_FILE:
       ret = "WRITE";
       break;
-    case MPI_SERVER_CLOSE_FILE_WS:
+    case MPI_SERVER_CLOSE_FILE:
       ret = "CLOSE";
       break;
     case MPI_SERVER_RM_FILE:
@@ -69,21 +69,6 @@ char * mpi_server_op2string ( int op_code )
       break;
     case MPI_SERVER_SETATTR_FILE:
       ret = "SETATTR";
-      break;
-
-    // File operations without session
-    case MPI_SERVER_OPEN_FILE_WOS:
-      ret = "OPEN_WOS";
-      break;
-    case MPI_SERVER_CREAT_FILE_WOS:
-      ret = "CREAT_WOS";
-      break;
-    case MPI_SERVER_READ_FILE_WOS:
-      ret = "READ_WOS";
-      break;
-    case MPI_SERVER_WRITE_FILE_WOS:
-      ret = "WRITE_WOS";
-      break;
 
     // Directory operations
     case MPI_SERVER_MKDIR_DIR:
@@ -143,22 +128,16 @@ char * mpi_server_op2string ( int op_code )
 /* ... Functions / Funciones ......................................... */
 
 // File operations
-void mpi_server_op_open_ws     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
-void mpi_server_op_creat_ws    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
-void mpi_server_op_read_ws     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
-void mpi_server_op_write_ws    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
-void mpi_server_op_close_ws    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
+void mpi_server_op_open        ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
+void mpi_server_op_creat       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
+void mpi_server_op_read        ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
+void mpi_server_op_write       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
+void mpi_server_op_close       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
 void mpi_server_op_rm          ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
 void mpi_server_op_rm_async    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
 void mpi_server_op_rename      ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
 void mpi_server_op_setattr     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
 void mpi_server_op_getattr     ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
-
-// File operations without session
-void mpi_server_op_open_wos    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
-void mpi_server_op_creat_wos   ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
-void mpi_server_op_read_wos    ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
-void mpi_server_op_write_wos   ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
 
 // Directory operations
 void mpi_server_op_mkdir       ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id );
@@ -189,68 +168,44 @@ int mpi_server_do_operation ( struct st_th *th, int * the_end )
   switch (th->type_op)
   {
     //File API
-    case MPI_SERVER_OPEN_FILE_WS:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_open), sizeof(struct st_mpi_server_open), th->rank_client_id, th->tag_client_id);
+    case MPI_SERVER_OPEN_FILE:
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_open), sizeof(struct st_mpi_server_path_flags), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        mpi_server_op_open_ws(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        mpi_server_op_open(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
-    case MPI_SERVER_OPEN_FILE_WOS:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_open), sizeof(struct st_mpi_server_open), th->rank_client_id, th->tag_client_id);
+    case MPI_SERVER_CREAT_FILE:
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_creat), sizeof(struct st_mpi_server_path_flags), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        mpi_server_op_open_wos(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        mpi_server_op_creat(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
-    case MPI_SERVER_CREAT_FILE_WS:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_creat), sizeof(struct st_mpi_server_creat), th->rank_client_id, th->tag_client_id);
+    case MPI_SERVER_READ_FILE:
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_read), sizeof(struct st_mpi_server_rw), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        mpi_server_op_creat_ws(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        mpi_server_op_read(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
-    case MPI_SERVER_CREAT_FILE_WOS:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_creat), sizeof(struct st_mpi_server_creat), th->rank_client_id, th->tag_client_id);
+    case MPI_SERVER_WRITE_FILE:
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_write), sizeof(struct st_mpi_server_rw), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        mpi_server_op_creat_wos(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        mpi_server_op_write(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
-    case MPI_SERVER_READ_FILE_WS:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_read), sizeof(struct st_mpi_server_read), th->rank_client_id, th->tag_client_id);
-      if (ret != -1) {
-        mpi_server_op_read_ws(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
-      }
-      break;
-    case MPI_SERVER_READ_FILE_WOS:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_read), sizeof(struct st_mpi_server_read), th->rank_client_id, th->tag_client_id);
-      if (ret != -1) {
-        mpi_server_op_read_wos(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
-      }
-      break;
-    case MPI_SERVER_WRITE_FILE_WS:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_write), sizeof(struct st_mpi_server_write), th->rank_client_id, th->tag_client_id);
-      if (ret != -1) {
-        mpi_server_op_write_ws(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
-      }
-      break;
-    case MPI_SERVER_WRITE_FILE_WOS:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_write), sizeof(struct st_mpi_server_write), th->rank_client_id, th->tag_client_id);
-      if (ret != -1) {
-        mpi_server_op_write_wos(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
-      }
-      break;
-    case MPI_SERVER_CLOSE_FILE_WS:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_close), sizeof(struct st_mpi_server_close), th->rank_client_id, th->tag_client_id);
-      if (ret != -1) {
-        mpi_server_op_close_ws(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
-      }
+    case MPI_SERVER_CLOSE_FILE:
+      // ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_close), sizeof(struct st_mpi_server_close), th->rank_client_id, th->tag_client_id);
+      // if (ret != -1) {
+      //   mpi_server_op_close(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
+      // }
       break;
     case MPI_SERVER_RM_FILE:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_rm), th->rank_client_id, th->tag_client_id);
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         mpi_server_op_rm(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case MPI_SERVER_RM_FILE_ASYNC:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_rm), th->rank_client_id, th->tag_client_id);
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rm), sizeof(struct st_mpi_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         mpi_server_op_rm_async(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
@@ -262,7 +217,7 @@ int mpi_server_do_operation ( struct st_th *th, int * the_end )
       }
       break;
     case MPI_SERVER_GETATTR_FILE:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_getattr), sizeof(struct st_mpi_server_getattr), th->rank_client_id, th->tag_client_id);
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_getattr), sizeof(struct st_mpi_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         mpi_server_op_getattr(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
@@ -276,13 +231,13 @@ int mpi_server_do_operation ( struct st_th *th, int * the_end )
 
     //Directory API
     case MPI_SERVER_MKDIR_DIR:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_mkdir), sizeof(struct st_mpi_server_mkdir), th->rank_client_id, th->tag_client_id);
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_mkdir), sizeof(struct st_mpi_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         mpi_server_op_mkdir(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case MPI_SERVER_OPENDIR_DIR:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_opendir), sizeof(struct st_mpi_server_opendir), th->rank_client_id, th->tag_client_id);
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_opendir), sizeof(struct st_mpi_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         mpi_server_op_opendir(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
@@ -300,13 +255,13 @@ int mpi_server_do_operation ( struct st_th *th, int * the_end )
       }
       break;
     case MPI_SERVER_RMDIR_DIR:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_rmdir), th->rank_client_id, th->tag_client_id);
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         mpi_server_op_rmdir(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case MPI_SERVER_RMDIR_DIR_ASYNC:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_rmdir), th->rank_client_id, th->tag_client_id);
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_rmdir), sizeof(struct st_mpi_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         mpi_server_op_rmdir_async(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
@@ -346,7 +301,7 @@ int mpi_server_do_operation ( struct st_th *th, int * the_end )
 
 
 // File API
-void mpi_server_op_open_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id ) // WS - With Session
+void mpi_server_op_open ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
 {
   int  fd;
   char path [PATH_MAX];
@@ -354,11 +309,12 @@ void mpi_server_op_open_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_ws] ERROR: NULL arguments\n", -1);
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] ERROR: NULL arguments\n", -1);
     return;
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_ws] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] open(%s)\n", params->rank, head->u_st_mpi_server_msg.op_open.path);
 
   strcpy(path, params->dirbase);
   strcat(path, "/");
@@ -366,44 +322,18 @@ void mpi_server_op_open_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st
 
   // do open
   fd = filesystem_open(path, O_RDWR);
-
-  mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id, tag_client_id);
-
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_ws] open(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_open.path, fd);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_ws] << End\n", params->rank);
-}
-
-void mpi_server_op_open_wos ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id ) //WOS - Without Session
-{
-  int  fd;
-  char path [PATH_MAX];
-
-  // check params...
-  if (NULL == params)
-  {
-    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_wos] ERROR: NULL arguments\n", -1);
-    return;
-  }
-
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_wos] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_wos] open(%s)\n", params->rank, head->u_st_mpi_server_msg.op_open.path);
-
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_mpi_server_msg.op_open.path);
-
-  // do open
-  fd = filesystem_open(path, O_RDWR);
+  // TODO: flags
+  // fd = filesystem_open(path, head->u_st_mpi_server_msg.op_open.flags);
 
   mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id, tag_client_id);
 
   filesystem_close(fd);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_wos] open(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_open.path, fd);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open_wos] << End\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] open(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_open.path, fd);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] << End\n", params->rank);
 }
 
-void mpi_server_op_creat_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
+void mpi_server_op_creat ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
 {
   int  fd;
   char path [PATH_MAX];
@@ -411,138 +341,34 @@ void mpi_server_op_creat_ws ( mpi_server_param_st *params, MPI_Comm sd, struct s
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_ws] ERROR: NULL arguments\n", -1);
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat] ERROR: NULL arguments\n", -1);
     return;
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_ws] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_ws] creat(%s)\n", params->rank, head->u_st_mpi_server_msg.op_creat.path);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat] creat(%s)\n", params->rank, head->u_st_mpi_server_msg.op_creat.path);
 
   strcpy(path, params->dirbase);
   strcat(path, "/");
   strcat(path, head->u_st_mpi_server_msg.op_creat.path);
 
   // do creat
-  fd = filesystem_creat(path, 0770); // TODO: mpi_server_op_creat don't use 'mode' from client ?
-
-  mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id, tag_client_id);
-
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_ws] creat(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_creat.path, fd);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_ws] << End\n", params->rank);
-}
-
-void mpi_server_op_creat_wos ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
-{
-  int  fd;
-  char path [PATH_MAX];
-
-  // check params...
-  if (NULL == params)
-  {
-    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_wos] ERROR: NULL arguments\n", -1);
-    return;
-  }
-
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_wos] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_wos] creat(%s)\n", params->rank, head->u_st_mpi_server_msg.op_creat.path);
-
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_mpi_server_msg.op_creat.path);
-
-  // do creat
-  fd = filesystem_creat(path, 0770); // TODO: mpi_server_op_creat don't use 'mode' from client ?
+  fd = filesystem_creat(path, 0770);
+  // TODO: flags
+  // fd = filesystem_creat(path, head->u_st_mpi_server_msg.op_open.flags);
 
   mpi_server_comm_write_data(params, sd, (char *)&fd, sizeof(int), rank_client_id, tag_client_id);
 
   filesystem_close(fd);
 
   // show debug info
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_wos] creat(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_creat.path, fd);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat_wos] << End\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat] creat(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_creat.path, fd);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat] << End\n", params->rank);
 }
 
-void mpi_server_op_read_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
+void mpi_server_op_read ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  struct st_mpi_server_read_req req;
-  char  *buffer;
-  long  size, diff, to_read, cont;
-
-  // check params...
-  if (NULL == params)
-  {
-    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] ERROR: NULL arguments\n", -1);
-    return;
-  }
-
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] >> Begin\n",  params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] read(%d, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_read.fd, head->u_st_mpi_server_msg.op_read.offset, head->u_st_mpi_server_msg.op_read.size);
-
-  // initialize counters
-  cont = 0;
-  size = head->u_st_mpi_server_msg.op_read.size;
-  if (size > MAX_BUFFER_SIZE) {
-    size = MAX_BUFFER_SIZE;
-  }
-  diff = head->u_st_mpi_server_msg.op_read.size - cont;
-
-  // malloc a buffer of size...
-  buffer = (char *)malloc(size);
-  if (NULL == buffer)
-  {
-    req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
-    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
-    return;
-  }
-
-  // loop...
-  do
-  {
-    if (diff > size) {
-      to_read = size;
-    }
-    else{
-      to_read = diff;
-    }
-
-    // lseek and read data...
-    filesystem_lseek(head->u_st_mpi_server_msg.op_read.fd, head->u_st_mpi_server_msg.op_read.offset + cont, SEEK_SET); //TODO: check error
-    req.size = filesystem_read(head->u_st_mpi_server_msg.op_read.fd, buffer, to_read);
-    // if error then send as "how many bytes" -1
-    if (req.size < 0)
-    {
-      req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
-      mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
-
-      FREE_AND_NULL(buffer);
-      return;
-    }
-
-    // send (how many + data) to client...
-    mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_read_req), rank_client_id, tag_client_id);
-    debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] op_read: send size %ld\n", params->rank, req.size);
-
-    // send data to client...
-    if (req.size > 0)
-    {
-      mpi_server_comm_write_data(params, sd, buffer, req.size, rank_client_id, tag_client_id);
-      debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] op_read: send data\n", params->rank);
-    }
-    cont = cont + req.size; //Send bytes
-    diff = head->u_st_mpi_server_msg.op_read.size - cont;
-
-  } while ((diff > 0) && (req.size != 0));
-
-  // free buffer
-  FREE_AND_NULL(buffer);
-
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] read(%d, %ld %ld)=%ld\n", params->rank, head->u_st_mpi_server_msg.op_read.fd, head->u_st_mpi_server_msg.op_read.offset, head->u_st_mpi_server_msg.op_read.size, cont);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_ws] << End\n", params->rank);
-}
-
-void mpi_server_op_read_wos ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
-{
-  struct st_mpi_server_read_req req;
+  struct st_mpi_server_rw_req req;
   char * buffer;
   long   size, diff, to_read, cont;
   char   path [PATH_MAX];
@@ -550,12 +376,12 @@ void mpi_server_op_read_wos ( mpi_server_param_st *params, MPI_Comm sd, struct s
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] ERROR: NULL arguments\n", -1);
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read] ERROR: NULL arguments\n", -1);
     return;
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] >> Begin\n",  params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] read(%s, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_read.path, head->u_st_mpi_server_msg.op_read.offset, head->u_st_mpi_server_msg.op_read.size);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read] >> Begin\n",  params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read] read(%s, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_read.path, head->u_st_mpi_server_msg.op_read.offset, head->u_st_mpi_server_msg.op_read.size);
 
   strcpy(path, params->dirbase);
   strcat(path, "/");
@@ -574,7 +400,7 @@ void mpi_server_op_read_wos ( mpi_server_param_st *params, MPI_Comm sd, struct s
   if (fd < 0)
   {
     req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
-    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
+    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
     return;
   }
 
@@ -583,7 +409,7 @@ void mpi_server_op_read_wos ( mpi_server_param_st *params, MPI_Comm sd, struct s
   if (NULL == buffer)
   {
     req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
-    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
+    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
 
     filesystem_close(fd);
 
@@ -607,7 +433,7 @@ void mpi_server_op_read_wos ( mpi_server_param_st *params, MPI_Comm sd, struct s
     if (req.size < 0)
     {
       req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
-      mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
+      mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
 
       filesystem_close(fd);
 
@@ -615,14 +441,14 @@ void mpi_server_op_read_wos ( mpi_server_param_st *params, MPI_Comm sd, struct s
       return;
     }
     // send (how many + data) to client...
-    mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_read_req), rank_client_id, tag_client_id);
-    debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] op_read: send size %ld\n", params->rank, req.size);
+    mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
+    debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read] op_read: send size %ld\n", params->rank, req.size);
 
     // send data to client...
     if (req.size > 0)
     {
       mpi_server_comm_write_data(params, sd, buffer, req.size, rank_client_id, tag_client_id);
-      debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] op_read: send data\n", params->rank);
+      debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read] op_read: send data\n", params->rank);
     }
     cont = cont + req.size; //Send bytes
     diff = head->u_st_mpi_server_msg.op_read.size - cont;
@@ -634,80 +460,13 @@ void mpi_server_op_read_wos ( mpi_server_param_st *params, MPI_Comm sd, struct s
   // free buffer
   FREE_AND_NULL(buffer);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] read(%s, %ld %ld)=%ld\n", params->rank, head->u_st_mpi_server_msg.op_read.path, head->u_st_mpi_server_msg.op_read.offset, head->u_st_mpi_server_msg.op_read.size, cont);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read_wos] << End\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read] read(%s, %ld %ld)=%ld\n", params->rank, head->u_st_mpi_server_msg.op_read.path, head->u_st_mpi_server_msg.op_read.offset, head->u_st_mpi_server_msg.op_read.size, cont);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read] << End\n", params->rank);
 }
 
-void mpi_server_op_write_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
+void mpi_server_op_write ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  struct st_mpi_server_write_req req;
-  char *buffer;
-  int   size, diff, cont, to_write;
-
-  // check params...
-  if (NULL == params)
-  {
-    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_ws] ERROR: NULL arguments\n", -1);
-    return;
-  }
-
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_ws] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_ws] write(%d, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_write.fd, head->u_st_mpi_server_msg.op_write.offset, head->u_st_mpi_server_msg.op_write.size);
-
-  // initialize counters
-  cont = 0;
-  size = (head->u_st_mpi_server_msg.op_write.size);
-  if (size > MAX_BUFFER_SIZE) {
-    size = MAX_BUFFER_SIZE;
-  }
-  diff = head->u_st_mpi_server_msg.op_read.size - cont;
-
-  // malloc a buffer of size...
-  buffer = (char *)malloc(size);
-  if (NULL == buffer)
-  {
-    req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
-    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
-    return;
-  }
-
-  // loop...
-  do
-  {
-    if (diff > size) {
-      to_write = size;
-    }
-    else {
-      to_write = diff;
-    }
-
-    // read data from MPI and write into the file
-    mpi_server_comm_read_data(params, sd, buffer, to_write, rank_client_id, tag_client_id);
-    filesystem_lseek(head->u_st_mpi_server_msg.op_write.fd, head->u_st_mpi_server_msg.op_write.offset + cont, SEEK_SET); //TODO: check error
-    //sem_wait(&disk_sem);
-    req.size = filesystem_write(head->u_st_mpi_server_msg.op_write.fd, buffer, to_write);
-    //sem_post(&disk_sem);
-
-    // update counters
-    cont = cont + req.size; // Received bytes
-    diff = head->u_st_mpi_server_msg.op_read.size - cont;
-
-  } while ((diff > 0) && (req.size != 0));
-
-  // write to the client the status of the write operation
-  req.size = cont;
-  mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
-
-  // free buffer
-  FREE_AND_NULL(buffer);
-
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_ws] write(%d, %ld %ld)=%d\n", params->rank, head->u_st_mpi_server_msg.op_write.fd, head->u_st_mpi_server_msg.op_write.offset, head->u_st_mpi_server_msg.op_write.size, cont);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_ws] << End\n", params->rank);
-}
-
-void mpi_server_op_write_wos ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
-{
-  struct st_mpi_server_write_req req;
+  struct st_mpi_server_rw_req req;
   char * buffer;
   int    size, diff, cont, to_write;
   char   path [PATH_MAX];
@@ -715,12 +474,12 @@ void mpi_server_op_write_wos ( mpi_server_param_st *params, MPI_Comm sd, struct 
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_wos] ERROR: NULL arguments\n", -1);
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write] ERROR: NULL arguments\n", -1);
     return;
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_wos] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_wos] write(%s, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_write.path, head->u_st_mpi_server_msg.op_write.offset, head->u_st_mpi_server_msg.op_write.size);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write] write(%s, %ld %ld)\n", params->rank, head->u_st_mpi_server_msg.op_write.path, head->u_st_mpi_server_msg.op_write.offset, head->u_st_mpi_server_msg.op_write.size);
 
   strcpy(path, params->dirbase);
   strcat(path, "/");
@@ -739,7 +498,7 @@ void mpi_server_op_write_wos ( mpi_server_param_st *params, MPI_Comm sd, struct 
   if (fd < 0)
   {
     req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
-    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
+    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
     return;
   }
 
@@ -748,7 +507,7 @@ void mpi_server_op_write_wos ( mpi_server_param_st *params, MPI_Comm sd, struct 
   if (NULL == buffer)
   {
     req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
-    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
+    mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
 
     filesystem_close(fd);
 
@@ -780,36 +539,36 @@ void mpi_server_op_write_wos ( mpi_server_param_st *params, MPI_Comm sd, struct 
 
   // write to the client the status of the write operation
   req.size = cont;
-  mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_write_req), rank_client_id, tag_client_id);
+  mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
 
   filesystem_close(fd);
 
   // free buffer
   FREE_AND_NULL(buffer);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_ws] write(%s, %ld %ld)=%d\n", params->rank, head->u_st_mpi_server_msg.op_write.path, head->u_st_mpi_server_msg.op_write.offset, head->u_st_mpi_server_msg.op_write.size, cont);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write_wos] << End\n", params->rank);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write] write(%s, %ld %ld)=%d\n", params->rank, head->u_st_mpi_server_msg.op_write.path, head->u_st_mpi_server_msg.op_write.offset, head->u_st_mpi_server_msg.op_write.size, cont);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_write] << End\n", params->rank);
 }
 
-void mpi_server_op_close_ws ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
+void mpi_server_op_close ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
 {
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] ERROR: NULL arguments\n", -1);
+    printf("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close] ERROR: NULL arguments\n", -1);
     return;
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] close(%d)\n", params->rank, head->u_st_mpi_server_msg.op_close.fd);
+  // debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close] >> Begin\n", params->rank);
+  // debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close] close(%d)\n", params->rank, head->u_st_mpi_server_msg.op_close.fd);
 
-  // do close
-  int ret = filesystem_close(head->u_st_mpi_server_msg.op_close.fd);
+  // // do close
+  // int ret = filesystem_close(head->u_st_mpi_server_msg.op_close.fd);
 
-  mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id, tag_client_id);
+  // mpi_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id, tag_client_id);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] close(%d)=%d\n", params->rank, head->u_st_mpi_server_msg.op_close.fd, ret);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close_ws] << End\n", params->rank);
+  // debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close] close(%d)=%d\n", params->rank, head->u_st_mpi_server_msg.op_close.fd, ret);
+  // debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_close] << End\n", params->rank);
 }
 
 void mpi_server_op_rm ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
