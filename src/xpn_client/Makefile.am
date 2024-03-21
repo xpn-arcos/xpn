@@ -31,8 +31,7 @@ BASE_HEADER=			@top_srcdir@/include/base/base_lib.h \
 				@top_srcdir@/include/base/workers_pool.h \
 				@top_srcdir@/include/base/utils.h
 
-NFI_LOCAL_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local_err.h \
-				@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local.h
+NFI_LOCAL_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local.h
 ### BEGIN OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_HEADER BLOCK. Do not remove this line. ###
 NFI_NFS_HEADER=			@top_srcdir@/include/xpn_client/nfi/nfi_nfs/nfi_nfs_err.h \
@@ -45,8 +44,7 @@ NFI_NFS3_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfs3.h
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
-NFI_MPI_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.h \
-				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.h \
+NFI_MPI_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/mpi_client_comm.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.h
 ### END OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_SCK_SERVER_HEADER BLOCK. Do not remove this line. ###
@@ -102,7 +100,6 @@ XPN_HEADER= 		@top_srcdir@/include/xpn_client/xpn.h
 			@top_srcdir@/include/xpn_client/xpn/xpn_lib.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_cwd.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_dir.h \
-			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_err.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_file.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_init.h \
@@ -143,8 +140,7 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 
 NFI_COMMON_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/common/nfi_ops.c \
 			@top_srcdir@/src/xpn_client/nfi/common/nfi_worker.c
-NFI_LOCAL_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local.c \
-			@top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local_err.c
+NFI_LOCAL_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_local/nfi_local.c
 ### BEGIN OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_OBJECTS BLOCK. Do not remove this line. ###
 NFI_NFS_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_nfs/nfi_nfs.c \
@@ -162,8 +158,7 @@ NFI_NFS3_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_nfs3/nfi_nfs3.c \
 ### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_MPI_SERVER_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server.c \
-			@top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/mpi_server_comm.c \
-			@top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_server_err.c
+			@top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/mpi_client_comm.c
 ### END OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_SCK_SERVER_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_sck_server/nfi_sck_server.c \
@@ -210,7 +205,6 @@ endif
 ### XPN_CORE ###
 XPN_CORE_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_dir.c \
-					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_err.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_file.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_init.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_open.c \

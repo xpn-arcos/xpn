@@ -135,6 +135,7 @@ void nfi_do_operation (struct st_th th_arg)
   }
 
   wrk->arg.result = ret;
+  wrk->arg.worker_errno = errno;
 
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_do_operation] >> End\n", pthread_self());
 }

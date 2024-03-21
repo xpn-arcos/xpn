@@ -36,21 +36,21 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
 
   if(path == NULL)
   {
-    xpn_err(XPNERR_PARAM);
+    errno = EINVAL;
     return -1;
   }
 
   ret = XpnGetAbsolutePath(path, abs_path); /* esta funcion genera el path absoluto */
   if(ret<0)
   {
-    xpn_err(XPNERR_PATH_NOEXIST);
+    errno = ENOENT;
     return -1;
   }
 
   pd = XpnGetPartition(abs_path); /* return partition's id */
   if(pd<0)
   {
-    xpn_err(XPNERR_PART_NOEXIST);
+    errno = ENOENT;
     return -1;
   }
 
@@ -80,7 +80,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   /* construccion del vfh */
   if(vfh_aux == NULL)
   {
-    xpn_err(XPNERR_NOMEMORY);
+    errno = ENOMEM;
     free(servers);
     return -1;
   }
@@ -90,7 +90,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   if(vfh_aux->nfih == NULL)
   {
     free(vfh_aux);
-    xpn_err(XPNERR_NOMEMORY);
+    errno = ENOMEM;
     free(servers);
     return -1;
   }
@@ -170,7 +170,6 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   // Error checking
   if(err)
   {
-    xpn_err(XPNERR_REMOVE);
     free(servers);
     return -1;
   }
@@ -230,21 +229,21 @@ int xpn_simple_rmdir(const char *path)
 
   if(path == NULL)
   {
-    xpn_err(XPNERR_PARAM);
+    errno = EINVAL;
     return -1;
   }
 
   ret = XpnGetAbsolutePath(path, abs_path); /* esta funcion genera el path absoluto */
   if(ret<0)
   {
-    xpn_err(XPNERR_PATH_NOEXIST);
+    errno = ENOENT;
     return -1;
   }
 
   pd = XpnGetPartition(abs_path); /* return partition's id */
   if(pd<0)
   {
-    xpn_err(XPNERR_PART_NOEXIST);
+    errno = ENOENT;
     return -1;
   }
 
@@ -279,7 +278,6 @@ int xpn_simple_rmdir(const char *path)
   // Error checking
   if(err)
   {
-    xpn_err(XPNERR_REMOVE);
     free(servers);
     return -1;
   }

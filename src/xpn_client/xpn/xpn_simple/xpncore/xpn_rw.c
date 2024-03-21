@@ -108,11 +108,13 @@ ssize_t xpn_sread ( int fd, const void *buffer, size_t size, off_t offset )
   }
 
   if (xpn_file_table[fd]->mode == O_WRONLY) {
+     errno = EBADF;
      XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
      return -1;
   }
 
   if (xpn_file_table[fd]->type == XPN_DIR) {
+     errno = EISDIR;
      XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
      return -1;
   }
@@ -219,12 +221,14 @@ ssize_t xpn_swrite( int fd, const void *buffer, size_t size, off_t offset )
 
   if (xpn_file_table[fd]->mode == O_RDONLY)
   {
+     errno = EBADF;  
      XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
      return -1;
   }
 
   if (xpn_file_table[fd]->type == XPN_DIR)
   {
+     errno = EISDIR;
      XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
      return -1;
   }
@@ -366,6 +370,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   if (xpn_file_table[fd]->mode == O_WRONLY)
   {
      res = -1;
+     errno = EBADF;
      XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
      return res;
   }
@@ -373,6 +378,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   if (xpn_file_table[fd]->type == XPN_DIR)
   {
      res = -1;
+     errno = EISDIR;
      XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
      return res;
   }
@@ -575,12 +581,14 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
   if (xpn_file_table[fd]->mode == O_RDONLY)
   {
+     errno = EBADF;
      XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
      return -1;
   }
 
   if (xpn_file_table[fd]->type == XPN_DIR)
   {
+     errno = EISDIR;
      XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
      return -1;
   }

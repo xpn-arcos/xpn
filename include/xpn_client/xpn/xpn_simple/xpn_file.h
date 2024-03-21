@@ -31,7 +31,6 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "xpn.h"
-  #include "xpn_err.h"
   #include "xpn_policy_init.h"
 
 

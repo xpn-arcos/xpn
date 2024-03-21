@@ -49,7 +49,8 @@
   struct nfi_worker_args
   {
     int     operation;
-    ssize_t result;
+    ssize_t result;    
+    int worker_errno;
 
     char   url           [PATH_MAX];
     int    master_node;

@@ -22,7 +22,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "mpi_server_comm.h"
+#include "mpi_client_comm.h"
 
 
 /* ... Const / Const ................................................. */

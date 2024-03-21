@@ -29,7 +29,6 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "xpn_err.h"
   #include "xpn.h"
   #include "xpn_init.h"
 
@@ -53,10 +52,10 @@
   struct conf_file_data
   {
     char *data;               //All the data
-    ssize_t lines_n;          //Number of lines
+    int lines_n;          //Number of lines
     char **lines;             //The pointers to the lines
-    size_t partition_n;       //Number of partitions
-    size_t *server_n;         //Array of number of servers in partition
+    int partition_n;       //Number of partitions
+    int *server_n;         //Array of number of servers in partition
     int *server_url_index;    //Array of index to line of server_url in lines
   };
 

@@ -72,7 +72,7 @@ int XpnConfGetServer(struct conf_file_data *conf_data, char *value, int partitio
     
     char key_buf[KB];
     int server_index = 0;
-    for (size_t i = 0; i < partition; i++)
+    for (int i = 0; i < partition; i++)
     {   
         server_index += conf_data->server_n[i];
     }
@@ -175,7 +175,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         return -1;
     }
     conf_data->lines[0] = conf_data->data;
-    size_t line_index = 1;
+    int line_index = 1;
     for (size_t i = 1; i < file_size; i++)
     {
         if (conf_data->data[i] == '\n')
@@ -190,7 +190,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     }
     // Count partitions
     conf_data->partition_n = 0;
-    for (size_t i = 0; i < conf_data->lines_n; i++)
+    for (int i = 0; i < conf_data->lines_n; i++)
     {
         sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
         if (strcmp(key_buf, XPN_CONF_TAG_PARTITION) == 0)
@@ -200,7 +200,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     }
 
     // Count servers
-    conf_data->server_n = malloc(conf_data->partition_n * sizeof(size_t));
+    conf_data->server_n = malloc(conf_data->partition_n * sizeof(int));
     if (conf_data->server_n == NULL)
     {
         free(conf_data->data);
@@ -208,10 +208,10 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
         return -1;
     }
-    memset(conf_data->server_n, 0, conf_data->partition_n * sizeof(size_t));
+    memset(conf_data->server_n, 0, conf_data->partition_n * sizeof(int));
 
-    size_t current_partition = -1;
-    for (size_t i = 0; i < conf_data->lines_n; i++)
+    int current_partition = -1;
+    for (int i = 0; i < conf_data->lines_n; i++)
     {
         sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
         if (strcmp(key_buf, XPN_CONF_TAG_PARTITION) == 0)
@@ -224,8 +224,8 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     }
 
     //Store the server_url index
-    size_t total_servers = 0;
-    for (size_t i = 0; i < conf_data->partition_n; i++)
+    int total_servers = 0;
+    for (int i = 0; i < conf_data->partition_n; i++)
     {
         total_servers += conf_data->server_n[i];
     }
@@ -239,8 +239,8 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
         return -1;
     }
-    size_t server_url_index = 0;
-    for (size_t i = 0; i < conf_data->lines_n; i++)
+    int server_url_index = 0;
+    for (int i = 0; i < conf_data->lines_n; i++)
     {
         sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
         if (strcmp(key_buf, XPN_CONF_TAG_SERVER_URL) == 0)
@@ -277,7 +277,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
 
     ret = ParseURL(url_buf, prt, NULL, NULL, NULL, NULL, NULL);
     if (ret < 0) {
-        xpn_err(XPNERR_INVALURL);
+        errno = EINVAL;
         return -1;
     }
     
@@ -286,7 +286,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
         //printf("[XPN]nfi_local_init: %s\n",url);
         ret = nfi_local_init(url_buf, serv, NULL);
         if (ret < 0) {
-            xpn_err(XPNERR_INITSERV);
+            errno = ESRCH;
             return -1;
         }
     }
@@ -296,7 +296,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
         //printf("[XPN]nfi_nfs_init: %s\n",url);
         ret = nfi_nfs_init(url_buf, serv, NULL);
         if (ret < 0) {
-            xpn_err(XPNERR_INITSERV);
+            errno = ESRCH;
             return -1;
         }
     }
@@ -307,7 +307,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
         //printf("[XPN]nfi_nfs3_init: %s\n",url);
         ret = nfi_nfs3_init(url_buf, serv, NULL);
         if (ret < 0) {
-            xpn_err(XPNERR_INITSERV);
+            errno = ESRCH;
             return -1;
         }
     }
@@ -318,7 +318,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
         //printf("[XPN]nfi_mpi_server_init: %s\n",url);
         ret = nfi_mpi_server_init(url_buf, serv, NULL);
         if (ret < 0) {
-            xpn_err(XPNERR_INITSERV);
+            errno = ESRCH;
             return -1;
         }
     }
@@ -329,7 +329,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
         //printf("[XPN]nfi_sck_server_init: %s\n",url);
         ret = nfi_sck_server_init(url_buf, serv, NULL);
         if (ret < 0) {
-            xpn_err(XPNERR_INITSERV);
+            errno = ESRCH;
             return -1;
         }
     }
@@ -340,7 +340,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
         //printf("[XPN]nfi_tcp_server_init: %s\n",url);
         ret = nfi_tcp_server_init(url_buf, serv, NULL);
         if (ret < 0) {
-            xpn_err(XPNERR_INITSERV);
+            errno = ESRCH;
             return -1;
         }
     }
@@ -348,7 +348,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
 
     else {
         printf("[XPN] Protocol '%s' not recognized\n", prt);
-        xpn_err(XPNERR_INVALURL);
+        errno = EINVAL;
         return -1;
     }
 

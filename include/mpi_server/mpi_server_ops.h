@@ -171,6 +171,11 @@
     char status;
   };
 
+  struct st_mpi_server_status
+  {
+    int ret;
+    int server_errno;
+  };
 
   struct st_mpi_server_msg
   {
@@ -187,7 +192,7 @@
       struct st_mpi_server_path           op_getattr;
       struct st_mpi_server_setattr        op_setattr;
 
-      struct st_mpi_server_path           op_mkdir;
+      struct st_mpi_server_path_flags     op_mkdir;
       struct st_mpi_server_path           op_opendir;
       struct st_mpi_server_readdir        op_readdir;
       struct st_mpi_server_closedir       op_closedir;

@@ -20,38 +20,20 @@
  */
 
 
-#ifndef _NFI_MPI_SERVER_ERR_H_
-#define _NFI_MPI_SERVER_ERR_H_
-
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
+#ifndef _MPI_CLIENT_COMM_H_
+#define _MPI_CLIENT_COMM_H_
 
   /* ... Include / Inclusion ........................................... */
 
+  #include "all_system.h"
+  #include "nfi_mpi_server_params.h"
+  #include "base/utils.h"
+  #include "base/ns.h"
+  #include "base/socket.h"
+  #include "mpi_server/mpi_server_ops.h"
+
 
   /* ... Const / Const ................................................. */
-
-  enum nfi_mpi_server_err
-  {
-    MPI_SERVER_ERR_PARAM         = 0,
-    MPI_SERVER_ERR_MEMORY        = 1,
-    MPI_SERVER_ERR_URL           = 2,
-    MPI_SERVER_ERR_MNTCONNECTION = 3,
-    MPI_SERVER_ERR_MOUNT         = 4,
-    MPI_SERVER_ERR_NFSCONNECTION = 5,    
-    MPI_SERVER_ERR_GETATTR       = 6,
-    MPI_SERVER_ERR_LOOKUP        = 7,
-    MPI_SERVER_ERR_READ          = 8,
-    MPI_SERVER_ERR_WRITE         = 9,
-    MPI_SERVER_ERR_CREATE        = 10,
-    MPI_SERVER_ERR_REMOVE        = 11,
-    MPI_SERVER_ERR_MKDIR         = 12,
-    MPI_SERVER_ERR_READDIR       = 13,
-    MPI_SERVER_ERR_STATFS        = 14,
-    MPI_SERVER_ERR_NOTDIR        = 15,
-  };
 
 
   /* ... Data structures / Estructuras de datos ........................ */
@@ -59,13 +41,20 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  void mpi_server_err(int err);
+  int     mpi_client_comm_init       ( mpi_client_param_st *params );
+  int     mpi_client_comm_destroy    ( mpi_client_param_st *params );
+
+  int     mpi_client_comm_connect    ( mpi_client_param_st *params );
+  int     mpi_client_comm_disconnect ( mpi_client_param_st *params );
+  
+  int     mpi_client_comm_locality   ( mpi_client_param_st *params );
+
+  ssize_t mpi_client_write_operation ( MPI_Comm fd, int op );
+  ssize_t mpi_client_write_data      ( MPI_Comm fd, char *data, ssize_t size );
+  ssize_t mpi_client_read_data       ( MPI_Comm fd, char *data, ssize_t size );
 
 
   /* ................................................................... */
 
-  #ifdef  __cplusplus
-    }
-  #endif
-
 #endif
+

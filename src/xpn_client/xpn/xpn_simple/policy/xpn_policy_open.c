@@ -376,7 +376,6 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   // Error checking
   if(err)
   {
-    xpn_err(XPNERR_REMOVE);
     free(servers);
     return -1;
   }
@@ -428,7 +427,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   pd = XpnGetPartition(aux_path); // returns partition id and remove partition name from path 
   if (pd < 0)
   {
-    xpn_err(XPNERR_PART_NOEXIST);
+    errno = ENOENT;
     XPN_DEBUG_END_ARGS1(aux_path)
     return pd;
   }
@@ -455,7 +454,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   /* construccion del vfh */
   if(vfh_aux == NULL)
   {
-    xpn_err(XPNERR_NOMEMORY);
+    errno = ENOMEM;
     free(servers);
     return -1;
   }
@@ -465,7 +464,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   if(vfh_aux->nfih == NULL)
   {
     free(vfh_aux);
-    xpn_err(XPNERR_NOMEMORY);
+    errno = ENOMEM;
     free(servers);
     return -1;
   }
@@ -507,7 +506,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   // Error checking
   if(err)
   {
-    xpn_err(XPNERR_REMOVE);
     free(servers);
     return -1;
   }
