@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -76,8 +76,8 @@
   int     nfi_mpi_server_reconnect  ( struct nfi_server *server );
   int     nfi_mpi_server_disconnect ( struct nfi_server *server );
 
-  int     nfi_mpi_server_create     ( struct nfi_server *server, char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh );
-  int     nfi_mpi_server_open       ( struct nfi_server *server, char *url, struct nfi_fhandle *fho );
+  int     nfi_mpi_server_create     ( struct nfi_server *server, char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle  *fh );
+  int     nfi_mpi_server_open       ( struct nfi_server *server, char *url, int flags, mode_t mode, struct nfi_fhandle *fho );
   ssize_t nfi_mpi_server_read       ( struct nfi_server *server, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size );
   ssize_t nfi_mpi_server_write      ( struct nfi_server *server, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size );
   int     nfi_mpi_server_close      ( struct nfi_server *server, struct nfi_fhandle *fh );

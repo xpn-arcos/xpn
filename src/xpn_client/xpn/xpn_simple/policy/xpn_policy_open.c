@@ -301,7 +301,7 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
   XpnGetURLServer(servers, path, url_serv);
   if (servers->error != -1){
     // Default Value (if file, else directory)
-    res = servers->ops->nfi_open(servers, url_serv, fh_aux);
+    res = servers->ops->nfi_open(servers, url_serv, O_RDWR | O_CREAT, S_IRWXU, fh_aux);
     if (res<0) {
         res = servers->ops->nfi_opendir(servers, url_serv, fh_aux); // FIXME: When do we do nfi_closedir()?
     }

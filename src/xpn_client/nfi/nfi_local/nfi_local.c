@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -391,7 +391,7 @@ int nfi_local_reconnect ( struct nfi_server *serv ) //TODO
 }
 
 // File API
-int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho )
+int nfi_local_open ( struct nfi_server *serv, char *url, int flags, mode_t mode, struct nfi_fhandle *fho )
 {
   int ret;
   char dir[PATH_MAX];
@@ -426,7 +426,7 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] nfi_local_open(%s)\n", serv->id, dir);
 
-  fh_aux->fd = filesystem_open(dir, O_RDWR);
+  fh_aux->fd = filesystem_open2(dir, flags, mode);
   if (fh_aux->fd < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] ERROR: real_posix_open2 fails to open '%s' in server %s.\n", serv->id, dir, serv->server);
@@ -450,7 +450,7 @@ int nfi_local_open ( struct nfi_server *serv, char *url, struct nfi_fhandle *fho
   return 0;
 }
 
-int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh )
+int nfi_local_create ( struct nfi_server *serv,  char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle *fh )
 {
   int ret;
   char   dir[PATH_MAX];
@@ -483,7 +483,7 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, struct nfi_attr *att
   
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] nfi_local_create(%s)\n", serv->id, dir);
 
-  fh_aux->fd = filesystem_creat(dir, 0770);
+  fh_aux->fd = filesystem_creat(dir, mode);
   if (fh_aux->fd < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] ERROR: real_posix_open2 fails to open '%s' in server %s.\n", serv->id, dir, serv->server);

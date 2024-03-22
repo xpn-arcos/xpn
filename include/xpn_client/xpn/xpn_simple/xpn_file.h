@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -75,7 +75,8 @@
     char path[PATH_MAX];          // absolute path      
     int type;                     // indicate FILE or DIR                 
     int links;                    // number of links that this file has   
-    mode_t mode;                  // O_RDONLY, O_WRONLY,....    
+    int flags;                    // O_RDONLY, O_WRONLY,....    
+    mode_t mode;                  // S_IRUSR , S_IWUSR ,....    
     struct xpn_partition *part;   // partition                      
     struct xpn_metadata *mdata;   // metadata       
     struct xpn_attr attr;         // attributes of the open file          

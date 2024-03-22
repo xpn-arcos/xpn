@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -315,21 +315,21 @@ void mpi_server_op_open ( mpi_server_param_st *params, MPI_Comm sd, struct st_mp
   }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] open(%s)\n", params->rank, head->u_st_mpi_server_msg.op_open.path);
 
   strcpy(path, params->dirbase);
   strcat(path, "/");
   strcat(path, head->u_st_mpi_server_msg.op_open.path);
 
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] open(%s, %d, %d)\n", params->rank, path, head->u_st_mpi_server_msg.op_open.flags, head->u_st_mpi_server_msg.op_open.mode);
+
   // do open
-  status.ret = filesystem_open(path, O_RDWR);
+  status.ret = filesystem_open2(path, head->u_st_mpi_server_msg.op_open.flags, head->u_st_mpi_server_msg.op_open.mode);
   status.server_errno = errno;
   // TODO: flags
   // fd = filesystem_open(path, head->u_st_mpi_server_msg.op_open.flags);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] open(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_open.path, status.ret);
   if (status.ret < 0){
     mpi_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
-    return;
   }else{
     status.ret = filesystem_close(status.ret);
     status.server_errno = errno;
@@ -360,11 +360,11 @@ void mpi_server_op_creat ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
   strcat(path, head->u_st_mpi_server_msg.op_creat.path);
 
   // do creat
-  status.ret = filesystem_creat(path, 0770);
+  status.ret = filesystem_creat(path, head->u_st_mpi_server_msg.op_creat.mode);
   status.server_errno = errno;
   // TODO: flags
   // fd = filesystem_creat(path, head->u_st_mpi_server_msg.op_open.flags);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat] creat(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_creat.path, fd);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat] creat(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_creat.path, status.ret);
   if (status.ret < 0){
     mpi_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
     return;
@@ -632,7 +632,7 @@ void mpi_server_op_rm ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_
   status.server_errno = errno;
   mpi_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm] unlink(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_rm.path, ret);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm] unlink(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_rm.path, status.ret);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rm] << End\n", params->rank);
 }
 
@@ -688,7 +688,7 @@ void mpi_server_op_rename ( mpi_server_param_st *params, MPI_Comm sd, struct st_
   status.server_errno = errno;
   mpi_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rename] rename(%s, %s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_rename.old_url, head->u_st_mpi_server_msg.op_rename.new_url, ret);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rename] rename(%s, %s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_rename.old_url, head->u_st_mpi_server_msg.op_rename.new_url, status.ret);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rename] << End\n", params->rank);
 }
 
@@ -769,7 +769,7 @@ void mpi_server_op_mkdir ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
   status.server_errno = errno;
   mpi_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_mkdir] mkdir(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_mkdir.path, ret);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_mkdir] mkdir(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_mkdir.path, status.ret);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_mkdir] << End\n", params->rank);
 }
 
@@ -869,7 +869,7 @@ void mpi_server_op_closedir ( mpi_server_param_st *params, MPI_Comm sd, struct s
   status.server_errno = errno;
   mpi_server_comm_write_data(params, sd,(char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_closedir] closedir(%p)=%d\n", params->rank, s, ret);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_closedir] closedir(%p)=%d\n", params->rank, s, status.ret);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_closedir] << End\n", params->rank);
 }
 
@@ -897,7 +897,7 @@ void mpi_server_op_rmdir ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
   status.server_errno = errno;  
   mpi_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
 
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rmdir] rmdir(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_rmdir.path, ret);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rmdir] rmdir(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_rmdir.path, status.ret);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_rmdir] << End\n", params->rank);
 }
 

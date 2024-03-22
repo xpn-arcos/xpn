@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -596,7 +596,7 @@ int nfi_mpi_server_reconnect(struct nfi_server *serv)
 }
 
 // File API
-int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
+int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t mode, struct nfi_fhandle *fho )
 {
   int    ret;
   char   dir[PATH_MAX], server[PATH_MAX];
@@ -648,7 +648,8 @@ int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, struct nfi_fhandl
 
   //memccpy(msg.id,                               server_aux->id, 0, MPI_SERVER_ID-1);
   memccpy(msg.u_st_mpi_server_msg.op_open.path, dir,            0, PATH_MAX-1);
-  // msg.u_st_mpi_server_msg.op_open.flags = flags; //TODO: send flags
+  msg.u_st_mpi_server_msg.op_open.flags = flags;
+  msg.u_st_mpi_server_msg.op_open.mode = mode;
 
   nfi_mpi_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_mpi_server_status));
   if (status.ret < 0)
@@ -674,7 +675,7 @@ int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, struct nfi_fhandl
   return 0;
 }
 
-int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh)
+int nfi_mpi_server_create (struct nfi_server *serv,  char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle  *fh)
 {
   int    ret;
   char   server[PATH_MAX], dir[PATH_MAX];
@@ -722,7 +723,8 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, struct nfi_attr 
 
   msg.type = MPI_SERVER_CREAT_FILE;
   memccpy(msg.u_st_mpi_server_msg.op_creat.path, dir,            0, PATH_MAX-1);
-  
+  msg.u_st_mpi_server_msg.op_creat.mode = mode;
+
   nfi_mpi_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_mpi_server_status));
   if (status.ret < 0)
   {

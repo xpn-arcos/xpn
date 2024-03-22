@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -89,7 +89,8 @@
   struct st_mpi_server_path_flags
   {
     char path[PATH_MAX];
-    int flags; //TODO: use flags
+    int flags;
+    mode_t mode;
   };
 
   struct st_mpi_server_path

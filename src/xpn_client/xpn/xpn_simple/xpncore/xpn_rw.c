@@ -39,6 +39,39 @@ ssize_t xpn_simple_read ( int fd, void *buffer, size_t size )
 
   XPN_DEBUG_BEGIN_CUSTOM("%d, %zu", fd, size)
 
+  // (1) Check arguments...
+  if ( (fd<0) || (fd>XPN_MAX_FILE) || (NULL == xpn_file_table[fd]) )
+  {
+     XpnShowFileTable();
+     errno = EBADF;
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     return -1;
+  }
+
+  if (buffer == NULL)
+  {
+     errno = EFAULT;
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     return -1;
+  }
+
+  if (size == 0) {
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     return 0;
+  }
+
+  if (xpn_file_table[fd]->flags == O_WRONLY) {
+     errno = EBADF;
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     return -1;
+  }
+
+  if (xpn_file_table[fd]->type == XPN_DIR) {
+     errno = EISDIR;
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     return -1;
+  }
+
   if ((unsigned long)(size) > (unsigned long)(xpn_file_table[fd]->block_size))
   {
     res = xpn_pread(fd, buffer, size, xpn_file_table[fd]->offset);
@@ -58,6 +91,42 @@ ssize_t xpn_simple_write ( int fd, const void *buffer, size_t size )
 
   XPN_DEBUG_BEGIN_CUSTOM("%d, %zu", fd, size)
 
+  // (1) Check arguments...
+  if ( (fd<0) || (fd>XPN_MAX_FILE) )
+  {
+     XpnShowFileTable();
+     errno = EBADF;
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+
+     return -1;
+  }
+
+  if ( (xpn_file_table[fd] == NULL) || (buffer == NULL) )
+  {
+     errno = EFAULT;
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     return -1;
+  }
+
+  if (size == 0)
+  {
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     return 0;
+  }
+
+  if (xpn_file_table[fd]->flags == O_RDONLY)
+  {
+     errno = EBADF;  
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     return -1;
+  }
+
+  if (xpn_file_table[fd]->type == XPN_DIR)
+  {
+     errno = EISDIR;
+     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     return -1;
+  }
   // action
   if ((unsigned long)(size) >= (unsigned long)(xpn_file_table[fd]->block_size) || xpn_file_table[fd]->part->replication_level > 0)
   {
@@ -86,38 +155,7 @@ ssize_t xpn_sread ( int fd, const void *buffer, size_t size, off_t offset )
   count = 0 ;
   XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 
-  // (1) Check arguments...
-  if ( (fd<0) || (fd>XPN_MAX_FILE) || (NULL == xpn_file_table[fd]) )
-  {
-     XpnShowFileTable();
-     errno = EBADF;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
-
-  if (buffer == NULL)
-  {
-     errno = EFAULT;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
-
-  if (size == 0) {
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return 0;
-  }
-
-  if (xpn_file_table[fd]->mode == O_WRONLY) {
-     errno = EBADF;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
-
-  if (xpn_file_table[fd]->type == XPN_DIR) {
-     errno = EISDIR;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
+  // (1) Check arguments in xpn_simple_read
 
   // (2) Get servers...
   servers = NULL;
@@ -196,42 +234,7 @@ ssize_t xpn_swrite( int fd, const void *buffer, size_t size, off_t offset )
 
   XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 
-  // (1) Check arguments...
-  if ( (fd<0) || (fd>XPN_MAX_FILE) )
-  {
-     XpnShowFileTable();
-     errno = EBADF;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-
-     return -1;
-  }
-
-  if ( (xpn_file_table[fd] == NULL) || (buffer == NULL) )
-  {
-     errno = EFAULT;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
-
-  if (size == 0)
-  {
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return 0;
-  }
-
-  if (xpn_file_table[fd]->mode == O_RDONLY)
-  {
-     errno = EBADF;  
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
-
-  if (xpn_file_table[fd]->type == XPN_DIR)
-  {
-     errno = EISDIR;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
+  // (1) Check arguments in xpn_simple_write
 
   // (2) Get servers...
   servers = NULL;
@@ -342,46 +345,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
 
   XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 
-  // (1) check arguments
-  if ( (fd<0) || (fd>XPN_MAX_FILE) || (NULL == xpn_file_table[fd]) )
-  {
-     XpnShowFileTable();
-     errno = EBADF;
-     res = -1;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return res;
-  }
-
-  if (buffer == NULL)
-  {
-     errno = EFAULT;
-     res = -1;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return res;
-  }
-
-  if (size == 0)
-  {
-     res = 0;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return res;
-  }
-
-  if (xpn_file_table[fd]->mode == O_WRONLY)
-  {
-     res = -1;
-     errno = EBADF;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return res;
-  }
-
-  if (xpn_file_table[fd]->type == XPN_DIR)
-  {
-     res = -1;
-     errno = EISDIR;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return res;
-  }
+  // (1) check arguments in xpn_simple_read
 
   // (2) memory allocation for internal information
   servers = NULL;
@@ -556,42 +520,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
   XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
 
-  // (1) check arguments
-  if ( (fd<0) || (fd>XPN_MAX_FILE) )
-  {
-     XpnShowFileTable();
-     errno = EBADF;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-
-     return -1;
-  }
-
-  if ( (xpn_file_table[fd] == NULL) || (buffer == NULL) )
-  {
-     errno = EFAULT;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
-
-  if (size == 0)
-  {
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return 0;
-  }
-
-  if (xpn_file_table[fd]->mode == O_RDONLY)
-  {
-     errno = EBADF;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
-
-  if (xpn_file_table[fd]->type == XPN_DIR)
-  {
-     errno = EISDIR;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset)
-     return -1;
-  }
+  // (1) check arguments in xpn_simple_write
 
   // (2) memory allocation for internal information
   servers = NULL;

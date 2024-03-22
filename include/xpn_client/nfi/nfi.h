@@ -126,8 +126,8 @@
     //int   (*nfi_destroy)(struct nfi_server *serv);
     int     (*nfi_getattr)  (struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
     int     (*nfi_setattr)  (struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
-    int     (*nfi_open)     (struct nfi_server *serv, char *url, struct nfi_fhandle *fho); 
-    int     (*nfi_create)   (struct nfi_server *serv, char *url,  struct nfi_attr *attr, struct nfi_fhandle  *fh);
+    int     (*nfi_open)     (struct nfi_server *serv, char *url, int flags, mode_t mode, struct nfi_fhandle *fho); 
+    int     (*nfi_create)   (struct nfi_server *serv, char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle  *fh);
     int     (*nfi_close)    (struct nfi_server *serv, struct nfi_fhandle *fh);
     int     (*nfi_remove)   (struct nfi_server *serv, char *url);
     int     (*nfi_rename)   (struct nfi_server *serv, char *old_url, char *new_url);

@@ -1,6 +1,6 @@
   
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -69,8 +69,8 @@
   int     nfi_local_reconnect  ( struct nfi_server *server );
   int     nfi_local_disconnect ( struct nfi_server *server );
 
-  int     nfi_local_create     ( struct nfi_server *server, char *url, struct nfi_attr    *attr, struct nfi_fhandle  *fh );
-  int     nfi_local_open       ( struct nfi_server *server, char *url, struct nfi_fhandle *fho );
+  int     nfi_local_create     ( struct nfi_server *server, char *url, mode_t mode, struct nfi_attr    *attr, struct nfi_fhandle  *fh );
+  int     nfi_local_open       ( struct nfi_server *server, char *url, int flags, mode_t mode, struct nfi_fhandle *fho );
   ssize_t nfi_local_read       ( struct nfi_server *server, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size );
   ssize_t nfi_local_write      ( struct nfi_server *server, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size );
   int     nfi_local_close      ( struct nfi_server *server, struct nfi_fhandle *fh );

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -48,10 +48,10 @@ void nfi_do_operation (struct st_th th_arg)
   {
     //File API
     case op_open:
-      ret = wrk->server->ops->nfi_open(wrk->server, wrk->arg.url, wrk->arg.fh);
+      ret = wrk->server->ops->nfi_open(wrk->server, wrk->arg.url, wrk->arg.flags, wrk->arg.mode, wrk->arg.fh);
       break;
     case op_create:
-      ret = wrk->server->ops->nfi_create(wrk->server, wrk->arg.url, wrk->arg.attr, wrk->arg.fh);
+      ret = wrk->server->ops->nfi_create(wrk->server, wrk->arg.url, wrk->arg.mode, wrk->arg.attr, wrk->arg.fh);
       break;
     case op_read:
       ret = 0;
@@ -142,7 +142,7 @@ void nfi_do_operation (struct st_th th_arg)
 
 
 // File API
-int nfi_worker_do_open (struct nfi_worker * wrk, char * url, struct nfi_fhandle * fh) 
+int nfi_worker_do_open (struct nfi_worker * wrk, char * url, int flags, mode_t mode, struct nfi_fhandle * fh) 
 {
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_open] >> Begin\n", pthread_self());
 
@@ -150,6 +150,8 @@ int nfi_worker_do_open (struct nfi_worker * wrk, char * url, struct nfi_fhandle 
   wrk->arg.operation = op_open;
   wrk->arg.fh = fh;
   strcpy(wrk->arg.url, url);
+  wrk->arg.flags = flags;
+  wrk->arg.mode = mode;
 
   // Do operation
   nfiworker_launch(nfi_do_operation, wrk);
@@ -159,7 +161,7 @@ int nfi_worker_do_open (struct nfi_worker * wrk, char * url, struct nfi_fhandle 
   return 0;
 }
 
-int nfi_worker_do_create (struct nfi_worker * wrk, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) 
+int nfi_worker_do_create (struct nfi_worker * wrk, char * url, mode_t mode, struct nfi_attr * attr, struct nfi_fhandle * fh) 
 {
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_create] >> Begin\n", pthread_self());
 
@@ -168,6 +170,7 @@ int nfi_worker_do_create (struct nfi_worker * wrk, char * url, struct nfi_attr *
   wrk->arg.fh = fh;
   wrk->arg.attr = attr;
   strcpy(wrk->arg.url, url);
+  wrk->arg.mode = mode;
 
   // Do operation
   nfiworker_launch(nfi_do_operation, wrk);

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -71,8 +71,8 @@
 
   void nfi_do_operation ( struct st_th th_arg );
 
-  int nfi_worker_do_open   (struct nfi_worker *wrk, char *url, struct nfi_fhandle *fho);
-  int nfi_worker_do_create (struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh);
+  int nfi_worker_do_open   (struct nfi_worker *wrk, char *url, int flags, mode_t mode, struct nfi_fhandle *fho);
+  int nfi_worker_do_create (struct nfi_worker *wrk, char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle  *fh);
   int nfi_worker_do_read   (struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io,int n);
   int nfi_worker_do_write  (struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io,int n);
   int nfi_worker_do_close  (struct nfi_worker *wrk, struct nfi_fhandle *fh);
