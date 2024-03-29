@@ -31,17 +31,17 @@
     subgraph ide1 [1 With spack]
     subgraph ide11 [1.1 Add repo]
        direction TB
-       X1["git clone https://github.com/xpn-arcos/xpn.git </br>
+       X1["git clone https://github.com/xpn-arcos/xpn.git 
           spack repo add xpn/scripts/spack"]
     end
     subgraph ide12 [1.2 Install software]
        direction TB
-       X2["`spack **info** xpn &nbsp;&nbsp;</br>
-         spack **install** xpn`"]
+       X2["spack <b>info</b> xpn
+          spack <b>install</b> xpn"]
     end
     subgraph ide13 [1.3 Load software]
        direction TB
-       X3["`spack **load** xpn`"]
+       X3["spack <b>load</b> xpn"]
     end
     classDef lt text-align:left,fill:lightgreen,color:black; 
     class X1,X2,X3 lt;
@@ -63,15 +63,15 @@
     end
     subgraph ide22 [2.2 Download source code]
        direction TB
-       Y2B["mkdir $HOME/src </br>
-            cd    $HOME/src </br>
-            git clone https://github.com/michaelrsweet/mxml.git<br>
+       Y2B["mkdir $HOME/src 
+            cd    $HOME/src 
+            git clone https://github.com/michaelrsweet/mxml.git
             git clone https://github.com/xpn-arcos/xpn.git"]
     end
     subgraph ide23 ["2.3 build source code"]
        direction LR
-       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' <br>
-            cd $HOME/src <br>
+       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' 
+            cd $HOME/src 
             ./xpn/build-me -m $XPN_MPICC -i $HOME/bin"]
     end
     ide21a --> ide22
@@ -80,6 +80,8 @@
 
     classDef lt2 text-align:left,fill:lightblue,color:black;
     class Y1A,Y1B lt2;
+    classDef lt3 text-align:left;
+    class Y2B,Y3B lt3;
     end
 
     Y3B --> I([End])
@@ -152,7 +154,7 @@ And the 5 special environment variables for XPN clients are:
 * ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
 * ```XPN_SESSION```  with value 0 for without session and value 1 for with session (optional, default: 0).
-* ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
+* ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 1).
 </details>
 
 
