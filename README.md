@@ -80,6 +80,8 @@
 
     classDef lt2 text-align:left,fill:lightblue,color:black;
     class Y1A,Y1B lt2;
+    classDef lt3 text-align:left;
+    class Y2B,Y3B lt3;
     end
 
     Y3B --> I([End])
