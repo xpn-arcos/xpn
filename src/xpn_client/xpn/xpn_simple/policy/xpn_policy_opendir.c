@@ -45,7 +45,7 @@ int XpnGetEntry(int fd, struct dirent *entry)
     serv_num++;
   }
 
-	res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[serv_num]), servers[serv_num], xpn_file_table[fd]->path);
+	res = XpnGetFhDir(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[serv_num]), servers[serv_num], xpn_file_table[fd]->path);
 
 	free(servers);
 

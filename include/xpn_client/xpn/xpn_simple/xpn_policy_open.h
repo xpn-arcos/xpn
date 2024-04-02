@@ -75,6 +75,7 @@
   int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server **servers , struct xpn_fh *fh, char *path);
 
   int XpnGetFh(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);
+  int XpnGetFhDir(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);
 
   int XpnGetAtribFd   (int fd,      struct stat *st);
   int XpnGetAtribPath (char * path, struct stat *st);

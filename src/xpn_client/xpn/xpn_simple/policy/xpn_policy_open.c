@@ -240,11 +240,19 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
 
   n = hash(path, nserv);
 
+  // TODO: fix getFh for dir or file
   res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
   if(res < 0)
-  {
-    XPN_DEBUG_END
-    return -1;
+  { 
+    int save_errno = errno;
+    errno = 0;
+    res = XpnGetFhDir(mdata, &(fh->nfih[n]), servers[n], path);
+    if(res < 0)
+    {
+      errno = save_errno;
+      XPN_DEBUG_END
+      return -1;
+    }
   }
 
   XpnCreateMetadata(mdata, pd, path);
@@ -299,16 +307,54 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
   memset(fh_aux, 0, sizeof(struct nfi_fhandle));
 
   XpnGetURLServer(servers, path, url_serv);
-  if (servers->error != -1){
-    // Default Value (if file, else directory)
-    res = servers->ops->nfi_open(servers, url_serv, O_RDWR | O_CREAT, S_IRWXU, fh_aux);
-    if (res<0) {
-        int save_errno = errno;
-        errno = 0;
-        res = servers->ops->nfi_opendir(servers, url_serv, fh_aux); // FIXME: When do we do nfi_closedir()?
-        if (res<0) errno = save_errno;
-    }
+  servers->wrk->thread = servers->xpn_thread;
+  nfi_worker_do_open(servers->wrk, url_serv, O_RDWR | O_CREAT, S_IRWXU, fh_aux);
+  res = nfiworker_wait(servers->wrk);
+
+  if(res<0)
+  {
+    free(fh_aux);
+    XPN_DEBUG_END
+    return -1;
   }
+
+  (*fh) = fh_aux;
+
+  XPN_DEBUG_END
+  return 0;
+}
+
+int XpnGetFhDir( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path)
+{
+  int res = 0;
+  char url_serv[PATH_MAX];
+  struct nfi_fhandle *fh_aux;
+
+  XPN_DEBUG_BEGIN_CUSTOM("%s",path);
+  if(mdata == NULL){
+    return -1;
+  }
+
+  if((*fh) != NULL)
+  {
+    XPN_DEBUG_END
+    return 0;
+  }
+
+  fh_aux = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
+  if(fh_aux == NULL)
+  {
+    XPN_DEBUG_END
+    return -1;
+  }
+
+  memset(fh_aux, 0, sizeof(struct nfi_fhandle));
+
+  XpnGetURLServer(servers, path, url_serv);
+  servers->wrk->thread = servers->xpn_thread;
+  nfi_worker_do_opendir(servers->wrk, url_serv, fh_aux);
+  res = nfiworker_wait(servers->wrk);
+
   if(res<0)
   {
     free(fh_aux);

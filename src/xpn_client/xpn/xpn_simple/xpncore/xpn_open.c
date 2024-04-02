@@ -688,15 +688,19 @@ int xpn_simple_rename(const char * path, const char * newpath)
     int res, err, i, n, pd, newpd;
     struct xpn_fh * vfh_aux;
 
+    XPN_DEBUG_BEGIN_CUSTOM("(%s %s)", path, newpath);
+
     if (path == NULL) 
     {
         errno = EINVAL;
+        XPN_DEBUG_END;
         return -1;
     }
 
     if (newpath == NULL) 
     {
         errno = EINVAL;
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -704,6 +708,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
     if (res < 0) 
     {
         errno = ENOENT;
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -711,6 +716,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
     if (res < 0) 
     {
         errno = ENOENT;
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -718,6 +724,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
     if (pd < 0)
     {
         errno = ENOENT;
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -725,11 +732,13 @@ int xpn_simple_rename(const char * path, const char * newpath)
     if (newpd < 0) 
     {
         errno = ENOENT;
+        XPN_DEBUG_END;
         return -1;
     }
 
     if (pd != newpd) 
     {
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -740,6 +749,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
     n = XpnGetServers(op_xpn_rename, pd, abs_path, -1, & servers);
     if (n <= 0) {
         //free(servers);
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -750,6 +760,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
     {
         errno = ENOMEM;
         free(servers);
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -759,6 +770,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
     {
         errno = ENOMEM;
         free(servers);
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -773,6 +785,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
         free(servers);
         free(vfh_aux -> nfih);
         free(vfh_aux);
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -798,7 +811,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
         free(vfh_aux -> nfih);
         free(vfh_aux);
         free(mdata_aux);
-
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -822,7 +835,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
         free(vfh_aux -> nfih);
         free(vfh_aux);
         free(mdata_aux);
-
+        XPN_DEBUG_END;
         return -1;
     }
 
@@ -887,11 +900,12 @@ int xpn_simple_rename(const char * path, const char * newpath)
             free(vfh_aux -> nfih);
             free(vfh_aux);
             free(mdata_aux);
-
+            XPN_DEBUG_END;
             return -1;
         }
     }
 
+    XPN_DEBUG_END;
     return 0;
 }
 
