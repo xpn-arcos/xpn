@@ -828,6 +828,8 @@ void mpi_server_op_readdir ( mpi_server_param_st *params, MPI_Comm sd, struct st
 
   // do mkdir
   s = head->u_st_mpi_server_msg.op_readdir.dir;
+  // Reset errno
+  errno = 0;
   ret = filesystem_readdir(s);
   if (ret != NULL)
   {

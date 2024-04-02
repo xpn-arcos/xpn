@@ -127,7 +127,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
     char abs_path[PATH_MAX];
     char url_serv[PATH_MAX];
     struct nfi_server ** servers;
-    int n, pd, i, master;
+    int n, pd, i, master, err;
     int res = -1;
 
     XPN_DEBUG_BEGIN_CUSTOM("%s, %d, %d", path, flags, mode);
@@ -148,35 +148,72 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
         return pd;
     }
 
-    res = XpnSearchFile(abs_path);
-    if (res < 0) 
+    servers = NULL;
+    n = XpnGetServers(op_xpn_open, pd, abs_path, -1, & servers);
+    if (n <= 0) 
     {
-        servers = NULL;
-        n = XpnGetServers(op_xpn_open, pd, abs_path, -1, & servers);
-        if (n <= 0) 
+        XPN_DEBUG_END_ARGS1(path);
+        return res;
+    }
+    if (vfh == NULL) {
+        vfh = (struct xpn_fh * ) malloc(sizeof(struct xpn_fh));
+        if (vfh == NULL) 
         {
+            free(servers);
             XPN_DEBUG_END_ARGS1(path);
             return res;
         }
-        if (vfh == NULL) {
-            vfh = (struct xpn_fh * ) malloc(sizeof(struct xpn_fh));
-            if (vfh == NULL) 
-            {
-                free(servers);
-                XPN_DEBUG_END_ARGS1(path);
-                return res;
-            }
 
-            vfh -> n_nfih = n;
-            vfh -> nfih = (struct nfi_fhandle ** ) malloc(sizeof(struct nfi_fhandle * ) * n);
-            for (i = 0; i < n; i++) 
+        vfh -> n_nfih = n;
+        vfh -> nfih = (struct nfi_fhandle ** ) malloc(sizeof(struct nfi_fhandle * ) * n);
+        for (i = 0; i < n; i++) 
+        {
+            vfh -> nfih[i] = NULL;
+            
+        }
+    }
+
+    // Open file only in master server if not creat
+    if (O_CREAT == (flags & O_CREAT))
+    {   
+        //if creat, creat file in all servers
+        for (i = 0; i < n; i++) 
+        {
+            vfh -> nfih[i] = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
+            if(vfh -> nfih[i] == NULL)
             {
-                vfh -> nfih[i] = NULL;
-                
+                XPN_DEBUG_END
+                return -1;
+            }
+            servers[i]->wrk->thread = servers[i]->xpn_thread;
+            XpnGetURLServer(servers[i], abs_path, url_serv);
+            nfi_worker_do_open(servers[i]->wrk, url_serv, flags, mode, vfh->nfih[i]);
+        }
+
+        err = 0;
+        for (i = 0; i < n; i++) 
+        {
+            res = nfiworker_wait(servers[i]->wrk);
+            if (res < 0) {
+                err = 1;
             }
         }
 
-        // Open file only in master server 
+        if (err)
+        {
+            free(servers);
+            for (i = 0; i < n; i++) 
+            {
+                free(vfh -> nfih[i]);
+            }
+            free(vfh -> nfih);
+            free(vfh);
+            XPN_DEBUG_END_ARGS1(path);
+            return res;
+        }
+
+    }else{
+        //if not creat, open file only in master server
         master = hash(abs_path, n);
 
         vfh -> nfih[master] = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
@@ -199,36 +236,33 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
             XPN_DEBUG_END_ARGS1(path);
             return res;
         }
-
-        if (mdata == NULL) {
-            mdata = (struct xpn_metadata * ) malloc(sizeof(struct xpn_metadata));
-            if (mdata == NULL) 
-            {
-                free(servers);
-                XPN_DEBUG_END_ARGS1(path);
-                return res;
-            }
-            // read the metadata
-            memset(mdata, 0, sizeof(struct xpn_metadata));
-            res = XpnReadMetadata(mdata, n, servers, vfh, abs_path, pd);
-            if (res < 0) 
-            {
-                free(servers);
-                free(vfh -> nfih);
-                free(vfh);
-                free(mdata);
-                XPN_DEBUG_END_ARGS1(path);
-                return res;
-            }
-        }
-
-        free(servers);
-        res = XpnSearchSlotFile(pd, abs_path, vfh, mdata, flags, mode);
-    } else 
-    {
-        xpn_file_table[res] -> links++;
     }
 
+    if (mdata == NULL) {
+        mdata = (struct xpn_metadata * ) malloc(sizeof(struct xpn_metadata));
+        if (mdata == NULL) 
+        {
+            free(servers);
+            XPN_DEBUG_END_ARGS1(path);
+            return res;
+        }
+        // read the metadata
+        memset(mdata, 0, sizeof(struct xpn_metadata));
+        res = XpnReadMetadata(mdata, n, servers, vfh, abs_path, pd);
+        if (res < 0) 
+        {
+            free(servers);
+            free(vfh -> nfih);
+            free(vfh);
+            free(mdata);
+            XPN_DEBUG_END_ARGS1(path);
+            return res;
+        }
+    }
+
+    free(servers);
+    res = XpnSearchSlotFile(pd, abs_path, vfh, mdata, flags, mode);
+    
     XPN_DEBUG_END_ARGS1(path);
     return res;
 }
@@ -564,7 +598,6 @@ int xpn_simple_open(const char * path, int flags, mode_t mode)
 {
     struct xpn_fh * vfh;
     struct xpn_metadata * mdata;
-    int md;
     int res = -1;
 
     XPN_DEBUG_BEGIN_ARGS1(path);

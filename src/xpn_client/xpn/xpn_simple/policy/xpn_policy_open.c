@@ -274,7 +274,7 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
 
 int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path)
 {
-  int res;
+  int res = 0;
   char url_serv[PATH_MAX];
   struct nfi_fhandle *fh_aux;
 
@@ -303,7 +303,10 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
     // Default Value (if file, else directory)
     res = servers->ops->nfi_open(servers, url_serv, O_RDWR | O_CREAT, S_IRWXU, fh_aux);
     if (res<0) {
+        int save_errno = errno;
+        errno = 0;
         res = servers->ops->nfi_opendir(servers, url_serv, fh_aux); // FIXME: When do we do nfi_closedir()?
+        if (res<0) errno = save_errno;
     }
   }
   if(res<0)

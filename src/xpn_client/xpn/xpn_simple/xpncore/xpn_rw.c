@@ -44,7 +44,7 @@ ssize_t xpn_simple_read ( int fd, void *buffer, size_t size )
   {
      XpnShowFileTable();
      errno = EBADF;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     XPN_DEBUG_END_CUSTOM("%d, %zu", fd, size)
      return -1;
   }
 
@@ -96,7 +96,7 @@ ssize_t xpn_simple_write ( int fd, const void *buffer, size_t size )
   {
      XpnShowFileTable();
      errno = EBADF;
-     XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)xpn_file_table[fd]->offset)
+     XPN_DEBUG_END_CUSTOM("%d, %zu", fd, size)
 
      return -1;
   }

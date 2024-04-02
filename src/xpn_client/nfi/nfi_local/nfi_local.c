@@ -961,7 +961,8 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
   memset(entry, 0, sizeof(struct dirent));
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_readdir] nfi_local_readdir(%p)\n", serv->id, fh_aux->dir);
-
+  // Reset errno
+  errno = 0;
   ent = filesystem_readdir(fh_aux->dir);
   if (ent == NULL)
   {
