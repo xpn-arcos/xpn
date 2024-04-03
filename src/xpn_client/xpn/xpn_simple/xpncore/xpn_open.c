@@ -226,7 +226,10 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
         servers[master]->wrk->thread = servers[master]->xpn_thread;
         
         XpnGetURLServer(servers[master], abs_path, url_serv);
-        nfi_worker_do_open(servers[master]->wrk, url_serv, flags, mode, vfh->nfih[master]);
+        if (O_DIRECTORY == (flags & O_DIRECTORY))
+            nfi_worker_do_opendir(servers[master]->wrk, url_serv, vfh->nfih[master]);
+        else
+            nfi_worker_do_open(servers[master]->wrk, url_serv, flags, mode, vfh->nfih[master]);
         res = nfiworker_wait(servers[master]->wrk);
         if (res < 0) {
             free(servers);

@@ -53,7 +53,7 @@ DIR *xpn_simple_opendir(const char *path)
     path_aux[strlen(path)+1] = '\0';
   }
 
-  res = xpn_simple_open(path_aux, O_RDONLY, 0);
+  res = xpn_simple_open(path_aux, O_RDONLY | O_DIRECTORY, 0);
   if (res < 0)
   {
     XPN_DEBUG_END_ARGS1(path)
