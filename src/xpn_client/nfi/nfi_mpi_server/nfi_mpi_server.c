@@ -771,7 +771,6 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
   struct st_mpi_server_rw_req req;
-  struct st_mpi_server_status status;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] >> Begin\n", serv->id);
 
@@ -823,9 +822,11 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
     if (ret < 0)
     {
       printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: mpi_client_read_data fails\n", serv->id);
-      ret = mpi_client_read_data(server_aux->params.server, (char *)&status, sizeof(struct st_mpi_server_status));
-      if (status.ret < 0)
-        errno = status.server_errno;
+      return -1;
+    }
+
+    if (req.status.ret < 0){
+      errno = req.status.server_errno;
       return -1;
     }
     
@@ -850,15 +851,13 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   if (req.size < 0)
   {
     printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: nfi_mpi_server_read reads zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
-    ret = mpi_client_read_data(server_aux->params.server, (char *)&status, sizeof(struct st_mpi_server_status));
-    if (status.ret < 0)
-      errno = status.server_errno;
+    if (req.status.ret < 0)
+      errno = req.status.server_errno;
     return -1;
   }
 
-  ret = mpi_client_read_data(server_aux->params.server, (char *)&status, sizeof(struct st_mpi_server_status));
-  if (status.ret < 0)
-    errno = status.server_errno;
+  if (req.status.ret < 0)
+    errno = req.status.server_errno;
   
   ret = cont;
 
@@ -875,7 +874,6 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
   struct st_mpi_server_rw_req req;
-  struct st_mpi_server_status status;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] >> Begin\n", serv->id);
 
@@ -970,15 +968,13 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   if (req.size < 0)
   {
     printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: nfi_mpi_server_write writes zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
-    ret = mpi_client_read_data(server_aux->params.server, (char *)&status, sizeof(struct st_mpi_server_status));
-    if (status.ret < 0)
-      errno = status.server_errno;
+    if (req.status.ret < 0)
+      errno = req.status.server_errno;
     return -1;
   }
 
-  ret = mpi_client_read_data(server_aux->params.server, (char *)&status, sizeof(struct st_mpi_server_status));
-  if (status.ret < 0)
-    errno = status.server_errno;
+  if (req.status.ret < 0)
+    errno = req.status.server_errno;
 
   ret = cont;
 
@@ -1425,8 +1421,7 @@ int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
   struct nfi_mpi_server_server *server_aux;
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
-  struct st_mpi_server_direntry ret_entry;
-  struct st_mpi_server_status status;
+  struct st_mpi_server_readdir_req ret_entry;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] >> Begin\n", serv->id);
 
@@ -1466,11 +1461,10 @@ int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
   //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
   msg.u_st_mpi_server_msg.op_readdir.dir = fh_aux->dir;
 
-  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_mpi_server_direntry));
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_mpi_server_readdir_req));
   
-  mpi_client_read_data(server_aux->params.server, (char *)&status, sizeof(struct st_mpi_server_status));
-  if (status.ret < 0)
-    errno = status.server_errno;
+  if (ret_entry.status.ret < 0)
+    errno = ret_entry.status.server_errno;
   
   if (ret_entry.end == 0) {
     return -1;

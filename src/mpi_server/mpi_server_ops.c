@@ -382,7 +382,6 @@ void mpi_server_op_creat ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
 void mpi_server_op_read ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_mpi_server_rw_req req;
-  struct st_mpi_server_status status;
   char * buffer;
   long   size, diff, to_read, cont;
   char   path [PATH_MAX];
@@ -414,10 +413,9 @@ void mpi_server_op_read ( mpi_server_param_st *params, MPI_Comm sd, struct st_mp
   if (fd < 0)
   {
     req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+    req.status.ret = fd;
+    req.status.server_errno = errno;
     mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
-    status.ret = fd;
-    status.server_errno = errno;
-    mpi_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
     return;
   }
 
@@ -426,12 +424,11 @@ void mpi_server_op_read ( mpi_server_param_st *params, MPI_Comm sd, struct st_mp
   if (NULL == buffer)
   {
     req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+    req.status.ret = -1;
+    req.status.server_errno = errno;
     mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
 
     filesystem_close(fd);
-    status.ret = -1;
-    status.server_errno = errno;
-    mpi_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
     return;
   }
 
@@ -452,17 +449,18 @@ void mpi_server_op_read ( mpi_server_param_st *params, MPI_Comm sd, struct st_mp
     if (req.size < 0)
     {
       req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
+      req.status.ret = -1;
+      req.status.server_errno = errno;
       mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
 
       filesystem_close(fd);
 
       FREE_AND_NULL(buffer);
-      status.ret = -1;
-      status.server_errno = errno;
-      mpi_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
       return;
     }
     // send (how many + data) to client...
+    req.status.ret = 0;
+    req.status.server_errno = errno;
     mpi_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
     debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_read] op_read: send size %ld\n", params->rank, req.size);
 
@@ -479,10 +477,6 @@ void mpi_server_op_read ( mpi_server_param_st *params, MPI_Comm sd, struct st_mp
 
   filesystem_close(fd);
 
-  status.ret = 0;
-  status.server_errno = errno;
-  mpi_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
-
   // free buffer
   FREE_AND_NULL(buffer);
 
@@ -493,7 +487,6 @@ void mpi_server_op_read ( mpi_server_param_st *params, MPI_Comm sd, struct st_mp
 void mpi_server_op_write ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_mpi_server_rw_req req;
-  struct st_mpi_server_status status;
   char * buffer;
   int    size, diff, cont, to_write;
   char   path [PATH_MAX];
@@ -525,10 +518,9 @@ void mpi_server_op_write ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
   if (fd < 0)
   {
     req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
+    req.status.ret = fd;
+    req.status.server_errno = errno;
     mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id); 
-    status.ret = fd;
-    status.server_errno = errno;
-    mpi_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
     return;
   }
 
@@ -537,12 +529,11 @@ void mpi_server_op_write ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
   if (NULL == buffer)
   {
     req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
+    req.status.ret = -1;
+    req.status.server_errno = errno;
     mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
 
     filesystem_close(fd);
-    status.ret = -1;
-    status.server_errno = errno;
-    mpi_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
     return;
   }
 
@@ -571,13 +562,11 @@ void mpi_server_op_write ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
 
   // write to the client the status of the write operation
   req.size = cont;
+  req.status.ret = 0;
+  req.status.server_errno = errno;
   mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_rw_req), rank_client_id, tag_client_id);
 
   filesystem_close(fd);
-
-  status.ret = 0;
-  status.server_errno = errno;
-  mpi_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
 
   // free buffer
   FREE_AND_NULL(buffer);
@@ -812,9 +801,8 @@ void mpi_server_op_opendir ( mpi_server_param_st *params, MPI_Comm sd, struct st
 void mpi_server_op_readdir ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct dirent * ret;
-  struct st_mpi_server_direntry ret_entry;
+  struct st_mpi_server_readdir_req ret_entry;
   DIR* s;
-  struct st_mpi_server_status status;
 
   // check params...
   if (NULL == params)
@@ -840,11 +828,9 @@ void mpi_server_op_readdir ( mpi_server_param_st *params, MPI_Comm sd, struct st
     ret_entry.end = 0;
   }
 
-  mpi_server_comm_write_data(params, sd,(char *)&ret_entry, sizeof(struct st_mpi_server_direntry), rank_client_id, tag_client_id);
-  
-  status.ret = ret == NULL ? -1 : 0;
-  status.server_errno = errno;
-  mpi_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
+  ret_entry.status.ret = ret == NULL ? -1 : 0;
+  ret_entry.status.server_errno = errno;
+  mpi_server_comm_write_data(params, sd,(char *)&ret_entry, sizeof(struct st_mpi_server_readdir_req), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] readdir(%p)=%p\n", params->rank, s, ret);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] << End\n", params->rank);

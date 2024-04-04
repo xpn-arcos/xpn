@@ -86,6 +86,12 @@
 
   /* Message struct */
 
+  struct st_mpi_server_status
+  {
+    int ret;
+    int server_errno;
+  };
+
   struct st_mpi_server_path_flags
   {
     char path[PATH_MAX];
@@ -96,11 +102,6 @@
   struct st_mpi_server_path
   {
     char path[PATH_MAX];
-  };
-
-  struct st_mpi_server_open_req
-  {
-   int fd;
   };
 
   struct st_mpi_server_rw
@@ -114,6 +115,7 @@
   {
     ssize_t size;
     char last;
+    struct st_mpi_server_status status;
   };
 
   struct st_mpi_server_rename
@@ -132,6 +134,7 @@
   {
     char status;  
     struct stat attr;
+    struct st_mpi_server_status status_req;
   };
 
   struct st_mpi_server_readdir
@@ -139,10 +142,11 @@
     DIR * dir;
   };
 
-  struct st_mpi_server_direntry
+  struct st_mpi_server_readdir_req
   {
     int end; //If end = 1 exist entry; 0 not exist
     struct dirent ret;
+    struct st_mpi_server_status status;
   };
 
   struct st_mpi_server_closedir
@@ -170,12 +174,6 @@
   struct st_mpi_server_end
   {
     char status;
-  };
-
-  struct st_mpi_server_status
-  {
-    int ret;
-    int server_errno;
   };
 
   struct st_mpi_server_msg
