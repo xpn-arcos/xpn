@@ -677,6 +677,7 @@ int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
 
 int nfi_mpi_server_create (struct nfi_server *serv,  char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle  *fh)
 {
+  //TODO: actualy creat is not in use, it use like POSIX open(path, O_WRONLY|O_CREAT|O_TRUNC, mode);
   int    ret;
   char   server[PATH_MAX], dir[PATH_MAX];
   struct nfi_mpi_server_server *server_aux;
@@ -1201,6 +1202,8 @@ int nfi_mpi_server_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
 
   nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
 
+  if (req.status_req.ret < 0)
+      errno = req.status_req.server_errno;
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_getattr] nfi_mpi_server_getattr(%s)=%d\n", serv->id, dir, req.status);
 
   mpi_server_2_nfi_attr(attr, &req.attr);

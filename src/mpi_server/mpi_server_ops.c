@@ -702,6 +702,8 @@ void mpi_server_op_getattr ( mpi_server_param_st *params, MPI_Comm sd, struct st
 
   // do getattr
   req.status = filesystem_stat(path, &req.attr);
+  req.status_req.ret = req.status;
+  req.status_req.server_errno = errno;
 
   mpi_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_mpi_server_attr_req), rank_client_id, tag_client_id);
 
