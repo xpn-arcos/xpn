@@ -217,6 +217,7 @@ int mpi_server_up ( void )
     switch (ret)
     {
     case MPI_SOCKET_ACCEPT:
+      socket_accept_send(server_socket, params.port_name, MPI_MAX_PORT_NAME);
       mpi_server_accept();
       break;
     case MPI_SOCKET_FINISH:
@@ -238,8 +239,6 @@ int mpi_server_up ( void )
 // Stop servers
 int mpi_server_down ( int argc, char *argv[] )
 {
-  int      ret;
-  char     port_name [MPI_MAX_PORT_NAME];
   char     srv_name  [1024];
   FILE     *file;
 
@@ -267,39 +266,6 @@ int mpi_server_down ( int argc, char *argv[] )
 
   while (fscanf(file, "%[^\n] ", srv_name) != EOF)
   {
-    int version_len;
-    char version[MPI_MAX_LIBRARY_VERSION_STRING];
-    MPI_Get_library_version(version, &version_len);
-
-    debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] MPI Version: %s\n", 0, version);
-
-    if (strncasecmp(version, "Open MPI", strlen("Open MPI")) != 0)
-    {
-      // Lookup port name
-      char aux_srv_ip[1024];
-
-      debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ns_lookup server %s\n", 0, srv_name);
-
-      ret = ns_lookup("mpi_server", srv_name, aux_srv_ip, port_name);
-      if (ret < 0)
-      {
-        printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: server %s not found\n", 0, srv_name);
-        continue;
-      }
-    }
-    else
-    {
-      // Lookup port name on nameserver
-      debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] MPI_Lookup_name server %s\n", 0, srv_name);
-
-      ret = MPI_Lookup_name(srv_name, MPI_INFO_NULL, port_name);
-      if (MPI_SUCCESS != ret)
-      {
-        printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: server %s not found\n", 0, srv_name);
-        continue;
-      }
-    }
-
     socket_send(srv_name, MPI_SOCKET_FINISH);
   }
 
@@ -320,11 +286,10 @@ int mpi_server_down ( int argc, char *argv[] )
 int mpi_server_terminate ( int argc, char *argv[] )
 {
   int  ret;
-  char port_name[MPI_MAX_PORT_NAME];
   
   printf("\n");
   printf(" ----------------\n");
-  printf(" Stopping server (%s)\n", serv_name);
+  printf(" Stopping server (%s)\n", params.srv_name);
   printf(" ----------------\n");
   printf("\n");
 
@@ -334,31 +299,11 @@ int mpi_server_terminate ( int argc, char *argv[] )
   int version_len;
   char version[MPI_MAX_LIBRARY_VERSION_STRING];
   MPI_Get_library_version(version, &version_len);
-
-  if (strncasecmp(version, "Open MPI", strlen("Open MPI")) != 0)
-  {
-    // Lookup port name
-    char aux_srv_ip[1024];
-    ret = ns_lookup("mpi_server", params.srv_name, aux_srv_ip, port_name);
-    if (ret < 0)
-    {
-      printf("[MPI-SERVER] INFO: server %s not found\n", params.srv_name);
-      // continue;
-    }
-  }
-  else
-  {
-    // Lookup port name on nameserver
-    ret = MPI_Lookup_name(params.srv_name, MPI_INFO_NULL, port_name) ;
-    if (MPI_SUCCESS != ret) {
-      printf("[MPI-SERVER] INFO: server %s not found\n", params.srv_name) ;
-      // continue;
-    }
-  }
   
+  ret = socket_send(params.srv_name, MPI_SOCKET_FINISH);
   if (ret >= 0)
   {
-    ret = socket_send(params.srv_name, MPI_SOCKET_FINISH);
+    printf("Fail to send finish to server (%s)\n",params.srv_name);
   }
   
   MPI_Finalize();

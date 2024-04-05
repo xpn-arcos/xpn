@@ -40,8 +40,10 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int socket_accept_read ( int socket );   
+  int socket_accept_send ( int socket, void * data, int size );   
+  int socket_accept_read ( int socket );
   int socket_send ( char * srv_name, int code );  
+  int socket_read ( char * srv_name, void * data, int size );  
   int socket_create ( int *out_socket );
 
   /* ... Macros / Macros .................................................. */

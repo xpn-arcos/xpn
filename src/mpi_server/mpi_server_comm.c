@@ -37,7 +37,6 @@
 int mpi_server_comm_init ( mpi_server_param_st *params )
 {
   int  ret, provided, claimed;
-  char serv_name [HOST_NAME_MAX];
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] >> Begin\n", params->rank);
 
@@ -105,74 +104,6 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
     return -1;
   }
 
-  // Generate DNS file
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Generate DNS file\n", params->rank);
-
-  int version_len;
-  char version[MPI_MAX_LIBRARY_VERSION_STRING];
-  MPI_Get_library_version(version, &version_len);
-
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] MPI Version: %s\n", params->rank, version);
-
-  if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
-  {
-    for (int j=0; j < params->size; j++)
-    {
-      if (j == params->rank)
-      {
-        char *ip;
-
-        // get hostname and IP
-        debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Get host name\n", params->rank);
-
-        ns_get_hostname(params->srv_name);
-
-        debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Get host ip\n", params->rank);
-
-        ip = ns_get_host_ip();
-        if (ip == NULL)
-        {
-          printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: ns_get_host_ip fails\n", params->rank);
-          return -1;
-        }
-
-        // Publish hostname
-        debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Publish host\n", params->rank);
-
-        ret = ns_publish(params->dns_file, "mpi_server", params->srv_name, ip, params->port_name);
-        if (ret < 0)
-        {
-          printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: ns_publish fails\n", params->rank);
-          return -1;
-        }
-      }
-
-      MPI_Barrier(MPI_COMM_WORLD);
-    }
-  }
-  else
-  {
-    // Publish port name
-    MPI_Info info;
-    MPI_Info_create(&info);
-    MPI_Info_set(info, "ompi_global_scope", "true");
-
-    // get hostname
-    debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Get host name\n", params->rank);
-
-    gethostname(serv_name, HOST_NAME_MAX);
-    sprintf(params->srv_name, "%s", serv_name);
-
-    // Publish hostname
-    debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] Publish host\n", params->rank);
-
-    ret = MPI_Publish_name(params->srv_name, info, params->port_name);
-    if (MPI_SUCCESS != ret) {
-      printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: MPI_Publish_name fails\n", params->rank);
-      return -1;
-    }
-  }
-
   // Print server init information
   MPI_Barrier(MPI_COMM_WORLD);
 
@@ -183,7 +114,7 @@ int mpi_server_comm_init ( mpi_server_param_st *params )
   TIME_MISC_DiffTime(&t0, &t1, &tf);
   time = TIME_MISC_TimevaltoFloat(&tf);
 
-    MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
+  MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
 
   if (params->rank == 0)
   {
@@ -214,55 +145,6 @@ int mpi_server_comm_destroy ( mpi_server_param_st *params )
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] Close port\n", params->rank);
 
   MPI_Close_port(params->port_name);
-
-  // Update DNS file
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] Update DNS file\n", params->rank);
-
-  for (int i = 0; i < params->size; ++i)
-  {
-    if (params->rank == i)
-    {
-      int version_len;
-      char version[MPI_MAX_LIBRARY_VERSION_STRING];
-      MPI_Get_library_version(version, &version_len);
-
-      debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] MPI Version: %s\n", params->rank, version);
-
-      if (strncasecmp(version, "Open MPI", strlen("Open MPI")) != 0)
-      {
-        char hostname[1024];
-
-        // get hostname and IP
-        debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] Get host name\n", params->rank);
-
-        ns_get_hostname(hostname);
-
-        // Unpublish port name
-        debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] Unpublish host\n", params->rank);
-
-        ret = ns_unpublish(params->dns_file, "mpi_server", hostname);
-        if (ret < 0)
-        {
-          printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] ERROR: ns_unpublish fails\n", params->rank);
-          return -1;
-        }
-      }
-      else
-      {
-        // Unpublish port name
-        debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] Unpublish host\n", params->rank);
-
-        ret = MPI_Unpublish_name(params->srv_name, MPI_INFO_NULL, params->port_name);
-        if (MPI_SUCCESS != ret)
-        {
-          printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] ERROR: MPI_Unpublish_name fails\n", params->rank);
-          return -1;
-        }
-      }
-    }
-
-    MPI_Barrier(MPI_COMM_WORLD);
-  }
 
   // Finalize
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] MPI Finalize\n", params->rank);

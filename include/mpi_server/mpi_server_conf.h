@@ -34,31 +34,9 @@
     #define MAX_BUFFER_SIZE (1*MB)
   #endif
 
-  /* ENVIROMENT VARIABLES: DNS SERVICE */
-  #ifndef MPI_SERVER_FILE
-    #define MPI_SERVER_FILE "MPI_SERVER_FILE"
-  #endif
-
-  #ifndef MPI_SERVER_FILE_DEFAULT
-    #define MPI_SERVER_FILE_DEFAULT "/etc/xpn/mpi_server.dns"
-  #endif
-
-  #ifndef MPI_SERVER_NAME_DEFAULT
-    #define MPI_SERVER_NAME_DEFAULT "node"
-  #endif
-
   #ifndef MPI_SERVER_DIRBASE_DEFAULT
     #define MPI_SERVER_DIRBASE_DEFAULT  "/"
   #endif
-
-  #ifndef MPI_SERVER_PORT_DEFAULT
-    #define MPI_SERVER_PORT_DEFAULT 9999
-  #endif
-
-  #ifndef MPI_SERVER_IOSIZE_DEFAULT
-    #define MPI_SERVER_IOSIZE_DEFAULT   (MB)
-  #endif
-
 
   /* ... Data structures / Estructuras de datos ........................ */
 

@@ -159,52 +159,6 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] MPI Version: %s\n", version);
 
-  if(strncasecmp(version,"Open MPI", strlen("Open MPI")) != 0)
-  {
-    // Lookup port name
-    int lookup_retries = 0;
-    char aux_srv_ip[1024];
-
-    do
-    {
-      // Lookup port name on nameserver
-      debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] Lookup server %s\n", params->srv_name);
-
-      ret = ns_lookup("mpi_server", params->srv_name, aux_srv_ip, params->port_name);
-      if (ret < 0)
-      {
-        if (lookup_retries == 0)
-        { 
-          char cli_name  [HOST_NAME_MAX];
-          gethostname(cli_name, HOST_NAME_MAX);
-          debug_info("----------------------------------------------------------------\n");
-          debug_info("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
-          debug_info("----------------------------------------------------------------\n\n");
-        }
-        lookup_retries++;
-        sleep(1);
-      }
-    } while((ret < 0) && (lookup_retries < 1));
-
-    if (ret < 0)
-    {
-      debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->srv_name, params->port_name);
-      return -1;
-    }
-  }
-  else
-  {
-    // Lookup port name on nameserver
-    debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] Lookup server %s\n", params->port_name);
-
-    ret = MPI_Lookup_name(params->srv_name, MPI_INFO_NULL, params->port_name);
-    if (MPI_SUCCESS != ret)
-    {
-      debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: DNS Lookup %s Port %s\n", params->port_name, params->port_name);
-      return -1;
-    }
-  }
-
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
   // Send connect intention
   if (params->rank == 0)
@@ -215,7 +169,16 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
       debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: socket send\n");
       return -1;
     }
+    ret = socket_read(params->srv_name, params->port_name, MPI_MAX_PORT_NAME);
+    if (ret != 0)
+    {
+      debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: socket read\n");
+      return -1;
+    }
   }
+
+  // Send port name to all ranks
+  MPI_Bcast(params->port_name, MPI_MAX_PORT_NAME, MPI_CHAR, 0, MPI_COMM_WORLD);
 
   // Connect...
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] Connect port %s\n", params->port_name);

@@ -39,8 +39,6 @@ void mpi_server_params_show ( mpi_server_param_st *params )
   debug_info("[Server=%d] [MPI_SERVER_PARAMS] [mpi_server_params_show] >> Begin\n", params->rank);
 
   printf(" * MPI server current configuration:\n");
-  // * dns_file
-  printf("\t-ns <path>:\t'%s'\n",   params->dns_file);
   // * threads
   if (params->thread_mode == TH_NOT) {
     printf("\t-t  <int>:\tWithout threads\n");
@@ -88,7 +86,6 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
   strcpy(params->port_name, "");
   strcpy(params->srv_name,  "");
   strcpy(params->dirbase,   MPI_SERVER_DIRBASE_DEFAULT);
-  strcpy(params->dns_file,  MPI_SERVER_DNS_FILE_DEFAULT);
   params->number_accepts = -1;
 
   // update user requests
@@ -101,14 +98,6 @@ int mpi_server_params_get ( mpi_server_param_st *params, int argc, char *argv[] 
       case '-':
         switch (argv[i][1])
         {
-          case 'n':
-            if ((strlen(argv[i]) == 3) && (argv[i][2] == 's'))
-            {
-              strcpy(params->dns_file, argv[i+1]);
-              i++;
-            }
-            break;
-
           case 'f':
             strcpy(params->shutdown_file, argv[i+1]);
             i++;

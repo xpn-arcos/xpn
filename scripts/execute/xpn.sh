@@ -102,7 +102,7 @@ start_xpn_servers() {
         line=$(head -n $i "$HOSTFILE" | tail -n 1)
         mpiexec -np       1 \
           -host "${line}" \
-          ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server -ns ${WORKDIR}/dns.txt ${ARGS} &
+          ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server ${ARGS} &
         sleep 0.5
     done
   elif [[ ${SERVER_TYPE} == "sck" ]]; then
@@ -143,7 +143,6 @@ stop_xpn_servers() {
 
   if [[ ${SERVER_TYPE} == "mpi" ]]; then
     mpiexec -np 1 \
-            -genv XPN_DNS ${WORKDIR}/dns.txt \
             "${BASE_DIR}"/../../src/mpi_server/xpn_stop_mpi_server -f ${DEATH_FILE}
   elif [[ ${SERVER_TYPE} == "sck" ]]; then
     mpiexec -np 1 \
@@ -165,7 +164,6 @@ terminate_xpn_server() {
 
   if [[ ${SERVER_TYPE} == "mpi" ]]; then
     mpiexec -np 1 \
-            -genv XPN_DNS ${WORKDIR}/dns.txt \
             ${BASE_DIR}/../../src/mpi_server/xpn_terminate_mpi_server -f ${DEATH_FILE} -h ${HOST}
   fi
 }
@@ -181,7 +179,6 @@ rebuild_xpn_servers() {
   # 1. Copy
   mpiexec -np       "${NODE_NUM}" \
           -hostfile "${HOSTFILE}" \
-          -genv      XPN_DNS "${WORKDIR}"/dns.txt \
           -genv      XPN_CONF /local_test/test/configuration/conf.xml \
           -genv      LD_PRELOAD src/bypass/xpn_bypass.so \
           -genv      XPN_LOCALITY 0\
