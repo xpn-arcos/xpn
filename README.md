@@ -188,7 +188,7 @@ The typical executions has 3 main steps:
    export XPN_CONF=<full path to the XPN configuration file>
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3
    ```
-4. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
+3. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
    ```bash
    ./xpn -v -l <full path to the hostfile>  stop
    ```
