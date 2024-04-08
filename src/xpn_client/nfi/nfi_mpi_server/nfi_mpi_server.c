@@ -108,7 +108,7 @@ int mpi_server_write_operation ( MPI_Comm sd, struct st_mpi_server_msg *head )
       break;
     case MPI_SERVER_CLOSEDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] CLOSEDIR operation\n", head->id);
-      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_closedir), sizeof(struct st_mpi_server_closedir));
+      ret = mpi_client_write_data(sd, (char *)&(head->u_st_mpi_server_msg.op_closedir), sizeof(struct st_mpi_server_path));
       break;
     case MPI_SERVER_RMDIR_DIR:
       debug_info("[SERV_ID=%s] [NFI_MPI] [mpi_server_write_operation] RMDIR operation\n", head->id);
@@ -663,7 +663,7 @@ int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
 
   memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] nfi_mpi_server_open(%s)=%d\n", serv->id, dir, fh_aux->fd);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_open] nfi_mpi_server_open(%s)\n", serv->id, dir);
 
   fho->type    = NFIFILE;
   fho->priv_fh = NULL;
@@ -745,7 +745,7 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, mode_t mode, str
 
   nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] nfi_mpi_server_create(%s)=%d\n", serv->id, url, fh_aux->fd);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] nfi_mpi_server_create(%s)\n", serv->id, url);
 
   fh->type   = NFIFILE;
   fh->server = serv;
@@ -794,7 +794,7 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   // private_info file handle
   fh_aux = (struct nfi_mpi_server_fhandle *) fh->priv_fh;
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] nfi_mpi_server_read(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] nfi_mpi_server_read(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
 
   //Debug
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] xpn_read(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
@@ -851,7 +851,7 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
 
   if (req.size < 0)
   {
-    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: nfi_mpi_server_read reads zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
+    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] ERROR: nfi_mpi_server_read reads zero bytes from '%s' in server %s\n", serv->id, fh_aux->path, serv->server);
     if (req.status.ret < 0)
       errno = req.status.server_errno;
     return -1;
@@ -862,7 +862,7 @@ ssize_t nfi_mpi_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   
   ret = cont;
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] nfi_mpi_server_read(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] nfi_mpi_server_read(%s, %ld, %ld)=%d\n", serv->id, fh_aux->path, offset, size, ret);
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_read] >> End\n", serv->id);
 
   return ret;
@@ -901,7 +901,7 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   // private_info file handle
   fh_aux     = (struct nfi_mpi_server_fhandle *) fh->priv_fh;
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] nfi_mpi_server_write(%d, %ld, %ld)\n", serv->id, fh_aux->fd, offset, size);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] nfi_mpi_server_write(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
 
   //Debug
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_mpi_server_msg.op_read.path, offset, size);
@@ -968,7 +968,7 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
   if (req.size < 0)
   {
-    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: nfi_mpi_server_write writes zero bytes from '%d' in server %s\n", serv->id, fh_aux->fd, serv->server);
+    printf("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] ERROR: nfi_mpi_server_write writes zero bytes from '%s' in server %s\n", serv->id, fh_aux->path, serv->server);
     if (req.status.ret < 0)
       errno = req.status.server_errno;
     return -1;
@@ -979,7 +979,7 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
   ret = cont;
 
-  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] nfi_mpi_server_write(%d, %ld, %ld)=%d\n", serv->id, fh_aux->fd, offset, size, ret);
+  debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] nfi_mpi_server_write(%s, %ld, %ld)=%d\n", serv->id, fh_aux->path, offset, size, ret);
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_write] >> End\n", serv->id);
 
   return ret;
@@ -1307,9 +1307,8 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *a
   if (status.ret <0)
     errno = status.server_errno;
 
-  fh_aux->fd = status.ret;
   memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
-  if ((fh_aux->fd < 0)&&(errno != EEXIST))
+  if ((status.ret < 0)&&(errno != EEXIST))
   {
     debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
     FREE_AND_NULL(fh_aux);
@@ -1392,20 +1391,17 @@ int nfi_mpi_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] nfi_mpi_server_opendir(%s)\n", serv->id, dir);
   
-  //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
   msg.type = MPI_SERVER_OPENDIR_DIR;
-  //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
   memccpy(msg.u_st_mpi_server_msg.op_opendir.path, dir,            0, PATH_MAX-1);
 
-  unsigned long long aux;
-  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(aux), sizeof(DIR*));
-
-  mpi_client_read_data(server_aux->params.server, (char *)&status, sizeof(struct st_mpi_server_status));
+  nfi_mpi_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_mpi_server_status));
   if (status.ret < 0)
+  {
     errno = status.server_errno;
+    return -1;
+  }
 
-  fh_aux->dir = (DIR *)aux;
+  fh_aux->telldir = status.ret;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_opendir] nfi_mpi_server_opendir(%s)=%p\n", serv->id, dir, fh_aux->dir);
 
@@ -1458,16 +1454,16 @@ int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_readdir] nfi_mpi_server_readdir(%p)\n", serv->id, fh_aux->dir);
 
-  //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
   msg.type = MPI_SERVER_READDIR_DIR;
-  //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
-  msg.u_st_mpi_server_msg.op_readdir.dir = fh_aux->dir;
+  memccpy(msg.u_st_mpi_server_msg.op_readdir.path, fh_aux->path,            0, PATH_MAX-1);
+  msg.u_st_mpi_server_msg.op_readdir.telldir = fh_aux->telldir;
 
   nfi_mpi_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_mpi_server_readdir_req));
   
   if (ret_entry.status.ret < 0)
     errno = ret_entry.status.server_errno;
+  else
+    fh_aux->telldir = ret_entry.status.ret;
   
   if (ret_entry.end == 0) {
     return -1;
@@ -1514,15 +1510,15 @@ int nfi_mpi_server_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] nfi_mpi_server_closedir(%p)\n", serv->id, fh_aux->dir);
 
-    //bzero(&msg, sizeof(struct st_mpi_server_msg));
-
     msg.type = MPI_SERVER_CLOSEDIR_DIR;
-    //memccpy(msg.id, server_aux->id, 0, MPI_SERVER_ID-1);
-    msg.u_st_mpi_server_msg.op_closedir.dir = fh_aux->dir;
+    memccpy(msg.u_st_mpi_server_msg.op_closedir.path, fh_aux->path,            0, PATH_MAX-1);
 
     nfi_mpi_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_mpi_server_status));
     if (status.ret < 0)
+    {
       errno = status.server_errno;
+      return -1;
+    }
 
     debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_closedir] nfi_mpi_server_closedir(%p)=%d\n", serv->id, fh_aux->dir, 0);
 

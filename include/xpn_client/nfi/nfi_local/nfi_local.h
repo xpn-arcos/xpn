@@ -56,8 +56,7 @@
   struct nfi_local_fhandle
   {
     char path[PATH_MAX];
-    int  fd;
-    DIR *dir;
+    long telldir;
   };
 
 

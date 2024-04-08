@@ -426,8 +426,8 @@ int nfi_local_open ( struct nfi_server *serv, char *url, int flags, mode_t mode,
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] nfi_local_open(%s)\n", serv->id, dir);
 
-  fh_aux->fd = filesystem_open2(dir, flags, mode);
-  if (fh_aux->fd < 0)
+  ret = filesystem_open2(dir, flags, mode);
+  if (ret < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] ERROR: real_posix_open2 fails to open '%s' in server %s.\n", serv->id, dir, serv->server);
     FREE_AND_NULL(fh_aux);
@@ -435,7 +435,7 @@ int nfi_local_open ( struct nfi_server *serv, char *url, int flags, mode_t mode,
     return -1;
   }
 
-  filesystem_close(fh_aux->fd);
+  filesystem_close(ret);
 
   strcpy(fh_aux->path, dir);
 
@@ -444,7 +444,7 @@ int nfi_local_open ( struct nfi_server *serv, char *url, int flags, mode_t mode,
   fho->server = serv;
   fho->priv_fh = (void *) fh_aux;
 
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] nfi_local_open(%s)=%d\n", serv->id, dir, fh_aux->fd);
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] nfi_local_open(%s)=%d\n", serv->id, dir, ret);
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_open] << End\n", serv->id);
 
   return 0;
@@ -483,15 +483,15 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, mode_t mode, struct 
   
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] nfi_local_create(%s)\n", serv->id, dir);
 
-  fh_aux->fd = filesystem_creat(dir, mode);
-  if (fh_aux->fd < 0)
+  ret = filesystem_creat(dir, mode);
+  if (ret < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] ERROR: real_posix_open2 fails to open '%s' in server %s.\n", serv->id, dir, serv->server);
     FREE_AND_NULL(fh_aux);
     return -1;
   }
 
-  filesystem_close(fh_aux->fd);
+  filesystem_close(ret);
 
   // Get stat of the file
   memset(&st, 0, sizeof(struct stat));
@@ -609,6 +609,9 @@ ssize_t nfi_local_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void 
 
 int nfi_local_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 {
+  // Without sesion close do nothing
+  return 0;
+
   int ret = -1;
   struct nfi_local_fhandle *fh_aux;
 
@@ -625,11 +628,11 @@ int nfi_local_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 
   if (fh_aux != NULL)
   {
-    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] nfi_local_close(%d)\n", serv->id, fh_aux->fd);
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] nfi_local_close(%s)\n", serv->id, fh_aux->path);
 
     // ret = real_posix_close(fh_aux->fd);
 
-    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] nfi_local_close(%d)=%d\n", serv->id, fh_aux->fd, ret);
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] nfi_local_close(%s)=%d\n", serv->id, fh_aux->path, ret);
   }
 
   // free memory
@@ -883,6 +886,7 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
   int    ret;
   char   dir[PATH_MAX];
   struct nfi_local_fhandle *fh_aux;
+  DIR* s;
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_opendir] >> Begin\n", serv->id);
 
@@ -915,16 +919,17 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_opendir] nfi_local_opendir(%s)\n", serv->id, dir);
 
-  fh_aux->dir = filesystem_opendir(dir);
-  if (fh_aux->dir == NULL)
+  s = filesystem_opendir(dir);
+  if (s == NULL)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_opendir] ERROR: real_posix_opendir fails to opendir '%s' in server %s.\n", serv->id, dir, serv->server);
     FREE_AND_NULL(fh_aux);
     FREE_AND_NULL(fho->url);
     return -1;
   }
+  filesystem_closedir(s);
 
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_opendir] nfi_local_opendir(%s)=%p\n", serv->id, dir, fh_aux->dir);
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_opendir] nfi_local_opendir(%s)=%p\n", serv->id, dir, s);
 
   strcpy(fh_aux->path, dir);
   fho->type    = NFIDIR;
@@ -940,6 +945,7 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 {
   struct nfi_local_fhandle *fh_aux;
   struct dirent *ent;
+  DIR* s;
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_readdir] >> Begin\n", serv->id);
 
@@ -960,15 +966,21 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
   // cleaning entry values...
   memset(entry, 0, sizeof(struct dirent));
 
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_readdir] nfi_local_readdir(%p)\n", serv->id, fh_aux->dir);
+  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_readdir] nfi_local_readdir(%s)\n", serv->id, fh_aux->path);
+  s = filesystem_opendir(fh_aux->path);
+  
+  filesystem_seekdir(s, fh_aux->telldir);
   // Reset errno
   errno = 0;
-  ent = filesystem_readdir(fh_aux->dir);
+  ent = filesystem_readdir(s);
   if (ent == NULL)
   {
-    debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_readdir] ERROR: real_posix_readdir fails to open '%p' in server %s.\n", serv->id, fh_aux->dir, serv->server);
+    debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_readdir] ERROR: real_posix_readdir fails to open '%s' in server %s.\n", serv->id, fh_aux->path, serv->server);
     return -1;
   }
+  fh_aux->telldir = filesystem_telldir(s);
+
+  filesystem_closedir(s);
 
   memcpy(entry, ent, sizeof(struct dirent));
 
@@ -980,7 +992,10 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 
 int nfi_local_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 {
-  struct nfi_local_fhandle *fh_aux;
+  // Without sesion close do nothing
+  return 0;
+
+  // struct nfi_local_fhandle *fh_aux;
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_closedir] >> Begin\n", serv->id);
 
@@ -993,11 +1008,11 @@ int nfi_local_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
   // Do closedir
   if (fh->priv_fh != NULL){
     // private_info file handle
-    fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
+    // fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
     debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_closedir] nfi_local_closedir(%p)\n", serv->id, fh_aux->dir);
 
-    filesystem_closedir(fh_aux->dir);
+    // filesystem_closedir(fh_aux->dir);
 
     debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_closedir] nfi_local_closedir(%p)=%d\n", serv->id, fh_aux->dir, 0);
   }

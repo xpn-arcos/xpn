@@ -443,6 +443,43 @@ DIR * filesystem_opendir(char * pathname)
     return ret;
 }
 
+long filesystem_telldir(DIR * dirp)
+{
+    long ret;
+
+    DEBUG_BEGIN();
+
+    // Check params
+    if (NULL == dirp) {
+        debug_warning("[FILE_POSIX]: dirp is NULL\n");
+    }
+
+    ret = real_posix_telldir(dirp);
+    if (-1 == ret) {
+        debug_warning("[FILE_POSIX]: telldir(dirp:%p) -> %ld\n", dirp, ret);
+        //perror("telldir: ") ;
+    }
+
+    DEBUG_END();
+
+    // Return DIR*
+    return ret;
+}
+
+void filesystem_seekdir(DIR * dirp, long loc)
+{
+    DEBUG_BEGIN();
+
+    // Check params
+    if (NULL == dirp) {
+        debug_warning("[FILE_POSIX]: dirp is NULL\n");
+    }
+
+    real_posix_seekdir(dirp, loc);
+
+    DEBUG_END();
+}
+
 struct dirent * filesystem_readdir(DIR * dirp)
 {
     struct dirent * ret;

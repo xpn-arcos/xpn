@@ -139,7 +139,8 @@
 
   struct st_mpi_server_readdir
   {
-    DIR * dir;
+    char path[PATH_MAX];
+    long telldir;
   };
 
   struct st_mpi_server_readdir_req
@@ -147,11 +148,6 @@
     int end; //If end = 1 exist entry; 0 not exist
     struct dirent ret;
     struct st_mpi_server_status status;
-  };
-
-  struct st_mpi_server_closedir
-  {
-    DIR * dir;
   };
 
   struct st_mpi_server_flush
@@ -194,7 +190,7 @@
       struct st_mpi_server_path_flags     op_mkdir;
       struct st_mpi_server_path           op_opendir;
       struct st_mpi_server_readdir        op_readdir;
-      struct st_mpi_server_closedir       op_closedir;
+      struct st_mpi_server_path           op_closedir;
       struct st_mpi_server_path           op_rmdir;
 
       struct st_mpi_server_flush          op_flush;

@@ -250,7 +250,7 @@ int mpi_server_do_operation ( struct st_th *th, int * the_end )
       }
       break;
     case MPI_SERVER_CLOSEDIR_DIR:
-      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_closedir), sizeof(struct st_mpi_server_closedir), th->rank_client_id, th->tag_client_id);
+      ret = mpi_server_comm_read_data(th->params, (MPI_Comm) th->sd, (char *)&(head.u_st_mpi_server_msg.op_closedir), sizeof(struct st_mpi_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         mpi_server_op_closedir(th->params, (MPI_Comm) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
@@ -577,7 +577,8 @@ void mpi_server_op_write ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
 
 void mpi_server_op_close ( mpi_server_param_st *params, __attribute__((__unused__)) MPI_Comm sd, __attribute__((__unused__)) struct st_mpi_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 {
-  // TODO: think if is necesary a method for close
+  // Without sesion close do nothing
+  return;
   // check params...
   if (NULL == params)
   {
@@ -784,16 +785,15 @@ void mpi_server_op_opendir ( mpi_server_param_st *params, MPI_Comm sd, struct st
   strcat(path, "/");
   strcat(path, head->u_st_mpi_server_msg.op_opendir.path);
 
-  // do mkdir
   ret = filesystem_opendir(path);
-
-  unsigned long long aux;
-  aux = (unsigned long long)ret;  // TODO: why not "(char *)&ret" ?
-
-  mpi_server_comm_write_data(params, sd, (char *)&aux, (int)sizeof(DIR *), rank_client_id, tag_client_id);
-
   status.ret = ret == NULL ? -1 : 0;
   status.server_errno = errno;
+
+  if (status.ret == 0){
+    status.ret = filesystem_telldir(ret);
+    status.server_errno = errno;
+  }
+
   mpi_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_opendir] opendir(%s)=%p\n", params->rank, head->u_st_mpi_server_msg.op_opendir.path, ret);
@@ -804,6 +804,7 @@ void mpi_server_op_readdir ( mpi_server_param_st *params, MPI_Comm sd, struct st
 {
   struct dirent * ret;
   struct st_mpi_server_readdir_req ret_entry;
+  char path [PATH_MAX];
   DIR* s;
 
   // check params...
@@ -814,10 +815,18 @@ void mpi_server_op_readdir ( mpi_server_param_st *params, MPI_Comm sd, struct st
   }
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] readdir(%p)\n", params->rank, head->u_st_mpi_server_msg.op_readdir.dir);
+  debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] readdir(%s)\n", params->rank, head->u_st_mpi_server_msg.op_readdir.path);
 
-  // do mkdir
-  s = head->u_st_mpi_server_msg.op_readdir.dir;
+  strcpy(path, params->dirbase);
+  strcat(path, "/");
+  strcat(path, head->u_st_mpi_server_msg.op_readdir.path);
+  
+  s = filesystem_opendir(path);
+  ret_entry.status.ret = s == NULL ? -1 : 0;
+  ret_entry.status.server_errno = errno;
+
+  filesystem_seekdir(s, head->u_st_mpi_server_msg.op_readdir.telldir);
+
   // Reset errno
   errno = 0;
   ret = filesystem_readdir(s);
@@ -831,15 +840,24 @@ void mpi_server_op_readdir ( mpi_server_param_st *params, MPI_Comm sd, struct st
   }
 
   ret_entry.status.ret = ret == NULL ? -1 : 0;
+
+  if (ret_entry.status.ret == 0)
+    ret_entry.status.ret = filesystem_telldir(s);
+
+  ret_entry.status.ret = filesystem_closedir(s);
   ret_entry.status.server_errno = errno;
+
   mpi_server_comm_write_data(params, sd,(char *)&ret_entry, sizeof(struct st_mpi_server_readdir_req), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] readdir(%p)=%p\n", params->rank, s, ret);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_readdir] << End\n", params->rank);
 }
 
-void mpi_server_op_closedir ( mpi_server_param_st *params, MPI_Comm sd, struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
+void mpi_server_op_closedir ( mpi_server_param_st *params, MPI_Comm sd,  __attribute__((__unused__)) struct st_mpi_server_msg *head, int rank_client_id, int tag_client_id )
 {
+  // Without sesion close do nothing
+  return;
+
   DIR* s;
   struct st_mpi_server_status status;
 
@@ -854,7 +872,7 @@ void mpi_server_op_closedir ( mpi_server_param_st *params, MPI_Comm sd, struct s
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_closedir] closedir(%p)\n", params->rank, head->u_st_mpi_server_msg.op_closedir.dir);
 
   // do mkdir
-  s = head->u_st_mpi_server_msg.op_closedir.dir;
+  // s = head->u_st_mpi_server_msg.op_closedir.dir;
   status.ret = filesystem_closedir(s);
   status.server_errno = errno;
   mpi_server_comm_write_data(params, sd,(char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);

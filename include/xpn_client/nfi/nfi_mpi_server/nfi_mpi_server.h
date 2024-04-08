@@ -63,8 +63,7 @@
   struct nfi_mpi_server_fhandle
   {
     char path[PATH_MAX];
-    int  fd;
-    DIR *dir;
+    long telldir;
   };
 
 
