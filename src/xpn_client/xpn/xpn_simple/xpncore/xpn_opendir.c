@@ -115,13 +115,15 @@ struct dirent* xpn_simple_readdir(DIR *dirp)
     return NULL;
   }
 
-  XPN_DEBUG_END
+  XPN_DEBUG_END_CUSTOM("read: %s",dirnt->d_name);
   return dirnt;
 }
 
 int xpn_simple_closedir(DIR *dirp)
 {
   int i;
+
+  XPN_DEBUG_BEGIN;
 
   if((NULL == dirp)||(dirp->fd<0)||(dirp->fd>XPN_MAX_FILE-1)){
     errno = EINVAL;
@@ -161,6 +163,8 @@ int xpn_simple_closedir(DIR *dirp)
   free(dirp->path) ;
   free(dirp);
 
+  int res = 0;
+  XPN_DEBUG_END;
   return 0;
 }
 

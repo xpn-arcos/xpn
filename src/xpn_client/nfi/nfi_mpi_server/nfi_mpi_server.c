@@ -987,7 +987,8 @@ ssize_t nfi_mpi_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
 int nfi_mpi_server_close ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 {
-  //TODO: think if is necesary close
+  // Without sesion close do nothing
+  return 0;
   struct nfi_mpi_server_server *server_aux;
   // struct st_mpi_server_msg msg;
 
@@ -1463,7 +1464,7 @@ int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
   if (ret_entry.status.ret < 0)
     errno = ret_entry.status.server_errno;
   else
-    fh_aux->telldir = ret_entry.status.ret;
+    fh_aux->telldir = ret_entry.telldir;
   
   if (ret_entry.end == 0) {
     return -1;
@@ -1479,6 +1480,8 @@ int nfi_mpi_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
 
 int nfi_mpi_server_closedir ( struct nfi_server *serv,  struct nfi_fhandle *fh )
 {
+  // Without sesion close do nothing
+  return 0;
   struct st_mpi_server_msg msg;
   struct nfi_mpi_server_server *server_aux;
   struct nfi_mpi_server_fhandle *fh_aux;

@@ -841,8 +841,7 @@ void mpi_server_op_readdir ( mpi_server_param_st *params, MPI_Comm sd, struct st
 
   ret_entry.status.ret = ret == NULL ? -1 : 0;
 
-  if (ret_entry.status.ret == 0)
-    ret_entry.status.ret = filesystem_telldir(s);
+  ret_entry.telldir = filesystem_telldir(s);
 
   ret_entry.status.ret = filesystem_closedir(s);
   ret_entry.status.server_errno = errno;

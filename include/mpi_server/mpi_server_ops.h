@@ -147,6 +147,7 @@
   {
     int end; //If end = 1 exist entry; 0 not exist
     struct dirent ret;
+    long telldir;
     struct st_mpi_server_status status;
   };
 

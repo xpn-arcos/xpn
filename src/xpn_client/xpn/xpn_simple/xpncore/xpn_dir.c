@@ -34,6 +34,8 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   int ret, err, i, j, n, pd;
   struct xpn_fh *vfh_aux;
 
+  XPN_DEBUG_BEGIN_CUSTOM("%s, %d", path, perm);
+  
   if(path == NULL)
   {
     errno = EINVAL;
@@ -218,6 +220,8 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   */
 
   free(servers);
+  int res = 0;
+  XPN_DEBUG_END;
   return 0;
 }
 
@@ -226,6 +230,8 @@ int xpn_simple_rmdir(const char *path)
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
   int ret, err, i, n, pd;
   struct nfi_server **servers;
+
+  XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
   if(path == NULL)
   {
@@ -283,6 +289,8 @@ int xpn_simple_rmdir(const char *path)
   }
 
   free(servers);
+  int res = 0;
+  XPN_DEBUG_END;
   return 0;
 }
 

@@ -927,6 +927,7 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
     FREE_AND_NULL(fho->url);
     return -1;
   }
+  fh_aux->telldir = filesystem_telldir(s);
   filesystem_closedir(s);
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_opendir] nfi_local_opendir(%s)=%p\n", serv->id, dir, s);
