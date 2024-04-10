@@ -450,18 +450,20 @@ int nfi_local_open ( struct nfi_server *serv, char *url, int flags, mode_t mode,
   return 0;
 }
 
-int nfi_local_create ( struct nfi_server *serv,  char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle *fh )
+int nfi_local_create ( struct nfi_server *serv,  char *url, mode_t mode, __attribute__((__unused__)) struct nfi_attr *attr, struct nfi_fhandle *fh )
 {
+  //NOTE: actualy creat is not in use, it use like POSIX open(path, O_WRONLY|O_CREAT|O_TRUNC, mode);
+  return nfi_local_open(serv, url, O_WRONLY|O_CREAT|O_TRUNC, mode, fh);
   int ret;
   char   dir[PATH_MAX];
   struct nfi_local_fhandle *fh_aux;
-  struct stat st;
+  // struct stat st;
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] >> Begin\n", serv->id);
 
   // Check arguments...
   NULL_RET_ERR(serv, EINVAL);
-  NULL_RET_ERR(attr, EINVAL);
+  // NULL_RET_ERR(attr, EINVAL);
   nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, EINVAL);
 
@@ -494,16 +496,16 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, mode_t mode, struct 
   filesystem_close(ret);
 
   // Get stat of the file
-  memset(&st, 0, sizeof(struct stat));
+  // memset(&st, 0, sizeof(struct stat));
 
-  ret = real_posix_stat(dir, &st);
-  if (ret < 0)
-  {
-    debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, dir, serv->server);
-    FREE_AND_NULL(fh->url);
-    FREE_AND_NULL(fh_aux);
-    return -1;
-  }
+  // ret = real_posix_stat(dir, &st);
+  // if (ret < 0)
+  // {
+  //   debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, dir, serv->server);
+  //   FREE_AND_NULL(fh->url);
+  //   FREE_AND_NULL(fh_aux);
+  //   return -1;
+  // }
 
   fh->type   = NFIFILE;
   fh->server = serv;
@@ -517,7 +519,7 @@ int nfi_local_create ( struct nfi_server *serv,  char *url, mode_t mode, struct 
     return -1;
   }
 
-  local_2_nfi_attr(attr, &st);
+  // local_2_nfi_attr(attr, &st);
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_create] >> End\n", serv->id);
 
@@ -814,18 +816,18 @@ int nfi_local_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 }
 
 // Directories API
-int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh )
+int nfi_local_mkdir ( struct nfi_server *serv,  char *url, __attribute__((__unused__)) struct nfi_attr *attr, struct nfi_fhandle *fh )
 {
   int    ret;
   char   dir[PATH_MAX];
   struct nfi_local_fhandle *fh_aux;
-  struct stat st;
+  // struct stat st;
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] >> Begin\n", serv->id);
 
   // Check arguments...
   NULL_RET_ERR(serv, EINVAL);
-  NULL_RET_ERR(attr, EINVAL);
+  // NULL_RET_ERR(attr, EINVAL);
   nfi_local_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, EINVAL);
 
@@ -854,12 +856,12 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr
     return -1;
   }
 
-  ret = filesystem_stat(dir, &st);
-  if (ret < 0)
-  {
-    debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, dir, serv->server);
-    return ret;
-  }
+  // ret = filesystem_stat(dir, &st);
+  // if (ret < 0)
+  // {
+  //   debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] ERROR: real_posix_stat fails to stat '%s' in server %s.\n", serv->id, dir, serv->server);
+  //   return ret;
+  // }
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] nfi_local_mkdir(%s)=%d\n", serv->id, dir, ret);
 
@@ -874,7 +876,7 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, struct nfi_attr *attr
     return -1;
   }
 
-  local_2_nfi_attr(attr, &st);
+  // local_2_nfi_attr(attr, &st);
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] >> End\n", serv->id);
 

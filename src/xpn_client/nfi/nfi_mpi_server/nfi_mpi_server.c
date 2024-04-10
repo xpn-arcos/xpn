@@ -675,22 +675,23 @@ int nfi_mpi_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
   return 0;
 }
 
-int nfi_mpi_server_create (struct nfi_server *serv,  char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle  *fh)
+int nfi_mpi_server_create (struct nfi_server *serv,  char *url, mode_t mode, __attribute__((__unused__)) struct nfi_attr *attr, struct nfi_fhandle  *fh)
 {
-  //TODO: actualy creat is not in use, it use like POSIX open(path, O_WRONLY|O_CREAT|O_TRUNC, mode);
+  //NOTE: actualy creat is not in use, it use like POSIX open(path, O_WRONLY|O_CREAT|O_TRUNC, mode);
+  return nfi_mpi_server_open(serv, url, O_WRONLY|O_CREAT|O_TRUNC, mode, fh);
   int    ret;
   char   server[PATH_MAX], dir[PATH_MAX];
   struct nfi_mpi_server_server *server_aux;
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
-  struct st_mpi_server_attr_req req;
+  // struct st_mpi_server_attr_req req;
   struct st_mpi_server_status status;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] >> Begin\n", serv->id);
 
   // Check arguments...
   NULL_RET_ERR(serv, EINVAL);
-  NULL_RET_ERR(attr, EINVAL);
+  // NULL_RET_ERR(attr, EINVAL);
   nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, EINVAL);
 
@@ -739,11 +740,11 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, mode_t mode, str
 
   // Get stat
   //bzero(&msg, sizeof(struct st_mpi_server_msg));
-  msg.type = MPI_SERVER_GETATTR_FILE;
+  // msg.type = MPI_SERVER_GETATTR_FILE;
   //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
-  memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
+  // memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
 
-  nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
+  // nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] nfi_mpi_server_create(%s)\n", serv->id, url);
 
@@ -758,7 +759,7 @@ int nfi_mpi_server_create (struct nfi_server *serv,  char *url, mode_t mode, str
     return -1;
   }
 
-  mpi_server_2_nfi_attr(attr, &req.attr);
+  // mpi_server_2_nfi_attr(attr, &req.attr);
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_create] >> End\n", serv->id);
 
@@ -1252,14 +1253,14 @@ int nfi_mpi_server_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
 }
 
 // Directories API
-int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *attr, struct nfi_fhandle *fh)
+int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url,__attribute__((__unused__)) struct nfi_attr *attr, struct nfi_fhandle *fh)
 {
   int ret;
   char server[PATH_MAX], dir[PATH_MAX];
   struct nfi_mpi_server_server *server_aux;
   struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
-  struct st_mpi_server_attr_req req;
+  // struct st_mpi_server_attr_req req;
   struct st_mpi_server_status status;
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] >> Begin\n", serv->id);
@@ -1317,11 +1318,11 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *a
   }
 
   //Get stat
-  msg.type = MPI_SERVER_GETATTR_FILE;
+  // msg.type = MPI_SERVER_GETATTR_FILE;
   //memccpy(msg.id,                                  server_aux->id, 0, MPI_SERVER_ID-1);
-  memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
+  // memccpy(msg.u_st_mpi_server_msg.op_getattr.path, dir,            0, PATH_MAX-1);
 
-  nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
+  // nfi_mpi_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mpi_server_attr_req));
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] nfi_mpi_server_mkdir(%s)=%d\n", serv->id, dir, ret);
 
@@ -1335,7 +1336,7 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, struct nfi_attr *a
     return -1;
   }
 
-  mpi_server_2_nfi_attr(attr, &req.attr);
+  // mpi_server_2_nfi_attr(attr, &req.attr);
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] >> End\n", serv->id);
 
