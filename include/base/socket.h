@@ -31,7 +31,7 @@
 
   /* ... Const / Const ................................................. */
 
-  #define MPI_SOCKET_PORT 3456
+  #define DEFAULT_XPN_SCK_PORT 3456
   #define MPI_SOCKET_ACCEPT 123
   #define MPI_SOCKET_FINISH 666
 
@@ -40,11 +40,12 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int socket_accept_send ( int socket, void * data, int size );   
-  int socket_accept_read ( int socket );
-  int socket_send ( char * srv_name, int code );  
-  int socket_read ( char * srv_name, void * data, int size );  
-  int socket_create ( int *out_socket );
+  int socket_send ( int socket, void * buffer, int size );
+  int socket_recv ( int socket, void * buffer, int size );
+  int socket_server_create ( int *out_socket );
+  int socket_server_accept ( int socket, int *out_conection_socket );
+  int socket_client_connect ( char * srv_name, int *out_socket );
+  int socket_close ( int socket );
 
   /* ... Macros / Macros .................................................. */
 

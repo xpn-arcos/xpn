@@ -150,6 +150,7 @@ int mpi_client_comm_destroy ( mpi_client_param_st *params )
 int mpi_client_comm_connect ( mpi_client_param_st *params )
 {
   int ret;
+  int connection_socket;
 
   debug_info("[MPI_CLIENT_COMM] [mpi_client_comm_connect] >> Begin\n");
 
@@ -163,18 +164,28 @@ int mpi_client_comm_connect ( mpi_client_param_st *params )
   // Send connect intention
   if (params->rank == 0)
   {
-    ret = socket_send(params->srv_name, MPI_SOCKET_ACCEPT);
+    ret = socket_client_connect(params->srv_name, &connection_socket);
+    if (ret != 0)
+    {
+      debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: socket connect\n");
+      return -1;
+    }
+    int buffer = MPI_SOCKET_ACCEPT;
+    ret = socket_send(connection_socket, &buffer, sizeof(buffer));
     if (ret != 0)
     {
       debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: socket send\n");
+      socket_close(connection_socket);
       return -1;
     }
-    ret = socket_read(params->srv_name, params->port_name, MPI_MAX_PORT_NAME);
+    ret = socket_recv(connection_socket, params->port_name, MPI_MAX_PORT_NAME);
     if (ret != 0)
     {
       debug_error("[MPI_CLIENT_COMM] [mpi_client_comm_connect] ERROR: socket read\n");
+      socket_close(connection_socket);
       return -1;
     }
+    socket_close(connection_socket);
   }
 
   // Send port name to all ranks

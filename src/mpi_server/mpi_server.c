@@ -164,6 +164,9 @@ void mpi_server_finish()
 int mpi_server_up ( void )
 {
   int ret;
+  int server_socket;
+  int connection_socket;
+  int recv_code = 0;
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] >> Begin\n", 0);
 
@@ -200,9 +203,8 @@ int mpi_server_up ( void )
     printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Workers initialization fails\n", 0);
     return -1;
   }
-  int server_socket;
 
-  ret = socket_create(&server_socket);
+  ret = socket_server_create(&server_socket);
   if (ret < 0)
   {
     printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_up] ERROR: Socket initialization fails\n", 0);
@@ -212,12 +214,17 @@ int mpi_server_up ( void )
   the_end = 0;
 
   while(!the_end){
-    ret = socket_accept_read(server_socket);
-    debug_info("[TH_ID=%d] [MPI_SERVER %s] [mpi_server_up] pipe recv: %d \n", 0,params.srv_name, ret);
-    switch (ret)
+    ret = socket_server_accept(server_socket, &connection_socket);
+    if (ret < 0)
+      continue;
+    ret = socket_recv(connection_socket, &recv_code, sizeof(recv_code));
+    if (ret < 0)
+      continue;
+    debug_info("[TH_ID=%d] [MPI_SERVER %s] [mpi_server_up] socket recv: %d \n", 0, params.srv_name, recv_code);
+    switch (recv_code)
     {
     case MPI_SOCKET_ACCEPT:
-      socket_accept_send(server_socket, params.port_name, MPI_MAX_PORT_NAME);
+      socket_send(connection_socket, params.port_name, MPI_MAX_PORT_NAME);
       mpi_server_accept();
       break;
     case MPI_SOCKET_FINISH:
@@ -225,9 +232,10 @@ int mpi_server_up ( void )
       the_end = 1;
       break;
     default:
-      perror("read");
+      debug_info("[TH_ID=%d] [MPI_SERVER %s] [mpi_server_up] >> Socket recv unknown code %d\n", 0, params.srv_name, recv_code);
       break;
     }
+    socket_close(connection_socket);
   }
    
   close(server_socket);
@@ -241,6 +249,8 @@ int mpi_server_down ( int argc, char *argv[] )
 {
   char     srv_name  [1024];
   FILE     *file;
+  int ret;
+  int buffer = MPI_SOCKET_FINISH;
 
   debug_info("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] >> Begin\n", 0);
 
@@ -265,8 +275,20 @@ int mpi_server_down ( int argc, char *argv[] )
   }
 
   while (fscanf(file, "%[^\n] ", srv_name) != EOF)
-  {
-    socket_send(srv_name, MPI_SOCKET_FINISH);
+  { 
+    int connection_socket;
+    ret = socket_client_connect(srv_name, &connection_socket);
+    if (ret < 0)
+    {
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: socket connection %s\n", 0, srv_name);
+      continue;
+    }
+    ret = socket_send(connection_socket, &buffer, sizeof(buffer)); 
+    if (ret < 0)
+    {
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: socket send %s\n", 0, srv_name);
+    }
+    socket_close(connection_socket);
   }
 
   // Close host file
@@ -286,6 +308,7 @@ int mpi_server_down ( int argc, char *argv[] )
 int mpi_server_terminate ( int argc, char *argv[] )
 {
   int  ret;
+  int buffer = MPI_SOCKET_FINISH;
   
   printf("\n");
   printf(" ----------------\n");
@@ -300,10 +323,19 @@ int mpi_server_terminate ( int argc, char *argv[] )
   char version[MPI_MAX_LIBRARY_VERSION_STRING];
   MPI_Get_library_version(version, &version_len);
   
-  ret = socket_send(params.srv_name, MPI_SOCKET_FINISH);
-  if (ret >= 0)
+  int connection_socket;
+  ret = socket_client_connect(params.srv_name, &connection_socket);
+  if (ret < 0)
   {
-    printf("Fail to send finish to server (%s)\n",params.srv_name);
+    printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: socket connection %s\n", 0, params.srv_name);
+  }else
+  {
+    ret = socket_send(connection_socket, &buffer, sizeof(buffer));
+    if (ret < 0)
+    {
+      printf("[TH_ID=%d] [MPI_SERVER] [mpi_server_down] ERROR: socket send %s\n", 0, params.srv_name);
+    }
+    socket_close(connection_socket);
   }
   
   MPI_Finalize();
