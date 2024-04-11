@@ -325,8 +325,6 @@ void mpi_server_op_open ( mpi_server_param_st *params, MPI_Comm sd, struct st_mp
   // do open
   status.ret = filesystem_open2(path, head->u_st_mpi_server_msg.op_open.flags, head->u_st_mpi_server_msg.op_open.mode);
   status.server_errno = errno;
-  // TODO: flags
-  // fd = filesystem_open(path, head->u_st_mpi_server_msg.op_open.flags);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_open] open(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_open.path, status.ret);
   if (status.ret < 0){
     mpi_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
@@ -362,8 +360,6 @@ void mpi_server_op_creat ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
   // do creat
   status.ret = filesystem_creat(path, head->u_st_mpi_server_msg.op_creat.mode);
   status.server_errno = errno;
-  // TODO: flags
-  // fd = filesystem_creat(path, head->u_st_mpi_server_msg.op_open.flags);
   debug_info("[Server=%d] [MPI_SERVER_OPS] [mpi_server_op_creat] creat(%s)=%d\n", params->rank, head->u_st_mpi_server_msg.op_creat.path, status.ret);
   if (status.ret < 0){
     mpi_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
@@ -756,8 +752,7 @@ void mpi_server_op_mkdir ( mpi_server_param_st *params, MPI_Comm sd, struct st_m
   strcat(path, head->u_st_mpi_server_msg.op_mkdir.path);
 
   // do mkdir
-  status.ret = filesystem_mkdir(path, 0777); //TO-DO: 0777 received from the client
-  // status.ret = filesystem_mkdir(path, head->u_st_mpi_server_msg.op_mkdir.flags); //TO-DO: 0777 received from the client
+  status.ret = filesystem_mkdir(path, head->u_st_mpi_server_msg.op_mkdir.mode);
   status.server_errno = errno;
   mpi_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_mpi_server_status), rank_client_id, tag_client_id);
 

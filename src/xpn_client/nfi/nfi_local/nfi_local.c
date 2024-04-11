@@ -816,7 +816,7 @@ int nfi_local_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 }
 
 // Directories API
-int nfi_local_mkdir ( struct nfi_server *serv,  char *url, __attribute__((__unused__)) struct nfi_attr *attr, __attribute__((__unused__)) struct nfi_fhandle *fh )
+int nfi_local_mkdir ( struct nfi_server *serv,  char *url, mode_t mode, __attribute__((__unused__)) struct nfi_attr *attr, __attribute__((__unused__)) struct nfi_fhandle *fh )
 {
   int    ret;
   char   dir[PATH_MAX];
@@ -848,7 +848,7 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, __attribute__((__unus
   // bzero(fh_aux, sizeof(struct nfi_local_fhandle));
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] nfi_local_mkdir(%s)\n", serv->id, dir);
-  ret = filesystem_mkdir(dir, 0777);
+  ret = filesystem_mkdir(dir, mode);
   if ((ret < 0) && (errno != EEXIST))
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] ERROR: real_posix_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);

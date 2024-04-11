@@ -82,7 +82,7 @@
   int nfi_worker_do_getattr (struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
   int nfi_worker_do_setattr (struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
 
-  int nfi_worker_do_mkdir    (struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
+  int nfi_worker_do_mkdir    (struct nfi_worker *wrk, char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle *fh);
   int nfi_worker_do_opendir  (struct nfi_worker *wrk, char *url, struct nfi_fhandle *fho);
   int nfi_worker_do_readdir  (struct nfi_worker *wrk, struct nfi_fhandle *fhd, struct dirent *entry);
   int nfi_worker_do_closedir (struct nfi_worker *wrk, struct nfi_fhandle *fh);

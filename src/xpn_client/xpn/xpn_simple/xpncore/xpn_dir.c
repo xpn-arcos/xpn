@@ -67,7 +67,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   {
     XpnGetURLServer(servers[i], abs_path, url_serv);
     // Worker
-    nfi_worker_do_mkdir(servers[i]->wrk, url_serv, NULL, NULL);
+    nfi_worker_do_mkdir(servers[i]->wrk, url_serv, perm, NULL, NULL);
   }
   // Wait
   err = 0;

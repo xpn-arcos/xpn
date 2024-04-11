@@ -1253,7 +1253,7 @@ int nfi_mpi_server_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
 }
 
 // Directories API
-int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, __attribute__((__unused__)) struct nfi_attr *attr, __attribute__((__unused__)) struct nfi_fhandle *fh)
+int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, mode_t mode, __attribute__((__unused__)) struct nfi_attr *attr, __attribute__((__unused__)) struct nfi_fhandle *fh)
 {
   int ret;
   char server[PATH_MAX], dir[PATH_MAX];
@@ -1302,6 +1302,7 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, __attribute__((__u
   //bzero(&msg, sizeof(struct st_mpi_server_msg));
 
   msg.type = MPI_SERVER_MKDIR_DIR;
+  msg.u_st_mpi_server_msg.op_mkdir.mode = mode;
   memccpy(msg.u_st_mpi_server_msg.op_mkdir.path, dir, 0, PATH_MAX-1);
 
   nfi_mpi_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_mpi_server_status));

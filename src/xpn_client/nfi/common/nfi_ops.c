@@ -105,7 +105,7 @@ void nfi_do_operation (struct st_th th_arg)
 
     //Directory API
     case op_mkdir:
-      ret = wrk->server->ops->nfi_mkdir(wrk->server, wrk->arg.url, wrk->arg.attr, wrk->arg.fh);
+      ret = wrk->server->ops->nfi_mkdir(wrk->server, wrk->arg.url, wrk->arg.mode, wrk->arg.attr, wrk->arg.fh);
       break;
     case op_opendir:
       ret = wrk->server->ops->nfi_opendir(wrk->server, wrk->arg.url, wrk->arg.fh);
@@ -302,7 +302,7 @@ int nfi_worker_do_setattr (struct nfi_worker * wrk, struct nfi_fhandle * fh, str
 
 
 //Directory API
-int nfi_worker_do_mkdir (struct nfi_worker * wrk, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) 
+int nfi_worker_do_mkdir (struct nfi_worker * wrk, char * url, mode_t mode, struct nfi_attr * attr, struct nfi_fhandle * fh) 
 {
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_mkdir] >> Begin\n", pthread_self());
 
@@ -311,6 +311,7 @@ int nfi_worker_do_mkdir (struct nfi_worker * wrk, char * url, struct nfi_attr * 
   wrk->arg.attr = attr;
   wrk->arg.operation = op_mkdir;
   strcpy(wrk->arg.url, url);
+  wrk->arg.mode = mode;
 
   // Do operation
   nfiworker_launch(nfi_do_operation, wrk);
