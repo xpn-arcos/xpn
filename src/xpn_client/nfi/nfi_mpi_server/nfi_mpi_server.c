@@ -1253,12 +1253,12 @@ int nfi_mpi_server_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
 }
 
 // Directories API
-int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url,__attribute__((__unused__)) struct nfi_attr *attr, struct nfi_fhandle *fh)
+int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url, __attribute__((__unused__)) struct nfi_attr *attr, __attribute__((__unused__)) struct nfi_fhandle *fh)
 {
   int ret;
   char server[PATH_MAX], dir[PATH_MAX];
   struct nfi_mpi_server_server *server_aux;
-  struct nfi_mpi_server_fhandle *fh_aux;
+  // struct nfi_mpi_server_fhandle *fh_aux;
   struct st_mpi_server_msg msg;
   // struct st_mpi_server_attr_req req;
   struct st_mpi_server_status status;
@@ -1267,7 +1267,7 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url,__attribute__((__un
 
   // Check arguments...
   NULL_RET_ERR(serv, EINVAL);
-  NULL_RET_ERR(attr, EINVAL);
+  // NULL_RET_ERR(attr, EINVAL);
   nfi_mpi_server_keep_connected(serv);
   NULL_RET_ERR(serv->private_info, EINVAL);
 
@@ -1293,9 +1293,9 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url,__attribute__((__un
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] ParseURL(%s)= %s; %s\n", serv->id, url, server, dir);
 
   // private_info file handle
-  fh_aux = (struct nfi_mpi_server_fhandle *)malloc(sizeof(struct nfi_mpi_server_fhandle));
-  NULL_RET_ERR(fh_aux, ENOMEM);
-  bzero(fh_aux, sizeof(struct nfi_mpi_server_fhandle));
+  // fh_aux = (struct nfi_mpi_server_fhandle *)malloc(sizeof(struct nfi_mpi_server_fhandle));
+  // NULL_RET_ERR(fh_aux, ENOMEM);
+  // bzero(fh_aux, sizeof(struct nfi_mpi_server_fhandle));
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] nfi_mpi_server_mkdir(%s)\n", serv->id, dir);
 
@@ -1309,11 +1309,11 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url,__attribute__((__un
   if (status.ret <0)
     errno = status.server_errno;
 
-  memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
+  // memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
   if ((status.ret < 0)&&(errno != EEXIST))
   {
     debug_error("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
-    FREE_AND_NULL(fh_aux);
+    // FREE_AND_NULL(fh_aux);
     return -1;
   }
 
@@ -1326,15 +1326,15 @@ int nfi_mpi_server_mkdir(struct nfi_server *serv,  char *url,__attribute__((__un
 
   debug_info("[SERV_ID=%d] [NFI_MPI] [nfi_mpi_server_mkdir] nfi_mpi_server_mkdir(%s)=%d\n", serv->id, dir, ret);
 
-  fh->type = NFIDIR;
-  fh->priv_fh = (void *)fh_aux;
+  // fh->type = NFIDIR;
+  // fh->priv_fh = (void *)fh_aux;
 
-  fh->url = STRING_MISC_StrDup(url);
-  if(fh->url == NULL)
-  {
-    FREE_AND_NULL(fh_aux);
-    return -1;
-  }
+  // fh->url = STRING_MISC_StrDup(url);
+  // if(fh->url == NULL)
+  // {
+  //   FREE_AND_NULL(fh_aux);
+  //   return -1;
+  // }
 
   // mpi_server_2_nfi_attr(attr, &req.attr);
 

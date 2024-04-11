@@ -816,11 +816,11 @@ int nfi_local_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 }
 
 // Directories API
-int nfi_local_mkdir ( struct nfi_server *serv,  char *url, __attribute__((__unused__)) struct nfi_attr *attr, struct nfi_fhandle *fh )
+int nfi_local_mkdir ( struct nfi_server *serv,  char *url, __attribute__((__unused__)) struct nfi_attr *attr, __attribute__((__unused__)) struct nfi_fhandle *fh )
 {
   int    ret;
   char   dir[PATH_MAX];
-  struct nfi_local_fhandle *fh_aux;
+  // struct nfi_local_fhandle *fh_aux;
   // struct stat st;
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] >> Begin\n", serv->id);
@@ -843,16 +843,16 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, __attribute__((__unus
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] ParseURL(%s)= %s\n", serv->id, url, dir);
 
   // private_info file handle
-  fh_aux = (struct nfi_local_fhandle *)malloc(sizeof(struct nfi_local_fhandle));
-  NULL_RET_ERR(fh_aux, ENOMEM);
-  bzero(fh_aux, sizeof(struct nfi_local_fhandle));
+  // fh_aux = (struct nfi_local_fhandle *)malloc(sizeof(struct nfi_local_fhandle));
+  // NULL_RET_ERR(fh_aux, ENOMEM);
+  // bzero(fh_aux, sizeof(struct nfi_local_fhandle));
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] nfi_local_mkdir(%s)\n", serv->id, dir);
   ret = filesystem_mkdir(dir, 0777);
   if ((ret < 0) && (errno != EEXIST))
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] ERROR: real_posix_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
-    FREE_AND_NULL(fh_aux);
+    // FREE_AND_NULL(fh_aux);
     return -1;
   }
 
@@ -865,16 +865,16 @@ int nfi_local_mkdir ( struct nfi_server *serv,  char *url, __attribute__((__unus
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_mkdir] nfi_local_mkdir(%s)=%d\n", serv->id, dir, ret);
 
-  fh->type = NFIDIR;
-  fh->priv_fh = (void *)fh_aux;
+  // fh->type = NFIDIR;
+  // fh->priv_fh = (void *)fh_aux;
 
-  fh->url = STRING_MISC_StrDup(url);
-  if (fh->url == NULL)
-  {
-    errno = ENOMEM;
-    FREE_AND_NULL(fh_aux);
-    return -1;
-  }
+  // fh->url = STRING_MISC_StrDup(url);
+  // if (fh->url == NULL)
+  // {
+  //   errno = ENOMEM;
+  //   FREE_AND_NULL(fh_aux);
+  //   return -1;
+  // }
 
   // local_2_nfi_attr(attr, &st);
 
