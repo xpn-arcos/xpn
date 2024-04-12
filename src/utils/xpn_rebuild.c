@@ -32,6 +32,7 @@
   #include <sys/stat.h>
   #include <dirent.h>
   #include "mpi.h"
+  #include "xpn/xpn_simple/xpn_policy_rw.h"
 
 
 /* ... Const / Const ................................................. */
@@ -54,7 +55,7 @@
 
 /* ... Functions / Funciones ......................................... */
 
-  int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int rank, int size)
+  int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {  
     int  ret;
 
@@ -63,6 +64,9 @@
     int buf_len;
     off64_t offset_src ;
     int cont, cont2 ;
+    off_t local_offset;
+    int local_server;
+    int i;
 
     printf("=");
     
@@ -113,37 +117,53 @@
       memset(header_buf, 0, HEADER_SIZE);
       ret = write(fd_dest, header_buf, HEADER_SIZE);
 
-      offset_src = rank * blocksize ;
+      offset_src = 0;
       do
       { 
-        off64_t ret_2;
-        ret_2 = lseek64(fd_src, offset_src, SEEK_SET) ;
-        if (ret_2 < 0) {
-          //perror("lseek: ");
-          break;
+        for (i = 0; i <= replication_level; i++)
+        {
+          XpnCalculateBlock(blocksize, replication_level, size, offset_src, i, &local_offset, &local_server);
+
+          if (local_server == rank)
+            break;
         }
+        
+        if (local_server != rank)
+        {
+          offset_src+=blocksize;
+        }
+        else
+        {
+          // printf("From rank: %d %s, offset_src: %d, local_offset: %d, repl: %d\n", rank, entry, offset_src, local_offset, i);
+          off64_t ret_2;
+          ret_2 = lseek64(fd_src, offset_src, SEEK_SET) ;
+          if (ret_2 < 0) {
+            //perror("lseek: ");
+            break;
+          }
 
-        cont = 0;
-        buf_len = blocksize;
-        memset(buf, 0, buf_len);
-        do {
-          ret = read(fd_src, buf + cont, buf_len);
-          cont    = cont + ret ;
-          buf_len = buf_len - ret ;
-        } while ( (cont < buf_len) && (ret != 0) );
+          cont = 0;
+          buf_len = blocksize;
+          memset(buf, 0, buf_len);
+          do {
+            ret = read(fd_src, buf + cont, buf_len);
+            cont    = cont + ret ;
+            buf_len = buf_len - ret ;
+          } while ( (cont < buf_len) && (ret != 0) );
 
-        cont2 = 0;
-        buf_len = cont;
-        do {
-          ret = write(fd_dest, buf + cont2, buf_len);
-          cont2    = cont2 + ret ;
-          buf_len  = buf_len - ret ;
-        } while ( (cont2 < cont) && (ret != 0) );
+          cont2 = 0;
+          buf_len = cont;
+          do {
+            ret = write(fd_dest, buf + cont2, buf_len);
+            cont2    = cont2 + ret ;
+            buf_len  = buf_len - ret ;
+          } while ( (cont2 < cont) && (ret != 0) );
 
-        //printf("rank %d; ret: %d; offset %ld; nodes %d; blocksize %d\n", rank, ret, offset_src, size, blocksize);
-        //printf("Buf: %s\n", buf);
+          //printf("rank %d; ret: %d; offset %ld; nodes %d; blocksize %d\n", rank, ret, offset_src, size, blocksize);
+          //printf("Buf: %s\n", buf);
 
-        offset_src = offset_src + (size * blocksize) ;
+          offset_src+=blocksize;
+        }
       }
       while(cont > 0);
 
@@ -156,7 +176,7 @@
   }
 
 
-  int list (char * dir_name, char * dest_prefix, int blocksize, int rank, int size)
+  int list (char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {
     int ret;
     DIR* dir = NULL;
@@ -197,13 +217,13 @@
       }
 
       int is_file = !S_ISDIR(stat_buf.st_mode);
-      copy(path, is_file, dir_name, dest_prefix, blocksize, rank, size);
+      copy(path, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
 
       if (S_ISDIR(stat_buf.st_mode))
       {
         char path_dst [PATH_MAX];
         sprintf(path_dst, "%s/%s", dest_prefix, entry->d_name);
-        list(path, path_dst, blocksize, rank, size);
+        list(path, path_dst, blocksize, replication_level, rank, size);
       }
 
       entry = readdir(dir);
@@ -218,24 +238,32 @@
   int main(int argc, char *argv[])
   {   
     int rank, size;
-
+    int replication_level = 0;
+    int blocksize = 524288;
     //
     // Check arguments...
     //
-    if ( argc < 4 )
+    if ( argc < 3 )
     {
       printf("Usage:\n");
-      printf(" ./%s <origin partition> <destination local path> <destination block size>\n", argv[0]);
+      printf(" ./%s <origin partition> <destination local path> <optional destination block size> <optional replication level>\n", argv[0]);
       printf("\n");
       return -1;
     }
-
+    
+    if ( argc >= 5){
+      replication_level = atoi(argv[4]);
+    }
+    if ( argc >= 4){
+      blocksize = atoi(argv[3]);
+    }
+    
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    printf("Copying... \n");
-    list (argv[1], argv[2], atoi(argv[3]), rank, size);
+    printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
+    list (argv[1], argv[2], blocksize, replication_level, rank, size);
     printf("\n");
 
     MPI_Barrier(MPI_COMM_WORLD);

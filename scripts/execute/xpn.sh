@@ -103,7 +103,7 @@ start_xpn_servers() {
         mpiexec -np       1 \
           -host "${line}" \
           ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server ${ARGS} &
-        sleep 0.5
+        # sleep 0.5
     done
   elif [[ ${SERVER_TYPE} == "sck" ]]; then
     mpiexec -np       "${NODE_NUM}" \
