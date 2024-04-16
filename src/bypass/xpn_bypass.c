@@ -508,6 +508,8 @@ int xpn_adaptor_keepInit ( void )
     fdstable_init ();
     fdsdirtable_init ();
     ret = xpn_init();
+    // Add callback atexit of xpn_destroy
+    atexit((void (*)(void))xpn_destroy);
 
     debug_info("[BYPASS]\t After xpn_init() -> %d\n", ret);
 

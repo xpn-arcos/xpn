@@ -79,9 +79,17 @@ int xpn_simple_destroy ( void )
   int i;
 
   XPN_DEBUG_BEGIN
+  pthread_mutex_lock(&xpn_init_mutex);
+  if ( xpn_initialize == 0){
+    pthread_mutex_unlock(&xpn_init_mutex);
+    res = 0;
+    XPN_DEBUG_END
+    return res;
+  }
   xpn_initialize = 0;
   if(xpn_parttable[0].id < 0)
   {
+    pthread_mutex_unlock(&xpn_init_mutex);
     res = 0;
     XPN_DEBUG_END
     return res;
@@ -98,6 +106,7 @@ int xpn_simple_destroy ( void )
     i++;
   }
 
+  pthread_mutex_unlock(&xpn_init_mutex);
   res = 0;
   XPN_DEBUG_END
   return res;
