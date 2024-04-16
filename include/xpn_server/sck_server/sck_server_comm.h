@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _SOCKET_H_
-#define _SOCKET_H_
+#ifndef _SCK_SERVER_COMM_H_
+#define _SCK_SERVER_COMM_H_
 
   #ifdef  __cplusplus
     extern "C" {
@@ -30,29 +30,23 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #include "debug_msg.h"
+  #include "base/utils.h"
+  #include "base/time_misc.h"
 
-
+  
   /* ... Const / Const ................................................. */
 
-  #define DEFAULT_XPN_SCK_PORT 3456
-  #define SOCKET_ACCEPT_CODE 123
-  #define SOCKET_FINISH_CODE 666
 
   /* ... Data structures / Estructuras de datos ........................ */
 
 
   /* ... Functions / Funciones ......................................... */
 
-  int socket_send ( int socket, void * buffer, int size );
-  int socket_recv ( int socket, void * buffer, int size );
-  int socket_server_create ( int *out_socket );
-  int socket_server_accept ( int socket, int *out_conection_socket );
-  int socket_client_connect ( char * srv_name, int *out_socket );
-  int socket_close ( int socket );
+  int       sck_server_comm_init    ( int *socket, char *port_name );
+  int       sck_server_comm_accept  ( int socket, int *new_socket );
 
-  /* ... Macros / Macros .................................................. */
-
+  /* ................................................................... */
+  
   #ifdef  __cplusplus
     }
   #endif

@@ -22,7 +22,8 @@
 
    /* ... Include / Inclusion ........................................... */
 
-      #include "xpn/xpn_simple/xpn_rw.h"
+  #include "xpn/xpn_simple/xpn_rw.h"
+  #include "ns.h"
 
 
    /* ... Global vars. / Variables globales ............................. */

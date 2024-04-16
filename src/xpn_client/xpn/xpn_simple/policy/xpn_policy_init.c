@@ -290,6 +290,25 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
             return -1;
         }
     }
+    #ifdef ENABLE_MPI_SERVER
+    else if (strcmp(prt, "mpi_server") == 0) {
+        ret = nfi_xpn_server_init(url_buf, serv, XPN_SERVER_TYPE_MPI);
+        if (ret < 0) {
+            errno = ESRCH;
+            return -1;
+        }
+    }
+    #endif
+
+    #ifdef ENABLE_SCK_SERVER
+    else if (strcmp(prt, "sck_server") == 0) {
+        ret = nfi_xpn_server_init(url_buf, serv, XPN_SERVER_TYPE_SCK);
+        if (ret < 0) {
+            errno = ESRCH;
+            return -1;
+        }
+    }
+    #endif
 
     #ifdef ENABLE_NFS
     else if ((strcmp(prt, "nfs") == 0) || (strcmp(prt, "nfs2") == 0)) {
@@ -306,28 +325,6 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
     else if (strcmp(prt, "nfs3") == 0) {
         //printf("[XPN]nfi_nfs3_init: %s\n",url);
         ret = nfi_nfs3_init(url_buf, serv, NULL);
-        if (ret < 0) {
-            errno = ESRCH;
-            return -1;
-        }
-    }
-    #endif
-
-    #ifdef ENABLE_MPI_SERVER
-    else if (strcmp(prt, "mpi_server") == 0) {
-        //printf("[XPN]nfi_mpi_server_init: %s\n",url);
-        ret = nfi_mpi_server_init(url_buf, serv, NULL);
-        if (ret < 0) {
-            errno = ESRCH;
-            return -1;
-        }
-    }
-    #endif
-
-    #ifdef ENABLE_SCK_SERVER
-    else if (strcmp(prt, "sck_server") == 0) {
-        //printf("[XPN]nfi_sck_server_init: %s\n",url);
-        ret = nfi_sck_server_init(url_buf, serv, NULL);
         if (ret < 0) {
             errno = ESRCH;
             return -1;

@@ -35,7 +35,6 @@
   #include "base/path_misc.h"
   #include "base/urlstr.h"
   #include "nfi/nfi.h"
-  #include "nfi/nfi_mpi_server/nfi_mpi_server.h"
   #include "nfi_worker.h"
 
 
@@ -50,7 +49,7 @@
   struct nfi_local_server
   {
     char path[PATH_MAX];
-    void * private_info_mpi;
+    void * private_info_server;
   };
 
   struct nfi_local_fhandle

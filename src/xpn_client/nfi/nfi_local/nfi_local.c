@@ -23,6 +23,7 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "nfi_local.h"
+#include "nfi/nfi_xpn_server/nfi_xpn_server_comm.h"
 
 
 /* ... Const / Const ................................................. */
@@ -307,7 +308,7 @@ int nfi_local_connect ( struct nfi_server *serv, __attribute__((__unused__)) cha
 int nfi_local_disconnect ( struct nfi_server *serv )
 {
   struct nfi_local_server *server_aux;
-  struct nfi_mpi_server_server *server_mpi_aux;
+  struct nfi_xpn_server *server_xpn_aux;
 
   // check params...
   if (serv == NULL) {
@@ -325,10 +326,10 @@ int nfi_local_disconnect ( struct nfi_server *serv )
     return -1;
   }
 
-  server_mpi_aux = (struct nfi_mpi_server_server *)server_aux->private_info_mpi;
-  if (server_aux != NULL) {
-    serv->private_info = server_mpi_aux;
-    nfi_mpi_server_disconnect(serv);
+  server_xpn_aux = (struct nfi_xpn_server *)server_aux->private_info_server;
+  if (server_xpn_aux != NULL) {
+    serv->private_info = server_xpn_aux;
+    nfi_xpn_server_disconnect(serv);
     serv->private_info = server_aux;
   }
 
@@ -345,7 +346,7 @@ int nfi_local_reconnect ( struct nfi_server *serv ) //TODO
   int ret;
   char   dir[PATH_MAX];
   struct nfi_local_server *server_aux;
-  struct nfi_mpi_server_server *server_mpi_aux;
+  struct nfi_xpn_server *server_mpi_aux;
 
   // check params...
   if (serv == NULL) {
@@ -355,14 +356,14 @@ int nfi_local_reconnect ( struct nfi_server *serv ) //TODO
 
   server_aux = (struct nfi_local_server *) (serv->private_info);
   if (server_aux != NULL) {
-    server_mpi_aux = (struct nfi_mpi_server_server *)server_aux->private_info_mpi;
+    server_mpi_aux = (struct nfi_xpn_server *)server_aux->private_info_server;
     if (server_aux != NULL) {
       serv->private_info = server_mpi_aux;
-      nfi_mpi_server_reconnect(serv);
-      // Update private_info_mpi
-      server_mpi_aux = (struct nfi_mpi_server_server *)serv->private_info;
+      nfi_xpn_server_reconnect(serv);
+      // Update private_info_server
+      server_mpi_aux = (struct nfi_xpn_server *)serv->private_info;
       serv->private_info = server_aux;
-      server_aux->private_info_mpi = server_mpi_aux;
+      server_aux->private_info_server = server_mpi_aux;
     }
   }
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_reconnect] >> Begin\n", serv->id);

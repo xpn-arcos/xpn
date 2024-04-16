@@ -178,8 +178,7 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_client/xpn \
 -I\$(top_srcdir)/include/xpn_client/xpn/xpn_simple \
 -I\$(top_srcdir)/include/xpn_client/nfi \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_local"
 
@@ -309,9 +308,8 @@ AC_CONFIG_FILES([ \
       src/xpn_client/Makefile \
       src/utils/Makefile \
       src/bypass/Makefile \
-      src/mpi_server/Makefile \
-      src/sck_server/Makefile \
       src/tcp_server/Makefile \
+      src/xpn_server/Makefile \
       test/integrity/xpn/Makefile \
       test/integrity/mpi_connect_accept/Makefile \
       test/integrity/bypass_c/Makefile \

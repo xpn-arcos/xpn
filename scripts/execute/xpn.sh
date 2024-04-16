@@ -69,6 +69,7 @@ mk_conf_servers() {
                            --part_size    ${PARTITION_SIZE} \
                            --replication_level    ${REPLICATION_LEVEL} \
                            --part_name    ${PARTITION_NAME} \
+                           --storage_protocol     ${SERVER_TYPE}"_server" \
                            --storage_path ${STORAGE_PATH}
   else
     "${BASE_DIR}"/mk_conf.sh --conf            "${CONF_NAME}" \
@@ -95,24 +96,18 @@ start_xpn_servers() {
 
   rm -f "${WORKDIR}/dns.txt"
   touch "${WORKDIR}/dns.txt"
-
-  if [[ ${SERVER_TYPE} == "mpi" ]]; then
+  if [[ ${SERVER_TYPE} == "sck" ]]; then
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
+  else
     for ((i=1; i<=$NODE_NUM; i++))
     do
         line=$(head -n $i "$HOSTFILE" | tail -n 1)
         mpiexec -np       1 \
           -host "${line}" \
-          ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server ${ARGS} &
-        # sleep 0.5
+          ${BASE_DIR}/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} ${ARGS} &
     done
-  elif [[ ${SERVER_TYPE} == "sck" ]]; then
-    mpiexec -np       "${NODE_NUM}" \
-            -hostfile "${HOSTFILE}" \
-            "${BASE_DIR}"/../../src/sck_server/xpn_sck_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
-  else
-    mpiexec -np       "${NODE_NUM}" \
-            -hostfile "${HOSTFILE}" \
-            "${BASE_DIR}"/../../src/tcp_server/xpn_tcp_server -ns "${WORKDIR}"/dns.txt "${ARGS}" -p 3456 &
   fi
 
   sleep 3
@@ -140,19 +135,8 @@ stop_xpn_servers() {
     echo " * DEATH_FILE: ${DEATH_FILE}"
     echo " * additional daemon args: ${ARGS}"
   fi
-
-  if [[ ${SERVER_TYPE} == "mpi" ]]; then
-    mpiexec -np 1 \
-            "${BASE_DIR}"/../../src/mpi_server/xpn_stop_mpi_server -f ${DEATH_FILE}
-  elif [[ ${SERVER_TYPE} == "sck" ]]; then
-    mpiexec -np 1 \
-            -genv XPN_DNS ${WORKDIR}/dns.txt \
-            "${BASE_DIR}"/../../src/sck_server/xpn_stop_sck_server -f ${DEATH_FILE}
-  else
-    mpiexec -np 1 \
-            -genv XPN_DNS${WORKDIR}/dns.txt \
-            ${BASE_DIR}/../../src/tcp_server/xpn_stop_tcp_server -f ${DEATH_FILE}
-  fi
+  mpiexec -np 1 \
+          "${BASE_DIR}"/../../src/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE}
 }
 
 terminate_xpn_server() {

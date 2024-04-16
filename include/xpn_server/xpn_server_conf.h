@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _SOCKET_H_
-#define _SOCKET_H_
+#ifndef _XPN_SERVER_CONF_H_
+#define _XPN_SERVER_CONF_H_
 
   #ifdef  __cplusplus
     extern "C" {
@@ -30,28 +30,39 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #include "debug_msg.h"
+  #ifdef ENABLE_MPI_SERVER
+  #include "mpi.h"
+  #endif
 
 
   /* ... Const / Const ................................................. */
 
-  #define DEFAULT_XPN_SCK_PORT 3456
-  #define SOCKET_ACCEPT_CODE 123
-  #define SOCKET_FINISH_CODE 666
+  #define XPN_SERVER_TYPE_MPI 0
+  #define XPN_SERVER_TYPE_SCK 1
 
+
+  /* MAX_BUFFER_SIZE */
+  #ifndef MAX_BUFFER_SIZE
+    #define MAX_BUFFER_SIZE (1*MB)
+  #endif
+
+  #ifndef XPN_SERVER_DIRBASE_DEFAULT
+    #define XPN_SERVER_DIRBASE_DEFAULT  "/"
+  #endif
+
+  #ifdef MPI_MAX_PORT_NAME
+  #define XPN_SERVER_MAX_PORT_NAME MPI_MAX_PORT_NAME
+  #else
+  #define XPN_SERVER_MAX_PORT_NAME 1024
+  #endif
+  
   /* ... Data structures / Estructuras de datos ........................ */
 
 
   /* ... Functions / Funciones ......................................... */
 
-  int socket_send ( int socket, void * buffer, int size );
-  int socket_recv ( int socket, void * buffer, int size );
-  int socket_server_create ( int *out_socket );
-  int socket_server_accept ( int socket, int *out_conection_socket );
-  int socket_client_connect ( char * srv_name, int *out_socket );
-  int socket_close ( int socket );
 
-  /* ... Macros / Macros .................................................. */
+  /* ................................................................... */
 
   #ifdef  __cplusplus
     }
