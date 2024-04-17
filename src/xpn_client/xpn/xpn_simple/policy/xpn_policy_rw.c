@@ -37,9 +37,9 @@
  */
 void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t offset, int replication, off_t *local_offset, int *serv)
 {
-	int block = offset / block_size;
-	int block_replication = block * (replication_level + 1) + replication;
-	int block_line = block_replication / nserv;
+	off_t block = offset / block_size;
+	off_t block_replication = block * (replication_level + 1) + replication;
+	off_t block_line = block_replication / nserv;
 	
 	// Calculate the server	
 	(*serv) = (block_replication) % nserv;
@@ -62,19 +62,18 @@ void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t o
  */
 void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, int serv, off_t local_offset, off_t *offset)
 {
-	int added_size;
+	off_t added_size;
 	if (local_offset % block_size == 0){
 		added_size = 0;
 	}else{
 		added_size = block_size - (local_offset % block_size);
 	}
-    int block_line = (local_offset + added_size) / block_size;
+    off_t block_line = (local_offset + added_size) / block_size;
 
-	int block_replication = (block_line-1) * nserv + (serv+1);
+	off_t block_replication = (block_line-1) * nserv + (serv+1);
 	
 	// round up
-    int block = 1 + ((block_replication - 1) / (replication_level + 1));
-
+    off_t block = 1 + ((block_replication - 1) / (replication_level + 1));
     (*offset) = block * block_size - added_size;
 }
 
