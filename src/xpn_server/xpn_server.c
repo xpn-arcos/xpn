@@ -177,20 +177,13 @@ int xpn_server_up(void) {
     // Workers initialization
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers initialization\n", 0);
 
-    ret = base_workers_init(&worker1, params.thread_mode);
+    ret = base_workers_init(&worker1, params.thread_mode_connections);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;
     }
 
-    // TODO: move if to params 
-    // In sck_server worker2 has to be sequential because you don't want to have to make a socket per operation.
-    // It can be done because it is not reentrant
-    if (params.server_type == XPN_SERVER_TYPE_SCK){
-        ret = base_workers_init(&worker2, TH_NOT);
-    }else{
-        ret = base_workers_init(&worker2, params.thread_mode);
-    }
+    ret = base_workers_init(&worker2, params.thread_mode_operations);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;

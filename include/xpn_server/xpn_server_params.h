@@ -55,7 +55,8 @@
     // server configuration
     char dirbase [PATH_MAX];
     char shutdown_file[PATH_MAX];
-    int  thread_mode;
+    int  thread_mode_connections;
+    int  thread_mode_operations;
     int  server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
 
     #ifdef ENABLE_SCK_SERVER

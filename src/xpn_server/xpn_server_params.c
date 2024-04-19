@@ -49,13 +49,13 @@ void xpn_server_params_show ( xpn_server_param_st *params )
     printf("\t-s  <int>:\tError: unknown\n");
   }
   // * threads
-  if (params->thread_mode == TH_NOT) {
+  if (params->thread_mode_connections == TH_NOT) {
     printf("\t-t  <int>:\tWithout threads\n");
   }else
-  if (params->thread_mode == TH_POOL) {
+  if (params->thread_mode_connections == TH_POOL) {
     printf("\t-t  <int>:\tThread Pool Activated\n");
   }else
-  if (params->thread_mode == TH_OP) {
+  if (params->thread_mode_connections == TH_OP) {
     printf("\t-t  <int>:\tThread on demand\n");
   }else{
     printf("\t-t  <int>:\tError: unknown\n");
@@ -93,7 +93,12 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
   params->argv = argv;
   params->size = 0;
   params->rank = 0;
-  params->thread_mode = TH_NOT;
+  params->thread_mode_connections = TH_NOT;
+  params->thread_mode_operations = TH_NOT;
+  params->server_type = XPN_SERVER_TYPE_SCK;
+  #ifdef ENABLE_MPI_SERVER
+  params->server_type = XPN_SERVER_TYPE_MPI;
+  #endif
   strcpy(params->port_name, "");
   strcpy(params->srv_name,  "");
   strcpy(params->dirbase,   XPN_SERVER_DIRBASE_DEFAULT);
@@ -127,7 +132,8 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
 
                 if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP) 
                 {
-                  params->thread_mode = thread_mode_aux;
+                  params->thread_mode_connections= thread_mode_aux;
+                  params->thread_mode_operations= thread_mode_aux;
                 }
                 else {
                   printf("ERROR: unknown option %s\n", argv[i+1]);
@@ -136,13 +142,16 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
               else
               {
                 if (strcmp("without", argv[i+1]) == 0) {
-                  params->thread_mode = TH_NOT;
+                  params->thread_mode_connections = TH_NOT;
+                  params->thread_mode_operations = TH_NOT;
                 }
                 else if (strcmp("pool", argv[i+1]) == 0) {
-                  params->thread_mode = TH_POOL;
+                  params->thread_mode_connections = TH_POOL;
+                  params->thread_mode_operations = TH_POOL;
                 }
                 else if (strcmp("on_demand", argv[i+1]) == 0) {
-                  params->thread_mode = TH_OP;
+                  params->thread_mode_connections = TH_OP;
+                  params->thread_mode_operations = TH_OP;
                 }
                 else {
                   printf("ERROR: unknown option %s\n", argv[i+1]);
@@ -180,6 +189,11 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
     }
   }
 
+  // In sck_server worker for operations has to be sequential because you don't want to have to make a socket per operation.
+  // It can be done because it is not reentrant
+  if (params->server_type == XPN_SERVER_TYPE_SCK){
+    params->thread_mode_operations = TH_OP;
+  }
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] << End\n", params->rank);
 
   return 1;

@@ -49,7 +49,7 @@ int xpn_server_comm_init ( xpn_server_param_st *params )
   {
   #ifdef ENABLE_MPI_SERVER
   case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_init( params->argc, params->argv, params->thread_mode, params->port_name );
+    ret = mpi_server_comm_init( params->argc, params->argv, params->thread_mode_connections, params->port_name );
     break;
   #endif
   #ifdef ENABLE_SCK_SERVER
