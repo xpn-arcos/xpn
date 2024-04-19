@@ -352,9 +352,10 @@ void xpn_server_op_creat ( xpn_server_param_st *params, int sd, struct st_xpn_se
 void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_rw_req req;
-  char * buffer;
+  char * buffer = NULL;
   long   size, diff, to_read, cont;
   char   path [PATH_MAX];
+  off_t ret_lseek;
 
   // check params...
   if (NULL == params)
@@ -382,24 +383,22 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
   int fd = filesystem_open(path, O_RDONLY);
   if (fd < 0)
   {
-    req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+    req.size = -1;
     req.status.ret = fd;
     req.status.server_errno = errno;
     xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
-    return;
+    goto cleanup_xpn_server_op_read;
   }
 
   // malloc a buffer of size...
   buffer = (char *)malloc(size);
   if (NULL == buffer)
   {
-    req.size = -1;  // TODO: check in client that -1 is treated properly... :-9
+    req.size = -1;
     req.status.ret = -1;
     req.status.server_errno = errno;
     xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
-
-    filesystem_close(fd);
-    return;
+    goto cleanup_xpn_server_op_read;
   }
 
   // loop...
@@ -413,20 +412,25 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
     }
 
     // lseek and read data...
-    filesystem_lseek(fd, head->u_st_xpn_server_msg.op_read.offset + cont, SEEK_SET); //TODO: check error
-    req.size = filesystem_read(fd, buffer, to_read);
-    // if error then send as "how many bytes" -1
-    if (req.size < 0)
+    ret_lseek = filesystem_lseek(fd, head->u_st_xpn_server_msg.op_read.offset + cont, SEEK_SET);
+    if (ret_lseek == -1)
     {
-      req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
+      req.size = -1;
       req.status.ret = -1;
       req.status.server_errno = errno;
       xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
+      goto cleanup_xpn_server_op_read;
+    }
 
-      filesystem_close(fd);
-
-      FREE_AND_NULL(buffer);
-      return;
+    req.size = filesystem_read(fd, buffer, to_read);
+    // if error then send as "how many bytes" -1
+    if (req.size < 0 || req.status.ret == -1)
+    {
+      req.size = -1;
+      req.status.ret = -1;
+      req.status.server_errno = errno;
+      xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
+      goto cleanup_xpn_server_op_read;
     }
     // send (how many + data) to client...
     req.status.ret = 0;
@@ -444,7 +448,7 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
     diff = head->u_st_xpn_server_msg.op_read.size - cont;
 
   } while ((diff > 0) && (req.size != 0));
-
+cleanup_xpn_server_op_read:
   filesystem_close(fd);
 
   // free buffer
@@ -457,9 +461,10 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
 void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_rw_req req;
-  char * buffer;
+  char * buffer = NULL;
   int    size, diff, cont, to_write;
   char   path [PATH_MAX];
+  off_t ret_lseek;
 
   // check params...
   if (NULL == params)
@@ -487,24 +492,18 @@ void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_se
   int fd = filesystem_open(path, O_WRONLY);
   if (fd < 0)
   {
-    req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
-    req.status.ret = fd;
-    req.status.server_errno = errno;
-    xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id); 
-    return;
+    req.size = -1;
+    req.status.ret = -1;
+    goto cleanup_xpn_server_op_write;
   }
 
   // malloc a buffer of size...
   buffer = (char *)malloc(size);
   if (NULL == buffer)
   {
-    req.size = -1;  // TODO: check in client that -1 is treated properly... :-)
+    req.size = -1;
     req.status.ret = -1;
-    req.status.server_errno = errno;
-    xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
-
-    filesystem_close(fd);
-    return;
+    goto cleanup_xpn_server_op_write;
   }
 
   // loop...
@@ -519,10 +518,18 @@ void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_se
 
     // read data from MPI and write into the file
     xpn_server_comm_read_data(params, sd, buffer, to_write, rank_client_id, tag_client_id);
-    filesystem_lseek(fd, head->u_st_xpn_server_msg.op_write.offset + cont, SEEK_SET); //TODO: check error
-    //sem_wait(&disk_sem);
+    ret_lseek = filesystem_lseek(fd, head->u_st_xpn_server_msg.op_write.offset + cont, SEEK_SET);
+    if (ret_lseek < 0)
+    {
+      req.status.ret = -1;
+      goto cleanup_xpn_server_op_write;
+    }
     req.size = filesystem_write(fd, buffer, to_write);
-    //sem_post(&disk_sem);
+    if (req.size < 0)
+    {
+      req.status.ret = -1;
+      goto cleanup_xpn_server_op_write;
+    }
 
     // update counters
     cont = cont + req.size; // Received bytes
@@ -530,9 +537,10 @@ void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_se
 
   } while ((diff > 0) && (req.size != 0));
 
-  // write to the client the status of the write operation
   req.size = cont;
   req.status.ret = 0;
+cleanup_xpn_server_op_write:
+  // write to the client the status of the write operation
   req.status.server_errno = errno;
   xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
 
