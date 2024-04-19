@@ -174,9 +174,6 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
   serv->ops->nfi_closedir   = nfi_local_closedir;
   serv->ops->nfi_rmdir      = nfi_local_rmdir;
 
-  serv->ops->nfi_preload    = nfi_local_preload;
-  serv->ops->nfi_flush      = nfi_local_flush;
-
   serv->ops->nfi_statfs     = nfi_local_statfs;
 
   // ParseURL...
@@ -1115,30 +1112,5 @@ int nfi_local_statfs ( __attribute__((__unused__)) struct nfi_server *serv, __at
 
   return 0;
 }
-
-
-int nfi_local_preload(__attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) char *url, __attribute__((__unused__)) char *virtual_path, __attribute__((__unused__)) char *storage_path, __attribute__((__unused__)) int opt)
-{
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_preload] >> Begin\n", serv->id);
-
-  //TODO
-
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_preload] >> End\n", serv->id);
-
-  return 0;
-}
-
-
-int nfi_local_flush ( __attribute__((__unused__)) struct nfi_server *serv,  __attribute__((__unused__)) char *url, __attribute__((__unused__)) char *virtual_path, __attribute__((__unused__)) char *storage_path, __attribute__((__unused__)) int opt )
-{
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_flush] >> Begin\n", serv->id);
-
-  //TODO
-
-  debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_flush] >> End\n", serv->id);
-
-  return 0;
-}
-
 
 /* ................................................................... */

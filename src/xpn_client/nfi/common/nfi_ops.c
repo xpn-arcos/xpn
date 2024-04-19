@@ -120,14 +120,6 @@ void nfi_do_operation (struct st_th th_arg)
       ret = wrk->server->ops->nfi_rmdir(wrk->server, wrk->arg.url);
       break;
 
-    // Import / Export API
-    case op_preload:
-      ret = wrk->server->ops->nfi_preload(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt);
-      break;
-    case op_flush:
-      ret = wrk->server->ops->nfi_flush(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt);
-      break;
-    
     //FS API
     case op_statfs:
       ret = wrk->server->ops->nfi_statfs(wrk->server, wrk->arg.inf);
@@ -383,57 +375,6 @@ int nfi_worker_do_rmdir (struct nfi_worker * wrk, char * url)
   nfiworker_launch(nfi_do_operation, wrk);
 
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_rmdir] >> End\n", pthread_self());
-
-  return 0;
-}
-
-//Import / Export API
-int nfi_worker_do_flush (struct nfi_worker * wrk, char * url, char * virtual_path, char * storage_path, int opt) 
-{
-  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_flush] >> Begin\n", pthread_self());
-
-  if (wrk->server->ops->nfi_flush == NULL) 
-  {
-    wrk->arg.result = -1;
-    return -1;
-  }
-
-  // Pack request
-  wrk->arg.operation = op_flush;
-  strcpy(wrk->arg.url, url);
-  strcpy(wrk->arg.virtual_path, virtual_path);
-  strcpy(wrk->arg.storage_path, storage_path);
-  wrk->arg.opt = opt;
-
-  // Do operation
-  nfiworker_launch(nfi_do_operation, wrk);
-
-  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_flush] >> End\n", pthread_self());
-
-  return 0;
-}
-
-int nfi_worker_do_preload (struct nfi_worker * wrk, char * url, char * virtual_path, char * storage_path, int opt) 
-{
-  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_preload] >> Begin\n", pthread_self());
-
-  if (wrk->server->ops->nfi_preload == NULL) 
-  {
-    wrk->arg.result = -1;
-    return -1;
-  }
-
-  // Pack request
-  wrk->arg.operation = op_preload;
-  strcpy(wrk->arg.url, url);
-  strcpy(wrk->arg.virtual_path, virtual_path);
-  strcpy(wrk->arg.storage_path, storage_path);
-  wrk->arg.opt = opt;
-
-  // Do operation
-  nfiworker_launch(nfi_do_operation, wrk);
-
-  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_preload] >> End\n", pthread_self());
 
   return 0;
 }

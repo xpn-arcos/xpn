@@ -63,10 +63,6 @@
   #define XPN_SERVER_READDIR_DIR      24
   #define XPN_SERVER_CLOSEDIR_DIR     25
 
-  // Import / Export operations
-  #define XPN_SERVER_FLUSH_FILE     40
-  #define XPN_SERVER_PRELOAD_FILE   41
-
   // FS Operations
   #define XPN_SERVER_STATFS_DIR     60
   #define XPN_SERVER_GETNODENAME    61
@@ -147,23 +143,6 @@
     struct st_xpn_server_status status;
   };
 
-  struct st_xpn_server_flush
-  {
-    char storage_path[PATH_MAX];
-    char virtual_path[PATH_MAX];
-    int block_size;
-    char opt;
-  };
-
-  struct st_xpn_server_preload
-  {
-    char storage_path[PATH_MAX];
-    char virtual_path[PATH_MAX];
-    int block_size;
-    char opt;
-  };
-
-
   struct st_xpn_server_end
   {
     char status;
@@ -188,9 +167,6 @@
       struct st_xpn_server_readdir        op_readdir;
       struct st_xpn_server_path           op_closedir;
       struct st_xpn_server_path           op_rmdir;
-
-      struct st_xpn_server_flush          op_flush;
-      struct st_xpn_server_preload        op_preload;
 
       struct st_xpn_server_end            op_end;
     } u_st_xpn_server_msg;

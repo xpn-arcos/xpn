@@ -119,16 +119,6 @@ int nfi_write_operation ( struct nfi_xpn_server *params, struct st_xpn_server_ms
       debug_info("[NFI_XPN] [nfi_write_operation] RMDIR_ASYNC operation\n");
       ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path));
       break;
-
-    //Optimization API
-    case XPN_SERVER_FLUSH_FILE:
-      debug_info("[NFI_XPN] [nfi_write_operation] FLUSH operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_flush), sizeof(struct st_xpn_server_flush));
-      break;
-    case XPN_SERVER_PRELOAD_FILE:
-      debug_info("[NFI_XPN] [nfi_write_operation] PRELOAD operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_preload), sizeof(struct st_xpn_server_preload));
-      break;
   }
 
   debug_info("[NFI_XPN] [nfi_write_operation] >> End\n");
@@ -300,9 +290,6 @@ int nfi_xpn_server_init ( char *url, struct nfi_server *serv, int server_type )
   serv->ops->nfi_readdir    = nfi_xpn_server_readdir;
   serv->ops->nfi_closedir   = nfi_xpn_server_closedir;
   serv->ops->nfi_rmdir      = nfi_xpn_server_rmdir;
-
-  serv->ops->nfi_preload    = nfi_xpn_server_preload;
-  serv->ops->nfi_flush      = nfi_xpn_server_flush;
 
   serv->ops->nfi_statfs     = nfi_xpn_server_statfs;
 
@@ -1486,19 +1473,5 @@ int nfi_xpn_server_statfs(__attribute__((__unused__)) struct nfi_server *serv, _
 
   return 0;
 }
-
-int nfi_xpn_server_preload( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) char *url, __attribute__((__unused__)) char *virtual_path, __attribute__((__unused__)) char *storage_path, __attribute__((__unused__)) int opt )
-{
-  // TODO: remove preload from nfi and server
-  return 0;
-}
-
-
-int nfi_xpn_server_flush ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) char *url, __attribute__((__unused__)) char *virtual_path, __attribute__((__unused__)) char *storage_path, __attribute__((__unused__)) int opt )
-{
-  // TODO: remove preload from nfi and server
-  return 0;
-}
-
 
 /* ................................................................... */

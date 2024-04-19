@@ -92,14 +92,6 @@ char * xpn_server_op2string ( int op_code )
       ret = "CLOSEDIR";
       break;
 
-    // Import / Export operations
-    case XPN_SERVER_FLUSH_FILE:
-      ret = "FLUSH";
-      break;
-    case XPN_SERVER_PRELOAD_FILE:
-      ret = "PRELOAD";
-      break;
-
     // FS Operations
     case XPN_SERVER_STATFS_DIR:
       ret = "STATFS";
@@ -148,10 +140,6 @@ void xpn_server_op_readdir     ( xpn_server_param_st *params, int sd, struct st_
 void xpn_server_op_closedir    ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
 void xpn_server_op_rmdir       ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
 void xpn_server_op_rmdir_async ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-
-// Import / Export operations
-void xpn_server_op_flush       ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_preload     ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
 
 // FS Operations
 void xpn_server_op_getnodename ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
@@ -265,20 +253,6 @@ int xpn_server_do_operation ( struct st_th *th, int * the_end )
       ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         xpn_server_op_rmdir_async(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
-      }
-      break;
-
-    // Import / Export API
-    case XPN_SERVER_PRELOAD_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_preload), sizeof(struct st_xpn_server_preload), th->rank_client_id, th->tag_client_id);
-      if (ret != -1) {
-        xpn_server_op_preload(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
-      }
-      break;
-    case XPN_SERVER_FLUSH_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_flush), sizeof(struct st_xpn_server_flush), th->rank_client_id, th->tag_client_id);
-      if (ret != -1) {
-        xpn_server_op_flush(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
 
@@ -890,188 +864,6 @@ void xpn_server_op_rmdir_async ( __attribute__((__unused__)) xpn_server_param_st
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] rmdir(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_rmdir.path, ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] << End\n", params->rank);
-}
-
-//Import / Export API
-void xpn_server_op_preload ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
-{
-  int   ret;
-  int   fd_dest, fd_orig;
-  char  protocol[1024];
-  char  user[1024];
-  char  pass[1024];
-  char  machine[1024];
-  char  port[1024];
-  char  file[1024];
-
-  int  BLOCKSIZE = head->u_st_xpn_server_msg.op_preload.block_size;
-  char buffer [BLOCKSIZE];
-
-  // check params...
-  if (NULL == params)
-  {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_preload] ERROR: NULL arguments\n", -1);
-    return;
-  }
-
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_preload] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_preload] preload(%s,%s)\n", params->rank, head->u_st_xpn_server_msg.op_preload.virtual_path, head->u_st_xpn_server_msg.op_preload.storage_path);
-
-  // Open origin file
-  fd_orig = filesystem_open(head->u_st_xpn_server_msg.op_preload.storage_path, O_RDONLY);
-  if (fd_orig < 0)
-  {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_preload] ERROR: open operation on '%s' fails\n", params->rank, file);
-    xpn_server_comm_write_data(params, sd, (char *)&fd_orig, sizeof(int), rank_client_id, tag_client_id); // TO-DO: Check error treatment client-side
-    return;
-  }
-
-  ret = ParseURL(head->u_st_xpn_server_msg.op_preload.virtual_path, protocol, user, pass, machine, port, file);
-
-  // Create new file
-  fd_dest = filesystem_creat(file, 0777);
-  if (fd_dest < 0)
-  {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_preload] ERROR: open operation on '%s' fails\n", params->rank, head->u_st_xpn_server_msg.op_flush.storage_path);
-    xpn_server_comm_write_data(params, sd, (char *)&fd_orig, sizeof(int), rank_client_id, tag_client_id); // TO-DO: Check error treatment client-side
-    filesystem_close(fd_orig);
-    return;
-  }
-
-  off_t cont = BLOCKSIZE * params->rank;
-  int read_bytes, write_bytes;
-
-  do
-  {
-    off_t ret_2 = filesystem_lseek(fd_orig, cont, SEEK_SET);
-    if (ret_2 == (off_t) -1)
-    {
-      filesystem_close(fd_orig);
-      filesystem_close(fd_dest);
-      xpn_server_comm_write_data(params, sd, (char *)&fd_orig, sizeof(int), rank_client_id, tag_client_id); // TO-DO: Check error treatment client-side
-      return;
-    }
-
-    read_bytes = filesystem_read(fd_orig, &buffer, BLOCKSIZE);
-    if (read_bytes < 0)
-    {
-      filesystem_close(fd_orig);
-      filesystem_close(fd_dest);
-      xpn_server_comm_write_data(params, sd, (char *)&fd_orig, sizeof(int), rank_client_id, tag_client_id); // TO-DO: Check error treatment client-side
-      return;
-    }
-
-    if (read_bytes > 0)
-    {
-      write_bytes = filesystem_write(fd_dest, &buffer, read_bytes);
-      if (write_bytes==-1)
-      {
-        filesystem_close(fd_orig);
-        filesystem_close(fd_dest);
-        xpn_server_comm_write_data(params, sd, (char *)&fd_orig, sizeof(int), rank_client_id, tag_client_id); // TO-DO: Check error treatment client-side
-        return;
-      }
-    }
-
-    cont = cont + (BLOCKSIZE * params->size);
-
-  } while(read_bytes == BLOCKSIZE);
-
-  filesystem_close(fd_orig);
-  filesystem_close(fd_dest);
-
-  xpn_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id, tag_client_id);
-
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_preload] preload(%s,%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_preload.virtual_path, head->u_st_xpn_server_msg.op_preload.storage_path,ret);
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_preload] << END\n", params->rank);
-}
-
-void xpn_server_op_flush ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id)
-{
-  int   ret;
-  int   fd_dest, fd_orig;
-  char  protocol[1024];
-  char  user[1024];
-  char  pass[1024];
-  char  machine[1024];
-  char  port[1024];
-  char  file[1024];
-
-  int BLOCKSIZE = head->u_st_xpn_server_msg.op_flush.block_size;
-  char buffer [BLOCKSIZE];
-
-  // check params...
-  if (NULL == params)
-  {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_flush] ERROR: NULL arguments\n", -1);
-    return;
-  }
-
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_flush] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_flush] preload(%s,%s)\n", params->rank, head->u_st_xpn_server_msg.op_flush.virtual_path, head->u_st_xpn_server_msg.op_flush.storage_path);
-
-  ret = ParseURL(head->u_st_xpn_server_msg.op_flush.virtual_path, protocol, user, pass, machine, port, file);
-
-  // Open origin file
-  fd_orig = filesystem_open(file, O_RDONLY);
-  if (fd_orig < 0)
-  {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_flush] ERROR: open operation on '%s' fails\n", params->rank, file);
-    xpn_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id, tag_client_id);
-    return;
-  }
-
-  // Create new file
-  fd_dest = filesystem_open(head->u_st_xpn_server_msg.op_flush.storage_path, O_WRONLY | O_CREAT);
-  if (fd_dest < 0)
-  {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_flush] ERROR: open operation on '%s' fails\n", params->rank, head->u_st_xpn_server_msg.op_flush.storage_path);
-    filesystem_close(fd_orig);
-    xpn_server_comm_write_data(params, sd, (char *)&fd_dest, sizeof(int), rank_client_id, tag_client_id);
-    return;
-  }
-
-  MPI_Barrier(MPI_COMM_WORLD);
-
-  int cont = BLOCKSIZE * params->rank;
-  int read_bytes, write_bytes;
-
-  do
-  {
-    read_bytes = filesystem_read(fd_orig, &buffer, BLOCKSIZE);
-    if (read_bytes < 0)
-    {
-      filesystem_close(fd_orig);
-      filesystem_close(fd_dest);
-      xpn_server_comm_write_data(params, sd, (char * ) & read_bytes, sizeof(int), rank_client_id, tag_client_id); // TO-DO: Check error treatment client-side
-      return;
-    }
-
-    if (read_bytes > 0)
-    {
-      filesystem_lseek(fd_dest, cont, SEEK_SET); //TODO: check error
-
-      write_bytes = filesystem_write(fd_dest, &buffer, read_bytes);
-      if (write_bytes < 0)
-      {
-        filesystem_close(fd_orig);
-        filesystem_close(fd_dest);
-        xpn_server_comm_write_data(params, sd, (char * ) & write_bytes, sizeof(int), rank_client_id, tag_client_id); // TO-DO: Check error treatment client-side
-        return;
-      }
-    }
-
-    cont = cont + (BLOCKSIZE * params->size);
-
-  } while(read_bytes == BLOCKSIZE);
-
-  filesystem_close(fd_orig);
-  filesystem_close(fd_dest);
-
-  xpn_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id, tag_client_id);
-
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_flush] preload(%s,%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_flush.virtual_path, head->u_st_xpn_server_msg.op_flush.storage_path, ret);  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_flush] << END\n", params->rank);
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_flush] << END\n", params->rank);
 }
 
 //FS API

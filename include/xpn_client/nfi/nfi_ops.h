@@ -59,8 +59,6 @@
     op_closedir = 24,
 
     op_statfs   = 60,
-    op_preload  = 61,
-    op_flush    = 62,
   };
 
 
@@ -89,9 +87,6 @@
   int nfi_worker_do_rmdir    (struct nfi_worker *wrk, char *url);
 
   int nfi_worker_do_statfs  (struct nfi_worker *wrk, struct nfi_info *inf);
-  int nfi_worker_do_preload (struct nfi_worker *wrk, char *url, char *virtual_path,char *storage_path,int opt);
-  int nfi_worker_do_flush   (struct nfi_worker *wrk, char *url, char *virtual_path,char *storage_path,int opt);
-
 
   /* ................................................................... */
 

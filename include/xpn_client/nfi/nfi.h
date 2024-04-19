@@ -139,9 +139,6 @@
     int     (*nfi_readdir)  (struct nfi_server *serv, struct nfi_fhandle *fhd, struct dirent *entry);
     int     (*nfi_closedir) (struct nfi_server *serv, struct nfi_fhandle *fh);
     int     (*nfi_statfs)   (struct nfi_server *serv, struct nfi_info *inf);
-
-    int     (*nfi_preload)  (struct nfi_server *serv, char *url, char *virtual_path, char* storage_path, int opt); 
-    int     (*nfi_flush)    (struct nfi_server *serv, char *url, char *virtual_path, char* storage_path, int opt); 
   };
 
 

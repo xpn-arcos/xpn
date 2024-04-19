@@ -56,8 +56,6 @@
     op_xpn_readdir  = 12,
     op_xpn_closedir = 13,
     op_xpn_statfs   = 14,
-    op_xpn_preload  = 15,
-    op_xpn_flush    = 16,
   };
 
 
