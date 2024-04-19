@@ -13,6 +13,7 @@ AC_CONFIG_AUX_DIR(./config)
 AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_INSTALL
 AC_PROG_RANLIB
+AC_PROG_LN_S
 
 
 
@@ -180,7 +181,10 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_client/nfi \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_local"
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
+-I\$(top_srcdir)/include/xpn_server/ \
+-I\$(top_srcdir)/include/xpn_server/mpi_server/ \
+-I\$(top_srcdir)/include/xpn_server/sck_server/"
 
 
 
