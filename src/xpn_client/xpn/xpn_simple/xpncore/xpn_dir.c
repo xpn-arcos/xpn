@@ -28,7 +28,7 @@
 int xpn_simple_mkdir(const char *path, mode_t perm)
 {
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
-  struct nfi_server **servers;
+  struct nfi_server *servers;
   int res = 0, err, i, n, pd;
 
   XPN_DEBUG_BEGIN_CUSTOM("%s, %d", path, perm);
@@ -57,7 +57,7 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   }
 
   servers = NULL;
-  n = XpnGetServers(op_xpn_mkdir, pd, abs_path, -1, &servers);
+  n = XpnGetServers(pd, -1, &servers);
   if(n<=0){
     XPN_DEBUG_END_ARGS1(path);
     return -1;
@@ -65,15 +65,15 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
 
   for(i=0;i<n;i++)
   {
-    XpnGetURLServer(servers[i], abs_path, url_serv);
+    XpnGetURLServer(&servers[i], abs_path, url_serv);
     // Worker
-    nfi_worker_do_mkdir(servers[i]->wrk, url_serv, perm, NULL, NULL);
+    nfi_worker_do_mkdir(servers[i].wrk, url_serv, perm, NULL, NULL);
   }
   // Wait
   err = 0;
   for(i=0;i<n;i++)
   {
-    res = nfiworker_wait(servers[i]->wrk);
+    res = nfiworker_wait(servers[i].wrk);
     if (res < 0) {
       err = 1;
     }
@@ -81,7 +81,6 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   // Error checking
   if (err)
   {
-    free(servers);
     XPN_DEBUG_END_ARGS1(path);
     return -1;
   }
@@ -90,7 +89,6 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
   // mdata_aux = (struct xpn_metadata *)malloc(sizeof(struct xpn_metadata));
   // if(mdata_aux == NULL)
   // {
-  //   free(servers);
   //   free(mdata_aux);
 
   //   return -1;
@@ -101,13 +99,11 @@ int xpn_simple_mkdir(const char *path, mode_t perm)
 
   // if(ret<0)
   // {
-  //   free(servers);
   //   free(mdata_aux);
 
   //   return -1;
   // }
 
-  free(servers);
   XPN_DEBUG_END_ARGS1(path);
   return 0;
 }
@@ -116,7 +112,7 @@ int xpn_simple_rmdir(const char *path)
 {
   char abs_path[PATH_MAX], url_serv[PATH_MAX];
   int res = 0, err, i, n, pd;
-  struct nfi_server **servers;
+  struct nfi_server *servers;
 
   XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
@@ -146,7 +142,7 @@ int xpn_simple_rmdir(const char *path)
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
-  n = XpnGetServers(op_xpn_rmdir, pd, abs_path, -1, &servers);
+  n = XpnGetServers(pd, -1, &servers);
   if(n<=0){
     XPN_DEBUG_END_ARGS1(path);
     return -1;
@@ -154,9 +150,9 @@ int xpn_simple_rmdir(const char *path)
 
   for(i=0;i<n;i++)
   {
-    XpnGetURLServer(servers[i], abs_path, url_serv);
+    XpnGetURLServer(&servers[i], abs_path, url_serv);
     // Worker
-    nfi_worker_do_rmdir(servers[i]->wrk, url_serv);
+    nfi_worker_do_rmdir(servers[i].wrk, url_serv);
 
   }
 
@@ -164,7 +160,7 @@ int xpn_simple_rmdir(const char *path)
   err = 0;
   for (i=0;i<n;i++)
   {
-    res = nfiworker_wait(servers[i]->wrk);
+    res = nfiworker_wait(servers[i].wrk);
     // Error checking
     if((res<0)&&(!err)){
       err = 1;
@@ -174,12 +170,10 @@ int xpn_simple_rmdir(const char *path)
   // Error checking
   if(err)
   {
-    free(servers);
     XPN_DEBUG_END_ARGS1(path);
     return -1;
   }
 
-  free(servers);
   XPN_DEBUG_END;
   return 0;
 }

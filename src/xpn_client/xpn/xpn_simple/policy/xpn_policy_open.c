@@ -71,80 +71,54 @@ void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
 
 /**
  * TODO:
- *   ** int op -> not used (!)
  *   ** fd < 0 => XpnGetServers_data_by_path(....) ;
  *   ** fd > 0 => XpnGetServers_data_by_fd(....) ;
  * 
- * Returns the data or metadata servers.
+ * Returns the number of the data servers, and a pointer to the array.
  *
  * @param op Flag operation.
  * @param pd Partition id.
  * @param abs_path Absolute path.
  * @param fd File descriptor.
- * @param servers[out] The data or metadata servers to be obtained.
+ * @param servers[out] The data servers to be obtained, must not free.
  *
- * @return The number of data or metadata servers on success or -1 on error,
+ * @return The number of data servers on success or -1 on error,
  */
-int XpnGetServers(int op, int pd, __attribute__((__unused__)) char *abs_path, int fd, struct nfi_server ***servers)
+int XpnGetServers(int pd, int fd, struct nfi_server **servers)
 {
-  struct nfi_server **serv;
-  int i, j, n;
+  // struct nfi_server **serv;
+  int i, n;
 
   n = 1; // TODO: check default value of 1
 
   /* params op and abs_path are not used in this version */
-  switch(op)
+  if (pd >= 0)
   {
-    default:
-      if (pd >= 0)
-      {
-        i = 0;
-        while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
-          i++;
-        }
+    i = 0;
+    while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
+      i++;
+    }
 
-        if(i == XPN_MAX_PART){
-          return -1;
-        }
+    if(i == XPN_MAX_PART){
+      return -1;
+    }
 
-        n = xpn_parttable[i].data_nserv;
-        
-        serv = (struct nfi_server **)malloc(sizeof(struct nfi_server *) * n);
-        if(serv == NULL){
-          /* xpn_err()*/
-          return -1;
-        }
+    n = xpn_parttable[i].data_nserv;
+    
+    (*servers) = xpn_parttable[i].data_serv;
+  }
+  else if (fd >=0)
+  {
+    if((fd>XPN_MAX_FILE)||(xpn_file_table[fd] == NULL)){
+      return -1;
+    }
 
-        for(j=0;j<n;j++)
-        {
-          serv[j] = &(xpn_parttable[i].data_serv[j]);
-        }
-        (*servers) = serv;
-      }
-      else if (fd >=0)
-      {
-        if((fd>XPN_MAX_FILE)||(xpn_file_table[fd] == NULL)){
-          return -1;
-        }
-        n = xpn_file_table[fd]->data_vfh->n_nfih;
+    n = xpn_file_table[fd]->data_vfh->n_nfih;
 
-        serv = (struct nfi_server **)malloc(sizeof(struct nfi_server*) * n);
-        if(serv == NULL){
-          /* xpn_err()*/
-          return -1;
-        }
-
-        for(j=0;j<n;j++)
-        {
-          serv[j] = &(xpn_file_table[fd]->part->data_serv[j]);
-        }
-
-        (*servers) = serv;
-      }
-      else{
-        return -1;
-      }
-      break;
+    (*servers) = xpn_file_table[fd]->part->data_serv;
+  }
+  else{
+    return -1;
   }
 
   return n;
@@ -372,22 +346,21 @@ int XpnGetFhDir( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi
 int XpnGetAtribFd ( int fd, struct stat *st )
 {
   int ret, res, i, n, err;
-  struct nfi_server **servers;
+  struct nfi_server *servers;
   struct nfi_attr *attr;
 
   XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
   servers = NULL;
-  n = XpnGetServers(op_xpn_getattr, xpn_file_table[fd]->part->id, NULL, fd, &servers);
+  n = XpnGetServers(xpn_file_table[fd]->part->id, fd, &servers);
   if (n<=0)
   {
     XPN_DEBUG_END_CUSTOM("%d", fd)
     return -1;
-  }
+  }  
 
   attr = (struct nfi_attr *) malloc(n * sizeof(struct nfi_attr));
   if (NULL == attr) {
-    free(servers);
     perror("malloc: ");
     return -1;
   }
@@ -397,7 +370,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
 
   for(i=0;i<n;i++)
   {
-    res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
+    res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), &servers[i], xpn_file_table[fd]->path);
     if (res<0 && xpn_file_table[fd]->part->data_serv[i].error != -1)
     {
       XPN_DEBUG_END_CUSTOM("%d", fd)
@@ -405,19 +378,17 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     }
 
     // Worker
-    nfi_worker_do_getattr(servers[i]->wrk, xpn_file_table[fd]->data_vfh->nfih[i], &(attr[i]));
+    nfi_worker_do_getattr(servers[i].wrk, xpn_file_table[fd]->data_vfh->nfih[i], &(attr[i]));
   }
 
   // Wait
   err = 0;
   for(i=0;i<n;i++)
   {
-    ret = nfiworker_wait(servers[i]->wrk);
+    ret = nfiworker_wait(servers[i].wrk);
 
     // Control error
-    if((ret<0)&&(!err))
-    {
-      // erase the file create before de server number i
+    if((ret<0)&&(!err)){
       err = 1;
     }
   }
@@ -425,7 +396,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   // Error checking
   if(err)
   {
-    free(servers);
+    free(attr);
     return -1;
   }
 
@@ -454,7 +425,6 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
   st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
 
-  free(servers);
   free(attr);
 
   XPN_DEBUG_END_CUSTOM("%d", fd);
@@ -466,7 +436,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   int ret, res, err, i, n, pd;
   char url_serv[PATH_MAX];
   char aux_path[PATH_MAX];
-  struct nfi_server **servers;
+  struct nfi_server *servers;
   struct nfi_attr *attr;
   struct xpn_fh *vfh_aux;
 
@@ -484,15 +454,13 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
-  n = XpnGetServers(op_xpn_getattr, pd, aux_path, -1, &servers);
+  n = XpnGetServers(pd, -1, &servers);
   if(n<=0){
-    /*free(servers);*/
     return -1;
   }
 
   attr = (struct nfi_attr *) malloc(n * sizeof(struct nfi_attr));
   if (NULL == attr) {
-    free(servers);
     perror("malloc: ");
     return -1;
   }
@@ -504,7 +472,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   if(vfh_aux == NULL)
   {
     errno = ENOMEM;
-    free(servers);
     return -1;
   }
 
@@ -514,7 +481,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   {
     free(vfh_aux);
     errno = ENOMEM;
-    free(servers);
     return -1;
   }
 
@@ -522,27 +488,26 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   {
     vfh_aux->nfih[i] = NULL;
 
-    XpnGetURLServer(servers[i], aux_path, url_serv);
+    XpnGetURLServer(&servers[i], aux_path, url_serv);
 
     vfh_aux->nfih[i] = (struct nfi_fhandle*)malloc(sizeof(struct nfi_fhandle));
     memset(vfh_aux->nfih[i], 0, sizeof(struct nfi_fhandle));
     if(vfh_aux->nfih[i] == NULL)
     {
-      free(servers);
       return -1;
     }
 
     vfh_aux->nfih[i]->url = url_serv;
 
     // Worker
-    nfi_worker_do_getattr(servers[i]->wrk, vfh_aux->nfih[i], &(attr[i]));
+    nfi_worker_do_getattr(servers[i].wrk, vfh_aux->nfih[i], &(attr[i]));
   }
 
   // Wait
   err = 0;
   for(i=0;i<n;i++)
   {
-    ret = nfiworker_wait(servers[i]->wrk);
+    ret = nfiworker_wait(servers[i].wrk);
 
     // Control error
     if((ret<0)&&(!err))
@@ -555,7 +520,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   // Error checking
   if(err)
   {
-    free(servers);
     return -1;
   }
 
@@ -584,7 +548,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
   st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
 
-  free(servers);
   free(attr);
 
   XPN_DEBUG_END_CUSTOM("%s", path)

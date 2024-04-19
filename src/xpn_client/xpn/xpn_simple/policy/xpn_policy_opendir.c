@@ -29,27 +29,23 @@
 int XpnGetEntry(int fd, struct dirent *entry)
 {
 	int n,res,serv_num;
-	struct nfi_server **servers;
+	struct nfi_server *servers;
 
 	XPN_DEBUG_BEGIN
 
-	/* XpnGetServers: flag operation, partition id, absolute path, file descript., pointer to server */
 	servers = NULL;
-	n = XpnGetServers(op_xpn_readdir, xpn_file_table[fd]->part->id, NULL, fd, &servers);
+	n = XpnGetServers(xpn_file_table[fd]->part->id, fd, &servers);
 	if(n<=0){
 	    return -1;
 	}
   serv_num = 0;
-  while(serv_num < n && servers[serv_num]->error == -1)
+  while(serv_num < n && servers[serv_num].error == -1)
   {
     serv_num++;
   }
 
-	res = XpnGetFhDir(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[serv_num]), servers[serv_num], xpn_file_table[fd]->path);
+	res = XpnGetFhDir(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[serv_num]), &servers[serv_num], xpn_file_table[fd]->path);
 
-	free(servers);
-
-     // printf("xpn_file_table[fd]->vfh->nfih[0]->server %p\n",xpn_file_table[fd]->vfh->nfih[0]->server);
 	res = xpn_file_table[fd]->data_vfh->nfih[serv_num]->server->ops->nfi_readdir(xpn_file_table[fd]->data_vfh->nfih[serv_num]->server, xpn_file_table[fd]->data_vfh->nfih[serv_num], entry);
 
 	XPN_DEBUG_END

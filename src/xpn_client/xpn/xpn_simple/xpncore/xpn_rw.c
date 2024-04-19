@@ -149,7 +149,7 @@ ssize_t xpn_sread ( int fd, const void *buffer, size_t size, off_t offset )
   off_t new_offset, l_offset;
   size_t l_size;
   int l_serv;
-  struct nfi_server **servers = NULL;
+  struct nfi_server *servers = NULL;
   int n;
 
   res   = -1 ;
@@ -161,9 +161,7 @@ ssize_t xpn_sread ( int fd, const void *buffer, size_t size, off_t offset )
   // (2) Get servers...
   servers = NULL;
 
-  /* params for XpnGetServers:
-   * flag operation, partition id, absolute path, file descriptor, pointer to servers */
-  n = XpnGetServers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers);
+  n = XpnGetServers(xpn_file_table[fd]->part->id, fd, &servers);
   if (n <= 0)
   {
     count = -1;
@@ -178,11 +176,11 @@ ssize_t xpn_sread ( int fd, const void *buffer, size_t size, off_t offset )
   ns_get_hostname(hostname);
   int serv_client = -1;
   for(int i=0; i<n; i++){
-    XPN_DEBUG("serv_client: %d serv_url: %s client: %s name: %s", serv_client, servers[i]->url, hostip, hostname);
+    XPN_DEBUG("serv_client: %d serv_url: %s client: %s name: %s", serv_client, servers[i].url, hostip, hostname);
 
-    if (strstr(servers[i]->url, hostip) != NULL || strstr(servers[i]->url, hostname) != NULL){
+    if (strstr(servers[i].url, hostip) != NULL || strstr(servers[i].url, hostname) != NULL){
       serv_client = i;
-      XPN_DEBUG("serv_client: %d serv_url: %s client: %s", serv_client, servers[serv_client]->url, hostip);
+      XPN_DEBUG("serv_client: %d serv_url: %s client: %s", serv_client, servers[serv_client].url, hostip);
     }
   }
 
@@ -199,14 +197,14 @@ ssize_t xpn_sread ( int fd, const void *buffer, size_t size, off_t offset )
 
     if (xpn_file_table[fd]->data_vfh->nfih[l_serv] == NULL)
     {
-      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), servers[l_serv], xpn_file_table[fd]->path);
+      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), &servers[l_serv], xpn_file_table[fd]->path);
       if (res<0) {
         count = -1;
         goto cleanup_xpn_sread;
       }
     }
 
-    res = servers[l_serv]->ops->nfi_read(servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset+XPN_HEADER_SIZE, l_size) ;
+    res = servers[l_serv].ops->nfi_read(&servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset+XPN_HEADER_SIZE, l_size) ;
     if (res<0) {
       count = (0 == count) ? -1 : count;
       goto cleanup_xpn_sread;
@@ -221,7 +219,6 @@ ssize_t xpn_sread ( int fd, const void *buffer, size_t size, off_t offset )
   }
 
 cleanup_xpn_sread:
-  FREE_AND_NULL(servers);
   res = count;
   XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset);
   return res;
@@ -234,7 +231,7 @@ ssize_t xpn_swrite( int fd, const void *buffer, size_t size, off_t offset )
   off_t new_offset, l_offset;
   size_t l_size;
   int l_serv, res_aux;
-  struct nfi_server **servers = NULL;
+  struct nfi_server *servers = NULL;
   int n;
 
   XPN_DEBUG_BEGIN_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset);
@@ -244,9 +241,7 @@ ssize_t xpn_swrite( int fd, const void *buffer, size_t size, off_t offset )
   // (2) Get servers...
   servers = NULL;
 
-  /* params for XpnGetServers:
-   * flag operation, partition id, absolute path, file descriptor, pointer to servers */
-  n = XpnGetServers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers);
+  n = XpnGetServers(xpn_file_table[fd]->part->id, fd, &servers);
   if (n<=0)
   {
     count = -1;
@@ -270,14 +265,14 @@ ssize_t xpn_swrite( int fd, const void *buffer, size_t size, off_t offset )
 
         if (xpn_file_table[fd]->data_vfh->nfih[l_serv] == NULL)
         {
-          res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), servers[l_serv], xpn_file_table[fd]->path);
+          res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[l_serv]), &servers[l_serv], xpn_file_table[fd]->path);
           if(res<0){
             count = -1;
             goto cleanup_xpn_swrite;
           }
         }
 
-        res = servers[l_serv]->ops->nfi_write(servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset+XPN_HEADER_SIZE, l_size) ;
+        res = servers[l_serv].ops->nfi_write(&servers[l_serv], xpn_file_table[fd]->data_vfh->nfih[l_serv], (char *)buffer + count, l_offset+XPN_HEADER_SIZE, l_size) ;
         XPN_DEBUG("l_serv = %d, l_offset = %lld, l_size = %lld", l_serv, (long long)l_offset, (long long)l_size);
         if (res<0) {
           count = (0 == count) ? -1 : count;
@@ -291,8 +286,6 @@ ssize_t xpn_swrite( int fd, const void *buffer, size_t size, off_t offset )
   while((size > (size_t) count) && (res > 0));
 
 cleanup_xpn_swrite:
-  FREE_AND_NULL(servers);
-
   if(count > 0){
     xpn_file_table[fd]->offset += count;
   }
@@ -306,7 +299,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   ssize_t res = -1, total;
   ssize_t *res_v = NULL;
   int n, i, j, err, max;
-  struct nfi_server **servers = NULL;
+  struct nfi_server *servers = NULL;
   struct nfi_worker_io **io = NULL;
   int *ion = NULL;
   void *new_buffer = NULL;
@@ -315,7 +308,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
 
   // (1) check arguments in xpn_simple_read
 
-  n = XpnGetServers(op_xpn_read, xpn_file_table[fd]->part->id, NULL, fd, &servers);
+  n = XpnGetServers(xpn_file_table[fd]->part->id, fd, &servers);
   if (n<=0)
   {
     res = -1;
@@ -372,11 +365,11 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   ns_get_hostname(hostname);
   int serv_client = -1;
   for(int i=0; i<n; i++){
-    XPN_DEBUG("serv_client: %d serv_url: %s client: %s name: %s", serv_client, servers[i]->url, hostip, hostname);
+    XPN_DEBUG("serv_client: %d serv_url: %s client: %s name: %s", serv_client, servers[i].url, hostip, hostname);
 
-    if (strstr(servers[i]->url, hostip) != NULL || strstr(servers[i]->url, hostname) != NULL){
+    if (strstr(servers[i].url, hostip) != NULL || strstr(servers[i].url, hostname) != NULL){
       serv_client = i;
-      XPN_DEBUG("serv_client: %d serv_url: %s client: %s", serv_client, servers[serv_client]->url, hostip);
+      XPN_DEBUG("serv_client: %d serv_url: %s client: %s", serv_client, servers[serv_client].url, hostip);
     }
   }
 
@@ -395,7 +388,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
 
     if (ion[i] != 0)
     {
-      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
+      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), &servers[i], xpn_file_table[fd]->path);
       if (res < 0)
       {
         res = -1;
@@ -403,8 +396,8 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
       }
 
       // Worker
-      servers[i]->wrk->thread = servers[i]->xpn_thread;
-      nfi_worker_do_read(servers[i]->wrk, xpn_file_table[fd]->data_vfh->nfih[i], io[i], ion[i]);
+      servers[i].wrk->thread = servers[i].xpn_thread;
+      nfi_worker_do_read(servers[i].wrk, xpn_file_table[fd]->data_vfh->nfih[i], io[i], ion[i]);
     }
   }
 
@@ -414,7 +407,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   {
      if (ion[i] != 0)
      {
-        res_v[i] = nfiworker_wait(servers[i]->wrk);
+        res_v[i] = nfiworker_wait(servers[i].wrk);
         if (res_v[i] < 0) {
             err = 1;
         }
@@ -435,7 +428,6 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   XpnReadBlocksFinish(fd, buffer, size, offset, serv_client, &io, &ion, n, new_buffer);
 
 cleanup_xpn_pread:
-  FREE_AND_NULL(servers);
   if (ion != NULL){
     for (j=0; j<n; j++){ 
       FREE_AND_NULL(io[j]);
@@ -454,7 +446,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   ssize_t res = -1, total;
   ssize_t *res_v = NULL;
   int n, i, j, err, max;
-  struct nfi_server **servers = NULL;
+  struct nfi_server *servers = NULL;
   struct nfi_worker_io **io = NULL;
   int *ion = NULL;
   void *new_buffer = NULL;
@@ -463,7 +455,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
   // (1) check arguments in xpn_simple_write
 
-  n = XpnGetServers(op_xpn_write, xpn_file_table[fd]->part->id, NULL, fd, &servers);
+  n = XpnGetServers(xpn_file_table[fd]->part->id, fd, &servers);
   if (n<=0)
   {
     res = -1;
@@ -530,7 +522,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
     if (ion[i] != 0)
     {
-      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
+      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), &servers[i], xpn_file_table[fd]->path);
       if (res<0)
       {
         res = -1;
@@ -538,8 +530,8 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
       }
 
       //Worker
-      servers[i]->wrk->thread = servers[i]->xpn_thread;
-      nfi_worker_do_write(servers[i]->wrk, xpn_file_table[fd]->data_vfh->nfih[i], io[i], ion[i]);
+      servers[i].wrk->thread = servers[i].xpn_thread;
+      nfi_worker_do_write(servers[i].wrk, xpn_file_table[fd]->data_vfh->nfih[i], io[i], ion[i]);
     }
   }
 
@@ -549,7 +541,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   {
     if(ion[i] != 0)
     {
-      res_v[i] = nfiworker_wait(servers[i]->wrk);
+      res_v[i] = nfiworker_wait(servers[i].wrk);
       if (res_v[i] < 0) {
         err = 1;
       }
@@ -559,7 +551,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   total = -1;
   if (!err)
   {
-    total = XpnWriteGetTotalBytes(res_v, n, &io, ion, servers) / (xpn_file_table[fd]->part->replication_level+1);
+    total = XpnWriteGetTotalBytes(res_v, n, &io, ion, &servers) / (xpn_file_table[fd]->part->replication_level+1);
 
     if (total > 0) {
         xpn_file_table[fd]->offset += total;
@@ -568,7 +560,6 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   res = total;
   
 cleanup_xpn_pwrite:
-  FREE_AND_NULL(servers);
   if (ion != NULL){
     for (j=0; j<n; j++){ 
       FREE_AND_NULL(io[j]);
