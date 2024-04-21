@@ -192,7 +192,7 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
   // In sck_server worker for operations has to be sequential because you don't want to have to make a socket per operation.
   // It can be done because it is not reentrant
   if (params->server_type == XPN_SERVER_TYPE_SCK){
-    params->thread_mode_operations = TH_OP;
+    params->thread_mode_operations = TH_NOT;
   }
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] << End\n", params->rank);
 
