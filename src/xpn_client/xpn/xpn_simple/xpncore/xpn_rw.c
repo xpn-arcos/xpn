@@ -551,7 +551,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   total = -1;
   if (!err)
   {
-    total = XpnWriteGetTotalBytes(res_v, n, &io, ion, &servers) / (xpn_file_table[fd]->part->replication_level+1);
+    total = XpnWriteGetTotalBytes(res_v, n, &io, ion, servers) / (xpn_file_table[fd]->part->replication_level+1);
 
     if (total > 0) {
         xpn_file_table[fd]->offset += total;

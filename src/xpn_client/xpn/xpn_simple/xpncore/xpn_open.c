@@ -247,7 +247,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
         }
         // read the metadata
         memset(mdata, 0, sizeof(struct xpn_metadata));
-        res = XpnReadMetadata(mdata, n, &servers, vfh, abs_path, pd);
+        res = XpnReadMetadata(mdata, n, servers, vfh, abs_path, pd);
         if (res < 0) 
         {
             free(vfh -> nfih);
@@ -590,7 +590,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
 
     memset(mdata_aux, 0, sizeof(struct xpn_metadata));
 
-    res = XpnReadMetadata(mdata_aux, n, &servers, vfh_aux, abs_path, pd);
+    res = XpnReadMetadata(mdata_aux, n, servers, vfh_aux, abs_path, pd);
     if (res < 0) 
     {
         // tambien los punteros indirectos
@@ -613,7 +613,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
         return -1;
     }
 
-    res = XpnUpdateMetadata(mdata_aux, n, &servers, vfh_aux, newabs_path);
+    res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
     if (res < 0) 
     {
         // tambien los punteros indirectos
@@ -676,7 +676,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
     // error checking
     if (err) 
     {
-        res = XpnUpdateMetadata(mdata_aux, n, &servers, vfh_aux, newabs_path);
+        res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
         if (res < 0) 
         {
             // tambien los punteros indirectos

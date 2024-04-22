@@ -461,7 +461,7 @@ ssize_t XpnReadGetTotalBytes(ssize_t *res_v, int num_servers)
  *
  * @return Returns total bytes read/write.
  */
-ssize_t XpnWriteGetTotalBytes(ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers) 
+ssize_t XpnWriteGetTotalBytes(ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server *servers) 
 {
 	ssize_t res = -1;
 	int i;
@@ -475,7 +475,7 @@ ssize_t XpnWriteGetTotalBytes(ssize_t *res_v, int num_servers, struct nfi_worker
 
 		for (int j = 0; j < ion[i]; j++)
 		{
-			if (servers[i]->error != -1){
+			if (servers[i].error != -1){
 				total_send += (*io)[i][j].size;
 			}
 			total_write += (*io)[i][j].size;

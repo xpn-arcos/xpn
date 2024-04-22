@@ -191,7 +191,7 @@ int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
 //TODO: we think that this function is used to write metadata into the metadata header (todo: really write into file)
 int XpnUpdateMetadata( __attribute__((__unused__)) struct xpn_metadata *mdata,
                        __attribute__((__unused__)) int nserv,
-                       __attribute__((__unused__)) struct nfi_server **servers,
+                       __attribute__((__unused__)) struct nfi_server *servers,
                        __attribute__((__unused__)) struct xpn_fh *fh,
                        __attribute__((__unused__)) char *path)
 {
@@ -202,7 +202,7 @@ int XpnUpdateMetadata( __attribute__((__unused__)) struct xpn_metadata *mdata,
 
 
 //TODO: we think that this function is used to read metadata from the metadata header (todo: really read header)
-int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path, int pd )
+int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) int nserv, struct nfi_server *servers, struct xpn_fh *fh, char *path, int pd )
 {
   int res, n, i;
 
@@ -215,12 +215,12 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
   n = hash(path, nserv);
 
   // TODO: fix getFh for dir or file
-  res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
+  res = XpnGetFh(mdata, &(fh->nfih[n]), &servers[n], path);
   if(res < 0)
   { 
     int save_errno = errno;
     errno = 0;
-    res = XpnGetFhDir(mdata, &(fh->nfih[n]), servers[n], path);
+    res = XpnGetFhDir(mdata, &(fh->nfih[n]), &servers[n], path);
     if(res < 0)
     {
       errno = save_errno;

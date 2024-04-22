@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -68,9 +68,9 @@
   int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos);
   int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path);
 
-  int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server **servers , struct xpn_fh *fh, char *path, int pd);
+  int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers , struct xpn_fh *fh, char *path, int pd);
 
-  int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server **servers , struct xpn_fh *fh, char *path);
+  int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers , struct xpn_fh *fh, char *path);
 
   int XpnGetFh(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);
   int XpnGetFhDir(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);
