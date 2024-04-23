@@ -78,21 +78,17 @@ int xpn_simple_destroy ( void )
   int res = 0;
   int i;
 
-  XPN_DEBUG_BEGIN
+  XPN_DEBUG_BEGIN;
   pthread_mutex_lock(&xpn_init_mutex);
   if ( xpn_initialize == 0){
-    pthread_mutex_unlock(&xpn_init_mutex);
     res = 0;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_simple_destroy;
   }
   xpn_initialize = 0;
   if(xpn_parttable[0].id < 0)
   {
-    pthread_mutex_unlock(&xpn_init_mutex);
     res = 0;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_simple_destroy;
   }
 
   xpn_destroy_file_table();
@@ -105,10 +101,10 @@ int xpn_simple_destroy ( void )
     xpn_parttable[i].id = -1;
     i++;
   }
-
-  pthread_mutex_unlock(&xpn_init_mutex);
   res = 0;
-  XPN_DEBUG_END
+cleanup_xpn_simple_destroy:
+  pthread_mutex_unlock(&xpn_init_mutex);
+  XPN_DEBUG_END;
   return res;
 }
 
@@ -126,47 +122,36 @@ int xpn_init_partition( void )
     xpn_debug=1;
   }
 
-  XPN_DEBUG_BEGIN
+  XPN_DEBUG_BEGIN;
 
   setbuf(stdout,NULL);
   setbuf(stderr,NULL);
 
   pthread_mutex_lock(&xpn_init_mutex);
 
-  xpn_initialize = 0;
   if(!xpn_initialize){
-    XPN_DEBUG("\nInitializing");
+    XPN_DEBUG("Initializing");
   }
   else
   {
     XPN_DEBUG("Already initialized");
-
-    pthread_mutex_unlock(&xpn_init_mutex);
-
     res = 0;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_init_partition;
   }
 
   res = XpnConfLoad(&conf_data);
   if (res != 0)
   {
-    pthread_mutex_unlock(&xpn_init_mutex);
     res = -1;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_init_partition;
   }
 
   part_n = XpnConfGetNumPartitions(&conf_data);
   if (part_n <= 0)
   {
     fprintf(stderr, "xpn_init: Fail in parse config file\n");
-    XpnConfFree(&conf_data);
-    pthread_mutex_unlock(&xpn_init_mutex);
-
     res = -1;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_init_partition;
   }
   for (i = 0; i < part_n; i++)
   {
@@ -176,12 +161,8 @@ int xpn_init_partition( void )
     if (res != 0)
     {
       fprintf(stderr, "xpn_init: Error in conf_file: "XPN_CONF_TAG_PARTITION_NAME" not found in %d partition\n", i);
-      XpnConfFree(&conf_data);
-      pthread_mutex_unlock(&xpn_init_mutex);
-
       res = -1;
-      XPN_DEBUG_END
-      return res;
+      goto cleanup_xpn_init_partition;
     }
     strcpy(xpn_parttable[i].name, buff_value);
     XPN_DEBUG("Partition %d: name=%s", xpn_parttable[i].id, xpn_parttable[i].name);
@@ -205,12 +186,8 @@ int xpn_init_partition( void )
     if (xpn_parttable[i].data_nserv <= 0)
     {
       fprintf(stderr, "xpn_init: Error in conf_file: %d servers found, minimum 1 in %d partition\n", xpn_parttable[i].data_nserv ,i);
-      XpnConfFree(&conf_data);
-      pthread_mutex_unlock(&xpn_init_mutex);
-
       res = -1;
-      XPN_DEBUG_END
-      return res;
+      goto cleanup_xpn_init_partition;
     }
     XPN_DEBUG("Partition %d: data_nserv=%d", xpn_parttable[i].id, xpn_parttable[i].data_nserv);
     
@@ -218,13 +195,8 @@ int xpn_init_partition( void )
     if (xpn_parttable[i].data_serv == NULL)
     {
       fprintf(stderr, "xpn_init: Couldn't allocate memory\n");
-
-      XpnConfFree(&conf_data);
-      pthread_mutex_unlock(&xpn_init_mutex);
-
       res = -1;
-      XPN_DEBUG_END
-      return res;
+      goto cleanup_xpn_init_partition;
     }
 
     memset(xpn_parttable[i].data_serv, 0, xpn_parttable[i].data_nserv*sizeof(struct nfi_server));
@@ -245,7 +217,7 @@ int xpn_init_partition( void )
     {
       if (xpn_parttable[i].data_serv[j].error != 0)
         n_error++;
-      XPN_DEBUG("Partition %d: error server %d: %d",xpn_parttable[i].id,j,xpn_parttable[i].data_serv[j].error)
+      XPN_DEBUG("Partition %d: error server %d: %d",xpn_parttable[i].id,j,xpn_parttable[i].data_serv[j].error);
     }  
     XPN_DEBUG("Partition %d end", xpn_parttable[i].id);
 
@@ -256,12 +228,8 @@ int xpn_init_partition( void )
       }
       fprintf(stderr,"xpn_init: More servers with errors (%d) than replication level permit (%d)\n",n_error,xpn_parttable[i].replication_level);
 
-      XpnConfFree(&conf_data);
-      pthread_mutex_unlock(&xpn_init_mutex);
-
       res = -1;
-      XPN_DEBUG_END
-      return res;
+      goto cleanup_xpn_init_partition;
     }
     
     // Check if there are to much parts
@@ -272,13 +240,8 @@ int xpn_init_partition( void )
         xpn_destroy_servers(&(xpn_parttable[j]));
       }
       fprintf(stderr,"xpn_init: Data configuration incorrect. Too much partitions \n");
-
-      XpnConfFree(&conf_data);
-      pthread_mutex_unlock(&xpn_init_mutex);
-
       res = -1;
-      XPN_DEBUG_END
-      return res;
+      goto cleanup_xpn_init_partition;
     }
   }
   
@@ -290,13 +253,8 @@ int xpn_init_partition( void )
     {
       xpn_destroy_servers(&(xpn_parttable[j]));
     }
-
-    XpnConfFree(&conf_data);
-    pthread_mutex_unlock(&xpn_init_mutex);
-
     res = -1;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_init_partition;
   }
 
   /* Init the rest of elements of the table */
@@ -306,14 +264,12 @@ int xpn_init_partition( void )
   }
   xpn_init_cwd();
   xpn_initialize = 1;
-
+  res = 0;
+cleanup_xpn_init_partition:
   XpnConfFree(&conf_data);
   pthread_mutex_unlock(&xpn_init_mutex);
 
-  res = 0;
-  XPN_DEBUG_END
-  XPN_DEBUG("\n");
-
+  XPN_DEBUG_END;
   return res;
 }
 

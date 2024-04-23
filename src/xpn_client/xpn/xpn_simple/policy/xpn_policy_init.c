@@ -112,6 +112,13 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     FILE *fd;
     int res = 0;
 
+    //Init in NULL pointers
+    conf_data->data = NULL;
+    conf_data->lines = NULL;
+    conf_data->server_n = NULL;
+    conf_data->server_url_index = NULL;
+
+
     if (param_get(XPN_CONF) != NULL)
     {
         strcpy(conf, param_get(XPN_CONF));
@@ -125,7 +132,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     if (fd == NULL)
     {
         fprintf(stderr, "XpnLoadConf: Can't open %s %s\n", conf, strerror(errno));
-        return -1;
+        goto cleanup_error_XpnConfLoad;
     }
     fseek(fd, 0L, SEEK_END);
     size_t file_size = ftell(fd);
@@ -134,20 +141,20 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     if(file_size > 10*MB)
     {
         fprintf(stderr, "XpnLoadConf: Error conf file bigger than 10MB, size %ldB\n", file_size);
+        goto cleanup_error_XpnConfLoad;
     }
     // Alocate and read all file
     conf_data->data = malloc(sizeof(char) * file_size);
     if (conf_data->data == NULL)
     {
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
-        return -1;
+        goto cleanup_error_XpnConfLoad;
     }
     res = fread(conf_data->data, file_size * sizeof(char), 1, fd);
     if (res != 1)
     {
-        free(conf_data->data);
         fprintf(stderr, "XpnLoadConf: Fail fread %s %s\n", conf, strerror(errno));
-        return -1;
+        goto cleanup_error_XpnConfLoad;
     }
 
     fclose(fd);
@@ -163,16 +170,14 @@ int XpnConfLoad(struct conf_file_data *conf_data)
 
     if (conf_data->lines_n < 1)
     {
-        free(conf_data->data);
-        return -1;
+        goto cleanup_error_XpnConfLoad;
     }
     // Allocate and pointer to lines
     conf_data->lines = malloc(conf_data->lines_n*sizeof(char *));
     if (conf_data->lines == NULL)
     {
-        free(conf_data->data);
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
-        return -1;
+        goto cleanup_error_XpnConfLoad;
     }
     conf_data->lines[0] = conf_data->data;
     int line_index = 1;
@@ -203,10 +208,8 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     conf_data->server_n = malloc(conf_data->partition_n * sizeof(int));
     if (conf_data->server_n == NULL)
     {
-        free(conf_data->data);
-        free(conf_data->lines);
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
-        return -1;
+        goto cleanup_error_XpnConfLoad;
     }
     memset(conf_data->server_n, 0, conf_data->partition_n * sizeof(int));
 
@@ -233,11 +236,8 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     conf_data->server_url_index = malloc(total_servers * sizeof(int));
     if (conf_data->server_url_index == NULL)
     {
-        free(conf_data->data);
-        free(conf_data->lines);
-        free(conf_data->server_n);
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
-        return -1;
+        goto cleanup_error_XpnConfLoad;
     }
     int server_url_index = 0;
     for (int i = 0; i < conf_data->lines_n; i++)
@@ -251,14 +251,17 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     }
 
     return 0;
+cleanup_error_XpnConfLoad:
+    XpnConfFree(conf_data);
+    return -1;
 }
 
 void XpnConfFree(struct conf_file_data *conf_data)
 {
-    free(conf_data->data);
-    free(conf_data->lines);
-    free(conf_data->server_n);
-    free(conf_data->server_url_index);
+    FREE_AND_NULL(conf_data->data);
+    FREE_AND_NULL(conf_data->lines);
+    FREE_AND_NULL(conf_data->server_n);
+    FREE_AND_NULL(conf_data->server_url_index);
 }
 
 
