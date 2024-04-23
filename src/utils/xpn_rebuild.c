@@ -63,30 +63,40 @@
     char *buf ;
     int buf_len;
     off64_t offset_src ;
-    int cont, cont2 ;
     off_t local_offset;
     int local_server;
     int i;
+    ssize_t read_size, write_size;
+    struct stat st;
 
-    printf("=");
-    
-    buf = (char *) malloc(blocksize + 1) ;
+    //Alocate buffer
+    buf_len = blocksize;
+    buf = (char *) malloc(blocksize ) ;
     if (NULL == buf) {
       perror("malloc: ");
       return -1;
     }
 
     //Generate source path
-    //sprintf( src_path, "%s/%s", argv[1], entry );
     strcpy(src_path, entry);
 
     //Generate destination path
     char * aux_entry = entry + strlen(dir_name);
     sprintf( dest_path, "%s/%s", dest_prefix, aux_entry );
 
+    if (rank == 0){
+      printf("%s\n", aux_entry);
+    }
+
+    ret = stat(src_path, &st);
+    if (ret < 0){
+      perror("stat: ");
+      free(buf) ;
+      return -1;
+    }
     if (!is_file)
     {
-      ret = mkdir(dest_path, 0755);
+      ret = mkdir(dest_path, st.st_mode);
       if ( ret < 0 )
       {
         perror("mkdir: ");
@@ -99,15 +109,15 @@
       fd_src = open64(src_path, O_RDONLY | O_LARGEFILE);
       if ( fd_src < 0 )
       {
-        perror("open 2: ");
+        perror("open 1: ");
         free(buf) ;
         return -1;
       }
 
-      fd_dest = open64(dest_path, O_CREAT | O_WRONLY | O_TRUNC | O_LARGEFILE, 0755);
+      fd_dest = open64(dest_path, O_CREAT | O_WRONLY | O_TRUNC | O_LARGEFILE, st.st_mode);
       if ( fd_dest < 0 )
       {
-        perror("open 1: ");
+        perror("open 2: ");
         free(buf) ;
         return -1;
       }
@@ -115,7 +125,12 @@
       // Write header
       char header_buf [HEADER_SIZE];
       memset(header_buf, 0, HEADER_SIZE);
-      ret = write(fd_dest, header_buf, HEADER_SIZE);
+      write_size = filesystem_write(fd_dest, header_buf, HEADER_SIZE);
+      if (write_size != HEADER_SIZE){
+        perror("write: ");
+        free(buf) ;
+        return -1;
+      }
 
       offset_src = 0;
       do
@@ -125,48 +140,35 @@
           XpnCalculateBlock(blocksize, replication_level, size, offset_src, i, &local_offset, &local_server);
 
           if (local_server == rank)
-            break;
+          {
+            off64_t ret_2;
+            ret_2 = lseek64(fd_src, offset_src, SEEK_SET) ;
+            if (ret_2 < 0) {
+              perror("lseek: ");
+              goto finish_copy;
+            }
+            ret_2 = lseek64(fd_dest, local_offset+HEADER_SIZE, SEEK_SET) ;
+            if (ret_2 < 0) {
+              perror("lseek: ");
+              goto finish_copy;
+            }
+
+            read_size = filesystem_read(fd_src, buf, buf_len);
+            if (read_size <= 0){
+              goto finish_copy;
+            }
+            write_size = filesystem_write(fd_dest, buf, read_size);
+            if (write_size != read_size){
+              perror("write: ");
+              goto finish_copy;
+            }
+          }
         }
         
-        if (local_server != rank)
-        {
-          offset_src+=blocksize;
-        }
-        else
-        {
-          // printf("From rank: %d %s, offset_src: %d, local_offset: %d, repl: %d\n", rank, entry, offset_src, local_offset, i);
-          off64_t ret_2;
-          ret_2 = lseek64(fd_src, offset_src, SEEK_SET) ;
-          if (ret_2 < 0) {
-            //perror("lseek: ");
-            break;
-          }
-
-          cont = 0;
-          buf_len = blocksize;
-          memset(buf, 0, buf_len);
-          do {
-            ret = read(fd_src, buf + cont, buf_len);
-            cont    = cont + ret ;
-            buf_len = buf_len - ret ;
-          } while ( (cont < buf_len) && (ret != 0) );
-
-          cont2 = 0;
-          buf_len = cont;
-          do {
-            ret = write(fd_dest, buf + cont2, buf_len);
-            cont2    = cont2 + ret ;
-            buf_len  = buf_len - ret ;
-          } while ( (cont2 < cont) && (ret != 0) );
-
-          //printf("rank %d; ret: %d; offset %ld; nodes %d; blocksize %d\n", rank, ret, offset_src, size, blocksize);
-          //printf("Buf: %s\n", buf);
-
-          offset_src+=blocksize;
-        }
+        offset_src+=blocksize;
       }
-      while(cont > 0);
-
+      while(read_size > 0);
+finish_copy:
       close(fd_src);
       close(fd_dest);
     }
@@ -261,10 +263,10 @@
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-    printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
+    if (rank == 0){
+      printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
+    }
     list (argv[1], argv[2], blocksize, replication_level, rank, size);
-    printf("\n");
 
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();

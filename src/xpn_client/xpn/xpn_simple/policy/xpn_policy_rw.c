@@ -62,7 +62,7 @@ void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t o
  */
 void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, int serv, off_t local_offset, off_t *offset)
 {
-	off_t added_size;
+	off_t added_size = 0;
 	if (local_offset % block_size == 0){
 		added_size = 0;
 	}else{
@@ -73,8 +73,9 @@ void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, i
 	off_t block_replication = (block_line-1) * nserv + (serv+1);
 	
 	// round up
-    off_t block = 1 + ((block_replication - 1) / (replication_level + 1));
-    (*offset) = block * block_size - added_size;
+    off_t block = ((block_replication + (replication_level + 1) - 1) / (replication_level + 1));
+    block = block > 0 ? block : 0;
+	(*offset) = block * block_size - added_size;
 }
 
 /**
@@ -530,7 +531,11 @@ ssize_t XpnGetRealFileSize(struct xpn_partition *part, struct nfi_attr *attr, in
 		}
 	}
 
-	off_t offset = 0;
-	XpnCalculateBlockInvert(part->block_size, part->replication_level, part->data_nserv, serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE, &offset);
+	off_t offset = attr[serv_to_calc].at_size - XPN_HEADER_SIZE;
+	if (offset > 0){
+		XpnCalculateBlockInvert(part->block_size, part->replication_level, part->data_nserv, serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE, &offset);
+	}else{
+		offset = 0;
+	}
 	return offset;
 }
