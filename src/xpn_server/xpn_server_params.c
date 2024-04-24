@@ -60,12 +60,10 @@ void xpn_server_params_show ( xpn_server_param_st *params )
   }else{
     printf("\t-t  <int>:\tError: unknown\n");
   }
-  // * dirbase
-  printf("\t-d  <path>:\t'%s'\n",   params->dirbase);
   // * shutdown_file
   printf("\t-f  <path>:\t'%s'\n",   params->shutdown_file);
   // * host
-  printf("\t-h <host>:\t'%s'\n",   params->srv_name) ;
+  printf("\t-h  <host>:\t'%s'\n",   params->srv_name) ;
 
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show] << End\n", params->rank);
 }
@@ -77,7 +75,6 @@ void xpn_server_params_show_usage ( void )
   printf("Usage:\n") ;
   printf("\t-s  <server_type>:     mpi (for mpi server); sck (for sck server)\n") ;
   printf("\t-t  <int>:      0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
-  printf("\t-d  <string>:   name of the base directory\n") ;
   printf("\t-f  <path>:     file of servers to be shutdown\n") ;
   printf("\t-h  <host>:     host server to be shutdown\n") ;
 
@@ -101,7 +98,6 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
   #endif
   strcpy(params->port_name, "");
   strcpy(params->srv_name,  "");
-  strcpy(params->dirbase,   XPN_SERVER_DIRBASE_DEFAULT);
 
   // update user requests
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] Get user configuration\n", params->rank);
@@ -117,12 +113,6 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
             strcpy(params->shutdown_file, argv[i+1]);
             i++;
             break;
-
-          case 'd':
-            strcpy(params->dirbase, argv[i+1]);
-            i++;
-            break;
-
           case 't':
             if ((i+1) < argc)
             {

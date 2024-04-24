@@ -53,7 +53,6 @@
     char srv_name [MPI_MAX_PORT_NAME];
 
     // server configuration
-    char dirbase [PATH_MAX];
     char shutdown_file[PATH_MAX];
     int  thread_mode_connections;
     int  thread_mode_operations;

@@ -147,13 +147,17 @@ int xpn_simple_rmdir(const char *path)
     XPN_DEBUG_END_ARGS1(path);
     return -1;
   }
-
+  int master_node = hash((char *)path, n);
+  servers[master_node].wrk->arg.is_master_node = 1;
   for(i=0;i<n;i++)
   {
     XpnGetURLServer(&servers[i], abs_path, url_serv);
+    if (i != master_node){
+      servers[i].wrk->arg.is_master_node = 0;
+    }
     // Worker
+    servers[i].wrk->thread = servers[i].xpn_thread;
     nfi_worker_do_rmdir(servers[i].wrk, url_serv);
-
   }
 
   // Wait
@@ -168,13 +172,11 @@ int xpn_simple_rmdir(const char *path)
   }
 
   // Error checking
-  if(err)
-  {
-    XPN_DEBUG_END_ARGS1(path);
-    return -1;
+  if(err){
+    res = -1;
   }
 
-  XPN_DEBUG_END;
-  return 0;
+  XPN_DEBUG_END_ARGS1(path);
+  return res;
 }
 

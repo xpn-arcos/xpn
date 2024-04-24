@@ -66,7 +66,7 @@ mk_conf_servers() {
   if [[ ! -f ${DEPLOYMENTFILE} ]]; then
     ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
                            --machinefile  ${MACHINE_FILE} \
-                           --part_size    ${PARTITION_SIZE} \
+                           --part_bsize    ${PARTITION_SIZE} \
                            --replication_level    ${REPLICATION_LEVEL} \
                            --part_name    ${PARTITION_NAME} \
                            --storage_protocol     ${SERVER_TYPE}"_server" \

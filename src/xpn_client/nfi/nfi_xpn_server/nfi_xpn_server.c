@@ -623,7 +623,6 @@ int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
 
   msg.type = XPN_SERVER_OPEN_FILE;
 
-  //memccpy(msg.id,                               0, 0, xpn_ID-1);
   memccpy(msg.u_st_xpn_server_msg.op_open.path, dir,            0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_open.flags = flags;
   msg.u_st_xpn_server_msg.op_open.mode = mode;
@@ -656,81 +655,6 @@ int nfi_xpn_server_create (struct nfi_server *serv,  char *url, mode_t mode, __a
 {
   //NOTE: actualy creat is not in use, it use like POSIX open(path, O_WRONLY|O_CREAT|O_TRUNC, mode);
   return nfi_xpn_server_open(serv, url, O_WRONLY|O_CREAT|O_TRUNC, mode, fh);
-  int    ret;
-  char   server[PATH_MAX], dir[PATH_MAX];
-  struct nfi_xpn_server *server_aux;
-  struct nfi_xpn_server_fhandle *fh_aux;
-  struct st_xpn_server_msg msg;
-  // struct st_xpn_server_attr_req req;
-  struct st_xpn_server_status status;
-
-  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_create] >> Begin\n", serv->id);
-
-  // Check arguments...
-  NULL_RET_ERR(serv, EINVAL);
-  // NULL_RET_ERR(attr, EINVAL);
-  nfi_xpn_server_keep_connected(serv);
-  NULL_RET_ERR(serv->private_info, EINVAL);
-
-  // private_info...
-  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_create] Get server private info\n", serv->id);
-
-  server_aux = (struct nfi_xpn_server *) serv->private_info;
-  if (server_aux == NULL)
-  {
-    errno = EINVAL;
-    return -1;
-  }
-
-  // url -> server + dir
-  ret = ParseURL(url,  NULL, NULL, NULL, server,  NULL,  dir);
-  if (ret < 0)
-  {
-    debug_error("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_create] ERROR: incorrect url '%s'.\n", serv->id, url);
-    errno = EINVAL;
-    return -1;
-  }
-
-  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_create] ParseURL(%s)= %s; %s\n", serv->id, url, server, dir);
-
-  // private_info file handle
-  fh_aux = (struct nfi_xpn_server_fhandle *)malloc(sizeof(struct nfi_xpn_server_fhandle));
-  NULL_RET_ERR(fh_aux, ENOMEM);
-  bzero(fh_aux, sizeof(struct nfi_xpn_server_fhandle));
-
-  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_create] nfi_xpn_server_create(%s)\n", serv->id, dir);
-
-  msg.type = XPN_SERVER_CREAT_FILE;
-  memccpy(msg.u_st_xpn_server_msg.op_creat.path, dir,            0, PATH_MAX-1);
-  msg.u_st_xpn_server_msg.op_creat.mode = mode;
-
-  nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
-  if (status.ret < 0)
-  {
-    errno = status.server_errno;
-    debug_error("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_create] ERROR: remote open fails to creat '%s' in server %s.\n", serv->id, dir, serv->server);
-    FREE_AND_NULL(fh_aux);
-    return -1;
-  }
-
-  memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
-
-  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_create] nfi_xpn_server_create(%s)\n", serv->id, url);
-
-  fh->type   = NFIFILE;
-  fh->server = serv;
-  fh->priv_fh = (void *)fh_aux;
-
-  fh->url = strdup(url);
-  if (fh->url == NULL)
-  {
-    FREE_AND_NULL(fh_aux);
-    return -1;
-  }
-
-  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_create] >> End\n", serv->id);
-
-  return 0;
 }
 
 ssize_t nfi_xpn_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size )
@@ -992,8 +916,6 @@ int nfi_xpn_server_remove ( struct nfi_server *serv,  char *url )
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove(%s)\n", serv->id, dir);
 
-  //bzero(&msg, sizeof(struct st_xpn_server_msg));
-  //memccpy(msg.id, 0, 0, xpn_ID-1);
   memccpy(msg.u_st_xpn_server_msg.op_rm.path, dir, 0, PATH_MAX-1);
 
   if ((serv -> wrk -> arg.is_master_node) == 1)
@@ -1423,16 +1345,26 @@ int nfi_xpn_server_rmdir(struct nfi_server *serv,  char *url)
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rmdir] nfi_xpn_server_rmdir(%s)\n", serv->id, dir);
 
-  msg.type = XPN_SERVER_RMDIR_DIR;
   memccpy(msg.u_st_xpn_server_msg.op_rmdir.path, dir, 0, PATH_MAX-1);
 
-  nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
-
-  if (status.ret < 0)
+  if ((serv -> wrk -> arg.is_master_node) == 1)
   {
-    debug_error("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rmdir] ERROR: xpn_rm fails to rm '%s' in server %s.\n", serv->id, dir, serv->server);
-    errno = status.server_errno;
-    return -1;
+    msg.type = XPN_SERVER_RMDIR_DIR;
+    nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
+    if (status.ret < 0){
+      errno = status.server_errno;
+      return status.ret;
+    }
+  }
+  else
+  {
+    msg.type = XPN_SERVER_RMDIR_DIR_ASYNC;
+
+    // send request...
+    ret = nfi_write_operation(server_aux, &msg);
+    if (ret >= 0) {
+      return 0;
+    }
   }
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rmdir] nfi_xpn_server_rmdir(%s)=%d\n", serv->id, dir, ret);

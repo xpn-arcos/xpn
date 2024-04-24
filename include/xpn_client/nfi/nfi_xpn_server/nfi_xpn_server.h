@@ -73,9 +73,6 @@
     char port_name [XPN_SERVER_MAX_PORT_NAME];
     char  srv_name [XPN_SERVER_MAX_PORT_NAME];
 
-    // server configuration
-    char dirbase[PATH_MAX];
-    
     // server arguments
     int    argc;
     char **argv;

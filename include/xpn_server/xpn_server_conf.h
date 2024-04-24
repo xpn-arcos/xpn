@@ -46,10 +46,6 @@
     #define MAX_BUFFER_SIZE (1*MB)
   #endif
 
-  #ifndef XPN_SERVER_DIRBASE_DEFAULT
-    #define XPN_SERVER_DIRBASE_DEFAULT  "/"
-  #endif
-
   #ifdef MPI_MAX_PORT_NAME
   #define XPN_SERVER_MAX_PORT_NAME MPI_MAX_PORT_NAME
   #else

@@ -65,8 +65,6 @@
 
   // FS Operations
   #define XPN_SERVER_STATFS_DIR     60
-  #define XPN_SERVER_GETNODENAME    61
-  #define XPN_SERVER_GETID          62
 
   // Connection operatons
   #define XPN_SERVER_FINALIZE       80

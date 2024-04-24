@@ -99,16 +99,10 @@ char * xpn_server_op2string ( int op_code )
     case XPN_SERVER_FINALIZE:
       ret = "FINALIZE";
       break;
-    case XPN_SERVER_GETID:
-      ret = "GETID";
-      break;
 
     // Connection operatons
     case XPN_SERVER_DISCONNECT:
       ret = "DISCONNECT";
-      break;
-    case XPN_SERVER_GETNODENAME:
-      ret = "GETNODENAME";
       break;
     case XPN_SERVER_END:
       ret = "END";
@@ -256,11 +250,6 @@ int xpn_server_do_operation ( struct st_th *th, int * the_end )
       }
       break;
 
-    //FS API
-    case XPN_SERVER_GETNODENAME:
-      xpn_server_op_getnodename(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
-      break;
-
     //Connection API
     case XPN_SERVER_DISCONNECT:
       break;
@@ -278,7 +267,6 @@ int xpn_server_do_operation ( struct st_th *th, int * the_end )
 // File API
 void xpn_server_op_open ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  char path [PATH_MAX];
   struct st_xpn_server_status status;
 
   // check params...
@@ -290,14 +278,10 @@ void xpn_server_op_open ( xpn_server_param_st *params, int sd, struct st_xpn_ser
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] >> Begin\n", params->rank);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_open.path);
-
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] open(%s, %d, %d)\n", params->rank, path, head->u_st_xpn_server_msg.op_open.flags, head->u_st_xpn_server_msg.op_open.mode);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] open(%s, %d, %d)\n", params->rank, head->u_st_xpn_server_msg.op_open.path, head->u_st_xpn_server_msg.op_open.flags, head->u_st_xpn_server_msg.op_open.mode);
 
   // do open
-  status.ret = filesystem_open2(path, head->u_st_xpn_server_msg.op_open.flags, head->u_st_xpn_server_msg.op_open.mode);
+  status.ret = filesystem_open2(head->u_st_xpn_server_msg.op_open.path, head->u_st_xpn_server_msg.op_open.flags, head->u_st_xpn_server_msg.op_open.mode);
   status.server_errno = errno;
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] open(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_open.path, status.ret);
   if (status.ret < 0){
@@ -314,7 +298,6 @@ void xpn_server_op_open ( xpn_server_param_st *params, int sd, struct st_xpn_ser
 
 void xpn_server_op_creat ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  char path [PATH_MAX];
   struct st_xpn_server_status status;
 
   // check params...
@@ -327,12 +310,8 @@ void xpn_server_op_creat ( xpn_server_param_st *params, int sd, struct st_xpn_se
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] creat(%s)\n", params->rank, head->u_st_xpn_server_msg.op_creat.path);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_creat.path);
-
   // do creat
-  status.ret = filesystem_creat(path, head->u_st_xpn_server_msg.op_creat.mode);
+  status.ret = filesystem_creat(head->u_st_xpn_server_msg.op_creat.path, head->u_st_xpn_server_msg.op_creat.mode);
   status.server_errno = errno;
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] creat(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_creat.path, status.ret);
   if (status.ret < 0){
@@ -354,7 +333,6 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
   struct st_xpn_server_rw_req req;
   char * buffer = NULL;
   long   size, diff, to_read, cont;
-  char   path [PATH_MAX];
   off_t ret_lseek;
 
   // check params...
@@ -367,10 +345,6 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read] >> Begin\n",  params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read] read(%s, %ld %ld)\n", params->rank, head->u_st_xpn_server_msg.op_read.path, head->u_st_xpn_server_msg.op_read.offset, head->u_st_xpn_server_msg.op_read.size);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_read.path);
-
   // initialize counters
   cont = 0;
   size = head->u_st_xpn_server_msg.op_read.size;
@@ -380,7 +354,7 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
   diff = head->u_st_xpn_server_msg.op_read.size - cont;
 
   //Open file
-  int fd = filesystem_open(path, O_RDONLY);
+  int fd = filesystem_open(head->u_st_xpn_server_msg.op_read.path, O_RDONLY);
   if (fd < 0)
   {
     req.size = -1;
@@ -463,7 +437,6 @@ void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_se
   struct st_xpn_server_rw_req req;
   char * buffer = NULL;
   int    size, diff, cont, to_write;
-  char   path [PATH_MAX];
   off_t ret_lseek;
 
   // check params...
@@ -476,10 +449,6 @@ void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_se
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] write(%s, %ld %ld)\n", params->rank, head->u_st_xpn_server_msg.op_write.path, head->u_st_xpn_server_msg.op_write.offset, head->u_st_xpn_server_msg.op_write.size);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_write.path);
-
   // initialize counters
   cont = 0;
   size = (head->u_st_xpn_server_msg.op_write.size);
@@ -489,7 +458,7 @@ void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_se
   diff = head->u_st_xpn_server_msg.op_read.size - cont;
 
   //Open file
-  int fd = filesystem_open(path, O_WRONLY);
+  int fd = filesystem_open(head->u_st_xpn_server_msg.op_write.path, O_WRONLY);
   if (fd < 0)
   {
     req.size = -1;
@@ -561,7 +530,6 @@ void xpn_server_op_close ( __attribute__((__unused__)) xpn_server_param_st *para
 
 void xpn_server_op_rm ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  char path [PATH_MAX];
   struct st_xpn_server_status status;
 
   // check params...
@@ -574,12 +542,8 @@ void xpn_server_op_rm ( xpn_server_param_st *params, int sd, struct st_xpn_serve
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] unlink(%s)\n", params->rank, head->u_st_xpn_server_msg.op_rm.path);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_rm.path);
-
   // do rm
-  status.ret = filesystem_unlink(path);
+  status.ret = filesystem_unlink(head->u_st_xpn_server_msg.op_rm.path);
   status.server_errno = errno;
   xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
@@ -589,8 +553,6 @@ void xpn_server_op_rm ( xpn_server_param_st *params, int sd, struct st_xpn_serve
 
 void xpn_server_op_rm_async ( xpn_server_param_st *params, __attribute__((__unused__)) int sd, struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 {
-  char path [PATH_MAX];
-
   // check params...
   if (NULL == params)
   {
@@ -601,12 +563,8 @@ void xpn_server_op_rm_async ( xpn_server_param_st *params, __attribute__((__unus
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] unlink(%s)\n", params->rank, head->u_st_xpn_server_msg.op_rm.path);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_rm.path);
-
   // do rm
-  filesystem_unlink(path);
+  filesystem_unlink(head->u_st_xpn_server_msg.op_rm.path);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] unlink(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_rm.path, 0);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] << End\n", params->rank);
@@ -614,8 +572,6 @@ void xpn_server_op_rm_async ( xpn_server_param_st *params, __attribute__((__unus
 
 void xpn_server_op_rename ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  char old_path [PATH_MAX];
-  char new_path [PATH_MAX];
   struct st_xpn_server_status status;
 
   // check params...
@@ -628,14 +584,8 @@ void xpn_server_op_rename ( xpn_server_param_st *params, int sd, struct st_xpn_s
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] rename(%s, %s)\n", params->rank, head->u_st_xpn_server_msg.op_rename.old_url, head->u_st_xpn_server_msg.op_rename.new_url);
 
-  strcpy(old_path, params->dirbase);
-  strcat(old_path, head->u_st_xpn_server_msg.op_rename.old_url);
-
-  strcpy(new_path, params->dirbase);
-  strcat(new_path, head->u_st_xpn_server_msg.op_rename.new_url );
-
   // do rename
-  status.ret = filesystem_rename(old_path, new_path);
+  status.ret = filesystem_rename(head->u_st_xpn_server_msg.op_rename.old_url, head->u_st_xpn_server_msg.op_rename.new_url);
   status.server_errno = errno;
   xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
@@ -646,7 +596,6 @@ void xpn_server_op_rename ( xpn_server_param_st *params, int sd, struct st_xpn_s
 void xpn_server_op_getattr ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_attr_req req;
-  char path [PATH_MAX];
 
   // check params...
   if (NULL == params)
@@ -658,12 +607,8 @@ void xpn_server_op_getattr ( xpn_server_param_st *params, int sd, struct st_xpn_
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] stat(%s)\n", params->rank, head->u_st_xpn_server_msg.op_getattr.path);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_getattr.path);
-
   // do getattr
-  req.status = filesystem_stat(path, &req.attr);
+  req.status = filesystem_stat(head->u_st_xpn_server_msg.op_getattr.path, &req.attr);
   req.status_req.ret = req.status;
   req.status_req.server_errno = errno;
 
@@ -699,7 +644,6 @@ void xpn_server_op_setattr (xpn_server_param_st *params, __attribute__((__unused
 //Directory API
 void xpn_server_op_mkdir ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  char path [PATH_MAX];
   struct st_xpn_server_status status;
 
   // check params...
@@ -712,12 +656,8 @@ void xpn_server_op_mkdir ( xpn_server_param_st *params, int sd, struct st_xpn_se
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] mkdir(%s)\n", params->rank, head->u_st_xpn_server_msg.op_mkdir.path);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_mkdir.path);
-
   // do mkdir
-  status.ret = filesystem_mkdir(path, head->u_st_xpn_server_msg.op_mkdir.mode);
+  status.ret = filesystem_mkdir(head->u_st_xpn_server_msg.op_mkdir.path, head->u_st_xpn_server_msg.op_mkdir.mode);
   status.server_errno = errno;
   xpn_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
@@ -728,7 +668,6 @@ void xpn_server_op_mkdir ( xpn_server_param_st *params, int sd, struct st_xpn_se
 void xpn_server_op_opendir ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   DIR* ret;
-  char path [PATH_MAX];
   struct st_xpn_server_status status;
 
   // check params...
@@ -741,11 +680,7 @@ void xpn_server_op_opendir ( xpn_server_param_st *params, int sd, struct st_xpn_
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] opendir(%s)\n", params->rank, head->u_st_xpn_server_msg.op_opendir.path);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_opendir.path);
-
-  ret = filesystem_opendir(path);
+  ret = filesystem_opendir(head->u_st_xpn_server_msg.op_opendir.path);
   status.ret = ret == NULL ? -1 : 0;
   status.server_errno = errno;
 
@@ -764,7 +699,6 @@ void xpn_server_op_readdir ( xpn_server_param_st *params, int sd, struct st_xpn_
 {
   struct dirent * ret;
   struct st_xpn_server_readdir_req ret_entry;
-  char path [PATH_MAX];
   DIR* s;
 
   // check params...
@@ -777,11 +711,7 @@ void xpn_server_op_readdir ( xpn_server_param_st *params, int sd, struct st_xpn_
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] readdir(%s)\n", params->rank, head->u_st_xpn_server_msg.op_readdir.path);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_readdir.path);
-  
-  s = filesystem_opendir(path);
+  s = filesystem_opendir(head->u_st_xpn_server_msg.op_readdir.path);
   ret_entry.status.ret = s == NULL ? -1 : 0;
   ret_entry.status.server_errno = errno;
 
@@ -820,7 +750,6 @@ void xpn_server_op_closedir ( __attribute__((__unused__)) xpn_server_param_st *p
 
 void xpn_server_op_rmdir ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  char path [PATH_MAX];
   struct st_xpn_server_status status;
 
   // check params...
@@ -833,12 +762,8 @@ void xpn_server_op_rmdir ( xpn_server_param_st *params, int sd, struct st_xpn_se
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] rmdir(%s)\n", params->rank, head->u_st_xpn_server_msg.op_rmdir.path);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_rmdir.path);
-
   // do rmdir
-  status.ret = filesystem_rmdir(path);
+  status.ret = filesystem_rmdir(head->u_st_xpn_server_msg.op_rmdir.path);
   status.server_errno = errno;  
   xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
@@ -846,11 +771,8 @@ void xpn_server_op_rmdir ( xpn_server_param_st *params, int sd, struct st_xpn_se
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] << End\n", params->rank);
 }
 
-void xpn_server_op_rmdir_async ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) int sd, struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, int tag_client_id )
+void xpn_server_op_rmdir_async ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) int sd, struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 {
-  int ret;
-  char path [PATH_MAX];
-
   // check params...
   if (NULL == params)
   {
@@ -861,42 +783,11 @@ void xpn_server_op_rmdir_async ( __attribute__((__unused__)) xpn_server_param_st
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] rmdir(%s)\n", params->rank, head->u_st_xpn_server_msg.op_rmdir.path);
 
-  strcpy(path, params->dirbase);
-  strcat(path, "/");
-  strcat(path, head->u_st_xpn_server_msg.op_rmdir.path);
-
   // do rmdir
-  ret = filesystem_rmdir(path);
+  filesystem_rmdir(head->u_st_xpn_server_msg.op_rmdir.path);
 
-  xpn_server_comm_write_data(params, sd, (char *)&ret, sizeof(int), rank_client_id, tag_client_id);
-
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] rmdir(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_rmdir.path, ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] rmdir(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_rmdir.path, 0);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] << End\n", params->rank);
-}
-
-//FS API
-void  xpn_server_op_getnodename (xpn_server_param_st *params, int sd,  __attribute__((__unused__)) struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id)
-{
-  char serv_name[HOST_NAME_MAX];
-
-  // check params...
-  if (NULL == params)
-  {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getnodename] ERROR: NULL arguments\n", -1);
-    return;
-  }
-
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getnodename] >> Begin\n", params->rank);
-
-  // Get server host name
-  gethostname(serv_name, HOST_NAME_MAX);
-
-  xpn_server_comm_write_data(params, sd, (char *)(serv_name),       HOST_NAME_MAX, rank_client_id, tag_client_id); // Send one single message
-  xpn_server_comm_write_data(params, sd, (char *)(params->dirbase), PATH_MAX,      rank_client_id, tag_client_id); // Send one single message
-  //xpn_server_comm_write_data(params, sd, (char *)params->sem_name_server, PATH_MAX, rank_client_id, tag_client_id); // Send one single message
-
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getnodename] gethostname=%s\n", params->rank, serv_name);
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getnodename] << END\n", params->rank);
 }
 
 /* ................................................................... */
