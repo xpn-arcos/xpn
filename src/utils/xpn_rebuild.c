@@ -242,6 +242,7 @@ finish_copy:
     int rank, size;
     int replication_level = 0;
     int blocksize = 524288;
+    double start_time;
     //
     // Check arguments...
     //
@@ -263,11 +264,14 @@ finish_copy:
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+    start_time = MPI_Wtime();
     if (rank == 0){
       printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
     }
     list (argv[1], argv[2], blocksize, replication_level, rank, size);
-
+    if (rank == 0){
+      printf("Rebuild elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);
+    }
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
 
