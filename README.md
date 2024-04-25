@@ -11,68 +11,82 @@
 * *Licence*:  [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/dcamarmas/xpn/blob/master/COPYING)</br>
 * *Authors*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, David Garcia Fernandez
 
-## 1. To deploy XPN...
+## 1. To deploy Ad-Hoc XPN...
 
   The Expand Parallel File System (a.k.a. XPN) can be installed on a cluster with local storage per-node (HDD, SSD or RAM Drive) and a shared home directory.
 
+  There are only two pre-requisites that current Ad-Hoc XPN needs:
+  1. The typical C development tools: gcc, make, and autotools
+  2. An MPI implementation installed: MPICH 4.x
+
   The general steps to deploy XPN are:
   ```mermaid
-  flowchart LR
-    A[Start] --> B{Spack?}
-    B -- Yes --> C[add repo]
-    subgraph ide1 [1.1 With spack]
-    C --> D[install software]
-    D --> E[load software]
+  %% {init: {"flowchart": {"defaultRenderer": "elk"}} }%%
+  flowchart TD
+    A([Start]) --> B("Do you have 'Spack'?")
+    B -- Yes --> ide11
+    B -- No --> Y1("Do you have 'modules'?")
+
+    %% (1) with spack
+    subgraph ide1 [1 With spack]
+    subgraph ide11 [1.1 Add repo]
+       direction TB
+       X1["git clone https://github.com/xpn-arcos/xpn.git </br>
+          spack repo add xpn/scripts/spack"]
     end
-    E --> I[End]
-    B -- No ---> F[install prerequisites]
-    subgraph ide2 [1.2 With autotools]
-    F --> G[download source code]
-    G --> H[build source code]
+    subgraph ide12 [1.2 Install software]
+       direction TB
+       X2["`spack **info** xpn &nbsp;&nbsp;</br>
+         spack **install** xpn`"]
     end
-    H --> I[End]
+    subgraph ide13 [1.3 Load software]
+       direction TB
+       X3["`spack **load** xpn`"]
+    end
+    classDef lt text-align:left,fill:lightgreen,color:black; 
+    class X1,X2,X3 lt;
+    ide11 --> ide12
+    ide12 --> ide13
+    end
+    ide13 --> I([End])
+
+    Y1-- Yes --> ide21a
+    Y1-- No ---> ide21b
+    subgraph ide2 [2 With autotools]
+    subgraph ide21a [2.1 Install prerequisites]
+       direction TB
+       Y1A["module avail <br> module load gcc<br> module load 'impi/2017.4'"]
+    end
+    subgraph ide21b [2.1 Install prerequisites]
+       direction TB
+       Y1B["sudo apt-get install -y build-essential gcc make libtool<br>sudo apt-get install -y autoconf automake git<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
+    end
+    subgraph ide22 [2.2 Download source code]
+       direction TB
+       Y2B["mkdir $HOME/src </br>
+            cd    $HOME/src </br>
+            git clone https://github.com/michaelrsweet/mxml.git<br>
+            git clone https://github.com/xpn-arcos/xpn.git"]
+    end
+    subgraph ide23 ["2.3 build source code"]
+       direction LR
+       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' <br>
+            cd $HOME/src <br>
+            ./xpn/build-me -m $XPN_MPICC -i $HOME/bin"]
+    end
+    ide21a --> ide22
+    ide21b --> ide22
+    ide22 --> ide23
+
+    classDef lt2 text-align:left,fill:lightblue,color:black;
+    class Y1A,Y1B lt2;
+    end
+
+    Y3B --> I([End])
   ```
 
-### 1.1. With Spack
 
-  * To add XPN Spack repository:
-    ```
-    git clone https://github.com/xpn-arcos/xpn.git
-    spack repo add xpn/scripts/spack
-    ```
-
-  * To install XPN with Spack:
-    ```
-    spack info xpn
-    spack install xpn
-    ```
-
-  * To use XPN with Spack:
-    ```
-    spack load xpn
-    ```
-
-
-### 1.2. With autotools (configure, make, make install)
-
-  * ### 1.2.1. Installing prerequisites
-
-    XPN needs two elements:
-    1. The typical C development tools: gcc, make, autotools
-    2. An MPI implementation installed: MPICH or OpenMPI
-
-    The steps to install both depends on your platform (cluster with modules, Linux packages, etc.):
-
-  | Steps to install ...                | Cluster with modules       | Linux packages      |
-  | ----------------------------------- | -------------------------- | ------------------- |
-  | ... the C development tools         | module load gcc            | sudo apt-get install -y autoconf automake gcc g++ make libtool build-essential |
-  | ... the MPI implementation          | module load "impi/2017.4"  | sudo apt-get install -y libmpich-dev mpich mpich-doc                           |
-  
-  In a cluster with modules, "gcc" is the example of compiler module and "impi/2017.4" is the MPI module.
-  You can check your available modules by using:
- ```
- module avail
- ```
+### With MPICH from source code
 
  In order to install the MPICH implementation of MPI from source code and with Infiniband (Omni-Path) support we recommend:
  ```
@@ -89,33 +103,27 @@
  ```
 
 
-  * ### 1.2.2. Download the source code of XPN
+## 2. Executing Ad-Hoc XPN...
 
-    You need to download the source code of [XPN](https://xpn-arcos.github.io) and [minixml](http://www.minixml.org).
+First, you need to get familiar with 4 special files and 2 special environment variables for XPN client:
 
-    You can download both by executing:
-    ```
-    mkdir $HOME/src
-    cd    $HOME/src
-    git clone https://github.com/michaelrsweet/mxml.git
-    git clone https://github.com/xpn-arcos/xpn.git
-    ```
+  ```mermaid
+  mindmap
+  root((XPN))
+    files
+        ["`**hostfile**</br>               for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
+        ["`**XPN configuration file**</br> for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers`"]
+        ["`**nameserver file**</br>        for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing`"]
+        ["`**server file**</br>            for XPN, it is a text file with the list of the servers to be stopped (one host name per line)`"]
+    environment variables
+        ["`**XPN_DNS=**'full path to the nameserver file to be used (mandatory)'`"]
+        ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
+```
 
-    You must do both 'git clone' requests in the same directory (e.g.: $HOME/src).
 
-
-  * ### 1.2.3. Building XPN
-
-    To build Expand you need to execute:
-    ```
-    cd $HOME/src
-    ./xpn/build-me -m <full path to your mpicc compiler> \
-                   -i <full path to where XPN and MXML are going to be installed>
-    ```
-
-## 2. Executing XPN
-
-First, you need to get familiar with 4 special files and 5 special environment variables for XPN client:
+<details>
+<summary>For Expand developers...</summary>
+You need to get familiar with 4 special files and **5** special environment variables for XPN client:
 
   ```mermaid
   mindmap
@@ -145,34 +153,46 @@ And the 5 special environment variables for XPN clients are:
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
 * ```XPN_SESSION```  with value 0 for without session and value 1 for with session (optional, default: 0).
 * ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
+</details>
 
 
-### 2.1 Ad-Hoc Expand (based on MPI)
+### 2.1 Executing Ad-Hoc Expand (based on MPI)
 The typical executions has 3 main steps:
-- First, launch the Expand MPI server (xpn_mpi_server):
+1. First, launch the Expand MPI server (xpn_mpi_server):
+   ```bash
+   ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
+   ```
+2. Then,  launch the program that will use Expand (XPN client).
 
-  ```
-  ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
-  ```
+   2.1. Example for the *app1* MPI application:
+   ```bash
+   mpiexec -np <number of processes> \
+           -hostfile <full path to the hostfile> \
+           -genv XPN_DNS  <nameserver file> \
+           -genv XPN_CONF <XPN configuration file> \
+           -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
+           -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+           <full path to app1>/app1
+   ```
+   2.2. Example for the *app2* program (a NON-MPI application):
+   ```bash
+   export XPN_DNS=<full path to the nameserver file>
+   export XPN_CONF=<full path to the XPN configuration file>
+   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
+   ```
+   2.3. Example for the *app3* Python program:
+   ```bash
+   export XPN_DNS=<full path to the nameserver file>
+   export XPN_CONF=<full path to the XPN configuration file>
+   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3
+   ```
+4. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
+   ```bash
+   ./xpn -v -l <full path to the hostfile>  stop
+   ```
 
-- Then,  launch the program that will use Expand (XPN client):
-
-  ```
-  mpiexec -np <number of processes> \
-          -hostfile <full path to the hostfile> \
-          -genv XPN_DNS  <nameserver file> \
-          -genv XPN_CONF <XPN configuration file> \
-          -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-          -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-          <program path>
-  ```
-
-- At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
-
-  ```
-  ./xpn -v -l <full path to the hostfile>  stop
-  ```
-    
+<details>
+<summary>For Expand developers...</summary>
 Summary:
 
 ```mermaid
@@ -187,4 +207,5 @@ sequenceDiagram
     XPN client    -->> session: execution ends
     session        ->> xpn_mpi_server: stop the MPI server
 ```
+</details>
 
