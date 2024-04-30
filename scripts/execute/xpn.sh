@@ -66,7 +66,7 @@ mk_conf_servers() {
   if [[ ! -f ${DEPLOYMENTFILE} ]]; then
     ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
                            --machinefile  ${MACHINE_FILE} \
-                           --part_size    ${PARTITION_SIZE} \
+                           --part_bsize    ${PARTITION_SIZE} \
                            --replication_level    ${REPLICATION_LEVEL} \
                            --part_name    ${PARTITION_NAME} \
                            --storage_path ${STORAGE_PATH}
@@ -95,29 +95,59 @@ start_xpn_servers() {
 
   rm -f "${WORKDIR}/dns.txt"
   touch "${WORKDIR}/dns.txt"
-
-  if [[ ${SERVER_TYPE} == "mpi" ]]; then
-    for ((i=1; i<=$NODE_NUM; i++))
-    do
-        line=$(head -n $i "$HOSTFILE" | tail -n 1)
-        mpiexec -np       1 \
-          -host "${line}" \
-          -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-          ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server -ns ${WORKDIR}/dns.txt ${ARGS} &
-        sleep 0.5
-    done
-  elif [[ ${SERVER_TYPE} == "sck" ]]; then
-    mpiexec -np       "${NODE_NUM}" \
-            -hostfile "${HOSTFILE}" \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
+  
+  if command -v srun &> /dev/null
+  then
+    # Create dir
+    srun  -n "${NODE_NUM}" \
+          -w "${HOSTFILE}" \
+          mkdir -p ${XPN_STORAGE_PATH}
+    if [[ ${SERVER_TYPE} == "mpi" ]]; then
+      for ((i=1; i<=$NODE_NUM; i++))
+      do
+          line=$(head -n $i "$HOSTFILE" | tail -n 1)
+          srun  -n       1 \
+                -w "${line}" \
+                --export=ALL \
+                ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server -ns ${WORKDIR}/dns.txt ${ARGS} &
+          sleep 0.5
+      done
+    elif [[ ${SERVER_TYPE} == "sck" ]]; then
+      srun  -n "${NODE_NUM}" \
+            -w "${HOSTFILE}" \
+            --export=ALL \
             "${BASE_DIR}"/../../src/sck_server/xpn_sck_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
+    else
+      srun  -n "${NODE_NUM}" \
+            -w "${HOSTFILE}" \
+            --export=ALL \
+            "${BASE_DIR}"/../../src/tcp_server/xpn_tcp_server -ns "${WORKDIR}"/dns.txt "${ARGS}" -p 3456 &
+    fi
   else
+    # Create dir
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/tcp_server/xpn_tcp_server -ns "${WORKDIR}"/dns.txt "${ARGS}" -p 3456 &
-  fi
+            mkdir -p ${XPN_STORAGE_PATH}
 
+    if [[ ${SERVER_TYPE} == "mpi" ]]; then
+      for ((i=1; i<=$NODE_NUM; i++))
+      do
+          line=$(head -n $i "$HOSTFILE" | tail -n 1)
+          mpiexec -np       1 \
+            -host "${line}" \
+            ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server -ns ${WORKDIR}/dns.txt ${ARGS} &
+          sleep 0.5
+      done
+    elif [[ ${SERVER_TYPE} == "sck" ]]; then
+      mpiexec -np       "${NODE_NUM}" \
+              -hostfile "${HOSTFILE}" \
+              "${BASE_DIR}"/../../src/sck_server/xpn_sck_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
+    else
+      mpiexec -np       "${NODE_NUM}" \
+              -hostfile "${HOSTFILE}" \
+              "${BASE_DIR}"/../../src/tcp_server/xpn_tcp_server -ns "${WORKDIR}"/dns.txt "${ARGS}" -p 3456 &
+    fi
+  fi
   sleep 3
 
   if [[ ${RUN_FOREGROUND} == true ]]; then
@@ -143,22 +173,29 @@ stop_xpn_servers() {
     echo " * DEATH_FILE: ${DEATH_FILE}"
     echo " * additional daemon args: ${ARGS}"
   fi
-
-  if [[ ${SERVER_TYPE} == "mpi" ]]; then
-    mpiexec -np 1 \
-            -genv XPN_DNS ${WORKDIR}/dns.txt \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/mpi_server/xpn_stop_mpi_server -f ${DEATH_FILE}
-  elif [[ ${SERVER_TYPE} == "sck" ]]; then
-    mpiexec -np 1 \
-            -genv XPN_DNS ${WORKDIR}/dns.txt \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/sck_server/xpn_stop_sck_server -f ${DEATH_FILE}
+  if command -v srun &> /dev/null
+  then
+    if [[ ${SERVER_TYPE} == "mpi" ]]; then
+      srun -n 1 \
+              "${BASE_DIR}"/../../src/mpi_server/xpn_stop_mpi_server -ns "${WORKDIR}"/dns.txt -f ${DEATH_FILE}
+    elif [[ ${SERVER_TYPE} == "sck" ]]; then
+      srun -n 1 \
+              "${BASE_DIR}"/../../src/sck_server/xpn_stop_sck_server -ns "${WORKDIR}"/dns.txt -f ${DEATH_FILE}
+    else
+      srun -n 1 \
+              "${BASE_DIR}"/../../src/tcp_server/xpn_stop_tcp_server -ns "${WORKDIR}"/dns.txt -f ${DEATH_FILE}
+    fi
   else
-    mpiexec -np 1 \
-            -genv XPN_DNS${WORKDIR}/dns.txt \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            ${BASE_DIR}/../../src/tcp_server/xpn_stop_tcp_server -f ${DEATH_FILE}
+    if [[ ${SERVER_TYPE} == "mpi" ]]; then
+      mpiexec -np 1 \
+              "${BASE_DIR}"/../../src/mpi_server/xpn_stop_mpi_server -ns "${WORKDIR}"/dns.txt -f ${DEATH_FILE}
+    elif [[ ${SERVER_TYPE} == "sck" ]]; then
+      mpiexec -np 1 \
+              "${BASE_DIR}"/../../src/sck_server/xpn_stop_sck_server -ns "${WORKDIR}"/dns.txt -f ${DEATH_FILE}
+    else
+      mpiexec -np 1 \
+              "${BASE_DIR}"/../../src/tcp_server/xpn_stop_tcp_server -ns "${WORKDIR}"/dns.txt -f ${DEATH_FILE}
+    fi
   fi
 }
 
@@ -179,7 +216,7 @@ terminate_xpn_server() {
 
 
 rebuild_xpn_servers() {
-
+  # TODO: all rebuild
   if [[ ${VERBOSE} == true ]]; then
     echo " * source partition: ${SOURCE_PATH}"
     echo " * xpn storage path: ${XPN_STORAGE_PATH}"
@@ -214,9 +251,16 @@ preload_xpn() {
   fi
 
   # 1. Copy
-  mpiexec -np       "${NODE_NUM}" \
-          -hostfile "${HOSTFILE}" \
-          "${BASE_DIR}"/../../src/utils/xpn_preload "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288
+  if command -v srun &> /dev/null
+  then
+    srun  -n "${NODE_NUM}" \
+          -w "${HOSTFILE}" \
+          "${BASE_DIR}"/../../src/utils/xpn_preload "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
+  else
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            "${BASE_DIR}"/../../src/utils/xpn_preload "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
+  fi
 }
 
 flush_xpn() {
@@ -227,9 +271,16 @@ flush_xpn() {
   fi
 
   # 1. Copy
-  mpiexec -np       "${NODE_NUM}" \
-          -hostfile "${HOSTFILE}" \
-          "${BASE_DIR}"/../../src/utils/xpn_flush "${XPN_STORAGE_PATH}" "${DEST_PATH}" 524288
+  if command -v srun &> /dev/null
+  then
+    srun  -n "${NODE_NUM}" \
+          -w "${HOSTFILE}" \
+          "${BASE_DIR}"/../../src/utils/xpn_flush "${XPN_STORAGE_PATH}" "${DEST_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
+  else
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            "${BASE_DIR}"/../../src/utils/xpn_flush "${XPN_STORAGE_PATH}" "${DEST_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
+  fi
 }
 
 
@@ -307,7 +358,7 @@ get_opts() {
          -l | --hostfile         ) HOSTFILE=$2;                 shift 2 ;;
          -d | --deathfile        ) DEATH_FILE=$2;               shift 2 ;;
          -k | --host             ) HOST=$2;                     shift 2 ;;
-         -p | --replication_level) XPN_REPLICATION_LEVEL=$2;        shift 2 ;;
+         -p | --replication_level) XPN_REPLICATION_LEVEL=$2;    shift 2 ;;
          -v | --verbose          ) VERBOSE=true;                shift 1 ;;
          -h | --help             ) usage_short; usage_details;  exit 0 ;;
          --                      ) shift;         break  ;;

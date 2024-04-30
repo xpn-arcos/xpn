@@ -25,9 +25,9 @@ usage_short() {
   echo ""
   echo " Usage: expand.sh [-h/--help] "
   echo "                  [-l/--hosts    <host1,host2,...>] "
-  echo "                  [-w/--workdir  <path to workdir>]"
   echo "                  [-d/--datadir  <path to datadir>]"
-  echo "                  [-m/--mountdir <path to mountdir>]"
+  echo "                  [-s/--sharedfir <path to sharedfir>]"
+  echo "                  [-r/--replication_level <replication level>]"
   echo "                  [-v/--verbose <false>] {start,stop,expand,shrink}"
   echo ""
 }
@@ -41,29 +41,29 @@ usage_details() {
   echo "     command                  Command to execute: 'start', 'stop', 'expand' and 'shrink'"
   echo ""
   echo " optional arguments:"
-  echo "     -h, --help                      Shows this help message and exits."
-  echo "     -l, --hosts     <arguments>     A comma separated list of valid job hostnames that can be used to start the adhoc servers."
-  echo "     -w, --workdir   <path>          The default working directory for adhoc servers."
-  echo "     -d, --datadir   <path>          The default data directory for adhoc servers."
-  echo "     -m, --mountdir  <path>          The default mount directory for adhoc servers."
-  echo "     -v, --verbose                   Increase verbosity"
+  echo "     -h, --help                               Shows this help message and exits."
+  echo "     -l, --hosts              <arguments>     A comma separated list of valid job hostnames that can be used to start the adhoc servers."
+  echo "     -d, --datadir            <path>          The default data directory for adhoc servers."
+  echo "     -s, --shareddir          <path>          The default shared directory for adhoc servers."
+  echo "     -r, --replication_level  <path>          The replication level to use."
+  echo "     -v, --verbose                            Increase verbosity"
   echo ""
 }
 
 get_opts() {
    # Taken the general idea from https://stackoverflow.com/questions/70951038/how-to-use-getopt-long-option-in-bash-script
    mkconf_name=$(basename "$0")
-   mkconf_short_opt=l:w:d:m:vh
-   mkconf_long_opt=hosts:,workdir:,datadir:,mountdir:,verbose,help
+   mkconf_short_opt=l:d:s:r:vh
+   mkconf_long_opt=hosts:,datadir:,shareddir:,replication_level:,verbose,help
    TEMP=$(getopt -o $mkconf_short_opt --long $mkconf_long_opt --name "$mkconf_name" -- "$@")
    eval set -- "${TEMP}"
 
    while :; do
       case "${1}" in
-         -e | --hosts            ) HOSTLIST=$2;                 shift 2 ;;
-         -r | --workdir          ) WORKDIR=$2;                  shift 2 ;;
-         -w | --datadir          ) DATADIR=$2;                  shift 2 ;;
-         -s | --mountdir         ) MOUNTDIR=$2;                 shift 2 ;;
+         -l | --hosts            ) HOSTLIST=$2;                 shift 2 ;;
+         -d | --datadir          ) DATADIR=$2;                  shift 2 ;;
+         -s | --shareddir        ) SHAREDDIR=$2;                shift 2 ;;
+         -r | --replication_level) REPLICATION_LEVEL=$2;        shift 2 ;;
          -v | --verbose          ) VERBOSE=true;                shift 1 ;;
          -h | --help             ) usage_short; usage_details;  exit 0 ;;
          --                      ) shift;         break  ;;
@@ -76,51 +76,125 @@ get_opts() {
 
 ## default values
 ACTION=""
-HOSTLIST="localhost"
-WORKDIR="/tmp/expand"
+HOSTLIST=$(hostname -I)
 DATADIR="/tmp/expand/data"
-MOUNTDIR="/tmp/expand/mnt"
+SHAREDDIR=""
 DEPLOYMENTFILE=""
 NHOST=0
+REPLICATION_LEVEL=0
 VERBOSE=false
 
 ## get arguments
 BASE_DIR=$(dirname "$(readlink -f "$0")")/
+XPN_SH=${BASE_DIR}../../scripts/execute/xpn.sh
 get_opts $@
 
+if [[ ${VERBOSE} == true ]]; then
+  echo "HOSTS=${HOSTLIST}"
+  echo "DATADIR=${DATADIR}"
+  echo "SHAREDDIR=${SHAREDDIR}"
+  echo "REPLICATION_LEVEL=${REPLICATION_LEVEL}"
+  start_script=$(date +%s%3N)
+fi
 # run 
 case "${ACTION}" in
-      start)    # HOSTLIST -> HOSTFILE
-                rm -fr /tmp/hostfile.txt
+      start)    rm -f  /tmp/hostfile.txt
                 touch  /tmp/hostfile.txt
+                # HOSTLIST -> HOSTFILE
                 for i in $(echo ${HOSTLIST} | tr "," "\n")
                 do
-                	NHOST=$((NHOST+1))
+                  NHOST=$((NHOST+1))
                   echo $i >> /tmp/hostfile.txt
                 done
-
-								# xpn ...
-                ./xpn -n $NHOST -l /tmp/hostfile.txt -x ${DATADIR} start
+                
+                if [ -z "$SHAREDDIR" ]; then
+                  echo "Error: shareddir not especified"
+                  usage_short
+                  exit 1
+                fi
+                # xpn ...
+                ${XPN_SH} --numnodes $NHOST --hostfile /tmp/hostfile.txt --xpn_storage_path ${DATADIR} --workdir ${SHAREDDIR} --replication_level ${REPLICATION_LEVEL} start
                 ;;
 
-      stop)     ./xpn -l /tmp/hostfile.txt stop
-								rm -f /tmp/hostfile.txt
+      stop)     if [ -z "$SHAREDDIR" ]; then
+                  echo "Error: shareddir not especified"
+                  usage_short
+                  exit 1
+                fi
+                ${XPN_SH} --deathfile /tmp/hostfile.txt --workdir ${SHAREDDIR} stop
+                rm -f /tmp/hostfile.txt
                 ;;
 
-      expand)   
-      shrink)   # HOSTLIST -> HOSTFILE
-                rm -fr /tmp/hostfile_rebuild.txt
+      expand | shrink)   
+                rm -f  /tmp/hostfile_rebuild.txt
                 touch  /tmp/hostfile_rebuild.txt
+                # HOSTLIST -> HOSTFILE
                 for i in $(echo ${HOSTLIST} | tr "," "\n")
                 do
-                	NHOST=$((NHOST+1))
+                  NHOST=$((NHOST+1))
                   echo $i >> /tmp/hostfile_rebuild.txt
                 done
+                if [ -z "$SHAREDDIR" ]; then
+                  echo "Error: shareddir not especified"
+                  usage_short
+                  exit 1
+                fi
+                NHOST_OLD=$(cat /tmp/hostfile.txt | wc -l)
+                # stop
+                if [[ ${VERBOSE} == true ]]; then
+                  start_stop=$(date +%s%3N)
+                fi
 
-                # rebuild from old to new...
-                ./xpn -n $NHOST -l /tmp/hostfile_rebuild.txt -s ${MOUNTDIR} -x ${DATADIR} rebuild
+                ${XPN_SH} --deathfile /tmp/hostfile.txt --workdir ${SHAREDDIR} stop
+                
+                if [[ ${VERBOSE} == true ]]; then
+                  end_stop=$(date +%s%3N)
+                  seconds=$(((end_stop - start_stop) / 1000))
+                  milliseconds=$(((end_stop - start_stop) % 1000))
+                  echo "Time to run stop: $seconds.$milliseconds sec"
+                fi
+                # flush
+                if [[ ${VERBOSE} == true ]]; then
+                  start_flush=$(date +%s%3N)
+                fi
+
+                mkdir -p ${SHAREDDIR}/tmp_shrink
+                ${XPN_SH} --numnodes $NHOST_OLD --hostfile /tmp/hostfile.txt --xpn_storage_path ${DATADIR} --destination_path ${SHAREDDIR}/tmp_shrink --replication_level ${REPLICATION_LEVEL} flush
+                
+                if [[ ${VERBOSE} == true ]]; then
+                  end_flush=$(date +%s%3N)
+                  seconds=$(((end_flush - start_flush) / 1000))
+                  milliseconds=$(((end_flush - start_flush) % 1000))
+                  echo "Time to run flush: $seconds.$milliseconds sec"
+                fi
+                # start
+                if [[ ${VERBOSE} == true ]]; then
+                  start_start=$(date +%s%3N)
+                fi
 
                 mv /tmp/hostfile_rebuild.txt /tmp/hostfile.txt
+                ${XPN_SH} --numnodes $NHOST --hostfile /tmp/hostfile.txt --xpn_storage_path ${DATADIR} --workdir ${SHAREDDIR} --replication_level ${REPLICATION_LEVEL} start
+                
+                if [[ ${VERBOSE} == true ]]; then
+                  end_start=$(date +%s%3N)
+                  seconds=$(((end_start - start_start) / 1000))
+                  milliseconds=$(((end_start - start_start) % 1000))
+                  echo "Time to run start: $seconds.$milliseconds sec"
+                fi
+                # preload
+                if [[ ${VERBOSE} == true ]]; then
+                  start_preload=$(date +%s%3N)
+                fi
+
+                ${XPN_SH} --numnodes $NHOST --hostfile /tmp/hostfile.txt --source_path ${SHAREDDIR}/tmp_shrink --xpn_storage_path ${DATADIR} --replication_level ${REPLICATION_LEVEL} preload
+                rm -r ${SHAREDDIR}/tmp_shrink
+                
+                if [[ ${VERBOSE} == true ]]; then
+                  end_preload=$(date +%s%3N)
+                  seconds=$(((end_preload - start_preload) / 1000))
+                  milliseconds=$(((end_preload - start_preload) % 1000))
+                  echo "Time to run preload: $seconds.$milliseconds sec"
+                fi
                 ;;
                 
       *)        echo ""
@@ -130,3 +204,9 @@ case "${ACTION}" in
                 ;;
 esac
 
+if [[ ${VERBOSE} == true ]]; then
+  end_script=$(date +%s%3N)
+  seconds=$(((end_script - start_script) / 1000))
+  milliseconds=$(((end_script - start_script) % 1000))
+  echo "Time to run script: $seconds.$milliseconds sec"
+fi

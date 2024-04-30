@@ -188,7 +188,7 @@ finish_copy:
     dir = opendir(dir_name);
     if(dir == NULL)
     {
-      perror("opendir:");
+      fprintf(stderr, "opendir error %s %s\n", dir_name, strerror(errno));
       return -1;
     }
     
