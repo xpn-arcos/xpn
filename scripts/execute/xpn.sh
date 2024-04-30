@@ -99,26 +99,26 @@ start_xpn_servers() {
   if command -v srun &> /dev/null
   then
     # Create dir
-    srun  -n "${NODE_NUM}" \
+    srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
           -w "${HOSTFILE}" \
           mkdir -p ${XPN_STORAGE_PATH}
     if [[ ${SERVER_TYPE} == "mpi" ]]; then
       for ((i=1; i<=$NODE_NUM; i++))
       do
           line=$(head -n $i "$HOSTFILE" | tail -n 1)
-          srun  -n       1 \
+          srun  -n 1 -N 1 \
                 -w "${line}" \
                 --export=ALL \
                 ${BASE_DIR}/../../src/mpi_server/xpn_mpi_server -ns ${WORKDIR}/dns.txt ${ARGS} &
           sleep 0.5
       done
     elif [[ ${SERVER_TYPE} == "sck" ]]; then
-      srun  -n "${NODE_NUM}" \
+      srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
             -w "${HOSTFILE}" \
             --export=ALL \
             "${BASE_DIR}"/../../src/sck_server/xpn_sck_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
     else
-      srun  -n "${NODE_NUM}" \
+      srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
             -w "${HOSTFILE}" \
             --export=ALL \
             "${BASE_DIR}"/../../src/tcp_server/xpn_tcp_server -ns "${WORKDIR}"/dns.txt "${ARGS}" -p 3456 &
@@ -176,13 +176,13 @@ stop_xpn_servers() {
   if command -v srun &> /dev/null
   then
     if [[ ${SERVER_TYPE} == "mpi" ]]; then
-      srun -n 1 \
+      srun -n 1 -N 1 \
               "${BASE_DIR}"/../../src/mpi_server/xpn_stop_mpi_server -ns "${WORKDIR}"/dns.txt -f ${DEATH_FILE}
     elif [[ ${SERVER_TYPE} == "sck" ]]; then
-      srun -n 1 \
+      srun -n 1 -N 1 \
               "${BASE_DIR}"/../../src/sck_server/xpn_stop_sck_server -ns "${WORKDIR}"/dns.txt -f ${DEATH_FILE}
     else
-      srun -n 1 \
+      srun -n 1 -N 1 \
               "${BASE_DIR}"/../../src/tcp_server/xpn_stop_tcp_server -ns "${WORKDIR}"/dns.txt -f ${DEATH_FILE}
     fi
   else
@@ -253,7 +253,7 @@ preload_xpn() {
   # 1. Copy
   if command -v srun &> /dev/null
   then
-    srun  -n "${NODE_NUM}" \
+    srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
           -w "${HOSTFILE}" \
           "${BASE_DIR}"/../../src/utils/xpn_preload "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
   else
@@ -273,7 +273,7 @@ flush_xpn() {
   # 1. Copy
   if command -v srun &> /dev/null
   then
-    srun  -n "${NODE_NUM}" \
+    srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
           -w "${HOSTFILE}" \
           "${BASE_DIR}"/../../src/utils/xpn_flush "${XPN_STORAGE_PATH}" "${DEST_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
   else

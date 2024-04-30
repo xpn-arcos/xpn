@@ -89,6 +89,15 @@ BASE_DIR=$(dirname "$(readlink -f "$0")")/
 XPN_SH=${BASE_DIR}../../scripts/execute/xpn.sh
 get_opts $@
 
+if [ -z "$SHAREDDIR" ]; then
+  echo "Error: shareddir not especified"
+  usage_short
+  exit 1
+fi
+
+HOSTFILE=${SHAREDDIR}/hostfile.txt
+HOSTFILE_REBUILD=${SHAREDDIR}/hostfile_rebuild.txt
+
 if [[ ${VERBOSE} == true ]]; then
   echo "HOSTS=${HOSTLIST}"
   echo "DATADIR=${DATADIR}"
@@ -98,54 +107,39 @@ if [[ ${VERBOSE} == true ]]; then
 fi
 # run 
 case "${ACTION}" in
-      start)    rm -f  /tmp/hostfile.txt
-                touch  /tmp/hostfile.txt
+      start)    rm -f  ${HOSTFILE}
+                touch  ${HOSTFILE}
                 # HOSTLIST -> HOSTFILE
                 for i in $(echo ${HOSTLIST} | tr "," "\n")
                 do
                   NHOST=$((NHOST+1))
-                  echo $i >> /tmp/hostfile.txt
+                  echo $i >> ${HOSTFILE}
                 done
                 
-                if [ -z "$SHAREDDIR" ]; then
-                  echo "Error: shareddir not especified"
-                  usage_short
-                  exit 1
-                fi
                 # xpn ...
-                ${XPN_SH} --numnodes $NHOST --hostfile /tmp/hostfile.txt --xpn_storage_path ${DATADIR} --workdir ${SHAREDDIR} --replication_level ${REPLICATION_LEVEL} start
+                ${XPN_SH} --numnodes $NHOST --hostfile ${HOSTFILE} --xpn_storage_path ${DATADIR} --workdir ${SHAREDDIR} --replication_level ${REPLICATION_LEVEL} start
                 ;;
 
-      stop)     if [ -z "$SHAREDDIR" ]; then
-                  echo "Error: shareddir not especified"
-                  usage_short
-                  exit 1
-                fi
-                ${XPN_SH} --deathfile /tmp/hostfile.txt --workdir ${SHAREDDIR} stop
-                rm -f /tmp/hostfile.txt
+      stop)     ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop
+                rm -f ${HOSTFILE}
                 ;;
 
       expand | shrink)   
-                rm -f  /tmp/hostfile_rebuild.txt
-                touch  /tmp/hostfile_rebuild.txt
+                rm -f  ${HOSTFILE_REBUILD}
+                touch  ${HOSTFILE_REBUILD}
                 # HOSTLIST -> HOSTFILE
                 for i in $(echo ${HOSTLIST} | tr "," "\n")
                 do
                   NHOST=$((NHOST+1))
-                  echo $i >> /tmp/hostfile_rebuild.txt
+                  echo $i >> ${HOSTFILE_REBUILD}
                 done
-                if [ -z "$SHAREDDIR" ]; then
-                  echo "Error: shareddir not especified"
-                  usage_short
-                  exit 1
-                fi
-                NHOST_OLD=$(cat /tmp/hostfile.txt | wc -l)
+                NHOST_OLD=$(cat ${HOSTFILE} | wc -l)
                 # stop
                 if [[ ${VERBOSE} == true ]]; then
                   start_stop=$(date +%s%3N)
                 fi
 
-                ${XPN_SH} --deathfile /tmp/hostfile.txt --workdir ${SHAREDDIR} stop
+                ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop
                 
                 if [[ ${VERBOSE} == true ]]; then
                   end_stop=$(date +%s%3N)
@@ -159,7 +153,7 @@ case "${ACTION}" in
                 fi
 
                 mkdir -p ${SHAREDDIR}/tmp_shrink
-                ${XPN_SH} --numnodes $NHOST_OLD --hostfile /tmp/hostfile.txt --xpn_storage_path ${DATADIR} --destination_path ${SHAREDDIR}/tmp_shrink --replication_level ${REPLICATION_LEVEL} flush
+                ${XPN_SH} --numnodes $NHOST_OLD --hostfile ${HOSTFILE} --xpn_storage_path ${DATADIR} --destination_path ${SHAREDDIR}/tmp_shrink --replication_level ${REPLICATION_LEVEL} flush
                 
                 if [[ ${VERBOSE} == true ]]; then
                   end_flush=$(date +%s%3N)
@@ -172,8 +166,8 @@ case "${ACTION}" in
                   start_start=$(date +%s%3N)
                 fi
 
-                mv /tmp/hostfile_rebuild.txt /tmp/hostfile.txt
-                ${XPN_SH} --numnodes $NHOST --hostfile /tmp/hostfile.txt --xpn_storage_path ${DATADIR} --workdir ${SHAREDDIR} --replication_level ${REPLICATION_LEVEL} start
+                mv ${HOSTFILE_REBUILD} ${HOSTFILE}
+                ${XPN_SH} --numnodes $NHOST --hostfile ${HOSTFILE} --xpn_storage_path ${DATADIR} --workdir ${SHAREDDIR} --replication_level ${REPLICATION_LEVEL} start
                 
                 if [[ ${VERBOSE} == true ]]; then
                   end_start=$(date +%s%3N)
@@ -186,7 +180,7 @@ case "${ACTION}" in
                   start_preload=$(date +%s%3N)
                 fi
 
-                ${XPN_SH} --numnodes $NHOST --hostfile /tmp/hostfile.txt --source_path ${SHAREDDIR}/tmp_shrink --xpn_storage_path ${DATADIR} --replication_level ${REPLICATION_LEVEL} preload
+                ${XPN_SH} --numnodes $NHOST --hostfile ${HOSTFILE} --source_path ${SHAREDDIR}/tmp_shrink --xpn_storage_path ${DATADIR} --replication_level ${REPLICATION_LEVEL} preload
                 rm -r ${SHAREDDIR}/tmp_shrink
                 
                 if [[ ${VERBOSE} == true ]]; then
