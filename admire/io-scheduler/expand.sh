@@ -97,6 +97,9 @@ fi
 
 HOSTFILE=${SHAREDDIR}/hostfile.txt
 HOSTFILE_REBUILD=${SHAREDDIR}/hostfile_rebuild.txt
+HOSTFILE_START=${SHAREDDIR}/hostfile_start.txt
+HOSTFILE_STOP=${SHAREDDIR}/hostfile_stop.txt
+HOSTFILE_REBUILD_JOIN=${SHAREDDIR}/hostfile_rebuild_join.txt
 
 if [[ ${VERBOSE} == true ]]; then
   echo "HOSTS=${HOSTLIST}"
@@ -109,6 +112,8 @@ fi
 case "${ACTION}" in
       start)    rm -f  ${HOSTFILE}
                 touch  ${HOSTFILE}
+                rm -f  ${SHAREDDIR}/dns.txt
+                touch  ${SHAREDDIR}/dns.txt
                 # HOSTLIST -> HOSTFILE
                 for i in $(echo ${HOSTLIST} | tr "," "\n")
                 do
@@ -124,6 +129,67 @@ case "${ACTION}" in
                 rm -f ${HOSTFILE}
                 ;;
 
+      expand_v2 | shrink_v2)   
+                rm -f  ${HOSTFILE_REBUILD}
+                touch  ${HOSTFILE_REBUILD}
+                # HOSTLIST -> HOSTFILE
+                for i in $(echo ${HOSTLIST} | tr "," "\n")
+                do
+                  NHOST=$((NHOST+1))
+                  echo $i >> ${HOSTFILE_REBUILD}
+                done
+                NHOST_OLD=$(cat ${HOSTFILE} | wc -l)
+
+                diff ${HOSTFILE} ${HOSTFILE_REBUILD} | grep "^>" | cut -d' ' -f2 > ${HOSTFILE_START}
+                diff ${HOSTFILE} ${HOSTFILE_REBUILD} | grep "^<" | cut -d' ' -f2 > ${HOSTFILE_STOP}
+                NHOST_START=$(cat ${HOSTFILE_START} | wc -l)
+                NHOST_STOP=$(cat ${HOSTFILE_STOP} | wc -l)
+
+                if [ $NHOST_START -eq 0 ] && [ $NHOST_STOP -eq 0 ]; then
+                    echo "The hosts provided are the same"
+                    exit 0
+                fi
+
+                if [[ ${VERBOSE} == true ]]; then
+                  start_stop=$(date +%s%3N)
+                fi
+
+                if [ $NHOST_START -gt 0 ]; then
+                  ${XPN_SH} --numnodes ${NHOST_START} --hostfile ${HOSTFILE_START} --xpn_storage_path ${DATADIR} --workdir ${SHAREDDIR} --replication_level ${REPLICATION_LEVEL} start
+                fi
+                
+                if [ $NHOST_STOP -gt 0 ]; then
+                  ${XPN_SH} --deathfile ${HOSTFILE_STOP} --workdir ${SHAREDDIR} stop
+                fi
+
+                if [[ ${VERBOSE} == true ]]; then
+                  end_stop=$(date +%s%3N)
+                  seconds=$(((end_stop - start_stop) / 1000))
+                  milliseconds=$(((end_stop - start_stop) % 1000))
+                  echo "Time to run start-stop: $seconds.$milliseconds sec"
+                fi
+                
+                cat ${HOSTFILE} ${HOSTFILE_REBUILD} | sort | uniq > ${HOSTFILE_REBUILD_JOIN}
+                NHOST_REBUILD_JOIN=$(cat ${HOSTFILE_REBUILD_JOIN} | wc -l)
+
+                if [[ ${VERBOSE} == true ]]; then
+                  start_rebuild=$(date +%s%3N)
+                fi
+
+                ${XPN_SH} --numnodes ${NHOST_REBUILD_JOIN} --hostfile ${HOSTFILE_REBUILD_JOIN} --workdir ${SHAREDDIR} --xpn_storage_path ${DATADIR} --replication_level ${REPLICATION_LEVEL} --deathfile ${HOSTFILE} --rebuildfile ${HOSTFILE_REBUILD} rebuild
+
+                if [[ ${VERBOSE} == true ]]; then
+                  end_rebuild=$(date +%s%3N)
+                  seconds=$(((end_rebuild - start_rebuild) / 1000))
+                  milliseconds=$(((end_rebuild - start_rebuild) % 1000))
+                  echo "Time to run rebuild: $seconds.$milliseconds sec"
+                fi
+
+                mv ${HOSTFILE_REBUILD} ${HOSTFILE}
+                rm ${HOSTFILE_START}
+                rm ${HOSTFILE_STOP}
+                rm ${HOSTFILE_REBUILD_JOIN}
+                ;;
       expand | shrink)   
                 rm -f  ${HOSTFILE_REBUILD}
                 touch  ${HOSTFILE_REBUILD}

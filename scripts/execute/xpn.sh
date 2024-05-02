@@ -93,9 +93,6 @@ start_xpn_servers() {
     exit -1
   fi
 
-  rm -f "${WORKDIR}/dns.txt"
-  touch "${WORKDIR}/dns.txt"
-  
   if command -v srun &> /dev/null
   then
     # Create dir
@@ -216,30 +213,24 @@ terminate_xpn_server() {
 
 
 rebuild_xpn_servers() {
-  # TODO: all rebuild
   if [[ ${VERBOSE} == true ]]; then
-    echo " * source partition: ${SOURCE_PATH}"
     echo " * xpn storage path: ${XPN_STORAGE_PATH}"
+    echo " * xpn old hostfile: ${DEATH_FILE}"
+    echo " * xpn new hostfile: ${REBUILD_FILE}"
+    echo " * xpn replication_level: ${XPN_REPLICATION_LEVEL}"
   fi
 
   # 1. Copy
-  mpiexec -np       "${NODE_NUM}" \
-          -hostfile "${HOSTFILE}" \
-          -genv      LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-          -genv      XPN_DNS "${WORKDIR}"/dns.txt \
-          -genv      XPN_CONF /local_test/test/configuration/conf.xml \
-          -genv      LD_PRELOAD src/bypass/xpn_bypass.so \
-          -genv      XPN_LOCALITY 0\
-          "${BASE_DIR}"/../../src/utils/xpn_rebuild "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288
-
-  rm -f "${WORKDIR}"/partition_content.txt
-
-  # 2. stop old servers
-  stop_xpn_servers
-
-  # 3. start new servers
-  mk_conf_servers  "config.xml" "${HOSTFILE}" "512k" "xpn" "${XPN_STORAGE_PATH}" "${DEPLOYMENTFILE}"
-  start_xpn_servers
+  if command -v srun &> /dev/null
+  then
+    srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
+          -w "${HOSTFILE}" \
+          "${BASE_DIR}"/../../src/utils/xpn_rebuild "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
+  else
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            "${BASE_DIR}"/../../src/utils/xpn_rebuild "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
+  fi
 }
 
 
@@ -329,6 +320,7 @@ usage_details() {
   echo "     -x, --xpn_storage_path <path>       The XPN local storage path"  
   echo "     -l, --hostfile  <path>              File with the hosts to be used to execute daemons (one per line)."
   echo "     -d, --deathfile <path>              File with the hosts to be used to stop    daemons (one per line)."
+  echo "     -b, --rebuildfile <path>              File with the hosts to be used to stop    daemons (one per line)."
   echo "     -k, --host <host>                   Ip of the host to be used to terminate    daemons (one per line)."
   echo "     -v, --verbose                       Increase verbosity"
   echo ""
@@ -337,8 +329,8 @@ usage_details() {
 get_opts() {
    # Taken the general idea from https://stackoverflow.com/questions/70951038/how-to-use-getopt-long-option-in-bash-script
    mkconf_name=$(basename "$0")
-   mkconf_short_opt=e:r:w:s:t:x:d:k:p:n:a:c:m:l:fvh
-   mkconf_long_opt=execute:,rootdir:,workdir:,source_path:,destination_path:,xpn_storage_path:,numnodes:,args:,config:,deployment_file:,foreground_file,hostfile:,deathfile:,host:,replication_level:,verbose,help
+   mkconf_short_opt=e:r:w:s:t:x:d:k:p:n:a:c:m:l:b:fvh
+   mkconf_long_opt=execute:,rootdir:,workdir:,source_path:,destination_path:,xpn_storage_path:,numnodes:,args:,config:,deployment_file:,foreground_file,hostfile:,deathfile:,rebuildfile:,host:,replication_level:,verbose,help
    TEMP=$(getopt -o $mkconf_short_opt --long $mkconf_long_opt --name "$mkconf_name" -- "$@")
    eval set -- "${TEMP}"
 
@@ -357,6 +349,7 @@ get_opts() {
          -f | --foreground_file  ) RUN_FOREGROUND=true;         shift 1 ;;
          -l | --hostfile         ) HOSTFILE=$2;                 shift 2 ;;
          -d | --deathfile        ) DEATH_FILE=$2;               shift 2 ;;
+         -b | --rebuildfile      ) REBUILD_FILE=$2;               shift 2 ;;
          -k | --host             ) HOST=$2;                     shift 2 ;;
          -p | --replication_level) XPN_REPLICATION_LEVEL=$2;    shift 2 ;;
          -v | --verbose          ) VERBOSE=true;                shift 1 ;;
@@ -384,6 +377,7 @@ RUN_FOREGROUND=false
 VERBOSE=false
 HOSTFILE="machinefile"
 DEATH_FILE="machinefile"
+REBUILD_FILE=""
 HOST=""
 SERVER_TYPE="mpi"
 XPN_REPLICATION_LEVEL=0
@@ -407,7 +401,8 @@ case "${ACTION}" in
                 ;;
       terminate)terminate_xpn_server
                 ;;
-      rebuild)  rebuild_xpn_servers
+      rebuild)  mk_conf_servers  "config.xml" ${REBUILD_FILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+                rebuild_xpn_servers
                 ;;
       preload)  preload_xpn
                 ;;
