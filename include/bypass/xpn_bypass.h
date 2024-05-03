@@ -163,10 +163,12 @@
   off_t   lseek   ( int fildes, off_t offset, int whence );
   off64_t lseek64 ( int fd,   off64_t offset, int whence );
 
+  int stat         (          const char *path, struct stat   *buf );
   int __lxstat     ( int ver, const char *path, struct stat   *buf );
   int __lxstat64   ( int ver, const char *path, struct stat64 *buf );
   int __xstat      ( int ver, const char *path, struct stat   *buf );
   int __xstat64    ( int ver, const char *path, struct stat64 *buf );
+  int fstat        (                    int fd, struct stat   *buf );
   int __fxstat     ( int ver,           int fd, struct stat   *buf );
   int __fxstat64   ( int ver,       int fildes, struct stat64 *buf );
   int __fxstatat   ( int ver, int dirfd, const char *path, struct stat   *buf, int flags );

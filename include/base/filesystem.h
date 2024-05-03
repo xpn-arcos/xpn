@@ -66,6 +66,8 @@
   int  filesystem_rmdir     ( char *pathname );
 
   DIR           *filesystem_opendir  ( char *name );
+  long           filesystem_telldir  ( DIR  *dirp );
+  void           filesystem_seekdir  ( DIR  *dirp, long loc );
   struct dirent *filesystem_readdir  ( DIR  *dirp );
   int            filesystem_closedir ( DIR  *dirp );
 
@@ -97,6 +99,8 @@
 
 
     #define real_posix_opendir(pathname)                     dlsym_opendir(pathname)
+    #define real_posix_telldir(dirptr)                       dlsym_telldir(dirptr)
+    #define real_posix_seekdir(dirptr, loc)                  dlsym_seekdir(dirptr, loc)
     #define real_posix_readdir(dirptr)                       dlsym_readdir(dirptr)
     #define real_posix_closedir(dirptr)                      dlsym_closedir(dirptr)
   #else
@@ -118,6 +122,8 @@
     #define real_posix_stat(pathname,info)                   stat(pathname,info)
 
     #define real_posix_opendir(pathname)                     opendir(pathname)
+    #define real_posix_telldir(dirptr)                       telldir(dirptr)
+    #define real_posix_seekdir(dirptr, loc)                  seekdir(dirptr, loc)
     #define real_posix_readdir(dirptr)                       readdir(dirptr)
     #define real_posix_closedir(dirptr)                      closedir(dirptr)
   #endif

@@ -11,9 +11,7 @@ set (BASE_OBJECTS	base/darray.c
 			base/urlstr.c
     )
 set (NFI_COMMON_OBJECTS	nfi/common/nfi_worker.c)
-set (NFI_LOCAL_OBJECTS	nfi/nfi_local/nfi_local.c
-			nfi/nfi_local/nfi_local_err.c
-    )
+set (NFI_LOCAL_OBJECTS	nfi/nfi_local/nfi_local.c)
 ### BEGIN OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_OBJECTS BLOCK. Do not remove this line. ###
 set (NFI_NFS_OBJECTS	nfi/nfi_nfs/nfi_nfs.c
@@ -55,8 +53,7 @@ set (NFI_GRIDFTP_OBJECTS	nfi/nfi_gridftp/nfi_gridftp.c
 ### END OF NFI_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 set (NFI_MPI_SERVER_OBJECTS	nfi/nfi_mpi_server/nfi_mpi_server.c
-				nfi/nfi_mpi_server/mpi_server_comm.c
-				nfi/nfi_mpi_server/nfi_mpi_server_err.c
+				nfi/nfi_mpi_server/mpi_client_comm.c
     )
 ### END OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
@@ -140,7 +137,6 @@ endif (ENABLE_HTTP)
 
 set (XPN_CORE_OBJECTS	xpn/xpn_simple/xpncore/xpn_cwd.c
 			xpn/xpn_simple/xpncore/xpn_dir.c
-			xpn/xpn_simple/xpncore/xpn_err.c
 			xpn/xpn_simple/xpncore/xpn_file.c
 			xpn/xpn_simple/xpncore/xpn_init.c
 			xpn/xpn_simple/xpncore/xpn_open.c

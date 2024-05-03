@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal, Dario Muñoz Muñoz
 #
 #  This file is part of Expand.
 #
@@ -26,9 +26,10 @@ mk_conf_servers() {
   CONF_NAME=${WORKDIR}/$1
   MACHINE_FILE=$2
   PARTITION_SIZE=$3
-  PARTITION_NAME=$4
-  STORAGE_PATH=$5
-  DEPLOYMENTFILE=$6
+  REPLICATION_LEVEL=$4
+  PARTITION_NAME=$5
+  STORAGE_PATH=$6
+  DEPLOYMENTFILE=$7
 
   # check params
   if [[ ${CONF_NAME} == "" ]]; then
@@ -57,16 +58,19 @@ mk_conf_servers() {
     echo " * CONF_NAME=${CONF_NAME}"
     echo " * HOSTFILE=${MACHINE_FILE}"
     echo " * PARTITION_SIZE=${PARTITION_SIZE}"
+    echo " * REPLICATION_LEVEL=${REPLICATION_LEVEL}"
     echo " * PARTITION_NAME=${PARTITION_NAME}"
     echo " * STORAGE_PATH=${STORAGE_PATH}"
   fi
 
   if [[ ! -f ${DEPLOYMENTFILE} ]]; then
-    "${BASE_DIR}"/mk_conf.sh --conf         "${CONF_NAME}" \
-                           --machinefile  "${MACHINE_FILE}" \
-                           --part_size    "${PARTITION_SIZE}" \
-                           --part_name    "${PARTITION_NAME}" \
-                           --storage_path "${STORAGE_PATH}"
+    ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
+                           --machinefile  ${MACHINE_FILE} \
+                           --part_bsize    ${PARTITION_SIZE} \
+                           --replication_level    ${REPLICATION_LEVEL} \
+                           --part_name    ${PARTITION_NAME} \
+                           --storage_protocol     ${SERVER_TYPE}"_server" \
+                           --storage_path ${STORAGE_PATH}
   else
     "${BASE_DIR}"/mk_conf.sh --conf            "${CONF_NAME}" \
                            --deployment_file "${DEPLOYMENTFILE}"
@@ -92,22 +96,18 @@ start_xpn_servers() {
 
   rm -f "${WORKDIR}/dns.txt"
   touch "${WORKDIR}/dns.txt"
-
-  if [[ ${SERVER_TYPE} == "mpi" ]]; then
+  if [[ ${SERVER_TYPE} == "sck" ]]; then
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/mpi_server/xpn_mpi_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
-  elif [[ ${SERVER_TYPE} == "sck" ]]; then
-    mpiexec -np       "${NODE_NUM}" \
-            -hostfile "${HOSTFILE}" \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/sck_server/xpn_sck_server -ns "${WORKDIR}"/dns.txt "${ARGS}" &
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
   else
-    mpiexec -np       "${NODE_NUM}" \
-            -hostfile "${HOSTFILE}" \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/tcp_server/xpn_tcp_server -ns "${WORKDIR}"/dns.txt "${ARGS}" -p 3456 &
+    for ((i=1; i<=$NODE_NUM; i++))
+    do
+        line=$(head -n $i "$HOSTFILE" | tail -n 1)
+        mpiexec -np       1 \
+          -host "${line}" \
+          ${BASE_DIR}/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} ${ARGS} &
+    done
   fi
 
   sleep 3
@@ -135,22 +135,20 @@ stop_xpn_servers() {
     echo " * DEATH_FILE: ${DEATH_FILE}"
     echo " * additional daemon args: ${ARGS}"
   fi
+  mpiexec -np 1 \
+          "${BASE_DIR}"/../../src/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE}
+}
+
+terminate_xpn_server() {
+
+  if [[ ${VERBOSE} == true ]]; then
+    echo " * DEATH_FILE: ${DEATH_FILE}"
+    echo " * additional daemon args: ${ARGS}"
+  fi
 
   if [[ ${SERVER_TYPE} == "mpi" ]]; then
     mpiexec -np 1 \
-            -genv XPN_DNS "${WORKDIR}"/dns.txt \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/mpi_server/xpn_stop_mpi_server -f "${DEATH_FILE}"
-  elif [[ ${SERVER_TYPE} == "sck" ]]; then
-    mpiexec -np 1 \
-            -genv XPN_DNS "${WORKDIR}"/dns.txt \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/sck_server/xpn_stop_sck_server -f "${DEATH_FILE}"
-  else
-    mpiexec -np 1 \
-            -genv XPN_DNS "${WORKDIR}"/dns.txt \
-            -genv LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-            "${BASE_DIR}"/../../src/tcp_server/xpn_stop_tcp_server -f "${DEATH_FILE}"
+            ${BASE_DIR}/../../src/mpi_server/xpn_terminate_mpi_server -f ${DEATH_FILE} -h ${HOST}
   fi
 }
 
@@ -165,8 +163,6 @@ rebuild_xpn_servers() {
   # 1. Copy
   mpiexec -np       "${NODE_NUM}" \
           -hostfile "${HOSTFILE}" \
-          -genv      LD_LIBRARY_PATH ../mxml/lib:"$LD_LIBRARY_PATH" \
-          -genv      XPN_DNS "${WORKDIR}"/dns.txt \
           -genv      XPN_CONF /local_test/test/configuration/conf.xml \
           -genv      LD_PRELOAD src/bypass/xpn_bypass.so \
           -genv      XPN_LOCALITY 0\
@@ -212,9 +208,10 @@ flush_xpn() {
 
 usage_short() {
   echo ""
-  echo " Usage: xpn.sh [-h/--help] "
+  echo " Usage: xpn.sh [-h/--help]"
   echo "               [-e/--execute <daemon type>] [-a/--args <daemon_args>] [-f/--foreground <false>]"
   echo "               [-c/--config <configuration file>]"
+  echo "               [-p/--replication_level <replication_level>]"
   echo "               [-m/--deployment_file <deployment file>]"
   echo "               [-n/--numnodes <jobsize>]"
   echo "               [-l/--hostfile  <host file>]"
@@ -244,6 +241,7 @@ usage_details() {
   echo "     -a, --args <arguments>              Add various additional daemon arguments."
   echo "     -f, --foreground                    Starts the script in the foreground. Daemons are stopped by pressing 'q'."
   echo "     -c, --config   <path>               Path to configuration file."
+  echo "     -p, --replication_level   <n>       Replication level n."
   echo "     -m, --deployment_file   <path>      Path to deployment file."
   echo "     -n, --numnodes <n>                  XPN servers are started on n nodes."
   echo "     -r, --rootdir  <path>               The rootdir path for XPN daemons."
@@ -253,6 +251,7 @@ usage_details() {
   echo "     -x, --xpn_storage_path <path>       The XPN local storage path"  
   echo "     -l, --hostfile  <path>              File with the hosts to be used to execute daemons (one per line)."
   echo "     -d, --deathfile <path>              File with the hosts to be used to stop    daemons (one per line)."
+  echo "     -k, --host <host>                   Ip of the host to be used to terminate    daemons (one per line)."
   echo "     -v, --verbose                       Increase verbosity"
   echo ""
 }
@@ -260,8 +259,8 @@ usage_details() {
 get_opts() {
    # Taken the general idea from https://stackoverflow.com/questions/70951038/how-to-use-getopt-long-option-in-bash-script
    mkconf_name=$(basename "$0")
-   mkconf_short_opt=e:r:w:s:t:x:d:n:a:c:m:l:fvh
-   mkconf_long_opt=execute:,rootdir:,workdir:,source_path:,destination_path:,xpn_storage_path:,numnodes:,args:,config:,deployment_file:,foreground_file,hostfile:,deathfile:,verbose,help
+   mkconf_short_opt=e:r:w:s:t:x:d:k:p:n:a:c:m:l:fvh
+   mkconf_long_opt=execute:,rootdir:,workdir:,source_path:,destination_path:,xpn_storage_path:,numnodes:,args:,config:,deployment_file:,foreground_file,hostfile:,deathfile:,host:,replication_level:,verbose,help
    TEMP=$(getopt -o $mkconf_short_opt --long $mkconf_long_opt --name "$mkconf_name" -- "$@")
    eval set -- "${TEMP}"
 
@@ -280,6 +279,8 @@ get_opts() {
          -f | --foreground_file  ) RUN_FOREGROUND=true;         shift 1 ;;
          -l | --hostfile         ) HOSTFILE=$2;                 shift 2 ;;
          -d | --deathfile        ) DEATH_FILE=$2;               shift 2 ;;
+         -k | --host             ) HOST=$2;                     shift 2 ;;
+         -p | --replication_level) XPN_REPLICATION_LEVEL=$2;        shift 2 ;;
          -v | --verbose          ) VERBOSE=true;                shift 1 ;;
          -h | --help             ) usage_short; usage_details;  exit 0 ;;
          --                      ) shift;         break  ;;
@@ -305,7 +306,10 @@ RUN_FOREGROUND=false
 VERBOSE=false
 HOSTFILE="machinefile"
 DEATH_FILE="machinefile"
+HOST=""
 SERVER_TYPE="mpi"
+XPN_REPLICATION_LEVEL=0
+
 
 ## get arguments
 BASE_DIR=$(dirname "$(readlink -f "$0")")/
@@ -318,10 +322,12 @@ fi
 
 # run 
 case "${ACTION}" in
-      start)    mk_conf_servers  "config.xml" "${HOSTFILE}" "512k" "xpn" "${XPN_STORAGE_PATH}" "${DEPLOYMENTFILE}"
+      start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers
+                ;;
+      terminate)terminate_xpn_server
                 ;;
       rebuild)  rebuild_xpn_servers
                 ;;

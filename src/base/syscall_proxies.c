@@ -76,6 +76,8 @@ int     (*real_feof ) (FILE *) = NULL;
 
 DIR*              (*real_opendir  )(char*) = NULL;
 DIR*              (*real_opendir64)(char*) = NULL;
+long              (*real_telldir  )(DIR *) = NULL;
+void              (*real_seekdir  )(DIR *, long) = NULL;
 struct dirent   * (*real_readdir  )(DIR *) = NULL;
 struct dirent64 * (*real_readdir64)(DIR *) = NULL;
 int               (*real_closedir )(DIR *) = NULL;
@@ -671,6 +673,34 @@ DIR* dlsym_opendir64 (char *dirname)
   debug_info("[SYSCALL_PROXIES] [dlsym_opendir64] >> End\n");
 
   return ret;
+}
+
+long dlsym_telldir (DIR *dirp)
+{
+  debug_info("[SYSCALL_PROXIES] [dlsym_telldir] >> Begin\n");
+
+  if (real_telldir == NULL){
+    real_telldir = (long (*)(DIR *)) dlsym(RTLD_NEXT,"telldir");
+  }
+  
+  long ret = real_telldir((DIR *)dirp);
+
+  debug_info("[SYSCALL_PROXIES] [dlsym_telldir] >> End\n");
+
+  return ret;
+}
+
+void dlsym_seekdir (DIR *dirp, long loc)
+{
+  debug_info("[SYSCALL_PROXIES] [dlsym_seekdir] >> Begin\n");
+
+  if (real_seekdir == NULL){
+    real_seekdir = (void (*)(DIR *, long)) dlsym(RTLD_NEXT,"seekdir");
+  }
+  
+  real_seekdir((DIR *)dirp, (long) loc);
+
+  debug_info("[SYSCALL_PROXIES] [dlsym_seekdir] >> End\n");
 }
 
 int dlsym_mkdir (char *path, mode_t mode)
