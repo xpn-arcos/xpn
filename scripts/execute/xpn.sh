@@ -220,16 +220,26 @@ rebuild_xpn_servers() {
     echo " * xpn replication_level: ${XPN_REPLICATION_LEVEL}"
   fi
 
+  NODE_NUM_SUM=$(($(cat ${DEATH_FILE} | wc -l) + $(cat ${REBUILD_FILE} | wc -l)))
+  hosts=$(cat ${DEATH_FILE} ${REBUILD_FILE} | sort | uniq -c | awk '{print $2":"$1}' | paste -sd "," -)
   # 1. Copy
   if command -v srun &> /dev/null
   then
+    # Create dir
     srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
           -w "${HOSTFILE}" \
+          mkdir -p ${XPN_STORAGE_PATH}
+    srun  -n "${NODE_NUM_SUM}" -N "${NODE_NUM_SUM}" \
+          -w "${hosts}" \
           "${BASE_DIR}"/../../src/utils/xpn_rebuild "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
   else
+    # Create dir
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
-            "${BASE_DIR}"/../../src/utils/xpn_rebuild "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
+            mkdir -p ${XPN_STORAGE_PATH}
+    mpiexec -l -np       "${NODE_NUM_SUM}" \
+            -host "${hosts}" \
+            "${BASE_DIR}"/../../src/utils/xpn_rebuild_active_writer "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
   fi
 }
 
