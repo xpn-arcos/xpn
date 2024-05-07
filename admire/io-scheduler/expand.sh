@@ -230,12 +230,7 @@ case "${ACTION}" in
                 if [[ ${VERBOSE} == true ]]; then
                   start_rebuild=$(date +%s%3N)
                 fi
-                echo "cat ${HOSTFILE_REBUILD_JOIN}"
-                cat ${HOSTFILE_REBUILD_JOIN}
-                echo "cat ${HOSTFILE_REBUILD}"
-                cat ${HOSTFILE_REBUILD}
-                echo "cat ${HOSTFILE}"
-                cat ${HOSTFILE}
+
                 ${XPN_SH} --numnodes ${NHOST_REBUILD_JOIN} --hostfile ${HOSTFILE_REBUILD_JOIN} --workdir ${SHAREDDIR} --xpn_storage_path ${DATADIR} --replication_level ${REPLICATION_LEVEL} --deathfile ${HOSTFILE} --rebuildfile ${HOSTFILE_REBUILD} rebuild
 
                 if [[ ${VERBOSE} == true ]]; then

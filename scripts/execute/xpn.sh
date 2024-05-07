@@ -106,14 +106,10 @@ start_xpn_servers() {
             --export=ALL \
             "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
     else
-      for ((i=1; i<=$NODE_NUM; i++))
-      do
-        line=$(head -n $i "$HOSTFILE" | tail -n 1)
-        srun  -n 1 -N 1 \
-              -w "${line}" \
-              --export=ALL \
-              ${BASE_DIR}/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} ${ARGS} &
-      done
+      srun  -n "${NODE_NUM}" -N "${NODE_NUM}" --mpi=none \
+            -w "${HOSTFILE}" \
+            --export=ALL \
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} "${ARGS}" &
     fi
 
   else
@@ -201,7 +197,7 @@ rebuild_xpn_servers() {
           -w "${HOSTFILE}" \
           mkdir -p ${XPN_STORAGE_PATH}
     hosts=$(cat ${DEATH_FILE} ${REBUILD_FILE} | sort | paste -sd "," -)
-    srun  -n "${NODE_NUM_SUM}" -N "${NODE_NUM_SUM}" \
+    srun  -n "${NODE_NUM_SUM}" \
           -w "${hosts}" \
           "${BASE_DIR}"/../../src/utils/xpn_rebuild_active_writer "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
   else
