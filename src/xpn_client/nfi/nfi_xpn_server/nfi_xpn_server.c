@@ -354,6 +354,16 @@ int nfi_xpn_server_init ( char *url, struct nfi_server *serv, int server_type )
     FREE_AND_NULL(server_aux);
     return -1;
   }
+  
+  // copy 'url' string...
+  serv->url = strdup(url);
+  NULL_RET_ERR(serv->url, ENOMEM);
+
+  // new server wrk...
+  serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker));
+  memset(serv->wrk, 0, sizeof(struct nfi_worker));
+  serv->wrk->server = serv;
+
   // Server conection
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] Server conection\n", serv->id);
 
@@ -385,15 +395,6 @@ int nfi_xpn_server_init ( char *url, struct nfi_server *serv, int server_type )
       return ret;
     }
   }
-
-  // copy 'url' string...
-  serv->url = strdup(url);
-  NULL_RET_ERR(serv->url, ENOMEM);
-
-  // new server wrk...
-  serv->wrk = (struct nfi_worker *)malloc(sizeof(struct nfi_worker));
-  memset(serv->wrk, 0, sizeof(struct nfi_worker));
-  serv->wrk->server = serv;
 
   // Initialize workers
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] Initialize workers\n", serv->id);
