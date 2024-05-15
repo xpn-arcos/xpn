@@ -9,7 +9,7 @@
 * *Homepage*: <https://xpn-arcos.github.io/xpn-arcos.github.io/>
 * *Source*:   <https://github.com/xpn-arcos/xpn>
 * *Licence*:  [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/dcamarmas/xpn/blob/master/COPYING)</br>
-* *Authors*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, David Garcia Fernandez
+* *Authors*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, Dario Muñoz Muñoz
 
 ## 1. To deploy Ad-Hoc XPN...
 
@@ -41,7 +41,7 @@
     end
     subgraph ide13 [1.3 Load software]
        direction TB
-       X3["`spack **load** xpn`"]
+       X3["spack <b>load</b> xpn"]
     end
     classDef lt text-align:left,fill:lightgreen,color:black; 
     class X1,X2,X3 lt;
@@ -63,15 +63,15 @@
     end
     subgraph ide22 [2.2 Download source code]
        direction TB
-       Y2B["mkdir $HOME/src </br>
-            cd    $HOME/src </br>
-            git clone https://github.com/michaelrsweet/mxml.git<br>
+       Y2B["mkdir $HOME/src 
+            cd    $HOME/src 
+            git clone --branch v3.x https://github.com/michaelrsweet/mxml.git
             git clone https://github.com/xpn-arcos/xpn.git"]
     end
     subgraph ide23 ["2.3 build source code"]
        direction LR
-       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' <br>
-            cd $HOME/src <br>
+       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' 
+            cd $HOME/src 
             ./xpn/build-me -m $XPN_MPICC -i $HOME/bin"]
     end
     ide21a --> ide22
@@ -135,10 +135,11 @@ You need to get familiar with 4 special files and **5** special environment vari
         nameserver
         server file
     environment variables
+        XPN_DNS
         XPN_CONF
         XPN_THREAD
+        XPN_SESSION
         XPN_LOCALITY
-        XPN_SCK_PORT
 ```
 
 The 4 special files are:
@@ -148,6 +149,7 @@ The 4 special files are:
 * ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
 And the 5 special environment variables for XPN clients are:
+* ```XPN_DNS```      with the full path to the nameserver file to be used (mandatory).
 * ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
 * ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
@@ -181,7 +183,7 @@ The typical executions has 3 main steps:
    export XPN_CONF=<full path to the XPN configuration file>
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3
    ```
-4. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
+3. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
    ```bash
    ./xpn -v -l <full path to the hostfile>  stop
    ```
