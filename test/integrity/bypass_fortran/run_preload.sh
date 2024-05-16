@@ -8,7 +8,7 @@ echo "env LD_PRELOAD=../../../src/bypass/xpn_bypass.so:\$LD_PRELOAD  XPN_CONF=./
 
 echo "output:"
       gfortran -g -o main_preload main_preload.f90
-      env LD_PRELOAD="../../../src/bypass/xpn_bypass.so:../../../../mxml/libmxml.so.1:$LD_PRELOAD"  XPN_CONF=./xpn.conf  ./main_preload
+      env LD_PRELOAD="../../../src/bypass/xpn_bypass.so:$LD_PRELOAD"  XPN_CONF=./xpn.conf  ./main_preload
       cat /tmp/expand/P1/demo.txt
 
 # Clean

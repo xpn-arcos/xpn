@@ -42,8 +42,8 @@
   #define FREE_AND_NULL(ptr) \
            if ((ptr) != NULL) { free((ptr)); (ptr) = NULL; }
 
-  #define NULL_RET_ERR(ptr, err_val) \
-           if (NULL == (ptr)) { return -1; }
+  #define NULL_RET_ERR(ptr, set_errno) \
+           if (NULL == (ptr)) { errno=set_errno; return -1; }
 
 
   /* ... Data structures / Estructuras de datos ........................ */

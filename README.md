@@ -9,7 +9,7 @@
 * *Homepage*: <https://xpn-arcos.github.io/xpn-arcos.github.io/>
 * *Source*:   <https://github.com/xpn-arcos/xpn>
 * *Licence*:  [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/dcamarmas/xpn/blob/master/COPYING)</br>
-* *Authors*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, David Garcia Fernandez
+* *Authors*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, Dario Muñoz Muñoz
 
 ## 1. To deploy Ad-Hoc XPN...
 
@@ -31,17 +31,17 @@
     subgraph ide1 [1 With spack]
     subgraph ide11 [1.1 Add repo]
        direction TB
-       X1["git clone https://github.com/xpn-arcos/xpn.git </br>
+       X1["git clone https://github.com/xpn-arcos/xpn.git 
           spack repo add xpn/scripts/spack"]
     end
     subgraph ide12 [1.2 Install software]
        direction TB
-       X2["`spack **info** xpn &nbsp;&nbsp;</br>
-         spack **install** xpn`"]
+       X2["spack <b>info</b> xpn
+          spack <b>install</b> xpn"]
     end
     subgraph ide13 [1.3 Load software]
        direction TB
-       X3["`spack **load** xpn`"]
+       X3["spack <b>load</b> xpn"]
     end
     classDef lt text-align:left,fill:lightgreen,color:black; 
     class X1,X2,X3 lt;
@@ -63,15 +63,14 @@
     end
     subgraph ide22 [2.2 Download source code]
        direction TB
-       Y2B["mkdir $HOME/src </br>
-            cd    $HOME/src </br>
-            git clone https://github.com/michaelrsweet/mxml.git<br>
+       Y2B["mkdir $HOME/src 
+            cd    $HOME/src 
             git clone https://github.com/xpn-arcos/xpn.git"]
     end
     subgraph ide23 ["2.3 build source code"]
        direction LR
-       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' <br>
-            cd $HOME/src <br>
+       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' 
+            cd $HOME/src 
             ./xpn/build-me -m $XPN_MPICC -i $HOME/bin"]
     end
     ide21a --> ide22
@@ -80,6 +79,8 @@
 
     classDef lt2 text-align:left,fill:lightblue,color:black;
     class Y1A,Y1B lt2;
+    classDef lt3 text-align:left;
+    class Y2B,Y3B lt3;
     end
 
     Y3B --> I([End])
@@ -105,25 +106,24 @@
 
 ## 2. Executing Ad-Hoc XPN...
 
-First, you need to get familiar with 4 special files and 2 special environment variables for XPN client:
+First, you need to get familiar with 4 special files and 1 special environment variables for XPN client:
 
   ```mermaid
   mindmap
   root((XPN))
     files
         ["`**hostfile**</br>               for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
-        ["`**XPN configuration file**</br> for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers`"]
+        ["`**XPN configuration file**</br> for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers`"]
         ["`**nameserver file**</br>        for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing`"]
         ["`**server file**</br>            for XPN, it is a text file with the list of the servers to be stopped (one host name per line)`"]
     environment variables
-        ["`**XPN_DNS=**'full path to the nameserver file to be used (mandatory)'`"]
         ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
 ```
 
 
 <details>
 <summary>For Expand developers...</summary>
-You need to get familiar with 4 special files and **5** special environment variables for XPN client:
+You need to get familiar with 4 special files and 4 special environment variables for XPN client:
 
   ```mermaid
   mindmap
@@ -134,25 +134,23 @@ You need to get familiar with 4 special files and **5** special environment vari
         nameserver
         server file
     environment variables
-        XPN_DNS
         XPN_CONF
         XPN_THREAD
-        XPN_SESSION
         XPN_LOCALITY
+        XPN_SCK_PORT
 ```
 
 The 4 special files are:
 * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
-* ```<XPN configuration file>``` for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers.
+* ```<XPN configuration file>``` for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers.
 * ```<nameserver file>``` for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing.
 * ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
 And the 5 special environment variables for XPN clients are:
-* ```XPN_DNS```      with the full path to the nameserver file to be used (mandatory).
 * ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
-* ```XPN_SESSION```  with value 0 for without session and value 1 for with session (optional, default: 0).
 * ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
+* ```XPN_SCK_PORT``` with the port to use in internal comunications (opcional, default: 3456).
 </details>
 
 
@@ -168,25 +166,21 @@ The typical executions has 3 main steps:
    ```bash
    mpiexec -np <number of processes> \
            -hostfile <full path to the hostfile> \
-           -genv XPN_DNS  <nameserver file> \
-           -genv XPN_CONF <XPN configuration file> \
-           -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
-           -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+           -genv XPN_CONF    <XPN configuration file> \
+           -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
            <full path to app1>/app1
    ```
    2.2. Example for the *app2* program (a NON-MPI application):
    ```bash
-   export XPN_DNS=<full path to the nameserver file>
    export XPN_CONF=<full path to the XPN configuration file>
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
    ```
    2.3. Example for the *app3* Python program:
    ```bash
-   export XPN_DNS=<full path to the nameserver file>
    export XPN_CONF=<full path to the XPN configuration file>
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3
    ```
-4. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
+3. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
    ```bash
    ./xpn -v -l <full path to the hostfile>  stop
    ```

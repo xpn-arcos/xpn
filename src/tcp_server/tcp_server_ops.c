@@ -913,7 +913,7 @@ void tcp_server_op_mkdir(tcp_server_param_st * params, int sd, struct st_tcp_ser
   tcp_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, s);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) MKDIR(%s)\n", params->srv_name, ret);
 }
 
 void tcp_server_op_opendir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)
@@ -931,7 +931,7 @@ void tcp_server_op_opendir(tcp_server_param_st * params, int sd, struct st_tcp_s
   tcp_server_comm_write_data(params, sd, (char * )(unsigned long long * ) & (ret), (unsigned int) sizeof(DIR * ), rank_client_id);
 
   // show debug info
-  debug_info("[TCP-SERVER-OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, s);
+  debug_info("[TCP-SERVER-OPS] (ID=%s) OPENDIR(%s)\n", params->srv_name, ret);
 }
 
 void tcp_server_op_readdir(tcp_server_param_st * params, int sd, struct st_tcp_server_msg * head, int rank_client_id)

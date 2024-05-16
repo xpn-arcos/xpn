@@ -28,7 +28,6 @@ class Xpn(AutotoolsPackage):
     variant('mosquitto', default=False, description='Enables support for mosquitto.')
 
     # Dependencies
-    depends_on("mxml")
     depends_on("mpich",                  when="+mpich")
     depends_on('autoconf', type='build', when='@master')
     depends_on('automake', type='build', when='@master')
