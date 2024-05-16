@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -59,7 +59,7 @@
   {  
     int  ret;
 
-    int fd_src, fd_dest;
+    int fd_src, fd_dest, replication = 0;
     char *buf ;
     int buf_len;
     off64_t offset_dest ;
@@ -140,28 +140,34 @@
         return -1;
       }
 
-      //offset_dest = rank * blocksize ;
       off64_t ret_1;
-      ret_1 = lseek64(fd_src, HEADER_SIZE, SEEK_SET) ;
-      if (ret_1 < 0) {
-        perror("lseek: ");
-        return -1;
-      }
-
       offset_src = 0;
 
       do
       { 
-        XpnCalculateBlockInvert(blocksize, replication_level, size, rank, offset_src, &offset_dest);
+        //TODO: check when the server has error and data is corrupt for fault tolerance
+        XpnCalculateBlockInvert(blocksize, replication_level, size, rank, offset_src, &offset_dest, &replication);
+        
+        if(offset_src > st_src.st_size){
+          break;
+        }
+        if (replication != 0){
+          offset_src += blocksize;
+          continue;
+        }
 
+        ret_1 = lseek64(fd_src, offset_src + HEADER_SIZE, SEEK_SET) ;
+        if (ret_1 < 0) {
+          perror("lseek: ");
+          break;
+        }
         read_size = filesystem_read(fd_src, buf, buf_len);
         if (read_size <= 0){
           break;
         }
 
-        off64_t ret_2;
-        ret_2 = lseek64(fd_dest, offset_dest, SEEK_SET) ;
-        if (ret_2 < 0) {
+        ret_1 = lseek64(fd_dest, offset_dest, SEEK_SET) ;
+        if (ret_1 < 0) {
           perror("lseek: ");
           break;
         }

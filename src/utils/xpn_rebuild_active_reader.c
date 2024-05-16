@@ -45,19 +45,16 @@
 #define _FILE_OFFSET_BITS 64
 #endif
 
-#define HEADER_SIZE 8192
+#define HEADER_SIZE   8192
+#define TAG_OFFSET    10
+#define TAG_READ_SIZE 20
+#define TAG_BUF       30
 
 int *rank_actual_to_new = NULL;
 int *rank_actual_to_old = NULL;
 int *rank_new_to_actual = NULL;
 int *rank_old_to_actual = NULL;
 int old_size, new_size;
-struct mpi_msg_info {
-    int rank_send;
-    int rank_recv;
-    ssize_t read_size;
-    off64_t offset;
-};
 
 /* ... Functions / Funciones ......................................... */
 
@@ -71,10 +68,10 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
     ssize_t read_size, write_size;
     off_t offset_src, offset_dest, offset_real;
     int replication, rank_to_send;
-    char *buf = NULL, *buf_recv = NULL;
-    struct mpi_msg_info *all_msg_info = NULL;
-    struct mpi_msg_info local_msg_info;
+    char *buf = NULL;
     int buf_len;
+    ssize_t *read_sizes = NULL;
+    MPI_Comm old_comm;
 
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -84,6 +81,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
             master_old = i;
         }
     }
+
     // Get stat of file only in master node of the old file
     if (rank == master_old) {
         res = stat(entry, &st);
@@ -91,6 +89,11 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
             perror("stat: ");
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
         }
+    }
+    if (rank_actual_to_old[rank] != -1) {
+        MPI_Comm_split(MPI_COMM_WORLD, 0, rank, &old_comm);
+    } else {
+        MPI_Comm_split(MPI_COMM_WORLD, MPI_UNDEFINED, rank, &old_comm);
     }
     // Broadcast stat
     res = MPI_Bcast(&st, sizeof(struct stat), MPI_BYTE, master_old, MPI_COMM_WORLD);
@@ -135,20 +138,14 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
         }
         // Alocate buffers
         buf_len = blocksize;
-        buf = (char *)malloc(blocksize);
+        buf = (char *)malloc(blocksize * sizeof(char));
         if (NULL == buf) {
-            perror("malloc");
+            perror("malloc buf");
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
         }
-        buf_recv = (char *)malloc(blocksize);
-        if (NULL == buf_recv) {
-            perror("malloc");
-            MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-        }
-
-        all_msg_info = malloc(size * sizeof(struct mpi_msg_info));
-        if (NULL == all_msg_info) {
-            perror("malloc");
+        read_sizes = (ssize_t *)malloc(size * sizeof(ssize_t));
+        if (NULL == read_sizes) {
+            perror("malloc read_sizes");
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
         }
 
@@ -164,9 +161,12 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
         }
 
         offset_src = 0;
+        offset_dest = 0;
         read_size = 0;
         int finish = 0;
+
         do {
+            read_size = 0;
             // Read in old_ranks
             if (rank_actual_to_old[rank] != -1) {
                 // Calculate the block
@@ -174,88 +174,63 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                                         &offset_real, &replication);
                 XpnCalculateBlock(blocksize, replication_level, new_size, offset_real, replication, &offset_dest,
                                   &rank_to_send);
+
                 ret_2 = real_posix_lseek64(fd_src, offset_src + HEADER_SIZE, SEEK_SET);
                 if (ret_2 < 0) {
                     perror("lseek");
                     MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
                 }
                 read_size = filesystem_read(fd_src, buf, buf_len);
-                // Construct mpi_msg_info to send
-                local_msg_info.rank_send = rank;
-                local_msg_info.rank_recv = rank_new_to_actual[rank_to_send];
-                local_msg_info.read_size = read_size;
-                local_msg_info.offset = offset_dest;
-            } else {
-                // Construct mpi_msg_info when rank is not in the old ranks
-                local_msg_info.rank_send = -1;
-                local_msg_info.rank_recv = -1;
-                local_msg_info.read_size = -1;
-                local_msg_info.offset = -1;
-            }
-            // Send the structure of mpi_msg_info to all processes
-            res = MPI_Allgather(&local_msg_info, sizeof(struct mpi_msg_info), MPI_BYTE, all_msg_info, sizeof(struct mpi_msg_info), MPI_BYTE, MPI_COMM_WORLD);
-            if (res != MPI_SUCCESS) {
-                fprintf(stderr, "Error: %s\n", strerror(errno));
-                MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+                if (read_size <= 0) {
+                    break;
+                }
+
+                MPI_Send(&offset_dest, 1, MPI_LONG, rank_new_to_actual[rank_to_send], TAG_OFFSET, MPI_COMM_WORLD);
+                MPI_Send(&read_size, 1, MPI_LONG, rank_new_to_actual[rank_to_send], TAG_READ_SIZE, MPI_COMM_WORLD);
+                MPI_Send(buf, read_size, MPI_CHAR, rank_new_to_actual[rank_to_send], TAG_BUF, MPI_COMM_WORLD);
             }
 
-            // For all messages
-            for (int i = 0; i < size; i++) {
-                // Send if the rank has to send and not is the same as recv
-                if (all_msg_info[i].rank_send == rank) {
-                    if (all_msg_info[i].rank_send != all_msg_info[i].rank_recv) {
-                        res = MPI_Send(buf, all_msg_info[i].read_size, MPI_CHAR, all_msg_info[i].rank_recv, 0, MPI_COMM_WORLD);
-                        if (res != MPI_SUCCESS) {
-                            fprintf(stderr, "Error: %s\n", strerror(errno));
-                            MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-                        }
-                    }
+            // Write in new_ranks
+            if (rank_actual_to_new[rank] != -1) {
+                MPI_Status status;
+                MPI_Recv(&offset_dest, 1, MPI_LONG, MPI_ANY_SOURCE, TAG_OFFSET, MPI_COMM_WORLD, &status);
+                if (offset_dest == -666) {
+                    break;
                 }
-                // Recv if rank has to recv and not is the same as send
-                // then write the recv buf
-                if (all_msg_info[i].rank_recv == rank) {
-                    if (all_msg_info[i].rank_send != all_msg_info[i].rank_recv) {
-                        res = MPI_Recv(buf_recv, all_msg_info[i].read_size, MPI_CHAR, all_msg_info[i].rank_send, 0, MPI_COMM_WORLD,
-                                       MPI_STATUS_IGNORE);
-                        if (res != MPI_SUCCESS) {
-                            fprintf(stderr, "Error: %s\n", strerror(errno));
-                            MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-                        }
-                    }
-                    ret_2 = real_posix_lseek64(fd_dest, all_msg_info[i].offset + HEADER_SIZE, SEEK_SET);
-                    if (ret_2 < 0) {
-                        perror("lseek: ");
-                        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-                    }
-                    // Use diferent buf if recv or if the same rank use directly
-                    if (all_msg_info[i].rank_send != all_msg_info[i].rank_recv) {
-                        write_size = filesystem_write(fd_dest, buf_recv, all_msg_info[i].read_size);
-                    } else {
-                        write_size = filesystem_write(fd_dest, buf, all_msg_info[i].read_size);
-                    }
+                MPI_Recv(&read_size, 1, MPI_LONG, status.MPI_SOURCE, TAG_READ_SIZE, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                MPI_Recv(buf, read_size, MPI_CHAR, status.MPI_SOURCE, TAG_BUF, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-                    if (write_size != all_msg_info[i].read_size) {
-                        perror("write: ");
-                        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-                    }
+                ret_2 = real_posix_lseek64(fd_dest, offset_dest + HEADER_SIZE, SEEK_SET);
+                if (ret_2 < 0) {
+                    perror("lseek: ");
+                    MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
                 }
-            }
-            // Check if all mpi_msg_info dont have read_size
-            finish = 1;
-            for (int i = 0; i < size; i++) {
-                if (all_msg_info[i].read_size > 0) {
-                    finish = 0;
-                }
+
+                write_size = filesystem_write(fd_dest, buf, read_size);
             }
 
             offset_src += blocksize;
-        } while (finish == 0);
+        } while (finish != 1);
+        if (old_comm != MPI_COMM_NULL) {
+            MPI_Barrier(old_comm);
+            MPI_Comm_free(&old_comm);
+        }
+
+        if (rank == master_old) {
+            for (int i = 0; i < size; i++) {
+                if (rank_actual_to_new[i] != -1) {
+                    offset_dest = -666;
+                    MPI_Send(&offset_dest, 1, MPI_LONG, i, TAG_OFFSET, MPI_COMM_WORLD);
+                }
+            }
+        }
 
         // Only in old_ranks
         if (rank_actual_to_old[rank] != -1) {
             close(fd_src);
             unlink(entry);
         }
+        MPI_Barrier(MPI_COMM_WORLD);
         // Only in new_ranks
         if (rank_actual_to_new[rank] != -1) {
             close(fd_dest);
@@ -265,14 +240,10 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
         if (buf != NULL) {
             free(buf);
         }
-        if (buf_recv != NULL) {
-            free(buf_recv);
-        }
-        if (all_msg_info != NULL) {
-            free(all_msg_info);
+        if (read_sizes != NULL) {
+            free(read_sizes);
         }
     }
-
     MPI_Barrier(MPI_COMM_WORLD);
     return 0;
 }
@@ -398,6 +369,8 @@ void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_
     char *hostip = ns_get_host_ip();
     char hostname[HOST_NAME_MAX];
     ns_get_hostname(hostname);
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
     // Open host files
     FILE *file_old = NULL;
     FILE *file_new = NULL;
@@ -499,7 +472,28 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Error: %s\n", strerror(errno));
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
-    // Construct maps
+
+    // Remove duplicates
+    for (int i = 0; i < size; i++) {
+        if (rank_actual_to_new[i] != -1 && i != size - 1) {
+            for (int j = i + 1; j < size; j++) {
+                if (rank_actual_to_new[i] == rank_actual_to_new[j]) {
+                    rank_actual_to_new[j] = -1;
+                }
+            }
+        }
+    }
+    for (int i = size - 1; i >= 0; i--) {
+        if (rank_actual_to_old[i] != -1 && i != 0) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (rank_actual_to_old[i] == rank_actual_to_old[j]) {
+                    rank_actual_to_old[j] = -1;
+                }
+            }
+        }
+    }
+
+    // Construct maps x to actual
     for (int i = 0; i < size; i++) {
         rank_old_to_actual[i] = -1;
         rank_new_to_actual[i] = -1;

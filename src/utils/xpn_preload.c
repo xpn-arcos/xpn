@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -188,7 +188,7 @@ finish_copy:
     dir = opendir(dir_name);
     if(dir == NULL)
     {
-      perror("opendir:");
+      fprintf(stderr, "opendir error %s %s\n", dir_name, strerror(errno));
       return -1;
     }
     

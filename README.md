@@ -65,7 +65,6 @@
        direction TB
        Y2B["mkdir $HOME/src 
             cd    $HOME/src 
-            git clone --branch v3.x https://github.com/michaelrsweet/mxml.git
             git clone https://github.com/xpn-arcos/xpn.git"]
     end
     subgraph ide23 ["2.3 build source code"]
@@ -114,11 +113,10 @@ First, you need to get familiar with 4 special files and 2 special environment v
   root((XPN))
     files
         ["`**hostfile**</br>               for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
-        ["`**XPN configuration file**</br> for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers`"]
+        ["`**XPN configuration file**</br> for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers`"]
         ["`**nameserver file**</br>        for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing`"]
         ["`**server file**</br>            for XPN, it is a text file with the list of the servers to be stopped (one host name per line)`"]
     environment variables
-        ["`**XPN_DNS=**'full path to the nameserver file to be used (mandatory)'`"]
         ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
 ```
 
@@ -136,26 +134,23 @@ You need to get familiar with 4 special files and **5** special environment vari
         nameserver
         server file
     environment variables
-        XPN_DNS
         XPN_CONF
         XPN_THREAD
-        XPN_SESSION
         XPN_LOCALITY
+        XPN_SCK_PORT
 ```
 
 The 4 special files are:
 * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
-* ```<XPN configuration file>``` for XPN, it is a XML file with the configuration for the partition where files are stored at the XPN servers.
+* ```<XPN configuration file>``` for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers.
 * ```<nameserver file>``` for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing.
 * ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
 And the 5 special environment variables for XPN clients are:
-* ```XPN_DNS```      with the full path to the nameserver file to be used (mandatory).
 * ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
-* ```XPN_SESSION```  with value 0 for without session and value 1 for with session (optional, default: 0).
-* ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 1).
-</details>
+* ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
+* ```XPN_SCK_PORT``` with the port to use in internal comunications (opcional, default: 3456).
 
 
 ### 2.1 Executing Ad-Hoc Expand (based on MPI)
@@ -170,21 +165,17 @@ The typical executions has 3 main steps:
    ```bash
    mpiexec -np <number of processes> \
            -hostfile <full path to the hostfile> \
-           -genv XPN_DNS  <nameserver file> \
            -genv XPN_CONF <XPN configuration file> \
-           -genv LD_LIBRARY_PATH <INSTALL_PATH>/mxml/lib:$LD_LIBRARY_PATH \
            -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
            <full path to app1>/app1
    ```
    2.2. Example for the *app2* program (a NON-MPI application):
    ```bash
-   export XPN_DNS=<full path to the nameserver file>
    export XPN_CONF=<full path to the XPN configuration file>
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
    ```
    2.3. Example for the *app3* Python program:
    ```bash
-   export XPN_DNS=<full path to the nameserver file>
    export XPN_CONF=<full path to the XPN configuration file>
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3
    ```

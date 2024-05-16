@@ -42,7 +42,7 @@
   /* ... Functions / Funciones ......................................... */
 
   void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t offset, int replication, off_t *local_offset, int *serv);
-  void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, int serv, off_t local_offset, off_t *offset);
+  void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, int serv, off_t local_offset, off_t *offset, int *replication);
 
   int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, int *serv);
   int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv);
