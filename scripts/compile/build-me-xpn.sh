@@ -27,7 +27,7 @@ function usage {
     echo " $0  -m <mpicc path>  -i <Install path>"
     echo " Where:"
     echo " * <mpicc   path> = full path where the mpicc is installed."
-    echo " * <Install path> = full path where MXML and XPN is going to be installed."
+    echo " * <Install path> = full path where XPN is going to be installed."
     echo ""
 }
 
@@ -75,7 +75,6 @@ fi
 
 
 # 2) XPN and dependencies...
-"$BASE_PATH"/software/mxml.sh                    -i "$INSTALL_PATH" -s "$BASE_PATH"/../../../mxml
 "$BASE_PATH"/software/xpn.sh    -m "$MPICC_PATH" -i "$INSTALL_PATH" -s "$BASE_PATH"/../../../xpn
 
 echo " End."

@@ -56,10 +56,10 @@
   // xpn_init.c
   int         xpn_init    ( void );
   int         xpn_destroy ( void );
+  // to test fault tolerant
+  int         xpn_mark_error_server(int index);
 
   // xpn_open.c
-  int         xpn_flush     (const char *virtual_path, const char *storage_path); // Auxiliary function
-  int         xpn_preload   (const char *virtual_path, const char *storage_path); // Auxiliary function
   int         xpn_creat     (const char *path, mode_t perm);
   int         xpn_open      (const char *path, int flags , ...);
   int         xpn_close     (int fd);

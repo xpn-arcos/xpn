@@ -99,7 +99,10 @@
   // Directory API
   DIR* dlsym_opendir   (char *dirname);
   DIR* dlsym_opendir64 (char *dirname);
-  int  dlsym_closedir  (DIR*);
+  int  dlsym_closedir  (DIR* dirp);
+
+  long dlsym_telldir (DIR *dirp);
+  void dlsym_seekdir (DIR *dirp, long loc);
 
   struct dirent * dlsym_readdir     (DIR *dirp);
   struct dirent64 * dlsym_readdir64 (DIR *dirp);

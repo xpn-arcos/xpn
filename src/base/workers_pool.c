@@ -151,7 +151,7 @@ void worker_pool_enqueue ( worker_pool_t *w, struct st_th *th_arg, void (*worker
   th_arg->v        = (void *)th_arg;
 
   // enqueue
-  debug_info("[WORKERS_POOL] [worker_pool_enqueue] enqueue\n");
+  debug_info("[WORKERS_POOL] [worker_pool_enqueue] enqueue id = %d\n", th_arg->id);
 
   w->operations_buffer[w->enq_pos] = *th_arg;
   w->enq_pos = (w->enq_pos + 1) % MAX_OPERATIONS;

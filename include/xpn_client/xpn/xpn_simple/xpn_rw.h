@@ -34,7 +34,6 @@
   #include "xpn_file.h"
   #include "xpn_open.h"
   #include "xpn_policy_rw.h"
-  #include "xpn_err.h"
   #include "base/workers.h"
 
 
