@@ -27,6 +27,7 @@
 
   #include "all_system.h"
   #include "syscall_proxies.h"
+  #include "base/filesystem_low.h"
   #include "base/utils.h"
   #include <pthread.h> 
   #include <sys/stat.h>
@@ -35,15 +36,11 @@
 
   /* ... Const / Const ................................................. */
 
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-  typedef off_t offset_t;
-
-  // <IMPORTANT>: next two lines MUST be before each file in xpn_client that uses filesystem.h BUT NOT in mpi_server that uses filesystem.h
+  // <IMPORTANT for XPN>
+  //   DLSYM is used in xpn_client BUT NOT in mpi_server
   //   #define ASYNC_CLOSE 1
   //   #define FILESYSTEM_DLSYM 1
-  // </IMPORTANT>
+  // </IMPORTANT for XPN>
 
 
   /* ... Functions / Funciones ......................................... */
@@ -76,54 +73,7 @@
   int   filesystem_stat     ( char *pathname, struct stat *sinfo );
 
 
-  /* ... Macros / Macros .................................................. */
-
-  // #ifdef FILESYSTEM_DLSYM
-    #define real_posix_creat(path,mode)                      dlsym_creat(path,mode)
-    #define real_posix_open(path,flags)                      dlsym_open(path,flags)
-    #define real_posix_open2(path,flags,mode)                dlsym_open2(path,flags,mode)
-    #define real_posix_close(fd)                             dlsym_close(fd)
-
-    #define real_posix_lseek(fd,offset,whence)               dlsym_lseek(fd,offset,whence)
-    #define real_posix_lseek64(fd,offset,whence)             dlsym_lseek64(fd,offset,whence)
-    #define real_posix_read(fd,buffer,buffer_size)           dlsym_read(fd,buffer,buffer_size)
-    #define real_posix_write(fd,buffer,buffer_size)          dlsym_write(fd,buffer,buffer_size)
-
-    #define real_posix_rename(old_path, new_path)            dlsym_rename(old_path, new_path)
-
-    #define real_posix_mkdir(pathname,mode)                  dlsym_mkdir(pathname,mode)
-    #define real_posix_rmdir(pathname)                       dlsym_rmdir(pathname)
-    #define real_posix_unlink(pathname)                      dlsym_unlink(pathname)
-    #define real_posix_stat(pathname,info)                   dlsym_stat(0,pathname,info)
-
-    #define real_posix_opendir(pathname)                     dlsym_opendir(pathname)
-    #define real_posix_telldir(dirptr)                       dlsym_telldir(dirptr)
-    #define real_posix_seekdir(dirptr, loc)                  dlsym_seekdir(dirptr, loc)
-    #define real_posix_readdir(dirptr)                       dlsym_readdir(dirptr)
-    #define real_posix_closedir(dirptr)                      dlsym_closedir(dirptr)
-  // #else
-  //   #define real_posix_creat(path,mode)                      creat(path,mode)
-  //   #define real_posix_open(path,flags)                      open(path,flags)
-  //   #define real_posix_open2(path,flags,mode)                open(path,flags,mode)
-  //   #define real_posix_close(fd)                             close(fd)
-
-  //   #define real_posix_lseek(fd,offset,whence)               lseek(fd,offset,whence)
-  //   #define real_posix_lseek64(fd,offset,whence)             lseek64(fd,offset,whence)
-  //   #define real_posix_read(fd,buffer,buffer_size)           read(fd,buffer,buffer_size)
-  //   #define real_posix_write(fd,buffer,buffer_size)          write(fd,buffer,buffer_size)
-
-  //   #define real_posix_rename(old_path, new_path)            rename(old_path, new_path)
-
-  //   #define real_posix_mkdir(pathname,mode)                  mkdir(pathname,mode)
-  //   #define real_posix_rmdir(pathname)                       rmdir(pathname)
-  //   #define real_posix_unlink(pathname)                      unlink(pathname)
-  //   #define real_posix_stat(pathname,info)                   stat(pathname,info)
-
-  //   #define real_posix_opendir(pathname)                     opendir(pathname)
-  //   #define real_posix_telldir(dirptr)                       telldir(dirptr)
-  //   #define real_posix_seekdir(dirptr, loc)                  seekdir(dirptr, loc)
-  //   #define real_posix_readdir(dirptr)                       readdir(dirptr)
-  //   #define real_posix_closedir(dirptr)                      closedir(dirptr)
-  // #endif
+  /* ...................................................................... */
 
 #endif
+
