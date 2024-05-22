@@ -66,7 +66,7 @@ void xpn_server_dispatcher(struct st_th th) {
     while (!disconnect) {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Waiting for operation\n", th.id);
 
-        ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params, th.sd, &(th.type_op),
+        ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params, th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
         if (ret < 0) {
             debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: read operation fail\n", th.id);
@@ -93,7 +93,7 @@ void xpn_server_dispatcher(struct st_th th) {
 
         // Launch worker per operation
         th_arg.params = &params;
-        th_arg.sd = (long)th.sd;
+        th_arg.comm = th.comm;
         th_arg.function = xpn_server_run;
         th_arg.type_op = th.type_op;
         th_arg.rank_client_id = th.rank_client_id;
@@ -107,16 +107,17 @@ void xpn_server_dispatcher(struct st_th th) {
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Client %d close\n", th.id, th.rank_client_id);
 
-    xpn_server_comm_disconnect(th.params, th.sd);
+    xpn_server_comm_disconnect(th.params, th.comm);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
 }
 
 void xpn_server_accept() {
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Start accepting\n", 0);
-    int ret, sd;
+    int ret;
+    void *comm = NULL;
     struct st_th th_arg;
-    ret = xpn_server_comm_accept(&params, &sd);
+    ret = xpn_server_comm_accept(&params, &comm);
     if (ret == MPI_COMM_NULL) {
         return;
     }
@@ -125,7 +126,7 @@ void xpn_server_accept() {
 
     // Launch dispatcher per aplication
     th_arg.params = &params;
-    th_arg.sd = (long)sd;
+    th_arg.comm = comm;
     th_arg.function = xpn_server_dispatcher;
     th_arg.type_op = 0;
     th_arg.rank_client_id = 0;

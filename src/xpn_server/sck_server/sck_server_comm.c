@@ -130,7 +130,7 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   return 1;
 }
 
-int sck_server_comm_accept ( int socket, int *new_socket )
+int sck_server_comm_accept ( int socket, int **new_socket )
 {
   int    ret, sc, flag;
   struct sockaddr_in client_addr;
@@ -177,8 +177,23 @@ int sck_server_comm_accept ( int socket, int *new_socket )
 
   debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] << End\n", 0);
 
-  *new_socket = sc;
+  *new_socket = malloc(sizeof(int));
+  if (*new_socket == NULL) {
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] ERROR: Memory allocation\n", 0);
+    return -1;
+  }
+
+  **new_socket = sc;
   return 0;
 }
+
+
+int sck_server_comm_disconnect ( int *socket )
+{
+  socket_close(*socket);
+  free(socket);
+  return 0;
+}
+
 
 /* ................................................................... */
