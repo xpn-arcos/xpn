@@ -10,9 +10,9 @@ COMMON_HEADER=			@top_srcdir@/include/all_system.h \
 BASE_HEADER=			@top_srcdir@/include/base/
 
 XPN_SERVER_HEADER=		@top_srcdir@/include/xpn_server/xpn_server_params.h \
-						@top_srcdir@/include/xpn_server/xpn_server_conf.h \
-						@top_srcdir@/include/xpn_server/xpn_server_ops.h \
-						@top_srcdir@/include/xpn_server/xpn_server_comm.h
+				@top_srcdir@/include/xpn_server/xpn_server_conf.h \
+				@top_srcdir@/include/xpn_server/xpn_server_ops.h \
+				@top_srcdir@/include/xpn_server/xpn_server_comm.h
 MPI_SERVER_HEADER=		@top_srcdir@/include/xpn_server/mpi_server/mpi_server_comm.h
 SCK_SERVER_HEADER=		@top_srcdir@/include/xpn_server/sck_server/sck_server_comm.h
 
@@ -45,6 +45,7 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/ns.c \
 			@top_srcdir@/src/base/socket.c \
 			@top_srcdir@/src/base/syscall_proxies.c \
+			@top_srcdir@/src/base/filesystem_low.c \
 			@top_srcdir@/src/base/filesystem.c \
 			@top_srcdir@/src/base/workers.c \
 			@top_srcdir@/src/base/workers_ondemand.c \
