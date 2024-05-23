@@ -174,7 +174,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                                         &offset_real, &replication);
                 XpnCalculateBlock(blocksize, replication_level, new_size, offset_real, replication, &offset_dest,
                                   &rank_to_send);
-                ret_2 = real_posix_lseek64(fd_src, offset_src + HEADER_SIZE, SEEK_SET);
+                ret_2 = lseek64(fd_src, offset_src + HEADER_SIZE, SEEK_SET);
                 if (ret_2 < 0) {
                     perror("lseek");
                     MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -222,7 +222,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
                         }
                     }
-                    ret_2 = real_posix_lseek64(fd_dest, all_msg_info[i].offset + HEADER_SIZE, SEEK_SET);
+                    ret_2 = lseek64(fd_dest, all_msg_info[i].offset + HEADER_SIZE, SEEK_SET);
                     if (ret_2 < 0) {
                         perror("lseek: ");
                         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);

@@ -158,7 +158,12 @@ And the 5 special environment variables for XPN clients are:
 The typical executions has 3 main steps:
 1. First, launch the Expand MPI server (xpn_mpi_server):
    ```bash
-   ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
+   ./xpn -v \
+      -n <number of processes> \
+      -l <full path to the hostfile> \
+      -w <shared directory among hostfile computers, $HOME for example> \
+      -x <local directory on each node to be used, /tmp for example> \
+      start
    ```
 2. Then,  launch the program that will use Expand (XPN client).
 

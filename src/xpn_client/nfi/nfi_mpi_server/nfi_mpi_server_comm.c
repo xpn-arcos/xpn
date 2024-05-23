@@ -155,6 +155,8 @@ int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_c
             goto mpi_comm_socket_error;
         }
         mpi_comm_socket_error:
+        printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: send connect intention fails\n", rank);
+        return -1;
     }
 
     // Send port name to all ranks
