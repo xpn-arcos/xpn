@@ -46,6 +46,8 @@
 
   /* ... Functions / Funciones ......................................... */
 
+    int  fs_low_set ( void * new_rtld ) ;
+
     // Files
     int     fs_low_creat ( char * pathname, mode_t mode ) ;
     int     fs_low_open  ( char * pathname, int flags ) ;
