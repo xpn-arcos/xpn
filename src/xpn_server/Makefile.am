@@ -45,7 +45,6 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/ns.c \
 			@top_srcdir@/src/base/socket.c \
 			@top_srcdir@/src/base/syscall_proxies.c \
-			@top_srcdir@/src/base/filesystem_low.c \
 			@top_srcdir@/src/base/filesystem.c \
 			@top_srcdir@/src/base/workers.c \
 			@top_srcdir@/src/base/workers_ondemand.c \
@@ -53,9 +52,9 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/utils.c
 
 XPN_SERVER_OBJECTS=	@top_srcdir@/src/xpn_server/xpn_server.c \
-					@top_srcdir@/src/xpn_server/xpn_server_params.c \
-					@top_srcdir@/src/xpn_server/xpn_server_ops.c \
-					@top_srcdir@/src/xpn_server/xpn_server_comm.c
+			@top_srcdir@/src/xpn_server/xpn_server_params.c \
+			@top_srcdir@/src/xpn_server/xpn_server_ops.c \
+			@top_srcdir@/src/xpn_server/xpn_server_comm.c
 
 MPI_SERVER_OBJECTS=	@top_srcdir@/src/xpn_server/mpi_server/mpi_server_comm.c
 SCK_SERVER_OBJECTS=	@top_srcdir@/src/xpn_server/sck_server/sck_server_comm.c
