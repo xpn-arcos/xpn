@@ -73,7 +73,6 @@ int nfi_mpi_server_comm_init(int xpn_thread) {
     // set is_mpi_server as the used protocol
     setenv("XPN_IS_MPI_SERVER", "1", 1);
 
-    debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_init] server %d available at %s\n", params->rank, params->port_name);
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_init] >> End\n");
 
     // Return OK
@@ -130,69 +129,99 @@ int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_c
         printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: MPI_Comm_rank fails\n", rank);
         return -1;
     }
-    // Send connect intention
-    if (rank == 0) {
-        err = 0;
-        ret = socket_client_connect(srv_name, &connection_socket);
-        if (ret < 0) {
-            debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket connect\n");
-            err = -1;
-            goto mpi_comm_socket_error;
+
+    // Check if spawn_servers
+    char * env_spawn_servers = getenv("XPN_SERVER_SPAWN");
+    if (env_spawn_servers != NULL)
+    {
+        struct stat st;
+        ret = filesystem_stat(env_spawn_servers,&st);
+        if (ret < 0){
+            printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] ERROR: xpn_server_spawn not found in path: \"%s\"\n", rank, env_spawn_servers);
+            return -1;
         }
-        int buffer = SOCKET_ACCEPT_CODE;
-        ret = socket_send(connection_socket, &buffer, sizeof(buffer));
-        if (ret < 0) {
-            debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket send\n");
-            socket_close(connection_socket);
-            err = -1;
-            goto mpi_comm_socket_error;
+
+        int spawnError[1];
+        MPI_Info info;
+        MPI_Info_create(&info);
+        MPI_Info_set(info, "host", srv_name);
+        // For openmpi is necesary the next info:
+        // MPI_Info_set(info, "add-host", srv_name);
+        // MPI_Info_set(info, "PMIX_HOST", srv_name);
+        // MPI_Info_set(info, "PMIX_ADD_HOST", srv_name);
+        debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] Server spawn %s\n", srv_name);
+        ret = MPI_Comm_spawn(env_spawn_servers, MPI_ARGV_NULL, 1, info, 0, MPI_COMM_WORLD, out_comm, spawnError);
+        if (*out_comm==MPI_COMM_NULL){
+            debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: Server spawn\n");
+            return -1;
         }
-        ret = socket_recv(connection_socket, port_name, MPI_MAX_PORT_NAME);
-        if (ret < 0) {
-            debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket read\n");
-            socket_close(connection_socket);
-            err = -1;
-            goto mpi_comm_socket_error;
-        }
-        mpi_comm_socket_error:
-    }
-
-    // Send port name to all ranks
-    MPI_Bcast(&err, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    if (err == -1){
-        return -1;
-    }
-    MPI_Bcast(port_name, MPI_MAX_PORT_NAME, MPI_CHAR, 0, MPI_COMM_WORLD);
-
-    // Connect...
-    debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] Connect port %s\n", port_name);
-
-    int connect_retries = 0;
-    int errclass, resultlen;
-    char err_buffer[MPI_MAX_ERROR_STRING];
-    MPI_Info info;
-    MPI_Info_create(&info);
-    MPI_Info_set(info, "timeout", "1");
-    do {
-        ret = MPI_Comm_connect(port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, out_comm);
-
-        MPI_Error_class(ret, &errclass);
-        MPI_Error_string(ret, err_buffer, &resultlen);
-
-        if (MPI_SUCCESS != errclass) {
-            XPN_DEBUG("%s", err_buffer);
-            if (connect_retries == 0) {
-                char cli_name[HOST_NAME_MAX];
-                gethostname(cli_name, HOST_NAME_MAX);
-                printf("----------------------------------------------------------------\n");
-                printf("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
-                printf("----------------------------------------------------------------\n\n");
+        MPI_Info_free(&info);
+    }else{
+        // Send connect intention
+        if (rank == 0) {
+            err = 0;
+            ret = socket_client_connect(srv_name, &connection_socket);
+            if (ret < 0) {
+                debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket connect\n");
+                err = -1;
+                goto mpi_comm_socket_error;
             }
-            connect_retries++;
-            sleep(1);
+            int buffer = SOCKET_ACCEPT_CODE;
+            ret = socket_send(connection_socket, &buffer, sizeof(buffer));
+            if (ret < 0) {
+                debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket send\n");
+                socket_close(connection_socket);
+                err = -1;
+                goto mpi_comm_socket_error;
+            }
+            ret = socket_recv(connection_socket, port_name, MPI_MAX_PORT_NAME);
+            if (ret < 0) {
+                debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket read\n");
+                socket_close(connection_socket);
+                err = -1;
+                goto mpi_comm_socket_error;
+            }
+            mpi_comm_socket_error:
         }
-    } while (MPI_SUCCESS != ret && connect_retries < 1);
-    MPI_Info_free(&info);
+
+        // Send port name to all ranks
+        MPI_Bcast(&err, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        if (err == -1){
+            return -1;
+        }
+        MPI_Bcast(port_name, MPI_MAX_PORT_NAME, MPI_CHAR, 0, MPI_COMM_WORLD);
+
+        // Connect...
+        debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] Connect port %s\n", port_name);
+
+        int connect_retries = 0;
+        int errclass, resultlen;
+        char err_buffer[MPI_MAX_ERROR_STRING];
+        MPI_Info info;
+        MPI_Info_create(&info);
+        MPI_Info_set(info, "timeout", "1");
+        do {
+            ret = MPI_Comm_connect(port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, out_comm);
+
+            MPI_Error_class(ret, &errclass);
+            MPI_Error_string(ret, err_buffer, &resultlen);
+
+            if (MPI_SUCCESS != errclass) {
+                XPN_DEBUG("%s", err_buffer);
+                if (connect_retries == 0) {
+                    char cli_name[HOST_NAME_MAX];
+                    gethostname(cli_name, HOST_NAME_MAX);
+                    printf("----------------------------------------------------------------\n");
+                    printf("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
+                    printf("----------------------------------------------------------------\n\n");
+                }
+                connect_retries++;
+                sleep(1);
+            }
+        } while (MPI_SUCCESS != ret && connect_retries < 1);
+        MPI_Info_free(&info);
+    }
+
     if (MPI_SUCCESS != ret) {
         debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: MPI_Comm_connect fails\n");
         return -1;

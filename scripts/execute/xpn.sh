@@ -373,6 +373,8 @@ fi
 
 # run 
 case "${ACTION}" in
+      mk_conf)  mk_conf_servers  "config.xml" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+                ;;
       start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 start_xpn_servers
                 ;;
