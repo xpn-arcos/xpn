@@ -316,7 +316,7 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
             }
             copy(path, is_file, blocksize, replication_level, rank, size);
 
-            if (S_ISDIR(stat_buf.st_mode)) {
+            if (!is_file) {
                 list(path, blocksize, replication_level, rank, size);
             }
 
@@ -358,6 +358,10 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
             copy(path, is_file, blocksize, replication_level, rank, size);
+
+            if (!is_file) {
+                list(path, blocksize, replication_level, rank, size);
+            }
         }
     }
 
