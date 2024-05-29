@@ -164,7 +164,7 @@ int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_c
             if (ret < 0) {
                 debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket connect\n");
                 err = -1;
-                goto mpi_comm_socket_error;
+                goto mpi_comm_socket_finish;
             }
             int buffer = SOCKET_ACCEPT_CODE;
             ret = socket_send(connection_socket, &buffer, sizeof(buffer));
@@ -172,16 +172,18 @@ int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_c
                 debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket send\n");
                 socket_close(connection_socket);
                 err = -1;
-                goto mpi_comm_socket_error;
+                goto mpi_comm_socket_finish;
             }
             ret = socket_recv(connection_socket, port_name, MPI_MAX_PORT_NAME);
             if (ret < 0) {
                 debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket read\n");
                 socket_close(connection_socket);
                 err = -1;
-                goto mpi_comm_socket_error;
+                goto mpi_comm_socket_finish;
             }
-            mpi_comm_socket_error:
+            socket_close(connection_socket);
+            mpi_comm_socket_finish:
+            debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] Socket end, recv port: %s\n", port_name);
         }
 
         // Send port name to all ranks
