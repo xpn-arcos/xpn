@@ -238,6 +238,9 @@ int xpn_is_server_spawned(void) {
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] mpi_comm initialization\n", 0);
     ret = PMPI_Init(&params.argc, &params.argv);
 
+    // TODO: check if necesary bypass the bypass with dlysm RTLD_NEXT
+    filesystem_low_set(RTLD_NEXT);
+
     // Workers initialization
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] Workers initialization\n", 0);
 

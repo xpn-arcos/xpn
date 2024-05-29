@@ -106,7 +106,7 @@
 
 ## 2. Executing Ad-Hoc XPN...
 
-First, you need to get familiar with 4 special files and 2 special environment variables for XPN client:
+First, you need to get familiar with 4 special files and 1 special environment variables for XPN client:
 
   ```mermaid
   mindmap
@@ -123,7 +123,7 @@ First, you need to get familiar with 4 special files and 2 special environment v
 
 <details>
 <summary>For Expand developers...</summary>
-You need to get familiar with 4 special files and **5** special environment variables for XPN client:
+You need to get familiar with 4 special files and 4 special environment variables for XPN client:
 
   ```mermaid
   mindmap
@@ -151,13 +151,19 @@ And the 5 special environment variables for XPN clients are:
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
 * ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
 * ```XPN_SCK_PORT``` with the port to use in internal comunications (opcional, default: 3456).
+</details>
 
 
 ### 2.1 Executing Ad-Hoc Expand (based on MPI)
 The typical executions has 3 main steps:
 1. First, launch the Expand MPI server (xpn_mpi_server):
    ```bash
-   ./xpn -v -n <number of processes> -l <full path to the hostfile>  start
+   ./xpn -v \
+      -n <number of processes> \
+      -l <full path to the hostfile> \
+      -w <shared directory among hostfile computers, $HOME for example> \
+      -x <local directory on each node to be used, /tmp for example> \
+      start
    ```
 2. Then,  launch the program that will use Expand (XPN client).
 
@@ -165,8 +171,8 @@ The typical executions has 3 main steps:
    ```bash
    mpiexec -np <number of processes> \
            -hostfile <full path to the hostfile> \
-           -genv XPN_CONF <XPN configuration file> \
-           -genv LD_PRELOAD      <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+           -genv XPN_CONF    <XPN configuration file> \
+           -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
            <full path to app1>/app1
    ```
    2.2. Example for the *app2* program (a NON-MPI application):
