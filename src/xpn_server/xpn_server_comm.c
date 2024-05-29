@@ -91,7 +91,7 @@ int xpn_server_comm_destroy ( xpn_server_param_st *params )
   return ret;
 }
 
-int xpn_server_comm_accept ( xpn_server_param_st *params, int *new_sd )
+int xpn_server_comm_accept ( xpn_server_param_st *params, void **new_sd )
 {
   int ret = -1;
 
@@ -99,13 +99,12 @@ int xpn_server_comm_accept ( xpn_server_param_st *params, int *new_sd )
   {
   #ifdef ENABLE_MPI_SERVER
   case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_accept( params->port_name, (MPI_Comm *)new_sd );
-
+    ret = mpi_server_comm_accept( params->port_name, (MPI_Comm **)new_sd );
     break;
   #endif
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
-    ret = sck_server_comm_accept( params->server_socket, new_sd );
+    ret = sck_server_comm_accept( params->server_socket, (int **)new_sd );
     break;
   #endif
   
@@ -117,7 +116,7 @@ int xpn_server_comm_accept ( xpn_server_param_st *params, int *new_sd )
   return ret;
 }
 
-int xpn_server_comm_disconnect ( xpn_server_param_st *params, int sd )
+int xpn_server_comm_disconnect ( xpn_server_param_st *params, void *sd )
 {
   int ret = -1;
 
@@ -125,12 +124,12 @@ int xpn_server_comm_disconnect ( xpn_server_param_st *params, int sd )
   {
   #ifdef ENABLE_MPI_SERVER
   case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_disconnect( (MPI_Comm)sd );
+    ret = mpi_server_comm_disconnect( (MPI_Comm *)sd );
     break;
   #endif
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
-    ret = socket_close( sd );
+    ret = sck_server_comm_disconnect( (int *)sd );
     break;
   #endif
   
@@ -142,7 +141,7 @@ int xpn_server_comm_disconnect ( xpn_server_param_st *params, int sd )
   return ret;
 }
 
-ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, int sd, int *op, int *rank_client_id, int *tag_client_id )
+ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, void *sd, int *op, int *rank_client_id, int *tag_client_id )
 {  
   ssize_t ret = -1;
 
@@ -150,12 +149,12 @@ ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, int sd, in
   {
   #ifdef ENABLE_MPI_SERVER
   case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_read_operation( (MPI_Comm)sd, op, rank_client_id, tag_client_id );
+    ret = mpi_server_comm_read_operation( (MPI_Comm *)sd, op, rank_client_id, tag_client_id );
     break;
   #endif
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
-    ret = socket_recv(sd, op, sizeof(*op));
+    ret = socket_recv(*(int*)sd, op, sizeof(*op));
     break;
   #endif
   
@@ -167,7 +166,7 @@ ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, int sd, in
   return ret;
 }
 
-ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, int sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
+ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
 {  
   ssize_t ret = -1;
 
@@ -175,12 +174,12 @@ ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, int sd, char *
   {
   #ifdef ENABLE_MPI_SERVER
   case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_write_data( (MPI_Comm)sd, data, size, rank_client_id, tag_client_id );
+    ret = mpi_server_comm_write_data( (MPI_Comm *)sd, data, size, rank_client_id, tag_client_id );
     break;
   #endif
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
-    ret = socket_send(sd, data, size);
+    ret = socket_send(*(int*)sd, data, size);
     break;
   #endif
   
@@ -192,7 +191,7 @@ ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, int sd, char *
   return ret;
 }
 
-ssize_t xpn_server_comm_read_data ( xpn_server_param_st *params, int sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
+ssize_t xpn_server_comm_read_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
 {  
   ssize_t ret = -1;
 
@@ -200,12 +199,12 @@ ssize_t xpn_server_comm_read_data ( xpn_server_param_st *params, int sd, char *d
   {
   #ifdef ENABLE_MPI_SERVER
   case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_read_data( (MPI_Comm)sd, data, size, rank_client_id, tag_client_id );
+    ret = mpi_server_comm_read_data( (MPI_Comm *)sd, data, size, rank_client_id, tag_client_id );
     break;
   #endif
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
-    ret = socket_recv(sd, data, size);
+    ret = socket_recv(*(int*)sd, data, size);
     break;
   #endif
   
