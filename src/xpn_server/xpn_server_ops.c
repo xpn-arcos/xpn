@@ -116,28 +116,28 @@ char * xpn_server_op2string ( int op_code )
 /* ... Functions / Funciones ......................................... */
 
 // File operations
-void xpn_server_op_open        ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_creat       ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_read        ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_write       ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_close       ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_rm          ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_rm_async    ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_rename      ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_setattr     ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_getattr     ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_open        ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_creat       ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_read        ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_write       ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_close       ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_rm          ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_rm_async    ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_rename      ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_setattr     ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_getattr     ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
 
 // Directory operations
-void xpn_server_op_mkdir       ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_opendir     ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_readdir     ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_closedir    ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_rmdir       ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_rmdir_async ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_mkdir       ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_opendir     ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_readdir     ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_closedir    ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_rmdir       ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_rmdir_async ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
 
 // FS Operations
-void xpn_server_op_getnodename ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
-void xpn_server_op_fstat       ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id ); //TODO: implement
+void xpn_server_op_getnodename ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_fstat       ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id ); //TODO: implement
 
 //Read the operation to realize
 int xpn_server_do_operation ( struct st_th *th, int * the_end )
@@ -152,101 +152,101 @@ int xpn_server_do_operation ( struct st_th *th, int * the_end )
   {
     //File API
     case XPN_SERVER_OPEN_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_open), sizeof(struct st_xpn_server_path_flags), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_open), sizeof(struct st_xpn_server_path_flags), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_open(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_open(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_CREAT_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_creat), sizeof(struct st_xpn_server_path_flags), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_creat), sizeof(struct st_xpn_server_path_flags), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_creat(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_creat(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_READ_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_read), sizeof(struct st_xpn_server_rw), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_read), sizeof(struct st_xpn_server_rw), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_read(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_read(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_WRITE_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_write), sizeof(struct st_xpn_server_rw), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_write), sizeof(struct st_xpn_server_rw), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_write(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_write(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_CLOSE_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_close), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_close), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_close(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_close(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_RM_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_rm), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_rm), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_rm(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_rm(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_RM_FILE_ASYNC:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_rm), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_rm), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_rm_async(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_rm_async(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_RENAME_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_rename), sizeof(struct st_xpn_server_rename), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_rename), sizeof(struct st_xpn_server_rename), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_rename(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_rename(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_GETATTR_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_getattr), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_getattr), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_getattr(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_getattr(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_SETATTR_FILE:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_setattr), sizeof(struct st_xpn_server_setattr), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_setattr), sizeof(struct st_xpn_server_setattr), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_setattr(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_setattr(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
 
     //Directory API
     case XPN_SERVER_MKDIR_DIR:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_mkdir), sizeof(struct st_xpn_server_path_flags), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_mkdir), sizeof(struct st_xpn_server_path_flags), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_mkdir(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_mkdir(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_OPENDIR_DIR:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_opendir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_opendir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_opendir(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_opendir(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_READDIR_DIR:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_readdir), sizeof(struct st_xpn_server_readdir), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_readdir), sizeof(struct st_xpn_server_readdir), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_readdir(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_readdir(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_CLOSEDIR_DIR:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_closedir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_closedir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_closedir(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_closedir(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_RMDIR_DIR:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_rmdir(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_rmdir(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
     case XPN_SERVER_RMDIR_DIR_ASYNC:
-      ret = xpn_server_comm_read_data(th->params, (int) th->sd, (char *)&(head.u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
-        xpn_server_op_rmdir_async(th->params, (int) th->sd, &head, th->rank_client_id, th->tag_client_id);
+        xpn_server_op_rmdir_async(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
 
@@ -265,7 +265,7 @@ int xpn_server_do_operation ( struct st_th *th, int * the_end )
 
 
 // File API
-void xpn_server_op_open ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_open ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_status status;
 
@@ -285,18 +285,18 @@ void xpn_server_op_open ( xpn_server_param_st *params, int sd, struct st_xpn_ser
   status.server_errno = errno;
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] open(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_open.path, status.ret);
   if (status.ret < 0){
-    xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+    xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
   }else{
     status.ret = filesystem_close(status.ret);
     status.server_errno = errno;
 
-    xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+    xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] << End\n", params->rank);
 }
 
-void xpn_server_op_creat ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_creat ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_status status;
 
@@ -315,20 +315,20 @@ void xpn_server_op_creat ( xpn_server_param_st *params, int sd, struct st_xpn_se
   status.server_errno = errno;
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] creat(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_creat.path, status.ret);
   if (status.ret < 0){
-    xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+    xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
     return;
   }else{
     status.ret = filesystem_close(status.ret);
     status.server_errno = errno;
 
-    xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+    xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
   }
 
   // show debug info
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] << End\n", params->rank);
 }
 
-void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_read ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_rw_req req;
   char * buffer = NULL;
@@ -360,7 +360,7 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
     req.size = -1;
     req.status.ret = fd;
     req.status.server_errno = errno;
-    xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
+    xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
     goto cleanup_xpn_server_op_read;
   }
 
@@ -371,7 +371,7 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
     req.size = -1;
     req.status.ret = -1;
     req.status.server_errno = errno;
-    xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
+    xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
     goto cleanup_xpn_server_op_read;
   }
 
@@ -392,7 +392,7 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
       req.size = -1;
       req.status.ret = -1;
       req.status.server_errno = errno;
-      xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
+      xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
       goto cleanup_xpn_server_op_read;
     }
 
@@ -403,19 +403,19 @@ void xpn_server_op_read ( xpn_server_param_st *params, int sd, struct st_xpn_ser
       req.size = -1;
       req.status.ret = -1;
       req.status.server_errno = errno;
-      xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
+      xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
       goto cleanup_xpn_server_op_read;
     }
     // send (how many + data) to client...
     req.status.ret = 0;
     req.status.server_errno = errno;
-    xpn_server_comm_write_data(params, sd, (char *)&req, sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
+    xpn_server_comm_write_data(params, comm, (char *)&req, sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
     debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read] op_read: send size %ld\n", params->rank, req.size);
 
     // send data to client...
     if (req.size > 0)
     {
-      xpn_server_comm_write_data(params, sd, buffer, req.size, rank_client_id, tag_client_id);
+      xpn_server_comm_write_data(params, comm, buffer, req.size, rank_client_id, tag_client_id);
       debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read] op_read: send data\n", params->rank);
     }
     cont = cont + req.size; //Send bytes
@@ -432,7 +432,7 @@ cleanup_xpn_server_op_read:
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read] << End\n", params->rank);
 }
 
-void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_write ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_rw_req req;
   char * buffer = NULL;
@@ -486,7 +486,7 @@ void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_se
     }
 
     // read data from MPI and write into the file
-    xpn_server_comm_read_data(params, sd, buffer, to_write, rank_client_id, tag_client_id);
+    xpn_server_comm_read_data(params, comm, buffer, to_write, rank_client_id, tag_client_id);
     ret_lseek = filesystem_lseek(fd, head->u_st_xpn_server_msg.op_write.offset + cont, SEEK_SET);
     if (ret_lseek < 0)
     {
@@ -511,7 +511,7 @@ void xpn_server_op_write ( xpn_server_param_st *params, int sd, struct st_xpn_se
 cleanup_xpn_server_op_write:
   // write to the client the status of the write operation
   req.status.server_errno = errno;
-  xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
+  xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
 
   filesystem_close(fd);
 
@@ -522,13 +522,13 @@ cleanup_xpn_server_op_write:
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] << End\n", params->rank);
 }
 
-void xpn_server_op_close ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) int sd, __attribute__((__unused__)) struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
+void xpn_server_op_close ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) void *comm, __attribute__((__unused__)) struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 {
   // Without sesion close do nothing
   return;
 }
 
-void xpn_server_op_rm ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_rm ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_status status;
 
@@ -545,13 +545,13 @@ void xpn_server_op_rm ( xpn_server_param_st *params, int sd, struct st_xpn_serve
   // do rm
   status.ret = filesystem_unlink(head->u_st_xpn_server_msg.op_rm.path);
   status.server_errno = errno;
-  xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+  xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] unlink(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_rm.path, status.ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] << End\n", params->rank);
 }
 
-void xpn_server_op_rm_async ( xpn_server_param_st *params, __attribute__((__unused__)) int sd, struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
+void xpn_server_op_rm_async ( xpn_server_param_st *params, __attribute__((__unused__)) void *comm, struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 {
   // check params...
   if (NULL == params)
@@ -570,7 +570,7 @@ void xpn_server_op_rm_async ( xpn_server_param_st *params, __attribute__((__unus
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] << End\n", params->rank);
 }
 
-void xpn_server_op_rename ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_rename ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_status status;
 
@@ -587,13 +587,13 @@ void xpn_server_op_rename ( xpn_server_param_st *params, int sd, struct st_xpn_s
   // do rename
   status.ret = filesystem_rename(head->u_st_xpn_server_msg.op_rename.old_url, head->u_st_xpn_server_msg.op_rename.new_url);
   status.server_errno = errno;
-  xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+  xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] rename(%s, %s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_rename.old_url, head->u_st_xpn_server_msg.op_rename.new_url, status.ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] << End\n", params->rank);
 }
 
-void xpn_server_op_getattr ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_getattr ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_attr_req req;
 
@@ -612,13 +612,13 @@ void xpn_server_op_getattr ( xpn_server_param_st *params, int sd, struct st_xpn_
   req.status_req.ret = req.status;
   req.status_req.server_errno = errno;
 
-  xpn_server_comm_write_data(params, sd,(char *)&req,sizeof(struct st_xpn_server_attr_req), rank_client_id, tag_client_id);
+  xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_attr_req), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] stat(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_getattr.path, req.status);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] << End\n", params->rank);
 }
 
-void xpn_server_op_setattr (xpn_server_param_st *params, __attribute__((__unused__)) int sd, struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id)
+void xpn_server_op_setattr (xpn_server_param_st *params, __attribute__((__unused__)) void *comm, struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id)
 {
   // check params...
   if (NULL == params)
@@ -642,7 +642,7 @@ void xpn_server_op_setattr (xpn_server_param_st *params, __attribute__((__unused
 }
 
 //Directory API
-void xpn_server_op_mkdir ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_mkdir ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_status status;
 
@@ -659,13 +659,13 @@ void xpn_server_op_mkdir ( xpn_server_param_st *params, int sd, struct st_xpn_se
   // do mkdir
   status.ret = filesystem_mkdir(head->u_st_xpn_server_msg.op_mkdir.path, head->u_st_xpn_server_msg.op_mkdir.mode);
   status.server_errno = errno;
-  xpn_server_comm_write_data(params, sd,(char *)&status,sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+  xpn_server_comm_write_data(params, comm,(char *)&status,sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] mkdir(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_mkdir.path, status.ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] << End\n", params->rank);
 }
 
-void xpn_server_op_opendir ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_opendir ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   DIR* ret;
   struct st_xpn_server_status status;
@@ -689,13 +689,13 @@ void xpn_server_op_opendir ( xpn_server_param_st *params, int sd, struct st_xpn_
     status.server_errno = errno;
   }
 
-  xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+  xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] opendir(%s)=%p\n", params->rank, head->u_st_xpn_server_msg.op_opendir.path, ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] << End\n", params->rank);
 }
 
-void xpn_server_op_readdir ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_readdir ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct dirent * ret;
   struct st_xpn_server_readdir_req ret_entry;
@@ -736,19 +736,19 @@ void xpn_server_op_readdir ( xpn_server_param_st *params, int sd, struct st_xpn_
   ret_entry.status.ret = filesystem_closedir(s);
   ret_entry.status.server_errno = errno;
 
-  xpn_server_comm_write_data(params, sd,(char *)&ret_entry, sizeof(struct st_xpn_server_readdir_req), rank_client_id, tag_client_id);
+  xpn_server_comm_write_data(params, comm,(char *)&ret_entry, sizeof(struct st_xpn_server_readdir_req), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] readdir(%p)=%p\n", params->rank, s, ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] << End\n", params->rank);
 }
 
-void xpn_server_op_closedir ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) int sd, __attribute__((__unused__)) struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
+void xpn_server_op_closedir ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) void *comm, __attribute__((__unused__)) struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 {
   // Without sesion close do nothing
   return;
 }
 
-void xpn_server_op_rmdir ( xpn_server_param_st *params, int sd, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+void xpn_server_op_rmdir ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   struct st_xpn_server_status status;
 
@@ -765,13 +765,13 @@ void xpn_server_op_rmdir ( xpn_server_param_st *params, int sd, struct st_xpn_se
   // do rmdir
   status.ret = filesystem_rmdir(head->u_st_xpn_server_msg.op_rmdir.path);
   status.server_errno = errno;  
-  xpn_server_comm_write_data(params, sd, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+  xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] rmdir(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_rmdir.path, status.ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] << End\n", params->rank);
 }
 
-void xpn_server_op_rmdir_async ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) int sd, struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
+void xpn_server_op_rmdir_async ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) void *comm, struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 {
   // check params...
   if (NULL == params)

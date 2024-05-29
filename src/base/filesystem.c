@@ -18,15 +18,41 @@
  *
  */
 
+
   /* ... Include / Inclusion ........................................... */
 
      #include "filesystem.h"
 
+
   /* ... Varibles ........................................... */
+
+     void * DLSYM_RTLD = RTLD_DEFAULT ;
+
+     int     (*fs_low_creat   )(const char *, mode_t)             = creat ;
+     int     (*fs_low_open    )(const char *, int, mode_t)        = (int (*)(const char *, int, mode_t))open ;
+     int     (*fs_low_close   )(int)                              = close ;
+     ssize_t (*fs_low_read    )(int, void*, size_t)               = read ;
+     ssize_t (*fs_low_write   )(int, const void*, size_t)         = write ;
+     off_t   (*fs_low_lseek   )(int, off_t, int)                  = lseek ;
+     off64_t (*fs_low_lseek64 )(int, off64_t, int)                = lseek64 ;
+     int     (*fs_low_stat    )(const char *, struct stat *)      = stat ;
+
+     int     (*fs_low_mkdir   )(const char *, mode_t)             = mkdir ;
+     int     (*fs_low_rmdir   )(const char *)                     = rmdir ;
+     int     (*fs_low_unlink  )(const char *)                     = unlink ;
+     int     (*fs_low_rename  )(const char *, const  char *)      = rename ;
+
+     DIR*            (*fs_low_opendir  )(const char *) = opendir ;
+     long            (*fs_low_telldir  )(DIR *)        = telldir ;
+     void            (*fs_low_seekdir  )(DIR *, long)  = seekdir ;
+     struct dirent * (*fs_low_readdir  )(DIR *)        = readdir ;
+     int             (*fs_low_closedir )(DIR *)        = closedir ;
 
      //pthread_attr_t filesystem_attr;
 
+
   /* ... Functions / Funciones ......................................... */
+
 
      /*
       * Internal
@@ -34,25 +60,31 @@
 
 int aux_clear_dirs(char * path)
 {
-    int j;
-    char ant = '\0', s[255];
+    char  s[PATH_MAX];
+    char  ant = '\0' ;
+    int      j = 0;
+    unsigned i = 0 ;
+    unsigned sl = 0 ;
 
     if (NULL == path) {
         return -1;
     }
 
-    j = 0;
-    for (unsigned i = 0; i < strlen(path); i++) {
-        switch (path[i]) {
-        case '/':
-            if (ant != '/') {
-                ant = s[j] = '/';
-                j++;
-            }
-            break;
-        default:
-            ant = s[j] = path[i];
-            j++;
+    sl = strlen(path) ;
+    for (i = 0; i < sl; i++)
+    {
+        switch (path[i])
+	{
+           case '/':
+               if (ant != '/') {
+                   ant = s[j] = '/';
+                   j++;
+               }
+               break;
+
+           default:
+               ant = s[j] = path[i];
+               j++;
         }
 
         s[j] = '\0';
@@ -108,7 +140,44 @@ int aux_get_dirs(char * path, int n, char * s)
  * API
  */
 
-/*int  filesystem_init ( void )
+int  filesystem_low_set ( void * new_rtld )
+{
+     void * old_rtld = DLSYM_RTLD ;
+
+     DEBUG_BEGIN();
+
+     if (RTLD_NEXT    == new_rtld) DLSYM_RTLD = RTLD_NEXT ;
+     if (RTLD_DEFAULT == new_rtld) DLSYM_RTLD = RTLD_DEFAULT ;
+     if (old_rtld == new_rtld) return 1 ;
+
+     fs_low_creat   = (int     (*)(const char *, mode_t))              dlsym(DLSYM_RTLD, "creat") ;
+     fs_low_open    = (int     (*)(const char *, int, mode_t))         dlsym(DLSYM_RTLD, "open") ;
+     fs_low_close   = (int     (*)(int))                               dlsym(DLSYM_RTLD, "close") ;
+     fs_low_read    = (ssize_t (*)(int, void*, size_t))                dlsym(DLSYM_RTLD, "read") ;
+     fs_low_write   = (ssize_t (*)(int, const void*, size_t))          dlsym(DLSYM_RTLD, "write") ;
+     fs_low_lseek   = (off_t   (*)(int, off_t, int))                   dlsym(DLSYM_RTLD, "lseek");
+     fs_low_lseek64 = (off64_t (*)(int, off64_t, int))                 dlsym(DLSYM_RTLD, "lseek64") ;
+     fs_low_stat    = (int     (*)(const char *, struct stat *))       dlsym(DLSYM_RTLD, "stat") ;
+
+     fs_low_mkdir   = (int     (*)(const char *, mode_t))              dlsym(DLSYM_RTLD, "mkdir") ;
+     fs_low_rmdir   = (int     (*)(const char *))                      dlsym(DLSYM_RTLD, "rmdir") ;
+     fs_low_unlink  = (int     (*)(const char *))                      dlsym(DLSYM_RTLD, "unlink") ;
+     fs_low_rename  = (int     (*)(const char *, const char *))        dlsym(DLSYM_RTLD, "rename") ;
+
+     fs_low_opendir  = (DIR *           (*)(const char *))             dlsym(DLSYM_RTLD, "opendir") ;
+     fs_low_telldir  = (long            (*)(DIR *))                    dlsym(DLSYM_RTLD, "telldir") ;
+     fs_low_seekdir  = (void            (*)(DIR *, long))              dlsym(DLSYM_RTLD, "seekdir") ;
+     fs_low_readdir  = (struct dirent * (*)(DIR *))                    dlsym(DLSYM_RTLD, "readdir") ;
+     fs_low_closedir = (int             (*)(DIR *))                    dlsym(DLSYM_RTLD, "closedir") ;
+
+     DEBUG_END();
+
+     // Return OK
+     return 1 ;
+}
+
+/*
+int  filesystem_init ( void )
 {
   pthread_attr_init(&filesystem_attr);
   int ret = pthread_attr_setdetachstate(&filesystem_attr, PTHREAD_CREATE_DETACHED);
@@ -118,7 +187,19 @@ int aux_get_dirs(char * path, int n, char * s)
   }
 
   return 0;
-}*/
+}
+
+int  filesystem_destroy ( void )
+{
+  int ret = pthread_attr_destroy(&filesystem_attr);
+  if (ret !=0 ) {
+    //perror("pthread_attr_destroy: ");
+    return ret;
+  }
+
+  return 0;
+}
+*/
 
 void * filesystem_async_close(void * arg)
 {
@@ -131,17 +212,6 @@ void * filesystem_async_close(void * arg)
 
     pthread_exit(NULL);
 }
-
-/*int  filesystem_destroy ( void )
-{
-  int ret = pthread_attr_destroy(&filesystem_attr);
-  if (ret !=0 ) {
-    //perror("pthread_attr_destroy: ");
-    return ret;
-  }
-
-  return 0;
-}*/
 
 int filesystem_creat(char * pathname, mode_t mode)
 {
@@ -182,7 +252,7 @@ int filesystem_open(char * pathname, int flags)
     }
 
     // Try to open the file
-    ret = fs_low_open(pathname, flags);
+    ret = fs_low_open(pathname, flags, 0);
     if (ret < 0) {
         debug_warning("[FILE_POSIX]: open(pathname:%s, flags:%d) -> %d\n", pathname, flags, ret);
         //perror("open: ") ;
@@ -206,7 +276,7 @@ int filesystem_open2(char * pathname, int flags, mode_t mode)
     }
 
     // Try to open the file
-    ret = fs_low_open2(pathname, flags, mode);
+    ret = fs_low_open(pathname, flags, mode);
     if (ret < 0) {
         debug_warning("[FILE_POSIX]: open2(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret);
         //perror("open: ") ;
@@ -350,7 +420,7 @@ int filesystem_rename(char * old_pathname, char * new_pathname)
     return ret;
 }
 
-int filesystem_mkpath(char * pathname)
+int filesystem_mkpath ( char * pathname )
 {
     int ret;
     char dir[PATH_MAX];
@@ -371,7 +441,7 @@ int filesystem_mkpath(char * pathname)
     return 1;
 }
 
-int filesystem_mkdir(char * pathname, mode_t mode)
+int filesystem_mkdir ( char * pathname, mode_t mode )
 {
     int ret;
 
@@ -395,7 +465,7 @@ int filesystem_mkdir(char * pathname, mode_t mode)
     return ret;
 }
 
-int filesystem_rmdir(char * pathname)
+int filesystem_rmdir ( char * pathname )
 {
     int ret;
 
@@ -419,7 +489,7 @@ int filesystem_rmdir(char * pathname)
     return ret;
 }
 
-DIR * filesystem_opendir(char * pathname)
+DIR * filesystem_opendir ( char * pathname )
 {
     DIR * ret;
 
@@ -443,7 +513,7 @@ DIR * filesystem_opendir(char * pathname)
     return ret;
 }
 
-long filesystem_telldir(DIR * dirp)
+long filesystem_telldir ( DIR * dirp )
 {
     long ret;
 
@@ -466,7 +536,7 @@ long filesystem_telldir(DIR * dirp)
     return ret;
 }
 
-void filesystem_seekdir(DIR * dirp, long loc)
+void filesystem_seekdir ( DIR * dirp, long loc )
 {
     DEBUG_BEGIN();
 
@@ -480,7 +550,7 @@ void filesystem_seekdir(DIR * dirp, long loc)
     DEBUG_END();
 }
 
-struct dirent * filesystem_readdir(DIR * dirp)
+struct dirent * filesystem_readdir ( DIR * dirp )
 {
     struct dirent * ret;
 
@@ -504,7 +574,7 @@ struct dirent * filesystem_readdir(DIR * dirp)
     return ret;
 }
 
-int filesystem_closedir(DIR * dirp)
+int filesystem_closedir ( DIR * dirp )
 {
     int ret;
 
@@ -528,7 +598,7 @@ int filesystem_closedir(DIR * dirp)
     return ret;
 }
 
-off_t filesystem_lseek(int fd, off_t offset, int whence)
+off_t filesystem_lseek ( int fd, off_t offset, int whence )
 {
     off_t ret;
 
@@ -552,7 +622,7 @@ off_t filesystem_lseek(int fd, off_t offset, int whence)
     return ret;
 }
 
-int filesystem_unlink(char * pathname)
+int filesystem_unlink ( char * pathname )
 {
     int ret;
 
@@ -576,7 +646,7 @@ int filesystem_unlink(char * pathname)
     return ret;
 }
 
-int filesystem_stat(char * pathname, struct stat * sinfo)
+int filesystem_stat ( char * pathname, struct stat * sinfo )
 {
     int ret;
 

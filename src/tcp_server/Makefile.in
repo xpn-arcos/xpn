@@ -12,7 +12,6 @@
 			@top_srcdir@/src/tcp_server/tcp_server_comm.o \
 			@top_srcdir@/src/tcp_server/tcp_server_ops.o \
 			@top_srcdir@/src/tcp_server/tcp_server_d2xpn.o \
-			@top_srcdir@/src/base/filesystem_low.o \
 			@top_srcdir@/src/base/filesystem.o \
 			@top_srcdir@/src/base/urlstr.o \
 			@top_srcdir@/src/base/string_misc.o \
