@@ -58,7 +58,7 @@ int socket_send ( int socket, void * buffer, int size )
 
   do
   {
-    r = real_posix_write(socket, buffer, l);
+    r = dlsym_write(socket, buffer, l);
     if (r < 0) {
       printf("[SOCKET] [socket_send] ERROR: socket send buffer size %d Failed\n", size);
       return -1;
@@ -77,7 +77,7 @@ int socket_recv ( int socket, void * buffer, int size )
   int l = size;
 
   do {
-    r = real_posix_read(socket, buffer, l);
+    r = dlsym_read(socket, buffer, l);
     if (r < 0) {
       printf("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size);
       return -1;

@@ -10,9 +10,9 @@ COMMON_HEADER=			@top_srcdir@/include/all_system.h \
 BASE_HEADER=			@top_srcdir@/include/base/
 
 XPN_SERVER_HEADER=		@top_srcdir@/include/xpn_server/xpn_server_params.h \
-						@top_srcdir@/include/xpn_server/xpn_server_conf.h \
-						@top_srcdir@/include/xpn_server/xpn_server_ops.h \
-						@top_srcdir@/include/xpn_server/xpn_server_comm.h
+				@top_srcdir@/include/xpn_server/xpn_server_conf.h \
+				@top_srcdir@/include/xpn_server/xpn_server_ops.h \
+				@top_srcdir@/include/xpn_server/xpn_server_comm.h
 MPI_SERVER_HEADER=		@top_srcdir@/include/xpn_server/mpi_server/mpi_server_comm.h
 SCK_SERVER_HEADER=		@top_srcdir@/include/xpn_server/sck_server/sck_server_comm.h
 
@@ -52,9 +52,9 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/utils.c
 
 XPN_SERVER_OBJECTS=	@top_srcdir@/src/xpn_server/xpn_server.c \
-					@top_srcdir@/src/xpn_server/xpn_server_params.c \
-					@top_srcdir@/src/xpn_server/xpn_server_ops.c \
-					@top_srcdir@/src/xpn_server/xpn_server_comm.c
+			@top_srcdir@/src/xpn_server/xpn_server_params.c \
+			@top_srcdir@/src/xpn_server/xpn_server_ops.c \
+			@top_srcdir@/src/xpn_server/xpn_server_comm.c
 
 MPI_SERVER_OBJECTS=	@top_srcdir@/src/xpn_server/mpi_server/mpi_server_comm.c
 SCK_SERVER_OBJECTS=	@top_srcdir@/src/xpn_server/sck_server/sck_server_comm.c
