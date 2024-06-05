@@ -66,7 +66,7 @@ void xpn_server_dispatcher(struct st_th th) {
     while (!disconnect) {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Waiting for operation\n", th.id);
 
-        ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params, th.sd, &(th.type_op),
+        ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params, th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
         if (ret < 0) {
             debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: read operation fail\n", th.id);
@@ -93,7 +93,7 @@ void xpn_server_dispatcher(struct st_th th) {
 
         // Launch worker per operation
         th_arg.params = &params;
-        th_arg.sd = (long)th.sd;
+        th_arg.comm = th.comm;
         th_arg.function = xpn_server_run;
         th_arg.type_op = th.type_op;
         th_arg.rank_client_id = th.rank_client_id;
@@ -107,17 +107,18 @@ void xpn_server_dispatcher(struct st_th th) {
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Client %d close\n", th.id, th.rank_client_id);
 
-    xpn_server_comm_disconnect(th.params, th.sd);
+    xpn_server_comm_disconnect(th.params, th.comm);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
 }
 
 void xpn_server_accept() {
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Start accepting\n", 0);
-    int ret, sd;
+    int ret;
+    void *comm = NULL;
     struct st_th th_arg;
-    ret = xpn_server_comm_accept(&params, &sd);
-    if (ret == MPI_COMM_NULL) {
+    ret = xpn_server_comm_accept(&params, &comm);
+    if (ret < 0) {
         return;
     }
 
@@ -125,7 +126,7 @@ void xpn_server_accept() {
 
     // Launch dispatcher per aplication
     th_arg.params = &params;
-    th_arg.sd = (long)sd;
+    th_arg.comm = comm;
     th_arg.function = xpn_server_dispatcher;
     th_arg.type_op = 0;
     th_arg.rank_client_id = 0;
@@ -226,6 +227,77 @@ int xpn_server_up(void) {
     return 0;
 }
 
+// Start servers spawn
+int xpn_is_server_spawned(void) {
+    int ret;
+
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> Begin\n", 0);
+    #ifdef ENABLE_MPI_SERVER
+    // Initialize server
+    // mpi_comm initialization
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] mpi_comm initialization\n", 0);
+    ret = PMPI_Init(&params.argc, &params.argv);
+
+    // TODO: check if necesary bypass the bypass with dlysm RTLD_NEXT
+    filesystem_low_set(RTLD_NEXT);
+
+    // Workers initialization
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] Workers initialization\n", 0);
+
+    // in spawn there are no connections so server is secuential
+    ret = base_workers_init(&worker1, TH_NOT);
+    if (ret < 0) {
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Workers initialization fails\n", 0);
+        return -1;
+    }
+
+    ret = base_workers_init(&worker2, params.thread_mode_operations);
+    if (ret < 0) {
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Workers initialization fails\n", 0);
+        return -1;
+    }
+
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] Get parent\n", 0);
+    struct st_th th_arg;
+    MPI_Comm *parent;
+    
+    parent = (MPI_Comm *)malloc(sizeof(MPI_Comm));
+    if (parent == NULL) {
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Memory allocation\n", 0);
+        return -1;
+    }
+
+    ret = MPI_Comm_get_parent(parent);
+
+    if (ret < 0 || *parent == MPI_COMM_NULL){
+        
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: parent not found\n", 0);
+        return -1;
+    }
+
+    // Launch dispatcher per aplication
+    th_arg.params = &params;
+    th_arg.comm = parent;
+    th_arg.function = xpn_server_dispatcher;
+    th_arg.type_op = 0;
+    th_arg.rank_client_id = 0;
+    th_arg.tag_client_id = 0;
+    th_arg.wait4me = FALSE;
+
+    base_workers_launch(&worker1, &th_arg, xpn_server_dispatcher);
+
+    base_workers_destroy(&worker1);
+    base_workers_destroy(&worker2);
+    PMPI_Finalize();
+
+    #else
+    printf("WARNING: if you have not compiled xpn with the mpi server you cannot use spawn server.\n");
+    #endif
+
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> End\n", 0);
+    return 0;
+}
+
 // Stop servers
 int xpn_server_down( ) {
     char srv_name[1024];
@@ -310,14 +382,6 @@ int main(int argc, char *argv[]) {
     setbuf(stdout, NULL);
     setbuf(stderr, NULL);
 
-    // Welcome...
-    printf("\n");
-    printf(" xpn_server\n");
-    printf(" ----------\n");
-    printf("\n");
-    printf(" Begin.\n");
-    printf("\n");
-
     // Get arguments..
     debug_info("[TH_ID=%d] [XPN_SERVER] [main] Get server params\n", 0);
 
@@ -327,8 +391,24 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    // Show configuration...
     exec_name = basename(argv[0]);
+    if (strcasecmp(exec_name, "xpn_server_spawn") == 0) {        
+        debug_info("[TH_ID=%d] [XPN_SERVER] [main] Spawn server\n", 0);
+
+        ret = xpn_is_server_spawned();
+
+        return ret;
+    } 
+
+    // Welcome...
+    printf("\n");
+    printf(" xpn_server\n");
+    printf(" ----------\n");
+    printf("\n");
+    printf(" Begin.\n");
+    printf("\n");
+
+    // Show configuration...
     printf(" * action=%s\n", exec_name);
     gethostname(serv_name, HOST_NAME_MAX);
     printf(" * host=%s\n", serv_name);

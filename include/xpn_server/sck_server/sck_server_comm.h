@@ -42,8 +42,9 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int       sck_server_comm_init    ( int *socket, char *port_name );
-  int       sck_server_comm_accept  ( int socket, int *new_socket );
+  int       sck_server_comm_init          ( int *socket, char *port_name );
+  int       sck_server_comm_accept        ( int socket, int **new_socket );
+  int       sck_server_comm_disconnect    ( int *socket );
 
   /* ................................................................... */
   
