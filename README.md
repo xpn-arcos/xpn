@@ -170,6 +170,7 @@ The typical executions has 3 main steps:
            -hostfile         <full path to the hostfile> \
            -genv XPN_CONF    <XPN configuration file> \
            -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+
            <full path to app1>/app1
    ```
    2.2. Example for the *app2* program (a NON-MPI application):
