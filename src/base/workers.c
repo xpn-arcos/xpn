@@ -108,7 +108,7 @@ int base_workers_launch ( worker_t *w, struct st_th *th_arg, void (*worker_funct
       break;
   }
 
-  debug_info("[WORKERS] [base_workers_launch] >> End\n");
+  debug_info("[WORKERS] [base_workers_launch] >> End id = %d\n", th_arg->id);
 
   return 1;
 }

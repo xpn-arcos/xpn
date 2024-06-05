@@ -1,8 +1,13 @@
 
 # Changelog
 
-## 2.3.0 - 2024-02-09
+## 3.0.0 - 2024-06-05
 
+  * Fault tolerance support based on replication added
+  * Maleability support improved
+  * Expand deployment based on docker added
+  * MXML dependency removed
+  * Simplified user experience: more user-friendly way to start and stop ad hoc server
   * Minor bug fixes and improvements
 
 ## 2.2.2 - 2023-06-12
@@ -18,7 +23,7 @@
 
 ## 2.2.0 - 2023-03-24
 
-  * Maleability support
+  * Maleability support added
 
 ## 2.1.0 - 2023-03-03
 

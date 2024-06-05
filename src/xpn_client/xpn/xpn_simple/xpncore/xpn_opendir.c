@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -37,7 +37,7 @@ DIR *xpn_simple_opendir(const char *path)
 
   if ((path == NULL)||(strlen(path)==0)||(strlen(path)>PATH_MAX))
   {
-    errno = ENOENT;
+    errno = EINVAL;
     XPN_DEBUG_END_ARGS1(path)
     return NULL;
   }
@@ -53,10 +53,9 @@ DIR *xpn_simple_opendir(const char *path)
     path_aux[strlen(path)+1] = '\0';
   }
 
-  res = xpn_simple_open(path_aux, O_RDONLY, 0);
+  res = xpn_simple_open(path_aux, O_RDONLY | O_DIRECTORY, 0);
   if (res < 0)
   {
-    errno = ENOENT;
     XPN_DEBUG_END_ARGS1(path)
     return NULL;
   }
@@ -85,12 +84,12 @@ struct dirent* xpn_simple_readdir(DIR *dirp)
   XPN_DEBUG_BEGIN
 
   if((NULL == dirp)||(dirp->fd<0)||(dirp->fd>XPN_MAX_FILE-1)){
-    // set errno
+    errno = EINVAL;
     return NULL;
   }
 
   if(xpn_file_table[dirp->fd] == NULL){
-    // xpn_err
+    errno = ENOENT;
     return NULL;
   }
 
@@ -116,7 +115,7 @@ struct dirent* xpn_simple_readdir(DIR *dirp)
     return NULL;
   }
 
-  XPN_DEBUG_END
+  XPN_DEBUG_END_CUSTOM("read: %s",dirnt->d_name);
   return dirnt;
 }
 
@@ -124,13 +123,15 @@ int xpn_simple_closedir(DIR *dirp)
 {
   int i;
 
+  XPN_DEBUG_BEGIN;
+
   if((NULL == dirp)||(dirp->fd<0)||(dirp->fd>XPN_MAX_FILE-1)){
-    // set errno
+    errno = EINVAL;
     return -1;
   }
 
   if(xpn_file_table[dirp->fd] == NULL){
-    // xpn_err
+    errno = ENOENT;
     return -1;
   }
 
@@ -153,7 +154,6 @@ int xpn_simple_closedir(DIR *dirp)
     free(xpn_file_table[dirp->fd]->data_vfh->nfih);
     free(xpn_file_table[dirp->fd]->data_vfh);
 
-    free(xpn_file_table[dirp->fd]->mdata->policy);
     free(xpn_file_table[dirp->fd]->mdata);
 
     free(xpn_file_table[dirp->fd]);
@@ -163,10 +163,9 @@ int xpn_simple_closedir(DIR *dirp)
   free(dirp->path) ;
   free(dirp);
 
-  // set errno
-  xpn_err(XPN_OK);
+  int res = 0;
+  XPN_DEBUG_END;
   return 0;
-  //return -1;
 }
 
 void xpn_simple_rewinddir(__attribute__((__unused__)) DIR *dirp)

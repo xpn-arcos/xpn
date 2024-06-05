@@ -37,3 +37,4 @@ include/config.h.in
 src/base/Makefile.in
 src/utils/Makefile.in
 src/xpn_client/Makefile.in
+src/.vscode

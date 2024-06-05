@@ -8,11 +8,12 @@
 #
 # begin
 #
-AC_INIT([Expand],[2.0],[fgcarbal@inf.uc3m.es],[expand])
+AC_INIT([Expand],[3.0.0],[fgcarbal@inf.uc3m.es],[expand])
 AC_CONFIG_AUX_DIR(./config)
 AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_INSTALL
 AC_PROG_RANLIB
+AC_PROG_LN_S
 
 
 
@@ -54,7 +55,6 @@ fi
 #
 AC_CHECK_LIB(pthread,pthread_create)
 AC_CHECK_LIB(dl,dlopen)
-AC_CHECK_LIB(mxml,mxmlNewXML)
 AC_CHECK_LIB(mosquitto,mosquitto_lib_init)
 
 
@@ -100,17 +100,15 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
-IFLAGS="-I../../mxml        -I../../bin/mosquitto/include       "
-IFLAGS+="-I../../../mxml    -I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
-IFLAGS+="-I../../../../mxml -I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
+IFLAGS="-I../../bin/mosquitto/include       "
+IFLAGS+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+IFLAGS+="-I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
 
-LFLAGS=" -L../../mxml        -L../../bin/mosquitto/lib        -L../../xpn/lib "
-LFLAGS+="-L../../../mxml     -L../../../bin/mosquitto/lib     -L../../../xpn/lib "
-LFLAGS+="-L../../../../mxml  -L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
+LFLAGS="-L../../bin/mosquitto/lib        -L../../xpn/lib "
+LFLAGS+="-L../../../bin/mosquitto/lib     -L../../../xpn/lib "
+LFLAGS+="-L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
 
 LIBLINK=$LIBS
-LIBLINK+=" -lmxml"
-LIBS=$LFLAGS" "$LIBS" -lmxml"
 
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
@@ -118,7 +116,7 @@ then
   CC="mpifcc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
@@ -127,7 +125,7 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
@@ -136,7 +134,7 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
 elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
@@ -145,7 +143,7 @@ then
   CC="mpicc"
   MAKE="gmake"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
 else
@@ -153,7 +151,7 @@ else
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
   AC_MSG_RESULT("Using Linux configuration as default configuration...");
@@ -181,10 +179,12 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_client/xpn \
 -I\$(top_srcdir)/include/xpn_client/xpn/xpn_simple \
 -I\$(top_srcdir)/include/xpn_client/nfi \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_mpi_server \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_local"
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
+-I\$(top_srcdir)/include/xpn_server/ \
+-I\$(top_srcdir)/include/xpn_server/mpi_server/ \
+-I\$(top_srcdir)/include/xpn_server/sck_server/"
 
 
 
@@ -312,15 +312,15 @@ AC_CONFIG_FILES([ \
       src/xpn_client/Makefile \
       src/utils/Makefile \
       src/bypass/Makefile \
-      src/mpi_server/Makefile \
-      src/sck_server/Makefile \
       src/tcp_server/Makefile \
+      src/xpn_server/Makefile \
       test/integrity/xpn/Makefile \
       test/integrity/mpi_connect_accept/Makefile \
       test/integrity/bypass_c/Makefile \
       test/performance/xpn/Makefile \
       test/performance/iop/Makefile \
       test/performance/mpi_pingpong/Makefile \
+      test/performance/xpn-fault-tolerant/Makefile \
     ])
     
 AC_OUTPUT

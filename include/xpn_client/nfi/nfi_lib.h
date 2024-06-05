@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -31,6 +31,7 @@
 
   /* protocols */
   #include "nfi_local.h"
+  #include "nfi_xpn_server.h"
 
   // BEGIN OF ENABLE_MODULE BLOCK. Do not remove this line. //
   // BEGIN OF ENABLE_NFS BLOCK. Do not remove this line. //
@@ -43,16 +44,6 @@
     #include "nfi_nfs3.h"
   #endif
   // END OF ENABLE_NFS3 BLOCK. Do not remove this line. //
-  // BEGIN OF ENABLE_MPI_SERVER BLOCK. Do not remove this line. //
-  #ifdef ENABLE_MPI_SERVER
-    #include "nfi_mpi_server.h"
-  #endif
-  // END OF ENABLE_MPI_SERVER BLOCK. Do not remove this line. //
-  // BEGIN OF ENABLE_SCK_SERVER BLOCK. Do not remove this line. //
-  #ifdef ENABLE_SCK_SERVER
-    #include "nfi_sck_server.h"
-  #endif
-  // END OF ENABLE_SCK_SERVER BLOCK. Do not remove this line. //
   // BEGIN OF ENABLE_TCP_SERVER BLOCK. Do not remove this line. //
   #ifdef ENABLE_TCP_SERVER
     #include "nfi_tcp_server.h"

@@ -25,10 +25,10 @@
 #
 # Default values
 #
-CONFNAME="$HOME/tmp/config.xml"
+CONFNAME="$HOME/tmp/config.txt"
 MACHINEFILE="$HOME/tmp/machinefile"
 XPN_PARTITION_BSIZE="512k"
-XPN_PARTITION_TYPE="NORMAL"
+XPN_REPLICATION_LEVEL="0"
 XPN_PARTITION_NAME="xpn"
 XPN_STORAGE_PATH="/tmp"
 XPN_STORAGE_PROTOCOL="mpi_server"
@@ -46,24 +46,24 @@ intro() {
 }
 
 usage() {
-   echo " Usage: $0 --conf              ~/tmp/config.xml \\"
+   echo " Usage: $0 --conf              ~/tmp/config.txt \\"
    echo "           --machinefile       ~/tmp/machinefile \\"
-   echo "           [--part_size        <64|512k|1m|...>] \\"
-   echo "           [--part_type        NORMAL] \\"
+   echo "           [--part_bsize       <64|512k|1m|...>] \\"
+   echo "           [--replication_level        0] \\"
    echo "           [--part_name        <partition name>] \\"
    echo "           [--storage_path     <server local storage path>] \\"
    echo "           [--storage_protocol <mpi_server|tcp_server>]"
    echo "           [--deployment_file  ~/tmp/deploymentfile] \\"
    echo ""
    echo " Deployment file has this format in general:"
-   echo "   [ partition; block_size; part_type; protocol; host; path ]+"
+   echo "   [ partition; block_size; replication_level; protocol; host; path ]+"
    echo ""
    echo " Example:"
-   echo "   particion; block_size; part_type; protocolo ; host     ; path"
-   echo "   xpn1     ; 512k      ; NORMAL   ; mpi_server; compute-1; /tmp/"
-   echo "            ;           ;          ; tcp_server; compute-2; /tmp/"
-   echo "   xpn2     ; 1024k     ; NORMAL   ; mpi_server; compute-3; /tmp/"
-   echo "            ;           ;          ; tcp_server; compute-4; /tmp/"
+   echo "   particion; block_size; replication_level; protocolo ; host     ; path"
+   echo "   xpn1     ; 512k      ; 0                ; mpi_server; compute-1; /tmp/"
+   echo "            ;           ;                  ; tcp_server; compute-2; /tmp/"
+   echo "   xpn2     ; 1024k     ; 0                ; mpi_server; compute-3; /tmp/"
+   echo "            ;           ;                  ; tcp_server; compute-4; /tmp/"
    echo ""
 }
 
@@ -71,7 +71,7 @@ info() {
    echo " * configuration file name: "${CONFNAME}
    echo " * machinefile:      "${MACHINEFILE}
    echo " * partition bsize:  "${XPN_PARTITION_BSIZE}
-   echo " * partition type:   "${XPN_PARTITION_TYPE}
+   echo " * replication level:   "${XPN_REPLICATION_LEVEL}
    echo " * partition name:   "${XPN_PARTITION_NAME}
    echo " * storage path:     "${XPN_STORAGE_PATH}
    echo " * storage protocol: "${XPN_STORAGE_PROTOCOL}
@@ -83,7 +83,7 @@ get_opts() {
    # Taken the general idea from https://stackoverflow.com/questions/70951038/how-to-use-getopt-long-option-in-bash-script
    mkconf_name=$(basename "$0")
    mkconf_short_opt=c:,m:,s:,t:,n,p:,x:,d:,h
-   mkconf_long_opt=conf:,machinefile:,part_size:,part_type:,part_name:,storage_path:,storage_protocol:,deployment_file:,help
+   mkconf_long_opt=conf:,machinefile:,part_bsize:,replication_level:,part_name:,storage_path:,storage_protocol:,deployment_file:,help
    TEMP=$(getopt -o $mkconf_short_opt --long $mkconf_long_opt --name "$mkconf_name" -- "$@")
    eval set -- "${TEMP}"
 
@@ -91,8 +91,8 @@ get_opts() {
       case "${1}" in
          -c | --conf             ) CONFNAME=$2;             shift 2 ;;
          -m | --machinefile      ) MACHINEFILE=$2;          shift 2 ;;
-         -s | --part_size        ) XPN_PARTITION_BSIZE=$2;  shift 2 ;;
-         -t | --part_type        ) XPN_PARTITION_TYPE=$2;   shift 2 ;;
+         -s | --part_bsize       ) XPN_PARTITION_BSIZE=$2;  shift 2 ;;
+         -r | --replication_level) XPN_REPLICATION_LEVEL=$2;   shift 2 ;;
          -n | --part_name        ) XPN_PARTITION_NAME=$2;   shift 2 ;;
          -p | --storage_path     ) XPN_STORAGE_PATH=$2;     shift 2 ;;
          -x | --storage_protocol ) XPN_STORAGE_PROTOCOL=$2; shift 2 ;;
@@ -115,33 +115,21 @@ check_opts() {
       exit 1
    fi
 
-   # TODO: more checks around partition block size, type, etc.
+   # TODO: more checks around partition bsize, replication_level, etc.
 }
 
 mk_conf_file_from_args() {
-   echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"    > ${CONFNAME}
-   echo "<xpn_conf>"                                        >> ${CONFNAME}
-
-   XPN_PARTITION="<partition "
-   XPN_PARTITION=${XPN_PARTITION}" bsize='"${XPN_PARTITION_BSIZE}"' "
-   XPN_PARTITION=${XPN_PARTITION}"  type='"${XPN_PARTITION_TYPE}"' "
-   XPN_PARTITION=${XPN_PARTITION}"  name='"${XPN_PARTITION_NAME}"' "
-   XPN_PARTITION=${XPN_PARTITION}" >"
-   echo "  ${XPN_PARTITION}"    >> ${CONFNAME}
+   echo "[partition]"    > ${CONFNAME}
+   echo "bsize = ${XPN_PARTITION_BSIZE}"                                        >> ${CONFNAME}
+   echo "replication_level = ${XPN_REPLICATION_LEVEL}"                                        >> ${CONFNAME}
+   echo "partition_name = ${XPN_PARTITION_NAME}"                                        >> ${CONFNAME}
 
    ITER=1
    while read line
    do
-      XPN_DATA_NODE="<data_node "
-      XPN_DATA_NODE=${XPN_DATA_NODE}" url=\"${XPN_STORAGE_PROTOCOL}://${line}/${XPN_STORAGE_PATH}\" "
-      XPN_DATA_NODE=${XPN_DATA_NODE}" id=\"id${ITER}\" "
-      XPN_DATA_NODE=${XPN_DATA_NODE}" />"
-      echo "    ${XPN_DATA_NODE}"  >> ${CONFNAME}
+      echo "server_url = ${XPN_STORAGE_PROTOCOL}://${line}/${XPN_STORAGE_PATH}"                                        >> ${CONFNAME}
       ITER=$((${ITER}+1))
    done < <(grep . ${MACHINEFILE})
-
-   echo "  </partition>"    >> ${CONFNAME}
-   echo "</xpn_conf>"       >> ${CONFNAME}
 }
 
 mk_conf_file_from_deploy() {
@@ -162,7 +150,7 @@ BEGIN {
 
          partition="xpn";
          block_size="512k";
-         part_type="NORMAL";
+         replication_level="0";
          protocol="mpi_server";
          host="localhost";
          path="/tmp";
@@ -174,7 +162,7 @@ BEGIN {
 
             if (trim(\$1) != "") partition  = trim(\$1);
             if (trim(\$2) != "") block_size = trim(\$2);
-            if (trim(\$3) != "") part_type  = trim(\$3);
+            if (trim(\$3) != "") replication_level  = trim(\$3);
             if (trim(\$4) != "") protocol   = trim(\$4);
             if (trim(\$5) != "") host       = trim(\$5);
             if (trim(\$6) != "") path       = trim(\$6);
@@ -186,7 +174,7 @@ BEGIN {
 
             if ( (NR == 2) || (old_partition != partition) )
             {
-                  print "  <partition bsize=\"" block_size "\" type=\"" part_type "\" name=\"" partition "\">";
+                  print "  <partition bsize=\"" block_size= "\"  replication_level="\" name=\"" partition "\">";
             } 
 
                   print "    <data_node url=\"" protocol "://" host "/" path "\" id=\"id" NR "\"/>";

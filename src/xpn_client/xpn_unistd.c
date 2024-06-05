@@ -65,6 +65,19 @@ int xpn_destroy ( void )
   return ret;
 }
 
+int xpn_mark_error_server ( int index )
+{
+  int ret = -1;
+
+  debug_info("[XPN_UNISTD] [xpn_mark_error_server] >> End\n");
+
+  ret = xpn_simple_mark_error_server(index);
+
+  debug_info("[XPN_UNISTD] [xpn_mark_error_server] >> End\n");
+
+  return ret;
+}
+
 int xpn_creat ( const char *path, mode_t perm )
 {
   int ret = -1;
