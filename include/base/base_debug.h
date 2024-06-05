@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -66,18 +66,18 @@
       fprintf (stderr, "("); \
       fprintf (stderr, format, ## __VA_ARGS__); \
       fprintf (stderr, ")"); \
-      fprintf (stderr, "=%d, errno=%d", (int)res, errno); \
+      fprintf (stderr, "=%d, errno=%d %s", (int)res, errno, strerror(errno)); \
       fprintf (stderr, "\n"); \
     }
 
   #define XPN_DEBUG_BEGIN XPN_DEBUG("Begin %s()", __func__)
-  #define XPN_DEBUG_END   XPN_DEBUG("End   %s()=%d, errno=%d", __func__, (int)res, errno)
+  #define XPN_DEBUG_END   XPN_DEBUG("End   %s()=%d, errno=%d %s", __func__, (int)res, errno, strerror(errno))
 
   #define XPN_DEBUG_BEGIN_ARGS1(...) XPN_DEBUG("Begin %s(%s)", __func__, ## __VA_ARGS__)
-  #define XPN_DEBUG_END_ARGS1(...)   XPN_DEBUG("End   %s(%s)=%d, errno=%d", __func__, ## __VA_ARGS__, (int)res, errno)
+  #define XPN_DEBUG_END_ARGS1(...)   XPN_DEBUG("End   %s(%s)=%d, errno=%d %s", __func__, ## __VA_ARGS__, (int)res, errno, strerror(errno))
 
   #define XPN_DEBUG_BEGIN_ARGS2(...) XPN_DEBUG("Begin %s(%s, %s)", __func__, ## __VA_ARGS__)
-  #define XPN_DEBUG_END_ARGS2(...)   XPN_DEBUG("End   %s(%s, %s)=%d, errno=%d", __func__, ## __VA_ARGS__, (int)res, errno)
+  #define XPN_DEBUG_END_ARGS2(...)   XPN_DEBUG("End   %s(%s, %s)=%d, errno=%d %s", __func__, ## __VA_ARGS__, (int)res, errno, strerror(errno))
 
   #if defined(DEBUG)
     // base

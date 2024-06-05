@@ -1,5 +1,5 @@
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -48,10 +48,10 @@ void nfi_do_operation (struct st_th th_arg)
   {
     //File API
     case op_open:
-      ret = wrk->server->ops->nfi_open(wrk->server, wrk->arg.url, wrk->arg.fh);
+      ret = wrk->server->ops->nfi_open(wrk->server, wrk->arg.url, wrk->arg.flags, wrk->arg.mode, wrk->arg.fh);
       break;
     case op_create:
-      ret = wrk->server->ops->nfi_create(wrk->server, wrk->arg.url, wrk->arg.attr, wrk->arg.fh);
+      ret = wrk->server->ops->nfi_create(wrk->server, wrk->arg.url, wrk->arg.mode, wrk->arg.attr, wrk->arg.fh);
       break;
     case op_read:
       ret = 0;
@@ -105,7 +105,7 @@ void nfi_do_operation (struct st_th th_arg)
 
     //Directory API
     case op_mkdir:
-      ret = wrk->server->ops->nfi_mkdir(wrk->server, wrk->arg.url, wrk->arg.attr, wrk->arg.fh);
+      ret = wrk->server->ops->nfi_mkdir(wrk->server, wrk->arg.url, wrk->arg.mode, wrk->arg.attr, wrk->arg.fh);
       break;
     case op_opendir:
       ret = wrk->server->ops->nfi_opendir(wrk->server, wrk->arg.url, wrk->arg.fh);
@@ -120,14 +120,6 @@ void nfi_do_operation (struct st_th th_arg)
       ret = wrk->server->ops->nfi_rmdir(wrk->server, wrk->arg.url);
       break;
 
-    // Import / Export API
-    case op_preload:
-      ret = wrk->server->ops->nfi_preload(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt);
-      break;
-    case op_flush:
-      ret = wrk->server->ops->nfi_flush(wrk->server, wrk->arg.url, wrk->arg.virtual_path, wrk->arg.storage_path, wrk->arg.opt);
-      break;
-    
     //FS API
     case op_statfs:
       ret = wrk->server->ops->nfi_statfs(wrk->server, wrk->arg.inf);
@@ -135,13 +127,14 @@ void nfi_do_operation (struct st_th th_arg)
   }
 
   wrk->arg.result = ret;
+  wrk->arg.worker_errno = errno;
 
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_do_operation] >> End\n", pthread_self());
 }
 
 
 // File API
-int nfi_worker_do_open (struct nfi_worker * wrk, char * url, struct nfi_fhandle * fh) 
+int nfi_worker_do_open (struct nfi_worker * wrk, char * url, int flags, mode_t mode, struct nfi_fhandle * fh) 
 {
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_open] >> Begin\n", pthread_self());
 
@@ -149,6 +142,8 @@ int nfi_worker_do_open (struct nfi_worker * wrk, char * url, struct nfi_fhandle 
   wrk->arg.operation = op_open;
   wrk->arg.fh = fh;
   strcpy(wrk->arg.url, url);
+  wrk->arg.flags = flags;
+  wrk->arg.mode = mode;
 
   // Do operation
   nfiworker_launch(nfi_do_operation, wrk);
@@ -158,7 +153,7 @@ int nfi_worker_do_open (struct nfi_worker * wrk, char * url, struct nfi_fhandle 
   return 0;
 }
 
-int nfi_worker_do_create (struct nfi_worker * wrk, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) 
+int nfi_worker_do_create (struct nfi_worker * wrk, char * url, mode_t mode, struct nfi_attr * attr, struct nfi_fhandle * fh) 
 {
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_create] >> Begin\n", pthread_self());
 
@@ -167,6 +162,7 @@ int nfi_worker_do_create (struct nfi_worker * wrk, char * url, struct nfi_attr *
   wrk->arg.fh = fh;
   wrk->arg.attr = attr;
   strcpy(wrk->arg.url, url);
+  wrk->arg.mode = mode;
 
   // Do operation
   nfiworker_launch(nfi_do_operation, wrk);
@@ -298,7 +294,7 @@ int nfi_worker_do_setattr (struct nfi_worker * wrk, struct nfi_fhandle * fh, str
 
 
 //Directory API
-int nfi_worker_do_mkdir (struct nfi_worker * wrk, char * url, struct nfi_attr * attr, struct nfi_fhandle * fh) 
+int nfi_worker_do_mkdir (struct nfi_worker * wrk, char * url, mode_t mode, struct nfi_attr * attr, struct nfi_fhandle * fh) 
 {
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_mkdir] >> Begin\n", pthread_self());
 
@@ -307,6 +303,7 @@ int nfi_worker_do_mkdir (struct nfi_worker * wrk, char * url, struct nfi_attr * 
   wrk->arg.attr = attr;
   wrk->arg.operation = op_mkdir;
   strcpy(wrk->arg.url, url);
+  wrk->arg.mode = mode;
 
   // Do operation
   nfiworker_launch(nfi_do_operation, wrk);
@@ -378,57 +375,6 @@ int nfi_worker_do_rmdir (struct nfi_worker * wrk, char * url)
   nfiworker_launch(nfi_do_operation, wrk);
 
   debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_rmdir] >> End\n", pthread_self());
-
-  return 0;
-}
-
-//Import / Export API
-int nfi_worker_do_flush (struct nfi_worker * wrk, char * url, char * virtual_path, char * storage_path, int opt) 
-{
-  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_flush] >> Begin\n", pthread_self());
-
-  if (wrk->server->ops->nfi_flush == NULL) 
-  {
-    wrk->arg.result = -1;
-    return -1;
-  }
-
-  // Pack request
-  wrk->arg.operation = op_flush;
-  strcpy(wrk->arg.url, url);
-  strcpy(wrk->arg.virtual_path, virtual_path);
-  strcpy(wrk->arg.storage_path, storage_path);
-  wrk->arg.opt = opt;
-
-  // Do operation
-  nfiworker_launch(nfi_do_operation, wrk);
-
-  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_flush] >> End\n", pthread_self());
-
-  return 0;
-}
-
-int nfi_worker_do_preload (struct nfi_worker * wrk, char * url, char * virtual_path, char * storage_path, int opt) 
-{
-  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_preload] >> Begin\n", pthread_self());
-
-  if (wrk->server->ops->nfi_preload == NULL) 
-  {
-    wrk->arg.result = -1;
-    return -1;
-  }
-
-  // Pack request
-  wrk->arg.operation = op_preload;
-  strcpy(wrk->arg.url, url);
-  strcpy(wrk->arg.virtual_path, virtual_path);
-  strcpy(wrk->arg.storage_path, storage_path);
-  wrk->arg.opt = opt;
-
-  // Do operation
-  nfiworker_launch(nfi_do_operation, wrk);
-
-  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_preload] >> End\n", pthread_self());
 
   return 0;
 }

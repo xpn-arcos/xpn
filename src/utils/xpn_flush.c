@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -32,6 +32,7 @@
   #include <sys/stat.h>
   #include <dirent.h>
   #include "mpi.h"
+  #include "xpn/xpn_simple/xpn_policy_rw.h"
 
 
 /* ... Const / Const ................................................. */
@@ -54,40 +55,56 @@
 
 /* ... Functions / Funciones ......................................... */
 
-  int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int rank, int size)
+  int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {  
     int  ret;
 
-    int fd_src, fd_dest;
+    int fd_src, fd_dest, replication = 0;
     char *buf ;
     int buf_len;
     off64_t offset_dest ;
-    int cont, cont2 ;
+    off_t offset_src;
+    ssize_t read_size, write_size;
+    struct stat st, st_src;
 
-    printf("=");
-    
-    buf = (char *) malloc(blocksize + 1) ;
+    //Alocate buffer
+    buf_len = blocksize;
+    buf = (char *) malloc(buf_len) ;
     if (NULL == buf) {
       perror("malloc: ");
       return -1;
     }
 
     //Generate source path
-    //sprintf( src_path, "%s/%s", argv[1], entry );
     strcpy(src_path, entry);
 
     //Generate destination path
     char * aux_entry = entry + strlen(dir_name);
     sprintf( dest_path, "%s/%s", dest_prefix, aux_entry );
 
+    if (rank == 0){
+      printf("%s\n", aux_entry);
+    }
+
+    ret = stat(src_path, &st_src);
+    if (ret < 0){
+      perror("stat: ");
+      free(buf) ;
+      return -1;
+    }
     if (!is_file)
     {
-      ret = mkdir(dest_path, 0755);
-      if ( ret < 0 )
+      if (rank == 0)
       {
-        perror("mkdir: ");
-        free(buf) ;
-        return -1;
+        if (stat(dest_path, &st) == -1) {
+          ret = mkdir(dest_path, st_src.st_mode);
+          if ( ret < 0 )
+          {
+            perror("mkdir: ");
+            free(buf) ;
+            return -1;
+          }
+        }
       }
     }
     else if (is_file)
@@ -95,78 +112,73 @@
       fd_src = open64(src_path, O_RDONLY | O_LARGEFILE);
       if ( fd_src < 0 )
       {
-        perror("open 2: ");
+        perror("open 1: ");
         free(buf) ;
         return -1;
       }
 
       if (rank == 0)
       {
-        fd_dest = open64(dest_path, O_CREAT | O_WRONLY | O_TRUNC | O_LARGEFILE, 0755);
-        if ( fd_dest < 0 )
-        {
-          perror("open 1: ");
-          free(buf) ;
-          return -1;
+        fd_dest = creat(dest_path, st_src.st_mode);
+        if ( fd_dest < 0 ){
+          perror("creat 1: ");
+        }else{
+          close(fd_dest);
         }
-        MPI_Barrier(MPI_COMM_WORLD);
       }
-      else
+      MPI_Bcast(&fd_dest, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      if (fd_dest < 0)
       {
-        MPI_Barrier(MPI_COMM_WORLD);
-
-        fd_dest = open64(dest_path, O_WRONLY | O_LARGEFILE);
-        if ( fd_dest < 0 )
-        {
-          perror("open 1: ");
-          free(buf) ;
-          return -1;
-        }
+        free(buf) ;
+        return -1;
       }
-
-      //offset_dest = rank * blocksize ;
-      off64_t ret_1;
-      ret_1 = lseek64(fd_src, HEADER_SIZE, SEEK_SET) ;
-      if (ret_1 < 0) {
-        perror("lseek: ");
+      fd_dest = open64(dest_path, O_WRONLY | O_LARGEFILE);
+      if ( fd_dest < 0 )
+      {
+        perror("open 2: ");
+        free(buf) ;
         return -1;
       }
 
-      offset_dest = rank * blocksize ;
+      off64_t ret_1;
+      offset_src = 0;
 
       do
       { 
-        cont = 0;
-        buf_len = blocksize;
-        memset(buf, 0, buf_len);
-        do {
-          ret = read(fd_src, buf + cont, buf_len);
-          cont    = cont + ret ;
-          buf_len = buf_len - ret ;
-        } while ( (cont < buf_len) && (ret != 0) );
+        //TODO: check when the server has error and data is corrupt for fault tolerance
+        XpnCalculateBlockInvert(blocksize, replication_level, size, rank, offset_src, &offset_dest, &replication);
+        
+        if(offset_src > st_src.st_size){
+          break;
+        }
+        if (replication != 0){
+          offset_src += blocksize;
+          continue;
+        }
 
-
-        off64_t ret_2;
-        ret_2 = lseek64(fd_dest, offset_dest, SEEK_SET) ;
-        if (ret_2 < 0) {
-          //perror("lseek: ");
+        ret_1 = lseek64(fd_src, offset_src + HEADER_SIZE, SEEK_SET) ;
+        if (ret_1 < 0) {
+          perror("lseek: ");
+          break;
+        }
+        read_size = filesystem_read(fd_src, buf, buf_len);
+        if (read_size <= 0){
           break;
         }
 
-        cont2 = 0;
-        buf_len = cont;
-        do {
-          ret = write(fd_dest, buf + cont2, buf_len);
-          cont2    = cont2 + ret ;
-          buf_len  = buf_len - ret ;
-        } while ( (cont2 < cont) && (ret != 0) );
-
-        //printf("rank %d; ret: %d; offset %ld; nodes %d; blocksize %d\n", rank, ret, offset_dest, size, blocksize);
-        //printf("Buf: %s\n", buf);
-
-        offset_dest = offset_dest + (size * blocksize) ;
+        ret_1 = lseek64(fd_dest, offset_dest, SEEK_SET) ;
+        if (ret_1 < 0) {
+          perror("lseek: ");
+          break;
+        }
+        write_size = filesystem_write(fd_dest, buf, read_size);
+        if (write_size != read_size){
+          perror("write: ");
+          break;
+        }
+        offset_src += blocksize;
       }
-      while(cont > 0);
+      while(read_size > 0);
 
       close(fd_src);
       close(fd_dest);
@@ -177,7 +189,7 @@
   }
 
 
-  int list (char * dir_name, char * dest_prefix, int blocksize, int rank, int size)
+  int list (char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {
     int ret;
     DIR* dir = NULL;
@@ -218,13 +230,13 @@
       }
 
       int is_file = !S_ISDIR(stat_buf.st_mode);
-      copy(path, is_file, dir_name, dest_prefix, blocksize, rank, size);
+      copy(path, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
 
       if (S_ISDIR(stat_buf.st_mode))
       {
         char path_dst [PATH_MAX];
         sprintf(path_dst, "%s/%s", dest_prefix, entry->d_name);
-        list(path, path_dst, blocksize, rank, size);
+        list(path, path_dst, blocksize, replication_level, rank, size);
       }
 
       entry = readdir(dir);
@@ -239,26 +251,38 @@
   int main(int argc, char *argv[])
   {   
     int rank, size;
-
+    int replication_level = 0;
+    int blocksize = 524288;
+    double start_time;
     //
     // Check arguments...
     //
-    if ( argc < 4 )
+    if ( argc < 3 )
     {
       printf("Usage:\n");
-      printf(" ./%s <origin partition> <destination local path> <destination block size>\n", argv[0]);
+      printf(" ./%s <origin partition> <destination local path> <optional destination block size> <optional replication level>\n", argv[0]);
       printf("\n");
       return -1;
     }
-
+    
+    if ( argc >= 5){
+      replication_level = atoi(argv[4]);
+    }
+    if ( argc >= 4){
+      blocksize = atoi(argv[3]);
+    }
+    
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-    printf("Copying... \n");
-    list (argv[1], argv[2], atoi(argv[3]), rank, size);
-    printf("\n");
-
+    start_time = MPI_Wtime();
+    if (rank == 0){
+      printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
+    }
+    list (argv[1], argv[2], blocksize, replication_level, rank, size);
+    if (rank == 0){
+      printf("Flush elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);
+    }
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
 

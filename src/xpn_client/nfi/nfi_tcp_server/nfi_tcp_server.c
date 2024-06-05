@@ -260,9 +260,6 @@ int nfi_tcp_server_init(char * url, struct nfi_server * serv, __attribute__((__u
   serv->ops->nfi_closedir = nfi_tcp_server_closedir;
   serv->ops->nfi_rmdir = nfi_tcp_server_rmdir;
 
-  serv->ops->nfi_preload = nfi_tcp_server_preload;
-  serv->ops->nfi_flush = nfi_tcp_server_flush;
-
   serv->ops->nfi_statfs = nfi_tcp_server_statfs;
 
   // parse url...

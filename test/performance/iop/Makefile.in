@@ -9,7 +9,7 @@
  SOURCE_PATH   	= .
  INCLUDE_PATH	= -I../../../include/base -I../../../include/xpn_client -I../../../include/
  LIB_PATH       = -L../../../src/base     -L../../../src/xpn_client
- LIBLINK       	= -lbase  -lxpn  -ldl  -lmxml  -lpthread
+ LIBLINK       	= -lbase  -lxpn  -ldl  -lpthread
  OBJETOS1      	= ./iop.o ./time.o
 
 

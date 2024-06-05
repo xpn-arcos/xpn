@@ -8,7 +8,7 @@
  CC           = @CC@
  MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
  MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
- LIBRARIES    = -lxpn -lmxml -lpthread -ldl -lmosquitto
+ LIBRARIES    = -lxpn -lpthread -ldl -lmosquitto
  MYFLAGS      = -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H
 
 
@@ -17,7 +17,6 @@
 #
 
 all:  open-write-close open-read-close
-
 open-write-close: open-write-close.o
 	$(CC)  -o open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIES)
 

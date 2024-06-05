@@ -34,7 +34,6 @@
   #include "xpn_init.h" 
   #include "xpn_open.h"
   #include "xpn_rw.h"
-  #include "xpn_err.h"
   #include "xpn_cwd.h"
   #include "xpn_file.h"
   #include "xpn_opendir.h"

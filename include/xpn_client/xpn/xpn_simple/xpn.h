@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -47,18 +47,12 @@
   struct xpn_partition
   {
     int id;       // id of partition 
-    int type;     // type of file :NORMAL, RAID5,... 
+    int replication_level;     // replication_level of files :0, 1, 2,... 
     char name[PATH_MAX];  // name of partition 
     ssize_t block_size;   // size of distribution used 
-    ssize_t size_threads;
-    
-    int initialized; // whether it is already initialized or not 
 
     int data_nserv;     // number of server 
     struct nfi_server *data_serv; // list of data servers in the partition 
-    
-    int meta_nserv;     // number of metadata_server 
-    struct nfi_server *meta_serv; // list of metadata servers in the partition 
   };
 
   // metadata of xpn file
@@ -72,20 +66,7 @@
     int data_nserv;   // number of servers 
     int meta_nserv;   // number of metadata servers 
     struct nfi_attr attr;
-    int type_policy;     // RAID0, RAID1 
-    void *policy;
-    int policy_size;
-  };
-
-  enum xpn_policy
-  {
-    POLICY_RAID0,
-    POLICY_RAID1
-  };
-
-  struct policy
-  {
-    int first_node;
+	  int first_node;
   };
 
   // metadata header of xpn file
@@ -95,7 +76,8 @@
     ssize_t block_size;    // size of distribution used 
     int     data_nserv;   // number of servers 
     ssize_t file_size;
-    int     type_policy;     // RAID0, RAID1 
+    int replication_level;     // replication_level of files :0, 1, 2,... 
+	  int first_node;
     //char    padding[512-(3*sizeof(int) - 2*sizeof(ssize_t))];   // 484 = 512 bytes - 3*sizeof(int) - 2*sizeof(ssize_t) 
   };
 
