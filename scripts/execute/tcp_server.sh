@@ -73,10 +73,10 @@ fi
 # (2/3) build xpn.conf.xml file...
 touch "${BASE_DIR}/conf/xpn.conf.xml"
 "${XPN_DIR}"/scripts/execute/mk_conf.sh --conf        "${BASE_DIR}/conf/xpn.conf.xml" \
-                                      --machinefile "${BASE_DIR}/conf/machinefile" \
-                                      --part_size    512k \
-                                      --part_name    xpn \
-                                      --storage_path "${BASE_DIR}/data"
+                                        --machinefile "${BASE_DIR}/conf/machinefile" \
+                                        --part_size    512k \
+                                        --part_name    xpn \
+                                        --storage_path "${BASE_DIR}/data"
 
 # (3/3) build empty xpn.dns file...
 touch    "${BASE_DIR}/conf/xpn.dns"

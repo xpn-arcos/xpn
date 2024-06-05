@@ -1,9 +1,9 @@
-# XPN 2.3.0
+# XPN 3.0.0
 
 *Expand Ad-Hoc Parallel File System*
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-![version](https://img.shields.io/badge/version-2.3.0-blue)
+![version](https://img.shields.io/badge/version-3.0.0-blue)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://www.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xpn-arcos/xpn&amp;utm_campaign=Badge_Grade)
 
 * *Homepage*: <https://xpn-arcos.github.io/xpn-arcos.github.io/>
@@ -17,7 +17,7 @@
 
   There are only two pre-requisites that current Ad-Hoc XPN needs:
   1. The typical C development tools: gcc, make, and autotools
-  2. An MPI implementation installed: MPICH 4.x
+  2. An MPI implementation installed: MPICH 4.x, or Intel MPI 2017 (or compatible)
 
   The general steps to deploy XPN are:
   ```mermaid
@@ -89,7 +89,7 @@
 
 ### With MPICH from source code
 
- In order to install the MPICH implementation of MPI from source code and with Infiniband (Omni-Path) support we recommend:
+ In order to install the MPICH implementation (for example, MPICH 4.1.1) of MPI from source code and with Infiniband (Omni-Path) support we recommend:
  ```
  wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
  tar zxf mpich-4.1.1
@@ -114,7 +114,6 @@ First, you need to get familiar with 4 special files and 1 special environment v
     files
         ["`**hostfile**</br>               for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
         ["`**XPN configuration file**</br> for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers`"]
-        ["`**nameserver file**</br>        for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing`"]
         ["`**server file**</br>            for XPN, it is a text file with the list of the servers to be stopped (one host name per line)`"]
     environment variables
         ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
@@ -131,7 +130,6 @@ You need to get familiar with 4 special files and 4 special environment variable
     files
         hostfile
         xpn cfg file
-        nameserver
         server file
     environment variables
         XPN_CONF
@@ -143,7 +141,6 @@ You need to get familiar with 4 special files and 4 special environment variable
 The 4 special files are:
 * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
 * ```<XPN configuration file>``` for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers.
-* ```<nameserver file>``` for XPN, it will be a text file (created at runtime) with the list of host names where XPN servers are executing.
 * ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
 And the 5 special environment variables for XPN clients are:
@@ -165,12 +162,12 @@ The typical executions has 3 main steps:
       -x <local directory on each node to be used, /tmp for example> \
       start
    ```
-2. Then,  launch the program that will use Expand (XPN client).
+2. Then, launch the program that will use Expand (XPN client).
 
    2.1. Example for the *app1* MPI application:
    ```bash
-   mpiexec -np <number of processes> \
-           -hostfile <full path to the hostfile> \
+   mpiexec -np               <number of processes> \
+           -hostfile         <full path to the hostfile> \
            -genv XPN_CONF    <XPN configuration file> \
            -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
            <full path to app1>/app1
@@ -187,7 +184,7 @@ The typical executions has 3 main steps:
    ```
 3. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
    ```bash
-   ./xpn -v -l <full path to the hostfile>  stop
+   ./xpn -v -l <full path to the hostfile> stop
    ```
 
 <details>

@@ -299,7 +299,7 @@ usage_details() {
   echo "     -x, --xpn_storage_path <path>       The XPN local storage path"  
   echo "     -l, --hostfile  <path>              File with the hosts to be used to execute daemons (one per line)."
   echo "     -d, --deathfile <path>              File with the hosts to be used to stop    daemons (one per line)."
-  echo "     -b, --rebuildfile <path>              File with the hosts to be used to stop    daemons (one per line)."
+  echo "     -b, --rebuildfile <path>            File with the hosts to be used to stop    daemons (one per line)."
   echo "     -k, --host <host>                   Ip of the host to be used to terminate    daemons (one per line)."
   echo "     -v, --verbose                       Increase verbosity"
   echo ""
@@ -328,7 +328,7 @@ get_opts() {
          -f | --foreground_file  ) RUN_FOREGROUND=true;         shift 1 ;;
          -l | --hostfile         ) HOSTFILE=$2;                 shift 2 ;;
          -d | --deathfile        ) DEATH_FILE=$2;               shift 2 ;;
-         -b | --rebuildfile      ) REBUILD_FILE=$2;               shift 2 ;;
+         -b | --rebuildfile      ) REBUILD_FILE=$2;             shift 2 ;;
          -k | --host             ) HOST=$2;                     shift 2 ;;
          -p | --replication_level) XPN_REPLICATION_LEVEL=$2;    shift 2 ;;
          -v | --verbose          ) VERBOSE=true;                shift 1 ;;
@@ -373,16 +373,16 @@ fi
 
 # run 
 case "${ACTION}" in
-      mk_conf)  mk_conf_servers  "config.xml" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+      mk_conf)  mk_conf_servers  "config.txt" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 ;;
-      start)    mk_conf_servers  "config.xml" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+      start)    mk_conf_servers  "config.txt" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers
                 ;;
       terminate)terminate_xpn_server
                 ;;
-      rebuild)  mk_conf_servers  "config.xml" ${REBUILD_FILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+      rebuild)  mk_conf_servers  "config.txt" ${REBUILD_FILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 rebuild_xpn_servers
                 ;;
       preload)  preload_xpn
