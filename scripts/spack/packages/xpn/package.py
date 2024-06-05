@@ -21,7 +21,7 @@ class Xpn(AutotoolsPackage):
 
     # versions
     version('latest', branch='master', submodules=True)
-    version("3.0.0",  sha256="7063ae410b28abe100481cda15f80d996799f8f4b487afec9028e6774cf91f7c")
+    version("3.0.0",  sha256="867ad73bae2fa4dc223e5acc1d27c6bf3ed2883e")
 
     # Variants
     variant("mpich",     default=False, description="Use MPICH")
