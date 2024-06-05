@@ -25,7 +25,7 @@
 #
 # Default values
 #
-CONFNAME="$HOME/tmp/config.xml"
+CONFNAME="$HOME/tmp/config.txt"
 MACHINEFILE="$HOME/tmp/machinefile"
 XPN_PARTITION_BSIZE="512k"
 XPN_REPLICATION_LEVEL="0"
@@ -46,7 +46,7 @@ intro() {
 }
 
 usage() {
-   echo " Usage: $0 --conf              ~/tmp/config.xml \\"
+   echo " Usage: $0 --conf              ~/tmp/config.txt \\"
    echo "           --machinefile       ~/tmp/machinefile \\"
    echo "           [--part_bsize       <64|512k|1m|...>] \\"
    echo "           [--replication_level        0] \\"
@@ -60,10 +60,10 @@ usage() {
    echo ""
    echo " Example:"
    echo "   particion; block_size; replication_level; protocolo ; host     ; path"
-   echo "   xpn1     ; 512k      ; 0   ; mpi_server; compute-1; /tmp/"
-   echo "            ;           ;          ; tcp_server; compute-2; /tmp/"
-   echo "   xpn2     ; 1024k     ; 0   ; mpi_server; compute-3; /tmp/"
-   echo "            ;           ;          ; tcp_server; compute-4; /tmp/"
+   echo "   xpn1     ; 512k      ; 0                ; mpi_server; compute-1; /tmp/"
+   echo "            ;           ;                  ; tcp_server; compute-2; /tmp/"
+   echo "   xpn2     ; 1024k     ; 0                ; mpi_server; compute-3; /tmp/"
+   echo "            ;           ;                  ; tcp_server; compute-4; /tmp/"
    echo ""
 }
 
@@ -130,30 +130,6 @@ mk_conf_file_from_args() {
       echo "server_url = ${XPN_STORAGE_PROTOCOL}://${line}/${XPN_STORAGE_PATH}"                                        >> ${CONFNAME}
       ITER=$((${ITER}+1))
    done < <(grep . ${MACHINEFILE})
-
-   # echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"    > ${CONFNAME}
-   # echo "<xpn_conf>"                                        >> ${CONFNAME}
-
-   # XPN_PARTITION="<partition "
-   # XPN_PARTITION=${XPN_PARTITION}" bsize='"${XPN_PARTITION_BSIZE}"' "
-   # XPN_PARTITION=${XPN_PARTITION}"  replication_level='"${XPN_REPLICATION_LEVEL}"' "
-   # XPN_PARTITION=${XPN_PARTITION}"  name='"${XPN_PARTITION_NAME}"' "
-   # XPN_PARTITION=${XPN_PARTITION}" >"
-   # echo "  ${XPN_PARTITION}"    >> ${CONFNAME}
-
-   # ITER=1
-   # while read line
-   # do
-   #    XPN_DATA_NODE="<data_node "
-   #    XPN_DATA_NODE=${XPN_DATA_NODE}" url=\"${XPN_STORAGE_PROTOCOL}://${line}/${XPN_STORAGE_PATH}\" "
-   #    XPN_DATA_NODE=${XPN_DATA_NODE}" id=\"id${ITER}\" "
-   #    XPN_DATA_NODE=${XPN_DATA_NODE}" />"
-   #    echo "    ${XPN_DATA_NODE}"  >> ${CONFNAME}
-   #    ITER=$((${ITER}+1))
-   # done < <(grep . ${MACHINEFILE})
-
-   # echo "  </partition>"    >> ${CONFNAME}
-   # echo "</xpn_conf>"       >> ${CONFNAME}
 }
 
 mk_conf_file_from_deploy() {
