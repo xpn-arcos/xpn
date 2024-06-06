@@ -130,7 +130,7 @@ You need to get familiar with 4 special files and 4 special environment variable
     files
         hostfile
         xpn cfg file
-        server file
+        dead file
     environment variables
         XPN_CONF
         XPN_THREAD
@@ -141,7 +141,7 @@ You need to get familiar with 4 special files and 4 special environment variable
 The 4 special files are:
 * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
 * ```<XPN configuration file>``` for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers.
-* ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
+* ```<dead file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
 And the 5 special environment variables for XPN clients are:
 * ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
@@ -155,10 +155,11 @@ And the 5 special environment variables for XPN clients are:
 The typical executions has 3 main steps:
 1. First, launch the Expand MPI server (xpn_mpi_server):
    ```bash
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    ./xpn -v \
       -n <number of processes> \
-      -l <full path to the hostfile> \
-      -w <shared directory among hostfile computers, $HOME for example> \
+      -l $WORK_DIR/hostfile \
+      -w $WORK_DIR \
       -x <local directory on each node to be used, /tmp for example> \
       start
    ```
@@ -166,26 +167,29 @@ The typical executions has 3 main steps:
 
    2.1. Example for the *app1* MPI application:
    ```bash
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    mpiexec -np               <number of processes> \
-           -hostfile         <full path to the hostfile> \
-           -genv XPN_CONF    <XPN configuration file> \
+           -hostfile         $WORK_DIR/hostfile \
+           -genv XPN_CONF    $WORK_DIR/xpn.conf \
            -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-
            <full path to app1>/app1
    ```
    2.2. Example for the *app2* program (a NON-MPI application):
    ```bash
-   export XPN_CONF=<full path to the XPN configuration file>
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   export XPN_CONF=$WORK_DIR/xpn.conf
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
    ```
    2.3. Example for the *app3* Python program:
    ```bash
-   export XPN_CONF=<full path to the XPN configuration file>
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   export XPN_CONF=$WORK_DIR/xpn.conf
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3
    ```
 3. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
    ```bash
-   ./xpn -v -l <full path to the hostfile> stop
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   ./xpn -v -l $WORK_DIR/hostfile stop
    ```
 
 <details>
