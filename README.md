@@ -93,14 +93,18 @@
  ```
  wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
  tar zxf mpich-4.1.1
- cd      mpich-4.1.1
+
+ cd mpich-4.1.1
  ./configure --prefix=<path where MPICH is going to be installed> \
              --enable-threads=multiple \
              --enable-romio \
              --with-device=ch4:ofi:psm2 \
              --with-libfabric=<path where your libfabric is installed>
+
  make
  make install
+
+ export LD_LIBRARY_PATH=<path where MPICH is going to be installed>/lib:$LD_LIBRARY_PATH
  ```
 
 
