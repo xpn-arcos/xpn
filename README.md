@@ -114,7 +114,6 @@ First, you need to get familiar with 4 special files and 1 special environment v
     files
         ["`**hostfile**</br>               for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
         ["`**XPN configuration file**</br> for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers`"]
-        ["`**server file**</br>            for XPN, it is a text file with the list of the servers to be stopped (one host name per line)`"]
     environment variables
         ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
 ```
@@ -131,6 +130,7 @@ You need to get familiar with 4 special files and 4 special environment variable
         hostfile
         xpn cfg file
         dead file
+        ::icon(mdi mdi-skull-outline)
     environment variables
         XPN_CONF
         XPN_THREAD
