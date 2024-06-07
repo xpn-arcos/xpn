@@ -266,39 +266,43 @@ The typical executions has 3 main steps:
 
 
 
-### 2.2 Executing Ad-Hoc Expand using Open MPI (experimental alpha)
+### 2.2 Executing Ad-Hoc Expand using OpenMPI (experimental alpha)
 
 An example of SLURM job might be:
    ```bash
    #!/bin/bash
+
    #SBATCH --job-name=test
+   #SBATCH --output=$HOME/results_%j.out
    #SBATCH --nodes=8
-   #SBATCH --ntasks=8
-   #SBATCH --cpus-per-task=4
+   #SBATCH --exclusive
    #SBATCH --time=00:05:00
-   #SBATCH --output=results.txt
 
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
 
    # Step 1
+   scontrol show hostnames ${SLURM_JOB_NODELIST} > $WORK_DIR/hostfile
    prte --hostfile $WORK_DIR/hostfile --report-uri $WORK_DIR/prte --no-ready-msg &
+   sleep 2
    NAMESPACE=$(cat $WORK_DIR/prte | head -n 1 | cut -d "@" -f 1)
 
    # Step 2
-   mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
+   mpiexec -n ${SLURM_NNODES} \
+           --hostfile $WORK_DIR/hostfile \
            --dvm ns:$NAMESPACE \
            --map-by ppr:1:node:OVERSUBSCRIBE \
            <INSTALL_PATH>/bin/xpn_server &
    sleep 2
 
    # Step 3
-   mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
+   mpiexec -n <number of processes: 2> \
+           -hostfile $WORK_DIR/hostfile \
+           --dvm ns:$NAMESPACE \
            -mca routed direct \
            --map-by node:OVERSUBSCRIBE \
-           --dvm ns:$NAMESPACE \
-           -genv XPN_CONF    $WORK_DIR/xpn.conf \
-           -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+           -x XPN_CONF=$WORK_DIR/xpn.conf \
+           -x LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
            <full path to app>
 
    # Step 4
