@@ -93,57 +93,61 @@
  ```
  wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
  tar zxf mpich-4.1.1
- cd      mpich-4.1.1
+
+ cd mpich-4.1.1
  ./configure --prefix=<path where MPICH is going to be installed> \
              --enable-threads=multiple \
              --enable-romio \
              --with-device=ch4:ofi:psm2 \
              --with-libfabric=<path where your libfabric is installed>
+
  make
  make install
+
+ export LD_LIBRARY_PATH=<path where MPICH is going to be installed>/lib:$LD_LIBRARY_PATH
  ```
 
 
 ## 2. Executing Ad-Hoc XPN...
 
-First, you need to get familiar with 4 special files and 1 special environment variables for XPN client:
+First, you need to get familiar with 2 special files and 1 special environment variables for XPN client:
 
   ```mermaid
   mindmap
   root((XPN))
-    files
+    {{Environment variables}}
+        ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
+    {{Files}}
+        ::: color #080085
         ["`**hostfile**</br>               for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
         ["`**XPN configuration file**</br> for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers`"]
-        ["`**server file**</br>            for XPN, it is a text file with the list of the servers to be stopped (one host name per line)`"]
-    environment variables
-        ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
 ```
 
 
 <details>
 <summary>For Expand developers...</summary>
-You need to get familiar with 4 special files and 4 special environment variables for XPN client:
+You need to get familiar with 3 special files and 4 special environment variables for XPN client:
 
   ```mermaid
   mindmap
   root((XPN))
-    files
+    {{Files}}
         hostfile
         xpn cfg file
-        server file
-    environment variables
+        dead file
+    {{Environment variables}}
         XPN_CONF
         XPN_THREAD
         XPN_LOCALITY
         XPN_SCK_PORT
 ```
 
-The 4 special files are:
+The 3 special files are:
 * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
 * ```<XPN configuration file>``` for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers.
-* ```<server file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
+* ```<dead file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
-And the 5 special environment variables for XPN clients are:
+And the 4 special environment variables for XPN clients are:
 * ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
 * ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
 * ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
@@ -153,39 +157,49 @@ And the 5 special environment variables for XPN clients are:
 
 ### 2.1 Executing Ad-Hoc Expand (based on MPI)
 The typical executions has 3 main steps:
-1. First, launch the Expand MPI server (xpn_mpi_server):
+1. First, launch the Expand MPI server (xpn_server):
    ```bash
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   export NODE_DIR=<local directory to be used on each node, /tmp for example>
+   
    ./xpn -v \
-      -n <number of processes> \
-      -l <full path to the hostfile> \
-      -w <shared directory among hostfile computers, $HOME for example> \
-      -x <local directory on each node to be used, /tmp for example> \
-      start
+         -n <number of processes> \
+         -l $WORK_DIR/hostfile \
+         -w $WORK_DIR \
+         -x $NODE_DIR \
+         start
    ```
 2. Then, launch the program that will use Expand (XPN client).
 
    2.1. Example for the *app1* MPI application:
    ```bash
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   
    mpiexec -np               <number of processes> \
-           -hostfile         <full path to the hostfile> \
-           -genv XPN_CONF    <XPN configuration file> \
+           -hostfile         $WORK_DIR/hostfile \
+           -genv XPN_CONF    $WORK_DIR/xpn.conf \
            -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-
            <full path to app1>/app1
    ```
    2.2. Example for the *app2* program (a NON-MPI application):
    ```bash
-   export XPN_CONF=<full path to the XPN configuration file>
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   export XPN_CONF=$WORK_DIR/xpn.conf
+   
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
    ```
-   2.3. Example for the *app3* Python program:
+   2.3. Example for the *app3.py* Python program:
    ```bash
-   export XPN_CONF=<full path to the XPN configuration file>
-   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   export XPN_CONF=$WORK_DIR/xpn.conf
+   
+   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
    ```
-3. At the end of your working session, you need to stop the MPI server (xpn_mpi_server):
+3. At the end of your working session, you need to stop the MPI server (xpn_server):
    ```bash
-   ./xpn -v -l <full path to the hostfile> stop
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   
+   ./xpn -v -l $WORK_DIR/hostfile stop
    ```
 
 <details>
@@ -195,7 +209,7 @@ Summary:
 ```mermaid
 sequenceDiagram
     session        ->> xpn_mpi_server: launch the Expand MPI server
-    xpn_mpi_server ->> mk_conf.sh: generate the XPN configuration file
+    xpn_server     ->> mk_conf.sh: generate the XPN configuration file
     mk_conf.sh     ->> xpn.conf: generate the xpn.conf file
     xpn.conf      -->> xpn_mpi_server: read the XPN configuration file
     session        ->> XPN client: launch the program that will use Expand
