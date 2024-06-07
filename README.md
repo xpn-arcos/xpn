@@ -17,7 +17,7 @@
 
   There are only two pre-requisites that Ad-Hoc XPN needs:
   1. The typical C development tools: gcc, make, and autotools
-  2. An MPI implementation installed: MPICH 4.x or Intel MPI 2017 (or compatible) compiled with MPI-IO and threads support
+  2. An MPI implementation installed: MPICH 4.x, Intel MPI 2017 (or compatible), or Open MPI (experimental alpha) compiled with MPI-IO and threads support
 
   The general steps to deploy XPN are:
   ```mermaid
@@ -92,7 +92,7 @@
  In order to install the MPICH implementation of MPI (for example, MPICH 4.1.1) from source code and with Infiniband (Omni-Path) support we recommend:
  ```
  wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
- tar zxf mpich-4.1.1
+ tar zxf mpich-4.1.1.tar.gz
 
  cd mpich-4.1.1
  ./configure --prefix=<path where MPICH is going to be installed> \
@@ -105,6 +105,25 @@
  make install
 
  export LD_LIBRARY_PATH=<path where MPICH is going to be installed>/lib:$LD_LIBRARY_PATH
+ ```
+
+### Open MPI from source code
+
+ In order to install the Open MPI implementation of MPI (for example, MPICH 5.0.3) from source code and with Infiniband (Omni-Path) support we recommend:
+ ```
+ wget https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-5.0.3.tar.gz
+ tar zxf openmpi-5.0.3.tar.gz
+
+ cd openmpi-5.0.3
+ ./configure --prefix=<path where Open MPI is going to be installed> \
+             --enable-threads=multiple \
+             --enable-romio \
+             --with-libfabric=<path where your libfabric is installed>
+
+ make
+ make install
+
+ export LD_LIBRARY_PATH=<path where Open MPI is going to be installed>/lib:$LD_LIBRARY_PATH
  ```
 
 
@@ -156,22 +175,18 @@ And the 4 special environment variables for XPN clients are:
 </details>
 
 
-### 2.1 Executing Ad-Hoc Expand (based on MPI)
+### 2.1 Executing Ad-Hoc Expand using MPICH
 
 An example of SLURM job might be:
    ```bash
    #!/bin/bash
    #SBATCH --job-name=test
-   #SBATCH --account=<account name>
-   #SBATCH --partition=<partition name>
    #SBATCH --nodes=8
    #SBATCH --ntasks=8
    #SBATCH --cpus-per-task=4
    #SBATCH --time=00:05:00
    #SBATCH --output=res.txt
 
-   module load gcc
-   module load 'impi/2017.4'
 
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
@@ -236,6 +251,111 @@ The typical executions has 3 main steps:
    
    ./xpn -v -d $WORK_DIR/hostfile stop
    ```
+
+
+
+### 2.2 Executing Ad-Hoc Expand using Open MPI (experimental alpha)
+
+An example of SLURM job might be:
+   ```bash
+   #!/bin/bash
+   #SBATCH --job-name=test
+   #SBATCH --nodes=8
+   #SBATCH --ntasks=8
+   #SBATCH --cpus-per-task=4
+   #SBATCH --time=00:05:00
+   #SBATCH --output=res.txt
+
+
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   export NODE_DIR=<local directory to be used on each node, /tmp for example>
+
+   # Step 1
+   prte --hostfile $WORK_DIR/hostfile --report-uri $WORK_DIR/prte --no-ready-msg &
+   NAMESPACE=$(cat $WORK_DIR/prte | head -n 1 | cut -d "@" -f 1)
+
+   # Step 2
+   mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
+           --dvm ns:$NAMESPACE \
+           --map-by ppr:1:node:OVERSUBSCRIBE \
+           <INSTALL_PATH>/bin/xpn_server &
+   sleep 2
+
+   # Step 3
+   mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
+           -mca routed direct \
+           --map-by node:OVERSUBSCRIBE \
+           --dvm ns:$NAMESPACE \
+           -genv XPN_CONF    $WORK_DIR/xpn.conf \
+           -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+           <full path to app>
+
+   # Step 4
+   <INSTALL_PATH>/xpn/bin/xpn -v -d $WORK_DIR/hostfile stop
+   sleep 2
+   ```
+
+
+
+
+
+
+
+
+
+
+The typical executions has 4 main steps:
+1. First, launch the Open MPI prte server:
+  ```bash
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   export NODE_DIR=<local directory to be used on each node, /tmp for example>
+
+   prte --hostfile $WORK_DIR/hostfile --report-uri $WORK_DIR/prte --no-ready-msg &
+   NAMESPACE=$(cat $WORK_DIR/prte | head -n 1 | cut -d "@" -f 1)
+   ```
+
+2. Sencond, launch the Expand MPI servers:
+   ```bash
+   mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
+           --dvm ns:$NAMESPACE \
+           --map-by ppr:1:node:OVERSUBSCRIBE \
+           <INSTALL_PATH>/bin/xpn_server &
+   ```
+3. Then, launch the program that will use Expand (XPN client).
+
+   3.1. Example for the *app1* MPI application:
+   ```bash
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   
+    mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
+            -mca routed direct \
+            --map-by node:OVERSUBSCRIBE \
+            --dvm ns:$NAMESPACE \
+            -genv XPN_CONF    $WORK_DIR/xpn.conf \
+            -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+            <full path to app1>/app1
+   ```
+   3.2. Example for the *app2* program (a NON-MPI application):
+   ```bash
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   export XPN_CONF=$WORK_DIR/xpn.conf
+   
+   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
+   ```
+   3.3. Example for the *app3.py* Python program:
+   ```bash
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   export XPN_CONF=$WORK_DIR/xpn.conf
+   
+   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
+   ```
+5. At the end of your working session, you need to stop the MPI servers:
+   ```bash
+   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+   
+   ./xpn -v -d $WORK_DIR/hostfile stop
+   ```
+
 
 <details>
 <summary>For Expand developers...</summary>
