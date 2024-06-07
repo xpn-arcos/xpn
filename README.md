@@ -187,7 +187,7 @@ An example of SLURM job might be:
            <full path to app>
 
    # Step 3
-   <INSTALL_PATH>/xpn/bin/xpn -v -l $WORK_DIR/hostfile stop
+   <INSTALL_PATH>/xpn/bin/xpn -v -d $WORK_DIR/hostfile stop
    sleep 2
    ```
 
@@ -234,7 +234,7 @@ The typical executions has 3 main steps:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
-   ./xpn -v -l $WORK_DIR/hostfile stop
+   ./xpn -v -d $WORK_DIR/hostfile stop
    ```
 
 <details>
