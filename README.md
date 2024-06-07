@@ -14,8 +14,8 @@
 ## 1. To deploy Ad-Hoc XPN...
 
   The Expand Ad-Hoc Parallel File System (a.k.a. Ad-Hoc XPN) can be installed on a cluster/supercomputer with:
-  1. Local storage per-node (HDD, SSD or RAM Drive).
-  2. A shared home directory.
+  1. A local storage per-node (HDD, SSD or RAM Drive) accessible through a directory, ```/tmp``` for example (this is the NODE_DIR).
+  2. A shared directory among compute nodes used, ```$HOME``` for example (this is the WORK_DIR).
 
   There are only two software pre-requisites that Ad-Hoc XPN needs:
   1. The typical C development tools: gcc, make, and autotools
@@ -195,14 +195,15 @@ An example of SLURM job might be:
    #SBATCH --ntasks=8
    #SBATCH --cpus-per-task=4
    #SBATCH --time=00:05:00
-   #SBATCH --output=res.txt
-
+   #SBATCH --output=results.txt
 
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
 
    # Step 1
-   <INSTALL_PATH>/xpn/bin/xpn -v -n <number of processes> -l $WORK_DIR/hostfile   -w $WORK_DIR -x $NODE_DIR   start
+   <INSTALL_PATH>/xpn/bin/xpn -v \
+                              -n <number of processes> -l $WORK_DIR/hostfile \
+                              -w $WORK_DIR -x $NODE_DIR   start
    sleep 2
 
    # Step 2
@@ -215,6 +216,7 @@ An example of SLURM job might be:
    <INSTALL_PATH>/xpn/bin/xpn -v -d $WORK_DIR/hostfile stop
    sleep 2
    ```
+
 
 The typical executions has 3 main steps:
 1. First, launch the Expand MPI servers:
@@ -307,13 +309,6 @@ An example of SLURM job might be:
 
 
 
-
-
-
-
-
-
-
 The typical executions has 4 main steps:
 1. First, launch the Open MPI prte server:
   ```bash
@@ -324,7 +319,7 @@ The typical executions has 4 main steps:
    NAMESPACE=$(cat $WORK_DIR/prte | head -n 1 | cut -d "@" -f 1)
    ```
 
-2. Sencond, launch the Expand MPI servers:
+2. Second, launch the Expand MPI servers:
    ```bash
    mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
            --dvm ns:$NAMESPACE \
