@@ -14,8 +14,8 @@
 ## 1. To deploy Ad-Hoc XPN...
 
   The Expand Ad-Hoc Parallel File System (a.k.a. Ad-Hoc XPN) can be installed on a cluster/supercomputer with:
-  1. A local storage per-node (HDD, SSD or RAM Drive) accessible through a directory, ```/tmp``` for example (this is the NODE_DIR).
-  2. A shared directory among compute nodes used, ```$HOME``` for example (this is the WORK_DIR).
+  1. A local storage per-node (HDD, SSD or RAM Drive) accessible through a directory, ```/tmp``` for example (this will be the NODE_DIR in this document).
+  2. A shared directory among compute nodes used, ```$HOME``` for example (this will be the WORK_DIR in this document).
 
   There are only two software pre-requisites that Ad-Hoc XPN needs:
   1. The typical C development tools: gcc, make, and autotools
@@ -232,32 +232,32 @@ The typical executions has 3 main steps:
          start
    ```
 2. Then, launch the program that will use Expand (XPN client).
-
+   
    2.1. Example for the *app1* MPI application:
-   ```bash
-   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+      ```bash
+        export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
-   mpiexec -np               <number of processes> \
-           -hostfile         $WORK_DIR/hostfile \
-           -genv XPN_CONF    $WORK_DIR/xpn.conf \
-           -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-           <full path to app1>/app1
-   ```
+         mpiexec -np               <number of processes> \
+                 -hostfile         $WORK_DIR/hostfile \
+                 -genv XPN_CONF    $WORK_DIR/xpn.conf \
+                 -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+                 <full path to app1>/app1
+      ```
    2.2. Example for the *app2* program (a NON-MPI application):
-   ```bash
-   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
-   export XPN_CONF=$WORK_DIR/xpn.conf
+      ```bash
+        export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+        export XPN_CONF=$WORK_DIR/xpn.conf
    
-   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
-   ```
+        LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
+      ```
    2.3. Example for the *app3.py* Python program:
-   ```bash
-   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
-   export XPN_CONF=$WORK_DIR/xpn.conf
+      ```bash
+        export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+        export XPN_CONF=$WORK_DIR/xpn.conf
    
-   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
-   ```
-3. At the end of your working session, you need to stop the MPI servers:
+        LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
+      ```
+4. At the end of your working session, you need to stop the MPI servers:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
@@ -276,8 +276,7 @@ An example of SLURM job might be:
    #SBATCH --ntasks=8
    #SBATCH --cpus-per-task=4
    #SBATCH --time=00:05:00
-   #SBATCH --output=res.txt
-
+   #SBATCH --output=results.txt
 
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
@@ -308,9 +307,8 @@ An example of SLURM job might be:
    ```
 
 
-
 The typical executions has 4 main steps:
-1. First, launch the Open MPI prte server:
+1. First, launch the OpenMPI prte server:
   ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
@@ -319,7 +317,7 @@ The typical executions has 4 main steps:
    NAMESPACE=$(cat $WORK_DIR/prte | head -n 1 | cut -d "@" -f 1)
    ```
 
-2. Second, launch the Expand MPI servers:
+2. Second, launch the Expand servers:
    ```bash
    mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
            --dvm ns:$NAMESPACE \
@@ -354,7 +352,7 @@ The typical executions has 4 main steps:
    
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
    ```
-5. At the end of your working session, you need to stop the MPI servers:
+5. At the end of your working session, you need to stop the Expand servers:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
