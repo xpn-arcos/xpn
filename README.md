@@ -113,12 +113,12 @@
 First, you need to get familiar with 2 special files and 1 special environment variables for XPN client:
 
   ```mermaid
+  %%{ init : { "theme" : "default", "themeVariables" : { "background" : "#000" }}}%%
   mindmap
   root((XPN))
     {{Environment variables}}
         ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
     {{Files}}
-        ::: color #080085
         ["`**hostfile**</br>               for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
         ["`**XPN configuration file**</br> for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers`"]
 ```
@@ -129,6 +129,7 @@ First, you need to get familiar with 2 special files and 1 special environment v
 You need to get familiar with 3 special files and 4 special environment variables for XPN client:
 
   ```mermaid
+  %%{ init : { "theme" : "default", "themeVariables" : { "background" : "#000" }}}%%
   mindmap
   root((XPN))
     {{Files}}
