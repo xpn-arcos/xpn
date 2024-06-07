@@ -362,19 +362,20 @@ The typical executions has 4 main steps:
 
 <details>
 <summary>For Expand developers...</summary>
+<br>
 Summary:
 
 ```mermaid
 sequenceDiagram
-    session        ->> xpn_mpi_server: launch the Expand MPI server
-    xpn_server     ->> mk_conf.sh: generate the XPN configuration file
+    job            ->> mk_conf.sh: generate the XPN configuration file
     mk_conf.sh     ->> xpn.conf: generate the xpn.conf file
-    xpn.conf      -->> xpn_mpi_server: read the XPN configuration file
-    session        ->> XPN client: launch the program that will use Expand
+    job            ->> xpn_server: (1) launch the Expand MPI server
+    xpn.conf      -->> xpn_server: read the XPN configuration file
+    job            ->> XPN client: (2) launch the program that will use Expand
     xpn.conf      -->> XPN client: read the XPN configuration file
-    XPN client    -->> xpn_mpi_server: write and read data
-    XPN client    -->> session: execution ends
-    session        ->> xpn_mpi_server: stop the MPI server
+    XPN client      -> xpn_server: write and read data
+    XPN client    -->> job: execution ends
+    job            ->> xpn_server: (3) stop the MPI server
 ```
 </details>
 
