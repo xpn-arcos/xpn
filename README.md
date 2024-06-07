@@ -14,8 +14,8 @@
 ## 1. To deploy Ad-Hoc XPN...
 
   The Expand Ad-Hoc Parallel File System (a.k.a. Ad-Hoc XPN) can be installed on a cluster/supercomputer with:
-  1. Local storage per-node (HDD, SSD or RAM Drive).
-  2. A shared home directory.
+  1. A local storage per-node (HDD, SSD or RAM Drive) accessible through a directory, ```/tmp``` for example (this will be the NODE_DIR in this document).
+  2. A shared directory among compute nodes used, ```$HOME``` for example (this will be the WORK_DIR in this document).
 
   There are only two software pre-requisites that Ad-Hoc XPN needs:
   1. The typical C development tools: gcc, make, and autotools
@@ -195,14 +195,15 @@ An example of SLURM job might be:
    #SBATCH --ntasks=8
    #SBATCH --cpus-per-task=4
    #SBATCH --time=00:05:00
-   #SBATCH --output=res.txt
-
+   #SBATCH --output=results.txt
 
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
 
    # Step 1
-   <INSTALL_PATH>/xpn/bin/xpn -v -n <number of processes> -l $WORK_DIR/hostfile   -w $WORK_DIR -x $NODE_DIR   start
+   <INSTALL_PATH>/xpn/bin/xpn -v \
+                              -n <number of processes> -l $WORK_DIR/hostfile \
+                              -w $WORK_DIR -x $NODE_DIR   start
    sleep 2
 
    # Step 2
@@ -215,6 +216,7 @@ An example of SLURM job might be:
    <INSTALL_PATH>/xpn/bin/xpn -v -d $WORK_DIR/hostfile stop
    sleep 2
    ```
+
 
 The typical executions has 3 main steps:
 1. First, launch the Expand MPI servers:
@@ -230,32 +232,32 @@ The typical executions has 3 main steps:
          start
    ```
 2. Then, launch the program that will use Expand (XPN client).
-
+   
    2.1. Example for the *app1* MPI application:
-   ```bash
-   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+      ```bash
+        export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
-   mpiexec -np               <number of processes> \
-           -hostfile         $WORK_DIR/hostfile \
-           -genv XPN_CONF    $WORK_DIR/xpn.conf \
-           -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-           <full path to app1>/app1
-   ```
+         mpiexec -np               <number of processes> \
+                 -hostfile         $WORK_DIR/hostfile \
+                 -genv XPN_CONF    $WORK_DIR/xpn.conf \
+                 -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+                 <full path to app1>/app1
+      ```
    2.2. Example for the *app2* program (a NON-MPI application):
-   ```bash
-   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
-   export XPN_CONF=$WORK_DIR/xpn.conf
+      ```bash
+        export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+        export XPN_CONF=$WORK_DIR/xpn.conf
    
-   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
-   ```
+        LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
+      ```
    2.3. Example for the *app3.py* Python program:
-   ```bash
-   export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
-   export XPN_CONF=$WORK_DIR/xpn.conf
+      ```bash
+        export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
+        export XPN_CONF=$WORK_DIR/xpn.conf
    
-   LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
-   ```
-3. At the end of your working session, you need to stop the MPI servers:
+        LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
+      ```
+4. At the end of your working session, you need to stop the MPI servers:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
@@ -274,8 +276,7 @@ An example of SLURM job might be:
    #SBATCH --ntasks=8
    #SBATCH --cpus-per-task=4
    #SBATCH --time=00:05:00
-   #SBATCH --output=res.txt
-
+   #SBATCH --output=results.txt
 
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
@@ -306,16 +307,8 @@ An example of SLURM job might be:
    ```
 
 
-
-
-
-
-
-
-
-
 The typical executions has 4 main steps:
-1. First, launch the Open MPI prte server:
+1. First, launch the OpenMPI prte server:
   ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
@@ -324,7 +317,7 @@ The typical executions has 4 main steps:
    NAMESPACE=$(cat $WORK_DIR/prte | head -n 1 | cut -d "@" -f 1)
    ```
 
-2. Sencond, launch the Expand MPI servers:
+2. Second, launch the Expand servers:
    ```bash
    mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
            --dvm ns:$NAMESPACE \
@@ -359,7 +352,7 @@ The typical executions has 4 main steps:
    
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
    ```
-5. At the end of your working session, you need to stop the MPI servers:
+5. At the end of your working session, you need to stop the Expand servers:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
@@ -369,19 +362,20 @@ The typical executions has 4 main steps:
 
 <details>
 <summary>For Expand developers...</summary>
+<br>
 Summary:
 
 ```mermaid
 sequenceDiagram
-    session        ->> xpn_mpi_server: launch the Expand MPI server
-    xpn_server     ->> mk_conf.sh: generate the XPN configuration file
+    job            ->> mk_conf.sh: generate the XPN configuration file
     mk_conf.sh     ->> xpn.conf: generate the xpn.conf file
-    xpn.conf      -->> xpn_mpi_server: read the XPN configuration file
-    session        ->> XPN client: launch the program that will use Expand
+    job            ->> xpn_server: (1) launch the Expand MPI server
+    xpn.conf      -->> xpn_server: read the XPN configuration file
+    job            ->> XPN client: (2) launch the program that will use Expand
     xpn.conf      -->> XPN client: read the XPN configuration file
-    XPN client    -->> xpn_mpi_server: write and read data
-    XPN client    -->> session: execution ends
-    session        ->> xpn_mpi_server: stop the MPI server
+    XPN client      -> xpn_server: write and read data
+    XPN client    -->> job: execution ends
+    job            ->> xpn_server: (3) stop the MPI server
 ```
 </details>
 
