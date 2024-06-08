@@ -144,12 +144,12 @@ First, you need to get familiar with 2 special files and 1 special environment v
   ```mermaid
   %%{ init : { "theme" : "default", "themeVariables" : { "background" : "#000" }}}%%
   mindmap
-  root((XPN))
-    {{Environment variables}}
-        ["`**XPN_CONF=**'full path to the XPN configuration file to be used (mandatory)'`"]
+  root(("Ad-Hoc XPN"))
+    {{Environment<br> Variables}}
+        ["`**XPN_CONF=**'full path to the xpn.conf file' <br> \* It is the XPN configuration file to be used (mandatory)`"]
     {{Files}}
-        ["`**hostfile**</br>               for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
-        ["`**XPN configuration file**</br> for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers`"]
+        ["`**hostfile**</br>   \* for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
+        ["`**xpn.conf**</br>   \* for Ad-Hoc XPN, it is a text file with the configuration for the partition where files are stored at the XPN servers`"]
 ```
 
 
@@ -160,22 +160,22 @@ You need to get familiar with 3 special files and 4 special environment variable
   ```mermaid
   %%{ init : { "theme" : "default", "themeVariables" : { "background" : "#000" }}}%%
   mindmap
-  root((XPN))
+  root((Ad-Hoc XPN))
     {{Files}}
-        hostfile
-        xpn cfg file
-        dead file
-    {{Environment variables}}
-        XPN_CONF
-        XPN_THREAD
-        XPN_LOCALITY
-        XPN_SCK_PORT
+        [hostfile]
+        [xpn.cfg]
+        [stop_file]
+    {{Environment Variables}}
+        [XPN_CONF]
+        [XPN_THREAD]
+        [XPN_LOCALITY]
+        [XPN_SCK_PORT]
 ```
 
 The 3 special files are:
 * ```<hostfile>``` for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed.
-* ```<XPN configuration file>``` for XPN, it is a file with the configuration for the partition where files are stored at the XPN servers.
-* ```<dead file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
+* ```<xpn.cfg>``` for XPN, it is the XPN configuration file with the configuration for the partition where files are stored at the XPN servers.
+* ```<stop_file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
 And the 4 special environment variables for XPN clients are:
 * ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
@@ -190,29 +190,34 @@ And the 4 special environment variables for XPN clients are:
 An example of SLURM job might be:
    ```bash
    #!/bin/bash
+
    #SBATCH --job-name=test
+   #SBATCH --output=$HOME/results_%j.out
    #SBATCH --nodes=8
    #SBATCH --ntasks=8
-   #SBATCH --cpus-per-task=4
+   #SBATCH --cpus-per-task=8
    #SBATCH --time=00:05:00
-   #SBATCH --output=results.txt
-
+   
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
 
-   # Step 1
+   scontrol show hostnames ${SLURM_JOB_NODELIST} > $WORK_DIR/hostfile
+
+   # Step 1: to launch the Expand MPI servers
    <INSTALL_PATH>/xpn/bin/xpn -v \
-                              -n <number of processes> -l $WORK_DIR/hostfile \
-                              -w $WORK_DIR -x $NODE_DIR   start
+                              -w $WORK_DIR -x $NODE_DIR \
+                              -n <number of XPN processes> \
+                              -l $WORK_DIR/hostfile start
    sleep 2
 
-   # Step 2
-   mpiexec -np <number of processes>  -hostfile $WORK_DIR/hostfile \
-           -genv XPN_CONF    $WORK_DIR/xpn.conf \
-           -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-           <full path to app>
+     # Step 2: to launch the XPN client (app. that will use Expand)
+     mpiexec -np <number of client processes> \
+             -hostfile $WORK_DIR/hostfile \
+             -genv XPN_CONF    $WORK_DIR/xpn.conf \
+             -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+             <full path to the app.>
 
-   # Step 3
+   # Step 3: to stop the MPI servers
    <INSTALL_PATH>/xpn/bin/xpn -v -d $WORK_DIR/hostfile stop
    sleep 2
    ```
@@ -224,12 +229,12 @@ The typical executions has 3 main steps:
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
 
-   ./xpn -v \
-         -n <number of processes> \
-         -l $WORK_DIR/hostfile \
-         -w $WORK_DIR \
-         -x $NODE_DIR \
-         start
+   <INSTALL_PATH>/xpn/bin/xpn -v \
+                              -n <number of processes> \
+                              -l $WORK_DIR/hostfile \
+                              -w $WORK_DIR \
+                              -x $NODE_DIR \
+                              start
    ```
 2. Then, launch the program that will use Expand (XPN client).
    
@@ -261,7 +266,7 @@ The typical executions has 3 main steps:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
-   ./xpn -v -d $WORK_DIR/hostfile stop
+   <INSTALL_PATH>/xpn/bin/xpn  -v -d $WORK_DIR/hostfile stop
    ```
 
 
@@ -281,13 +286,14 @@ An example of SLURM job might be:
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
 
-   # Step 1
    scontrol show hostnames ${SLURM_JOB_NODELIST} > $WORK_DIR/hostfile
+
+   # Step 1
    prte --hostfile $WORK_DIR/hostfile --report-uri $WORK_DIR/prte --no-ready-msg &
    sleep 2
    NAMESPACE=$(cat $WORK_DIR/prte | head -n 1 | cut -d "@" -f 1)
 
-   # Step 2
+   # Step 2: to launch the Expand MPI servers
    mpiexec -n ${SLURM_NNODES} \
            --hostfile $WORK_DIR/hostfile \
            --dvm ns:$NAMESPACE \
@@ -295,17 +301,17 @@ An example of SLURM job might be:
            <INSTALL_PATH>/bin/xpn_server &
    sleep 2
 
-   # Step 3
-   mpiexec -n <number of processes: 2> \
-           -hostfile $WORK_DIR/hostfile \
-           --dvm ns:$NAMESPACE \
-           -mca routed direct \
-           --map-by node:OVERSUBSCRIBE \
-           -x XPN_CONF=$WORK_DIR/xpn.conf \
-           -x LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-           <full path to app>
+     # Step 3: to launch the XPN client (app. that will use Expand)
+     mpiexec  -n <number of processes: 2> \
+              -hostfile $WORK_DIR/hostfile \
+             --dvm ns:$NAMESPACE \
+              -mca routed direct \
+             --map-by node:OVERSUBSCRIBE \
+              -x XPN_CONF=$WORK_DIR/xpn.conf \
+              -x LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+             <full path to the app.>
 
-   # Step 4
+   # Step 4: to stop the MPI servers
    <INSTALL_PATH>/xpn/bin/xpn -v -d $WORK_DIR/hostfile stop
    sleep 2
    ```
