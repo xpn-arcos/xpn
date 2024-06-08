@@ -49,21 +49,6 @@ int xpn_destroy_servers(struct xpn_partition *part)
 
   free(part->data_serv);
 
-  for(i=0;i<part->meta_nserv;i++)
-  {
-    serv = part->meta_serv;
-    if(serv[i].ops != NULL)
-    {
-      part->meta_serv[i].ops->nfi_disconnect(&(serv[i]));
-      //part->meta_serv[i].ops->nfi_destroy(&(serv[i]));
-      if(serv[i].ops != NULL){
-        free(serv[i].ops);
-      }
-    }
-  }
-
-  free(part->meta_serv);
-
   return 0;
 }
 
@@ -93,13 +78,17 @@ int xpn_simple_destroy ( void )
   int res = 0;
   int i;
 
-  XPN_DEBUG_BEGIN
+  XPN_DEBUG_BEGIN;
+  pthread_mutex_lock(&xpn_init_mutex);
+  if ( xpn_initialize == 0){
+    res = 0;
+    goto cleanup_xpn_simple_destroy;
+  }
   xpn_initialize = 0;
   if(xpn_parttable[0].id < 0)
   {
     res = 0;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_simple_destroy;
   }
 
   xpn_destroy_file_table();
@@ -112,26 +101,28 @@ int xpn_simple_destroy ( void )
     xpn_parttable[i].id = -1;
     i++;
   }
-
   res = 0;
-  XPN_DEBUG_END
+cleanup_xpn_simple_destroy:
+  pthread_mutex_unlock(&xpn_init_mutex);
+  XPN_DEBUG_END;
   return res;
 }
 
-int xpn_init_partition(__attribute__((__unused__)) char *partname)
+int xpn_init_partition( void )
 {
   int res;
   int i,j;
-  struct conf_connect_st *fd;
-  xpn_initialize = 0;
   char *env_debug;
+  int part_n = 0;
+  char buff_value[PATH_MAX];
+  struct conf_file_data conf_data = {0};
 
   env_debug = getenv("XPN_DEBUG");
   if ((env_debug != NULL) && (strlen(env_debug) > 0)){
     xpn_debug=1;
   }
 
-  XPN_DEBUG_BEGIN
+  XPN_DEBUG_BEGIN;
 
   setbuf(stdout,NULL);
   setbuf(stderr,NULL);
@@ -139,185 +130,151 @@ int xpn_init_partition(__attribute__((__unused__)) char *partname)
   pthread_mutex_lock(&xpn_init_mutex);
 
   if(!xpn_initialize){
-    XPN_DEBUG("Initializing\n");
+    XPN_DEBUG("Initializing");
   }
   else
   {
-    XPN_DEBUG("Already initialized\n");
-
-    pthread_mutex_unlock(&xpn_init_mutex);
-
+    XPN_DEBUG("Already initialized");
     res = 0;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_init_partition;
   }
 
-  fd = XpnPartitionOpen(); /* XpnPartitionOpen */
-  if(fd == NULL)
+  res = XpnConfLoad(&conf_data);
+  if (res != 0)
   {
-    xpn_err(XPNERR_CONF);
-    fprintf(stderr,"xpn_init: Can't open partition data\n");
-
-    pthread_mutex_unlock(&xpn_init_mutex);
-
     res = -1;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_init_partition;
   }
 
-  i = 0;
-  while((res = XpnGetNextPartition(fd, xpn_parttable[i].name)) > 0)
+  part_n = XpnConfGetNumPartitions(&conf_data);
+  if (part_n <= 0)
   {
-    xpn_parttable[i].initialized = 0;
-
-    //TODO: XpnGetIdPartition does not take into account that xpn_init xpn_destroy and xpn_init are done in one run
-    // xpn_parttable[i].id = XpnGetIdPartition(fd, xpn_parttable[i].name);
+    fprintf(stderr, "xpn_init: Fail in parse config file\n");
+    res = -1;
+    goto cleanup_xpn_init_partition;
+  }
+  for (i = 0; i < part_n; i++)
+  {
     xpn_parttable[i].id = i;
-    XPN_DEBUG("Partition %d: name=%s", xpn_parttable[i].id, xpn_parttable[i].name);
-    
-    /* compruebo los errores???? */
-    if(XpnGetInfoPartition(fd, &(xpn_parttable[i]))==-1)
+
+    res = XpnConfGetValue(&conf_data, XPN_CONF_TAG_PARTITION_NAME, buff_value, i);
+    if (res != 0)
     {
-      fprintf(stderr, "(4)xpn_init: %s info incomplete.\n", xpn_parttable[i].name);
-
-      pthread_mutex_unlock(&xpn_init_mutex);
-
+      fprintf(stderr, "xpn_init: Error in conf_file: "XPN_CONF_TAG_PARTITION_NAME" not found in %d partition\n", i);
       res = -1;
-      XPN_DEBUG_END
-      return res;
-    }    
+      goto cleanup_xpn_init_partition;
+    }
+    strcpy(xpn_parttable[i].name, buff_value);
+    XPN_DEBUG("Partition %d: name=%s", xpn_parttable[i].id, xpn_parttable[i].name);
+
+    // Block_size
+    res = XpnConfGetValue(&conf_data, XPN_CONF_TAG_BLOCKSIZE, buff_value, i);
+    if (res != 0 || getSizeFactor(buff_value) == 1)
+      strcpy(buff_value, XPN_CONF_DEFAULT_BLOCKSIZE);
+    xpn_parttable[i].block_size =  getSizeFactor(buff_value);
+    XPN_DEBUG("Partition %d: block_size=%ld", xpn_parttable[i].id, xpn_parttable[i].block_size);
+
+    // Replication_level
+    res = XpnConfGetValue(&conf_data, XPN_CONF_TAG_REPLICATION_LEVEL, buff_value, i);
+    if (res != 0 || atoi(buff_value) < 0)
+      strcpy(buff_value, XPN_CONF_DEFAULT_REPLICATION_LEVEL);
+    xpn_parttable[i].replication_level = atoi(buff_value);
     XPN_DEBUG("Partition %d: replication_level=%d", xpn_parttable[i].id, xpn_parttable[i].replication_level);
 
-    xpn_parttable[i].data_nserv = XpnGetNumServersPartition(fd, &(xpn_parttable[i]) , XPN_DATA_SERVER);
-    XPN_DEBUG("Partition %d: data_nserv=%d\n", xpn_parttable[i].id, xpn_parttable[i].data_nserv);
-
+    // data_nserv
+    xpn_parttable[i].data_nserv = XpnConfGetNumServers(&conf_data, i);
+    if (xpn_parttable[i].data_nserv <= 0)
+    {
+      fprintf(stderr, "xpn_init: Error in conf_file: %d servers found, minimum 1 in %d partition\n", xpn_parttable[i].data_nserv ,i);
+      res = -1;
+      goto cleanup_xpn_init_partition;
+    }
+    XPN_DEBUG("Partition %d: data_nserv=%d", xpn_parttable[i].id, xpn_parttable[i].data_nserv);
+    
     xpn_parttable[i].data_serv=(struct nfi_server *)malloc(xpn_parttable[i].data_nserv*sizeof(struct nfi_server));
     if (xpn_parttable[i].data_serv == NULL)
     {
       fprintf(stderr, "xpn_init: Couldn't allocate memory\n");
-
-      pthread_mutex_unlock(&xpn_init_mutex);
-
       res = -1;
-      XPN_DEBUG_END
-      return res;
+      goto cleanup_xpn_init_partition;
     }
 
     memset(xpn_parttable[i].data_serv, 0, xpn_parttable[i].data_nserv*sizeof(struct nfi_server));
 
+    // Init all servers
     for(j=0;j<xpn_parttable[i].data_nserv;j++)
     {
-      //TODO: AQUI??
-
-      res = XpnGetServer(fd, &(xpn_parttable[i]), &(xpn_parttable[i].data_serv[j]), XPN_DATA_SERVER);
-
-      if(res<0){
-        // Mark server with error for fault tolerant
+      res = XpnInitServer(&conf_data, &(xpn_parttable[i]), &(xpn_parttable[i].data_serv[j]), j);
+      if(res<0)
+      {
         xpn_parttable[i].data_serv[j].error = -1;
-        // XpnPartitionClose(fd);
-        // for(j=0;j<i;j++){
-        //   xpn_destroy_servers(&(xpn_parttable[j]));
-        // }
-        // fprintf(stderr,"xpn_init: Data configuration incorrect\n");
-
-        // pthread_mutex_unlock(&xpn_init_mutex);
-
-        // res = -1;
-        // XPN_DEBUG_END
-        // return res;
       }
     }
-    
+
+    // Check if there are to much servers with errors than replication level permit
     int n_error = 0;
     for(j=0;j<xpn_parttable[i].data_nserv;j++)
     {
       if (xpn_parttable[i].data_serv[j].error != 0)
         n_error++;
-      XPN_DEBUG("Partition %d: error server %d: %d",xpn_parttable[i].id,j,xpn_parttable[i].data_serv[j].error)
+      XPN_DEBUG("Partition %d: error server %d: %d",xpn_parttable[i].id,j,xpn_parttable[i].data_serv[j].error);
     }  
     XPN_DEBUG("Partition %d end", xpn_parttable[i].id);
 
-    if (n_error > xpn_parttable[i].replication_level){
-      XpnPartitionClose(fd);
+    if (n_error > xpn_parttable[i].replication_level)
+    {
       for(j=0;j<XPN_MAX_PART;j++){
         xpn_destroy_servers(&(xpn_parttable[j]));
       }
       fprintf(stderr,"xpn_init: More servers with errors (%d) than replication level permit (%d)\n",n_error,xpn_parttable[i].replication_level);
 
-      pthread_mutex_unlock(&xpn_init_mutex);
-
       res = -1;
-      XPN_DEBUG_END
-      return res;
+      goto cleanup_xpn_init_partition;
     }
     
-    i++;
+    // Check if there are to much parts
     if(i == XPN_MAX_PART)
     {
-      XpnPartitionClose(fd);
-      for(j=0;j<XPN_MAX_PART;j++){
+      for(j=0;j<XPN_MAX_PART;j++)
+      {
         xpn_destroy_servers(&(xpn_parttable[j]));
       }
       fprintf(stderr,"xpn_init: Data configuration incorrect. Too much partitions \n");
-
-      pthread_mutex_unlock(&xpn_init_mutex);
-
       res = -1;
-      XPN_DEBUG_END
-      return res;
+      goto cleanup_xpn_init_partition;
     }
-  } // while
-
-  if(res<0)
-  {
-    XpnPartitionClose(fd);
-    for(j=0;j<i;j++){
-      xpn_destroy_servers(&(xpn_parttable[j]));
-    }
-
-    fprintf(stderr,"xpn_init: Data configuration incorrect.\n");
-
-    pthread_mutex_unlock(&xpn_init_mutex);
-
-    res = -1;
-    XPN_DEBUG_END
-    return res;
   }
-
-  XpnPartitionClose(fd);
-
+  
   /* Init the file table */
   res = xpn_init_file_table();
   if(res<0)
   {
-    for(j=0;j<i;j++){
+    for(j=0;j<i;j++)
+    {
       xpn_destroy_servers(&(xpn_parttable[j]));
     }
-
-    pthread_mutex_unlock(&xpn_init_mutex);
-
     res = -1;
-    XPN_DEBUG_END
-    return res;
+    goto cleanup_xpn_init_partition;
   }
 
   /* Init the rest of elements of the table */
-  for(j=0;j<i;j++){
+  for(j=0;j<i;j++)
+  {
     xpn_parttable[i].id = -1;
   }
   xpn_init_cwd();
   xpn_initialize = 1;
-
+  res = 0;
+cleanup_xpn_init_partition:
+  XpnConfFree(&conf_data);
   pthread_mutex_unlock(&xpn_init_mutex);
 
-  res = 0;
-  XPN_DEBUG_END
-
+  XPN_DEBUG_END;
   return res;
 }
 
 int xpn_simple_init ( void )
 {
-  return xpn_init_partition(NULL);
+  return xpn_init_partition();
 }
 

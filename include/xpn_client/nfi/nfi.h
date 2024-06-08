@@ -75,7 +75,6 @@
     int xpn_thread;
   };
 
-
   struct nfi_attr_server
   {
     int type;
@@ -95,21 +94,21 @@
 
   struct nfi_attr
   {
-    dev_t     st_dev;     // ID of device containing file 
-    ino_t     st_ino;     // inode number 
+    dev_t   st_dev;     // ID of device containing file 
+    ino_t   st_ino;     // inode number 
 
-    int   at_type;      // FILE or DIR        
+    int     at_type;    // FILE or DIR        
     mode_t  at_mode;    // protection     
     nlink_t at_nlink;   // number of hard links   
-    uid_t at_uid;       // user ID of owner   
-    gid_t at_gid;       // group ID of owner    
-    off_t at_size;      // total size, in bytes   
+    uid_t   at_uid;     // user ID of owner   
+    gid_t   at_gid;     // group ID of owner    
+    off_t   at_size;    // total size, in bytes   
     u_long  at_blksize; // blocksize for filesystem I/O 
     u_long  at_blocks;  // number of blocks allocated 
     time_t  at_atime;   // time of last access    
     time_t  at_mtime;   // time of last modification  
     time_t  at_ctime;   // time of last status change 
-    void  *private_info;  
+    void    *private_info;  
   };
 
   struct nfi_fhandle 
@@ -127,22 +126,19 @@
     //int   (*nfi_destroy)(struct nfi_server *serv);
     int     (*nfi_getattr)  (struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
     int     (*nfi_setattr)  (struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
-    int     (*nfi_open)     (struct nfi_server *serv, char *url, struct nfi_fhandle *fho); 
-    int     (*nfi_create)   (struct nfi_server *serv, char *url,  struct nfi_attr *attr, struct nfi_fhandle  *fh);
+    int     (*nfi_open)     (struct nfi_server *serv, char *url, int flags, mode_t mode, struct nfi_fhandle *fho); 
+    int     (*nfi_create)   (struct nfi_server *serv, char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle  *fh);
     int     (*nfi_close)    (struct nfi_server *serv, struct nfi_fhandle *fh);
     int     (*nfi_remove)   (struct nfi_server *serv, char *url);
     int     (*nfi_rename)   (struct nfi_server *serv, char *old_url, char *new_url);
     ssize_t (*nfi_read)     (struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size);
     ssize_t (*nfi_write)    (struct nfi_server *serv, struct nfi_fhandle *fh, void *buffer, off_t offset, size_t size);
-    int     (*nfi_mkdir)    (struct nfi_server *serv, char *url, struct nfi_attr *attr, struct nfi_fhandle *fh);
+    int     (*nfi_mkdir)    (struct nfi_server *serv, char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle *fh);
     int     (*nfi_rmdir)    (struct nfi_server *serv, char *url);
     int     (*nfi_opendir)  (struct nfi_server *serv, char *url, struct nfi_fhandle *fho);
     int     (*nfi_readdir)  (struct nfi_server *serv, struct nfi_fhandle *fhd, struct dirent *entry);
     int     (*nfi_closedir) (struct nfi_server *serv, struct nfi_fhandle *fh);
     int     (*nfi_statfs)   (struct nfi_server *serv, struct nfi_info *inf);
-
-    int     (*nfi_preload)  (struct nfi_server *serv, char *url, char *virtual_path, char* storage_path, int opt); 
-    int     (*nfi_flush)    (struct nfi_server *serv, char *url, char *virtual_path, char* storage_path, int opt); 
   };
 
 

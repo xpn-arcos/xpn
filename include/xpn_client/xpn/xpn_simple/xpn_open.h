@@ -69,10 +69,6 @@
   int   xpn_simple_dup(int fd);
   int   xpn_simple_dup2(int fd, int fd2);
 
-  int   xpn_simple_flush(const char *virtual_path, const char *storage_path);
-  int   xpn_simple_preload(const char *virtual_path, const char *storage_path);
-
-
   /* ................................................................... */
 
   #ifdef  __cplusplus

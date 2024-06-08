@@ -47,7 +47,9 @@
     int   id;
     int   type_op;
     int   rank_client_id;
+    int   tag_client_id;
     long  sd;
+    void *comm;
 
     // w: worker_ondemand/worker_pool as void *
     void *w;

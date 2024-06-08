@@ -41,7 +41,8 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int XpnGetBlockInvert(struct xpn_partition *part, int serv, off_t local_offset, off_t *offset);
+  void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t offset, int replication, off_t *local_offset, int *serv);
+  void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, int serv, off_t local_offset, off_t *offset, int *replication);
 
   int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, int *serv);
   int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv);
@@ -52,8 +53,9 @@
   void *XpnWriteBlocks      (int fd, const void *buffer, size_t size, off_t offset, struct nfi_worker_io ***io_out, int **ion_out, int num_servers);
 
   ssize_t XpnReadGetTotalBytes (ssize_t *res_v, int num_servers);
-  ssize_t XpnWriteGetTotalBytes (ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers);
+  ssize_t XpnWriteGetTotalBytes (ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server *servers);
 
+  ssize_t XpnGetRealFileSize(struct xpn_partition *part, struct nfi_attr *attr, int n_serv);
  
   /* ................................................................... */
 

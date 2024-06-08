@@ -50,15 +50,9 @@
     int replication_level;     // replication_level of files :0, 1, 2,... 
     char name[PATH_MAX];  // name of partition 
     ssize_t block_size;   // size of distribution used 
-    ssize_t size_threads;
-    
-    int initialized; // whether it is already initialized or not 
 
     int data_nserv;     // number of server 
     struct nfi_server *data_serv; // list of data servers in the partition 
-    
-    int meta_nserv;     // number of metadata_server 
-    struct nfi_server *meta_serv; // list of metadata servers in the partition 
   };
 
   // metadata of xpn file
@@ -72,7 +66,7 @@
     int data_nserv;   // number of servers 
     int meta_nserv;   // number of metadata servers 
     struct nfi_attr attr;
-	int first_node;
+	  int first_node;
   };
 
   // metadata header of xpn file
@@ -82,6 +76,8 @@
     ssize_t block_size;    // size of distribution used 
     int     data_nserv;   // number of servers 
     ssize_t file_size;
+    int replication_level;     // replication_level of files :0, 1, 2,... 
+	  int first_node;
     //char    padding[512-(3*sizeof(int) - 2*sizeof(ssize_t))];   // 484 = 512 bytes - 3*sizeof(int) - 2*sizeof(ssize_t) 
   };
 

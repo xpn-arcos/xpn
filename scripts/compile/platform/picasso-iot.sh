@@ -39,7 +39,6 @@ ln -s  /usr/lib64/libslurm.so   $INSTALL_PATH/base/lib/libslurm.so.32
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$INSTALL_PATH/base/lib/
 
 # 3) preconfigure build-me...
-$BASE_PATH/../software/mxml.sh                       -i $INSTALL_PATH -s $BASE_PATH/../../../../mxml
 $BASE_PATH/../software/mqtt.sh        				 -i $INSTALL_PATH -s $BASE_PATH/../../../../mosquitto
 $BASE_PATH/../software/xpn_iot.sh     -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
 $BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior

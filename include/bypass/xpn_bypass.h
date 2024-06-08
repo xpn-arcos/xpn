@@ -32,6 +32,8 @@
   #include <dlfcn.h>
   #include <sys/stat.h>
   #include <stdarg.h>
+  #include <time.h>
+  #include <stdlib.h>
 
   #include "xpn.h"
   #include "syscall_proxies.h"
@@ -145,6 +147,7 @@
   int open64     ( const char *path, int flags, ... );
   int __open_2   ( const char *path, int flags, ... );
   int creat      ( const char *path, mode_t mode );
+  int mkstemp    ( char *template );
   int close      ( int fd );
 
   int ftruncate  ( int fildes, off_t length );
@@ -152,16 +155,20 @@
   ssize_t read   ( int fildes,       void *buf, size_t nbyte );
   ssize_t write  ( int fildes, const void *buf, size_t nbyte );
 
-  ssize_t pread  ( int fd, void *buf, size_t count, off_t offset );
-  ssize_t pwrite ( int fd, const void *buf, size_t count, off_t offset );
+  ssize_t pread    ( int fd, void *buf, size_t count, off_t offset );
+  ssize_t pwrite   ( int fd, const void *buf, size_t count, off_t offset );
+  ssize_t pread64  ( int fd, void *buf, size_t count, off_t offset );
+  ssize_t pwrite64 ( int fd, const void *buf, size_t count, off_t offset );
 
   off_t   lseek   ( int fildes, off_t offset, int whence );
   off64_t lseek64 ( int fd,   off64_t offset, int whence );
 
+  int stat         (          const char *path, struct stat   *buf );
   int __lxstat     ( int ver, const char *path, struct stat   *buf );
   int __lxstat64   ( int ver, const char *path, struct stat64 *buf );
   int __xstat      ( int ver, const char *path, struct stat   *buf );
   int __xstat64    ( int ver, const char *path, struct stat64 *buf );
+  int fstat        (                    int fd, struct stat   *buf );
   int __fxstat     ( int ver,           int fd, struct stat   *buf );
   int __fxstat64   ( int ver,       int fildes, struct stat64 *buf );
   int __fxstatat   ( int ver, int dirfd, const char *path, struct stat   *buf, int flags );
@@ -183,7 +190,8 @@
 
   int  fseek      ( FILE *stream, long int offset, int whence );
   long ftell      ( FILE *stream );
-  int  dlsym_feof ( FILE *stream );
+  void rewind     ( FILE *stream );
+  int  feof       ( FILE *stream );
 
 
   // Directory API

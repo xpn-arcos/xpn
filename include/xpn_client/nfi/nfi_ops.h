@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -59,8 +59,6 @@
     op_closedir = 24,
 
     op_statfs   = 60,
-    op_preload  = 61,
-    op_flush    = 62,
   };
 
 
@@ -71,27 +69,24 @@
 
   void nfi_do_operation ( struct st_th th_arg );
 
-  int nfi_worker_do_open(struct nfi_worker *wrk, char *url, struct nfi_fhandle *fho);
-  int nfi_worker_do_create(struct nfi_worker *wrk, char *url, struct nfi_attr *attr, struct nfi_fhandle  *fh);
-  int nfi_worker_do_read( struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io,int n);
-  int nfi_worker_do_write(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io,int n);
-  int nfi_worker_do_close(struct nfi_worker *wrk, struct nfi_fhandle *fh);
+  int nfi_worker_do_open   (struct nfi_worker *wrk, char *url, int flags, mode_t mode, struct nfi_fhandle *fho);
+  int nfi_worker_do_create (struct nfi_worker *wrk, char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle  *fh);
+  int nfi_worker_do_read   (struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io,int n);
+  int nfi_worker_do_write  (struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_worker_io *io,int n);
+  int nfi_worker_do_close  (struct nfi_worker *wrk, struct nfi_fhandle *fh);
 
-  int nfi_worker_do_remove(struct nfi_worker *wrk, char *url);
-  int nfi_worker_do_rename(struct nfi_worker *wrk, char *old_url, char *new_url);
-  int nfi_worker_do_getattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
-  int nfi_worker_do_setattr(struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
+  int nfi_worker_do_remove  (struct nfi_worker *wrk, char *url);
+  int nfi_worker_do_rename  (struct nfi_worker *wrk, char *old_url, char *new_url);
+  int nfi_worker_do_getattr (struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
+  int nfi_worker_do_setattr (struct nfi_worker *wrk, struct nfi_fhandle *fh, struct nfi_attr *attr);
 
-  int nfi_worker_do_mkdir     (struct nfi_worker *wrk, char *url,               struct nfi_attr *attr, struct nfi_fhandle *fh);
-  int nfi_worker_do_opendir   (struct nfi_worker *wrk, char *url,               struct nfi_fhandle *fho);
-  int nfi_worker_do_readdir   (struct nfi_worker *wrk, struct nfi_fhandle *fhd, struct dirent *entry);
-  int nfi_worker_do_closedir  (struct nfi_worker *wrk, struct nfi_fhandle *fh);
-  int nfi_worker_do_rmdir     (struct nfi_worker *wrk, char *url);
+  int nfi_worker_do_mkdir    (struct nfi_worker *wrk, char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle *fh);
+  int nfi_worker_do_opendir  (struct nfi_worker *wrk, char *url, struct nfi_fhandle *fho);
+  int nfi_worker_do_readdir  (struct nfi_worker *wrk, struct nfi_fhandle *fhd, struct dirent *entry);
+  int nfi_worker_do_closedir (struct nfi_worker *wrk, struct nfi_fhandle *fh);
+  int nfi_worker_do_rmdir    (struct nfi_worker *wrk, char *url);
 
-  int nfi_worker_do_statfs(struct nfi_worker *wrk, struct nfi_info *inf);
-  int nfi_worker_do_preload(struct nfi_worker *wrk, char *url, char *virtual_path,char *storage_path,int opt);
-  int nfi_worker_do_flush(struct nfi_worker *wrk, char *url, char *virtual_path,char *storage_path,int opt);
-
+  int nfi_worker_do_statfs  (struct nfi_worker *wrk, struct nfi_info *inf);
 
   /* ................................................................... */
 

@@ -55,12 +55,15 @@
 
   int dlsym_creat     (const char *path, mode_t mode);
   int dlsym_ftruncate (int fd, off_t length);
+  int dlsym_mkstemp   (char *template);
 
   ssize_t dlsym_read  (int fd, void *buf, size_t nbyte);
   ssize_t dlsym_write (int fd, void *buf, size_t nbyte);
 
-  ssize_t dlsym_pread  (int fd, void *buf, size_t count, off_t offset);
-  ssize_t dlsym_pwrite (int fd, const void *buf, size_t count, off_t offset);
+  ssize_t dlsym_pread    (int fd, void *buf, size_t count, off_t offset);
+  ssize_t dlsym_pwrite   (int fd, const void *buf, size_t count, off_t offset);
+  ssize_t dlsym_pread64  (int fd, void *buf, size_t count, off_t offset);
+  ssize_t dlsym_pwrite64 (int fd, const void *buf, size_t count, off_t offset);
 
   off_t   dlsym_lseek   (int fd,   off_t offset, int whence);
   off64_t dlsym_lseek64 (int fd, off64_t offset, int whence);
@@ -89,13 +92,17 @@
 
   int  dlsym_fseek    (FILE *stream, long int offset, int whence);
   long dlsym_ftell    (FILE *stream);
+  void dlsym_rewind   (FILE *stream);
   int  dlsym_feof     (FILE *stream);
 
 
   // Directory API
   DIR* dlsym_opendir   (char *dirname);
   DIR* dlsym_opendir64 (char *dirname);
-  int  dlsym_closedir  (DIR*);
+  int  dlsym_closedir  (DIR* dirp);
+
+  long dlsym_telldir (DIR *dirp);
+  void dlsym_seekdir (DIR *dirp, long loc);
 
   struct dirent * dlsym_readdir     (DIR *dirp);
   struct dirent64 * dlsym_readdir64 (DIR *dirp);

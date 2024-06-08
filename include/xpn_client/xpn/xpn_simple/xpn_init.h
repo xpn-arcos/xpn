@@ -49,7 +49,7 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int xpn_init_partition(char *partname);
+  int xpn_init_partition( void );
 
   int xpn_simple_mark_error_server ( int index ) ;
   int xpn_simple_destroy ( void );

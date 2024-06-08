@@ -24,10 +24,6 @@
 
 
 
-ssize_t XpnGetSizeThreads(struct xpn_partition *p)
-{
-  return p->size_threads;
-}
 
 
 void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
@@ -75,115 +71,54 @@ void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
 
 /**
  * TODO:
- *   ** int op -> not used (!)
- *   ** XpnGetServers(.... int type==XPN_META_SERVER) ->  XpnGetServers_mdata(....) ;
  *   ** fd < 0 => XpnGetServers_data_by_path(....) ;
  *   ** fd > 0 => XpnGetServers_data_by_fd(....) ;
  * 
- * Returns the data or metadata servers.
+ * Returns the number of the data servers, and a pointer to the array.
  *
  * @param op Flag operation.
  * @param pd Partition id.
  * @param abs_path Absolute path.
  * @param fd File descriptor.
- * @param servers[out] The data or metadata servers to be obtained.
- * @param type Metadata or data server.
+ * @param servers[out] The data servers to be obtained, must not free.
  *
- * @return The number of data or metadata servers on success or -1 on error,
+ * @return The number of data servers on success or -1 on error,
  */
-int XpnGetServers(int op, int pd, __attribute__((__unused__)) char *abs_path, int fd, struct nfi_server ***servers, int type)
+int XpnGetServers(int pd, int fd, struct nfi_server **servers)
 {
-  struct nfi_server **serv;
-  int i, j, n;
+  // struct nfi_server **serv;
+  int i, n;
 
   n = 1; // TODO: check default value of 1
 
   /* params op and abs_path are not used in this version */
-  switch(op)
+  if (pd >= 0)
   {
-    default:
-      if (pd >= 0)
-      {
-        i = 0;
-        while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
-          i++;
-        }
+    i = 0;
+    while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
+      i++;
+    }
 
-        if(i == XPN_MAX_PART){
-          return -1;
-        }
+    if(i == XPN_MAX_PART){
+      return -1;
+    }
 
-        switch(type)
-        {
-          case  XPN_DATA_SERVER:
-            n = xpn_parttable[i].data_nserv;
-            break;
-          case  XPN_META_SERVER:
-            n = xpn_parttable[i].meta_nserv;
-            break;
-        }
+    n = xpn_parttable[i].data_nserv;
+    
+    (*servers) = xpn_parttable[i].data_serv;
+  }
+  else if (fd >=0)
+  {
+    if((fd>XPN_MAX_FILE)||(xpn_file_table[fd] == NULL)){
+      return -1;
+    }
 
-        serv = (struct nfi_server **)malloc(sizeof(struct nfi_server *) * n);
-        if(serv == NULL){
-          /* xpn_err()*/
-          return -1;
-        }
+    n = xpn_file_table[fd]->data_vfh->n_nfih;
 
-        for(j=0;j<n;j++)
-        {
-          switch(type)
-          {
-            case  XPN_DATA_SERVER:
-              serv[j] = &(xpn_parttable[i].data_serv[j]);
-              break;
-            case  XPN_META_SERVER:
-              serv[j] = &(xpn_parttable[i].meta_serv[j]);
-              break;
-          }
-        }
-        (*servers) = serv;
-      }
-      else if (fd >=0)
-      {
-        if((fd>XPN_MAX_FILE)||(xpn_file_table[fd] == NULL)){
-          return -1;
-        }
-
-        switch(type)
-        {
-          case  XPN_DATA_SERVER:
-            n = xpn_file_table[fd]->data_vfh->n_nfih;
-            break;
-          case  XPN_META_SERVER:
-            n = xpn_file_table[fd]->meta_vfh->n_nfih;
-            break;
-        }
-
-        serv = (struct nfi_server **)malloc(sizeof(struct nfi_server*) * n);
-        if(serv == NULL){
-          /* xpn_err()*/
-          return -1;
-        }
-
-        for(j=0;j<n;j++)
-        {
-          switch(type)
-          {
-            case  XPN_DATA_SERVER:
-              serv[j] = &(xpn_file_table[fd]->part->data_serv[j]);
-              break;
-            case  XPN_META_SERVER:
-              serv[j] = &(xpn_file_table[fd]->part->meta_serv[j]);
-              break;
-          }
-        }
-
-        (*servers) = serv;
-      }
-      else{
-        return -1;
-      }
-      break;
+    (*servers) = xpn_file_table[fd]->part->data_serv;
+  }
+  else{
+    return -1;
   }
 
   return n;
@@ -212,7 +147,6 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
 
   /* initial values */
   bzero(mdata, sizeof(struct xpn_metadata));
-  mdata->meta_nserv   = xpn_parttable[part_id].meta_nserv;
   mdata->data_nserv   = xpn_parttable[part_id].data_nserv;
   mdata->id           = 0;
   mdata->version      = 1;
@@ -257,7 +191,7 @@ int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
 //TODO: we think that this function is used to write metadata into the metadata header (todo: really write into file)
 int XpnUpdateMetadata( __attribute__((__unused__)) struct xpn_metadata *mdata,
                        __attribute__((__unused__)) int nserv,
-                       __attribute__((__unused__)) struct nfi_server **servers,
+                       __attribute__((__unused__)) struct nfi_server *servers,
                        __attribute__((__unused__)) struct xpn_fh *fh,
                        __attribute__((__unused__)) char *path)
 {
@@ -268,7 +202,7 @@ int XpnUpdateMetadata( __attribute__((__unused__)) struct xpn_metadata *mdata,
 
 
 //TODO: we think that this function is used to read metadata from the metadata header (todo: really read header)
-int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) int nserv, struct nfi_server **servers, struct xpn_fh *fh, char *path, int pd )
+int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) int nserv, struct nfi_server *servers, struct xpn_fh *fh, char *path, int pd )
 {
   int res, n, i;
 
@@ -280,11 +214,19 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
 
   n = hash(path, nserv);
 
-  res = XpnGetFh(mdata, &(fh->nfih[n]), servers[n], path);
+  // TODO: fix getFh for dir or file
+  res = XpnGetFh(mdata, &(fh->nfih[n]), &servers[n], path);
   if(res < 0)
-  {
-    XPN_DEBUG_END
-    return -1;
+  { 
+    int save_errno = errno;
+    errno = 0;
+    res = XpnGetFhDir(mdata, &(fh->nfih[n]), &servers[n], path);
+    if(res < 0)
+    {
+      errno = save_errno;
+      XPN_DEBUG_END
+      return -1;
+    }
   }
 
   XpnCreateMetadata(mdata, pd, path);
@@ -314,7 +256,7 @@ int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) in
 
 int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path)
 {
-  int res;
+  int res = 0;
   char url_serv[PATH_MAX];
   struct nfi_fhandle *fh_aux;
 
@@ -339,13 +281,54 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
   memset(fh_aux, 0, sizeof(struct nfi_fhandle));
 
   XpnGetURLServer(servers, path, url_serv);
-  if (servers->error != -1){
-    // Default Value (if file, else directory)
-    res = servers->ops->nfi_open(servers, url_serv, fh_aux);
-    if (res<0) {
-        res = servers->ops->nfi_opendir(servers, url_serv, fh_aux); // FIXME: When do we do nfi_closedir()?
-    }
+  servers->wrk->thread = servers->xpn_thread;
+  nfi_worker_do_open(servers->wrk, url_serv, O_RDWR | O_CREAT, S_IRWXU, fh_aux);
+  res = nfiworker_wait(servers->wrk);
+
+  if(res<0)
+  {
+    free(fh_aux);
+    XPN_DEBUG_END
+    return -1;
   }
+
+  (*fh) = fh_aux;
+
+  XPN_DEBUG_END
+  return 0;
+}
+
+int XpnGetFhDir( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_server *servers, char *path)
+{
+  int res = 0;
+  char url_serv[PATH_MAX];
+  struct nfi_fhandle *fh_aux;
+
+  XPN_DEBUG_BEGIN_CUSTOM("%s",path);
+  if(mdata == NULL){
+    return -1;
+  }
+
+  if((*fh) != NULL)
+  {
+    XPN_DEBUG_END
+    return 0;
+  }
+
+  fh_aux = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
+  if(fh_aux == NULL)
+  {
+    XPN_DEBUG_END
+    return -1;
+  }
+
+  memset(fh_aux, 0, sizeof(struct nfi_fhandle));
+
+  XpnGetURLServer(servers, path, url_serv);
+  servers->wrk->thread = servers->xpn_thread;
+  nfi_worker_do_opendir(servers->wrk, url_serv, fh_aux);
+  res = nfiworker_wait(servers->wrk);
+
   if(res<0)
   {
     free(fh_aux);
@@ -363,22 +346,21 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
 int XpnGetAtribFd ( int fd, struct stat *st )
 {
   int ret, res, i, n, err;
-  struct nfi_server **servers;
+  struct nfi_server *servers;
   struct nfi_attr *attr;
 
   XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
   servers = NULL;
-  n = XpnGetServers(op_xpn_getattr, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+  n = XpnGetServers(xpn_file_table[fd]->part->id, fd, &servers);
   if (n<=0)
   {
     XPN_DEBUG_END_CUSTOM("%d", fd)
     return -1;
-  }
+  }  
 
   attr = (struct nfi_attr *) malloc(n * sizeof(struct nfi_attr));
   if (NULL == attr) {
-    free(servers);
     perror("malloc: ");
     return -1;
   }
@@ -388,7 +370,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
 
   for(i=0;i<n;i++)
   {
-    res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), servers[i], xpn_file_table[fd]->path);
+    res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), &servers[i], xpn_file_table[fd]->path);
     if (res<0 && xpn_file_table[fd]->part->data_serv[i].error != -1)
     {
       XPN_DEBUG_END_CUSTOM("%d", fd)
@@ -396,19 +378,17 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     }
 
     // Worker
-    nfi_worker_do_getattr(servers[i]->wrk, xpn_file_table[fd]->data_vfh->nfih[i], &(attr[i]));
+    nfi_worker_do_getattr(servers[i].wrk, xpn_file_table[fd]->data_vfh->nfih[i], &(attr[i]));
   }
 
   // Wait
   err = 0;
   for(i=0;i<n;i++)
   {
-    ret = nfiworker_wait(servers[i]->wrk);
+    ret = nfiworker_wait(servers[i].wrk);
 
     // Control error
-    if((ret<0)&&(!err))
-    {
-      // erase the file create before de server number i
+    if((ret<0)&&(!err)){
       err = 1;
     }
   }
@@ -416,39 +396,11 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   // Error checking
   if(err)
   {
-    xpn_err(XPNERR_REMOVE);
-    free(servers);
+    free(attr);
     return -1;
   }
 
-  int serv_to_calc = 0;
-  // Check if have incomplete blocks
-  int have_incompete_blocks = 0;
-  for(i=0;i<n;i++)
-    if (attr[i].at_size != 0 &&
-       (attr[i].at_size - XPN_HEADER_SIZE) % xpn_file_table[fd]->part->block_size != 0){
-      have_incompete_blocks = 1;
-      serv_to_calc = i;
-      break;
-    }
-
-  // Get serv with the last block
-  for(i=0;i<n;i++){
-    if (have_incompete_blocks){
-      if (attr[i].at_size != 0 &&
-         (attr[i].at_size - XPN_HEADER_SIZE) % xpn_file_table[fd]->part->block_size != 0 && 
-          attr[i].at_size <= attr[serv_to_calc].at_size){
-            serv_to_calc = i;
-          }
-    }else{
-      if (attr[i].at_size >= attr[serv_to_calc].at_size)
-        serv_to_calc = i;
-    }
-  }
-  
-  off_t offset = 0;
-  ret = XpnGetBlockInvert(xpn_file_table[fd]->part, serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE, &offset);
-  st->st_size = offset;
+  st->st_size = XpnGetRealFileSize(xpn_file_table[fd]->part, attr, n);
 
   int master_node = xpn_file_table[fd]->mdata->first_node;
 
@@ -473,7 +425,6 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
   st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
 
-  free(servers);
   free(attr);
 
   XPN_DEBUG_END_CUSTOM("%d", fd);
@@ -485,7 +436,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   int ret, res, err, i, n, pd;
   char url_serv[PATH_MAX];
   char aux_path[PATH_MAX];
-  struct nfi_server **servers;
+  struct nfi_server *servers;
   struct nfi_attr *attr;
   struct xpn_fh *vfh_aux;
 
@@ -495,7 +446,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   pd = XpnGetPartition(aux_path); // returns partition id and remove partition name from path 
   if (pd < 0)
   {
-    xpn_err(XPNERR_PART_NOEXIST);
+    errno = ENOENT;
     XPN_DEBUG_END_ARGS1(aux_path)
     return pd;
   }
@@ -503,15 +454,13 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   /* params:
    * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
-  n = XpnGetServers(op_xpn_getattr, pd, aux_path, -1, &servers, XPN_DATA_SERVER);
+  n = XpnGetServers(pd, -1, &servers);
   if(n<=0){
-    /*free(servers);*/
     return -1;
   }
 
   attr = (struct nfi_attr *) malloc(n * sizeof(struct nfi_attr));
   if (NULL == attr) {
-    free(servers);
     perror("malloc: ");
     return -1;
   }
@@ -522,8 +471,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   /* construccion del vfh */
   if(vfh_aux == NULL)
   {
-    xpn_err(XPNERR_NOMEMORY);
-    free(servers);
+    errno = ENOMEM;
     return -1;
   }
 
@@ -532,8 +480,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   if(vfh_aux->nfih == NULL)
   {
     free(vfh_aux);
-    xpn_err(XPNERR_NOMEMORY);
-    free(servers);
+    errno = ENOMEM;
     return -1;
   }
 
@@ -541,27 +488,26 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   {
     vfh_aux->nfih[i] = NULL;
 
-    XpnGetURLServer(servers[i], aux_path, url_serv);
+    XpnGetURLServer(&servers[i], aux_path, url_serv);
 
     vfh_aux->nfih[i] = (struct nfi_fhandle*)malloc(sizeof(struct nfi_fhandle));
     memset(vfh_aux->nfih[i], 0, sizeof(struct nfi_fhandle));
     if(vfh_aux->nfih[i] == NULL)
     {
-      free(servers);
       return -1;
     }
 
     vfh_aux->nfih[i]->url = url_serv;
 
     // Worker
-    nfi_worker_do_getattr(servers[i]->wrk, vfh_aux->nfih[i], &(attr[i]));
+    nfi_worker_do_getattr(servers[i].wrk, vfh_aux->nfih[i], &(attr[i]));
   }
 
   // Wait
   err = 0;
   for(i=0;i<n;i++)
   {
-    ret = nfiworker_wait(servers[i]->wrk);
+    ret = nfiworker_wait(servers[i].wrk);
 
     // Control error
     if((ret<0)&&(!err))
@@ -574,39 +520,10 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   // Error checking
   if(err)
   {
-    xpn_err(XPNERR_REMOVE);
-    free(servers);
     return -1;
   }
 
-  int serv_to_calc = 0;
-  // Check if have incomplete blocks
-  int have_incompete_blocks = 0;
-  for(i=0;i<n;i++)
-    if (attr[i].at_size != 0 &&
-       (attr[i].at_size - XPN_HEADER_SIZE) % xpn_parttable[pd].block_size != 0){
-      have_incompete_blocks = 1;
-      serv_to_calc = i;
-      break;
-    }
-
-  // Get serv with the last block
-  for(i=0;i<n;i++){
-    if (have_incompete_blocks){
-      if (attr[i].at_size != 0 &&
-         (attr[i].at_size - XPN_HEADER_SIZE) % xpn_parttable[pd].block_size != 0 && 
-          attr[i].at_size <= attr[serv_to_calc].at_size){
-            serv_to_calc = i;
-          }
-    }else{
-      if (attr[i].at_size >= attr[serv_to_calc].at_size)
-        serv_to_calc = i;
-    }
-  }
-  
-  off_t offset = 0;
-  ret = XpnGetBlockInvert(&(xpn_parttable[pd]), serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE, &offset);
-  st->st_size = offset;
+  st->st_size = XpnGetRealFileSize(&(xpn_parttable[pd]), attr, n);
 
   int master_node = hash(path, n);
 
@@ -631,7 +548,6 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
   st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
 
-  free(servers);
   free(attr);
 
   XPN_DEBUG_END_CUSTOM("%s", path)

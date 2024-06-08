@@ -25,57 +25,47 @@
 /**
  * Calculates the server and the offset (in server) of the given offset (origin file) of a file with replication.
  *
- * @param fd[in] A file descriptor.
+ * @param block_size[in] The block size of the file.
+ * @param replication_level[in] The replication level of the file.
+ * @param nserv[in] The number of servers.
  * @param offset[in] The original offset.
  * @param replication[in] The replication of actual offset.
  * @param local_offset[out] The offset in the server.
  * @param serv[out] The server in which is located the given offset.
- *
- * @return Returns 0 on success or -1 on error.
  */
-int XpnGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv)
-{	
-	int block = offset / xpn_file_table[fd]->block_size;
-	int block_replication = block * (xpn_file_table[fd]->part->replication_level + 1) + replication;
-	int block_line = block_replication / xpn_file_table[fd]->part->data_nserv;
+void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t offset, int replication, off_t *local_offset, int *serv)
+{
+	off_t block = offset / block_size;
+	off_t block_replication = block * (replication_level + 1) + replication;
+	off_t block_line = block_replication / nserv;
 	
 	// Calculate the server	
-	(*serv) = (block_replication) % xpn_file_table[fd]->part->data_nserv;
+	(*serv) = (block_replication) % nserv;
 	
 	// Calculate the offset in the server
-	(*local_offset) = block_line * xpn_file_table[fd]->block_size + (offset % xpn_file_table[fd]->block_size);
-	XPN_DEBUG("offset(%lld) -> local_offset = %lld, serv = %d, repl = %d do=%d", (long long)offset, (long long)(*local_offset), *serv, replication, xpn_file_table[fd]->part->data_serv[*serv].error);
-	return 0;
+	(*local_offset) = block_line * block_size + (offset % block_size);
 }
 
 /**
  * Calculates the offset (in file) of the given offset (file in server) of a file with replication.
  *
- * @param fd[in] A file descriptor.
+ * @param block_size[in] The block size of the file.
+ * @param replication_level[in] The replication level of the file.
+ * @param nserv[in] The number of servers.
  * @param serv[in] The server in which is located the given offset.
  * @param local_offset[in] The offset in the server.
  * @param offset[out] The original offset.
- *
- * @return Returns 0 on success or -1 on error.
  */
-int XpnGetBlockInvert(struct xpn_partition *part, int serv, off_t local_offset, off_t *offset)
+void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, int serv, off_t local_offset, off_t *offset, int *replication)
 {
-	int added_size;
-	if (local_offset % part->block_size == 0){
-		added_size = 0;
-	}else{
-		added_size = part->block_size - (local_offset % part->block_size);
-	}
-    int block_line = (local_offset + added_size) / part->block_size;
-
-	int block_replication = (block_line-1) * part->data_nserv + (serv+1);
-	
-	// round up
-    int block = 1 + ((block_replication - 1) / (part->replication_level + 1));
-
-    (*offset) = block * part->block_size - added_size;
-	XPN_DEBUG("offset(%lld) -> local_offset = %lld, serv = %d, do=%d", (long long)(*offset), (long long)local_offset, serv, part->data_serv[serv].error);
-	return 0;
+    off_t block_line = local_offset / block_size;
+	off_t block_replication = block_line * nserv + serv;
+	// round down
+    off_t block = block_replication / (replication_level + 1);
+	// Calculate the offset
+	(*offset) = block * block_size + (local_offset % block_size);
+	// Calculate the actual replication block
+	(*replication) = block_replication % (replication_level + 1);
 }
 
 /**
@@ -96,7 +86,7 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
 	int replication = 0;
 	if (serv_client != -1){
 		do{
-			XpnGetBlock(fd, offset, replication, local_offset, serv);
+			XpnCalculateBlock(xpn_file_table[fd]->block_size, xpn_file_table[fd]->part->replication_level, xpn_file_table[fd]->part->data_nserv, offset, replication, local_offset, serv);
 			if ((*serv) == serv_client && xpn_file_table[fd]->part->data_serv[(*serv)].error != -1 ){
 				return 0;
 			}
@@ -109,7 +99,7 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
 		replication = rand() % (xpn_file_table[fd]->part->replication_level + 1);
 
 	do{
-		XpnGetBlock(fd, offset, replication, local_offset, serv);
+		XpnCalculateBlock(xpn_file_table[fd]->block_size, xpn_file_table[fd]->part->replication_level, xpn_file_table[fd]->part->data_nserv, offset, replication, local_offset, serv);
 		if (xpn_file_table[fd]->part->replication_level != 0)
 			replication = (replication + 1) % (xpn_file_table[fd]->part->replication_level + 1);
 		retries++;
@@ -131,7 +121,7 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
  */
 int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv)
 {
-	XpnGetBlock(fd, offset, replication, local_offset, serv);
+	XpnCalculateBlock(xpn_file_table[fd]->block_size, xpn_file_table[fd]->part->replication_level, xpn_file_table[fd]->part->data_nserv, offset, replication, local_offset, serv);
 	return xpn_file_table[fd]->part->data_serv[*serv].error;
 }
 
@@ -462,7 +452,7 @@ ssize_t XpnReadGetTotalBytes(ssize_t *res_v, int num_servers)
  *
  * @return Returns total bytes read/write.
  */
-ssize_t XpnWriteGetTotalBytes(ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server **servers) 
+ssize_t XpnWriteGetTotalBytes(ssize_t *res_v, int num_servers, struct nfi_worker_io ***io, int *ion, struct nfi_server *servers) 
 {
 	ssize_t res = -1;
 	int i;
@@ -476,7 +466,7 @@ ssize_t XpnWriteGetTotalBytes(ssize_t *res_v, int num_servers, struct nfi_worker
 
 		for (int j = 0; j < ion[i]; j++)
 		{
-			if (servers[i]->error != -1){
+			if (servers[i].error != -1){
 				total_send += (*io)[i][j].size;
 			}
 			total_write += (*io)[i][j].size;
@@ -487,4 +477,58 @@ ssize_t XpnWriteGetTotalBytes(ssize_t *res_v, int num_servers, struct nfi_worker
 		return total_write;
 
 	return res;
+}
+
+/**
+ * Calculates the real size in bytes of a file.
+ *
+ * @param part[in] The part of the file.
+ * @param attr[in] The response array of the servers.
+ * @param n_serv[in] The number of servers.
+ *
+ * @return Returns real size in bytes.
+ */
+ssize_t XpnGetRealFileSize(struct xpn_partition *part, struct nfi_attr *attr, int n_serv)
+{
+	int i = 0;
+	int serv_to_calc = 0;
+	size_t total = 0;
+	// Check if have incomplete blocks
+	int have_incompete_blocks = 0;
+	for(i=0;i<n_serv;i++){
+		total += attr[i].at_size;
+		if (attr[i].at_size != 0 &&
+		(attr[i].at_size - XPN_HEADER_SIZE) % part->block_size != 0){
+			have_incompete_blocks = 1;
+			serv_to_calc = i;
+			break;
+		}
+	}
+	if (total == 0){
+		return 0;
+	}
+	// Get serv with the last block
+	for(i=0;i<n_serv;i++){
+		if (have_incompete_blocks){
+			if (attr[i].at_size != 0 &&
+				(attr[i].at_size - XPN_HEADER_SIZE) % part->block_size != 0 && 
+				attr[i].at_size <= attr[serv_to_calc].at_size){
+					serv_to_calc = i;
+				}
+		}else{
+			if (attr[i].at_size >= attr[serv_to_calc].at_size)
+				serv_to_calc = i;
+		}
+	}
+
+	off_t offset = attr[serv_to_calc].at_size - XPN_HEADER_SIZE;
+	int replication;
+	if (offset > 0){
+		// The fix -1 and then +1 is because in the size of blocksize it calculate the next block, and with the -1 calculate the correct block that then with +1 is corrected
+		XpnCalculateBlockInvert(part->block_size, part->replication_level, part->data_nserv, serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE - 1, &offset, &replication);
+		offset += 1;
+	}else{
+		offset = 0;
+	}
+	return offset;
 }

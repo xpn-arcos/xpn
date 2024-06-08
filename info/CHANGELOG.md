@@ -1,24 +1,38 @@
 
 # Changelog
 
+## 3.0.0 - 2024-06-05
+
+  * Fault tolerance support based on replication added
+  * Maleability support improved
+  * Expand deployment based on docker added
+  * MXML dependency removed
+  * Simplified user experience: more user-friendly way to start and stop ad hoc server
+  * Minor bug fixes and improvements
+
 ## 2.2.2 - 2023-06-12
+
   * TCP server rebuilt from scratch
   * New system calls intercepted
   * Preload and flush data operations added
   * Minor bug fixes and improvements
 
 ## 2.2.1 - 2023-03-31
+
   * Minor bug fixes and improvements
 
 ## 2.2.0 - 2023-03-24
-  * Maleability support
+
+  * Maleability support added
 
 ## 2.1.0 - 2023-03-03
+
   * Spack support added
   * Simplified user experience: now it is easier to start and stop expand ad-hoc servers
   * Code refactoring
 
 ## 2.0.0 - 2022-12-12
+
   * First XPN Ad-Hoc release
   * This version provides:
     * Simplifiyed build system based on build-me script.  
