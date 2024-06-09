@@ -109,6 +109,8 @@ int mpi_server_comm_init ( int argc, char *argv[], int thread_mode, char * port_
 
   if (rank == 0)
   {
+    printf(" * Time to inizialize server %d: %f\n", rank, time);
+    /*
     printf("\n\n");
     printf("Time to inizialize all servers: %f s\n", time);
     printf("\n");
@@ -116,6 +118,7 @@ int mpi_server_comm_init ( int argc, char *argv[], int thread_mode, char * port_
     printf("All XPN MPI servers running\n");
     printf("---------------------------\n");
     printf("\n\n");
+    */
   }
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] server %d available at %s\n", rank, rank, port_name);
