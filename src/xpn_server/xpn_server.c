@@ -153,7 +153,7 @@ void xpn_server_finish ( void )
 /* ... Functions / Funciones ......................................... */
 
 // Start servers
-int xpn_server_up(void)
+int xpn_server_up ( void )
 {
     int ret;
     int server_socket;
@@ -206,9 +206,10 @@ int xpn_server_up(void)
     {
         ret = socket_server_accept(server_socket, &connection_socket);
         if (ret < 0) continue;
+
         ret = socket_recv(connection_socket, &recv_code, sizeof(recv_code));
         if (ret < 0) continue;
-        
+
         debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] socket recv: %d \n", 0, params.srv_name, recv_code);
         switch (recv_code)
         {
@@ -243,6 +244,7 @@ int xpn_is_server_spawned ( void )
     int ret;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> Begin\n", 0);
+    
     #ifdef ENABLE_MPI_SERVER
     // Initialize server
     // mpi_comm initialization
@@ -273,15 +275,13 @@ int xpn_is_server_spawned ( void )
     MPI_Comm *parent;
     
     parent = (MPI_Comm *)malloc(sizeof(MPI_Comm));
-    if (parent == NULL) {
+    if (NULL == parent) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Memory allocation\n", 0);
         return -1;
     }
 
     ret = MPI_Comm_get_parent(parent);
-
-    if (ret < 0 || *parent == MPI_COMM_NULL){
-        
+    if ( (ret < 0) || (MPI_COMM_NULL == *parent) ) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: parent not found\n", 0);
         return -1;
     }
@@ -302,7 +302,7 @@ int xpn_is_server_spawned ( void )
     PMPI_Finalize();
 
     #else
-    printf("WARNING: if you have not compiled xpn with the mpi server you cannot use spawn server.\n");
+    printf("WARNING: if you have not compiled XPN with the MPI server then you cannot use spawn server.\n");
     #endif
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> End\n", 0);
@@ -319,11 +319,14 @@ int xpn_server_down ( void )
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] >> Begin\n", 0);
 
+    printf(" * Stopping server (%s)\n", srv_name);
+    /*
     printf("\n");
     printf(" ----------------\n");
     printf(" Stopping servers (%s)\n", serv_name);
     printf(" ----------------\n");
     printf("\n");
+    */
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] MPI_Init\n", 0);
     
@@ -336,17 +339,20 @@ int xpn_server_down ( void )
         return -1;
     }
 
-    while (fscanf(file, "%[^\n] ", srv_name) != EOF) {
+    while (fscanf(file, "%[^\n] ", srv_name) != EOF)
+    {
         int connection_socket;
         ret = socket_client_connect(srv_name, &connection_socket);
         if (ret < 0) {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);
             continue;
         }
+        
         ret = socket_send(connection_socket, &buffer, sizeof(buffer));
         if (ret < 0) {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, srv_name);
         }
+        
         socket_close(connection_socket);
     }
 
@@ -364,6 +370,7 @@ int xpn_server_terminate ( void )
 {
     int ret;
     int buffer = SOCKET_FINISH_CODE;
+    int connection_socket;
 
     printf(" * Stopping server (%s)\n", params.srv_name);
     /*
@@ -374,7 +381,6 @@ int xpn_server_terminate ( void )
     printf("\n");
     */
 
-    int connection_socket;
     ret = socket_client_connect(params.srv_name, &connection_socket);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, params.srv_name);
@@ -411,39 +417,37 @@ int main ( int argc, char *argv[] )
     }
 
     exec_name = basename(argv[0]);
-    if (strcasecmp(exec_name, "xpn_server_spawn") == 0) {        
-        debug_info("[TH_ID=%d] [XPN_SERVER] [main] Spawn server\n", 0);
-
-        ret = xpn_is_server_spawned();
-        return ret;
-    } 
+    gethostname(serv_name, HOST_NAME_MAX);
 
     // Welcome...
     printf("\n");
     printf(" xpn_server\n");
     printf(" ----------\n");
-    printf("\n");
-    printf(" Begin.\n");
-    printf("\n");
 
     // Show configuration...
     printf(" * action=%s\n", exec_name);
-    gethostname(serv_name, HOST_NAME_MAX);
     printf(" * host=%s\n", serv_name);
     xpn_server_params_show(&params);
 
     // Do associate action...
-    if (strcasecmp(exec_name, "xpn_stop_server") == 0) {
+    if (strcasecmp(exec_name, "xpn_server_spawn") == 0)
+    {
+        debug_info("[TH_ID=%d] [XPN_SERVER] [main] Spawn server\n", 0);
+        ret = xpn_is_server_spawned();
+    }
+    else if (strcasecmp(exec_name, "xpn_stop_server") == 0)
+    {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Down servers\n", 0);
-
         ret = xpn_server_down();
-    } else if (strcasecmp(exec_name, "xpn_terminate_server") == 0) {
+    }
+    else if (strcasecmp(exec_name, "xpn_terminate_server") == 0)
+    {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Terminate server\n", 0);
-
         ret = xpn_server_terminate();
-    } else {
+    }
+    else
+    {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Up servers\n", 0);
-
         ret = xpn_server_up();
     }
 
@@ -451,3 +455,4 @@ int main ( int argc, char *argv[] )
 }
 
 /* ................................................................... */
+
