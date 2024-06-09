@@ -22,14 +22,8 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "sck_server_comm.h"
-#include "socket.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
+   #include "sck_server_comm.h"
+   #include "socket.h"
 
 
 /* ... Functions / Funciones ......................................... */
@@ -114,7 +108,7 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   TIME_MISC_DiffTime(&t0, &t1, &tf);
   time = TIME_MISC_TimevaltoFloat(&tf);
 
-  printf(" * Time to initialize XPN SCK server: %f s\n", time);
+  printf(" | * Time to initialize XPN SCK server: %f s\n", time);
   /*
   printf("\n\n");
   printf("Time to inizialize all servers: %f s\n", time);

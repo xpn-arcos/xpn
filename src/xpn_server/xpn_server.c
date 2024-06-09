@@ -217,18 +217,18 @@ int xpn_server_up ( void )
                 socket_send(connection_socket, params.port_name, MPI_MAX_PORT_NAME);
                 xpn_server_accept();
                 break;
-            
+
             case SOCKET_FINISH_CODE:
                 xpn_server_finish();
                 the_end = 1;
                 break;
-            
+
             default:
                 debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] >> Socket recv unknown code %d\n", 0,
                            params.srv_name, recv_code);
                 break;
         }
-        
+
         socket_close(connection_socket);
     }
 
@@ -244,7 +244,7 @@ int xpn_is_server_spawned ( void )
     int ret;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> Begin\n", 0);
-    
+
     #ifdef ENABLE_MPI_SERVER
     // Initialize server
     // mpi_comm initialization
@@ -273,7 +273,7 @@ int xpn_is_server_spawned ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] Get parent\n", 0);
     struct st_th th_arg;
     MPI_Comm *parent;
-    
+
     parent = (MPI_Comm *)malloc(sizeof(MPI_Comm));
     if (NULL == parent) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Memory allocation\n", 0);
@@ -329,7 +329,7 @@ int xpn_server_down ( void )
     */
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] MPI_Init\n", 0);
-    
+
     // Open host file
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Open host file %s\n", 0, params.shutdown_file);
 
@@ -347,12 +347,12 @@ int xpn_server_down ( void )
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);
             continue;
         }
-        
+
         ret = socket_send(connection_socket, &buffer, sizeof(buffer));
         if (ret < 0) {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, srv_name);
         }
-        
+
         socket_close(connection_socket);
     }
 
@@ -385,7 +385,7 @@ int xpn_server_terminate ( void )
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, params.srv_name);
         return -1 ;
-    } 
+    }
 
     ret = socket_send(connection_socket, &buffer, sizeof(buffer));
     if (ret < 0) {
@@ -421,12 +421,12 @@ int main ( int argc, char *argv[] )
 
     // Welcome...
     printf("\n");
-    printf(" xpn_server\n");
-    printf(" ----------\n");
+    printf(" + xpn_server\n");
+    printf(" | ----------\n");
 
     // Show configuration...
-    printf(" * action=%s\n", exec_name);
-    printf(" * host=%s\n", serv_name);
+    printf(" | * action=%s\n", exec_name);
+    printf(" | * host=%s\n", serv_name);
     xpn_server_params_show(&params);
 
     // Do associate action...
