@@ -109,7 +109,7 @@
     end
     subgraph ide21b [2.1 Install prerequisites]
        direction TB
-       Y1B["sudo apt-get install -y build-essential gcc make libtool<br>sudo apt-get install -y autoconf automake git<br> sudo apt-get install -y libmpich-dev mpich mpich-doc"]
+       Y1B["sudo apt install -y build-essential libtool<br>sudo apt install -y autoconf automake git<br> sudo apt install -y libmpich-dev mpich"]
     end
     subgraph ide22 [2.2 Download source code]
        direction TB
