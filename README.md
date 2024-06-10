@@ -37,6 +37,7 @@
         ./configure --prefix=<path where MPICH is going to be installed> \
                     --enable-threads=multiple \
                     --enable-romio \
+                    --with-slurm=<path where your slurm is installed> \
                     --with-device=ch4:ofi:psm2 \
                     --with-libfabric=<path where your libfabric is installed>
 
@@ -59,6 +60,7 @@
         ./configure --prefix=<path where Open MPI is going to be installed> \
                     --enable-threads=multiple \
                     --enable-romio \
+                    --with-slurm=<path where your slurm is installed> \
                     --with-libfabric=<path where your libfabric is installed>
 
         make
@@ -287,6 +289,8 @@ An example of SLURM job might be:
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
 
    scontrol show hostnames ${SLURM_JOB_NODELIST} > $WORK_DIR/hostfile
+
+   <INSTALL_PATH>/scripts/execute/xpn.sh -w $WORK_DIR -l $WORK_DIR/hostfile -x $NODE_DIR -n ${SLURM_NNODES} -v mk_conf
 
    # Step 1
    prte --hostfile $WORK_DIR/hostfile --report-uri $WORK_DIR/prte --no-ready-msg &
