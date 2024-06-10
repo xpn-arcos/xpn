@@ -107,7 +107,7 @@ int mpi_server_comm_init ( int argc, char *argv[], int thread_mode, char * port_
 
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
 
-  printf(" * Time to initialize XPN MPI server %d: %f\n", rank, time) ;
+  printf(" | * Time to initialize XPN MPI server: %f\n", time) ;
   /*
   if (rank == 0)
   {
