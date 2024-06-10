@@ -37,6 +37,7 @@
         ./configure --prefix=<path where MPICH is going to be installed> \
                     --enable-threads=multiple \
                     --enable-romio \
+                    --with-slurm=/opt/slurm \
                     --with-device=ch4:ofi:psm2 \
                     --with-libfabric=<path where your libfabric is installed>
 
@@ -59,6 +60,7 @@
         ./configure --prefix=<path where Open MPI is going to be installed> \
                     --enable-threads=multiple \
                     --enable-romio \
+                    --with-slurm=/opt/slurm \
                     --with-libfabric=<path where your libfabric is installed>
 
         make
