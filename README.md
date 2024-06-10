@@ -290,6 +290,8 @@ An example of SLURM job might be:
 
    scontrol show hostnames ${SLURM_JOB_NODELIST} > $WORK_DIR/hostfile
 
+   <INSTALL_PATH>/scripts/execute/xpn.sh -w $WORK_DIR -l $WORK_DIR/hostfile -x $NODE_DIR -n ${SLURM_NNODES} -v mk_conf
+
    # Step 1
    prte --hostfile $WORK_DIR/hostfile --report-uri $WORK_DIR/prte --no-ready-msg &
    sleep 2
