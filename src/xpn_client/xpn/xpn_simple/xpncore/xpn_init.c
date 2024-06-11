@@ -21,6 +21,7 @@
 
 
 #include "xpn/xpn_simple/xpn_init.h"
+#include "ns.h"
 
 
 struct xpn_partition xpn_parttable[XPN_MAX_PART];
@@ -208,6 +209,20 @@ int xpn_init_partition( void )
       if(res<0)
       {
         xpn_parttable[i].data_serv[j].error = -1;
+      }
+    }
+
+    // Check locality
+    char *hostip = ns_get_host_ip();
+    char hostname[1024];
+    ns_get_hostname(hostname);
+    xpn_parttable[i].local_serv = -1;
+    for(int j=0; j<xpn_parttable[i].data_nserv; j++){
+      XPN_DEBUG("xpn_parttable[%d].local_serv: %d serv_url: %s client: %s name: %s", i, xpn_parttable[i].local_serv, xpn_parttable[i].data_serv[j].url, hostip, hostname);
+
+      if (strstr(xpn_parttable[i].data_serv[j].url, hostip) != NULL || strstr(xpn_parttable[i].data_serv[j].url, hostname) != NULL){
+        xpn_parttable[i].local_serv = j;
+        XPN_DEBUG("xpn_parttable[%d].local_serv: %d serv_url: %s client: %s", i, xpn_parttable[i].local_serv, xpn_parttable[i].data_serv[xpn_parttable[i].local_serv].url, hostip);
       }
     }
 

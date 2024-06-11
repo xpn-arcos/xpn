@@ -23,7 +23,6 @@
    /* ... Include / Inclusion ........................................... */
 
   #include "xpn/xpn_simple/xpn_rw.h"
-  #include "ns.h"
 
 
    /* ... Global vars. / Variables globales ............................. */
@@ -171,22 +170,9 @@ ssize_t xpn_sread ( int fd, const void *buffer, size_t size, off_t offset )
   new_offset = offset;
   count = 0;
 
-  char *hostip = ns_get_host_ip();
-  char hostname[1024];
-  ns_get_hostname(hostname);
-  int serv_client = -1;
-  for(int i=0; i<n; i++){
-    XPN_DEBUG("serv_client: %d serv_url: %s client: %s name: %s", serv_client, servers[i].url, hostip, hostname);
-
-    if (strstr(servers[i].url, hostip) != NULL || strstr(servers[i].url, hostname) != NULL){
-      serv_client = i;
-      XPN_DEBUG("serv_client: %d serv_url: %s client: %s", serv_client, servers[serv_client].url, hostip);
-    }
-  }
-
   do
   {
-    XpnReadGetBlock(fd, new_offset, serv_client, &l_offset, &l_serv);
+    XpnReadGetBlock(fd, new_offset, xpn_file_table[fd]->part->local_serv, &l_offset, &l_serv);
 
     l_size = xpn_file_table[fd]->block_size - (new_offset%xpn_file_table[fd]->block_size);
 
@@ -359,22 +345,9 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
     io[i][0].offset = 0;
     io[i][0].size = 0;
   }
-  
-  char *hostip = ns_get_host_ip();
-  char hostname[1024];
-  ns_get_hostname(hostname);
-  int serv_client = -1;
-  for(int i=0; i<n; i++){
-    XPN_DEBUG("serv_client: %d serv_url: %s client: %s name: %s", serv_client, servers[i].url, hostip, hostname);
-
-    if (strstr(servers[i].url, hostip) != NULL || strstr(servers[i].url, hostname) != NULL){
-      serv_client = i;
-      XPN_DEBUG("serv_client: %d serv_url: %s client: %s", serv_client, servers[serv_client].url, hostip);
-    }
-  }
 
   // Calculate which blocks to read from each server
-  new_buffer = XpnReadBlocks(fd, buffer, size, offset, serv_client, &io, &ion, n);
+  new_buffer = XpnReadBlocks(fd, buffer, size, offset, xpn_file_table[fd]->part->local_serv, &io, &ion, n);
   if(new_buffer == NULL)
   {
     res = -1;
@@ -425,7 +398,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   }
   res = total;
 
-  XpnReadBlocksFinish(fd, buffer, size, offset, serv_client, &io, &ion, n, new_buffer);
+  XpnReadBlocksFinish(fd, buffer, size, offset, xpn_file_table[fd]->part->local_serv, &io, &ion, n, new_buffer);
 
 cleanup_xpn_pread:
   if (ion != NULL){
