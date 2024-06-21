@@ -764,7 +764,7 @@ void xpn_server_op_rmdir ( xpn_server_param_st *params, void *comm, struct st_xp
 
   // do rmdir
   status.ret = filesystem_rmdir(head->u_st_xpn_server_msg.op_rmdir.path);
-  status.server_errno = errno;  
+  status.server_errno = errno;
   xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] rmdir(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_rmdir.path, status.ret);

@@ -107,6 +107,8 @@ int mpi_server_comm_init ( int argc, char *argv[], int thread_mode, char * port_
 
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
 
+  printf(" | * Time to initialize XPN MPI server: %f\n", time) ;
+  /*
   if (rank == 0)
   {
     printf("\n\n");
@@ -117,6 +119,7 @@ int mpi_server_comm_init ( int argc, char *argv[], int thread_mode, char * port_
     printf("---------------------------\n");
     printf("\n\n");
   }
+  */
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] server %d available at %s\n", rank, rank, port_name);
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] server %d accepting...\n",    rank, rank);
