@@ -135,7 +135,7 @@
   {
     int type;
     int real_fd;
-    int is_file;
+    // int is_file;
   };
 
 

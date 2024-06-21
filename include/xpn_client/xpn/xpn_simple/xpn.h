@@ -53,6 +53,8 @@
 
     int data_nserv;     // number of server 
     struct nfi_server *data_serv; // list of data servers in the partition 
+
+    int local_serv; // server with locality
   };
 
   // metadata of xpn file

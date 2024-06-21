@@ -487,9 +487,9 @@ int xpn_simple_rename(const char * path, const char * newpath)
     char abs_path[PATH_MAX], url_serv[PATH_MAX];
     char newabs_path[PATH_MAX], newurl_serv[PATH_MAX];
     struct nfi_server *servers;
-    struct xpn_metadata * mdata_aux;
+    // struct xpn_metadata * mdata_aux;
     int res, err, i, n, pd, newpd;
-    struct xpn_fh * vfh_aux;
+    // struct xpn_fh * vfh_aux;
 
     XPN_DEBUG_BEGIN_CUSTOM("(%s %s)", path, newpath);
 
@@ -554,87 +554,87 @@ int xpn_simple_rename(const char * path, const char * newpath)
         XPN_DEBUG_END;
         return -1;
     }
+    // TODO: METADATA
+    // vfh_aux = (struct xpn_fh * ) malloc(sizeof(struct xpn_fh));
 
-    vfh_aux = (struct xpn_fh * ) malloc(sizeof(struct xpn_fh));
+    // // construccion del vfh
+    // if (vfh_aux == NULL) 
+    // {
+    //     errno = ENOMEM;
+    //     XPN_DEBUG_END;
+    //     return -1;
+    // }
 
-    // construccion del vfh
-    if (vfh_aux == NULL) 
-    {
-        errno = ENOMEM;
-        XPN_DEBUG_END;
-        return -1;
-    }
+    // vfh_aux -> n_nfih = n;
+    // vfh_aux -> nfih = (struct nfi_fhandle ** ) malloc(sizeof(struct nfi_fhandle * ) * n);
+    // if (vfh_aux -> nfih == NULL) 
+    // {
+    //     errno = ENOMEM;
+    //     XPN_DEBUG_END;
+    //     return -1;
+    // }
 
-    vfh_aux -> n_nfih = n;
-    vfh_aux -> nfih = (struct nfi_fhandle ** ) malloc(sizeof(struct nfi_fhandle * ) * n);
-    if (vfh_aux -> nfih == NULL) 
-    {
-        errno = ENOMEM;
-        XPN_DEBUG_END;
-        return -1;
-    }
+    // for (i = 0; i < n; i++) 
+    // {
+    //     vfh_aux -> nfih[i] = NULL;
+    // }
 
-    for (i = 0; i < n; i++) 
-    {
-        vfh_aux -> nfih[i] = NULL;
-    }
+    // mdata_aux = (struct xpn_metadata * ) malloc(sizeof(struct xpn_metadata));
+    // if (mdata_aux == NULL) 
+    // {
+    //     free(vfh_aux -> nfih);
+    //     free(vfh_aux);
+    //     XPN_DEBUG_END;
+    //     return -1;
+    // }
 
-    mdata_aux = (struct xpn_metadata * ) malloc(sizeof(struct xpn_metadata));
-    if (mdata_aux == NULL) 
-    {
-        free(vfh_aux -> nfih);
-        free(vfh_aux);
-        XPN_DEBUG_END;
-        return -1;
-    }
+    // memset(mdata_aux, 0, sizeof(struct xpn_metadata));
 
-    memset(mdata_aux, 0, sizeof(struct xpn_metadata));
+    // res = XpnReadMetadata(mdata_aux, n, servers, vfh_aux, abs_path, pd);
+    // if (res < 0) 
+    // {
+    //     // tambien los punteros indirectos
+    //     for (i = 0; i < n; i++) 
+    //     {
+    //         if (vfh_aux -> nfih[i] != NULL) 
+    //         {
+    //             if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
+    //             {
+    //                 vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
+    //             }
 
-    res = XpnReadMetadata(mdata_aux, n, servers, vfh_aux, abs_path, pd);
-    if (res < 0) 
-    {
-        // tambien los punteros indirectos
-        for (i = 0; i < n; i++) 
-        {
-            if (vfh_aux -> nfih[i] != NULL) 
-            {
-                if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
-                {
-                    vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
-                }
+    //             free(vfh_aux -> nfih[i]);
+    //         }
+    //     }
+    //     free(vfh_aux -> nfih);
+    //     free(vfh_aux);
+    //     free(mdata_aux);
+    //     XPN_DEBUG_END;
+    //     return -1;
+    // }
 
-                free(vfh_aux -> nfih[i]);
-            }
-        }
-        free(vfh_aux -> nfih);
-        free(vfh_aux);
-        free(mdata_aux);
-        XPN_DEBUG_END;
-        return -1;
-    }
+    // res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
+    // if (res < 0) 
+    // {
+    //     // tambien los punteros indirectos
+    //     for (i = 0; i < n; i++) 
+    //     {
+    //         if (vfh_aux -> nfih[i] != NULL) 
+    //         {
+    //             if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
+    //             {
+    //                 vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
+    //             }
 
-    res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
-    if (res < 0) 
-    {
-        // tambien los punteros indirectos
-        for (i = 0; i < n; i++) 
-        {
-            if (vfh_aux -> nfih[i] != NULL) 
-            {
-                if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
-                {
-                    vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
-                }
-
-                free(vfh_aux -> nfih[i]);
-            }
-        }
-        free(vfh_aux -> nfih);
-        free(vfh_aux);
-        free(mdata_aux);
-        XPN_DEBUG_END;
-        return -1;
-    }
+    //             free(vfh_aux -> nfih[i]);
+    //         }
+    //     }
+    //     free(vfh_aux -> nfih);
+    //     free(vfh_aux);
+    //     free(mdata_aux);
+    //     XPN_DEBUG_END;
+    //     return -1;
+    // }
 
     for (i = 0; i < n; i++) 
     {
@@ -657,48 +657,48 @@ int xpn_simple_rename(const char * path, const char * newpath)
     }
 
     // tambien los punteros indirectos
-    for (i = 0; i < n; i++) 
-    {
-        if (vfh_aux -> nfih[i] != NULL) 
-        {
-            if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
-            {
-                vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
-            }
-            free(vfh_aux -> nfih[i]);
-        }
-    }
+    // for (i = 0; i < n; i++) 
+    // {
+    //     if (vfh_aux -> nfih[i] != NULL) 
+    //     {
+    //         if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
+    //         {
+    //             vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
+    //         }
+    //         free(vfh_aux -> nfih[i]);
+    //     }
+    // }
 
-    free(vfh_aux -> nfih);
-    free(vfh_aux);
-    free(mdata_aux);
+    // free(vfh_aux -> nfih);
+    // free(vfh_aux);
+    // free(mdata_aux);
 
     // error checking
-    if (err) 
-    {
-        res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
-        if (res < 0) 
-        {
-            // tambien los punteros indirectos
-            for (i = 0; i < n; i++) 
-            {
-                if (vfh_aux -> nfih[i] != NULL) 
-                {
-                    if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
-                    {
-                        vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
-                    }
+    // if (err) 
+    // {
+        // res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
+    //     if (res < 0) 
+    //     {
+    //         // tambien los punteros indirectos
+    //         for (i = 0; i < n; i++) 
+    //         {
+    //             if (vfh_aux -> nfih[i] != NULL) 
+    //             {
+    //                 if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
+    //                 {
+    //                     vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
+    //                 }
 
-                    free(vfh_aux -> nfih[i]);
-                }
-            }
-            free(vfh_aux -> nfih);
-            free(vfh_aux);
-            free(mdata_aux);
-            XPN_DEBUG_END;
-            return -1;
-        }
-    }
+    //                 free(vfh_aux -> nfih[i]);
+    //             }
+    //         }
+    //         free(vfh_aux -> nfih);
+    //         free(vfh_aux);
+    //         free(mdata_aux);
+    //         XPN_DEBUG_END;
+    //         return -1;
+    //     }
+    // }
 
     XPN_DEBUG_END;
     return 0;

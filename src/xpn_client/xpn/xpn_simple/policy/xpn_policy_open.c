@@ -28,41 +28,41 @@
 
 void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
 {
-  char dir[PATH_MAX];
-  char dir_aux[PATH_MAX];
-  int abs_path_len;
-  int put_slash;
-  int pos_abs_path;
-  int pos_dir;
+  // char dir[PATH_MAX];
+  // char dir_aux[PATH_MAX];
+  // int abs_path_len;
+  // int put_slash;
+  // int pos_abs_path;
+  // int pos_dir;
 
-  memccpy(dir, abs_path, 0, PATH_MAX-1);
-  abs_path_len = strlen(abs_path);
-  put_slash = 1;
-  pos_abs_path = 0;
-  pos_dir = 0;
-
-  while (pos_abs_path < abs_path_len)
-  {
-    if (abs_path[pos_abs_path] == '/')
-    {
-      if (put_slash)
-      {
-        dir_aux[pos_dir] = abs_path[pos_abs_path];
-        pos_dir++;
-        put_slash = 0;
-      }
-    } 
-    else
-    {
-      dir_aux[pos_dir] = abs_path[pos_abs_path];
-      pos_dir++;
-      put_slash = 1;
-    }
-    pos_abs_path++;
-  }
-  dir_aux[pos_dir] = '\0';
-  strcpy(dir,dir_aux);
-  sprintf(url_serv,"%s%s",serv->url, dir);
+  // memccpy(dir, abs_path, 0, PATH_MAX-1);
+  // abs_path_len = strlen(abs_path);
+  // put_slash = 1;
+  // pos_abs_path = 0;
+  // pos_dir = 0;
+  // TODO: check if necesary for NFS multiple "///"
+  // while (pos_abs_path < abs_path_len)
+  // {
+  //   if (abs_path[pos_abs_path] == '/')
+  //   {
+  //     if (put_slash)
+  //     {
+  //       dir_aux[pos_dir] = abs_path[pos_abs_path];
+  //       pos_dir++;
+  //       put_slash = 0;
+  //     }
+  //   } 
+  //   else
+  //   {
+  //     dir_aux[pos_dir] = abs_path[pos_abs_path];
+  //     pos_dir++;
+  //     put_slash = 1;
+  //   }
+  //   pos_abs_path++;
+  // }
+  // dir_aux[pos_dir] = '\0';
+  // strcpy(dir,dir_aux);
+  sprintf(url_serv,"%s%s",serv->url, abs_path);
 }
 
 
