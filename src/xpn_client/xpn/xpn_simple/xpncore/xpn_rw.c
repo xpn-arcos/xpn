@@ -359,9 +359,9 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   {
     // i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
 
-    if (ion[i] != 0)
+    if (ion[j] != 0)
     {
-      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), &servers[i], xpn_file_table[fd]->path);
+      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[j]), &servers[j], xpn_file_table[fd]->path);
       if (res < 0)
       {
         res = -1;
@@ -369,8 +369,8 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
       }
 
       // Worker
-      servers[i].wrk->thread = servers[i].xpn_thread;
-      nfi_worker_do_read(servers[i].wrk, xpn_file_table[fd]->data_vfh->nfih[i], io[i], ion[i]);
+      servers[j].wrk->thread = servers[j].xpn_thread;
+      nfi_worker_do_read(servers[j].wrk, xpn_file_table[fd]->data_vfh->nfih[j], io[j], ion[j]);
     }
   }
 
@@ -493,9 +493,9 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
   {
     // i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
 
-    if (ion[i] != 0)
+    if (ion[j] != 0)
     {
-      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), &servers[i], xpn_file_table[fd]->path);
+      res = XpnGetFh( xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[j]), &servers[j], xpn_file_table[fd]->path);
       if (res<0)
       {
         res = -1;
@@ -503,8 +503,8 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
       }
 
       //Worker
-      servers[i].wrk->thread = servers[i].xpn_thread;
-      nfi_worker_do_write(servers[i].wrk, xpn_file_table[fd]->data_vfh->nfih[i], io[i], ion[i]);
+      servers[j].wrk->thread = servers[j].xpn_thread;
+      nfi_worker_do_write(servers[j].wrk, xpn_file_table[fd]->data_vfh->nfih[j], io[j], ion[j]);
     }
   }
 
