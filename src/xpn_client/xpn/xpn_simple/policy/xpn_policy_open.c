@@ -368,9 +368,9 @@ int XpnGetFhDir( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi
 
 int XpnGetAtribFd ( int fd, struct stat *st )
 {
-  int ret, res, i, n, err;
+  int res, i, n;
   struct nfi_server *servers;
-  struct nfi_attr *attr;
+  struct nfi_attr attr;
   struct xpn_metadata mdata;
 
   XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
@@ -383,93 +383,75 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     return -1;
   }  
 
-  attr = (struct nfi_attr *) malloc(n * sizeof(struct nfi_attr));
-  if (NULL == attr) {
-    perror("malloc: ");
-    return -1;
-  }
-
-  memset(attr, 0, n* sizeof(struct nfi_attr));
+  memset(&attr, 0, sizeof(struct nfi_attr));
   memset(st,    0, sizeof(struct stat));
 
-  for(i=0;i<n;i++)
-  {
-    res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[i]), &servers[i], xpn_file_table[fd]->path);
-    if (res<0 && xpn_file_table[fd]->part->data_serv[i].error != -1)
-    {
-      XPN_DEBUG_END_CUSTOM("%d", fd)
-      return res;
-    }
-
-    // Worker
-    nfi_worker_do_getattr(servers[i].wrk, xpn_file_table[fd]->data_vfh->nfih[i], &(attr[i]));
-  }
-
-  // Wait
-  err = 0;
-  for(i=0;i<n;i++)
-  {
-    ret = nfiworker_wait(servers[i].wrk);
-
-    // Control error
-    if((ret<0)&&(!err)){
-      err = 1;
-    }
-  }
-
-  // Error checking
-  if(err)
-  {
-    free(attr);
-    return -1;
-  }
-
   int master_node = xpn_file_table[fd]->mdata->first_node;
+  for (i = 0; i < xpn_file_table[fd]->part->replication_level; i++)
+  {
+    master_node = (master_node+i)%n;
+    if (servers[master_node].error != -1){
+      break;
+    }
+  }
+
+  res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[master_node]), &servers[master_node], xpn_file_table[fd]->path);
+  if (res<0 && xpn_file_table[fd]->part->data_serv[master_node].error != -1)
+  {
+    XPN_DEBUG_END_CUSTOM("%d", fd)
+    return res;
+  }
+  nfi_worker_do_getattr(servers[master_node].wrk, xpn_file_table[fd]->data_vfh->nfih[master_node], &attr);
+  res = nfiworker_wait(servers[master_node].wrk);
+  if (res < 0)
+  {
+    XPN_DEBUG_END_CUSTOM("%d", fd)
+    return res;
+  }
+
   XpnReadMetadata(&mdata, n, servers, xpn_file_table[fd]->path, xpn_file_table[fd]->part->replication_level);
   if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
     st->st_size = mdata.file_size;
   }else{
-    st->st_size = attr[master_node].at_size;
+    st->st_size = attr.at_size;
   }
 
   // st->st_size = XpnGetRealFileSize(xpn_file_table[fd]->part, attr, n);
 
-  st->st_dev     = attr[master_node].st_dev;       // device
-  st->st_ino     = attr[master_node].st_ino;       // inode
+  st->st_dev     = attr.st_dev;       // device
+  st->st_ino     = attr.st_ino;       // inode
 
-  st->st_mode    = attr[master_node].at_mode ;     // protection
+  st->st_mode    = attr.at_mode ;     // protection
 
-  if (0 == attr[master_node].at_type){             // It is a file
+  if (0 == attr.at_type){             // It is a file
     st->st_mode = S_IFREG | st->st_mode;
   }
-  if (1 == attr[master_node].at_type){             // It is a directory
+  if (1 == attr.at_type){             // It is a directory
     st->st_mode = S_IFDIR | st->st_mode;
   }
 
-  st->st_nlink   = attr[master_node].at_nlink;     // number of hard links
+  st->st_nlink   = attr.at_nlink;     // number of hard links
   st->st_uid     = getuid() ;            // user ID of owner
   st->st_gid     = getgid() ;            // group ID of owner
   //st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O // TODO
-  st->st_blocks  = attr[master_node].at_blocks ;   // number of blocks allocated
-  st->st_atime   = attr[master_node].at_atime ;    // time of last access
-  st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
-  st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
-
-  free(attr);
+  st->st_blocks  = attr.at_blocks ;   // number of blocks allocated
+  st->st_atime   = attr.at_atime ;    // time of last access
+  st->st_mtime   = attr.at_mtime ;    // time of last modification
+  st->st_ctime   = attr.at_ctime ;    // time of last change
 
   XPN_DEBUG_END_CUSTOM("%d", fd);
-  return ret;
+  return res;
 }
 
 int XpnGetAtribPath ( char * path, struct stat *st )
 {
-  int ret, res, err, i, n, pd;
+  int res, i, n, pd;
   char url_serv[PATH_MAX];
   char aux_path[PATH_MAX];
   struct nfi_server *servers;
-  struct nfi_attr *attr;
-  struct xpn_fh *vfh_aux;
+  struct nfi_attr attr;
   struct xpn_metadata mdata;
+  struct nfi_fhandle vfh_aux;
 
   XPN_DEBUG_BEGIN_CUSTOM("%s", path)
   strcpy(aux_path, path);
@@ -482,118 +464,73 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     return pd;
   }
 
-  /* params:
-   * flag operation , partition id,absolute path, file descript., pointer to server*/
   servers = NULL;
   n = XpnGetServers(pd, -1, &servers);
   if(n<=0){
     return -1;
   }
 
-  attr = (struct nfi_attr *) malloc(n * sizeof(struct nfi_attr));
-  if (NULL == attr) {
-    perror("malloc: ");
-    return -1;
-  }
-  
-  memset(attr, 0, n* sizeof(struct nfi_attr));
-
-  vfh_aux = (struct xpn_fh *)malloc(sizeof(struct xpn_fh));
-  /* construccion del vfh */
-  if(vfh_aux == NULL)
-  {
-    errno = ENOMEM;
-    return -1;
-  }
-
-  vfh_aux->n_nfih = n;
-  vfh_aux->nfih = (struct nfi_fhandle **)malloc(sizeof(struct nfi_fhandle*) * n);
-  if(vfh_aux->nfih == NULL)
-  {
-    free(vfh_aux);
-    errno = ENOMEM;
-    return -1;
-  }
-
-  for(i=0;i<n;i++)
-  {
-    vfh_aux->nfih[i] = NULL;
-
-    XpnGetURLServer(&servers[i], aux_path, url_serv);
-
-    vfh_aux->nfih[i] = (struct nfi_fhandle*)malloc(sizeof(struct nfi_fhandle));
-    memset(vfh_aux->nfih[i], 0, sizeof(struct nfi_fhandle));
-    if(vfh_aux->nfih[i] == NULL)
-    {
-      return -1;
-    }
-
-    vfh_aux->nfih[i]->url = url_serv;
-
-    // Worker
-    nfi_worker_do_getattr(servers[i].wrk, vfh_aux->nfih[i], &(attr[i]));
-  }
-
-  // Wait
-  err = 0;
-  for(i=0;i<n;i++)
-  {
-    ret = nfiworker_wait(servers[i].wrk);
-
-    // Control error
-    if((ret<0)&&(!err))
-    {
-      // erase the file create before de server number i
-      err = 1;
-    }
-  }
-
-  // Error checking
-  if(err)
-  {
-    return -1;
-  }
+  memset(&attr, 0, sizeof(struct nfi_attr));
+  memset(&vfh_aux, 0, sizeof(struct nfi_fhandle));
 
   int master_node = hash(path, n);
   if (strlen(aux_path) == 0){
     aux_path[0] = '/';
     aux_path[1] = '\0';
   }
+
+  for (i = 0; i < XpnSearchPart(pd)->replication_level; i++)
+  {
+    master_node = (master_node+i)%n;
+    if (servers[master_node].error != -1){
+      break;
+    }
+  }
+  
+  XpnGetURLServer(&servers[master_node], aux_path, url_serv);
+  vfh_aux.url = url_serv;
+  // Worker
+  nfi_worker_do_getattr(servers[master_node].wrk, &vfh_aux, &attr);
+  res = nfiworker_wait(servers[master_node].wrk);
+  if (res < 0)
+  {
+    XPN_DEBUG_END_CUSTOM("%s", path)
+    return res;
+  }
+
   XpnReadMetadata(&mdata, n, servers, aux_path, XpnSearchPart(pd)->replication_level);
   if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
     st->st_size = mdata.file_size;
   }else{
-    st->st_size = attr[master_node].at_size;
+    st->st_size = attr.at_size;
   }
 
   // st->st_size = XpnGetRealFileSize(&(xpn_parttable[pd]), attr, n);
 
-  st->st_dev     = attr[master_node].st_dev;       // device
-  st->st_ino     = attr[master_node].st_ino;       // inode
+  st->st_dev     = attr.st_dev;       // device
+  st->st_ino     = attr.st_ino;       // inode
 
-  st->st_mode    = attr[master_node].at_mode ;     // protection
+  st->st_mode    = attr.at_mode ;     // protection
 
-  if (0 == attr[master_node].at_type){             // It is a file
+  if (0 == attr.at_type){             // It is a file
     st->st_mode = S_IFREG | st->st_mode;
   }
-  if (1 == attr[master_node].at_type){             // It is a directory
+  if (1 == attr.at_type){             // It is a directory
     st->st_mode = S_IFDIR | st->st_mode;
   }
 
-  st->st_nlink   = attr[master_node].at_nlink;     // number of hard links
+  st->st_nlink   = attr.at_nlink;     // number of hard links
   st->st_uid     = getuid() ;            // user ID of owner
   st->st_gid     = getgid() ;            // group ID of owner
   //st->st_blksize = xpn_file_table[pd]->block_size ;  /* blocksize for filesystem I/O // TODO
-  st->st_blocks  = attr[master_node].at_blocks ;   // number of blocks allocated
-  st->st_atime   = attr[master_node].at_atime ;    // time of last access
-  st->st_mtime   = attr[master_node].at_mtime ;    // time of last modification
-  st->st_ctime   = attr[master_node].at_ctime ;    // time of last change
-
-  free(attr);
+  st->st_blocks  = attr.at_blocks ;   // number of blocks allocated
+  st->st_atime   = attr.at_atime ;    // time of last access
+  st->st_mtime   = attr.at_mtime ;    // time of last modification
+  st->st_ctime   = attr.at_ctime ;    // time of last change
 
   XPN_DEBUG_END_CUSTOM("%s", path)
 
-  return ret;
+  return res;
 }
 
 /*
