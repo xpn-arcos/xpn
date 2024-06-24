@@ -241,7 +241,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
     {   
         // create metadata
         XpnCreateMetadata(mdata, pd, abs_path);
-        res = XpnUpdateMetadata(mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
+        res = XpnUpdateMetadata(mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level, 0);
         if (res < 0){
             goto error_xpn_internal_open;
         }
@@ -586,7 +586,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
 
     //Check magic number if is dir not have it so no update metadata
     if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
-        XpnUpdateMetadata(&mdata, n, servers, newabs_path, XpnSearchPart(pd)->replication_level);
+        XpnUpdateMetadata(&mdata, n, servers, newabs_path, XpnSearchPart(pd)->replication_level, 0);
     }
 
     XPN_DEBUG_END;

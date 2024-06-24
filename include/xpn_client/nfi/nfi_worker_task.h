@@ -72,6 +72,7 @@
     struct dirent        * entry;
     unsigned char        * type;
     struct xpn_metadata  * mdata;
+    int                    mdata_only_file_size;
   };
 
   struct nfi_worker

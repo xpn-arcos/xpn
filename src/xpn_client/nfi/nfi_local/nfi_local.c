@@ -24,7 +24,7 @@
 
 #include "nfi_local.h"
 #include "nfi/nfi_xpn_server/nfi_xpn_server_comm.h"
-
+#include <stddef.h>
 
 /* ... Const / Const ................................................. */
 
@@ -1006,10 +1006,11 @@ int nfi_local_read_mdata ( struct nfi_server *server, char *url, struct xpn_meta
   return 0;
 }
 
-int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_metadata *mdata )
+int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_metadata *mdata, int only_file_size )
 {
   int ret, fd;
   char dir[PATH_MAX];
+  ssize_t actual_file_size;
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] >> Begin\n", server->id);
 
@@ -1043,7 +1044,17 @@ int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_met
     return -1;
   }
 
-  ret = filesystem_write(fd, mdata, sizeof(struct xpn_metadata));
+  if(only_file_size){
+    filesystem_lseek(fd, offsetof(struct xpn_metadata, file_size), SEEK_SET);
+    ret = filesystem_read(fd, &actual_file_size, sizeof(ssize_t));
+
+    if (ret > 0 && actual_file_size < mdata->file_size){
+      filesystem_lseek(fd, offsetof(struct xpn_metadata, file_size), SEEK_SET);
+      ret = filesystem_write(fd, &mdata->file_size, sizeof(ssize_t));
+    }
+  }else{
+    ret = filesystem_write(fd, mdata, sizeof(struct xpn_metadata));
+  }
 
   filesystem_close(fd); //TODO: think if necesary check error in close
 

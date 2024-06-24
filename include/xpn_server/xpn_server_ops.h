@@ -68,6 +68,7 @@
   // Metadata
   #define XPN_SERVER_READ_MDATA      70
   #define XPN_SERVER_WRITE_MDATA     71
+  #define XPN_SERVER_WRITE_MDATA_FILE_SIZE     72
 
   // Connection operatons
   #define XPN_SERVER_FINALIZE       80
@@ -156,6 +157,12 @@
     struct xpn_metadata mdata;
   };
 
+  struct st_xpn_server_write_mdata_file_size
+  { 
+    char path[PATH_MAX];
+    ssize_t size;
+  };
+
   struct st_xpn_server_end
   {
     char status;
@@ -182,7 +189,8 @@
       struct st_xpn_server_path           op_rmdir;
 
       struct st_xpn_server_path           op_read_mdata;
-      struct st_xpn_server_write_mdata     op_write_mdata;
+      struct st_xpn_server_write_mdata    op_write_mdata;
+      struct st_xpn_server_write_mdata_file_size             op_write_mdata_file_size;
 
       struct st_xpn_server_end            op_end;
     } u_st_xpn_server_msg;

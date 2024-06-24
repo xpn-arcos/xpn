@@ -274,6 +274,11 @@ ssize_t xpn_swrite( int fd, const void *buffer, size_t size, off_t offset )
 cleanup_xpn_swrite:
   if(count > 0){
     xpn_file_table[fd]->offset += count;
+    // Update file_size in metadata
+    if (xpn_file_table[fd]->offset > xpn_file_table[fd]->mdata->file_size){
+      xpn_file_table[fd]->mdata->file_size = xpn_file_table[fd]->offset;
+      XpnUpdateMetadata(xpn_file_table[fd]->mdata, n, servers, xpn_file_table[fd]->path, xpn_file_table[fd]->part->replication_level, 1);
+    }
   }
   res = count;
   XPN_DEBUG_END_CUSTOM("%d, %zu, %lld", fd, size, (long long int)offset);
@@ -527,7 +532,12 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
     total = XpnWriteGetTotalBytes(res_v, n, &io, ion, servers) / (xpn_file_table[fd]->part->replication_level+1);
 
     if (total > 0) {
-        xpn_file_table[fd]->offset += total;
+      xpn_file_table[fd]->offset += total;
+      // Update file_size in metadata
+      if (xpn_file_table[fd]->offset > xpn_file_table[fd]->mdata->file_size){
+        xpn_file_table[fd]->mdata->file_size = xpn_file_table[fd]->offset;
+        XpnUpdateMetadata(xpn_file_table[fd]->mdata, n, servers, xpn_file_table[fd]->path, xpn_file_table[fd]->part->replication_level, 1);
+      }
     }
   }
   res = total;

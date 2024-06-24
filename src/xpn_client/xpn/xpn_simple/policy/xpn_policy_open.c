@@ -218,7 +218,7 @@ int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
 }
 
 
-int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level)
+int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level, int only_file_size)
 {
   int master_node, res, serv_node, err;
   char url_serv[PATH_MAX];
@@ -229,10 +229,10 @@ int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *
   for (int i = 0; i < replication_level+1; i++)
   {
     serv_node = (master_node+i) % nserv;
-    XPN_DEBUG("Write metadata to server: %d url: %s",serv_node,servers[serv_node].url);
     XpnGetURLServer(&servers[serv_node], path, url_serv);
     servers[serv_node].wrk->thread = servers[serv_node].xpn_thread;
-    nfi_worker_do_write_mdata(servers[serv_node].wrk, url_serv, mdata);
+    XPN_DEBUG("Write metadata to server: %d url: %s", serv_node, url_serv);
+    nfi_worker_do_write_mdata(servers[serv_node].wrk, url_serv, mdata, only_file_size);
   }
   
   err = 0;
@@ -265,9 +265,9 @@ int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *se
       break;
     }
   }
-  XPN_DEBUG("Read metadata from server: %d url: %s",master_node,servers[master_node].url);
   XpnGetURLServer(&servers[master_node], path, url_serv);
   servers[master_node].wrk->thread = servers[master_node].xpn_thread;
+  XPN_DEBUG("Read metadata from server: %d url: %s", master_node, url_serv);
   nfi_worker_do_read_mdata(servers[master_node].wrk, url_serv, mdata);
   res = nfiworker_wait(servers[master_node].wrk);
 
@@ -371,6 +371,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   int ret, res, i, n, err;
   struct nfi_server *servers;
   struct nfi_attr *attr;
+  struct xpn_metadata mdata;
 
   XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
@@ -423,9 +424,15 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     return -1;
   }
 
-  st->st_size = XpnGetRealFileSize(xpn_file_table[fd]->part, attr, n);
-
   int master_node = xpn_file_table[fd]->mdata->first_node;
+  XpnReadMetadata(&mdata, n, servers, xpn_file_table[fd]->path, xpn_file_table[fd]->part->replication_level);
+  if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
+    st->st_size = mdata.file_size;
+  }else{
+    st->st_size = attr[master_node].at_size;
+  }
+
+  // st->st_size = XpnGetRealFileSize(xpn_file_table[fd]->part, attr, n);
 
   st->st_dev     = attr[master_node].st_dev;       // device
   st->st_ino     = attr[master_node].st_ino;       // inode
@@ -462,6 +469,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   struct nfi_server *servers;
   struct nfi_attr *attr;
   struct xpn_fh *vfh_aux;
+  struct xpn_metadata mdata;
 
   XPN_DEBUG_BEGIN_CUSTOM("%s", path)
   strcpy(aux_path, path);
@@ -546,9 +554,19 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     return -1;
   }
 
-  st->st_size = XpnGetRealFileSize(&(xpn_parttable[pd]), attr, n);
-
   int master_node = hash(path, n);
+  if (strlen(aux_path) == 0){
+    aux_path[0] = '/';
+    aux_path[1] = '\0';
+  }
+  XpnReadMetadata(&mdata, n, servers, aux_path, XpnSearchPart(pd)->replication_level);
+  if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
+    st->st_size = mdata.file_size;
+  }else{
+    st->st_size = attr[master_node].at_size;
+  }
+
+  // st->st_size = XpnGetRealFileSize(&(xpn_parttable[pd]), attr, n);
 
   st->st_dev     = attr[master_node].st_dev;       // device
   st->st_ino     = attr[master_node].st_ino;       // inode

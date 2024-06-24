@@ -127,6 +127,10 @@ int nfi_write_operation ( struct nfi_xpn_server *params, struct st_xpn_server_ms
       debug_info("[NFI_XPN] [nfi_write_operation] WRITE_MDATA operation\n");
       ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write_mdata), sizeof(struct st_xpn_server_write_mdata));
       break;
+    case XPN_SERVER_WRITE_MDATA_FILE_SIZE:
+      debug_info("[NFI_XPN] [nfi_write_operation] WRITE_MDATA_FILE_SIZE operation\n");
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write_mdata_file_size), sizeof(struct st_xpn_server_write_mdata_file_size));
+      break;
   }
 
   debug_info("[NFI_XPN] [nfi_write_operation] >> End\n");
@@ -1473,7 +1477,7 @@ int nfi_xpn_server_read_mdata ( struct nfi_server *serv, char *url, struct xpn_m
   return req.status.ret;
 }
 
-int nfi_xpn_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata )
+int nfi_xpn_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata, int only_file_size )
 {
   int ret;
   char dir[PATH_MAX];
@@ -1511,10 +1515,15 @@ int nfi_xpn_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_
   
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata(%s)\n", serv->id, dir);
 
-
-  msg.type = XPN_SERVER_WRITE_MDATA;
-  memccpy(msg.u_st_xpn_server_msg.op_write_mdata.path, dir,            0, PATH_MAX-1);
-  memcpy(&msg.u_st_xpn_server_msg.op_write_mdata.mdata, mdata, sizeof(struct xpn_metadata));
+  if (only_file_size){
+    msg.type = XPN_SERVER_WRITE_MDATA_FILE_SIZE;
+    memccpy(msg.u_st_xpn_server_msg.op_write_mdata_file_size.path, dir,            0, PATH_MAX-1);
+    msg.u_st_xpn_server_msg.op_write_mdata_file_size.size = mdata->file_size;
+  }else{
+    msg.type = XPN_SERVER_WRITE_MDATA;
+    memccpy(msg.u_st_xpn_server_msg.op_write_mdata.path, dir,            0, PATH_MAX-1);
+    memcpy(&msg.u_st_xpn_server_msg.op_write_mdata.mdata, mdata, sizeof(struct xpn_metadata));
+  }
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_xpn_server_status));
 

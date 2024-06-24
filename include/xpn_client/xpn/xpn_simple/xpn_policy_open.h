@@ -73,7 +73,7 @@
 
   int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level);
 
-  int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level);
+  int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level, int only_file_size);
 
   int XpnGetFh(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);
   int XpnGetFhDir(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);

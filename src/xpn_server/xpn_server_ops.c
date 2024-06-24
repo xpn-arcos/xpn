@@ -24,6 +24,7 @@
 #include "xpn_server_ops.h"
 #include "xpn_server_params.h"
 #include "xpn_server_comm.h"
+#include <stddef.h>
 
 
 /* ... Const / Const ................................................. */
@@ -150,6 +151,7 @@ void xpn_server_op_fstat       ( xpn_server_param_st *params, void *comm, struct
 // Metadata
 void xpn_server_op_read_mdata   ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
 void xpn_server_op_write_mdata  ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_write_mdata_file_size  ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
 
 
 //Read the operation to realize
@@ -272,6 +274,12 @@ int xpn_server_do_operation ( struct st_th *th, int * the_end )
       ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_write_mdata), sizeof(struct st_xpn_server_write_mdata), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         xpn_server_op_write_mdata(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
+      }
+      break;
+    case XPN_SERVER_WRITE_MDATA_FILE_SIZE:
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_write_mdata_file_size), sizeof(struct st_xpn_server_write_mdata_file_size), th->rank_client_id, th->tag_client_id);
+      if (ret != -1) {
+        xpn_server_op_write_mdata_file_size(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
 
@@ -898,6 +906,61 @@ cleanup_xpn_server_op_write_mdata:
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] write_mdata(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_write_mdata.path, req.ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] << End\n", params->rank);
+
+}
+
+pthread_mutex_t op_write_mdata_file_size_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void xpn_server_op_write_mdata_file_size ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+{
+  int ret, fd;
+  ssize_t actual_file_size = 0;
+  struct st_xpn_server_status req;
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)\n", params->rank, head->u_st_xpn_server_msg.op_write_mdata_file_size.path, head->u_st_xpn_server_msg.op_write_mdata_file_size.size);
+  
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] mutex lock(%p)\n", params->rank, op_write_mdata_file_size_mutex);
+  pthread_mutex_lock(&op_write_mdata_file_size_mutex);
+
+  fd = filesystem_open(head->u_st_xpn_server_msg.op_write_mdata_file_size.path, O_RDWR);
+  if (fd < 0){
+    if (errno == EISDIR){
+      // if is directory there are no metadata to write so return 0
+      ret = 0;
+      goto cleanup_xpn_server_op_write_mdata_file_size;
+    }
+    ret = fd;
+    goto cleanup_xpn_server_op_write_mdata_file_size;
+  }
+
+  filesystem_lseek(fd, offsetof(struct xpn_metadata, file_size), SEEK_SET);
+  ret = filesystem_read(fd, &actual_file_size, sizeof(ssize_t));
+  if (ret > 0 && actual_file_size < head->u_st_xpn_server_msg.op_write_mdata_file_size.size){
+    filesystem_lseek(fd, offsetof(struct xpn_metadata, file_size), SEEK_SET);
+    ret = filesystem_write(fd, &head->u_st_xpn_server_msg.op_write_mdata_file_size.size, sizeof(ssize_t));
+  }
+
+  filesystem_close(fd); //TODO: think if necesary check error in close
+
+cleanup_xpn_server_op_write_mdata_file_size:
+
+  pthread_mutex_unlock(&op_write_mdata_file_size_mutex);
+
+  req.ret = ret;
+  req.server_errno = errno;
+
+  xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)=%d\n", params->rank, head->u_st_xpn_server_msg.op_write_mdata_file_size.path, head->u_st_xpn_server_msg.op_write_mdata_file_size.size, req.ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] << End\n", params->rank);
 
 }
 /* ................................................................... */
