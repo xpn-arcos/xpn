@@ -71,6 +71,7 @@
     struct nfi_worker_io * io;
     struct dirent        * entry;
     unsigned char        * type;
+    struct xpn_metadata  * mdata;
   };
 
   struct nfi_worker

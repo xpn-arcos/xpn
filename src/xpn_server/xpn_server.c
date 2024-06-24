@@ -195,6 +195,7 @@ int xpn_server_up ( void )
         return -1;
     }
 
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Control socket initialization\n", 0);
     ret = socket_server_create(&server_socket);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
@@ -204,6 +205,7 @@ int xpn_server_up ( void )
     the_end = 0;
     while (!the_end)
     {
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Listening to conections\n", 0);
         ret = socket_server_accept(server_socket, &connection_socket);
         if (ret < 0) continue;
 

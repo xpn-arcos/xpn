@@ -176,6 +176,9 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
 
   serv->ops->nfi_statfs     = nfi_local_statfs;
 
+  serv->ops->nfi_write_mdata    = nfi_local_write_mdata;
+  serv->ops->nfi_read_mdata     = nfi_local_read_mdata;
+
   // ParseURL...
   ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
   if (ret < 0)
@@ -952,4 +955,100 @@ int nfi_local_statfs ( __attribute__((__unused__)) struct nfi_server *serv, __at
   return 0;
 }
 
+int nfi_local_read_mdata ( struct nfi_server *server, char *url, struct xpn_metadata *mdata )
+{
+  int ret, fd;
+  char dir[PATH_MAX];
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] >> Begin\n", server->id);
+
+  // check arguments...
+  NULL_RET_ERR(server,               EINVAL);
+  nfi_local_keep_connected(server);
+  NULL_RET_ERR(server->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] Get server private info\n", server->id);
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] ERROR: incorrect url '%s'.\n", server->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] ParseURL(%s)= %s\n", server->id, url, dir);
+  
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] nfi_local_read_mdata(%s)\n", server->id, dir);
+
+  fd = filesystem_open(dir, O_RDWR);
+  if (fd < 0){
+    if (errno == EISDIR){
+      // if is directory there are no metadata to read so return 0
+	    memset(mdata, 0, sizeof(struct xpn_metadata));
+      return 0;
+    }
+    return -1;
+  }
+
+  ret = filesystem_read(fd, mdata, sizeof(struct xpn_metadata));
+
+  if (!XPN_CHECK_MAGIC_NUMBER(mdata)){
+	  memset(mdata, 0, sizeof(struct xpn_metadata));
+  }
+
+  filesystem_close(fd); //TODO: think if necesary check error in close
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] nfi_local_read_mdata(%s)=%d\n", params->rank, dir, ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] << End\n", params->rank);
+  return 0;
+}
+
+int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_metadata *mdata )
+{
+  int ret, fd;
+  char dir[PATH_MAX];
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] >> Begin\n", server->id);
+
+  // check arguments...
+  NULL_RET_ERR(server,               EINVAL);
+  nfi_local_keep_connected(server);
+  NULL_RET_ERR(server->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] Get server private info\n", server->id);
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] ERROR: incorrect url '%s'.\n", server->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] ParseURL(%s)= %s\n", server->id, url, dir);
+  
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] nfi_local_write_mdata(%s)\n", server->id, dir);
+
+  fd = filesystem_open(dir, O_WRONLY);
+  if (fd < 0){
+    if (errno == EISDIR){
+    // if is directory there are no metadata to write so return 0
+      return 0;
+    }
+    return -1;
+  }
+
+  ret = filesystem_write(fd, mdata, sizeof(struct xpn_metadata));
+
+  filesystem_close(fd); //TODO: think if necesary check error in close
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] nfi_local_write_mdata(%s)=%d\n", params->rank, dir, ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] << End\n", params->rank);
+  return 0;
+}
 /* ................................................................... */

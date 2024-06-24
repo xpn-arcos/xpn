@@ -31,6 +31,7 @@
   #include "all_system.h"
   #include "debug_msg.h"
   #include "workers.h"
+  #include "xpn_metadata.h"
 
 
   /* ... Const / Const ................................................. */
@@ -139,6 +140,8 @@
     int     (*nfi_readdir)  (struct nfi_server *serv, struct nfi_fhandle *fhd, struct dirent *entry);
     int     (*nfi_closedir) (struct nfi_server *serv, struct nfi_fhandle *fh);
     int     (*nfi_statfs)   (struct nfi_server *serv, struct nfi_info *inf);
+    int     (*nfi_read_mdata)  (struct nfi_server *serv, char *url, struct xpn_metadata *mdata);
+    int     (*nfi_write_mdata) (struct nfi_server *serv, char *url, struct xpn_metadata *mdata);
   };
 
 

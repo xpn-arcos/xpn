@@ -29,19 +29,21 @@
 
 
       //calculo del numero de servidor
-      int hash(__attribute__((__unused__)) char *file, __attribute__((__unused__)) int nServ)
+      int hash(const char *path, int nServ)
       {
-        /*int i,max;
+        int i,max;
         int unsigned num;
+        char *file;
+
+        // Get file name
+        file = strrchr(path, '/')+1;
 
         num=0;
         max=strlen(file)-1;
         for(i=0;i<max;i++){
               num=(int)file[i]+num;
         }
-        return (int)num%nServ;*/
-
-        return 0;
+        return (int)num%nServ;
       }
 
 

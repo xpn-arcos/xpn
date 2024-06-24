@@ -26,7 +26,7 @@
 
 
 
-void XpnGetURLServer(struct nfi_server *serv, char *abs_path, char *url_serv)
+void XpnGetURLServer(struct nfi_server *serv, const char *abs_path, char *url_serv)
 {
   // char dir[PATH_MAX];
   // char dir_aux[PATH_MAX];
@@ -126,11 +126,36 @@ int XpnGetServers(int pd, int fd, struct nfi_server **servers)
 
 
 // TODO: move to metadata file
-
-
-int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
+void XpnPrintMetadata(struct xpn_metadata *mdata)
 {
-  int part_id = 0;
+  int i;
+  printf("magic_number: %c%c%c\n", mdata->magic_number[0], mdata->magic_number[1], mdata->magic_number[2]);
+  printf("version: %d\n", mdata->version);
+  printf("type: %d\n", mdata->type);
+  printf("block_size: %zd\n", mdata->block_size);
+  printf("file_size: %zd\n", mdata->file_size);
+  printf("replication_level: %d\n", mdata->replication_level);
+  printf("first_node: %d\n", mdata->first_node);
+
+  printf("data_nserv: ");
+  for(i = 0; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++) {
+    printf("%d ", mdata->data_nserv[i]);
+  }
+  printf("\n");
+
+  printf("offsets: ");
+  for(i = 0; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++) {
+    printf("%d ", mdata->offsets[i]);
+  }
+  printf("\n");
+
+  printf("distribution_policy: %d\n", mdata->distribution_policy);
+}
+
+int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, const char *path)
+{
+  int part_id = 0,res = 0;
+  XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
   if(mdata == NULL){
     return -1;
@@ -147,14 +172,19 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, char *path)
 
   /* initial values */
   bzero(mdata, sizeof(struct xpn_metadata));
-  mdata->data_nserv   = xpn_parttable[part_id].data_nserv;
-  mdata->id           = 0;
-  mdata->version      = 1;
+  mdata->magic_number[0] = XPN_MAGIC_NUMBER[0];
+  mdata->magic_number[1] = XPN_MAGIC_NUMBER[1];
+  mdata->magic_number[2] = XPN_MAGIC_NUMBER[2];
+  mdata->data_nserv[0]   = xpn_parttable[part_id].data_nserv;
+  mdata->version      = XPN_METADATA_VERSION;
   mdata->type         = 0;
   mdata->block_size   = xpn_parttable[part_id].block_size;
+  mdata->replication_level   = xpn_parttable[part_id].replication_level;
 
   mdata->first_node = hash(path, xpn_parttable[part_id].data_nserv);
+  mdata->distribution_policy = XPN_METADATA_DISTRIBUTION_ROUND_ROBIN;
 
+  XPN_DEBUG_END_CUSTOM("%s", path);
   return 0;
 }
 
@@ -178,79 +208,72 @@ int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
   }
 
   if(pos < 0) {
-    pos = (mdata->first_node)%(mdata->data_nserv);
+    pos = (mdata->first_node)%(mdata->data_nserv[0]);
   }
   else{
-    pos = (mdata->first_node+pos)%(mdata->data_nserv);
+    pos = (mdata->first_node+pos)%(mdata->data_nserv[0]);
   }
 
   return pos;
 }
 
 
-//TODO: we think that this function is used to write metadata into the metadata header (todo: really write into file)
-int XpnUpdateMetadata( __attribute__((__unused__)) struct xpn_metadata *mdata,
-                       __attribute__((__unused__)) int nserv,
-                       __attribute__((__unused__)) struct nfi_server *servers,
-                       __attribute__((__unused__)) struct xpn_fh *fh,
-                       __attribute__((__unused__)) char *path)
+int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level)
 {
-  // TODO
-  return 0;
+  int master_node, res, serv_node, err;
+  char url_serv[PATH_MAX];
+  XPN_DEBUG_BEGIN_CUSTOM("%s", path);
+
+  master_node = hash(path, nserv);
+  mdata->first_node = master_node;
+  for (int i = 0; i < replication_level+1; i++)
+  {
+    serv_node = (master_node+i) % nserv;
+    XPN_DEBUG("Write metadata to server: %d url: %s",serv_node,servers[serv_node].url);
+    XpnGetURLServer(&servers[serv_node], path, url_serv);
+    servers[serv_node].wrk->thread = servers[serv_node].xpn_thread;
+    nfi_worker_do_write_mdata(servers[serv_node].wrk, url_serv, mdata);
+  }
+  
+  err = 0;
+  for (int i = 0; i < replication_level; i++)
+  {
+    serv_node = (master_node+i) % nserv;
+    res = nfiworker_wait(servers[serv_node].wrk);
+    if(res < 0){
+      err = -1;
+    }
+  }
+  res = err;
+  if (xpn_debug){ XpnPrintMetadata(mdata); }
+  XPN_DEBUG_END_CUSTOM("%s", path);
+  return res;
 }
 
+int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level)
+{ 
+  int master_node, res, i;
+  char url_serv[PATH_MAX];
+  XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
-
-//TODO: we think that this function is used to read metadata from the metadata header (todo: really read header)
-int XpnReadMetadata ( struct xpn_metadata *mdata, __attribute__((__unused__)) int nserv, struct nfi_server *servers, struct xpn_fh *fh, char *path, int pd )
-{
-  int res, n, i;
-
-  XPN_DEBUG_BEGIN
-
-  if(mdata == NULL){
-    return -1;
-  }
-
-  n = hash(path, nserv);
-
-  // TODO: fix getFh for dir or file
-  res = XpnGetFh(mdata, &(fh->nfih[n]), &servers[n], path);
-  if(res < 0)
-  { 
-    int save_errno = errno;
-    errno = 0;
-    res = XpnGetFhDir(mdata, &(fh->nfih[n]), &servers[n], path);
-    if(res < 0)
-    {
-      errno = save_errno;
-      XPN_DEBUG_END
-      return -1;
-    }
-  }
-
-  XpnCreateMetadata(mdata, pd, path);
-
-  if(fh->nfih[n]->type == NFIDIR)
+  master_node = hash(path, nserv);
+  
+  for (i = 0; i < replication_level; i++)
   {
-    i = 0;
-    while((i<XPN_MAX_PART) && (xpn_parttable[i].id != pd)){
-      i++;
+    master_node = (master_node+i)%nserv;
+    if (servers[master_node].error != -1){
+      break;
     }
-
-    if(i == XPN_MAX_PART)
-    {
-      XPN_DEBUG_END
-      return -1;
-    }
-
-    mdata->type = XPN_DIR;
-    XPN_DEBUG_END
-    return XPN_DIR;
   }
+  XPN_DEBUG("Read metadata from server: %d url: %s",master_node,servers[master_node].url);
+  XpnGetURLServer(&servers[master_node], path, url_serv);
+  servers[master_node].wrk->thread = servers[master_node].xpn_thread;
+  nfi_worker_do_read_mdata(servers[master_node].wrk, url_serv, mdata);
+  res = nfiworker_wait(servers[master_node].wrk);
 
-  XPN_DEBUG_END
-  return XPN_FILE;
+  if (xpn_debug){ XpnPrintMetadata(mdata); }
+  XPN_DEBUG_END_CUSTOM("%s", path);
+  return res;
 }
 
 

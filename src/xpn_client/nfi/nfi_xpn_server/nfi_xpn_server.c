@@ -119,6 +119,14 @@ int nfi_write_operation ( struct nfi_xpn_server *params, struct st_xpn_server_ms
       debug_info("[NFI_XPN] [nfi_write_operation] RMDIR_ASYNC operation\n");
       ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path));
       break;
+    case XPN_SERVER_READ_MDATA:
+      debug_info("[NFI_XPN] [nfi_write_operation] READ_MDATA operation\n");
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_read_mdata), sizeof(struct st_xpn_server_path));
+      break;
+    case XPN_SERVER_WRITE_MDATA:
+      debug_info("[NFI_XPN] [nfi_write_operation] WRITE_MDATA operation\n");
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write_mdata), sizeof(struct st_xpn_server_write_mdata));
+      break;
   }
 
   debug_info("[NFI_XPN] [nfi_write_operation] >> End\n");
@@ -292,6 +300,9 @@ int nfi_xpn_server_init ( char *url, struct nfi_server *serv, int server_type )
   serv->ops->nfi_rmdir      = nfi_xpn_server_rmdir;
 
   serv->ops->nfi_statfs     = nfi_xpn_server_statfs;
+
+  serv->ops->nfi_write_mdata    = nfi_xpn_server_write_mdata;
+  serv->ops->nfi_read_mdata     = nfi_xpn_server_read_mdata;
 
   // parse url...
   ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
@@ -1405,6 +1416,115 @@ int nfi_xpn_server_statfs(__attribute__((__unused__)) struct nfi_server *serv, _
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_statfs] >> End\n", serv->id);
 
   return 0;
+}
+
+int nfi_xpn_server_read_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata )
+{
+  int ret;
+  char dir[PATH_MAX];
+  struct nfi_xpn_server *server_aux;
+  struct st_xpn_server_msg msg;
+  struct st_xpn_server_read_mdata_req req;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] >> Begin\n", serv->id);
+
+  // check arguments...
+  NULL_RET_ERR(serv,               EINVAL);
+  nfi_xpn_server_keep_connected(serv);
+  NULL_RET_ERR(serv->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] Get server private info\n", serv->id);
+
+  server_aux = (struct nfi_xpn_server  *) serv->private_info;
+  if (server_aux == NULL)
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] ParseURL(%s)= %s\n", serv->id, url, dir);
+  
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata(%s)\n", serv->id, dir);
+
+
+  msg.type = XPN_SERVER_READ_MDATA;
+  memccpy(msg.u_st_xpn_server_msg.op_read_mdata.path, dir,            0, PATH_MAX-1);
+
+  nfi_xpn_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_xpn_server_read_mdata_req));
+
+  if (req.status.ret < 0)
+      errno = req.status.server_errno;
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata(%s)=%d\n", serv->id, dir, req.status);
+
+  memcpy(mdata, &req.mdata, sizeof(struct xpn_metadata));
+
+  debug_info("[NFI_XPN] [nfi_xpn_server_read_mdata] >> End\n");
+
+  return req.status.ret;
+}
+
+int nfi_xpn_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata )
+{
+  int ret;
+  char dir[PATH_MAX];
+  struct nfi_xpn_server *server_aux;
+  struct st_xpn_server_msg msg;
+  struct st_xpn_server_status req;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] >> Begin\n", serv->id);
+
+  // check arguments...
+  NULL_RET_ERR(serv,               EINVAL);
+  nfi_xpn_server_keep_connected(serv);
+  NULL_RET_ERR(serv->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] Get server private info\n", serv->id);
+
+  server_aux = (struct nfi_xpn_server  *) serv->private_info;
+  if (server_aux == NULL)
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] ParseURL(%s)= %s\n", serv->id, url, dir);
+  
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata(%s)\n", serv->id, dir);
+
+
+  msg.type = XPN_SERVER_WRITE_MDATA;
+  memccpy(msg.u_st_xpn_server_msg.op_write_mdata.path, dir,            0, PATH_MAX-1);
+  memcpy(&msg.u_st_xpn_server_msg.op_write_mdata.mdata, mdata, sizeof(struct xpn_metadata));
+
+  nfi_xpn_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_xpn_server_status));
+
+  if (req.ret < 0)
+      errno = req.server_errno;
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata(%s)=%d\n", serv->id, dir, req.ret);
+
+  debug_info("[NFI_XPN] [nfi_xpn_server_write_mdata] >> End\n");
+
+  return req.ret;
 }
 
 /* ................................................................... */

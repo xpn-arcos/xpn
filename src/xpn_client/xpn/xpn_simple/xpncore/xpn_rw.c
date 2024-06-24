@@ -357,7 +357,7 @@ ssize_t xpn_pread ( int fd, void *buffer, size_t size, off_t offset )
   // operation
   for (j=0; j<n; j++)
   {
-    i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
+    // i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
 
     if (ion[i] != 0)
     {
@@ -491,7 +491,7 @@ ssize_t xpn_pwrite(int fd, const void *buffer, size_t size, off_t offset)
 
   for(j=0; j<n; j++)
   {
-    i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
+    // i = XpnGetMetadataPos(xpn_file_table[fd]->mdata, j);
 
     if (ion[i] != 0)
     {

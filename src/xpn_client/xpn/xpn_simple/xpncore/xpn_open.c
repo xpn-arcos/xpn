@@ -127,7 +127,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
     char abs_path[PATH_MAX];
     char url_serv[PATH_MAX];
     struct nfi_server *servers;
-    int n, pd, i, master, err;
+    int n, pd, i, j, master, err;
     int res = -1;
 
     XPN_DEBUG_BEGIN_CUSTOM("%s, %d, %d", path, flags, mode);
@@ -181,8 +181,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
             vfh -> nfih[i] = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
             if(vfh -> nfih[i] == NULL)
             {
-                XPN_DEBUG_END
-                return -1;
+                goto error_xpn_internal_open;
             }
             servers[i].wrk->thread = servers[i].xpn_thread;
             XpnGetURLServer(&servers[i], abs_path, url_serv);
@@ -200,14 +199,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
 
         if (err)
         {
-            for (i = 0; i < n; i++) 
-            {
-                free(vfh -> nfih[i]);
-            }
-            free(vfh -> nfih);
-            free(vfh);
-            XPN_DEBUG_END_ARGS1(path);
-            return res;
+            goto error_xpn_internal_open;
         }
 
     }else{
@@ -217,8 +209,8 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
         vfh -> nfih[master] = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
         if(vfh -> nfih[master] == NULL)
         {
-            XPN_DEBUG_END
-            return -1;
+            res = -1;
+            goto error_xpn_internal_open;
         }
                 
         servers[master].wrk->thread = servers[master].xpn_thread;
@@ -230,36 +222,55 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
             nfi_worker_do_open(servers[master].wrk, url_serv, flags, mode, vfh->nfih[master]);
         res = nfiworker_wait(servers[master].wrk);
         if (res < 0) {
-            free(vfh -> nfih[master]);
-            free(vfh -> nfih);
-            free(vfh);
-            XPN_DEBUG_END_ARGS1(path);
-            return res;
+            goto error_xpn_internal_open;
         }
     }
 
+    // Metadata
     if (mdata == NULL) {
         mdata = (struct xpn_metadata * ) malloc(sizeof(struct xpn_metadata));
         if (mdata == NULL) 
         {
-            XPN_DEBUG_END_ARGS1(path);
-            return res;
+            goto error_xpn_internal_open;
         }
         // read the metadata
         memset(mdata, 0, sizeof(struct xpn_metadata));
-        res = XpnReadMetadata(mdata, n, servers, vfh, abs_path, pd);
-        if (res < 0) 
-        {
-            free(vfh -> nfih);
-            free(vfh);
-            free(mdata);
-            XPN_DEBUG_END_ARGS1(path);
-            return res;
+    }
+
+    if (O_CREAT == (flags & O_CREAT))
+    {   
+        // create metadata
+        XpnCreateMetadata(mdata, pd, abs_path);
+        res = XpnUpdateMetadata(mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
+        if (res < 0){
+            goto error_xpn_internal_open;
+        }
+
+    }else if (O_DIRECTORY != (flags & O_DIRECTORY))
+    {
+        // read metadata only in files
+        res = XpnReadMetadata(mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
+        if (res < 0){
+            goto error_xpn_internal_open;
         }
     }
 
     res = XpnSearchSlotFile(pd, abs_path, vfh, mdata, flags, mode);
     
+    XPN_DEBUG_END_ARGS1(path);
+    return res;
+
+error_xpn_internal_open:
+    if (vfh != NULL){
+        if (vfh -> nfih != NULL){
+            for (j=0; j<n; j++){ 
+                FREE_AND_NULL(vfh -> nfih[j]);
+            }
+        }
+        FREE_AND_NULL(vfh -> nfih);
+    }
+    FREE_AND_NULL(vfh);
+    FREE_AND_NULL(mdata);
     XPN_DEBUG_END_ARGS1(path);
     return res;
 }
@@ -487,9 +498,8 @@ int xpn_simple_rename(const char * path, const char * newpath)
     char abs_path[PATH_MAX], url_serv[PATH_MAX];
     char newabs_path[PATH_MAX], newurl_serv[PATH_MAX];
     struct nfi_server *servers;
-    // struct xpn_metadata * mdata_aux;
+    struct xpn_metadata mdata;
     int res, err, i, n, pd, newpd;
-    // struct xpn_fh * vfh_aux;
 
     XPN_DEBUG_BEGIN_CUSTOM("(%s %s)", path, newpath);
 
@@ -545,96 +555,14 @@ int xpn_simple_rename(const char * path, const char * newpath)
         return -1;
     }
 
-    /* params:
-     * flag operation, partition id, absolute path, file descriptor, pointer to server
-     */
     servers = NULL;
     n = XpnGetServers(pd, -1, &servers);
     if (n <= 0) {
         XPN_DEBUG_END;
         return -1;
     }
-    // TODO: METADATA
-    // vfh_aux = (struct xpn_fh * ) malloc(sizeof(struct xpn_fh));
 
-    // // construccion del vfh
-    // if (vfh_aux == NULL) 
-    // {
-    //     errno = ENOMEM;
-    //     XPN_DEBUG_END;
-    //     return -1;
-    // }
-
-    // vfh_aux -> n_nfih = n;
-    // vfh_aux -> nfih = (struct nfi_fhandle ** ) malloc(sizeof(struct nfi_fhandle * ) * n);
-    // if (vfh_aux -> nfih == NULL) 
-    // {
-    //     errno = ENOMEM;
-    //     XPN_DEBUG_END;
-    //     return -1;
-    // }
-
-    // for (i = 0; i < n; i++) 
-    // {
-    //     vfh_aux -> nfih[i] = NULL;
-    // }
-
-    // mdata_aux = (struct xpn_metadata * ) malloc(sizeof(struct xpn_metadata));
-    // if (mdata_aux == NULL) 
-    // {
-    //     free(vfh_aux -> nfih);
-    //     free(vfh_aux);
-    //     XPN_DEBUG_END;
-    //     return -1;
-    // }
-
-    // memset(mdata_aux, 0, sizeof(struct xpn_metadata));
-
-    // res = XpnReadMetadata(mdata_aux, n, servers, vfh_aux, abs_path, pd);
-    // if (res < 0) 
-    // {
-    //     // tambien los punteros indirectos
-    //     for (i = 0; i < n; i++) 
-    //     {
-    //         if (vfh_aux -> nfih[i] != NULL) 
-    //         {
-    //             if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
-    //             {
-    //                 vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
-    //             }
-
-    //             free(vfh_aux -> nfih[i]);
-    //         }
-    //     }
-    //     free(vfh_aux -> nfih);
-    //     free(vfh_aux);
-    //     free(mdata_aux);
-    //     XPN_DEBUG_END;
-    //     return -1;
-    // }
-
-    // res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
-    // if (res < 0) 
-    // {
-    //     // tambien los punteros indirectos
-    //     for (i = 0; i < n; i++) 
-    //     {
-    //         if (vfh_aux -> nfih[i] != NULL) 
-    //         {
-    //             if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
-    //             {
-    //                 vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
-    //             }
-
-    //             free(vfh_aux -> nfih[i]);
-    //         }
-    //     }
-    //     free(vfh_aux -> nfih);
-    //     free(vfh_aux);
-    //     free(mdata_aux);
-    //     XPN_DEBUG_END;
-    //     return -1;
-    // }
+    XpnReadMetadata(&mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
 
     for (i = 0; i < n; i++) 
     {
@@ -656,49 +584,10 @@ int xpn_simple_rename(const char * path, const char * newpath)
         }
     }
 
-    // tambien los punteros indirectos
-    // for (i = 0; i < n; i++) 
-    // {
-    //     if (vfh_aux -> nfih[i] != NULL) 
-    //     {
-    //         if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
-    //         {
-    //             vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
-    //         }
-    //         free(vfh_aux -> nfih[i]);
-    //     }
-    // }
-
-    // free(vfh_aux -> nfih);
-    // free(vfh_aux);
-    // free(mdata_aux);
-
-    // error checking
-    // if (err) 
-    // {
-        // res = XpnUpdateMetadata(mdata_aux, n, servers, vfh_aux, newabs_path);
-    //     if (res < 0) 
-    //     {
-    //         // tambien los punteros indirectos
-    //         for (i = 0; i < n; i++) 
-    //         {
-    //             if (vfh_aux -> nfih[i] != NULL) 
-    //             {
-    //                 if (vfh_aux -> nfih[i] -> priv_fh != NULL) 
-    //                 {
-    //                     vfh_aux -> nfih[i] -> server -> ops -> nfi_close(vfh_aux -> nfih[i] -> server, vfh_aux -> nfih[i]);
-    //                 }
-
-    //                 free(vfh_aux -> nfih[i]);
-    //             }
-    //         }
-    //         free(vfh_aux -> nfih);
-    //         free(vfh_aux);
-    //         free(mdata_aux);
-    //         XPN_DEBUG_END;
-    //         return -1;
-    //     }
-    // }
+    //Check magic number if is dir not have it so no update metadata
+    if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
+        XpnUpdateMetadata(&mdata, n, servers, newabs_path, XpnSearchPart(pd)->replication_level);
+    }
 
     XPN_DEBUG_END;
     return 0;

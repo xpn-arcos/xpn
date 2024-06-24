@@ -86,6 +86,9 @@
 
   int     nfi_local_statfs     ( struct nfi_server *server, struct nfi_info *inf );
 
+  int     nfi_local_read_mdata   ( struct nfi_server *server, char *url, struct xpn_metadata *mdata );
+  int     nfi_local_write_mdata  ( struct nfi_server *server, char *url, struct xpn_metadata *mdata );
+
   /* ................................................................... */
 
   #ifdef  __cplusplus

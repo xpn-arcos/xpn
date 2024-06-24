@@ -100,6 +100,14 @@ char * xpn_server_op2string ( int op_code )
       ret = "FINALIZE";
       break;
 
+    // Metadata
+    case XPN_SERVER_READ_MDATA:
+      ret = "READ_METADATA";
+      break;
+    case XPN_SERVER_WRITE_MDATA:
+      ret = "WRITE_METADATA";
+      break;
+
     // Connection operatons
     case XPN_SERVER_DISCONNECT:
       ret = "DISCONNECT";
@@ -138,6 +146,11 @@ void xpn_server_op_rmdir_async ( xpn_server_param_st *params, void *comm, struct
 // FS Operations
 void xpn_server_op_getnodename ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
 void xpn_server_op_fstat       ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id ); //TODO: implement
+
+// Metadata
+void xpn_server_op_read_mdata   ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+void xpn_server_op_write_mdata  ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id );
+
 
 //Read the operation to realize
 int xpn_server_do_operation ( struct st_th *th, int * the_end )
@@ -247,6 +260,18 @@ int xpn_server_do_operation ( struct st_th *th, int * the_end )
       ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         xpn_server_op_rmdir_async(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
+      }
+      break;
+    case XPN_SERVER_READ_MDATA:
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_read_mdata), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      if (ret != -1) {
+        xpn_server_op_read_mdata(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
+      }
+      break;
+    case XPN_SERVER_WRITE_MDATA:
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_write_mdata), sizeof(struct st_xpn_server_write_mdata), th->rank_client_id, th->tag_client_id);
+      if (ret != -1) {
+        xpn_server_op_write_mdata(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
       break;
 
@@ -790,5 +815,90 @@ void xpn_server_op_rmdir_async ( __attribute__((__unused__)) xpn_server_param_st
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] << End\n", params->rank);
 }
 
+void xpn_server_op_read_mdata   ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+{
+  int ret, fd;
+  struct st_xpn_server_read_mdata_req req;
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] read_mdata(%s)\n", params->rank, head->u_st_xpn_server_msg.op_read_mdata.path);
+
+  fd = filesystem_open(head->u_st_xpn_server_msg.op_read_mdata.path, O_RDWR);
+  if (fd < 0){
+    if (errno == EISDIR){
+      // if is directory there are no metadata to read so return 0
+      ret = 0;
+	    memset(&req.mdata, 0, sizeof(struct xpn_metadata));
+      goto cleanup_xpn_server_op_read_mdata;
+    }
+    ret = fd;
+    goto cleanup_xpn_server_op_read_mdata;
+  }
+
+  ret = filesystem_read(fd, &req.mdata, sizeof(struct xpn_metadata));
+
+  if (!XPN_CHECK_MAGIC_NUMBER(&req.mdata)){
+	  memset(&req.mdata, 0, sizeof(struct xpn_metadata));
+  }
+
+  filesystem_close(fd); //TODO: think if necesary check error in close
+
+cleanup_xpn_server_op_read_mdata:
+  req.status.ret = ret;
+  req.status.server_errno = errno;
+
+  xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_read_mdata_req), rank_client_id, tag_client_id);
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] read_mdata(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_read_mdata.path, req.status.ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] << End\n", params->rank);
+}
+
+void xpn_server_op_write_mdata ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
+{
+  int ret, fd;
+  struct st_xpn_server_status req;
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] write_mdata(%s)\n", params->rank, head->u_st_xpn_server_msg.op_write_mdata.path);
+
+  fd = filesystem_open(head->u_st_xpn_server_msg.op_write_mdata.path, O_WRONLY);
+  if (fd < 0){
+    if (errno == EISDIR){
+      // if is directory there are no metadata to write so return 0
+      ret = 0;
+      goto cleanup_xpn_server_op_write_mdata;
+    }
+    ret = fd;
+    goto cleanup_xpn_server_op_write_mdata;
+  }
+
+  ret = filesystem_write(fd, &head->u_st_xpn_server_msg.op_write_mdata.mdata, sizeof(struct xpn_metadata));
+
+  filesystem_close(fd); //TODO: think if necesary check error in close
+
+cleanup_xpn_server_op_write_mdata:
+  req.ret = ret;
+  req.server_errno = errno;
+
+  xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] write_mdata(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_write_mdata.path, req.ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] << End\n", params->rank);
+
+}
 /* ................................................................... */
 

@@ -35,11 +35,10 @@
   #include "base/urlstr.h"
   #include "base/utils.h"
   #include "base/workers.h"
+  #include "xpn_metadata.h"
 
 
   /* ... Const / Const ................................................. */
-
-  #define XPN_HEADER_SIZE 8192
 
   /* Operations */
 
@@ -65,6 +64,10 @@
 
   // FS Operations
   #define XPN_SERVER_STATFS_DIR     60
+
+  // Metadata
+  #define XPN_SERVER_READ_MDATA      70
+  #define XPN_SERVER_WRITE_MDATA     71
 
   // Connection operatons
   #define XPN_SERVER_FINALIZE       80
@@ -141,6 +144,18 @@
     struct st_xpn_server_status status;
   };
 
+  struct st_xpn_server_read_mdata_req
+  { 
+    struct xpn_metadata mdata;
+    struct st_xpn_server_status status;
+  };
+
+  struct st_xpn_server_write_mdata
+  { 
+    char path[PATH_MAX];
+    struct xpn_metadata mdata;
+  };
+
   struct st_xpn_server_end
   {
     char status;
@@ -165,6 +180,9 @@
       struct st_xpn_server_readdir        op_readdir;
       struct st_xpn_server_path           op_closedir;
       struct st_xpn_server_path           op_rmdir;
+
+      struct st_xpn_server_path           op_read_mdata;
+      struct st_xpn_server_write_mdata     op_write_mdata;
 
       struct st_xpn_server_end            op_end;
     } u_st_xpn_server_msg;

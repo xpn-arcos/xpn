@@ -112,6 +112,9 @@
 
   int     nfi_xpn_server_statfs     ( struct nfi_server *server, struct nfi_info *inf );
 
+  int     nfi_xpn_server_read_mdata      ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata );
+  int     nfi_xpn_server_write_mdata     ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata );
+
   /* ................................................................... */
 
   #ifdef  __cplusplus
