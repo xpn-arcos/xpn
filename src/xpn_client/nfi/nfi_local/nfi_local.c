@@ -1003,7 +1003,7 @@ int nfi_local_read_mdata ( struct nfi_server *server, char *url, struct xpn_meta
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] nfi_local_read_mdata(%s)=%d\n", params->rank, dir, ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] << End\n", params->rank);
-  return 0;
+  return ret;
 }
 
 int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_metadata *mdata, int only_file_size )
@@ -1011,6 +1011,25 @@ int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_met
   int ret, fd;
   char dir[PATH_MAX];
   ssize_t actual_file_size;
+  struct nfi_local_server *server_aux;
+  struct nfi_xpn_server *server_xpn_aux;
+
+  if(only_file_size){
+    // is necessary to do it in xpn_server in order to ensure atomic operation
+    server_aux = (struct nfi_local_server *) (server->private_info);
+    if (server_aux == NULL) {
+      return -1;
+    }
+    server_xpn_aux = (struct nfi_xpn_server *)server_aux->private_info_server;
+    if (server_xpn_aux != NULL) {
+      server->private_info = server_xpn_aux;
+      ret = nfi_xpn_server_write_mdata(server, url, mdata, only_file_size);
+      server->private_info = server_aux;
+    }else{
+      ret = -1;
+    }
+    return ret;
+  }
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] >> Begin\n", server->id);
 
@@ -1044,22 +1063,12 @@ int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_met
     return -1;
   }
 
-  if(only_file_size){
-    filesystem_lseek(fd, offsetof(struct xpn_metadata, file_size), SEEK_SET);
-    ret = filesystem_read(fd, &actual_file_size, sizeof(ssize_t));
-
-    if (ret > 0 && actual_file_size < mdata->file_size){
-      filesystem_lseek(fd, offsetof(struct xpn_metadata, file_size), SEEK_SET);
-      ret = filesystem_write(fd, &mdata->file_size, sizeof(ssize_t));
-    }
-  }else{
-    ret = filesystem_write(fd, mdata, sizeof(struct xpn_metadata));
-  }
+  ret = filesystem_write(fd, mdata, sizeof(struct xpn_metadata));
 
   filesystem_close(fd); //TODO: think if necesary check error in close
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] nfi_local_write_mdata(%s)=%d\n", params->rank, dir, ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] << End\n", params->rank);
-  return 0;
+  return ret;
 }
 /* ................................................................... */
