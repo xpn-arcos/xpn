@@ -1010,7 +1010,6 @@ int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_met
 {
   int ret, fd;
   char dir[PATH_MAX];
-  ssize_t actual_file_size;
   struct nfi_local_server *server_aux;
   struct nfi_xpn_server *server_xpn_aux;
 

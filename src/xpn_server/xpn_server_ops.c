@@ -108,6 +108,9 @@ char * xpn_server_op2string ( int op_code )
     case XPN_SERVER_WRITE_MDATA:
       ret = "WRITE_METADATA";
       break;
+    case XPN_SERVER_WRITE_MDATA_FILE_SIZE:
+      ret = "WRITE_METADATA_FILE_SIZE";
+      break;
 
     // Connection operatons
     case XPN_SERVER_DISCONNECT:
@@ -927,7 +930,7 @@ void xpn_server_op_write_mdata_file_size ( xpn_server_param_st *params, void *co
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)\n", params->rank, head->u_st_xpn_server_msg.op_write_mdata_file_size.path, head->u_st_xpn_server_msg.op_write_mdata_file_size.size);
   
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] mutex lock(%p)\n", params->rank, op_write_mdata_file_size_mutex);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] mutex lock\n", params->rank);
   pthread_mutex_lock(&op_write_mdata_file_size_mutex);
 
   fd = filesystem_open(head->u_st_xpn_server_msg.op_write_mdata_file_size.path, O_RDWR);
@@ -953,6 +956,7 @@ void xpn_server_op_write_mdata_file_size ( xpn_server_param_st *params, void *co
 cleanup_xpn_server_op_write_mdata_file_size:
 
   pthread_mutex_unlock(&op_write_mdata_file_size_mutex);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] mutex unlock\n", params->rank);
 
   req.ret = ret;
   req.server_errno = errno;
