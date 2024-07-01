@@ -155,6 +155,23 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
         XPN_DEBUG_END_ARGS1(path);
         return res;
     }
+    // Metadata
+    if (mdata == NULL) {
+        mdata = (struct xpn_metadata * ) malloc(sizeof(struct xpn_metadata));
+        if (mdata == NULL) 
+        {
+            goto error_xpn_internal_open;
+        }
+    }
+    if ((O_CREAT != (flags & O_CREAT)) && (O_DIRECTORY != (flags & O_DIRECTORY)))
+    {
+        // read metadata only in files
+        res = XpnReadMetadata(mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
+        if (res < 0){
+            goto error_xpn_internal_open;
+        }
+    }
+
     if (vfh == NULL) {
         vfh = (struct xpn_fh * ) malloc(sizeof(struct xpn_fh));
         if (vfh == NULL) 
@@ -172,84 +189,35 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
         }
     }
 
-    // Open file only in master server if not creat
-    if (O_CREAT == (flags & O_CREAT))
-    {   
-        //if creat, creat file in all servers
-        for (i = 0; i < n; i++) 
-        {
-            vfh -> nfih[i] = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
-            if(vfh -> nfih[i] == NULL)
-            {
-                goto error_xpn_internal_open;
-            }
-            servers[i].wrk->thread = servers[i].xpn_thread;
-            XpnGetURLServer(&servers[i], abs_path, url_serv);
-            nfi_worker_do_open(servers[i].wrk, url_serv, flags, mode, vfh->nfih[i]);
-        }
+    // Open file only in master server
+   
+    master = hash(abs_path, n);
 
-        err = 0;
-        for (i = 0; i < n; i++) 
-        {
-            res = nfiworker_wait(servers[i].wrk);
-            if (res < 0) {
-                err = 1;
-            }
-        }
-
-        if (err)
-        {
-            goto error_xpn_internal_open;
-        }
-
-    }else{
-        //if not creat, open file only in master server
-        master = hash(abs_path, n);
-
-        vfh -> nfih[master] = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
-        if(vfh -> nfih[master] == NULL)
-        {
-            res = -1;
-            goto error_xpn_internal_open;
-        }
-                
-        servers[master].wrk->thread = servers[master].xpn_thread;
-        
-        XpnGetURLServer(&servers[master], abs_path, url_serv);
-        if (O_DIRECTORY == (flags & O_DIRECTORY))
-            nfi_worker_do_opendir(servers[master].wrk, url_serv, vfh->nfih[master]);
-        else
-            nfi_worker_do_open(servers[master].wrk, url_serv, flags, mode, vfh->nfih[master]);
-        res = nfiworker_wait(servers[master].wrk);
-        if (res < 0) {
-            goto error_xpn_internal_open;
-        }
+    vfh -> nfih[master] = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
+    if(vfh -> nfih[master] == NULL)
+    {
+        res = -1;
+        goto error_xpn_internal_open;
+    }
+            
+    servers[master].wrk->thread = servers[master].xpn_thread;
+    
+    XpnGetURLServer(&servers[master], abs_path, url_serv);
+    if (O_DIRECTORY == (flags & O_DIRECTORY))
+        nfi_worker_do_opendir(servers[master].wrk, url_serv, vfh->nfih[master]);
+    else
+        nfi_worker_do_open(servers[master].wrk, url_serv, flags, mode, vfh->nfih[master]);
+    res = nfiworker_wait(servers[master].wrk);
+    if (res < 0) {
+        goto error_xpn_internal_open;
     }
 
     // Metadata
-    if (mdata == NULL) {
-        mdata = (struct xpn_metadata * ) malloc(sizeof(struct xpn_metadata));
-        if (mdata == NULL) 
-        {
-            goto error_xpn_internal_open;
-        }
-        // read the metadata
-        memset(mdata, 0, sizeof(struct xpn_metadata));
-    }
-
     if (O_CREAT == (flags & O_CREAT))
     {   
         // create metadata
         XpnCreateMetadata(mdata, pd, abs_path);
         res = XpnUpdateMetadata(mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level, 0);
-        if (res < 0){
-            goto error_xpn_internal_open;
-        }
-
-    }else if (O_DIRECTORY != (flags & O_DIRECTORY))
-    {
-        // read metadata only in files
-        res = XpnReadMetadata(mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
         if (res < 0){
             goto error_xpn_internal_open;
         }
@@ -330,6 +298,9 @@ int xpn_internal_remove(const char * path)
     }
 
     //Master node
+    struct xpn_metadata mdata = {0};
+    XpnReadMetadata(&mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
+
     int master_node = hash((char *)path, n);
     XpnGetURLServer(&servers[master_node], abs_path, url_serv);
 
@@ -344,6 +315,10 @@ int xpn_internal_remove(const char * path)
     if (res < 0)
     {
         return res;
+    }
+
+    if (XPN_CHECK_MAGIC_NUMBER(&mdata) && mdata.file_size <= mdata.block_size){
+        return 0;
     }
 
     // Rest of nodes...
