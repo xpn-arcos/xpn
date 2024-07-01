@@ -28,7 +28,7 @@
 
 int XpnGetEntry(int fd, struct dirent *entry)
 {
-	int n,res,serv_num;
+	int n, res;
 	struct nfi_server *servers;
 
 	XPN_DEBUG_BEGIN
@@ -38,15 +38,15 @@ int XpnGetEntry(int fd, struct dirent *entry)
 	if(n<=0){
 	    return -1;
 	}
-  serv_num = 0;
-  while(serv_num < n && servers[serv_num].error == -1)
+  int master_node = hash(xpn_file_table[fd]->path, n);
+  while(servers[master_node].error == -1)
   {
-    serv_num++;
+    master_node = (master_node+1) % n;
   }
 
-	res = XpnGetFhDir(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[serv_num]), &servers[serv_num], xpn_file_table[fd]->path);
+	res = XpnGetFhDir(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[master_node]), &servers[master_node], xpn_file_table[fd]->path);
 
-	res = xpn_file_table[fd]->data_vfh->nfih[serv_num]->server->ops->nfi_readdir(xpn_file_table[fd]->data_vfh->nfih[serv_num]->server, xpn_file_table[fd]->data_vfh->nfih[serv_num], entry);
+	res = xpn_file_table[fd]->data_vfh->nfih[master_node]->server->ops->nfi_readdir(xpn_file_table[fd]->data_vfh->nfih[master_node]->server, xpn_file_table[fd]->data_vfh->nfih[master_node], entry);
 
 	XPN_DEBUG_END
 
