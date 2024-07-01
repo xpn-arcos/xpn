@@ -46,6 +46,12 @@ void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t o
 	(*local_offset) = block_line * block_size + (offset % block_size);
 }
 
+void XpnCalculateBlockMdata(struct xpn_metadata *mdata, off_t offset, int replication, off_t *local_offset, int *serv)
+{
+	XpnCalculateBlock(mdata->block_size, mdata->replication_level, mdata->data_nserv[0], offset, replication, local_offset, serv);
+	(*serv) = ((*serv)+mdata->first_node) % mdata->data_nserv[0];
+}
+
 /**
  * Calculates the offset (in file) of the given offset (file in server) of a file with replication.
  *
@@ -86,7 +92,7 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
 	int replication = 0;
 	if (serv_client != -1){
 		do{
-			XpnCalculateBlock(xpn_file_table[fd]->block_size, xpn_file_table[fd]->part->replication_level, xpn_file_table[fd]->part->data_nserv, offset, replication, local_offset, serv);
+			XpnCalculateBlockMdata(xpn_file_table[fd]->mdata, offset, replication, local_offset, serv);
 			if ((*serv) == serv_client && xpn_file_table[fd]->part->data_serv[(*serv)].error != -1 ){
 				return 0;
 			}
@@ -99,7 +105,7 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
 		replication = rand() % (xpn_file_table[fd]->part->replication_level + 1);
 
 	do{
-		XpnCalculateBlock(xpn_file_table[fd]->block_size, xpn_file_table[fd]->part->replication_level, xpn_file_table[fd]->part->data_nserv, offset, replication, local_offset, serv);
+		XpnCalculateBlockMdata(xpn_file_table[fd]->mdata, offset, replication, local_offset, serv);
 		if (xpn_file_table[fd]->part->replication_level != 0)
 			replication = (replication + 1) % (xpn_file_table[fd]->part->replication_level + 1);
 		retries++;
@@ -121,7 +127,7 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
  */
 int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv)
 {
-	XpnCalculateBlock(xpn_file_table[fd]->block_size, xpn_file_table[fd]->part->replication_level, xpn_file_table[fd]->part->data_nserv, offset, replication, local_offset, serv);
+	XpnCalculateBlockMdata(xpn_file_table[fd]->mdata, offset, replication, local_offset, serv);
 	return xpn_file_table[fd]->part->data_serv[*serv].error;
 }
 
