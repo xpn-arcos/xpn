@@ -115,6 +115,7 @@ XPN_HEADER= 		@top_srcdir@/include/xpn_client/xpn.h
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_rw.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_simple_lib.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_stdio.h \
+			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_metadata.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn.h
 
 
@@ -211,6 +212,7 @@ XPN_CORE_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_file.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_init.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_open.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_metadata.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_opendir.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_rw.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.c
