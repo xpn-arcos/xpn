@@ -127,7 +127,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
     char abs_path[PATH_MAX];
     char url_serv[PATH_MAX];
     struct nfi_server *servers;
-    int n, pd, i, j, master, err;
+    int n, pd, i, j, master;
     int res = -1;
 
     XPN_DEBUG_BEGIN_CUSTOM("%s, %d, %d", path, flags, mode);
@@ -266,6 +266,7 @@ int xpn_internal_remove(const char * path)
     char abs_path[PATH_MAX], url_serv[PATH_MAX];
     int res, err, i, n, pd;
     struct nfi_server *servers;
+    int servers_affected, current_serv;
 
     if (path == NULL) 
     {
@@ -287,9 +288,6 @@ int xpn_internal_remove(const char * path)
         return -1;
     }
 
-    /* params:
-     * flag operation, partition id, absolute path, file descriptor, pointer to server
-     */
     servers = NULL;
     n = XpnGetServers(pd, -1, &servers);
     if (n <= 0) 
@@ -304,7 +302,21 @@ int xpn_internal_remove(const char * path)
     int master_node = hash((char *)path, n);
     XpnGetURLServer(&servers[master_node], abs_path, url_serv);
 
-    // Worker
+    // Calculate the number of servers affected
+    if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
+        // file
+        servers_affected = ( ( mdata.file_size - 1) / mdata.block_size ) + 1;
+        // Keep in mind replication level
+        servers_affected = servers_affected * (mdata.replication_level+1);
+        if (servers_affected > n){
+            servers_affected = n;
+        }
+    }else{
+        // dir
+        servers_affected = n;
+    }
+
+    // Master server
     servers[master_node].wrk->thread = servers[master_node].xpn_thread;
     servers[master_node].wrk->arg.master_node = master_node;
     servers[master_node].wrk->arg.is_master_node = 1;
@@ -317,38 +329,28 @@ int xpn_internal_remove(const char * path)
         return res;
     }
 
-    if (XPN_CHECK_MAGIC_NUMBER(&mdata) && mdata.file_size <= mdata.block_size){
-        return 0;
-    }
-
     // Rest of nodes...
-    for (i = 0; i < n; i++) 
+    for (i = 0; i < servers_affected - 1; i++) 
     {
-        if (i == master_node)
-        {
-            continue;
-        }
+        current_serv = (i + master_node + 1) % n;
 
-        XpnGetURLServer(&servers[i], abs_path, url_serv);
+        XpnGetURLServer(&servers[current_serv], abs_path, url_serv);
 
         // Worker
-        servers[i].wrk->thread = servers[i].xpn_thread;
-        servers[i].wrk->arg.master_node = master_node;
-        servers[i].wrk->arg.is_master_node = 0;
+        servers[current_serv].wrk->thread = servers[current_serv].xpn_thread;
+        servers[current_serv].wrk->arg.master_node = master_node;
+        servers[current_serv].wrk->arg.is_master_node = 0;
 
-        nfi_worker_do_remove(servers[i].wrk, url_serv);
+        nfi_worker_do_remove(servers[current_serv].wrk, url_serv);
     }
 
-    // Wait
+    // Wait for the rest of nodes...
     err = 0;
-    for (i = 0; i < n; i++) 
+    for (i = 0; i < servers_affected - 1; i++) 
     {
-        if (i == master_node)
-        {
-            continue;
-        }
+        current_serv = (i + master_node + 1) % n;
 
-        res = nfiworker_wait(servers[i].wrk);
+        res = nfiworker_wait(servers[current_serv].wrk);
         // error checking
         if ((res < 0) && (!err)) {
             err = 1;
