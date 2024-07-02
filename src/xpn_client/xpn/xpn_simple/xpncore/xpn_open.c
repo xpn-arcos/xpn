@@ -266,7 +266,8 @@ int xpn_internal_remove(const char * path)
     char abs_path[PATH_MAX], url_serv[PATH_MAX];
     int res, err, i, n, pd;
     struct nfi_server *servers;
-    int servers_affected, current_serv;
+    struct xpn_metadata mdata = {0};
+    int servers_affected, current_serv, master_node, file_size;
 
     if (path == NULL) 
     {
@@ -296,16 +297,16 @@ int xpn_internal_remove(const char * path)
     }
 
     //Master node
-    struct xpn_metadata mdata = {0};
     XpnReadMetadata(&mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
 
-    int master_node = hash((char *)path, n);
+    master_node = hash((char *)path, n);
     XpnGetURLServer(&servers[master_node], abs_path, url_serv);
 
     // Calculate the number of servers affected
     if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
         // file
-        servers_affected = ( ( mdata.file_size - 1) / mdata.block_size ) + 1;
+        file_size = mdata.file_size < 0 ? 0 : mdata.file_size-1;
+        servers_affected = ( file_size / mdata.block_size ) + 1;
         // Keep in mind replication level
         servers_affected = servers_affected * (mdata.replication_level+1);
         if (servers_affected > n){
@@ -475,8 +476,9 @@ int xpn_simple_rename(const char * path, const char * newpath)
     char abs_path[PATH_MAX], url_serv[PATH_MAX];
     char newabs_path[PATH_MAX], newurl_serv[PATH_MAX];
     struct nfi_server *servers;
-    struct xpn_metadata mdata;
+    struct xpn_metadata mdata = {0};
     int res, err, i, n, pd, newpd;
+    int servers_affected, current_serv, master_node, file_size;
 
     XPN_DEBUG_BEGIN_CUSTOM("(%s %s)", path, newpath);
 
@@ -539,24 +541,61 @@ int xpn_simple_rename(const char * path, const char * newpath)
         return -1;
     }
 
+    //Master node
     XpnReadMetadata(&mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
 
-    for (i = 0; i < n; i++) 
-    {
-        XpnGetURLServer(&servers[i], abs_path, url_serv);
-        XpnGetURLServer(&servers[i], newabs_path, newurl_serv);
+    master_node = hash((char *)path, n);
+    XpnGetURLServer(&servers[master_node], abs_path, url_serv);
+    XpnGetURLServer(&servers[master_node], newabs_path, newurl_serv);
 
-        // Worker
-        servers[i].wrk -> thread = servers[i].xpn_thread;
-        nfi_worker_do_rename(servers[i].wrk, url_serv, newurl_serv);
+    // Calculate the number of servers affected
+    if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
+        // file
+        file_size = mdata.file_size < 0 ? 0 : mdata.file_size-1;
+        servers_affected = ( file_size / mdata.block_size ) + 1;
+        // Keep in mind replication level
+        servers_affected = servers_affected * (mdata.replication_level+1);
+        if (servers_affected > n){
+            servers_affected = n;
+        }
+    }else{
+        // dir
+        servers_affected = n;
     }
 
-    err = 0;
-    for (i = 0; i < n; i++) 
+    // Master server
+    servers[master_node].wrk->thread = servers[master_node].xpn_thread;
+
+    nfi_worker_do_rename(servers[master_node].wrk, url_serv, newurl_serv);
+
+    res = nfiworker_wait(servers[master_node].wrk);
+    if (res < 0)
     {
-        res = nfiworker_wait(servers[i].wrk);
-        if ((!err) && (res < 0)) 
-        {
+        return res;
+    }
+
+    // Rest of nodes...
+    for (i = 0; i < servers_affected - 1; i++) 
+    {
+        current_serv = (i + master_node + 1) % n;
+
+        XpnGetURLServer(&servers[current_serv], abs_path, url_serv);
+        XpnGetURLServer(&servers[current_serv], newabs_path, newurl_serv);
+
+        // Worker
+        servers[current_serv].wrk -> thread = servers[current_serv].xpn_thread;
+        nfi_worker_do_rename(servers[current_serv].wrk, url_serv, newurl_serv);
+    }
+
+    // Wait for the rest of nodes...
+    err = 0;
+    for (i = 0; i < servers_affected - 1; i++) 
+    {
+        current_serv = (i + master_node + 1) % n;
+
+        res = nfiworker_wait(servers[current_serv].wrk);
+        // error checking
+        if ((res < 0) && (!err)) {
             err = 1;
         }
     }
