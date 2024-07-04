@@ -146,7 +146,7 @@
       do
       { 
         //TODO: check when the server has error and data is corrupt for fault tolerance
-        XpnCalculateBlockInvert(blocksize, replication_level, size, rank, offset_src, &offset_dest, &replication);
+        XpnCalculateBlockInvert(blocksize, replication_level, size, rank, offset_src, 0, &offset_dest, &replication);
         
         if(offset_src > st_src.st_size){
           break;

@@ -137,7 +137,7 @@
       { 
         for (i = 0; i <= replication_level; i++)
         {
-          XpnCalculateBlock(blocksize, replication_level, size, offset_src, i, &local_offset, &local_server);
+          XpnCalculateBlock(blocksize, replication_level, size, offset_src, i, 0, &local_offset, &local_server);
 
           if (local_server == rank)
           {
