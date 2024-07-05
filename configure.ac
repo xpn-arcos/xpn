@@ -293,6 +293,24 @@ AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
 ### END OF MQTT BLOCK. Do not remove this line. ###
 
 
+### BEGIN OF XPN_SESSION BLOCK. Do not remove this line. ###
+#
+# Defines the necessary variables if gridftp is enabled.
+#
+AC_ARG_ENABLE(  [xpn_session_file],
+                [AS_HELP_STRING([--enable-xpn_session_file],[Enable xpn_session for files.])],
+                [
+                  [CDEFS="$CDEFS -DXPN_SESSION_FILE"]
+                ]
+)
+AC_ARG_ENABLE(  [xpn_session_dir],
+                [AS_HELP_STRING([--enable-xpn_session_dir],[Enable xpn_session for directories.])],
+                [
+                  [CDEFS="$CDEFS -DXPN_SESSION_DIR"]
+                ]
+)
+### END OF XPN_SESSION BLOCK. Do not remove this line. ###
+
 
 CPPFLAGS="$CDEFS $INCLUDEFLAGS $M_HEADERS $CPPFLAGS"
 LDFLAGS="$LIBLINK $LIBS"

@@ -440,6 +440,9 @@ int xpn_simple_close(int fd)
         {
             if (xpn_file_table[fd] -> data_vfh -> nfih[i] != NULL) 
             {
+                if(xpn_file_table[fd]->data_vfh->nfih[i]->priv_fh != NULL){
+                    xpn_file_table[fd]->data_vfh->nfih[i]->server->ops->nfi_close( xpn_file_table[fd]->data_vfh->nfih[i]->server, xpn_file_table[fd]->data_vfh->nfih[i]);
+                }
                 free(xpn_file_table[fd] -> data_vfh -> nfih[i]);
             }
         }

@@ -82,6 +82,8 @@
   {
     char path[PATH_MAX];
     long telldir;
+    DIR *dir;
+    int fd;
   };
 
 

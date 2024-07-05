@@ -656,6 +656,7 @@ int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
   memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", serv->id, dir);
+  fh_aux->fd = status.ret;
 
   fho->type    = NFIFILE;
   fho->priv_fh = NULL;
@@ -712,6 +713,7 @@ ssize_t nfi_xpn_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   
   msg.u_st_xpn_server_msg.op_read.offset   = offset;
   msg.u_st_xpn_server_msg.op_read.size     = size;
+  msg.u_st_xpn_server_msg.op_read.fd   = fh_aux->fd;
 
   ret = nfi_write_operation(server_aux, &msg);
   if (ret < 0)
@@ -815,6 +817,7 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   memccpy(msg.u_st_xpn_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_write.offset = offset;
   msg.u_st_xpn_server_msg.op_write.size   = size;
+  msg.u_st_xpn_server_msg.op_write.fd   = fh_aux->fd;
 
   ret = nfi_write_operation(server_aux, &msg);
   if(ret < 0)
@@ -889,8 +892,51 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
 int nfi_xpn_server_close ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) struct nfi_fhandle *fh )
 {
+  #ifdef XPN_SESSION_FILE
+  struct nfi_xpn_server *server_aux;
+  struct nfi_xpn_server_fhandle *fh_aux;
+  struct st_xpn_server_msg msg;
+  struct st_xpn_server_status status;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] >> Begin\n", serv->id);
+
+  // Check arguments...
+  NULL_RET_ERR(serv, EINVAL);
+  NULL_RET_ERR(fh,   EINVAL);
+  nfi_xpn_server_keep_connected(serv);
+  NULL_RET_ERR(serv->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] Get server private info\n", serv->id);
+
+  server_aux = (struct nfi_xpn_server *) serv->private_info;
+  if (server_aux == NULL)
+  {
+    errno = EINVAL;
+    return -1;
+  }
+  
+  // private_info file handle
+  fh_aux     = (struct nfi_xpn_server_fhandle *) fh->priv_fh;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%d)\n", serv->id, fh_aux->fd);
+
+  msg.type = XPN_SERVER_CLOSE_FILE;
+  msg.u_st_xpn_server_msg.op_close.fd = fh_aux->fd;
+
+  nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
+
+  if (status.ret < 0)
+    errno = status.server_errno;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%d)=%d\n", serv->id, fh_aux->fd, status.ret);
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] >> End\n", serv->id);
+
+  return status.ret;
+  #else
   // Without sesion close do nothing
   return 0;
+  #endif
 }
 
 int nfi_xpn_server_remove ( struct nfi_server *serv,  char *url )
@@ -1187,7 +1233,7 @@ int nfi_xpn_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
   struct nfi_xpn_server *server_aux;
   struct nfi_xpn_server_fhandle *fh_aux;
   struct st_xpn_server_msg msg;
-  struct st_xpn_server_status status;
+  struct st_xpn_server_opendir_req req;
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_opendir] >> Begin\n", serv->id);
 
@@ -1233,14 +1279,15 @@ int nfi_xpn_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
   msg.type = XPN_SERVER_OPENDIR_DIR;
   memccpy(msg.u_st_xpn_server_msg.op_opendir.path, dir,            0, PATH_MAX-1);
 
-  nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
-  if (status.ret < 0)
+  nfi_xpn_server_do_request(server_aux, &msg, (char *)&(req), sizeof(struct st_xpn_server_opendir_req));
+  if (req.status.ret < 0)
   {
-    errno = status.server_errno;
+    errno = req.status.server_errno;
     return -1;
   }
 
-  fh_aux->telldir = status.ret;
+  fh_aux->telldir = req.status.ret;
+  fh_aux->dir = req.dir;
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_opendir] nfi_xpn_server_opendir(%s)\n", serv->id, dir);
 
@@ -1296,6 +1343,7 @@ int nfi_xpn_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
   msg.type = XPN_SERVER_READDIR_DIR;
   memccpy(msg.u_st_xpn_server_msg.op_readdir.path, fh_aux->path,            0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_readdir.telldir = fh_aux->telldir;
+  msg.u_st_xpn_server_msg.op_readdir.dir = fh_aux->dir;
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_xpn_server_readdir_req));
   
@@ -1318,8 +1366,51 @@ int nfi_xpn_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
 
 int nfi_xpn_server_closedir ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) struct nfi_fhandle *fh )
 {
+  #ifdef XPN_SESSION_DIR
+  struct nfi_xpn_server *server_aux;
+  struct nfi_xpn_server_fhandle *fh_aux;
+  struct st_xpn_server_msg msg;
+  struct st_xpn_server_status status;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] >> Begin\n", serv->id);
+
+  // Check arguments...
+  NULL_RET_ERR(serv, EINVAL);
+  NULL_RET_ERR(fh,   EINVAL);
+  nfi_xpn_server_keep_connected(serv);
+  NULL_RET_ERR(serv->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] Get server private info\n", serv->id);
+
+  server_aux = (struct nfi_xpn_server *) serv->private_info;
+  if (server_aux == NULL)
+  {
+    errno = EINVAL;
+    return -1;
+  }
+  
+  // private_info file handle
+  fh_aux     = (struct nfi_xpn_server_fhandle *) fh->priv_fh;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%d)\n", serv->id, fh_aux->dir);
+
+  msg.type = XPN_SERVER_CLOSEDIR_DIR;
+  msg.u_st_xpn_server_msg.op_close.dir = fh_aux->dir;
+
+  nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
+
+  if (status.ret < 0)
+    errno = status.server_errno;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%d)=%d\n", serv->id, fh_aux->dir, status.ret);
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] >> End\n", serv->id);
+
+  return status.ret;
+  #else
   // Without sesion close do nothing
   return 0;
+  #endif
 }
 
 int nfi_xpn_server_rmdir(struct nfi_server *serv,  char *url)

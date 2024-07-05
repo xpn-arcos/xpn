@@ -194,7 +194,7 @@ int xpn_server_do_operation ( struct st_th *th, int * the_end )
       }
       break;
     case XPN_SERVER_CLOSE_FILE:
-      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_close), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_close), sizeof(struct st_xpn_server_close), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         xpn_server_op_close(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
@@ -250,7 +250,7 @@ int xpn_server_do_operation ( struct st_th *th, int * the_end )
       }
       break;
     case XPN_SERVER_CLOSEDIR_DIR:
-      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_closedir), sizeof(struct st_xpn_server_path), th->rank_client_id, th->tag_client_id);
+      ret = xpn_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_xpn_server_msg.op_closedir), sizeof(struct st_xpn_server_close), th->rank_client_id, th->tag_client_id);
       if (ret != -1) {
         xpn_server_op_closedir(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
       }
@@ -323,7 +323,9 @@ void xpn_server_op_open ( xpn_server_param_st *params, void *comm, struct st_xpn
   if (status.ret < 0){
     xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
   }else{
+    #ifndef XPN_SESSION_FILE
     status.ret = filesystem_close(status.ret);
+    #endif
     status.server_errno = errno;
 
     xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
@@ -390,7 +392,11 @@ void xpn_server_op_read ( xpn_server_param_st *params, void *comm, struct st_xpn
   diff = head->u_st_xpn_server_msg.op_read.size - cont;
 
   //Open file
+  #ifdef XPN_SESSION_FILE
+  int fd = head->u_st_xpn_server_msg.op_read.fd;
+  #else
   int fd = filesystem_open(head->u_st_xpn_server_msg.op_read.path, O_RDONLY);
+  #endif
   if (fd < 0)
   {
     req.size = -1;
@@ -459,7 +465,9 @@ void xpn_server_op_read ( xpn_server_param_st *params, void *comm, struct st_xpn
 
   } while ((diff > 0) && (req.size != 0));
 cleanup_xpn_server_op_read:
+  #ifndef XPN_SESSION_FILE
   filesystem_close(fd);
+  #endif
 
   // free buffer
   FREE_AND_NULL(buffer);
@@ -494,7 +502,11 @@ void xpn_server_op_write ( xpn_server_param_st *params, void *comm, struct st_xp
   diff = head->u_st_xpn_server_msg.op_read.size - cont;
 
   //Open file
+  #ifdef XPN_SESSION_FILE
+  int fd = head->u_st_xpn_server_msg.op_write.fd;
+  #else
   int fd = filesystem_open(head->u_st_xpn_server_msg.op_write.path, O_WRONLY);
+  #endif
   if (fd < 0)
   {
     req.size = -1;
@@ -549,7 +561,11 @@ cleanup_xpn_server_op_write:
   req.status.server_errno = errno;
   xpn_server_comm_write_data(params, comm,(char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
 
+  #ifdef XPN_SESSION_FILE
+  filesystem_fsync(fd);
+  #else
   filesystem_close(fd);
+  #endif
 
   // free buffer
   FREE_AND_NULL(buffer);
@@ -558,10 +574,28 @@ cleanup_xpn_server_op_write:
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] << End\n", params->rank);
 }
 
-void xpn_server_op_close ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) void *comm, __attribute__((__unused__)) struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
+void xpn_server_op_close ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  // Without sesion close do nothing
-  return;
+  struct st_xpn_server_status status;
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] close(%d)\n", params->rank, head->u_st_xpn_server_msg.op_close.fd);
+
+  // do rm
+  status.ret = filesystem_close(head->u_st_xpn_server_msg.op_close.fd);
+  status.server_errno = errno;
+  xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] close(%d)=%d\n", params->rank, head->u_st_xpn_server_msg.op_close.fd, status.ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] << End\n", params->rank);
+
 }
 
 void xpn_server_op_rm ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
@@ -704,7 +738,7 @@ void xpn_server_op_mkdir ( xpn_server_param_st *params, void *comm, struct st_xp
 void xpn_server_op_opendir ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   DIR* ret;
-  struct st_xpn_server_status status;
+  struct st_xpn_server_opendir_req req;
 
   // check params...
   if (NULL == params)
@@ -717,15 +751,23 @@ void xpn_server_op_opendir ( xpn_server_param_st *params, void *comm, struct st_
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] opendir(%s)\n", params->rank, head->u_st_xpn_server_msg.op_opendir.path);
 
   ret = filesystem_opendir(head->u_st_xpn_server_msg.op_opendir.path);
-  status.ret = ret == NULL ? -1 : 0;
-  status.server_errno = errno;
+  req.status.ret = ret == NULL ? -1 : 0;
+  req.status.server_errno = errno;
 
-  if (status.ret == 0){
-    status.ret = filesystem_telldir(ret);
-    status.server_errno = errno;
+  if (req.status.ret == 0){
+    #ifndef XPN_SESSION_DIR
+    req.status.ret = filesystem_telldir(ret);
+    #else
+    req.dir = ret;
+    #endif
+    req.status.server_errno = errno;
   }
 
-  xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+  #ifndef XPN_SESSION_DIR
+  filesystem_closedir(ret);
+  #endif
+
+  xpn_server_comm_write_data(params, comm, (char *)&req, sizeof(struct st_xpn_server_opendir_req), rank_client_id, tag_client_id);
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] opendir(%s)=%p\n", params->rank, head->u_st_xpn_server_msg.op_opendir.path, ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] << End\n", params->rank);
@@ -735,7 +777,6 @@ void xpn_server_op_readdir ( xpn_server_param_st *params, void *comm, struct st_
 {
   struct dirent * ret;
   struct st_xpn_server_readdir_req ret_entry;
-  DIR* s;
 
   // check params...
   if (NULL == params)
@@ -747,6 +788,9 @@ void xpn_server_op_readdir ( xpn_server_param_st *params, void *comm, struct st_
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] readdir(%s)\n", params->rank, head->u_st_xpn_server_msg.op_readdir.path);
 
+  #ifndef XPN_SESSION_DIR
+  DIR* s;
+
   s = filesystem_opendir(head->u_st_xpn_server_msg.op_readdir.path);
   ret_entry.status.ret = s == NULL ? -1 : 0;
   ret_entry.status.server_errno = errno;
@@ -756,6 +800,11 @@ void xpn_server_op_readdir ( xpn_server_param_st *params, void *comm, struct st_
   // Reset errno
   errno = 0;
   ret = filesystem_readdir(s);
+  #else
+  // Reset errno
+  errno = 0;
+  ret = filesystem_readdir(head->u_st_xpn_server_msg.op_readdir.dir);
+  #endif
   if (ret != NULL)
   {
     ret_entry.end = 1;
@@ -767,9 +816,11 @@ void xpn_server_op_readdir ( xpn_server_param_st *params, void *comm, struct st_
 
   ret_entry.status.ret = ret == NULL ? -1 : 0;
 
-  ret_entry.telldir = filesystem_telldir(s);
+  #ifndef XPN_SESSION_DIR
+    ret_entry.telldir = filesystem_telldir(s);
 
-  ret_entry.status.ret = filesystem_closedir(s);
+    ret_entry.status.ret = filesystem_closedir(s);
+  #endif
   ret_entry.status.server_errno = errno;
 
   xpn_server_comm_write_data(params, comm,(char *)&ret_entry, sizeof(struct st_xpn_server_readdir_req), rank_client_id, tag_client_id);
@@ -778,10 +829,28 @@ void xpn_server_op_readdir ( xpn_server_param_st *params, void *comm, struct st_
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] << End\n", params->rank);
 }
 
-void xpn_server_op_closedir ( __attribute__((__unused__)) xpn_server_param_st *params, __attribute__((__unused__)) void *comm, __attribute__((__unused__)) struct st_xpn_server_msg *head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
+void xpn_server_op_closedir ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  // Without sesion close do nothing
-  return;
+  struct st_xpn_server_status status;
+
+  // check params...
+  if (NULL == params)
+  {
+    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] ERROR: NULL arguments\n", -1);
+    return;
+  }
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] >> Begin\n", params->rank);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] closedir(%ld)\n", params->rank, head->u_st_xpn_server_msg.op_close.dir);
+
+  // do rm
+  status.ret = filesystem_closedir(head->u_st_xpn_server_msg.op_close.dir);
+  status.server_errno = errno;
+  xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] closedir(%d)=%d\n", params->rank, head->u_st_xpn_server_msg.op_close.dir, status.ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] << End\n", params->rank);
+
 }
 
 void xpn_server_op_rmdir ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )

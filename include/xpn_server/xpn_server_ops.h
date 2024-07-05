@@ -98,11 +98,18 @@
     char path[PATH_MAX];
   };
 
+  struct st_xpn_server_close
+  {
+    int fd;
+    DIR *dir;
+  };
+
   struct st_xpn_server_rw
   {
     char path[PATH_MAX];
     offset_t offset;
     size_t size;
+    int fd;
   };
 
   struct st_xpn_server_rw_req
@@ -135,6 +142,13 @@
   {
     char path[PATH_MAX];
     long telldir;
+    DIR *dir;
+  };
+
+  struct st_xpn_server_opendir_req
+  {
+    DIR *dir;
+    struct st_xpn_server_status status;
   };
 
   struct st_xpn_server_readdir_req
@@ -174,7 +188,7 @@
     union {
       struct st_xpn_server_path_flags     op_open;
       struct st_xpn_server_path_flags     op_creat;
-      struct st_xpn_server_path           op_close;
+      struct st_xpn_server_close          op_close;
       struct st_xpn_server_rw             op_read;
       struct st_xpn_server_rw             op_write;
       struct st_xpn_server_path           op_rm;
@@ -185,7 +199,7 @@
       struct st_xpn_server_path_flags     op_mkdir;
       struct st_xpn_server_path           op_opendir;
       struct st_xpn_server_readdir        op_readdir;
-      struct st_xpn_server_path           op_closedir;
+      struct st_xpn_server_close          op_closedir;
       struct st_xpn_server_path           op_rmdir;
 
       struct st_xpn_server_path           op_read_mdata;
