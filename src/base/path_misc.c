@@ -23,6 +23,7 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "base/path_misc.h"
+      #include <libgen.h>
 
 
    /* ... Functions / Funciones ......................................... */
@@ -33,18 +34,20 @@
       {
         int i,max;
         int unsigned num;
-        char *file;
+        char *aux_file;
+        char file[PATH_MAX];
+        strncpy(file, path, PATH_MAX-1);
 
         // Get file name
-        file = strrchr(path, '/')+1;
+        aux_file = basename(file);
 
-        num=0;
-        max=strlen(file)-1;
-        for(i=0;i<max;i++){
-              num=(int)file[i]+num;
+        num = 0;
+        max = strlen(aux_file);
+        for (i = 0; i < max; i++) {
+              num += (int)aux_file[i];
         }
-        return (int)num%nServ;
-      }
+        return (int)num % nServ;
+     }
 
 
       int getFirstDir(char *dir, char *path)
