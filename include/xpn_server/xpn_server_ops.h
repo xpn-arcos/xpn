@@ -91,6 +91,7 @@
     char path[PATH_MAX];
     int flags;
     mode_t mode;
+    char xpn_session;
   };
 
   struct st_xpn_server_path
@@ -110,6 +111,7 @@
     offset_t offset;
     size_t size;
     int fd;
+    char xpn_session;
   };
 
   struct st_xpn_server_rw_req
@@ -143,6 +145,7 @@
     char path[PATH_MAX];
     long telldir;
     DIR *dir;
+    char xpn_session;
   };
 
   struct st_xpn_server_opendir_req
@@ -197,7 +200,7 @@
       struct st_xpn_server_setattr        op_setattr;
 
       struct st_xpn_server_path_flags     op_mkdir;
-      struct st_xpn_server_path           op_opendir;
+      struct st_xpn_server_path_flags     op_opendir;
       struct st_xpn_server_readdir        op_readdir;
       struct st_xpn_server_close          op_closedir;
       struct st_xpn_server_path           op_rmdir;

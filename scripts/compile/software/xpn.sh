@@ -86,7 +86,7 @@ echo " * XPN: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
 ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-./configure --prefix="${INSTALL_PATH}/xpn" --enable-xpn_session_dir --enable-sck_server --enable-mpi_server="${MPICC_PATH}" 
+./configure --prefix="${INSTALL_PATH}/xpn" --enable-sck_server --enable-mpi_server="${MPICC_PATH}" 
 make clean
 make -j 8
 #doxygen doc/doxygen-XPN.cfg
