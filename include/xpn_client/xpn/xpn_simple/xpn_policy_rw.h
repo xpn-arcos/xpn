@@ -41,6 +41,7 @@
 
   /* ... Functions / Funciones ......................................... */
 
+  void XpnCalculateBlockMdata(struct xpn_metadata *mdata, off_t offset, int replication, off_t *local_offset, int *serv);
   void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t offset, int replication, int first_node, off_t *local_offset, int *serv);
   void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, int serv, off_t local_offset, int first_node, off_t *offset, int *replication);
   void XpnPrintBlockDistribution(int blocks, struct xpn_metadata *mdata);

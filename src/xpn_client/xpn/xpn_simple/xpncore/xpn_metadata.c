@@ -67,19 +67,33 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, const char *path)
     return -1;
   }
 
+  XpnCreateMetadataExtern(mdata, path, xpn_parttable[part_id].data_nserv, xpn_parttable[part_id].block_size, xpn_parttable[part_id].replication_level);
+
+  XPN_DEBUG_END_CUSTOM("%s", path);
+  return 0;
+}
+
+int XpnCreateMetadataExtern(struct xpn_metadata *mdata, const char *path, int nserv, int block_size, int replication_level)
+{
+  int res = 0;
+  XPN_DEBUG_BEGIN_CUSTOM("%s", path);
+
+  if(mdata == NULL){
+    return -1;
+  }
+
   /* initial values */
   bzero(mdata, sizeof(struct xpn_metadata));
-  mdata->magic_number[0] = XPN_MAGIC_NUMBER[0];
-  mdata->magic_number[1] = XPN_MAGIC_NUMBER[1];
-  mdata->magic_number[2] = XPN_MAGIC_NUMBER[2];
-  mdata->data_nserv[0]   = xpn_parttable[part_id].data_nserv;
-  mdata->version      = XPN_METADATA_VERSION;
-  mdata->type         = 0;
-  mdata->block_size   = xpn_parttable[part_id].block_size;
-  mdata->replication_level   = xpn_parttable[part_id].replication_level;
-
-  mdata->first_node = hash(path, xpn_parttable[part_id].data_nserv);
-  mdata->distribution_policy = XPN_METADATA_DISTRIBUTION_ROUND_ROBIN;
+  mdata->magic_number[0]      = XPN_MAGIC_NUMBER[0];
+  mdata->magic_number[1]      = XPN_MAGIC_NUMBER[1];
+  mdata->magic_number[2]      = XPN_MAGIC_NUMBER[2];
+  mdata->data_nserv[0]        = nserv;
+  mdata->version              = XPN_METADATA_VERSION;
+  mdata->type                 = 0;
+  mdata->block_size           = block_size;
+  mdata->replication_level    = replication_level;
+  mdata->first_node           = hash(path, nserv);
+  mdata->distribution_policy  = XPN_METADATA_DISTRIBUTION_ROUND_ROBIN;
 
   XPN_DEBUG_END_CUSTOM("%s", path);
   return 0;
@@ -170,5 +184,105 @@ int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *se
 
   if (xpn_debug){ XpnPrintMetadata(mdata); }
   XPN_DEBUG_END_CUSTOM("%s", path);
+  return res;
+}
+
+int xpn_simple_get_block_locality(char *path, off_t offset, int *url_c, char **url_v[])
+{
+  char abs_path[PATH_MAX];
+  struct nfi_server *servers;
+  struct xpn_partition *part;
+  struct xpn_metadata mdata = {0};
+  int res, i, n, pd;
+  off_t local_offset;
+  int serv;
+
+  XPN_DEBUG_BEGIN_CUSTOM("(%s %ld)", path, offset);
+
+  if (path == NULL)
+  {
+    errno = EINVAL;
+    XPN_DEBUG_END;
+    return -1;
+  }
+
+  res = XpnGetAbsolutePath(path, abs_path); // esta funcion genera el path absoluto
+  if (res < 0) 
+  {
+    errno = ENOENT;
+    XPN_DEBUG_END;
+    return -1;
+  }
+
+  pd = XpnGetPartition(abs_path); // return partition's id
+  if (pd < 0)
+  {
+    errno = ENOENT;
+    XPN_DEBUG_END;
+    return -1;
+  }
+  part = XpnSearchPart(pd);
+
+  servers = NULL;
+  n = XpnGetServers(pd, -1, &servers);
+  if (n <= 0) {
+    XPN_DEBUG_END;
+    return -1;
+  }
+
+  //Master node
+  res = XpnReadMetadata(&mdata, n, servers, abs_path, part->replication_level);
+
+  if (res < 0 || !XPN_CHECK_MAGIC_NUMBER(&mdata)){
+    XPN_DEBUG_END;
+    return -1;
+  }
+
+  (*url_v) = malloc(((part->replication_level+1) + 1) * sizeof(char*));
+  if ((*url_v) == NULL){
+    XPN_DEBUG_END;
+    return -1;
+  }
+
+  for (i = 0; i < part->replication_level+1; i++)
+  {
+    (*url_v)[i] = malloc(PATH_MAX * sizeof(char));
+    if ((*url_v)[i] == NULL){
+      XPN_DEBUG_END;
+      return -1;
+    }
+    memset((*url_v)[i], 0, PATH_MAX);
+  }
+
+  (*url_v)[part->replication_level+1] = NULL;
+
+  for (i = 0; i < part->replication_level+1; i++)
+  {
+    XpnCalculateBlockMdata(&mdata, offset, i, &local_offset, &serv);
+    ParseURL(servers[serv].url, NULL, NULL, NULL, (*url_v)[i], NULL, NULL);
+  }
+
+  (*url_c) = part->replication_level+1;
+
+  XPN_DEBUG_END;
+  return res;
+}
+
+int xpn_simple_free_block_locality(int *url_c, char **url_v[])
+{
+  int res = 0;
+  XPN_DEBUG_BEGIN;
+
+  for (int i = 0; i < (*url_c); i++)
+  {
+    free((*url_v)[i]);
+  }
+  
+  free((*url_v));
+
+  (*url_v) = NULL;
+  (*url_c) = 0;
+
+  XPN_DEBUG_END;
   return res;
 }

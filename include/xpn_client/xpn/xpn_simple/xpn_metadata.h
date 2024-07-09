@@ -30,6 +30,7 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
+  #include "nfi.h"
 
   /* ... Const / Const ................................................. */
 
@@ -60,8 +61,24 @@
     int     distribution_policy;                          // Distribution policy of blocks, default: round-robin
   };
 
+  // Forward declaration
+  struct nfi_server;
+
   /* ... Functions / Funciones ......................................... */
 
+  int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos);
+
+  void XpnPrintMetadata(struct xpn_metadata *mdata);
+  
+  int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, const char *path);
+  int XpnCreateMetadataExtern(struct xpn_metadata *mdata, const char *path, int nserv, int block_size, int replication_level);
+
+  int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level);
+
+  int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level, int only_file_size);
+
+  int xpn_simple_get_block_locality(char *path, off_t offset, int *url_c, char **url_v[]);
+  int xpn_simple_free_block_locality(int *url_c, char **url_v[]);
 
   /* ................................................................... */
 

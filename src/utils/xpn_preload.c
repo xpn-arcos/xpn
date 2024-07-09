@@ -131,6 +131,15 @@
         free(buf) ;
         return -1;
       }
+      struct xpn_metadata mdata;
+      XpnCreateMetadataExtern(&mdata, entry, size, blocksize, replication_level);
+      filesystem_lseek(fd_dest, 0, SEEK_SET);
+      write_size = filesystem_write(fd_dest, &mdata, sizeof(struct xpn_metadata));
+      if (write_size != sizeof(struct xpn_metadata)){
+        perror("write: ");
+        free(buf) ;
+        return -1;
+      }
 
       offset_src = 0;
       do

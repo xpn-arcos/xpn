@@ -120,6 +120,9 @@
     void *priv_fh;              // pointer to private filehandle
   };
 
+  // Forward declaration
+  struct xpn_metadata;
+
   struct nfi_ops 
   {
     int     (*nfi_reconnect) (struct nfi_server *serv);

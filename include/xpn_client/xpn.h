@@ -59,6 +59,10 @@
   // to test fault tolerant
   int         xpn_mark_error_server(int index);
 
+  //url_c is like argc and url_v is like argv NULL terminated
+  int         xpn_get_block_locality  ( char *path, off_t offset, int *url_c, char **url_v[] );
+  int         xpn_free_block_locality ( int *url_c, char **url_v[] );
+
   // xpn_open.c
   int         xpn_creat     (const char *path, mode_t perm);
   int         xpn_open      (const char *path, int flags , ...);

@@ -65,16 +65,6 @@
 
   int XpnGetServers(int pd, int fd, struct nfi_server **servers);
 
-  int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos);
-
-  void XpnPrintMetadata(struct xpn_metadata *mdata);
-  
-  int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, const char *path);
-
-  int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level);
-
-  int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *servers, const char *path, int replication_level, int only_file_size);
-
   int XpnGetFh(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);
   int XpnGetFhDir(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);
 
