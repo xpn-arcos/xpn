@@ -323,7 +323,6 @@ void xpn_server_op_open ( xpn_server_param_st *params, void *comm, struct st_xpn
   if (status.ret < 0){
     xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
   }else{
-    printf("XPN_SESSION_FILE %d\n",head->u_st_xpn_server_msg.op_open.xpn_session);
     if (head->u_st_xpn_server_msg.op_open.xpn_session == 0){
       status.ret = filesystem_close(status.ret);
     }

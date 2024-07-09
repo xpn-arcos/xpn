@@ -29,7 +29,6 @@ BASE_HEADER=			@top_srcdir@/include/base/base_lib.h \
 				@top_srcdir@/include/base/workers.h \
 				@top_srcdir@/include/base/workers_ondemand.h \
 				@top_srcdir@/include/base/workers_pool.h \
-				@top_srcdir@/include/base/env.h \
 				@top_srcdir@/include/base/utils.h
 
 NFI_LOCAL_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_local/nfi_local.h
@@ -140,7 +139,6 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/workers.c \
 			@top_srcdir@/src/base/workers_ondemand.c \
 			@top_srcdir@/src/base/workers_pool.c \
-			@top_srcdir@/src/base/env.c \
 			@top_srcdir@/src/base/utils.c
 
 NFI_COMMON_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/common/nfi_ops.c \

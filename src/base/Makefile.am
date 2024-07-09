@@ -22,7 +22,6 @@ BASE_HEADER=	@top_srcdir@/include/base/base_lib.h \
 				@top_srcdir@/include/base/workers.h \
 				@top_srcdir@/include/base/workers_ondemand.h \
 				@top_srcdir@/include/base/workers_pool.h\
-				@top_srcdir@/include/base/env.h\
 				@top_srcdir@/include/base/utils.h
 
 BASE_SOURCE=	@top_srcdir@/src/base/darray.c \
@@ -41,7 +40,6 @@ BASE_SOURCE=	@top_srcdir@/src/base/darray.c \
 				@top_srcdir@/src/base/workers.c \
 				@top_srcdir@/src/base/workers_ondemand.c \
 				@top_srcdir@/src/base/workers_pool.c \
-				@top_srcdir@/src/base/env.c \
 				@top_srcdir@/src/base/utils.c
 
 

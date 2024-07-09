@@ -49,7 +49,6 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/workers.c \
 			@top_srcdir@/src/base/workers_ondemand.c \
 			@top_srcdir@/src/base/workers_pool.c \
-			@top_srcdir@/src/base/env.c \
 			@top_srcdir@/src/base/utils.c
 
 XPN_SERVER_OBJECTS=	@top_srcdir@/src/xpn_server/xpn_server.c \

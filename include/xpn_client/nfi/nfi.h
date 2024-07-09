@@ -74,6 +74,8 @@
 
     // Execution configuration
     int xpn_thread;
+    int xpn_session_file;
+    int xpn_session_dir;
   };
 
   struct nfi_attr_server

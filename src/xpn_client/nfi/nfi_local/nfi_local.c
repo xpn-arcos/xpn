@@ -215,6 +215,19 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
     serv->xpn_thread = atoi(env_thread);
   }
 
+  // session mode
+  serv->xpn_session_file = 0;
+  char *env_session_file = getenv("XPN_SESSION_FILE");
+  if (env_session_file != NULL) {
+    serv->xpn_session_file = atoi(env_session_file);
+  }
+
+  serv->xpn_session_dir = 1;
+  char *env_session_dir = getenv("XPN_SESSION_DIR");
+  if (env_session_dir != NULL) {
+    serv->xpn_session_dir = atoi(env_session_dir);
+  }
+
   // copy 'url' string...
   serv->url = strdup(url);
   NULL_RET_ERR(serv->url, ENOMEM);
@@ -435,7 +448,7 @@ int nfi_local_open ( struct nfi_server *serv, char *url, int flags, mode_t mode,
     return -1;
   }
 
-  if (xpn_session_file() == 0){
+  if (serv->xpn_session_file == 0){
     filesystem_close(ret);
   }
 
@@ -477,7 +490,7 @@ ssize_t nfi_local_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_read] nfi_local_read(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
   int fd;
-  if (xpn_session_file() == 1){
+  if (serv->xpn_session_file == 1){
     fd = fh_aux->fd;
   }else{
     fd = filesystem_open(fh_aux->path, O_RDONLY);
@@ -503,7 +516,7 @@ ssize_t nfi_local_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *
     goto cleanup_nfi_local_read;
   }
 cleanup_nfi_local_read:
-  if (xpn_session_file() == 0){
+  if (serv->xpn_session_file == 0){
     filesystem_close(fd);
   }
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_read] nfi_local_read(%s, %ld, %ld)=%ld\n", serv->id, fh_aux->path, offset, size, ret);
@@ -535,7 +548,7 @@ ssize_t nfi_local_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_write] nfi_local_write(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
 
   int fd;
-  if (xpn_session_file() == 1){
+  if (serv->xpn_session_file == 1){
     fd = fh_aux->fd;
   }else{
     fd = filesystem_open(fh_aux->path, O_WRONLY);
@@ -562,7 +575,7 @@ ssize_t nfi_local_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void 
   }
 
 cleanup_nfi_local_write:
-  if (xpn_session_file() == 1){
+  if (serv->xpn_session_file == 1){
     filesystem_fsync(fd);
   }else{
     filesystem_close(fd);
@@ -575,7 +588,7 @@ cleanup_nfi_local_write:
 
 int nfi_local_close ( struct nfi_server *serv, struct nfi_fhandle *fh )
 {
-  if (xpn_session_file() == 1){
+  if (serv->xpn_session_file == 1){
     int ret;
     struct nfi_local_fhandle *fh_aux;
 
@@ -845,7 +858,7 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
     return -1;
   }
 
-  if (xpn_session_dir() == 0){
+  if (serv->xpn_session_dir == 0){
     fh_aux->telldir = filesystem_telldir(s);
     filesystem_closedir(s);
   }
@@ -914,7 +927,7 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 
 int nfi_local_closedir ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) struct nfi_fhandle *fh )
 {
-  if (xpn_session_dir() == 1){
+  if (serv->xpn_session_dir == 1){
     int ret;
     struct nfi_local_fhandle *fh_aux;
 

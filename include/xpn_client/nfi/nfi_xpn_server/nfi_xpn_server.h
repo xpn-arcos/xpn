@@ -34,7 +34,6 @@
   #include "base/path_misc.h"
   #include "base/urlstr.h"
   #include "base/workers.h"
-  #include "base/env.h"
   #include "nfi_local.h"
   #include "nfi.h"
   #include "xpn_server/xpn_server_conf.h"

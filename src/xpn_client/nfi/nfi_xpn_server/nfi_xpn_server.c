@@ -348,6 +348,19 @@ int nfi_xpn_server_init ( char *url, struct nfi_server *serv, int server_type )
     serv->xpn_thread = atoi(env_thread);
   }
 
+  // session mode
+  serv->xpn_session_file = 0;
+  char *env_session_file = getenv("XPN_SESSION_FILE");
+  if (env_session_file != NULL) {
+    serv->xpn_session_file = atoi(env_session_file);
+  }
+
+  serv->xpn_session_dir = 1;
+  char *env_session_dir = getenv("XPN_SESSION_DIR");
+  if (env_session_dir != NULL) {
+    serv->xpn_session_dir = atoi(env_session_dir);
+  }
+
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] Thread mode: %d\n", serv->id, serv->xpn_thread);
 
   // Locality mode
@@ -642,7 +655,7 @@ int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
   memccpy(msg.u_st_xpn_server_msg.op_open.path, dir,            0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_open.flags = flags;
   msg.u_st_xpn_server_msg.op_open.mode = mode;
-  msg.u_st_xpn_server_msg.op_open.xpn_session = xpn_session_file();
+  msg.u_st_xpn_server_msg.op_open.xpn_session = serv->xpn_session_file;
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
   if (status.ret < 0)
@@ -715,7 +728,7 @@ ssize_t nfi_xpn_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   msg.u_st_xpn_server_msg.op_read.offset   = offset;
   msg.u_st_xpn_server_msg.op_read.size     = size;
   msg.u_st_xpn_server_msg.op_read.fd   = fh_aux->fd;
-  msg.u_st_xpn_server_msg.op_read.xpn_session = xpn_session_file();
+  msg.u_st_xpn_server_msg.op_read.xpn_session = serv->xpn_session_file;
 
   ret = nfi_write_operation(server_aux, &msg);
   if (ret < 0)
@@ -820,7 +833,7 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   msg.u_st_xpn_server_msg.op_write.offset = offset;
   msg.u_st_xpn_server_msg.op_write.size   = size;
   msg.u_st_xpn_server_msg.op_write.fd   = fh_aux->fd;
-  msg.u_st_xpn_server_msg.op_write.xpn_session = xpn_session_file();
+  msg.u_st_xpn_server_msg.op_write.xpn_session = serv->xpn_session_file;
 
   ret = nfi_write_operation(server_aux, &msg);
   if(ret < 0)
@@ -895,7 +908,7 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
 int nfi_xpn_server_close ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) struct nfi_fhandle *fh )
 {
-  if (xpn_session_file() == 1){
+  if (serv->xpn_session_file == 1){
     struct nfi_xpn_server *server_aux;
     struct nfi_xpn_server_fhandle *fh_aux;
     struct st_xpn_server_msg msg;
@@ -1281,7 +1294,7 @@ int nfi_xpn_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
   
   msg.type = XPN_SERVER_OPENDIR_DIR;
   memccpy(msg.u_st_xpn_server_msg.op_opendir.path, dir,            0, PATH_MAX-1);
-  msg.u_st_xpn_server_msg.op_opendir.xpn_session = xpn_session_dir();
+  msg.u_st_xpn_server_msg.op_opendir.xpn_session = serv->xpn_session_dir;
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&(req), sizeof(struct st_xpn_server_opendir_req));
   if (req.status.ret < 0)
@@ -1348,7 +1361,7 @@ int nfi_xpn_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
   memccpy(msg.u_st_xpn_server_msg.op_readdir.path, fh_aux->path,            0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_readdir.telldir = fh_aux->telldir;
   msg.u_st_xpn_server_msg.op_readdir.dir = fh_aux->dir;
-  msg.u_st_xpn_server_msg.op_opendir.xpn_session = xpn_session_dir();
+  msg.u_st_xpn_server_msg.op_opendir.xpn_session = serv->xpn_session_dir;
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_xpn_server_readdir_req));
   
@@ -1371,7 +1384,7 @@ int nfi_xpn_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
 
 int nfi_xpn_server_closedir ( struct nfi_server *serv, struct nfi_fhandle *fh )
 {
-  if (xpn_session_dir() == 1){
+  if (serv->xpn_session_dir == 1){
     struct nfi_xpn_server *server_aux;
     struct nfi_xpn_server_fhandle *fh_aux;
     struct st_xpn_server_msg msg;
