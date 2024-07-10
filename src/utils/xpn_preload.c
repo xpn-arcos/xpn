@@ -63,7 +63,9 @@
     char *buf ;
     int buf_len;
     off64_t offset_src ;
+    off64_t ret_2;
     off_t local_offset;
+    off_t local_size = 0;
     int local_server;
     int i;
     ssize_t read_size, write_size;
@@ -123,19 +125,13 @@
       }
 
       // Write header
+      struct xpn_metadata mdata;
+      XpnCreateMetadataExtern(&mdata, dest_path, size, blocksize, replication_level);
+
       char header_buf [HEADER_SIZE];
       memset(header_buf, 0, HEADER_SIZE);
       write_size = filesystem_write(fd_dest, header_buf, HEADER_SIZE);
       if (write_size != HEADER_SIZE){
-        perror("write: ");
-        free(buf) ;
-        return -1;
-      }
-      struct xpn_metadata mdata;
-      XpnCreateMetadataExtern(&mdata, entry, size, blocksize, replication_level);
-      filesystem_lseek(fd_dest, 0, SEEK_SET);
-      write_size = filesystem_write(fd_dest, &mdata, sizeof(struct xpn_metadata));
-      if (write_size != sizeof(struct xpn_metadata)){
         perror("write: ");
         free(buf) ;
         return -1;
@@ -146,11 +142,10 @@
       { 
         for (i = 0; i <= replication_level; i++)
         {
-          XpnCalculateBlock(blocksize, replication_level, size, offset_src, i, 0, &local_offset, &local_server);
+          XpnCalculateBlockMdata(&mdata, offset_src, i, &local_offset, &local_server);
 
           if (local_server == rank)
           {
-            off64_t ret_2;
             ret_2 = lseek64(fd_src, offset_src, SEEK_SET) ;
             if (ret_2 < 0) {
               perror("lseek: ");
@@ -171,15 +166,45 @@
               perror("write: ");
               goto finish_copy;
             }
+            local_size += write_size;
           }
         }
         
         offset_src+=blocksize;
       }
-      while(read_size > 0);
+      while(write_size > 0);
+
 finish_copy:
-      close(fd_src);
-      close(fd_dest);
+      // Update file size
+      mdata.file_size = st.st_size;
+      // Write mdata only when necesary
+      int write_mdata = 0;
+      int aux_serv;
+      for (int i = 0; i < replication_level+1; i++)
+      { 
+        aux_serv = ( mdata.first_node + i ) % size;
+        if (aux_serv == rank){
+          write_mdata = 1;
+          break;
+        }
+      }
+      
+      if (write_mdata == 1){
+        ret_2 = lseek64(fd_dest, 0, SEEK_SET);
+        write_size = filesystem_write(fd_dest, &mdata, sizeof(struct xpn_metadata));
+        if (write_size != sizeof(struct xpn_metadata)){
+          perror("write: ");
+          free(buf) ;
+          return -1;
+        }
+      }
+
+      filesystem_close(fd_src);
+      filesystem_close(fd_dest);
+
+      if (local_size == 0){
+        filesystem_unlink(dest_path);
+      }
     }
     
     free(buf);
