@@ -1361,7 +1361,7 @@ int nfi_xpn_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
   memccpy(msg.u_st_xpn_server_msg.op_readdir.path, fh_aux->path,            0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_readdir.telldir = fh_aux->telldir;
   msg.u_st_xpn_server_msg.op_readdir.dir = fh_aux->dir;
-  msg.u_st_xpn_server_msg.op_opendir.xpn_session = serv->xpn_session_dir;
+  msg.u_st_xpn_server_msg.op_readdir.xpn_session = serv->xpn_session_dir;
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_xpn_server_readdir_req));
   
