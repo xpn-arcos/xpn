@@ -320,7 +320,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   memset(&attr, 0, sizeof(struct nfi_attr));
   memset(&vfh_aux, 0, sizeof(struct nfi_fhandle));
 
-  int master_node = hash(path, n);
+  int master_node = hash(path, n, 0);
   if (strlen(aux_path) == 0){
     aux_path[0] = '/';
     aux_path[1] = '\0';

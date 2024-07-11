@@ -30,7 +30,7 @@
 
 
       //calculo del numero de servidor
-      int hash(const char *path, int nServ)
+      int hash(const char *path, int nServ, int isfile)
       {
         int i,max;
         int unsigned num;
@@ -39,8 +39,12 @@
         strncpy(file, path, PATH_MAX-1);
 
         // Get file name
-        aux_file = basename(file);
-
+        if (isfile == 1){
+              aux_file = basename(file);
+        }else{
+              aux_file = dirname(file);
+              aux_file = basename(aux_file);
+        }
         num = 0;
         max = strlen(aux_file);
         for (i = 0; i < max; i++) {

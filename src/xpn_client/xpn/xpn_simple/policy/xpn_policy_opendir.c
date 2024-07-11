@@ -38,7 +38,7 @@ int XpnGetEntry(int fd, struct dirent *entry)
 	if(n<=0){
 	    return -1;
 	}
-  int master_node = hash(xpn_file_table[fd]->path, n);
+  int master_node = hash(xpn_file_table[fd]->path, n, 1);
   while(servers[master_node].error == -1)
   {
     master_node = (master_node+1) % n;

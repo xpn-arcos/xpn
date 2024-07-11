@@ -191,7 +191,11 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
 
     // Open file only in master server
    
-    master = hash(abs_path, n);
+    if (O_DIRECTORY == (flags & O_DIRECTORY))
+        master = hash(abs_path, n, 1);
+    else
+        master = hash(abs_path, n, 0);
+
 
     vfh -> nfih[master] = (struct nfi_fhandle *) malloc(sizeof(struct nfi_fhandle));
     if(vfh -> nfih[master] == NULL)
@@ -299,7 +303,7 @@ int xpn_internal_remove(const char * path)
     //Master node
     XpnReadMetadata(&mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
 
-    master_node = hash((char *)path, n);
+    master_node = hash((char *)path, n, 0);
     XpnGetURLServer(&servers[master_node], abs_path, url_serv);
 
     // Calculate the number of servers affected
@@ -547,7 +551,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
     //Master node
     XpnReadMetadata(&mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
 
-    master_node = hash((char *)path, n);
+    master_node = hash((char *)path, n, 0);
     XpnGetURLServer(&servers[master_node], abs_path, url_serv);
     XpnGetURLServer(&servers[master_node], newabs_path, newurl_serv);
 

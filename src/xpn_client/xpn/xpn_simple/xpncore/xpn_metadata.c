@@ -92,7 +92,7 @@ int XpnCreateMetadataExtern(struct xpn_metadata *mdata, const char *path, int ns
   mdata->type                 = 0;
   mdata->block_size           = block_size;
   mdata->replication_level    = replication_level;
-  mdata->first_node           = hash(path, nserv);
+  mdata->first_node           = hash(path, nserv, 0);
   mdata->distribution_policy  = XPN_METADATA_DISTRIBUTION_ROUND_ROBIN;
 
   XPN_DEBUG_END_CUSTOM("%s", path);
@@ -135,7 +135,7 @@ int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *
   char url_serv[PATH_MAX];
   XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
-  master_node = hash(path, nserv);
+  master_node = hash(path, nserv, 0);
   mdata->first_node = master_node;
   for (int i = 0; i < replication_level+1; i++)
   {
@@ -167,7 +167,7 @@ int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *se
   char url_serv[PATH_MAX];
   XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
-  master_node = hash(path, nserv);
+  master_node = hash(path, nserv, 0);
   
   for (i = 0; i < replication_level; i++)
   {
