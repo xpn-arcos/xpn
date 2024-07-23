@@ -252,6 +252,9 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
     return -1;
   }
 
+  // Evade the preload when working in local
+  filesystem_low_set(RTLD_NEXT);
+
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] << End\n", serv->id);
 
   return 0;
@@ -1088,8 +1091,8 @@ int nfi_local_read_mdata ( struct nfi_server *server, char *url, struct xpn_meta
 
   filesystem_close(fd); //TODO: think if necesary check error in close
 
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] nfi_local_read_mdata(%s)=%d\n", params->rank, dir, ret);
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] << End\n", params->rank);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] nfi_local_read_mdata(%s)=%d\n", server->id, dir, ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] << End\n", server->id);
   return ret;
 }
 
@@ -1153,8 +1156,8 @@ int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_met
 
   filesystem_close(fd); //TODO: think if necesary check error in close
 
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] nfi_local_write_mdata(%s)=%d\n", params->rank, dir, ret);
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] << End\n", params->rank);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] nfi_local_write_mdata(%s)=%d\n", server->id, dir, ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] << End\n", server->id);
   return ret;
 }
 /* ................................................................... */
