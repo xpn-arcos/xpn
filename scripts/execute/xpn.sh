@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -x
+# set -x
 
 #
 #  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal, Dario Muñoz Muñoz
@@ -163,6 +163,22 @@ stop_xpn_servers() {
   else
     mpiexec -np 1 \
             "${BASE_DIR}"/../../src/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE}
+  fi
+}
+
+await_stop_xpn_servers() {
+
+  if [[ ${VERBOSE} == true ]]; then
+    echo " * DEATH_FILE: ${DEATH_FILE}"
+    echo " * additional daemon args: ${ARGS}"
+  fi
+  if command -v srun &> /dev/null
+  then
+    srun -n 1 -N 1 \
+            "${BASE_DIR}"/../../src/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE} -w
+  else
+    mpiexec -np 1 \
+            "${BASE_DIR}"/../../src/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE} -w
   fi
 }
 
@@ -379,6 +395,8 @@ case "${ACTION}" in
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers
+                ;;
+      stop_await) await_stop_xpn_servers
                 ;;
       terminate)terminate_xpn_server
                 ;;

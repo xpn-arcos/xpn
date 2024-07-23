@@ -159,6 +159,7 @@ int xpn_server_up ( void )
     int server_socket;
     int connection_socket;
     int recv_code = 0;
+    int await_stop = 0;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> Begin\n", 0);
 
@@ -221,8 +222,12 @@ int xpn_server_up ( void )
                 break;
 
             case SOCKET_FINISH_CODE:
+            case SOCKET_FINISH_CODE_AWAIT:
                 xpn_server_finish();
                 the_end = 1;
+                if (recv_code == SOCKET_FINISH_CODE_AWAIT){
+                    await_stop = 1;
+                }
                 break;
 
             default:
@@ -231,10 +236,17 @@ int xpn_server_up ( void )
                 break;
         }
 
-        socket_close(connection_socket);
+        if (await_stop == 0){
+            socket_close(connection_socket);
+        }
     }
 
-    close(server_socket);
+    socket_close(server_socket);
+
+    if (await_stop == 1){
+        socket_send(connection_socket, &recv_code, sizeof(recv_code));
+        socket_close(connection_socket);
+    }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> End\n", 0);
     return 0;
@@ -318,6 +330,9 @@ int xpn_server_down ( void )
     FILE *file;
     int ret;
     int buffer = SOCKET_FINISH_CODE;
+    if (params.await_stop == 1){
+        buffer = SOCKET_FINISH_CODE_AWAIT;
+    }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] >> Begin\n", 0);
 
@@ -353,6 +368,10 @@ int xpn_server_down ( void )
         ret = socket_send(connection_socket, &buffer, sizeof(buffer));
         if (ret < 0) {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, srv_name);
+        }
+
+        if (params.await_stop == 1){
+            ret = socket_recv(connection_socket, &buffer, sizeof(buffer));
         }
 
         socket_close(connection_socket);

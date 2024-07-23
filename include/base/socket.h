@@ -38,6 +38,7 @@
   #define DEFAULT_XPN_SCK_PORT 3456
   #define SOCKET_ACCEPT_CODE 123
   #define SOCKET_FINISH_CODE 666
+  #define SOCKET_FINISH_CODE_AWAIT 667
 
   /* ... Data structures / Estructuras de datos ........................ */
 
