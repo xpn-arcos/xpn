@@ -57,9 +57,11 @@
 
   int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {  
+    debug_info("entry %s is_file %d dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d \n",entry, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
     int  ret;
 
     int fd_src, fd_dest, replication = 0;
+    int aux_serv;
     char *buf ;
     int buf_len;
     off64_t offset_dest ;
@@ -83,7 +85,7 @@
     sprintf( dest_path, "%s/%s", dest_prefix, aux_entry );
 
     if (rank == 0){
-      printf("%s\n", aux_entry);
+      printf("%s -> %s\n", src_path, dest_path);
     }
 
     ret = stat(src_path, &st_src);
@@ -98,7 +100,7 @@
       {
         if (stat(dest_path, &st) == -1) {
           ret = mkdir(dest_path, st_src.st_mode);
-          if ( ret < 0 )
+          if ( ret < 0 && errno != EEXIST)
           {
             perror("mkdir: ");
             free(buf) ;
@@ -110,7 +112,7 @@
     else if (is_file)
     {      
       fd_src = open64(src_path, O_RDONLY | O_LARGEFILE);
-      if ( fd_src < 0 )
+      if ( fd_src < 0 && errno != ENOENT )
       {
         perror("open 1: ");
         free(buf) ;
@@ -140,13 +142,47 @@
         return -1;
       }
 
+      struct xpn_metadata mdata = {0};
+      int master_node = hash(src_path, size, 0);
+      if (rank == master_node){
+        ret = filesystem_read(fd_src, &mdata, sizeof(struct xpn_metadata));
+        // To debug
+        // XpnPrintMetadata(&mdata);
+      }
+      
+      debug_info("Rank %d mdata %3s\n", rank, mdata.magic_number);
+      MPI_Bcast(&mdata, sizeof(struct xpn_metadata), MPI_CHAR, master_node, MPI_COMM_WORLD);
+      debug_info("After bcast Rank %d mdata %3s\n", rank, mdata.magic_number);
+      if (!XPN_CHECK_MAGIC_NUMBER(&mdata)){
+        free(buf);
+        return -1;
+      }
+
+
       off64_t ret_1;
       offset_src = 0;
+      offset_dest = -blocksize;
 
       do
       { 
         //TODO: check when the server has error and data is corrupt for fault tolerance
-        XpnCalculateBlockInvert(blocksize, replication_level, size, rank, offset_src, 0, &offset_dest, &replication);
+        do{
+          offset_dest += blocksize;
+          for (int i = 0; i < replication_level+1; i++)
+          {
+            XpnCalculateBlockMdata(&mdata, offset_dest, i, &offset_src, &aux_serv);
+            
+            debug_info("try rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
+            if (aux_serv == rank){
+              goto exit_search;
+            }
+          }
+        }while(offset_dest < mdata.file_size);
+        exit_search:
+        if (aux_serv != rank){
+          continue;
+        }
+        debug_info("rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
         
         if(offset_src > st_src.st_size){
           break;
@@ -176,7 +212,7 @@
           perror("write: ");
           break;
         }
-        offset_src += blocksize;
+        debug_info("rank %d write %ld in offset_dest %ld from offset_src %ld\n", rank, write_size, offset_dest, offset_src);
       }
       while(read_size > 0);
 

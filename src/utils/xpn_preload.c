@@ -57,6 +57,7 @@
 
   int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {  
+    debug_info("entry %s is_file %d dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d \n",entry, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
     int  ret;
 
     int fd_src, fd_dest;
@@ -87,7 +88,7 @@
     sprintf( dest_path, "%s/%s", dest_prefix, aux_entry );
 
     if (rank == 0){
-      printf("%s\n", aux_entry);
+      printf("%s -> %s\n", src_path, dest_path);
     }
 
     ret = stat(src_path, &st);
@@ -197,6 +198,7 @@ finish_copy:
           free(buf) ;
           return -1;
         }
+        local_size += write_size;
       }
 
       filesystem_close(fd_src);
