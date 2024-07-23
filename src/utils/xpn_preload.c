@@ -100,7 +100,7 @@
     if (!is_file)
     {
       ret = mkdir(dest_path, st.st_mode);
-      if ( ret < 0 )
+      if ( ret < 0 && errno != EEXIST)
       {
         perror("mkdir: ");
         free(buf) ;
