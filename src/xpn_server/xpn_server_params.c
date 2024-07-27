@@ -68,7 +68,7 @@ void xpn_server_params_show ( xpn_server_param_st *params )
   printf(" |\t-h  <host>:\t'%s'\n",   params->srv_name);
   // * await
   if (params->await_stop == 1){
-    printf(" |\t-w  true\n");
+    printf(" |\t-w  await true\n");
   }
 
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show] << End\n", params->rank);

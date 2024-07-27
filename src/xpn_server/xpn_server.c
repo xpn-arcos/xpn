@@ -372,6 +372,9 @@ int xpn_server_down ( void )
 
         if (params.await_stop == 1){
             ret = socket_recv(connection_socket, &buffer, sizeof(buffer));
+            if (ret < 0) {
+                printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, srv_name);
+            }
         }
 
         socket_close(connection_socket);
