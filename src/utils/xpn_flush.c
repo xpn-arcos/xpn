@@ -153,6 +153,9 @@
       debug_info("Rank %d mdata %3s\n", rank, mdata.magic_number);
       MPI_Bcast(&mdata, sizeof(struct xpn_metadata), MPI_CHAR, master_node, MPI_COMM_WORLD);
       debug_info("After bcast Rank %d mdata %3s\n", rank, mdata.magic_number);
+      #ifdef DEBUG
+      XpnPrintMetadata(&mdata);
+      #endif
       if (!XPN_CHECK_MAGIC_NUMBER(&mdata)){
         free(buf);
         return -1;
@@ -183,8 +186,7 @@
           continue;
         }
         debug_info("rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
-        
-        if(offset_src > st_src.st_size){
+        if(offset_src > st_src.st_size || offset_dest > mdata.file_size){
           break;
         }
         if (replication != 0){
@@ -217,6 +219,7 @@
       while(read_size > 0);
 
       close(fd_src);
+      unlink(src_path);
       close(fd_dest);
     }
     

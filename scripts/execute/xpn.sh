@@ -269,6 +269,57 @@ flush_xpn() {
   fi
 }
 
+expand_xpn() {
+
+  NODE_NUM_REST=$(cat ${DEATH_FILE} | wc -l)
+
+  if [[ ${VERBOSE} == true ]]; then
+    echo " * xpn storage path: ${XPN_STORAGE_PATH}"
+    echo " * last num serv: ${NODE_NUM_REST}"
+  fi
+
+  # 1. Copy
+  if command -v srun &> /dev/null
+  then
+    srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
+          -w "${HOSTFILE}" \
+          "${BASE_DIR}"/../../src/utils/xpn_expand "${XPN_STORAGE_PATH}" "${NODE_NUM_REST}"
+  else
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            "${BASE_DIR}"/../../src/utils/xpn_expand "${XPN_STORAGE_PATH}" "${NODE_NUM_REST}"
+  fi
+}
+
+shrink_xpn() {
+
+  NODE_NUM_REST=$(cat ${DEATH_FILE} | wc -l)
+  
+  hostlist=""
+
+  while IFS= read -r line || [ -n "$line" ]; do
+      hostlist="$hostlist;$line"
+  done < ${DEATH_FILE}
+  
+  hostlist="${hostlist:1}"
+  
+  if [[ ${VERBOSE} == true ]]; then
+    echo " * xpn storage path: ${XPN_STORAGE_PATH}"
+    echo " * list of servers to stop: ${hostlist}"
+  fi
+
+  # 1. Copy
+  if command -v srun &> /dev/null
+  then
+    srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
+          -w "${HOSTFILE}" \
+          "${BASE_DIR}"/../../src/utils/xpn_shrink "${XPN_STORAGE_PATH}" "${hostlist}"
+  else
+    mpiexec -np       "${NODE_NUM}" \
+            -hostfile "${HOSTFILE}" \
+            "${BASE_DIR}"/../../src/utils/xpn_shrink "${XPN_STORAGE_PATH}" "${hostlist}"
+  fi
+}
 
 usage_short() {
   echo ""
@@ -406,6 +457,10 @@ case "${ACTION}" in
       preload)  preload_xpn
                 ;;
       flush)    flush_xpn
+                ;;
+      expand)   expand_xpn
+                ;;
+      shrink)   shrink_xpn
                 ;;
       *)        echo ""
                 echo " ERROR: ACTION '${ACTION}' not supported"

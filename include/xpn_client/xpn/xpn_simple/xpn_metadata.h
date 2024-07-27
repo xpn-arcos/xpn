@@ -38,7 +38,7 @@
   
   #define XPN_MAGIC_NUMBER "XPN"
   #define XPN_METADATA_VERSION 1
-  #define XPN_METADATA_MAX_RECONSTURCTIONS 10
+  #define XPN_METADATA_MAX_RECONSTURCTIONS 40
   #define XPN_METADATA_DISTRIBUTION_ROUND_ROBIN 1
 
   #define XPN_CHECK_MAGIC_NUMBER(mdata) \
@@ -56,9 +56,9 @@
     ssize_t file_size;                                    // Size of the file
     int     replication_level;                            // Replication level of files: 0, 1, 2, ...
     int     first_node;                                   // Server which has the first block
+    int     distribution_policy;                          // Distribution policy of blocks, default: round-robin
     int     data_nserv[XPN_METADATA_MAX_RECONSTURCTIONS]; // Array of number of servers to reconstruct
     int     offsets[XPN_METADATA_MAX_RECONSTURCTIONS];    // Array indicating the block where new server configuration starts
-    int     distribution_policy;                          // Distribution policy of blocks, default: round-robin
   };
 
   // Forward declaration
