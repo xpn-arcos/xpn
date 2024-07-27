@@ -165,12 +165,6 @@ case "${ACTION}" in
                   milliseconds=$(((end_stop - start_stop) % 1000))
                   echo "Time to run stop: $seconds.$milliseconds sec"
                 fi
-                
-                # cat ${HOSTFILE} ${HOSTFILE_START} > ${HOSTFILE_REBUILD_JOIN}
-                # grep -F -v -f ${HOSTFILE_STOP} ${HOSTFILE} > ${HOSTFILE_REBUILD}
-
-                NHOST_REBUILD_JOIN=$(cat ${HOSTFILE_REBUILD_JOIN} | wc -l)
-
                 if [[ ${VERBOSE} == true ]]; then
                   start_rebuild=$(date +%s%3N)
                 fi
@@ -183,6 +177,7 @@ case "${ACTION}" in
                     mv ${HOSTFILE_REBUILD_JOIN} ${HOSTFILE}
                 else
                     cat ${HOSTFILE} ${HOSTFILE_START} > ${HOSTFILE_REBUILD_JOIN}
+                    NHOST_REBUILD_JOIN=$(cat ${HOSTFILE_REBUILD_JOIN} | wc -l)
 
                     ${XPN_SH} --numnodes ${NHOST_REBUILD_JOIN} --hostfile ${HOSTFILE_REBUILD_JOIN} --workdir ${SHAREDDIR} --xpn_storage_path ${DATADIR} --replication_level ${REPLICATION_LEVEL} --deathfile ${HOSTFILE} --rebuildfile ${HOSTFILE_REBUILD} expand
                 

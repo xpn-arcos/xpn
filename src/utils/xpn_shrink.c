@@ -47,8 +47,7 @@
   #endif
 
   #define MIN(a,b) (((a)<(b))?(a):(b))
-  #define THREAD_READER 1
-  #define THREAD_WRITER 1
+  #define THREAD_WRITER 2
 
   struct xpn_metadata new_mdata;
   char *t_entry;
@@ -578,6 +577,7 @@
     char *servers[XPN_METADATA_MAX_RECONSTURCTIONS] = {NULL};
     char hostname[MPI_MAX_PROCESSOR_NAME];
     char *hostip;
+    int provided;
     
     //
     // Check arguments...
@@ -589,7 +589,12 @@
       printf("\n");
       return -1;
     }
-    MPI_Init(&argc, &argv);
+
+    if (THREAD_WRITER == 1){
+      MPI_Init(&argc, &argv);
+    }else{
+      MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
+    }
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
