@@ -231,7 +231,7 @@ void XpnPrintBlockDistribution(int blocks, struct xpn_metadata *mdata)
 	}
 	
 	int **queues = malloc(max_server*sizeof(int*));
-	int max_per_server = (blocks * (mdata->replication_level+1) / min_server) + 1; 
+	int max_per_server = (blocks * (mdata->replication_level+1)) + 1; 
 	for (int i = 0; i < max_server; i++)
 	{
 		queues[i] = malloc(max_per_server*sizeof(int));
@@ -270,8 +270,10 @@ void XpnPrintBlockDistribution(int blocks, struct xpn_metadata *mdata)
 
 
 	// Body
+	int finish = 0;
 	for (int j = 0; j < max_per_server; j++)
-	{
+	{	
+		finish = 0;
 		for (int i = 0; i < max_server; i++)
 		{	
 			if (queues[i][j]<0){
@@ -279,10 +281,14 @@ void XpnPrintBlockDistribution(int blocks, struct xpn_metadata *mdata)
 			}else{
 				printf("%*d",7,queues[i][j]);
 				check_sum_2+=queues[i][j];
+				finish = 1;
 			}
 			if (i != max_server-1) printf(" | ");
 		}
 		printf("\n");
+		if (finish == 0){
+			break;
+		}
 	}
 
 	if (check_sum_1 == check_sum_2){
