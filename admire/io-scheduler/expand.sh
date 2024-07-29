@@ -157,7 +157,8 @@ case "${ACTION}" in
                   start_stop=$(date +%s%3N)
                 fi
 
-                ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop_await
+                ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop_await &
+                STOP_PID=$!
                 
                 if [[ ${VERBOSE} == true ]]; then
                   end_stop=$(date +%s%3N)
@@ -191,6 +192,7 @@ case "${ACTION}" in
                   echo "Time to run $ACTION: $seconds.$milliseconds sec"
                 fi
 
+                wait $STOP_PID
                 # start
                 if [[ ${VERBOSE} == true ]]; then
                   start_start=$(date +%s%3N)
