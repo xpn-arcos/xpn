@@ -106,6 +106,7 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
   params->await_stop = 0;
   strcpy(params->port_name, "");
   strcpy(params->srv_name,  "");
+  ns_get_hostname(params->srv_name);
 
   // update user requests
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] Get user configuration\n", params->rank);
