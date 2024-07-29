@@ -336,7 +336,6 @@ int xpn_server_down ( void )
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] >> Begin\n", 0);
 
-    printf(" * Stopping server (%s)\n", srv_name);
     /*
     printf("\n");
     printf(" ----------------\n");
@@ -344,8 +343,6 @@ int xpn_server_down ( void )
     printf(" ----------------\n");
     printf("\n");
     */
-
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] MPI_Init\n", 0);
 
     // Open host file
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Open host file %s\n", 0, params.shutdown_file);
@@ -356,29 +353,52 @@ int xpn_server_down ( void )
         return -1;
     }
 
+    int num_serv = 0;
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
-        int connection_socket;
-        ret = socket_client_connect(srv_name, &connection_socket);
+        num_serv ++;
+    }
+
+    rewind(file);
+    int *sockets = malloc(num_serv * sizeof(int));
+    int i = 0;
+    while (fscanf(file, "%[^\n] ", srv_name) != EOF)
+    {
+        printf(" * Stopping server (%s)\n", srv_name);
+        ret = socket_client_connect(srv_name, &sockets[i]);
         if (ret < 0) {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);
             continue;
         }
 
-        ret = socket_send(connection_socket, &buffer, sizeof(buffer));
+        ret = socket_send(sockets[i], &buffer, sizeof(buffer));
         if (ret < 0) {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, srv_name);
         }
+        
+        if (params.await_stop == 0){
+            socket_close(sockets[i]);
+        }
 
+        i++;
+    }
+
+    rewind(file);
+    i = 0;
+    while (fscanf(file, "%[^\n] ", srv_name) != EOF)
+    {
         if (params.await_stop == 1){
-            ret = socket_recv(connection_socket, &buffer, sizeof(buffer));
+            ret = socket_recv(sockets[i], &buffer, sizeof(buffer));
             if (ret < 0) {
                 printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, srv_name);
             }
+            socket_close(sockets[i]);
         }
 
-        socket_close(connection_socket);
+        i++;
     }
+
+    free(sockets);
 
     // Close host file
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Close host file\n", 0);
