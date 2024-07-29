@@ -47,7 +47,7 @@
   #endif
 
   #define MIN(a,b) (((a)<(b))?(a):(b))
-  #define THREAD_WRITER 2
+  #define THREAD_WRITER 1
 
   struct xpn_metadata new_mdata;
   char *t_entry;
@@ -184,13 +184,18 @@
         int replication = 0;
         off_t local_offset;
         int aux_serv;
-        for (int j = 0; j < prev_nserv; j++)
+        int counter = 0;
+        for (int j = 0; j < prev_nserv*2; j++)
         {
           XpnCalculateBlockMdata(&new_mdata, actual_last_block*new_mdata.block_size, replication, &local_offset, &aux_serv);
           if (rank == 0){ debug_info("actual_last_block %d aux_serv %d\n",actual_last_block, aux_serv); }
           if (is_prev_first_node(new_mdata.first_node, aux_serv, prev_nserv) == 1){
-            // break;
-            goto tag1;
+            if (counter == 1){
+              // break;
+              goto tag1;
+            }else{
+              counter ++;
+            }
           }
           replication++;
           if (replication > new_mdata.replication_level){
@@ -200,8 +205,8 @@
         }
         tag1:
 
-        int aux_actual_last_block = actual_last_block;
         replication = new_mdata.replication_level;
+        int aux_actual_last_block = actual_last_block;
         for (int j = prev_nserv-1; j >= 0; j--)
         {
           XpnCalculateBlockMdata(&new_mdata, aux_actual_last_block*new_mdata.block_size, replication, &local_offset, &aux_serv);
@@ -299,7 +304,7 @@
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
 
-      fd = open(t_entry, O_RDWR | O_CREAT, st.st_mode);
+      fd = open64(t_entry, O_RDWR | O_CREAT | O_LARGEFILE, st.st_mode);
       if (fd < 0){
         perror("open reader :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -318,7 +323,7 @@
           {
             XpnCalculateBlockMdata(&mdata, offset_dest, replication, &local_offset, &aux_serv);
             
-            debug_info("try rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
+            // debug_info("try rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
             if (rank == aux_serv){
               goto exit_search;
             }
@@ -330,9 +335,15 @@
         }
 
         
-        ret = filesystem_lseek(fd, local_offset + XPN_HEADER_SIZE, SEEK_SET);
+        off64_t ret_2;
+        ret_2 = lseek64(fd, local_offset + XPN_HEADER_SIZE, SEEK_SET);
+        if (ret_2 < 0){
+          printf("lseek offset %ld\n", local_offset + XPN_HEADER_SIZE);
+          perror("lseek :");
+          MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+        }
         read_size = filesystem_read(fd, buf, new_mdata.block_size);
-        debug_info("Rank %d local_offset %ld read_size %d\n", rank, local_offset, read_size);
+        // debug_info("Rank %d local_offset %ld read_size %d\n", rank, local_offset, read_size);
         if (read_size <= 0){
           has_remaining_blocks = 0;
           break;
@@ -347,7 +358,7 @@
           }
         }
         
-        debug_info("Rank %d send to %d has_remaining_blocks %d local_offset %ld read_size %d\n", rank, rank_to_send, has_remaining_blocks, local_offset, read_size);
+        // debug_info("Rank %d send to %d has_remaining_blocks %d local_offset %ld read_size %d\n", rank, rank_to_send, has_remaining_blocks, local_offset, read_size);
         MPI_Send(&has_remaining_blocks, 1, MPI_INT, rank_to_send, 0, MPI_COMM_WORLD);
         MPI_Send(&offset_src, 1, MPI_LONG, rank_to_send, 1, MPI_COMM_WORLD);
         MPI_Send(&read_size, 1, MPI_INT, rank_to_send, 2, MPI_COMM_WORLD);
@@ -450,7 +461,7 @@
       MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
 
-    fd = open(t_entry, O_WRONLY | O_CREAT, st.st_mode);
+    fd = open64(t_entry, O_WRONLY | O_CREAT | O_LARGEFILE, st.st_mode);
     if (fd < 0){
       perror("open writer:");
       MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -459,17 +470,19 @@
     debug_info("Rank %d starting listening\n", rank);
     do{
       MPI_Recv(&has_remaining_blocks, 1, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
-      debug_info("Rank %d recv has_remaining_blocks %d\n", rank, has_remaining_blocks);
+      // debug_info("Rank %d recv has_remaining_blocks %d\n", rank, has_remaining_blocks);
       if (has_remaining_blocks == 0) break;
 
 
       MPI_Recv(&offset, 1, MPI_LONG, status.MPI_SOURCE, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       MPI_Recv(&buf_size, 1, MPI_INT, status.MPI_SOURCE, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       MPI_Recv(buf, buf_size, MPI_CHAR, status.MPI_SOURCE, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      debug_info("Rank %d recv offset %ld buf_size %d buf\n", rank, offset, buf_size);
+      // debug_info("Rank %d recv offset %ld buf_size %d buf\n", rank, offset, buf_size);
 
-      ret = filesystem_lseek(fd, offset + XPN_HEADER_SIZE, SEEK_SET);
-      if (ret < 0){
+      off64_t ret_2;
+      ret_2 = lseek64(fd, offset + XPN_HEADER_SIZE, SEEK_SET);
+      if (ret_2 < 0){
+        printf("lseek offset %ld\n", offset + XPN_HEADER_SIZE);
         perror("lseek :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
