@@ -603,7 +603,7 @@ void XpnWriteBlocksAllInOne(int fd, const void *buffer, size_t size, off_t offse
 void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, int serv_client, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
 {	
 	int optimize = 1; // Optimize by default
-	if (xpn_file_table[fd]->part->replication_level > 0){
+	if (xpn_file_table[fd]->part->replication_level > 0 || xpn_file_table[fd]->mdata->data_nserv[1] != 0){
     	optimize = 0; // Do not optimize
 	}
 
@@ -644,7 +644,7 @@ void XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, int se
 	size_t count;
 
 	int optimize = 1; // Optimize by default
-	if (xpn_file_table[fd]->part->replication_level > 0){
+	if (xpn_file_table[fd]->part->replication_level > 0 || xpn_file_table[fd]->mdata->data_nserv[1] != 0){
     	optimize = 0; // Do not optimize
 	}
 
