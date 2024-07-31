@@ -163,11 +163,11 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
             goto error_xpn_internal_open;
         }
     }
-    if ((O_CREAT != (flags & O_CREAT)) && (O_DIRECTORY != (flags & O_DIRECTORY)))
+    if ((O_DIRECTORY != (flags & O_DIRECTORY)))
     {
         // read metadata only in files
         res = XpnReadMetadata(mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
-        if (res < 0){
+        if (res < 0 && O_CREAT != (flags & O_CREAT)){
             goto error_xpn_internal_open;
         }
     }
@@ -217,7 +217,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
     }
 
     // Metadata
-    if (O_CREAT == (flags & O_CREAT))
+    if (O_CREAT == (flags & O_CREAT) && !XPN_CHECK_MAGIC_NUMBER(mdata))
     {   
         // create metadata
         XpnCreateMetadata(mdata, pd, abs_path);
