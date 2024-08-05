@@ -900,7 +900,7 @@ void xpn_server_op_rmdir_async ( __attribute__((__unused__)) xpn_server_param_st
 void xpn_server_op_read_mdata   ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
   int ret, fd;
-  struct st_xpn_server_read_mdata_req req;
+  struct st_xpn_server_read_mdata_req req = {0};
 
   // check params...
   if (NULL == params)
