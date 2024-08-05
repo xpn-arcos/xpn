@@ -26,27 +26,27 @@
 void XpnPrintMetadata(struct xpn_metadata *mdata)
 {
   int i;
-  printf("magic_number: %c%c%c\n", mdata->magic_number[0], mdata->magic_number[1], mdata->magic_number[2]);
-  printf("version: %d\n", mdata->version);
-  printf("type: %d\n", mdata->type);
-  printf("block_size: %zd\n", mdata->block_size);
-  printf("file_size: %zd\n", mdata->file_size);
-  printf("replication_level: %d\n", mdata->replication_level);
-  printf("first_node: %d\n", mdata->first_node);
+  fprintf(stderr, "magic_number: %c%c%c\n", mdata->magic_number[0], mdata->magic_number[1], mdata->magic_number[2]);
+  fprintf(stderr, "version: %d\n", mdata->version);
+  fprintf(stderr, "type: %d\n", mdata->type);
+  fprintf(stderr, "block_size: %zd\n", mdata->block_size);
+  fprintf(stderr, "file_size: %zd\n", mdata->file_size);
+  fprintf(stderr, "replication_level: %d\n", mdata->replication_level);
+  fprintf(stderr, "first_node: %d\n", mdata->first_node);
 
-  printf("data_nserv: ");
+  fprintf(stderr, "data_nserv: ");
   for(i = 0; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++) {
-    printf("%d ", mdata->data_nserv[i]);
+    fprintf(stderr, "%d ", mdata->data_nserv[i]);
   }
-  printf("\n");
+  fprintf(stderr, "\n");
 
-  printf("offsets: ");
+  fprintf(stderr, "offsets: ");
   for(i = 0; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++) {
-    printf("%d ", mdata->offsets[i]);
+    fprintf(stderr, "%d ", mdata->offsets[i]);
   }
-  printf("\n");
+  fprintf(stderr, "\n");
 
-  printf("distribution_policy: %d\n", mdata->distribution_policy);
+  fprintf(stderr, "distribution_policy: %d\n", mdata->distribution_policy);
 }
 
 int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, const char *path)
@@ -160,7 +160,8 @@ int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *
     }
   }
   res = err;
-  if (xpn_debug){ printf("Mdata of %s:\n", path); XpnPrintMetadata(mdata); }
+  XPN_DEBUG("Mdata of %s:", path);
+  if (xpn_debug){ XpnPrintMetadata(mdata); }
   XPN_DEBUG_END_CUSTOM("%s", path);
   return res;
 }
@@ -190,7 +191,8 @@ int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *se
   nfi_worker_do_read_mdata(servers[master_node].wrk, url_serv, mdata);
   res = nfiworker_wait(servers[master_node].wrk);
 
-  if (xpn_debug){ printf("Mdata of %s:\n", path); XpnPrintMetadata(mdata); }
+  XPN_DEBUG("Mdata of %s:", path);
+  if (xpn_debug){ XpnPrintMetadata(mdata); }
   XPN_DEBUG_END_CUSTOM("%s", path);
   return res;
 }
