@@ -1143,7 +1143,7 @@ int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_met
   
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] nfi_local_write_mdata(%s)\n", server->id, dir);
 
-  fd = filesystem_open(dir, O_WRONLY);
+  fd = filesystem_open2(dir, O_WRONLY | O_CREAT, S_IRWXU);
   if (fd < 0){
     if (errno == EISDIR){
     // if is directory there are no metadata to write so return 0

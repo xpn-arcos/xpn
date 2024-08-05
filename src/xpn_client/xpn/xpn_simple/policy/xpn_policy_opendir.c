@@ -31,7 +31,7 @@ int XpnGetEntry(int fd, struct dirent *entry)
 	int n, res;
 	struct nfi_server *servers;
 
-	XPN_DEBUG_BEGIN
+	XPN_DEBUG_BEGIN_CUSTOM("%s", xpn_file_table[fd]->path);
 
 	servers = NULL;
 	n = XpnGetServers(xpn_file_table[fd]->part->id, fd, &servers);

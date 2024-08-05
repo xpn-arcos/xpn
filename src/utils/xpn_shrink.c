@@ -79,8 +79,8 @@
       printf("%s\n", entry);
     }
 
-    int master_node_old = hash(entry, size, 0);
-    int master_node_new = hash(entry, new_size, 0);
+    int master_node_old = hash(entry, size, 1);
+    int master_node_new = hash(entry, new_size, 1);
     int has_new_mdata = 0;
 
     debug_info("master_node_old %d master_node_new %d\n", master_node_old, master_node_new);

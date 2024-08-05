@@ -61,8 +61,8 @@
       printf("%s\n", entry);
     }
 
-    int master_node_old = hash(entry, last_size, 0);
-    int master_node_new = hash(entry, size, 0);
+    int master_node_old = hash(entry, last_size, 1);
+    int master_node_new = hash(entry, size, 1);
     int has_new_mdata = 0;
 
     debug_info("master_node_old %d master_node_new %d\n", master_node_old, master_node_new);
@@ -132,23 +132,23 @@
       }
     }
     
-    if (has_new_mdata == 1){
       debug_info("Write metadata for %s in rank %d\n", entry, rank);
-      fd_src = open(entry, O_WRONLY | O_CREAT, st.st_mode);
-      if (fd_src < 0){
-        perror("open :");
-        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-      }
+    fd_src = open(entry, O_WRONLY | O_CREAT, st.st_mode);
+    if (fd_src < 0){
+      perror("open :");
+      MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+    }
+    if (has_new_mdata == 1){
       ret = filesystem_write(fd_src, &mdata, sizeof(mdata));
       if (ret < 0){
         perror("write mdata :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
-      ret = close(fd_src);
-      if (ret < 0){
-        perror("close :");
-        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-      }
+    }
+    ret = close(fd_src);
+    if (ret < 0){
+      perror("close :");
+      MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
     return 0;
   }

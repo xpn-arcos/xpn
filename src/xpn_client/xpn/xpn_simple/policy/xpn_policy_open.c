@@ -256,8 +256,8 @@ int XpnGetAtribFd ( int fd, struct stat *st )
     return res;
   }
 
-  XpnReadMetadata(&mdata, n, servers, xpn_file_table[fd]->path, xpn_file_table[fd]->part->replication_level);
-  if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
+  if (attr.at_type == NFIFILE){
+    XpnReadMetadata(&mdata, n, servers, xpn_file_table[fd]->path, xpn_file_table[fd]->part->replication_level);
     st->st_size = mdata.file_size;
   }else{
     st->st_size = attr.at_size;
@@ -320,7 +320,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   memset(&attr, 0, sizeof(struct nfi_attr));
   memset(&vfh_aux, 0, sizeof(struct nfi_fhandle));
 
-  int master_node = hash(path, n, 0);
+  int master_node = hash(path, n, 1);
   if (strlen(aux_path) == 0){
     aux_path[0] = '/';
     aux_path[1] = '\0';
@@ -345,8 +345,8 @@ int XpnGetAtribPath ( char * path, struct stat *st )
     return res;
   }
 
-  XpnReadMetadata(&mdata, n, servers, aux_path, XpnSearchPart(pd)->replication_level);
-  if (XPN_CHECK_MAGIC_NUMBER(&mdata)){
+  if (attr.at_type == NFIFILE){
+    XpnReadMetadata(&mdata, n, servers, aux_path, XpnSearchPart(pd)->replication_level);
     st->st_size = mdata.file_size;
   }else{
     st->st_size = attr.at_size;

@@ -92,7 +92,7 @@ int XpnCreateMetadataExtern(struct xpn_metadata *mdata, const char *path, int ns
   mdata->type                 = 0;
   mdata->block_size           = block_size;
   mdata->replication_level    = replication_level;
-  mdata->first_node           = hash(path, nserv, 0);
+  mdata->first_node           = hash(path, nserv, 1);
   mdata->distribution_policy  = XPN_METADATA_DISTRIBUTION_ROUND_ROBIN;
 
   XPN_DEBUG_END_CUSTOM("%s", path);
@@ -135,7 +135,11 @@ int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *
   char url_serv[PATH_MAX];
   XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
-  master_node = hash(path, nserv, 0);
+  if (mdata == NULL){
+    return -1;
+  }
+
+  master_node = hash(path, nserv, 1);
   mdata->first_node = master_node;
   for (int i = 0; i < replication_level+1; i++)
   {
@@ -156,7 +160,7 @@ int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *
     }
   }
   res = err;
-  if (xpn_debug){ XpnPrintMetadata(mdata); }
+  if (xpn_debug){ printf("Mdata of %s:\n", path); XpnPrintMetadata(mdata); }
   XPN_DEBUG_END_CUSTOM("%s", path);
   return res;
 }
@@ -167,8 +171,12 @@ int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *se
   char url_serv[PATH_MAX];
   XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
-  master_node = hash(path, nserv, 0);
-  
+  if (mdata == NULL){
+    return -1;
+  }
+
+  memset(mdata, 0, sizeof(*mdata));
+  master_node = hash(path, nserv, 1);
   for (i = 0; i < replication_level; i++)
   {
     master_node = (master_node+i)%nserv;
@@ -182,7 +190,7 @@ int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *se
   nfi_worker_do_read_mdata(servers[master_node].wrk, url_serv, mdata);
   res = nfiworker_wait(servers[master_node].wrk);
 
-  if (xpn_debug){ XpnPrintMetadata(mdata); }
+  if (xpn_debug){ printf("Mdata of %s:\n", path); XpnPrintMetadata(mdata); }
   XPN_DEBUG_END_CUSTOM("%s", path);
   return res;
 }

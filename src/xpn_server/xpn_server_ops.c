@@ -957,7 +957,7 @@ void xpn_server_op_write_mdata ( xpn_server_param_st *params, void *comm, struct
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] write_mdata(%s)\n", params->rank, head->u_st_xpn_server_msg.op_write_mdata.path);
 
-  fd = filesystem_open(head->u_st_xpn_server_msg.op_write_mdata.path, O_WRONLY);
+  fd = filesystem_open2(head->u_st_xpn_server_msg.op_write_mdata.path, O_WRONLY | O_CREAT, S_IRWXU);
   if (fd < 0){
     if (errno == EISDIR){
       // if is directory there are no metadata to write so return 0

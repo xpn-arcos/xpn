@@ -180,12 +180,22 @@ finish_copy:
       mdata.file_size = st.st_size;
       // Write mdata only when necesary
       int write_mdata = 0;
+      int master_dir = hash(dest_path, size, 0);
+      int has_master_dir = 0;
       int aux_serv;
       for (int i = 0; i < replication_level+1; i++)
       { 
         aux_serv = ( mdata.first_node + i ) % size;
         if (aux_serv == rank){
           write_mdata = 1;
+          break;
+        }
+      }
+      for (int i = 0; i < replication_level+1; i++)
+      { 
+        aux_serv = ( master_dir + i ) % size;
+        if (aux_serv == rank){
+          has_master_dir = 1;
           break;
         }
       }
@@ -203,8 +213,7 @@ finish_copy:
 
       filesystem_close(fd_src);
       filesystem_close(fd_dest);
-
-      if (local_size == 0){
+      if (local_size == 0 && has_master_dir == 0){
         filesystem_unlink(dest_path);
       }
     }
