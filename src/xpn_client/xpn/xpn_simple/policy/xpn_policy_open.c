@@ -287,7 +287,7 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   st->st_ctime   = attr.at_ctime ;    // time of last change
 
   XPN_DEBUG_END_CUSTOM("%d", fd);
-  return res;
+  return 0;
 }
 
 int XpnGetAtribPath ( char * path, struct stat *st )
@@ -377,7 +377,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
 
   XPN_DEBUG_END_CUSTOM("%s", path)
 
-  return res;
+  return 0;
 }
 
 /*
