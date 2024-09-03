@@ -185,7 +185,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
     char url_serv[PATH_MAX];
     struct nfi_server *servers;
     int n, pd, i, j, master_node, master_dir;
-    int res = -1;
+    int res = -1, err;
 
     XPN_DEBUG_BEGIN_CUSTOM("%s, %d, %d", path, flags, mode);
 
@@ -269,6 +269,23 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
                 XpnGetURLServer(&servers[i], abs_path, url_serv);
                 nfi_worker_do_open(servers[i].wrk, url_serv, flags, mode, vfh->nfih[i]);
             }
+        }
+
+        err = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (XpnCheckServAffectedByOp(mdata, master_dir, master_node, n, i) == 1){
+                res = nfiworker_wait(servers[i].wrk);
+                if (res < 0)
+                {
+                    err = 1;
+                }
+            }
+        }
+        if (err == 1)
+        {
+            res = -1;
+            goto error_xpn_internal_open;
         }
     }else{
         // else only open in one
