@@ -22,11 +22,15 @@
 
 #include "xpn/xpn_simple/xpn_init.h"
 #include "ns.h"
+#include "profiler.h"
 
 
 struct xpn_partition xpn_parttable[XPN_MAX_PART];
 pthread_mutex_t xpn_init_mutex = PTHREAD_MUTEX_INITIALIZER;
 int xpn_debug=0;
+int xpn_profiler=0;
+int xpn_profiler_fd=-1;
+
 int xpn_initialize=0;
 
 int xpn_destroy_servers(struct xpn_partition *part)
@@ -106,6 +110,7 @@ int xpn_simple_destroy ( void )
 cleanup_xpn_simple_destroy:
   pthread_mutex_unlock(&xpn_init_mutex);
   XPN_DEBUG_END;
+  XPN_PROFILER_END();
   return res;
 }
 
@@ -114,6 +119,7 @@ int xpn_init_partition( void )
   int res;
   int i,j;
   char *env_debug;
+  char *env_profiler;
   int part_n = 0;
   char buff_value[PATH_MAX];
   struct conf_file_data conf_data = {0};
@@ -123,6 +129,12 @@ int xpn_init_partition( void )
     xpn_debug=1;
   }
 
+  env_profiler = getenv("XPN_PROFILER");
+  if ((env_profiler != NULL) && (strlen(env_profiler) > 0)){
+    xpn_profiler=1;
+  }
+
+  XPN_PROFILER_BEGIN(env_profiler);
   XPN_DEBUG_BEGIN;
 
   setbuf(stdout,NULL);
