@@ -1070,14 +1070,15 @@ int nfi_local_read_mdata ( struct nfi_server *server, char *url, struct xpn_meta
   }
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] ParseURL(%s)= %s\n", server->id, url, dir);
-  
+
+	memset(mdata, 0, sizeof(struct xpn_metadata));
+
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] nfi_local_read_mdata(%s)\n", server->id, dir);
 
   fd = filesystem_open(dir, O_RDWR);
   if (fd < 0){
     if (errno == EISDIR){
       // if is directory there are no metadata to read so return 0
-	    memset(mdata, 0, sizeof(struct xpn_metadata));
       return 0;
     }
     return -1;

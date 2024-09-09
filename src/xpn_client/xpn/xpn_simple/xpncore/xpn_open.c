@@ -219,6 +219,7 @@ int xpn_internal_open(const char * path, struct xpn_fh * vfh, struct xpn_metadat
         {
             goto error_xpn_internal_open;
         }
+        memset(mdata, 0, sizeof(*mdata));
     }
     if ((O_DIRECTORY != (flags & O_DIRECTORY)))
     {
