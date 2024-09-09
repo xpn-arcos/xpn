@@ -118,6 +118,15 @@
      {
          return( (float)timet->tv_sec * (float)USECPSEC + (float)timet->tv_usec);
      }
+    /**
+     * Return a timestamp as microseconds.
+     * @param timet the timestamp.
+     * @return timestamp as microseconds.
+     */
+     long TIME_MISC_TimevaltoMicroLong(struct timeval* timet)
+     {
+         return( (long)timet->tv_sec * (long)USECPSEC + (long)timet->tv_usec);
+     }
 
 
    /* ................................................................... */

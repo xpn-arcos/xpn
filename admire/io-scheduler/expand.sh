@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -x
+# set -x
 
 #
 #  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal
@@ -128,8 +128,91 @@ case "${ACTION}" in
       stop)     ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop
                 rm -f ${HOSTFILE}
                 ;;
+      stop_await)     ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop_await
+                rm -f ${HOSTFILE}
+                ;;
+      expand_v3 | shrink_v3)
+                # Expand with metadata and no change in files
+                rm -f  ${HOSTFILE_REBUILD}
+                touch  ${HOSTFILE_REBUILD}
+                # HOSTLIST -> HOSTFILE
+                for i in $(echo ${HOSTLIST} | tr "," "\n")
+                do
+                  NHOST=$((NHOST+1))
+                  echo $i >> ${HOSTFILE_REBUILD}
+                done
+                NHOST_OLD=$(cat ${HOSTFILE} | wc -l)
 
-      expand_v2 | shrink_v2)   
+                diff ${HOSTFILE} ${HOSTFILE_REBUILD} | grep "^>" | cut -d' ' -f2 > ${HOSTFILE_START}
+                diff ${HOSTFILE} ${HOSTFILE_REBUILD} | grep "^<" | cut -d' ' -f2 > ${HOSTFILE_STOP}
+                NHOST_START=$(cat ${HOSTFILE_START} | wc -l)
+                NHOST_STOP=$(cat ${HOSTFILE_STOP} | wc -l)
+
+                if [ $NHOST_START -eq 0 ] && [ $NHOST_STOP -eq 0 ]; then
+                    echo "The hosts provided are the same"
+                    exit 0
+                fi
+                # stop
+                if [[ ${VERBOSE} == true ]]; then
+                  start_stop=$(date +%s%3N)
+                fi
+
+                ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop_await &
+                STOP_PID=$!
+                
+                if [[ ${VERBOSE} == true ]]; then
+                  end_stop=$(date +%s%3N)
+                  seconds=$(((end_stop - start_stop) / 1000))
+                  milliseconds=$(((end_stop - start_stop) % 1000))
+                  echo "Time to run stop: $seconds.$milliseconds sec"
+                fi
+                if [[ ${VERBOSE} == true ]]; then
+                  start_rebuild=$(date +%s%3N)
+                fi
+
+                if [ $NHOST_START -eq 0 ]; then
+                    grep -F -v -f ${HOSTFILE_STOP} ${HOSTFILE} > ${HOSTFILE_REBUILD_JOIN}
+
+                    ${XPN_SH} --numnodes ${NHOST_OLD} --hostfile ${HOSTFILE} --workdir ${SHAREDDIR} --xpn_storage_path ${DATADIR} --replication_level ${REPLICATION_LEVEL} --deathfile ${HOSTFILE_STOP} --rebuildfile ${HOSTFILE_REBUILD} shrink
+
+                    mv ${HOSTFILE_REBUILD_JOIN} ${HOSTFILE}
+                else
+                    cat ${HOSTFILE} ${HOSTFILE_START} > ${HOSTFILE_REBUILD_JOIN}
+                    NHOST_REBUILD_JOIN=$(cat ${HOSTFILE_REBUILD_JOIN} | wc -l)
+
+                    ${XPN_SH} --numnodes ${NHOST_REBUILD_JOIN} --hostfile ${HOSTFILE_REBUILD_JOIN} --workdir ${SHAREDDIR} --xpn_storage_path ${DATADIR} --replication_level ${REPLICATION_LEVEL} --deathfile ${HOSTFILE} --rebuildfile ${HOSTFILE_REBUILD} expand
+                
+                    mv ${HOSTFILE_REBUILD_JOIN} ${HOSTFILE}
+                fi
+
+                if [[ ${VERBOSE} == true ]]; then
+                  end_rebuild=$(date +%s%3N)
+                  seconds=$(((end_rebuild - start_rebuild) / 1000))
+                  milliseconds=$(((end_rebuild - start_rebuild) % 1000))
+                  echo "Time to run $ACTION: $seconds.$milliseconds sec"
+                fi
+
+                wait $STOP_PID
+                # start
+                if [[ ${VERBOSE} == true ]]; then
+                  start_start=$(date +%s%3N)
+                fi
+
+                ${XPN_SH} --numnodes $NHOST --hostfile ${HOSTFILE} --xpn_storage_path ${DATADIR} --workdir ${SHAREDDIR} --replication_level ${REPLICATION_LEVEL} start
+                
+                if [[ ${VERBOSE} == true ]]; then
+                  end_start=$(date +%s%3N)
+                  seconds=$(((end_start - start_start) / 1000))
+                  milliseconds=$(((end_start - start_start) % 1000))
+                  echo "Time to run start: $seconds.$milliseconds sec"
+                fi
+
+                rm ${HOSTFILE_START}
+                rm ${HOSTFILE_STOP}
+                rm ${HOSTFILE_REBUILD}
+                ;;
+      expand_v2 | shrink_v2)  
+                # Rebuild without metadata, start and stop only necessary servers
                 rm -f  ${HOSTFILE_REBUILD}
                 touch  ${HOSTFILE_REBUILD}
                 # HOSTLIST -> HOSTFILE
@@ -159,7 +242,7 @@ case "${ACTION}" in
                 fi
                 
                 if [ $NHOST_STOP -gt 0 ]; then
-                  ${XPN_SH} --deathfile ${HOSTFILE_STOP} --workdir ${SHAREDDIR} stop
+                  ${XPN_SH} --deathfile ${HOSTFILE_STOP} --workdir ${SHAREDDIR} stop_await
                 fi
 
                 if [[ ${VERBOSE} == true ]]; then
@@ -191,6 +274,7 @@ case "${ACTION}" in
                 rm ${HOSTFILE_REBUILD_JOIN}
                 ;;
       expand_v1 | shrink_v1)   
+                # The rebuild without metadata start and stop all servers
                 rm -f  ${HOSTFILE_REBUILD}
                 touch  ${HOSTFILE_REBUILD}
                 # HOSTLIST -> HOSTFILE
@@ -215,7 +299,7 @@ case "${ACTION}" in
                   start_stop=$(date +%s%3N)
                 fi
 
-                ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop
+                ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop_await
                 
                 if [[ ${VERBOSE} == true ]]; then
                   end_stop=$(date +%s%3N)
@@ -259,7 +343,8 @@ case "${ACTION}" in
                 rm ${HOSTFILE_STOP}
                 rm ${HOSTFILE_REBUILD_JOIN}
                 ;;
-      expand | shrink)   
+      expand | shrink)
+                # First do a flush and then a preload
                 rm -f  ${HOSTFILE_REBUILD}
                 touch  ${HOSTFILE_REBUILD}
                 # HOSTLIST -> HOSTFILE
@@ -274,7 +359,7 @@ case "${ACTION}" in
                   start_stop=$(date +%s%3N)
                 fi
 
-                ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop
+                ${XPN_SH} --deathfile ${HOSTFILE} --workdir ${SHAREDDIR} stop_await
                 
                 if [[ ${VERBOSE} == true ]]; then
                   end_stop=$(date +%s%3N)

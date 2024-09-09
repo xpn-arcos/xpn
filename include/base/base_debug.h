@@ -27,6 +27,7 @@
 
   #include <stdio.h>
   #include <errno.h>
+  #include "profiler.h"
 
 
   /* ... Const / Const ................................................. */
@@ -57,7 +58,7 @@
       fprintf (stderr, format, ## __VA_ARGS__); \
       fprintf (stderr, ")"); \
       fprintf (stderr, "\n"); \
-    }
+    }; XPN_PROFILER_DEFAULT_BEGIN();
 
   #define XPN_DEBUG_END_CUSTOM(format, ...) \
     if (xpn_debug) { \
@@ -68,16 +69,16 @@
       fprintf (stderr, ")"); \
       fprintf (stderr, "=%d, errno=%d %s", (int)res, errno, strerror(errno)); \
       fprintf (stderr, "\n"); \
-    }
+    }; XPN_PROFILER_DEFAULT_END_CUSTOM(format, ## __VA_ARGS__);
 
-  #define XPN_DEBUG_BEGIN XPN_DEBUG("Begin %s()", __func__)
-  #define XPN_DEBUG_END   XPN_DEBUG("End   %s()=%d, errno=%d %s", __func__, (int)res, errno, strerror(errno))
+  #define XPN_DEBUG_BEGIN XPN_DEBUG("Begin %s()", __func__); XPN_PROFILER_DEFAULT_BEGIN();
+  #define XPN_DEBUG_END   XPN_DEBUG("End   %s()=%d, errno=%d %s", __func__, (int)res, errno, strerror(errno)); XPN_PROFILER_DEFAULT_END();
 
-  #define XPN_DEBUG_BEGIN_ARGS1(...) XPN_DEBUG("Begin %s(%s)", __func__, ## __VA_ARGS__)
-  #define XPN_DEBUG_END_ARGS1(...)   XPN_DEBUG("End   %s(%s)=%d, errno=%d %s", __func__, ## __VA_ARGS__, (int)res, errno, strerror(errno))
+  #define XPN_DEBUG_BEGIN_ARGS1(...) XPN_DEBUG("Begin %s(%s)", __func__, ## __VA_ARGS__); XPN_PROFILER_DEFAULT_BEGIN();
+  #define XPN_DEBUG_END_ARGS1(...)   XPN_DEBUG("End   %s(%s)=%d, errno=%d %s", __func__, ## __VA_ARGS__, (int)res, errno, strerror(errno)); XPN_PROFILER_DEFAULT_END_CUSTOM("%s", ## __VA_ARGS__);
 
-  #define XPN_DEBUG_BEGIN_ARGS2(...) XPN_DEBUG("Begin %s(%s, %s)", __func__, ## __VA_ARGS__)
-  #define XPN_DEBUG_END_ARGS2(...)   XPN_DEBUG("End   %s(%s, %s)=%d, errno=%d %s", __func__, ## __VA_ARGS__, (int)res, errno, strerror(errno))
+  #define XPN_DEBUG_BEGIN_ARGS2(...) XPN_DEBUG("Begin %s(%s, %s)", __func__, ## __VA_ARGS__); XPN_PROFILER_DEFAULT_BEGIN();
+  #define XPN_DEBUG_END_ARGS2(...)   XPN_DEBUG("End   %s(%s, %s)=%d, errno=%d %s", __func__, ## __VA_ARGS__, (int)res, errno, strerror(errno)); XPN_PROFILER_DEFAULT_END_CUSTOM("%s, %s", ## __VA_ARGS__);
 
   #if defined(DEBUG)
     // base

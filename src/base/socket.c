@@ -186,7 +186,7 @@ int socket_client_connect ( char * srv_name, int *out_socket )
   int status = connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
   if (status < 0) 
   {
-    printf("[SOCKET] [socket_read] ERROR: socket connection Failed\n");
+    printf("[SOCKET] [socket_read] ERROR: socket connection failed to %s in port %d %s\n", srv_name, socket_get_port(), strerror(errno));
     close(client_fd);
     return -1;
   }

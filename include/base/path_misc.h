@@ -42,7 +42,7 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  int hash (char *file,int nServ);
+  int hash (const char *file, int nServ, int isfile);
 
   int getFirstDir   ( char *dir, char *path);
   int getSizeFactor ( char *name );

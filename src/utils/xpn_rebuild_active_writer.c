@@ -195,9 +195,9 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
             // Write in new_ranks
             if (rank_actual_to_new[rank] != -1) {
                 // Calculate the block
-                XpnCalculateBlockInvert(blocksize, replication_level, new_size, rank_actual_to_new[rank], offset_dest,
+                XpnCalculateBlockInvert(blocksize, replication_level, new_size, rank_actual_to_new[rank], offset_dest, 0,
                                         &offset_real, &replication);
-                XpnCalculateBlock(blocksize, replication_level, old_size, offset_real, replication, &offset_src,
+                XpnCalculateBlock(blocksize, replication_level, old_size, offset_real, replication, 0, &offset_src,
                                   &rank_to_send);
 
                 MPI_Send(&offset_src, 1, MPI_LONG, rank_old_to_actual[rank_to_send], TAG_OFFSET, MPI_COMM_WORLD);

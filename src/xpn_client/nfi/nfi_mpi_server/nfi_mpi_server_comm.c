@@ -162,9 +162,14 @@ int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_c
             err = 0;
             ret = socket_client_connect(srv_name, &connection_socket);
             if (ret < 0) {
-                debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket connect\n");
-                err = -1;
-                goto mpi_comm_socket_finish;
+                // Do one retry in 1 second
+                sleep(1);
+                ret = socket_client_connect(srv_name, &connection_socket);
+                if (ret < 0) {
+                    debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket connect\n");
+                    err = -1;
+                    goto mpi_comm_socket_finish;
+                }
             }
             int buffer = SOCKET_ACCEPT_CODE;
             ret = socket_send(connection_socket, &buffer, sizeof(buffer));
