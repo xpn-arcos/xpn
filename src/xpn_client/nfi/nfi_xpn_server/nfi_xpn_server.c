@@ -109,7 +109,7 @@ int nfi_write_operation ( struct nfi_xpn_server *params, struct st_xpn_server_ms
       break;
     case XPN_SERVER_CLOSEDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] CLOSEDIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_closedir), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_closedir), sizeof(struct st_xpn_server_close));
       break;
     case XPN_SERVER_RMDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] RMDIR operation\n");
