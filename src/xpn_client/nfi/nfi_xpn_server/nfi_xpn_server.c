@@ -1414,7 +1414,7 @@ int nfi_xpn_server_closedir ( struct nfi_server *serv, struct nfi_fhandle *fh )
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%d)\n", serv->id, fh_aux->dir);
 
     msg.type = XPN_SERVER_CLOSEDIR_DIR;
-    msg.u_st_xpn_server_msg.op_close.dir = fh_aux->dir;
+    msg.u_st_xpn_server_msg.op_closedir.dir = fh_aux->dir;
 
     nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
 
