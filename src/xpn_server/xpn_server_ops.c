@@ -754,14 +754,14 @@ void xpn_server_op_closedir ( xpn_server_param_st *params, void *comm, struct st
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] >> Begin\n", params->rank);
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] closedir(%ld)\n", params->rank, head->u_st_xpn_server_msg.op_close.dir);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] closedir(%ld)\n", params->rank, head->u_st_xpn_server_msg.op_closedir.dir);
 
   // do rm
-  status.ret = filesystem_closedir(head->u_st_xpn_server_msg.op_close.dir);
+  status.ret = filesystem_closedir(head->u_st_xpn_server_msg.op_closedir.dir);
   status.server_errno = errno;
   xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
 
-  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] closedir(%d)=%d\n", params->rank, head->u_st_xpn_server_msg.op_close.dir, status.ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] closedir(%d)=%d\n", params->rank, head->u_st_xpn_server_msg.op_closedir.dir, status.ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] << End\n", params->rank);
 
 }
