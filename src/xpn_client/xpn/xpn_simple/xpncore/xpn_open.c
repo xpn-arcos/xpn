@@ -394,8 +394,8 @@ int xpn_internal_remove(const char * path)
     }
 
     XpnReadMetadata(&mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
-    master_node = hash((char *)path, n, 1);
-    master_dir = hash((char *)path, n, 0);
+    master_node = hash((char *)abs_path, n, 1);
+    master_dir = hash((char *)abs_path, n, 0);
 
     for (i = 0; i < n; i++)
     {
@@ -608,8 +608,8 @@ int xpn_simple_rename(const char * path, const char * newpath)
     }
 
     XpnReadMetadata(&mdata, n, servers, abs_path, XpnSearchPart(pd)->replication_level);
-    master_dir = hash((char *)path, n, 0);
-    master_node = hash((char *)path, n, 1);
+    master_dir = hash((char *)abs_path, n, 0);
+    master_node = hash((char *)abs_path, n, 1);
 
     for (i = 0; i < n; i++)
     {

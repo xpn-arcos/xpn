@@ -47,6 +47,8 @@
   #define MIN(a,b) (((a)<(b))?(a):(b))
   #define HEADER_SIZE 8192
 
+  int xpn_path_len = 0;
+
 /* ... Functions / Funciones ......................................... */
 
   int copy(char * entry, int rank, int size, int last_size)
@@ -61,8 +63,8 @@
       printf("%s\n", entry);
     }
 
-    int master_node_old = hash(entry, last_size, 1);
-    int master_node_new = hash(entry, size, 1);
+    int master_node_old = hash(&entry[xpn_path_len], last_size, 1);
+    int master_node_new = hash(&entry[xpn_path_len], size, 1);
     int has_new_mdata = 0;
 
     debug_info("master_node_old %d master_node_new %d\n", master_node_old, master_node_new);
@@ -164,7 +166,7 @@
     char path [PATH_MAX];
     int buff_coord = 1;
     
-    int master_node = hash(dir_name, last_size, 1);
+    int master_node = hash(&dir_name[xpn_path_len], last_size, 1);
     debug_info("for %s master_node %d\n", dir_name, master_node);
     if (rank == master_node){
       dir = opendir(dir_name);
@@ -265,6 +267,7 @@
     if (rank == 0){
       printf("Expand in path %s from %d servers to %d servers\n", argv[1], last_size, size);
     }
+    xpn_path_len = strlen(argv[1]);
     list (argv[1], rank, size, last_size);
     if (rank == 0){
       printf("Expand elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);

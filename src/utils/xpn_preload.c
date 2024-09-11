@@ -52,6 +52,7 @@
   char src_path [PATH_MAX+5];
   char dest_path [PATH_MAX+5];
 
+  int xpn_path_len = 0;
 
 /* ... Functions / Funciones ......................................... */
 
@@ -180,7 +181,7 @@ finish_copy:
       mdata.file_size = st.st_size;
       // Write mdata only when necesary
       int write_mdata = 0;
-      int master_dir = hash(dest_path, size, 0);
+      int master_dir = hash(&dest_path[xpn_path_len], size, 0);
       int has_master_dir = 0;
       int aux_serv;
       for (int i = 0; i < replication_level+1; i++)
@@ -313,6 +314,7 @@ finish_copy:
     if (rank == 0){
       printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
     }
+    xpn_path_len = strlen(argv[2]);
     list (argv[1], argv[2], blocksize, replication_level, rank, size);
     if (rank == 0){
       printf("Preload elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);
