@@ -59,77 +59,77 @@ int nfi_write_operation ( struct nfi_xpn_server *params, struct st_xpn_server_ms
     //File API
     case XPN_SERVER_OPEN_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] OPEN operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_open), sizeof(struct st_xpn_server_path_flags));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_open), sizeof(head->u_st_xpn_server_msg.op_open));
       break;
     case XPN_SERVER_CREAT_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] CREAT operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_creat), sizeof(struct st_xpn_server_path_flags));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_creat), sizeof(head->u_st_xpn_server_msg.op_creat));
       break;
     case XPN_SERVER_READ_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] READ operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_read), sizeof(struct st_xpn_server_rw));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_read), sizeof(head->u_st_xpn_server_msg.op_read));
       break;
     case XPN_SERVER_WRITE_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] WRITE operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write), sizeof(struct st_xpn_server_rw));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write), sizeof(head->u_st_xpn_server_msg.op_write));
       break;
     case XPN_SERVER_CLOSE_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] CLOSE operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_close), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_close), sizeof(head->u_st_xpn_server_msg.op_close));
       break;
     case XPN_SERVER_RM_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] RM operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rm), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rm), sizeof(head->u_st_xpn_server_msg.op_rm));
       break;
     case XPN_SERVER_RM_FILE_ASYNC:
       debug_info("[NFI_XPN] [nfi_write_operation] RM_ASYNC operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rm), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rm), sizeof(head->u_st_xpn_server_msg.op_rm));
       break;
     case XPN_SERVER_RENAME_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] RENAME operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rename), sizeof(struct st_xpn_server_rename));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rename), sizeof(head->u_st_xpn_server_msg.op_rename));
       break;
     case XPN_SERVER_GETATTR_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] GETATTR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_getattr), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_getattr), sizeof(head->u_st_xpn_server_msg.op_getattr));
       break;
 
     //Directory API
     case XPN_SERVER_MKDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] MDKIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_mkdir), sizeof(struct st_xpn_server_path_flags));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_mkdir), sizeof(head->u_st_xpn_server_msg.op_mkdir));
       break;
     case XPN_SERVER_OPENDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] OPENDIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_opendir), sizeof(struct st_xpn_server_path_flags));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_opendir), sizeof(head->u_st_xpn_server_msg.op_opendir));
       break;
     case XPN_SERVER_READDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] READDIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_readdir), sizeof(struct st_xpn_server_readdir));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_readdir), sizeof(head->u_st_xpn_server_msg.op_readdir));
       break;
     case XPN_SERVER_CLOSEDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] CLOSEDIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_closedir), sizeof(struct st_xpn_server_close));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_closedir), sizeof(head->u_st_xpn_server_msg.op_closedir));
       break;
     case XPN_SERVER_RMDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] RMDIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(head->u_st_xpn_server_msg.op_rmdir));
       break;
     case XPN_SERVER_RMDIR_DIR_ASYNC:
       debug_info("[NFI_XPN] [nfi_write_operation] RMDIR_ASYNC operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(head->u_st_xpn_server_msg.op_rmdir));
       break;
     case XPN_SERVER_READ_MDATA:
       debug_info("[NFI_XPN] [nfi_write_operation] READ_MDATA operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_read_mdata), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_read_mdata), sizeof(head->u_st_xpn_server_msg.op_read_mdata));
       break;
     case XPN_SERVER_WRITE_MDATA:
       debug_info("[NFI_XPN] [nfi_write_operation] WRITE_MDATA operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write_mdata), sizeof(struct st_xpn_server_write_mdata));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write_mdata), sizeof(head->u_st_xpn_server_msg.op_write_mdata));
       break;
     case XPN_SERVER_WRITE_MDATA_FILE_SIZE:
       debug_info("[NFI_XPN] [nfi_write_operation] WRITE_MDATA_FILE_SIZE operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write_mdata_file_size), sizeof(struct st_xpn_server_write_mdata_file_size));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write_mdata_file_size), sizeof(head->u_st_xpn_server_msg.op_write_mdata_file_size));
       break;
   }
 
@@ -826,7 +826,7 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
 
   //Debug
-  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_xpn_server_msg.op_read.path, offset, size);
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_xpn_server_msg.op_write.path, offset, size);
 
   msg.type = XPN_SERVER_WRITE_FILE;
   memccpy(msg.u_st_xpn_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX-1);
