@@ -124,6 +124,14 @@ void nfi_do_operation (struct st_th th_arg)
     case op_statfs:
       ret = wrk->server->ops->nfi_statfs(wrk->server, wrk->arg.inf);
       break;
+
+    //Metadata
+    case op_read_mdata:
+      ret = wrk->server->ops->nfi_read_mdata(wrk->server, wrk->arg.url, wrk->arg.mdata);
+      break;
+    case op_write_mdata:
+      ret = wrk->server->ops->nfi_write_mdata(wrk->server, wrk->arg.url, wrk->arg.mdata, wrk->arg.mdata_only_file_size);
+      break;
   }
 
   wrk->arg.result = ret;
@@ -396,5 +404,39 @@ int nfi_worker_do_statfs (struct nfi_worker * wrk, struct nfi_info * inf)
   return 0;
 }
 
+int nfi_worker_do_read_mdata (struct nfi_worker *wrk, char * url, struct xpn_metadata *mdata)
+{
+  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_read_data] >> Begin\n", pthread_self());
+
+  // Pack request
+  wrk->arg.operation = op_read_mdata;
+  strcpy(wrk->arg.url, url);
+  wrk->arg.mdata = mdata;
+
+  // Do operation
+  nfiworker_launch(nfi_do_operation, wrk);
+
+  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_read_data] >> End\n", pthread_self());
+
+  return 0;
+}
+
+int nfi_worker_do_write_mdata (struct nfi_worker *wrk, char * url, struct xpn_metadata *mdata, int only_file_size)
+{
+  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_write_data] >> Begin\n", pthread_self());
+
+  // Pack request
+  wrk->arg.operation = op_write_mdata;
+  strcpy(wrk->arg.url, url);
+  wrk->arg.mdata = mdata;
+  wrk->arg.mdata_only_file_size = only_file_size;
+
+  // Do operation
+  nfiworker_launch(nfi_do_operation, wrk);
+
+  debug_info("[TH_ID=%lu] [NFI_OPS] [nfi_worker_do_write_data] >> End\n", pthread_self());
+
+  return 0;
+}
 
 /* ................................................................... */

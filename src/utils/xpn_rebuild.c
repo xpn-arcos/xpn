@@ -170,9 +170,9 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
             // Read in old_ranks
             if (rank_actual_to_old[rank] != -1) {
                 // Calculate the block
-                XpnCalculateBlockInvert(blocksize, replication_level, old_size, rank_actual_to_old[rank], offset_src,
+                XpnCalculateBlockInvert(blocksize, replication_level, old_size, rank_actual_to_old[rank], offset_src, 0,
                                         &offset_real, &replication);
-                XpnCalculateBlock(blocksize, replication_level, new_size, offset_real, replication, &offset_dest,
+                XpnCalculateBlock(blocksize, replication_level, new_size, offset_real, replication, 0, &offset_dest,
                                   &rank_to_send);
                 ret_2 = lseek64(fd_src, offset_src + HEADER_SIZE, SEEK_SET);
                 if (ret_2 < 0) {

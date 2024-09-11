@@ -31,11 +31,13 @@
      int     (*fs_low_creat   )(const char *, mode_t)             = creat ;
      int     (*fs_low_open    )(const char *, int, mode_t)        = (int (*)(const char *, int, mode_t))open ;
      int     (*fs_low_close   )(int)                              = close ;
+     int     (*fs_low_fsync   )(int)                              = fsync ;
      ssize_t (*fs_low_read    )(int, void*, size_t)               = read ;
      ssize_t (*fs_low_write   )(int, const void*, size_t)         = write ;
      off_t   (*fs_low_lseek   )(int, off_t, int)                  = lseek ;
      off64_t (*fs_low_lseek64 )(int, off64_t, int)                = lseek64 ;
      int     (*fs_low_stat    )(const char *, struct stat *)      = stat ;
+     int     (*fs_low_stat_dlsym    )(int, const char *, struct stat *)      = NULL ;
 
      int     (*fs_low_mkdir   )(const char *, mode_t)             = mkdir ;
      int     (*fs_low_rmdir   )(const char *)                     = rmdir ;
@@ -153,11 +155,12 @@ int  filesystem_low_set ( void * new_rtld )
      fs_low_creat   = (int     (*)(const char *, mode_t))              dlsym(DLSYM_RTLD, "creat") ;
      fs_low_open    = (int     (*)(const char *, int, mode_t))         dlsym(DLSYM_RTLD, "open") ;
      fs_low_close   = (int     (*)(int))                               dlsym(DLSYM_RTLD, "close") ;
+     fs_low_fsync   = (int     (*)(int))                               dlsym(DLSYM_RTLD, "fsync") ;
      fs_low_read    = (ssize_t (*)(int, void*, size_t))                dlsym(DLSYM_RTLD, "read") ;
      fs_low_write   = (ssize_t (*)(int, const void*, size_t))          dlsym(DLSYM_RTLD, "write") ;
      fs_low_lseek   = (off_t   (*)(int, off_t, int))                   dlsym(DLSYM_RTLD, "lseek");
      fs_low_lseek64 = (off64_t (*)(int, off64_t, int))                 dlsym(DLSYM_RTLD, "lseek64") ;
-     fs_low_stat    = (int     (*)(const char *, struct stat *))       dlsym(DLSYM_RTLD, "stat") ;
+     fs_low_stat_dlsym    = (int     (*)(int, const char *, struct stat *))       dlsym(DLSYM_RTLD, "__xstat") ;
 
      fs_low_mkdir   = (int     (*)(const char *, mode_t))              dlsym(DLSYM_RTLD, "mkdir") ;
      fs_low_rmdir   = (int     (*)(const char *))                      dlsym(DLSYM_RTLD, "rmdir") ;
@@ -321,6 +324,29 @@ int filesystem_close(int fd)
         //perror("close: ") ;
     }
     #endif
+
+    DEBUG_END();
+
+    // Return OK/KO
+    return ret;
+}
+
+int filesystem_fsync(int fd)
+{
+    int ret;
+
+    DEBUG_BEGIN();
+
+    // Check params
+    if (fd < 0) {
+        debug_warning("[FILE_POSIX]: fsync file with fd < 0\n");
+    }
+
+    // Try to fsync the file
+    ret = fs_low_fsync(fd);
+    if (ret < 0) {
+        debug_warning("[FILE_POSIX]: fsync(fd:%d) -> %d\n", fd, ret);
+    }
 
     DEBUG_END();
 
@@ -661,7 +687,11 @@ int filesystem_stat ( char * pathname, struct stat * sinfo )
     }
 
     // Try to stat the file
-    ret = fs_low_stat(pathname, sinfo);
+    if (fs_low_stat_dlsym != NULL){
+        ret = fs_low_stat_dlsym(0, pathname, sinfo);
+    }else{
+        ret = fs_low_stat(pathname, sinfo);
+    }
     if (ret < 0) {
         debug_warning("[FILE_POSIX]: stat(pathname:%s, sinfo:%p) -> %d\n", pathname, sinfo, ret);
         //perror("stat: ") ;

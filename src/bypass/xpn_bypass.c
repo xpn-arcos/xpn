@@ -43,6 +43,7 @@ static int xpn_adaptor_initCalled_getenv = 0; // env variable obtained
  */
 char *xpn_adaptor_partition_prefix = "/tmp/expand/"; // Original --> xpn://
 int   xpn_prefix_change_verified = 0;
+size_t   xpn_prefix_strlen = 12;
 
 
 /* ... Auxiliar functions / Funciones auxiliares ......................................... */
@@ -60,12 +61,11 @@ int is_xpn_prefix   ( const char * path )
     if (env_prefix != NULL)
     {
       xpn_adaptor_partition_prefix = env_prefix;
+      xpn_prefix_strlen = strlen(xpn_adaptor_partition_prefix);
     }
   }
-  
-  const char *prefix = (const char *)xpn_adaptor_partition_prefix;
 
-  return ( !strncmp(prefix, path, strlen(prefix)) && strlen(path) > strlen(prefix) );
+  return ( strlen(path) > xpn_prefix_strlen && !memcmp(xpn_adaptor_partition_prefix, path, xpn_prefix_strlen) );
 }
 
 /**
@@ -73,7 +73,7 @@ int is_xpn_prefix   ( const char * path )
  */
 const char * skip_xpn_prefix ( const char * path )
 {
-  return (const char *)(path + strlen(xpn_adaptor_partition_prefix));
+  return (const char *)(path + xpn_prefix_strlen);
 }
 
 
@@ -116,7 +116,7 @@ void fdstable_realloc ( void )
   {
     fdstable[i].type = FD_FREE;
     fdstable[i].real_fd = -1;
-    fdstable[i].is_file = -1;
+    // fdstable[i].is_file = -1;
   }
 
   debug_info("[BYPASS] << After fdstable_realloc....\n");
@@ -205,7 +205,7 @@ int fdstable_remove ( int fd )
   fd = fd - PLUSXPN;
   fdstable[fd].type    = FD_FREE;
   fdstable[fd].real_fd = -1;
-  fdstable[fd].is_file = -1;
+  // fdstable[fd].is_file = -1;
 
   if (fd < fdstable_first_free) {
     fdstable_first_free = fd;
@@ -218,7 +218,7 @@ int fdstable_remove ( int fd )
 
 int add_xpn_file_to_fdstable ( int fd )
 {
-  struct stat st;
+  // struct stat st;
   struct generic_fd virtual_fd;
   
   debug_info("[BYPASS] >> Begin add_xpn_file_to_fdstable....\n");
@@ -235,12 +235,12 @@ int add_xpn_file_to_fdstable ( int fd )
   } 
 
   // fstat(fd...
-  xpn_fstat(fd, &st);
+  // xpn_fstat(fd, &st);
 
   // setup virtual_fd
   virtual_fd.type    = FD_XPN;
   virtual_fd.real_fd = fd;
-  virtual_fd.is_file = (S_ISDIR(st.st_mode)) ? 0 : 1;
+  // virtual_fd.is_file = (S_ISDIR(st.st_mode)) ? 0 : 1;
 
   // insert into fdstable
   ret = fdstable_put ( virtual_fd );
@@ -338,7 +338,7 @@ int fdsdirtable_put ( DIR * dir )
 
   virtual_fd.type    = FD_XPN;
   virtual_fd.real_fd = fd;
-  virtual_fd.is_file = 0;
+  // virtual_fd.is_file = 0;
 
   // insert into the dirtable (and fdstable)
   for (int i = fdsdirtable_first_free; i < fdsdirtable_size; ++i)
@@ -824,14 +824,14 @@ ssize_t read ( int fd, void *buf, size_t nbyte )
     xpn_adaptor_keepInit ();
 
     // It is an XPN partition, so we redirect the syscall to expand syscall
-    if (virtual_fd.is_file == 0)
-    {
-      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
-      debug_info("[BYPASS] << After read...\n");
+    // if (virtual_fd.is_file == 0)
+    // {
+    //   debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+    //   debug_info("[BYPASS] << After read...\n");
 
-      errno = EISDIR;
-      return -1;
-    }
+    //   errno = EISDIR;
+    //   return -1;
+    // }
 
     debug_info("[BYPASS]\t try to xpn_read %d, %p, %ld\n", virtual_fd.real_fd, buf, nbyte);
 
@@ -872,14 +872,14 @@ ssize_t write ( int fd, const void *buf, size_t nbyte )
     xpn_adaptor_keepInit ();
 
     // It is an XPN partition, so we redirect the syscall to expand syscall
-    if (virtual_fd.is_file == 0)
-    {
-      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
-      debug_info("[BYPASS] << After write...\n");
+    // if (virtual_fd.is_file == 0)
+    // {
+    //   debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+    //   debug_info("[BYPASS] << After write...\n");
 
-      errno = EISDIR;
-      return -1;
-    }
+    //   errno = EISDIR;
+    //   return -1;
+    // }
 
     debug_info("[BYPASS]\t try to xpn_write %d, %p, %ld\n", virtual_fd.real_fd, buf, nbyte);
 
@@ -921,14 +921,14 @@ ssize_t pread ( int fd, void *buf, size_t count, off_t offset )
     xpn_adaptor_keepInit ();
 
     // It is an XPN partition, so we redirect the syscall to expand syscall
-    if (virtual_fd.is_file == 0)
-    {
-      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
-      debug_info("[BYPASS] << After pread...\n");
+    // if (virtual_fd.is_file == 0)
+    // {
+    //   debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+    //   debug_info("[BYPASS] << After pread...\n");
 
-      errno = EISDIR;
-      return -1;
-    }
+    //   errno = EISDIR;
+    //   return -1;
+    // }
 
     debug_info("[BYPASS]\t try to xpn_read %d, %p, %ld, %ld\n", virtual_fd.real_fd, buf, count, offset);
 
@@ -976,14 +976,14 @@ ssize_t pwrite ( int fd, const void *buf, size_t count, off_t offset )
     xpn_adaptor_keepInit ();
 
     // It is an XPN partition, so we redirect the syscall to expand syscall
-    if (virtual_fd.is_file == 0)
-    {
-      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
-      debug_info("[BYPASS] << After pwrite...\n");
+    // if (virtual_fd.is_file == 0)
+    // {
+    //   debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+    //   debug_info("[BYPASS] << After pwrite...\n");
 
-      errno = EISDIR;
-      return -1;
-    }
+    //   errno = EISDIR;
+    //   return -1;
+    // }
 
     debug_info("[BYPASS]\t try to xpn_write %d, %p, %ld, %ld\n", virtual_fd.real_fd, buf, count, offset);
 
@@ -1031,14 +1031,14 @@ ssize_t pread64 ( int fd, void *buf, size_t count, off_t offset )
     xpn_adaptor_keepInit ();
 
     // It is an XPN partition, so we redirect the syscall to expand syscall
-    if (virtual_fd.is_file == 0)
-    {
-      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
-      debug_info("[BYPASS] << After pread64...\n");
+    // if (virtual_fd.is_file == 0)
+    // {
+    //   debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+    //   debug_info("[BYPASS] << After pread64...\n");
 
-      errno = EISDIR;
-      return -1;
-    }
+    //   errno = EISDIR;
+    //   return -1;
+    // }
 
     debug_info("[BYPASS]\t try to xpn_read %d, %p, %ld, %ld\n", virtual_fd.real_fd, buf, count, offset);
 
@@ -1086,14 +1086,14 @@ ssize_t pwrite64 ( int fd, const void *buf, size_t count, off_t offset )
     xpn_adaptor_keepInit ();
 
     // It is an XPN partition, so we redirect the syscall to expand syscall
-    if (virtual_fd.is_file == 0)
-    {
-      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
-      debug_info("[BYPASS] << After pwrite64...\n");
+    // if (virtual_fd.is_file == 0)
+    // {
+    //   debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+    //   debug_info("[BYPASS] << After pwrite64...\n");
 
-      errno = EISDIR;
-      return -1;
-    }
+    //   errno = EISDIR;
+    //   return -1;
+    // }
 
     debug_info("[BYPASS]\t try to xpn_write %d, %p, %ld, %ld\n", virtual_fd.real_fd, buf, count, offset);
 
@@ -1894,13 +1894,13 @@ size_t fread ( void *ptr, size_t size, size_t nmemb, FILE *stream )
     xpn_adaptor_keepInit ();
 
     // It is an XPN partition, so we redirect the syscall to expand syscall
-    if (virtual_fd.is_file == 0) {
-      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
-      debug_info("[BYPASS] << After fread...\n");
+    // if (virtual_fd.is_file == 0) {
+    //   debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+    //   debug_info("[BYPASS] << After fread...\n");
 
-      errno = EISDIR;
-      return -1;
-    }
+    //   errno = EISDIR;
+    //   return -1;
+    // }
 
     int buf_size = size * nmemb;
 
@@ -1946,13 +1946,13 @@ size_t fwrite ( const void *ptr, size_t size, size_t nmemb, FILE *stream )
     xpn_adaptor_keepInit ();
 
     // It is an XPN partition, so we redirect the syscall to expand syscall
-    if (virtual_fd.is_file == 0) {
-      debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
-      debug_info("[BYPASS] << After fwrite...\n");
+    // if (virtual_fd.is_file == 0) {
+    //   debug_error("[BYPASS:%s:%d] Error: is not a file\n", __FILE__, __LINE__);
+    //   debug_info("[BYPASS] << After fwrite...\n");
 
-      errno = EISDIR;
-      return -1;
-    }
+    //   errno = EISDIR;
+    //   return -1;
+    // }
 
     int buf_size = size * nmemb;
 

@@ -27,7 +27,7 @@
 #ifdef ENABLE_MPI_SERVER
 #include "nfi_mpi_server_comm.h"
 #endif
-#ifdef ENABLE_MPI_SERVER
+#ifdef ENABLE_SCK_SERVER
 #include "nfi_sck_server_comm.h"
 #endif
 
@@ -42,6 +42,7 @@
 int nfi_xpn_server_comm_init ( struct nfi_xpn_server *params )
 {
   int ret = -1;
+  XPN_PROFILER_DEFAULT_BEGIN();
 
   switch (params->server_type)
   {
@@ -61,12 +62,14 @@ int nfi_xpn_server_comm_init ( struct nfi_xpn_server *params )
     break;
   }
 
+  XPN_PROFILER_DEFAULT_END_CUSTOM("%s", params->srv_name);
   return ret;
 }
 
 int nfi_xpn_server_comm_destroy ( struct nfi_xpn_server *params )
 {
   int ret = -1;
+  XPN_PROFILER_DEFAULT_BEGIN();
 
   switch (params->server_type)
   {
@@ -86,12 +89,14 @@ int nfi_xpn_server_comm_destroy ( struct nfi_xpn_server *params )
     break;
   }
 
+  XPN_PROFILER_DEFAULT_END_CUSTOM("%s", params->srv_name);
   return ret;
 }
 
 int nfi_xpn_server_comm_connect ( struct nfi_xpn_server *params )
 {
   int ret = -1;
+  XPN_PROFILER_DEFAULT_BEGIN();
 
   switch (params->server_type)
   {
@@ -111,12 +116,14 @@ int nfi_xpn_server_comm_connect ( struct nfi_xpn_server *params )
     break;
   }
 
+  XPN_PROFILER_DEFAULT_END_CUSTOM("%s", params->srv_name);
   return ret;
 }
 
 int nfi_xpn_server_comm_disconnect ( struct nfi_xpn_server *params )
 {
   int ret = -1;
+  XPN_PROFILER_DEFAULT_BEGIN();
 
   switch (params->server_type)
   {
@@ -136,12 +143,14 @@ int nfi_xpn_server_comm_disconnect ( struct nfi_xpn_server *params )
     break;
   }
 
+  XPN_PROFILER_DEFAULT_END_CUSTOM("%s", params->srv_name);
   return ret;
 }
 
 int nfi_xpn_server_comm_write_operation ( struct nfi_xpn_server *params, int op)
 {
   int ret = -1;
+  XPN_PROFILER_DEFAULT_BEGIN();
 
   switch (params->server_type)
   {
@@ -161,12 +170,14 @@ int nfi_xpn_server_comm_write_operation ( struct nfi_xpn_server *params, int op)
     break;
   }
 
+  XPN_PROFILER_DEFAULT_END_CUSTOM("%s, %s", params->srv_name, xpn_server_op2string(op));
   return ret;
 }
 
 ssize_t nfi_xpn_server_comm_write_data ( struct nfi_xpn_server *params, char *data, ssize_t size )
 {
   ssize_t ret = -1;
+  XPN_PROFILER_DEFAULT_BEGIN();
 
   switch (params->server_type)
   {
@@ -186,12 +197,14 @@ ssize_t nfi_xpn_server_comm_write_data ( struct nfi_xpn_server *params, char *da
     break;
   }
 
+  XPN_PROFILER_DEFAULT_END_CUSTOM("%s, %ld", params->srv_name, size);
   return ret;
 }
 
 ssize_t nfi_xpn_server_comm_read_data ( struct nfi_xpn_server *params, char *data, ssize_t size )
 {
   ssize_t ret = -1;
+  XPN_PROFILER_DEFAULT_BEGIN();
 
   switch (params->server_type)
   {
@@ -211,6 +224,7 @@ ssize_t nfi_xpn_server_comm_read_data ( struct nfi_xpn_server *params, char *dat
     break;
   }
 
+  XPN_PROFILER_DEFAULT_END_CUSTOM("%s, %ld", params->srv_name, size);
   return ret;
 }
 
