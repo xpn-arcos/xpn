@@ -31,6 +31,7 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
+  #include <sys/time.h>
 
 
   /* ... Const / Const ................................................. */
@@ -72,6 +73,10 @@
     struct timeval* timet
   );
 
+  long TIME_MISC_TimevaltoMicroLong
+  (
+    struct timeval* timet
+  );
 
   /* ................................................................... */
 

@@ -33,17 +33,293 @@
  * @param local_offset[out] The offset in the server.
  * @param serv[out] The server in which is located the given offset.
  */
-void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t offset, int replication, off_t *local_offset, int *serv)
+void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t offset, int replication, int first_node, off_t *local_offset, int *serv)
 {
 	off_t block = offset / block_size;
 	off_t block_replication = block * (replication_level + 1) + replication;
 	off_t block_line = block_replication / nserv;
 	
 	// Calculate the server	
-	(*serv) = (block_replication) % nserv;
+	(*serv) = (block_replication + first_node) % nserv;
 	
 	// Calculate the offset in the server
 	(*local_offset) = block_line * block_size + (offset % block_size);
+}
+
+void XpnCalculateBlockMdata(struct xpn_metadata *mdata, off_t offset, int replication, off_t *local_offset, int *serv)
+{
+	// Without expand or shrink
+	if (mdata->data_nserv[1] == 0){
+		XpnCalculateBlock(mdata->block_size, mdata->replication_level, mdata->data_nserv[0], offset, replication, mdata->first_node, local_offset, serv);
+		return;
+	}
+
+	int actual_index = -1;
+	off_t block_num = offset / mdata->block_size;
+
+	int is_shrink = 0;
+	int is_expand = 0;
+	int aux_is_shrink = 0;
+	int aux_is_expand = 0;
+	int have_greatter_shrink = 0;
+
+	off_t acum_local_offset = 0;
+	int prev_data_nserv = 0;
+	off_t prev_block_num = 0;
+	int aux_serv = 0;
+	off_t aux_local_offset = 0;
+	off_t array_local_offset[XPN_METADATA_MAX_RECONSTURCTIONS] = {0};
+
+	for (int i = 0; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++)
+	{	
+		// stop when there are no more reconfigurations
+		if (mdata->data_nserv[i] == 0) break;
+		// negative servers is calculated in the positive next serv
+		if (mdata->data_nserv[i] < 0) continue;
+
+		// calculate actual conf and prev
+		is_shrink = 0;
+		is_expand = 0;
+		if (i > 0 && mdata->data_nserv[i-1] < 0){
+			is_shrink = 1;
+		}else{
+			is_expand = 1;
+		}
+
+		// calculate if the block is in the actual data_nserv
+		if (mdata->data_nserv[i+1] > 0){
+			if (actual_index == -1 && (block_num > mdata->offsets[i] || block_num == 0) && (block_num <= mdata->offsets[i+1] || mdata->offsets[i+1] == 0)){
+				actual_index = i;
+			}
+		}else{
+			if (actual_index == -1 && (block_num > mdata->offsets[i] || block_num == 0) && (block_num <= mdata->offsets[i+2] || mdata->offsets[i+2] == 0)){
+				actual_index = i;
+			}
+		}
+
+		// check offset for expansions to add or substract
+		prev_data_nserv = -1;
+		if (is_expand){
+			if (i-1 >= 0){
+				prev_data_nserv = mdata->data_nserv[i-1];
+				if (i-1 == 0){
+					prev_block_num = mdata->offsets[i];
+				}else{
+					prev_block_num = mdata->offsets[i] - mdata->offsets[i-1] - 1;
+				}
+				// if prev shrink count that blocks
+				if (i-2 >= 0 && mdata->data_nserv[i-2] < 0){
+					prev_block_num += mdata->offsets[i-2];
+				}
+			}
+		}else{
+			if (i-2 >= 0){
+				prev_data_nserv = mdata->data_nserv[i-2];
+				if (i-2 == 0){
+					prev_block_num = mdata->offsets[i];
+				}else{
+					prev_block_num = mdata->offsets[i] - mdata->offsets[i-2] - 1;
+				}
+				// if prev shrink count that blocks
+				if (i-3 >= 0 && mdata->data_nserv[i-3] < 0){
+					prev_block_num += mdata->offsets[i-3];
+				}
+			}
+		}
+
+		// Calculate offset of segment
+		if (prev_data_nserv != -1){
+			XpnCalculateBlock(mdata->block_size, mdata->replication_level, prev_data_nserv, prev_block_num*mdata->block_size, mdata->replication_level, mdata->first_node, &aux_local_offset, &aux_serv);
+			acum_local_offset += aux_local_offset + mdata->block_size; 
+			array_local_offset[i] = acum_local_offset;
+		}
+
+		
+
+		// Calculate local_offset and serv
+		if (actual_index != -1 && i == actual_index){
+			// change offset to new segment of blocks
+			if (i != 0){
+				offset-= mdata->block_size*(mdata->offsets[i] + 1);
+				if (is_shrink){
+					offset+= mdata->block_size*(mdata->offsets[i-1]);
+				}
+			}
+			XpnCalculateBlock(mdata->block_size, mdata->replication_level, mdata->data_nserv[i], offset, replication, mdata->first_node, local_offset, serv);
+			// Add offset
+			*local_offset += array_local_offset[i];
+			// Substract offset if necesary
+			for (int j = i; j >= 0; j--)
+			{
+
+				if (mdata->data_nserv[j] == 0) break;
+				aux_is_shrink = 0;
+				aux_is_expand = 0;
+				if (j > 0 && mdata->data_nserv[j-1] < 0){
+					aux_is_shrink = 1;
+				}else{
+					aux_is_expand = 1;
+				}
+				
+				if (aux_is_expand == 1){
+					if (j-1 >= 0 && (*serv) > (mdata->data_nserv[j-1] - 1) && (*serv) <= (mdata->data_nserv[j] - 1)){
+						*local_offset -= array_local_offset[j];
+						break;
+					}
+				}
+				else if (aux_is_shrink == 1){
+					if (j-3 >= 0 && mdata->data_nserv[j-3] > 0)
+					if (j-2 >= 0 && (*serv) == (mdata->data_nserv[j] - 1)){
+						*local_offset -= array_local_offset[j-2];
+						break;
+					}
+				}
+			}
+
+
+		}else{
+			if (is_shrink){
+				// Recalculate to reconfigure shrink
+				if ((*serv) == (abs(mdata->data_nserv[i-1]) - 1)){
+					XpnCalculateBlock(mdata->block_size, mdata->replication_level, mdata->data_nserv[i], *local_offset, replication, mdata->first_node, local_offset, serv);
+					
+					// Add or substract offset
+					*local_offset += array_local_offset[i];
+					aux_local_offset = *local_offset;
+
+					// Reduce offset
+					if (i-3 >= 0 && mdata->data_nserv[i-3] > 0)
+					if (i-2 >= 0 && (*serv) == (mdata->data_nserv[i] - 1)){
+						*local_offset -= array_local_offset[i-2];
+					}
+					
+				}else if ((*serv) > (abs(mdata->data_nserv[i-1]) - 1)){
+					(*serv)--;
+				}
+			}
+		}
+		
+
+		// if shrink greater than the actual config change block
+		have_greatter_shrink = 0;
+		for (int j = i; j < XPN_METADATA_MAX_RECONSTURCTIONS; j++)
+		{
+			if (mdata->data_nserv[j] == 0) break;
+			if (mdata->data_nserv[j] < 0) have_greatter_shrink = 1;
+		}
+
+		// if not greatter shrink and block calculated break
+		if (i == actual_index && have_greatter_shrink == 0){
+			break;
+		}
+	}
+}
+
+void XpnPrintBlockDistribution(int blocks, struct xpn_metadata *mdata)
+{
+	off_t offset, local_offset;
+	int serv, max_server = 0, min_server = 99999999;
+	int check_sum_1 = 0, check_sum_2 = 0;
+	for (int i = 0; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++)
+	{
+		if (mdata->data_nserv[i] > max_server){
+			max_server = mdata->data_nserv[i];
+		}
+		if (mdata->data_nserv[i] > 0 && mdata->data_nserv[i] < min_server){
+			min_server = mdata->data_nserv[i];
+		}
+	}
+	
+	int **queues = malloc(max_server*sizeof(int*));
+	int max_per_server = (blocks * (mdata->replication_level+1)) + 1; 
+	for (int i = 0; i < max_server; i++)
+	{
+		queues[i] = malloc(max_per_server*sizeof(int));
+		for (int j = 0; j < max_per_server; j++)
+		{
+			queues[i][j] = -1;
+		}
+	}
+	
+	for (int i = 0; i < blocks; i++)
+	{
+		offset = i * mdata->block_size;
+		check_sum_1 += i;
+		for (int j = 0; j < (mdata->replication_level+1); j++)
+		{
+			XpnCalculateBlockMdata(mdata, offset, j, &local_offset, &serv);
+			local_offset /= mdata->block_size;
+			queues[serv][local_offset]=i;
+		}
+	}	
+
+	printf("Header\n");
+	// Header
+	for (int i = 0; i < max_server; i++)
+	{
+		printf("Serv %*d", 2, i);
+		if (i != max_server-1) printf(" | ");
+	}
+	printf("\n");
+	for (int i = 0; i < max_server; i++)
+	{
+		printf("-------");
+		if (i != max_server-1) printf(" | ");
+	}
+	printf("\n");
+
+
+	// Body
+	int finish = 0;
+	for (int j = 0; j < max_per_server; j++)
+	{	
+		finish = 0;
+		for (int i = 0; i < max_server; i++)
+		{	
+			if (queues[i][j]<0){
+				printf("%*s",7," ");
+			}else{
+				printf("%*d",7,queues[i][j]);
+				check_sum_2+=queues[i][j];
+				finish = 1;
+			}
+			if (i != max_server-1) printf(" | ");
+		}
+		printf("\n");
+		if (finish == 0){
+			break;
+		}
+	}
+
+	if (check_sum_1 == check_sum_2){
+		printf("Correct: All blocks are present\n");
+	}else{
+		printf("Error: not all blocks are present\n");
+		printf("Mising blocks: ");
+		for (int i = 0; i < blocks; i++)
+		{
+			int have_block = 0;
+			for (int y = 0; y < max_per_server; y++)
+			{
+				for (int x = 0; x < max_server; x++)
+				{
+					if (queues[x][y] == i){
+						have_block = 1;
+					}
+				}
+			}
+			if (have_block == 0){
+				printf("%d", i);
+			}
+		}
+		printf("\n");
+	}
+
+	for (int i = 0; i < max_server; i++)
+	{
+		free(queues[i]);
+	}
+	free(queues);
 }
 
 /**
@@ -56,10 +332,10 @@ void XpnCalculateBlock(int block_size, int replication_level, int nserv, off_t o
  * @param local_offset[in] The offset in the server.
  * @param offset[out] The original offset.
  */
-void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, int serv, off_t local_offset, off_t *offset, int *replication)
+void XpnCalculateBlockInvert(int block_size, int replication_level, int nserv, int serv, off_t local_offset, int first_node, off_t *offset, int *replication)
 {
     off_t block_line = local_offset / block_size;
-	off_t block_replication = block_line * nserv + serv;
+	off_t block_replication = block_line * nserv + (((serv - first_node) % nserv + nserv) % nserv);
 	// round down
     off_t block = block_replication / (replication_level + 1);
 	// Calculate the offset
@@ -86,7 +362,7 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
 	int replication = 0;
 	if (serv_client != -1){
 		do{
-			XpnCalculateBlock(xpn_file_table[fd]->block_size, xpn_file_table[fd]->part->replication_level, xpn_file_table[fd]->part->data_nserv, offset, replication, local_offset, serv);
+			XpnCalculateBlockMdata(xpn_file_table[fd]->mdata, offset, replication, local_offset, serv);
 			if ((*serv) == serv_client && xpn_file_table[fd]->part->data_serv[(*serv)].error != -1 ){
 				return 0;
 			}
@@ -99,7 +375,7 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
 		replication = rand() % (xpn_file_table[fd]->part->replication_level + 1);
 
 	do{
-		XpnCalculateBlock(xpn_file_table[fd]->block_size, xpn_file_table[fd]->part->replication_level, xpn_file_table[fd]->part->data_nserv, offset, replication, local_offset, serv);
+		XpnCalculateBlockMdata(xpn_file_table[fd]->mdata, offset, replication, local_offset, serv);
 		if (xpn_file_table[fd]->part->replication_level != 0)
 			replication = (replication + 1) % (xpn_file_table[fd]->part->replication_level + 1);
 		retries++;
@@ -121,7 +397,7 @@ int XpnReadGetBlock(int fd, off_t offset, int serv_client, off_t *local_offset, 
  */
 int XpnWriteGetBlock(int fd, off_t offset, int replication, off_t *local_offset, int *serv)
 {
-	XpnCalculateBlock(xpn_file_table[fd]->block_size, xpn_file_table[fd]->part->replication_level, xpn_file_table[fd]->part->data_nserv, offset, replication, local_offset, serv);
+	XpnCalculateBlockMdata(xpn_file_table[fd]->mdata, offset, replication, local_offset, serv);
 	return xpn_file_table[fd]->part->data_serv[*serv].error;
 }
 
@@ -327,7 +603,7 @@ void XpnWriteBlocksAllInOne(int fd, const void *buffer, size_t size, off_t offse
 void *XpnReadBlocks(int fd, const void *buffer, size_t size, off_t offset, int serv_client, struct nfi_worker_io ***io_out, int **ion_out, int num_servers)
 {	
 	int optimize = 1; // Optimize by default
-	if (xpn_file_table[fd]->part->replication_level > 0){
+	if (xpn_file_table[fd]->part->replication_level > 0 || xpn_file_table[fd]->mdata->data_nserv[1] != 0){
     	optimize = 0; // Do not optimize
 	}
 
@@ -368,7 +644,7 @@ void XpnReadBlocksFinish(int fd, void *buffer, size_t size, off_t offset, int se
 	size_t count;
 
 	int optimize = 1; // Optimize by default
-	if (xpn_file_table[fd]->part->replication_level > 0){
+	if (xpn_file_table[fd]->part->replication_level > 0 || xpn_file_table[fd]->mdata->data_nserv[1] != 0){
     	optimize = 0; // Do not optimize
 	}
 
@@ -525,7 +801,7 @@ ssize_t XpnGetRealFileSize(struct xpn_partition *part, struct nfi_attr *attr, in
 	int replication;
 	if (offset > 0){
 		// The fix -1 and then +1 is because in the size of blocksize it calculate the next block, and with the -1 calculate the correct block that then with +1 is corrected
-		XpnCalculateBlockInvert(part->block_size, part->replication_level, part->data_nserv, serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE - 1, &offset, &replication);
+		XpnCalculateBlockInvert(part->block_size, part->replication_level, part->data_nserv, serv_to_calc, attr[serv_to_calc].at_size - XPN_HEADER_SIZE - 1, 0, &offset, &replication);
 		offset += 1;
 	}else{
 		offset = 0;

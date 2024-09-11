@@ -57,13 +57,16 @@
 
   int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {  
+    debug_info("entry %s is_file %d dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d \n",entry, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
     int  ret;
 
     int fd_src, fd_dest;
     char *buf ;
     int buf_len;
     off64_t offset_src ;
+    off64_t ret_2;
     off_t local_offset;
+    off_t local_size = 0;
     int local_server;
     int i;
     ssize_t read_size, write_size;
@@ -85,7 +88,7 @@
     sprintf( dest_path, "%s/%s", dest_prefix, aux_entry );
 
     if (rank == 0){
-      printf("%s\n", aux_entry);
+      printf("%s -> %s\n", src_path, dest_path);
     }
 
     ret = stat(src_path, &st);
@@ -97,7 +100,7 @@
     if (!is_file)
     {
       ret = mkdir(dest_path, st.st_mode);
-      if ( ret < 0 )
+      if ( ret < 0 && errno != EEXIST)
       {
         perror("mkdir: ");
         free(buf) ;
@@ -123,6 +126,9 @@
       }
 
       // Write header
+      struct xpn_metadata mdata;
+      XpnCreateMetadataExtern(&mdata, dest_path, size, blocksize, replication_level);
+
       char header_buf [HEADER_SIZE];
       memset(header_buf, 0, HEADER_SIZE);
       write_size = filesystem_write(fd_dest, header_buf, HEADER_SIZE);
@@ -137,11 +143,10 @@
       { 
         for (i = 0; i <= replication_level; i++)
         {
-          XpnCalculateBlock(blocksize, replication_level, size, offset_src, i, &local_offset, &local_server);
+          XpnCalculateBlockMdata(&mdata, offset_src, i, &local_offset, &local_server);
 
           if (local_server == rank)
           {
-            off64_t ret_2;
             ret_2 = lseek64(fd_src, offset_src, SEEK_SET) ;
             if (ret_2 < 0) {
               perror("lseek: ");
@@ -162,15 +167,55 @@
               perror("write: ");
               goto finish_copy;
             }
+            local_size += write_size;
           }
         }
         
         offset_src+=blocksize;
       }
-      while(read_size > 0);
+      while(write_size > 0);
+
 finish_copy:
-      close(fd_src);
-      close(fd_dest);
+      // Update file size
+      mdata.file_size = st.st_size;
+      // Write mdata only when necesary
+      int write_mdata = 0;
+      int master_dir = hash(dest_path, size, 0);
+      int has_master_dir = 0;
+      int aux_serv;
+      for (int i = 0; i < replication_level+1; i++)
+      { 
+        aux_serv = ( mdata.first_node + i ) % size;
+        if (aux_serv == rank){
+          write_mdata = 1;
+          break;
+        }
+      }
+      for (int i = 0; i < replication_level+1; i++)
+      { 
+        aux_serv = ( master_dir + i ) % size;
+        if (aux_serv == rank){
+          has_master_dir = 1;
+          break;
+        }
+      }
+      
+      if (write_mdata == 1){
+        ret_2 = lseek64(fd_dest, 0, SEEK_SET);
+        write_size = filesystem_write(fd_dest, &mdata, sizeof(struct xpn_metadata));
+        if (write_size != sizeof(struct xpn_metadata)){
+          perror("write: ");
+          free(buf) ;
+          return -1;
+        }
+        local_size += write_size;
+      }
+
+      filesystem_close(fd_src);
+      filesystem_close(fd_dest);
+      if (local_size == 0 && has_master_dir == 0){
+        filesystem_unlink(dest_path);
+      }
     }
     
     free(buf);

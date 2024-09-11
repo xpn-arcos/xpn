@@ -159,6 +159,7 @@ int xpn_server_up ( void )
     int server_socket;
     int connection_socket;
     int recv_code = 0;
+    int await_stop = 0;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> Begin\n", 0);
 
@@ -195,6 +196,7 @@ int xpn_server_up ( void )
         return -1;
     }
 
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Control socket initialization\n", 0);
     ret = socket_server_create(&server_socket);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
@@ -204,6 +206,7 @@ int xpn_server_up ( void )
     the_end = 0;
     while (!the_end)
     {
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Listening to conections\n", 0);
         ret = socket_server_accept(server_socket, &connection_socket);
         if (ret < 0) continue;
 
@@ -219,8 +222,12 @@ int xpn_server_up ( void )
                 break;
 
             case SOCKET_FINISH_CODE:
+            case SOCKET_FINISH_CODE_AWAIT:
                 xpn_server_finish();
                 the_end = 1;
+                if (recv_code == SOCKET_FINISH_CODE_AWAIT){
+                    await_stop = 1;
+                }
                 break;
 
             default:
@@ -229,10 +236,17 @@ int xpn_server_up ( void )
                 break;
         }
 
-        socket_close(connection_socket);
+        if (await_stop == 0){
+            socket_close(connection_socket);
+        }
     }
 
-    close(server_socket);
+    socket_close(server_socket);
+
+    if (await_stop == 1){
+        socket_send(connection_socket, &recv_code, sizeof(recv_code));
+        socket_close(connection_socket);
+    }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> End\n", 0);
     return 0;
@@ -316,10 +330,12 @@ int xpn_server_down ( void )
     FILE *file;
     int ret;
     int buffer = SOCKET_FINISH_CODE;
+    if (params.await_stop == 1){
+        buffer = SOCKET_FINISH_CODE_AWAIT;
+    }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] >> Begin\n", 0);
 
-    printf(" * Stopping server (%s)\n", srv_name);
     /*
     printf("\n");
     printf(" ----------------\n");
@@ -327,8 +343,6 @@ int xpn_server_down ( void )
     printf(" ----------------\n");
     printf("\n");
     */
-
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] MPI_Init\n", 0);
 
     // Open host file
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Open host file %s\n", 0, params.shutdown_file);
@@ -339,22 +353,52 @@ int xpn_server_down ( void )
         return -1;
     }
 
+    int num_serv = 0;
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
-        int connection_socket;
-        ret = socket_client_connect(srv_name, &connection_socket);
+        num_serv ++;
+    }
+
+    rewind(file);
+    int *sockets = malloc(num_serv * sizeof(int));
+    int i = 0;
+    while (fscanf(file, "%[^\n] ", srv_name) != EOF)
+    {
+        printf(" * Stopping server (%s)\n", srv_name);
+        ret = socket_client_connect(srv_name, &sockets[i]);
         if (ret < 0) {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);
             continue;
         }
 
-        ret = socket_send(connection_socket, &buffer, sizeof(buffer));
+        ret = socket_send(sockets[i], &buffer, sizeof(buffer));
         if (ret < 0) {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, srv_name);
         }
+        
+        if (params.await_stop == 0){
+            socket_close(sockets[i]);
+        }
 
-        socket_close(connection_socket);
+        i++;
     }
+
+    rewind(file);
+    i = 0;
+    while (fscanf(file, "%[^\n] ", srv_name) != EOF)
+    {
+        if (params.await_stop == 1){
+            ret = socket_recv(sockets[i], &buffer, sizeof(buffer));
+            if (ret < 0) {
+                printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, srv_name);
+            }
+            socket_close(sockets[i]);
+        }
+
+        i++;
+    }
+
+    free(sockets);
 
     // Close host file
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Close host file\n", 0);

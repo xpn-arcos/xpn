@@ -23,26 +23,35 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "base/path_misc.h"
+      #include <libgen.h>
 
 
    /* ... Functions / Funciones ......................................... */
 
 
       //calculo del numero de servidor
-      int hash(__attribute__((__unused__)) char *file, __attribute__((__unused__)) int nServ)
+      int hash(const char *path, int nServ, int isfile)
       {
-        /*int i,max;
+        int i,max;
         int unsigned num;
+        char *aux_file;
+        char file[PATH_MAX];
+        strncpy(file, path, PATH_MAX-1);
 
-        num=0;
-        max=strlen(file)-1;
-        for(i=0;i<max;i++){
-              num=(int)file[i]+num;
+        // Get file name
+        if (isfile == 1){
+              aux_file = basename(file);
+        }else{
+              aux_file = dirname(file);
+              aux_file = basename(aux_file);
         }
-        return (int)num%nServ;*/
-
-        return 0;
-      }
+        num = 0;
+        max = strlen(aux_file);
+        for (i = 0; i < max; i++) {
+              num += (int)aux_file[i];
+        }
+        return (int)num % nServ;
+     }
 
 
       int getFirstDir(char *dir, char *path)

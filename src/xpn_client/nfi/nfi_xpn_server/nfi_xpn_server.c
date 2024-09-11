@@ -59,65 +59,77 @@ int nfi_write_operation ( struct nfi_xpn_server *params, struct st_xpn_server_ms
     //File API
     case XPN_SERVER_OPEN_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] OPEN operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_open), sizeof(struct st_xpn_server_path_flags));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_open), sizeof(head->u_st_xpn_server_msg.op_open));
       break;
     case XPN_SERVER_CREAT_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] CREAT operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_creat), sizeof(struct st_xpn_server_path_flags));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_creat), sizeof(head->u_st_xpn_server_msg.op_creat));
       break;
     case XPN_SERVER_READ_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] READ operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_read), sizeof(struct st_xpn_server_rw));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_read), sizeof(head->u_st_xpn_server_msg.op_read));
       break;
     case XPN_SERVER_WRITE_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] WRITE operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write), sizeof(struct st_xpn_server_rw));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write), sizeof(head->u_st_xpn_server_msg.op_write));
       break;
     case XPN_SERVER_CLOSE_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] CLOSE operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_close), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_close), sizeof(head->u_st_xpn_server_msg.op_close));
       break;
     case XPN_SERVER_RM_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] RM operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rm), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rm), sizeof(head->u_st_xpn_server_msg.op_rm));
       break;
     case XPN_SERVER_RM_FILE_ASYNC:
       debug_info("[NFI_XPN] [nfi_write_operation] RM_ASYNC operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rm), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rm), sizeof(head->u_st_xpn_server_msg.op_rm));
       break;
     case XPN_SERVER_RENAME_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] RENAME operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rename), sizeof(struct st_xpn_server_rename));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rename), sizeof(head->u_st_xpn_server_msg.op_rename));
       break;
     case XPN_SERVER_GETATTR_FILE:
       debug_info("[NFI_XPN] [nfi_write_operation] GETATTR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_getattr), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_getattr), sizeof(head->u_st_xpn_server_msg.op_getattr));
       break;
 
     //Directory API
     case XPN_SERVER_MKDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] MDKIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_mkdir), sizeof(struct st_xpn_server_path_flags));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_mkdir), sizeof(head->u_st_xpn_server_msg.op_mkdir));
       break;
     case XPN_SERVER_OPENDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] OPENDIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_opendir), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_opendir), sizeof(head->u_st_xpn_server_msg.op_opendir));
       break;
     case XPN_SERVER_READDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] READDIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_readdir), sizeof(struct st_xpn_server_readdir));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_readdir), sizeof(head->u_st_xpn_server_msg.op_readdir));
       break;
     case XPN_SERVER_CLOSEDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] CLOSEDIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_closedir), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_closedir), sizeof(head->u_st_xpn_server_msg.op_closedir));
       break;
     case XPN_SERVER_RMDIR_DIR:
       debug_info("[NFI_XPN] [nfi_write_operation] RMDIR operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(head->u_st_xpn_server_msg.op_rmdir));
       break;
     case XPN_SERVER_RMDIR_DIR_ASYNC:
       debug_info("[NFI_XPN] [nfi_write_operation] RMDIR_ASYNC operation\n");
-      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(struct st_xpn_server_path));
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_rmdir), sizeof(head->u_st_xpn_server_msg.op_rmdir));
+      break;
+    case XPN_SERVER_READ_MDATA:
+      debug_info("[NFI_XPN] [nfi_write_operation] READ_MDATA operation\n");
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_read_mdata), sizeof(head->u_st_xpn_server_msg.op_read_mdata));
+      break;
+    case XPN_SERVER_WRITE_MDATA:
+      debug_info("[NFI_XPN] [nfi_write_operation] WRITE_MDATA operation\n");
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write_mdata), sizeof(head->u_st_xpn_server_msg.op_write_mdata));
+      break;
+    case XPN_SERVER_WRITE_MDATA_FILE_SIZE:
+      debug_info("[NFI_XPN] [nfi_write_operation] WRITE_MDATA_FILE_SIZE operation\n");
+      ret = nfi_xpn_server_comm_write_data(params, (char *)&(head->u_st_xpn_server_msg.op_write_mdata_file_size), sizeof(head->u_st_xpn_server_msg.op_write_mdata_file_size));
       break;
   }
 
@@ -293,6 +305,9 @@ int nfi_xpn_server_init ( char *url, struct nfi_server *serv, int server_type )
 
   serv->ops->nfi_statfs     = nfi_xpn_server_statfs;
 
+  serv->ops->nfi_write_mdata    = nfi_xpn_server_write_mdata;
+  serv->ops->nfi_read_mdata     = nfi_xpn_server_read_mdata;
+
   // parse url...
   ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
   if (ret < 0)
@@ -331,6 +346,19 @@ int nfi_xpn_server_init ( char *url, struct nfi_server *serv, int server_type )
   {
     server_aux->xpn_thread = atoi(env_thread);
     serv->xpn_thread = atoi(env_thread);
+  }
+
+  // session mode
+  serv->xpn_session_file = 0;
+  char *env_session_file = getenv("XPN_SESSION_FILE");
+  if (env_session_file != NULL) {
+    serv->xpn_session_file = atoi(env_session_file);
+  }
+
+  serv->xpn_session_dir = 1;
+  char *env_session_dir = getenv("XPN_SESSION_DIR");
+  if (env_session_dir != NULL) {
+    serv->xpn_session_dir = atoi(env_session_dir);
   }
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] Thread mode: %d\n", serv->id, serv->xpn_thread);
@@ -627,6 +655,7 @@ int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
   memccpy(msg.u_st_xpn_server_msg.op_open.path, dir,            0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_open.flags = flags;
   msg.u_st_xpn_server_msg.op_open.mode = mode;
+  msg.u_st_xpn_server_msg.op_open.xpn_session = serv->xpn_session_file;
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
   if (status.ret < 0)
@@ -641,6 +670,7 @@ int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
   memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", serv->id, dir);
+  fh_aux->fd = status.ret;
 
   fho->type    = NFIFILE;
   fho->priv_fh = NULL;
@@ -697,6 +727,8 @@ ssize_t nfi_xpn_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
   
   msg.u_st_xpn_server_msg.op_read.offset   = offset;
   msg.u_st_xpn_server_msg.op_read.size     = size;
+  msg.u_st_xpn_server_msg.op_read.fd   = fh_aux->fd;
+  msg.u_st_xpn_server_msg.op_read.xpn_session = serv->xpn_session_file;
 
   ret = nfi_write_operation(server_aux, &msg);
   if (ret < 0)
@@ -794,12 +826,14 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
 
   //Debug
-  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_xpn_server_msg.op_read.path, offset, size);
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] xpn_write(%s, %ld, %ld)\n", serv->id, msg.u_st_xpn_server_msg.op_write.path, offset, size);
 
   msg.type = XPN_SERVER_WRITE_FILE;
   memccpy(msg.u_st_xpn_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_write.offset = offset;
   msg.u_st_xpn_server_msg.op_write.size   = size;
+  msg.u_st_xpn_server_msg.op_write.fd   = fh_aux->fd;
+  msg.u_st_xpn_server_msg.op_write.xpn_session = serv->xpn_session_file;
 
   ret = nfi_write_operation(server_aux, &msg);
   if(ret < 0)
@@ -874,8 +908,51 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
 int nfi_xpn_server_close ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) struct nfi_fhandle *fh )
 {
-  // Without sesion close do nothing
-  return 0;
+  if (serv->xpn_session_file == 1){
+    struct nfi_xpn_server *server_aux;
+    struct nfi_xpn_server_fhandle *fh_aux;
+    struct st_xpn_server_msg msg;
+    struct st_xpn_server_status status;
+
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] >> Begin\n", serv->id);
+
+    // Check arguments...
+    NULL_RET_ERR(serv, EINVAL);
+    NULL_RET_ERR(fh,   EINVAL);
+    nfi_xpn_server_keep_connected(serv);
+    NULL_RET_ERR(serv->private_info, EINVAL);
+
+    // private_info...
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] Get server private info\n", serv->id);
+
+    server_aux = (struct nfi_xpn_server *) serv->private_info;
+    if (server_aux == NULL)
+    {
+      errno = EINVAL;
+      return -1;
+    }
+    
+    // private_info file handle
+    fh_aux     = (struct nfi_xpn_server_fhandle *) fh->priv_fh;
+
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%d)\n", serv->id, fh_aux->fd);
+
+    msg.type = XPN_SERVER_CLOSE_FILE;
+    msg.u_st_xpn_server_msg.op_close.fd = fh_aux->fd;
+
+    nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
+
+    if (status.ret < 0)
+      errno = status.server_errno;
+
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%d)=%d\n", serv->id, fh_aux->fd, status.ret);
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] >> End\n", serv->id);
+
+    return status.ret;
+  }else{
+    // Without sesion close do nothing
+    return 0;
+  }
 }
 
 int nfi_xpn_server_remove ( struct nfi_server *serv,  char *url )
@@ -1172,7 +1249,7 @@ int nfi_xpn_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
   struct nfi_xpn_server *server_aux;
   struct nfi_xpn_server_fhandle *fh_aux;
   struct st_xpn_server_msg msg;
-  struct st_xpn_server_status status;
+  struct st_xpn_server_opendir_req req;
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_opendir] >> Begin\n", serv->id);
 
@@ -1217,15 +1294,17 @@ int nfi_xpn_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
   
   msg.type = XPN_SERVER_OPENDIR_DIR;
   memccpy(msg.u_st_xpn_server_msg.op_opendir.path, dir,            0, PATH_MAX-1);
+  msg.u_st_xpn_server_msg.op_opendir.xpn_session = serv->xpn_session_dir;
 
-  nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
-  if (status.ret < 0)
+  nfi_xpn_server_do_request(server_aux, &msg, (char *)&(req), sizeof(struct st_xpn_server_opendir_req));
+  if (req.status.ret < 0)
   {
-    errno = status.server_errno;
+    errno = req.status.server_errno;
     return -1;
   }
 
-  fh_aux->telldir = status.ret;
+  fh_aux->telldir = req.status.ret;
+  fh_aux->dir = req.dir;
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_opendir] nfi_xpn_server_opendir(%s)\n", serv->id, dir);
 
@@ -1281,6 +1360,8 @@ int nfi_xpn_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
   msg.type = XPN_SERVER_READDIR_DIR;
   memccpy(msg.u_st_xpn_server_msg.op_readdir.path, fh_aux->path,            0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_readdir.telldir = fh_aux->telldir;
+  msg.u_st_xpn_server_msg.op_readdir.dir = fh_aux->dir;
+  msg.u_st_xpn_server_msg.op_readdir.xpn_session = serv->xpn_session_dir;
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_xpn_server_readdir_req));
   
@@ -1301,10 +1382,53 @@ int nfi_xpn_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
   return 0;
 }
 
-int nfi_xpn_server_closedir ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) struct nfi_fhandle *fh )
+int nfi_xpn_server_closedir ( struct nfi_server *serv, struct nfi_fhandle *fh )
 {
-  // Without sesion close do nothing
-  return 0;
+  if (serv->xpn_session_dir == 1){
+    struct nfi_xpn_server *server_aux;
+    struct nfi_xpn_server_fhandle *fh_aux;
+    struct st_xpn_server_msg msg;
+    struct st_xpn_server_status status;
+
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] >> Begin\n", serv->id);
+
+    // Check arguments...
+    NULL_RET_ERR(serv, EINVAL);
+    NULL_RET_ERR(fh,   EINVAL);
+    nfi_xpn_server_keep_connected(serv);
+    NULL_RET_ERR(serv->private_info, EINVAL);
+
+    // private_info...
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] Get server private info\n", serv->id);
+
+    server_aux = (struct nfi_xpn_server *) serv->private_info;
+    if (server_aux == NULL)
+    {
+      errno = EINVAL;
+      return -1;
+    }
+    
+    // private_info file handle
+    fh_aux     = (struct nfi_xpn_server_fhandle *) fh->priv_fh;
+
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%d)\n", serv->id, fh_aux->dir);
+
+    msg.type = XPN_SERVER_CLOSEDIR_DIR;
+    msg.u_st_xpn_server_msg.op_closedir.dir = fh_aux->dir;
+
+    nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
+
+    if (status.ret < 0)
+      errno = status.server_errno;
+
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%d)=%d\n", serv->id, fh_aux->dir, status.ret);
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] >> End\n", serv->id);
+
+    return status.ret;
+  }else{
+    // Without sesion close do nothing
+    return 0;
+  }
 }
 
 int nfi_xpn_server_rmdir(struct nfi_server *serv,  char *url)
@@ -1405,6 +1529,120 @@ int nfi_xpn_server_statfs(__attribute__((__unused__)) struct nfi_server *serv, _
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_statfs] >> End\n", serv->id);
 
   return 0;
+}
+
+int nfi_xpn_server_read_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata )
+{
+  int ret;
+  char dir[PATH_MAX];
+  struct nfi_xpn_server *server_aux;
+  struct st_xpn_server_msg msg;
+  struct st_xpn_server_read_mdata_req req;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] >> Begin\n", serv->id);
+
+  // check arguments...
+  NULL_RET_ERR(serv,               EINVAL);
+  nfi_xpn_server_keep_connected(serv);
+  NULL_RET_ERR(serv->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] Get server private info\n", serv->id);
+
+  server_aux = (struct nfi_xpn_server  *) serv->private_info;
+  if (server_aux == NULL)
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] ParseURL(%s)= %s\n", serv->id, url, dir);
+  
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata(%s)\n", serv->id, dir);
+
+
+  msg.type = XPN_SERVER_READ_MDATA;
+  memccpy(msg.u_st_xpn_server_msg.op_read_mdata.path, dir,            0, PATH_MAX-1);
+
+  nfi_xpn_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_xpn_server_read_mdata_req));
+
+  if (req.status.ret < 0)
+      errno = req.status.server_errno;
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata(%s)=%d\n", serv->id, dir, req.status);
+
+  memcpy(mdata, &req.mdata, sizeof(struct xpn_metadata));
+
+  debug_info("[NFI_XPN] [nfi_xpn_server_read_mdata] >> End\n");
+
+  return req.status.ret;
+}
+
+int nfi_xpn_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata, int only_file_size )
+{
+  int ret;
+  char dir[PATH_MAX];
+  struct nfi_xpn_server *server_aux;
+  struct st_xpn_server_msg msg;
+  struct st_xpn_server_status req;
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] >> Begin\n", serv->id);
+
+  // check arguments...
+  NULL_RET_ERR(serv,               EINVAL);
+  nfi_xpn_server_keep_connected(serv);
+  NULL_RET_ERR(serv->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] Get server private info\n", serv->id);
+
+  server_aux = (struct nfi_xpn_server  *) serv->private_info;
+  if (server_aux == NULL)
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] ParseURL(%s)= %s\n", serv->id, url, dir);
+  
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata(%s)\n", serv->id, dir);
+
+  if (only_file_size){
+    msg.type = XPN_SERVER_WRITE_MDATA_FILE_SIZE;
+    memccpy(msg.u_st_xpn_server_msg.op_write_mdata_file_size.path, dir,            0, PATH_MAX-1);
+    msg.u_st_xpn_server_msg.op_write_mdata_file_size.size = mdata->file_size;
+  }else{
+    msg.type = XPN_SERVER_WRITE_MDATA;
+    memccpy(msg.u_st_xpn_server_msg.op_write_mdata.path, dir,            0, PATH_MAX-1);
+    memcpy(&msg.u_st_xpn_server_msg.op_write_mdata.mdata, mdata, sizeof(struct xpn_metadata));
+  }
+
+  nfi_xpn_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_xpn_server_status));
+
+  if (req.ret < 0)
+      errno = req.server_errno;
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata(%s)=%d\n", serv->id, dir, req.ret);
+
+  debug_info("[NFI_XPN] [nfi_xpn_server_write_mdata] >> End\n");
+
+  return req.ret;
 }
 
 /* ................................................................... */

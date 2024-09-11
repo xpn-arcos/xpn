@@ -24,7 +24,7 @@
 
 #include "nfi_local.h"
 #include "nfi/nfi_xpn_server/nfi_xpn_server_comm.h"
-
+#include <stddef.h>
 
 /* ... Const / Const ................................................. */
 
@@ -176,6 +176,9 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
 
   serv->ops->nfi_statfs     = nfi_local_statfs;
 
+  serv->ops->nfi_write_mdata    = nfi_local_write_mdata;
+  serv->ops->nfi_read_mdata     = nfi_local_read_mdata;
+
   // ParseURL...
   ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
   if (ret < 0)
@@ -212,6 +215,19 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
     serv->xpn_thread = atoi(env_thread);
   }
 
+  // session mode
+  serv->xpn_session_file = 0;
+  char *env_session_file = getenv("XPN_SESSION_FILE");
+  if (env_session_file != NULL) {
+    serv->xpn_session_file = atoi(env_session_file);
+  }
+
+  serv->xpn_session_dir = 1;
+  char *env_session_dir = getenv("XPN_SESSION_DIR");
+  if (env_session_dir != NULL) {
+    serv->xpn_session_dir = atoi(env_session_dir);
+  }
+
   // copy 'url' string...
   serv->url = strdup(url);
   NULL_RET_ERR(serv->url, ENOMEM);
@@ -235,6 +251,9 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
     FREE_AND_NULL(server_aux);
     return -1;
   }
+
+  // Evade the preload when working in local
+  filesystem_low_set(RTLD_NEXT);
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_init] << End\n", serv->id);
 
@@ -432,9 +451,12 @@ int nfi_local_open ( struct nfi_server *serv, char *url, int flags, mode_t mode,
     return -1;
   }
 
-  filesystem_close(ret);
+  if (serv->xpn_session_file == 0){
+    filesystem_close(ret);
+  }
 
   memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
+  fh_aux->fd = ret;
 
   fho->type    = NFIFILE;
   fho->priv_fh = NULL;
@@ -470,8 +492,13 @@ ssize_t nfi_local_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *
   fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_read] nfi_local_read(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
+  int fd;
+  if (serv->xpn_session_file == 1){
+    fd = fh_aux->fd;
+  }else{
+    fd = filesystem_open(fh_aux->path, O_RDONLY);
+  }
 
-  int fd = filesystem_open(fh_aux->path, O_RDONLY);
   if (fd < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_read] ERROR: real_posix_read open fail '%s' in server %s\n", serv->id, fh_aux->path, serv->server);
@@ -492,7 +519,9 @@ ssize_t nfi_local_read ( struct nfi_server *serv, struct nfi_fhandle *fh, void *
     goto cleanup_nfi_local_read;
   }
 cleanup_nfi_local_read:
-  filesystem_close(fd);
+  if (serv->xpn_session_file == 0){
+    filesystem_close(fd);
+  }
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_read] nfi_local_read(%s, %ld, %ld)=%ld\n", serv->id, fh_aux->path, offset, size, ret);
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_read] >> End\n", serv->id);
 
@@ -521,7 +550,13 @@ ssize_t nfi_local_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void 
   
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_write] nfi_local_write(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
 
-  int fd = filesystem_open(fh_aux->path, O_WRONLY);
+  int fd;
+  if (serv->xpn_session_file == 1){
+    fd = fh_aux->fd;
+  }else{
+    fd = filesystem_open(fh_aux->path, O_WRONLY);
+  }
+
   if (fd < 0)
   {
     debug_error("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_write] ERROR: real_posix_write open fail '%s' in server %s\n", serv->id, fh_aux->path, serv->server);
@@ -543,17 +578,46 @@ ssize_t nfi_local_write ( struct nfi_server *serv, struct nfi_fhandle *fh, void 
   }
 
 cleanup_nfi_local_write:
-  filesystem_close(fd);
+  if (serv->xpn_session_file == 1){
+    filesystem_fsync(fd);
+  }else{
+    filesystem_close(fd);
+  }
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_write] nfi_local_write(%s, %ld, %ld)=%ld\n", serv->id, fh_aux->path, offset, size, ret);
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_write] >> End\n", serv->id);
 
   return ret;
 }
 
-int nfi_local_close ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) struct nfi_fhandle *fh )
+int nfi_local_close ( struct nfi_server *serv, struct nfi_fhandle *fh )
 {
-  // Without sesion close do nothing
-  return 0;
+  if (serv->xpn_session_file == 1){
+    int ret;
+    struct nfi_local_fhandle *fh_aux;
+
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] >> Begin\n", serv->id);
+
+    // Check arguments...
+    NULL_RET_ERR(serv, EINVAL);
+    NULL_RET_ERR(fh,   EINVAL);
+    nfi_local_keep_connected(serv);
+    NULL_RET_ERR(serv->private_info, EINVAL);
+
+    // private_info file handle
+    fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
+    
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] nfi_local_close(%d)\n", serv->id, fh_aux->fd);
+
+    ret = filesystem_close(fh_aux->fd);
+
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] nfi_local_close(%d)=%ld\n", serv->id, fh_aux->fd, ret);
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] >> End\n", serv->id);
+
+    return ret;
+  }else{
+    // Without sesion close do nothing
+    return 0;
+  }
 }
 
 int nfi_local_remove ( struct nfi_server *serv,  char *url )
@@ -796,12 +860,16 @@ int nfi_local_opendir ( struct nfi_server *serv,  char *url, struct nfi_fhandle 
     FREE_AND_NULL(fho->url);
     return -1;
   }
-  fh_aux->telldir = filesystem_telldir(s);
-  filesystem_closedir(s);
+
+  if (serv->xpn_session_dir == 0){
+    fh_aux->telldir = filesystem_telldir(s);
+    filesystem_closedir(s);
+  }
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_opendir] nfi_local_opendir(%s)=%p\n", serv->id, dir, s);
 
   strcpy(fh_aux->path, dir);
+  fh_aux->dir = s;
   fho->type    = NFIDIR;
   fho->server  = serv;
   fho->priv_fh = (void *) fh_aux;
@@ -862,8 +930,33 @@ int nfi_local_readdir ( struct nfi_server *serv,  struct nfi_fhandle *fh, struct
 
 int nfi_local_closedir ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) struct nfi_fhandle *fh )
 {
-  // Without sesion close do nothing
-  return 0;
+  if (serv->xpn_session_dir == 1){
+    int ret;
+    struct nfi_local_fhandle *fh_aux;
+
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_closedir] >> Begin\n", serv->id);
+
+    // Check arguments...
+    NULL_RET_ERR(serv, EINVAL);
+    NULL_RET_ERR(fh,   EINVAL);
+    nfi_local_keep_connected(serv);
+    NULL_RET_ERR(serv->private_info, EINVAL);
+
+    // private_info file handle
+    fh_aux = (struct nfi_local_fhandle *) fh->priv_fh;
+    
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_closedir] nfi_local_closedir(%d)\n", serv->id, fh_aux->dir);
+
+    ret = filesystem_closedir(fh_aux->dir);
+
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_closedir] nfi_local_closedir(%d)=%ld\n", serv->id, fh_aux->dir, ret);
+    debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_closedir] >> End\n", serv->id);
+
+    return ret;
+  }else{
+    // Without sesion close do nothing
+    return 0;
+  }
 }
 
 int nfi_local_rmdir ( struct nfi_server *serv, char *url )
@@ -952,4 +1045,120 @@ int nfi_local_statfs ( __attribute__((__unused__)) struct nfi_server *serv, __at
   return 0;
 }
 
+int nfi_local_read_mdata ( struct nfi_server *server, char *url, struct xpn_metadata *mdata )
+{
+  int ret, fd;
+  char dir[PATH_MAX];
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] >> Begin\n", server->id);
+
+  // check arguments...
+  NULL_RET_ERR(server,               EINVAL);
+  nfi_local_keep_connected(server);
+  NULL_RET_ERR(server->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] Get server private info\n", server->id);
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] ERROR: incorrect url '%s'.\n", server->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] ParseURL(%s)= %s\n", server->id, url, dir);
+
+	memset(mdata, 0, sizeof(struct xpn_metadata));
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_read_mdata] nfi_local_read_mdata(%s)\n", server->id, dir);
+
+  fd = filesystem_open(dir, O_RDWR);
+  if (fd < 0){
+    if (errno == EISDIR){
+      // if is directory there are no metadata to read so return 0
+      return 0;
+    }
+    return -1;
+  }
+
+  ret = filesystem_read(fd, mdata, sizeof(struct xpn_metadata));
+
+  if (!XPN_CHECK_MAGIC_NUMBER(mdata)){
+	  memset(mdata, 0, sizeof(struct xpn_metadata));
+  }
+
+  filesystem_close(fd); //TODO: think if necesary check error in close
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] nfi_local_read_mdata(%s)=%d\n", server->id, dir, ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_read_mdata] << End\n", server->id);
+  return ret;
+}
+
+int nfi_local_write_mdata ( struct nfi_server *server, char *url, struct xpn_metadata *mdata, int only_file_size )
+{
+  int ret, fd;
+  char dir[PATH_MAX];
+  struct nfi_local_server *server_aux;
+  struct nfi_xpn_server *server_xpn_aux;
+
+  if(only_file_size){
+    // is necessary to do it in xpn_server in order to ensure atomic operation
+    server_aux = (struct nfi_local_server *) (server->private_info);
+    if (server_aux == NULL) {
+      return -1;
+    }
+    server_xpn_aux = (struct nfi_xpn_server *)server_aux->private_info_server;
+    if (server_xpn_aux != NULL) {
+      server->private_info = server_xpn_aux;
+      ret = nfi_xpn_server_write_mdata(server, url, mdata, only_file_size);
+      server->private_info = server_aux;
+    }else{
+      ret = -1;
+    }
+    return ret;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] >> Begin\n", server->id);
+
+  // check arguments...
+  NULL_RET_ERR(server,               EINVAL);
+  nfi_local_keep_connected(server);
+  NULL_RET_ERR(server->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] Get server private info\n", server->id);
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] ERROR: incorrect url '%s'.\n", server->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] ParseURL(%s)= %s\n", server->id, url, dir);
+  
+  debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_local_write_mdata] nfi_local_write_mdata(%s)\n", server->id, dir);
+
+  fd = filesystem_open2(dir, O_WRONLY | O_CREAT, S_IRWXU);
+  if (fd < 0){
+    if (errno == EISDIR){
+    // if is directory there are no metadata to write so return 0
+      return 0;
+    }
+    return -1;
+  }
+
+  ret = filesystem_write(fd, mdata, sizeof(struct xpn_metadata));
+
+  filesystem_close(fd); //TODO: think if necesary check error in close
+
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] nfi_local_write_mdata(%s)=%d\n", server->id, dir, ret);
+  debug_info("[Server=%d] [XPN_SERVER_OPS] [nfi_local_write_mdata] << End\n", server->id);
+  return ret;
+}
 /* ................................................................... */

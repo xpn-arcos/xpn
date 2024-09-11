@@ -293,7 +293,6 @@ AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
 ### END OF MQTT BLOCK. Do not remove this line. ###
 
 
-
 CPPFLAGS="$CDEFS $INCLUDEFLAGS $M_HEADERS $CPPFLAGS"
 LDFLAGS="$LIBLINK $LIBS"
 AC_SUBST(CPPFLAGS)
@@ -317,6 +316,7 @@ AC_CONFIG_FILES([ \
       test/integrity/xpn/Makefile \
       test/integrity/mpi_connect_accept/Makefile \
       test/integrity/bypass_c/Makefile \
+      test/integrity/xpn_metadata/Makefile \
       test/performance/xpn/Makefile \
       test/performance/iop/Makefile \
       test/performance/mpi_pingpong/Makefile \

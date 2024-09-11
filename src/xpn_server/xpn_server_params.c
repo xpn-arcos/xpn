@@ -65,7 +65,11 @@ void xpn_server_params_show ( xpn_server_param_st *params )
   // * shutdown_file
   printf(" |\t-f  <path>:\t'%s'\n",   params->shutdown_file);
   // * host
-  printf(" |\t-h  <host>:\t'%s'\n",   params->srv_name) ;
+  printf(" |\t-h  <host>:\t'%s'\n",   params->srv_name);
+  // * await
+  if (params->await_stop == 1){
+    printf(" |\t-w  await true\n");
+  }
 
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show] << End\n", params->rank);
 }
@@ -79,6 +83,7 @@ void xpn_server_params_show_usage ( void )
   printf("\t-t  <int>:           0 (without thread); 1 (thread pool); 2 (on demand)\n") ;
   printf("\t-f  <path>:          file of servers to be shutdown\n") ;
   printf("\t-h  <host>:          host server to be shutdown\n") ;
+  printf("\t-w                   await for servers to stop\n") ;
 
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show_usage] << End\n", -1) ;
 }
@@ -98,8 +103,10 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
   #ifdef ENABLE_MPI_SERVER
   params->server_type = XPN_SERVER_TYPE_MPI;
   #endif
+  params->await_stop = 0;
   strcpy(params->port_name, "");
   strcpy(params->srv_name,  "");
+  ns_get_hostname(params->srv_name);
 
   // update user requests
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] Get user configuration\n", params->rank);
@@ -172,6 +179,9 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
 
           case 'h':
             strcpy(params->srv_name, argv[i+1]);
+            break;
+          case 'w':
+            params->await_stop = 1;
             break;
 
           default:
