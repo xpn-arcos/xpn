@@ -90,6 +90,7 @@
   /* ... Functions / Funciones ......................................... */
 
   int     nfi_xpn_server_init       ( char *url, struct nfi_server *serv, int server_type );
+  int     nfi_xpn_server_destroy    ( struct nfi_server *server );
 
   int     nfi_xpn_server_connect    ( struct nfi_server *server, char *url, char* prt, char* serv, char* dir );
   int     nfi_xpn_server_reconnect  ( struct nfi_server *server );

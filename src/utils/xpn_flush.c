@@ -52,6 +52,7 @@
   char src_path [PATH_MAX+5];
   char dest_path [PATH_MAX+5];
 
+  int xpn_path_len = 0;
 
 /* ... Functions / Funciones ......................................... */
 
@@ -110,7 +111,7 @@
     }
     else if (is_file)
     {      
-      int master_node = hash(src_path, size, 1);
+      int master_node = hash(&src_path[xpn_path_len], size, 1);
       if (rank == master_node)
       {
         fd_dest = creat(dest_path, st_src.st_mode);
@@ -241,7 +242,7 @@
     char path_dst [PATH_MAX];
     int buff_coord = 1;
 
-    int master_node = hash(dir_name, size, 1);
+    int master_node = hash(&dir_name[xpn_path_len], size, 1);
     if (rank == master_node){
       dir = opendir(dir_name);
       if(dir == NULL)
@@ -344,6 +345,7 @@
     if (rank == 0){
       printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
     }
+    xpn_path_len = strlen(argv[1]);
     list (argv[1], argv[2], blocksize, replication_level, rank, size);
     if (rank == 0){
       printf("Flush elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);

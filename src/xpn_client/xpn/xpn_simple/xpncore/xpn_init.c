@@ -45,7 +45,7 @@ int xpn_destroy_servers(struct xpn_partition *part)
     {
       part->data_serv[i].ops->nfi_disconnect(&(serv[i]));
 
-      //part->data_serv[i].ops->nfi_destroy(&(serv[i]));
+      part->data_serv[i].ops->nfi_destroy(&(serv[i]));
       if(serv[i].ops != NULL){
         free(serv[i].ops);
       }
