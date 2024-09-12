@@ -129,7 +129,7 @@
   {
     int     (*nfi_reconnect) (struct nfi_server *serv);
     int     (*nfi_disconnect)(struct nfi_server *serv);
-    //int   (*nfi_destroy)(struct nfi_server *serv);
+    int     (*nfi_destroy)(struct nfi_server *serv);
     int     (*nfi_getattr)  (struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
     int     (*nfi_setattr)  (struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
     int     (*nfi_open)     (struct nfi_server *serv, char *url, int flags, mode_t mode, struct nfi_fhandle *fho); 

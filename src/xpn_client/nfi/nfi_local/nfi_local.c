@@ -157,6 +157,7 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
   bzero(serv->ops, sizeof(struct nfi_ops));
   serv->ops->nfi_reconnect  = nfi_local_reconnect;
   serv->ops->nfi_disconnect = nfi_local_disconnect;
+  serv->ops->nfi_destroy    = nfi_local_destroy;
 
   serv->ops->nfi_open       = nfi_local_open;
   serv->ops->nfi_create     = nfi_local_create;
@@ -286,10 +287,12 @@ int nfi_local_destroy ( struct nfi_server *serv )
   nfiworker_destroy(serv);
 
   // free private_info, 'url' string and 'server' string...
+  FREE_AND_NULL(server_aux->private_info_server);
   FREE_AND_NULL(serv->ops);
   FREE_AND_NULL(serv->private_info);
   FREE_AND_NULL(serv->url);
   FREE_AND_NULL(serv->server);
+  FREE_AND_NULL(serv->wrk);
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_destroy] << End\n", serv->id);
 
@@ -348,8 +351,6 @@ int nfi_local_disconnect ( struct nfi_server *serv )
     nfi_xpn_server_disconnect(serv);
     serv->private_info = server_aux;
   }
-
-  FREE_AND_NULL(serv->private_info);
 
   debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_disconnect] << End\n", serv->id);
 
@@ -610,12 +611,17 @@ int nfi_local_close ( struct nfi_server *serv, struct nfi_fhandle *fh )
 
     ret = filesystem_close(fh_aux->fd);
 
+    FREE_AND_NULL(fh->priv_fh);
+    FREE_AND_NULL(fh->url);
+
     debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] nfi_local_close(%d)=%ld\n", serv->id, fh_aux->fd, ret);
     debug_info("[SERV_ID=%d] [NFI_LOCAL] [nfi_local_close] >> End\n", serv->id);
 
     return ret;
   }else{
     // Without sesion close do nothing
+    FREE_AND_NULL(fh->priv_fh);
+    FREE_AND_NULL(fh->url);
     return 0;
   }
 }

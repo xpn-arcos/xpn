@@ -286,6 +286,7 @@ int nfi_xpn_server_init ( char *url, struct nfi_server *serv, int server_type )
   bzero(serv->ops, sizeof(struct nfi_ops));
   serv->ops->nfi_reconnect  = nfi_xpn_server_reconnect;
   serv->ops->nfi_disconnect = nfi_xpn_server_disconnect;
+  serv->ops->nfi_destroy    = nfi_xpn_server_destroy;
 
   serv->ops->nfi_open       = nfi_xpn_server_open;
   serv->ops->nfi_create     = nfi_xpn_server_create;
@@ -465,7 +466,7 @@ int nfi_xpn_server_destroy ( struct nfi_server *serv )
 
   ret = nfi_xpn_server_comm_destroy( server_aux );
   if (ret < 0) {
-    printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] ERROR: nfi_xpn_server_comm_destroy fails\n", serv->id);
+    printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_destroy] ERROR: nfi_xpn_server_comm_destroy fails\n", serv->id);
   }
 
   // free private_info, 'url' string and 'server' string...
@@ -473,6 +474,7 @@ int nfi_xpn_server_destroy ( struct nfi_server *serv )
   FREE_AND_NULL(serv->private_info);
   FREE_AND_NULL(serv->url);
   FREE_AND_NULL(serv->server);
+  FREE_AND_NULL(serv->wrk);
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_destroy] << End\n", serv->id);
 
@@ -544,8 +546,6 @@ int nfi_xpn_server_disconnect ( struct nfi_server *serv )
   if (ret < 0) {
     printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_disconnect] ERROR: nfi_xpn_server_comm_disconnect fails\n", serv->id);
   }
-
-  FREE_AND_NULL(serv->private_info);
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_disconnect] << End\n", serv->id);
 
@@ -947,10 +947,15 @@ int nfi_xpn_server_close ( __attribute__((__unused__)) struct nfi_server *serv, 
 
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%d)=%d\n", serv->id, fh_aux->fd, status.ret);
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] >> End\n", serv->id);
+    
+    FREE_AND_NULL(fh->priv_fh);
+    FREE_AND_NULL(fh->url);
 
     return status.ret;
   }else{
     // Without sesion close do nothing
+    FREE_AND_NULL(fh->priv_fh);
+    FREE_AND_NULL(fh->url);
     return 0;
   }
 }
