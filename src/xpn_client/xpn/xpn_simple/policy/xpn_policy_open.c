@@ -151,6 +151,8 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
   memset(fh_aux, 0, sizeof(struct nfi_fhandle));
 
   XpnGetURLServer(servers, path, url_serv);
+  
+  XPN_DEBUG("%s %s", __func__, url_serv);
   servers->wrk->thread = servers->xpn_thread;
   nfi_worker_do_open(servers->wrk, url_serv, O_RDWR | O_CREAT, S_IRWXU, fh_aux);
   res = nfiworker_wait(servers->wrk);
