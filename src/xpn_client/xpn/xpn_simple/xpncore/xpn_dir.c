@@ -147,7 +147,7 @@ int xpn_simple_rmdir(const char *path)
     XPN_DEBUG_END_ARGS1(path);
     return -1;
   }
-  int master_node = hash((char *)path, n, 1);
+  int master_node = hash((char *)abs_path, n, 1);
   servers[master_node].wrk->arg.is_master_node = 1;
   for(i=0;i<n;i++)
   {

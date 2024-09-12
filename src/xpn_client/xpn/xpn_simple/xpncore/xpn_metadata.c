@@ -140,7 +140,6 @@ int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *
   }
 
   master_node = hash(path, nserv, 1);
-  mdata->first_node = master_node;
   for (int i = 0; i < replication_level+1; i++)
   {
     serv_node = (master_node+i) % nserv;

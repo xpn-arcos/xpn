@@ -52,6 +52,7 @@
   struct xpn_metadata new_mdata;
   char *t_entry;
   struct stat st;
+  int xpn_path_len = 0;
 
   int rank, size, new_size, pos_in_shrink;
 
@@ -79,8 +80,8 @@
       printf("%s\n", entry);
     }
 
-    int master_node_old = hash(entry, size, 1);
-    int master_node_new = hash(entry, new_size, 1);
+    int master_node_old = hash(&entry[xpn_path_len], size, 1);
+    int master_node_new = hash(&entry[xpn_path_len], new_size, 1);
     int has_new_mdata = 0;
 
     debug_info("master_node_old %d master_node_new %d\n", master_node_old, master_node_new);
@@ -515,7 +516,7 @@
     int buff_coord = 1;
     
 
-    int master_node = hash(dir_name, size, 1);
+    int master_node = hash(&dir_name[xpn_path_len], size, 1);
     if (rank == master_node){
       dir = opendir(dir_name);
       if(dir == NULL)
@@ -655,6 +656,7 @@
     if (rank == 0){
       printf("Shrink in path %s from %d servers to %d servers\n", argv[1], size, new_size);
     }
+    xpn_path_len = strlen(argv[1]);
     list (argv[1]);
     if (rank == 0){
       printf("Shrink elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);

@@ -151,6 +151,8 @@ int XpnGetFh( struct xpn_metadata *mdata, struct nfi_fhandle **fh, struct nfi_se
   memset(fh_aux, 0, sizeof(struct nfi_fhandle));
 
   XpnGetURLServer(servers, path, url_serv);
+  
+  XPN_DEBUG("%s %s", __func__, url_serv);
   servers->wrk->thread = servers->xpn_thread;
   nfi_worker_do_open(servers->wrk, url_serv, O_RDWR | O_CREAT, S_IRWXU, fh_aux);
   res = nfiworker_wait(servers->wrk);
@@ -320,7 +322,7 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   memset(&attr, 0, sizeof(struct nfi_attr));
   memset(&vfh_aux, 0, sizeof(struct nfi_fhandle));
 
-  int master_node = hash(path, n, 1);
+  int master_node = hash(aux_path, n, 1);
   if (strlen(aux_path) == 0){
     aux_path[0] = '/';
     aux_path[1] = '\0';
