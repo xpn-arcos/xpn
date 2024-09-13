@@ -50,8 +50,8 @@
 
   #else
 
-    #define XPN_API_LOCK()    (0)
-    #define XPN_API_UNLOCK()  (0)
+    #define XPN_API_LOCK()    
+    #define XPN_API_UNLOCK()  
 
   #endif
 

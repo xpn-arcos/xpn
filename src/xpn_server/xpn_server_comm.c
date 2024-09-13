@@ -23,7 +23,7 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "xpn_server_comm.h"
-#include "socket.h"
+#include "base/socket.h"
 
 #ifdef ENABLE_MPI_SERVER
 #include "mpi_server_comm.h"

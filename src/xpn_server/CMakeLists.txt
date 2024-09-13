@@ -1,0 +1,33 @@
+file(GLOB XPN_SERVER_SOURCE 
+    "*.c"
+    "mpi_server/*.c"
+    "sck_server/*.c"
+)
+
+add_executable(xpn_server ${XPN_SERVER_SOURCE})
+
+target_link_libraries(xpn_server PRIVATE xpn_base)
+
+target_compile_options(xpn_server PRIVATE 
+"-DHAVE_STRING_H"
+"-DHAVE_FCNTL_H"
+"-DHAVE_UNISTD_H"
+"-DHAVE_NETINET_IN_H"
+"-DHAVE_NETINET_TCP_H"
+)
+
+target_include_directories(xpn_server PRIVATE
+	"${PROJECT_SOURCE_DIR}/include"
+	"${PROJECT_SOURCE_DIR}/include/xpn_server"
+	"${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server"
+	"${PROJECT_SOURCE_DIR}/include/xpn_server/sck_server"
+	"${PROJECT_SOURCE_DIR}/include/xpn_client/xpn/xpn_simple"
+	"${PROJECT_SOURCE_DIR}/include/xpn_client/nfi"
+)
+
+
+install(TARGETS xpn_server RUNTIME DESTINATION bin)
+
+install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_stop_server)")
+install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_terminate_server)")
+install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server_spawn)")

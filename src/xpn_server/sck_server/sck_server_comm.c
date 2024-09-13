@@ -23,7 +23,7 @@
 /* ... Include / Inclusion ........................................... */
 
    #include "sck_server_comm.h"
-   #include "socket.h"
+   #include "base/socket.h"
 
 
 /* ... Functions / Funciones ......................................... */

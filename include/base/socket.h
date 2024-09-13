@@ -30,7 +30,7 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #include "debug_msg.h"
+  #include "base/debug_msg.h"
 
 
   /* ... Const / Const ................................................. */

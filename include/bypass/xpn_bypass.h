@@ -24,8 +24,9 @@
 #define _XPN_BYPASS_H_
 
   /* ... Include / Inclusion ........................................... */
-
+  #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
+  #endif
 
   #include "config.h"
 
@@ -36,7 +37,7 @@
   #include <stdlib.h>
 
   #include "xpn.h"
-  #include "syscall_proxies.h"
+  #include "base/syscall_proxies.h"
 
   #include <dirent.h>
   #include <string.h>
@@ -67,10 +68,18 @@
 
 
   // Types
+  #ifndef O_ACCMODE
   #define O_ACCMODE 00000003
+  #endif
+  #ifndef O_RDONLY
   #define O_RDONLY  00000000
+  #endif
+  #ifndef O_WRONLY
   #define O_WRONLY  00000001
+  #endif
+  #ifndef O_RDWR
   #define O_RDWR    00000002
+  #endif
   #ifndef O_CREAT
   #define O_CREAT   00000100  // not fcntl
   #endif

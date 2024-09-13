@@ -32,7 +32,7 @@
 #include <unistd.h>
 
 #include "mpi.h"
-#include "ns.h"
+#include "base/ns.h"
 #include "xpn/xpn_simple/xpn_policy_rw.h"
 
 /* ... Const / Const ................................................. */

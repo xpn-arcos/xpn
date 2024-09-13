@@ -29,8 +29,8 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #include "debug_msg.h"
-  #include "workers.h"
+  #include "base/debug_msg.h"
+  #include "base/workers.h"
   #include "xpn_metadata.h"
 
 

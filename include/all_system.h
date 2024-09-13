@@ -31,7 +31,7 @@
   #endif
 
   //Get "base_debug.h"
-  #include "base_debug.h"
+  #include "base/base_debug.h"
 
   //Include common headers
   #ifndef NOT_TO_USE_STDLIB_H
@@ -161,20 +161,48 @@
   #define PROTOCOL_MAXLEN 20
 
   #if !defined(HAVE_FCNTL_H)
+    #ifndef O_ACCMODE
     #define O_ACCMODE          0003
+    #endif
+    #ifndef O_RDONLY
     #define O_RDONLY             00
+    #endif
+    #ifndef O_WRONLY
     #define O_WRONLY             01
+    #endif
+    #ifndef O_RDWR
     #define O_RDWR               02
-    #define O_CREAT            0100 /* not fcntl */
-    #define O_EXCL             0200 /* not fcntl */
-    #define O_NOCTTY           0400 /* not fcntl */
-    #define O_TRUNC           01000 /* not fcntl */
+    #endif
+    #ifndef O_CREAT
+    #define O_CREAT            0100
+    #endif
+    #ifndef O_EXCL
+    #define O_EXCL             0200
+    #endif
+    #ifndef O_NOCTTY
+    #define O_NOCTTY           0400
+    #endif
+    #ifndef O_TRUNC
+    #define O_TRUNC           01000
+    #endif
+    #ifndef O_APPEND
     #define O_APPEND          02000
+    #endif
+    #ifndef O_NONBLOCK
     #define O_NONBLOCK        04000
+    #endif
+    #ifndef O_NDELAY
     #define O_NDELAY        O_NONBLOCK
+    #endif
+    #ifndef O_SYNC
     #define O_SYNC           010000
+    #endif
+    #ifndef O_FSYNC
     #define O_FSYNC          O_SYNC
+    #endif
+    #ifndef O_ASYNC
     #define O_ASYNC          020000
+    #endif
   #endif
 
   /* ... Data structures / Estructuras de datos ........................ */

@@ -21,7 +21,6 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "nfi_sck_server_comm.h"
-#include "socket.h"
 #include "xpn_server/xpn_server_conf.h"
 
 

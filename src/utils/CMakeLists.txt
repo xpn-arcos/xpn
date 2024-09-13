@@ -1,8 +1,19 @@
-set(UTILS_LIST cp-local2xpn xpn-ls xpn-mkdir removexpn xpn-rmdir xpn-statfs cp-xpn2local xpn-cat xpncp xpnwriter)
+set(UTILS_LIST 
+	xpn_expand
+	xpn_flush
+	xpn_preload
+	xpn_rebuild
+	xpn_rebuild_active_reader
+	xpn_rebuild_active_writer
+	xpn_shrink
+	xpn_get_block_locality
+	xpn_tree
+)
 
 # add the executables
 foreach (util ${UTILS_LIST})
 	add_executable(${util} ${util}.c)
-	target_link_libraries (${util} ${CMAKE_LINK_LIBRARY_FLAG})
+	target_link_libraries(${util} PRIVATE xpn_base xpn xpn_core xpn_nfi)
+	install(TARGETS ${util} RUNTIME DESTINATION bin)
 endforeach (util)
 

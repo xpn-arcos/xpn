@@ -21,8 +21,8 @@
 
 
 #include "xpn/xpn_simple/xpn_init.h"
-#include "ns.h"
-#include "profiler.h"
+#include "base/ns.h"
+#include "base/profiler.h"
 
 
 struct xpn_partition xpn_parttable[XPN_MAX_PART];
