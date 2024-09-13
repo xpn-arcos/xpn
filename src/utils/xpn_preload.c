@@ -316,10 +316,10 @@ finish_copy:
     }
     xpn_path_len = strlen(argv[2]);
     list (argv[1], argv[2], blocksize, replication_level, rank, size);
+    MPI_Barrier(MPI_COMM_WORLD);
     if (rank == 0){
       printf("Preload elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);
     }
-    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
 
     return 0;
