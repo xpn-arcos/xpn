@@ -32,4 +32,4 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
     DESTINATION include
     FILES_MATCHING PATTERN "*.h")
 
-install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib64)")
+install(CODE "execute_process(COMMAND ln -s -f \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib64)")

@@ -25,6 +25,39 @@ target_include_directories(xpn_server PRIVATE
 	"${PROJECT_SOURCE_DIR}/include/xpn_client/nfi"
 )
 
+add_custom_command(
+    OUTPUT xpn_stop_server
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+            xpn_server
+            xpn_stop_server
+    DEPENDS xpn_server
+    COMMENT "Creating symlink xpn_stop_server -> xpn_server"
+)
+
+add_custom_command(
+    OUTPUT xpn_terminate_server
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+            xpn_server
+            xpn_terminate_server
+    DEPENDS xpn_server
+    COMMENT "Creating symlink xpn_terminate_server -> xpn_server"
+)
+
+add_custom_command(
+    OUTPUT xpn_server_spawn
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+            xpn_server
+            xpn_server_spawn
+    DEPENDS xpn_server
+    COMMENT "Creating symlink xpn_server_spawn -> xpn_server"
+)
+
+add_custom_target(create_symlinks ALL
+    DEPENDS
+        xpn_stop_server
+        xpn_terminate_server
+        xpn_server_spawn
+)
 
 install(TARGETS xpn_server RUNTIME DESTINATION bin)
 

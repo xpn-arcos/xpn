@@ -1,4 +1,7 @@
-add_library(xpn_bypass "xpn_bypass.c")
+add_library(xpn_bypass SHARED "xpn_bypass.c")
+set_target_properties(xpn_bypass PROPERTIES PREFIX "")
+
+target_link_libraries(xpn_bypass PRIVATE -Wl,--whole-archive xpn_base -Wl,--no-whole-archive xpn pthread dl )
 
 target_compile_options(xpn_bypass PRIVATE
     "-DNOT_TO_USE_FCNTL_H"

@@ -85,10 +85,20 @@ ln    -s "${INSTALL_PATH}/xpn/lib64"   "${INSTALL_PATH}/xpn/lib"
 echo " * XPN: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
-ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-./configure --prefix="${INSTALL_PATH}/xpn" --enable-sck_server --enable-mpi_server="${MPICC_PATH}" 
-make clean
-make -j 8
-#doxygen doc/doxygen-XPN.cfg
-make install
+rm -r build
+mkdir -p build
+cd build
+
+cmake -S .. -B . -DCMAKE_INSTALL_PREFIX="${INSTALL_PATH}/xpn" -DCMAKE_C_COMPILER="${MPICC_PATH}"
+
+cmake --build . -j
+
+cmake --install .
+
+# ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
+# ./configure --prefix="${INSTALL_PATH}/xpn" --enable-sck_server --enable-mpi_server="${MPICC_PATH}" 
+# make clean
+# make -j 8
+# #doxygen doc/doxygen-XPN.cfg
+# make install
 popd

@@ -14,7 +14,7 @@ add_library(xpn ${XPN_HEADERS} ${XPN_SOURCE})
 add_library(xpn_shared SHARED $<TARGET_OBJECTS:xpn>)
 set_target_properties(xpn_shared PROPERTIES OUTPUT_NAME xpn)
 
-target_link_libraries(xpn PUBLIC xpn_base xpn_core xpn_nfi )
+target_link_libraries(xpn PRIVATE xpn_base xpn_core xpn_nfi )
 
 target_include_directories(xpn PUBLIC
 	"${PROJECT_SOURCE_DIR}/include"
