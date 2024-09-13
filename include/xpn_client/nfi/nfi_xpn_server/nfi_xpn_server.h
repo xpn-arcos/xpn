@@ -82,12 +82,15 @@
   {
     char path[PATH_MAX];
     long telldir;
+    DIR *dir;
+    int fd;
   };
 
 
   /* ... Functions / Funciones ......................................... */
 
   int     nfi_xpn_server_init       ( char *url, struct nfi_server *serv, int server_type );
+  int     nfi_xpn_server_destroy    ( struct nfi_server *server );
 
   int     nfi_xpn_server_connect    ( struct nfi_server *server, char *url, char* prt, char* serv, char* dir );
   int     nfi_xpn_server_reconnect  ( struct nfi_server *server );
@@ -111,6 +114,9 @@
   int     nfi_xpn_server_rmdir      ( struct nfi_server *server, char *url );
 
   int     nfi_xpn_server_statfs     ( struct nfi_server *server, struct nfi_info *inf );
+
+  int     nfi_xpn_server_read_mdata      ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata );
+  int     nfi_xpn_server_write_mdata     ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata, int only_file_size );
 
   /* ................................................................... */
 

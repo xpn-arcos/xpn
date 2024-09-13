@@ -31,6 +31,7 @@
   #include "all_system.h"
   #include "debug_msg.h"
   #include "workers.h"
+  #include "xpn_metadata.h"
 
 
   /* ... Const / Const ................................................. */
@@ -73,6 +74,8 @@
 
     // Execution configuration
     int xpn_thread;
+    int xpn_session_file;
+    int xpn_session_dir;
   };
 
   struct nfi_attr_server
@@ -119,11 +122,14 @@
     void *priv_fh;              // pointer to private filehandle
   };
 
+  // Forward declaration
+  struct xpn_metadata;
+
   struct nfi_ops 
   {
     int     (*nfi_reconnect) (struct nfi_server *serv);
     int     (*nfi_disconnect)(struct nfi_server *serv);
-    //int   (*nfi_destroy)(struct nfi_server *serv);
+    int     (*nfi_destroy)(struct nfi_server *serv);
     int     (*nfi_getattr)  (struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
     int     (*nfi_setattr)  (struct nfi_server *serv, struct nfi_fhandle *fh, struct nfi_attr *attr);
     int     (*nfi_open)     (struct nfi_server *serv, char *url, int flags, mode_t mode, struct nfi_fhandle *fho); 
@@ -139,6 +145,8 @@
     int     (*nfi_readdir)  (struct nfi_server *serv, struct nfi_fhandle *fhd, struct dirent *entry);
     int     (*nfi_closedir) (struct nfi_server *serv, struct nfi_fhandle *fh);
     int     (*nfi_statfs)   (struct nfi_server *serv, struct nfi_info *inf);
+    int     (*nfi_read_mdata)  (struct nfi_server *serv, char *url, struct xpn_metadata *mdata);
+    int     (*nfi_write_mdata) (struct nfi_server *serv, char *url, struct xpn_metadata *mdata, int only_file_size);
   };
 
 

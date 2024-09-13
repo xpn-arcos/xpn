@@ -35,11 +35,10 @@
   #include "base/urlstr.h"
   #include "base/utils.h"
   #include "base/workers.h"
+  #include "xpn_metadata.h"
 
 
   /* ... Const / Const ................................................. */
-
-  #define XPN_HEADER_SIZE 8192
 
   /* Operations */
 
@@ -66,6 +65,11 @@
   // FS Operations
   #define XPN_SERVER_STATFS_DIR     60
 
+  // Metadata
+  #define XPN_SERVER_READ_MDATA      70
+  #define XPN_SERVER_WRITE_MDATA     71
+  #define XPN_SERVER_WRITE_MDATA_FILE_SIZE     72
+
   // Connection operatons
   #define XPN_SERVER_FINALIZE       80
   #define XPN_SERVER_DISCONNECT     81
@@ -87,6 +91,7 @@
     char path[PATH_MAX];
     int flags;
     mode_t mode;
+    char xpn_session;
   };
 
   struct st_xpn_server_path
@@ -94,11 +99,19 @@
     char path[PATH_MAX];
   };
 
+  struct st_xpn_server_close
+  {
+    int fd;
+    DIR *dir;
+  };
+
   struct st_xpn_server_rw
   {
     char path[PATH_MAX];
     offset_t offset;
     size_t size;
+    int fd;
+    char xpn_session;
   };
 
   struct st_xpn_server_rw_req
@@ -131,6 +144,14 @@
   {
     char path[PATH_MAX];
     long telldir;
+    DIR *dir;
+    char xpn_session;
+  };
+
+  struct st_xpn_server_opendir_req
+  {
+    DIR *dir;
+    struct st_xpn_server_status status;
   };
 
   struct st_xpn_server_readdir_req
@@ -139,6 +160,24 @@
     struct dirent ret;
     long telldir;
     struct st_xpn_server_status status;
+  };
+
+  struct st_xpn_server_read_mdata_req
+  { 
+    struct xpn_metadata mdata;
+    struct st_xpn_server_status status;
+  };
+
+  struct st_xpn_server_write_mdata
+  { 
+    char path[PATH_MAX];
+    struct xpn_metadata mdata;
+  };
+
+  struct st_xpn_server_write_mdata_file_size
+  { 
+    char path[PATH_MAX];
+    ssize_t size;
   };
 
   struct st_xpn_server_end
@@ -152,7 +191,7 @@
     union {
       struct st_xpn_server_path_flags     op_open;
       struct st_xpn_server_path_flags     op_creat;
-      struct st_xpn_server_path           op_close;
+      struct st_xpn_server_close          op_close;
       struct st_xpn_server_rw             op_read;
       struct st_xpn_server_rw             op_write;
       struct st_xpn_server_path           op_rm;
@@ -161,10 +200,14 @@
       struct st_xpn_server_setattr        op_setattr;
 
       struct st_xpn_server_path_flags     op_mkdir;
-      struct st_xpn_server_path           op_opendir;
+      struct st_xpn_server_path_flags     op_opendir;
       struct st_xpn_server_readdir        op_readdir;
-      struct st_xpn_server_path           op_closedir;
+      struct st_xpn_server_close          op_closedir;
       struct st_xpn_server_path           op_rmdir;
+
+      struct st_xpn_server_path           op_read_mdata;
+      struct st_xpn_server_write_mdata    op_write_mdata;
+      struct st_xpn_server_write_mdata_file_size             op_write_mdata_file_size;
 
       struct st_xpn_server_end            op_end;
     } u_st_xpn_server_msg;
@@ -173,7 +216,40 @@
   
   /* ... Functions / Funciones ......................................... */
 
-  char *xpn_server_op2string    ( int op_code );
+  static inline const char *xpn_server_op2string(int op_code) {
+    switch (op_code) {
+      // File operations
+      case XPN_SERVER_OPEN_FILE: return "OPEN";
+      case XPN_SERVER_CREAT_FILE: return "CREAT";
+      case XPN_SERVER_READ_FILE: return "READ";
+      case XPN_SERVER_WRITE_FILE: return "WRITE";
+      case XPN_SERVER_CLOSE_FILE: return "CLOSE";
+      case XPN_SERVER_RM_FILE: return "RM";
+      case XPN_SERVER_RM_FILE_ASYNC: return "RM_ASYNC";
+      case XPN_SERVER_RENAME_FILE: return "RENAME";
+      case XPN_SERVER_GETATTR_FILE: return "GETATTR";
+      case XPN_SERVER_SETATTR_FILE: return "SETATTR";
+      // Directory operations
+      case XPN_SERVER_MKDIR_DIR: return "MKDIR";
+      case XPN_SERVER_RMDIR_DIR: return "RMDIR";
+      case XPN_SERVER_RMDIR_DIR_ASYNC: return "RMDIR_ASYNC";
+      case XPN_SERVER_OPENDIR_DIR: return "OPENDIR";
+      case XPN_SERVER_READDIR_DIR: return "READDIR";
+      case XPN_SERVER_CLOSEDIR_DIR: return "CLOSEDIR";
+      // FS Operations
+      case XPN_SERVER_STATFS_DIR: return "STATFS";
+      case XPN_SERVER_FINALIZE: return "FINALIZE";
+      // Metadata
+      case XPN_SERVER_READ_MDATA: return "READ_METADATA";
+      case XPN_SERVER_WRITE_MDATA: return "WRITE_METADATA";
+      case XPN_SERVER_WRITE_MDATA_FILE_SIZE: return "WRITE_METADATA_FILE_SIZE";
+      // Connection operatons
+      case XPN_SERVER_DISCONNECT: return "DISCONNECT";
+      case XPN_SERVER_END: return "END";
+      default: return "Unknown";
+    }
+  }
+
   int   xpn_server_do_operation ( struct st_th *th, int * the_end );
 
 

@@ -62,6 +62,8 @@
     int server_socket; // For sck_server
     #endif
 
+    int await_stop;
+
     // server arguments
     int    argc;
     char **argv;

@@ -21,11 +21,16 @@
 
 
 #include "xpn/xpn_simple/xpn_init.h"
+#include "ns.h"
+#include "profiler.h"
 
 
 struct xpn_partition xpn_parttable[XPN_MAX_PART];
 pthread_mutex_t xpn_init_mutex = PTHREAD_MUTEX_INITIALIZER;
 int xpn_debug=0;
+int xpn_profiler=0;
+int xpn_profiler_fd=-1;
+
 int xpn_initialize=0;
 
 int xpn_destroy_servers(struct xpn_partition *part)
@@ -40,7 +45,7 @@ int xpn_destroy_servers(struct xpn_partition *part)
     {
       part->data_serv[i].ops->nfi_disconnect(&(serv[i]));
 
-      //part->data_serv[i].ops->nfi_destroy(&(serv[i]));
+      part->data_serv[i].ops->nfi_destroy(&(serv[i]));
       if(serv[i].ops != NULL){
         free(serv[i].ops);
       }
@@ -105,6 +110,7 @@ int xpn_simple_destroy ( void )
 cleanup_xpn_simple_destroy:
   pthread_mutex_unlock(&xpn_init_mutex);
   XPN_DEBUG_END;
+  XPN_PROFILER_END();
   return res;
 }
 
@@ -113,6 +119,7 @@ int xpn_init_partition( void )
   int res;
   int i,j;
   char *env_debug;
+  char *env_profiler;
   int part_n = 0;
   char buff_value[PATH_MAX];
   struct conf_file_data conf_data = {0};
@@ -122,6 +129,12 @@ int xpn_init_partition( void )
     xpn_debug=1;
   }
 
+  env_profiler = getenv("XPN_PROFILER");
+  if ((env_profiler != NULL) && (strlen(env_profiler) > 0)){
+    xpn_profiler=1;
+  }
+
+  XPN_PROFILER_BEGIN(env_profiler);
   XPN_DEBUG_BEGIN;
 
   setbuf(stdout,NULL);
@@ -208,6 +221,20 @@ int xpn_init_partition( void )
       if(res<0)
       {
         xpn_parttable[i].data_serv[j].error = -1;
+      }
+    }
+
+    // Check locality
+    char *hostip = ns_get_host_ip();
+    char hostname[1024];
+    ns_get_hostname(hostname);
+    xpn_parttable[i].local_serv = -1;
+    for(int j=0; j<xpn_parttable[i].data_nserv; j++){
+      XPN_DEBUG("xpn_parttable[%d].local_serv: %d serv_url: %s client: %s name: %s", i, xpn_parttable[i].local_serv, xpn_parttable[i].data_serv[j].url, hostip, hostname);
+
+      if (strstr(xpn_parttable[i].data_serv[j].url, hostip) != NULL || strstr(xpn_parttable[i].data_serv[j].url, hostname) != NULL){
+        xpn_parttable[i].local_serv = j;
+        XPN_DEBUG("xpn_parttable[%d].local_serv: %d serv_url: %s client: %s", i, xpn_parttable[i].local_serv, xpn_parttable[i].data_serv[xpn_parttable[i].local_serv].url, hostip);
       }
     }
 

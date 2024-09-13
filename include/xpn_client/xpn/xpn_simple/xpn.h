@@ -38,7 +38,6 @@
   /* ... Const / Const ................................................. */
 
   #define XPN_CONF "XPN_CONF"
-  #define XPN_HEADER_SIZE 8192
 
 
   /* ... Data structures / Estructuras de datos ........................ */
@@ -53,34 +52,9 @@
 
     int data_nserv;     // number of server 
     struct nfi_server *data_serv; // list of data servers in the partition 
-  };
 
-  // metadata of xpn file
-  struct xpn_metadata
-  {
-    int id;
-    int version;       // number of version 
-    int type;         // type of file: file or dir 
-    ssize_t block_size; // size of distribution used 
-    ssize_t size_threads;
-    int data_nserv;   // number of servers 
-    int meta_nserv;   // number of metadata servers 
-    struct nfi_attr attr;
-	  int first_node;
+    int local_serv; // server with locality
   };
-
-  // metadata header of xpn file
-  struct xpn_metadata_header
-  {
-    int     version;       // number of version 
-    ssize_t block_size;    // size of distribution used 
-    int     data_nserv;   // number of servers 
-    ssize_t file_size;
-    int replication_level;     // replication_level of files :0, 1, 2,... 
-	  int first_node;
-    //char    padding[512-(3*sizeof(int) - 2*sizeof(ssize_t))];   // 484 = 512 bytes - 3*sizeof(int) - 2*sizeof(ssize_t) 
-  };
-
 
   /* ... Functions / Funciones ......................................... */
 

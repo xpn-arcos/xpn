@@ -52,20 +52,23 @@
   char src_path [PATH_MAX+5];
   char dest_path [PATH_MAX+5];
 
+  int xpn_path_len = 0;
 
 /* ... Functions / Funciones ......................................... */
 
   int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {  
+    debug_info("entry %s is_file %d dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d \n",entry, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
     int  ret;
 
     int fd_src, fd_dest, replication = 0;
+    int aux_serv;
     char *buf ;
     int buf_len;
     off64_t offset_dest ;
     off_t offset_src;
     ssize_t read_size, write_size;
-    struct stat st, st_src;
+    struct stat st_src = {0};
 
     //Alocate buffer
     buf_len = blocksize;
@@ -83,11 +86,11 @@
     sprintf( dest_path, "%s/%s", dest_prefix, aux_entry );
 
     if (rank == 0){
-      printf("%s\n", aux_entry);
+      printf("%s -> %s\n", src_path, dest_path);
     }
 
     ret = stat(src_path, &st_src);
-    if (ret < 0){
+    if (ret < 0 && errno != ENOENT){
       perror("stat: ");
       free(buf) ;
       return -1;
@@ -96,32 +99,25 @@
     {
       if (rank == 0)
       {
-        if (stat(dest_path, &st) == -1) {
-          ret = mkdir(dest_path, st_src.st_mode);
-          if ( ret < 0 )
-          {
-            perror("mkdir: ");
-            free(buf) ;
-            return -1;
-          }
+        ret = mkdir(dest_path, st_src.st_mode);
+        if ( ret < 0 && errno != EEXIST)
+        {
+          perror("mkdir: ");
+          free(buf) ;
+          return -1;
         }
       }
+      MPI_Barrier(MPI_COMM_WORLD);
     }
     else if (is_file)
     {      
-      fd_src = open64(src_path, O_RDONLY | O_LARGEFILE);
-      if ( fd_src < 0 )
-      {
-        perror("open 1: ");
-        free(buf) ;
-        return -1;
-      }
-
-      if (rank == 0)
+      int master_node = hash(&src_path[xpn_path_len], size, 1);
+      if (rank == master_node)
       {
         fd_dest = creat(dest_path, st_src.st_mode);
         if ( fd_dest < 0 ){
           perror("creat 1: ");
+          printf("creat: %s mode %d\n", dest_path, st_src.st_mode);
         }else{
           close(fd_dest);
         }
@@ -132,6 +128,14 @@
         free(buf) ;
         return -1;
       }
+      fd_src = open64(src_path, O_RDONLY | O_LARGEFILE);
+      if ( fd_src < 0 && errno != ENOENT )
+      {
+        perror("open 1: ");
+        free(buf) ;
+        return -1;
+      }
+      MPI_Barrier(MPI_COMM_WORLD);
       fd_dest = open64(dest_path, O_WRONLY | O_LARGEFILE);
       if ( fd_dest < 0 )
       {
@@ -140,15 +144,52 @@
         return -1;
       }
 
+      struct xpn_metadata mdata = {0};
+      if (rank == master_node){
+        ret = filesystem_read(fd_src, &mdata, sizeof(struct xpn_metadata));
+        // To debug
+        // XpnPrintMetadata(&mdata);
+      }
+      
+      debug_info("Rank %d mdata %3s\n", rank, mdata.magic_number);
+      MPI_Bcast(&mdata, sizeof(struct xpn_metadata), MPI_CHAR, master_node, MPI_COMM_WORLD);
+      debug_info("After bcast Rank %d mdata %3s\n", rank, mdata.magic_number);
+      #ifdef DEBUG
+      XpnPrintMetadata(&mdata);
+      #endif
+      if (!XPN_CHECK_MAGIC_NUMBER(&mdata)){
+        free(buf);
+        return -1;
+      }
+
       off64_t ret_1;
       offset_src = 0;
+      offset_dest = -blocksize;
 
       do
       { 
         //TODO: check when the server has error and data is corrupt for fault tolerance
-        XpnCalculateBlockInvert(blocksize, replication_level, size, rank, offset_src, &offset_dest, &replication);
-        
-        if(offset_src > st_src.st_size){
+        do{
+          offset_dest += blocksize;
+          for (int i = 0; i < replication_level+1; i++)
+          {
+            XpnCalculateBlockMdata(&mdata, offset_dest, i, &offset_src, &aux_serv);
+            
+            debug_info("try rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
+            if (aux_serv == rank){
+              goto exit_search;
+            }
+          }
+        }while(offset_dest < mdata.file_size);
+        exit_search:
+        if (aux_serv != rank){
+          continue;
+        }
+        debug_info("rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
+        if(st_src.st_mtime != 0 && offset_src > st_src.st_size){
+          break;
+        }
+        if (offset_dest > mdata.file_size){
           break;
         }
         if (replication != 0){
@@ -176,11 +217,12 @@
           perror("write: ");
           break;
         }
-        offset_src += blocksize;
+        debug_info("rank %d write %ld in offset_dest %ld from offset_src %ld\n", rank, write_size, offset_dest, offset_src);
       }
       while(read_size > 0);
 
       close(fd_src);
+      unlink(src_path);
       close(fd_dest);
     }
     
@@ -191,58 +233,82 @@
 
   int list (char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {
+    debug_info("dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d\n", dir_name, dest_prefix, blocksize, replication_level, rank, size);
+    
     int ret;
     DIR* dir = NULL;
     struct stat stat_buf;
     char path [PATH_MAX];
+    char path_dst [PATH_MAX];
+    int buff_coord = 1;
 
-    dir = opendir(dir_name);
-    if(dir == NULL)
-    {
-      perror("opendir:");
-      return -1;
-    }
-    
-    struct dirent* entry;
-    entry = readdir(dir);
-
-    while(entry != NULL)
-    {
-      if (! strcmp(entry->d_name, ".")){
-        entry = readdir(dir);
-        continue;
-      }
-
-      if (! strcmp(entry->d_name, "..")){
-        entry = readdir(dir);
-        continue;
-      }
-
-      sprintf(path, "%s/%s", dir_name, entry->d_name);
-
-      ret = stat(path, &stat_buf);
-      if (ret < 0) 
+    int master_node = hash(&dir_name[xpn_path_len], size, 1);
+    if (rank == master_node){
+      dir = opendir(dir_name);
+      if(dir == NULL)
       {
-        perror("stat: ");
-        printf("%s\n", path);
-        entry = readdir(dir);
-        continue;
+        perror("opendir:");
+        return -1;
       }
-
-      int is_file = !S_ISDIR(stat_buf.st_mode);
-      copy(path, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
-
-      if (S_ISDIR(stat_buf.st_mode))
-      {
-        char path_dst [PATH_MAX];
-        sprintf(path_dst, "%s/%s", dest_prefix, entry->d_name);
-        list(path, path_dst, blocksize, replication_level, rank, size);
-      }
-
+      struct dirent*  entry;
       entry = readdir(dir);
-    }
+      
 
-    closedir(dir);
+      while(entry != NULL)
+      {
+        if (! strcmp(entry->d_name, ".")){
+          entry = readdir(dir);
+          continue;
+        }
+
+        if (! strcmp(entry->d_name, "..")){
+          entry = readdir(dir);
+          continue;
+        }
+
+        sprintf(path, "%s/%s", dir_name, entry->d_name);
+        sprintf(path_dst, "%s/%s", dest_prefix, entry->d_name);
+
+        ret = stat(path, &stat_buf);
+        if (ret < 0) 
+        {
+          perror("stat: ");
+          printf("%s\n", path);
+          entry = readdir(dir);
+          continue;
+        }
+
+        MPI_Bcast(&buff_coord, 1, MPI_INT, master_node, MPI_COMM_WORLD);
+        MPI_Bcast(&path, sizeof(path), MPI_CHAR, master_node, MPI_COMM_WORLD);
+        MPI_Bcast(&path_dst, sizeof(path_dst), MPI_CHAR, master_node, MPI_COMM_WORLD);
+        MPI_Bcast(&stat_buf, sizeof(stat_buf), MPI_CHAR, master_node, MPI_COMM_WORLD);
+        int is_file = !S_ISDIR(stat_buf.st_mode);
+        copy(path, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
+        if (!is_file){
+          list(path, path_dst, blocksize, replication_level, rank, size);
+        }
+        
+
+        entry = readdir(dir);
+      }
+      buff_coord = 0;
+      MPI_Bcast(&buff_coord, 1, MPI_INT, master_node, MPI_COMM_WORLD);
+      closedir(dir);
+    }else{
+      while(buff_coord == 1){
+        MPI_Bcast(&buff_coord, 1, MPI_INT, master_node, MPI_COMM_WORLD);
+        if (buff_coord == 0) break;
+        MPI_Bcast(&path, sizeof(path), MPI_CHAR, master_node, MPI_COMM_WORLD);
+        MPI_Bcast(&path_dst, sizeof(path_dst), MPI_CHAR, master_node, MPI_COMM_WORLD);
+        MPI_Bcast(&stat_buf, sizeof(stat_buf), MPI_CHAR, master_node, MPI_COMM_WORLD);
+
+        int is_file = !S_ISDIR(stat_buf.st_mode);
+        copy(path, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
+        if (!is_file){
+          list(path, path_dst, blocksize, replication_level, rank, size);
+        }
+      }
+    }
 
     return 0;
   }
@@ -279,6 +345,7 @@
     if (rank == 0){
       printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
     }
+    xpn_path_len = strlen(argv[1]);
     list (argv[1], argv[2], blocksize, replication_level, rank, size);
     if (rank == 0){
       printf("Flush elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);

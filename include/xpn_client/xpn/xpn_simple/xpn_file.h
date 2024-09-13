@@ -84,7 +84,6 @@
     ssize_t block_size;           // size of distribution used            
     ssize_t size_threads;
     struct xpn_fh *data_vfh;      // virtual FH                           
-    struct xpn_fh *meta_vfh;      // virtual METADATA FH                  
     struct stat    st;
   };
 

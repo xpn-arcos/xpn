@@ -56,12 +56,15 @@
   {
     char path[PATH_MAX];
     long telldir;
+    int fd;
+    DIR *dir;
   };
 
 
   /* ... Functions / Funciones ......................................... */
 
   int     nfi_local_init       ( char *url, struct nfi_server *serv, struct nfi_attr_server *attr );
+  int     nfi_local_destroy    ( struct nfi_server *server );
 
   int     nfi_local_connect    ( struct nfi_server *serv, char *url, char* prt, char* server, char* dir );
   int     nfi_local_reconnect  ( struct nfi_server *server );
@@ -85,6 +88,9 @@
   int     nfi_local_rmdir      ( struct nfi_server *server, char *url );
 
   int     nfi_local_statfs     ( struct nfi_server *server, struct nfi_info *inf );
+
+  int     nfi_local_read_mdata   ( struct nfi_server *server, char *url, struct xpn_metadata *mdata );
+  int     nfi_local_write_mdata  ( struct nfi_server *server, char *url, struct xpn_metadata *mdata, int only_file_size );
 
   /* ................................................................... */
 
