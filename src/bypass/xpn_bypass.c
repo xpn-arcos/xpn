@@ -731,36 +731,36 @@ int creat ( const char *path, mode_t mode )
   return ret;
 }
 
-int mkstemp (char *template)
+int mkstemp (char *templ)
 {
   int ret = -1;
 
   debug_info("[BYPASS] >> Begin mkstemp...\n");
-  debug_info("[BYPASS]    1) template %s\n", template);
+  debug_info("[BYPASS]    1) template %s\n", templ);
 
   // This if checks if variable path passed as argument starts with the expand prefix.
-  if (is_xpn_prefix(template))
+  if (is_xpn_prefix(templ))
   {
     // It is an XPN partition, so we redirect the syscall to expand syscall
-    debug_info("[BYPASS]\t try to creat %s", skip_xpn_prefix(template));
+    debug_info("[BYPASS]\t try to creat %s", skip_xpn_prefix(templ));
 
     srand(time(NULL));
     int n = rand()%100000;
 
-    char *str_init = strstr(template, "XXXXXX");
+    char *str_init = strstr(templ, "XXXXXX");
     sprintf(str_init,"%06d", n);
 
-    int fd  = xpn_creat((const char *)skip_xpn_prefix(template), S_IRUSR | S_IWUSR);
+    int fd  = xpn_creat((const char *)skip_xpn_prefix(templ), S_IRUSR | S_IWUSR);
     ret = add_xpn_file_to_fdstable(fd);
 
-    debug_info("[BYPASS]\t creat %s -> %d", skip_xpn_prefix(template), ret);
+    debug_info("[BYPASS]\t creat %s -> %d", skip_xpn_prefix(templ), ret);
   }
   // Not an XPN partition. We must link with the standard library
   else
   {
     debug_info("[BYPASS]\t try to dlsym_mkstemp\n");
 
-    ret = dlsym_mkstemp(template);
+    ret = dlsym_mkstemp(templ);
 
     debug_info("[BYPASS]\t dlsym_mkstemp -> %d\n", ret);
   }
@@ -2731,7 +2731,7 @@ int access ( const char *path, int mode )
   return ret;
 }
 
-char *realpath ( const char *restrict path, char *restrict resolved_path )
+char *realpath ( const char *__restrict__ path, char *__restrict__ resolved_path )
 {
   debug_info("[BYPASS] >> Begin realpath...\n");
   debug_info("[BYPASS] 1) Path %s\n", path);

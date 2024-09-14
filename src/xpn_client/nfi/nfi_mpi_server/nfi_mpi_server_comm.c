@@ -113,6 +113,7 @@ int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_c
     int ret, err;
     int connection_socket;
     int rank;
+    int buffer = SOCKET_ACCEPT_CODE;
 
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] >> Begin\n");
 
@@ -171,7 +172,6 @@ int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_c
                     goto mpi_comm_socket_finish;
                 }
             }
-            int buffer = SOCKET_ACCEPT_CODE;
             ret = socket_send(connection_socket, &buffer, sizeof(buffer));
             if (ret < 0) {
                 debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket send\n");

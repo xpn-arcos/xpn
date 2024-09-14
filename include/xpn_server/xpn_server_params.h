@@ -33,7 +33,6 @@
   #include <stdio.h>
   #include <string.h>
   #include <ctype.h>
-  #include "mpi.h"
   #include "base/utils.h"
   #include "base/workers.h"
   #include "xpn_server_conf.h"
@@ -49,8 +48,8 @@
     int  size;
     int  rank;
 
-    char port_name[MPI_MAX_PORT_NAME];
-    char srv_name [MPI_MAX_PORT_NAME];
+    char port_name[XPN_SERVER_MAX_PORT_NAME];
+    char srv_name [XPN_SERVER_MAX_PORT_NAME];
 
     // server configuration
     char shutdown_file[PATH_MAX];

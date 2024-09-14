@@ -231,7 +231,7 @@
   int    chown    ( const char *path, uid_t owner, gid_t group );
   int    fcntl    ( int fd, int cmd, long arg );
   int    access   ( const char *path, int mode );
-  char * realpath ( const char *restrict path, char *restrict resolved_path );
+  char * realpath ( const char *__restrict__ path, char *__restrict__ resolved_path );
   char * __realpath_chk ( const char * path, char * resolved_path, size_t resolved_len );
   int    fsync ( int fd );
   int    flock ( int fd, int operation );

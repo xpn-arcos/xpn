@@ -1,10 +1,19 @@
+file(GLOB XPN_SERVER_HEADERS 
+    "${PROJECT_SOURCE_DIR}/include/xpn_server/*.h"
+    "${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server/*.h"
+    "${PROJECT_SOURCE_DIR}/include/xpn_server/sck_server/*.h"
+)
 file(GLOB XPN_SERVER_SOURCE 
-    "*.c"
-    "mpi_server/*.c"
-    "sck_server/*.c"
+"*.c"
+"mpi_server/*.c"
+"sck_server/*.c"
 )
 
+message(STATUS "XPN_SERVER_SOURCE: ${XPN_SERVER_SOURCE}")
+set_source_files_properties(${XPN_SERVER_SOURCE} PROPERTIES LANGUAGE CXX)
 add_executable(xpn_server ${XPN_SERVER_SOURCE})
+
+set_target_properties(xpn_server PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(xpn_server PRIVATE xpn_base)
 

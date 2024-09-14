@@ -9,12 +9,12 @@ file(GLOB XPN_SOURCE
 	"*.c"
 )
 
-
+set_source_files_properties(${XPN_SOURCE} PROPERTIES LANGUAGE CXX)
 add_library(xpn ${XPN_HEADERS} ${XPN_SOURCE})
-add_library(xpn_shared SHARED $<TARGET_OBJECTS:xpn>)
-set_target_properties(xpn_shared PROPERTIES OUTPUT_NAME xpn)
-
-target_link_libraries(xpn PRIVATE xpn_base xpn_core xpn_nfi )
+# add_library(xpn_shared SHARED $<TARGET_OBJECTS:xpn>)
+# set_target_properties(xpn_shared PROPERTIES OUTPUT_NAME xpn)
+target_link_libraries(xpn PRIVATE xpn_base xpn_core xpn_nfi)
+set_target_properties(xpn PROPERTIES LINKER_LANGUAGE CXX)
 
 target_include_directories(xpn PUBLIC
 	"${PROJECT_SOURCE_DIR}/include"
@@ -27,4 +27,4 @@ target_include_directories(xpn PUBLIC
 
 
 install(TARGETS xpn LIBRARY DESTINATION lib)
-install(TARGETS xpn_shared LIBRARY DESTINATION lib)
+# install(TARGETS xpn_shared LIBRARY DESTINATION lib)

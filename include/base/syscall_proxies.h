@@ -55,7 +55,7 @@
 
   int dlsym_creat     (const char *path, mode_t mode);
   int dlsym_ftruncate (int fd, off_t length);
-  int dlsym_mkstemp   (char *template);
+  int dlsym_mkstemp   (char *templ);
 
   ssize_t dlsym_read  (int fd, void *buf, size_t nbyte);
   ssize_t dlsym_write (int fd, void *buf, size_t nbyte);
@@ -129,7 +129,7 @@
   int dlsym_chown  (char *path, uid_t owner, gid_t group);
   int dlsym_fcntl  (int fd, int cmd, long arg);
   int dlsym_access (const char *path, int mode);
-  char *dlsym_realpath (const char *restrict path, char *restrict resolved_path);
+  char *dlsym_realpath (const char *__restrict__ path, char *__restrict__ resolved_path);
   int dlsym_fsync (int fd);
   int dlsym_flock (int fd, int operation);
 

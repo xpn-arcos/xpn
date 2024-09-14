@@ -23,17 +23,17 @@
 #ifndef _XPN_SERVER_CONF_H_
 #define _XPN_SERVER_CONF_H_
 
+
   #ifdef  __cplusplus
     extern "C" {
+  #endif
+  #ifdef ENABLE_MPI_SERVER
+  // #include "mpi.h"
   #endif
 
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #ifdef ENABLE_MPI_SERVER
-  #include "mpi.h"
-  #endif
-
 
   /* ... Const / Const ................................................. */
 

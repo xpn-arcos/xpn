@@ -23,6 +23,7 @@
 #ifndef _MPI_SERVER_COMM_H_
 #define _MPI_SERVER_COMM_H_
 
+  #include "mpi.h"
   #ifdef  __cplusplus
     extern "C" {
   #endif
@@ -32,7 +33,6 @@
   #include "all_system.h"
   #include "base/utils.h"
   #include "base/time_misc.h"
-  #include "mpi.h"
 
   /* ... Const / Const ................................................. */
 

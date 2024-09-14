@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(XPN)
+project(XPN VERSION 3.0.0 LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_compile_options("-D_GNU_SOURCE")
-add_compile_options("-fPIC" "-O2" "-g" "-g3" "-ggdb" "-Wall" "-Wextra" "-std=c11")
+add_compile_options("-D_GNU_SOURCE" "-DMPICH_SKIP_MPICXX" "-D_REENTRANT")
+add_compile_options("-fPIC" "-O2" "-g" "-g3" "-ggdb" "-Wall" "-Wextra" "-fpermissive")
 
 option(ENABLE_SCK_SERVER "Enable the sck_server module" ON)
 if(ENABLE_SCK_SERVER)

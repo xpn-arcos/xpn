@@ -23,6 +23,10 @@
 #ifndef _NS_H_
 #define _NS_H_
 
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
+
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h" /// Library for 'TODO'
@@ -66,4 +70,7 @@
 
   /* ................................................................... */
 
+  #ifdef  __cplusplus
+    }
+  #endif
 #endif

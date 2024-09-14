@@ -23,6 +23,9 @@
 #ifndef _WORKERS_ONDEMAND_H_
 #define _WORKERS_ONDEMAND_H_
 
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
@@ -54,5 +57,9 @@
   int   worker_ondemand_wait     ( struct st_th *th_arg );
 
   /* ................................................................... */
+
+  #ifdef  __cplusplus
+    }
+  #endif
 
 #endif

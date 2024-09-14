@@ -34,7 +34,7 @@
   #include "time_misc.h"    
   #include "math_misc.h"  
 
-  #include "darray.h " 
+  #include "darray.h" 
   #include "dtable.h"     
 
   #include "string_misc.h"  
