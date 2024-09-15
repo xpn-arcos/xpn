@@ -23,7 +23,7 @@
 
 #include "nfi_xpn_server.h"
 #include "nfi_xpn_server_comm.h"
-#include "xpn_server/xpn_server_ops.h"
+#include "xpn_server/xpn_server_ops.hpp"
 
 
 /* ... Const / Const ................................................. */

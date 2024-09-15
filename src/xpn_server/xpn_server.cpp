@@ -18,56 +18,69 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
+#define DEBUG
 /* ... Include / Inclusion ........................................... */
 
-#include "all_system.h"
+#include "all_system.h" 
+#include <unistd.h>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <execution>
 #include "base/socket.h"
 #include "base/utils.h"
-#include "base/workers.h"
-#include "xpn_server_comm.h"
-#include "xpn_server_ops.h"
-#include "xpn_server_params.h"
+#include "xpn_server_comm.hpp"
 
+#include "xpn_server.hpp"
 
 /* ... Global variables / Variables globales ........................ */
 
-char serv_name[HOST_NAME_MAX];
-xpn_server_param_st params;
-worker_t worker1, worker2;
-int the_end = 0;
+// char serv_name[HOST_NAME_MAX];
+// xpn_server_param_st params;
+// worker_t worker1, worker2;
+// int the_end = 0;
 
 /* ... Auxiliar Functions / Funciones Auxiliares ..................... */
 
-void xpn_server_run ( struct st_th th )
+namespace XPN
 {
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] >> Begin: OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
+    
+std::unique_ptr<xpn_server> xpn_server::s_server = nullptr;
 
-    xpn_server_do_operation(&th, &the_end);
-
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] << End: OP:'%s'\n", th.id, xpn_server_op2string(th.type_op));
+xpn_server& xpn_server::Create(int argc, char *argv[])
+{   
+    s_server = std::make_unique<xpn_server>(argc, argv);
+    return Get();
 }
+// void xpn_server_run ( struct st_th th )
+// {
+//     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] >> Begin: OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
 
-void xpn_server_dispatcher ( struct st_th th )
+//     xpn_server_do_operation(&th, &the_end);
+
+//     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] << End: OP:'%s'\n", th.id, xpn_server_op2string(th.type_op));
+// }
+
+void xpn_server::dispatcher ( struct st_th th )
 {
     int ret;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] >> Begin\n", th.id);
 
     // check params...
-    if (NULL == th.params) {
-        debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: NULL arguments\n", th.id);
-        return;
-    }
+    // if (NULL == th.params) {
+    //     debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: NULL arguments\n", th.id);
+    //     return;
+    // }
 
     struct st_th th_arg;
+    xpn_server_comm *comm = static_cast<xpn_server_comm*>(th.comm);
     int disconnect = 0;
     while (!disconnect)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Waiting for operation\n", th.id);
 
-        ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params, th.comm, &(th.type_op),
-                                             &(th.rank_client_id), &(th.tag_client_id));
+        ret = comm->read_operation(th.type_op, th.rank_client_id, th.tag_client_id);
         if (ret < 0) {
             debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: read operation fail\n", th.id);
             return;
@@ -87,73 +100,76 @@ void xpn_server_dispatcher ( struct st_th th )
             debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] FINALIZE received\n", th.id);
 
             disconnect = 1;
-            the_end = 1;
             continue;
         }
 
         // Launch worker per operation
-        th_arg.params = &params;
+        // th_arg.params = &params;
         th_arg.comm = th.comm;
-        th_arg.function = xpn_server_run;
+        th_arg.function = do_operation;
         th_arg.type_op = th.type_op;
         th_arg.rank_client_id = th.rank_client_id;
         th_arg.tag_client_id = th.tag_client_id;
         th_arg.wait4me = FALSE;
 
-        base_workers_launch(&worker2, &th_arg, xpn_server_run);
+        base_workers_launch(&xpn_server::Get().m_worker1, &th_arg, do_operation);
 
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Worker launched\n", th.id);
     }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Client %d close\n", th.id, th.rank_client_id);
 
-    xpn_server_comm_disconnect(th.params, th.comm);
+    xpn_server::Get().m_control_comm->disconnect(comm);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
 }
 
-void xpn_server_accept ( void )
+void xpn_server::accept ( )
 {
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Start accepting\n", 0);
     int ret;
-    void *comm = NULL;
     struct st_th th_arg;
-    ret = xpn_server_comm_accept(&params, &comm);
-    if (ret < 0) {
-        return;
-    }
+    
+    xpn_server_comm* comm = m_control_comm->accept();
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Accept received\n", 0);
 
     // Launch dispatcher per aplication
-    th_arg.params = &params;
     th_arg.comm = comm;
-    th_arg.function = xpn_server_dispatcher;
+    th_arg.function = dispatcher;
     th_arg.type_op = 0;
     th_arg.rank_client_id = 0;
     th_arg.tag_client_id = 0;
     th_arg.wait4me = FALSE;
 
-    base_workers_launch(&worker1, &th_arg, xpn_server_dispatcher);
+    base_workers_launch(&m_worker1, &th_arg, dispatcher);
 }
 
-void xpn_server_finish ( void )
+void xpn_server::finish ( void )
 {
     // Wait and finalize for all current workers
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers destroy\n", 0);
 
-    base_workers_destroy(&worker1);
-    base_workers_destroy(&worker2);
+    base_workers_destroy(&m_worker1);
+    base_workers_destroy(&m_worker2);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] mpi_comm destroy\n", 0);
 
-    xpn_server_comm_destroy(&params);
+    m_control_comm.reset();
 }
 
 /* ... Functions / Funciones ......................................... */
 
+xpn_server::xpn_server(int argc, char *argv[]) : m_params(argc, argv)
+{
+}
+
+xpn_server::~xpn_server()
+{
+}
+
 // Start servers
-int xpn_server_up ( void )
+int xpn_server::run()
 {
     int ret;
     int server_socket;
@@ -175,22 +191,18 @@ int xpn_server_up ( void )
     // * mpi_comm initialization
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] mpi_comm initialization\n", 0);
 
-    ret = xpn_server_comm_init(&params);
-    if (ret < 0) {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: mpi_comm initialization fails\n", 0);
-        return -1;
-    }
+    m_control_comm = xpn_server_control_comm::Create(m_params);
 
     // * Workers initialization
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers initialization\n", 0);
 
-    ret = base_workers_init(&worker1, params.thread_mode_connections);
+    ret = base_workers_init(&m_worker1, m_params.thread_mode_connections);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;
     }
 
-    ret = base_workers_init(&worker2, params.thread_mode_operations);
+    ret = base_workers_init(&m_worker2, m_params.thread_mode_operations);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;
@@ -203,7 +215,7 @@ int xpn_server_up ( void )
         return -1;
     }
 
-    the_end = 0;
+    int the_end = 0;
     while (!the_end)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Listening to conections\n", 0);
@@ -213,17 +225,17 @@ int xpn_server_up ( void )
         ret = socket_recv(connection_socket, &recv_code, sizeof(recv_code));
         if (ret < 0) continue;
 
-        debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] socket recv: %d \n", 0, params.srv_name, recv_code);
+        debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] socket recv: %d \n", 0, m_params.srv_name, recv_code);
         switch (recv_code)
         {
             case SOCKET_ACCEPT_CODE:
-                socket_send(connection_socket, params.port_name, XPN_SERVER_MAX_PORT_NAME);
-                xpn_server_accept();
+                socket_send(connection_socket, m_params.port_name, XPN_SERVER_MAX_PORT_NAME);
+                accept();
                 break;
 
             case SOCKET_FINISH_CODE:
             case SOCKET_FINISH_CODE_AWAIT:
-                xpn_server_finish();
+                finish();
                 the_end = 1;
                 if (recv_code == SOCKET_FINISH_CODE_AWAIT){
                     await_stop = 1;
@@ -232,7 +244,7 @@ int xpn_server_up ( void )
 
             default:
                 debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] >> Socket recv unknown code %d\n", 0,
-                           params.srv_name, recv_code);
+                           m_params.srv_name, recv_code);
                 break;
         }
 
@@ -324,15 +336,11 @@ int xpn_server_up ( void )
 // }
 
 // Stop servers
-int xpn_server_down ( void )
+int xpn_server::stop()
 {
     char srv_name[1024];
     FILE *file;
     int ret;
-    int buffer = SOCKET_FINISH_CODE;
-    if (params.await_stop == 1){
-        buffer = SOCKET_FINISH_CODE_AWAIT;
-    }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] >> Begin\n", 0);
 
@@ -345,102 +353,97 @@ int xpn_server_down ( void )
     */
 
     // Open host file
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Open host file %s\n", 0, params.shutdown_file);
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Open host file %s\n", 0, m_params.shutdown_file);
 
-    file = fopen(params.shutdown_file, "r");
+    file = fopen(m_params.shutdown_file, "r");
     if (file == NULL) {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: invalid file %s\n", 0, params.shutdown_file);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: invalid file %s\n", 0, m_params.shutdown_file);
         return -1;
     }
 
-    int num_serv = 0;
-    while (fscanf(file, "%[^\n] ", srv_name) != EOF)
-    {
-        num_serv ++;
-    }
-
-    rewind(file);
-    int *sockets = malloc(num_serv * sizeof(int));
+    std::vector<std::string> srv_names;
+    // int *sockets = malloc(num_serv * sizeof(int));
     int i = 0;
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
-        printf(" * Stopping server (%s)\n", srv_name);
-        ret = socket_client_connect(srv_name, &sockets[i]);
-        if (ret < 0) {
-            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);
-            continue;
-        }
-
-        ret = socket_send(sockets[i], &buffer, sizeof(buffer));
-        if (ret < 0) {
-            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, srv_name);
-        }
-        
-        if (params.await_stop == 0){
-            socket_close(sockets[i]);
-        }
-
-        i++;
+        srv_names.push_back(srv_name);
     }
-
-    rewind(file);
-    i = 0;
-    while (fscanf(file, "%[^\n] ", srv_name) != EOF)
-    {
-        if (params.await_stop == 1){
-            ret = socket_recv(sockets[i], &buffer, sizeof(buffer));
-            if (ret < 0) {
-                printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, srv_name);
-            }
-            socket_close(sockets[i]);
-        }
-
-        i++;
-    }
-
-    free(sockets);
 
     // Close host file
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Close host file\n", 0);
 
     fclose(file);
 
+    std::for_each(std::execution::par, srv_names.begin(), srv_names.end(), [this] (std::string & name){
+
+        printf(" * Stopping server (%s)\n", name.c_str());
+        int socket;
+        int ret;
+        int buffer = SOCKET_FINISH_CODE;
+        if (m_params.await_stop == 1){
+            buffer = SOCKET_FINISH_CODE_AWAIT;
+        }
+        ret = socket_client_connect(name.data(), &socket);
+        if (ret < 0) {
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, name.c_str());
+            return;
+        }
+
+        ret = socket_send(socket, &buffer, sizeof(buffer));
+        if (ret < 0) {
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, name.c_str());
+        }
+        
+        if (m_params.await_stop == 0){
+            socket_close(socket);
+        }
+
+        if (m_params.await_stop == 1){
+            ret = socket_recv(socket, &buffer, sizeof(buffer));
+            if (ret < 0) {
+                printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, name.c_str());
+            }
+            socket_close(socket);
+        }
+    });
+
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> End\n", 0);
 
     return 0;
 }
 
-int xpn_server_terminate ( void )
-{
-    int ret;
-    int buffer = SOCKET_FINISH_CODE;
-    int connection_socket;
+// int xpn_server_terminate ( void )
+// {
+//     int ret;
+//     int buffer = SOCKET_FINISH_CODE;
+//     int connection_socket;
 
-    printf(" * Stopping server (%s)\n", params.srv_name);
-    /*
-    printf("\n");
-    printf(" ----------------\n");
-    printf(" Stopping server (%s)\n", params.srv_name);
-    printf(" ----------------\n");
-    printf("\n");
-    */
+//     printf(" * Stopping server (%s)\n", params.srv_name);
+//     /*
+//     printf("\n");
+//     printf(" ----------------\n");
+//     printf(" Stopping server (%s)\n", params.srv_name);
+//     printf(" ----------------\n");
+//     printf("\n");
+//     */
 
-    ret = socket_client_connect(params.srv_name, &connection_socket);
-    if (ret < 0) {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, params.srv_name);
-        return -1 ;
-    }
+//     ret = socket_client_connect(params.srv_name, &connection_socket);
+//     if (ret < 0) {
+//         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, params.srv_name);
+//         return -1 ;
+//     }
 
-    ret = socket_send(connection_socket, &buffer, sizeof(buffer));
-    if (ret < 0) {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, params.srv_name);
-        return -1 ;
-    }
+//     ret = socket_send(connection_socket, &buffer, sizeof(buffer));
+//     if (ret < 0) {
+//         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, params.srv_name);
+//         return -1 ;
+//     }
 
-    socket_close(connection_socket);
-    return 0;
-}
+//     socket_close(connection_socket);
+//     return 0;
+// }
 
+} // namespace XPN
 // Main
 int main ( int argc, char *argv[] )
 {
@@ -454,14 +457,15 @@ int main ( int argc, char *argv[] )
     // Get arguments..
     debug_info("[TH_ID=%d] [XPN_SERVER] [main] Get server params\n", 0);
 
-    ret = xpn_server_params_get(&params, argc, argv);
-    if (ret < 0) {
-        xpn_server_params_show_usage();
-        return -1;
-    }
+    // ret = xpn_server_params_get(&params, argc, argv);
+    // if (ret < 0) {
+        // xpn_server_params_show_usage();
+        // return -1;
+    // }
+    XPN::xpn_server &server = XPN::xpn_server::Create(argc, argv);
 
     exec_name = basename(argv[0]);
-    gethostname(serv_name, HOST_NAME_MAX);
+    gethostname(server.serv_name, HOST_NAME_MAX);
 
     // Welcome...
     printf("\n");
@@ -470,8 +474,10 @@ int main ( int argc, char *argv[] )
 
     // Show configuration...
     printf(" | * action=%s\n", exec_name);
-    printf(" | * host=%s\n", serv_name);
-    xpn_server_params_show(&params);
+    printf(" | * host=%s\n", server.serv_name);
+    server.m_params.show();
+    // xpn_server_params_show(&params);
+
 
     // Do associate action...
     if (strcasecmp(exec_name, "xpn_server_spawn") == 0)
@@ -482,17 +488,18 @@ int main ( int argc, char *argv[] )
     else if (strcasecmp(exec_name, "xpn_stop_server") == 0)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Down servers\n", 0);
-        ret = xpn_server_down();
+        ret = server.stop();
+        // ret = xpn_server_down();
     }
     else if (strcasecmp(exec_name, "xpn_terminate_server") == 0)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Terminate server\n", 0);
-        ret = xpn_server_terminate();
+        // ret = xpn_server_terminate();
     }
     else
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Up servers\n", 0);
-        ret = xpn_server_up();
+        ret = server.run();
     }
 
     return ret;

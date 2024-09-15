@@ -12,9 +12,9 @@ add_compile_options("-DHAVE_UNISTD_H")
 add_compile_options("-DHAVE_NETINET_IN_H")
 add_compile_options("-DHAVE_NETINET_TCP_H")
 
-set_source_files_properties(${XPN_BASE_SOURCE} PROPERTIES LANGUAGE CXX)
+set_source_files_properties(${XPN_BASE_SOURCE} PROPERTIES LANGUAGE C)
 add_library(xpn_base ${XPN_BASE_SOURCE} ${XPN_BASE_HEADERS})
-set_target_properties(xpn_base PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(xpn_base PROPERTIES LINKER_LANGUAGE C)
 target_include_directories(xpn_base PRIVATE
     "${PROJECT_SOURCE_DIR}/include"
 )   

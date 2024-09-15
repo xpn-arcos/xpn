@@ -17,7 +17,8 @@ target_compile_options(xpn_core PRIVATE
     "-DHAVE_NETINET_TCP_H"
 )
 target_include_directories(xpn_core PRIVATE
-    "${PROJECT_SOURCE_DIR}/include/"
+    "${PROJECT_SOURCE_DIR}/src"
+    "${PROJECT_SOURCE_DIR}/include"
     "${PROJECT_SOURCE_DIR}/include/xpn_client"
     "${PROJECT_SOURCE_DIR}/include/xpn_client/nfi"
     "${PROJECT_SOURCE_DIR}/include/xpn_client/nfi/nfi_local"

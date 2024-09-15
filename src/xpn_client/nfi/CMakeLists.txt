@@ -26,6 +26,7 @@ target_compile_options(xpn_nfi PRIVATE
 )
 
 target_include_directories(xpn_nfi PRIVATE
+	"${PROJECT_SOURCE_DIR}/src"
     "${PROJECT_SOURCE_DIR}/include"
     "${PROJECT_SOURCE_DIR}/include/xpn_client"
     "${PROJECT_SOURCE_DIR}/include/xpn_client/xpn/xpn_simple"

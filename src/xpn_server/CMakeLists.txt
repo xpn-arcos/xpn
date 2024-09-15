@@ -1,15 +1,18 @@
 file(GLOB XPN_SERVER_HEADERS 
     "${PROJECT_SOURCE_DIR}/include/xpn_server/*.h"
+    "${PROJECT_SOURCE_DIR}/include/xpn_server/*.hpp"
     "${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server/*.h"
+    "${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server/*.hpp"
     "${PROJECT_SOURCE_DIR}/include/xpn_server/sck_server/*.h"
 )
 file(GLOB XPN_SERVER_SOURCE 
 "*.c"
+"*.cpp"
 "mpi_server/*.c"
+"mpi_server/*.cpp"
 "sck_server/*.c"
 )
 
-message(STATUS "XPN_SERVER_SOURCE: ${XPN_SERVER_SOURCE}")
 set_source_files_properties(${XPN_SERVER_SOURCE} PROPERTIES LANGUAGE CXX)
 add_executable(xpn_server ${XPN_SERVER_SOURCE})
 
@@ -26,6 +29,7 @@ target_compile_options(xpn_server PRIVATE
 )
 
 target_include_directories(xpn_server PRIVATE
+    "${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/include/xpn_server"
 	"${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server"

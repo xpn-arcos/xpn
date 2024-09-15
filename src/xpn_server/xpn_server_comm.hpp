@@ -19,37 +19,39 @@
  *
  */
 
-
-#ifndef _NFI_SCK_SERVER_COMM_H_
-#define _NFI_SCK_SERVER_COMM_H_
-
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-  /* ... Include / Inclusion ........................................... */
+#pragma once
 
   #include "all_system.h"
   #include "base/utils.h"
+  #include "base/time_misc.h"
   #include "base/ns.h"
-  #include "base/socket.h"
-  #include "xpn_server/xpn_server_ops.hpp"
+  #include "xpn_server_params.hpp"
+  #include <memory>
 
+namespace XPN
+{
+  class xpn_server_comm
+  {
+  public:
+    xpn_server_comm();
+    ~xpn_server_comm();
+    
+    virtual int64_t read_operation(int &op, int &rank_client_id, int &tag_client_id) = 0;
+    virtual int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
+    virtual int64_t write_data(const void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
+  };
 
-  /* ... Const / Const ................................................. */
+  class xpn_server_control_comm
+  {
+  public:
+    xpn_server_control_comm(xpn_server_params &params);
+    ~xpn_server_control_comm();
 
+    virtual xpn_server_comm* accept() = 0;
+    virtual void disconnect(xpn_server_comm *comm) = 0;
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
-  
-  int   nfi_sck_server_comm_connect       ( char * srv_name, char * port_name, int *out_socket );
-  int   nfi_sck_server_comm_disconnect    ( int socket );
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
-#endif
+    static std::unique_ptr<xpn_server_control_comm> Create(xpn_server_params &params);
+  protected:
+    xpn_server_params &m_params;
+  };
+}

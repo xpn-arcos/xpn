@@ -19,27 +19,21 @@
  *
  */
 
-
-#ifndef _XPN_SERVER_CONF_H_
-#define _XPN_SERVER_CONF_H_
-
-
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-  #ifdef ENABLE_MPI_SERVER
-  // #include "mpi.h"
-  #endif
+#pragma once
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
+  #include <stdlib.h>
+  #include <stdio.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include "base/utils.h"
+  #include "base/workers.h"
 
   /* ... Const / Const ................................................. */
 
   #define XPN_SERVER_TYPE_MPI 0
   #define XPN_SERVER_TYPE_SCK 1
-
 
   /* MAX_BUFFER_SIZE */
   #ifndef MAX_BUFFER_SIZE
@@ -47,21 +41,49 @@
   #endif
 
   #ifdef MPI_MAX_PORT_NAME
-  #define XPN_SERVER_MAX_PORT_NAME MPI_MAX_PORT_NAME
+    #define XPN_SERVER_MAX_PORT_NAME MPI_MAX_PORT_NAME
   #else
-  #define XPN_SERVER_MAX_PORT_NAME 1024
+    #define XPN_SERVER_MAX_PORT_NAME 1024
   #endif
-  
+
   /* ... Data structures / Estructuras de datos ........................ */
 
+namespace XPN
+{
+  class xpn_server_params
+  {
+  public:
+    // server identification
+    int  size;
+    int  rank;
 
-  /* ... Functions / Funciones ......................................... */
+    char port_name[XPN_SERVER_MAX_PORT_NAME];
+    char srv_name [XPN_SERVER_MAX_PORT_NAME];
 
+    // server configuration
+    char shutdown_file[PATH_MAX];
+    int  thread_mode_connections;
+    int  thread_mode_operations;
+    int  server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
 
+    #ifdef ENABLE_SCK_SERVER
+    int server_socket; // For sck_server
+    #endif
+
+    int await_stop;
+
+    // server arguments
+    int    argc;
+    char **argv;
+
+  public:
+    xpn_server_params(int argc, char *argv[]);
+    ~xpn_server_params();
+
+    void show_usage();
+    void show();
+  };
+  
   /* ................................................................... */
 
-  #ifdef  __cplusplus
-    }
-  #endif
-
-#endif
+}

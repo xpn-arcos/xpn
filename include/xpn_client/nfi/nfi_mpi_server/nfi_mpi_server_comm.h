@@ -33,7 +33,7 @@
   #include "base/utils.h"
   #include "base/ns.h"
   #include "base/socket.h"
-  #include "xpn_server/xpn_server_ops.h"
+  #include "xpn_server/xpn_server_ops.hpp"
   #include "mpi.h"
 
   /* ... Const / Const ................................................. */

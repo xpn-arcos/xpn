@@ -21,7 +21,7 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "nfi_sck_server_comm.h"
-#include "xpn_server/xpn_server_conf.h"
+#include "xpn_server/xpn_server_params.hpp"
 
 
 /* ... Const / Const ................................................. */

@@ -19,9 +19,7 @@
  *
  */
 
-
-#ifndef _XPN_SERVER_OPS_H_
-#define _XPN_SERVER_OPS_H_
+#pragma once
 
   #ifdef  __cplusplus
     extern "C" {
@@ -258,5 +256,3 @@
   #ifdef  __cplusplus
     }
   #endif
-
-#endif
