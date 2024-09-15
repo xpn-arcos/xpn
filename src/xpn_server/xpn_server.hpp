@@ -25,6 +25,7 @@
 #include "xpn_server_comm.hpp"
 #include "xpn_server_ops.hpp"
 #include "base/workers.h"
+#include "base_cpp/workers.hpp"
 #include <memory>
 
 
@@ -39,8 +40,8 @@ namespace XPN
         int stop();
 
         void accept();
-        static void dispatcher(struct st_th th);
-        static void do_operation(struct st_th th);
+        void dispatcher(xpn_server_comm *comm);
+        void do_operation(xpn_server_comm *comm, int op, int rank_client_id, int tag_client_id);
         void finish();
 
         static xpn_server& Create(int argc, char *argv[]);
@@ -51,7 +52,7 @@ namespace XPN
         char serv_name[HOST_NAME_MAX];
         xpn_server_params m_params;
         std::unique_ptr<xpn_server_control_comm> m_control_comm;
-        worker_t m_worker1, m_worker2;
+        std::unique_ptr<workers> m_worker1, m_worker2;
 
     private:
         static std::unique_ptr<xpn_server> s_server;

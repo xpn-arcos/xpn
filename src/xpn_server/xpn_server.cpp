@@ -61,11 +61,11 @@ xpn_server& xpn_server::Create(int argc, char *argv[])
 //     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] << End: OP:'%s'\n", th.id, xpn_server_op2string(th.type_op));
 // }
 
-void xpn_server::dispatcher ( struct st_th th )
+void xpn_server::dispatcher ( xpn_server_comm* comm )
 {
     int ret;
 
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] >> Begin\n", th.id);
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] >> Begin\n", 0);
 
     // check params...
     // if (NULL == th.params) {
@@ -73,31 +73,31 @@ void xpn_server::dispatcher ( struct st_th th )
     //     return;
     // }
 
-    struct st_th th_arg;
-    xpn_server_comm *comm = static_cast<xpn_server_comm*>(th.comm);
+    // struct st_th th_arg;
+    int type_op = 0, rank_client_id = 0, tag_client_id = 0;
     int disconnect = 0;
     while (!disconnect)
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Waiting for operation\n", th.id);
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Waiting for operation\n", 0);
 
-        ret = comm->read_operation(th.type_op, th.rank_client_id, th.tag_client_id);
+        ret = comm->read_operation(type_op, rank_client_id, tag_client_id);
         if (ret < 0) {
-            debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: read operation fail\n", th.id);
+            debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: read operation fail\n", 0);
             return;
         }
 
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] OP '%s'; OP_ID %d\n", th.id,
-                   xpn_server_op2string(th.type_op), th.type_op);
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] OP '%s'; OP_ID %d\n", 0,
+                   xpn_server_op2string(type_op), type_op);
 
-        if (th.type_op == XPN_SERVER_DISCONNECT) {
-            debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] DISCONNECT received\n", th.id);
+        if (type_op == XPN_SERVER_DISCONNECT) {
+            debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] DISCONNECT received\n", 0);
 
             disconnect = 1;
             continue;
         }
 
-        if (th.type_op == XPN_SERVER_FINALIZE) {
-            debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] FINALIZE received\n", th.id);
+        if (type_op == XPN_SERVER_FINALIZE) {
+            debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] FINALIZE received\n", 0);
 
             disconnect = 1;
             continue;
@@ -105,44 +105,45 @@ void xpn_server::dispatcher ( struct st_th th )
 
         // Launch worker per operation
         // th_arg.params = &params;
-        th_arg.comm = th.comm;
-        th_arg.function = do_operation;
-        th_arg.type_op = th.type_op;
-        th_arg.rank_client_id = th.rank_client_id;
-        th_arg.tag_client_id = th.tag_client_id;
-        th_arg.wait4me = FALSE;
+        // th_arg.comm = th.comm;
+        // th_arg.function = do_operation;
+        // th_arg.type_op = th.type_op;
+        // th_arg.rank_client_id = th.rank_client_id;
+        // th_arg.tag_client_id = th.tag_client_id;
+        // th_arg.wait4me = FALSE;
 
-        base_workers_launch(&xpn_server::Get().m_worker1, &th_arg, do_operation);
+        xpn_server::Get().m_worker2->launch([this, comm, type_op, rank_client_id, tag_client_id]{this->do_operation(comm, type_op, rank_client_id, tag_client_id);});
 
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Worker launched\n", th.id);
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Worker launched\n", 0);
     }
 
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Client %d close\n", th.id, th.rank_client_id);
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Client %d close\n", 0, rank_client_id);
 
     xpn_server::Get().m_control_comm->disconnect(comm);
 
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", 0);
 }
 
 void xpn_server::accept ( )
 {
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Start accepting\n", 0);
     int ret;
-    struct st_th th_arg;
+    // struct st_th th_arg;
     
     xpn_server_comm* comm = m_control_comm->accept();
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Accept received\n", 0);
 
     // Launch dispatcher per aplication
-    th_arg.comm = comm;
-    th_arg.function = dispatcher;
-    th_arg.type_op = 0;
-    th_arg.rank_client_id = 0;
-    th_arg.tag_client_id = 0;
-    th_arg.wait4me = FALSE;
+    // th_arg.comm = comm;
+    // th_arg.function = dispatcher;
+    // th_arg.type_op = 0;
+    // th_arg.rank_client_id = 0;
+    // th_arg.tag_client_id = 0;
+    // th_arg.wait4me = FALSE;
 
-    base_workers_launch(&m_worker1, &th_arg, dispatcher);
+    m_worker1->launch([this, comm]{this->dispatcher(comm);});
+    // base_workers_launch(&m_worker1, &th_arg, dispatcher);
 }
 
 void xpn_server::finish ( void )
@@ -150,8 +151,10 @@ void xpn_server::finish ( void )
     // Wait and finalize for all current workers
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers destroy\n", 0);
 
-    base_workers_destroy(&m_worker1);
-    base_workers_destroy(&m_worker2);
+    // base_workers_destroy(&m_worker1);
+    m_worker1.reset();
+    m_worker2.reset();
+    // base_workers_destroy(&m_worker2);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] mpi_comm destroy\n", 0);
 
@@ -190,20 +193,22 @@ int xpn_server::run()
     // Initialize server
     // * mpi_comm initialization
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] mpi_comm initialization\n", 0);
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] threads %d %d\n", 0, m_params.thread_mode_connections, m_params.thread_mode_operations);
 
     m_control_comm = xpn_server_control_comm::Create(m_params);
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] threads2 %d %d\n", 0, m_params.thread_mode_connections, m_params.thread_mode_operations);
 
     // * Workers initialization
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers initialization\n", 0);
 
-    ret = base_workers_init(&m_worker1, m_params.thread_mode_connections);
-    if (ret < 0) {
+    m_worker1 = workers::Create(static_cast<workers_mode>(m_params.thread_mode_connections));
+    if (m_worker1 == nullptr) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;
     }
 
-    ret = base_workers_init(&m_worker2, m_params.thread_mode_operations);
-    if (ret < 0) {
+    m_worker2 = workers::Create(static_cast<workers_mode>(m_params.thread_mode_operations));
+    if (m_worker2 == nullptr) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;
     }

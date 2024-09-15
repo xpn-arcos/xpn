@@ -40,7 +40,7 @@
   #ifdef DEBUG
     #define debug_error(...)    debug_msg_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
     #define debug_warning(...)  debug_msg_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
-    #define debug_info(...)     debug_msg_printf(3, __FILE__, __LINE__, stdout, __VA_ARGS__)
+    #define debug_info(...)     debug_msg_printf(3, __FILE__, __LINE__, stderr, __VA_ARGS__)
   #else
     #define debug_error(...)
     #define debug_warning(...)

@@ -24,6 +24,7 @@ unset(ENABLE_MPI_SERVER CACHE)
 
 
 add_subdirectory(src/base)
+add_subdirectory(src/base_cpp)
 add_subdirectory(src/xpn_client)
 add_subdirectory(src/xpn_server)
 add_subdirectory(src/bypass)

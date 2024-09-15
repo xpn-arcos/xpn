@@ -26,48 +26,47 @@ namespace XPN
 {
   
 template <typename OperationType, typename OperationFunction>
-void handle_operation(struct st_th &th, struct st_xpn_server_msg &msg, OperationType& operation, OperationFunction op_function) {
-    xpn_server_comm *comm = static_cast<xpn_server_comm*>(th.comm);
-    int ret = comm->read_data((char *)&operation, sizeof(operation), th.rank_client_id, th.tag_client_id);
+void handle_operation(xpn_server_comm *comm, int rank, int tag, struct st_xpn_server_msg &msg, OperationType& operation, OperationFunction op_function) {
+    int ret = comm->read_data((char *)&operation, sizeof(operation), rank, tag);
     if (ret != -1) {
-        op_function(*comm, msg, th.rank_client_id, th.tag_client_id);
+        op_function(*comm, msg, rank, tag);
     }
 }
 
 //Read the operation to realize
-void xpn_server::do_operation ( struct st_th th )
+void xpn_server::do_operation ( xpn_server_comm *comm, int type_op, int rank, int tag )
 {
   struct st_xpn_server_msg head;
 
   debug_info("[TH_ID=%d] [XPN_SERVER_OPS] [xpn_server_do_operation] >> Begin\n", th->id);
-  debug_info("[TH_ID=%d] [XPN_SERVER_OPS] [xpn_server_do_operation] OP '%s'; OP_ID %d\n", th->id, xpn_server_op2string(th->type_op), th->type_op);
+  debug_info("[TH_ID=%d] [XPN_SERVER_OPS] [xpn_server_do_operation] OP '%s'; OP_ID %d\n", th->id, xpn_server_op2string(type_op), type_op);
 
-  switch (th.type_op)
+  switch (type_op)
   {
     //File API
-    case XPN_SERVER_OPEN_FILE: handle_operation(th, head, head.u_st_xpn_server_msg.op_open, xpn_server::op_open); break;
-    case XPN_SERVER_CREAT_FILE: handle_operation(th, head, head.u_st_xpn_server_msg.op_creat, xpn_server::op_creat); break;
-    case XPN_SERVER_READ_FILE: handle_operation(th, head, head.u_st_xpn_server_msg.op_read, xpn_server::op_read); break;
-    case XPN_SERVER_WRITE_FILE: handle_operation(th, head, head.u_st_xpn_server_msg.op_write, xpn_server::op_write); break;
-    case XPN_SERVER_CLOSE_FILE: handle_operation(th, head, head.u_st_xpn_server_msg.op_close, xpn_server::op_close); break;
-    case XPN_SERVER_RM_FILE: handle_operation(th, head, head.u_st_xpn_server_msg.op_rm, xpn_server::op_rm); break;
-    case XPN_SERVER_RM_FILE_ASYNC: handle_operation(th, head, head.u_st_xpn_server_msg.op_rm, xpn_server::op_rm_async); break;
-    case XPN_SERVER_RENAME_FILE: handle_operation(th, head, head.u_st_xpn_server_msg.op_rename, xpn_server::op_rename); break;
-    case XPN_SERVER_GETATTR_FILE: handle_operation(th, head, head.u_st_xpn_server_msg.op_getattr, xpn_server::op_getattr); break;
-    case XPN_SERVER_SETATTR_FILE: handle_operation(th, head, head.u_st_xpn_server_msg.op_setattr, xpn_server::op_setattr); break;
+    case XPN_SERVER_OPEN_FILE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_open, xpn_server::op_open); break;
+    case XPN_SERVER_CREAT_FILE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_creat, xpn_server::op_creat); break;
+    case XPN_SERVER_READ_FILE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_read, xpn_server::op_read); break;
+    case XPN_SERVER_WRITE_FILE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_write, xpn_server::op_write); break;
+    case XPN_SERVER_CLOSE_FILE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_close, xpn_server::op_close); break;
+    case XPN_SERVER_RM_FILE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_rm, xpn_server::op_rm); break;
+    case XPN_SERVER_RM_FILE_ASYNC: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_rm, xpn_server::op_rm_async); break;
+    case XPN_SERVER_RENAME_FILE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_rename, xpn_server::op_rename); break;
+    case XPN_SERVER_GETATTR_FILE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_getattr, xpn_server::op_getattr); break;
+    case XPN_SERVER_SETATTR_FILE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_setattr, xpn_server::op_setattr); break;
 
     //Directory API
-    case XPN_SERVER_MKDIR_DIR: handle_operation(th, head, head.u_st_xpn_server_msg.op_mkdir, xpn_server::op_mkdir); break;
-    case XPN_SERVER_OPENDIR_DIR: handle_operation(th, head, head.u_st_xpn_server_msg.op_opendir, xpn_server::op_opendir); break;
-    case XPN_SERVER_READDIR_DIR: handle_operation(th, head, head.u_st_xpn_server_msg.op_readdir, xpn_server::op_readdir); break;
-    case XPN_SERVER_CLOSEDIR_DIR: handle_operation(th, head, head.u_st_xpn_server_msg.op_closedir, xpn_server::op_closedir); break;
-    case XPN_SERVER_RMDIR_DIR: handle_operation(th, head, head.u_st_xpn_server_msg.op_rmdir, xpn_server::op_rmdir); break;
-    case XPN_SERVER_RMDIR_DIR_ASYNC: handle_operation(th, head, head.u_st_xpn_server_msg.op_rmdir, xpn_server::op_rmdir_async); break;
+    case XPN_SERVER_MKDIR_DIR: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_mkdir, xpn_server::op_mkdir); break;
+    case XPN_SERVER_OPENDIR_DIR: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_opendir, xpn_server::op_opendir); break;
+    case XPN_SERVER_READDIR_DIR: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_readdir, xpn_server::op_readdir); break;
+    case XPN_SERVER_CLOSEDIR_DIR: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_closedir, xpn_server::op_closedir); break;
+    case XPN_SERVER_RMDIR_DIR: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_rmdir, xpn_server::op_rmdir); break;
+    case XPN_SERVER_RMDIR_DIR_ASYNC: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_rmdir, xpn_server::op_rmdir_async); break;
 
     //Metadata API
-    case XPN_SERVER_READ_MDATA: handle_operation(th, head, head.u_st_xpn_server_msg.op_read_mdata, xpn_server::op_read_mdata); break;
-    case XPN_SERVER_WRITE_MDATA: handle_operation(th, head, head.u_st_xpn_server_msg.op_write_mdata, xpn_server::op_write_mdata); break;
-    case XPN_SERVER_WRITE_MDATA_FILE_SIZE: handle_operation(th, head, head.u_st_xpn_server_msg.op_write_mdata_file_size, xpn_server::op_write_mdata_file_size); break;
+    case XPN_SERVER_READ_MDATA: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_read_mdata, xpn_server::op_read_mdata); break;
+    case XPN_SERVER_WRITE_MDATA: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_write_mdata, xpn_server::op_write_mdata); break;
+    case XPN_SERVER_WRITE_MDATA_FILE_SIZE: handle_operation(comm, rank, tag, head, head.u_st_xpn_server_msg.op_write_mdata_file_size, xpn_server::op_write_mdata_file_size); break;
 
     //Connection API
     case XPN_SERVER_DISCONNECT: break;

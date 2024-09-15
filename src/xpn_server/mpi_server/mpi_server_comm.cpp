@@ -18,13 +18,13 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#define DEBUG
 #include "mpi_server_comm.hpp"
 
 namespace XPN
 {
 
-mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) : 
-  xpn_server_control_comm(params)
+mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) : xpn_server_control_comm(params)
 {
   int ret, provided, claimed;
 
@@ -35,8 +35,10 @@ mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) :
   TIME_MISC_Timer(&t0);
 
   // MPI init
+  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] threads %d %d\n", m_rank, params.thread_mode_connections, params.thread_mode_operations);
+  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] threads2 %d %d\n", m_rank, m_params.thread_mode_connections, m_params.thread_mode_operations);
   // Threads disable
-  if (!params.thread_mode_connections)
+  if (params.thread_mode_connections == 0)
   {
     debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] MPI Init without threads\n", m_rank);
 
@@ -103,8 +105,8 @@ mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) :
 
   printf(" | * Time to initialize XPN MPI server: %f\n", time) ;
 
-  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] server %d available at %s\n", m_rank, m_rank, port.c_str());
-  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] server %d accepting...\n",    rank, m_rank);
+  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] server %d available at %s\n", m_rank, m_rank, m_params.port_name);
+  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] server %d accepting...\n", m_rank, m_rank);
 
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] >> End\n", m_rank);
 }
@@ -202,7 +204,7 @@ int64_t mpi_server_comm::read_operation ( int &op, int &rank_client_id, int &tag
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] >> Begin\n", 0);
 
   // Get message
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] Read operation %p\n", 0, fd);
+  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] Read operation\n", 0);
 
   ret = MPI_Recv(msg, 2, MPI_INT, MPI_ANY_SOURCE, 0, m_comm, &status);
   if (MPI_SUCCESS != ret) {
@@ -213,7 +215,7 @@ int64_t mpi_server_comm::read_operation ( int &op, int &rank_client_id, int &tag
   tag_client_id  = msg[0];
   op             = msg[1];
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] MPI_Recv (MPI SOURCE %d, MPI_TAG %d, OP %d, MPI_ERROR %d)\n", 0, *rank_client_id, *rank_client_id, *op, status.MPI_ERROR);
+  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] MPI_Recv (MPI SOURCE %d, MPI_TAG %d, OP %d, MPI_ERROR %d)\n", 0, rank_client_id, rank_client_id, op, status.MPI_ERROR);
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] << End\n", 0);
 
   // Return OK

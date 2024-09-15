@@ -28,7 +28,7 @@
   #define _GNU_SOURCE
   #endif
 
-  #include "config.h"
+  // #include "config.h"
 
   #include <dlfcn.h>
   #include <sys/stat.h>
