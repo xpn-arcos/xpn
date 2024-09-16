@@ -23,7 +23,7 @@
 namespace XPN
 {
 
-mpi_server_control_comm::mpi_server_control_comm(int argc, char *argv[], int thread_mode) : m_thread_mode(thread_mode)
+mpi_server_control_comm::mpi_server_control_comm(int argc, char *argv[], bool thread_mode) : m_thread_mode(thread_mode)
 {
   int ret, provided, claimed;
 
@@ -35,7 +35,7 @@ mpi_server_control_comm::mpi_server_control_comm(int argc, char *argv[], int thr
 
   // MPI init
   // Threads disable
-  if (m_thread_mode == 0)
+  if (!m_thread_mode)
   {
     debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] MPI Init without threads\n", m_rank);
 

@@ -82,6 +82,9 @@ namespace XPN
 
     void show_usage();
     void show();
+    bool have_threads() { return (thread_mode_connections + thread_mode_operations) > 0; }
+    int get_argc() { return argc; }
+    char** get_argv() { return argv; }
   };
   
   /* ................................................................... */

@@ -48,7 +48,7 @@ namespace XPN
   class mpi_server_control_comm : public xpn_server_control_comm
   {
   public:
-    mpi_server_control_comm(int argc, char *argv[], int thread_mode);
+    mpi_server_control_comm(int argc, char *argv[], bool thread_mode);
     ~mpi_server_control_comm();
     
     xpn_server_comm* accept() override;
@@ -56,7 +56,7 @@ namespace XPN
 
   private:
     int m_rank, m_size;
-    int m_thread_mode;
+    bool m_thread_mode;
   };
 
 } // namespace XPN

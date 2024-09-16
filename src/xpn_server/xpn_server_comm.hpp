@@ -33,8 +33,8 @@ namespace XPN
   class xpn_server_comm
   {
   public:
-    xpn_server_comm();
-    virtual ~xpn_server_comm();
+    xpn_server_comm() = default;
+    virtual ~xpn_server_comm() {};
     
     virtual int64_t read_operation(int &op, int &rank_client_id, int &tag_client_id) = 0;
     virtual int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
@@ -44,8 +44,8 @@ namespace XPN
   class xpn_server_control_comm
   {
   public:
-    xpn_server_control_comm();
-    virtual ~xpn_server_control_comm();
+    xpn_server_control_comm() = default;
+    virtual ~xpn_server_control_comm() {};
 
     virtual xpn_server_comm* accept() = 0;
     virtual void disconnect(xpn_server_comm *comm) = 0;

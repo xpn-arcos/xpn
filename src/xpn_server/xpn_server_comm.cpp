@@ -31,18 +31,14 @@ namespace XPN
     {
         switch (params.server_type)
         { 
-        case XPN_SERVER_TYPE_MPI:  
-        return std::make_unique<mpi_server_control_comm>(params.argc, params.argv, params.thread_mode_connections+params.thread_mode_operations);
+        case XPN_SERVER_TYPE_MPI:
+            return std::make_unique<mpi_server_control_comm>(params.get_argc(), params.get_argv(), params.have_threads());
         // case XPN_SERVER_TYPE_SCK:  return std::make_shared<sck_server_control_comm>(params);
         default:  fprintf(stderr, "[XPN_SERVER] [xpn_server_control_comm] server_type '%d' not recognized\n", params.server_type);
         }
         return nullptr;
     }
 
-    xpn_server_control_comm::xpn_server_control_comm() {}
-    xpn_server_control_comm::~xpn_server_control_comm() {}
-    xpn_server_comm::xpn_server_comm() {}
-    xpn_server_comm::~xpn_server_comm() {}
 } // namespace XPN
 
 
