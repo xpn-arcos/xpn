@@ -26,7 +26,7 @@ namespace XPN
 {
   
 template <typename OperationType, typename OperationFunction>
-void handle_operation(xpn_server_comm *comm, int rank, int tag, struct st_xpn_server_msg &msg, OperationType& operation, OperationFunction op_function) {
+inline void handle_operation(xpn_server_comm *comm, int rank, int tag, struct st_xpn_server_msg &msg, OperationType& operation, OperationFunction op_function) {
     int ret = comm->read_data((char *)&operation, sizeof(operation), rank, tag);
     if (ret != -1) {
         op_function(*comm, msg, rank, tag);
@@ -357,7 +357,7 @@ void xpn_server::op_rm ( xpn_server_comm &comm, struct st_xpn_server_msg &head, 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] << End\n", params->rank);
 }
 
-void xpn_server::op_rm_async ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id )
+void xpn_server::op_rm_async ( [[maybe_unused]] xpn_server_comm &comm, struct st_xpn_server_msg &head, [[maybe_unused]] int rank_client_id, [[maybe_unused]] int tag_client_id )
 {
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] unlink(%s)\n", params->rank, head.u_st_xpn_server_msg.op_rm.path);
@@ -403,7 +403,7 @@ void xpn_server::op_getattr ( xpn_server_comm &comm, struct st_xpn_server_msg &h
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] << End\n", params->rank);
 }
 
-void xpn_server::op_setattr (xpn_server_comm &comm, struct st_xpn_server_msg &head, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id)
+void xpn_server::op_setattr ( [[maybe_unused]] xpn_server_comm &comm, [[maybe_unused]] struct st_xpn_server_msg &head, [[maybe_unused]] int rank_client_id, [[maybe_unused]] int tag_client_id)
 {
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_setattr] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_setattr] SETATTR(...)\n", params->rank);
@@ -545,7 +545,7 @@ void xpn_server::op_rmdir ( xpn_server_comm &comm, struct st_xpn_server_msg &hea
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] << End\n", params->rank);
 }
 
-void xpn_server::op_rmdir_async ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id )
+void xpn_server::op_rmdir_async ( [[maybe_unused]] xpn_server_comm &comm, struct st_xpn_server_msg &head, [[maybe_unused]] int rank_client_id, [[maybe_unused]] int tag_client_id )
 {
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] rmdir(%s)\n", params->rank, head.u_st_xpn_server_msg.op_rmdir.path);

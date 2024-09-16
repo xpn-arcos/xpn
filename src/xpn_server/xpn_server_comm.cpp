@@ -29,25 +29,17 @@ namespace XPN
 {
     std::unique_ptr<xpn_server_control_comm> xpn_server_control_comm::Create(xpn_server_params &params)
     {
-        fprintf(stderr, "[XPN_SERVER] [xpn_server_comm_init] thread_type %d %d\n", params.thread_mode_connections, params.thread_mode_operations);
-        std::unique_ptr<mpi_server_control_comm> out;
         switch (params.server_type)
         { 
         case XPN_SERVER_TYPE_MPI:  
-        out = std::make_unique<mpi_server_control_comm>(params);
-        fprintf(stderr, "[XPN_SERVER] [xpn_server_comm_init] thread_type2 %d %d\n", out->m_params.thread_mode_connections, out->m_params.thread_mode_operations);
-        return out;
+        return std::make_unique<mpi_server_control_comm>(params.argc, params.argv, params.thread_mode_connections+params.thread_mode_operations);
         // case XPN_SERVER_TYPE_SCK:  return std::make_shared<sck_server_control_comm>(params);
-        default:  fprintf(stderr, "[XPN_SERVER] [xpn_server_comm_init] server_type '%d' not recognized\n", params.server_type);
+        default:  fprintf(stderr, "[XPN_SERVER] [xpn_server_control_comm] server_type '%d' not recognized\n", params.server_type);
         }
         return nullptr;
     }
 
-    xpn_server_control_comm::xpn_server_control_comm(xpn_server_params &params) : m_params(params) {
-        
-            fprintf(stderr, "[XPN_SERVER] [xpn_server_control_comm] thread_type %d %d\n", params.thread_mode_connections, params.thread_mode_operations);
-            fprintf(stderr, "[XPN_SERVER] [xpn_server_control_comm] thread_type2 %d %d\n", m_params.thread_mode_connections, m_params.thread_mode_operations);
-    }
+    xpn_server_control_comm::xpn_server_control_comm() {}
     xpn_server_control_comm::~xpn_server_control_comm() {}
     xpn_server_comm::xpn_server_comm() {}
     xpn_server_comm::~xpn_server_comm() {}

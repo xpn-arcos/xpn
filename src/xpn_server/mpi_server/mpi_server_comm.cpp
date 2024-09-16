@@ -18,13 +18,12 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#define DEBUG
 #include "mpi_server_comm.hpp"
 
 namespace XPN
 {
 
-mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) : xpn_server_control_comm(params)
+mpi_server_control_comm::mpi_server_control_comm(int argc, char *argv[], int thread_mode) : m_thread_mode(thread_mode)
 {
   int ret, provided, claimed;
 
@@ -35,14 +34,12 @@ mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) : xp
   TIME_MISC_Timer(&t0);
 
   // MPI init
-  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] threads %d %d\n", m_rank, params.thread_mode_connections, params.thread_mode_operations);
-  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] threads2 %d %d\n", m_rank, m_params.thread_mode_connections, m_params.thread_mode_operations);
   // Threads disable
-  if (params.thread_mode_connections == 0)
+  if (m_thread_mode == 0)
   {
     debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] MPI Init without threads\n", m_rank);
 
-    ret = MPI_Init(&(params.argc), &(params.argv));
+    ret = MPI_Init(&(argc), &(argv));
     if (MPI_SUCCESS != ret)
     {
       printf("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] ERROR: MPI_Init fails\n", m_rank);
@@ -54,7 +51,7 @@ mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) : xp
   {
     debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] MPI Init with threads\n", m_rank);
 
-    ret = MPI_Init_thread(&(params.argc), &(params.argv), MPI_THREAD_MULTIPLE, &provided);
+    ret = MPI_Init_thread(&(argc), &(argv), MPI_THREAD_MULTIPLE, &provided);
     if (MPI_SUCCESS != ret)
     {
       printf("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] ERROR: MPI_Init_thread fails\n", m_rank);
@@ -85,7 +82,7 @@ mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) : xp
   // Open server port...
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] Open port\n", m_rank);
 
-  ret = MPI_Open_port(MPI_INFO_NULL, params.port_name);
+  ret = MPI_Open_port(MPI_INFO_NULL, m_port_name);
   if (MPI_SUCCESS != ret) {
     printf("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] ERROR: MPI_Open_port fails\n", m_rank);
     return;
@@ -103,9 +100,9 @@ mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) : xp
 
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
 
-  printf(" | * Time to initialize XPN MPI server: %f\n", time) ;
+  printf(" | * Time to initialize XPN MPI server: %f\n", time);
 
-  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] server %d available at %s\n", m_rank, m_rank, m_params.port_name);
+  debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] server %d available at %s\n", m_rank, m_rank, m_port_name);
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] server %d accepting...\n", m_rank, m_rank);
 
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] >> End\n", m_rank);
@@ -120,7 +117,7 @@ mpi_server_control_comm::~mpi_server_control_comm()
   // Close port
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_destroy] Close port\n", 0);
 
-  MPI_Close_port(m_params.port_name);
+  MPI_Close_port(m_port_name);
 
   // Finalize
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_destroy] MPI Finalize\n", 0);
@@ -147,7 +144,7 @@ xpn_server_comm* mpi_server_control_comm::accept ( )
   // Accept
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_accept] Accept\n", 0);
 
-  ret = MPI_Comm_accept(m_params.port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &comm);
+  ret = MPI_Comm_accept(m_port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, &comm);
   if (MPI_SUCCESS != ret)
   {
     printf("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_accept] ERROR: MPI_Comm_accept fails\n", 0);

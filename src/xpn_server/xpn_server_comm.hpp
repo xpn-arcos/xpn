@@ -34,7 +34,7 @@ namespace XPN
   {
   public:
     xpn_server_comm();
-    ~xpn_server_comm();
+    virtual ~xpn_server_comm();
     
     virtual int64_t read_operation(int &op, int &rank_client_id, int &tag_client_id) = 0;
     virtual int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
@@ -44,14 +44,14 @@ namespace XPN
   class xpn_server_control_comm
   {
   public:
-    xpn_server_control_comm(xpn_server_params &params);
-    ~xpn_server_control_comm();
+    xpn_server_control_comm();
+    virtual ~xpn_server_control_comm();
 
     virtual xpn_server_comm* accept() = 0;
     virtual void disconnect(xpn_server_comm *comm) = 0;
 
     static std::unique_ptr<xpn_server_control_comm> Create(xpn_server_params &params);
-  protected:
-    xpn_server_params &m_params;
+  public:
+    char m_port_name[XPN_SERVER_MAX_PORT_NAME];
   };
 }

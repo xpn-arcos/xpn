@@ -18,8 +18,6 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#define DEBUG
-/* ... Include / Inclusion ........................................... */
 
 #include "all_system.h" 
 #include <unistd.h>
@@ -33,33 +31,8 @@
 
 #include "xpn_server.hpp"
 
-/* ... Global variables / Variables globales ........................ */
-
-// char serv_name[HOST_NAME_MAX];
-// xpn_server_param_st params;
-// worker_t worker1, worker2;
-// int the_end = 0;
-
-/* ... Auxiliar Functions / Funciones Auxiliares ..................... */
-
 namespace XPN
 {
-    
-std::unique_ptr<xpn_server> xpn_server::s_server = nullptr;
-
-xpn_server& xpn_server::Create(int argc, char *argv[])
-{   
-    s_server = std::make_unique<xpn_server>(argc, argv);
-    return Get();
-}
-// void xpn_server_run ( struct st_th th )
-// {
-//     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] >> Begin: OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
-
-//     xpn_server_do_operation(&th, &the_end);
-
-//     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] << End: OP:'%s'\n", th.id, xpn_server_op2string(th.type_op));
-// }
 
 void xpn_server::dispatcher ( xpn_server_comm* comm )
 {
@@ -67,13 +40,6 @@ void xpn_server::dispatcher ( xpn_server_comm* comm )
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] >> Begin\n", 0);
 
-    // check params...
-    // if (NULL == th.params) {
-    //     debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: NULL arguments\n", th.id);
-    //     return;
-    // }
-
-    // struct st_th th_arg;
     int type_op = 0, rank_client_id = 0, tag_client_id = 0;
     int disconnect = 0;
     while (!disconnect)
@@ -103,23 +69,14 @@ void xpn_server::dispatcher ( xpn_server_comm* comm )
             continue;
         }
 
-        // Launch worker per operation
-        // th_arg.params = &params;
-        // th_arg.comm = th.comm;
-        // th_arg.function = do_operation;
-        // th_arg.type_op = th.type_op;
-        // th_arg.rank_client_id = th.rank_client_id;
-        // th_arg.tag_client_id = th.tag_client_id;
-        // th_arg.wait4me = FALSE;
-
-        xpn_server::Get().m_worker2->launch([this, comm, type_op, rank_client_id, tag_client_id]{this->do_operation(comm, type_op, rank_client_id, tag_client_id);});
+        m_worker2->launch([this, comm, type_op, rank_client_id, tag_client_id]{this->do_operation(comm, type_op, rank_client_id, tag_client_id);});
 
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Worker launched\n", 0);
     }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Client %d close\n", 0, rank_client_id);
 
-    xpn_server::Get().m_control_comm->disconnect(comm);
+    m_control_comm->disconnect(comm);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", 0);
 }
@@ -127,23 +84,12 @@ void xpn_server::dispatcher ( xpn_server_comm* comm )
 void xpn_server::accept ( )
 {
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Start accepting\n", 0);
-    int ret;
-    // struct st_th th_arg;
     
     xpn_server_comm* comm = m_control_comm->accept();
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Accept received\n", 0);
 
-    // Launch dispatcher per aplication
-    // th_arg.comm = comm;
-    // th_arg.function = dispatcher;
-    // th_arg.type_op = 0;
-    // th_arg.rank_client_id = 0;
-    // th_arg.tag_client_id = 0;
-    // th_arg.wait4me = FALSE;
-
     m_worker1->launch([this, comm]{this->dispatcher(comm);});
-    // base_workers_launch(&m_worker1, &th_arg, dispatcher);
 }
 
 void xpn_server::finish ( void )
@@ -181,14 +127,6 @@ int xpn_server::run()
     int await_stop = 0;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> Begin\n", 0);
-
-    /*
-    printf("\n");
-    printf(" ----------------\n");
-    printf(" Starting servers (%s)\n", serv_name);
-    printf(" ----------------\n");
-    printf("\n");
-    */
 
     // Initialize server
     // * mpi_comm initialization
@@ -234,7 +172,7 @@ int xpn_server::run()
         switch (recv_code)
         {
             case SOCKET_ACCEPT_CODE:
-                socket_send(connection_socket, m_params.port_name, XPN_SERVER_MAX_PORT_NAME);
+                socket_send(connection_socket, m_control_comm->m_port_name, XPN_SERVER_MAX_PORT_NAME);
                 accept();
                 break;
 
@@ -345,17 +283,8 @@ int xpn_server::stop()
 {
     char srv_name[1024];
     FILE *file;
-    int ret;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] >> Begin\n", 0);
-
-    /*
-    printf("\n");
-    printf(" ----------------\n");
-    printf(" Stopping servers (%s)\n", serv_name);
-    printf(" ----------------\n");
-    printf("\n");
-    */
 
     // Open host file
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Open host file %s\n", 0, m_params.shutdown_file);
@@ -368,7 +297,6 @@ int xpn_server::stop()
 
     std::vector<std::string> srv_names;
     // int *sockets = malloc(num_serv * sizeof(int));
-    int i = 0;
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
         srv_names.push_back(srv_name);
@@ -467,7 +395,7 @@ int main ( int argc, char *argv[] )
         // xpn_server_params_show_usage();
         // return -1;
     // }
-    XPN::xpn_server &server = XPN::xpn_server::Create(argc, argv);
+    XPN::xpn_server server(argc, argv);
 
     exec_name = basename(argv[0]);
     gethostname(server.serv_name, HOST_NAME_MAX);
@@ -488,7 +416,7 @@ int main ( int argc, char *argv[] )
     if (strcasecmp(exec_name, "xpn_server_spawn") == 0)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Spawn server\n", 0);
-        // ret = xpn_is_server_spawned();
+        // ret = xpn_is_server_spawned(); //TODO: check if si posible with mpi ofi
     }
     else if (strcasecmp(exec_name, "xpn_stop_server") == 0)
     {

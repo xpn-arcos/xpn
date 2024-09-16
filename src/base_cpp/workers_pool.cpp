@@ -79,14 +79,14 @@ namespace XPN
 
     void workers_pool::launch(std::function<void()> task)
     {
-        // {
-        //     std::unique_lock<std::mutex> lock(m_full_mutex);
+        {
+            std::unique_lock<std::mutex> lock(m_full_mutex);
             
-        //     m_full_cv.wait(lock, [this] { 
-        //         return m_tasks.size() < m_num_threads; 
-        //     }); 
-        // }
-        { 
+            m_full_cv.wait(lock, [this] { 
+                return m_tasks.size() <= m_num_threads; 
+            }); 
+        }
+        {
             std::unique_lock<std::mutex> lock(m_queue_mutex);
             
             m_tasks.emplace(move(task)); 

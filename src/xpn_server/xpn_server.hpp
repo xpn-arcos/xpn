@@ -44,49 +44,40 @@ namespace XPN
         void do_operation(xpn_server_comm *comm, int op, int rank_client_id, int tag_client_id);
         void finish();
 
-        static xpn_server& Create(int argc, char *argv[]);
-
-        static xpn_server& Get() { return *s_server; }
-
     public:
         char serv_name[HOST_NAME_MAX];
         xpn_server_params m_params;
         std::unique_ptr<xpn_server_control_comm> m_control_comm;
         std::unique_ptr<workers> m_worker1, m_worker2;
 
-    private:
-        static std::unique_ptr<xpn_server> s_server;
-
     public:
-        
-    // File operations
-    static void op_open        ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_creat       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_read        ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_write       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_close       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_rm          ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_rm_async    ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_rename      ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_setattr     ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_getattr     ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        // File operations
+        static void op_open        ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_creat       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_read        ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_write       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_close       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_rm          ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_rm_async    ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_rename      ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_setattr     ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_getattr     ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
 
-    // Directory operations
-    static void op_mkdir       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_opendir     ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_readdir     ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_closedir    ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_rmdir       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_rmdir_async ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        // Directory operations
+        static void op_mkdir       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_opendir     ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_readdir     ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_closedir    ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_rmdir       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_rmdir_async ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
 
-    // FS Operations
-    static void op_getnodename ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_fstat       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id ); //TODO: implement
+        // FS Operations
+        static void op_getnodename ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_fstat       ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id ); //TODO: implement
 
-    // Metadata
-    static void op_read_mdata   ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_write_mdata  ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-    static void op_write_mdata_file_size  ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
-
+        // Metadata
+        static void op_read_mdata   ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_write_mdata  ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
+        static void op_write_mdata_file_size  ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id );
     };    
 }

@@ -57,11 +57,11 @@ namespace XPN
     int  size;
     int  rank;
 
-    char port_name[XPN_SERVER_MAX_PORT_NAME];
-    char srv_name [XPN_SERVER_MAX_PORT_NAME];
+    char port_name[XPN_SERVER_MAX_PORT_NAME] = {0};
+    char srv_name [XPN_SERVER_MAX_PORT_NAME] = {0};
 
     // server configuration
-    char shutdown_file[PATH_MAX];
+    char shutdown_file[PATH_MAX] = {0};
     int  thread_mode_connections;
     int  thread_mode_operations;
     int  server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
