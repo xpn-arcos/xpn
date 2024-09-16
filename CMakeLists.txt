@@ -21,7 +21,7 @@ if(ENABLE_MPI_SERVER)
 endif(ENABLE_MPI_SERVER)
 unset(ENABLE_MPI_SERVER CACHE)
 
-
+link_libraries("pthread" "dl")
 
 add_subdirectory(src/base)
 add_subdirectory(src/base_cpp)

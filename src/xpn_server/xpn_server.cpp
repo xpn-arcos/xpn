@@ -23,8 +23,6 @@
 #include <unistd.h>
 #include <vector>
 #include <string>
-#include <algorithm>
-#include <execution>
 #include "base/socket.h"
 #include "base/utils.h"
 #include "xpn_server_comm.hpp"
@@ -296,7 +294,6 @@ int xpn_server::stop()
     }
 
     std::vector<std::string> srv_names;
-    // int *sockets = malloc(num_serv * sizeof(int));
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
         srv_names.push_back(srv_name);
@@ -307,38 +304,45 @@ int xpn_server::stop()
 
     fclose(file);
 
-    std::for_each(std::execution::par, srv_names.begin(), srv_names.end(), [this] (std::string & name){
+    std::unique_ptr<workers> worker = workers::Create(workers_mode::thread_pool);
 
-        printf(" * Stopping server (%s)\n", name.c_str());
-        int socket;
-        int ret;
-        int buffer = SOCKET_FINISH_CODE;
-        if (m_params.await_stop == 1){
-            buffer = SOCKET_FINISH_CODE_AWAIT;
-        }
-        ret = socket_client_connect(name.data(), &socket);
-        if (ret < 0) {
-            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, name.c_str());
-            return;
-        }
+    for (auto &name : srv_names)
+    {
+        worker->launch([this, name] (){
 
-        ret = socket_send(socket, &buffer, sizeof(buffer));
-        if (ret < 0) {
-            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, name.c_str());
-        }
-        
-        if (m_params.await_stop == 0){
-            socket_close(socket);
-        }
-
-        if (m_params.await_stop == 1){
-            ret = socket_recv(socket, &buffer, sizeof(buffer));
-            if (ret < 0) {
-                printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, name.c_str());
+            printf(" * Stopping server (%s)\n", name.c_str());
+            int socket;
+            int ret;
+            int buffer = SOCKET_FINISH_CODE;
+            if (m_params.await_stop == 1){
+                buffer = SOCKET_FINISH_CODE_AWAIT;
             }
-            socket_close(socket);
-        }
-    });
+            ret = socket_client_connect(name.data(), &socket);
+            if (ret < 0) {
+                printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, name.c_str());
+                return;
+            }
+
+            ret = socket_send(socket, &buffer, sizeof(buffer));
+            if (ret < 0) {
+                printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, name.c_str());
+            }
+            
+            if (m_params.await_stop == 0){
+                socket_close(socket);
+            }
+
+            if (m_params.await_stop == 1){
+                ret = socket_recv(socket, &buffer, sizeof(buffer));
+                if (ret < 0) {
+                    printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, name.c_str());
+                }
+                socket_close(socket);
+            }
+        });
+    }
+
+    worker->wait();
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> End\n", 0);
 
