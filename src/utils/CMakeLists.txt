@@ -12,8 +12,9 @@ set(UTILS_LIST
 
 # add the executables
 foreach (util ${UTILS_LIST})
-	set_source_files_properties(${util} PROPERTIES LANGUAGE CXX)
+	set_source_files_properties(${util}.c PROPERTIES LANGUAGE CXX)
 	add_executable(${util} ${util}.c)
+	set_target_properties(${util} PROPERTIES LINKER_LANGUAGE CXX)
 	target_link_libraries(${util} PRIVATE xpn_base xpn xpn_core xpn_nfi)
 	install(TARGETS ${util} RUNTIME DESTINATION bin)
 endforeach (util)
