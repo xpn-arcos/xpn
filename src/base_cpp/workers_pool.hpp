@@ -52,7 +52,7 @@ namespace XPN
         std::condition_variable m_full_cv;
 
         bool m_stop = false;
-        bool m_wait = true;
+        int m_wait = 0;
 
         size_t m_num_threads = 0;
     };

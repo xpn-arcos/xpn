@@ -54,9 +54,11 @@ namespace XPN
 
                     {
                         std::unique_lock<std::mutex> lock(m_wait_mutex); 
-                        m_wait = false;
+                        m_wait--;
+                        if (m_wait == 0){
+                            m_wait_cv.notify_one();
+                        }
                     }
-                    m_wait_cv.notify_one();
                     m_full_cv.notify_one(); 
                 } 
             }); 
@@ -90,18 +92,20 @@ namespace XPN
             std::unique_lock<std::mutex> lock(m_queue_mutex);
             
             m_tasks.emplace(move(task)); 
+        }
+        {
+            std::unique_lock<std::mutex> lock(m_wait_mutex);
+            m_wait++;
         } 
         m_cv.notify_one(); 
     }
 
     void workers_pool::wait() 
     {
-        std::unique_lock<std::mutex> lock(m_wait_mutex); 
+        std::unique_lock<std::mutex> lock(m_wait_mutex);
         
         m_wait_cv.wait(lock, [this] { 
-            return !m_wait; 
+            return m_wait == 0; 
         }); 
-
-        m_wait = true;
     }
 } // namespace XPN
