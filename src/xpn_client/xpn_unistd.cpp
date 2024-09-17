@@ -25,15 +25,11 @@
 #include "xpn.h"
 #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
 #include "xpn_api_mutex.h"
+#include "xpn/xpn_api.hpp"
 
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
-
-/* ... Functions / Funciones ......................................... */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 int xpn_init ( void )
 {
@@ -42,7 +38,7 @@ int xpn_init ( void )
   debug_info("[XPN_UNISTD] [xpn_init] >> Begin\n");
 
   XPN_API_LOCK();
-  ret = xpn_simple_init();
+  ret = XPN::xpn_api::get_instance().init();
   XPN_API_UNLOCK();
 
   debug_info("[XPN_UNISTD] [xpn_init] >> End\n");
@@ -502,5 +498,8 @@ int xpn_dup2 ( int fd, int fd2 )
   return ret;
 }
 
+#ifdef __cplusplus
+}
+#endif
 
 /* ................................................................... */

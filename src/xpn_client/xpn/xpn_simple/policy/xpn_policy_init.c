@@ -124,9 +124,9 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     conf_data->server_url_index = NULL;
 
 
-    if (param_get(XPN_CONF) != NULL)
+    if (param_get("XPN_CONF") != NULL)
     {
-        strcpy(conf, param_get(XPN_CONF));
+        strcpy(conf, param_get("XPN_CONF"));
     }
     else
     {

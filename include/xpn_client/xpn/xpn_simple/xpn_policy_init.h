@@ -35,7 +35,7 @@
 
   /* ... Const / Const ................................................. */
 
-  #define XPN_CONF                           "XPN_CONF"
+  // #define XPN_CONF                           "XPN_CONF"
   #define XPN_CONF_TAG_PARTITION             "[partition]"
   #define XPN_CONF_TAG_PARTITION_NAME        "partition_name"
   #define XPN_CONF_TAG_REPLICATION_LEVEL     "replication_level"

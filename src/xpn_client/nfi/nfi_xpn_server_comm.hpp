@@ -22,26 +22,30 @@
 #pragma once
 
 #include <string>
+#include <memory>
+#include <xpn_server/xpn_server_params.hpp>
 
 namespace XPN
 {
-    class xpn_env
+    class nfi_xpn_server_comm
     {
     public:
-        xpn_env();
-        const char * xpn_sck_port;
-        const char * xpn_conf;
-        int xpn_debug = 0;
-        int xpn_profiler = 0;
-        int xpn_thread = 0;
-        int xpn_locality = 1;
-        int xpn_session_file = 0;
-        int xpn_session_dir = 1;
-    public:
-        static xpn_env& get_instance()
-        {
-            static xpn_env instance;
-            return instance;
-        }
+        nfi_xpn_server_comm() = default;
+        
+        virtual int64_t write_operation(int op) = 0;
+        virtual int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
+        virtual int64_t write_data(const void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
     };
-}
+    class nfi_xpn_server_control_comm 
+    {
+    public:
+        nfi_xpn_server_control_comm() = default;
+
+        virtual nfi_xpn_server_comm* accept() = 0;
+        virtual void disconnect(nfi_xpn_server_comm *comm) = 0;
+
+        static std::unique_ptr<nfi_xpn_server_control_comm> Create(xpn_server_params &params);
+    public:
+        char m_port_name[XPN_SERVER_MAX_PORT_NAME];
+    };
+} // namespace XPN

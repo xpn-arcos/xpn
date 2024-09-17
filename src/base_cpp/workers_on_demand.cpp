@@ -36,7 +36,7 @@ namespace XPN
     void workers_on_demand::launch(std::function<void()> task)
     {
         {
-            std::unique_lock lock(m_wait_mutex);
+            std::unique_lock<std::mutex> lock(m_wait_mutex);
             
             m_full_cv.wait(lock, [this] { 
                 return m_wait < m_num_threads; 

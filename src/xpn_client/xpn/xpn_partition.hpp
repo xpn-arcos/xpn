@@ -22,26 +22,25 @@
 #pragma once
 
 #include <string>
+#include <vector>
+
+#include "nfi/nfi_server.hpp"
+#include "xpn/xpn_conf.hpp"
 
 namespace XPN
 {
-    class xpn_env
+    class xpn_partition
     {
     public:
-        xpn_env();
-        const char * xpn_sck_port;
-        const char * xpn_conf;
-        int xpn_debug = 0;
-        int xpn_profiler = 0;
-        int xpn_thread = 0;
-        int xpn_locality = 1;
-        int xpn_session_file = 0;
-        int xpn_session_dir = 1;
+        xpn_partition(const std::string &name, int replication_level, uint64_t block_size);
+        int init_server(const std::string &url);
     public:
-        static xpn_env& get_instance()
-        {
-            static xpn_env instance;
-            return instance;
-        }
+        int m_replication_level = XPN_CONF::DEFAULT_REPLICATION_LEVEL;  // replication_level of files :0, 1, 2,... 
+        std::string m_name;                                             // name of partition 
+        uint64_t m_block_size = XPN_CONF::DEFAULT_BLOCKSIZE;            // size of distribution used 
+
+        std::vector<nfi_server> m_data_serv;                            // list of data servers in the partition 
+
+        int m_local_serv = -1;                                          // server with locality
     };
-}
+} // namespace XPN

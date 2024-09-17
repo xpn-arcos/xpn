@@ -19,29 +19,20 @@
  *
  */
 
-#pragma once
-
-#include <string>
+#include "xpn/xpn_partition.hpp"
 
 namespace XPN
 {
-    class xpn_env
-    {
-    public:
-        xpn_env();
-        const char * xpn_sck_port;
-        const char * xpn_conf;
-        int xpn_debug = 0;
-        int xpn_profiler = 0;
-        int xpn_thread = 0;
-        int xpn_locality = 1;
-        int xpn_session_file = 0;
-        int xpn_session_dir = 1;
-    public:
-        static xpn_env& get_instance()
+        xpn_partition::xpn_partition(const std::string &name, int replication_level, uint64_t block_size) :
+            m_name(name), m_replication_level(replication_level), m_block_size(block_size)
         {
-            static xpn_env instance;
-            return instance;
+
         }
-    };
-}
+
+        int xpn_partition::init_server(const std::string &url)
+        {
+            int index = m_data_serv.size();
+
+            auto& server = m_data_serv.emplace_back();
+        }
+} // namespace XPN

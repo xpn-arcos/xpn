@@ -19,6 +19,7 @@ target_compile_options(xpn_core PRIVATE
 )
 target_include_directories(xpn_core PRIVATE
     "${PROJECT_SOURCE_DIR}/src"
+    "${PROJECT_SOURCE_DIR}/src/xpn_client"
     "${PROJECT_SOURCE_DIR}/src/xpn_client/xpn"
     "${PROJECT_SOURCE_DIR}/include"
     "${PROJECT_SOURCE_DIR}/include/xpn_client"

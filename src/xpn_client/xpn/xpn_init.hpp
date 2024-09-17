@@ -21,27 +21,6 @@
 
 #pragma once
 
-#include <string>
-
 namespace XPN
 {
-    class xpn_env
-    {
-    public:
-        xpn_env();
-        const char * xpn_sck_port;
-        const char * xpn_conf;
-        int xpn_debug = 0;
-        int xpn_profiler = 0;
-        int xpn_thread = 0;
-        int xpn_locality = 1;
-        int xpn_session_file = 0;
-        int xpn_session_dir = 1;
-    public:
-        static xpn_env& get_instance()
-        {
-            static xpn_env instance;
-            return instance;
-        }
-    };
-}
+} // namespace XPN

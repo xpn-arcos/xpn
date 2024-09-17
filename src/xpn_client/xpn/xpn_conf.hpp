@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
 
 namespace XPN
 {
@@ -33,8 +34,10 @@ namespace XPN
         const std::string TAG_REPLICATION_LEVEL = "replication_level";
         const std::string TAG_BLOCKSIZE = "bsize";
         const std::string TAG_SERVER_URL = "server_url";
-        constexpr int DEFAULT_REPLICATION_LEVEL = 0;
-        constexpr int DEFAULT_BLOCKSIZE = 512 * 1024;
+        const int DEFAULT_REPLICATION_LEVEL = 0;
+        const int DEFAULT_BLOCKSIZE = 512 * 1024;
+
+        const std::string DEFAULT_PATH = "/etc/xpn/xpn.conf";
     }
 
     class xpn_conf
@@ -42,17 +45,41 @@ namespace XPN
         struct partition
         {
             std::string partition_name;
-            int replication_level = 0;
-            int bsize = 1;
+            int bsize = XPN_CONF::DEFAULT_BLOCKSIZE;
+            int replication_level = XPN_CONF::DEFAULT_REPLICATION_LEVEL;
             std::vector<std::string> server_urls;
 
             partition() = default;
             partition(const partition&) = default;
+
+            std::string to_string()
+            {
+                std::stringstream out;
+                out << XPN_CONF::TAG_PARTITION << std::endl;
+                out << XPN_CONF::TAG_PARTITION_NAME << " = " << partition_name << std::endl;
+                out << XPN_CONF::TAG_BLOCKSIZE << " = " << bsize << std::endl;
+                out << XPN_CONF::TAG_REPLICATION_LEVEL << " = " << replication_level << std::endl;
+                for (auto &srv : server_urls)
+                {
+                    out << XPN_CONF::TAG_SERVER_URL << " = " << srv << std::endl;
+                }
+                return out.str();
+            }
         };
 
     public:
         xpn_conf();
-    private:
+
+        std::string to_string()
+        {
+            std::stringstream out;
+            for (auto &part : partitions)
+            {
+                out << part.to_string();
+            }
+            return out.str();
+        }
+    public:
         std::vector<partition> partitions;
     };
 }

@@ -22,26 +22,23 @@
 #pragma once
 
 #include <string>
+#include <memory>
+
+#include "nfi_xpn_server_comm.hpp"
 
 namespace XPN
 {
-    class xpn_env
+    class nfi_server 
     {
     public:
-        xpn_env();
-        const char * xpn_sck_port;
-        const char * xpn_conf;
-        int xpn_debug = 0;
-        int xpn_profiler = 0;
-        int xpn_thread = 0;
-        int xpn_locality = 1;
-        int xpn_session_file = 0;
-        int xpn_session_dir = 1;
-    public:
-        static xpn_env& get_instance()
-        {
-            static xpn_env instance;
-            return instance;
-        }
+        std::string m_url;      // URL of this server -> protocol   
+                                // + server         
+                                // + path + more info (port, ...) 
+        std::string m_server;   // server address   
+        std::string m_path;     // path of the server 
+
+        int m_error;            // For fault tolerance
+        
+        std::unique_ptr<nfi_xpn_server_control_comm> m_control_comm;
     };
-}
+} // namespace XPN

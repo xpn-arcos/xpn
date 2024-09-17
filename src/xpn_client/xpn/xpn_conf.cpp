@@ -26,6 +26,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <csignal>
 
 namespace XPN
 {
@@ -97,37 +98,104 @@ namespace XPN
     //         return -1;
     //     return conf_data->server_n[partition_index];
     // }
+    inline void trim(std::string& str)
+    {
+        str.erase(str.find_last_not_of(" \t\n\r")+1);
+        str.erase(0, str.find_first_not_of(" \t\n\r"));
+    }
+
+    inline int getSizeFactor(const std::string &name)
+    {
+        constexpr int KB = 1024;
+        constexpr int MB = 1024 * KB;
+        constexpr int GB = 1024 * MB;
+        switch(name.back())
+	    {
+            case 'K':
+            case 'k':
+                return atoi(name.c_str())*KB;
+            case 'M':
+            case 'm':
+                return atoi(name.c_str())*MB;
+            case 'G':
+            case 'g':
+                return atoi(name.c_str())*GB;
+            case 'B':
+            case 'b':
+                switch(name[name.size()-2]){
+                    case 'K':
+                    case 'k':
+                        return atoi(name.c_str())*KB;
+                    case 'M':
+                    case 'm':
+                        return atoi(name.c_str())*MB;
+                    case 'G':
+                    case 'g':
+                        return atoi(name.c_str())*GB;
+                    default:
+                        return 1;
+                }
+            default:
+                return 1;
+        }
+      }
 
     xpn_conf::xpn_conf()
     {
         const char * cfile_path = xpn_env::get_instance().xpn_conf;
         if (cfile_path == nullptr)
         {
-            std::cerr << "Error: enviromental variable XPN_CONF must point to a config file of XPN" << std::endl;
-            exit(EXIT_FAILURE);
+            cfile_path = XPN_CONF::DEFAULT_PATH.c_str();
         }
         std::ifstream file(cfile_path);
         
         if (!file.is_open()) {
             std::cerr << "Error: while openning the XPN_CONF file: " << cfile_path << std::endl;
-            exit(EXIT_FAILURE);
+            std::raise(SIGTERM);
         }
         std::string line;
+        int actual_index = -1;
         while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string key, value;
-
-        if (std::getline(ss, key, '=') && std::getline(ss, value)) {
-            key.erase(0, key.find_first_not_of(" \t\n\r"));
-            key.erase(key.find_last_not_of(" \t\n\r") + 1);
-            value.erase(0, value.find_first_not_of(" \t\n\r"));
-            value.erase(value.find_last_not_of(" \t\n\r") + 1);
-
-            if (key.compare(XPN_CONF::TAG_PARTITION_NAME)){
+            trim(line);
+            // First check if have TAG_PARTITION and each create a new partition
+            if (line.compare(XPN_CONF::TAG_PARTITION) == 0){
+                partitions.emplace_back();
+                actual_index++;
             }
 
+            if (actual_index == -1){
+                std::cout << "Error: while parsing the XPN_CONF file: " << cfile_path << " not found " << XPN_CONF::TAG_PARTITION << std::endl;
+                std::cout << "Error: line '" << line << "'" << std::endl;
+                std::raise(SIGTERM);
+            }
+
+            // In each partition read each line to get keys and values
+            std::stringstream ss(line);
+            std::string key, value;
+
+            if (std::getline(ss, key, '=') && std::getline(ss, value)) {
+                trim(key);
+                trim(value);
+
+                if (key.compare(XPN_CONF::TAG_PARTITION_NAME) == 0){
+                    partitions[actual_index].partition_name = value;
+                }else
+                if (key.compare(XPN_CONF::TAG_BLOCKSIZE) == 0){
+                    partitions[actual_index].bsize = getSizeFactor(value);
+                }else
+                if (key.compare(XPN_CONF::TAG_REPLICATION_LEVEL) == 0){
+                    partitions[actual_index].replication_level = atoi(value.c_str());
+                }else
+                if (key.compare(XPN_CONF::TAG_SERVER_URL) == 0){
+                    partitions[actual_index].server_urls.emplace_back(value);
+                }else{
+                    std::cout << "Error: key '" << key << "' is not expected" << std::endl;
+                    std::raise(SIGTERM);
+                }
+            }
         }
-    }
+
+        std::cout << to_string();
     }
     //     char conf[KB];
     //     char key_buf[KB];
