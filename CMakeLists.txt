@@ -37,5 +37,5 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
 
 install(CODE "
     message(STATUS \"Create_symlink: from \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib to \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib64\")
-    execute_process(COMMAND ln -s -f \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib64)
+    execute_process(COMMAND ln -s -f -T \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib64)
 ")
