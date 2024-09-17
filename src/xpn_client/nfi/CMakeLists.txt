@@ -6,12 +6,8 @@ file(GLOB XPN_NFI_HEADERS
 	"${PROJECT_SOURCE_DIR}/include/xpn_client/nfi/nfi_mpi_server/*.h"
 )
 
-file(GLOB XPN_NFI_SOURCE
-	"common/*.c"
-	"nfi_local/*.c"
-	"nfi_xpn_server/*.c"
-	"nfi_sck_server/*.c"
-	"nfi_mpi_server/*.c"
+file(GLOB_RECURSE XPN_NFI_SOURCE
+	"*.c"
 )
 set_source_files_properties(${XPN_NFI_SOURCE} PROPERTIES LANGUAGE CXX)
 add_library(xpn_nfi ${XPN_NFI_HEADERS} ${XPN_NFI_SOURCE})
