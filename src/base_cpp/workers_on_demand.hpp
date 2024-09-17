@@ -23,6 +23,8 @@
 
 #include "workers.hpp"
 
+#include <mutex>
+#include <condition_variable> 
 namespace XPN
 {
     class workers_on_demand : public workers
@@ -33,5 +35,12 @@ namespace XPN
 
         void launch(std::function<void()> task) override;
         void wait() override;
+    private:
+        std::mutex m_wait_mutex;
+        std::condition_variable m_full_cv;
+        std::condition_variable m_wait_cv;
+        int m_wait = 0;
+        
+        int m_num_threads = 0;
     };
 } // namespace XPN

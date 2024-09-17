@@ -20,16 +20,52 @@
  */
 
 #include "workers_on_demand.hpp"
+#include <thread> 
 
 namespace XPN
 {
-    workers_on_demand::workers_on_demand() {}
-    workers_on_demand::~workers_on_demand() {}
+    workers_on_demand::workers_on_demand() 
+    {
+        m_num_threads = std::thread::hardware_concurrency() * 2;
+    }
+    workers_on_demand::~workers_on_demand() 
+    {
+        wait();
+    }
 
     void workers_on_demand::launch(std::function<void()> task)
     {
-        task(); //TODO: all
+        {
+            std::unique_lock lock(m_wait_mutex);
+            
+            m_full_cv.wait(lock, [this] { 
+                return m_wait < m_num_threads; 
+            });
+
+            m_wait++;
+        }
+        std::thread t([this, task] { 
+            task(); 
+
+            {
+                std::unique_lock<std::mutex> lock(m_wait_mutex); 
+                m_wait--;
+                if (m_wait == 0){
+                    m_wait_cv.notify_one();
+                }
+                m_full_cv.notify_one();
+            }
+        });
+
+        t.detach();
     }
 
-    void workers_on_demand::wait() {}
+    void workers_on_demand::wait() 
+    {
+        std::unique_lock<std::mutex> lock(m_wait_mutex);
+        
+        m_wait_cv.wait(lock, [this] { 
+            return m_wait == 0;
+        });
+    }
 } // namespace XPN
