@@ -23,6 +23,7 @@
 #include "xpn/xpn_simple/xpn_init.h"
 #include "base/ns.h"
 #include "base/profiler.h"
+#include "xpn_env.hpp"
 
 
 struct xpn_partition xpn_parttable[XPN_MAX_PART];
@@ -123,7 +124,7 @@ int xpn_init_partition( void )
   int part_n = 0;
   char buff_value[PATH_MAX];
   struct conf_file_data conf_data = {0};
-
+  XPN::xpn_env::get_instance();
   env_debug = getenv("XPN_DEBUG");
   if ((env_debug != NULL) && (strlen(env_debug) > 0)){
     xpn_debug=1;

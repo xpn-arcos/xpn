@@ -1,6 +1,6 @@
 
 add_subdirectory(nfi)
-add_subdirectory(xpn/xpn_simple)
+add_subdirectory(xpn)
 
 file(GLOB XPN_HEADERS
 	"${PROJECT_SOURCE_DIR}/include/xpn_client/*.h"

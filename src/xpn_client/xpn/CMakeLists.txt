@@ -4,6 +4,7 @@ file(GLOB_RECURSE XPN_SIMPLE_HEADERS
 
 file(GLOB_RECURSE XPN_SIMPLE_SOURCE
     "*.c"
+    "*.cpp"
 )
 
 set_source_files_properties(${XPN_SIMPLE_SOURCE} PROPERTIES LANGUAGE CXX)
@@ -18,6 +19,7 @@ target_compile_options(xpn_core PRIVATE
 )
 target_include_directories(xpn_core PRIVATE
     "${PROJECT_SOURCE_DIR}/src"
+    "${PROJECT_SOURCE_DIR}/src/xpn_client/xpn"
     "${PROJECT_SOURCE_DIR}/include"
     "${PROJECT_SOURCE_DIR}/include/xpn_client"
     "${PROJECT_SOURCE_DIR}/include/xpn_client/nfi"
