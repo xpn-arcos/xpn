@@ -182,11 +182,6 @@ xpn_server_params::xpn_server_params(int argc, char *argv[]) {
     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] << End\n", rank);
 }
 
-xpn_server_params::~xpn_server_params()
-{
-
-}
-
 /* ................................................................... */
 
 }  // namespace XPN

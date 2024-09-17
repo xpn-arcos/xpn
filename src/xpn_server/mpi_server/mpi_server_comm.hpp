@@ -35,8 +35,7 @@ namespace XPN
   class mpi_server_comm : public xpn_server_comm
   {
   public:
-    mpi_server_comm(MPI_Comm &comm);
-    ~mpi_server_comm();
+    mpi_server_comm(MPI_Comm &comm) : m_comm(comm) {}
 
     int64_t read_operation(int &op, int &rank_client_id, int &tag_client_id) override;
     int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) override;

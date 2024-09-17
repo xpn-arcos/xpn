@@ -184,14 +184,6 @@ void mpi_server_control_comm::disconnect ( xpn_server_comm *comm )
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_disconnect] << End\n", 0);
 }
 
-mpi_server_comm::mpi_server_comm(MPI_Comm &comm) : m_comm(comm)
-{
-}
-
-mpi_server_comm::~mpi_server_comm()
-{
-}
-
 int64_t mpi_server_comm::read_operation ( int &op, int &rank_client_id, int &tag_client_id )
 {
   int ret;

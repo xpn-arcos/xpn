@@ -78,7 +78,6 @@ namespace XPN
 
   public:
     xpn_server_params(int argc, char *argv[]);
-    ~xpn_server_params();
 
     void show_usage();
     void show();
