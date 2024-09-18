@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -19,28 +19,23 @@
  *
  */
 
+#pragma once
 
-/* ... Include / Inclusion ........................................... */
+#include <iostream>
+#include <cstring>
+#include "xpn_env.hpp"
 
-#include "xpn_api_mutex.h"
+namespace XPN
+{
+    #define XPN_DEBUG_COMMON_HEADER std::cerr<<"["<<__func__<<"]["<<__FILE__<<":"<<__LINE__<<"] ";
 
+    #define XPN_DEBUG(out_format) \
+    if (xpn_env::get_instance().xpn_debug) { \
+        XPN_DEBUG_COMMON_HEADER \
+        std::cerr<<out_format<<std::endl;\
+    }
 
-/* ... Const / Const ................................................. */
+    #define XPN_DEBUG_BEGIN XPN_DEBUG("Begin "<<__func__<<"()");
+    #define XPN_DEBUG_END   XPN_DEBUG("End   "<<__func__<<"()="<<(int)res<<", errno="<<errno<<" "<<std::strerror(errno)<<"");
 
-
-/* ... Global variables / Variables globales ........................ */
-
-
-/* ... Macros / Macros ............................................... */
-
-#ifdef _REENTRANT
-
-  pthread_mutex_t xpn_api_mutex = PTHREAD_MUTEX_INITIALIZER ;
-
-#endif
-
-
-/* ... Functions / Funciones ......................................... */
-
-
-/* ................................................................... */
+} // namespace XPN

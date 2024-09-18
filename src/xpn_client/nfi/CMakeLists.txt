@@ -7,7 +7,7 @@ file(GLOB XPN_NFI_HEADERS
 )
 
 file(GLOB_RECURSE XPN_NFI_SOURCE
-	"*.c"
+	"*.cpp"
 )
 set_source_files_properties(${XPN_NFI_SOURCE} PROPERTIES LANGUAGE CXX)
 add_library(xpn_nfi ${XPN_NFI_HEADERS} ${XPN_NFI_SOURCE})
@@ -23,6 +23,8 @@ target_compile_options(xpn_nfi PRIVATE
 
 target_include_directories(xpn_nfi PRIVATE
 	"${PROJECT_SOURCE_DIR}/src"
+	"${PROJECT_SOURCE_DIR}/src/xpn_client"
+	"${PROJECT_SOURCE_DIR}/src/xpn_client/nfi"
     "${PROJECT_SOURCE_DIR}/include"
     "${PROJECT_SOURCE_DIR}/include/xpn_client"
     "${PROJECT_SOURCE_DIR}/include/xpn_client/xpn/xpn_simple"

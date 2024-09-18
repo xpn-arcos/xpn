@@ -20,18 +20,21 @@
  */
 
 #include "base/profiler.h"
+#include "base_cpp/debug.hpp"
 #include "xpn/xpn_api.hpp"
-#include "xpn/xpn_env.hpp"
+#include "base_cpp/xpn_env.hpp"
 #include "xpn/xpn_conf.hpp"
 
 #include <iostream>
 #include <cstdio>
+#include <csignal>
 
 namespace XPN
 {
     int xpn_api::init()
     {
-        xpn_env &env = xpn_env::get_instance();
+        int res = 0;
+        xpn_env::get_instance();
 
         XPN_PROFILER_BEGIN(env.xpn_profiler);
         XPN_DEBUG_BEGIN;
@@ -42,7 +45,8 @@ namespace XPN
         std::unique_lock<std::mutex> lock(m_init_mutex);
         if (m_initialized){
             XPN_DEBUG("Already initialized");
-            return 0;
+            XPN_DEBUG_END;
+            return res;
         }
 
         xpn_conf conf;
@@ -50,12 +54,42 @@ namespace XPN
         for (const auto &part : conf.partitions)
         {
             auto& xpn_part = m_partitions.emplace_back(part.partition_name, part.replication_level, part.bsize);
-
+            int server_with_error = 0;
             for (const auto &srv_url : part.server_urls)
             {
-                xpn_part.init_server(srv_url);
+                res = xpn_part.init_server(srv_url);
+            }
+
+            for (const auto &srv : xpn_part.m_data_serv)
+            {
+                if (srv.m_error < 0)
+                {
+                    server_with_error++;
+                }
+            }
+            if (server_with_error > xpn_part.m_replication_level)
+            {
+                std::cerr << "More servers with errors '" << server_with_error 
+                << "' than replication level permit '" << xpn_part.m_replication_level 
+                << "'" << std::endl;
+                std::raise(SIGTERM);
             }
         }
-        // TODO: finish
+
+        XPN_DEBUG_END;
+        return res;
+    }
+
+    int xpn_api::destroy()
+    {
+        for (auto &part : m_partitions)
+        {
+            for (auto &serv : part.m_data_serv)
+            {
+                serv.destroy_comm();
+            }
+        }
+        m_partitions.clear();
+        return 0;
     }
 } // namespace XPN

@@ -21,10 +21,6 @@
 
 #pragma once
 
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "base/time_misc.h"
-  #include "base/ns.h"
   #include "xpn_server_params.hpp"
   #include <memory>
 
@@ -34,6 +30,7 @@ namespace XPN
   {
   public:
     xpn_server_comm() = default;
+    virtual ~xpn_server_comm() = default;
     
     virtual int64_t read_operation(int &op, int &rank_client_id, int &tag_client_id) = 0;
     virtual int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
@@ -44,12 +41,13 @@ namespace XPN
   {
   public:
     xpn_server_control_comm() = default;
+    virtual ~xpn_server_control_comm() = default;
 
     virtual xpn_server_comm* accept() = 0;
     virtual void disconnect(xpn_server_comm *comm) = 0;
 
     static std::unique_ptr<xpn_server_control_comm> Create(xpn_server_params &params);
   public:
-    char m_port_name[XPN_SERVER_MAX_PORT_NAME];
+    char m_port_name[MAX_PORT_NAME];
   };
 }

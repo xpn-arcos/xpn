@@ -35,8 +35,8 @@ namespace XPN
         xpn_partition(const std::string &name, int replication_level, uint64_t block_size);
         int init_server(const std::string &url);
     public:
-        int m_replication_level = XPN_CONF::DEFAULT_REPLICATION_LEVEL;  // replication_level of files :0, 1, 2,... 
         std::string m_name;                                             // name of partition 
+        int m_replication_level = XPN_CONF::DEFAULT_REPLICATION_LEVEL;  // replication_level of files :0, 1, 2,... 
         uint64_t m_block_size = XPN_CONF::DEFAULT_BLOCKSIZE;            // size of distribution used 
 
         std::vector<nfi_server> m_data_serv;                            // list of data servers in the partition 

@@ -24,6 +24,7 @@
 #include "xpn_server_params.hpp"
 
 #include "base/ns.h"
+#include "base_cpp/workers.hpp"
 
 namespace XPN {
 
@@ -44,18 +45,18 @@ void xpn_server_params::show() {
     }
 
     // * threads
-    if (thread_mode_connections == TH_NOT) {
+    if (thread_mode_connections == workers_mode::sequential) {
         printf(" |\t-t  <int>:\tWithout threads\n");
-    } else if (thread_mode_connections == TH_POOL) {
+    } else if (thread_mode_connections == workers_mode::thread_pool) {
         printf(" |\t-t  <int>:\tThread Pool Activated\n");
-    } else if (thread_mode_connections == TH_OP) {
+    } else if (thread_mode_connections == workers_mode::thread_on_demand) {
         printf(" |\t-t  <int>:\tThread on demand\n");
     } else {
         printf(" |\t-t  <int>:\tError: unknown\n");
     }
 
     // * shutdown_file
-    printf(" |\t-f  <path>:\t'%s'\n", shutdown_file);
+    printf(" |\t-f  <path>:\t'%s'\n", shutdown_file.c_str());
     // * host
     printf(" |\t-h  <host>:\t'%s'\n", srv_name);
     // * await
@@ -87,8 +88,8 @@ xpn_server_params::xpn_server_params(int argc, char *argv[]) {
     argv = argv;
     size = 0;
     rank = 0;
-    thread_mode_connections = TH_NOT;
-    thread_mode_operations = TH_NOT;
+    thread_mode_connections = workers_mode::sequential;
+    thread_mode_operations = workers_mode::sequential;
     server_type = XPN_SERVER_TYPE_SCK;
 #ifdef ENABLE_MPI_SERVER
     server_type = XPN_SERVER_TYPE_MPI;
@@ -105,7 +106,7 @@ xpn_server_params::xpn_server_params(int argc, char *argv[]) {
             case '-':
                 switch (argv[i][1]) {
                     case 'f':
-                        strcpy(shutdown_file, argv[i + 1]);
+                        shutdown_file = argv[i + 1];
                         i++;
                         break;
 
@@ -114,23 +115,23 @@ xpn_server_params::xpn_server_params(int argc, char *argv[]) {
                             if (isdigit(argv[i + 1][0])) {
                                 int thread_mode_aux = atoi(argv[i + 1]);
 
-                                if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP) {
-                                    thread_mode_connections = thread_mode_aux;
-                                    thread_mode_operations = thread_mode_aux;
+                                if (thread_mode_aux >= static_cast<int>(workers_mode::sequential) && thread_mode_aux <= static_cast<int>(workers_mode::sequential)) {
+                                    thread_mode_connections = static_cast<workers_mode>(thread_mode_aux);
+                                    thread_mode_operations = static_cast<workers_mode>(thread_mode_aux);
                                 } else {
                                     printf("ERROR: unknown option %s\n", argv[i + 1]);
                                     show_usage();
                                 }
                             } else {
                                 if (strcmp("without", argv[i + 1]) == 0) {
-                                    thread_mode_connections = TH_NOT;
-                                    thread_mode_operations = TH_NOT;
+                                    thread_mode_connections = workers_mode::sequential;
+                                    thread_mode_operations = workers_mode::sequential;
                                 } else if (strcmp("pool", argv[i + 1]) == 0) {
-                                    thread_mode_connections = TH_POOL;
-                                    thread_mode_operations = TH_POOL;
+                                    thread_mode_connections = workers_mode::thread_pool;
+                                    thread_mode_operations = workers_mode::thread_pool;
                                 } else if (strcmp("on_demand", argv[i + 1]) == 0) {
-                                    thread_mode_connections = TH_OP;
-                                    thread_mode_operations = TH_OP;
+                                    thread_mode_connections = workers_mode::thread_on_demand;
+                                    thread_mode_operations = workers_mode::thread_on_demand;
                                 } else {
                                     printf("ERROR: unknown option %s\n", argv[i + 1]);
                                     show_usage();
@@ -176,7 +177,7 @@ xpn_server_params::xpn_server_params(int argc, char *argv[]) {
     // In sck_server worker for operations has to be sequential because you don't want to have to make a socket per
     // operation. It can be done because it is not reentrant
     if (server_type == XPN_SERVER_TYPE_SCK) {
-        thread_mode_operations = TH_NOT;
+        thread_mode_operations = workers_mode::sequential;
     }
 
     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] << End\n", rank);

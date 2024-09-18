@@ -18,34 +18,42 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #pragma once
 
+#include "mpi.h"
 #include <string>
 #include <memory>
 
-#include "nfi_xpn_server_comm.hpp"
+#include "nfi/nfi_xpn_server_comm.hpp"
 
 namespace XPN
 {
-    class nfi_server 
-    {
-    public:
-        nfi_server(const std::string &url);
-        int init_comm();
-        int destroy_comm();
-    public:
-        std::string m_protocol; // protocol of the server: mpi_server sck_server
-        std::string m_server;   // server address
-        std::string m_path;     // path of the server
+  
+  class nfi_mpi_server_comm : public nfi_xpn_server_comm
+  {
+  public:
+    nfi_mpi_server_comm(MPI_Comm &comm, int rank, int size) : m_comm(comm), m_rank(rank), m_size(size) {}
 
-        int m_error = 0;        // For fault tolerance
-    private:
-        const std::string m_url;// URL of this server -> protocol
-                                // + server
-                                // + path + more info (port, ...)
+    int64_t write_operation(int op) override;
+    int64_t read_data(void *data, int64_t size) override;
+    int64_t write_data(const void *data, int64_t size) override;
+  public:
+    MPI_Comm m_comm;
+    int m_rank, m_size;
+  };
+  
+  class nfi_mpi_server_control_comm : public nfi_xpn_server_control_comm
+  {
+  public:
+    nfi_mpi_server_control_comm();
+    ~nfi_mpi_server_control_comm();
+    
+    nfi_xpn_server_comm* connect(const std::string &srv_name) override;
+    void disconnect(nfi_xpn_server_comm* comm) override;
 
-        std::unique_ptr<nfi_xpn_server_control_comm> m_control_comm;
-        nfi_xpn_server_comm                         *m_comm;
-    };
+  private:
+    int m_rank, m_size;
+    bool m_thread_mode;
+  };
+
 } // namespace XPN

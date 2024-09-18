@@ -22,30 +22,32 @@
 #pragma once
 
 #include <string>
-#include <memory>
-
-#include "nfi_xpn_server_comm.hpp"
+#include <unistd.h>
+#include <limits.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 
 namespace XPN
 {
-    class nfi_server 
-    {
+    class ns
+	{
     public:
-        nfi_server(const std::string &url);
-        int init_comm();
-        int destroy_comm();
-    public:
-        std::string m_protocol; // protocol of the server: mpi_server sck_server
-        std::string m_server;   // server address
-        std::string m_path;     // path of the server
+        static std::string get_host_name()
+        {
 
-        int m_error = 0;        // For fault tolerance
-    private:
-        const std::string m_url;// URL of this server -> protocol
-                                // + server
-                                // + path + more info (port, ...)
+            char hostname[HOST_NAME_MAX];
+            if (gethostname(hostname, HOST_NAME_MAX) == 0){
+                return std::string(hostname);
+            }
+            return {};
+        }
 
-        std::unique_ptr<nfi_xpn_server_control_comm> m_control_comm;
-        nfi_xpn_server_comm                         *m_comm;
-    };
+        static std::string get_host_ip()
+        {
+            hostent* hostname = gethostbyname(get_host_name().c_str());
+            if(hostname)
+                return std::string(inet_ntoa(**(in_addr**)hostname->h_addr_list));
+            return {};
+        }
+	};
 } // namespace XPN

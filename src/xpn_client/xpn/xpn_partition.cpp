@@ -20,19 +20,26 @@
  */
 
 #include "xpn/xpn_partition.hpp"
+#include "base_cpp/ns.hpp"
 
 namespace XPN
 {
         xpn_partition::xpn_partition(const std::string &name, int replication_level, uint64_t block_size) :
             m_name(name), m_replication_level(replication_level), m_block_size(block_size)
         {
-
         }
 
         int xpn_partition::init_server(const std::string &url)
         {
             int index = m_data_serv.size();
 
-            auto& server = m_data_serv.emplace_back();
+            auto& server = m_data_serv.emplace_back(url);
+
+            if (server.m_server.compare(ns::get_host_name()) == 0 ||
+                server.m_server.compare(ns::get_host_ip()) == 0)
+            {
+                m_local_serv = index;
+            }
+            return 0;
         }
 } // namespace XPN

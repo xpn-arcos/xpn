@@ -5,12 +5,8 @@ file(GLOB XPN_SERVER_HEADERS
     "${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server/*.hpp"
     "${PROJECT_SOURCE_DIR}/include/xpn_server/sck_server/*.h"
 )
-file(GLOB XPN_SERVER_SOURCE 
-"*.c"
-"*.cpp"
-"mpi_server/*.c"
-"mpi_server/*.cpp"
-"sck_server/*.c"
+file(GLOB_RECURSE XPN_SERVER_SOURCE 
+    "*.cpp"
 )
 
 set_source_files_properties(${XPN_SERVER_SOURCE} PROPERTIES LANGUAGE CXX)

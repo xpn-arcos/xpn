@@ -22,30 +22,27 @@
 #pragma once
 
 #include <string>
-#include <memory>
-
-#include "nfi_xpn_server_comm.hpp"
+#include <netdb.h>
+#include <arpa/inet.h>
 
 namespace XPN
 {
-    class nfi_server 
-    {
+    
+    class xpn_socket
+	{
     public:
-        nfi_server(const std::string &url);
-        int init_comm();
-        int destroy_comm();
-    public:
-        std::string m_protocol; // protocol of the server: mpi_server sck_server
-        std::string m_server;   // server address
-        std::string m_path;     // path of the server
-
-        int m_error = 0;        // For fault tolerance
+        constexpr static const int DEFAULT_XPN_SCK_PORT = 3456;
+        constexpr static const int ACCEPT_CODE = 123;
+        constexpr static const int FINISH_CODE = 666;
+        constexpr static const int FINISH_CODE_AWAIT = 667;
     private:
-        const std::string m_url;// URL of this server -> protocol
-                                // + server
-                                // + path + more info (port, ...)
-
-        std::unique_ptr<nfi_xpn_server_control_comm> m_control_comm;
-        nfi_xpn_server_comm                         *m_comm;
-    };
+        static int get_xpn_port();
+    public:
+        static int64_t send ( int socket, void * buffer, int64_t size );
+        static int64_t recv ( int socket, void * buffer, int64_t size );
+        static int server_create ( int &out_socket );
+        static int server_accept ( int socket, int &out_conection_socket );
+        static int client_connect ( const std::string &srv_name, int &out_socket );
+        static int close ( int socket );
+	};
 } // namespace XPN

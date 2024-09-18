@@ -123,6 +123,19 @@
   #define O_CLOEXEC 02000000  // set close_on_exec */
   #endif
 
+  // for access
+  #ifndef R_OK
+  #define	R_OK	4
+  #endif
+  #ifndef W_OK
+  #define	W_OK	2
+  #endif
+  #ifndef X_OK
+  #define	X_OK	1
+  #endif
+  #ifndef F_OK
+  #define	F_OK	0
+  #endif
 
   /* ... Data structures / Estructuras de datos ........................ */
 

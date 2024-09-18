@@ -20,9 +20,6 @@
  */
 #pragma once
 
-#include "all_system.h"
-#include "base/utils.h"
-#include "base/time_misc.h"
 #include "mpi.h"
 #include <string>
 #include <memory>
@@ -36,6 +33,7 @@ namespace XPN
   {
   public:
     mpi_server_comm(MPI_Comm &comm) : m_comm(comm) {}
+    ~mpi_server_comm() override {}
 
     int64_t read_operation(int &op, int &rank_client_id, int &tag_client_id) override;
     int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) override;
@@ -48,7 +46,7 @@ namespace XPN
   {
   public:
     mpi_server_control_comm(int argc, char *argv[], bool thread_mode);
-    ~mpi_server_control_comm();
+    ~mpi_server_control_comm() override;
     
     xpn_server_comm* accept() override;
     void disconnect(xpn_server_comm *comm) override;

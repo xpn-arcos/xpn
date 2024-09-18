@@ -30,7 +30,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
+  // #include "all_system.h"
   #include "string_misc.h"
 
 

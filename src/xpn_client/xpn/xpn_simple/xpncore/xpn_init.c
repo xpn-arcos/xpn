@@ -23,7 +23,7 @@
 #include "xpn/xpn_simple/xpn_init.h"
 #include "base/ns.h"
 #include "base/profiler.h"
-#include "xpn_env.hpp"
+#include "base_cpp/xpn_env.hpp"
 
 
 struct xpn_partition xpn_parttable[XPN_MAX_PART];

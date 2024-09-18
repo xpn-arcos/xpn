@@ -24,9 +24,23 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <sys/stat.h>
 
+#include <nfi/nfi_xpn_server_comm.hpp>
 #include <xpn/xpn_partition.hpp>
 #include <xpn/xpn_file.hpp>
+
+#ifdef _REENTRANT
+
+    #define XPN_API_LOCK()    std::unique_lock<std::mutex> lock(XPN::xpn_api::get_instance().m_api_mutex);
+    #define XPN_API_UNLOCK()  lock.unlock();
+
+#else
+
+    #define XPN_API_LOCK()    
+    #define XPN_API_UNLOCK()  
+
+#endif
 
 namespace XPN
 {
@@ -46,6 +60,9 @@ namespace XPN
 
         std::mutex m_init_mutex;
         bool m_initialized = false;
+
+    public:
+        std::mutex m_api_mutex;
 
     public:
         // XPN api

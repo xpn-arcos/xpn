@@ -27,25 +27,31 @@
 
 namespace XPN
 {
+    namespace server_protocols
+    {
+        constexpr const char * mpi_server = "mpi_server";
+        constexpr const char * sck_server = "sck_server";
+        constexpr const char * file = "file";
+    }
     class nfi_xpn_server_comm
     {
     public:
         nfi_xpn_server_comm() = default;
         
         virtual int64_t write_operation(int op) = 0;
-        virtual int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
-        virtual int64_t write_data(const void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
+        virtual int64_t read_data(void *data, int64_t size) = 0;
+        virtual int64_t write_data(const void *data, int64_t size) = 0;
     };
     class nfi_xpn_server_control_comm 
     {
     public:
         nfi_xpn_server_control_comm() = default;
 
-        virtual nfi_xpn_server_comm* accept() = 0;
+        virtual nfi_xpn_server_comm* connect(const std::string &srv_name) = 0;
         virtual void disconnect(nfi_xpn_server_comm *comm) = 0;
 
-        static std::unique_ptr<nfi_xpn_server_control_comm> Create(xpn_server_params &params);
+        static std::unique_ptr<nfi_xpn_server_control_comm> Create(const std::string& server_protocol);
     public:
-        char m_port_name[XPN_SERVER_MAX_PORT_NAME];
+        char m_port_name[MAX_PORT_NAME];
     };
 } // namespace XPN

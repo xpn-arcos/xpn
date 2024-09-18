@@ -20,7 +20,7 @@
  */
 
 #include "xpn_conf.hpp"
-#include "xpn_env.hpp"
+#include "base_cpp/xpn_env.hpp"
 
 #include <string>
 #include <fstream>
@@ -30,74 +30,6 @@
 
 namespace XPN
 {
-    // int XpnConfGetValueRept(struct conf_file_data *conf_data, char *key, char *value, int partition, int rept)
-    // {
-    //     char key_buf[KB];
-    //     char value_buf[KB];
-    //     int i;
-    //     int part_index = -1;
-    //     int internal_rept = 0;
-    //     for (i = 0; i < conf_data->lines_n; i++)
-    //     {
-    //         sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
-    //         if (strcmp(key_buf, XPN_CONF_TAG_PARTITION) == 0)
-    //         {
-    //             part_index++;
-    //         }
-    //         if (strcmp(key_buf, key) == 0)
-    //         {
-    //             if (partition == part_index)
-    //             {
-    //                 if (rept == internal_rept)
-    //                 {
-    //                     strcpy(value, value_buf);
-    //                     return 0;
-    //                 }
-    //                 internal_rept++;
-    //             }
-    //         }
-    //     }
-    //     return -1;
-    // }
-
-    // int XpnConfGetServer(struct conf_file_data *conf_data, char *value, int partition, int server)
-    // {   
-    //     if (partition >= conf_data->partition_n)
-    //         return -1;
-        
-    //     char key_buf[KB];
-    //     int server_index = 0;
-    //     for (int i = 0; i < partition; i++)
-    //     {   
-    //         server_index += conf_data->server_n[i];
-    //     }
-
-    //     server_index += server;
-    //     server_index = conf_data->server_url_index[server_index];
-    //     sscanf(conf_data->lines[server_index], "%s = %s", key_buf, value);
-    //     if (strcmp(key_buf, XPN_CONF_TAG_SERVER_URL) != 0)
-    //     {
-    //         return -1;
-    //     }
-    //     return 0;
-    // }
-
-    // int XpnConfGetValue(struct conf_file_data *conf_data, char *key, char *value, int partition)
-    // {
-    //     return XpnConfGetValueRept(conf_data, key, value, partition, 0);
-    // }
-
-    // int XpnConfGetNumPartitions(struct conf_file_data *conf_data)
-    // {   
-    //     return conf_data->partition_n;
-    // }
-
-    // int XpnConfGetNumServers(struct conf_file_data *conf_data, int partition_index)
-    // {      
-    //     if (partition_index >= conf_data->partition_n)
-    //         return -1;
-    //     return conf_data->server_n[partition_index];
-    // }
     inline void trim(std::string& str)
     {
         str.erase(str.find_last_not_of(" \t\n\r")+1);
@@ -145,7 +77,7 @@ namespace XPN
         const char * cfile_path = xpn_env::get_instance().xpn_conf;
         if (cfile_path == nullptr)
         {
-            cfile_path = XPN_CONF::DEFAULT_PATH.c_str();
+            cfile_path = XPN_CONF::DEFAULT_PATH;
         }
         std::ifstream file(cfile_path);
         
@@ -164,8 +96,8 @@ namespace XPN
             }
 
             if (actual_index == -1){
-                std::cout << "Error: while parsing the XPN_CONF file: " << cfile_path << " not found " << XPN_CONF::TAG_PARTITION << std::endl;
-                std::cout << "Error: line '" << line << "'" << std::endl;
+                std::cerr << "Error: while parsing the XPN_CONF file: " << cfile_path << " not found " << XPN_CONF::TAG_PARTITION << std::endl;
+                std::cerr << "Error: line '" << line << "'" << std::endl;
                 std::raise(SIGTERM);
             }
 
@@ -189,7 +121,7 @@ namespace XPN
                 if (key.compare(XPN_CONF::TAG_SERVER_URL) == 0){
                     partitions[actual_index].server_urls.emplace_back(value);
                 }else{
-                    std::cout << "Error: key '" << key << "' is not expected" << std::endl;
+                    std::cerr << "Error: key '" << key << "' is not expected" << std::endl;
                     std::raise(SIGTERM);
                 }
             }

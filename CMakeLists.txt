@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_compile_options("-D_GNU_SOURCE" "-DMPICH_SKIP_MPICXX" "-D_REENTRANT")
-add_compile_options("-fPIC" "-O2" "-g" "-g3" "-ggdb" "-Wall" "-Wextra" "-fpermissive")
+add_compile_options("-fPIC" "-O2" "-g" "-g3" "-ggdb" "-Wall" "-Wextra")
 
 option(ENABLE_SCK_SERVER "Enable the sck_server module" ON)
 if(ENABLE_SCK_SERVER)
@@ -24,11 +24,12 @@ unset(ENABLE_MPI_SERVER CACHE)
 link_libraries("pthread" "dl")
 
 add_subdirectory(src/base)
+add_subdirectory(src/bypass)
+add_compile_options("-fpermissive")
 add_subdirectory(src/base_cpp)
 add_subdirectory(src/xpn_client)
 add_subdirectory(src/xpn_server)
-add_subdirectory(src/bypass)
-add_subdirectory(src/utils)
+# add_subdirectory(src/utils)
 
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/

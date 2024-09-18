@@ -3,7 +3,6 @@ file(GLOB_RECURSE XPN_SIMPLE_HEADERS
 )
 
 file(GLOB_RECURSE XPN_SIMPLE_SOURCE
-    "*.c"
     "*.cpp"
 )
 

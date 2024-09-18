@@ -24,6 +24,8 @@
 #define _XPN_PROFILER_H
 
   /* ... Include / Inclusion ........................................... */
+  //TODO: do it in cpp better
+  #ifdef XPN_PROFIFER
 
   #include <stdio.h>
   #include <errno.h>
@@ -38,8 +40,6 @@
   #define XPN_PROFILER_HEADER "{\"otherData\": {},\"traceEvents\":[{}\n"
   #define XPN_PROFILER_FOOTER "]}\n"
 
-  //TODO: do it in cpp better
-  #ifdef XPN_PROFIFER
   #define XPN_PROFILER_BEGIN(name_file) \
     if (xpn_profiler) { \
       char buf[PATH_MAX]; \

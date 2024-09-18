@@ -29,15 +29,15 @@ namespace XPN
 {
     namespace XPN_CONF
     {
-        const std::string TAG_PARTITION = "[partition]";
-        const std::string TAG_PARTITION_NAME = "partition_name";
-        const std::string TAG_REPLICATION_LEVEL = "replication_level";
-        const std::string TAG_BLOCKSIZE = "bsize";
-        const std::string TAG_SERVER_URL = "server_url";
-        const int DEFAULT_REPLICATION_LEVEL = 0;
-        const int DEFAULT_BLOCKSIZE = 512 * 1024;
+        constexpr const char * TAG_PARTITION = "[partition]";
+        constexpr const char * TAG_PARTITION_NAME = "partition_name";
+        constexpr const char * TAG_REPLICATION_LEVEL = "replication_level";
+        constexpr const char * TAG_BLOCKSIZE = "bsize";
+        constexpr const char * TAG_SERVER_URL = "server_url";
+        constexpr const int DEFAULT_REPLICATION_LEVEL = 0;
+        constexpr const int DEFAULT_BLOCKSIZE = 512 * 1024;
 
-        const std::string DEFAULT_PATH = "/etc/xpn/xpn.conf";
+        constexpr const char * DEFAULT_PATH = "/etc/xpn/xpn.conf";
     }
 
     class xpn_conf

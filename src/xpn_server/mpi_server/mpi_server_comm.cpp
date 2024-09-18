@@ -19,6 +19,8 @@
  *
  */
 #include "mpi_server_comm.hpp"
+#include "base/debug_msg.h"
+#include "base_cpp/timer.hpp"
 
 namespace XPN
 {
@@ -30,8 +32,7 @@ mpi_server_control_comm::mpi_server_control_comm(int argc, char *argv[], bool th
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] >> Begin\n", m_rank);
 
   //Get timestap
-  struct timeval t0;
-  TIME_MISC_Timer(&t0);
+  timer timer;
 
   // MPI init
   // Threads disable
@@ -91,16 +92,9 @@ mpi_server_control_comm::mpi_server_control_comm(int argc, char *argv[], bool th
   // Print server init information
   MPI_Barrier(MPI_COMM_WORLD);
 
-  struct timeval t1;
-  struct timeval tf;
-  float time;
-  TIME_MISC_Timer(&t1);
-  TIME_MISC_DiffTime(&t0, &t1, &tf);
-  time = TIME_MISC_TimevaltoFloat(&tf);
-
   MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
 
-  printf(" | * Time to initialize XPN MPI server: %f\n", time);
+  printf(" | * Time to initialize XPN MPI server: %f\n", timer.elapsed());
 
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] server %d available at %s\n", m_rank, m_rank, m_port_name);
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] server %d accepting...\n", m_rank, m_rank);
@@ -180,7 +174,7 @@ void mpi_server_control_comm::disconnect ( xpn_server_comm *comm )
     return;
   }
 
-  delete in_comm;
+  delete comm;
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_disconnect] << End\n", 0);
 }
 
