@@ -19,34 +19,16 @@
  *
  */
 
-#include "xpn/xpn_partition.hpp"
-#include "base_cpp/ns.hpp"
-#include "base_cpp/debug.hpp"
+#pragma once
+
+#include <string>
 
 namespace XPN
 {
-        xpn_partition::xpn_partition(const std::string &name, int replication_level, uint64_t block_size) :
-            m_name(name), m_replication_level(replication_level), m_block_size(block_size)
-        {
-        }
-
-        int xpn_partition::init_server(const std::string &url)
-        {
-            XPN_DEBUG_BEGIN;
-            int res = 0;
-            int index = m_data_serv.size();
-
-            auto& server = m_data_serv.emplace_back(url);
-
-            if (server.m_server == ns::get_host_name() ||
-                server.m_server == ns::get_host_ip())
-            {
-                m_local_serv = index;
-            }
-
-            res = server.init_comm();
-
-            XPN_DEBUG_END;
-            return res;
-        }
-} // namespace XPN
+    class xpn_path
+    {
+    public:
+        static std::string get_first_dir(const std::string &path);
+        static int hash(const std::string &path, int max_num, bool is_file);
+    };
+}

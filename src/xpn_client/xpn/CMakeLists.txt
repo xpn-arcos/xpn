@@ -1,15 +1,13 @@
 file(GLOB_RECURSE XPN_SIMPLE_HEADERS
     # "${PROJECT_SOURCE_DIR}/include/xpn_client/xpn/**.h"
-    "*.cpp"
+    "*.hpp"
 )
 
 file(GLOB_RECURSE XPN_SIMPLE_SOURCE
     "*.cpp"
 )
 
-set_source_files_properties(${XPN_SIMPLE_SOURCE} PROPERTIES LANGUAGE CXX)
 add_library(xpn_core ${XPN_SIMPLE_SOURCE} ${XPN_SIMPLE_HEADERS})
-set_target_properties(xpn_core PROPERTIES LINKER_LANGUAGE CXX)
 target_compile_options(xpn_core PRIVATE 
     "-DHAVE_STRING_H"
     "-DHAVE_FCNTL_H"

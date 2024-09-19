@@ -21,22 +21,13 @@
 
 #pragma once
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-  /* ... Include / Inclusion ........................................... */
-
   #include <libgen.h>
-  #include "all_system.h"
   #include "base/filesystem.h"
   #include "base/urlstr.h"
   #include "base/utils.h"
   #include "base/workers.h"
-  #include "xpn_metadata.h"
-
-
-  /* ... Const / Const ................................................. */
+  #include "xpn/xpn_metadata.hpp"
+  #include <variant>
 
   /* Operations */
 
@@ -72,9 +63,6 @@
   #define XPN_SERVER_FINALIZE       80
   #define XPN_SERVER_DISCONNECT     81
   #define XPN_SERVER_END            -1
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
 
   /* Message struct */
 
@@ -162,14 +150,14 @@
 
   struct st_xpn_server_read_mdata_req
   { 
-    struct xpn_metadata mdata;
+    XPN::xpn_metadata::data mdata;
     struct st_xpn_server_status status;
   };
 
   struct st_xpn_server_write_mdata
   { 
     char path[PATH_MAX];
-    struct xpn_metadata mdata;
+    XPN::xpn_metadata::data mdata;
   };
 
   struct st_xpn_server_write_mdata_file_size
@@ -186,33 +174,44 @@
   struct st_xpn_server_msg
   {
     int type;
-    union {
-      struct st_xpn_server_path_flags     op_open;
-      struct st_xpn_server_path_flags     op_creat;
-      struct st_xpn_server_close          op_close;
-      struct st_xpn_server_rw             op_read;
-      struct st_xpn_server_rw             op_write;
-      struct st_xpn_server_path           op_rm;
-      struct st_xpn_server_rename         op_rename;
-      struct st_xpn_server_path           op_getattr;
-      struct st_xpn_server_setattr        op_setattr;
+    using XpnServerMsgVariant = std::variant<
+        st_xpn_server_path_flags,      // Para op_open y op_creat
+        st_xpn_server_close,           // Para op_close y op_closedir
+        st_xpn_server_rw,              // Para op_read y op_write
+        st_xpn_server_path,            // Para op_rm, op_getattr, op_rmdir, op_read_mdata
+        st_xpn_server_rename,          // Para op_rename
+        st_xpn_server_setattr,         // Para op_setattr
+        st_xpn_server_readdir,         // Para op_readdir
+        st_xpn_server_write_mdata,     // Para op_write_mdata
+        st_xpn_server_write_mdata_file_size,  // Para op_write_mdata_file_size
+        st_xpn_server_end              // Para op_end
+    >;
 
-      struct st_xpn_server_path_flags     op_mkdir;
-      struct st_xpn_server_path_flags     op_opendir;
-      struct st_xpn_server_readdir        op_readdir;
-      struct st_xpn_server_close          op_closedir;
-      struct st_xpn_server_path           op_rmdir;
+    XpnServerMsgVariant data;  // Ahora usamos std::variant en lugar de la unión
+    // union {
+    //   struct st_xpn_server_path_flags     op_open;
+    //   struct st_xpn_server_path_flags     op_creat;
+    //   struct st_xpn_server_close          op_close;
+    //   struct st_xpn_server_rw             op_read;
+    //   struct st_xpn_server_rw             op_write;
+    //   struct st_xpn_server_path           op_rm;
+    //   struct st_xpn_server_rename         op_rename;
+    //   struct st_xpn_server_path           op_getattr;
+    //   struct st_xpn_server_setattr        op_setattr;
 
-      struct st_xpn_server_path           op_read_mdata;
-      struct st_xpn_server_write_mdata    op_write_mdata;
-      struct st_xpn_server_write_mdata_file_size             op_write_mdata_file_size;
+    //   struct st_xpn_server_path_flags     op_mkdir;
+    //   struct st_xpn_server_path_flags     op_opendir;
+    //   struct st_xpn_server_readdir        op_readdir;
+    //   struct st_xpn_server_close          op_closedir;
+    //   struct st_xpn_server_path           op_rmdir;
 
-      struct st_xpn_server_end            op_end;
-    } u_st_xpn_server_msg;
+    //   struct st_xpn_server_path           op_read_mdata;
+    //   struct st_xpn_server_write_mdata    op_write_mdata;
+    //   struct st_xpn_server_write_mdata_file_size             op_write_mdata_file_size;
+
+    //   struct st_xpn_server_end            op_end;
+    // } u_st_xpn_server_msg;
   };
-
-  
-  /* ... Functions / Funciones ......................................... */
 
   static inline const char *xpn_server_op2string(int op_code) {
     switch (op_code) {
@@ -247,12 +246,3 @@
       default: return "Unknown";
     }
   }
-
-  int   xpn_server_do_operation ( struct st_th *th, int * the_end );
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif

@@ -30,15 +30,15 @@ namespace XPN
 {
     std::unique_ptr<nfi_xpn_server_control_comm> nfi_xpn_server_control_comm::Create(const std::string &server_protocol)
     {
-        if (server_protocol.compare(server_protocols::mpi_server) == 0)
+        if (server_protocol == server_protocols::mpi_server)
         {
             return std::make_unique<nfi_mpi_server_control_comm>();
         }else
-        if (server_protocol.compare(server_protocols::sck_server) == 0)
+        if (server_protocol == server_protocols::sck_server)
         {
             // return std::make_unique<mpi_server_control_comm>(params.get_argc(), params.get_argv(), params.have_threads());
         }else
-        if (server_protocol.compare(server_protocols::file) == 0)
+        if (server_protocol == server_protocols::file)
         {
             // return std::make_unique<mpi_server_control_comm>(params.get_argc(), params.get_argv(), params.have_threads());
         }

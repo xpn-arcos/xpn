@@ -54,7 +54,16 @@ namespace XPN
 
         for (const auto &part : conf.partitions)
         {
-            auto& xpn_part = m_partitions.emplace_back(part.partition_name, part.replication_level, part.bsize);
+            // xpn_partition xpn_part(part.partition_name, part.replication_level, part.bsize);
+            // auto &[key, xpn_part] = m_partitions.insert({part.partition_name, {part.partition_name, part.replication_level, part.bsize}});
+            auto[key, inserted] = m_partitions.emplace(part.partition_name, xpn_partition(part.partition_name, part.replication_level, part.bsize));
+            if (!inserted){
+                std::cerr << "Error: cannot create xpn_partition" << std::endl;
+                std::raise(SIGTERM);
+            }
+            //  = {part.partition_name, part.replication_level, part.bsize};
+            auto& xpn_part = m_partitions.at(part.partition_name);
+            // m_partitions.emplace(std::make_pair(part.partition_name, xpn_partition{part.partition_name,part.replication_level, part.bsize}));
             int server_with_error = 0;
             for (const auto &srv_url : part.server_urls)
             {
@@ -70,12 +79,14 @@ namespace XPN
             }
             if (server_with_error > xpn_part.m_replication_level)
             {
-                std::cerr << "More servers with errors '" << server_with_error 
+                std::cerr << "Error: More servers with errors '" << server_with_error 
                 << "' than replication level permit '" << xpn_part.m_replication_level 
                 << "'" << std::endl;
                 std::raise(SIGTERM);
             }
         }
+        
+        m_worker = workers::Create(static_cast<workers_mode>(xpn_env::get_instance().xpn_thread));
 
         XPN_DEBUG_END;
         return res;
@@ -93,7 +104,7 @@ namespace XPN
         }
         m_initialized = false;
 
-        for (auto &part : m_partitions)
+        for (auto &[key, part] : m_partitions)
         {
             for (auto &serv : part.m_data_serv)
             {
@@ -109,7 +120,7 @@ namespace XPN
     {
         int res = -1;
         XPN_DEBUG_BEGIN;
-        for (auto &part : m_partitions)
+        for (auto &[key, part] : m_partitions)
         {
             if (index < static_cast<int>(part.m_data_serv.size())){
                 part.m_data_serv[index].m_error = -1;
@@ -122,11 +133,17 @@ namespace XPN
 
     int xpn_api::get_block_locality(char *path, off_t offset, int *url_c, char **url_v[])
     {
-
+        XPN_DEBUG_BEGIN;
+        int res = 0;
+        XPN_DEBUG_END;
+        return res;
     }
 
     int xpn_api::free_block_locality(int *url_c, char **url_v[])
     {
-
+        XPN_DEBUG_BEGIN;
+        int res = 0;
+        XPN_DEBUG_END;
+        return res;
     }
 } // namespace XPN

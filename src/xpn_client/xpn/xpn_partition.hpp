@@ -29,6 +29,9 @@
 
 namespace XPN
 {
+    // Fordward declaration
+    class nfi_server;
+
     class xpn_partition
     {
     public:

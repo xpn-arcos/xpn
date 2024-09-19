@@ -92,7 +92,7 @@ namespace XPN
         while (std::getline(file, line)) {
             trim(line);
             // First check if have TAG_PARTITION and each create a new partition
-            if (line.compare(XPN_CONF::TAG_PARTITION) == 0){
+            if (line == XPN_CONF::TAG_PARTITION){
                 partitions.emplace_back();
                 actual_index++;
             }
@@ -111,16 +111,16 @@ namespace XPN
                 trim(key);
                 trim(value);
 
-                if (key.compare(XPN_CONF::TAG_PARTITION_NAME) == 0){
+                if (key == XPN_CONF::TAG_PARTITION_NAME){
                     partitions[actual_index].partition_name = value;
                 }else
-                if (key.compare(XPN_CONF::TAG_BLOCKSIZE) == 0){
+                if (key == XPN_CONF::TAG_BLOCKSIZE){
                     partitions[actual_index].bsize = getSizeFactor(value);
                 }else
-                if (key.compare(XPN_CONF::TAG_REPLICATION_LEVEL) == 0){
+                if (key == XPN_CONF::TAG_REPLICATION_LEVEL){
                     partitions[actual_index].replication_level = atoi(value.c_str());
                 }else
-                if (key.compare(XPN_CONF::TAG_SERVER_URL) == 0){
+                if (key == XPN_CONF::TAG_SERVER_URL){
                     partitions[actual_index].server_urls.emplace_back(value);
                 }else{
                     std::cerr << "Error: key '" << key << "' is not expected" << std::endl;

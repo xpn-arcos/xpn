@@ -22,13 +22,14 @@
 #pragma once
 
 #include <string>
-#include <vector>
+#include <unordered_map>
 #include <mutex>
 #include <sys/stat.h>
 
 #include <xpn/xpn_partition.hpp>
 #include <xpn/xpn_file.hpp>
 #include <base_cpp/debug.hpp>
+#include <base_cpp/workers.hpp>
 
 #ifdef _REENTRANT
 
@@ -55,11 +56,13 @@ namespace XPN
             return instance;
         }
     private:
-        std::vector<xpn_partition> m_partitions;
-        std::vector<xpn_file> m_files;
+        std::unordered_map<std::string, xpn_partition> m_partitions;
+        std::unordered_map<int, xpn_file> m_files;
+        std::unique_ptr<workers> m_worker;
 
         std::mutex m_init_mutex;
         bool m_initialized = false;
+
 
     public:
         std::mutex m_api_mutex;
@@ -74,6 +77,7 @@ namespace XPN
 
         // File api
         int   open      (const char *path, int flags, mode_t mode);
+
         int   creat     (const char *path, mode_t perm);
         int   close     (int fd);
         int   unlink    (const char *path);
@@ -114,7 +118,7 @@ namespace XPN
         // DIR api
         DIR *           opendir(const char *path);
         int             closedir(DIR *dirp);
-        struct dirent * readdir(DIR *dirp);
+        struct:: dirent*readdir(DIR *dirp);
         void            rewinddir(DIR *dirp);  
         int             mkdir(const char *path, mode_t perm);
         int             rmdir(const char *path);

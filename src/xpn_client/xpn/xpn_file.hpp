@@ -46,6 +46,10 @@ namespace XPN
 
     class xpn_file
     {
+    public:
+        xpn_file(const std::string &path, const xpn_partition &part) : m_path(path), m_part(part), m_mdata(m_path, m_part) {}
+
+    public:
         const std::string m_path;       // absolute path
         file_type m_type;               // indicate FILE or DIR
         int m_links = 0;                // number of links that this file has
@@ -54,6 +58,5 @@ namespace XPN
         off_t m_offset = 0;             // offset of the open file
         std::vector<xpn_fh> m_data_vfh; // virtual FH
 
-        xpn_file(const std::string &path, const xpn_partition &part) : m_path(path), m_part(part), m_mdata(*this) {}
     };
 } // namespace XPN

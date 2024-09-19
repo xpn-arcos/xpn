@@ -19,55 +19,22 @@
  *
  */
 
-#include "xpn/xpn_api.hpp"
+#include "xpn_metadata.hpp"
 
 namespace XPN
 {
-    DIR *xpn_api::opendir(const char *path)
+    int xpn_metadata::read()
     {
-        XPN_DEBUG_BEGIN;
-        int res = 0;
-        XPN_DEBUG_END;
-        return nullptr;
+        return 0;
     }
 
-    int xpn_api::closedir(DIR *dirp)
+    int xpn_metadata::write()
     {
-        XPN_DEBUG_BEGIN;
-        int res = 0;
-        XPN_DEBUG_END;
-        return res;
+        return 0;
     }
 
-    struct ::dirent *xpn_api::readdir(DIR *dirp)
+    int xpn_metadata::update_file_size()
     {
-        XPN_DEBUG_BEGIN;
-        int res = 0;
-        XPN_DEBUG_END;
-        return nullptr;
+        return 0;
     }
-
-    void xpn_api::rewinddir(DIR *dirp)
-    {
-        XPN_DEBUG_BEGIN;
-        int res = 0;
-        XPN_DEBUG_END;
-    }
-
-    int xpn_api::mkdir(const char *path, mode_t perm)
-    {
-        XPN_DEBUG_BEGIN;
-        int res = 0;
-        XPN_DEBUG_END;
-        return res;
-    }
-
-    int xpn_api::rmdir(const char *path)
-    {
-        XPN_DEBUG_BEGIN;
-        int res = 0;
-        XPN_DEBUG_END;
-        return res;
-    }
-
 } // namespace XPN

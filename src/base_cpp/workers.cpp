@@ -21,6 +21,8 @@
 
 #include "workers.hpp"
 
+#include <iostream>
+
 #include "workers_sequential.hpp"
 #include "workers_pool.hpp"
 #include "workers_on_demand.hpp"
@@ -37,7 +39,7 @@ namespace XPN
             case workers_mode::sequential: return std::make_unique<workers_sequential>();
             case workers_mode::thread_pool: return std::make_unique<workers_pool>();
             case workers_mode::thread_on_demand: return std::make_unique<workers_on_demand>();
-            default: break;
+            default: std::cerr<<"Error: workers mode '"<<static_cast<int>(mode)<<"' not defined"<<std::endl; break;
         }
         return nullptr;
     }

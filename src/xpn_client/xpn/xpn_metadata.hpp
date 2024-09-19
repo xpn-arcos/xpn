@@ -25,27 +25,29 @@
 #include <vector>
 
 #include "nfi/nfi_server.hpp"
+#include "xpn/xpn_partition.hpp"
 
+#include "base_cpp/xpn_path.hpp"
 namespace XPN
 {
     
     // Fordward declaration
-    class xpn_file;
+    class xpn_partition;
 
     class xpn_metadata
     {
     public:
-        static constexpr const int HEADER_SIZE = 8*KB;
+        static constexpr const int HEADER_SIZE = 8192;
         static constexpr const char * MAGIC_NUMBER = "XPN";
         static constexpr const int VERSION = 1;
         static constexpr const int MAX_RECONSTURCTIONS = 40;
         static constexpr const int DISTRIBUTION_ROUND_ROBIN = 1;
     public:
-        xpn_metadata(const xpn_file &file) : m_file(file) {}
+        xpn_metadata(const std::string &path, const xpn_partition& part) : m_path(path), m_part(part) {}
         int read();
         int write();
         int update_file_size();
-    private:
+    public:
         struct data{
             std::array<int, 3> magic_number = {0};                     // Magic number to identify if is correct the metadata
             int      version = 0;                                      // Version number
@@ -57,18 +59,35 @@ namespace XPN
             int      distribution_policy = 0;                          // Distribution policy of blocks, default: round-robin
             std::array<int, MAX_RECONSTURCTIONS> data_nserv = {0}; // Array of number of servers to reconstruct
             std::array<int, MAX_RECONSTURCTIONS> offsets = {0};    // Array indicating the block where new server configuration starts
+            
+            bool in_valid() 
+            { 
+                return magic_number[0] == MAGIC_NUMBER[0] && 
+                       magic_number[1] == MAGIC_NUMBER[1] && 
+                       magic_number[2] == MAGIC_NUMBER[2];
+            } 
         };
     public:
-        const xpn_file &m_file;
+        const std::string &m_path;
+        const xpn_partition &m_part;
         data m_data;
 
     public:
-
-        bool in_valid() 
-        { 
-            return m_data.magic_number[0] == MAGIC_NUMBER[0] && 
-                   m_data.magic_number[1] == MAGIC_NUMBER[1] && 
-                   m_data.magic_number[2] == MAGIC_NUMBER[2];
-        } 
+    private:
+        int calculate_master(bool is_file)
+        {
+            int master = xpn_path::hash(m_path, m_part.m_data_serv.size(), is_file);
+            for (int i = 0; i < m_part.m_replication_level; i++)
+            {
+                master = (master+1)%m_part.m_data_serv.size();
+                if (m_part.m_data_serv[master].m_error != -1){
+                    break;
+                }
+            }
+            return master;
+        }
+    public:
+        int master_file() {return calculate_master(true);}
+        int master_dir() {return calculate_master(false);}
     };
 } // namespace XPN

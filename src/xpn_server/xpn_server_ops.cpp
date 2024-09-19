@@ -564,7 +564,7 @@ void xpn_server::op_rmdir_async ( [[maybe_unused]] xpn_server_comm &comm, struct
 void xpn_server::op_read_mdata   ( xpn_server_comm &comm, struct st_xpn_server_msg &head, int rank_client_id, int tag_client_id )
 {
   int ret, fd;
-  struct st_xpn_server_read_mdata_req req = {0};
+  struct st_xpn_server_read_mdata_req req;
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] read_mdata(%s)\n", params->rank, head.u_st_xpn_server_msg.op_read_mdata.path);
@@ -581,9 +581,10 @@ void xpn_server::op_read_mdata   ( xpn_server_comm &comm, struct st_xpn_server_m
     goto cleanup_xpn_server_op_read_mdata;
   }
 
-  ret = filesystem_read(fd, &req.mdata, sizeof(struct xpn_metadata));
+  ret = filesystem_read(fd, &req.mdata, sizeof(req.mdata));
 
-  if (!XPN_CHECK_MAGIC_NUMBER(&req.mdata)){
+
+  if (!req.mdata.in_valid()){
 	  memset(&req.mdata, 0, sizeof(struct xpn_metadata));
   }
 
@@ -658,10 +659,10 @@ void xpn_server::op_write_mdata_file_size ( xpn_server_comm &comm, struct st_xpn
     goto cleanup_xpn_server_op_write_mdata_file_size;
   }
 
-  filesystem_lseek(fd, offsetof(struct xpn_metadata, file_size), SEEK_SET);
+  filesystem_lseek(fd, offsetof(xpn_metadata::data, file_size), SEEK_SET);
   ret = filesystem_read(fd, &actual_file_size, sizeof(ssize_t));
   if (ret > 0 && actual_file_size < head.u_st_xpn_server_msg.op_write_mdata_file_size.size){
-    filesystem_lseek(fd, offsetof(struct xpn_metadata, file_size), SEEK_SET);
+    filesystem_lseek(fd, offsetof(xpn_metadata::data, file_size), SEEK_SET);
     ret = filesystem_write(fd, &head.u_st_xpn_server_msg.op_write_mdata_file_size.size, sizeof(ssize_t));
   }
 

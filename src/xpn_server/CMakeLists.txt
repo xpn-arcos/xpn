@@ -26,6 +26,7 @@ target_compile_options(xpn_server PRIVATE
 
 target_include_directories(xpn_server PRIVATE
     "${PROJECT_SOURCE_DIR}/src"
+    "${PROJECT_SOURCE_DIR}/src/xpn_client"
 	"${PROJECT_SOURCE_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/include/xpn_server"
 	"${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server"

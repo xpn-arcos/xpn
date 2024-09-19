@@ -302,7 +302,7 @@ int xpn_server::stop()
 
     fclose(file);
 
-    std::unique_ptr<workers> worker = workers::Create(workers_mode::thread_pool);
+    std::unique_ptr<workers> worker = workers::Create(workers_mode::thread_on_demand);
 
     for (auto &name : srv_names)
     {

@@ -19,34 +19,40 @@
  *
  */
 
-#include "xpn/xpn_partition.hpp"
-#include "base_cpp/ns.hpp"
-#include "base_cpp/debug.hpp"
+#include "xpn_path.hpp"
+
+#include <filesystem>
 
 namespace XPN
 {
-        xpn_partition::xpn_partition(const std::string &name, int replication_level, uint64_t block_size) :
-            m_name(name), m_replication_level(replication_level), m_block_size(block_size)
+    std::string xpn_path::get_first_dir(const std::string &path)
+    {
+        std::filesystem::path p(path);
+
+        for (const auto& part : p)
         {
+            return part.string();        
+        }
+        return "";
+    }
+
+    int hash(const std::string &path, int max_num, bool is_file)
+    {
+        
+        std::filesystem::path file_path(path);
+        
+        std::string name;
+        if (is_file) {
+            name = file_path.filename().string();
+        } else {
+            name = file_path.parent_path().filename().string();
         }
 
-        int xpn_partition::init_server(const std::string &url)
-        {
-            XPN_DEBUG_BEGIN;
-            int res = 0;
-            int index = m_data_serv.size();
-
-            auto& server = m_data_serv.emplace_back(url);
-
-            if (server.m_server == ns::get_host_name() ||
-                server.m_server == ns::get_host_ip())
-            {
-                m_local_serv = index;
-            }
-
-            res = server.init_comm();
-
-            XPN_DEBUG_END;
-            return res;
+        int num = 0;
+        for (char ch : name) {
+            num += static_cast<int>(ch);
         }
-} // namespace XPN
+
+        return num % max_num;
+     }
+}

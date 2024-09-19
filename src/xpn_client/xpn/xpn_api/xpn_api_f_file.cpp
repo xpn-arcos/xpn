@@ -109,7 +109,7 @@ namespace XPN
         XPN_DEBUG_BEGIN;
         int res = 0;
         XPN_DEBUG_END;
-        return nullptr;
+        return;
     }
 
     int xpn_api::fileno(FILE *stream)
