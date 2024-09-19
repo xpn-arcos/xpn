@@ -32,6 +32,7 @@
 
   #include <dlfcn.h>
   #include <sys/stat.h>
+  #include <sys/statvfs.h>
   #include <dirent.h>
   #include <stdlib.h>
 
@@ -133,6 +134,8 @@
   int dlsym_fsync (int fd);
   int dlsym_flock (int fd, int operation);
 
+  int dlsym_statvfs (const char *path, struct statvfs *buf);
+  int dlsym_fstatvfs (int fd, struct statvfs *buf);
 
   // Memory API
   void *dlsym_mmap (void *addr, size_t length, int prot, int flags, int fd, off_t offset);

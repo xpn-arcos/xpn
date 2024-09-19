@@ -25,6 +25,7 @@
 #include <unordered_map>
 #include <mutex>
 #include <sys/stat.h>
+#include <sys/statvfs.h>
 
 #include <xpn/xpn_partition.hpp>
 #include <xpn/xpn_file.hpp>
@@ -84,8 +85,8 @@ namespace XPN
         int   rename    (const char *path, const char *newpath);
 
         // Stat api
-        int   fstat     (int fd, struct stat *sb);
-        int   stat      (const char *path, struct stat *sb);
+        int   fstat     (int fd, struct ::stat *sb);
+        int   stat      (const char *path, struct ::stat *sb);
         int   chown     (const char *path,  uid_t owner,  gid_t group);
         int   fchown    (int  fd,  uid_t owner,  gid_t group);
         int   chmod     (const char *path,  mode_t mode);
@@ -94,6 +95,8 @@ namespace XPN
         int   ftruncate (int fd, off_t length);
         int   dup       (int fd);
         int   dup2      (int fd, int fd2);
+        int   statvfs    (const char *path, struct ::statvfs *buf);
+        int   fstatvfs   (int fd, struct ::statvfs *buf);
 
         // RW api
         ssize_t read    (int fd, void *buffer, size_t size);

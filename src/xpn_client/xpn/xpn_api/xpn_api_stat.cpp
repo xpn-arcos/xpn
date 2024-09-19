@@ -149,4 +149,61 @@ namespace XPN
         XPN_DEBUG_END;
         return res;
     }
+
+    int xpn_api::statvfs(const char * path, struct ::statvfs *buf)
+    {
+        XPN_DEBUG_BEGIN_CUSTOM(path);
+        int res = 0;
+
+        std::string name_part = xpn_path::get_first_dir(path);
+        if (m_partitions.find(name_part) == m_partitions.end())
+        {
+            errno = EBADF;
+            res = -1;
+            XPN_DEBUG_END_CUSTOM(path);
+            return res;
+        }
+        xpn_partition& part = m_partitions.at(name_part);
+
+        xpn_file file(path, part);
+
+        auto& server = part.m_data_serv[file.m_mdata.master_file()];
+                
+        m_worker->launch([&server, buf, &res](){res = server->nfi_statvfs(*buf);});
+
+        for (size_t i = 0; i < part.m_data_serv.size(); i++)
+        {
+            if (static_cast<int>(i) == file.m_mdata.master_file()) continue;
+            struct ::statvfs aux_buf;
+            m_worker->launch([&server, &aux_buf, &res](){res = server->nfi_statvfs(aux_buf);});
+            buf->f_blocks += aux_buf.f_blocks;
+            buf->f_bfree += aux_buf.f_bfree;
+            buf->f_bavail += aux_buf.f_bavail;
+        }
+        
+
+        m_worker->wait();
+
+        XPN_DEBUG_END_CUSTOM(path);
+        return res;
+    }
+
+    int xpn_api::fstatvfs(int fd, struct ::statvfs *buf)
+    {
+        XPN_DEBUG_BEGIN;
+        int res = 0;
+        
+        if (m_files.find(fd) == m_files.end())
+        {
+            errno = EBADF;
+            XPN_DEBUG_END_CUSTOM(fd);
+            return -1;
+        }
+
+        // Redirect to statvfs to not duplicate code
+        res = statvfs(m_files.at(fd).m_path.c_str(), buf);
+
+        XPN_DEBUG_END;
+        return res;
+    }
 } // namespace XPN

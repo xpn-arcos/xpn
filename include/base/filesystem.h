@@ -34,6 +34,7 @@
   #include "base/utils.h"
   #include <pthread.h> 
   #include <sys/stat.h>
+  #include <sys/statvfs.h>
   #include <sys/types.h>
 
 
@@ -83,6 +84,8 @@
     off_t filesystem_lseek    ( int fd, off_t offset, int whence );
     int   filesystem_unlink   ( char *pathname );
     int   filesystem_stat     ( char *pathname, struct stat *sinfo );
+
+    int   filesystem_statvfs     ( const char *pathname, struct statvfs *buf );
 
 
   /* ...................................................................... */

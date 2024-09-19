@@ -2856,6 +2856,60 @@ int flock(int fd, int operation)
   return ret;
 }
 
+int statvfs(const char * path, struct statvfs * buf)
+{
+  debug_info("[BYPASS] >> Begin statvfs...\n");
+  debug_info("[BYPASS] 1) Path %s\n", path);
+
+  // This if checks if variable path passed as argument starts with the expand prefix.
+  if (is_xpn_prefix(path))
+  {
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    // It is an XPN partition, so we redirect the syscall to expand syscall
+    debug_info("[BYPASS] xpn_statvfs...\n");
+
+    return xpn_statvfs(skip_xpn_prefix(path), buf);
+  }
+  // Not an XPN partition. We must link with the standard library
+  else
+  {
+    debug_info("[BYPASS] Begin dlsym_statvfs...\n");
+
+    return dlsym_statvfs(path, buf);
+  }
+}
+
+int fstatvfs(int fd, struct statvfs * buf)
+{
+  int ret = -1;
+
+  debug_info("[BYPASS] >> Begin fstatvfs...\n");
+  debug_info("[BYPASS]    * fd=%d\n",        fd);
+
+  struct generic_fd virtual_fd = fdstable_get ( fd );
+
+  // This if checks if variable fd passed as argument is a expand fd.
+  if(virtual_fd.type == FD_XPN)
+  {
+    ret = xpn_fstatvfs(fd, buf);
+  }
+  // Not an XPN partition. We must link with the standard library
+  else
+  {
+    debug_info("[BYPASS]\t try to dlsym_fstatvfs %d,%d\n", fd);
+
+    ret = dlsym_fstatvfs(fd, buf);
+
+    debug_info("[BYPASS]\t dlsym_fstatvfs %d -> %d\n", fd, ret);
+  }
+
+  debug_info("[BYPASS] << After fstatvfs...\n");
+  
+  return ret;
+}
+
 // MPI API
 
 int MPI_Init ( int *argc, char ***argv )

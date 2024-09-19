@@ -32,6 +32,7 @@
 
   #include <dlfcn.h>
   #include <sys/stat.h>
+  #include <sys/statvfs.h>
   #include <stdarg.h>
   #include <time.h>
   #include <stdlib.h>
@@ -249,6 +250,7 @@
   int    fsync ( int fd );
   int    flock ( int fd, int operation );
 
+  int   statvfs (const char *path, struct statvfs *buf);
 
   // MPI API
   int MPI_Init ( int *argc, char ***argv );

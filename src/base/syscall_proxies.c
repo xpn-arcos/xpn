@@ -100,6 +100,8 @@ char*   (*real_realpath)(const char *__restrict__, char *__restrict__) = NULL;
 int     (*real_fsync)(int) = NULL;
 int     (*real_flock)(int, int) = NULL;
 void*   (*real_mmap)(void *, size_t, int, int, int, off_t) = NULL;
+int     (*real_statvfs)(const char *, struct statvfs *) = NULL;
+int     (*real_fstatvfs)(int, struct statvfs *) = NULL;
 
 
 /* ... Functions / Funciones ......................................... */
@@ -984,6 +986,36 @@ int dlsym_flock (int fd, int operation)
   int ret = real_flock(fd, operation);
 
   debug_info("[SYSCALL_PROXIES] [dlsym_flock] >> End\n");
+
+  return ret;
+}
+
+int dlsym_statvfs (const char *path, struct statvfs *buf)
+{
+  debug_info("[SYSCALL_PROXIES] [dlsym_statvfs] >> Begin\n");
+
+  if (real_statvfs == NULL){
+      real_statvfs = (int (*)(const char *, struct statvfs *)) dlsym(RTLD_NEXT, "statvfs");
+  }
+  
+  int ret = real_statvfs(path, buf);
+
+  debug_info("[SYSCALL_PROXIES] [dlsym_statvfs] >> End\n");
+
+  return ret;
+}
+
+int dlsym_fstatvfs (int fd, struct statvfs *buf)
+{
+  debug_info("[SYSCALL_PROXIES] [dlsym_fstatvfs] >> Begin\n");
+
+  if (real_fstatvfs == NULL){
+      real_fstatvfs = (int (*)(int, struct statvfs *)) dlsym(RTLD_NEXT, "fstatvfs");
+  }
+  
+  int ret = real_fstatvfs(fd, buf);
+
+  debug_info("[SYSCALL_PROXIES] [dlsym_fstatvfs] >> End\n");
 
   return ret;
 }

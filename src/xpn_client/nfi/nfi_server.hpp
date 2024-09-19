@@ -25,6 +25,7 @@
 #include <memory>
 #include <sys/vfs.h>
 #include <sys/stat.h>
+#include <sys/statvfs.h>
 #include <dirent.h>
 
 #include "nfi_xpn_server_comm.hpp"
@@ -73,7 +74,7 @@ namespace XPN
         virtual int nfi_readdir     (xpn_fh &fhd, struct ::dirent &entry) = 0;
         virtual int nfi_closedir    (const xpn_fh &fhd) = 0;
         virtual int nfi_rmdir       (const std::string &path, bool is_async) = 0;
-        virtual int nfi_statfs      (struct ::statfs &inf) = 0;
+        virtual int nfi_statvfs      (struct ::statvfs &inf) = 0;
         virtual int nfi_read_mdata  (const std::string &path, xpn_metadata &mdata) = 0;
         virtual int nfi_write_mdata (const std::string &path, const xpn_metadata &mdata, bool only_file_size) = 0;
     };

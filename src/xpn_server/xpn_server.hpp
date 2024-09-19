@@ -71,7 +71,7 @@ namespace XPN
         void op_rmdir_async ( xpn_server_comm &comm, st_xpn_server_path         &head, int rank_client_id, int tag_client_id );
 
         // FS Operations
-        void op_statfs       ( xpn_server_comm &comm, st_xpn_server_path        &head, int rank_client_id, int tag_client_id ); //TODO: implement
+        void op_statvfs      ( xpn_server_comm &comm, st_xpn_server_path        &head, int rank_client_id, int tag_client_id ); //TODO: implement
 
         // Metadata
         void op_read_mdata   ( xpn_server_comm &comm, st_xpn_server_path        &head, int rank_client_id, int tag_client_id );

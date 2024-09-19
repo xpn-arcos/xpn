@@ -52,7 +52,7 @@
   #define XPN_SERVER_CLOSEDIR_DIR     25
 
   // FS Operations
-  #define XPN_SERVER_STATFS_DIR     60
+  #define XPN_SERVER_STATVFS_DIR     60
 
   // Metadata
   #define XPN_SERVER_READ_MDATA      70
@@ -166,9 +166,9 @@
     uint64_t size;
   };
   
-  struct st_xpn_server_statfs_req
+  struct st_xpn_server_statvfs_req
   {
-    struct ::statfs attr;
+    struct ::statvfs attr;
     struct st_xpn_server_status status_req;
   };
 
@@ -240,7 +240,7 @@
       case XPN_SERVER_READDIR_DIR: return "READDIR";
       case XPN_SERVER_CLOSEDIR_DIR: return "CLOSEDIR";
       // FS Operations
-      case XPN_SERVER_STATFS_DIR: return "STATFS";
+      case XPN_SERVER_STATVFS_DIR: return "STATVFS";
       case XPN_SERVER_FINALIZE: return "FINALIZE";
       // Metadata
       case XPN_SERVER_READ_MDATA: return "READ_METADATA";

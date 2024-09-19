@@ -18,7 +18,6 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include "nfi_xpn_server.hpp"
 #include "xpn/xpn_file.hpp"
 #include "base/debug_msg.h"
@@ -138,7 +137,7 @@ int nfi_xpn_server::nfi_close (const xpn_fh &fh)
       errno = status.server_errno;
     }
 
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%s)=%d\n", m_server.c_str(), fh_aux->fd, status.ret);
+    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%s)=%d\n", m_server.c_str(), fh.path, status.ret);
     debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_close] >> End\n", m_server.c_str());
     
     return status.ret;
@@ -594,26 +593,26 @@ int nfi_xpn_server::nfi_rmdir(const std::string &path, bool is_async)
     }
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rmdir] nfi_xpn_server_rmdir(%s)=%d\n", m_server.c_str(), dir, ret);
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rmdir] nfi_xpn_server_rmdir(%s)=%d\n", m_server.c_str(), srv_path.c_str(), ret);
   debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rmdir] >> End\n", m_server.c_str());
 
   return ret;
 }
 
-int nfi_xpn_server::nfi_statfs(struct ::statfs &inf)
+int nfi_xpn_server::nfi_statvfs(struct ::statvfs &inf)
 {
   int ret;
   struct st_xpn_server_path msg;
-  struct st_xpn_server_statfs_req req;
+  struct st_xpn_server_statvfs_req req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statfs] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] >> Begin\n", m_server.c_str());
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statfs] nfi_xpn_server_statfs(%s)\n", m_server.c_str(), m_path.c_str());
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] nfi_xpn_server_statvfs(%s)\n", m_server.c_str(), m_path.c_str());
 
   std::size_t length = m_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
 
-  ret = nfi_do_request(XPN_SERVER_STATFS_DIR, msg, req);
+  ret = nfi_do_request(XPN_SERVER_STATVFS_DIR, msg, req);
 
   memcpy(&inf, &req.attr, sizeof(req.attr));
 
@@ -622,8 +621,8 @@ int nfi_xpn_server::nfi_statfs(struct ::statfs &inf)
     ret = req.status_req.ret;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statfs] nfi_xpn_server_statfs(%s)=%d\n", m_server.c_str(), dir, ret);
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statfs] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] nfi_xpn_server_statvfs(%s)=%d\n", m_server.c_str(), m_path.c_str(), ret);
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] >> End\n", m_server.c_str());
 
   return ret;
 }
@@ -649,7 +648,7 @@ int nfi_xpn_server::nfi_read_mdata (const std::string &path, xpn_metadata &mdata
     errno = req.status.server_errno;
     ret = req.status.ret;
   }
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata(%s)=%d\n", m_server.c_str(), dir, req.status);
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata(%s)=%d\n", m_server.c_str(), srv_path.c_str(), req.status);
 
   memcpy(&mdata.m_data, &req.mdata, sizeof(req.mdata));
 

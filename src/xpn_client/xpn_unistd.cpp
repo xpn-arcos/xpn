@@ -405,6 +405,36 @@ int xpn_fstat ( int fd, struct stat *sb )
   return ret;
 }
 
+int xpn_statvfs ( const char *path, struct statvfs *buf )
+{
+  int ret = -1;
+
+  debug_info("[XPN_UNISTD] [xpn_fstat] >> Begin\n");
+
+  XPN_API_LOCK();
+  ret = XPN::xpn_api::get_instance().statvfs(path, buf);
+  XPN_API_UNLOCK();
+
+  debug_info("[XPN_UNISTD] [xpn_fstat] >> End\n");
+
+  return ret;
+}
+
+int xpn_fstatvfs ( int fd, struct statvfs *buf )
+{
+  int ret = -1;
+
+  debug_info("[XPN_UNISTD] [xpn_fstat] >> Begin\n");
+
+  XPN_API_LOCK();
+  ret = XPN::xpn_api::get_instance().fstatvfs(fd, buf);
+  XPN_API_UNLOCK();
+
+  debug_info("[XPN_UNISTD] [xpn_fstat] >> End\n");
+
+  return ret;
+}
+
 int xpn_chown ( const char *path,  uid_t owner,  gid_t group )
 {
   int ret = -1;
