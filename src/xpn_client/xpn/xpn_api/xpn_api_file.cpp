@@ -44,7 +44,7 @@ namespace XPN
         XPN_DEBUG_BEGIN_CUSTOM(path<<", "<<flags<<", "<<mode);
         int res = 0;
 
-
+        
         
         XPN_DEBUG_END_CUSTOM(path<<", "<<flags<<", "<<mode);
         return res;

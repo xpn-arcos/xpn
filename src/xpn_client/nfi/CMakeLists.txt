@@ -9,9 +9,7 @@ file(GLOB XPN_NFI_HEADERS
 file(GLOB_RECURSE XPN_NFI_SOURCE
 	"*.cpp"
 )
-set_source_files_properties(${XPN_NFI_SOURCE} PROPERTIES LANGUAGE CXX)
 add_library(xpn_nfi ${XPN_NFI_HEADERS} ${XPN_NFI_SOURCE})
-set_target_properties(xpn_nfi PROPERTIES LINKER_LANGUAGE CXX)
 
 target_compile_options(xpn_nfi PRIVATE 
 "-DHAVE_STRING_H"

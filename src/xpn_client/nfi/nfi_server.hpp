@@ -25,13 +25,14 @@
 #include <memory>
 #include <sys/vfs.h>
 #include <sys/stat.h>
+#include <dirent.h>
 
 #include "nfi_xpn_server_comm.hpp"
 
 namespace XPN
 {
     // Fordward declaration
-    class xpn_file;
+    class xpn_fh;
     class xpn_metadata;
 
     class nfi_server 
@@ -40,13 +41,15 @@ namespace XPN
         nfi_server(const std::string &url);
         int init_comm();
         int destroy_comm();
+
+        static std::unique_ptr<nfi_server> Create(const std::string &url);
     public:
         std::string m_protocol; // protocol of the server: mpi_server sck_server
         std::string m_server;   // server address
         std::string m_path;     // path of the server
 
         int m_error = 0;        // For fault tolerance
-    private:
+    protected:
         const std::string m_url;// URL of this server -> protocol
                                 // + server
                                 // + path + more info (port, ...)
@@ -55,25 +58,23 @@ namespace XPN
         nfi_xpn_server_comm                         *m_comm;
 
     public:
-        int nfi_reconnect   ();
-        int nfi_disconnect  ();
-        int nfi_destroy     ();
-        int nfi_getattr     (const xpn_file &fh, struct ::stat &st);
-        int nfi_setattr     (const xpn_file &fh, struct ::stat &st);
-        int nfi_open        (const std::string &path, int flags, mode_t mode, xpn_file &fho); 
-        int nfi_create      (const std::string &path, mode_t mode, xpn_file &fh);
-        int nfi_close       (const xpn_file &fh);
-        int nfi_remove      (const std::string &path);
-        int nfi_rename      (const std::string &path, const std::string &new_path);
-        int64_t nfi_read    (const xpn_file &fh, void *buffer, off_t offset, size_t size);
-        int64_t nfi_write   (const xpn_file &fh, void *buffer, off_t offset, size_t size);
-        int nfi_mkdir       (const std::string &path, mode_t mode);
-        int nfi_rmdir       (const std::string &path);
-        int nfi_opendir     (const std::string &path, xpn_file &fho);
-        int nfi_readdir     (const xpn_file &fhd, struct dirent &entry);
-        int nfi_closedir    (const xpn_file &fh);
-        int nfi_statfs      (struct ::statfs &inf);
-        int nfi_read_mdata  (const std::string &path, xpn_metadata &mdata);
-        int nfi_write_mdata (const std::string &path, const xpn_metadata &mdata, bool only_file_size);
+        // Operations 
+        virtual int nfi_open        (const std::string &path, int flags, mode_t mode, xpn_fh &fho) = 0; 
+        virtual int nfi_create      (const std::string &path, mode_t mode, xpn_fh &fho) = 0;
+        virtual int nfi_close       (const xpn_fh &fh) = 0;
+        virtual int64_t nfi_read    (const xpn_fh &fh,       char *buffer, int64_t offset, uint64_t size) = 0;
+        virtual int64_t nfi_write   (const xpn_fh &fh, const char *buffer, int64_t offset, uint64_t size) = 0;
+        virtual int nfi_remove      (const std::string &path, bool is_async) = 0;
+        virtual int nfi_rename      (const std::string &path, const std::string &new_path) = 0;
+        virtual int nfi_getattr     (const std::string &path, struct ::stat &st) = 0;
+        virtual int nfi_setattr     (const std::string &path, struct ::stat &st) = 0;
+        virtual int nfi_mkdir       (const std::string &path, mode_t mode) = 0;
+        virtual int nfi_opendir     (const std::string &path, xpn_fh &fho) = 0;
+        virtual int nfi_readdir     (xpn_fh &fhd, struct ::dirent &entry) = 0;
+        virtual int nfi_closedir    (const xpn_fh &fhd) = 0;
+        virtual int nfi_rmdir       (const std::string &path, bool is_async) = 0;
+        virtual int nfi_statfs      (struct ::statfs &inf) = 0;
+        virtual int nfi_read_mdata  (const std::string &path, xpn_metadata &mdata) = 0;
+        virtual int nfi_write_mdata (const std::string &path, const xpn_metadata &mdata, bool only_file_size) = 0;
     };
 } // namespace XPN

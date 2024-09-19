@@ -42,7 +42,7 @@ namespace XPN
         int m_replication_level = XPN_CONF::DEFAULT_REPLICATION_LEVEL;  // replication_level of files :0, 1, 2,... 
         uint64_t m_block_size = XPN_CONF::DEFAULT_BLOCKSIZE;            // size of distribution used 
 
-        std::vector<nfi_server> m_data_serv;                            // list of data servers in the partition 
+        std::vector<std::unique_ptr<nfi_server>> m_data_serv;                            // list of data servers in the partition 
 
         int m_local_serv = -1;                                          // server with locality
     };

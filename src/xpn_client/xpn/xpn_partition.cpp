@@ -36,15 +36,15 @@ namespace XPN
             int res = 0;
             int index = m_data_serv.size();
 
-            auto& server = m_data_serv.emplace_back(url);
+            auto& server = m_data_serv.emplace_back(nfi_server::Create(url));
 
-            if (server.m_server == ns::get_host_name() ||
-                server.m_server == ns::get_host_ip())
+            if (server->m_server == ns::get_host_name() ||
+                server->m_server == ns::get_host_ip())
             {
                 m_local_serv = index;
             }
 
-            res = server.init_comm();
+            res = server->init_comm();
 
             XPN_DEBUG_END;
             return res;

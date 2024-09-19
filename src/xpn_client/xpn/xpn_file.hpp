@@ -30,9 +30,9 @@
 
 namespace XPN
 {
-    class xpn_fh
+    struct xpn_fh
     {
-        std::string url;            // url in the server   
+        std::string path;           // url in the server   
         long telldir = 0;           // telldir of directory in the server when XPN_SESSION_DIR is not set
         DIR *dir = nullptr;         // pointer to directory in the server when XPN_SESSION_DIR set
         int fd = -1;                // file_descriptor in the server when XPN_SESSION_FILE set

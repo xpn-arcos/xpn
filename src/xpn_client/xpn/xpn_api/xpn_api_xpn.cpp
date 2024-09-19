@@ -72,7 +72,7 @@ namespace XPN
 
             for (const auto &srv : xpn_part.m_data_serv)
             {
-                if (srv.m_error < 0)
+                if (srv->m_error < 0)
                 {
                     server_with_error++;
                 }
@@ -108,7 +108,7 @@ namespace XPN
         {
             for (auto &serv : part.m_data_serv)
             {
-                serv.destroy_comm();
+                serv->destroy_comm();
             }
         }
         m_partitions.clear();
@@ -123,7 +123,7 @@ namespace XPN
         for (auto &[key, part] : m_partitions)
         {
             if (index < static_cast<int>(part.m_data_serv.size())){
-                part.m_data_serv[index].m_error = -1;
+                part.m_data_serv[index]->m_error = -1;
                 res = 0;
             }
         }

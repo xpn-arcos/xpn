@@ -47,7 +47,6 @@ namespace XPN
     {
         XPN_DEBUG_BEGIN_CUSTOM(path);
         int res = 0;
-        XPN_DEBUG("line");
         std::string name_part = xpn_path::get_first_dir(path);
         if (m_partitions.find(name_part) == m_partitions.end())
         {
@@ -55,28 +54,21 @@ namespace XPN
             XPN_DEBUG_END_CUSTOM(path);
             return -1;
         }
-        XPN_DEBUG("line");
         xpn_partition& part = m_partitions.at(name_part);
-        XPN_DEBUG("line");
 
         xpn_file file(path, part);
-        XPN_DEBUG("line");
 
         if (file.m_mdata.read() < 0){
             XPN_DEBUG_END_CUSTOM(path);
             return -1;
         }
-        XPN_DEBUG("line");
         
         auto& server = part.m_data_serv[file.m_mdata.master_file()];
 
-        XPN_DEBUG("line");
-        m_worker->launch([&server, &file, sb, &res](){res = server.nfi_getattr(file, *sb); });
-        XPN_DEBUG("line");
+        m_worker->launch([&server, &file, sb, &res](){res = server->nfi_getattr(file.m_path, *sb);});
 
         m_worker->wait();
 
-        XPN_DEBUG("line");
         // Update file_size
         if (S_ISREG(sb->st_mode)){
             sb->st_size = file.m_mdata.m_data.file_size;

@@ -36,7 +36,7 @@ namespace XPN
         return "";
     }
 
-    int hash(const std::string &path, int max_num, bool is_file)
+    int xpn_path::hash(const std::string &path, int max_num, bool is_file)
     {
         
         std::filesystem::path file_path(path);

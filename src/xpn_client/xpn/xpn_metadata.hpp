@@ -80,7 +80,7 @@ namespace XPN
             for (int i = 0; i < m_part.m_replication_level; i++)
             {
                 master = (master+1)%m_part.m_data_serv.size();
-                if (m_part.m_data_serv[master].m_error != -1){
+                if (m_part.m_data_serv[master]->m_error != -1){
                     break;
                 }
             }

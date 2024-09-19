@@ -22,12 +22,26 @@
 #include "base_cpp/debug.hpp"
 #include "nfi_server.hpp"
 #include "xpn/xpn_api.hpp"
+#include "nfi/nfi_xpn_server/nfi_xpn_server.hpp"
 
 #include <iostream>
 #include <csignal>
 
 namespace XPN
 {
+    std::unique_ptr<nfi_server> nfi_server::Create(const std::string &url)
+    {
+        if (url.find(server_protocols::mpi_server) == 0 ||
+            url.find(server_protocols::sck_server) == 0){
+                return std::make_unique<nfi_xpn_server>(url);
+            }
+        // if (url.find(server_protocols::file) == 0){
+        //         return std::make_unique<nfi_local>(url);
+        //     }
+        
+        std::cerr << "Error: server protocol '"<< url << "' is not defined." << std::endl;
+        return nullptr;
+    }
     nfi_server::nfi_server(const std::string &url) : m_url(url)
     {
         XPN_DEBUG_BEGIN;
@@ -97,125 +111,6 @@ namespace XPN
         m_control_comm.reset();
 
         XPN_DEBUG_END;
-        return res;
-    }
-
-    int nfi_reconnect   ()
-    {
-
-    }
-
-    int nfi_disconnect  ()
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_destroy     ()
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_getattr     (const xpn_file &fh, struct ::stat &st)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_setattr     (const xpn_file &fh, struct ::stat &st)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_open        (const std::string &path, int flags, mode_t mode, xpn_file &fho)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_create      (const std::string &path, mode_t mode, xpn_file &fh)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_close       (const xpn_file &fh)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_remove      (const std::string &path)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_rename      (const std::string &path, const std::string &new_path)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int64_t nfi_read    (const xpn_file &fh, void *buffer, off_t offset, size_t size)
-    {
-        int64_t res = 0;
-        return res;
-    }
-
-    int64_t nfi_write   (const xpn_file &fh, void *buffer, off_t offset, size_t size)
-    {
-        int64_t res = 0;
-        return res;
-    }
-
-    int nfi_mkdir       (const std::string &path, mode_t mode)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_rmdir       (const std::string &path)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_opendir     (const std::string &path, xpn_file &fho)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_readdir     (const xpn_file &fhd, struct dirent &entry)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_closedir    (const xpn_file &fh)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_statfs      (struct ::statfs &inf)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_read_mdata  (const std::string &path, xpn_metadata &mdata)
-    {
-        int res = 0;
-        return res;
-    }
-
-    int nfi_write_mdata (const std::string &path, const xpn_metadata &mdata, bool only_file_size)
-    {
-        int res = 0;
         return res;
     }
 
