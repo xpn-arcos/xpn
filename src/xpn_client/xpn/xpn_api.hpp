@@ -26,9 +26,9 @@
 #include <mutex>
 #include <sys/stat.h>
 
-#include <nfi/nfi_xpn_server_comm.hpp>
 #include <xpn/xpn_partition.hpp>
 #include <xpn/xpn_file.hpp>
+#include <base_cpp/debug.hpp>
 
 #ifdef _REENTRANT
 
@@ -78,6 +78,8 @@ namespace XPN
         int   close     (int fd);
         int   unlink    (const char *path);
         int   rename    (const char *path, const char *newpath);
+
+        // Stat api
         int   fstat     (int fd, struct stat *sb);
         int   stat      (const char *path, struct stat *sb);
         int   chown     (const char *path,  uid_t owner,  gid_t group);
@@ -89,10 +91,12 @@ namespace XPN
         int   dup       (int fd);
         int   dup2      (int fd, int fd2);
 
+        // RW api
         ssize_t read    (int fd, void *buffer, size_t size);
         ssize_t write   (int fd, const void *buffer, size_t size);
         off_t   lseek   (int fd, off_t offset, int flag);
 
+        // f_file api
         FILE   *fopen   (const char *filename, const char *mode);
         int     fclose  (FILE *stream);
         size_t  fread   (void *ptr, size_t size, size_t nmemb, FILE *stream);
@@ -112,11 +116,11 @@ namespace XPN
         int             closedir(DIR *dirp);
         struct dirent * readdir(DIR *dirp);
         void            rewinddir(DIR *dirp);  
-        int             mkdir(const char *path, mode_t perm) ;
-        int             rmdir(const char *path) ;
+        int             mkdir(const char *path, mode_t perm);
+        int             rmdir(const char *path);
         
         // cwd api
-        char* getcwd(char *path, size_t size) ;
-        int   chdir(char *path) ;
+        char* getcwd(char *path, size_t size);
+        int   chdir(char *path);
     };
 } // namespace XPN

@@ -21,6 +21,7 @@
 
 #include "xpn/xpn_partition.hpp"
 #include "base_cpp/ns.hpp"
+#include "base_cpp/debug.hpp"
 
 namespace XPN
 {
@@ -31,6 +32,8 @@ namespace XPN
 
         int xpn_partition::init_server(const std::string &url)
         {
+            XPN_DEBUG_BEGIN;
+            int res = 0;
             int index = m_data_serv.size();
 
             auto& server = m_data_serv.emplace_back(url);
@@ -40,6 +43,10 @@ namespace XPN
             {
                 m_local_serv = index;
             }
-            return 0;
+
+            res = server.init_comm();
+
+            XPN_DEBUG_END;
+            return res;
         }
 } // namespace XPN

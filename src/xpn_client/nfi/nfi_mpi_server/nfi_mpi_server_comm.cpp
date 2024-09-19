@@ -19,7 +19,7 @@
  *
  */
 
-#include "base_cpp/xpn_socket.hpp"
+#include "base_cpp/socket.hpp"
 #include "base_cpp/ns.hpp"
 #include "nfi_mpi_server_comm.hpp"
 #include "xpn_server/xpn_server_ops.hpp"
@@ -116,7 +116,7 @@ nfi_mpi_server_control_comm::~nfi_mpi_server_control_comm() {
 nfi_xpn_server_comm* nfi_mpi_server_control_comm::connect(const std::string &srv_name) {
     int ret, err;
     int connection_socket;
-    int buffer = xpn_socket::ACCEPT_CODE;
+    int buffer = socket::ACCEPT_CODE;
     char port_name[MAX_PORT_NAME];
     MPI_Comm out_comm;
 
@@ -133,32 +133,32 @@ nfi_xpn_server_comm* nfi_mpi_server_control_comm::connect(const std::string &srv
     // Send connect intention
     if (m_rank == 0) {
         err = 0;
-        ret = xpn_socket::client_connect(srv_name, connection_socket);
+        ret = socket::client_connect(srv_name, connection_socket);
         if (ret < 0) {
             // Do one retry in 1 second
             std::this_thread::sleep_for(std::chrono::seconds(1));
-            ret = xpn_socket::client_connect(srv_name, connection_socket);
+            ret = socket::client_connect(srv_name, connection_socket);
             if (ret < 0) {
                 debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket connect\n");
                 err = -1;
                 goto mpi_comm_socket_finish;
             }
         }
-        ret = xpn_socket::send(connection_socket, &buffer, sizeof(buffer));
+        ret = socket::send(connection_socket, &buffer, sizeof(buffer));
         if (ret < 0) {
             debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket send\n");
-            xpn_socket::close(connection_socket);
+            socket::close(connection_socket);
             err = -1;
             goto mpi_comm_socket_finish;
         }
-        ret = xpn_socket::recv(connection_socket, port_name, MAX_PORT_NAME);
+        ret = socket::recv(connection_socket, port_name, MAX_PORT_NAME);
         if (ret < 0) {
             debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket read\n");
-            xpn_socket::close(connection_socket);
+            socket::close(connection_socket);
             err = -1;
             goto mpi_comm_socket_finish;
         }
-        xpn_socket::close(connection_socket);
+        socket::close(connection_socket);
         mpi_comm_socket_finish:
         debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] Socket end, recv port: %s\n", port_name);
     }

@@ -35,6 +35,8 @@ namespace XPN
         std::cerr<<out_format<<std::endl;\
     }
 
+    #define XPN_DEBUG_BEGIN_CUSTOM(out_format) XPN_DEBUG("Begin "<<__func__<<"("<<out_format<<")");
+    #define XPN_DEBUG_END_CUSTOM(out_format)   XPN_DEBUG("End   "<<__func__<<"("<<out_format<<")="<<(int)res<<", errno="<<errno<<" "<<std::strerror(errno)<<"");
     #define XPN_DEBUG_BEGIN XPN_DEBUG("Begin "<<__func__<<"()");
     #define XPN_DEBUG_END   XPN_DEBUG("End   "<<__func__<<"()="<<(int)res<<", errno="<<errno<<" "<<std::strerror(errno)<<"");
 

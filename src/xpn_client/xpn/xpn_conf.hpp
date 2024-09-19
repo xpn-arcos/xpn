@@ -55,7 +55,7 @@ namespace XPN
             std::string to_string()
             {
                 std::stringstream out;
-                out << XPN_CONF::TAG_PARTITION << std::endl;
+                out << std::endl << XPN_CONF::TAG_PARTITION << std::endl;
                 out << XPN_CONF::TAG_PARTITION_NAME << " = " << partition_name << std::endl;
                 out << XPN_CONF::TAG_BLOCKSIZE << " = " << bsize << std::endl;
                 out << XPN_CONF::TAG_REPLICATION_LEVEL << " = " << replication_level << std::endl;

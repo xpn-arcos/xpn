@@ -19,8 +19,24 @@
  *
  */
 
-#pragma once
+#include "xpn/xpn_api.hpp"
 
 namespace XPN
 {
+    char *xpn_api::getcwd(char *path, size_t size)
+    {
+        XPN_DEBUG_BEGIN;
+        int res = 0;
+        XPN_DEBUG_END;
+        return nullptr;
+    }
+
+    int xpn_api::chdir(char *path)
+    {
+        XPN_DEBUG_BEGIN;
+        int res = 0;
+        XPN_DEBUG_END;
+        return res;
+    }
+
 } // namespace XPN

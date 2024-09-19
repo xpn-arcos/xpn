@@ -22,7 +22,7 @@
 #include <unistd.h>
 #include <vector>
 #include <string>
-#include "base_cpp/xpn_socket.hpp"
+#include "base_cpp/socket.hpp"
 #include "xpn_server_comm.hpp"
 
 #include "xpn_server.hpp"
@@ -148,7 +148,7 @@ int xpn_server::run()
     }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Control socket initialization\n", 0);
-    ret = xpn_socket::server_create(server_socket);
+    ret = socket::server_create(server_socket);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
         return -1;
@@ -158,25 +158,25 @@ int xpn_server::run()
     while (!the_end)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Listening to conections\n", 0);
-        ret = xpn_socket::server_accept(server_socket, connection_socket);
+        ret = socket::server_accept(server_socket, connection_socket);
         if (ret < 0) continue;
 
-        ret = xpn_socket::recv(connection_socket, &recv_code, sizeof(recv_code));
+        ret = socket::recv(connection_socket, &recv_code, sizeof(recv_code));
         if (ret < 0) continue;
 
         debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] socket recv: %d \n", 0, m_params.srv_name, recv_code);
         switch (recv_code)
         {
-            case xpn_socket::ACCEPT_CODE:
-                xpn_socket::send(connection_socket, m_control_comm->m_port_name, MAX_PORT_NAME);
+            case socket::ACCEPT_CODE:
+                socket::send(connection_socket, m_control_comm->m_port_name, MAX_PORT_NAME);
                 accept();
                 break;
 
-            case xpn_socket::FINISH_CODE:
-            case xpn_socket::FINISH_CODE_AWAIT:
+            case socket::FINISH_CODE:
+            case socket::FINISH_CODE_AWAIT:
                 finish();
                 the_end = 1;
-                if (recv_code == xpn_socket::FINISH_CODE_AWAIT){
+                if (recv_code == socket::FINISH_CODE_AWAIT){
                     await_stop = 1;
                 }
                 break;
@@ -188,15 +188,15 @@ int xpn_server::run()
         }
 
         if (await_stop == 0){
-            xpn_socket::close(connection_socket);
+            socket::close(connection_socket);
         }
     }
 
-    xpn_socket::close(server_socket);
+    socket::close(server_socket);
 
     if (await_stop == 1){
-        xpn_socket::send(connection_socket, &recv_code, sizeof(recv_code));
-        xpn_socket::close(connection_socket);
+        socket::send(connection_socket, &recv_code, sizeof(recv_code));
+        socket::close(connection_socket);
     }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> End\n", 0);
@@ -311,31 +311,31 @@ int xpn_server::stop()
             printf(" * Stopping server (%s)\n", name.c_str());
             int socket;
             int ret;
-            int buffer = xpn_socket::FINISH_CODE;
+            int buffer = socket::FINISH_CODE;
             if (m_params.await_stop == 1){
-                buffer = xpn_socket::FINISH_CODE_AWAIT;
+                buffer = socket::FINISH_CODE_AWAIT;
             }
-            ret = xpn_socket::client_connect(name.data(), socket);
+            ret = socket::client_connect(name.data(), socket);
             if (ret < 0) {
                 printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, name.c_str());
                 return;
             }
 
-            ret = xpn_socket::send(socket, &buffer, sizeof(buffer));
+            ret = socket::send(socket, &buffer, sizeof(buffer));
             if (ret < 0) {
                 printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, name.c_str());
             }
             
             if (m_params.await_stop == 0){
-                xpn_socket::close(socket);
+                socket::close(socket);
             }
 
             if (m_params.await_stop == 1){
-                ret = xpn_socket::recv(socket, &buffer, sizeof(buffer));
+                ret = socket::recv(socket, &buffer, sizeof(buffer));
                 if (ret < 0) {
                     printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, name.c_str());
                 }
-                xpn_socket::close(socket);
+                socket::close(socket);
             }
         });
     }
@@ -374,7 +374,7 @@ int xpn_server::stop()
 //         return -1 ;
 //     }
 
-//     socket_close(connection_socket);
+//     close(connection_socket);
 //     return 0;
 // }
 

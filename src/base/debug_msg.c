@@ -31,7 +31,7 @@
 /* ... Global variables / Variables globales ........................ */
 
 int    (*DEBUG_MSG_PrintMsg)(const char *, va_list) = NULL;
-
+int xpn_debug;
 
 /* ... Functions / Funciones ......................................... */
 

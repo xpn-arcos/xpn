@@ -28,40 +28,47 @@
 
 namespace XPN
 {
-    #define HEADER_SIZE 8192
     
-    #define MAGIC_NUMBER "XPN"
-    #define METADATA_VERSION 1
-    #define METADATA_MAX_RECONSTURCTIONS 40
-    #define METADATA_DISTRIBUTION_ROUND_ROBIN 1
+    // Fordward declaration
+    class xpn_file;
 
-    // inline bool CHECK_MAGIC_NUMBER(xpn_metadata &mdata){
-    //     return (((mdata).magic_number[0] == MAGIC_NUMBER[0]) && 
-    //         ((mdata).magic_number[1] == MAGIC_NUMBER[1]) && 
-    //         ((mdata).magic_number[2] == MAGIC_NUMBER[2])) 
-    // }
-            
     class xpn_metadata
     {
     public:
-        xpn_metadata() = default;
+        static constexpr const int HEADER_SIZE = 8*KB;
+        static constexpr const char * MAGIC_NUMBER = "XPN";
+        static constexpr const int VERSION = 1;
+        static constexpr const int MAX_RECONSTURCTIONS = 40;
+        static constexpr const int DISTRIBUTION_ROUND_ROBIN = 1;
+    public:
+        xpn_metadata(const xpn_file &file) : m_file(file) {}
+        int read();
+        int write();
+        int update_file_size();
     private:
-        std::array<int, 3> magic_number = {0};
-        int      version = 0;                                      // Version number
-        int      type = 0;                                         // Type of file: file or directory
-        uint64_t block_size = 0;                                   // Size of block used
-        uint64_t file_size = 0;                                    // Size of the file
-        int      replication_level = 0;                            // Replication level of files: 0, 1, 2, ...
-        int      first_node = 0;                                   // Server which has the first block
-        int      distribution_policy = 0;                          // Distribution policy of blocks, default: round-robin
-        std::array<int, METADATA_MAX_RECONSTURCTIONS> data_nserv = {0}; // Array of number of servers to reconstruct
-        std::array<int, METADATA_MAX_RECONSTURCTIONS> offsets = {0};    // Array indicating the block where new server configuration starts
+        struct data{
+            std::array<int, 3> magic_number = {0};                     // Magic number to identify if is correct the metadata
+            int      version = 0;                                      // Version number
+            int      type = 0;                                         // Type of file: file or directory
+            uint64_t block_size = 0;                                   // Size of block used
+            uint64_t file_size = 0;                                    // Size of the file
+            int      replication_level = 0;                            // Replication level of files: 0, 1, 2, ...
+            int      first_node = 0;                                   // Server which has the first block
+            int      distribution_policy = 0;                          // Distribution policy of blocks, default: round-robin
+            std::array<int, MAX_RECONSTURCTIONS> data_nserv = {0}; // Array of number of servers to reconstruct
+            std::array<int, MAX_RECONSTURCTIONS> offsets = {0};    // Array indicating the block where new server configuration starts
+        };
+    public:
+        const xpn_file &m_file;
+        data m_data;
 
-        bool check_magic_number() 
+    public:
+
+        bool in_valid() 
         { 
-            return magic_number[0] == MAGIC_NUMBER[0] && 
-                   magic_number[1] == MAGIC_NUMBER[1] && 
-                   magic_number[2] == MAGIC_NUMBER[2];
+            return m_data.magic_number[0] == MAGIC_NUMBER[0] && 
+                   m_data.magic_number[1] == MAGIC_NUMBER[1] && 
+                   m_data.magic_number[2] == MAGIC_NUMBER[2];
         } 
     };
 } // namespace XPN

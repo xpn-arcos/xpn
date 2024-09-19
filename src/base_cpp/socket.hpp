@@ -21,25 +21,27 @@
 
 #pragma once
 
+#include <string>
+#include <netdb.h>
+#include <arpa/inet.h>
+
 namespace XPN
 {
-    class xpn_env
-    {
+    class socket
+	{
     public:
-        xpn_env();
-        const char * xpn_sck_port;
-        const char * xpn_conf;
-        int xpn_debug = 0;
-        int xpn_profiler = 0;
-        int xpn_thread = 0;
-        int xpn_locality = 1;
-        int xpn_session_file = 0;
-        int xpn_session_dir = 1;
+        constexpr static const int DEFAULT_XPN_SCK_PORT = 3456;
+        constexpr static const int ACCEPT_CODE = 123;
+        constexpr static const int FINISH_CODE = 666;
+        constexpr static const int FINISH_CODE_AWAIT = 667;
+    private:
+        static int get_xpn_port();
     public:
-        static xpn_env& get_instance()
-        {
-            static xpn_env instance;
-            return instance;
-        }
-    };
-}
+        static int64_t send ( int socket, void * buffer, int64_t size );
+        static int64_t recv ( int socket, void * buffer, int64_t size );
+        static int server_create ( int &out_socket );
+        static int server_accept ( int socket, int &out_conection_socket );
+        static int client_connect ( const std::string &srv_name, int &out_socket );
+        static int close ( int socket );
+	};
+} // namespace XPN

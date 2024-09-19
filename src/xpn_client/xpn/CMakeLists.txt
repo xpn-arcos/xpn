@@ -1,5 +1,6 @@
 file(GLOB_RECURSE XPN_SIMPLE_HEADERS
-    "${PROJECT_SOURCE_DIR}/include/xpn_client/xpn/**.h"
+    # "${PROJECT_SOURCE_DIR}/include/xpn_client/xpn/**.h"
+    "*.cpp"
 )
 
 file(GLOB_RECURSE XPN_SIMPLE_SOURCE

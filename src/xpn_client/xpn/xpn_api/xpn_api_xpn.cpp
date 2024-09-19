@@ -34,7 +34,6 @@ namespace XPN
     int xpn_api::init()
     {
         int res = 0;
-        xpn_env::get_instance();
 
         XPN_PROFILER_BEGIN(env.xpn_profiler);
         XPN_DEBUG_BEGIN;
@@ -48,8 +47,10 @@ namespace XPN
             XPN_DEBUG_END;
             return res;
         }
-
+        m_initialized = true;
+        
         xpn_conf conf;
+        xpn_env::get_instance();
 
         for (const auto &part : conf.partitions)
         {
@@ -82,6 +83,16 @@ namespace XPN
 
     int xpn_api::destroy()
     {
+        int res = 0;
+        XPN_DEBUG_BEGIN;
+        std::unique_lock<std::mutex> lock(m_init_mutex);
+        if (!m_initialized){
+            XPN_DEBUG("Not initialized");
+            XPN_DEBUG_END;
+            return res;
+        }
+        m_initialized = false;
+
         for (auto &part : m_partitions)
         {
             for (auto &serv : part.m_data_serv)
@@ -90,6 +101,32 @@ namespace XPN
             }
         }
         m_partitions.clear();
-        return 0;
+        XPN_DEBUG_END;
+        return res;
+    }
+
+    int xpn_api::mark_error_server(int index)
+    {
+        int res = -1;
+        XPN_DEBUG_BEGIN;
+        for (auto &part : m_partitions)
+        {
+            if (index < static_cast<int>(part.m_data_serv.size())){
+                part.m_data_serv[index].m_error = -1;
+                res = 0;
+            }
+        }
+        XPN_DEBUG_END;
+        return res;
+    }
+
+    int xpn_api::get_block_locality(char *path, off_t offset, int *url_c, char **url_v[])
+    {
+
+    }
+
+    int xpn_api::free_block_locality(int *url_c, char **url_v[])
+    {
+
     }
 } // namespace XPN

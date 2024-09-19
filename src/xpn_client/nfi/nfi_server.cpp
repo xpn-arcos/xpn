@@ -30,6 +30,8 @@ namespace XPN
 {
     nfi_server::nfi_server(const std::string &url) : m_url(url)
     {
+        XPN_DEBUG_BEGIN;
+        int res = 0;
         // Find the position of "://"
         size_t protocol_pos = m_url.find("://");
 
@@ -62,29 +64,39 @@ namespace XPN
         << m_protocol <<"' server '"
         << m_server << "' path '"
         << m_path << "'");
+        XPN_DEBUG_END;
     }
 
     int nfi_server::init_comm()
     {
+        XPN_DEBUG_BEGIN;
+        int res = 0;
         // Init the comunication
         m_control_comm = nfi_xpn_server_control_comm::Create(m_protocol);
 
         // Connect to the server
         m_comm = m_control_comm->connect(m_server);
+        if(m_comm){
+            XPN_DEBUG("Connected successfull to "<<m_server);
+        }
 
         if (m_comm == nullptr){
             m_error = -1;
-            return -1;
+            res = -1;
         }
-        return 0;
+        XPN_DEBUG_END;
+        return res;
     }
 
     int nfi_server::destroy_comm()
     {
+        XPN_DEBUG_BEGIN;
+        int res = 0;
         m_control_comm->disconnect(m_comm);
 
         m_control_comm.reset();
 
-        return 0;
+        XPN_DEBUG_END;
+        return res;
     }
 } // namespace XPN
