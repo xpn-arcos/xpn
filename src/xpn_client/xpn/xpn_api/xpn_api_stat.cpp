@@ -166,18 +166,25 @@ namespace XPN
                 
         m_worker->launch([&server, &file, buf, &res](){res = server->nfi_statvfs(file->m_path, *buf);});
 
+        std::vector<int> v_res(file->m_part.m_data_serv.size());
         for (size_t i = 0; i < file->m_part.m_data_serv.size(); i++)
         {
             if (static_cast<int>(i) == file->m_mdata.master_file()) continue;
             struct ::statvfs aux_buf;
-            m_worker->launch([&server, &file, &aux_buf, &res](){res = server->nfi_statvfs(file->m_path, aux_buf);});
+            m_worker->launch([i, &server, &file, &aux_buf, &v_res](){v_res[i] = server->nfi_statvfs(file->m_path, aux_buf);});
             buf->f_blocks += aux_buf.f_blocks;
             buf->f_bfree += aux_buf.f_bfree;
             buf->f_bavail += aux_buf.f_bavail;
         }
         
-
         m_worker->wait();
+
+        for (auto &aux_res : v_res)
+        {
+            if (aux_res < 0){
+                res = aux_res;
+            }
+        }
 
         XPN_DEBUG_END_CUSTOM(path);
         return res;

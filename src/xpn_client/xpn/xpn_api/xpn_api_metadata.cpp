@@ -21,6 +21,8 @@
 
 #include "xpn/xpn_api.hpp"
 
+#include <vector>
+
 namespace XPN
 {
     int xpn_api::read_metadata(xpn_metadata &mdata)
@@ -43,11 +45,26 @@ namespace XPN
         XPN_DEBUG_BEGIN;
         int res = 0;
 
-        m_worker->launch([&res, &mdata, only_file_size](){
-            res = mdata.m_part.m_data_serv[mdata.master_file()]->nfi_write_mdata(mdata.m_path, mdata, only_file_size);
-        });
+        int server = xpn_path::hash(mdata.m_path, mdata.m_part.m_data_serv.size(), true);
+        std::vector<int> v_res(mdata.m_part.m_replication_level);
+        for (int i = 0; i < mdata.m_part.m_replication_level; i++)
+        {
+            server = (server+1) % mdata.m_part.m_data_serv.size();
+            if (mdata.m_part.m_data_serv[server]->m_error != -1){
+                m_worker->launch([i, &v_res, &mdata, only_file_size](){
+                    v_res[i] = mdata.m_part.m_data_serv[mdata.master_file()]->nfi_write_mdata(mdata.m_path, mdata, only_file_size);
+                });
+            }
+        }
 
         m_worker->wait();
+
+        for (auto &aux_res : v_res)
+        {
+            if (aux_res < 0){
+                res = aux_res;
+            }
+        }
 
         XPN_DEBUG_END;
         return res;
