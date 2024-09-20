@@ -29,16 +29,16 @@ namespace XPN
         XPN_DEBUG_BEGIN_CUSTOM(fd);
         int res = 0;
 
-        auto& file = m_file_table.get(fd);
-        if (!file)
+        if (!m_file_table.has(fd))
         {
             errno = EBADF;
             XPN_DEBUG_END_CUSTOM(fd);
             return -1;
         }
+        auto& file = m_file_table.get(fd);
 
         // Redirect to stat to not duplicate code
-        res = stat(file->m_path.c_str(), sb);
+        res = stat(file.m_path.c_str(), sb);
 
         XPN_DEBUG_END_CUSTOM(fd);
         return res;
@@ -48,28 +48,30 @@ namespace XPN
     {
         XPN_DEBUG_BEGIN_CUSTOM(path);
         int res = 0;
-
-        auto file = create_file_from_part_path(path);
-        if (!file){
+        std::string file_path;
+        auto name_part = check_remove_path_from_path(path, file_path);
+        if (name_part.empty()){
             errno = ENOENT;
             XPN_DEBUG_END_CUSTOM(path);
             return -1;
         }
 
-        if (read_metadata(file->m_mdata) < 0){
+        xpn_file file(file_path, m_partitions.at(name_part));
+
+        if (read_metadata(file.m_mdata) < 0){
             XPN_DEBUG_END_CUSTOM(path);
             return -1;
         }
         
-        auto& server = file->m_part.m_data_serv[file->m_mdata.master_file()];
+        auto& server = file.m_part.m_data_serv[file.m_mdata.master_file()];
 
-        m_worker->launch([&server, &file, sb, &res](){res = server->nfi_getattr(file->m_path, *sb);});
+        m_worker->launch([&server, &file, sb, &res](){res = server->nfi_getattr(file.m_path, *sb);});
 
         m_worker->wait();
 
         // Update file_size
         if (S_ISREG(sb->st_mode)){
-            sb->st_size = file->m_mdata.m_data.file_size;
+            sb->st_size = file.m_mdata.m_data.file_size;
         }
 
         XPN_DEBUG_END;
@@ -153,28 +155,32 @@ namespace XPN
         XPN_DEBUG_BEGIN_CUSTOM(path);
         int res = 0;
 
-        auto file = create_file_from_part_path(path);
-        if (file)
-        {
+        std::string file_path;
+        auto name_part = check_remove_path_from_path(path, file_path);
+        if (name_part.empty()){
             errno = ENOENT;
             res = -1;
             XPN_DEBUG_END_CUSTOM(path);
             return res;
         }
 
-        auto& server = file->m_part.m_data_serv[file->m_mdata.master_file()];
-                
-        m_worker->launch([&server, &file, buf, &res](){res = server->nfi_statvfs(file->m_path, *buf);});
+        xpn_file file(file_path, m_partitions.at(name_part));
 
-        std::vector<int> v_res(file->m_part.m_data_serv.size());
-        for (size_t i = 0; i < file->m_part.m_data_serv.size(); i++)
+        auto& server = file.m_part.m_data_serv[file.m_mdata.master_file()];
+                
+        m_worker->launch([&server, &file, buf, &res](){res = server->nfi_statvfs(file.m_path, *buf);});
+
+        std::vector<int> v_res(file.m_part.m_data_serv.size());
+        struct ::statvfs aux_buf;
+        for (size_t i = 0; i < file.m_part.m_data_serv.size(); i++)
         {
-            if (static_cast<int>(i) == file->m_mdata.master_file()) continue;
-            struct ::statvfs aux_buf;
-            m_worker->launch([i, &server, &file, &aux_buf, &v_res](){v_res[i] = server->nfi_statvfs(file->m_path, aux_buf);});
-            buf->f_blocks += aux_buf.f_blocks;
-            buf->f_bfree += aux_buf.f_bfree;
-            buf->f_bavail += aux_buf.f_bavail;
+            if (static_cast<int>(i) == file.m_mdata.master_file()) continue;
+            m_worker->launch([i, &server, &file, &aux_buf, &v_res](){v_res[i] = server->nfi_statvfs(file.m_path, aux_buf);});
+            if (v_res[i] >= 0){
+                buf->f_blocks += aux_buf.f_blocks;
+                buf->f_bfree += aux_buf.f_bfree;
+                buf->f_bavail += aux_buf.f_bavail;
+            }
         }
         
         m_worker->wait();
@@ -195,16 +201,16 @@ namespace XPN
         XPN_DEBUG_BEGIN;
         int res = 0;
 
-        auto& file = m_file_table.get(fd);
-        if (!file)
+        if (!m_file_table.has(fd))
         {
             errno = EBADF;
             XPN_DEBUG_END_CUSTOM(fd);
             return -1;
         }
+        auto& file = m_file_table.get(fd);
 
         // Redirect to statvfs to not duplicate code
-        res = statvfs(file->m_path.c_str(), buf);
+        res = statvfs(file.m_path.c_str(), buf);
 
         XPN_DEBUG_END;
         return res;

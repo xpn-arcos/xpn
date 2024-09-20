@@ -18,6 +18,7 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include "xpn_server.hpp"
 #include "base_cpp/timer.hpp"
 #include <stddef.h>
@@ -583,7 +584,7 @@ void xpn_server::op_read_mdata   ( xpn_server_comm &comm, st_xpn_server_path &he
   ret = filesystem_read(fd, &req.mdata, sizeof(req.mdata));
 
 
-  if (!req.mdata.in_valid()){
+  if (!req.mdata.is_valid()){
     req.mdata = {};
   }
 

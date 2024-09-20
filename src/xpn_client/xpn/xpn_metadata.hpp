@@ -25,14 +25,13 @@
 #include <vector>
 
 #include "nfi/nfi_server.hpp"
-#include "xpn/xpn_partition.hpp"
 
 #include "base_cpp/xpn_path.hpp"
 namespace XPN
 {
     
     // Fordward declaration
-    class xpn_partition;
+    class xpn_file;
 
     class xpn_metadata
     {
@@ -43,10 +42,15 @@ namespace XPN
         static constexpr const int MAX_RECONSTURCTIONS = 40;
         static constexpr const int DISTRIBUTION_ROUND_ROBIN = 1;
     public:
-        xpn_metadata(const std::string &path, const xpn_partition& part) : m_path(path), m_part(part) {}
+        // xpn_metadata(std::string &path, xpn_partition& part) : m_path(path), m_part(part) {}
+        xpn_metadata(xpn_file& file) : m_file(file) {}
+        xpn_metadata(xpn_metadata &&other, xpn_file& file);
+        xpn_metadata(xpn_metadata &&other) = delete;
     public:
         struct data{
-            std::array<int, 3> magic_number = {0};                     // Magic number to identify if is correct the metadata
+            void fill(const xpn_metadata& mdata);
+
+            std::array<char, 3> magic_number = {'0', '0', '0'};                     // Magic number to identify if is correct the metadata
             int      version = 0;                                      // Version number
             int      type = 0;                                         // Type of file: file or directory
             uint64_t block_size = 0;                                   // Size of block used
@@ -57,34 +61,25 @@ namespace XPN
             std::array<int, MAX_RECONSTURCTIONS> data_nserv = {0}; // Array of number of servers to reconstruct
             std::array<int, MAX_RECONSTURCTIONS> offsets = {0};    // Array indicating the block where new server configuration starts
             
-            bool in_valid() 
-            { 
+            bool is_valid() { 
                 return magic_number[0] == MAGIC_NUMBER[0] && 
                        magic_number[1] == MAGIC_NUMBER[1] && 
                        magic_number[2] == MAGIC_NUMBER[2];
             } 
+            std::string to_string();
         };
     public:
-        const std::string &m_path;
-        const xpn_partition &m_part;
+        xpn_file &m_file;
+        // std::string &m_path;
+        // xpn_partition &m_part;
         data m_data;
 
     public:
     private:
-        int calculate_master(bool is_file)
-        {
-            int master = xpn_path::hash(m_path, m_part.m_data_serv.size(), is_file);
-            for (int i = 0; i < m_part.m_replication_level; i++)
-            {
-                master = (master+1)%m_part.m_data_serv.size();
-                if (m_part.m_data_serv[master]->m_error != -1){
-                    break;
-                }
-            }
-            return master;
-        }
+        int calculate_master(bool is_file) const;
     public:
-        int master_file() {return calculate_master(true);}
-        int master_dir() {return calculate_master(false);}
+        int master_file() const {return calculate_master(true);}
+        int master_dir() const {return calculate_master(false);}
+        std::string to_string();
     };
 } // namespace XPN

@@ -27,32 +27,39 @@ namespace XPN
 {
     int xpn_api::read_metadata(xpn_metadata &mdata)
     {
-        XPN_DEBUG_BEGIN;
+        XPN_DEBUG_BEGIN_CUSTOM(mdata.m_file.m_path);
         int res = 0;
         
         m_worker->launch([&res, &mdata](){
-            res = mdata.m_part.m_data_serv[mdata.master_file()]->nfi_read_mdata(mdata.m_path, mdata);
+            res = mdata.m_file.m_part.m_data_serv[mdata.master_file()]->nfi_read_mdata(mdata.m_file.m_path, mdata);
         });
 
         m_worker->wait();
 
-        XPN_DEBUG_END;
+        XPN_DEBUG(mdata.to_string());
+
+        XPN_DEBUG_END_CUSTOM(mdata.m_file.m_path);
         return res;
     }
 
     int xpn_api::write_metadata(xpn_metadata &mdata, bool only_file_size)
     {
-        XPN_DEBUG_BEGIN;
+        XPN_DEBUG_BEGIN_CUSTOM(mdata.m_file.m_path<<", "<<only_file_size);
         int res = 0;
+        if (only_file_size){
+            XPN_DEBUG(mdata.m_data.file_size);
+        }else{
+            XPN_DEBUG(mdata.to_string());
+        }
 
-        int server = xpn_path::hash(mdata.m_path, mdata.m_part.m_data_serv.size(), true);
-        std::vector<int> v_res(mdata.m_part.m_replication_level);
-        for (int i = 0; i < mdata.m_part.m_replication_level; i++)
+        int server = xpn_path::hash(mdata.m_file.m_path, mdata.m_file.m_part.m_data_serv.size(), true);
+        std::vector<int> v_res(mdata.m_file.m_part.m_replication_level+1);
+        for (int i = 0; i < mdata.m_file.m_part.m_replication_level+1; i++)
         {
-            server = (server+1) % mdata.m_part.m_data_serv.size();
-            if (mdata.m_part.m_data_serv[server]->m_error != -1){
+            server = (server+i) % mdata.m_file.m_part.m_data_serv.size();
+            if (mdata.m_file.m_part.m_data_serv[server]->m_error != -1){
                 m_worker->launch([i, &v_res, &mdata, only_file_size](){
-                    v_res[i] = mdata.m_part.m_data_serv[mdata.master_file()]->nfi_write_mdata(mdata.m_path, mdata, only_file_size);
+                    v_res[i] = mdata.m_file.m_part.m_data_serv[mdata.master_file()]->nfi_write_mdata(mdata.m_file.m_path, mdata, only_file_size);
                 });
             }
         }
@@ -66,7 +73,7 @@ namespace XPN
             }
         }
 
-        XPN_DEBUG_END;
+        XPN_DEBUG_END_CUSTOM(mdata.m_file.m_path<<", "<<only_file_size);
         return res;
     }
 } // namespace XPN

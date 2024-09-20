@@ -44,13 +44,31 @@
 
 #endif
 
+#ifndef O_RDONLY
+#define O_RDONLY             00
+#endif
+#ifndef O_WRONLY
+#define O_WRONLY             01
+#endif
+#ifndef O_RDWR
+#define O_RDWR               02
+#endif
+#ifndef O_CREAT
+#define O_CREAT            0100
+#endif
+#ifndef O_TRUNC
+#define O_TRUNC           01000
+#endif
+#ifndef O_DIRECTORY
+#define O_DIRECTORY    00200000
+#endif
 namespace XPN
 {
     class xpn_api
     {
     public:
         xpn_api() { init(); }
-        std::unique_ptr<xpn_file> create_file_from_part_path(const std::string &path);
+        std::string check_remove_path_from_path(const std::string &path, std::string& out_path);
     public:
         static xpn_api& get_instance()
         {
@@ -60,7 +78,6 @@ namespace XPN
     private:
         std::unordered_map<std::string, xpn_partition> m_partitions;
         xpn_file_table m_file_table;
-        std::unique_ptr<workers> m_worker;
 
         std::mutex m_init_mutex;
         bool m_initialized = false;
@@ -68,6 +85,7 @@ namespace XPN
 
     public:
         std::mutex m_api_mutex;
+        std::unique_ptr<workers> m_worker;
 
     public:
         // XPN api
@@ -104,9 +122,13 @@ namespace XPN
         int   fstatvfs   (int fd, struct ::statvfs *buf);
 
         // RW api
-        ssize_t read    (int fd, void *buffer, size_t size);
-        ssize_t write   (int fd, const void *buffer, size_t size);
-        off_t   lseek   (int fd, off_t offset, int flag);
+        ssize_t read            (int fd, void *buffer, size_t size);
+        ssize_t secuencial_read (xpn_file &file, void *buffer, size_t size);
+        ssize_t parallel_read   (xpn_file &file, void *buffer, size_t size);
+        ssize_t write           (int fd, const void *buffer, size_t size);
+        ssize_t secuencial_write(xpn_file &file, const void *buffer, size_t size);
+        ssize_t parallel_write  (xpn_file &file, const void *buffer, size_t size);
+        off_t   lseek           (int fd, off_t offset, int flag);
 
         // f_file api
         FILE   *fopen   (const char *filename, const char *mode);

@@ -38,7 +38,7 @@ namespace XPN
             return m_files.find(fd) != m_files.end();
         }
 
-        int insert(std::unique_ptr<xpn_file> file)
+        int insert(xpn_file& file)
         {
             int fd;
             if (m_free_keys.empty()){
@@ -47,13 +47,14 @@ namespace XPN
                 fd = m_free_keys.front();
                 m_free_keys.pop();
             }
-            m_files[fd] = std::move(file);
+            m_files.insert(std::make_pair(fd, std::move(file)));
             return fd;
         }
 
-        std::unique_ptr<xpn_file>& get(int fd)
+        // It must be checked if fd is in the file_table with has(fd)
+        xpn_file& get(int fd)
         {
-            return m_files[fd]; 
+            return m_files.at(fd); 
         }
 
         bool remove(int fd)
@@ -70,13 +71,13 @@ namespace XPN
             std::stringstream out;
             for (auto &[key, file] : m_files)
             {
-                out << "fd: " << key << " : " << file->m_path << std::endl;
+                out << "fd: " << key << " : " << file.m_path << std::endl;
             }
             return out.str();
         }
 
     private:
-        std::unordered_map<int, std::unique_ptr<xpn_file>> m_files;
+        std::unordered_map<int, xpn_file> m_files;
         std::queue<int> m_free_keys;
         int secuencial_key = 1;
     };

@@ -36,30 +36,51 @@ namespace XPN
         long telldir = 0;           // telldir of directory in the server when XPN_SESSION_DIR is not set
         DIR *dir = nullptr;         // pointer to directory in the server when XPN_SESSION_DIR set
         int fd = -1;                // file_descriptor in the server when XPN_SESSION_FILE set
+
+        bool is_initialized() {return !path.empty();}
     };
 
     enum class file_type
     {
-        file = 0,
-        dir = 1
+        null = 0,
+        file = 1,
+        dir = 2
     };
 
     class xpn_file
     {
     public:
-        xpn_file(const std::string &path, const xpn_partition &part) : m_path(path), m_part(part), m_mdata(m_path, m_part) 
+        xpn_file(std::string &path, xpn_partition &part) : m_path(path), m_part(part), m_mdata(*this) 
         {
             m_data_vfh.resize(m_part.m_data_serv.size());
         }
+        xpn_file(xpn_file&& other) : m_path(std::move(other.m_path)),
+                                     m_type(other.m_type),
+                                     m_links(other.m_links),
+                                     m_flags(other.m_flags),
+                                     m_mode(other.m_mode),
+                                     m_part(other.m_part),
+                                     m_mdata(std::move(other.m_mdata), *this),
+                                     m_offset(other.m_offset),
+                                     m_data_vfh(std::move(other.m_data_vfh)){}
+        xpn_file(const xpn_file&) = delete;
 
     public:
-        const std::string m_path;       // absolute path
-        file_type m_type;               // indicate FILE or DIR
-        int m_links = 0;                // number of links that this file has
-        const xpn_partition &m_part;    // partition
-        xpn_metadata m_mdata;           // metadata
-        off_t m_offset = 0;             // offset of the open file
-        std::vector<xpn_fh> m_data_vfh; // virtual FH
+        bool exist_in_serv(int serv);
+        void map_offset(int block_size, int replication_level, int nserv, int64_t offset, int replication, int first_node, int64_t &local_offset, int &serv);
+        void map_offset_mdata(int64_t offset, int replication, int64_t &local_offset, int &serv);
+        int  initialize_vfh(int index);
+
+    public:
+        std::string m_path;                 // absolute path
+        file_type m_type = file_type::null; // indicate FILE or DIR
+        int m_links = 0;                    // number of links that this file has
+        int m_flags = 0;                    // O_RDONLY, O_WRONLY,....    
+        mode_t m_mode = 0;                  // S_IRUSR , S_IWUSR ,....  
+        xpn_partition &m_part;              // partition
+        xpn_metadata m_mdata;               // metadata
+        off_t m_offset = 0;                 // offset of the open file
+        std::vector<xpn_fh> m_data_vfh;     // virtual FH
 
     };
 } // namespace XPN
