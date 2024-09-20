@@ -19,22 +19,37 @@
  *
  */
 
-#include "xpn_metadata.hpp"
+#include "xpn/xpn_api.hpp"
 
 namespace XPN
 {
-    int xpn_metadata::read()
+    int xpn_api::read_metadata(xpn_metadata &mdata)
     {
-        return 0;
+        XPN_DEBUG_BEGIN;
+        int res = 0;
+        
+        m_worker->launch([&res, &mdata](){
+            res = mdata.m_part.m_data_serv[mdata.master_file()]->nfi_read_mdata(mdata.m_path, mdata);
+        });
+
+        m_worker->wait();
+
+        XPN_DEBUG_END;
+        return res;
     }
 
-    int xpn_metadata::write()
+    int xpn_api::write_metadata(xpn_metadata &mdata, bool only_file_size)
     {
-        return 0;
-    }
+        XPN_DEBUG_BEGIN;
+        int res = 0;
 
-    int xpn_metadata::update_file_size()
-    {
-        return 0;
+        m_worker->launch([&res, &mdata, only_file_size](){
+            res = mdata.m_part.m_data_serv[mdata.master_file()]->nfi_write_mdata(mdata.m_path, mdata, only_file_size);
+        });
+
+        m_worker->wait();
+
+        XPN_DEBUG_END;
+        return res;
     }
 } // namespace XPN

@@ -28,7 +28,7 @@
 #include <sys/statvfs.h>
 
 #include <xpn/xpn_partition.hpp>
-#include <xpn/xpn_file.hpp>
+#include <xpn/xpn_file_table.hpp>
 #include <base_cpp/debug.hpp>
 #include <base_cpp/workers.hpp>
 
@@ -50,6 +50,7 @@ namespace XPN
     {
     public:
         xpn_api() { init(); }
+        std::unique_ptr<xpn_file> create_file_from_part_path(const std::string &path);
     public:
         static xpn_api& get_instance()
         {
@@ -58,7 +59,7 @@ namespace XPN
         }
     private:
         std::unordered_map<std::string, xpn_partition> m_partitions;
-        std::unordered_map<int, xpn_file> m_files;
+        xpn_file_table m_file_table;
         std::unique_ptr<workers> m_worker;
 
         std::mutex m_init_mutex;
@@ -75,6 +76,10 @@ namespace XPN
         int mark_error_server(int index);
         int get_block_locality(char *path, off_t offset, int *url_c, char **url_v[]);
         int free_block_locality(int *url_c, char **url_v[]);
+
+        // Metadata api
+        int read_metadata(xpn_metadata &mdata);
+        int write_metadata(xpn_metadata &mdata, bool only_file_size);
 
         // File api
         int   open      (const char *path, int flags, mode_t mode);

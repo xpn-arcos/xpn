@@ -44,9 +44,6 @@ namespace XPN
         static constexpr const int DISTRIBUTION_ROUND_ROBIN = 1;
     public:
         xpn_metadata(const std::string &path, const xpn_partition& part) : m_path(path), m_part(part) {}
-        int read();
-        int write();
-        int update_file_size();
     public:
         struct data{
             std::array<int, 3> magic_number = {0};                     // Magic number to identify if is correct the metadata

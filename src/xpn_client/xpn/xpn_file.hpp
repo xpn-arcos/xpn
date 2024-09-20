@@ -47,7 +47,10 @@ namespace XPN
     class xpn_file
     {
     public:
-        xpn_file(const std::string &path, const xpn_partition &part) : m_path(path), m_part(part), m_mdata(m_path, m_part) {}
+        xpn_file(const std::string &path, const xpn_partition &part) : m_path(path), m_part(part), m_mdata(m_path, m_part) 
+        {
+            m_data_vfh.resize(m_part.m_data_serv.size());
+        }
 
     public:
         const std::string m_path;       // absolute path

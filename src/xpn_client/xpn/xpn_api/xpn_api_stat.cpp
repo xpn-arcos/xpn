@@ -29,7 +29,8 @@ namespace XPN
         XPN_DEBUG_BEGIN_CUSTOM(fd);
         int res = 0;
 
-        if (m_files.find(fd) == m_files.end())
+        auto& file = m_file_table.get(fd);
+        if (!file)
         {
             errno = EBADF;
             XPN_DEBUG_END_CUSTOM(fd);
@@ -37,7 +38,7 @@ namespace XPN
         }
 
         // Redirect to stat to not duplicate code
-        res = stat(m_files.at(fd).m_path.c_str(), sb);
+        res = stat(file->m_path.c_str(), sb);
 
         XPN_DEBUG_END_CUSTOM(fd);
         return res;
@@ -47,31 +48,28 @@ namespace XPN
     {
         XPN_DEBUG_BEGIN_CUSTOM(path);
         int res = 0;
-        std::string name_part = xpn_path::get_first_dir(path);
-        if (m_partitions.find(name_part) == m_partitions.end())
-        {
-            errno = EBADF;
+
+        auto file = create_file_from_part_path(path);
+        if (!file){
+            errno = ENOENT;
             XPN_DEBUG_END_CUSTOM(path);
             return -1;
         }
-        xpn_partition& part = m_partitions.at(name_part);
 
-        xpn_file file(path, part);
-
-        if (file.m_mdata.read() < 0){
+        if (read_metadata(file->m_mdata) < 0){
             XPN_DEBUG_END_CUSTOM(path);
             return -1;
         }
         
-        auto& server = part.m_data_serv[file.m_mdata.master_file()];
+        auto& server = file->m_part.m_data_serv[file->m_mdata.master_file()];
 
-        m_worker->launch([&server, &file, sb, &res](){res = server->nfi_getattr(file.m_path, *sb);});
+        m_worker->launch([&server, &file, sb, &res](){res = server->nfi_getattr(file->m_path, *sb);});
 
         m_worker->wait();
 
         // Update file_size
         if (S_ISREG(sb->st_mode)){
-            sb->st_size = file.m_mdata.m_data.file_size;
+            sb->st_size = file->m_mdata.m_data.file_size;
         }
 
         XPN_DEBUG_END;
@@ -155,27 +153,24 @@ namespace XPN
         XPN_DEBUG_BEGIN_CUSTOM(path);
         int res = 0;
 
-        std::string name_part = xpn_path::get_first_dir(path);
-        if (m_partitions.find(name_part) == m_partitions.end())
+        auto file = create_file_from_part_path(path);
+        if (file)
         {
-            errno = EBADF;
+            errno = ENOENT;
             res = -1;
             XPN_DEBUG_END_CUSTOM(path);
             return res;
         }
-        xpn_partition& part = m_partitions.at(name_part);
 
-        xpn_file file(path, part);
-
-        auto& server = part.m_data_serv[file.m_mdata.master_file()];
+        auto& server = file->m_part.m_data_serv[file->m_mdata.master_file()];
                 
-        m_worker->launch([&server, buf, &res](){res = server->nfi_statvfs(*buf);});
+        m_worker->launch([&server, &file, buf, &res](){res = server->nfi_statvfs(file->m_path, *buf);});
 
-        for (size_t i = 0; i < part.m_data_serv.size(); i++)
+        for (size_t i = 0; i < file->m_part.m_data_serv.size(); i++)
         {
-            if (static_cast<int>(i) == file.m_mdata.master_file()) continue;
+            if (static_cast<int>(i) == file->m_mdata.master_file()) continue;
             struct ::statvfs aux_buf;
-            m_worker->launch([&server, &aux_buf, &res](){res = server->nfi_statvfs(aux_buf);});
+            m_worker->launch([&server, &file, &aux_buf, &res](){res = server->nfi_statvfs(file->m_path, aux_buf);});
             buf->f_blocks += aux_buf.f_blocks;
             buf->f_bfree += aux_buf.f_bfree;
             buf->f_bavail += aux_buf.f_bavail;
@@ -192,8 +187,9 @@ namespace XPN
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
-        
-        if (m_files.find(fd) == m_files.end())
+
+        auto& file = m_file_table.get(fd);
+        if (!file)
         {
             errno = EBADF;
             XPN_DEBUG_END_CUSTOM(fd);
@@ -201,7 +197,7 @@ namespace XPN
         }
 
         // Redirect to statvfs to not duplicate code
-        res = statvfs(m_files.at(fd).m_path.c_str(), buf);
+        res = statvfs(file->m_path.c_str(), buf);
 
         XPN_DEBUG_END;
         return res;

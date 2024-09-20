@@ -39,13 +39,75 @@ namespace XPN
     #define O_DIRECTORY    00200000
     #endif
 
+    std::unique_ptr<xpn_file> xpn_api::create_file_from_part_path(const std::string &path)
+    {
+        std::string name_part = xpn_path::get_first_dir(path);
+        auto it = m_partitions.find(name_part);
+        if (it == m_partitions.end())
+        {
+            return nullptr;
+        }
+        xpn_partition& part = it->second;
+
+        return std::make_unique<xpn_file>(xpn_path::remove_first_dir(path), part);
+    }
+
     int xpn_api::open(const char *path, int flags, mode_t mode)
     {
         XPN_DEBUG_BEGIN_CUSTOM(path<<", "<<flags<<", "<<mode);
         int res = 0;
 
-        
-        
+        auto file = create_file_from_part_path(path);
+        if (!file){
+            errno = ENOENT;
+            XPN_DEBUG_END_CUSTOM(path<<", "<<flags<<", "<<mode);
+            return -1;
+        }
+
+        if ((O_DIRECTORY != (flags & O_DIRECTORY)))
+        {
+            int ret = read_metadata(file->m_mdata);
+            if (res < 0 && O_CREAT != (flags & O_CREAT)){
+                XPN_DEBUG_END_CUSTOM(path<<", "<<flags<<", "<<mode);
+                return -1;
+            }
+        }
+
+        if ((O_CREAT == (flags & O_CREAT))){
+            std::vector<int> v_res(file->m_part.m_data_serv.size());
+            for (size_t i = 0; i < file->m_part.m_data_serv.size(); i++)
+            {
+                auto& serv = file->m_part.m_data_serv[i];
+                m_worker->launch([i, &v_res, &serv, &file, flags, mode](){
+                    v_res[i] = serv->nfi_open(file->m_path, flags, mode, file->m_data_vfh[i]);
+                });
+            }
+
+            m_worker->wait();
+
+            for (auto &aux_res : v_res)
+            {
+                if (aux_res < 0)
+                {
+                    XPN_DEBUG_END_CUSTOM(path<<", "<<flags<<", "<<mode);
+                    return -1;
+                }
+            }
+
+            if ((O_DIRECTORY != (flags & O_DIRECTORY)))
+            {
+                write_metadata(file->m_mdata, false);
+            }
+        }else{
+            m_worker->launch([&res, &file, flags, mode](){
+                int master_file = file->m_mdata.master_file();
+                res = file->m_part.m_data_serv[master_file]->nfi_open(file->m_path, flags, mode, file->m_data_vfh[master_file]);
+            });
+            m_worker->wait();
+        }
+
+        res = m_file_table.insert(std::move(file));
+
         XPN_DEBUG_END_CUSTOM(path<<", "<<flags<<", "<<mode);
         return res;
     }
@@ -63,6 +125,9 @@ namespace XPN
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
+
+        
+
         XPN_DEBUG_END;
         return res;
     }

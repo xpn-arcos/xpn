@@ -29,6 +29,7 @@ namespace XPN
     {
     public:
         static std::string get_first_dir(const std::string &path);
+        static std::string remove_first_dir(const std::string &path);
         static int hash(const std::string &path, int max_num, bool is_file);
     };
 }

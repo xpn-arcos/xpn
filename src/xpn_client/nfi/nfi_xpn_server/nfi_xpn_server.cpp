@@ -599,7 +599,7 @@ int nfi_xpn_server::nfi_rmdir(const std::string &path, bool is_async)
   return ret;
 }
 
-int nfi_xpn_server::nfi_statvfs(struct ::statvfs &inf)
+int nfi_xpn_server::nfi_statvfs(const std::string &path, struct ::statvfs &inf)
 {
   int ret;
   struct st_xpn_server_path msg;
@@ -607,9 +607,11 @@ int nfi_xpn_server::nfi_statvfs(struct ::statvfs &inf)
 
   debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] >> Begin\n", m_server.c_str());
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] nfi_xpn_server_statvfs(%s)\n", m_server.c_str(), m_path.c_str());
+  std::string srv_path = m_path + "/" + path;
 
-  std::size_t length = m_path.copy(msg.path, PATH_MAX - 1);
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] nfi_xpn_server_statvfs(%s)\n", m_server.c_str(), srv_path.c_str());
+
+  std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
 
   ret = nfi_do_request(XPN_SERVER_STATVFS_DIR, msg, req);

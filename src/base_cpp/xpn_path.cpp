@@ -22,7 +22,6 @@
 #include "xpn_path.hpp"
 
 #include <filesystem>
-
 namespace XPN
 {
     std::string xpn_path::get_first_dir(const std::string &path)
@@ -31,9 +30,25 @@ namespace XPN
 
         for (const auto& part : p)
         {
-            return part.string();        
+            return part.string();
         }
         return "";
+    }
+
+    std::string xpn_path::remove_first_dir(const std::string &path)
+    {
+        std::filesystem::path p(path);
+        std::filesystem::path aux_p;
+
+        int index = 0;
+        for (const auto& part : p)
+        {
+            if (index != 0){
+                aux_p /= part;
+            }
+            index++;
+        }
+        return aux_p.string();
     }
 
     int xpn_path::hash(const std::string &path, int max_num, bool is_file)
