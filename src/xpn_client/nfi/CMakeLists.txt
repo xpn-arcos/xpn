@@ -1,6 +1,8 @@
+
 file(GLOB_RECURSE XPN_NFI_HEADERS
 	"*.hpp"
 )
+
 file(GLOB_RECURSE XPN_NFI_SOURCE
 	"*.cpp"
 )

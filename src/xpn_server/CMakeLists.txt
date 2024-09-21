@@ -1,14 +1,13 @@
+
 file(GLOB_RECURSE XPN_SERVER_HEADERS 
     "*.hpp"
 )
+
 file(GLOB_RECURSE XPN_SERVER_SOURCE 
     "*.cpp"
 )
 
-set_source_files_properties(${XPN_SERVER_SOURCE} PROPERTIES LANGUAGE CXX)
 add_executable(xpn_server ${XPN_SERVER_SOURCE})
-
-set_target_properties(xpn_server PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(xpn_server PRIVATE xpn_base_c xpn_base_cpp)
 
