@@ -54,17 +54,25 @@ namespace XPN
         {
             m_data_vfh.resize(m_part.m_data_serv.size());
         }
-        xpn_file(xpn_file&& other) : m_path(std::move(other.m_path)),
-                                     m_type(other.m_type),
-                                     m_links(other.m_links),
-                                     m_flags(other.m_flags),
-                                     m_mode(other.m_mode),
-                                     m_part(other.m_part),
-                                     m_mdata(std::move(other.m_mdata), *this),
-                                     m_offset(other.m_offset),
-                                     m_data_vfh(std::move(other.m_data_vfh)){}
-        xpn_file(const xpn_file&) = delete;
-
+        xpn_file(const xpn_file& file) : 
+            m_path(file.m_path), 
+            m_type(file.m_type),
+            m_links(file.m_links),
+            m_flags(file.m_flags),
+            m_mode(file.m_mode),
+            m_part(file.m_part), 
+            m_mdata(*this, file.m_mdata.m_data),
+            m_offset(file.m_offset),
+            m_data_vfh(file.m_data_vfh)
+        {}
+        // Delete default constructors
+        xpn_file() = delete;
+        // Delete copy assignment operator
+        xpn_file& operator=(const xpn_file&) = delete;
+        // Delete move constructor
+        xpn_file(xpn_file&&) = delete;
+        // Delete move assignment operator
+        xpn_file& operator=(xpn_file&&) = delete;
     public:
         bool exist_in_serv(int serv);
         void map_offset(int block_size, int replication_level, int nserv, int64_t offset, int replication, int first_node, int64_t &local_offset, int &serv);

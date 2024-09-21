@@ -31,53 +31,20 @@ namespace XPN
     class xpn_file_table
     {
     public:
-        static constexpr const int MAX_FILES = 1000000;
-    public:
-        bool has(int fd)
-        {
-            return m_files.find(fd) != m_files.end();
-        }
-
-        int insert(xpn_file& file)
-        {
-            int fd;
-            if (m_free_keys.empty()){
-                fd = secuencial_key++;
-            }else{
-                fd = m_free_keys.front();
-                m_free_keys.pop();
-            }
-            m_files.insert(std::make_pair(fd, std::move(file)));
-            return fd;
-        }
-
+        bool has(int fd) {return m_files.find(fd) != m_files.end();}
         // It must be checked if fd is in the file_table with has(fd)
-        xpn_file& get(int fd)
-        {
-            return m_files.at(fd); 
-        }
+        xpn_file& get(int fd) {return *m_files.at(fd); }
 
-        bool remove(int fd)
-        {   
-            int res = m_files.erase(fd);
-            if (res == 1){
-                m_free_keys.push(fd);
-            }
-            return res == 1 ? true : false;
-        }
+        int insert(const xpn_file& file);
+        int insert(xpn_file* file);
 
-        std::string to_string()
-        {
-            std::stringstream out;
-            for (auto &[key, file] : m_files)
-            {
-                out << "fd: " << key << " : " << file.m_path << std::endl;
-            }
-            return out.str();
-        }
+        bool remove(int fd);
+        // It must be checked if fd is in the file_table with has(fd)
+        int dup(int fd, int new_fd = -1);
+        std::string to_string();
 
     private:
-        std::unordered_map<int, xpn_file> m_files;
+        std::unordered_map<int, xpn_file*> m_files;
         std::queue<int> m_free_keys;
         int secuencial_key = 1;
     };

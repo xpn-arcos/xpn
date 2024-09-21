@@ -104,11 +104,12 @@ namespace XPN
 
         // File api
         int   open      (const char *path, int flags, mode_t mode);
-
         int   creat     (const char *path, mode_t perm);
         int   close     (int fd);
         int   unlink    (const char *path);
         int   rename    (const char *path, const char *newpath);
+        int   dup       (int fd);
+        int   dup2      (int fd, int fd2);
 
         // Stat api
         int   fstat     (int fd, struct ::stat *sb);
@@ -119,10 +120,8 @@ namespace XPN
         int   fchmod    (int fd,  mode_t mode);
         int   truncate  (const char *path,  off_t length);
         int   ftruncate (int fd, off_t length);
-        int   dup       (int fd);
-        int   dup2      (int fd, int fd2);
-        int   statvfs    (const char *path, struct ::statvfs *buf);
-        int   fstatvfs   (int fd, struct ::statvfs *buf);
+        int   statvfs   (const char *path, struct ::statvfs *buf);
+        int   fstatvfs  (int fd, struct ::statvfs *buf);
 
         // RW api
         ssize_t read            (int fd, void *buffer, size_t size);

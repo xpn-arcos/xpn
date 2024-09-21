@@ -132,24 +132,6 @@ namespace XPN
         return res;
     }
 
-    int xpn_api::dup([[maybe_unused]] int fd)
-    {
-        XPN_DEBUG_BEGIN;
-        int res = 0;
-        // TODO
-        XPN_DEBUG_END;
-        return res;
-    }
-
-    int xpn_api::dup2([[maybe_unused]] int fd, [[maybe_unused]] int fd2)
-    {
-        XPN_DEBUG_BEGIN;
-        int res = 0;
-        // TODO
-        XPN_DEBUG_END;
-        return res;
-    }
-
     int xpn_api::statvfs(const char * path, struct ::statvfs *buf)
     {
         XPN_DEBUG_BEGIN_CUSTOM(path);

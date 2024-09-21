@@ -275,4 +275,35 @@ namespace XPN
         XPN_DEBUG_END_CUSTOM(path<<", "<<newpath);
         return res;
     }
+
+    int xpn_api::dup(int fd)
+    {
+        XPN_DEBUG_BEGIN;
+        int res = 0;
+        if (!m_file_table.has(fd))
+        {
+            errno = EBADF;
+            XPN_DEBUG_END_CUSTOM(fd);
+            return -1;
+        }
+        res = m_file_table.dup(fd);
+        XPN_DEBUG_END;
+        return res;
+    }
+
+    int xpn_api::dup2(int fd, int fd2)
+    {
+        XPN_DEBUG_BEGIN;
+        int res = 0;
+        if (!m_file_table.has(fd))
+        {
+            errno = EBADF;
+            XPN_DEBUG_END_CUSTOM(fd);
+            return -1;
+        }
+        res = m_file_table.dup(fd, fd2);
+        XPN_DEBUG_END;
+        return res;
+    }
+
 } // namespace XPN

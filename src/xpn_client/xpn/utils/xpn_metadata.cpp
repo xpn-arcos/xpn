@@ -22,17 +22,12 @@
 #include "xpn/xpn_metadata.hpp"
 #include "xpn/xpn_file.hpp"
 
-#include "base_cpp/debug.hpp"
 #include <iostream>
 #include <string>
 
 namespace XPN
 {
     
-    xpn_metadata::xpn_metadata(xpn_metadata &&other, xpn_file& file) : m_file(file),
-                                                            m_data(std::move(other.m_data)){
-                                                            XPN_DEBUG("Move metadata: "<<m_file.m_path);
-                                                            }
     void xpn_metadata::data::fill(const xpn_metadata& mdata){
         magic_number        = {MAGIC_NUMBER[0], MAGIC_NUMBER[1], MAGIC_NUMBER[2]};
         data_nserv[0]       = static_cast<int>(mdata.m_file.m_part.m_data_serv.size());
@@ -69,10 +64,12 @@ namespace XPN
         return out.str();
     }
 
-    std::string xpn_metadata::to_string(){
+    std::string xpn_metadata::to_string(bool with_data){
         std::stringstream out;
         out << "Metadata of: " << m_file.m_path << std::endl;
-        out << m_data.to_string();
+        if (with_data){
+            out << m_data.to_string();
+        }
         return out.str();
     }
     

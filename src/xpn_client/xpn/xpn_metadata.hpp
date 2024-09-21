@@ -27,6 +27,8 @@
 #include "nfi/nfi_server.hpp"
 
 #include "base_cpp/xpn_path.hpp"
+#include "base_cpp/debug.hpp"
+
 namespace XPN
 {
     
@@ -41,11 +43,6 @@ namespace XPN
         static constexpr const int VERSION = 1;
         static constexpr const int MAX_RECONSTURCTIONS = 40;
         static constexpr const int DISTRIBUTION_ROUND_ROBIN = 1;
-    public:
-        // xpn_metadata(std::string &path, xpn_partition& part) : m_path(path), m_part(part) {}
-        xpn_metadata(xpn_file& file) : m_file(file) {}
-        xpn_metadata(xpn_metadata &&other, xpn_file& file);
-        xpn_metadata(xpn_metadata &&other) = delete;
     public:
         struct data{
             void fill(const xpn_metadata& mdata);
@@ -69,6 +66,20 @@ namespace XPN
             std::string to_string();
         };
     public:
+        // xpn_metadata(std::string &path, xpn_partition& part) : m_path(path), m_part(part) {}
+        xpn_metadata(xpn_file& file) : m_file(file) {}
+        xpn_metadata(xpn_file& file, const xpn_metadata::data &data) : m_file(file), m_data(data) {}
+        // Delete default constructors
+        xpn_metadata() = delete;
+        // Delete copy constructor
+        xpn_metadata(const xpn_metadata&) = delete;
+        // Delete copy assignment operator
+        xpn_metadata& operator=(const xpn_metadata&) = delete;
+        // Delete move constructor
+        xpn_metadata(xpn_metadata&&) = delete;
+        // Delete move assignment operator
+        xpn_metadata& operator=(xpn_metadata&&) = delete;
+    public:
         xpn_file &m_file;
         // std::string &m_path;
         // xpn_partition &m_part;
@@ -80,6 +91,6 @@ namespace XPN
     public:
         int master_file() const {return calculate_master(true);}
         int master_dir() const {return calculate_master(false);}
-        std::string to_string();
+        std::string to_string(bool with_data = true);
     };
 } // namespace XPN
