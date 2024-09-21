@@ -292,4 +292,27 @@ namespace XPN
         return res;
     }
 
+    int xpn_file::initialize_vfh_dir(int index)
+    {
+        int res = 0;
+        XPN_DEBUG_BEGIN_CUSTOM(index<<", "<<m_path);
+        if (m_data_vfh[index].is_initialized()){
+            XPN_DEBUG_END_CUSTOM(index<<", "<<m_path);
+            return res;
+        }
+        if (index < 0 || index >= static_cast<int>(m_data_vfh.size())){
+            res = -1;
+            XPN_DEBUG_END_CUSTOM(index<<", "<<m_path);
+            return res;
+        }
+        auto& api = xpn_api::get_instance();
+        api.m_worker->launch([&res, this, index](){
+            res = this->m_part.m_data_serv[index]->nfi_opendir(this->m_path, this->m_data_vfh[index]);
+        });
+
+        api.m_worker->wait();
+        
+        XPN_DEBUG_END_CUSTOM(index<<", "<<m_path);
+        return res;
+    }
 } // namespace XPN

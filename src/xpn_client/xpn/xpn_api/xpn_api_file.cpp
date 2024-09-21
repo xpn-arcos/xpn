@@ -69,15 +69,15 @@ namespace XPN
 
         if ((O_CREAT == (flags & O_CREAT))){
 
-            
-
             std::vector<int> v_res(file.m_part.m_data_serv.size());
             for (size_t i = 0; i < file.m_part.m_data_serv.size(); i++)
             {
                 auto& serv = file.m_part.m_data_serv[i];
-                m_worker->launch([i, &v_res, &serv, &file, flags, mode](){
-                    v_res[i] = serv->nfi_open(file.m_path, flags, mode, file.m_data_vfh[i]);
-                });
+                if (file.exist_in_serv(i)){
+                    m_worker->launch([i, &v_res, &serv, &file, flags, mode](){
+                        v_res[i] = serv->nfi_open(file.m_path, flags, mode, file.m_data_vfh[i]);
+                    });
+                }
             }
 
             m_worker->wait();
@@ -86,8 +86,9 @@ namespace XPN
             {
                 if (aux_res < 0)
                 {
+                    res = aux_res;
                     XPN_DEBUG_END_CUSTOM(path<<", "<<flags<<", "<<mode);
-                    return -1;
+                    return res;
                 }
             }
 
@@ -186,7 +187,9 @@ namespace XPN
         {
             if (file.exist_in_serv(i)){
                 m_worker->launch([i, &v_res, &file](){
-                    v_res[i] = file.m_part.m_data_serv[i]->nfi_remove(file.m_path, file.m_mdata.master_file()==static_cast<int>(i));
+                    // Always wait and not async because it can fail in other ways
+                    v_res[i] = file.m_part.m_data_serv[i]->nfi_remove(file.m_path, false);
+                    // v_res[i] = file.m_part.m_data_serv[i]->nfi_remove(file.m_path, file.m_mdata.master_file()==static_cast<int>(i));
                 });
             }
         }
@@ -241,9 +244,17 @@ namespace XPN
         for (size_t i = 0; i < file.m_part.m_data_serv.size(); i++)
         {
             if (file.exist_in_serv(i)){
-                m_worker->launch([i, &v_res, &file, &new_file](){
-                    v_res[i] = file.m_part.m_data_serv[i]->nfi_rename(file.m_path, new_file.m_path);
-                });
+                if (!new_file.exist_in_serv(i)){
+                    XPN_DEBUG("Remove in server "<<i);
+                    m_worker->launch([i, &v_res, &file, &new_file](){
+                        v_res[i] = file.m_part.m_data_serv[i]->nfi_remove(file.m_path, false);
+                    });
+                }else{
+                    XPN_DEBUG("Rename in server "<<i);
+                    m_worker->launch([i, &v_res, &file, &new_file](){
+                        v_res[i] = file.m_part.m_data_serv[i]->nfi_rename(file.m_path, new_file.m_path);
+                    });
+                }
             }
         }
         

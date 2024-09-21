@@ -70,6 +70,7 @@ namespace XPN
         void map_offset(int block_size, int replication_level, int nserv, int64_t offset, int replication, int first_node, int64_t &local_offset, int &serv);
         void map_offset_mdata(int64_t offset, int replication, int64_t &local_offset, int &serv);
         int  initialize_vfh(int index);
+        int  initialize_vfh_dir(int index);
 
     public:
         std::string m_path;                 // absolute path
