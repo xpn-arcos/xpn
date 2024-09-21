@@ -71,6 +71,14 @@ namespace XPN
     {
     public:
         xpn_api() { init(); }
+        // Delete copy constructor
+        xpn_api(const xpn_api&) = delete;
+        // Delete copy assignment operator
+        xpn_api& operator=(const xpn_api&) = delete;
+        // Delete move constructor
+        xpn_api(xpn_api&&) = delete;
+        // Delete move assignment operator
+        xpn_api& operator=(xpn_api&&) = delete;
         std::string check_remove_path_from_path(const std::string &path, std::string& out_path);
     public:
         static xpn_api& get_instance()

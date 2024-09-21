@@ -27,6 +27,14 @@ namespace XPN
     {
     public:
         xpn_env();
+        // Delete copy constructor
+        xpn_env(const xpn_env&) = delete;
+        // Delete copy assignment operator
+        xpn_env& operator=(const xpn_env&) = delete;
+        // Delete move constructor
+        xpn_env(xpn_env&&) = delete;
+        // Delete move assignment operator
+        xpn_env& operator=(xpn_env&&) = delete;
         const char * xpn_sck_port;
         const char * xpn_conf;
         int xpn_debug = 0;

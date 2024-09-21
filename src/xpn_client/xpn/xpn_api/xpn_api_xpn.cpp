@@ -54,9 +54,10 @@ namespace XPN
 
         for (const auto &part : conf.partitions)
         {
-            // xpn_partition xpn_part(part.partition_name, part.replication_level, part.bsize);
-            // auto &[key, xpn_part] = m_partitions.insert({part.partition_name, {part.partition_name, part.replication_level, part.bsize}});
-            auto[key, inserted] = m_partitions.emplace(part.partition_name, xpn_partition(part.partition_name, part.replication_level, part.bsize));
+            // Emplace without creation of temp xpn_partition
+            auto[key, inserted] = m_partitions.emplace(std::piecewise_construct,
+                                                       std::forward_as_tuple(part.partition_name),
+                                                       std::forward_as_tuple(part.partition_name, part.replication_level, part.bsize));
             if (!inserted){
                 std::cerr << "Error: cannot create xpn_partition" << std::endl;
                 std::raise(SIGTERM);

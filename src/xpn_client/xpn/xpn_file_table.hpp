@@ -31,6 +31,16 @@ namespace XPN
     class xpn_file_table
     {
     public:
+        xpn_file_table() = default;
+        // Delete copy constructor
+        xpn_file_table(const xpn_file_table&) = delete;
+        // Delete copy assignment operator
+        xpn_file_table& operator=(const xpn_file_table&) = delete;
+        // Delete move constructor
+        xpn_file_table(xpn_file_table&&) = delete;
+        // Delete move assignment operator
+        xpn_file_table& operator=(xpn_file_table&&) = delete;
+    public:
         bool has(int fd) {return m_files.find(fd) != m_files.end();}
         // It must be checked if fd is in the file_table with has(fd)
         xpn_file& get(int fd) {return *m_files.at(fd); }
