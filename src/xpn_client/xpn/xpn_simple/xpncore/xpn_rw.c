@@ -559,6 +559,8 @@ cleanup_xpn_pwrite:
 off_t xpn_simple_lseek ( int fd, off_t offset, int flag )
 {
   struct stat st;
+  int res = 0;
+  XPN_DEBUG_BEGIN_CUSTOM("%d, %lld, %d", fd, (long long int)offset, flag);
 
   switch (flag)
   {
@@ -605,7 +607,9 @@ off_t xpn_simple_lseek ( int fd, off_t offset, int flag )
          return (off_t)-1;
   }
 
-  return xpn_file_table[fd]->offset;
+  res = xpn_file_table[fd]->offset;
+  XPN_DEBUG_END_CUSTOM("%d, %lld, %d", fd, (long long int)offset, flag);
+  return res;
 }
 
 

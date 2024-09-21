@@ -58,10 +58,10 @@
   #define XPN_PROFILER_WRITE_CUSTOM(start_time, elapsed_time, format, ...) \
     if (xpn_profiler) { \
       if (xpn_profiler_fd >= 0) { \
-        char xpn_profiler_aux_buff[2048]; \
-        char xpn_profiler_aux_buff2[1024]; \
-        snprintf(xpn_profiler_aux_buff2, 1024, format, ## __VA_ARGS__); \
-        snprintf(xpn_profiler_aux_buff, 2048, ",{" \
+        char xpn_profiler_aux_buff[PATH_MAX*2]; \
+        char xpn_profiler_aux_buff2[PATH_MAX]; \
+        snprintf(xpn_profiler_aux_buff2, PATH_MAX, format, ## __VA_ARGS__); \
+        snprintf(xpn_profiler_aux_buff, PATH_MAX*2, ",{" \
         "\"cat\":\"function\"," \
         "\"dur\":%ld," \
         "\"name\":\"%s(%s)\"," \
