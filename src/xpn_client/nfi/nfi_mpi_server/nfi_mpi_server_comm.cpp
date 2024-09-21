@@ -186,7 +186,6 @@ nfi_xpn_server_comm* nfi_mpi_server_control_comm::connect(const std::string &srv
         MPI_Error_string(ret, err_buffer, &resultlen);
 
         if (MPI_SUCCESS != errclass) {
-            XPN_DEBUG("%s", err_buffer);
             if (connect_retries == 0) {
                 printf("----------------------------------------------------------------\n");
                 printf("XPN Client %s : Waiting for servers being up and runing...\n", ns::get_host_name().c_str());

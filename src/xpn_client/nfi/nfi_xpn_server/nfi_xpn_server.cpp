@@ -20,7 +20,7 @@
  */
 #include "nfi_xpn_server.hpp"
 #include "xpn/xpn_file.hpp"
-#include "base/debug_msg.h"
+#include "base_c/debug_msg.h"
 #include "base_cpp/xpn_env.hpp"
 #include "xpn_server/xpn_server_ops.hpp"
 

@@ -27,10 +27,10 @@
 #include <sys/stat.h>
 #include <sys/statvfs.h>
 
-#include <xpn/xpn_partition.hpp>
-#include <xpn/xpn_file_table.hpp>
-#include <base_cpp/debug.hpp>
-#include <base_cpp/workers.hpp>
+#include "xpn/xpn_partition.hpp"
+#include "xpn/xpn_file_table.hpp"
+#include "base_cpp/debug.hpp"
+#include "base_cpp/workers.hpp"
 
 #ifdef _REENTRANT
 
@@ -58,6 +58,9 @@
 #endif
 #ifndef O_TRUNC
 #define O_TRUNC           01000
+#endif    
+#ifndef O_APPEND
+#define O_APPEND          02000
 #endif
 #ifndef O_DIRECTORY
 #define O_DIRECTORY    00200000

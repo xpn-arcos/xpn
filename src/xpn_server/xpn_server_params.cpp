@@ -23,7 +23,7 @@
 
 #include "xpn_server_params.hpp"
 
-#include "base/ns.h"
+#include "base_c/debug_msg.h"
 #include "base_cpp/workers.hpp"
 
 namespace XPN {

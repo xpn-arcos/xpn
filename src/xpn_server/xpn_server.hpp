@@ -24,7 +24,6 @@
 #include "xpn_server_params.hpp"
 #include "xpn_server_comm.hpp"
 #include "xpn_server_ops.hpp"
-#include "base/workers.h"
 #include "base_cpp/workers.hpp"
 
 

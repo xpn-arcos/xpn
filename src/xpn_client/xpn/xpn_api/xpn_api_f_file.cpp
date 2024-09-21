@@ -26,16 +26,64 @@ namespace XPN
 
     FILE *xpn_api::fopen(const char *filename, const char *mode)
     {
-        XPN_DEBUG_BEGIN;
+        XPN_DEBUG_BEGIN_CUSTOM(filename<<", "<<mode);
         int res = 0;
-        XPN_DEBUG_END;
-        return nullptr;
+        FILE *stream = NULL;
+        int flags = -1;
+
+        if (strstr(mode, "r+") != NULL){
+            flags = O_RDWR;
+        }
+        else if (strstr(mode, "r") != NULL){
+            flags = O_RDONLY;
+        }
+        else if (strstr(mode, "w+") != NULL){
+            flags = O_RDWR | O_CREAT | O_TRUNC;
+        }
+        else if (strstr(mode, "w") != NULL){
+            flags = O_WRONLY | O_CREAT | O_TRUNC;
+        }
+        else if (strstr(mode, "a+") != NULL){
+            flags = O_RDWR | O_CREAT | O_APPEND;
+        }
+        else if (strstr(mode, "a") != NULL){
+            flags = O_WRONLY | O_CREAT | O_APPEND;
+        }
+
+        if (flags >= 0)
+        {
+            res = open(filename, flags, 07000);
+            if (res >= 0)
+            {
+                stream = new FILE;
+                memset(stream, 0, sizeof(FILE));
+                stream->_fileno = res;
+            }
+        }
+        XPN_DEBUG_END_CUSTOM(filename<<", "<<mode);
+        return stream;
     }
 
     int xpn_api::fclose(FILE *stream)
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
+        
+        if (stream != NULL)
+        {
+            fflush(stream);
+
+            res = close(stream->_fileno);
+            if (stream->_IO_buf_base != NULL) {
+                stream->_IO_buf_base = NULL;
+            }
+            free(stream);
+        }
+        else
+        {
+            res = EOF;
+            errno = EBADF;
+        }
         XPN_DEBUG_END;
         return res;
     }
@@ -43,7 +91,8 @@ namespace XPN
     size_t xpn_api::fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
     {
         XPN_DEBUG_BEGIN;
-        int res = 0;
+        size_t res = 0;
+        res = read(stream->_fileno, ptr, size*nmemb);
         XPN_DEBUG_END;
         return res;
     }
@@ -51,7 +100,8 @@ namespace XPN
     size_t xpn_api::fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)
     {
         XPN_DEBUG_BEGIN;
-        int res = 0;
+        size_t res = 0;
+        res = write(stream->_fileno, ptr, size*nmemb);
         XPN_DEBUG_END;
         return res;
     }
@@ -59,20 +109,24 @@ namespace XPN
     int xpn_api::fseek(FILE *stream, long offset, int whence)
     {
         XPN_DEBUG_BEGIN;
-        int res = 0;
+        off_t res;
+        res = lseek(stream->_fileno, offset, whence);
         XPN_DEBUG_END;
-        return res;
+        return static_cast<int>(res);
     }
 
     long xpn_api::ftell(FILE *stream)
     {
         XPN_DEBUG_BEGIN;
-        int res = 0;
+        long res = 0;
+        if (m_file_table.has(stream->_fileno)){
+            res = m_file_table.get(stream->_fileno).m_offset;
+        }
         XPN_DEBUG_END;
         return res;
     }
 
-    int xpn_api::fflush(FILE *stream)
+    int xpn_api::fflush([[maybe_unused]] FILE *stream)
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
@@ -83,23 +137,28 @@ namespace XPN
     int xpn_api::fgetc(FILE *stream)
     {
         XPN_DEBUG_BEGIN;
-        int res = 0;
+        unsigned char res;
+        read(stream->_fileno, &res, 1*sizeof(unsigned char));
         XPN_DEBUG_END;
-        return res;
+        return (int)res;
     }
 
     char *xpn_api::fgets(char *s, int tam, FILE *stream)
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
+        memset(s, 0, tam*sizeof(char));
+
+        fread(s, sizeof(char), tam-1, stream);
+
         XPN_DEBUG_END;
-        return nullptr;
+        return s;
     }
 
     int xpn_api::getc(FILE *stream)
     {
         XPN_DEBUG_BEGIN;
-        int res = 0;
+        int res = fgetc(stream);
         XPN_DEBUG_END;
         return res;
     }
@@ -108,6 +167,7 @@ namespace XPN
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
+        lseek(stream->_fileno, 0, SEEK_SET);
         XPN_DEBUG_END;
         return;
     }
@@ -115,15 +175,16 @@ namespace XPN
     int xpn_api::fileno(FILE *stream)
     {
         XPN_DEBUG_BEGIN;
-        int res = 0;
+        int res = stream->_fileno;
         XPN_DEBUG_END;
         return res;
     }
 
-    int xpn_api::ferror(FILE *stream)
+    int xpn_api::ferror([[maybe_unused]] FILE *stream)
     {
         XPN_DEBUG_BEGIN;
-        int res = 0;
+        int res = errno;
+        // TODO: update errno or xpn_errno?
         XPN_DEBUG_END;
         return res;
     }

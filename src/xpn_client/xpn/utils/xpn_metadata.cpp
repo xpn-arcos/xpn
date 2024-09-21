@@ -19,10 +19,10 @@
  *
  */
 
-#include "xpn_metadata.hpp"
+#include "xpn/xpn_metadata.hpp"
+#include "xpn/xpn_file.hpp"
 
 #include "base_cpp/debug.hpp"
-#include "xpn_file.hpp"
 #include <iostream>
 #include <string>
 

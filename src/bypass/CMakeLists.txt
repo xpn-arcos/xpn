@@ -3,7 +3,7 @@ add_library(xpn_bypass SHARED "xpn_bypass.c")
 set_target_properties(xpn_bypass PROPERTIES LINKER_LANGUAGE C)
 set_target_properties(xpn_bypass PROPERTIES PREFIX "")
 
-target_link_libraries(xpn_bypass PRIVATE -Wl,--whole-archive xpn_base xpn_base_cpp xpn -Wl,--no-whole-archive pthread dl )
+target_link_libraries(xpn_bypass PRIVATE xpn pthread dl )
 
 target_compile_options(xpn_bypass PRIVATE
     "-DNOT_TO_USE_FCNTL_H"
@@ -16,9 +16,7 @@ target_compile_options(xpn_bypass PRIVATE
 )
 
 target_include_directories(xpn_bypass PRIVATE 
-    "${PROJECT_SOURCE_DIR}/include"
-	"${PROJECT_SOURCE_DIR}/include/bypass"
-	"${PROJECT_SOURCE_DIR}/include/xpn_client"
+    "${PROJECT_SOURCE_DIR}/src"
 )
 
 install(TARGETS xpn_bypass LIBRARY DESTINATION lib)

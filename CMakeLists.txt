@@ -23,18 +23,13 @@ unset(ENABLE_MPI_SERVER CACHE)
 
 link_libraries("pthread" "dl")
 
-add_subdirectory(src/base)
-add_subdirectory(src/bypass)
-add_compile_options("-fpermissive")
+add_subdirectory(src/base_c)
 add_subdirectory(src/base_cpp)
+add_subdirectory(src/bypass)
 add_subdirectory(src/xpn_client)
 add_subdirectory(src/xpn_server)
 # add_subdirectory(src/utils)
 
-
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.h")
 
 install(CODE "
     message(STATUS \"Create_symlink: from \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib to \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib64\")

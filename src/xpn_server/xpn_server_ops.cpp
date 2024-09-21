@@ -231,7 +231,7 @@ cleanup_xpn_server_op_read:
   }
 
   // free buffer
-  FREE_AND_NULL(buffer);
+  if (buffer != NULL) free(buffer);
 
   debug_info("[Server=%s] [XPN_SERVER_OPS] [xpn_server_op_read] read(%s, %ld %ld)=%ld\n", m_params.srv_name, head.path, head.offset, head.size, cont);
   debug_info("[Server=%s] [XPN_SERVER_OPS] [xpn_server_op_read] << End\n", m_params.srv_name);
@@ -322,8 +322,8 @@ cleanup_xpn_server_op_write:
     filesystem_close(fd);
   }
 
-  // free buffer
-  FREE_AND_NULL(buffer);
+  // free buffer  
+  if (buffer != NULL) free(buffer);
 
   debug_info("[Server=%s] [XPN_SERVER_OPS] [xpn_server_op_write] write(%s, %ld %ld)=%d\n", m_params.srv_name, head.path, head.offset, head.size, cont);
   debug_info("[Server=%s] [XPN_SERVER_OPS] [xpn_server_op_write] << End\n", m_params.srv_name);

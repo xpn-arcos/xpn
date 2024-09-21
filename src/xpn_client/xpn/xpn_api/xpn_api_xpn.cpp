@@ -19,7 +19,7 @@
  *
  */
 
-#include "base/profiler.h"
+#include "base_c/profiler.h"
 #include "base_cpp/debug.hpp"
 #include "xpn/xpn_api.hpp"
 #include "base_cpp/xpn_env.hpp"

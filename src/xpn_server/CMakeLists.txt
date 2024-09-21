@@ -1,9 +1,5 @@
-file(GLOB XPN_SERVER_HEADERS 
-    "${PROJECT_SOURCE_DIR}/include/xpn_server/*.h"
-    "${PROJECT_SOURCE_DIR}/include/xpn_server/*.hpp"
-    "${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server/*.h"
-    "${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server/*.hpp"
-    "${PROJECT_SOURCE_DIR}/include/xpn_server/sck_server/*.h"
+file(GLOB_RECURSE XPN_SERVER_HEADERS 
+    "*.hpp"
 )
 file(GLOB_RECURSE XPN_SERVER_SOURCE 
     "*.cpp"
@@ -14,25 +10,11 @@ add_executable(xpn_server ${XPN_SERVER_SOURCE})
 
 set_target_properties(xpn_server PROPERTIES LINKER_LANGUAGE CXX)
 
-target_link_libraries(xpn_server PRIVATE xpn_base xpn_base_cpp)
-
-target_compile_options(xpn_server PRIVATE 
-"-DHAVE_STRING_H"
-"-DHAVE_FCNTL_H"
-"-DHAVE_UNISTD_H"
-"-DHAVE_NETINET_IN_H"
-"-DHAVE_NETINET_TCP_H"
-)
+target_link_libraries(xpn_server PRIVATE xpn_base_c xpn_base_cpp)
 
 target_include_directories(xpn_server PRIVATE
     "${PROJECT_SOURCE_DIR}/src"
     "${PROJECT_SOURCE_DIR}/src/xpn_client"
-	"${PROJECT_SOURCE_DIR}/include"
-	"${PROJECT_SOURCE_DIR}/include/xpn_server"
-	"${PROJECT_SOURCE_DIR}/include/xpn_server/mpi_server"
-	"${PROJECT_SOURCE_DIR}/include/xpn_server/sck_server"
-	"${PROJECT_SOURCE_DIR}/include/xpn_client/xpn/xpn_simple"
-	"${PROJECT_SOURCE_DIR}/include/xpn_client/nfi"
 )
 
 add_custom_command(

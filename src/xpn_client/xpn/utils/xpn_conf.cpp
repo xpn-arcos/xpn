@@ -19,7 +19,7 @@
  *
  */
 
-#include "xpn_conf.hpp"
+#include "xpn/xpn_conf.hpp"
 #include "base_cpp/xpn_env.hpp"
 #include "base_cpp/debug.hpp"
 

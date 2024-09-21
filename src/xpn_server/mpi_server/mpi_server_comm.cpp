@@ -19,7 +19,7 @@
  *
  */
 #include "mpi_server_comm.hpp"
-#include "base/debug_msg.h"
+#include "base_c/debug_msg.h"
 #include "base_cpp/timer.hpp"
 
 namespace XPN

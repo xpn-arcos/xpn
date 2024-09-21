@@ -38,8 +38,8 @@
 namespace XPN
 {
   constexpr const int KB = 1024;
-  constexpr const int MB = (1*KB);
-  constexpr const int GB = (1*MB);
+  constexpr const int MB = (KB*KB);
+  constexpr const int GB = (KB*MB);
   constexpr const int MAX_BUFFER_SIZE = (1*MB);
 
   #ifdef MPI_MAX_PORT_NAME
