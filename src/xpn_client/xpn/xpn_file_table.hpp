@@ -32,6 +32,7 @@ namespace XPN
     {
     public:
         xpn_file_table() = default;
+        ~xpn_file_table();
         // Delete copy constructor
         xpn_file_table(const xpn_file_table&) = delete;
         // Delete copy assignment operator

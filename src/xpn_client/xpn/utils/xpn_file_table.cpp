@@ -24,6 +24,14 @@
 
 namespace XPN
 {
+    xpn_file_table::~xpn_file_table()
+    {   
+        for (auto [key,file] : m_files)
+        {
+            remove(key);
+        }
+    }
+
     int xpn_file_table::insert(const xpn_file& file)
     {
         int fd;
