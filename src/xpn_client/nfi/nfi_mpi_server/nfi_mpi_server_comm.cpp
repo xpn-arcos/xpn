@@ -205,7 +205,7 @@ nfi_xpn_server_comm* nfi_mpi_server_control_comm::connect(const std::string &srv
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] << End\n");
 
     // Return OK
-    return new nfi_mpi_server_comm(out_comm, m_rank, m_size);
+    return new (std::nothrow) nfi_mpi_server_comm(out_comm, m_rank, m_size);
 }
 
 void nfi_mpi_server_control_comm::disconnect(nfi_xpn_server_comm *comm) {

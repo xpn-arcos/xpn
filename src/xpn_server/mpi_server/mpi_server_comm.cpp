@@ -146,8 +146,8 @@ xpn_server_comm* mpi_server_control_comm::accept ( )
   }
 
   debug_info("[Server=%d] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_accept] << End\n", 0);
-
-  return new mpi_server_comm(comm);
+  
+  return new (std::nothrow) mpi_server_comm(comm);
 }
 
 void mpi_server_control_comm::disconnect ( xpn_server_comm *comm )

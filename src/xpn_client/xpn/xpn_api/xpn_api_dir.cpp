@@ -56,7 +56,7 @@ namespace XPN
             return NULL;
         }
 
-        dirp = new DIR;
+        dirp = new (std::nothrow) DIR;
         if (dirp == nullptr)
         {
             XPN_DEBUG_END_CUSTOM(path);
@@ -115,6 +115,9 @@ namespace XPN
         file.initialize_vfh_dir(master_dir);
 
         struct ::dirent * entry = new dirent;
+        if (entry == nullptr){
+            return nullptr;
+        }
         m_worker->launch([&res, master_dir, &file, entry](){
             res = file.m_part.m_data_serv[master_dir]->nfi_readdir(file.m_data_vfh[master_dir], *entry);
         });

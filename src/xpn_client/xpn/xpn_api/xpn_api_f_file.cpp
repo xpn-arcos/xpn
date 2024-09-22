@@ -55,7 +55,10 @@ namespace XPN
             res = open(filename, flags, 07000);
             if (res >= 0)
             {
-                stream = new FILE;
+                stream = new (std::nothrow) FILE;
+                if (stream == nullptr){
+                    return nullptr;
+                }
                 memset(stream, 0, sizeof(FILE));
                 stream->_fileno = res;
             }

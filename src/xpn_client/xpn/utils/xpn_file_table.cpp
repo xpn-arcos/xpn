@@ -41,7 +41,11 @@ namespace XPN
             fd = m_free_keys.front();
             m_free_keys.pop();
         }
-        auto pair = std::make_pair(fd, new xpn_file(file));
+        auto file_ptr = new (std::nothrow) xpn_file(file);
+        if (file_ptr == nullptr){
+            return -1;
+        }
+        auto pair = std::make_pair(fd, file_ptr);
         pair.second->m_links++;
         m_files.insert(pair);
         return fd;
