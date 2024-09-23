@@ -18,6 +18,7 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include "nfi_xpn_server.hpp"
 #include "xpn/xpn_file.hpp"
 #include "base_c/debug_msg.h"
@@ -26,57 +27,6 @@
 
 namespace XPN
 {
-
-template<typename msg_struct>
-int nfi_xpn_server::nfi_write_operation( int op, msg_struct &msg )
-{
-  int ret;
-
-  debug_info("[NFI_XPN] [nfi_write_operation] >> Begin\n");
-
-  debug_info("[NFI_XPN] [nfi_write_operation] Send operation\n");
-
-  ret = m_comm->write_operation(op);
-  if (ret < 0)
-  {
-    printf("[NFI_XPN] [nfi_write_operation] ERROR: nfi_write_operation fails\n");
-    return -1;
-  }
-
-  debug_info("[NFI_XPN] [nfi_write_operation] Execute operation: %d -> \n", op);
-  ret = m_comm->write_data((void *)&(msg), sizeof(msg));
-
-  debug_info("[NFI_XPN] [nfi_write_operation] >> End\n");
-
-  return ret;
-}
-
-template<typename msg_struct, typename req_struct>
-int nfi_xpn_server::nfi_do_request ( int op, msg_struct &msg, req_struct &req )
-{
-  ssize_t ret;
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_do_request] >> Begin\n", 0);
-
-  // send request...
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_do_request] Send operation: %d\n", 0, op);
-
-  ret = nfi_write_operation(op, msg);
-  if (ret < 0) {
-    return -1;
-  }
-
-  // read response...
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_do_request] Response operation: %d\n", 0, op);
-
-  ret = m_comm->read_data((void *)&(req), sizeof(req));
-  if (ret < 0) {
-    return -1;
-  }
-
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_do_request] >> End\n", 0);
-
-  return 0;
-}
 
 // File API
 int nfi_xpn_server::nfi_open (const std::string &path, int flags, mode_t mode, xpn_fh &fho)
@@ -89,7 +39,7 @@ int nfi_xpn_server::nfi_open (const std::string &path, int flags, mode_t mode, x
 
   fho.path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", m_server.c_str(), fho.path);
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", m_server.c_str(), fho.path.c_str());
 
   std::size_t length = fho.path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -100,11 +50,11 @@ int nfi_xpn_server::nfi_open (const std::string &path, int flags, mode_t mode, x
   ret = nfi_do_request(XPN_SERVER_OPEN_FILE, msg, status);
   if (status.ret < 0 || ret < 0){ 
     errno = status.server_errno;
-    debug_error("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] ERROR: remote open fails to open '%s'.\n", m_server.c_str(), fho.path);
+    debug_error("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] ERROR: remote open fails to open '%s'.\n", m_server.c_str(), fho.path.c_str());
     return -1;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", m_server.c_str(), fho.path);
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", m_server.c_str(), fho.path.c_str());
   
   fho.fd = status.ret;
 
@@ -332,7 +282,7 @@ int nfi_xpn_server::nfi_remove (const std::string &path, bool is_async)
 
   std::string srv_path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove(%s)\n", m_server.c_str(), srv_path);
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove(%s, %d)\n", m_server.c_str(), srv_path.c_str(), is_async);
 
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -348,7 +298,7 @@ int nfi_xpn_server::nfi_remove (const std::string &path, bool is_async)
     ret = req.ret;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove(%s)=%d\n", m_server.c_str(), srv_path, ret);
+  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove(%s)=%d\n", m_server.c_str(), srv_path.c_str(), ret);
   debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_remove] >> End\n", m_server.c_str());
 
   return ret;

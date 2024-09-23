@@ -38,9 +38,7 @@ namespace XPN
 
             auto& server = m_data_serv.emplace_back(nfi_server::Create(url));
 
-            if (server->m_server == ns::get_host_name() ||
-                server->m_server == ns::get_host_ip())
-            {
+            if(nfi_server::is_local_server(server->m_server)){
                 m_local_serv = index;
             }
 

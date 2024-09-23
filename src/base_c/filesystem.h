@@ -72,29 +72,29 @@
   //int             filesystem_init     ( void );
   //int             filesystem_destroy  ( void );
 
-    int             filesystem_creat    ( char *pathname, mode_t mode );
-    int             filesystem_open     ( char *pathname, int flags );
-    int             filesystem_open2    ( char *pathname, int flags, mode_t mode );
+    int             filesystem_creat    ( const char *pathname, mode_t mode );
+    int             filesystem_open     ( const char *pathname, int flags );
+    int             filesystem_open2    ( const char *pathname, int flags, mode_t mode );
     int             filesystem_close    ( int fd );
     int             filesystem_fsync    ( int fd );
 
     ssize_t         filesystem_read     ( int read_fd2,  void *buffer, size_t buffer_size );
-    ssize_t         filesystem_write    ( int write_fd2, void *buffer, size_t num_bytes_to_write );
+    ssize_t         filesystem_write    ( int write_fd2, const void *buffer, size_t num_bytes_to_write );
 
-    int             filesystem_mkdir    ( char *pathname, mode_t mode );
-    int             filesystem_rmdir    ( char *pathname );
-    int             filesystem_mkpath   ( char *pathname );
+    int             filesystem_mkdir    ( const char *pathname, mode_t mode );
+    int             filesystem_rmdir    ( const char *pathname );
+    int             filesystem_mkpath   ( const char *pathname );
 
-    DIR           * filesystem_opendir  ( char *name );
+    DIR           * filesystem_opendir  ( const char *name );
     long            filesystem_telldir  ( DIR  *dirp );
     void            filesystem_seekdir  ( DIR  *dirp, long loc );
     struct dirent * filesystem_readdir  ( DIR  *dirp );
     int             filesystem_closedir ( DIR  *dirp );
 
-    int             filesystem_rename   ( char *old_pathname, char *new_pathname );
+    int             filesystem_rename   ( const char *old_pathname, const char *new_pathname );
     off_t           filesystem_lseek    ( int fd, off_t offset, int whence );
-    int             filesystem_unlink   ( char *pathname );
-    int             filesystem_stat     ( char *pathname, struct stat *sinfo );
+    int             filesystem_unlink   ( const char *pathname );
+    int             filesystem_stat     ( const char *pathname, struct stat *sinfo );
 
     int             filesystem_statvfs  ( const char *pathname, struct statvfs *buf );
 

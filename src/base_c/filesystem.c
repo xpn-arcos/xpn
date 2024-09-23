@@ -216,7 +216,7 @@ void * filesystem_async_close(void * arg)
     pthread_exit(NULL);
 }
 
-int filesystem_creat(char * pathname, mode_t mode)
+int filesystem_creat(const char * pathname, mode_t mode)
 {
     int ret;
 
@@ -243,7 +243,7 @@ int filesystem_creat(char * pathname, mode_t mode)
     return ret;
 }
 
-int filesystem_open(char * pathname, int flags)
+int filesystem_open(const char * pathname, int flags)
 {
     int ret;
 
@@ -267,7 +267,7 @@ int filesystem_open(char * pathname, int flags)
     return ret;
 }
 
-int filesystem_open2(char * pathname, int flags, mode_t mode)
+int filesystem_open2(const char * pathname, int flags, mode_t mode)
 {
     int ret;
 
@@ -389,11 +389,11 @@ ssize_t filesystem_read(int read_fd2, void * buffer, size_t buffer_size)
     return buffer_size;
 }
 
-ssize_t filesystem_write(int write_fd2, void * buffer, size_t num_bytes_to_write)
+ssize_t filesystem_write(int write_fd2, const void * buffer, size_t num_bytes_to_write)
 {
     ssize_t write_num_bytes = -1;
     ssize_t write_remaining_bytes = num_bytes_to_write;
-    void * write_buffer = buffer;
+    const void * write_buffer = buffer;
 
     // check arguments...
     if (NULL == buffer) {
@@ -419,7 +419,7 @@ ssize_t filesystem_write(int write_fd2, void * buffer, size_t num_bytes_to_write
     return num_bytes_to_write;
 }
 
-int filesystem_rename(char * old_pathname, char * new_pathname)
+int filesystem_rename(const char * old_pathname, const char * new_pathname)
 {
     int ret;
 
@@ -446,14 +446,17 @@ int filesystem_rename(char * old_pathname, char * new_pathname)
     return ret;
 }
 
-int filesystem_mkpath ( char * pathname )
+int filesystem_mkpath ( const char * pathname )
 {
     int ret;
     char dir[PATH_MAX];
+    char path[PATH_MAX];
 
     DEBUG_BEGIN();
 
-    for (int i = 0; aux_get_dirs(pathname, i, dir) != 0; i++) {
+    strcpy(path, pathname);
+
+    for (int i = 0; aux_get_dirs(path, i, dir) != 0; i++) {
         ret = fs_low_mkdir(dir, 0770);
         if (ret < 0) {
             debug_warning("[FILE_POSIX]: cannot mkdir(%s)\n", dir);
@@ -467,7 +470,7 @@ int filesystem_mkpath ( char * pathname )
     return 1;
 }
 
-int filesystem_mkdir ( char * pathname, mode_t mode )
+int filesystem_mkdir ( const char * pathname, mode_t mode )
 {
     int ret;
 
@@ -491,7 +494,7 @@ int filesystem_mkdir ( char * pathname, mode_t mode )
     return ret;
 }
 
-int filesystem_rmdir ( char * pathname )
+int filesystem_rmdir ( const char * pathname )
 {
     int ret;
 
@@ -515,7 +518,7 @@ int filesystem_rmdir ( char * pathname )
     return ret;
 }
 
-DIR * filesystem_opendir ( char * pathname )
+DIR * filesystem_opendir ( const char * pathname )
 {
     DIR * ret;
 
@@ -648,7 +651,7 @@ off_t filesystem_lseek ( int fd, off_t offset, int whence )
     return ret;
 }
 
-int filesystem_unlink ( char * pathname )
+int filesystem_unlink ( const char * pathname )
 {
     int ret;
 
@@ -672,7 +675,7 @@ int filesystem_unlink ( char * pathname )
     return ret;
 }
 
-int filesystem_stat ( char * pathname, struct stat * sinfo )
+int filesystem_stat ( const char * pathname, struct stat * sinfo )
 {
     int ret;
 

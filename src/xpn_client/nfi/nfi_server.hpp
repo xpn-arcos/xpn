@@ -29,12 +29,24 @@
 #include <dirent.h>
 
 #include "nfi_xpn_server_comm.hpp"
+#include "base_c/debug_msg.h"
 
 namespace XPN
 {
     // Fordward declaration
     class xpn_fh;
     class xpn_metadata;
+    
+    class nfi_parser
+    {
+    public:
+        nfi_parser(const std::string &url);
+
+        const std::string m_url;
+        std::string m_protocol; 
+        std::string m_server;   
+        std::string m_path;     
+    };
 
     class nfi_server 
     {
@@ -42,7 +54,8 @@ namespace XPN
         nfi_server(const std::string &url);
         int init_comm();
         int destroy_comm();
-
+        static bool is_local_server(const std::string &server);
+        
         static std::unique_ptr<nfi_server> Create(const std::string &url);
     public:
         std::string m_protocol; // protocol of the server: mpi_server sck_server
@@ -77,5 +90,57 @@ namespace XPN
         virtual int nfi_statvfs     (const std::string &path, struct ::statvfs &inf) = 0;
         virtual int nfi_read_mdata  (const std::string &path, xpn_metadata &mdata) = 0;
         virtual int nfi_write_mdata (const std::string &path, const xpn_metadata &mdata, bool only_file_size) = 0;
+    protected:
+    
+        template<typename msg_struct>
+        int nfi_write_operation( int op, msg_struct &msg )
+        {
+            int ret;
+
+            debug_info("[NFI_XPN] [nfi_write_operation] >> Begin\n");
+
+            debug_info("[NFI_XPN] [nfi_write_operation] Send operation\n");
+
+            ret = m_comm->write_operation(op);
+            if (ret < 0)
+            {
+                printf("[NFI_XPN] [nfi_write_operation] ERROR: nfi_write_operation fails\n");
+                return -1;
+            }
+
+            debug_info("[NFI_XPN] [nfi_write_operation] Execute operation: %d -> \n", op);
+            ret = m_comm->write_data((void *)&(msg), sizeof(msg));
+
+            debug_info("[NFI_XPN] [nfi_write_operation] >> End\n");
+
+            return ret;
+        }
+
+        template<typename msg_struct, typename req_struct>
+        int nfi_do_request ( int op, msg_struct &msg, req_struct &req )
+        {
+            ssize_t ret;
+            debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_server_do_request] >> Begin\n", 0);
+
+            // send request...
+            debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_server_do_request] Send operation: %d\n", 0, op);
+
+            ret = nfi_write_operation(op, msg);
+            if (ret < 0) {
+                return -1;
+            }
+
+            // read response...
+            debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_server_do_request] Response operation: %d\n", 0, op);
+
+            ret = m_comm->read_data((void *)&(req), sizeof(req));
+            if (ret < 0) {
+                return -1;
+            }
+
+            debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_server_do_request] >> End\n", 0);
+
+            return 0;
+        }
     };
 } // namespace XPN

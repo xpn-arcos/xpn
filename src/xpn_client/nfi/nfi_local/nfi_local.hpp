@@ -22,6 +22,7 @@
 #pragma once
 
 #include "nfi/nfi_server.hpp"
+#include "base_c/filesystem.h"
 
 namespace XPN
 {
@@ -29,10 +30,13 @@ namespace XPN
     class xpn_fh;
     class xpn_metadata;
 
-    class nfi_xpn_server : public nfi_server
+    class nfi_local : public nfi_server
     {
     public:
-        nfi_xpn_server(const std::string &url) : nfi_server(url) {}
+        nfi_local(const std::string &url) : nfi_server(url) 
+        {
+            filesystem_low_set(RTLD_NEXT);
+        }
     public:
         // Operations 
         int nfi_open        (const std::string &path, int flags, mode_t mode, xpn_fh &fho) override;

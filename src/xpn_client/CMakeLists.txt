@@ -10,7 +10,7 @@ file(GLOB XPN_SOURCE
 	"*.cpp"
 )
 
-add_library(xpn ${XPN_HEADERS} ${XPN_SOURCE})
+add_library(xpn STATIC ${XPN_HEADERS} ${XPN_SOURCE})
 target_link_libraries(xpn xpn_base_c xpn_base_cpp xpn_core xpn_nfi)
 
 add_library(xpn_shared SHARED $<TARGET_OBJECTS:xpn>)

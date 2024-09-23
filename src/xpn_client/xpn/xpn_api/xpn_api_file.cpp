@@ -104,7 +104,12 @@ namespace XPN
             m_worker->wait();
         }
 
-        file.m_type = file_type::file;
+        
+        if ((O_DIRECTORY == (flags & O_DIRECTORY))){
+            file.m_type = file_type::dir;
+        }else{
+            file.m_type = file_type::file;
+        }
         file.m_flags = flags;
         file.m_mode = mode;
         res = m_file_table.insert(file);
@@ -196,6 +201,7 @@ namespace XPN
         
         m_worker->wait();
 
+        res = 0;
         for (auto &aux_res : v_res)
         {
             if (aux_res < 0){

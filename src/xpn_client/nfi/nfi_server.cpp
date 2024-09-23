@@ -19,30 +19,20 @@
  *
  */
 
+#include "base_c/debug_msg.h"
 #include "base_cpp/debug.hpp"
+#include "base_cpp/ns.hpp"
 #include "nfi_server.hpp"
 #include "xpn/xpn_api.hpp"
 #include "nfi/nfi_xpn_server/nfi_xpn_server.hpp"
+#include "nfi/nfi_local/nfi_local.hpp"
 
 #include <iostream>
 #include <csignal>
 
 namespace XPN
 {
-    std::unique_ptr<nfi_server> nfi_server::Create(const std::string &url)
-    {
-        if (url.find(server_protocols::mpi_server) == 0 ||
-            url.find(server_protocols::sck_server) == 0){
-                return std::make_unique<nfi_xpn_server>(url);
-            }
-        // if (url.find(server_protocols::file) == 0){
-        //         return std::make_unique<nfi_local>(url);
-        //     }
-        
-        std::cerr << "Error: server protocol '"<< url << "' is not defined." << std::endl;
-        return nullptr;
-    }
-    nfi_server::nfi_server(const std::string &url) : m_url(url)
+    nfi_parser::nfi_parser(const std::string &url) : m_url(url)
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
@@ -81,6 +71,30 @@ namespace XPN
         XPN_DEBUG_END;
     }
 
+    std::unique_ptr<nfi_server> nfi_server::Create(const std::string &url)
+    {
+        nfi_parser parser(url);
+        if (url.find(server_protocols::file) == 0 ||
+            (xpn_env::get_instance().xpn_locality == 1 && is_local_server(parser.m_server))){
+                return std::make_unique<nfi_local>(url);
+            }
+        if (url.find(server_protocols::mpi_server) == 0 ||
+            url.find(server_protocols::sck_server) == 0){
+                return std::make_unique<nfi_xpn_server>(url);
+            }
+        
+        std::cerr << "Error: server protocol '"<< url << "' is not defined." << std::endl;
+        return nullptr;
+    }
+
+    nfi_server::nfi_server(const std::string &url) : m_url(url)
+    {
+        nfi_parser parser(url);
+        m_protocol = parser.m_protocol;
+        m_server = parser.m_server;
+        m_path = parser.m_path;
+    }
+
     int nfi_server::init_comm()
     {
         XPN_DEBUG_BEGIN;
@@ -114,4 +128,9 @@ namespace XPN
         return res;
     }
 
+    bool nfi_server::is_local_server(const std::string &server)
+    {
+        return (server == ns::get_host_name() ||
+                server == ns::get_host_ip());
+    }
 } // namespace XPN
