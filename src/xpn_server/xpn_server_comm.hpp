@@ -48,6 +48,6 @@ namespace XPN
 
     static std::unique_ptr<xpn_server_control_comm> Create(xpn_server_params &params);
   public:
-    char m_port_name[MAX_PORT_NAME];
+    std::string m_port_name = std::string(MAX_PORT_NAME, '\0');
   };
 }

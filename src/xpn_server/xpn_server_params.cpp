@@ -58,7 +58,7 @@ void xpn_server_params::show() {
     // * shutdown_file
     printf(" |\t-f  <path>:\t'%s'\n", shutdown_file.c_str());
     // * host
-    printf(" |\t-h  <host>:\t'%s'\n", srv_name);
+    printf(" |\t-h  <host>:\t'%s'\n", srv_name.c_str());
     // * await
     if (await_stop == 1) {
         printf(" |\t-w  await true\n");
@@ -80,12 +80,12 @@ void xpn_server_params::show_usage() {
     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show_usage] << End\n", -1);
 }
 
-xpn_server_params::xpn_server_params(int argc, char *argv[]) {
+xpn_server_params::xpn_server_params(int _argc, char *_argv[]) {
     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] >> Begin\n", params->rank);
 
     // set default values
-    argc = argc;
-    argv = argv;
+    argc = _argc;
+    argv = _argv;
     size = 0;
     rank = 0;
     thread_mode_connections = workers_mode::sequential;
@@ -95,8 +95,8 @@ xpn_server_params::xpn_server_params(int argc, char *argv[]) {
     server_type = XPN_SERVER_TYPE_MPI;
 #endif
     await_stop = 0;
-    strcpy(port_name, "");
-    strcpy(srv_name, "");
+    port_name = "";
+    srv_name = "";
 
     // update user requests
     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] Get user configuration\n", rank);
@@ -156,7 +156,7 @@ xpn_server_params::xpn_server_params(int argc, char *argv[]) {
                         break;
 
                     case 'h':
-                        strcpy(srv_name, argv[i + 1]);
+                        srv_name = argv[i + 1];
                         break;
                     case 'w':
                         await_stop = 1;

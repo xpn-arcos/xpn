@@ -30,6 +30,10 @@
   #include <ctype.h>
   #include "base_cpp/workers.hpp"
 
+  #if defined(ENABLE_MPI_SERVER)
+  #include "mpi.h"
+  #endif
+
   /* ... Const / Const ................................................. */
 
   #define XPN_SERVER_TYPE_MPI 0
@@ -57,8 +61,8 @@ namespace XPN
     int  size;
     int  rank;
 
-    char port_name[MAX_PORT_NAME] = {0};
-    char srv_name [MAX_PORT_NAME] = {0};
+    std::string port_name;
+    std::string srv_name;
 
     // server configuration
     std::string shutdown_file;
@@ -78,6 +82,16 @@ namespace XPN
 
   public:
     xpn_server_params(int argc, char *argv[]);
+    // Delete default constructors
+    xpn_server_params() = delete;
+    // Delete copy constructor
+    xpn_server_params(const xpn_server_params&) = delete;
+    // Delete copy assignment operator
+    xpn_server_params& operator=(const xpn_server_params&) = delete;
+    // Delete move constructor
+    xpn_server_params(xpn_server_params&&) = delete;
+    // Delete move assignment operator
+    xpn_server_params& operator=(xpn_server_params&&) = delete;
 
     void show_usage();
     void show();

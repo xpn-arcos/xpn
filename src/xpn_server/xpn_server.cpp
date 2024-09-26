@@ -135,13 +135,13 @@ int xpn_server::run()
     // * Workers initialization
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers initialization\n", 0);
 
-    m_worker1 = workers::Create(static_cast<workers_mode>(m_params.thread_mode_connections));
+    m_worker1 = workers::Create(m_params.thread_mode_connections);
     if (m_worker1 == nullptr) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;
     }
 
-    m_worker2 = workers::Create(static_cast<workers_mode>(m_params.thread_mode_operations));
+    m_worker2 = workers::Create(m_params.thread_mode_operations);
     if (m_worker2 == nullptr) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;
@@ -168,7 +168,7 @@ int xpn_server::run()
         switch (recv_code)
         {
             case socket::ACCEPT_CODE:
-                socket::send(connection_socket, m_control_comm->m_port_name, MAX_PORT_NAME);
+                socket::send(connection_socket, m_control_comm->m_port_name.data(), MAX_PORT_NAME);
                 accept();
                 break;
 

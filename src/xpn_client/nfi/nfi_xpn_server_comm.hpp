@@ -51,7 +51,5 @@ namespace XPN
         virtual void disconnect(nfi_xpn_server_comm *comm) = 0;
 
         static std::unique_ptr<nfi_xpn_server_control_comm> Create(const std::string& server_protocol);
-    public:
-        char m_port_name[MAX_PORT_NAME];
     };
 } // namespace XPN
