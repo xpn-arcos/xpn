@@ -209,7 +209,7 @@ void * filesystem_async_close(void * arg)
     // Try to close file
     int ret = fs_low_close((int)(long) arg);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: async_close(fd:%d) -> %d\n", (int)(long) arg, ret);
+        debug_warning_f("[FILE_POSIX]: async_close(fd:%d) -> %d\n", (int)(long) arg, ret);
         //perror("async_close: ") ;
     }
 
@@ -224,16 +224,16 @@ int filesystem_creat(const char * pathname, mode_t mode)
 
     // Check params
     if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: pathname is NULL\n");
     }
     if (0 == mode) {
-        debug_warning("[FILE_POSIX]: mode is zero\n");
+        debug_warning_f("[FILE_POSIX]: mode is zero\n");
     }
 
     // Try to creat the file
     ret = fs_low_creat(pathname, mode);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: open(pathname:%s, mode:%d) -> %d\n", pathname, mode, ret);
+        debug_warning_f("[FILE_POSIX]: open(pathname:%s, mode:%d) -> %d\n", pathname, mode, ret);
         //perror("open: ") ;
     }
 
@@ -251,13 +251,13 @@ int filesystem_open(const char * pathname, int flags)
 
     // Check params
     if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: pathname is NULL\n");
     }
 
     // Try to open the file
     ret = fs_low_open(pathname, flags, 0);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: open(pathname:%s, flags:%d) -> %d\n", pathname, flags, ret);
+        debug_warning_f("[FILE_POSIX]: open(pathname:%s, flags:%d) -> %d\n", pathname, flags, ret);
         //perror("open: ") ;
     }
 
@@ -275,13 +275,13 @@ int filesystem_open2(const char * pathname, int flags, mode_t mode)
 
     // Check params
     if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: pathname is NULL\n");
     }
 
     // Try to open the file
     ret = fs_low_open(pathname, flags, mode);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: open2(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret);
+        debug_warning_f("[FILE_POSIX]: open2(pathname:%s, flags:%d, mode:%d) -> %d\n", pathname, flags, mode, ret);
         //perror("open: ") ;
     }
 
@@ -299,7 +299,7 @@ int filesystem_close(int fd)
 
     // Check params
     if (fd < 0) {
-        debug_warning("[FILE_POSIX]: close file with fd < 0\n");
+        debug_warning_f("[FILE_POSIX]: close file with fd < 0\n");
     }
 
     // Try to close file
@@ -312,7 +312,7 @@ int filesystem_close(int fd)
     if (ret < 0) {
         ret = fs_low_close(fd);
         if (ret < 0) {
-            debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret);
+            debug_warning_f("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret);
             //perror("close: ") ;
         }
     }
@@ -320,7 +320,7 @@ int filesystem_close(int fd)
     #else
     ret = fs_low_close(fd);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret);
+        debug_warning_f("[FILE_POSIX]: close(fd:%d) -> %d\n", fd, ret);
         //perror("close: ") ;
     }
     #endif
@@ -339,13 +339,13 @@ int filesystem_fsync(int fd)
 
     // Check params
     if (fd < 0) {
-        debug_warning("[FILE_POSIX]: fsync file with fd < 0\n");
+        debug_warning_f("[FILE_POSIX]: fsync file with fd < 0\n");
     }
 
     // Try to fsync the file
     ret = fs_low_fsync(fd);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: fsync(fd:%d) -> %d\n", fd, ret);
+        debug_warning_f("[FILE_POSIX]: fsync(fd:%d) -> %d\n", fd, ret);
     }
 
     DEBUG_END();
@@ -362,7 +362,7 @@ ssize_t filesystem_read(int read_fd2, void * buffer, size_t buffer_size)
 
     // check arguments...
     if (NULL == buffer) {
-        debug_warning("[FILE_POSIX]: read_buffer with NULL buffer\n");
+        debug_warning_f("[FILE_POSIX]: read_buffer with NULL buffer\n");
     }
 
     while (read_remaining_bytes > 0) {
@@ -372,13 +372,13 @@ ssize_t filesystem_read(int read_fd2, void * buffer, size_t buffer_size)
         /* Check errors */
         if (read_num_bytes < 0) {
             //perror("read: ") ;
-            debug_error("[FILE_POSIX]: read fails to read data.\n");
+            debug_error_f("[FILE_POSIX]: read fails to read data.\n");
             return -1;
         }
 
         /* Check end of file */
         if (read_num_bytes == 0) {
-            debug_error("[FILE_POSIX]: end of file, readed %ld.\n", (buffer_size - read_remaining_bytes));
+            debug_error_f("[FILE_POSIX]: end of file, readed %ld.\n", (buffer_size - read_remaining_bytes));
             return (buffer_size - read_remaining_bytes);
         }
 
@@ -397,7 +397,7 @@ ssize_t filesystem_write(int write_fd2, const void * buffer, size_t num_bytes_to
 
     // check arguments...
     if (NULL == buffer) {
-        debug_warning("[FILE_POSIX]: read_buffer with NULL buffer\n");
+        debug_warning_f("[FILE_POSIX]: read_buffer with NULL buffer\n");
     }
 
     while (write_remaining_bytes > 0)
@@ -408,7 +408,7 @@ ssize_t filesystem_write(int write_fd2, const void * buffer, size_t num_bytes_to
         /* Check errors */
         if (write_num_bytes < 0) {
             //perror("write: ") ;
-            debug_error("[FILE_POSIX]: write fails to write data.\n");
+            debug_error_f("[FILE_POSIX]: write fails to write data.\n");
             return -1;
         }
 
@@ -427,16 +427,16 @@ int filesystem_rename(const char * old_pathname, const char * new_pathname)
 
     // Check params
     if (NULL == old_pathname) {
-        debug_warning("[FILE_POSIX]: old_pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: old_pathname is NULL\n");
     }
     if (NULL == new_pathname) {
-        debug_warning("[FILE_POSIX]: new_pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: new_pathname is NULL\n");
     }
 
     // Try to open the file
     ret = fs_low_rename(old_pathname, new_pathname);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: rename(old_pathname:%s, new_pathname:%s)\n", old_pathname, new_pathname);
+        debug_warning_f("[FILE_POSIX]: rename(old_pathname:%s, new_pathname:%s)\n", old_pathname, new_pathname);
         //perror("rename: ") ;
     }
 
@@ -459,7 +459,7 @@ int filesystem_mkpath ( const char * pathname )
     for (int i = 0; aux_get_dirs(path, i, dir) != 0; i++) {
         ret = fs_low_mkdir(dir, 0770);
         if (ret < 0) {
-            debug_warning("[FILE_POSIX]: cannot mkdir(%s)\n", dir);
+            debug_warning_f("[FILE_POSIX]: cannot mkdir(%s)\n", dir);
             //perror("mkdir: ") ;
         }
     }
@@ -478,13 +478,13 @@ int filesystem_mkdir ( const char * pathname, mode_t mode )
 
     // Check params
     if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: pathname is NULL\n");
     }
 
     // Try to mkdir
     ret = fs_low_mkdir(pathname, mode);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: mkdir(pathname:%s, mode:%d) -> %d\n", pathname, mode, ret);
+        debug_warning_f("[FILE_POSIX]: mkdir(pathname:%s, mode:%d) -> %d\n", pathname, mode, ret);
         //perror("mkdir: ") ;
     }
 
@@ -502,13 +502,13 @@ int filesystem_rmdir ( const char * pathname )
 
     // Check params
     if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: pathname is NULL\n");
     }
 
     // Try to rmdir
     ret = fs_low_rmdir(pathname);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: rmdir(pathname:%s) -> %d\n", pathname, ret);
+        debug_warning_f("[FILE_POSIX]: rmdir(pathname:%s) -> %d\n", pathname, ret);
         //perror("rmdir: ") ;
     }
 
@@ -526,13 +526,13 @@ DIR * filesystem_opendir ( const char * pathname )
 
     // Check params
     if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: pathname is NULL\n");
     }
 
     // Try to open the directory
     ret = fs_low_opendir(pathname);
     if (NULL == ret) {
-        debug_warning("[FILE_POSIX]: opendir(pathname:%s) -> %p\n", pathname, ret);
+        debug_warning_f("[FILE_POSIX]: opendir(pathname:%s) -> %p\n", pathname, ret);
         //perror("opendir: ") ;
     }
 
@@ -550,12 +550,12 @@ long filesystem_telldir ( DIR * dirp )
 
     // Check params
     if (NULL == dirp) {
-        debug_warning("[FILE_POSIX]: dirp is NULL\n");
+        debug_warning_f("[FILE_POSIX]: dirp is NULL\n");
     }
 
     ret = fs_low_telldir(dirp);
     if (-1 == ret) {
-        debug_warning("[FILE_POSIX]: telldir(dirp:%p) -> %ld\n", dirp, ret);
+        debug_warning_f("[FILE_POSIX]: telldir(dirp:%p) -> %ld\n", dirp, ret);
         //perror("telldir: ") ;
     }
 
@@ -571,7 +571,7 @@ void filesystem_seekdir ( DIR * dirp, long loc )
 
     // Check params
     if (NULL == dirp) {
-        debug_warning("[FILE_POSIX]: dirp is NULL\n");
+        debug_warning_f("[FILE_POSIX]: dirp is NULL\n");
     }
 
     fs_low_seekdir(dirp, loc);
@@ -587,13 +587,13 @@ struct dirent * filesystem_readdir ( DIR * dirp )
 
     // Check params
     if (NULL == dirp) {
-        debug_warning("[FILE_POSIX]: dirp is NULL\n");
+        debug_warning_f("[FILE_POSIX]: dirp is NULL\n");
     }
 
     // Try to read next entry of the directory
     ret = fs_low_readdir(dirp);
     if (NULL == ret) {
-        debug_warning("[FILE_POSIX]: readdir(dirp:%p) -> %p\n", dirp, ret);
+        debug_warning_f("[FILE_POSIX]: readdir(dirp:%p) -> %p\n", dirp, ret);
         //perror("readdir: ") ;
     }
 
@@ -611,13 +611,13 @@ int filesystem_closedir ( DIR * dirp )
 
     // Check params
     if (NULL == dirp) {
-        debug_warning("[FILE_POSIX]: dirp is NULL\n");
+        debug_warning_f("[FILE_POSIX]: dirp is NULL\n");
     }
 
     // Try to close the directory session
     ret = fs_low_closedir(dirp);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: closedir(dirp:%p) -> %p\n", dirp, ret);
+        debug_warning_f("[FILE_POSIX]: closedir(dirp:%p) -> %p\n", dirp, ret);
         //perror("closedir: ") ;
     }
 
@@ -635,13 +635,13 @@ off_t filesystem_lseek ( int fd, off_t offset, int whence )
 
     // Check params
     if (fd < 0) {
-        debug_warning("[FILE_POSIX]: fd is negative\n");
+        debug_warning_f("[FILE_POSIX]: fd is negative\n");
     }
 
     // Try to lseek the file
     ret = fs_low_lseek(fd, offset, whence);
     if (ret == (off_t) -1) {
-        debug_warning("[FILE_POSIX]: lseek(fd:%s, offset:%ld, whence:%d) -> %d\n", fd, offset, whence, ret);
+        debug_warning_f("[FILE_POSIX]: lseek(fd:%s, offset:%ld, whence:%d) -> %d\n", fd, offset, whence, ret);
         //perror("lseek: ") ;
     }
 
@@ -659,13 +659,13 @@ int filesystem_unlink ( const char * pathname )
 
     // Check params
     if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: pathname is NULL\n");
     }
 
     // Try to unlink a file
     ret = fs_low_unlink(pathname);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: unlink(pathname:%s) -> %d\n", pathname, ret);
+        debug_warning_f("[FILE_POSIX]: unlink(pathname:%s) -> %d\n", pathname, ret);
         //perror("unlink: ") ;
     }
 
@@ -683,10 +683,10 @@ int filesystem_stat ( const char * pathname, struct stat * sinfo )
 
     // Check params
     if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: pathname is NULL\n");
     }
     if (NULL == sinfo) {
-        debug_warning("[FILE_POSIX]: sinfo is NULL\n");
+        debug_warning_f("[FILE_POSIX]: sinfo is NULL\n");
     }
 
     // Try to stat the file
@@ -696,7 +696,7 @@ int filesystem_stat ( const char * pathname, struct stat * sinfo )
         ret = fs_low_stat(pathname, sinfo);
     }
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: stat(pathname:%s, sinfo:%p) -> %d\n", pathname, sinfo, ret);
+        debug_warning_f("[FILE_POSIX]: stat(pathname:%s, sinfo:%p) -> %d\n", pathname, sinfo, ret);
         //perror("stat: ") ;
     }
 
@@ -714,16 +714,16 @@ int filesystem_statvfs ( const char * pathname, struct statvfs *buf )
 
     // Check params
     if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
+        debug_warning_f("[FILE_POSIX]: pathname is NULL\n");
     }
     if (NULL == buf) {
-        debug_warning("[FILE_POSIX]: buf is NULL\n");
+        debug_warning_f("[FILE_POSIX]: buf is NULL\n");
     }
 
     // Try to unlink a file
     ret = fs_low_statvfs(pathname, buf);
     if (ret < 0) {
-        debug_warning("[FILE_POSIX]: statvfs(pathname:%s) -> %d\n", pathname, ret);
+        debug_warning_f("[FILE_POSIX]: statvfs(pathname:%s) -> %d\n", pathname, ret);
         //perror("unlink: ") ;
     }
 

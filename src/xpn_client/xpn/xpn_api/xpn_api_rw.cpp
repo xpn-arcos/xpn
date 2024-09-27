@@ -62,70 +62,48 @@ namespace XPN
             return -1;
         }
 
-        if (size > file.m_part.m_block_size){
-            res = parallel_read(file, buffer, size);
-        }else {
-            res = secuencial_read(file, buffer, size);
+        xpn_rw_buffer rw_buff(file, file.m_offset, const_cast<void*>(buffer), size);
+        rw_buff.calculate_reads();
+
+        std::vector<ssize_t> v_res(rw_buff.num_ops());
+        int index = 0;
+        for (size_t i = 0; i < rw_buff.m_ops.size(); i++)
+        {
+            for (auto &op : rw_buff.m_ops[i])
+            {
+                res = file.initialize_vfh(i);
+                if (res < 0){
+                    m_worker->wait();
+                    XPN_DEBUG_END_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
+                    return res;
+                }
+                m_worker->launch([index, i, &v_res, &file, &op](){
+                    XPN_DEBUG("Serv "<<i<<" off: "<<op.offset_serv+xpn_metadata::HEADER_SIZE<<" size: "<<op.v_buffer.size());
+                    v_res[index] = file.m_part.m_data_serv[i]->nfi_read(file.m_data_vfh[i], op.get_buffer(), op.offset_serv+xpn_metadata::HEADER_SIZE, op.get_size());
+                });
+
+                index++;
+            }
         }
+        
+        m_worker->wait();
+        
+        size_t sum = 0;
+        for (auto &aux_res : v_res)
+        {
+            if (aux_res < 0){
+                XPN_DEBUG_END_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
+                return aux_res;
+            }
+            sum += aux_res;
+        }
+
+        res = sum;
+
+        rw_buff.fix_ops_reads();
 
         XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
         return res;
-    }
-
-    ssize_t xpn_api::secuencial_read (xpn_file &file, void *buffer, size_t _size)
-    {
-        ssize_t size = static_cast<ssize_t>(_size);
-        XPN_DEBUG_BEGIN_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
-        ssize_t res = 0;
-
-        ssize_t new_offset = file.m_offset;
-        ssize_t count = 0;
-        ssize_t l_offset = 0;
-        int l_serv = 0;
-        ssize_t l_size;
-
-        do
-        {
-            xpn_rw::read_get_block(file, new_offset, l_offset, l_serv);
-
-            l_size = file.m_part.m_block_size - (new_offset%file.m_part.m_block_size);
-
-            // If l_size > the remaining bytes to read/write, then adjust l_size
-            if ((size - count) < l_size){
-                l_size = size - count;
-            }
-
-            file.initialize_vfh(l_serv);
-            m_worker->launch([&res, &file, l_serv, buffer, count, l_offset, l_size](){
-                res = file.m_part.m_data_serv[l_serv]->nfi_read(file.m_data_vfh[l_serv], (char *)buffer + count, l_offset+xpn_metadata::HEADER_SIZE, l_size);
-            });
-            m_worker->wait();
-
-            if (res < 0) {
-                count = (0 == count) ? -1 : count;
-            }else{
-                count = count + res;
-                new_offset = file.m_offset + count;
-            }
-        }
-        while((size > count) && (res > 0));
-
-        if(count > 0){
-            file.m_offset += count;
-        }
-
-        res = count;
-        XPN_DEBUG_END_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
-        return res;
-    }
-
-    ssize_t xpn_api::parallel_read   (xpn_file &file, void *buffer, size_t size)
-    {
-        XPN_DEBUG_BEGIN_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
-        int res = 0;
-        // TODO
-        XPN_DEBUG_END_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
-        return size;
     }
 
     ssize_t xpn_api::write(int fd, const void *buffer, size_t size)
@@ -164,86 +142,57 @@ namespace XPN
             XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
             return -1;
         }
-        XPN_DEBUG("Path file: "<<file.m_path);
-        if (size > file.m_part.m_block_size){
-            res = parallel_write(file, buffer, size);
-        }else {
-            res = secuencial_write(file, buffer, size);
-        }
 
-        XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
-        return res;
-    }
+        xpn_rw_buffer rw_buff(file, file.m_offset, const_cast<void*>(buffer), size);
+        rw_buff.calculate_writes();
 
-    ssize_t xpn_api::secuencial_write (xpn_file &file, const void *buffer, size_t _size)
-    {
-        ssize_t size = static_cast<ssize_t>(_size);
-        XPN_DEBUG_BEGIN_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
-        ssize_t res = 0;
-
-        ssize_t new_offset = file.m_offset;
-        ssize_t count = 0;
-        ssize_t l_offset = 0;
-        int l_serv = 0;
-        ssize_t l_size;
-        int res_aux = 0;
-
-        do
+        std::vector<ssize_t> v_res(rw_buff.num_ops());
+        int index = 0;
+        for (size_t i = 0; i < rw_buff.m_ops.size(); i++)
         {
-            for (int i = 0; i < file.m_part.m_replication_level + 1; i++)
+            for (auto &op : rw_buff.m_ops[i])
             {
-                res_aux = xpn_rw::write_get_block(file, new_offset, i, l_offset, l_serv);
-                if (res_aux != -1){        
-                    l_size = file.m_part.m_block_size - (new_offset%file.m_part.m_block_size);
-
-                    // If l_size > the remaining bytes to read/write, then adjust l_size
-                    if ((size - count) < l_size){
-                        l_size = size - count;
-                    }
-
-                    res = file.initialize_vfh(l_serv);
-                    if (res < 0){
-                        count = -1;
-                        goto cleanup_xpn_swrite;
-                    }
-                    m_worker->launch([&res, &file, l_serv, buffer, count, l_offset, l_size](){
-                        res = file.m_part.m_data_serv[l_serv]->nfi_write(file.m_data_vfh[l_serv], (char *)buffer + count, l_offset+xpn_metadata::HEADER_SIZE, l_size);
-                    });
+                res = file.initialize_vfh(i);
+                if (res < 0){
                     m_worker->wait();
-                    XPN_DEBUG("l_serv = "<<l_serv<<", l_offset = "<<l_offset<<", l_size = "<<l_size);
-                    if (res < 0) {
-                        count = (0 == count) ? -1 : count;
-                        goto cleanup_xpn_swrite;
-                    }
+                    XPN_DEBUG_END_CUSTOM(file.m_path<<", ops: "<<rw_buff.num_ops()<<", "<<rw_buff.size());
+                    return res;
                 }
+                m_worker->launch([index, i, &v_res, &file, &op](){
+                    XPN_DEBUG("Serv "<<i<<" off: "<<op.offset_serv+xpn_metadata::HEADER_SIZE<<" size: "<<op.v_buffer.size());
+                    v_res[index] = file.m_part.m_data_serv[i]->nfi_write(file.m_data_vfh[i], op.get_buffer(), op.offset_serv+xpn_metadata::HEADER_SIZE, op.get_size());
+                });
+
+                index++;
             }
-            count = count + res;
-            new_offset = file.m_offset + count;
         }
-        while((size > count) && (res > 0));
-    cleanup_xpn_swrite:
-        if(count > 0){
-            file.m_offset += count;
+        
+        m_worker->wait();
+        
+        size_t sum = 0;
+        for (auto &aux_res : v_res)
+        {
+            if (aux_res < 0){
+                XPN_DEBUG_END_CUSTOM(file.m_path<<", ops: "<<rw_buff.num_ops()<<", "<<rw_buff.size());
+                return aux_res;
+            }
+            sum += aux_res;
+        }
+
+        if (sum != rw_buff.size()){
+            res = sum / (file.m_part.m_replication_level+1);
+        }else{
+            res = static_cast<ssize_t>(rw_buff.m_size);
+            file.m_offset += res;
             // Update file_size in metadata
             if (file.m_offset > static_cast<off_t>(file.m_mdata.m_data.file_size)){
                 file.m_mdata.m_data.file_size = file.m_offset;
                 write_metadata(file.m_mdata, true);
             }
         }
-        res = count;
 
-        XPN_DEBUG_END_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
+        XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
         return res;
-    }
-
-    ssize_t xpn_api::parallel_write   (xpn_file &file, const void *buffer, size_t size)
-    {
-
-        XPN_DEBUG_BEGIN_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
-        int res = 0;
-        // TODO
-        XPN_DEBUG_END_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
-        return size;
     }
 
     off_t xpn_api::lseek(int fd, off_t offset, int flag)

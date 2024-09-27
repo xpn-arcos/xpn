@@ -39,31 +39,6 @@ namespace XPN
         distribution_policy = DISTRIBUTION_ROUND_ROBIN;
     }
 
-    std::string xpn_metadata::data::to_string(){
-        int i;
-        std::stringstream out;
-        out <<"magic_number: " << magic_number[0] << magic_number[1] << magic_number[2] << std::endl;
-        out <<"version: " << version << std::endl;
-        out <<"type: " << type << std::endl;
-        out <<"block_size: " << block_size << std::endl;
-        out <<"file_size: " << file_size << std::endl;
-        out <<"replication_level: " << replication_level << std::endl;
-        out <<"first_node: " << first_node << std::endl;
-        out <<"distribution_policy: " << distribution_policy << std::endl;
-        out <<"data_nserv: ";
-        for(i = 0; i < xpn_metadata::MAX_RECONSTURCTIONS; i++) {
-            out << data_nserv[i] << " ";
-        }
-        out << std::endl;
-
-        out <<"offsets: ";
-        for(i = 0; i < xpn_metadata::MAX_RECONSTURCTIONS; i++) {
-            out << offsets[i] << " ";
-        }
-        out << std::endl;
-        return out.str();
-    }
-
     std::string xpn_metadata::to_string(bool with_data){
         std::stringstream out;
         out << "Metadata of: " << m_file.m_path << std::endl;

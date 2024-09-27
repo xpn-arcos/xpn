@@ -23,8 +23,49 @@
 
 #include "xpn/xpn_file.hpp"
 
+#include <vector>
+
 namespace XPN
 {
+    class xpn_rw_buffer
+    {
+    public:
+        xpn_rw_buffer(xpn_file &file, int64_t offset, void *buffer, uint64_t size);
+        void calculate_reads();
+        void join_ops();
+        void fix_ops_reads();
+        void calculate_writes();
+
+        size_t num_ops();
+        size_t size();
+
+        std::string to_string();
+        
+        struct rw_buffer
+        {
+            char *buffer;
+            uint64_t size;
+            int64_t offset_serv;
+            int64_t offset_buff;
+            std::vector<char> v_buffer;
+            std::vector<char*> origin_buffer;
+            std::vector<uint64_t> origin_buffer_size;
+
+            bool was_move() { return !v_buffer.empty(); }
+            char * get_buffer() { return v_buffer.empty() ? buffer : v_buffer.data(); }
+            int64_t get_size() { return size; }
+
+            std::string to_string();
+        };
+        std::vector<std::vector<rw_buffer>> m_ops;
+
+    private:
+        xpn_file &m_file;
+        int64_t m_offset;
+        char *m_buffer;
+    public:
+        uint64_t m_size;
+    };
     class xpn_rw
     {
     public:

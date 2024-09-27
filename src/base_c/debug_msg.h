@@ -37,21 +37,21 @@
 
   // debug messages
   #ifdef DEBUG
-    #define debug_error(...)    debug_msg_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
-    #define debug_warning(...)  debug_msg_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
-    #define debug_info(...)     debug_msg_printf(3, __FILE__, __LINE__, stderr, __VA_ARGS__)
+    #define debug_error_f(...)    debug_msg_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
+    #define debug_warning_f(...)  debug_msg_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
+    #define debug_info_f(...)     debug_msg_printf(3, __FILE__, __LINE__, stderr, __VA_ARGS__)
   #else
-    #define debug_error(...)
-    #define debug_warning(...)
-    #define debug_info(...)
+    #define debug_error_f(...)
+    #define debug_warning_f(...)
+    #define debug_info_f(...)
   #endif
 
   // Current function
   #define DEBUG_BEGIN() \
-          debug_info("Begin %s()\n", __func__)
+          debug_info_f("Begin %s()\n", __func__)
 
   #define DEBUG_END() \
-          debug_info("End   %s(), errno=%d\n", __func__, errno)
+          debug_info_f("End   %s(), errno=%d\n", __func__, errno)
 
 
   /* ... Data structures / Estructuras de datos ........................ */

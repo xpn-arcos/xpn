@@ -29,6 +29,7 @@
 
 #include "xpn/xpn_partition.hpp"
 #include "xpn/xpn_file_table.hpp"
+#include "xpn/xpn_rw.hpp"
 #include "base_cpp/debug.hpp"
 #include "base_cpp/workers.hpp"
 
@@ -136,8 +137,8 @@ namespace XPN
         ssize_t secuencial_read (xpn_file &file, void *buffer, size_t size);
         ssize_t parallel_read   (xpn_file &file, void *buffer, size_t size);
         ssize_t write           (int fd, const void *buffer, size_t size);
-        ssize_t secuencial_write(xpn_file &file, const void *buffer, size_t size);
-        ssize_t parallel_write  (xpn_file &file, const void *buffer, size_t size);
+        ssize_t secuencial_write(xpn_file &file, xpn_rw_buffer &rw_buff);
+        ssize_t parallel_write  (xpn_file &file, xpn_rw_buffer &rw_buff);
         off_t   lseek           (int fd, off_t offset, int flag);
 
         // f_file api

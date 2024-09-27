@@ -19,7 +19,6 @@
  *
  */
 
-#include "base_c/debug_msg.h"
 #include "base_cpp/debug.hpp"
 #include "base_cpp/ns.hpp"
 #include "nfi_server.hpp"

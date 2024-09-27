@@ -22,6 +22,7 @@
 #pragma once
 
 #include "nfi/nfi_server.hpp"
+#include "base_cpp/debug.hpp"
 #include "base_c/filesystem.h"
 
 namespace XPN

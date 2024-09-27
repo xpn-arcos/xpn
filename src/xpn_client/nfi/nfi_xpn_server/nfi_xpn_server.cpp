@@ -21,7 +21,7 @@
 
 #include "nfi_xpn_server.hpp"
 #include "xpn/xpn_file.hpp"
-#include "base_c/debug_msg.h"
+#include "base_cpp/debug.hpp"
 #include "base_cpp/xpn_env.hpp"
 #include "xpn_server/xpn_server_ops.hpp"
 
@@ -35,11 +35,11 @@ int nfi_xpn_server::nfi_open (const std::string &path, int flags, mode_t mode, x
   st_xpn_server_path_flags msg;
   st_xpn_server_status status;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_open] >> Begin");
 
   fho.path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", m_server.c_str(), fho.path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open("<<fho.path<<", "<<flags<<", "<<mode<<")");
 
   std::size_t length = fho.path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -50,15 +50,15 @@ int nfi_xpn_server::nfi_open (const std::string &path, int flags, mode_t mode, x
   ret = nfi_do_request(XPN_SERVER_OPEN_FILE, msg, status);
   if (status.ret < 0 || ret < 0){ 
     errno = status.server_errno;
-    debug_error("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] ERROR: remote open fails to open '%s'.\n", m_server.c_str(), fho.path.c_str());
+    debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_open] ERROR: remote open fails to open '"<<fho.path<<"'");
     return -1;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", m_server.c_str(), fho.path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open("<<fho.path<<")="<<status.ret);
   
   fho.fd = status.ret;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_open] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_open] >> End");
 
   return status.ret;
 }
@@ -75,9 +75,9 @@ int nfi_xpn_server::nfi_close (const xpn_fh &fh)
     st_xpn_server_close msg;
     st_xpn_server_status status;
 
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_close] >> Begin\n", m_server.c_str());
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_close] >> Begin");
 
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%d)\n", m_server.c_str(), fh.fd);
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close("<<fh.fd<<")");
 
     msg.fd = fh.fd;
 
@@ -87,8 +87,8 @@ int nfi_xpn_server::nfi_close (const xpn_fh &fh)
       errno = status.server_errno;
     }
 
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%s)=%d\n", m_server.c_str(), fh.path, status.ret);
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_close] >> End\n", m_server.c_str());
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close("<<fh.fd<<")="<<status.ret);
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_close] >> End");
     
     return status.ret;
   }else{
@@ -103,9 +103,9 @@ int64_t nfi_xpn_server::nfi_read (const xpn_fh &fh, char *buffer, int64_t offset
   st_xpn_server_rw msg;
   st_xpn_server_rw_req req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] >> Begin");
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read(%s, %ld, %ld)\n", m_server.c_str(), fh.path, offset, size);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read("<<fh.path<<", "<<offset<<", "<<size<<")");
   
   // Check arguments...
   if (size == 0) {
@@ -122,7 +122,7 @@ int64_t nfi_xpn_server::nfi_read (const xpn_fh &fh, char *buffer, int64_t offset
   ret = nfi_write_operation(XPN_SERVER_READ_FILE, msg);
   if (ret < 0)
   {
-    printf("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_write_operation fails\n", m_server.c_str());
+    debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_write_operation fails");
     return -1;
   }
 
@@ -133,7 +133,7 @@ int64_t nfi_xpn_server::nfi_read (const xpn_fh &fh, char *buffer, int64_t offset
     ret = m_comm->read_data(&req, sizeof(req));
     if (ret < 0)
     {
-      printf("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_comm_read_data fails\n", m_server.c_str());
+      debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_comm_read_data fails");
       return -1;
     }
 
@@ -142,18 +142,18 @@ int64_t nfi_xpn_server::nfi_read (const xpn_fh &fh, char *buffer, int64_t offset
       return -1;
     }
     
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_comm_read_data=%d.\n",m_server.c_str(), ret);
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_comm_read_data="<<ret);
 
     if (req.size > 0)
     {
-      debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_comm_read_data(%ld)\n",m_server.c_str(), req.size);
+      debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_comm_read_data("<<req.size<<")");
 
       ret = m_comm->read_data(buffer+cont, req.size);
       if (ret < 0) {
-        printf("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_comm_read_data fails\n", m_server.c_str());
+        debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_comm_read_data fails");
       }
 
-      debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_comm_read_data(%ld)=%d\n",m_server.c_str(), req.size, ret);
+      debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_comm_read_data("<<req.size<<")="<< ret);
     }
     cont = cont + req.size;
     diff = msg.size - cont;
@@ -162,7 +162,7 @@ int64_t nfi_xpn_server::nfi_read (const xpn_fh &fh, char *buffer, int64_t offset
 
   if (req.size < 0)
   {
-    printf("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_read reads zero bytes from '%s'\n", m_server.c_str(), fh.path.c_str());
+    debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_read reads zero bytes from '"<<fh.path<<"'");
     if (req.status.ret < 0)
       errno = req.status.server_errno;
     return -1;
@@ -173,8 +173,8 @@ int64_t nfi_xpn_server::nfi_read (const xpn_fh &fh, char *buffer, int64_t offset
 
   ret = cont;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read(%s, %ld, %ld)=%d\n", m_server.c_str(), fh.path.c_str(), offset, size, ret);
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read("<<fh.path<<", "<<offset<<", "<<size<<")="<<ret);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] >> End");
 
   return ret;
 }
@@ -185,14 +185,14 @@ ssize_t nfi_xpn_server::nfi_write (const xpn_fh &fh, const char *buffer, int64_t
   st_xpn_server_rw msg;
   st_xpn_server_rw_req req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] >> Begin");
 
   // Check arguments...
   if (size == 0) {
     return 0;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write(%s, %ld, %ld)\n", m_server.c_str(), fh.path, offset, size);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write("<<fh.path<<", "<<offset<<", "<<size<<")");
 
   std::size_t length = fh.path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -204,7 +204,7 @@ ssize_t nfi_xpn_server::nfi_write (const xpn_fh &fh, const char *buffer, int64_t
   ret = nfi_write_operation(XPN_SERVER_WRITE_FILE, msg);
   if(ret < 0)
   {
-    printf("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_write_operation fails\n", m_server.c_str());
+    debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_write_operation fails");
     return -1;
   }
 
@@ -226,18 +226,18 @@ ssize_t nfi_xpn_server::nfi_write (const xpn_fh &fh, const char *buffer, int64_t
     {
       ret = m_comm->write_data(buffer + cont, buffer_size);
       if (ret < 0) {
-        printf("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_write_data fails\n", m_server.c_str());
+        debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_write_data fails");
       }
     }
     else
     {
       ret = m_comm->write_data(buffer + cont, diff);
       if (ret < 0) {
-        printf("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_write_data fails\n", m_server.c_str());
+        debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_write_data fails");
       }
     }
 
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_comm_write_data=%d.\n",m_server.c_str(), ret);
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_comm_write_data="<< ret);
 
     cont = cont + ret; //Send bytes
     diff = size - cont;
@@ -247,15 +247,15 @@ ssize_t nfi_xpn_server::nfi_write (const xpn_fh &fh, const char *buffer, int64_t
   ret = m_comm->read_data(&req, sizeof(req));
   if (ret < 0) 
   {
-    printf("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_read_data fails\n", m_server.c_str());
+    debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_read_data fails");
     return -1;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_comm_read_data=%d.\n",m_server.c_str(), ret);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_comm_read_data="<< ret);
 
   if (req.size < 0)
   {
-    printf("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_write writes zero bytes from '%s'\n", m_server.c_str(), fh.path.c_str());
+    debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_write writes zero bytes from '"<<fh.path<<"'");
     if (req.status.ret < 0)
       errno = req.status.server_errno;
     return -1;
@@ -266,8 +266,8 @@ ssize_t nfi_xpn_server::nfi_write (const xpn_fh &fh, const char *buffer, int64_t
 
   ret = cont;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write(%s, %ld, %ld)=%d\n", m_server.c_str(), fh.path.c_str(), offset, size, ret);
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write("<<fh.path<<", "<<offset<<", "<<size<<")="<<ret);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] >> End");
 
   return ret;
 }
@@ -278,11 +278,11 @@ int nfi_xpn_server::nfi_remove (const std::string &path, bool is_async)
   st_xpn_server_path msg;
   st_xpn_server_status req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_remove] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_remove] >> Begin");
 
   std::string srv_path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove(%s, %d)\n", m_server.c_str(), srv_path.c_str(), is_async);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove("<<srv_path<<", "<<is_async<<")");
 
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -298,8 +298,8 @@ int nfi_xpn_server::nfi_remove (const std::string &path, bool is_async)
     ret = req.ret;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove(%s)=%d\n", m_server.c_str(), srv_path.c_str(), ret);
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_remove] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove("<<srv_path<<", "<<is_async<<")="<<ret);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_remove] >> End");
 
   return ret;
 }
@@ -310,12 +310,12 @@ int nfi_xpn_server::nfi_rename (const std::string &path, const std::string &new_
   st_xpn_server_rename msg;
   st_xpn_server_status req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rename] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_rename] >> Begin");
 
   std::string srv_path = m_path + "/" + path;
   std::string new_srv_path = m_path + "/" + new_path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rename] nfi_xpn_server_rename(%s,%s)\n", m_server.c_str(), srv_path.c_str(), new_srv_path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_rename] nfi_xpn_server_rename("<<srv_path<<", "<<new_srv_path<<")");
 
   std::size_t length = srv_path.copy(msg.old_url, PATH_MAX - 1);
   msg.old_url[length] = '\0';
@@ -329,7 +329,7 @@ int nfi_xpn_server::nfi_rename (const std::string &path, const std::string &new_
     ret = req.ret;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rename] nfi_xpn_server_rename(%s,%s)=%d\n", m_server.c_str(), srv_path.c_str(), new_srv_path.c_str(), ret);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_rename] nfi_xpn_server_rename("<<srv_path<<", "<<new_srv_path<<")="<<ret);
   debug_info("[NFI_XPN] [nfi_xpn_server_rename] >> End\n");
 
   return ret;
@@ -341,11 +341,11 @@ int nfi_xpn_server::nfi_getattr (const std::string &path, struct ::stat &st)
   st_xpn_server_path msg;
   st_xpn_server_attr_req req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_getattr] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_getattr] >> Begin");
 
   std::string srv_path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_getattr] nfi_xpn_server_getattr(%s)\n", m_server.c_str(), srv_path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_getattr] nfi_xpn_server_getattr("<<srv_path<<")");
 
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -358,7 +358,7 @@ int nfi_xpn_server::nfi_getattr (const std::string &path, struct ::stat &st)
     errno = req.status_req.server_errno;
     ret = req.status_req.ret;
   }
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_getattr] nfi_xpn_server_getattr(%s)=%d\n", m_server.c_str(), srv_path.c_str(), req.status);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_getattr] nfi_xpn_server_getattr("<<srv_path<<")="<<ret);
 
   debug_info("[NFI_XPN] [nfi_xpn_server_getattr] >> End\n");
 
@@ -367,11 +367,11 @@ int nfi_xpn_server::nfi_getattr (const std::string &path, struct ::stat &st)
 
 int nfi_xpn_server::nfi_setattr ([[maybe_unused]] const std::string &path, [[maybe_unused]] struct ::stat &st)
 {
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_setattr] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_setattr] >> Begin");
 
   // TODO: setattr
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_setattr] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_setattr] >> End");
 
   return 0;
 }
@@ -383,11 +383,11 @@ int nfi_xpn_server::nfi_mkdir(const std::string &path, mode_t mode)
   st_xpn_server_path_flags msg;
   st_xpn_server_status req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_mkdir] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_mkdir] >> Begin");
 
   std::string srv_path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_mkdir] nfi_xpn_server_mkdir(%s)\n", m_server.c_str(), srv_path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_mkdir] nfi_xpn_server_mkdir("<<srv_path<<")");
 
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -401,13 +401,13 @@ int nfi_xpn_server::nfi_mkdir(const std::string &path, mode_t mode)
 
   if ((req.ret < 0)&&(errno != EEXIST))
   {
-    debug_error("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s'\n", m_server.c_str(), srv_path.c_str());
+    debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: xpn_mkdir fails to mkdir '"<<srv_path<<"'");
     return -1;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_mkdir] nfi_xpn_server_mkdir(%s)=%d\n", m_server.c_str(), srv_path.c_str(), ret);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_mkdir] nfi_xpn_server_mkdir("<<srv_path<<")="<<ret);
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_mkdir] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_mkdir] >> End");
 
   return ret;
 }
@@ -418,11 +418,11 @@ int nfi_xpn_server::nfi_opendir(const std::string &path, xpn_fh &fho)
   st_xpn_server_path_flags msg;
   st_xpn_server_opendir_req req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_opendir] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_opendir] >> Begin");
 
   fho.path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_opendir] nfi_xpn_server_opendir(%s)\n", m_server.c_str(), fho.path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_opendir] nfi_xpn_server_opendir("<<fho.path<<")");
   
   std::size_t length = fho.path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -438,9 +438,9 @@ int nfi_xpn_server::nfi_opendir(const std::string &path, xpn_fh &fho)
   fho.telldir = req.status.ret;
   fho.dir = req.dir;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_opendir] nfi_xpn_server_opendir(%s)\n", m_server.c_str(), fho.path);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_opendir] nfi_xpn_server_opendir("<<fho.path<<")="<<ret);
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_opendir] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_opendir] >> End");
 
   return ret;
 }
@@ -451,12 +451,12 @@ int nfi_xpn_server::nfi_readdir(xpn_fh &fhd, struct ::dirent &entry)
   st_xpn_server_readdir msg;
   st_xpn_server_readdir_req req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_readdir] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_readdir] >> Begin");
 
   // clean all entry content
   memset(&entry, 0, sizeof(struct ::dirent));
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_readdir] nfi_xpn_server_readdir(%s)\n", m_server.c_str(), fhd.path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_readdir] nfi_xpn_server_readdir("<<fhd.path<<")");
 
   std::size_t length = fhd.path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -479,8 +479,8 @@ int nfi_xpn_server::nfi_readdir(xpn_fh &fhd, struct ::dirent &entry)
 
   memcpy(&entry, &(req.ret), sizeof(struct dirent));
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_readdir] nfi_xpn_server_readdir(%s)=%p\n", m_server.c_str(), fhd.path.c_str(), entry);
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_readdir] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_readdir] nfi_xpn_server_readdir("<<fhd.path<<")="<<(void*)&entry);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_readdir] >> End");
 
   return ret;
 }
@@ -492,9 +492,9 @@ int nfi_xpn_server::nfi_closedir (const xpn_fh &fhd)
     struct st_xpn_server_close msg;
     struct st_xpn_server_status req;
 
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_closedir] >> Begin\n", m_server.c_str());
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_closedir] >> Begin");
 
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%d)\n", m_server.c_str(), fhd.dir);
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir("<<fhd.dir<<")");
 
     msg.dir = fhd.dir;
 
@@ -505,8 +505,8 @@ int nfi_xpn_server::nfi_closedir (const xpn_fh &fhd)
       ret = req.ret;
     }
 
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%d)=%d\n", m_server.c_str(), fhd.dir, req.ret);
-    debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_closedir] >> End\n", m_server.c_str());
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir("<<fhd.dir<<")="<<ret);
+    debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_closedir] >> End");
 
     return ret;
   }else{
@@ -521,11 +521,11 @@ int nfi_xpn_server::nfi_rmdir(const std::string &path, bool is_async)
   struct st_xpn_server_path msg;
   struct st_xpn_server_status req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rmdir] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_rmdir] >> Begin");
 
   std::string srv_path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rmdir] nfi_xpn_server_rmdir(%s)\n", m_server.c_str(), srv_path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_rmdir] nfi_xpn_server_rmdir("<<srv_path<<")");
 
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -543,8 +543,8 @@ int nfi_xpn_server::nfi_rmdir(const std::string &path, bool is_async)
     }
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rmdir] nfi_xpn_server_rmdir(%s)=%d\n", m_server.c_str(), srv_path.c_str(), ret);
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_rmdir] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_rmdir] nfi_xpn_server_rmdir("<<srv_path<<")="<<ret);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_rmdir] >> End");
 
   return ret;
 }
@@ -555,11 +555,11 @@ int nfi_xpn_server::nfi_statvfs(const std::string &path, struct ::statvfs &inf)
   struct st_xpn_server_path msg;
   struct st_xpn_server_statvfs_req req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_statvfs] >> Begin");
 
   std::string srv_path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] nfi_xpn_server_statvfs(%s)\n", m_server.c_str(), srv_path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_statvfs] nfi_xpn_server_statvfs("<<srv_path<<")");
 
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -573,8 +573,8 @@ int nfi_xpn_server::nfi_statvfs(const std::string &path, struct ::statvfs &inf)
     ret = req.status_req.ret;
   }
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] nfi_xpn_server_statvfs(%s)=%d\n", m_server.c_str(), m_path.c_str(), ret);
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_statvfs] >> End\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_statvfs] nfi_xpn_server_statvfs("<<srv_path<<")="<<ret);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_statvfs] >> End");
 
   return ret;
 }
@@ -585,11 +585,11 @@ int nfi_xpn_server::nfi_read_mdata (const std::string &path, xpn_metadata &mdata
   struct st_xpn_server_path msg;
   struct st_xpn_server_read_mdata_req req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read_mdata] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read_mdata] >> Begin");
 
   std::string srv_path = m_path + "/" + path;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata(%s)\n", m_server.c_str(), srv_path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata("<<srv_path<<")");
 
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
@@ -600,7 +600,7 @@ int nfi_xpn_server::nfi_read_mdata (const std::string &path, xpn_metadata &mdata
     errno = req.status.server_errno;
     ret = req.status.ret;
   }
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata(%s)=%d\n", m_server.c_str(), srv_path.c_str(), req.status);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata("<<srv_path<<")="<<ret);
 
   memcpy(&mdata.m_data, &req.mdata, sizeof(req.mdata));
 
@@ -614,11 +614,11 @@ int nfi_xpn_server::nfi_write_mdata (const std::string &path, const xpn_metadata
   int ret;
   struct st_xpn_server_status req;
 
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write_mdata] >> Begin\n", m_server.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write_mdata] >> Begin");
 
   std::string srv_path = m_path + "/" + path;
   
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata(%s)\n", m_server.c_str(), srv_path.c_str());
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata("<<srv_path<<")");
 
   if (only_file_size){
     struct st_xpn_server_write_mdata_file_size msg;
@@ -638,7 +638,7 @@ int nfi_xpn_server::nfi_write_mdata (const std::string &path, const xpn_metadata
     errno = req.server_errno;
     ret = req.ret;
   }
-  debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata(%s)=%d\n", m_server.c_str(), srv_path.c_str(), req.ret);
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata("<<srv_path<<")="<<ret);
 
   debug_info("[NFI_XPN] [nfi_xpn_server_write_mdata] >> End\n");
 

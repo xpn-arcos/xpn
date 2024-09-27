@@ -22,6 +22,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 #include <vector>
 
 #include "nfi/nfi_server.hpp"
@@ -63,7 +64,30 @@ namespace XPN
                        magic_number[1] == MAGIC_NUMBER[1] && 
                        magic_number[2] == MAGIC_NUMBER[2];
             } 
-            std::string to_string();
+            std::string to_string(){
+                int i;
+                std::stringstream out;
+                out <<"magic_number: " << magic_number[0] << magic_number[1] << magic_number[2] << std::endl;
+                out <<"version: " << version << std::endl;
+                out <<"type: " << type << std::endl;
+                out <<"block_size: " << block_size << std::endl;
+                out <<"file_size: " << file_size << std::endl;
+                out <<"replication_level: " << replication_level << std::endl;
+                out <<"first_node: " << first_node << std::endl;
+                out <<"distribution_policy: " << distribution_policy << std::endl;
+                out <<"data_nserv: ";
+                for(i = 0; i < xpn_metadata::MAX_RECONSTURCTIONS; i++) {
+                    out << data_nserv[i] << " ";
+                }
+                out << std::endl;
+
+                out <<"offsets: ";
+                for(i = 0; i < xpn_metadata::MAX_RECONSTURCTIONS; i++) {
+                    out << offsets[i] << " ";
+                }
+                out << std::endl;
+                return out.str();
+            }
         };
     public:
         // xpn_metadata(std::string &path, xpn_partition& part) : m_path(path), m_part(part) {}

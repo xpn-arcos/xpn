@@ -92,7 +92,7 @@ namespace XPN
             return -1;
         }
 
-        debug_info("[SOCKET] [socket::server_create] Socket reuseaddr\n");
+        debug_info_f("[SOCKET] [socket::server_create] Socket reuseaddr\n");
 
         val = 1;
         ret = setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&val, sizeof(int));
@@ -103,7 +103,7 @@ namespace XPN
         }
 
         // bind
-        debug_info("[SOCKET] [socket::server_create] Socket bind\n");
+        debug_info_f("[SOCKET] [socket::server_create] Socket bind\n");
 
         struct sockaddr_in server_addr;
         memset(&server_addr, 0, sizeof(server_addr));
@@ -120,7 +120,7 @@ namespace XPN
         }
 
         // listen
-        debug_info("[SOCKET] [socket::server_create] Socket listen\n");
+        debug_info_f("[SOCKET] [socket::server_create] Socket listen\n");
 
         ret = listen(server_socket, SOMAXCONN);
         if (ret < 0)

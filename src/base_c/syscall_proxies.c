@@ -109,7 +109,7 @@ int     (*real_fstatvfs)(int, struct statvfs *) = NULL;
 // File API
 int dlsym_open (char *path, int flags)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_open] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_open] >> Begin\n");
 
   if (real_open == NULL) {
       real_open = (int (*)(char *, int, mode_t)) dlsym(RTLD_NEXT, "open");
@@ -117,14 +117,14 @@ int dlsym_open (char *path, int flags)
   
   int fd = real_open((char *)path, flags, 0);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_open] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_open] >> End\n");
 
   return fd;
 }
 
 int dlsym_open2 (char *path, int flags, mode_t mode)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_open2] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_open2] >> Begin\n");
 
   if (real_open == NULL) {
       real_open = (int (*)(char *, int, mode_t)) dlsym(RTLD_NEXT, "open");
@@ -132,14 +132,14 @@ int dlsym_open2 (char *path, int flags, mode_t mode)
   
   int fd = real_open((char *)path, flags, mode);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_open2] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_open2] >> End\n");
 
   return fd;
 }
 
 int dlsym_open64 (char *path, int flags, mode_t mode)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_open64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_open64] >> Begin\n");
 
   if (real_open64 == NULL){
       real_open64 = (int (*)(char *, int, mode_t)) dlsym(RTLD_NEXT, "open64");
@@ -147,14 +147,14 @@ int dlsym_open64 (char *path, int flags, mode_t mode)
   
   int fd = real_open64((char *)path, flags, mode);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_open64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_open64] >> End\n");
 
   return fd;
 }
 
 int dlsym___open_2 (char *path, int flags)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym___open_2] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym___open_2] >> Begin\n");
 
   if (real___open_2 == NULL) {
       real___open_2 = (int (*)(char *, int)) dlsym(RTLD_NEXT, "__open");
@@ -162,14 +162,14 @@ int dlsym___open_2 (char *path, int flags)
   
   int fd = real___open_2((char *)path, flags);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym___open_2] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym___open_2] >> End\n");
 
   return fd;
 }
 
 int dlsym_creat (const char *path, mode_t mode)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_creat] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_creat] >> Begin\n");
 
   if (real_creat == NULL) {
       real_creat = (int (*)(const char *, mode_t)) dlsym(RTLD_NEXT, "creat");
@@ -177,14 +177,14 @@ int dlsym_creat (const char *path, mode_t mode)
 
   int fd = real_creat(path,mode);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_creat] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_creat] >> End\n");
  
   return fd;
 }
 
 int dlsym_mkstemp (char *templ)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_mkstemp] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_mkstemp] >> Begin\n");
 
   if (real_mkstemp == NULL) {
       real_mkstemp = (int(*)(char *)) dlsym(RTLD_NEXT, "mkstemp");
@@ -192,14 +192,14 @@ int dlsym_mkstemp (char *templ)
   
   int ret = real_mkstemp(templ);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_mkstemp] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_mkstemp] >> End\n");
 
   return ret;
 }
 
 int dlsym_ftruncate (int fd, off_t length)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_ftruncate] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_ftruncate] >> Begin\n");
 
   if (real_ftruncate == NULL){
       real_ftruncate = (int (*)(int, off_t)) dlsym(RTLD_NEXT, "ftruncate");
@@ -207,14 +207,14 @@ int dlsym_ftruncate (int fd, off_t length)
 
   int ret = real_ftruncate(fd, length);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_ftruncate] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_ftruncate] >> End\n");
  
   return ret;
 }
 
 ssize_t dlsym_read (int fd, void *buf, size_t nbyte)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_read] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_read] >> Begin\n");
 
   if (real_read == NULL){
       real_read = (ssize_t (*)(int, void*, size_t)) dlsym(RTLD_NEXT, "read");
@@ -222,14 +222,14 @@ ssize_t dlsym_read (int fd, void *buf, size_t nbyte)
 
   ssize_t ret = real_read(fd, buf, nbyte);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_read] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_read] >> End\n");
 
   return ret;
 }
 
 ssize_t dlsym_write (int fd, void *buf, size_t nbyte)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_write] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_write] >> Begin\n");
 
   if (real_write == NULL){
       real_write = (ssize_t (*)(int, const void*, size_t)) dlsym(RTLD_NEXT, "write");
@@ -237,14 +237,14 @@ ssize_t dlsym_write (int fd, void *buf, size_t nbyte)
 
   ssize_t ret = real_write(fd, buf, nbyte);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_write] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_write] >> End\n");
 
   return ret;
 }
 
 ssize_t dlsym_pread (int fd, void *buf, size_t count, off_t offset)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_pread] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pread] >> Begin\n");
 
   if (real_pread == NULL){
       real_pread = (ssize_t (*)(int, void *, size_t, off_t)) dlsym(RTLD_NEXT, "pread");
@@ -252,14 +252,14 @@ ssize_t dlsym_pread (int fd, void *buf, size_t count, off_t offset)
 
   ssize_t ret = real_pread(fd, buf, count, offset);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_pread] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pread] >> End\n");
 
   return ret;
 }
 
 ssize_t dlsym_pwrite (int fd, const void *buf, size_t count, off_t offset)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_pwrite] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pwrite] >> Begin\n");
 
   if (real_pwrite == NULL){
       real_pwrite = (ssize_t (*)(int, const void *, size_t, off_t)) dlsym(RTLD_NEXT, "pwrite");
@@ -267,14 +267,14 @@ ssize_t dlsym_pwrite (int fd, const void *buf, size_t count, off_t offset)
 
   ssize_t ret = real_pwrite(fd, buf, count, offset);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_pwrite] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pwrite] >> End\n");
 
   return ret;
 }
 
 ssize_t dlsym_pread64 (int fd, void *buf, size_t count, off_t offset)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_pread64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pread64] >> Begin\n");
 
   if (real_pread64 == NULL){
       real_pread64 = (ssize_t (*)(int, void *, size_t, off_t)) dlsym(RTLD_NEXT, "pread64");
@@ -282,14 +282,14 @@ ssize_t dlsym_pread64 (int fd, void *buf, size_t count, off_t offset)
 
   ssize_t ret = real_pread64(fd, buf, count, offset);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_pread64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pread64] >> End\n");
 
   return ret;
 }
 
 ssize_t dlsym_pwrite64 (int fd, const void *buf, size_t count, off_t offset)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_pwrite64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pwrite64] >> Begin\n");
 
   if (real_pwrite64 == NULL){
       real_pwrite64 = (ssize_t (*)(int, const void *, size_t, off_t)) dlsym(RTLD_NEXT, "pwrite64");
@@ -297,14 +297,14 @@ ssize_t dlsym_pwrite64 (int fd, const void *buf, size_t count, off_t offset)
 
   ssize_t ret = real_pwrite64(fd, buf, count, offset);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_pwrite64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pwrite64] >> End\n");
 
   return ret;
 }
 
 off_t dlsym_lseek (int fd, off_t offset, int whence)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_lseek] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_lseek] >> Begin\n");
 
   if (real_lseek == NULL){
       real_lseek = (off_t (*)(int, off_t, int)) dlsym(RTLD_NEXT, "lseek");
@@ -312,14 +312,14 @@ off_t dlsym_lseek (int fd, off_t offset, int whence)
 
   off_t ret = real_lseek(fd, offset, whence);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_lseek] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_lseek] >> End\n");
 
   return ret;
 }
 
 off64_t dlsym_lseek64 (int fd, off64_t offset, int whence)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_lseek64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_lseek64] >> Begin\n");
 
   if (real_lseek64 == NULL){
       real_lseek64 = (off64_t (*)(int, off64_t, int)) dlsym(RTLD_NEXT, "lseek64");
@@ -327,14 +327,14 @@ off64_t dlsym_lseek64 (int fd, off64_t offset, int whence)
 
   off64_t ret = real_lseek64(fd, offset, whence);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_lseek64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_lseek64] >> End\n");
 
   return ret;
 }
 
 int dlsym_lxstat64 (int ver, const char *path, struct stat64 *buf)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_lxstat64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_lxstat64] >> Begin\n");
 
   if (real_lxstat64 == NULL){
       real_lxstat64 = (int (*)(int, const char *, struct stat64 *)) dlsym(RTLD_NEXT, "__lxstat64");
@@ -342,14 +342,14 @@ int dlsym_lxstat64 (int ver, const char *path, struct stat64 *buf)
 
   int ret = real_lxstat64(ver,(char *)path, buf);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_lxstat64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_lxstat64] >> End\n");
 
   return ret;
 }
 
 int dlsym_xstat64 (int ver, const char *path, struct stat64 *buf)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_xstat64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_xstat64] >> Begin\n");
 
   if (real_xstat64 == NULL){
       real_xstat64 = (int (*)(int, const char *, struct stat64 *)) dlsym(RTLD_NEXT, "__xstat64");
@@ -357,14 +357,14 @@ int dlsym_xstat64 (int ver, const char *path, struct stat64 *buf)
 
   int ret = real_xstat64(ver,(char *)path, buf);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_xstat64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_xstat64] >> End\n");
 
   return ret;
 }
 
 int dlsym_fxstat64 (int ver, int fd, struct stat64 *buf)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fxstat64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fxstat64] >> Begin\n");
 
   if (real_fxstat64 == NULL){
       real_fxstat64 = (int (*)(int, int, struct stat64 *)) dlsym(RTLD_NEXT, "__fxstat64");
@@ -372,14 +372,14 @@ int dlsym_fxstat64 (int ver, int fd, struct stat64 *buf)
 
   int ret = real_fxstat64(ver,fd, buf);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fxstat64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fxstat64] >> End\n");
 
   return ret;
 }
 
 int dlsym_lstat (int ver, const char *path, struct stat *buf)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_lstat] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_lstat] >> Begin\n");
 
   if (real_lstat == NULL){
       real_lstat = (int (*)(int, char *, struct stat *)) dlsym(RTLD_NEXT, "__lxstat");
@@ -387,14 +387,14 @@ int dlsym_lstat (int ver, const char *path, struct stat *buf)
 
   int ret = real_lstat(ver,(char *)path, buf);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_lstat] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_lstat] >> End\n");
 
   return ret;
 }
 
 int dlsym_stat (int ver, const char *path, struct stat *buf)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_stat] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_stat] >> Begin\n");
 
   if (real_stat == NULL){
       real_stat = (int (*)(int, char *, struct stat *)) dlsym(RTLD_NEXT, "__xstat");
@@ -402,14 +402,14 @@ int dlsym_stat (int ver, const char *path, struct stat *buf)
 
   int ret = real_stat(ver,(char *)path, buf);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_stat] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_stat] >> End\n");
 
   return ret;
 }
 
 int dlsym_fstat (int ver, int fd, struct stat *buf)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstat] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fstat] >> Begin\n");
 
   if (real_fstat == NULL){
       real_fstat = (int (*)(int, int, struct stat *)) dlsym(RTLD_NEXT, "__fxstat");
@@ -417,14 +417,14 @@ int dlsym_fstat (int ver, int fd, struct stat *buf)
 
   int ret = real_fstat(ver,fd, buf);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstat] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fstat] >> End\n");
 
   return ret;
 }
 
 int dlsym_fstatat (int dfd, const char *path, struct stat *buf, int flags)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstatat] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fstatat] >> Begin\n");
 
   if (real_fstatat == NULL){
       real_fstatat = (int (*)(int, const char *, struct stat *, int)) dlsym(RTLD_NEXT, "fstatat");
@@ -432,14 +432,14 @@ int dlsym_fstatat (int dfd, const char *path, struct stat *buf, int flags)
 
   int ret = real_fstatat(dfd,(char *)path, buf, flags);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstatat] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fstatat] >> End\n");
 
   return ret;
 }
 
 int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstatat64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fstatat64] >> Begin\n");
 
   if (real_fstatat64 == NULL){
       real_fstatat64 = (int (*)(int, const char *, struct stat64 *, int)) dlsym(RTLD_NEXT, "fstatat64");
@@ -447,14 +447,14 @@ int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags)
 
   int ret = real_fstatat64(dfd,(char *)path, buf, flags);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstatat64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fstatat64] >> End\n");
 
   return ret;
 }
 
 int dlsym_close (int fd)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_close] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_close] >> Begin\n");
 
   if (real_close == NULL){
       real_close = (int (*)(int)) dlsym(RTLD_NEXT, "close");
@@ -462,14 +462,14 @@ int dlsym_close (int fd)
 
   int ret = real_close(fd);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_close] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_close] >> End\n");
 
   return ret;
 }
 
 int dlsym_rename (const char *old_path, const char *new_path)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_rename] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_rename] >> Begin\n");
 
   if (real_rename == NULL){
       real_rename = (int (*)(const char *, const  char *)) dlsym(RTLD_NEXT, "rename");
@@ -477,14 +477,14 @@ int dlsym_rename (const char *old_path, const char *new_path)
 
   int ret = real_rename(old_path, new_path);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_rename] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_rename] >> End\n");
 
   return ret;
 }
 
 int dlsym_unlink (char *path)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_unlink] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_unlink] >> Begin\n");
 
   if (real_unlink == NULL){
       real_unlink = (int (*)(char *)) dlsym(RTLD_NEXT, "unlink");
@@ -492,14 +492,14 @@ int dlsym_unlink (char *path)
   
   int ret = real_unlink((char *)path);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_unlink] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_unlink] >> End\n");
 
   return ret;
 }
 
 int dlsym_remove (char *path)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_remove] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_remove] >> Begin\n");
 
   if (real_remove == NULL){
       real_remove = (int (*)(char *)) dlsym(RTLD_NEXT, "remove");
@@ -507,7 +507,7 @@ int dlsym_remove (char *path)
   
   int ret = real_remove((char *)path);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_remove] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_remove] >> End\n");
 
   return ret;
 }
@@ -515,7 +515,7 @@ int dlsym_remove (char *path)
 // File API (stdio)
 FILE* dlsym_fopen(const char *filename, const char *mode)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fopen] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fopen] >> Begin\n");
 
   if (real_fopen == NULL) {
       real_fopen = (FILE* (*)(const char *, const char *)) dlsym(RTLD_NEXT, "fopen");
@@ -523,14 +523,14 @@ FILE* dlsym_fopen(const char *filename, const char *mode)
   
   FILE* fd = real_fopen((const char *) filename, mode);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fopen] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fopen] >> End\n");
 
   return fd;
 }
 
 FILE* dlsym_fdopen(int fd, const char *mode)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fdopen] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fdopen] >> Begin\n");
 
   if (real_fdopen == NULL) {
       real_fdopen = (FILE* (*)(int, const char *)) dlsym(RTLD_NEXT, "fdopen");
@@ -538,14 +538,14 @@ FILE* dlsym_fdopen(int fd, const char *mode)
   
   FILE* fp = real_fdopen(fd, mode);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fdopen] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fdopen] >> End\n");
 
   return fp;
 }
 
 int  dlsym_fclose(FILE *stream)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fclose] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fclose] >> Begin\n");
 
   if (real_fclose == NULL) {
       real_fclose = (int (*)(FILE*)) dlsym(RTLD_NEXT, "fclose");
@@ -553,14 +553,14 @@ int  dlsym_fclose(FILE *stream)
   
   int ret = real_fclose(stream);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fclose] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fclose] >> End\n");
 
   return ret;
 }
 
 size_t dlsym_fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fread] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fread] >> Begin\n");
 
   if (real_fread == NULL) {
       real_fread = (size_t (*)(void *, size_t, size_t, FILE *)) dlsym(RTLD_NEXT, "fread");
@@ -568,14 +568,14 @@ size_t dlsym_fread(void *ptr, size_t size, size_t nmemb, FILE *stream)
   
   size_t ret = real_fread(ptr, size, nmemb, stream);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fread] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fread] >> End\n");
 
   return ret;
 }
 
 size_t dlsym_fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fwrite] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fwrite] >> Begin\n");
 
   if (real_fwrite == NULL) {
       real_fwrite = (size_t (*)(const void *, size_t, size_t, FILE *)) dlsym(RTLD_NEXT, "fwrite");
@@ -583,14 +583,14 @@ size_t dlsym_fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream)
   
   size_t ret = real_fwrite(ptr, size, nmemb, stream);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fwrite] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fwrite] >> End\n");
 
   return ret;
 }
 
 int dlsym_fseek (FILE *stream, long int offset, int whence)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fseek] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fseek] >> Begin\n");
 
   if (real_fseek == NULL) {
       real_fseek = (int (*)(FILE *, long int, int)) dlsym(RTLD_NEXT, "fseek");
@@ -598,14 +598,14 @@ int dlsym_fseek (FILE *stream, long int offset, int whence)
   
   int ret = real_fseek(stream, offset, whence);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fseek] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fseek] >> End\n");
 
   return ret;
 }
 
 long dlsym_ftell (FILE *stream)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_ftell] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_ftell] >> Begin\n");
 
   if (real_ftell== NULL) {
       real_ftell = (long (*)(FILE *)) dlsym(RTLD_NEXT, "ftell");
@@ -613,14 +613,14 @@ long dlsym_ftell (FILE *stream)
   
   int ret = real_ftell(stream);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_ftell] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_ftell] >> End\n");
 
   return ret;
 }
 
 void dlsym_rewind (FILE *stream)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_rewind] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_rewind] >> Begin\n");
 
   if (real_rewind == NULL) {
       real_rewind = (void(*)(FILE *)) dlsym(RTLD_NEXT, "rewind");
@@ -628,12 +628,12 @@ void dlsym_rewind (FILE *stream)
   
   real_rewind(stream);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_rewind] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_rewind] >> End\n");
 }
 
 int dlsym_feof (FILE *stream)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_feof] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_feof] >> Begin\n");
 
   if (real_feof== NULL) {
       real_feof = (int (*)(FILE *)) dlsym(RTLD_NEXT, "feof");
@@ -641,7 +641,7 @@ int dlsym_feof (FILE *stream)
   
   int ret = real_feof(stream);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_feof] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_feof] >> End\n");
 
   return ret;
 }
@@ -649,7 +649,7 @@ int dlsym_feof (FILE *stream)
 // Directory API
 DIR* dlsym_opendir (char *dirname)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_opendir] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_opendir] >> Begin\n");
 
   if (real_opendir == NULL){
       real_opendir = (DIR* (*)(char*)) dlsym(RTLD_NEXT, "opendir");
@@ -657,14 +657,14 @@ DIR* dlsym_opendir (char *dirname)
   
   DIR* ret = real_opendir((char *)dirname);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_opendir] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_opendir] >> End\n");
 
   return ret;
 }
 
 DIR* dlsym_opendir64 (char *dirname)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_opendir64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_opendir64] >> Begin\n");
 
   if (real_opendir64 == NULL){
       real_opendir64 = (DIR* (*)(char*)) dlsym(RTLD_NEXT, "opendir64");
@@ -672,14 +672,14 @@ DIR* dlsym_opendir64 (char *dirname)
   
   DIR* ret = real_opendir64((char *)dirname);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_opendir64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_opendir64] >> End\n");
 
   return ret;
 }
 
 long dlsym_telldir (DIR *dirp)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_telldir] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_telldir] >> Begin\n");
 
   if (real_telldir == NULL){
       real_telldir = (long (*)(DIR *)) dlsym(RTLD_NEXT, "telldir");
@@ -687,14 +687,14 @@ long dlsym_telldir (DIR *dirp)
   
   long ret = real_telldir((DIR *)dirp);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_telldir] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_telldir] >> End\n");
 
   return ret;
 }
 
 void dlsym_seekdir (DIR *dirp, long loc)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_seekdir] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_seekdir] >> Begin\n");
 
   if (real_seekdir == NULL){
       real_seekdir = (void (*)(DIR *, long)) dlsym(RTLD_NEXT, "seekdir");
@@ -702,12 +702,12 @@ void dlsym_seekdir (DIR *dirp, long loc)
   
   real_seekdir((DIR *)dirp, (long) loc);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_seekdir] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_seekdir] >> End\n");
 }
 
 int dlsym_mkdir (char *path, mode_t mode)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_mkdir] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_mkdir] >> Begin\n");
 
   if (real_mkdir == NULL){
       real_mkdir = (int (*)(char *, mode_t)) dlsym(RTLD_NEXT, "mkdir");
@@ -715,14 +715,14 @@ int dlsym_mkdir (char *path, mode_t mode)
   
   int ret = real_mkdir((char *)path,mode);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_mkdir] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_mkdir] >> End\n");
 
   return ret;
 }
 
 struct dirent * dlsym_readdir (DIR *dirp)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_readdir] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_readdir] >> Begin\n");
 
   if (real_readdir == NULL){
       real_readdir = (struct dirent * (*)(DIR *)) dlsym(RTLD_NEXT, "readdir");
@@ -730,14 +730,14 @@ struct dirent * dlsym_readdir (DIR *dirp)
   
   struct dirent * ret = real_readdir(dirp);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_readdir] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_readdir] >> End\n");
 
   return ret;
 }
 
 struct dirent64 * dlsym_readdir64 (DIR *dirp)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_readdir64] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_readdir64] >> Begin\n");
 
   if (real_readdir64 == NULL){
       real_readdir64 = (struct dirent64 * (*)(DIR *)) dlsym(RTLD_NEXT, "readdir64");
@@ -745,14 +745,14 @@ struct dirent64 * dlsym_readdir64 (DIR *dirp)
   
   struct dirent64 * ret = real_readdir64(dirp);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_readdir64] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_readdir64] >> End\n");
 
   return ret;
 }
 
 int dlsym_closedir (DIR* dirp)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_closedir] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_closedir] >> Begin\n");
 
   if (real_closedir == NULL){
       real_closedir = (int (*)(DIR*)) dlsym(RTLD_NEXT, "closedir");
@@ -760,14 +760,14 @@ int dlsym_closedir (DIR* dirp)
   
   int ret = real_closedir(dirp);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_closedir] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_closedir] >> End\n");
 
   return ret;
 }
 
 int dlsym_rmdir (char *path)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_rmdir] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_rmdir] >> Begin\n");
 
   if (real_rmdir == NULL){
       real_rmdir = (int (*)(char *)) dlsym(RTLD_NEXT, "rmdir");
@@ -775,7 +775,7 @@ int dlsym_rmdir (char *path)
   
   int ret = real_rmdir((char *)path);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_rmdir] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_rmdir] >> End\n");
 
   return ret;
 }
@@ -783,7 +783,7 @@ int dlsym_rmdir (char *path)
 // Proccess API
 int dlsym_fork (void)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fork] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fork] >> Begin\n");
 
   if (real_fork == NULL){
       real_fork = (int (*)()) dlsym(RTLD_NEXT, "fork");
@@ -791,14 +791,14 @@ int dlsym_fork (void)
   
   int ret = real_fork();
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fork] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fork] >> End\n");
 
   return ret;
 }
 
 int dlsym_pipe (int pipefd[2])
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_pipe] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pipe] >> Begin\n");
 
   if (real_pipe == NULL){
       real_pipe = (int (*)(int *)) dlsym(RTLD_NEXT, "pipe");
@@ -806,14 +806,14 @@ int dlsym_pipe (int pipefd[2])
   
   int ret = real_pipe(pipefd);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_pipe] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_pipe] >> End\n");
 
   return ret;
 }
 
 int dlsym_dup (int fd)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_dup] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_dup] >> Begin\n");
 
   if (real_dup == NULL){
       real_dup = (int (*)(int)) dlsym(RTLD_NEXT, "dup");
@@ -821,14 +821,14 @@ int dlsym_dup (int fd)
   
   int ret = real_dup(fd);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_dup] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_dup] >> End\n");
 
   return ret;
 }
 
 int dlsym_dup2 (int fd, int fd2)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_dup2] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_dup2] >> Begin\n");
 
   if (real_dup2 == NULL){
       real_dup2 = (int (*)(int, int)) dlsym(RTLD_NEXT, "dup2");
@@ -836,14 +836,14 @@ int dlsym_dup2 (int fd, int fd2)
   
   int ret = real_dup2(fd, fd2);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_dup2] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_dup2] >> End\n");
 
   return ret;
 }
 
 void dlsym_exit (int status)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_exit] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_exit] >> Begin\n");
 
   if (real_exit == NULL){
       real_exit = (void (*)(int)) dlsym(RTLD_NEXT, "exit");
@@ -851,13 +851,13 @@ void dlsym_exit (int status)
   
   real_exit(status);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_exit] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_exit] >> End\n");
 }
 
 // File/Directory Metadata API
 int dlsym_chdir (char * path)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_chdir] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_chdir] >> Begin\n");
 
   if (real_chdir == NULL){
       real_chdir = (int (*)(char *)) dlsym(RTLD_NEXT, "chdir");
@@ -865,14 +865,14 @@ int dlsym_chdir (char * path)
   
   int ret = real_chdir((char *)path);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_chdir] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_chdir] >> End\n");
 
   return ret;
 }
 
 int dlsym_chmod (char *path, mode_t mode)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_chmod] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_chmod] >> Begin\n");
 
   if (real_chmod == NULL){
       real_chmod = (int (*)(char *, mode_t)) dlsym(RTLD_NEXT, "chmod");
@@ -880,14 +880,14 @@ int dlsym_chmod (char *path, mode_t mode)
   
   int ret = real_chmod((char *)path, mode);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_chmod] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_chmod] >> End\n");
 
   return ret;
 }
 
 int dlsym_fchmod (int fd, mode_t mode)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fchmod] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fchmod] >> Begin\n");
 
   if (real_fchmod == NULL){
       real_fchmod = (int (*)(int, mode_t)) dlsym(RTLD_NEXT, "fchmod");
@@ -895,14 +895,14 @@ int dlsym_fchmod (int fd, mode_t mode)
   
   int ret = real_fchmod(fd,mode);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fchmod] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fchmod] >> End\n");
 
   return ret;
 }
 
 int dlsym_chown (char *path, uid_t owner, gid_t group)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_chown] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_chown] >> Begin\n");
 
   if (real_chown == NULL){
       real_chown = (int (*)(char *, uid_t, gid_t)) dlsym(RTLD_NEXT, "chown");
@@ -910,14 +910,14 @@ int dlsym_chown (char *path, uid_t owner, gid_t group)
   
   int ret = real_chown((char *)path, owner, group);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_chown] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_chown] >> End\n");
 
   return ret;
 }
 
 int dlsym_fcntl (int fd, int cmd, long arg)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fcntl] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fcntl] >> Begin\n");
 
   if (real_fcntl == NULL){
       real_fcntl = (int (*)(int, int, long)) dlsym(RTLD_NEXT, "fcntl");
@@ -925,14 +925,14 @@ int dlsym_fcntl (int fd, int cmd, long arg)
   
   int ret = real_fcntl(fd, cmd, arg);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fcntl] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fcntl] >> End\n");
 
   return ret;
 }
 
 int dlsym_access (const char *path, int mode)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_access] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_access] >> Begin\n");
 
   if (real_access == NULL) {
       real_access = (int (*)(const char *, int)) dlsym(RTLD_NEXT, "access");
@@ -940,14 +940,14 @@ int dlsym_access (const char *path, int mode)
   
   int ret = real_access((char *)path, mode);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_access] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_access] >> End\n");
 
   return ret;
 }
 
 char *dlsym_realpath (const char *__restrict__ path, char *__restrict__ resolved_path)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_realpath] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_realpath] >> Begin\n");
 
   if (real_realpath == NULL) {
       real_realpath = (char* (*)(const char *__restrict__, char *__restrict__)) dlsym(RTLD_NEXT, "realpath");
@@ -955,14 +955,14 @@ char *dlsym_realpath (const char *__restrict__ path, char *__restrict__ resolved
   
   char* ret = real_realpath((char *)path, (char *)resolved_path);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_realpath] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_realpath] >> End\n");
 
   return ret;
 }
 
 int dlsym_fsync (int fd)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fsync] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fsync] >> Begin\n");
 
   if (real_fsync == NULL){
       real_fsync = (int (*)(int)) dlsym(RTLD_NEXT, "fsync");
@@ -970,14 +970,14 @@ int dlsym_fsync (int fd)
   
   int ret = real_fsync(fd);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fsync] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fsync] >> End\n");
 
   return ret;
 }
 
 int dlsym_flock (int fd, int operation)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_flock] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_flock] >> Begin\n");
 
   if (real_flock == NULL){
       real_flock = (int (*)(int, int)) dlsym(RTLD_NEXT, "fsync");
@@ -985,14 +985,14 @@ int dlsym_flock (int fd, int operation)
   
   int ret = real_flock(fd, operation);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_flock] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_flock] >> End\n");
 
   return ret;
 }
 
 int dlsym_statvfs (const char *path, struct statvfs *buf)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_statvfs] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_statvfs] >> Begin\n");
 
   if (real_statvfs == NULL){
       real_statvfs = (int (*)(const char *, struct statvfs *)) dlsym(RTLD_NEXT, "statvfs");
@@ -1000,14 +1000,14 @@ int dlsym_statvfs (const char *path, struct statvfs *buf)
   
   int ret = real_statvfs(path, buf);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_statvfs] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_statvfs] >> End\n");
 
   return ret;
 }
 
 int dlsym_fstatvfs (int fd, struct statvfs *buf)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstatvfs] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fstatvfs] >> Begin\n");
 
   if (real_fstatvfs == NULL){
       real_fstatvfs = (int (*)(int, struct statvfs *)) dlsym(RTLD_NEXT, "fstatvfs");
@@ -1015,7 +1015,7 @@ int dlsym_fstatvfs (int fd, struct statvfs *buf)
   
   int ret = real_fstatvfs(fd, buf);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstatvfs] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_fstatvfs] >> End\n");
 
   return ret;
 }
@@ -1023,7 +1023,7 @@ int dlsym_fstatvfs (int fd, struct statvfs *buf)
 // Memory API
 void *dlsym_mmap (void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 {
-  debug_info("[SYSCALL_PROXIES] [dlsym_mmap] >> Begin\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_mmap] >> Begin\n");
 
   if (real_mmap == NULL) {
       real_mmap = (void *(*)(void *, size_t, int, int, int, off_t)) dlsym(RTLD_NEXT, "mmap");
@@ -1031,7 +1031,7 @@ void *dlsym_mmap (void *addr, size_t length, int prot, int flags, int fd, off_t 
   
   char* ret = real_mmap(addr, length, prot, flags, fd, offset);
 
-  debug_info("[SYSCALL_PROXIES] [dlsym_mmap] >> End\n");
+  debug_info_f("[SYSCALL_PROXIES] [dlsym_mmap] >> End\n");
 
   return ret;
 } 

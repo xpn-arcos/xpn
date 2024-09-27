@@ -47,7 +47,7 @@ namespace XPN
         XPN_DEBUG_BEGIN_CUSTOM(mdata.m_file.m_path<<", "<<only_file_size);
         int res = 0;
         if (only_file_size){
-            XPN_DEBUG(mdata.m_data.file_size);
+            XPN_DEBUG("New file_size: "<<mdata.m_data.file_size);
         }else{
             XPN_DEBUG(mdata.to_string());
         }

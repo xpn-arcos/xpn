@@ -29,7 +29,7 @@
 #include <dirent.h>
 
 #include "nfi_xpn_server_comm.hpp"
-#include "base_c/debug_msg.h"
+#include "base_cpp/debug.hpp"
 
 namespace XPN
 {
@@ -97,21 +97,21 @@ namespace XPN
         {
             int ret;
 
-            debug_info("[NFI_XPN] [nfi_write_operation] >> Begin\n");
+            debug_info("[NFI_XPN] [nfi_write_operation] >> Begin");
 
-            debug_info("[NFI_XPN] [nfi_write_operation] Send operation\n");
+            debug_info("[NFI_XPN] [nfi_write_operation] Send operation");
 
             ret = m_comm->write_operation(op);
             if (ret < 0)
             {
-                printf("[NFI_XPN] [nfi_write_operation] ERROR: nfi_write_operation fails\n");
+                printf("[NFI_XPN] [nfi_write_operation] ERROR: nfi_write_operation fails");
                 return -1;
             }
 
-            debug_info("[NFI_XPN] [nfi_write_operation] Execute operation: %d -> \n", op);
+            debug_info("[NFI_XPN] [nfi_write_operation] Execute operation: "<<op<<" -> ");
             ret = m_comm->write_data((void *)&(msg), sizeof(msg));
 
-            debug_info("[NFI_XPN] [nfi_write_operation] >> End\n");
+            debug_info("[NFI_XPN] [nfi_write_operation] >> End");
 
             return ret;
         }
@@ -120,10 +120,10 @@ namespace XPN
         int nfi_do_request ( int op, msg_struct &msg, req_struct &req )
         {
             ssize_t ret;
-            debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_server_do_request] >> Begin\n", 0);
+            debug_info("[NFI_XPN] [nfi_server_do_request] >> Begin");
 
             // send request...
-            debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_server_do_request] Send operation: %d\n", 0, op);
+            debug_info("[NFI_XPN] [nfi_server_do_request] Send operation: "<<op);
 
             ret = nfi_write_operation(op, msg);
             if (ret < 0) {
@@ -131,14 +131,14 @@ namespace XPN
             }
 
             // read response...
-            debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_server_do_request] Response operation: %d\n", 0, op);
+            debug_info("[NFI_XPN] [nfi_server_do_request] Response operation: "<<op);
 
             ret = m_comm->read_data((void *)&(req), sizeof(req));
             if (ret < 0) {
                 return -1;
             }
 
-            debug_info("[SERV_ID=%s] [NFI_XPN] [nfi_server_do_request] >> End\n", 0);
+            debug_info("[NFI_XPN] [nfi_server_do_request] >> End");
 
             return 0;
         }

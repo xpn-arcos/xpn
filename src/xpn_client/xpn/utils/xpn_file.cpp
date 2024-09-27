@@ -271,11 +271,10 @@ namespace XPN
     int xpn_file::initialize_vfh(int index)
     {
         int res = 0;
-        XPN_DEBUG_BEGIN_CUSTOM(index<<", "<<m_path);
         if (m_data_vfh[index].is_initialized()){
-            XPN_DEBUG_END_CUSTOM(index<<", "<<m_path);
             return res;
         }
+        XPN_DEBUG_BEGIN_CUSTOM(index<<", "<<m_path);
         if (index < 0 || index >= static_cast<int>(m_data_vfh.size())){
             res = -1;
             XPN_DEBUG_END_CUSTOM(index<<", "<<m_path);

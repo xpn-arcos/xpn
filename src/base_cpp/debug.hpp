@@ -27,7 +27,18 @@
 
 namespace XPN
 {
-    #define XPN_DEBUG_COMMON_HEADER std::cerr<<"["<<__func__<<"]["<<__FILE__<<":"<<__LINE__<<"] ";
+    constexpr const char* file_name(const char* path) {
+        const char* file = path;
+        while (*path) {
+            if (*path++ == '/') {
+                file = path;
+            }
+        }
+        return file;
+    }
+
+    #define XPN_DEBUG_COMMON_HEADER \
+        std::cerr<<"["<<__func__<<"] ["<<file_name(__FILE__)<<":"<<__LINE__<<"] ";
 
     #define XPN_DEBUG(out_format) \
     if (xpn_env::get_instance().xpn_debug) { \
@@ -39,5 +50,17 @@ namespace XPN
     #define XPN_DEBUG_END_CUSTOM(out_format)   XPN_DEBUG("End   "<<__func__<<"("<<out_format<<")="<<(int)res<<", errno="<<errno<<" "<<std::strerror(errno)<<"");
     #define XPN_DEBUG_BEGIN XPN_DEBUG("Begin "<<__func__<<"()");
     #define XPN_DEBUG_END   XPN_DEBUG("End   "<<__func__<<"()="<<(int)res<<", errno="<<errno<<" "<<std::strerror(errno)<<"");
+
+    #ifdef DEBUG
+        #define debug_error(out_format)    std::cerr<<"[ERROR] ["<<__func__<<"] ["<<::XPN::file_name(__FILE__)<<":"<<__LINE__<<"] "<<out_format<<std::endl;
+        #define debug_warning(out_format)  std::cerr<<"[WARNING] ["<<__func__<<"] ["<<::XPN::file_name(__FILE__)<<":"<<__LINE__<<"] "<<out_format<<std::endl;
+        #define debug_info(out_format)     std::cerr<<"[INFO] ["<<__func__<<"] ["<<::XPN::file_name(__FILE__)<<":"<<__LINE__<<"] "<<out_format<<std::endl;
+    #else
+        #define debug_error(out_format)
+        #define debug_warning(out_format)
+        #define debug_info(out_format)
+    #endif
+
+    #define print(out_format) std::cout << out_format << std::endl;
 
 } // namespace XPN
