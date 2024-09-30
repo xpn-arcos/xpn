@@ -89,7 +89,7 @@ rm -r build
 mkdir -p build
 cd build
 
-cmake -S .. -B . -D CMAKE_INSTALL_PREFIX="${INSTALL_PATH}/xpn" -D CMAKE_C_COMPILER="${MPICC_PATH}"/mpicc -D CMAKE_CXX_COMPILER="${MPICC_PATH}"/mpicxx
+cmake -S .. -B . -D BUILD_TESTS=ON -D CMAKE_INSTALL_PREFIX="${INSTALL_PATH}/xpn" -D CMAKE_C_COMPILER="${MPICC_PATH}"/mpicc -D CMAKE_CXX_COMPILER="${MPICC_PATH}"/mpicxx
 
 cmake --build . -j
 

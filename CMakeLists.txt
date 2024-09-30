@@ -16,6 +16,7 @@ if(ENABLE_SCK_SERVER)
 else()
     message(STATUS "ENABLE_SCK_SERVER : false")
 endif(ENABLE_SCK_SERVER)
+unset(ENABLE_SCK_SERVER CACHE)
 
 option(ENABLE_MPI_SERVER "Enable the mpi_server module" ON)
 if(ENABLE_MPI_SERVER)
@@ -24,6 +25,7 @@ if(ENABLE_MPI_SERVER)
 else()
     message(STATUS "ENABLE_MPI_SERVER : false")
 endif(ENABLE_MPI_SERVER)
+unset(ENABLE_MPI_SERVER CACHE)
 
 link_libraries("pthread" "dl")
 
@@ -42,6 +44,7 @@ if(BUILD_TESTS)
 else()
     message(STATUS "BUILD_TESTS : false")
 endif(BUILD_TESTS)
+unset(BUILD_TESTS CACHE)
 
 
 install(CODE "
