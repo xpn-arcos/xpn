@@ -116,5 +116,6 @@ namespace XPN
         int master_file() const {return calculate_master(true);}
         int master_dir() const {return calculate_master(false);}
         std::string to_string(bool with_data = true);
+        std::string to_string_blocks(int blocks);
     };
 } // namespace XPN

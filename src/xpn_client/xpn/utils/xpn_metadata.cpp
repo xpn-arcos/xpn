@@ -24,6 +24,8 @@
 
 #include <iostream>
 #include <string>
+#include <iomanip>
+#include <map>
 
 namespace XPN
 {
@@ -38,15 +40,6 @@ namespace XPN
         first_node          = mdata.master_file();
         distribution_policy = DISTRIBUTION_ROUND_ROBIN;
     }
-
-    std::string xpn_metadata::to_string(bool with_data){
-        std::stringstream out;
-        out << "Metadata of: " << m_file.m_path << std::endl;
-        if (with_data){
-            out << m_data.to_string();
-        }
-        return out.str();
-    }
     
     int xpn_metadata::calculate_master(bool is_file) const
     {
@@ -59,5 +52,84 @@ namespace XPN
             }
         }
         return master;
+    }
+
+    std::string xpn_metadata::to_string(bool with_data){
+        std::stringstream out;
+        out << "Metadata of: " << m_file.m_path << std::endl;
+        if (with_data){
+            out << m_data.to_string();
+        }
+        return out.str();
+    }
+
+    std::string xpn_metadata::to_string_blocks(int blocks)
+    {
+        off_t offset, local_offset;
+        int serv;
+        int check_sum_1 = 0, check_sum_2 = 0;
+        
+        std::map<int, std::vector<int>> queues;
+        
+        for (int i = 0; i < blocks; i++)
+        {
+            offset = i * m_data.block_size;
+            check_sum_1 += i;
+            for (int j = 0; j < (m_data.replication_level+1); j++)
+            {   
+                m_file.map_offset_mdata(offset, j, local_offset, serv);
+                local_offset /= m_data.block_size;
+                auto &vec = queues[serv];
+                // Resize in case it does not fit
+                if (vec.size() <= static_cast<size_t>(local_offset)) vec.resize(local_offset+1, -1);
+                vec[local_offset] = i;
+            }
+        }	
+
+        std::stringstream out;
+        out << "Header" << std::endl;
+        // Header
+        for (auto &[key, vec] : queues)
+        {
+            out << "Serv " << std::setw(2) << key;
+            if (key != static_cast<int>(queues.size())-1) out << " | ";
+        }
+        out << std::endl;
+        for (auto &[key, vec] : queues)
+        {
+            out << "-------";
+            if (key !=  static_cast<int>(queues.size())-1) out << " | ";
+        }
+        out << std::endl;
+
+
+        // Body
+        size_t max_ops = 1000;
+        size_t count = 0;
+        bool finish = false;
+        while(count < max_ops && !finish){
+            finish = true;
+            for (auto &[key, vec] : queues)
+            {
+                if (count < vec.size()){
+                    out << std::setw(7) << vec[count];
+                    check_sum_2+=vec[count];
+                    finish = false;
+                }else{
+                    out << std::setw(7) << "";
+                }
+                if (key !=  static_cast<int>(queues.size())-1) out << " | ";
+            }
+            out << std::endl;
+            count++;
+        }
+
+        if (check_sum_1 == check_sum_2){
+            out << "Correct: All blocks are present" << std::endl;
+        }else{
+            out << "Error: not all blocks are present" << std::endl;
+        }
+
+        return out.str();
     }
 } // namespace XPN
