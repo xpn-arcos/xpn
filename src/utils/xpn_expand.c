@@ -269,10 +269,10 @@
     }
     xpn_path_len = strlen(argv[1]);
     list (argv[1], rank, size, last_size);
+    MPI_Barrier(MPI_COMM_WORLD);
     if (rank == 0){
       printf("Expand elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);
     }
-    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
 
     return 0;
