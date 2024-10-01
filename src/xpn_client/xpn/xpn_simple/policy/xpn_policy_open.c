@@ -259,7 +259,11 @@ int XpnGetAtribFd ( int fd, struct stat *st )
   }
 
   if (attr.at_type == NFIFILE){
-    XpnReadMetadata(&mdata, n, servers, xpn_file_table[fd]->path, xpn_file_table[fd]->part->replication_level);
+    res = XpnReadMetadata(&mdata, n, servers, xpn_file_table[fd]->path, xpn_file_table[fd]->part->replication_level);
+    if (res < 0){
+      XPN_DEBUG_END_CUSTOM("%d", fd)
+      return res;
+    }
     st->st_size = mdata.file_size;
   }else{
     st->st_size = attr.at_size;
@@ -348,7 +352,11 @@ int XpnGetAtribPath ( char * path, struct stat *st )
   }
 
   if (attr.at_type == NFIFILE){
-    XpnReadMetadata(&mdata, n, servers, aux_path, XpnSearchPart(pd)->replication_level);
+    res = XpnReadMetadata(&mdata, n, servers, aux_path, XpnSearchPart(pd)->replication_level);
+    if (res < 0){
+      XPN_DEBUG_END_CUSTOM("%s", path)
+      return res;
+    }
     st->st_size = mdata.file_size;
   }else{
     st->st_size = attr.at_size;
