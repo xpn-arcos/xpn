@@ -83,7 +83,7 @@
     subgraph ide1 [1 With spack]
     subgraph ide11 [1.1 Add repo]
        direction TB
-       X1["git clone https://github.com/xpn-arcos/xpn.git 
+       X1["git clone https#58;#47;#47;github.com/xpn-arcos/xpn.git
           spack repo add xpn/scripts/spack"]
     end
     subgraph ide12 [1.2 Install software]
@@ -148,7 +148,7 @@ First, you need to get familiar with 2 special files and 1 special environment v
   mindmap
   root(("Ad-Hoc XPN"))
     {{Environment<br> Variables}}
-        ["`**XPN_CONF=**'full path to the xpn.conf file' <br> \* It is the XPN configuration file to be used (mandatory)`"]
+        ["`**XPN_CONF=**´full path to the xpn.conf file´ <br> \* It is the XPN configuration file to be used (mandatory)`"]
     {{Files}}
         ["`**hostfile**</br>   \* for MPI, it is a text file with the list of host names (one per line) where XPN servers and XPN client is going to be executed`"]
         ["`**xpn.conf**</br>   \* for Ad-Hoc XPN, it is a text file with the configuration for the partition where files are stored at the XPN servers`"]
