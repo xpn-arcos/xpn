@@ -526,6 +526,7 @@ int main(int argc, char *argv[]) {
 
     list(dir_name, blocksize, replication_level, rank, size);
 
+    MPI_Barrier(MPI_COMM_WORLD);
     if (rank == 0) {
         printf("Rebuild elapsed time %f mseg\n", (MPI_Wtime() - start_time) * 1000);
     }
@@ -543,7 +544,6 @@ int main(int argc, char *argv[]) {
         free(rank_old_to_actual);
     }
 
-    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
     return res;
 }
