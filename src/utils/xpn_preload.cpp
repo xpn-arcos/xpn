@@ -132,7 +132,7 @@
       // Write header
       xpn_partition part("xpn", replication_level, blocksize);
       part.m_data_serv.resize(size);
-      std::string aux_str = dest_path;
+      std::string aux_str = &dest_path[xpn_path_len];
       xpn_file file(aux_str, part);
       file.m_mdata.m_data.fill(file.m_mdata);
 

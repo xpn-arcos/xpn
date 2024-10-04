@@ -117,7 +117,7 @@
     {
       xpn_partition part("xpn", replication_level, blocksize);
       part.m_data_serv.resize(size);
-      std::string aux_str = src_path;
+      std::string aux_str = &src_path[xpn_path_len];
       xpn_file file(aux_str, part);
       file.m_mdata.m_data.fill(file.m_mdata);
       int master_node = file.m_mdata.master_file();
@@ -131,7 +131,7 @@
           close(fd_dest);
         }
       }
-      MPI_Bcast(&fd_dest, 1, MPI_INT, 0, MPI_COMM_WORLD);
+      MPI_Bcast(&fd_dest, 1, MPI_INT, master_node, MPI_COMM_WORLD);
       if (fd_dest < 0)
       {
         free(buf) ;
@@ -141,6 +141,7 @@
       if ( fd_src < 0 && errno != ENOENT )
       {
         perror("open 1: ");
+        printf("open 1: %s\n", src_path);
         free(buf) ;
         return -1;
       }
@@ -149,6 +150,7 @@
       if ( fd_dest < 0 )
       {
         perror("open 2: ");
+        printf("open 2: %s\n", dest_path);
         free(buf) ;
         return -1;
       }
@@ -159,11 +161,15 @@
         // XpnPrintMetadata(&mdata);
       }
       
-      debug_info("Rank "<<rank<<" mdata "<<file.m_mdata.m_data.magic_number);
+      debug_info("Rank "<<rank<<" mdata " <<file.m_mdata.m_data.magic_number[0]
+                                          <<file.m_mdata.m_data.magic_number[1]
+                                          <<file.m_mdata.m_data.magic_number[2]);
       MPI_Bcast(&file.m_mdata.m_data, sizeof(file.m_mdata.m_data), MPI_CHAR, master_node, MPI_COMM_WORLD);
-      debug_info("After bcast Rank "<<rank<<" mdata "<<file.m_mdata.m_data.magic_number);
+      debug_info("After bcast Rank "<<rank<<" mdata " <<file.m_mdata.m_data.magic_number[0]
+                                                      <<file.m_mdata.m_data.magic_number[1]
+                                                      <<file.m_mdata.m_data.magic_number[2]);
       #ifdef DEBUG
-      XpnPrintMetadata(&mdata);
+      std::cerr<<file.m_mdata.to_string()<<std::endl;
       #endif
       if (!file.m_mdata.m_data.is_valid()){
         free(buf);
@@ -183,7 +189,7 @@
           {
             file.map_offset_mdata(offset_dest, i, offset_src, aux_serv);
             
-            debug_info("try rank "<<rank<<" offset_dest "<<offset_dest<<" offset_src "<<offset_src<<" aux_server "<<aux_serv);
+            debug_info("try rank "<<rank<<" offset_dest "<<offset_dest<<" offset_src "<<offset_src<<" aux_server "<<aux_serv<<" file_size "<<file.m_mdata.m_data.file_size);
             if (aux_serv == rank){
               goto exit_search;
             }
@@ -253,7 +259,7 @@
 
     xpn_partition part("xpn", replication_level, blocksize);
     part.m_data_serv.resize(size);
-    std::string aux_str = src_path;
+    std::string aux_str = &src_path[xpn_path_len];
     xpn_file file(aux_str, part);
     file.m_mdata.m_data.fill(file.m_mdata);
     int master_node = file.m_mdata.master_file();
