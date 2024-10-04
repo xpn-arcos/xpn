@@ -346,7 +346,7 @@ int nfi_local::nfi_readdir(xpn_fh &fhd, struct ::dirent &entry)
     debug_error("[SERV_ID="<<m_server<<"] [NFI_LOCAL] [nfi_local_readdir] ERROR: real_posix_readdir fails to open '"<<fhd.path<<"'");
     return -1;
   }
-  if (xpn_env::get_instance().xpn_session_dir == 1){
+  if (xpn_env::get_instance().xpn_session_dir == 0){
     fhd.telldir = filesystem_telldir(s);
     filesystem_closedir(s);
   }

@@ -29,6 +29,7 @@ namespace XPN
     std::string xpn_api::check_remove_path_from_path(const std::string &path, std::string& out_path)
     {
         std::string name_part = xpn_path::get_first_dir(path);
+        XPN_DEBUG("First dir "<<name_part);
         auto it = m_partitions.find(name_part);
         if (it == m_partitions.end())
         {
@@ -97,10 +98,17 @@ namespace XPN
                 write_metadata(file.m_mdata, false);
             }
         }else{
-            m_worker->launch([&res, &file, flags, mode](){
-                int master_file = file.m_mdata.master_file();
-                res = file.m_part.m_data_serv[master_file]->nfi_open(file.m_path, flags, mode, file.m_data_vfh[master_file]);
-            });
+            int master_file = file.m_mdata.master_file();
+            
+            if ((O_DIRECTORY == (flags & O_DIRECTORY))){
+                m_worker->launch([&res, &file, master_file, flags, mode](){
+                    res = file.m_part.m_data_serv[master_file]->nfi_opendir(file.m_path, file.m_data_vfh[master_file]);
+                });
+            }else{
+                m_worker->launch([&res, &file, master_file, flags, mode](){
+                    res = file.m_part.m_data_serv[master_file]->nfi_open(file.m_path, flags, mode, file.m_data_vfh[master_file]);
+                });
+            }
             m_worker->wait();
         }
 

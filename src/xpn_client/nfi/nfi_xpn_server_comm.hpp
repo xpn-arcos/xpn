@@ -36,8 +36,7 @@ namespace XPN
     class nfi_xpn_server_comm
     {
     public:
-        nfi_xpn_server_comm() = default;
-        
+        virtual ~nfi_xpn_server_comm() = default;
         virtual int64_t write_operation(int op) = 0;
         virtual int64_t read_data(void *data, int64_t size) = 0;
         virtual int64_t write_data(const void *data, int64_t size) = 0;
@@ -45,7 +44,7 @@ namespace XPN
     class nfi_xpn_server_control_comm 
     {
     public:
-        nfi_xpn_server_control_comm() = default;
+        virtual ~nfi_xpn_server_control_comm() = default;
 
         virtual nfi_xpn_server_comm* connect(const std::string &srv_name) = 0;
         virtual void disconnect(nfi_xpn_server_comm *comm) = 0;

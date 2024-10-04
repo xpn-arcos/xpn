@@ -73,7 +73,7 @@ namespace XPN
 
     int xpn_api::closedir(DIR *dirp)
     {
-        XPN_DEBUG_BEGIN;
+        XPN_DEBUG_BEGIN_CUSTOM(dirp->fd);
         int res = 0;
         
         if((NULL == dirp)||(!m_file_table.has(dirp->fd))){
@@ -82,7 +82,7 @@ namespace XPN
         }
 
         auto& file = m_file_table.get(dirp->fd);
-
+        XPN_DEBUG("Close : '"<<file.m_path<<"'")
         for (size_t i = 0; i < file.m_data_vfh.size(); i++)
         {
             if (file.m_data_vfh[i].is_initialized()){
@@ -92,6 +92,8 @@ namespace XPN
             }
         }
         m_worker->wait();
+
+        m_file_table.remove(dirp->fd);
 
         delete dirp->path;
         delete dirp;
@@ -114,11 +116,11 @@ namespace XPN
         int master_dir = file.m_mdata.master_dir();
         file.initialize_vfh_dir(master_dir);
 
-        struct ::dirent * entry = new dirent;
+        struct ::dirent * entry = new (std::nothrow) dirent;
         if (entry == nullptr){
             return nullptr;
         }
-        m_worker->launch([&res, master_dir, &file, entry](){
+        m_worker->launch([&res, master_dir, &file, &entry](){
             res = file.m_part.m_data_serv[master_dir]->nfi_readdir(file.m_data_vfh[master_dir], *entry);
         });
 

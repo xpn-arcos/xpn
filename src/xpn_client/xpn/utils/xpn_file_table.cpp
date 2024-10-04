@@ -26,8 +26,14 @@ namespace XPN
 {
     xpn_file_table::~xpn_file_table()
     {   
+        std::vector<int> keys;
         for (auto [key,file] : m_files)
         {
+            keys.emplace_back(key);
+        }
+        for (auto &key : keys)
+        {
+            XPN_DEBUG("Forgot to close: "<<key);
             remove(key);
         }
     }
