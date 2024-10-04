@@ -32,7 +32,10 @@
   #include <sys/stat.h>
   #include <dirent.h>
   #include "mpi.h"
-  #include "xpn/xpn_simple/xpn_policy_rw.h"
+  #include "xpn/xpn_file.hpp"
+  #include "xpn/xpn_partition.hpp"
+  #include "xpn/xpn_metadata.hpp"
+  #include "base_c/filesystem.h"
 
 
 /* ... Const / Const ................................................. */
@@ -54,11 +57,12 @@
 
   int xpn_path_len = 0;
 
+  using namespace XPN;
 /* ... Functions / Funciones ......................................... */
 
   int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {  
-    debug_info("entry %s is_file %d dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d \n",entry, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
+    debug_info("entry "<<entry<<" is_file "<<is_file<<" dir_name "<<dir_name<<" dest_prefix "<<dest_prefix<<" blocksize "<<blocksize<<" replication_level "<<replication_level<<" rank "<<rank<<" size "<<size);
     int  ret;
 
     int fd_src, fd_dest, replication = 0;
@@ -68,7 +72,7 @@
     off64_t offset_dest ;
     off_t offset_src;
     ssize_t read_size, write_size;
-    struct stat st_src = {0};
+    struct stat st_src = {};
 
     //Alocate buffer
     buf_len = blocksize;
@@ -110,8 +114,13 @@
       MPI_Barrier(MPI_COMM_WORLD);
     }
     else if (is_file)
-    {      
-      int master_node = hash(&src_path[xpn_path_len], size, 1);
+    {
+      xpn_partition part("xpn", replication_level, blocksize);
+      part.m_data_serv.resize(size);
+      std::string aux_str = src_path;
+      xpn_file file(aux_str, part);
+      file.m_mdata.m_data.fill(file.m_mdata);
+      int master_node = file.m_mdata.master_file();
       if (rank == master_node)
       {
         fd_dest = creat(dest_path, st_src.st_mode);
@@ -144,20 +153,19 @@
         return -1;
       }
 
-      struct xpn_metadata mdata = {0};
       if (rank == master_node){
-        ret = filesystem_read(fd_src, &mdata, sizeof(struct xpn_metadata));
+        ret = filesystem_read(fd_src, &file.m_mdata.m_data, sizeof(file.m_mdata.m_data));
         // To debug
         // XpnPrintMetadata(&mdata);
       }
       
-      debug_info("Rank %d mdata %3s\n", rank, mdata.magic_number);
-      MPI_Bcast(&mdata, sizeof(struct xpn_metadata), MPI_CHAR, master_node, MPI_COMM_WORLD);
-      debug_info("After bcast Rank %d mdata %3s\n", rank, mdata.magic_number);
+      debug_info("Rank "<<rank<<" mdata "<<file.m_mdata.m_data.magic_number);
+      MPI_Bcast(&file.m_mdata.m_data, sizeof(file.m_mdata.m_data), MPI_CHAR, master_node, MPI_COMM_WORLD);
+      debug_info("After bcast Rank "<<rank<<" mdata "<<file.m_mdata.m_data.magic_number);
       #ifdef DEBUG
       XpnPrintMetadata(&mdata);
       #endif
-      if (!XPN_CHECK_MAGIC_NUMBER(&mdata)){
+      if (!file.m_mdata.m_data.is_valid()){
         free(buf);
         return -1;
       }
@@ -173,23 +181,23 @@
           offset_dest += blocksize;
           for (int i = 0; i < replication_level+1; i++)
           {
-            XpnCalculateBlockMdata(&mdata, offset_dest, i, &offset_src, &aux_serv);
+            file.map_offset_mdata(offset_dest, i, offset_src, aux_serv);
             
-            debug_info("try rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
+            debug_info("try rank "<<rank<<" offset_dest "<<offset_dest<<" offset_src "<<offset_src<<" aux_server "<<aux_serv);
             if (aux_serv == rank){
               goto exit_search;
             }
           }
-        }while(offset_dest < mdata.file_size);
+        }while(offset_dest < static_cast<off64_t>(file.m_mdata.m_data.file_size));
         exit_search:
         if (aux_serv != rank){
           continue;
         }
-        debug_info("rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
+        debug_info("rank "<<rank<<" offset_dest "<<offset_dest<<" offset_src "<<offset_src<<" aux_server "<<aux_serv);
         if(st_src.st_mtime != 0 && offset_src > st_src.st_size){
           break;
         }
-        if (offset_dest > mdata.file_size){
+        if (offset_dest > static_cast<off64_t>(file.m_mdata.m_data.file_size)){
           break;
         }
         if (replication != 0){
@@ -217,7 +225,7 @@
           perror("write: ");
           break;
         }
-        debug_info("rank %d write %ld in offset_dest %ld from offset_src %ld\n", rank, write_size, offset_dest, offset_src);
+        debug_info("rank "<<rank<<" write "<<write_size<<" in offset_dest "<<offset_dest<<" from offset_src "<<offset_src);
       }
       while(read_size > 0);
 
@@ -233,7 +241,7 @@
 
   int list (char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {
-    debug_info("dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d\n", dir_name, dest_prefix, blocksize, replication_level, rank, size);
+    debug_info("dir_name "<<dir_name<<" dest_prefix "<<dest_prefix<<" blocksize "<<blocksize<<" replication_level "<<replication_level<<" rank "<<rank<<" size "<<size);
     
     int ret;
     DIR* dir = NULL;
@@ -242,7 +250,13 @@
     char path_dst [PATH_MAX];
     int buff_coord = 1;
 
-    int master_node = hash(&dir_name[xpn_path_len], size, 1);
+
+    xpn_partition part("xpn", replication_level, blocksize);
+    part.m_data_serv.resize(size);
+    std::string aux_str = src_path;
+    xpn_file file(aux_str, part);
+    file.m_mdata.m_data.fill(file.m_mdata);
+    int master_node = file.m_mdata.master_file();
     if (rank == master_node){
       dir = opendir(dir_name);
       if(dir == NULL)

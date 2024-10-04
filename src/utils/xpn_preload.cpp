@@ -32,8 +32,10 @@
   #include <sys/stat.h>
   #include <dirent.h>
   #include "mpi.h"
-  #include "xpn/xpn_simple/xpn_policy_rw.h"
-
+  #include "xpn/xpn_file.hpp"
+  #include "xpn/xpn_partition.hpp"
+  #include "xpn/xpn_metadata.hpp"
+  #include "base_c/filesystem.h"
 
 /* ... Const / Const ................................................. */
 
@@ -53,12 +55,13 @@
   char dest_path [PATH_MAX+5];
 
   int xpn_path_len = 0;
-
+  
+  using namespace XPN;
 /* ... Functions / Funciones ......................................... */
 
   int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {  
-    debug_info("entry %s is_file %d dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d \n",entry, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
+    debug_info("entry "<<entry<<" is_file "<<is_file<<" dir_name "<<dir_name<<" dest_prefix "<<dest_prefix<<" blocksize "<<blocksize<<" replication_level "<<replication_level<<" rank "<<rank<<" size "<<size);
     int  ret;
 
     int fd_src, fd_dest;
@@ -127,8 +130,11 @@
       }
 
       // Write header
-      struct xpn_metadata mdata;
-      XpnCreateMetadataExtern(&mdata, dest_path, size, blocksize, replication_level);
+      xpn_partition part("xpn", replication_level, blocksize);
+      part.m_data_serv.resize(size);
+      std::string aux_str = dest_path;
+      xpn_file file(aux_str, part);
+      file.m_mdata.m_data.fill(file.m_mdata);
 
       char header_buf [HEADER_SIZE];
       memset(header_buf, 0, HEADER_SIZE);
@@ -144,7 +150,7 @@
       { 
         for (i = 0; i <= replication_level; i++)
         {
-          XpnCalculateBlockMdata(&mdata, offset_src, i, &local_offset, &local_server);
+          file.map_offset_mdata(offset_src, i, local_offset, local_server);
 
           if (local_server == rank)
           {
@@ -178,15 +184,15 @@
 
 finish_copy:
       // Update file size
-      mdata.file_size = st.st_size;
+      file.m_mdata.m_data.file_size = st.st_size;
       // Write mdata only when necesary
       int write_mdata = 0;
-      int master_dir = hash(&dest_path[xpn_path_len], size, 0);
+      int master_dir = file.m_mdata.master_dir();
       int has_master_dir = 0;
       int aux_serv;
       for (int i = 0; i < replication_level+1; i++)
       { 
-        aux_serv = ( mdata.first_node + i ) % size;
+        aux_serv = ( file.m_mdata.m_data.first_node + i ) % size;
         if (aux_serv == rank){
           write_mdata = 1;
           break;
@@ -203,8 +209,8 @@ finish_copy:
       
       if (write_mdata == 1){
         ret_2 = lseek64(fd_dest, 0, SEEK_SET);
-        write_size = filesystem_write(fd_dest, &mdata, sizeof(struct xpn_metadata));
-        if (write_size != sizeof(struct xpn_metadata)){
+        write_size = filesystem_write(fd_dest, &file.m_mdata.m_data, sizeof(file.m_mdata.m_data));
+        if (write_size != sizeof(file.m_mdata.m_data)){
           perror("write: ");
           free(buf) ;
           return -1;

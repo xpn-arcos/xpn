@@ -34,7 +34,7 @@ add_subdirectory(src/base_cpp)
 add_subdirectory(src/bypass)
 add_subdirectory(src/xpn_client)
 add_subdirectory(src/xpn_server)
-# add_subdirectory(src/utils)
+add_subdirectory(src/utils)
 
 
 option(BUILD_TESTS "Build the test" OFF)
