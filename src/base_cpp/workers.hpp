@@ -36,8 +36,7 @@ namespace XPN
     class workers
     {
     public:
-        workers();
-        ~workers();
+        virtual ~workers() = default;
 
         virtual void launch(std::function<void()> task) = 0;
         virtual void wait() = 0;

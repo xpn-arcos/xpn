@@ -29,9 +29,6 @@
 
 namespace XPN
 {
-    workers::workers() {}
-    workers::~workers() {}
-
     std::unique_ptr<workers> workers::Create(workers_mode mode)
     {
         switch (mode)
