@@ -32,8 +32,11 @@
   #include <sys/stat.h>
   #include <dirent.h>
   #include "mpi.h"
-  #include "xpn/xpn_simple/xpn_policy_rw.h"
-  #include "base/ns.h"
+  #include "xpn/xpn_file.hpp"
+  #include "xpn/xpn_partition.hpp"
+  #include "xpn/xpn_metadata.hpp"
+  #include "base_c/filesystem.h"
+  #include "base_cpp/ns.hpp"
 
 
 /* ... Const / Const ................................................. */
@@ -47,15 +50,13 @@
   #endif
 
   #define MIN(a,b) (((a)<(b))?(a):(b))
-  #define THREAD_WRITER 1
 
-  struct xpn_metadata new_mdata;
   char *t_entry;
   struct stat st;
   int xpn_path_len = 0;
 
   int rank, size, new_size, pos_in_shrink;
-
+  using namespace XPN;
 
   void *recv_thread(void * arg);
 /* ... Functions / Funciones ......................................... */
@@ -71,20 +72,29 @@
 
   int copy(char * entry)
   {  
-    debug_info("copy entry %s rank %d size %d new_size %d pos_in_shrink %d\n", entry, rank, size, new_size, pos_in_shrink);
+    debug_info("copy entry "<<entry<<" rank "<<rank<<" size "<<size<<" new_size "<<new_size<<" pos_in_shrink "<<pos_in_shrink);
     int ret;
     int fd_src;
-    struct xpn_metadata mdata;
 
     if (rank == 0){
       printf("%s\n", entry);
     }
 
-    int master_node_old = hash(&entry[xpn_path_len], size, 1);
-    int master_node_new = hash(&entry[xpn_path_len], new_size, 1);
+    xpn_partition old_part("xpn", 0, 0);
+    old_part.m_data_serv.resize(size);
+    std::string aux_str = &entry[xpn_path_len];
+    xpn_file old_file(aux_str, old_part);
+    old_file.m_mdata.m_data.fill(old_file.m_mdata);
+
+    xpn_partition new_part("xpn", 0, 0);
+    new_part.m_data_serv.resize(new_size);
+    xpn_file new_file(aux_str, new_part);
+    new_file.m_mdata.m_data.fill(new_file.m_mdata);
+    int master_node_old = old_file.m_mdata.master_file();
+    int master_node_new = new_file.m_mdata.master_file();
     int has_new_mdata = 0;
 
-    debug_info("master_node_old %d master_node_new %d\n", master_node_old, master_node_new);
+    debug_info("master_node_old "<<master_node_old<<" master_node_new "<<master_node_new);
 
     if (master_node_old == rank){
       fd_src = open(entry, O_RDONLY);
@@ -92,7 +102,7 @@
         perror("open :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
-      ret = filesystem_read(fd_src, &mdata, sizeof(mdata));
+      ret = filesystem_read(fd_src, &old_file.m_mdata.m_data, sizeof(old_file.m_mdata.m_data));
       if (ret < 0){
         perror("read mdata :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -109,19 +119,19 @@
       }
       
       // Check correct mdata
-      if (!XPN_CHECK_MAGIC_NUMBER(&mdata)){
+      if (!old_file.m_mdata.m_data.is_valid()){
         printf("Error: metadata incorrect\n");
         int len;
         char processor_name[MPI_MAX_PROCESSOR_NAME];
         MPI_Get_processor_name(processor_name, &len);
         printf("Rank %d processor_name %s ", rank, processor_name); 
-        XpnPrintMetadata(&mdata);
+        std::cerr<<old_file.m_mdata.to_string()<<std::endl;
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
     }
     debug_info("before bcast\n");
-    MPI_Bcast(&mdata, sizeof(mdata), MPI_CHAR, master_node_old, MPI_COMM_WORLD);
-    new_mdata = mdata;
+    MPI_Bcast(&old_file.m_mdata.m_data, sizeof(old_file.m_mdata.m_data), MPI_CHAR, master_node_old, MPI_COMM_WORLD);
+    new_file.m_mdata.m_data = old_file.m_mdata.m_data;
     MPI_Bcast(&st, sizeof(st), MPI_CHAR, master_node_old, MPI_COMM_WORLD);
     debug_info("after bcast\n");
     
@@ -137,15 +147,15 @@
     int current_serv = 0;
     int times_do_it = 0;
     int trans_rank = rank;
-    int actual_last_block = mdata.file_size / mdata.block_size;
-    int *trans_rank_array = malloc(sizeof(int) * size);
+    int actual_last_block = old_file.m_mdata.m_data.file_size / old_file.m_mdata.m_data.block_size;
+    int *trans_rank_array = (int *)malloc(sizeof(int) * size);
     if (trans_rank_array == NULL){
       perror("malloc: ");
       MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
-    for (int i = 1; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++)
+    for (int i = 1; i < xpn_metadata::MAX_RECONSTURCTIONS; i++)
     {
-      if (new_mdata.data_nserv[i] == 0 && i+1 < XPN_METADATA_MAX_RECONSTURCTIONS){
+      if (new_file.m_mdata.m_data.data_nserv[i] == 0 && i+1 < xpn_metadata::MAX_RECONSTURCTIONS){
         if (current_serv == pos_in_shrink){
           aux_rank_bcast = rank;
         }else{
@@ -156,7 +166,7 @@
         // MPI_Bcast(&aux_st, sizeof(aux_st), MPI_CHAR, rank_bcast, MPI_COMM_WORLD);
         MPI_Allgather(&trans_rank, 1, MPI_INT, trans_rank_array, 1, MPI_INT, MPI_COMM_WORLD);
         if (rank == 0){
-          debug_info("Rank %d rank_bcast %d\n", rank, rank_bcast);
+          debug_info("Rank "<<rank<<" rank_bcast "<<rank_bcast);
           debug_info("Trans_rank_array ");
           for (int i = 0; i < size; i++)
           {
@@ -170,13 +180,13 @@
         }
         
         int prev_nserv;
-        int prev_block = new_mdata.data_nserv[i-1];
-        if (new_mdata.data_nserv[i-1] < 0){
-          prev_nserv = new_mdata.data_nserv[i-2];
+        int prev_block = new_file.m_mdata.m_data.data_nserv[i-1];
+        if (new_file.m_mdata.m_data.data_nserv[i-1] < 0){
+          prev_nserv = new_file.m_mdata.m_data.data_nserv[i-2];
         }else{
-          prev_nserv = new_mdata.data_nserv[i-1];
+          prev_nserv = new_file.m_mdata.m_data.data_nserv[i-1];
         }
-        if (rank == 0){ debug_info("prev_nserv %d\n", prev_nserv); }
+        if (rank == 0){ debug_info("prev_nserv "<<prev_nserv); }
           
         if (actual_last_block < prev_block){
           actual_last_block = prev_block;
@@ -188,9 +198,9 @@
         int counter = 0;
         for (int j = 0; j < prev_nserv*2; j++)
         {
-          XpnCalculateBlockMdata(&new_mdata, actual_last_block*new_mdata.block_size, replication, &local_offset, &aux_serv);
-          if (rank == 0){ debug_info("actual_last_block %d aux_serv %d\n",actual_last_block, aux_serv); }
-          if (is_prev_first_node(new_mdata.first_node, aux_serv, prev_nserv) == 1){
+          new_file.map_offset_mdata(actual_last_block*new_file.m_mdata.m_data.block_size, replication, local_offset, aux_serv);
+          if (rank == 0){ debug_info("actual_last_block "<<actual_last_block<<" aux_serv "<<aux_serv); }
+          if (is_prev_first_node(new_file.m_mdata.m_data.first_node, aux_serv, prev_nserv) == 1){
             if (counter == 1){
               // break;
               goto tag1;
@@ -199,23 +209,23 @@
             }
           }
           replication++;
-          if (replication > new_mdata.replication_level){
+          if (replication > new_file.m_mdata.m_data.replication_level){
             actual_last_block ++;
             replication = 0;
           }
         }
         tag1:
 
-        replication = new_mdata.replication_level;
+        replication = new_file.m_mdata.m_data.replication_level;
         int aux_actual_last_block = actual_last_block;
         for (int j = prev_nserv-1; j >= 0; j--)
         {
-          XpnCalculateBlockMdata(&new_mdata, aux_actual_last_block*new_mdata.block_size, replication, &local_offset, &aux_serv);
-          if (rank == 0){ debug_info("aux_actual_last_block %d aux_serv %d local_offset_blocks %d\n",aux_actual_last_block, aux_serv, local_offset/new_mdata.block_size); }
+          new_file.map_offset_mdata(aux_actual_last_block*new_file.m_mdata.m_data.block_size, replication, local_offset, aux_serv);
+          if (rank == 0){ debug_info("aux_actual_last_block "<aux_actual_last_block<<" aux_serv "<<aux_serv<<" local_offset_blocks "<<local_offset/new_file.m_mdata.m_data.block_size); }
           replication--;
           if (replication < 0){
             aux_actual_last_block --;
-            replication = new_mdata.replication_level;
+            replication = new_file.m_mdata.m_data.replication_level;
           }
           if (aux_serv == trans_rank_array[rank_bcast]){
             goto tag2;
@@ -225,14 +235,14 @@
         tag2:
 
         // Server id in negative
-        new_mdata.data_nserv[i] = (trans_rank_array[rank_bcast] + 1) * -1;
+        new_file.m_mdata.m_data.data_nserv[i] = (trans_rank_array[rank_bcast] + 1) * -1;
         // Num blocks to redistribute
-        new_mdata.offsets[i] = local_offset / new_mdata.block_size + 1;
+        new_file.m_mdata.m_data.offsets[i] = local_offset / new_file.m_mdata.m_data.block_size + 1;
         // New nserv
-        new_mdata.data_nserv[i+1] = prev_nserv - 1;
+        new_file.m_mdata.m_data.data_nserv[i+1] = prev_nserv - 1;
         // New last block
-        new_mdata.offsets[i+1] = actual_last_block;
-        debug_info("Rank %d trans_rank %d rank_bcast %d\n", rank, trans_rank, rank_bcast);
+        new_file.m_mdata.m_data.offsets[i+1] = actual_last_block;
+        debug_info("Rank "<<rank<<" trans_rank "<<trans_rank<<" rank_bcast "<<rank_bcast);
         if (rank > rank_bcast){
           trans_rank--;
         }else if (rank == rank_bcast){
@@ -282,24 +292,64 @@
     t_entry = entry;
     if (pos_in_shrink == -1){
       // If is writer
-      if (THREAD_WRITER == 1){
-        recv_thread(NULL);
-      }else{
-        pthread_t threads[THREAD_WRITER];
-        for (int i = 0; i < THREAD_WRITER; i++)
-        {
-		      pthread_create(&threads[i], NULL, (void * (*)(void *))recv_thread, NULL);
-        }
-        for (int i = 0; i < THREAD_WRITER; i++)
-        {
-		      pthread_join(threads[i], NULL);
-        }
+      int ret;
+      char *buf;    
+      int has_remaining_blocks = 1;
+      off_t offset;
+      int buf_size;
+      MPI_Status status;
+      int fd;
+
+      buf = (char *)malloc(sizeof(char)*new_file.m_mdata.m_data.block_size);
+      if (buf == NULL){
+        perror("malloc: ");
+        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
+
+      fd = open64(t_entry, O_WRONLY | O_CREAT | O_LARGEFILE, st.st_mode);
+      if (fd < 0){
+        perror("open writer:");
+        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+      }
+
+      debug_info("Rank "<<rank<<" starting listening");
+      do{
+        MPI_Recv(&has_remaining_blocks, 1, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
+        // debug_info("Rank %d recv has_remaining_blocks %d\n", rank, has_remaining_blocks);
+        if (has_remaining_blocks == 0) break;
+
+
+        MPI_Recv(&offset, 1, MPI_LONG, status.MPI_SOURCE, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&buf_size, 1, MPI_INT, status.MPI_SOURCE, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(buf, buf_size, MPI_CHAR, status.MPI_SOURCE, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        // debug_info("Rank %d recv offset %ld buf_size %d buf\n", rank, offset, buf_size);
+
+        off64_t ret_2;
+        ret_2 = lseek64(fd, offset + xpn_metadata::HEADER_SIZE, SEEK_SET);
+        if (ret_2 < 0){
+          print("lseek offset "<< offset + xpn_metadata::HEADER_SIZE);
+          perror("lseek :");
+          MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+        }
+
+        ret = filesystem_write(fd, buf, buf_size);
+        if (ret < 0){
+          perror("write buf :");
+          MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+        }
+      }while(has_remaining_blocks == 1);
+      
+      ret = close(fd);
+      if (ret < 0){
+        perror("close :");
+        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+      }
+      debug_info("Exit recv_thread rank "<<rank);
       
     }else{
       // If is reader
       int fd; 
-      buf = malloc(sizeof(char)*new_mdata.block_size);
+      buf = (char *)malloc(sizeof(char)*new_file.m_mdata.m_data.block_size);
       if (buf == NULL){
         perror("malloc: ");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -310,7 +360,7 @@
         perror("open reader :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
-      off_t offset_dest = -new_mdata.block_size; 
+      off_t offset_dest = -new_file.m_mdata.m_data.block_size; 
       off_t offset_src;
       off_t local_offset;
       int replication = 0;
@@ -319,17 +369,17 @@
       do{
         // First calcule from where
         do{
-          offset_dest += mdata.block_size;
-          for (replication = 0; replication < mdata.replication_level+1; replication++)
+          offset_dest += old_file.m_mdata.m_data.block_size;
+          for (replication = 0; replication < old_file.m_mdata.m_data.replication_level+1; replication++)
           {
-            XpnCalculateBlockMdata(&mdata, offset_dest, replication, &local_offset, &aux_serv);
+            old_file.map_offset_mdata(offset_dest, replication, local_offset, aux_serv);
             
             // debug_info("try rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
             if (rank == aux_serv){
               goto exit_search;
             }
           }
-        }while(offset_dest < mdata.file_size);
+        }while(offset_dest < static_cast<off_t>(old_file.m_mdata.m_data.file_size));
         exit_search:
         if (rank != aux_serv){
           continue;
@@ -337,20 +387,20 @@
 
         
         off64_t ret_2;
-        ret_2 = lseek64(fd, local_offset + XPN_HEADER_SIZE, SEEK_SET);
+        ret_2 = lseek64(fd, local_offset + xpn_metadata::HEADER_SIZE, SEEK_SET);
         if (ret_2 < 0){
-          printf("lseek offset %ld\n", local_offset + XPN_HEADER_SIZE);
+          print("lseek offset "<<local_offset + xpn_metadata::HEADER_SIZE);
           perror("lseek :");
           MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
         }
-        read_size = filesystem_read(fd, buf, new_mdata.block_size);
+        read_size = filesystem_read(fd, buf, new_file.m_mdata.m_data.block_size);
         // debug_info("Rank %d local_offset %ld read_size %d\n", rank, local_offset, read_size);
         if (read_size <= 0){
           has_remaining_blocks = 0;
           break;
         }
         int rank_to_send = 0;
-        XpnCalculateBlockMdata(&new_mdata, offset_dest, replication, &offset_src, &aux_serv);
+        new_file.map_offset_mdata(offset_dest, replication, offset_src, aux_serv);
         for (int i = 0; i < size; i++)
         {
           if (aux_serv == trans_rank_array[i]){
@@ -373,7 +423,7 @@
         // MPI_Recv(buf[0], buf_size, MPI_CHAR, status.MPI_SOURCE, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       }while(has_remaining_blocks == 1);
 
-      debug_info("Rank %d after barrier readers\n", rank);
+      debug_info("Rank "<<rank<<" after barrier readers");
       MPI_Barrier(comm_separated);
 
       // Select master to stop writers
@@ -383,16 +433,13 @@
         if (trans_rank_array[master_send_stop] == -1) break;
       }
 
-      debug_info("Rank %d Before barrier readers master_send_stop %d\n", rank, master_send_stop);
+      debug_info("Rank "<<rank<<" Before barrier readers master_send_stop "<< master_send_stop);
 
       if (rank == master_send_stop){
         for (int i = 0; i < size; i++)
         {
           if (trans_rank_array[i] != -1){
-            for (int j = 0; j < THREAD_WRITER; j++)
-            {
-              MPI_Send(&has_remaining_blocks, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-            }
+            MPI_Send(&has_remaining_blocks, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
           }
         }      
       }
@@ -413,7 +460,7 @@
         
     // Calculate where to write the new metadata
     int aux_serv = 0;
-    for (int i = 0; i < mdata.replication_level+1; i++)
+    for (int i = 0; i < new_file.m_mdata.m_data.replication_level+1; i++)
     { 
       aux_serv = ( master_node_new + i ) % size;
       if (trans_rank_array[rank] == aux_serv){
@@ -421,15 +468,15 @@
         break;
       }
     }
-    debug_info("Rank %d Write metadata master_node_new %d\n", rank, master_node_new);
+    debug_info("Rank "<<rank<<" Write metadata master_node_new "<<master_node_new);
     if (has_new_mdata == 1){
-      debug_info("Write metadata for %s in rank %d new rank %d\n", entry, rank, trans_rank_array[rank]);
+      debug_info("Write metadata for "<<entry<<" in rank "<<rank<<" new rank "<<trans_rank_array[rank]);
       fd_src = open(entry, O_WRONLY | O_CREAT, st.st_mode);
       if (fd_src < 0){
         perror("open :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
-      ret = filesystem_write(fd_src, &new_mdata, sizeof(new_mdata));
+      ret = filesystem_write(fd_src, &new_file.m_mdata.m_data, sizeof(new_file.m_mdata.m_data));
       if (ret < 0){
         perror("write mdata :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -447,67 +494,9 @@
     return 0;
   }
 
-  void *recv_thread(__attribute__((__unused__)) void * arg){
-    int ret;
-    char *buf;    
-    int has_remaining_blocks = 1;
-    off_t offset;
-    int buf_size;
-    MPI_Status status;
-    int fd;
-
-    buf = malloc(sizeof(char)*new_mdata.block_size);
-    if (buf == NULL){
-      perror("malloc: ");
-      MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-    }
-
-    fd = open64(t_entry, O_WRONLY | O_CREAT | O_LARGEFILE, st.st_mode);
-    if (fd < 0){
-      perror("open writer:");
-      MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-    }
-
-    debug_info("Rank %d starting listening\n", rank);
-    do{
-      MPI_Recv(&has_remaining_blocks, 1, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
-      // debug_info("Rank %d recv has_remaining_blocks %d\n", rank, has_remaining_blocks);
-      if (has_remaining_blocks == 0) break;
-
-
-      MPI_Recv(&offset, 1, MPI_LONG, status.MPI_SOURCE, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      MPI_Recv(&buf_size, 1, MPI_INT, status.MPI_SOURCE, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      MPI_Recv(buf, buf_size, MPI_CHAR, status.MPI_SOURCE, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      // debug_info("Rank %d recv offset %ld buf_size %d buf\n", rank, offset, buf_size);
-
-      off64_t ret_2;
-      ret_2 = lseek64(fd, offset + XPN_HEADER_SIZE, SEEK_SET);
-      if (ret_2 < 0){
-        printf("lseek offset %ld\n", offset + XPN_HEADER_SIZE);
-        perror("lseek :");
-        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-      }
-
-      ret = filesystem_write(fd, buf, buf_size);
-      if (ret < 0){
-        perror("write buf :");
-        MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-      }
-    }while(has_remaining_blocks == 1);
-    
-    ret = close(fd);
-    if (ret < 0){
-      perror("close :");
-      MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
-    }
-    debug_info("Exit recv_thread rank %d\n", rank);
-    return NULL;
-  }
-
-
   int list (char * dir_name)
   {
-    debug_info("dir_name %s rank %d size %d new_size %d pos_in_shrink %d\n", dir_name, rank, size, new_size, pos_in_shrink);
+    debug_info("dir_name "<<dir_name<<" rank "<<rank<<" size "<<size<<" new_size "<<new_size<<" pos_in_shrink "<<pos_in_shrink);
     
     int ret;
     DIR* dir = NULL;
@@ -516,7 +505,13 @@
     int buff_coord = 1;
     
 
-    int master_node = hash(&dir_name[xpn_path_len], size, 1);
+    xpn_partition part("xpn", 0, 0);
+    part.m_data_serv.resize(size);
+    std::string aux_str = &dir_name[xpn_path_len];
+    xpn_file file(aux_str, part);
+    file.m_mdata.m_data.fill(file.m_mdata);
+
+    int master_node = file.m_mdata.master_file();
     if (rank == master_node){
       dir = opendir(dir_name);
       if(dir == NULL)
@@ -588,10 +583,9 @@
   {   
     double start_time;
     const char *delim = ";";
-    char *servers[XPN_METADATA_MAX_RECONSTURCTIONS] = {NULL};
-    char hostname[MPI_MAX_PROCESSOR_NAME];
-    char *hostip;
-    int provided;
+    char *servers[xpn_metadata::MAX_RECONSTURCTIONS] = {NULL};
+    std::string hostname;
+    std::string hostip;
     
     //
     // Check arguments...
@@ -604,11 +598,7 @@
       return -1;
     }
 
-    if (THREAD_WRITER == 1){
-      MPI_Init(&argc, &argv);
-    }else{
-      MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
-    }
+    MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
@@ -620,7 +610,7 @@
       servers[0] = strtok(argv[2], delim);
       while (servers[new_size] != NULL) {
         new_size++;
-        if (new_size >= XPN_METADATA_MAX_RECONSTURCTIONS){
+        if (new_size >= xpn_metadata::MAX_RECONSTURCTIONS){
           printf("Too much serv %s\n", argv[2]);
           exit(EXIT_FAILURE);
         }
@@ -631,15 +621,15 @@
     new_size = size - new_size;
     pos_in_shrink = -1;
 
-    for (int i = 0; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++)
+    for (int i = 0; i < xpn_metadata::MAX_RECONSTURCTIONS; i++)
     {
       if (servers[i] == NULL) break;
 
-      hostip = ns_get_host_ip();
-      ns_get_hostname(hostname);
-      if (strstr(servers[i], hostip) != NULL || strstr(servers[i], hostname) != NULL)
+      hostip = ns::get_host_ip();
+      hostname = ns::get_host_name();
+      if (strstr(servers[i], hostip.c_str()) != NULL || strstr(servers[i], hostname.c_str()) != NULL)
       {
-        debug_info("Rank %d Server %d '%s'\n", rank, i, servers[i]);
+        debug_info("Rank "<<rank<<" Server "<<i<<" '"<<servers[i]<<"'");
         pos_in_shrink = i;
         break;
       }

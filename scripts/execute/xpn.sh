@@ -215,7 +215,7 @@ rebuild_xpn_servers() {
     hosts=$(cat ${DEATH_FILE} ${REBUILD_FILE} | sort | paste -sd "," -)
     srun  -n "${NODE_NUM_SUM}" \
           -w "${hosts}" \
-          "${BASE_DIR_BUILD}"/utils/xpn_rebuild_active_writer "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
+          "${BASE_DIR_BUILD}"/utils/xpn_rebuild_active_reader "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
   else
     # Create dir
     mpiexec -np       "${NODE_NUM}" \
@@ -224,7 +224,7 @@ rebuild_xpn_servers() {
     hosts=$(cat ${DEATH_FILE} ${REBUILD_FILE} | sort | uniq -c | awk '{print $2":"$1}' | paste -sd "," -)
     mpiexec -l -np       "${NODE_NUM_SUM}" \
             -host "${hosts}" \
-            "${BASE_DIR_BUILD}"/utils/xpn_rebuild_active_writer "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
+            "${BASE_DIR_BUILD}"/utils/xpn_rebuild_active_reader "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
   fi
 }
 

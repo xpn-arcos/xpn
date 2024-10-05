@@ -75,7 +75,8 @@ namespace XPN
         xpn_file& operator=(xpn_file&&) = delete;
     public:
         bool exist_in_serv(int serv);
-        void map_offset(int block_size, int replication_level, int nserv, int64_t offset, int replication, int first_node, int64_t &local_offset, int &serv);
+        void static map_offset(int block_size, int replication_level, int nserv, int64_t offset, int replication, int first_node, int64_t &local_offset, int &serv);
+        void static inverted_map_offset(int block_size, int replication_level, int nserv, int serv, int64_t local_offset, int first_node, int64_t &offset, int &replication);
         void map_offset_mdata(int64_t offset, int replication, int64_t &local_offset, int &serv);
         int  initialize_vfh(int index);
         int  initialize_vfh_dir(int index);

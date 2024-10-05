@@ -32,7 +32,10 @@
   #include <sys/stat.h>
   #include <dirent.h>
   #include "mpi.h"
-  #include "xpn/xpn_simple/xpn_policy_rw.h"
+  #include "xpn/xpn_file.hpp"
+  #include "xpn/xpn_partition.hpp"
+  #include "xpn/xpn_metadata.hpp"
+  #include "base_c/filesystem.h"
 
 /* ... Const / Const ................................................. */
 
@@ -49,25 +52,35 @@
 
   int xpn_path_len = 0;
 
+  using namespace XPN;
 /* ... Functions / Funciones ......................................... */
 
   int copy(char * entry, int rank, int size, int last_size)
   {  
-    debug_info("copy entry %s rank %d size %d last_size %d\n", entry, rank, size, last_size);
+    debug_info("copy entry "<<entry<<" rank "<<rank<<" size "<<size<<" last_size "<<last_size);
     int ret;
     int fd_src;
     struct stat st;
-    struct xpn_metadata mdata;
 
     if (rank == 0){
       printf("%s\n", entry);
     }
 
-    int master_node_old = hash(&entry[xpn_path_len], last_size, 1);
-    int master_node_new = hash(&entry[xpn_path_len], size, 1);
+    xpn_partition old_part("xpn", 0, 0);
+    old_part.m_data_serv.resize(last_size);
+    std::string aux_str = &entry[xpn_path_len];
+    xpn_file old_file(aux_str, old_part);
+    old_file.m_mdata.m_data.fill(old_file.m_mdata);
+
+    xpn_partition new_part("xpn", 0, 0);
+    new_part.m_data_serv.resize(size);
+    xpn_file new_file(aux_str, new_part);
+    new_file.m_mdata.m_data.fill(new_file.m_mdata);
+    int master_node_old = old_file.m_mdata.master_file();
+    int master_node_new = new_file.m_mdata.master_file();
     int has_new_mdata = 0;
 
-    debug_info("master_node_old %d master_node_new %d\n", master_node_old, master_node_new);
+    debug_info("master_node_old "<<master_node_old<<" master_node_new "<<master_node_new);
 
     if (master_node_old == rank){
       fd_src = open(entry, O_RDONLY);
@@ -75,7 +88,7 @@
         perror("open :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
-      ret = filesystem_read(fd_src, &mdata, sizeof(mdata));
+      ret = filesystem_read(fd_src, &old_file.m_mdata.m_data, sizeof(old_file.m_mdata.m_data));
       if (ret < 0){
         perror("read mdata :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -92,23 +105,23 @@
       }
       
       // Check correct mdata
-      if (!XPN_CHECK_MAGIC_NUMBER(&mdata)){
+      if (!old_file.m_mdata.m_data.is_valid()){
         printf("Error: metadata incorrect\n");
         int len;
         char processor_name[MPI_MAX_PROCESSOR_NAME];
         MPI_Get_processor_name(processor_name, &len);
         printf("Rank %d processor_name %s ", rank, processor_name); 
-        XpnPrintMetadata(&mdata);
+        std::cerr<<old_file.m_mdata.to_string()<<std::endl;
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
       }
     }
 
-    MPI_Bcast(&mdata, sizeof(mdata), MPI_CHAR, master_node_old, MPI_COMM_WORLD);
+    MPI_Bcast(&old_file.m_mdata.m_data, sizeof(old_file.m_mdata.m_data), MPI_CHAR, master_node_old, MPI_COMM_WORLD);
     MPI_Bcast(&st, sizeof(st), MPI_CHAR, master_node_old, MPI_COMM_WORLD);
     
     // Calculate where to write the new metadata
     int aux_serv;
-    for (int i = 0; i < mdata.replication_level+1; i++)
+    for (int i = 0; i < old_file.m_mdata.m_data.replication_level+1; i++)
     { 
       aux_serv = ( master_node_new + i ) % size;
       if (aux_serv == rank){
@@ -118,30 +131,30 @@
     }
 
     // Modify the metadata
-    if (mdata.data_nserv[XPN_METADATA_MAX_RECONSTURCTIONS-1] != 0){
+    if (old_file.m_mdata.m_data.data_nserv[xpn_metadata::MAX_RECONSTURCTIONS-1] != 0){
       printf("Error: it cannot be more expansion in servers it not fit in metadata\n");
     }
 
-    for (int i = 1; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++)
+    for (int i = 1; i < xpn_metadata::MAX_RECONSTURCTIONS; i++)
     {
-      if (mdata.data_nserv[i] == 0){
-        int actual_blocks = mdata.file_size / mdata.block_size;
-        int limit_actual_blocks = (actual_blocks + mdata.data_nserv[i-1] - 1) / mdata.data_nserv[i-1] * mdata.data_nserv[i-1];
+      if (old_file.m_mdata.m_data.data_nserv[i] == 0){
+        int actual_blocks = old_file.m_mdata.m_data.file_size / old_file.m_mdata.m_data.block_size;
+        int limit_actual_blocks = (actual_blocks + old_file.m_mdata.m_data.data_nserv[i-1] - 1) / old_file.m_mdata.m_data.data_nserv[i-1] * old_file.m_mdata.m_data.data_nserv[i-1];
         limit_actual_blocks -= 1;
-        mdata.data_nserv[i] = size;
-        mdata.offsets[i] = limit_actual_blocks;
+        old_file.m_mdata.m_data.data_nserv[i] = size;
+        old_file.m_mdata.m_data.offsets[i] = limit_actual_blocks;
         break;
       }
     }
     
-      debug_info("Write metadata for %s in rank %d\n", entry, rank);
+    debug_info("Write metadata for "<<entry<<" in rank "<<rank);
     fd_src = open(entry, O_WRONLY | O_CREAT, st.st_mode);
     if (fd_src < 0){
       perror("open :");
       MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
     if (has_new_mdata == 1){
-      ret = filesystem_write(fd_src, &mdata, sizeof(mdata));
+      ret = filesystem_write(fd_src, &old_file.m_mdata.m_data, sizeof(old_file.m_mdata.m_data));
       if (ret < 0){
         perror("write mdata :");
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
@@ -158,7 +171,7 @@
 
   int list (char * dir_name, int rank, int size, int last_size)
   {
-    debug_info("dir_name %s rank %d size %d last_size %d\n", dir_name, rank, size, last_size);
+    debug_info("dir_name "<<dir_name<<" rank "<<rank<<" size "<<size<<" last_size "<<last_size);
     
     int ret;
     DIR* dir = NULL;
@@ -166,8 +179,14 @@
     char path [PATH_MAX];
     int buff_coord = 1;
     
-    int master_node = hash(&dir_name[xpn_path_len], last_size, 1);
-    debug_info("for %s master_node %d\n", dir_name, master_node);
+    xpn_partition part("xpn", 0, 0);
+    part.m_data_serv.resize(last_size);
+    std::string aux_str = &dir_name[xpn_path_len];
+    xpn_file file(aux_str, part);
+    file.m_mdata.m_data.fill(file.m_mdata);
+
+    int master_node = file.m_mdata.master_file();
+    debug_info("for "<<dir_name<<" master_node "<<master_node);
     if (rank == master_node){
       dir = opendir(dir_name);
       if(dir == NULL)
@@ -181,7 +200,7 @@
 
       while(entry != NULL)
       {
-        debug_info("Rank %d readdir %s readed %s\n", rank, dir_name, entry->d_name);
+        debug_info("Rank "<<rank<<" readdir "<<dir_name<<" readed "<<<<entry->d_name);
         if (! strcmp(entry->d_name, ".")){
           entry = readdir(dir);
           continue;

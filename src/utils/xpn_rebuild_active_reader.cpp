@@ -32,8 +32,11 @@
 #include <unistd.h>
 
 #include "mpi.h"
-#include "base/ns.h"
-#include "xpn/xpn_simple/xpn_policy_rw.h"
+#include "xpn/xpn_file.hpp"
+#include "xpn/xpn_partition.hpp"
+#include "xpn/xpn_metadata.hpp"
+#include "base_c/filesystem.h"
+#include "base_cpp/ns.hpp"
 
 /* ... Const / Const ................................................. */
 
@@ -55,6 +58,8 @@ int *rank_actual_to_old = NULL;
 int *rank_new_to_actual = NULL;
 int *rank_old_to_actual = NULL;
 int old_size, new_size;
+
+using namespace XPN;
 
 /* ... Functions / Funciones ......................................... */
 
@@ -170,10 +175,10 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
             // Read in old_ranks
             if (rank_actual_to_old[rank] != -1) {
                 // Calculate the block
-                XpnCalculateBlockInvert(blocksize, replication_level, old_size, rank_actual_to_old[rank], offset_src, 0,
-                                        &offset_real, &replication);
-                XpnCalculateBlock(blocksize, replication_level, new_size, offset_real, replication, 0, &offset_dest,
-                                  &rank_to_send);
+                xpn_file::inverted_map_offset(blocksize, replication_level, old_size, rank_actual_to_old[rank], offset_src, 0,
+                                            offset_real, replication);
+                xpn_file::map_offset(blocksize, replication_level, new_size, offset_real, replication, 0, offset_dest,
+                                  rank_to_send);
 
                 ret_2 = lseek64(fd_src, offset_src + HEADER_SIZE, SEEK_SET);
                 if (ret_2 < 0) {
@@ -370,12 +375,11 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
 
 void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_rank, int *new_rank) {
     // Get ip and hostname
-    char *hostip = ns_get_host_ip();
-    char hostname[HOST_NAME_MAX];
     char line[HOST_NAME_MAX];
     int rank = 0;
-    ns_get_hostname(hostname);
     int world_rank;
+    std::string hostip = ns::get_host_ip();
+    std::string hostname = ns::get_host_name();
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
     // Open host files
     FILE *file_old = NULL;
@@ -394,7 +398,7 @@ void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_
     // Read line by line to get the new and old rank
     *old_rank = -1;
     while (fscanf(file_old, "%s", line) == 1) {
-        if (strstr(line, hostip) != NULL || strstr(line, hostname) != NULL) {
+        if (strstr(line, hostip.c_str()) != NULL || strstr(line, hostname.c_str()) != NULL) {
             *old_rank = rank;
         }
         rank++;
@@ -403,7 +407,7 @@ void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_
     rank = 0;
     *new_rank = -1;
     while (fscanf(file_new, "%s", line) == 1) {
-        if (strstr(line, hostip) != NULL || strstr(line, hostname) != NULL) {
+        if (strstr(line, hostip.c_str()) != NULL || strstr(line, hostname.c_str()) != NULL) {
             *new_rank = rank;
         }
         rank++;
@@ -455,10 +459,10 @@ int main(int argc, char *argv[]) {
     calculate_ranks_sizes(argv[2], argv[3], &old_rank, &new_rank);
 
     // Allocate buffers to comunication
-    rank_actual_to_old = malloc(size * sizeof(int));
-    rank_actual_to_new = malloc(size * sizeof(int));
-    rank_old_to_actual = malloc(size * sizeof(int));
-    rank_new_to_actual = malloc(size * sizeof(int));
+    rank_actual_to_old = (int *)malloc(size * sizeof(int));
+    rank_actual_to_new = (int *)malloc(size * sizeof(int));
+    rank_old_to_actual = (int *)malloc(size * sizeof(int));
+    rank_new_to_actual = (int *)malloc(size * sizeof(int));
     if (rank_actual_to_new == NULL || rank_actual_to_old == NULL || rank_new_to_actual == NULL ||
         rank_old_to_actual == NULL) {
         fprintf(stderr, "Error: %s\n", strerror(errno));
