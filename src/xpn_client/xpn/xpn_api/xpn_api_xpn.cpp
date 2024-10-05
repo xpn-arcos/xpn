@@ -134,9 +134,56 @@ namespace XPN
 
     int xpn_api::get_block_locality(char *path, off_t offset, int *url_c, char **url_v[])
     {
-        XPN_DEBUG_BEGIN;
+        XPN_DEBUG_BEGIN_CUSTOM(path<<", "<<offset);
         int res = 0;
-        XPN_DEBUG_END;
+        off_t local_offset;
+        int serv;
+        
+        std::string file_path;
+        auto part_name = check_remove_path_from_path(path, file_path);
+        if (part_name.empty()){
+            errno = ENOENT;
+            XPN_DEBUG_END_CUSTOM(path<<", "<<offset);
+            return -1;
+        }
+
+        xpn_file file(file_path, m_partitions.at(part_name));
+
+        res = read_metadata(file.m_mdata);
+        
+        if (res < 0 || !file.m_mdata.m_data.is_valid()){
+            XPN_DEBUG_END_CUSTOM(path<<", "<<offset);
+            return -1;
+        }
+
+        (*url_v) = (char **)malloc(((file.m_part.m_replication_level+1) + 1) * sizeof(char*));
+        if ((*url_v) == NULL){
+            XPN_DEBUG_END_CUSTOM(path<<", "<<offset);
+            return -1;
+        }
+
+        for (int i = 0; i < file.m_part.m_replication_level+1; i++)
+        {
+            (*url_v)[i] = (char *)malloc(PATH_MAX * sizeof(char));
+            if ((*url_v)[i] == NULL){
+                XPN_DEBUG_END_CUSTOM(path<<", "<<offset);
+                return -1;
+            }
+            memset((*url_v)[i], 0, PATH_MAX);
+        }
+
+        (*url_v)[file.m_part.m_replication_level+1] = NULL;
+
+        for (int i = 0; i < file.m_part.m_replication_level+1; i++)
+        {   
+            file.map_offset_mdata(offset, i, local_offset, serv);
+            auto &serv_url = file.m_part.m_data_serv[serv]->m_server;
+            serv_url.copy((*url_v)[i], serv_url.size());
+        }
+
+        (*url_c) = file.m_part.m_replication_level+1;
+
+        XPN_DEBUG_END_CUSTOM(path<<", "<<offset);
         return res;
     }
 
@@ -144,6 +191,15 @@ namespace XPN
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
+        for (int i = 0; i < (*url_c); i++)
+        {
+            free((*url_v)[i]);
+        }
+        
+        free((*url_v));
+
+        (*url_v) = NULL;
+        (*url_c) = 0;
         XPN_DEBUG_END;
         return res;
     }
