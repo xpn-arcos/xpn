@@ -33,8 +33,9 @@ namespace XPN
         workers_on_demand();
         ~workers_on_demand();
 
-        void launch(std::function<void()> task) override;
-        void wait() override;
+        std::future<int> launch(std::function<int()> task) override;
+        void launch_no_future(std::function<void()> task) override;
+        void wait_all() override;
     private:
         std::mutex m_wait_mutex;
         std::condition_variable m_full_cv;

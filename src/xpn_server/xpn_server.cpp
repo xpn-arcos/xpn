@@ -66,7 +66,9 @@ void xpn_server::dispatcher ( xpn_server_comm* comm )
             continue;
         }
 
-        m_worker2->launch([this, comm, type_op, rank_client_id, tag_client_id]{this->do_operation(comm, type_op, rank_client_id, tag_client_id);});
+        m_worker2->launch_no_future([this, comm, type_op, rank_client_id, tag_client_id]{
+            this->do_operation(comm, type_op, rank_client_id, tag_client_id);
+        });
 
         debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_dispatcher] Worker launched");
     }
@@ -86,7 +88,9 @@ void xpn_server::accept ( )
 
     debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_up] Accept received");
 
-    m_worker1->launch([this, comm]{this->dispatcher(comm);});
+    m_worker1->launch_no_future([this, comm]{
+        this->dispatcher(comm); 
+    });
 }
 
 void xpn_server::finish ( void )
@@ -278,6 +282,7 @@ int xpn_server::run()
 // Stop servers
 int xpn_server::stop()
 {
+    int res = 0;
     char srv_name[1024];
     FILE *file;
 
@@ -304,10 +309,11 @@ int xpn_server::stop()
     fclose(file);
 
     std::unique_ptr<workers> worker = workers::Create(workers_mode::thread_on_demand);
-
+    std::vector<std::future<int>> v_res(srv_names.size());
+    int index = 0;
     for (auto &name : srv_names)
     {
-        worker->launch([this, &name] (){
+        v_res[index++] = worker->launch([this, &name] (){
 
             printf(" * Stopping server (%s)\n", name.c_str());
             int socket;
@@ -319,7 +325,7 @@ int xpn_server::stop()
             ret = socket::client_connect(name.data(), socket);
             if (ret < 0) {
                 print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_down] ERROR: socket connection " << name);
-                return;
+                return ret;
             }
 
             ret = socket::send(socket, &buffer, sizeof(buffer));
@@ -338,14 +344,22 @@ int xpn_server::stop()
                 }
                 socket::close(socket);
             }
+            return ret;
         });
     }
 
-    worker->wait();
-
+    int aux_res;
+    for (auto &fut : v_res)
+    {
+        aux_res = fut.get();
+        if (aux_res < 0){
+            res = aux_res;
+        }
+    }
+    
     debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_up] >> End");
 
-    return 0;
+    return res;
 }
 
 // int xpn_server_terminate ( void )

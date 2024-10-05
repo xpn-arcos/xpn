@@ -30,10 +30,42 @@ namespace XPN
     }
     workers_on_demand::~workers_on_demand() 
     {
-        wait();
+        wait_all();
     }
 
-    void workers_on_demand::launch(std::function<void()> task)
+    std::future<int> workers_on_demand::launch(std::function<int()> task)
+    {
+        {
+            std::unique_lock<std::mutex> lock(m_wait_mutex);
+            
+            m_full_cv.wait(lock, [this] { 
+                return m_wait < m_num_threads; 
+            });
+
+            m_wait++;
+        }
+        std::packaged_task<int()> p_task([this, task]{
+            int result = task(); 
+
+            {
+                std::unique_lock<std::mutex> lock(m_wait_mutex); 
+                m_wait--;
+                if (m_wait == 0){
+                    m_wait_cv.notify_one();
+                }
+                m_full_cv.notify_one();
+            }
+
+            return result;
+        });
+
+        std::future<int> result = p_task.get_future();
+        std::thread t(std::move(p_task));
+        t.detach();
+        return result;
+    }
+
+    void workers_on_demand::launch_no_future(std::function<void()> task)
     {
         {
             std::unique_lock<std::mutex> lock(m_wait_mutex);
@@ -60,7 +92,7 @@ namespace XPN
         t.detach();
     }
 
-    void workers_on_demand::wait() 
+    void workers_on_demand::wait_all() 
     {
         std::unique_lock<std::mutex> lock(m_wait_mutex);
         

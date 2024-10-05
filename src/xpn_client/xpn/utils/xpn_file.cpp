@@ -293,11 +293,11 @@ namespace XPN
             return res;
         }
         auto& api = xpn_api::get_instance();
-        api.m_worker->launch([&res, this, index](){
-            res = this->m_part.m_data_serv[index]->nfi_open(this->m_path, O_RDWR | O_CREAT, S_IRWXU, this->m_data_vfh[index]);
+        auto result = api.m_worker->launch([&res, this, index](){
+            return this->m_part.m_data_serv[index]->nfi_open(this->m_path, O_RDWR | O_CREAT, S_IRWXU, this->m_data_vfh[index]);
         });
 
-        api.m_worker->wait();
+        res = result.get();
         
         XPN_DEBUG_END_CUSTOM(index<<", "<<m_path);
         return res;
@@ -317,11 +317,11 @@ namespace XPN
             return res;
         }
         auto& api = xpn_api::get_instance();
-        api.m_worker->launch([&res, this, index](){
-            res = this->m_part.m_data_serv[index]->nfi_opendir(this->m_path, this->m_data_vfh[index]);
+        auto result = api.m_worker->launch([&res, this, index](){
+            return this->m_part.m_data_serv[index]->nfi_opendir(this->m_path, this->m_data_vfh[index]);
         });
 
-        api.m_worker->wait();
+        res = result.get();
         
         XPN_DEBUG_END_CUSTOM(index<<", "<<m_path);
         return res;

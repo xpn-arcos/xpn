@@ -30,11 +30,11 @@ namespace XPN
         XPN_DEBUG_BEGIN_CUSTOM(mdata.m_file.m_path);
         int res = 0;
         
-        m_worker->launch([&res, &mdata](){
-            res = mdata.m_file.m_part.m_data_serv[mdata.master_file()]->nfi_read_mdata(mdata.m_file.m_path, mdata);
+        auto fut = m_worker->launch([&mdata](){
+            return mdata.m_file.m_part.m_data_serv[mdata.master_file()]->nfi_read_mdata(mdata.m_file.m_path, mdata);
         });
 
-        m_worker->wait();
+        res = fut.get();
 
         XPN_DEBUG(mdata.to_string());
 
@@ -53,21 +53,22 @@ namespace XPN
         }
 
         int server = xpn_path::hash(mdata.m_file.m_path, mdata.m_file.m_part.m_data_serv.size(), true);
-        std::vector<int> v_res(mdata.m_file.m_part.m_replication_level+1);
+        std::vector<std::future<int>> v_res(mdata.m_file.m_part.m_replication_level+1);
         for (int i = 0; i < mdata.m_file.m_part.m_replication_level+1; i++)
         {
             server = (server+i) % mdata.m_file.m_part.m_data_serv.size();
             if (mdata.m_file.m_part.m_data_serv[server]->m_error != -1){
-                m_worker->launch([i, &v_res, &mdata, only_file_size](){
-                    v_res[i] = mdata.m_file.m_part.m_data_serv[mdata.master_file()]->nfi_write_mdata(mdata.m_file.m_path, mdata, only_file_size);
+                v_res[i] = m_worker->launch([i, &mdata, only_file_size](){
+                    return mdata.m_file.m_part.m_data_serv[mdata.master_file()]->nfi_write_mdata(mdata.m_file.m_path, mdata, only_file_size);
                 });
             }
         }
 
-        m_worker->wait();
-
-        for (auto &aux_res : v_res)
+        int aux_res;
+        for (auto &fut : v_res)
         {
+            if (!fut.valid()) continue;
+            aux_res = fut.get();
             if (aux_res < 0){
                 res = aux_res;
             }

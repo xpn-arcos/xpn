@@ -26,10 +26,21 @@ namespace XPN
     workers_sequential::workers_sequential() {}
     workers_sequential::~workers_sequential() {}
 
-    void workers_sequential::launch(std::function<void()> task)
+    std::future<int> workers_sequential::launch(std::function<int()> task)
+    {
+        std::packaged_task<int()> p_task(task);
+
+        std::future<int> result = p_task.get_future();
+
+        p_task();
+
+        return result;
+    }
+
+    void workers_sequential::launch_no_future(std::function<void()> task)
     {
         task();
     }
 
-    void workers_sequential::wait() {}
+    void workers_sequential::wait_all() {}
 } // namespace XPN

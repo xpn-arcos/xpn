@@ -65,32 +65,29 @@ namespace XPN
         xpn_rw_buffer rw_buff(file, file.m_offset, const_cast<void*>(buffer), size);
         rw_buff.calculate_reads();
 
-        std::vector<ssize_t> v_res(rw_buff.num_ops());
+        std::vector<std::future<int>> v_res(rw_buff.num_ops());
         int index = 0;
         for (size_t i = 0; i < rw_buff.m_ops.size(); i++)
         {
+            res = file.initialize_vfh(i);
+            if (res < 0){
+                break;
+            }
             for (auto &op : rw_buff.m_ops[i])
             {
-                res = file.initialize_vfh(i);
-                if (res < 0){
-                    m_worker->wait();
-                    XPN_DEBUG_END_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
-                    return res;
-                }
-                m_worker->launch([index, i, &v_res, &file, &op](){
+                v_res[index++] = m_worker->launch([i, &file, &op](){
                     XPN_DEBUG("Serv "<<i<<" off: "<<op.offset_serv+xpn_metadata::HEADER_SIZE<<" size: "<<op.v_buffer.size());
-                    v_res[index] = file.m_part.m_data_serv[i]->nfi_read(file.m_data_vfh[i], op.get_buffer(), op.offset_serv+xpn_metadata::HEADER_SIZE, op.get_size());
+                    return file.m_part.m_data_serv[i]->nfi_read(file.m_data_vfh[i], op.get_buffer(), op.offset_serv+xpn_metadata::HEADER_SIZE, op.get_size());
                 });
-
-                index++;
             }
         }
         
-        m_worker->wait();
-        
         size_t sum = 0;
-        for (auto &aux_res : v_res)
+        int aux_res;
+        for (auto &fut : v_res)
         {
+            if (!fut.valid()) continue;
+            aux_res = fut.get();
             if (aux_res < 0){
                 XPN_DEBUG_END_CUSTOM(file.m_path<<", "<<buffer<<", "<<size);
                 return aux_res;
@@ -146,32 +143,30 @@ namespace XPN
         xpn_rw_buffer rw_buff(file, file.m_offset, const_cast<void*>(buffer), size);
         rw_buff.calculate_writes();
 
-        std::vector<ssize_t> v_res(rw_buff.num_ops());
+        std::vector<std::future<int>> v_res(rw_buff.num_ops());
         int index = 0;
         for (size_t i = 0; i < rw_buff.m_ops.size(); i++)
         {
+            res = file.initialize_vfh(i);
+            if (res < 0){
+                break;
+            }
+
             for (auto &op : rw_buff.m_ops[i])
             {
-                res = file.initialize_vfh(i);
-                if (res < 0){
-                    m_worker->wait();
-                    XPN_DEBUG_END_CUSTOM(file.m_path<<", ops: "<<rw_buff.num_ops()<<", "<<rw_buff.size());
-                    return res;
-                }
-                m_worker->launch([index, i, &v_res, &file, &op](){
+                v_res[index++] = m_worker->launch([i, &file, &op](){
                     XPN_DEBUG("Serv "<<i<<" off: "<<op.offset_serv+xpn_metadata::HEADER_SIZE<<" size: "<<op.v_buffer.size());
-                    v_res[index] = file.m_part.m_data_serv[i]->nfi_write(file.m_data_vfh[i], op.get_buffer(), op.offset_serv+xpn_metadata::HEADER_SIZE, op.get_size());
+                    return file.m_part.m_data_serv[i]->nfi_write(file.m_data_vfh[i], op.get_buffer(), op.offset_serv+xpn_metadata::HEADER_SIZE, op.get_size());
                 });
-
-                index++;
             }
         }
         
-        m_worker->wait();
-        
         size_t sum = 0;
-        for (auto &aux_res : v_res)
+        int aux_res;
+        for (auto &fut : v_res)
         {
+            if (!fut.valid()) continue;
+            aux_res = fut.get();
             if (aux_res < 0){
                 XPN_DEBUG_END_CUSTOM(file.m_path<<", ops: "<<rw_buff.num_ops()<<", "<<rw_buff.size());
                 return aux_res;

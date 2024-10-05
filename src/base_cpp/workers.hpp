@@ -23,6 +23,7 @@
 
 #include <memory>
 #include <functional>
+#include <future>
 
 namespace XPN
 {
@@ -38,8 +39,9 @@ namespace XPN
     public:
         virtual ~workers() = default;
 
-        virtual void launch(std::function<void()> task) = 0;
-        virtual void wait() = 0;
+        virtual std::future<int> launch(std::function<int()> task) = 0;
+        virtual void launch_no_future(std::function<void()> task) = 0;
+        virtual void wait_all() = 0;
     public:
         static std::unique_ptr<workers> Create(workers_mode mode);
     };

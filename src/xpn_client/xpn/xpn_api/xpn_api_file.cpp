@@ -75,21 +75,22 @@ namespace XPN
 
         if ((O_CREAT == (flags & O_CREAT))){
 
-            std::vector<int> v_res(file.m_part.m_data_serv.size());
+            std::vector<std::future<int>> v_res(file.m_part.m_data_serv.size());
             for (size_t i = 0; i < file.m_part.m_data_serv.size(); i++)
             {
                 auto& serv = file.m_part.m_data_serv[i];
                 if (file.exist_in_serv(i)){
-                    m_worker->launch([i, &v_res, &serv, &file, flags, mode](){
-                        v_res[i] = serv->nfi_open(file.m_path, flags, mode, file.m_data_vfh[i]);
+                    v_res[i] = m_worker->launch([i, &serv, &file, flags, mode](){
+                        return serv->nfi_open(file.m_path, flags, mode, file.m_data_vfh[i]);
                     });
                 }
             }
 
-            m_worker->wait();
-
-            for (auto &aux_res : v_res)
+            int aux_res;
+            for (auto &fut : v_res)
             {
+                if (!fut.valid()) continue;
+                aux_res = fut.get();
                 if (aux_res < 0)
                 {
                     res = aux_res;
@@ -104,17 +105,17 @@ namespace XPN
             }
         }else{
             int master_file = file.m_mdata.master_file();
-            
+            std::future<int> fut;
             if ((O_DIRECTORY == (flags & O_DIRECTORY))){
-                m_worker->launch([&res, &file, master_file, flags, mode](){
-                    res = file.m_part.m_data_serv[master_file]->nfi_opendir(file.m_path, file.m_data_vfh[master_file]);
+                fut = m_worker->launch([&file, master_file, flags, mode](){
+                    return file.m_part.m_data_serv[master_file]->nfi_opendir(file.m_path, file.m_data_vfh[master_file]);
                 });
             }else{
-                m_worker->launch([&res, &file, master_file, flags, mode](){
-                    res = file.m_part.m_data_serv[master_file]->nfi_open(file.m_path, flags, mode, file.m_data_vfh[master_file]);
+                fut = m_worker->launch([&file, master_file, flags, mode](){
+                    return file.m_part.m_data_serv[master_file]->nfi_open(file.m_path, flags, mode, file.m_data_vfh[master_file]);
                 });
             }
-            m_worker->wait();
+            res = fut.get();
         }
 
         
@@ -153,22 +154,24 @@ namespace XPN
         }
         auto& file = m_file_table.get(fd);
 
-        std::vector<int> v_res(file.m_data_vfh.size());
+        std::vector<std::future<int>> v_res(file.m_data_vfh.size());
         for (size_t i = 0; i < file.m_data_vfh.size(); i++)
         {
             if (file.m_data_vfh[i].fd != -1)
             {
-                m_worker->launch([i, &v_res, &file](){
-                    v_res[i] = file.m_part.m_data_serv[i]->nfi_close(file.m_data_vfh[i]);
+                v_res[i] = m_worker->launch([i, &file](){
+                    return file.m_part.m_data_serv[i]->nfi_close(file.m_data_vfh[i]);
                 });
             }
         }
 
-        m_worker->wait();
-
-        for (auto &aux_res : v_res)
-        {
-            if (aux_res < 0){
+        int aux_res;
+        for (auto &fut : v_res)
+        {   
+            if (!fut.valid()) continue;
+            aux_res = fut.get();
+            if (aux_res < 0)
+            {
                 res = aux_res;
             }
         }
@@ -200,24 +203,26 @@ namespace XPN
             return res;
         }
 
-        std::vector<int> v_res(file.m_part.m_data_serv.size());
+        std::vector<std::future<int>> v_res(file.m_part.m_data_serv.size());
         for (size_t i = 0; i < file.m_part.m_data_serv.size(); i++)
         {
             if (file.exist_in_serv(i)){
-                m_worker->launch([i, &v_res, &file](){
+                v_res[i] = m_worker->launch([i, &v_res, &file](){
                     // Always wait and not async because it can fail in other ways
-                    v_res[i] = file.m_part.m_data_serv[i]->nfi_remove(file.m_path, false);
+                    return file.m_part.m_data_serv[i]->nfi_remove(file.m_path, false);
                     // v_res[i] = file.m_part.m_data_serv[i]->nfi_remove(file.m_path, file.m_mdata.master_file()==static_cast<int>(i));
                 });
             }
         }
         
-        m_worker->wait();
-
         res = 0;
-        for (auto &aux_res : v_res)
-        {
-            if (aux_res < 0){
+        int aux_res;
+        for (auto &fut : v_res)
+        {   
+            if (!fut.valid()) continue;
+            aux_res = fut.get();
+            if (aux_res < 0)
+            {
                 res = aux_res;
             }
         }
@@ -259,29 +264,30 @@ namespace XPN
             return res;
         }
 
-        std::vector<int> v_res(file.m_part.m_data_serv.size());
+        std::vector<std::future<int>> v_res(file.m_part.m_data_serv.size());
         for (size_t i = 0; i < file.m_part.m_data_serv.size(); i++)
         {
             if (file.exist_in_serv(i)){
                 if (!new_file.exist_in_serv(i)){
                     XPN_DEBUG("Remove in server "<<i);
-                    m_worker->launch([i, &v_res, &file, &new_file](){
-                        v_res[i] = file.m_part.m_data_serv[i]->nfi_remove(file.m_path, false);
+                    v_res[i] = m_worker->launch([i, &file, &new_file](){
+                        return file.m_part.m_data_serv[i]->nfi_remove(file.m_path, false);
                     });
                 }else{
                     XPN_DEBUG("Rename in server "<<i);
-                    m_worker->launch([i, &v_res, &file, &new_file](){
-                        v_res[i] = file.m_part.m_data_serv[i]->nfi_rename(file.m_path, new_file.m_path);
+                    v_res[i] = m_worker->launch([i, &file, &new_file](){
+                        return file.m_part.m_data_serv[i]->nfi_rename(file.m_path, new_file.m_path);
                     });
                 }
             }
         }
         
-        m_worker->wait();
-
-        for (auto &aux_res : v_res)
-        {
-            if (aux_res < 0){
+        int aux_res;
+        for (auto &fut : v_res)
+        {   
+            aux_res = fut.get();
+            if (aux_res < 0)
+            {
                 res = aux_res;
             }
         }

@@ -65,9 +65,11 @@ namespace XPN
         
         auto& server = file.m_part.m_data_serv[file.m_mdata.master_file()];
 
-        m_worker->launch([&server, &file, sb, &res](){res = server->nfi_getattr(file.m_path, *sb);});
+        auto fut = m_worker->launch([&server, &file, sb](){
+            return server->nfi_getattr(file.m_path, *sb);
+        });
 
-        m_worker->wait();
+        res = fut.get();
 
         // Update file_size
         if (S_ISREG(sb->st_mode)){
@@ -150,25 +152,39 @@ namespace XPN
 
         auto& server = file.m_part.m_data_serv[file.m_mdata.master_file()];
                 
-        m_worker->launch([&server, &file, buf, &res](){res = server->nfi_statvfs(file.m_path, *buf);});
+        auto fut = m_worker->launch([&server, &file, buf](){
+            return server->nfi_statvfs(file.m_path, *buf);
+        });
 
-        std::vector<int> v_res(file.m_part.m_data_serv.size());
-        struct ::statvfs aux_buf;
+        res = fut.get();
+        if (res < 0){
+            XPN_DEBUG_END_CUSTOM(path);
+            return res;
+        }
+
+        std::vector<std::future<int>> v_res(file.m_part.m_data_serv.size());
+        std::mutex buff_mutex;
         for (size_t i = 0; i < file.m_part.m_data_serv.size(); i++)
         {
             if (static_cast<int>(i) == file.m_mdata.master_file()) continue;
-            m_worker->launch([i, &server, &file, &aux_buf, &v_res](){v_res[i] = server->nfi_statvfs(file.m_path, aux_buf);});
-            if (v_res[i] >= 0){
-                buf->f_blocks += aux_buf.f_blocks;
-                buf->f_bfree += aux_buf.f_bfree;
-                buf->f_bavail += aux_buf.f_bavail;
-            }
+            v_res[i] = m_worker->launch([i, &file, &buf, &buff_mutex](){
+                struct ::statvfs aux_buf;
+                int res = file.m_part.m_data_serv[i]->nfi_statvfs(file.m_path, aux_buf);
+                std::unique_lock lock(buff_mutex);
+                if (res >= 0){
+                    buf->f_blocks += aux_buf.f_blocks;
+                    buf->f_bfree += aux_buf.f_bfree;
+                    buf->f_bavail += aux_buf.f_bavail;
+                }
+                return res;
+            });
         }
-        
-        m_worker->wait();
 
-        for (auto &aux_res : v_res)
+        int aux_res;
+        for (auto &fut : v_res)
         {
+            if (!fut.valid()) continue;
+            aux_res = fut.get();
             if (aux_res < 0){
                 res = aux_res;
             }

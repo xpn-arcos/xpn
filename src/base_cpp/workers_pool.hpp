@@ -26,6 +26,7 @@
 #include <mutex> 
 #include <queue> 
 #include <thread> 
+#include <variant> 
 
 namespace XPN
 {
@@ -35,13 +36,12 @@ namespace XPN
         workers_pool();
         ~workers_pool();
 
-        void launch(std::function<void()> task) override;
-        void wait() override;
-    private:
-        void enqueue(std::function<void()> task);
+        std::future<int> launch(std::function<int()> task) override;
+        void launch_no_future(std::function<void()> task) override;
+        void wait_all() override;
     private:
         std::vector<std::thread> m_threads;
-        std::queue<std::function<void()>> m_tasks;
+        std::queue<std::variant<std::packaged_task<int()>,std::function<void()>>> m_tasks;
         std::mutex m_queue_mutex;
         std::condition_variable m_cv;
 

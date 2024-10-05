@@ -29,7 +29,7 @@ namespace XPN
         for (size_t i = 0; i < m_num_threads; ++i) { 
             m_threads.emplace_back([this] { 
                 while (true) { 
-                    std::function<void()> task; 
+                    std::variant<std::packaged_task<int()>,std::function<void()>> task; 
                     { 
                         std::unique_lock<std::mutex> lock(m_queue_mutex); 
                         
@@ -50,7 +50,11 @@ namespace XPN
                         m_tasks.pop(); 
                     } 
   
-                    task(); 
+                    if ( auto *p_task = std::get_if<std::packaged_task<int()>>( &task ) ){
+                        (*p_task)();
+                    }else if ( auto *f_task = std::get_if<std::function<void()>>( &task ) ){
+                        (*f_task)();
+                    }
 
                     {
                         std::unique_lock<std::mutex> lock(m_wait_mutex); 
@@ -79,7 +83,34 @@ namespace XPN
         } 
     }
 
-    void workers_pool::launch(std::function<void()> task)
+    std::future<int> workers_pool::launch(std::function<int()> task)
+    {
+        std::future<int> result;
+        {
+            std::unique_lock<std::mutex> lock(m_full_mutex);
+            
+            m_full_cv.wait(lock, [this] { 
+                return m_tasks.size() <= m_num_threads; 
+            }); 
+        }
+        {
+            std::unique_lock<std::mutex> lock(m_queue_mutex);
+            
+            std::packaged_task<int()> p_task(task);
+
+            result = p_task.get_future();
+
+            m_tasks.emplace(move(p_task)); 
+        }
+        {
+            std::unique_lock<std::mutex> lock(m_wait_mutex);
+            m_wait++;
+        } 
+        m_cv.notify_one();
+        return result;
+    }
+
+    void workers_pool::launch_no_future(std::function<void()> task)
     {
         {
             std::unique_lock<std::mutex> lock(m_full_mutex);
@@ -100,7 +131,7 @@ namespace XPN
         m_cv.notify_one(); 
     }
 
-    void workers_pool::wait() 
+    void workers_pool::wait_all() 
     {
         std::unique_lock<std::mutex> lock(m_wait_mutex);
         
