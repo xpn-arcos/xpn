@@ -27,14 +27,27 @@ namespace XPN
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
+        
+        // TODO: return a correct errno in case of error
+        if (cwd.size() > size){
+            XPN_DEBUG_END;
+            return nullptr;
+        }
+
+        cwd.copy(path, cwd.size());
+
         XPN_DEBUG_END;
-        return nullptr;
+        return path;
     }
 
     int xpn_api::chdir(char *path)
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
+
+        // TODO: return a correct errno in case of error
+        cwd = path;
+
         XPN_DEBUG_END;
         return res;
     }

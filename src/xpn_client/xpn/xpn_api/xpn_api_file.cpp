@@ -37,6 +37,11 @@ namespace XPN
         }
 
         out_path = xpn_path::remove_first_dir(path);
+
+        if (out_path[0] != '/'){
+            out_path = cwd + '/' + out_path;
+        }
+
         return name_part;
     }
 

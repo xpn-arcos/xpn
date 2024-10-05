@@ -94,6 +94,7 @@ namespace XPN
         std::mutex m_init_mutex;
         bool m_initialized = false;
 
+        std::string cwd;
 
     public:
         std::mutex m_api_mutex;
