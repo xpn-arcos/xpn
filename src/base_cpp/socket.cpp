@@ -51,7 +51,7 @@ namespace XPN
         return port;
     }
 
-    int64_t socket::send ( int socket, void * buffer, int64_t size )
+    int64_t socket::send ( int socket, const void * buffer, int64_t size )
     {
         int64_t ret;
 

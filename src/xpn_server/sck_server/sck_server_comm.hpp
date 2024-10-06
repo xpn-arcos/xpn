@@ -21,28 +21,38 @@
 
 #pragma once
 
+#include "mpi.h"
 #include <string>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/tcp.h>
+#include <memory>
+
+#include "xpn_server/xpn_server_comm.hpp"
 
 namespace XPN
 {
-    class socket
-	{
-    public:
-        constexpr static const int DEFAULT_XPN_SCK_PORT = 3456;
-        constexpr static const int ACCEPT_CODE = 123;
-        constexpr static const int FINISH_CODE = 666;
-        constexpr static const int FINISH_CODE_AWAIT = 667;
-    private:
-        static int get_xpn_port();
-    public:
-        static int64_t send ( int socket, const void * buffer, int64_t size );
-        static int64_t recv ( int socket, void * buffer, int64_t size );
-        static int server_create ( int &out_socket );
-        static int server_accept ( int socket, int &out_conection_socket );
-        static int client_connect ( const std::string &srv_name, int &out_socket );
-        static int close ( int socket );
-	};
+  
+  class sck_server_comm : public xpn_server_comm
+  {
+  public:
+    sck_server_comm(int socket) : m_socket(socket) {}
+    ~sck_server_comm() override {}
+
+    int64_t read_operation(int &op, int &rank_client_id, int &tag_client_id) override;
+    int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) override;
+    int64_t write_data(const void *data, int64_t size, int rank_client_id, int tag_client_id) override;
+  public:
+    int m_socket;
+  };
+  
+  class sck_server_control_comm : public xpn_server_control_comm
+  {
+  public:
+    sck_server_control_comm();
+    ~sck_server_control_comm() override;
+    
+    xpn_server_comm* accept() override;
+    void disconnect(xpn_server_comm *comm) override;
+  private:
+    int m_socket;
+  };
+
 } // namespace XPN

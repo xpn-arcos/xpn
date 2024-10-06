@@ -20,7 +20,6 @@
  */
 #include "mpi_server_comm.hpp"
 #include "base_cpp/debug.hpp"
-#include "base_cpp/timer.hpp"
 #include "base_cpp/ns.hpp"
 
 namespace XPN
@@ -31,9 +30,6 @@ mpi_server_control_comm::mpi_server_control_comm(xpn_server_params &params) : m_
   int ret, provided, claimed;
 
   debug_info("[Server="<<ns::get_host_name()<<"] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_init] >> Begin");
-
-  //Get timestap
-  timer timer;
 
   // MPI init
   // Threads disable
@@ -264,7 +260,5 @@ int64_t mpi_server_comm::write_data ( const void *data, int64_t size, int rank_c
   // Return bytes written
   return size;
 }
-
-/* ................................................................... */
 
 } // namespace XPN

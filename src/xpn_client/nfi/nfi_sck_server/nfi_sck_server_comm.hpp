@@ -19,37 +19,38 @@
  *
  */
 
+#pragma once
 
-#ifndef _SCK_SERVER_COMM_H_
-#define _SCK_SERVER_COMM_H_
+#include <string>
+#include <memory>
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#include "nfi/nfi_xpn_server_comm.hpp"
 
-  /* ... Include / Inclusion ........................................... */
-
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "base/time_misc.h"
-
+namespace XPN
+{
   
-  /* ... Const / Const ................................................. */
+  class nfi_sck_server_comm : public nfi_xpn_server_comm
+  {
+  public:
+    nfi_sck_server_comm(int socket) : m_socket(socket) {}
 
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
-
-  int       sck_server_comm_init          ( int *socket, char *port_name );
-  int       sck_server_comm_accept        ( int socket, int **new_socket );
-  int       sck_server_comm_disconnect    ( int *socket );
-
-  /* ................................................................... */
+    int64_t write_operation(int op) override;
+    int64_t read_data(void *data, int64_t size) override;
+    int64_t write_data(const void *data, int64_t size) override;
+  public:
+    int m_socket;
+  };
   
-  #ifdef  __cplusplus
-    }
-  #endif
+  class nfi_sck_server_control_comm : public nfi_xpn_server_control_comm
+  {
+  public:
+    nfi_sck_server_control_comm() = default;
+    ~nfi_sck_server_control_comm() = default;
+    
+    nfi_xpn_server_comm* connect(const std::string &srv_name) override;
+    void disconnect(nfi_xpn_server_comm* comm) override;
 
-#endif
+  private:
+  };
+
+} // namespace XPN

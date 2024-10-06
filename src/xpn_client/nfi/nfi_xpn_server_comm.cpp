@@ -25,6 +25,7 @@
 #include <iostream>
 #include "nfi_xpn_server_comm.hpp"
 #include "nfi_mpi_server/nfi_mpi_server_comm.hpp"
+#include "nfi_sck_server/nfi_sck_server_comm.hpp"
 
 namespace XPN
 {
@@ -36,7 +37,7 @@ namespace XPN
         }else
         if (server_protocol == server_protocols::sck_server)
         {
-            // return std::make_unique<mpi_server_control_comm>(params.get_argc(), params.get_argv(), params.have_threads());
+            return std::make_unique<nfi_sck_server_control_comm>();
         }else
         if (server_protocol == server_protocols::file)
         {
