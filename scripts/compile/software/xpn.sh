@@ -78,9 +78,8 @@ fi
 
 ## XPN
 echo " * XPN: preparing directories..."
-  rm -fr "${INSTALL_PATH}/xpn"
-mkdir -p "${INSTALL_PATH}/xpn/lib64"
-ln    -s "${INSTALL_PATH}/xpn/lib64"   "${INSTALL_PATH}/xpn/lib"
+
+rm -fr "${INSTALL_PATH}/xpn"
 
 echo " * XPN: compiling and installing..."
 pushd .
