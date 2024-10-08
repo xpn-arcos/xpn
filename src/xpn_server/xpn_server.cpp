@@ -178,6 +178,10 @@ int xpn_server::run()
                 accept();
                 break;
 
+            case socket::STATS_CODE:
+                socket::send(connection_socket, &m_stats, sizeof(m_stats));
+                break;
+
             case socket::FINISH_CODE:
             case socket::FINISH_CODE_AWAIT:
                 finish();
@@ -362,6 +366,68 @@ int xpn_server::stop()
     return res;
 }
 
+// Stats servers
+int xpn_server::print_stats()
+{
+    char srv_name[1024];
+    FILE *file;
+
+    debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] >> Begin");
+
+    // Open host file
+    debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] Open host file "<< m_params.shutdown_file);
+
+    file = fopen(m_params.shutdown_file.c_str(), "r");
+    if (file == NULL) {
+        debug_error("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: invalid file "<< m_params.shutdown_file);
+        return -1;
+    }
+
+    std::vector<std::string> srv_names;
+    while (fscanf(file, "%[^\n] ", srv_name) != EOF)
+    {
+        srv_names.push_back(srv_name);
+    }
+
+    // Close host file
+    debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] Close host file");
+
+    fclose(file);
+
+    std::cout << std::endl;
+    for (auto &name : srv_names)
+    {
+        int socket;
+        int ret;
+        int buffer = socket::STATS_CODE;
+        xpn_stats stat_buff;
+        ret = socket::client_connect(name.data(), socket);
+        if (ret < 0) {
+            print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket connection " << name);
+            continue;
+        }
+
+        ret = socket::send(socket, &buffer, sizeof(buffer));
+        if (ret < 0) {
+            print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket send " << name);
+            continue;
+        }
+        
+        ret = socket::recv(socket, &stat_buff, sizeof(stat_buff));
+        if (ret < 0) {
+            print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket recv " << name);
+            continue;
+        }
+        socket::close(socket);
+
+        std::cout << "Server " << name << ":" << std::endl;
+        std::cout << stat_buff.to_string() << std::endl << std::endl;
+    }
+
+    debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_up] >> End");
+
+    return 0;
+}
 // int xpn_server_terminate ( void )
 // {
 //     int ret;
@@ -445,6 +511,11 @@ int main ( int argc, char *argv[] )
     {
         debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [main] Terminate server");
         // ret = xpn_server_terminate();
+    }
+    else if (strcasecmp(exec_name, "xpn_server_stats") == 0)
+    {
+        debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [main] Terminate server");
+        ret = server.print_stats();
     }
     else
     {

@@ -40,12 +40,13 @@ namespace XPN
 
 		float elapsed()
 		{
-			return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - m_Start).count() * 0.001f * 0.001f * 0.001f;
+			return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - m_Start).count();
 		}
-
-		float elapsed_millis()
+		
+		template<typename precision>
+		float elapsed()
 		{
-			return elapsed() * 1000.0f;
+			return std::chrono::duration_cast<precision>(std::chrono::high_resolution_clock::now() - m_Start).count();
 		}
 
 	private:

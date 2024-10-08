@@ -43,11 +43,21 @@ add_custom_command(
     COMMENT "Create_symlink xpn_server -> xpn_server_spawn"
 )
 
+add_custom_command(
+    OUTPUT xpn_server_stats
+    COMMAND ${CMAKE_COMMAND} -E create_symlink
+            xpn_server
+            xpn_server_stats
+    DEPENDS xpn_server
+    COMMENT "Create_symlink xpn_server -> xpn_server_stats"
+)
+
 add_custom_target(create_symlinks ALL
     DEPENDS
         xpn_stop_server
         xpn_terminate_server
         xpn_server_spawn
+        xpn_server_stats
 )
 
 install(TARGETS xpn_server RUNTIME DESTINATION bin)
@@ -63,4 +73,8 @@ install(CODE "
 install(CODE "
     message(STATUS \"Create_symlink: from \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server to \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server_spawn\")
     execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server_spawn)
+")
+install(CODE "
+    message(STATUS \"Create_symlink: from \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server to \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server_stats\")
+    execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/xpn_server_stats)
 ")

@@ -32,9 +32,10 @@ namespace XPN
 	{
     public:
         constexpr static const int DEFAULT_XPN_SCK_PORT = 3456;
-        constexpr static const int ACCEPT_CODE = 123;
-        constexpr static const int FINISH_CODE = 666;
-        constexpr static const int FINISH_CODE_AWAIT = 667;
+        constexpr static const int ACCEPT_CODE          = 123;
+        constexpr static const int FINISH_CODE          = 666;
+        constexpr static const int FINISH_CODE_AWAIT    = 667;
+        constexpr static const int STATS_CODE           = 444;
     private:
         static int get_xpn_port();
     public:

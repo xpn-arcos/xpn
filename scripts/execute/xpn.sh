@@ -149,6 +149,21 @@ start_xpn_servers() {
   fi
 }
 
+stats_xpn_servers() {
+
+  if [[ ${VERBOSE} == true ]]; then
+    echo " * HOSTFILE: ${HOSTFILE}"
+    echo " * additional daemon args: ${ARGS}"
+  fi
+  if command -v srun &> /dev/null
+  then
+    srun -n 1 -N 1 \
+            "${BASE_DIR_BUILD}"/xpn_server/xpn_server_stats -f ${HOSTFILE}
+  else
+    mpiexec -np 1 \
+            "${BASE_DIR_BUILD}"/xpn_server/xpn_server_stats -f ${HOSTFILE}
+  fi
+}
 
 stop_xpn_servers() {
 
@@ -445,6 +460,8 @@ case "${ACTION}" in
                 ;;
       start)    mk_conf_servers  "config.txt" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 start_xpn_servers
+                ;;
+      stats)    stats_xpn_servers
                 ;;
       stop)     stop_xpn_servers
                 ;;

@@ -199,8 +199,10 @@ void xpn_server::op_read ( xpn_server_comm &comm, st_xpn_server_rw &head, int ra
       comm.write_data((char *)&req,sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
       goto cleanup_xpn_server_op_read;
     }
-
-    req.size = filesystem_read(fd, buffer, to_read);
+    {
+      xpn_stats::scope_stat stat(m_stats.read_disk, to_read);
+      req.size = filesystem_read(fd, buffer, to_read);
+    }
     // if error then send as "how many bytes" -1
     if (req.size < 0 || req.status.ret == -1)
     {
@@ -219,7 +221,10 @@ void xpn_server::op_read ( xpn_server_comm &comm, st_xpn_server_rw &head, int ra
     // send data to client...
     if (req.size > 0)
     {
-      comm.write_data(buffer, req.size, rank_client_id, tag_client_id);
+      {
+        xpn_stats::scope_stat stat(m_stats.write_net, to_read);
+        comm.write_data(buffer, req.size, rank_client_id, tag_client_id);
+      }
       debug_info("[Server="<<serv_name<<"] [XPN_SERVER_OPS] [xpn_server_op_read] op_read: send data");
     }
     cont = cont + req.size; //Send bytes
@@ -290,14 +295,20 @@ void xpn_server::op_write ( xpn_server_comm &comm, st_xpn_server_rw &head, int r
     }
 
     // read data from MPI and write into the file
-    comm.read_data(buffer, to_write, rank_client_id, tag_client_id);
+    {
+      xpn_stats::scope_stat stat(m_stats.read_net, to_write);
+      comm.read_data(buffer, to_write, rank_client_id, tag_client_id);
+    }
     ret_lseek = filesystem_lseek(fd, head.offset + cont, SEEK_SET);
     if (ret_lseek < 0)
     {
       req.status.ret = -1;
       goto cleanup_xpn_server_op_write;
     }
-    req.size = filesystem_write(fd, buffer, to_write);
+    {
+      xpn_stats::scope_stat stat(m_stats.write_disk, to_write);
+      req.size = filesystem_write(fd, buffer, to_write);
+    }
     if (req.size < 0)
     {
       req.status.ret = -1;
