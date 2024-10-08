@@ -26,10 +26,10 @@
 
 namespace XPN
 {
-    std::string xpn_api::check_remove_path_from_path(const std::string &path, std::string& out_path)
+    std::string xpn_api::check_remove_part_from_path(const std::string &path, std::string& out_path)
     {
         std::string name_part = xpn_path::get_first_dir(path);
-        XPN_DEBUG("First dir "<<name_part);
+        // XPN_DEBUG("First dir "<<name_part);
         auto it = m_partitions.find(name_part);
         if (it == m_partitions.end())
         {
@@ -51,7 +51,7 @@ namespace XPN
         int res = 0;
 
         std::string file_path;
-        auto part_name = check_remove_path_from_path(path, file_path);
+        auto part_name = check_remove_part_from_path(path, file_path);
         if (part_name.empty()){
             errno = ENOENT;
             XPN_DEBUG_END_CUSTOM(path<<", "<<flags<<", "<<mode);
@@ -188,7 +188,7 @@ namespace XPN
         int res = 0;
 
         std::string file_path;
-        auto part_name = check_remove_path_from_path(path, file_path);
+        auto part_name = check_remove_part_from_path(path, file_path);
         if (part_name.empty()){
             errno = ENOENT;
             XPN_DEBUG_END_CUSTOM(path);
@@ -236,14 +236,14 @@ namespace XPN
         XPN_DEBUG_BEGIN_CUSTOM(path<<", "<<newpath);
         int res = 0;
         std::string file_path;
-        auto part_name = check_remove_path_from_path(path, file_path);
+        auto part_name = check_remove_part_from_path(path, file_path);
         if (part_name.empty()){
             errno = ENOENT;
             XPN_DEBUG_END_CUSTOM(path<<", "<<newpath);
             return -1;
         }
         std::string new_file_path;
-        auto new_part_name = check_remove_path_from_path(newpath, new_file_path);
+        auto new_part_name = check_remove_part_from_path(newpath, new_file_path);
         if (new_part_name.empty()){
             errno = ENOENT;
             XPN_DEBUG_END_CUSTOM(path<<", "<<newpath);

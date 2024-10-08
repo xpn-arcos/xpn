@@ -140,7 +140,7 @@ namespace XPN
         int serv;
         
         std::string file_path;
-        auto part_name = check_remove_path_from_path(path, file_path);
+        auto part_name = check_remove_part_from_path(path, file_path);
         if (part_name.empty()){
             errno = ENOENT;
             XPN_DEBUG_END_CUSTOM(path<<", "<<offset);

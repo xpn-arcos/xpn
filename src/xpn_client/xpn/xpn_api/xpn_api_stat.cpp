@@ -49,7 +49,7 @@ namespace XPN
         XPN_DEBUG_BEGIN_CUSTOM(path);
         int res = 0;
         std::string file_path;
-        auto name_part = check_remove_path_from_path(path, file_path);
+        auto name_part = check_remove_part_from_path(path, file_path);
         if (name_part.empty()){
             errno = ENOENT;
             XPN_DEBUG_END_CUSTOM(path);
@@ -140,7 +140,7 @@ namespace XPN
         int res = 0;
 
         std::string file_path;
-        auto name_part = check_remove_path_from_path(path, file_path);
+        auto name_part = check_remove_part_from_path(path, file_path);
         if (name_part.empty()){
             errno = ENOENT;
             res = -1;

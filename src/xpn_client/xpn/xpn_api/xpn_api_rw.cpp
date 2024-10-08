@@ -69,9 +69,11 @@ namespace XPN
         int index = 0;
         for (size_t i = 0; i < rw_buff.m_ops.size(); i++)
         {
-            res = file.initialize_vfh(i);
-            if (res < 0){
-                break;
+            if (!rw_buff.m_ops[i].empty()){
+                res = file.initialize_vfh(i);
+                if (res < 0){
+                    break;
+                }   
             }
             for (auto &op : rw_buff.m_ops[i])
             {
@@ -147,11 +149,12 @@ namespace XPN
         int index = 0;
         for (size_t i = 0; i < rw_buff.m_ops.size(); i++)
         {
-            res = file.initialize_vfh(i);
-            if (res < 0){
-                break;
+            if (!rw_buff.m_ops[i].empty()){
+                res = file.initialize_vfh(i);
+                if (res < 0){
+                    break;
+                }
             }
-
             for (auto &op : rw_buff.m_ops[i])
             {
                 v_res[index++] = m_worker->launch([i, &file, &op](){

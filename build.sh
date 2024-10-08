@@ -6,6 +6,6 @@ cd build
 
 cmake -S .. -B . -D BUILD_TESTS=true -D CMAKE_INSTALL_PREFIX=$1 -D CMAKE_C_COMPILER=/home/lab/bin/mpich/bin/mpicc -D CMAKE_CXX_COMPILER=/home/lab/bin/mpich/bin/mpic++
 
-cmake --build . -j
+cmake --build . -j 8
 
 cmake --install .

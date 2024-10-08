@@ -169,7 +169,7 @@ namespace XPN
         }
 
         std::string file_path;
-        auto part_name = check_remove_path_from_path(path, file_path);
+        auto part_name = check_remove_part_from_path(path, file_path);
         if (part_name.empty()){
             errno = ENOENT;
             res = -1;
@@ -216,7 +216,7 @@ namespace XPN
         }
 
         std::string file_path;
-        auto part_name = check_remove_path_from_path(path, file_path);
+        auto part_name = check_remove_part_from_path(path, file_path);
         if (part_name.empty()){
             errno = ENOENT;
             res = -1;
