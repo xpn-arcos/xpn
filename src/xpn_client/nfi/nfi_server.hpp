@@ -51,7 +51,7 @@ namespace XPN
     class nfi_server 
     {
     public:
-        nfi_server(const std::string &url);
+        nfi_server(const nfi_parser &url);
         int init_comm();
         int destroy_comm();
         static bool is_local_server(const std::string &server);

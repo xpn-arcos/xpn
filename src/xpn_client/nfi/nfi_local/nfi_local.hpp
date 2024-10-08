@@ -34,7 +34,7 @@ namespace XPN
     class nfi_local : public nfi_server
     {
     public:
-        nfi_local(const std::string &url) : nfi_server(url) 
+        nfi_local(const nfi_parser &parser) : nfi_server(parser) 
         {
             filesystem_low_set(RTLD_NEXT);
         }

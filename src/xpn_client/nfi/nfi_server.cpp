@@ -75,20 +75,19 @@ namespace XPN
         nfi_parser parser(url);
         if (url.find(server_protocols::file) == 0 ||
             (xpn_env::get_instance().xpn_locality == 1 && is_local_server(parser.m_server))){
-                return std::make_unique<nfi_local>(url);
+                return std::make_unique<nfi_local>(parser);
             }
         if (url.find(server_protocols::mpi_server) == 0 ||
             url.find(server_protocols::sck_server) == 0){
-                return std::make_unique<nfi_xpn_server>(url);
+                return std::make_unique<nfi_xpn_server>(parser);
             }
         
         std::cerr << "Error: server protocol '"<< url << "' is not defined." << std::endl;
         return nullptr;
     }
 
-    nfi_server::nfi_server(const std::string &url) : m_url(url)
+    nfi_server::nfi_server(const nfi_parser &parser) : m_url(parser.m_url)
     {
-        nfi_parser parser(url);
         m_protocol = parser.m_protocol;
         m_server = parser.m_server;
         m_path = parser.m_path;
