@@ -105,11 +105,15 @@ int64_t nfi_xpn_server::nfi_read (const xpn_fh &fh, char *buffer, int64_t offset
 
   debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] >> Begin");
 
-  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read("<<fh.path<<", "<<offset<<", "<<size<<")");
-  
   // Check arguments...
   if (size == 0) {
     return 0;
+  }
+
+  debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read("<<fh.path<<", "<<offset<<", "<<size<<")");
+
+  if (!xpn_env::get_instance().xpn_session_connect && m_comm == nullptr){
+    m_comm = m_control_comm->connect(m_server);
   }
 
   std::size_t length = fh.path.copy(msg.path, PATH_MAX - 1);
@@ -174,6 +178,12 @@ int64_t nfi_xpn_server::nfi_read (const xpn_fh &fh, char *buffer, int64_t offset
   ret = cont;
 
   debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read("<<fh.path<<", "<<offset<<", "<<size<<")="<<ret);
+  
+  if (!xpn_env::get_instance().xpn_session_connect){
+    m_control_comm->disconnect(m_comm);
+    m_comm = nullptr;
+  }
+
   debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] >> End");
 
   return ret;
@@ -190,6 +200,10 @@ ssize_t nfi_xpn_server::nfi_write (const xpn_fh &fh, const char *buffer, int64_t
   // Check arguments...
   if (size == 0) {
     return 0;
+  }
+
+  if (!xpn_env::get_instance().xpn_session_connect && m_comm == nullptr){
+    m_comm = m_control_comm->connect(m_server);
   }
 
   debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write("<<fh.path<<", "<<offset<<", "<<size<<")");
@@ -267,6 +281,12 @@ ssize_t nfi_xpn_server::nfi_write (const xpn_fh &fh, const char *buffer, int64_t
   ret = cont;
 
   debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write("<<fh.path<<", "<<offset<<", "<<size<<")="<<ret);
+  
+  if (!xpn_env::get_instance().xpn_session_connect){
+    m_control_comm->disconnect(m_comm);
+    m_comm = nullptr;
+  }
+
   debug_info("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] >> End");
 
   return ret;

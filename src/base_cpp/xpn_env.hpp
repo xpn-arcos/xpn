@@ -43,6 +43,7 @@ namespace XPN
         int xpn_locality = 1;
         int xpn_session_file = 0;
         int xpn_session_dir = 1;
+        int xpn_session_connect = 1;
     public:
         static xpn_env& get_instance()
         {

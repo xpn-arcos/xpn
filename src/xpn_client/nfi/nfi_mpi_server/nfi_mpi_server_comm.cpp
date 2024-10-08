@@ -234,6 +234,8 @@ void nfi_mpi_server_control_comm::disconnect(nfi_xpn_server_comm *comm) {
         printf("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_disconnect] ERROR: MPI_Comm_disconnect fails");
     }
 
+    delete comm;
+
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_disconnect] << End");
 }
 

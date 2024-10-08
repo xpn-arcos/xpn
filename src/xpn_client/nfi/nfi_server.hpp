@@ -122,6 +122,10 @@ namespace XPN
             ssize_t ret;
             debug_info("[NFI_XPN] [nfi_server_do_request] >> Begin");
 
+            if (!xpn_env::get_instance().xpn_session_connect && m_comm == nullptr){
+                m_comm = m_control_comm->connect(m_server);
+            }
+
             // send request...
             debug_info("[NFI_XPN] [nfi_server_do_request] Send operation: "<<op);
 
@@ -138,6 +142,10 @@ namespace XPN
                 return -1;
             }
 
+            if (!xpn_env::get_instance().xpn_session_connect){
+                m_control_comm->disconnect(m_comm);
+                m_comm = nullptr;
+            }
             debug_info("[NFI_XPN] [nfi_server_do_request] >> End");
 
             return 0;

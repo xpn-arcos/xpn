@@ -110,6 +110,12 @@ namespace XPN
             m_error = -1;
             res = -1;
         }
+
+        if (!xpn_env::get_instance().xpn_session_connect){
+            m_control_comm->disconnect(m_comm);
+            m_comm = nullptr;
+        }
+
         XPN_DEBUG_END;
         return res;
     }
@@ -118,7 +124,9 @@ namespace XPN
     {
         XPN_DEBUG_BEGIN;
         int res = 0;
-        m_control_comm->disconnect(m_comm);
+        if (m_comm != nullptr){
+            m_control_comm->disconnect(m_comm);
+        }
 
         m_control_comm.reset();
 

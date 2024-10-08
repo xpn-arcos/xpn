@@ -61,5 +61,10 @@ namespace XPN
         if ((env_session_file != NULL) && (std::strlen(env_session_file) > 0)){
             xpn_session_file=atoi(env_session_file);
         }
+        // XPN_SESSION_CONNECT
+        char *env_session_connect = std::getenv("XPN_SESSION_CONNECT");
+        if ((env_session_connect != NULL) && (std::strlen(env_session_connect) > 0)){
+            xpn_session_connect=atoi(env_session_connect);
+        }
     }
 }
