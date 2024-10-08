@@ -175,6 +175,10 @@ namespace XPN
                     buf->f_blocks += aux_buf.f_blocks;
                     buf->f_bfree += aux_buf.f_bfree;
                     buf->f_bavail += aux_buf.f_bavail;
+                    
+                    buf->f_files += aux_buf.f_files;
+                    buf->f_ffree += aux_buf.f_ffree;
+                    buf->f_favail += aux_buf.f_favail;
                 }
                 return res;
             });
