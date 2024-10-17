@@ -31,17 +31,15 @@
 namespace XPN
 {
 
-#define HANDLE_OPERATION(comm, rank, tag, op_struct, op_function) \
-    do { \
-        op_struct msg; \
-        int ret = (comm)->read_data((char *)&(msg), sizeof(msg), (rank), (tag)); \
-        if (ret != -1) { \
-            (op_function)(*(comm), (msg), (rank), (tag)); \
-        } \
-    } while (0)
+#define HANDLE_OPERATION(op_struct, op_function) \
+    op_struct msg; \
+    int ret = (comm)->read_data((char *)&(msg), sizeof(msg), (rank), (tag)); \
+    if (ret != -1) { \
+        (op_function)(*(comm), (msg), (rank), (tag)); \
+    }
 
 //Read the operation to realize
-void xpn_server::do_operation ( xpn_server_comm *comm, int type_op, int rank, int tag )
+void xpn_server::do_operation ( xpn_server_comm *comm, xpn_server_ops type_op, int rank, int tag, timer timer )
 {
   debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER_OPS] [xpn_server_do_operation] >> Begin");
   debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER_OPS] [xpn_server_do_operation] OP '"<<xpn_server_op2string(type_op)<<"'; OP_ID "<< type_op);
@@ -49,33 +47,41 @@ void xpn_server::do_operation ( xpn_server_comm *comm, int type_op, int rank, in
   switch (type_op)
   {
     //File API
-    case XPN_SERVER_OPEN_FILE:              HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path_flags,             op_open); break;
-    case XPN_SERVER_CREAT_FILE:             HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path_flags,             op_creat); break;
-    case XPN_SERVER_READ_FILE:              HANDLE_OPERATION(comm, rank, tag, st_xpn_server_rw,                     op_read); break;
-    case XPN_SERVER_WRITE_FILE:             HANDLE_OPERATION(comm, rank, tag, st_xpn_server_rw,                     op_write); break;
-    case XPN_SERVER_CLOSE_FILE:             HANDLE_OPERATION(comm, rank, tag, st_xpn_server_close,                  op_close); break;
-    case XPN_SERVER_RM_FILE:                HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path,                   op_rm); break;
-    case XPN_SERVER_RM_FILE_ASYNC:          HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path,                   op_rm_async); break;
-    case XPN_SERVER_RENAME_FILE:            HANDLE_OPERATION(comm, rank, tag, st_xpn_server_rename,                 op_rename); break;
-    case XPN_SERVER_GETATTR_FILE:           HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path,                   op_getattr); break;
-    case XPN_SERVER_SETATTR_FILE:           HANDLE_OPERATION(comm, rank, tag, st_xpn_server_setattr,                op_setattr); break;
+    case xpn_server_ops::OPEN_FILE:              {HANDLE_OPERATION(st_xpn_server_path_flags,             op_open);                  break;}
+    case xpn_server_ops::CREAT_FILE:             {HANDLE_OPERATION(st_xpn_server_path_flags,             op_creat);                 break;}
+    case xpn_server_ops::READ_FILE:              {HANDLE_OPERATION(st_xpn_server_rw,                     op_read);
+                                                  std::unique_ptr<xpn_stats::scope_stat<xpn_stats::io_stats>> io_stat;
+                                                  if (xpn_env::get_instance().xpn_stats) { io_stat = std::make_unique<xpn_stats::scope_stat<xpn_stats::io_stats>>(m_stats.m_read_total, msg.size, timer); } 
+                                                  break;}
+    case xpn_server_ops::WRITE_FILE:             {HANDLE_OPERATION(st_xpn_server_rw,                     op_write);
+                                                  std::unique_ptr<xpn_stats::scope_stat<xpn_stats::io_stats>> io_stat;
+                                                  if (xpn_env::get_instance().xpn_stats) { io_stat = std::make_unique<xpn_stats::scope_stat<xpn_stats::io_stats>>(m_stats.m_write_total, msg.size, timer); } 
+                                                  break;}
+    case xpn_server_ops::CLOSE_FILE:             {HANDLE_OPERATION(st_xpn_server_close,                  op_close);                 break;}
+    case xpn_server_ops::RM_FILE:                {HANDLE_OPERATION(st_xpn_server_path,                   op_rm);                    break;}
+    case xpn_server_ops::RM_FILE_ASYNC:          {HANDLE_OPERATION(st_xpn_server_path,                   op_rm_async);              break;}
+    case xpn_server_ops::RENAME_FILE:            {HANDLE_OPERATION(st_xpn_server_rename,                 op_rename);                break;}
+    case xpn_server_ops::GETATTR_FILE:           {HANDLE_OPERATION(st_xpn_server_path,                   op_getattr);               break;}
+    case xpn_server_ops::SETATTR_FILE:           {HANDLE_OPERATION(st_xpn_server_setattr,                op_setattr);               break;}
 
     //Directory API
-    case XPN_SERVER_MKDIR_DIR:              HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path_flags,             op_mkdir); break;
-    case XPN_SERVER_OPENDIR_DIR:            HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path_flags,             op_opendir); break;
-    case XPN_SERVER_READDIR_DIR:            HANDLE_OPERATION(comm, rank, tag, st_xpn_server_readdir,                op_readdir); break;
-    case XPN_SERVER_CLOSEDIR_DIR:           HANDLE_OPERATION(comm, rank, tag, st_xpn_server_close,                  op_closedir); break;
-    case XPN_SERVER_RMDIR_DIR:              HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path,                   op_rmdir); break;
-    case XPN_SERVER_RMDIR_DIR_ASYNC:        HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path,                   op_rmdir_async); break;
+    case xpn_server_ops::MKDIR_DIR:              {HANDLE_OPERATION(st_xpn_server_path_flags,             op_mkdir);                 break;}
+    case xpn_server_ops::OPENDIR_DIR:            {HANDLE_OPERATION(st_xpn_server_path_flags,             op_opendir);               break;}
+    case xpn_server_ops::READDIR_DIR:            {HANDLE_OPERATION(st_xpn_server_readdir,                op_readdir);               break;}
+    case xpn_server_ops::CLOSEDIR_DIR:           {HANDLE_OPERATION(st_xpn_server_close,                  op_closedir);              break;}
+    case xpn_server_ops::RMDIR_DIR:              {HANDLE_OPERATION(st_xpn_server_path,                   op_rmdir);                 break;}
+    case xpn_server_ops::RMDIR_DIR_ASYNC:        {HANDLE_OPERATION(st_xpn_server_path,                   op_rmdir_async);           break;}
 
     //Metadata API
-    case XPN_SERVER_READ_MDATA:             HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path,                   op_read_mdata); break;
-    case XPN_SERVER_WRITE_MDATA:            HANDLE_OPERATION(comm, rank, tag, st_xpn_server_write_mdata,            op_write_mdata); break;
-    case XPN_SERVER_WRITE_MDATA_FILE_SIZE:  HANDLE_OPERATION(comm, rank, tag, st_xpn_server_write_mdata_file_size,  op_write_mdata_file_size); break;
+    case xpn_server_ops::READ_MDATA:             {HANDLE_OPERATION(st_xpn_server_path,                   op_read_mdata);            break;}
+    case xpn_server_ops::WRITE_MDATA:            {HANDLE_OPERATION(st_xpn_server_write_mdata,            op_write_mdata);           break;}
+    case xpn_server_ops::WRITE_MDATA_FILE_SIZE:  {HANDLE_OPERATION(st_xpn_server_write_mdata_file_size,  op_write_mdata_file_size); break;}
 
-    case XPN_SERVER_STATVFS_DIR:            HANDLE_OPERATION(comm, rank, tag, st_xpn_server_path,                   op_statvfs); break;
+    case xpn_server_ops::STATVFS_DIR:            {HANDLE_OPERATION(st_xpn_server_path,                   op_statvfs);               break;}
     //Connection API
-    case XPN_SERVER_DISCONNECT: break;
+    case xpn_server_ops::DISCONNECT: break;
+    //Rest operation are unknown
+    default: std::cerr << "Server " << serv_name << " has received an unknown operation." << std::endl;
   }
 
   debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER_OPS] [xpn_server_do_operation] << End");
@@ -200,7 +206,8 @@ void xpn_server::op_read ( xpn_server_comm &comm, st_xpn_server_rw &head, int ra
       goto cleanup_xpn_server_op_read;
     }
     {
-      xpn_stats::scope_stat stat(m_stats.read_disk, to_read);
+      std::unique_ptr<xpn_stats::scope_stat<xpn_stats::io_stats>> io_stat;
+      if (xpn_env::get_instance().xpn_stats) { io_stat = std::make_unique<xpn_stats::scope_stat<xpn_stats::io_stats>>(m_stats.m_read_disk, to_read); } 
       req.size = filesystem_read(fd, buffer, to_read);
     }
     // if error then send as "how many bytes" -1
@@ -222,7 +229,8 @@ void xpn_server::op_read ( xpn_server_comm &comm, st_xpn_server_rw &head, int ra
     if (req.size > 0)
     {
       {
-        xpn_stats::scope_stat stat(m_stats.write_net, to_read);
+        std::unique_ptr<xpn_stats::scope_stat<xpn_stats::io_stats>> io_stat;
+        if (xpn_env::get_instance().xpn_stats) { io_stat = std::make_unique<xpn_stats::scope_stat<xpn_stats::io_stats>>(m_stats.m_write_net, to_read); } 
         comm.write_data(buffer, req.size, rank_client_id, tag_client_id);
       }
       debug_info("[Server="<<serv_name<<"] [XPN_SERVER_OPS] [xpn_server_op_read] op_read: send data");
@@ -296,7 +304,8 @@ void xpn_server::op_write ( xpn_server_comm &comm, st_xpn_server_rw &head, int r
 
     // read data from MPI and write into the file
     {
-      xpn_stats::scope_stat stat(m_stats.read_net, to_write);
+      std::unique_ptr<xpn_stats::scope_stat<xpn_stats::io_stats>> io_stat;
+      if (xpn_env::get_instance().xpn_stats) { io_stat = std::make_unique<xpn_stats::scope_stat<xpn_stats::io_stats>>(m_stats.m_read_net, to_write); } 
       comm.read_data(buffer, to_write, rank_client_id, tag_client_id);
     }
     ret_lseek = filesystem_lseek(fd, head.offset + cont, SEEK_SET);
@@ -306,7 +315,8 @@ void xpn_server::op_write ( xpn_server_comm &comm, st_xpn_server_rw &head, int r
       goto cleanup_xpn_server_op_write;
     }
     {
-      xpn_stats::scope_stat stat(m_stats.write_disk, to_write);
+      std::unique_ptr<xpn_stats::scope_stat<xpn_stats::io_stats>> io_stat;
+      if (xpn_env::get_instance().xpn_stats) { io_stat = std::make_unique<xpn_stats::scope_stat<xpn_stats::io_stats>>(m_stats.m_write_disk, to_write); } 
       req.size = filesystem_write(fd, buffer, to_write);
     }
     if (req.size < 0)

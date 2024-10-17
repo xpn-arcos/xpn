@@ -471,7 +471,7 @@ int nfi_local::nfi_write_mdata (const std::string &path, const xpn_metadata &mda
     std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
     msg.path[length] = '\0';
     msg.size = mdata.m_data.file_size;
-    ret = nfi_do_request(XPN_SERVER_WRITE_MDATA_FILE_SIZE, msg, req);
+    ret = nfi_do_request(xpn_server_ops::WRITE_MDATA_FILE_SIZE, msg, req);
 
     if (req.ret < 0){
       errno = req.server_errno;

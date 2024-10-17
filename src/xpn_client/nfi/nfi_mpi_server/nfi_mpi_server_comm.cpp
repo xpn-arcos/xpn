@@ -218,7 +218,7 @@ void nfi_mpi_server_control_comm::disconnect(nfi_xpn_server_comm *comm) {
     MPI_Comm_rank(MPI_COMM_WORLD, &(rank));
     if (rank == 0) {
         debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_disconnect] Send disconnect message");
-        ret = in_comm->write_operation(XPN_SERVER_DISCONNECT);
+        ret = in_comm->write_operation(xpn_server_ops::DISCONNECT);
         if (ret < 0) {
             printf("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_disconnect] ERROR: nfi_mpi_server_comm_write_operation fails");
         }
@@ -239,7 +239,7 @@ void nfi_mpi_server_control_comm::disconnect(nfi_xpn_server_comm *comm) {
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_disconnect] << End");
 }
 
-int64_t nfi_mpi_server_comm::write_operation(int op) {
+int64_t nfi_mpi_server_comm::write_operation(xpn_server_ops op) {
     int ret;
     int msg[2];
     int eclass, len;
@@ -249,7 +249,7 @@ int64_t nfi_mpi_server_comm::write_operation(int op) {
 
     // Message generation
     msg[0] = (int)(pthread_self() % 32450) + 1;
-    msg[1] = (int)op;
+    msg[1] = static_cast<int>(op);
 
     // Send message
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_write_operation] Write operation send tag "<< msg[0]);

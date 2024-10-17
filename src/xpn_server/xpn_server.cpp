@@ -37,8 +37,8 @@ void xpn_server::dispatcher ( xpn_server_comm* comm )
     int ret;
 
     debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_dispatcher] >> Begin");
-
-    int type_op = 0, rank_client_id = 0, tag_client_id = 0;
+    xpn_server_ops type_op = xpn_server_ops::size;
+    int rank_client_id = 0, tag_client_id = 0;
     int disconnect = 0;
     while (!disconnect)
     {
@@ -52,22 +52,24 @@ void xpn_server::dispatcher ( xpn_server_comm* comm )
 
         debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_dispatcher] OP '"<<xpn_server_op2string(type_op)<<"'; OP_ID "<< type_op);
 
-        if (type_op == XPN_SERVER_DISCONNECT) {
+        if (type_op == xpn_server_ops::DISCONNECT) {
             debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_dispatcher] DISCONNECT received");
 
             disconnect = 1;
             continue;
         }
 
-        if (type_op == XPN_SERVER_FINALIZE) {
+        if (type_op == xpn_server_ops::FINALIZE) {
             debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_dispatcher] FINALIZE received");
 
             disconnect = 1;
             continue;
         }
-
-        m_worker2->launch_no_future([this, comm, type_op, rank_client_id, tag_client_id]{
-            this->do_operation(comm, type_op, rank_client_id, tag_client_id);
+        timer timer;
+        m_worker2->launch_no_future([this, timer, comm, type_op, rank_client_id, tag_client_id]{
+            std::unique_ptr<xpn_stats::scope_stat<xpn_stats::op_stats>> op_stat;
+            if (xpn_env::get_instance().xpn_stats) { op_stat = std::make_unique<xpn_stats::scope_stat<xpn_stats::op_stats>>(m_stats.m_ops_stats[static_cast<int>(type_op)], timer); } 
+            do_operation(comm, type_op, rank_client_id, tag_client_id, timer);
         });
 
         debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_dispatcher] Worker launched");
@@ -112,6 +114,9 @@ void xpn_server::finish ( void )
 
 xpn_server::xpn_server(int argc, char *argv[]) : m_params(argc, argv)
 {
+    if (xpn_env::get_instance().xpn_stats){
+        m_window_stats = std::make_unique<xpn_window_stats>(m_stats);
+    }
 }
 
 xpn_server::~xpn_server()
@@ -125,7 +130,6 @@ int xpn_server::run()
     int server_socket;
     int connection_socket;
     int recv_code = 0;
-    int await_stop = 0;
     timer timer;
 
     debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_up] >> Begin");
@@ -187,7 +191,7 @@ int xpn_server::run()
                 finish();
                 the_end = 1;
                 if (recv_code == socket::FINISH_CODE_AWAIT){
-                    await_stop = 1;
+                    socket::send(connection_socket, &recv_code, sizeof(recv_code));
                 }
                 break;
 
@@ -196,17 +200,10 @@ int xpn_server::run()
                 break;
         }
 
-        if (await_stop == 0){
-            socket::close(connection_socket);
-        }
+        socket::close(connection_socket);
     }
 
     socket::close(server_socket);
-
-    if (await_stop == 1){
-        socket::send(connection_socket, &recv_code, sizeof(recv_code));
-        socket::close(connection_socket);
-    }
 
     debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_up] >> End");
     return 0;
@@ -421,7 +418,11 @@ int xpn_server::print_stats()
         socket::close(socket);
 
         std::cout << "Server " << name << ":" << std::endl;
-        std::cout << stat_buff.to_string() << std::endl << std::endl;
+        std::cout << "Bandwidth :" << std::endl;
+        std::cout << stat_buff.to_string_bandwidth() << std::endl;
+        std::cout << "Ops :" << std::endl;
+        std::cout << stat_buff.to_string_ops() << std::endl;
+        std::cout << std::endl;
     }
 
     debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_up] >> End");

@@ -5,6 +5,7 @@ set(UTILS_LIST_CPP
 	xpn_expand
 	xpn_shrink
 	# xpn_rebuild_active_reader # TODO: fix with metadata
+	xpn_server_stats
 )
 
 # add the executables cpp

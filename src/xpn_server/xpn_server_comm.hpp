@@ -22,6 +22,7 @@
 #pragma once
 
   #include "xpn_server_params.hpp"
+  #include "xpn_server_ops.hpp"
   #include <memory>
 
 namespace XPN
@@ -32,7 +33,7 @@ namespace XPN
     xpn_server_comm() = default;
     virtual ~xpn_server_comm() = default;
     
-    virtual int64_t read_operation(int &op, int &rank_client_id, int &tag_client_id) = 0;
+    virtual int64_t read_operation(xpn_server_ops &op, int &rank_client_id, int &tag_client_id) = 0;
     virtual int64_t read_data(void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
     virtual int64_t write_data(const void *data, int64_t size, int rank_client_id, int tag_client_id) = 0;
   };

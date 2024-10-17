@@ -25,7 +25,7 @@
 #include "xpn_server_comm.hpp"
 #include "xpn_server_ops.hpp"
 #include "base_cpp/workers.hpp"
-#include "base_cpp/xpn_stats.hpp"
+#include "xpn/xpn_stats.hpp"
 
 
 namespace XPN
@@ -41,7 +41,7 @@ namespace XPN
 
         void accept();
         void dispatcher(xpn_server_comm *comm);
-        void do_operation(xpn_server_comm *comm, int op, int rank_client_id, int tag_client_id);
+        void do_operation(xpn_server_comm *comm, xpn_server_ops op, int rank_client_id, int tag_client_id, timer timer);
         void finish();
 
     public:
@@ -51,6 +51,7 @@ namespace XPN
         std::unique_ptr<workers> m_worker1, m_worker2;
 
         xpn_stats m_stats;
+        std::unique_ptr<xpn_window_stats> m_window_stats;
 
     public:
         // File operations

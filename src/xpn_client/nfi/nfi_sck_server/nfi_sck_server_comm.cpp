@@ -148,13 +148,12 @@ nfi_xpn_server_comm* nfi_sck_server_control_comm::connect ( const std::string &s
 void nfi_sck_server_control_comm::disconnect(nfi_xpn_server_comm *comm) 
 {
   int ret;
-  int code = XPN_SERVER_DISCONNECT;
   nfi_sck_server_comm *in_comm = static_cast<nfi_sck_server_comm*>(comm);
 
   debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] >> Begin");
 
   debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Send disconnect message");
-  ret = in_comm->write_operation(code);
+  ret = in_comm->write_operation(xpn_server_ops::DISCONNECT);
   if (ret < 0) {
     printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] ERROR: nfi_sck_server_comm_write_operation fails");
   }
@@ -172,7 +171,7 @@ void nfi_sck_server_control_comm::disconnect(nfi_xpn_server_comm *comm)
   debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] << End");
 }
 
-int64_t nfi_sck_server_comm::write_operation(int op) {
+int64_t nfi_sck_server_comm::write_operation(xpn_server_ops op) {
     int ret;
     int msg[2];
 

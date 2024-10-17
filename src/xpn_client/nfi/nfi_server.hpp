@@ -28,6 +28,7 @@
 #include <sys/statvfs.h>
 #include <dirent.h>
 
+#include "xpn_server/xpn_server_ops.hpp"
 #include "nfi_xpn_server_comm.hpp"
 #include "base_cpp/debug.hpp"
 
@@ -93,7 +94,7 @@ namespace XPN
     protected:
     
         template<typename msg_struct>
-        int nfi_write_operation( int op, msg_struct &msg )
+        int nfi_write_operation( xpn_server_ops op, msg_struct &msg )
         {
             int ret;
 
@@ -117,7 +118,7 @@ namespace XPN
         }
 
         template<typename msg_struct, typename req_struct>
-        int nfi_do_request ( int op, msg_struct &msg, req_struct &req )
+        int nfi_do_request ( xpn_server_ops op, msg_struct &msg, req_struct &req )
         {
             ssize_t ret;
             debug_info("[NFI_XPN] [nfi_server_do_request] >> Begin");

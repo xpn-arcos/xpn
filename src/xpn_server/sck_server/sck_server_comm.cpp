@@ -175,7 +175,7 @@ void sck_server_control_comm::disconnect ( xpn_server_comm* comm )
 }
 
 
-int64_t sck_server_comm::read_operation ( int &op, int &rank_client_id, int &tag_client_id )
+int64_t sck_server_comm::read_operation ( xpn_server_ops &op, int &rank_client_id, int &tag_client_id )
 {
   int ret;
   int msg[2];
@@ -192,7 +192,7 @@ int64_t sck_server_comm::read_operation ( int &op, int &rank_client_id, int &tag
 
   rank_client_id = 0;
   tag_client_id  = msg[0];
-  op             = msg[1];
+  op             = static_cast<xpn_server_ops>(msg[1]);
 
   debug_info("[Server="<<ns::get_host_name()<<"] [SCK_SERVER_COMM] [sck_server_comm_read_operation] read (SOURCE "<<m_socket<<", MPI_TAG "<<tag_client_id<<", MPI_ERROR "<<ret<<")");
   debug_info("[Server="<<ns::get_host_name()<<"] [SCK_SERVER_COMM] [sck_server_comm_read_operation] << End");

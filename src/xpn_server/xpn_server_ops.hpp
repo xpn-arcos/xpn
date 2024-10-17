@@ -21,45 +21,93 @@
 
 #pragma once
 
-  #include <libgen.h>
-  #include "base_c/filesystem.h"
+#include "base_c/filesystem.h"
+#include "xpn/xpn_metadata.hpp"
 
-  #include "xpn/xpn_metadata.hpp"
+/* Operations */
 
-  /* Operations */
+namespace XPN
+{
+    
+  enum class xpn_server_ops{
+    // File operations
+    OPEN_FILE,
+    CREAT_FILE,
+    READ_FILE,
+    WRITE_FILE,
+    CLOSE_FILE,
+    RM_FILE,
+    RM_FILE_ASYNC,
+    RENAME_FILE,
+    GETATTR_FILE,
+    SETATTR_FILE,
 
-  // File operations
-  #define XPN_SERVER_OPEN_FILE      0
-  #define XPN_SERVER_CREAT_FILE     1
-  #define XPN_SERVER_READ_FILE      2
-  #define XPN_SERVER_WRITE_FILE     3
-  #define XPN_SERVER_CLOSE_FILE     4
-  #define XPN_SERVER_RM_FILE        5
-  #define XPN_SERVER_RM_FILE_ASYNC  6
-  #define XPN_SERVER_RENAME_FILE    7
-  #define XPN_SERVER_GETATTR_FILE   8
-  #define XPN_SERVER_SETATTR_FILE   9
+    // Directory operations
+    MKDIR_DIR,
+    RMDIR_DIR,
+    RMDIR_DIR_ASYNC,
+    OPENDIR_DIR,
+    READDIR_DIR,
+    CLOSEDIR_DIR,
 
-  // Directory operations
-  #define XPN_SERVER_MKDIR_DIR        20
-  #define XPN_SERVER_RMDIR_DIR        21
-  #define XPN_SERVER_RMDIR_DIR_ASYNC  22
-  #define XPN_SERVER_OPENDIR_DIR      23
-  #define XPN_SERVER_READDIR_DIR      24
-  #define XPN_SERVER_CLOSEDIR_DIR     25
+    // FS Operations
+    STATVFS_DIR,
 
-  // FS Operations
-  #define XPN_SERVER_STATVFS_DIR     60
+    // Metadata
+    READ_MDATA,
+    WRITE_MDATA,
+    WRITE_MDATA_FILE_SIZE,
 
-  // Metadata
-  #define XPN_SERVER_READ_MDATA      70
-  #define XPN_SERVER_WRITE_MDATA     71
-  #define XPN_SERVER_WRITE_MDATA_FILE_SIZE     72
+    // Connection operatons
+    FINALIZE,
+    DISCONNECT,
+    END,
 
-  // Connection operatons
-  #define XPN_SERVER_FINALIZE       80
-  #define XPN_SERVER_DISCONNECT     81
-  #define XPN_SERVER_END            -1
+    // For enum count
+    size,
+  };
+
+  static const std::array<std::string, static_cast<size_t>(xpn_server_ops::size)+1> xpn_server_ops_names ={
+    // File operations
+    "OPEN_FILE",
+    "CREAT_FILE",
+    "READ_FILE",
+    "WRITE_FILE",
+    "CLOSE_FILE",
+    "RM_FILE",
+    "RM_FILE_ASYNC",
+    "RENAME_FILE",
+    "GETATTR_FILE",
+    "SETATTR_FILE",
+
+    // Directory operations
+    "MKDIR_DIR",
+    "RMDIR_DIR",
+    "RMDIR_DIR_ASYNC",
+    "OPENDIR_DIR",
+    "READDIR_DIR",
+    "CLOSEDIR_DIR",
+
+    // FS Operations
+    "STATVFS_DIR",
+
+    // Metadata
+    "READ_MDATA",
+    "WRITE_MDATA",
+    "WRITE_MDATA_FILE_SIZE",
+
+    // Connection operatons
+    "FINALIZE",
+    "DISCONNECT",
+    "END",
+
+    // For enum count
+    "size",
+  };
+
+  static inline const std::string& xpn_server_ops_name(xpn_server_ops op) {
+    return xpn_server_ops_names[static_cast<size_t>(op)];
+  }
 
   /* Message struct */
 
@@ -85,7 +133,7 @@
   struct st_xpn_server_close
   {
     int fd;
-    DIR *dir;
+    ::DIR *dir;
   };
 
   struct st_xpn_server_rw
@@ -127,13 +175,13 @@
   {
     char path[PATH_MAX];
     long telldir;
-    DIR *dir;
+    ::DIR *dir;
     char xpn_session;
   };
 
   struct st_xpn_server_opendir_req
   {
-    DIR *dir;
+    ::DIR *dir;
     struct st_xpn_server_status status;
   };
 
@@ -147,14 +195,14 @@
 
   struct st_xpn_server_read_mdata_req
   { 
-    XPN::xpn_metadata::data mdata;
+    xpn_metadata::data mdata;
     struct st_xpn_server_status status;
   };
 
   struct st_xpn_server_write_mdata
   { 
     char path[PATH_MAX];
-    XPN::xpn_metadata::data mdata;
+    xpn_metadata::data mdata;
   };
 
   struct st_xpn_server_write_mdata_file_size
@@ -174,36 +222,5 @@
     char status;
   };
 
-  static inline const char *xpn_server_op2string(int op_code) {
-    switch (op_code) {
-      // File operations
-      case XPN_SERVER_OPEN_FILE: return "OPEN";
-      case XPN_SERVER_CREAT_FILE: return "CREAT";
-      case XPN_SERVER_READ_FILE: return "READ";
-      case XPN_SERVER_WRITE_FILE: return "WRITE";
-      case XPN_SERVER_CLOSE_FILE: return "CLOSE";
-      case XPN_SERVER_RM_FILE: return "RM";
-      case XPN_SERVER_RM_FILE_ASYNC: return "RM_ASYNC";
-      case XPN_SERVER_RENAME_FILE: return "RENAME";
-      case XPN_SERVER_GETATTR_FILE: return "GETATTR";
-      case XPN_SERVER_SETATTR_FILE: return "SETATTR";
-      // Directory operations
-      case XPN_SERVER_MKDIR_DIR: return "MKDIR";
-      case XPN_SERVER_RMDIR_DIR: return "RMDIR";
-      case XPN_SERVER_RMDIR_DIR_ASYNC: return "RMDIR_ASYNC";
-      case XPN_SERVER_OPENDIR_DIR: return "OPENDIR";
-      case XPN_SERVER_READDIR_DIR: return "READDIR";
-      case XPN_SERVER_CLOSEDIR_DIR: return "CLOSEDIR";
-      // FS Operations
-      case XPN_SERVER_STATVFS_DIR: return "STATVFS";
-      case XPN_SERVER_FINALIZE: return "FINALIZE";
-      // Metadata
-      case XPN_SERVER_READ_MDATA: return "READ_METADATA";
-      case XPN_SERVER_WRITE_MDATA: return "WRITE_METADATA";
-      case XPN_SERVER_WRITE_MDATA_FILE_SIZE: return "WRITE_METADATA_FILE_SIZE";
-      // Connection operatons
-      case XPN_SERVER_DISCONNECT: return "DISCONNECT";
-      case XPN_SERVER_END: return "END";
-      default: return "Unknown";
-    }
-  }
+
+} // namespace XPN

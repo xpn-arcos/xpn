@@ -34,7 +34,7 @@ namespace XPN
   public:
     nfi_mpi_server_comm(MPI_Comm &comm, int rank, int size) : m_comm(comm), m_rank(rank), m_size(size) {}
 
-    int64_t write_operation(int op) override;
+    int64_t write_operation(xpn_server_ops op) override;
     int64_t read_data(void *data, int64_t size) override;
     int64_t write_data(const void *data, int64_t size) override;
   public:

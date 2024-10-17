@@ -173,7 +173,7 @@ void mpi_server_control_comm::disconnect ( xpn_server_comm *comm )
   debug_info("[Server="<<ns::get_host_name()<<"] [MPI_SERVER_CONTROL_COMM] [mpi_server_control_comm_disconnect] << End");
 }
 
-int64_t mpi_server_comm::read_operation ( int &op, int &rank_client_id, int &tag_client_id )
+int64_t mpi_server_comm::read_operation ( xpn_server_ops &op, int &rank_client_id, int &tag_client_id )
 {
   int ret;
   MPI_Status status;
@@ -191,7 +191,7 @@ int64_t mpi_server_comm::read_operation ( int &op, int &rank_client_id, int &tag
 
   rank_client_id = status.MPI_SOURCE;
   tag_client_id  = msg[0];
-  op             = msg[1];
+  op             = static_cast<xpn_server_ops>(msg[1]);
 
   debug_info("[Server="<<ns::get_host_name()<<"] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] MPI_Recv (MPI SOURCE "<<status.MPI_SOURCE<<", MPI_TAG "<<status.MPI_TAG<<", MPI_ERROR "<<status.MPI_ERROR<<")");
   debug_info("[Server="<<ns::get_host_name()<<"] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] << End");

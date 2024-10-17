@@ -47,7 +47,7 @@ int nfi_xpn_server::nfi_open (const std::string &path, int flags, mode_t mode, x
   msg.mode = mode;
   msg.xpn_session = xpn_env::get_instance().xpn_session_file;
 
-  ret = nfi_do_request(XPN_SERVER_OPEN_FILE, msg, status);
+  ret = nfi_do_request(xpn_server_ops::OPEN_FILE, msg, status);
   if (status.ret < 0 || ret < 0){ 
     errno = status.server_errno;
     debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_open] ERROR: remote open fails to open '"<<fho.path<<"'");
@@ -81,7 +81,7 @@ int nfi_xpn_server::nfi_close (const xpn_fh &fh)
 
     msg.fd = fh.fd;
 
-    nfi_do_request(XPN_SERVER_CLOSE_FILE, msg, status);
+    nfi_do_request(xpn_server_ops::CLOSE_FILE, msg, status);
 
     if (status.ret < 0){
       errno = status.server_errno;
@@ -123,7 +123,7 @@ int64_t nfi_xpn_server::nfi_read (const xpn_fh &fh, char *buffer, int64_t offset
   msg.fd          = fh.fd;
   msg.xpn_session = xpn_env::get_instance().xpn_session_file;
 
-  ret = nfi_write_operation(XPN_SERVER_READ_FILE, msg);
+  ret = nfi_write_operation(xpn_server_ops::READ_FILE, msg);
   if (ret < 0)
   {
     debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_write_operation fails");
@@ -215,7 +215,7 @@ ssize_t nfi_xpn_server::nfi_write (const xpn_fh &fh, const char *buffer, int64_t
   msg.fd          = fh.fd;
   msg.xpn_session = xpn_env::get_instance().xpn_session_file;
 
-  ret = nfi_write_operation(XPN_SERVER_WRITE_FILE, msg);
+  ret = nfi_write_operation(xpn_server_ops::WRITE_FILE, msg);
   if(ret < 0)
   {
     debug_error("[SERV_ID="<<m_server<<"] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_write_operation fails");
@@ -308,11 +308,11 @@ int nfi_xpn_server::nfi_remove (const std::string &path, bool is_async)
   msg.path[length] = '\0';
   if (is_async)
   {
-    ret = nfi_write_operation(XPN_SERVER_RM_FILE_ASYNC, msg);
+    ret = nfi_write_operation(xpn_server_ops::RM_FILE_ASYNC, msg);
   }
   else
   {
-    ret = nfi_do_request(XPN_SERVER_RM_FILE, msg, req);
+    ret = nfi_do_request(xpn_server_ops::RM_FILE, msg, req);
     if (req.ret < 0)
       errno = req.server_errno;
     ret = req.ret;
@@ -343,7 +343,7 @@ int nfi_xpn_server::nfi_rename (const std::string &path, const std::string &new_
   length = new_srv_path.copy(msg.new_url, PATH_MAX - 1);
   msg.new_url[length] = '\0';
 
-  ret = nfi_do_request(XPN_SERVER_RENAME_FILE, msg, req);
+  ret = nfi_do_request(xpn_server_ops::RENAME_FILE, msg, req);
   if (req.ret < 0){
     errno = req.server_errno;
     ret = req.ret;
@@ -370,7 +370,7 @@ int nfi_xpn_server::nfi_getattr (const std::string &path, struct ::stat &st)
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
 
-  ret = nfi_do_request(XPN_SERVER_GETATTR_FILE, msg, req);
+  ret = nfi_do_request(xpn_server_ops::GETATTR_FILE, msg, req);
 
   memcpy(&st, &req.attr, sizeof(req.attr));
 
@@ -413,7 +413,7 @@ int nfi_xpn_server::nfi_mkdir(const std::string &path, mode_t mode)
   msg.path[length] = '\0';
   msg.mode = mode;
 
-  ret = nfi_do_request(XPN_SERVER_MKDIR_DIR, msg, req);
+  ret = nfi_do_request(xpn_server_ops::MKDIR_DIR, msg, req);
 
   if (req.ret < 0){
     errno = req.server_errno;
@@ -448,7 +448,7 @@ int nfi_xpn_server::nfi_opendir(const std::string &path, xpn_fh &fho)
   msg.path[length] = '\0';
   msg.xpn_session = xpn_env::get_instance().xpn_session_dir;
 
-  ret = nfi_do_request(XPN_SERVER_OPENDIR_DIR, msg, req);
+  ret = nfi_do_request(xpn_server_ops::OPENDIR_DIR, msg, req);
   if (req.status.ret < 0)
   {
     errno = req.status.server_errno;
@@ -484,7 +484,7 @@ int nfi_xpn_server::nfi_readdir(xpn_fh &fhd, struct ::dirent &entry)
   msg.dir =         fhd.dir;
   msg.xpn_session = xpn_env::get_instance().xpn_session_dir;
 
-  ret = nfi_do_request(XPN_SERVER_READDIR_DIR, msg, req);
+  ret = nfi_do_request(xpn_server_ops::READDIR_DIR, msg, req);
   
   if (req.status.ret < 0){
     errno = req.status.server_errno;
@@ -518,7 +518,7 @@ int nfi_xpn_server::nfi_closedir (const xpn_fh &fhd)
 
     msg.dir = fhd.dir;
 
-    ret = nfi_do_request(XPN_SERVER_CLOSEDIR_DIR, msg, req);
+    ret = nfi_do_request(xpn_server_ops::CLOSEDIR_DIR, msg, req);
 
     if (req.ret < 0){
       errno = req.server_errno;
@@ -552,11 +552,11 @@ int nfi_xpn_server::nfi_rmdir(const std::string &path, bool is_async)
 
   if (is_async)
   {
-    ret = nfi_write_operation(XPN_SERVER_RMDIR_DIR_ASYNC, msg);
+    ret = nfi_write_operation(xpn_server_ops::RMDIR_DIR_ASYNC, msg);
   }
   else
   {
-    ret = nfi_do_request(XPN_SERVER_RMDIR_DIR, msg, req);
+    ret = nfi_do_request(xpn_server_ops::RMDIR_DIR, msg, req);
     if (req.ret < 0){
       errno = req.server_errno;
       ret = req.ret;
@@ -584,7 +584,7 @@ int nfi_xpn_server::nfi_statvfs(const std::string &path, struct ::statvfs &inf)
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
 
-  ret = nfi_do_request(XPN_SERVER_STATVFS_DIR, msg, req);
+  ret = nfi_do_request(xpn_server_ops::STATVFS_DIR, msg, req);
 
   memcpy(&inf, &req.attr, sizeof(req.attr));
 
@@ -614,7 +614,7 @@ int nfi_xpn_server::nfi_read_mdata (const std::string &path, xpn_metadata &mdata
   std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
   msg.path[length] = '\0';
 
-  ret = nfi_do_request(XPN_SERVER_READ_MDATA, msg, req);
+  ret = nfi_do_request(xpn_server_ops::READ_MDATA, msg, req);
 
   if (req.status.ret < 0){
     errno = req.status.server_errno;
@@ -645,13 +645,13 @@ int nfi_xpn_server::nfi_write_mdata (const std::string &path, const xpn_metadata
     std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
     msg.path[length] = '\0';
     msg.size = mdata.m_data.file_size;
-    ret = nfi_do_request(XPN_SERVER_WRITE_MDATA_FILE_SIZE, msg, req);
+    ret = nfi_do_request(xpn_server_ops::WRITE_MDATA_FILE_SIZE, msg, req);
   }else{
     struct st_xpn_server_write_mdata msg;
     std::size_t length = srv_path.copy(msg.path, PATH_MAX - 1);
     msg.path[length] = '\0';
     memcpy(&msg.mdata, &mdata.m_data, sizeof(mdata.m_data));
-    ret = nfi_do_request(XPN_SERVER_WRITE_MDATA, msg, req);
+    ret = nfi_do_request(xpn_server_ops::WRITE_MDATA, msg, req);
   }
 
   if (req.ret < 0){

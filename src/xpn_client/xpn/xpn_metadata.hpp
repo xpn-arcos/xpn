@@ -24,8 +24,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-
-#include "nfi/nfi_server.hpp"
+#include <array>
 
 #include "base_cpp/xpn_path.hpp"
 #include "base_cpp/debug.hpp"

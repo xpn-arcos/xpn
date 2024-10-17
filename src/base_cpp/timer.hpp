@@ -49,6 +49,11 @@ namespace XPN
 			return std::chrono::duration_cast<precision>(std::chrono::high_resolution_clock::now() - m_Start).count();
 		}
 
+		std::chrono::time_point<std::chrono::high_resolution_clock> get_start()
+		{
+			return m_Start;
+		}
+
 	private:
 		std::chrono::time_point<std::chrono::high_resolution_clock> m_Start;
 	};
