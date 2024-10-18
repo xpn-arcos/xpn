@@ -330,7 +330,7 @@ int xpn_server::stop()
             if (m_params.await_stop == 1){
                 buffer = socket::FINISH_CODE_AWAIT;
             }
-            ret = socket::client_connect(name.data(), socket);
+            ret = socket::client_connect(name, socket);
             if (ret < 0) {
                 print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_down] ERROR: socket connection " << name);
                 return ret;

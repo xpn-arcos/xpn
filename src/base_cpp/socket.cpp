@@ -145,6 +145,34 @@ namespace XPN
         return 0;
     }
 
+    int resolve_hostname(const std::string &srv_name, sockaddr_in* pAddr)
+    {
+        int ret;
+        addrinfo* pResultList = NULL;
+        addrinfo hints = {};
+        int result = -1;
+
+        hints.ai_family = AF_INET;
+        hints.ai_socktype = SOCK_STREAM;
+
+        ret = ::getaddrinfo(srv_name.c_str(), NULL, &hints, &pResultList);
+
+        result = (ret == 0) ? 1 : -1;
+        if (result != -1)
+        {
+            // just pick the first one found
+            *pAddr = *(sockaddr_in*)(pResultList->ai_addr);
+            result = 0;
+        }
+
+        if (pResultList != NULL)
+        {
+            ::freeaddrinfo(pResultList);
+        }
+
+        return result;
+    }
+
     int socket::client_connect ( const std::string &srv_name, int &out_socket )
     {
         int client_fd;
@@ -155,17 +183,8 @@ namespace XPN
             printf("[SOCKET] [socket::read] ERROR: socket creation error\n");
             return -1;
         }
-        struct hostent * hp;
-        hp = gethostbyname(srv_name.c_str());
-        if (hp == NULL) 
-        {
-            printf("[SOCKET] [socket::read] ERROR: gethostbyname srv_name: %s\n", srv_name.c_str());
-            close(client_fd);
-            return -1;
-        }
-        serv_addr.sin_family = AF_INET;
+        resolve_hostname(srv_name, &serv_addr);
         serv_addr.sin_port = htons(get_xpn_port());
-        memcpy( & (serv_addr.sin_addr), hp->h_addr, hp->h_length);
         int status = connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
         if (status < 0) 
         {

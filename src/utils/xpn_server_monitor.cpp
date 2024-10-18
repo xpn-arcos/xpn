@@ -25,11 +25,14 @@
 #include <thread>
 #include <array>
 #include "base_cpp/socket.hpp"
+#include "base_cpp/workers.hpp"
 #include "base_cpp/timer.hpp"
 #include "base_cpp/debug.hpp"
 #include "xpn/xpn_stats.hpp"
 
 using namespace XPN;
+
+static std::unique_ptr<workers> worker;
 
 void monitor_stats(std::string hostfile, std::filesystem::path csv_path)
 {
@@ -51,7 +54,7 @@ void monitor_stats(std::string hostfile, std::filesystem::path csv_path)
     std::vector<std::string> srv_names;
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
-        srv_names.push_back(srv_name);
+        srv_names.emplace_back(srv_name);
     }
 
     // Close host file
@@ -61,33 +64,40 @@ void monitor_stats(std::string hostfile, std::filesystem::path csv_path)
 
     xpn_stats comb_stats;
 
+    std::mutex comb_stats_mutex;
+
     for (auto &name : srv_names)
-    {
-        int socket;
-        int ret;
-        int buffer = socket::STATS_wINDOW_CODE;
-        xpn_stats stat_buff;
-        ret = socket::client_connect(name.data(), socket);
-        if (ret < 0) {
-            print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket connection " << name);
-            continue;
-        }
+    {   
+        worker->launch_no_future([&name, &comb_stats_mutex, &comb_stats](){
+            int socket;
+            int ret;
+            int buffer = socket::STATS_wINDOW_CODE;
+            xpn_stats stat_buff;
+            ret = socket::client_connect(name, socket);
+            if (ret < 0) {
+                print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket connection " << name);
+                return;
+            }
 
-        ret = socket::send(socket, &buffer, sizeof(buffer));
-        if (ret < 0) {
-            print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket send " << name);
-            continue;
-        }
-        
-        ret = socket::recv(socket, &stat_buff, sizeof(stat_buff));
-        if (ret < 0) {
-            print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket recv " << name);
-            continue;
-        }
-        socket::close(socket);
+            ret = socket::send(socket, &buffer, sizeof(buffer));
+            if (ret < 0) {
+                print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket send " << name);
+                return;
+            }
+            
+            ret = socket::recv(socket, &stat_buff, sizeof(stat_buff));
+            if (ret < 0) {
+                print("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket recv " << name);
+                return;
+            }
+            socket::close(socket);
 
-        comb_stats = comb_stats + stat_buff;
+            std::unique_lock<std::mutex> lock(comb_stats_mutex);
+            comb_stats = comb_stats + stat_buff;
+        });
     }
+
+    worker->wait_all();
 
     std::ofstream csv_file(csv_path, std::ofstream::out | std::ofstream::app);
     if (csv_file.is_open()){
@@ -126,6 +136,8 @@ int main ( int argc, char *argv[] )
         csv_file << aux_stats.to_csv_header();
         csv_file.flush();
     }
+
+    worker = workers::Create(workers_mode::thread_pool);
 
     while (true)
     {
