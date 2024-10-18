@@ -22,6 +22,7 @@
 #pragma once
 
 #include "base_cpp/timer.hpp"
+#include "base_cpp/ns.hpp"
 #include "xpn_server/xpn_server_params.hpp"
 #include "xpn_server/xpn_server_ops.hpp"
 #include <atomic>
@@ -29,6 +30,8 @@
 #include <iomanip>
 #include <array>
 #include <type_traits>
+#include <fstream>
+#include <filesystem>
 
 namespace XPN
 {
@@ -258,6 +261,54 @@ namespace XPN
             }
             return out.str();
         }
+
+        std::string to_csv_header(){
+            std::stringstream out;
+            out << "Timestamp" << ";";
+            out << "Disk read (mb/sec)" << ";";
+            out << "Disk write (mb/sec)" << ";";
+            out << "Net read (mb/sec)" << ";";
+            out << "Net write (mb/sec)" << ";";
+            out << "Total read (mb/sec)" << ";";
+            out << "Total write (mb/sec)" << ";";
+            
+            for (auto &op : m_ops_stats)
+            {
+                out << "OP " << xpn_server_ops_name(op.m_op) << " (ops/sec);";
+            }
+
+            out << std::endl;
+            return out.str();
+        }
+
+        std::string to_csv(){
+            std::stringstream out;
+            std::stringstream out_data;
+            auto now = std::chrono::system_clock::now();
+            std::time_t actual_time = std::chrono::system_clock::to_time_t(now);
+            std::tm formated_time = *std::localtime(&actual_time);
+            auto millisec = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+            out << std::put_time(&formated_time, "%Y-%m-%d %H:%M:%S") << "." << std::setw(3) << std::setfill('0') << millisec.count() << ";";
+
+            out_data << m_read_disk.get_bandwidth() << ";";
+            out_data << m_write_disk.get_bandwidth() << ";";
+            out_data << m_read_net.get_bandwidth() << ";";
+            out_data << m_write_net.get_bandwidth() << ";";
+            out_data << m_read_total.get_bandwidth() << ";";
+            out_data << m_write_total.get_bandwidth() << ";";
+            
+            for (auto &op : m_ops_stats)
+            {
+                out_data << op.get_ops_sec() << ";";
+            }
+
+            std::string replace_point = out_data.str();
+            std::replace(replace_point.begin(), replace_point.end(), '.', ',');
+
+            out << replace_point;
+            out << std::endl;
+            return out.str();
+        }
     };
 
     class xpn_window_stats{
@@ -266,6 +317,15 @@ namespace XPN
         {
             std::cout << "Run thread" << std::endl;
             m_thread = std::thread(&xpn_window_stats::thread_xpn_stats, this);
+
+            if(xpn_env::get_instance().xpn_stats_dir){
+                std::filesystem::path csv_path = xpn_env::get_instance().xpn_stats_dir;
+                csv_path.append(ns::get_host_name()+".csv");
+                csv_file = std::ofstream(csv_path);
+                if (csv_file.is_open()){
+                    csv_file << m_stats.to_csv_header();
+                }
+            }
         }
 
         ~xpn_window_stats()
@@ -295,6 +355,9 @@ namespace XPN
 
         xpn_stats m_previous;
         int m_actual_index = 0;
+
+        std::ofstream csv_file;
+
         void thread_xpn_stats(){
             std::unique_lock<std::mutex> lock(m_mutex);
             while (is_running) {
@@ -306,6 +369,10 @@ namespace XPN
                 m_window_stats[m_actual_index].set_time(std::chrono::duration_cast<std::chrono::microseconds>(window_time).count());
                 m_previous = m_stats;
 
+                if (csv_file.is_open()){
+                    csv_file << m_window_stats[m_actual_index].to_csv();
+                    csv_file.flush();
+                }
                 // std::cout << "Actual index " << m_actual_index << std::endl;
 
                 // std::cout << m_window_stats[m_actual_index].to_string_bandwidth() << std::endl;

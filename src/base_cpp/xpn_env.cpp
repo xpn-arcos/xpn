@@ -71,5 +71,7 @@ namespace XPN
         if ((env_stats != NULL) && (std::strlen(env_stats) > 0)){
             xpn_stats=atoi(env_stats);
         }
+        // XPN_STATS_DIR
+        xpn_stats_dir = std::getenv("XPN_STATS_DIR");
     }
 }
