@@ -73,13 +73,6 @@ namespace XPN
             void set_time(uint64_t utime){
                 m_utime = utime;
             }
-                        
-            stats operator-(const stats& other) const {
-                stats out;
-                out.m_utime = m_utime - other.m_utime;
-                out.m_count = m_count - other.m_count;
-                return out;
-            }
             
         protected:
             std::atomic_uint64_t m_utime = 0;
@@ -126,6 +119,14 @@ namespace XPN
                 return out;
             }
 
+            io_stats operator+(const io_stats& other) const {
+                io_stats out;
+                out.m_utime = m_utime + other.m_utime;
+                out.m_size = m_size + other.m_size;
+                out.m_count = m_count + other.m_count;
+                return out;
+            }
+
             std::string to_string(){
                 std::stringstream out;
                 out << " | Total | "<< std::fixed << std::setprecision(2) << std::setw(10) << static_cast<double>(get_size())/(MB)  << " mb";
@@ -147,6 +148,14 @@ namespace XPN
                 op_stats out;
                 out.m_utime = m_utime - other.m_utime;
                 out.m_count = m_count - other.m_count;
+                out.m_op = m_op;
+                return out;
+            }
+
+            op_stats operator+(const op_stats& other) const {
+                op_stats out;
+                out.m_utime = m_utime + other.m_utime;
+                out.m_count = m_count + other.m_count;
                 out.m_op = m_op;
                 return out;
             }
@@ -223,6 +232,22 @@ namespace XPN
             for (size_t i = 0; i < m_ops_stats.size(); i++)
             {
                 out.m_ops_stats[i] = m_ops_stats[i] - other.m_ops_stats[i]; 
+            }
+            return out;
+        }
+        
+        xpn_stats operator+(const xpn_stats& other) const {
+            xpn_stats out;
+            out.m_read_disk = m_read_disk + other.m_read_disk;
+            out.m_write_disk = m_write_disk + other.m_write_disk;
+            out.m_read_net = m_read_net + other.m_read_net;
+            out.m_write_net = m_write_net + other.m_write_net;
+            out.m_read_total = m_read_total + other.m_read_total;
+            out.m_write_total = m_write_total + other.m_write_total;
+
+            for (size_t i = 0; i < m_ops_stats.size(); i++)
+            {
+                out.m_ops_stats[i] = m_ops_stats[i] + other.m_ops_stats[i]; 
             }
             return out;
         }
@@ -338,13 +363,13 @@ namespace XPN
             m_thread.join();
         }
 
+        xpn_stats& get_current_stats() { return m_window_stats[m_actual_index]; }
+
         constexpr static const int window_size = 10;
         constexpr static const std::chrono::duration window_time = std::chrono::milliseconds(500);
 
-        std::array<xpn_stats, window_size> m_window_stats;
-
-
     private:
+        std::array<xpn_stats, window_size> m_window_stats;
         std::atomic_bool is_running = true;
         std::mutex m_mutex;
         std::condition_variable m_cv;

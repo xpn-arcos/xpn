@@ -182,6 +182,11 @@ int xpn_server::run()
                 accept();
                 break;
 
+            case socket::STATS_wINDOW_CODE:
+                if (m_window_stats){
+                    socket::send(connection_socket, &m_window_stats->get_current_stats(), sizeof(m_stats));
+                    break;
+                }
             case socket::STATS_CODE:
                 socket::send(connection_socket, &m_stats, sizeof(m_stats));
                 break;
