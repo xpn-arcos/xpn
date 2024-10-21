@@ -340,7 +340,6 @@ namespace XPN
     public:
         xpn_window_stats(xpn_stats& stats) : m_stats(stats) 
         {
-            std::cout << "Run thread" << std::endl;
             m_thread = std::thread(&xpn_window_stats::thread_xpn_stats, this);
 
             if(xpn_env::get_instance().xpn_stats_dir){
