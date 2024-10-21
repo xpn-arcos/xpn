@@ -309,8 +309,8 @@ namespace XPN
         std::string to_csv(){
             std::stringstream out;
             std::stringstream out_data;
-            auto now = std::chrono::system_clock::now();
-            std::time_t actual_time = std::chrono::system_clock::to_time_t(now);
+            auto now = std::chrono::high_resolution_clock::now();
+            std::time_t actual_time = std::chrono::high_resolution_clock::to_time_t(now);
             std::tm formated_time = *std::localtime(&actual_time);
             auto millisec = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
             out << std::put_time(&formated_time, "%Y-%m-%d %H:%M:%S") << "." << std::setw(3) << std::setfill('0') << millisec.count() << ";";
@@ -389,6 +389,7 @@ namespace XPN
                     break;
                 }
 
+                m_actual_index = (m_actual_index + 1) % window_size;
                 m_window_stats[m_actual_index] = m_stats - m_previous;
                 m_window_stats[m_actual_index].set_time(std::chrono::duration_cast<std::chrono::microseconds>(window_time).count());
                 m_previous = m_stats;
@@ -402,7 +403,6 @@ namespace XPN
                 // std::cout << m_window_stats[m_actual_index].to_string_bandwidth() << std::endl;
                 // std::cout << m_window_stats[m_actual_index].to_string_ops() << std::endl;
 
-                m_actual_index = (m_actual_index + 1) % window_size;
             }
         }
     };
