@@ -313,7 +313,7 @@ namespace XPN
             std::time_t actual_time = std::chrono::high_resolution_clock::to_time_t(now);
             std::tm formated_time = *std::localtime(&actual_time);
             auto millisec = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
-            out << std::put_time(&formated_time, "%Y-%m-%d %H:%M:%S") << "." << std::setw(3) << std::setfill('0') << millisec.count() << ";";
+            out << std::put_time(&formated_time, "%Y-%m-%d %H:%M:%S") << "," << std::setw(3) << std::setfill('0') << millisec.count() << ";";
 
             out_data << m_read_total.get_bandwidth() << ";";
             out_data << m_read_total.get_size() / 1024 / 1024 << ";";
