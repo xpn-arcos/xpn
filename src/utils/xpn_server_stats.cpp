@@ -191,7 +191,7 @@ int main ( int argc, char *argv[] )
 
     debug_info("[TH_ID="<<std::this_thread::get_id()<<"] [XPN_SERVER] [main] Get server params");
 
-    if (argc < 2){
+    if (argc < 3){
         show_usage();
     }
 

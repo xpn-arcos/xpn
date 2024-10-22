@@ -38,7 +38,8 @@ namespace XPN
         auto& file = m_file_table.get(fd);
 
         // Redirect to stat to not duplicate code
-        res = stat(file.m_path.c_str(), sb);
+        std::string file_path = file.m_part.m_name + "/" + file.m_path;
+        res = stat(file_path.c_str(), sb);
 
         XPN_DEBUG_END_CUSTOM(fd);
         return res;
@@ -212,7 +213,8 @@ namespace XPN
         auto& file = m_file_table.get(fd);
 
         // Redirect to statvfs to not duplicate code
-        res = statvfs(file.m_path.c_str(), buf);
+        std::string file_path = file.m_part.m_name + "/" + file.m_path;
+        res = statvfs(file_path.c_str(), buf);
 
         XPN_DEBUG_END;
         return res;
