@@ -143,7 +143,7 @@ namespace XPN
 
     int xpn_api::close(int fd)
     {
-        XPN_DEBUG_BEGIN;
+        XPN_DEBUG_BEGIN_CUSTOM(fd);
         int res = 0;
         
         if (!m_file_table.has(fd))
@@ -178,7 +178,7 @@ namespace XPN
         
         m_file_table.remove(fd);
 
-        XPN_DEBUG_END;
+        XPN_DEBUG_END_CUSTOM(fd);
         return res;
     }
 
@@ -303,7 +303,7 @@ namespace XPN
 
     int xpn_api::dup(int fd)
     {
-        XPN_DEBUG_BEGIN;
+        XPN_DEBUG_BEGIN_CUSTOM(fd);
         int res = 0;
         if (!m_file_table.has(fd))
         {
@@ -312,22 +312,22 @@ namespace XPN
             return -1;
         }
         res = m_file_table.dup(fd);
-        XPN_DEBUG_END;
+        XPN_DEBUG_END_CUSTOM(fd);
         return res;
     }
 
     int xpn_api::dup2(int fd, int fd2)
     {
-        XPN_DEBUG_BEGIN;
+        XPN_DEBUG_BEGIN_CUSTOM(fd<<", "<<fd2);
         int res = 0;
         if (!m_file_table.has(fd))
         {
             errno = EBADF;
-            XPN_DEBUG_END_CUSTOM(fd);
+            XPN_DEBUG_END_CUSTOM(fd<<", "<<fd2);
             return -1;
         }
         res = m_file_table.dup(fd, fd2);
-        XPN_DEBUG_END;
+        XPN_DEBUG_END_CUSTOM(fd<<", "<<fd2);
         return res;
     }
 

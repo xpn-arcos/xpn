@@ -28,7 +28,7 @@ namespace XPN
     ssize_t xpn_api::read(int fd, void *buffer, size_t size)
     {
         XPN_DEBUG_BEGIN_CUSTOM(fd<<", "<<buffer<<", "<<size);
-        int res = 0;
+        ssize_t res = 0;
 
         if (!m_file_table.has(fd)){
             errno = EBADF;
@@ -41,25 +41,28 @@ namespace XPN
 
         if (buffer == NULL){
             errno = EFAULT;
+            res = -1;
             XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
-            return -1;
+            return res;
         }
 
         if (size == 0){
             XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
-            return 0;
+            return res;
         }
 
         if (file.m_flags == O_WRONLY){
             errno = EBADF;
+            res = -1;
             XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
-            return -1;
+            return res;
         }
 
         if (file.m_type == file_type::dir){
             errno = EISDIR;
+            res = -1;
             XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
-            return -1;
+            return res;
         }
 
         xpn_rw_buffer rw_buff(file, file.m_offset, const_cast<void*>(buffer), size);
@@ -78,7 +81,7 @@ namespace XPN
             for (auto &op : rw_buff.m_ops[i])
             {
                 v_res[index++] = m_worker->launch([i, &file, &op](){
-                    XPN_DEBUG("Serv "<<i<<" off: "<<op.offset_serv+xpn_metadata::HEADER_SIZE<<" size: "<<op.v_buffer.size());
+                    XPN_DEBUG("Serv "<<i<<" off: "<<op.offset_serv+xpn_metadata::HEADER_SIZE<<" size: "<<op.get_size());
                     return file.m_part.m_data_serv[i]->nfi_read(file.m_data_vfh[i], op.get_buffer(), op.offset_serv+xpn_metadata::HEADER_SIZE, op.get_size());
                 });
             }
@@ -99,6 +102,10 @@ namespace XPN
 
         res = sum;
 
+        if(res > 0){
+            file.m_offset += res;
+        }
+
         rw_buff.fix_ops_reads();
 
         XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
@@ -108,7 +115,7 @@ namespace XPN
     ssize_t xpn_api::write(int fd, const void *buffer, size_t size)
     {
         XPN_DEBUG_BEGIN_CUSTOM(fd<<", "<<buffer<<", "<<size);
-        int res = 0;
+        ssize_t res = 0;
 
         if (!m_file_table.has(fd)){
             errno = EBADF;
@@ -121,25 +128,28 @@ namespace XPN
 
         if (buffer == NULL){
             errno = EFAULT;
+            res = -1;
             XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
-            return -1;
+            return res;
         }
 
         if (size == 0){
             XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
-            return 0;
+            return res;
         }
 
         if (file.m_flags == O_RDONLY){
             errno = EBADF;
+            res = -1;
             XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
-            return -1;
+            return res;
         }
 
         if (file.m_type == file_type::dir){
             errno = EISDIR;
+            res = -1;
             XPN_DEBUG_END_CUSTOM(fd<<", "<<buffer<<", "<<size);
-            return -1;
+            return res;
         }
 
         xpn_rw_buffer rw_buff(file, file.m_offset, const_cast<void*>(buffer), size);
@@ -158,7 +168,7 @@ namespace XPN
             for (auto &op : rw_buff.m_ops[i])
             {
                 v_res[index++] = m_worker->launch([i, &file, &op](){
-                    XPN_DEBUG("Serv "<<i<<" off: "<<op.offset_serv+xpn_metadata::HEADER_SIZE<<" size: "<<op.v_buffer.size());
+                    XPN_DEBUG("Serv "<<i<<" off: "<<op.offset_serv+xpn_metadata::HEADER_SIZE<<" size: "<<op.get_size());
                     return file.m_part.m_data_serv[i]->nfi_write(file.m_data_vfh[i], op.get_buffer(), op.offset_serv+xpn_metadata::HEADER_SIZE, op.get_size());
                 });
             }
@@ -196,13 +206,14 @@ namespace XPN
     off_t xpn_api::lseek(int fd, off_t offset, int flag)
     {
         XPN_DEBUG_BEGIN_CUSTOM(fd<<", "<<offset<<", "<<flag);
-        int res = 0;
+        off_t res = 0;
         struct ::stat st;
 
         if (!m_file_table.has(fd)){
             errno = EBADF;
+            res = -1;
             XPN_DEBUG_END_CUSTOM(fd<<", "<<offset<<", "<<flag);
-            return -1;
+            return res;
         }
         auto& file = m_file_table.get(fd);
         
@@ -212,7 +223,9 @@ namespace XPN
                 if (offset < 0)
                 {
                     errno = EINVAL;
-                    return (off_t)-1;
+                    res = -1;
+                    XPN_DEBUG_END_CUSTOM(fd<<", "<<offset<<", "<<flag);
+                    return res;
                 }
                 else {
                     file.m_offset = offset;
@@ -223,7 +236,9 @@ namespace XPN
                 if (file.m_offset+offset<0)
                 {
                     errno = EINVAL;
-                    return (off_t)-1;
+                    res = -1;
+                    XPN_DEBUG_END_CUSTOM(fd<<", "<<offset<<", "<<flag);
+                    return res;
                 }
                 else {
                     file.m_offset += offset;
@@ -234,12 +249,16 @@ namespace XPN
                 if (fstat(fd, &st)<0)
                 {
                     errno = EBADF;
-                    return (off_t)-1;
+                    res = -1;
+                    XPN_DEBUG_END_CUSTOM(fd<<", "<<offset<<", "<<flag);
+                    return res;
                 }
                 if (st.st_size + offset<0)
                 {
                     errno = EINVAL;
-                    return (off_t)-1;
+                    res = -1;
+                    XPN_DEBUG_END_CUSTOM(fd<<", "<<offset<<", "<<flag);
+                    return res;
                 }
                 else {
                     file.m_offset = st.st_size + offset;
@@ -248,9 +267,12 @@ namespace XPN
 
             default:
                 errno = EINVAL;
-                return (off_t)-1;
+                res = -1;
+                XPN_DEBUG_END_CUSTOM(fd<<", "<<offset<<", "<<flag);
+                return res;
         }
 
+        res = file.m_offset;
         XPN_DEBUG_END_CUSTOM(fd<<", "<<offset<<", "<<flag);
         return res;
     }

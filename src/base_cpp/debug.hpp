@@ -24,6 +24,10 @@
 #include <iostream>
 #include <cstring>
 #include "xpn_env.hpp"
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <chrono>
 
 namespace XPN
 {
@@ -37,8 +41,19 @@ namespace XPN
         return file;
     }
 
+    static inline const std::string get_time_stamp() 
+    {
+        std::stringstream out;
+        auto now = std::chrono::high_resolution_clock::now();
+        std::time_t actual_time = std::chrono::high_resolution_clock::to_time_t(now);
+        std::tm formated_time = *std::localtime(&actual_time);
+        auto millisec = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+        out << std::put_time(&formated_time, "%Y-%m-%d %H:%M:%S") << "." << std::setw(3) << std::setfill('0') << millisec.count();
+        return out.str();
+    }
+
     #define XPN_DEBUG_COMMON_HEADER \
-        std::cerr<<"["<<__func__<<"] ["<<file_name(__FILE__)<<":"<<__LINE__<<"] ";
+        std::cerr<<"["<<get_time_stamp()<<"] ["<<__func__<<"] ["<<file_name(__FILE__)<<":"<<__LINE__<<"] ";
 
     #define XPN_DEBUG(out_format) \
     if (xpn_env::get_instance().xpn_debug) { \
@@ -47,9 +62,9 @@ namespace XPN
     }
 
     #define XPN_DEBUG_BEGIN_CUSTOM(out_format) XPN_DEBUG("Begin "<<__func__<<"("<<out_format<<")");
-    #define XPN_DEBUG_END_CUSTOM(out_format)   XPN_DEBUG("End   "<<__func__<<"("<<out_format<<")="<<(int)res<<", errno="<<errno<<" "<<std::strerror(errno)<<"");
+    #define XPN_DEBUG_END_CUSTOM(out_format)   XPN_DEBUG("End   "<<__func__<<"("<<out_format<<")="<<res<<", errno="<<errno<<" "<<std::strerror(errno)<<"");
     #define XPN_DEBUG_BEGIN XPN_DEBUG("Begin "<<__func__<<"()");
-    #define XPN_DEBUG_END   XPN_DEBUG("End   "<<__func__<<"()="<<(int)res<<", errno="<<errno<<" "<<std::strerror(errno)<<"");
+    #define XPN_DEBUG_END   XPN_DEBUG("End   "<<__func__<<"()="<<res<<", errno="<<errno<<" "<<std::strerror(errno)<<"");
 
     #ifdef DEBUG
         #define debug_error(out_format)    std::cerr<<"[ERROR] ["<<__func__<<"] ["<<::XPN::file_name(__FILE__)<<":"<<__LINE__<<"] "<<out_format<<std::endl;
