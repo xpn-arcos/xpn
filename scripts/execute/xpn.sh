@@ -109,7 +109,7 @@ start_xpn_servers() {
       srun  -n "${NODE_NUM}" -N "${NODE_NUM}" --mpi=none \
             -w "${HOSTFILE}" \
             --export=ALL \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_server -s ${SERVER_TYPE} "${ARGS}" &
+            "${BASE_DIR_BUILD}"/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
     fi
 
   else

@@ -59,7 +59,7 @@ void monitor_stats(std::filesystem::path csv_path) {
         nfi_parser parser(url);
         auto& name = parser.m_server;
 
-        worker->launch_no_future([&name, &comb_stats_mutex, &comb_stats]() {
+        worker->launch_no_future([name, &comb_stats_mutex, &comb_stats]() {
             int socket;
             int ret;
             int buffer = socket::STATS_wINDOW_CODE;
