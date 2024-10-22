@@ -290,12 +290,12 @@ namespace XPN
         std::string to_csv_header(){
             std::stringstream out;
             out << "Timestamp" << ";";
-            out << "Disk read (mb/sec)" << ";";
-            out << "Disk write (mb/sec)" << ";";
-            out << "Net read (mb/sec)" << ";";
-            out << "Net write (mb/sec)" << ";";
-            out << "Total read (mb/sec)" << ";";
-            out << "Total write (mb/sec)" << ";";
+            out << "Read (mb/sec)" << ";";
+            out << "Read (mb)" << ";";
+            out << "Avg read (kb)" << ";";
+            out << "Write (mb/sec)" << ";";
+            out << "Write (mb)" << ";";
+            out << "Avg write (kb)" << ";";
             
             for (auto &op : m_ops_stats)
             {
@@ -315,12 +315,12 @@ namespace XPN
             auto millisec = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
             out << std::put_time(&formated_time, "%Y-%m-%d %H:%M:%S") << "." << std::setw(3) << std::setfill('0') << millisec.count() << ";";
 
-            out_data << m_read_disk.get_bandwidth() << ";";
-            out_data << m_write_disk.get_bandwidth() << ";";
-            out_data << m_read_net.get_bandwidth() << ";";
-            out_data << m_write_net.get_bandwidth() << ";";
             out_data << m_read_total.get_bandwidth() << ";";
+            out_data << m_read_total.get_size() / 1024 / 1024 << ";";
+            out_data << m_read_total.get_avg_size() / 1024 << ";";
             out_data << m_write_total.get_bandwidth() << ";";
+            out_data << m_write_total.get_size() / 1024 / 1024 << ";";
+            out_data << m_write_total.get_avg_size() / 1024 << ";";
             
             for (auto &op : m_ops_stats)
             {

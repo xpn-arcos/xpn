@@ -66,21 +66,21 @@ void monitor_stats(std::filesystem::path csv_path) {
             xpn_stats stat_buff;
             ret = socket::client_connect(name, socket::get_xpn_port(), socket);
             if (ret < 0) {
-                print("[TH_ID=" << std::this_thread::get_id()
+                debug_error("[TH_ID=" << std::this_thread::get_id()
                                 << "] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket connection " << name);
                 return;
             }
 
             ret = socket::send(socket, &buffer, sizeof(buffer));
             if (ret < 0) {
-                print("[TH_ID=" << std::this_thread::get_id()
+                debug_error("[TH_ID=" << std::this_thread::get_id()
                                 << "] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket send " << name);
                 return;
             }
 
             ret = socket::recv(socket, &stat_buff, sizeof(stat_buff));
             if (ret < 0) {
-                print("[TH_ID=" << std::this_thread::get_id()
+                debug_error("[TH_ID=" << std::this_thread::get_id()
                                 << "] [XPN_SERVER] [xpn_server_print_stats] ERROR: socket recv " << name);
                 return;
             }
