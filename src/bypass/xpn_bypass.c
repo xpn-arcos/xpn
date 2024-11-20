@@ -1254,7 +1254,7 @@ int statfs64 (const char *path, struct statfs64 *buf)
   {
     debug_info("[BYPASS]\t try to dlsym_statfs64\n");
 
-    //ret = dlsym_statfs64(path, buf); //TODO
+    ret = dlsym_statfs64(path, buf);
 
     debug_info("[BYPASS]\t dlsym_statfs64 -> %d\n", ret);
   }
