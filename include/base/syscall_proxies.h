@@ -34,6 +34,7 @@
   #include <sys/stat.h>
   #include <dirent.h>
   #include <stdlib.h>
+  #include <sys/vfs.h>
 
   #include "utils.h"
 
@@ -76,6 +77,8 @@
   int dlsym_xstat64   (int ver, const char *path, struct stat64 *buf);
   int dlsym_fstatat   (int dfd, const char *path, struct stat   *buf, int flags);
   int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags);
+  int dlsym_statfs    (const char *path, struct statfs   *buf);
+  int dlsym_statfs64  (const char *path, struct statfs64 *buf);
 
   int dlsym_rename (const char *old_path, const char *new_path);
   int dlsym_unlink (char *path);
