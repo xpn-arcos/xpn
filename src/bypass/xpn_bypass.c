@@ -1264,6 +1264,41 @@ int statfs64 (const char *path, struct statfs64 *buf)
   return ret;
 }
 
+int statfs (const char *path, struct statfs *buf)
+{
+  int ret;
+
+  debug_info("[BYPASS] >> Begin statfs...\n");
+  debug_info("[BYPASS]    1) Path  => %s\n", path);
+
+  // This if checks if variable path passed as argument starts with the expand prefix.
+  if (is_xpn_prefix(path))
+  {
+    // We must initialize expand if it has not been initialized yet.
+    xpn_adaptor_keepInit ();
+
+    // It is an XPN partition, so we redirect the syscall to expand syscall
+    debug_info("[BYPASS]\t xpn_stat %s\n",       skip_xpn_prefix(path));
+
+    ret = xpn_stat(skip_xpn_prefix(path), (struct stat *) buf);
+
+    debug_info("[BYPASS]\t xpn_stat %s -> %d\n", skip_xpn_prefix(path), ret);
+  }
+  // Not an XPN partition. We must link with the standard library
+  else
+  {
+    debug_info("[BYPASS]\t try to dlsym_statfs\n");
+
+    ret = dlsym_statfs(path, buf);
+
+    debug_info("[BYPASS]\t dlsym_statfs -> %d\n", ret);
+  }
+
+  debug_info("[BYPASS] << After statfs...\n");
+
+  return ret;
+}
+
 int __lxstat64 ( int ver, const char *path, struct stat64 *buf )
 {
   int ret;
@@ -2952,56 +2987,4 @@ int MPI_Finalize (void)
   debug_info("[BYPASS] << After MPI_Finalize\n");
 
   return PMPI_Finalize();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-int statfs (const char *path, struct statfs *buf)
-{
-  int ret;
-
-  debug_info("[BYPASS] >> Begin statfs...\n");
-  debug_info("[BYPASS]    1) Path  => %s\n", path);
-
-  // This if checks if variable path passed as argument starts with the expand prefix.
-  if (is_xpn_prefix(path))
-  {
-    // We must initialize expand if it has not been initialized yet.
-    xpn_adaptor_keepInit ();
-
-    // It is an XPN partition, so we redirect the syscall to expand syscall
-    debug_info("[BYPASS]\t xpn_stat %s\n",       skip_xpn_prefix(path));
-
-    ret = xpn_stat(skip_xpn_prefix(path), (struct stat *) buf);
-
-    debug_info("[BYPASS]\t xpn_stat %s -> %d\n", skip_xpn_prefix(path), ret);
-  }
-  // Not an XPN partition. We must link with the standard library
-  else
-  {
-    debug_info("[BYPASS]\t try to dlsym_statfs\n");
-
-    ret = dlsym_statfs(path, buf);
-
-    debug_info("[BYPASS]\t dlsym_statfs -> %d\n", ret);
-  }
-
-  debug_info("[BYPASS] << After statfs...\n");
-
-  return ret;
 }
