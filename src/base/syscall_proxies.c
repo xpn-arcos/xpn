@@ -57,6 +57,8 @@ int     (*real_fstat    )(int, int,          struct stat   *) = NULL;
 int     (*real_fxstat64 )(int, int,          struct stat64 *) = NULL;
 int     (*real_fstatat  )(int, const char *, struct stat   *, int) = NULL;
 int     (*real_fstatat64)(int, const char *, struct stat64 *, int) = NULL;
+int     (*real_statfs   )(const char *, struct statfs *)   = NULL;
+int     (*real_statfs64 )(const char *, struct statfs64 *) = NULL;
 
 int     (*real_rename)(const char *, const  char *) = NULL;
 int     (*real_unlink)(char *) = NULL;
@@ -446,6 +448,37 @@ int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags)
   int ret = real_fstatat64(dfd,(char *)path, buf, flags);
 
   debug_info("[SYSCALL_PROXIES] [dlsym_fstatat64] >> End\n");
+
+  return ret;
+}
+
+int dlsym_statfs (const char *path, struct statfs *buf)
+{
+  debug_info("[SYSCALL_PROXIES] [dlsym_statfs] >> Begin\n");
+
+  if (real_statfs == NULL){
+      real_statfs = (int (*)(const char *, struct statfs *)) dlsym(RTLD_NEXT, "statfs");
+  }
+
+  int ret = real_statfs(path, buf);
+
+  debug_info("[SYSCALL_PROXIES] [dlsym_statfs] >> End\n");
+
+  return ret;
+}
+
+
+int dlsym_statfs64 (const char *path, struct statfs64 *buf)
+{
+  debug_info("[SYSCALL_PROXIES] [dlsym_statfs64] >> Begin\n");
+
+  if (real_statfs64 == NULL){
+      real_statfs64 = (int (*)(const char *, struct statfs64 *)) dlsym(RTLD_NEXT, "statfs64");
+  }
+
+  int ret = real_statfs64(path, buf);
+
+  debug_info("[SYSCALL_PROXIES] [dlsym_statfs64] >> End\n");
 
   return ret;
 }
