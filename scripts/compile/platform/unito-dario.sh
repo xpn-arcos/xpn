@@ -30,12 +30,13 @@ spack load pkg-config
 # 2) working path...
 #MPICC_PATH=$HOME/opt/spack/linux-ubuntu20.04-zen/gcc-9.4.0/openmpi-4.1.3-4bpvwm3lcbftmjki6en35c4i5od6wjbr/bin/mpicc
 #MPICC_PATH=$HOME/opt/spack/linux-ubuntu20.04-zen/gcc-9.4.0/mpich-4.0.2-a76rmlxbneoqdvemzjsyewp2akiiuxlj/bin/mpicc
-MPICC_PATH=$HOME/dariomnz/bin/mpich/bin/mpicc
+# MPICC_PATH=$HOME/dariomnz/bin/mpich/bin/mpicc
+MPICC_PATH=$HOME/dariomnz/bin/mpich/bin
 INSTALL_PATH=$HOME/dariomnz/bin/
 BASE_PATH=$(dirname $0)
 
 # 3) preconfigure build-me...
 $BASE_PATH/../software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
-$BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
+$BASE_PATH/../software/ior.sh         -m $MPICC_PATH/mpicc -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
 # $BASE_PATH/../software/lz4.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500/build/pfind/lz4/
 # $BASE_PATH/../software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500

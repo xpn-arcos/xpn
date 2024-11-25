@@ -23,6 +23,10 @@
 #ifndef _FILESYSTEM_H_
 #define _FILESYSTEM_H_
 
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
+
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
@@ -30,6 +34,7 @@
   #include "base/utils.h"
   #include <pthread.h> 
   #include <sys/stat.h>
+  #include <sys/statvfs.h>
   #include <sys/types.h>
 
 
@@ -80,8 +85,13 @@
     int   filesystem_unlink   ( char *pathname );
     int   filesystem_stat     ( char *pathname, struct stat *sinfo );
 
+    int   filesystem_statvfs     ( const char *pathname, struct statvfs *buf );
+
 
   /* ...................................................................... */
 
+  #ifdef  __cplusplus
+    }
+  #endif
 #endif
 

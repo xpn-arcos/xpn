@@ -24,20 +24,22 @@
 #define _XPN_BYPASS_H_
 
   /* ... Include / Inclusion ........................................... */
-
+  #ifndef _GNU_SOURCE
   #define _GNU_SOURCE
+  #endif
 
-  #include "config.h"
+  // #include "config.h"
 
   #include <dlfcn.h>
   #include <sys/stat.h>
+  #include <sys/statvfs.h>
   #include <stdarg.h>
   #include <time.h>
   #include <stdlib.h>
   #include <sys/vfs.h>
 
   #include "xpn.h"
-  #include "syscall_proxies.h"
+  #include "base/syscall_proxies.h"
 
   #include <dirent.h>
   #include <string.h>
@@ -68,10 +70,18 @@
 
 
   // Types
+  #ifndef O_ACCMODE
   #define O_ACCMODE 00000003
+  #endif
+  #ifndef O_RDONLY
   #define O_RDONLY  00000000
+  #endif
+  #ifndef O_WRONLY
   #define O_WRONLY  00000001
+  #endif
+  #ifndef O_RDWR
   #define O_RDWR    00000002
+  #endif
   #ifndef O_CREAT
   #define O_CREAT   00000100  // not fcntl
   #endif
@@ -115,6 +125,19 @@
   #define O_CLOEXEC 02000000  // set close_on_exec */
   #endif
 
+  // for access
+  #ifndef R_OK
+  #define	R_OK	4
+  #endif
+  #ifndef W_OK
+  #define	W_OK	2
+  #endif
+  #ifndef X_OK
+  #define	X_OK	1
+  #endif
+  #ifndef F_OK
+  #define	F_OK	0
+  #endif
 
   /* ... Data structures / Estructuras de datos ........................ */
 
@@ -225,11 +248,12 @@
   int    chown    ( const char *path, uid_t owner, gid_t group );
   int    fcntl    ( int fd, int cmd, long arg );
   int    access   ( const char *path, int mode );
-  char * realpath ( const char *restrict path, char *restrict resolved_path );
+  char * realpath ( const char *__restrict__ path, char *__restrict__ resolved_path );
   char * __realpath_chk ( const char * path, char * resolved_path, size_t resolved_len );
   int    fsync ( int fd );
   int    flock ( int fd, int operation );
 
+  int   statvfs (const char *path, struct statvfs *buf);
 
   // MPI API
   int MPI_Init ( int *argc, char ***argv );

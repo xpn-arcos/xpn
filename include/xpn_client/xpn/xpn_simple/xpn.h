@@ -37,7 +37,7 @@
 
   /* ... Const / Const ................................................. */
 
-  #define XPN_CONF "XPN_CONF"
+  // #define XPN_CONF "XPN_CONF"
 
 
   /* ... Data structures / Estructuras de datos ........................ */

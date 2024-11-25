@@ -32,8 +32,8 @@
   #include "all_system.h"
   #include "base/utils.h"
   #include "base/ns.h"
-  #include "socket.h"
-  #include "xpn_server/xpn_server_ops.h"
+  #include "base/socket.h"
+  #include "xpn_server/xpn_server_ops.hpp"
 
 
   /* ... Const / Const ................................................. */

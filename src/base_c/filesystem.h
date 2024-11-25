@@ -1,0 +1,108 @@
+
+/*
+ *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+#ifndef _FILESYSTEM_H_
+#define _FILESYSTEM_H_
+
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
+
+  /* ... Include / Inclusion ........................................... */
+  #ifndef __USE_LARGEFILE64
+  #define __USE_LARGEFILE64
+  #endif
+
+  #include "base_c/syscall_proxies.h"
+  #include "base_c/debug_msg.h"
+  #include <pthread.h> 
+  #include <sys/stat.h>
+  #include <sys/statvfs.h>
+  #include <sys/types.h>
+  #include <dirent.h>
+  #include <fcntl.h>
+  #include <unistd.h>
+  #include <dlfcn.h>
+
+  #ifndef RTLD_NEXT
+  #define RTLD_NEXT ((void *) -1l)
+  #endif
+  #ifndef RTLD_DEFAULT
+  #define RTLD_DEFAULT ((void *) 0)
+  #endif
+  /* ... Const / Const ................................................. */
+
+  // <IMPORTANT for XPN>
+  //   -> In xpn_client, this line must be added at the beginning:
+  //      filesystem_low_set(RTLD_NEXT) ;
+  //   -> BUT in mpi_server, this line must be added at the beginning:
+  //      filesystem_low_set(RTLD_DEFAULT) ;
+  //   -> In order to close in a thread (background), then use:
+  //      #define ASYNC_CLOSE 1
+  // </IMPORTANT for XPN>
+
+
+  /* ... Data structures / Estructuras de datos ........................ */
+
+     typedef off_t offset_t;
+
+
+  /* ... Functions / Funciones ......................................... */
+
+    int             filesystem_low_set  ( void * new_rtld ) ;
+  //int             filesystem_init     ( void );
+  //int             filesystem_destroy  ( void );
+
+    int             filesystem_creat    ( const char *pathname, mode_t mode );
+    int             filesystem_open     ( const char *pathname, int flags );
+    int             filesystem_open2    ( const char *pathname, int flags, mode_t mode );
+    int             filesystem_close    ( int fd );
+    int             filesystem_fsync    ( int fd );
+
+    ssize_t         filesystem_read     ( int read_fd2,  void *buffer, size_t buffer_size );
+    ssize_t         filesystem_write    ( int write_fd2, const void *buffer, size_t num_bytes_to_write );
+
+    int             filesystem_mkdir    ( const char *pathname, mode_t mode );
+    int             filesystem_rmdir    ( const char *pathname );
+    int             filesystem_mkpath   ( const char *pathname );
+
+    DIR           * filesystem_opendir  ( const char *name );
+    long            filesystem_telldir  ( DIR  *dirp );
+    void            filesystem_seekdir  ( DIR  *dirp, long loc );
+    struct dirent * filesystem_readdir  ( DIR  *dirp );
+    int             filesystem_closedir ( DIR  *dirp );
+
+    int             filesystem_rename   ( const char *old_pathname, const char *new_pathname );
+    off_t           filesystem_lseek    ( int fd, off_t offset, int whence );
+    int             filesystem_unlink   ( const char *pathname );
+    int             filesystem_stat     ( const char *pathname, struct stat *sinfo );
+
+    int             filesystem_statvfs  ( const char *pathname, struct statvfs *buf );
+
+
+  /* ...................................................................... */
+
+  #ifdef  __cplusplus
+    }
+  #endif
+#endif
+

@@ -32,7 +32,7 @@
 #include <unistd.h>
 
 #include "mpi.h"
-#include "ns.h"
+#include "base/ns.h"
 #include "xpn/xpn_simple/xpn_policy_rw.h"
 
 /* ... Const / Const ................................................. */
@@ -382,6 +382,8 @@ void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_
     // Get ip and hostname
     char *hostip = ns_get_host_ip();
     char hostname[HOST_NAME_MAX];
+    char line[HOST_NAME_MAX];
+    int rank = 0;
     ns_get_hostname(hostname);
     int world_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
@@ -400,8 +402,6 @@ void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_
     }
 
     // Read line by line to get the new and old rank
-    char line[HOST_NAME_MAX];
-    int rank = 0;
     *old_rank = -1;
     while (fscanf(file_old, "%s", line) == 1) {
         if (strstr(line, hostip) != NULL || strstr(line, hostname) != NULL) {

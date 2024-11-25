@@ -30,7 +30,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
+  // #include "all_system.h"
   #include "string_misc.h"
 
 
@@ -40,7 +40,7 @@
   #ifdef DEBUG
     #define debug_error(...)    debug_msg_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
     #define debug_warning(...)  debug_msg_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
-    #define debug_info(...)     debug_msg_printf(3, __FILE__, __LINE__, stdout, __VA_ARGS__)
+    #define debug_info(...)     debug_msg_printf(3, __FILE__, __LINE__, stderr, __VA_ARGS__)
   #else
     #define debug_error(...)
     #define debug_warning(...)
@@ -63,7 +63,7 @@
   // Debug API
 
   void debug_msg_init   ( void );
-  int  debug_msg_printf ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... );
+  int  debug_msg_printf ( int src_type, char *src_fname, long src_line, FILE *fd, const char *msg_fmt, ... );
 
 
   // Extra Debug API

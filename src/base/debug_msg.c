@@ -31,7 +31,7 @@
 /* ... Global variables / Variables globales ........................ */
 
 int    (*DEBUG_MSG_PrintMsg)(const char *, va_list) = NULL;
-
+int xpn_debug;
 
 /* ... Functions / Funciones ......................................... */
 
@@ -42,7 +42,7 @@ void debug_msg_init ( void )
   setbuf(stderr, NULL);
 }
 
-int debug_msg_printf ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... )
+int debug_msg_printf ( int src_type, char *src_fname, long src_line, FILE *fd, const char *msg_fmt, ... )
 {
   va_list valist;
   int ret;

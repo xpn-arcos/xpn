@@ -36,8 +36,8 @@
   #include "base/workers.h"
   #include "nfi_local.h"
   #include "nfi.h"
-  #include "xpn_server/xpn_server_conf.h"
-  #include "xpn_server/xpn_server_ops.h"
+  // #include "xpn_server/xpn_server_ops.hpp"
+  // #include "xpn_server/xpn_server_params.hpp"
   #include "nfi.h"
   #include "nfi_worker.h"
   #ifdef ENABLE_MPI_SERVER
@@ -46,7 +46,7 @@
 
 
   /* ... Const / Const ................................................. */
-
+  #define XPN_SERVER_MAX_PORT_NAME 1024
 
   /* ... Data structures / Estructuras de datos ........................ */
 

@@ -1,11 +1,13 @@
 
-#include "all_system.h"
 #include "xpn.h"
 #include <sys/time.h>
+#include <string.h>
+#include <fcntl.h>
+#include <stdlib.h>
 
 
 #define KB  (1024)
-
+#define MB  (KB*1024)
 #define BUFF_SIZE (1*MB)
 char buffer[BUFF_SIZE] ;
 

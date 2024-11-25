@@ -30,11 +30,19 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-
+  // #include "all_system.h"
+  #include <stdint.h>
+  #include <stdarg.h>
+  #include <stddef.h>
+  #include <string.h>
+  #include <stdlib.h>
+  #include <stdio.h>
 
   /* ... Const / Const ................................................. */
 
+  #if !defined(NULL_DEVICE_PATH)
+    #define NULL_DEVICE_PATH  "/dev/null"
+  #endif
 
   /* ... Data structures / Estructuras de datos ........................ */
 

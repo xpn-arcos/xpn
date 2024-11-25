@@ -19,11 +19,18 @@
    *
    */
 
-#include "all_system.h"
 #include "xpn.h"
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <time.h>
+
+#define KB  (1024)
+#define MB  (KB*1024)
 
 char *bufferWrite;
 char *bufferRead ;
@@ -126,7 +133,7 @@ int main ( int argc, char *argv[] )
 	bufferRead  = malloc(buff_size*sizeof(char)) ;
 	bufferRead2 = malloc(buff_size*sizeof(char)) ;
 
-	long file_size = mb_file*MB;
+	size_t file_size = mb_file*MB;
 	printf("MB to test: %f bytes %ld\n", mb_file, file_size);
 	printf("File to save data and check xpn: %s", random_file);
 
@@ -148,7 +155,7 @@ int main ( int argc, char *argv[] )
     int fd_random = open(random_file, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	while (bytesWritten < file_size) {
         size_t bytesToWrite = (file_size - bytesWritten < buff_size) ? (file_size - bytesWritten) : buff_size;
-		for (int i = 0; i < buff_size; i++)
+		for (size_t i = 0; i < buff_size; i++)
 		{
 			bufferWrite[i] = rand() % 1000;
 		}

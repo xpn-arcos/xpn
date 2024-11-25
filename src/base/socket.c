@@ -23,7 +23,7 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "base/socket.h"
-#include "filesystem.h"
+#include "base/filesystem.h"
 
 
 /* ... Const / Const ................................................. */
@@ -162,7 +162,7 @@ int socket_server_accept ( int socket, int *out_conection_socket )
   return 0;
 }
 
-int socket_client_connect ( char * srv_name, int *out_socket )
+int socket_client_connect ( const char * srv_name, int *out_socket )
 {
   int client_fd;
   struct sockaddr_in serv_addr;
