@@ -20,28 +20,46 @@
    */
 
 
-#ifndef _TCP_SERVER_D2XPN_H_
-#define _TCP_SERVER_D2XPN_H_
+#ifndef _MQ_SERVER_CONF_H_
+#define _MQ_SERVER_CONF_H_
 
-   #include <sys/param.h>
-   #include <stdio.h>
-   #include <sys/file.h>
-   #include <sys/fcntl.h>
-   #include <unistd.h>
-   #include <sys/time.h>
-   #include <sys/wait.h>
-   #include <sys/errno.h>
 
-   #include "all_system.h"
-   #include "base/utils.h"
-   #include "tcp_server_params.h"
-   #include "tcp_server_ops.h"
+#include "all_system.h"
 
-   #include "xpn.h"
 
-   #define PRELOAD_SYNC  0
-   #define PRELOAD_ASYNC 1
+/* MAX_BUFFER_SIZE */
+#ifndef MAX_BUFFER_SIZE
+    #define MAX_BUFFER_SIZE (1*MB)
+#endif
 
-   int tcp_server_d2xpn ( tcp_server_param_st *params, char *origen, char *destino ) ;
+/* ENVIROMENT VARIABLE: DNS SERVICE */
+#ifndef MQ_SERVER_FILE
+    #define MQ_SERVER_FILE "MQ_SERVER_FILE"
+#endif
+
+#ifndef MQ_SERVER_FILE_DEFAULT
+    #define MQ_SERVER_FILE_DEFAULT "/etc/xpn/mq_server.dns"
+#endif
+
+#ifndef MQ_SERVER_NAME_DEFAULT
+    #define MQ_SERVER_NAME_DEFAULT "node"
+#endif
+
+#ifndef MQ_SERVER_DIRBASE_DEFAULT
+    #define MQ_SERVER_DIRBASE_DEFAULT  "/"
+#endif
+
+#ifndef MQ_SERVER_PORT_DEFAULT
+    #define MQ_SERVER_PORT_DEFAULT 9999
+#endif
+
+#ifndef TCP_MAX_PORT_NAME
+    #define TCP_MAX_PORT_NAME 1024
+#endif
+
+#ifndef MQ_SERVER_IOSIZE_DEFAULT
+    #define MQ_SERVER_IOSIZE_DEFAULT (MB)
+#endif
+
 
 #endif

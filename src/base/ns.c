@@ -177,8 +177,8 @@ int ns_lookup (char *protocol, char *param_srv_name, char *srv_ip, char *port_na
     else if (strcmp(protocol, "sck_server") == 0) {
       strcpy(dns_file, SCK_SERVER_DNS_FILE_DEFAULT);
     }
-    else if (strcmp(protocol, "tcp_server") == 0) {
-      strcpy(dns_file, TCP_SERVER_DNS_FILE_DEFAULT);
+    else if (strcmp(protocol, "mq_server") == 0) {
+      strcpy(dns_file, MQ_SERVER_DNS_FILE_DEFAULT);
     }
     else {
       printf("Unrecognized protocol '%s' !!\n", protocol) ;

@@ -19,42 +19,47 @@
    *
    */
 
-#include "nfi_tcp_server.h"
 
-extern int errno;
+#ifndef _MQ_SERVER_CONF_H_
+#define _MQ_SERVER_CONF_H_
 
-// TODO: this interface must be changed
-void tcp_server_err(int err)
-{
-	switch(err)
-	{
-		case TCP_SERVERERR_PARAM:
-			errno = -1;
-			break;
-		
-		case TCP_SERVERERR_MEMORY:
-			errno = -1;
-			break;
-			
-		case TCP_SERVERERR_URL:
-			errno = -1;
-			break;
 
-		case TCP_SERVERERR_MNTCONNECTION:
-			errno = -1;
-			break;
+#include "all_system.h"
 
-		case TCP_SERVERERR_MOUNT:
-			errno = -1;
-			break;
 
-		case TCP_SERVERERR_NFSCONNECTION:
-			errno = -1;
-			break;
-			
-		case TCP_SERVERERR_GETATTR:
-			errno = -1;
-			break;
-	}
-}
+/* MAX_BUFFER_SIZE */
+#ifndef MAX_BUFFER_SIZE
+	#define MAX_BUFFER_SIZE (1*MB)
+#endif
 
+/* ENVIROMENT VARIABLE: DNS SERVICE */
+#ifndef MQ_SERVER_FILE
+	#define MQ_SERVER_FILE "MQ_SERVER_FILE"
+#endif
+
+#ifndef MQ_SERVER_FILE_DEFAULT
+	#define MQ_SERVER_FILE_DEFAULT "/etc/xpn/mq_server.dns"
+#endif
+
+#ifndef MQ_SERVER_NAME_DEFAULT
+	#define MQ_SERVER_NAME_DEFAULT	"node"
+#endif
+
+#ifndef MQ_SERVER_DIRBASE_DEFAULT
+	#define MQ_SERVER_DIRBASE_DEFAULT	"/"
+#endif
+
+#ifndef MQ_SERVER_PORT_DEFAULT
+	#define MQ_SERVER_PORT_DEFAULT	9999
+#endif
+
+#ifndef TCP_MAX_PORT_NAME
+    #define TCP_MAX_PORT_NAME 1024
+#endif
+
+#ifndef MQ_SERVER_IOSIZE_DEFAULT
+    #define MQ_SERVER_IOSIZE_DEFAULT (MB)
+#endif
+
+
+#endif

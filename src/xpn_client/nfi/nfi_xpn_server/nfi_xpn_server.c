@@ -684,7 +684,7 @@ int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
 
 int nfi_xpn_server_create (struct nfi_server *serv,  char *url, mode_t mode, __attribute__((__unused__)) struct nfi_attr *attr, struct nfi_fhandle  *fh)
 {
-  //NOTE: actualy creat is not in use, it use like POSIX open(path, O_WRONLY|O_CREAT|O_TRUNC, mode);
+  //NOTE: actually creat is not in use, it use like POSIX open(path, O_WRONLY|O_CREAT|O_TRUNC, mode);
   return nfi_xpn_server_open(serv, url, O_WRONLY|O_CREAT|O_TRUNC, mode, fh);
 }
 

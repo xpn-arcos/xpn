@@ -174,7 +174,7 @@ int nfi_xpn_server_comm_write_operation ( struct nfi_xpn_server *params, int op)
   return ret;
 }
 
-ssize_t nfi_xpn_server_comm_write_data ( struct nfi_xpn_server *params, char *data, ssize_t size )
+ssize_t nfi_xpn_server_comm_write_data ( struct nfi_xpn_server *params, __attribute__((__unused__)) char *data, ssize_t size )
 {
   ssize_t ret = -1;
   XPN_PROFILER_DEFAULT_BEGIN();
@@ -201,7 +201,7 @@ ssize_t nfi_xpn_server_comm_write_data ( struct nfi_xpn_server *params, char *da
   return ret;
 }
 
-ssize_t nfi_xpn_server_comm_read_data ( struct nfi_xpn_server *params, char *data, ssize_t size )
+ssize_t nfi_xpn_server_comm_read_data ( struct nfi_xpn_server *params, __attribute__((__unused__))  char *data, ssize_t size )
 {
   ssize_t ret = -1;
   XPN_PROFILER_DEFAULT_BEGIN();

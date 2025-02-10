@@ -20,14 +20,23 @@
    */
 
 
-#ifndef _TCP_SERVER_PARAMS_H_
-#define _TCP_SERVER_PARAMS_H_
+#ifndef _MQ_SERVER_PARAMS_H_
+#define _MQ_SERVER_PARAMS_H_
+
 
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
-  #include "tcp_server_conf.h"
+  #include <ctype.h>
+  #include "base/utils.h"
+  #include "base/workers.h"
+  #include "mq_server_conf.h"
   //#include <semaphore.h>
+
+
+  /*
+   * Constants
+   */
 
 
   /*
@@ -36,37 +45,55 @@
 
   typedef struct
   {
-    // Execution configuration
-    int xpn_thread ;
-    int xpn_session ;
-    int xpn_locality ;
-
-
-    //MQTT usage
-    int xpn_mosquitto_mode;
-    int xpn_mosquitto_qos;
-
-    // client identification
+    // server identification
     int  size ;
     int  rank ;
+    char port_name[TCP_MAX_PORT_NAME] ;
+    char srv_name[TCP_MAX_PORT_NAME] ;
 
-    // server port and comm
-    // int   port_number;
-    char  srv_name   [TCP_MAX_PORT_NAME] ;
-    char  server_name[TCP_MAX_PORT_NAME];
-    char  port_number[TCP_MAX_PORT_NAME];
-    int   server ;
+    char name[TCP_MAX_PORT_NAME] ;
+    char port[TCP_MAX_PORT_NAME] ;
+    int  IOsize ;
 
-    int     locality ;
     char dirbase[PATH_MAX] ;
-    //char    sem_name_server [PATH_MAX];
-    //sem_t * sem_server ;
+    char dns_file[PATH_MAX] ;
+    char shutdown_file[PATH_MAX] ;
+
+    // server configuration
+    int thread_mode;
+
+    // MQTT configuration
+    int xpn_keep_connection;
+    int mosquitto_mode;
+    int mosquitto_qos;
+
+#ifdef HAVE_MOSQUITTO_H
+    struct mosquitto * mqtt;
+#endif
+
+    //Semaphore for clients
+    //char sem_name_server [PATH_MAX];
+
+    //Semaphore for server disk
+    //sem_t disk_sem;
+
+    // associated client
+    int  client ;
+    int  global_sock;
 
     // server arguments
     int    argc ;
     char **argv ;
 
-  } tcpClient_param_st ;
+  } mq_server_param_st ;
 
+
+  /*
+   * API
+   */
+
+  void mq_server_params_show_usage ( void ) ;
+  int  mq_server_params_get        ( mq_server_param_st *params, int argc, char *argv[] ) ;
+  void mq_server_params_show       ( mq_server_param_st *params ) ;
 
 #endif

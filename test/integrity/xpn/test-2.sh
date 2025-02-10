@@ -7,7 +7,7 @@ make clean;make -j;clear
 
 # MQTT
 
-export XPN_DNS=/work/tcp_server.dns
+export XPN_DNS=/work/mq_server.dns
 export XPN_LOCALITY=0
 export XPN_SESSION=0
 export XPN_MQTT=0

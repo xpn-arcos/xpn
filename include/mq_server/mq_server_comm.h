@@ -20,30 +20,30 @@
 */
 
 
-#ifndef _TCP_SERVER_COMM_H_
-#define _TCP_SERVER_COMM_H_
+#ifndef _MQ_SERVER_COMM_H_
+#define _MQ_SERVER_COMM_H_
 
    #include "all_system.h"
    #include "base/utils.h"
    #include "base/time_misc.h"
    #include "base/ns.h"
-   #include "tcp_server_params.h"
+   #include "mq_server_params.h"
 
 
   /*
    *  API
    */
 
-  int      tcp_server_comm_init      ( tcp_server_param_st *params ) ;
-  int      tcp_server_comm_destroy   ( tcp_server_param_st *params ) ;
+  int      mq_server_comm_init      ( mq_server_param_st *params ) ;
+  int      mq_server_comm_destroy   ( mq_server_param_st *params ) ;
 
-  int      tcp_server_comm_accept    ( tcp_server_param_st *params ) ;
-  int      tcp_server_comm_connect   ( tcp_server_param_st * params, char *server_name, int port_number ) ;
-  int      tcp_server_comm_close     ( int fd ) ;
+  int      mq_server_comm_accept    ( mq_server_param_st *params ) ;
+  int      mq_server_comm_connect   ( mq_server_param_st * params, char *server_name, int port_number ) ;
+  int      mq_server_comm_close     ( int fd ) ;
 
-  ssize_t tcp_server_comm_write_data     ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
-  ssize_t tcp_server_comm_read_operation ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int *rank_client_id ) ;
-  ssize_t tcp_server_comm_read_data      ( tcp_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
+  ssize_t mq_server_comm_write_data     ( mq_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
+  ssize_t mq_server_comm_read_operation ( mq_server_param_st *params, int fd, char *data, ssize_t size, int *rank_client_id ) ;
+  ssize_t mq_server_comm_read_data      ( mq_server_param_st *params, int fd, char *data, ssize_t size, int  rank_client_id ) ;
 
 #endif
 

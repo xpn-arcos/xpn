@@ -19,18 +19,21 @@
    *
    */
 
-#ifndef _TCP_SERVER_COMM_H_
-#define _TCP_SERVER_COMM_H_
+#ifndef _MQ_SERVER_COMM_H_
+#define _MQ_SERVER_COMM_H_
 
       #include "all_system.h"
-      #include "tcp_server_params.h"
+      #include "mq_server_params.h"
       #include "base/utils.h"
       #include "base/ns.h"
-      #include "tcp_server_ops.h"
+      #include "mq_server_ops.h"
 
       /*
        *  API
        */
+
+      int     doConnection              ( tcpClient_param_st *params ) ;
+      int     doDisconnection           ( tcpClient_param_st *params ) ;
 
       int     tcpClient_comm_init       ( tcpClient_param_st *params ) ;
       int     tcpClient_comm_destroy    ( tcpClient_param_st *params ) ;

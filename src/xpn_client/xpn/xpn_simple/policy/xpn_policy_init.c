@@ -335,10 +335,10 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
     }
     #endif
 
-    #ifdef ENABLE_TCP_SERVER
-    else if (strcmp(prt, "tcp_server") == 0) {
-        //printf("[XPN]nfi_tcp_server_init: %s\n",url);
-        ret = nfi_tcp_server_init(url_buf, serv, NULL);
+    #ifdef ENABLE_MQ_SERVER
+    else if (strcmp(prt, "mq_server") == 0) {
+        //printf("[XPN]nfi_mq_server_init: %s\n",url);
+        ret = nfi_mq_server_init(url_buf, serv, NULL);
         if (ret < 0) {
             errno = ESRCH;
             return -1;
