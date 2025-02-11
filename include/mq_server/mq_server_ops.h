@@ -80,6 +80,11 @@
   #define MQ_SERVER_GETNODENAME    61
   #define MQ_SERVER_GETID          62
 
+  // Metadata
+  #define MQ_SERVER_READ_MDATA      70
+  #define MQ_SERVER_WRITE_MDATA     71
+  #define MQ_SERVER_WRITE_MDATA_FILE_SIZE     72
+
   // Connection operatons
   #define MQ_SERVER_FINALIZE       80
   #define MQ_SERVER_DISCONNECT     81
@@ -225,6 +230,25 @@
   };
 
 
+  struct st_mq_server_read_mdata_req
+  { 
+    struct xpn_metadata mdata;
+    struct st_mq_server_status status;
+  };
+
+  struct st_mq_server_write_mdata
+  { 
+    char path[PATH_MAX];
+    struct xpn_metadata mdata;
+  };
+
+  struct st_mq_server_write_mdata_file_size
+  { 
+    char path[PATH_MAX];
+    ssize_t size;
+  };
+
+
 
   struct st_mq_server_msg
   {
@@ -246,9 +270,14 @@
       struct st_mq_server_getattr  op_getattr;
       struct st_mq_server_setattr  op_setattr;
 
-      struct st_mq_server_flush    op_flush;
-      struct st_mq_server_preload  op_preload;
+  //    struct st_mq_server_flush    op_flush;
+  //    struct st_mq_server_preload  op_preload;
       struct st_mq_server_end      op_end;
+
+      struct st_mq_server_path           op_read_mdata;
+      struct st_mq_server_write_mdata    op_write_mdata;
+      struct st_mq_server_write_mdata_file_size             op_write_mdata_file_size;
+
     } u_st_mq_server_msg ;
   };
 

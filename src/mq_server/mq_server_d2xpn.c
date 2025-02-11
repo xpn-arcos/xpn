@@ -109,7 +109,7 @@
       {
            struct stat st;
            int fdp,fd,ret,fd_lock;
-           char *mq_server_path, new_path[255];
+           char *mq_server_path, new_path[PATH_MAX + 1];
 
 
            debug_info("d2xpn(%d): Origen: %s\n",  params->rank, origen) ;
@@ -120,7 +120,10 @@
                mq_server_path = MQ_SERVER_PATH_DEFAULT;
            }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
            sprintf(new_path, "%s/%s", mq_server_path, destino);
+#pragma GCC diagnostic pop
 
            /*
             * Deberia comprobar si puedo hacer el lock,

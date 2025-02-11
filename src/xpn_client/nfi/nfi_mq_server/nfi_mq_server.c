@@ -38,7 +38,7 @@
 int mq_server_write_operation(int sd, struct st_mq_server_msg * head) {
     int ret;
 
-    debug_info("[NFI-TCP] (ID=%s) tcpClient_write_data: begin               HEAD_TYPE:%d\n", head->id, sizeof(head->type));
+    debug_info("[NFI_MQ] (ID=%s) tcpClient_write_data: begin               HEAD_TYPE:%d\n", head->id, sizeof(head->type));
     ret = tcpClient_write_operation(sd, (char * ) & (head->type), 1, head->id);
     debug_info("CLIENT -- %d\n", head->type);
     if (ret < 0) {
@@ -46,77 +46,92 @@ int mq_server_write_operation(int sd, struct st_mq_server_msg * head) {
         return -1;
     }
 
-    debug_info("[NFI-TCP] (ID=%s) write_operation: %d->\n", head->id, head->type);
+    debug_info("[NFI_MQ] (ID=%s) write_operation: %d->\n", head->id, head->type);
     switch (head->type) {
         //File API
     case MQ_SERVER_OPEN_FILE_WS:
     case MQ_SERVER_OPEN_FILE_WOS:
-        debug_info("[NFI-TCP] (ID=%s) OPEN operation ---------------------  %ld\n", head->id, sizeof(struct st_mq_server_open));
+        debug_info("[NFI_MQ] (ID=%s) OPEN operation ---------------------  %ld\n", head->id, sizeof(struct st_mq_server_open));
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_open, sizeof(struct st_mq_server_open), head->id);
         break;
     case MQ_SERVER_CREAT_FILE_WS:
     case MQ_SERVER_CREAT_FILE_WOS:
-        debug_info("[NFI-TCP] (ID=%s) CREAT operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) CREAT operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_creat, sizeof(struct st_mq_server_creat), head->id);
         break;
     case MQ_SERVER_READ_FILE_WS:
     case MQ_SERVER_READ_FILE_WOS:
-        debug_info("[NFI-TCP] (ID=%s) READ operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) READ operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_read, sizeof(struct st_mq_server_read), head->id);
         break;
     case MQ_SERVER_WRITE_FILE_WS:
     case MQ_SERVER_WRITE_FILE_WOS:
-        debug_info("[NFI-TCP] (ID=%s) WRITE operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) WRITE operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_write, sizeof(struct st_mq_server_write), head->id);
         break;
     case MQ_SERVER_CLOSE_FILE_WS:
-        debug_info("[NFI-TCP] (ID=%s) CLOSE operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) CLOSE operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_close, sizeof(struct st_mq_server_close), head->id);
         break;
     case MQ_SERVER_RM_FILE:
-        debug_info("[NFI-TCP] (ID=%s) RM operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) RM operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_rm, sizeof(struct st_mq_server_rm), head->id);
         break;
     case MQ_SERVER_RENAME_FILE:
-        debug_info("[NFI-TCP] (ID=%s) RENAME operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) RENAME operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_rename, sizeof(struct st_mq_server_rename), head->id);
         break;
     case MQ_SERVER_GETATTR_FILE:
-        debug_info("[NFI-TCP] (ID=%s) GETATTR operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) GETATTR operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_getattr, sizeof(struct st_mq_server_getattr), head->id);
         break;
 
         //Directory API
     case MQ_SERVER_MKDIR_DIR:
-        debug_info("[NFI-TCP] (ID=%s) MKDIR operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) MKDIR operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_mkdir, sizeof(struct st_mq_server_mkdir), head->id);
         break;
     case MQ_SERVER_OPENDIR_DIR:
-        debug_info("[NFI-TCP] (ID=%s) OPENDIR operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) OPENDIR operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_opendir, sizeof(struct st_mq_server_opendir), head->id);
         break;
     case MQ_SERVER_READDIR_DIR:
-        debug_info("[NFI-TCP] (ID=%s) READDIR operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) READDIR operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_readdir, sizeof(struct st_mq_server_readdir), head->id);
         break;
     case MQ_SERVER_CLOSEDIR_DIR:
-        debug_info("[NFI-TCP] (ID=%s) CLOSEDIR operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) CLOSEDIR operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_closedir, sizeof(struct st_mq_server_closedir), head->id);
         break;
     case MQ_SERVER_RMDIR_DIR:
-        debug_info("[NFI-TCP] (ID=%s) RMDIR operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) RMDIR operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_rmdir, sizeof(struct st_mq_server_rmdir), head->id);
         break;
 
         //Optimization API
+/*
     case MQ_SERVER_FLUSH_FILE:
-        debug_info("[NFI-TCP] (ID=%s) FLUSH operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) FLUSH operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_flush, sizeof(struct st_mq_server_flush), head->id);
         break;
     case MQ_SERVER_PRELOAD_FILE:
-        debug_info("[NFI-TCP] (ID=%s) PRELOAD operation\n", head->id);
+        debug_info("[NFI_MQ] (ID=%s) PRELOAD operation\n", head->id);
         ret = tcpClient_write_data(sd, (char * ) & head->u_st_mq_server_msg.op_preload, sizeof(struct st_mq_server_preload), head->id);
         break;
+*/
+
+    case MQ_SERVER_READ_MDATA:
+      debug_info("[NFI_MQ] [nfi_write_operation] READ_MDATA operation\n");
+      ret = nfi_mq_server_comm_write_data(params, (char *)&(head->u_st_mq_server_msg.op_read_mdata), sizeof(head->u_st_mq_server_msg.op_read_mdata));
+      break;
+    case MQ_SERVER_WRITE_MDATA:
+      debug_info("[NFI_MQ] [nfi_write_operation] WRITE_MDATA operation\n");
+      ret = nfi_mq_server_comm_write_data(params, (char *)&(head->u_st_mq_server_msg.op_write_mdata), sizeof(head->u_st_mq_server_msg.op_write_mdata));
+      break;
+    case MQ_SERVER_WRITE_MDATA_FILE_SIZE:
+      debug_info("[NFI_MQ] [nfi_write_operation] WRITE_MDATA_FILE_SIZE operation\n");
+      ret = nfi_mq_server_comm_write_data(params, (char *)&(head->u_st_mq_server_msg.op_write_mdata_file_size), sizeof(head->u_st_mq_server_msg.op_write_mdata_file_size));
+      break;
     }
 
     return ret;
@@ -126,7 +141,7 @@ int nfi_mq_server_doRequest(struct nfi_mq_server_server * server_aux, struct st_
     ssize_t ret;
 
     // send request...
-    debug_info("[NFI-TCP] (ID=%s): %s:->...\n", server_aux->id, msg->id);
+    debug_info("[NFI_MQ] (ID=%s): %s:->...\n", server_aux->id, msg->id);
     ret = mq_server_write_operation(server_aux->params.server, msg);
     if (ret < 0) 
     {
@@ -134,7 +149,7 @@ int nfi_mq_server_doRequest(struct nfi_mq_server_server * server_aux, struct st_
     }
 
     // read response...
-    debug_info("[NFI-TCP] (ID=%s): %s: <- ...\n", server_aux->id, msg->id);
+    debug_info("[NFI_MQ] (ID=%s): %s: <- ...\n", server_aux->id, msg->id);
     ret = tcpClient_read_data(server_aux->params.server, req, req_size, msg->id);
     if (ret < 0) 
     {
@@ -275,10 +290,17 @@ int nfi_mq_server_init(char * url, struct nfi_server * serv, __attribute__((__un
     serv->ops->nfi_closedir = nfi_mq_server_closedir;
     serv->ops->nfi_rmdir = nfi_mq_server_rmdir;
 
+    serv->ops->nfi_destroy = nfi_mq_server_destroy;
+    serv->ops->nfi_statfs = nfi_mq_server_statfs;
+
+    // TODO: add these new functions
+    serv->ops->nfi_read_mdata  = nfi_mq_server_read_mdata;
+    serv->ops->nfi_write_mdata = nfi_mq_server_write_mdata;
+
+    // TODO: remove these old functions
  // serv->ops->nfi_preload = nfi_mq_server_preload;
  // serv->ops->nfi_flush = nfi_mq_server_flush;
 
-    serv->ops->nfi_statfs = nfi_mq_server_statfs;
 
     // parse url...
     ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
@@ -357,7 +379,7 @@ int nfi_mq_server_init(char * url, struct nfi_server * serv, __attribute__((__un
     memset(serv->wrk, 0, sizeof(struct nfi_worker));
     serv->wrk->server = serv;
 
-    debug_info("[NFI-TCP] nfiworker_init()\n");
+    debug_info("[NFI_MQ] nfiworker_init()\n");
     ret = nfiworker_init(serv);
 
     //int n_retries = 0;
@@ -512,7 +534,7 @@ int nfi_mq_server_destroy(struct nfi_server * serv)
     }
 
     // Thread destroy...
-    debug_info("[NFI-TCP] nfiworker_destroy()\n");
+    debug_info("[NFI_MQ] nfiworker_destroy()\n");
     nfiworker_destroy(serv);
 
     nfi_mq_server_disconnect( serv );
@@ -520,7 +542,7 @@ int nfi_mq_server_destroy(struct nfi_server * serv)
     // TCP Finalize...
     ret = tcpClient_comm_destroy( & (server_aux->params) );
     if (ret < 0) {
-        debug_info("[NFI-TCP]: tcpClient_comm_destroy fails :-(");
+        debug_info("[NFI_MQ]: tcpClient_comm_destroy fails :-(");
     }
 
     // free private_info, 'url' string and 'server' string...
@@ -610,7 +632,7 @@ int nfi_mq_server_disconnect(struct nfi_server * serv) {
         ret = tcpClient_comm_disconnect( & (server_aux->params));
         if (ret < 0) 
         {
-            debug_info("[NFI-TCP]: tcpClient_comm_disconnect fails :-(");
+            debug_info("[NFI_MQ]: tcpClient_comm_disconnect fails :-(");
         }
     }
 
@@ -694,7 +716,7 @@ int nfi_mq_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t 
 
     // private_info...
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_open(ID=%s): begin %s\n", server_aux->id, url);
+    debug_info("[NFI_MQ] nfi_mq_server_open(ID=%s): begin %s\n", server_aux->id, url);
 
     ret = doConnection( & (server_aux->params) );
     if (ret < 0) 
@@ -815,7 +837,7 @@ int nfi_mq_server_create(struct nfi_server * serv, char * url, mode_t mode, stru
 
     // private_info...
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_create(ID=%s): begin %s\n", server_aux->id, url);
+    debug_info("[NFI_MQ] nfi_mq_server_create(ID=%s): begin %s\n", server_aux->id, url);
 
     ret = doConnection( & (server_aux->params) );
     if (ret < 0) 
@@ -959,7 +981,7 @@ ssize_t nfi_mq_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, vo
 
     // private_info
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_read(%s): begin off %d size %d\n", server_aux->id, (int) offset, (int) size);
+    debug_info("[NFI_MQ] nfi_mq_server_read(%s): begin off %d size %d\n", server_aux->id, (int) offset, (int) size);
     fh_aux = (struct nfi_mq_server_fhandle * ) fh->priv_fh;
 
     ret = doConnection( & (server_aux->params) );
@@ -979,7 +1001,7 @@ ssize_t nfi_mq_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, vo
             ret = filesystem_read(fh_aux->fd, buffer, size);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int) offset, size, ret);
+            debug_info("[NFI_MQ] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int) offset, size, ret);
         } else 
         {
             int fd;
@@ -996,7 +1018,7 @@ ssize_t nfi_mq_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, vo
             ret = filesystem_read(fd, buffer, size);
             //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-            debug_info("[NFI-TCP] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int) offset, size, ret);
+            debug_info("[NFI_MQ] read %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int) offset, size, ret);
 
             filesystem_close(fd);
         }
@@ -1012,18 +1034,18 @@ ssize_t nfi_mq_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, vo
         if (server_aux->params.xpn_session) {
             msg.type = MQ_SERVER_READ_FILE_WS;
             msg.u_st_mq_server_msg.op_read.fd = fh_aux->fd;
-            debug_info("[NFI-TCP] read:->fd     %d \n", msg.u_st_mq_server_msg.op_read.fd);
+            debug_info("[NFI_MQ] read:->fd     %d \n", msg.u_st_mq_server_msg.op_read.fd);
         } else {
             msg.type = MQ_SERVER_READ_FILE_WOS;
             memccpy(msg.u_st_mq_server_msg.op_read.path, fh_aux->path, 0, PATH_MAX);
-            debug_info("[NFI-TCP] read:->path   %s \n", msg.u_st_mq_server_msg.op_read.path);
+            debug_info("[NFI_MQ] read:->path   %s \n", msg.u_st_mq_server_msg.op_read.path);
         }
         memccpy(msg.id, server_aux->id, 0, MQ_SERVER_ID - 1);
         msg.u_st_mq_server_msg.op_read.offset = offset;
         msg.u_st_mq_server_msg.op_read.size = size;
 
-        debug_info("[NFI-TCP] read:->offset %d \n", (int) msg.u_st_mq_server_msg.op_read.offset);
-        debug_info("[NFI-TCP] read:->size   %d \n", msg.u_st_mq_server_msg.op_read.size);
+        debug_info("[NFI_MQ] read:->offset %d \n", (int) msg.u_st_mq_server_msg.op_read.offset);
+        debug_info("[NFI_MQ] read:->size   %d \n", msg.u_st_mq_server_msg.op_read.size);
 
         ret = mq_server_write_operation(server_aux->params.server, & msg);
         if (ret < 0) {
@@ -1035,7 +1057,7 @@ ssize_t nfi_mq_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, vo
         cont = 0;
         do {
             ret = tcpClient_read_data(server_aux->params.server, (char * ) & req, sizeof(struct st_mq_server_read_req), msg.id);
-            debug_info("[NFI-TCP] nfi_mq_server_read(ID=%s): (1)tcpClient_read_data = %d.\n", server_aux->id, ret);
+            debug_info("[NFI_MQ] nfi_mq_server_read(ID=%s): (1)tcpClient_read_data = %d.\n", server_aux->id, ret);
 
             if (ret < 0) {
                 fprintf(stderr, "ERROR: (2)nfi_mq_server_read: Error on write operation\n");
@@ -1045,9 +1067,9 @@ ssize_t nfi_mq_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, vo
             // TODO: mq_server_ops.c:465 ->if (req.size < 0)->error on server side so... something must be done on client side
 
             if (req.size > 0) {
-                debug_info("[NFI-TCP] nfi_mq_server_read(ID=%s): (2)tcpClient_read_data = %d. size = %d\n", server_aux->id, ret, req.size);
+                debug_info("[NFI_MQ] nfi_mq_server_read(ID=%s): (2)tcpClient_read_data = %d. size = %d\n", server_aux->id, ret, req.size);
                 ret = tcpClient_read_data(server_aux->params.server, (char * ) buffer + cont, req.size, msg.id);
-                debug_info("[NFI-TCP] nfi_mq_server_read(ID=%s): (2)tcpClient_read_data = %d.\n", server_aux->id, ret);
+                debug_info("[NFI_MQ] nfi_mq_server_read(ID=%s): (2)tcpClient_read_data = %d.\n", server_aux->id, ret);
 
                 if (ret < 0) {
                     fprintf(stderr, "ERROR: (3)nfi_mq_server_read: Error on read operation\n");
@@ -1106,7 +1128,7 @@ ssize_t nfi_mq_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, v
 
     // private_info...
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_write(ID=%s): begin off %d size %d\n", server_aux->id, (int) offset, (int) size);
+    debug_info("[NFI_MQ] nfi_mq_server_write(ID=%s): begin off %d size %d\n", server_aux->id, (int) offset, (int) size);
     fh_aux = (struct nfi_mq_server_fhandle * ) fh->priv_fh;
 
     debug_info("ANTES ------------------- %s\n", server_aux->params.server_name);
@@ -1131,7 +1153,7 @@ ssize_t nfi_mq_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, v
                 ret = filesystem_write(fh_aux->fd, buffer, size);
                 //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-                debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int) offset, size, ret);
+                debug_info("[NFI_MQ] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fh_aux->fd, (long int) offset, size, ret);
             } else 
             {
                 int fd;
@@ -1147,7 +1169,7 @@ ssize_t nfi_mq_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, v
                 ret = filesystem_write(fd, buffer, size);
                 //if(server_aux->params.sem_server != 0) sem_post(server_aux->params.sem_server);
 
-                debug_info("[NFI-TCP] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int) offset, size, ret);
+                debug_info("[NFI_MQ] write %s(%d) off %ld size %zu (ret:%zd)", fh->url, fd, (long int) offset, size, ret);
 
                 filesystem_close(fd); // WOS
             }
@@ -1165,20 +1187,20 @@ ssize_t nfi_mq_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, v
             {
                 msg.type = MQ_SERVER_WRITE_FILE_WS;
                 msg.u_st_mq_server_msg.op_write.fd = fh_aux->fd;
-                debug_info("[NFI-TCP] write:->fd     %d \n", msg.u_st_mq_server_msg.op_write.fd);
+                debug_info("[NFI_MQ] write:->fd     %d \n", msg.u_st_mq_server_msg.op_write.fd);
             } else 
             {
                 msg.type = MQ_SERVER_WRITE_FILE_WOS;
                 memccpy(msg.u_st_mq_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX - 1);
-                debug_info("[NFI-TCP] write:->path   %s \n", msg.u_st_mq_server_msg.op_write.path);
+                debug_info("[NFI_MQ] write:->path   %s \n", msg.u_st_mq_server_msg.op_write.path);
             }
 
             memccpy(msg.id, server_aux->id, 0, MQ_SERVER_ID - 1);
             msg.u_st_mq_server_msg.op_write.offset = offset;
             msg.u_st_mq_server_msg.op_write.size = size;
 
-            debug_info("[NFI-TCP] write:->offset %d \n", (int) msg.u_st_mq_server_msg.op_write.offset);
-            debug_info("[NFI-TCP] write:->size   %d \n", msg.u_st_mq_server_msg.op_write.size);
+            debug_info("[NFI_MQ] write:->offset %d \n", (int) msg.u_st_mq_server_msg.op_write.offset);
+            debug_info("[NFI_MQ] write:->size   %d \n", msg.u_st_mq_server_msg.op_write.size);
 
             //printf("EscrituraClienteWos\n\n");
 
@@ -1229,7 +1251,7 @@ ssize_t nfi_mq_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, v
                 fprintf(stderr, "(3)ERROR: nfi_mq_server_write(ID=%s): Error on write operation\n", server_aux->id);
                 return -1;
             }
-            debug_info("[NFI-TCP] nfi_mq_server_write(ID=%s): write %s off %d size %d (err:%d).\n", server_aux->id, fh->url, (int) offset, (int) size, (int) req.size);
+            debug_info("[NFI_MQ] nfi_mq_server_write(ID=%s): write %s off %d size %d (err:%d).\n", server_aux->id, fh->url, (int) offset, (int) size, (int) req.size);
             if (req.size < 0) 
             {
                 fprintf(stderr, "ERROR: nfi_mq_server_write(ID=%s): Fail write %s off %d size %d (err:%d).\n", server_aux->id, fh->url, (int) offset, (int) size, (int) req.size);
@@ -1322,7 +1344,7 @@ int nfi_mq_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
 
     // private_info...
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_close(ID=%s): begin\n", server_aux->id);
+    debug_info("[NFI_MQ] nfi_mq_server_close(ID=%s): begin\n", server_aux->id);
 
     ret = doConnection( & (server_aux->params) );
     if (ret < 0) 
@@ -1334,12 +1356,12 @@ int nfi_mq_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
     // without session->just return ok
     if (server_aux->params.xpn_session == 0) 
     {
-        debug_info("[NFI-TCP] nfi_mq_server_close(ID=%s): end\n", server_aux->id);
+        debug_info("[NFI_MQ] nfi_mq_server_close(ID=%s): end\n", server_aux->id);
         return 1;
     }
 
     if (NULL == fh->priv_fh) {
-        debug_info("[NFI-TCP] nfi_mq_server_close(ID=%s): end\n", server_aux->id);
+        debug_info("[NFI_MQ] nfi_mq_server_close(ID=%s): end\n", server_aux->id);
         return -1;
     }
 
@@ -1364,7 +1386,7 @@ int nfi_mq_server_close(struct nfi_server * serv, struct nfi_fhandle * fh) {
         memccpy(msg.u_st_mq_server_msg.op_close.path, fh_aux->path, 0, PATH_MAX - 1);
 
         nfi_mq_server_doRequest(server_aux, & msg, (char * ) & (ret), sizeof(int));
-        debug_info("[NFI-TCP] nfi_mq_server_close(ID=%s): close->%d\n", server_aux->id, msg.u_st_mq_server_msg.op_close.fd);
+        debug_info("[NFI_MQ] nfi_mq_server_close(ID=%s): close->%d\n", server_aux->id, msg.u_st_mq_server_msg.op_close.fd);
     }
 
     // free memory
@@ -1403,7 +1425,7 @@ int nfi_mq_server_remove(struct nfi_server * serv, char * url)
 
     // private_info...
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_remove(%s): begin %s\n", server_aux->id, url);
+    debug_info("[NFI_MQ] nfi_mq_server_remove(%s): begin %s\n", server_aux->id, url);
     if (server_aux == NULL) 
     {
         mq_server_err(MQ_SERVERERR_PARAM);
@@ -1478,7 +1500,7 @@ int nfi_mq_server_rename(struct nfi_server * serv, char * old_url, char * new_ur
 
     // private_info...
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_remove(%s): begin %s\n", server_aux->id, new_url);
+    debug_info("[NFI_MQ] nfi_mq_server_remove(%s): begin %s\n", server_aux->id, new_url);
     if (server_aux == NULL) 
     {
         mq_server_err(MQ_SERVERERR_PARAM);
@@ -1569,7 +1591,7 @@ int nfi_mq_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, str
 
     // private_info...
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_write(ID=%s): begin off %d size %d\n", server_aux->id, (int) offset, (int) size);
+    debug_info("[NFI_MQ] nfi_mq_server_write(ID=%s): begin off %d size %d\n", server_aux->id, (int) offset, (int) size);
     //fh_aux = (struct nfi_mq_server_fhandle * ) fh->priv_fh;
 
     ret = doConnection( & (server_aux->params) );
@@ -2137,7 +2159,7 @@ int nfi_mq_server_preload(struct nfi_server * serv, char * url, char * virtual_p
 
     // get private_info...
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_preload(ID=%s): begin %s - %s \n", server_aux->id, virtual_path, storage_path);
+    debug_info("[NFI_MQ] nfi_mq_server_preload(ID=%s): begin %s - %s \n", server_aux->id, virtual_path, storage_path);
 
     if (url[strlen(url) - 1] == '/') {
         mq_server_err(MQ_SERVERERR_PARAM);
@@ -2153,7 +2175,7 @@ int nfi_mq_server_preload(struct nfi_server * serv, char * url, char * virtual_p
         return -1;
     }
 
-    debug_info("[NFI-TCP] nfi_mq_server_preload(ID=%s): preload %s in server %s.\n", server_aux->id, virtual_path, serv->server);
+    debug_info("[NFI_MQ] nfi_mq_server_preload(ID=%s): preload %s in server %s.\n", server_aux->id, virtual_path, serv->server);
 
     /*****************************************/
     msg.type = MQ_SERVER_PRELOAD_FILE;
@@ -2166,7 +2188,7 @@ int nfi_mq_server_preload(struct nfi_server * serv, char * url, char * virtual_p
     nfi_mq_server_doRequest(server_aux, & msg, (char * ) & ret, sizeof(int));
     /*****************************************/
 
-    debug_info("[NFI-TCP] nfi_mq_server_preload(ID=%s): end %s - %s = %d\n", server_aux->id, virtual_path, storage_path, ret);
+    debug_info("[NFI_MQ] nfi_mq_server_preload(ID=%s): end %s - %s = %d\n", server_aux->id, virtual_path, storage_path, ret);
 
     int ret2 = doDisconnection( & (server_aux->params) );
     if (ret2 < 0) 
@@ -2201,7 +2223,7 @@ int nfi_mq_server_flush(struct nfi_server * serv, char * url, char * virtual_pat
 
     // private_info...
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_flush(ID=%s): begin %s - %s \n", server_aux->id, virtual_path, storage_path);
+    debug_info("[NFI_MQ] nfi_mq_server_flush(ID=%s): begin %s - %s \n", server_aux->id, virtual_path, storage_path);
 
     if (url[strlen(url) - 1] == '/') {
         mq_server_err(MQ_SERVERERR_PARAM);
@@ -2209,7 +2231,7 @@ int nfi_mq_server_flush(struct nfi_server * serv, char * url, char * virtual_pat
     }
 
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
-    debug_info("[NFI-TCP] nfi_mq_server_flush(ID=%s): open %s in server %s.\n", server_aux->id, virtual_path, serv->server);
+    debug_info("[NFI_MQ] nfi_mq_server_flush(ID=%s): open %s in server %s.\n", server_aux->id, virtual_path, serv->server);
 
     /*****************************************/
     //bzero(&msg, sizeof(struct st_mq_server_msg));
@@ -2237,4 +2259,121 @@ int nfi_mq_server_flush(struct nfi_server * serv, char * url, char * virtual_pat
     return 0;
 }
 
+
+int nfi_mq_server_read_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata )
+{
+  int ret;
+  char dir[PATH_MAX];
+  struct nfi_mq_server *server_aux;
+  struct st_mq_server_msg msg;
+  struct st_mq_server_read_mdata_req req;
+
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_read_mdata] >> Begin\n", serv->id);
+
+  // check arguments...
+  NULL_RET_ERR(serv,               EINVAL);
+  nfi_mq_server_keep_connected(serv);
+  NULL_RET_ERR(serv->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_read_mdata] Get server private info\n", serv->id);
+
+  server_aux = (struct nfi_mq_server  *) serv->private_info;
+  if (server_aux == NULL)
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_read_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_read_mdata] ParseURL(%s)= %s\n", serv->id, url, dir);
+  
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_read_mdata] nfi_mq_server_read_mdata(%s)\n", serv->id, dir);
+
+
+  msg.type = XPN_SERVER_READ_MDATA;
+  memccpy(msg.u_st_mq_server_msg.op_read_mdata.path, dir,            0, PATH_MAX-1);
+
+  nfi_mq_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mq_server_read_mdata_req));
+
+  if (req.status.ret < 0)
+      errno = req.status.server_errno;
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_read_mdata] nfi_mq_server_read_mdata(%s)=%d\n", serv->id, dir, req.status);
+
+  memcpy(mdata, &req.mdata, sizeof(struct xpn_metadata));
+
+  debug_info("[NFI_MQ] [nfi_mq_server_read_mdata] >> End\n");
+
+  return req.status.ret;
+}
+
+int nfi_mq_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata, int only_file_size )
+{
+  int ret;
+  char dir[PATH_MAX];
+  struct nfi_mq_server *server_aux;
+  struct st_mq_server_msg msg;
+  struct st_mq_server_status req;
+
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_write_mdata] >> Begin\n", serv->id);
+
+  // check arguments...
+  NULL_RET_ERR(serv,               EINVAL);
+  nfi_mq_server_keep_connected(serv);
+  NULL_RET_ERR(serv->private_info, EINVAL);
+
+  // private_info...
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_write_mdata] Get server private info\n", serv->id);
+
+  server_aux = (struct nfi_mq_server  *) serv->private_info;
+  if (server_aux == NULL)
+  {
+    errno = EINVAL;
+    return -1;
+  }
+
+  // from url -> server + dir
+  ret = ParseURL(url, NULL, NULL, NULL, NULL,  NULL,  dir);
+  if (ret < 0)
+  {
+    printf("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_write_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
+    errno = EINVAL;
+    return -1;
+  }
+
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_write_mdata] ParseURL(%s)= %s\n", serv->id, url, dir);
+  
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_write_mdata] nfi_mq_server_write_mdata(%s)\n", serv->id, dir);
+
+  if (only_file_size){
+    msg.type = XPN_SERVER_WRITE_MDATA_FILE_SIZE;
+    memccpy(msg.u_st_mq_server_msg.op_write_mdata_file_size.path, dir,            0, PATH_MAX-1);
+    msg.u_st_mq_server_msg.op_write_mdata_file_size.size = mdata->file_size;
+  }else{
+    msg.type = XPN_SERVER_WRITE_MDATA;
+    memccpy(msg.u_st_mq_server_msg.op_write_mdata.path, dir,            0, PATH_MAX-1);
+    memcpy(&msg.u_st_mq_server_msg.op_write_mdata.mdata, mdata, sizeof(struct xpn_metadata));
+  }
+
+  nfi_mq_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mq_server_status));
+
+  if (req.ret < 0)
+      errno = req.server_errno;
+  debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_write_mdata] nfi_mq_server_write_mdata(%s)=%d\n", serv->id, dir, req.ret);
+
+  debug_info("[NFI_MQ] [nfi_mq_server_write_mdata] >> End\n");
+
+  return req.ret;
+}
+
+
 /* ................................................................... */
+

@@ -102,8 +102,10 @@
     int     nfi_mq_server_rmdir      ( struct nfi_server *server, char *url ) ;
 
     int     nfi_mq_server_statfs     ( struct nfi_server *server, struct nfi_info *inf ) ;
-    int     nfi_mq_server_preload    ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt ) ;
-    int     nfi_mq_server_flush      ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt ) ;
+ // int     nfi_mq_server_preload    ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt ) ;
+//  int     nfi_mq_server_flush      ( struct nfi_server *server, char *url, char *virtual_path, char *storage_path, int opt ) ;
+    int     nfi_mq_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata, int only_file_size ) ;
+    int     nfi_mq_server_read_mdata  ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata ) ;
 
 
   /* ................................................................... */

@@ -85,6 +85,7 @@ AC_CHECK_SIZEOF(unsigned long,8)
 AC_CHECK_SIZEOF(char *,4)
 AC_CHECK_SIZEOF(ptrdiff_t,4)
 AC_CHECK_SIZEOF(size_t,4)
+AC_SYS_LARGEFILE
 
 
 

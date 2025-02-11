@@ -126,11 +126,11 @@ void signal_callback_handler(int signum) {
 }
 
 void mq_server_run(struct st_th th) {
-    debug_info("[TCP-SERVER] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mq_server_op2string(th.type_op), th.type_op);
+    debug_info("[MQ-SERVER] (ID=%d): begin to do operation '%s' OP_ID %d\n", th.id, mq_server_op2string(th.type_op), th.type_op);
 
     mq_server_do_operation( & th, & the_end);
 
-    debug_info("[TCP-SERVER] (ID=%d) end to do operation '%s'\n", th.id, mq_server_op2string(th.type_op));
+    debug_info("[MQ-SERVER] (ID=%d) end to do operation '%s'\n", th.id, mq_server_op2string(th.type_op));
 }
 
 void mq_server_dispatcher(struct st_th th) {
@@ -150,11 +150,11 @@ void mq_server_dispatcher(struct st_th th) {
 
     ret = mq_server_comm_write_data(th.params, (int) th.sd, (char * ) & data, sizeof(int), 0);
     if (ret < 0) {
-        printf("[TCP-SERVER] ERROR: sync write fails\n");
-        return -1;
+        printf("[MQ-SERVER] ERROR: sync write fails\n");
+        return;
     }
 
-    //printf("[TCP-SERVER] OK: sync write\n")
+    //printf("[MQ-SERVER] OK: sync write\n")
 
     disconnect = 0;
     while (!disconnect) {
@@ -201,18 +201,18 @@ void mq_server_dispatcher(struct st_th th) {
 */
         //fprintf(file, "%s\n", time_str);
         if (ret < 0) {
-            //printf("[TCP-SERVER] ERROR: mq_server_comm_readdata fail\n");
+            //printf("[MQ-SERVER] ERROR: mq_server_comm_readdata fail\n");
             return;
         }
 
         if (ret == 0) {
-            //printf("[TCP-SERVER] WARNING: mq_server_comm_readdata broken pipe\n");
+            //printf("[MQ-SERVER] WARNING: mq_server_comm_readdata broken pipe\n");
             return;
         }
 
         if (th.type_op == MQ_SERVER_DISCONNECT || th.type_op == MQ_SERVER_FINALIZE) 
         {
-            printf("[TCP-SERVER] INFO: DISCONNECT received\n");
+            printf("[MQ-SERVER] INFO: DISCONNECT received\n");
             disconnect = 1;
             continue;
         }
@@ -228,19 +228,19 @@ void mq_server_dispatcher(struct st_th th) {
         mq_server_run(th_arg);
     }
 
-    debug_info("[TCP-SERVER] mq_server_worker_run (ID=%d) close\n", th.rank_client_id);
+    debug_info("[MQ-SERVER] mq_server_worker_run (ID=%d) close\n", th.rank_client_id);
 
     mq_server_comm_close((int) th.sd);
 }
 
-void * process_client(void * arg) {
+void * process_client(__attribute__((__unused__)) void * arg) {
     struct st_mq_server_msg head;
     int rank_client_id, ret;
     struct st_th th_arg;
 
     while (1) {
-        char bufferSock[MAX_LINE_LENGTH];
-        ssize_t bytes_received;
+        //char bufferSock[MAX_LINE_LENGTH];
+        //ssize_t bytes_received;
 
         ClientData * client = dequeue();
 
@@ -250,13 +250,13 @@ void * process_client(void * arg) {
         //printf("SERVER 1 -- %d\n", head.type);
 
         if (ret < 0) {
-            printf("[TCP-SERVER] ERROR: mq_server_comm_readdata fail\n");
-            return -1;
+            printf("[MQ-SERVER] ERROR: mq_server_comm_readdata fail\n");
+            continue;
         }
 
         if (head.type == MQ_SERVER_FINALIZE) {
             the_end = 1;
-            printf("[TCP-SERVER]: mq_server finalized\n");
+            printf("[MQ-SERVER]: mq_server finalized\n");
             continue;
         }
 
@@ -310,12 +310,12 @@ int mq_server_up(void)
     ret = mq_server_comm_init( & params);
     if (ret < 0) 
     {
-        printf("[TCP-SERVER] ERROR: tcp_comm initialization fails\n");
+        printf("[MQ-SERVER] ERROR: tcp_comm initialization fails\n");
         return -1;
     }
     /*ret = base_workers_init(&worker, params.thread_mode);
     if (ret < 0) {
-        printf("[TCP-SERVER] ERROR: workers initialization fails\n");
+        printf("[MQ-SERVER] ERROR: workers initialization fails\n");
         return -1;
     }*/
 
@@ -324,7 +324,7 @@ int mq_server_up(void)
     ret = sem_init( & (params.disk_sem), 0, 1);
     if (ret < 0) 
     {
-        printf("[TCP-SERVER] ERROR: semaphore initialization fails\n");
+        printf("[MQ-SERVER] ERROR: semaphore initialization fails\n");
         return -1;
     }
 
@@ -332,7 +332,7 @@ int mq_server_up(void)
     sprintf(params.sem_name_server, "%s%d", serv_name, getpid());
     sem_server = sem_open(params.sem_name_server, O_CREAT, 0777, 1);
     if (sem_server == 0) {
-        printf("[TCP-SERVER] ERROR: semaphore open fails\n");
+        printf("[MQ-SERVER] ERROR: semaphore open fails\n");
         return -1;
     }
     */
@@ -345,21 +345,21 @@ int mq_server_up(void)
     char * xpn_time = getenv("XPN_TIME");
 
     if (xpn_time == NULL) {
-        printf("[TCP-SERVER] Error: process_client\n");
+        printf("[MQ-SERVER] Error: process_client\n");
     }
 
     file = open(xpn_time, O_CREAT | O_WRONLY, 0777);
     if (file == NULL) {
-        printf("[TCP-SERVER] ERROR: process_client\n");
+        printf("[MQ-SERVER] ERROR: process_client\n");
     }
 */
     // Loop: receiving + processing
     the_end = 0;
 
-    static int pet = 0;
+    //static int pet = 0;
 
     while (!the_end) {
-        debug_info("[TCP-SERVER] mq_server_accept_comm()\n");
+        debug_info("[MQ-SERVER] mq_server_accept_comm()\n");
 
         params.client = 0;
         sd = mq_server_comm_accept( & params);
@@ -376,7 +376,7 @@ int mq_server_up(void)
     }
 
     // Wait and finalize for all current workers
-    //debug_info("[TCP-SERVER] base_workers_destroy\n");
+    //debug_info("[MQ-SERVER] base_workers_destroy\n");
     //base_workers_destroy( & worker);
 
     // Esperar a que todos los hilos finalicen
@@ -384,7 +384,7 @@ int mq_server_up(void)
         pthread_join(threads[i], NULL);
     }
 
-    debug_info("[TCP-SERVER] mq_server_comm_destroy\n");
+    debug_info("[MQ-SERVER] mq_server_comm_destroy\n");
     mq_server_comm_destroy( & params);
 
     /*
@@ -418,12 +418,12 @@ int mq_server_down(void)
     debug_msg_init();
     ret = mq_server_comm_init( & params);
     if (ret < 0) {
-        printf("[TCP-SERVER] ERROR: tcp_comm initialization fails\n");
+        printf("[MQ-SERVER] ERROR: tcp_comm initialization fails\n");
         return -1;
     }
     ret = base_workers_init( & worker, params.thread_mode);
     if (ret < 0) {
-        printf("[TCP-SERVER] ERROR: workers initialization fails\n");
+        printf("[MQ-SERVER] ERROR: workers initialization fails\n");
         return -1;
     }
 
@@ -431,7 +431,7 @@ int mq_server_down(void)
     file = fopen(params.dns_file, "r");
     if (file == NULL) 
     {
-        printf("[TCP-SERVER] ERROR: invalid file %s\n", params.dns_file);
+        printf("[MQ-SERVER] ERROR: invalid file %s\n", params.dns_file);
         return -1;
     }
 
@@ -440,7 +440,7 @@ int mq_server_down(void)
         // Lookup port name
         ret = ns_lookup("mq_server", srv_name, server_name, port_number);
         if (ret < 0) {
-            printf("[TCP-SERVER] ERROR: server %s %s %s not found\n", srv_name, server_name, port_number);
+            printf("[MQ-SERVER] ERROR: server %s %s %s not found\n", srv_name, server_name, port_number);
             continue;
         }
 
@@ -448,7 +448,7 @@ int mq_server_down(void)
         sd = mq_server_comm_connect( & params, server_name, atoi(port_number));
         if (sd < 0) 
         {
-            printf("[TCP-SERVER] ERROR: connect to %s failed\n", server_name);
+            printf("[MQ-SERVER] ERROR: connect to %s failed\n", server_name);
             continue;
         }
 
@@ -457,7 +457,7 @@ int mq_server_down(void)
         ret = mq_server_comm_write_data( & params, sd, (char * ) & data, sizeof(int), 0); // 0: rank_client_id
         if (ret < 0) 
         {
-            printf("[TCP-SERVER] ERROR: write SERVER_FINALIZE to %s failed\n", srv_name);
+            printf("[MQ-SERVER] ERROR: write SERVER_FINALIZE to %s failed\n", srv_name);
             return -1;
         }
 
@@ -469,9 +469,9 @@ int mq_server_down(void)
     fclose(file);
 
     // Wait and finalize for all current workers
-    debug_info("[TCP-SERVER] base_workers_destroy\n");
+    debug_info("[MQ-SERVER] base_workers_destroy\n");
     base_workers_destroy( & worker);
-    debug_info("[TCP-SERVER] mq_server_comm_destroy\n");
+    debug_info("[MQ-SERVER] mq_server_comm_destroy\n");
     mq_server_comm_destroy( & params);
 
     return 0;

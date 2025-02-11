@@ -27,6 +27,16 @@
 
 /* ... Functions / Funciones ......................................... */
 
+double get_time_ops(void)
+{
+    struct timeval tp;
+    struct timezone tzp;
+
+    gettimeofday(&tp,&tzp);
+    return((double) tp.tv_sec + .000001 * (double) tp.tv_usec);
+}
+
+
 char * mq_server_op2string(int op_code) {
     char * ret = "Unknown";
 
@@ -139,12 +149,17 @@ void mq_server_op_readdir(mq_server_param_st * params, int sd, struct st_mq_serv
 void mq_server_op_closedir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 void mq_server_op_rmdir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 
-void mq_server_op_flush(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_preload(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+//void mq_server_op_flush(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+//void mq_server_op_preload(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 
 void mq_server_op_getnodename(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id); //NEW
 void mq_server_op_fstat(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id); //TODO: implement
 void mq_server_op_getid(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id); //TODO: call in switch
+
+// Metadata
+void mq_server_op_read_mdata   ( mq_server_param_st *params, void *comm, struct st_mq_server_msg *head, int rank_client_id, int tag_client_id );
+void mq_server_op_write_mdata  ( mq_server_param_st *params, void *comm, struct st_mq_server_msg *head, int rank_client_id, int tag_client_id );
+void mq_server_op_write_mdata_file_size  ( mq_server_param_st *params, void *comm, struct st_mq_server_msg *head, int rank_client_id, int tag_client_id );
 
 
 /**********************************
@@ -275,19 +290,41 @@ int mq_server_do_operation(struct st_th * th, int * the_end)
 		}
 		break;
 
+/*
 		//File system API
 	    case MQ_SERVER_PRELOAD_FILE:
-		ret = mq_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_mq_server_msg.op_preload), sizeof(struct st_mq_server_preload), 0 /*head.id*/);
+		ret = mq_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_mq_server_msg.op_preload), sizeof(struct st_mq_server_preload), 0);
 		if (ret != -1) {
-		    mq_server_op_preload(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		    mq_server_op_preload(th -> params, (int) th -> sd, & head, 0);
 		}
 		break;
 	    case MQ_SERVER_FLUSH_FILE:
-		ret = mq_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_mq_server_msg.op_flush), sizeof(struct st_mq_server_flush), 0 /*head.id*/);
+		ret = mq_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_mq_server_msg.op_flush), sizeof(struct st_mq_server_flush), 0 );
 		if (ret != -1) {
-		    mq_server_op_flush(th -> params, (int) th -> sd, & head, 0 /*head.id*/);
+		    mq_server_op_flush(th -> params, (int) th -> sd, & head, 0);
 		}
 		break;
+*/
+
+	    // Metadata
+	    case MQ_SERVER_READ_MDATA:
+	         ret = mq_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_mq_server_msg.op_read_mdata), sizeof(head.u_st_mq_server_msg.op_read_mdata), th->rank_client_id, th->tag_client_id);
+	         if (ret != -1) {
+		   mq_server_op_read_mdata(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
+	         }
+	         break;
+	    case MQ_SERVER_WRITE_MDATA:
+	         ret = mq_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_mq_server_msg.op_write_mdata), sizeof(head.u_st_mq_server_msg.op_write_mdata), th->rank_client_id, th->tag_client_id);
+	         if (ret != -1) {
+		   mq_server_op_write_mdata(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
+	         }
+	         break;
+	    case MQ_SERVER_WRITE_MDATA_FILE_SIZE:
+	         ret = mq_server_comm_read_data(th->params, th->comm, (char *)&(head.u_st_mq_server_msg.op_write_mdata_file_size), sizeof(head.u_st_mq_server_msg.op_write_mdata_file_size), th->rank_client_id, th->tag_client_id);
+	         if (ret != -1) {
+		   mq_server_op_write_mdata_file_size(th->params, th->comm, &head, th->rank_client_id, th->tag_client_id);
+	         }
+	         break;
 
 		//Connection API
 	    case MQ_SERVER_DISCONNECT:
@@ -355,7 +392,7 @@ void mq_server_op_open_ws(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    debug_info("[%d][MQ-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 }
 
 
@@ -408,7 +445,7 @@ void mq_server_op_open_wos(mq_server_param_st * params, int sd, struct st_mq_ser
     
 
     // show debug info
-    debug_info("[%d][TCP-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    debug_info("[%d][MQ-SERVER-OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 
 }
 
@@ -452,7 +489,7 @@ void mq_server_op_creat_ws(mq_server_param_st * params, int sd, struct st_mq_ser
     mq_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    debug_info("[%d][MQ-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 }
 
 
@@ -520,14 +557,14 @@ void mq_server_op_creat_wos(mq_server_param_st * params, int sd, struct st_mq_se
     
     
     
-    //printf("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    //printf("[%d][MQ-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
     mq_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
 
     filesystem_close(fd);
 
     // show debug info
-    debug_info("[%d][TCP-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    debug_info("[%d][MQ-SERVER-OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 }
 
 
@@ -538,7 +575,7 @@ void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_serv
     char * buffer;
     long size, diff, to_read, cont;
 
-    debug_info("[TCP-SERVER-OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n",
+    debug_info("[MQ-SERVER-OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.fd, (int) head -> u_st_mq_server_msg.op_read.offset, head -> u_st_mq_server_msg.op_read.size);
 
     // initialize counters
@@ -578,12 +615,12 @@ void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_serv
         }
         // send (how many + data) to client...
         mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_read_req), rank_client_id);
-        debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send size %d\n", params -> srv_name, req.size);
+        debug_info("[MQ-SERVER-OPS] (ID=%s) op_read: send size %d\n", params -> srv_name, req.size);
 
         // send data to client...
         if (req.size > 0) {
             mq_server_comm_write_data(params, sd, buffer, req.size, rank_client_id);
-            debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send data\n", params -> srv_name);
+            debug_info("[MQ-SERVER-OPS] (ID=%s) op_read: send data\n", params -> srv_name);
         }
         cont = cont + req.size; //Send bytes
         diff = head -> u_st_mq_server_msg.op_read.size - cont;
@@ -594,7 +631,7 @@ void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_serv
     FREE_AND_NULL(buffer);
 
     // debugging information
-    debug_info("[TCP-SERVER-OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",
+    debug_info("[MQ-SERVER-OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.fd, (int) head -> u_st_mq_server_msg.op_read.offset, size);
 }
 
@@ -605,7 +642,7 @@ void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_ser
     char * buffer;
     long size, diff, to_read, cont;
 
-    debug_info("[TCP-SERVER-OPS] (ID=%s) begin read: path %s offset %d size %d ID=x\n",
+    debug_info("[MQ-SERVER-OPS] (ID=%s) begin read: path %s offset %d size %d ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.path, (int) head -> u_st_mq_server_msg.op_read.offset, head -> u_st_mq_server_msg.op_read.size);
 
     // initialize counters
@@ -653,12 +690,12 @@ void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_ser
         }
         // send (how many + data) to client...
         mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_read_req), rank_client_id);
-        debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send size %d\n", params -> srv_name, req.size);
+        debug_info("[MQ-SERVER-OPS] (ID=%s) op_read: send size %d\n", params -> srv_name, req.size);
 
         // send data to client...
         if (req.size > 0) {
             mq_server_comm_write_data(params, sd, buffer, req.size, rank_client_id);
-            debug_info("[TCP-SERVER-OPS] (ID=%s) op_read: send data\n", params -> srv_name);
+            debug_info("[MQ-SERVER-OPS] (ID=%s) op_read: send data\n", params -> srv_name);
         }
 
         cont = cont + req.size; //Send bytes
@@ -672,7 +709,7 @@ void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_ser
     FREE_AND_NULL(buffer);
 
     // debugging information
-    debug_info("[TCP-SERVER-OPS] (ID=%s) end READ: path %s offset %d size %d ID=x\n",
+    debug_info("[MQ-SERVER-OPS] (ID=%s) end READ: path %s offset %d size %d ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.path, (int) head -> u_st_mq_server_msg.op_read.offset, size);
 }
 
@@ -682,13 +719,13 @@ void mq_server_op_write_ws(mq_server_param_st * params, int sd, struct st_mq_ser
 {
     if( params -> mosquitto_mode == 0 )
     {
-        debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
+        debug_info("[MQ-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
     
         struct st_mq_server_write_req req;
         char * buffer;
         int size, diff, cont, to_write;
 
-        debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
+        debug_info("[MQ-SERVER-OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
 
         // initialize counters
         cont = 0;
@@ -733,7 +770,7 @@ void mq_server_op_write_ws(mq_server_param_st * params, int sd, struct st_mq_ser
     }
 
     // for debugging purpouses
-    debug_info("[TCP-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
 }
 
 
@@ -746,7 +783,7 @@ void mq_server_op_write_wos(mq_server_param_st * params, int sd, struct st_mq_se
         char * buffer;
         int size, diff, cont, to_write;
 
-        debug_info("[TCP-SERVER-OPS] (ID=%s) begin write: path %s ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.path);
+        debug_info("[MQ-SERVER-OPS] (ID=%s) begin write: path %s ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.path);
 
         // initialize counters
         cont = 0;
@@ -757,7 +794,7 @@ void mq_server_op_write_wos(mq_server_param_st * params, int sd, struct st_mq_se
         diff = head -> u_st_mq_server_msg.op_read.size - cont;
 
         double start_time = 0.0, total_time = 0.0;
-        start_time = get_time();
+        start_time = get_time_ops();
 
         //Open file
         int fd = filesystem_open(head -> u_st_mq_server_msg.op_write.path, O_WRONLY);
@@ -840,13 +877,13 @@ void mq_server_op_write_wos(mq_server_param_st * params, int sd, struct st_mq_se
 
         filesystem_close(fd);
 
-        total_time = (get_time() - start_time);
+        total_time = (get_time_ops() - start_time);
         printf("%s;%.8f\n", head -> u_st_mq_server_msg.op_write.path, total_time);
         FREE_AND_NULL(buffer);
     }
 
     // for debugging purpouses
-    debug_info("[TCP-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
 }
 
 
@@ -890,7 +927,7 @@ void mq_server_op_close_ws(mq_server_param_st * params, int sd, struct st_mq_ser
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) CLOSE(fd=%d, path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_close.fd, head -> u_st_mq_server_msg.op_close.path);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) CLOSE(fd=%d, path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_close.fd, head -> u_st_mq_server_msg.op_close.path);
 }
 
 
@@ -912,7 +949,7 @@ void mq_server_op_rm(mq_server_param_st * params, int sd, struct st_mq_server_ms
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_rm.path);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_rm.path);
 }
 
 
@@ -937,7 +974,7 @@ void mq_server_op_rename(mq_server_param_st * params, int sd, struct st_mq_serve
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_rm.path);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_rm.path);
 }
 
 
@@ -953,7 +990,7 @@ void mq_server_op_getattr(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_attr_req), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_getattr.path);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_getattr.path);
 }
 
 
@@ -979,10 +1016,10 @@ void mq_server_op_setattr(mq_server_param_st * params, int sd, struct st_mq_serv
     //TODO
 
     // do setattr
-    debug_info("[TCP-SERVER-OPS] SETATTR operation to be implemented !!\n");
+    debug_info("[MQ-SERVER-OPS] SETATTR operation to be implemented !!\n");
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) SETATTR(...)\n", params -> srv_name);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) SETATTR(...)\n", params -> srv_name);
 }
 
 
@@ -1003,7 +1040,7 @@ void mq_server_op_mkdir(mq_server_param_st * params, int sd, struct st_mq_server
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) MKDIR(%s)\n", params -> srv_name, s);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) MKDIR(%s)\n", params -> srv_name, s);
 }
 
 
@@ -1020,7 +1057,7 @@ void mq_server_op_opendir(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * )(unsigned long long * ) & (ret), (unsigned int) sizeof(DIR * ), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) OPENDIR(%s)\n", params -> srv_name, s);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) OPENDIR(%s)\n", params -> srv_name, s);
 }
 
 
@@ -1045,7 +1082,7 @@ void mq_server_op_readdir(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * ) & ret_entry, sizeof(struct st_mq_server_direntry), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) READDIR(%s)\n", params -> srv_name, s);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) READDIR(%s)\n", params -> srv_name, s);
 }
 
 
@@ -1062,7 +1099,7 @@ void mq_server_op_closedir(mq_server_param_st * params, int sd, struct st_mq_ser
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) READDIR(%s)\n", params -> srv_name, s);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) READDIR(%s)\n", params -> srv_name, s);
 }
 
 
@@ -1079,7 +1116,7 @@ void mq_server_op_rmdir(mq_server_param_st * params, int sd, struct st_mq_server
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) RMDIR(%s) \n", params -> srv_name, s);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) RMDIR(%s) \n", params -> srv_name, s);
 }
 
 
@@ -1088,14 +1125,14 @@ void mq_server_op_rmdir(mq_server_param_st * params, int sd, struct st_mq_server
 
 void mq_server_op_preload(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id)
 {
-    int ret;
-    int fd_dest, fd_orig;
-    char * protocol;
-    char * user;
-    char * machine;
-    char * port;
-    char * file;
-    char * params1;
+    int ret  = 0;
+    int fd_dest = 0, fd_orig = 0;
+    char * protocol = NULL;
+    char * user = NULL;
+    char * machine = NULL;
+    char * port = NULL;
+    char * file = NULL;
+    char * params1 = NULL;
 
     int BLOCKSIZE = head -> u_st_mq_server_msg.op_preload.block_size;
     char buffer[BLOCKSIZE];
@@ -1168,7 +1205,7 @@ void mq_server_op_preload(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * ) & cont, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n", params -> srv_name, head -> u_st_mq_server_msg.op_preload.virtual_path, head -> u_st_mq_server_msg.op_preload.storage_path, ret);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n", params -> srv_name, head -> u_st_mq_server_msg.op_preload.virtual_path, head -> u_st_mq_server_msg.op_preload.storage_path, ret);
 
     free(protocol); free(user); free(machine); free(file); free(params1) ;  
     return;
@@ -1178,14 +1215,14 @@ void mq_server_op_preload(mq_server_param_st * params, int sd, struct st_mq_serv
 
 void mq_server_op_flush(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id)
 {
-    int ret;
-    int fd_dest, fd_orig;
-    char * protocol;
-    char * user;
-    char * machine;
-    char * port;
-    char * file;
-    char * params1;
+    int ret  = 0;
+    int fd_dest = 0, fd_orig = 0;
+    char * protocol = NULL;
+    char * user = NULL;
+    char * machine = NULL;
+    char * port = NULL;
+    char * file = NULL;
+    char * params1 = NULL;
 
     int BLOCKSIZE = head -> u_st_mq_server_msg.op_flush.block_size;
     char buffer[BLOCKSIZE];
@@ -1253,7 +1290,7 @@ void mq_server_op_flush(mq_server_param_st * params, int sd, struct st_mq_server
     mq_server_comm_write_data(params, sd, (char * ) & cont, sizeof(int), rank_client_id);
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) FLUSH(%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_flush.virtual_path);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) FLUSH(%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_flush.virtual_path);
 
     free(protocol); free(user); free(machine); free(file); free(params1) ;  
     return;
@@ -1277,7 +1314,7 @@ void mq_server_op_getnodename(mq_server_param_st * params, int sd, __attribute__
     // </TODO>
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) GETNAME=%s\n", params -> srv_name, serv_name);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) GETNAME=%s\n", params -> srv_name, serv_name);
 
     mq_server_comm_write_data(params, sd, (char * ) serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
   //mq_server_comm_write_data(params, sd, (char * ) params -> sem_name_server, PATH_MAX, rank_client_id); // Send one single message
@@ -1291,7 +1328,7 @@ void mq_server_op_getid(mq_server_param_st * params, int sd, struct st_mq_server
     mq_server_comm_write_data(params, sd, (char * ) head -> id, MQ_SERVER_ID, rank_client_id); //TO-DO: Check function
 
     // show debug info
-    debug_info("[TCP-SERVER-OPS] (ID=%s) GETID(...)\n", params -> srv_name);
+    debug_info("[MQ-SERVER-OPS] (ID=%s) GETID(...)\n", params -> srv_name);
 }
 
 

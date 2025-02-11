@@ -9,14 +9,17 @@
  MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
  MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
  LIBRARIES    = -lxpn -lpthread -ldl -lmosquitto
- MYFLAGS      = -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H
+ MYFLAGS      = -O3 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 
 
 #
 # Rules
 #
 
-all:  open-write-close open-read-close creat-close-unlink open-unlink unlink rename rename2 mkdir mkdir2 rmdir rmdir2
+all:  open-write-close open-read-close creat-close-unlink open-unlink unlink rename rename2 mkdir mkdir2 rmdir rmdir2 iot-xpn
+
+iot-xpn: iot-xpn.o
+	$(CC)  -o iot-xpn iot-xpn.o $(MYLIBPATH) $(LIBRARIES)
 
 open-write-close: open-write-close.o
 	$(CC)  -o open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIES)
@@ -56,4 +59,4 @@ rmdir2: rmdir2.o
 
 clean:
 	rm -f ./*.o
-	rm -f ./open-write-close ./open-read-close ./creat-close-unlink ./open-unlink ./unlink ./rename ./rename2 ./mkdir ./mkdir2 ./rmdir ./rmdir2
+	rm -f ./iot-xpn ./open-write-close ./open-read-close ./creat-close-unlink ./open-unlink ./unlink ./rename ./rename2 ./mkdir ./mkdir2 ./rmdir ./rmdir2

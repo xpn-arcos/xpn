@@ -29,6 +29,7 @@
   #include "mq_server_params.h"
   #include "base/utils.h"
   #include "base/filesystem.h"
+  #include "xpn_metadata.h"
 
 
   /*
@@ -69,8 +70,13 @@
   #define MQ_SERVER_CLOSEDIR_DIR     25
 
   // Import / Export operations
-  #define MQ_SERVER_FLUSH_FILE     40
-  #define MQ_SERVER_PRELOAD_FILE   41
+//  #define MQ_SERVER_FLUSH_FILE     40
+//  #define MQ_SERVER_PRELOAD_FILE   41
+
+  // Metadata
+  #define MQ_SERVER_READ_MDATA      70
+  #define MQ_SERVER_WRITE_MDATA     71
+  #define MQ_SERVER_WRITE_MDATA_FILE_SIZE     72
 
   // FS Operations
   #define MQ_SERVER_STATFS_DIR     60
@@ -183,6 +189,7 @@
 
   //TODO: define MQ_SERVER_OPENDIR_DIR, MQ_SERVER_READDIR_DIR, MQ_SERVER_CLOSEDIR_DIR
 
+/*
   struct st_mq_server_flush{
     char storage_path[PATH_MAX];
     char virtual_path[PATH_MAX];
@@ -197,12 +204,32 @@
     char opt;
   };
 
+  */
 
 
   struct st_mq_server_end{
     char status;
   };
   
+
+  struct st_mq_server_read_mdata_req
+  { 
+    struct xpn_metadata mdata;
+    struct st_mq_server_status status;
+  };
+
+  struct st_mq_server_write_mdata
+  { 
+    char path[PATH_MAX];
+    struct xpn_metadata mdata;
+  };
+
+  struct st_mq_server_write_mdata_file_size
+  { 
+    char path[PATH_MAX];
+    ssize_t size;
+  };
+
 
 
   struct st_mq_server_msg
@@ -225,9 +252,14 @@
       struct st_mq_server_getattr  op_getattr;
       struct st_mq_server_setattr  op_setattr;
 
-      struct st_mq_server_flush    op_flush;
-      struct st_mq_server_preload  op_preload;
+  //    struct st_mq_server_flush    op_flush;
+  //    struct st_mq_server_preload  op_preload;
       struct st_mq_server_end      op_end;
+
+      struct st_mq_server_path           op_read_mdata;
+      struct st_mq_server_write_mdata    op_write_mdata;
+      struct st_mq_server_write_mdata_file_size             op_write_mdata_file_size;
+
     } u_st_mq_server_msg ;
   };
 

@@ -1,7 +1,11 @@
 
+
+#include <features.h>
+#include <sys/types.h>
+#include <sys/time.h>
+
 #include "all_system.h"
 #include "xpn.h"
-#include <sys/time.h>
 
 #define MAX_LINE_LENGTH (512)
 

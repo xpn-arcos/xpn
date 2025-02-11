@@ -114,7 +114,7 @@ ThreadData * dequeue_mq()
 }
 
 // Función que se ejecutara en el hilo
-void * process_message(void * arg) 
+void * process_message(__attribute__((__unused__)) void * arg) 
 {
     while(1)
     {
@@ -128,8 +128,13 @@ void * process_message(void * arg)
 
         int to_write1, offset;
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+
         strncpy(topic, thread_data -> topic, PATH_MAX);
 
+#pragma GCC diagnostic pop
         // Encontrar la posición del último y el penúltimo slash
         int last_slash = -1;
         int penultimate_slash = -1;
@@ -164,7 +169,10 @@ void * process_message(void * arg)
         else 
         {
             // Si no hay slashes, asumir que todo es el path
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
             strncpy(path, topic, PATH_MAX - 1);
+#pragma GCC diagnostic pop
             path[PATH_MAX - 1] = '\0';
             to_write1 = 0;
             offset = 0;
@@ -188,7 +196,7 @@ void * process_message(void * arg)
         int fd = open(path, O_WRONLY | O_APPEND);
         if (fd < 0) 
         {
-            return;
+            pthread_exit(NULL);
         }
 
         // malloc a buffer of size...
@@ -260,7 +268,7 @@ void * process_message(void * arg)
     pthread_exit(NULL);
 }
 
-void on_message(struct mosquitto * mqtt, void * obj, const struct mosquitto_message * msg) 
+void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj, const struct mosquitto_message * msg) 
 {
     if (NULL == obj) {
         printf("ERROR: obj is NULL :-( \n");
