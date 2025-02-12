@@ -1,4 +1,25 @@
 
+  /*
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *
+   *  This file is part of Expand.
+   *
+   *  Expand is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  Expand is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */
+
+
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -8,17 +29,11 @@
 #include <fcntl.h>
 #include <argp.h>
 
+#include "all_system.h"
 #include "xpn.h"
 
 #define BAR_LENGTH 50
 
-#ifndef KB
-	#define KB	(1024)
-#endif
-
-#ifndef MB
-	#define MB	(KB*KB)
-#endif
 
 struct stat st;
 struct timeval t_ini_transfer, t_end_transfer, t_old_transfer;
@@ -146,7 +161,7 @@ void *write_func ( void *func_args )
 		next++;
 
 		if (debug)
-			printf("Written a block of %zu bytes\n", nw);
+			printf("Written a block of %ld bytes\n", nw);
 	}
 
 	pthread_exit(0);
@@ -477,7 +492,7 @@ int main(int argc, char *argv[]) {
 		buf->buffer_length = nr;
 
 		if (debug)
-			fprintf(stderr, " read(%zu)    read block %zu (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", buffer_size, last, buf->buffer, nr, (unsigned char)buf->buffer[0], (unsigned char)buf->buffer[1], (unsigned char)buf->buffer[2], (unsigned char)buf->buffer[3], (unsigned char)buf->buffer[nr-4], (unsigned char)buf->buffer[nr-3], (unsigned char)buf->buffer[nr-2], (unsigned char)buf->buffer[nr-1]);
+			fprintf(stderr, " read(%lu)    read block %ld (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", buffer_size, last, buf->buffer, nr, (unsigned char)buf->buffer[0], (unsigned char)buf->buffer[1], (unsigned char)buf->buffer[2], (unsigned char)buf->buffer[3], (unsigned char)buf->buffer[nr-4], (unsigned char)buf->buffer[nr-3], (unsigned char)buf->buffer[nr-2], (unsigned char)buf->buffer[nr-1]);
 
 		sum_r = sum_r + nr;
 

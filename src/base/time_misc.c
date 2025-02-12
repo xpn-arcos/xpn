@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -117,6 +117,15 @@
      float TIME_MISC_TimevaltoMicro(struct timeval* timet)
      {
          return( (float)timet->tv_sec * (float)USECPSEC + (float)timet->tv_usec);
+     }
+    /**
+     * Return a timestamp as microseconds.
+     * @param timet the timestamp.
+     * @return timestamp as microseconds.
+     */
+     long TIME_MISC_TimevaltoMicroLong(struct timeval* timet)
+     {
+         return( (long)timet->tv_sec * (long)USECPSEC + (long)timet->tv_usec);
      }
 
 

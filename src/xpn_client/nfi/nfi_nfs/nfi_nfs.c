@@ -1,4 +1,24 @@
 
+  /*
+   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *
+   *  This file is part of Expand.
+   *
+   *  Expand is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU Lesser General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  Expand is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU Lesser General Public License for more details.
+   *
+   *  You should have received a copy of the GNU Lesser General Public License
+   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+   *
+   */
+
 #include "nfi_nfs.h"
 
 /*
@@ -122,9 +142,6 @@ int nfi_nfs_init(char *url, struct nfi_server *serv, __attribute__((__unused__))
 
 	serv->ops->nfi_reconnect  = nfi_nfs_reconnect;
 	serv->ops->nfi_disconnect = nfi_nfs_disconnect;
-
-	serv->ops->nfi_preload	= NULL;
-	serv->ops->nfi_flush	= NULL;
 
 	serv->ops->nfi_getattr	= nfi_nfs_getattr;
 	serv->ops->nfi_setattr	= nfi_nfs_setattr;
@@ -544,6 +561,7 @@ int nfi_nfs_setattr(struct nfi_server *serv,  struct nfi_fhandle *fh, struct nfi
 	return 0;
 }
 
+
 int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 {
 	char dir[NFSPATHLEN], server[NFSPATHLEN];
@@ -616,15 +634,16 @@ int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 	//fprintf(stderr,"nfs_open: lookup %s in server %s (err:%d).\n",dir,serv->server,ret);
 #endif
 
-	if(ret < 0){
+	if (ret < 0) {
 		//fprintf(stderr,"nfs_open: Fail lookup %s in server %s (err:%d).\n",dir,serv->server,ret);
 		//nfs_err(NFSERR_LOOKUP);
 		//free(fho->url);
-		//free(fh_aux);
-		//free(server_aux);
+		free(fh_aux) ;
 		return -1;
 	}
-	switch(ret){
+
+	switch (ret)
+	{
 		case NFREG:
 			fho->type = NFIFILE;
 			break;
@@ -638,9 +657,7 @@ int nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 	fho->priv_fh = (void *) fh_aux;
 
 	return 0;
-
 }
-
 
 
 int nfi_nfs_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )

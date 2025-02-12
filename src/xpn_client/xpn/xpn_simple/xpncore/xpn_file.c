@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -57,7 +57,6 @@ int xpn_destroy_file_table()
 
       free(xpn_file_table[i]->data_vfh->nfih);
       free(xpn_file_table[i]->data_vfh);
-      free(xpn_file_table[i]->mdata->policy);
       free(xpn_file_table[i]->mdata);
       free(xpn_file_table[i]);
 

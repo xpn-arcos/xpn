@@ -11,9 +11,7 @@ set (BASE_OBJECTS	base/darray.c
 			base/urlstr.c
     )
 set (NFI_COMMON_OBJECTS	nfi/common/nfi_worker.c)
-set (NFI_LOCAL_OBJECTS	nfi/nfi_local/nfi_local.c
-			nfi/nfi_local/nfi_local_err.c
-    )
+set (NFI_LOCAL_OBJECTS	nfi/nfi_local/nfi_local.c)
 ### BEGIN OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_NFS_OBJECTS BLOCK. Do not remove this line. ###
 set (NFI_NFS_OBJECTS	nfi/nfi_nfs/nfi_nfs.c
@@ -53,18 +51,23 @@ set (NFI_GRIDFTP_OBJECTS	nfi/nfi_gridftp/nfi_gridftp.c
 				nfi/nfi_gridftp/nfi_gridftp_err.c
     )
 ### END OF NFI_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
-set (NFI_TCP_SERVER_OBJECTS	nfi/nfi_tcp_server/nfi_tcp_server.c
-				nfi/nfi_tcp_server/tcp_server_comm.c
-				nfi/nfi_tcp_server/nfi_tcp_server_err.c
-    )
-### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 set (NFI_MPI_SERVER_OBJECTS	nfi/nfi_mpi_server/nfi_mpi_server.c
-				nfi/nfi_mpi_server/mpi_server_comm.c
-				nfi/nfi_mpi_server/nfi_mpi_server_err.c
+				nfi/nfi_mpi_server/mpi_client_comm.c
     )
 ### END OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+set (NFI_SCK_SERVER_OBJECTS	nfi/nfi_sck_server/nfi_sck_server.c
+				nfi/nfi_sck_server/sck_server_comm.c
+				nfi/nfi_sck_server/nfi_sck_server_err.c
+    )
+### END OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_MQ_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+set (NFI_MQ_SERVER_OBJECTS	nfi/nfi_mq_server/nfi_mq_server.c
+				nfi/nfi_mq_server/mq_server_comm.c
+				nfi/nfi_mq_server/nfi_mq_server_err.c
+    )
+### END OF NFI_MQ_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
 set (NFI_IOPROXY_RPC_OBJECTS	nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.c
 				nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.c
@@ -110,11 +113,11 @@ if (ENABLE_GRIDFTP)
 	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_GRIDFTP_OBJECTS})
 endif (ENABLE_GRIDFTP)
 ### END OF ENABLE_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
-if (ENABLE_TCP_SERVER)
-	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_TCP_SERVER_OBJECTS})
-endif (ENABLE_TCP_SERVER)
-### END OF ENABLE_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_MQ_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+if (ENABLE_MQ_SERVER)
+	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_MQ_SERVER_OBJECTS})
+endif (ENABLE_MQ_SERVER)
+### END OF ENABLE_MQ_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 if (ENABLE_MPI_SERVER)
 	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_MPI_SERVER_OBJECTS})
@@ -134,7 +137,6 @@ endif (ENABLE_HTTP)
 
 set (XPN_CORE_OBJECTS	xpn/xpn_simple/xpncore/xpn_cwd.c
 			xpn/xpn_simple/xpncore/xpn_dir.c
-			xpn/xpn_simple/xpncore/xpn_err.c
 			xpn/xpn_simple/xpncore/xpn_file.c
 			xpn/xpn_simple/xpncore/xpn_init.c
 			xpn/xpn_simple/xpncore/xpn_open.c

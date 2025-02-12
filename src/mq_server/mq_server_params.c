@@ -1,0 +1,223 @@
+/*
+ *  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+/* ... Include / Inclusion ........................................... */
+
+#include "mq_server_params.h"
+
+
+/* ... Functions / Funciones ......................................... */
+
+void mq_server_params_show(mq_server_param_st * params) {
+    DEBUG_BEGIN();
+
+    printf("   * MQ-SERVER current configuration:\n");
+    printf("\t-n  <string>:\t'%s'\n", params -> name);
+    printf("\t-p  <int>:\t'%s'\n",    params -> port);
+    printf("\t-io <int>:\t%d\n",      params -> IOsize);
+
+    printf("\t-ns <string>:\t'%s'\n", params -> dns_file);
+    printf("\t-d  <string>:\t'%s'\n", params -> dirbase);
+
+    if (params -> thread_mode == TH_NOT) {
+        printf("\t-t:\t\tWithout threads\n");
+    }
+    if (params -> thread_mode == TH_POOL) {
+        printf("\t-t:\t\tThread Pool Activated\n");
+    }
+    if (params -> thread_mode == TH_OP) {
+        printf("\t-n:\t\tThread on demand\n");
+    }
+
+    if (params -> mosquitto_mode == 1) {
+        printf("\t-m <mqtt_qos>:\t%d\n", params -> mosquitto_qos);
+    }
+
+    printf("\t-k  <int>:\t'%d'\n", params -> xpn_keep_connection);
+
+    DEBUG_END();
+}
+
+void mq_server_params_show_usage(void) {
+    DEBUG_BEGIN();
+
+    printf("Usage:\n");
+    printf("\t-n  <string>: name of the server\n");
+    printf("\t-p  <int>:    port number\n");
+    printf("\t-io <int>:    IOsize\n");
+
+    printf("\t-ns <path>: file for service name\n");
+    printf("\t-d  <string>: name of the base directory\n");
+
+    printf("\t-t  <int>: 0 (without thread); 1 (thread pool); 2 (on demand)\n");
+
+    printf("\t-m <int>:  0 (QoS 0); 1 (QoS 1); 2 (QoS 2)\n");
+    printf("\t-k <int>:  0 (disconnect on each op.); 1 (keep connected after op.)\n");
+
+    DEBUG_END();
+}
+
+int mq_server_params_get(mq_server_param_st * params, int argc, char * argv[]) {
+    DEBUG_BEGIN();
+
+    // set default values
+    params -> argc = argc;
+    params -> argv = argv;
+
+    params -> size = 0;
+    params -> rank = 0;
+    strcpy(params -> port_name, "");
+    strcpy(params -> srv_name, "");
+
+    params -> thread_mode = TH_POOL;
+    strcpy(params -> dirbase, MQ_SERVER_DIRBASE_DEFAULT);
+    strcpy(params -> dns_file, "");
+
+    gethostname(params -> name,   TCP_MAX_PORT_NAME);
+    sprintf(params -> port, "%d", MQ_SERVER_PORT_DEFAULT);
+    params -> IOsize = MQ_SERVER_IOSIZE_DEFAULT;
+
+    params -> mosquitto_mode = 0;
+    params -> mosquitto_qos = 0;
+
+    // update user requests
+    for (int i = 0; i < argc; i++) 
+    {
+        switch (argv[i][0]) 
+        {
+        case '-':
+            switch (argv[i][1]) 
+            {
+            case 'p':
+                strcpy(params -> port, argv[i + 1]);
+                i++;
+                break;
+            case 'n':
+                if ((strlen(argv[i]) == 2)) 
+                {
+                    strcpy(params -> name, argv[i + 1]);
+                    i++;
+                }
+                if ((strlen(argv[i]) == 3) && (argv[i][2] == 's')) 
+                {
+                    strcpy(params -> dns_file, argv[i + 1]);
+                    i++;
+                }
+                if ((strlen(argv[i]) == 4) && (argv[i][2] == 't') && (argv[i][3] == 'p')) 
+                {
+                    params -> thread_mode = TH_OP;
+                    i++;
+                }
+                break;
+            case 'i':
+                if ((strlen(argv[i]) == 3) && (argv[i][2] == 'o')) 
+                {
+                    params -> IOsize = atoi(argv[i + 1]);
+                    i++;
+                }
+                break;
+            case 'd':
+                strcpy(params -> dirbase, argv[i + 1]);
+                i++;
+                break;
+            case 't':
+                if (isdigit(argv[i + 1][0])) 
+                {
+                    int thread_mode_aux = atoi(argv[i + 1]);
+
+                    if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP) 
+                    {
+                        params -> thread_mode = thread_mode_aux;
+                    } else 
+                    {
+                        printf("ERROR: unknown option %s\n", argv[i + 1]);
+                    }
+                } else 
+                {
+                    if (strcmp("without", argv[i + 1]) == 0) 
+                    {
+                        params -> thread_mode = TH_NOT;
+                    } else if (strcmp("pool", argv[i + 1]) == 0) 
+                    {
+                        params -> thread_mode = TH_POOL;
+                    } else if (strcmp("on_demand", argv[i + 1]) == 0) 
+                    {
+                        params -> thread_mode = TH_OP;
+                    } else 
+                    {
+                        printf("ERROR: unknown option %s\n", argv[i + 1]);
+                    }
+                }
+                i++;
+                break;
+            case 'm':
+                params -> mosquitto_mode = 1;
+
+                if (isdigit(argv[i + 1][0])) 
+                {
+                    int qos_mode_mqtt = atoi(argv[i + 1]);
+
+                    if ( qos_mode_mqtt < 0 || qos_mode_mqtt > 2 )
+                    {
+                        printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
+                    }
+                    else
+                    {
+                        params -> mosquitto_qos = qos_mode_mqtt;
+                    }
+                }
+                else
+                {
+                    printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
+                }
+
+                i++;
+                break;
+
+            case 'h':
+                return -1;
+
+            case 'k':
+                char *endptr;
+                params -> xpn_keep_connection = (int)strtol(argv[i + 1], &endptr, 10);
+                if ( (endptr == argv[i + 1]) || (*endptr != '\0') ) {
+                      params -> xpn_keep_connection = 1 ;
+                      printf("WARNING: unknown keep_connection value (%s). Default value 1 selected\n", argv[i + 1]);
+		}
+                i++;
+                break;
+
+            default:
+                break;
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    // return OK
+    DEBUG_END();
+    return 1;
+}
+
+/* ................................................................... */
+

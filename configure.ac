@@ -8,11 +8,14 @@
 #
 # begin
 #
-AC_INIT([Expand],[2.0],[fgcarbal@inf.uc3m.es],[expand])
+AC_INIT([Expand],[3.0.0],[fgcarbal@inf.uc3m.es],[expand])
 AC_CONFIG_AUX_DIR(./config)
 AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_INSTALL
 AC_PROG_RANLIB
+AC_PROG_LN_S
+
+
 
 #
 # Canonicalize the configuration name.
@@ -26,6 +29,8 @@ AM_CONDITIONAL([am__fastdepCC], [test x$am__fastdepCC = xam__fastdepCC])
 AM_CONDITIONAL([AMDEP], [test x$amdep = xamdep])
 AM_PROG_AR
 
+
+
 #
 # Checks for programs.
 #
@@ -33,13 +38,26 @@ AC_PROG_MAKE_SET
 AC_PROG_CC([gcc mpicc icc mpifcc])
 AM_PROG_CC_C_O
 
+
+
+#
+# Check __open2 support
+#
+MPICC_INTEL=$(mpicc --version | grep "Intel" | wc -l)
+if test "x$MPICC_INTEL" == "x1"; then
+   AC_DEFINE([HAVE_ICC], [1], [we have icc as mpicc compiler])
+fi
+
+
+
 #
 # Checks for libraries.
 #
 AC_CHECK_LIB(pthread,pthread_create)
 AC_CHECK_LIB(dl,dlopen)
-AC_CHECK_LIB(mxml,mxmlNewXML)
 AC_CHECK_LIB(mosquitto,mosquitto_lib_init)
+
+
 
 #
 # Checks for header files.
@@ -48,7 +66,9 @@ AC_CHECK_LIB(mosquitto,mosquitto_lib_init)
 AC_PROG_EGREP
 
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h sys/time.h netinet/tcp.h netinet/in.h pthread.h windows.h sys/param.h dirent.h rpc/rpc.h rpc/clnt.h rpc/types.h mpi.h mosquitto.h)
+AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h sys/time.h netinet/tcp.h netinet/in.h pthread.h sys/param.h dirent.h rpc/rpc.h rpc/clnt.h rpc/types.h mpi.h mosquitto.h)
+
+
 
 #
 # Checks for typedefs, structures, and compiler characteristics.
@@ -65,6 +85,9 @@ AC_CHECK_SIZEOF(unsigned long,8)
 AC_CHECK_SIZEOF(char *,4)
 AC_CHECK_SIZEOF(ptrdiff_t,4)
 AC_CHECK_SIZEOF(size_t,4)
+AC_SYS_LARGEFILE
+
+
 
 #
 # Checks for library functions.
@@ -73,16 +96,20 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname gettimeofday select socket strdup strerror)
 AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 
+
+
 #
 # Set initial variables depending on $target_cpu and $target_os...
 #
-IFLAGS="-I../../../mxml -I../../../xpn/include -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
-LFLAGS="    -L../../mxml    -L../../xpn/lib "
-LFLAGS+="-L../../../mxml -L../../../xpn/lib "
+IFLAGS="-I../../bin/mosquitto/include       "
+IFLAGS+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+IFLAGS+="-I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
+
+LFLAGS="-L../../bin/mosquitto/lib        -L../../xpn/lib "
+LFLAGS+="-L../../../bin/mosquitto/lib     -L../../../xpn/lib "
+LFLAGS+="-L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
 
 LIBLINK=$LIBS
-LIBLINK+=" -lmxml"
-LIBS=$LFLAGS" "$LIBS
 
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
@@ -90,7 +117,7 @@ then
   CC="mpifcc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
 
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
@@ -99,7 +126,7 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
   CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
 
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
@@ -108,7 +135,7 @@ then
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1 -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
 elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
@@ -117,7 +144,7 @@ then
   CC="mpicc"
   MAKE="gmake"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
 else
@@ -125,7 +152,7 @@ else
   CC="mpicc"
   MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -DLINUX -DENABLE_MXML"
+  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"
   CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
 
   AC_MSG_RESULT("Using Linux configuration as default configuration...");
@@ -140,22 +167,26 @@ AC_SUBST(LIBLINK)
 AC_MSG_RESULT("$target_cpu");
 AC_MSG_RESULT("$target_os");
 
+
+
 #
 # Set Include_Flags
 #
 INCLUDEFLAGS="\
 -I\$(top_srcdir)/include \
 -I\$(top_srcdir)/include/base \
+-I\$(top_srcdir)/include/bypass \
 -I\$(top_srcdir)/include/xpn_client/ \
 -I\$(top_srcdir)/include/xpn_client/xpn \
 -I\$(top_srcdir)/include/xpn_client/xpn/xpn_simple \
 -I\$(top_srcdir)/include/xpn_client/nfi \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_mq_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
--I\$(top_srcdir)/include/xpn_client/xpni/ \
--I\$(top_srcdir)/include/xpn_client/xpni/common \
--I\$(top_srcdir)/include/xpn_client/xpni/xpni_null \
--I\$(top_srcdir)/include/xpn_client/xpni/xpni_ft \
--I\$(top_srcdir)/include/xpn_client/xpni/xpni_log"
+-I\$(top_srcdir)/include/xpn_server/ \
+-I\$(top_srcdir)/include/xpn_server/mpi_server/ \
+-I\$(top_srcdir)/include/xpn_server/sck_server/"
+
 
 
 ### BEGIN OF NFS BLOCK. Do not remove this line. ###
@@ -176,6 +207,7 @@ AC_SUBST(NFI_NFS_OBJECTS)
 AM_CONDITIONAL([ENABLE_NFS], [test "$NFI_NFS" = "nfi_nfs"])
 ### END OF NFS BLOCK. Do not remove this line. ###
 
+
 ### BEGIN OF NFS3 BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if nfs3 is enabled.
@@ -195,27 +227,9 @@ AM_CONDITIONAL([ENABLE_NFS3], [test "$NFI_NFS3" = "nfi_nfs3"])
 ### END OF NFS3 BLOCK. Do not remove this line. ###
 
 
-### BEGIN OF TCP_SERVER BLOCK. Do not remove this line. ###
-#
-# Defines the necessary variables if gridftp is enabled.
-#
-AC_ARG_ENABLE(  [tcp_server],
-                [AS_HELP_STRING([--enable-tcp_server],[Enable tcp_server module.])],
-                [
-                  [CDEFS="$CDEFS -DENABLE_TCP_SERVER"]
-                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"]
-                  [NFI_TCP_SERVER="nfi_tcp_server"]
-                  [NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"]
-                ]
-)
-AC_SUBST(NFI_TCP_SERVER)
-AC_SUBST(NFI_TCP_SERVER_OBJECTS)
-AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
-### END OF TCP_SERVER BLOCK. Do not remove this line. ###
-
 ### BEGIN OF MPI_SERVER BLOCK. Do not remove this line. ###
 #
-# Defines the necessary variables if gridftp is enabled.
+# Defines the necessary variables if mpi_server is enabled.
 #
 AC_ARG_ENABLE(  [mpi_server],
                 [AS_HELP_STRING([--enable-mpi_server@<:@=/path/to/mpi/@:>@ (Don't use '~')],[Enable mpi_server module.])],
@@ -238,6 +252,48 @@ AM_CONDITIONAL([ENABLE_MPI_SERVER], [test "$NFI_MPI_SERVER" = "nfi_mpi_server"])
 ### END OF MPI_SERVER BLOCK. Do not remove this line. ###
 
 
+### BEGIN OF SCK_SERVER BLOCK. Do not remove this line. ###
+#
+# Defines the necessary variables if gridftp is enabled.
+#
+AC_ARG_ENABLE(  [sck_server],
+                [AS_HELP_STRING([--enable-sck_server],[Enable sck_server module.])],
+                [
+                  [CDEFS="$CDEFS -DENABLE_SCK_SERVER"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server"]
+                  [NFI_SCK_SERVER="nfi_sck_server"]
+                  [NFI_SCK_SERVER_OBJECTS="\$(NFI_SCK_SERVER_OBJECTS)"]
+                ]
+)
+AC_SUBST(NFI_SCK_SERVER)
+AC_SUBST(NFI_SCK_SERVER_OBJECTS)
+AM_CONDITIONAL([ENABLE_SCK_SERVER], [test "$NFI_SCK_SERVER" = "nfi_sck_server"])
+### END OF SCK_SERVER BLOCK. Do not remove this line. ###
+
+
+### BEGIN OF MQTT BLOCK. Do not remove this line. ###
+#
+# Defines the necessary variables if gridftp is enabled.
+#
+AC_ARG_ENABLE(  [mosquitto],
+                [AS_HELP_STRING([--enable-mosquitto],[Enable mosquitto module.])],
+                [
+                  [CDEFS="$CDEFS -DENABLE_MQ_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_mq_server"]
+                  [NFI_MQ_SERVER="nfi_mq_server"]
+                  [NFI_MQ_SERVER_OBJECTS="\$(NFI_MQ_SERVER_OBJECTS)"]
+                  [LIBLINK+=" -lmosquitto"]
+                  [LIBS=$LFLAGS" "$LIBS" -lmosquitto"]
+                ]
+)
+AC_SUBST(NFI_MQ_SERVER)
+AC_SUBST(NFI_MQ_SERVER_OBJECTS)
+AC_SUBST(LIBLINK)
+AC_SUBST(LIBS)
+AM_CONDITIONAL([ENABLE_MQ_SERVER], [test "$NFI_MQ_SERVER" = "nfi_mq_server"])
+### END OF MQTT BLOCK. Do not remove this line. ###
+
+
 CPPFLAGS="$CDEFS $INCLUDEFLAGS $M_HEADERS $CPPFLAGS"
 LDFLAGS="$LIBLINK $LIBS"
 AC_SUBST(CPPFLAGS)
@@ -246,21 +302,26 @@ AC_SUBST(LIBS)
 AC_SUBST(M_HEADERS)
 
 
+
 #
 # Build makefile and headers...
 #
 AC_CONFIG_FILES([ \
-		  Makefile \
-		  src/base/Makefile \
-		  src/xpn_client/Makefile \
-		  src/utils/Makefile \
-		  src/bypass/Makefile \
-		  src/mpi_server/Makefile \
-		  src/tcp_server/Makefile\
-		  test/integrity/xpn/Makefile \
-		  test/integrity/mpi_connect_accept/Makefile \
-                  test/performance/mpi_pingpong/Makefile \
-		  test/performance/iop/Makefile \
-		])
+      Makefile \
+      src/base/Makefile \
+      src/xpn_client/Makefile \
+      src/utils/Makefile \
+      src/bypass/Makefile \
+      src/mq_server/Makefile \
+      src/xpn_server/Makefile \
+      test/integrity/xpn/Makefile \
+      test/integrity/mpi_connect_accept/Makefile \
+      test/integrity/bypass_c/Makefile \
+      test/integrity/xpn_metadata/Makefile \
+      test/performance/xpn/Makefile \
+      test/performance/iop/Makefile \
+      test/performance/mpi_pingpong/Makefile \
+      test/performance/xpn-fault-tolerant/Makefile \
+    ])
+    
 AC_OUTPUT
-

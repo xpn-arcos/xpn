@@ -1,0 +1,35 @@
+
+
+#
+# Definitions
+#
+
+ MAKE         = make -s
+ CC           = @CC@
+ MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
+ MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
+ LIBRARIES    = -lxpn -lpthread -ldl -lmosquitto
+ MYFLAGS      = -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE
+
+
+#
+# Rules
+#
+
+all:  rnd-write-read-cmp write-server-read server-write-read
+
+rnd-write-read-cmp: rnd-write-read-cmp.o
+	$(CC)  -o rnd-write-read-cmp  rnd-write-read-cmp.o  $(MYLIBPATH) $(LIBRARIES)
+	
+write-server-read: write-server-read.o
+	$(CC)  -o write-server-read  write-server-read.o  $(MYLIBPATH) $(LIBRARIES)
+	
+server-write-read: server-write-read.o
+	$(CC)  -o server-write-read  server-write-read.o  $(MYLIBPATH) $(LIBRARIES)
+
+%.o: %.c
+	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
+
+clean:
+	rm -f ./*.o
+	rm -f ./rnd-write-read-cmp ./write-server-read ./server-write-read

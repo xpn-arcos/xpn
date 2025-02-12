@@ -1,0 +1,30 @@
+
+#
+# Definitions
+#
+
+EXPAND_DIR = ../..
+FUSE_PATH  = ../../../fuse
+
+CFLAGS     = -g  -Wall -Wextra -static -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE -DHAVE_STRUCT_IOVEC
+INC_PATH   = -I../../include  -I../../include/xpn_client/  -I../../include/base/  -I$(FUSE_PATH)/include
+LIB_PATH   = -L../../src/xpn_client/  -L../../../fuse/lib/  -L$(FUSE_PATH)/lib/
+LIB_LINK   = -lxpn -ldl -lfuse -lpthread -lmpi -lmosquitto  
+
+
+#
+# Rules
+#
+
+all: fuse-expand
+
+clean:
+	rm -f *.o fuse-expand
+
+fuse-expand: fuse-expand.o ../../src/xpn_client/libxpn.a
+	mpicc -o $@ $< $(LIB_PATH) $(LIB_LINK) -Wl,--rpath -Wl,/usr/lib
+
+%.o: %.c
+	mpicc -D_FILE_OFFSET_BITS=64 $(CFLAGS) $(INC_PATH) -c -o $@ $<
+
+

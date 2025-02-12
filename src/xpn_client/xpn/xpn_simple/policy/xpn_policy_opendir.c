@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -28,24 +28,25 @@
 
 int XpnGetEntry(int fd, struct dirent *entry)
 {
-	int n,res;
-	struct nfi_server **servers;
+	int n, res;
+	struct nfi_server *servers;
 
-	XPN_DEBUG_BEGIN
+	XPN_DEBUG_BEGIN_CUSTOM("%s", xpn_file_table[fd]->path);
 
-	/* XpnGetServers: flag operation, partition id, absolute path, file descript., pointer to server */
 	servers = NULL;
-	n = XpnGetServers(op_xpn_readdir, xpn_file_table[fd]->part->id, NULL, fd, &servers, XPN_DATA_SERVER);
+	n = XpnGetServers(xpn_file_table[fd]->part->id, fd, &servers);
 	if(n<=0){
 	    return -1;
 	}
+  int master_node = hash(xpn_file_table[fd]->path, n, 1);
+  while(servers[master_node].error == -1)
+  {
+    master_node = (master_node+1) % n;
+  }
 
-	res = XpnGetFh(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[0]), servers[0], xpn_file_table[fd]->path);
+	res = XpnGetFhDir(xpn_file_table[fd]->mdata, &(xpn_file_table[fd]->data_vfh->nfih[master_node]), &servers[master_node], xpn_file_table[fd]->path);
 
-	free(servers);
-
-     // printf("xpn_file_table[fd]->vfh->nfih[0]->server %p\n",xpn_file_table[fd]->vfh->nfih[0]->server);
-	res = xpn_file_table[fd]->data_vfh->nfih[0]->server->ops->nfi_readdir(xpn_file_table[fd]->data_vfh->nfih[0]->server, xpn_file_table[fd]->data_vfh->nfih[0], entry);
+	res = xpn_file_table[fd]->data_vfh->nfih[master_node]->server->ops->nfi_readdir(xpn_file_table[fd]->data_vfh->nfih[master_node]->server, xpn_file_table[fd]->data_vfh->nfih[master_node], entry);
 
 	XPN_DEBUG_END
 

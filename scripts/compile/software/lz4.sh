@@ -3,7 +3,7 @@
 #set -x
 
 #
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #
 #  This file is part of Expand.
 #
@@ -20,6 +20,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
+
 
 function usage {
     echo ""
@@ -84,7 +85,7 @@ pushd .
 cd "$SRC_PATH"
 export CC=${MPICC_PATH}
 export MPICC=${MPICC_PATH}
+export PATH=$(dirname $MPICC_PATH):$PATH
 make clean
 make
 popd
-

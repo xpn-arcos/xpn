@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #
 #  This file is part of Expand.
 #
@@ -20,13 +20,14 @@
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 function usage {
     echo ""
     echo " Usage:"
     echo " $0  -m <mpicc path>  -i <Install path>"
     echo " Where:"
     echo " * <mpicc   path> = full path where the mpicc is installed."
-    echo " * <Install path> = full path where MXML and XPN is going to be installed."
+    echo " * <Install path> = full path where XPN is going to be installed."
     echo ""
 }
 
@@ -41,7 +42,7 @@ echo " Begin."
 # 1) Arguments...
 
 ## base path
-BASE_PATH=$(dirname "$0")
+BASE_PATH="$(dirname "$(readlink -f "$0")")"
 
 ## get arguments
 while getopts "m:i:" opt; do
@@ -74,8 +75,6 @@ fi
 
 
 # 2) XPN and dependencies...
-"$BASE_PATH"/software/mxml.sh                    -i "$INSTALL_PATH" -s "$BASE_PATH"/../../../mxml
 "$BASE_PATH"/software/xpn.sh    -m "$MPICC_PATH" -i "$INSTALL_PATH" -s "$BASE_PATH"/../../../xpn
 
 echo " End."
-

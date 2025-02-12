@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2023 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #
 #  This file is part of Expand.
 #
@@ -19,6 +19,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
 #
+
 
 function usage {
     echo ""
@@ -77,18 +78,17 @@ fi
 
 ## XPN
 echo " * XPN: preparing directories..."
-  rm -fr "$INSTALL_PATH/xpn"
-mkdir -p "$INSTALL_PATH/xpn/lib64"
-ln    -s "$INSTALL_PATH/xpn/lib64"   "$INSTALL_PATH/xpn/lib"
+  rm -fr "${INSTALL_PATH}/xpn"
+mkdir -p "${INSTALL_PATH}/xpn/lib64"
+ln    -s "${INSTALL_PATH}/xpn/lib64"   "${INSTALL_PATH}/xpn/lib"
 
 echo " * XPN: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
 ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-./configure --prefix=$INSTALL_PATH/xpn --enable-tcp_server --enable-mpi_server="$MPICC_PATH"
+./configure --prefix="${INSTALL_PATH}/xpn" --enable-sck_server --enable-mpi_server="${MPICC_PATH}" 
 make clean
 make -j 8
 #doxygen doc/doxygen-XPN.cfg
 make install
 popd
-
