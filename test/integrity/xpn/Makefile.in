@@ -16,7 +16,10 @@
 # Rules
 #
 
-all:  open-write-close open-read-close creat-close-unlink open-unlink unlink rename rename2 mkdir mkdir2 rmdir rmdir2 iot-xpn
+all:  open-write-close open-read-close creat-close-unlink open-unlink unlink rename rename2 mkdir mkdir2 rmdir rmdir2 iot-xpn times-train
+
+times-train: times-train.o
+	$(CC)  -o times-train times-train.o $(MYLIBPATH) $(LIBRARIES)
 
 iot-xpn: iot-xpn.o
 	$(CC)  -o iot-xpn iot-xpn.o $(MYLIBPATH) $(LIBRARIES)
@@ -59,4 +62,4 @@ rmdir2: rmdir2.o
 
 clean:
 	rm -f ./*.o
-	rm -f ./iot-xpn ./open-write-close ./open-read-close ./creat-close-unlink ./open-unlink ./unlink ./rename ./rename2 ./mkdir ./mkdir2 ./rmdir ./rmdir2
+	rm -f ./times-train ./iot-xpn ./open-write-close ./open-read-close ./creat-close-unlink ./open-unlink ./unlink ./rename ./rename2 ./mkdir ./mkdir2 ./rmdir ./rmdir2

@@ -47,8 +47,8 @@ int main ( int argc, char *argv[] )
 	}
 
     char topic[256];
-
     char *filename = strrchr(argv[2], '/');
+    
     if (filename) 
     {
         filename++; // Avanza el puntero para saltar el '/'
@@ -56,10 +56,16 @@ int main ( int argc, char *argv[] )
     {
         filename = argv[2]; // No hay '/' en el nombre del fichero
     }
+
     snprintf(topic, sizeof(topic), "/P1/%s/%s", argv[1], filename);
 
+	fd1 = xpn_creat(topic, 0777);
 
-	fd1 = xpn_creat(topic, 00777);
+    if (fd1 < 0) 
+    {
+        perror ("ERROR CREATE");
+        return -1;
+    }
 
     char buffer[MAX_LINE_LENGTH];
     bzero(buffer, MAX_LINE_LENGTH);

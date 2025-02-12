@@ -207,6 +207,17 @@
   */
 
 
+  struct st_mq_server_status
+  {
+    int ret;
+    int server_errno;
+  };
+
+  struct st_mq_server_path
+  {
+    char path[PATH_MAX];
+  };
+
   struct st_mq_server_end{
     char status;
   };

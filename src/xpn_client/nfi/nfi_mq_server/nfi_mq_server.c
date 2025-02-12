@@ -122,15 +122,15 @@ int mq_server_write_operation(int sd, struct st_mq_server_msg * head) {
 
     case MQ_SERVER_READ_MDATA:
       debug_info("[NFI_MQ] [nfi_write_operation] READ_MDATA operation\n");
-      ret = nfi_mq_server_comm_write_data(params, (char *)&(head->u_st_mq_server_msg.op_read_mdata), sizeof(head->u_st_mq_server_msg.op_read_mdata));
+      ret = tcpClient_write_data(sd, (char *)&(head->u_st_mq_server_msg.op_read_mdata), sizeof(head->u_st_mq_server_msg.op_read_mdata), head->id);
       break;
     case MQ_SERVER_WRITE_MDATA:
       debug_info("[NFI_MQ] [nfi_write_operation] WRITE_MDATA operation\n");
-      ret = nfi_mq_server_comm_write_data(params, (char *)&(head->u_st_mq_server_msg.op_write_mdata), sizeof(head->u_st_mq_server_msg.op_write_mdata));
+      ret = tcpClient_write_data(sd, (char *)&(head->u_st_mq_server_msg.op_write_mdata), sizeof(head->u_st_mq_server_msg.op_write_mdata), head->id);
       break;
     case MQ_SERVER_WRITE_MDATA_FILE_SIZE:
       debug_info("[NFI_MQ] [nfi_write_operation] WRITE_MDATA_FILE_SIZE operation\n");
-      ret = nfi_mq_server_comm_write_data(params, (char *)&(head->u_st_mq_server_msg.op_write_mdata_file_size), sizeof(head->u_st_mq_server_msg.op_write_mdata_file_size));
+      ret = tcpClient_write_data(sd, (char *)&(head->u_st_mq_server_msg.op_write_mdata_file_size), sizeof(head->u_st_mq_server_msg.op_write_mdata_file_size), head->id);
       break;
     }
 
@@ -771,10 +771,10 @@ int nfi_mq_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t 
             msg.type = MQ_SERVER_OPEN_FILE_WOS;
         }
         memccpy(msg.id, server_aux->id, 0, MQ_SERVER_ID - 1);
-	memccpy(msg.u_st_mq_server_msg.op_open.path, dir, 0, PATH_MAX - 1);
-  	msg.u_st_mq_server_msg.op_open.flags = flags;
-  	msg.u_st_mq_server_msg.op_open.mode = mode;
-  	msg.u_st_mq_server_msg.op_open.xpn_session = serv->xpn_session_file;
+        memccpy(msg.u_st_mq_server_msg.op_open.path, dir, 0, PATH_MAX - 1);
+        msg.u_st_mq_server_msg.op_open.flags = flags;
+        msg.u_st_mq_server_msg.op_open.mode = mode;
+        msg.u_st_mq_server_msg.op_open.xpn_session = serv->xpn_session_file;
 
         nfi_mq_server_doRequest(server_aux, & msg, (char * ) & (fh_aux->fd), sizeof(int));
 
@@ -2138,7 +2138,7 @@ int nfi_mq_server_statfs(__attribute__((__unused__)) struct nfi_server * serv, _
     return 0;
 }
 
-
+/*
 
 int nfi_mq_server_preload(struct nfi_server * serv, char * url, char * virtual_path, char * storage_path, int opt) 
 {
@@ -2177,7 +2177,6 @@ int nfi_mq_server_preload(struct nfi_server * serv, char * url, char * virtual_p
 
     debug_info("[NFI_MQ] nfi_mq_server_preload(ID=%s): preload %s in server %s.\n", server_aux->id, virtual_path, serv->server);
 
-    /*****************************************/
     msg.type = MQ_SERVER_PRELOAD_FILE;
     memccpy(msg.id, server_aux->id, 0, MQ_SERVER_ID - 1);
     memccpy(msg.u_st_mq_server_msg.op_preload.virtual_path, virtual_path, 0, PATH_MAX - 1);
@@ -2186,7 +2185,6 @@ int nfi_mq_server_preload(struct nfi_server * serv, char * url, char * virtual_p
     msg.u_st_mq_server_msg.op_preload.opt = opt;
 
     nfi_mq_server_doRequest(server_aux, & msg, (char * ) & ret, sizeof(int));
-    /*****************************************/
 
     debug_info("[NFI_MQ] nfi_mq_server_preload(ID=%s): end %s - %s = %d\n", server_aux->id, virtual_path, storage_path, ret);
 
@@ -2233,7 +2231,6 @@ int nfi_mq_server_flush(struct nfi_server * serv, char * url, char * virtual_pat
     server_aux = (struct nfi_mq_server_server * ) serv->private_info;
     debug_info("[NFI_MQ] nfi_mq_server_flush(ID=%s): open %s in server %s.\n", server_aux->id, virtual_path, serv->server);
 
-    /*****************************************/
     //bzero(&msg, sizeof(struct st_mq_server_msg));
 
     msg.type = MQ_SERVER_FLUSH_FILE;
@@ -2244,7 +2241,6 @@ int nfi_mq_server_flush(struct nfi_server * serv, char * url, char * virtual_pat
     msg.u_st_mq_server_msg.op_flush.opt = opt;
 
     nfi_mq_server_doRequest(server_aux, & msg, (char * ) & ret, sizeof(int));
-    /*****************************************/
 
     int ret2 = doDisconnection( & (server_aux->params) );
     if (ret2 < 0) 
@@ -2258,7 +2254,7 @@ int nfi_mq_server_flush(struct nfi_server * serv, char * url, char * virtual_pat
 
     return 0;
 }
-
+*/
 
 int nfi_mq_server_read_mdata ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata )
 {
@@ -2272,7 +2268,7 @@ int nfi_mq_server_read_mdata ( struct nfi_server *serv, char *url, struct xpn_me
 
   // check arguments...
   NULL_RET_ERR(serv,               EINVAL);
-  nfi_mq_server_keep_connected(serv);
+  nfi_mq_server_keepConnected(serv);
   NULL_RET_ERR(serv->private_info, EINVAL);
 
   // private_info...
@@ -2299,10 +2295,10 @@ int nfi_mq_server_read_mdata ( struct nfi_server *serv, char *url, struct xpn_me
   debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_read_mdata] nfi_mq_server_read_mdata(%s)\n", serv->id, dir);
 
 
-  msg.type = XPN_SERVER_READ_MDATA;
+  msg.type = MQ_SERVER_READ_MDATA;
   memccpy(msg.u_st_mq_server_msg.op_read_mdata.path, dir,            0, PATH_MAX-1);
 
-  nfi_mq_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mq_server_read_mdata_req));
+  nfi_mq_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_mq_server_read_mdata_req));
 
   if (req.status.ret < 0)
       errno = req.status.server_errno;
@@ -2327,7 +2323,7 @@ int nfi_mq_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_m
 
   // check arguments...
   NULL_RET_ERR(serv,               EINVAL);
-  nfi_mq_server_keep_connected(serv);
+  nfi_mq_server_keepConnected(serv);
   NULL_RET_ERR(serv->private_info, EINVAL);
 
   // private_info...
@@ -2354,16 +2350,16 @@ int nfi_mq_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_m
   debug_info("[SERV_ID=%d] [NFI_MQ] [nfi_mq_server_write_mdata] nfi_mq_server_write_mdata(%s)\n", serv->id, dir);
 
   if (only_file_size){
-    msg.type = XPN_SERVER_WRITE_MDATA_FILE_SIZE;
+    msg.type = MQ_SERVER_WRITE_MDATA_FILE_SIZE;
     memccpy(msg.u_st_mq_server_msg.op_write_mdata_file_size.path, dir,            0, PATH_MAX-1);
     msg.u_st_mq_server_msg.op_write_mdata_file_size.size = mdata->file_size;
   }else{
-    msg.type = XPN_SERVER_WRITE_MDATA;
+    msg.type = MQ_SERVER_WRITE_MDATA;
     memccpy(msg.u_st_mq_server_msg.op_write_mdata.path, dir,            0, PATH_MAX-1);
     memcpy(&msg.u_st_mq_server_msg.op_write_mdata.mdata, mdata, sizeof(struct xpn_metadata));
   }
 
-  nfi_mq_server_do_request(server_aux, &msg, (char *)&req, sizeof(struct st_mq_server_status));
+  nfi_mq_server_doRequest(server_aux, &msg, (char *)&req, sizeof(struct st_mq_server_status));
 
   if (req.ret < 0)
       errno = req.server_errno;

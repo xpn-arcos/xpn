@@ -108,6 +108,8 @@
     int     nfi_mq_server_read_mdata  ( struct nfi_server *serv, char *url, struct xpn_metadata *mdata ) ;
 
 
+    int     nfi_mq_server_destroy(struct nfi_server * serv) ;
+
   /* ................................................................... */
 
  #ifdef  __cplusplus

@@ -29,9 +29,9 @@ int tcpClient_comm_init ( __attribute__((__unused__)) tcpClient_param_st * param
 {
     // int ret ;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_init(...)\n");
+    debug_info("[NFI_MQ_COMM] begin tcpClient_comm_init(...)\n");
 
-    debug_info("[NFI_TCP_COMM] end tcpClient_comm_init(...)\n");
+    debug_info("[NFI_MQ_COMM] end tcpClient_comm_init(...)\n");
 
     // Return OK
     return 0;
@@ -42,9 +42,9 @@ int tcpClient_comm_destroy ( __attribute__((__unused__)) tcpClient_param_st * pa
 {
     // int ret ;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_destroy(...)\n");
+    debug_info("[NFI_MQ_COMM] begin tcpClient_comm_destroy(...)\n");
 
-    debug_info("[NFI_TCP_COMM] end tcpClient_comm_destroy(...)\n");
+    debug_info("[NFI_MQ_COMM] end tcpClient_comm_destroy(...)\n");
 
     // Return OK
     return 0;
@@ -172,7 +172,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
     int lookup_retries;
     int data;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_connect(...)\n");
+    debug_info("[NFI_MQ_COMM] begin tcpClient_comm_connect(...)\n");
 
     // Lookup port name
     lookup_retries = 0;
@@ -203,7 +203,7 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
         return -1;
     }
 
-    debug_info("[NFI_TCP_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params -> srv_name, params -> server_name, params->port_number);
+    debug_info("[NFI_MQ_COMM] ----SERVER = %s NEWSERVER = %s PORT = %s\n", params -> srv_name, params -> server_name, params->port_number);
 
 
     ret = connection( params );
@@ -220,9 +220,9 @@ int tcpClient_comm_connect ( tcpClient_param_st * params )
 
 int tcpClient_comm_disconnect ( __attribute__((__unused__)) tcpClient_param_st * params )
 {
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_disconnect nservers\n");
+    debug_info("[NFI_MQ_COMM] begin tcpClient_comm_disconnect nservers\n");
 
-    debug_info("[NFI_TCP_COMM] end   tcpClient_comm_disconnect nservers\n");
+    debug_info("[NFI_MQ_COMM] end   tcpClient_comm_disconnect nservers\n");
 
     // Return OK
     return 0;
@@ -236,12 +236,12 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
     char cli_name[HOST_NAME_MAX];
     char serv_name[HOST_NAME_MAX];
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_comm_locality\n");
+    debug_info("[NFI_MQ_COMM] begin tcpClient_comm_locality\n");
 
     // Locality disable
     if (!params -> xpn_locality)
     {
-        debug_info("[NFI_TCP_COMM] tcpClient_comm_locality disable\n");
+        debug_info("[NFI_MQ_COMM] tcpClient_comm_locality disable\n");
         params -> locality = 0;
         return 1;
     }
@@ -281,7 +281,7 @@ int tcpClient_comm_locality ( tcpClient_param_st * params )
         // params -> sem_server = sem_open(params -> sem_name_server, 0);
     }
 
-    debug_info("[NFI_TCP_COMM] end tcpClient_comm_locality\n");
+    debug_info("[NFI_MQ_COMM] end tcpClient_comm_locality\n");
 
     // Return OK
     return 1;
@@ -292,7 +292,7 @@ ssize_t tcpClient_write_operation ( int fd, char * data, ssize_t size, __attribu
 {
     int ret;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_write_operation(...)\n");
+    debug_info("[NFI_MQ_COMM] begin tcpClient_write_operation(...)\n");
 
     // Check params
     if (size == 0) {
@@ -306,7 +306,7 @@ ssize_t tcpClient_write_operation ( int fd, char * data, ssize_t size, __attribu
 
     ret = tcpClient_write_data(fd, data, size * sizeof(int), msg_id) ;
 
-    debug_info("[NFI_TCP_COMM] end tcpClient_write_operation(...)\n");
+    debug_info("[NFI_MQ_COMM] end tcpClient_write_operation(...)\n");
 
     // Return integers written
     return ret / sizeof(int);
@@ -318,7 +318,7 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     int ret, cont;
     static ssize_t( * real_write)(int,const void * , size_t) = NULL;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_write_data(...)\n");
+    debug_info("[NFI_MQ_COMM] begin tcpClient_write_data(...)\n");
 
     // Check params
     if (size == 0) {
@@ -339,10 +339,10 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     {
         ret = real_write(fd, data + cont, size - cont);
 
-        debug_info("[NFI_TCP_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
+        debug_info("[NFI_MQ_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
 
         if (ret < 0) {
-            //debug_info("[NFI_TCP_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
+            //debug_info("[NFI_MQ_COMM] client: write_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
 
             perror("tcpClient_write_data: ERROR on real_write: ");
             return ret ;
@@ -353,12 +353,12 @@ ssize_t tcpClient_write_data ( int fd, char * data, ssize_t size, __attribute__(
     } while ((ret > 0) && (cont != size));
 
     if (ret < 0) {
-        debug_info(stderr, "[NFI_TCP_COMM]  ERROR: write_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
+        debug_info(stderr, "[NFI_MQ_COMM]  ERROR: write_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
         return ret;
     }
 
-    debug_info("[NFI_TCP_COMM] client: write_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
-    debug_info("[NFI_TCP_COMM] end tcpClient_write_data(...)\n");
+    debug_info("[NFI_MQ_COMM] client: write_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
+    debug_info("[NFI_MQ_COMM] end tcpClient_write_data(...)\n");
 
     debug_info("-------------SIZE = %d\n", size);
 
@@ -372,7 +372,7 @@ ssize_t tcpClient_read_data ( int fd, char * data, ssize_t size, __attribute__((
     int ret, cont;
     static ssize_t (* real_read)(int, void * , size_t) = NULL;
 
-    debug_info("[NFI_TCP_COMM] begin tcpClient_read_data(...)\n");
+    debug_info("[NFI_MQ_COMM] begin tcpClient_read_data(...)\n");
 
     // Check params
     if (size == 0) {
@@ -395,7 +395,7 @@ ssize_t tcpClient_read_data ( int fd, char * data, ssize_t size, __attribute__((
     {
         ret = real_read(fd, data + cont, size - cont);
 
-        debug_info("[NFI_TCP_COMM] client: read_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
+        debug_info("[NFI_MQ_COMM] client: read_data(%d): %lu = %d ID=%s --th:%d--\n", fd, (unsigned long) size, ret, msg_id, (int) pthread_self());
 
         if (ret < 0) {
             perror("tcpClient_read_data: ERROR on real_read: ");
@@ -407,12 +407,12 @@ ssize_t tcpClient_read_data ( int fd, char * data, ssize_t size, __attribute__((
     } while ((ret > 0) && (cont != size));
 
     if (ret < 0) {
-        debug_info(stderr, "[NFI_TCP_COMM]  client: read_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
+        debug_info(stderr, "[NFI_MQ_COMM]  client: read_data(%d): err %d  ID=%s --th:%d--\n", fd, ret, msg_id, (int) pthread_self());
         return ret;
     }
 
-    debug_info("[NFI_TCP_COMM] client: read_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
-    debug_info("[NFI_TCP_COMM] end tcpClient_read_data(...)\n");
+    debug_info("[NFI_MQ_COMM] client: read_data(%d): %d de %lu ID=%s --th:%d--\n", fd, cont, (unsigned long) size, msg_id, (int) pthread_self());
+    debug_info("[NFI_MQ_COMM] end tcpClient_read_data(...)\n");
 
     // Return bytes read
     return cont;
