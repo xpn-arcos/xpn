@@ -27,7 +27,7 @@
    #include "base/utils.h"
    #include "base/time_misc.h"
    #include "base/ns.h"
-   #include "mq_server_params.h"
+   #include "mq_server/mq_server_params.h"
 
 
   /*

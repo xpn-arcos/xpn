@@ -20,12 +20,13 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "mq_server_params.h"
+   #include "mq_server/mq_server_params.h"
 
 
 /* ... Functions / Funciones ......................................... */
 
-void mq_server_params_show(mq_server_param_st * params) {
+void mq_server_params_show(mq_server_param_st * params)
+{
     DEBUG_BEGIN();
 
     printf("   * MQ-SERVER current configuration:\n");
@@ -55,7 +56,8 @@ void mq_server_params_show(mq_server_param_st * params) {
     DEBUG_END();
 }
 
-void mq_server_params_show_usage(void) {
+void mq_server_params_show_usage(void)
+{
     DEBUG_BEGIN();
 
     printf("Usage:\n");
@@ -74,7 +76,8 @@ void mq_server_params_show_usage(void) {
     DEBUG_END();
 }
 
-int mq_server_params_get(mq_server_param_st * params, int argc, char * argv[]) {
+int mq_server_params_get(mq_server_param_st * params, int argc, char * argv[])
+{
     DEBUG_BEGIN();
 
     // set default values
@@ -218,6 +221,7 @@ int mq_server_params_get(mq_server_param_st * params, int argc, char * argv[]) {
     DEBUG_END();
     return 1;
 }
+
 
 /* ................................................................... */
 

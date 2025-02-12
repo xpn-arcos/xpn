@@ -102,7 +102,7 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 # Set initial variables depending on $target_cpu and $target_os...
 #
 IFLAGS="-I../../bin/mosquitto/include       "
-IFLAGS+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+IFLAGS+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client    -I../../../xpn/include/base "
 IFLAGS+="-I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
 
 LFLAGS="-L../../bin/mosquitto/lib        -L../../xpn/lib "
@@ -181,12 +181,12 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_client/xpn/xpn_simple \
 -I\$(top_srcdir)/include/xpn_client/nfi \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_mq_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_mq_server \
+-I\$(top_srcdir)/include/mq_server/ \
 -I\$(top_srcdir)/include/xpn_server/ \
 -I\$(top_srcdir)/include/xpn_server/mpi_server/ \
 -I\$(top_srcdir)/include/xpn_server/sck_server/"
-
 
 
 ### BEGIN OF NFS BLOCK. Do not remove this line. ###

@@ -23,7 +23,7 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "all_system.h"
-      #include "mq_server_params.h"
+      #include "mq_server/mq_server_params.h"
       #include "mq_server_d2xpn.h"
 
       #include "xpn.h"

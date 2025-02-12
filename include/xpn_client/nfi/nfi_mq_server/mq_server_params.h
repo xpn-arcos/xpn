@@ -20,8 +20,8 @@
    */
 
 
-#ifndef _MQ_SERVER_PARAMS_H_
-#define _MQ_SERVER_PARAMS_H_
+#ifndef _NFI_MQ_SERVER_PARAMS_H_
+#define _NFI_MQ_SERVER_PARAMS_H_
 
   #include <stdlib.h>
   #include <stdio.h>

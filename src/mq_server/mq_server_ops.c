@@ -20,15 +20,14 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "mq_server_ops.h"
+   #include "mq_server/mq_server_params.h"
+   #include "mq_server_ops.h"
 
-#include <sys/time.h>
-
-/* GLOBAL VARIABLES */
 
 /* ... Functions / Funciones ......................................... */
 
-double get_time_ops(void) {
+double get_time_ops ( void )
+{
     struct timeval tp;
     struct timezone tzp;
 
@@ -36,134 +35,96 @@ double get_time_ops(void) {
     return ((double) tp.tv_sec + .000001 * (double) tp.tv_usec);
 }
 
-char * mq_server_op2string(int op_code) {
-    char * ret = "Unknown";
-
+char * mq_server_op2string ( int op_code )
+{
     switch (op_code) {
-    case MQ_SERVER_OPEN_FILE_WS:
-        ret = "OPEN";
-        break;
-    case MQ_SERVER_OPEN_FILE_WOS:
-        ret = "OPEN_WOS";
-        break;
-    case MQ_SERVER_CREAT_FILE_WS:
-        ret = "CREAT";
-        break;
-    case MQ_SERVER_CREAT_FILE_WOS:
-        ret = "CREAT_WOS";
-        break;
-    case MQ_SERVER_READ_FILE_WS:
-        ret = "READ";
-        break;
-    case MQ_SERVER_READ_FILE_WOS:
-        ret = "READ_WOS";
-        break;
-    case MQ_SERVER_WRITE_FILE_WS:
-        ret = "WRITE";
-        break;
-    case MQ_SERVER_WRITE_FILE_WOS:
-        ret = "WRITE_WOS";
-        break;
-    case MQ_SERVER_CLOSE_FILE_WS:
-        ret = "CLOSE";
-        break;
-    case MQ_SERVER_RM_FILE:
-        ret = "RM";
-        break;
-    case MQ_SERVER_RENAME_FILE:
-        ret = "RENAME";
-        break;
-    case MQ_SERVER_GETATTR_FILE:
-        ret = "GETATTR";
-        break;
-    case MQ_SERVER_SETATTR_FILE:
-        ret = "SETATTR";
-        break;
-    case MQ_SERVER_MKDIR_DIR:
-        ret = "MKDIR";
-        break;
-    case MQ_SERVER_RMDIR_DIR:
-        ret = "RMDIR";
-        break;
-    case MQ_SERVER_OPENDIR_DIR:
-        ret = "OPENDIR";
-        break;
-    case MQ_SERVER_READDIR_DIR:
-        ret = "READDIR";
-        break;
-    case MQ_SERVER_CLOSEDIR_DIR:
-        ret = "CLOSEDIR";
-        break;
-    case MQ_SERVER_FLUSH_FILE:
-        ret = "FLUSH";
-        break;
-    case MQ_SERVER_PRELOAD_FILE:
-        ret = "PRELOAD";
-        break;
-    case MQ_SERVER_STATFS_DIR:
-        ret = "STATFS";
-        break;
-    case MQ_SERVER_FINALIZE:
-        ret = "FINALIZE";
-        break;
-    case MQ_SERVER_GETID:
-        ret = "GETID";
-        break;
-    case MQ_SERVER_DISCONNECT:
-        ret = "DISCONNECT";
-        break;
-    case MQ_SERVER_GETNODENAME:
-        ret = "GETNODENAME";
-        break;
-    case MQ_SERVER_END:
-        ret = "END";
-        break;
+      // File operations
+      case MQ_SERVER_OPEN_FILE_WS:       return "OPEN";
+      case MQ_SERVER_CREAT_FILE_WS:      return "CREAT";
+      case MQ_SERVER_READ_FILE_WS:       return "READ";
+      case MQ_SERVER_WRITE_FILE_WS:      return "WRITE";
+      case MQ_SERVER_CLOSE_FILE_WS:      return "CLOSE";
+      case MQ_SERVER_RM_FILE:            return "RM";
+      case MQ_SERVER_RM_FILE_ASYNC:      return "RM_ASYNC";
+      case MQ_SERVER_RENAME_FILE:        return "RENAME";
+      case MQ_SERVER_GETATTR_FILE:       return "GETATTR";
+      case MQ_SERVER_SETATTR_FILE:       return "SETATTR";
+      // File operations without session
+      case MQ_SERVER_OPEN_FILE_WOS:      return "OPEN";
+      case MQ_SERVER_CREAT_FILE_WOS:     return "CREAT";
+      case MQ_SERVER_READ_FILE_WOS:      return "READ";
+      case MQ_SERVER_WRITE_FILE_WOS:     return "WRITE";
+      // Directory operations
+      case MQ_SERVER_MKDIR_DIR:       return "MKDIR";
+      case MQ_SERVER_RMDIR_DIR:       return "RMDIR";
+      case MQ_SERVER_RMDIR_DIR_ASYNC: return "RMDIR_ASYNC";
+      case MQ_SERVER_OPENDIR_DIR:     return "OPENDIR";
+      case MQ_SERVER_READDIR_DIR:     return "READDIR";
+      case MQ_SERVER_CLOSEDIR_DIR:    return "CLOSEDIR";
+      // FS Operations
+      case MQ_SERVER_STATFS_DIR:      return "STATFS";
+      case MQ_SERVER_GETNODENAME:     return "GET NODE NAME";
+      case MQ_SERVER_GETID:           return "GET ID";
+      // Metadata
+      case MQ_SERVER_READ_MDATA:            return "READ METADATA";
+      case MQ_SERVER_WRITE_MDATA:           return "WRITE METADATA";
+      case MQ_SERVER_WRITE_MDATA_FILE_SIZE: return "WRITE METADATA FILE SIZE";
+      // Misc
+      //case MQ_METADATA_MAX_RECONSTURCTIONS: return "METADATA MAX RECONSTURCTIONS";
+      //case MQ_SERVER_FLUSH_FILE:            return "MQ_SERVER_FLUSH_FILE METADATA";
+      //case MQ_SERVER_PRELOAD_FILE:          return "MQ_SERVER_PRELOAD_FILE METADATA";
+      // Connection operatons
+      case MQ_SERVER_FINALIZE:        return "FINALIZE";
+      case MQ_SERVER_DISCONNECT:      return "DISCONNECT";
+      case MQ_SERVER_END:             return "END";
+      default:                        return "Unknown";
     }
-
-    return ret;
 }
+
 
 /*
  * OPERATIONAL FUNCTIONS
  */
 
-void mq_server_op_open_ws(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_open_wos(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_creat_ws(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_open_ws  (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_open_wos (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_creat_ws (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 void mq_server_op_creat_wos(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_write_ws(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_read_ws  (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_read_wos (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_write_ws (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 void mq_server_op_write_wos(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_close_ws(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_close_ws (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 
-void mq_server_op_rm(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_rename(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_setattr(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_getattr(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_rm      (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_rename  (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_setattr (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_getattr (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 
-void mq_server_op_mkdir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_opendir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_readdir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_mkdir   (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_opendir (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_readdir (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 void mq_server_op_closedir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_rmdir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_rmdir   (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 
 //void mq_server_op_flush(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 //void mq_server_op_preload(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 
 void mq_server_op_getnodename(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id); //NEW
-void mq_server_op_fstat(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id); //TODO: implement
-void mq_server_op_getid(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id); //TODO: call in switch
+void mq_server_op_fstat      (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id); //TODO: implement
+void mq_server_op_getid      (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id); //TODO: call in switch
 
 // Metadata
-void mq_server_op_read_mdata(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
-void mq_server_op_write_mdata(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_read_mdata  (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+void mq_server_op_write_mdata (mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
 void mq_server_op_write_mdata_file_size(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id);
+
 
 /**********************************
 Read the operation to realize
 ***********************************/
-int mq_server_do_operation(struct st_th * th, int * the_end) {
+int mq_server_do_operation(struct st_th * th, int * the_end)
+{
     DEBUG_BEGIN();
 
     int ret;
@@ -171,7 +132,8 @@ int mq_server_do_operation(struct st_th * th, int * the_end) {
 
     //printf("SERVER DO OPERATION -- %d\n", th -> type_op);
 
-    switch (th -> type_op) {
+    switch (th -> type_op)
+    {
         //File API
     case MQ_SERVER_OPEN_FILE_WS:
         ret = mq_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_mq_server_msg.op_open), sizeof(struct st_mq_server_open), 0 /*head.id*/ );
@@ -286,21 +248,21 @@ int mq_server_do_operation(struct st_th * th, int * the_end) {
         }
         break;
 
-        /*
-        		//File system API
-        	    case MQ_SERVER_PRELOAD_FILE:
-        		ret = mq_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_mq_server_msg.op_preload), sizeof(struct st_mq_server_preload), 0);
-        		if (ret != -1) {
-        		    mq_server_op_preload(th -> params, (int) th -> sd, & head, 0);
-        		}
-        		break;
-        	    case MQ_SERVER_FLUSH_FILE:
-        		ret = mq_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_mq_server_msg.op_flush), sizeof(struct st_mq_server_flush), 0 );
-        		if (ret != -1) {
-        		    mq_server_op_flush(th -> params, (int) th -> sd, & head, 0);
-        		}
-        		break;
-        */
+/*
+	//File system API
+    case MQ_SERVER_PRELOAD_FILE:
+	ret = mq_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_mq_server_msg.op_preload), sizeof(struct st_mq_server_preload), 0);
+	if (ret != -1) {
+	    mq_server_op_preload(th -> params, (int) th -> sd, & head, 0);
+	}
+	break;
+    case MQ_SERVER_FLUSH_FILE:
+	ret = mq_server_comm_read_data(th -> params, (int) th -> sd, (char * ) & (head.u_st_mq_server_msg.op_flush), sizeof(struct st_mq_server_flush), 0 );
+	if (ret != -1) {
+	    mq_server_op_flush(th -> params, (int) th -> sd, & head, 0);
+	}
+	break;
+*/
 
         // Metadata
     case MQ_SERVER_READ_MDATA:
@@ -327,8 +289,7 @@ int mq_server_do_operation(struct st_th * th, int * the_end) {
         break;
 
     case MQ_SERVER_FINALIZE:
-        *
-        the_end = 1;
+        *the_end = 1;
         break;
 
         //FS Metadata API
@@ -342,6 +303,7 @@ int mq_server_do_operation(struct st_th * th, int * the_end) {
 
     return 0;
 }
+
 
 //
 // File API
@@ -539,7 +501,7 @@ void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_serv
     char * buffer;
     long size, diff, to_read, cont;
 
-    printf("[MQ_SERVER_OPS] (ID=%s) begin read: fd %d offset %d size %d ID=x\n",
+    printf("[MQ_SERVER_OPS] (ID=%s) begin read: fd %d offset %d size %ld ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.fd, (int) head -> u_st_mq_server_msg.op_read.offset, head -> u_st_mq_server_msg.op_read.size);
 
     // initialize counters
@@ -579,7 +541,7 @@ void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_serv
         }
         // send (how many + data) to client...
         mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_read_req), rank_client_id);
-        printf("[MQ_SERVER_OPS] (ID=%s) op_read: send size %d\n", params -> srv_name, req.size);
+        printf("[MQ_SERVER_OPS] (ID=%s) op_read: send size %ld\n", params -> srv_name, req.size);
 
         // send data to client...
         if (req.size > 0) {
@@ -595,7 +557,7 @@ void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_serv
     FREE_AND_NULL(buffer);
 
     // debugging information
-    printf("[MQ_SERVER_OPS] (ID=%s) end READ: fd %d offset %d size %d ID=x\n",
+    printf("[MQ_SERVER_OPS] (ID=%s) end READ: fd %d offset %d size %ld ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.fd, (int) head -> u_st_mq_server_msg.op_read.offset, size);
 }
 
@@ -604,7 +566,7 @@ void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_ser
     char * buffer;
     long size, diff, to_read, cont;
 
-    printf("[MQ_SERVER_OPS] (ID=%s) begin read: path %s offset %d size %d ID=x\n",
+    printf("[MQ_SERVER_OPS] (ID=%s) begin read: path %s offset %d size %ld ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.path, (int) head -> u_st_mq_server_msg.op_read.offset, head -> u_st_mq_server_msg.op_read.size);
 
     // initialize counters
@@ -652,7 +614,7 @@ void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_ser
         }
         // send (how many + data) to client...
         mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_read_req), rank_client_id);
-        printf("[MQ_SERVER_OPS] (ID=%s) op_read: send size %d\n", params -> srv_name, req.size);
+        printf("[MQ_SERVER_OPS] (ID=%s) op_read: send size %ld\n", params -> srv_name, req.size);
 
         // send data to client...
         if (req.size > 0) {
@@ -671,7 +633,7 @@ void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_ser
     FREE_AND_NULL(buffer);
 
     // debugging information
-    printf("[MQ_SERVER_OPS] (ID=%s) end READ: path %s offset %d size %d ID=x\n",
+    printf("[MQ_SERVER_OPS] (ID=%s) end READ: path %s offset %d size %ld ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.path, (int) head -> u_st_mq_server_msg.op_read.offset, size);
 }
 
@@ -1002,7 +964,7 @@ void mq_server_op_readdir(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * ) & ret_entry, sizeof(struct st_mq_server_direntry), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) READDIR(%s)\n", params -> srv_name, s);
+    printf("[MQ_SERVER_OPS] (ID=%s) READDIR(%p)\n", params -> srv_name, s);
 }
 
 void mq_server_op_closedir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -1016,7 +978,7 @@ void mq_server_op_closedir(mq_server_param_st * params, int sd, struct st_mq_ser
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) READDIR(%s)\n", params -> srv_name, s);
+    printf("[MQ_SERVER_OPS] (ID=%s) READDIR(%p)\n", params -> srv_name, s);
 }
 
 void mq_server_op_rmdir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -1272,7 +1234,7 @@ void mq_server_op_read_mdata(mq_server_param_st * params, int sd, struct st_mq_s
 
     ret = filesystem_read(fd, & req.mdata, sizeof(struct xpn_metadata));
 
-    if (!MQ_CHECK_MAGIC_NUMBER( & req.mdata)) {
+    if (!XPN_CHECK_MAGIC_NUMBER( & req.mdata)) {
         memset( & req.mdata, 0, sizeof(struct xpn_metadata));
     }
 

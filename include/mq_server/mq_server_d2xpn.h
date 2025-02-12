@@ -34,7 +34,7 @@
 
    #include "all_system.h"
    #include "base/utils.h"
-   #include "mq_server_params.h"
+   #include "mq_server/mq_server_params.h"
    #include "mq_server_ops.h"
 
    #include "xpn.h"
