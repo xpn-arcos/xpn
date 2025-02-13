@@ -324,7 +324,7 @@ void mq_server_op_open_ws(mq_server_param_st * params, int sd, struct st_mq_serv
 
     if (params -> mosquitto_mode == 1) {
         #ifdef HAVE_MOSQUITTO_H
-        printf("[%d]\tBEGIN OPEN MOSQUITTO MQ_SERVER WS - %s\n", __LINE__, sm);
+        debug_info("[%d]\tBEGIN OPEN MOSQUITTO MQ_SERVER WS - %s\n", __LINE__, sm);
 
         int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
         if (rc != MOSQ_ERR_SUCCESS) {
@@ -332,19 +332,20 @@ void mq_server_op_open_ws(mq_server_param_st * params, int sd, struct st_mq_serv
             mosquitto_disconnect(params -> mqtt);
         }
 
-        printf("[%d]\tEND OPEN MOSQUITTO MQ_SERVER WS - %s\n\n", __LINE__, sm);
+        debug_info("[%d]\tEND OPEN MOSQUITTO MQ_SERVER WS - %s\n\n", __LINE__, sm);
         #endif
     }
 
     s = head -> u_st_mq_server_msg.op_open.path;
 
     // do open
-    fd = filesystem_open(s, O_RDWR);
+    fd = filesystem_open2(s, head->u_st_mq_server_msg.op_open.flags, head->u_st_mq_server_msg.op_open.mode);
+    //fd = filesystem_open(s, O_RDWR);
 
     mq_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[%d][MQ_SERVER_OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    debug_info("[%d][MQ_SERVER_OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 }
 
 void mq_server_op_open_wos(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) //WOS - Without Session
@@ -364,7 +365,7 @@ void mq_server_op_open_wos(mq_server_param_st * params, int sd, struct st_mq_ser
 
     if (params -> mosquitto_mode == 1) {
         #ifdef HAVE_MOSQUITTO_H
-        printf("[%d]\tBEGIN OPEN MOSQUITTO MQ_SERVER WOS - %s\n", __LINE__, sm);
+        debug_info("[%d]\tBEGIN OPEN MOSQUITTO MQ_SERVER WOS - %s\n", __LINE__, sm);
 
         int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
         if (rc != MOSQ_ERR_SUCCESS) {
@@ -372,27 +373,28 @@ void mq_server_op_open_wos(mq_server_param_st * params, int sd, struct st_mq_ser
             mosquitto_disconnect(params -> mqtt);
         }
 
-        printf("[%d]\tEND OPEN MOSQUITTO MQ_SERVER WOS - %s\n\n", __LINE__, sm);
+        debug_info("[%d]\tEND OPEN MOSQUITTO MQ_SERVER WOS - %s\n\n", __LINE__, sm);
         /**
-                printf("[%d]\tBEGIN CLOSE OPEN MOSQUITTO MQ_SERVER - WOS \n\n", __LINE__);
+                debug_info("[%d]\tBEGIN CLOSE OPEN MOSQUITTO MQ_SERVER - WOS \n\n", __LINE__);
 
                 mosquitto_unsubscribe(params -> mqtt, NULL, sm);
                 mosquitto_unsubscribe(params -> mqtt, NULL, s);
 
-                printf("[%d]\tEND CLOSE OPEN MOSQUITTO MQ_SERVER - WOS %s\n\n", __LINE__, s);
+                debug_info("[%d]\tEND CLOSE OPEN MOSQUITTO MQ_SERVER - WOS %s\n\n", __LINE__, s);
                 **/
         #endif
     }
 
     // do open
-    fd = filesystem_open(s, O_RDWR);
+    fd = filesystem_open2(s, head->u_st_mq_server_msg.op_open.flags, head->u_st_mq_server_msg.op_open.mode);
+    //fd = filesystem_open(s, O_RDWR);
 
     mq_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
     filesystem_close(fd);
 
     // show debug info
-    printf("[%d][MQ_SERVER_OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    debug_info("[%d][MQ_SERVER_OPS] (ID=%s) OPEN(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 
 }
 
@@ -406,7 +408,7 @@ void mq_server_op_creat_ws(mq_server_param_st * params, int sd, struct st_mq_ser
 
     if (params -> mosquitto_mode == 1) {
         #ifdef HAVE_MOSQUITTO_H
-        printf("[%d]\tBEGIN CREAT MOSQUITTO MQ_SERVER WS - %s\n", __LINE__, sm);
+        debug_info("[%d]\tBEGIN CREAT MOSQUITTO MQ_SERVER WS - %s\n", __LINE__, sm);
 
         rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
 
@@ -415,23 +417,27 @@ void mq_server_op_creat_ws(mq_server_param_st * params, int sd, struct st_mq_ser
             mosquitto_disconnect(params -> mqtt);
         }
 
-        printf("[%d]\tEND CREAT MOSQUITTO MQ_SERVER WS - %s\n\n", __LINE__, sm);
+        debug_info("[%d]\tEND CREAT MOSQUITTO MQ_SERVER WS - %s\n\n", __LINE__, sm);
         #endif
     }
 
     s = head -> u_st_mq_server_msg.op_creat.path;
 
     // do creat
-    fd = filesystem_creat(s, 0770); // TODO: mq_server_op_creat don't use 'mode' from client ?
+    
+    fd = filesystem_creat(s, 0777);
+
+    //fd = filesystem_creat(s, 0770); // TODO: mq_server_op_creat don't use 'mode' from client ?
+    
     if (fd < 0) {
         filesystem_mkpath(s);
-        fd = filesystem_creat(s, 0770);
+        fd = filesystem_creat(s, 0777);
     }
 
     mq_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[%d][MQ_SERVER_OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    debug_info("[%d][MQ_SERVER_OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 }
 
 void mq_server_op_creat_wos(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -447,7 +453,7 @@ void mq_server_op_creat_wos(mq_server_param_st * params, int sd, struct st_mq_se
 
     if (params -> mosquitto_mode == 1) {
         #ifdef HAVE_MOSQUITTO_H
-        printf("[%d]\tBEGIN CREATE MOSQUITTO MQ_SERVER WOS - %s\n", __LINE__, sm);
+        debug_info("[%d]\tBEGIN CREATE MOSQUITTO MQ_SERVER WOS - %s\n", __LINE__, sm);
 
         int rc = mosquitto_subscribe(params -> mqtt, NULL, sm, params -> mosquitto_qos);
 
@@ -456,14 +462,14 @@ void mq_server_op_creat_wos(mq_server_param_st * params, int sd, struct st_mq_se
             mosquitto_disconnect(params -> mqtt);
         }
 
-        printf("[%d]\tEND CREATE MOSQUITTO MQ_SERVER WOS - %s\n\n", __LINE__, sm);
+        debug_info("[%d]\tEND CREATE MOSQUITTO MQ_SERVER WOS - %s\n\n", __LINE__, sm);
         /**      
-              printf("[%d]\tBEGIN CLOSE CREAT MOSQUITTO MQ_SERVER - WOS \n\n", __LINE__);
+              debug_info("[%d]\tBEGIN CLOSE CREAT MOSQUITTO MQ_SERVER - WOS \n\n", __LINE__);
 
               mosquitto_unsubscribe(params -> mqtt, NULL, sm);
               mosquitto_unsubscribe(params -> mqtt, NULL, s);
 
-              printf("[%d]\tEND CLOSE CREAT MOSQUITTO MQ_SERVER - WOS %s \n\n", __LINE__, s);
+              debug_info("[%d]\tEND CLOSE CREAT MOSQUITTO MQ_SERVER - WOS %s \n\n", __LINE__, s);
               **/
         #endif
     }
@@ -472,11 +478,14 @@ void mq_server_op_creat_wos(mq_server_param_st * params, int sd, struct st_mq_se
     do {
 
         // do creat
-        fd = filesystem_creat(s, 0770); // TODO: mq_server_op_creat don't use 'mode' from client ?
+        
+        fd = filesystem_creat(s, 0777);
+
+        //fd = filesystem_creat(s, 0770); // TODO: mq_server_op_creat don't use 'mode' from client ?
         //fd = filesystem_open(s, O_CREAT|O_APPEND);
         if (fd < 0) {
             filesystem_mkpath(s);
-            fd = filesystem_creat(s, 0770);
+            fd = filesystem_creat(s, 0777);
             //fd = filesystem_open(s, O_CREAT|O_APPEND);
             //printf("MQ_SERVER_OPS CREATE NOTOK - %s - %d\n", s, fd);
             retries++;
@@ -487,13 +496,13 @@ void mq_server_op_creat_wos(mq_server_param_st * params, int sd, struct st_mq_se
 
     } while ((fd < 0) && (retries < 5));
 
-    //printf("[%d][MQ_SERVER_OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    //debug_info("[%d][MQ_SERVER_OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
     mq_server_comm_write_data(params, sd, (char * ) & fd, sizeof(int), rank_client_id);
 
     filesystem_close(fd);
 
     // show debug info
-    printf("[%d][MQ_SERVER_OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
+    debug_info("[%d][MQ_SERVER_OPS] (ID=%s) CREAT(%s)=%d\n", __LINE__, params -> srv_name, s, fd);
 }
 
 void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -501,7 +510,7 @@ void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_serv
     char * buffer;
     long size, diff, to_read, cont;
 
-    printf("[MQ_SERVER_OPS] (ID=%s) begin read: fd %d offset %d size %ld ID=x\n",
+    debug_info("[MQ_SERVER_OPS] (ID=%s) begin read: fd %d offset %d size %ld ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.fd, (int) head -> u_st_mq_server_msg.op_read.offset, head -> u_st_mq_server_msg.op_read.size);
 
     // initialize counters
@@ -541,12 +550,12 @@ void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_serv
         }
         // send (how many + data) to client...
         mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_read_req), rank_client_id);
-        printf("[MQ_SERVER_OPS] (ID=%s) op_read: send size %ld\n", params -> srv_name, req.size);
+        debug_info("[MQ_SERVER_OPS] (ID=%s) op_read: send size %ld\n", params -> srv_name, req.size);
 
         // send data to client...
         if (req.size > 0) {
             mq_server_comm_write_data(params, sd, buffer, req.size, rank_client_id);
-            printf("[MQ_SERVER_OPS] (ID=%s) op_read: send data\n", params -> srv_name);
+            debug_info("[MQ_SERVER_OPS] (ID=%s) op_read: send data\n", params -> srv_name);
         }
         cont = cont + req.size; //Send bytes
         diff = head -> u_st_mq_server_msg.op_read.size - cont;
@@ -557,7 +566,7 @@ void mq_server_op_read_ws(mq_server_param_st * params, int sd, struct st_mq_serv
     FREE_AND_NULL(buffer);
 
     // debugging information
-    printf("[MQ_SERVER_OPS] (ID=%s) end READ: fd %d offset %d size %ld ID=x\n",
+    debug_info("[MQ_SERVER_OPS] (ID=%s) end READ: fd %d offset %d size %ld ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.fd, (int) head -> u_st_mq_server_msg.op_read.offset, size);
 }
 
@@ -566,7 +575,7 @@ void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_ser
     char * buffer;
     long size, diff, to_read, cont;
 
-    printf("[MQ_SERVER_OPS] (ID=%s) begin read: path %s offset %d size %ld ID=x\n",
+    debug_info("[MQ_SERVER_OPS] (ID=%s) begin read: path %s offset %d size %ld ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.path, (int) head -> u_st_mq_server_msg.op_read.offset, head -> u_st_mq_server_msg.op_read.size);
 
     // initialize counters
@@ -614,12 +623,12 @@ void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_ser
         }
         // send (how many + data) to client...
         mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_read_req), rank_client_id);
-        printf("[MQ_SERVER_OPS] (ID=%s) op_read: send size %ld\n", params -> srv_name, req.size);
+        debug_info("[MQ_SERVER_OPS] (ID=%s) op_read: send size %ld\n", params -> srv_name, req.size);
 
         // send data to client...
         if (req.size > 0) {
             mq_server_comm_write_data(params, sd, buffer, req.size, rank_client_id);
-            printf("[MQ_SERVER_OPS] (ID=%s) op_read: send data\n", params -> srv_name);
+            debug_info("[MQ_SERVER_OPS] (ID=%s) op_read: send data\n", params -> srv_name);
         }
 
         cont = cont + req.size; //Send bytes
@@ -633,19 +642,19 @@ void mq_server_op_read_wos(mq_server_param_st * params, int sd, struct st_mq_ser
     FREE_AND_NULL(buffer);
 
     // debugging information
-    printf("[MQ_SERVER_OPS] (ID=%s) end READ: path %s offset %d size %ld ID=x\n",
+    debug_info("[MQ_SERVER_OPS] (ID=%s) end READ: path %s offset %d size %ld ID=x\n",
         params -> srv_name, head -> u_st_mq_server_msg.op_read.path, (int) head -> u_st_mq_server_msg.op_read.offset, size);
 }
 
 void mq_server_op_write_ws(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
     if (params -> mosquitto_mode == 0) {
-        printf("[MQ_SERVER_OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
+        debug_info("[MQ_SERVER_OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
 
         struct st_mq_server_write_req req;
         char * buffer;
         int size, diff, cont, to_write;
 
-        printf("[MQ_SERVER_OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
+        debug_info("[MQ_SERVER_OPS] (ID=%s) begin write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
 
         // initialize counters
         cont = 0;
@@ -690,7 +699,7 @@ void mq_server_op_write_ws(mq_server_param_st * params, int sd, struct st_mq_ser
     }
 
     // for debugging purpouses
-    printf("[MQ_SERVER_OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
 }
 
 void mq_server_op_write_wos(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -699,7 +708,7 @@ void mq_server_op_write_wos(mq_server_param_st * params, int sd, struct st_mq_se
         char * buffer;
         int size, diff, cont, to_write;
 
-        printf("[MQ_SERVER_OPS] (ID=%s) begin write: path %s ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.path);
+        debug_info("[MQ_SERVER_OPS] (ID=%s) begin write: path %s ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.path);
 
         // initialize counters
         cont = 0;
@@ -798,7 +807,7 @@ void mq_server_op_write_wos(mq_server_param_st * params, int sd, struct st_mq_se
     }
 
     // for debugging purpouses
-    printf("[MQ_SERVER_OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) end write: fd %d ID=xn", params -> srv_name, head -> u_st_mq_server_msg.op_write.fd);
 }
 
 void mq_server_op_close_ws(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -819,12 +828,12 @@ void mq_server_op_close_ws(mq_server_param_st * params, int sd, struct st_mq_ser
 
     if (params -> mosquitto_mode == 1) {
         #ifdef HAVE_MOSQUITTO_H
-        printf("[%d]\tBEGIN CLOSE MOSQUITTO MQ_SERVER - WS \n\n", __LINE__);
+        debug_info("[%d]\tBEGIN CLOSE MOSQUITTO MQ_SERVER - WS \n\n", __LINE__);
 
         mosquitto_unsubscribe(params -> mqtt, NULL, sm);
         mosquitto_unsubscribe(params -> mqtt, NULL, s);
 
-        printf("[%d]\tEND CLOSE MOSQUITTO MQ_SERVER - WS %s\n\n", __LINE__, sm);
+        debug_info("[%d]\tEND CLOSE MOSQUITTO MQ_SERVER - WS %s\n\n", __LINE__, sm);
         #endif
     }
 
@@ -836,7 +845,7 @@ void mq_server_op_close_ws(mq_server_param_st * params, int sd, struct st_mq_ser
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) CLOSE(fd=%d, path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_close.fd, head -> u_st_mq_server_msg.op_close.path);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) CLOSE(fd=%d, path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_close.fd, head -> u_st_mq_server_msg.op_close.path);
 }
 
 void mq_server_op_rm(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -854,7 +863,7 @@ void mq_server_op_rm(mq_server_param_st * params, int sd, struct st_mq_server_ms
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_rm.path);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_rm.path);
 }
 
 void mq_server_op_rename(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -875,7 +884,7 @@ void mq_server_op_rename(mq_server_param_st * params, int sd, struct st_mq_serve
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_rm.path);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) RM(path=%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_rm.path);
 }
 
 void mq_server_op_getattr(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -888,7 +897,7 @@ void mq_server_op_getattr(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_attr_req), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_getattr.path);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) GETATTR(%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_getattr.path);
 }
 
 void mq_server_op_setattr(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, __attribute__((__unused__)) int rank_client_id) {
@@ -908,10 +917,10 @@ void mq_server_op_setattr(mq_server_param_st * params, int sd, struct st_mq_serv
     //TODO
 
     // do setattr
-    printf("[MQ_SERVER_OPS] SETATTR operation to be implemented !!\n");
+    debug_info("[MQ_SERVER_OPS] SETATTR operation to be implemented !!\n");
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) SETATTR(...)\n", params -> srv_name);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) SETATTR(...)\n", params -> srv_name);
 }
 
 //Directory API
@@ -928,7 +937,7 @@ void mq_server_op_mkdir(mq_server_param_st * params, int sd, struct st_mq_server
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) MKDIR(%s)\n", params -> srv_name, s);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) MKDIR(%s)\n", params -> srv_name, s);
 }
 
 void mq_server_op_opendir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -942,7 +951,7 @@ void mq_server_op_opendir(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * )(unsigned long long * ) & (ret), (unsigned int) sizeof(DIR * ), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) OPENDIR(%s)\n", params -> srv_name, s);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) OPENDIR(%s)\n", params -> srv_name, s);
 }
 
 void mq_server_op_readdir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -964,7 +973,7 @@ void mq_server_op_readdir(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * ) & ret_entry, sizeof(struct st_mq_server_direntry), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) READDIR(%p)\n", params -> srv_name, s);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) READDIR(%p)\n", params -> srv_name, s);
 }
 
 void mq_server_op_closedir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -978,7 +987,7 @@ void mq_server_op_closedir(mq_server_param_st * params, int sd, struct st_mq_ser
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) READDIR(%p)\n", params -> srv_name, s);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) READDIR(%p)\n", params -> srv_name, s);
 }
 
 void mq_server_op_rmdir(mq_server_param_st * params, int sd, struct st_mq_server_msg * head, int rank_client_id) {
@@ -992,7 +1001,7 @@ void mq_server_op_rmdir(mq_server_param_st * params, int sd, struct st_mq_server
     mq_server_comm_write_data(params, sd, (char * ) & ret, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) RMDIR(%s) \n", params -> srv_name, s);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) RMDIR(%s) \n", params -> srv_name, s);
 }
 
 //Optimization API
@@ -1079,7 +1088,7 @@ void mq_server_op_preload(mq_server_param_st * params, int sd, struct st_mq_serv
     mq_server_comm_write_data(params, sd, (char * ) & cont, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n", params -> srv_name, head -> u_st_mq_server_msg.op_preload.virtual_path, head -> u_st_mq_server_msg.op_preload.storage_path, ret);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) PRELOAD(%s,%s) -> %d\n", params -> srv_name, head -> u_st_mq_server_msg.op_preload.virtual_path, head -> u_st_mq_server_msg.op_preload.storage_path, ret);
 
     free(protocol); free(user); free(machine); free(file); free(params1) ;  
     return;
@@ -1163,7 +1172,7 @@ void mq_server_op_flush(mq_server_param_st * params, int sd, struct st_mq_server
     mq_server_comm_write_data(params, sd, (char * ) & cont, sizeof(int), rank_client_id);
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) FLUSH(%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_flush.virtual_path);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) FLUSH(%s)\n", params -> srv_name, head -> u_st_mq_server_msg.op_flush.virtual_path);
 
     free(protocol); free(user); free(machine); free(file); free(params1) ;  
     return;
@@ -1185,7 +1194,7 @@ void mq_server_op_getnodename(mq_server_param_st * params, int sd, __attribute__
     // </TODO>
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) GETNAME=%s\n", params -> srv_name, serv_name);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) GETNAME=%s\n", params -> srv_name, serv_name);
 
     mq_server_comm_write_data(params, sd, (char * ) serv_name, HOST_NAME_MAX, rank_client_id); // Send one single message
     //mq_server_comm_write_data(params, sd, (char * ) params -> sem_name_server, PATH_MAX, rank_client_id); // Send one single message
@@ -1199,7 +1208,7 @@ void mq_server_op_getid(mq_server_param_st * params, int sd, struct st_mq_server
     mq_server_comm_write_data(params, sd, (char * ) head -> id, MQ_SERVER_ID, rank_client_id); //TO-DO: Check function
 
     // show debug info
-    printf("[MQ_SERVER_OPS] (ID=%s) GETID(...)\n", params -> srv_name);
+    debug_info("[MQ_SERVER_OPS] (ID=%s) GETID(...)\n", params -> srv_name);
 }
 
 /* ................................................................... */
@@ -1213,12 +1222,12 @@ void mq_server_op_read_mdata(mq_server_param_st * params, int sd, struct st_mq_s
 
     // check params...
     if (NULL == params) {
-        printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] ERROR: NULL arguments\n", -1);
+        debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] ERROR: NULL arguments\n", -1);
         return;
     }
 
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] >> Begin\n", params -> rank);
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] read_mdata(%s)\n", params -> rank, head -> u_st_mq_server_msg.op_read_mdata.path);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] >> Begin\n", params -> rank);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] read_mdata(%s)\n", params -> rank, head -> u_st_mq_server_msg.op_read_mdata.path);
 
     fd = filesystem_open(head -> u_st_mq_server_msg.op_read_mdata.path, O_RDWR);
     if (fd < 0) {
@@ -1246,8 +1255,8 @@ void mq_server_op_read_mdata(mq_server_param_st * params, int sd, struct st_mq_s
 
     mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_read_mdata_req), rank_client_id);
 
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] read_mdata(%s)=%d\n", params -> rank, head -> u_st_mq_server_msg.op_read_mdata.path, req.status.ret);
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] << End\n", params -> rank);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] read_mdata(%s)=%d\n", params -> rank, head -> u_st_mq_server_msg.op_read_mdata.path, req.status.ret);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_read_mdata] << End\n", params -> rank);
 }
 
 
@@ -1259,12 +1268,12 @@ void mq_server_op_write_mdata(mq_server_param_st * params, int sd, struct st_mq_
 
     // check params...
     if (NULL == params) {
-        printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] ERROR: NULL arguments\n", -1);
+        debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] ERROR: NULL arguments\n", -1);
         return;
     }
 
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] >> Begin\n", params -> rank);
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] write_mdata(%s)\n", params -> rank, head -> u_st_mq_server_msg.op_write_mdata.path);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] >> Begin\n", params -> rank);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] write_mdata(%s)\n", params -> rank, head -> u_st_mq_server_msg.op_write_mdata.path);
 
     fd = filesystem_open2(head -> u_st_mq_server_msg.op_write_mdata.path, O_WRONLY | O_CREAT, S_IRWXU);
     if (fd < 0) {
@@ -1287,8 +1296,8 @@ void mq_server_op_write_mdata(mq_server_param_st * params, int sd, struct st_mq_
 
     mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_status), rank_client_id);
 
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] write_mdata(%s)=%d\n", params -> rank, head -> u_st_mq_server_msg.op_write_mdata.path, req.ret);
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] << End\n", params -> rank);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] write_mdata(%s)=%d\n", params -> rank, head -> u_st_mq_server_msg.op_write_mdata.path, req.ret);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata] << End\n", params -> rank);
 
 }
 
@@ -1302,14 +1311,14 @@ void mq_server_op_write_mdata_file_size(mq_server_param_st * params, int sd, str
 
     // check params...
     if (NULL == params) {
-        printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] ERROR: NULL arguments\n", -1);
+        debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] ERROR: NULL arguments\n", -1);
         return;
     }
 
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] >> Begin\n", params -> rank);
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)\n", params -> rank, head -> u_st_mq_server_msg.op_write_mdata_file_size.path, head -> u_st_mq_server_msg.op_write_mdata_file_size.size);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] >> Begin\n", params -> rank);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)\n", params -> rank, head -> u_st_mq_server_msg.op_write_mdata_file_size.path, head -> u_st_mq_server_msg.op_write_mdata_file_size.size);
 
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] mutex lock\n", params -> rank);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] mutex lock\n", params -> rank);
     pthread_mutex_lock( & op_write_mdata_file_size_mutex);
 
     fd = filesystem_open(head -> u_st_mq_server_msg.op_write_mdata_file_size.path, O_RDWR);
@@ -1335,14 +1344,14 @@ void mq_server_op_write_mdata_file_size(mq_server_param_st * params, int sd, str
     cleanup_mq_server_op_write_mdata_file_size:
 
         pthread_mutex_unlock( & op_write_mdata_file_size_mutex);
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] mutex unlock\n", params -> rank);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] mutex unlock\n", params -> rank);
 
     req.ret = ret;
     req.server_errno = errno;
 
     mq_server_comm_write_data(params, sd, (char * ) & req, sizeof(struct st_mq_server_status), rank_client_id);
 
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)=%d\n", params -> rank, head -> u_st_mq_server_msg.op_write_mdata_file_size.path, head -> u_st_mq_server_msg.op_write_mdata_file_size.size, req.ret);
-    printf("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] << End\n", params -> rank);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)=%d\n", params -> rank, head -> u_st_mq_server_msg.op_write_mdata_file_size.path, head -> u_st_mq_server_msg.op_write_mdata_file_size.size, req.ret);
+    debug_info("[Server=%d] [MQ_SERVER_OPS] [mq_server_op_write_mdata_file_size] << End\n", params -> rank);
 
 }
