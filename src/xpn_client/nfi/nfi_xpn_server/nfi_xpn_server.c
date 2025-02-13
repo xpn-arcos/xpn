@@ -951,6 +951,7 @@ int nfi_xpn_server_close ( __attribute__((__unused__)) struct nfi_server *serv, 
     msg.type = XPN_SERVER_CLOSE_FILE;
     msg.u_st_xpn_server_msg.op_close.fd        = fh_aux->fd;
     msg.u_st_xpn_server_msg.op_close.file_type = fh->has_mqtt;
+    memccpy(msg.u_st_xpn_server_msg.op_close.path, fh_aux->path, 0, PATH_MAX - 1);
 
     nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
 

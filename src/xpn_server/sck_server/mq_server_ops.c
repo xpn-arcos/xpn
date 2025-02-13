@@ -37,7 +37,6 @@ double get_time_ops ( void )
 }
 
 
-
 void mq_server_op_subscribe ( xpn_server_param_st *params, struct st_xpn_server_msg *head )
 {
     if (params -> mosquitto_mode != 1) {
@@ -62,7 +61,8 @@ void mq_server_op_subscribe ( xpn_server_param_st *params, struct st_xpn_server_
 	    }
 
 	    debug_info("[%d]\tEND OPEN MOSQUITTO MQ_SERVER WS - %s\n\n", __LINE__, sm);
-	#endif
+
+    #endif
 }
 
 
@@ -76,16 +76,11 @@ void mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_serve
 
     #ifdef HAVE_MOSQUITTO_H
 
-// TODO!!!!!!!!!!!!!! msg.op_close.path no tiene path sino el descriptor de fichero !!!
-/*
     	char * extra = "/#";
 	char * s;
 	char * sm = malloc(strlen(head -> u_st_xpn_server_msg.op_close.path) + strlen(extra) + 1);
 	strcpy(sm, head -> u_st_xpn_server_msg.op_close.path);
 	strcat(sm, extra);
-*/
-    char *s; // TODO: remove me please !!!
-    char *sm = "/#" ; // TODO: remove me please !!!
 
 	debug_info("[%d]\tBEGIN CLOSE MOSQUITTO MQ_SERVER - WS \n\n", __LINE__);
 
@@ -93,7 +88,8 @@ void mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_serve
         mosquitto_unsubscribe(params -> mqtt, NULL, s);
 
         debug_info("[%d]\tEND CLOSE MOSQUITTO MQ_SERVER - WS %s\n\n", __LINE__, sm);
-	#endif
+
+    #endif
 }
 
 
