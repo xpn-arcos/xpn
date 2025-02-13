@@ -34,11 +34,8 @@
   #include "base/time_misc.h"
   #include "base/ns.h"
   #include "xpn_server_params.h"
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+  #include "sck_server_comm.h"
+  #include "mq_server_ops.h"
 
 
   /* ... Functions / Funciones ......................................... */

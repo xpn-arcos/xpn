@@ -22,8 +22,8 @@
 
 /* ... Include / Inclusion ........................................... */
 
-   #include "sck_server_comm.h"
-   #include "socket.h"
+#include "sck_server_comm.h"
+#include "socket.h"
 
 
 /* ... Functions / Funciones ......................................... */
@@ -79,7 +79,6 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port        = htons(0);
 
-
   ret = bind(*new_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
   if (ret < 0)
   {
@@ -96,6 +95,8 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
     printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: listen fails\n", 0);
     return -1;
   }
+
+  // get sockname
   socklen_t len = sizeof(server_addr);
   getsockname(*new_socket, (struct sockaddr *)&server_addr, &len);
   sprintf(port_name, "%d", ntohs(server_addr.sin_port));

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Elias Del Pozo Puñal, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _SCK_SERVER_COMM_H_
-#define _SCK_SERVER_COMM_H_
+#ifndef _MQ_SERVER_OPS_H_
+#define _MQ_SERVER_OPS_H_
 
   #ifdef  __cplusplus
     extern "C" {
@@ -29,20 +29,21 @@
 
   /* ... Include / Inclusion ........................................... */
 
-    #include "all_system.h"
-    #include "base/utils.h"
-    #include "base/time_misc.h"
-    #include "xpn_server/xpn_server_params.h"
+     #include "all_system.h"
+     #include "base/utils.h"
+     #include "xpn_server_params.h"
+     #include "xpn_server_ops.h"
 
-  
+
   /* ... Functions / Funciones ......................................... */
+  
+     double get_time_ops ( void ) ;
+     void   mq_server_op_subscribe   ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
+     void   mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
 
-  int  sck_server_comm_init          ( int *socket, char *port_name );
-  int  sck_server_comm_accept        ( int socket, int **new_socket );
-  int  sck_server_comm_disconnect    ( int *socket );
 
   /* ................................................................... */
-  
+
   #ifdef  __cplusplus
     }
   #endif

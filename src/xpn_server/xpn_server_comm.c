@@ -50,7 +50,10 @@ int xpn_server_comm_init ( xpn_server_param_st *params )
 
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
+    // Initialize socket
     ret = sck_server_comm_init( &params->server_socket, params->port_name );
+    // Initialize mosquitto
+    ret = mq_server_mqtt_init(params) ;
     break;
   #endif
  
@@ -76,7 +79,10 @@ int xpn_server_comm_destroy ( xpn_server_param_st *params )
 
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
-    ret = socket_close( params->server_socket );
+    // Finalize mosquitto
+    ret = mq_server_mqtt_destroy(params) ;
+    // Close socket
+    ret = socket_close(params->server_socket) ;
     break;
   #endif
  

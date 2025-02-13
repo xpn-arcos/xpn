@@ -383,7 +383,7 @@ int nfi_xpn_server_init ( char *url, struct nfi_server *serv, int server_type )
     FREE_AND_NULL(server_aux);
     return -1;
   }
-  
+
   // copy 'url' string...
   serv->url = strdup(url);
   NULL_RET_ERR(serv->url, ENOMEM);
@@ -605,7 +605,7 @@ int nfi_xpn_server_reconnect(struct nfi_server *serv)
 int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t mode, struct nfi_fhandle *fho )
 {
   int    ret;
-  char   dir[PATH_MAX], server[PATH_MAX];
+  char   dir[PATH_MAX], server[PATH_MAX], protocol[PATH_MAX];
   struct nfi_xpn_server *server_aux;
   struct nfi_xpn_server_fhandle *fh_aux;
   struct st_xpn_server_msg msg;
@@ -629,20 +629,25 @@ int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
     return -1;
   }
 
-  // from url -> server + dir
-  ret = ParseURL(url, NULL, NULL, NULL, server,  NULL,  dir);
+  // from url -> protocol + server + dir
+  ret = ParseURL(url, protocol, NULL, NULL, server,  NULL,  dir);
   if (ret < 0)
   {
     printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] ERROR: incorrect url '%s'.\n", serv->id, url);
     errno = EINVAL;
     return -1;
   }
-  
+
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] ParseURL(%s)= %s; %s\n", serv->id, url, server, dir);
 
-  //Copy url
+  // Copy .url field
   fho->url = strdup(url);
   NULL_RET_ERR(fho->url, ENOMEM);
+
+  // Set .has_mqtt field
+  if (strcasecmp(protocol, "mq_server") == 0)
+       fho->has_mqtt = 1;
+  else fho->has_mqtt = 0;
 
   fh_aux = (struct nfi_xpn_server_fhandle *)malloc(sizeof(struct nfi_xpn_server_fhandle));
   NULL_RET_ERR(fh_aux, ENOMEM);
@@ -651,15 +656,15 @@ int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", serv->id, dir);
 
   msg.type = XPN_SERVER_OPEN_FILE;
-
-  memccpy(msg.u_st_xpn_server_msg.op_open.path, dir,            0, PATH_MAX-1);
-  msg.u_st_xpn_server_msg.op_open.flags = flags;
-  msg.u_st_xpn_server_msg.op_open.mode = mode;
+  memccpy(msg.u_st_xpn_server_msg.op_open.path, dir, 0, PATH_MAX-1);
+  msg.u_st_xpn_server_msg.op_open.flags       = flags;
+  msg.u_st_xpn_server_msg.op_open.mode        = mode;
   msg.u_st_xpn_server_msg.op_open.xpn_session = serv->xpn_session_file;
+  msg.u_st_xpn_server_msg.op_open.file_type   = fho->has_mqtt;
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
   if (status.ret < 0)
-  { 
+  {
     errno = status.server_errno;
     debug_error("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] ERROR: remote open fails to open '%s' in server %s.\n", serv->id, dir, serv->server);
     FREE_AND_NULL(fh_aux);
@@ -667,9 +672,9 @@ int nfi_xpn_server_open ( struct nfi_server *serv,  char *url, int flags, mode_t
     return -1;
   }
 
-  memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
-
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", serv->id, dir);
+
+  memccpy(fh_aux->path, dir, 0, PATH_MAX-1);
   fh_aux->fd = status.ret;
 
   fho->type    = NFIFILE;
@@ -724,10 +729,9 @@ ssize_t nfi_xpn_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
 
   msg.type = XPN_SERVER_READ_FILE;
   memccpy(msg.u_st_xpn_server_msg.op_read.path, fh_aux->path, 0, PATH_MAX);
-  
   msg.u_st_xpn_server_msg.op_read.offset   = offset;
   msg.u_st_xpn_server_msg.op_read.size     = size;
-  msg.u_st_xpn_server_msg.op_read.fd   = fh_aux->fd;
+  msg.u_st_xpn_server_msg.op_read.fd       = fh_aux->fd;
   msg.u_st_xpn_server_msg.op_read.xpn_session = serv->xpn_session_file;
 
   ret = nfi_write_operation(server_aux, &msg);
@@ -752,7 +756,7 @@ ssize_t nfi_xpn_server_read ( struct nfi_server *serv, struct nfi_fhandle *fh, v
       errno = req.status.server_errno;
       return -1;
     }
-    
+
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_comm_read_data=%d.\n",serv->id, ret);
 
     if (req.size > 0)
@@ -802,7 +806,7 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
   // Check arguments...
   if (size == 0) {
-    return 0;
+      return 0;
   }
 
   NULL_RET_ERR(serv, EINVAL);
@@ -816,13 +820,12 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   server_aux = (struct nfi_xpn_server *) serv->private_info;
   if (server_aux == NULL)
   {
-    errno = EINVAL;
-    return -1;
+      errno = EINVAL;
+      return -1;
   }
-  
-  // private_info file handle
-  fh_aux     = (struct nfi_xpn_server_fhandle *) fh->priv_fh;
 
+  // private_info file handle
+  fh_aux = (struct nfi_xpn_server_fhandle *) fh->priv_fh;
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
 
   //Debug
@@ -830,10 +833,11 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
   msg.type = XPN_SERVER_WRITE_FILE;
   memccpy(msg.u_st_xpn_server_msg.op_write.path, fh_aux->path, 0, PATH_MAX-1);
-  msg.u_st_xpn_server_msg.op_write.offset = offset;
-  msg.u_st_xpn_server_msg.op_write.size   = size;
-  msg.u_st_xpn_server_msg.op_write.fd   = fh_aux->fd;
+  msg.u_st_xpn_server_msg.op_write.offset      = offset;
+  msg.u_st_xpn_server_msg.op_write.size        = size;
+  msg.u_st_xpn_server_msg.op_write.fd          = fh_aux->fd;
   msg.u_st_xpn_server_msg.op_write.xpn_session = serv->xpn_session_file;
+  msg.u_st_xpn_server_msg.op_write.file_type   = fh->has_mqtt ;
 
   ret = nfi_write_operation(server_aux, &msg);
   if(ret < 0)
@@ -848,9 +852,8 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   int buffer_size = size;
 
   // Max buffer size
-  if (buffer_size > MAX_BUFFER_SIZE)
-  {
-    buffer_size = MAX_BUFFER_SIZE;
+  if (buffer_size > MAX_BUFFER_SIZE) {
+      buffer_size = MAX_BUFFER_SIZE;
   }
 
   // writes n times: number of bytes + write data (n bytes)
@@ -879,7 +882,7 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   } while ((diff > 0) && (ret != 0));
 
   ret = nfi_xpn_server_comm_read_data(server_aux, (char *)&req, sizeof(struct st_xpn_server_rw_req));
-  if (ret < 0) 
+  if (ret < 0)
   {
     printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_read_data fails\n", serv->id);
     return -1;
@@ -908,7 +911,15 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
 
 int nfi_xpn_server_close ( __attribute__((__unused__)) struct nfi_server *serv, __attribute__((__unused__)) struct nfi_fhandle *fh )
 {
-  if (serv->xpn_session_file == 1){
+    // Without sesion close do nothing
+    if (serv->xpn_session_file != 1)
+    {
+      FREE_AND_NULL(fh->priv_fh);
+      FREE_AND_NULL(fh->url);
+      return 0;
+    }
+
+    // With sesion...
     struct nfi_xpn_server *server_aux;
     struct nfi_xpn_server_fhandle *fh_aux;
     struct st_xpn_server_msg msg;
@@ -931,33 +942,29 @@ int nfi_xpn_server_close ( __attribute__((__unused__)) struct nfi_server *serv, 
       errno = EINVAL;
       return -1;
     }
-    
+
     // private_info file handle
     fh_aux     = (struct nfi_xpn_server_fhandle *) fh->priv_fh;
 
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%d)\n", serv->id, fh_aux->fd);
 
     msg.type = XPN_SERVER_CLOSE_FILE;
-    msg.u_st_xpn_server_msg.op_close.fd = fh_aux->fd;
+    msg.u_st_xpn_server_msg.op_close.fd        = fh_aux->fd;
+    msg.u_st_xpn_server_msg.op_close.file_type = fh->has_mqtt;
 
     nfi_xpn_server_do_request(server_aux, &msg, (char *)&(status), sizeof(struct st_xpn_server_status));
 
-    if (status.ret < 0)
-      errno = status.server_errno;
+    if (status.ret < 0) {
+        errno = status.server_errno;
+    }
 
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%d)=%d\n", serv->id, fh_aux->fd, status.ret);
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] >> End\n", serv->id);
-    
+
     FREE_AND_NULL(fh->priv_fh);
     FREE_AND_NULL(fh->url);
 
     return status.ret;
-  }else{
-    // Without sesion close do nothing
-    FREE_AND_NULL(fh->priv_fh);
-    FREE_AND_NULL(fh->url);
-    return 0;
-  }
 }
 
 int nfi_xpn_server_remove ( struct nfi_server *serv,  char *url )
@@ -996,7 +1003,6 @@ int nfi_xpn_server_remove ( struct nfi_server *serv,  char *url )
   }
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_remove] ParseURL(%s)= %s; %s\n", serv->id, url, server, dir);
-
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove(%s)\n", serv->id, dir);
 
   memccpy(msg.u_st_xpn_server_msg.op_rm.path, dir, 0, PATH_MAX-1);
@@ -1129,7 +1135,7 @@ int nfi_xpn_server_getattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
   }
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_getattr] ParseURL(%s)= %s; %s\n", serv->id, fh->url, server, dir);
-  
+
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_getattr] nfi_xpn_server_getattr(%s)\n", serv->id, dir);
 
 
@@ -1173,7 +1179,7 @@ int nfi_xpn_server_setattr ( struct nfi_server *serv,  struct nfi_fhandle *fh, s
     errno = EINVAL;
     return -1;
   }
-  
+
   // private_info file handle
   fh_aux = (struct nfi_xpn_server_fhandle *) fh->priv_fh;
 
@@ -1296,7 +1302,7 @@ int nfi_xpn_server_opendir(struct nfi_server *serv,  char *url, struct nfi_fhand
   bzero(fh_aux, sizeof(struct nfi_xpn_server_fhandle));
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_opendir] nfi_xpn_server_opendir(%s)\n", serv->id, dir);
-  
+
   msg.type = XPN_SERVER_OPENDIR_DIR;
   memccpy(msg.u_st_xpn_server_msg.op_opendir.path, dir,            0, PATH_MAX-1);
   msg.u_st_xpn_server_msg.op_opendir.xpn_session = serv->xpn_session_dir;
@@ -1369,12 +1375,12 @@ int nfi_xpn_server_readdir(struct nfi_server *serv,  struct nfi_fhandle *fh, str
   msg.u_st_xpn_server_msg.op_readdir.xpn_session = serv->xpn_session_dir;
 
   nfi_xpn_server_do_request(server_aux, &msg, (char *)&(ret_entry), sizeof(struct st_xpn_server_readdir_req));
-  
+
   if (ret_entry.status.ret < 0)
     errno = ret_entry.status.server_errno;
   else
     fh_aux->telldir = ret_entry.telldir;
-  
+
   if (ret_entry.end == 0) {
     return -1;
   }
@@ -1412,7 +1418,7 @@ int nfi_xpn_server_closedir ( struct nfi_server *serv, struct nfi_fhandle *fh )
       errno = EINVAL;
       return -1;
     }
-    
+
     // private_info file handle
     fh_aux     = (struct nfi_xpn_server_fhandle *) fh->priv_fh;
 
@@ -1571,7 +1577,7 @@ int nfi_xpn_server_read_mdata ( struct nfi_server *serv, char *url, struct xpn_m
   }
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] ParseURL(%s)= %s\n", serv->id, url, dir);
-  
+
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] nfi_xpn_server_read_mdata(%s)\n", serv->id, dir);
 
 
@@ -1626,14 +1632,17 @@ int nfi_xpn_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_
   }
 
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] ParseURL(%s)= %s\n", serv->id, url, dir);
-  
+
   debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] nfi_xpn_server_write_mdata(%s)\n", serv->id, dir);
 
-  if (only_file_size){
+  if (only_file_size)
+  {
     msg.type = XPN_SERVER_WRITE_MDATA_FILE_SIZE;
     memccpy(msg.u_st_xpn_server_msg.op_write_mdata_file_size.path, dir,            0, PATH_MAX-1);
     msg.u_st_xpn_server_msg.op_write_mdata_file_size.size = mdata->file_size;
-  }else{
+  }
+  else
+  {
     msg.type = XPN_SERVER_WRITE_MDATA;
     memccpy(msg.u_st_xpn_server_msg.op_write_mdata.path, dir,            0, PATH_MAX-1);
     memcpy(&msg.u_st_xpn_server_msg.op_write_mdata.mdata, mdata, sizeof(struct xpn_metadata));
@@ -1650,4 +1659,6 @@ int nfi_xpn_server_write_mdata ( struct nfi_server *serv, char *url, struct xpn_
   return req.ret;
 }
 
+
 /* ................................................................... */
+

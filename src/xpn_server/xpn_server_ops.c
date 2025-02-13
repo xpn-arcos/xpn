@@ -231,15 +231,24 @@ void xpn_server_op_open ( xpn_server_param_st *params, void *comm, struct st_xpn
   status.ret = filesystem_open2(head->u_st_xpn_server_msg.op_open.path, head->u_st_xpn_server_msg.op_open.flags, head->u_st_xpn_server_msg.op_open.mode);
   status.server_errno = errno;
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] open(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_open.path, status.ret);
-  if (status.ret < 0){
+  if (status.ret < 0)
+  {
     xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
-  }else{
+  }
+  else
+  {
     if (head->u_st_xpn_server_msg.op_open.xpn_session == 0){
       status.ret = filesystem_close(status.ret);
     }
     status.server_errno = errno;
 
     xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+
+    // If this is a file with mq_server protocol then the server is going to suscribe
+    if ( head->u_st_xpn_server_msg.op_open.file_type == 1 ) 
+    {
+      mq_server_op_subscribe ( params, head );
+    }
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] << End\n", params->rank);
@@ -263,14 +272,24 @@ void xpn_server_op_creat ( xpn_server_param_st *params, void *comm, struct st_xp
   status.ret = filesystem_creat(head->u_st_xpn_server_msg.op_creat.path, head->u_st_xpn_server_msg.op_creat.mode);
   status.server_errno = errno;
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] creat(%s)=%d\n", params->rank, head->u_st_xpn_server_msg.op_creat.path, status.ret);
-  if (status.ret < 0){
+  if (status.ret < 0)
+  {
     xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
     return;
-  }else{
+  }
+  else
+  {
     status.ret = filesystem_close(status.ret);
     status.server_errno = errno;
 
     xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+
+    // If this is a file with mq_server protocol then the server is going to suscribe
+    if ( head->u_st_xpn_server_msg.op_creat.file_type == 1 ) 
+    {
+      mq_server_op_subscribe ( params, head );
+    }
+    
   }
 
   // show debug info
@@ -376,7 +395,7 @@ void xpn_server_op_read ( xpn_server_param_st *params, void *comm, struct st_xpn
     diff = head->u_st_xpn_server_msg.op_read.size - cont;
 
   } while ((diff > 0) && (req.size != 0));
-cleanup_xpn_server_op_read:
+  cleanup_xpn_server_op_read:
   if (head->u_st_xpn_server_msg.op_read.xpn_session == 0){
     filesystem_close(fd);
   }
@@ -400,6 +419,12 @@ void xpn_server_op_write ( xpn_server_param_st *params, void *comm, struct st_xp
   {
     printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] ERROR: NULL arguments\n", -1);
     return;
+  }
+
+  // If this is a file with mq_server protocol then the callback function is going to be used
+  if ( head->u_st_xpn_server_msg.op_write.file_type == 1 ) 
+  {
+    return ;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] >> Begin\n", params->rank);
@@ -505,6 +530,12 @@ void xpn_server_op_close ( xpn_server_param_st *params, void *comm, struct st_xp
   status.ret = filesystem_close(head->u_st_xpn_server_msg.op_close.fd);
   status.server_errno = errno;
   xpn_server_comm_write_data(params, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
+
+  // Si es un fichero con protocolo mq_server se desuscribe
+  if ( head->u_st_xpn_server_msg.op_close.file_type == 1 ) 
+  {
+    mq_server_op_unsubscribe (params, head);
+  }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] close(%d)=%d\n", params->rank, head->u_st_xpn_server_msg.op_close.fd, status.ret);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] << End\n", params->rank);

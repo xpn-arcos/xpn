@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Elias Del Pozo Puñal, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _SCK_SERVER_COMM_H_
-#define _SCK_SERVER_COMM_H_
+#ifndef _MQ_SERVER_COMM_H_
+#define _MQ_SERVER_COMM_H_
 
   #ifdef  __cplusplus
     extern "C" {
@@ -29,23 +29,36 @@
 
   /* ... Include / Inclusion ........................................... */
 
-    #include "all_system.h"
-    #include "base/utils.h"
-    #include "base/time_misc.h"
-    #include "xpn_server/xpn_server_params.h"
+  #include "all_system.h"
+  #include <sys/time.h>
 
-  
+  #include "base/utils.h"
+  #include "socket.h"
+  #include "xpn_server/xpn_server_params.h"
+
+
+  /* ... Const / Const ................................................. */
+
+
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
   /* ... Functions / Funciones ......................................... */
+  
+     double get_time(void) ;
 
-  int  sck_server_comm_init          ( int *socket, char *port_name );
-  int  sck_server_comm_accept        ( int socket, int **new_socket );
-  int  sck_server_comm_disconnect    ( int *socket );
+     #ifdef HAVE_MOSQUITTO_H
+     void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj, const struct mosquitto_message * msg) ;
+     #endif
+
+     int mq_server_mqtt_init    ( xpn_server_param_st * params ) ;
+     int mq_server_mqtt_destroy ( xpn_server_param_st * params ) ;
+
 
   /* ................................................................... */
-  
+
   #ifdef  __cplusplus
     }
   #endif
 
 #endif
-
