@@ -68,6 +68,15 @@
     int    argc;
     char **argv;
 
+    // MQTT configuration
+    int xpn_keep_connection;
+    int mosquitto_mode;
+    int mosquitto_qos;
+
+    #ifdef HAVE_MOSQUITTO_H
+      struct mosquitto * mqtt;
+    #endif
+
   } xpn_server_param_st;
 
 

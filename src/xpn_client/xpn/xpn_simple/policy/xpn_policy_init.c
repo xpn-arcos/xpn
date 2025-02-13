@@ -304,7 +304,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
     #endif
 
     #ifdef ENABLE_SCK_SERVER
-    else if (strcmp(prt, "sck_server") == 0) {
+    else if ( (strcmp(prt, "sck_server") == 0) || (strcmp(prt, "mq_server") == 0) ) {
         ret = nfi_xpn_server_init(url_buf, serv, XPN_SERVER_TYPE_SCK);
         if (ret < 0) {
             errno = ESRCH;
@@ -328,17 +328,6 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
     else if (strcmp(prt, "nfs3") == 0) {
         //printf("[XPN]nfi_nfs3_init: %s\n",url);
         ret = nfi_nfs3_init(url_buf, serv, NULL);
-        if (ret < 0) {
-            errno = ESRCH;
-            return -1;
-        }
-    }
-    #endif
-
-    #ifdef ENABLE_MQ_SERVER
-    else if (strcmp(prt, "mq_server") == 0) {
-        //printf("[XPN]nfi_mq_server_init: %s\n",url);
-        ret = nfi_mq_server_init(url_buf, serv, NULL);
         if (ret < 0) {
             errno = ESRCH;
             return -1;

@@ -182,8 +182,6 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_client/nfi \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_mq_server \
--I\$(top_srcdir)/include/mq_server/ \
 -I\$(top_srcdir)/include/xpn_server/ \
 -I\$(top_srcdir)/include/xpn_server/mpi_server/ \
 -I\$(top_srcdir)/include/xpn_server/sck_server/"
@@ -278,19 +276,17 @@ AM_CONDITIONAL([ENABLE_SCK_SERVER], [test "$NFI_SCK_SERVER" = "nfi_sck_server"])
 AC_ARG_ENABLE(  [mosquitto],
                 [AS_HELP_STRING([--enable-mosquitto],[Enable mosquitto module.])],
                 [
-                  [CDEFS="$CDEFS -DENABLE_MQ_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"]
-                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_mq_server"]
-                  [NFI_MQ_SERVER="nfi_mq_server"]
-                  [NFI_MQ_SERVER_OBJECTS="\$(NFI_MQ_SERVER_OBJECTS)"]
+                  [CDEFS="$CDEFS -DENABLE_SCK_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server"]
+                  [NFI_MQ_SERVER="nfi_sck_server"]
                   [LIBLINK+=" -lmosquitto"]
                   [LIBS=$LFLAGS" "$LIBS" -lmosquitto"]
                 ]
 )
 AC_SUBST(NFI_MQ_SERVER)
-AC_SUBST(NFI_MQ_SERVER_OBJECTS)
 AC_SUBST(LIBLINK)
 AC_SUBST(LIBS)
-AM_CONDITIONAL([ENABLE_MQ_SERVER], [test "$NFI_MQ_SERVER" = "nfi_mq_server"])
+AM_CONDITIONAL([ENABLE_SCK_SERVER], [test "$NFI_SCK_SERVER" = "nfi_sck_server"])
 ### END OF MQTT BLOCK. Do not remove this line. ###
 
 
@@ -312,7 +308,6 @@ AC_CONFIG_FILES([ \
       src/xpn_client/Makefile \
       src/utils/Makefile \
       src/bypass/Makefile \
-      src/mq_server/Makefile \
       src/xpn_server/Makefile \
       test/integrity/xpn/Makefile \
       test/integrity/mpi_connect_accept/Makefile \

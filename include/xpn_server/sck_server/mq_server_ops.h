@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Elias Del Pozo Puñal, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -20,31 +20,17 @@
  */
 
 
-#ifndef _NFI_LIB_H_
-#define _NFI_LIB_H_
+#ifndef _MQ_SERVER_OPS_H_
+#define _MQ_SERVER_OPS_H_
+
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "nfi.h"
-  #include "nfi_worker.h"
-  #include "base/path_misc.h"
-
-  /* protocols */
-  #include "nfi_local.h"
-  #include "nfi_xpn_server.h"
-
-  // BEGIN OF ENABLE_MODULE BLOCK. Do not remove this line. //
-  // BEGIN OF ENABLE_NFS BLOCK. Do not remove this line. //
-  #ifdef ENABLE_NFS
-    #include "nfi_nfs.h"
-  #endif
-  // END OF ENABLE_NFS BLOCK. Do not remove this line. //
-  // BEGIN OF ENABLE_NFS3 BLOCK. Do not remove this line. //
-  #ifdef ENABLE_NFS3
-    #include "nfi_nfs3.h"
-  #endif
-  // END OF ENABLE_NFS3 BLOCK. Do not remove this line. //
-  // END OF ENABLE_MODULE BLOCK. Do not remove this line. //
+  #include "all_system.h"
+  #include "base/utils.h"
 
 
   /* ... Const / Const ................................................. */
@@ -54,8 +40,15 @@
 
 
   /* ... Functions / Funciones ......................................... */
-
+  
+     double get_time_ops ( void ) ;
+     void mq_server_op_subscribe   ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
+     void mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
 
   /* ................................................................... */
+
+  #ifdef  __cplusplus
+    }
+  #endif
 
 #endif

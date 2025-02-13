@@ -112,6 +112,7 @@
     size_t size;
     int fd;
     char xpn_session;
+    int file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
   };
 
   struct st_xpn_server_rw_req

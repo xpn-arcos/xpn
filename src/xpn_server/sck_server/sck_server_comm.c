@@ -22,8 +22,11 @@
 
 /* ... Include / Inclusion ........................................... */
 
-   #include "sck_server_comm.h"
-   #include "socket.h"
+#include "sck_server_comm.h"
+#include "socket.h"
+
+
+  
 
 
 /* ... Functions / Funciones ......................................... */
@@ -96,6 +99,16 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
     printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: listen fails\n", 0);
     return -1;
   }
+
+    /*
+     * Initialize mosquitto
+     */
+
+    #ifdef HAVE_MOSQUITTO_H
+    ret = mq_server_mqtt_init(params) ;
+    #endif
+
+  // get sockname
   socklen_t len = sizeof(server_addr);
   getsockname(*new_socket, (struct sockaddr *)&server_addr, &len);
   sprintf(port_name, "%d", ntohs(server_addr.sin_port));
@@ -125,6 +138,17 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] >> End\n", 0);
 
   return 1;
+}
+
+int sck_server_comm_destroy ( mq_server_param_st * params )
+{
+    ret = socket_close( params->server_socket );
+
+    #ifdef HAVE_MOSQUITTO_H
+    ret = mq_server_mqtt_destroy(params) ;
+    #endif
+
+    return ret ;
 }
 
 int sck_server_comm_accept ( int socket, int **new_socket )

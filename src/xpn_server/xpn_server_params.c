@@ -62,6 +62,15 @@ void xpn_server_params_show ( xpn_server_param_st *params )
       printf(" |\t-t  <int>:\tError: unknown\n");
   }
 
+
+  // use of mqtt
+  if (params -> mosquitto_mode == 1) 
+  {
+    printf("\t-m <mqtt_qos>:\t%d\n", params -> mosquitto_qos);
+  }
+
+  printf("\t-k  <int>:\t'%d'\n", params -> xpn_keep_connection);
+
   // * shutdown_file
   printf(" |\t-f  <path>:\t'%s'\n",   params->shutdown_file);
   // * host
@@ -85,6 +94,9 @@ void xpn_server_params_show_usage ( void )
   printf("\t-h  <host>:          host server to be shutdown\n") ;
   printf("\t-w                   await for servers to stop\n") ;
 
+  printf("\t-m  <int>:           0 (QoS 0); 1 (QoS 1); 2 (QoS 2)\n");
+  printf("\t-k  <int>:           0 (disconnect on each op.); 1 (keep connected after op.)\n");
+
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show_usage] << End\n", -1) ;
 }
 
@@ -95,18 +107,27 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
   // set default values
   params->argc = argc;
   params->argv = argv;
+
   params->size = 0;
   params->rank = 0;
+
   params->thread_mode_connections = TH_NOT;
   params->thread_mode_operations = TH_NOT;
   params->server_type = XPN_SERVER_TYPE_SCK;
   #ifdef ENABLE_MPI_SERVER
   params->server_type = XPN_SERVER_TYPE_MPI;
   #endif
+
   params->await_stop = 0;
   strcpy(params->port_name, "");
   strcpy(params->srv_name,  "");
   ns_get_hostname(params->srv_name);
+
+  // default values for mqtt
+  params -> mosquitto_mode = 0;
+  params -> mosquitto_qos = 0;
+
+  params -> xpn_keep_connection = 0;
 
   // update user requests
   debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] Get user configuration\n", params->rank);
@@ -182,6 +203,42 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
             break;
           case 'w':
             params->await_stop = 1;
+            break;
+
+          case 'm':
+            params -> mosquitto_mode = 1;
+
+            if (isdigit(argv[i + 1][0])) 
+            {
+                int qos_mode_mqtt = atoi(argv[i + 1]);
+
+                if ( qos_mode_mqtt < 0 || qos_mode_mqtt > 2 )
+                {
+                    printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
+                }
+                else
+                {
+                    params -> mosquitto_qos = qos_mode_mqtt;
+                }
+            }
+            else
+            {
+                printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
+            }
+
+            i++;
+            break;
+
+          case 'k':
+            char *endptr;
+            params -> xpn_keep_connection = (int)strtol(argv[i + 1], &endptr, 10);
+
+            if ( (endptr == argv[i + 1]) || (*endptr != '\0') ) 
+            {
+              params -> xpn_keep_connection = 1 ;
+              printf("WARNING: unknown keep_connection value (%s). Default value 1 selected\n", argv[i + 1]);
+            }
+            i++;
             break;
 
           default:

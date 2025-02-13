@@ -76,7 +76,8 @@ int xpn_server_comm_destroy ( xpn_server_param_st *params )
 
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
-    ret = socket_close( params->server_socket );
+    ret = sck_server_comm_destroy(params) ;
+    //ret = socket_close( params->server_socket );
     break;
   #endif
  

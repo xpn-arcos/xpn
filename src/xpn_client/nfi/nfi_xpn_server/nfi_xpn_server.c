@@ -835,6 +835,15 @@ ssize_t nfi_xpn_server_write ( struct nfi_server *serv, struct nfi_fhandle *fh, 
   msg.u_st_xpn_server_msg.op_write.fd   = fh_aux->fd;
   msg.u_st_xpn_server_msg.op_write.xpn_session = serv->xpn_session_file;
 
+  if (strstr(serv->url, "mq_server")) 
+  {
+     msg.u_st_xpn_server_msg.op_write.file_type = 1;
+  }
+  else {
+     msg.u_st_xpn_server_msg.op_write.file_type = 0;
+  }
+
+
   ret = nfi_write_operation(server_aux, &msg);
   if(ret < 0)
   {
