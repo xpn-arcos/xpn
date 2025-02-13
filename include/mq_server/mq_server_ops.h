@@ -22,25 +22,18 @@
  #define _MQ_SERVER_OPS_H_
  
  #include <libgen.h>
- 
+ #include <sys/time.h>
  #include "all_system.h"
- 
  #include "base/filesystem.h"
- 
  #include "base/urlstr.h"
- 
  #include "base/utils.h"
- 
  #include "base/workers.h"
- 
  #include "mq_server_ops.h"
- 
  #include "mq_server_comm.h"
- 
  #include "mq_server_d2xpn.h"
+ #include "mq_server/mq_server_params.h"
  
- #include "mq_server_params.h"
- 
+
  /*
   *  Constants
   */
@@ -51,8 +44,8 @@
  
 #define MQ_MAGIC_NUMBER "XPN"
 
- #define MQ_CHECK_MAGIC_NUMBER(mdata)\
-     (((mdata) -> magic_number[0] == MQ_MAGIC_NUMBER[0]) && \
+#define MQ_CHECK_MAGIC_NUMBER(mdata)\
+        (((mdata) -> magic_number[0] == MQ_MAGIC_NUMBER[0]) && \
          ((mdata) -> magic_number[1] == MQ_MAGIC_NUMBER[1]) && \
          ((mdata) -> magic_number[2] == MQ_MAGIC_NUMBER[2]))
  
@@ -293,3 +286,4 @@
  int mq_server_do_operation(struct st_th * th, int * the_end);
  
  #endif
+

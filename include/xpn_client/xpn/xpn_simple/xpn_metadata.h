@@ -42,7 +42,7 @@
   #define XPN_METADATA_DISTRIBUTION_ROUND_ROBIN 1
 
   #define XPN_CHECK_MAGIC_NUMBER(mdata) \
-          (((mdata)->magic_number[0] == XPN_MAGIC_NUMBER[0]) && \
+         (((mdata)->magic_number[0] == XPN_MAGIC_NUMBER[0]) && \
           ((mdata)->magic_number[1] == XPN_MAGIC_NUMBER[1]) && \
           ((mdata)->magic_number[2] == XPN_MAGIC_NUMBER[2])) 
 
