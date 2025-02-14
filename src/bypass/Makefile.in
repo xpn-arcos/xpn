@@ -1,0 +1,23 @@
+#
+# This Makefile is for expand bypass (syscalls interceptions) library
+#
+
+
+ prefix = @prefix@
+ CC=@CC@
+
+ FLAGS=-Wall -Wextra -fpic -std=c11 @CFLAGS@
+ INCLUDE=-I../../include -I../../include/base -I../../include/xpn_client -I../../include/bypass -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
+ LIBS=-L../../../xpn/src/xpn_client -L../../src/xpn_client -lxpn -lpthread -ldl
+
+all:
+	$(CC) $(FLAGS) $(INCLUDE) -c xpn_bypass.c
+	$(CC) -shared -o xpn_bypass.so xpn_bypass.o $(LIBS)
+
+install:
+	cp -f xpn_bypass.so ${prefix}/lib
+
+clean:
+	rm -f *.o
+	rm -f *.so
+
