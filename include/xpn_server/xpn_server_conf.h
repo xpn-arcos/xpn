@@ -49,7 +49,7 @@
   #ifdef MPI_MAX_PORT_NAME
   #define XPN_SERVER_MAX_PORT_NAME MPI_MAX_PORT_NAME
   #else
-  #define XPN_SERVER_MAX_PORT_NAME 1024
+  #define XPN_SERVER_MAX_PORT_NAME 256
   #endif
   
   /* ... Data structures / Estructuras de datos ........................ */
