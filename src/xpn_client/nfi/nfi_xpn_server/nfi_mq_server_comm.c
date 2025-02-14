@@ -77,7 +77,7 @@ void nfi_mq_server_init ( struct nfi_xpn_server *server_aux )
             mosquitto_int_option(server_aux -> mqtt, MOSQ_OPT_TCP_NODELAY, 1);  
             mosquitto_int_option(server_aux -> mqtt, MOSQ_OPT_SEND_MAXIMUM, 65535);
 
-            printf("%s\n", server_aux->srv_name);
+            // printf("%s\n", server_aux->srv_name);
             rc = mosquitto_connect(server_aux -> mqtt, server_aux -> srv_name, 1883, 0);
 
             if (rc != MOSQ_ERR_SUCCESS)

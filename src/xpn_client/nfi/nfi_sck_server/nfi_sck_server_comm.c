@@ -53,7 +53,7 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
     return -1;
   }
 
-  ret = socket_recv(connection_socket, port_name, 10);
+  ret = socket_recv(connection_socket, port_name, XPN_SERVER_MAX_PORT_NAME);
 
   if (ret < 0)
   {
