@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Elias del Pozo Puñal, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Elias del Pozo Puñal, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -282,7 +282,7 @@ void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj
     }*/
 
     // Crear una estructura para pasar al hilo
-    ThreadData * thread_data = (struct ThreadData * ) malloc(sizeof(ThreadData));
+    ThreadData * thread_data = (ThreadData *) malloc(sizeof(ThreadData));
 
     thread_data -> topic = strdup(msg -> topic);
     thread_data -> msg = (char * ) malloc(msg -> payloadlen + 1);
@@ -324,7 +324,7 @@ void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj
 #endif
 
 
-int mq_server_mqtt_init ( mq_server_param_st * params ) 
+int mq_server_mqtt_init ( xpn_server_param_st * params ) 
 {
     if (params -> mosquitto_mode != 1) {
       debug_info("WARNING: mosquitto is not enabled :-(\n") ;
@@ -387,7 +387,7 @@ int mq_server_mqtt_init ( mq_server_param_st * params )
     #endif
 }
 
-int mq_server_mqtt_destroy ( mq_server_param_st * params ) 
+int mq_server_mqtt_destroy ( xpn_server_param_st * params ) 
 {
     if (params -> mosquitto_mode != 1) {
       debug_info("WARNING: mosquitto is not enabled :-(\n") ;
@@ -406,3 +406,4 @@ int mq_server_mqtt_destroy ( mq_server_param_st * params )
 
 
 /* ................................................................... */
+

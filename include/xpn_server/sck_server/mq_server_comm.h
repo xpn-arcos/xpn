@@ -29,16 +29,12 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "socket.h"
-  #include <sys/time.h>
+     #include "all_system.h"
+     #include <sys/time.h>
 
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "base/utils.h"
+     #include "socket.h"
+     #include "xpn_server/xpn_server_params.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -49,8 +45,8 @@
      void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj, const struct mosquitto_message * msg) ;
      #endif
 
-     int mq_server_mqtt_init    ( mq_server_param_st * params ) ;
-     int mq_server_mqtt_destroy ( mq_server_param_st * params ) ;
+     int mq_server_mqtt_init    ( xpn_server_param_st * params ) ;
+     int mq_server_mqtt_destroy ( xpn_server_param_st * params ) ;
 
 
   /* ................................................................... */
@@ -60,3 +56,4 @@
   #endif
 
 #endif
+

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -88,37 +88,40 @@
 
   struct st_xpn_server_path_flags
   {
-    char path[PATH_MAX];
-    int flags;
-    mode_t mode;
-    char xpn_session;
+    char     path[PATH_MAX];
+    int      flags;
+    mode_t   mode;
+    char     xpn_session;
+    int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
   };
 
   struct st_xpn_server_path
   {
-    char path[PATH_MAX];
+    char     path[PATH_MAX];
   };
 
   struct st_xpn_server_close
   {
-    int fd;
-    DIR *dir;
+    int      fd;
+    char     path[PATH_MAX];
+    DIR     *dir;
+    int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
   };
 
   struct st_xpn_server_rw
   {
-    char path[PATH_MAX];
+    char     path[PATH_MAX];
     offset_t offset;
-    size_t size;
-    int fd;
-    char xpn_session;
-    int file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+    size_t   size;
+    int      fd;
+    char     xpn_session;
+    int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
   };
 
   struct st_xpn_server_rw_req
   {
     ssize_t size;
-    char last;
+    char    last;
     struct st_xpn_server_status status;
   };
 

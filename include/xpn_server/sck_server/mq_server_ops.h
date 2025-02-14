@@ -29,21 +29,18 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/utils.h"
-
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "all_system.h"
+     #include "base/utils.h"
+     #include "xpn_server_params.h"
+     #include "xpn_server_ops.h"
 
 
   /* ... Functions / Funciones ......................................... */
   
      double get_time_ops ( void ) ;
-     void mq_server_op_subscribe   ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
-     void mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
+     void   mq_server_op_subscribe   ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
+     void   mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
+
 
   /* ................................................................... */
 
@@ -52,3 +49,4 @@
   #endif
 
 #endif
+

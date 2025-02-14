@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -20,15 +20,9 @@
 
 /* ... Include / Inclusion ........................................... */
 
+#include "xpn_server/xpn_server_conf.h"
 #include "nfi_sck_server_comm.h"
 #include "socket.h"
-#include "xpn_server/xpn_server_conf.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
 
 
 /* ... Functions / Funciones ......................................... */
@@ -49,6 +43,7 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
     debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket connect\n");
     return -1;
   }
+
   int buffer = SOCKET_ACCEPT_CODE;
   ret = socket_send(connection_socket, &buffer, sizeof(buffer));
   if (ret < 0)
@@ -57,6 +52,7 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
     socket_close(connection_socket);
     return -1;
   }
+
   ret = socket_recv(connection_socket, port_name, XPN_SERVER_MAX_PORT_NAME);
   if (ret < 0)
   {
@@ -64,8 +60,8 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
     socket_close(connection_socket);
     return -1;
   }
-  socket_close(connection_socket);
 
+  socket_close(connection_socket);
   if (ret < 0) {
     printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: Lookup %s Port %s\n", srv_name, port_name);
     return -1;
@@ -180,4 +176,7 @@ int nfi_sck_server_comm_disconnect(int socket)
   // Return OK
   return ret;
 }
+
+
 /* ................................................................... */
+

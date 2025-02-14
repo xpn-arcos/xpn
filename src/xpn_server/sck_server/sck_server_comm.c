@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -24,9 +24,6 @@
 
 #include "sck_server_comm.h"
 #include "socket.h"
-
-
-  
 
 
 /* ... Functions / Funciones ......................................... */
@@ -82,7 +79,6 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port        = htons(0);
 
-
   ret = bind(*new_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
   if (ret < 0)
   {
@@ -99,14 +95,6 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
     printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: listen fails\n", 0);
     return -1;
   }
-
-    /*
-     * Initialize mosquitto
-     */
-
-    #ifdef HAVE_MOSQUITTO_H
-    ret = mq_server_mqtt_init(params) ;
-    #endif
 
   // get sockname
   socklen_t len = sizeof(server_addr);
@@ -138,17 +126,6 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] >> End\n", 0);
 
   return 1;
-}
-
-int sck_server_comm_destroy ( mq_server_param_st * params )
-{
-    ret = socket_close( params->server_socket );
-
-    #ifdef HAVE_MOSQUITTO_H
-    ret = mq_server_mqtt_destroy(params) ;
-    #endif
-
-    return ret ;
 }
 
 int sck_server_comm_accept ( int socket, int **new_socket )

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -31,7 +31,7 @@
 
    /* ... Functions / Funciones ......................................... */
 
-      int getURLProtocol(char *url, char *protocol)
+      int getURLProtocol ( char *url, char *protocol )
       {
       	int i,j;
 

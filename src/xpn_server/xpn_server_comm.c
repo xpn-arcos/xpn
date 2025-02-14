@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -50,7 +50,10 @@ int xpn_server_comm_init ( xpn_server_param_st *params )
 
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
+    // Initialize socket
     ret = sck_server_comm_init( &params->server_socket, params->port_name );
+    // Initialize mosquitto
+    ret = mq_server_mqtt_init(params) ;
     break;
   #endif
  
@@ -76,8 +79,10 @@ int xpn_server_comm_destroy ( xpn_server_param_st *params )
 
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
-    ret = sck_server_comm_destroy(params) ;
-    //ret = socket_close( params->server_socket );
+    // Finalize mosquitto
+    ret = mq_server_mqtt_destroy(params) ;
+    // Close socket
+    ret = socket_close(params->server_socket) ;
     break;
   #endif
  
@@ -141,7 +146,7 @@ int xpn_server_comm_disconnect ( xpn_server_param_st *params, void *sd )
   return ret;
 }
 
-ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, void *sd, int *op, int *rank_client_id, int *tag_client_id )
+ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, void *sd, int *op, __attribute__((__unused__)) int *rank_client_id, __attribute__((__unused__)) int *tag_client_id )
 { 
   ssize_t ret = -1;
 
@@ -167,7 +172,7 @@ ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, void *sd, 
   return ret;
 }
 
-ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
+ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 { 
   ssize_t ret = -1;
 
@@ -193,7 +198,7 @@ ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, void *sd, char
   return ret;
 }
 
-ssize_t xpn_server_comm_read_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
+ssize_t xpn_server_comm_read_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 { 
   ssize_t ret = -1;
 

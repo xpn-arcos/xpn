@@ -180,8 +180,8 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_client/xpn \
 -I\$(top_srcdir)/include/xpn_client/xpn/xpn_simple \
 -I\$(top_srcdir)/include/xpn_client/nfi \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
 -I\$(top_srcdir)/include/xpn_server/ \
 -I\$(top_srcdir)/include/xpn_server/mpi_server/ \
 -I\$(top_srcdir)/include/xpn_server/sck_server/"
@@ -252,7 +252,7 @@ AM_CONDITIONAL([ENABLE_MPI_SERVER], [test "$NFI_MPI_SERVER" = "nfi_mpi_server"])
 
 ### BEGIN OF SCK_SERVER BLOCK. Do not remove this line. ###
 #
-# Defines the necessary variables if gridftp is enabled.
+# Defines the necessary variables if sck_server is enabled.
 #
 AC_ARG_ENABLE(  [sck_server],
                 [AS_HELP_STRING([--enable-sck_server],[Enable sck_server module.])],
@@ -271,19 +271,21 @@ AM_CONDITIONAL([ENABLE_SCK_SERVER], [test "$NFI_SCK_SERVER" = "nfi_sck_server"])
 
 ### BEGIN OF MQTT BLOCK. Do not remove this line. ###
 #
-# Defines the necessary variables if gridftp is enabled.
+# Defines the necessary variables if mq_server is enabled.
 #
 AC_ARG_ENABLE(  [mosquitto],
                 [AS_HELP_STRING([--enable-mosquitto],[Enable mosquitto module.])],
                 [
                   [CDEFS="$CDEFS -DENABLE_SCK_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"]
                   [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server"]
-                  [NFI_MQ_SERVER="nfi_sck_server"]
+                  [NFI_SCK_SERVER="nfi_sck_server"]
+                  [NFI_SCK_SERVER_OBJECTS="\$(NFI_SCK_SERVER_OBJECTS)"]
                   [LIBLINK+=" -lmosquitto"]
                   [LIBS=$LFLAGS" "$LIBS" -lmosquitto"]
                 ]
 )
-AC_SUBST(NFI_MQ_SERVER)
+AC_SUBST(NFI_SCK_SERVER)
+AC_SUBST(NFI_SCK_SERVER_OBJECTS)
 AC_SUBST(LIBLINK)
 AC_SUBST(LIBS)
 AM_CONDITIONAL([ENABLE_SCK_SERVER], [test "$NFI_SCK_SERVER" = "nfi_sck_server"])
