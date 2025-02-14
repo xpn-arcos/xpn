@@ -864,6 +864,7 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
         return -1;
     }
 
+
     if (req.status.ret < 0)
         errno = req.status.server_errno;
 
@@ -1052,7 +1053,8 @@ int nfi_xpn_server_rename(struct nfi_server * serv, char * old_url, char * new_u
     return ret;
 }
 
-int nfi_xpn_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
+int nfi_xpn_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_xpn_server * server_aux;
@@ -1105,7 +1107,8 @@ int nfi_xpn_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
     return req.status;
 }
 
-int nfi_xpn_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
+int nfi_xpn_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr)
+{
     struct nfi_xpn_server * server_aux;
     struct nfi_xpn_server_fhandle * fh_aux;
 
@@ -1269,7 +1272,8 @@ int nfi_xpn_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
     return 0;
 }
 
-int nfi_xpn_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry) {
+int nfi_xpn_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry)
+{
     struct nfi_xpn_server * server_aux;
     struct nfi_xpn_server_fhandle * fh_aux;
     struct st_xpn_server_msg msg;
@@ -1330,7 +1334,8 @@ int nfi_xpn_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
     return 0;
 }
 
-int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
+int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
+{
     if (serv -> xpn_session_dir == 1) {
         struct nfi_xpn_server * server_aux;
         struct nfi_xpn_server_fhandle * fh_aux;
@@ -1377,7 +1382,8 @@ int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
     }
 }
 
-int nfi_xpn_server_rmdir(struct nfi_server * serv, char * url) {
+int nfi_xpn_server_rmdir(struct nfi_server * serv, char * url)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_xpn_server * server_aux;

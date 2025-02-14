@@ -41,6 +41,7 @@
   void nfi_mq_server_destroy      ( struct nfi_xpn_server *server_aux );
   ssize_t nfi_mq_server_publish   ( struct nfi_xpn_server *server_aux, struct nfi_xpn_server_fhandle *fh_aux, void * buffer, off_t offset, size_t size );
 
+      
   /* ................................................................... */
 
   #ifdef  __cplusplus

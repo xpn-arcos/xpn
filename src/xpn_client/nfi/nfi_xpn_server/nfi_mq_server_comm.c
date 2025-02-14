@@ -34,13 +34,13 @@ void nfi_mq_server_init ( struct nfi_xpn_server *server_aux )
 	{
           debug_info("WARNING: mosquitto is not enabled :,-(\n") ;
           return;
-        }
+  }
 
     /*INIT MOSQUITTO CLIENT SIDE */
 
     #ifdef HAVE_MOSQUITTO_H
         int rc = 0;
-	char *end;
+	      char *end;
 
         // server_aux -> xpn_mosquitto_mode = atoi(env_mosquitto);
         server_aux -> xpn_mosquitto_mode = strtol(env_mosquitto, &end, 10);
@@ -172,4 +172,3 @@ ssize_t nfi_mq_server_publish ( struct nfi_xpn_server *server_aux, struct nfi_xp
 
     return ret;
 }
-
