@@ -45,6 +45,7 @@ NFI_NFS3_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_XPN_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_XPN_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_xpn_server/nfi_xpn_server_comm.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_xpn_server/nfi_mq_server_comm.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_xpn_server/nfi_xpn_server.h
 ### END OF NFI_XPN_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
@@ -150,6 +151,7 @@ NFI_NFS3_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_nfs3/nfi_nfs3.c \
 ### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_XPN_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_XPN_SERVER_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_xpn_server/nfi_xpn_server.c \
+			@top_srcdir@/src/xpn_client/nfi/nfi_xpn_server/nfi_mq_server_comm.c \
 			@top_srcdir@/src/xpn_client/nfi/nfi_xpn_server/nfi_xpn_server_comm.c
 ### END OF NFI_XPN_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###

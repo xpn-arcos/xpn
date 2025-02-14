@@ -20,11 +20,10 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi_xpn_server.h"
-
-#include "nfi_xpn_server_comm.h"
-
-#include "xpn_server/xpn_server_ops.h"
+  #include "nfi_xpn_server.h"
+  #include "nfi_xpn_server_comm.h"
+  #include "nfi_mq_server_comm.h"
+  #include "xpn_server/xpn_server_ops.h"
 
 
 /* ... Const / Const ................................................. */
@@ -406,7 +405,7 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type) {
 
 
     // MQTT Initialization
-    ret = nfi_mq_server_init (server_aux);
+    nfi_mq_server_init (server_aux);
 
     // Initialize workers
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] Initialize workers\n", serv -> id);
@@ -443,6 +442,9 @@ int nfi_xpn_server_destroy(struct nfi_server * serv) {
 
     nfiworker_destroy(serv);
 
+    // MQTT destroy
+    nfi_mq_server_destroy (server_aux);
+
     // MPI Finalize...
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_destroy] Destroy MPI Client communication\n", serv -> id);
 
@@ -450,9 +452,6 @@ int nfi_xpn_server_destroy(struct nfi_server * serv) {
     if (ret < 0) {
         printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_destroy] ERROR: nfi_xpn_server_comm_destroy fails\n", serv -> id);
     }
-
-    // MQTT destroy
-    nfi_mq_server_destroy (server_aux);
 
     // free private_info, 'url' string and 'server' string...
     FREE_AND_NULL(serv -> ops);
@@ -865,6 +864,7 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
         return -1;
     }
 
+
     if (req.status.ret < 0)
         errno = req.status.server_errno;
 
@@ -1053,7 +1053,8 @@ int nfi_xpn_server_rename(struct nfi_server * serv, char * old_url, char * new_u
     return ret;
 }
 
-int nfi_xpn_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
+int nfi_xpn_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_xpn_server * server_aux;
@@ -1106,7 +1107,8 @@ int nfi_xpn_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
     return req.status;
 }
 
-int nfi_xpn_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr) {
+int nfi_xpn_server_setattr(struct nfi_server * serv, struct nfi_fhandle * fh, struct nfi_attr * attr)
+{
     struct nfi_xpn_server * server_aux;
     struct nfi_xpn_server_fhandle * fh_aux;
 
@@ -1270,7 +1272,8 @@ int nfi_xpn_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
     return 0;
 }
 
-int nfi_xpn_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry) {
+int nfi_xpn_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, struct dirent * entry)
+{
     struct nfi_xpn_server * server_aux;
     struct nfi_xpn_server_fhandle * fh_aux;
     struct st_xpn_server_msg msg;
@@ -1331,7 +1334,8 @@ int nfi_xpn_server_readdir(struct nfi_server * serv, struct nfi_fhandle * fh, st
     return 0;
 }
 
-int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
+int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
+{
     if (serv -> xpn_session_dir == 1) {
         struct nfi_xpn_server * server_aux;
         struct nfi_xpn_server_fhandle * fh_aux;
@@ -1378,7 +1382,8 @@ int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh) {
     }
 }
 
-int nfi_xpn_server_rmdir(struct nfi_server * serv, char * url) {
+int nfi_xpn_server_rmdir(struct nfi_server * serv, char * url)
+{
     int ret;
     char server[PATH_MAX], dir[PATH_MAX];
     struct nfi_xpn_server * server_aux;

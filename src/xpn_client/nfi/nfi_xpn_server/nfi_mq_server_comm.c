@@ -20,35 +20,50 @@
 
 /* ... Include / Inclusion ........................................... */
 
-
 #include "nfi_mq_server_comm.h"
 
 
+/* ... Functions / Funciones ......................................... */
 
 void nfi_mq_server_init ( struct nfi_xpn_server *server_aux )
 {
-	server_aux -> params.xpn_mosquitto_mode = 0;
+	server_aux -> xpn_mosquitto_mode = 0;
 	char * env_mosquitto = getenv("XPN_MQTT");
 
 	if (env_mosquitto == NULL) 
 	{
-      debug_info("WARNING: mosquitto is not enabled :-(\n") ;
-      return;
-    }
+          debug_info("WARNING: mosquitto is not enabled :,-(\n") ;
+          return;
+  }
 
-	#ifdef HAVE_MOSQUITTO_H
     /*INIT MOSQUITTO CLIENT SIDE */
-    int rc = 0;
-    if (env_mosquitto != NULL) 
-    {
-        server_aux -> params.xpn_mosquitto_mode = atoi(env_mosquitto);
 
-        if (server_aux -> params.xpn_mosquitto_mode == 1)                       //MQTT initialization
+    #ifdef HAVE_MOSQUITTO_H
+        int rc = 0;
+	      char *end;
+
+        // server_aux -> xpn_mosquitto_mode = atoi(env_mosquitto);
+        server_aux -> xpn_mosquitto_mode = strtol(env_mosquitto, &end, 10);
+        if (*end != '\0') {
+          server_aux -> xpn_mosquitto_mode = 0 ;
+          debug_info("WARNING: env_mosquitto is not a number :,-(\n") ;
+        }
+
+	// MQTT initialization
+        if (server_aux -> xpn_mosquitto_mode == 1)
         {
-            server_aux -> params.xpn_mosquitto_qos = 0;
+            server_aux -> xpn_mosquitto_qos = 0; // QoS <- 0
             char * env_qos_mqtt = getenv("XPN_MQTT_QOS");
             
-            if (env_qos_mqtt != NULL) server_aux -> params.xpn_mosquitto_qos = atoi(env_qos_mqtt);
+            if (env_qos_mqtt != NULL)
+	    {
+		// server_aux -> xpn_mosquitto_qos = atoi(env_qos_mqtt);
+                server_aux -> xpn_mosquitto_qos = strtol(env_qos_mqtt, &end, 10);
+		if (*end != '\0') {
+                  server_aux -> xpn_mosquitto_qos = 0 ;
+		  debug_info("WARNING: env_qos_mqtt is not a number :,-(\n") ;
+		}
+	    }
 
             mosquitto_lib_init();
             server_aux -> mqtt = mosquitto_new(NULL, true, NULL);
@@ -63,9 +78,9 @@ void nfi_mq_server_init ( struct nfi_xpn_server *server_aux )
             mosquitto_int_option(server_aux -> mqtt, MOSQ_OPT_SEND_MAXIMUM, 65535);
 
 
-            rc = mosquitto_connect(server_aux -> mqtt, server_aux -> params.server_name, 1883, 0);
+            rc = mosquitto_connect(server_aux -> mqtt, server_aux -> srv_name, 1883, 0);
 
-            if(rc != MOSQ_ERR_SUCCESS)
+            if (rc != MOSQ_ERR_SUCCESS)
             {
                 mosquitto_destroy(server_aux -> mqtt);
                 fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
@@ -75,17 +90,15 @@ void nfi_mq_server_init ( struct nfi_xpn_server *server_aux )
             /* Run the network loop in a background thread, this call returns quickly. */
             rc = mosquitto_loop_start(server_aux -> mqtt);
 
-            if(rc != MOSQ_ERR_SUCCESS)
+            if (rc != MOSQ_ERR_SUCCESS)
             {
                 mosquitto_destroy(server_aux -> mqtt);
                 fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
                 return;
             }
         }
-    }
 
     #endif
-
 }
 
 
@@ -94,7 +107,7 @@ void nfi_mq_server_destroy ( struct nfi_xpn_server *server_aux )
 
     #ifdef HAVE_MOSQUITTO_H
 
-    if (server_aux -> params.xpn_mosquitto_mode == 1)
+    if (server_aux -> xpn_mosquitto_mode == 1)
     {
         mosquitto_disconnect(server_aux -> mqtt);
         mosquitto_destroy(server_aux -> mqtt);
@@ -105,12 +118,11 @@ void nfi_mq_server_destroy ( struct nfi_xpn_server *server_aux )
 }
 
 
-ssize_t nfi_mq_server_publish ( struct nfi_xpn_server *server_aux, struct nfi_tcp_server_fhandle *fh_aux, void * buffer, off_t offset, size_t size )
+ssize_t nfi_mq_server_publish ( struct nfi_xpn_server *server_aux, struct nfi_xpn_server_fhandle *fh_aux, void * buffer, off_t offset, size_t size )
 {
+    int ret, diff, cont;
 
-	int ret, diff, cont;
-
-	diff = size;
+    diff = size;
     cont = 0;
 
     int buffer_size = size;
@@ -131,9 +143,9 @@ ssize_t nfi_mq_server_publish ( struct nfi_xpn_server *server_aux, struct nfi_tc
 
         #ifdef HAVE_MOSQUITTO_H
 
-            sprintf(topic, "%s/%d/%d", fh_aux -> path, bytes_to_write, offset);
+            sprintf(topic, "%s/%d/%ld", fh_aux -> path, bytes_to_write, offset);
             
-            ret = mosquitto_publish(server_aux -> mqtt, NULL, topic, bytes_to_write, (char * ) buffer + cont, server_aux -> params.xpn_mosquitto_qos, false);
+            ret = mosquitto_publish(server_aux -> mqtt, NULL, topic, bytes_to_write, (char * ) buffer + cont, server_aux -> xpn_mosquitto_qos, false);
 
             if(ret != MOSQ_ERR_SUCCESS)
             {
@@ -146,7 +158,7 @@ ssize_t nfi_mq_server_publish ( struct nfi_xpn_server *server_aux, struct nfi_tc
 
         if (ret < 0) 
         {
-            fprintf(stderr, "(2)ERROR: nfi_mq_server_write(ID=%s): Error on write operation\n", server_aux -> id);
+            fprintf(stderr, "(2)ERROR: nfi_mq_server_write: Error on write operation\n") ;
             return -1;
         }
 

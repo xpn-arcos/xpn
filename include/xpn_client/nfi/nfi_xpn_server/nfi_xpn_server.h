@@ -60,6 +60,14 @@
     int xpn_locality;
     int locality;
 
+    // MQTT usage
+    int xpn_mosquitto_mode;
+    int xpn_mosquitto_qos;
+
+    #ifdef HAVE_MOSQUITTO_H
+    struct mosquitto * mqtt;
+    #endif
+
     // server comm
     int server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
     #ifdef ENABLE_MPI_SERVER

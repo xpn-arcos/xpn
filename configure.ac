@@ -312,6 +312,7 @@ AC_CONFIG_FILES([ \
       src/bypass/Makefile \
       src/xpn_server/Makefile \
       test/integrity/xpn/Makefile \
+      test/integrity/xpn-iot/Makefile \
       test/integrity/mpi_connect_accept/Makefile \
       test/integrity/bypass_c/Makefile \
       test/integrity/xpn_metadata/Makefile \
