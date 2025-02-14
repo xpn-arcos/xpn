@@ -77,7 +77,7 @@ void nfi_mq_server_init ( struct nfi_xpn_server *server_aux )
             mosquitto_int_option(server_aux -> mqtt, MOSQ_OPT_TCP_NODELAY, 1);  
             mosquitto_int_option(server_aux -> mqtt, MOSQ_OPT_SEND_MAXIMUM, 65535);
 
-
+            printf("%s\n", server_aux->srv_name);
             rc = mosquitto_connect(server_aux -> mqtt, server_aux -> srv_name, 1883, 0);
 
             if (rc != MOSQ_ERR_SUCCESS)
@@ -146,6 +146,8 @@ ssize_t nfi_mq_server_publish ( struct nfi_xpn_server *server_aux, struct nfi_xp
             sprintf(topic, "%s/%d/%ld", fh_aux -> path, bytes_to_write, offset);
             
             ret = mosquitto_publish(server_aux -> mqtt, NULL, topic, bytes_to_write, (char * ) buffer + cont, server_aux -> xpn_mosquitto_qos, false);
+
+            //printf("PUBLISH --------------- topic: %s\n", topic);
 
             if(ret != MOSQ_ERR_SUCCESS)
             {

@@ -53,7 +53,8 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
     return -1;
   }
 
-  ret = socket_recv(connection_socket, port_name, XPN_SERVER_MAX_PORT_NAME);
+  ret = socket_recv(connection_socket, port_name, 10);
+
   if (ret < 0)
   {
     debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket read\n");

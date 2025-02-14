@@ -217,7 +217,7 @@ int xpn_server_up ( void )
         switch (recv_code)
         {
             case SOCKET_ACCEPT_CODE:
-                socket_send(connection_socket, params.port_name, MPI_MAX_PORT_NAME);
+                socket_send(connection_socket, params.port_name, 10);
                 xpn_server_accept();
                 break;
 

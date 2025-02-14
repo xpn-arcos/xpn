@@ -47,6 +47,7 @@ int main ( int argc, char *argv[] )
 	}
 
     char topic[256];
+    char dir[256];
     char *filename = strrchr(argv[2], '/');
     
     if (filename) 
@@ -57,7 +58,10 @@ int main ( int argc, char *argv[] )
         filename = argv[2]; // No hay '/' en el nombre del fichero
     }
 
+    snprintf(dir, sizeof(dir), "/P1/%s", argv[1]);
     snprintf(topic, sizeof(topic), "/P1/%s/%s", argv[1], filename);
+
+    xpn_mkdir(dir, 0777);
 
 	fd1 = xpn_creat(topic, 0777);
 
