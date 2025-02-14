@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -30,8 +30,8 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #include "base/debug_msg.h"
-  #include "base/workers.h"
+  #include "debug_msg.h"
+  #include "workers.h"
   #include "nfi.h"
 
   /* ... Const / Const ................................................. */

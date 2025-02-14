@@ -3,7 +3,7 @@
 #set -x
 
 #
-#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #
 #  This file is part of Expand.
 #
@@ -52,7 +52,7 @@ usage() {
    echo "           [--replication_level        0] \\"
    echo "           [--part_name        <partition name>] \\"
    echo "           [--storage_path     <server local storage path>] \\"
-   echo "           [--storage_protocol <mpi_server|tcp_server>]"
+   echo "           [--storage_protocol <mpi_server|mq_server>]"
    echo "           [--deployment_file  ~/tmp/deploymentfile] \\"
    echo ""
    echo " Deployment file has this format in general:"
@@ -61,9 +61,9 @@ usage() {
    echo " Example:"
    echo "   particion; block_size; replication_level; protocolo ; host     ; path"
    echo "   xpn1     ; 512k      ; 0                ; mpi_server; compute-1; /tmp/"
-   echo "            ;           ;                  ; tcp_server; compute-2; /tmp/"
+   echo "            ;           ;                  ; mq_server; compute-2; /tmp/"
    echo "   xpn2     ; 1024k     ; 0                ; mpi_server; compute-3; /tmp/"
-   echo "            ;           ;                  ; tcp_server; compute-4; /tmp/"
+   echo "            ;           ;                  ; mq_server; compute-4; /tmp/"
    echo ""
 }
 

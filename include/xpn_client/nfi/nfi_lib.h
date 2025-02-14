@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -44,11 +44,6 @@
     #include "nfi_nfs3.h"
   #endif
   // END OF ENABLE_NFS3 BLOCK. Do not remove this line. //
-  // BEGIN OF ENABLE_TCP_SERVER BLOCK. Do not remove this line. //
-  #ifdef ENABLE_TCP_SERVER
-    #include "nfi_tcp_server.h"
-  #endif
-  // END OF ENABLE_TCP_SERVER BLOCK. Do not remove this line. //
   // END OF ENABLE_MODULE BLOCK. Do not remove this line. //
 
 

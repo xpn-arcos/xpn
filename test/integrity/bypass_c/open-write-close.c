@@ -1,14 +1,10 @@
 
+#include "all_system.h"
 #include <sys/time.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
 
 
 #define KB  (1024)
-#define MB  (KB*1024)
+
 #define BUFF_SIZE (1*MB)
 char buffer[BUFF_SIZE] ;
 
@@ -16,8 +12,9 @@ char buffer[BUFF_SIZE] ;
 double get_time(void)
 {
     struct timeval tp;
+    struct timezone tzp;
 
-    gettimeofday(&tp,NULL);
+    gettimeofday(&tp,&tzp);
     return((double) tp.tv_sec + .000001 * (double) tp.tv_usec);
 }
 

@@ -2,7 +2,7 @@
 # set -x
 
 #
-#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal, Dario Muñoz Muñoz
+#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal, Dario Muñoz Muñoz
 #
 #  This file is part of Expand.
 #
@@ -104,12 +104,12 @@ start_xpn_servers() {
       srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
             -w "${HOSTFILE}" \
             --export=ALL \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
     else
       srun  -n "${NODE_NUM}" -N "${NODE_NUM}" --mpi=none \
             -w "${HOSTFILE}" \
             --export=ALL \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} "${ARGS}" &
     fi
 
   else
@@ -121,14 +121,14 @@ start_xpn_servers() {
     if [[ ${SERVER_TYPE} == "sck" ]]; then
       mpiexec -np       "${NODE_NUM}" \
               -hostfile "${HOSTFILE}" \
-              "${BASE_DIR_BUILD}"/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
+              "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
     else
       for ((i=1; i<=$NODE_NUM; i++))
       do
           line=$(head -n $i "$HOSTFILE" | tail -n 1)
           mpiexec -np       1 \
             -host "${line}" \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool ${ARGS} &
+            ${BASE_DIR}/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} ${ARGS} &
       done
     fi
   fi
@@ -149,21 +149,6 @@ start_xpn_servers() {
   fi
 }
 
-stats_xpn_servers() {
-
-  if [[ ${VERBOSE} == true ]]; then
-    echo " * HOSTFILE: ${HOSTFILE}"
-    echo " * additional daemon args: ${ARGS}"
-  fi
-  if command -v srun &> /dev/null
-  then
-    srun -n 1 -N 1 \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_server_stats -f ${HOSTFILE}
-  else
-    mpiexec -np 1 \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_server_stats -f ${HOSTFILE}
-  fi
-}
 
 stop_xpn_servers() {
 
@@ -174,10 +159,10 @@ stop_xpn_servers() {
   if command -v srun &> /dev/null
   then
     srun -n 1 -N 1 \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE}
+            "${BASE_DIR}"/../../src/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE}
   else
     mpiexec -np 1 \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE}
+            "${BASE_DIR}"/../../src/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE}
   fi
 }
 
@@ -190,10 +175,10 @@ await_stop_xpn_servers() {
   if command -v srun &> /dev/null
   then
     srun -n 1 -N 1 \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE} -w
+            "${BASE_DIR}"/../../src/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE} -w
   else
     mpiexec -np 1 \
-            "${BASE_DIR_BUILD}"/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE} -w
+            "${BASE_DIR}"/../../src/xpn_server/xpn_stop_server -s ${SERVER_TYPE} -f ${DEATH_FILE} -w
   fi
 }
 
@@ -206,7 +191,7 @@ terminate_xpn_server() {
 
   if [[ ${SERVER_TYPE} == "mpi" ]]; then
     mpiexec -np 1 \
-            "${BASE_DIR_BUILD}"/mpi_server/xpn_terminate_mpi_server -f ${DEATH_FILE} -h ${HOST}
+            ${BASE_DIR}/../../src/mpi_server/xpn_terminate_mpi_server -f ${DEATH_FILE} -h ${HOST}
   fi
 }
 
@@ -230,7 +215,7 @@ rebuild_xpn_servers() {
     hosts=$(cat ${DEATH_FILE} ${REBUILD_FILE} | sort | paste -sd "," -)
     srun  -n "${NODE_NUM_SUM}" \
           -w "${hosts}" \
-          "${BASE_DIR_BUILD}"/utils/xpn_rebuild_active_reader "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
+          "${BASE_DIR}"/../../src/utils/xpn_rebuild_active_writer "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
   else
     # Create dir
     mpiexec -np       "${NODE_NUM}" \
@@ -239,7 +224,7 @@ rebuild_xpn_servers() {
     hosts=$(cat ${DEATH_FILE} ${REBUILD_FILE} | sort | uniq -c | awk '{print $2":"$1}' | paste -sd "," -)
     mpiexec -l -np       "${NODE_NUM_SUM}" \
             -host "${hosts}" \
-            "${BASE_DIR_BUILD}"/utils/xpn_rebuild_active_reader "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
+            "${BASE_DIR}"/../../src/utils/xpn_rebuild_active_writer "${XPN_STORAGE_PATH}" "${DEATH_FILE}" "${REBUILD_FILE}" 524288 "${XPN_REPLICATION_LEVEL}" 
   fi
 }
 
@@ -256,11 +241,11 @@ preload_xpn() {
   then
     srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
           -w "${HOSTFILE}" \
-          "${BASE_DIR_BUILD}"/utils/xpn_preload "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
+          "${BASE_DIR}"/../../src/utils/xpn_preload "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
   else
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
-            "${BASE_DIR_BUILD}"/utils/xpn_preload "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
+            "${BASE_DIR}"/../../src/utils/xpn_preload "${SOURCE_PATH}" "${XPN_STORAGE_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
   fi
 }
 
@@ -276,11 +261,11 @@ flush_xpn() {
   then
     srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
           -w "${HOSTFILE}" \
-          "${BASE_DIR_BUILD}"/utils/xpn_flush "${XPN_STORAGE_PATH}" "${DEST_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
+          "${BASE_DIR}"/../../src/utils/xpn_flush "${XPN_STORAGE_PATH}" "${DEST_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
   else
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
-            "${BASE_DIR_BUILD}"/utils/xpn_flush "${XPN_STORAGE_PATH}" "${DEST_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
+            "${BASE_DIR}"/../../src/utils/xpn_flush "${XPN_STORAGE_PATH}" "${DEST_PATH}" 524288 "${XPN_REPLICATION_LEVEL}"
   fi
 }
 
@@ -298,11 +283,11 @@ expand_xpn() {
   then
     srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
           -w "${HOSTFILE}" \
-          "${BASE_DIR_BUILD}"/utils/xpn_expand "${XPN_STORAGE_PATH}" "${NODE_NUM_REST}"
+          "${BASE_DIR}"/../../src/utils/xpn_expand "${XPN_STORAGE_PATH}" "${NODE_NUM_REST}"
   else
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
-            "${BASE_DIR_BUILD}"/utils/xpn_expand "${XPN_STORAGE_PATH}" "${NODE_NUM_REST}"
+            "${BASE_DIR}"/../../src/utils/xpn_expand "${XPN_STORAGE_PATH}" "${NODE_NUM_REST}"
   fi
 }
 
@@ -328,11 +313,11 @@ shrink_xpn() {
   then
     srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
           -w "${HOSTFILE}" \
-          "${BASE_DIR_BUILD}"/utils/xpn_shrink "${XPN_STORAGE_PATH}" "${hostlist}"
+          "${BASE_DIR}"/../../src/utils/xpn_shrink "${XPN_STORAGE_PATH}" "${hostlist}"
   else
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
-            "${BASE_DIR_BUILD}"/utils/xpn_shrink "${XPN_STORAGE_PATH}" "${hostlist}"
+            "${BASE_DIR}"/../../src/utils/xpn_shrink "${XPN_STORAGE_PATH}" "${hostlist}"
   fi
 }
 
@@ -446,7 +431,6 @@ XPN_REPLICATION_LEVEL=0
 
 ## get arguments
 BASE_DIR=$(dirname "$(readlink -f "$0")")/
-BASE_DIR_BUILD=${BASE_DIR}/../../build/src/
 get_opts $@
 
 # load xpn_start.cfg
@@ -460,8 +444,6 @@ case "${ACTION}" in
                 ;;
       start)    mk_conf_servers  "config.txt" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 start_xpn_servers
-                ;;
-      stats)    stats_xpn_servers
                 ;;
       stop)     stop_xpn_servers
                 ;;

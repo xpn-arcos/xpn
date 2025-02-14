@@ -38,6 +38,5 @@ src/base/Makefile.in
 src/utils/Makefile.in
 src/xpn_client/Makefile.in
 src/.vscode
-.vscode
-build
-install
+.vscode/settings.json
+test/integrity/xpn/circs

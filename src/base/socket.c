@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -23,7 +23,7 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "base/socket.h"
-#include "base/filesystem.h"
+#include "filesystem.h"
 
 
 /* ... Const / Const ................................................. */
@@ -162,7 +162,7 @@ int socket_server_accept ( int socket, int *out_conection_socket )
   return 0;
 }
 
-int socket_client_connect ( const char * srv_name, int *out_socket )
+int socket_client_connect ( char * srv_name, int *out_socket )
 {
   int client_fd;
   struct sockaddr_in serv_addr;

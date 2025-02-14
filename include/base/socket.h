@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -30,7 +30,7 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #include "base/debug_msg.h"
+  #include "debug_msg.h"
 
 
   /* ... Const / Const ................................................. */
@@ -49,7 +49,7 @@
   int socket_recv ( int socket, void * buffer, int size );
   int socket_server_create ( int *out_socket );
   int socket_server_accept ( int socket, int *out_conection_socket );
-  int socket_client_connect ( const char * srv_name, int *out_socket );
+  int socket_client_connect ( char * srv_name, int *out_socket );
   int socket_close ( int socket );
 
   /* ... Macros / Macros .................................................. */

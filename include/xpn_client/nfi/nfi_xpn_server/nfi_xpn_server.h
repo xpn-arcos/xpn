@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -34,19 +34,18 @@
   #include "base/path_misc.h"
   #include "base/urlstr.h"
   #include "base/workers.h"
+  #include "nfi.h"
   #include "nfi_local.h"
-  #include "nfi.h"
-  // #include "xpn_server/xpn_server_ops.hpp"
-  // #include "xpn_server/xpn_server_params.hpp"
-  #include "nfi.h"
   #include "nfi_worker.h"
+  #include "xpn_server/xpn_server_conf.h"
+  #include "xpn_server/xpn_server_ops.h"
   #ifdef ENABLE_MPI_SERVER
   #include "mpi.h"
   #endif
 
 
   /* ... Const / Const ................................................. */
-  #define XPN_SERVER_MAX_PORT_NAME 1024
+
 
   /* ... Data structures / Estructuras de datos ........................ */
 
@@ -60,6 +59,14 @@
     int xpn_thread;
     int xpn_locality;
     int locality;
+
+    // MQTT usage
+    int xpn_mosquitto_mode;
+    int xpn_mosquitto_qos;
+
+    #ifdef HAVE_MOSQUITTO_H
+    struct mosquitto * mqtt;
+    #endif
 
     // server comm
     int server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
@@ -107,7 +114,7 @@
   int     nfi_xpn_server_getattr    ( struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr );
   int     nfi_xpn_server_setattr    ( struct nfi_server *server, struct nfi_fhandle *fh, struct nfi_attr *attr );
 
-  int     nfi_xpn_server_mkdir      ( struct nfi_server *server, char *url, mode_t mode, struct nfi_attr    *attr, struct nfi_fhandle *fh );
+  int     nfi_xpn_server_mkdir      ( struct nfi_server *server, char *url, mode_t mode, struct nfi_attr *attr, struct nfi_fhandle *fh );
   int     nfi_xpn_server_opendir    ( struct nfi_server *server, char *url, struct nfi_fhandle *fho );
   int     nfi_xpn_server_readdir    ( struct nfi_server *server, struct nfi_fhandle *fhd, struct dirent *entry );
   int     nfi_xpn_server_closedir   ( struct nfi_server *server, struct nfi_fhandle *fhd );

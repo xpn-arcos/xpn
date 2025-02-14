@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -32,7 +32,6 @@
   
   #include <sys/types.h>
   #include <sys/stat.h>
-  #include <sys/statvfs.h>
   #include <stdio.h>
   #include <dirent.h>
   //#include <sys/uio.h>
@@ -80,9 +79,6 @@
   int         xpn_ftruncate (int fd, off_t length);
   int         xpn_dup       (int fd);
   int         xpn_dup2      (int fd, int fd2);
-
-  int         xpn_statvfs    (const char *path, struct statvfs *buf);
-  int         xpn_fstatvfs   (int fd, struct statvfs *buf);
 
   // xpn_opendir.c
   DIR *           xpn_opendir   (const char *path);

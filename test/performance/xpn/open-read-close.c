@@ -1,11 +1,9 @@
 
+#include "all_system.h"
 #include "xpn.h"
 #include <sys/time.h>
-#include <string.h>
-#include <fcntl.h>
-#include <stdlib.h>
 
-#define KB  (1024)
+
 #define BUFF_SIZE (1024*1024)
 char buffer[BUFF_SIZE] ;
 
@@ -31,7 +29,7 @@ int main ( int argc, char *argv[] )
 	    printf(" Usage: %s <full path> <megabytes to read>\n", argv[0]) ;
 	    printf("\n") ;
 	    printf(" Example:") ;
-	    printf(" env XPN_CONF=./xpn.conf XPN_DNS=/shared/tcp_server.dns %s /P1/test_1 2\n", argv[0]);
+	    printf(" env XPN_CONF=./xpn.conf XPN_DNS=/shared/mq_server.dns %s /P1/test_1 2\n", argv[0]);
 	    printf("\n") ;
 	    return -1 ;
 	}	

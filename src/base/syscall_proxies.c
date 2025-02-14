@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -98,12 +98,10 @@ int     (*real_fchmod)(int, mode_t) = NULL;
 int     (*real_chown)(char *, uid_t, gid_t) = NULL;
 int     (*real_fcntl)(int, int, long) = NULL;
 int     (*real_access)(const char *, int) = NULL;
-char*   (*real_realpath)(const char *__restrict__, char *__restrict__) = NULL;
+char*   (*real_realpath)(const char *restrict, char *restrict) = NULL;
 int     (*real_fsync)(int) = NULL;
 int     (*real_flock)(int, int) = NULL;
 void*   (*real_mmap)(void *, size_t, int, int, int, off_t) = NULL;
-int     (*real_statvfs)(const char *, struct statvfs *) = NULL;
-int     (*real_fstatvfs)(int, struct statvfs *) = NULL;
 
 
 /* ... Functions / Funciones ......................................... */
@@ -184,7 +182,7 @@ int dlsym_creat (const char *path, mode_t mode)
   return fd;
 }
 
-int dlsym_mkstemp (char *templ)
+int dlsym_mkstemp (char *template)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_mkstemp] >> Begin\n");
 
@@ -192,7 +190,7 @@ int dlsym_mkstemp (char *templ)
       real_mkstemp = (int(*)(char *)) dlsym(RTLD_NEXT, "mkstemp");
   }
   
-  int ret = real_mkstemp(templ);
+  int ret = real_mkstemp(template);
 
   debug_info("[SYSCALL_PROXIES] [dlsym_mkstemp] >> End\n");
 
@@ -978,12 +976,12 @@ int dlsym_access (const char *path, int mode)
   return ret;
 }
 
-char *dlsym_realpath (const char *__restrict__ path, char *__restrict__ resolved_path)
+char *dlsym_realpath (const char *restrict path, char *restrict resolved_path)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_realpath] >> Begin\n");
 
   if (real_realpath == NULL) {
-      real_realpath = (char* (*)(const char *__restrict__, char *__restrict__)) dlsym(RTLD_NEXT, "realpath");
+      real_realpath = (char* (*)(const char *restrict, char *restrict)) dlsym(RTLD_NEXT, "realpath");
   }
   
   char* ret = real_realpath((char *)path, (char *)resolved_path);
@@ -1019,36 +1017,6 @@ int dlsym_flock (int fd, int operation)
   int ret = real_flock(fd, operation);
 
   debug_info("[SYSCALL_PROXIES] [dlsym_flock] >> End\n");
-
-  return ret;
-}
-
-int dlsym_statvfs (const char *path, struct statvfs *buf)
-{
-  debug_info("[SYSCALL_PROXIES] [dlsym_statvfs] >> Begin\n");
-
-  if (real_statvfs == NULL){
-      real_statvfs = (int (*)(const char *, struct statvfs *)) dlsym(RTLD_NEXT, "statvfs");
-  }
-  
-  int ret = real_statvfs(path, buf);
-
-  debug_info("[SYSCALL_PROXIES] [dlsym_statvfs] >> End\n");
-
-  return ret;
-}
-
-int dlsym_fstatvfs (int fd, struct statvfs *buf)
-{
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstatvfs] >> Begin\n");
-
-  if (real_fstatvfs == NULL){
-      real_fstatvfs = (int (*)(int, struct statvfs *)) dlsym(RTLD_NEXT, "fstatvfs");
-  }
-  
-  int ret = real_fstatvfs(fd, buf);
-
-  debug_info("[SYSCALL_PROXIES] [dlsym_fstatvfs] >> End\n");
 
   return ret;
 }

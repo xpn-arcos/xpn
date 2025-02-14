@@ -1,5 +1,5 @@
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -111,11 +111,6 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     char value_buf[KB];
     FILE *fd;
     int res = 0;
-    int line_index = 1;
-    int current_partition = -1;
-    int total_servers = 0;
-    int server_url_index = 0;
-    size_t file_size;
 
     //Init in NULL pointers
     conf_data->data = NULL;
@@ -124,9 +119,9 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     conf_data->server_url_index = NULL;
 
 
-    if (param_get("XPN_CONF") != NULL)
+    if (param_get(XPN_CONF) != NULL)
     {
-        strcpy(conf, param_get("XPN_CONF"));
+        strcpy(conf, param_get(XPN_CONF));
     }
     else
     {
@@ -140,7 +135,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         goto cleanup_error_XpnConfLoad;
     }
     fseek(fd, 0L, SEEK_END);
-    file_size = ftell(fd);
+    size_t file_size = ftell(fd);
     rewind(fd);
 
     if(file_size > 10*MB)
@@ -185,6 +180,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         goto cleanup_error_XpnConfLoad;
     }
     conf_data->lines[0] = conf_data->data;
+    int line_index = 1;
     for (size_t i = 1; i < file_size; i++)
     {
         if (conf_data->data[i] == '\n')
@@ -217,6 +213,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     }
     memset(conf_data->server_n, 0, conf_data->partition_n * sizeof(int));
 
+    int current_partition = -1;
     for (int i = 0; i < conf_data->lines_n; i++)
     {
         sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
@@ -230,6 +227,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     }
 
     //Store the server_url index
+    int total_servers = 0;
     for (int i = 0; i < conf_data->partition_n; i++)
     {
         total_servers += conf_data->server_n[i];
@@ -241,6 +239,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
         goto cleanup_error_XpnConfLoad;
     }
+    int server_url_index = 0;
     for (int i = 0; i < conf_data->lines_n; i++)
     {
         sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
@@ -305,7 +304,7 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
     #endif
 
     #ifdef ENABLE_SCK_SERVER
-    else if (strcmp(prt, "sck_server") == 0) {
+    else if ( (strcmp(prt, "sck_server") == 0) || (strcmp(prt, "mq_server") == 0) ) {
         ret = nfi_xpn_server_init(url_buf, serv, XPN_SERVER_TYPE_SCK);
         if (ret < 0) {
             errno = ESRCH;
@@ -329,17 +328,6 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
     else if (strcmp(prt, "nfs3") == 0) {
         //printf("[XPN]nfi_nfs3_init: %s\n",url);
         ret = nfi_nfs3_init(url_buf, serv, NULL);
-        if (ret < 0) {
-            errno = ESRCH;
-            return -1;
-        }
-    }
-    #endif
-
-    #ifdef ENABLE_TCP_SERVER
-    else if (strcmp(prt, "tcp_server") == 0) {
-        //printf("[XPN]nfi_tcp_server_init: %s\n",url);
-        ret = nfi_tcp_server_init(url_buf, serv, NULL);
         if (ret < 0) {
             errno = ESRCH;
             return -1;

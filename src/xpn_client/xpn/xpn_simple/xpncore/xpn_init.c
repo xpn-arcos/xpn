@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+   *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -21,9 +21,8 @@
 
 
 #include "xpn/xpn_simple/xpn_init.h"
-#include "base/ns.h"
-#include "base/profiler.h"
-#include "base_cpp/xpn_env.hpp"
+#include "ns.h"
+#include "profiler.h"
 
 
 struct xpn_partition xpn_parttable[XPN_MAX_PART];
@@ -124,7 +123,7 @@ int xpn_init_partition( void )
   int part_n = 0;
   char buff_value[PATH_MAX];
   struct conf_file_data conf_data = {0};
-  XPN::xpn_env::get_instance();
+
   env_debug = getenv("XPN_DEBUG");
   if ((env_debug != NULL) && (strlen(env_debug) > 0)){
     xpn_debug=1;

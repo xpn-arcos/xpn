@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -23,10 +23,6 @@
 #ifndef _NS_H_
 #define _NS_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h" /// Library for 'TODO'
@@ -43,12 +39,12 @@
     #define SCK_SERVER_DNS_FILE_DEFAULT "/tmp/sck_dns.txt"
   #endif
 
-  #ifndef TCP_SERVER_DNS_FILE_DEFAULT
-    #define TCP_SERVER_DNS_FILE_DEFAULT "/tmp/tcp_dns.txt"
+  #ifndef MQ_SERVER_DNS_FILE_DEFAULT
+    #define MQ_SERVER_DNS_FILE_DEFAULT "/tmp/tcp_dns.txt"
   #endif
 
-  #ifndef MAX_TCP_SERVER_NODES
-    #define MAX_TCP_SERVER_NODES 256
+  #ifndef MAX_MQ_SERVER_NODES
+    #define MAX_MQ_SERVER_NODES 256
   #endif
 
   #ifndef CONST_TEMP
@@ -70,7 +66,4 @@
 
   /* ................................................................... */
 
-  #ifdef  __cplusplus
-    }
-  #endif
 #endif

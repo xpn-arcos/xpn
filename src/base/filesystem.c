@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -21,7 +21,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include "base/filesystem.h"
+     #include "filesystem.h"
 
 
   /* ... Varibles ........................................... */
@@ -38,7 +38,6 @@
      off64_t (*fs_low_lseek64 )(int, off64_t, int)                = lseek64 ;
      int     (*fs_low_stat    )(const char *, struct stat *)      = stat ;
      int     (*fs_low_stat_dlsym    )(int, const char *, struct stat *)      = NULL ;
-     int     (*fs_low_statvfs    )(const char *, struct statvfs *)  = statvfs ;
 
      int     (*fs_low_mkdir   )(const char *, mode_t)             = mkdir ;
      int     (*fs_low_rmdir   )(const char *)                     = rmdir ;
@@ -704,32 +703,6 @@ int filesystem_stat ( char * pathname, struct stat * sinfo )
     return ret;
 }
 
-int filesystem_statvfs ( const char * pathname, struct statvfs *buf )
-{
-    int ret;
-
-    DEBUG_BEGIN();
-
-    // Check params
-    if (NULL == pathname) {
-        debug_warning("[FILE_POSIX]: pathname is NULL\n");
-    }
-    if (NULL == buf) {
-        debug_warning("[FILE_POSIX]: buf is NULL\n");
-    }
-
-    // Try to unlink a file
-    ret = fs_low_statvfs(pathname, buf);
-    if (ret < 0) {
-        debug_warning("[FILE_POSIX]: statvfs(pathname:%s) -> %d\n", pathname, ret);
-        //perror("unlink: ") ;
-    }
-
-    DEBUG_END();
-
-    // Return OK/KO
-    return ret;
-}
 
   /* ................................................................... */
 

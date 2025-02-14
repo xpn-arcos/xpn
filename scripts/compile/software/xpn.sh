@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
 #
 #  This file is part of Expand.
 #
@@ -78,26 +78,17 @@ fi
 
 ## XPN
 echo " * XPN: preparing directories..."
-
-rm -fr "${INSTALL_PATH}/xpn"
+  rm -fr "${INSTALL_PATH}/xpn"
+mkdir -p "${INSTALL_PATH}/xpn/lib64"
+ln    -s "${INSTALL_PATH}/xpn/lib64"   "${INSTALL_PATH}/xpn/lib"
 
 echo " * XPN: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
-rm -r build
-mkdir -p build
-cd build
-
-cmake -S .. -B . -D BUILD_TESTS=ON -D CMAKE_INSTALL_PREFIX="${INSTALL_PATH}/xpn" -D CMAKE_C_COMPILER="${MPICC_PATH}"/mpicc -D CMAKE_CXX_COMPILER="${MPICC_PATH}"/mpicxx
-
-cmake --build . -j
-
-cmake --install .
-
-# ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-# ./configure --prefix="${INSTALL_PATH}/xpn" --enable-sck_server --enable-mpi_server="${MPICC_PATH}" 
-# make clean
-# make -j 8
-# #doxygen doc/doxygen-XPN.cfg
-# make install
+ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
+./configure --prefix="${INSTALL_PATH}/xpn" --enable-sck_server --enable-mpi_server="${MPICC_PATH}" 
+make clean
+make -j 8
+#doxygen doc/doxygen-XPN.cfg
+make install
 popd

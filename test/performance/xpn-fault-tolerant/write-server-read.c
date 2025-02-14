@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+   *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -19,15 +19,9 @@
    *
    */
 
+#include "all_system.h"
 #include "xpn.h"
 #include <sys/time.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-
-#define KB  (1024)
-#define MB  (KB*1024)
 
 char *bufferWrite;
 char *bufferRead ;
@@ -70,7 +64,7 @@ int main ( int argc, char *argv[] )
 	    printf(" Usage: %s <full path> <megabytes to write-read> <buffer size> <stop/kill/mark> <num of servers with error> \n", argv[0]) ;
 	    printf("\n") ;
 	    printf(" Example:") ;
-	    printf(" env XPN_CONF=./xpn.conf XPN_DNS=/shared/tcp_server.dns %s /P1/test_1 2\n", argv[0]);
+	    printf(" env XPN_CONF=./xpn.conf XPN_DNS=/shared/mq_server.dns %s /P1/test_1 2\n", argv[0]);
 	    printf("\n") ;
 	    return -1 ;
 	}	
@@ -95,7 +89,7 @@ int main ( int argc, char *argv[] )
 	bufferRead  = malloc(buff_size*sizeof(char)) ;
 	bufferRead2 = malloc(buff_size*sizeof(char)) ;
 
-	size_t file_size = mb_file*buff_size;
+	long file_size = mb_file*buff_size;
 	printf("MB to test: %f Buffer size: %f bytes %ld\n", mb_file, buff_size_mb, file_size);
 	printf("File to save data and check xpn: %s", random_file);
 
@@ -117,7 +111,7 @@ int main ( int argc, char *argv[] )
     int fd_random = open(random_file, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	while (bytesWritten < file_size) {
         size_t bytesToWrite = (file_size - bytesWritten < buff_size) ? (file_size - bytesWritten) : buff_size;
-		for (size_t i = 0; i < buff_size; i++)
+		for (int i = 0; i < buff_size; i++)
 		{
 			// bufferWrite[i] = rand() % 1000;
 			bufferWrite[i] = aux_data;
@@ -146,13 +140,13 @@ int main ( int argc, char *argv[] )
 	xpn_stat(argv[1], &sb2);
 	printf("File size: %lld bytes, real size: %ld bytes\n", (long long) sb2.st_size, file_size);
 	
-	if (sb.st_size != (off_t)file_size){
+	if (sb.st_size != file_size){
 		printf("fstat size not the same as the real size\n");
 		freeBuffers();
 		return 2;
 	}
 
-	if (sb2.st_size != (off_t)file_size){
+	if (sb2.st_size != file_size){
 		printf("stat size not the same as the real size\n");
 		freeBuffers();
 		return 3;

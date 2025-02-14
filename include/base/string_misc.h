@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -30,19 +30,11 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  // #include "all_system.h"
-  #include <stdint.h>
-  #include <stdarg.h>
-  #include <stddef.h>
-  #include <string.h>
-  #include <stdlib.h>
-  #include <stdio.h>
+  #include "all_system.h"
+
 
   /* ... Const / Const ................................................. */
 
-  #if !defined(NULL_DEVICE_PATH)
-    #define NULL_DEVICE_PATH  "/dev/null"
-  #endif
 
   /* ... Data structures / Estructuras de datos ........................ */
 

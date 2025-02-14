@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -29,8 +29,8 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #include "base/debug_msg.h"
-  #include "base/workers.h"
+  #include "debug_msg.h"
+  #include "workers.h"
   #include "xpn_metadata.h"
 
 
@@ -38,10 +38,10 @@
 
   // PROTOCOLS
   /*
-  #define LOCAL    1
-  #define NFS    2
-  #define NFS3     3
-  #define TCP_SERVER   9
+  #define LOCAL        1
+  #define NFS          2
+  #define NFS3         3
+  #define MQ_SERVER    9
   #define MPI_SERVER  10
   */
 
@@ -116,10 +116,11 @@
 
   struct nfi_fhandle 
   {
-    int type;                   // file or directory    
-    char *url;                  // url of DIR or FILE     
+    int    type;                // file or directory    
+    char  *url;                 // url of DIR or FILE     
     struct nfi_server *server;  // server       
-    void *priv_fh;              // pointer to private filehandle
+    void  *priv_fh;             // pointer to private filehandle
+    int    has_mqtt;            // has MQTT
   };
 
   // Forward declaration

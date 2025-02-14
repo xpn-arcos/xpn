@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -24,8 +24,6 @@
 #define _XPN_PROFILER_H
 
   /* ... Include / Inclusion ........................................... */
-  //TODO: do it in cpp better
-  #ifdef XPN_PROFIFER
 
   #include <stdio.h>
   #include <errno.h>
@@ -39,6 +37,7 @@
   
   #define XPN_PROFILER_HEADER "{\"otherData\": {},\"traceEvents\":[{}\n"
   #define XPN_PROFILER_FOOTER "]}\n"
+
 
   #define XPN_PROFILER_BEGIN(name_file) \
     if (xpn_profiler) { \
@@ -97,21 +96,6 @@
   #define XPN_PROFILER_DEFAULT_END() XPN_PROFILER_NAME_END_CUSTOM(default, " ");
   #define XPN_PROFILER_DEFAULT_END_CUSTOM(format, ...) XPN_PROFILER_NAME_END_CUSTOM(default, format, ## __VA_ARGS__);
 
-  #else
-    #define XPN_PROFILER_BEGIN(name_file)
-
-    #define XPN_PROFILER_END()
-
-    #define XPN_PROFILER_WRITE_CUSTOM(start_time, elapsed_time, format, ...)
-
-    #define XPN_PROFILER_NAME_BEGIN(name) 
-
-    #define XPN_PROFILER_NAME_END_CUSTOM(name, format, ...) 
-
-    #define XPN_PROFILER_DEFAULT_BEGIN() 
-    #define XPN_PROFILER_DEFAULT_END()
-    #define XPN_PROFILER_DEFAULT_END_CUSTOM(format, ...)
-  #endif
   /* ... Data structures / Estructuras de datos ........................ */
 
 
