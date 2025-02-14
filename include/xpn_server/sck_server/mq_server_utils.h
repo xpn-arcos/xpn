@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _NFI_MQ_SERVER_COMM_H_
-#define _NFI_MQ_SERVER_COMM_H_
+#ifndef _MQ_SERVER_UTILS_H_
+#define _MQ_SERVER_UTILS_H_
 
   #ifdef  __cplusplus
     extern "C" {
@@ -29,21 +29,50 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "utils.h"
-  #include "nfi_xpn_server.h"
-  #include "xpn_server_params.h"
-  #include "mosquitto.h"
+     #include "all_system.h"
+     #include <sys/time.h>
+     #include "base/utils.h"
+
+
+  /* ... Const / Constantes ............................................ */
+
+     #define QUEUE_MQ_SIZE 1000000
+
+
+  /* ... Data Types / Tipo de datos .................................... */
+
+	typedef struct
+	{
+	    char * topic;
+	    char * msg;
+	}
+	ThreadData;
+
+	typedef struct
+	{
+	    ThreadData * queue[QUEUE_MQ_SIZE];
+	    int front;
+	    int rear;
+	    int count;
+	    pthread_mutex_t mutex;
+	    pthread_cond_t not_empty;
+	    pthread_cond_t not_full;
+	}
+	CircularQueueMQ;
 
 
   /* ... Functions / Funciones ......................................... */
 
-  void    nfi_mq_server_init      ( struct nfi_xpn_server *server_aux );
-  void    nfi_mq_server_destroy   ( struct nfi_xpn_server *server_aux );
-  ssize_t nfi_mq_server_publish   ( struct nfi_xpn_server *server_aux, struct nfi_xpn_server_fhandle *fh_aux, void * buffer, off_t offset, size_t size );
+     double get_time (void) ;
+     double get_time_ops ( void ) ;
 
-      
+     void         queue_mq_init ( void ) ;
+     void         enqueue_mq ( ThreadData * client ) ;
+     ThreadData * dequeue_mq ( void ) ;
+
+
   /* ................................................................... */
+
 
   #ifdef  __cplusplus
     }

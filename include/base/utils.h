@@ -54,6 +54,9 @@
   // time
   long utils_get_time ( void ) ;
 
+  // enviroment variables
+  int utils_getenv_int ( char *env_name, int default_value ) ;
+
 
   /* .................................................................... */
 

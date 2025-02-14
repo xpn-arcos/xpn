@@ -27,16 +27,6 @@
 
 /* ... Functions / Funciones ......................................... */
 
-double get_time_ops ( void )
-{
-    struct timeval tp;
-    struct timezone tzp;
-
-    gettimeofday( & tp, & tzp);
-    return ((double) tp.tv_sec + .000001 * (double) tp.tv_usec);
-}
-
-
 void mq_server_op_subscribe ( xpn_server_param_st *params, struct st_xpn_server_msg *head )
 {
     if (params->mosquitto_mode != 1) {
