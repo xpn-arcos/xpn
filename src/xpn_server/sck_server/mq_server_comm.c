@@ -282,7 +282,7 @@ void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj
     }*/
 
     // Crear una estructura para pasar al hilo
-    ThreadData * thread_data = (struct ThreadData * ) malloc(sizeof(ThreadData));
+    ThreadData * thread_data = (ThreadData *) malloc(sizeof(ThreadData));
 
     thread_data -> topic = strdup(msg -> topic);
     thread_data -> msg = (char * ) malloc(msg -> payloadlen + 1);

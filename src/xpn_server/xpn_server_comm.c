@@ -146,7 +146,7 @@ int xpn_server_comm_disconnect ( xpn_server_param_st *params, void *sd )
   return ret;
 }
 
-ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, void *sd, int *op, int *rank_client_id, int *tag_client_id )
+ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, void *sd, int *op, __attribute__((__unused__)) int *rank_client_id, __attribute__((__unused__)) int *tag_client_id )
 { 
   ssize_t ret = -1;
 
@@ -172,7 +172,7 @@ ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, void *sd, 
   return ret;
 }
 
-ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
+ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 { 
   ssize_t ret = -1;
 
@@ -198,7 +198,7 @@ ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, void *sd, char
   return ret;
 }
 
-ssize_t xpn_server_comm_read_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
+ssize_t xpn_server_comm_read_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 { 
   ssize_t ret = -1;
 

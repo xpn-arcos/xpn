@@ -35,6 +35,7 @@
   #include "base/ns.h"
   #include "xpn_server_params.h"
   #include "sck_server_comm.h"
+  #include "mq_server_comm.h"
   #include "mq_server_ops.h"
 
 

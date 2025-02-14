@@ -29,18 +29,12 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include <sys/time.h>
+     #include "all_system.h"
+     #include <sys/time.h>
 
-  #include "base/utils.h"
-  #include "socket.h"
-  #include "xpn_server/xpn_server_params.h"
-
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "base/utils.h"
+     #include "socket.h"
+     #include "xpn_server/xpn_server_params.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -62,3 +56,4 @@
   #endif
 
 #endif
+
