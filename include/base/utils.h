@@ -56,6 +56,7 @@
 
   // enviroment variables
   int utils_getenv_int ( char *env_name, int default_value ) ;
+  int utils_str2int    ( char *str_name, int default_value ) ;
 
 
   /* .................................................................... */

@@ -69,7 +69,7 @@ void xpn_server_params_show ( xpn_server_param_st *params )
     printf("\t-m <mqtt_qos>:\t%d\n", params -> mosquitto_qos);
   }
 
-  printf("\t-k  <int>:\t'%d'\n", params -> xpn_keep_connection);
+  printf("\t-k  <int>:\t'%d'\n",     params -> xpn_keep_connection);
 
   // * shutdown_file
   printf(" |\t-f  <path>:\t'%s'\n",   params->shutdown_file);
@@ -93,7 +93,6 @@ void xpn_server_params_show_usage ( void )
   printf("\t-f  <path>:          file of servers to be shutdown\n") ;
   printf("\t-h  <host>:          host server to be shutdown\n") ;
   printf("\t-w                   await for servers to stop\n") ;
-
   printf("\t-m  <int>:           0 (QoS 0); 1 (QoS 1); 2 (QoS 2)\n");
   printf("\t-k  <int>:           0 (disconnect on each op.); 1 (keep connected after op.)\n");
 
@@ -112,7 +111,7 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
   params->rank = 0;
 
   params->thread_mode_connections = TH_NOT;
-  params->thread_mode_operations = TH_NOT;
+  params->thread_mode_operations  = TH_NOT;
   params->server_type = XPN_SERVER_TYPE_SCK;
   #ifdef ENABLE_MPI_SERVER
   params->server_type = XPN_SERVER_TYPE_MPI;
@@ -125,7 +124,7 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
 
   // default values for mqtt
   params -> mosquitto_mode = 0;
-  params -> mosquitto_qos = 0;
+  params -> mosquitto_qos  = 0;
 
   params -> xpn_keep_connection = 0;
 
@@ -140,7 +139,9 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
         switch (argv[i][1])
         {
           case 'f':
-            strcpy(params->shutdown_file, argv[i+1]);
+            if ((i+1) < argc)
+                 strcpy(params->shutdown_file, argv[i+1]);
+	    else printf("ERROR: empty shutdown file name.\n");
             i++;
             break;
 
@@ -149,33 +150,32 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
             {
               if (isdigit(argv[i+1][0]))
               {
-                int thread_mode_aux = atoi(argv[i+1]);
-
-                if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP)
-                {
-                  params->thread_mode_connections = thread_mode_aux;
-                  params->thread_mode_operations  = thread_mode_aux;
-                }
-                else {
-                  printf("ERROR: unknown option %s\n", argv[i+1]);
-                }
+	          int   thread_mode_aux = utils_str2int(argv[i + 1], TH_NOT) ;
+                  if ( (thread_mode_aux >= TH_NOT) && (thread_mode_aux <= TH_OP) )
+                  {
+                      params->thread_mode_connections = thread_mode_aux;
+                      params->thread_mode_operations  = thread_mode_aux;
+                  }
+                  else {
+                      printf("ERROR: unknown option -t '%s'\n", argv[i+1]);
+                  }
               }
               else
               {
                 if (strcmp("without", argv[i+1]) == 0) {
-                  params->thread_mode_connections = TH_NOT;
-                  params->thread_mode_operations  = TH_NOT;
+                    params->thread_mode_connections = TH_NOT;
+                    params->thread_mode_operations  = TH_NOT;
                 }
                 else if (strcmp("pool", argv[i+1]) == 0) {
-                  params->thread_mode_connections = TH_POOL;
-                  params->thread_mode_operations  = TH_POOL;
+                    params->thread_mode_connections = TH_POOL;
+                    params->thread_mode_operations  = TH_POOL;
                 }
                 else if (strcmp("on_demand", argv[i+1]) == 0) {
-                  params->thread_mode_connections = TH_OP;
-                  params->thread_mode_operations  = TH_OP;
+                    params->thread_mode_connections = TH_OP;
+                    params->thread_mode_operations  = TH_OP;
                 }
                 else {
-                  printf("ERROR: unknown option %s\n", argv[i+1]);
+                    printf("ERROR: unknown option -t '%s'\n", argv[i+1]);
                 }
               }
             }
@@ -192,52 +192,44 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
                 params->server_type = XPN_SERVER_TYPE_SCK;
               }
               else {
-                printf("ERROR: unknown option %s\n", argv[i+1]);
+                printf("ERROR: unknown option -s '%s'\n", argv[i+1]);
               }
             }
             i++;
             break;
 
           case 'h':
-            strcpy(params->srv_name, argv[i+1]);
+            if ((i+1) < argc) 
+                 strcpy(params->srv_name, argv[i+1]);
+	    else printf("ERROR: empty server name.\n");
+            i++;
             break;
+
           case 'w':
             params->await_stop = 1;
             break;
 
           case 'm':
-            params -> mosquitto_mode = 1;
-
-            if (isdigit(argv[i + 1][0])) 
+	    int qos_mode_mqtt = utils_str2int(argv[i + 1], 0) ;
+            if ( (qos_mode_mqtt < 0) || (qos_mode_mqtt > 2) )
             {
-                int qos_mode_mqtt = atoi(argv[i + 1]);
-
-                if ( qos_mode_mqtt < 0 || qos_mode_mqtt > 2 )
-                {
-                    printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
-                }
-                else
-                {
-                    params -> mosquitto_qos = qos_mode_mqtt;
-                }
-            }
-            else
-            {
-                printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
+                 printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
+		 qos_mode_mqtt = 0;
             }
 
+	    params->mosquitto_mode = qos_mode_mqtt ;
             i++;
             break;
 
           case 'k':
-            char *endptr;
-            params -> xpn_keep_connection = (int)strtol(argv[i + 1], &endptr, 10);
-
-            if ( (endptr == argv[i + 1]) || (*endptr != '\0') ) 
+	    int keep_connection = utils_str2int(argv[i + 1], 1) ;
+            if ( (keep_connection < 0) || (keep_connection > 1) )
             {
-              params -> xpn_keep_connection = 1 ;
-              printf("WARNING: unknown keep_connection value (%s). Default value 1 selected\n", argv[i + 1]);
+                 printf("ERROR: unknown keep-connection value. Default value 1 selected\n");
+	         keep_connection = 1 ;
             }
+
+	    params->xpn_keep_connection = keep_connection ;
             i++;
             break;
 
