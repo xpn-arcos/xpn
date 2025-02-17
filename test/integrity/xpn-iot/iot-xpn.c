@@ -63,8 +63,7 @@ int main ( int argc, char *argv[] )
 
     xpn_mkdir(dir, 0777);
 
-	fd1 = xpn_creat(topic, 0777);
-
+    fd1 = xpn_creat(topic, 0777);
     if (fd1 < 0) 
     {
         perror ("ERROR CREATE");

@@ -47,9 +47,9 @@ mosquitto  -c mosquitto.conf
 ```
 
 ### Expand server
-* Create the DNS server file with one line per server IP:
+* Create the hostfile file with one line per server IP:
 ```
-echo localhost > server.dns
+echo localhost > hostfile
 ```
 
 * Create the local server directory:
@@ -59,7 +59,7 @@ mkdir -p /tmp/work/data
 
 * In order to start one xpn_server at port "7555", you can use:
 ```
-../../../src/xpn_server/xpn_server -d /tmp/work/data  -p 3456  -m 0  -ns server.dns
+../../../src/xpn_server/xpn_server -d /tmp/work/data  -m 0  -ns hostfile
 ```
 
 ### Expand client
@@ -79,7 +79,7 @@ server_url = mq_server://localhost/tmp/work/data
 
 * In order to start the client, just execute:
 ```
-XPN_CONF=xpn.conf  XPN_DNS=server.dns  XPN_LOCALITY=0  XPN_SESSION=0  XPN_MQTT=1  XPN_QOS_MQTT=0  ./iot-xpn  Provincia-Estacion circulaciones/circulacion
+XPN_CONF=xpn.conf  XPN_LOCALITY=0  XPN_SESSION=0  XPN_MQTT=1  XPN_QOS_MQTT=0  ./iot-xpn  Provincia-Estacion ./circulaciones/circulacion
 ```
 
 

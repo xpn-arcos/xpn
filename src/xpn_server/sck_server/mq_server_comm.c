@@ -25,16 +25,7 @@
 #include "mq_server_comm.h"
 
 
-/* ... Functions / Funciones ......................................... */
-
-#define QUEUE_MQ_SIZE 1000000
-
-typedef struct 
-{
-    char * topic;
-    char * msg;
-}
-ThreadData;
+/* ... Globals / Globales ............................................ */
 
 int file2 = -1;
 int opened = 0;
@@ -42,80 +33,13 @@ int write_total = 0;
 //int its = 0;
 
 
-typedef struct 
-{
-    ThreadData * queue[QUEUE_MQ_SIZE];
-    int front;
-    int rear;
-    int count;
-    pthread_mutex_t mutex;
-    pthread_cond_t not_empty;
-    pthread_cond_t not_full;
-}
-CircularQueueMQ;
+/* ... Functions / Funciones ......................................... */
 
-CircularQueueMQ queue_mq;
-
-
-double get_time(void)
-{
-    struct timeval tp;
-    struct timezone tzp;
-
-    gettimeofday(&tp,&tzp);
-    return((double) tp.tv_sec + .000001 * (double) tp.tv_usec);
-}
-
-void queue_mq_init() 
-{
-    queue_mq.front = 0;
-    queue_mq.rear = -1;
-    queue_mq.count = 0;
-    pthread_mutex_init( & queue_mq.mutex, NULL);
-    pthread_cond_init( & queue_mq.not_empty, NULL);
-    pthread_cond_init( & queue_mq.not_full, NULL);
-}
-
-void enqueue_mq(ThreadData * client) 
-{
-    pthread_mutex_lock( &queue_mq.mutex );
-    while (queue_mq.count >= QUEUE_MQ_SIZE) 
-    {
-        pthread_cond_wait( & queue_mq.not_full, & queue_mq.mutex);
-    }
-
-    queue_mq.rear = (queue_mq.rear + 1) % QUEUE_MQ_SIZE;
-    queue_mq.queue[queue_mq.rear] = client;
-    queue_mq.count++;
-
-    pthread_cond_signal( & queue_mq.not_empty);
-    pthread_mutex_unlock( & queue_mq.mutex);
-}
-
-ThreadData * dequeue_mq() 
-{
-    pthread_mutex_lock( &queue_mq.mutex );
-
-    while (queue_mq.count <= 0) 
-    {
-        pthread_cond_wait( & queue_mq.not_empty, & queue_mq.mutex);
-    }
-
-    ThreadData * client = queue_mq.queue[queue_mq.front];
-    queue_mq.front = (queue_mq.front + 1) % QUEUE_MQ_SIZE;
-    queue_mq.count--;
-
-  
-    pthread_cond_signal( & queue_mq.not_full);
-    pthread_mutex_unlock( & queue_mq.mutex);
-
-    return client;
-}
 
 // Función que se ejecutara en el hilo
 void * process_message(__attribute__((__unused__)) void * arg) 
 {
-    while(1)
+    while (1)
     {
         ThreadData * thread_data = dequeue_mq();
         //struct ThreadData * thread_data = (struct ThreadData *) data;

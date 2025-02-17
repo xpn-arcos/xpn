@@ -34,13 +34,12 @@
 
      #include "base/utils.h"
      #include "socket.h"
+     #include "mq_server_utils.h"
      #include "xpn_server/xpn_server_params.h"
 
 
   /* ... Functions / Funciones ......................................... */
   
-     double get_time(void) ;
-
      #ifdef HAVE_MOSQUITTO_H
      void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj, const struct mosquitto_message * msg) ;
      #endif

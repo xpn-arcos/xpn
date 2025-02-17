@@ -18,9 +18,12 @@
  *
  */
 
+
 #include "xpn/xpn_simple/xpn_policy_init.h"
 
+
 extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
+
 
 char * param_get(char * key)
 {
@@ -35,13 +38,14 @@ char * param_get(char * key)
     return ret;
 }
 
-int XpnConfGetValueRept(struct conf_file_data *conf_data, char *key, char *value, int partition, int rept)
+int XpnConfGetValueRept ( struct conf_file_data *conf_data, char *key, char *value, int partition, int rept )
 {
     char key_buf[KB];
     char value_buf[KB];
     int i;
     int part_index = -1;
     int internal_rept = 0;
+
     for (i = 0; i < conf_data->lines_n; i++)
     {
         sscanf(conf_data->lines[i], "%s = %s", key_buf, value_buf);
@@ -58,6 +62,7 @@ int XpnConfGetValueRept(struct conf_file_data *conf_data, char *key, char *value
                     strcpy(value, value_buf);
                     return 0;
                 }
+
                 internal_rept++;
             }
         }
@@ -101,10 +106,11 @@ int XpnConfGetNumServers(struct conf_file_data *conf_data, int partition_index)
 {      
     if (partition_index >= conf_data->partition_n)
         return -1;
+
     return conf_data->server_n[partition_index];
 }
 
-int XpnConfLoad(struct conf_file_data *conf_data)
+int XpnConfLoad ( struct conf_file_data *conf_data )
 {
     char conf[KB];
     char key_buf[KB];
@@ -117,7 +123,6 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     conf_data->lines = NULL;
     conf_data->server_n = NULL;
     conf_data->server_url_index = NULL;
-
 
     if (param_get(XPN_CONF) != NULL)
     {
@@ -138,11 +143,12 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     size_t file_size = ftell(fd);
     rewind(fd);
 
-    if(file_size > 10*MB)
+    if (file_size > 10*MB)
     {
         fprintf(stderr, "XpnLoadConf: Error conf file bigger than 10MB, size %ldB\n", file_size);
         goto cleanup_error_XpnConfLoad;
     }
+
     // Alocate and read all file
     conf_data->data = malloc(sizeof(char) * file_size);
     if (conf_data->data == NULL)
@@ -150,6 +156,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
         goto cleanup_error_XpnConfLoad;
     }
+
     res = fread(conf_data->data, file_size * sizeof(char), 1, fd);
     if (res != 1)
     {
@@ -158,6 +165,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     }
 
     fclose(fd);
+
     // Count the lines
     conf_data->lines_n = 0;
     for (size_t i = 0; i < file_size; i++)
@@ -172,6 +180,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     {
         goto cleanup_error_XpnConfLoad;
     }
+
     // Allocate and pointer to lines
     conf_data->lines = malloc(conf_data->lines_n*sizeof(char *));
     if (conf_data->lines == NULL)
@@ -179,6 +188,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
         goto cleanup_error_XpnConfLoad;
     }
+
     conf_data->lines[0] = conf_data->data;
     int line_index = 1;
     for (size_t i = 1; i < file_size; i++)
@@ -193,6 +203,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
             }
         }
     }
+
     // Count partitions
     conf_data->partition_n = 0;
     for (int i = 0; i < conf_data->lines_n; i++)
@@ -211,6 +222,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
         goto cleanup_error_XpnConfLoad;
     }
+
     memset(conf_data->server_n, 0, conf_data->partition_n * sizeof(int));
 
     int current_partition = -1;
@@ -220,7 +232,8 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         if (strcmp(key_buf, XPN_CONF_TAG_PARTITION) == 0)
         {
             current_partition++;
-        }else if (strcmp(key_buf, XPN_CONF_TAG_SERVER_URL) == 0)
+        }
+	else if (strcmp(key_buf, XPN_CONF_TAG_SERVER_URL) == 0)
         {
             conf_data->server_n[current_partition]++;
         }
@@ -239,6 +252,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
         fprintf(stderr, "XpnLoadConf: Fail malloc %s %s\n", conf, strerror(errno));
         goto cleanup_error_XpnConfLoad;
     }
+
     int server_url_index = 0;
     for (int i = 0; i < conf_data->lines_n; i++)
     {
@@ -251,6 +265,7 @@ int XpnConfLoad(struct conf_file_data *conf_data)
     }
 
     return 0;
+
 cleanup_error_XpnConfLoad:
     XpnConfFree(conf_data);
     return -1;
@@ -345,7 +360,9 @@ int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part,
     return 1;
 }
 
-int XpnGetPartition(char * path) /* return partition's id */ {
+/* return partition's id */
+int XpnGetPartition(char * path)
+{
     int i;
     char part[PATH_MAX];
 
@@ -364,7 +381,8 @@ int XpnGetPartition(char * path) /* return partition's id */ {
     return xpn_parttable[i].id;
 }
 
-struct xpn_partition * XpnSearchPart(int pd) {
+struct xpn_partition * XpnSearchPart(int pd)
+{
     int i = 0;
 
     while ((i < XPN_MAX_PART) && (xpn_parttable[i].id != pd)) {
@@ -378,7 +396,8 @@ struct xpn_partition * XpnSearchPart(int pd) {
     return & (xpn_parttable[i]);
 }
 
-void XpnShowPartitionTable(void) {
+void XpnShowPartitionTable(void)
+{
     int i = 0;
 
     while ((i < XPN_MAX_PART) && (xpn_parttable[i].name != NULL) && (strcmp("", xpn_parttable[i].name) != 0)) {
