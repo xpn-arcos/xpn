@@ -107,12 +107,8 @@ int XpnSearchFile(const char * path)
     }
 
     if (i == XPN_MAX_FILE) 
-    {
-        res = -1;
-    } else 
-    {
-        res = i;
-    }
+         res = -1;
+    else res = i;
 
     XPN_DEBUG_END
 
@@ -475,10 +471,9 @@ int xpn_simple_open(const char * path, int flags, mode_t mode)
 }
 
 
-
 int xpn_simple_close(int fd) 
 {
-    int res, i;
+    int i;
 
     XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
@@ -522,7 +517,6 @@ int xpn_simple_close(int fd)
 }
 
 
-
 int xpn_simple_unlink(const char * path) 
 {
     int res;
@@ -532,9 +526,9 @@ int xpn_simple_unlink(const char * path)
     res = xpn_internal_remove(path);
 
     XPN_DEBUG_END_ARGS1(path)
+
     return res;
 }
-
 
 
 int xpn_simple_rename(const char * path, const char * newpath) 
