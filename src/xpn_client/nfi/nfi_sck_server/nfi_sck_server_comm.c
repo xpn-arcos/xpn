@@ -29,97 +29,98 @@
 
 int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_socket )
 {
-  struct hostent * hp;
-  struct sockaddr_in server_addr;
-  int ret, sd, flag, val;
-  int connection_socket;
+    struct hostent * hp;
+    struct sockaddr_in server_addr;
+    int ret, sd, flag, val;
+    int connection_socket;
 
-  debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] >> Begin\n");
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] >> Begin\n");
 
-  // Lookup port name
-  ret = socket_client_connect(srv_name, &connection_socket);
-  if (ret < 0)
-  {
+    // Lookup port name
+    ret = socket_client_connect(srv_name, &connection_socket);
+    if (ret < 0)
+    {
     debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket connect\n");
     return -1;
-  }
+    }
 
-  int buffer = SOCKET_ACCEPT_CODE;
-  ret = socket_send(connection_socket, &buffer, sizeof(buffer));
-  if (ret < 0)
-  {
+    int buffer = SOCKET_ACCEPT_CODE;
+    ret = socket_send(connection_socket, &buffer, sizeof(buffer));
+    if (ret < 0)
+    {
     debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket send\n");
     socket_close(connection_socket);
     return -1;
-  }
+    }
 
-  ret = socket_recv(connection_socket, port_name, XPN_SERVER_MAX_PORT_NAME);
+    ret = socket_recv(connection_socket, port_name, XPN_SERVER_MAX_PORT_NAME);
 
-  if (ret < 0)
-  {
+    if (ret < 0)
+    {
     debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket read\n");
     socket_close(connection_socket);
     return -1;
-  }
+    }
 
-  socket_close(connection_socket);
-  if (ret < 0) {
-    printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: Lookup %s Port %s\n", srv_name, port_name);
+    socket_close(connection_socket);
+    if (ret < 0) 
+    {
+    debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: Lookup %s Port %s\n", srv_name, port_name);
     return -1;
-  }
+    }
 
-  debug_info("[NFI_SCK_SERVER_COMM] ----SERVER = %s PORT = %s\n", srv_name, port_name);
+    debug_info("[NFI_SCK_SERVER_COMM] ----SERVER = %s PORT = %s\n", srv_name, port_name);
 
-  // Socket...
-  sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-  if (sd < 0) {
+    // Socket...
+    sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sd < 0) {
     perror("socket: ");
     return -1;
-  }
-  debug_info("[NFI_SCK_SERVER_COMM] ----SERVER = %s PORT = %s ==> %d\n", srv_name, port_name, sd);
+    }
+    debug_info("[NFI_SCK_SERVER_COMM] ----SERVER = %s PORT = %s ==> %d\n", srv_name, port_name, sd);
 
-  // Set sockopt
-  flag = 1;
-  ret = setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag));
-  if (ret < 0) {
+    // Set sockopt
+    flag = 1;
+    ret = setsockopt(sd, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag));
+    if (ret < 0) {
     perror("setsockopt: ");
     return -1;
-  }
+    }
 
-  val = 1024 * 1024; //1 MB
-  ret = setsockopt(sd, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int));
-  if (ret < 0) {
+    val = 1024 * 1024; //1 MB
+    ret = setsockopt(sd, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int));
+    if (ret < 0) {
     perror("setsockopt: ");
     return -1;
-  }
+    }
 
-  val = 1024 * 1024; //1 MB
-  ret = setsockopt(sd, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int));
-  if (ret < 0) {
+    val = 1024 * 1024; //1 MB
+    ret = setsockopt(sd, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int));
+    if (ret < 0) {
     perror("setsockopt: ");
     return -1;
-  }
+    }
 
-  // gethost by name
-  hp = gethostbyname(srv_name);
-  if (hp == NULL)
-  {
-    fprintf(stderr, "nfi_sck_server_init: error gethostbyname %s (%s,%s)\n",
+    // gethost by name
+    hp = gethostbyname(srv_name);
+    if (hp == NULL)
+    {
+    debug_info(stderr, "nfi_sck_server_init: error gethostbyname %s (%s,%s)\n",
     srv_name, srv_name, port_name);
     return -1;
-  }
+    }
 
-  // Connect...
-  debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] Connect port %s\n", port_name);
+    // Connect...
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] Connect port %s\n", port_name);
 
-  bzero((char * ) & server_addr, sizeof(server_addr));
-  server_addr.sin_family = AF_INET;
-  server_addr.sin_port   = htons(atoi(port_name));
-  memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
+    bzero((char * ) & server_addr, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port   = htons(atoi(port_name));
+    memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
 
-  int connect_retries = 0;
-  do
-  {
+    int connect_retries = 0;
+    do
+    {
     ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
     if (ret < 0)
     {
@@ -127,26 +128,26 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
       {
         char cli_name  [HOST_NAME_MAX];
         gethostname(cli_name, HOST_NAME_MAX);
-        printf("----------------------------------------------------------------\n");
-        printf("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
-        printf("----------------------------------------------------------------\n\n");
+        debug_info("----------------------------------------------------------------\n");
+        debug_info("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
+        debug_info("----------------------------------------------------------------\n\n");
       }
       connect_retries++;
       sleep(2);
     }
-  } while(ret < 0 && connect_retries < 1);
+    } while(ret < 0 && connect_retries < 1);
 
-  if (ret < 0)
-  {
-    printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: connect fails\n");
+    if (ret < 0)
+    {
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: connect fails\n");
     return -1;
-  }
+    }
 
-  *out_socket = sd;
+    *out_socket = sd;
 
-  debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] << End\n");
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] << End\n");
 
-  return ret;
+    return ret;
 }
 
 int nfi_sck_server_comm_disconnect(int socket) 
@@ -159,7 +160,7 @@ int nfi_sck_server_comm_disconnect(int socket)
   debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Send disconnect message\n");
   ret = socket_send(socket, &code, sizeof(code));
   if (ret < 0) {
-    printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] ERROR: nfi_sck_server_comm_write_operation fails\n");
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] ERROR: nfi_sck_server_comm_write_operation fails\n");
     return ret;
   }
 
@@ -168,7 +169,7 @@ int nfi_sck_server_comm_disconnect(int socket)
 
   ret = socket_close(socket);
   if (ret < 0) {
-    printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] ERROR: MPI_Comm_disconnect fails\n");
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] ERROR: MPI_Comm_disconnect fails\n");
     return ret;
   }
 

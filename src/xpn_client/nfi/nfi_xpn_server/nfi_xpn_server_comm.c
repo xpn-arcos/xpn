@@ -58,7 +58,7 @@ int nfi_xpn_server_comm_init ( struct nfi_xpn_server *params )
   #endif
   
   default:
-    printf("[NFI_XPN_SERVER] [nfi_xpn_server_comm_init] server_type '%d' not recognized\n",params->server_type);
+    debug_info("[NFI_XPN_SERVER] [nfi_xpn_server_comm_init] server_type '%d' not recognized\n",params->server_type);
     break;
   }
 
@@ -85,7 +85,7 @@ int nfi_xpn_server_comm_destroy ( struct nfi_xpn_server *params )
   #endif
   
   default:
-    printf("[NFI_XPN_SERVER] [nfi_xpn_server_comm_destroy] server_type '%d' not recognized\n",params->server_type);
+    debug_info("[NFI_XPN_SERVER] [nfi_xpn_server_comm_destroy] server_type '%d' not recognized\n",params->server_type);
     break;
   }
 
@@ -112,7 +112,7 @@ int nfi_xpn_server_comm_connect ( struct nfi_xpn_server *params )
   #endif
   
   default:
-    printf("[NFI_XPN_SERVER] [nfi_xpn_server_comm_connect] server_type '%d' not recognized\n",params->server_type);
+    debug_info("[NFI_XPN_SERVER] [nfi_xpn_server_comm_connect] server_type '%d' not recognized\n",params->server_type);
     break;
   }
 
@@ -139,7 +139,7 @@ int nfi_xpn_server_comm_disconnect ( struct nfi_xpn_server *params )
   #endif
   
   default:
-    printf("[NFI_XPN_SERVER] [nfi_xpn_server_comm_disconnect] server_type '%d' not recognized\n",params->server_type);
+    debug_info("[NFI_XPN_SERVER] [nfi_xpn_server_comm_disconnect] server_type '%d' not recognized\n",params->server_type);
     break;
   }
 
@@ -166,7 +166,7 @@ int nfi_xpn_server_comm_write_operation ( struct nfi_xpn_server *params, int op)
   #endif
   
   default:
-    printf("[NFI_XPN_SERVER] [nfi_xpn_server_comm_write_operation] server_type '%d' not recognized\n",params->server_type);
+    debug_info("[NFI_XPN_SERVER] [nfi_xpn_server_comm_write_operation] server_type '%d' not recognized\n",params->server_type);
     break;
   }
 
@@ -193,7 +193,7 @@ ssize_t nfi_xpn_server_comm_write_data ( struct nfi_xpn_server *params, __attrib
   #endif
   
   default:
-    printf("[NFI_XPN_SERVER] [nfi_xpn_server_comm_write_data] server_type '%d' not recognized\n",params->server_type);
+    debug_info("[NFI_XPN_SERVER] [nfi_xpn_server_comm_write_data] server_type '%d' not recognized\n",params->server_type);
     break;
   }
 
@@ -220,7 +220,7 @@ ssize_t nfi_xpn_server_comm_read_data ( struct nfi_xpn_server *params, __attribu
   #endif
   
   default:
-    printf("[NFI_XPN_SERVER] [nfi_xpn_server_comm_read_data] server_type '%d' not recognized\n",params->server_type);
+    debug_info("[NFI_XPN_SERVER] [nfi_xpn_server_comm_read_data] server_type '%d' not recognized\n",params->server_type);
     break;
   }
 

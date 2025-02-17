@@ -22,34 +22,10 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "base/socket.h"
-#include "filesystem.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
+   #include "base/socket.h"
 
 
 /* ... Functions / Funciones ......................................... */
-
-int socket_get_port()
-{
-  char *sck_port = getenv("XPN_SCK_PORT");
-  int port = DEFAULT_XPN_SCK_PORT;
-  if (sck_port != NULL)
-  {
-    int aux_port = atoi(sck_port);
-    if (aux_port != 0){
-      port = aux_port;
-    }
-    else{
-      printf("[SOCKET] [socket_get_port] ERROR: env XPN_SCK_PORT %s is not a number\n", sck_port);
-    }
-  }
-  return port;
-}
 
 int socket_send ( int socket, void * buffer, int size )
 {
@@ -93,14 +69,15 @@ int socket_recv ( int socket, void * buffer, int size )
 int socket_server_create ( int *out_socket )
 {
   int ret = 0;
+  struct sockaddr_in server_addr;
+  int port ;
+
   int server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (server_socket < 0)
   {
     printf("[SOCKET] [socket_server_create] ERROR: socket fails\n");
     return -1;
   }
-
-  struct sockaddr_in server_addr;
 
   int val = 1;
   ret = setsockopt(server_socket, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
@@ -123,11 +100,11 @@ int socket_server_create ( int *out_socket )
   // bind
   debug_info("[SOCKET] [socket_server_create] Socket bind\n");
 
+  port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
   bzero((char * )&server_addr, sizeof(server_addr));
   server_addr.sin_family      = AF_INET;
   server_addr.sin_addr.s_addr = INADDR_ANY;
-  server_addr.sin_port        = htons(socket_get_port());
-
+  server_addr.sin_port        = htons(port);
 
   ret = bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
   if (ret < 0)
@@ -145,6 +122,7 @@ int socket_server_create ( int *out_socket )
     printf("[SOCKET] [socket_server_create] ERROR: listen fails\n");
     return -1;
   }
+
   *out_socket = server_socket;
   return 0;
 }
@@ -153,11 +131,13 @@ int socket_server_accept ( int socket, int *out_conection_socket )
 {
   struct sockaddr_in client_addr;
   socklen_t sock_size = sizeof(struct sockaddr_in);
+
   int new_socket = accept(socket, (struct sockaddr*)&client_addr, &sock_size);
   if (new_socket < 0) {
-    printf("[SOCKET] [socket_accept_send] ERROR: socket accept\n");
-    return -1;
+      printf("[SOCKET] [socket_accept_send] ERROR: socket accept\n");
+      return -1;
   }
+
   *out_conection_socket = new_socket;
   return 0;
 }
@@ -166,12 +146,15 @@ int socket_client_connect ( char * srv_name, int *out_socket )
 {
   int client_fd;
   struct sockaddr_in serv_addr;
+  int port;
+
   client_fd = socket(AF_INET, SOCK_STREAM, 0);
   if (client_fd < 0) 
   {
     printf("[SOCKET] [socket_read] ERROR: socket creation error\n");
     return -1;
   }
+
   struct hostent * hp;
   hp = gethostbyname(srv_name);
   if (hp == NULL) 
@@ -180,13 +163,17 @@ int socket_client_connect ( char * srv_name, int *out_socket )
     close(client_fd);
     return -1;
   }
+
+  port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+  bzero((char * )&serv_addr, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
-  serv_addr.sin_port = htons(socket_get_port());
+  serv_addr.sin_port = htons(port);
   memcpy( & (serv_addr.sin_addr), hp->h_addr, hp->h_length);
+
   int status = connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
   if (status < 0) 
   {
-    printf("[SOCKET] [socket_read] ERROR: socket connection failed to %s in port %d %s\n", srv_name, socket_get_port(), strerror(errno));
+    printf("[SOCKET] [socket_read] ERROR: socket connection failed to %s in port %d %s\n", srv_name, port, strerror(errno));
     close(client_fd);
     return -1;
   }
@@ -207,3 +194,7 @@ int socket_close ( int socket )
 
   return ret;
 }
+
+
+/* ................................................................... */
+

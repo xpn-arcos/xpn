@@ -29,14 +29,15 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include <stdlib.h>
-  #include <stdio.h>
-  #include <string.h>
-  #include <ctype.h>
-  #include "mpi.h"
-  #include "base/utils.h"
-  #include "base/workers.h"
-  #include "xpn_server_conf.h"
+     #include <stdlib.h>
+     #include <stdio.h>
+     #include <string.h>
+     #include <ctype.h>
+     #include "mpi.h"
+     #include "base/utils.h"
+     #include "base/workers.h"
+     #include "xpn_server_conf.h"
+
 
   /* ... Const / Const ................................................. */
 
@@ -82,9 +83,10 @@
 
   /* ... Functions / Funciones ......................................... */
 
-  void xpn_server_params_show_usage ( void );
-  int  xpn_server_params_get        ( xpn_server_param_st *params, int argc, char *argv[] );
-  void xpn_server_params_show       ( xpn_server_param_st *params );
+     void xpn_server_params_show_usage ( void );
+     int  xpn_server_params_get        ( xpn_server_param_st *params, int argc, char *argv[] );
+     void xpn_server_params_show       ( xpn_server_param_st *params );
+
 
   /* ................................................................... */
 
