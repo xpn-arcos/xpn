@@ -101,7 +101,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
             offset = 0;
         }
 
-        //printf("\n%s - %s %d %d\n", topic, path, to_write1, offset);
+        //debug_info("\n%s - %s %d %d\n", topic, path, to_write1, offset);
 
         //char * buffer = NULL;
         int size, diff, cont = 0, to_write = 0, size_written = 0;
@@ -145,7 +145,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
 
             char time_str[20];
             strftime(time_str, sizeof(time_str), "%H:%M:%S", timeinfo);
-            //printf("ENDW - %s\n", time_str);
+            //debug_info("ENDW - %s\n", time_str);
 
         }
         else if ((strstr(copy_header, "INI") != NULL))
@@ -158,7 +158,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
 
             char time_str[20];
             strftime(time_str, sizeof(time_str), "%H:%M:%S", timeinfo);
-            //printf("STARTW - %s\n", time_str);
+            //debug_info("STARTW - %s\n", time_str);
         }*/
 
         // loop...
@@ -169,7 +169,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
 
             // read data from TCP and write into the file
             lseek(fd, offset + cont, SEEK_SET);
-            //printf("to write: %d\t msg: %s", to_write, thread_data -> msg);
+            //debug_info("to write: %d\t msg: %s", to_write, thread_data -> msg);
             size_written = write(fd, thread_data -> msg, to_write);
 
             // update counters
@@ -180,7 +180,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
 
         close(fd);
         //total_time = (get_time() - start_time);
-        //printf("%s;%.8f\n", path, total_time);
+        //debug_info("%s;%.8f\n", path, total_time);
         //FREE_AND_NULL(buffer);
 
         // Liberar memoria y finalizar el hilo
@@ -197,7 +197,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
 void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj, const struct mosquitto_message * msg) 
 {
     if (NULL == obj) {
-        printf("ERROR: obj is NULL :-( \n");
+        debug_info("ERROR: obj is NULL :-( \n");
     }
 
     /*if (strstr(copy_header, "FIN;") != NULL)
@@ -228,14 +228,14 @@ void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj
 
         if (xpn_time1 == NULL) 
         {
-            printf("[TCP-SERVER] Error: process_client\n");
+            debug_info("[TCP-SERVER] Error: process_client\n");
         } 
         else 
         {
             file2 = open(xpn_time1, O_APPEND | O_WRONLY, 0777);
             if (file2 < 0) 
             {
-                printf("[TCP-SERVER] ERROR: process_client2 %s\n", xpn_time1);
+                debug_info("[TCP-SERVER] ERROR: process_client2 %s\n", xpn_time1);
             }
             opened = 1;
         }
@@ -261,14 +261,14 @@ int mq_server_mqtt_init ( xpn_server_param_st * params )
         #define MOSQ_OPT_TCP_NODELAY 1
         #endif
 
-        printf("[%d]\tBEGIN INIT MOSQUITTO MQ_SERVER\n\n", __LINE__);
+        debug_info("[%d]\tBEGIN INIT MOSQUITTO MQ_SERVER\n\n", __LINE__);
 
         mosquitto_lib_init();
 
         params -> mqtt = mosquitto_new(NULL, true, NULL);
 
         if (params -> mqtt == NULL) {
-            fprintf(stderr, "Error: Out of memory.\n");
+            debug_info(stderr, "Error: Out of memory.\n");
             return 1;
         }
 
@@ -280,7 +280,7 @@ int mq_server_mqtt_init ( xpn_server_param_st * params )
         int rc = mosquitto_connect(params -> mqtt, "localhost", 1883, 0);
         if (rc != MOSQ_ERR_SUCCESS) {
             mosquitto_destroy(params -> mqtt);
-            fprintf(stderr, "[%d]\tERROR INIT MOSQUITTO MQ_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
+            debug_info(stderr, "[%d]\tERROR INIT MOSQUITTO MQ_SERVER: %s\n", __LINE__, mosquitto_strerror(rc));
             return 1;
         }
 
@@ -289,12 +289,12 @@ int mq_server_mqtt_init ( xpn_server_param_st * params )
 
         if (rc != MOSQ_ERR_SUCCESS) {
             mosquitto_destroy(params -> mqtt);
-            fprintf(stderr, "Error: %s\n", mosquitto_strerror(rc));
+            debug_info(stderr, "Error: %s\n", mosquitto_strerror(rc));
             return 1;
         }
 
         //mosquitto_loop_forever(params -> mqtt, -1, 1);
-        printf("[%d]\tEND INIT MOSQUITTO MQ_SERVER\n\n", __LINE__);
+        debug_info("[%d]\tEND INIT MOSQUITTO MQ_SERVER\n\n", __LINE__);
 
 
         //Mosquitto pool thread

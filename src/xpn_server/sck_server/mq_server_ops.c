@@ -46,7 +46,7 @@ void mq_server_op_subscribe ( xpn_server_param_st *params, struct st_xpn_server_
 
 	    int rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
 	    if (rc != MOSQ_ERR_SUCCESS) {
-	        fprintf(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
+	        debug_info(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
 	        mosquitto_disconnect(params->mqtt);
 	    }
 
@@ -66,7 +66,7 @@ void mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_serve
 
     #ifdef HAVE_MOSQUITTO_H
 
-    	char * extra = "/#";
+	char * extra = "/#";
 	char * sm = malloc(strlen(head->u_st_xpn_server_msg.op_close.path) + strlen(extra) + 1);
 	strcpy(sm, head->u_st_xpn_server_msg.op_close.path);
 	strcat(sm, extra);
@@ -76,10 +76,10 @@ void mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_serve
 
 	debug_info("[%d]\tBEGIN CLOSE MOSQUITTO MQ_SERVER - WS \n\n", __LINE__);
 
-        mosquitto_unsubscribe(params->mqtt, NULL, sm);
-        mosquitto_unsubscribe(params->mqtt, NULL, s);
+    mosquitto_unsubscribe(params->mqtt, NULL, sm);
+    mosquitto_unsubscribe(params->mqtt, NULL, s);
 
-        debug_info("[%d]\tEND CLOSE MOSQUITTO MQ_SERVER - WS %s\n\n", __LINE__, sm);
+    debug_info("[%d]\tEND CLOSE MOSQUITTO MQ_SERVER - WS %s\n\n", __LINE__, sm);
 
     #endif
 }
