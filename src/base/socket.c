@@ -66,11 +66,10 @@ int socket_recv ( int socket, void * buffer, int size )
   return size;
 }
 
-int socket_server_create ( int *out_socket )
+int socket_server_create ( int *out_socket, int port )
 {
   int ret = 0;
   struct sockaddr_in server_addr;
-  int port ;
 
   int server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (server_socket < 0)
@@ -100,7 +99,6 @@ int socket_server_create ( int *out_socket )
   // bind
   debug_info("[SOCKET] [socket_server_create] Socket bind\n");
 
-  port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
   bzero((char * )&server_addr, sizeof(server_addr));
   server_addr.sin_family      = AF_INET;
   server_addr.sin_addr.s_addr = INADDR_ANY;
@@ -142,11 +140,10 @@ int socket_server_accept ( int socket, int *out_conection_socket )
   return 0;
 }
 
-int socket_client_connect ( char * srv_name, int *out_socket )
+int socket_client_connect ( char * srv_name, int port, int *out_socket )
 {
   int client_fd;
   struct sockaddr_in serv_addr;
-  int port;
 
   client_fd = socket(AF_INET, SOCK_STREAM, 0);
   if (client_fd < 0) 
@@ -164,7 +161,6 @@ int socket_client_connect ( char * srv_name, int *out_socket )
     return -1;
   }
 
-  port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
   bzero((char * )&serv_addr, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = htons(port);

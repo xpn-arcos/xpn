@@ -108,7 +108,7 @@ int nfi_xpn_server_comm_connect ( struct nfi_xpn_server *params )
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
        // lookup port_name
-       ret = nfi_sck_server_comm_lookup_port_name(params->srv_name, params->port_name) ;
+       ret = ns_lookup_port_name(params->srv_name, params->port_name) ;
        if (ret < 0) {
           fprintf(stderr, "nfi_sck_server_comm_lookup_port_name: error on '%s'\n", params->srv_name);
           return -1;

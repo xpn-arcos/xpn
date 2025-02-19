@@ -25,12 +25,28 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h" /// Library for 'TODO'
-  #include "base/utils.h" /// Library for 'TODO'
+  #include "all_system.h"
+  #include "base/utils.h"
+  #include "base/socket.h"
 
   
   /* ... Const / Const ................................................. */
 
+  // NS base on sockets
+  #define DEFAULT_XPN_SCK_PORT    3456
+
+  #define SOCKET_ACCEPT_CODE       123
+  #define SOCKET_FINISH_CODE       665
+  #define SOCKET_FINISH_CODE_AWAIT 667
+
+  #ifdef MPI_MAX_PORT_NAME
+     #define MAX_PORT_NAME_LENGTH MPI_MAX_PORT_NAME
+  #else
+     #define MAX_PORT_NAME_LENGTH 256
+  #endif
+
+
+  // NS base on files
   #ifndef MPI_SERVER_DNS_FILE_DEFAULT
     #define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
   #endif
@@ -51,11 +67,13 @@
     #define CONST_TEMP 1024
   #endif
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
 
   /* ... Functions / Funciones ......................................... */
 
+  // NS base on sockets
+  int   ns_lookup_port_name ( char * srv_name, char * port_name ) ;
+
+  // NS base on files
   void ns_get_hostname(char *srv_name);
   char *ns_get_host_ip(void);
 

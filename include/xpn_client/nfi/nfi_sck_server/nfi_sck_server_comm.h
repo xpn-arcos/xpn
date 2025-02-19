@@ -38,9 +38,8 @@
 
   /* ... Functions / Funciones ......................................... */
   
-    int   nfi_sck_server_comm_lookup_port_name ( char * srv_name, char * port_name ) ;
-    int   nfi_sck_server_comm_connect          ( char * srv_name, char * port_name, int *out_socket );
-    int   nfi_sck_server_comm_disconnect       ( int socket );
+    int   nfi_sck_server_comm_connect     ( char * srv_name, char * port_name, int *out_socket );
+    int   nfi_sck_server_comm_disconnect  ( int socket );
 
 
   /* ................................................................... */

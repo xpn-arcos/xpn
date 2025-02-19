@@ -21,15 +21,13 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi_mpi_server_comm.h"
+   #include "nfi_mpi_server_comm.h"
 
-/* ... Const / Const ................................................. */
-
-/* ... Global variables / Variables globales ........................ */
 
 /* ... Functions / Funciones ......................................... */
 
-int nfi_mpi_server_comm_init(int xpn_thread) {
+int nfi_mpi_server_comm_init(int xpn_thread)
+{
     int ret, provided, claimed;
     int flag = 0;
 
@@ -111,7 +109,7 @@ int nfi_mpi_server_comm_destroy() {
 
 int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_comm) {
     int ret, err;
-    int connection_socket;
+    int connection_socket, port;
     int rank;
 
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] >> Begin\n");
@@ -158,13 +156,15 @@ int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_c
         MPI_Info_free(&info);
     }else{
         // Send connect intention
-        if (rank == 0) {
+        if (rank == 0)
+	{
             err = 0;
-            ret = socket_client_connect(srv_name, &connection_socket);
+            port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+            ret = socket_client_connect(srv_name, port, &connection_socket);
             if (ret < 0) {
                 // Do one retry in 1 second
                 sleep(1);
-                ret = socket_client_connect(srv_name, &connection_socket);
+                ret = socket_client_connect(srv_name, port, &connection_socket);
                 if (ret < 0) {
                     debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket connect\n");
                     err = -1;
