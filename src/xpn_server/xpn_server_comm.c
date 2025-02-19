@@ -24,10 +24,12 @@
 
 #include "socket.h"
 
-#ifdef ENABLE_MPI_SERVER#include "mpi_server_comm.h"
+#ifdef ENABLE_MPI_SERVER
+#include "mpi_server_comm.h"
 
 #endif
-#ifdef ENABLE_MPI_SERVER#include "sck_server_comm.h"
+#ifdef ENABLE_MPI_SERVER
+#include "sck_server_comm.h"
 
 #endif
 
