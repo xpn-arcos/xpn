@@ -27,6 +27,7 @@
    #ifdef ENABLE_MPI_SERVER
    #include "nfi_mpi_server_comm.h"
    #endif
+
    #ifdef ENABLE_SCK_SERVER
    #include "nfi_sck_server_comm.h"
    #endif
@@ -46,6 +47,7 @@ int nfi_xpn_server_comm_init ( struct nfi_xpn_server *params )
     ret = nfi_mpi_server_comm_init( params->xpn_thread );
     break;
   #endif
+
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
     ret = 0;
@@ -70,9 +72,10 @@ int nfi_xpn_server_comm_destroy ( struct nfi_xpn_server *params )
   {
   #ifdef ENABLE_MPI_SERVER
   case XPN_SERVER_TYPE_MPI:
-    ret = nfi_mpi_server_comm_destroy( );
+    ret = nfi_mpi_server_comm_destroy();
     break;
   #endif
+
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
     ret = 0;
@@ -98,13 +101,22 @@ int nfi_xpn_server_comm_connect ( struct nfi_xpn_server *params )
   {
   #ifdef ENABLE_MPI_SERVER
   case XPN_SERVER_TYPE_MPI:
-    ret = nfi_mpi_server_comm_connect(params->srv_name, params->port_name, &params->server_comm);
-    break;
+       ret = nfi_mpi_server_comm_connect(params->srv_name, params->port_name, &params->server_comm);
+       break;
   #endif
+
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
-    ret = nfi_sck_server_comm_connect(params->srv_name, params->port_name, &params->server_socket);
-    break;
+       // lookup port_name
+       ret = nfi_sck_server_comm_lookup_port_name(params->srv_name, params->port_name) ;
+       if (ret < 0) {
+          fprintf(stderr, "nfi_sck_server_comm_lookup_port_name: error on '%s'\n", params->srv_name);
+          return -1;
+       }
+
+       // connect to this port_name
+       ret = nfi_sck_server_comm_connect(params->srv_name, params->port_name, &params->server_socket);
+       break;
   #endif
   
   default:
@@ -128,6 +140,7 @@ int nfi_xpn_server_comm_disconnect ( struct nfi_xpn_server *params )
     ret = nfi_mpi_server_comm_disconnect(&(params->server_comm));
     break;
   #endif
+
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
     ret = nfi_sck_server_comm_disconnect(params->server_socket);
@@ -156,6 +169,7 @@ int nfi_xpn_server_comm_write_operation ( struct nfi_xpn_server *params, int op)
     ret = nfi_mpi_server_comm_write_operation(params->server_comm, op);
     break;
   #endif
+
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
     ret = socket_send(params->server_socket, &op, sizeof(op));
@@ -183,6 +197,7 @@ ssize_t nfi_xpn_server_comm_write_data ( struct nfi_xpn_server *params, __attrib
     ret = nfi_mpi_server_comm_write_data(params->server_comm, data, size);
     break;
   #endif
+
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
     ret = socket_send(params->server_socket, data, size);
@@ -210,6 +225,7 @@ ssize_t nfi_xpn_server_comm_read_data ( struct nfi_xpn_server *params, __attribu
     ret = nfi_mpi_server_comm_read_data(params->server_comm, data, size);
     break;
   #endif
+
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
     ret = socket_recv(params->server_socket, data, size);
@@ -227,3 +243,4 @@ ssize_t nfi_xpn_server_comm_read_data ( struct nfi_xpn_server *params, __attribu
 
 
 /* ................................................................... */
+

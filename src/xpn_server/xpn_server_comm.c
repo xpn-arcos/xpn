@@ -36,47 +36,59 @@
 /* ... Functions / Funciones ......................................... */
 
 // init, destroy
-int xpn_server_comm_init(xpn_server_param_st * params) {
+int xpn_server_comm_init ( xpn_server_param_st * params )
+{
     int ret = -1;
 
-    switch (params -> server_type) {
+    switch (params -> server_type)
+    {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
+        // Initialize MPI subsystem
         ret = mpi_server_comm_init(params -> argc, params -> argv, params -> thread_mode_connections, params -> port_name);
         break;
         #endif
 
         #ifdef ENABLE_SCK_SERVER
     case XPN_SERVER_TYPE_SCK:
-        // Initialize socket
+        // Initialize socket subsystem
         ret = sck_server_comm_init( & params -> server_socket, params -> port_name);
-        // Initialize mosquitto
-        ret = mq_server_mqtt_init(params);
+
+        // Initialize mosquitto if it is enabled
+	if (1 == params->mosquitto_mode) {
+            ret = mq_server_mqtt_init(params);
+        }
         break;
         #endif
 
     default:
-        debug_info("[XPN_SERVER] [xpn_server_comm_init] server_type '%d' not recognized\n", params -> server_type);
+        debug_info("[XPN_SERVER] [xpn_server_comm_init] server_type '%d' not recognized, please check your compiler options just in case.\n", params -> server_type);
         break;
     }
 
     return ret;
 }
 
-int xpn_server_comm_destroy(xpn_server_param_st * params) {
+int xpn_server_comm_destroy(xpn_server_param_st * params)
+{
     int ret = -1;
 
-    switch (params -> server_type) {
+    switch (params -> server_type)
+    {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
+	// Finalize the MPI subsystem
         ret = mpi_server_comm_destroy(params -> port_name);
         break;
         #endif
 
         #ifdef ENABLE_SCK_SERVER
     case XPN_SERVER_TYPE_SCK:
-        // Finalize mosquitto
-        ret = mq_server_mqtt_destroy(params);
+        // Finalize mosquitto if it is enabled
+	if (1 == params->mosquitto_mode) {
+            ret = mq_server_mqtt_destroy(params);
+        }
+
         // Close socket
         ret = socket_close(params -> server_socket);
         break;
@@ -90,7 +102,8 @@ int xpn_server_comm_destroy(xpn_server_param_st * params) {
     return ret;
 }
 
-int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd) {
+int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd)
+{
     int ret = -1;
 
     switch (params -> server_type) {
@@ -114,7 +127,8 @@ int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd) {
     return ret;
 }
 
-int xpn_server_comm_disconnect(xpn_server_param_st * params, void * sd) {
+int xpn_server_comm_disconnect(xpn_server_param_st * params, void * sd)
+{
     int ret = -1;
 
     switch (params -> server_type) {
@@ -138,10 +152,12 @@ int xpn_server_comm_disconnect(xpn_server_param_st * params, void * sd) {
     return ret;
 }
 
-ssize_t xpn_server_comm_read_operation(xpn_server_param_st * params, void * sd, int * op, __attribute__((__unused__)) int * rank_client_id, __attribute__((__unused__)) int * tag_client_id) {
+ssize_t xpn_server_comm_read_operation(xpn_server_param_st * params, void * sd, int * op, __attribute__((__unused__)) int * rank_client_id, __attribute__((__unused__)) int * tag_client_id)
+{
     ssize_t ret = -1;
 
-    switch (params -> server_type) {
+    switch (params -> server_type)
+    {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
         ret = mpi_server_comm_read_operation((MPI_Comm * ) sd, op, rank_client_id, tag_client_id);
@@ -162,10 +178,12 @@ ssize_t xpn_server_comm_read_operation(xpn_server_param_st * params, void * sd, 
     return ret;
 }
 
-ssize_t xpn_server_comm_write_data(xpn_server_param_st * params, void * sd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id) {
+ssize_t xpn_server_comm_write_data(xpn_server_param_st * params, void * sd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id)
+{
     ssize_t ret = -1;
 
-    switch (params -> server_type) {
+    switch (params -> server_type)
+    {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
         ret = mpi_server_comm_write_data((MPI_Comm * ) sd, data, size, rank_client_id, tag_client_id);
@@ -186,10 +204,12 @@ ssize_t xpn_server_comm_write_data(xpn_server_param_st * params, void * sd, char
     return ret;
 }
 
-ssize_t xpn_server_comm_read_data(xpn_server_param_st * params, void * sd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id) {
+ssize_t xpn_server_comm_read_data(xpn_server_param_st * params, void * sd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id)
+{
     ssize_t ret = -1;
 
-    switch (params -> server_type) {
+    switch (params -> server_type)
+    {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
         ret = mpi_server_comm_read_data((MPI_Comm * ) sd, data, size, rank_client_id, tag_client_id);
@@ -198,7 +218,7 @@ ssize_t xpn_server_comm_read_data(xpn_server_param_st * params, void * sd, char 
 
         #ifdef ENABLE_SCK_SERVER
     case XPN_SERVER_TYPE_SCK:
-        ret = socket_recv( * (int * ) sd, data, size);
+        ret = socket_recv( * (int *)sd, data, size);
         break;
         #endif
 
@@ -210,4 +230,6 @@ ssize_t xpn_server_comm_read_data(xpn_server_param_st * params, void * sd, char 
     return ret;
 }
 
+
 /* ................................................................... */
+
