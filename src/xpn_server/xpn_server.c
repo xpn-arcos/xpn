@@ -48,6 +48,7 @@ void xpn_server_run ( struct st_th th )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] << End: OP:'%s'\n", th.id, xpn_server_op2string(th.type_op));
 }
 
+
 void xpn_server_dispatcher ( struct st_th th )
 {
     int ret;
@@ -128,13 +129,14 @@ void xpn_server_accept ( void )
     // Launch dispatcher per aplication
     th_arg.params = &params;
     th_arg.comm = comm;
-    th_arg.function = xpn_server_dispatcher;
     th_arg.type_op = 0;
+    th_arg.function = xpn_server_dispatcher;
     th_arg.rank_client_id = 0;
     th_arg.tag_client_id = 0;
     th_arg.wait4me = FALSE;
 
     base_workers_launch(&worker1, &th_arg, xpn_server_dispatcher);
+    
 }
 
 void xpn_server_finish ( void )
@@ -173,11 +175,11 @@ int xpn_server_up ( void )
 
     // Initialize server
     // * mpi_comm initialization
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] mpi_comm initialization\n", 0);
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] xpn_comm initialization\n", 0);
 
     ret = xpn_server_comm_init(&params);
     if (ret < 0) {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: mpi_comm initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: xpn_comm initialization fails\n", 0);
         return -1;
     }
 

@@ -68,6 +68,8 @@
     struct mosquitto * mqtt;
     #endif
 
+    int keep_connected;
+
     // server comm
     int server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
     #ifdef ENABLE_MPI_SERVER
