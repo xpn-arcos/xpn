@@ -30,9 +30,7 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #ifdef ENABLE_MPI_SERVER
-  #include "mpi.h"
-  #endif
+  #include "base/ns.h"
 
 
   /* ... Const / Const ................................................. */
@@ -45,15 +43,6 @@
   #ifndef MAX_BUFFER_SIZE
     #define MAX_BUFFER_SIZE (1*MB)
   #endif
-
-  #ifdef MPI_MAX_PORT_NAME
-  #define XPN_SERVER_MAX_PORT_NAME MPI_MAX_PORT_NAME
-  #else
-  #define XPN_SERVER_MAX_PORT_NAME 256
-  #endif
-  
-
-  /* ... Functions / Funciones ......................................... */
 
 
   /* ................................................................... */

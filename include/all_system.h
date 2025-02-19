@@ -113,6 +113,11 @@
     #include <mpi.h>
   #endif
 
+  // TODO: within former define...
+  #ifdef ENABLE_MPI_SERVER
+  #include "mpi.h"
+  #endif
+
   #if defined(HAVE_MOSQUITTO_H)
     #include <mosquitto.h>
   #endif

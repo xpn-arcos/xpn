@@ -23,6 +23,7 @@
 
 #include "all_system.h"
 #include "base/socket.h"
+#include "base/ns.h"
 #include "base/utils.h"
 #include "base/workers.h"
 #include "xpn_server_comm.h"
@@ -36,6 +37,7 @@ char serv_name[HOST_NAME_MAX];
 xpn_server_param_st params;
 worker_t worker1, worker2;
 int the_end = 0;
+
 
 /* ... Auxiliar Functions / Funciones Auxiliares ..................... */
 
@@ -158,7 +160,7 @@ void xpn_server_finish ( void )
 int xpn_server_up ( void )
 {
     int ret;
-    int server_socket;
+    int server_socket, port;
     int connection_socket;
     int recv_code = 0;
     int await_stop = 0;
@@ -198,8 +200,10 @@ int xpn_server_up ( void )
         return -1;
     }
 
+    port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Control socket initialization\n", 0);
-    ret = socket_server_create(&server_socket);
+    ret = socket_server_create(&server_socket, port);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
         return -1;
@@ -219,7 +223,7 @@ int xpn_server_up ( void )
         switch (recv_code)
         {
             case SOCKET_ACCEPT_CODE:
-                socket_send(connection_socket, params.port_name, XPN_SERVER_MAX_PORT_NAME);
+                socket_send(connection_socket, params.port_name, MAX_PORT_NAME_LENGTH);
                 xpn_server_accept();
                 break;
 
@@ -332,6 +336,7 @@ int xpn_server_down ( void )
     char srv_name[1024];
     FILE *file;
     int ret;
+
     int buffer = SOCKET_FINISH_CODE;
     if (params.await_stop == 1){
         buffer = SOCKET_FINISH_CODE_AWAIT;
@@ -365,10 +370,11 @@ int xpn_server_down ( void )
     rewind(file);
     int *sockets = malloc(num_serv * sizeof(int));
     int i = 0;
+    int port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
         printf(" * Stopping server (%s)\n", srv_name);
-        ret = socket_client_connect(srv_name, &sockets[i]);
+        ret = socket_client_connect(srv_name, port, &sockets[i]);
         if (ret < 0) {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);
             continue;
@@ -417,7 +423,7 @@ int xpn_server_terminate ( void )
 {
     int ret;
     int buffer = SOCKET_FINISH_CODE;
-    int connection_socket;
+    int connection_socket, port;
 
     printf(" * Stopping server (%s)\n", params.srv_name);
     /*
@@ -428,7 +434,8 @@ int xpn_server_terminate ( void )
     printf("\n");
     */
 
-    ret = socket_client_connect(params.srv_name, &connection_socket);
+    port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+    ret = socket_client_connect(params.srv_name, port, &connection_socket);
     if (ret < 0) {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, params.srv_name);
         return -1 ;

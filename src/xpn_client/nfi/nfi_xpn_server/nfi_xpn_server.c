@@ -28,14 +28,14 @@
 
 /* ... Const / Const ................................................. */
 
-#define FILESYSTEM_DLSYM 1
+   #define FILESYSTEM_DLSYM 1
 
-/* ... Global variables / Variables globales ........................ */
 
 /* ... Auxiliar Functions / Funciones Auxiliares ..................... */
 
 //Communication
-int nfi_write_operation(struct nfi_xpn_server * params, struct st_xpn_server_msg * head) {
+int nfi_write_operation(struct nfi_xpn_server * params, struct st_xpn_server_msg * head)
+{
     int ret;
 
     debug_info("[NFI_XPN] [nfi_write_operation] >> Begin\n");
@@ -50,7 +50,8 @@ int nfi_write_operation(struct nfi_xpn_server * params, struct st_xpn_server_msg
 
     debug_info("[NFI_XPN] [nfi_write_operation] Execute operation: %d -> \n", head -> type);
 
-    switch (head -> type) {
+    switch (head -> type)
+    {
         //File API
     case XPN_SERVER_OPEN_FILE:
         debug_info("[NFI_XPN] [nfi_write_operation] OPEN operation\n");
@@ -133,7 +134,8 @@ int nfi_write_operation(struct nfi_xpn_server * params, struct st_xpn_server_msg
     return ret;
 }
 
-int nfi_xpn_server_do_request(struct nfi_xpn_server * server_aux, struct st_xpn_server_msg * msg, char * req, int req_size) {
+int nfi_xpn_server_do_request(struct nfi_xpn_server * server_aux, struct st_xpn_server_msg * msg, char * req, int req_size)
+{
     ssize_t ret;
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_do_request] >> Begin\n", 0);
 
@@ -425,7 +427,13 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
 
 
     // MQTT Initialization
-    nfi_mq_server_init (server_aux);
+    nfi_mq_server_init(server_aux);
+
+    /* TODO: replace former line of code with something like this:
+    if (1 == serv->mosquitto_mode) {
+        nfi_mq_server_init(server_aux);
+    }
+    */
 
     // Initialize workers
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] Initialize workers\n", serv -> id);
@@ -434,8 +442,9 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
 
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] << End\n", serv -> id);
 
-    if (serv -> keep_connected == 0)
+    if (serv -> keep_connected == 0) {
         nfi_xpn_server_disconnect(serv);
+    }
 
     return 0;
 }
@@ -569,8 +578,6 @@ int nfi_xpn_server_disconnect(struct nfi_server * serv)
 int nfi_xpn_server_reconnect(struct nfi_server * serv) 
 {
     int ret;
-    char server[PATH_MAX], dir[PATH_MAX];
-    struct nfi_xpn_server * server_aux;
 
     // check params...
     if (serv == NULL) 

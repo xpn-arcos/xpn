@@ -20,7 +20,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "xpn_server/xpn_server_conf.h"
+#include "base/ns.h"
 #include "nfi_sck_server_comm.h"
 #include "socket.h"
 
@@ -32,44 +32,8 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
     struct hostent * hp;
     struct sockaddr_in server_addr;
     int ret, sd, flag, val;
-    int connection_socket;
 
     debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] >> Begin\n");
-
-    // Lookup port name
-    ret = socket_client_connect(srv_name, &connection_socket);
-    if (ret < 0)
-    {
-        debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket connect\n");
-        return -1;
-    }
-
-    int buffer = SOCKET_ACCEPT_CODE;
-    ret = socket_send(connection_socket, &buffer, sizeof(buffer));
-    if (ret < 0)
-    {
-        debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket send\n");
-        socket_close(connection_socket);
-        return -1;
-    }
-
-    ret = socket_recv(connection_socket, port_name, XPN_SERVER_MAX_PORT_NAME);
-
-    if (ret < 0)
-    {
-        debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket read\n");
-        socket_close(connection_socket);
-        return -1;
-    }
-
-    socket_close(connection_socket);
-    if (ret < 0) 
-    {
-        debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: Lookup %s Port %s\n", srv_name, port_name);
-        return -1;
-    }
-
-    debug_info("[NFI_SCK_SERVER_COMM] ----SERVER = %s PORT = %s\n", srv_name, port_name);
 
     // Socket...
     sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -139,7 +103,7 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
     if (ret < 0)
     {
         printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: connect fails\n");
-      return -1;
+        return -1;
     }
 
     *out_socket = sd;
@@ -156,9 +120,13 @@ int nfi_sck_server_comm_disconnect(int socket)
 
   debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] >> Begin\n");
 
-  // Si ya se ha desconectado previamente no hago nada
-
-  if (socket == -1) return 0;
+  // If it has been previously disconnected, just return OK
+  if (socket == -1)
+  {
+      debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Previously disconnected\n");
+      debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] << End\n");
+      return 0;
+  }
 
   debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Send disconnect message\n");
   ret = socket_send(socket, &code, sizeof(code));

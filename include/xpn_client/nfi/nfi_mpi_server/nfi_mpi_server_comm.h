@@ -36,11 +36,6 @@
   #include "xpn_server/xpn_server_ops.h"
   #include "mpi.h"
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
 
   /* ... Functions / Funciones ......................................... */
 
