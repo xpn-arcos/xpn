@@ -45,7 +45,7 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   *new_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if (*new_socket < 0)
   {
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: socket fails\n", 0);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: socket fails\n", 0);
     return -1;
   }
 
@@ -56,7 +56,7 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   ret = setsockopt(*new_socket, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
   if (ret < 0)
   {
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: setsockopt fails\n", 0);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: setsockopt fails\n", 0);
     return -1;
   }
 
@@ -67,7 +67,7 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   ret = setsockopt(*new_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&val, sizeof(int));
   if (ret < 0)
   {
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: setsockopt fails\n", 0);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: setsockopt fails\n", 0);
     return -1;
   }
 
@@ -82,7 +82,7 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   ret = bind(*new_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
   if (ret < 0)
   {
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: bind fails\n", 0);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: bind fails\n", 0);
     return -1;
   }
 
@@ -92,7 +92,7 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   ret = listen(*new_socket, 20);
   if (ret < 0)
   {
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: listen fails\n", 0);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: listen fails\n", 0);
     return -1;
   }
 
@@ -111,13 +111,13 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
 
   printf(" | * Time to initialize XPN SCK server: %f s\n", time);
   /*
-  debug_info("\n\n");
-  debug_info("Time to inizialize all servers: %f s\n", time);
-  debug_info("\n");
-  debug_info("---------------------------\n");
-  debug_info("All XPN SCK servers running\n");
-  debug_info("---------------------------\n");
-  debug_info("\n\n");
+  printf("\n\n");
+  printf("Time to inizialize all servers: %f s\n", time);
+  printf("\n");
+  printf("---------------------------\n");
+  printf("All XPN SCK servers running\n");
+  printf("---------------------------\n");
+  printf("\n\n");
   */
 
   debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] server %d available at %s\n", 0, 0, port_name);
@@ -142,7 +142,7 @@ int sck_server_comm_accept ( int socket, int **new_socket )
   sc = accept(socket, (struct sockaddr *)&client_addr, &size);
   if (sc < 0)
   {
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_destroy] ERROR: accept fails\n", 0);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_destroy] ERROR: accept fails\n", 0);
     return -1;
   }
 
@@ -177,14 +177,13 @@ int sck_server_comm_accept ( int socket, int **new_socket )
 
   *new_socket = malloc(sizeof(int));
   if (*new_socket == NULL) {
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] ERROR: Memory allocation\n", 0);
+    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] ERROR: Memory allocation\n", 0);
     return -1;
   }
 
   **new_socket = sc;
   return 0;
 }
-
 
 int sck_server_comm_disconnect ( int *socket )
 {
@@ -195,3 +194,4 @@ int sck_server_comm_disconnect ( int *socket )
 
 
 /* ................................................................... */
+
