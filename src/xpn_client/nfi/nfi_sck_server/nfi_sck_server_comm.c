@@ -157,6 +157,10 @@ int nfi_sck_server_comm_disconnect(int socket)
 
   debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] >> Begin\n");
 
+  // Si ya se ha desconectado previamente no hago nada
+
+  if (socket == -1) return 0;
+
   debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Send disconnect message\n");
   ret = socket_send(socket, &code, sizeof(code));
   if (ret < 0) {

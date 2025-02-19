@@ -70,7 +70,6 @@
     char **argv;
 
     // MQTT configuration
-    int xpn_keep_connection;
     int mosquitto_mode;
     int mosquitto_qos;
 

@@ -98,6 +98,7 @@ int nfi_xpn_server_comm_connect ( struct nfi_xpn_server *params )
   int ret = -1;
   XPN_PROFILER_DEFAULT_BEGIN();
 
+
   switch (params->server_type)
   {
   #ifdef ENABLE_MPI_SERVER
@@ -135,6 +136,7 @@ int nfi_xpn_server_comm_disconnect ( struct nfi_xpn_server *params )
   #ifdef ENABLE_SCK_SERVER
   case XPN_SERVER_TYPE_SCK:
     ret = nfi_sck_server_comm_disconnect(params->server_socket);
+    params->server_socket = -1;
     break;
   #endif
   

@@ -60,8 +60,6 @@ void xpn_server_params_show(xpn_server_param_st * params) {
         printf("\t-m <mqtt_qos>:\t%d\n", params -> mosquitto_qos);
     }
 
-    printf("\t-k  <int>:\t'%d'\n", params -> xpn_keep_connection);
-
     // * shutdown_file
     printf(" |\t-f  <path>:\t'%s'\n", params -> shutdown_file);
     // * host
@@ -84,7 +82,6 @@ void xpn_server_params_show_usage(void) {
     printf("\t-h  <host>:          host server to be shutdown\n");
     printf("\t-w                   await for servers to stop\n");
     printf("\t-m  <int>:           0 (QoS 0); 1 (QoS 1); 2 (QoS 2)\n");
-    printf("\t-k  <int>:           0 (disconnect on each op.); 1 (keep connected after op.)\n");
 
     printf("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show_usage] << End\n", -1);
 }
@@ -114,8 +111,6 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
     // default values for mqtt
     params -> mosquitto_mode = 0;
     params -> mosquitto_qos = 0;
-
-    params -> xpn_keep_connection = 0;
 
     // update user requests
     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] Get user configuration\n", params -> rank);
@@ -192,17 +187,6 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
 
                 params -> mosquitto_mode = 1;
                 params -> mosquitto_qos = qos_mode_mqtt;
-                i++;
-                break;
-
-            case 'k':
-                int keep_connection = utils_str2int(argv[i + 1], 1);
-                if ((keep_connection < 0) || (keep_connection > 1)) {
-                    printf("ERROR: unknown keep-connection value. Default value 1 selected\n");
-                    keep_connection = 1;
-                }
-
-                params -> xpn_keep_connection = keep_connection;
                 i++;
                 break;
 

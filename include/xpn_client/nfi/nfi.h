@@ -76,6 +76,8 @@
     int xpn_thread;
     int xpn_session_file;
     int xpn_session_dir;
+
+    int keep_connected;     // keep connection between operations
   };
 
   struct nfi_attr_server
