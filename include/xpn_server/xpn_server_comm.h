@@ -44,7 +44,7 @@
   int       xpn_server_comm_init              ( xpn_server_param_st *params );
   int       xpn_server_comm_destroy           ( xpn_server_param_st *params );
 
-  int       xpn_server_comm_accept            ( xpn_server_param_st *params, void **new_sd );
+  int       xpn_server_comm_accept            ( xpn_server_param_st *params, void **new_sd, int is_no_conn );
   int       xpn_server_comm_disconnect        ( xpn_server_param_st *params, void *sd );
 
   ssize_t   xpn_server_comm_read_operation    ( xpn_server_param_st *params, void *sd, int *op, int *rank_client_id, int *tag_client_id );

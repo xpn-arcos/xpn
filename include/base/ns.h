@@ -35,9 +35,10 @@
   // NS base on sockets
   #define DEFAULT_XPN_SCK_PORT    3456
 
-  #define SOCKET_ACCEPT_CODE       123
-  #define SOCKET_FINISH_CODE       665
-  #define SOCKET_FINISH_CODE_AWAIT 667
+  #define SOCKET_ACCEPT_CODE                123
+  #define SOCKET_ACCEPT_CODE_NO_CONN        124
+  #define SOCKET_FINISH_CODE                665
+  #define SOCKET_FINISH_CODE_AWAIT          667
 
   #ifdef MPI_MAX_PORT_NAME
      #define MAX_PORT_NAME_LENGTH MPI_MAX_PORT_NAME
@@ -71,7 +72,7 @@
   /* ... Functions / Funciones ......................................... */
 
   // NS base on sockets
-  int   ns_lookup_port_name ( char * srv_name, char * port_name ) ;
+  int   ns_lookup_port_name ( char * srv_name, char * port_name, int is_no_conn ) ;
 
   // NS base on files
   void ns_get_hostname(char *srv_name);

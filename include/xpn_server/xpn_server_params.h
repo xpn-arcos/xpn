@@ -44,14 +44,14 @@
 
   /* ... Data structures / Estructuras de datos ........................ */
 
-  typedef struct
-  {
+typedef struct
+{
     // server identification
     int  size;
     int  rank;
 
-    char port_name[MPI_MAX_PORT_NAME];
-    char srv_name [MPI_MAX_PORT_NAME];
+    char port_name[MAX_PORT_NAME_LENGTH];
+    char srv_name [MAX_PORT_NAME_LENGTH];
 
     // server configuration
     char shutdown_file[PATH_MAX];
@@ -61,6 +61,8 @@
 
     #ifdef ENABLE_SCK_SERVER
     int server_socket; // For sck_server
+    char port_name_no_conn[MAX_PORT_NAME_LENGTH];
+    int server_socket_no_conn;
     #endif
 
     int await_stop;
@@ -77,7 +79,7 @@
       struct mosquitto * mqtt;
     #endif
 
-  } xpn_server_param_st;
+} xpn_server_param_st;
 
 
   /* ... Functions / Funciones ......................................... */

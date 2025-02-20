@@ -27,15 +27,6 @@
 
 void nfi_mq_server_init ( struct nfi_xpn_server *server_aux )
 {
-	server_aux -> xpn_mosquitto_mode = 0;
-
-	char * env_mosquitto = getenv("XPN_MQTT");
-	if (env_mosquitto == NULL) 
-	{
-          debug_info("WARNING: mosquitto is not enabled :,-(\n") ;
-          return;
-        }
-
     /*INIT MOSQUITTO CLIENT SIDE */
 
     #ifdef HAVE_MOSQUITTO_H

@@ -54,8 +54,12 @@ int xpn_server_comm_init ( xpn_server_param_st * params )
         // Initialize socket subsystem
         ret = sck_server_comm_init( & params -> server_socket, params -> port_name);
 
+        // Initialize socket without connection between ops.
+        ret = sck_server_comm_init( & params -> server_socket_no_conn, params -> port_name_no_conn);
+
         // Initialize mosquitto if it is enabled
-	if (1 == params->mosquitto_mode) {
+    	if (1 == params->mosquitto_mode) 
+        {
             ret = mq_server_mqtt_init(params);
         }
         break;
@@ -102,7 +106,7 @@ int xpn_server_comm_destroy(xpn_server_param_st * params)
     return ret;
 }
 
-int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd)
+int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int is_no_conn)
 {
     int ret = -1;
 
@@ -115,7 +119,12 @@ int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd)
 
         #ifdef ENABLE_SCK_SERVER
     case XPN_SERVER_TYPE_SCK:
-        ret = sck_server_comm_accept(params -> server_socket, (int ** ) new_sd);
+
+        if (is_no_conn == 0)
+            ret = sck_server_comm_accept(params -> server_socket, (int ** ) new_sd);
+        else
+            ret = sck_server_comm_accept(params -> server_socket_no_conn, (int ** ) new_sd);
+
         break;
         #endif
 
