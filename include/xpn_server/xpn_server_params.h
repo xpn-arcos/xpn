@@ -29,17 +29,11 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include <stdlib.h>
-     #include <stdio.h>
-     #include <string.h>
-     #include <ctype.h>
-     #include "mpi.h"
+     #include "all_system.h"
      #include "base/utils.h"
+     #include "base/service_socket.h"
      #include "base/workers.h"
      #include "xpn_server_conf.h"
-
-
-  /* ... Const / Const ................................................. */
 
 
   /* ... Data structures / Estructuras de datos ........................ */

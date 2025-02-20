@@ -35,6 +35,7 @@
   #include "base/urlstr.h"
   #include "base/workers.h"
   #include "base/ns.h"
+  #include "base/service_socket.h"
   #include "nfi.h"
   #include "nfi_local.h"
   #include "nfi_worker.h"

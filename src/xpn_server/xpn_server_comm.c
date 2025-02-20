@@ -52,8 +52,7 @@ int xpn_server_comm_init ( xpn_server_param_st * params )
         #ifdef ENABLE_SCK_SERVER
     case XPN_SERVER_TYPE_SCK:
         // Initialize socket subsystem
-        ret = sck_server_comm_init( & params -> server_socket, params -> port_name);
-
+        ret = sck_server_comm_init( & params -> server_socket,         params -> port_name);
         // Initialize socket without connection between ops.
         ret = sck_server_comm_init( & params -> server_socket_no_conn, params -> port_name_no_conn);
 
@@ -95,6 +94,7 @@ int xpn_server_comm_destroy(xpn_server_param_st * params)
 
         // Close socket
         ret = socket_close(params -> server_socket);
+        ret = socket_close(params -> server_socket_no_conn);
         break;
         #endif
 
@@ -106,11 +106,12 @@ int xpn_server_comm_destroy(xpn_server_param_st * params)
     return ret;
 }
 
-int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int is_no_conn)
+int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int connection_type)
 {
     int ret = -1;
 
-    switch (params -> server_type) {
+    switch (params -> server_type)
+    {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
         ret = mpi_server_comm_accept(params -> port_name, (MPI_Comm ** ) new_sd);
@@ -120,10 +121,9 @@ int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int is_
         #ifdef ENABLE_SCK_SERVER
     case XPN_SERVER_TYPE_SCK:
 
-        if (is_no_conn == 0)
-            ret = sck_server_comm_accept(params -> server_socket, (int ** ) new_sd);
-        else
-            ret = sck_server_comm_accept(params -> server_socket_no_conn, (int ** ) new_sd);
+        if (connection_type != XPN_SERVER_CONNECTIONLESS)
+             ret = sck_server_comm_accept(params -> server_socket,         (int ** ) new_sd);
+        else ret = sck_server_comm_accept(params -> server_socket_no_conn, (int ** ) new_sd);
 
         break;
         #endif
@@ -140,7 +140,8 @@ int xpn_server_comm_disconnect(xpn_server_param_st * params, void * sd)
 {
     int ret = -1;
 
-    switch (params -> server_type) {
+    switch (params -> server_type)
+    {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
         ret = mpi_server_comm_disconnect((MPI_Comm * ) sd);
@@ -161,7 +162,7 @@ int xpn_server_comm_disconnect(xpn_server_param_st * params, void * sd)
     return ret;
 }
 
-ssize_t xpn_server_comm_read_operation(xpn_server_param_st * params, void * sd, int * op, __attribute__((__unused__)) int * rank_client_id, __attribute__((__unused__)) int * tag_client_id)
+ssize_t xpn_server_comm_read_operation ( xpn_server_param_st * params, void * sd, int * op, __attribute__((__unused__)) int * rank_client_id, __attribute__((__unused__)) int * tag_client_id )
 {
     ssize_t ret = -1;
 
@@ -187,7 +188,7 @@ ssize_t xpn_server_comm_read_operation(xpn_server_param_st * params, void * sd, 
     return ret;
 }
 
-ssize_t xpn_server_comm_write_data(xpn_server_param_st * params, void * sd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id)
+ssize_t xpn_server_comm_write_data ( xpn_server_param_st * params, void * sd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 {
     ssize_t ret = -1;
 
@@ -213,7 +214,7 @@ ssize_t xpn_server_comm_write_data(xpn_server_param_st * params, void * sd, char
     return ret;
 }
 
-ssize_t xpn_server_comm_read_data(xpn_server_param_st * params, void * sd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id)
+ssize_t xpn_server_comm_read_data ( xpn_server_param_st * params, void * sd, char * data, ssize_t size, __attribute__((__unused__)) int rank_client_id, __attribute__((__unused__)) int tag_client_id )
 {
     ssize_t ret = -1;
 

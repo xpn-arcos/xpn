@@ -100,38 +100,31 @@ int nfi_xpn_server_comm_connect ( struct nfi_xpn_server *params )
   switch (params->server_type)
   {
   #ifdef ENABLE_MPI_SERVER
-  case XPN_SERVER_TYPE_MPI:
-       ret = nfi_mpi_server_comm_connect(params->srv_name, params->port_name, &params->server_comm);
-       break;
+   case XPN_SERVER_TYPE_MPI:
+        ret = nfi_mpi_server_comm_connect(params->srv_name, params->port_name, &params->server_comm);
+        break;
   #endif
 
   #ifdef ENABLE_SCK_SERVER
-  case XPN_SERVER_TYPE_SCK:
+   case XPN_SERVER_TYPE_SCK:
 
         if (params->keep_connected == 1)
         {
             // lookup port_name
+            debug_info("srv_name: '%s' ??\n", params->srv_name);
 
-            debug_info("%s %s\n", params->srv_name, params->port_name);
-            ret = ns_lookup_port_name(params->srv_name, params->port_name, SOCKET_ACCEPT_CODE) ;
+            ret = sersoc_lookup_port_name(params->srv_name, params->port_name, SOCKET_ACCEPT_CODE) ;
             if (ret < 0) 
             {
                 fprintf(stderr, "nfi_sck_server_comm_lookup_port_name: error on '%s'\n", params->srv_name);
                 return -1;
             }
-        }
 
-        printf ("%s\n", params->port_name);
+            debug_info("srv_name: '%s' -> port_name: '%s'\n", params->srv_name, params->port_name);
+        }
 
         // connect to this port_name
         ret = nfi_sck_server_comm_connect(params->srv_name, params->port_name, &params->server_socket);
-
-        //struct nfi_xpn_server * server_aux = (struct nfi_xpn_server * ) serv -> private_info;
-        /*int buff = SOCKET_ACCEPT_CODE;
-        printf("\n\nbuff ---- %d %s\n", buff, params->port_name);
-        ret = write(params->server_socket, &buff, sizeof(int));
-        ret = write(params->server_socket, &buff, sizeof(int));
-        printf ("SOCKET - %d %d\n", params->server_socket, ret);*/
 
        break;
   #endif
