@@ -72,7 +72,7 @@
   /* ... Functions / Funciones ......................................... */
 
   // NS base on sockets
-  int   ns_lookup_port_name ( char * srv_name, char * port_name ) ;
+  int   ns_lookup_port_name ( char * srv_name, char * port_name, int is_no_conn ) ;
 
   // NS base on files
   void ns_get_hostname(char *srv_name);

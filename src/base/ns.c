@@ -27,7 +27,7 @@
 /* ... Functions / Funciones ......................................... */
 
   // NS base on sockets
-int ns_lookup_port_name ( char * srv_name, char * port_name )
+int ns_lookup_port_name ( char * srv_name, char * port_name, int is_conn )
 {
     int ret = -1 ;
     int connection_socket, port;
@@ -43,8 +43,7 @@ int ns_lookup_port_name ( char * srv_name, char * port_name )
         return -1;
     }
 
-    int buffer = SOCKET_ACCEPT_CODE;
-    ret = socket_send(connection_socket, &buffer, sizeof(buffer));
+    ret = socket_send(connection_socket, &is_conn, sizeof(int));
     if (ret < 0)
     {
         debug_error("[NS] [nfi_sck_server_comm_connect] ERROR: socket send\n");

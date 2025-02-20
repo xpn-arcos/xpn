@@ -338,14 +338,14 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
     }
 
     // keep connection between operations
-    char * env_connection = getenv("XPN_CONNECTED");
-    int keep_connection = utils_str2int(env_connection, 1);
+    int keep_connection = utils_getenv_int("XPN_CONNECTED", 1);
     if ((keep_connection < 0) || (keep_connection > 1)) 
     {
         debug_info("ERROR: unknown keep-connection value. Default value 1 selected\n");
         keep_connection = 1;
     }
     serv -> keep_connected = keep_connection;
+    server_aux -> keep_connected = keep_connection;
 
     // session mode
     serv -> xpn_session_file = 0;
@@ -393,8 +393,22 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
     // Server conection
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] Server connection\n", serv -> id);
 
+    if (server_aux->keep_connected == 0)
+    {
+        // lookup port_name
+
+        debug_info("%s %s\n", server, server_aux->port_name);
+        ret = ns_lookup_port_name(server, server_aux->port_name, SOCKET_ACCEPT_CODE_NO_CONN) ;
+        if (ret < 0) 
+        {
+            fprintf(stderr, "nfi_sck_server_comm_lookup_port_name: error on '%s'\n", server_aux->srv_name);
+            return -1;
+        }
+    }
+
     ret = nfi_xpn_server_connect(serv, url, prt, server, dir);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         FREE_AND_NULL(serv -> ops);
         FREE_AND_NULL(server_aux);
         return -1;
@@ -427,13 +441,11 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
 
 
     // MQTT Initialization
-    nfi_mq_server_init(server_aux);
-
-    /* TODO: replace former line of code with something like this:
-    if (1 == serv->mosquitto_mode) {
+    server_aux -> xpn_mosquitto_mode = utils_getenv_int("XPN_MQTT", 0);
+    if (1 == server_aux->xpn_mosquitto_mode)
+    {
         nfi_mq_server_init(server_aux);
     }
-    */
 
     // Initialize workers
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] Initialize workers\n", serv -> id);
