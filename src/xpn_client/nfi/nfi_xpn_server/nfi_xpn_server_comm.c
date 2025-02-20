@@ -121,8 +121,18 @@ int nfi_xpn_server_comm_connect ( struct nfi_xpn_server *params )
             }
         }
 
-       // connect to this port_name
-       ret = nfi_sck_server_comm_connect(params->srv_name, params->port_name, &params->server_socket);
+        printf ("%s\n", params->port_name);
+
+        // connect to this port_name
+        ret = nfi_sck_server_comm_connect(params->srv_name, params->port_name, &params->server_socket);
+
+        //struct nfi_xpn_server * server_aux = (struct nfi_xpn_server * ) serv -> private_info;
+        /*int buff = SOCKET_ACCEPT_CODE;
+        printf("\n\nbuff ---- %d %s\n", buff, params->port_name);
+        ret = write(params->server_socket, &buff, sizeof(int));
+        ret = write(params->server_socket, &buff, sizeof(int));
+        printf ("SOCKET - %d %d\n", params->server_socket, ret);*/
+
        break;
   #endif
   

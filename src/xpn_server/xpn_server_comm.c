@@ -124,7 +124,7 @@ int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int is_
             ret = sck_server_comm_accept(params -> server_socket, (int ** ) new_sd);
         else
             ret = sck_server_comm_accept(params -> server_socket_no_conn, (int ** ) new_sd);
-        
+
         break;
         #endif
 
