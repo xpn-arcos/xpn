@@ -26,55 +26,6 @@
 
 /* ... Functions / Funciones ......................................... */
 
-  // NS base on sockets
-int ns_lookup_port_name ( char * srv_name, char * port_name, int is_conn )
-{
-    int ret = -1 ;
-    int connection_socket, port;
-
-    debug_info("[NS] [ns_lookup_port_name] >> Begin\n");
-
-    // Lookup port name
-    port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
-    ret  = socket_client_connect(srv_name, port, &connection_socket);
-    if (ret < 0)
-    {
-        debug_error("[NS] [nfi_sck_server_comm_connect] ERROR: socket connect\n");
-        return -1;
-    }
-
-    ret = socket_send(connection_socket, &is_conn, sizeof(int));
-    if (ret < 0)
-    {
-        debug_error("[NS] [nfi_sck_server_comm_connect] ERROR: socket send\n");
-        socket_close(connection_socket);
-        return -1;
-    }
-
-    ret = socket_recv(connection_socket, port_name, MAX_PORT_NAME_LENGTH);
-    if (ret < 0)
-    {
-        debug_error("[NS] [nfi_sck_server_comm_connect] ERROR: socket read\n");
-        socket_close(connection_socket);
-        return -1;
-    }
-
-    socket_close(connection_socket);
-    if (ret < 0) 
-    {
-        debug_error("[NS] [nfi_sck_server_comm_connect] ERROR: Lookup %s Port %s\n", srv_name, port_name);
-        return -1;
-    }
-
-    debug_info("[NS] ----SERVER = %s PORT = %s\n", srv_name, port_name);
-    debug_info("[NS] [ns_lookup_port_name] << End\n");
-
-    return ret;
-}
-
-
-
-  // NS base on files
 void ns_get_hostname (char *srv_name)
 {
   debug_info("[NS] [ns_get_hostname] >> Begin\n");
