@@ -51,6 +51,68 @@ void xpn_server_run ( struct st_th th )
 }
 
 
+void xpn_server_dispatcher_no_conn ( struct st_th th )
+{
+    int ret;
+
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] >> Begin\n", th.id);
+
+    // check params...
+    if (NULL == th.params) 
+    {
+        debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] ERROR: NULL arguments\n", th.id);
+        return;
+    }
+
+    struct st_th th_arg;
+
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Waiting for operation\n", th.id);
+
+    ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params, th.comm, &(th.type_op),
+                                         &(th.rank_client_id), &(th.tag_client_id));
+    if (ret < 0) 
+    {
+        debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] ERROR: read operation fail\n", th.id);
+        return;
+    }
+
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] OP '%s'; OP_ID %d\n", th.id,
+               xpn_server_op2string(th.type_op), th.type_op);
+
+    if (th.type_op == XPN_SERVER_DISCONNECT) 
+    {
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] DISCONNECT received\n", th.id);
+        return;
+    }
+
+    if (th.type_op == XPN_SERVER_FINALIZE) 
+    {
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] FINALIZE received\n", th.id);
+
+        the_end = 1;
+    }
+
+    // Launch worker per operation
+    th_arg.params = &params;
+    th_arg.comm = th.comm;
+    th_arg.function = xpn_server_run;
+    th_arg.type_op = th.type_op;
+    th_arg.rank_client_id = th.rank_client_id;
+    th_arg.tag_client_id = th.tag_client_id;
+    th_arg.wait4me = FALSE;
+
+    base_workers_launch(&worker2, &th_arg, xpn_server_run);
+
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Worker launched\n", th.id);
+
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Client %d close\n", th.id, th.rank_client_id);
+
+    xpn_server_comm_disconnect(th.params, th.comm);
+
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] End\n", th.id);
+}
+
+
 void xpn_server_dispatcher ( struct st_th th )
 {
     int ret;
@@ -115,14 +177,16 @@ void xpn_server_dispatcher ( struct st_th th )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
 }
 
-void xpn_server_accept ( void )
+void xpn_server_accept ( int is_no_conn )
 {
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Start accepting\n", 0);
     int ret;
     void *comm = NULL;
     struct st_th th_arg;
-    ret = xpn_server_comm_accept(&params, &comm);
-    if (ret < 0) {
+
+    ret = xpn_server_comm_accept(&params, &comm, is_no_conn);
+    if (ret < 0)
+    {
         return;
     }
 
@@ -137,7 +201,10 @@ void xpn_server_accept ( void )
     th_arg.tag_client_id = 0;
     th_arg.wait4me = FALSE;
 
-    base_workers_launch(&worker1, &th_arg, xpn_server_dispatcher);
+    if (is_no_conn == 0)
+        base_workers_launch(&worker1, &th_arg, xpn_server_dispatcher);
+    else
+        base_workers_launch(&worker1, &th_arg, xpn_server_dispatcher_no_conn);
     
 }
 
@@ -189,13 +256,15 @@ int xpn_server_up ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers initialization\n", 0);
 
     ret = base_workers_init(&worker1, params.thread_mode_connections);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;
     }
 
     ret = base_workers_init(&worker2, params.thread_mode_operations);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
         return -1;
     }
@@ -204,7 +273,8 @@ int xpn_server_up ( void )
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Control socket initialization\n", 0);
     ret = socket_server_create(&server_socket, port);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
         return -1;
     }
@@ -224,14 +294,20 @@ int xpn_server_up ( void )
         {
             case SOCKET_ACCEPT_CODE:
                 socket_send(connection_socket, params.port_name, MAX_PORT_NAME_LENGTH);
-                xpn_server_accept();
+                xpn_server_accept(0);
+                break;
+
+            case SOCKET_ACCEPT_CODE_NO_CONN:
+                socket_send(connection_socket, params.port_name_no_conn, MAX_PORT_NAME_LENGTH);
+                xpn_server_accept(1);
                 break;
 
             case SOCKET_FINISH_CODE:
             case SOCKET_FINISH_CODE_AWAIT:
                 xpn_server_finish();
                 the_end = 1;
-                if (recv_code == SOCKET_FINISH_CODE_AWAIT){
+                if (recv_code == SOCKET_FINISH_CODE_AWAIT)
+                {
                     await_stop = 1;
                 }
                 break;
@@ -242,14 +318,16 @@ int xpn_server_up ( void )
                 break;
         }
 
-        if (await_stop == 0){
+        if (await_stop == 0)
+        {
             socket_close(connection_socket);
         }
     }
 
     socket_close(server_socket);
 
-    if (await_stop == 1){
+    if (await_stop == 1)
+    {
         socket_send(connection_socket, &recv_code, sizeof(recv_code));
         socket_close(connection_socket);
     }
