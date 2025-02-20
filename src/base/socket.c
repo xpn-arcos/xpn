@@ -58,6 +58,10 @@ int socket_recv ( int socket, void * buffer, int size )
       printf("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size);
       return -1;
     }
+    if (0 == r) {
+      // printf("[SOCKET] [socket_recv] WARN: end of file receive for socket '%d'\n", socket);
+      return 0;
+    }
     l = l -r ;
     buffer = buffer + r;
 
