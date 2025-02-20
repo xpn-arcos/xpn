@@ -49,6 +49,7 @@ void xpn_server_run ( struct st_th th )
     xpn_server_do_operation(&th, &the_end);
 
     if (th.close4me) {
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] Client close\n", th.id);
         xpn_server_comm_disconnect(th.params, th.comm);
     }
 
@@ -74,27 +75,33 @@ void xpn_server_dispatcher_no_conn ( struct st_th th )
 
     while (1)
     {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Waiting in accept\n", th.id);
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Waiting in accept\n", th.id);
         ret = xpn_server_comm_accept(th.params, &comm, XPN_SERVER_CONNECTIONLESS);
         if (ret < 0)
         {
-            debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] ERROR: accept fails :-(\n", th.id);
-            return;
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] ERROR: accept fails :-(\n", th.id);
+            continue;
         }
 
 	th.comm = comm ;
 
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Waiting for operation\n", th.id);
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Waiting for operation\n", th.id);
         ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params,
 			                     th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
         if (ret < 0)
         {
-            debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] ERROR: read operation fail\n", th.id);
-            return;
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] ERROR: read operation fail\n", th.id);
+            continue;
+        }
+        if (0 == ret)
+        {
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] WARN: read operation found EOF\n", th.id);
+            xpn_server_comm_disconnect(th.params, th.comm);
+            continue;
         }
 
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
 
         if (th.type_op == XPN_SERVER_DISCONNECT)
         {
@@ -109,6 +116,8 @@ void xpn_server_dispatcher_no_conn ( struct st_th th )
 	    break;
         }
 
+	printf(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \n") ;
+
         // Launch worker per operation
         th_arg.params         = &params;
         th_arg.comm           = th.comm;
@@ -122,9 +131,6 @@ void xpn_server_dispatcher_no_conn ( struct st_th th )
         base_workers_launch(&worker2, &th_arg, xpn_server_run);
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Worker launched\n", th.id);
     }
-
-    printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Client %d close\n", th.id, th.rank_client_id);
-    xpn_server_comm_disconnect(th.params, th.comm);
 
     printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] End\n", th.id);
 }
@@ -174,6 +180,8 @@ void xpn_server_dispatcher ( struct st_th th )
             the_end = 1;
             continue;
         }
+
+	printf(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \n") ;
 
         // Launch worker per operation
         th_arg.params         = &params;
