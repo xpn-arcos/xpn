@@ -112,13 +112,18 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
     params -> mosquitto_mode = 0;
     params -> mosquitto_qos = 0;
 
+    int qos_mode_mqtt = 0;
+
     // update user requests
     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] Get user configuration\n", params -> rank);
 
-    for (int i = 0; i < argc; i++) {
-        switch (argv[i][0]) {
+    for (int i = 0; i < argc; i++) 
+    {
+        switch (argv[i][0]) 
+        {
         case '-':
-            switch (argv[i][1]) {
+            switch (argv[i][1]) 
+            {
             case 'f':
                 if ((i + 1) < argc)
                     strcpy(params -> shutdown_file, argv[i + 1]);
@@ -127,26 +132,35 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
                 break;
 
             case 't':
-                if ((i + 1) < argc) {
-                    if (isdigit(argv[i + 1][0])) {
+                if ((i + 1) < argc) 
+                {
+                    if (isdigit(argv[i + 1][0])) 
+                    {
                         int thread_mode_aux = utils_str2int(argv[i + 1], TH_NOT);
-                        if ((thread_mode_aux >= TH_NOT) && (thread_mode_aux <= TH_OP)) {
+                        if ((thread_mode_aux >= TH_NOT) && (thread_mode_aux <= TH_OP)) 
+                        {
                             params -> thread_mode_connections = thread_mode_aux;
                             params -> thread_mode_operations = thread_mode_aux;
-                        } else {
+                        } else 
+                        {
                             printf("ERROR: unknown option -t '%s'\n", argv[i + 1]);
                         }
-                    } else {
-                        if (strcmp("without", argv[i + 1]) == 0) {
+                    } else 
+                    {
+                        if (strcmp("without", argv[i + 1]) == 0) 
+                        {
                             params -> thread_mode_connections = TH_NOT;
                             params -> thread_mode_operations = TH_NOT;
-                        } else if (strcmp("pool", argv[i + 1]) == 0) {
+                        } else if (strcmp("pool", argv[i + 1]) == 0) 
+                        {
                             params -> thread_mode_connections = TH_POOL;
                             params -> thread_mode_operations = TH_POOL;
-                        } else if (strcmp("on_demand", argv[i + 1]) == 0) {
+                        } else if (strcmp("on_demand", argv[i + 1]) == 0) 
+                        {
                             params -> thread_mode_connections = TH_OP;
                             params -> thread_mode_operations = TH_OP;
-                        } else {
+                        } else 
+                        {
                             printf("ERROR: unknown option -t '%s'\n", argv[i + 1]);
                         }
                     }
@@ -155,12 +169,16 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
                 break;
 
             case 's':
-                if ((i + 1) < argc) {
-                    if (strcmp("mpi", argv[i + 1]) == 0) {
+                if ((i + 1) < argc) 
+                {
+                    if (strcmp("mpi", argv[i + 1]) == 0) 
+                    {
                         params -> server_type = XPN_SERVER_TYPE_MPI;
-                    } else if (strcmp("sck", argv[i + 1]) == 0) {
+                    } else if (strcmp("sck", argv[i + 1]) == 0) 
+                    {
                         params -> server_type = XPN_SERVER_TYPE_SCK;
-                    } else {
+                    } else 
+                    {
                         printf("ERROR: unknown option -s '%s'\n", argv[i + 1]);
                     }
                 }
@@ -179,8 +197,9 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
                 break;
 
             case 'm':
-                int qos_mode_mqtt = utils_str2int(argv[i + 1], 0);
-                if ((qos_mode_mqtt < 0) || (qos_mode_mqtt > 2)) {
+                qos_mode_mqtt = utils_str2int(argv[i + 1], 0);
+                if ((qos_mode_mqtt < 0) || (qos_mode_mqtt > 2)) 
+                {
                     printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
                     qos_mode_mqtt = 0;
                 }
@@ -202,7 +221,8 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
 
     // In sck_server worker for operations has to be sequential because you don't want to have to make a socket per operation.
     // It can be done because it is not reentrant
-    if (params -> server_type == XPN_SERVER_TYPE_SCK) {
+    if (params -> server_type == XPN_SERVER_TYPE_SCK) 
+    {
         params -> thread_mode_operations = TH_NOT;
     }
 
