@@ -36,7 +36,7 @@
 
    char serv_name[HOST_NAME_MAX];
    xpn_server_param_st params;
-   worker_t worker1, worker2;
+   worker_t worker1, worker2, worker3;
    int the_end = 0;
 
 
@@ -204,7 +204,7 @@ void xpn_server_dispatcher ( struct st_th th )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
 }
 
-void xpn_server_launch_worker ( void *comm, void (*function)(struct st_th) )
+void xpn_server_launch_worker ( worker_t *w, void *comm, void (*function)(struct st_th) )
 {
     struct st_th th_arg;
 
@@ -217,18 +217,62 @@ void xpn_server_launch_worker ( void *comm, void (*function)(struct st_th) )
     th_arg.wait4me        = FALSE;
     th_arg.function       = function;
 
-    base_workers_launch(&worker1, &th_arg, function);
+    base_workers_launch(w, &th_arg, function);
 }
 
-void xpn_server_finish ( void )
+int xpn_server_init ( void )
+{
+    int ret ;
+
+    // * mpi_comm initialization
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] xpn_comm initialization\n", 0);
+
+    ret = xpn_server_comm_init(&params);
+    if (ret < 0) 
+    {
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: xpn_comm initialization fails\n", 0);
+        return -1;
+    }
+
+    // * Workers initialization
+    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers initialization\n", 0);
+
+    ret = base_workers_init(&worker1, params.thread_mode_connections);
+    if (ret < 0)
+    {
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers 1 initialization fails\n", 0);
+        return -1;
+    }
+
+    ret = base_workers_init(&worker2, params.thread_mode_operations);
+    if (ret < 0)
+    {
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers 2 initialization fails\n", 0);
+        return -1;
+    }
+
+    ret = base_workers_init(&worker3, TH_OP);
+    if (ret < 0)
+    {
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers 3 initialization fails\n", 0);
+        return -1;
+    }
+
+    return 0;
+}
+
+int xpn_server_finish ( void )
 {
     // Wait and finalize for all current workers
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers destroy\n", 0);
     base_workers_destroy(&worker1);
     base_workers_destroy(&worker2);
+    base_workers_destroy(&worker3);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] mpi_comm destroy\n", 0);
     xpn_server_comm_destroy(&params);
+
+    return 0;
 }
 
 
@@ -247,37 +291,17 @@ int xpn_server_up ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> Begin\n", 0);
 
     // Initialize server
-    // * mpi_comm initialization
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] xpn_comm initialization\n", 0);
-
-    ret = xpn_server_comm_init(&params);
-    if (ret < 0) 
-    {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: xpn_comm initialization fails\n", 0);
-        return -1;
-    }
-
-    // * Workers initialization
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers initialization\n", 0);
-
-    ret = base_workers_init(&worker1, params.thread_mode_connections);
+    ret = xpn_server_init() ;
     if (ret < 0)
     {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_init] ERROR: initialization fails\n", 0);
         return -1;
     }
-
-    ret = base_workers_init(&worker2, params.thread_mode_operations);
-    if (ret < 0)
-    {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers initialization fails\n", 0);
-        return -1;
-    }
-
-    port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Control socket initialization\n", 0);
-    ret = socket_server_create(&server_socket, port);
+
+    port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+    ret  = socket_server_create(&server_socket, port);
     if (ret < 0)
     {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
@@ -285,7 +309,7 @@ int xpn_server_up ( void )
     }
 
     // One thread for connection-less clients...
-    xpn_server_launch_worker(NULL, xpn_server_dispatcher_connectionless);
+    xpn_server_launch_worker(&worker3, NULL, xpn_server_dispatcher_connectionless);
 
     the_end = 0;
     while (!the_end)
@@ -305,7 +329,7 @@ int xpn_server_up ( void )
         		if (ret < 0) continue;
         		ret = xpn_server_comm_accept(&params, &comm, XPN_SERVER_CONNECTION);
         		if (ret < 0) continue;
-        		xpn_server_launch_worker(comm, xpn_server_dispatcher) ;
+        		xpn_server_launch_worker(&worker1, comm, xpn_server_dispatcher) ;
                 break;
 
             case SOCKET_ACCEPT_CODE_NO_CONN:
@@ -353,7 +377,7 @@ int xpn_is_server_spawned ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> Begin\n", 0);
 
     #ifndef ENABLE_MPI_SERVER
-    debug_info("WARNING: if you have not compiled XPN with the MPI server then you cannot use spawn server.\n");
+    printf("WARNING: if you have not compiled XPN with the MPI server then you cannot use spawn server.\n");
     #else
     // Initialize server
     // mpi_comm initialization
@@ -456,7 +480,7 @@ int xpn_server_down ( void )
 
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
-        debug_info(" * Stopping server (%s)\n", srv_name);
+        printf(" * Stopping server (%s)\n", srv_name);
         ret = socket_client_connect(srv_name, port, &sockets[i]);
         if (ret < 0) 
         {
@@ -508,7 +532,7 @@ int xpn_server_down ( void )
 
 int xpn_server_terminate ( void )      
 {
-    debug_info(" * Stopping server (%s)\n", params.srv_name);
+    printf(" * Stopping server (%s)\n", params.srv_name);
 
     int port   = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
     int req_id = SOCKET_FINISH_CODE;
@@ -542,13 +566,13 @@ int main ( int argc, char *argv[] )
     gethostname(serv_name, HOST_NAME_MAX);
 
     // Welcome...
-    debug_info("\n");
-    debug_info(" + xpn_server\n");
-    debug_info(" | ----------\n");
+    printf("\n");
+    printf(" + xpn_server\n");
+    printf(" | ----------\n");
 
     // Show configuration...
-    debug_info(" | * action=%s\n", exec_name);
-    debug_info(" | * host=%s\n", serv_name);
+    printf(" | * action=%s\n", exec_name);
+    printf(" | * host=%s\n", serv_name);
     xpn_server_params_show(&params);
 
     // Do associate action...

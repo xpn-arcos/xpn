@@ -57,13 +57,15 @@ void xpn_server_params_show(xpn_server_param_st * params)
 
     // use of mqtt
     if (params -> mosquitto_mode == 1) {
-        printf("\t-m <mqtt_qos>:\t%d\n", params -> mosquitto_qos);
+        printf(" |\t-m <mqtt_qos>:\t%d\n", params -> mosquitto_qos);
     }
 
     // * shutdown_file
     printf(" |\t-f  <path>:\t'%s'\n", params -> shutdown_file);
+
     // * host
     printf(" |\t-h  <host>:\t'%s'\n", params -> srv_name);
+
     // * await
     if (params -> await_stop == 1) {
         printf(" |\t-w  await true\n");
