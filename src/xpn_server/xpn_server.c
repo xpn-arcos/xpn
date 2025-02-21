@@ -57,66 +57,66 @@ void xpn_server_run ( struct st_th th )
 }
 
 
-void xpn_server_dispatcher_no_conn ( struct st_th th )
+void xpn_server_dispatcher_connectionless ( struct st_th th )
 {
     int ret;
     struct st_th th_arg;
     void *comm = NULL;
 
-    printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] >> Begin\n", th.id);
+    printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] >> Begin\n", th.id);
 
     // check params...
     if (NULL == th.params)
     {
-        debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] ERROR: NULL arguments\n", th.id);
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] End\n", th.id);
+        debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: NULL arguments\n", th.id);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] End\n", th.id);
         return;
     }
 
     while (1)
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Waiting in accept\n", th.id);
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Waiting in accept\n", th.id);
         ret = xpn_server_comm_accept(th.params, &comm, XPN_SERVER_CONNECTIONLESS);
         if (ret < 0)
         {
-            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] ERROR: accept fails :-(\n", th.id);
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: accept fails\n", th.id);
             continue;
         }
 
-	th.comm = comm ;
+        th.comm = comm ;
 
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Waiting for operation\n", th.id);
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Waiting for operation\n", th.id);
         ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params,
 			                     th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
         if (ret < 0)
         {
-            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] ERROR: read operation fail\n", th.id);
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: read operation fail\n", th.id);
             continue;
         }
         if (0 == ret)
         {
-            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] WARN: read operation found EOF\n", th.id);
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] WARN: read operation found EOF\n", th.id);
             xpn_server_comm_disconnect(th.params, th.comm);
             continue;
         }
 
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
 
         if (th.type_op == XPN_SERVER_DISCONNECT)
         {
-            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] DISCONNECT received\n", th.id);
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] DISCONNECT received\n", th.id);
             continue ; // a connection-less client ask for unnecessary disconnect, ignored!
         }
 
         if (th.type_op == XPN_SERVER_FINALIZE)
         {
-            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] FINALIZE received\n", th.id);
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] FINALIZE received\n", th.id);
             the_end = 1;
 	    break;
         }
 
-	printf(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \n") ;
+        printf(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \n") ;
 
         // Launch worker per operation
         th_arg.params         = &params;
@@ -129,10 +129,10 @@ void xpn_server_dispatcher_no_conn ( struct st_th th )
         th_arg.close4me       = TRUE;
 
         base_workers_launch(&worker2, &th_arg, xpn_server_run);
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] Worker launched\n", th.id);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Worker launched\n", th.id);
     }
 
-    printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_no_conn] End\n", th.id);
+    printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] End\n", th.id);
 }
 
 void xpn_server_dispatcher ( struct st_th th )
@@ -143,7 +143,8 @@ void xpn_server_dispatcher ( struct st_th th )
     printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] >> Begin\n", th.id);
 
     // check params...
-    if (NULL == th.params) {
+    if (NULL == th.params) 
+    {
         debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: NULL arguments\n", th.id);
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
         return;
@@ -165,7 +166,7 @@ void xpn_server_dispatcher ( struct st_th th )
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
 
         if (th.type_op == XPN_SERVER_DISCONNECT)
-	{
+        {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] DISCONNECT received\n", th.id);
 
             disconnect = 1;
@@ -173,7 +174,7 @@ void xpn_server_dispatcher ( struct st_th th )
         }
 
         if (th.type_op == XPN_SERVER_FINALIZE)
-	{
+        {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] FINALIZE received\n", th.id);
 
             disconnect = 1;
@@ -181,7 +182,7 @@ void xpn_server_dispatcher ( struct st_th th )
             continue;
         }
 
-	printf(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \n") ;
+        printf(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \n") ;
 
         // Launch worker per operation
         th_arg.params         = &params;
@@ -250,7 +251,8 @@ int xpn_server_up ( void )
     printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] xpn_comm initialization\n", 0);
 
     ret = xpn_server_comm_init(&params);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: xpn_comm initialization fails\n", 0);
         return -1;
     }
@@ -283,7 +285,7 @@ int xpn_server_up ( void )
     }
 
     // One thread for connection-less clients...
-    xpn_server_launch_worker(NULL, xpn_server_dispatcher_no_conn);
+    xpn_server_launch_worker(NULL, xpn_server_dispatcher_connectionless);
 
     the_end = 0;
     while (!the_end)
@@ -300,10 +302,10 @@ int xpn_server_up ( void )
         {
             case SOCKET_ACCEPT_CODE:
                 ret = socket_send(connection_socket, params.port_name, MAX_PORT_NAME_LENGTH);
-		if (ret < 0) continue;
-		ret = xpn_server_comm_accept(&params, &comm, XPN_SERVER_CONNECTION);
-		if (ret < 0) continue;
-		xpn_server_launch_worker(comm, xpn_server_dispatcher) ;
+        		if (ret < 0) continue;
+        		ret = xpn_server_comm_accept(&params, &comm, XPN_SERVER_CONNECTION);
+        		if (ret < 0) continue;
+        		xpn_server_launch_worker(comm, xpn_server_dispatcher) ;
                 break;
 
             case SOCKET_ACCEPT_CODE_NO_CONN:
@@ -372,7 +374,8 @@ int xpn_is_server_spawned ( void )
     }
 
     ret = base_workers_init(&worker2, params.thread_mode_operations);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Workers initialization fails\n", 0);
         return -1;
     }
@@ -382,13 +385,15 @@ int xpn_is_server_spawned ( void )
     MPI_Comm *parent;
 
     parent = (MPI_Comm *)malloc(sizeof(MPI_Comm));
-    if (NULL == parent) {
+    if (NULL == parent) 
+    {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Memory allocation\n", 0);
         return -1;
     }
 
     ret = MPI_Comm_get_parent(parent);
-    if ( (ret < 0) || (MPI_COMM_NULL == *parent) ) {
+    if ( (ret < 0) || (MPI_COMM_NULL == *parent) ) 
+    {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: parent not found\n", 0);
         return -1;
     }
@@ -412,6 +417,8 @@ int xpn_is_server_spawned ( void )
     printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> End\n", 0);
     return ret ;
 }
+
+
 
 // Stop servers
 int xpn_server_down ( void )
@@ -446,21 +453,25 @@ int xpn_server_down ( void )
     int *sockets = malloc(num_serv * sizeof(int));
     int i = 0;
     int port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
         printf(" * Stopping server (%s)\n", srv_name);
         ret = socket_client_connect(srv_name, port, &sockets[i]);
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);
             continue;
         }
 
         ret = socket_send(sockets[i], &buffer, sizeof(buffer));
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, srv_name);
         }
 
-        if (params.await_stop == 0){
+        if (params.await_stop == 0)
+        {
             socket_close(sockets[i]);
         }
 
@@ -494,7 +505,8 @@ int xpn_server_down ( void )
     return 0;
 }
 
-int xpn_server_terminate ( void )                                                                                                                                                                                                                           {
+int xpn_server_terminate ( void )      
+{
     printf(" * Stopping server (%s)\n", params.srv_name);
 
     int port   = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
@@ -503,6 +515,7 @@ int xpn_server_terminate ( void )                                               
 
     return ret ;
 }
+
 
 // Main
 int main ( int argc, char *argv[] )
