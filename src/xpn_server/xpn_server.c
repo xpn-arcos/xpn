@@ -443,7 +443,6 @@ int xpn_is_server_spawned ( void )
 }
 
 
-
 // Stop servers
 int xpn_server_down ( void )
 {
@@ -530,23 +529,14 @@ int xpn_server_down ( void )
     return 0;
 }
 
-int xpn_server_terminate ( void )      
-{
-    printf(" * Stopping server (%s)\n", params.srv_name);
-
-    int port   = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
-    int req_id = SOCKET_FINISH_CODE;
-    int ret    = sersoc_do_send(params.srv_name, port, req_id) ;
-
-    return ret ;
-}
-
 
 // Main
 int main ( int argc, char *argv[] )
 {
-    int ret = -1;
+    int   ret = -1;
     char *exec_name = NULL;
+    int   port ;
+    int   req_id ;
 
     // Initializing...
     setbuf(stdout, NULL);
@@ -589,7 +579,11 @@ int main ( int argc, char *argv[] )
     else if (strcasecmp(exec_name, "xpn_terminate_server") == 0)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Terminate server\n", 0);
-        ret = xpn_server_terminate();
+
+        printf(" * Stopping server (%s)\n", params.srv_name);
+        port   = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+        req_id = SOCKET_FINISH_CODE;
+        ret    = sersoc_do_send(params.srv_name, port, req_id) ;
     }
     else
     {

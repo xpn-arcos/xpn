@@ -18,8 +18,7 @@ sudo systemctl stop mosquitto
 
 * To compile the examples you just need to execute:
 ```
-make clean
-make
+make clean; make
 ```
 
 
@@ -43,23 +42,18 @@ max_connections -1
 
 * Start the mosquitto server:
 ```
-mosquitto  -c mosquitto.conf
+mosquitto -c conf/mq.conf
 ```
 
 ### Expand server
-* Create the hostfile file with one line per server IP:
-```
-echo localhost > hostfile
-```
-
 * Create the local server directory:
 ```
 mkdir -p /tmp/work/data
 ```
 
-* In order to start one xpn_server at port "7555", you can use:
+* In order to start one xpn_server, you can use:
 ```
-../../../src/xpn_server/xpn_server -d /tmp/work/data  -m 0  -ns hostfile
+../../../src/xpn_server/xpn_server -w /tmp/work/data -m 0 -t 1 -s sck
 ```
 
 ### Expand client
@@ -79,7 +73,6 @@ server_url = mq_server://localhost/tmp/work/data
 
 * In order to start the client, just execute:
 ```
-XPN_CONF=xpn.conf  XPN_LOCALITY=0  XPN_SESSION=0  XPN_MQTT=1  XPN_QOS_MQTT=0  ./iot-xpn  Provincia-Estacion ./circulaciones/circulacion
+XPN_CONF=conf/xpn_iot.conf XPN_LOCALITY=0 XPN_CONNECTED=1 XPN_SESSION_FILE=1 XPN_MQTT=1 XPN_QOS_MQTT=0 ./test/integrity/xpn-iot/iot-xpn  Origen-Destino  ~/user-circs/bif6
 ```
-
 
