@@ -65,7 +65,7 @@ int xpn_server_comm_init ( xpn_server_param_st * params )
         #endif
 
     default:
-        debug_info("[XPN_SERVER] [xpn_server_comm_init] server_type '%d' not recognized, please check your compiler options just in case.\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_init] server_type '%d' not recognized, please check your compiler options just in case.\n", params -> server_type);
         break;
     }
 
@@ -99,7 +99,7 @@ int xpn_server_comm_destroy(xpn_server_param_st * params)
         #endif
 
     default:
-        debug_info("[XPN_SERVER] [xpn_server_comm_destroy] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_destroy] server_type '%d' not recognized\n", params -> server_type);
         break;
     }
 
@@ -129,7 +129,7 @@ int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int con
         #endif
 
     default:
-        debug_info("[XPN_SERVER] [xpn_server_comm_accept] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_accept] server_type '%d' not recognized\n", params -> server_type);
         break;
     }
 
@@ -155,7 +155,7 @@ int xpn_server_comm_disconnect(xpn_server_param_st * params, void * sd)
         #endif
 
     default:
-        debug_info("[XPN_SERVER] [xpn_server_comm_disconnect] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_disconnect] server_type '%d' not recognized\n", params -> server_type);
         break;
     }
 
@@ -181,7 +181,7 @@ ssize_t xpn_server_comm_read_operation ( xpn_server_param_st * params, void * sd
         #endif
 
     default:
-        debug_info("[XPN_SERVER] [xpn_server_comm_read_operation] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_read_operation] server_type '%d' not recognized\n", params -> server_type);
         break;
     }
 
@@ -207,7 +207,7 @@ ssize_t xpn_server_comm_write_data ( xpn_server_param_st * params, void * sd, ch
         #endif
 
     default:
-        debug_info("[XPN_SERVER] [xpn_server_comm_write_data] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_write_data] server_type '%d' not recognized\n", params -> server_type);
         break;
     }
 
@@ -233,7 +233,7 @@ ssize_t xpn_server_comm_read_data ( xpn_server_param_st * params, void * sd, cha
         #endif
 
     default:
-        debug_info("[XPN_SERVER] [xpn_server_comm_read_data] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_read_data] server_type '%d' not recognized\n", params -> server_type);
         break;
     }
 

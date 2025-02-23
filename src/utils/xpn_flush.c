@@ -165,11 +165,13 @@
       off64_t ret_1;
       offset_src = 0;
       offset_dest = -blocksize;
+      read_size = -1;
 
       do
       { 
         //TODO: check when the server has error and data is corrupt for fault tolerance
-        do{
+        do
+	{
           offset_dest += blocksize;
           for (int i = 0; i < replication_level+1; i++)
           {
@@ -180,7 +182,8 @@
               goto exit_search;
             }
           }
-        }while(offset_dest < mdata.file_size);
+        } while(offset_dest < mdata.file_size);
+
         exit_search:
         if (aux_serv != rank){
           continue;
@@ -202,6 +205,7 @@
           perror("lseek: ");
           break;
         }
+
         read_size = filesystem_read(fd_src, buf, buf_len);
         if (read_size <= 0){
           break;
@@ -219,7 +223,7 @@
         }
         debug_info("rank %d write %ld in offset_dest %ld from offset_src %ld\n", rank, write_size, offset_dest, offset_src);
       }
-      while(read_size > 0);
+      while (read_size > 0);
 
       close(fd_src);
       unlink(src_path);
