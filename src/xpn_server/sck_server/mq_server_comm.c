@@ -116,9 +116,10 @@ void * process_message(__attribute__((__unused__)) void * arg)
         //double start_time = 0.0, total_time = 0.0;
         //start_time = get_time();
         //Open file
-        int fd = open(path, O_WRONLY | O_APPEND);
+        int fd = open(path, O_WRONLY | O_CREAT, 0700);
         if (fd < 0) 
         {
+	    perror("open: ") ;
             pthread_exit(NULL);
         }
 
