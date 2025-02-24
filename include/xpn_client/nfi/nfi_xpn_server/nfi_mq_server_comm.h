@@ -33,7 +33,6 @@
   #include "utils.h"
   #include "nfi_xpn_server.h"
   #include "xpn_server_params.h"
-  #include "mosquitto.h"
 
 
   /* ... Functions / Funciones ......................................... */
