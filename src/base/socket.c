@@ -33,9 +33,16 @@ int socket_send ( int socket, void * buffer, int size )
     do
     {
         r = dlsym_write(socket, buffer, l);
+
+        if (errno == EPIPE)
+        {
+            debug_info("[SOCKET] [socket_send] ERROR: client closed the connection abruptly\n");
+            return -1;
+        }
+
         if (r < 0)
         {
-            printf("[SOCKET] [socket_send] ERROR: socket send buffer size %d Failed\n", size);
+            debug_info("[SOCKET] [socket_send] ERROR: socket send buffer size %d Failed\n", size);
             return -1;
         }
         l = l - r;
@@ -53,9 +60,15 @@ int socket_recv ( int socket, void * buffer, int size )
 
     do {
         r = dlsym_read(socket, buffer, l);
+
+        if (errno == EPIPE)
+        {
+            debug_info("[SOCKET] [socket_send] ERROR: client closed the connection abruptly\n");
+            return -1;
+        }
         if (r < 0)
         {
-            printf("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size);
+            debug_info("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size);
             return -1;
         }
         if (0 == r)
