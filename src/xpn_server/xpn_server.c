@@ -300,7 +300,7 @@ int xpn_server_up ( void )
     ret = xpn_server_init() ;
     if (ret < 0)
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_init] ERROR: initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_init] ERROR: initialization fails\n", 0);
         return -1;
     }
 
@@ -310,7 +310,7 @@ int xpn_server_up ( void )
     ret  = socket_server_create(&server_socket, port);
     if (ret < 0)
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
         return -1;
     }
 
@@ -399,14 +399,14 @@ int xpn_is_server_spawned ( void )
     // in spawn there are no connections so server is secuential
     ret = base_workers_init(&worker1, TH_NOT);
     if (ret < 0) {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Workers initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Workers initialization fails\n", 0);
         return -1;
     }
 
     ret = base_workers_init(&worker2, params.thread_mode_operations);
     if (ret < 0) 
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Workers initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Workers initialization fails\n", 0);
         return -1;
     }
 
@@ -417,14 +417,14 @@ int xpn_is_server_spawned ( void )
     parent = (MPI_Comm *)malloc(sizeof(MPI_Comm));
     if (NULL == parent) 
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Memory allocation\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Memory allocation\n", 0);
         return -1;
     }
 
     ret = MPI_Comm_get_parent(parent);
     if ( (ret < 0) || (MPI_COMM_NULL == *parent) ) 
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: parent not found\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: parent not found\n", 0);
         return -1;
     }
 
@@ -468,7 +468,7 @@ int xpn_server_down ( void )
 
     file = fopen(params.shutdown_file, "r");
     if (file == NULL) {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: invalid file %s\n", 0, params.shutdown_file);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: invalid file %s\n", 0, params.shutdown_file);
         return -1;
     }
 
@@ -485,18 +485,18 @@ int xpn_server_down ( void )
 
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
-        debug_info(" * Stopping server (%s)\n", srv_name);
+        printf(" * Stopping server (%s)\n", srv_name);
         ret = socket_client_connect(srv_name, port, &sockets[i]);
         if (ret < 0) 
         {
-            debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);
             continue;
         }
 
         ret = socket_send(sockets[i], &buffer, sizeof(buffer));
         if (ret < 0) 
         {
-            debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, srv_name);
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket send %s\n", 0, srv_name);
         }
 
         if (params.await_stop == 0)
@@ -515,7 +515,7 @@ int xpn_server_down ( void )
             ret = socket_recv(sockets[i], &buffer, sizeof(buffer));
             if (ret < 0) 
             {
-                debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, srv_name);
+                printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket recv %s\n", 0, srv_name);
             }
             socket_close(sockets[i]);
         }
@@ -562,13 +562,13 @@ int main ( int argc, char *argv[] )
     gethostname(serv_name, HOST_NAME_MAX);
 
     // Welcome...
-    debug_info("\n");
-    debug_info(" + xpn_server\n");
-    debug_info(" | ----------\n");
+    printf("\n");
+    printf(" + xpn_server\n");
+    printf(" | ----------\n");
 
     // Show configuration...
-    debug_info(" | * action=%s\n", exec_name);
-    debug_info(" | * host=%s\n", serv_name);
+    printf(" | * action=%s\n", exec_name);
+    printf(" | * host=%s\n", serv_name);
     xpn_server_params_show(&params);
 
     // Do associate action...

@@ -747,7 +747,7 @@ ssize_t nfi_xpn_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
     ret = nfi_write_operation(server_aux, & msg);
     if (ret < 0)
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_write_operation fails\n", serv->id);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_write_operation fails\n", serv->id);
         goto nfi_xpn_server_read_KO;
     }
 
@@ -758,7 +758,7 @@ ssize_t nfi_xpn_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
         ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & req, sizeof(struct st_xpn_server_rw_req));
         if (ret < 0)
         {
-            debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_comm_read_data fails\n", serv->id);
+            printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_comm_read_data fails\n", serv->id);
             goto nfi_xpn_server_read_KO;
         }
 
@@ -777,7 +777,7 @@ ssize_t nfi_xpn_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
             ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) buffer + cont, req.size);
             if (ret < 0)
             {
-                debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_comm_read_data fails\n", serv->id);
+                printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] ERROR: nfi_xpn_server_comm_read_data fails\n", serv->id);
             }
 
             debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_comm_read_data(%ld)=%d\n", serv->id, req.size, ret);
@@ -873,7 +873,7 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     ret = nfi_write_operation(server_aux, & msg);
     if (ret < 0)
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_write_operation fails\n", serv->id);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_write_operation fails\n", serv->id);
         goto nfi_xpn_server_write_KO;
     }
 
@@ -896,14 +896,14 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
             ret = nfi_xpn_server_comm_write_data(server_aux, (char * ) buffer + cont, buffer_size);
             if (ret < 0)
             {
-                debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_write_data fails\n", serv->id);
+                printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_write_data fails\n", serv->id);
             }
         } else
         {
             ret = nfi_xpn_server_comm_write_data(server_aux, (char * ) buffer + cont, diff);
             if (ret < 0)
             {
-                debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_write_data fails\n", serv->id);
+                printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_write_data fails\n", serv->id);
             }
         }
 
@@ -917,7 +917,7 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & req, sizeof(struct st_xpn_server_rw_req));
     if (ret < 0)
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_read_data fails\n", serv->id);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_comm_read_data fails\n", serv->id);
         goto nfi_xpn_server_write_KO;
     }
 
@@ -925,7 +925,7 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 
     if (req.size < 0)
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_write writes zero bytes from '%s' in server %s\n", serv->id, fh_aux->path, serv->server);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_write writes zero bytes from '%s' in server %s\n", serv->id, fh_aux->path, serv->server);
 
         if (req.status.ret < 0) 
         {
@@ -1143,7 +1143,7 @@ int nfi_xpn_server_rename(struct nfi_server * serv, char * old_url, char * new_u
     if (ret < 0)
     {
         errno = EINVAL;
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rename] ERROR: incorrect url '%s'.\n", serv->id, old_url);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rename] ERROR: incorrect url '%s'.\n", serv->id, old_url);
         if (serv->keep_connected == 0)
             nfi_xpn_server_disconnect(serv);
         return -1;
@@ -1156,7 +1156,7 @@ int nfi_xpn_server_rename(struct nfi_server * serv, char * old_url, char * new_u
     if (ret < 0)
     {
         errno = EINVAL;
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rename] ERROR: incorrect url '%s'.\n", serv->id, new_url);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rename] ERROR: incorrect url '%s'.\n", serv->id, new_url);
         if (serv->keep_connected == 0)
             nfi_xpn_server_disconnect(serv);
         return -1;
@@ -1217,7 +1217,7 @@ int nfi_xpn_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
     ret = ParseURL(fh->url, NULL, NULL, NULL, server, NULL, dir);
     if (ret < 0)
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_getattr] ERROR: incorrect url '%s'.\n", serv->id, fh->url);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_getattr] ERROR: incorrect url '%s'.\n", serv->id, fh->url);
         errno = EINVAL;
         if (serv->keep_connected == 0)
             nfi_xpn_server_disconnect(serv);
@@ -1328,7 +1328,7 @@ int nfi_xpn_server_mkdir(struct nfi_server * serv, char * url, mode_t mode, __at
     ret = ParseURL(url, NULL, NULL, NULL, server, NULL, dir);
     if (ret < 0)
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: incorrect url '%s'.\n", serv->id, url);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: incorrect url '%s'.\n", serv->id, url);
         errno = EINVAL;
         if (serv->keep_connected == 0)
             nfi_xpn_server_disconnect(serv);
@@ -1351,7 +1351,7 @@ int nfi_xpn_server_mkdir(struct nfi_server * serv, char * url, mode_t mode, __at
 
     if ((status.ret < 0) && (errno != EEXIST))
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
         if (serv->keep_connected == 0)
             nfi_xpn_server_disconnect(serv);
         return -1;
@@ -1403,7 +1403,7 @@ int nfi_xpn_server_opendir(struct nfi_server * serv, char * url, struct nfi_fhan
     if (ret < 0)
     {
         errno = EINVAL;
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_opendir] ERROR: incorrect url '%s'.\n", serv->id, url);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_opendir] ERROR: incorrect url '%s'.\n", serv->id, url);
 
         if (serv->keep_connected == 0)
             nfi_xpn_server_disconnect(serv);
@@ -1538,7 +1538,7 @@ int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
     {
         if (serv->keep_connected == 0) {
             nfi_xpn_server_disconnect(serv);
-	}
+	   }
 
         // Without sesion close do nothing
         return 0;
@@ -1629,7 +1629,7 @@ int nfi_xpn_server_rmdir(struct nfi_server * serv, char * url)
     if (ret < 0)
     {
         errno = EINVAL;
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rmdir] ERROR: incorrect url '%s'.\n", serv->id, url);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rmdir] ERROR: incorrect url '%s'.\n", serv->id, url);
 
         if (serv->keep_connected == 0) {
             nfi_xpn_server_disconnect(serv);
@@ -1747,7 +1747,7 @@ int nfi_xpn_server_read_mdata(struct nfi_server * serv, char * url, struct xpn_m
     ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir);
     if (ret < 0)
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
         errno = EINVAL;
         if (serv->keep_connected == 0)
             nfi_xpn_server_disconnect(serv);
@@ -1810,7 +1810,7 @@ int nfi_xpn_server_write_mdata(struct nfi_server * serv, char * url, struct xpn_
     ret = ParseURL(url, NULL, NULL, NULL, NULL, NULL, dir);
     if (ret < 0)
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write_mdata] ERROR: incorrect url '%s'.\n", serv->id, url);
         errno = EINVAL;
 
         if (serv->keep_connected == 0)
