@@ -182,15 +182,17 @@ int xpn_init_partition( void )
 
     // Block_size
     res = XpnConfGetValue(&conf_data, XPN_CONF_TAG_BLOCKSIZE, buff_value, i);
-    if (res != 0 || getSizeFactor(buff_value) == 1)
-      strcpy(buff_value, XPN_CONF_DEFAULT_BLOCKSIZE);
-    xpn_parttable[i].block_size =  getSizeFactor(buff_value);
+    if (res != 0 || getSizeFactor(buff_value) == 1) {
+        sprintf(buff_value, "%d", XPN_CONF_DEFAULT_BLOCKSIZE);
+    }
+    xpn_parttable[i].block_size = getSizeFactor(buff_value);
     XPN_DEBUG("Partition %d: block_size=%ld", xpn_parttable[i].id, xpn_parttable[i].block_size);
 
     // Replication_level
     res = XpnConfGetValue(&conf_data, XPN_CONF_TAG_REPLICATION_LEVEL, buff_value, i);
-    if (res != 0 || atoi(buff_value) < 0)
-      strcpy(buff_value, XPN_CONF_DEFAULT_REPLICATION_LEVEL);
+    if (res != 0 || atoi(buff_value) < 0) {
+        sprintf(buff_value, "%d", XPN_CONF_DEFAULT_REPLICATION_LEVEL);
+    }
     xpn_parttable[i].replication_level = atoi(buff_value);
     XPN_DEBUG("Partition %d: replication_level=%d", xpn_parttable[i].id, xpn_parttable[i].replication_level);
 
@@ -198,13 +200,13 @@ int xpn_init_partition( void )
     xpn_parttable[i].data_nserv = XpnConfGetNumServers(&conf_data, i);
     if (xpn_parttable[i].data_nserv <= 0)
     {
-      fprintf(stderr, "xpn_init: Error in conf_file: %d servers found, minimum 1 in %d partition\n", xpn_parttable[i].data_nserv ,i);
-      res = -1;
-      goto cleanup_xpn_init_partition;
+        fprintf(stderr, "xpn_init: Error in conf_file: %d servers found, minimum 1 in %d partition\n", xpn_parttable[i].data_nserv ,i);
+        res = -1;
+        goto cleanup_xpn_init_partition;
     }
     XPN_DEBUG("Partition %d: data_nserv=%d", xpn_parttable[i].id, xpn_parttable[i].data_nserv);
     
-    xpn_parttable[i].data_serv=(struct nfi_server *)malloc(xpn_parttable[i].data_nserv*sizeof(struct nfi_server));
+    xpn_parttable[i].data_serv = (struct nfi_server *)malloc(xpn_parttable[i].data_nserv*sizeof(struct nfi_server));
     if (xpn_parttable[i].data_serv == NULL)
     {
       fprintf(stderr, "xpn_init: Couldn't allocate memory\n");
