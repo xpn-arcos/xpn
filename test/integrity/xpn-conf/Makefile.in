@@ -18,8 +18,8 @@
 
 all:  main
 
-main: main.o conf_reader.o
-	$(CC)  -o main main.o conf_reader.o $(MYLIBPATH) $(LIBRARIES)
+main: main.o
+	$(CC)  -o main main.o  $(MYLIBPATH) $(LIBRARIES)
 
 %.o: %.c
 	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@

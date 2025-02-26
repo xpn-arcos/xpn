@@ -104,7 +104,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
         //debug_info("\n%s - %s %d %d\n", topic, path, to_write1, offset);
 
         //char * buffer = NULL;
-        int size, diff, cont = 0, to_write = 0, size_written = 0;
+	int size, diff, cont = 0, to_write = 0, size_written = 0;
 
         // initialize counters
         size = to_write1;
@@ -162,12 +162,16 @@ void * process_message(__attribute__((__unused__)) void * arg)
             //debug_info("STARTW - %s\n", time_str);
         }*/
 
-        if (diff > size) to_write = size;
+        if (diff > size)
+	     to_write = size;
         else to_write = diff;
 
         filesystem_lseek(fd, offset + cont, SEEK_SET);
         //debug_info("to write: %d\t msg: %s", to_write, thread_data -> msg);
         size_written = filesystem_write(fd, thread_data -> msg, to_write);
+	if (size_written < 0) {
+	    printf("process_message: filesystem_write return error\n") ;
+	}
 
         // loop...
         /*do 

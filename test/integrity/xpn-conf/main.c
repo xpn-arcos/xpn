@@ -1,7 +1,7 @@
 
 #include "all_system.h"
 #include "xpn.h"
-#include "conf_reader.h"
+#include "xpn_conf_reader.h"
 
 
 struct conf_file_data conf_data ;
@@ -33,7 +33,7 @@ int main ( int argc, char *argv[] )
         sprintf(conf, "xpn-%d.conf", i) ;
 
 	printf(">>> load xpn-%d.conf...\n", i) ;
-        ret = conf_reader_load(&conf_data, conf) ;
+        ret = xpn_conf_reader_load(&conf_data, conf) ;
 	if (ret < 0)
 	{
 	    printf("\n") ;
@@ -41,7 +41,7 @@ int main ( int argc, char *argv[] )
 	}
 
 	printf(">>> show xpn-%d.conf ...\n", i) ;
-        ret = conf_reader_show(stdout, &conf_data) ;
+        ret = xpn_conf_reader_show(stdout, &conf_data) ;
 	if (ret < 0)
 	{
 	    printf("\n") ;
@@ -49,7 +49,7 @@ int main ( int argc, char *argv[] )
 	}
 
 	printf(">>> free xpn-%d.conf ...\n", i) ;
-        ret = conf_reader_free(&conf_data) ;
+        ret = xpn_conf_reader_free(&conf_data) ;
 
 	printf("\n") ;
     }
