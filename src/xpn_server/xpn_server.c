@@ -48,7 +48,13 @@ void xpn_server_run ( struct st_th th )
 
     xpn_server_do_operation(&th, &the_end);
 
-    if (th.close4me) {
+    if (errno == EPIPE)
+    {
+        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] Client closed the connection abruptly\n", th.id);
+        xpn_server_comm_disconnect(th.params, th.comm);
+    }
+    else if (th.close4me) 
+    {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] Client close\n", th.id);
         xpn_server_comm_disconnect(th.params, th.comm);
     }
@@ -158,7 +164,8 @@ void xpn_server_dispatcher ( struct st_th th )
         ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params,
 			                     th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
-        if (ret < 0) {
+        if (ret < 0) 
+        {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: read operation fail\n", th.id);
             return;
         }
@@ -377,7 +384,7 @@ int xpn_is_server_spawned ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> Begin\n", 0);
 
     #ifndef ENABLE_MPI_SERVER
-    printf("WARNING: if you have not compiled XPN with the MPI server then you cannot use spawn server.\n");
+    debug_info("WARNING: if you have not compiled XPN with the MPI server then you cannot use spawn server.\n");
     #else
     // Initialize server
     // mpi_comm initialization
@@ -411,14 +418,14 @@ int xpn_is_server_spawned ( void )
     parent = (MPI_Comm *)malloc(sizeof(MPI_Comm));
     if (NULL == parent) 
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Memory allocation\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Memory allocation\n", 0);
         return -1;
     }
 
     ret = MPI_Comm_get_parent(parent);
     if ( (ret < 0) || (MPI_COMM_NULL == *parent) ) 
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: parent not found\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: parent not found\n", 0);
         return -1;
     }
 
@@ -461,8 +468,9 @@ int xpn_server_down ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Open host file %s\n", 0, params.shutdown_file);
 
     file = fopen(params.shutdown_file, "r");
-    if (file == NULL) {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: invalid file %s\n", 0, params.shutdown_file);
+    if (file == NULL) 
+    {
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: invalid file %s\n", 0, params.shutdown_file);
         return -1;
     }
 
@@ -541,7 +549,7 @@ int main ( int argc, char *argv[] )
     // Initializing...
     setbuf(stdout, NULL);
     setbuf(stderr, NULL);
-
+    signal(SIGPIPE, SIG_IGN);
     // Get arguments..
     debug_info("[TH_ID=%d] [XPN_SERVER] [main] Get server params\n", 0);
 
@@ -580,7 +588,7 @@ int main ( int argc, char *argv[] )
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Terminate server\n", 0);
 
-        printf(" * Stopping server (%s)\n", params.srv_name);
+        debug_info(" * Stopping server (%s)\n", params.srv_name);
         port   = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
         req_id = SOCKET_FINISH_CODE;
         ret    = sersoc_do_send(params.srv_name, port, req_id) ;

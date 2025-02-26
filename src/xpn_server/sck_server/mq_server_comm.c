@@ -162,8 +162,15 @@ void * process_message(__attribute__((__unused__)) void * arg)
             //debug_info("STARTW - %s\n", time_str);
         }*/
 
+        if (diff > size) to_write = size;
+        else to_write = diff;
+
+        filesystem_lseek(fd, offset + cont, SEEK_SET);
+        //debug_info("to write: %d\t msg: %s", to_write, thread_data -> msg);
+        size_written = filesystem_write(fd, thread_data -> msg, to_write);
+
         // loop...
-        do 
+        /*do 
         {
             if (diff > size) to_write = size;
             else to_write = diff;
@@ -177,7 +184,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
             cont = cont + size_written; // Received bytes
             diff = to_write - cont;
 
-        } while ((diff > 0) && (size_written != 0));
+        } while ((diff > 0) && (size_written != 0));*/
 
         close(fd);
         //total_time = (get_time() - start_time);

@@ -74,6 +74,8 @@ int main ( int argc, char *argv[] )
     bzero(buffer, MAX_LINE_LENGTH);
     ssize_t bytes_read;
 
+    //ret = xpn_write(fd1, "a", strlen("a"));
+
     while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0) 
     {
         ret = xpn_write(fd1, buffer, bytes_read);

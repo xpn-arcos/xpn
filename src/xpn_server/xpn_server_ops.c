@@ -859,7 +859,7 @@ void xpn_server_op_read_mdata   ( xpn_server_param_st *params, void *comm, struc
     if (errno == EISDIR){
       // if is directory there are no metadata to read so return 0
       ret = 0;
-	    memset(&req.mdata, 0, sizeof(struct xpn_metadata));
+      memset(&req.mdata, 0, sizeof(struct xpn_metadata));
       goto cleanup_xpn_server_op_read_mdata;
     }
     ret = fd;
@@ -869,7 +869,7 @@ void xpn_server_op_read_mdata   ( xpn_server_param_st *params, void *comm, struc
   ret = filesystem_read(fd, &req.mdata, sizeof(struct xpn_metadata));
 
   if (!XPN_CHECK_MAGIC_NUMBER(&req.mdata)){
-	  memset(&req.mdata, 0, sizeof(struct xpn_metadata));
+    memset(&req.mdata, 0, sizeof(struct xpn_metadata));
   }
 
   filesystem_close(fd); //TODO: think if necesary check error in close
@@ -981,4 +981,3 @@ cleanup_xpn_server_op_write_mdata_file_size:
 
 }
 /* ................................................................... */
-

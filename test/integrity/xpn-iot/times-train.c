@@ -130,6 +130,13 @@ int main(int argc, char *argv[])
         xpn_closedir(dir);
     }
 
+    ret = xpn_destroy();
+    if (ret < 0) 
+    {
+        printf("ERROR: xpn_destroy()\n");
+        return -1;
+    }
+
     
     return 0;
 }
