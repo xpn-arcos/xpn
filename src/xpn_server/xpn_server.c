@@ -85,7 +85,7 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         ret = xpn_server_comm_accept(th.params, &comm, XPN_SERVER_CONNECTIONLESS);
         if (ret < 0)
         {
-            debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: accept fails\n", th.id);
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: accept fails\n", th.id);
             continue;
         }
 
@@ -97,7 +97,7 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
                                              &(th.rank_client_id), &(th.tag_client_id));
         if (ret < 0)
         {
-            debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: read operation fail\n", th.id);
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: read operation fail\n", th.id);
             continue;
         }
         if (0 == ret)
@@ -164,8 +164,9 @@ void xpn_server_dispatcher ( struct st_th th )
         ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params,
 			                     th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
-        if (ret < 0) {
-            debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: read operation fail\n", th.id);
+        if (ret < 0) 
+        {
+            printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: read operation fail\n", th.id);
             return;
         }
 
@@ -236,7 +237,7 @@ int xpn_server_init ( void )
     ret = xpn_server_comm_init(&params);
     if (ret < 0) 
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: xpn_comm initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: xpn_comm initialization fails\n", 0);
         return -1;
     }
 
@@ -246,21 +247,21 @@ int xpn_server_init ( void )
     ret = base_workers_init(&worker1, params.thread_mode_connections);
     if (ret < 0)
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers 1 initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers 1 initialization fails\n", 0);
         return -1;
     }
 
     ret = base_workers_init(&worker2, params.thread_mode_operations);
     if (ret < 0)
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers 2 initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers 2 initialization fails\n", 0);
         return -1;
     }
 
     ret = base_workers_init(&worker3, TH_OP);
     if (ret < 0)
     {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers 3 initialization fails\n", 0);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Workers 3 initialization fails\n", 0);
         return -1;
     }
 
@@ -467,7 +468,8 @@ int xpn_server_down ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] Open host file %s\n", 0, params.shutdown_file);
 
     file = fopen(params.shutdown_file, "r");
-    if (file == NULL) {
+    if (file == NULL) 
+    {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: invalid file %s\n", 0, params.shutdown_file);
         return -1;
     }

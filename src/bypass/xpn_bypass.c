@@ -168,6 +168,8 @@ int fdstable_put ( struct generic_fd fd )
       debug_info("[BYPASS]\t fdstable_put -> fd %d ; type: %d ; real_fd: %d\n", i + PLUSXPN, fdstable[i].type, fdstable[i].real_fd);
       debug_info("[BYPASS] << After fdstable_put....\n");
 
+      dup2(fd.real_fd, i+PLUSXPN);
+
       return i + PLUSXPN;
     }
   }
@@ -181,6 +183,8 @@ int fdstable_put ( struct generic_fd fd )
 
     debug_info("[BYPASS]\t fdstable_put -> fd %ld ; type: %d ; real_fd: %d\n", old_size + PLUSXPN, fdstable[old_size].type, fdstable[old_size].real_fd);
     debug_info("[BYPASS] << After fdstable_put....\n");
+
+    dup2(fd.real_fd, old_size+PLUSXPN);
 
     return old_size + PLUSXPN;
   }
@@ -210,6 +214,8 @@ int fdstable_remove ( int fd )
   if (fd < fdstable_first_free) {
     fdstable_first_free = fd;
   }
+
+  close(fd+PLUSXPN);
 
   debug_info("[BYPASS] << After fdstable_remove....\n");
 

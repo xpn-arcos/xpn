@@ -42,7 +42,7 @@ int socket_send ( int socket, void * buffer, int size )
 
         if (r < 0)
         {
-            debug_info("[SOCKET] [socket_send] ERROR: socket send buffer size %d Failed\n", size);
+            printf("[SOCKET] [socket_send] ERROR: socket send buffer size %d Failed\n", size);
             return -1;
         }
         l = l - r;
@@ -68,7 +68,7 @@ int socket_recv ( int socket, void * buffer, int size )
         }
         if (r < 0)
         {
-            debug_info("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size);
+            printf("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size);
             return -1;
         }
         if (0 == r)
