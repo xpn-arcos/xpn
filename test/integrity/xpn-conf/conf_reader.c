@@ -436,5 +436,48 @@ int conf_reader_get_value ( struct conf_file_data *conf_data, int partition_inde
 }
 
 
+//
+// Old API
+//
+
+int XpnConfGetServer ( struct conf_file_data *conf_data, char *value, int partition, int server )
+{
+    return conf_reader_get_server (conf_data, value, partition, server) ;
+}
+
+int XpnConfGetValue ( struct conf_file_data *conf_data, char *key, char *value, int partition )
+{
+    return conf_reader_get_value(conf_data, partition, key, value) ;
+}
+
+int XpnConfGetNumPartitions ( struct conf_file_data *conf_data )
+{
+    return conf_reader_get_num_partitions(conf_data) ;
+}
+
+int XpnConfGetNumServers ( struct conf_file_data *conf_data, int partition_index )
+{
+    return conf_reader_get_num_servers(conf_data, partition_index) ;
+}
+
+int XpnConfLoad ( struct conf_file_data *conf_data )
+{
+    char  conf[KB] ;
+    char *env_val ;
+
+    env_val = getenv(XPN_CONF) ;
+    if (env_val != NULL)
+         strcpy(conf, env_val);
+    else strcpy(conf, XPN_CONF_DEFAULT);
+
+    return conf_reader_load(conf_data, conf) ;
+}
+
+void XpnConfFree(struct conf_file_data *conf_data)
+{
+    conf_reader_free(conf_data) ;
+}
+
+
 /* ................................................................... */
 

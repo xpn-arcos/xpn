@@ -84,17 +84,19 @@
      int conf_reader_free ( struct conf_file_data *conf_data ) ;
      int conf_reader_show ( FILE *fd, struct conf_file_data *conf_data ) ;
 
-     // XpnConfGetNumPartitions
      int conf_reader_get_num_partitions ( struct conf_file_data *conf_data ) ;
-
-     // XpnConfGetNumServers
      int conf_reader_get_num_servers    ( struct conf_file_data *conf_data, int partition_index ) ;
-
-     // XpnConfGetServer
      int conf_reader_get_server         ( struct conf_file_data *conf_data, char *value, int partition, int server ) ;
-
-     // XpnConfGetValue
      int conf_reader_get_value          ( struct conf_file_data *conf_data, int partition_index, char *key, char *value ) ;
+
+     // Old API
+     int  XpnConfLoad             ( struct conf_file_data *conf_data );
+     void XpnConfFree             ( struct conf_file_data *conf_data );
+
+     int  XpnConfGetServer        ( struct conf_file_data *conf_data, char *value, int partition, int server ) ;
+     int  XpnConfGetValue         ( struct conf_file_data *conf_data, char *key, char *value, int partition );
+     int  XpnConfGetNumPartitions ( struct conf_file_data *conf_data );
+     int  XpnConfGetNumServers    ( struct conf_file_data *conf_data, int partition_index );
 
 
   /* ................................................................... */
