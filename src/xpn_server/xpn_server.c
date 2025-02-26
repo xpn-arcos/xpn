@@ -588,7 +588,7 @@ int main ( int argc, char *argv[] )
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Terminate server\n", 0);
 
-        debug_info(" * Stopping server (%s)\n", params.srv_name);
+        printf(" * Stopping server (%s)\n", params.srv_name);
         port   = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
         req_id = SOCKET_FINISH_CODE;
         ret    = sersoc_do_send(params.srv_name, port, req_id) ;

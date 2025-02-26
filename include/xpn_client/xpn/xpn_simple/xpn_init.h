@@ -30,30 +30,30 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/path_misc.h"
-  #include "xpn_policy_init.h"
-  #include "xpn_cwd.h"
-  #include "xpn_file.h"
+     #include "all_system.h"
+     #include "base/path_misc.h"
+     #include "xpn_policy_init.h"
+     #include "xpn_cwd.h"
+     #include "xpn_file.h"
 
 
   /* ... Const / Const ................................................. */
  
-  #define XPN_MAX_PART 128
-
-  extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
+     #define XPN_MAX_PART 128
 
 
   /* ... Data structures / Estructuras de datos ........................ */
 
+     extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
+
 
   /* ... Functions / Funciones ......................................... */
 
-  int xpn_init_partition( void );
+     int xpn_init_partition( void );
 
-  int xpn_simple_mark_error_server ( int index ) ;
-  int xpn_simple_destroy ( void );
-  int xpn_simple_init ( void );
+     int xpn_simple_mark_error_server ( int index ) ;
+     int xpn_simple_destroy ( void );
+     int xpn_simple_init ( void );
 
 
   /* ................................................................... */

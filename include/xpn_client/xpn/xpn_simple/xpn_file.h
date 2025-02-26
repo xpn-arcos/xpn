@@ -36,12 +36,12 @@
 
   /* ... Const / Const ................................................. */
 
-  // max number of file descriptors */
-  #define XPN_MAX_FILE  1024
+     /* max number of file descriptors */
+     #define XPN_MAX_FILE  1024
 
-  // FILE or DIR */
-  #define XPN_FILE  0
-  #define XPN_DIR   1
+     /* FILE or DIR */
+     #define XPN_FILE  0
+     #define XPN_DIR   1
 
 
   /* ... Data structures / Estructuras de datos ........................ */

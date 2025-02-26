@@ -96,10 +96,6 @@
   #define XPN_PROFILER_DEFAULT_END() XPN_PROFILER_NAME_END_CUSTOM(default, " ");
   #define XPN_PROFILER_DEFAULT_END_CUSTOM(format, ...) XPN_PROFILER_NAME_END_CUSTOM(default, format, ## __VA_ARGS__);
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
 
   /* ................................................................... */
 
