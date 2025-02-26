@@ -441,6 +441,7 @@ int XpnConfGetNumServers ( struct conf_file_data *conf_data, int partition_index
 
 int XpnConfLoad ( struct conf_file_data *conf_data )
 {
+    int ret ;
     char  conf[KB] ;
     char *env_val ;
 
@@ -449,7 +450,12 @@ int XpnConfLoad ( struct conf_file_data *conf_data )
          strcpy(conf, env_val);
     else strcpy(conf, XPN_CONF_DEFAULT);
 
-    return xpn_conf_reader_load(conf_data, conf) ;
+    ret = xpn_conf_reader_load(conf_data, conf) ;
+//  printf(" ******************\n") ;
+//  xpn_conf_reader_show(stderr, conf_data) ;
+//  printf(" ******************\n") ;
+
+    return ret ;
 }
 
 void XpnConfFree(struct conf_file_data *conf_data)
