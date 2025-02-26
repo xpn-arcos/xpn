@@ -40,6 +40,8 @@
      #define CLOSE_BRACKET   102
      #define EQUAL           103
 
+     #define MAX_TOKEN_LEN   1024
+
      #define XPN_CONF                           "XPN_CONF"
      #define XPN_CONF_DEFAULT                   "xpn.conf"
 
@@ -81,6 +83,18 @@
      int conf_reader_load ( struct conf_file_data *conf_data, char *fname ) ;
      int conf_reader_free ( struct conf_file_data *conf_data ) ;
      int conf_reader_show ( FILE *fd, struct conf_file_data *conf_data ) ;
+
+     // XpnConfGetNumPartitions
+     int conf_reader_get_num_partitions ( struct conf_file_data *conf_data ) ;
+
+     // XpnConfGetNumServers
+     int conf_reader_get_num_servers    ( struct conf_file_data *conf_data, int partition_index ) ;
+
+     // XpnConfGetServer
+     int conf_reader_get_server         ( struct conf_file_data *conf_data, char *value, int partition, int server ) ;
+
+     // XpnConfGetValue
+     int conf_reader_get_value          ( struct conf_file_data *conf_data, int partition_index, char *key, char *value ) ;
 
 
   /* ................................................................... */

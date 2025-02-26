@@ -99,14 +99,13 @@ int next_token ( FILE *fp, char *tok, long *line )
 
 
 //
-// int XpnConfFree ( struct conf_file_data *conf_data )
+// int ret = XpnConfFree(&conf_data) ;
 //
-
 int conf_reader_free ( struct conf_file_data *conf_data )
 {
     // check params
     if (NULL == conf_data) {
-        printf("conf_reader_free: ERROR: NULL conf_data argument.\n") ;
+        fprintf(stderr, "conf_reader_free: ERROR: NULL conf_data argument.\n") ;
         return -1 ;
     }
 
@@ -134,24 +133,23 @@ int conf_reader_free ( struct conf_file_data *conf_data )
 //
 // int ret = XpnConfLoad(&conf_data, "xpn-1.conf") ;
 //
-
 int conf_reader_load ( struct conf_file_data *conf_data, char *conf )
 {
     FILE *fd;
     int   elto ;
-    char  tok[1024] ;
-    char  key[1024] ;
-    char  value[1024] ;
+    char  tok[MAX_TOKEN_LEN] ;
+    char  key[MAX_TOKEN_LEN] ;
+    char  value[MAX_TOKEN_LEN] ;
     int   current_partition ;
     int   current_server ;
 
     // check params
     if (NULL == conf_data) {
-        printf("conf_reader_load: ERROR: NULL conf_data argument.\n") ;
+        fprintf(stderr, "conf_reader_load: ERROR: NULL conf_data argument.\n") ;
         return -1 ;
     }
     if (NULL == conf) {
-        printf("conf_reader_load: ERROR: NULL conf argument.\n") ;
+        fprintf(stderr, "conf_reader_load: ERROR: NULL file name argument.\n") ;
         return -1 ;
     }
 
@@ -288,28 +286,149 @@ cleanup_error_XpnConfLoad:
     return -1;
 }
 
+
 int conf_reader_show ( FILE *fd, struct conf_file_data *conf_data )
 {
     // check params
     if (NULL == fd) {
-        printf("conf_reader_free: ERROR: NULL file descriptor argument.\n") ;
+        fprintf(stderr, "conf_reader_free: ERROR: NULL file descriptor argument.\n") ;
         return -1 ;
     }
     if (NULL == conf_data) {
-        printf("conf_reader_free: ERROR: NULL conf_data argument.\n") ;
+        fprintf(stderr, "conf_reader_free: ERROR: NULL conf_data argument.\n") ;
         return -1 ;
     }
 
     // remove existing allocated data
     for (int i=0; i<conf_data->partition_n; i++)
     {
-         fprintf(fd, " [%d] partition: %s\n", i, conf_data->partitions[i].partition_name) ;
+         fprintf(fd, " [%d] partition: %s\n", i,         conf_data->partitions[i].partition_name) ;
 
-         fprintf(fd, "     ** bsize: %ld\n", conf_data->partitions[i].bsize) ;
-         fprintf(fd, "     ** replication level: %ld\n", conf_data->partitions[i].bsize) ;
+         fprintf(fd, "     ** bsize: %ld\n",             conf_data->partitions[i].bsize) ;
+         fprintf(fd, "     ** replication level: %d\n",  conf_data->partitions[i].replication_level) ;
          for (int j=0; j<conf_data->partitions[i].server_n; j++) {
-              fprintf(fd, "     ** server %d: %s\n", j, conf_data->partitions[i].servers[j]) ;
+              fprintf(fd, "     ** server %d: %s\n", j,  conf_data->partitions[i].servers[j]) ;
          }
+    }
+
+    // return OK
+    return 0 ;
+}
+
+
+//
+// int ret = XpnConfGetNumPartitions(&conf_data) ;
+//
+int conf_reader_get_num_partitions ( struct conf_file_data *conf_data )
+{
+    // check params
+    if (NULL == conf_data) {
+        fprintf(stderr, "conf_reader_get_num_partitions: ERROR: NULL conf_data argument.\n") ;
+        return -1 ;
+    }
+
+    return conf_data->partition_n ;
+}
+
+
+//
+// int ret = XpnConfGetNumServers(&conf_data, **int partition_index**) ;
+//
+int conf_reader_get_num_servers ( struct conf_file_data *conf_data, int partition_index )
+{
+    // check params
+    if (NULL == conf_data) {
+        fprintf(stderr, "conf_reader_get_num_servers: ERROR: NULL conf_data argument.\n") ;
+        return -1 ;
+    }
+
+    // check ranges
+    if (partition_index >= conf_data->partition_n) {
+        fprintf(stderr, "conf_reader_get_num_servers: ERROR: partition index '%d' out of range.\n", partition_index) ;
+	return -1 ;
+    }
+
+    return conf_data->partitions[partition_index].server_n ;
+}
+
+
+//
+// char value[1024] ;
+// int ret = XpnConfGetServer(&conf_data, value, 0, 0) ;
+//
+int conf_reader_get_server ( struct conf_file_data *conf_data, char *value, int partition, int server )
+{
+    // check params
+    if (NULL == conf_data) {
+        fprintf(stderr, "conf_reader_get_server: ERROR: NULL conf_data argument.\n") ;
+        return -1 ;
+    }
+    if (NULL == value) {
+        fprintf(stderr, "conf_reader_get_server: ERROR: NULL value argument.\n") ;
+        return -1 ;
+    }
+
+    // check ranges
+    if (partition >= conf_data->partition_n) {
+        fprintf(stderr, "conf_reader_get_server: ERROR: partition index '%d' out of range.\n", partition) ;
+	return -1 ;
+    }
+    if (server >= conf_data->partitions[partition].server_n) {
+        fprintf(stderr, "conf_reader_get_server: ERROR: server index '%d' out of range.\n", server) ;
+	return -1 ;
+    }
+
+    strcpy(value, conf_data->partitions[partition].servers[server]) ;
+    return 0 ;
+}
+
+
+//
+// char buff_value[1024] ;
+// int  i = 0 ;
+// int res = XpnConfGetValue(&conf_data, XPN_CONF_TAG_PARTITION_NAME, buff_value, i);
+//
+int conf_reader_get_value ( struct conf_file_data *conf_data, int partition_index, char *key, char *value )
+{
+    // check params
+    if (NULL == conf_data) {
+        fprintf(stderr, "conf_reader_get_value: ERROR: NULL conf_data argument.\n") ;
+        return -1 ;
+    }
+    if (NULL == key) {
+        fprintf(stderr, "conf_reader_get_value: ERROR: NULL key argument.\n") ;
+        return -1 ;
+    }
+    if (NULL == value) {
+        fprintf(stderr, "conf_reader_get_value: ERROR: NULL value argument.\n") ;
+        return -1 ;
+    }
+
+    // check ranges
+    if (partition_index >= conf_data->partition_n) {
+        fprintf(stderr, "conf_reader_get_value: ERROR: partition index '%d' out of range.\n", partition_index) ;
+	return -1 ;
+    }
+
+    // bsize = 512k
+    if (strcasecmp(key, XPN_CONF_TAG_BLOCKSIZE) == 0)
+    {
+	sprintf(value, "%ld", conf_data->partitions[partition_index].bsize) ;
+    }
+    // replication_level = 0
+    else if (strcasecmp(key, XPN_CONF_TAG_REPLICATION_LEVEL) == 0)
+    {
+	sprintf(value, "%d", conf_data->partitions[partition_index].replication_level) ;
+    }
+    // partition_name = P1
+    else if (strcasecmp(key, XPN_CONF_TAG_PARTITION_NAME) == 0)
+    {
+	strcpy(value, conf_data->partitions[partition_index].partition_name) ;
+    }
+    else
+    {
+        fprintf(stderr, "conf_reader_get_value: unknown key '%s'\n", key) ;
+	return -1 ;
     }
 
     // return OK
