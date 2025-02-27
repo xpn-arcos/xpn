@@ -82,7 +82,9 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
     while (1)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Waiting in accept\n", th.id);
-        ret = xpn_server_comm_accept(th.params, &comm, XPN_SERVER_CONNECTIONLESS);
+
+     // ret = xpn_server_comm_accept(th.params, &comm, XPN_SERVER_CONNECTIONLESS);
+        ret = sck_server_comm_accept(((xpn_server_param_st *)th.params)->server_socket_no_conn, (int ** )&comm); // SCK only
         if (ret < 0)
         {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: accept fails\n", th.id);
@@ -103,7 +105,8 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         if (0 == ret)
         {
             debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] WARN: read operation found EOF\n", th.id);
-            xpn_server_comm_disconnect(th.params, th.comm);
+         // xpn_server_comm_disconnect(th.params, th.comm);
+	    sck_server_comm_disconnect(th.comm); // SCK only
             continue;
         }
 
@@ -133,6 +136,8 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         th_arg.tag_client_id  = th.tag_client_id;
         th_arg.wait4me        = FALSE;
         th_arg.close4me       = TRUE;
+
+        ((xpn_server_param_st *)th_arg.params)->server_type = XPN_SERVER_CONNECTIONLESS; // SCK only
 
         base_workers_launch(&worker2, &th_arg, xpn_server_run);
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Worker launched\n", th.id);

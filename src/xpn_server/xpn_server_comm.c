@@ -72,7 +72,7 @@ int xpn_server_comm_init ( xpn_server_param_st * params )
     return ret;
 }
 
-int xpn_server_comm_destroy(xpn_server_param_st * params)
+int xpn_server_comm_destroy ( xpn_server_param_st * params )
 {
     int ret = -1;
 
@@ -106,7 +106,7 @@ int xpn_server_comm_destroy(xpn_server_param_st * params)
     return ret;
 }
 
-int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int connection_type)
+int xpn_server_comm_accept ( xpn_server_param_st * params, void ** new_sd, int connection_type )
 {
     int ret = -1;
 
@@ -136,7 +136,7 @@ int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int con
     return ret;
 }
 
-int xpn_server_comm_disconnect(xpn_server_param_st * params, void * sd)
+int xpn_server_comm_disconnect ( xpn_server_param_st * params, void * sd )
 {
     int ret = -1;
 
