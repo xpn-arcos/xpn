@@ -40,21 +40,21 @@ int xpn_server_comm_init ( xpn_server_param_st * params )
 {
     int ret = -1;
 
-    switch (params -> server_type)
+    switch (params->server_type)
     {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
         // Initialize MPI subsystem
-        ret = mpi_server_comm_init(params -> argc, params -> argv, params -> thread_mode_connections, params -> port_name);
+        ret = mpi_server_comm_init(params->argc, params->argv, params->thread_mode_connections, params->port_name);
         break;
         #endif
 
         #ifdef ENABLE_SCK_SERVER
     case XPN_SERVER_TYPE_SCK:
         // Initialize socket subsystem
-        ret = sck_server_comm_init( & params -> server_socket,         params -> port_name);
+        ret = sck_server_comm_init( & params->server_socket,         params->port_name);
         // Initialize socket without connection between ops.
-        ret = sck_server_comm_init( & params -> server_socket_no_conn, params -> port_name_no_conn);
+        ret = sck_server_comm_init( & params->server_socket_no_conn, params->port_name_no_conn);
 
         // Initialize mosquitto if it is enabled
     	if (1 == params->mosquitto_mode) 
@@ -65,23 +65,23 @@ int xpn_server_comm_init ( xpn_server_param_st * params )
         #endif
 
     default:
-        printf("[XPN_SERVER] [xpn_server_comm_init] server_type '%d' not recognized, please check your compiler options just in case.\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_init] server_type '%d' not recognized, please check your compiler options just in case.\n", params->server_type);
         break;
     }
 
     return ret;
 }
 
-int xpn_server_comm_destroy(xpn_server_param_st * params)
+int xpn_server_comm_destroy ( xpn_server_param_st * params )
 {
     int ret = -1;
 
-    switch (params -> server_type)
+    switch (params->server_type)
     {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
 	// Finalize the MPI subsystem
-        ret = mpi_server_comm_destroy(params -> port_name);
+        ret = mpi_server_comm_destroy(params->port_name);
         break;
         #endif
 
@@ -93,28 +93,28 @@ int xpn_server_comm_destroy(xpn_server_param_st * params)
         }
 
         // Close socket
-        ret = socket_close(params -> server_socket);
-        ret = socket_close(params -> server_socket_no_conn);
+        ret = socket_close(params->server_socket);
+        ret = socket_close(params->server_socket_no_conn);
         break;
         #endif
 
     default:
-        printf("[XPN_SERVER] [xpn_server_comm_destroy] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_destroy] server_type '%d' not recognized, please check your compiler options just in case.\n", params->server_type);
         break;
     }
 
     return ret;
 }
 
-int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int connection_type)
+int xpn_server_comm_accept ( xpn_server_param_st * params, void ** new_sd, int connection_type )
 {
     int ret = -1;
 
-    switch (params -> server_type)
+    switch (params->server_type)
     {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
-        ret = mpi_server_comm_accept(params -> port_name, (MPI_Comm ** ) new_sd);
+        ret = mpi_server_comm_accept(params->port_name, (MPI_Comm ** ) new_sd);
         break;
         #endif
 
@@ -122,25 +122,25 @@ int xpn_server_comm_accept(xpn_server_param_st * params, void ** new_sd, int con
     case XPN_SERVER_TYPE_SCK:
 
         if (connection_type != XPN_SERVER_CONNECTIONLESS)
-             ret = sck_server_comm_accept(params -> server_socket,         (int ** ) new_sd);
-        else ret = sck_server_comm_accept(params -> server_socket_no_conn, (int ** ) new_sd);
+             ret = sck_server_comm_accept(params->server_socket,         (int ** ) new_sd);
+        else ret = sck_server_comm_accept(params->server_socket_no_conn, (int ** ) new_sd);
 
         break;
         #endif
 
     default:
-        printf("[XPN_SERVER] [xpn_server_comm_accept] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_accept] server_type '%d' not recognized, please check your compiler options just in case.\n", params->server_type);
         break;
     }
 
     return ret;
 }
 
-int xpn_server_comm_disconnect(xpn_server_param_st * params, void * sd)
+int xpn_server_comm_disconnect ( xpn_server_param_st * params, void * sd )
 {
     int ret = -1;
 
-    switch (params -> server_type)
+    switch (params->server_type)
     {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
@@ -155,7 +155,7 @@ int xpn_server_comm_disconnect(xpn_server_param_st * params, void * sd)
         #endif
 
     default:
-        printf("[XPN_SERVER] [xpn_server_comm_disconnect] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_disconnect] server_type '%d' not recognized, please check your compiler options just in case.\n", params->server_type);
         break;
     }
 
@@ -166,7 +166,7 @@ ssize_t xpn_server_comm_read_operation ( xpn_server_param_st * params, void * sd
 {
     ssize_t ret = -1;
 
-    switch (params -> server_type)
+    switch (params->server_type)
     {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
@@ -181,7 +181,7 @@ ssize_t xpn_server_comm_read_operation ( xpn_server_param_st * params, void * sd
         #endif
 
     default:
-        printf("[XPN_SERVER] [xpn_server_comm_read_operation] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_read_operation] server_type '%d' not recognized, please check your compiler options just in case.\n", params->server_type);
         break;
     }
 
@@ -192,7 +192,7 @@ ssize_t xpn_server_comm_write_data ( xpn_server_param_st * params, void * sd, ch
 {
     ssize_t ret = -1;
 
-    switch (params -> server_type)
+    switch (params->server_type)
     {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
@@ -207,7 +207,7 @@ ssize_t xpn_server_comm_write_data ( xpn_server_param_st * params, void * sd, ch
         #endif
 
     default:
-        printf("[XPN_SERVER] [xpn_server_comm_write_data] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_write_data] server_type '%d' not recognized, please check your compiler options just in case.\n", params->server_type);
         break;
     }
 
@@ -218,7 +218,7 @@ ssize_t xpn_server_comm_read_data ( xpn_server_param_st * params, void * sd, cha
 {
     ssize_t ret = -1;
 
-    switch (params -> server_type)
+    switch (params->server_type)
     {
         #ifdef ENABLE_MPI_SERVER
     case XPN_SERVER_TYPE_MPI:
@@ -233,7 +233,7 @@ ssize_t xpn_server_comm_read_data ( xpn_server_param_st * params, void * sd, cha
         #endif
 
     default:
-        printf("[XPN_SERVER] [xpn_server_comm_read_data] server_type '%d' not recognized\n", params -> server_type);
+        printf("[XPN_SERVER] [xpn_server_comm_read_data] server_type '%d' not recognized, please check your compiler options just in case.\n", params->server_type);
         break;
     }
 

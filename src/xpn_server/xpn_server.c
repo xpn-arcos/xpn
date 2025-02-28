@@ -68,21 +68,34 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
     int ret;
     struct st_th th_arg;
     void *comm = NULL;
+    xpn_server_param_st *local_params ;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] >> Begin\n", th.id);
 
     // check params...
     if (NULL == th.params)
     {
-        debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: NULL arguments\n", th.id);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: NULL arguments\n", th.id);
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] End\n", th.id);
         return;
     }
 
+    local_params = (xpn_server_param_st *)th.params ;
+
+    // <SCK only
+    ret = sck_server_comm_init( &(local_params->server_socket),         local_params->port_name);
+    ret = sck_server_comm_init( &(local_params->server_socket_no_conn), local_params->port_name_no_conn);
+    if (1 == local_params->mosquitto_mode) {
+        ret = mq_server_mqtt_init(local_params);
+    }
+    // </SCK only
+
     while (1)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Waiting in accept\n", th.id);
-        ret = xpn_server_comm_accept(th.params, &comm, XPN_SERVER_CONNECTIONLESS);
+
+     // ret = xpn_server_comm_accept(th.params, &comm, XPN_SERVER_CONNECTIONLESS);
+        ret = sck_server_comm_accept(local_params->server_socket_no_conn, (int ** )&comm); // SCK only
         if (ret < 0)
         {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: accept fails\n", th.id);
@@ -92,7 +105,7 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         th.comm = comm ;
 
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Waiting for operation\n", th.id);
-        ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params,
+        ret = xpn_server_comm_read_operation(local_params,
 			                     th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
         if (ret < 0)
@@ -103,7 +116,8 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         if (0 == ret)
         {
             debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] WARN: read operation found EOF\n", th.id);
-            xpn_server_comm_disconnect(th.params, th.comm);
+         // xpn_server_comm_disconnect(th.params, th.comm);
+	    sck_server_comm_disconnect(comm); // SCK only
             continue;
         }
 
@@ -114,15 +128,12 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
             debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] DISCONNECT received\n", th.id);
             continue ; // a connection-less client ask for unnecessary disconnect, ignored!
         }
-
         if (th.type_op == XPN_SERVER_FINALIZE)
         {
             debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] FINALIZE received\n", th.id);
             the_end = 1;
 	    break;
         }
-
-        debug_info(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \n") ;
 
         // Launch worker per operation
         th_arg.params         = &params;
@@ -138,6 +149,14 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Worker launched\n", th.id);
     }
 
+    // <SCK only
+    if (1 == local_params->mosquitto_mode) {
+        ret = mq_server_mqtt_destroy(local_params);
+    }
+    ret = socket_close(local_params->server_socket);
+    ret = socket_close(local_params->server_socket_no_conn);
+    // </SCK only
+
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] End\n", th.id);
 }
 
@@ -145,23 +164,26 @@ void xpn_server_dispatcher ( struct st_th th )
 {
     int ret;
     struct st_th th_arg;
+    xpn_server_param_st *local_params ;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] >> Begin\n", th.id);
 
     // check params...
     if (NULL == th.params) 
     {
-        debug_error("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: NULL arguments\n", th.id);
+        printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] ERROR: NULL arguments\n", th.id);
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
         return;
     }
+
+    local_params = (xpn_server_param_st *)th.params ;
 
     int disconnect = 0;
     while (!disconnect)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Waiting for operation\n", th.id);
 
-        ret = xpn_server_comm_read_operation((xpn_server_param_st *)th.params,
+        ret = xpn_server_comm_read_operation(local_params,
 			                     th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
         if (ret < 0) 
@@ -179,7 +201,6 @@ void xpn_server_dispatcher ( struct st_th th )
             disconnect = 1;
             continue;
         }
-
         if (th.type_op == XPN_SERVER_FINALIZE)
         {
             debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] FINALIZE received\n", th.id);
@@ -188,8 +209,6 @@ void xpn_server_dispatcher ( struct st_th th )
             the_end = 1;
             continue;
         }
-
-        debug_info(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \n") ;
 
         // Launch worker per operation
         th_arg.params         = &params;
@@ -206,7 +225,7 @@ void xpn_server_dispatcher ( struct st_th th )
     }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Client %d close\n", th.id, th.rank_client_id);
-    xpn_server_comm_disconnect(th.params, th.comm);
+    xpn_server_comm_disconnect(local_params, th.comm);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
 }
@@ -316,7 +335,9 @@ int xpn_server_up ( void )
     }
 
     // One thread for connection-less clients...
-    xpn_server_launch_worker(&worker3, NULL, xpn_server_dispatcher_connectionless);
+    if (params.server_type != XPN_SERVER_TYPE_MPI) { // SCK only
+        xpn_server_launch_worker(&worker3, NULL, xpn_server_dispatcher_connectionless);
+    }
 
     the_end = 0;
     while (!the_end)
