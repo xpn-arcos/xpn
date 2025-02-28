@@ -21,15 +21,15 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "all_system.h"
-#include "base/ns.h"
-#include "base/socket.h"
-#include "base/service_socket.h"
-#include "base/utils.h"
-#include "base/workers.h"
-#include "xpn_server_comm.h"
-#include "xpn_server_ops.h"
-#include "xpn_server_params.h"
+   #include "all_system.h"
+   #include "base/ns.h"
+   #include "base/socket.h"
+   #include "base/service_socket.h"
+   #include "base/utils.h"
+   #include "base/workers.h"
+   #include "xpn_server_comm.h"
+   #include "xpn_server_ops.h"
+   #include "xpn_server_params.h"
 
 
 /* ... Global variables / Variables globales ........................ */
@@ -44,6 +44,9 @@
 
 void xpn_server_run ( struct st_th th )
 {
+    xpn_server_param_st *local_params ;
+    local_params = (xpn_server_param_st *)th.params ;
+
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] >> Begin: OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
 
     xpn_server_do_operation(&th, &the_end);
@@ -51,12 +54,12 @@ void xpn_server_run ( struct st_th th )
     if (errno == EPIPE)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] Client closed the connection abruptly\n", th.id);
-        xpn_server_comm_disconnect(th.params, th.comm);
+        xpn_server_comm_disconnect(local_params->server_type, th.comm) ;
     }
     else if (th.close4me) 
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] Client close\n", th.id);
-        xpn_server_comm_disconnect(th.params, th.comm);
+        xpn_server_comm_disconnect(local_params->server_type, th.comm) ;
     }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] << End: OP:'%s'\n", th.id, xpn_server_op2string(th.type_op));
@@ -82,20 +85,13 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
 
     local_params = (xpn_server_param_st *)th.params ;
 
-    // <SCK only
-    ret = sck_server_comm_init( &(local_params->server_socket),         local_params->port_name);
-    ret = sck_server_comm_init( &(local_params->server_socket_no_conn), local_params->port_name_no_conn);
-    if (1 == local_params->mosquitto_mode) {
-        ret = mq_server_mqtt_init(local_params);
-    }
-    // </SCK only
+    ret = xpn_server_comm_init(XPN_SERVER_TYPE_SCK, &params); // SCK only
 
     while (1)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Waiting in accept\n", th.id);
 
-     // ret = xpn_server_comm_accept(th.params, &comm, XPN_SERVER_CONNECTIONLESS);
-        ret = sck_server_comm_accept(local_params->server_socket_no_conn, (int ** )&comm); // SCK only
+        ret = xpn_server_comm_accept(XPN_SERVER_TYPE_SCK, local_params, XPN_SERVER_CONNECTIONLESS, &comm); // SCK only
         if (ret < 0)
         {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] ERROR: accept fails\n", th.id);
@@ -105,7 +101,7 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         th.comm = comm ;
 
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Waiting for operation\n", th.id);
-        ret = xpn_server_comm_read_operation(local_params,
+        ret = xpn_server_comm_read_operation(XPN_SERVER_TYPE_SCK,
 			                     th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
         if (ret < 0)
@@ -116,8 +112,8 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         if (0 == ret)
         {
             debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] WARN: read operation found EOF\n", th.id);
-         // xpn_server_comm_disconnect(th.params, th.comm);
-	    sck_server_comm_disconnect(comm); // SCK only
+            xpn_server_comm_disconnect(XPN_SERVER_TYPE_SCK, th.comm);
+	    // SCK only
             continue;
         }
 
@@ -149,13 +145,7 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Worker launched\n", th.id);
     }
 
-    // <SCK only
-    if (1 == local_params->mosquitto_mode) {
-        ret = mq_server_mqtt_destroy(local_params);
-    }
-    ret = socket_close(local_params->server_socket);
-    ret = socket_close(local_params->server_socket_no_conn);
-    // </SCK only
+    xpn_server_comm_destroy(XPN_SERVER_TYPE_SCK, &params); // SCK only
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] End\n", th.id);
 }
@@ -183,7 +173,7 @@ void xpn_server_dispatcher ( struct st_th th )
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Waiting for operation\n", th.id);
 
-        ret = xpn_server_comm_read_operation(local_params,
+        ret = xpn_server_comm_read_operation(local_params->server_type,
 			                     th.comm, &(th.type_op),
                                              &(th.rank_client_id), &(th.tag_client_id));
         if (ret < 0) 
@@ -225,7 +215,7 @@ void xpn_server_dispatcher ( struct st_th th )
     }
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Client %d close\n", th.id, th.rank_client_id);
-    xpn_server_comm_disconnect(local_params, th.comm);
+    xpn_server_comm_disconnect(local_params->server_type, th.comm);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] End\n", th.id);
 }
@@ -253,7 +243,7 @@ int xpn_server_init ( void )
     // * mpi_comm initialization
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] xpn_comm initialization\n", 0);
 
-    ret = xpn_server_comm_init(&params);
+    ret = xpn_server_comm_init(params.server_type, &params);
     if (ret < 0) 
     {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: xpn_comm initialization fails\n", 0);
@@ -296,7 +286,7 @@ int xpn_server_finish ( void )
     base_workers_destroy(&worker3);
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] mpi_comm destroy\n", 0);
-    xpn_server_comm_destroy(&params);
+    xpn_server_comm_destroy(params.server_type, &params);
 
     return 0;
 }
@@ -353,30 +343,32 @@ int xpn_server_up ( void )
         switch (recv_code)
         {
             case SOCKET_ACCEPT_CODE:
-                ret = socket_send(connection_socket, params.port_name, MAX_PORT_NAME_LENGTH);
-        		if (ret < 0) continue;
-        		ret = xpn_server_comm_accept(&params, &comm, XPN_SERVER_CONNECTION);
-        		if (ret < 0) continue;
-        		xpn_server_launch_worker(&worker1, comm, xpn_server_dispatcher) ;
-                break;
+                 ret = socket_send(connection_socket, params.port_name, MAX_PORT_NAME_LENGTH);
+        	 if (ret < 0) continue;
+
+        	 ret = xpn_server_comm_accept(params.server_type, &params, XPN_SERVER_CONNECTION, &comm) ;
+        	 if (ret < 0) continue;
+
+        	 xpn_server_launch_worker(&worker1, comm, xpn_server_dispatcher) ;
+                 break;
 
             case SOCKET_ACCEPT_CODE_NO_CONN:
-                socket_send(connection_socket, params.port_name_no_conn, MAX_PORT_NAME_LENGTH);
-                break;
+                 socket_send(connection_socket, params.port_name_no_conn, MAX_PORT_NAME_LENGTH);
+                 break;
 
             case SOCKET_FINISH_CODE:
             case SOCKET_FINISH_CODE_AWAIT:
-                xpn_server_finish();
-                the_end = 1;
-                if (recv_code == SOCKET_FINISH_CODE_AWAIT)
-                {
-                    await_stop = 1;
-                }
-                break;
+                 xpn_server_finish();
+                 the_end = 1;
+                 if (recv_code == SOCKET_FINISH_CODE_AWAIT)
+                 {
+                     await_stop = 1;
+                 }
+                 break;
 
             default:
-                debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] >> Socket recv unknown code %d\n", 0, params.srv_name, recv_code);
-                break;
+                 debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] >> Socket recv unknown code %d\n", 0, params.srv_name, recv_code);
+                 break;
         }
 
         if (await_stop == 0)
