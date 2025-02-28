@@ -278,7 +278,6 @@ int mq_server_mqtt_init ( xpn_server_param_st * params )
         mosquitto_lib_init();
 
         params -> mqtt = mosquitto_new(NULL, true, NULL);
-
         if (params -> mqtt == NULL) {
             debug_info(stderr, "Error: Out of memory.\n");
             return 1;
@@ -298,7 +297,6 @@ int mq_server_mqtt_init ( xpn_server_param_st * params )
 
         /* Run the network loop in a background thread, this call returns quickly. */
         rc = mosquitto_loop_start(params -> mqtt);
-
         if (rc != MOSQ_ERR_SUCCESS) {
             mosquitto_destroy(params -> mqtt);
             debug_info(stderr, "Error: %s\n", mosquitto_strerror(rc));

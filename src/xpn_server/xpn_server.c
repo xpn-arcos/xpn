@@ -49,7 +49,7 @@ void xpn_server_run ( struct st_th th )
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_run] >> Begin: OP '%s'; OP_ID %d\n", th.id, xpn_server_op2string(th.type_op), th.type_op);
 
-    xpn_server_do_operation(&th, &the_end);
+    xpn_server_do_operation(th.server_type, &th, &the_end);
 
     if (errno == EPIPE)
     {
@@ -84,8 +84,6 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
     }
 
     local_params = (xpn_server_param_st *)th.params ;
-
-    ret = xpn_server_comm_init(XPN_SERVER_TYPE_SCK, &params); // SCK only
 
     while (1)
     {
@@ -140,12 +138,11 @@ void xpn_server_dispatcher_connectionless ( struct st_th th )
         th_arg.tag_client_id  = th.tag_client_id;
         th_arg.wait4me        = FALSE;
         th_arg.close4me       = TRUE;
+        th_arg.server_type    = XPN_SERVER_TYPE_SCK;
 
         base_workers_launch(&worker2, &th_arg, xpn_server_run);
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] Worker launched\n", th.id);
     }
-
-    xpn_server_comm_destroy(XPN_SERVER_TYPE_SCK, &params); // SCK only
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher_connectionless] End\n", th.id);
 }
@@ -209,6 +206,7 @@ void xpn_server_dispatcher ( struct st_th th )
         th_arg.tag_client_id  = th.tag_client_id;
         th_arg.wait4me        = FALSE;
         th_arg.close4me       = FALSE;
+        th_arg.server_type    = params.server_type;
 
         base_workers_launch(&worker2, &th_arg, xpn_server_run);
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_dispatcher] Worker launched\n", th.id);
@@ -240,7 +238,7 @@ int xpn_server_init ( void )
 {
     int ret ;
 
-    // * mpi_comm initialization
+    // * comm initialization
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] xpn_comm initialization\n", 0);
 
     ret = xpn_server_comm_init(params.server_type, &params);
@@ -248,6 +246,10 @@ int xpn_server_init ( void )
     {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: xpn_comm initialization fails\n", 0);
         return -1;
+    }
+
+    if (XPN_SERVER_TYPE_MPI == params.server_type) {
+        ret = xpn_server_comm_init(XPN_SERVER_TYPE_SCK, &params); // SCK only
     }
 
     // * Workers initialization
@@ -274,6 +276,11 @@ int xpn_server_init ( void )
         return -1;
     }
 
+    // One thread for connection-less clients...
+    if (params.server_type != XPN_SERVER_TYPE_MPI) { // SCK only
+        xpn_server_launch_worker(&worker3, NULL, xpn_server_dispatcher_connectionless);
+    }
+
     return 0;
 }
 
@@ -281,12 +288,19 @@ int xpn_server_finish ( void )
 {
     // Wait and finalize for all current workers
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Workers destroy\n", 0);
+
     base_workers_destroy(&worker1);
     base_workers_destroy(&worker2);
     base_workers_destroy(&worker3);
 
+    // destroy comm subsystem
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] mpi_comm destroy\n", 0);
+
     xpn_server_comm_destroy(params.server_type, &params);
+
+    if (XPN_SERVER_TYPE_MPI == params.server_type) {
+        xpn_server_comm_destroy(XPN_SERVER_TYPE_SCK, &params); // SCK only
+    }
 
     return 0;
 }
@@ -322,11 +336,6 @@ int xpn_server_up ( void )
     {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
         return -1;
-    }
-
-    // One thread for connection-less clients...
-    if (params.server_type != XPN_SERVER_TYPE_MPI) { // SCK only
-        xpn_server_launch_worker(&worker3, NULL, xpn_server_dispatcher_connectionless);
     }
 
     the_end = 0;

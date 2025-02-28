@@ -8,7 +8,7 @@ char buffer[BUFF_SIZE] ;
 int main ( int argc, char *argv[] )
 {
 	int  ret ;
-	int  fd, fd1, num_read ;
+	int  fd1 ;
 
 	// Arguments
 	if (argc < 2)
