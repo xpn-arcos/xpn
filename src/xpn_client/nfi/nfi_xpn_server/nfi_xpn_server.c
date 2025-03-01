@@ -380,7 +380,7 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
     if (server_aux->keep_connected == 0)
     {
         // lookup port_name
-        ret = sersoc_lookup_port_name(server, server_aux->port_name, SOCKET_ACCEPT_CODE_NO_CONN) ;
+        ret = sersoc_lookup_port_name(server, server_aux->port_name, SOCKET_ACCEPT_CODE_SCK_NO_CONN) ;
         if (ret < 0)
         {
             fprintf(stderr, "nfi_sck_server_comm_lookup_port_name: error on '%s'\n", server_aux->srv_name);

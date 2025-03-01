@@ -63,9 +63,6 @@ int xpn_server_do_operation ( int server_type, struct st_th *th, int * the_end )
 {
   int ret;
   struct st_xpn_server_msg head;
-  xpn_server_param_st *local_params ;
-
-  local_params = (xpn_server_param_st *)th->params ;
 
   debug_info("[TH_ID=%d] [XPN_SERVER_OPS] [xpn_server_do_operation] >> Begin\n", th->id);
   debug_info("[TH_ID=%d] [XPN_SERVER_OPS] [xpn_server_do_operation] OP '%s'; OP_ID %d\n", th->id, xpn_server_op2string(th->type_op), th->type_op);

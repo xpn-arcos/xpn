@@ -351,32 +351,39 @@ int xpn_server_up ( void )
         debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] socket recv: %d \n", 0, params.srv_name, recv_code);
         switch (recv_code)
         {
-            case SOCKET_ACCEPT_CODE:
-                 ret = socket_send(connection_socket, params.port_name, MAX_PORT_NAME_LENGTH);
+            case SOCKET_ACCEPT_CODE_MPI:
+                 ret = socket_send(connection_socket, params.port_name,      MAX_PORT_NAME_LENGTH);
         	 if (ret < 0) continue;
-
         	 ret = xpn_server_comm_accept(params.server_type, &params, XPN_SERVER_CONNECTION, &comm) ;
         	 if (ret < 0) continue;
-
         	 xpn_server_launch_worker(&worker1, comm, xpn_server_dispatcher) ;
                  break;
 
-            case SOCKET_ACCEPT_CODE_NO_CONN:
+            case SOCKET_ACCEPT_CODE_SCK_CONN:
+		 ret = socket_send(connection_socket, params.port_name_conn, MAX_PORT_NAME_LENGTH);
+        	 if (ret < 0) continue;
+        	 ret = xpn_server_comm_accept(params.server_type, &params, XPN_SERVER_CONNECTION, &comm) ;
+        	 if (ret < 0) continue;
+        	 xpn_server_launch_worker(&worker1, comm, xpn_server_dispatcher) ;
+                 break;
+
+            case SOCKET_ACCEPT_CODE_SCK_NO_CONN:
                  socket_send(connection_socket, params.port_name_no_conn, MAX_PORT_NAME_LENGTH);
                  break;
 
             case SOCKET_FINISH_CODE:
-            case SOCKET_FINISH_CODE_AWAIT:
                  xpn_server_finish();
                  the_end = 1;
-                 if (recv_code == SOCKET_FINISH_CODE_AWAIT)
-                 {
-                     await_stop = 1;
-                 }
+                 break;
+
+            case SOCKET_FINISH_CODE_AWAIT:
+                 xpn_server_finish();
+                 the_end    = 1;
+                 await_stop = 1;
                  break;
 
             default:
-                 debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] >> Socket recv unknown code %d\n", 0, params.srv_name, recv_code);
+                 debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] >> Socket receive an unknown recv_code: '%d'\n", 0, params.srv_name, recv_code);
                  break;
         }
 
@@ -397,80 +404,6 @@ int xpn_server_up ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] >> End\n", 0);
     return 0;
 }
-
-// Start servers spawn
-int xpn_is_server_spawned ( void )
-{
-    int ret = 0;
-
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> Begin\n", 0);
-
-    #ifndef ENABLE_MPI_SERVER
-    debug_info("WARNING: if you have not compiled XPN with the MPI server then you cannot use spawn server.\n");
-    #else
-    // Initialize server
-    // mpi_comm initialization
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] mpi_comm initialization\n", 0);
-    ret = PMPI_Init(&params.argc, &params.argv);
-
-    // TODO: check if necesary bypass the bypass with dlysm RTLD_NEXT
-    filesystem_low_set(RTLD_NEXT);
-
-    // Workers initialization
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] Workers initialization\n", 0);
-
-    // in spawn there are no connections so server is secuential
-    ret = base_workers_init(&worker1, TH_NOT);
-    if (ret < 0) {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Workers initialization fails\n", 0);
-        return -1;
-    }
-
-    ret = base_workers_init(&worker2, params.thread_mode_operations);
-    if (ret < 0) 
-    {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Workers initialization fails\n", 0);
-        return -1;
-    }
-
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] Get parent\n", 0);
-    struct st_th th_arg;
-    MPI_Comm *parent;
-
-    parent = (MPI_Comm *)malloc(sizeof(MPI_Comm));
-    if (NULL == parent) 
-    {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: Memory allocation\n", 0);
-        return -1;
-    }
-
-    ret = MPI_Comm_get_parent(parent);
-    if ( (ret < 0) || (MPI_COMM_NULL == *parent) ) 
-    {
-        printf("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] ERROR: parent not found\n", 0);
-        return -1;
-    }
-
-    // Launch dispatcher per aplication
-    th_arg.params = &params;
-    th_arg.comm = parent;
-    th_arg.function = xpn_server_dispatcher;
-    th_arg.type_op = 0;
-    th_arg.rank_client_id = 0;
-    th_arg.tag_client_id = 0;
-    th_arg.wait4me = FALSE;
-
-    base_workers_launch(&worker1, &th_arg, xpn_server_dispatcher);
-
-    base_workers_destroy(&worker1);
-    base_workers_destroy(&worker2);
-    PMPI_Finalize();
-    #endif
-
-    debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_is_server_spawned] >> End\n", 0);
-    return ret ;
-}
-
 
 // Stop servers
 int xpn_server_down ( void )
@@ -596,12 +529,7 @@ int main ( int argc, char *argv[] )
     xpn_server_params_show(&params);
 
     // Do associate action...
-    if (strcasecmp(exec_name, "xpn_server_spawn") == 0)
-    {
-        debug_info("[TH_ID=%d] [XPN_SERVER] [main] Spawn server\n", 0);
-        ret = xpn_is_server_spawned();
-    }
-    else if (strcasecmp(exec_name, "xpn_stop_server") == 0)
+    if (strcasecmp(exec_name, "xpn_stop_server") == 0)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [main] Down servers\n", 0);
         ret = xpn_server_down();

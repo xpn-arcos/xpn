@@ -35,10 +35,11 @@
   // NS base on sockets
   #define DEFAULT_XPN_SCK_PORT    3456
 
-  #define SOCKET_ACCEPT_CODE                123
-  #define SOCKET_ACCEPT_CODE_NO_CONN        124
-  #define SOCKET_FINISH_CODE                655
-  #define SOCKET_FINISH_CODE_AWAIT          656
+  #define SOCKET_ACCEPT_CODE_MPI            100
+  #define SOCKET_ACCEPT_CODE_SCK_CONN       151
+  #define SOCKET_ACCEPT_CODE_SCK_NO_CONN    152
+  #define SOCKET_FINISH_CODE                750
+  #define SOCKET_FINISH_CODE_AWAIT          751
 
   #ifdef MPI_MAX_PORT_NAME
      #define MAX_PORT_NAME_LENGTH MPI_MAX_PORT_NAME

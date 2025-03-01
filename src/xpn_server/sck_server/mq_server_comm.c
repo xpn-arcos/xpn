@@ -22,15 +22,15 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "mq_server_comm.h"
+   #include "mq_server_comm.h"
 
 
 /* ... Globals / Globales ............................................ */
 
-int file2 = -1;
-int opened = 0;
-int write_total = 0;
-//int its = 0;
+   int file2 = -1;
+   int opened = 0;
+   int write_total = 0;
+   //int its = 0;
 
 
 /* ... Functions / Funciones ......................................... */

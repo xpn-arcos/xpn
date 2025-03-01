@@ -22,15 +22,9 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "xpn.h"
-#include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
-#include "xpn_api_mutex.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
+   #include "xpn.h"
+   #include "xpn_client/xpn/xpn_simple/xpn_simple_lib.h"
+   #include "xpn_api_mutex.h"
 
 
 /* ... Functions / Funciones ......................................... */

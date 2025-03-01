@@ -24,13 +24,13 @@
 
    #include "nfi_xpn_server_comm.h"
 
-   #ifdef ENABLE_MPI_SERVER
+#ifdef ENABLE_MPI_SERVER
    #include "nfi_mpi_server_comm.h"
-   #endif
+#endif
 
-   #ifdef ENABLE_SCK_SERVER
+#ifdef ENABLE_SCK_SERVER
    #include "nfi_sck_server_comm.h"
-   #endif
+#endif
 
 
 /* ... Functions / Funciones ......................................... */
@@ -113,7 +113,7 @@ int nfi_xpn_server_comm_connect ( struct nfi_xpn_server *params )
             // lookup port_name
             debug_info("srv_name: '%s' ??\n", params->srv_name);
 
-            ret = sersoc_lookup_port_name(params->srv_name, params->port_name, SOCKET_ACCEPT_CODE) ;
+            ret = sersoc_lookup_port_name(params->srv_name, params->port_name, SOCKET_ACCEPT_CODE_SCK_CONN) ;
             if (ret < 0) 
             {
                 fprintf(stderr, "nfi_sck_server_comm_lookup_port_name: error on '%s'\n", params->srv_name);

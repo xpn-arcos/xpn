@@ -54,9 +54,10 @@ typedef struct
     int  server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
 
     #ifdef ENABLE_SCK_SERVER
-    int server_socket; // For sck_server
+    char port_name_conn[MAX_PORT_NAME_LENGTH];
+    int  server_socket;
     char port_name_no_conn[MAX_PORT_NAME_LENGTH];
-    int server_socket_no_conn;
+    int  server_socket_no_conn;
     #endif
 
     int await_stop;

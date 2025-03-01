@@ -40,7 +40,7 @@ int xpn_server_comm_init ( int server_type, xpn_server_param_st * params )
 #ifdef ENABLE_SCK_SERVER
        case XPN_SERVER_TYPE_SCK:
             // Initialize socket subsystem
-            ret = sck_server_comm_init( & params->server_socket,         params->port_name);
+            ret = sck_server_comm_init( & params->server_socket,         params->port_name_conn);
 
             // Initialize socket without connection between ops.
             ret = sck_server_comm_init( & params->server_socket_no_conn, params->port_name_no_conn);

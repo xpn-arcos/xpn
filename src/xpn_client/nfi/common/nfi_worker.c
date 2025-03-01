@@ -21,19 +21,16 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi/nfi_worker.h"
-#include "nfi/nfi_ops.h"
-
-
-/* ... Const / Const ................................................. */
+   #include "nfi/nfi_worker.h"
+   #include "nfi/nfi_ops.h"
 
 
 /* ... Global variables / Variables globales ........................ */
 
-static int      create_m = 0;
-pthread_mutex_t global_mt;
-pthread_cond_t  global_cnd;
-int             global_busy;
+   static int      create_m = 0;
+   pthread_mutex_t global_mt;
+   pthread_cond_t  global_cnd;
+   int             global_busy;
 
 
 /* ... Functions / Funciones ......................................... */
