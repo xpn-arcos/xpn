@@ -28,7 +28,7 @@
 
 int skip_spaces ( FILE *fp, long *line )
 {
-    char ch ;
+    int ch ;
 
     ch = getc(fp) ;
     while (ch != EOF)
@@ -50,7 +50,7 @@ int skip_spaces ( FILE *fp, long *line )
 
 int read_token ( FILE *fp, char *tok, long *line )
 {
-    char ch ;
+    int ch ;
     int i = 0 ;
 
     ch = getc(fp) ;
