@@ -477,7 +477,7 @@ void xpn_server_op_write ( xpn_server_param_st *params, void *comm, struct st_xp
 
     // update counters
     cont = cont + req.size; // Received bytes
-    diff = head->u_st_xpn_server_msg.op_read.size - cont;
+    diff = head->u_st_xpn_server_msg.op_write.size - cont;
 
   } while ((diff > 0) && (req.size != 0));
 
