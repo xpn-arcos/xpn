@@ -9,7 +9,7 @@ int main ( int argc, char *argv[] )
 	int  ret ;
 	//char buffer[BUFF_SIZE] ;
 
-	printf("env XPN_CONF=./xpn.conf XPN_DNS=/tmp/mq_server.dns %s\n", argv[0]);
+	printf("env XPN_CONF=./xpn.conf %s\n", argv[0]);
 
 	// xpn_init
 	ret = xpn_init();

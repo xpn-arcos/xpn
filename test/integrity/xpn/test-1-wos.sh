@@ -5,7 +5,6 @@
 # alternative - 1
 #
 export XPN_CONF=./xpn.conf
-export XPN_DNS=/work/mq_server.dns
 export XPN_LOCALITY=0
 export XPN_SESSION=0
 export XPN_MQTT=1
