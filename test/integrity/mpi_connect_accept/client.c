@@ -1,4 +1,3 @@
-
 #include "mpi.h"
 #include <string.h>
 

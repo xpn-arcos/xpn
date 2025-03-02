@@ -13,7 +13,7 @@ int main ( int argc, char *argv[] )
 	ret = xpn_init();
 	printf("%d = xpn_init()\n", ret);
 	if (ret < 0) {
-		return -1;
+	    return -1;
 	}
 
 	// test 1
@@ -30,8 +30,8 @@ int main ( int argc, char *argv[] )
 	printf("%d = xpn_mkdir('%s', %o)\n", ret, "/P1/d4/d1/d2/d3", 00777);
 
 	// xpn-destroy
-	printf("xpn_destroy()\n");
 	ret = xpn_destroy();
+	printf("%d = xpn_destroy()\n", ret);
 	if (ret < 0) {
 	    printf("ERROR: xpn_destroy()\n");
 	    return -1;

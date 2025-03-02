@@ -9,7 +9,7 @@ int main ( int argc, char *argv[] )
 	int  ret ;
 	//char buffer[BUFF_SIZE] ;
 
-	printf("env XPN_CONF=./xpn.conf  %s\n", argv[0]);
+	printf("env XPN_CONF=./xpn.conf %s\n", argv[0]);
 
 	// xpn-init
 	ret = xpn_init();
@@ -26,8 +26,8 @@ int main ( int argc, char *argv[] )
 	printf("%d = xpn_rmdir('%s')\n", ret, "/P1/d4");
 
 	// xpn-destroy
-	printf("xpn_destroy()\n");
 	ret = xpn_destroy();
+	printf("%d = xpn_destroy()\n", ret);
 	if (ret < 0) {
 	    printf("ERROR: xpn_destroy()\n");
 	    return -1;

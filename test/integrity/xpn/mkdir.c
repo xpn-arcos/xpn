@@ -9,7 +9,7 @@ int main ( int argc, char *argv[] )
 	int  ret ;
 	//char buffer[BUFF_SIZE] ;
 
-	printf("env XPN_CONF=./xpn.conf \n", argv[0]);
+	printf("env XPN_CONF=./xpn.conf %s\n", argv[0]);
 
 	// xpn-init
 	ret = xpn_init();
@@ -32,3 +32,4 @@ int main ( int argc, char *argv[] )
 
 	return 0;
 }
+

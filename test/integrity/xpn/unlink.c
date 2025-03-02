@@ -7,22 +7,26 @@
 int main ( int argc, char *argv[] )
 {
 	int  ret ;
-	int  fd1 ;
 	//char buffer[BUFF_SIZE] ;
 
-	printf("env XPN_CONF=./xpn.conf  %s\n", argv[0]);
+	printf("env XPN_CONF=./xpn.conf %s\n", argv[0]);
 
-	// xpn-init
+	// xpn_init
 	ret = xpn_init();
 	printf("%d = xpn_init()\n", ret);
 	if (ret < 0) {
+	    printf("ERROR: xpn_init()\n");
 	    return -1;
 	}
 
 	ret = xpn_unlink("/P1/test_1");
 	printf("%d = xpn_unlink(%s)\n", ret, "/P1/test_1") ;
+	if (ret < 0) {
+	    printf("ERROR: xpn_unlink()\n");
+	    return -1;
+	}
 
-	// xpn-destroy
+	// xpn_destroy
 	ret = xpn_destroy();
 	printf("%d = xpn_destroy()\n", ret);
 	if (ret < 0) {
@@ -32,3 +36,4 @@ int main ( int argc, char *argv[] )
 
 	return 0;
 }
+
