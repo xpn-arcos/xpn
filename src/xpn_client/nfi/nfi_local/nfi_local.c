@@ -22,9 +22,10 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi_local.h"
-#include "nfi/nfi_xpn_server/nfi_xpn_server_comm.h"
-#include <stddef.h>
+   #include "nfi_local.h"
+   #include "nfi/nfi_xpn_server/nfi_xpn_server_comm.h"
+   #include <stddef.h>
+
 
 /* ... Const / Const ................................................. */
 

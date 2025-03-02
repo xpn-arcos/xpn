@@ -29,12 +29,12 @@ int main ( int argc, char *argv[] )
 	ret = xpn_mkdir("/P1/d4/d1/d2/d3", 00777);
 	printf("%d = xpn_mkdir('%s', %o)\n", ret, "/P1/d4/d1/d2/d3", 00777);
 
-		// xpn-destroy
+	// xpn-destroy
 	printf("xpn_destroy()\n");
 	ret = xpn_destroy();
 	if (ret < 0) {
-		printf("ERROR: xpn_destroy()\n");
-		return -1;
+	    printf("ERROR: xpn_destroy()\n");
+	    return -1;
 	}
 
 	return 0;

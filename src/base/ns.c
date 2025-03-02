@@ -79,6 +79,7 @@ int ns_publish (char *dns_file, char *protocol, char *param_srv_name, char *srv_
   fclose(dns_fd);
 
   debug_info("[NS] [ns_publish] >> End\n");
+
   return 0;
 }
 

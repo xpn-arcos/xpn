@@ -29,7 +29,7 @@ int main ( int argc, char *argv[] )
 	    printf(" Usage: %s <full path> <megabytes to read>\n", argv[0]) ;
 	    printf("\n") ;
 	    printf(" Example:") ;
-	    printf(" env XPN_CONF=./xpn.conf XPN_DNS=/shared/tcp_server.dns %s /P1/test_1 2\n", argv[0]);
+	    printf(" env XPN_CONF=./xpn.conf  %s /P1/test_1 2\n", argv[0]);
 	    printf("\n") ;
 	    return -1 ;
 	}	

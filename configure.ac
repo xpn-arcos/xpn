@@ -317,6 +317,7 @@ AC_CONFIG_FILES([ \
       test/integrity/mpi_connect_accept/Makefile \
       test/integrity/bypass_c/Makefile \
       test/integrity/xpn_metadata/Makefile \
+      test/integrity/xpn-conf/Makefile \
       test/performance/xpn/Makefile \
       test/performance/iop/Makefile \
       test/performance/mpi_pingpong/Makefile \
