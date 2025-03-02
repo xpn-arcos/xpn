@@ -25,9 +25,6 @@
 #include "xpn_bypass.h"
 
 
-/* ... Const / Const ................................................. */
-
-
 /* ... Global variables / Variables globales ........................ */
 
 /**

@@ -25,12 +25,6 @@
 #include "mpi_server_comm.h"
 
 
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
-
 /* ... Functions / Funciones ......................................... */
 
 // init, destroy

@@ -44,9 +44,6 @@
   extern struct xpn_partition xpn_parttable[XPN_MAX_PART];
 
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   int xpn_init_partition( void );

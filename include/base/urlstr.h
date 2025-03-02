@@ -35,12 +35,6 @@
   #include "path_misc.h"
 
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   int ParseURL( char *url,  

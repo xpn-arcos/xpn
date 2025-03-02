@@ -33,12 +33,6 @@
   #include "xpn_policy_open.h"
 
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   void XpnCalculateBlockMdata(struct xpn_metadata *mdata, off_t offset, int replication, off_t *local_offset, int *serv);

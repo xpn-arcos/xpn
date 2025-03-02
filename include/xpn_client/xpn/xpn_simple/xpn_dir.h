@@ -34,11 +34,6 @@
   #include "xpn_policy_init.h"
   #include "xpn_policy_open.h"
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
 
   /* ... Functions / Funciones ......................................... */
  

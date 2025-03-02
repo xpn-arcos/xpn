@@ -28,10 +28,7 @@
 
 /* ... Const / Const ................................................. */
 
-#define FILESYSTEM_DLSYM 1
-
-
-/* ... Global variables / Variables globales ........................ */
+   #define FILESYSTEM_DLSYM 1
 
 
 /* ... Auxiliar Functions / Funciones Auxiliares ..................... */

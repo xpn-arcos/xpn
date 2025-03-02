@@ -28,7 +28,6 @@
 
    /* ... Functions / Funciones ......................................... */
 
-
       //calculo del numero de servidor
       int hash(const char *path, int nServ, int isfile)
       {

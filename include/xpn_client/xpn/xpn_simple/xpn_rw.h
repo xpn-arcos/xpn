@@ -37,12 +37,6 @@
   #include "base/workers.h"
 
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   ssize_t xpn_simple_read  ( int fd, void *buffer, size_t size );

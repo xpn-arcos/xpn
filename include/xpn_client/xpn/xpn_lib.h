@@ -28,12 +28,6 @@
   #include "xpn_simple/xpn_simple_lib.h"
 
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   /*

@@ -26,12 +26,6 @@
 #include "filesystem.h"
 
 
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
-
 /* ... Functions / Funciones ......................................... */
 
 int socket_get_port()

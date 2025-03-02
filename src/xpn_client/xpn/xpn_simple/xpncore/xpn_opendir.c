@@ -163,7 +163,6 @@ int xpn_simple_closedir(DIR *dirp)
   free(dirp->path) ;
   free(dirp);
 
-  int res = 0;
   XPN_DEBUG_END;
   return 0;
 }

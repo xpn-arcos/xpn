@@ -25,9 +25,6 @@
 #include "base/debug_msg.h"
 
 
-/* ... Const / Const ................................................. */
-
-
 /* ... Global variables / Variables globales ........................ */
 
 int    (*DEBUG_MSG_PrintMsg)(const char *, va_list) = NULL;

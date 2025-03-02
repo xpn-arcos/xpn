@@ -25,12 +25,6 @@
 #include "utils.h"
 
 
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
-
 /* ... Functions / Funciones ......................................... */
 
 long utils_get_time ( void )

@@ -27,12 +27,6 @@
 #include "xpn_api_mutex.h"
 
 
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
-
 /* ... Functions / Funciones ......................................... */
 
 FILE * xpn_fopen ( const char *name, const char *mode )

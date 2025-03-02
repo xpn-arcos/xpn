@@ -29,9 +29,6 @@
   #include "workers_common.h"
 
   
-  /* ... Const / Const ................................................. */
-
-
   /* ... Data structures / Estructuras de datos ........................ */
 
   typedef struct

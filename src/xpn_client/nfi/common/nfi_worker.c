@@ -21,11 +21,8 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi/nfi_worker.h"
-#include "nfi/nfi_ops.h"
-
-
-/* ... Const / Const ................................................. */
+   #include "nfi/nfi_worker.h"
+   #include "nfi/nfi_ops.h"
 
 
 /* ... Global variables / Variables globales ........................ */

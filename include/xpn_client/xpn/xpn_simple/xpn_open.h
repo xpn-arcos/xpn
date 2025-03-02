@@ -39,12 +39,6 @@
   #include "base/workers.h"
 
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   //int   xpn_open(const char *path, int flags, ...);

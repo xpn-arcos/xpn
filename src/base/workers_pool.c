@@ -25,12 +25,6 @@
 #include "workers_pool.h"
 
 
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
-
 /* ... Auxiliar functions / Funciones auxiliares ......................................... */
 
 void *worker_pool_function ( void *arg )

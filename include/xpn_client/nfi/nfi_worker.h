@@ -33,12 +33,6 @@
   #include "nfi_worker_task.h"
 
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   int     nfi_worker_init    ( struct nfi_worker *wrk, struct nfi_server *serv, int thread );

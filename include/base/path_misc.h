@@ -34,12 +34,6 @@
   #include "base/string_misc.h"
 
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   int hash (const char *file, int nServ, int isfile);

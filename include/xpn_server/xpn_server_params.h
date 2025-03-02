@@ -38,8 +38,6 @@
   #include "base/workers.h"
   #include "xpn_server_conf.h"
 
-  /* ... Const / Const ................................................. */
-
 
   /* ... Data structures / Estructuras de datos ........................ */
 

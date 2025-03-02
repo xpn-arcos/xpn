@@ -40,8 +40,6 @@
   #define SOCKET_FINISH_CODE 666
   #define SOCKET_FINISH_CODE_AWAIT 667
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
 
   /* ... Functions / Funciones ......................................... */
 

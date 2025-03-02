@@ -27,11 +27,7 @@
 
    /* ... Functions / Funciones ......................................... */
 
-
-
-   /* ... Functions / Funciones ......................................... */
-
-      int getURLProtocol(char *url, char *protocol)
+      int getURLProtocol ( char *url, char *protocol )
       {
       	int i,j;
 

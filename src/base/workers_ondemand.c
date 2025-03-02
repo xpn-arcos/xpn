@@ -25,12 +25,6 @@
 #include "workers_ondemand.h"
 
 
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
-
 /* ... Auxiliar functions / Funciones auxiliares ......................................... */
 
 void *worker_run ( void *arg )

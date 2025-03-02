@@ -34,12 +34,6 @@
   #include "base/time_misc.h"
   #include "mpi.h"
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   int      mpi_server_comm_init            ( int argc, char *argv[], int thread_mode, char * port_name );

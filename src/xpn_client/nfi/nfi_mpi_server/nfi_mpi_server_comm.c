@@ -21,11 +21,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi_mpi_server_comm.h"
-
-/* ... Const / Const ................................................. */
-
-/* ... Global variables / Variables globales ........................ */
+   #include "nfi_mpi_server_comm.h"
 
 /* ... Functions / Funciones ......................................... */
 

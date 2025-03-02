@@ -39,9 +39,6 @@
   #define USECPSEC    1000000
 
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   void TIME_MISC_Timer

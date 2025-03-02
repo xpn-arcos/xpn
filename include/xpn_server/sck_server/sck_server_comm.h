@@ -34,12 +34,6 @@
   #include "base/time_misc.h"
 
   
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   int       sck_server_comm_init          ( int *socket, char *port_name );

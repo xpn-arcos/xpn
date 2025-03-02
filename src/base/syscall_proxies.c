@@ -25,9 +25,6 @@
 #include "base/syscall_proxies.h"
 
 
-/* ... Const / Const ................................................. */
-
-
 /* ... Global variables / Variables globales ........................ */
 
 int     (*real_open    )(char *, int, mode_t)  = NULL;

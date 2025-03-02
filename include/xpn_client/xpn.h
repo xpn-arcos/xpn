@@ -37,12 +37,6 @@
   //#include <sys/uio.h>
   
 
-  /* ... Const / Const ................................................. */
-
-  
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
   // xpn_cwd.c

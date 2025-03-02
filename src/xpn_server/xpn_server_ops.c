@@ -27,15 +27,6 @@
 #include <stddef.h>
 
 
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
-
-/* ... Auxiliar Functions / Funciones Auxiliares ..................... */
-
-
 /* ... Functions / Funciones ......................................... */
 
 // File operations

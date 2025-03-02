@@ -31,11 +31,6 @@
 #include "nfi_sck_server_comm.h"
 #endif
 
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
 
 /* ... Functions / Funciones ......................................... */
 

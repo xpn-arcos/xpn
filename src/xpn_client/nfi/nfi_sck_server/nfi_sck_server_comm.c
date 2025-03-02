@@ -27,12 +27,6 @@
 #include "xpn_server/xpn_server_conf.h"
 
 
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
-
-
 /* ... Functions / Funciones ......................................... */
 
 int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_socket )

@@ -22,13 +22,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "workers.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
+   #include "workers.h"
 
 
 /* ... Functions / Funciones ......................................... */

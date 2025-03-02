@@ -45,9 +45,6 @@
   #endif
 
 
-  /* ... Const / Const ................................................. */
-
-
   /* ... Data structures / Estructuras de datos ........................ */
 
   struct nfi_xpn_server

@@ -34,9 +34,6 @@
   #include "xpn_open.h"
 
 
-  /* ... Const / Const ................................................. */
-
-
   /* ... Data structures / Estructuras de datos ........................ */
  
   struct __dirstream

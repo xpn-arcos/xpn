@@ -35,11 +35,6 @@
   #include "base/ns.h"
   #include "xpn_server_params.h"
 
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
 
   /* ... Functions / Funciones ......................................... */
 

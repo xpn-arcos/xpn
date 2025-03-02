@@ -19,6 +19,7 @@
  *
  */
 
+
 /* ... Include / Inclusion ........................................... */
 
 #include <dirent.h>
@@ -34,6 +35,7 @@
 #include "mpi.h"
 #include "ns.h"
 #include "xpn/xpn_simple/xpn_policy_rw.h"
+
 
 /* ... Const / Const ................................................. */
 
@@ -56,9 +58,11 @@ int *rank_new_to_actual = NULL;
 int *rank_old_to_actual = NULL;
 int old_size, new_size;
 
+
 /* ... Functions / Funciones ......................................... */
 
-int copy(char *entry, int is_file, int blocksize, int replication_level, int rank, int size) {
+int copy(char *entry, int is_file, int blocksize, int replication_level, int rank, int size)
+{
     struct stat st;
     int res;
     off64_t ret_2;
@@ -102,7 +106,8 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
         MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
     }
 
-    if (!is_file) {
+    if (!is_file)
+    {
         if (rank_actual_to_new[rank] != -1) {
             // Not error when mkdir because it can exist
             res = mkdir(entry, st.st_mode);
@@ -111,7 +116,9 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
         }
-    } else {
+    }
+    else
+    {
         // Only create tmp file in new_ranks
         if (rank_actual_to_new[rank] != -1) {
             sprintf(dest_path, "%s_XXXXXX", entry);
@@ -128,6 +135,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
         }
+
         // Only open file in old_ranks
         if (rank_actual_to_old[rank] != -1) {
             fd_src = open64(entry, O_RDONLY | O_LARGEFILE);
@@ -136,6 +144,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
         }
+
         // Alocate buffers
         buf_len = blocksize;
         buf = (char *)malloc(blocksize * sizeof(char));
@@ -165,10 +174,12 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
         read_size = 0;
         int finish = 0;
 
-        do {
+        do
+	{
             read_size = 0;
             // Read in old_ranks
-            if (rank_actual_to_old[rank] != -1) {
+            if (rank_actual_to_old[rank] != -1)
+	    {
                 // Calculate the block
                 XpnCalculateBlockInvert(blocksize, replication_level, old_size, rank_actual_to_old[rank], offset_src, 0,
                                         &offset_real, &replication);
@@ -191,7 +202,8 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
             }
 
             // Write in new_ranks
-            if (rank_actual_to_new[rank] != -1) {
+            if (rank_actual_to_new[rank] != -1)
+	    {
                 MPI_Status status;
                 MPI_Recv(&offset_dest, 1, MPI_LONG, MPI_ANY_SOURCE, TAG_OFFSET, MPI_COMM_WORLD, &status);
                 if (offset_dest == -666) {
@@ -211,12 +223,14 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
 
             offset_src += blocksize;
         } while (finish != 1);
+
         if (old_comm != MPI_COMM_NULL) {
             MPI_Barrier(old_comm);
             MPI_Comm_free(&old_comm);
         }
 
-        if (rank == master_old) {
+        if (rank == master_old)
+	{
             for (int i = 0; i < size; i++) {
                 if (rank_actual_to_new[i] != -1) {
                     offset_dest = -666;
@@ -231,6 +245,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
             unlink(entry);
         }
         MPI_Barrier(MPI_COMM_WORLD);
+
         // Only in new_ranks
         if (rank_actual_to_new[rank] != -1) {
             close(fd_dest);
@@ -248,7 +263,8 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
     return 0;
 }
 
-int list(char *dir_name, int blocksize, int replication_level, int rank, int size) {
+int list(char *dir_name, int blocksize, int replication_level, int rank, int size)
+{
     int res;
     DIR *dir = NULL;
     struct stat stat_buf;
@@ -257,6 +273,7 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
     int while_loop = 1;
     // Calculate the master rank of the old file
     int master_old = 0;
+
     for (int i = 0; i < size; i++) {
         if (rank_actual_to_old[i] == 0) {
             master_old = i;
@@ -264,14 +281,17 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
     }
     // Only on master open and readdir (because there are no dir structure in some of new ranks)
     // then send to the others ranks
-    if (rank == master_old) {
+    if (rank == master_old)
+    {
         dir = opendir(dir_name);
         if (dir == NULL) {
             perror("opendir:");
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
         }
+
         entry = readdir(dir);
-        while (entry != NULL) {
+        while (entry != NULL)
+	{
             if (!strcmp(entry->d_name, ".")) {
                 entry = readdir(dir);
                 continue;
@@ -292,23 +312,27 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
                 continue;
             }
             while_loop = 1;
+
             // Broadcast the values to run copy()
             res = MPI_Bcast(&while_loop, 1, MPI_INT, master_old, MPI_COMM_WORLD);
             if (res != MPI_SUCCESS) {
                 fprintf(stderr, "Error: %s\n", strerror(errno));
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
+
             int is_file = !S_ISDIR(stat_buf.st_mode);
             res = MPI_Bcast(path, PATH_MAX, MPI_CHAR, master_old, MPI_COMM_WORLD);
             if (res != MPI_SUCCESS) {
                 fprintf(stderr, "Error: %s\n", strerror(errno));
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
+
             res = MPI_Bcast(&is_file, 1, MPI_INT, master_old, MPI_COMM_WORLD);
             if (res != MPI_SUCCESS) {
                 fprintf(stderr, "Error: %s\n", strerror(errno));
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
+
             res = MPI_Bcast(dir_name, PATH_MAX, MPI_CHAR, master_old, MPI_COMM_WORLD);
             if (res != MPI_SUCCESS) {
                 fprintf(stderr, "Error: %s\n", strerror(errno));
@@ -322,6 +346,7 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
 
             entry = readdir(dir);
         }
+
         while_loop = 0;
         res = MPI_Bcast(&while_loop, 1, MPI_INT, master_old, MPI_COMM_WORLD);
         if (res != MPI_SUCCESS) {
@@ -329,9 +354,12 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
             MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
         }
         closedir(dir);
-    } else {
+    }
+    else
+    {
         while_loop = 1;
-        while (1) {
+        while (1)
+	{
             // Get the broadcast values to run copy()
             res = MPI_Bcast(&while_loop, 1, MPI_INT, master_old, MPI_COMM_WORLD);
             if (res != MPI_SUCCESS) {
@@ -341,17 +369,20 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
             if (while_loop == 0) {
                 break;
             }
+
             int is_file;
             res = MPI_Bcast(path, PATH_MAX, MPI_CHAR, master_old, MPI_COMM_WORLD);
             if (res != MPI_SUCCESS) {
                 fprintf(stderr, "Error: %s\n", strerror(errno));
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
+
             res = MPI_Bcast(&is_file, 1, MPI_INT, master_old, MPI_COMM_WORLD);
             if (res != MPI_SUCCESS) {
                 fprintf(stderr, "Error: %s\n", strerror(errno));
                 MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
             }
+
             res = MPI_Bcast(dir_name, PATH_MAX, MPI_CHAR, master_old, MPI_COMM_WORLD);
             if (res != MPI_SUCCESS) {
                 fprintf(stderr, "Error: %s\n", strerror(errno));
@@ -368,13 +399,16 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
     return 0;
 }
 
-void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_rank, int *new_rank) {
+void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_rank, int *new_rank)
+{
     // Get ip and hostname
     char *hostip = ns_get_host_ip();
     char hostname[HOST_NAME_MAX];
     ns_get_hostname(hostname);
     int world_rank;
+
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+
     // Open host files
     FILE *file_old = NULL;
     FILE *file_new = NULL;
@@ -419,7 +453,8 @@ cleanup_calculate_ranks_sizes:
 }
 
 // TODO: think if MPI_Abort is the desired error handler
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int rank, size, old_rank, new_rank;
     int replication_level = 0;
     int blocksize = 524288;
@@ -539,3 +574,4 @@ int main(int argc, char *argv[]) {
 }
 
 /* ................................................................... */
+
