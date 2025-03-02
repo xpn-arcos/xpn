@@ -1,8 +1,7 @@
+
 #include <sys/time.h>
 #include "time.h"
 #include <stdio.h>
-
-
 
 
 void Timer(struct timeval * t)

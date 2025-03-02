@@ -35,14 +35,8 @@
 
   /* ... Const / Const ................................................. */
 
-  #define XPN_SERVER_TYPE_MPI 0
-  #define XPN_SERVER_TYPE_SCK 1
-
-
-  /* MAX_BUFFER_SIZE */
-  #ifndef MAX_BUFFER_SIZE
-    #define MAX_BUFFER_SIZE (1*MB)
-  #endif
+     #define XPN_SERVER_TYPE_MPI 0
+     #define XPN_SERVER_TYPE_SCK 1
 
 
   /* ................................................................... */

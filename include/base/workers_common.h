@@ -51,6 +51,7 @@
     long   sd;
     void  *comm;
     int    close4me;
+    int    server_type;
 
     // w: worker_ondemand/worker_pool as void *
     void  *w;

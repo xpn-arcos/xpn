@@ -25,15 +25,15 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  //Get config*.h
+  // Get config*.h
   #if defined(HAVE_CONFIG_H)
     #include "config.h"
   #endif
 
-  //Get "base_debug.h"
+  // Get "base_debug.h"
   #include "base_debug.h"
 
-  //Include common headers
+  // Include common headers
   #ifndef NOT_TO_USE_STDLIB_H
     #include <stdlib.h>
   #endif
@@ -44,6 +44,7 @@
   #include <stdint.h>
   #include <math.h>
   #include <ctype.h>
+  #include <stddef.h>
 
   #include <sys/types.h>
   #include <sys/stat.h>
@@ -51,7 +52,7 @@
   #include <semaphore.h>
 
 
-  //Include detected headers
+  // Include detected headers
   #if defined(HAVE_SYS_PARAM_H)
     #include <sys/param.h>
   #endif
