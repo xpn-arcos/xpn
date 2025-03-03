@@ -48,8 +48,7 @@ int xpn_server_comm_init ( int server_type, xpn_server_param_st * params )
             ret = sck_server_comm_init( & params->server_socket_no_conn, params->port_name_no_conn);
 
             // Initialize mosquitto if it is enabled
-    	    if (1 == params->mosquitto_mode) 
-            {
+    	    if (1 == params->mosquitto_mode) {
                 ret = mq_server_mqtt_init(params);
             }
             break;
@@ -83,7 +82,10 @@ int xpn_server_comm_destroy ( int server_type, xpn_server_param_st * params )
             }
 
             // Close socket
+	    ret =     shutdown(params->server_socket, SHUT_RDWR) ;
             ret = socket_close(params->server_socket);
+
+	    ret =     shutdown(params->server_socket_no_conn, SHUT_RDWR) ;
             ret = socket_close(params->server_socket_no_conn);
             break;
 #endif

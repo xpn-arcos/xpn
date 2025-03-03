@@ -242,13 +242,11 @@ void worker_pool_destroy ( worker_pool_t *w )
   debug_info("[WORKERS_POOL] [worker_pool_destroy] >> Begin\n");
 
   // update pool_end...
-  debug_info("[WORKERS_POOL] [worker_pool_destroy] client: lock\n");
-
+  debug_info("[WORKERS_POOL] [worker_pool_destroy]   lock m_pool_end\n");
   pthread_mutex_lock(&(w->m_pool_end));
   w->pool_end = 1;
 
-  debug_info("[WORKERS_POOL] [worker_pool_destroy] unlock\n");
-
+  debug_info("[WORKERS_POOL] [worker_pool_destroy] unlock m_pool_end\n");
   pthread_mutex_unlock(&(w->m_pool_end));
 
   // prepare arguments...
@@ -257,31 +255,26 @@ void worker_pool_destroy ( worker_pool_t *w )
   th_arg.type_op = TH_FINALIZE;
 
   for (int i = 0; i < w->POOL_MAX_THREADS; ++i) {
-    worker_pool_enqueue(w, &th_arg, NULL);
+       worker_pool_enqueue(w, &th_arg, NULL);
   }
 
-  debug_info("[WORKERS_POOL] [worker_pool_destroy] lock\n");
-
+  debug_info("[WORKERS_POOL] [worker_pool_destroy]   lock m_pool\n");
   pthread_mutex_lock(&(w->m_pool));
 
   debug_info("[WORKERS_POOL] [worker_pool_destroy] broadcast\n");
-
   pthread_cond_broadcast(&(w->c_poll_no_empty));
 
-  debug_info("[WORKERS_POOL] [worker_pool_destroy] unlock\n");
-
+  debug_info("[WORKERS_POOL] [worker_pool_destroy] unlock m_pool\n");
   pthread_mutex_unlock(&(w->m_pool));
 
   for (int i=0; i < w->POOL_MAX_THREADS; i++)
   {
-    debug_info("[WORKERS_POOL] [worker_pool_destroy] join\n");
-
-    pthread_join(w->thid[i],NULL);
+       debug_info("[WORKERS_POOL] [worker_pool_destroy] join\n");
+       pthread_join(w->thid[i],NULL);
   }
 
   // free threads...
   debug_info("[WORKERS_POOL] [worker_pool_destroy] free\n");
-
   free(w->thid);
   w->thid = NULL;
 
@@ -296,3 +289,4 @@ void worker_pool_destroy ( worker_pool_t *w )
 
 
 /* ................................................................... */
+
