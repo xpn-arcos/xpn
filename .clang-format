@@ -8,3 +8,11 @@ AlignConsecutiveMacros:
 AlignTrailingComments:
   Kind: Always
   OverEmptyLines: 2
+BreakBeforeBraces: Custom
+BraceWrapping:
+  SplitEmptyFunction: false
+  AfterControlStatement: Never
+  AfterFunction: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeElse: true
