@@ -1,0 +1,30 @@
+
+
+#
+# Definitions
+#
+
+ MAKE         = make -s
+ CC           = @CC@
+ MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
+ MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
+ LIBRARIES    = -lxpn @LIBS@
+ MYFLAGS      = -g -Wall -DPOSIX_THREADS -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE @CPPFLAGS@
+
+
+#
+# Rules
+#
+
+all:  main
+
+main: main.o
+	$(CC)  -o main main.o  $(MYLIBPATH) $(LIBRARIES)
+
+%.o: %.c
+	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
+
+clean:
+	rm -f ./*.o
+	rm -f ./main
+

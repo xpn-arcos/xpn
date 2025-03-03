@@ -1,5 +1,6 @@
+
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -18,17 +19,12 @@
  *
  */
 
+
 /* ... Include / Inclusion ........................................... */
 
 #include "nfi_sck_server_comm.h"
 #include "socket.h"
 #include "xpn_server/xpn_server_conf.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
 
 
 /* ... Functions / Funciones ......................................... */

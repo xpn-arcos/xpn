@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -63,9 +63,6 @@
     int             r_wait;
     int             wait4me; // (wait4me==1) ? launch + wait : launch
   };
-
-
-  /* ... Functions / Funciones ......................................... */
 
 
   /* ................................................................... */

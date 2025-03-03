@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -33,8 +33,6 @@
   #include "debug_msg.h"
   #include "workers.h"
   #include "nfi.h"
-
-  /* ... Const / Const ................................................. */
 
 
   /* ... Data structures / Estructuras de datos ........................ */
@@ -93,9 +91,6 @@
     struct nfi_worker_args  arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant
   };
 
-
-  /* ... Functions / Funciones ......................................... */
-  
 
   /* ................................................................... */
 

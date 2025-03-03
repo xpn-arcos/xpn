@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+   *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
    *
    *  This file is part of Expand.
    *
@@ -18,6 +18,7 @@
    *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
    *
    */
+
 
 #ifndef _TCP_SERVER_COMM_H_
 #define _TCP_SERVER_COMM_H_

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -21,11 +21,8 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi/nfi_worker.h"
-#include "nfi/nfi_ops.h"
-
-
-/* ... Const / Const ................................................. */
+   #include "nfi/nfi_worker.h"
+   #include "nfi/nfi_ops.h"
 
 
 /* ... Global variables / Variables globales ........................ */

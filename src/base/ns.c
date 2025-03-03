@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -21,13 +21,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "base/ns.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
+   #include "base/ns.h"
 
 
 /* ... Functions / Funciones ......................................... */
@@ -77,6 +71,7 @@ int ns_publish (char *dns_file, char *protocol, char *param_srv_name, char *srv_
   ret = fprintf(dns_fd, "%s:%s %s:%s %s\n", protocol, param_srv_name, protocol, srv_ip, port_name);
   if (ret < 0)
   {
+    fclose(dns_fd);
     perror("[NS] [ns_publish] ERROR: fprintf on DNS File");
     return -1;
   }
@@ -123,7 +118,7 @@ int ns_unpublish (char *dns_file, char *protocol, char *param_srv_name)
   sprintf(aux_srv_name, "%s:%s", protocol, param_srv_name);
 
   // copy filtering...
-  while (fscanf(dns_fd, "%s %s %s", aux_name, aux_name_2, port_name) != EOF)
+  while (fscanf(dns_fd, "%1000s %1000s %100s", aux_name, aux_name_2, port_name) != EOF)
   {
     if (strcmp(aux_name, aux_srv_name) == 0)
     {
@@ -177,7 +172,7 @@ int ns_lookup (char *protocol, char *param_srv_name, char *srv_ip, char *port_na
     else if (strcmp(protocol, "sck_server") == 0) {
       strcpy(dns_file, SCK_SERVER_DNS_FILE_DEFAULT);
     }
-    else if (strcmp(protocol, "tcp_server") == 0) {
+    else if (strcmp(protocol, "mq_server") == 0) {
       strcpy(dns_file, TCP_SERVER_DNS_FILE_DEFAULT);
     }
     else {
@@ -197,7 +192,7 @@ int ns_lookup (char *protocol, char *param_srv_name, char *srv_ip, char *port_na
 
   sprintf(prot_srv_name, "%s:%s", protocol, param_srv_name);
 
-  while (fscanf(dns_fd, "%s %[^:]:%s %s", aux_srv_name, aux_protocol, srv_ip, port_name) != EOF)
+  while (fscanf(dns_fd, "%1000s %[^:]:%100s %100s", aux_srv_name, aux_protocol, srv_ip, port_name) != EOF)
   {
     debug_info("[NS] [ns_lookup] %s %s:%s %s\n\n", aux_srv_name, aux_protocol, srv_ip, port_name);
 
@@ -222,3 +217,4 @@ int ns_lookup (char *protocol, char *param_srv_name, char *srv_ip, char *port_na
 
 
 /* ................................................................... */
+

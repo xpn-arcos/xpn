@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -23,12 +23,6 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "mpi_server_comm.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
 
 
 /* ... Functions / Funciones ......................................... */
@@ -133,24 +127,24 @@ int mpi_server_comm_destroy ( char * port_name )
 {
   int ret;
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] >> Begin\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_destroy] >> Begin\n");
 
   // Close port
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] Close port\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_destroy] Close port\n");
 
   MPI_Close_port(port_name);
 
   // Finalize
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] MPI Finalize\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_destroy] MPI Finalize\n");
 
   ret = MPI_Finalize();
   if (MPI_SUCCESS != ret)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] ERROR: MPI_Finalize fails\n", 0);
+    printf("[Server] [MPI_SERVER_COMM] [mpi_server_comm_destroy] ERROR: MPI_Finalize fails\n");
     return -1;
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_destroy] << End\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_destroy] << End\n");
 
   // Return OK
   return 1;
@@ -163,25 +157,25 @@ int mpi_server_comm_accept ( char * port_name, MPI_Comm **new_sd )
 
   *new_sd = malloc(sizeof(MPI_Comm));
   if (*new_sd == NULL) {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] ERROR: Memory allocation\n", 0);
+    printf("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] ERROR: Memory allocation\n");
     return -1;
   }
 
   **new_sd = MPI_COMM_NULL;
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] >> Begin\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] >> Begin\n");
 
   // Accept
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] Accept %ld\n", 0, **new_sd);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] Accept %ld\n", **new_sd);
 
   ret = MPI_Comm_accept(port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, *new_sd);
   if (MPI_SUCCESS != ret)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] ERROR: MPI_Comm_accept fails\n", 0);
+    printf("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] ERROR: MPI_Comm_accept fails\n");
     return -1;
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] << End %ld\n", 0, **new_sd);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] << End %ld\n", **new_sd);
 
   return 0;
 }
@@ -190,25 +184,25 @@ int mpi_server_comm_disconnect ( MPI_Comm *fd )
 {
   int ret;
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] >> Begin\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] >> Begin\n");
 
   if (*fd == MPI_COMM_NULL)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] ERROR: The MPI_Comm is NULL\n", 0);
+    printf("[Server] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] ERROR: The MPI_Comm is NULL\n");
     return 1;
   }
 
   // Disconnect
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] Disconnect\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] Disconnect\n");
 
   ret = MPI_Comm_disconnect(fd);
   if (MPI_SUCCESS != ret)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] ERROR: MPI_Comm_disconnect fails\n", 0);
+    printf("[Server] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] ERROR: MPI_Comm_disconnect fails\n");
     return -1;
   }
   free(fd);
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] << End\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_disconnect] << End\n");
 
   // Return OK
   return 1;
@@ -220,22 +214,22 @@ ssize_t mpi_server_comm_read_operation ( MPI_Comm *fd, int *op, int *rank_client
   MPI_Status status;
   int msg[2];
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] >> Begin\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] >> Begin\n");
 
   // Get message
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] Read operation %p\n", 0, fd);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] Read operation %p\n", fd);
 
   ret = MPI_Recv(msg, 2, MPI_INT, MPI_ANY_SOURCE, 0, *fd, &status);
   if (MPI_SUCCESS != ret) {
-    debug_warning("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] ERROR: MPI_Recv fails\n", 0);
+    debug_warning("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] ERROR: MPI_Recv fails\n");
   }
 
   *rank_client_id = status.MPI_SOURCE;
   *tag_client_id  = msg[0];
   *op             = msg[1];
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] MPI_Recv (MPI SOURCE %d, MPI_TAG %d, OP %d, MPI_ERROR %d)\n", 0, *rank_client_id, *rank_client_id, *op, status.MPI_ERROR);
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] << End\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] MPI_Recv (MPI SOURCE %d, MPI_TAG %d, OP %d, MPI_ERROR %d)\n", *rank_client_id, *rank_client_id, *op, status.MPI_ERROR);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_operation] << End\n");
 
   // Return OK
   return 0;
@@ -246,26 +240,26 @@ ssize_t mpi_server_comm_write_data ( MPI_Comm *fd, char *data, ssize_t size, int
 {
   int ret;
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] >> Begin\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_write_data] >> Begin\n");
 
   if (size == 0) {
       return 0;
   }
   if (size < 0)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] ERROR: size < 0\n", 0);
+    printf("[Server] [MPI_SERVER_COMM] [mpi_server_comm_write_data] ERROR: size < 0\n");
     return -1;
   }
 
   // Send message
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] Write data tag %d\n", 0, tag_client_id);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_write_data] Write data tag %d\n", tag_client_id);
 
   ret = MPI_Send(data, size, MPI_CHAR, rank_client_id, tag_client_id, *fd);
   if (MPI_SUCCESS != ret) {
-    debug_warning("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] ERROR: MPI_Send fails\n", 0);
+    debug_warning("[Server] [MPI_SERVER_COMM] [mpi_server_comm_write_data] ERROR: MPI_Send fails\n");
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_write_data] << End\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_write_data] << End\n");
 
   // Return bytes written
   return size;
@@ -276,27 +270,27 @@ ssize_t mpi_server_comm_read_data ( MPI_Comm *fd, char *data, ssize_t size, int 
   int ret;
   MPI_Status status;
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] >> Begin\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_data] >> Begin\n");
 
   if (size == 0) {
     return  0;
   }
   if (size < 0)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] ERROR: size < 0\n", 0);
+    printf("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_data] ERROR: size < 0\n");
     return  -1;
   }
 
   // Get message
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] Read data tag %d\n", 0, tag_client_id);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_data] Read data tag %d\n", tag_client_id);
 
   ret = MPI_Recv(data, size, MPI_CHAR, rank_client_id, tag_client_id, *fd, &status);
   if (MPI_SUCCESS != ret) {
-    debug_warning("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] ERROR: MPI_Recv fails\n", 0);
+    debug_warning("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_data] ERROR: MPI_Recv fails\n");
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] MPI_Recv (MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d)\n", 0, status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_read_data] << End\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_data] MPI_Recv (MPI SOURCE %d, MPI_TAG %d, MPI_ERROR %d)\n", status.MPI_SOURCE, status.MPI_TAG, status.MPI_ERROR);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_read_data] << End\n");
 
   // Return bytes read
   return size;

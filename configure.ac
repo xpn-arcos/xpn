@@ -85,6 +85,7 @@ AC_CHECK_SIZEOF(unsigned long,8)
 AC_CHECK_SIZEOF(char *,4)
 AC_CHECK_SIZEOF(ptrdiff_t,4)
 AC_CHECK_SIZEOF(size_t,4)
+AC_SYS_LARGEFILE
 
 
 
@@ -101,10 +102,10 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 # Set initial variables depending on $target_cpu and $target_os...
 #
 IFLAGS="-I../../bin/mosquitto/include       "
-IFLAGS+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client -I../../../xpn/include/base "
+IFLAGS+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client    -I../../../xpn/include/base "
 IFLAGS+="-I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
 
-LFLAGS="-L../../bin/mosquitto/lib        -L../../xpn/lib "
+LFLAGS="-L../../bin/mosquitto/lib         -L../../xpn/lib "
 LFLAGS+="-L../../../bin/mosquitto/lib     -L../../../xpn/lib "
 LFLAGS+="-L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
 
@@ -179,9 +180,9 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_client/xpn \
 -I\$(top_srcdir)/include/xpn_client/xpn/xpn_simple \
 -I\$(top_srcdir)/include/xpn_client/nfi \
+-I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
 -I\$(top_srcdir)/include/xpn_server/ \
 -I\$(top_srcdir)/include/xpn_server/mpi_server/ \
 -I\$(top_srcdir)/include/xpn_server/sck_server/"
@@ -253,7 +254,7 @@ AM_CONDITIONAL([ENABLE_MPI_SERVER], [test "$NFI_MPI_SERVER" = "nfi_mpi_server"])
 
 ### BEGIN OF SCK_SERVER BLOCK. Do not remove this line. ###
 #
-# Defines the necessary variables if gridftp is enabled.
+# Defines the necessary variables if sck_server is enabled.
 #
 AC_ARG_ENABLE(  [sck_server],
                 [AS_HELP_STRING([--enable-sck_server],[Enable sck_server module.])],
@@ -317,6 +318,7 @@ AC_CONFIG_FILES([ \
       test/integrity/mpi_connect_accept/Makefile \
       test/integrity/bypass_c/Makefile \
       test/integrity/xpn_metadata/Makefile \
+      test/integrity/xpn-conf/Makefile \
       test/performance/xpn/Makefile \
       test/performance/iop/Makefile \
       test/performance/mpi_pingpong/Makefile \

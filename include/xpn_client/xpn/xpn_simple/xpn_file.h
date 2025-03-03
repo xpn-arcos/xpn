@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -36,10 +36,10 @@
 
   /* ... Const / Const ................................................. */
 
-  // max number of file descriptors */
+  /* max number of file descriptors */
   #define XPN_MAX_FILE  1024
 
-  // FILE or DIR */
+  /* FILE or DIR */
   #define XPN_FILE  0
   #define XPN_DIR   1
 

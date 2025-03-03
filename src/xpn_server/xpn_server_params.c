@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -180,6 +180,7 @@ int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] 
           case 'h':
             strcpy(params->srv_name, argv[i+1]);
             break;
+
           case 'w':
             params->await_stop = 1;
             break;

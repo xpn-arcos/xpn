@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -38,44 +38,43 @@
   #include "base/workers.h"
   #include "xpn_server_conf.h"
 
-  /* ... Const / Const ................................................. */
-
 
   /* ... Data structures / Estructuras de datos ........................ */
 
-  typedef struct
-  {
-    // server identification
-    int  size;
-    int  rank;
+     typedef struct
+     {
+       // server identification
+       int  size;
+       int  rank;
 
-    char port_name[MPI_MAX_PORT_NAME];
-    char srv_name [MPI_MAX_PORT_NAME];
+       char port_name[MPI_MAX_PORT_NAME];
+       char srv_name [MPI_MAX_PORT_NAME];
 
-    // server configuration
-    char shutdown_file[PATH_MAX];
-    int  thread_mode_connections;
-    int  thread_mode_operations;
-    int  server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
+       // server configuration
+       char shutdown_file[PATH_MAX];
+       int  thread_mode_connections;
+       int  thread_mode_operations;
+       int  server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
 
-    #ifdef ENABLE_SCK_SERVER
-    int server_socket; // For sck_server
-    #endif
+       #ifdef ENABLE_SCK_SERVER
+       int server_socket; // For sck_server
+       #endif
 
-    int await_stop;
+       int await_stop;
 
-    // server arguments
-    int    argc;
-    char **argv;
+       // server arguments
+       int    argc;
+       char **argv;
 
-  } xpn_server_param_st;
+     } xpn_server_param_st;
 
 
   /* ... Functions / Funciones ......................................... */
 
-  void xpn_server_params_show_usage ( void );
-  int  xpn_server_params_get        ( xpn_server_param_st *params, int argc, char *argv[] );
-  void xpn_server_params_show       ( xpn_server_param_st *params );
+     void xpn_server_params_show_usage ( void );
+     int  xpn_server_params_get        ( xpn_server_param_st *params, int argc, char *argv[] );
+     void xpn_server_params_show       ( xpn_server_param_st *params );
+
 
   /* ................................................................... */
 

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -18,6 +18,7 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 
 /* ... Include / Inclusion ........................................... */
 
@@ -217,23 +218,25 @@ int xpn_server_up ( void )
         switch (recv_code)
         {
             case SOCKET_ACCEPT_CODE:
-                socket_send(connection_socket, params.port_name, MPI_MAX_PORT_NAME);
-                xpn_server_accept();
-                break;
+                 socket_send(connection_socket, params.port_name, MPI_MAX_PORT_NAME);
+                 xpn_server_accept();
+                 break;
 
             case SOCKET_FINISH_CODE:
+                 the_end = 1;
+                 xpn_server_finish();
+                 break;
+
             case SOCKET_FINISH_CODE_AWAIT:
-                xpn_server_finish();
-                the_end = 1;
-                if (recv_code == SOCKET_FINISH_CODE_AWAIT){
-                    await_stop = 1;
-                }
-                break;
+                 the_end = 1;
+                 await_stop = 1;
+                 xpn_server_finish();
+                 break;
 
             default:
-                debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] >> Socket recv unknown code %d\n", 0,
-                           params.srv_name, recv_code);
-                break;
+                 debug_info("[TH_ID=%d] [XPN_SERVER %s] [xpn_server_up] >> Socket recv unknown code %d\n", 0,
+                            params.srv_name, recv_code);
+                 break;
         }
 
         if (await_stop == 0){
