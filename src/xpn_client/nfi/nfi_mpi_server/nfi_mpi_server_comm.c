@@ -26,7 +26,7 @@
 
 /* ... Functions / Funciones ......................................... */
 
-int nfi_mpi_server_comm_init(int xpn_thread)
+int nfi_mpi_server_comm_init ( int xpn_thread )
 {
     int ret, provided, claimed;
     int flag = 0;
@@ -36,11 +36,13 @@ int nfi_mpi_server_comm_init(int xpn_thread)
     // MPI_Init
     MPI_Initialized(&flag);
 
-    if (!flag) {
+    if (!flag)
+    {
         // TODO: server->argc, server->argv from upper layers?
 
         // Threads disable
-        if (!xpn_thread) {
+        if (!xpn_thread)
+	{
             debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_init] MPI Init without threads\n");
 
             ret = MPI_Init(NULL, NULL);
@@ -50,7 +52,8 @@ int nfi_mpi_server_comm_init(int xpn_thread)
             }
         }
         // Threads enable
-        else {
+        else
+	{
             debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_init] MPI Init with threads\n");
 
             ret = MPI_Init_thread(NULL, NULL, MPI_THREAD_MULTIPLE, &provided);
@@ -77,7 +80,8 @@ int nfi_mpi_server_comm_init(int xpn_thread)
     return 1;
 }
 
-int nfi_mpi_server_comm_destroy() {
+int nfi_mpi_server_comm_destroy ( void )
+{
     int ret;
 
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_destroy] >> Begin\n");
@@ -88,7 +92,8 @@ int nfi_mpi_server_comm_destroy() {
     int flag = 0;
     MPI_Initialized(&flag);
 
-    if (!flag) {
+    if (!flag)
+    {
         debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_destroy] MPI Finalize\n");
 
         ret = PMPI_Finalize();
@@ -107,7 +112,7 @@ int nfi_mpi_server_comm_destroy() {
     return 1;
 }
 
-int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_comm)
+int nfi_mpi_server_comm_connect ( char *srv_name, char *port_name, MPI_Comm *out_comm )
 {
     int ret, err;
     int connection_socket, port;
@@ -220,7 +225,8 @@ int nfi_mpi_server_comm_connect(char *srv_name, char *port_name, MPI_Comm *out_c
     return 1;
 }
 
-int nfi_mpi_server_comm_disconnect(MPI_Comm *comm) {
+int nfi_mpi_server_comm_disconnect ( MPI_Comm *comm )
+{
     int ret;
 
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_disconnect] >> Begin\n");
@@ -253,7 +259,8 @@ int nfi_mpi_server_comm_disconnect(MPI_Comm *comm) {
     return 1;
 }
 
-ssize_t nfi_mpi_server_comm_write_operation(MPI_Comm fd, int op) {
+ssize_t nfi_mpi_server_comm_write_operation ( MPI_Comm fd, int op )
+{
     int ret;
     int msg[2];
     int eclass, len;
@@ -284,7 +291,8 @@ ssize_t nfi_mpi_server_comm_write_operation(MPI_Comm fd, int op) {
     return 0;
 }
 
-ssize_t nfi_mpi_server_comm_write_data(MPI_Comm fd, char *data, ssize_t size) {
+ssize_t nfi_mpi_server_comm_write_data ( MPI_Comm fd, char *data, ssize_t size )
+{
     int ret;
 
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_write_data] >> Begin\n");
@@ -315,7 +323,8 @@ ssize_t nfi_mpi_server_comm_write_data(MPI_Comm fd, char *data, ssize_t size) {
     return size;
 }
 
-ssize_t nfi_mpi_server_comm_read_data(MPI_Comm fd, char *data, ssize_t size) {
+ssize_t nfi_mpi_server_comm_read_data(MPI_Comm fd, char *data, ssize_t size)
+{
     int ret;
     MPI_Status status;
 
@@ -347,4 +356,6 @@ ssize_t nfi_mpi_server_comm_read_data(MPI_Comm fd, char *data, ssize_t size) {
     return size;
 }
 
+
 /* ................................................................... */
+

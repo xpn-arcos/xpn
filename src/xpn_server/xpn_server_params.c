@@ -138,7 +138,7 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
                       else printf("ERROR: empty shutdown file name.\n");
                       i++;
                       break;
-     
+
                  case 't':
                       if ((i + 1) < argc)
                       {
@@ -175,7 +175,7 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
                       }
                       i++;
                       break;
-     
+
                  case 's':
                       if ((i + 1) < argc)
                       {
@@ -192,18 +192,18 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
                       }
                       i++;
                       break;
-     
+
                  case 'h':
                       if ((i + 1) < argc)
                            strcpy(params->srv_name, argv[i + 1]);
                       else printf("ERROR: empty server name.\n");
                       i++;
                       break;
-     
+
                  case 'w':
                       params->await_stop = 1;
                       break;
-     
+
                  case 'm':
                       qos_mode_mqtt = utils_str2int(argv[i + 1], 0);
                       if ((qos_mode_mqtt < 0) || (qos_mode_mqtt > 2))
@@ -211,17 +211,17 @@ int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
                           printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
                           qos_mode_mqtt = 0;
                       }
-     
+
                       params->mosquitto_mode = 1;
                       params->mosquitto_qos = qos_mode_mqtt;
                       i++;
                       break;
-     
+
                  default:
                       break;
                }
                break;
-  
+
           default:
               break;
         }

@@ -210,8 +210,8 @@ void xpn_server_op_open ( xpn_server_param_st *params, void *comm, struct st_xpn
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] >> Begin\n", params->rank);
@@ -236,7 +236,7 @@ void xpn_server_op_open ( xpn_server_param_st *params, void *comm, struct st_xpn
     xpn_server_comm_write_data(params->server_type, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id) ;
 
     // If this is a file with mq_server protocol then the server is going to suscribe
-    if ( head->u_st_xpn_server_msg.op_open.file_type == 1 ) 
+    if ( head->u_st_xpn_server_msg.op_open.file_type == 1 )
     {
       mq_server_op_subscribe ( params, head );
     }
@@ -252,8 +252,8 @@ void xpn_server_op_creat ( xpn_server_param_st *params, void *comm, struct st_xp
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] >> Begin\n", params->rank);
@@ -276,11 +276,11 @@ void xpn_server_op_creat ( xpn_server_param_st *params, void *comm, struct st_xp
     xpn_server_comm_write_data(params->server_type, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id) ;
 
     // If this is a file with mq_server protocol then the server is going to suscribe
-    if ( head->u_st_xpn_server_msg.op_creat.file_type == 1 ) 
+    if ( head->u_st_xpn_server_msg.op_creat.file_type == 1 )
     {
       mq_server_op_subscribe ( params, head );
     }
-    
+
   }
 
   // show debug info
@@ -410,7 +410,7 @@ void xpn_server_op_write ( xpn_server_param_st *params, void *comm, struct st_xp
   }
 
   // If this is a file with mq_server protocol then the callback function is going to be used
-  if ( head->u_st_xpn_server_msg.op_write.file_type == 1 ) 
+  if ( head->u_st_xpn_server_msg.op_write.file_type == 1 )
   {
       return ;
   }
@@ -507,8 +507,8 @@ void xpn_server_op_close ( xpn_server_param_st *params, void *comm, struct st_xp
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_close] >> Begin\n", params->rank);
@@ -520,7 +520,7 @@ void xpn_server_op_close ( xpn_server_param_st *params, void *comm, struct st_xp
   xpn_server_comm_write_data(params->server_type, comm, (char *)&status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id) ;
 
   // Si es un fichero con protocolo mq_server se desuscribe
-  if ( head->u_st_xpn_server_msg.op_close.file_type == 1 ) 
+  if ( head->u_st_xpn_server_msg.op_close.file_type == 1 )
   {
     mq_server_op_unsubscribe (params, head);
   }
@@ -537,8 +537,8 @@ void xpn_server_op_rm ( xpn_server_param_st *params, void *comm, struct st_xpn_s
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] >> Begin\n", params->rank);
@@ -558,8 +558,8 @@ void xpn_server_op_rm_async ( xpn_server_param_st *params, __attribute__((__unus
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] >> Begin\n", params->rank);
@@ -579,8 +579,8 @@ void xpn_server_op_rename ( xpn_server_param_st *params, void *comm, struct st_x
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] >> Begin\n", params->rank);
@@ -602,8 +602,8 @@ void xpn_server_op_getattr ( xpn_server_param_st *params, void *comm, struct st_
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] >> Begin\n", params->rank);
@@ -625,8 +625,8 @@ void xpn_server_op_setattr (xpn_server_param_st *params, __attribute__((__unused
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_setattr] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_setattr] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_setattr] >> Begin\n", params->rank);
@@ -651,8 +651,8 @@ void xpn_server_op_mkdir ( xpn_server_param_st *params, void *comm, struct st_xp
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] >> Begin\n", params->rank);
@@ -675,8 +675,8 @@ void xpn_server_op_opendir ( xpn_server_param_st *params, void *comm, struct st_
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] >> Begin\n", params->rank);
@@ -714,8 +714,8 @@ void xpn_server_op_readdir ( xpn_server_param_st *params, void *comm, struct st_
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] >> Begin\n", params->rank);
@@ -768,8 +768,8 @@ void xpn_server_op_closedir ( xpn_server_param_st *params, void *comm, struct st
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_closedir] >> Begin\n", params->rank);
@@ -792,8 +792,8 @@ void xpn_server_op_rmdir ( xpn_server_param_st *params, void *comm, struct st_xp
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] >> Begin\n", params->rank);
@@ -813,8 +813,8 @@ void xpn_server_op_rmdir_async ( __attribute__((__unused__)) xpn_server_param_st
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir_async] >> Begin\n", params->rank);
@@ -835,8 +835,8 @@ void xpn_server_op_read_mdata   ( xpn_server_param_st *params, void *comm, struc
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] >> Begin\n", params->rank);
@@ -880,8 +880,8 @@ void xpn_server_op_write_mdata ( xpn_server_param_st *params, void *comm, struct
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] >> Begin\n", params->rank);
@@ -917,25 +917,26 @@ pthread_mutex_t op_write_mdata_file_size_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void xpn_server_op_write_mdata_file_size ( xpn_server_param_st *params, void *comm, struct st_xpn_server_msg *head, int rank_client_id, int tag_client_id )
 {
-  int ret, fd;
+  int     ret, fd;
   ssize_t actual_file_size = 0;
   struct st_xpn_server_status req;
 
   // check params...
   if (NULL == params)
   {
-    printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] ERROR: NULL arguments\n", -1);
-    return;
+      printf("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] ERROR: NULL arguments\n", -1);
+      return;
   }
 
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] >> Begin\n", params->rank);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)\n", params->rank, head->u_st_xpn_server_msg.op_write_mdata_file_size.path, head->u_st_xpn_server_msg.op_write_mdata_file_size.size);
-  
+
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] mutex lock\n", params->rank);
   pthread_mutex_lock(&op_write_mdata_file_size_mutex);
 
   fd = filesystem_open(head->u_st_xpn_server_msg.op_write_mdata_file_size.path, O_RDWR);
-  if (fd < 0){
+  if (fd < 0)
+  {
     if (errno == EISDIR){
       // if is directory there are no metadata to write so return 0
       ret = 0;
@@ -955,7 +956,6 @@ void xpn_server_op_write_mdata_file_size ( xpn_server_param_st *params, void *co
   filesystem_close(fd); //TODO: think if necesary check error in close
 
 cleanup_xpn_server_op_write_mdata_file_size:
-
   pthread_mutex_unlock(&op_write_mdata_file_size_mutex);
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] mutex unlock\n", params->rank);
 
@@ -968,4 +968,7 @@ cleanup_xpn_server_op_write_mdata_file_size:
   debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] << End\n", params->rank);
 
 }
+
+
 /* ................................................................... */
+

@@ -132,11 +132,11 @@ int sck_server_comm_accept ( int socket, int **new_socket )
   sc = accept(socket, (struct sockaddr *)&client_addr, &size);
   if (sc < 0)
   {
-    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_destroy] ERROR: accept fails\n", 0);
-    return -1;
+      printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] ERROR: accept fails\n", 0);
+      return -1;
   }
 
-  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_destroy] desp. accept conection .... %d\n", 0, sc);
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] desp. accept conection .... %d\n", 0, sc);
   // tcp_nodelay
   flag = 1;
   ret = setsockopt(sc, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag));
