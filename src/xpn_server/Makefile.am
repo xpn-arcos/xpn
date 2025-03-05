@@ -78,7 +78,7 @@ endif
 
 bin_PROGRAMS = xpn_server 
 xpn_server_SOURCES =  $(SERVER_OBJECTS) $(SERVER_HEADER)
-bin_SCRIPTS = xpn_stop_server$(EXEEXT) xpn_terminate_server$(EXEEXT) xpn_server_spawn$(EXEEXT)
+bin_SCRIPTS = xpn_stop_server$(EXEEXT) xpn_terminate_server$(EXEEXT)
 
 CLEANFILES = $(bin_SCRIPTS)
 
@@ -88,10 +88,7 @@ xpn_stop_server$(EXEEXT): xpn_server$(EXEEXT)
 xpn_terminate_server$(EXEEXT): xpn_server$(EXEEXT)
 	$(LN_S) -f xpn_server$(EXEEXT) xpn_terminate_server$(EXEEXT)
 
-xpn_server_spawn$(EXEEXT): xpn_server$(EXEEXT)
-	$(LN_S) -f xpn_server$(EXEEXT) xpn_server_spawn$(EXEEXT)
-
 install-exec-hook:
 	$(LN_S) -f $(DESTDIR)$(bindir)/xpn_server$(EXEEXT) $(DESTDIR)$(bindir)/xpn_stop_server$(EXEEXT)
 	$(LN_S) -f $(DESTDIR)$(bindir)/xpn_server$(EXEEXT) $(DESTDIR)$(bindir)/xpn_terminate_server$(EXEEXT)
-	$(LN_S) -f $(DESTDIR)$(bindir)/xpn_server$(EXEEXT) $(DESTDIR)$(bindir)/xpn_server_spawn$(EXEEXT)
+
