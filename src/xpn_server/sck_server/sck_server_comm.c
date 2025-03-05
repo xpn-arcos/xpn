@@ -79,7 +79,6 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port        = htons(0);
 
-
   ret = bind(*new_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
   if (ret < 0)
   {
@@ -194,3 +193,4 @@ int sck_server_comm_disconnect ( int *socket )
 
 
 /* ................................................................... */
+

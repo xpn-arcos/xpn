@@ -22,201 +22,202 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "xpn_server_comm.h"
-#include "socket.h"
-
-#ifdef ENABLE_MPI_SERVER
-#include "mpi_server_comm.h"
-#endif
-#ifdef ENABLE_MPI_SERVER
-#include "sck_server_comm.h"
-#endif
+   #include "xpn_server_comm.h"
+   #include "socket.h"
 
 
 /* ... Functions / Funciones ......................................... */
 
-// init, destroy
-int xpn_server_comm_init ( xpn_server_param_st *params )
-{
-  int ret = -1;
+    // init, destroy
+    int xpn_server_comm_init ( xpn_server_param_st *params )
+    {
+      int ret = -1;
 
-  switch (params->server_type)
-  {
-  #ifdef ENABLE_MPI_SERVER
-  case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_init( params->argc, params->argv, params->thread_mode_connections, params->port_name );
-    break;
-  #endif
+      switch (params->server_type)
+      {
+#ifdef ENABLE_MPI_SERVER
+         case XPN_SERVER_TYPE_MPI:
+              ret = mpi_server_comm_init( params->argc, params->argv, params->thread_mode_connections, params->port_name );
+              break;
+#endif
 
-  #ifdef ENABLE_SCK_SERVER
-  case XPN_SERVER_TYPE_SCK:
-    ret = sck_server_comm_init( &params->server_socket, params->port_name );
-    break;
-  #endif
- 
-  default:       
-    printf("[XPN_SERVER] [xpn_server_comm_init] server_type '%d' not recognized\n", params->server_type);
-    break;
-  }
+#ifdef ENABLE_SCK_SERVER
+         case XPN_SERVER_TYPE_SCK:
+              ret = sck_server_comm_init( &params->server_socket, params->port_name );
+              break;
+#endif
 
-  return ret;
-}
+         default:
+              printf("[XPN_SERVER] [xpn_server_comm_init] server_type '%d' not recognized\n", params->server_type);
+              break;
+      }
 
-int xpn_server_comm_destroy ( xpn_server_param_st *params )
-{ 
-  int ret = -1;
+      return ret;
+    }
 
-  switch (params->server_type)
-  {
-  #ifdef ENABLE_MPI_SERVER
-  case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_destroy( params->port_name );
-    break;
-  #endif
+    int xpn_server_comm_destroy ( xpn_server_param_st *params )
+    {
+      int ret = -1;
 
-  #ifdef ENABLE_SCK_SERVER
-  case XPN_SERVER_TYPE_SCK:
-    ret = socket_close( params->server_socket );
-    break;
-  #endif
- 
-  default:
-    printf("[XPN_SERVER] [xpn_server_comm_destroy] server_type '%d' not recognized\n", params->server_type);
-    break;
-  }
+      switch (params->server_type)
+      {
+#ifdef ENABLE_MPI_SERVER
+         case XPN_SERVER_TYPE_MPI:
+              ret = mpi_server_comm_destroy( params->port_name );
+              break;
+#endif
 
-  return ret;
-}
+#ifdef ENABLE_SCK_SERVER
+         case XPN_SERVER_TYPE_SCK:
+              ret = socket_close( params->server_socket );
+              break;
+#endif
 
-int xpn_server_comm_accept ( xpn_server_param_st *params, void **new_sd )
-{
-  int ret = -1;
+         default:
+              printf("[XPN_SERVER] [xpn_server_comm_destroy] server_type '%d' not recognized\n", params->server_type);
+              break;
+      }
 
-  switch (params->server_type)
-  {
-  #ifdef ENABLE_MPI_SERVER
-  case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_accept( params->port_name, (MPI_Comm **)new_sd );
-    break;
-  #endif
+      return ret;
+    }
 
-  #ifdef ENABLE_SCK_SERVER
-  case XPN_SERVER_TYPE_SCK:
-    ret = sck_server_comm_accept( params->server_socket, (int **)new_sd );
-    break;
-  #endif
- 
-  default:
-    printf("[XPN_SERVER] [xpn_server_comm_accept] server_type '%d' not recognized\n", params->server_type);
-    break;
-  }
+    // accept, disconnect
+    int xpn_server_comm_accept ( xpn_server_param_st *params, void **new_sd )
+    {
+      int ret = -1;
 
-  return ret;
-}
+      switch (params->server_type)
+      {
+#ifdef ENABLE_MPI_SERVER
+         case XPN_SERVER_TYPE_MPI:
+              ret = mpi_server_comm_accept( params->port_name, (MPI_Comm **)new_sd );
+              break;
+#endif
 
-int xpn_server_comm_disconnect ( xpn_server_param_st *params, void *sd )
-{
-  int ret = -1;
+#ifdef ENABLE_SCK_SERVER
+         case XPN_SERVER_TYPE_SCK:
+              ret = sck_server_comm_accept( params->server_socket, (int **)new_sd );
+              break;
+#endif
 
-  switch (params->server_type)
-  {
-  #ifdef ENABLE_MPI_SERVER
-  case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_disconnect( (MPI_Comm *)sd );
-    break;
-  #endif
+         default:
+              printf("[XPN_SERVER] [xpn_server_comm_accept] server_type '%d' not recognized\n", params->server_type);
+              break;
+      }
 
-  #ifdef ENABLE_SCK_SERVER
-  case XPN_SERVER_TYPE_SCK:
-    ret = sck_server_comm_disconnect( (int *)sd );
-    break;
-  #endif
- 
-  default:
-    printf("[XPN_SERVER] [xpn_server_comm_disconnect] server_type '%d' not recognized\n", params->server_type);
-    break;
-  }
+      return ret;
+    }
 
-  return ret;
-}
+    int xpn_server_comm_disconnect ( xpn_server_param_st *params, void *sd )
+    {
+      int ret = -1;
 
-ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, void *sd, int *op, int *rank_client_id, int *tag_client_id )
-{ 
-  ssize_t ret = -1;
+      switch (params->server_type)
+      {
+#ifdef ENABLE_MPI_SERVER
+         case XPN_SERVER_TYPE_MPI:
+              ret = mpi_server_comm_disconnect( (MPI_Comm *)sd );
+              break;
+#endif
 
-  switch (params->server_type)
-  {
-  #ifdef ENABLE_MPI_SERVER
-  case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_read_operation( (MPI_Comm *)sd, op, rank_client_id, tag_client_id );
-    break;
-  #endif
+#ifdef ENABLE_SCK_SERVER
+         case XPN_SERVER_TYPE_SCK:
+              ret = sck_server_comm_disconnect( (int *)sd );
+              break;
+#endif
 
-  #ifdef ENABLE_SCK_SERVER
-  case XPN_SERVER_TYPE_SCK:
-    ret = socket_recv(*(int*)sd, op, sizeof(*op));
-    break;
-  #endif
- 
-  default:
-    printf("[XPN_SERVER] [xpn_server_comm_read_operation] server_type '%d' not recognized\n", params->server_type);
-    break;
-  }
+         default:
+              printf("[XPN_SERVER] [xpn_server_comm_disconnect] server_type '%d' not recognized\n", params->server_type);
+              break;
+      }
 
-  return ret;
-}
+      return ret;
+    }
 
-ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
-{ 
-  ssize_t ret = -1;
+    // read_operation, write_operation
+    ssize_t xpn_server_comm_read_operation ( xpn_server_param_st *params, void *sd, int *op, int *rank_client_id, int *tag_client_id )
+    {
+      ssize_t ret = -1;
 
-  switch (params->server_type)
-  {
-  #ifdef ENABLE_MPI_SERVER
-  case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_write_data( (MPI_Comm *)sd, data, size, rank_client_id, tag_client_id );
-    break;
-  #endif
+      switch (params->server_type)
+      {
+#ifdef ENABLE_MPI_SERVER
+         case XPN_SERVER_TYPE_MPI:
+              ret = mpi_server_comm_read_operation( (MPI_Comm *)sd, op, rank_client_id, tag_client_id );
+              break;
+#endif
 
-  #ifdef ENABLE_SCK_SERVER
-  case XPN_SERVER_TYPE_SCK:
-    ret = socket_send(*(int*)sd, data, size);
-    break;
-  #endif
- 
-  default:
-    printf("[XPN_SERVER] [xpn_server_comm_write_data] server_type '%d' not recognized\n", params->server_type);
-    break;
-  }
+#ifdef ENABLE_SCK_SERVER
+         case XPN_SERVER_TYPE_SCK:
+	      rank_client_id = rank_client_id ;
+	      tag_client_id  = tag_client_id ;
+              ret = socket_recv(*(int*)sd, op, sizeof(*op));
+              break;
+#endif
 
-  return ret;
-}
+         default:
+              printf("[XPN_SERVER] [xpn_server_comm_read_operation] server_type '%d' not recognized\n", params->server_type);
+              break;
+      }
 
-ssize_t xpn_server_comm_read_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
-{ 
-  ssize_t ret = -1;
+      return ret;
+    }
 
-  switch (params->server_type)
-  {
-  #ifdef ENABLE_MPI_SERVER
-  case XPN_SERVER_TYPE_MPI:
-    ret = mpi_server_comm_read_data( (MPI_Comm *)sd, data, size, rank_client_id, tag_client_id );
-    break;
-  #endif
+    ssize_t xpn_server_comm_write_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
+    {
+      ssize_t ret = -1;
 
-  #ifdef ENABLE_SCK_SERVER
-  case XPN_SERVER_TYPE_SCK:
-    ret = socket_recv(*(int*)sd, data, size);
-    break;
-  #endif
- 
-  default:
-    printf("[XPN_SERVER] [xpn_server_comm_read_data] server_type '%d' not recognized\n", params->server_type);
-    break;
-  }
+      switch (params->server_type)
+      {
+#ifdef ENABLE_MPI_SERVER
+         case XPN_SERVER_TYPE_MPI:
+              ret = mpi_server_comm_write_data( (MPI_Comm *)sd, data, size, rank_client_id, tag_client_id );
+              break;
+#endif
 
-  return ret;
-}
+#ifdef ENABLE_SCK_SERVER
+         case XPN_SERVER_TYPE_SCK:
+	      rank_client_id = rank_client_id ;
+	      tag_client_id  = tag_client_id ;
+              ret = socket_send(*(int*)sd, data, size);
+              break;
+#endif
+
+         default:
+              printf("[XPN_SERVER] [xpn_server_comm_write_data] server_type '%d' not recognized\n", params->server_type);
+              break;
+      }
+
+      return ret;
+    }
+
+    ssize_t xpn_server_comm_read_data ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id )
+    {
+      ssize_t ret = -1;
+
+      switch (params->server_type)
+      {
+#ifdef ENABLE_MPI_SERVER
+         case XPN_SERVER_TYPE_MPI:
+              ret = mpi_server_comm_read_data( (MPI_Comm *)sd, data, size, rank_client_id, tag_client_id );
+              break;
+#endif
+
+#ifdef ENABLE_SCK_SERVER
+         case XPN_SERVER_TYPE_SCK:
+	      rank_client_id = rank_client_id ;
+	      tag_client_id  = tag_client_id ;
+              ret = socket_recv(*(int*)sd, data, size);
+              break;
+#endif
+
+         default:
+              printf("[XPN_SERVER] [xpn_server_comm_read_data] server_type '%d' not recognized\n", params->server_type);
+              break;
+      }
+
+      return ret;
+    }
 
 
 /* ................................................................... */

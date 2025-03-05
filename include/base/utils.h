@@ -30,29 +30,30 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include <stdio.h>
-  #include <stdarg.h>
-  #include <sys/time.h>
-  #include "base/debug_msg.h"
+     #include <stdio.h>
+     #include <stdarg.h>
+     #include <sys/time.h>
+     #include "base/debug_msg.h"
 
 
   /* ... Const / Const ................................................. */
 
-  // Check arguments
-  #define FREE_AND_NULL(ptr) \
-           if ((ptr) != NULL) { free((ptr)); (ptr) = NULL; }
+     // Check arguments
+     #define FREE_AND_NULL(ptr) \
+              if ((ptr) != NULL) { free((ptr)); (ptr) = NULL; }
 
-  #define NULL_RET_ERR(ptr, set_errno) \
-           if (NULL == (ptr)) { errno=set_errno; return -1; }
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #define NULL_RET_ERR(ptr, set_errno) \
+              if (NULL == (ptr)) { errno=set_errno; return -1; }
 
 
   /* ... Functions / Funciones ......................................... */
 
-  // time
-  long utils_get_time ( void ) ;
+     // time
+     long utils_get_time ( void ) ;
+
+     // enviroment variables
+     int utils_getenv_int ( char *env_name, int default_value ) ;
+     int utils_str2int    ( char *str_name, int default_value ) ;
 
 
   /* .................................................................... */
@@ -62,3 +63,4 @@
   #endif
 
 #endif
+
