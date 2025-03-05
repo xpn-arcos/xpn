@@ -39,31 +39,26 @@
     #define SCK_SERVER_DNS_FILE_DEFAULT "/tmp/sck_dns.txt"
   #endif
 
-  #ifndef TCP_SERVER_DNS_FILE_DEFAULT
-    #define TCP_SERVER_DNS_FILE_DEFAULT "/tmp/tcp_dns.txt"
-  #endif
-
-  #ifndef MAX_TCP_SERVER_NODES
-    #define MAX_TCP_SERVER_NODES 256
+  #ifndef MAX_SCK_SERVER_NODES
+    #define MAX_SCK_SERVER_NODES 256
   #endif
 
   #ifndef CONST_TEMP
     #define CONST_TEMP 1024
   #endif
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
 
   /* ... Functions / Funciones ......................................... */
 
-  void ns_get_hostname(char *srv_name);
-  char *ns_get_host_ip(void);
+  void ns_get_hostname ( char *srv_name );
+  char *ns_get_host_ip ( void );
 
-  int ns_publish(char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
-  int ns_unpublish(char *dns_file, char *protocol, char *param_srv_name);
-  int ns_lookup(char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
+  int ns_publish   ( char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name );
+  int ns_unpublish ( char *dns_file, char *protocol, char *param_srv_name );
+  int ns_lookup    ( char *protocol, char *param_srv_name, char *srv_ip, char *port_name );
 
 
   /* ................................................................... */
 
 #endif
+

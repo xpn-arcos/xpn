@@ -29,24 +29,32 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "base/time_misc.h"
-  #include "base/ns.h"
-  #include "xpn_server_params.h"
+     #include "all_system.h"
+     #include "base/utils.h"
+     #include "base/time_misc.h"
+     #include "base/ns.h"
+     #include "xpn_server_params.h"
+
+     #ifdef ENABLE_MPI_SERVER
+     #include "mpi_server_comm.h"
+     #endif
+     #ifdef ENABLE_SCK_SERVER
+     #include "sck_server_comm.h"
+     #endif
 
 
   /* ... Functions / Funciones ......................................... */
 
-  int       xpn_server_comm_init              ( xpn_server_param_st *params );
-  int       xpn_server_comm_destroy           ( xpn_server_param_st *params );
+     int      xpn_server_comm_init            ( xpn_server_param_st *params );
+     int      xpn_server_comm_destroy         ( xpn_server_param_st *params );
 
-  int       xpn_server_comm_accept            ( xpn_server_param_st *params, void **new_sd );
-  int       xpn_server_comm_disconnect        ( xpn_server_param_st *params, void *sd );
+     int      xpn_server_comm_accept          ( xpn_server_param_st *params, void **new_sd );
+     int      xpn_server_comm_disconnect      ( xpn_server_param_st *params, void *sd );
 
-  ssize_t   xpn_server_comm_read_operation    ( xpn_server_param_st *params, void *sd, int *op, int *rank_client_id, int *tag_client_id );
-  ssize_t   xpn_server_comm_write_data        ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id );
-  ssize_t   xpn_server_comm_read_data         ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id );
+     ssize_t  xpn_server_comm_read_operation  ( xpn_server_param_st *params, void *sd, int *op, int *rank_client_id, int *tag_client_id );
+     ssize_t  xpn_server_comm_write_data      ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id );
+     ssize_t  xpn_server_comm_read_data       ( xpn_server_param_st *params, void *sd, char *data, ssize_t size, int rank_client_id, int tag_client_id );
+
 
   /* ................................................................... */
 
@@ -55,3 +63,4 @@
   #endif
 
 #endif
+

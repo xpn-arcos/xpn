@@ -182,7 +182,6 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_client/nfi \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_local \
 -I\$(top_srcdir)/include/xpn_client/nfi/nfi_xpn_server \
--I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server \
 -I\$(top_srcdir)/include/xpn_server/ \
 -I\$(top_srcdir)/include/xpn_server/mpi_server/ \
 -I\$(top_srcdir)/include/xpn_server/sck_server/"
@@ -278,19 +277,19 @@ AM_CONDITIONAL([ENABLE_SCK_SERVER], [test "$NFI_SCK_SERVER" = "nfi_sck_server"])
 AC_ARG_ENABLE(  [mosquitto],
                 [AS_HELP_STRING([--enable-mosquitto],[Enable mosquitto module.])],
                 [
-                  [CDEFS="$CDEFS -DENABLE_TCP_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"]
-                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_tcp_server"]
-                  [NFI_TCP_SERVER="nfi_tcp_server"]
-                  [NFI_TCP_SERVER_OBJECTS="\$(NFI_TCP_SERVER_OBJECTS)"]
+                  [CDEFS="$CDEFS -DENABLE_SCK_SERVER -DENABLE_MOSQUITTO -DHAVE_MOSQUITTO_H"]
+                  [INCLUDEFLAGS="$INCLUDEFLAGS -I\$(top_srcdir)/include/xpn_client/nfi/nfi_sck_server"]
+                  [NFI_SCK_SERVER="nfi_sck_server"]
+                  [NFI_SCK_SERVER_OBJECTS="\$(NFI_SCK_SERVER_OBJECTS)"]
                   [LIBLINK+=" -lmosquitto"]
                   [LIBS=$LFLAGS" "$LIBS" -lmosquitto"]
                 ]
 )
-AC_SUBST(NFI_TCP_SERVER)
-AC_SUBST(NFI_TCP_SERVER_OBJECTS)
+AC_SUBST(NFI_SCK_SERVER)
+AC_SUBST(NFI_SCK_SERVER_OBJECTS)
 AC_SUBST(LIBLINK)
 AC_SUBST(LIBS)
-AM_CONDITIONAL([ENABLE_TCP_SERVER], [test "$NFI_TCP_SERVER" = "nfi_tcp_server"])
+AM_CONDITIONAL([ENABLE_SCK_SERVER], [test "$NFI_SCK_SERVER" = "nfi_sck_server"])
 ### END OF MQTT BLOCK. Do not remove this line. ###
 
 
@@ -312,7 +311,6 @@ AC_CONFIG_FILES([ \
       src/xpn_client/Makefile \
       src/utils/Makefile \
       src/bypass/Makefile \
-      src/tcp_server/Makefile \
       src/xpn_server/Makefile \
       test/integrity/xpn/Makefile \
       test/integrity/mpi_connect_accept/Makefile \

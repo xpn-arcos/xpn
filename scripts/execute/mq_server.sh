@@ -23,8 +23,8 @@
 
 # Header
 echo ""
-echo " tcp_server.sh"
-echo " -------------"
+echo " mq_server.sh"
+echo " ------------"
 echo ""
 
 # Default configuration
@@ -85,8 +85,8 @@ touch    "${BASE_DIR}/conf/xpn.dns"
 export XPN_PROFILE="${XPN_DIR}/doc/xpn.profile.example.xml"
 export XPN_CONF="${BASE_DIR}/conf/xpn.conf.xml"
 
-# run the tcp_server...
-"${XPN_DIR}"/src/tcp_server/xpn_tcp_server -n localhost -p "${PORT_NUMBER}" -ns "${BASE_DIR}/conf/xpn.dns"
+# run the mq_server...
+"${XPN_DIR}"/src/mq_server/xpn_mq_server -n localhost -p "${PORT_NUMBER}" -ns "${BASE_DIR}/conf/xpn.dns"
 
 # Stop
 echo " End."
