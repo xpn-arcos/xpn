@@ -111,9 +111,10 @@
   #endif
 
   #ifdef ENABLE_MPI_SERVER
-    #if defined(HAVE_MPI_H)
       #include <mpi.h>
-    #endif
+  #endif
+  #if defined(HAVE_MPI_H)
+      #include <mpi.h>
   #endif
 
   #if defined(HAVE_MOSQUITTO_H)
