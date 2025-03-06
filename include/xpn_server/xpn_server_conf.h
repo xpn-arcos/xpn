@@ -30,6 +30,7 @@
   /* ... Include / Inclusion ........................................... */
 
      #include "all_system.h"
+     #include "service_socket.h"
 
 
   /* ... Const / Const ................................................. */
@@ -38,13 +39,6 @@
      #define XPN_SERVER_TYPE_SCK 1
 
 
-     #ifdef MPI_MAX_PORT_NAME
-     #define XPN_SERVER_MAX_PORT_NAME MPI_MAX_PORT_NAME
-     #else
-     #define XPN_SERVER_MAX_PORT_NAME 1024
-     #endif
-
-  
   /* ................................................................... */
 
   #ifdef  __cplusplus
@@ -52,3 +46,4 @@
   #endif
 
 #endif
+

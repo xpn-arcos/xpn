@@ -30,20 +30,20 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "string_misc.h"
-  #include "path_misc.h"
+     #include "all_system.h"
+     #include "string_misc.h"
+     #include "path_misc.h"
 
 
   /* ... Functions / Funciones ......................................... */
 
-  int ParseURL( char *url,  
-                char *protocol, 
-                char *login, 
-                char *passwd, 
-                char *server,  
-                char *port,  
-                char *dir);
+     int ParseURL ( char *url,  
+                    char *protocol, 
+                    char *login, 
+                    char *passwd, 
+                    char *server,  
+                    char *port,  
+                    char *dir) ;
 
 
   /* ................................................................... */
@@ -53,3 +53,4 @@
   #endif
 
 #endif
+

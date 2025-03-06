@@ -30,9 +30,9 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "string_misc.h"
-  #include "trace_tags.h"
+     #include "all_system.h"
+     #include "string_misc.h"
+     #include "trace_tags.h"
 
 
   /* ... Functions / Funciones ......................................... */

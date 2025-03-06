@@ -23,7 +23,6 @@
 /* ... Include / Inclusion ........................................... */
 
 #include "nfi_sck_server_comm.h"
-#include "socket.h"
 #include "xpn_server/xpn_server_conf.h"
 
 
@@ -39,7 +38,8 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
   debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] >> Begin\n");
 
   // Lookup port name
-  ret = socket_client_connect(srv_name, &connection_socket);
+  int port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+  ret = socket_client_connect(srv_name, port, &connection_socket);
   if (ret < 0)
   {
     debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket connect\n");
@@ -53,7 +53,7 @@ int nfi_sck_server_comm_connect ( char * srv_name, char * port_name, int *out_so
     socket_close(connection_socket);
     return -1;
   }
-  ret = socket_recv(connection_socket, port_name, XPN_SERVER_MAX_PORT_NAME);
+  ret = socket_recv(connection_socket, port_name, MAX_PORT_NAME_LENGTH);
   if (ret < 0)
   {
     debug_error("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] ERROR: socket read\n");

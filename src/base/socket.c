@@ -83,7 +83,7 @@ int socket_recv ( int socket, void * buffer, int size )
     return size;
 }
 
-int socket_server_create_new ( int * out_socket, int port )
+int socket_server_create ( int * out_socket, int port )
 {
     int ret = 0;
     struct sockaddr_in server_addr;
@@ -157,7 +157,7 @@ int socket_server_accept ( int socket, int * out_conection_socket )
     return 0;
 }
 
-int socket_client_connect_new ( char * srv_name, int port, int * out_socket )
+int socket_client_connect ( char * srv_name, int port, int * out_socket )
 {
     int client_fd;
     struct sockaddr_in serv_addr;
@@ -208,23 +208,6 @@ int socket_close ( int socket )
 
     return ret;
 }
-
-
- //////////////////////////////////////////
-
-int socket_server_create ( int *out_socket )
-{
-    int port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
-    return socket_server_create_new(out_socket, port) ;
-}
-
-int socket_client_connect ( char * srv_name, int *out_socket )
-{
-    int port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
-    return socket_client_connect_new(srv_name, port, out_socket) ;
-}
-
- //////////////////////////////////////////
 
 
 /* ................................................................... */

@@ -29,20 +29,18 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "base/path_misc.h"
-  #include "base/urlstr.h"
-  #include "base/workers.h"
-  #include "nfi_local.h"
-  #include "nfi.h"
-  #include "xpn_server/xpn_server_conf.h"
-  #include "xpn_server/xpn_server_ops.h"
-  #include "nfi.h"
-  #include "nfi_worker.h"
-  #ifdef ENABLE_MPI_SERVER
-  #include "mpi.h"
-  #endif
+     #include "all_system.h"
+     #include "base/utils.h"
+     #include "base/path_misc.h"
+     #include "base/urlstr.h"
+     #include "base/workers.h"
+     #include "base/service_socket.h"
+     #include "nfi_local.h"
+     #include "nfi.h"
+     #include "xpn_server/xpn_server_conf.h"
+     #include "xpn_server/xpn_server_ops.h"
+     #include "nfi.h"
+     #include "nfi_worker.h"
 
 
   /* ... Data structures / Estructuras de datos ........................ */
@@ -67,8 +65,8 @@
     int server_socket; // For sck_server
     #endif
     // server port
-    char port_name [XPN_SERVER_MAX_PORT_NAME];
-    char  srv_name [XPN_SERVER_MAX_PORT_NAME];
+    char port_name [MAX_PORT_NAME_LENGTH];
+    char  srv_name [MAX_PORT_NAME_LENGTH];
 
     // server arguments
     int    argc;

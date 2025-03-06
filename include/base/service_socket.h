@@ -20,51 +20,38 @@
  */
 
 
-#ifndef _WORKERS_COMMON_H_
-#define _WORKERS_COMMON_H_
+#ifndef _SERVICE_SOCKET_H_
+#define _SERVICE_SOCKET_H_
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/debug_msg.h"
+     #include "all_system.h"
+     #include "base/utils.h"
+     #include "base/socket.h"
 
-
+  
   /* ... Const / Const ................................................. */
 
-  #define MAX_THREADS     2048
-  #define MAX_OPERATIONS  1024
-  #define STACK_SIZE     (256*KB)
+     // NS base on sockets
+     #define DEFAULT_XPN_SCK_PORT    3456
+
+     #define SOCKET_ACCEPT_CODE                100
+     #define SOCKET_FINISH_CODE                750
+     #define SOCKET_FINISH_CODE_AWAIT          751
+
+     #ifdef MPI_MAX_PORT_NAME
+        #define MAX_PORT_NAME_LENGTH MPI_MAX_PORT_NAME
+     #else
+        #define MAX_PORT_NAME_LENGTH 256
+     #endif
 
 
-  /* ... Data structures / Estructuras de datos ........................ */
+  /* ... Functions / Funciones ......................................... */
 
-  struct st_th
-  {
-    void   *params;
-    void  (*function)(struct st_th);
+     int sersoc_do_send_recv ( char * srv_name, int port, int req_id, char *res_val ) ;
+     int sersoc_do_send ( char * srv_name, int port, int req_id ) ;
 
-    // server stuff
-    int    id;
-    int    type_op;
-    int    rank_client_id;
-    int    tag_client_id;
-    long   sd;
-    void  *comm;
-    int    close4me;
-    int    server_type;
-
-    // w: worker_ondemand/worker_pool as void *
-    void  *w;
-    // v: original st_th as void *
-    void  *v;
-
-    // client stuff
-    pthread_t        th_worker;
-    pthread_mutex_t  m_wait;
-    pthread_cond_t   c_wait;
-    int              r_wait;
-    int              wait4me;  // (wait4me==1) ? launch + wait : launch
-  };
+     int sersoc_lookup_port_name ( char * srv_name, char * port_name, int socket_accept_code ) ;
 
 
   /* ................................................................... */

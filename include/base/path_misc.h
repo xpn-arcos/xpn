@@ -30,8 +30,9 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/string_misc.h"
+     #include "all_system.h"
+     #include "base/string_misc.h"
+     #include <libgen.h>
 
 
   /* ... Functions / Funciones ......................................... */

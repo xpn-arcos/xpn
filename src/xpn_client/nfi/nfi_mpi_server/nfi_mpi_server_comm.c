@@ -136,12 +136,14 @@ int nfi_mpi_server_comm_connect ( char *srv_name, char *port_name, MPI_Comm *out
     if (rank == 0)
     {
         err = 0;
-        ret = socket_client_connect(srv_name, &connection_socket);
+        int port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+        ret = socket_client_connect(srv_name, port, &connection_socket);
         if (ret < 0)
 	{
                 // Do one retry in 1 second
                 sleep(1);
-                ret = socket_client_connect(srv_name, &connection_socket);
+                int port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+                ret = socket_client_connect(srv_name, port, &connection_socket);
                 if (ret < 0) {
                     debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket connect\n");
                     err = -1;

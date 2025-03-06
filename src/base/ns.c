@@ -1,3 +1,4 @@
+
 /*
  *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
@@ -79,7 +80,6 @@ int ns_publish (char *dns_file, char *protocol, char *param_srv_name, char *srv_
   fclose(dns_fd);
 
   debug_info("[NS] [ns_publish] >> End\n");
-
   return 0;
 }
 
@@ -173,7 +173,7 @@ int ns_lookup (char *protocol, char *param_srv_name, char *srv_ip, char *port_na
       strcpy(dns_file, SCK_SERVER_DNS_FILE_DEFAULT);
     }
     else if (strcmp(protocol, "mq_server") == 0) {
-      strcpy(dns_file, SCK_SERVER_DNS_FILE_DEFAULT);
+      strcpy(dns_file, MQ_SERVER_DNS_FILE_DEFAULT);
     }
     else {
       printf("Unrecognized protocol '%s' !!\n", protocol) ;

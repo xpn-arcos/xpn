@@ -22,7 +22,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "workers_ondemand.h"
+   #include "workers_ondemand.h"
 
 
 /* ... Auxiliar functions / Funciones auxiliares ......................................... */
@@ -203,7 +203,7 @@ void workers_ondemand_destroy ( worker_ondemand_t *w )
   pthread_mutex_unlock(&(w->m_worker));
 
   // destroy resources
-  debug_info("[WORKERS_ONDEMAND] [workers_ondemand_destroy] destroy resocurces\n");
+  debug_info("[WORKERS_ONDEMAND] [workers_ondemand_destroy] destroy resources\n");
 
   pthread_cond_destroy  (&(w->c_worker));
   pthread_cond_destroy  (&(w->c_nworkers));
@@ -214,3 +214,4 @@ void workers_ondemand_destroy ( worker_ondemand_t *w )
 
 
 /* ................................................................... */
+

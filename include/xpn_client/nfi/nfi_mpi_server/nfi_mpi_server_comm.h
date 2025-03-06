@@ -33,6 +33,7 @@
   #include "base/utils.h"
   #include "base/ns.h"
   #include "base/socket.h"
+  #include "base/service_socket.h"
   #include "xpn_server/xpn_server_ops.h"
   #include "mpi.h"
 

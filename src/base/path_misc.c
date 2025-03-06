@@ -23,13 +23,11 @@
    /* ... Include / Inclusion ........................................... */
 
       #include "base/path_misc.h"
-      #include <libgen.h>
 
 
    /* ... Functions / Funciones ......................................... */
 
-      //calculo del numero de servidor
-      int hash(const char *path, int nServ, int isfile)
+      int hash ( const char *path, int nServ, int isfile )
       {
         int i,max;
         int unsigned num;
@@ -53,7 +51,7 @@
      }
 
 
-      int getFirstDir(char *dir, char *path)
+      int getFirstDir ( char *dir, char *path )
       {
         int i, j;
 
@@ -89,7 +87,7 @@
 
       int getSizeFactor ( char *name )
       {
-        switch(name[strlen(name)-1] )
+        switch (name[strlen(name)-1])
 	{
                 case 'K':
                 case 'k':
@@ -121,29 +119,31 @@
       }
 
 
-      int getNameFile(char *file, char *dir)
+      int getNameFile ( char *file, char *dir )
       {
       	int i,j;
 
       	i = strlen(dir);
-      		if(i == 0){
+    	if (i == 0) {
       		file[0]='\0';
       		return 0; /* ? */
       	}
 
-      	while((i>=0)&&(dir[i] == '/'))
+      	while ((i>=0)&&(dir[i] == '/')) {
       		i--;
-      	if(i == 0){
+	}
+      	if (i == 0) {
       		file[0]='\0';
       		return 0; /* ? */
       	}
 
       	/* */
       	j = i;
-      	while((j>=0)&&(dir[j] != '/'))
+      	while ((j>=0)&&(dir[j] != '/')) {
       		j--;
+	}
 
-      	if(dir[j] == '/'){
+      	if (dir[j] == '/') {
       		j++;
       	}
 
@@ -156,20 +156,24 @@
       }
 
 
-      int getNamePart(char *part, char *dir)
+      int getNamePart ( char *part, char *dir )
       {
       	int i,j;
 
-      	//Printf("original dir = %s\n", dir);
-      	if(dir[0] != '/')
-      		return -1;
-      	i =1;
-      	while((dir[i] != '\0')&&(dir[i] != '/'))
+      	// Printf("original dir = %s\n", dir);
+      	if (dir[0] != '/') {
+      	    return -1;
+	}
+
+      	i = 1;
+      	while((dir[i] != '\0')&&(dir[i] != '/')) {
       		i++;
+	}
+
       	strncpy(part, dir+1, i-1);
       	part[i-1] = '\0';
       	j = 0;
-      	while(dir[i] != '\0'){
+      	while (dir[i] != '\0') {
       		dir[j] = dir[i];
       		j++;
       		i++;
