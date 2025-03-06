@@ -110,13 +110,10 @@
     #endif
   #endif
 
-  #if defined(HAVE_MPI_H)
-    #include <mpi.h>
-  #endif
-
-  // TODO: within former define...
   #ifdef ENABLE_MPI_SERVER
-  #include "mpi.h"
+    #if defined(HAVE_MPI_H)
+      #include <mpi.h>
+    #endif
   #endif
 
   #if defined(HAVE_MOSQUITTO_H)
@@ -126,7 +123,7 @@
 
   /* ... Const / Const ................................................. */
 
-  //Common sizes
+  // Common sizes
   #ifndef KB
     #define KB  (1024)
   #endif
@@ -151,7 +148,7 @@
     #define LARGEFILE_SOURCE 1
   #endif
 
-  //Other definitions
+  // Other definitions
   #if !defined(NULL_DEVICE_PATH)
     #define NULL_DEVICE_PATH  "/dev/null"
   #endif
@@ -183,12 +180,8 @@
     #define O_ASYNC          020000
   #endif
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
-  
 
   /* ................................................................... */
 
 #endif /* _ALL_H_SYSTEM_H */
+

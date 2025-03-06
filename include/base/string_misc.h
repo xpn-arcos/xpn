@@ -30,13 +30,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "all_system.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -122,3 +116,4 @@
   #endif
 
 #endif /* _STRING_MISC_H */
+

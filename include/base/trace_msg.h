@@ -30,15 +30,9 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "string_misc.h"
-  #include "trace_tags.h"
-
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "all_system.h"
+     #include "string_misc.h"
+     #include "trace_tags.h"
 
 
   /* ... Functions / Funciones ......................................... */

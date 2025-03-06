@@ -63,13 +63,11 @@
     pthread_mutex_t  m_wait;
     pthread_cond_t   c_wait;
     int              r_wait;
-    int              wait4me;  //  (wait4me==1) ? launch + wait : launch
+    int              wait4me;  // (wait4me==1) ? launch + wait : launch
   };
-
-
-  /* ... Functions / Funciones ......................................... */
 
 
   /* ................................................................... */
 
 #endif
+
