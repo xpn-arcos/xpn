@@ -97,6 +97,7 @@ XPN_HEADER= 		@top_srcdir@/include/xpn_client/xpn.h
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_opendir.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_open.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_cwd.h \
+			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_conf_reader.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_init.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_opendir.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_open.h \
@@ -197,6 +198,7 @@ XPN_CORE_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.c
 
 XPN_POLICY_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_conf_reader.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \
