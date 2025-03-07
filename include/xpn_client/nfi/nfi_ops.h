@@ -36,29 +36,29 @@
 
   /* ... Const / Const ................................................. */
 
-  enum nfi_work{
-    noop        = -1,
-    op_open     =  0,
-    op_create   =  1,
-    op_read     =  2,
-    op_write    =  3,
-    op_close    =  4,
-    op_remove   =  5,
-    op_rename   =  6,
-    op_getattr  =  7,
-    op_setattr  =  8,
+     enum nfi_work{
+       noop        = -1,
+       op_open     =  0,
+       op_create   =  1,
+       op_read     =  2,
+       op_write    =  3,
+       op_close    =  4,
+       op_remove   =  5,
+       op_rename   =  6,
+       op_getattr  =  7,
+       op_setattr  =  8,
 
-    op_mkdir    = 20,
-    op_rmdir    = 21,
-    op_opendir  = 22,
-    op_readdir  = 23,
-    op_closedir = 24,
+       op_mkdir    = 20,
+       op_rmdir    = 21,
+       op_opendir  = 22,
+       op_readdir  = 23,
+       op_closedir = 24,
 
-    op_statfs   = 60,
+       op_statfs   = 60,
 
-    op_read_mdata  = 70,
-    op_write_mdata = 71,
-  };
+       op_read_mdata  = 70,
+       op_write_mdata = 71
+     };
 
 
   /* ... Functions / Funciones ......................................... */
