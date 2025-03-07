@@ -105,7 +105,7 @@ IFLAGS="-I../../bin/mosquitto/include       "
 IFLAGS+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client    -I../../../xpn/include/base "
 IFLAGS+="-I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
 
-LFLAGS="-L../../bin/mosquitto/lib        -L../../xpn/lib "
+LFLAGS="-L../../bin/mosquitto/lib         -L../../xpn/lib "
 LFLAGS+="-L../../../bin/mosquitto/lib     -L../../../xpn/lib "
 LFLAGS+="-L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
 

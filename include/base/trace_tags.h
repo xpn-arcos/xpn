@@ -30,18 +30,12 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
+     #include "all_system.h"
 
 
   /* ... Consts / Constantes ........................................... */
 
-  #define  SPOT __LINE__,__FILE__,getpid(),0
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
+     #define  SPOT __LINE__,__FILE__,getpid(),0
 
 
   /* ................................................................... */
@@ -51,3 +45,4 @@
   #endif
 
 #endif
+

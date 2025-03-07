@@ -30,22 +30,15 @@
 
   /* ... Include / Inclusion ........................................... */
 
+     #include <dlfcn.h>
+     #include <dirent.h>
+     #include <stdlib.h>
+     #include <sys/vfs.h>
 
-  #include <dlfcn.h>
-  #include <dirent.h>
-  #include <stdlib.h>
-  #include <sys/vfs.h>
+     #include <features.h>
+     #include <sys/stat.h>
 
-  #include <features.h>
-  #include <sys/stat.h>
-
-  #include "utils.h"
-
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "utils.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -151,3 +144,4 @@
   #endif
 
 #endif
+

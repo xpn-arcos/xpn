@@ -25,13 +25,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "xpn_simple/xpn_simple_lib.h"
-
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "xpn_simple/xpn_simple_lib.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -71,3 +65,4 @@
   /* ................................................................... */
 
 #endif
+

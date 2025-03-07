@@ -30,18 +30,11 @@
 
   /* ... Include / Inclusion ........................................... */
   
-  #include <sys/types.h>
-  #include <sys/stat.h>
-  #include <stdio.h>
-  #include <dirent.h>
-  //#include <sys/uio.h>
+     #include <sys/types.h>
+     #include <sys/stat.h>
+     #include <stdio.h>
+     #include <dirent.h>
   
-
-  /* ... Const / Const ................................................. */
-
-  
-  /* ... Data structures / Estructuras de datos ........................ */
-
 
   /* ... Functions / Funciones ......................................... */
 
@@ -155,3 +148,4 @@
   #endif
 
 #endif
+
