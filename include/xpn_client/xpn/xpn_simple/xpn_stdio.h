@@ -50,12 +50,9 @@
   #include <xpn.h>
 
 
-  /* ... Const / Const ................................................. */
-
-
   /* ... Data structures / Estructuras de datos ........................ */
 
-  extern struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
+     extern struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
 
 
   /* ... Functions / Funciones ......................................... */
@@ -87,3 +84,4 @@
   #endif
 
 #endif
+

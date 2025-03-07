@@ -24,7 +24,7 @@
 # Header
 echo ""
 echo " mq_server.sh"
-echo " -------------"
+echo " ------------"
 echo ""
 
 # Default configuration
