@@ -19,7 +19,6 @@
  *
  */
 
-
 #ifndef _XPN_H
 #define _XPN_H
 

@@ -28,206 +28,216 @@
 
 /* ... Functions / Funciones ......................................... */
 
-   void xpn_server_params_show ( xpn_server_param_st *params )
-   {
-        debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show] >> Begin\n", params->rank);
+void xpn_server_params_show(xpn_server_param_st * params)
+{
+    debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show] >> Begin\n", params->rank);
 
-        printf(" | * MPI server current configuration:\n");
+    printf(" | * XPN server current configuration:\n");
 
-        // * server_type
-        if (params->server_type == XPN_SERVER_TYPE_MPI) {
-            printf(" |\t-s  <int>:\tmpi_server\n");
-        }
-        else
-        if (params->server_type == XPN_SERVER_TYPE_SCK) {
-            printf(" |\t-s  <int>:\tsck_server\n");
-        }
-        else {
-            printf(" |\t-s  <int>:\tError: unknown\n");
-        }
+    // * server_type
+    if (params->server_type == XPN_SERVER_TYPE_MPI) {
+        printf(" |\t-s  <int>:\tmpi_server\n");
+    } else
+    if (params->server_type == XPN_SERVER_TYPE_SCK) {
+        printf(" |\t-s  <int>:\tsck_server\n");
+    } else {
+        printf(" |\t-s  <int>:\tError: unknown\n");
+    }
 
-        // * threads
-        if (params->thread_mode_connections == TH_NOT) {
-            printf(" |\t-t  <int>:\tWithout threads\n");
-        }
-        else
-        if (params->thread_mode_connections == TH_POOL) {
-            printf(" |\t-t  <int>:\tThread Pool Activated\n");
-        }
-        else
-        if (params->thread_mode_connections == TH_OP) {
-            printf(" |\t-t  <int>:\tThread on demand\n");
-        }
-        else {
-            printf(" |\t-t  <int>:\tError: unknown\n");
-        }
+    // * threads
+    if (params->thread_mode_connections == TH_NOT) {
+        printf(" |\t-t  <int>:\tWithout threads\n");
+    } else
+    if (params->thread_mode_connections == TH_POOL) {
+        printf(" |\t-t  <int>:\tThread Pool Activated\n");
+    } else
+    if (params->thread_mode_connections == TH_OP) {
+        printf(" |\t-t  <int>:\tThread on demand\n");
+    } else {
+        printf(" |\t-t  <int>:\tError: unknown\n");
+    }
 
-        // * shutdown_file
-        printf(" |\t-f  <path>:\t'%s'\n",   params->shutdown_file);
-        // * host
-        printf(" |\t-h  <host>:\t'%s'\n",   params->srv_name);
-        // * await
-        if (params->await_stop == 1){
-          printf(" |\t-w  await true\n");
-        }
+    // use of mqtt
+    if (params->mosquitto_mode == 1) {
+        printf(" |\t-m <mqtt_qos>:\t%d\n", params->mosquitto_qos);
+    }
 
-        debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show] << End\n", params->rank);
-   }
+    // * shutdown_file
+    printf(" |\t-f  <path>:\t'%s'\n", params->shutdown_file);
 
-   void xpn_server_params_show_usage ( void )
-   {
-     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show_usage] >> Begin\n", -1) ;
+    // * host
+    printf(" |\t-h  <host>:\t'%s'\n", params->srv_name);
 
-     printf("Usage:\n") ;
-     printf("\t-s  <server_type>:\n") ;
-     printf("\t        mpi (for MPI server)\n") ;
-     printf("\t        sck (for socket server)\n") ;
-     printf("\t-t  <int>:\n") ;
-     printf("\t        0 (without thread)\n") ;
-     printf("\t        1 (thread pool)\n") ;
-     printf("\t        2 (on demand)\n") ;
-     printf("\t-f  <path>:\n") ;
-     printf("\t        file of servers to be shutdown\n") ;
-     printf("\t-h  <host>:\n") ;
-     printf("\t        host server to be shutdown\n") ;
-     printf("\t-w      await for servers to stop\n") ;
-     printf("\t/?      show usage\n") ;
-     printf("\n") ;
-     printf("\tImportant: if server_type == sck, then -t 0 (without thread)\n") ;
+    // * await
+    if (params->await_stop == 1) {
+        printf(" |\t-w  await true\n");
+    }
 
-     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show_usage] << End\n", -1) ;
-   }
+    debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show] << End\n", params->rank);
+}
 
-   int xpn_server_params_get ( xpn_server_param_st *params, int argc, char *argv[] )
-   {
-     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] >> Begin\n", params->rank);
+void xpn_server_params_show_usage(void)
+{
+    debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show_usage] >> Begin\n", -1);
 
-     // set default values
-     params->argc                    = argc;
-     params->argv                    = argv;
-     params->size                    = 0;
-     params->rank                    = 0;
-     params->thread_mode_connections = TH_NOT;
-     params->thread_mode_operations  = TH_NOT;
-     params->server_type             = XPN_SERVER_TYPE_SCK;
-     params->await_stop              = 0;
-     strcpy(params->port_name, "");
-     strcpy(params->srv_name,  "");
-     ns_get_hostname(params->srv_name);
+    printf("Usage:\n");
+    printf("\t-s  <server_type>:   mpi (for mpi server); sck (for sck server)\n");
+    printf("\t-t  <int>:           0 (without thread); 1 (thread pool); 2 (on demand)\n");
+    printf("\t-f  <path>:          file of servers to be shutdown\n");
+    printf("\t-h  <host>:          host server to be shutdown\n");
+    printf("\t-w                   await for servers to stop\n");
+    printf("\t-m  <int>:           0 (QoS 0); 1 (QoS 1); 2 (QoS 2)\n");
 
-     #ifdef ENABLE_MPI_SERVER
-     params->server_type             = XPN_SERVER_TYPE_MPI;
-     params->thread_mode_connections = TH_POOL;
-     params->thread_mode_operations  = TH_POOL;
-     #endif
+    debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_show_usage] << End\n", -1);
+}
 
-     // update user requests
-     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] Get user configuration\n", params->rank);
+int xpn_server_params_get(xpn_server_param_st * params, int argc, char * argv[])
+{
+    debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] >> Begin\n", params->rank);
 
-     for (int i=0; i<argc; i++)
-     {
-          switch (argv[i][0])
-          {
-              case '/':
-              case '-':
-                   switch (argv[i][1])
-                   {
-                      case 'f':
-                           if (NULL != argv[i+1]) {
-                                strcpy(params->shutdown_file, argv[i+1]);
-                           }
-                           i++;
-                           break;
+    // set default values
+    params->argc = argc;
+    params->argv = argv;
 
-                      case 't':
-                           if ((i+1) < argc)
-                           {
-                             if (isdigit(argv[i+1][0]))
+    params->size = 0;
+    params->rank = 0;
+
+    params->thread_mode_connections = TH_NOT;
+    params->thread_mode_operations = TH_NOT;
+    params->server_type = XPN_SERVER_TYPE_SCK;
+    #ifdef ENABLE_MPI_SERVER
+    params->server_type = XPN_SERVER_TYPE_MPI;
+    #endif
+
+    params->await_stop = 0;
+    strcpy(params->srv_name, "");
+    ns_get_hostname(params->srv_name);
+    strcpy(params->port_name,         "");
+    strcpy(params->port_name_conn,    "");
+    strcpy(params->port_name_no_conn, "");
+
+    // default values for mqtt
+    params->mosquitto_mode = 0;
+    params->mosquitto_qos = 0;
+
+    int qos_mode_mqtt = 0;
+
+    // update user requests
+    debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] Get user configuration\n", params->rank);
+
+    for (int i = 0; i < argc; i++)
+    {
+        switch (argv[i][0])
+        {
+          case '-':
+               switch (argv[i][1])
+               {
+                 case 'f':
+                      if ((i + 1) < argc)
+                           strcpy(params->shutdown_file, argv[i + 1]);
+                      else printf("ERROR: empty shutdown file name.\n");
+                      i++;
+                      break;
+
+                 case 't':
+                      if ((i + 1) < argc)
+                      {
+                         if (isdigit(argv[i + 1][0]))
+                         {
+                             int thread_mode_aux = utils_str2int(argv[i + 1], TH_NOT);
+                             if ((thread_mode_aux >= TH_NOT) && (thread_mode_aux <= TH_OP))
                              {
-                                 int thread_mode_aux = atoi(argv[i+1]);
-
-                                 if (thread_mode_aux >= TH_NOT && thread_mode_aux <= TH_OP)
-                                 {
-                                     params->thread_mode_connections = thread_mode_aux;
-                                     params->thread_mode_operations  = thread_mode_aux;
-                                 }
-                                 else {
-                                     printf("ERROR: unknown option %s\n", argv[i+1]);
-                                 }
-                             }
-                             else
+                                 params->thread_mode_connections = thread_mode_aux;
+                                 params->thread_mode_operations = thread_mode_aux;
+                             } else
                              {
-                                 if (strcasecmp("without", argv[i+1]) == 0) {
-                                     params->thread_mode_connections = TH_NOT;
-                                     params->thread_mode_operations  = TH_NOT;
-                                 }
-                                 else if (strcasecmp("pool", argv[i+1]) == 0) {
-                                      params->thread_mode_connections = TH_POOL;
-                                      params->thread_mode_operations  = TH_POOL;
-                                 }
-                                 else if (strcasecmp("on_demand", argv[i+1]) == 0) {
-                                      params->thread_mode_connections = TH_OP;
-                                      params->thread_mode_operations  = TH_OP;
-                                 }
-                                 else {
-                                      printf("ERROR: unknown option %s\n", argv[i+1]);
-                                 }
+                                 printf("ERROR: unknown option -t '%s'\n", argv[i + 1]);
                              }
-                           }
-                           i++;
-                           break;
+                         } else
+                         {
+                             if (strcmp("without", argv[i + 1]) == 0)
+                             {
+                                 params->thread_mode_connections = TH_NOT;
+                                 params->thread_mode_operations = TH_NOT;
+                             } else if (strcmp("pool", argv[i + 1]) == 0)
+                             {
+                                 params->thread_mode_connections = TH_POOL;
+                                 params->thread_mode_operations = TH_POOL;
+                             } else if (strcmp("on_demand", argv[i + 1]) == 0)
+                             {
+                                 params->thread_mode_connections = TH_OP;
+                                 params->thread_mode_operations = TH_OP;
+                             } else
+                             {
+                                 printf("ERROR: unknown option -t '%s'\n", argv[i + 1]);
+                             }
+                         }
+                      }
+                      i++;
+                      break;
 
-                      case 's':
-                           if ((i+1) < argc)
-                           {
-                               if (strcasecmp("mpi", argv[i+1]) == 0) {
-                                   params->server_type = XPN_SERVER_TYPE_MPI;
-                               }
-                               else if (strcasecmp("sck", argv[i+1]) == 0) {
-                                   params->server_type = XPN_SERVER_TYPE_SCK;
-                               }
-                               else {
-                                   printf("ERROR: unknown option %s\n", argv[i+1]);
-                               }
-                           }
-                           i++;
-                           break;
+                 case 's':
+                      if ((i + 1) < argc)
+                      {
+                         if (strcmp("mpi", argv[i + 1]) == 0) {
+                             params->server_type = XPN_SERVER_TYPE_MPI;
+                         }
+     		    else
+     		    if (strcmp("sck", argv[i + 1]) == 0) {
+                             params->server_type = XPN_SERVER_TYPE_SCK;
+                         }
+     		    else {
+                             printf("ERROR: unknown option -s '%s'\n", argv[i + 1]);
+                         }
+                      }
+                      i++;
+                      break;
 
-                      case 'h':
-                           if (NULL != argv[i+1]) {
-                               strcpy(params->srv_name, argv[i+1]);
-                           }
-                           break;
+                 case 'h':
+                      if ((i + 1) < argc)
+                           strcpy(params->srv_name, argv[i + 1]);
+                      else printf("ERROR: empty server name.\n");
+                      i++;
+                      break;
 
-                      case 'w':
-                           params->await_stop = 1;
-                           break;
+                 case 'w':
+                      params->await_stop = 1;
+                      break;
 
-                      case '?':
-                           xpn_server_params_show_usage() ;
-                           break;
+                 case 'm':
+                      qos_mode_mqtt = utils_str2int(argv[i + 1], 0);
+                      if ((qos_mode_mqtt < 0) || (qos_mode_mqtt > 2))
+                      {
+                          printf("ERROR: unknown QoS value for MQTT. Default value 0 selected\n");
+                          qos_mode_mqtt = 0;
+                      }
 
-                      default:
-                           break;
-                   }
-                   break;
+                      params->mosquitto_mode = 1;
+                      params->mosquitto_qos = qos_mode_mqtt;
+                      i++;
+                      break;
 
-               default:
-                   break;
-          }
-     }
+                 default:
+                      break;
+               }
+               break;
 
-     debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] << End\n", params->rank);
+          default:
+              break;
+        }
+    }
 
-     // In sck_server worker for operations has to be sequential because you don't want to have to make a socket per operation.
-     // It can be done because it is not reentrant
-     if ( (XPN_SERVER_TYPE_SCK == params->server_type) && (TH_NOT != params->thread_mode_operations) )
-     {
-	   fprintf(stderr, "Warning: detected (server_type == XPN_SERVER_TYPE_SCK) AND (thread_mode == TH_NOT)\n") ;
-     }
+    // In sck_server worker for operations has to be sequential because you don't want to have to make a socket per operation.
+    // It can be done because it is not reentrant
+    if (params->server_type == XPN_SERVER_TYPE_SCK)
+    {
+        params->thread_mode_operations = TH_NOT;
+    }
 
-     return 1;
-   }
+    debug_info("[Server=%d] [XPN_SERVER_PARAMS] [xpn_server_params_get] << End\n", params->rank);
+
+    return 1;
+}
 
 
 /* ................................................................... */

@@ -25,10 +25,13 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include "all_system.h"
-     #include "workers_common.h"
+  #include "all_system.h"
+  #include "workers_common.h"
 
   
+  /* ... Const / Const ................................................. */
+
+
   /* ... Data structures / Estructuras de datos ........................ */
 
   typedef struct

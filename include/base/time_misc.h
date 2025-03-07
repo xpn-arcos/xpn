@@ -27,54 +27,56 @@
     extern "C" {
   #endif
 
-
+  
   /* ... Include / Inclusion ........................................... */
 
-     #include "all_system.h"
-     #include <sys/time.h>
+  #include "all_system.h"
+  #include <sys/time.h>
 
 
   /* ... Const / Const ................................................. */
 
-     #define USECPSEC    1000000
+  #define USECPSEC    1000000
+
+
+  /* ... Data structures / Estructuras de datos ........................ */
 
 
   /* ... Functions / Funciones ......................................... */
 
-     void TIME_MISC_Timer
-     (
-       struct timeval * t
-     );
+  void TIME_MISC_Timer
+  (
+    struct timeval * t
+  );
 
-     void TIME_MISC_DiffTime
-     (
-       struct timeval * to,
-       struct timeval * tn,
-       struct timeval * dif
-     );
+  void TIME_MISC_DiffTime
+  (
+    struct timeval * to,
+    struct timeval * tn,
+    struct timeval * dif
+  );
 
-     void TIME_MISC_AddTime
-     (
-       struct timeval * to,
-       struct timeval * tn,
-       struct timeval * sum
-     );
+  void TIME_MISC_AddTime
+  (
+    struct timeval * to,
+    struct timeval * tn,
+    struct timeval * sum
+  );
 
-     float TIME_MISC_TimevaltoFloat
-     (
-       struct timeval* timet
-     );
+  float TIME_MISC_TimevaltoFloat
+  (
+    struct timeval* timet
+  );
 
-     float TIME_MISC_TimevaltoMicro
-     (
-       struct timeval* timet
-     );
+  float TIME_MISC_TimevaltoMicro
+  (
+    struct timeval* timet
+  );
 
-     long TIME_MISC_TimevaltoMicroLong
-     (
-       struct timeval* timet
-     );
-
+  long TIME_MISC_TimevaltoMicroLong
+  (
+    struct timeval* timet
+  );
 
   /* ................................................................... */
 
@@ -84,4 +86,3 @@
   #endif
 
 #endif /* _TIME_MISC_H */
-

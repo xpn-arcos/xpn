@@ -22,12 +22,15 @@
 
 /* ... Include / Inclusion ........................................... */
 
-   #include "base/debug_msg.h"
+#include "base/debug_msg.h"
+
+
+/* ... Const / Const ................................................. */
 
 
 /* ... Global variables / Variables globales ........................ */
 
-   int    (*DEBUG_MSG_PrintMsg)(const char *, va_list) = NULL;
+int    (*DEBUG_MSG_PrintMsg)(const char *, va_list) = NULL;
 
 
 /* ... Functions / Funciones ......................................... */
@@ -117,4 +120,3 @@ void DEBUG_MSG_PrintF ( int line, char *name, long pid, int type, char *fto,  ..
 
 
 /* ................................................................... */
-

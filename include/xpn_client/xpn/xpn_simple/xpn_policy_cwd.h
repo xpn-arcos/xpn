@@ -34,6 +34,12 @@
   #include "xpn_cwd.h"
 
 
+  /* ... Const / Const ................................................. */
+
+
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
   /* ... Functions / Funciones ......................................... */
 
   int XpnGetAbsolutePath(const char *path, char *path_part);

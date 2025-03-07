@@ -47,6 +47,15 @@
   // END OF ENABLE_MODULE BLOCK. Do not remove this line. //
 
 
+  /* ... Const / Const ................................................. */
+
+
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
+  /* ... Functions / Funciones ......................................... */
+
+
   /* ................................................................... */
 
 #endif

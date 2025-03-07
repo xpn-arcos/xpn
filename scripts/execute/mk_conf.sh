@@ -52,7 +52,7 @@ usage() {
    echo "           [--replication_level        0] \\"
    echo "           [--part_name        <partition name>] \\"
    echo "           [--storage_path     <server local storage path>] \\"
-   echo "           [--storage_protocol <mpi_server|sck_server>]"
+   echo "           [--storage_protocol <mpi_server|mq_server>]"
    echo "           [--deployment_file  ~/tmp/deploymentfile] \\"
    echo ""
    echo " Deployment file has this format in general:"
@@ -61,21 +61,21 @@ usage() {
    echo " Example:"
    echo "   particion; block_size; replication_level; protocolo ; host     ; path"
    echo "   xpn1     ; 512k      ; 0                ; mpi_server; compute-1; /tmp/"
-   echo "            ;           ;                  ; sck_server; compute-2; /tmp/"
+   echo "            ;           ;                  ; mq_server; compute-2; /tmp/"
    echo "   xpn2     ; 1024k     ; 0                ; mpi_server; compute-3; /tmp/"
-   echo "            ;           ;                  ; sck_server; compute-4; /tmp/"
+   echo "            ;           ;                  ; mq_server; compute-4; /tmp/"
    echo ""
 }
 
 info() {
    echo " * configuration file name: "${CONFNAME}
-   echo " * machinefile:             "${MACHINEFILE}
-   echo " * partition bsize:         "${XPN_PARTITION_BSIZE}
-   echo " * replication level:       "${XPN_REPLICATION_LEVEL}
-   echo " * partition name:          "${XPN_PARTITION_NAME}
-   echo " * storage path:            "${XPN_STORAGE_PATH}
-   echo " * storage protocol:        "${XPN_STORAGE_PROTOCOL}
-   echo " * deployment_file:         "${DEPLOYMENTFILE}
+   echo " * machinefile:      "${MACHINEFILE}
+   echo " * partition bsize:  "${XPN_PARTITION_BSIZE}
+   echo " * replication level:   "${XPN_REPLICATION_LEVEL}
+   echo " * partition name:   "${XPN_PARTITION_NAME}
+   echo " * storage path:     "${XPN_STORAGE_PATH}
+   echo " * storage protocol: "${XPN_STORAGE_PROTOCOL}
+   echo " * deployment_file:  "${DEPLOYMENTFILE}
    echo ""
 }
 
@@ -89,14 +89,14 @@ get_opts() {
 
    while :; do
       case "${1}" in
-         -c | --conf             ) CONFNAME=$2;               shift 2 ;;
-         -m | --machinefile      ) MACHINEFILE=$2;            shift 2 ;;
-         -s | --part_bsize       ) XPN_PARTITION_BSIZE=$2;    shift 2 ;;
-         -r | --replication_level) XPN_REPLICATION_LEVEL=$2;  shift 2 ;;
-         -n | --part_name        ) XPN_PARTITION_NAME=$2;     shift 2 ;;
-         -p | --storage_path     ) XPN_STORAGE_PATH=$2;       shift 2 ;;
-         -x | --storage_protocol ) XPN_STORAGE_PROTOCOL=$2;   shift 2 ;;
-         -d | --deployment_file  ) DEPLOYMENTFILE=$2;         shift 2 ;;
+         -c | --conf             ) CONFNAME=$2;             shift 2 ;;
+         -m | --machinefile      ) MACHINEFILE=$2;          shift 2 ;;
+         -s | --part_bsize       ) XPN_PARTITION_BSIZE=$2;  shift 2 ;;
+         -r | --replication_level) XPN_REPLICATION_LEVEL=$2;   shift 2 ;;
+         -n | --part_name        ) XPN_PARTITION_NAME=$2;   shift 2 ;;
+         -p | --storage_path     ) XPN_STORAGE_PATH=$2;     shift 2 ;;
+         -x | --storage_protocol ) XPN_STORAGE_PROTOCOL=$2; shift 2 ;;
+         -d | --deployment_file  ) DEPLOYMENTFILE=$2;       shift 2 ;;
          -h | --help             ) intro; usage;  exit 0 ;;
          --                      ) shift;         break  ;;
          *                       ) intro; echo " > ERROR: parsing arguments found an error :-/"; usage; exit 1 ;;
@@ -120,14 +120,14 @@ check_opts() {
 
 mk_conf_file_from_args() {
    echo "[partition]"    > ${CONFNAME}
-   echo "bsize = ${XPN_PARTITION_BSIZE}"                        >> ${CONFNAME}
-   echo "replication_level = ${XPN_REPLICATION_LEVEL}"          >> ${CONFNAME}
-   echo "partition_name = ${XPN_PARTITION_NAME}"                >> ${CONFNAME}
+   echo "bsize = ${XPN_PARTITION_BSIZE}"                                        >> ${CONFNAME}
+   echo "replication_level = ${XPN_REPLICATION_LEVEL}"                                        >> ${CONFNAME}
+   echo "partition_name = ${XPN_PARTITION_NAME}"                                        >> ${CONFNAME}
 
    ITER=1
    while read line
    do
-      echo "server_url = ${XPN_STORAGE_PROTOCOL}://${line}/${XPN_STORAGE_PATH}"    >> ${CONFNAME}
+      echo "server_url = ${XPN_STORAGE_PROTOCOL}://${line}/${XPN_STORAGE_PATH}"                                        >> ${CONFNAME}
       ITER=$((${ITER}+1))
    done < <(grep . ${MACHINEFILE})
 }
@@ -211,4 +211,3 @@ else
   mk_conf_file_from_args
 fi
 echo " Done."
-

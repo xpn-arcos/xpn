@@ -32,6 +32,11 @@
   #include "xpn_file.h"
   #include "xpn.h"
 
+  /* ... Const / Const ................................................. */
+
+
+  /* ... Data structures / Estructuras de datos ........................ */
+
 
   /* ... Functions / Funciones ......................................... */
  

@@ -19,7 +19,6 @@
    *
    */
 
-
 #ifndef _XPN_POLICY_INIT_H
 #define _XPN_POLICY_INIT_H
 
@@ -50,4 +49,3 @@
   #endif
 
 #endif
-

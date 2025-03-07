@@ -19,7 +19,6 @@
  *
  */
 
-
 #ifndef _NFI_H
 #define _NFI_H
 
@@ -42,7 +41,7 @@
   #define LOCAL        1
   #define NFS          2
   #define NFS3         3
-  #define SCK_SERVER   9
+  #define MQ_SERVER    9
   #define MPI_SERVER  10
   */
 
@@ -77,6 +76,8 @@
     int xpn_thread;
     int xpn_session_file;
     int xpn_session_dir;
+
+    int keep_connected;     // keep connection between operations
   };
 
   struct nfi_attr_server
@@ -117,10 +118,11 @@
 
   struct nfi_fhandle 
   {
-    int type;                   // file or directory    
-    char *url;                  // url of DIR or FILE     
+    int    type;                // file or directory    
+    char  *url;                 // url of DIR or FILE     
     struct nfi_server *server;  // server       
-    void *priv_fh;              // pointer to private filehandle
+    void  *priv_fh;             // pointer to private filehandle
+    int    has_mqtt;            // has MQTT
   };
 
   // Forward declaration

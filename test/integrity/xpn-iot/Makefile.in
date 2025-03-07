@@ -1,0 +1,35 @@
+
+
+#
+# Definitions
+#
+
+MAKE         = make -s
+CC           = @CC@
+MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
+MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client -L../../../../../bin/mosquitto/lib -L../../../../../bin/mxml/lib64 -I../../../bin/mosquitto/include
+LIBRARIES    = -lxpn @LIBS@
+MYFLAGS      = -O3 -Wall -DPOSIX_THREADS -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE @CPPFLAGS@
+
+
+#
+# Rules
+#
+
+all:  iot-xpn times-train write-iot
+
+write-iot: write-iot.o
+	$(CC)  -o write-iot write-iot.o $(MYLIBPATH) $(LIBRARIES)
+
+times-train: times-train.o
+	$(CC)  -o times-train times-train.o $(MYLIBPATH) $(LIBRARIES)
+
+iot-xpn: iot-xpn.o
+	$(CC)  -o iot-xpn iot-xpn.o $(MYLIBPATH) $(LIBRARIES)
+
+%.o: %.c
+	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
+
+clean:
+	rm -f ./*.o
+	rm -f ./times-train ./iot-xpn ./write-iot
