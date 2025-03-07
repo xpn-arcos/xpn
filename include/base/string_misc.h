@@ -30,7 +30,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
+     #include "all_system.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -116,3 +116,4 @@
   #endif
 
 #endif /* _STRING_MISC_H */
+

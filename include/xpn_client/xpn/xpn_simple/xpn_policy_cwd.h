@@ -30,13 +30,13 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "xpn_cwd.h"
+     #include "all_system.h"
+     #include "xpn_cwd.h"
 
 
   /* ... Functions / Funciones ......................................... */
 
-  int XpnGetAbsolutePath(const char *path, char *path_part);
+     int XpnGetAbsolutePath(const char *path, char *path_part);
 
 
   /* ................................................................... */

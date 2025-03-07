@@ -52,7 +52,7 @@ usage() {
    echo "           [--replication_level        0] \\"
    echo "           [--part_name        <partition name>] \\"
    echo "           [--storage_path     <server local storage path>] \\"
-   echo "           [--storage_protocol <mpi_server|sck_server>]"
+   echo "           [--storage_protocol <mpi_server|sck_server|mq_server>]"
    echo "           [--deployment_file  ~/tmp/deploymentfile] \\"
    echo ""
    echo " Deployment file has this format in general:"
@@ -63,19 +63,19 @@ usage() {
    echo "   xpn1     ; 512k      ; 0                ; mpi_server; compute-1; /tmp/"
    echo "            ;           ;                  ; sck_server; compute-2; /tmp/"
    echo "   xpn2     ; 1024k     ; 0                ; mpi_server; compute-3; /tmp/"
-   echo "            ;           ;                  ; sck_server; compute-4; /tmp/"
+   echo "            ;           ;                  ; mq_server; compute-4; /tmp/"
    echo ""
 }
 
 info() {
    echo " * configuration file name: "${CONFNAME}
-   echo " * machinefile:             "${MACHINEFILE}
-   echo " * partition bsize:         "${XPN_PARTITION_BSIZE}
-   echo " * replication level:       "${XPN_REPLICATION_LEVEL}
-   echo " * partition name:          "${XPN_PARTITION_NAME}
-   echo " * storage path:            "${XPN_STORAGE_PATH}
-   echo " * storage protocol:        "${XPN_STORAGE_PROTOCOL}
-   echo " * deployment_file:         "${DEPLOYMENTFILE}
+   echo " * machinefile:         "${MACHINEFILE}
+   echo " * partition bsize:     "${XPN_PARTITION_BSIZE}
+   echo " * replication level:   "${XPN_REPLICATION_LEVEL}
+   echo " * partition name:      "${XPN_PARTITION_NAME}
+   echo " * storage path:        "${XPN_STORAGE_PATH}
+   echo " * storage protocol:    "${XPN_STORAGE_PROTOCOL}
+   echo " * deployment_file:     "${DEPLOYMENTFILE}
    echo ""
 }
 
@@ -120,9 +120,9 @@ check_opts() {
 
 mk_conf_file_from_args() {
    echo "[partition]"    > ${CONFNAME}
-   echo "bsize = ${XPN_PARTITION_BSIZE}"                        >> ${CONFNAME}
-   echo "replication_level = ${XPN_REPLICATION_LEVEL}"          >> ${CONFNAME}
-   echo "partition_name = ${XPN_PARTITION_NAME}"                >> ${CONFNAME}
+   echo "bsize = ${XPN_PARTITION_BSIZE}"                      >> ${CONFNAME}
+   echo "replication_level = ${XPN_REPLICATION_LEVEL}"        >> ${CONFNAME}
+   echo "partition_name = ${XPN_PARTITION_NAME}"              >> ${CONFNAME}
 
    ITER=1
    while read line
@@ -211,4 +211,3 @@ else
   mk_conf_file_from_args
 fi
 echo " Done."
-

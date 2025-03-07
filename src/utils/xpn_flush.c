@@ -165,7 +165,7 @@
       off64_t ret_1;
       offset_src = 0;
       offset_dest = -blocksize;
-      read_size = 0;
+      read_size = -1;
 
       do
       {
@@ -205,6 +205,7 @@
           perror("lseek: ");
           break;
         }
+
         read_size = filesystem_read(fd_src, buf, buf_len);
         if (read_size <= 0){
           break;
@@ -359,4 +360,6 @@
     return 0;
   }
 
+
 /* ................................................................... */
+

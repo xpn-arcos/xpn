@@ -187,7 +187,6 @@ INCLUDEFLAGS="\
 -I\$(top_srcdir)/include/xpn_server/sck_server/"
 
 
-
 ### BEGIN OF NFS BLOCK. Do not remove this line. ###
 #
 # Defines the necessary variables if nfs is enabled.
@@ -272,7 +271,7 @@ AM_CONDITIONAL([ENABLE_SCK_SERVER], [test "$NFI_SCK_SERVER" = "nfi_sck_server"])
 
 ### BEGIN OF MQTT BLOCK. Do not remove this line. ###
 #
-# Defines the necessary variables if gridftp is enabled.
+# Defines the necessary variables if mq_server is enabled.
 #
 AC_ARG_ENABLE(  [mosquitto],
                 [AS_HELP_STRING([--enable-mosquitto],[Enable mosquitto module.])],
@@ -313,10 +312,11 @@ AC_CONFIG_FILES([ \
       src/bypass/Makefile \
       src/xpn_server/Makefile \
       test/integrity/xpn/Makefile \
+      test/integrity/xpn-iot/Makefile \
+      test/integrity/xpn-conf/Makefile \
       test/integrity/mpi_connect_accept/Makefile \
       test/integrity/bypass_c/Makefile \
       test/integrity/xpn_metadata/Makefile \
-      test/integrity/xpn-conf/Makefile \
       test/performance/xpn/Makefile \
       test/performance/iop/Makefile \
       test/performance/mpi_pingpong/Makefile \

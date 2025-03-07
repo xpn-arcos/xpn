@@ -44,6 +44,7 @@
   #include <stdint.h>
   #include <math.h>
   #include <ctype.h>
+  #include <stddef.h>
 
   #include <sys/types.h>
   #include <sys/stat.h>
@@ -109,12 +110,11 @@
     #endif
   #endif
 
-  #if defined(HAVE_MPI_H)
-    #include <mpi.h>
-  #endif
-
   #ifdef ENABLE_MPI_SERVER
-  #include "mpi.h"
+      #include <mpi.h>
+  #endif
+  #if defined(HAVE_MPI_H)
+      #include <mpi.h>
   #endif
 
   #if defined(HAVE_MOSQUITTO_H)
@@ -185,3 +185,4 @@
   /* ................................................................... */
 
 #endif /* _ALL_H_SYSTEM_H */
+

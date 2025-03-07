@@ -19,6 +19,7 @@
  *
  */
 
+
 /* ... Include / Inclusion ........................................... */
 
 #include <dirent.h>
@@ -58,8 +59,7 @@ int old_size, new_size;
 
 /* ... Functions / Funciones ......................................... */
 
-int copy(char *entry, int is_file, int blocksize, int replication_level, int rank, int size)
-{
+int copy(char *entry, int is_file, int blocksize, int replication_level, int rank, int size) {
     struct stat st;
     int res;
     off64_t ret_2;
@@ -259,8 +259,7 @@ int copy(char *entry, int is_file, int blocksize, int replication_level, int ran
     return 0;
 }
 
-int list(char *dir_name, int blocksize, int replication_level, int rank, int size)
-{
+int list(char *dir_name, int blocksize, int replication_level, int rank, int size) {
     int res;
     DIR *dir = NULL;
     struct stat stat_buf;
@@ -380,8 +379,7 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
     return 0;
 }
 
-void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_rank, int *new_rank)
-{
+void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_rank, int *new_rank) {
     // Get ip and hostname
     char *hostip = ns_get_host_ip();
     char hostname[HOST_NAME_MAX];
@@ -432,8 +430,7 @@ cleanup_calculate_ranks_sizes:
 }
 
 // TODO: think if MPI_Abort is the desired error handler
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     int rank, size, old_rank, new_rank;
     int replication_level = 0;
     int blocksize = 524288;
@@ -553,4 +550,3 @@ int main(int argc, char *argv[])
 }
 
 /* ................................................................... */
-

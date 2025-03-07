@@ -42,3 +42,4 @@ src/xpn_server/Makefile.in
 src/xpn_server/Makefile
 src/.vscode
 .vscode/settings.json
+test/integrity/xpn/circs

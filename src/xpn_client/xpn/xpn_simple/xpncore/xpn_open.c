@@ -19,6 +19,7 @@
  *
  */
 
+
 #include "xpn/xpn_simple/xpn_open.h"
 
 #include "xpn/xpn_simple/xpn_opendir.h"
@@ -88,6 +89,7 @@ int XpnSearchSlotFile(int pd, char * path, struct xpn_fh * vfh, struct xpn_metad
 
     return res;
 }
+
 
 
 int XpnSearchFile(const char * path) 
@@ -337,6 +339,7 @@ error_xpn_internal_open:
 }
 
 
+
 int xpn_internal_resize(__attribute__((__unused__)) char * path, __attribute__((__unused__)) struct xpn_fh ** vfh, __attribute__((__unused__)) int size) 
 {
     // TODO
@@ -344,11 +347,13 @@ int xpn_internal_resize(__attribute__((__unused__)) char * path, __attribute__((
 }
 
 
+
 int xpn_internal_fresize(__attribute__((__unused__)) int fd, __attribute__((__unused__)) int size) 
 {
     // TODO
     return 0;
 }
+
 
 
 int xpn_internal_remove(const char * path) 
@@ -523,6 +528,7 @@ int xpn_simple_unlink(const char * path)
     res = xpn_internal_remove(path);
 
     XPN_DEBUG_END_ARGS1(path)
+
     return res;
 }
 
@@ -636,6 +642,7 @@ int xpn_simple_rename(const char * path, const char * newpath)
 }
 
 
+
 int xpn_simple_fstat(int fd, struct stat * sb) 
 {
     int res;
@@ -655,6 +662,7 @@ int xpn_simple_fstat(int fd, struct stat * sb)
 
     return res;
 }
+
 
 
 int xpn_simple_stat(const char * path, struct stat * sb)
@@ -699,11 +707,13 @@ int xpn_simple_stat(const char * path, struct stat * sb)
 }
 
 
+
 int xpn_simple_chown(__attribute__((__unused__)) const char * path, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group) 
 {
     // TODO
     return 0;
 }
+
 
 
 int xpn_simple_fchown(int __attribute__((__unused__)) fd, __attribute__((__unused__)) uid_t owner, __attribute__((__unused__)) gid_t group) 
@@ -713,11 +723,13 @@ int xpn_simple_fchown(int __attribute__((__unused__)) fd, __attribute__((__unuse
 }
 
 
+
 int xpn_simple_chmod(__attribute__((__unused__)) const char * path, __attribute__((__unused__)) mode_t mode) 
 {
     // TODO
     return 0;
 }
+
 
 
 int xpn_simple_fchmod(__attribute__((__unused__)) int fd, __attribute__((__unused__)) mode_t mode) 
@@ -727,11 +739,13 @@ int xpn_simple_fchmod(__attribute__((__unused__)) int fd, __attribute__((__unuse
 }
 
 
+
 int xpn_simple_truncate(__attribute__((__unused__)) const char * path, __attribute__((__unused__)) off_t length) 
 {
     // TODO
     return 0;
 }
+
 
 
 int xpn_simple_ftruncate(__attribute__((__unused__)) int fd, __attribute__((__unused__)) off_t length) 
@@ -741,8 +755,8 @@ int xpn_simple_ftruncate(__attribute__((__unused__)) int fd, __attribute__((__un
 }
 
 
-int xpn_simple_dup(int fd)
-{
+
+int xpn_simple_dup(int fd) {
     int i;
 
     if ((fd > XPN_MAX_FILE - 1) || (fd < 0)) 
@@ -772,8 +786,8 @@ int xpn_simple_dup(int fd)
 }
 
 
-int xpn_simple_dup2(int fd, int fd2)
-{
+
+int xpn_simple_dup2(int fd, int fd2) {
     if ((fd > XPN_MAX_FILE - 1) || (fd < 0)) 
     {
         return -1;
@@ -796,4 +810,3 @@ int xpn_simple_dup2(int fd, int fd2)
 
     return 0;
 }
-
