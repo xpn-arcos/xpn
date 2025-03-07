@@ -85,36 +85,44 @@
       }
 
 
-      int getSizeFactor ( char *name )
+      long getSizeFactor ( char *name )
       {
         switch (name[strlen(name)-1])
 	{
-                case 'K':
-                case 'k':
-                        return atoi(name)*KB;
-                case 'M':
-                case 'm':
-                        return atoi(name)*MB;
-                case 'G':
-                case 'g':
-                        return atoi(name)*GB;
-                case 'B':
-                case 'b':
-                        switch(name[strlen(name)-2]){
-                                case 'K':
-                                case 'k':
-                                        return atoi(name)*KB;
-                                case 'M':
-                                case 'm':
-                                        return atoi(name)*MB;
-                                case 'G':
-                                case 'g':
-                                        return atoi(name)*GB;
-                                default:
-                                        return 1;
-                        }
-                default:
-                        return 1;
+            case 'K':
+            case 'k':
+                 return atoi(name)*KB;
+
+            case 'M':
+            case 'm':
+                 return atoi(name)*MB;
+
+            case 'G':
+            case 'g':
+                 return atoi(name)*GB;
+
+            case 'B':
+            case 'b':
+                 switch (name[strlen(name)-2])
+		 {
+                     case 'K':
+                     case 'k':
+                          return atoi(name)*KB;
+
+                     case 'M':
+                     case 'm':
+                          return atoi(name)*MB;
+
+                     case 'G':
+                     case 'g':
+                          return atoi(name)*GB;
+
+                     default:
+                          return 1;
+                 }
+
+            default:
+                 return atoi(name);
         }
       }
 
