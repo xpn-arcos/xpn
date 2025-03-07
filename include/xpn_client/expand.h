@@ -25,24 +25,11 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "xpn/xpn_lib.h"
+     #include "all_system.h"
+     #include "xpn/xpn_lib.h"
 
   
-  /* ... Const / Const ................................................. */
-
-  /* ENVIROMENT VARIABLES:
-   * -  XPN_CONF
-   * -  XPN_PROFILE
-   */
-
-  
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
-
-
   /* ................................................................... */
 
 #endif
+
