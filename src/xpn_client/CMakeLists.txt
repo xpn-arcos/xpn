@@ -62,6 +62,12 @@ set (NFI_SCK_SERVER_OBJECTS	nfi/nfi_sck_server/nfi_sck_server.c
 				nfi/nfi_sck_server/nfi_sck_server_err.c
     )
 ### END OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF NFI_MQ_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+set (NFI_MQ_SERVER_OBJECTS	nfi/nfi_mq_server/nfi_mq_server.c
+				nfi/nfi_mq_server/mq_server_comm.c
+				nfi/nfi_mq_server/nfi_mq_server_err.c
+    )
+### END OF NFI_MQ_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_IOPROXY_RPC_OBJECTS BLOCK. Do not remove this line. ###
 set (NFI_IOPROXY_RPC_OBJECTS	nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc.c
 				nfi/nfi_ioproxy-rpc/nfi_ioproxy-rpc_err.c
@@ -107,6 +113,11 @@ if (ENABLE_GRIDFTP)
 	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_GRIDFTP_OBJECTS})
 endif (ENABLE_GRIDFTP)
 ### END OF ENABLE_GRIDFTP_OBJECTS BLOCK. Do not remove this line. ###
+### BEGIN OF ENABLE_MQ_SERVER_OBJECTS BLOCK. Do not remove this line. ###
+if (ENABLE_MQ_SERVER)
+	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_MQ_SERVER_OBJECTS})
+endif (ENABLE_MQ_SERVER)
+### END OF ENABLE_MQ_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF ENABLE_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 if (ENABLE_MPI_SERVER)
 	set (NFI_OBJECTS ${NFI_OBJECTS} ${NFI_MPI_SERVER_OBJECTS})
@@ -146,7 +157,7 @@ set (XPN_CORE_OBJECTS	xpn/xpn_simple/xpncore/xpn_cwd.c
 #			xpn/xpn_simple/xpncore/xpn_setvbuf.c
     )
 set (XPN_POLICY_OBJECTS	xpn/xpn_simple/policy/xpn_policy_cwd.c
-			xpn/xpn_simple/policy/xpn_conf_reader.c
+	                xpn/xpn_simple/policy/xpn_conf_reader.c
 			xpn/xpn_simple/policy/xpn_policy_init.c
 			xpn/xpn_simple/policy/xpn_policy_open.c
 			xpn/xpn_simple/policy/xpn_policy_opendir.c

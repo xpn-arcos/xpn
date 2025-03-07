@@ -8,8 +8,8 @@
  CC           = @CC@
  MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/ -I../../../include/xpn_client/nfi -I../../../include/xpn_client/nfi/nfi_local -I../../../include/xpn_client/nfi/nfi_xpn_server -I../../../include/xpn_client/xpn/xpn_simple
  MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
- LIBRARIES    = -lxpn -lpthread -ldl -lmosquitto
- MYFLAGS      = -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H
+ LIBRARIES    = -lxpn @LIBS@
+ MYFLAGS      = -O2 -Wall -DPOSIX_THREADS -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE @CPPFLAGS@
 
 
 #

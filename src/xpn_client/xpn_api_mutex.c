@@ -25,13 +25,14 @@
    #include "xpn_api_mutex.h"
 
 
-/* ... Macros / Macros ............................................... */
+/* ... Global vars / Variables globales .............................. */
 
 #ifdef _REENTRANT
 
   pthread_mutex_t xpn_api_mutex = PTHREAD_MUTEX_INITIALIZER ;
 
 #endif
+
 
 /* ................................................................... */
 

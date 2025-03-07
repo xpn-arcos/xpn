@@ -37,7 +37,6 @@
 
   #define XPN_META_SIZE (4*KB)
 
-
   /* ... Data structures / Estructuras de datos ........................ */
 
   enum xpn_work{

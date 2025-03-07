@@ -23,6 +23,7 @@
 
    #include "nfi_mpi_server_comm.h"
 
+
 /* ... Functions / Funciones ......................................... */
 
 int nfi_mpi_server_comm_init ( int xpn_thread )
@@ -40,7 +41,8 @@ int nfi_mpi_server_comm_init ( int xpn_thread )
         // TODO: server->argc, server->argv from upper layers?
 
         // Threads disable
-        if (!xpn_thread) {
+        if (!xpn_thread)
+	{
             debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_init] MPI Init without threads\n");
 
             ret = MPI_Init(NULL, NULL);
@@ -113,7 +115,7 @@ int nfi_mpi_server_comm_destroy ( void )
 int nfi_mpi_server_comm_connect ( char *srv_name, char *port_name, MPI_Comm *out_comm )
 {
     int ret, err;
-    int connection_socket;
+    int connection_socket, port;
     int rank;
 
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] >> Begin\n");
@@ -135,48 +137,47 @@ int nfi_mpi_server_comm_connect ( char *srv_name, char *port_name, MPI_Comm *out
     // Send connect intention
     if (rank == 0)
     {
-        err = 0;
-        int port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
-        ret = socket_client_connect(srv_name, port, &connection_socket);
-        if (ret < 0)
-	{
+            err = 0;
+            port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
+            ret = socket_client_connect(srv_name, port, &connection_socket);
+            if (ret < 0)
+	    {
                 // Do one retry in 1 second
                 sleep(1);
-                int port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
                 ret = socket_client_connect(srv_name, port, &connection_socket);
                 if (ret < 0) {
                     debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket connect\n");
                     err = -1;
                     goto mpi_comm_socket_finish;
                 }
-        }
+            }
 
-        int buffer = SOCKET_ACCEPT_CODE;
-        ret = socket_send(connection_socket, &buffer, sizeof(buffer));
-        if (ret < 0) {
+            int buffer = SOCKET_ACCEPT_CODE_MPI;
+            ret = socket_send(connection_socket, &buffer, sizeof(buffer));
+            if (ret < 0) {
                 debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket send\n");
                 socket_close(connection_socket);
                 err = -1;
                 goto mpi_comm_socket_finish;
-        }
+            }
 
-        ret = socket_recv(connection_socket, port_name, MPI_MAX_PORT_NAME);
-        if (ret < 0) {
+            ret = socket_recv(connection_socket, port_name, MPI_MAX_PORT_NAME);
+            if (ret < 0) {
                 debug_error("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] ERROR: socket read\n");
                 socket_close(connection_socket);
                 err = -1;
                 goto mpi_comm_socket_finish;
-        }
+            }
 
-        socket_close(connection_socket);
-        mpi_comm_socket_finish:
-        debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] Socket end, recv port: %s\n", port_name);
+            socket_close(connection_socket);
+            mpi_comm_socket_finish:
+            debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_connect] Socket end, recv port: %s\n", port_name);
     }
 
     // Send port name to all ranks
     MPI_Bcast(&err, 1, MPI_INT, 0, MPI_COMM_WORLD);
     if (err == -1){
-        return -1;
+            return -1;
     }
     MPI_Bcast(port_name, MPI_MAX_PORT_NAME, MPI_CHAR, 0, MPI_COMM_WORLD);
 
@@ -191,25 +192,25 @@ int nfi_mpi_server_comm_connect ( char *srv_name, char *port_name, MPI_Comm *out
     MPI_Info_set(info, "timeout", "1");
     do
     {
-         ret = MPI_Comm_connect(port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, out_comm);
+            ret = MPI_Comm_connect(port_name, MPI_INFO_NULL, 0, MPI_COMM_WORLD, out_comm);
 
-         MPI_Error_class(ret, &errclass);
-         MPI_Error_string(ret, err_buffer, &resultlen);
+            MPI_Error_class(ret, &errclass);
+            MPI_Error_string(ret, err_buffer, &resultlen);
 
-         if (MPI_SUCCESS != errclass)
-	 {
-             XPN_DEBUG("%s", err_buffer);
-             if (connect_retries == 0)
-	     {
+            if (MPI_SUCCESS != errclass)
+	    {
+                XPN_DEBUG("%s", err_buffer);
+                if (connect_retries == 0)
+		{
                     char cli_name[HOST_NAME_MAX];
                     gethostname(cli_name, HOST_NAME_MAX);
                     printf("----------------------------------------------------------------\n");
                     printf("XPN Client %s : Waiting for servers being up and runing...\n", cli_name);
                     printf("----------------------------------------------------------------\n\n");
-             }
-             connect_retries++;
-             sleep(1);
-         }
+                }
+                connect_retries++;
+                sleep(1);
+            }
     } while (MPI_SUCCESS != ret && connect_retries < 1);
     MPI_Info_free(&info);
 
@@ -232,8 +233,7 @@ int nfi_mpi_server_comm_disconnect ( MPI_Comm *comm )
 
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &(rank));
-    if (rank == 0)
-    {
+    if (rank == 0) {
         debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_disconnect] Send disconnect message\n");
         ret = nfi_mpi_server_comm_write_operation(*comm, XPN_SERVER_DISCONNECT);
         if (ret < 0) {
@@ -276,8 +276,7 @@ ssize_t nfi_mpi_server_comm_write_operation ( MPI_Comm fd, int op )
     debug_info("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_write_operation] Write operation send tag %d\n", msg[0]);
 
     ret = MPI_Send(msg, 2, MPI_INT, 0, 0, fd);
-    if (MPI_SUCCESS != ret)
-    {
+    if (MPI_SUCCESS != ret) {
         printf("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_write_operation] ERROR: MPI_Send < 0 : %d\n", ret);
         MPI_Error_class(ret, &eclass);
         MPI_Error_string(ret, estring, &len);
@@ -302,7 +301,6 @@ ssize_t nfi_mpi_server_comm_write_data ( MPI_Comm fd, char *data, ssize_t size )
     if (size == 0) {
         return 0;
     }
-
     if (size < 0) {
         printf("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_write_data] ERROR: size < 0\n");
         return -1;
@@ -325,7 +323,7 @@ ssize_t nfi_mpi_server_comm_write_data ( MPI_Comm fd, char *data, ssize_t size )
     return size;
 }
 
-ssize_t nfi_mpi_server_comm_read_data ( MPI_Comm fd, char *data, ssize_t size )
+ssize_t nfi_mpi_server_comm_read_data(MPI_Comm fd, char *data, ssize_t size)
 {
     int ret;
     MPI_Status status;
@@ -336,7 +334,6 @@ ssize_t nfi_mpi_server_comm_read_data ( MPI_Comm fd, char *data, ssize_t size )
     if (size == 0) {
         return 0;
     }
-
     if (size < 0) {
         printf("[NFI_MPI_SERVER_COMM] [nfi_mpi_server_comm_read_data] ERROR: size < 0\n");
         return -1;

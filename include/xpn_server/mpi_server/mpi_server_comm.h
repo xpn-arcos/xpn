@@ -29,10 +29,10 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "base/time_misc.h"
-  #include "mpi.h"
+     #include "all_system.h"
+     #include "base/utils.h"
+     #include "base/time_misc.h"
+
 
   /* ... Functions / Funciones ......................................... */
 
@@ -45,6 +45,7 @@
   ssize_t  mpi_server_comm_read_operation  ( MPI_Comm *fd, int *op, int *rank_client_id, int *tag_client_id );
   ssize_t  mpi_server_comm_write_data      ( MPI_Comm *fd, char *data, ssize_t size, int  rank_client_id, int tag_client_id );
   ssize_t  mpi_server_comm_read_data       ( MPI_Comm *fd, char *data, ssize_t size, int  rank_client_id, int tag_client_id );
+
 
   /* ................................................................... */
 

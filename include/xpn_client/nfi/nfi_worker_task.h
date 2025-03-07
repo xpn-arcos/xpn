@@ -34,6 +34,8 @@
   #include "workers.h"
   #include "nfi.h"
 
+  /* ... Const / Const ................................................. */
+
 
   /* ... Data structures / Estructuras de datos ........................ */
 
@@ -91,6 +93,9 @@
     struct nfi_worker_args  arg; // TODO: Convert this into a list of 'struct nfi_worker_args' to make Expand reentrant
   };
 
+
+  /* ... Functions / Funciones ......................................... */
+  
 
   /* ................................................................... */
 

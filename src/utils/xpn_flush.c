@@ -57,7 +57,7 @@
 /* ... Functions / Funciones ......................................... */
 
   int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
-  {
+  {  
     debug_info("entry %s is_file %d dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d \n",entry, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
     int  ret;
 
@@ -110,7 +110,7 @@
       MPI_Barrier(MPI_COMM_WORLD);
     }
     else if (is_file)
-    {
+    {      
       int master_node = hash(&src_path[xpn_path_len], size, 1);
       if (rank == master_node)
       {
@@ -150,7 +150,7 @@
         // To debug
         // XpnPrintMetadata(&mdata);
       }
-
+      
       debug_info("Rank %d mdata %3s\n", rank, mdata.magic_number);
       MPI_Bcast(&mdata, sizeof(struct xpn_metadata), MPI_CHAR, master_node, MPI_COMM_WORLD);
       debug_info("After bcast Rank %d mdata %3s\n", rank, mdata.magic_number);
@@ -165,10 +165,10 @@
       off64_t ret_1;
       offset_src = 0;
       offset_dest = -blocksize;
-      read_size = 0;
+      read_size = -1;
 
       do
-      {
+      { 
         //TODO: check when the server has error and data is corrupt for fault tolerance
         do
 	{
@@ -176,7 +176,7 @@
           for (int i = 0; i < replication_level+1; i++)
           {
             XpnCalculateBlockMdata(&mdata, offset_dest, i, &offset_src, &aux_serv);
-
+            
             debug_info("try rank %d offset_dest %ld offset_src %ld aux_server %d\n", rank, offset_dest, offset_src, aux_serv);
             if (aux_serv == rank){
               goto exit_search;
@@ -205,6 +205,7 @@
           perror("lseek: ");
           break;
         }
+
         read_size = filesystem_read(fd_src, buf, buf_len);
         if (read_size <= 0){
           break;
@@ -228,7 +229,7 @@
       unlink(src_path);
       close(fd_dest);
     }
-
+    
     free(buf);
     return 0;
   }
@@ -237,7 +238,7 @@
   int list (char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {
     debug_info("dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d\n", dir_name, dest_prefix, blocksize, replication_level, rank, size);
-
+    
     int ret;
     DIR* dir = NULL;
     struct stat stat_buf;
@@ -255,7 +256,7 @@
       }
       struct dirent*  entry;
       entry = readdir(dir);
-
+      
 
       while(entry != NULL)
       {
@@ -273,7 +274,7 @@
         sprintf(path_dst, "%s/%s", dest_prefix, entry->d_name);
 
         ret = stat(path, &stat_buf);
-        if (ret < 0)
+        if (ret < 0) 
         {
           perror("stat: ");
           printf("%s\n", path);
@@ -290,7 +291,7 @@
         if (!is_file){
           list(path, path_dst, blocksize, replication_level, rank, size);
         }
-
+        
 
         entry = readdir(dir);
       }
@@ -318,7 +319,7 @@
 
 
   int main(int argc, char *argv[])
-  {
+  {   
     int rank, size;
     int replication_level = 0;
     int blocksize = 524288;
@@ -333,14 +334,14 @@
       printf("\n");
       return -1;
     }
-
+    
     if ( argc >= 5){
       replication_level = atoi(argv[4]);
     }
     if ( argc >= 4){
       blocksize = atoi(argv[3]);
     }
-
+    
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);

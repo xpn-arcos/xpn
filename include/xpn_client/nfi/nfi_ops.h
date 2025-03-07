@@ -61,6 +61,9 @@
   };
 
 
+  /* ... Data structures / Estructuras de datos ........................ */
+
+
   /* ... Functions / Funciones ......................................... */
 
   void nfi_do_operation ( struct st_th th_arg );
@@ -86,7 +89,6 @@
 
   int nfi_worker_do_read_mdata   ( struct nfi_worker *wrk, char *url, struct xpn_metadata *mdata );
   int nfi_worker_do_write_mdata  ( struct nfi_worker *wrk, char *url, struct xpn_metadata *mdata, int only_file_size );
-
 
   /* ................................................................... */
 

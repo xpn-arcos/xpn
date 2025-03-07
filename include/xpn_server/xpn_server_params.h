@@ -29,45 +29,52 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include <stdlib.h>
-  #include <stdio.h>
-  #include <string.h>
-  #include <ctype.h>
-  #include "mpi.h"
-  #include "base/utils.h"
-  #include "base/service_socket.h"
-  #include "base/workers.h"
-  #include "xpn_server_conf.h"
+     #include "all_system.h"
+     #include "base/utils.h"
+     #include "base/service_socket.h"
+     #include "base/workers.h"
+     #include "xpn_server_conf.h"
 
 
   /* ... Data structures / Estructuras de datos ........................ */
 
-     typedef struct
-     {
-       // server identification
-       int  size;
-       int  rank;
+typedef struct
+{
+    // server identification
+    int  size;
+    int  rank;
 
-       char port_name[MAX_PORT_NAME_LENGTH];
-       char srv_name [MAX_PORT_NAME_LENGTH];
+    char port_name[MAX_PORT_NAME_LENGTH];
+    char srv_name [MAX_PORT_NAME_LENGTH];
 
-       // server configuration
-       char shutdown_file[PATH_MAX];
-       int  thread_mode_connections;
-       int  thread_mode_operations;
-       int  server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
+    // server configuration
+    char shutdown_file[PATH_MAX];
+    int  thread_mode_connections;
+    int  thread_mode_operations;
+    int  server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
 
-       #ifdef ENABLE_SCK_SERVER
-       int server_socket; // For sck_server
-       #endif
+    #ifdef ENABLE_SCK_SERVER
+    char port_name_conn[MAX_PORT_NAME_LENGTH];
+    int  server_socket;
+    char port_name_no_conn[MAX_PORT_NAME_LENGTH];
+    int  server_socket_no_conn;
+    #endif
 
-       int await_stop;
+    int await_stop;
 
-       // server arguments
-       int    argc;
-       char **argv;
+    // server arguments
+    int    argc;
+    char **argv;
 
-     } xpn_server_param_st;
+    // MQTT configuration
+    int mosquitto_mode;
+    int mosquitto_qos;
+
+    #ifdef HAVE_MOSQUITTO_H
+      struct mosquitto * mqtt;
+    #endif
+
+} xpn_server_param_st;
 
 
   /* ... Functions / Funciones ......................................... */

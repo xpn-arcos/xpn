@@ -26,13 +26,13 @@
 void XpnPrintMetadata(struct xpn_metadata *mdata)
 {
   int i;
-  fprintf(stderr, "magic_number: %c%c%c\n",  mdata->magic_number[0], mdata->magic_number[1], mdata->magic_number[2]);
-  fprintf(stderr, "version: %d\n",           mdata->version);
-  fprintf(stderr, "type: %d\n",              mdata->type);
-  fprintf(stderr, "block_size: %zd\n",       mdata->block_size);
-  fprintf(stderr, "file_size: %zd\n",        mdata->file_size);
+  fprintf(stderr, "magic_number: %c%c%c\n", mdata->magic_number[0], mdata->magic_number[1], mdata->magic_number[2]);
+  fprintf(stderr, "version: %d\n", mdata->version);
+  fprintf(stderr, "type: %d\n", mdata->type);
+  fprintf(stderr, "block_size: %zd\n", mdata->block_size);
+  fprintf(stderr, "file_size: %zd\n", mdata->file_size);
   fprintf(stderr, "replication_level: %d\n", mdata->replication_level);
-  fprintf(stderr, "first_node: %d\n",        mdata->first_node);
+  fprintf(stderr, "first_node: %d\n", mdata->first_node);
 
   fprintf(stderr, "data_nserv: ");
   for(i = 0; i < XPN_METADATA_MAX_RECONSTURCTIONS; i++) {
@@ -59,11 +59,11 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, const char *path)
   }
 
   //TODO pd == xpn_parttable[i].id
-  while((part_id<XPN_MAX_PART) && (xpn_parttable[part_id].id != pd)) {
+  while((part_id<XPN_MAX_PART) && (xpn_parttable[part_id].id != pd)){
     part_id++;
   }
 
-  if (part_id == XPN_MAX_PART) {
+  if (part_id == XPN_MAX_PART){
     return -1;
   }
 
@@ -77,7 +77,7 @@ int XpnCreateMetadataExtern(struct xpn_metadata *mdata, const char *path, int ns
 {
   XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
-  if(mdata == NULL) {
+  if(mdata == NULL){
     return -1;
   }
 
@@ -113,16 +113,14 @@ int XpnCreateMetadataExtern(struct xpn_metadata *mdata, const char *path, int ns
  */
 int XpnGetMetadataPos(struct xpn_metadata *mdata, int pos)
 {
-  if(mdata == NULL) {
+  if(mdata == NULL){
     return -1;
   }
 
-  if(pos < 0)
-  {
+  if(pos < 0) {
     pos = (mdata->first_node)%(mdata->data_nserv[0]);
   }
-  else
-  {
+  else{
     pos = (mdata->first_node+pos)%(mdata->data_nserv[0]);
   }
 
@@ -136,7 +134,7 @@ int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *
   char url_serv[PATH_MAX];
   XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
-  if (mdata == NULL) {
+  if (mdata == NULL){
     return -1;
   }
 
@@ -159,12 +157,10 @@ int XpnUpdateMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *
       err = -1;
     }
   }
-
   res = err;
   XPN_DEBUG("Mdata of %s:", path);
   if (xpn_debug){ XpnPrintMetadata(mdata); }
   XPN_DEBUG_END_CUSTOM("%s", path);
-
   return res;
 }
 
@@ -196,7 +192,6 @@ int XpnReadMetadata(struct xpn_metadata *mdata, int nserv, struct nfi_server *se
   XPN_DEBUG("Mdata of %s:", path);
   if (xpn_debug){ XpnPrintMetadata(mdata); }
   XPN_DEBUG_END_CUSTOM("%s", path);
-
   return res;
 }
 
@@ -299,3 +294,4 @@ int xpn_simple_free_block_locality(int *url_c, char **url_v[])
   XPN_DEBUG_END;
   return res;
 }
+
