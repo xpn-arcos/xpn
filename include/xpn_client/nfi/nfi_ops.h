@@ -57,7 +57,7 @@
        op_statfs   = 60,
 
        op_read_mdata  = 70,
-       op_write_mdata = 71,
+       op_write_mdata = 71
      };
 
 
