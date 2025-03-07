@@ -1,6 +1,6 @@
 
   /*
-   *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+   *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
    *
    *  This file is part of Expand.
    *
@@ -51,7 +51,7 @@ void XpnPrintMetadata(struct xpn_metadata *mdata)
 
 int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, const char *path)
 {
-  int part_id = 0,res = 0;
+  int part_id = 0;
   XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
   if(mdata == NULL){
@@ -75,7 +75,6 @@ int XpnCreateMetadata(struct xpn_metadata *mdata, int pd, const char *path)
 
 int XpnCreateMetadataExtern(struct xpn_metadata *mdata, const char *path, int nserv, int block_size, int replication_level)
 {
-  int res = 0;
   XPN_DEBUG_BEGIN_CUSTOM("%s", path);
 
   if(mdata == NULL){
@@ -295,3 +294,4 @@ int xpn_simple_free_block_locality(int *url_c, char **url_v[])
   XPN_DEBUG_END;
   return res;
 }
+

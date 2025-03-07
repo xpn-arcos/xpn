@@ -1,5 +1,6 @@
+
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -17,6 +18,7 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 
 #include "xpn/xpn_simple/xpn_open.h"
 
@@ -107,12 +109,8 @@ int XpnSearchFile(const char * path)
     }
 
     if (i == XPN_MAX_FILE) 
-    {
-        res = -1;
-    } else 
-    {
-        res = i;
-    }
+         res = -1;
+    else res = i;
 
     XPN_DEBUG_END
 
@@ -475,10 +473,9 @@ int xpn_simple_open(const char * path, int flags, mode_t mode)
 }
 
 
-
 int xpn_simple_close(int fd) 
 {
-    int res, i;
+    int i;
 
     XPN_DEBUG_BEGIN_CUSTOM("%d", fd)
 
@@ -522,7 +519,6 @@ int xpn_simple_close(int fd)
 }
 
 
-
 int xpn_simple_unlink(const char * path) 
 {
     int res;
@@ -532,9 +528,9 @@ int xpn_simple_unlink(const char * path)
     res = xpn_internal_remove(path);
 
     XPN_DEBUG_END_ARGS1(path)
+
     return res;
 }
-
 
 
 int xpn_simple_rename(const char * path, const char * newpath) 

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -22,13 +22,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "mpi_server_comm.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
+   #include "mpi_server_comm.h"
 
 
 /* ... Functions / Funciones ......................................... */
@@ -36,7 +30,7 @@
 // init, destroy
 int mpi_server_comm_init ( int argc, char *argv[], int thread_mode, char * port_name )
 {
-  int  ret, provided, claimed;
+  int ret, provided, claimed;
   int rank = 0;
 
   debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_init] >> Begin\n", rank);
@@ -163,25 +157,25 @@ int mpi_server_comm_accept ( char * port_name, MPI_Comm **new_sd )
 
   *new_sd = malloc(sizeof(MPI_Comm));
   if (*new_sd == NULL) {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] ERROR: Memory allocation\n", 0);
+    printf("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] ERROR: Memory allocation\n");
     return -1;
   }
 
   **new_sd = MPI_COMM_NULL;
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] >> Begin\n", 0);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] >> Begin\n");
 
   // Accept
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] Accept %ld\n", 0, **new_sd);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] Accept %ld\n", **new_sd);
 
   ret = MPI_Comm_accept(port_name, MPI_INFO_NULL, 0, MPI_COMM_SELF, *new_sd);
   if (MPI_SUCCESS != ret)
   {
-    printf("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] ERROR: MPI_Comm_accept fails\n", 0);
+    printf("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] ERROR: MPI_Comm_accept fails on port '%s'\n", port_name);
     return -1;
   }
 
-  debug_info("[Server=%d] [MPI_SERVER_COMM] [mpi_server_comm_accept] << End %ld\n", 0, **new_sd);
+  debug_info("[Server] [MPI_SERVER_COMM] [mpi_server_comm_accept] << End %ld\n", **new_sd);
 
   return 0;
 }

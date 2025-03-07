@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -30,18 +30,12 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
+     #include "all_system.h"
 
 
   /* ... Consts / Constantes ........................................... */
 
-  #define  SPOT __LINE__,__FILE__,getpid(),0
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
+     #define  SPOT __LINE__,__FILE__,getpid(),0
 
 
   /* ................................................................... */
@@ -51,3 +45,4 @@
   #endif
 
 #endif
+

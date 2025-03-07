@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -42,7 +42,7 @@
   #define XPN_METADATA_DISTRIBUTION_ROUND_ROBIN 1
 
   #define XPN_CHECK_MAGIC_NUMBER(mdata) \
-          (((mdata)->magic_number[0] == XPN_MAGIC_NUMBER[0]) && \
+         (((mdata)->magic_number[0] == XPN_MAGIC_NUMBER[0]) && \
           ((mdata)->magic_number[1] == XPN_MAGIC_NUMBER[1]) && \
           ((mdata)->magic_number[2] == XPN_MAGIC_NUMBER[2])) 
 

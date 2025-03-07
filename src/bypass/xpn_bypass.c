@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -161,12 +161,16 @@ int fdstable_put ( struct generic_fd fd )
 
   for (int i = fdstable_first_free; i < fdstable_size; ++i)
   {
-    if ( fdstable[i].type == FD_FREE ) {
+    if ( fdstable[i].type == FD_FREE )
+    {
       fdstable[i] = fd;
       fdstable_first_free = (long)(i + 1);
 
       debug_info("[BYPASS]\t fdstable_put -> fd %d ; type: %d ; real_fd: %d\n", i + PLUSXPN, fdstable[i].type, fdstable[i].real_fd);
       debug_info("[BYPASS] << After fdstable_put....\n");
+
+      // trick for python3...
+      dup2(fd.real_fd, i+PLUSXPN);
 
       return i + PLUSXPN;
     }
@@ -176,11 +180,15 @@ int fdstable_put ( struct generic_fd fd )
 
   fdstable_realloc();
 
-  if ( fdstable[old_size].type == FD_FREE ) {
+  if ( fdstable[old_size].type == FD_FREE )
+  {
     fdstable[old_size] = fd;
 
     debug_info("[BYPASS]\t fdstable_put -> fd %ld ; type: %d ; real_fd: %d\n", old_size + PLUSXPN, fdstable[old_size].type, fdstable[old_size].real_fd);
     debug_info("[BYPASS] << After fdstable_put....\n");
+
+      // trick for python3...
+      dup2(fd.real_fd, old_size+PLUSXPN);
 
     return old_size + PLUSXPN;
   }
@@ -210,6 +218,9 @@ int fdstable_remove ( int fd )
   if (fd < fdstable_first_free) {
     fdstable_first_free = fd;
   }
+
+      // trick for python3...
+      close(fd+PLUSXPN);
 
   debug_info("[BYPASS] << After fdstable_remove....\n");
 
@@ -2988,3 +2999,4 @@ int MPI_Finalize (void)
 
   return PMPI_Finalize();
 }
+

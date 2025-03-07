@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -30,19 +30,15 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include <dlfcn.h>
-  #include <sys/stat.h>
-  #include <dirent.h>
-  #include <stdlib.h>
-  #include <sys/vfs.h>
+     #include <dlfcn.h>
+     #include <dirent.h>
+     #include <stdlib.h>
+     #include <sys/vfs.h>
 
-  #include "utils.h"
+     #include <features.h>
+     #include <sys/stat.h>
 
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "utils.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -148,3 +144,4 @@
   #endif
 
 #endif
+

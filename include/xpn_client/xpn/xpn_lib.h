@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -25,13 +25,7 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "xpn_simple/xpn_simple_lib.h"
-
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "xpn_simple/xpn_simple_lib.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -71,3 +65,4 @@
   /* ................................................................... */
 
 #endif
+

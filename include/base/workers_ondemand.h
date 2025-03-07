@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -25,13 +25,10 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "workers_common.h"
+     #include "all_system.h"
+     #include "workers_common.h"
 
   
-  /* ... Const / Const ................................................. */
-
-
   /* ... Data structures / Estructuras de datos ........................ */
 
   typedef struct

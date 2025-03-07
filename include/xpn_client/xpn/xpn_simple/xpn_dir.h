@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -30,20 +30,15 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "xpn.h"
-  #include "xpn_policy_init.h"
-  #include "xpn_policy_open.h"
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "xpn.h"
+     #include "xpn_policy_init.h"
+     #include "xpn_policy_open.h"
 
 
   /* ... Functions / Funciones ......................................... */
  
-  int xpn_simple_mkdir(const char *path, mode_t perm) ;
-  int xpn_simple_rmdir(const char *path) ;
+     int xpn_simple_mkdir(const char *path, mode_t perm) ;
+     int xpn_simple_rmdir(const char *path) ;
 
 
   /* ................................................................... */

@@ -8,7 +8,7 @@ char buffer[BUFF_SIZE] ;
 int main ( int argc, char *argv[] )
 {
 	int  ret ;
-	int  fd, fd1, num_read ;
+	int  fd1 ;
 
 	// Arguments
 	if (argc < 2)
@@ -17,7 +17,7 @@ int main ( int argc, char *argv[] )
 	    return -1 ;
 	}
 
-	//printf("env XPN_CONF=./xpn.conf XPN_DNS=/tmp/tcp_server.dns %s\n", argv[0]);
+	//printf("env XPN_CONF=./xpn.conf %s\n", argv[0]);
 
 	// xpn-init
 	ret = xpn_init();
@@ -28,7 +28,7 @@ int main ( int argc, char *argv[] )
 
 	// xpn-creat
 	fd1 = xpn_creat("/P1/test_1", 00777);
-	printf("%d = xpn_creat('%s', %o)\n", ret, "/P1/test_1", 00777);
+	printf("%d = xpn_creat('%s', %o)\n", fd1, "/P1/test_1", 00777);
 	if (fd1 < 0) {
 	    return -1;
 	}

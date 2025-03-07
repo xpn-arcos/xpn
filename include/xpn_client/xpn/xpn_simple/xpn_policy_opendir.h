@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -29,18 +29,13 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "xpn_file.h"
-  #include "xpn.h"
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "xpn_file.h"
+     #include "xpn.h"
 
 
   /* ... Functions / Funciones ......................................... */
  
-  int XpnGetEntry(int fd , struct dirent *entry);
+     int XpnGetEntry(int fd , struct dirent *entry);
 
 
   /* ................................................................... */
@@ -50,3 +45,4 @@
   #endif
 
 #endif
+

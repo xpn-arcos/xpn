@@ -1,5 +1,4 @@
 
-
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -13,7 +12,7 @@
 #include "nfi/nfi_nfs/nfi_nfs.h"
 #include "nfi/nfi_nfs3/nfs3.h"
 #include "nfi/nfi_nfs3/nfi_nfs3.h"
-#include "nfi/nfi_tcp_server/tcp_server.h"
+#include "nfi/nfi_mq_server/mq_server.h"
 #include "xpn/xpn_simple/xpn_policy_init.h"
 
 

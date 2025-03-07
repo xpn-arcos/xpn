@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -29,22 +29,17 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "base/time_misc.h"
+    #include "all_system.h"
+    #include "base/utils.h"
+    #include "base/time_misc.h"
+    #include "xpn_server/xpn_server_params.h"
 
   
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
   /* ... Functions / Funciones ......................................... */
 
-  int       sck_server_comm_init          ( int *socket, char *port_name );
-  int       sck_server_comm_accept        ( int socket, int **new_socket );
-  int       sck_server_comm_disconnect    ( int *socket );
+  int  sck_server_comm_init          ( int *socket, char *port_name );
+  int  sck_server_comm_accept        ( int socket, int **new_socket );
+  int  sck_server_comm_disconnect    ( int *socket );
 
   /* ................................................................... */
   
@@ -53,3 +48,4 @@
   #endif
 
 #endif
+

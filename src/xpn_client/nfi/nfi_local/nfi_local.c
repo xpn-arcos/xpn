@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -22,16 +22,13 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi_local.h"
-#include "nfi/nfi_xpn_server/nfi_xpn_server_comm.h"
-#include <stddef.h>
+   #include "nfi_local.h"
+   #include "nfi/nfi_xpn_server/nfi_xpn_server_comm.h"
+   #include <stddef.h>
 
 /* ... Const / Const ................................................. */
 
-#define FILESYSTEM_DLSYM 1
-
-
-/* ... Global variables / Variables globales ........................ */
+   #define FILESYSTEM_DLSYM 1
 
 
 /* ... Auxiliar Functions / Funciones Auxiliares ..................... */
@@ -210,24 +207,11 @@ int nfi_local_init ( char *url, struct nfi_server *serv, __attribute__((__unused
   memset(server_aux, 0, sizeof(struct nfi_local_server));
 
   // thread mode
-  serv->xpn_thread = TH_NOT;
-  char *env_thread = getenv("XPN_THREAD");
-  if (env_thread != NULL) {
-    serv->xpn_thread = atoi(env_thread);
-  }
+  serv->xpn_thread = utils_getenv_int("XPN_THREAD", TH_NOT) ;
 
   // session mode
-  serv->xpn_session_file = 0;
-  char *env_session_file = getenv("XPN_SESSION_FILE");
-  if (env_session_file != NULL) {
-    serv->xpn_session_file = atoi(env_session_file);
-  }
-
-  serv->xpn_session_dir = 1;
-  char *env_session_dir = getenv("XPN_SESSION_DIR");
-  if (env_session_dir != NULL) {
-    serv->xpn_session_dir = atoi(env_session_dir);
-  }
+  serv->xpn_session_file = utils_getenv_int("XPN_SESSION_FILE", 0) ;
+  serv->xpn_session_dir  = utils_getenv_int("XPN_SESSION_DIR",  1) ;
 
   // copy 'url' string...
   serv->url = strdup(url);

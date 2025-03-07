@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -30,32 +30,13 @@
   /* ... Include / Inclusion ........................................... */
 
   #include "all_system.h"
-  #ifdef ENABLE_MPI_SERVER
-  #include "mpi.h"
-  #endif
+  #include "base/ns.h"
 
 
   /* ... Const / Const ................................................. */
 
-  #define XPN_SERVER_TYPE_MPI 0
-  #define XPN_SERVER_TYPE_SCK 1
-
-
-  /* MAX_BUFFER_SIZE */
-  #ifndef MAX_BUFFER_SIZE
-    #define MAX_BUFFER_SIZE (1*MB)
-  #endif
-
-  #ifdef MPI_MAX_PORT_NAME
-  #define XPN_SERVER_MAX_PORT_NAME MPI_MAX_PORT_NAME
-  #else
-  #define XPN_SERVER_MAX_PORT_NAME 1024
-  #endif
-  
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
+     #define XPN_SERVER_TYPE_MPI 0
+     #define XPN_SERVER_TYPE_SCK 1
 
 
   /* ................................................................... */

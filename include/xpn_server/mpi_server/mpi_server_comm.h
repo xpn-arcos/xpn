@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -29,15 +29,9 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/utils.h"
-  #include "base/time_misc.h"
-  #include "mpi.h"
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "all_system.h"
+     #include "base/utils.h"
+     #include "base/time_misc.h"
 
 
   /* ... Functions / Funciones ......................................... */
@@ -51,6 +45,7 @@
   ssize_t  mpi_server_comm_read_operation  ( MPI_Comm *fd, int *op, int *rank_client_id, int *tag_client_id );
   ssize_t  mpi_server_comm_write_data      ( MPI_Comm *fd, char *data, ssize_t size, int  rank_client_id, int tag_client_id );
   ssize_t  mpi_server_comm_read_data       ( MPI_Comm *fd, char *data, ssize_t size, int  rank_client_id, int tag_client_id );
+
 
   /* ................................................................... */
 

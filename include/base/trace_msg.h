@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -30,15 +30,9 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "string_misc.h"
-  #include "trace_tags.h"
-
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "all_system.h"
+     #include "string_misc.h"
+     #include "trace_tags.h"
 
 
   /* ... Functions / Funciones ......................................... */

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -25,45 +25,44 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h" /// Library for 'TODO'
-  #include "base/utils.h" /// Library for 'TODO'
+     #include "all_system.h"
+     #include "base/utils.h"
 
   
   /* ... Const / Const ................................................. */
 
-  #ifndef MPI_SERVER_DNS_FILE_DEFAULT
-    #define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
-  #endif
+     #ifndef MPI_SERVER_DNS_FILE_DEFAULT
+       #define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
+     #endif
 
-  #ifndef SCK_SERVER_DNS_FILE_DEFAULT
-    #define SCK_SERVER_DNS_FILE_DEFAULT "/tmp/sck_dns.txt"
-  #endif
+     #ifndef SCK_SERVER_DNS_FILE_DEFAULT
+       #define SCK_SERVER_DNS_FILE_DEFAULT "/tmp/sck_dns.txt"
+     #endif
 
-  #ifndef TCP_SERVER_DNS_FILE_DEFAULT
-    #define TCP_SERVER_DNS_FILE_DEFAULT "/tmp/tcp_dns.txt"
-  #endif
+     #ifndef MQ_SERVER_DNS_FILE_DEFAULT
+       #define MQ_SERVER_DNS_FILE_DEFAULT "/tmp/mq_dns.txt"
+     #endif
 
-  #ifndef MAX_TCP_SERVER_NODES
-    #define MAX_TCP_SERVER_NODES 256
-  #endif
+     #ifndef MAX_MQ_SERVER_NODES
+       #define MAX_MQ_SERVER_NODES 256
+     #endif
 
-  #ifndef CONST_TEMP
-    #define CONST_TEMP 1024
-  #endif
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #ifndef CONST_TEMP
+       #define CONST_TEMP 1024
+     #endif
 
 
   /* ... Functions / Funciones ......................................... */
 
-  void ns_get_hostname(char *srv_name);
-  char *ns_get_host_ip(void);
+     void  ns_get_hostname ( char *srv_name );
+     char *ns_get_host_ip  ( void );
 
-  int ns_publish(char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
-  int ns_unpublish(char *dns_file, char *protocol, char *param_srv_name);
-  int ns_lookup(char *protocol, char *param_srv_name, char *srv_ip, char *port_name);
+     int ns_publish   ( char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name );
+     int ns_unpublish ( char *dns_file, char *protocol, char *param_srv_name );
+     int ns_lookup    ( char *protocol, char *param_srv_name, char *srv_ip, char *port_name );
 
 
   /* ................................................................... */
 
 #endif
+

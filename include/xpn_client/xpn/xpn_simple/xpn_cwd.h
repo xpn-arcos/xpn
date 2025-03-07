@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -30,28 +30,25 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "xpn.h"
-  #include "xpn_policy_cwd.h"
-
-
-  /* ... Const / Const ................................................. */
+     #include "xpn.h"
+     #include "xpn_policy_cwd.h"
 
 
   /* ... Data structures / Estructuras de datos ........................ */
 
-  struct xpn_cwd {
-    char xpn_cwd_path[PATH_MAX];	
-  };
+     struct xpn_cwd {
+       char xpn_cwd_path[PATH_MAX];	
+     };
 
-  extern struct xpn_cwd xpn_cwddir;
+     extern struct xpn_cwd xpn_cwddir;
 
 
   /* ... Functions / Funciones ......................................... */  
 
-  void xpn_init_cwd();
+     void xpn_init_cwd();
 
-  char* xpn_simple_getcwd(char *path, size_t size) ;
-  int   xpn_simple_chdir(char *path) ;
+     char* xpn_simple_getcwd(char *path, size_t size) ;
+     int   xpn_simple_chdir(char *path) ;
 
 
   /* ................................................................... */
@@ -61,3 +58,4 @@
   #endif
 
 #endif
+

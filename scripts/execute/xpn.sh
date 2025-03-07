@@ -2,7 +2,7 @@
 # set -x
 
 #
-#  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal, Dario Muñoz Muñoz
+#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal, Dario Muñoz Muñoz, Gabriel Sotodosos Morales
 #
 #  This file is part of Expand.
 #
@@ -64,16 +64,16 @@ mk_conf_servers() {
   fi
 
   if [[ ! -f ${DEPLOYMENTFILE} ]]; then
-    ${BASE_DIR}/mk_conf.sh --conf         ${CONF_NAME} \
-                           --machinefile  ${MACHINE_FILE} \
-                           --part_bsize    ${PARTITION_SIZE} \
-                           --replication_level    ${REPLICATION_LEVEL} \
-                           --part_name    ${PARTITION_NAME} \
-                           --storage_protocol     ${SERVER_TYPE}"_server" \
-                           --storage_path ${STORAGE_PATH}
+    ${BASE_DIR}/mk_conf.sh --conf              ${CONF_NAME} \
+                           --machinefile       ${MACHINE_FILE} \
+                           --part_bsize        ${PARTITION_SIZE} \
+                           --replication_level ${REPLICATION_LEVEL} \
+                           --part_name         ${PARTITION_NAME} \
+                           --storage_protocol  ${SERVER_TYPE}"_server" \
+                           --storage_path       ${STORAGE_PATH}
   else
     "${BASE_DIR}"/mk_conf.sh --conf            "${CONF_NAME}" \
-                           --deployment_file "${DEPLOYMENTFILE}"
+                             --deployment_file "${DEPLOYMENTFILE}"
   fi
 }
 
@@ -100,11 +100,22 @@ start_xpn_servers() {
     srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
           -w "${HOSTFILE}" \
           mkdir -p ${XPN_STORAGE_PATH}
+
     if [[ ${SERVER_TYPE} == "sck" ]]; then
       srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
             -w "${HOSTFILE}" \
             --export=ALL \
-            "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t 1 "${ARGS}" &
+    elif [[ ${SERVER_TYPE} == "mq" ]]; then
+      srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
+            -w "${HOSTFILE}" \
+            --export=ALL \
+            mosquitto -c "${MQTT_CONFIG_FILE}" &
+      sleep 2
+      srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
+            -w "${HOSTFILE}" \
+            --export=ALL \
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -m 0 -t pool -s "sck" "${ARGS}" &
     else
       srun  -n "${NODE_NUM}" -N "${NODE_NUM}" --mpi=none \
             -w "${HOSTFILE}" \
@@ -122,13 +133,21 @@ start_xpn_servers() {
       mpiexec -np       "${NODE_NUM}" \
               -hostfile "${HOSTFILE}" \
               "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool "${ARGS}" &
+    elif [[ ${SERVER_TYPE} == "mq" ]]; then
+      mpiexec -np       "${NODE_NUM}" \
+              -hostfile "${HOSTFILE}" \
+              mosquitto -c "${MQTT_CONFIG_FILE}" &
+      sleep 2
+      mpiexec -np       "${NODE_NUM}" \
+              -hostfile "${HOSTFILE}" \
+              "${BASE_DIR}"/../../src/xpn_server/xpn_server -m 0 -t 1 -s "sck" "${ARGS}" &
     else
       for ((i=1; i<=$NODE_NUM; i++))
       do
           line=$(head -n $i "$HOSTFILE" | tail -n 1)
           mpiexec -np       1 \
-            -host "${line}" \
-            ${BASE_DIR}/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} ${ARGS} &
+                  -host "${line}" \
+                  ${BASE_DIR}/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} ${ARGS} &
       done
     fi
   fi
@@ -156,6 +175,7 @@ stop_xpn_servers() {
     echo " * DEATH_FILE: ${DEATH_FILE}"
     echo " * additional daemon args: ${ARGS}"
   fi
+
   if command -v srun &> /dev/null
   then
     srun -n 1 -N 1 \
@@ -172,6 +192,7 @@ await_stop_xpn_servers() {
     echo " * DEATH_FILE: ${DEATH_FILE}"
     echo " * additional daemon args: ${ARGS}"
   fi
+
   if command -v srun &> /dev/null
   then
     srun -n 1 -N 1 \
@@ -197,6 +218,7 @@ terminate_xpn_server() {
 
 
 rebuild_xpn_servers() {
+
   if [[ ${VERBOSE} == true ]]; then
     echo " * xpn storage path: ${XPN_STORAGE_PATH}"
     echo " * xpn old hostfile: ${DEATH_FILE}"
@@ -205,6 +227,7 @@ rebuild_xpn_servers() {
   fi
 
   NODE_NUM_SUM=$(($(cat ${DEATH_FILE} | wc -l) + $(cat ${REBUILD_FILE} | wc -l)))
+
   # 1. Copy
   if command -v srun &> /dev/null
   then
@@ -375,8 +398,8 @@ usage_details() {
 get_opts() {
    # Taken the general idea from https://stackoverflow.com/questions/70951038/how-to-use-getopt-long-option-in-bash-script
    mkconf_name=$(basename "$0")
-   mkconf_short_opt=e:r:w:s:t:x:d:k:p:n:a:c:m:l:b:fvh
-   mkconf_long_opt=execute:,rootdir:,workdir:,source_path:,destination_path:,xpn_storage_path:,numnodes:,args:,config:,deployment_file:,foreground_file,hostfile:,deathfile:,rebuildfile:,host:,replication_level:,verbose,help
+   mkconf_short_opt=e:r:w:s:t:x:d:k:p:n:a:c:m:l:o:q:b:fvh
+   mkconf_long_opt=execute:,rootdir:,workdir:,source_path:,destination_path:,xpn_storage_path:,numnodes:,args:,config:,deployment_file:,foreground_file,hostfile:,deathfile:,rebuildfile:,host:,replication_level:,block_size:,mqtt_conf_file:,verbose,help
    TEMP=$(getopt -o $mkconf_short_opt --long $mkconf_long_opt --name "$mkconf_name" -- "$@")
    eval set -- "${TEMP}"
 
@@ -398,6 +421,8 @@ get_opts() {
          -b | --rebuildfile      ) REBUILD_FILE=$2;             shift 2 ;;
          -k | --host             ) HOST=$2;                     shift 2 ;;
          -p | --replication_level) XPN_REPLICATION_LEVEL=$2;    shift 2 ;;
+         -o | --block_size       ) XPN_BLOCK_SIZE=$2;           shift 2 ;;
+         -q | --mqtt_conf_file   ) MQTT_CONFIG_FILE=$2;         shift 2 ;;
          -v | --verbose          ) VERBOSE=true;                shift 1 ;;
          -h | --help             ) usage_short; usage_details;  exit 0 ;;
          --                      ) shift;         break  ;;
@@ -427,6 +452,8 @@ REBUILD_FILE=""
 HOST=""
 SERVER_TYPE="mpi"
 XPN_REPLICATION_LEVEL=0
+XPN_BLOCK_SIZE="512k"
+MQTT_CONFIG_FILE="/etc/mosquitto/mosquitto.conf"
 
 
 ## get arguments
@@ -440,9 +467,10 @@ fi
 
 # run 
 case "${ACTION}" in
-      mk_conf)  mk_conf_servers  "config.txt" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+      mk_conf)  mk_conf_servers  "config.txt" ${HOSTFILE} ${XPN_BLOCK_SIZE} ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 ;;
-      start)    mk_conf_servers  "config.txt" ${HOSTFILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+      start)    mk_conf_servers  "config.txt" ${HOSTFILE} ${XPN_BLOCK_SIZE} ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+                sed -i '/^$/d' ${XPN_CONF}
                 start_xpn_servers
                 ;;
       stop)     stop_xpn_servers
@@ -451,7 +479,7 @@ case "${ACTION}" in
                 ;;
       terminate)terminate_xpn_server
                 ;;
-      rebuild)  mk_conf_servers  "config.txt" ${REBUILD_FILE} "512k" ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
+      rebuild)  mk_conf_servers  "config.txt" ${REBUILD_FILE} ${XPN_BLOCK_SIZE} ${XPN_REPLICATION_LEVEL} "xpn" ${XPN_STORAGE_PATH} ${DEPLOYMENTFILE}
                 rebuild_xpn_servers
                 ;;
       preload)  preload_xpn

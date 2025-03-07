@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -33,13 +33,8 @@
   #include "base/utils.h"
   #include "base/ns.h"
   #include "base/socket.h"
+  #include "base/service_socket.h"
   #include "xpn_server/xpn_server_ops.h"
-  #include "mpi.h"
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
 
 
   /* ... Functions / Funciones ......................................... */

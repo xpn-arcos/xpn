@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -58,8 +58,8 @@
   #define MAX_DIRS  10000
   #define PLUSXPN   1000
 
-  #undef __USE_FILE_OFFSET64
-  #undef __USE_LARGEFILE64
+  //#undef __USE_FILE_OFFSET64
+  //#undef __USE_LARGEFILE64
 
 
   #define FD_FREE 0

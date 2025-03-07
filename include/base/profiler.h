@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -33,6 +33,7 @@
   extern int xpn_profiler_fd; // In src/xpn/xpn_simple/xpncore/xpn_init.c
   extern int xpn_profiler; // In src/xpn/xpn_simple/xpncore/xpn_init.c
   
+
   /* ... Const / Const ................................................. */
   
   #define XPN_PROFILER_HEADER "{\"otherData\": {},\"traceEvents\":[{}\n"
@@ -96,11 +97,8 @@
   #define XPN_PROFILER_DEFAULT_END() XPN_PROFILER_NAME_END_CUSTOM(default, " ");
   #define XPN_PROFILER_DEFAULT_END_CUSTOM(format, ...) XPN_PROFILER_NAME_END_CUSTOM(default, format, ## __VA_ARGS__);
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
 
   /* ................................................................... */
 
 #endif
+

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -22,15 +22,12 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "base/debug_msg.h"
-
-
-/* ... Const / Const ................................................. */
+   #include "base/debug_msg.h"
 
 
 /* ... Global variables / Variables globales ........................ */
 
-int    (*DEBUG_MSG_PrintMsg)(const char *, va_list) = NULL;
+   int    (*DEBUG_MSG_PrintMsg)(const char *, va_list) = NULL;
 
 
 /* ... Functions / Funciones ......................................... */
@@ -120,3 +117,4 @@ void DEBUG_MSG_PrintF ( int line, char *name, long pid, int type, char *fto,  ..
 
 
 /* ................................................................... */
+

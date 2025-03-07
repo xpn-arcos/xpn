@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
  *  This file is part of Expand.
  *
@@ -23,7 +23,6 @@
 /* ... Include / Inclusion ........................................... */
 
    #include "sck_server_comm.h"
-   #include "socket.h"
 
 
 /* ... Functions / Funciones ......................................... */
@@ -79,7 +78,6 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   server_addr.sin_addr.s_addr = INADDR_ANY;
   server_addr.sin_port        = htons(0);
 
-
   ret = bind(*new_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
   if (ret < 0)
   {
@@ -96,6 +94,8 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
     printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: listen fails\n", 0);
     return -1;
   }
+
+  // get sockname
   socklen_t len = sizeof(server_addr);
   getsockname(*new_socket, (struct sockaddr *)&server_addr, &len);
   sprintf(port_name, "%d", ntohs(server_addr.sin_port));
@@ -108,16 +108,7 @@ int sck_server_comm_init ( int *new_socket, char *port_name )
   TIME_MISC_DiffTime(&t0, &t1, &tf);
   time = TIME_MISC_TimevaltoFloat(&tf);
 
-  printf(" | * Time to initialize XPN SCK server: %f s\n", time);
-  /*
-  printf("\n\n");
-  printf("Time to inizialize all servers: %f s\n", time);
-  printf("\n");
-  printf("---------------------------\n");
-  printf("All XPN SCK servers running\n");
-  printf("---------------------------\n");
-  printf("\n\n");
-  */
+  printf(" | * Time to initialize XPN SCK server (port %s): %f s\n", port_name, time);
 
   debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] server %d available at %s\n", 0, 0, port_name);
   debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] server %d accepting...\n",    0, 0);
@@ -141,11 +132,11 @@ int sck_server_comm_accept ( int socket, int **new_socket )
   sc = accept(socket, (struct sockaddr *)&client_addr, &size);
   if (sc < 0)
   {
-    printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_destroy] ERROR: accept fails\n", 0);
-    return -1;
+      printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] ERROR: accept fails\n", 0);
+      return -1;
   }
 
-  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_destroy] desp. accept conection .... %d\n", 0, sc);
+  debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] desp. accept conection .... %d\n", 0, sc);
   // tcp_nodelay
   flag = 1;
   ret = setsockopt(sc, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag));
@@ -184,7 +175,6 @@ int sck_server_comm_accept ( int socket, int **new_socket )
   return 0;
 }
 
-
 int sck_server_comm_disconnect ( int *socket )
 {
   socket_close(*socket);
@@ -194,3 +184,4 @@ int sck_server_comm_disconnect ( int *socket )
 
 
 /* ................................................................... */
+

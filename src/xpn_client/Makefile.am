@@ -24,6 +24,7 @@ BASE_HEADER=			@top_srcdir@/include/base/base_lib.h \
 				@top_srcdir@/include/base/urlstr.h \
 				@top_srcdir@/include/base/ns.h \
 				@top_srcdir@/include/base/socket.h \
+				@top_srcdir@/include/base/service_socket.h \
 				@top_srcdir@/include/base/syscall_proxies.h \
 				@top_srcdir@/include/base/filesystem.h \
 				@top_srcdir@/include/base/workers.h \
@@ -45,6 +46,7 @@ NFI_NFS3_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_nfs3/nfi_nfs3_err.h \
 ### END OF NFI_NFS3_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_XPN_SERVER_HEADER BLOCK. Do not remove this line. ###
 NFI_XPN_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_xpn_server/nfi_xpn_server_comm.h \
+				@top_srcdir@/include/xpn_client/nfi/nfi_xpn_server/nfi_mq_server_comm.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_xpn_server/nfi_xpn_server.h
 ### END OF NFI_XPN_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_HEADER BLOCK. Do not remove this line. ###
@@ -54,12 +56,6 @@ NFI_MPI_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_mpi_server/nfi_m
 NFI_SCK_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_sck_server/nfi_sck_server_comm.h \
 				@top_srcdir@/include/xpn_server/xpn_server_conf.h 
 ### END OF NFI_SCK_SERVER_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
-NFI_TCP_SERVER_HEADER=		@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.h \
-				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/tcp_server_conf.h \
-				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.h \
-				@top_srcdir@/include/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.h
-### END OF NFI_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_HEADER BLOCK. Do not remove this line. ###
 NFI_HEADER=			@top_srcdir@/include/xpn_client/nfi/nfi.h \
 				@top_srcdir@/include/xpn_client/nfi/nfi_lib.h \
@@ -90,11 +86,6 @@ if ENABLE_SCK_SERVER
 NFI_HEADER+=$(NFI_SCK_SERVER_HEADER)
 endif
 ### END OF ENABLE_SCK_SERVER_HEADER BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
-if ENABLE_TCP_SERVER
-NFI_HEADER+=$(NFI_TCP_SERVER_HEADER)
-endif
-### END OF ENABLE_TCP_SERVER_HEADER BLOCK. Do not remove this line. ###
 ### END OF NFI_HEADER BLOCK. Do not remove this line. ###
 
 ### XPN_HEADER ###
@@ -108,6 +99,7 @@ XPN_HEADER= 		@top_srcdir@/include/xpn_client/xpn.h
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_opendir.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_open.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_cwd.h \
+			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_conf_reader.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_init.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_opendir.h \
 			@top_srcdir@/include/xpn_client/xpn/xpn_simple/xpn_policy_open.h \
@@ -134,6 +126,7 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/urlstr.c \
 			@top_srcdir@/src/base/ns.c \
 			@top_srcdir@/src/base/socket.c \
+			@top_srcdir@/src/base/service_socket.c \
 			@top_srcdir@/src/base/syscall_proxies.c \
 			@top_srcdir@/src/base/filesystem.c \
 			@top_srcdir@/src/base/workers.c \
@@ -161,6 +154,7 @@ NFI_NFS3_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_nfs3/nfi_nfs3.c \
 ### END OF NFI_NFS3_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_XPN_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_XPN_SERVER_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_xpn_server/nfi_xpn_server.c \
+			@top_srcdir@/src/xpn_client/nfi/nfi_xpn_server/nfi_mq_server_comm.c \
 			@top_srcdir@/src/xpn_client/nfi/nfi_xpn_server/nfi_xpn_server_comm.c
 ### END OF NFI_XPN_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### BEGIN OF NFI_MPI_SERVER_OBJECTS BLOCK. Do not remove this line. ###
@@ -169,11 +163,6 @@ NFI_MPI_SERVER_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_mpi_server/nfi_mpi_s
 ### BEGIN OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 NFI_SCK_SERVER_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_sck_server/nfi_sck_server_comm.c 
 ### END OF NFI_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
-NFI_TCP_SERVER_OBJECTS=	@top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server.c \
-			@top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/tcp_server_comm.c \
-			@top_srcdir@/src/xpn_client/nfi/nfi_tcp_server/nfi_tcp_server_err.c
-### END OF NFI_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_MODULE_OBJECTS BLOCK. Do not remove this line. ###
 
 NFI_OBJECTS=$(NFI_COMMON_OBJECTS) $(NFI_LOCAL_OBJECTS) $(NFI_XPN_SERVER_OBJECTS) 
@@ -199,11 +188,6 @@ if ENABLE_SCK_SERVER
 NFI_OBJECTS+=$(NFI_SCK_SERVER_OBJECTS)
 endif
 ### END OF ENABLE_SCK_SERVER_OBJECTS BLOCK. Do not remove this line. ###
-### BEGIN OF ENABLE_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
-if ENABLE_TCP_SERVER
-NFI_OBJECTS+=$(NFI_TCP_SERVER_OBJECTS)
-endif
-### END OF ENABLE_TCP_SERVER_OBJECTS BLOCK. Do not remove this line. ###
 ### END OF NFI_OBJECTS BLOCK. Do not remove this line. ###
 
 ### XPN_CORE ###
@@ -218,6 +202,7 @@ XPN_CORE_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_cwd.c
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/xpncore/xpn_stdio.c
 
 XPN_POLICY_OBJECTS=			@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_cwd.c \
+					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_conf_reader.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_init.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_open.c \
 					@top_srcdir@/src/xpn_client/xpn/xpn_simple/policy/xpn_policy_opendir.c \

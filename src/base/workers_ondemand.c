@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -22,13 +22,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "workers_ondemand.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
+   #include "workers_ondemand.h"
 
 
 /* ... Auxiliar functions / Funciones auxiliares ......................................... */
@@ -209,7 +203,7 @@ void workers_ondemand_destroy ( worker_ondemand_t *w )
   pthread_mutex_unlock(&(w->m_worker));
 
   // destroy resources
-  debug_info("[WORKERS_ONDEMAND] [workers_ondemand_destroy] destroy resocurces\n");
+  debug_info("[WORKERS_ONDEMAND] [workers_ondemand_destroy] destroy resources\n");
 
   pthread_cond_destroy  (&(w->c_worker));
   pthread_cond_destroy  (&(w->c_nworkers));
@@ -220,3 +214,4 @@ void workers_ondemand_destroy ( worker_ondemand_t *w )
 
 
 /* ................................................................... */
+

@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra
  *
  *  This file is part of Expand.
  *
@@ -27,15 +27,12 @@
 
    /* ... Functions / Funciones ......................................... */
 
-
-
-   /* ... Functions / Funciones ......................................... */
-
-      int getURLProtocol(char *url, char *protocol)
+      int getURLProtocol ( char *url, char *protocol )
       {
       	int i,j;
 
-      	if (url == NULL) {
+      	if (url == NULL)
+	{
            printf("[%s:%d] ERROR: url is NULL\n", __FILE__, __LINE__);
       	   return -1;
       	}
@@ -47,30 +44,34 @@
         }
         j = i;
 
-      	if (url[i] != ':') {
-          printf("[%s:%d] ERROR: missing ':' within the url.\n", __FILE__, __LINE__);
-          printf("Usage: protocol_name://server:port//dir\n");
-      	  return -1;
+      	if (url[i] != ':')
+	{
+            printf("[%s:%d] ERROR: missing ':' within the url.\n", __FILE__, __LINE__);
+            printf("Usage: protocol_name://server:port//dir\n");
+      	    return -1;
       	}
 
       	i++;
-      	if (url[i] != '/') {
-          printf("[%s:%d] ERROR: missing first '/' within the url.\n", __FILE__, __LINE__);
-          printf("Usage: protocol_name://server:port//dir\n");
-      	  return -1;
+      	if (url[i] != '/')
+	{
+            printf("[%s:%d] ERROR: missing first '/' within the url.\n", __FILE__, __LINE__);
+            printf("Usage: protocol_name://server:port//dir\n");
+      	    return -1;
       	}
 
       	i++;
-      	if (url[i] != '/') {
-          printf("[%s:%d] ERROR: missing second '/' within the url.\n", __FILE__, __LINE__);
-          printf("Usage: protocol_name://server:port//dir\n");
-      	  return -1;
+      	if (url[i] != '/')
+	{
+            printf("[%s:%d] ERROR: missing second '/' within the url.\n", __FILE__, __LINE__);
+            printf("Usage: protocol_name://server:port//dir\n");
+      	    return -1;
       	}
 
       	i++;
-      	if (protocol != NULL) {
-      	  strncpy(protocol, url, j);
-      	  protocol[j] = '\0';
+      	if (protocol != NULL)
+	{
+      	    strncpy(protocol, url, j);
+      	    protocol[j] = '\0';
       	}
 
       	return i;
@@ -106,22 +107,22 @@
 
       	i=getURLServer(url, NULL) ;
       	if (i < 0) {
-      		return -1;
+      	    return -1;
       	}
 
       	if (url[i] != ':') {
-      		return -1;
+      	    return -1;
       	}
 
 	i++;
       	j = i;
       	while ((url[j]!='\0')&&(url[j]!='/')) {
-	  j++;
+	    j++;
 	}
 
-	if(port != NULL){
-		strncpy(port, url+i, j-i);
-		port[j-i] = '\0';
+	if (port != NULL) {
+	    strncpy(port, url+i, j-i);
+	    port[j-i] = '\0';
 	}
 
       	return j;
@@ -150,24 +151,6 @@
 
       	return strlen(url);
       }
-
-
-
-/*
-      int getURLLogin(char *url, char *login)
-      {
-        // TODO
-      	return 0;
-      }
-
-
-      int getURLPasswd(char *url, char *passwd)
-      {
-        // TODO
-      	return 0;
-      }
-*/
-
 
       int clear_slash(char *path)
       {
@@ -215,54 +198,32 @@
       	}
 
       	urlaux = url;
-      	if (login != NULL)
+      	if (server != NULL)
 	{
       		/* return the next position */
-      		/*
-      		if(getURLLogin(urlaux, login)<0){
-      			//Not mandatory
-      			//return -1;
-      		}
-      		*/
-      	}
-
-      	urlaux = url;
-      	if(passwd != NULL)
-	{
-      		/* return the next position */
-      		/*
-      		if(getURLPasswd(urlaux, passwd)<0){
-      			//Not mandatory
-      			//return -1;
-      		}
-      		*/
-      	}
-
-      	urlaux = url;
-      	if(server != NULL)
-	{
-      		/* return the next position */
-      		if(getURLServer(urlaux, server)<0){
+      		if (getURLServer(urlaux, server)<0){
       			return -1;
       		}
       	}
 
+	login  = login ;
+	passwd = passwd ;
 
       	urlaux = url;
-      	if(port != NULL)
+      	if (port != NULL)
 	{
       		/* return the next position */
-      		if(getURLPort(urlaux, port)<0){
+      		if (getURLPort(urlaux, port)<0) {
       			//Not mandatory
       			//return -1;
       		}
       	}
 
       	urlaux = url;
-      	if(dir != NULL)
+      	if (dir != NULL)
 	{
       		/* return the next position */
-      		if(getURLDir(urlaux, dir)<0){
+      		if (getURLDir(urlaux, dir)<0) {
       			return -1;
       		}
 		clear_slash(dir);
@@ -272,7 +233,7 @@
       }
 
 
-      int getDirWithURL(char *url, char *dir)
+      int getDirWithURL ( char *url, char *dir )
       {
       	char dir_aux[PATH_MAX]; /* change for a const*/
       	int i,j;
@@ -280,29 +241,27 @@
       	getURLDir(url, dir_aux);
 
       	i = 0;
-      	while((dir_aux[i] != '\0')&&(dir_aux[i] == dir[i])) {
+      	while ((dir_aux[i] != '\0')&&(dir_aux[i] == dir[i])) {
       		i++;
 	}
 
-
-      	if(dir_aux[i] != '\0') {
+      	if (dir_aux[i] != '\0') {
       		return -1;
 	}
-      	if(dir_aux[i] == dir[i]){
-      		//dir[0] = '\0'; /* or '/'  */
+      	if (dir_aux[i] == dir[i]) {
       		dir[0] = '/';
       		dir[1] = '\0';
       		return 0;
       	}
 
       	j = 0;
-      	while(dir[j+i]!='\0'){
+      	while (dir[j+i]!='\0') {
       		dir[j] = dir[j+i];
       		j++;
       	}
 
       	dir[j] = '\0';
-      	if((dir[j] == '/') &&(strlen(dir+j) == 1)) {
+      	if ((dir[j] == '/') &&(strlen(dir+j) == 1)) {
       		dir[j-1] = '\0';
 	}
 

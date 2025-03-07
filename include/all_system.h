@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2024 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
  *  This file is part of Expand.
  *
@@ -25,15 +25,15 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  //Get config*.h
+  // Get config*.h
   #if defined(HAVE_CONFIG_H)
     #include "config.h"
   #endif
 
-  //Get "base_debug.h"
+  // Get "base_debug.h"
   #include "base_debug.h"
 
-  //Include common headers
+  // Include common headers
   #ifndef NOT_TO_USE_STDLIB_H
     #include <stdlib.h>
   #endif
@@ -44,6 +44,7 @@
   #include <stdint.h>
   #include <math.h>
   #include <ctype.h>
+  #include <stddef.h>
 
   #include <sys/types.h>
   #include <sys/stat.h>
@@ -51,7 +52,7 @@
   #include <semaphore.h>
 
 
-  //Include detected headers
+  // Include detected headers
   #if defined(HAVE_SYS_PARAM_H)
     #include <sys/param.h>
   #endif
@@ -109,8 +110,11 @@
     #endif
   #endif
 
+  #ifdef ENABLE_MPI_SERVER
+      #include <mpi.h>
+  #endif
   #if defined(HAVE_MPI_H)
-    #include <mpi.h>
+      #include <mpi.h>
   #endif
 
   #if defined(HAVE_MOSQUITTO_H)
@@ -120,7 +124,7 @@
 
   /* ... Const / Const ................................................. */
 
-  //Common sizes
+  // Common sizes
   #ifndef KB
     #define KB  (1024)
   #endif
@@ -145,7 +149,7 @@
     #define LARGEFILE_SOURCE 1
   #endif
 
-  //Other definitions
+  // Other definitions
   #if !defined(NULL_DEVICE_PATH)
     #define NULL_DEVICE_PATH  "/dev/null"
   #endif
@@ -177,12 +181,8 @@
     #define O_ASYNC          020000
   #endif
 
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
-  
 
   /* ................................................................... */
 
 #endif /* _ALL_H_SYSTEM_H */
+
