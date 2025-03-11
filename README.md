@@ -117,7 +117,7 @@
        direction TB
        Y2B["mkdir $HOME/src 
             cd    $HOME/src 
-            git clone https://github.com/xpn-arcos/xpn.git"]
+            git clone ‎https\://github.com/xpn-arcos/xpn.git"]
     end
     subgraph ide23 ["2.3 build source code"]
        direction LR

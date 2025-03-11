@@ -40,6 +40,7 @@
      #define OPEN_BRACKET    101
      #define CLOSE_BRACKET   102
      #define EQUAL           103
+     #define COMMENT         104
 
      #define MAX_TOKEN_LEN   1024
 
