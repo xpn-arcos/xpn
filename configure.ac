@@ -8,7 +8,7 @@
 #
 # begin
 #
-AC_INIT([Expand],[3.0.0],[fgcarbal@inf.uc3m.es],[expand])
+AC_INIT([Expand],[3.2.1],[fgcarbal@inf.uc3m.es],[expand])
 AC_CONFIG_AUX_DIR(./config)
 AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_INSTALL
@@ -32,21 +32,42 @@ AM_PROG_AR
 
 
 #
-# Checks for programs.
+# Check for compiler
 #
-AC_PROG_MAKE_SET
-AC_PROG_CC([gcc mpicc icc mpifcc])
+dnl If the environment variable CC is set, its value will be taken as the name of the C compiler to use. 
+dnl Otherwise, search for a C compiler under a series of likely names, trying gcc and cc first. 
+dnl Regardless, the output variable CC is set to the chosen compiler.
+
+AC_PROG_CC([cc gcc icc mpifcc mpicc])
 AM_PROG_CC_C_O
 
-
-
-#
-# Check __open2 support
-#
 MPICC_INTEL=$(mpicc --version | grep "Intel" | wc -l)
 if test "x$MPICC_INTEL" == "x1"; then
    AC_DEFINE([HAVE_ICC], [1], [we have icc as mpicc compiler])
 fi
+
+MPICC_ANY=$(mpicc --version | wc -l)
+if test "$MPICC_ANY" -ne "0"; then
+   AC_DEFINE([HAVE_MPICC], [1], [we have an mpicc compiler])
+fi
+
+AC_SUBST(CC)
+
+
+#
+# Check for compiler
+#
+
+AC_PROG_MAKE_SET
+
+if test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
+then
+   MAKE="gmake"
+else
+   MAKE="make"
+fi
+
+AC_SUBST(MAKE)
 
 
 
@@ -99,73 +120,81 @@ AC_CHECK_FUNCS(memcmp memcpy memmove memset)
 
 
 #
-# Set initial variables depending on $target_cpu and $target_os...
+# Set initial variables depending on $target_cpu, $target_os, etc.
 #
-IFLAGS="-I../../bin/mosquitto/include       "
-IFLAGS+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client    -I../../../xpn/include/base "
-IFLAGS+="-I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
 
-LFLAGS="-L../../bin/mosquitto/lib         -L../../xpn/lib "
-LFLAGS+="-L../../../bin/mosquitto/lib     -L../../../xpn/lib "
-LFLAGS+="-L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
+CFLAGS_IPATH="-I../../bin/mosquitto/include       "
+CFLAGS_IPATH+="-I../../../bin/mosquitto/include    -I../../../xpn/include    -I../../../xpn/include/xpn_client    -I../../../xpn/include/base "
+CFLAGS_IPATH+="-I../../../../bin/mosquitto/include -I../../../../xpn/include -I../../../../xpn/include/xpn_client -I../../../../xpn/include/base "
 
-LIBLINK=$LIBS
+CFLAGS_LPATH="-L../../bin/mosquitto/lib         -L../../xpn/lib "
+CFLAGS_LPATH+="-L../../../bin/mosquitto/lib     -L../../../xpn/lib "
+CFLAGS_LPATH+="-L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
 
-if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
-then
-  OS="__LINUX__"
-  #CC="mpifcc"
-  MAKE="make"
+ CFLAGS_DEBUG="-O2 -Wall -Wextra"
+#CFLAGS_DEBUG="-g -Wall -Wextra"
+#CFLAGS_DEBUG="-g -g3 -ggdb -Wall -Wextra"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
-  CFLAGS=$IFLAGS" -fPIC -O2 -g -std=c11"
+CFLAGS_CDEFS=""
+CFLAGS_SWITCHES=""
 
-elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
-then
-  OS="__LINUX__"
-  #CC="mpicc"
-  MAKE="make"
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
-  CFLAGS=$IFLAGS" -fPIC -O2 -g -g3 -ggdb -Wall -Wextra -std=c11"
+AC_MSG_RESULT("$target_os");
+case "$target_os" in
+  Linux* | linux*)
+    OS="__LINUX__"
+    CFLAGS_CDEFS+=" -D_GNU_SOURCE"
+    ;;
+  AIX*   | aix*)
+    OS="__AIX__"
+    CFLAGS_CDEFS+=" -D_LARGE_FILES=1"
+    ;;
+  IRIX*  | irix*)
+    OS="__IRIX__"
+    ;;
+  *)
+    OS="__LINUX__"
+    AC_MSG_RESULT("GNU/Linux operating by default will be used.");
+    ;;
+esac
 
-elif test "$target_os" = "AIX" -o "$target_os" = "aix"
-then
-  OS="__AIX__"
-  #CC="mpicc"
-  MAKE="make"
+AC_MSG_RESULT("$target_cpu");
+#case "$target_cpu" in
+#  x86_64 | AARCH64* | aarch64*)
+#    CFLAGS_CDEFS+=" -D_FILE_OFFSET_BITS=64"
+#    AC_MSG_RESULT("64-bits by default will be used.");
+#    ;;
+#  MIPS64* | mips64* | ppc64* | sparc64)
+#    CFLAGS_CDEFS+=" -D_FILE_OFFSET_BITS=64"
+#    AC_MSG_RESULT("64-bits by default will be used for MIPS/PPC/SPARC.");
+#    ;;
+#  *)
+#    AC_MSG_RESULT("32-bits by default will be used.");
+#    ;;
+#esac
 
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1"
-  CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-
-elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
-then
-  OS="__IRIX__"
-  #CC="mpicc"
-  MAKE="gmake"
-
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"
-  CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-
+AC_CHECK_SIZEOF([int *])
+if test "x$SIZEOF_INT_P" == "x8"; then
+    CFLAGS_CDEFS+=" -DHAVE_64BITS -D_FILE_OFFSET_BITS=64"
+    AC_MSG_RESULT("64-bits by default will be used.");
 else
-  OS="__LINUX__"
-  #CC="mpicc"
-  MAKE="make"
-
-  CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"
-  CFLAGS=$IFLAGS" -O2 -Wall -Wextra -fPIC -g -std=c11"
-
-  AC_MSG_RESULT("Using Linux configuration as default configuration...");
+    CFLAGS_CDEFS+=" -DHAVE_32BITS"
+    AC_MSG_RESULT("32-bits by default will be used.");
 fi
 
+
+LIBLINK=$LIBS
+CDEFS="$CFLAGS_CDEFS -D_REENTRANT -DHAVE_CONFIG_H"
+CFLAGS="$CFLAGS_SWITCHES $CFLAGS_DEBUG -Wall -Wextra -fPIC -std=c11 $CFLAGS_IPATH"
+
+AC_MSG_RESULT("CFLAGS   so far: "$CFLAGS);
+AC_MSG_RESULT("CDEFS    so far: "$CDEFS);
+AC_MSG_RESULT("LIBLINK  so far: "$LIBLINK);
+
 AC_SUBST(OS)
-AC_SUBST(CC)
-AC_SUBST(MAKE)
 AC_SUBST(CFLAGS)
 AC_SUBST(CDEFS)
 AC_SUBST(LIBLINK)
-AC_MSG_RESULT("$target_cpu");
-AC_MSG_RESULT("$target_os");
 
 
 
@@ -281,7 +310,7 @@ AC_ARG_ENABLE(  [mosquitto],
                   [NFI_SCK_SERVER="nfi_sck_server"]
                   [NFI_SCK_SERVER_OBJECTS="\$(NFI_SCK_SERVER_OBJECTS)"]
                   [LIBLINK+=" -lmosquitto"]
-                  [LIBS=$LFLAGS" "$LIBS" -lmosquitto"]
+                  [LIBS=$CFLAGS_LPATH" "$LIBS" -lmosquitto"]
                 ]
 )
 AC_SUBST(NFI_SCK_SERVER)
@@ -324,3 +353,4 @@ AC_CONFIG_FILES([ \
     ])
     
 AC_OUTPUT
+

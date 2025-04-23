@@ -4,8 +4,8 @@
 # Definitions
 #
 
-MAKE         = make -s
-CC           = gcc
+MAKE         = @MAKE@
+CC           = @CC@
 MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
 MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client -L../../../../../bin/mosquitto/lib -L../../../../../bin/mxml/lib64 -I../../../bin/mosquitto/include
 LIBRARIES    = -lxpn @LIBS@

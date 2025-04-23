@@ -85,10 +85,14 @@ ln    -s "${INSTALL_PATH}/xpn/lib64"   "${INSTALL_PATH}/xpn/lib"
 echo " * XPN: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
+export CC=${MPICC_PATH}
+export CFLAGS="-I${INSTALL_PATH}/mosquitto/include"
+export CPPFLAGS="-I${INSTALL_PATH}/mosquitto/include" 
+export LDFLAGS="-L${INSTALL_PATH}/mosquitto/lib64"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/bin/mosquitto/lib64:$HOME/bin/mpich-install/lib" 
 ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-CC=${MPICC_PATH} LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/bin/mosquitto/lib64:$HOME/bin/mpich-install/lib" CFLAGS="-I${INSTALL_PATH}/mosquitto/include" CPPFLAGS="-I${INSTALL_PATH}/mosquitto/include" LDFLAGS="-L${INSTALL_PATH}/mosquitto/lib64" ./configure --prefix="${INSTALL_PATH}/xpn" --enable-mosquitto
-CC=${MPICC_PATH} CFLAGS="-I${INSTALL_PATH}/mosquitto/include" CPPFLAGS="-I${INSTALL_PATH}/mosquitto/include" LDFLAGS="-L${INSTALL_PATH}/mosquitto/lib64" make clean
-CC=${MPICC_PATH} CFLAGS="-I${INSTALL_PATH}/mosquitto/include" CPPFLAGS="-I${INSTALL_PATH}/mosquitto/include" LDFLAGS="-L${INSTALL_PATH}/mosquitto/lib64" make -j 16
-#doxygen doc/doxygen-XPN.cfg
+./configure --prefix="${INSTALL_PATH}/xpn" --enable-mosquitto
+make clean
+make -j 16
 make install
 popd
