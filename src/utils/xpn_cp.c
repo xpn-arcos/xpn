@@ -36,7 +36,7 @@
 
   #define BUFFER_SIZE (8192*1024)
   char buf[BUFFER_SIZE];
-
+  #define PATH_MAX 1024
 
 /* ... Functions / Funciones ......................................... */
 

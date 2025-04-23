@@ -66,7 +66,7 @@ AC_CHECK_LIB(mosquitto,mosquitto_lib_init)
 AC_PROG_EGREP
 
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h sys/time.h netinet/tcp.h netinet/in.h pthread.h sys/param.h dirent.h rpc/rpc.h rpc/clnt.h rpc/types.h mpi.h mosquitto.h)
+AC_CHECK_HEADERS(fcntl.h string.h strings.h unistd.h sys/ioctl.h time.h sys/time.h netinet/tcp.h netinet/in.h pthread.h sys/param.h dirent.h rpc/rpc.h rpc/clnt.h rpc/types.h mpi.h mosquitto.h)
 
 
 
@@ -114,7 +114,7 @@ LIBLINK=$LIBS
 if test "$target_cpu" = "AARCH64" -o "$target_cpu" = "aarch64"
 then
   OS="__LINUX__"
-  CC="mpifcc"
+  #CC="mpifcc"
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
@@ -123,7 +123,7 @@ then
 elif test "$target_os" = "Linux" -o "$target_os" = "linux" -o "$target_os" = "linux-gnu" -o "$target_os" = "linux gnu"
 then
   OS="__LINUX__"
-  CC="mpicc"
+  #CC="mpicc"
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
@@ -132,7 +132,7 @@ then
 elif test "$target_os" = "AIX" -o "$target_os" = "aix"
 then
   OS="__AIX__"
-  CC="mpicc"
+  #CC="mpicc"
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H -D_LARGE_FILES=1"
@@ -141,7 +141,7 @@ then
 elif test "$target_os" = "IRIX6.5" -o "$target_os" = "irix6.5"
 then
   OS="__IRIX__"
-  CC="mpicc"
+  #CC="mpicc"
   MAKE="gmake"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"
@@ -149,7 +149,7 @@ then
 
 else
   OS="__LINUX__"
-  CC="mpicc"
+  #CC="mpicc"
   MAKE="make"
 
   CDEFS="-D_REENTRANT -DHAVE_CONFIG_H"

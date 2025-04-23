@@ -32,7 +32,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#if defined(HAVE_MPI_H)
 #include "mpi.h"
+#endif
+
 #include "ns.h"
 #include "xpn/xpn_simple/xpn_policy_rw.h"
 
@@ -59,6 +62,8 @@ int old_size, new_size;
 
 /* ... Functions / Funciones ......................................... */
 
+
+#if defined(HAVE_MPI_H)
 int copy(char *entry, int is_file, int blocksize, int replication_level, int rank, int size) {
     struct stat st;
     int res;
@@ -428,6 +433,7 @@ cleanup_calculate_ranks_sizes:
         fclose(file_new);
     }
 }
+#endif
 
 // TODO: think if MPI_Abort is the desired error handler
 int main(int argc, char *argv[]) {
@@ -439,6 +445,8 @@ int main(int argc, char *argv[]) {
     //
     // Check arguments...
     //
+
+#if defined(HAVE_MPI_H)
     if (argc < 4) {
         printf("Usage:\n");
         printf(
@@ -546,6 +554,7 @@ int main(int argc, char *argv[]) {
     }
 
     MPI_Finalize();
+#endif
     return res;
 }
 

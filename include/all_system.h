@@ -30,9 +30,6 @@
     #include "config.h"
   #endif
 
-  // Get "base_debug.h"
-  #include "base_debug.h"
-
   // Include common headers
   #ifndef NOT_TO_USE_STDLIB_H
     #include <stdlib.h>
@@ -58,6 +55,7 @@
   #endif
 
   #if defined(HAVE_DIRENT_H)
+    #define __USE_XOPEN
     #include <dirent.h>
   #endif
 
@@ -92,6 +90,10 @@
     #include <sys/time.h>
   #endif
 
+  #if defined(HAVE_TIME_H)
+    #include <time.h>
+  #endif
+
   #if defined(HAVE_RPC_RPC_H)
     #include <rpc/rpc.h>
   #endif
@@ -120,6 +122,9 @@
   #if defined(HAVE_MOSQUITTO_H)
     #include <mosquitto.h>
   #endif
+
+#define __USE_GNU
+#include <dlfcn.h>
 
 
   /* ... Const / Const ................................................. */
@@ -180,6 +185,26 @@
     #define O_FSYNC          O_SYNC
     #define O_ASYNC          020000
   #endif
+
+#if !defined (__x86_64__) && !defined (__aarch64__)
+    #define off64_t __off_t
+    #define uid_t __uid_t
+    #define gid_t __gid_t
+    #define mode_t __mode_t
+    #define h_addr h_addr_list[0] /* for backward compatibility */
+    #define u_long unsigned long
+#endif
+
+#if !defined(O_DIRECTORY)
+    #define O_DIRECTORY      040000
+    #define O_LARGEFILE __O_LARGEFILE
+#endif
+
+
+  // Get "base_debug.h"
+  #include "base_debug.h"
+
+
 
 
   /* ................................................................... */

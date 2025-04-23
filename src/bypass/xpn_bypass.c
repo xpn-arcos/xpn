@@ -444,6 +444,9 @@ DIR fdsdirtable_getfd ( DIR * dir )
 /**
  * stat management
  */
+
+#if defined (__x86__64__) || defined (__aarch64__)
+
 int stat_to_stat64 ( struct stat64 *buf, struct stat *st )
 {
   buf->st_dev     = (__dev_t)      st->st_dev;
@@ -481,7 +484,7 @@ int stat64_to_stat ( struct stat *buf, struct stat64 *st )
 
   return 0;
 }
-
+#endif
 
 /*
  * This function checks if expand has already been initialized.
@@ -600,6 +603,7 @@ int open ( const char *path, int flags, ... )
 }
 
 
+#if defined (__x86__64__) || defined (__aarch64__)
 int open64 ( const char *path, int flags, ... )
 {
   int fd, ret;
@@ -651,7 +655,7 @@ int open64 ( const char *path, int flags, ... )
 
   return ret;
 }
-
+#endif
 
 #ifndef HAVE_ICC
 
@@ -1023,6 +1027,9 @@ ssize_t pwrite ( int fd, const void *buf, size_t count, off_t offset )
   return ret;
 }
 
+
+#if defined (__x86__64__) || defined (__aarch64__)
+
 ssize_t pread64 ( int fd, void *buf, size_t count, off_t offset )
 {
   ssize_t ret = -1;
@@ -1133,6 +1140,8 @@ ssize_t pwrite64 ( int fd, const void *buf, size_t count, off_t offset )
   return ret;
 }
 
+#endif
+
 off_t lseek ( int fd, off_t offset, int whence )
 {
   off_t ret = (off_t) -1;
@@ -1168,6 +1177,9 @@ off_t lseek ( int fd, off_t offset, int whence )
 
   return ret;
 }
+
+
+#if defined (__x86__64__) || defined (__aarch64__)
 
 off64_t lseek64 ( int fd, off64_t offset, int whence )
 {
@@ -1205,6 +1217,8 @@ off64_t lseek64 ( int fd, off64_t offset, int whence )
   return ret;
 }
 
+#endif
+
 int stat(const char *path, struct stat *buf)
 {
   int ret;
@@ -1239,6 +1253,9 @@ int stat(const char *path, struct stat *buf)
 
   return ret;
 }
+
+
+#if defined (__x86__64__) || defined (__aarch64__)
 
 int statfs64 (const char *path, struct statfs64 *buf)
 {
@@ -1275,6 +1292,8 @@ int statfs64 (const char *path, struct statfs64 *buf)
   return ret;
 }
 
+#endif
+
 int statfs (const char *path, struct statfs *buf)
 {
   int ret;
@@ -1309,6 +1328,9 @@ int statfs (const char *path, struct statfs *buf)
 
   return ret;
 }
+
+
+#if defined (__x86__64__) || defined (__aarch64__)
 
 int __lxstat64 ( int ver, const char *path, struct stat64 *buf )
 {
@@ -1350,6 +1372,7 @@ int __lxstat64 ( int ver, const char *path, struct stat64 *buf )
 
   return ret;
 }
+
 
 int __xstat64 ( int ver, const char *path, struct stat64 *buf )
 {
@@ -1430,6 +1453,8 @@ int __fxstat64 ( int ver, int fd, struct stat64 *buf )
 
   return ret;
 }
+
+#endif
 
 int __lxstat ( int ver, const char *path, struct stat *buf )
 {
@@ -2334,6 +2359,9 @@ struct dirent *readdir ( DIR *dirp )
   return ret;
 }
 
+
+#if defined (__x86__64__) || defined (__aarch64__)
+
 struct dirent64 *readdir64 ( DIR *dirp )
 {
   struct dirent *aux;
@@ -2378,6 +2406,8 @@ struct dirent64 *readdir64 ( DIR *dirp )
 
   return ret;
 }
+
+#endif
 
 int closedir ( DIR *dirp )
 {
@@ -2939,6 +2969,7 @@ int flock(int fd, int operation)
 
 // MPI API
 
+#if defined(HAVE_MPI_H)
 int MPI_Init ( int *argc, char ***argv )
 {
   char *value;
@@ -2999,4 +3030,4 @@ int MPI_Finalize (void)
 
   return PMPI_Finalize();
 }
-
+#endif

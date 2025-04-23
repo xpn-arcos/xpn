@@ -25,54 +25,45 @@
 
 struct xpn_filedesc *xpn_file_table[XPN_MAX_FILE];
 
-int xpn_init_file_table ( void )
+int xpn_init_file_table()
 {
-    int i;
+  int i;
 
-    for (i=0; i<XPN_MAX_FILE; i++)
-    {
-         xpn_file_table[i] = NULL;
-    }
+  for(i=0;i<XPN_MAX_FILE;i++){
+    xpn_file_table[i] = NULL;
+  }
 
-    return 0;
+  return 0;
 }
 
-pthread_mutex_t x_d_lock = PTHREAD_MUTEX_INITIALIZER;
-
-int xpn_destroy_file_table ( void )
+int xpn_destroy_file_table()
 {
-    int i, j;
+  int i,j;
 
-    pthread_mutex_lock(&x_d_lock);
-
-    for (i=0; i<XPN_MAX_FILE; i++)
+  for(i=0;i<XPN_MAX_FILE;i++)
+  {
+    if(xpn_file_table[i] != NULL)
     {
-        if (NULL == xpn_file_table[i]) {
-	    continue ;
-        }
-        if (NULL == xpn_file_table[i]->data_vfh) {
-	    continue ;
-        }
-
-        for (j=0; j<xpn_file_table[i]->data_vfh->n_nfih; j++)
+      for(j=0;j<xpn_file_table[i]->data_vfh->n_nfih;j++)
+      {
+        if(xpn_file_table[i]->data_vfh->nfih[j] != NULL)
         {
-             if (NULL == xpn_file_table[i]->data_vfh->nfih[j]) {
-	         continue ;
-             }
-
-             FREE_AND_NULL(xpn_file_table[i]->data_vfh->nfih[j]->priv_fh) ;
-             FREE_AND_NULL(xpn_file_table[i]->data_vfh->nfih[j]) ;
+          if(xpn_file_table[i]->data_vfh->nfih[j]->priv_fh != NULL){
+            free(xpn_file_table[i]->data_vfh->nfih[j]->priv_fh);
+          }
+          free(xpn_file_table[i]->data_vfh->nfih[j]);
         }
+      }
 
-        FREE_AND_NULL(xpn_file_table[i]->data_vfh->nfih) ;
-        FREE_AND_NULL(xpn_file_table[i]->data_vfh) ;
-        FREE_AND_NULL(xpn_file_table[i]->mdata) ;
-        FREE_AND_NULL(xpn_file_table[i]) ;
+      free(xpn_file_table[i]->data_vfh->nfih);
+      free(xpn_file_table[i]->data_vfh);
+      free(xpn_file_table[i]->mdata);
+      free(xpn_file_table[i]);
+
+      xpn_file_table[i] = NULL;
     }
+  }
 
-    pthread_mutex_unlock(&x_d_lock);
-
-    return 0;
+  return 0;
 }
-
 
