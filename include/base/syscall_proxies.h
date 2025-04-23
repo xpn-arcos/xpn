@@ -127,7 +127,7 @@
 
 
   // 64 bits
-#if defined(__x86__64__) || defined(__aarch64__)
+#if defined(DHAVE_64BITS)
   struct dirent64 * dlsym_readdir64 (DIR *dirp);
   DIR* dlsym_opendir64 (char *dirname);
   int dlsym_statfs64  (const char *path, struct statfs64 *buf);
