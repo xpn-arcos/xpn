@@ -22,15 +22,15 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "mq_server_comm.h"
+   #include "mq_server_comm.h"
 
 
 /* ... Globals / Globales ............................................ */
 
-int file2 = -1;
-int opened = 0;
-int write_total = 0;
-//int its = 0;
+   int file2 = -1;
+   int opened = 0;
+   int write_total = 0;
+   //int its = 0;
 
 
 /* ... Functions / Funciones ......................................... */
@@ -104,7 +104,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
         //debug_info("\n%s - %s %d %d\n", topic, path, to_write1, offset);
 
         //char * buffer = NULL;
-        int size, diff, cont = 0, to_write = 0, size_written = 0;
+	int size, diff, cont = 0, to_write = 0, size_written = 0;
 
         // initialize counters
         size = to_write1;
@@ -162,8 +162,19 @@ void * process_message(__attribute__((__unused__)) void * arg)
             //debug_info("STARTW - %s\n", time_str);
         }*/
 
+        if (diff > size)
+	     to_write = size;
+        else to_write = diff;
+
+        filesystem_lseek(fd, offset + cont, SEEK_SET);
+        //debug_info("to write: %d\t msg: %s", to_write, thread_data -> msg);
+        size_written = filesystem_write(fd, thread_data -> msg, to_write);
+	if (size_written < 0) {
+	    printf("process_message: filesystem_write return error\n") ;
+	}
+
         // loop...
-        do 
+        /*do 
         {
             if (diff > size) to_write = size;
             else to_write = diff;
@@ -177,7 +188,7 @@ void * process_message(__attribute__((__unused__)) void * arg)
             cont = cont + size_written; // Received bytes
             diff = to_write - cont;
 
-        } while ((diff > 0) && (size_written != 0));
+        } while ((diff > 0) && (size_written != 0));*/
 
         close(fd);
         //total_time = (get_time() - start_time);
@@ -267,7 +278,6 @@ int mq_server_mqtt_init ( xpn_server_param_st * params )
         mosquitto_lib_init();
 
         params -> mqtt = mosquitto_new(NULL, true, NULL);
-
         if (params -> mqtt == NULL) {
             debug_info(stderr, "Error: Out of memory.\n");
             return 1;
@@ -287,7 +297,6 @@ int mq_server_mqtt_init ( xpn_server_param_st * params )
 
         /* Run the network loop in a background thread, this call returns quickly. */
         rc = mosquitto_loop_start(params -> mqtt);
-
         if (rc != MOSQ_ERR_SUCCESS) {
             mosquitto_destroy(params -> mqtt);
             debug_info(stderr, "Error: %s\n", mosquitto_strerror(rc));
@@ -308,8 +317,9 @@ int mq_server_mqtt_init ( xpn_server_param_st * params )
             pthread_create( &threads_mq[i], NULL, process_message, &i );
         }
 
-        return 0 ; // OK: 0, ERROR: 1        
     #endif
+
+        return 0 ; // OK: 0, ERROR: 1        
 }
 
 int mq_server_mqtt_destroy ( xpn_server_param_st * params ) 
@@ -325,8 +335,9 @@ int mq_server_mqtt_destroy ( xpn_server_param_st * params )
         mosquitto_loop_stop(params -> mqtt, true);
         debug_info("[%d]\tEND DESTROY MOSQUITTO MQ_SERVER\n\n", __LINE__);
 
-        return 0 ; // OK: 0, ERROR: 1
     #endif
+
+        return 0 ; // OK: 0, ERROR: 1
 }
 
 

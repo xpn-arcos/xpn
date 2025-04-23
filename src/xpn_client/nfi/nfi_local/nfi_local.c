@@ -22,16 +22,13 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi_local.h"
-#include "nfi/nfi_xpn_server/nfi_xpn_server_comm.h"
-#include <stddef.h>
+   #include "nfi_local.h"
+   #include "nfi/nfi_xpn_server/nfi_xpn_server_comm.h"
+   #include <stddef.h>
 
 /* ... Const / Const ................................................. */
 
-#define FILESYSTEM_DLSYM 1
-
-
-/* ... Global variables / Variables globales ........................ */
+   #define FILESYSTEM_DLSYM 1
 
 
 /* ... Auxiliar Functions / Funciones Auxiliares ..................... */

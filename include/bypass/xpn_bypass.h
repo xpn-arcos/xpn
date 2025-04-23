@@ -41,8 +41,10 @@
 
   #include <dirent.h>
   #include <string.h>
-  #include "mpi.h"
 
+#if defined(HAVE_MPI_H)
+  #include "mpi.h"
+#endif
   //#include<pthread.h> //Mutex
 
 
@@ -145,7 +147,6 @@
   // File API
 
   int open       ( const char *path, int flags, ... );
-  int open64     ( const char *path, int flags, ... );
   int __open_2   ( const char *path, int flags, ... );
   int creat      ( const char *path, mode_t mode );
   int mkstemp    ( char *template );
@@ -158,24 +159,16 @@
 
   ssize_t pread    ( int fd, void *buf, size_t count, off_t offset );
   ssize_t pwrite   ( int fd, const void *buf, size_t count, off_t offset );
-  ssize_t pread64  ( int fd, void *buf, size_t count, off_t offset );
-  ssize_t pwrite64 ( int fd, const void *buf, size_t count, off_t offset );
 
   off_t   lseek   ( int fildes, off_t offset, int whence );
-  off64_t lseek64 ( int fd,   off64_t offset, int whence );
 
   int stat         (          const char *path, struct stat     *buf );
   int statfs       (          const char *path, struct statfs   *buf );
-  int statfs64     (          const char *path, struct statfs64 *buf );
   int __lxstat     ( int ver, const char *path, struct stat     *buf );
-  int __lxstat64   ( int ver, const char *path, struct stat64   *buf );
   int __xstat      ( int ver, const char *path, struct stat     *buf );
-  int __xstat64    ( int ver, const char *path, struct stat64   *buf );
   int fstat        (                    int fd, struct stat     *buf );
   int __fxstat     ( int ver,           int fd, struct stat     *buf );
-  int __fxstat64   ( int ver,       int fildes, struct stat64   *buf );
   int __fxstatat   ( int ver, int dirfd, const char *path, struct stat   *buf, int flags );
-  int __fxstatat64 ( int ver, int dirfd, const char *path, struct stat64 *buf, int flags );
 
   int rename     ( const char *old_path, const char *new_path );
   int unlink     ( const char *path );
@@ -203,7 +196,6 @@
   DIR * opendir ( const char *dirname );
 
   struct dirent   *readdir   ( DIR *dirp );
-  struct dirent64 *readdir64 ( DIR *dirp );
 
   int closedir ( DIR *dirp );
   int rmdir    ( const char *path );
@@ -232,11 +224,25 @@
 
 
   // MPI API
+
+#if defined(HAVE_MPI_H)
   int MPI_Init ( int *argc, char ***argv );
   int MPI_Init_thread ( int *argc, char ***argv, int required, int *provided );
   int MPI_Finalize (void);
+#endif
 
+#if defined (__x86__64__) || defined (__aarch64__)
+  int statfs64     (          const char *path, struct statfs64 *buf );
+  int open64     ( const char *path, int flags, ... );
+  ssize_t pread64  ( int fd, void *buf, size_t count, off_t offset );
+  ssize_t pwrite64 ( int fd, const void *buf, size_t count, off_t offset );
+  off64_t lseek64 ( int fd,   off64_t offset, int whence );
+  int __lxstat64   ( int ver, const char *path, struct stat64   *buf );
+  int __xstat64    ( int ver, const char *path, struct stat64   *buf );
+  int __fxstat64   ( int ver,       int fildes, struct stat64   *buf );
+  int __fxstatat64 ( int ver, int dirfd, const char *path, struct stat64 *buf, int flags );
+  struct dirent64 *readdir64 ( DIR *dirp );
+#endif
 
   /* ................................................................... */
-
 #endif

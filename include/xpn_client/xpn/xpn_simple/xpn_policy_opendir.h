@@ -29,18 +29,13 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "xpn_file.h"
-  #include "xpn.h"
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "xpn_file.h"
+     #include "xpn.h"
 
 
   /* ... Functions / Funciones ......................................... */
  
-  int XpnGetEntry(int fd , struct dirent *entry);
+     int XpnGetEntry(int fd , struct dirent *entry);
 
 
   /* ................................................................... */
@@ -50,3 +45,4 @@
   #endif
 
 #endif
+

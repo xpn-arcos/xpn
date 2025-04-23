@@ -1,3 +1,4 @@
+
 /*
  *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
@@ -18,11 +19,12 @@
  *
  */
 
+
 /* ... Include / Inclusion ........................................... */
 
-#include "base/ns.h"
-#include "nfi_sck_server_comm.h"
-#include "socket.h"
+   #include "base/ns.h"
+   #include "nfi_sck_server_comm.h"
+   #include "socket.h"
 
 
 /* ... Functions / Funciones ......................................... */

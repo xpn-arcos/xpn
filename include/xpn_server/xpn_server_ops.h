@@ -254,7 +254,7 @@
     }
   }
 
-  int   xpn_server_do_operation ( struct st_th *th, int * the_end );
+  int   xpn_server_do_operation ( int server_type, struct st_th *th, int * the_end );
 
 
   /* ................................................................... */

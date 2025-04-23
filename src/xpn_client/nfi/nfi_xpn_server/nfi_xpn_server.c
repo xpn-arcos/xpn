@@ -1,3 +1,4 @@
+
 /*
  *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
@@ -17,6 +18,7 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 
 /* ... Include / Inclusion ........................................... */
 
@@ -303,7 +305,8 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
 
     // parse url...
     ret = ParseURL(url, prt, NULL, NULL, server, NULL, dir);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
         printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_init] ERROR: incorrect url '%s'.\n", serv->id, url);
         FREE_AND_NULL(serv->ops);
         return -1;
@@ -379,7 +382,7 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
     if (server_aux->keep_connected == 0)
     {
         // lookup port_name
-        ret = sersoc_lookup_port_name(server, server_aux->port_name, SOCKET_ACCEPT_CODE_NO_CONN) ;
+        ret = sersoc_lookup_port_name(server, server_aux->port_name, SOCKET_ACCEPT_CODE_SCK_NO_CONN) ;
         if (ret < 0)
         {
             fprintf(stderr, "nfi_sck_server_comm_lookup_port_name: error on '%s'\n", server_aux->srv_name);
@@ -837,12 +840,14 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] >> Begin\n", serv->id);
 
     // MQTT publish
-    if (fh->has_mqtt) {
+    if (fh->has_mqtt) 
+    {
         return nfi_mq_server_publish(server_aux, fh_aux, buffer, offset, size);
     }
 
     // 0-size buffer
-    if (size == 0) {
+    if (size == 0) 
+    {
         return 0;
     }
 
@@ -881,7 +886,8 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     int buffer_size = size;
 
     // Max buffer size
-    if (buffer_size > MAX_BUFFER_SIZE) {
+    if (buffer_size > MAX_BUFFER_SIZE) 
+    {
         buffer_size = MAX_BUFFER_SIZE;
     }
 
@@ -924,14 +930,16 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     {
         printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_write writes zero bytes from '%s' in server %s\n", serv->id, fh_aux->path, serv->server);
 
-        if (req.status.ret < 0) {
+        if (req.status.ret < 0) 
+        {
             errno = req.status.server_errno;
-	}
+        }
         goto nfi_xpn_server_write_KO;
     }
 
 
-    if (req.status.ret < 0) {
+    if (req.status.ret < 0) 
+    {
         errno = req.status.server_errno;
     }
     ret = cont;
@@ -939,7 +947,8 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_write(%s, %ld, %ld)=%d\n", serv->id, fh_aux->path, offset, size, ret);
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] >> End\n", serv->id);
 
-    if (serv->keep_connected == 0) {
+    if (serv->keep_connected == 0) 
+    {
         nfi_xpn_server_disconnect(serv);
     }
 
@@ -947,8 +956,9 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 
 
 nfi_xpn_server_write_KO:
-    if (serv->keep_connected == 0) {
-            nfi_xpn_server_disconnect(serv);
+    if (serv->keep_connected == 0) 
+    {
+        nfi_xpn_server_disconnect(serv);
     }
 
     return -1;
@@ -1344,7 +1354,7 @@ int nfi_xpn_server_mkdir(struct nfi_server * serv, char * url, mode_t mode, __at
 
     if ((status.ret < 0) && (errno != EEXIST))
     {
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
         if (serv->keep_connected == 0)
             nfi_xpn_server_disconnect(serv);
         return -1;
@@ -1531,7 +1541,7 @@ int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
     {
         if (serv->keep_connected == 0) {
             nfi_xpn_server_disconnect(serv);
-	}
+	   }
 
         // Without sesion close do nothing
         return 0;

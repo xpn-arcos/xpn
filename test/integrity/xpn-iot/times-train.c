@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -128,6 +129,13 @@ int main(int argc, char *argv[])
 
         sleep(10);
         xpn_closedir(dir);
+    }
+
+    ret = xpn_destroy();
+    if (ret < 0) 
+    {
+        printf("ERROR: xpn_destroy()\n");
+        return -1;
     }
 
     

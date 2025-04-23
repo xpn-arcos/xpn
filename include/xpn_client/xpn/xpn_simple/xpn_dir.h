@@ -30,20 +30,15 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "xpn.h"
-  #include "xpn_policy_init.h"
-  #include "xpn_policy_open.h"
-
-  /* ... Const / Const ................................................. */
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
+     #include "xpn.h"
+     #include "xpn_policy_init.h"
+     #include "xpn_policy_open.h"
 
 
   /* ... Functions / Funciones ......................................... */
  
-  int xpn_simple_mkdir(const char *path, mode_t perm) ;
-  int xpn_simple_rmdir(const char *path) ;
+     int xpn_simple_mkdir(const char *path, mode_t perm) ;
+     int xpn_simple_rmdir(const char *path) ;
 
 
   /* ................................................................... */

@@ -25,21 +25,13 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "config.h"
-  #include "base/base_lib.h"
-  #include "nfi/nfi_lib.h"
-  #include "xpn/xpn_lib.h"
-
-
-  /* ... Const / Const ................................................. */
-
-  
-  /* ... Data structures / Estructuras de datos ........................ */
-
-
-  /* ... Functions / Funciones ......................................... */
+     #include "config.h"
+     #include "base/base_lib.h"
+     #include "nfi/nfi_lib.h"
+     #include "xpn/xpn_lib.h"
 
 
   /* ................................................................... */
 
 #endif
+

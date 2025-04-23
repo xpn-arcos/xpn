@@ -51,6 +51,7 @@
     long   sd;
     void  *comm;
     int    close4me;
+    int    server_type;
 
     // w: worker_ondemand/worker_pool as void *
     void  *w;
@@ -62,13 +63,11 @@
     pthread_mutex_t  m_wait;
     pthread_cond_t   c_wait;
     int              r_wait;
-    int              wait4me;  //  (wait4me==1) ? launch + wait : launch
+    int              wait4me;  // (wait4me==1) ? launch + wait : launch
   };
-
-
-  /* ... Functions / Funciones ......................................... */
 
 
   /* ................................................................... */
 
 #endif
+

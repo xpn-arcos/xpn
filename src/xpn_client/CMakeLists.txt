@@ -157,6 +157,7 @@ set (XPN_CORE_OBJECTS	xpn/xpn_simple/xpncore/xpn_cwd.c
 #			xpn/xpn_simple/xpncore/xpn_setvbuf.c
     )
 set (XPN_POLICY_OBJECTS	xpn/xpn_simple/policy/xpn_policy_cwd.c
+	                xpn/xpn_simple/policy/xpn_conf_reader.c
 			xpn/xpn_simple/policy/xpn_policy_init.c
 			xpn/xpn_simple/policy/xpn_policy_open.c
 			xpn/xpn_simple/policy/xpn_policy_opendir.c

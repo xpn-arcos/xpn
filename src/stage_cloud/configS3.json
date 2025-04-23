@@ -1,0 +1,6 @@
+{
+    "bucket_name": "Name of the S3 bucket",
+    "aws_access_key_id": "Please, fill with your access ID",
+    "aws_secret_access_key": "Please, fill with your access key",
+    "region_name": "eu-west-3"
+}

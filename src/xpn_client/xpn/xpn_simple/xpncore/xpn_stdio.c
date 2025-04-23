@@ -67,6 +67,7 @@ int xpn_cleaner (void *cookie)
 
 FILE *xpn_fopencookie(const char *path, const char *mode)
 {
+#if defined (__x86__64__) || defined (__aarch64__)
   FILE *stream;
   int flags, *fd;
   cookie_io_functions_t io_functions;
@@ -87,7 +88,7 @@ FILE *xpn_fopencookie(const char *path, const char *mode)
   else if (0 == strncmp(mode, "w", 1)){
     flags = O_WRONLY | O_CREAT | O_TRUNC;
   }
-  else if (0 == strncmp(mode, "a", 1)){
+  else if (0 == strncmp(mode, "a", 1)){dddd
     flags = O_WRONLY;
   }
 
@@ -102,6 +103,9 @@ FILE *xpn_fopencookie(const char *path, const char *mode)
   stream = fopencookie((void *)fd, mode, io_functions);
 
   return stream;
+#else
+  return NULL;
+#endif
 }
 
 /************************************************************************/

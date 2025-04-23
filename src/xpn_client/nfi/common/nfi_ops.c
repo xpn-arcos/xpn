@@ -1,3 +1,4 @@
+
 /*
  *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
  *
@@ -21,13 +22,7 @@
 
 /* ... Include / Inclusion ........................................... */
 
-#include "nfi/nfi_ops.h"
-
-
-/* ... Const / Const ................................................. */
-
-
-/* ... Global variables / Variables globales ........................ */
+   #include "nfi/nfi_ops.h"
 
 
 /* ... Functions / Funciones ......................................... */

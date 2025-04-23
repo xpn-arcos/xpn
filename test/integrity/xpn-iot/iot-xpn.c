@@ -1,5 +1,4 @@
 
-
 #include <features.h>
 #include <sys/types.h>
 #include <sys/time.h>
@@ -73,6 +72,8 @@ int main ( int argc, char *argv[] )
     char buffer[MAX_LINE_LENGTH];
     bzero(buffer, MAX_LINE_LENGTH);
     ssize_t bytes_read;
+
+    //ret = xpn_write(fd1, "a", strlen("a"));
 
     while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0) 
     {

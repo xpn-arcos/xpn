@@ -25,15 +25,12 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  //Get config*.h
+  // Get config*.h
   #if defined(HAVE_CONFIG_H)
     #include "config.h"
   #endif
 
-  //Get "base_debug.h"
-  #include "base_debug.h"
-
-  //Include common headers
+  // Include common headers
   #ifndef NOT_TO_USE_STDLIB_H
     #include <stdlib.h>
   #endif
@@ -44,6 +41,7 @@
   #include <stdint.h>
   #include <math.h>
   #include <ctype.h>
+  #include <stddef.h>
 
   #include <sys/types.h>
   #include <sys/stat.h>
@@ -51,12 +49,13 @@
   #include <semaphore.h>
 
 
-  //Include detected headers
+  // Include detected headers
   #if defined(HAVE_SYS_PARAM_H)
     #include <sys/param.h>
   #endif
 
   #if defined(HAVE_DIRENT_H)
+    #define __USE_XOPEN
     #include <dirent.h>
   #endif
 
@@ -91,6 +90,10 @@
     #include <sys/time.h>
   #endif
 
+  #if defined(HAVE_TIME_H)
+    #include <time.h>
+  #endif
+
   #if defined(HAVE_RPC_RPC_H)
     #include <rpc/rpc.h>
   #endif
@@ -109,23 +112,24 @@
     #endif
   #endif
 
-  #if defined(HAVE_MPI_H)
-    #include <mpi.h>
-  #endif
-
-  // TODO: within former define...
   #ifdef ENABLE_MPI_SERVER
-  #include "mpi.h"
+      #include <mpi.h>
+  #endif
+  #if defined(HAVE_MPI_H)
+      #include <mpi.h>
   #endif
 
   #if defined(HAVE_MOSQUITTO_H)
     #include <mosquitto.h>
   #endif
 
+#define __USE_GNU
+#include <dlfcn.h>
+
 
   /* ... Const / Const ................................................. */
 
-  //Common sizes
+  // Common sizes
   #ifndef KB
     #define KB  (1024)
   #endif
@@ -150,7 +154,7 @@
     #define LARGEFILE_SOURCE 1
   #endif
 
-  //Other definitions
+  // Other definitions
   #if !defined(NULL_DEVICE_PATH)
     #define NULL_DEVICE_PATH  "/dev/null"
   #endif
@@ -182,12 +186,28 @@
     #define O_ASYNC          020000
   #endif
 
-  /* ... Data structures / Estructuras de datos ........................ */
+#if !defined (__x86_64__) && !defined (__aarch64__)
+    #define off64_t __off_t
+    #define uid_t __uid_t
+    #define gid_t __gid_t
+    #define mode_t __mode_t
+    #define h_addr h_addr_list[0] /* for backward compatibility */
+    #define u_long unsigned long
+#endif
+
+#if !defined(O_DIRECTORY)
+    #define O_DIRECTORY      040000
+    #define O_LARGEFILE __O_LARGEFILE
+#endif
 
 
-  /* ... Functions / Funciones ......................................... */
-  
+  // Get "base_debug.h"
+  #include "base_debug.h"
+
+
+
 
   /* ................................................................... */
 
 #endif /* _ALL_H_SYSTEM_H */
+

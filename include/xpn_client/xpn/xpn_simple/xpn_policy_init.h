@@ -29,49 +29,17 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "xpn.h"
-  #include "xpn_init.h"
+     #include "xpn.h"
+     #include "xpn_init.h"
+     #include "xpn_conf_reader.h"
 
-
-  /* ... Const / Const ................................................. */
-
-  #define XPN_CONF                           "XPN_CONF"
-  #define XPN_CONF_TAG_PARTITION             "[partition]"
-  #define XPN_CONF_TAG_PARTITION_NAME        "partition_name"
-  #define XPN_CONF_TAG_REPLICATION_LEVEL     "replication_level"
-  #define XPN_CONF_TAG_BLOCKSIZE             "bsize"
-  #define XPN_CONF_TAG_SERVER_URL            "server_url"
-  #define XPN_CONF_DEFAULT_REPLICATION_LEVEL "0"
-  #define XPN_CONF_DEFAULT_BLOCKSIZE         "512K"
-
-  #define XPN_CONF_DEFAULT  "/etc/xpn/xpn.conf"
-
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-  struct conf_file_data
-  {
-    char *data;               //All the data
-    int lines_n;          //Number of lines
-    char **lines;             //The pointers to the lines
-    int partition_n;       //Number of partitions
-    int *server_n;         //Array of number of servers in partition
-    int *server_url_index;    //Array of index to line of server_url in lines
-  };
 
   /* ... Functions / Funciones ......................................... */
   
-  int XpnConfGetValueRept(struct conf_file_data *conf_data, char *key, char *value, int partition, int rept);
-  int XpnConfGetValue(struct conf_file_data *conf_data, char *key, char *value, int partition);
-  int XpnConfGetNumPartitions(struct conf_file_data *conf_data);
-  int XpnConfGetNumServers(struct conf_file_data *conf_data, int partition_index);
-  int XpnConfLoad(struct conf_file_data *conf_data);
-  void XpnConfFree(struct conf_file_data *conf_data);
+     int                    XpnInitServer   ( struct conf_file_data *conf_data, struct xpn_partition * part, struct nfi_server * serv, int server_num );
   
-  int XpnInitServer(struct conf_file_data *conf_data, struct xpn_partition * part, struct nfi_server * serv, int server_num);
-  
-  struct xpn_partition*    XpnSearchPart(int pd);
-  int XpnGetPartition(char *path);
+     struct xpn_partition * XpnSearchPart   ( int pd );
+     int                    XpnGetPartition ( char *path );
 
 
   /* ................................................................... */

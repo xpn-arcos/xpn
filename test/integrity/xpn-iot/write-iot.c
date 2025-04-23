@@ -1,8 +1,11 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#if defined(HAVE_MPI_H)
 #include <mpi.h>
+#endif
 #include "all_system.h"
 #include "xpn.h"
 #include <time.h>
@@ -18,6 +21,8 @@ struct ThreadArgs
 
 pthread_mutex_t m;
 
+
+#if defined(HAVE_MPI_H)
 
 double get_time(void)
 {
@@ -265,3 +270,4 @@ int main(int argc, char * argv[])
 
     return 0;
 }
+#endif
