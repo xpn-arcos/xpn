@@ -31,7 +31,10 @@
   #include <linux/limits.h>
   #include <sys/stat.h>
   #include <dirent.h>
+
+#if defined(HAVE_MPI_H)
   #include "mpi.h"
+#endif
   #include "xpn/xpn_simple/xpn_policy_rw.h"
 
 /* ... Const / Const ................................................. */
@@ -51,6 +54,7 @@
 
 /* ... Functions / Funciones ......................................... */
 
+#if defined(HAVE_MPI_H)
   int copy(char * entry, int rank, int size, int last_size)
   {  
     debug_info("copy entry %s rank %d size %d last_size %d\n", entry, rank, size, last_size);
@@ -234,7 +238,7 @@
 
     return 0;
   }
-
+#endif
 
   int main(int argc, char *argv[])
   {   
@@ -244,6 +248,8 @@
     //
     // Check arguments...
     //
+
+#if defined(HAVE_MPI_H)
     if ( argc < 3 )
     {
       printf("Usage:\n");
@@ -274,7 +280,7 @@
       printf("Expand elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);
     }
     MPI_Finalize();
-
+#endif
     return 0;
   }
 

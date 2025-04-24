@@ -30,8 +30,8 @@
 
   /* ... Include / Inclusion ........................................... */
 
-     #include <dlfcn.h>
-     #include <dirent.h>
+     #include "all_system.h"
+     #include <dirent.h> 
      #include <stdlib.h>
      #include <sys/vfs.h>
 
@@ -46,7 +46,6 @@
   // File API
   int dlsym_open     (char *path, int flags);
   int dlsym_open2    (char *path, int flags, mode_t mode);
-  int dlsym_open64   (char *path, int flags, mode_t mode);
   int dlsym___open_2 (char *path, int flags);
   int dlsym_close    (int fd);
 
@@ -59,22 +58,14 @@
 
   ssize_t dlsym_pread    (int fd, void *buf, size_t count, off_t offset);
   ssize_t dlsym_pwrite   (int fd, const void *buf, size_t count, off_t offset);
-  ssize_t dlsym_pread64  (int fd, void *buf, size_t count, off_t offset);
-  ssize_t dlsym_pwrite64 (int fd, const void *buf, size_t count, off_t offset);
 
   off_t   dlsym_lseek   (int fd,   off_t offset, int whence);
-  off64_t dlsym_lseek64 (int fd, off64_t offset, int whence);
 
   int dlsym_fstat     (int ver, int fd, struct stat *buf);
-  int dlsym_fxstat64  (int ver, int fd, struct stat64 *buf);
   int dlsym_stat      (int ver, const char *path, struct stat   *buf);
   int dlsym_lstat     (int ver, const char *path, struct stat   *buf);
-  int dlsym_lxstat64  (int ver, const char *path, struct stat64 *buf);
-  int dlsym_xstat64   (int ver, const char *path, struct stat64 *buf);
   int dlsym_fstatat   (int dfd, const char *path, struct stat   *buf, int flags);
-  int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags);
   int dlsym_statfs    (const char *path, struct statfs   *buf);
-  int dlsym_statfs64  (const char *path, struct statfs64 *buf);
 
   int dlsym_rename (const char *old_path, const char *new_path);
   int dlsym_unlink (char *path);
@@ -97,14 +88,12 @@
 
   // Directory API
   DIR* dlsym_opendir   (char *dirname);
-  DIR* dlsym_opendir64 (char *dirname);
   int  dlsym_closedir  (DIR* dirp);
 
   long dlsym_telldir (DIR *dirp);
   void dlsym_seekdir (DIR *dirp, long loc);
 
   struct dirent * dlsym_readdir     (DIR *dirp);
-  struct dirent64 * dlsym_readdir64 (DIR *dirp);
 
   int dlsym_mkdir (char *path, mode_t mode);
   int dlsym_rmdir (char *path);
@@ -135,6 +124,22 @@
 
   // Memory API
   void *dlsym_mmap (void *addr, size_t length, int prot, int flags, int fd, off_t offset);
+
+
+  // 64 bits
+#if defined(DHAVE_64BITS)
+  struct dirent64 * dlsym_readdir64 (DIR *dirp);
+  DIR* dlsym_opendir64 (char *dirname);
+  int dlsym_statfs64  (const char *path, struct statfs64 *buf);
+  int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags);
+  int dlsym_xstat64   (int ver, const char *path, struct stat64 *buf);
+  int dlsym_lxstat64  (int ver, const char *path, struct stat64 *buf);
+  int dlsym_fxstat64  (int ver, int fd, struct stat64 *buf);
+  off64_t dlsym_lseek64 (int fd, off64_t offset, int whence);
+  int dlsym_open64   (char *path, int flags, mode_t mode);
+  ssize_t dlsym_pread64  (int fd, void *buf, size_t count, off_t offset);
+  ssize_t dlsym_pwrite64 (int fd, const void *buf, size_t count, off_t offset);
+#endif
 
 
   /* ................................................................... */
