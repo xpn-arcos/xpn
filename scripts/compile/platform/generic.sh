@@ -23,6 +23,7 @@
 
 
 # 1) software (if needed)...
+echo " * Checking build software... (it might take a while)"
 PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
 for P in $PKG_NAMES; do
     apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P

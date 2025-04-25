@@ -607,7 +607,7 @@ int nfs3_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 	strcpy(fho->url, url);
 
 	fh_aux = (struct nfi_nfs3_fhandle *)malloc(sizeof(struct nfi_nfs3_fhandle));
-	if (fh_aux == NULL){
+	if (fh_aux == NULL) {
 		nfs3_err(NFS3ERR_MEMORY);
 		fprintf(stderr,"nfs3_open: fh_aux is null. Can't reserve memory\n");
 		free(fho->url);
@@ -620,38 +620,40 @@ int nfs3_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )
 
 	/* obtaine the NFS file handle */
 	ret = nfs3_lookup(&server_aux->fh,
-			dir,
-			&fh_aux->fh,
-			NULL,
-			server_aux->cl);
+			   dir,
+			  &fh_aux->fh,
+			   NULL,
+			   server_aux->cl);
 
 
-	if(ret < 0){
+	if (ret < 0) {
 		nfs3_err(-ret);
 		//fprintf(stderr,"nfs3_open: Fail lookup %s in server %s (err:%d).\n",dir,serv->server,ret);
 		//free(fho->url);
-		//free(fh_aux);
+		free(fh_aux);
 		//free(server_aux);
 		return -1;
 	}
+
 	nfs3_err(-ret);
-	switch(ret){
+	switch (ret)
+	{
 		case NF3REG:
 			fho->type = NFIFILE;
 			break;
+
 		case NF3DIR:
 			fho->type = NFIDIR;
 			break;
 	}
+
 	fho->server = NULL;
 	fho->priv_fh = NULL;
 	fho->server = serv;
 	fho->priv_fh = (void *) fh_aux;
 
 	return 0;
-
 }
-
 
 
 int nfi_nfs3_open(struct nfi_server *serv,  char *url, struct nfi_fhandle *fho )

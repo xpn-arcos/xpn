@@ -28,8 +28,10 @@
   #include <dirent.h>
   #include <string.h>
   #include <sys/stat.h>
+  #include "all_system.h"
+#if defined(HAVE_MPI_H)
   #include "mpi.h"
-
+#endif
 
 /* ... Functions / Funciones ......................................... */
 
@@ -95,7 +97,7 @@
       printf("Usage: %s <directory path> <output_file>\n", argv[0]);
       return -1;
     }
-
+#if defined(HAVE_MPI_H)
     MPI_Init(&argc, &argv);
 
     fd = fopen(argv[2], "w");
@@ -109,7 +111,10 @@
 
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
-    
+#else
+    printf("Error. No MPI supported.\n");
+#endif
+
     return 0;
   }
 

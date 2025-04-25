@@ -31,7 +31,10 @@
   #include <linux/limits.h>
   #include <sys/stat.h>
   #include <dirent.h>
+
+#if defined(HAVE_MPI_H)
   #include "mpi.h"
+#endif
   #include "xpn/xpn_simple/xpn_policy_rw.h"
   #include "base/ns.h"
 
@@ -59,6 +62,8 @@
 
   void *recv_thread(void * arg);
 /* ... Functions / Funciones ......................................... */
+
+#if defined(HAVE_MPI_H)
   int is_prev_first_node(int first_node, int node, int nserv){
     if (first_node == 0 && node == nserv-1){
       return 1;
@@ -582,10 +587,12 @@
 
     return 0;
   }
-
+#endif
 
   int main(int argc, char *argv[])
   {   
+	  
+#if defined(HAVE_MPI_H)
     double start_time;
     const char *delim = ";";
     char *servers[XPN_METADATA_MAX_RECONSTURCTIONS] = {NULL};
@@ -596,6 +603,7 @@
     //
     // Check arguments...
     //
+
     if ( argc < 3 )
     {
       printf("Usage:\n");
@@ -663,7 +671,7 @@
       printf("Shrink elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);
     }
     MPI_Finalize();
-
+#endif
     return 0;
   }
 

@@ -45,7 +45,7 @@ int socket_send ( int socket, void * buffer, int size )
         }
 
         l = l - r;
-        buffer = buffer + r;
+        buffer = (void *) ((char *)buffer + r) ;
 
     } while ((l > 0) && (r >= 0));
 
@@ -75,7 +75,7 @@ int socket_recv ( int socket, void * buffer, int size )
         }
 
         l = l - r;
-        buffer = buffer + r;
+        buffer = (void *) ((char *)buffer + r) ;
 
     } while ((l > 0) && (r >= 0));
 
@@ -179,7 +179,7 @@ int socket_client_connect ( char * srv_name, int port, int * out_socket )
 
     bzero((char * ) & serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(port);
+    serv_addr.sin_port   = htons(port);
     memcpy( & (serv_addr.sin_addr), hp -> h_addr, hp -> h_length);
 
     int status = connect(client_fd, (struct sockaddr * ) & serv_addr, sizeof(serv_addr));

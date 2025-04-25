@@ -4,10 +4,10 @@
 # Definitions
 #
 
-MAKE         = make -s
+MAKE         = @MAKE@
 CC           = @CC@
 MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
-MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client -L../../../../../bin/mosquitto/lib -L../../../../../bin/mxml/lib64 -I../../../bin/mosquitto/include
+MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client -L../../../../../bin/mosquitto/lib -I../../../bin/mosquitto/include
 LIBRARIES    = -lxpn @LIBS@
 MYFLAGS      = -O3 -Wall -DPOSIX_THREADS -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE @CPPFLAGS@
 
@@ -16,10 +16,10 @@ MYFLAGS      = -O3 -Wall -DPOSIX_THREADS -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOUR
 # Rules
 #
 
-all:  iot-xpn times-train write-iot
+all:  iot-xpn times-train
 
-write-iot: write-iot.o
-	$(CC)  -o write-iot write-iot.o $(MYLIBPATH) $(LIBRARIES)
+#write-iot: write-iot.o
+#	$(CC)  -o write-iot write-iot.o $(MYLIBPATH) $(LIBRARIES)
 
 times-train: times-train.o
 	$(CC)  -o times-train times-train.o $(MYLIBPATH) $(LIBRARIES)
@@ -32,4 +32,4 @@ iot-xpn: iot-xpn.o
 
 clean:
 	rm -f ./*.o
-	rm -f ./times-train ./iot-xpn ./write-iot
+	rm -f ./times-train ./iot-xpn

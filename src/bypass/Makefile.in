@@ -1,12 +1,12 @@
-#
-# This Makefile is for expand bypass (syscalls interceptions) library
-#
 
+#
+# This Makefile is for The Expand bypass library (syscalls interceptions) 
+#
 
  prefix = @prefix@
  CC=@CC@
 
- FLAGS=-Wall -Wextra -fpic -std=c11 @CFLAGS@
+ FLAGS=@CFLAGS@
  INCLUDE=-I../../include -I../../include/base -I../../include/xpn_client -I../../include/bypass -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
  LIBS=-L../../../xpn/src/xpn_client -L../../src/xpn_client -lxpn -lpthread -ldl
 
