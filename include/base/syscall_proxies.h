@@ -127,18 +127,21 @@
 
 
   // 64 bits
-#if defined(DHAVE_64BITS)
-  struct dirent64 * dlsym_readdir64 (DIR *dirp);
-  DIR* dlsym_opendir64 (char *dirname);
+#if defined(HAVE_64BITS)
+  int     dlsym_open64   (char *path, int flags, mode_t mode);
+  ssize_t dlsym_pread64  (int fd, void *buf, size_t count, off_t offset);
+  ssize_t dlsym_pwrite64 (int fd, const void *buf, size_t count, off_t offset);
+
+  off64_t dlsym_lseek64  (int fd, off64_t offset, int whence);
+
   int dlsym_statfs64  (const char *path, struct statfs64 *buf);
   int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags);
   int dlsym_xstat64   (int ver, const char *path, struct stat64 *buf);
   int dlsym_lxstat64  (int ver, const char *path, struct stat64 *buf);
   int dlsym_fxstat64  (int ver, int fd, struct stat64 *buf);
-  off64_t dlsym_lseek64 (int fd, off64_t offset, int whence);
-  int dlsym_open64   (char *path, int flags, mode_t mode);
-  ssize_t dlsym_pread64  (int fd, void *buf, size_t count, off_t offset);
-  ssize_t dlsym_pwrite64 (int fd, const void *buf, size_t count, off_t offset);
+
+  DIR* dlsym_opendir64 (char *dirname);
+  struct dirent64 * dlsym_readdir64 (DIR *dirp);
 #endif
 
 

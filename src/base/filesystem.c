@@ -50,7 +50,7 @@
      struct dirent * (*fs_low_readdir  )(DIR *)        = readdir ;
      int             (*fs_low_closedir )(DIR *)        = closedir ;
 
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
      off64_t (*fs_low_lseek64 )(int, off64_t, int)                = lseek64 ;
 #endif
      //pthread_attr_t filesystem_attr;
@@ -163,7 +163,7 @@ int  filesystem_low_set ( void * new_rtld )
      fs_low_write   = (ssize_t (*)(int, const void*, size_t))          dlsym(DLSYM_RTLD, "write") ;
      fs_low_lseek   = (off_t   (*)(int, off_t, int))                   dlsym(DLSYM_RTLD, "lseek");
 
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
      fs_low_lseek64 = (off64_t (*)(int, off64_t, int))                 dlsym(DLSYM_RTLD, "lseek64") ;
 #endif
      fs_low_stat_dlsym    = (int     (*)(int, const char *, struct stat *))       dlsym(DLSYM_RTLD, "__xstat") ;

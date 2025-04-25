@@ -442,7 +442,7 @@
     * stat management
     */
 
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
 
    int stat_to_stat64 ( struct stat64 *buf, struct stat *st )
    {
@@ -602,7 +602,7 @@
     }
 
 
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
     int open64 ( const char *path, int flags, ... )
     {
       int fd, ret;
@@ -1026,7 +1026,7 @@
     }
 
 
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
 
     ssize_t pread64 ( int fd, void *buf, size_t count, off_t offset )
     {
@@ -1176,7 +1176,7 @@
     }
 
 
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
 
     off64_t lseek64 ( int fd, off64_t offset, int whence )
     {
@@ -1252,7 +1252,7 @@
     }
 
 
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
 
     int statfs64 (const char *path, struct statfs64 *buf)
     {
@@ -1327,7 +1327,7 @@
     }
 
 
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
 
     int __lxstat64 ( int ver, const char *path, struct stat64 *buf )
     {
@@ -2357,7 +2357,7 @@
     }
 
 
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
 
     struct dirent64 *readdir64 ( DIR *dirp )
     {

@@ -236,16 +236,19 @@
 
      // 64-bits API
 
-#if defined(DHAVE_64BITS)
-     int statfs64     ( const char *path, struct statfs64 *buf );
+#if defined(HAVE_64BITS)
      int open64       ( const char *path, int flags, ... );
      ssize_t pread64  ( int fd, void *buf, size_t count, off_t offset );
      ssize_t pwrite64 ( int fd, const void *buf, size_t count, off_t offset );
+
      off64_t lseek64  ( int fd,   off64_t offset, int whence );
+
+     int statfs64     ( const char *path, struct statfs64 *buf );
      int __lxstat64   ( int ver, const char *path, struct stat64   *buf );
      int __xstat64    ( int ver, const char *path, struct stat64   *buf );
      int __fxstat64   ( int ver,       int fildes, struct stat64   *buf );
      int __fxstatat64 ( int ver, int dirfd, const char *path, struct stat64 *buf, int flags );
+
      struct dirent64 *readdir64 ( DIR *dirp );
 #endif
 

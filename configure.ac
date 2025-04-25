@@ -158,24 +158,10 @@ case "$target_os" in
     ;;
 esac
 
-AC_MSG_RESULT("$target_cpu");
-#case "$target_cpu" in
-#  x86_64 | AARCH64* | aarch64*)
-#    CFLAGS_CDEFS+=" -D_FILE_OFFSET_BITS=64"
-#    AC_MSG_RESULT("64-bits by default will be used.");
-#    ;;
-#  MIPS64* | mips64* | ppc64* | sparc64)
-#    CFLAGS_CDEFS+=" -D_FILE_OFFSET_BITS=64"
-#    AC_MSG_RESULT("64-bits by default will be used for MIPS/PPC/SPARC.");
-#    ;;
-#  *)
-#    AC_MSG_RESULT("32-bits by default will be used.");
-#    ;;
-#esac
-
 AC_CHECK_SIZEOF([int *])
+SIZEOF_INT_P=$ac_cv_sizeof_int_p
 if test "x$SIZEOF_INT_P" == "x8"; then
-    CFLAGS_CDEFS+=" -DHAVE_64BITS -D_FILE_OFFSET_BITS=64"
+    CFLAGS_CDEFS+=" -DHAVE_64BITS "
     AC_MSG_RESULT("64-bits by default will be used.");
 else
     CFLAGS_CDEFS+=" -DHAVE_32BITS"
@@ -185,7 +171,7 @@ fi
 
 LIBLINK=$LIBS
 CDEFS="$CFLAGS_CDEFS -D_REENTRANT -DHAVE_CONFIG_H"
-CFLAGS="$CFLAGS_SWITCHES $CFLAGS_DEBUG -Wall -Wextra -fPIC -std=c11 $CFLAGS_IPATH"
+CFLAGS="$CFLAGS_SWITCHES $CFLAGS_DEBUG -Wall -Wextra -fPIC -std=c11 $CDEFS $CFLAGS_IPATH"
 
 AC_MSG_RESULT("CFLAGS   so far: "$CFLAGS);
 AC_MSG_RESULT("CDEFS    so far: "$CDEFS);
