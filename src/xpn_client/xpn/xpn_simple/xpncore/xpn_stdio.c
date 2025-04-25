@@ -67,7 +67,7 @@ int xpn_cleaner (void *cookie)
 
 FILE *xpn_fopencookie(const char *path, const char *mode)
 {
-#if defined(DHAVE_64BITS)
+#if defined(HAVE_64BITS)
 
     FILE *stream;
     int flags, *fd;

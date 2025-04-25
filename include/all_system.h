@@ -133,7 +133,7 @@
 
   /* ... Types / Tipos ................................................. */
 
-#if !defined(DHAVE_64BITS)
+#if !defined(HAVE_64BITS)
      #define off64_t __off_t
      #define uid_t __uid_t
      #define gid_t __gid_t
