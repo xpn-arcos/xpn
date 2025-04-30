@@ -37,8 +37,8 @@
 
 
 
-  #define SCK_IP4 0
-  #define SCK_IP6 1
+  #define SCK_IP4 4
+  #define SCK_IP6 6
 
   /* ... Functions / Funciones ......................................... */
 

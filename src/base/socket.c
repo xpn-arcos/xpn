@@ -86,7 +86,7 @@ int socket_server_create ( int * out_socket, int port, int socket_mode )
 {
     int ret = 0;
 
-    debug_error_info("[SOCKET] [base_socket_init] >> Begin\n");
+    debug_info("[SOCKET] [base_socket_init] >> Begin\n");
 
     // check arguments...
     if (NULL == out_socket)
@@ -124,7 +124,7 @@ int socket_server_accept ( int socket, int * out_conection_socket, int socket_mo
 {
     int ret = 0;
 
-    debug_error_info("[SOCKET] [socket_server_accept] >> Begin\n");
+    debug_info("[SOCKET] [socket_server_accept] >> Begin\n");
 
     // check arguments...
     if (NULL == out_conection_socket)
@@ -162,7 +162,7 @@ int socket_client_connect ( char * srv_name, int port, int * out_socket, int soc
 
     int ret = 0;
 
-    debug_error_info("[SOCKET] [socket_client_connect] >> Begin\n");
+    debug_info("[SOCKET] [socket_client_connect] >> Begin\n");
 
     // check arguments...
     if (NULL == srv_name)
@@ -176,12 +176,12 @@ int socket_client_connect ( char * srv_name, int port, int * out_socket, int soc
     {
     case SCK_IP4:
         debug_info("[SOCKET] [socket_client_connect] socket_ip4_server_connect\n");
-        ret = socket_ip4_server_connect(srv_name, port, out_socket);
+        ret = socket_ip4_client_connect(srv_name, port, out_socket);
         break;
 
     case SCK_IP6:
         debug_info("[SOCKET] [socket_client_connect] socket_ip6_server_connect\n");
-        ret = socket_ip6_server_connect(srv_name, port, out_socket);
+        ret = socket_ip6_client_connect(srv_name, port, out_socket);
         break;
 
     default:
@@ -209,6 +209,41 @@ int socket_close ( int socket )
     return ret;
 }
 
+
+int socket_gethostbyname ( char * ip, size_t ip_size, char * srv_name, int socket_mode )
+{
+    int ret = 0;
+    debug_info("[SOCKET] [socket_gethostbyname] >> Begin\n");
+
+    // check arguments...
+    if (NULL == srv_name)
+    {
+        debug_error("[SOCKET] [socket_gethostbyname] ERROR: NULL srv_name\n");
+        return NULL;
+    }
+
+    
+    switch (socket_mode)
+    {
+    case SCK_IP4:
+        debug_info("[SOCKET] [socket_gethostbyname] socket_ip4_server_connect\n");
+        ret = socket_ip4_gethostbyname(ip, ip_size, srv_name);
+        break;
+
+    case SCK_IP6:
+        debug_info("[SOCKET] [socket_gethostbyname] socket_ip6_server_connect\n");
+        ret = socket_ip6_gethostbyname(ip, ip_size, srv_name);
+        break;
+
+    default:
+        debug_info("[SOCKET] [socket_gethostbyname] ERROR: on socket_gethostbyname(%d).\n", socket_mode);
+        return -1;
+        break;
+    }
+
+    return ret;
+
+}
 
 /* ................................................................... */
 

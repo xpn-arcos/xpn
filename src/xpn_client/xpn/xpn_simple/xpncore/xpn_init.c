@@ -233,7 +233,8 @@ int xpn_init_partition ( void )
       }
 
       // Check locality
-      char *hostip = ns_get_host_ip();
+      char hostip[HOST_NAME_MAX];
+      ns_get_host_ip(hostip, HOST_NAME_MAX);
       char hostname[1024];
       ns_get_hostname(hostname);
       xpn_parttable[i].local_serv = -1;

@@ -27,6 +27,7 @@
 
      #include "all_system.h"
      #include "base/utils.h"
+     #include "base/service_socket.h"
 
   
   /* ... Const / Const ................................................. */
@@ -55,7 +56,7 @@
   /* ... Functions / Funciones ......................................... */
 
      void  ns_get_hostname ( char *srv_name );
-     char *ns_get_host_ip  ( void );
+     int ns_get_host_ip (char * ip, size_t ip_size);
 
      int ns_publish   ( char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name );
      int ns_unpublish ( char *dns_file, char *protocol, char *param_srv_name );

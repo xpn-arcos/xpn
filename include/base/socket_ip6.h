@@ -40,6 +40,7 @@
     int socket_ip6_server_create ( int *out_socket, int port );
     int socket_ip6_server_accept ( int socket, int *out_conection_socket );
     int socket_ip6_client_connect ( char * srv_name, int port, int *out_socket );
+    int socket_ip6_gethostbyname ( char * ip, size_t ip_size, char * srv_name );
 
 
   /* ................................................................... */

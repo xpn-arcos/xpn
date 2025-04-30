@@ -141,5 +141,20 @@ int socket_ip4_client_connect ( char * srv_name, int port, int * out_socket )
 }
 
 
+int socket_ip4_gethostbyname ( char * ip, size_t ip_size, char * srv_name )
+{
+    char   *ip_local;
+    struct hostent *srv_entry;
+
+
+    srv_entry = gethostbyname(srv_name);                                    // find host information
+    ip_local = inet_ntoa(*((struct in_addr *)srv_entry->h_addr_list[0]));   // Convert into IP string
+
+    strcpy(ip, ip_local);
+
+    return 0;
+}
+
+
 /* ................................................................... */
 

@@ -36,23 +36,26 @@ void ns_get_hostname (char *srv_name)
   debug_info("[NS] [ns_get_hostname] >> End\n");
 }
 
-char *ns_get_host_ip (void)
+int ns_get_host_ip (char * ip, size_t ip_size)
 {
-  char   *ip;
-  char   srv_name[HOST_NAME_MAX];
-  struct hostent *srv_entry;
-
+  
   debug_info("[NS] [ns_get_host_ip] >> Begin\n");
 
-  gethostname(srv_name, HOST_NAME_MAX);                           // get hostname
-  srv_entry = gethostbyname(srv_name);                            // find host information
-  ip = inet_ntoa(*((struct in_addr *)srv_entry->h_addr_list[0])); // Convert into IP string
+
+  int     ret = 0;
+  char    srv_name[HOST_NAME_MAX];
+
+  int     ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
+
+  gethostname(srv_name, HOST_NAME_MAX);
+  ret = socket_gethostbyname ( ip, HOST_NAME_MAX, srv_name, ipv );
+
 
   debug_info("[NS] [ns_get_host_ip] srv_name: %s IP: %s\n", srv_name, ip);
 
   debug_info("[NS] [ns_get_host_ip] >> End\n");
 
-  return ip;
+  return 0;
 }
 
 int ns_publish (char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name)
