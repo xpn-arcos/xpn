@@ -102,7 +102,7 @@ int socket_ip6_server_accept ( int socket, int * out_conection_socket )
     return 0;
 }
 
-int socket_ip6_client_connect ( char * srv_name, int port, int * out_socket )
+/*int socket_ip6_client_connect ( char * srv_name, int port, int * out_socket )
 {
     int client_fd;
     struct sockaddr_in6 serv_addr;
@@ -139,9 +139,50 @@ int socket_ip6_client_connect ( char * srv_name, int port, int * out_socket )
 
     * out_socket = client_fd;
     return 0;
+}*/
+
+int socket_ip6_client_connect(char *srv_name, int port, int *out_socket)
+{
+    int client_fd;
+    struct addrinfo hints, *res, *p;
+    char port_str[6];  // max port is 65535
+
+    snprintf(port_str, sizeof(port_str), "%d", port);
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET6;       // IPv6 only
+    hints.ai_socktype = SOCK_STREAM;  // TCP
+
+    int status = getaddrinfo(srv_name, port_str, &hints, &res);
+    if (status != 0)
+    {
+        fprintf(stderr, "[SOCKET] getaddrinfo error: %s\n", gai_strerror(status));
+        return -1;
+    }
+
+    for (p = res; p != NULL; p = p->ai_next)
+    {
+        client_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+        if (client_fd == -1)
+            continue;
+
+        if (connect(client_fd, p->ai_addr, p->ai_addrlen) == 0)
+        {
+            // Success
+            *out_socket = client_fd;
+            freeaddrinfo(res);
+            return 0;
+        }
+
+        close(client_fd);
+    }
+
+    fprintf(stderr, "[SOCKET] Connection failed to %s on port %d\n", srv_name, port);
+    freeaddrinfo(res);
+    return -1;
 }
 
-
+/*
 int socket_ip6_gethostbyname ( char * ip, size_t ip_size, char * srv_name )
 {
     struct hostent *srv_entry;
@@ -163,7 +204,39 @@ int socket_ip6_gethostbyname ( char * ip, size_t ip_size, char * srv_name )
 
     freeaddrinfo(res); 
     return 0;
+}*/
+
+
+int socket_ip6_gethostbyname(char *ip, size_t ip_size, char *srv_name)
+{
+    struct addrinfo hints, *res, *p;
+    int status;
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET6;      // IPv6 only
+    hints.ai_socktype = SOCK_STREAM; // TCP
+
+    status = getaddrinfo(srv_name, NULL, &hints, &res);
+    if (status != 0) {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
+        return -1;
+    }
+
+    for (p = res; p != NULL; p = p->ai_next) {
+        if (p->ai_family == AF_INET6) {
+            struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)p->ai_addr;
+            if (inet_ntop(AF_INET6, &ipv6->sin6_addr, ip, ip_size)) {
+                freeaddrinfo(res);
+                return 0;  // Success
+            } else {
+                perror("inet_ntop");
+                break;
+            }
+        }
+    }
+
+    freeaddrinfo(res);
+    return -1;
 }
 
 /* ................................................................... */
-
