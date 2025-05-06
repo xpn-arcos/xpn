@@ -216,8 +216,11 @@ int socket_ip6_gethostbyname(char *ip, size_t ip_size, char *srv_name)
     hints.ai_family = AF_INET6;      // IPv6 only
     hints.ai_socktype = SOCK_STREAM; // TCP
 
+	printf("%s %d %s\n\n", ip, ip_size, srv_name);
+
     status = getaddrinfo(srv_name, NULL, &hints, &res);
     if (status != 0) {
+	    printf("[SOCKET_IP6] socket_ip6_gethostname");
         fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
         return -1;
     }

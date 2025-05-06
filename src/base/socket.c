@@ -64,7 +64,7 @@ int socket_recv ( int socket, void * buffer, int size )
         {
             if (EPIPE == errno)
                  printf("[SOCKET] [socket_send] ERROR: client closed the connection abruptly\n") ;
-	    else printf("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size) ;
+            else printf("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size) ;
 
             return -1;
         }
