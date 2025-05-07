@@ -32,7 +32,7 @@
   
   /* ... Const / Const ................................................. */
 
-     // NS base on sockets
+      // NS base on sockets
       #define DEFAULT_XPN_SCK_PORT     3456
       #define DEFAULT_XPN_SCK_IPV      SCK_IP4
 
@@ -52,7 +52,7 @@
   /* ... Functions / Funciones ......................................... */
 
      int sersoc_do_send_recv ( char * srv_name, int port, int req_id, char *res_val ) ;
-     int sersoc_do_send ( char * srv_name, int port, int req_id ) ;
+     int sersoc_do_send      ( char * srv_name, int port, int req_id ) ;
 
      int sersoc_lookup_port_name ( char * srv_name, char * port_name, int socket_accept_code ) ;
 

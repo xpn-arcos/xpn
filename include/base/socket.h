@@ -29,25 +29,28 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "debug_msg.h"
-  #include "utils.h"
-  #include "socket_ip4.h"
-  #include "socket_ip6.h"
+     #include "all_system.h"
+     #include "debug_msg.h"
+     #include "utils.h"
+     #include "socket_ip4.h"
+     #include "socket_ip6.h"
 
 
+  /* ... Const / Const ................................................. */
 
-  #define SCK_IP4 4
-  #define SCK_IP6 6
+     // values for ip_version
+     #define SCK_IP4 4
+     #define SCK_IP6 6
+
 
   /* ... Functions / Funciones ......................................... */
 
-  int socket_send ( int socket, void * buffer, int size );
-  int socket_recv ( int socket, void * buffer, int size );
-  int socket_server_create ( int *out_socket, int port, int socket_mode );
-  int socket_server_accept ( int socket, int *out_conection_socket, int socket_mode );
-  int socket_client_connect ( char * srv_name, int port, int *out_socket, int socket_mode );
-  int socket_close ( int socket );
+     int socket_send ( int socket, void * buffer, int size );
+     int socket_recv ( int socket, void * buffer, int size );
+     int socket_server_create  ( int *out_socket, int port,                  int ip_version );
+     int socket_server_accept  ( int socket, int *out_conection_socket,      int ip_version );
+     int socket_client_connect ( char * srv_name, int port, int *out_socket, int ip_version );
+     int socket_close ( int socket );
 
 
   /* ................................................................... */

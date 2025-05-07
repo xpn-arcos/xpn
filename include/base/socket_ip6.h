@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias Del Pozo Puñal
  *
  *  This file is part of Expand.
  *
@@ -29,18 +29,17 @@
 
   /* ... Include / Inclusion ........................................... */
 
-    #include "all_system.h"
-    #include "debug_msg.h"
-    #include "utils.h"
-    #include "filesystem.h"
+     #include "all_system.h"
+     #include "debug_msg.h"
+     #include "utils.h"
 
 
   /* ... Functions / Funciones ......................................... */
 
-    int socket_ip6_server_create ( int *out_socket, int port );
-    int socket_ip6_server_accept ( int socket, int *out_conection_socket );
-    int socket_ip6_client_connect ( char * srv_name, int port, int *out_socket );
-    int socket_ip6_gethostbyname ( char * ip, size_t ip_size, char * srv_name );
+     int socket_ip6_server_create  ( int *out_socket, int port );
+     int socket_ip6_server_accept  ( int socket, int *out_conection_socket );
+     int socket_ip6_client_connect ( char * srv_name, int port, int *out_socket );
+     int socket_ip6_gethostbyname  ( char * ip, size_t ip_size, char * srv_name );
 
 
   /* ................................................................... */

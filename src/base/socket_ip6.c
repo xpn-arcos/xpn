@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias Del Pozo Puñal
  *
  *  This file is part of Expand.
  *
@@ -20,13 +20,12 @@
  */
 
 
-/* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-   #include "base/socket.h"
+     #include "base/socket_ip6.h"
 
 
-/* ... Functions / Funciones ......................................... */
-
+  /* ... Functions / Funciones ......................................... */
 
 int socket_ip6_server_create ( int * out_socket, int port )
 {
