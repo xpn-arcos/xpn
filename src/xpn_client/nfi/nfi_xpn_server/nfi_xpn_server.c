@@ -262,7 +262,8 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
     char server[PATH_MAX], dir[PATH_MAX], prt[PATH_MAX];
     struct nfi_xpn_server * server_aux;
     char hostname[HOST_NAME_MAX];
-    char * hostip;
+    char hostip[HOST_NAME_MAX];
+    
 
     // check params...
     if (serv == NULL) {
@@ -403,7 +404,7 @@ int nfi_xpn_server_init(char * url, struct nfi_server * serv, int server_type)
 
     if (server_aux->xpn_locality == 1)
     {
-        hostip = ns_get_host_ip();
+        ns_get_host_ip(hostip, HOST_NAME_MAX);
         ns_get_hostname(hostname);
         if (strstr(server, hostip) != NULL || strstr(server, hostname) != NULL)
         {
@@ -838,6 +839,7 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     fh_aux     = (struct nfi_xpn_server_fhandle * ) fh->priv_fh;
 
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] >> Begin\n", serv->id);
+
 
     // MQTT publish
     if (fh->has_mqtt) 

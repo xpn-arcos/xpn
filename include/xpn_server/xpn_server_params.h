@@ -74,6 +74,8 @@ typedef struct
       struct mosquitto * mqtt;
     #endif
 
+    int ipv;
+
 } xpn_server_param_st;
 
 

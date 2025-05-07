@@ -64,7 +64,7 @@ int socket_recv ( int socket, void * buffer, int size )
         {
             if (EPIPE == errno)
                  printf("[SOCKET] [socket_send] ERROR: client closed the connection abruptly\n") ;
-	    else printf("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size) ;
+            else printf("[SOCKET] [socket_recv] ERROR: socket read buffer size %d Failed\n", size) ;
 
             return -1;
         }
@@ -82,116 +82,117 @@ int socket_recv ( int socket, void * buffer, int size )
     return size;
 }
 
-int socket_server_create ( int * out_socket, int port )
+int socket_server_create ( int * out_socket, int port, int socket_mode )
 {
     int ret = 0;
-    struct sockaddr_in server_addr;
 
-    int server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (server_socket < 0)
+    debug_info("[SOCKET] [base_socket_init] >> Begin\n");
+
+    // check arguments...
+    if (NULL == out_socket)
     {
-        printf("[SOCKET] [socket_server_create] ERROR: socket fails\n");
+        debug_error("[SOCKET] [base_socket_init] ERROR: NULL out_socket\n");
         return -1;
     }
 
-    int val = 1;
-    ret = setsockopt(server_socket, IPPROTO_TCP, TCP_NODELAY, & val, sizeof(val));
-    if (ret < 0)
+    // initialize...
+    
+    switch (socket_mode)
     {
-        printf("[SOCKET] [socket_server_create] ERROR: setsockopt fails\n");
+    case SCK_IP4:
+        debug_info("[SOCKET] [base_socket_init] socket_ip4_server_create\n");
+        ret = socket_ip4_server_create(out_socket, port);
+        break;
+
+    case SCK_IP6:
+        debug_info("[SOCKET] [base_socket_init] socket_ip6_server_create\n");
+        ret = socket_ip6_server_create(out_socket, port);
+        break;
+
+    default:
+        debug_info("[SOCKET] [base_socket_init] ERROR: on socket_server_create(%d).\n", socket_mode);
         return -1;
+        break;
     }
 
-    debug_info("[SOCKET] [socket_server_create] Socket reuseaddr\n");
+    debug_info("[SOCKET] [base_socket_init] >> End\n");
 
-    val = 1;
-    ret = setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, (char * ) & val, sizeof(int));
-    if (ret < 0)
-    {
-        printf("[SOCKET] [socket_server_create] ERROR: setsockopt fails\n");
-        return -1;
-    }
-
-    // bind
-    debug_info("[SOCKET] [socket_server_create] Socket bind\n");
-
-    bzero((char * ) & server_addr, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(port);
-
-    ret = bind(server_socket, (struct sockaddr * ) & server_addr, sizeof(server_addr));
-    if (ret < 0)
-    {
-        printf("[SOCKET] [socket_server_create] ERROR: bind fails\n");
-        return -1;
-    }
-
-    // listen
-    debug_info("[SOCKET] [socket_server_create] Socket listen\n");
-
-    ret = listen(server_socket, SOMAXCONN);
-    if (ret < 0)
-    {
-        printf("[SOCKET] [socket_server_create] ERROR: listen fails\n");
-        return -1;
-    }
-
-    * out_socket = server_socket;
-    return 0;
+    return ret;
 }
 
-int socket_server_accept ( int socket, int * out_conection_socket )
+int socket_server_accept ( int socket, int * out_conection_socket, int socket_mode )
 {
-    struct sockaddr_in client_addr;
-    socklen_t sock_size = sizeof(struct sockaddr_in);
+    int ret = 0;
 
-    int new_socket = accept(socket, (struct sockaddr * ) & client_addr, & sock_size);
-    if (new_socket < 0) {
-        printf("[SOCKET] [socket_accept_send] ERROR: socket accept\n");
+    debug_info("[SOCKET] [socket_server_accept] >> Begin\n");
+
+    // check arguments...
+    if (NULL == out_conection_socket)
+    {
+        debug_error("[SOCKET] [socket_server_accept] ERROR: NULL out_socket\n");
         return -1;
     }
 
-    * out_conection_socket = new_socket;
-    return 0;
+    
+    switch (socket_mode)
+    {
+    case SCK_IP4:
+        debug_info("[SOCKET] [socket_server_accept] socket_ip4_server_accept\n");
+        ret = socket_ip4_server_accept(socket, out_conection_socket);
+        break;
+
+    case SCK_IP6:
+        debug_info("[SOCKET] [socket_server_accept] socket_ip6_server_accept\n");
+        ret = socket_ip6_server_accept(socket, out_conection_socket);
+        break;
+
+    default:
+        debug_info("[SOCKET] [socket_server_accept] ERROR: on socket_server_accept(%d).\n", socket_mode);
+        return -1;
+        break;
+    }
+
+    debug_info("[SOCKET] [socket_server_accept] >> End\n");
+
+    return ret;
 }
 
-int socket_client_connect ( char * srv_name, int port, int * out_socket )
+int socket_client_connect ( char * srv_name, int port, int * out_socket, int socket_mode )
 {
-    int client_fd;
-    struct sockaddr_in serv_addr;
 
-    client_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (client_fd < 0)
+    int ret = 0;
+
+    debug_info("[SOCKET] [socket_client_connect] >> Begin\n");
+
+    // check arguments...
+    if (NULL == srv_name)
     {
-        printf("[SOCKET] [socket_read] ERROR: socket creation error\n");
+        debug_error("[SOCKET] [socket_client_connect] ERROR: NULL srv_name\n");
         return -1;
     }
 
-    struct hostent * hp;
-    hp = gethostbyname(srv_name);
-    if (hp == NULL)
+    
+    switch (socket_mode)
     {
-        printf("[SOCKET] [socket_read] ERROR: gethostbyname srv_name: %s\n", srv_name);
-        close(client_fd);
+    case SCK_IP4:
+        debug_info("[SOCKET] [socket_client_connect] socket_ip4_server_connect\n");
+        ret = socket_ip4_client_connect(srv_name, port, out_socket);
+        break;
+
+    case SCK_IP6:
+        debug_info("[SOCKET] [socket_client_connect] socket_ip6_server_connect\n");
+        ret = socket_ip6_client_connect(srv_name, port, out_socket);
+        break;
+
+    default:
+        debug_info("[SOCKET] [socket_client_connect] ERROR: on socket_client_connect(%d).\n", socket_mode);
         return -1;
+        break;
     }
 
-    bzero((char * ) & serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port   = htons(port);
-    memcpy( & (serv_addr.sin_addr), hp -> h_addr, hp -> h_length);
+    debug_info("[SOCKET] [socket_client_connect] >> End\n");
 
-    int status = connect(client_fd, (struct sockaddr * ) & serv_addr, sizeof(serv_addr));
-    if (status < 0)
-    {
-        printf("[SOCKET] [socket_read] ERROR: socket connection failed to %s in port %d %s\n", srv_name, port, strerror(errno));
-        close(client_fd);
-        return -1;
-    }
-
-    * out_socket = client_fd;
-    return 0;
+    return ret;
 }
 
 int socket_close ( int socket )
@@ -208,6 +209,41 @@ int socket_close ( int socket )
     return ret;
 }
 
+
+int socket_gethostbyname ( char * ip, size_t ip_size, char * srv_name, int socket_mode )
+{
+    int ret = 0;
+    debug_info("[SOCKET] [socket_gethostbyname] >> Begin\n");
+
+    // check arguments...
+    if (NULL == srv_name)
+    {
+        debug_error("[SOCKET] [socket_gethostbyname] ERROR: NULL srv_name\n");
+        return NULL;
+    }
+
+    
+    switch (socket_mode)
+    {
+    case SCK_IP4:
+        debug_info("[SOCKET] [socket_gethostbyname] socket_ip4_server_connect\n");
+        ret = socket_ip4_gethostbyname(ip, ip_size, srv_name);
+        break;
+
+    case SCK_IP6:
+        debug_info("[SOCKET] [socket_gethostbyname] socket_ip6_server_connect\n");
+        ret = socket_ip6_gethostbyname(ip, ip_size, srv_name);
+        break;
+
+    default:
+        debug_info("[SOCKET] [socket_gethostbyname] ERROR: on socket_gethostbyname(%d).\n", socket_mode);
+        return -1;
+        break;
+    }
+
+    return ret;
+
+}
 
 /* ................................................................... */
 

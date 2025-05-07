@@ -48,6 +48,8 @@ BASE_OBJECTS=		@top_srcdir@/src/base/darray.c \
 			@top_srcdir@/src/base/urlstr.c \
 			@top_srcdir@/src/base/ns.c \
 			@top_srcdir@/src/base/socket.c \
+			@top_srcdir@/src/base/socket_ip4.c \
+			@top_srcdir@/src/base/socket_ip6.c \
 			@top_srcdir@/src/base/service_socket.c \
 			@top_srcdir@/src/base/syscall_proxies.c \
 			@top_srcdir@/src/base/filesystem.c \

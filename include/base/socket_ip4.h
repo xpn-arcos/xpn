@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _SOCKET_H_
-#define _SOCKET_H_
+#ifndef _SOCKET_IP4_H_
+#define _SOCKET_IP4_H_
 
   #ifdef  __cplusplus
     extern "C" {
@@ -29,25 +29,17 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "debug_msg.h"
-  #include "utils.h"
-  #include "socket_ip4.h"
-  #include "socket_ip6.h"
+     #include "all_system.h"
+     #include "debug_msg.h"
+     #include "utils.h"
+     #include "filesystem.h"
 
-
-
-  #define SCK_IP4 4
-  #define SCK_IP6 6
 
   /* ... Functions / Funciones ......................................... */
 
-  int socket_send ( int socket, void * buffer, int size );
-  int socket_recv ( int socket, void * buffer, int size );
-  int socket_server_create ( int *out_socket, int port, int socket_mode );
-  int socket_server_accept ( int socket, int *out_conection_socket, int socket_mode );
-  int socket_client_connect ( char * srv_name, int port, int *out_socket, int socket_mode );
-  int socket_close ( int socket );
+     int socket_ip4_server_create ( int *out_socket, int port );
+     int socket_ip4_server_accept ( int socket, int *out_conection_socket );
+     int socket_ip4_client_connect ( char * srv_name, int port, int *out_socket );
 
 
   /* ................................................................... */
