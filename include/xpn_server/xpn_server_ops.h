@@ -29,14 +29,13 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #include <libgen.h>
   #include "all_system.h"
   #include "base/filesystem.h"
   #include "base/urlstr.h"
   #include "base/utils.h"
   #include "base/workers.h"
   #include "xpn_metadata.h"
-
+  #include <libgen.h>
 
   /* ... Const / Const ................................................. */
 
@@ -88,11 +87,11 @@
 
   struct st_xpn_server_path_flags
   {
-    char     path[PATH_MAX];
     int      flags;
     mode_t   mode;
     char     xpn_session;
     int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+    char     path[PATH_MAX];
   };
 
   struct st_xpn_server_path
@@ -103,19 +102,19 @@
   struct st_xpn_server_close
   {
     int      fd;
-    char     path[PATH_MAX];
     DIR     *dir;
     int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+    char     path[PATH_MAX];
   };
 
   struct st_xpn_server_rw
   {
-    char     path[PATH_MAX];
     offset_t offset;
     size_t   size;
     int      fd;
     char     xpn_session;
     int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+    char     path[PATH_MAX];
   };
 
   struct st_xpn_server_rw_req
@@ -133,8 +132,8 @@
 
   struct st_xpn_server_setattr
   { 
-    char path[PATH_MAX];
     struct stat attr;
+    char path[PATH_MAX];
   };
 
   struct st_xpn_server_attr_req
@@ -146,10 +145,10 @@
 
   struct st_xpn_server_readdir
   {
-    char path[PATH_MAX];
     long telldir;
     DIR *dir;
     char xpn_session;
+    char path[PATH_MAX];
   };
 
   struct st_xpn_server_opendir_req
@@ -174,14 +173,14 @@
 
   struct st_xpn_server_write_mdata
   { 
-    char path[PATH_MAX];
     struct xpn_metadata mdata;
+    char path[PATH_MAX];
   };
 
   struct st_xpn_server_write_mdata_file_size
   { 
-    char path[PATH_MAX];
     ssize_t size;
+    char path[PATH_MAX];
   };
 
   struct st_xpn_server_end

@@ -115,7 +115,35 @@ int ns_get_host_ip(char * ip, size_t ip_size)
     
     if (ipv == 4)
     {
+	/*struct hostent *srv_entry;    
         gethostname(srv_name, HOST_NAME_MAX); // get hostname
+	
+	srv_entry = gethostbyname(srv_name);                            // find host information
+	ip = inet_ntoa(*((struct in_addr *)srv_entry->h_addr_list[0])); // Convert into IP string*/
+									
+									
+	struct hostent *host_entry;
+
+    	if (gethostname(srv_name, HOST_NAME_MAX) != 0) {
+        	perror("gethostname");
+        	return -1;
+    	}
+
+    	host_entry = gethostbyname(srv_name);
+    	if (host_entry == NULL || host_entry->h_addr_list[0] == NULL) {
+        	perror("gethostbyname");
+        	return -1;
+    	}
+
+    	const char *ip_str = inet_ntoa(*(struct in_addr *)host_entry->h_addr_list[0]);
+    	if (ip_str == NULL) {
+        	fprintf(stderr, "inet_ntoa failed\n");
+        	return -1;
+    	}
+
+    	strncpy(ip, ip_str, ip_size - 1);
+    	ip[ip_size - 1] = '\0';
+
     }
     else
     {
@@ -178,10 +206,12 @@ int ns_get_host_ip(char * ip, size_t ip_size)
         }
 
         freeifaddrs(ifaddr);
+
+    	ret = socket_gethostbyname(ip, HOST_NAME_MAX, srv_name, ipv);
     }
     
 
-    ret = socket_gethostbyname(ip, HOST_NAME_MAX, srv_name, ipv);
+    /*ret = socket_gethostbyname(ip, HOST_NAME_MAX, srv_name, ipv);*/
 
     debug_info("[NS] [ns_get_host_ip] srv_name: %s IP: %s\n", srv_name, ip);
 

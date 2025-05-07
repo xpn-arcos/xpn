@@ -409,6 +409,7 @@ void xpn_server_op_write ( xpn_server_param_st *params, void *comm, struct st_xp
       return;
   }
 
+
   // If this is a file with mq_server protocol then the callback function is going to be used
   if ( head->u_st_xpn_server_msg.op_write.file_type == 1 )
   {
