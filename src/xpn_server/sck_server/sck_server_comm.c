@@ -1,3 +1,4 @@
+
 /*
  *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
  *
@@ -18,320 +19,96 @@
  *
  */
 
-/* ... Include / Inclusion ........................................... */
-
-#include "sck_server_comm.h"
 
+   /* ... Include / Inclusion ........................................... */
 
-/* ... Functions / Funciones ......................................... */
+      #include "sck_server_comm.h"
 
-int sck_server_comm_init (int *new_socket, char *port_name, int ipv ) 
-{
 
-    if (ipv == 6) 
-    {
-        return sck_ip6_server_comm_init(new_socket, port_name);
-    } 
-    else 
-    {
-        return sck_ip4_server_comm_init(new_socket, port_name);
-    }
-}
+   /* ... Functions / Funciones ......................................... */
 
+      int sck_server_comm_init (int *new_socket, char *port_name, int ipv )
+      {
+          int ret ;
+          struct timeval t0, t1, tf;
+          float  time;
 
+          debug_info("[SCK_SERVER_COMM] [sck_server_comm_init] >> Begin\n");
 
-int sck_ip4_server_comm_init(int * new_socket, char * port_name) 
-{
-    int ret, val;
-    struct sockaddr_in server_addr;
+          // Get timestap
+          TIME_MISC_Timer( &t0 );
 
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] >> Begin\n", 0);
+	  // create server socket...
+          ret = socket_server_create(new_socket, 0, ipv) ; // port=0 -> system will assign port
+          if (ret < 0)
+          {
+              debug_info("[SCK_SERVER_COMM] [sck_server_comm_init]: socket create fails\n");
+              return -1;
+          }
 
-    // Get timestap
-    struct timeval t0;
-    TIME_MISC_Timer( & t0);
+	  // ...get name for server socket...
+          ret = socket_getsockname(port_name, *new_socket, ipv) ;
+          if (ret < 0)
+          {
+              debug_info("[SCK_SERVER_COMM] [sck_server_comm_init]: getsockname fails\n");
+              return -1;
+          }
 
-    // Socket init
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Scoket init\n", 0);
+          // Get timestap
+          TIME_MISC_Timer( &t1);
+          TIME_MISC_DiffTime( &t0, &t1, &tf );
+          time = TIME_MISC_TimevaltoFloat( &tf );
 
-    * new_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if ( * new_socket < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: socket fails\n", 0);
-        return -1;
-    }
+          // Print server init information
+          printf(" | * Time to initialize XPN SCK server (port %s): %f s\n", port_name, time);
+          debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] server %d available at %s\n", 0, 0, port_name);
+          debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] server %d accepting...\n", 0, 0);
 
-    // tcp_nodalay
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] TCP nodelay\n", 0);
+          debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] >> End\n", 0);
+          return ret ;
+      }
 
-    val = 1;
-    ret = setsockopt( * new_socket, IPPROTO_TCP, TCP_NODELAY, & val, sizeof(val));
-    if (ret < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: setsockopt fails\n", 0);
-        return -1;
-    }
+      int sck_server_comm_accept(int socket, int **new_socket, int ipv )
+      {
+          int ret ;
 
-    // sock_reuseaddr
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Socket reuseaddr\n", 0);
+          debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] >> Begin\n", 0);
 
-    val = 1;
-    ret = setsockopt( * new_socket, SOL_SOCKET, SO_REUSEADDR, (char * ) & val, sizeof(int));
-    if (ret < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: setsockopt fails\n", 0);
-        return -1;
-    }
-
-    // bind
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Socket bind\n", 0);
+          *new_socket = malloc(sizeof(int));
+          if ( *new_socket == NULL) {
+              printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] ERROR: Memory allocation\n", 0);
+              return -1;
+          }
 
-    bzero((char * ) & server_addr, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(0);
-
-    ret = bind( * new_socket, (struct sockaddr * ) & server_addr, sizeof(server_addr));
-    if (ret < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: bind fails\n", 0);
-        return -1;
-    }
+          ret = socket_server_accept(socket, *new_socket, ipv) ;
+          if (ret < 0) {
+              perror("accept: ");
+	      free(*new_socket) ;
+              return -1;
+          }
 
-    // listen
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] Socket listen\n", 0);
+          ret = socket_setopt_data(**new_socket) ;
+          if (ret < 0) {
+              perror("setsockopt: ");
+	      free(*new_socket) ;
+              return -1;
+          }
 
-    ret = listen( * new_socket, 20);
-    if (ret < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] ERROR: listen fails\n", 0);
-        return -1;
-    }
+          debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] << End\n", 0);
 
-    // get sockname
-    socklen_t len = sizeof(server_addr);
-    getsockname( * new_socket, (struct sockaddr * ) & server_addr, & len);
-    sprintf(port_name, "%d", ntohs(server_addr.sin_port));
+          return ret ;
+      }
 
-    // Print server init information
-    struct timeval t1;
-    struct timeval tf;
-    float time;
-    TIME_MISC_Timer( & t1);
-    TIME_MISC_DiffTime( & t0, & t1, & tf);
-    time = TIME_MISC_TimevaltoFloat( & tf);
+      int sck_server_comm_disconnect(int * socket)
+      {
+          int ret ;
 
-    printf(" | * Time to initialize XPN SCK server (port %s): %f s\n", port_name, time);
+          ret = socket_close(*socket);
+          free(socket);
 
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] server %d available at %s\n", 0, 0, port_name);
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] server %d accepting...\n", 0, 0);
+          return ret ;
+      }
 
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_init] >> End\n", 0);
 
-    return 1;
-}
+   /* ................................................................... */
 
-
-int sck_ip6_server_comm_init(int *new_socket, char *port_name) 
-{
-    int ret, val;
-    struct sockaddr_in6 server_addr;
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] >> Begin\n", 0);
-
-    struct timeval t0;
-    TIME_MISC_Timer(&t0);
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] Socket init\n", 0);
-
-    *new_socket = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
-    if (*new_socket < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] ERROR: socket fails\n", 0);
-        return -1;
-    }
-
-    val = 1;
-    ret = setsockopt(*new_socket, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
-    if (ret < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] ERROR: setsockopt TCP_NODELAY fails\n", 0);
-        return -1;
-    }
-
-    val = 1;
-    ret = setsockopt(*new_socket, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(int));
-    if (ret < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] ERROR: setsockopt SO_REUSEADDR fails\n", 0);
-        return -1;
-    }
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] Socket bind\n", 0);
-
-    bzero(&server_addr, sizeof(server_addr));
-    server_addr.sin6_family = AF_INET6;
-    server_addr.sin6_addr = in6addr_any;
-    server_addr.sin6_port = htons(0); // System will assign port
-
-    ret = bind(*new_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    if (ret < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] ERROR: bind fails\n", 0);
-        return -1;
-    }
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] Socket listen\n", 0);
-
-    ret = listen(*new_socket, 20);
-    if (ret < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] ERROR: listen fails\n", 0);
-        return -1;
-    }
-
-    socklen_t len = sizeof(server_addr);
-    getsockname(*new_socket, (struct sockaddr *)&server_addr, &len);
-    sprintf(port_name, "%d", ntohs(server_addr.sin6_port));
-
-    struct timeval t1, tf;
-    float time;
-    TIME_MISC_Timer(&t1);
-    TIME_MISC_DiffTime(&t0, &t1, &tf);
-    time = TIME_MISC_TimevaltoFloat(&tf);
-
-    printf(" | * Time to initialize IPv6 SCK server (port %s): %f s\n", port_name, time);
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] server %d available at %s\n", 0, 0, port_name);
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] server %d accepting...\n", 0, 0);
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_init] >> End\n", 0);
-
-    return 1;
-}
-
-
-int sck_server_comm_accept(int socket, int **new_socket, int ipv ) 
-{
-    if (ipv == 6) 
-    {
-        return sck_ip6_server_comm_accept(socket, new_socket);
-    } 
-    else 
-    {
-        return sck_ip4_server_comm_accept(socket, new_socket);
-    }
-}
-
-
-int sck_ip4_server_comm_accept(int socket, int ** new_socket) 
-{
-    int ret, sc, flag;
-    struct sockaddr_in client_addr;
-    socklen_t size = sizeof(struct sockaddr_in);
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] >> Begin\n", 0);
-
-    // Accept
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] Accept\n", 0);
-
-    sc = accept(socket, (struct sockaddr * ) & client_addr, & size);
-    if (sc < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] ERROR: accept fails\n", 0);
-        return -1;
-    }
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] desp. accept conection .... %d\n", 0, sc);
-    // tcp_nodelay
-    flag = 1;
-    ret = setsockopt(sc, IPPROTO_TCP, TCP_NODELAY, & flag, sizeof(flag));
-    if (ret < 0) {
-        perror("setsockopt: ");
-        return -1;
-    }
-
-    //NEW
-    int val = 1024 * 1024; //1 MB
-    ret = setsockopt(sc, SOL_SOCKET, SO_SNDBUF, (char * ) & val, sizeof(int));
-    if (ret < 0) {
-        perror("setsockopt: ");
-        return -1;
-    }
-
-    val = 1024 * 1024; //1 MB
-    ret = setsockopt(sc, SOL_SOCKET, SO_RCVBUF, (char * ) & val, sizeof(int));
-    if (ret < 0) {
-        perror("setsockopt: ");
-        return -1;
-    }
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] << End\n", 0);
-
-    * new_socket = malloc(sizeof(int));
-    if ( * new_socket == NULL) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_server_comm_accept] ERROR: Memory allocation\n", 0);
-        return -1;
-    }
-
-    **new_socket = sc;
-    return 0;
-}
-
-
-
-int sck_ip6_server_comm_accept(int socket, int **new_socket) 
-{
-    int ret, sc, flag;
-    struct sockaddr_in6 client_addr;
-    socklen_t size = sizeof(struct sockaddr_in6);
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_accept] >> Begin\n", 0);
-
-    // Accept
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_accept] Accept\n", 0);
-
-    sc = accept(socket, (struct sockaddr *) &client_addr, &size);
-    if (sc < 0) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_accept] ERROR: accept fails\n", 0);
-        return -1;
-    }
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_accept] Accepted connection %d\n", 0, sc);
-
-    // TCP_NODELAY
-    flag = 1;
-    ret = setsockopt(sc, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
-    if (ret < 0) {
-        perror("setsockopt TCP_NODELAY: ");
-        return -1;
-    }
-
-    // Send buffer size
-    int val = 1024 * 1024; // 1 MB
-    ret = setsockopt(sc, SOL_SOCKET, SO_SNDBUF, (char *)&val, sizeof(int));
-    if (ret < 0) {
-        perror("setsockopt SO_SNDBUF: ");
-        return -1;
-    }
-
-    // Receive buffer size
-    val = 1024 * 1024; // 1 MB
-    ret = setsockopt(sc, SOL_SOCKET, SO_RCVBUF, (char *)&val, sizeof(int));
-    if (ret < 0) {
-        perror("setsockopt SO_RCVBUF: ");
-        return -1;
-    }
-
-    debug_info("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_accept] << End\n", 0);
-
-    *new_socket = malloc(sizeof(int));
-    if (*new_socket == NULL) {
-        printf("[Server=%d] [SCK_SERVER_COMM] [sck_ip6_server_comm_accept] ERROR: Memory allocation\n", 0);
-        return -1;
-    }
-
-    **new_socket = sc;
-
-    return 0;
-}
-
-
-
-int sck_server_comm_disconnect(int * socket) 
-{
-    socket_close( * socket);
-    free(socket);
-    return 0;
-}
-
-/* ................................................................... */

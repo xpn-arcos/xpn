@@ -102,6 +102,7 @@ ssize_t nfi_mq_server_publish ( struct nfi_xpn_server *server_aux, struct nfi_xp
 {
     int ret, diff, cont;
 
+    ret  = -1 ;
     diff = size;
     cont = 0;
 

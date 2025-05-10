@@ -47,10 +47,17 @@
 
      int socket_send ( int socket, void * buffer, int size );
      int socket_recv ( int socket, void * buffer, int size );
+
+     int socket_setopt_data    ( int socket ) ;
+     int socket_setopt_service ( int socket ) ;
+
      int socket_server_create  ( int *out_socket, int port,                  int ip_version );
      int socket_server_accept  ( int socket, int *out_conection_socket,      int ip_version );
      int socket_client_connect ( char * srv_name, int port, int *out_socket, int ip_version );
      int socket_close ( int socket );
+
+     int socket_gethostbyname ( char * ip, size_t ip_size, char * srv_name, int socket_mode ) ;
+     int socket_getsockname   ( char * port_name, int in_socket, int socket_mode ) ;
 
 
   /* ................................................................... */
