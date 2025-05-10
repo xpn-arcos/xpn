@@ -292,6 +292,40 @@
      //  address management
      //
 
+     int socket_gethostname ( char * srv_name, int socket_mode )
+     {
+         int ret = 0;
+
+         debug_info("[SOCKET] [socket_gethostname] >> Begin\n");
+
+         // check arguments...
+         if (NULL == srv_name)
+         {
+             debug_error("[SOCKET] [socket_gethostname] ERROR: NULL srv_name\n");
+             return -1;
+         }
+
+         switch (socket_mode)
+         {
+            case SCK_IP4:
+                 debug_info("[SOCKET] [socket_gethostname] socket_gethostname\n");
+                 ret = socket_ip4_gethostname(srv_name) ;
+                 break;
+
+            case SCK_IP6:
+                 debug_info("[SOCKET] [socket_gethostname] socket_gethostname\n");
+                 ret = socket_ip6_gethostname(srv_name) ;
+                 break;
+
+            default:
+                 debug_info("[SOCKET] [socket_gethostname] ERROR: on socket_gethostname(%d).\n", socket_mode);
+                 return -1;
+                 break;
+         }
+
+         return ret;
+     }
+
      int socket_gethostbyname ( char * ip, size_t ip_size, char * srv_name, int socket_mode )
      {
          int ret = 0;
@@ -308,12 +342,12 @@
          switch (socket_mode)
          {
             case SCK_IP4:
-                 debug_info("[SOCKET] [socket_gethostbyname] socket_ip4_server_connect\n");
+                 debug_info("[SOCKET] [socket_gethostbyname] socket_gethostbyname\n");
                  ret = socket_ip4_gethostbyname(ip, ip_size, srv_name);
                  break;
 
             case SCK_IP6:
-                 debug_info("[SOCKET] [socket_gethostbyname] socket_ip6_server_connect\n");
+                 debug_info("[SOCKET] [socket_gethostbyname] socket_gethostbyname\n");
                  ret = socket_ip6_gethostbyname(ip, ip_size, srv_name);
                  break;
 

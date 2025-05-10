@@ -177,6 +177,71 @@
      //  address management
      //
 
+     int socket_ip6_gethostname ( char * srv_name )
+     {
+         int ret ;
+         struct ifaddrs *ifaddr, *ifa ;
+         char ipstr[INET6_ADDRSTRLEN] ;
+         struct sockaddr_in6 *sa6 ;
+
+         debug_info("[SOCKET_IP6] [socket_ip6_gethostname] >> Begin IPv6\n");
+
+         if (getifaddrs(&ifaddr) == -1)
+         {
+             perror("getifaddrs");
+             return -1 ;
+         }
+
+         debug_info("[NS] [ns_get_hostname] >> Successfully retrieved network interfaces");
+
+         for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
+         {
+		 // Skip empty and non-IPv6
+                 if (!ifa->ifa_addr) {
+                     continue;
+                 }
+                 if (ifa->ifa_addr->sa_family != AF_INET6) {
+                     continue;
+                 }
+
+                 sa6 = (struct sockaddr_in6 *)ifa->ifa_addr;
+
+                 // Skip link-local and loopback
+                 if (IN6_IS_ADDR_LINKLOCAL(&sa6->sin6_addr)) {
+                     debug_info("[NS] [ns_get_hostname] >> Skipping link-local IPv6 address");
+                     continue;
+                 }
+                 if (IN6_IS_ADDR_LOOPBACK(&sa6->sin6_addr)) {
+                     debug_info("[NS] [ns_get_hostname] >> Skipping loopback IPv6 address");
+                     continue;
+                 }
+
+		 // inet_ntop...
+                 inet_ntop(AF_INET6, &sa6->sin6_addr, ipstr, sizeof(ipstr));
+                 debug_info("[NS] [ns_get_hostname] >> Found global IPv6 address: %s", ipstr);
+
+                 ret = getnameinfo((struct sockaddr *)sa6, sizeof(*sa6), srv_name, sizeof(srv_name), NULL, 0, NI_NAMEREQD);
+		 if (ret == 0) {
+                     debug_info("Resolved hostname for IPv6 %s: %s", ipstr, hostname);
+                 }
+                 /*
+		 if (ret == 0) {
+                     debug_info("Resolved hostname for IPv6 %s: %s", ipstr, hostname);
+                     break;  // Stop after first valid result
+                 }
+                 else {
+                     debug_info("Could not resolve name for %s: %s", ipstr, gai_strerror(ret));
+                 }
+		 */
+         }
+
+         freeifaddrs(ifaddr);
+
+         debug_info("[SOCKET_IP6] [socket_ip6_gethostname] >> End IPv6\n");
+
+	 return 0 ;
+     }
+
      int socket_ip6_gethostbyname ( char *ip, size_t ip_size, char *srv_name )
      {
          struct addrinfo hints, *res, *p;

@@ -30,13 +30,6 @@
      #include "base/service_socket.h"
 
 
-     #include <ifaddrs.h>
-     #include <arpa/inet.h>
-     #include <netdb.h>
-     #include <sys/socket.h>
-     #include <netinet/in.h>
-
-
   /* ... Const / Const ................................................. */
 
      #ifndef MPI_SERVER_DNS_FILE_DEFAULT

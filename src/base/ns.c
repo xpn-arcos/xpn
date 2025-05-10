@@ -25,178 +25,43 @@
 
   /* ... Functions / Funciones ......................................... */
 
-     int ns_get_hostname(char * srv_name)
+     int ns_get_hostname ( char * srv_name )
      {
-         int ipv ;
-         struct ifaddrs *ifaddr, *ifa;
-         char ipstr[INET6_ADDRSTRLEN];
+         int ret, ipv ;
 
          ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
+         ret = socket_gethostname(srv_name, ipv) ;
 
-	 // IPv4
-         if (ipv == 4)
-         {
-             debug_info("[NS] [ns_get_hostname] >> Begin IPv4\n");
-             gethostname(srv_name, HOST_NAME_MAX); // get hostname
-             debug_info("[NS] [ns_get_hostname] >> End IPv4\n");
-	     return 0 ;
-         }
-
-	 // IPv6
-         debug_info("[NS] [ns_get_hostname] >> Starting IPv6 hostname resolution");
-
-         if (getifaddrs(&ifaddr) == -1)
-         {
-             perror("getifaddrs");
-             return EXIT_FAILURE;
-         }
-
-         debug_info("[NS] [ns_get_hostname] >> Successfully retrieved network interfaces");
-
-         for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
-         {
-                 if (!ifa->ifa_addr) {
-                     continue;
-                 }
-
-                 if (ifa->ifa_addr->sa_family != AF_INET6) {
-                     continue;
-                 }
-
-                 struct sockaddr_in6 *sa6 = (struct sockaddr_in6 *)ifa->ifa_addr;
-
-                 // Skip link-local and loopback
-                 if (IN6_IS_ADDR_LINKLOCAL(&sa6->sin6_addr)) {
-                     debug_info("[NS] [ns_get_hostname] >> Skipping link-local IPv6 address");
-                     continue;
-                 }
-                 if (IN6_IS_ADDR_LOOPBACK(&sa6->sin6_addr)) {
-                     debug_info("[NS] [ns_get_hostname] >> Skipping loopback IPv6 address");
-                     continue;
-                 }
-
-                 inet_ntop(AF_INET6, &sa6->sin6_addr, ipstr, sizeof(ipstr));
-                 debug_info("[NS] [ns_get_hostname] >> Found global IPv6 address: %s", ipstr);
-
-                 int ret = getnameinfo((struct sockaddr *)sa6, sizeof(*sa6), srv_name, sizeof(srv_name), NULL, 0, NI_NAMEREQD);
-
-                 /*if (ret == 0)
-                 {
-                     debug_info("Resolved hostname for IPv6 %s: %s", ipstr, hostname);
-                     break;  // Stop after first valid result
-                 }
-                 else
-                 {
-                     debug_info("Could not resolve name for %s: %s", ipstr, gai_strerror(ret));
-                 }*/
-         }
-
-         freeifaddrs(ifaddr);
-
-         debug_info("[NS] [ns_get_hostname] >> End\n");
-	 return 0 ;
+	 return ret ;
      }
 
-     int ns_get_host_ip(char * ip, size_t ip_size)
+     int ns_get_host_ip ( char * ip, size_t ip_size )
      {
+         int ret, ipv ;
+         char srv_name[HOST_NAME_MAX];
 
          debug_info("[NS] [ns_get_host_ip] >> Begin\n");
 
-         int ret = 0;
-         char srv_name[HOST_NAME_MAX];
+         ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
 
-         int ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
-
-
-         if (ipv == 4)
-         {
-     	     struct hostent *host_entry;
-
-             if (gethostname(srv_name, HOST_NAME_MAX) != 0) {
-             	perror("gethostname");
-             	return -1;
-             }
-
-             host_entry = gethostbyname(srv_name);
-             if (host_entry == NULL || host_entry->h_addr_list[0] == NULL) {
-             	perror("gethostbyname");
-             	return -1;
-             }
-
-             const char *ip_str = inet_ntoa(*(struct in_addr *)host_entry->h_addr_list[0]);
-             if (ip_str == NULL) {
-             	fprintf(stderr, "inet_ntoa failed\n");
-             	return -1;
-             }
-
-             strncpy(ip, ip_str, ip_size - 1);
-             ip[ip_size - 1] = '\0';
-         }
-         else
-         {
-             struct ifaddrs *ifaddr, *ifa;
-             char ipstr[INET6_ADDRSTRLEN];
-
-             debug_info("[NS] [ns_get_host_ip] >> Starting IPv6 hostname resolution");
-
-             if (getifaddrs(&ifaddr) == -1)
-             {
-                 perror("getifaddrs");
-                 return EXIT_FAILURE;
-             }
-
-             debug_info("[NS] [ns_get_host_ip] >> Successfully retrieved network interfaces");
-
-             for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
-             {
-                 if (!ifa->ifa_addr) {
-                     continue;
-                 }
-
-                 if (ifa->ifa_addr->sa_family != AF_INET6) {
-                     continue;
-                 }
-
-                 struct sockaddr_in6 *sa6 = (struct sockaddr_in6 *)ifa->ifa_addr;
-
-                 // Skip link-local and loopback
-                 if (IN6_IS_ADDR_LINKLOCAL(&sa6->sin6_addr)) {
-                     debug_info("[NS] [ns_get_host_ip] >> Skipping link-local IPv6 address");
-                     continue;
-                 }
-                 if (IN6_IS_ADDR_LOOPBACK(&sa6->sin6_addr)) {
-                     debug_info("[NS] [ns_get_host_ip] >> Skipping loopback IPv6 address");
-                     continue;
-                 }
-
-                 inet_ntop(AF_INET6, &sa6->sin6_addr, ipstr, sizeof(ipstr));
-                 debug_info("[NS] [ns_get_host_ip] >> Found global IPv6 address: %s", ipstr);
-
-                 int ret = getnameinfo((struct sockaddr *)sa6, sizeof(*sa6), srv_name, sizeof(srv_name), NULL, 0, NI_NAMEREQD);
-
-                 /*if (ret == 0)
-                 {
-                     debug_info("Resolved hostname for IPv6 %s: %s", ipstr, hostname);
-                     break;  // Stop after first valid result
-                 }
-                 else
-                 {
-                     debug_info("Could not resolve name for %s: %s", ipstr, gai_strerror(ret));
-                 }*/
-             }
-
-             freeifaddrs(ifaddr);
-
-       	     ret = socket_gethostbyname(ip, HOST_NAME_MAX, srv_name, ipv);
+         ret = socket_gethostname(srv_name, ipv) ;
+	 if (ret < 0) {
+             fprintf(stderr, "gethostname failed\n");
+             return -1 ;
          }
 
-         /*ret = socket_gethostbyname(ip, HOST_NAME_MAX, srv_name, ipv);*/
+       	 ret = socket_gethostbyname(ip, ip_size, srv_name, ipv);
+	 if (ret < 0) {
+             fprintf(stderr, "gethostbyname failed\n");
+             return -1 ;
+         }
 
          debug_info("[NS] [ns_get_host_ip] srv_name: %s IP: %s\n", srv_name, ip);
          debug_info("[NS] [ns_get_host_ip] >> End\n");
 
-         return 0;
+         return ret ;
      }
+
 
      int ns_publish(char * dns_file, char * protocol, char * param_srv_name, char * srv_ip, char * port_name)
      {

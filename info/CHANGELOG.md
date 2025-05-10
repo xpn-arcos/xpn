@@ -1,6 +1,18 @@
 
 # Changelog
 
+## 3.2.1 - 2025-06-05
+
+  * IPv6 support added
+  * Support for 32-bits version of Expand added
+
+## 3.2.0 - 2025-03-12
+
+  * MQTT support added: mpi_server, sck_server and now mq_server available
+  * Cleanup and minor improvements on socket support
+  * Improvements on the configuration file reader
+  * Minor updates on examples
+
 ## 3.0.0 - 2024-06-05
 
   * Fault tolerance support based on replication added
