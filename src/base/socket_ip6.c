@@ -36,7 +36,7 @@
          // check arguments...
          if (NULL == out_socket)
          {
-             printf("[SOCKET] [socket_ip6_server_create] ERROR: NULL out_socket\n");
+             printf("[SOCKET_IP6] [socket_ip6_server_create] ERROR: NULL out_socket\n");
              return -1;
          }
 
@@ -44,7 +44,7 @@
          server_socket = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
          if (server_socket < 0)
          {
-             printf("[SOCKET] [socket_server_create] ERROR: socket fails\n");
+             printf("[SOCKET_IP6] [socket_server_create] ERROR: socket fails\n");
              return -1;
          }
 
@@ -52,22 +52,22 @@
          ret = setsockopt(server_socket, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
          if (ret < 0)
          {
-             printf("[SOCKET] [socket_server_create] ERROR: setsockopt fails\n");
+             printf("[SOCKET_IP6] [socket_server_create] ERROR: setsockopt fails\n");
              return -1;
          }
 
-         debug_info("[SOCKET] [socket_server_create] Socket reuseaddr\n");
+         debug_info("[SOCKET_IP6] [socket_server_create] Socket reuseaddr\n");
 
          val = 1;
          ret = setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, (char * ) &val, sizeof(int));
          if (ret < 0)
          {
-             printf("[SOCKET] [socket_server_create] ERROR: setsockopt fails\n");
+             printf("[SOCKET_IP6] [socket_server_create] ERROR: setsockopt fails\n");
              return -1;
          }
 
          // bind
-         debug_info("[SOCKET] [socket_server_create] Socket bind\n");
+         debug_info("[SOCKET_IP6] [socket_server_create] Socket bind\n");
 
          bzero((char * ) &server_addr, sizeof(server_addr));
          server_addr.sin6_family = AF_INET6;
@@ -77,17 +77,17 @@
          ret = bind(server_socket, (struct sockaddr * ) &server_addr, sizeof(server_addr));
          if (ret < 0)
          {
-             printf("[SOCKET] [socket_server_create] ERROR: bind fails\n");
+             printf("[SOCKET_IP6] [socket_server_create] ERROR: bind fails\n");
              return -1;
          }
 
          // listen
-         debug_info("[SOCKET] [socket_server_create] Socket listen\n");
+         debug_info("[SOCKET_IP6] [socket_server_create] Socket listen\n");
 
          ret = listen(server_socket, SOMAXCONN);
          if (ret < 0)
          {
-             printf("[SOCKET] [socket_server_create] ERROR: listen fails\n");
+             printf("[SOCKET_IP6] [socket_server_create] ERROR: listen fails\n");
              return -1;
          }
 
@@ -103,21 +103,21 @@
          // check arguments...
          if (NULL == out_conection_socket)
          {
-             printf("[SOCKET] [socket_ip6_server_accept] ERROR: NULL out_conection_socket\n");
+             printf("[SOCKET_IP6] [socket_ip6_server_accept] ERROR: NULL out_conection_socket\n");
              return -1;
          }
 
          // Accept
-         debug_info("[SOCKET] [socket_ip6_server_accept] Accept\n");
+         debug_info("[SOCKET_IP6] [socket_ip6_server_accept] Accept\n");
 
          sock_size = sizeof(struct sockaddr_in);
          *out_conection_socket = accept(socket, (struct sockaddr * ) &client_addr, &sock_size);
          if (*out_conection_socket < 0) {
-             printf("[SOCKET] [socket_accept_send] ERROR: socket accept\n");
+             printf("[SOCKET_IP6] [socket_accept_send] ERROR: socket accept\n");
              return -1;
          }
 
-         debug_info("[SOCKET] [socket_ip6_server_accept] accepted for %d\n", *out_conection_socket);
+         debug_info("[SOCKET_IP6] [socket_ip6_server_accept] accepted for %d\n", *out_conection_socket);
 
          return 0;
      }
@@ -132,7 +132,7 @@
          // check arguments...
          if (NULL == out_socket)
          {
-             printf("[SOCKET] [socket_ip6_client_connect] ERROR: NULL out_socket\n");
+             printf("[SOCKET_IP6] [socket_ip6_client_connect] ERROR: NULL out_socket\n");
              return -1;
          }
 
@@ -146,7 +146,7 @@
          int status = getaddrinfo(srv_name, port_str, &hints, &res);
          if (status != 0)
          {
-             fprintf(stderr, "[SOCKET] getaddrinfo error: %s\n", gai_strerror(status));
+             fprintf(stderr, "[SOCKET_IP6] getaddrinfo error: %s\n", gai_strerror(status));
              return -1;
          }
 
@@ -167,7 +167,7 @@
              close(client_fd);
          }
 
-         fprintf(stderr, "[SOCKET] Connection failed to %s on port %d\n", srv_name, port);
+         fprintf(stderr, "[SOCKET_IP6] Connection failed to %s on port %d\n", srv_name, port);
          freeaddrinfo(res);
          return -1;
      }
