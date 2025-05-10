@@ -27,6 +27,10 @@
 
   /* ... Functions / Funciones ......................................... */
 
+     //
+     //  Send/Recev
+     //
+
      int socket_send ( int socket, void * buffer, int size )
      {
          int r;
@@ -82,6 +86,79 @@
          return size;
      }
 
+
+     //
+     //  setopt for data or server
+     //
+
+     int socket_setopt_data ( int socket )
+     {
+          int ret ;
+          int flag, val ;
+
+          debug_info("[SOCKET] [socket_setopt_data] >> Begin\n");
+
+          // tcp_nodelay
+          flag = 1;
+          ret = setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
+          if (ret < 0) {
+              perror("setsockopt: ");
+              return -1;
+          }
+
+          // send_buffer: 1 MB
+          val = 1024 * 1024; // 1 MB
+          ret = setsockopt(socket, SOL_SOCKET, SO_SNDBUF, (char * ) &val, sizeof(int));
+          if (ret < 0) {
+              perror("setsockopt: ");
+              return -1;
+          }
+
+          // recv_buffer: 1 MB
+          val = 1024 * 1024; // 1 MB
+          ret = setsockopt(socket, SOL_SOCKET, SO_RCVBUF, (char * ) &val, sizeof(int));
+          if (ret < 0) {
+              perror("setsockopt: ");
+              return -1;
+          }
+
+          debug_info("[SOCKET] [socket_setopt_data] << End\n");
+          return ret ;
+     }
+
+     int socket_setopt_service ( int socket )
+     {
+         int ret ;
+         int flag, val ;
+
+         debug_info("[SOCKET] [socket_setopt_service] >> Begin\n");
+
+         // tcp_nodelay
+         flag = 1;
+         ret = setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
+         if (ret < 0) {
+             printf("[SOCKET] [socket_setopt_service] ERROR: setsockopt for TCP_NODELAY fails\n");
+             return -1;
+         }
+
+         // sock_reuseaddr
+         val = 1;
+         ret = setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, (char * ) &val, sizeof(val));
+         if (ret < 0)
+         {
+             printf("[SOCKET] [socket_setopt_service] ERROR: setsockopt for SO_REUSEADDR fails\n");
+             return -1;
+         }
+
+         debug_info("[SOCKET] [socket_setopt_service] << End\n");
+         return ret ;
+     }
+
+
+     //
+     //  server_create
+     //
+
      int socket_server_create ( int * out_socket, int port, int socket_mode )
      {
          int ret = 0;
@@ -96,7 +173,6 @@
          }
 
          // initialize...
-
          switch (socket_mode)
          {
             case SCK_IP4:
@@ -120,6 +196,11 @@
          return ret;
      }
 
+
+     //
+     //  accept / connect
+     //
+
      int socket_server_accept ( int socket, int * out_conection_socket, int socket_mode )
      {
          int ret = 0;
@@ -132,7 +213,6 @@
              debug_error("[SOCKET] [socket_server_accept] ERROR: NULL out_socket\n");
              return -1;
          }
-
 
          switch (socket_mode)
          {
@@ -159,7 +239,6 @@
 
      int socket_client_connect ( char * srv_name, int port, int * out_socket, int socket_mode )
      {
-
          int ret = 0;
 
          debug_info("[SOCKET] [socket_client_connect] >> Begin\n");
@@ -170,7 +249,6 @@
              debug_error("[SOCKET] [socket_client_connect] ERROR: NULL srv_name\n");
              return -1;
          }
-
 
          switch (socket_mode)
          {
@@ -210,18 +288,22 @@
      }
 
 
+     //
+     //  address management
+     //
+
      int socket_gethostbyname ( char * ip, size_t ip_size, char * srv_name, int socket_mode )
      {
          int ret = 0;
+
          debug_info("[SOCKET] [socket_gethostbyname] >> Begin\n");
 
          // check arguments...
          if (NULL == srv_name)
          {
              debug_error("[SOCKET] [socket_gethostbyname] ERROR: NULL srv_name\n");
-             return NULL;
+             return -1;
          }
-
 
          switch (socket_mode)
          {
@@ -237,6 +319,40 @@
 
             default:
                  debug_info("[SOCKET] [socket_gethostbyname] ERROR: on socket_gethostbyname(%d).\n", socket_mode);
+                 return -1;
+                 break;
+         }
+
+         return ret;
+     }
+
+     int socket_getsockname ( char * port_name, int in_socket, int socket_mode )
+     {
+         int ret = 0;
+
+         debug_info("[SOCKET] [socket_getsockname] >> Begin\n");
+
+         // check arguments...
+         if (NULL == port_name)
+         {
+             debug_error("[SOCKET] [socket_getsockname] ERROR: NULL srv_name\n");
+             return -1;
+         }
+
+         switch (socket_mode)
+         {
+            case SCK_IP4:
+                 debug_info("[SOCKET] [socket_getsockname] socket_ip4_getsockname\n");
+                 ret = socket_ip4_getsockname(port_name, in_socket) ;
+                 break;
+
+            case SCK_IP6:
+                 debug_info("[SOCKET] [socket_getsockname] socket_ip6_getsockname\n");
+                 ret = socket_ip6_getsockname(port_name, in_socket) ;
+                 break;
+
+            default:
+                 debug_info("[SOCKET] [socket_getsockname] ERROR: on socket_mode for socket_gethostbyname(%d).\n", socket_mode);
                  return -1;
                  break;
          }
