@@ -40,8 +40,9 @@
      int socket_ip4_server_accept  ( int socket, int * out_conection_socket ) ;
      int socket_ip4_client_connect ( char * srv_name, int port, int * out_socket ) ;
 
+     int socket_ip4_gethostname   ( char * srv_name ) ;
      int socket_ip4_gethostbyname ( char * ip, size_t ip_size, char * srv_name ) ;
-     int socket_ip4_getsockname ( char * port_name, int new_socket ) ;
+     int socket_ip4_getsockname   ( char * port_name, int new_socket ) ;
 
 
   /* ................................................................... */

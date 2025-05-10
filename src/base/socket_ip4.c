@@ -181,6 +181,17 @@
      //  address management
      //
 
+     int socket_ip4_gethostname ( char * srv_name )
+     {
+         int ret ;
+
+         debug_info("[SOCKET_IP4] [socket_ip4_gethostname] >> Begin IPv4\n");
+         ret = gethostname(srv_name, HOST_NAME_MAX); // get hostname
+         debug_info("[SOCKET_IP4] [socket_ip4_gethostname] >> End IPv4\n");
+
+	 return ret ;
+     }
+
      int socket_ip4_gethostbyname ( char * ip, size_t ip_size, char * srv_name )
      {
          char   *ip_local;
@@ -199,6 +210,12 @@
          srv_entry = gethostbyname(srv_name);                                    // find host information
          ip_local = inet_ntoa(*((struct in_addr *)srv_entry->h_addr_list[0]));   // Convert into IP string
          strcpy(ip, ip_local);
+
+	 // unsafe strcpy:
+         //   strcpy(ip, ip_local);
+	 // safe strcpy replacement:
+         //   strncpy(ip, ip_local, ip_size - 1);
+         //   ip[ip_size - 1] = '\0';
 
          return 1;
      }
