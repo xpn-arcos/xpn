@@ -273,6 +273,40 @@
          return ret;
      }
 
+     int socket_client_connect_retries ( int sd, int n_retries, struct sockaddr *ai_addr, socklen_t ai_addrlen )
+     {
+         int  ret, connect_retries ;
+         char cli_name[HOST_NAME_MAX];
+
+	 // gethostname
+         ret = gethostname(cli_name, HOST_NAME_MAX);
+	 if (ret < 0) {
+	     perror("gethostname: ") ;
+	     strcpy(cli_name, "unknown") ;
+	 }
+
+	 // loop...
+         connect_retries = 0;
+         do
+         {
+             ret = connect(sd, ai_addr, ai_addrlen) ;
+             if (ret < 0)
+             {
+                 if (connect_retries == 0)
+     	         {
+                     printf("----------------------------------------------------------------\n");
+                     printf("Client '%s' waiting for server to be up and running...\n", cli_name);
+                     printf("----------------------------------------------------------------\n\n");
+                 }
+
+                 connect_retries++;
+                 sleep(2);
+             }
+         } while ((ret < 0) && (connect_retries < n_retries));
+
+         return ret ;
+     }
+
      int socket_client_connect_with_retries ( char *srv_name, char *port_name, int *out_socket, int n_retries, int socket_mode )
      {
          int ret = 0;
@@ -280,9 +314,16 @@
          debug_info("[SOCKET] [socket_client_connect_with_retries] >> Begin\n");
 
          // check arguments...
-         if (NULL == srv_name)
-         {
+         if (NULL == srv_name) {
              debug_error("[SOCKET] [socket_client_connect_with_retries] ERROR: NULL srv_name\n");
+             return -1;
+         }
+         if (NULL == port_name) {
+             debug_error("[SOCKET] [socket_client_connect_with_retries] ERROR: NULL port_name\n");
+             return -1;
+         }
+         if (NULL == out_socket) {
+             debug_error("[SOCKET] [socket_client_connect_with_retries] ERROR: NULL out_socket\n");
              return -1;
          }
 
