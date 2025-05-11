@@ -176,6 +176,81 @@
          return 0;
      }
 
+     int socket_ip4_client_connect_with_retries ( char * srv_name, char * port_name, int *out_socket, int n_retries )
+     {
+         int ret, sd;
+         struct hostent * hp;
+         struct sockaddr_in server_addr;
+         char cli_name[HOST_NAME_MAX];
+	 int socket_setopt_data ( int socket ) ;
+
+         debug_info("[SOCKET] [socket_ip4_client_connect_with_retries] srv_name:%s port_name:%s\n", srv_name, port_name);
+
+         // Socket...
+         sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+         if (sd < 0) {
+             perror("socket: ");
+             return -1;
+         }
+
+         ret = socket_setopt_data(sd) ;
+         if (ret < 0) {
+             close(sd);
+             return -1;
+         }
+
+         // gethostname
+         gethostname(cli_name, HOST_NAME_MAX);
+	 if (ret < 0) {
+	     perror("gethostname: ") ;
+	     strcpy(cli_name, "unknown") ;
+	 }
+
+         // gethost by name
+         hp = gethostbyname(srv_name);
+         if (hp == NULL)
+         {
+             fprintf(stderr, "nfi_sck_server_init: error gethostbyname %s (%s,%s)\n", srv_name, srv_name, port_name);
+             return -1;
+         }
+
+         // Connect...
+         debug_info("[SOCKET] [socket_ip4_client_connect_with_retries] Connect port %s\n", port_name);
+
+         bzero((char * ) &server_addr, sizeof(server_addr));
+         server_addr.sin_family = AF_INET;
+         server_addr.sin_port   = htons(atoi(port_name));
+         memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
+
+         int connect_retries = 0;
+         do
+         {
+             ret = connect(sd, (struct sockaddr * ) & server_addr, sizeof(server_addr));
+             if (ret < 0)
+             {
+                 if (connect_retries == 0)
+                 {
+                     printf("----------------------------------------------------------------\n");
+                     printf("Client '%s' waiting for server to be up and running...\n", cli_name);
+                     printf("----------------------------------------------------------------\n\n");
+                 }
+
+                 connect_retries++;
+                 sleep(2);
+             }
+         } while ((ret < 0) && (connect_retries < n_retries));
+
+         if (ret < 0)
+         {
+             printf("[SOCKET] [socket_ip4_client_connect_with_retries] ERROR: connect fails\n");
+             close(sd);
+             return -1;
+         }
+
+         *out_socket = sd;
+         return ret;
+     }
+
 
      //
      //  address management

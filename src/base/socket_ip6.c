@@ -153,8 +153,9 @@
          for (p = res; p != NULL; p = p->ai_next)
          {
              client_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-             if (client_fd == -1)
+             if (client_fd == -1) {
                  continue;
+	     }
 
              if (connect(client_fd, p->ai_addr, p->ai_addrlen) == 0)
              {
@@ -170,6 +171,77 @@
          fprintf(stderr, "[SOCKET_IP6] Connection failed to %s on port %d\n", srv_name, port);
          freeaddrinfo(res);
          return -1;
+     }
+
+     int socket_ip6_client_connect_with_retries ( char *srv_name, char *port_name, int *out_socket, int n_retries )
+     {
+         struct addrinfo hints, *res = NULL;
+         int sd, ret;
+         char cli_name[HOST_NAME_MAX];
+	 int socket_setopt_data ( int socket ) ;
+
+         debug_info("[SOCKET] [socket_ip6_client_connect_with_retries] srv_name:%s port_name:%s\n", srv_name, port_name);
+
+	 // socket
+         sd = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
+         if (sd < 0) {
+             perror("socket: ") ;
+             return -1;
+         }
+
+         ret = socket_setopt_data(sd) ;
+         if (ret < 0) {
+             close(sd);
+             return -1;
+         }
+
+	 // gethostname
+         ret = gethostname(cli_name, HOST_NAME_MAX);
+	 if (ret < 0) {
+	     perror("gethostname: ") ;
+	     strcpy(cli_name, "unknown") ;
+	 }
+
+	 // getaddrinfo
+         memset(&hints, 0, sizeof(hints));
+         hints.ai_family   = AF_INET6;
+         hints.ai_socktype = SOCK_STREAM;
+
+         ret = getaddrinfo(srv_name, port_name, &hints, &res);
+         if ( (ret != 0) || (res == NULL) ) {
+             fprintf(stderr, "getaddrinfo failed for %s:%s - %s\n", srv_name, port_name, gai_strerror(ret));
+             close(sd);
+             return -1;
+         }
+
+         // Connect with retries
+         int connect_retries = 0;
+         do
+         {
+             ret = connect(sd, res->ai_addr, res->ai_addrlen);
+             if (ret < 0)
+             {
+                 if (connect_retries == 0)
+     	         {
+                     printf("----------------------------------------------------------------\n");
+                     printf("Client '%s' waiting for server to be up and running...\n", cli_name);
+                     printf("----------------------------------------------------------------\n\n");
+                 }
+                 connect_retries++;
+                 sleep(2);
+             }
+         } while ((ret < 0) && (connect_retries < n_retries));
+
+         freeaddrinfo(res);
+
+         if (ret < 0) {
+             printf("[SOCKET] [socket_ip6_client_connect_with_retries] ERROR: connect fails\n");
+             close(sd);
+             return -1;
+         }
+
+         *out_socket = sd;
+         return 0;
      }
 
 
