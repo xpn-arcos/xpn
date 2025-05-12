@@ -153,8 +153,9 @@
          for (p = res; p != NULL; p = p->ai_next)
          {
              client_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-             if (client_fd == -1)
+             if (client_fd == -1) {
                  continue;
+	     }
 
              if (connect(client_fd, p->ai_addr, p->ai_addrlen) == 0)
              {
@@ -170,6 +171,54 @@
          fprintf(stderr, "[SOCKET_IP6] Connection failed to %s on port %d\n", srv_name, port);
          freeaddrinfo(res);
          return -1;
+     }
+
+     int socket_ip6_client_connect_with_retries ( char *srv_name, char *port_name, int *out_socket, int n_retries )
+     {
+         int ret;
+         struct addrinfo hints, *res = NULL;
+	 int socket_setopt_data ( int socket ) ;
+         int socket_client_connect_retries ( int sd, int n_retries, struct sockaddr *ai_addr, socklen_t ai_addrlen ) ;
+
+         debug_info("[SOCKET] [socket_ip6_client_connect_with_retries] srv_name:%s port_name:%s\n", srv_name, port_name);
+
+	 // socket
+         *out_socket = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
+         if (*out_socket < 0) {
+             perror("socket: ") ;
+             return -1;
+         }
+
+         ret = socket_setopt_data(*out_socket) ;
+         if (ret < 0) {
+             close(*out_socket);
+             return -1;
+         }
+
+	 // getaddrinfo
+         memset(&hints, 0, sizeof(hints));
+         hints.ai_family   = AF_INET6;
+         hints.ai_socktype = SOCK_STREAM;
+
+         ret = getaddrinfo(srv_name, port_name, &hints, &res);
+         if ( (ret != 0) || (res == NULL) ) {
+             fprintf(stderr, "getaddrinfo failed for %s:%s - %s\n", srv_name, port_name, gai_strerror(ret));
+             close(*out_socket);
+             return -1;
+         }
+
+         // Connect with retries
+         ret = socket_client_connect_retries(*out_socket, n_retries, res->ai_addr, res->ai_addrlen) ;
+
+         freeaddrinfo(res);
+
+         if (ret < 0) {
+             printf("[SOCKET] [socket_ip6_client_connect_with_retries] ERROR: connect fails\n");
+             close(*out_socket);
+             return -1;
+         }
+
+         return 0;
      }
 
 

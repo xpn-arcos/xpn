@@ -176,6 +176,54 @@
          return 0;
      }
 
+     int socket_ip4_client_connect_with_retries ( char * srv_name, char * port_name, int *out_socket, int n_retries )
+     {
+         int ret;
+         struct hostent * hp;
+         struct sockaddr_in server_addr;
+	 int socket_setopt_data ( int socket ) ;
+         int socket_client_connect_retries ( int sd, int n_retries, struct sockaddr *ai_addr, socklen_t ai_addrlen ) ;
+
+         debug_info("[SOCKET] [socket_ip4_client_connect_with_retries] srv_name:%s port_name:%s\n", srv_name, port_name);
+
+         // Socket...
+         *out_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+         if (*out_socket < 0) {
+             perror("socket: ");
+             return -1;
+         }
+
+         ret = socket_setopt_data(*out_socket) ;
+         if (ret < 0) {
+             close(*out_socket);
+             return -1;
+         }
+
+         // get address with gethostbyname
+         hp = gethostbyname(srv_name);
+         if (hp == NULL)
+         {
+             fprintf(stderr, "nfi_sck_server_init: error gethostbyname %s (%s,%s)\n", srv_name, srv_name, port_name);
+             return -1;
+         }
+
+         bzero((char * ) &server_addr, sizeof(server_addr));
+         server_addr.sin_family = AF_INET;
+         server_addr.sin_port   = htons(atoi(port_name));
+         memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
+
+         // Connect with retries
+         ret = socket_client_connect_retries(*out_socket, n_retries, (struct sockaddr *)&server_addr, sizeof(server_addr)) ;
+         if (ret < 0)
+         {
+             printf("[SOCKET] [socket_ip4_client_connect_with_retries] ERROR: connect fails\n");
+             close(*out_socket);
+             return -1;
+         }
+
+         return ret;
+     }
+
 
      //
      //  address management

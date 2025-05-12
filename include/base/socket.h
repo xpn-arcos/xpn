@@ -58,7 +58,8 @@
 
      int socket_server_create  ( int *out_socket, int port,                  int ip_version );
      int socket_server_accept  ( int socket, int *out_conection_socket,      int ip_version );
-     int socket_client_connect ( char * srv_name, int port, int *out_socket, int ip_version );
+     int socket_client_connect              ( char *srv_name, int   port,      int *out_socket, int ip_version );
+     int socket_client_connect_with_retries ( char *srv_name, char *port_name, int *out_socket, int n_retries, int ip_version ) ;
      int socket_close ( int socket );
 
      int socket_gethostname   ( char * srv_name, int socket_mode ) ;

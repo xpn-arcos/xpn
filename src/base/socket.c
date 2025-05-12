@@ -273,6 +273,83 @@
          return ret;
      }
 
+     int socket_client_connect_retries ( int sd, int n_retries, struct sockaddr *ai_addr, socklen_t ai_addrlen )
+     {
+         int  ret, connect_retries ;
+         char cli_name[HOST_NAME_MAX];
+
+	 // gethostname
+         ret = gethostname(cli_name, HOST_NAME_MAX);
+	 if (ret < 0) {
+	     perror("gethostname: ") ;
+	     strcpy(cli_name, "unknown") ;
+	 }
+
+	 // loop...
+         connect_retries = 0;
+         do
+         {
+             ret = connect(sd, ai_addr, ai_addrlen) ;
+             if (ret < 0)
+             {
+                 if (connect_retries == 0)
+     	         {
+                     printf("----------------------------------------------------------------\n");
+                     printf("Client '%s' waiting for server to be up and running...\n", cli_name);
+                     printf("----------------------------------------------------------------\n\n");
+                 }
+
+                 connect_retries++;
+                 sleep(2);
+             }
+         } while ((ret < 0) && (connect_retries < n_retries));
+
+         return ret ;
+     }
+
+     int socket_client_connect_with_retries ( char *srv_name, char *port_name, int *out_socket, int n_retries, int socket_mode )
+     {
+         int ret = 0;
+
+         debug_info("[SOCKET] [socket_client_connect_with_retries] >> Begin\n");
+
+         // check arguments...
+         if (NULL == srv_name) {
+             debug_error("[SOCKET] [socket_client_connect_with_retries] ERROR: NULL srv_name\n");
+             return -1;
+         }
+         if (NULL == port_name) {
+             debug_error("[SOCKET] [socket_client_connect_with_retries] ERROR: NULL port_name\n");
+             return -1;
+         }
+         if (NULL == out_socket) {
+             debug_error("[SOCKET] [socket_client_connect_with_retries] ERROR: NULL out_socket\n");
+             return -1;
+         }
+
+         switch (socket_mode)
+         {
+            case SCK_IP4:
+                 debug_info("[SOCKET] [socket_client_connect_with_retries] socket_ip4_server_connect\n");
+                 ret = socket_ip4_client_connect_with_retries(srv_name, port_name, out_socket, n_retries);
+                 break;
+
+            case SCK_IP6:
+                 debug_info("[SOCKET] [socket_client_connect_with_retries] socket_ip6_server_connect\n");
+                 ret = socket_ip6_client_connect_with_retries(srv_name, port_name, out_socket, n_retries);
+                 break;
+
+            default:
+                 debug_info("[SOCKET] [socket_client_connect_with_retries] ERROR: on socket_client_connect(%d).\n", socket_mode);
+                 return -1;
+                 break;
+         }
+
+         debug_info("[SOCKET] [socket_client_connect_with_retries] >> End\n");
+
+         return ret;
+     }
+
      int socket_close ( int socket )
      {
          int ret;
