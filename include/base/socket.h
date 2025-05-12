@@ -32,17 +32,39 @@
      #include "all_system.h"
      #include "debug_msg.h"
      #include "utils.h"
-     #include "filesystem.h"
+     #include "socket_ip4.h"
+     #include "socket_ip6.h"
+
+     #include <arpa/inet.h>
+     #include <netdb.h>
+     #include <sys/socket.h>
+     #include <netinet/in.h>
+
+
+  /* ... Const / Const ................................................. */
+
+     // values for ip_version
+     #define SCK_IP4 4
+     #define SCK_IP6 6
 
 
   /* ... Functions / Funciones ......................................... */
 
      int socket_send ( int socket, void * buffer, int size );
      int socket_recv ( int socket, void * buffer, int size );
-     int socket_server_create ( int *out_socket, int port );
-     int socket_server_accept ( int socket, int *out_conection_socket );
-     int socket_client_connect ( char * srv_name, int port, int *out_socket );
+
+     int socket_setopt_data    ( int socket ) ;
+     int socket_setopt_service ( int socket ) ;
+
+     int socket_server_create  ( int *out_socket, int port,                  int ip_version );
+     int socket_server_accept  ( int socket, int *out_conection_socket,      int ip_version );
+     int socket_client_connect              ( char *srv_name, int   port,      int *out_socket, int ip_version );
+     int socket_client_connect_with_retries ( char *srv_name, char *port_name, int *out_socket, int n_retries, int ip_version ) ;
      int socket_close ( int socket );
+
+     int socket_gethostname   ( char * srv_name, int socket_mode ) ;
+     int socket_gethostbyname ( char * ip, size_t ip_size, char * srv_name, int socket_mode ) ;
+     int socket_getsockname   ( char * port_name, int in_socket, int socket_mode ) ;
 
 
   /* ................................................................... */

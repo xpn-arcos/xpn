@@ -386,7 +386,8 @@ int list(char *dir_name, int blocksize, int replication_level, int rank, int siz
 
 void calculate_ranks_sizes(char *path_old_hosts, char *path_new_hosts, int *old_rank, int *new_rank) {
     // Get ip and hostname
-    char *hostip = ns_get_host_ip();
+    char hostip[HOST_NAME_MAX];
+    ns_get_host_ip(hostip, HOST_NAME_MAX);
     char hostname[HOST_NAME_MAX];
     ns_get_hostname(hostname);
     int world_rank;

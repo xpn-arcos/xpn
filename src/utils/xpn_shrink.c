@@ -597,7 +597,8 @@
     const char *delim = ";";
     char *servers[XPN_METADATA_MAX_RECONSTURCTIONS] = {NULL};
     char hostname[MPI_MAX_PROCESSOR_NAME];
-    char *hostip;
+   
+    char hostip[HOST_NAME_MAX];
     int provided;
     
     //
@@ -643,7 +644,7 @@
     {
       if (servers[i] == NULL) break;
 
-      hostip = ns_get_host_ip();
+      ns_get_host_ip(hostip, HOST_NAME_MAX);
       ns_get_hostname(hostname);
       if (strstr(servers[i], hostip) != NULL || strstr(servers[i], hostname) != NULL)
       {

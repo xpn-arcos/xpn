@@ -131,7 +131,7 @@ CFLAGS_LPATH="-L../../bin/mosquitto/lib         -L../../xpn/lib "
 CFLAGS_LPATH+="-L../../../bin/mosquitto/lib     -L../../../xpn/lib "
 CFLAGS_LPATH+="-L../../../../bin/mosquitto/lib  -L../../../../xpn/lib "
 
- CFLAGS_DEBUG="-O2 -Wall -Wextra"
+ CFLAGS_DEBUG="-g -O3 -Wall -Wextra"
 #CFLAGS_DEBUG="-g -Wall -Wextra"
 #CFLAGS_DEBUG="-g -g3 -ggdb -Wall -Wextra"
 
