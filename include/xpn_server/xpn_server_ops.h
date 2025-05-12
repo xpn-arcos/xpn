@@ -111,7 +111,12 @@
      struct st_xpn_server_rw
      {
        offset_t offset;
+       //x32 architecture
+#if !defined(HAVE_64BITS)
+       uint64_t size;
+#else
        size_t   size;
+#endif
        int      fd;
        char     xpn_session;
        int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
@@ -120,7 +125,12 @@
 
      struct st_xpn_server_rw_req
      {
+#if !defined(HAVE_64BITS)
+       uint64_t size;
+#else
        ssize_t size;
+#endif
+       
        char    last;
        struct st_xpn_server_status status;
      };
@@ -180,7 +190,12 @@
 
      struct st_xpn_server_write_mdata_file_size
      {
+#if !defined(HAVE_64BITS)
+       uint64_t size;
+#else
        ssize_t size;
+#endif
+       
        char path[PATH_MAX];
      };
 
