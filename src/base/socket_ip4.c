@@ -240,30 +240,32 @@
 	 return ret ;
      }
 
-     int socket_ip4_gethostbyname ( char * ip, size_t ip_size, char * srv_name )
+     int socket_ip4_gethostbyname ( char *ip, size_t ip_size, char *srv_name )
      {
-         char   *ip_local;
          struct hostent *srv_entry;
 
-         // check arguments...
-         if (NULL == ip)
-         {
+         if (ip == NULL) {
              printf("[SOCKET_IP4] [socket_ip4_gethostbyname] ERROR: NULL ip argument\n");
              return -1;
          }
 
-	 ip_size = ip_size ; // to avoid warning unused argument
+         // Resolver nombre
+         srv_entry = gethostbyname(srv_name);
+         if (srv_entry == NULL) {
+             printf("[SOCKET_IP4] [socket_ip4_gethostbyname] ERROR: gethostbyname failed for '%s'\n", srv_name);
+             return -1;
+         }
 
-         // gethostBYname
-         srv_entry = gethostbyname(srv_name);                                    // find host information
-         ip_local = inet_ntoa(*((struct in_addr *)srv_entry->h_addr_list[0]));   // Convert into IP string
-         strcpy(ip, ip_local);
+         // Asegurarse de que haya al menos una IP
+         if (srv_entry->h_addr_list == NULL || srv_entry->h_addr_list[0] == NULL) {
+             printf("[SOCKET_IP4] [socket_ip4_gethostbyname] ERROR: No IP address found for '%s'\n", srv_name);
+             return -1;
+         }
 
-	 // unsafe strcpy:
-         //   strcpy(ip, ip_local);
-	 // safe strcpy replacement:
-         //   strncpy(ip, ip_local, ip_size - 1);
-         //   ip[ip_size - 1] = '\0';
+         // Convertir a string y copiar a ip
+         const char *ip_local = inet_ntoa(*(struct in_addr *)srv_entry->h_addr_list[0]);
+         strncpy(ip, ip_local, ip_size - 1);
+         ip[ip_size - 1] = '\0'; // asegurarse de que esté terminada en null
 
          return 1;
      }
