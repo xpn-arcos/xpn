@@ -3,7 +3,7 @@
 #set -x
 
 #
-#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Gabriel Sotodosos Morales
 #
 #  This file is part of Expand.
 #
@@ -23,19 +23,15 @@
 
 
 # 1) software (if needed)...
-module load fuji
 
 # 2) working path...
-MPICC_PATH=/opt/FJSVxtclanga/tcsds-1.2.26b/bin/mpifcc
-INSTALL_PATH=$HOME/cte-arm/bin/
+MPICC_PATH=$HOME/gsotodos/bin/mpich/bin/mpicc
+MQTT_PATH=$HOME/gsotodos/bin/mosquitto
+INSTALL_PATH=$HOME/gsotodos/bin/
 BASE_PATH=$(dirname $0)
 
-# patch for cross-compiling
-export    CC=$MPICC_PATH
-export MPICC=$MPICC_PATH
-
 # 3) preconfigure build-me...
-$BASE_PATH/../software/xpn.sh                -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
-$BASE_PATH/../software/ior.sh                -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
-$BASE_PATH/../software/lz4.sh                -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500/build/pfind/lz4/
-$BASE_PATH/../software/io500_noinet.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
+ $BASE_PATH/../software/xpn_iot_mpi.sh  -m $MPICC_PATH -i $INSTALL_PATH -q $MQTT_PATH -s $BASE_PATH/../../../../xpn
+#$BASE_PATH/../software/ior.sh          -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
+#$BASE_PATH/../software/lz4.sh          -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500/build/pfind/lz4/
+#$BASE_PATH/../software/io500.sh        -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
