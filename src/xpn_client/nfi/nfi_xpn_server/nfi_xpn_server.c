@@ -1557,9 +1557,10 @@ int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
 {
     if (serv->xpn_session_dir != 1)
     {
-        if (serv->keep_connected == 0) {
+        if (serv->keep_connected == 0) 
+        {
             nfi_xpn_server_disconnect(serv);
-	}
+        }
 
         // Without sesion close do nothing
         return 0;
@@ -1570,48 +1571,57 @@ int nfi_xpn_server_closedir(struct nfi_server * serv, struct nfi_fhandle * fh)
     struct st_xpn_server_msg msg;
     struct st_xpn_server_status status;
 
-        // Check arguments...
-        NULL_RET_ERR(serv, EINVAL);
-        NULL_RET_ERR(fh, EINVAL);
-        nfi_xpn_server_keep_connected(serv);
-        NULL_RET_ERR(serv->private_info, EINVAL);
+    // Check arguments...
+    NULL_RET_ERR(serv, EINVAL);
+    NULL_RET_ERR(fh, EINVAL);
+    nfi_xpn_server_keep_connected(serv);
+    NULL_RET_ERR(serv->private_info, EINVAL);
 
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] >> Begin\n", serv->id);
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] >> Begin\n", serv->id);
 
-        // private_info...
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] Get server private info\n", serv->id);
+    // private_info...
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] Get server private info\n", serv->id);
 
-        server_aux = (struct nfi_xpn_server * ) serv->private_info;
-        if (server_aux == NULL)
+    server_aux = (struct nfi_xpn_server * ) serv->private_info;
+    if (server_aux == NULL)
+    {
+        errno = EINVAL;
+        if (serv->keep_connected == 0) 
         {
-            errno = EINVAL;
-            if (serv->keep_connected == 0) {
-                nfi_xpn_server_disconnect(serv);
-	    }
-
-            return -1;
+            nfi_xpn_server_disconnect(serv);
         }
 
-        // private_info file handle
-        fh_aux = (struct nfi_xpn_server_fhandle * ) fh->priv_fh;
+        return -1;
+    }
 
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%p)\n", serv->id, fh_aux->dir);
+    // private_info file handle
+    fh_aux = (struct nfi_xpn_server_fhandle * ) fh->priv_fh;
 
-        msg.type = XPN_SERVER_CLOSEDIR_DIR;
-        msg.u_st_xpn_server_msg.op_closedir.dir = fh_aux->dir;
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%p)\n", serv->id, fh_aux->dir);
 
-        nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
+    msg.type = XPN_SERVER_CLOSEDIR_DIR;
 
-        if (status.ret < 0) {
-            errno = status.server_errno;
-	}
+    #if !defined(HAVE_64BITS)
+    msg.u_st_xpn_server_msg.op_closedir.dir = (uint64_t) fh_aux->dir;
+    #else
+    msg.u_st_xpn_server_msg.op_closedir.dir = fh_aux->dir;
+    #endif
+    
 
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%p)=%d\n", serv->id, fh_aux->dir, status.ret);
-        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] >> End\n", serv->id);
+    nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
 
-        if (serv->keep_connected == 0) {
-            nfi_xpn_server_disconnect(serv);
-	}
+    if (status.ret < 0) 
+    {
+        errno = status.server_errno;
+    }
+
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] nfi_xpn_server_closedir(%p)=%d\n", serv->id, fh_aux->dir, status.ret);
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_closedir] >> End\n", serv->id);
+
+    if (serv->keep_connected == 0) 
+    {
+        nfi_xpn_server_disconnect(serv);
+    }
 
         return status.ret;
 }
