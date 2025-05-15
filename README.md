@@ -9,7 +9,7 @@
 * *Homepage*:     <https://xpn-arcos.github.io/xpn-arcos.github.io/>
 * *Source*:       <https://github.com/xpn-arcos/xpn>
 * *Licence*:      [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/dcamarmas/xpn/blob/master/COPYING)</br>
-* *Maintainers*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, Dario Muñoz Muñoz, Elias Del Pozo Puñal
+* *Maintainers*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso,  Elias Del Pozo Puñal, Dario Muñoz Muñoz, Gabriel Sotodosos Morales
 
 ## 1. To deploy Ad-Hoc XPN...
 
