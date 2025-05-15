@@ -52,8 +52,17 @@
     char    magic_number[3];
     int     version;                                      // Version number
     int     type;                                         // Type of file: file or directory
+    
+#if !defined(HAVE_64BITS)
+    uint64_t block_size;                                   // Size of block used
+    uint64_t file_size;                                    // Size of the file
+    
+#else
     ssize_t block_size;                                   // Size of block used
     ssize_t file_size;                                    // Size of the file
+    
+#endif
+
     int     replication_level;                            // Replication level of files: 0, 1, 2, ...
     int     first_node;                                   // Server which has the first block
     int     distribution_policy;                          // Distribution policy of blocks, default: round-robin
