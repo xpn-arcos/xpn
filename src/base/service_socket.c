@@ -48,8 +48,11 @@ int sersoc_do_send_recv ( char * srv_name, int port, int req_id, char *res_val )
 
     debug_info("[SERSOC] [sersoc_do_send_recv] >> Begin\n");
 
+
+    int ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
+
     // Lookup port name
-    ret  = socket_client_connect(srv_name, port, &connection_socket);
+    ret  = socket_client_connect(srv_name, port, &connection_socket, ipv);
     if (ret < 0)
     {
         debug_error("[SERSOC] [sersoc_do_send_recv] ERROR: socket connect\n");
@@ -92,8 +95,10 @@ int sersoc_do_send ( char * srv_name, int port, int req_id )
 
     debug_info("[SERSOC] [sersoc_do_send] >> Begin\n");
 
+    int ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
+
     // Lookup port name
-    ret  = socket_client_connect(srv_name, port, &connection_socket);
+    ret  = socket_client_connect(srv_name, port, &connection_socket, ipv);
     if (ret < 0)
     {
         debug_error("[SERSOC] [sersoc_do_send] ERROR: socket connect\n");

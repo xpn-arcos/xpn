@@ -312,7 +312,7 @@ int xpn_server_finish ( void )
 int xpn_server_up ( void )
 {
     int ret;
-    int server_socket, port;
+    int server_socket, port, ipv = 0;
     int connection_socket;
     int recv_code = 0;
     int await_stop = 0;
@@ -331,7 +331,9 @@ int xpn_server_up ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Control socket initialization\n", 0);
 
     port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
-    ret  = socket_server_create(&server_socket, port);
+    ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
+
+    ret  = socket_server_create(&server_socket, port, ipv);
     if (ret < 0)
     {
         printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] ERROR: Socket initialization fails\n", 0);
@@ -342,7 +344,7 @@ int xpn_server_up ( void )
     while (!the_end)
     {
         debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Listening to conections\n", 0);
-        ret = socket_server_accept(server_socket, &connection_socket);
+        ret = socket_server_accept(server_socket, &connection_socket, ipv);
         if (ret < 0) continue;
 
         ret = socket_recv(connection_socket, &recv_code, sizeof(recv_code));
@@ -411,9 +413,11 @@ int xpn_server_down ( void )
     int   buffer;
     char  srv_name[1024];
     FILE *file;
-    int   ret;
+    int   ret, ipv = 0;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] >> Begin\n", 0);
+
+    ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
 
     if (params.await_stop == 1)
          buffer = SOCKET_FINISH_CODE_AWAIT;
@@ -443,7 +447,7 @@ int xpn_server_down ( void )
     while (fscanf(file, "%[^\n] ", srv_name) != EOF)
     {
         printf(" * Stopping server (%s)\n", srv_name);
-        ret = socket_client_connect(srv_name, port, &sockets[i]);
+        ret = socket_client_connect(srv_name, port, &sockets[i], ipv);
         if (ret < 0)
         {
             printf("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] ERROR: socket connection %s\n", 0, srv_name);

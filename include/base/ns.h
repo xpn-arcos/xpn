@@ -27,42 +27,44 @@
 
      #include "all_system.h"
      #include "base/utils.h"
+     #include "base/service_socket.h"
 
-  
+
   /* ... Const / Const ................................................. */
 
      #ifndef MPI_SERVER_DNS_FILE_DEFAULT
-       #define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
+     #define MPI_SERVER_DNS_FILE_DEFAULT "/tmp/mpi_dns.txt"
      #endif
 
      #ifndef SCK_SERVER_DNS_FILE_DEFAULT
-       #define SCK_SERVER_DNS_FILE_DEFAULT "/tmp/sck_dns.txt"
+     #define SCK_SERVER_DNS_FILE_DEFAULT "/tmp/sck_dns.txt"
      #endif
 
      #ifndef MQ_SERVER_DNS_FILE_DEFAULT
-       #define MQ_SERVER_DNS_FILE_DEFAULT "/tmp/mq_dns.txt"
+     #define MQ_SERVER_DNS_FILE_DEFAULT "/tmp/mq_dns.txt"
      #endif
 
      #ifndef MAX_MQ_SERVER_NODES
-       #define MAX_MQ_SERVER_NODES 256
+     #define MAX_MQ_SERVER_NODES 256
      #endif
 
      #ifndef CONST_TEMP
-       #define CONST_TEMP 1024
+     #define CONST_TEMP 1024
      #endif
 
 
   /* ... Functions / Funciones ......................................... */
 
-     void  ns_get_hostname ( char *srv_name );
-     char *ns_get_host_ip  ( void );
+     int  ns_get_hostname ( char * srv_name ) ;
+     int   ns_get_host_ip ( char * ip, size_t ip_size ) ;
 
-     int ns_publish   ( char *dns_file, char *protocol, char *param_srv_name, char *srv_ip, char *port_name );
-     int ns_unpublish ( char *dns_file, char *protocol, char *param_srv_name );
-     int ns_lookup    ( char *protocol, char *param_srv_name, char *srv_ip, char *port_name );
+     int ns_publish    ( char * dns_file, char * protocol, char * param_srv_name, char * srv_ip, char * port_name ) ;
+     int ns_unpublish  ( char * dns_file, char * protocol, char * param_srv_name ) ;
+     int ns_lookup     (                  char * protocol, char * param_srv_name, char * srv_ip, char * port_name ) ;
 
 
   /* ................................................................... */
+
 
 #endif
 

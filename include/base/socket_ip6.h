@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias Del Pozo Puñal
  *
  *  This file is part of Expand.
  *
@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _SCK_SERVER_COMM_H_
-#define _SCK_SERVER_COMM_H_
+#ifndef _SOCKET_IP6_H_
+#define _SOCKET_IP6_H_
 
   #ifdef  __cplusplus
     extern "C" {
@@ -30,24 +30,26 @@
   /* ... Include / Inclusion ........................................... */
 
      #include "all_system.h"
-     #include "base/utils.h"
-     #include "base/time_misc.h"
-     #include "xpn_server/xpn_server_params.h"
+     #include "debug_msg.h"
+     #include "utils.h"
 
-  
+     #include <ifaddrs.h>
+
+
   /* ... Functions / Funciones ......................................... */
 
-     int  sck_server_comm_init         ( int *socket, char *port_name, int ipv );
-     int  sck_ip4_server_comm_init     ( int *socket, char *port_name );
-     int  sck_ip6_server_comm_init     ( int *socket, char *port_name );
-     int  sck_server_comm_accept       ( int socket, int **new_socket, int ipv );
-     int  sck_ip4_server_comm_accept   ( int socket, int **new_socket );
-     int  sck_ip6_server_comm_accept   ( int socket, int **new_socket );
-     int  sck_server_comm_disconnect   ( int *socket );
+     int socket_ip6_server_create  ( int *out_socket, int port ) ;
+     int socket_ip6_server_accept  ( int socket, int *out_conection_socket ) ;
+     int socket_ip6_client_connect              ( char *srv_name, int   port,      int *out_socket ) ;
+     int socket_ip6_client_connect_with_retries ( char *srv_name, char *port_name, int *out_socket, int n_retries ) ;
+
+     int socket_ip6_gethostname    ( char * srv_name ) ;
+     int socket_ip6_gethostbyname  ( char * ip, size_t ip_size, char * srv_name ) ;
+     int socket_ip6_getsockname    ( char * port_name, int new_socket ) ;
 
 
   /* ................................................................... */
-  
+
   #ifdef  __cplusplus
     }
   #endif

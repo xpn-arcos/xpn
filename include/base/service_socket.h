@@ -32,26 +32,27 @@
   
   /* ... Const / Const ................................................. */
 
-     // NS base on sockets
-     #define DEFAULT_XPN_SCK_PORT    3456
+      // NS base on sockets
+      #define DEFAULT_XPN_SCK_PORT     3456
+      #define DEFAULT_XPN_SCK_IPV      SCK_IP4
 
-     #define SOCKET_ACCEPT_CODE_MPI            100
-     #define SOCKET_ACCEPT_CODE_SCK_CONN       151
-     #define SOCKET_ACCEPT_CODE_SCK_NO_CONN    152
-     #define SOCKET_FINISH_CODE                750
-     #define SOCKET_FINISH_CODE_AWAIT          751
+      #define SOCKET_ACCEPT_CODE_MPI            100
+      #define SOCKET_ACCEPT_CODE_SCK_CONN       151
+      #define SOCKET_ACCEPT_CODE_SCK_NO_CONN    152
+      #define SOCKET_FINISH_CODE                750
+      #define SOCKET_FINISH_CODE_AWAIT          751
 
-     #ifdef MPI_MAX_PORT_NAME
+      #ifdef MPI_MAX_PORT_NAME
         #define MAX_PORT_NAME_LENGTH MPI_MAX_PORT_NAME
-     #else
+      #else
         #define MAX_PORT_NAME_LENGTH 256
-     #endif
+      #endif
 
 
   /* ... Functions / Funciones ......................................... */
 
      int sersoc_do_send_recv ( char * srv_name, int port, int req_id, char *res_val ) ;
-     int sersoc_do_send ( char * srv_name, int port, int req_id ) ;
+     int sersoc_do_send      ( char * srv_name, int port, int req_id ) ;
 
      int sersoc_lookup_port_name ( char * srv_name, char * port_name, int socket_accept_code ) ;
 

@@ -22,13 +22,13 @@
 
 /* ... Include / Inclusion ........................................... */
 
+   #define __USE_GNU
    #include "base/syscall_proxies.h"
 
 
 /* ... Global variables / Variables globales ........................ */
 
 int     (*real_open    )(char *, int, mode_t)  = NULL;
-int     (*real_open64  )(char *, int, mode_t)  = NULL;
 int     (*real___open_2)(char *, int)          = NULL;
 int     (*real_creat   )(const char *, mode_t) = NULL;
 int     (*real_mkstemp )(char*)                = NULL;
@@ -39,23 +39,15 @@ ssize_t (*real_write)(int, const void*, size_t) = NULL;
 
 ssize_t (*real_pread   )(int, void *, size_t, off_t)       = NULL;
 ssize_t (*real_pwrite  )(int, const void *, size_t, off_t) = NULL;
-ssize_t (*real_pread64 )(int, void *, size_t, off_t)       = NULL;
-ssize_t (*real_pwrite64)(int, const void *, size_t, off_t) = NULL;
 
 off_t   (*real_lseek)(int, off_t, int)          = NULL;
-off64_t (*real_lseek64)(int, off64_t, int)      = NULL;
 int     (*real_ftruncate)(int, off_t)           = NULL;
 
 int     (*real_stat     )(int, char *,       struct stat   *) = NULL;
-int     (*real_xstat64  )(int, const char *, struct stat64 *) = NULL;
 int     (*real_lstat    )(int, char *,       struct stat   *) = NULL;
-int     (*real_lxstat64 )(int, const char *, struct stat64 *) = NULL;
 int     (*real_fstat    )(int, int,          struct stat   *) = NULL;
-int     (*real_fxstat64 )(int, int,          struct stat64 *) = NULL;
 int     (*real_fstatat  )(int, const char *, struct stat   *, int) = NULL;
-int     (*real_fstatat64)(int, const char *, struct stat64 *, int) = NULL;
 int     (*real_statfs   )(const char *, struct statfs *)   = NULL;
-int     (*real_statfs64 )(const char *, struct statfs64 *) = NULL;
 
 int     (*real_rename)(const char *, const  char *) = NULL;
 int     (*real_unlink)(char *) = NULL;
@@ -74,11 +66,9 @@ void    (*real_rewind)(FILE *) = NULL;
 int     (*real_feof ) (FILE *) = NULL;
 
 DIR*              (*real_opendir  )(char*) = NULL;
-DIR*              (*real_opendir64)(char*) = NULL;
 long              (*real_telldir  )(DIR *) = NULL;
 void              (*real_seekdir  )(DIR *, long) = NULL;
 struct dirent   * (*real_readdir  )(DIR *) = NULL;
-struct dirent64 * (*real_readdir64)(DIR *) = NULL;
 int               (*real_closedir )(DIR *) = NULL;
 
 int     (*real_mkdir)(char *, mode_t) = NULL;
@@ -100,6 +90,20 @@ int     (*real_fsync)(int) = NULL;
 int     (*real_flock)(int, int) = NULL;
 void*   (*real_mmap)(void *, size_t, int, int, int, off_t) = NULL;
 
+
+#if defined(HAVE_64BITS)
+struct dirent64 * (*real_readdir64)(DIR *) = NULL;
+DIR*              (*real_opendir64)(char*) = NULL;
+int     (*real_statfs64 )(const char *, struct statfs64 *) = NULL;
+int     (*real_fstatat64)(int, const char *, struct stat64 *, int) = NULL;
+int     (*real_fxstat64 )(int, int,          struct stat64 *) = NULL;
+int     (*real_lxstat64 )(int, const char *, struct stat64 *) = NULL;
+int     (*real_xstat64  )(int, const char *, struct stat64 *) = NULL;
+off64_t (*real_lseek64)(int, off64_t, int)      = NULL;
+ssize_t (*real_pread64 )(int, void *, size_t, off_t)       = NULL;
+int     (*real_open64  )(char *, int, mode_t)  = NULL;
+ssize_t (*real_pwrite64)(int, const void *, size_t, off_t) = NULL;
+#endif
 
 /* ... Functions / Funciones ......................................... */
 
@@ -134,6 +138,7 @@ int dlsym_open2 (char *path, int flags, mode_t mode)
   return fd;
 }
 
+#if defined(HAVE_64BITS)
 int dlsym_open64 (char *path, int flags, mode_t mode)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_open64] >> Begin\n");
@@ -148,6 +153,7 @@ int dlsym_open64 (char *path, int flags, mode_t mode)
 
   return fd;
 }
+#endif
 
 int dlsym___open_2 (char *path, int flags)
 {
@@ -269,6 +275,8 @@ ssize_t dlsym_pwrite (int fd, const void *buf, size_t count, off_t offset)
   return ret;
 }
 
+
+#if defined(HAVE_64BITS)
 ssize_t dlsym_pread64 (int fd, void *buf, size_t count, off_t offset)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_pread64] >> Begin\n");
@@ -284,6 +292,7 @@ ssize_t dlsym_pread64 (int fd, void *buf, size_t count, off_t offset)
   return ret;
 }
 
+
 ssize_t dlsym_pwrite64 (int fd, const void *buf, size_t count, off_t offset)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_pwrite64] >> Begin\n");
@@ -298,6 +307,7 @@ ssize_t dlsym_pwrite64 (int fd, const void *buf, size_t count, off_t offset)
 
   return ret;
 }
+#endif
 
 off_t dlsym_lseek (int fd, off_t offset, int whence)
 {
@@ -314,6 +324,7 @@ off_t dlsym_lseek (int fd, off_t offset, int whence)
   return ret;
 }
 
+#if defined(HAVE_64BITS)
 off64_t dlsym_lseek64 (int fd, off64_t offset, int whence)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_lseek64] >> Begin\n");
@@ -373,6 +384,7 @@ int dlsym_fxstat64 (int ver, int fd, struct stat64 *buf)
 
   return ret;
 }
+#endif
 
 int dlsym_lstat (int ver, const char *path, struct stat *buf)
 {
@@ -434,6 +446,7 @@ int dlsym_fstatat (int dfd, const char *path, struct stat *buf, int flags)
   return ret;
 }
 
+#if defined(HAVE_64BITS)
 int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_fstatat64] >> Begin\n");
@@ -448,6 +461,7 @@ int dlsym_fstatat64 (int dfd, const char *path, struct stat64 *buf, int flags)
 
   return ret;
 }
+#endif
 
 int dlsym_statfs (const char *path, struct statfs *buf)
 {
@@ -465,6 +479,7 @@ int dlsym_statfs (const char *path, struct statfs *buf)
 }
 
 
+#if defined(HAVE_64BITS)
 int dlsym_statfs64 (const char *path, struct statfs64 *buf)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_statfs64] >> Begin\n");
@@ -479,6 +494,7 @@ int dlsym_statfs64 (const char *path, struct statfs64 *buf)
 
   return ret;
 }
+#endif
 
 int dlsym_close (int fd)
 {
@@ -690,6 +706,7 @@ DIR* dlsym_opendir (char *dirname)
   return ret;
 }
 
+#if defined(HAVE_64BITS)
 DIR* dlsym_opendir64 (char *dirname)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_opendir64] >> Begin\n");
@@ -704,6 +721,7 @@ DIR* dlsym_opendir64 (char *dirname)
 
   return ret;
 }
+#endif
 
 long dlsym_telldir (DIR *dirp)
 {
@@ -763,6 +781,7 @@ struct dirent * dlsym_readdir (DIR *dirp)
   return ret;
 }
 
+#if defined(HAVE_64BITS)
 struct dirent64 * dlsym_readdir64 (DIR *dirp)
 {
   debug_info("[SYSCALL_PROXIES] [dlsym_readdir64] >> Begin\n");
@@ -777,6 +796,7 @@ struct dirent64 * dlsym_readdir64 (DIR *dirp)
 
   return ret;
 }
+#endif
 
 int dlsym_closedir (DIR* dirp)
 {

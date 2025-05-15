@@ -1,21 +1,25 @@
-# XPN 3.0.0
+# Ad-Hoc XPN 3.2.1
 
 *Expand Ad-Hoc Parallel File System*
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-![version](https://img.shields.io/badge/version-3.0.0-blue)
+![version](https://img.shields.io/badge/version-3.2.1-blue)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://www.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xpn-arcos/xpn&amp;utm_campaign=Badge_Grade)
 
-* *Homepage*: <https://xpn-arcos.github.io/xpn-arcos.github.io/>
-* *Source*:   <https://github.com/xpn-arcos/xpn>
-* *Licence*:  [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/dcamarmas/xpn/blob/master/COPYING)</br>
-* *Authors*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, Dario Muñoz Muñoz
+* *Homepage*:     <https://xpn-arcos.github.io/xpn-arcos.github.io/>
+* *Source*:       <https://github.com/xpn-arcos/xpn>
+* *Licence*:      [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/dcamarmas/xpn/blob/master/COPYING)</br>
+* *Maintainers*:  Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso,  Elias Del Pozo Puñal, Dario Muñoz Muñoz, Gabriel Sotodosos Morales
 
 ## 1. To deploy Ad-Hoc XPN...
 
+### 1.1 Deploying Ad-Hoc Expand on a cluster/supercomputer
+
   The Expand Ad-Hoc Parallel File System (a.k.a. Ad-Hoc XPN) can be installed on a cluster/supercomputer with:
-  1. A local storage per-node (HDD, SSD or RAM Drive) accessible through a directory, ```/tmp``` for example (this will be the NODE_DIR in this document).
-  2. A shared directory among compute nodes used, ```$HOME``` for example (this will be the WORK_DIR in this document).
+  * A local storage per-node (HDD, SSD or RAM Drive) accessible through a directory, for example, ```/tmp```. <br>
+    This will be the NODE_DIR in this document.
+  * A shared directory among compute nodes used, for example ```$HOME```. <br>
+    This will be the WORK_DIR in this document.
 
   There are only two software pre-requisites that Ad-Hoc XPN needs:
   1. The typical C development tools: gcc, make, and autotools
@@ -111,7 +115,7 @@
     end
     subgraph ide21b [2.1 Install prerequisites]
        direction TB
-       Y1B["sudo apt install -y build-essential libtool<br>sudo apt install -y autoconf automake git<br> sudo apt install -y libmpich-dev mpich"]
+       Y1B["sudo apt install -y build-essential libtool autoconf automake git<br><br>sudo apt install -y libmpich-dev mpich"]
     end
     subgraph ide22 [2.2 Download source code]
        direction TB
@@ -172,6 +176,10 @@ You need to get familiar with 3 special files and 4 special environment variable
         [XPN_THREAD]
         [XPN_LOCALITY]
         [XPN_SCK_PORT]
+        [XPN_SCK_IPV]
+        [XPN_CONNECTED]
+        [XPN_MQTT]
+        [XPN_MQTT_QOS]
 ```
 
 The 3 special files are:
@@ -180,10 +188,14 @@ The 3 special files are:
 * ```<stop_file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
 And the 4 special environment variables for XPN clients are:
-* ```XPN_CONF```     with the full path to the XPN configuration file to be used (mandatory).
-* ```XPN_THREAD```   with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
-* ```XPN_LOCALITY``` with value 0 for without locality and value 1 for with locality (optional, default: 0).
-* ```XPN_SCK_PORT``` with the port to use in internal comunications (opcional, default: 3456).
+* ```XPN_CONF```       with the full path to the XPN configuration file to be used (mandatory).
+* ```XPN_THREAD```     with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
+* ```XPN_LOCALITY```   with value 0 for without locality and value 1 for with locality (optional, default: 1).
+* ```XPN_SCK_PORT```   with the port to use in internal comunications (opcional, default: 3456).
+* ```XPN_SCK_IPV```    with value 6 for IPv6 support or value 4 for IPv4 support (optional, default: 4).
+* ```XPN_CONNECTED```  with value 0 for connection per request or value 1 for connection per session (optional, default: 1).
+* ```XPN_MQTT```       with value 1 for MQTT support (optional, default: 0).
+* ```XPN_MQTT_QOS```   with value 0, 1, 2 for the QoS of MQTT (optional, default: 0).
 </details>
 
 
@@ -212,12 +224,12 @@ An example of SLURM job might be:
                               -l $WORK_DIR/hostfile start
    sleep 2
 
-     # Step 2: to launch the XPN client (app. that will use Expand)
-     mpiexec -np <number of client processes> \
-             -hostfile $WORK_DIR/hostfile \
-             -genv XPN_CONF    $WORK_DIR/xpn.conf \
-             -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-             <full path to the app.>
+   # Step 2: to launch the XPN client (app. that will use Expand)
+   mpiexec -np <number of client processes> \
+           -hostfile $WORK_DIR/hostfile \
+           -genv XPN_CONF    $WORK_DIR/xpn.conf \
+           -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+           <full path to the app.>
 
    # Step 3: to stop the MPI servers
    <INSTALL_PATH>/xpn/bin/xpn -v -d $WORK_DIR/hostfile stop
@@ -244,11 +256,11 @@ The typical executions has 3 main steps:
       ```bash
         export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
-         mpiexec -np               <number of processes> \
-                 -hostfile         $WORK_DIR/hostfile \
-                 -genv XPN_CONF    $WORK_DIR/xpn.conf \
-                 -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-                 <full path to app1>/app1
+        mpiexec -np               <number of processes> \
+                -hostfile         $WORK_DIR/hostfile \
+                -genv XPN_CONF    $WORK_DIR/xpn.conf \
+                -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+                <full path to app1>/app1
       ```
    2.2. Example for the *app2* program (a NON-MPI application):
       ```bash
@@ -305,15 +317,15 @@ An example of SLURM job might be:
            <INSTALL_PATH>/bin/xpn_server &
    sleep 2
 
-     # Step 3: to launch the XPN client (app. that will use Expand)
-     mpiexec  -n <number of processes: 2> \
-              -hostfile $WORK_DIR/hostfile \
-             --dvm ns:$NAMESPACE \
-              -mca routed direct \
-             --map-by node:OVERSUBSCRIBE \
-              -x XPN_CONF=$WORK_DIR/xpn.conf \
-              -x LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-             <full path to the app.>
+   # Step 3: to launch the XPN client (app. that will use Expand)
+   mpiexec  -n <number of processes: 2> \
+            -hostfile $WORK_DIR/hostfile \
+            --dvm ns:$NAMESPACE \
+            -mca routed direct \
+            --map-by node:OVERSUBSCRIBE \
+            -x XPN_CONF=$WORK_DIR/xpn.conf \
+            -x LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+            <full path to the app.>
 
    # Step 4: to stop the MPI servers
    <INSTALL_PATH>/xpn/bin/xpn -v -d $WORK_DIR/hostfile stop
@@ -344,13 +356,13 @@ The typical executions has 4 main steps:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    
-    mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
-            -mca routed direct \
-            --map-by node:OVERSUBSCRIBE \
-            --dvm ns:$NAMESPACE \
-            -genv XPN_CONF    $WORK_DIR/xpn.conf \
-            -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
-            <full path to app1>/app1
+   mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
+           -mca routed direct \
+           --map-by node:OVERSUBSCRIBE \
+           --dvm ns:$NAMESPACE \
+           -genv XPN_CONF    $WORK_DIR/xpn.conf \
+           -genv LD_PRELOAD  <INSTALL_PATH>/xpn/lib/xpn_bypass.so:$LD_PRELOAD \
+           <full path to app1>/app1
    ```
    3.2. Example for the *app2* program (a NON-MPI application):
    ```bash

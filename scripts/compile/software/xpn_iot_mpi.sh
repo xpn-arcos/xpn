@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Gabriel Sotodosos Morales
 #
 #  This file is part of Expand.
 #
@@ -24,9 +24,10 @@
 function usage {
     echo ""
     echo " Usage:"
-    echo " $0  -m <mpicc path>  -i <Install path> -s <Source path>"
+    echo " $0  -m <mpicc path> -q <mosquitto path>  -i <Install path> -s <Source path>"
     echo " Where:"
     echo " * <mpicc   path> = full path where the mpicc is installed."
+    echo " * <mosquitto path> = full path where mosquitto is installed."
     echo " * <Install path> = full path where XPN is going to be installed."
     echo " * <Source  path> = full path to the source code XPN."
     echo ""
@@ -34,13 +35,15 @@ function usage {
 
 
 ## get arguments
-while getopts "m:i:s:" opt; do
+while getopts "m:i:s:q:" opt; do
     case "${opt}" in
           m) MPICC_PATH=${OPTARG}
              ;;
           i) INSTALL_PATH=${OPTARG}
              ;;
           s) SRC_PATH=${OPTARG}
+             ;;
+          q) MQTT_PATH=${OPTARG}
              ;;
           *) echo " Error:"
              echo " * Unknown option: ${opt}"
@@ -54,6 +57,12 @@ done
 if [ "$MPICC_PATH" == "" ]; then
    echo " Error:"
    echo " * Empty MPICC_PATH"
+   usage
+   exit
+fi
+if [ "$MQTT_PATH" == "" ]; then
+   echo " Error:"
+   echo " * Empty MQTT_PATH"
    usage
    exit
 fi
@@ -86,12 +95,12 @@ echo " * XPN: compiling and installing..."
 pushd .
 cd "$SRC_PATH"
 export CC=${MPICC_PATH}
-export CFLAGS="-I${INSTALL_PATH}/mosquitto/include"
-export CPPFLAGS="-I${INSTALL_PATH}/mosquitto/include" 
-export LDFLAGS="-L${INSTALL_PATH}/mosquitto/lib64"
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/bin/mosquitto/lib64:$HOME/bin/mpich-install/lib" 
+export CFLAGS="-I${MQTT_PATH}/include"
+export CPPFLAGS="-I${MQTT_PATH}/include"
+export LDFLAGS="-L${MQTT_PATH}/lib"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${MQTT_PATH}/lib:${MPICC_PATH}/../lib"
 ACLOCAL_FLAGS="-I /usr/share/aclocal/" autoreconf -v -i -s -W all
-./configure --prefix="${INSTALL_PATH}/xpn" --enable-mosquitto
+./configure --prefix="${INSTALL_PATH}/xpn" --enable-sck_server --enable-mpi_server="${MPICC_PATH}" --enable-mosquitto
 make clean
 make -j 16
 make install
