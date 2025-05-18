@@ -20,20 +20,21 @@
  */
 
 
-/* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-  #include <stdio.h>
-  #include <unistd.h>
-  #include <sys/types.h>
-  #include <dirent.h>
-  #include <string.h>
-  #include <sys/stat.h>
-  #include "all_system.h"
+     #include <stdio.h>
+     #include <unistd.h>
+     #include <sys/types.h>
+     #include <dirent.h>
+     #include <string.h>
+     #include <sys/stat.h>
+     #include "all_system.h"
 #if defined(HAVE_MPI_H)
-  #include "mpi.h"
+     #include "mpi.h"
 #endif
 
-/* ... Functions / Funciones ......................................... */
+
+  /* ... Functions / Funciones ......................................... */
 
   int list (char * dir_name, FILE * fd)
   {
@@ -88,35 +89,40 @@
     return 0;
   }
 
+#if defined(HAVE_MPI_H)
   int main(int argc, char *argv[])
   {
-    FILE * fd;
+      FILE * fd;
 
-    if(argc < 3){
-      printf("ERROR: too few arguments.\n");
-      printf("Usage: %s <directory path> <output_file>\n", argv[0]);
-      return -1;
-    }
-#if defined(HAVE_MPI_H)
-    MPI_Init(&argc, &argv);
+      if (argc < 3)
+      {
+          printf("ERROR: too few arguments.\n");
+          printf("Usage: %s <directory path> <output_file>\n", argv[0]);
+          return -1;
+      }
+      MPI_Init(&argc, &argv);
 
-    fd = fopen(argv[2], "w");
-    if ( fd == NULL )
-    {
-      perror("fopen: ");
-      return -1;
-    }
+      fd = fopen(argv[2], "w");
+      if (NULL == fd)
+      {
+          perror("fopen: ");
+          return -1;
+      }
 
-    list(argv[1], fd);
+      list(argv[1], fd);
 
-    MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Finalize();
-#else
-    printf("Error. No MPI supported.\n");
-#endif
+      MPI_Barrier(MPI_COMM_WORLD);
+      MPI_Finalize();
 
-    return 0;
+      return 0;
   }
+#else
+  int main(int argc, char *argv[])
+  {
+      printf("ERROR: this utility must be compiled with MPI support.\n");
+      return -1;
+  }
+#endif
 
 
 /* ................................................................... */
