@@ -20,51 +20,50 @@
  */
 
 
-/* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-  #include <stdio.h>
-  #include <unistd.h>
-  #include <sys/types.h>
-  #include <stdlib.h>
-  #include <string.h>
-  #include <fcntl.h>
-  #include <linux/limits.h>
-  #include <sys/stat.h>
-  #include <dirent.h>
+     #include <stdio.h>
+     #include <unistd.h>
+     #include <sys/types.h>
+     #include <stdlib.h>
+     #include <string.h>
+     #include <fcntl.h>
+     #include <linux/limits.h>
+     #include <sys/stat.h>
+     #include <dirent.h>
 
 #if defined(HAVE_MPI_H)
-  #include "mpi.h"
+     #include "mpi.h"
 #endif
-  #include "xpn/xpn_simple/xpn_policy_rw.h"
+     #include "xpn/xpn_simple/xpn_policy_rw.h"
 
 
-/* ... Const / Const ................................................. */
+  /* ... Const / Const ................................................. */
 
-  #ifndef _LARGEFILE_SOURCE
-  #define _LARGEFILE_SOURCE
-  #endif
+     #ifndef _LARGEFILE_SOURCE
+     #define _LARGEFILE_SOURCE
+     #endif
 
-  #ifndef _FILE_OFFSET_BITS
-  #define _FILE_OFFSET_BITS 64
-  #endif
+     #ifndef _FILE_OFFSET_BITS
+     #define _FILE_OFFSET_BITS 64
+     #endif
 
-  #define MIN(a,b) (((a)<(b))?(a):(b))
-  #define HEADER_SIZE 8192
+     #define MIN(a,b) (((a)<(b))?(a):(b))
+     #define HEADER_SIZE 8192
 
-  char command[4*1024];
-  char src_path [PATH_MAX+5];
-  char dest_path [PATH_MAX+5];
+     char command[4*1024];
+     char src_path [PATH_MAX+5];
+     char dest_path [PATH_MAX+5];
 
-  int xpn_path_len = 0;
+     int xpn_path_len = 0;
 
-/* ... Functions / Funciones ......................................... */
+
+  /* ... Functions / Funciones ......................................... */
 
 #if defined(HAVE_MPI_H)
   int copy(char * entry, int is_file, char * dir_name, char * dest_prefix, int blocksize, int replication_level, int rank, int size)
   {  
-    debug_info("entry %s is_file %d dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d \n",entry, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
     int  ret;
-
     int fd_src, fd_dest;
     char *buf ;
     int buf_len;
@@ -76,6 +75,8 @@
     int i;
     ssize_t read_size, write_size;
     struct stat st;
+
+    debug_info("entry %s is_file %d dir_name %s dest_prefix %s blocksize %d replication_level %d rank %d size %d \n",entry, is_file, dir_name, dest_prefix, blocksize, replication_level, rank, size);
 
     //Alocate buffer
     buf_len = blocksize;
@@ -248,13 +249,13 @@ finish_copy:
     while(entry != NULL)
     {
       if (! strcmp(entry->d_name, ".")){
-        entry = readdir(dir);
-        continue;
+          entry = readdir(dir);
+          continue;
       }
 
       if (! strcmp(entry->d_name, "..")){
-        entry = readdir(dir);
-        continue;
+          entry = readdir(dir);
+          continue;
       }
 
       sprintf(path, "%s/%s", dir_name, entry->d_name);
@@ -262,10 +263,10 @@ finish_copy:
       ret = stat(path, &stat_buf);
       if (ret < 0) 
       {
-        perror("stat: ");
-        printf("%s\n", path);
-        entry = readdir(dir);
-        continue;
+          perror("stat: ");
+          printf("%s\n", path);
+          entry = readdir(dir);
+          continue;
       }
 
       int is_file = !S_ISDIR(stat_buf.st_mode);
@@ -273,9 +274,9 @@ finish_copy:
 
       if (S_ISDIR(stat_buf.st_mode))
       {
-        char path_dst [PATH_MAX];
-        sprintf(path_dst, "%s/%s", dest_prefix, entry->d_name);
-        list(path, path_dst, blocksize, replication_level, rank, size);
+          char path_dst [PATH_MAX];
+          sprintf(path_dst, "%s/%s", dest_prefix, entry->d_name);
+          list(path, path_dst, blocksize, replication_level, rank, size);
       }
 
       entry = readdir(dir);
@@ -287,22 +288,23 @@ finish_copy:
   }
 #endif
 
+#if defined (HAVE_MPI_H)
   int main(int argc, char *argv[])
   {   
     int rank, size;
     int replication_level = 0;
     int blocksize = 524288;
     double start_time;
+
     //
     // Check arguments...
     //
-#if defined (HAVE_MPI_H)
-    if ( argc < 3 )
+    if (argc < 3)
     {
-      printf("Usage:\n");
-      printf(" ./%s <origin partition> <destination local path> <optional destination block size> <optional replication level>\n", argv[0]);
-      printf("\n");
-      return -1;
+        printf("Usage:\n");
+        printf(" ./%s <origin partition> <destination local path> <optional destination block size> <optional replication level>\n", argv[0]);
+        printf("\n");
+        return -1;
     }
     
     if ( argc >= 5){
@@ -317,17 +319,25 @@ finish_copy:
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     start_time = MPI_Wtime();
     if (rank == 0){
-      printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
+        printf("Copying from %s to %s blocksize %d replication_level %d \n", argv[1], argv[2], blocksize, replication_level);
     }
     xpn_path_len = strlen(argv[2]);
     list (argv[1], argv[2], blocksize, replication_level, rank, size);
     MPI_Barrier(MPI_COMM_WORLD);
     if (rank == 0){
-      printf("Preload elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);
+        printf("Preload elapsed time %f mseg\n", (MPI_Wtime() - start_time)*1000);
     }
     MPI_Finalize();
-#endif
     return 0;
   }
+#else
+  int main ( int argc, char *argv[] )
+  {
+      printf("ERROR: this utility must to be compiled with MPI support\n") ;
+      return -1 ;
+  }
+#endif
+
 
 /* ................................................................... */
+
