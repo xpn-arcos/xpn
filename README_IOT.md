@@ -16,6 +16,7 @@
 
   * [1. To deploy Ad-Hoc XPN...](#1-to-deploy-ad-hoc-xpn)
     * [1.1 Deploying on a cluster/supercomputer](#11-deploying-ad-hoc-expand-on-a-clustersupercomputer)
+    * [1.2 Deploying on a IoT distributed system](#12-deploying-ad-hoc-expand-on-a-iot-distributed-system)
   * [2. Executing Ad-Hoc XPN...](#2-executing-ad-hoc-xpn)
     * [2.1 Executing Ad-Hoc Expand using MPICH](#21-executing-ad-hoc-expand-using-mpich)
     * [2.2 Executing Ad-Hoc Expand using OpenMPI (experimental)](#22-executing-ad-hoc-expand-using-openmpi-experimental-alpha)
@@ -153,6 +154,47 @@
   ```
 
 
+### 1.2 Deploying Ad-Hoc Expand on a IoT distributed system
+
+  The Expand Ad-Hoc Parallel File System (a.k.a. Ad-Hoc XPN) can be installed on a IoT distributed system with:
+  * A local storage per-node (HDD, SSD or RAM Drive) accessible through a directory, for example, ```/tmp```. <br>
+    This will be the NODE_DIR in this document.
+
+  There are only two software pre-requisites that Ad-Hoc XPN for IoT needs:
+  1. The typical C development tools: gcc, make, and autotools
+  2. A MQTT implementation:
+     * Tested: Mosquitto 2.0.18 (or compatible) 
+
+  To install the typical prerequisites, the general steps are:
+  * Install the typical C development tools:
+    ```
+    sudo apt install -y build-essential libtool autoconf automake git
+    ```
+  * In order to use Mosquitto, you must install the following packages:
+    ```
+    sudo apt-get install mosquitto mosquitto-clients mosquitto-dev libmosquitto-dev
+    ```
+  * Then, we need to stop the Mosquitto MQTT service:
+    ```
+    sudo systemctl stop mosquitto
+    ```
+
+  Once all prerequisites are met, the general steps to deploy XPN are:
+  * Download XPN source code:
+    ```
+    mkdir $HOME/src 
+    cd    $HOME/src 
+    git clone https://github.com/xpn-arcos/xpn.git
+    ```
+  * Build source code
+    ```
+    export XPN_CC='full path to the gcc compiler to be used' 
+    export MQTT_PATH='/usr/lib/x86_64-linux-gnu/libmosquitto.so'
+    cd $HOME/src 
+    ./xpn/scripts/compile/software/xpn_iot_mpi.sh -m $XPN_CC -i $HOME/bin -q $MQTT_PATH -s ./xpn
+    ```
+
+
 ## 2. Executing Ad-Hoc XPN...
 
 First, you need to get familiar with 2 special files and 1 special environment variables for XPN client:
@@ -188,6 +230,8 @@ You need to get familiar with 3 special files and 4 special environment variable
         [XPN_SCK_PORT]
         [XPN_SCK_IPV]
         [XPN_CONNECTED]
+        [XPN_MQTT]
+        [XPN_MQTT_QOS]
 ```
 
 The 3 special files are:
@@ -195,13 +239,15 @@ The 3 special files are:
 * ```<xpn.cfg>``` for XPN, it is the XPN configuration file with the configuration for the partition where files are stored at the XPN servers.
 * ```<stop_file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
-And the 6 special environment variables for XPN clients are:
+And the 8 special environment variables for XPN clients are:
 * ```XPN_CONF```       with the full path to the XPN configuration file to be used (mandatory).
 * ```XPN_THREAD```     with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
 * ```XPN_LOCALITY```   with value 0 for without locality and value 1 for with locality (optional, default: 1).
 * ```XPN_SCK_PORT```   with the port to use in internal comunications (opcional, default: 3456).
 * ```XPN_SCK_IPV```    with value 6 for IPv6 support or value 4 for IPv4 support (optional, default: 4).
 * ```XPN_CONNECTED```  with value 0 for connection per request or value 1 for connection per session (optional, default: 1).
+* ```XPN_MQTT```       with value 1 for MQTT support (optional, default: 0).
+* ```XPN_MQTT_QOS```   with value 0, 1, 2 for the QoS of MQTT (optional, default: 0).
 </details>
 
 
