@@ -1,10 +1,10 @@
-# Ad-Hoc XPN 3.2.1
+# Ad-Hoc XPN 3.3.0
 
 *Expand Ad-Hoc Parallel File System*
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-![version](https://img.shields.io/badge/version-3.2.1-blue)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://www.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=xpn-arcos/xpn&amp;utm_campaign=Badge_Grade)
+![version](https://img.shields.io/badge/version-3.3.0-blue)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://app.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 * *Homepage*:     <https://xpn-arcos.github.io/xpn-arcos.github.io/>
 * *Source*:       <https://github.com/xpn-arcos/xpn>
@@ -16,6 +16,7 @@
 
   * [1. To deploy Ad-Hoc XPN...](#1-to-deploy-ad-hoc-xpn)
     * [1.1 Deploying on a cluster/supercomputer](#11-deploying-ad-hoc-expand-on-a-clustersupercomputer)
+    * [1.2 Deploying on a IoT distributed system](#12-deploying-ad-hoc-expand-on-a-iot-distributed-system)
   * [2. Executing Ad-Hoc XPN...](#2-executing-ad-hoc-xpn)
     * [2.1 Executing Ad-Hoc Expand using MPICH](#21-executing-ad-hoc-expand-using-mpich)
     * [2.2 Executing Ad-Hoc Expand using OpenMPI (experimental)](#22-executing-ad-hoc-expand-using-openmpi-experimental-alpha)
@@ -42,7 +43,7 @@
        <summary>Help to compile MPICH from source code... (click to expand)</summary>
         <br>
         In order to install the MPICH implementation of MPI (for example, MPICH 4.1.1) from source code and with Infiniband (Omni-Path) support we recommend:
-    
+
         ```
         wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
         tar zxf mpich-4.1.1.tar.gz
@@ -65,7 +66,7 @@
         <summary>Help to compile OpenMPI from source code... (click to expand)</summary>
         <br>
         For example, in order to install the OpenMPI 5.0.3 implementation of MPI from source code, including Infiniband (Omni-Path) support, we recommend the following steps:
-    
+
         ```
         wget https://download.open-mpi.org/release/open-mpi/v5.0/openmpi-5.0.3.tar.gz
         tar zxf openmpi-5.0.3.tar.gz
@@ -109,7 +110,7 @@
        direction TB
        X3["spack <b>load</b> xpn"]
     end
-    classDef lt text-align:left,fill:lightgreen,color:black; 
+    classDef lt text-align:left,fill:lightgreen,color:black;
     class X1,X2,X3 lt;
     ide11 --> ide12
     ide12 --> ide13
@@ -129,14 +130,14 @@
     end
     subgraph ide22 [2.2 Download source code]
        direction TB
-       Y2B["mkdir $HOME/src 
-            cd    $HOME/src 
+       Y2B["mkdir $HOME/src
+            cd    $HOME/src
             git clone ‎https\://github.com/xpn-arcos/xpn.git"]
     end
     subgraph ide23 ["2.3 Build source code"]
        direction LR
-       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used' 
-            cd $HOME/src 
+       Y3B["export XPN_MPICC='full path to the mpicc compiler to be used'
+            cd $HOME/src
             ./xpn/build-me -m $XPN_MPICC -i $HOME/bin"]
     end
     ide21a --> ide22
@@ -151,6 +152,47 @@
 
     Y3B --> I([End])
   ```
+
+
+### 1.2 Deploying Ad-Hoc Expand on a IoT distributed system
+
+  The Expand Ad-Hoc Parallel File System (a.k.a. Ad-Hoc XPN) can be installed on a IoT distributed system with:
+  * A local storage per-node (HDD, SSD or RAM Drive) accessible through a directory, for example, ```/tmp```. <br>
+    This will be the NODE_DIR in this document.
+
+  There are only two software pre-requisites that Ad-Hoc XPN for IoT needs:
+  1. The typical C development tools: gcc, make, and autotools
+  2. A MQTT implementation:
+     * Tested: Mosquitto 2.0.18 (or compatible)
+
+  To install the typical prerequisites, the general steps are:
+  * Install the typical C development tools:
+    ```
+    sudo apt install -y build-essential libtool autoconf automake git
+    ```
+  * In order to use Mosquitto, you must install the following packages:
+    ```
+    sudo apt-get install mosquitto mosquitto-clients mosquitto-dev libmosquitto-dev
+    ```
+  * Then, we need to stop the Mosquitto MQTT service:
+    ```
+    sudo systemctl stop mosquitto
+    ```
+
+  Once all prerequisites are met, the general steps to deploy XPN are:
+  * Download XPN source code:
+    ```
+    mkdir $HOME/src
+    cd    $HOME/src
+    git clone https://github.com/xpn-arcos/xpn.git
+    ```
+  * Build source code
+    ```
+    export XPN_CC='full path to the gcc compiler to be used'
+    export MQTT_PATH='/usr/lib/x86_64-linux-gnu/libmosquitto.so'
+    cd $HOME/src
+    ./xpn/scripts/compile/software/xpn_iot_mpi.sh -m $XPN_CC -i $HOME/bin -q $MQTT_PATH -s ./xpn
+    ```
 
 
 ## 2. Executing Ad-Hoc XPN...
@@ -188,6 +230,8 @@ You need to get familiar with 3 special files and 4 special environment variable
         [XPN_SCK_PORT]
         [XPN_SCK_IPV]
         [XPN_CONNECTED]
+        [XPN_MQTT]
+        [XPN_MQTT_QOS]
 ```
 
 The 3 special files are:
@@ -195,13 +239,15 @@ The 3 special files are:
 * ```<xpn.cfg>``` for XPN, it is the XPN configuration file with the configuration for the partition where files are stored at the XPN servers.
 * ```<stop_file>``` for XPN is a text file with the list of the servers to be stopped (one host name per line).
 
-And the 6 special environment variables for XPN clients are:
+And the 8 special environment variables for XPN clients are:
 * ```XPN_CONF```       with the full path to the XPN configuration file to be used (mandatory).
 * ```XPN_THREAD```     with value 0 for without threads, value 1 for thread-on-demand and value 2 for pool-of-threads (optional, default: 0).
 * ```XPN_LOCALITY```   with value 0 for without locality and value 1 for with locality (optional, default: 1).
 * ```XPN_SCK_PORT```   with the port to use in internal comunications (opcional, default: 3456).
 * ```XPN_SCK_IPV```    with value 6 for IPv6 support or value 4 for IPv4 support (optional, default: 4).
 * ```XPN_CONNECTED```  with value 0 for connection per request or value 1 for connection per session (optional, default: 1).
+* ```XPN_MQTT```       with value 1 for MQTT support (optional, default: 0).
+* ```XPN_MQTT_QOS```   with value 0, 1, 2 for the QoS of MQTT (optional, default: 0).
 </details>
 
 
@@ -217,7 +263,7 @@ An example of SLURM job might be:
    #SBATCH --ntasks=8
    #SBATCH --cpus-per-task=8
    #SBATCH --time=00:05:00
-   
+
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export NODE_DIR=<local directory to be used on each node, /tmp for example>
 
@@ -257,11 +303,11 @@ The typical executions has 3 main steps:
                               start
    ```
 2. Then, launch the program that will use Expand (XPN client).
-   
+
    2.1. Example for the *app1* MPI application:
       ```bash
         export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
-   
+
         mpiexec -np               <number of processes> \
                 -hostfile         $WORK_DIR/hostfile \
                 -genv XPN_CONF    $WORK_DIR/xpn.conf \
@@ -272,20 +318,20 @@ The typical executions has 3 main steps:
       ```bash
         export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
         export XPN_CONF=$WORK_DIR/xpn.conf
-   
+
         LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
       ```
    2.3. Example for the *app3.py* Python program:
       ```bash
         export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
         export XPN_CONF=$WORK_DIR/xpn.conf
-   
+
         LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
       ```
 4. At the end of your working session, you need to stop the MPI servers:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
-   
+
    <INSTALL_PATH>/xpn/bin/xpn  -v -d $WORK_DIR/hostfile stop
    ```
 
@@ -360,7 +406,7 @@ The typical executions has 4 main steps:
    3.1. Example for the *app1* MPI application:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
-   
+
    mpiexec -n <number of processes>  -hostfile $WORK_DIR/hostfile \
            -mca routed direct \
            --map-by node:OVERSUBSCRIBE \
@@ -373,20 +419,20 @@ The typical executions has 4 main steps:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export XPN_CONF=$WORK_DIR/xpn.conf
-   
+
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so <full path to app2>/app2
    ```
    3.3. Example for the *app3.py* Python program:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
    export XPN_CONF=$WORK_DIR/xpn.conf
-   
+
    LD_PRELOAD=<INSTALL_PATH>/xpn/lib/xpn_bypass.so python3 <full path to app3>/app3.py
    ```
 5. At the end of your working session, you need to stop the Expand servers:
    ```bash
    export WORK_DIR=<shared directory among hostfile computers, $HOME for example>
-   
+
    ./xpn -v -d $WORK_DIR/hostfile stop
    ```
 
