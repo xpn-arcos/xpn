@@ -312,7 +312,7 @@ int xpn_server_finish ( void )
 int xpn_server_up ( void )
 {
     int ret;
-    int server_socket, port, ipv = 0;
+    int server_socket, port, ipv;
     int connection_socket;
     int recv_code = 0;
     int await_stop = 0;
@@ -331,7 +331,7 @@ int xpn_server_up ( void )
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_up] Control socket initialization\n", 0);
 
     port = utils_getenv_int("XPN_SCK_PORT", DEFAULT_XPN_SCK_PORT) ;
-    ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
+    ipv  = utils_getenv_int("XPN_SCK_IPV",  DEFAULT_XPN_SCK_IPV);
 
     ret  = socket_server_create(&server_socket, port, ipv);
     if (ret < 0)
@@ -413,7 +413,7 @@ int xpn_server_down ( void )
     int   buffer;
     char  srv_name[1024];
     FILE *file;
-    int   ret, ipv = 0;
+    int   ret, ipv;
 
     debug_info("[TH_ID=%d] [XPN_SERVER] [xpn_server_down] >> Begin\n", 0);
 
