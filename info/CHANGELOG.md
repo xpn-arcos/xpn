@@ -1,10 +1,11 @@
 
 # Changelog
 
-## 3.2.1 - 2025-06-05
+## 3.3.0 - 2025-05-22
 
+  * Spark connector added
   * IPv6 support added
-  * Support for 32-bits version of Expand added
+  * Added support for 32-bits version of Expand
 
 ## 3.2.0 - 2025-03-12
 
