@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 3.3.0 - 2025-05-22
+## 3.3.0 - 2025-06-05
 
   * Spark connector added
   * IPv6 support added

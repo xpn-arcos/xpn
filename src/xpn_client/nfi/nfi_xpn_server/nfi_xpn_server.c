@@ -420,7 +420,7 @@
 
                  if (serv->keep_connected == 0) {
                      nfi_xpn_server_disconnect(serv);
-     	         }
+               }
 
                  return ret;
              }
@@ -505,7 +505,7 @@
 
          // check params...
          if (serv == NULL)
-	 {
+   {
              debug_info("[SERV_ID=%d] [NFI_n] [nfi_xpn_server_connect] ERROR: serv argument is NULL\n", -1);
              return -1;
          }
@@ -631,7 +631,7 @@
          {
              errno = EINVAL;
              printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] ERROR: NULL serv->private_info.\n", serv->id);
-     	     goto nfi_xpn_server_open_KO ;
+           goto nfi_xpn_server_open_KO ;
          }
 
          // from url->protocol + server + dir
@@ -640,7 +640,7 @@
          {
              errno = EINVAL;
              printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] ERROR: incorrect url '%s'.\n", serv->id, url);
-     	     goto nfi_xpn_server_open_KO ;
+           goto nfi_xpn_server_open_KO ;
          }
 
          debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] ParseURL(%s)= %s; %s\n", serv->id, url, server, dir);
@@ -674,7 +674,7 @@
              debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] ERROR: remote open fails to open '%s' in server %s.\n", serv->id, dir, serv->server);
              FREE_AND_NULL(fh_aux);
              FREE_AND_NULL(fho->url);
-     	     goto nfi_xpn_server_open_KO ;
+           goto nfi_xpn_server_open_KO ;
          }
 
          debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", serv->id, dir);
@@ -986,7 +986,7 @@
 
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return 0;
          }
 
@@ -1000,7 +1000,7 @@
 
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1057,7 +1057,7 @@
          {
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              errno = EINVAL;
              return -1;
          }
@@ -1070,7 +1070,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1079,7 +1079,7 @@
 
          memccpy(msg.u_st_xpn_server_msg.op_rm.path, dir, 0, PATH_MAX - 1);
 
-         if ((serv->wrk->arg.is_master_node) == 1)
+         /*if ((serv->wrk->arg.is_master_node) == 1)
          {
              msg.type = XPN_SERVER_RM_FILE;
              nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
@@ -1096,10 +1096,15 @@
              {
                  if (serv->keep_connected == 0) {
                      nfi_xpn_server_disconnect(serv);
-     	         }
+               }
                  return 0;
              }
-         }
+         }*/
+
+         msg.type = XPN_SERVER_RM_FILE;
+         nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
+         if (status.ret < 0)
+             errno = status.server_errno;
 
          debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_remove] nfi_xpn_server_remove(%s)=%d\n", serv->id, dir, ret);
          debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_remove] >> End\n", serv->id);
@@ -1137,7 +1142,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1149,7 +1154,7 @@
              printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rename] ERROR: incorrect url '%s'.\n", serv->id, old_url);
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1163,7 +1168,7 @@
              printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rename] ERROR: incorrect url '%s'.\n", serv->id, new_url);
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1177,7 +1182,7 @@
          nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
          if (status.ret < 0) {
              errno = status.server_errno;
-	 }
+   }
 
          debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rename] nfi_xpn_server_rename(%s,%s)=%d\n", serv->id, old_path, new_path, ret);
          debug_info("[NFI_XPN] [nfi_xpn_server_rename] >> End\n");
@@ -1215,7 +1220,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1228,7 +1233,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1282,7 +1287,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1329,7 +1334,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1342,7 +1347,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1366,7 +1371,7 @@
              printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv->id, dir, serv->server);
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1408,7 +1413,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1422,7 +1427,7 @@
 
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1450,7 +1455,7 @@
              errno = req.status.server_errno;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1495,7 +1500,7 @@
              errno = ENOTDIR;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
          // private_info...
@@ -1507,7 +1512,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1536,7 +1541,7 @@
          {
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1647,7 +1652,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1661,7 +1666,7 @@
 
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
@@ -1670,7 +1675,7 @@
 
          memccpy(msg.u_st_xpn_server_msg.op_rmdir.path, dir, 0, PATH_MAX - 1);
 
-         if ((serv->wrk->arg.is_master_node) == 1)
+         /*if ((serv->wrk->arg.is_master_node) == 1)
          {
              msg.type = XPN_SERVER_RMDIR_DIR;
              nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
@@ -1679,11 +1684,11 @@
                  errno = status.server_errno;
                  if (serv->keep_connected == 0) {
                      nfi_xpn_server_disconnect(serv);
-     	         }
+               }
                  return status.ret;
              }
          } 
-	 else
+         else
          {
              msg.type = XPN_SERVER_RMDIR_DIR_ASYNC;
 
@@ -1693,9 +1698,20 @@
              {
                  if (serv->keep_connected == 0) {
                      nfi_xpn_server_disconnect(serv);
-     	         }
+               }
                  return 0;
              }
+         }*/
+
+         msg.type = XPN_SERVER_RMDIR_DIR;
+         nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
+         if (status.ret < 0)
+         {
+             errno = status.server_errno;
+             if (serv->keep_connected == 0) {
+                 nfi_xpn_server_disconnect(serv);
+           }
+             return status.ret;
          }
 
          debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_rmdir] nfi_xpn_server_rmdir(%s)=%d\n", serv->id, dir, ret);
@@ -1772,7 +1788,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1785,7 +1801,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1838,7 +1854,7 @@
              errno = EINVAL;
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
 
              return -1;
          }
@@ -1852,7 +1868,7 @@
 
              if (serv->keep_connected == 0) {
                  nfi_xpn_server_disconnect(serv);
-     	     }
+           }
              return -1;
          }
 
