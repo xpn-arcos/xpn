@@ -1,3 +1,5 @@
+![Logo for the Expand Parallel File System.](info/xpn-logo.svg)
+
 # Ad-Hoc XPN 3.3.0
 
 *Expand Ad-Hoc Parallel File System*
