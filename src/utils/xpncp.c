@@ -407,22 +407,29 @@ int main(int argc, char *argv[])
 			in_transfer_t += (t_end_trans.tv_sec-t_ini_trans.tv_sec)+(double)(t_end_trans.tv_usec-t_ini_trans.tv_usec)/1000000;
 		}
 
-		if (debug)
-			fprintf(stderr, " read(%zu)    read block (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", buffer_size, buffer, nr, (unsigned char)buffer[0], (unsigned char)buffer[1], (unsigned char)buffer[2], (unsigned char)buffer[3], (unsigned char)buffer[nr-4], (unsigned char)buffer[nr-3], (unsigned char)buffer[nr-2], (unsigned char)buffer[nr-1]);
+		if (debug) {
+		    if (nr >= 4)
+		    {
+			fprintf(stderr, " read(%zu)    read block (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", 
+				buffer_size, buffer, nr, 
+				(unsigned char)buffer[0],    (unsigned char)buffer[1],    (unsigned char)buffer[2],    (unsigned char)buffer[3],
+				(unsigned char)buffer[nr-4], (unsigned char)buffer[nr-3], (unsigned char)buffer[nr-2], (unsigned char)buffer[nr-1]);
+		    }
+		}
 	
 		if (!very_silent)
-			gettimeofday(&t_ini_trans, NULL);
+		     gettimeofday(&t_ini_trans, NULL);
+
 		if (xpndest)
-			nw = xpn_write(fdd, buffer, nr);
-		else
-			nw = write(fdd, buffer, nr);
+		     nw = xpn_write(fdd, buffer, nr);
+		else nw = write(fdd, buffer, nr);
 		if (!very_silent) {
 			gettimeofday(&t_end_trans, NULL);
 			out_transfer_t += (t_end_trans.tv_sec-t_ini_trans.tv_sec)+(double)(t_end_trans.tv_usec-t_ini_trans.tv_usec)/1000000;
 		}
 
 		if (debug)
-			fprintf(stderr, "write(%zd) written block (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", nr, buffer, nw, (unsigned char)buffer[0], (unsigned char)buffer[1], (unsigned char)buffer[2], (unsigned char)buffer[3], (unsigned char)buffer[nw-4], (unsigned char)buffer[nw-3], (unsigned char)buffer[nw-2], (unsigned char)buffer[nw-1]);
+		    fprintf(stderr, "write(%zd) written block (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", nr, buffer, nw, (unsigned char)buffer[0], (unsigned char)buffer[1], (unsigned char)buffer[2], (unsigned char)buffer[3], (unsigned char)buffer[nw-4], (unsigned char)buffer[nw-3], (unsigned char)buffer[nw-2], (unsigned char)buffer[nw-1]);
 	
 		sum = sum + nw;
 	} while ((nw > 0) && (sum < st.st_size));
