@@ -12,13 +12,17 @@ public class ExpandTextInputPartition implements InputPartition, Serializable {
     private final String path;
     private final long start;
     private final long length;
-    // private final Configuration conf;
+    private final String[] preferredLocations;
 
-    public ExpandTextInputPartition(String path, long start, long length) {
+    public ExpandTextInputPartition(String path, long start, long length, String[] preferredLocations) {
         this.path = path;
         this.start = start;
         this.length = length;
-        // this.conf = new Configuration(conf);
+        this.preferredLocations = preferredLocations;
+    }
+
+    public String[] preferredLocations() {
+        return preferredLocations;
     }
 
     public String getPath() {
@@ -32,8 +36,4 @@ public class ExpandTextInputPartition implements InputPartition, Serializable {
     public long getLength() {
         return length;
     }
-
-    // public Configuration getConf() {
-    //     return conf;
-    // }
 }

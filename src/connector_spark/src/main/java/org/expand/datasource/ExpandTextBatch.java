@@ -8,6 +8,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.BlockLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +36,12 @@ public class ExpandTextBatch implements Batch {
             FileStatus status = fs.getFileStatus(hPath);
             long length = fs.getBlockSize(hPath);
             long fileSize = status.getLen();
-            long numBlocks = (int) Math.ceil(fileSize / length) + 1;
+            int numBlocks = (int) Math.ceil(fileSize / length) + 1;
 
-            for (long i = 0; i < numBlocks; i++) {
-                partitions.add(new ExpandTextInputPartition(path, i*length, length));
+            BlockLocation[] locations = fs.getFileBlockLocations(status, 0, fileSize);
+
+            for (int i = 0; i < numBlocks; i++) {
+                partitions.add(new ExpandTextInputPartition(path, i*length, length, locations[i].getHosts()));
             }
 
         } catch (IOException e) {

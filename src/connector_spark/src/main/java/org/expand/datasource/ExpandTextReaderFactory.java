@@ -19,12 +19,10 @@ public class ExpandTextReaderFactory implements PartitionReaderFactory {
 
     private final StructType schema;
     private final String pathStr;
-    // private final Configuration conf;
 
     public ExpandTextReaderFactory(StructType schema, String path) {
         this.schema = schema;
         this.pathStr = path;
-        // this.conf = new Configuration(conf);
     }
 
     @Override
@@ -40,8 +38,6 @@ public class ExpandTextReaderFactory implements PartitionReaderFactory {
                 FSDataInputStream inputStream = null;
 
                 try {
-                    // System.out.println("Leyendo archivo desde HCFS: " + pathStr + " desde " + start + " por " + length + " bytes");
-
                     Configuration conf = new Configuration();
                     conf.set("fs.defaultFS", "xpn:///");
                     conf.set("fs.xpn.impl", "org.expand.hadoop.Expand");
