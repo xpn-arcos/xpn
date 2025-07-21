@@ -33,15 +33,14 @@ public class ExpandTextBatch implements Batch {
         try {
             Path hPath = new Path(path);
             FileSystem fs = hPath.getFileSystem(conf);
-            FileStatus status = fs.getFileStatus(hPath);
             long length = fs.getBlockSize(hPath);
-            long fileSize = status.getLen();
-            int numBlocks = (int) Math.ceil(fileSize / length) + 1;
+            FileStatus [] fileStatus = fs.listStatus(hPath);
+            for (FileStatus status : fileStatus) {
+                BlockLocation[] locations = fs.getFileBlockLocations(status, 0, status.getLen());
 
-            BlockLocation[] locations = fs.getFileBlockLocations(status, 0, fileSize);
-
-            for (int i = 0; i < numBlocks; i++) {
-                partitions.add(new ExpandTextInputPartition(path, i*length, length, locations[i].getHosts()));
+                for (BlockLocation location : locations) {
+                    partitions.add(new ExpandTextInputPartition(status.getPath().toString(), location.getOffset(), length, location.getHosts()));
+                }
             }
 
         } catch (IOException e) {
