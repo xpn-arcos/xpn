@@ -41,6 +41,18 @@ public class Expand extends FileSystem {
 		this.initialized = false;
 	}
 
+	public long getBlockSize() {
+		return this.blksize;
+	}
+
+	public int getBufferSize() {
+		return this.bufsize;
+	}
+
+	public short getReplication() {
+		return this.xpn_replication;
+	}
+
 	@Override
 	public FSDataOutputStream append(Path f) throws IOException {
 		return append(f, this.bufsize, null);
@@ -158,7 +170,7 @@ public class Expand extends FileSystem {
 
 		Stat stats = this.xpn.jni_xpn_stat(path.toString());
 		boolean isdir = this.xpn.jni_xpn_isDir(stats.st_mode) != 0;
-		return new FileStatus(stats.st_size, isdir, 0, stats.st_blksize,
+		return new FileStatus(stats.st_size, isdir, 0, this.blksize,
 					stats.st_mtime * 1000, path);
 	}
 
@@ -175,6 +187,11 @@ public class Expand extends FileSystem {
 	@Override
 	public URI getUri() {
 		return this.uri;
+	}
+
+	@Override
+	public String getScheme() {
+		return "xpn";
 	}
 
 	@Override
