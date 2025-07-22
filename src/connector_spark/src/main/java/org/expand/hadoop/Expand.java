@@ -71,8 +71,8 @@ public class Expand extends FileSystem {
 	}
 
 	@Override
-	public FSDataOutputStream create(Path f) throws IOException {
-		return create(f, FsPermission.getFileDefault(), true, this.bufsize, this.xpn_replication, this.blksize, null);
+	public FSDataOutputStream create(Path f, boolean overwrite) throws IOException {
+		return create(f, FsPermission.getFileDefault(), overwrite, this.bufsize, this.xpn_replication, this.blksize, null);
 	}
 
 	@Override

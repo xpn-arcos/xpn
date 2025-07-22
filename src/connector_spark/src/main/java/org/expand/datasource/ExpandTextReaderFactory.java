@@ -9,7 +9,6 @@ import org.apache.spark.sql.catalyst.expressions.GenericInternalRow;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
-import org.expand.hadoop.ExpandInputStream;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
