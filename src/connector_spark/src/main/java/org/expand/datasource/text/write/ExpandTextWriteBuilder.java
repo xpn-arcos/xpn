@@ -6,16 +6,16 @@ import org.apache.spark.sql.connector.write.LogicalWriteInfo;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
 
 public class ExpandTextWriteBuilder implements WriteBuilder {
-    private final CaseInsensitiveStringMap options;
+    private final String path;
     private final boolean truncate;
 
     public ExpandTextWriteBuilder(CaseInsensitiveStringMap options, boolean truncate) {
-        this.options = options;
+        this.path = options.get("path");
         this.truncate = truncate;
     }
 
     @Override
     public BatchWrite buildForBatch() {
-        return new ExpandTextBatchWrite(options, truncate);
+        return new ExpandTextBatchWrite(path, truncate);
     }
 }

@@ -12,8 +12,8 @@ public class ExpandTextBatchWrite implements BatchWrite {
     private final String path;
     private final boolean truncate;
 
-    public ExpandTextBatchWrite(CaseInsensitiveStringMap options, boolean truncate) {
-        this.path = options.get("path");;
+    public ExpandTextBatchWrite(String path, boolean truncate) {
+        this.path = path;
         this.truncate = truncate;
     }
 
