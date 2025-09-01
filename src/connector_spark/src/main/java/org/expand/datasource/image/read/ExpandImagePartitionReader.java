@@ -45,7 +45,7 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
 
             ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
             BufferedImage img = ImageIO.read(bais);
-            String format = path.endsWith(".png") ? "png" : "jpeg";
+            // String format = path.endsWith(".png") ? "png" : "jpeg";
 
             row = new GenericInternalRow(new Object[]{
                     UTF8String.fromString(path),

@@ -41,19 +41,16 @@ public class ExpandImageDataWriter implements DataWriter {
             BufferedImage img = ImageIO.read(bais);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            String format = path.toLowerCase().endsWith(".png") ? "png" : "jpeg";
+            String format = img.getColorModel().toString();
             ImageIO.write(img, format, baos);
             byte[] imageBytes = baos.toByteArray();
             Path writePath = new Path(outputPath);
-            try {
-                FSDataOutputStream out = fs.create(writePath, true);
-                out.write(imageBytes, 0, imageBytes.length);
-                out.flush();
-            } catch (Exception e) {
-                throw new RuntimeException("Error writing image: " + path, e);
-            }
+
+            FSDataOutputStream out = fs.create(writePath, true);
+            out.write(imageBytes, 0, imageBytes.length);
+            out.flush();
         } catch (Exception e) {
-            throw new RuntimeException("Error writing image: " + path, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -63,8 +60,12 @@ public class ExpandImageDataWriter implements DataWriter {
     }
 
     @Override
-    public void abort() {}
+    public void abort() {
+        // no-op
+    }
 
     @Override
-    public void close() {}
+    public void close() {
+        // no-op
+    }
 }

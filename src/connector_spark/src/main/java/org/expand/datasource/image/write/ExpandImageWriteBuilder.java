@@ -21,10 +21,14 @@ public class ExpandImageWriteBuilder implements WriteBuilder {
                     }
 
                     @Override
-                    public void commit(WriterCommitMessage[] messages) {}
+                    public void commit(WriterCommitMessage[] messages) {
+                        // no-op
+                    }
 
                     @Override
-                    public void abort(WriterCommitMessage[] messages) {}
+                    public void abort(WriterCommitMessage[] messages) {
+                        // no-op
+                    }
                 };
             }
         };

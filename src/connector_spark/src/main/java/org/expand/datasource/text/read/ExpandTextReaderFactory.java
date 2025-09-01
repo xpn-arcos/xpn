@@ -16,9 +16,6 @@ import java.util.*;
 
 public class ExpandTextReaderFactory implements PartitionReaderFactory {
 
-    public ExpandTextReaderFactory(String path) {
-    }
-
     @Override
     public PartitionReader<InternalRow> createReader(InputPartition partition) {
         return new PartitionReader<InternalRow>() {
@@ -83,7 +80,7 @@ public class ExpandTextReaderFactory implements PartitionReaderFactory {
 
             @Override
             public void close() {
-
+                // no-op
             }
         };
     }

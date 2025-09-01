@@ -46,7 +46,7 @@ public class ExpandTextBatchReader implements Batch {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("File does not exist: " + path);
+            throw new RuntimeException(e);
         }
 
         return partitions.toArray(new InputPartition[0]);
@@ -54,6 +54,6 @@ public class ExpandTextBatchReader implements Batch {
 
     @Override
     public PartitionReaderFactory createReaderFactory() {
-        return new ExpandTextReaderFactory(path);
+        return new ExpandTextReaderFactory();
     }
 }
