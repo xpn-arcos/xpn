@@ -27,7 +27,9 @@ public class ExpandTextDataWriter implements DataWriter {
             Path outputPath = new Path(path + "/part-" + partitionId + "-" + taskId);
             this.out = fs.create(outputPath, truncate);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("IOException: " + e.getMessage());
+            System.exit(0);
+            return null;
         }
     }
 

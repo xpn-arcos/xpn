@@ -46,7 +46,9 @@ public class ExpandTextBatchReader implements Batch {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("IOException: " + e.getMessage());
+            System.exit(0);
+            return null;
         }
 
         return partitions.toArray(new InputPartition[0]);

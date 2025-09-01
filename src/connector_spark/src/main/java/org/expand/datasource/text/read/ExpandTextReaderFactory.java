@@ -51,15 +51,9 @@ public class ExpandTextReaderFactory implements PartitionReaderFactory {
                         }
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    if (inputStream != null) {
-                        try {
-                            inputStream.close();
-                        } catch (IOException e) {
-
-                        }
-                    }
+                    System.err.println("IOException: " + e.getMessage());
+                    System.exit(0);
+                    return null;
                 }
                 return lines;
             }

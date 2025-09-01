@@ -50,7 +50,9 @@ public class ExpandImageDataWriter implements DataWriter {
             out.write(imageBytes, 0, imageBytes.length);
             out.flush();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.err.println("IOException: " + e.getMessage());
+            System.exit(0);
+            return null;
         }
     }
 

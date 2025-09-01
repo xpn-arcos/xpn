@@ -45,7 +45,6 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
 
             ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
             BufferedImage img = ImageIO.read(bais);
-            // String format = path.endsWith(".png") ? "png" : "jpeg";
 
             row = new GenericInternalRow(new Object[]{
                     UTF8String.fromString(path),
@@ -57,7 +56,9 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
             read = true;
             return true;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("IOException: " + e.getMessage());
+            System.exit(0);
+            return null;
         }
     }
 
