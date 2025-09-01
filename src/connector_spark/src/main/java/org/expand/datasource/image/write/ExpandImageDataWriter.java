@@ -7,6 +7,7 @@ import org.apache.spark.sql.catalyst.InternalRow;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 
+import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -24,8 +25,8 @@ public class ExpandImageDataWriter implements DataWriter {
         try {
             Path hPath = new Path(path);
             this.fs = hPath.getFileSystem(conf);
-        } catch (Exception e) {
-            throw new RuntimeException("Error writing image: " + path, e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

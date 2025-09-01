@@ -30,6 +30,6 @@ public class ExpandTextReadBuilder implements ScanBuilder, Scan {
 
     @Override
     public Batch toBatch() {
-        return new ExpandTextBatchReader(schema, options, conf);
+        return new ExpandTextBatchReader(options, conf);
     }
 }

@@ -9,6 +9,7 @@ import org.apache.hadoop.conf.Configuration;
 
 import org.expand.datasource.image.ImageSchema;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
@@ -43,8 +44,8 @@ public class ExpandImageBatchReader implements Batch {
                 }
             }
             return partitions.toArray(new InputPartition[0]);
-        } catch (Exception e) {
-            throw new RuntimeException("Error listing images", e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -16,12 +16,7 @@ import java.util.*;
 
 public class ExpandTextReaderFactory implements PartitionReaderFactory {
 
-    private final StructType schema;
-    private final String pathStr;
-
-    public ExpandTextReaderFactory(StructType schema, String path) {
-        this.schema = schema;
-        this.pathStr = path;
+    public ExpandTextReaderFactory(String path) {
     }
 
     @Override
@@ -59,7 +54,7 @@ public class ExpandTextReaderFactory implements PartitionReaderFactory {
                         }
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException("Error opening file: " + pathStr);
+                    throw new RuntimeException(e);
                 } finally {
                     if (inputStream != null) {
                         try {

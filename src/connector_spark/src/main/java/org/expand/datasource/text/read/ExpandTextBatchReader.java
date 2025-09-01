@@ -17,12 +17,10 @@ import java.lang.Math;
 
 public class ExpandTextBatchReader implements Batch {
 
-    private final StructType schema;
     private final String path;
     private final Configuration conf;
 
-    public ExpandTextBatchReader(StructType schema, CaseInsensitiveStringMap options, Configuration conf) {
-        this.schema = schema;
+    public ExpandTextBatchReader(CaseInsensitiveStringMap options, Configuration conf) {
         this.path = options.get("path");
         this.conf = conf;
     }
@@ -56,6 +54,6 @@ public class ExpandTextBatchReader implements Batch {
 
     @Override
     public PartitionReaderFactory createReaderFactory() {
-        return new ExpandTextReaderFactory(schema, path);
+        return new ExpandTextReaderFactory(path);
     }
 }

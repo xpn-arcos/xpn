@@ -27,7 +27,7 @@ public class ExpandTextDataWriter implements DataWriter {
             Path outputPath = new Path(path + "/part-" + partitionId + "-" + taskId);
             this.out = fs.create(outputPath, truncate);
         } catch (IOException e) {
-            throw new RuntimeException("File already exists: " + pathStr);
+            throw new RuntimeException(e);
         }
     }
 

@@ -8,6 +8,7 @@ import org.apache.spark.unsafe.types.UTF8String;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 
+import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -39,7 +40,7 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
 
             FileSystem fs = p.getFileSystem(conf);
             FSDataInputStream is = fs.open(p);
-            int bytesRead = is.read(this.start, buffer, 0, buffer.length);
+            is.read(this.start, buffer, 0, buffer.length);
             is.close();
 
             ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
@@ -55,8 +56,8 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
             });
             read = true;
             return true;
-        } catch (Exception e) {
-            throw new RuntimeException("Error reading image: " + path, e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
