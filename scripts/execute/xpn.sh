@@ -94,36 +94,36 @@ start_xpn_servers() {
     exit -1
   fi
 
-  # if command -v srun &> /dev/null
-  # then
-  #   # Create dir
-  #   srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
-  #         -w "${HOSTFILE}" \
-  #         mkdir -p ${XPN_STORAGE_PATH}
+  if command -v srun &> /dev/null
+  then
+    # Create dir
+    srun  -n "${NODE_NUM}" -N "${NODE_NUM}" \
+          -w "${HOSTFILE}" \
+          mkdir -p ${XPN_STORAGE_PATH}
 
-  #   if [[ ${SERVER_TYPE} == "sck" ]]; then
-  #     srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
-  #           -w "${HOSTFILE}" \
-  #           --export=ALL \
-  #           "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t 1 "${ARGS}" &
-  #   elif [[ ${SERVER_TYPE} == "mq" ]]; then
-  #     srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
-  #           -w "${HOSTFILE}" \
-  #           --export=ALL \
-  #           mosquitto -c "${MQTT_CONFIG_FILE}" &
-  #     sleep 2
-  #     srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
-  #           -w "${HOSTFILE}" \
-  #           --export=ALL \
-  #           "${BASE_DIR}"/../../src/xpn_server/xpn_server -m 0 -t pool -s "sck" "${ARGS}" &
-  #   else
-  #     srun  -n "${NODE_NUM}" -N "${NODE_NUM}" --mpi=none \
-  #           -w "${HOSTFILE}" \
-  #           --export=ALL \
-  #           "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} "${ARGS}" &
-  #   fi
+    if [[ ${SERVER_TYPE} == "sck" ]]; then
+      srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
+            -w "${HOSTFILE}" \
+            --export=ALL \
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t 1 "${ARGS}" &
+    elif [[ ${SERVER_TYPE} == "mq" ]]; then
+      srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
+            -w "${HOSTFILE}" \
+            --export=ALL \
+            mosquitto -c "${MQTT_CONFIG_FILE}" &
+      sleep 2
+      srun  -n "${NODE_NUM}" -N "${NODE_NUM}"\
+            -w "${HOSTFILE}" \
+            --export=ALL \
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -m 0 -t pool -s "sck" "${ARGS}" &
+    else
+      srun  -n "${NODE_NUM}" -N "${NODE_NUM}" --mpi=none \
+            -w "${HOSTFILE}" \
+            --export=ALL \
+            "${BASE_DIR}"/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} "${ARGS}" &
+    fi
 
-  # else
+  else
     # Create dir
     mpiexec -np       "${NODE_NUM}" \
             -hostfile "${HOSTFILE}" \
@@ -150,7 +150,7 @@ start_xpn_servers() {
                   ${BASE_DIR}/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool ${ARGS} &
       done
     fi
-  # fi
+  fi
 
   if [[ ${RUN_FOREGROUND} == true ]]; then
     echo "Press 'q' to exit"

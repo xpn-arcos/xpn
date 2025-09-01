@@ -1,17 +1,12 @@
 package org.expand.datasource.text;
 
 import org.apache.spark.sql.connector.read.ScanBuilder;
-import org.apache.spark.sql.connector.catalog.SupportsRead;
-import org.apache.spark.sql.connector.catalog.SupportsWrite;
-import org.apache.spark.sql.connector.write.SupportsOverwrite;
-import org.apache.spark.sql.connector.write.SupportsTruncate;
+import org.apache.spark.sql.connector.catalog.*;
+import org.apache.spark.sql.connector.write.*;
 import org.apache.spark.sql.connector.catalog.Table;
 import org.apache.spark.sql.connector.expressions.Transform;
-import org.apache.spark.sql.connector.write.LogicalWriteInfo;
-import org.apache.spark.sql.connector.write.WriteBuilder;
 import org.apache.spark.sql.types.*;
 import org.apache.spark.sql.util.CaseInsensitiveStringMap;
-import org.apache.spark.sql.connector.catalog.TableCapability;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.sources.Filter;
 
@@ -65,7 +60,6 @@ public class ExpandTextTable implements Table, SupportsRead, SupportsWrite, Supp
     @Override
     public ScanBuilder newScanBuilder(CaseInsensitiveStringMap options) {
         Configuration hadoopConf = SparkSession.getActiveSession().get().sparkContext().hadoopConfiguration();
-
         return new ExpandTextReadBuilder(schema, options, hadoopConf);
     }
 
@@ -76,13 +70,11 @@ public class ExpandTextTable implements Table, SupportsRead, SupportsWrite, Supp
 
     @Override
     public WriteBuilder truncate() {
-        System.out.println("Truncando tabla antes de escribir (overwrite)");
         return new ExpandTextWriteBuilder(options, true);
     }
 
     @Override
     public WriteBuilder overwrite(Filter[] filters) {
-        System.out.println("Sobrescribiendo tabla completa con filtros (OverwriteByExpression)");
         return new ExpandTextWriteBuilder(options, true);
     }
 }
