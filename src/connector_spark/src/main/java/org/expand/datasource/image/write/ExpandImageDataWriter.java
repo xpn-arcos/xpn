@@ -26,7 +26,9 @@ public class ExpandImageDataWriter implements DataWriter {
             Path hPath = new Path(path);
             this.fs = hPath.getFileSystem(conf);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("IOException: " + e.getMessage());
+            System.exit(0);
+            return null;
         }
     }
 
