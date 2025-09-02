@@ -147,7 +147,7 @@ start_xpn_servers() {
           line=$(head -n $i "$HOSTFILE" | tail -n 1)
           mpiexec -np       1 \
                   -host "${line}" \
-                  ${BASE_DIR}/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} ${ARGS} &
+                  ${BASE_DIR}/../../src/xpn_server/xpn_server -s ${SERVER_TYPE} -t pool ${ARGS} &
       done
     fi
   fi
