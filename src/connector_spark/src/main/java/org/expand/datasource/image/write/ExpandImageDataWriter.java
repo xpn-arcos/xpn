@@ -15,7 +15,7 @@ import java.io.ByteArrayOutputStream;
 
 public class ExpandImageDataWriter implements DataWriter {
     private final String path;
-    private final FileSystem fs;
+    private FileSystem fs = null;
 
     public ExpandImageDataWriter(String path) {
         this.path = path;
@@ -28,7 +28,6 @@ public class ExpandImageDataWriter implements DataWriter {
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
             System.exit(0);
-            return null;
         }
     }
 
@@ -36,7 +35,7 @@ public class ExpandImageDataWriter implements DataWriter {
     public void write(Object record) {
         InternalRow row = (InternalRow) record;
         String outputPath = path + row.getString(0);
-        byte[] data = row.getBinary(4);
+        byte[] data = row.getBinary(5);
 
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(data);
@@ -54,7 +53,6 @@ public class ExpandImageDataWriter implements DataWriter {
         } catch (Exception e) {
             System.err.println("IOException: " + e.getMessage());
             System.exit(0);
-            return null;
         }
     }
 

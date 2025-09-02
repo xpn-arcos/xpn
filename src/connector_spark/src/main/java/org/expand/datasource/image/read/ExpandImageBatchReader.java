@@ -24,26 +24,24 @@ public class ExpandImageBatchReader implements Batch {
 
     @Override
     public InputPartition[] planInputPartitions() {
-        List<InputPartition> partitions = new ArrayList<>();
         try {
             Path hPath = new Path(path);
             FileSystem fs = hPath.getFileSystem(conf);
             FileStatus[] statuses = fs.listStatus(hPath);
             long length = fs.getBlockSize(hPath);
+            InputPartition partition [] = new InputPartition[statuses.length];
+            int i = 0;
             for (FileStatus status : statuses) {
                 if (status.isDirectory()) {
                     continue;
                 }
 
                 String fileName = status.getPath().toString();
-                if ((fileName.toLowerCase().endsWith(".png") || fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg"))) {
-                    BlockLocation[] locations = fs.getFileBlockLocations(status, 0, status.getLen());
-                    for (BlockLocation location : locations) {
-                        partitions.add(new ExpandImageInputPartition(fileName, location.getOffset(), length, location.getHosts()));
-                    }
-                }
+                BlockLocation location = fs.getFileBlockLocations(status, 0, status.getLen())[0];
+                partition[i] = new ExpandImageInputPartition(fileName, location.getOffset(), status.getLen(), location.getHosts());
+                i++;
             }
-            return partitions.toArray(new InputPartition[0]);
+            return partition;
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
             System.exit(0);

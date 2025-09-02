@@ -11,6 +11,7 @@ import org.apache.hadoop.fs.*;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
@@ -46,19 +47,27 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
             ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
             BufferedImage img = ImageIO.read(bais);
 
+            WritableRaster raster = img.getRaster();
+            int[] pixels = raster.getPixels(0, 0, img.getWidth(), img.getHeight(), (int[]) null);
+            byte[] rawData = new byte[pixels.length];
+            for (int i = 0; i < pixels.length; i++) {
+                rawData[i] = (byte) pixels[i];
+            }
+
             row = new GenericInternalRow(new Object[]{
                     UTF8String.fromString(path),
                     img.getHeight(),
                     img.getWidth(),
+                    img.getColorModel().getNumComponents(),
                     UTF8String.fromString(img.getColorModel().toString()),
-                    buffer
+                    rawData
             });
             read = true;
             return true;
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
             System.exit(0);
-            return null;
+            return false;
         }
     }
 
