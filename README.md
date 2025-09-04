@@ -500,9 +500,18 @@ author = {Elias Del-Pozo-Puñal and Felix Garcia-Carballeira and Diego Camarmas-
  
   * Authors: Diego Camarmas-Alonso, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Darío Muñoz-Muñoz, Jesus Carretero
   * Conference paper: XXXV Jornadas de Paralelismo (JP25)
-  * Link: [:link: Open publication](XXX)
+  * Link: [:link: Open publication](https://doi.org/10.5281/zenodo.15773123)
   * Cite:
   ```bash
+@article{DIEGOCAMARMASALONSO_JP25,
+   title = {Evaluación del sistema de ficheros Expand Ad-Hoc con aplicaciones de uso intensivo de datos},
+   conference = {XXXV Jornadas de Paralelismo (JP25)},
+   volume = {1},
+   pages = {305-314},
+   year = {2025},
+   doi = {https://doi.org/10.5281/zenodo.15773123},
+   url = {https://zenodo.org/records/15773123},
+   author = {Diego Camarmas-Alonso, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Darío Muñoz-Muñoz, Jesus Carretero}}
   ```
 </details>
 
@@ -511,9 +520,18 @@ author = {Elias Del-Pozo-Puñal and Felix Garcia-Carballeira and Diego Camarmas-
  
   * Authors: Elías Del-Pozo-Puñal, Félix García-Carballeira, Diego Camarmas-Alonso, Alejandro Calderon-Mateos
   * Conference paper: XXXV Jornadas de Paralelismo (JP25)
-  * Link: [:link: Open publication](XXX)
+  * Link: [:link: Open publication](https://doi.org/10.5281/zenodo.15773179)
   * Cite:
   ```bash
+@article{DELPOZOPUNAL_JP25,
+   title = {Sistema de almacenamiento para computing continuum: aplicación a sistemas de información ferroviaria},
+   conference = {XXXV Jornadas de Paralelismo (JP25)},
+   volume = {1},
+   pages = {315-324},
+   year = {2025},
+   doi = {https://doi.org/10.5281/zenodo.15773179},
+   url = {https://zenodo.org/records/15773179},
+   author = {Elías Del-Pozo-Puñal, Félix García-Carballeira, Diego Camarmas-Alonso, Alejandro Calderon-Mateos}}
   ```
 </details>
 
@@ -522,9 +540,18 @@ author = {Elias Del-Pozo-Puñal and Felix Garcia-Carballeira and Diego Camarmas-
  
   * Authors: Darío Muñoz-Muñoz, Félix García-Carballeira, Diego Camarmas-Alonso, Alejandro Calderon-Mateos
   * Conference paper:XXXV Jornadas de Paralelismo (JP25)
-  * Link: [:link: Open publication](XXX)
+  * Link: [:link: Open publication](https://doi.org/10.5281/zenodo.15773016)
   * Cite:
   ```bash
+@article{DARIOMUNOZMUNOZ_JP25,
+   title = {LFI: una librería de comunicaciones tolerante a fallos para redes de alto rendimiento},
+   conference = {XXXV Jornadas de Paralelismo (JP25)},
+   volume = {1},
+   pages = {205-214},
+   year = {2025},
+   doi = {https://doi.org/10.5281/zenodo.15773016},
+   url = {https://zenodo.org/records/15773016},
+   author = {Darío Muñoz-Muñoz, Félix García-Carballeira, Diego Camarmas-Alonso, Alejandro Calderon-Mateos}}
   ```
 </details>
 
@@ -533,9 +560,18 @@ author = {Elias Del-Pozo-Puñal and Felix Garcia-Carballeira and Diego Camarmas-
  
   * Authors: Gabriel Sotodosos-Morales, Félix García-Carballeira, Diego Camarmas-Alonso, Alejandro Calderón-Mateos, Darío Muñoz-Muñoz, Jesús Carretero
   * Conference paper: XXXV Jornadas de Paralelismo (JP25)
-  * Link: [:link: Open publication](XXX)
+  * Link: [:link: Open publication](https://doi.org/10.5281/zenodo.15773242)
   * Cite:
   ```bash
+@article{DELPOZOPUNAL_JP25,
+   title = {Optimización de entornos de Big Data Analytics mediante sistemas de ficheros paralelos Ad-hoc},
+   conference = {XXXV Jornadas de Paralelismo (JP25)},
+   volume = {1},
+   pages = {833-842},
+   year = {2025},
+   doi = {https://doi.org/10.5281/zenodo.15773242},
+   url = {https://zenodo.org/records/15773242},
+   author = {Gabriel Sotodosos-Morales, Félix García-Carballeira, Diego Camarmas-Alonso, Alejandro Calderón-Mateos, Darío Muñoz-Muñoz, Jesús Carretero}}
   ```
 </details>
 
@@ -551,14 +587,14 @@ author = {Elias Del-Pozo-Puñal and Felix Garcia-Carballeira and Diego Camarmas-
   * Cite:
   ```bash
 @InProceedings{10.1007/978-3-031-69766-1_5,
-author="Mu{\~{n}}oz-Mu{\~{n}}oz, Dario and Garcia-Carballeira, Felix and Camarmas-Alonso, Diego and Calderon-Mateos, Alejandro and Carretero, Jesus",
-title="Fault Tolerant in the Expand Ad-Hoc Parallel File System",
-booktitle="Euro-Par 2024: Parallel Processing",
-year="2024",
-publisher="Springer Nature Switzerland",
-address="Cham",
-pages="62--76",
-isbn="978-3-031-69766-1"
+   author="Mu{\~{n}}oz-Mu{\~{n}}oz, Dario and Garcia-Carballeira, Felix and Camarmas-Alonso, Diego and Calderon-Mateos, Alejandro and Carretero, Jesus",
+   title="Fault Tolerant in the Expand Ad-Hoc Parallel File System",
+   booktitle="Euro-Par 2024: Parallel Processing",
+   year="2024",
+   publisher="Springer Nature Switzerland",
+   address="Cham",
+   pages="62--76",
+   isbn="978-3-031-69766-1"
 }
   ```
 </details>
@@ -572,14 +608,14 @@ isbn="978-3-031-69766-1"
   * Cite:
   ```bash
 @InProceedings{10.1007/978-3-031-90200-0_26,
-author="Mu{\~{n}}oz-Mu{\~{n}}oz, Dario and Garcia-Carballeira, Felix and Camarmas-Alonso, Diego and Calderon-Mateos, Alejandro and Carretero, Jesus",
-title="Malleability in the Expand Ad-Hoc Parallel File System",
-booktitle="Euro-Par 2024: Parallel Processing Workshops",
-year="2025",
-publisher="Springer Nature Switzerland",
-address="Cham",
-pages="322--333",
-isbn="978-3-031-90200-0"
+   author="Mu{\~{n}}oz-Mu{\~{n}}oz, Dario and Garcia-Carballeira, Felix and Camarmas-Alonso, Diego and Calderon-Mateos, Alejandro and Carretero, Jesus",
+   title="Malleability in the Expand Ad-Hoc Parallel File System",
+   booktitle="Euro-Par 2024: Parallel Processing Workshops",
+   year="2025",
+   publisher="Springer Nature Switzerland",
+   address="Cham",
+   pages="322--333",
+   isbn="978-3-031-90200-0"
 }
   ```
 </details>
