@@ -216,6 +216,7 @@
        struct st_xpn_server_msg
        {
            int type;
+           char status;
            union
 	   {
                struct st_xpn_server_path_flags op_open;

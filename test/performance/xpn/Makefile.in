@@ -4,28 +4,35 @@
 # Definitions
 #
 
- MAKE         = make -s
- CC           = @CC@
- MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
- MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
- LIBRARIES    = -lxpn -lpthread -ldl -lmosquitto
- MYFLAGS      = -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE
+ MAKE         		= make -s
+ CC           		= @CC@
+ MYHEADER     		= -I../../../include/ -I../../../include/base -I../../../include/xpn_client/ -I../../../include/bypass
+ MYLIBPATH    		= -L../../../src/base -L../../../src/xpn_client -L../../../src/bypass
+ LIBRARIES    		= -lxpn -lpthread -ldl -lmosquitto
+ LIBRARIESPROXY    	= -lxpn_proxy_client -lpthread -ldl -lmosquitto
+ MYFLAGS      		= -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE
 
 
 #
 # Rules
 #
 
-all:  open-write-close open-read-close
+all:  open-write-close open-read-close proxy-open-write-close proxy-open-read-close
 open-write-close: open-write-close.o
 	$(CC)  -o open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIES)
 
 open-read-close: open-read-close.o
 	$(CC)  -o open-read-close  open-read-close.o  $(MYLIBPATH) $(LIBRARIES)
 
+proxy-open-write-close: open-write-close.o
+	$(CC)  -o proxy-open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIESPROXY)
+
+proxy-open-read-close: open-read-close.o
+	$(CC)  -o proxy-open-read-close  open-read-close.o  $(MYLIBPATH) $(LIBRARIESPROXY)
+
 %.o: %.c
 	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
 
 clean:
 	rm -f ./*.o
-	rm -f ./open-write-close ./open-read-close
+	rm -f ./open-write-close ./open-read-close ./proxy-open-write-close ./proxy-open-read-close

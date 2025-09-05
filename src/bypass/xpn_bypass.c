@@ -1597,7 +1597,7 @@
       return ret;
     }
 
-    /*
+    
     int __fxstatat64 ( __attribute__((__unused__)) int ver, int dirfd, const char *path, struct stat64 *buf, int flags )
     {
       int    ret = -1;
@@ -1684,7 +1684,7 @@
 
       return ret;
     }
-    */
+    
 
     int close ( int fd )
     {
