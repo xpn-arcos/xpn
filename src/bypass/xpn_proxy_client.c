@@ -75,6 +75,21 @@ int d_send_receive(struct st_xpn_server_msg *pr, struct st_xpn_server_status *re
     int ret;
     int sd_server;
     struct sockaddr_in address;
+    char *env = getenv("XPN_PROXY_ADDR");
+    char ip[64] = "127.0.0.1";
+    int port = 5555;
+
+    if (env) {
+        char *sep = strchr(env, ':');
+        if (sep) {
+            size_t ip_len = sep - env;
+            if (ip_len < sizeof(ip)) {
+                strncpy(ip, env, ip_len);
+                ip[ip_len] = '\0';
+                port = atoi(sep + 1);
+            }
+        }
+    }
 
     sd_server = socket(AF_INET, SOCK_STREAM, 0);
     if (sd_server < 0) {
@@ -83,9 +98,9 @@ int d_send_receive(struct st_xpn_server_msg *pr, struct st_xpn_server_status *re
     }
 
     address.sin_family = AF_INET;
-    address.sin_port = htons(5555);
+    address.sin_port = htons(port);
 
-    ret = inet_pton(AF_INET, "127.0.0.1", &address.sin_addr);
+    ret = inet_pton(AF_INET, ip, &address.sin_addr);
     if (ret <= 0) {
         fprintf(stderr, "d_send_receive: invalid address or address not supported\n");
         close(sd_server);

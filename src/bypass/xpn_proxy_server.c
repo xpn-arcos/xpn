@@ -154,8 +154,10 @@ void handle_petition(int arg)
             res.ret = xpn_write(pr.u_st_xpn_server_msg.op_write.fd, buf2, r);
         }
 
-        if (write(sd_client, buf2, (res.ret > 0 ? res.ret : 0)) < 0)
-            perror("handle_petition: write WRITE data");
+        if (res.ret > 0) {
+            if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+                perror("handle_petition: write status");
+        }
 
         free(buf2);
         break;
@@ -201,7 +203,6 @@ int main(int argc, char *argv[])
     do_exit = 0;
 
     ret = xpn_init();
-    printf("%d = xpn_init()\n", ret);
     if (ret < 0) {
         fprintf(stderr, "main: xpn_init failed\n");
         return -1;
@@ -257,7 +258,6 @@ int main(int argc, char *argv[])
         perror("main: close sd_server");
 
     ret = xpn_destroy();
-    printf("%d = xpn_destroy()\n", ret);
     if (ret < 0) {
         fprintf(stderr, "main: xpn_destroy failed\n");
         return -1;
