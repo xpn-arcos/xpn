@@ -563,7 +563,7 @@ author = {Elias Del-Pozo-Puñal and Felix Garcia-Carballeira and Diego Camarmas-
   * Link: [:link: Open publication](https://doi.org/10.5281/zenodo.15773242)
   * Cite:
   ```bash
-@article{DELPOZOPUNAL_JP25,
+@article{SOTODOSOSMORALES_JP25,
    title = {Optimización de entornos de Big Data Analytics mediante sistemas de ficheros paralelos Ad-hoc},
    conference = {XXXV Jornadas de Paralelismo (JP25)},
    volume = {1},
