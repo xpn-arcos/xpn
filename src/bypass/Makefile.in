@@ -1,23 +1,46 @@
 
 #
-# This Makefile is for The Expand bypass library (syscalls interceptions) 
+# This Makefile is for The Expand bypass library (syscalls interceptions) and the Expand proxy
 #
 
  prefix = @prefix@
  CC=@CC@
 
  FLAGS=@CFLAGS@
- INCLUDE=-I../../include -I../../include/base -I../../include/xpn_client -I../../include/bypass -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
+ INCLUDE=-I../../include -I../../include/base -I../../include/xpn_client -I../../include/bypass -I../../include/xpn_client/xpn/xpn_simple -I../../include/xpn_client/nfi -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
+ INCLUDEPROXY=-I../../include -I../../include/base -I../../include/bypass -I../../include/xpn_client/xpn/xpn_simple -I../../include/xpn_client/nfi -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
  LIBS=-L../../../xpn/src/xpn_client -L../../src/xpn_client -lxpn -lpthread -ldl
+ LIBSPROXY=-lpthread -ldl
 
-all:
+
+all: xpn_proxy_server libxpn_proxy_client.a xpn_bypass.so xpn_bypass_proxy.so
+
+xpn_bypass.so:
 	$(CC) $(FLAGS) $(INCLUDE) -c xpn_bypass.c
 	$(CC) -shared -o xpn_bypass.so xpn_bypass.o $(LIBS)
 
+xpn_proxy_server:
+	$(CC) $(FLAGS) $(INCLUDE) -c xpn_proxy_server.c
+	$(CC) $(FLAGS) $(INCLUDE) -o xpn_proxy_server xpn_proxy_server.o $(LIBS) -lmosquitto
+
+libxpn_proxy_client.a:
+	$(CC) $(FLAGS) $(INCLUDE) -c xpn_proxy_client.c
+	ar -rcs libxpn_proxy_client.a xpn_proxy_client.o
+
+xpn_bypass_proxy.so:
+	$(CC) $(FLAGS) $(INCLUDEPROXY) -c xpn_proxy_client.c
+	$(CC) $(FLAGS) $(INCLUDEPROXY) -c xpn_bypass.c  -DBYPASS_USE_XPNPROXY
+	$(CC) -shared -o xpn_bypass_proxy.so xpn_bypass.o xpn_proxy_client.o $(LIBSPROXY)
+
 install:
-	cp -f xpn_bypass.so ${prefix}/lib
+	cp -f xpn_bypass.so          ${prefix}/lib
+	cp -f xpn_proxy_server       ${prefix}/bin
+	cp -f libxpn_proxy_client.a  ${prefix}/lib
+	cp -f xpn_bypass_proxy.so    ${prefix}/lib
 
 clean:
 	rm -f *.o
+	rm -f *.a
 	rm -f *.so
+	rm -f xpn_proxy_server
 
