@@ -180,9 +180,11 @@ int do_exit = 0;
  * @param signo: Signal number.
  * @return: void.
  */
-void sigHandler(int signo)
+void sigHandler (int sig_id )
 {
-    do_exit = 1;
+    if (SIGINT == sig_id) {
+        do_exit = 1;
+    }
 }
 
 
@@ -200,15 +202,20 @@ int main(int argc, char *argv[])
     struct sockaddr_in address;
     int opt, addrlen;
     extern int do_exit;
+
+    // default initial values
     do_exit = 0;
 
+    // initialize Expand
     ret = xpn_init();
     if (ret < 0) {
         fprintf(stderr, "main: xpn_init failed\n");
         return -1;
     }
 
-    if ((sd_server = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+    // new server socket
+    sd_server = socket(AF_INET, SOCK_STREAM, 0) ;
+    if (sd_server < 0) {
         perror("main: socket");
         return -1;
     }
@@ -236,15 +243,18 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    // SIGINT -> end
     new_action.sa_handler = sigHandler;
     sigemptyset(&new_action.sa_mask);
     new_action.sa_flags = 0;
     sigaction(SIGINT, NULL, &old_action);
 
-    if (old_action.sa_handler != SIG_IGN)
+    if (old_action.sa_handler != SIG_IGN) {
         sigaction(SIGINT, &new_action, NULL);
+    }
 
-    while (do_exit == 0) {
+    while (do_exit == 0)
+    {
         addrlen = sizeof(address);
         sd_client = accept(sd_server, (struct sockaddr *)&address, (socklen_t *)&addrlen);
         if (sd_client < 0) {
