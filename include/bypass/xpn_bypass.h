@@ -39,7 +39,12 @@
   #include <sys/vfs.h>
 
   #include "xpn.h"
-  #include "syscall_proxies.h"
+
+#ifdef BYPASS_MODE_DIRECT
+    #include "syscall_proxies.h"
+#else
+   #include "xpn_proxy_client.h"
+#endif
 
   #include <dirent.h>
   #include <string.h>

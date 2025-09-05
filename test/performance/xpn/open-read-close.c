@@ -23,7 +23,7 @@ int main ( int argc, char *argv[] )
 	int    ret, fd1 ;
 	double t_bc, t_ac, t_bw, t_aw ;
 
-        if (argc < 3)
+    if (argc < 3)
 	{
 	    printf("\n") ;
 	    printf(" Usage: %s <full path> <megabytes to read>\n", argv[0]) ;
@@ -35,11 +35,11 @@ int main ( int argc, char *argv[] )
 	}	
 
 	// xpn-init
-	ret = xpn_init();
+	/*ret = xpn_init();
 	printf("%d = xpn_init()\n", ret);
 	if (ret < 0) {
 	    return -1;
-	}
+	}*/
 
 	memset(buffer, 'a', BUFF_SIZE) ;
 	printf("memset(buffer, 'a', %d)\n", BUFF_SIZE) ;
@@ -52,15 +52,15 @@ int main ( int argc, char *argv[] )
 	    printf("%d = xpn_open('%s', %o)\n", ret, argv[1], 00777) ;
 	    return -1 ;
 	}
-
+	
 	t_bw = get_time();
 
 	// xpn-write
-        long mb = atoi(argv[2]) ;
+    long mb = atoi(argv[2]) ;
 	for (int i = 0; i < mb; i++)
 	{
-	     ret = xpn_read(fd1, buffer, BUFF_SIZE);
-	  // printf("%d = xpn_read_%d(%d, %p, %lu)\n", ret, i, fd1, buffer, (unsigned long)BUFF_SIZE);
+		ret = xpn_read(fd1, buffer, BUFF_SIZE);
+		printf("%d = xpn_read_%d(%d, %p, %lu)\n", ret, i, fd1, buffer, (unsigned long)BUFF_SIZE);
 	}
 	
 	t_aw = get_time() - t_bw;
@@ -74,12 +74,12 @@ int main ( int argc, char *argv[] )
 	printf("%f;%f;%f\n", (double)mb * BUFF_SIZE, t_ac * 1000, t_aw * 1000) ;
 
 	// xpn-destroy
-	ret = xpn_destroy();
+	/*ret = xpn_destroy();
 	printf("%d = xpn_destroy()\n", ret);
 	if (ret < 0) {
 	    return -1;
 	}
-
+*/
 	return 0;
 }
 
