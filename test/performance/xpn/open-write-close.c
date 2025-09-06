@@ -1,14 +1,35 @@
+
+/*
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elías Del Pozo Puñal
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
 #include "all_system.h"
-
 #include "xpn.h"
-
 #include <sys/time.h>
 
 
 #define BUFF_SIZE (1024*1024)
 char buffer[BUFF_SIZE];
 
-double get_time(void) {
+double get_time(void)
+{
     struct timeval tp;
     struct timezone tzp;
 
@@ -16,9 +37,11 @@ double get_time(void) {
     return ((double) tp.tv_sec + .000001 * (double) tp.tv_usec);
 }
 
-int main(int argc, char * argv[]) {
+int main(int argc, char * argv[])
+{
     int ret = 0, fd1;
     double t_bc, t_ac, t_bw, t_aw;
+    long mb ;
 
     if (argc < 3) {
         printf("\n");
@@ -31,11 +54,11 @@ int main(int argc, char * argv[]) {
     }
 
     // xpn-init
-    /*ret = xpn_init();
+    ret = xpn_init();
     printf("%d = xpn_init()\n", ret);
     if (ret < 0) {
         return -1;
-    }*/
+    }
 
     memset(buffer, 'a', BUFF_SIZE);
     printf("memset(buffer, 'a', %d)\n", BUFF_SIZE);
@@ -52,7 +75,7 @@ int main(int argc, char * argv[]) {
     t_bw = get_time();
 
     // xpn-write
-    long mb = atoi(argv[2]);
+    mb = atoi(argv[2]);
     for (int i = 0; i < mb; i++) {
         ret = xpn_write(fd1, buffer, BUFF_SIZE);
         printf("%d = xpn_write_%d(%d, %p, %lu)\n", ret, i, fd1, buffer, (unsigned long) BUFF_SIZE);
@@ -75,11 +98,12 @@ int main(int argc, char * argv[]) {
     printf("%f;%f;%f\n", (double) mb * (double) BUFF_SIZE, t_ac * 1000, t_aw * 1000);
 
     // xpn-destroy
-    /*ret = xpn_destroy();
+    ret = xpn_destroy();
     printf("%d = xpn_destroy()\n", ret);
     if (ret < 0) {
         return -1;
-    }*/
+    }
 
     return 0;
 }
+

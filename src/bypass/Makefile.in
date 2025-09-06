@@ -1,6 +1,6 @@
 
 #
-# This Makefile is for The Expand bypass library (syscalls interceptions) 
+# This Makefile is for The Expand bypass library (syscalls interceptions) and the Expand proxy
 #
 
  prefix = @prefix@
@@ -12,22 +12,11 @@
  LIBS=-L../../../xpn/src/xpn_client -L../../src/xpn_client -lxpn -lpthread -ldl
  LIBSPROXY=-lpthread -ldl
 
-#all:
-#	$(CC) $(FLAGS) $(INCLUDE) -c xpn_bypass.c
-#	$(CC) -shared -o xpn_bypass.so xpn_bypass.o $(LIBS)
-
-#install:
-#	cp -f xpn_bypass.so ${prefix}/lib
-
-#clean:
-#	rm -f *.o
-#	rm -f *.so
-
 
 all: xpn_proxy_server libxpn_proxy_client.a xpn_bypass.so xpn_bypass_proxy.so
 
 xpn_bypass.so:
-	$(CC) $(FLAGS) $(INCLUDE) -DBYPASS_MODE_DIRECT -c xpn_bypass.c
+	$(CC) $(FLAGS) $(INCLUDE) -c xpn_bypass.c
 	$(CC) -shared -o xpn_bypass.so xpn_bypass.o $(LIBS)
 
 xpn_proxy_server:
@@ -40,17 +29,18 @@ libxpn_proxy_client.a:
 
 xpn_bypass_proxy.so:
 	$(CC) $(FLAGS) $(INCLUDEPROXY) -c xpn_proxy_client.c
-	$(CC) $(FLAGS) $(INCLUDEPROXY) -c xpn_bypass.c
+	$(CC) $(FLAGS) $(INCLUDEPROXY) -c xpn_bypass.c  -DBYPASS_USE_XPNPROXY
 	$(CC) -shared -o xpn_bypass_proxy.so xpn_bypass.o xpn_proxy_client.o $(LIBSPROXY)
 
 install:
-	cp -f xpn_bypass.so ${prefix}/lib
-	cp -f xpn_proxy_server ${prefix}/bin
-	cp -f libxpn_proxy_client.a ${prefix}/lib
-	cp -f xpn_bypass_proxy.so ${prefix}/lib
+	cp -f xpn_bypass.so          ${prefix}/lib
+	cp -f xpn_proxy_server       ${prefix}/bin
+	cp -f libxpn_proxy_client.a  ${prefix}/lib
+	cp -f xpn_bypass_proxy.so    ${prefix}/lib
 
 clean:
 	rm -f *.o
+	rm -f *.a
 	rm -f *.so
 	rm -f xpn_proxy_server
-	rm -f *.a
+

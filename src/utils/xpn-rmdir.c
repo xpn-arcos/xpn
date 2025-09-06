@@ -34,16 +34,16 @@ int main(int argc, char *argv[])
   int fdp,fd;
 
   // Arguments
-  if(argc !=2) {
-    printf("ERROR: incorrect number of parameters.\"\n");
-    printf("Usage \"%s <path>\"\n", argv[0]);
-    exit(0);
+  if (argc != 2) {
+      printf("ERROR: incorrect number of parameters.\n");
+      printf("Usage \"%s <path>\"\n", argv[0]);
+      exit(0);
   }
 
   // XPN
-  if((fd=xpn_init())<0){
-    printf("Error in init %d\n",fd);
-    exit(-1);
+  if ((fd=xpn_init())<0) {
+      printf("Error in init %d\n",fd);
+      exit(-1);
   }
   
   destination = argv[1];

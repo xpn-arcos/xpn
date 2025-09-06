@@ -150,7 +150,6 @@ void *write_func(void *func_args)
 				*(args->out_transfer_t) += (t_end_trans.tv_sec-t_ini_trans.tv_sec)+(double)(t_end_trans.tv_usec-t_ini_trans.tv_usec)/1000000;
 			}
 
-				//fprintf(stderr, "write(%zd) written block %zd (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", array_bufs[next]->buffer_length, next, array_bufs[next]->buffer, nw, (unsigned char)array_bufs[next]->buffer[0], (unsigned char)array_bufs[next]->buffer[1], (unsigned char)array_bufs[next]->buffer[2], (unsigned char)array_bufs[next]->buffer[3], (unsigned char)array_bufs[next]->buffer[nw-4], (unsigned char)array_bufs[next]->buffer[nw-3], (unsigned char)array_bufs[next]->buffer[nw-2], (unsigned char)array_bufs[next]->buffer[nw-1]);
 			if (debug)
 				fprintf(stderr, "write(%zd) written block %zd (%p) of %zd bytes\n", array_bufs[next]->buffer_length, next, array_bufs[next]->buffer, nw);
 
@@ -534,14 +533,14 @@ int main(int argc, char *argv[])
 		}
 
 		if (debug) {
-				//fprintf(stderr, " read(%zu)    read block %zu (%p) of %zd bytes %u %u %u %u ... %u %u %u %u\n", buffer_size, (unsigned long)last, buf->buffer, nr, (unsigned char)buf->buffer[0], (unsigned char)buf->buffer[1], (unsigned char)buf->buffer[2], (unsigned char)buf->buffer[3], (unsigned char)buf->buffer[nr-4], (unsigned char)buf->buffer[nr-3], (unsigned char)buf->buffer[nr-2], (unsigned char)buf->buffer[nr-1]);
 			if (xpnsource && xpndest)
 				fprintf(stderr, " read(%lu)    read block %lu (%p) of %zd bytes\n", (unsigned long)buffer_size, (unsigned long)last, buf->buffer, nr);
 			else
 				fprintf(stderr, " read(%lu)    read block of %zd bytes\n", (unsigned long)buffer_size, nr);
 		}
 
-		if (nr > 0) {
+		if (nr > 0)
+		{
 			sum_r = sum_r + nr;
 
 			if (xpnsource && xpndest) {
@@ -637,6 +636,12 @@ int main(int argc, char *argv[])
 
 	if (!very_silent)
 		printf("\n");
+
+	if (array_bufs != NULL)
+        {
+                free(array_bufs);
+                array_bufs = NULL;
+	}
 
 	exit(0);
 }
