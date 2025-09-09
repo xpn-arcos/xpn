@@ -54,6 +54,6 @@ public class ExpandImageTable implements Table, SupportsRead, SupportsWrite {
 
     @Override
     public WriteBuilder newWriteBuilder(LogicalWriteInfo info) {
-        return new ExpandImageWriteBuilder(options.get("path"));
+        return new ExpandImageWriteBuilder();
     }
 }
