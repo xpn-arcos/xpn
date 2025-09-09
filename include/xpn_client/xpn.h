@@ -36,6 +36,8 @@
      #include <dirent.h>
   
 
+      #define DEFAULT_XPN_PROXY_PORT 5555
+
   /* ... Functions / Funciones ......................................... */
 
   // xpn_cwd.c

@@ -41,11 +41,11 @@ double get_time(void)
 
 int main ( int argc, char *argv[] )
 {
-	int    ret, fd1 ;
+	int    ret = 0, fd1 = 0;
 	double t_bc, t_ac, t_bw, t_aw ;
 	long   mb ;
 
-        if (argc < 3)
+    if (argc < 3)
 	{
 	    printf("\n") ;
 	    printf(" Usage: %s <full path> <megabytes to read>\n", argv[0]) ;
@@ -57,14 +57,13 @@ int main ( int argc, char *argv[] )
 	}	
 
 	// xpn-init
-	ret = xpn_init();
+	/*ret = xpn_init();
 	printf("%d = xpn_init()\n", ret);
 	if (ret < 0) {
 	    return -1;
 	}
-
-	memset(buffer, 'a', BUFF_SIZE) ;
-	printf("memset(buffer, 'a', %d)\n", BUFF_SIZE) ;
+*/
+	bzero(buffer, BUFF_SIZE) ;
 
 	// xpn-creat
 	t_bc = get_time();
@@ -96,11 +95,11 @@ int main ( int argc, char *argv[] )
 	printf("%f;%f;%f\n", (double)mb * BUFF_SIZE, t_ac * 1000, t_aw * 1000) ;
 
 	// xpn-destroy
-	ret = xpn_destroy();
+	/*ret = xpn_destroy();
 	printf("%d = xpn_destroy()\n", ret);
 	if (ret < 0) {
 	    return -1;
-	}
+	}*/
 
 	return 0;
 }

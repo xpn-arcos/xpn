@@ -24,7 +24,7 @@ xpn_proxy_server:
 	$(CC) $(FLAGS) $(INCLUDE) -o xpn_proxy_server xpn_proxy_server.o $(LIBS) -lmosquitto
 
 libxpn_proxy_client.a:
-	$(CC) $(FLAGS) $(INCLUDE) -c xpn_proxy_client.c
+	$(CC) $(FLAGS) $(INCLUDEPROXY) -c xpn_proxy_client.c
 	ar -rcs libxpn_proxy_client.a xpn_proxy_client.o
 
 xpn_bypass_proxy.so:

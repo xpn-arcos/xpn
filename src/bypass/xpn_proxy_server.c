@@ -28,11 +28,66 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <pthread.h>
+#include <sys/queue.h>
+
 #include "xpn_client/xpn.h"
 #include "xpn_server/xpn_server_ops.h"
+#include "base/socket.h"
+#include "base/service_socket.h"
 
+
+#define THREAD_POOL_SIZE 32
+
+int do_exit = 0;
+
+// Mutex and condition variable for queue
+pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t queue_cond = PTHREAD_COND_INITIALIZER;
 
 /* ... Functions / Funciones ......................................... */
+
+// Node for client socket queue
+typedef struct client_node {
+    int sd_client;
+    TAILQ_ENTRY(client_node) nodes;
+} client_node_t;
+
+// Queue head for client sockets
+TAILQ_HEAD(client_queue, client_node);
+struct client_queue client_q = TAILQ_HEAD_INITIALIZER(client_q);
+
+
+/*
+ * Worker thread function for the thread pool.
+ * Waits for client sockets in the queue and processes them.
+ */
+void *worker_thread(void *arg)
+{
+    (void)arg;
+    while (1)
+    {
+        pthread_mutex_lock(&queue_mutex);
+        while (TAILQ_EMPTY(&client_q) && !do_exit)
+            pthread_cond_wait(&queue_cond, &queue_mutex);
+
+        if (do_exit) {
+            pthread_mutex_unlock(&queue_mutex);
+            break;
+        }
+
+        client_node_t *node = TAILQ_FIRST(&client_q);
+        if (node)
+            TAILQ_REMOVE(&client_q, node, nodes);
+        pthread_mutex_unlock(&queue_mutex);
+
+        if (node) {
+            handle_petition(node->sd_client);
+            free(node);
+        }
+    }
+    return NULL;
+}
 
 /*
  * Reads exactly n bytes from a socket.
@@ -172,19 +227,15 @@ void handle_petition(int arg)
         perror("handle_petition: close sd_client");
 }
 
-
-int do_exit = 0;
-
 /*
  * Signal handler for SIGINT.
  * @param signo: Signal number.
  * @return: void.
  */
-void sigHandler (int sig_id )
+void sigHandler(int signo)
 {
-    if (SIGINT == sig_id) {
-        do_exit = 1;
-    }
+    do_exit = 1;
+    pthread_cond_broadcast(&queue_cond);
 }
 
 
@@ -197,25 +248,32 @@ void sigHandler (int sig_id )
 int main(int argc, char *argv[])
 {
     int ret;
-    int sd_server, sd_client;
+    int sd_server, sd_client, ipv, port_proxy;
     struct sigaction new_action, old_action;
-    struct sockaddr_in address;
+    //struct sockaddr_in address, client_addr;
     int opt, addrlen;
     extern int do_exit;
 
-    // default initial values
     do_exit = 0;
+    pthread_t threads[THREAD_POOL_SIZE];
 
-    // initialize Expand
     ret = xpn_init();
     if (ret < 0) {
         fprintf(stderr, "main: xpn_init failed\n");
         return -1;
     }
 
-    // new server socket
-    sd_server = socket(AF_INET, SOCK_STREAM, 0) ;
-    if (sd_server < 0) {
+    port_proxy = utils_getenv_int("XPN_PROXY_PORT", DEFAULT_XPN_PROXY_PORT);
+    ipv  = utils_getenv_int("XPN_PROXY_IPV",  DEFAULT_XPN_SCK_IPV);
+
+    if (socket_server_create(&sd_server, port_proxy, ipv) < 0) {
+        fprintf(stderr, "main_proxy: socket_server_create failed\n");
+        xpn_destroy();
+        return -1;
+    }
+
+    /*
+    if ((sd_server = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
         perror("main: socket");
         return -1;
     }
@@ -237,35 +295,63 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    if (listen(sd_server, 3) < 0) {
+    if (listen(sd_server, SOMAXCONN) < 0) {
         perror("main: listen");
         close(sd_server);
         return -1;
     }
+    */
 
-    // SIGINT -> end
     new_action.sa_handler = sigHandler;
     sigemptyset(&new_action.sa_mask);
     new_action.sa_flags = 0;
     sigaction(SIGINT, NULL, &old_action);
 
-    if (old_action.sa_handler != SIG_IGN) {
+    if (old_action.sa_handler != SIG_IGN)
         sigaction(SIGINT, &new_action, NULL);
-    }
 
-    while (do_exit == 0)
-    {
-        addrlen = sizeof(address);
-        sd_client = accept(sd_server, (struct sockaddr *)&address, (socklen_t *)&addrlen);
+    // Start thread pool
+    for (int i = 0; i < THREAD_POOL_SIZE; ++i)
+        pthread_create(&threads[i], NULL, worker_thread, NULL);
+
+    while (do_exit == 0) {
+        ret = socket_server_accept(sd_server, &sd_client, ipv);
+        /*addrlen = sizeof(client_addr);
+        sd_client = accept(sd_server, (struct sockaddr *)&client_addr, (socklen_t *)&addrlen);*/
         if (sd_client < 0) {
+            if (do_exit)
+                break;
             perror("main: accept");
             continue;
         }
-        handle_petition(sd_client);
+
+        client_node_t *node = malloc(sizeof(client_node_t));
+        if (!node) {
+            perror("main: malloc client_node_t");
+            close(sd_client);
+            continue;
+        }
+        node->sd_client = sd_client;
+
+        pthread_mutex_lock(&queue_mutex);
+        TAILQ_INSERT_TAIL(&client_q, node, nodes);
+        pthread_cond_signal(&queue_cond);
+        pthread_mutex_unlock(&queue_mutex);
     }
 
-    if (close(sd_server) < 0)
-        perror("main: close sd_server");
+    // Notify all threads to exit and join them
+    pthread_mutex_lock(&queue_mutex);
+    pthread_cond_broadcast(&queue_cond);
+    pthread_mutex_unlock(&queue_mutex);
+
+    for (int i = 0; i < THREAD_POOL_SIZE; ++i)
+        pthread_join(threads[i], NULL);
+
+    if (socket_close(sd_server) < 0)
+        perror("main: socket_close sd_server");
+
+    pthread_mutex_destroy(&queue_mutex);
+    pthread_cond_destroy(&queue_cond);
 
     ret = xpn_destroy();
     if (ret < 0) {
