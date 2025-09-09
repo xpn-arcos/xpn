@@ -54,11 +54,11 @@ int main(int argc, char * argv[])
     }
 
     // xpn-init
-    ret = xpn_init();
+    /*ret = xpn_init();
     printf("%d = xpn_init()\n", ret);
     if (ret < 0) {
         return -1;
-    }
+    }*/
 
     memset(buffer, 'a', BUFF_SIZE);
     printf("memset(buffer, 'a', %d)\n", BUFF_SIZE);
@@ -98,12 +98,12 @@ int main(int argc, char * argv[])
     printf("%f;%f;%f\n", (double) mb * (double) BUFF_SIZE, t_ac * 1000, t_aw * 1000);
 
     // xpn-destroy
-    ret = xpn_destroy();
+    /*ret = xpn_destroy();
     printf("%d = xpn_destroy()\n", ret);
     if (ret < 0) {
         return -1;
     }
-
+*/
     return 0;
 }
 
