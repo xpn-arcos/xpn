@@ -333,6 +333,7 @@ AC_CONFIG_FILES([ \
       test/integrity/bypass_c/Makefile \
       test/integrity/xpn_metadata/Makefile \
       test/performance/xpn/Makefile \
+      test/performance/xpn-proxy/Makefile \
       test/performance/iop/Makefile \
       test/performance/mpi_pingpong/Makefile \
       test/performance/xpn-fault-tolerant/Makefile \

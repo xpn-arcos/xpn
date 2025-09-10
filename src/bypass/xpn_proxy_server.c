@@ -100,6 +100,7 @@ ssize_t read_n_bytes(int sock, void *buffer, size_t n)
 {
     if (buffer == NULL || n == 0) {
         fprintf(stderr, "read_n_bytes: invalid buffer or size\n");
+        printf("[XPN_PROXY_SERVER]\t[read_n_bytes]\t%d\n", __LINE__);
         return -1;
     }
     size_t total = 0;
@@ -112,9 +113,14 @@ ssize_t read_n_bytes(int sock, void *buffer, size_t n)
         if (bytes <= 0)
         {
             if (bytes == 0)
+            {
                 fprintf(stderr, "read_n_bytes: connection closed unexpectedly\n");
-            else
-                perror("read_n_bytes: read");
+                printf("[XPN_PROXY_SERVER]\t[read_n_bytes]\t%d\n", __LINE__);
+            }else
+            {
+                printf("read_n_bytes: read");
+                printf("[XPN_PROXY_SERVER]\t[read_n_bytes]\t%d\n", __LINE__);
+            }
             return -1;
         }
         total += bytes;
@@ -140,35 +146,41 @@ void handle_petition(int arg)
     sd_client = (int)arg;
     ret = read(sd_client, &pr, sizeof(struct st_xpn_server_msg));
     if (ret < 0) {
-        perror("handle_petition: read");
+        printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
         if (close(sd_client) < 0)
-            perror("handle_petition: close");
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
         return;
     }
 
     switch (pr.type) {
     case XPN_SERVER_OPEN_FILE: // OPEN
         res.ret = xpn_open(pr.u_st_xpn_server_msg.op_open.path, pr.u_st_xpn_server_msg.op_open.flags, pr.u_st_xpn_server_msg.op_open.mode);
+        res.server_errno = errno = errno;
+
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
-            perror("handle_petition: write OPEN");
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
         break;
 
     case XPN_SERVER_CREAT_FILE: // CREATE
         res.ret = xpn_creat(pr.u_st_xpn_server_msg.op_creat.path, pr.u_st_xpn_server_msg.op_creat.mode);
+        res.server_errno = errno = errno;
+
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
-            perror("handle_petition: write CREAT");
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
         break;
 
     case XPN_SERVER_CLOSE_FILE: // CLOSE
         res.ret = xpn_close(pr.u_st_xpn_server_msg.op_close.fd);
+        res.server_errno = errno = errno;
+
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
-            perror("handle_petition: write CLOSE");
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
         break;
 
     case XPN_SERVER_READ_FILE:  // READ
         char *buf = malloc(pr.u_st_xpn_server_msg.op_read.size);
         if (buf == NULL) {
-            perror("handle_petition: malloc READ");
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
             res.ret = -1;
             ret = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status));
             break;
@@ -176,22 +188,22 @@ void handle_petition(int arg)
         bzero(buf, pr.u_st_xpn_server_msg.op_read.size);
 
         res.ret = xpn_read(pr.u_st_xpn_server_msg.op_read.fd, buf, pr.u_st_xpn_server_msg.op_read.size);
+        res.server_errno = errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
-            perror("handle_petition: write READ status");
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
 
         if (res.ret > 0) {
             if (write(sd_client, buf, res.ret) < 0)
-                perror("handle_petition: write READ data");
+                printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
         }
         free(buf);
         break;
     
-
     case XPN_SERVER_WRITE_FILE:  // WRITE
         char *buf2 = malloc(pr.u_st_xpn_server_msg.op_write.size);
         if (buf2 == NULL) {
-            perror("handle_petition: malloc WRITE");
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
             res.ret = -1;
             ret = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status));
             break;
@@ -199,24 +211,145 @@ void handle_petition(int arg)
         bzero(buf2, pr.u_st_xpn_server_msg.op_write.size);
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
-            perror("handle_petition: write WRITE status");
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
 
         ssize_t r = read_n_bytes(sd_client, buf2, pr.u_st_xpn_server_msg.op_write.size);
         if (r < 0) {
-            perror("handle_petition: read_n_bytes WRITE");
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
             res.ret = -1;
+            res.server_errno = errno = errno;
         } else {
             res.ret = xpn_write(pr.u_st_xpn_server_msg.op_write.fd, buf2, r);
+            res.server_errno = errno = errno;
         }
 
         if (res.ret > 0) {
             if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
-                perror("handle_petition: write status");
+                printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
         }
 
         free(buf2);
         break;
     
+    case XPN_SERVER_RM_FILE: // REMOVE
+        res.ret = xpn_unlink(pr.u_st_xpn_server_msg.op_rm.path);
+        res.server_errno = errno = errno;
+
+        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+        break;
+
+    case XPN_SERVER_RENAME_FILE: // RENAME
+        res.ret = xpn_rename(pr.u_st_xpn_server_msg.op_rename.old_url, pr.u_st_xpn_server_msg.op_rename.new_url);
+        res.server_errno = errno;
+
+        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+        break;
+
+    case XPN_SERVER_GETATTR_FILE: // GETATTR
+        struct st_xpn_server_attr_req req;
+
+        req.status = xpn_stat(pr.u_st_xpn_server_msg.op_getattr.path, &req.attr);
+        req.status_req.ret = req.status;
+
+        res.ret = req.status;
+        res.server_errno = errno;
+
+        req.status_req.server_errno = errno;
+
+        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+        
+        if (res.ret == 0)
+        {
+            if (write(sd_client, (char *)&req, sizeof(struct st_xpn_server_attr_req)) < 0)
+                printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+        }
+
+        break;
+
+    case XPN_SERVER_MKDIR_DIR: // MKDIR
+        res.ret = xpn_mkdir(pr.u_st_xpn_server_msg.op_mkdir.path, pr.u_st_xpn_server_msg.op_mkdir.mode);
+        res.server_errno = errno;
+
+        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+        break;
+
+    case XPN_SERVER_OPENDIR_DIR: // OPENDIR
+        DIR* ret;
+        struct st_xpn_server_opendir_req req_opendir;
+
+        ret = xpn_opendir(pr.u_st_xpn_server_msg.op_opendir.path);
+        req_opendir.status.ret = ret == NULL ? -1 : 0;
+        req_opendir.dir = ret == NULL ? NULL : ret;
+        req_opendir.status.server_errno = errno;
+
+        req.status_req.server_errno = errno;
+
+        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+
+        if (res.ret == 0)
+        {
+            if (write(sd_client, (char *)&req_opendir, sizeof(struct st_xpn_server_opendir_req)) < 0)
+                printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+        }
+        break;
+
+    case XPN_SERVER_CLOSEDIR_DIR: // CLOSEDIR
+
+        res.ret = xpn_closedir(pr.u_st_xpn_server_msg.op_closedir.dir);
+        res.server_errno = errno;
+
+        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+        break;
+
+    case XPN_SERVER_READDIR_DIR: // READDIR
+
+        struct dirent * ret_readdir;
+        struct st_xpn_server_readdir_req ret_entry;
+
+        ret_readdir = xpn_readdir(pr.u_st_xpn_server_msg.op_readdir.dir);
+        
+        if (ret_readdir != NULL)
+        {
+            ret_entry.end = 1;
+            ret_entry.ret = *ret_readdir;
+        }
+        else
+        {
+            ret_entry.end = 0;
+        }
+
+        ret_entry.status.ret = ret_readdir == NULL ? -1 : 0;
+        ret_entry.status.server_errno = errno;
+
+        res.ret = ret_entry.status.ret;
+        res.server_errno = ret_entry.status.server_errno;
+
+        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+
+        if (res.ret == 0)
+        {
+            if (write(sd_client, (char *)&ret_entry, sizeof(struct st_xpn_server_readdir_req)) < 0)
+                printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+        }
+
+        break;
+
+    case XPN_SERVER_RMDIR_DIR: // CLOSEDIR
+
+        res.ret = xpn_rmdir(pr.u_st_xpn_server_msg.op_rmdir.path);
+        res.server_errno = errno;
+
+        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+            printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+        break;
+
 
     default:
         fprintf(stderr, "handle_petition: unknown request type %d\n", pr.type);
@@ -224,7 +357,7 @@ void handle_petition(int arg)
     }
 
     if (close(sd_client) < 0)
-        perror("handle_petition: close sd_client");
+        printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
 }
 
 /*
@@ -251,7 +384,7 @@ int main(int argc, char *argv[])
     int sd_server, sd_client, ipv, port_proxy;
     struct sigaction new_action, old_action;
     //struct sockaddr_in address, client_addr;
-    int opt, addrlen;
+    //int opt, addrlen;
     extern int do_exit;
 
     do_exit = 0;
@@ -259,7 +392,7 @@ int main(int argc, char *argv[])
 
     ret = xpn_init();
     if (ret < 0) {
-        fprintf(stderr, "main: xpn_init failed\n");
+        printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
         return -1;
     }
 
@@ -267,20 +400,20 @@ int main(int argc, char *argv[])
     ipv  = utils_getenv_int("XPN_PROXY_IPV",  DEFAULT_XPN_SCK_IPV);
 
     if (socket_server_create(&sd_server, port_proxy, ipv) < 0) {
-        fprintf(stderr, "main_proxy: socket_server_create failed\n");
+        printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
         xpn_destroy();
         return -1;
     }
 
     /*
     if ((sd_server = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        perror("main: socket");
+        printf("main: socket");
         return -1;
     }
 
     opt = 1;
     if (setsockopt(sd_server, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
-        perror("main: setsockopt");
+        printf("main: setsockopt");
         close(sd_server);
         return -1;
     }
@@ -290,13 +423,13 @@ int main(int argc, char *argv[])
     address.sin_port = htons(5555);
 
     if (bind(sd_server, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        perror("main: bind");
+        printf("main: bind");
         close(sd_server);
         return -1;
     }
 
     if (listen(sd_server, SOMAXCONN) < 0) {
-        perror("main: listen");
+        printf("main: listen");
         close(sd_server);
         return -1;
     }
@@ -321,13 +454,13 @@ int main(int argc, char *argv[])
         if (sd_client < 0) {
             if (do_exit)
                 break;
-            perror("main: accept");
+            printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
             continue;
         }
 
         client_node_t *node = malloc(sizeof(client_node_t));
         if (!node) {
-            perror("main: malloc client_node_t");
+            printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
             close(sd_client);
             continue;
         }
@@ -348,14 +481,14 @@ int main(int argc, char *argv[])
         pthread_join(threads[i], NULL);
 
     if (socket_close(sd_server) < 0)
-        perror("main: socket_close sd_server");
+        printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
 
     pthread_mutex_destroy(&queue_mutex);
     pthread_cond_destroy(&queue_cond);
 
     ret = xpn_destroy();
     if (ret < 0) {
-        fprintf(stderr, "main: xpn_destroy failed\n");
+        printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
         return -1;
     }
 
