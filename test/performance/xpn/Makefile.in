@@ -19,12 +19,18 @@ MYFLAGS      		= -O3 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_S
 # Rules
 #
 
-all:  open-write-close open-read-close proxy-open-write-close proxy-open-read-close
+all:  open-write-close open-read-close proxy-open-write-close proxy-open-read-close create-dirs-test remove-dirs-test proxy-create-dirs-test proxy-remove-dirs-test
 open-write-close: open-write-close.o
 	$(CC)  -o open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIES)
 
 open-read-close: open-read-close.o
 	$(CC)  -o open-read-close  open-read-close.o  $(MYLIBPATH) $(LIBRARIES)
+
+create-dirs-test: create-dirs-test.o
+	$(CC)  -o create-dirs-test  create-dirs-test.o  $(MYLIBPATH) $(LIBRARIES)
+
+remove-dirs-test: remove-dirs-test.o
+	$(CC)  -o remove-dirs-test  remove-dirs-test.o  $(MYLIBPATH) $(LIBRARIES)
 
 proxy-open-write-close: open-write-close.o
 	$(CC)  -o proxy-open-write-close open-write-close.o $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
@@ -32,9 +38,16 @@ proxy-open-write-close: open-write-close.o
 proxy-open-read-close: open-read-close.o
 	$(CC)  -o proxy-open-read-close  open-read-close.o  $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
 
+proxy-create-dirs-test: create-dirs-test.o
+	$(CC)  -o proxy-create-dirs-test create-dirs-test.o $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
+
+proxy-remove-dirs-test: remove-dirs-test.o
+	$(CC)  -o proxy-remove-dirs-test  remove-dirs-test.o  $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
+
+
 %.o: %.c
 	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
 
 clean:
 	rm -f ./*.o
-	rm -f ./open-write-close ./open-read-close ./proxy-open-write-close ./proxy-open-read-close
+	rm -f ./open-write-close ./open-read-close ./proxy-open-write-close ./proxy-open-read-close ./create-dirs-test ./remove-dirs-test ./proxy-create-dirs-test ./proxy-remove-dirs-test
