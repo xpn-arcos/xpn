@@ -14,26 +14,31 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.*;
 
 public class ExpandImagePartitionReader implements PartitionReader<InternalRow> {
-    private final String path;
+    private final List<String> path;
     private boolean read = false;
     private InternalRow row;
-    private final long length;
-    private final long start;
+    private final List<Long> length;
+    private final Iterator<String> iterator;
+    private final Iterator<Long> iteratorLength;
 
-    public ExpandImagePartitionReader(String path, long length, long start) {
+    public ExpandImagePartitionReader(List<String> path, List<Long> length) {
         this.path = path;
         this.length = length;
-        this.start = start;
+        this.iterator = path.iterator();
+        this.iteratorLength = length.iterator();
     }
 
     @Override
     public boolean next() {
-        if (read) return false;
+        if (!iterator.hasNext()) return false;
         try {
-            Path p = new Path(path);
-            byte[] buffer = new byte[(int) this.length];
+            String currentPath = iterator.next();
+            long currentLength = iteratorLength.next();
+            Path p = new Path(currentPath);
+            byte[] buffer = new byte[(int) currentLength];
 
             Configuration conf = new Configuration();
             conf.set("fs.defaultFS", "xpn:///");
@@ -41,7 +46,7 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
 
             FileSystem fs = p.getFileSystem(conf);
             FSDataInputStream is = fs.open(p);
-            is.read(this.start, buffer, 0, buffer.length);
+            is.read(0, buffer, 0, buffer.length);
             is.close();
 
             ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
@@ -55,14 +60,13 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
             }
 
             row = new GenericInternalRow(new Object[]{
-                    UTF8String.fromString(path),
+                    UTF8String.fromString(currentPath),
                     img.getHeight(),
                     img.getWidth(),
                     img.getColorModel().getNumComponents(),
                     UTF8String.fromString(img.getColorModel().toString()),
                     rawData
             });
-            read = true;
             return true;
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
