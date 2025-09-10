@@ -362,7 +362,11 @@ ssize_t xpn_write(int fd, const void *buffer, size_t size)
     return res.ret;
 }
 
-
+/*
+ * Removes a file on the server.
+ * @param path: Path to the file to remove.
+ * @return: 0 on success, -1 on error.
+ */
 int xpn_unlink (const char *path)
 {
     if ( !path ) {
@@ -389,6 +393,12 @@ int xpn_unlink (const char *path)
     return res.ret;
 }
 
+/*
+ * Renames a file or directory on the server.
+ * @param path: Current path of the file or directory.
+ * @param newpath: New path for the file or directory.
+ * @return: 0 on success, -1 on error.
+ */
 int xpn_rename (const char *path, const char *newpath)
 {
     if ( !path || !newpath ) {
@@ -416,7 +426,12 @@ int xpn_rename (const char *path, const char *newpath)
     return res.ret;
 }
 
-
+/*
+ * Retrieves file or directory attributes from the server.
+ * @param path: Path to the file or directory.
+ * @param sb: Pointer to a stat structure to store the attributes.
+ * @return: 0 on success, -1 on error.
+ */
 int xpn_stat (const char *path, struct stat *sb)
 {
     if ( !path || !sb ) {
@@ -470,7 +485,12 @@ int xpn_stat (const char *path, struct stat *sb)
     return res.ret;
 }
 
-
+/*
+ * Creates a directory on the server.
+ * @param path: Path to the directory to create.
+ * @param perm: Permissions for the new directory.
+ * @return: 0 on success, -1 on error.
+ */
 int xpn_mkdir (const char *path, mode_t perm)
 {
     if ( !path ) {
@@ -498,6 +518,11 @@ int xpn_mkdir (const char *path, mode_t perm)
     return res.ret;
 }
 
+/*
+ * Removes a directory on the server.
+ * @param path: Path to the directory to remove.
+ * @return: 0 on success, -1 on error.
+ */
 int xpn_rmdir (const char *path )
 {
     if ( !path ) {
@@ -524,7 +549,11 @@ int xpn_rmdir (const char *path )
     return res.ret;
 }
 
-
+/*
+ * Opens a directory on the server.
+ * @param path: Path to the directory.
+ * @return: Pointer to DIR structure on success, NULL on error.
+ */
 DIR * xpn_opendir (const char *path)
 {
     if ( !path ) {
@@ -559,6 +588,7 @@ DIR * xpn_opendir (const char *path)
         {
             printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
             d_close(sd);
+            errno = EIO;
             return NULL;
         }
 
@@ -572,6 +602,10 @@ DIR * xpn_opendir (const char *path)
         else
         {
             d_close(sd);
+            if (st_req.dir == NULL) {
+                errno = EIO;
+                return NULL;
+            }
             return st_req.dir;
         }
     }
@@ -581,7 +615,11 @@ DIR * xpn_opendir (const char *path)
     return NULL;
 }
 
-
+/*
+ * Reads a directory entry from the server.
+ * @param dirp: Pointer to DIR structure.
+ * @return: Pointer to dirent structure on success, NULL on error or end of directory.
+ */
 struct dirent* xpn_readdir (DIR *dirp)
 {
     static struct dirent local_dirent;;
@@ -644,7 +682,11 @@ struct dirent* xpn_readdir (DIR *dirp)
 }
 
 
-
+/*
+ * Closes a directory on the server.
+ * @param dirp: Pointer to DIR structure.
+ * @return: 0 on success, -1 on error.
+ */
 int xpn_closedir (DIR *dirp)
 {
     if ( !dirp ) 
@@ -663,8 +705,8 @@ int xpn_closedir (DIR *dirp)
     bzero(&res, sizeof(res));
     bzero(&st_req, sizeof(st_req));
 
-    pr.type = XPN_SERVER_READDIR_DIR;
-    pr.u_st_xpn_server_msg.op_readdir.dir = dirp;
+    pr.type = XPN_SERVER_CLOSEDIR_DIR;
+    pr.u_st_xpn_server_msg.op_closedir.dir = dirp;
 
     sd = d_send_receive(&pr, &res);
     if (sd < 0) 

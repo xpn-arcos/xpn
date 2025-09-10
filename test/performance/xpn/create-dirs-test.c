@@ -1,6 +1,6 @@
-#define _XOPEN_SOURCE 700
-
-
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
 #include "all_system.h"
 #include "xpn.h"
 
@@ -11,7 +11,55 @@ void test_result(const char *description, int expected_success, int ret) {
     printf("  Got:      %s\n\n", (ret == 0) ? "Success" : strerror(errno));
 }
 
-int main(void) 
+// Create a deep directory tree (e.g., /P1/deep/level1/level2/.../levelN)
+void test_deep_nesting(int levels) {
+    char path[1024] = "/P1/deep";
+    int ret = xpn_mkdir(path, 0755);
+    if (ret != 0) return;
+    for (int i = 1; i <= levels; ++i) {
+        snprintf(path + strlen(path), sizeof(path) - strlen(path), "/level%d", i);
+        int ret = xpn_mkdir(path, 0755);
+        char desc[2048];
+        snprintf(desc, sizeof(desc), "Create deep nested dir '%s'", path);
+        test_result(desc, 1, ret);
+        if (ret != 0) break;
+    }
+}
+
+// Create a wide directory tree (e.g., /P1/wide/dir1 ... /P1/wide/dirN)
+void test_wide_fanout(int count) {
+    char path[1024] = "/P1/wide";
+    int ret = xpn_mkdir(path, 0755);
+    if (ret != 0) return;
+    for (int i = 1; i <= count; ++i) {
+        snprintf(path, sizeof(path), "/P1/wide/dir%d", i);
+        int ret = xpn_mkdir(path, 0755);
+        char desc[2048];
+        snprintf(desc, sizeof(desc), "Create wide dir '%s'", path);
+        test_result(desc, 1, ret);
+    }
+}
+
+// Stress test: create and remove directories in a loop
+void test_stress_create_remove(int count) {
+    char path[1024] = "/P1/stress";
+    int ret = xpn_mkdir(path, 0755);
+    if (ret != 0) return;
+    for (int i = 1; i <= count; ++i) {
+        snprintf(path, sizeof(path), "/P1/stress/dir%d", i);
+        int ret = xpn_mkdir(path, 0755);
+        char desc[2048];
+        snprintf(desc, sizeof(desc), "Stress create dir '%s'", path);
+        test_result(desc, 1, ret);
+        if (ret == 0) {
+            ret = xpn_rmdir(path);
+            snprintf(desc, sizeof(desc), "Stress remove dir '%s'", path);
+            test_result(desc, 1, ret);
+        }
+    }
+}
+
+int main(void)
 {
     int ret;
 
@@ -52,6 +100,11 @@ int main(void)
     } else {
         perror("open");
     }
+
+    // 7. Large-scale directory creation tests
+    test_deep_nesting(50);         // Deep nesting, e.g., 50 levels
+    test_wide_fanout(100);         // Wide fan-out, e.g., 100 subdirs
+    test_stress_create_remove(50); // Create and remove 50 dirs
 
     return 0;
 }
