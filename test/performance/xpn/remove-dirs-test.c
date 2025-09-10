@@ -4,8 +4,6 @@
 #include <errno.h>
 #include "all_system.h"
 #include "xpn.h"
-#include "all_system.h"
-#include "xpn.h"
 
 // Helper function to print test results
 void test_result(const char *description, int expected_success, int ret) {
