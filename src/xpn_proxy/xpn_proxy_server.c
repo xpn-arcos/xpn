@@ -18,45 +18,49 @@
  *
  */
 
+
 /* ... Include / Inclusion ........................................... */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <signal.h>
-#include <stdarg.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <pthread.h>
-#include <sys/queue.h>
+   #include <stdio.h>
+   #include <stdlib.h>
+   #include <string.h>
+   #include <signal.h>
+   #include <stdarg.h>
+   #include <unistd.h>
+   #include <sys/socket.h>
+   #include <netinet/in.h>
+   #include <pthread.h>
+   #include <sys/queue.h>
 
-#include "xpn_client/xpn.h"
-#include "xpn_server/xpn_server_ops.h"
-#include "base/socket.h"
-#include "base/service_socket.h"
+   #include "xpn_client/xpn.h"
+   #include "xpn_server/xpn_server_ops.h"
+   #include "base/socket.h"
+   #include "base/service_socket.h"
 
 
-#define THREAD_POOL_SIZE 32
+/* ... Global items / Elementos globales ............................. */
 
-int do_exit = 0;
+   #define THREAD_POOL_SIZE 32
 
-// Mutex and condition variable for queue
-pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t queue_cond = PTHREAD_COND_INITIALIZER;
+   int do_exit = 0;
+
+   // Mutex and condition variable for queue
+   pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
+   pthread_cond_t  queue_cond  = PTHREAD_COND_INITIALIZER;
+
+
+   // Node for client socket queue
+   typedef struct client_node {
+       int sd_client;
+       TAILQ_ENTRY(client_node) nodes;
+   } client_node_t;
+
+   // Queue head for client sockets
+   TAILQ_HEAD(client_queue, client_node);
+   struct client_queue client_q = TAILQ_HEAD_INITIALIZER(client_q);
+
 
 /* ... Functions / Funciones ......................................... */
-
-// Node for client socket queue
-typedef struct client_node {
-    int sd_client;
-    TAILQ_ENTRY(client_node) nodes;
-} client_node_t;
-
-// Queue head for client sockets
-TAILQ_HEAD(client_queue, client_node);
-struct client_queue client_q = TAILQ_HEAD_INITIALIZER(client_q);
-
 
 /*
  * Worker thread function for the thread pool.
@@ -65,11 +69,14 @@ struct client_queue client_q = TAILQ_HEAD_INITIALIZER(client_q);
 void *worker_thread(void *arg)
 {
     (void)arg;
+    void handle_petition(int arg);
+
     while (1)
     {
         pthread_mutex_lock(&queue_mutex);
-        while (TAILQ_EMPTY(&client_q) && !do_exit)
+        while (TAILQ_EMPTY(&client_q) && !do_exit) {
             pthread_cond_wait(&queue_cond, &queue_mutex);
+	}
 
         if (do_exit) {
             pthread_mutex_unlock(&queue_mutex);
@@ -77,8 +84,9 @@ void *worker_thread(void *arg)
         }
 
         client_node_t *node = TAILQ_FIRST(&client_q);
-        if (node)
+        if (node) {
             TAILQ_REMOVE(&client_q, node, nodes);
+	}
         pthread_mutex_unlock(&queue_mutex);
 
         if (node) {
@@ -86,6 +94,7 @@ void *worker_thread(void *arg)
             free(node);
         }
     }
+
     return NULL;
 }
 
@@ -135,9 +144,9 @@ ssize_t read_n_bytes(int sock, void *buffer, size_t n)
  * @param arg: Client socket file descriptor (as int).
  * @return: void.
  */
-void handle_petition(int arg)
+void handle_petition ( int arg )
 {
-    int ret;
+    int ret, ret2;
     int sd_client;
     struct st_xpn_server_msg pr;
     struct st_xpn_server_status res;
@@ -145,14 +154,18 @@ void handle_petition(int arg)
 
     sd_client = (int)arg;
     ret = read(sd_client, &pr, sizeof(struct st_xpn_server_msg));
-    if (ret < 0) {
+    if (ret < 0)
+    {
         printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-        if (close(sd_client) < 0)
+        if (close(sd_client) < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+	}
+
         return;
     }
 
-    switch (pr.type) {
+    switch (pr.type)
+    {
     case XPN_SERVER_OPEN_FILE: // OPEN
         res.ret = xpn_open(pr.u_st_xpn_server_msg.op_open.path, pr.u_st_xpn_server_msg.op_open.flags, pr.u_st_xpn_server_msg.op_open.mode);
         res.server_errno = errno = errno;
@@ -199,7 +212,7 @@ void handle_petition(int arg)
         }
         free(buf);
         break;
-    
+
     case XPN_SERVER_WRITE_FILE:  // WRITE
         char *buf2 = malloc(pr.u_st_xpn_server_msg.op_write.size);
         if (buf2 == NULL) {
@@ -230,7 +243,7 @@ void handle_petition(int arg)
 
         free(buf2);
         break;
-    
+
     case XPN_SERVER_RM_FILE: // REMOVE
         res.ret = xpn_unlink(pr.u_st_xpn_server_msg.op_rm.path);
         res.server_errno = errno = errno;
@@ -258,13 +271,15 @@ void handle_petition(int arg)
 
         req.status_req.server_errno = errno;
 
-        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-        
+	}
+
         if (res.ret == 0)
         {
-            if (write(sd_client, (char *)&req, sizeof(struct st_xpn_server_attr_req)) < 0)
+            if (write(sd_client, (char *)&req, sizeof(struct st_xpn_server_attr_req)) < 0) {
                 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+	    }
         }
 
         break;
@@ -282,19 +297,22 @@ void handle_petition(int arg)
         struct st_xpn_server_opendir_req req_opendir;
 
         ret = xpn_opendir(pr.u_st_xpn_server_msg.op_opendir.path);
+
         req_opendir.status.ret = ret == NULL ? -1 : 0;
         req_opendir.dir = ret == NULL ? NULL : ret;
         req_opendir.status.server_errno = errno;
-
         req.status_req.server_errno = errno;
 
-        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+        ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
+        if (ret2 < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+	}
 
         if (res.ret == 0)
         {
-            if (write(sd_client, (char *)&req_opendir, sizeof(struct st_xpn_server_opendir_req)) < 0)
+            if (write(sd_client, (char *)&req_opendir, sizeof(struct st_xpn_server_opendir_req)) < 0) {
                 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+	    }
         }
         break;
 
@@ -303,8 +321,10 @@ void handle_petition(int arg)
         res.ret = xpn_closedir(pr.u_st_xpn_server_msg.op_closedir.dir);
         res.server_errno = errno;
 
-        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+        ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
+        if (ret2 < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+	}
         break;
 
     case XPN_SERVER_READDIR_DIR: // READDIR
@@ -313,7 +333,6 @@ void handle_petition(int arg)
         struct st_xpn_server_readdir_req ret_entry;
 
         ret_readdir = xpn_readdir(pr.u_st_xpn_server_msg.op_readdir.dir);
-        
         if (ret_readdir != NULL)
         {
             ret_entry.end = 1;
@@ -330,13 +349,16 @@ void handle_petition(int arg)
         res.ret = ret_entry.status.ret;
         res.server_errno = ret_entry.status.server_errno;
 
-        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+        ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
+        if (ret2 < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+	}
 
         if (res.ret == 0)
         {
-            if (write(sd_client, (char *)&ret_entry, sizeof(struct st_xpn_server_readdir_req)) < 0)
+            if (write(sd_client, (char *)&ret_entry, sizeof(struct st_xpn_server_readdir_req)) < 0) {
                 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+	    }
         }
 
         break;
@@ -346,8 +368,10 @@ void handle_petition(int arg)
         res.ret = xpn_rmdir(pr.u_st_xpn_server_msg.op_rmdir.path);
         res.server_errno = errno;
 
-        if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
+        ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
+        if (ret2 < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+	}
         break;
 
 
@@ -356,8 +380,9 @@ void handle_petition(int arg)
         break;
     }
 
-    if (close(sd_client) < 0)
+    if (close(sd_client) < 0) {
         printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+    }
 }
 
 /*
@@ -369,6 +394,8 @@ void sigHandler(int signo)
 {
     do_exit = 1;
     pthread_cond_broadcast(&queue_cond);
+
+    printf("[XPN_PROXY_SERVER]\t[sigHandler]\t%d signal id:%d\n", __LINE__, signo);
 }
 
 
@@ -383,8 +410,6 @@ int main(int argc, char *argv[])
     int ret;
     int sd_server, sd_client, ipv, port_proxy;
     struct sigaction new_action, old_action;
-    //struct sockaddr_in address, client_addr;
-    //int opt, addrlen;
     extern int do_exit;
 
     do_exit = 0;
@@ -405,52 +430,23 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    /*
-    if ((sd_server = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        printf("main: socket");
-        return -1;
-    }
-
-    opt = 1;
-    if (setsockopt(sd_server, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
-        printf("main: setsockopt");
-        close(sd_server);
-        return -1;
-    }
-
-    address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(5555);
-
-    if (bind(sd_server, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        printf("main: bind");
-        close(sd_server);
-        return -1;
-    }
-
-    if (listen(sd_server, SOMAXCONN) < 0) {
-        printf("main: listen");
-        close(sd_server);
-        return -1;
-    }
-    */
-
     new_action.sa_handler = sigHandler;
     sigemptyset(&new_action.sa_mask);
     new_action.sa_flags = 0;
     sigaction(SIGINT, NULL, &old_action);
 
-    if (old_action.sa_handler != SIG_IGN)
+    if (old_action.sa_handler != SIG_IGN) {
         sigaction(SIGINT, &new_action, NULL);
+    }
 
     // Start thread pool
-    for (int i = 0; i < THREAD_POOL_SIZE; ++i)
+    for (int i = 0; i < THREAD_POOL_SIZE; ++i) {
         pthread_create(&threads[i], NULL, worker_thread, NULL);
+    }
 
-    while (do_exit == 0) {
+    while (do_exit == 0)
+    {
         ret = socket_server_accept(sd_server, &sd_client, ipv);
-        /*addrlen = sizeof(client_addr);
-        sd_client = accept(sd_server, (struct sockaddr *)&client_addr, (socklen_t *)&addrlen);*/
         if (sd_client < 0) {
             if (do_exit)
                 break;
@@ -464,6 +460,7 @@ int main(int argc, char *argv[])
             close(sd_client);
             continue;
         }
+
         node->sd_client = sd_client;
 
         pthread_mutex_lock(&queue_mutex);
@@ -477,11 +474,13 @@ int main(int argc, char *argv[])
     pthread_cond_broadcast(&queue_cond);
     pthread_mutex_unlock(&queue_mutex);
 
-    for (int i = 0; i < THREAD_POOL_SIZE; ++i)
+    for (int i = 0; i < THREAD_POOL_SIZE; ++i) {
         pthread_join(threads[i], NULL);
+    }
 
-    if (socket_close(sd_server) < 0)
+    if (socket_close(sd_server) < 0) {
         printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
+    }
 
     pthread_mutex_destroy(&queue_mutex);
     pthread_cond_destroy(&queue_cond);
@@ -496,4 +495,6 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+
 /* ................................................................... */
+
