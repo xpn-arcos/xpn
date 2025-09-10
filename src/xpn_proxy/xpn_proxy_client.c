@@ -18,9 +18,10 @@
  *
  */
 
+
 /* ... Include / Inclusion ........................................... */
 
-#include "xpn_proxy_client.h"
+   #include "xpn_proxy_client.h"
 
 
 /* ... Functions / Funciones ......................................... */
@@ -718,3 +719,7 @@ int xpn_closedir (DIR *dirp)
     d_close(sd);
     return res.ret;
 }
+
+
+/* ................................................................... */
+

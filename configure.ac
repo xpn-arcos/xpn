@@ -323,9 +323,10 @@ AC_CONFIG_FILES([ \
       Makefile \
       src/base/Makefile \
       src/xpn_client/Makefile \
-      src/utils/Makefile \
+      src/xpn_proxy/Makefile \
       src/bypass/Makefile \
       src/xpn_server/Makefile \
+      src/utils/Makefile \
       test/integrity/xpn/Makefile \
       test/integrity/xpn-iot/Makefile \
       test/integrity/xpn-conf/Makefile \
