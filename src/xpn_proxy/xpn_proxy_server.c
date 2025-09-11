@@ -37,6 +37,7 @@
    #include "base/socket.h"
    #include "base/service_socket.h"
 
+   #include "xpn_proxy/xpn_proxy_macros.h"
 
 /* ... Global items / Elementos globales ............................. */
 
@@ -167,7 +168,7 @@ void handle_petition ( int arg )
     switch (pr.type)
     {
     case XPN_SERVER_OPEN_FILE: // OPEN
-        res.ret = xpn_open(pr.u_st_xpn_server_msg.op_open.path, pr.u_st_xpn_server_msg.op_open.flags, pr.u_st_xpn_server_msg.op_open.mode);
+        res.ret = PROXY_XPN_OPEN(pr.u_st_xpn_server_msg.op_open.path, pr.u_st_xpn_server_msg.op_open.flags, pr.u_st_xpn_server_msg.op_open.mode);
         res.server_errno = errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -175,7 +176,7 @@ void handle_petition ( int arg )
         break;
 
     case XPN_SERVER_CREAT_FILE: // CREATE
-        res.ret = xpn_creat(pr.u_st_xpn_server_msg.op_creat.path, pr.u_st_xpn_server_msg.op_creat.mode);
+        res.ret = PROXY_XPN_CREAT(pr.u_st_xpn_server_msg.op_creat.path, pr.u_st_xpn_server_msg.op_creat.mode);
         res.server_errno = errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -183,7 +184,7 @@ void handle_petition ( int arg )
         break;
 
     case XPN_SERVER_CLOSE_FILE: // CLOSE
-        res.ret = xpn_close(pr.u_st_xpn_server_msg.op_close.fd);
+        res.ret = PROXY_XPN_CLOSE(pr.u_st_xpn_server_msg.op_close.fd);
         res.server_errno = errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -200,7 +201,7 @@ void handle_petition ( int arg )
         }
         bzero(buf, pr.u_st_xpn_server_msg.op_read.size);
 
-        res.ret = xpn_read(pr.u_st_xpn_server_msg.op_read.fd, buf, pr.u_st_xpn_server_msg.op_read.size);
+        res.ret = PROXY_XPN_READ(pr.u_st_xpn_server_msg.op_read.fd, buf, pr.u_st_xpn_server_msg.op_read.size);
         res.server_errno = errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -232,7 +233,7 @@ void handle_petition ( int arg )
             res.ret = -1;
             res.server_errno = errno = errno;
         } else {
-            res.ret = xpn_write(pr.u_st_xpn_server_msg.op_write.fd, buf2, r);
+            res.ret = PROXY_XPN_WRITE(pr.u_st_xpn_server_msg.op_write.fd, buf2, r);
             res.server_errno = errno = errno;
         }
 
@@ -245,7 +246,7 @@ void handle_petition ( int arg )
         break;
 
     case XPN_SERVER_RM_FILE: // REMOVE
-        res.ret = xpn_unlink(pr.u_st_xpn_server_msg.op_rm.path);
+        res.ret = PROXY_XPN_UNLINK(pr.u_st_xpn_server_msg.op_rm.path);
         res.server_errno = errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -253,7 +254,7 @@ void handle_petition ( int arg )
         break;
 
     case XPN_SERVER_RENAME_FILE: // RENAME
-        res.ret = xpn_rename(pr.u_st_xpn_server_msg.op_rename.old_url, pr.u_st_xpn_server_msg.op_rename.new_url);
+        res.ret = PROXY_XPN_RENAME(pr.u_st_xpn_server_msg.op_rename.old_url, pr.u_st_xpn_server_msg.op_rename.new_url);
         res.server_errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -263,7 +264,7 @@ void handle_petition ( int arg )
     case XPN_SERVER_GETATTR_FILE: // GETATTR
         struct st_xpn_server_attr_req req;
 
-        req.status = xpn_stat(pr.u_st_xpn_server_msg.op_getattr.path, &req.attr);
+        req.status = PROXY_XPN_STAT(pr.u_st_xpn_server_msg.op_getattr.path, &req.attr);
         req.status_req.ret = req.status;
 
         res.ret = req.status;
@@ -285,7 +286,7 @@ void handle_petition ( int arg )
         break;
 
     case XPN_SERVER_MKDIR_DIR: // MKDIR
-        res.ret = xpn_mkdir(pr.u_st_xpn_server_msg.op_mkdir.path, pr.u_st_xpn_server_msg.op_mkdir.mode);
+        res.ret = PROXY_XPN_MKDIR(pr.u_st_xpn_server_msg.op_mkdir.path, pr.u_st_xpn_server_msg.op_mkdir.mode);
         res.server_errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -296,7 +297,7 @@ void handle_petition ( int arg )
         DIR* ret;
         struct st_xpn_server_opendir_req req_opendir;
 
-        ret = xpn_opendir(pr.u_st_xpn_server_msg.op_opendir.path);
+        ret = PROXY_XPN_OPENDIR(pr.u_st_xpn_server_msg.op_opendir.path);
 
         req_opendir.status.ret = ret == NULL ? -1 : 0;
         req_opendir.dir = ret == NULL ? NULL : ret;
@@ -318,7 +319,7 @@ void handle_petition ( int arg )
 
     case XPN_SERVER_CLOSEDIR_DIR: // CLOSEDIR
 
-        res.ret = xpn_closedir(pr.u_st_xpn_server_msg.op_closedir.dir);
+        res.ret = PROXY_XPN_CLOSEDIR(pr.u_st_xpn_server_msg.op_closedir.dir);
         res.server_errno = errno;
 
         ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
@@ -332,7 +333,7 @@ void handle_petition ( int arg )
         struct dirent * ret_readdir;
         struct st_xpn_server_readdir_req ret_entry;
 
-        ret_readdir = xpn_readdir(pr.u_st_xpn_server_msg.op_readdir.dir);
+        ret_readdir = PROXY_XPN_READDIR(pr.u_st_xpn_server_msg.op_readdir.dir);
         if (ret_readdir != NULL)
         {
             ret_entry.end = 1;
@@ -365,7 +366,7 @@ void handle_petition ( int arg )
 
     case XPN_SERVER_RMDIR_DIR: // CLOSEDIR
 
-        res.ret = xpn_rmdir(pr.u_st_xpn_server_msg.op_rmdir.path);
+        res.ret = PROXY_XPN_RMDIR(pr.u_st_xpn_server_msg.op_rmdir.path);
         res.server_errno = errno;
 
         ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
@@ -415,11 +416,13 @@ int main(int argc, char *argv[])
     do_exit = 0;
     pthread_t threads[THREAD_POOL_SIZE];
 
+#ifdef USE_XPN_FUNCTIONS
     ret = xpn_init();
     if (ret < 0) {
         printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
         return -1;
     }
+#endif
 
     port_proxy = utils_getenv_int("XPN_PROXY_PORT", DEFAULT_XPN_PROXY_PORT);
     ipv  = utils_getenv_int("XPN_PROXY_IPV",  DEFAULT_XPN_SCK_IPV);
@@ -485,11 +488,13 @@ int main(int argc, char *argv[])
     pthread_mutex_destroy(&queue_mutex);
     pthread_cond_destroy(&queue_cond);
 
+#ifdef USE_XPN_FUNCTIONS
     ret = xpn_destroy();
     if (ret < 0) {
         printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
         return -1;
     }
+#endif
 
     printf("The End.\n");
     return 0;

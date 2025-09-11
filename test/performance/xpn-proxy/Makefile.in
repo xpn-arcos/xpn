@@ -7,7 +7,7 @@
 MAKE         		= make -s
 CC           		= @CC@
 MYHEADER     		= -I../../../include/ -I../../../include/base -I../../../include/xpn_client/ -I../../../include/bypass
-MYLIBPATHPROXY    	= -L../../../src/base -L../../../src/bypass
+MYLIBPATHPROXY    	= -L../../../src/base -L../../../src/xpn_proxy
 LIBRARIESPROXY    	= -lxpn_proxy_client -lpthread -ldl -lmosquitto -lbase
 MYFLAGS      		= -O3 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE
 
