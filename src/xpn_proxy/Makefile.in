@@ -20,7 +20,7 @@ LIB_PATH=-L../../../xpn/src/xpn_client -L../../src/xpn_client
 all: xpn_proxy_server libxpn_proxy_client.a
 
 xpn_proxy_server:
-	$(CC) $(FLAGS) $(INCLUDE) -I../../include/xpn_client -c xpn_proxy_server.c -o xpn_proxy_server.o
+	$(CC) $(FLAGS) $(INCLUDE) -DUSE_XPN_FUNCTIONS -I../../include/xpn_client -c xpn_proxy_server.c -o xpn_proxy_server.o
 	$(CC) $(FLAGS) $(INCLUDE) -I../../include/xpn_client -o xpn_proxy_server      xpn_proxy_server.o $(LIB_PATH) $(LIBS) -lxpn -lmosquitto
 
 libxpn_proxy_client.a:
