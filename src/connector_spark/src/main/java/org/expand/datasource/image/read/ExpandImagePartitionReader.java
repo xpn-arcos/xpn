@@ -23,12 +23,25 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
     private final List<Long> length;
     private final Iterator<String> iterator;
     private final Iterator<Long> iteratorLength;
+    private Configuration conf;
+    private FileSystem fs;
 
     public ExpandImagePartitionReader(List<String> path, List<Long> length) {
         this.path = path;
         this.length = length;
         this.iterator = path.iterator();
         this.iteratorLength = length.iterator();
+
+        try {
+            this.conf = new Configuration();
+            this.conf.set("fs.defaultFS", "xpn:///");
+            this.conf.set("fs.xpn.impl", "org.expand.hadoop.Expand");
+            Path iniPath = new Path(path.get(0));
+            this.fs = iniPath.getFileSystem(this.conf);
+        } catch (IOException e) {
+            System.err.println("IOException: " + e.getMessage());
+            System.exit(0);
+        }
     }
 
     @Override
@@ -40,11 +53,6 @@ public class ExpandImagePartitionReader implements PartitionReader<InternalRow> 
             Path p = new Path(currentPath);
             byte[] buffer = new byte[(int) currentLength];
 
-            Configuration conf = new Configuration();
-            conf.set("fs.defaultFS", "xpn:///");
-            conf.set("fs.xpn.impl", "org.expand.hadoop.Expand");
-
-            FileSystem fs = p.getFileSystem(conf);
             FSDataInputStream is = fs.open(p);
             is.read(0, buffer, 0, buffer.length);
             is.close();

@@ -30,75 +30,59 @@ public class ExpandImageBatchReader implements Batch {
             Path hPath = new Path(path);
             FileSystem fs = hPath.getFileSystem(conf);
             FileStatus[] statuses = fs.listStatus(hPath);
-
-            List<FileStatus> files = new ArrayList<>();
+            long length = fs.getBlockSize(hPath);
+            int numFiles = 0;
+            Map<String, List<FileStatus>> locationGroups = new HashMap<>();
 
             for (FileStatus status : statuses) {
-                if (!status.isDirectory()) {
-                    files.add(status);
+                if (status.isDirectory()) {
+                    continue;
                 }
-            }
 
-            int numFiles = files.size();
+                String fileName = status.getPath().toString();
+                BlockLocation location = fs.getFileBlockLocations(status, 0, status.getLen())[0];
+
+                locationGroups.computeIfAbsent(location.getHosts()[0], k -> new ArrayList<>()).add(status);
+                numFiles++;
+            }
 
             SparkSession spark = SparkSession.active();
             SparkContext sc = spark.sparkContext();
 
-            int parallelism = sc.defaultParallelism();
+            int parallelism = 6;
 
             int numGroups = Math.min(numFiles, parallelism);
+            int filesPerGroup = (int) Math.ceil((double) numFiles / numGroups);
+            int groupsPerNode = (int) Math.ceil((double) numGroups / locationGroups.size());
+            int cores = parallelism / locationGroups.size();
 
-            Map<String, List<FileStatus>> locationGroups = new HashMap<>();
-
-            for (FileStatus status : statuses) {
-                BlockLocation[] locations = fs.getFileBlockLocations(status, 0, status.getLen());
-                String key = String.join(",", locations[0].getHosts());
-
-                locationGroups.computeIfAbsent(key, k -> new ArrayList<>()).add(status);
-            }
-
-            List<List<FileStatus>> groups = new ArrayList<>(locationGroups.values());
-
-            for (int i = 0; i < numGroups; i++) {
-                groups.add(new ArrayList<>());
-            }
-
-            for (int i = 0; i < numFiles; i++) {
-                groups.get(i % numGroups).add(statuses[i]);
-            }
-
-            if (groups.size() > numGroups) {
-                List<List<FileStatus>> merged = new ArrayList<>();
-                for (int i = 0; i < numGroups; i++) {
-                    merged.add(new ArrayList<>());
-                }
-                int idx = 0;
-                for (List<FileStatus> g : groups) {
-                    merged.get(idx % numGroups).addAll(g);
-                    idx++;
-                }
-                groups = merged;
-            }
-
+            InputPartition partition [] = new InputPartition[numGroups];
             List<InputPartition> partitions = new ArrayList<>();
 
-            for (List<FileStatus> group : groups) {
-                if (group.isEmpty()) continue;
-
-                BlockLocation[] locs = fs.getFileBlockLocations(group.get(0), 0, group.get(0).getLen());
-                String[] hosts = locs[0].getHosts();
-
-                List<String> filePaths = new ArrayList<>();
-                List<Long> fileLength = new ArrayList<>();
-                for (FileStatus status : group) {
-                    filePaths.add(status.getPath().toString());
-                    fileLength.add(status.getLen());
+            for (String key : locationGroups.keySet()) {
+                List<List<String>> pathList = new ArrayList<>();
+                List<List<Long>> lengthList = new ArrayList<>();
+                int i = 0;
+                for (FileStatus f : locationGroups.get(key)) {
+                    if (pathList.size() <= i && pathList.size() < cores) {
+                        pathList.add(new ArrayList<>(Arrays.asList(f.getPath().toString())));
+                        lengthList.add(new ArrayList<>(Arrays.asList(f.getLen())));
+                    }else{
+                        pathList.get(i % cores).add(f.getPath().toString());
+                        lengthList.get(i % cores).add(f.getLen());
+                    }
+                    i++;
                 }
 
-                partitions.add(new ExpandImageInputPartition(filePaths, fileLength, hosts));
+                for (int j = 0; j < pathList.size(); j++) {
+                    partitions.add(new ExpandImageInputPartition(
+                            pathList.get(j),
+                            lengthList.get(j),
+                            new String[]{key}
+                    ));
+                }
             }
             return partitions.toArray(new InputPartition[0]);
-
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
             System.exit(0);
