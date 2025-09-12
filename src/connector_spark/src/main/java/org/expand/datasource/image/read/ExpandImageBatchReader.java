@@ -49,11 +49,9 @@ public class ExpandImageBatchReader implements Batch {
             SparkSession spark = SparkSession.active();
             SparkContext sc = spark.sparkContext();
 
-            int parallelism = 6;
+            int parallelism = spark.sparkContext().defaultParallelism();
 
             int numGroups = Math.min(numFiles, parallelism);
-            int filesPerGroup = (int) Math.ceil((double) numFiles / numGroups);
-            int groupsPerNode = (int) Math.ceil((double) numGroups / locationGroups.size());
             int cores = parallelism / locationGroups.size();
 
             InputPartition partition [] = new InputPartition[numGroups];
