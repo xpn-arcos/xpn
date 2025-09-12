@@ -24,6 +24,8 @@
 #ifndef PROXY_XPN_MACROS_H
 #define PROXY_XPN_MACROS_H
 
+
+
 #ifdef USE_XPN_FUNCTIONS
     // Map to xpn_xxxx functions
     #define PROXY_XPN_OPEN      xpn_open
@@ -40,11 +42,15 @@
     #define PROXY_XPN_READDIR   xpn_readdir
     #define PROXY_XPN_RMDIR     xpn_rmdir
 #else
+
+    #include <fcntl.h>      // for open()
+    #include <unistd.h>     // for close(), read(), write()
+
     // Map to POSIX functions
     #define PROXY_XPN_OPEN      open
     #define PROXY_XPN_CREAT     creat
     #define PROXY_XPN_CLOSE     close
-    #define PROXY_XPN_READ      read
+    #define PROXY_XPN_READ      filesystem_read
     #define PROXY_XPN_WRITE     write
     #define PROXY_XPN_UNLINK    unlink
     #define PROXY_XPN_RENAME    rename

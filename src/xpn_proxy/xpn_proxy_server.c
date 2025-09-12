@@ -450,7 +450,7 @@ int main(int argc, char *argv[])
     while (do_exit == 0)
     {
         ret = socket_server_accept(sd_server, &sd_client, ipv);
-        if (sd_client < 0) {
+        if (sd_client < 0 || ret < 0) {
             if (do_exit)
                 break;
             printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
