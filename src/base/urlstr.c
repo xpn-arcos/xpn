@@ -20,12 +20,12 @@
  */
 
 
-   /* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-      #include "base/urlstr.h"
+     #include "base/urlstr.h"
 
 
-   /* ... Functions / Funciones ......................................... */
+  /* ... Functions / Funciones ......................................... */
 
       int getURLProtocol ( char *url, char *protocol )
       {

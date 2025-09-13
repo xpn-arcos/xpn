@@ -20,12 +20,12 @@
  */
 
 
-/* ... Include / Inclusion ........................................... */
+   /* ... Include / Inclusion ........................................... */
 
-   #include "workers_ondemand.h"
+      #include "workers_ondemand.h"
 
 
-/* ... Auxiliar functions / Funciones auxiliares ......................................... */
+   /* ... Auxiliar functions / Funciones auxiliares ......................................... */
 
 void *worker_run ( void *arg )
 {
@@ -213,5 +213,5 @@ void workers_ondemand_destroy ( worker_ondemand_t *w )
 }
 
 
-/* ................................................................... */
+   /* ................................................................... */
 

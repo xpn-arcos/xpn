@@ -53,12 +53,12 @@
          int  thread_mode_operations;
          int  server_type;  // it can be XPN_SERVER_TYPE_MPI, XPN_SERVER_TYPE_SCK
 
-         #ifdef ENABLE_SCK_SERVER
+ #ifdef ENABLE_SCK_SERVER
          char port_name_conn[MAX_PORT_NAME_LENGTH];
          int  server_socket;
          char port_name_no_conn[MAX_PORT_NAME_LENGTH];
          int  server_socket_no_conn;
-         #endif
+ #endif
 
          int await_stop;
 
@@ -70,9 +70,9 @@
          int mosquitto_mode;
          int mosquitto_qos;
 
-         #ifdef HAVE_MOSQUITTO_H
+ #ifdef HAVE_MOSQUITTO_H
            struct mosquitto * mqtt;
-         #endif
+ #endif
 
 	 // IPv4 or IPv6
          int ipv;
