@@ -27,46 +27,50 @@
     extern "C" {
   #endif
 
+
   /* ... Include / Inclusion ........................................... */
 
-  #include "darray.h"
+     #include "darray.h"
 
 
   /* ... Constants / Constantes ........................................ */
 
-  #define c_DTABLE_T    sizeof(dtable_t)
-  #define c_DTELTO_T    sizeof(dtelto_t)
+     #define c_DTABLE_T    sizeof(dtable_t)
+     #define c_DTELTO_T    sizeof(dtelto_t)
 
-  #define c_DTABLE_T_NULL  {NULL,0,-1}
+     #define c_DTABLE_T_NULL  {NULL,0,-1}
 
 
   /* ... Data structures / Estructuras de datos ........................ */
 
-  typedef struct
-  {
-    void       *dt_info;
-    int         next_free;
-    int         myself;
-  } dtelto_t;
+     typedef struct
+     {
+       void       *dt_info;
+       int         next_free;
+       int         myself;
+     } dtelto_t;
 
-  typedef struct
-  {
-    t_pointerDArray  dtable;
-    long             neltos;
-    long             free_list;
-  } dtable_t;
+     typedef struct
+     {
+       t_pointerDArray  dtable;
+       long             neltos;
+       long             free_list;
+     } dtable_t;
 
 
   /* ... Functions / Funciones ......................................... */
 
-    int    dtable_insert ( dtable_t *dt, void *dt_info );
-    int    dtable_delete ( dtable_t *dt, int   fd );
-    void  *dtable_get    ( dtable_t *dt, int   fd );
+     int    dtable_insert ( dtable_t *dt, void *dt_info );
+     int    dtable_delete ( dtable_t *dt, int   fd );
+     void  *dtable_get    ( dtable_t *dt, int   fd );
+
 
   /* ................................................................... */
+
 
   #ifdef  __cplusplus
     }
   #endif
 
 #endif
+

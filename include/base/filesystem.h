@@ -23,6 +23,11 @@
 #ifndef _FILESYSTEM_H_
 #define _FILESYSTEM_H_
 
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
+
+
   /* ... Include / Inclusion ........................................... */
 
      #include "all_system.h"
@@ -82,6 +87,11 @@
 
 
   /* ...................................................................... */
+
+
+  #ifdef  __cplusplus
+    }
+  #endif
 
 #endif
 
