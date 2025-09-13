@@ -23,6 +23,11 @@
 #ifndef _XPN_DEBUG_H
 #define _XPN_DEBUG_H
 
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
+
+
   /* ... Include / Inclusion ........................................... */
 
      #include <stdio.h>
@@ -101,6 +106,11 @@
 
 
   /* ................................................................... */
+
+
+  #ifdef  __cplusplus
+    }
+  #endif
 
 #endif
 

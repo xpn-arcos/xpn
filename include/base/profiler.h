@@ -23,6 +23,10 @@
 #ifndef _XPN_PROFILER_H
 #define _XPN_PROFILER_H
 
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
+
 
   /* ... Include / Inclusion ........................................... */
 
@@ -100,6 +104,11 @@
 
 
   /* ................................................................... */
+
+
+  #ifdef  __cplusplus
+    }
+  #endif
 
 #endif
 
