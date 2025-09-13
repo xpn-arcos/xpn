@@ -11,7 +11,7 @@ void test_result(const char *description, int expected_success, int ret) {
     printf("  Got:      %s\n\n", (ret == 0) ? "Success" : strerror(errno));
 }
 
-// Create a deep directory tree (e.g., /P1/deep/level1/level2/.../levelN)
+// Create a deep directory tree (e.g., /P1/deep/level1/level2/../P1/levelN)
 void test_deep_nesting(int levels) {
     char path[1024] = "/P1/deep";
     int ret = xpn_mkdir(path, 0755);

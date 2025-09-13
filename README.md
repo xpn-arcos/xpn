@@ -1,11 +1,11 @@
 ![Logo for the Expand Parallel File System.](info/xpn-logo.svg)
 
-# Ad-Hoc XPN 3.3.0
+# Ad-Hoc XPN 3.3.1
 
 *Expand Ad-Hoc Parallel File System*
 
 [![License: GPL3](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/GPL-3.0)
-![version](https://img.shields.io/badge/version-3.3.0-blue)
+![version](https://img.shields.io/badge/version-3.3.1-blue)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://app.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 * *Homepage*:     <https://xpn-arcos.github.io/xpn-arcos.github.io/>

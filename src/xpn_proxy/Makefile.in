@@ -9,7 +9,6 @@ prefix = @prefix@
 CC=@CC@
 FLAGS=@CFLAGS@ -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
 LIBS=@LIBS@
-#LIBS=-lxpn -lpthread -ldl -lmosquitto
 
 INCLUDE=-I../../include  -I../../include/base -I../../include/xpn_proxy -I../../include/xpn_client/nfi -I../../include/xpn_client/xpn/xpn_simple 
 LIB_PATH=-L../../../xpn/src/xpn_client -L../../src/xpn_client 
@@ -20,8 +19,8 @@ LIB_PATH=-L../../../xpn/src/xpn_client -L../../src/xpn_client
 all: xpn_proxy_server libxpn_proxy_client.a
 
 xpn_proxy_server:
-	$(CC) $(FLAGS) $(INCLUDE) -I../../include/xpn_client -c xpn_proxy_server.c -o xpn_proxy_server.o
-	$(CC) $(FLAGS) $(INCLUDE) -I../../include/xpn_client -o xpn_proxy_server      xpn_proxy_server.o $(LIB_PATH) $(LIBS) -lxpn -lmosquitto
+	$(CC) $(FLAGS) $(INCLUDE) -DUSE_XPN_FUNCTIONS -I../../include/xpn_client -c xpn_proxy_server.c -o xpn_proxy_server.o
+	$(CC) $(FLAGS) $(INCLUDE) -I../../include/xpn_client -o xpn_proxy_server    xpn_proxy_server.o $(LIB_PATH) -lxpn $(LIBS)
 
 libxpn_proxy_client.a:
 	$(CC) $(FLAGS) $(INCLUDE) -c xpn_proxy_client.c -o xpn_proxy_client.o
