@@ -1,6 +1,6 @@
 
 #
-# This Makefile is for The Expand bypass library (syscalls interceptions) and the Expand proxy
+# This Makefile is for The Expand bypass library (syscalls interceptions) (with and without the Expand proxy)
 #
 
 
@@ -10,9 +10,6 @@ prefix = @prefix@
 CC=@CC@
 FLAGS=@CFLAGS@ -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
 LIBS=@LIBS@
-#LIBS=-lxpn -lpthread -ldl -lmosquitto
-#LIBSPROXY=-lpthread -ldl
-#LIBS=-L../../../xpn/src/xpn_client -L../../src/xpn_client -lxpn -lpthread -ldl
 
 INCLUDE=-I../../include -I../../include/base -I../../include/xpn_proxy -I../../include/bypass -I../../include/xpn_client/xpn/xpn_simple -I../../include/xpn_client/nfi
 LIB_PATH=-L../../../xpn/src/xpn_client -L../../src/xpn_client -L../../src/xpn_proxy

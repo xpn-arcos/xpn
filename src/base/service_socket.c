@@ -20,12 +20,12 @@
  */
 
 
-/* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-   #include "base/service_socket.h"
+     #include "base/service_socket.h"
 
 
-/* ... Functions / Funciones ......................................... */
+  /* ... Functions / Funciones ......................................... */
 
 int sersoc_lookup_port_name ( char * srv_name, char * port_name, int socket_accept_code )
 {

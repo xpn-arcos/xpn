@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal
  *
  *  This file is part of Expand.
  *
@@ -25,23 +25,21 @@
 
   /* ... Include / Inclusion ........................................... */
 
-    #include "config.h"
+     #include "config.h"
 
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <string.h>
-    #include <signal.h>
-    #include <unistd.h>
-    #include <sys/socket.h>
-    #include <netinet/in.h>
-    #include <arpa/inet.h>
+     #include <stdio.h>
+     #include <stdlib.h>
+     #include <string.h>
+     #include <signal.h>
+     #include <unistd.h>
+     #include <sys/socket.h>
+     #include <netinet/in.h>
+     #include <arpa/inet.h>
 
-    #include "xpn_server/xpn_server_ops.h"
-    #include "base/socket.h"
-    #include "base/service_socket.h"
-    #include "base/utils.h"
-
-
+     #include "xpn_server/xpn_server_ops.h"
+     #include "base/socket.h"
+     #include "base/service_socket.h"
+     #include "base/utils.h"
 
 
   /* ... Functions / Funciones ......................................... */

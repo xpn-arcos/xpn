@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
+ *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal
  *
  *  This file is part of Expand.
  *
@@ -16,18 +16,28 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Macro remapping for PROXY_XPN_XXXX functions.
- * If USE_XPN_FUNCTIONS is defined, PROXY_XPN_XXXX maps to xpn_xxxx.
- * Otherwise, PROXY_XPN_XXXX maps to POSIX functions.
+ *  Macro remapping for PROXY_XPN_XXXX functions:
+ *  + If USE_XPN_FUNCTIONS is defined, PROXY_XPN_XXXX maps to Expand functions (xpn_xxxxx).
+ *  + Otherwise, PROXY_XPN_XXXX maps to POSIX functions.
  */
+
 
 #ifndef PROXY_XPN_MACROS_H
 #define PROXY_XPN_MACROS_H
 
 
+  /* ... Include / Inclusion ........................................... */
+
+    // for open():
+    #include <fcntl.h>
+    // for close(), read(), write():
+    #include <unistd.h>
+
+
+  /* ... Macros / Macros ............................................... */
 
 #ifdef USE_XPN_FUNCTIONS
-    // Map to xpn_xxxx functions
+    // Map to Expand functions
     #define PROXY_XPN_OPEN      xpn_open
     #define PROXY_XPN_CREAT     xpn_creat
     #define PROXY_XPN_CLOSE     xpn_close
@@ -42,16 +52,12 @@
     #define PROXY_XPN_READDIR   xpn_readdir
     #define PROXY_XPN_RMDIR     xpn_rmdir
 #else
-
-    #include <fcntl.h>      // for open()
-    #include <unistd.h>     // for close(), read(), write()
-
     // Map to POSIX functions
     #define PROXY_XPN_OPEN      open
     #define PROXY_XPN_CREAT     creat
     #define PROXY_XPN_CLOSE     close
     #define PROXY_XPN_READ      filesystem_read
-    #define PROXY_XPN_WRITE     write
+    #define PROXY_XPN_WRITE     filesystem_write
     #define PROXY_XPN_UNLINK    unlink
     #define PROXY_XPN_RENAME    rename
     #define PROXY_XPN_STAT      stat
@@ -62,4 +68,8 @@
     #define PROXY_XPN_RMDIR     rmdir
 #endif
 
+  /* ................................................................... */
+
+
 #endif // PROXY_XPN_MACROS_H
+

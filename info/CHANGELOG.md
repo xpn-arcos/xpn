@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 3.3.1 - 2025-09-10
+
+  * Expand proxy added
+  * C3 Platform added
+  * Minor updates
+
 ## 3.3.0 - 2025-06-05
 
   * Spark connector added

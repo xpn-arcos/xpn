@@ -24,7 +24,7 @@
 #define _XPN_SERVER_OPS_H_
 
   #ifdef __cplusplus
-  extern "C" {
+    extern "C" {
   #endif
 
     /* ... Include / Inclusion ........................................... */
@@ -315,7 +315,7 @@
 
 
   #ifdef __cplusplus
-  }
+    }
   #endif
 
 #endif
