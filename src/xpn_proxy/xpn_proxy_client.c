@@ -324,6 +324,7 @@ int xpn_creat(const char *path, mode_t perm)
     pr.type = XPN_SERVER_CREAT_FILE;
     pr.u_st_xpn_server_msg.op_creat.flags = 0777;
     pr.u_st_xpn_server_msg.op_creat.mode = perm;
+    bzero(pr.u_st_xpn_server_msg.op_creat.path, sizeof(pr.u_st_xpn_server_msg.op_creat.path));
     //strncpy(pr.u_st_xpn_server_msg.op_creat.path, path, sizeof(pr.u_st_xpn_server_msg.op_creat.path) - 1);
 
     if (strlen(path) > XPN_PATH_MAX) 
@@ -332,7 +333,7 @@ int xpn_creat(const char *path, mode_t perm)
         //pr.u_st_xpn_server_msg.op_creat.path[127] = '\0';
     }else
     {
-        strncpy(pr.u_st_xpn_server_msg.op_creat.path, path, sizeof(pr.u_st_xpn_server_msg.op_creat.path) - 1);
+        strncpy(pr.u_st_xpn_server_msg.op_creat.path, path, strlen(path));
     }
 
     pr.u_st_xpn_server_msg.op_creat.path_len = strlen(path);

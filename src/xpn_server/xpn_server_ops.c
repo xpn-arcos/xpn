@@ -431,8 +431,9 @@ void xpn_server_op_write(xpn_server_param_st * params, void * comm, struct st_xp
         return;
     }
 
-    path_len = head -> u_st_xpn_server_msg.op_open.path_len;
-    memcpy(full_path, head -> u_st_xpn_server_msg.op_open.path, path_len > XPN_PATH_MAX ? XPN_PATH_MAX : path_len);
+    path_len = head -> u_st_xpn_server_msg.op_write.path_len;
+    memcpy(full_path, head -> u_st_xpn_server_msg.op_write.path, path_len > XPN_PATH_MAX ? XPN_PATH_MAX : path_len);
+
     if (path_len > XPN_PATH_MAX) {
         ssize_t r = socket_recv(* (int *)comm, full_path + XPN_PATH_MAX, path_len - XPN_PATH_MAX);
         if (r < 0) {
@@ -488,8 +489,8 @@ void xpn_server_op_write(xpn_server_param_st * params, void * comm, struct st_xp
             req.status.ret = -1;
             goto cleanup_xpn_server_op_write;
         }
-
         req.size = filesystem_write(fd, buffer, to_write);
+        
         if (req.size < 0) {
             req.status.ret = -1;
             goto cleanup_xpn_server_op_write;
@@ -498,7 +499,6 @@ void xpn_server_op_write(xpn_server_param_st * params, void * comm, struct st_xp
         // update counters
         cont = cont + req.size; // Received bytes
         diff = head -> u_st_xpn_server_msg.op_write.size - cont;
-
     } while ((diff > 0) && (req.size != 0));
 
     req.size = cont;
@@ -507,12 +507,12 @@ void xpn_server_op_write(xpn_server_param_st * params, void * comm, struct st_xp
     cleanup_xpn_server_op_write:
         // write to the client the status of the write operation
         req.status.server_errno = errno;
+
     xpn_server_comm_write_data(params -> server_type, comm, (char * ) & req, sizeof(struct st_xpn_server_rw_req), rank_client_id, tag_client_id);
 
     if (head -> u_st_xpn_server_msg.op_write.xpn_session == 1)
         filesystem_fsync(fd);
     else filesystem_close(fd);
-
     // free buffer
     FREE_AND_NULL(buffer);
 

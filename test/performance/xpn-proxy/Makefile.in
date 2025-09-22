@@ -16,7 +16,7 @@ MYFLAGS      		= -O3 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_S
 # Rules
 #
 
-all:  proxy-open-write-close proxy-open-read-close  proxy-create-dirs-test proxy-remove-dirs-test
+all:  proxy-open-write-close proxy-open-read-close  proxy-create-dirs-test proxy-remove-dirs-test proxy-xpn-tests
 
 proxy-open-write-close: open-write-close.o
 	$(CC)  -o proxy-open-write-close open-write-close.o $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
@@ -30,10 +30,12 @@ proxy-create-dirs-test: create-dirs-test.o
 proxy-remove-dirs-test: remove-dirs-test.o
 	$(CC)  -o proxy-remove-dirs-test  remove-dirs-test.o  $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
 
+proxy-xpn-tests: xpn-tests.o
+	$(CC)  -o proxy-xpn-tests  xpn-tests.o  $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
 
 %.o: %.c
 	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
 
 clean:
 	rm -f ./*.o
-	rm -f ./proxy-open-write-close ./proxy-open-read-close ./proxy-create-dirs-test ./proxy-remove-dirs-test
+	rm -f ./proxy-open-write-close ./proxy-open-read-close ./proxy-create-dirs-test ./proxy-remove-dirs-test ./proxy-xpn-tests

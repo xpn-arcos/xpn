@@ -642,7 +642,29 @@ int nfi_xpn_server_open(struct nfi_server * serv, char * url, int flags, mode_t 
     msg.u_st_xpn_server_msg.op_open.xpn_session = serv -> xpn_session_file;
     msg.u_st_xpn_server_msg.op_open.file_type = fho -> has_mqtt;
 
-    nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
+
+    if (dir_len >= XPN_PATH_MAX){
+        ret = nfi_write_operation(server_aux, & msg);
+        if (ret < 0) {
+            return -1;
+        }
+        
+        int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+        if (ret2 < 0) {
+            return -1;
+        }
+        
+        ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
+        if (ret < 0) {
+            return -1;
+        }
+    }
+    else
+    {
+        nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
+    }
+
+    //nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
     if (status.ret < 0) {
         errno = status.server_errno;
         debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] ERROR: remote open fails to open '%s' in server %s.\n", serv -> id, dir, serv -> server);
@@ -650,8 +672,8 @@ int nfi_xpn_server_open(struct nfi_server * serv, char * url, int flags, mode_t 
         FREE_AND_NULL(fho -> url);
         goto nfi_xpn_server_open_KO;
     }
-    
-    if (dir_len >= XPN_PATH_MAX){
+    /*if (dir_len >= XPN_PATH_MAX){
+        printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] Sending extra path data for %s\n", serv -> id, dir);
         int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
         if (ret2 != 0) {
             // Error al enviar el resto del path
@@ -659,7 +681,7 @@ int nfi_xpn_server_open(struct nfi_server * serv, char * url, int flags, mode_t 
             FREE_AND_NULL(fho->url);
             goto nfi_xpn_server_open_KO;
         }
-    }
+    }*/
 
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_open] nfi_xpn_server_open(%s)\n", serv -> id, dir);
 
@@ -884,7 +906,7 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
 
     if (dir_len >= XPN_PATH_MAX){
         int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-        if (ret2 != 0) {
+        if (ret2 < 0) {
             goto nfi_xpn_server_write_KO;
         }
     }
@@ -926,8 +948,6 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
         goto nfi_xpn_server_write_KO;
     }
 
-    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] nfi_xpn_server_comm_read_data=%d.\n", serv -> id, ret);
-
     if (req.size < 0) {
         printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_write] ERROR: nfi_xpn_server_write writes zero bytes from '%s' in server %s\n", serv -> id, fh_aux -> path, serv -> server);
 
@@ -948,7 +968,6 @@ ssize_t nfi_xpn_server_write(struct nfi_server * serv, struct nfi_fhandle * fh, 
     if (serv -> keep_connected == 0) {
         nfi_xpn_server_disconnect(serv);
     }
-
     return ret;
 
     nfi_xpn_server_write_KO:
@@ -966,6 +985,7 @@ int nfi_xpn_server_close(__attribute__((__unused__)) struct nfi_server * serv, _
     struct st_xpn_server_msg msg;
     struct st_xpn_server_status status;
 
+    int ret = 0;
     // Check arguments...
     NULL_RET_ERR(serv, EINVAL);
     NULL_RET_ERR(fh, EINVAL);
@@ -1021,20 +1041,42 @@ int nfi_xpn_server_close(__attribute__((__unused__)) struct nfi_server * serv, _
     msg.u_st_xpn_server_msg.op_close.file_type = fh -> has_mqtt;
     //memccpy(msg.u_st_xpn_server_msg.op_close.path, fh_aux -> path, 0, PATH_MAX - 1);
 
-    nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
+    if (dir_len >= XPN_PATH_MAX){
+        ret = nfi_write_operation(server_aux, & msg);
+        if (ret < 0) {
+            return -1;
+        }
+        
+        int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+        if (ret2 < 0) {
+            return -1;
+        }
+        
+        ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
+        if (ret < 0) {
+            return -1;
+        }
+    }
+    else
+    {
+        nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
+    }
+
+
+    //nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (status), sizeof(struct st_xpn_server_status));
 
     if (status.ret < 0) {
         errno = status.server_errno;
     }
 
-    if (dir_len >= XPN_PATH_MAX){
+    /*if (dir_len >= XPN_PATH_MAX){
         int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
         if (ret2 != 0) {
             // Error al enviar el resto del path
             FREE_AND_NULL(fh_aux);
             return -1;
         }
-    }
+    }*/
 
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] nfi_xpn_server_close(%d)=%d\n", serv -> id, fh_aux -> fd, status.ret);
     debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_close] >> End\n", serv -> id);
@@ -1290,8 +1332,6 @@ int nfi_xpn_server_getattr(struct nfi_server * serv, struct nfi_fhandle * fh, st
     int dir_len = strlen(dir);
     msg.u_st_xpn_server_msg.op_getattr.path_len = dir_len;
     bzero(msg.u_st_xpn_server_msg.op_getattr.path, XPN_PATH_MAX);
-
-    printf("Recibo de proxy_xpn_server ---- %d %s\n\n", dir_len, dir);
 
     if (dir_len < XPN_PATH_MAX) 
     {

@@ -195,6 +195,7 @@ void handle_petition ( int arg )
             ssize_t r = read_n_bytes(sd_client, full_path + XPN_PATH_MAX, len - XPN_PATH_MAX);
             if (r < 0) { full_path[0] = '\0'; }
         }
+        
         full_path[len] = '\0';
 
         res.ret = PROXY_XPN_CREAT(full_path, pr.u_st_xpn_server_msg.op_creat.mode);
