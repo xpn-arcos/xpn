@@ -312,9 +312,11 @@ void handle_petition ( int arg )
 
     case XPN_SERVER_GETATTR_FILE: // GETATTR
         struct st_xpn_server_attr_req req;
-        
+        bzero(&req, sizeof(struct st_xpn_server_attr_req));
+
         len = pr.u_st_xpn_server_msg.op_getattr.path_len;
         memcpy(full_path, pr.u_st_xpn_server_msg.op_getattr.path, len > XPN_PATH_MAX ? XPN_PATH_MAX : len);
+
         if (len > XPN_PATH_MAX) {
             ssize_t r = read_n_bytes(sd_client, full_path + XPN_PATH_MAX, len - XPN_PATH_MAX);
             if (r < 0) { full_path[0] = '\0'; }
@@ -332,7 +334,7 @@ void handle_petition ( int arg )
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
         }
-
+        
         if (res.ret == 0)
         {
             if (write(sd_client, (char *)&req, sizeof(struct st_xpn_server_attr_req)) < 0) {

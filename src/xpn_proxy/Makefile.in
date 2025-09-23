@@ -10,7 +10,7 @@ CC=@CC@
 FLAGS=@CFLAGS@ -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
 LIBS=@LIBS@
 
-INCLUDE=-I../../include  -I../../include/base -I../../include/xpn_proxy -I../../include/xpn_client/nfi -I../../include/xpn_client/xpn/xpn_simple 
+INCLUDE=-I../../include  -I../../include/base -I../../include/xpn_proxy -I../../include/xpn_client/nfi -I../../include/xpn_client/xpn/xpn_simple -g
 LIB_PATH=-L../../../xpn/src/xpn_client -L../../src/xpn_client 
 
 

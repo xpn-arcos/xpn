@@ -685,6 +685,7 @@ void xpn_server_op_getattr(xpn_server_param_st * params, void * comm, struct st_
 
     // do getattr
     req.status = filesystem_stat(full_path, & req.attr);
+    printf("XPN_SERVER GETATTR   req.status = %d\n",req.status);
     req.status_req.ret = req.status;
     req.status_req.server_errno = errno;
 
@@ -941,6 +942,9 @@ void xpn_server_op_read_mdata(xpn_server_param_st * params, void * comm, struct 
     struct st_xpn_server_read_mdata_req req = {
         0
     };
+    int path_len = 0;
+    char full_path[2048];
+    bzero(full_path, 2048);
 
     // check params...
     if (NULL == params) {
@@ -948,10 +952,20 @@ void xpn_server_op_read_mdata(xpn_server_param_st * params, void * comm, struct 
         return;
     }
 
-    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] >> Begin\n", params -> rank);
-    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] read_mdata(%s)\n", params -> rank, head -> u_st_xpn_server_msg.op_read_mdata.path);
+    path_len = head -> u_st_xpn_server_msg.op_read_mdata.path_len;
+    memcpy(full_path, head -> u_st_xpn_server_msg.op_read_mdata.path, path_len > XPN_PATH_MAX ? XPN_PATH_MAX : path_len);
+    if (path_len > XPN_PATH_MAX) {
+        ssize_t r = socket_recv(* (int *)comm, full_path + XPN_PATH_MAX, path_len - XPN_PATH_MAX);
+        if (r < 0) {
+            full_path[0] = '\0';
+        }
+    }
+    full_path[path_len] = '\0';
 
-    fd = filesystem_open(head -> u_st_xpn_server_msg.op_read_mdata.path, O_RDWR);
+    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] >> Begin\n", params -> rank);
+    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] read_mdata(%s)\n", params -> rank, full_path);
+
+    fd = filesystem_open(full_path, O_RDWR);
     if (fd < 0) {
         if (errno == EISDIR) {
             // if is directory there are no metadata to read so return 0
@@ -985,6 +999,9 @@ void xpn_server_op_read_mdata(xpn_server_param_st * params, void * comm, struct 
 void xpn_server_op_write_mdata(xpn_server_param_st * params, void * comm, struct st_xpn_server_msg * head, int rank_client_id, int tag_client_id) {
     int ret, fd;
     struct st_xpn_server_status req;
+    int path_len = 0;
+    char full_path[2048];
+    bzero(full_path, 2048);
 
     // check params...
     if (NULL == params) {
@@ -992,10 +1009,21 @@ void xpn_server_op_write_mdata(xpn_server_param_st * params, void * comm, struct
         return;
     }
 
-    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] >> Begin\n", params -> rank);
-    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] write_mdata(%s)\n", params -> rank, head -> u_st_xpn_server_msg.op_write_mdata.path);
+    path_len = head -> u_st_xpn_server_msg.op_write_mdata.path_len;
+    memcpy(full_path, head -> u_st_xpn_server_msg.op_write_mdata.path, path_len > XPN_PATH_MAX ? XPN_PATH_MAX : path_len);
+    if (path_len > XPN_PATH_MAX) {
+        ssize_t r = socket_recv(* (int *)comm, full_path + XPN_PATH_MAX, path_len - XPN_PATH_MAX);
+        if (r < 0) {
+            full_path[0] = '\0';
+        }
+    }
+    full_path[path_len] = '\0';
 
-    fd = filesystem_open2(head -> u_st_xpn_server_msg.op_write_mdata.path, O_WRONLY | O_CREAT, S_IRWXU);
+
+    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] >> Begin\n", params -> rank);
+    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] write_mdata(%s)\n", params -> rank, full_path);
+
+    fd = filesystem_open2(full_path, O_WRONLY | O_CREAT, S_IRWXU);
     if (fd < 0) {
         if (errno == EISDIR) {
             // if is directory there are no metadata to write so return 0
@@ -1027,6 +1055,9 @@ void xpn_server_op_write_mdata_file_size(xpn_server_param_st * params, void * co
     int ret, fd;
     ssize_t actual_file_size = 0;
     struct st_xpn_server_status req;
+    int path_len = 0;
+    char full_path[2048];
+    bzero(full_path, 2048);
 
     // check params...
     if (NULL == params) {
@@ -1034,13 +1065,23 @@ void xpn_server_op_write_mdata_file_size(xpn_server_param_st * params, void * co
         return;
     }
 
+    path_len = head -> u_st_xpn_server_msg.op_write_mdata_file_size.path_len;
+    memcpy(full_path, head -> u_st_xpn_server_msg.op_write_mdata_file_size.path, path_len > XPN_PATH_MAX ? XPN_PATH_MAX : path_len);
+    if (path_len > XPN_PATH_MAX) {
+        ssize_t r = socket_recv(* (int *)comm, full_path + XPN_PATH_MAX, path_len - XPN_PATH_MAX);
+        if (r < 0) {
+            full_path[0] = '\0';
+        }
+    }
+    full_path[path_len] = '\0';
+
     debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] >> Begin\n", params -> rank);
-    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)\n", params -> rank, head -> u_st_xpn_server_msg.op_write_mdata_file_size.path, head -> u_st_xpn_server_msg.op_write_mdata_file_size.size);
+    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)\n", params -> rank, full_path, head -> u_st_xpn_server_msg.op_write_mdata_file_size.size);
 
     debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] mutex lock\n", params -> rank);
     pthread_mutex_lock( & op_write_mdata_file_size_mutex);
 
-    fd = filesystem_open(head -> u_st_xpn_server_msg.op_write_mdata_file_size.path, O_RDWR);
+    fd = filesystem_open(full_path, O_RDWR);
     if (fd < 0) {
         if (errno == EISDIR) {
             // if is directory there are no metadata to write so return 0

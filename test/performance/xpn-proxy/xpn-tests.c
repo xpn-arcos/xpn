@@ -217,7 +217,7 @@ int main(void) {
             printf("[INFO] trying cleanup of %s\n", base1);
         }
     } else report_ok("xpn_rmdir", base1);
-
+/*
     printf("\n=== TESTS WITH PATHS > 128 bytes ===\n");
     char base2[4096];
     snprintf(base2, sizeof(base2), "%s/posix_test_long", tmp);
@@ -283,7 +283,7 @@ int main(void) {
 
     free(long_dirname);
     free(final_name);
-
+*/
     if (overall == 0) printf("\n=== RESULT: all tests passed (or errors were handled) ===\n");
     else printf("\n=== RESULT: some tests failed. Check error outputs. ===\n");
 

@@ -202,7 +202,7 @@
        struct st_xpn_server_write_mdata
        {
            struct   xpn_metadata mdata;
-           char     path[PATH_MAX];
+           char     path[XPN_PATH_MAX];
            int      path_len;
        };
 
@@ -215,7 +215,7 @@
            ssize_t  size;
       #endif
 
-           char     path[PATH_MAX];
+           char     path[XPN_PATH_MAX];
            int      path_len;
        };
 
