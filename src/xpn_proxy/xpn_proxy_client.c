@@ -610,7 +610,6 @@ int xpn_stat (const char *path, struct stat *sb)
         return -1;
     }
 
-    printf("RES.RET ---- %d\n", res.ret);
     if (res.ret == 0)
     {
         ret = read(sd, (char *)&st_req, sizeof(struct st_xpn_server_attr_req));

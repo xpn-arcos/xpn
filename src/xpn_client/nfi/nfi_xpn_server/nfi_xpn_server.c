@@ -89,7 +89,7 @@ int nfi_write_operation(struct nfi_xpn_server * params, struct st_xpn_server_msg
 
         //Directory API
     case XPN_SERVER_MKDIR_DIR:
-        debug_info("[NFI_XPN] [nfi_write_operation] MDKIR operation\n");
+        debug_info("[NFI_XPN] [nfi_write_operation] MKDIR operation\n");
         ret = nfi_xpn_server_comm_write_data(params, (char * ) & (head -> u_st_xpn_server_msg.op_mkdir), sizeof(head -> u_st_xpn_server_msg.op_mkdir));
         break;
     case XPN_SERVER_OPENDIR_DIR:
@@ -739,9 +739,6 @@ ssize_t nfi_xpn_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
 
     // private_info file handle
     fh_aux = (struct nfi_xpn_server_fhandle * ) fh -> priv_fh;
-    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read(%s, %ld, %ld)\n", serv -> id, fh_aux -> path, offset, size);
-    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] xpn_read(%s, %ld, %ld)\n", serv -> id, msg.u_st_xpn_server_msg.op_read.path, offset, size);
-
 
     int dir_len = strlen(fh_aux -> path);
     msg.u_st_xpn_server_msg.op_read.path_len = dir_len;
@@ -755,6 +752,13 @@ ssize_t nfi_xpn_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
     {
         memccpy(msg.u_st_xpn_server_msg.op_read.path, fh_aux -> path, 0, XPN_PATH_MAX);
     }
+
+    
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read(%s, %ld, %ld)\n", serv -> id, fh_aux -> path, offset, size);
+    debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] xpn_read(%s, %ld, %ld)\n", serv -> id, fh_aux -> path, offset, size);
+
+
+    
 
     // do operation
     msg.type = XPN_SERVER_READ_FILE;
@@ -772,7 +776,7 @@ ssize_t nfi_xpn_server_read(struct nfi_server * serv, struct nfi_fhandle * fh, v
 
     if (dir_len >= XPN_PATH_MAX){
         int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-        if (ret2 != 0) {
+        if (ret2 < 0) {
             goto nfi_xpn_server_read_KO;
         }
     }
@@ -1307,7 +1311,7 @@ int nfi_xpn_server_rename(struct nfi_server * serv, char * old_url, char * new_u
 
         if(new_path_len >= XPN_PATH_MAX){
             int ret3 = socket_send(server_aux->server_socket, new_path + XPN_PATH_MAX, new_path_len - XPN_PATH_MAX);
-            if (ret3 != 0) {
+            if (ret3 < 0) {
                 return -1;
             }
         }
@@ -2196,7 +2200,6 @@ int nfi_xpn_server_read_mdata(struct nfi_server * serv, char * url, struct xpn_m
     if (serv -> keep_connected == 0) {
         nfi_xpn_server_disconnect(serv);
     }
-    printf("%d\n", req.status.ret);
     return req.status.ret;
 }
 

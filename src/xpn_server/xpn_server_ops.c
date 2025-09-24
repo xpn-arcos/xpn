@@ -277,7 +277,7 @@ void xpn_server_op_creat(xpn_server_param_st * params, void * comm, struct st_xp
     // do creat
     status.ret = filesystem_creat(full_path, head -> u_st_xpn_server_msg.op_creat.mode);
     status.server_errno = errno;
-    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] creat(%s)=%d\n", params -> rank, full_path status.ret);
+    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] creat(%s)=%d\n", params -> rank, full_path, status.ret);
     if (status.ret < 0) {
         xpn_server_comm_write_data(params -> server_type, comm, (char * ) & status, sizeof(struct st_xpn_server_status), rank_client_id, tag_client_id);
     } else {
@@ -685,7 +685,6 @@ void xpn_server_op_getattr(xpn_server_param_st * params, void * comm, struct st_
 
     // do getattr
     req.status = filesystem_stat(full_path, & req.attr);
-    printf("XPN_SERVER GETATTR   req.status = %d\n",req.status);
     req.status_req.ret = req.status;
     req.status_req.server_errno = errno;
 
@@ -775,7 +774,7 @@ void xpn_server_op_opendir(xpn_server_param_st * params, void * comm, struct st_
     full_path[path_len] = '\0';
 
     debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] >> Begin\n", params -> rank);
-    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] opendir(%s)\n", params -> rank, head -> u_st_xpn_server_msg.op_opendir.path);
+    debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] opendir(%s)\n", params -> rank, full_path);
 
     ret = filesystem_opendir(full_path);
     req.status.ret = ret == NULL ? -1 : 0;
@@ -962,6 +961,7 @@ void xpn_server_op_read_mdata(xpn_server_param_st * params, void * comm, struct 
     }
     full_path[path_len] = '\0';
 
+
     debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] >> Begin\n", params -> rank);
     debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] read_mdata(%s)\n", params -> rank, full_path);
 
@@ -989,7 +989,6 @@ void xpn_server_op_read_mdata(xpn_server_param_st * params, void * comm, struct 
     cleanup_xpn_server_op_read_mdata:
         req.status.ret = ret;
     req.status.server_errno = errno;
-
     xpn_server_comm_write_data(params -> server_type, comm, (char * ) & req, sizeof(struct st_xpn_server_read_mdata_req), rank_client_id, tag_client_id);
 
     debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] read_mdata(%s)=%d\n", params -> rank, head -> u_st_xpn_server_msg.op_read_mdata.path, req.status.ret);
