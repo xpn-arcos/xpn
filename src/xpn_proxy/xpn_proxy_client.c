@@ -252,6 +252,16 @@ int d_close(int sd_server)
     return 0;
 }
 
+int xpn_init()
+{
+    return 0;
+}
+
+int xpn_destroy()
+{
+    return 0;
+}
+
 /*
  * Opens a file on the server.
  * @param path: Path to the file.

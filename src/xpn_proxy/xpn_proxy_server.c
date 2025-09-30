@@ -513,7 +513,9 @@ int main(int argc, char *argv[])
 
     if (socket_server_create(&sd_server, port_proxy, ipv) < 0) {
         printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
+#ifdef USE_XPN_FUNCTIONS
         xpn_destroy();
+#endif
         return -1;
     }
 

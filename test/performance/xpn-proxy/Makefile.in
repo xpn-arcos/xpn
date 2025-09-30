@@ -7,8 +7,8 @@
 MAKE         		= make -s
 CC           		= @CC@
 MYHEADER     		= -I../../../include/ -I../../../include/base -I../../../include/xpn_client/ -I../../../include/bypass
-MYLIBPATHPROXY    	= -L../../../src/base -L../../../src/xpn_proxy
-LIBRARIESPROXY    	= -lxpn_proxy_client -lpthread -ldl -lmosquitto -lbase
+LIBPATH    			= -L../../../src/base 
+LIBRARIES    		= -lpthread -ldl -lmosquitto -lbase
 MYFLAGS      		= -O3 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE
 
 
@@ -16,26 +16,43 @@ MYFLAGS      		= -O3 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_S
 # Rules
 #
 
-all:  proxy-open-write-close proxy-open-read-close  proxy-create-dirs-test proxy-remove-dirs-test proxy-xpn-tests
+all:  xpn-open-write-close xpn-open-read-close  xpn-create-dirs-test xpn-remove-dirs-test xpn-xpn-tests posix-open-write-close posix-open-read-close  posix-create-dirs-test posix-remove-dirs-test posix-xpn-tests
 
-proxy-open-write-close: open-write-close.o
-	$(CC)  -o proxy-open-write-close open-write-close.o $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
+xpn-open-write-close: xpn-open-write-close.o
+	$(CC)  -o xpn-open-write-close xpn-open-write-close.o  -lxpn_proxy_client -L../../../src/xpn_proxy $(LIBPATH) $(LIBRARIES)
 
-proxy-open-read-close: open-read-close.o
-	$(CC)  -o proxy-open-read-close  open-read-close.o  $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
+xpn-open-read-close: xpn-open-read-close.o
+	$(CC)  -o xpn-open-read-close  xpn-open-read-close.o  -lxpn_proxy_client -L../../../src/xpn_proxy $(LIBPATH) $(LIBRARIES) 
 
-proxy-create-dirs-test: create-dirs-test.o
-	$(CC)  -o proxy-create-dirs-test create-dirs-test.o $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
+xpn-create-dirs-test: xpn-create-dirs-test.o
+	$(CC)  -o xpn-create-dirs-test xpn-create-dirs-test.o -lxpn_proxy_client -L../../../src/xpn_proxy $(LIBPATH) $(LIBRARIES) 
 
-proxy-remove-dirs-test: remove-dirs-test.o
-	$(CC)  -o proxy-remove-dirs-test  remove-dirs-test.o  $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
+xpn-remove-dirs-test: xpn-remove-dirs-test.o
+	$(CC)  -o xpn-remove-dirs-test  xpn-remove-dirs-test.o  -lxpn_proxy_client -L../../../src/xpn_proxy $(LIBPATH) $(LIBRARIES) 
 
-proxy-xpn-tests: xpn-tests.o
-	$(CC)  -o proxy-xpn-tests  xpn-tests.o  $(MYLIBPATHPROXY) $(LIBRARIESPROXY)
+xpn-xpn-tests: xpn-xpn-tests.o
+	$(CC)  -o xpn-xpn-tests  xpn-xpn-tests.o -lxpn_proxy_client -L../../../src/xpn_proxy $(LIBPATH) $(LIBRARIES) 
+
+posix-open-write-close: posix-open-write-close.o
+	$(CC)  -o posix-open-write-close posix-open-write-close.o $(LIBPATH) $(LIBRARIES)
+
+posix-open-read-close: posix-open-read-close.o
+	$(CC)  -o posix-open-read-close  posix-open-read-close.o  $(LIBPATH) $(LIBRARIES)
+
+posix-create-dirs-test: posix-create-dirs-test.o
+	$(CC)  -o posix-create-dirs-test posix-create-dirs-test.o $(LIBPATH) $(LIBRARIES)
+
+posix-remove-dirs-test: posix-remove-dirs-test.o
+	$(CC)  -o posix-remove-dirs-test  posix-remove-dirs-test.o  $(LIBPATH) $(LIBRARIES)
+
+posix-xpn-tests: posix-xpn-tests.o
+	$(CC)  -o posix-xpn-tests  posix-xpn-tests.o  $(LIBPATH) $(LIBRARIES)
+
+
 
 %.o: %.c
 	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
 
 clean:
 	rm -f ./*.o
-	rm -f ./proxy-open-write-close ./proxy-open-read-close ./proxy-create-dirs-test ./proxy-remove-dirs-test ./proxy-xpn-tests
+	rm -f ./xpn-open-write-close ./xpn-open-read-close ./xpn-create-dirs-test ./xpn-remove-dirs-test ./xpn-xpn-tests ./posix-open-write-close ./posix-open-read-close ./posix-create-dirs-test ./posix-remove-dirs-test ./posix-xpn-tests

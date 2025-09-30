@@ -2,7 +2,6 @@
 #include <string.h>
 #include <errno.h>
 #include "all_system.h"
-#include "xpn.h"
 
 static void report_fail(const char * op,
     const char * path) {
@@ -39,97 +38,97 @@ static int test_file_ops(const char * base_dir,
 
     /* 1) creat */
     printf("[INFO] Testing file operations on: %s\n", path);
-    int fd = xpn_creat(path, 0644);
+    int fd = creat(path, 0644);
     if (fd == -1) {
-        report_fail("xpn_creat", path);
+        report_fail("creat", path);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_creat", path);
+    report_ok("creat", path);
 
     /* 2) write */
     const char * payload = "POSIX test payload\n";
-    ssize_t w = xpn_write(fd, payload, strlen(payload));
+    ssize_t w = write(fd, payload, strlen(payload));
     if (w != (ssize_t) strlen(payload)) {
-        report_fail("xpn_write", path);
+        report_fail("write", path);
         ret = -1;
-        xpn_close(fd);
+        close(fd);
         goto cleanup;
     }
-    report_ok("xpn_write", path);
+    report_ok("write", path);
 
     /* 3) close */
-    if (xpn_close(fd) == -1) {
-        report_fail("xpn_close", path);
+    if (close(fd) == -1) {
+        report_fail("close", path);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_close", path);
+    report_ok("close", path);
 
     /* 4) stat */
     struct stat st;
-    if (xpn_stat(path, & st) == -1) {
-        report_fail("xpn_stat", path);
+    if (stat(path, & st) == -1) {
+        report_fail("stat", path);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_stat", path);
+    report_ok("stat", path);
 
     /* 5) open */
-    int rfd = xpn_open(path, O_RDONLY);
+    int rfd = open(path, O_RDONLY);
     if (rfd == -1) {
-        report_fail("xpn_open", path);
+        report_fail("open", path);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_open", path);
+    report_ok("open", path);
 
     /* 6) read */
     char buf[256];
-    ssize_t r = xpn_read(rfd, buf, sizeof(buf) - 1);
+    ssize_t r = read(rfd, buf, sizeof(buf) - 1);
     if (r <= 0) {
-        report_fail("xpn_read", path);
+        report_fail("read", path);
         ret = -1;
-        xpn_close(rfd);
+        close(rfd);
         goto cleanup;
     }
     buf[r] = '\0';
     printf("[INFO] read %zd bytes: '%s'\n", r, buf);
-    report_ok("xpn_read", path);
+    report_ok("read", path);
 
     /* 7) close */
-    if (xpn_close(rfd) == -1) {
-        report_fail("xpn_close", path);
+    if (close(rfd) == -1) {
+        report_fail("close", path);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_close", path);
+    report_ok("close", path);
 
     /* 8) rename */
     char path2[4096];
     snprintf(path2, sizeof(path2), "%s/%s.renamed", base_dir, name);
-    if (xpn_rename(path, path2) == -1) {
-        report_fail("xpn_rename", path);
+    if (rename(path, path2) == -1) {
+        report_fail("rename", path);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_rename", path);
+    report_ok("rename", path);
 
     /* 9) stat renamed */
-    if (xpn_stat(path2, & st) == -1) {
-        report_fail("xpn_stat", path2);
+    if (stat(path2, & st) == -1) {
+        report_fail("stat", path2);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_stat", path2);
+    report_ok("stat", path2);
 
     /* 10) unlink */
-    if (xpn_unlink(path2) == -1) {
-        report_fail("xpn_unlink", path2);
+    if (unlink(path2) == -1) {
+        report_fail("unlink", path2);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_unlink", path2);
+    report_ok("unlink", path2);
 
     cleanup:
         return ret;
@@ -142,48 +141,48 @@ static int test_dir_ops(const char * parent_dir,
     snprintf(dirpath, sizeof(dirpath), "%s/%s/", parent_dir, dirname);
 
     /* mkdir */
-    if (xpn_mkdir(dirpath, 0755) == -1) {
-        report_fail("xpn_mkdir", dirpath);
+    if (mkdir(dirpath, 0755) == -1) {
+        report_fail("mkdir", dirpath);
         return -1;
     }
-    report_ok("xpn_mkdir", dirpath);
+    report_ok("mkdir", dirpath);
 
     /* opendir */
-    DIR * d = xpn_opendir(dirpath);
+    DIR * d = opendir(dirpath);
     if (!d) {
-        report_fail("xpn_opendir", dirpath);
+        report_fail("opendir", dirpath);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_opendir", dirpath);
+    report_ok("opendir", dirpath);
 
     /* readdir */
     struct dirent * ent;
     int found = 0;
-    while ((ent = xpn_readdir(d)) != NULL) {
+    while ((ent = readdir(d)) != NULL) {
         printf("[INFO] readdir: %s\n", ent -> d_name);
         found++;
     }
     if (found < 2) {
         fprintf(stderr, "[WARN] readdir found < 2 entries in %s\n", dirpath);
     }
-    report_ok("xpn_readdir", dirpath);
+    report_ok("readdir", dirpath);
 
     /* closedir */
-    if (xpn_closedir(d) == -1) {
-        report_fail("xpn_closedir", dirpath);
+    if (closedir(d) == -1) {
+        report_fail("closedir", dirpath);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_closedir", dirpath);
+    report_ok("closedir", dirpath);
 
     /* rmdir */
-    if (xpn_rmdir(dirpath) == -1) {
-        report_fail("xpn_rmdir", dirpath);
+    if (rmdir(dirpath) == -1) {
+        report_fail("rmdir", dirpath);
         ret = -1;
         goto cleanup;
     }
-    report_ok("xpn_rmdir", dirpath);
+    report_ok("rmdir", dirpath);
 
     cleanup:
         return ret;
@@ -196,11 +195,11 @@ int main(void) {
     printf("=== TESTS WITH PATHS < 128 bytes ===\n");
     char base1[256];
     snprintf(base1, sizeof(base1), "%s/posix_test_short", tmp);
-    if (xpn_mkdir(base1, 0755) == -1 && errno != EEXIST) {
-        report_fail("xpn_mkdir", base1);
+    if (mkdir(base1, 0755) == -1 && errno != EEXIST) {
+        report_fail("mkdir", base1);
         return 2;
     }
-    report_ok("xpn_mkdir", base1);
+    report_ok("mkdir", base1);
 
     char * short_name = make_long_name("short_", 50);
     if (!short_name) {
@@ -211,21 +210,21 @@ int main(void) {
     if (test_dir_ops(base1, "dshort") != 0) overall = 1;
     free(short_name);
 
-    if (xpn_rmdir(base1) == -1) {
-        if (errno == ENOENT) report_ok("xpn_rmdir", base1);
+    if (rmdir(base1) == -1) {
+        if (errno == ENOENT) report_ok("rmdir", base1);
         else {
             printf("[INFO] trying cleanup of %s\n", base1);
         }
-    } else report_ok("xpn_rmdir", base1);
+    } else report_ok("rmdir", base1);
 
     printf("\n=== TESTS WITH PATHS > 128 bytes ===\n");
-    char base2[4096];
+    char base2[1024];
     snprintf(base2, sizeof(base2), "%s/posix_test_long", tmp);
-    if (xpn_mkdir(base2, 0755) == -1 && errno != EEXIST) {
-        report_fail("xpn_mkdir", base2);
+    if (mkdir(base2, 0755) == -1 && errno != EEXIST) {
+        report_fail("mkdir", base2);
         return 2;
     }
-    report_ok("xpn_mkdir", base2);
+    report_ok("mkdir", base2);
 
     long name_max = pathconf("/", _PC_NAME_MAX);
     if (name_max <= 0) name_max = 255;
@@ -244,13 +243,13 @@ int main(void) {
         return 2;
     }
 
-    char long_dirpath[4096];
+    char long_dirpath[2048];
     snprintf(long_dirpath, sizeof(long_dirpath), "%s/%s", base2, long_dirname);
 
-    if (xpn_mkdir(long_dirpath, 0755) == -1) {
-        report_fail("xpn_mkdir", long_dirpath);
+    if (mkdir(long_dirpath, 0755) == -1) {
+        report_fail("mkdir", long_dirpath);
         overall = 1;
-    } else report_ok("xpn_mkdir", long_dirpath);
+    } else report_ok("mkdir", long_dirpath);
 
     char * final_name = make_long_name("longfile_", 40);
     if (!final_name) {
@@ -258,7 +257,7 @@ int main(void) {
         return 2;
     }
 
-    char fullpath[4096];
+    char fullpath[4000];
     snprintf(fullpath, sizeof(fullpath), "%s/%s", long_dirpath, final_name);
     printf("[INFO] Long test full path length = %zu characters\n", strlen(fullpath));
     if (strlen(fullpath) <= 128) {
@@ -268,18 +267,18 @@ int main(void) {
     if (test_file_ops(long_dirpath, final_name) != 0) overall = 1;
     if (test_dir_ops(base2, long_dirname) != 0) overall = 1;
 
-    if (xpn_rmdir(base2) == -1) {
+    if (rmdir(base2) == -1) {
         if (errno == ENOTEMPTY || errno == EEXIST || errno == EBUSY) {
             printf("[INFO] %s not empty, attempting cleanup...\n", base2);
             char rem[4096];
             snprintf(rem, sizeof(rem), "%s/%s.renamed", long_dirpath, final_name);
-            xpn_unlink(rem);
-            xpn_unlink(fullpath);
-            xpn_rmdir(long_dirpath);
-            if (xpn_rmdir(base2) == -1) report_fail("xpn_rmdir", base2);
-            else report_ok("xpn_rmdir", base2);
-        } else report_fail("xpn_rmdir", base2);
-    } else report_ok("xpn_rmdir", base2);
+            unlink(rem);
+            unlink(fullpath);
+            rmdir(long_dirpath);
+            if (rmdir(base2) == -1) report_fail("rmdir", base2);
+            else report_ok("rmdir", base2);
+        } else report_fail("rmdir", base2);
+    } else report_ok("rmdir", base2);
 
     free(long_dirname);
     free(final_name);
