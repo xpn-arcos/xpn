@@ -147,8 +147,9 @@ ssize_t read_n_bytes(int sock, void *buffer, size_t n)
  */
 void handle_petition ( int arg )
 {
-    int ret, ret2;
+    int ret, ret2, len = 0;
     int sd_client;
+    char full_path[4096];
     struct st_xpn_server_msg pr;
     struct st_xpn_server_status res;
     res.ret = 0;
@@ -168,15 +169,36 @@ void handle_petition ( int arg )
     switch (pr.type)
     {
     case XPN_SERVER_OPEN_FILE: // OPEN
-        res.ret = PROXY_XPN_OPEN(pr.u_st_xpn_server_msg.op_open.path, pr.u_st_xpn_server_msg.op_open.flags, pr.u_st_xpn_server_msg.op_open.mode);
+        
+        len = pr.u_st_xpn_server_msg.op_open.path_len;
+        memcpy(full_path, pr.u_st_xpn_server_msg.op_open.path, len > XPN_PATH_MAX ? XPN_PATH_MAX : len);
+        if (len > XPN_PATH_MAX) {
+            ssize_t r = read_n_bytes(sd_client, full_path + XPN_PATH_MAX, len - XPN_PATH_MAX);
+            if (r < 0) { full_path[0] = '\0'; }
+        }
+        full_path[len] = '\0';
+        res.ret = PROXY_XPN_OPEN(full_path, pr.u_st_xpn_server_msg.op_open.flags, pr.u_st_xpn_server_msg.op_open.mode);
         res.server_errno = errno = errno;
+
+        /*res.ret = PROXY_XPN_OPEN(pr.u_st_xpn_server_msg.op_open.path, pr.u_st_xpn_server_msg.op_open.flags, pr.u_st_xpn_server_msg.op_open.mode);
+        res.server_errno = errno = errno;*/
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
         break;
 
     case XPN_SERVER_CREAT_FILE: // CREATE
-        res.ret = PROXY_XPN_CREAT(pr.u_st_xpn_server_msg.op_creat.path, pr.u_st_xpn_server_msg.op_creat.mode);
+    
+        len = pr.u_st_xpn_server_msg.op_creat.path_len;
+        memcpy(full_path, pr.u_st_xpn_server_msg.op_creat.path, len > XPN_PATH_MAX ? XPN_PATH_MAX : len);
+        if (len > XPN_PATH_MAX) {
+            ssize_t r = read_n_bytes(sd_client, full_path + XPN_PATH_MAX, len - XPN_PATH_MAX);
+            if (r < 0) { full_path[0] = '\0'; }
+        }
+        
+        full_path[len] = '\0';
+
+        res.ret = PROXY_XPN_CREAT(full_path, pr.u_st_xpn_server_msg.op_creat.mode);
         res.server_errno = errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -246,7 +268,16 @@ void handle_petition ( int arg )
         break;
 
     case XPN_SERVER_RM_FILE: // REMOVE
-        res.ret = PROXY_XPN_UNLINK(pr.u_st_xpn_server_msg.op_rm.path);
+        
+        len = pr.u_st_xpn_server_msg.op_rm.path_len;
+        memcpy(full_path, pr.u_st_xpn_server_msg.op_rm.path, len > XPN_PATH_MAX ? XPN_PATH_MAX : len);
+        if (len > XPN_PATH_MAX) {
+            ssize_t r = read_n_bytes(sd_client, full_path + XPN_PATH_MAX, len - XPN_PATH_MAX);
+            if (r < 0) { full_path[0] = '\0'; }
+        }
+        full_path[len] = '\0';
+
+        res.ret = PROXY_XPN_UNLINK(full_path);
         res.server_errno = errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -254,7 +285,25 @@ void handle_petition ( int arg )
         break;
 
     case XPN_SERVER_RENAME_FILE: // RENAME
-        res.ret = PROXY_XPN_RENAME(pr.u_st_xpn_server_msg.op_rename.old_url, pr.u_st_xpn_server_msg.op_rename.new_url);
+
+        char full_path_old[PATH_MAX], full_path_new[PATH_MAX];
+        int len_old = pr.u_st_xpn_server_msg.op_rename.old_url_len;
+        memcpy(full_path_old, pr.u_st_xpn_server_msg.op_rename.old_url, len_old > XPN_PATH_MAX ? XPN_PATH_MAX : len_old);
+        if (len_old > XPN_PATH_MAX) {
+            ssize_t r = read_n_bytes(sd_client, full_path_old + XPN_PATH_MAX, len_old - XPN_PATH_MAX);
+            if (r < 0) { full_path_old[0] = '\0'; }
+        }
+        full_path_old[len_old] = '\0';
+
+        int len_new = pr.u_st_xpn_server_msg.op_rename.new_url_len;
+        memcpy(full_path_new, pr.u_st_xpn_server_msg.op_rename.new_url, len_new > XPN_PATH_MAX ? XPN_PATH_MAX : len_new);
+        if (len_new > XPN_PATH_MAX) {
+            ssize_t r = read_n_bytes(sd_client, full_path_new + XPN_PATH_MAX, len_new - XPN_PATH_MAX);
+            if (r < 0) { full_path_new[0] = '\0'; }
+        }
+        full_path_new[len_new] = '\0';
+
+        res.ret = PROXY_XPN_RENAME(full_path_old, full_path_new);
         res.server_errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -263,8 +312,18 @@ void handle_petition ( int arg )
 
     case XPN_SERVER_GETATTR_FILE: // GETATTR
         struct st_xpn_server_attr_req req;
+        bzero(&req, sizeof(struct st_xpn_server_attr_req));
 
-        req.status = PROXY_XPN_STAT(pr.u_st_xpn_server_msg.op_getattr.path, &req.attr);
+        len = pr.u_st_xpn_server_msg.op_getattr.path_len;
+        memcpy(full_path, pr.u_st_xpn_server_msg.op_getattr.path, len > XPN_PATH_MAX ? XPN_PATH_MAX : len);
+
+        if (len > XPN_PATH_MAX) {
+            ssize_t r = read_n_bytes(sd_client, full_path + XPN_PATH_MAX, len - XPN_PATH_MAX);
+            if (r < 0) { full_path[0] = '\0'; }
+        }
+        full_path[len] = '\0';
+
+        req.status = PROXY_XPN_STAT(full_path, &req.attr);
         req.status_req.ret = req.status;
 
         res.ret = req.status;
@@ -274,19 +333,29 @@ void handle_petition ( int arg )
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-	}
-
+        }
+        
         if (res.ret == 0)
         {
             if (write(sd_client, (char *)&req, sizeof(struct st_xpn_server_attr_req)) < 0) {
                 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-	    }
+            }
         }
 
         break;
 
     case XPN_SERVER_MKDIR_DIR: // MKDIR
-        res.ret = PROXY_XPN_MKDIR(pr.u_st_xpn_server_msg.op_mkdir.path, pr.u_st_xpn_server_msg.op_mkdir.mode);
+
+        len = pr.u_st_xpn_server_msg.op_mkdir.path_len;
+        memcpy(full_path, pr.u_st_xpn_server_msg.op_mkdir.path, len > XPN_PATH_MAX ? XPN_PATH_MAX : len);
+
+        if (len > XPN_PATH_MAX) {
+            ssize_t r = read_n_bytes(sd_client, full_path + XPN_PATH_MAX, len - XPN_PATH_MAX);
+            if (r < 0) { full_path[0] = '\0'; }
+        }
+        full_path[len] = '\0';
+
+        res.ret = PROXY_XPN_MKDIR(full_path, pr.u_st_xpn_server_msg.op_mkdir.mode);
         res.server_errno = errno;
 
         if (write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) < 0)
@@ -297,7 +366,16 @@ void handle_petition ( int arg )
         DIR* ret;
         struct st_xpn_server_opendir_req req_opendir;
 
-        ret = PROXY_XPN_OPENDIR(pr.u_st_xpn_server_msg.op_opendir.path);
+        
+        len = pr.u_st_xpn_server_msg.op_opendir.path_len;
+        memcpy(full_path, pr.u_st_xpn_server_msg.op_opendir.path, len > XPN_PATH_MAX ? XPN_PATH_MAX : len);
+        if (len > XPN_PATH_MAX) {
+            ssize_t r = read_n_bytes(sd_client, full_path + XPN_PATH_MAX, len - XPN_PATH_MAX);
+            if (r < 0) { full_path[0] = '\0'; }
+        }
+        full_path[len] = '\0';
+
+        ret = PROXY_XPN_OPENDIR(full_path);
 
         req_opendir.status.ret = ret == NULL ? -1 : 0;
         req_opendir.dir = ret == NULL ? NULL : ret;
@@ -307,13 +385,12 @@ void handle_petition ( int arg )
         ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
         if (ret2 < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-	}
+        }
 
-        if (res.ret == 0)
-        {
+        if (res.ret == 0){
             if (write(sd_client, (char *)&req_opendir, sizeof(struct st_xpn_server_opendir_req)) < 0) {
                 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-	    }
+            }
         }
         break;
 
@@ -325,7 +402,7 @@ void handle_petition ( int arg )
         ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
         if (ret2 < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-	}
+        }
         break;
 
     case XPN_SERVER_READDIR_DIR: // READDIR
@@ -334,13 +411,11 @@ void handle_petition ( int arg )
         struct st_xpn_server_readdir_req ret_entry;
 
         ret_readdir = PROXY_XPN_READDIR(pr.u_st_xpn_server_msg.op_readdir.dir);
-        if (ret_readdir != NULL)
-        {
+        if (ret_readdir != NULL){
             ret_entry.end = 1;
             ret_entry.ret = *ret_readdir;
         }
-        else
-        {
+        else{
             ret_entry.end = 0;
         }
 
@@ -353,26 +428,35 @@ void handle_petition ( int arg )
         ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
         if (ret2 < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-	}
+        }
 
         if (res.ret == 0)
         {
             if (write(sd_client, (char *)&ret_entry, sizeof(struct st_xpn_server_readdir_req)) < 0) {
                 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-	    }
+            }
         }
 
         break;
 
     case XPN_SERVER_RMDIR_DIR: // CLOSEDIR
 
-        res.ret = PROXY_XPN_RMDIR(pr.u_st_xpn_server_msg.op_rmdir.path);
+        
+        len = pr.u_st_xpn_server_msg.op_rmdir.path_len;
+        memcpy(full_path, pr.u_st_xpn_server_msg.op_rmdir.path, len > XPN_PATH_MAX ? XPN_PATH_MAX : len);
+        if (len > XPN_PATH_MAX) {
+            ssize_t r = read_n_bytes(sd_client, full_path + XPN_PATH_MAX, len - XPN_PATH_MAX);
+            if (r < 0) { full_path[0] = '\0'; }
+        }
+        full_path[len] = '\0';
+
+        res.ret = PROXY_XPN_RMDIR(full_path);
         res.server_errno = errno;
 
         ret2 = write(sd_client, (char *)&res, sizeof(struct st_xpn_server_status)) ;
         if (ret2 < 0) {
             printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-	}
+        }
         break;
 
 
@@ -429,7 +513,9 @@ int main(int argc, char *argv[])
 
     if (socket_server_create(&sd_server, port_proxy, ipv) < 0) {
         printf("[XPN_PROXY_SERVER]\t[main]\t%d\n", __LINE__);
+#ifdef USE_XPN_FUNCTIONS
         xpn_destroy();
+#endif
         return -1;
     }
 

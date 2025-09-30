@@ -16,18 +16,21 @@ MYFLAGS      		= -O3 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_S
 # Rules
 #
 
-all:  open-write-close open-read-close create-dirs-test remove-dirs-test
-open-write-close: open-write-close.o
-	$(CC)  -o open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIES)
+all:  xpn-open-write-close xpn-open-read-close xpn-create-dirs-test xpn-remove-dirs-test posix-create-dirs-test
+xpn-open-write-close: xpn-open-write-close.o
+	$(CC)  -o xpn-open-write-close xpn-open-write-close.o $(MYLIBPATH) $(LIBRARIES)
 
-open-read-close: open-read-close.o
-	$(CC)  -o open-read-close  open-read-close.o  $(MYLIBPATH) $(LIBRARIES)
+xpn-open-read-close: xpn-open-read-close.o
+	$(CC)  -o xpn-open-read-close  xpn-open-read-close.o  $(MYLIBPATH) $(LIBRARIES)
 
-create-dirs-test: create-dirs-test.o
-	$(CC)  -o create-dirs-test  create-dirs-test.o  $(MYLIBPATH) $(LIBRARIES)
+posix-create-dirs-test: posix-create-dirs-test.o
+	$(CC)  -o posix-create-dirs-test  posix-create-dirs-test.o  $(MYLIBPATH) $(LIBRARIES)
 
-remove-dirs-test: remove-dirs-test.o
-	$(CC)  -o remove-dirs-test  remove-dirs-test.o  $(MYLIBPATH) $(LIBRARIES)
+xpn-create-dirs-test: xpn-create-dirs-test.o
+	$(CC)  -o xpn-create-dirs-test  xpn-create-dirs-test.o  $(MYLIBPATH) $(LIBRARIES)
+
+xpn-remove-dirs-test: xpn-remove-dirs-test.o
+	$(CC)  -o xpn-remove-dirs-test  xpn-remove-dirs-test.o  $(MYLIBPATH) $(LIBRARIES)
 
 
 %.o: %.c
@@ -35,4 +38,4 @@ remove-dirs-test: remove-dirs-test.o
 
 clean:
 	rm -f ./*.o
-	rm -f ./open-write-close ./open-read-close ./create-dirs-test ./remove-dirs-test
+	rm -f ./xpn-open-write-close ./xpn-open-read-close ./xpn-create-dirs-test ./xpn-remove-dirs-test ./posix-create-dirs-test
