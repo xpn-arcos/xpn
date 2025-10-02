@@ -116,7 +116,7 @@
            return -1;
        }
 
-       if (path_len > XPN_PATH_MAX) 
+       if (path_len > XPN_PATH_MAX)
        {
            ret = write(sd_server, path + XPN_PATH_MAX, path_len - XPN_PATH_MAX);
            if (ret < 0) {
@@ -186,7 +186,7 @@
            return -1;
        }
 
-       if (old_path_len > XPN_PATH_MAX) 
+       if (old_path_len > XPN_PATH_MAX)
        {
            ret = write(sd_server, old_path + XPN_PATH_MAX, old_path_len - XPN_PATH_MAX);
            if (ret < 0) {
@@ -196,7 +196,7 @@
            }
        }
 
-       if (new_path_len > XPN_PATH_MAX) 
+       if (new_path_len > XPN_PATH_MAX)
        {
            ret = write(sd_server, new_path + XPN_PATH_MAX, new_path_len - XPN_PATH_MAX);
            if (ret < 0) {
@@ -266,40 +266,41 @@
     * @param ...: Optional mode_t argument for file permissions.
     * @return: File descriptor on success, -1 on error.
     */
-   int xpn_open(const char *path, int flags, ...)
+   int xpn_open ( const char *path, int flags, ... )
    {
+       va_list ap;
+       va_start(ap, flags);
+       mode_t mode = va_arg(ap, mode_t);
+       va_end(ap);
+
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+       int path_len, path_len_max ;
+
+       /* check params */
        if (!path) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_open]\t%d\n", __LINE__);
            errno = EINVAL;
            return -1;
        }
 
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-
-       va_list ap;
-       va_start(ap, flags);
-       mode_t mode = va_arg(ap, mode_t);
-       va_end(ap);
-
-       bzero(&pr, sizeof(pr));
+       /* fill request */
+       bzero(&pr,  sizeof(pr));
        bzero(&res, sizeof(res));
+
+       path_len = strlen(path) ;
+       if  (path_len > XPN_PATH_MAX)
+            path_len_max = XPN_PATH_MAX;
+       else path_len_max = path_len;
 
        pr.type = XPN_SERVER_OPEN_FILE;
        pr.u_st_xpn_server_msg.op_open.flags = flags;
        pr.u_st_xpn_server_msg.op_open.mode = mode;
+    // bzero (pr.u_st_xpn_server_msg.op_open.path, sizeof(pr.u_st_xpn_server_msg.op_open.path)); <- bzero(&pr,... already fill with zeroes
+       memcpy(pr.u_st_xpn_server_msg.op_open.path, path, path_len_max);
+       pr.u_st_xpn_server_msg.op_open.path_len = path_len ;
 
-       if (strlen(path) > XPN_PATH_MAX) 
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_open.path, path, XPN_PATH_MAX);
-           //pr.u_st_xpn_server_msg.op_open.path[127] = '\0';
-       }
-       else
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_open.path, path, sizeof(pr.u_st_xpn_server_msg.op_open.path) - 1);
-       }
-
-       pr.u_st_xpn_server_msg.op_open.path_len = strlen(path);
+       /* send request, receive response */
        int fd = d_send_receive(&pr, &res, path, pr.u_st_xpn_server_msg.op_open.path_len);
        if (fd < 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_open]\t%d\n", __LINE__);
@@ -316,41 +317,37 @@
     * @param perm: Permissions for the new file.
     * @return: File descriptor on success, -1 on error.
     */
-   int xpn_creat(const char *path, mode_t perm)
+   int xpn_creat ( const char *path, mode_t perm )
    {
-       if ( !path ) 
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+       int path_len, path_len_max ;
+
+       /* check params */
+       if ( !path )
        {
            printf("[XPN_PROXY_CLIENT]\t[xpn_creat]\t%d\n", __LINE__);
            errno = EINVAL;
            return -1;
        }
 
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-       int path_len ;
-
-       bzero(&pr, sizeof(pr));
+       /* fill request */
+       bzero(&pr,  sizeof(pr));
        bzero(&res, sizeof(res));
+
        path_len = strlen(path) ;
+       if  (path_len > XPN_PATH_MAX)
+            path_len_max = XPN_PATH_MAX;
+       else path_len_max = path_len;
 
        pr.type = XPN_SERVER_CREAT_FILE;
        pr.u_st_xpn_server_msg.op_creat.flags = 0777;
-       pr.u_st_xpn_server_msg.op_creat.mode = perm;
-       bzero(pr.u_st_xpn_server_msg.op_creat.path, sizeof(pr.u_st_xpn_server_msg.op_creat.path));
-       //strncpy(pr.u_st_xpn_server_msg.op_creat.path, path, sizeof(pr.u_st_xpn_server_msg.op_creat.path) - 1);
+       pr.u_st_xpn_server_msg.op_creat.mode  = perm;
+   //  bzero (pr.u_st_xpn_server_msg.op_creat.path, sizeof(pr.u_st_xpn_server_msg.op_creat.path)); <- bzero(&pr,... already fill with zeroes
+       memcpy(pr.u_st_xpn_server_msg.op_creat.path, path, path_len_max);
+       pr.u_st_xpn_server_msg.op_creat.path_len = path_len ;
 
-       if (path_len > XPN_PATH_MAX) 
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_creat.path, path, XPN_PATH_MAX);
-           //pr.u_st_xpn_server_msg.op_creat.path[127] = '\0';
-       }
-       else
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_creat.path, path, path_len);
-       }
-
-       pr.u_st_xpn_server_msg.op_creat.path_len = strlen(path);
-
+       /* send request, receive response */
        int fd = d_send_receive(&pr, &res, path, pr.u_st_xpn_server_msg.op_creat.path_len);
        if (fd < 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_creat]\t%d\n", __LINE__);
@@ -366,8 +363,12 @@
     * @param fd: File descriptor to close.
     * @return: 0 on success, -1 on error.
     */
-   int xpn_close (int fd)
+   int xpn_close ( int fd )
    {
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+
+       /* check params */
        if (fd < 0)
        {
            printf("[XPN_PROXY_CLIENT]\t[xpn_close]\t%d\n", __LINE__);
@@ -375,15 +376,14 @@
            return -1;
        }
 
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-
-       bzero(&pr, sizeof(pr));
+       /* fill request */
+       bzero(&pr,  sizeof(pr));
        bzero(&res, sizeof(res));
 
        pr.type = XPN_SERVER_CLOSE_FILE;
        pr.u_st_xpn_server_msg.op_close.fd = fd;
 
+       /* send request, receive response */
        int sd = d_send_receive(&pr, &res, NULL, 0);
        if (sd < 0)
        {
@@ -402,17 +402,19 @@
     * @param size: Number of bytes to read.
     * @return: Number of bytes read on success, -1 on error.
     */
-   ssize_t xpn_read(int fd, void *buffer, size_t size)
+   ssize_t xpn_read ( int fd, void *buffer, size_t size )
    {
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+
+       /* check params */
        if (fd < 0 || !buffer || size == 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_read]\t%d\n", __LINE__);
            errno = EINVAL;
            return -1;
        }
 
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-
+       /* fill request */
        bzero(&pr, sizeof(pr));
        bzero(&res, sizeof(res));
 
@@ -420,6 +422,7 @@
        pr.u_st_xpn_server_msg.op_read.fd = fd;
        pr.u_st_xpn_server_msg.op_read.size = size;
 
+       /* send request, receive response */
        int sd = d_send_receive(&pr, &res, NULL, 0);
        if (sd < 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_read]\t%d\n", __LINE__);
@@ -444,24 +447,27 @@
     * @param size: Number of bytes to write.
     * @return: Number of bytes written on success, -1 on error.
     */
-   ssize_t xpn_write(int fd, const void *buffer, size_t size)
+   ssize_t xpn_write ( int fd, const void *buffer, size_t size )
    {
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+
+       /* check params */
        if (fd < 0 || !buffer || size == 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_write]\t%d\n", __LINE__);
            errno = EINVAL;
            return -1;
        }
 
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-
-       bzero(&pr, sizeof(pr));
+       /* fill request */
+       bzero(&pr,  sizeof(pr));
        bzero(&res, sizeof(res));
 
        pr.type = XPN_SERVER_WRITE_FILE;
        pr.u_st_xpn_server_msg.op_write.fd = fd;
        pr.u_st_xpn_server_msg.op_write.size = size;
 
+       /* send request, receive response */
        int sd = d_send_receive(&pr, &res, NULL, 0);
        if (sd < 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_write]\t%d\n", __LINE__);
@@ -493,33 +499,33 @@
     */
    int xpn_unlink (const char *path)
    {
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+       int path_len, path_len_max ;
+
+       /* check params */
        if ( !path ) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_unlink]\t%d\n", __LINE__);
            errno = EINVAL;
            return -1;
        }
 
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
+       path_len = strlen(path) ;
+       if  (path_len > XPN_PATH_MAX)
+            path_len_max = XPN_PATH_MAX;
+       else path_len_max = path_len;
 
-       bzero(&pr, sizeof(pr));
+       /* fill request */
+       bzero(&pr,  sizeof(pr));
        bzero(&res, sizeof(res));
 
        pr.type = XPN_SERVER_RM_FILE;
-       //strncpy(pr.u_st_xpn_server_msg.op_rm.path, path, sizeof(pr.u_st_xpn_server_msg.op_rm.path) - 1);
 
-       if (strlen(path) > XPN_PATH_MAX) 
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_rm.path, path, XPN_PATH_MAX);
-           //pr.u_st_xpn_server_msg.op_rm.path[127] = '\0';
-       }
-       else
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_rm.path, path, sizeof(pr.u_st_xpn_server_msg.op_rm.path) - 1);
-       }
+   //  bzero (pr.u_st_xpn_server_msg.op_rm.path, sizeof(pr.u_st_xpn_server_msg.op_rm.path)) ; <- bzero(&pr,... already fill with zeroes
+       memcpy(pr.u_st_xpn_server_msg.op_rm.path, path, path_len_max);
+       pr.u_st_xpn_server_msg.op_rm.path_len = path_len ;
 
-       pr.u_st_xpn_server_msg.op_rm.path_len = strlen(path);
-
+       /* send request, receive response */
        int sd = d_send_receive(&pr, &res, path, pr.u_st_xpn_server_msg.op_rm.path_len);
        if (sd < 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_unlink]\t%d\n", __LINE__);
@@ -538,46 +544,41 @@
     */
    int xpn_rename (const char *path, const char *newpath)
    {
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+       int path_len, path_len_max ;
+
+       /* check params */
        if ( !path || !newpath ) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_rename]\t%d\n", __LINE__);
            errno = EINVAL;
            return -1;
        }
 
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
+       /* fill request */
+       bzero(&pr,  sizeof(pr)) ;
+       bzero(&res, sizeof(res)) ;
 
-       bzero(&pr, sizeof(pr));
-       bzero(&res, sizeof(res));
+       path_len = strlen(path) ;
+       if  (path_len > XPN_PATH_MAX)
+            path_len_max = XPN_PATH_MAX;
+       else path_len_max = path_len;
 
-       pr.type = XPN_SERVER_RENAME_FILE;
-       //strncpy(pr.u_st_xpn_server_msg.op_rename.old_url, path, sizeof(pr.u_st_xpn_server_msg.op_rename.old_url) - 1);
-       
-       if (strlen(path) > XPN_PATH_MAX) 
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_rename.old_url, path, XPN_PATH_MAX);
-           //pr.u_st_xpn_server_msg.op_rename.old_url[127] = '\0';
-       }
-       else
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_rename.old_url, path, sizeof(pr.u_st_xpn_server_msg.op_rename.old_url) - 1);
-       }
-       
-       //strncpy(pr.u_st_xpn_server_msg.op_rename.new_url, newpath, sizeof(pr.u_st_xpn_server_msg.op_rename.new_url) - 1);
+       pr.type = XPN_SERVER_RENAME_FILE ;
+   //  bzero (pr.u_st_xpn_server_msg.op_rename.old_url, sizeof(pr.u_st_xpn_server_msg.op_rename.old_url)) ; <- bzero(&pr,... already fill with zeroes
+       memcpy(pr.u_st_xpn_server_msg.op_rename.old_url, path, path_len_max) ;
+       pr.u_st_xpn_server_msg.op_rename.old_url_len = path_len ;
 
-       if (strlen(newpath) > XPN_PATH_MAX) 
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_rename.new_url, newpath, XPN_PATH_MAX);
-           //pr.u_st_xpn_server_msg.op_rename.new_url[127] = '\0';
-       }
-       else
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_rename.new_url, newpath, sizeof(pr.u_st_xpn_server_msg.op_rename.new_url) - 1);
-       }
+       path_len = strlen(newpath) ;
+       if  (path_len > XPN_PATH_MAX)
+            path_len_max = XPN_PATH_MAX;
+       else path_len_max = path_len;
 
-       pr.u_st_xpn_server_msg.op_rename.old_url_len = strlen(path);
-       pr.u_st_xpn_server_msg.op_rename.new_url_len = strlen(newpath);
+   //  bzero (pr.u_st_xpn_server_msg.op_rename.new_url, sizeof(pr.u_st_xpn_server_msg.op_rename.new_url)) ; <- bzero(&pr,... already fill with zeroes
+       memcpy(pr.u_st_xpn_server_msg.op_rename.new_url, newpath, path_len_max) ;
+       pr.u_st_xpn_server_msg.op_rename.new_url_len = path_len ;
 
+       /* send request, receive response */
        int sd = d_send_receive_rn(&pr, &res, path, newpath, pr.u_st_xpn_server_msg.op_rename.old_url_len, pr.u_st_xpn_server_msg.op_rename.new_url_len);
        if (sd < 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_rename]\t%d\n", __LINE__);
@@ -596,63 +597,65 @@
     */
    int xpn_stat (const char *path, struct stat *sb)
    {
+       int    ret = 0, sd = 0;
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+       struct st_xpn_server_attr_req st_req;
+       int path_len, path_len_max ;
+
+       /* check params */
        if ( !path || !sb ) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_stat]\t%d\n", __LINE__);
            errno = EINVAL;
            return -1;
        }
 
-       int    ret = 0, sd = 0;
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-       struct st_xpn_server_attr_req st_req;
-
-       bzero(&pr, sizeof(pr));
-       bzero(&res, sizeof(res));
+       /* fill request */
+       bzero(&pr,     sizeof(pr));
+       bzero(&res,    sizeof(res));
        bzero(&st_req, sizeof(st_req));
 
+       path_len = strlen(path) ;
+       if  (path_len > XPN_PATH_MAX)
+            path_len_max = XPN_PATH_MAX;
+       else path_len_max = path_len;
+
        pr.type = XPN_SERVER_GETATTR_FILE;
+    // bzero (pr.u_st_xpn_server_msg.op_getattr.path, sizeof(pr.u_st_xpn_server_msg.op_getattr.path)) ; <- bzero(&pr,... already fill with zeroes
+       memcpy(pr.u_st_xpn_server_msg.op_getattr.path, path, path_len_max);
+       pr.u_st_xpn_server_msg.op_getattr.path_len = path_len ;
 
-       if (strlen(path) > XPN_PATH_MAX) 
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_getattr.path, path, XPN_PATH_MAX);
-           //pr.u_st_xpn_server_msg.op_getattr.path[127] = '\0';
-       }
-       else
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_getattr.path, path, sizeof(pr.u_st_xpn_server_msg.op_getattr.path) - 1);
-       }
-
-       pr.u_st_xpn_server_msg.op_getattr.path_len = strlen(path);
-
+       /* send request, receive response */
        sd = d_send_receive(&pr, &res, path, pr.u_st_xpn_server_msg.op_getattr.path_len);
-       if (sd < 0) 
+       if (sd < 0)
        {
            printf("[XPN_PROXY_CLIENT]\t[xpn_stat]\t%d\n", __LINE__);
            return -1;
        }
-
-       if (res.ret == 0)
+       if (res.ret != 0)
        {
-           ret = read(sd, (char *)&st_req, sizeof(struct st_xpn_server_attr_req));
-           if (ret < 0) 
-           {
-               printf("[XPN_PROXY_CLIENT]\t[xpn_stat]\t%d\n", __LINE__);
-               d_close(sd);
-               return -1;
-           }
-
-           if (st_req.status == 0) 
-           {
-               memcpy(sb, &st_req.attr, sizeof(struct stat));
-           } else 
-           {
-               printf("[XPN_PROXY_CLIENT]\t[xpn_stat]\t%d\n", __LINE__);
-               errno = EIO; 
-               d_close(sd);
-               return -1;
-           }
+           d_close(sd);
+           return res.ret;
        }
+
+       /* try to read 'struct stat' */
+       ret = read(sd, (char *)&st_req, sizeof(struct st_xpn_server_attr_req));
+       if (ret < 0)
+       {
+           printf("[XPN_PROXY_CLIENT]\t[xpn_stat]\t%d\n", __LINE__);
+           d_close(sd);
+           return -1;
+       }
+       if (st_req.status != 0)
+       {
+           errno = EIO;
+           printf("[XPN_PROXY_CLIENT]\t[xpn_stat]\t%d\n", __LINE__);
+           d_close(sd);
+           return -1;
+       }
+
+       /* copy 'struct stat' */
+       memcpy(sb, &st_req.attr, sizeof(struct stat));
 
        d_close(sd);
        return res.ret;
@@ -664,36 +667,36 @@
     * @param perm: Permissions for the new directory.
     * @return: 0 on success, -1 on error.
     */
-   int xpn_mkdir (const char *path, mode_t perm)
+   int xpn_mkdir ( const char *path, mode_t perm )
    {
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+       int path_len, path_len_max ;
+
+       /* check params */
        if ( !path ) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_mkdir]\t%d\n", __LINE__);
            errno = EINVAL;
            return -1;
        }
 
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-       int len_path ;
-
+       /* fill request */
        bzero(&pr,  sizeof(pr));
        bzero(&res, sizeof(res));
 
+       path_len = strlen(path) ;
+       if  (path_len > XPN_PATH_MAX)
+            path_len_max = XPN_PATH_MAX;
+       else path_len_max = path_len;
+
        pr.type = XPN_SERVER_MKDIR_DIR;
        pr.u_st_xpn_server_msg.op_mkdir.mode = perm;
-       pr.u_st_xpn_server_msg.op_mkdir.path_len = len_path;
+   //  bzero(pr.u_st_xpn_server_msg.op_mkdir.path, sizeof(pr.u_st_xpn_server_msg.op_mkdir.path)) ; <- bzero(&pr,... already fill with zeroes
+       memcpy(pr.u_st_xpn_server_msg.op_mkdir.path, path, path_len_max) ;
+       pr.u_st_xpn_server_msg.op_mkdir.path_len = path_len ;
 
-       len_path = strlen(path);
-       if (len_path > XPN_PATH_MAX) 
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_mkdir.path, path, XPN_PATH_MAX);
-       }
-       else
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_mkdir.path, path, len_path);
-       }
-
-       int sd = d_send_receive(&pr, &res, path, pr.u_st_xpn_server_msg.op_mkdir.path_len);
+       /* send request, receive response */
+       int sd = d_send_receive(&pr, &res, path, path_len) ;
        if (sd < 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_mkdir]\t%d\n", __LINE__);
            return -1;
@@ -708,35 +711,35 @@
     * @param path: Path to the directory to remove.
     * @return: 0 on success, -1 on error.
     */
-   int xpn_rmdir (const char *path )
+   int xpn_rmdir ( const char *path )
    {
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+       int path_len, path_len_max ;
+
+       /* check params */
        if ( !path ) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_rmdir]\t%d\n", __LINE__);
            errno = EINVAL;
            return -1;
        }
 
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-
-       bzero(&pr, sizeof(pr));
+       /* fill request */
+       bzero(&pr,  sizeof(pr));
        bzero(&res, sizeof(res));
 
+       path_len = strlen(path) ;
+       if  (path_len > XPN_PATH_MAX)
+            path_len_max = XPN_PATH_MAX;
+       else path_len_max = path_len;
+
        pr.type = XPN_SERVER_RMDIR_DIR;
+   //  bzero (pr.u_st_xpn_server_msg.op_rmdir.path, sizeof(pr.u_st_xpn_server_msg.op_rmdir.path)) ; <- bzero(&pr,... already fill with zeroes
+       memcpy(pr.u_st_xpn_server_msg.op_rmdir.path, path, path_len_max);
+       pr.u_st_xpn_server_msg.op_rmdir.path_len = path_len ;
 
-       if (strlen(path) > XPN_PATH_MAX) 
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_rmdir.path, path, XPN_PATH_MAX);
-           //pr.u_st_xpn_server_msg.op_rmdir.path[127] = '\0';
-       }
-       else
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_rmdir.path, path, sizeof(pr.u_st_xpn_server_msg.op_rmdir.path) - 1);
-       }
-
-       pr.u_st_xpn_server_msg.op_rmdir.path_len = strlen(path);
-
-       int sd = d_send_receive(&pr, &res, path, strlen(path));
+       /* send request, receive response */
+       int sd = d_send_receive(&pr, &res, path, path_len);
        if (sd < 0) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_rmdir]\t%d\n", __LINE__);
            return -1;
@@ -751,76 +754,74 @@
     * @param path: Path to the directory.
     * @return: Pointer to DIR structure on success, NULL on error.
     */
-   DIR * xpn_opendir (const char *path)
+   DIR * xpn_opendir ( const char *path )
    {
+       int ret = 0, sd = 0;
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+       struct st_xpn_server_opendir_req st_req;
+       int path_len, path_len_max ;
+
+       /* check params */
        if ( !path ) {
            printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
            errno = EINVAL;
            return NULL;
        }
 
-       int ret = 0, sd = 0;
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-       struct st_xpn_server_opendir_req st_req;
-
-       bzero(&pr, sizeof(pr));
-       bzero(&res, sizeof(res));
+       /* fill request */
+       bzero(&pr,     sizeof(pr));
+       bzero(&res,    sizeof(res));
        bzero(&st_req, sizeof(st_req));
 
+       path_len = strlen(path) ;
+       if  (path_len > XPN_PATH_MAX)
+            path_len_max = XPN_PATH_MAX;
+       else path_len_max = path_len;
+
        pr.type = XPN_SERVER_OPENDIR_DIR;
+       memcpy(pr.u_st_xpn_server_msg.op_opendir.path, path, path_len_max) ;
+       pr.u_st_xpn_server_msg.op_opendir.path_len = path_len ;
 
-       if (strlen(path) > XPN_PATH_MAX) 
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_opendir.path, path, XPN_PATH_MAX);
-       }
-       else
-       {
-           strncpy(pr.u_st_xpn_server_msg.op_opendir.path, path, sizeof(pr.u_st_xpn_server_msg.op_opendir.path) - 1);
-       }
-
-       pr.u_st_xpn_server_msg.op_opendir.path_len = strlen(path);
-       //strncpy(pr.u_st_xpn_server_msg.op_opendir.path, path, sizeof(pr.u_st_xpn_server_msg.op_opendir.path) - 1);
-
-       sd = d_send_receive(&pr, &res, path, strlen(path));
-       if (sd < 0) 
+       /* send request, receive response */
+       sd = d_send_receive(&pr, &res, path, path_len);
+       if (sd < 0)
        {
            printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
            return NULL;
        }
-
-       if (res.ret == 0)
+       if (res.ret != 0)
        {
-           ret = read(sd, (char *)&st_req, sizeof(struct st_xpn_server_opendir_req));
-           if (ret < 0) 
-           {
-               printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
-               d_close(sd);
-               errno = EIO;
-               return NULL;
-           }
-
-           if (st_req.status.ret != 0) 
-           {
-               printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
-               errno = EIO; 
-               d_close(sd);
-               return NULL;
-           }
-           else
-           {
-               d_close(sd);
-               if (st_req.dir == NULL) {
-                   errno = EIO;
-                   return NULL;
-               }
-               return st_req.dir;
-           }
+           d_close(sd);
+           errno = res.server_errno;
+           return NULL;
        }
 
+       /* try to read st_req.dir */
+       ret = read(sd, (char *)&st_req, sizeof(struct st_xpn_server_opendir_req));
+       if (ret < 0)
+       {
+           errno = EIO;
+           printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
+           d_close(sd);
+           return NULL;
+       }
+       if (st_req.status.ret != 0)
+       {
+           errno = EIO;
+           printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
+           d_close(sd);
+           return NULL;
+       }
+       if (st_req.dir == NULL) {
+           errno = EIO;
+           d_close(sd);
+           return NULL;
+       }
+
+       /* return st_req.dir */
        d_close(sd);
-       errno = res.server_errno;
-       return NULL;
+       return st_req.dir;
    }
 
    /*
@@ -828,65 +829,65 @@
     * @param dirp: Pointer to DIR structure.
     * @return: Pointer to dirent structure on success, NULL on error or end of directory.
     */
-   struct dirent* xpn_readdir (DIR *dirp)
+   struct dirent* xpn_readdir ( DIR *dirp )
    {
-       static struct dirent local_dirent;  // TODO: make this thread-safe
-
-       if ( !dirp ) 
-       {
-           printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
-           errno = EBADF;
-           return NULL;
-       }
+       static struct dirent local_dirent;  // TODO: make this thread-safe !!!!!!!
 
        int ret2 = 0, sd = 0;
        struct st_xpn_server_msg pr;
        struct st_xpn_server_status res;
        struct st_xpn_server_readdir_req st_req;
 
-       bzero(&pr, sizeof(pr));
-       bzero(&res, sizeof(res));
-       bzero(&st_req, sizeof(st_req));
+       /* check params */
+       if ( !dirp )
+       {
+           printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
+           errno = EBADF;
+           return NULL;
+       }
+
+       /* fill request */
+       bzero(&pr,     sizeof(pr)) ;
+       bzero(&res,    sizeof(res)) ;
+       bzero(&st_req, sizeof(st_req)) ;
 
        pr.type = XPN_SERVER_READDIR_DIR;
        pr.u_st_xpn_server_msg.op_readdir.dir = dirp;
 
+       /* send request, receive response */
        sd = d_send_receive(&pr, &res, NULL, 0);
-       if (sd < 0) 
+       if (sd < 0)
        {
            printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
            return NULL;
        }
-
-       if (res.ret == 0)
+       if (res.ret != 0)
        {
-           ret2 = read(sd, (char *)&st_req, sizeof(struct st_xpn_server_readdir_req));
-           if (ret2 < 0) 
-           {
-               printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
-               d_close(sd);
-               return NULL;
-           }
-
-           if (st_req.status.ret != 0) 
-           {
-               printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
-               errno = EIO; 
-               d_close(sd);
-               return NULL;
-           }
-           else
-           {
-               memcpy(&local_dirent, &st_req.ret, sizeof(struct dirent));
-
-               d_close(sd);
-               return &local_dirent; 
-           }
+           d_close(sd);
+           errno = res.server_errno;
+           return NULL;
        }
 
+       /* try to read 'dirent' */
+       ret2 = read(sd, (char *)&st_req, sizeof(struct st_xpn_server_readdir_req));
+       if (ret2 < 0)
+       {
+           printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
+           d_close(sd);
+           return NULL;
+       }
+       if (st_req.status.ret != 0)
+       {
+           errno = EIO;
+           printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
+           d_close(sd);
+           return NULL;
+       }
+
+       /* return 'dirent' */
+       memcpy(&local_dirent, &st_req.ret, sizeof(struct dirent));
        d_close(sd);
-       errno = res.server_errno;
-       return NULL;
+       return &local_dirent;
    }
 
    /*
@@ -894,29 +895,32 @@
     * @param dirp: Pointer to DIR structure.
     * @return: 0 on success, -1 on error.
     */
-   int xpn_closedir (DIR *dirp)
+   int xpn_closedir ( DIR *dirp )
    {
-       if ( !dirp ) 
+       int sd = 0;
+       struct st_xpn_server_msg pr;
+       struct st_xpn_server_status res;
+       struct st_xpn_server_readdir_req st_req;
+
+       /* check params */
+       if ( !dirp )
        {
            printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
            errno = EBADF;
            return -1;
        }
 
-       int sd = 0;
-       struct st_xpn_server_msg pr;
-       struct st_xpn_server_status res;
-       struct st_xpn_server_readdir_req st_req;
-
-       bzero(&pr, sizeof(pr));
-       bzero(&res, sizeof(res));
+       /* fill request */
+       bzero(&pr,     sizeof(pr));
+       bzero(&res,    sizeof(res));
        bzero(&st_req, sizeof(st_req));
 
        pr.type = XPN_SERVER_CLOSEDIR_DIR;
        pr.u_st_xpn_server_msg.op_closedir.dir = dirp;
 
+       /* send request, receive response */
        sd = d_send_receive(&pr, &res, NULL, 0);
-       if (sd < 0) 
+       if (sd < 0)
        {
            printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
            return -1;
