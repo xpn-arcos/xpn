@@ -1,37 +1,42 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
 #include "all_system.h"
 
-static void report_fail(const char * op,
-    const char * path) {
+
+static void report_fail(const char * op, const char * path)
+{
     fprintf(stderr, "[FAIL] %s('%s') -> errno=%d (%s)\n\n", op, path ? path : "(null)", errno, strerror(errno));
 }
 
-static void report_ok(const char * op,
-    const char * path) {
+static void report_ok(const char * op, const char * path)
+{
     printf("[ OK ] %s('%s')\n\n", op, path ? path : "(null)");
 }
 
 /* Helper to create a long repetitive name (not longer than max_len). */
-static char * make_long_name(const char * prefix, size_t total_len) {
+static char * make_long_name(const char * prefix, size_t total_len)
+{
     if (!prefix) prefix = "file_";
     size_t pref_len = strlen(prefix);
     if (total_len <= pref_len) total_len = pref_len + 1;
     char * buf = malloc(total_len + 1);
     if (!buf) return NULL;
     strcpy(buf, prefix);
+
     size_t i = 0;
     i = pref_len;
     while (i < total_len) {
         buf[i++] = 'a' + (i % 23);
     }
     buf[total_len] = '\0';
+
     return buf;
 }
 
-static int test_file_ops(const char * base_dir,
-    const char * name) {
+static int test_file_ops(const char * base_dir, const char * name)
+{
     int ret = 0;
     char path[4096];
     snprintf(path, sizeof(path), "%s/%s", base_dir, name);
@@ -134,8 +139,8 @@ static int test_file_ops(const char * base_dir,
         return ret;
 }
 
-static int test_dir_ops(const char * parent_dir,
-    const char * dirname) {
+static int test_dir_ops(const char * parent_dir, const char * dirname)
+{
     int ret = 0;
     char dirpath[4096];
     snprintf(dirpath, sizeof(dirpath), "%s/%s/", parent_dir, dirname);
@@ -188,7 +193,8 @@ static int test_dir_ops(const char * parent_dir,
         return ret;
 }
 
-int main(void) {
+int main ( void )
+{
     int overall = 0;
     const char * tmp = "/P1";
 
@@ -267,7 +273,8 @@ int main(void) {
     if (test_file_ops(long_dirpath, final_name) != 0) overall = 1;
     if (test_dir_ops(base2, long_dirname) != 0) overall = 1;
 
-    if (rmdir(base2) == -1) {
+    if (rmdir(base2) == -1)
+    {
         if (errno == ENOTEMPTY || errno == EEXIST || errno == EBUSY) {
             printf("[INFO] %s not empty, attempting cleanup...\n", base2);
             char rem[4096];
@@ -283,8 +290,10 @@ int main(void) {
     free(long_dirname);
     free(final_name);
 
-    if (overall == 0) printf("\n=== RESULT: all tests passed (or errors were handled) ===\n");
+    if (overall == 0) 
+	 printf("\n=== RESULT: all tests passed (or errors were handled) ===\n");
     else printf("\n=== RESULT: some tests failed. Check error outputs. ===\n");
 
     return overall;
 }
+
