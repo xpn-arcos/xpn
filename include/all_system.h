@@ -45,6 +45,8 @@
 
      #include <semaphore.h>
 
+    #define XPN_PATH_MAX 128
+
      // Include detected headers
      #ifndef NOT_TO_USE_STDLIB_H
          #include <stdlib.h>

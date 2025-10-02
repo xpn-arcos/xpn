@@ -23,51 +23,61 @@
 #ifndef _WORKERS_COMMON_H_
 #define _WORKERS_COMMON_H_
 
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
+
+
   /* ... Include / Inclusion ........................................... */
 
-  #include "all_system.h"
-  #include "base/debug_msg.h"
+     #include "all_system.h"
+     #include "base/debug_msg.h"
 
 
   /* ... Const / Const ................................................. */
 
-  #define MAX_THREADS     2048
-  #define MAX_OPERATIONS  1024
-  #define STACK_SIZE     (256*KB)
+     #define MAX_THREADS     2048
+     #define MAX_OPERATIONS  1024
+     #define STACK_SIZE     (256*KB)
 
 
   /* ... Data structures / Estructuras de datos ........................ */
 
-  struct st_th
-  {
-    void   *params;
-    void  (*function)(struct st_th);
+     struct st_th
+     {
+       void   *params;
+       void  (*function)(struct st_th);
 
-    // server stuff
-    int    id;
-    int    type_op;
-    int    rank_client_id;
-    int    tag_client_id;
-    long   sd;
-    void  *comm;
-    int    close4me;
-    int    server_type;
+       // server stuff
+       int    id;
+       int    type_op;
+       int    rank_client_id;
+       int    tag_client_id;
+       long   sd;
+       void  *comm;
+       int    close4me;
+       int    server_type;
 
-    // w: worker_ondemand/worker_pool as void *
-    void  *w;
-    // v: original st_th as void *
-    void  *v;
+       // w: worker_ondemand/worker_pool as void *
+       void  *w;
+       // v: original st_th as void *
+       void  *v;
 
-    // client stuff
-    pthread_t        th_worker;
-    pthread_mutex_t  m_wait;
-    pthread_cond_t   c_wait;
-    int              r_wait;
-    int              wait4me;  // (wait4me==1) ? launch + wait : launch
-  };
+       // client stuff
+       pthread_t        th_worker;
+       pthread_mutex_t  m_wait;
+       pthread_cond_t   c_wait;
+       int              r_wait;
+       int              wait4me;  // (wait4me==1) ? launch + wait : launch
+     };
 
 
   /* ................................................................... */
+
+
+  #ifdef  __cplusplus
+    }
+  #endif
 
 #endif
 
