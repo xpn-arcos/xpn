@@ -1785,7 +1785,6 @@ nfi_xpn_server_write_KO:
 
            //int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
-               perror("a");
                return -1;
             }
            
