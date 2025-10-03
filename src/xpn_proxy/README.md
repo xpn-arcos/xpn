@@ -26,11 +26,6 @@ mkdir -p /tmp/work/data
 
 ## 🧪 Case 1: Expand Server + Expand Client Application
 
-### Architecture Diagram
-
-graph TD
-    C[Expand Client Application] --> S[Expand Server]
-
 ### 🖥️ Launch Expand Server
 
 ```bash
@@ -54,12 +49,6 @@ XPN_SCK_IPV=4 \
 ```
 
 ## 🧪 Case 2: Expand Server + Expand Proxy Server + Expand Client (xpn_ functions)
-
-### Architecture Diagram
-
-graph TD
-    C[Expand Client (xpn_ functions)] --> P[XPN Proxy Server]
-    P --> S[Expand Server]
 
 ### 🖥️ Launch Expand Server
 
@@ -94,12 +83,6 @@ XPN_PROXY_ADDR=127.0.0.1:5555 ./xpn-create-dirs-test
 
 ## 🧪 Case 3: Expand Server + Expand Client + Bypass Expand
 
-### Architecture Diagram
-
-graph TD
-    C[Client with LD_PRELOAD (Bypass)] --> S[Expand Server]
-
-
 ### 🖥️ Launch Expand Server
 
 ```bash
@@ -124,13 +107,6 @@ XPN_SCK_IPV=4 \
 ```
 
 ## 🧪 Case 4: Expand Server + Expand Proxy Server + Expand Client + Bypass Expand
-
-### Architecture Diagram
-
-graph TD
-    C[Client with LD_PRELOAD (Bypass)] --> P[XPN Proxy Server]
-    P --> S[Expand Server]
-
 
 ### 🖥️ Launch Expand Server
 
