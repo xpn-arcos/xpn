@@ -91,7 +91,7 @@ int main(void)
     // 6. Create a file inside 'with_file'
     int fd = creat("/tmp/expand/P1/with_file/file1.txt", 0644);
     if (fd >= 0) {
-        write(fd, "Hello POSIX!\n", 13);
+        ret = write(fd, "Hello POSIX!\n", 13);
         close(fd);
         printf("Test: Create file '/tmp/expand/P1/with_file/file1.txt'\n");
         printf("  Expected: Success\n");
