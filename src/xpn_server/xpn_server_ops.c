@@ -199,7 +199,7 @@
         return 0;
     }
 
-    int xpn_server_read_path ( void *comm, char *full_path, int full_path_size, char *path_msg, int path_len )
+    int xpn_server_read_path ( int server_type, void *comm, char *full_path, int full_path_size, char *path_msg, int path_len, int rank_client_id, int tag_client_id )
     {
         ssize_t r ;
 
@@ -207,8 +207,8 @@
         memcpy(full_path, path_msg, path_len > XPN_PATH_MAX ? XPN_PATH_MAX : path_len);
 
         if (path_len > XPN_PATH_MAX)
-	{
-            r = socket_recv(* (int *)comm, full_path + XPN_PATH_MAX, path_len - XPN_PATH_MAX);
+        {
+            r = xpn_server_comm_read_data(server_type, comm, full_path + XPN_PATH_MAX, path_len - XPN_PATH_MAX, rank_client_id, tag_client_id);
             if (r < 0) {
                 full_path[0] = '\0';
             }
@@ -229,13 +229,13 @@
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] open(%s, %d, %d)\n", params->rank, full_path, head->u_st_xpn_server_msg.op_open.flags, head->u_st_xpn_server_msg.op_open.mode);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_open.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_open.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_open.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_open] open(%s, %d, %d)\n", params->rank, full_path, head->u_st_xpn_server_msg.op_open.flags, head->u_st_xpn_server_msg.op_open.mode);
 
         // do open
         status.ret = filesystem_open2(full_path, head->u_st_xpn_server_msg.op_open.flags, head->u_st_xpn_server_msg.op_open.mode);
@@ -271,13 +271,13 @@
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] creat(%s)\n", params->rank, full_path);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_creat.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_creat.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_creat.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_creat] creat(%s)\n", params->rank, full_path);
 
         // do creat
         status.ret = filesystem_creat(full_path, head->u_st_xpn_server_msg.op_creat.mode);
@@ -315,13 +315,13 @@
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read] read(%s, %ld %ld)\n", params->rank, full_path, head->u_st_xpn_server_msg.op_read.offset, head->u_st_xpn_server_msg.op_read.size);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_read.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_read.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_read.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read] read(%s, %ld %ld)\n", params->rank, full_path, head->u_st_xpn_server_msg.op_read.offset, head->u_st_xpn_server_msg.op_read.size);
 
         // initialize counters
         cont = 0;
@@ -426,13 +426,13 @@ cleanup_xpn_server_op_read:
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] write(%s, %ld %ld)\n", params->rank, full_path, head->u_st_xpn_server_msg.op_write.offset, head->u_st_xpn_server_msg.op_write.size);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_write.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_write.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_write.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write] write(%s, %ld %ld)\n", params->rank, full_path, head->u_st_xpn_server_msg.op_write.offset, head->u_st_xpn_server_msg.op_write.size);
 
         // initialize counters
         cont = 0;
@@ -527,7 +527,7 @@ cleanup_xpn_server_op_write:
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_close.path_len;
 	char *path_msg = head->u_st_xpn_server_msg.op_close.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
 
         // do rm
         status.ret = filesystem_close(head->u_st_xpn_server_msg.op_close.fd);
@@ -553,13 +553,14 @@ cleanup_xpn_server_op_write:
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] unlink(%s)\n", params->rank, full_path);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_rm.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_rm.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_rm.path ;
+
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm] unlink(%s)\n", params->rank, full_path);
 
         // do rm
         status.ret = filesystem_unlink(full_path);
@@ -578,13 +579,13 @@ cleanup_xpn_server_op_write:
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] unlink(%s)\n", params->rank, head->u_st_xpn_server_msg.op_rm.path);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_rm.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_rm.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_rm.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rm_async] unlink(%s)\n", params->rank, head->u_st_xpn_server_msg.op_rm.path);
 
         // do rm
         filesystem_unlink(full_path);
@@ -603,18 +604,18 @@ cleanup_xpn_server_op_write:
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] rename(%s, %s)\n", params->rank, full_path_old, full_path_new);
-
         char  full_path_old[PATH_MAX];
         int   path_len_old = head->u_st_xpn_server_msg.op_rename.old_url_len ;
-	char *path_msg_old = head->u_st_xpn_server_msg.op_rename.old_url ;
-        xpn_server_read_path(comm, full_path_old, PATH_MAX, path_msg_old, path_len_old) ;
+        char *path_msg_old = head->u_st_xpn_server_msg.op_rename.old_url ;
+        xpn_server_read_path(params->server_type, comm, full_path_old, PATH_MAX, path_msg_old, path_len_old, rank_client_id, tag_client_id) ;
 
         char  full_path_new[PATH_MAX];
         int   path_len_new = head->u_st_xpn_server_msg.op_rename.new_url_len;
-	char *path_msg_new = head->u_st_xpn_server_msg.op_rename.new_url ;
-        xpn_server_read_path(comm, full_path_new, PATH_MAX, path_msg_new, path_len_new) ;
+        char *path_msg_new = head->u_st_xpn_server_msg.op_rename.new_url ;
+        xpn_server_read_path(params->server_type, comm, full_path_new, PATH_MAX, path_msg_new, path_len_new, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rename] rename(%s, %s)\n", params->rank, full_path_old, full_path_new);
 
         // do rename
         status.ret = filesystem_rename(full_path_old, full_path_new);
@@ -635,13 +636,13 @@ cleanup_xpn_server_op_write:
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] stat(%s)\n", params->rank, full_path);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_getattr.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_getattr.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_getattr.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_getattr] stat(%s)\n", params->rank, full_path);
 
         // do getattr
         req.status = filesystem_stat(full_path, &(req.attr)) ;
@@ -688,13 +689,13 @@ cleanup_xpn_server_op_write:
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] mkdir(%s)\n", params->rank, full_path);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_mkdir.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_mkdir.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_mkdir.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_mkdir] mkdir(%s)\n", params->rank, full_path);
 
         // do mkdir
         status.ret = filesystem_mkdir(full_path, head->u_st_xpn_server_msg.op_mkdir.mode);
@@ -716,13 +717,14 @@ cleanup_xpn_server_op_write:
             return;
         }
 
+        char  full_path[PATH_MAX];
+        int   path_len = head->u_st_xpn_server_msg.op_opendir.path_len;
+        char *path_msg = head->u_st_xpn_server_msg.op_opendir.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] >> Begin\n", params->rank);
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] opendir(%s)\n", params->rank, full_path);
 
-        char  full_path[PATH_MAX];
-        int   path_len = head->u_st_xpn_server_msg.op_opendir.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_opendir.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
 
         ret = filesystem_opendir(full_path);
         req.status.ret = ret == NULL ? -1 : 0;
@@ -763,13 +765,15 @@ cleanup_xpn_server_op_write:
             return;
         }
 
+        char  full_path[PATH_MAX];
+        int   path_len = head->u_st_xpn_server_msg.op_readdir.path_len;
+        char *path_msg = head->u_st_xpn_server_msg.op_readdir.path ;
+
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] >> Begin\n", params->rank);
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_readdir] readdir(%s)\n", params->rank, full_path);
 
-        char  full_path[PATH_MAX];
-        int   path_len = head->u_st_xpn_server_msg.op_readdir.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_readdir.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
 
         if (head->u_st_xpn_server_msg.op_readdir.xpn_session == 1)
 	{
@@ -846,13 +850,13 @@ cleanup_xpn_server_op_write:
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] rmdir(%s)\n", params->rank, full_path);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_rmdir.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_rmdir.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_rmdir.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_rmdir] rmdir(%s)\n", params->rank, full_path);
 
         // do rmdir
         status.ret = filesystem_rmdir(full_path);
@@ -893,13 +897,13 @@ cleanup_xpn_server_op_write:
             return;
         }
 
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] >> Begin\n", params->rank);
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] read_mdata(%s)\n", params->rank, full_path);
-
         char  full_path[PATH_MAX];
         int   path_len = head->u_st_xpn_server_msg.op_read_mdata.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_read_mdata.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        char *path_msg = head->u_st_xpn_server_msg.op_read_mdata.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] >> Begin\n", params->rank);
+        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_read_mdata] read_mdata(%s)\n", params->rank, full_path);
 
         fd = filesystem_open(full_path, O_RDWR);
         if (fd < 0)
@@ -943,13 +947,15 @@ cleanup_xpn_server_op_read_mdata:
             return;
         }
 
+        char  full_path[PATH_MAX];
+        int   path_len = head->u_st_xpn_server_msg.op_write_mdata.path_len;
+        char *path_msg = head->u_st_xpn_server_msg.op_write_mdata.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] >> Begin\n", params->rank);
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata] write_mdata(%s)\n", params->rank, full_path);
 
-        char  full_path[PATH_MAX];
-        int   path_len = head->u_st_xpn_server_msg.op_write_mdata.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_write_mdata.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        
 
         fd = filesystem_open2(full_path, O_WRONLY | O_CREAT, S_IRWXU);
         if (fd < 0)
@@ -993,13 +999,15 @@ cleanup_xpn_server_op_write_mdata:
             return;
         }
 
+        char  full_path[PATH_MAX];
+        int   path_len = head->u_st_xpn_server_msg.op_write_mdata_file_size.path_len;
+        char *path_msg = head->u_st_xpn_server_msg.op_write_mdata_file_size.path ;
+        xpn_server_read_path(params->server_type, comm, full_path, PATH_MAX, path_msg, path_len, rank_client_id, tag_client_id) ;
+
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] >> Begin\n", params->rank);
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] write_mdata_file_size(%s, %ld)\n", params->rank, full_path, head->u_st_xpn_server_msg.op_write_mdata_file_size.size);
 
-        char  full_path[PATH_MAX];
-        int   path_len = head->u_st_xpn_server_msg.op_write_mdata_file_size.path_len;
-	char *path_msg = head->u_st_xpn_server_msg.op_write_mdata_file_size.path ;
-        xpn_server_read_path(comm, full_path, PATH_MAX, path_msg, path_len) ;
+        
 
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_write_mdata_file_size] mutex lock\n", params->rank);
         pthread_mutex_lock( & op_write_mdata_file_size_mutex);

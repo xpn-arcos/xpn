@@ -196,7 +196,7 @@ static int test_dir_ops(const char * parent_dir, const char * dirname)
 int main ( void )
 {
     int overall = 0;
-    const char * tmp = "/P1";
+    const char * tmp = "/tmp/expand/P1";
 
     printf("=== TESTS WITH PATHS < 128 bytes ===\n");
     char base1[256];

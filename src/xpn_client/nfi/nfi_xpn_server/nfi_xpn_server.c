@@ -663,10 +663,10 @@
                return -1;
            }
            
-           int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+           //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
-           }
+            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
@@ -778,10 +778,10 @@ nfi_xpn_server_open_KO:
 
        if (dir_len >= XPN_PATH_MAX)
        {
-           int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
-               goto nfi_xpn_server_read_KO;
-           }
+           //int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
+               return -1;
+            }
        }
 
        // read n times: number of bytes + read data (n bytes)
@@ -914,10 +914,10 @@ nfi_xpn_server_read_KO:
        }
 
        if (dir_len >= XPN_PATH_MAX){
-           int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
-               goto nfi_xpn_server_write_KO;
-           }
+           //int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
+               return -1;
+            }
        }
 
        diff = size;
@@ -1059,10 +1059,10 @@ nfi_xpn_server_write_KO:
                return -1;
            }
            
-           int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+           //int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
-           }
+            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
@@ -1161,10 +1161,10 @@ nfi_xpn_server_write_KO:
                return -1;
            }
            
-           int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+           //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
-           }
+            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
@@ -1287,17 +1287,17 @@ nfi_xpn_server_write_KO:
            }
            
            if (old_path_len >= XPN_PATH_MAX){
-               int ret2 = socket_send(server_aux->server_socket, old_path + XPN_PATH_MAX, old_path_len - XPN_PATH_MAX);
-               if (ret2 < 0) {
+               //int ret2 = socket_send(server_aux->server_socket, old_path + XPN_PATH_MAX, old_path_len - XPN_PATH_MAX);
+               if (nfi_xpn_server_comm_write_data(server_aux, old_path + XPN_PATH_MAX, old_path_len - XPN_PATH_MAX) < 0 ) {
                    return -1;
-               }
+                }
            }
 
            if(new_path_len >= XPN_PATH_MAX){
-               int ret3 = socket_send(server_aux->server_socket, new_path + XPN_PATH_MAX, new_path_len - XPN_PATH_MAX);
-               if (ret3 < 0) {
+               //int ret3 = socket_send(server_aux->server_socket, new_path + XPN_PATH_MAX, new_path_len - XPN_PATH_MAX);
+               if (nfi_xpn_server_comm_write_data(server_aux, new_path + XPN_PATH_MAX, new_path_len - XPN_PATH_MAX) < 0 ) {
                    return -1;
-               }
+                }
            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
@@ -1394,10 +1394,10 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+           //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
-           }
+            }
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (req), sizeof(struct st_xpn_server_attr_req));
            if (ret < 0) {
                return -1;
@@ -1540,10 +1540,10 @@ nfi_xpn_server_write_KO:
                return -1;
            }
            
-           int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+           //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
-           }
+            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
@@ -1664,10 +1664,10 @@ nfi_xpn_server_write_KO:
                return -1;
            }
            
-           int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+           //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
-           }
+            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (req), sizeof(struct st_xpn_server_opendir_req));
            if (ret < 0) {
@@ -1782,11 +1782,12 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
-           int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+
+           //int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
+               perror("a");
                return -1;
-           }
+            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (ret_entry), sizeof(struct st_xpn_server_readdir_req));
            if (ret < 0) {
@@ -1960,10 +1961,10 @@ nfi_xpn_server_write_KO:
                return -1;
            }
            
-           int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+           //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
-           }
+            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
@@ -2102,10 +2103,10 @@ nfi_xpn_server_write_KO:
                return -1;
            }
            
-           int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+           //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
-           }
+            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (req), sizeof(struct st_xpn_server_read_mdata_req));
            if (ret < 0) {
@@ -2225,10 +2226,10 @@ nfi_xpn_server_write_KO:
                return -1;
            }
            
-           int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
-           if (ret2 < 0) {
+           //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
+           if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
-           }
+            }
            
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (req), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
