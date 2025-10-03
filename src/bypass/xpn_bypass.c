@@ -2301,7 +2301,7 @@
 
         // It is an XPN partition, so we redirect the syscall to expand syscall
         debug_info("[BYPASS]\t xpn_opendir\n");
-
+        printf("OPENDIR BYPASS - %s\n", dirname);
         ret = xpn_opendir((const char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
         if (ret != NULL) {
           fdsdirtable_put ( ret );
