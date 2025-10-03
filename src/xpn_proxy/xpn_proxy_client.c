@@ -831,7 +831,7 @@
     */
    struct dirent* xpn_readdir ( DIR *dirp )
    {
-       static struct dirent local_dirent;  // TODO: make this thread-safe !!!!!!!
+       struct dirent local_dirent;
 
        int ret2 = 0, sd = 0;
        struct st_xpn_server_msg pr;
