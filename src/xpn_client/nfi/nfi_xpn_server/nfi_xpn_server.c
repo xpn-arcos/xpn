@@ -1561,7 +1561,7 @@ nfi_xpn_server_write_KO:
 
        if ((status.ret < 0) && (errno != EEXIST))
        {
-           printf("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv -> id, dir, serv -> server);
+           debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_mkdir] ERROR: xpn_mkdir fails to mkdir '%s' in server %s.\n", serv -> id, dir, serv -> server);
            if (serv -> keep_connected == 0) {
                nfi_xpn_server_disconnect(serv);
            }
@@ -1785,7 +1785,6 @@ nfi_xpn_server_write_KO:
 
            //int ret2 = socket_send(server_aux->server_socket, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, fh_aux -> path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
-               perror("a");
                return -1;
             }
            

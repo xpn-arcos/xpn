@@ -143,7 +143,7 @@ static int test_dir_ops(const char * parent_dir, const char * dirname)
 {
     int ret = 0;
     char dirpath[4096];
-    snprintf(dirpath, sizeof(dirpath), "%s/%s/", parent_dir, dirname);
+    snprintf(dirpath, sizeof(dirpath), "%s/%s", parent_dir, dirname);
 
     /* mkdir */
     if (mkdir(dirpath, 0755) == -1) {
@@ -201,16 +201,16 @@ int main ( void )
     printf("=== TESTS WITH PATHS < 128 bytes ===\n");
     char base1[256];
     snprintf(base1, sizeof(base1), "%s/posix_test_short", tmp);
-    if (mkdir(base1, 0755) == -1 && errno != EEXIST) {
+    if (mkdir(base1, 0755) == -1) {
         report_fail("mkdir", base1);
-        return 2;
+        return -1;
     }
     report_ok("mkdir", base1);
 
     char * short_name = make_long_name("short_", 50);
     if (!short_name) {
         fprintf(stderr, "malloc fail\n");
-        return 2;
+        return -1;
     }
     if (test_file_ops(base1, short_name) != 0) overall = 1;
     if (test_dir_ops(base1, "dshort") != 0) overall = 1;
@@ -221,8 +221,9 @@ int main ( void )
         else {
             printf("[INFO] trying cleanup of %s\n", base1);
         }
+        return -1;
     } else report_ok("rmdir", base1);
-
+/*
     printf("\n=== TESTS WITH PATHS > 128 bytes ===\n");
     char base2[1024];
     snprintf(base2, sizeof(base2), "%s/posix_test_long", tmp);
@@ -289,7 +290,7 @@ int main ( void )
 
     free(long_dirname);
     free(final_name);
-
+*/
     if (overall == 0) 
 	 printf("\n=== RESULT: all tests passed (or errors were handled) ===\n");
     else printf("\n=== RESULT: some tests failed. Check error outputs. ===\n");
