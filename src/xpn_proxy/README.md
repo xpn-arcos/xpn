@@ -1,142 +1,162 @@
-# XPN Proxy Deployment and Execution Guide
 
-This guide provides detailed instructions for deploying and executing the XPN Proxy system across four different configurations. It covers four scenarios:
+# Execution Guide for Expand with XPN Proxy Deployment
 
-1. Expand Server + Expand Client Application  
-2. Expand Server + Expand Proxy Server + Expand Client (xpn_ functions)  
-3. Expand Server + Client Application with Bypass Expand  
-4. Expand Server + Expand Proxy Server + Client Application with Bypass Expand 
+* This guide provides the instructions for deploying and executing Expand across the following four different configurations:
+   |                       | App XPN   | App POSIX |
+   |-----------------------|-----------|-----------|
+   | **Without XPN Proxy** |    1      |    2      |
+   | **With    XPN Proxy** |    3      |    4      |
 
----
+* They correspond to:
+  1. [Expand Server + Native Expand Client Application (with ```xpn_*``` functions)](#-case-1-expand-server--native-expand-client)
+  2. [Expand Server + POSIX Client Application with bypass to Expand](#-case-2-expand-server--posix-expand-client-with-bypass-to-expand)
+  3. [Expand Server + Expand Proxy Server + Native Expand Client (with ```xpn_*``` functions)](#-case-3-expand-server--expand-proxy-server--native-expand-client)
+  4. [Expand Server + Expand Proxy Server + POSIX Client Application with bypass to Expand](#-case-4-expand-server--expand-proxy-server--expand-client-with-bypass-to-expand)
+
+
+</br>
 
 ## 🧩 Prerequisites
 
-Before starting, ensure the following:
+Before starting, ensure at least the following key requirements:
 
-- Environment variables like `$HOMEDIRXPN` and `$DIRTOCONF` are properly set.
-- Required binaries are compiled and available.
-- You have permission to create directories and execute binaries.
-- Create a working directory for the server before each launch:
+- Required binaries are installed (compiled and available).</br>
+  For example, if the source code of Expand is available at ```$HOME/xpn```:
+  ```bash
+  cd $HOME/xpn/
+  ./scripts/compile/build-me-platform.sh generic
+  ```
+- Environment variables like `$HOMEDIRXPN` and `$DIRTOCONF` are properly set. </br>
+  For example, if the source code of Expand is available at ```$HOME/xpn```:
+  ```bash
+  export HOMEDIRXPN=$HOME/xpn/
+  export  DIRTOCONF=$HOME/xpn/test/integrity/xpn-iot/conf/
+  ```
 
-```bash
-mkdir -p /tmp/work/data
-```
 
----
 
-## 🧪 Case 1: Expand Server + Expand Client Application
+## 🧪 Case 1: Expand Server + Native Expand Client
 
-### 🖥️ Launch Expand Server
+### 1. 🗄️ Launch The Expand Server
 
-```bash
-mkdir -p /tmp/work/data
-cd $HOMEDIRXPN
-XPN_SCK_IPV=4 ./src/xpn_server/xpn_server -w /tmp/work/data -s sck -t 1 -i 4
-```
+* For example: 
+  ```bash
+  mkdir -p /tmp/work/data
+  $HOMEDIRXPN/src/xpn_server/xpn_server -w /tmp/work/data -s sck -t 1 -i 4 
+  ```
 
-### 🚀 Run Expand Client Application (No Proxy)
+### 2. 🚀 Run The Expand Client Application (without Proxy)
 
-```bash
-cd $HOMEDIRXPN/test/performance/xpn
-make -j
-XPN_CONF=$DIRTOCONF/xpn_sck.conf \
-XPN_MQTT=0 \
-XPN_LOCALITY=0 \
-XPN_CONNECTED=1 \
-XPN_SESSION_FILE=1 \
-XPN_SCK_IPV=4 \
-./create-dirs-test
-```
+* For example: 
+  ```bash
+  cd $HOMEDIRXPN/test/performance/xpn
+  make -j
+  XPN_CONF=$DIRTOCONF/xpn_sck.conf \
+    XPN_MQTT=0 \
+    XPN_LOCALITY=0 \
+    XPN_CONNECTED=1 \
+    XPN_SESSION_FILE=1 \
+    XPN_SCK_IPV=4 \
+    ./create-dirs-test
+  ```
 
-## 🧪 Case 2: Expand Server + Expand Proxy Server + Expand Client (xpn_ functions)
 
-### 🖥️ Launch Expand Server
+## 🧪 Case 2: Expand Server + POSIX Expand Client with bypass to Expand
 
-```bash
-mkdir -p /tmp/work/data
-cd $HOMEDIRXPN
-XPN_SCK_IPV=4 ./src/xpn_server/xpn_server -w /tmp/work/data -s sck -t 1 -i 4
-```
+### 1. 🗄️ Launch Expand Server
 
-### 🔗 Launch Expand Proxy Server
+* For example: 
+  ```bash
+  mkdir -p /tmp/work/data
+  $HOMEDIRXPN/src/xpn_server/xpn_server -w /tmp/work/data -s sck -t 1 -i 4
+  ```
 
-```bash
-cd $HOMEDIRXPN/src/xpn_proxy
-XPN_CONF=$DIRTOCONF/xpn_sck.conf \
-XPN_MQTT=0 \
-XPN_LOCALITY=0 \
-XPN_CONNECTED=1 \
-XPN_SESSION_FILE=1 \
-XPN_PROXY_IPV=4 \
-XPN_PROXY_PORT=5555 \
-XPN_SCK_IPV=4 \
-./xpn_proxy_server
-```
+### 2. 🚀 Run Expand Client with Bypass (without Proxy)
 
-### 🚀 Run Expand Client Application (xpn_ functions)
+* For example: 
+  ```bash
+  cd $HOMEDIRXPN/test/performance/xpn-proxy_posix
+  make -j
+  LD_PRELOAD=$HOMEDIRXPN/src/bypass/xpn_bypass.so \
+    XPN_CONF=$DIRTOCONF/xpn_sck.conf \
+    XPN_MQTT=0 \
+    XPN_LOCALITY=0 \
+    XPN_CONNECTED=1 \
+    XPN_SESSION_FILE=1 \
+    XPN_SCK_IPV=4 \
+    ./posix-create-dirs-test
+  ```
 
-```bash
-cd $HOMEDIRXPN/test/performance/xpn-proxy
-make
-XPN_PROXY_ADDR=127.0.0.1:5555 ./xpn-create-dirs-test
-```
 
-## 🧪 Case 3: Expand Server + Expand Client + Bypass Expand
+## 🧪 Case 3: Expand Server + Expand Proxy Server + Native Expand Client
 
-### 🖥️ Launch Expand Server
+### 1. 🗄️ Launch The Expand Server
 
-```bash
-mkdir -p /tmp/work/data
-cd $HOMEDIRXPN
-XPN_SCK_IPV=4 ./src/xpn_server/xpn_server -w /tmp/work/data -s sck -t 1 -i 4
-```
+* For example: 
+  ```bash
+  mkdir -p /tmp/work/data
+  $HOMEDIRXPN/src/xpn_server/xpn_server -w /tmp/work/data -s sck -t 1 -i 4
+  ```
 
-### 🚀 Run Expand Client with Bypass (No Proxy)
+### 2.🔗 Launch The Expand Proxy Server
 
-```bash
-cd $HOMEDIRXPN/test/performance/xpn-proxy_posix
-make -j
-LD_PRELOAD=$HOMEDIRXPN/src/bypass/xpn_bypass.so \
-XPN_CONF=$DIRTOCONF/xpn_sck.conf \
-XPN_MQTT=0 \
-XPN_LOCALITY=0 \
-XPN_CONNECTED=1 \
-XPN_SESSION_FILE=1 \
-XPN_SCK_IPV=4 \
-./posix-create-dirs-test
-```
+* For example: 
+  ```bash
+  cd $HOMEDIRXPN/src/xpn_proxy
+  XPN_CONF=$DIRTOCONF/xpn_sck.conf \
+    XPN_MQTT=0 \
+    XPN_LOCALITY=0 \
+    XPN_CONNECTED=1 \
+    XPN_SESSION_FILE=1 \
+    XPN_PROXY_IPV=4 \
+    XPN_PROXY_PORT=5555 \
+    XPN_SCK_IPV=4 \
+    ./xpn_proxy_server
+  ```
 
-## 🧪 Case 4: Expand Server + Expand Proxy Server + Expand Client + Bypass Expand
+### 3. 🚀 Run The Expand Client Application (```xpn_*``` functions)
 
-### 🖥️ Launch Expand Server
+* For example: 
+  ```bash
+  cd $HOMEDIRXPN/test/performance/xpn-proxy
+  make -j
+  XPN_PROXY_ADDR=127.0.0.1:5555 ./xpn-create-dirs-test
+  ```
 
-```bash
-mkdir -p /tmp/work/data
-cd $HOMEDIRXPN
-XPN_SCK_IPV=4 ./src/xpn_server/xpn_server -w /tmp/work/data -s sck -t 1 -i 4
-```
 
-### 🔗 Launch Expand Proxy Server
+## 🧪 Case 4: Expand Server + Expand Proxy Server + Expand Client with bypass to Expand
 
-```bash
-cd $HOMEDIRXPN/src/xpn_proxy
-XPN_CONF=$DIRTOCONF/xpn_sck.conf \
-XPN_MQTT=0 \
-XPN_LOCALITY=0 \
-XPN_CONNECTED=1 \
-XPN_SESSION_FILE=1 \
-XPN_PROXY_IPV=4 \
-XPN_PROXY_PORT=5555 \
-XPN_SCK_IPV=4 \
-./xpn_proxy_server
-```
+### 1. 🗄️ Launch Expand Server
 
-### 🚀 Run Expand Client with Bypass and Proxy
+* For example: 
+  ```bash
+  mkdir -p /tmp/work/data
+  $HOMEDIRXPN/src/xpn_server/xpn_server -w /tmp/work/data -s sck -t 1 -i 4
+  ```
 
-```bash
-cd $HOMEDIRXPN/test/performance/xpn-proxy_posix
-make -j
-LD_PRELOAD=$HOMEDIRXPN/src/bypass/xpn_bypass_proxy.so \
-XPN_PROXY_ADDR=127.0.0.1:5555 \
-./posix-create-dirs-test
-```
+### 2. 🔗 Launch Expand Proxy Server
+
+* For example: 
+  ```bash
+  cd $HOMEDIRXPN/src/xpn_proxy
+  XPN_CONF=$DIRTOCONF/xpn_sck.conf \
+    XPN_MQTT=0 \
+    XPN_LOCALITY=0 \
+    XPN_CONNECTED=1 \
+    XPN_SESSION_FILE=1 \
+    XPN_PROXY_IPV=4 \
+    XPN_PROXY_PORT=5555 \
+    XPN_SCK_IPV=4 \
+    ./xpn_proxy_server
+  ```
+
+### 3. 🚀 Run Expand Client with bypass and Proxy
+
+* For example: 
+  ```bash
+  cd $HOMEDIRXPN/test/performance/xpn-proxy_posix
+  make -j
+  LD_PRELOAD=$HOMEDIRXPN/src/bypass/xpn_bypass_proxy.so \
+    XPN_PROXY_ADDR=127.0.0.1:5555 ./posix-create-dirs-test
+  ```
+
