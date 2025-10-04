@@ -222,6 +222,7 @@
     void xpn_server_op_open ( xpn_server_param_st * params, void * comm, struct st_xpn_server_msg * head, int rank_client_id, int tag_client_id )
     {
         struct st_xpn_server_status status;
+        errno = 0;
 
         // check params...
         if (NULL == params) {
@@ -264,6 +265,8 @@
     void xpn_server_op_creat ( xpn_server_param_st * params, void * comm, struct st_xpn_server_msg * head, int rank_client_id, int tag_client_id )
     {
         struct st_xpn_server_status status;
+        errno = 0;
+
 
         // check params...
         if (NULL == params) {
@@ -308,6 +311,7 @@
         long size, diff, to_read, cont;
         off_t ret_lseek;
         int fd;
+        errno = 0;
 
         // check params...
         if (NULL == params) {
@@ -414,6 +418,7 @@ cleanup_xpn_server_op_read:
         int size, diff, cont, to_write;
         off_t ret_lseek;
         int fd, ret;
+        errno = 0;
 
         // check params...
         if (NULL == params) {
@@ -514,6 +519,7 @@ cleanup_xpn_server_op_write:
     void xpn_server_op_close ( xpn_server_param_st * params, void * comm, struct st_xpn_server_msg * head, int rank_client_id, int tag_client_id )
     {
         struct st_xpn_server_status status;
+        errno = 0;
 
         // check params...
         if (NULL == params) {
@@ -546,6 +552,7 @@ cleanup_xpn_server_op_write:
     void xpn_server_op_rm ( xpn_server_param_st * params, void * comm, struct st_xpn_server_msg * head, int rank_client_id, int tag_client_id )
     {
         struct st_xpn_server_status status;
+        errno = 0;
 
         // check params...
         if (NULL == params) {
@@ -597,6 +604,7 @@ cleanup_xpn_server_op_write:
     void xpn_server_op_rename(xpn_server_param_st * params, void * comm, struct st_xpn_server_msg * head, int rank_client_id, int tag_client_id)
     {
         struct st_xpn_server_status status;
+        errno = 0;
 
         // check params...
         if (NULL == params) {
@@ -629,6 +637,7 @@ cleanup_xpn_server_op_write:
     void xpn_server_op_getattr ( xpn_server_param_st * params, void * comm, struct st_xpn_server_msg * head, int rank_client_id, int tag_client_id )
     {
         struct st_xpn_server_attr_req req;
+        errno = 0;
 
         // check params...
         if (NULL == params) {
@@ -682,6 +691,7 @@ cleanup_xpn_server_op_write:
     void xpn_server_op_mkdir ( xpn_server_param_st * params, void * comm, struct st_xpn_server_msg * head, int rank_client_id, int tag_client_id )
     {
         struct st_xpn_server_status status;
+        errno = 0;
 
         // check params...
         if (NULL == params) {
@@ -710,6 +720,7 @@ cleanup_xpn_server_op_write:
     {
         DIR    * ret;
         struct st_xpn_server_opendir_req req;
+        errno = 0;
 
         // check params...
         if (NULL == params) {
@@ -725,19 +736,19 @@ cleanup_xpn_server_op_write:
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] >> Begin\n", params->rank);
         debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] opendir(%s)\n", params->rank, full_path);
 
-
         ret = filesystem_opendir(full_path);
-        req.status.ret = ret == NULL ? -1 : 0;
+        if (errno != 0) req.status.ret = -1;
+        //req.status.ret = ret == NULL ? -1 : 0;
         req.status.server_errno = errno;
 
         if (req.status.ret == 0)
-	{
+	   {
             if (head->u_st_xpn_server_msg.op_opendir.xpn_session == 1)
-	    {
+	       {
                 req.dir = ret;
             }
-	    else
-	    {
+    	    else
+    	    {
                 req.status.ret = filesystem_telldir(ret);
             }
             req.status.server_errno = errno;
@@ -804,7 +815,8 @@ cleanup_xpn_server_op_write:
             ret_entry.end = 0;
         }
 
-        ret_entry.status.ret = ret == NULL ? -1 : 0;
+        if (errno != 0) ret_entry.status.ret = -1;
+        //ret_entry.status.ret = ret == NULL ? -1 : 0;
 
         if (head->u_st_xpn_server_msg.op_readdir.xpn_session == 0) {
             ret_entry.telldir    = filesystem_telldir(s);
