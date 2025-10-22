@@ -1664,7 +1664,7 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
+                      
            //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
@@ -1677,7 +1677,7 @@ nfi_xpn_server_write_KO:
        }
        else
        {
-           nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (req), sizeof(struct st_xpn_server_opendir_req));
+            nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (req), sizeof(struct st_xpn_server_opendir_req));
        }
 
        //nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (req), sizeof(struct st_xpn_server_opendir_req));
@@ -1691,7 +1691,7 @@ nfi_xpn_server_write_KO:
 
        fh_aux->telldir = req.status.ret;
        fh_aux->dir = req.dir;
-
+       
        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_opendir] nfi_xpn_server_opendir(%s)\n", serv->id, dir);
 
        strcpy(fh_aux->path, dir);
@@ -1704,7 +1704,6 @@ nfi_xpn_server_write_KO:
        if (serv->keep_connected == 0) {
            nfi_xpn_server_disconnect(serv);
        }
-
        return 0;
    }
 
