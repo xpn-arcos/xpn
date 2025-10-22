@@ -1597,7 +1597,7 @@
       return ret;
     }
 
-    
+    /*
     int __fxstatat64 ( __attribute__((__unused__)) int ver, int dirfd, const char *path, struct stat64 *buf, int flags )
     {
       int    ret = -1;
@@ -1684,7 +1684,7 @@
 
       return ret;
     }
-    
+    */
 
     int close ( int fd )
     {
@@ -2294,28 +2294,27 @@
       debug_info("[BYPASS]    1) dirname %s\n", dirname);
 
       // This if checks if variable path passed as argument starts with the expand prefix.
-      if (is_xpn_prefix(dirname))
+      if(is_xpn_prefix(dirname))
       {
-          // We must initialize expand if it has not been initialized yet.
-          xpn_adaptor_keepInit ();
+        // We must initialize expand if it has not been initialized yet.
+        xpn_adaptor_keepInit ();
 
-printf("OPENDIR BYPASS - %s\n", dirname); //////// DEBUG ///////
+        // It is an XPN partition, so we redirect the syscall to expand syscall
+        debug_info("[BYPASS]\t xpn_opendir\n");
 
-          // It is an XPN partition, so we redirect the syscall to expand syscall
-          debug_info("[BYPASS]\t xpn_opendir\n");
-          ret = xpn_opendir((const char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
-          if (ret != NULL) {
-              fdsdirtable_put ( ret );
-          }
+        ret = xpn_opendir((const char *)(dirname+strlen(xpn_adaptor_partition_prefix)));
+        if (ret != NULL) {
+          fdsdirtable_put ( ret );
+        }
 
-          debug_info("[BYPASS]\t xpn_opendir -> %p\n", ret);
+        debug_info("[BYPASS]\t xpn_opendir -> %p\n", ret);
       }
       // Not an XPN partition. We must link with the standard library
       else
       {
-          debug_info("[BYPASS]\t try dlsym_opendir\n");
-          ret = dlsym_opendir((char *)dirname);
-          debug_info("[BYPASS]\t dlsym_opendir -> %p\n", ret);
+        debug_info("[BYPASS]\t try dlsym_opendir\n");
+        ret = dlsym_opendir((char *)dirname);
+        debug_info("[BYPASS]\t dlsym_opendir -> %p\n", ret);
       }
 
       debug_info("[BYPASS] << After opendir...\n");
