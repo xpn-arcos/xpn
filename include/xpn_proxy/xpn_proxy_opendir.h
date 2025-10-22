@@ -24,10 +24,12 @@
 #define _XPN_PROXY_OPENDIR_H_
 
 
-	/* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-	/* ... Data structures / Estructuras de datos ........................ */
+     #include "config.h"
 
+
+  /* ... Data structures / Estructuras de datos ........................ */
 
 	struct __dirstream
 	{
@@ -44,12 +46,19 @@
 	};
 
 
-	
+   /* ... Const / Const ................................................. */
 
+	#ifndef O_RDONLY
 	#define O_RDONLY  00000000
-
-	#ifndef O_DIRECTORY
-	#define O_DIRECTORY 00200000  // must be a directory
 	#endif
 
+        // must be a directory
+	#ifndef O_DIRECTORY
+	#define O_DIRECTORY 00200000
+	#endif
+
+
+   /* ................................................................... */
+
 #endif
+
