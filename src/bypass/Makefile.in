@@ -27,7 +27,7 @@ xpn_bypass.so:
 
 xpn_bypass_proxy.so:
 	$(CC) $(FLAGS) $(INCLUDE_PROXY) -c xpn_bypass.c -o xpn_bypass.o -DBYPASS_USE_XPNPROXY
-	$(CC) -shared -o xpn_bypass_proxy.so xpn_bypass.o $(LIB_PATH_PROXY) $(LIBS) -lxpn_proxy_client -lbase
+	$(CC) -shared -o xpn_bypass_proxy.so xpn_bypass.o $(LIB_PATH_PROXY) $(LIBS) -lxpn_proxy_client -lbase -ldl
 
 install:
 	cp -f xpn_bypass.so          ${prefix}/lib
