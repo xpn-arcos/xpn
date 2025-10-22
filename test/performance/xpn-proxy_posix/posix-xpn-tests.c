@@ -143,7 +143,7 @@ static int test_dir_ops(const char * parent_dir, const char * dirname)
 {
     int ret = 0;
     char dirpath[4096];
-    snprintf(dirpath, sizeof(dirpath), "%s/%s", parent_dir, dirname);
+    snprintf(dirpath, sizeof(dirpath), "%s/%s/", parent_dir, dirname);
 
     /* mkdir */
     if (mkdir(dirpath, 0755) == -1) {
@@ -154,6 +154,7 @@ static int test_dir_ops(const char * parent_dir, const char * dirname)
 
     /* opendir */
     DIR * d = opendir(dirpath);
+
     if (!d) {
         report_fail("opendir", dirpath);
         ret = -1;
@@ -223,7 +224,7 @@ int main ( void )
         }
         return -1;
     } else report_ok("rmdir", base1);
-/*
+
     printf("\n=== TESTS WITH PATHS > 128 bytes ===\n");
     char base2[1024];
     snprintf(base2, sizeof(base2), "%s/posix_test_long", tmp);
@@ -290,7 +291,7 @@ int main ( void )
 
     free(long_dirname);
     free(final_name);
-*/
+
     if (overall == 0) 
 	 printf("\n=== RESULT: all tests passed (or errors were handled) ===\n");
     else printf("\n=== RESULT: some tests failed. Check error outputs. ===\n");

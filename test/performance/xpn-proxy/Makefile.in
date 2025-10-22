@@ -6,8 +6,8 @@
 
 MAKE         	= make -s
 CC           	= @CC@
-MYHEADER     	= -I../../../include/ -I../../../include/base -I../../../include/xpn_client/ -I../../../include/bypass
-LIBPATH  	= -L../../../src/base
+MYHEADER     	= -I../../../include/ -I../../../include/base -I../../../include/xpn_client/ -I../../../include/bypass -I../../../../../bin/mosquitto/include
+LIBPATH  		= -L../../../src/base -L../../../../../bin/mosquitto/lib
 LIBRARIES    	= -lpthread -ldl -lmosquitto -lbase
 MYFLAGS      	= -O3 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE
 

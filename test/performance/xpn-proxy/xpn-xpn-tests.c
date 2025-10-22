@@ -193,6 +193,8 @@ int main(void) {
     int overall = 0;
     const char * tmp = "/P1";
 
+    xpn_init();
+
     printf("=== TESTS WITH PATHS < 128 bytes ===\n");
     char base1[256];
     snprintf(base1, sizeof(base1), "%s/posix_test_short", tmp);
@@ -286,6 +288,8 @@ int main(void) {
 
     if (overall == 0) printf("\n=== RESULT: all tests passed (or errors were handled) ===\n");
     else printf("\n=== RESULT: some tests failed. Check error outputs. ===\n");
+
+    xpn_destroy();
 
     return overall;
 }

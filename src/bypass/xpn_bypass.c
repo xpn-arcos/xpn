@@ -20,12 +20,12 @@
  */
 
 
-/* ... Include / Inclusion ........................................... */
+ /* ... Include / Inclusion ........................................... */
 
-   #include "xpn_bypass.h"
+    #include "xpn_bypass.h"
 
 
-/* ... Global variables / Variables globales ........................ */
+ /* ... Global variables / Variables globales ........................ */
 
    /**
     * This variable indicates if expand has already been initialized or not.
@@ -43,7 +43,7 @@
    size_t   xpn_prefix_strlen = 12;
 
 
-/* ... Auxiliar functions / Funciones auxiliares ......................................... */
+ /* ... Auxiliar functions / Funciones auxiliares ......................................... */
 
    /**
     * Check that the path contains the prefix of XPN
@@ -792,7 +792,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -831,7 +831,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -879,7 +879,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -928,7 +928,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -983,7 +983,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -1041,7 +1041,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -1096,7 +1096,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -1148,7 +1148,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -1187,7 +1187,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -1421,7 +1421,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -1696,7 +1696,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -1733,7 +1733,7 @@
       debug_info("[BYPASS]    2) new Path %s\n", new_path);
 
       // This if checks if variable path passed as argument starts with the expand prefix.
-      if(is_xpn_prefix( old_path) && is_xpn_prefix( new_path))
+      if (is_xpn_prefix( old_path) && is_xpn_prefix( new_path))
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -1913,7 +1913,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         debug_info("[BYPASS]\t try to dlsym_fdopen 1\n");
 
@@ -1949,7 +1949,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -1991,7 +1991,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2043,7 +2043,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2093,7 +2093,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2131,7 +2131,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2167,7 +2167,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2203,7 +2203,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2294,7 +2294,7 @@
       debug_info("[BYPASS]    1) dirname %s\n", dirname);
 
       // This if checks if variable path passed as argument starts with the expand prefix.
-      if(is_xpn_prefix(dirname))
+      if (is_xpn_prefix(dirname))
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2413,7 +2413,7 @@
       debug_info("[BYPASS] >> Begin closedir...\n");
       debug_info("[BYPASS]    1) dirp %p\n", dirp);
 
-      if( fdsdirtable_get( dirp ) != -1 )
+      if ( fdsdirtable_get( dirp ) != -1 )
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2486,7 +2486,7 @@
       debug_info("[BYPASS]\t try to dlsym_fork\n");
 
       ret = dlsym_fork();
-      if(0 == ret) {
+      if (0 == ret) {
         // We want the children to be initialized
         xpn_adaptor_initCalled = 0;
       }
@@ -2522,7 +2522,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2561,7 +2561,7 @@
       struct generic_fd virtual_fd2 = fdstable_get ( fd2 );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2690,7 +2690,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         // We must initialize expand if it has not been initialized yet.
         xpn_adaptor_keepInit ();
@@ -2760,7 +2760,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         debug_info("[BYPASS] xpn_fcntl\n");
 
@@ -2910,7 +2910,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         debug_info("[BYPASS] xpn_fsync\n");
 
@@ -2944,7 +2944,7 @@
       struct generic_fd virtual_fd = fdstable_get ( fd );
 
       // This if checks if variable fd passed as argument is a expand fd.
-      if(virtual_fd.type == FD_XPN)
+      if (virtual_fd.type == FD_XPN)
       {
         //TODO
         return 0;
@@ -2978,9 +2978,9 @@
 
       // It is an XPN partition, so we redirect the syscall to expand syscall
       value = getenv("XPN_IS_MPI_SERVER");
-      if (NULL == value) {
+      if (NULL == value)
+      {
         debug_info("[BYPASS] << After MPI_Init\n");
-
         return PMPI_Init(argc, argv);
       }
 
@@ -3000,11 +3000,12 @@
 
       // It is an XPN partition, so we redirect the syscall to expand syscall
       value = getenv("XPN_IS_MPI_SERVER");
-      if (NULL == value) {
+      if (NULL == value)
+      {
         debug_info("[BYPASS] << After MPI_Init_thread\n");
-
         return PMPI_Init_thread( argc, argv, required, provided );
       }
+
       debug_info("[BYPASS] << After MPI_Init_thread\n");
 
       return MPI_SUCCESS;
@@ -3017,9 +3018,9 @@
       debug_info("[BYPASS] >> Begin MPI_Finalize\n");
 
       value = getenv("XPN_IS_MPI_SERVER");
-      if (NULL != value && xpn_adaptor_initCalled == 1) {
+      if (NULL != value && xpn_adaptor_initCalled == 1)
+      {
         debug_info("[BYPASS] xpn_destroy\n");
-
         xpn_destroy();
       }
 
@@ -3029,7 +3030,7 @@
     }
 
 
-/* ....................................................................................... */
+ /* ....................................................................................... */
 
 #endif
 

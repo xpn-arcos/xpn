@@ -739,6 +739,7 @@ cleanup_xpn_server_op_write:
         req.status.ret = 0;
 
         ret = filesystem_opendir(full_path);
+
         req.status.server_errno = errno;
         req.status.ret = (errno != 0) ? -1 : 0;
 
@@ -754,8 +755,6 @@ cleanup_xpn_server_op_write:
                 filesystem_closedir(ret);
             }
         }
-
-        debug_info("[Server=%d] [XPN_SERVER_OPS] [xpn_server_op_opendir] << End - opendir(%s)=%p\n", params->rank, full_path, ret);
 
         // send back the status
         xpn_server_comm_write_data(params->server_type, comm, (char * ) & req, sizeof(struct st_xpn_server_opendir_req), rank_client_id, tag_client_id);

@@ -19,19 +19,19 @@
  */
 
 
-/* ... Include / Inclusion ........................................... */
+ /* ... Include / Inclusion ........................................... */
 
-   #include "nfi_xpn_server.h"
-   #include "nfi_xpn_server_comm.h"
-   #include "nfi_mq_server_comm.h"
-
-
-/* ... Const / Const ................................................. */
-
-   #define FILESYSTEM_DLSYM 1
+    #include "nfi_xpn_server.h"
+    #include "nfi_xpn_server_comm.h"
+    #include "nfi_mq_server_comm.h"
 
 
-/* ... Auxiliar Functions / Funciones Auxiliares ..................... */
+ /* ... Const / Const ................................................. */
+
+    #define FILESYSTEM_DLSYM 1
+
+
+ /* ... Auxiliar Functions / Funciones Auxiliares ..................... */
 
    // Communication
    int nfi_write_operation(struct nfi_xpn_server * params, struct st_xpn_server_msg * head)
@@ -638,7 +638,7 @@
        msg.u_st_xpn_server_msg.op_open.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_open.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_open.path, dir, 0, dir_len);
            //msg.u_st_xpn_server_msg.op_open.path[dir_len] = '\0';
@@ -663,12 +663,12 @@
            if (ret < 0) {
                return -1;
            }
-           
+
            //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
             }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
                return -1;
@@ -751,7 +751,7 @@ nfi_xpn_server_open_KO:
        msg.u_st_xpn_server_msg.op_read.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_read.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_read.path, fh_aux->path, 0, dir_len);
        }
@@ -759,7 +759,7 @@ nfi_xpn_server_open_KO:
        {
            memccpy(msg.u_st_xpn_server_msg.op_read.path, fh_aux->path, 0, XPN_PATH_MAX);
        }
-       
+
        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] nfi_xpn_server_read(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
        debug_info("[SERV_ID=%d] [NFI_XPN] [nfi_xpn_server_read] xpn_read(%s, %ld, %ld)\n", serv->id, fh_aux->path, offset, size);
 
@@ -890,7 +890,7 @@ nfi_xpn_server_read_KO:
        msg.u_st_xpn_server_msg.op_write.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_write.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_write.path, fh_aux->path, 0, dir_len);
        }
@@ -1039,7 +1039,7 @@ nfi_xpn_server_write_KO:
        msg.u_st_xpn_server_msg.op_close.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_close.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_close.path, fh_aux->path, 0, dir_len);
        }
@@ -1059,12 +1059,12 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
+
            //int ret2 = socket_send(server_aux->server_socket, fh_aux->path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, fh_aux->path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
             }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
                return -1;
@@ -1141,7 +1141,7 @@ nfi_xpn_server_write_KO:
        msg.u_st_xpn_server_msg.op_rm.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_rm.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_rm.path, dir, 0, dir_len);
            //msg.u_st_xpn_server_msg.op_open.path[dir_len] = '\0';
@@ -1161,12 +1161,12 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
+
            //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
             }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
                return -1;
@@ -1258,7 +1258,7 @@ nfi_xpn_server_write_KO:
        msg.u_st_xpn_server_msg.op_rename.new_url_len = new_path_len;
        bzero(msg.u_st_xpn_server_msg.op_rename.new_url, XPN_PATH_MAX);
 
-       if (old_path_len < XPN_PATH_MAX) 
+       if (old_path_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_rename.old_url, old_path, 0, old_path_len);
        }
@@ -1267,7 +1267,7 @@ nfi_xpn_server_write_KO:
            memccpy(msg.u_st_xpn_server_msg.op_rename.old_url, old_path, 0, XPN_PATH_MAX);
        }
 
-       if (new_path_len < XPN_PATH_MAX) 
+       if (new_path_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_rename.new_url, new_path, 0, new_path_len);
        }
@@ -1286,7 +1286,7 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
+
            if (old_path_len >= XPN_PATH_MAX){
                //int ret2 = socket_send(server_aux->server_socket, old_path + XPN_PATH_MAX, old_path_len - XPN_PATH_MAX);
                if (nfi_xpn_server_comm_write_data(server_aux, old_path + XPN_PATH_MAX, old_path_len - XPN_PATH_MAX) < 0 ) {
@@ -1300,7 +1300,7 @@ nfi_xpn_server_write_KO:
                    return -1;
                 }
            }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
                return -1;
@@ -1376,7 +1376,7 @@ nfi_xpn_server_write_KO:
        msg.u_st_xpn_server_msg.op_getattr.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_getattr.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_getattr.path, dir, 0, dir_len);
        }
@@ -1520,7 +1520,7 @@ nfi_xpn_server_write_KO:
        msg.u_st_xpn_server_msg.op_mkdir.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_mkdir.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_mkdir.path, dir, 0, dir_len);
        }
@@ -1540,12 +1540,12 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
+
            //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
             }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
                return -1;
@@ -1642,7 +1642,7 @@ nfi_xpn_server_write_KO:
        msg.u_st_xpn_server_msg.op_opendir.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_opendir.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_opendir.path, dir, 0, dir_len);
            //msg.u_st_xpn_server_msg.op_open.path[dir_len] = '\0';
@@ -1664,12 +1664,12 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
+
            //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
             }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (req), sizeof(struct st_xpn_server_opendir_req));
            if (ret < 0) {
                return -1;
@@ -1677,7 +1677,7 @@ nfi_xpn_server_write_KO:
        }
        else
        {
-           nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (req), sizeof(struct st_xpn_server_opendir_req));
+            nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (req), sizeof(struct st_xpn_server_opendir_req));
        }
 
        //nfi_xpn_server_do_request(server_aux, & msg, (char * ) & (req), sizeof(struct st_xpn_server_opendir_req));
@@ -1704,7 +1704,6 @@ nfi_xpn_server_write_KO:
        if (serv->keep_connected == 0) {
            nfi_xpn_server_disconnect(serv);
        }
-
        return 0;
    }
 
@@ -1759,7 +1758,7 @@ nfi_xpn_server_write_KO:
        msg.u_st_xpn_server_msg.op_readdir.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_readdir.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_readdir.path, fh_aux->path, 0, dir_len);
            //msg.u_st_xpn_server_msg.op_open.path[dir_len] = '\0';
@@ -1788,7 +1787,7 @@ nfi_xpn_server_write_KO:
            if (nfi_xpn_server_comm_write_data(server_aux, fh_aux->path + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
             }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (ret_entry), sizeof(struct st_xpn_server_readdir_req));
            if (ret < 0) {
                return -1;
@@ -1941,7 +1940,7 @@ nfi_xpn_server_write_KO:
        msg.u_st_xpn_server_msg.op_rmdir.path_len = dir_len;
        bzero(msg.u_st_xpn_server_msg.op_rmdir.path, XPN_PATH_MAX);
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_rmdir.path, dir, 0, dir_len);
            //msg.u_st_xpn_server_msg.op_open.path[dir_len] = '\0';
@@ -1960,12 +1959,12 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
+
            //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
             }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (status), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
                return -1;
@@ -2086,7 +2085,7 @@ nfi_xpn_server_write_KO:
        bzero(msg.u_st_xpn_server_msg.op_read_mdata.path, XPN_PATH_MAX);
        msg.type = XPN_SERVER_READ_MDATA;
 
-       if (dir_len < XPN_PATH_MAX) 
+       if (dir_len < XPN_PATH_MAX)
        {
            memccpy(msg.u_st_xpn_server_msg.op_read_mdata.path, dir, 0, dir_len);
        }
@@ -2102,12 +2101,12 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
+
            //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
             }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) & (req), sizeof(struct st_xpn_server_read_mdata_req));
            if (ret < 0) {
                return -1;
@@ -2189,7 +2188,7 @@ nfi_xpn_server_write_KO:
            msg.type = XPN_SERVER_WRITE_MDATA_FILE_SIZE;
            msg.u_st_xpn_server_msg.op_write_mdata_file_size.path_len = dir_len;
 
-           if (dir_len < XPN_PATH_MAX) 
+           if (dir_len < XPN_PATH_MAX)
            {
                memccpy(msg.u_st_xpn_server_msg.op_write_mdata_file_size.path, dir, 0, dir_len);
            }
@@ -2206,7 +2205,7 @@ nfi_xpn_server_write_KO:
            msg.type = XPN_SERVER_WRITE_MDATA;
            msg.u_st_xpn_server_msg.op_write_mdata.path_len = dir_len;
 
-           if (dir_len < XPN_PATH_MAX) 
+           if (dir_len < XPN_PATH_MAX)
            {
                memccpy(msg.u_st_xpn_server_msg.op_write_mdata.path, dir, 0, dir_len);
            }
@@ -2225,12 +2224,12 @@ nfi_xpn_server_write_KO:
            if (ret < 0) {
                return -1;
            }
-           
+
            //int ret2 = socket_send(server_aux->server_socket, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX);
            if (nfi_xpn_server_comm_write_data(server_aux, dir + XPN_PATH_MAX, dir_len - XPN_PATH_MAX) < 0 ) {
                return -1;
             }
-           
+
            ret = nfi_xpn_server_comm_read_data(server_aux, (char * ) &(req), sizeof(struct st_xpn_server_status));
            if (ret < 0) {
                return -1;
@@ -2259,5 +2258,5 @@ nfi_xpn_server_write_KO:
    }
 
 
-/* ................................................................... */
+ /* ................................................................... */
 
