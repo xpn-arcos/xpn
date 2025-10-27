@@ -52,7 +52,6 @@ public class ExpandImageBatchReader implements Batch {
             int parallelism = spark.sparkContext().defaultParallelism();
 
             int numGroups = Math.min(numFiles, parallelism);
-            int cores = parallelism / locationGroups.size();
 
             InputPartition partition [] = new InputPartition[numGroups];
             List<InputPartition> partitions = new ArrayList<>();
@@ -62,12 +61,12 @@ public class ExpandImageBatchReader implements Batch {
                 List<List<Long>> lengthList = new ArrayList<>();
                 int i = 0;
                 for (FileStatus f : locationGroups.get(key)) {
-                    if (pathList.size() <= i && pathList.size() < cores) {
+                    if (pathList.size() <= i && pathList.size() < numGroups) {
                         pathList.add(new ArrayList<>(Arrays.asList(f.getPath().toString())));
                         lengthList.add(new ArrayList<>(Arrays.asList(f.getLen())));
                     }else{
-                        pathList.get(i % cores).add(f.getPath().toString());
-                        lengthList.get(i % cores).add(f.getLen());
+                        pathList.get(i % numGroups).add(f.getPath().toString());
+                        lengthList.get(i % numGroups).add(f.getLen());
                     }
                     i++;
                 }
