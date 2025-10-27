@@ -24,7 +24,7 @@
 #define _XPN_SERVER_OPS_H_
 
   #ifdef __cplusplus
-  extern "C" {
+    extern "C" {
   #endif
 
     /* ... Include / Inclusion ........................................... */
@@ -88,47 +88,51 @@
 
        struct st_xpn_server_path_flags
        {
-           int    flags;
-           mode_t mode;
-           char   xpn_session;
-           int    file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
-           char   path[PATH_MAX];
+           int      flags;
+           mode_t   mode;
+           char     xpn_session;
+           int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+           char     path[XPN_PATH_MAX];
+           int      path_len;
        };
 
        struct st_xpn_server_path {
-           char   path[PATH_MAX];
+           char     path[XPN_PATH_MAX];
+           int      path_len;
        };
 
        struct st_xpn_server_close
        {
-           int  fd;
-           int  file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+           int      fd;
+           int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
 			   //
       // interoperability
       #if !defined(HAVE_64BITS)
            uint64_t dir;
       #else
-           DIR * dir;
+           DIR *    dir;
       #endif
 
-           char path[PATH_MAX];
+           char     path[XPN_PATH_MAX];
+           int      path_len;
        };
 
        struct st_xpn_server_rw
        {
            offset_t offset;
-           int  fd;
-           int  file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+           int      fd;
+           int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
 
       // interoperability
       #if!defined(HAVE_64BITS)
            uint64_t size;
       #else
-           size_t size;
+           size_t   size;
       #endif
 
-           char xpn_session;
-           char path[PATH_MAX];
+           char     xpn_session;
+           char     path[XPN_PATH_MAX];
+           int      path_len;
        };
 
        struct st_xpn_server_rw_req
@@ -137,64 +141,69 @@
       #if!defined(HAVE_64BITS)
            uint64_t size;
       #else
-           ssize_t size;
+           ssize_t  size;
       #endif
 
-           char last;
-           struct st_xpn_server_status status;
+           char     last;
+           struct   st_xpn_server_status status;
        };
 
        struct st_xpn_server_rename
        {
-           char old_url[PATH_MAX];
-           char new_url[PATH_MAX];
+           char     old_url[XPN_PATH_MAX];
+           int      old_url_len;
+           char     new_url[XPN_PATH_MAX];
+           int      new_url_len;
        };
 
        struct st_xpn_server_setattr
        {
-           struct stat attr;
-           char path[PATH_MAX];
+           struct   stat attr;
+           char     path[XPN_PATH_MAX];
+           int      path_len;
        };
 
        struct st_xpn_server_attr_req
        {
-           struct stat attr;
-           struct st_xpn_server_status status_req;
-           char   status;
+           struct   stat attr;
+           struct   st_xpn_server_status status_req;
+           char     status;
        };
 
        struct st_xpn_server_readdir
        {
-           long    telldir;
-           DIR   * dir;
-           char    xpn_session;
-           char    path[PATH_MAX];
+           long     telldir;
+           DIR   *  dir;
+           char     xpn_session;
+           char     path[XPN_PATH_MAX];
+           int      path_len;
        };
 
        struct st_xpn_server_opendir_req
        {
-           DIR   * dir;
-           struct st_xpn_server_status status;
+           DIR   *  dir;
+           struct   st_xpn_server_status status;
        };
 
        struct st_xpn_server_readdir_req
        {
-           int    end; //If end = 1 exist entry; 0 not exist
-           long   telldir;
-           struct dirent ret;
-           struct st_xpn_server_status status;
+           int      end; //If end = 1 exist entry; 0 not exist
+           long     telldir;
+           struct   dirent ret;
+           struct   st_xpn_server_status status;
        };
 
        struct st_xpn_server_read_mdata_req
        {
-           struct xpn_metadata mdata;
-           struct st_xpn_server_status status;
+           struct   xpn_metadata mdata;
+           struct   st_xpn_server_status status;
        };
 
        struct st_xpn_server_write_mdata
        {
-           struct xpn_metadata mdata;
-           char path[PATH_MAX];
+           struct   xpn_metadata mdata;
+           char     path[XPN_PATH_MAX];
+           int      path_len;
        };
 
        struct st_xpn_server_write_mdata_file_size
@@ -203,10 +212,11 @@
       #if!defined(HAVE_64BITS)
            uint64_t size;
       #else
-           ssize_t size;
+           ssize_t  size;
       #endif
 
-           char path[PATH_MAX];
+           char     path[XPN_PATH_MAX];
+           int      path_len;
        };
 
        struct st_xpn_server_end {
@@ -215,9 +225,9 @@
 
        struct st_xpn_server_msg
        {
-           int type;
-           union
-	   {
+            int type;
+            union
+            {
                struct st_xpn_server_path_flags op_open;
                struct st_xpn_server_path_flags op_creat;
                struct st_xpn_server_close op_close;
@@ -239,7 +249,7 @@
                struct st_xpn_server_write_mdata_file_size op_write_mdata_file_size;
 
                struct st_xpn_server_end op_end;
-           }
+            }
            u_st_xpn_server_msg;
        };
 
@@ -314,7 +324,7 @@
 
 
   #ifdef __cplusplus
-  }
+    }
   #endif
 
 #endif

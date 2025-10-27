@@ -8,7 +8,7 @@
 #
 # begin
 #
-AC_INIT([Expand],[3.3.0],[fgcarbal@inf.uc3m.es],[expand])
+AC_INIT([Expand],[3.3.1],[fgcarbal@inf.uc3m.es],[expand])
 AC_CONFIG_AUX_DIR(./config)
 AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_INSTALL
@@ -323,9 +323,10 @@ AC_CONFIG_FILES([ \
       Makefile \
       src/base/Makefile \
       src/xpn_client/Makefile \
-      src/utils/Makefile \
+      src/xpn_proxy/Makefile \
       src/bypass/Makefile \
       src/xpn_server/Makefile \
+      src/utils/Makefile \
       test/integrity/xpn/Makefile \
       test/integrity/xpn-iot/Makefile \
       test/integrity/xpn-conf/Makefile \
@@ -333,6 +334,8 @@ AC_CONFIG_FILES([ \
       test/integrity/bypass_c/Makefile \
       test/integrity/xpn_metadata/Makefile \
       test/performance/xpn/Makefile \
+      test/performance/xpn-proxy/Makefile \
+      test/performance/xpn-proxy_posix/Makefile \
       test/performance/iop/Makefile \
       test/performance/mpi_pingpong/Makefile \
       test/performance/xpn-fault-tolerant/Makefile \

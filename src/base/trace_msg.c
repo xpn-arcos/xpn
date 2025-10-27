@@ -20,17 +20,17 @@
  */
 
 
-   /* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-      #include "base/trace_msg.h"
-
-
-   /* ... Globla var. / Variables glob. ................................. */
-
-      int    (*TRACE_MSG_PrintMsg)(const char *, va_list) = NULL ;
+     #include "base/trace_msg.h"
 
 
-   /* ... Functions / Funciones ......................................... */
+  /* ... Globla var. / Variables glob. ................................. */
+
+     int    (*TRACE_MSG_PrintMsg)(const char *, va_list) = NULL ;
+
+
+  /* ... Functions / Funciones ......................................... */
 
       void   TRACE_MSG_setPrinter 
       ( 

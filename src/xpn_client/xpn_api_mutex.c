@@ -20,19 +20,19 @@
  */
 
 
-/* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-   #include "xpn_api_mutex.h"
+     #include "xpn_api_mutex.h"
 
 
-/* ... Global vars / Variables globales .............................. */
+  /* ... Global vars / Variables globales .............................. */
 
 #ifdef _REENTRANT
 
-  pthread_mutex_t xpn_api_mutex = PTHREAD_MUTEX_INITIALIZER ;
+    pthread_mutex_t xpn_api_mutex = PTHREAD_MUTEX_INITIALIZER ;
 
 #endif
 
 
-/* ................................................................... */
+  /* ................................................................... */
 

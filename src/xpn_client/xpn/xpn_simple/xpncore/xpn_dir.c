@@ -20,10 +20,13 @@
    */
 
 
-#include "xpn/xpn_simple/xpn_dir.h"
+  /* ... Include / Inclusion ........................................... */
 
-#include "xpn/xpn_simple/xpn_open.h"
+     #include "xpn/xpn_simple/xpn_dir.h"
+     #include "xpn/xpn_simple/xpn_open.h"
 
+
+  /* ... Functions / Funciones ......................................... */
 
 int xpn_simple_mkdir(const char *path, mode_t perm)
 {
@@ -179,4 +182,7 @@ int xpn_simple_rmdir(const char *path)
   XPN_DEBUG_END_ARGS1(path);
   return res;
 }
+
+
+  /* ................................................................... */
 

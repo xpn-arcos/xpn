@@ -23,6 +23,11 @@
 #ifndef _WORKERS_ONDEMAND_H_
 #define _WORKERS_ONDEMAND_H_
 
+  #ifdef  __cplusplus
+    extern "C" {
+  #endif
+
+
   /* ... Include / Inclusion ........................................... */
 
      #include "all_system.h"
@@ -31,25 +36,31 @@
   
   /* ... Data structures / Estructuras de datos ........................ */
 
-  typedef struct
-  {
-    // number of active threads (launch + destroy)
-    int             busy_worker;
-    pthread_mutex_t m_worker;
-    pthread_cond_t  c_worker;
-    pthread_cond_t  c_nworkers;
-    long            n_workers;
-  } worker_ondemand_t;
+     typedef struct
+     {
+       // number of active threads (launch + destroy)
+       int             busy_worker;
+       pthread_mutex_t m_worker;
+       pthread_cond_t  c_worker;
+       pthread_cond_t  c_nworkers;
+       long            n_workers;
+     } worker_ondemand_t;
 
 
   /* ... Functions / Funciones ......................................... */
 
-  int   worker_ondemand_init     ( worker_ondemand_t *w );
-  void  workers_ondemand_destroy ( worker_ondemand_t *w );
+     int   worker_ondemand_init     ( worker_ondemand_t *w );
+     void  workers_ondemand_destroy ( worker_ondemand_t *w );
 
-  int   worker_ondemand_launch   ( worker_ondemand_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) );
-  int   worker_ondemand_wait     ( struct st_th *th_arg );
+     int   worker_ondemand_launch   ( worker_ondemand_t *w, struct st_th *th_arg, void (*worker_function)(struct st_th) );
+     int   worker_ondemand_wait     ( struct st_th *th_arg );
+
 
   /* ................................................................... */
+
+
+  #ifdef  __cplusplus
+    }
+  #endif
 
 #endif
