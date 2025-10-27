@@ -25,99 +25,32 @@
 
   /* ... Include / Inclusion ........................................... */
 
-  #ifndef _GNU_SOURCE
-  #define _GNU_SOURCE
-  #endif
+     #ifndef _GNU_SOURCE
+     #define _GNU_SOURCE
+     #endif
 
-  #include "config.h"
+     #include "config.h"
 
-  #include <dlfcn.h>
-  #include <sys/stat.h>
-  #include <stdarg.h>
-  #include <time.h>
-  #include <stdlib.h>
-  #include <sys/vfs.h>
+     #include <stdarg.h>
+     #include <string.h>
+     #include <time.h>
+     #include <stdlib.h>
+     #include <dlfcn.h>
 
-  #include "xpn.h"
-  #include "syscall_proxies.h"
-
-  #include <dirent.h>
-  #include <string.h>
+     #include <sys/vfs.h>
+     #include <dirent.h>
+     #include <sys/stat.h>
 
 #if defined(HAVE_MPI_H)
-  #include "mpi.h"
+     #include "mpi.h"
 #endif
-  //#include<pthread.h> //Mutex
 
+     #include "xpn.h"
+     #include "syscall_proxies.h"
 
-  /* ... Const / Const ................................................. */
-
-     #ifndef _STAT_VER
-     #define _STAT_VER 0
-     #endif
-
-
-     //#define RTLD_NEXT ((void *) -1l)
-     #define MAX_FDS   10000
-     #define MAX_DIRS  10000
-     #define PLUSXPN   1000
-
-     //#undef __USE_FILE_OFFSET64
-     //#undef __USE_LARGEFILE64
-
-
-     #define FD_FREE 0
-     #define FD_SYS  1
-     #define FD_XPN  2
-
-
-     // Types
-     #define O_ACCMODE 00000003
-     #define O_RDONLY  00000000
-     #define O_WRONLY  00000001
-     #define O_RDWR    00000002
-     #ifndef O_CREAT
-     #define O_CREAT   00000100  // not fcntl
-     #endif
-     #ifndef O_EXCL
-     #define O_EXCL    00000200  // not fcntl
-     #endif
-     #ifndef O_NOCTTY
-     #define O_NOCTTY  00000400  // not fcntl
-     #endif
-     #ifndef O_TRUNC
-     #define O_TRUNC   00001000  // not fcntl
-     #endif
-     #ifndef O_APPEND
-     #define O_APPEND  00002000
-     #endif
-     #ifndef O_NONBLOCK
-     #define O_NONBLOCK  00004000
-     #endif
-     #ifndef O_DSYNC
-     #define O_DSYNC   00010000  // used to be O_SYNC, see below
-     #endif
-     #ifndef FASYNC
-     #define FASYNC    00020000  // fcntl, for BSD compatibility
-     #endif
-     #ifndef O_DIRECT
-     #define O_DIRECT  00040000  // direct disk access hint
-     #endif
-     #ifndef O_LARGEFILE
-     #define O_LARGEFILE 00100000
-     #endif
-     #ifndef O_DIRECTORY
-     #define O_DIRECTORY 00200000  // must be a directory
-     #endif
-     #ifndef O_NOFOLLOW
-     #define O_NOFOLLOW  00400000  // don't follow links
-     #endif
-     #ifndef O_NOATIME
-     #define O_NOATIME 01000000
-     #endif
-     #ifndef O_CLOEXEC
-     #define O_CLOEXEC 02000000  // set close_on_exec */
-     #endif
+#ifdef BYPASS_USE_XPNPROXY
+     #include "xpn_proxy_client.h"
+#endif
 
 
   /* ... Data structures / Estructuras de datos ........................ */
@@ -251,6 +184,97 @@
 
      struct dirent64 *readdir64 ( DIR *dirp );
 #endif
+
+
+  /* ... Const / Const ................................................. */
+
+     #ifndef _STAT_VER
+     #define _STAT_VER 0
+     #endif
+
+     //#define RTLD_NEXT ((void *) -1l)
+     #define MAX_FDS   10000
+     #define MAX_DIRS  10000
+     #define PLUSXPN   1000
+
+     //#undef __USE_FILE_OFFSET64
+     //#undef __USE_LARGEFILE64
+
+     #define FD_FREE 0
+     #define FD_SYS  1
+     #define FD_XPN  2
+
+     // Types
+     #define O_ACCMODE 00000003
+     #define O_RDONLY  00000000
+     #define O_WRONLY  00000001
+     #define O_RDWR    00000002
+
+     // not fcntl
+     #ifndef O_CREAT
+     #define O_CREAT   00000100
+     #endif
+
+     // not fcntl
+     #ifndef O_EXCL
+     #define O_EXCL    00000200
+     #endif
+
+     // not fcntl
+     #ifndef O_NOCTTY
+     #define O_NOCTTY  00000400
+     #endif
+
+     // not fcntl
+     #ifndef O_TRUNC
+     #define O_TRUNC   00001000
+     #endif
+
+     #ifndef O_APPEND
+     #define O_APPEND  00002000
+     #endif
+
+     #ifndef O_NONBLOCK
+     #define O_NONBLOCK  00004000
+     #endif
+
+     // used to be O_SYNC, see below
+     #ifndef O_DSYNC
+     #define O_DSYNC   00010000
+     #endif
+
+     // fcntl, for BSD compatibility
+     #ifndef FASYNC
+     #define FASYNC    00020000
+     #endif
+
+     // direct disk access hint
+     #ifndef O_DIRECT
+     #define O_DIRECT  00040000
+     #endif
+
+     #ifndef O_LARGEFILE
+     #define O_LARGEFILE 00100000
+     #endif
+
+     // must be a directory
+     #ifndef O_DIRECTORY
+     #define O_DIRECTORY 00200000
+     #endif
+
+     // don't follow links
+     #ifndef O_NOFOLLOW
+     #define O_NOFOLLOW  00400000
+     #endif
+
+     #ifndef O_NOATIME
+     #define O_NOATIME 01000000
+     #endif
+
+     // set close_on_exec
+     #ifndef O_CLOEXEC
+     #define O_CLOEXEC 02000000
+     #endif
 
 
   /* ................................................................... */

@@ -4,28 +4,36 @@
 # Definitions
 #
 
- MAKE         = make -s
- CC           = @CC@
- MYHEADER     = -I../../../include/ -I../../../include/base -I../../../include/xpn_client/
- MYLIBPATH    = -L../../../src/base -L../../../src/xpn_client
- LIBRARIES    = -lxpn -lpthread -ldl -lmosquitto
- MYFLAGS      = -O2 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE
+MAKE         		= make -s
+CC           		= @CC@
+MYHEADER     		= -I../../../include/ -I../../../include/base -I../../../include/xpn_client/ -I../../../include/bypass
+MYLIBPATH    		= -L../../../src/base -L../../../src/xpn_client -L../../../src/bypass
+LIBRARIES    		= -lxpn -lpthread -ldl -lmosquitto
+MYFLAGS      		= -O3 -Wall -D_REENTRANT -DPOSIX_THREADS -DHAVE_CONFIG_H -D_GNU_SOURCE
 
 
 #
 # Rules
 #
 
-all:  open-write-close open-read-close
-open-write-close: open-write-close.o
-	$(CC)  -o open-write-close open-write-close.o $(MYLIBPATH) $(LIBRARIES)
+all:  xpn-open-write-close xpn-open-read-close xpn-create-dirs-test xpn-remove-dirs-test xpn-create-dirs-test
+xpn-open-write-close: xpn-open-write-close.o
+	$(CC)  -o xpn-open-write-close xpn-open-write-close.o $(MYLIBPATH) $(LIBRARIES)
 
-open-read-close: open-read-close.o
-	$(CC)  -o open-read-close  open-read-close.o  $(MYLIBPATH) $(LIBRARIES)
+xpn-open-read-close: xpn-open-read-close.o
+	$(CC)  -o xpn-open-read-close  xpn-open-read-close.o  $(MYLIBPATH) $(LIBRARIES)
+
+xpn-create-dirs-test: xpn-create-dirs-test.o
+	$(CC)  -o xpn-create-dirs-test  xpn-create-dirs-test.o  $(MYLIBPATH) $(LIBRARIES)
+
+xpn-remove-dirs-test: xpn-remove-dirs-test.o
+	$(CC)  -o xpn-remove-dirs-test  xpn-remove-dirs-test.o  $(MYLIBPATH) $(LIBRARIES)
+
 
 %.o: %.c
 	$(CC) $(CFLAGS)  $(MYFLAGS) $(MYHEADER) -c $< -o $@
 
 clean:
 	rm -f ./*.o
-	rm -f ./open-write-close ./open-read-close
+	rm -f ./xpn-open-write-close ./xpn-open-read-close ./xpn-create-dirs-test ./xpn-remove-dirs-test ./xpn-create-dirs-test
+

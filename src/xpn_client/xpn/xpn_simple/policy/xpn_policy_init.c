@@ -148,11 +148,12 @@ struct xpn_partition * XpnSearchPart(int pd)
     return & (xpn_parttable[i]);
 }
 
-void XpnShowPartitionTable(void)
+void XpnShowPartitionTable ( void )
 {
     int i = 0;
 
-    while ((i < XPN_MAX_PART) && (xpn_parttable[i].name != NULL) && (strcmp("", xpn_parttable[i].name) != 0)) {
+    while ((i < XPN_MAX_PART) && (strcmp("", xpn_parttable[i].name) != 0))
+    {
         printf("[XPN]xpn_parttable[%d].name = %s\n", i, xpn_parttable[i].name);
         i++;
     }

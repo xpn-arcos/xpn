@@ -1,23 +1,38 @@
 
 #
-# This Makefile is for The Expand bypass library (syscalls interceptions) 
+# This Makefile is for The Expand bypass library (syscalls interceptions) (with and without the Expand proxy)
 #
 
- prefix = @prefix@
- CC=@CC@
 
- FLAGS=@CFLAGS@
- INCLUDE=-I../../include -I../../include/base -I../../include/xpn_client -I../../include/bypass -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
- LIBS=-L../../../xpn/src/xpn_client -L../../src/xpn_client -lxpn -lpthread -ldl
+### Definitions ###
 
-all:
-	$(CC) $(FLAGS) $(INCLUDE) -c xpn_bypass.c
-	$(CC) -shared -o xpn_bypass.so xpn_bypass.o $(LIBS)
+prefix = @prefix@
+CC=@CC@
+FLAGS=@CFLAGS@ -DNOT_TO_USE_FCNTL_H -DNOT_TO_USE_STDLIB_H
+LIBS=@LIBS@
+
+INCLUDE=-I../../include -I../../include/base -I../../include/bypass -I../../include/xpn_client/xpn/xpn_simple -I../../include/xpn_client/nfi
+INCLUDE_PROXY=-I../../include -I../../include/base -I../../include/xpn_proxy -I../../include/bypass -I../../include/xpn_client/xpn/xpn_simple -I../../include/xpn_client/nfi
+LIB_PATH=-L../../../xpn/src/xpn_client -L../../src/xpn_client
+LIB_PATH_PROXY=-L../../../xpn/src/xpn_client -L../../src/xpn_client -L../../src/xpn_proxy -L../../src/base
+
+
+### Rules ###
+
+all: xpn_bypass.so xpn_bypass_proxy.so
+
+xpn_bypass.so:
+	$(CC) $(FLAGS) $(INCLUDE) -I../../include/xpn_client -c xpn_bypass.c -o xpn_bypass.o
+	$(CC) -shared -o xpn_bypass.so xpn_bypass.o $(LIB_PATH) $(LIBS) -lxpn -ldl
+
+xpn_bypass_proxy.so:
+	$(CC) $(FLAGS) $(INCLUDE_PROXY) -c xpn_bypass.c -o xpn_bypass.o -DBYPASS_USE_XPNPROXY
+	$(CC) -shared -o xpn_bypass_proxy.so xpn_bypass.o $(LIB_PATH_PROXY) $(LIBS) -lxpn_proxy_client -lbase -ldl
 
 install:
-	cp -f xpn_bypass.so ${prefix}/lib
+	cp -f xpn_bypass.so          ${prefix}/lib
+	cp -f xpn_bypass_proxy.so    ${prefix}/lib
 
 clean:
-	rm -f *.o
-	rm -f *.so
+	rm -f *.o *.a *.so
 
