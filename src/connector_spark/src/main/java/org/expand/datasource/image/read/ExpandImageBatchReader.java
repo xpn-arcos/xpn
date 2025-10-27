@@ -47,7 +47,6 @@ public class ExpandImageBatchReader implements Batch {
             }
 
             SparkSession spark = SparkSession.active();
-            SparkContext sc = spark.sparkContext();
 
             int parallelism = spark.sparkContext().defaultParallelism();
 

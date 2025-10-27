@@ -15,9 +15,6 @@ import java.io.ByteArrayOutputStream;
 
 public class ExpandImageDataWriter implements DataWriter {
 
-    public ExpandImageDataWriter() {
-    }
-
     @Override
     public void write(Object record) {
 

@@ -4,10 +4,6 @@ import org.apache.spark.sql.connector.write.*;
 
 public class ExpandImageWriteBuilder implements WriteBuilder {
 
-    public ExpandImageWriteBuilder() {
-
-    }
-
     @Override
     public Write build() {
         return new Write() {
