@@ -31,9 +31,9 @@
 
   /* ... Data structures / Estructuras de datos ........................ */
 
-	struct __dirstream
-	{
-		int fd;                       // File descriptor.
+     struct __dirstream
+     {
+				int fd;                       // File descriptor.
 		//__libc_lock_define (, lock) // Mutex lock for this structure. //TODO
 		size_t allocation;            // Space allocated for the block.
 		size_t size;                  // Total valid data in the block.
@@ -43,19 +43,9 @@
 		char data[0] __attribute__ ((aligned (__alignof__ (void*))));
 
 		char * path;
-	};
+		DIR  * remote_handler;
 
-
-   /* ... Const / Const ................................................. */
-
-	#ifndef O_RDONLY
-	#define O_RDONLY  00000000
-	#endif
-
-        // must be a directory
-	#ifndef O_DIRECTORY
-	#define O_DIRECTORY 00200000
-	#endif
+      } ;
 
 
    /* ................................................................... */

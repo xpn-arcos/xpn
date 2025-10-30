@@ -55,11 +55,13 @@
         }
 
         ptr = buffer;
-        while (total < n) {
+        while (total < n)
+	{
             bytes = read(sock, ptr + total, n - total);
-            if (bytes <= 0) {
+            if (bytes <= 0)
+	    {
                 if (bytes == 0)
-                    printf("[XPN_PROXY_CLIENT]\t[read_n_bytes]\t%d\n", __LINE__);
+                     printf("[XPN_PROXY_CLIENT]\t[read_n_bytes]\t%d\n", __LINE__);
                 else perror("read: ");
 
                 return -1;
@@ -742,73 +744,95 @@
         return res.ret;
     }
 
-    /*
-     * Opens a directory on the server.
-     * @param path: Path to the directory.
-     * @return: Pointer to DIR structure on success, NULL on error.
-     */
-    DIR * xpn_opendir ( const char * path )
+/*
+* Opens a directory on the server.
+* @param path: Path to the directory.
+* @return: Pointer to DIR structure on success, NULL on error.
+*/
+
+DIR * xpn_opendir ( const char *path )
+{
+   int ret = 0, sd = 0;
+   struct st_xpn_server_msg pr;
+   struct st_xpn_server_status res;
+   struct st_xpn_server_opendir_req st_req;
+   int path_len, path_len_max ;
+   char path_aux[PATH_MAX];
+   DIR *dirp = NULL;
+
+   if ( !path ) {
+       printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
+       errno = EINVAL;
+       return NULL;
+   }
+   bzero(&pr,     sizeof(pr));
+   bzero(&res,    sizeof(res));
+   bzero(&st_req, sizeof(st_req));
+
+   path_len = strlen(path) ;
+   if  (path_len > XPN_PATH_MAX)
+        path_len_max = XPN_PATH_MAX;
+   else path_len_max = path_len;
+
+   pr.type = XPN_SERVER_OPENDIR_DIR;
+   memcpy(pr.u_st_xpn_server_msg.op_opendir.path, path, path_len_max) ;
+   pr.u_st_xpn_server_msg.op_opendir.path_len = path_len ;
+
+   sd = d_send_receive(&pr, &res, path, path_len);
+   if (sd < 0)
+   {
+       printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
+       return NULL;
+   }
+   if (res.ret != 0)
+   {
+       d_close(sd);
+       errno = res.server_errno;
+       return NULL;
+   }
+
+   ret = read_n_bytes(sd, (char *)&st_req, sizeof(struct st_xpn_server_opendir_req));
+   if (ret < 0)
+   {
+       errno = EIO;
+       printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
+       d_close(sd);
+       return NULL;
+   }
+
+   if (st_req.status.ret != 0)
+   {
+       errno = EIO;
+       printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
+       d_close(sd);
+       return NULL;
+   }
+   if (st_req.dir == NULL) {
+       errno = EIO;
+       d_close(sd);
+       return NULL;
+   }
+
+    strcpy(path_aux,path);
+    if (path_aux[strlen(path)-1] != '/')
     {
-        int sd = 0;
-        struct st_xpn_server_msg pr;
-        struct st_xpn_server_status res;
-        struct st_xpn_server_opendir_req st_req;
-        int path_len, path_len_max;
-        char path_aux[PATH_MAX];
-        DIR *dirp = NULL;
-
-        /* check params */
-        if (!path) {
-            printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
-            errno = EINVAL;
-            return NULL;
-        }
-
-        /* fill request */
-        bzero(&pr,     sizeof(pr));
-        bzero(&res,    sizeof(res));
-        bzero(&st_req, sizeof(st_req));
-
-        path_len = strlen(path);
-        if (path_len > XPN_PATH_MAX)
-             path_len_max = XPN_PATH_MAX;
-        else path_len_max = path_len;
-
-        pr.type = XPN_SERVER_OPEN_FILE;
-        pr.u_st_xpn_server_msg.op_open.flags = O_RDONLY|O_DIRECTORY;
-        pr.u_st_xpn_server_msg.op_open.mode = 0;
-        memcpy(pr.u_st_xpn_server_msg.op_open.path, path, path_len_max);
-        pr.u_st_xpn_server_msg.op_open.path_len = path_len;
-
-        /* send request, receive response */
-        int fd = d_send_receive( & pr, & res, path, pr.u_st_xpn_server_msg.op_open.path_len );
-        if (fd < 0) 
-        {
-            printf("[XPN_PROXY_CLIENT]\t[xpn_opendir]\t%d\n", __LINE__);
-            return NULL;
-        }
-
-        strcpy(path_aux,path);
-        if (path_aux[strlen(path)-1] != '/')
-        {
-            path_aux[strlen(path)] = '/';
-            path_aux[strlen(path)+1] = '\0';
-        }
-
-        dirp = (DIR *)malloc(sizeof(DIR));
-        if (dirp == NULL)
-        {
-            return NULL;
-        }
-
-        // fill the dirp info
-        dirp->fd   = fd;
-        dirp->path = strdup(path_aux) ;
-
-        d_close(sd);
-
-        return dirp;
+        path_aux[strlen(path)] = '/';
+        path_aux[strlen(path)+1] = '\0';
     }
+
+    dirp = (DIR *)malloc(sizeof(DIR));
+    if (dirp == NULL)
+    {
+        return NULL;
+    }
+
+    dirp->fd   = st_req.fd;
+    dirp->path = strdup(path_aux) ;
+    dirp->remote_handler = st_req.dir ;
+
+    d_close(sd);
+    return dirp;
+}
 
     /*
      * Reads a directory entry from the server.
@@ -837,7 +861,7 @@
         bzero(&st_req, sizeof(st_req));
 
         pr.type = XPN_SERVER_READDIR_DIR;
-        pr.u_st_xpn_server_msg.op_readdir.dir = dirp;
+        pr.u_st_xpn_server_msg.op_readdir.dir = dirp->remote_handler;
 
         /* send request, receive response */
         sd = d_send_receive( & pr, & res, NULL, 0);
@@ -886,7 +910,7 @@
 
         /* check params */
         if (!dirp) {
-            printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
+            printf("[XPN_PROXY_CLIENT]\t[xpn_closedir]\t%d\n", __LINE__);
             errno = EBADF;
             return -1;
         }
@@ -897,19 +921,24 @@
         bzero(&st_req, sizeof(st_req));
 
         pr.type = XPN_SERVER_CLOSEDIR_DIR;
-        pr.u_st_xpn_server_msg.op_closedir.dir = dirp;
+        pr.u_st_xpn_server_msg.op_closedir.dir = dirp->remote_handler;
 
         /* send request, receive response */
         sd = d_send_receive( & pr, & res, NULL, 0);
         if (sd < 0) {
-            printf("[XPN_PROXY_CLIENT]\t[xpn_readdir]\t%d\n", __LINE__);
+            printf("[XPN_PROXY_CLIENT]\t[xpn_closedir]\t%d\n", __LINE__);
             return -1;
         }
+
+        free (dirp->path);
+        dirp->path = NULL;
+        free (dirp);
+        dirp = NULL;
 
         d_close(sd);
         return res.ret;
     }
 
 
-/* ................................................................... */
+  /* ................................................................... */
 
