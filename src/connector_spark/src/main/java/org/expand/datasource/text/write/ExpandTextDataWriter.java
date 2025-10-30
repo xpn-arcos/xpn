@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class ExpandTextDataWriter implements DataWriter {
-    private final FSDataOutputStream out;
+    private FSDataOutputStream out = null;
     private final byte newLine = '\n';
 
     public ExpandTextDataWriter(String pathStr, int partitionId, long taskId, boolean truncate) {
@@ -29,7 +29,6 @@ public class ExpandTextDataWriter implements DataWriter {
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
             System.exit(0);
-            return null;
         }
     }
 
