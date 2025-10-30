@@ -55,11 +55,13 @@
         }
 
         ptr = buffer;
-        while (total < n) {
+        while (total < n)
+	{
             bytes = read(sock, ptr + total, n - total);
-            if (bytes <= 0) {
+            if (bytes <= 0)
+	    {
                 if (bytes == 0)
-                    printf("[XPN_PROXY_CLIENT]\t[read_n_bytes]\t%d\n", __LINE__);
+                     printf("[XPN_PROXY_CLIENT]\t[read_n_bytes]\t%d\n", __LINE__);
                 else perror("read: ");
 
                 return -1;
@@ -938,5 +940,5 @@ DIR * xpn_opendir ( const char *path )
     }
 
 
-/* ................................................................... */
+  /* ................................................................... */
 
