@@ -67,6 +67,7 @@
          char data[0] __attribute__ ((aligned (__alignof__ (void*))));
 
          char * path;
+         DIR*       remote_handler;
      };
 
      struct generic_fd
