@@ -3,17 +3,16 @@ package org.expand.datasource.image.read;
 import org.apache.spark.sql.connector.read.InputPartition;
 
 import java.io.Serializable;
+import java.util.*;
 
 public class ExpandImageInputPartition implements InputPartition, Serializable {
 
-    private final String path;
-    private final long start;
-    private final long length;
+    private final List<String> path;
+    private final List<Long> length;
     private final String[] preferredLocations;
 
-    public ExpandImageInputPartition(String path, long start, long length, String[] preferredLocations) {
+    public ExpandImageInputPartition(List<String> path, List<Long> length, String[] preferredLocations) {
         this.path = path;
-        this.start = start;
         this.length = length;
         this.preferredLocations = preferredLocations;
     }
@@ -22,15 +21,11 @@ public class ExpandImageInputPartition implements InputPartition, Serializable {
         return preferredLocations;
     }
 
-    public String getPath() {
+    public List<String> getPath() {
         return path;
     }
 
-    public long getStart() {
-        return start;
-    }
-
-    public long getLength() {
+    public List<Long> getLength() {
         return length;
     }
 }
