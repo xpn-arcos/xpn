@@ -78,89 +78,88 @@
 
     /* ... Data structures / Estructuras de datos ........................ */
 
+       /* Portable types for 32/64-bit interoperability */
+
+       #if !defined(HAVE_64BITS)
+           // 32-bit system: use fixed-size types for network communication
+           typedef uint64_t xpn_long64_t;
+           typedef uint64_t xpn_size_t;
+           typedef int64_t  xpn_ssize_t;
+           typedef uint64_t xpn_ptr_t;
+           typedef uint64_t xpn_dirptr_t;
+       #else
+           // 64-bit system: use native types
+           typedef ssize_t  xpn_long64_t;
+           typedef size_t   xpn_size_t;
+           typedef ssize_t  xpn_ssize_t;
+           typedef uint64_t xpn_ptr_t;
+           typedef DIR *    xpn_dirptr_t;
+       #endif
+
+
        /* Message struct */
 
        struct st_xpn_server_status
        {
-           int   ret;
-           int   server_errno;
+           int         ret;
+           int         server_errno;
        };
 
        struct st_xpn_server_path_flags
        {
-           int      flags;
-           mode_t   mode;
-           char     xpn_session;
-           int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
-           char     path[XPN_PATH_MAX];
-           int      path_len;
+           int         flags;
+           mode_t      mode;
+           char        xpn_session;
+           int         file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+           int         path_len;
+           char        path[XPN_PATH_MAX];
        };
 
        struct st_xpn_server_path {
-           char     path[XPN_PATH_MAX];
-           int      path_len;
+           int         path_len;
+           char        path[XPN_PATH_MAX];
        };
 
        struct st_xpn_server_close
        {
-           int      fd;
-           int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
-			   //
-      // interoperability
-      #if !defined(HAVE_64BITS)
-           uint64_t dir;
-      #else
-           DIR *    dir;
-      #endif
-
-           char     path[XPN_PATH_MAX];
-           int      path_len;
+           int           fd;
+           int           file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+           xpn_dirptr_t  dir;  // 32-bit: store as 64-bit integer for network transfer
+           int           path_len;
+           char          path[XPN_PATH_MAX];
        };
 
        struct st_xpn_server_rw
        {
-           offset_t offset;
-           int      fd;
-           int      file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
-
-      // interoperability
-      #if!defined(HAVE_64BITS)
-           uint64_t size;
-      #else
-           size_t   size;
-      #endif
-
-           char     xpn_session;
-           char     path[XPN_PATH_MAX];
-           int      path_len;
+           int           fd;
+           int           file_type; // 0 - SCK_FILE; 1 - MQ_FILE;
+           offset_t      offset;
+           xpn_size_t    size;  // 32-bit: use fixed 64-bit size
+           char          xpn_session;
+           int           path_len;
+           char          path[XPN_PATH_MAX];
        };
 
        struct st_xpn_server_rw_req
        {
-      // interoperability
-      #if!defined(HAVE_64BITS)
-           uint64_t size;
-      #else
-           ssize_t  size;
-      #endif
-
-           char     last;
-           struct   st_xpn_server_status status;
+           xpn_ssize_t   size;  // 32-bit: use fixed 64-bit signed size
+           char          last;
+           struct        st_xpn_server_status status;
        };
 
        struct st_xpn_server_rename
        {
-           char     old_url[XPN_PATH_MAX];
            int      old_url_len;
-           char     new_url[XPN_PATH_MAX];
            int      new_url_len;
+           char     old_url[XPN_PATH_MAX];
+           char     new_url[XPN_PATH_MAX];
        };
 
        struct st_xpn_server_setattr
        {
            struct   stat attr;
-           char     path[XPN_PATH_MAX];
            int      path_len;
+           char     path[XPN_PATH_MAX];
        };
 
        struct st_xpn_server_attr_req
@@ -172,51 +171,46 @@
 
        struct st_xpn_server_readdir
        {
-           long     telldir;
-           DIR   *  dir;
-           char     xpn_session;
-           char     path[XPN_PATH_MAX];
-           int      path_len;
+           long          telldir;
+           xpn_dirptr_t  dir;  // 32-bit: store as 64-bit integer for network transfer
+           char          xpn_session;
+           int           path_len;
+           char          path[XPN_PATH_MAX];
        };
 
        struct st_xpn_server_opendir_req
        {
-           DIR   *  dir;
-           struct   st_xpn_server_status status;
+           xpn_long64_t  fd;   // Portable 64-bit file descriptor
+           xpn_dirptr_t  dir;  // 32-bit: store as 64-bit integer for network transfer
+           struct        st_xpn_server_status status;
        };
 
        struct st_xpn_server_readdir_req
        {
-           int      end; //If end = 1 exist entry; 0 not exist
-           long     telldir;
-           struct   dirent ret;
-           struct   st_xpn_server_status status;
+           int       end; //If end = 1 exist entry; 0 not exist
+           long      telldir;
+           struct    dirent ret;
+           struct    st_xpn_server_status status;
        };
 
        struct st_xpn_server_read_mdata_req
        {
-           struct   xpn_metadata mdata;
-           struct   st_xpn_server_status status;
+           struct    xpn_metadata mdata;
+           struct    st_xpn_server_status status;
        };
 
        struct st_xpn_server_write_mdata
        {
            struct   xpn_metadata mdata;
-           char     path[XPN_PATH_MAX];
            int      path_len;
+           char     path[XPN_PATH_MAX];
        };
 
        struct st_xpn_server_write_mdata_file_size
        {
-      // interoperability
-      #if!defined(HAVE_64BITS)
-           uint64_t size;
-      #else
-           ssize_t  size;
-      #endif
-
-           char     path[XPN_PATH_MAX];
-           int      path_len;
+           xpn_ssize_t  size;  // 32-bit: use fixed 64-bit signed size
+           int          path_len;
+           char         path[XPN_PATH_MAX];
        };
 
        struct st_xpn_server_end {

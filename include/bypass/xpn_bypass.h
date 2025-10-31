@@ -67,6 +67,7 @@
          char data[0] __attribute__ ((aligned (__alignof__ (void*))));
 
          char * path;
+         DIR  * remote_handler;
      };
 
      struct generic_fd
@@ -205,10 +206,21 @@
      #define FD_XPN  2
 
      // Types
+     #ifndef O_ACCMODE
      #define O_ACCMODE 00000003
+     #endif
+
+     #ifndef O_RDONLY
      #define O_RDONLY  00000000
+     #endif
+
+     #ifndef O_WRONLY
      #define O_WRONLY  00000001
+     #endif
+
+     #ifndef O_RDWR
      #define O_RDWR    00000002
+     #endif
 
      // not fcntl
      #ifndef O_CREAT
