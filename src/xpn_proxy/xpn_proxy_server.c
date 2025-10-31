@@ -1,4 +1,3 @@
-
 /*
  *  Copyright 2000-2025 Felix Garcia Carballeira, Alejandro Calderon Mateos, Diego Camarmas Alonso, Elias del Pozo Puñal
  *
@@ -20,28 +19,27 @@
  */
 
 
- /* ... Include / Inclusion ........................................... */
+  /* ... Include / Inclusion ........................................... */
 
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <string.h>
-    #include <signal.h>
-    #include <stdarg.h>
-    #include <unistd.h>
-    #include <sys/socket.h>
-    #include <netinet/in.h>
-    #include <pthread.h>
-    #include <sys/queue.h>
-    #include "base/socket.h"
-    #include "base/service_socket.h"
+     #include <stdio.h>
+     #include <stdlib.h>
+     #include <string.h>
+     #include <signal.h>
+     #include <stdarg.h>
+     #include <unistd.h>
+     #include <sys/socket.h>
+     #include <netinet/in.h>
+     #include <pthread.h>
+     #include <sys/queue.h>
+     #include "base/socket.h"
+     #include "base/service_socket.h"
+     #include "xpn_client/xpn.h"
+     #include "xpn_server/xpn_server_ops.h"
+     #include "xpn_proxy/xpn_proxy_macros.h"
+     #include "xpn_proxy/xpn_proxy_opendir.h"
 
-    #include "xpn_client/xpn.h"
-    #include "xpn_server/xpn_server_ops.h"
-    #include "xpn_proxy/xpn_proxy_macros.h"
-    #include "xpn_proxy/xpn_proxy_opendir.h"
 
-
- /* ... Global items / Elementos globales ............................. */
+  /* ... Global items / Elementos globales ............................. */
 
      #define THREAD_POOL_SIZE 32
 
@@ -74,12 +72,11 @@
       */
      ssize_t read_n_bytes(int sock, void * buffer, size_t n)
      {
-          size_t total = 0;
+         size_t total = 0;
          ssize_t bytes;
-          char * ptr;
+         char * ptr;
 
-         if ((buffer == NULL) || (n == 0))
-	 {
+         if ((buffer == NULL) || (n == 0)) {
              fprintf(stderr, "read_n_bytes: invalid buffer or size\n");
              printf("[XPN_PROXY_SERVER]\t[read_n_bytes]\t%d\n", __LINE__);
              return -1;
@@ -174,262 +171,263 @@
 
          switch (pr.type)
 	 {
-		 case XPN_SERVER_OPEN_FILE: // OPEN
-	
-		     // read full path
-		     path_len = pr.u_st_xpn_server_msg.op_open.path_len;
-		     path_src = pr.u_st_xpn_server_msg.op_open.path;
-		     ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
-	
-		     // OPEN
-		     res.ret = PROXY_XPN_OPEN(full_path, pr.u_st_xpn_server_msg.op_open.flags, pr.u_st_xpn_server_msg.op_open.mode);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-		     break;
-	
-		 case XPN_SERVER_CREAT_FILE: // CREATE
-	
-		     // read full path
-		     path_len = pr.u_st_xpn_server_msg.op_creat.path_len;
-		     path_src = pr.u_st_xpn_server_msg.op_creat.path;
-		     ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
-	
-		     // CREAT
-		     res.ret = PROXY_XPN_CREAT(full_path, pr.u_st_xpn_server_msg.op_creat.mode);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-		     break;
-	
-		 case XPN_SERVER_CLOSE_FILE: // CLOSE
-	
-		     // CLOSE
-		     res.ret = PROXY_XPN_CLOSE(pr.u_st_xpn_server_msg.op_close.fd);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-		     break;
-	
-		 case XPN_SERVER_READ_FILE: // READ
-	
-		     buf = malloc(pr.u_st_xpn_server_msg.op_read.size);
-		     if (buf == NULL) {
-			 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-			 perror("malloc: ");
-	
-			 // send status
-			 res.ret = -1;
-			 ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-			 break;
-		     }
-	
-		     // read data from file
-		     bzero(buf, pr.u_st_xpn_server_msg.op_read.size);
-		     res.ret = PROXY_XPN_READ(pr.u_st_xpn_server_msg.op_read.fd, buf, pr.u_st_xpn_server_msg.op_read.size);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-	
-		     // send data
-		     if (res.ret > 0) {
-			 ret = write_n_bytes(sd_client, buf, res.ret);
-		     }
-	
-		     free(buf);
-		     break;
-	
-		 case XPN_SERVER_WRITE_FILE: // WRITE
-	
-		     buf2 = malloc(pr.u_st_xpn_server_msg.op_write.size);
-		     if (buf2 == NULL) {
-			 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
-			 perror("malloc: ");
-	
-			 // send status
-			 res.ret = -1;
-			 ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-			 break;
-		     }
-	
-		     // send status (1/2)
-		     res.ret = 0;
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-	
-		     // read from socket
-		     bzero(buf2, pr.u_st_xpn_server_msg.op_write.size);
-		     res.ret = read_n_bytes(sd_client, buf2, pr.u_st_xpn_server_msg.op_write.size);
-		     res.server_errno = errno;
-	
-		     // write data to file
-		     if (res.ret > 0) {
-			 res.ret = PROXY_XPN_WRITE(pr.u_st_xpn_server_msg.op_write.fd, buf2, res.ret);
-			 res.server_errno = errno;
-		     }
-	
-		     // send status (2/2)
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-	
-		     free(buf2);
-		     break;
-	
-		 case XPN_SERVER_RM_FILE: // REMOVE
-	
-		     // read full path
-		     path_len = pr.u_st_xpn_server_msg.op_rm.path_len;
-		     path_src = pr.u_st_xpn_server_msg.op_rm.path;
-		     ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
-	
-		     // UNLINK
-		     res.ret = PROXY_XPN_UNLINK(full_path);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-		     break;
-	
-		 case XPN_SERVER_RENAME_FILE: // RENAME
-	
-		     // read full path
-		     path_len = pr.u_st_xpn_server_msg.op_rename.old_url_len;
-		     path_src = pr.u_st_xpn_server_msg.op_rename.old_url;
-		     ret = xpn_proxy_server_read_fullpath(sd_client, full_path_old, path_len, path_src);
-	
-		     // read full path
-		     path_len = pr.u_st_xpn_server_msg.op_rename.new_url_len;
-		     path_src = pr.u_st_xpn_server_msg.op_rename.new_url;
-		     ret = xpn_proxy_server_read_fullpath(sd_client, full_path_new, path_len, path_src);
-	
-		     // RENAME
-		     res.ret = PROXY_XPN_RENAME(full_path_old, full_path_new);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-		     break;
-	
-		 case XPN_SERVER_GETATTR_FILE: // GETATTR
-	
-		     // read full path
-		     path_len = pr.u_st_xpn_server_msg.op_getattr.path_len;
-		     path_src = pr.u_st_xpn_server_msg.op_getattr.path;
-		     ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
-	
-		     // STAT
-		     bzero( & req_attr, sizeof(struct st_xpn_server_attr_req));
-		     res.ret = PROXY_XPN_STAT(full_path, & req_attr.attr);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-	
-		     // send attr struct
-		     if (res.ret == 0) {
-			 req_attr.status_req.ret = req_attr.status;
-			 req_attr.status_req.server_errno = res.server_errno;
-			 req_attr.status = res.ret;
-	
-			 write_n_bytes(sd_client, (char * ) & req_attr, sizeof(struct st_xpn_server_attr_req));
-		     }
-		     break;
-	
-		 case XPN_SERVER_MKDIR_DIR: // MKDIR
-	
-		     // read full path
-		     path_len = pr.u_st_xpn_server_msg.op_mkdir.path_len;
-		     path_src = pr.u_st_xpn_server_msg.op_mkdir.path;
-		     ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
-	
-		     // MKDIR
-		     res.ret = PROXY_XPN_MKDIR(full_path, pr.u_st_xpn_server_msg.op_mkdir.mode);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-		     break;
-	
-		 case XPN_SERVER_OPENDIR_DIR: // OPENDIR
-	
-		     // read full path
-		     path_len = pr.u_st_xpn_server_msg.op_opendir.path_len;
-		     path_src = pr.u_st_xpn_server_msg.op_opendir.path;
-		     ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
-	
-		     // OPENDIR
-		     ret_od = PROXY_XPN_OPENDIR(full_path);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-	
-		     // send struct opendir
-		     if (res.ret == 0) {
-			 req_opendir.status.ret = (ret_od == NULL) ? -1 : 0;
-			 req_opendir.dir = ret_od;
-			 req_opendir.status.server_errno = res.server_errno;
-			 write_n_bytes(sd_client, (char * ) & req_opendir, sizeof(struct st_xpn_server_opendir_req));
-		     }
-		     break;
-	
-		 case XPN_SERVER_CLOSEDIR_DIR: // CLOSEDIR
-	
-		     // CLOSEDIR
-		     res.ret = PROXY_XPN_CLOSEDIR(pr.u_st_xpn_server_msg.op_closedir.dir);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-		     break;
-	
-		 case XPN_SERVER_READDIR_DIR: // READDIR
-	
-		     // READDIR
-		     ret_readdir = PROXY_XPN_READDIR(pr.u_st_xpn_server_msg.op_readdir.dir);
-		     if (ret_readdir != NULL) {
-			 ret_entry.end = 1;
-			 res.ret = 0;
-		     } else {
-			 ret_entry.end = 0;
-			 res.ret = -1;
-		     }
-	
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-	
-		     // send readdir struct
-		     if (res.ret == 0) {
-			 ret_entry.status.ret = res.ret;
-			 ret_entry.status.server_errno = res.server_errno;
-			 ret_entry.ret = * ret_readdir;
-	
-			 write_n_bytes(sd_client, (char * ) & ret_entry, sizeof(struct st_xpn_server_readdir_req));
-		     }
-		     break;
-	
-		 case XPN_SERVER_RMDIR_DIR: // RMDIR
-	
-		     // read full path
-		     path_len = pr.u_st_xpn_server_msg.op_rmdir.path_len;
-		     path_src = pr.u_st_xpn_server_msg.op_rmdir.path;
-		     ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
-	
-		     // RMDIR
-		     res.ret = PROXY_XPN_RMDIR(full_path);
-		     res.server_errno = errno;
-	
-		     // send status
-		     ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
-		     break;
-	
-		 default:
-		     fprintf(stderr, "handle_petition: unknown request type %d\n", pr.type);
-		     break;
+         case XPN_SERVER_OPEN_FILE: // OPEN
+
+             // read full path
+             path_len = pr.u_st_xpn_server_msg.op_open.path_len;
+             path_src = pr.u_st_xpn_server_msg.op_open.path;
+             ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
+
+             // OPEN
+             res.ret = PROXY_XPN_OPEN(full_path, pr.u_st_xpn_server_msg.op_open.flags, pr.u_st_xpn_server_msg.op_open.mode);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+             break;
+
+         case XPN_SERVER_CREAT_FILE: // CREATE
+
+             // read full path
+             path_len = pr.u_st_xpn_server_msg.op_creat.path_len;
+             path_src = pr.u_st_xpn_server_msg.op_creat.path;
+             ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
+
+             // CREAT
+             res.ret = PROXY_XPN_CREAT(full_path, pr.u_st_xpn_server_msg.op_creat.mode);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+             break;
+
+         case XPN_SERVER_CLOSE_FILE: // CLOSE
+
+             // CLOSE
+             res.ret = PROXY_XPN_CLOSE(pr.u_st_xpn_server_msg.op_close.fd);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+             break;
+
+         case XPN_SERVER_READ_FILE: // READ
+
+             buf = malloc(pr.u_st_xpn_server_msg.op_read.size);
+             if (buf == NULL) {
+                 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+                 perror("malloc: ");
+
+                 // send status
+                 res.ret = -1;
+                 ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+                 break;
+             }
+
+             // read data from file
+             bzero(buf, pr.u_st_xpn_server_msg.op_read.size);
+             res.ret = PROXY_XPN_READ(pr.u_st_xpn_server_msg.op_read.fd, buf, pr.u_st_xpn_server_msg.op_read.size);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+
+             // send data
+             if (res.ret > 0) {
+                 ret = write_n_bytes(sd_client, buf, res.ret);
+             }
+
+             free(buf);
+             break;
+
+         case XPN_SERVER_WRITE_FILE: // WRITE
+
+             buf2 = malloc(pr.u_st_xpn_server_msg.op_write.size);
+             if (buf2 == NULL) {
+                 printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
+                 perror("malloc: ");
+
+                 // send status
+                 res.ret = -1;
+                 ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+                 break;
+             }
+
+             // send status (1/2)
+             res.ret = 0;
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+
+             // read from socket
+             bzero(buf2, pr.u_st_xpn_server_msg.op_write.size);
+             res.ret = read_n_bytes(sd_client, buf2, pr.u_st_xpn_server_msg.op_write.size);
+             res.server_errno = errno;
+
+             // write data to file
+             if (res.ret > 0) {
+                 res.ret = PROXY_XPN_WRITE(pr.u_st_xpn_server_msg.op_write.fd, buf2, res.ret);
+                 res.server_errno = errno;
+             }
+
+             // send status (2/2)
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+
+             free(buf2);
+             break;
+
+         case XPN_SERVER_RM_FILE: // REMOVE
+
+             // read full path
+             path_len = pr.u_st_xpn_server_msg.op_rm.path_len;
+             path_src = pr.u_st_xpn_server_msg.op_rm.path;
+             ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
+
+             // UNLINK
+             res.ret = PROXY_XPN_UNLINK(full_path);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+             break;
+
+         case XPN_SERVER_RENAME_FILE: // RENAME
+
+             // read full path
+             path_len = pr.u_st_xpn_server_msg.op_rename.old_url_len;
+             path_src = pr.u_st_xpn_server_msg.op_rename.old_url;
+             ret = xpn_proxy_server_read_fullpath(sd_client, full_path_old, path_len, path_src);
+
+             // read full path
+             path_len = pr.u_st_xpn_server_msg.op_rename.new_url_len;
+             path_src = pr.u_st_xpn_server_msg.op_rename.new_url;
+             ret = xpn_proxy_server_read_fullpath(sd_client, full_path_new, path_len, path_src);
+
+             // RENAME
+             res.ret = PROXY_XPN_RENAME(full_path_old, full_path_new);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+             break;
+
+         case XPN_SERVER_GETATTR_FILE: // GETATTR
+
+             // read full path
+             path_len = pr.u_st_xpn_server_msg.op_getattr.path_len;
+             path_src = pr.u_st_xpn_server_msg.op_getattr.path;
+             ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
+
+             // STAT
+             bzero( & req_attr, sizeof(struct st_xpn_server_attr_req));
+             res.ret = PROXY_XPN_STAT(full_path, & req_attr.attr);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+
+             // send attr struct
+             if (res.ret == 0) {
+                 req_attr.status_req.ret = req_attr.status;
+                 req_attr.status_req.server_errno = res.server_errno;
+                 req_attr.status = res.ret;
+
+                 write_n_bytes(sd_client, (char * ) & req_attr, sizeof(struct st_xpn_server_attr_req));
+             }
+             break;
+
+         case XPN_SERVER_MKDIR_DIR: // MKDIR
+
+             // read full path
+             path_len = pr.u_st_xpn_server_msg.op_mkdir.path_len;
+             path_src = pr.u_st_xpn_server_msg.op_mkdir.path;
+             ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
+
+             // MKDIR
+             res.ret = PROXY_XPN_MKDIR(full_path, pr.u_st_xpn_server_msg.op_mkdir.mode);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+             break;
+
+         case XPN_SERVER_OPENDIR_DIR: // OPENDIR
+
+             // read full path
+             path_len = pr.u_st_xpn_server_msg.op_opendir.path_len;
+             path_src = pr.u_st_xpn_server_msg.op_opendir.path;
+             ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
+
+             // OPENDIR
+             ret_od = PROXY_XPN_OPENDIR(full_path);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+
+             // send struct opendir
+             if (res.ret == 0) {
+                 req_opendir.status.ret = (ret_od == NULL) ? -1 : 0;
+                 req_opendir.dir = ret_od;
+                 req_opendir.fd = ret_od -> fd;
+                 req_opendir.status.server_errno = res.server_errno;
+                 write_n_bytes(sd_client, (char * ) & req_opendir, sizeof(struct st_xpn_server_opendir_req));
+             }
+             break;
+
+         case XPN_SERVER_CLOSEDIR_DIR: // CLOSEDIR
+
+             // CLOSEDIR
+             res.ret = PROXY_XPN_CLOSEDIR(pr.u_st_xpn_server_msg.op_closedir.dir);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+             break;
+
+         case XPN_SERVER_READDIR_DIR: // READDIR
+
+             // READDIR
+             ret_readdir = PROXY_XPN_READDIR(pr.u_st_xpn_server_msg.op_readdir.dir);
+             if (ret_readdir != NULL) {
+                 ret_entry.end = 1;
+                 res.ret = 0;
+             } else {
+                 ret_entry.end = 0;
+                 res.ret = -1;
+             }
+
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+
+             // send readdir struct
+             if (res.ret == 0) {
+                 ret_entry.status.ret = res.ret;
+                 ret_entry.status.server_errno = res.server_errno;
+                 ret_entry.ret = * ret_readdir;
+
+                 write_n_bytes(sd_client, (char * ) & ret_entry, sizeof(struct st_xpn_server_readdir_req));
+             }
+             break;
+
+         case XPN_SERVER_RMDIR_DIR: // RMDIR
+
+             // read full path
+             path_len = pr.u_st_xpn_server_msg.op_rmdir.path_len;
+             path_src = pr.u_st_xpn_server_msg.op_rmdir.path;
+             ret = xpn_proxy_server_read_fullpath(sd_client, full_path, path_len, path_src);
+
+             // RMDIR
+             res.ret = PROXY_XPN_RMDIR(full_path);
+             res.server_errno = errno;
+
+             // send status
+             ret = write_n_bytes(sd_client, (char * ) & res, sizeof(struct st_xpn_server_status));
+             break;
+
+         default:
+             fprintf(stderr, "handle_petition: unknown request type %d\n", pr.type);
+             break;
          }
 
          return 0;
@@ -462,7 +460,8 @@
 
              pthread_mutex_unlock( & queue_mutex);
 
-             if (node) {
+             if (node)
+	     {
                  ret = handle_petition(node -> sd_client);
                  if (ret < 0) {
                      printf("[XPN_PROXY_SERVER]\t[handle_petition]\t%d\n", __LINE__);
@@ -531,7 +530,7 @@
       * @param argv: Argument vector.
       * @return: 0 on success, -1 on error.
       */
-     int main ( int argc, char * argv[] )
+     int main(int argc, char * argv[])
      {
          int ret;
          pthread_t threads[THREAD_POOL_SIZE];
@@ -573,7 +572,8 @@
          while (do_exit == 0)
 	 {
              ret = socket_server_accept(sd_server, & sd_client, ipv);
-             if (sd_client < 0 || ret < 0) {
+             if (sd_client < 0 || ret < 0)
+	     {
                  if (do_exit) {
                      break;
                  }
@@ -622,5 +622,5 @@
      }
 
 
- /* ................................................................... */
+  /* ................................................................... */
 
