@@ -491,6 +491,14 @@
 
 See [`docs/RUNNING.md`](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md).
 
+  * [1. To deploy Ad-Hoc XPN...](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#1-to-deploy-ad-hoc-xpn)
+    * [1.1 Deploying on a cluster/supercomputer](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#11-deploying-ad-hoc-expand-on-a-clustersupercomputer)
+    * [1.2 Deploying on a IoT distributed system](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#12-deploying-ad-hoc-expand-on-a-iot-distributed-system)
+  * [2. Executing Ad-Hoc XPN...](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#2-executing-ad-hoc-xpn)
+    * [2.1 Executing Ad-Hoc Expand using MPICH](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#21-executing-ad-hoc-expand-using-mpich)
+    * [2.2 Executing Ad-Hoc Expand using OpenMPI (experimental)](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#22-executing-ad-hoc-expand-using-openmpi-experimental-alpha)
+  * [3. To use Apache Spark connector...](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#3-to-use-apache-spark-connector)
+
 
 
 <div align="center">
