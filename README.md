@@ -1,4 +1,4 @@
-![Logo for the Expand Parallel File System.](info/xpn-logo.svg)
+![Logo for the Expand Parallel File System.](https://github.com/xpn-arcos/xpn/blob/master/info/xpn-logo.svg)
 
 
 
