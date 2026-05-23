@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2000-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias Del Pozo Puñal
+ *  Copyright 2000-2025 The Expand Team.
  *
  *  This file is part of Expand.
  *

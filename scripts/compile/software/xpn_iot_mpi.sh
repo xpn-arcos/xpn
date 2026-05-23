@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Gabriel Sotodosos Morales
+#  Copyright 2020-2025 The Expand Team.
 #
 #  This file is part of Expand.
 #

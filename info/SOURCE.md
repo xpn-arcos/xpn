@@ -2,7 +2,7 @@
 Expand: XPN Parallel File System
 
 *Licence*: GNU GENERAL PUBLIC LICENSE Version 3</br>
-*Authors*: Felix Garcia Carballeira, Luis Miguel Sanchez Garcia, Borja Bergua Guerra, Alejandro Calderon Mateos, Diego Camarmas Alonso, Dario Muñoz Muñoz, David Garcia Fernandez
+*Authors*: The Expand Team.
 
 
 ## 1. Source structure
