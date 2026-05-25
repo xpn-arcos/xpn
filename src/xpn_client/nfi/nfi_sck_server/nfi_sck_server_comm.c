@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz, Elias del Pozo Puñal
+ *  Copyright 2020-2026 The Expand Team.
  *
  *  This file is part of Expand.
  *

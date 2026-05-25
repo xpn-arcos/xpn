@@ -1,5 +1,6 @@
+
 /*
- *  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Dario Muñoz Muñoz
+ *  Copyright 2020-2026 The Expand Team.
  *
  *  This file is part of Expand.
  *
@@ -17,6 +18,7 @@
  *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 
 /* ... Include / Inclusion ........................................... */
 
