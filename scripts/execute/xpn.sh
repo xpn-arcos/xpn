@@ -1,8 +1,8 @@
 #!/bin/bash
-# set -x
+#set -x
 
 #
-#  Copyright 2020-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos, Elias del Pozo Puñal, Dario Muñoz Muñoz, Gabriel Sotodosos Morales
+#  Copyright 2020-2026 The Expand Team.
 #
 #  This file is part of Expand.
 #
