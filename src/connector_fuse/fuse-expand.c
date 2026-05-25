@@ -1,6 +1,6 @@
 
 /*
- *  Copyright 2020-2025 The Expand Team.
+ *  Copyright 2020-2026 The Expand Team.
  *
  *  This file is part of Expand.
  *
