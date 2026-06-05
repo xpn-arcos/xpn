@@ -1,14 +1,17 @@
-![Logo for the Expand Parallel File System.](info/xpn-logo.svg)
+![Logo for the Expand Parallel File System.](https://github.com/xpn-arcos/xpn/blob/master/info/xpn-logo.svg)
+
+
 
 
 
 <div align="center">
  
   <h2 align="center">Expand Project</h2>
-  
+
+  ![Workflow](https://github.com/xpn-arcos/xpn-docker/actions/workflows/xpn_docker_workflow.yml/badge.svg)
   ![Release](https://img.shields.io/github/v/release/xpn-arcos/xpn)
   ![License](https://img.shields.io/github/license/xpn-arcos/xpn)
-  [![Codacy](https://app.codacy.com/project/badge/Grade/ca0c40db97f64698a2db9992cafdd4ab)](https://app.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+  [![Codacy Badge](https://app.codacy.com/project/badge/Grade/c1bda08c0c68491cb331cc280f754a99)](https://app.codacy.com/gh/xpn-arcos/xpn/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
   ![Stars](https://img.shields.io/github/stars/xpn-arcos/xpn?style=social)
   ![Forks](https://img.shields.io/github/forks/xpn-arcos/xpn?style=social)
 
@@ -38,17 +41,57 @@
   <h2 align="center">Content</h2>
 </div>
 
-1. [Publications](#publications)
-2. [Authors](#authors)
-3. [ChangeLog](#changelog)
-4. [Usage](#using-expand)
-5. [Sponsors](#sponsors)
+1. [IO500 Ranking](#io500-ranking)
+2. [Publications](#publications)
+3. [Authors](#authors)
+4. [ChangeLog](#changelog)
+5. [Usage](#using-expand)
+6. [Sponsors](#sponsors)
+
+
+
+<div align="center">
+  <h2 align="center">IO500 Ranking</h2>
+
+  | Supercomputer | 10 Node Research List                              | Full List                                            |
+  |:-------------:|:--------------------------------------------------:|:----------------------------------------------------:|
+  | Leonardo      | 47/113 ([SC24](https://io500.org/list/sc24/ten))   | 114/268 ([SC24](https://io500.org/list/sc24/full))   |
+  | Marenostrum 4 | 69/101 ([SC23](https://io500.org/list/sc23/ten))   | 184/236 ([SC23](https://io500.org/list/sc23/full))   |
+  | C3-UC3M       | 78/118 ([ISC25](https://io500.org/list/isc25/ten)) | 205/284 ([ISC25](https://io500.org/list/isc25/full)) |
+
+</div>
 
 
 
 <div align="center">
   <h2 align="center">Publications</h2>
 </div>
+
+### 2026
+
+<details>
+<summary>:newspaper: Expand: An ad-hoc file system for parallel and distributed environments</summary>
+ 
+  * Journal paper: SoftwareX
+  * Authors: Diego Camarmas-Alonso, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Elias Del-Pozo-Puñal, Dario Muñoz-Muñoz, Gabriel Sotodosos-Morales, Jesus Carretero
+  * [:link: Open publication](https://doi.org/10.1016/j.softx.2026.102691)
+  ```bibtex
+  @article{CAMARMASALONSO2026102691,
+    title = {Expand: An ad-hoc file system for parallel and distributed environments},
+    journal = {SoftwareX},
+    volume = {34},
+    pages = {102691},
+    year = {2026},
+    issn = {2352-7110},
+    doi = {https://doi.org/10.1016/j.softx.2026.102691},
+    url = {https://www.sciencedirect.com/science/article/pii/S2352711026001834},
+    author = {Diego Camarmas-Alonso and Felix Garcia-Carballeira and Alejandro Calderon-Mateos and Elias Del-Pozo-Puñal and Dario Muñoz-Muñoz and Gabriel Sotodosos-Morales and Jesus Carretero}
+  }
+  ```
+</details>
+
+
+
 
 ### 2025
 
@@ -371,14 +414,21 @@
   <h2 align="center">Authors</h2>
 </div>
 
+  * :technologist: [Diego Camarmas Alonso](https://github.com/dcamarmas)
   * :technologist: [Félix García Carballeira](https://github.com/fgcarbal)
   * :technologist: [Alejandro Calderón Mateos](https://github.com/acaldero)
-  * :technologist: Luis Miguel Sanchez Garcia
-  * :technologist: Borja Bergua Guerra
-  * :technologist: [Diego Camarmas Alonso](https://github.com/dcamarmas)
+  * :technologist: Jesús Carretero Pérez
+
+### Contributors
+  
   * :technologist: [Elías Del Pozo Puñal](https://github.com/edelpozop)
   * :technologist: [Dario Muñoz Muñoz](https://github.com/dariomnz)
   * :technologist: [Gabriel Sotodosos Morales](https://github.com/gsotodos)
+
+### Former Collaborators
+
+  * :technologist: Luis Miguel Sanchez Garcia
+  * :technologist: Borja Bergua Guerra
     
 </details>
 
@@ -490,6 +540,14 @@
 </div>
 
 See [`docs/RUNNING.md`](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md).
+
+  * [1. To deploy Ad-Hoc XPN...](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#1-to-deploy-ad-hoc-xpn)
+    * [1.1 Deploying on a cluster/supercomputer](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#11-deploying-ad-hoc-expand-on-a-clustersupercomputer)
+    * [1.2 Deploying on a IoT distributed system](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#12-deploying-ad-hoc-expand-on-a-iot-distributed-system)
+  * [2. Executing Ad-Hoc XPN...](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#2-executing-ad-hoc-xpn)
+    * [2.1 Executing Ad-Hoc Expand using MPICH](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#21-executing-ad-hoc-expand-using-mpich)
+    * [2.2 Executing Ad-Hoc Expand using OpenMPI (experimental)](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#22-executing-ad-hoc-expand-using-openmpi-experimental-alpha)
+  * [3. To use Apache Spark connector...](https://github.com/xpn-arcos/xpn/blob/master/docs/RUNNING.md#3-to-use-apache-spark-connector)
 
 
 
