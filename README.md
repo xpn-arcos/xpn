@@ -67,6 +67,32 @@
   <h2 align="center">Publications</h2>
 </div>
 
+### 2026
+
+<details>
+<summary>:newspaper: Expand: An ad-hoc file system for parallel and distributed environments</summary>
+ 
+  * Journal paper: SoftwareX
+  * Authors: Diego Camarmas-Alonso, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Elias Del-Pozo-Puñal, Dario Muñoz-Muñoz, Gabriel Sotodosos-Morales, Jesus Carretero
+  * [:link: Open publication](https://doi.org/10.1016/j.softx.2026.102691)
+  ```bibtex
+  @article{CAMARMASALONSO2026102691,
+    title = {Expand: An ad-hoc file system for parallel and distributed environments},
+    journal = {SoftwareX},
+    volume = {34},
+    pages = {102691},
+    year = {2026},
+    issn = {2352-7110},
+    doi = {https://doi.org/10.1016/j.softx.2026.102691},
+    url = {https://www.sciencedirect.com/science/article/pii/S2352711026001834},
+    author = {Diego Camarmas-Alonso and Felix Garcia-Carballeira and Alejandro Calderon-Mateos and Elias Del-Pozo-Puñal and Dario Muñoz-Muñoz and Gabriel Sotodosos-Morales and Jesus Carretero}
+  }
+  ```
+</details>
+
+
+
+
 ### 2025
 
 <details>
@@ -388,15 +414,21 @@
   <h2 align="center">Authors</h2>
 </div>
 
+  * :technologist: [Diego Camarmas Alonso](https://github.com/dcamarmas)
   * :technologist: [Félix García Carballeira](https://github.com/fgcarbal)
   * :technologist: [Alejandro Calderón Mateos](https://github.com/acaldero)
-  * :technologist: Luis Miguel Sanchez Garcia
-  * :technologist: Borja Bergua Guerra
-  * :technologist: [Diego Camarmas Alonso](https://github.com/dcamarmas)
+  * :technologist: Jesús Carretero Pérez
+
+### Contributors
+  
   * :technologist: [Elías Del Pozo Puñal](https://github.com/edelpozop)
   * :technologist: [Dario Muñoz Muñoz](https://github.com/dariomnz)
   * :technologist: [Gabriel Sotodosos Morales](https://github.com/gsotodos)
-  * :technologist: Jesús Carretero
+
+### Former Collaborators
+
+  * :technologist: Luis Miguel Sanchez Garcia
+  * :technologist: Borja Bergua Guerra
     
 </details>
 
