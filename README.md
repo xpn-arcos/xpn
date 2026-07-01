@@ -90,6 +90,47 @@
   ```
 </details>
 
+<details>
+<summary>:newspaper: Securizando el sistema de ficheros Expand utilizando blockchain</summary>
+  
+  * Conference paper: XXXVI Jornadas de Paralelismo (JP26)
+  * Authors: Diego Camarmas-Alonso, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Jesus Carretero
+  * [:link: Open publication](https://doi.org/10.5281/zenodo.21071965)
+  ```bibtex
+  @article{DIEGOCAMARMASALONSO_JP26,
+    title = {Securizando el sistema de ficheros Expand utilizando blockchain},
+    conference = {XXXVI Jornadas de Paralelismo (JP26)},
+    volume = {1},
+    pages = {509-517},
+    year = {2026},
+    doi = {https://doi.org/10.5281/zenodo.21071965},
+    url = {https://zenodo.org/records/21071965},
+    author = {Diego Camarmas-Alonso, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Jesus Carretero}
+  }
+  ```
+</details>
+
+<details>
+<summary>:newspaper: Checkpointing transparente en aplicaciones que utilizan sistemas de ficheros ad-hoc</summary>
+  
+  * Conference paper: XXXVI Jornadas de Paralelismo (JP26)
+  * Authors: Dario Muñoz-Muñoz, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Diego Camarmas-Alonso, Jesus Carretero
+  * [:link: Open publication](https://doi.org/10.5281/zenodo.21073650)
+  ```bibtex
+  @article{DARIOMUNOZMUNOZ_JP26,
+    title = {Checkpointing transparente en aplicaciones que utilizan sistemas de ficheros ad-hoc},
+    conference = {XXXVI Jornadas de Paralelismo (JP26)},
+    volume = {1},
+    pages = {147-155},
+    year = {2026},
+    doi = {https://doi.org/10.5281/zenodo.21073650},
+    url = {https://zenodo.org/records/21073650},
+    author = {Dario Muñoz-Muñoz, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Diego Camarmas-Alonso, Jesus Carretero}
+  }
+  ```
+</details>
+
+
 
 
 
