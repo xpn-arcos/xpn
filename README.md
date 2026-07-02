@@ -91,6 +91,25 @@
 </details>
 
 <details>
+<summary>:newspaper: LFI: a communication library for high-performance networks</summary>
+ 
+  * Journal paper: Cluster Computing
+  * Authors: Dario Muñoz-Muñoz, Felix Garcia-Carballeira, Diego Camarmas-Alonso, Alejandro Calderon-Mateos
+  * [:link: Open publication](https://doi.org/10.1007/s10586-026-06274-8)
+  ```bibtex
+  @article{munoz2026lfi,
+    title={LFI: a communication library for high-performance networks},
+    author={Mu{\~n}oz-Mu{\~n}oz, Dario and Garcia-Carballeira, Felix and Camarmas-Alonso, Diego and Calderon-Mateos, Alejandro},
+    journal={Cluster Computing},
+    volume={29},
+    number={454},
+    year={2026},
+    publisher={Springer}
+  }
+  ```
+</details>
+
+<details>
 <summary>:newspaper: Securizando el sistema de ficheros Expand utilizando blockchain</summary>
   
   * Conference paper: XXXVI Jornadas de Paralelismo (JP26)
