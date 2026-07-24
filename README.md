@@ -110,6 +110,27 @@
 </details>
 
 <details>
+<summary>:newspaper: Transparent Checkpointing in Parallel Applications Using Ad-Hoc File Systems</summary>
+  
+  * Conference paper: 25th International Symposium on Parallel and Distributed Computing (ISPDC)
+  * Authors: Dario Muñoz-Muñoz, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Diego Camarmas-Alonso, Jesus Carretero
+  * [:link: Open publication](https://doi.org/10.1109/ISPDC69862.2026.00017)
+  ```bibtex
+  @INPROCEEDINGS{11612825,
+    author={Muñoz-Muñoz, Dario and Garcia-Carballeira, Felix and Calderon-Mateos, Alejandro and Camarmas-Alonso, Diego and Carretero, Jesus},
+    booktitle={2026 25th International Symposium on Parallel and Distributed Computing (ISPDC)}, 
+    title={Transparent Checkpointing in Parallel Applications Using AD-HOC File Systems}, 
+    year={2026},
+    volume={},
+    number={},
+    pages={65-73},
+    keywords={File systems;Checkpointing;Timing;High performance computing;Printing;Conferences;Memory;Architecture;Computer architecture;Design methodology;Transparent checkpoint;Checkpoint and restore;Expand Ad-Hoc;Parallel file system;Fault tolerance},
+    doi={10.1109/ISPDC69862.2026.00017}
+  }
+  ```
+</details>
+
+<details>
 <summary>:newspaper: Securizando el sistema de ficheros Expand utilizando blockchain</summary>
   
   * Conference paper: XXXVI Jornadas de Paralelismo (JP26)
