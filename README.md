@@ -70,6 +70,27 @@
 ### 2026
 
 <details>
+<summary>:newspaper: Improving big data analytics ecosystems using ad-hoc parallel file systems</summary>
+ 
+  * Journal paper: Journal of Big Data
+  * Authors: Gabriel Sotodosos-Morales, Felix Garcia-Carballeira, Diego Camarmas-Alonso, Alejandro Calderon-Mateos, Dario Muñoz-Muñoz, Jesus Carretero
+  * [:link: Open publication](https://doi.org/10.1186/s40537-026-01559-6)
+  ```bibtex
+  @article{Sotodosos-Morales2026,
+    author    = {Sotodosos-Morales, Gabriel and Garcia-Carballeira, Felix and Camarmas-Alonso, Diego and Calderon-Mateos, Alejandro and Muñoz-Muñoz, Dario and Carretero, Jesus},
+    title     = {Improving big data analytics ecosystems using ad-hoc parallel file systems},
+    journal   = {Journal of Big Data},
+    year      = {2026},
+    month     = {sep},
+    day       = {22},
+    issn      = {2196-1115},
+    doi       = {10.1186/s40537-026-01559-6},
+    url       = {https://doi.org/10.1186/s40537-026-01559-6},
+  }
+  ```
+</details>
+
+<details>
 <summary>:newspaper: Expand: An ad-hoc file system for parallel and distributed environments</summary>
  
   * Journal paper: SoftwareX
