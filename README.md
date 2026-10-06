@@ -131,6 +131,28 @@
 </details>
 
 <details>
+<summary>:newspaper: Adaptive Compression Techniques for Ad-Hoc Parallel File Systems Based on MPI</summary>
+  
+  * Conference paper: 33rd European MPI Users' Group Meeting (EuroMPI 2026)
+  * Authors: Dario Muñoz-Muñoz, Felix Garcia-Carballeira, Alejandro Calderon-Mateos, Diego Camarmas-Alonso, Jesus Carretero
+  * [:link: Open publication](http://dx.doi.org/10.1007/978-3-032-40777-1_12)
+  ```bibtex
+  @inbook{Mu_oz_Mu_oz_2026,
+    title        = {Adaptive Compression Techniques for Ad-Hoc Parallel File Systems Based on MPI},
+    author       = {Muñoz-Muñoz, Dario and Garcia-Carballeira, Felix and Calderon-Mateos, Alejandro and Camarmas-Alonso, Diego and Carretero, Jesus},
+    ISBN         = {9783032407771},
+    ISSN         = {1611-3349},
+    url          = {http://dx.doi.org/10.1007/978-3-032-40777-1_12},
+    DOI          = {10.1007/978-3-032-40777-1_12},
+    booktitle    = {Recent Advances in the Message Passing Interface},
+    publisher    = {Springer Nature Switzerland},
+    year         = {2026},
+    pages        = {202–217}
+  }
+  ```
+</details>
+
+<details>
 <summary>:newspaper: Transparent Checkpointing in Parallel Applications Using Ad-Hoc File Systems</summary>
   
   * Conference paper: 25th International Symposium on Parallel and Distributed Computing (ISPDC)
