@@ -6,7 +6,7 @@
   This program can be distributed under the terms of the GNU GPL.
   See the file COPYING.
 
-  gcc -Wall fuse-xpn.c `pkg-config fuse3 --cflags --libs` -lxpn -o fuse-xpn
+  mpicc -Wall xpn_fuse.c libxpn.a -I ../../include/xpn_client `pkg-config fuse3 --cflags --libs` -o xpn_fuse
 */
 
 #define FUSE_USE_VERSION 314
@@ -41,15 +41,15 @@
 
 
 #ifdef DEBUG
-#define debug_info(...)
-  do {
-    fprintf(stderr, __VA_ARGS__);
-    fprintf(stderr, "\n");
-  } while (0)
+#define debug_info(...)                   \
+    do {                                  \
+        fprintf(stderr, __VA_ARGS__);     \
+        fprintf(stderr, "\n");            \
+    } while (0)
 #else
-#define debug_info(...)
-  do {
-  } while (0)
+#define debug_info(...) \
+    do {                \
+    } while (0)
 #endif
 
 
@@ -512,7 +512,7 @@ static int xmp_statfs(const char *path, struct statvfs *stbuf)
 
   res = xpn_path(p, sizeof(p), path);
   if (res < 0) return res;
-  res = xpn_statvfs(p, stbuf);
+  res = xmp_statfs(p, stbuf);
 
   debug_info("[FUSE-XPN] End statfs(%s, %p)", path, (void *)stbuf);
 
