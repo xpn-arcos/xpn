@@ -66,7 +66,6 @@ static void *xmp_init(struct fuse_conn_info *conn, struct fuse_config *cfg)
 {
   int res;
   (void)conn;
-  (void)cfg;
 
   debug_info("[FUSE-XPN] Init");
   debug_info("[FUSE-XPN] proto_major %u", conn->proto_major);
@@ -81,6 +80,11 @@ static void *xmp_init(struct fuse_conn_info *conn, struct fuse_config *cfg)
   debug_info("[FUSE-XPN] time_gran %u", conn->time_gran);
 
   res = xpn_init();
+
+  cfg->direct_io = 1;
+  cfg->attr_timeout = 0;
+  cfg->entry_timeout = 0;
+  cfg->negative_timeout = 0;
 
   debug_info("[FUSE-XPN] End");
 
@@ -419,6 +423,7 @@ static int xmp_create(const char *path, mode_t mode, struct fuse_file_info *fi)
   if (fd == -1) return -errno;
 
   fi->fh = fd;
+  fi->direct_io = 1;
   return 0;
 }
 
@@ -439,6 +444,7 @@ static int xmp_open(const char *path, struct fuse_file_info *fi)
   if (fd == -1) return -errno;
 
   fi->fh = fd;
+  fi->direct_io = 1;
   return 0;
 }
 
