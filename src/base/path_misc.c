@@ -19,178 +19,167 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-   /* ... Include / Inclusion ........................................... */
+#include "base/path_misc.h"
 
-      #include "base/path_misc.h"
+/* ... Functions / Funciones ......................................... */
 
+int hash(const char* path, int nServ, int isfile)
+{
+    int i, max;
+    int unsigned num;
+    char* aux_file;
+    char file[PATH_MAX];
+    strncpy(file, path, PATH_MAX - 1);
 
-   /* ... Functions / Funciones ......................................... */
+    // Get file name
+    if (isfile == 1) {
+        aux_file = basename(file);
+    }
+    else {
+        aux_file = dirname(file);
+        aux_file = basename(aux_file);
+    }
+    num = 0;
+    max = strlen(aux_file);
+    for (i = 0; i < max; i++) {
+        num += (int)aux_file[i];
+    }
+    return (int)num % nServ;
+}
 
-      int hash ( const char *path, int nServ, int isfile )
-      {
-        int i,max;
-        int unsigned num;
-        char *aux_file;
-        char file[PATH_MAX];
-        strncpy(file, path, PATH_MAX-1);
+int getFirstDir(char* dir, char* path)
+{
+    int i, j;
 
-        // Get file name
-        if (isfile == 1){
-              aux_file = basename(file);
-        }else{
-              aux_file = dirname(file);
-              aux_file = basename(aux_file);
-        }
-        num = 0;
-        max = strlen(aux_file);
-        for (i = 0; i < max; i++) {
-              num += (int)aux_file[i];
-        }
-        return (int)num % nServ;
-     }
+    // printf("++ path = %s ++\n", path);
 
+    i = 0;
+    while ((path[i] != '\0') && (path[i] != '/')) {
+        i++;
+    }
+    strncpy(dir, path, i);
 
-      int getFirstDir ( char *dir, char *path )
-      {
-        int i, j;
+    dir[i] = '\0';
 
-        //printf("++ path = %s ++\n", path);
+    // printf("++ dir = %s ++\n",dir);
 
-        i = 0;
-        while((path[i] != '\0')&&(path[i] != '/')){
-                i++;
-        }
-        strncpy(dir, path , i);
+    while ((path[i] != '\0') && (path[i] == '/')) {
+        i++;
+    }
 
-        dir[i] = '\0';
+    j = 0;
+    while (path[i + j] != '\0') {
+        path[j] = path[i + j];
+        j++;
+    }
 
-        //printf("++ dir = %s ++\n",dir);
+    path[j] = '\0';
+    // printf("++ dir = %s path = %s ++\n",dir, path);
+    return j;
+}
 
+long getSizeFactor(char* name)
+{
+    switch (name[strlen(name) - 1]) {
+        case 'K':
+        case 'k':
+            return atoi(name) * KB;
 
-        while((path[i] != '\0')&&(path[i] == '/')){
-                i++;
-        }
+        case 'M':
+        case 'm':
+            return atoi(name) * MB;
 
-        j = 0;
-        while(path[i+j] != '\0'){
+        case 'G':
+        case 'g':
+            return atoi(name) * GB;
 
-                path[j] = path[i+j];
-                j++;
-        }
+        case 'B':
+        case 'b':
+            switch (name[strlen(name) - 2]) {
+                case 'K':
+                case 'k':
+                    return atoi(name) * KB;
 
-        path[j] = '\0';
-        //printf("++ dir = %s path = %s ++\n",dir, path);
-        return j;
-      }
+                case 'M':
+                case 'm':
+                    return atoi(name) * MB;
 
+                case 'G':
+                case 'g':
+                    return atoi(name) * GB;
 
-      long getSizeFactor ( char *name )
-      {
-        switch (name[strlen(name)-1])
-	{
-            case 'K':
-            case 'k':
-                 return atoi(name)*KB;
+                default:
+                    return 1;
+            }
 
-            case 'M':
-            case 'm':
-                 return atoi(name)*MB;
+        default:
+            return atoi(name);
+    }
+}
 
-            case 'G':
-            case 'g':
-                 return atoi(name)*GB;
+int getNameFile(char* file, char* dir)
+{
+    int i, j;
 
-            case 'B':
-            case 'b':
-                 switch (name[strlen(name)-2])
-		 {
-                     case 'K':
-                     case 'k':
-                          return atoi(name)*KB;
+    i = strlen(dir);
+    if (i == 0) {
+        file[0] = '\0';
+        return 0; /* ? */
+    }
 
-                     case 'M':
-                     case 'm':
-                          return atoi(name)*MB;
+    while ((i >= 0) && (dir[i] == '/')) {
+        i--;
+    }
+    if (i == 0) {
+        file[0] = '\0';
+        return 0; /* ? */
+    }
 
-                     case 'G':
-                     case 'g':
-                          return atoi(name)*GB;
+    /* */
+    j = i;
+    while ((j >= 0) && (dir[j] != '/')) {
+        j--;
+    }
 
-                     default:
-                          return 1;
-                 }
+    if (dir[j] == '/') {
+        j++;
+    }
 
-            default:
-                 return atoi(name);
-        }
-      }
+    strncpy(file, dir + j, i - j);
 
+    dir[j] = '\0';
+    file[i - j] = '\0';
 
-      int getNameFile ( char *file, char *dir )
-      {
-      	int i,j;
+    return 0;
+}
 
-      	i = strlen(dir);
-    	if (i == 0) {
-      		file[0]='\0';
-      		return 0; /* ? */
-      	}
+int getNamePart(char* part, char* dir)
+{
+    int i, j;
 
-      	while ((i>=0)&&(dir[i] == '/')) {
-      		i--;
-	}
-      	if (i == 0) {
-      		file[0]='\0';
-      		return 0; /* ? */
-      	}
+    // Printf("original dir = %s\n", dir);
+    if (dir[0] != '/') {
+        return -1;
+    }
 
-      	/* */
-      	j = i;
-      	while ((j>=0)&&(dir[j] != '/')) {
-      		j--;
-	}
+    i = 1;
+    while ((dir[i] != '\0') && (dir[i] != '/')) {
+        i++;
+    }
 
-      	if (dir[j] == '/') {
-      		j++;
-      	}
+    strncpy(part, dir + 1, i - 1);
+    part[i - 1] = '\0';
+    j = 0;
+    while (dir[i] != '\0') {
+        dir[j] = dir[i];
+        j++;
+        i++;
+    }
 
-      	strncpy(file, dir+j, i-j);
+    dir[j] = '\0';
+    return 0;
+}
 
-      	dir[j] = '\0';
-      	file[i-j] = '\0';
-
-      	return 0;
-      }
-
-
-      int getNamePart ( char *part, char *dir )
-      {
-      	int i,j;
-
-      	// Printf("original dir = %s\n", dir);
-      	if (dir[0] != '/') {
-      	    return -1;
-	}
-
-      	i = 1;
-      	while((dir[i] != '\0')&&(dir[i] != '/')) {
-      		i++;
-	}
-
-      	strncpy(part, dir+1, i-1);
-      	part[i-1] = '\0';
-      	j = 0;
-      	while (dir[i] != '\0') {
-      		dir[j] = dir[i];
-      		j++;
-      		i++;
-      	}
-
-      	dir[j] = '\0';
-      	return 0;
-      }
-
-
-   /* ................................................................... */
-
+/* ................................................................... */

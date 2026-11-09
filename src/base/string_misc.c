@@ -19,178 +19,157 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "base/string_misc.h"
 
-     #include "base/string_misc.h"
+/* ... Functions / Funciones ......................................... */
 
+/**
+ * Return the string length of 'str'.
+ * @param str the string.
+ * @return the string length.
+ */
+long STRING_MISC_StrLen(/*IN*/ char* str)
+{
+    /* check params */
+    if (str == NULL) return 0L;
 
-  /* ... Functions / Funciones ......................................... */
+    return (long)strlen(str);
+}
 
+/**
+ * Return true if and only if the strings 'str1' and 'str2' are equals.
+ * @param str1 the first string.
+ * @param str2 the second string.
+ * @return true (1) iff are equals or false (0) in other case.
+ */
+int8_t STRING_MISC_Equal(/*IN*/ char* str1,
+                         /*IN*/ char* str2)
+{
+    /* easy cases */
+    if (str1 == str2) return (1);
+    if ((str1 == NULL) || (str2 == NULL)) return (0);
 
-    /**
-     * Return the string length of 'str'.
-     * @param str the string.
-     * @return the string length.
-     */
-     long   STRING_MISC_StrLen ( /*IN*/  char  *str )
-     {
-         /* check params */
-         if (str == NULL)
-             return 0L ;
+    /* use strcmp */
+    if ((strcmp(str1, str2) == 0)) return (1);
 
-         return (long)strlen(str) ;
-     }
+    return (0);
+}
 
-    /**
-     * Return true if and only if the strings 'str1' and 'str2' are equals.
-     * @param str1 the first string.
-     * @param str2 the second string.
-     * @return true (1) iff are equals or false (0) in other case.
-     */
-     int8_t STRING_MISC_Equal ( /*IN*/  char  *str1,
-                                /*IN*/  char  *str2 )
-     {
-         /* easy cases */
-         if (str1 == str2)
-               return (1) ;
-         if ( (str1 == NULL) || (str2 == NULL) )
-               return (0) ;
+/**
+ * Return a string clone of 'str'.
+ * @param str the string.
+ * @return a clone of 'str'.
+ */
+char* STRING_MISC_StrDup(/*IN*/ char* str)
+{
+    int lenstr;
+    char* pch;
 
-         /* use strcmp */
-         if ( (strcmp(str1,str2) == 0) )
-               return (1) ;
+    /* check params */
+    if (NULL == str) return NULL;
 
-         return (0) ;
-     }
+    /* alloc memory for the clone... */
+    lenstr = STRING_MISC_StrLen(str) + 1;
+    pch = (char*)malloc(lenstr);
+    if (NULL == pch) return NULL;
 
-    /**
-     * Return a string clone of 'str'.
-     * @param str the string.
-     * @return a clone of 'str'.
-     */
-     char  *STRING_MISC_StrDup ( /*IN*/ char  *str )
-     {
-         int  lenstr ;
-         char *pch ;
+    /* copy contents */
+    memmove(pch, str, lenstr);
+    return pch;
+}
 
-         /* check params */
-         if (NULL == str)
-             return NULL;
+/**
+ *
+ *     Como 'strlen' pero permite usar
+ *  un string con formato.
+ *
+ *     Like 'strlen' but also accept
+ *  a string with format.
+ *
+ *     @param  format string format.
+ *     @param  argl   format params.
+ *     @return string legth.
+ *
+ */
+int STRING_MISC_StrLenF(
+    /*IN*/ char* format,
+    /*IN*/ va_list argl)
+{
+    int ineed;
+    static FILE* nullfd = NULL;
 
-         /* alloc memory for the clone... */
-         lenstr = STRING_MISC_StrLen(str) + 1 ;
-         pch = (char *)malloc(lenstr) ;
-         if (NULL == pch)
-             return NULL;
-
-         /* copy contents */
-         memmove(pch,str,lenstr) ;
-         return pch ;
-       }
-
-       /**
-         *
-         *     Como 'strlen' pero permite usar
-         *  un string con formato.
-         *
-         *     Like 'strlen' but also accept
-         *  a string with format.
-         *
-         *     @param  format string format.
-         *     @param  argl   format params.
-         *     @return string legth.
-         *
+    if (nullfd == NULL) {
+        nullfd = fopen(NULL_DEVICE_PATH, "w");
+        /*
+         *   we will lost one file descriptor,
+         *   because we never "fclose(nullfd)".
          */
-       int   STRING_MISC_StrLenF
-       (
-         /*IN*/  char     *format,
-         /*IN*/  va_list   argl
-       )
-       {
-                int       ineed ;
-         static FILE     *nullfd = NULL ;
+    }
 
-         if (nullfd == NULL)
-            {
-              nullfd = fopen (NULL_DEVICE_PATH,"w") ;
-              /*
-               *   we will lost one file descriptor,
-               *   because we never "fclose(nullfd)".
-               */
-            }
+    if (strchr(format, '%') != NULL) {
+        ineed = vfprintf(nullfd, format, argl);
+    }
+    else /* only a string, not format */
+    {
+        ineed = strlen(format);
+    }
 
-         if (strchr(format,'%') != NULL)
-            {
-              ineed = vfprintf(nullfd,format,argl) ;
-            }
-       else /* only a string, not format */
-            {
-              ineed = strlen(format) ;
-            }
+    return ineed;
+}
 
-        return ineed ;
-      }
+/**
+ *
+ *     Actua igual que 'vsprintf', pero pide memoria
+ *  dinamica para el string donde se imprime.
+ *  Retorna NULL si no pudo.
+ *
+ *     Like vsprintf, but request dynamic memory
+ *  to write string elements.
+ *
+ *     @param  format string format.
+ *     @param  argl   format params.
+ *     @return string pointer or NULL if error.
+ *
+ */
+char* STRING_MISC_Dvsprintf(
+    /*IN*/ char* format,
+    /*IN*/ va_list argl)
+{
+    char* baux;
+    int ineed;
 
-      /**
-       *
-       *     Actua igual que 'vsprintf', pero pide memoria
-       *  dinamica para el string donde se imprime.
-       *  Retorna NULL si no pudo.
-       *
-       *     Like vsprintf, but request dynamic memory
-       *  to write string elements.
-       *
-       *     @param  format string format.
-       *     @param  argl   format params.
-       *     @return string pointer or NULL if error.
-       *
-       */
-      char *STRING_MISC_Dvsprintf
-      (
-        /*IN*/  char     *format,
-        /*IN*/  va_list   argl
-      )
-      {
-        char     *baux ;
-        int       ineed ;
+    ineed = STRING_MISC_StrLenF(format, argl);
+    baux = (char*)malloc(ineed + 1);
+    if (NULL == baux) return NULL;
 
-        ineed = STRING_MISC_StrLenF(format,argl) ;
-        baux  = (char *)malloc(ineed+1) ;
-        if (NULL == baux)
-            return NULL ;
+    vsprintf(baux, format, argl);
 
-        vsprintf(baux,format,argl) ;
+    return baux;
+}
 
-        return baux ;
-      }
+/**
+ *
+ *     Igual que la anterior, solo varia los argumentos
+ *
+ *     Like before, but with open arguments.
+ *
+ *     @param  format string with message format.
+ *     @return string pointer or NULL if error.
+ *
+ */
+char* STRING_MISC_Dsprintf(
+    /*IN*/ char* format, ...)
+{
+    char* saux;
+    va_list varg;
 
-      /**
-        *
-        *     Igual que la anterior, solo varia los argumentos
-        *
-        *     Like before, but with open arguments.
-        *
-        *     @param  format string with message format.
-        *     @return string pointer or NULL if error.
-        *
-        */
-      char *STRING_MISC_Dsprintf
-      (
-        /*IN*/  char   *format,
-        ...
-      )
-      {
-        char   *saux ;
-        va_list varg ;
+    va_start(varg, format);
+    saux = STRING_MISC_Dvsprintf(format, varg);
+    va_end(varg);
 
-        va_start(varg,format) ;
-        saux = STRING_MISC_Dvsprintf(format,varg) ;
-        va_end(varg) ;
+    return saux;
+}
 
-        return saux ;
-      }
-
-
-  /* ...................................................................... */
-
+/* ...................................................................... */

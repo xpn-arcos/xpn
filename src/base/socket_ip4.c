@@ -19,269 +19,251 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "base/socket_ip4.h"
 
-     #include "base/socket_ip4.h"
+/* ... Functions / Funciones ......................................... */
 
+int socket_ip4_server_create(int* out_socket, int port)
+{
+    int ret = 0;
+    struct sockaddr_in server_addr;
+    int server_socket, val;
 
-  /* ... Functions / Funciones ......................................... */
+    // check arguments...
+    if (NULL == out_socket) {
+        printf("[SOCKET_IP4] [socket_ip4_server_create] ERROR: NULL out_socket\n");
+        return -1;
+    }
 
-     int socket_ip4_server_create ( int * out_socket, int port )
-     {
-         int ret = 0;
-         struct sockaddr_in server_addr;
-         int server_socket, val ;
+    // Socket init
+    debug_info("[SOCKET_IP4] [socket_server_create] Scoket init\n");
 
-         // check arguments...
-         if (NULL == out_socket)
-         {
-             printf("[SOCKET_IP4] [socket_ip4_server_create] ERROR: NULL out_socket\n");
-             return -1;
-         }
+    server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (server_socket < 0) {
+        printf("[SOCKET_IP4] [socket_server_create] ERROR: socket fails\n");
+        return -1;
+    }
 
-         // Socket init
-         debug_info("[SOCKET_IP4] [socket_server_create] Scoket init\n");
+    // tcp_nodelay
+    debug_info(" [SOCKET_IP4] [socket_server_create] TCP nodelay\n");
 
-         server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-         if (server_socket < 0)
-         {
-             printf("[SOCKET_IP4] [socket_server_create] ERROR: socket fails\n");
-             return -1;
-         }
+    val = 1;
+    ret = setsockopt(server_socket, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
+    if (ret < 0) {
+        printf("[SOCKET_IP4] [socket_server_create] ERROR: setsockopt for TCP_NODELAY fails\n");
+        return -1;
+    }
 
-         // tcp_nodelay
-         debug_info(" [SOCKET_IP4] [socket_server_create] TCP nodelay\n");
+    // sock_reuseaddr
+    debug_info(" [SOCKET_IP4] [socket_server_create] Socket reuseaddr nodelay\n");
 
-         val = 1;
-         ret = setsockopt(server_socket, IPPROTO_TCP, TCP_NODELAY, & val, sizeof(val));
-         if (ret < 0)
-         {
-             printf("[SOCKET_IP4] [socket_server_create] ERROR: setsockopt for TCP_NODELAY fails\n");
-             return -1;
-         }
+    val = 1;
+    ret = setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, (char*)&val, sizeof(int));
+    if (ret < 0) {
+        printf("[SOCKET_IP4] [socket_server_create] ERROR: setsockopt for SO_REUSEADDR fails\n");
+        return -1;
+    }
 
-         // sock_reuseaddr
-         debug_info(" [SOCKET_IP4] [socket_server_create] Socket reuseaddr nodelay\n");
+    // bind
+    debug_info("[SOCKET_IP4] [socket_server_create] Socket bind\n");
 
-         val = 1;
-         ret = setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, (char * ) & val, sizeof(int));
-         if (ret < 0)
-         {
-             printf("[SOCKET_IP4] [socket_server_create] ERROR: setsockopt for SO_REUSEADDR fails\n");
-             return -1;
-         }
+    bzero((char*)&server_addr, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(port);
 
-         // bind
-         debug_info("[SOCKET_IP4] [socket_server_create] Socket bind\n");
+    ret = bind(server_socket, (struct sockaddr*)&server_addr, sizeof(server_addr));
+    if (ret < 0) {
+        printf("[SOCKET_IP4] [socket_server_create] ERROR: bind fails\n");
+        return -1;
+    }
 
-         bzero((char * ) & server_addr, sizeof(server_addr));
-         server_addr.sin_family = AF_INET;
-         server_addr.sin_addr.s_addr = INADDR_ANY;
-         server_addr.sin_port = htons(port);
+    // listen
+    debug_info("[SOCKET_IP4] [socket_server_create] Socket listen\n");
 
-         ret = bind(server_socket, (struct sockaddr * ) & server_addr, sizeof(server_addr));
-         if (ret < 0)
-         {
-             printf("[SOCKET_IP4] [socket_server_create] ERROR: bind fails\n");
-             return -1;
-         }
+    ret = listen(server_socket, SOMAXCONN);
+    if (ret < 0) {
+        printf("[SOCKET_IP4] [socket_server_create] ERROR: listen fails\n");
+        return -1;
+    }
 
+    // return new server_socket as *out_socket
+    *out_socket = server_socket;
+    return 0;
+}
 
-         // listen
-         debug_info("[SOCKET_IP4] [socket_server_create] Socket listen\n");
+int socket_ip4_server_accept(int socket, int* out_conection_socket)
+{
+    struct sockaddr_in client_addr;
+    socklen_t sock_size;
 
-         ret = listen(server_socket, SOMAXCONN);
-         if (ret < 0)
-         {
-             printf("[SOCKET_IP4] [socket_server_create] ERROR: listen fails\n");
-             return -1;
-         }
+    // check arguments...
+    if (NULL == out_conection_socket) {
+        printf("[SOCKET_IP4] [socket_ip4_server_accept] ERROR: NULL out_conection_socket\n");
+        return -1;
+    }
 
-         // return new server_socket as *out_socket
-         *out_socket = server_socket;
-         return 0;
-     }
+    // Accept
+    debug_info("[SOCKET_IP4] [socket_ip4_server_accept] Accept\n");
 
-     int socket_ip4_server_accept ( int socket, int * out_conection_socket )
-     {
-         struct sockaddr_in client_addr ;
-         socklen_t sock_size ;
+    sock_size = sizeof(struct sockaddr_in);
+    *out_conection_socket = accept(socket, (struct sockaddr*)&client_addr, &sock_size);
+    if (*out_conection_socket < 0) {
+        printf("[SOCKET_IP4] [socket_ip4_server_accept] ERROR: socket accept\n");
+        return -1;
+    }
 
-         // check arguments...
-         if (NULL == out_conection_socket)
-         {
-             printf("[SOCKET_IP4] [socket_ip4_server_accept] ERROR: NULL out_conection_socket\n");
-             return -1;
-         }
+    debug_info("[SOCKET_IP4] [socket_ip4_server_accept] accepted for %d\n", *out_conection_socket);
 
-         // Accept
-         debug_info("[SOCKET_IP4] [socket_ip4_server_accept] Accept\n");
+    return 0;
+}
 
-         sock_size = sizeof(struct sockaddr_in);
-         *out_conection_socket = accept(socket, (struct sockaddr * ) & client_addr, & sock_size);
-         if (*out_conection_socket < 0) {
-             printf("[SOCKET_IP4] [socket_ip4_server_accept] ERROR: socket accept\n");
-             return -1;
-         }
+int socket_ip4_client_connect(char* srv_name, int port, int* out_socket)
+{
+    int ret, client_fd;
+    struct sockaddr_in serv_addr;
+    struct hostent* hp;
 
-         debug_info("[SOCKET_IP4] [socket_ip4_server_accept] accepted for %d\n", *out_conection_socket);
+    // check arguments...
+    if (NULL == out_socket) {
+        printf("[SOCKET_IP4] [socket_ip4_client_connect] ERROR: NULL out_socket\n");
+        return -1;
+    }
 
-         return 0;
-     }
+    // socket + gethostbyname + connect
+    client_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (client_fd < 0) {
+        printf("[SOCKET_IP4] [socket_read] ERROR: socket creation error\n");
+        return -1;
+    }
 
-     int socket_ip4_client_connect ( char * srv_name, int port, int * out_socket )
-     {
-         int    ret, client_fd;
-         struct sockaddr_in serv_addr;
-         struct hostent * hp;
+    hp = gethostbyname(srv_name);
+    if (hp == NULL) {
+        printf("[SOCKET_IP4] [socket_read] ERROR: gethostbyname srv_name: %s\n", srv_name);
+        close(client_fd);
+        return -1;
+    }
 
-         // check arguments...
-         if (NULL == out_socket)
-         {
-             printf("[SOCKET_IP4] [socket_ip4_client_connect] ERROR: NULL out_socket\n");
-             return -1;
-         }
+    bzero((char*)&serv_addr, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(port);
+    memcpy(&(serv_addr.sin_addr), hp->h_addr, hp->h_length);
 
-	 // socket + gethostbyname + connect
-         client_fd = socket(AF_INET, SOCK_STREAM, 0);
-         if (client_fd < 0)
-         {
-             printf("[SOCKET_IP4] [socket_read] ERROR: socket creation error\n");
-             return -1;
-         }
+    ret = connect(client_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
+    if (ret < 0) {
+        printf("[SOCKET_IP4] [socket_read] ERROR: socket connection failed to %s in port %d %s\n", srv_name, port,
+               strerror(errno));
+        close(client_fd);
+        return -1;
+    }
 
-         hp = gethostbyname(srv_name);
-         if (hp == NULL)
-         {
-             printf("[SOCKET_IP4] [socket_read] ERROR: gethostbyname srv_name: %s\n", srv_name);
-             close(client_fd);
-             return -1;
-         }
+    *out_socket = client_fd;
+    return 0;
+}
 
-         bzero((char * ) & serv_addr, sizeof(serv_addr));
-         serv_addr.sin_family = AF_INET;
-         serv_addr.sin_port   = htons(port);
-         memcpy( & (serv_addr.sin_addr), hp->h_addr, hp->h_length);
+int socket_ip4_client_connect_with_retries(char* srv_name, char* port_name, int* out_socket, int n_retries)
+{
+    int ret;
+    struct hostent* hp;
+    struct sockaddr_in server_addr;
+    int socket_setopt_data(int socket);
+    int socket_client_connect_retries(int sd, int n_retries, struct sockaddr* ai_addr, socklen_t ai_addrlen);
 
-         ret = connect(client_fd, (struct sockaddr * ) &serv_addr, sizeof(serv_addr));
-         if (ret < 0)
-         {
-             printf("[SOCKET_IP4] [socket_read] ERROR: socket connection failed to %s in port %d %s\n", srv_name, port, strerror(errno));
-             close(client_fd);
-             return -1;
-         }
+    debug_info("[SOCKET] [socket_ip4_client_connect_with_retries] srv_name:%s port_name:%s\n", srv_name, port_name);
 
-         *out_socket = client_fd;
-         return 0;
-     }
+    // Socket...
+    *out_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (*out_socket < 0) {
+        perror("socket: ");
+        return -1;
+    }
 
-     int socket_ip4_client_connect_with_retries ( char * srv_name, char * port_name, int *out_socket, int n_retries )
-     {
-         int ret;
-         struct hostent * hp;
-         struct sockaddr_in server_addr;
-	 int socket_setopt_data ( int socket ) ;
-         int socket_client_connect_retries ( int sd, int n_retries, struct sockaddr *ai_addr, socklen_t ai_addrlen ) ;
+    ret = socket_setopt_data(*out_socket);
+    if (ret < 0) {
+        close(*out_socket);
+        return -1;
+    }
 
-         debug_info("[SOCKET] [socket_ip4_client_connect_with_retries] srv_name:%s port_name:%s\n", srv_name, port_name);
+    // get address with gethostbyname
+    hp = gethostbyname(srv_name);
+    if (hp == NULL) {
+        fprintf(stderr, "nfi_sck_server_init: error gethostbyname %s (%s,%s)\n", srv_name, srv_name, port_name);
+        return -1;
+    }
 
-         // Socket...
-         *out_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-         if (*out_socket < 0) {
-             perror("socket: ");
-             return -1;
-         }
+    bzero((char*)&server_addr, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(atoi(port_name));
+    memcpy(&(server_addr.sin_addr), hp->h_addr, hp->h_length);
 
-         ret = socket_setopt_data(*out_socket) ;
-         if (ret < 0) {
-             close(*out_socket);
-             return -1;
-         }
+    // Connect with retries
+    ret = socket_client_connect_retries(*out_socket, n_retries, (struct sockaddr*)&server_addr, sizeof(server_addr));
+    if (ret < 0) {
+        printf("[SOCKET] [socket_ip4_client_connect_with_retries] ERROR: connect fails\n");
+        close(*out_socket);
+        return -1;
+    }
 
-         // get address with gethostbyname
-         hp = gethostbyname(srv_name);
-         if (hp == NULL)
-         {
-             fprintf(stderr, "nfi_sck_server_init: error gethostbyname %s (%s,%s)\n", srv_name, srv_name, port_name);
-             return -1;
-         }
+    return ret;
+}
 
-         bzero((char * ) &server_addr, sizeof(server_addr));
-         server_addr.sin_family = AF_INET;
-         server_addr.sin_port   = htons(atoi(port_name));
-         memcpy( & (server_addr.sin_addr), hp->h_addr, hp->h_length);
+//
+//  address management
+//
 
-         // Connect with retries
-         ret = socket_client_connect_retries(*out_socket, n_retries, (struct sockaddr *)&server_addr, sizeof(server_addr)) ;
-         if (ret < 0)
-         {
-             printf("[SOCKET] [socket_ip4_client_connect_with_retries] ERROR: connect fails\n");
-             close(*out_socket);
-             return -1;
-         }
+int socket_ip4_gethostname(char* srv_name)
+{
+    int ret;
 
-         return ret;
-     }
+    debug_info("[SOCKET_IP4] [socket_ip4_gethostname] >> Begin IPv4\n");
+    ret = gethostname(srv_name, HOST_NAME_MAX);  // get hostname
+    debug_info("[SOCKET_IP4] [socket_ip4_gethostname] >> End IPv4\n");
 
+    return ret;
+}
 
-     //
-     //  address management
-     //
+int socket_ip4_gethostbyname(char* ip, size_t ip_size, char* srv_name)
+{
+    struct hostent* srv_entry;
 
-     int socket_ip4_gethostname ( char * srv_name )
-     {
-         int ret ;
+    if (ip == NULL) {
+        printf("[SOCKET_IP4] [socket_ip4_gethostbyname] ERROR: NULL ip argument\n");
+        return -1;
+    }
 
-         debug_info("[SOCKET_IP4] [socket_ip4_gethostname] >> Begin IPv4\n");
-         ret = gethostname(srv_name, HOST_NAME_MAX); // get hostname
-         debug_info("[SOCKET_IP4] [socket_ip4_gethostname] >> End IPv4\n");
+    // Resolver nombre
+    srv_entry = gethostbyname(srv_name);
+    if (srv_entry == NULL) {
+        printf("[SOCKET_IP4] [socket_ip4_gethostbyname] ERROR: gethostbyname failed for '%s'\n", srv_name);
+        return -1;
+    }
 
-	 return ret ;
-     }
+    // Asegurarse de que haya al menos una IP
+    if (srv_entry->h_addr_list == NULL || srv_entry->h_addr_list[0] == NULL) {
+        printf("[SOCKET_IP4] [socket_ip4_gethostbyname] ERROR: No IP address found for '%s'\n", srv_name);
+        return -1;
+    }
 
-     int socket_ip4_gethostbyname ( char *ip, size_t ip_size, char *srv_name )
-     {
-         struct hostent *srv_entry;
+    // Convertir a string y copiar a ip
+    const char* ip_local = inet_ntoa(*(struct in_addr*)srv_entry->h_addr_list[0]);
+    strncpy(ip, ip_local, ip_size - 1);
+    ip[ip_size - 1] = '\0';  // asegurarse de que esté terminada en null
 
-         if (ip == NULL) {
-             printf("[SOCKET_IP4] [socket_ip4_gethostbyname] ERROR: NULL ip argument\n");
-             return -1;
-         }
+    return 1;
+}
 
-         // Resolver nombre
-         srv_entry = gethostbyname(srv_name);
-         if (srv_entry == NULL) {
-             printf("[SOCKET_IP4] [socket_ip4_gethostbyname] ERROR: gethostbyname failed for '%s'\n", srv_name);
-             return -1;
-         }
+int socket_ip4_getsockname(char* port_name, int new_socket)
+{
+    struct sockaddr_in server_addr;
 
-         // Asegurarse de que haya al menos una IP
-         if (srv_entry->h_addr_list == NULL || srv_entry->h_addr_list[0] == NULL) {
-             printf("[SOCKET_IP4] [socket_ip4_gethostbyname] ERROR: No IP address found for '%s'\n", srv_name);
-             return -1;
-         }
+    // get sockname
+    socklen_t len = sizeof(server_addr);
+    getsockname(new_socket, (struct sockaddr*)&server_addr, &len);
+    sprintf(port_name, "%d", ntohs(server_addr.sin_port));
 
-         // Convertir a string y copiar a ip
-         const char *ip_local = inet_ntoa(*(struct in_addr *)srv_entry->h_addr_list[0]);
-         strncpy(ip, ip_local, ip_size - 1);
-         ip[ip_size - 1] = '\0'; // asegurarse de que esté terminada en null
+    return 1;
+}
 
-         return 1;
-     }
-
-     int socket_ip4_getsockname ( char * port_name, int new_socket )
-     {
-         struct sockaddr_in server_addr;
-
-         // get sockname
-         socklen_t len = sizeof(server_addr);
-         getsockname( new_socket, (struct sockaddr * ) &server_addr, &len);
-         sprintf(port_name, "%d", ntohs(server_addr.sin_port));
-
-         return 1;
-     }
-
-
-  /* ................................................................... */
-
+/* ................................................................... */

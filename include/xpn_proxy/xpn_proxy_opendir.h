@@ -19,36 +19,30 @@
  *
  */
 
-
 #ifndef _XPN_PROXY_OPENDIR_H_
 #define _XPN_PROXY_OPENDIR_H_
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "config.h"
 
-     #include "config.h"
+/* ... Data structures / Estructuras de datos ........................ */
 
+struct __dirstream
+{
+    int fd;  // File descriptor.
+    //__libc_lock_define (, lock) // Mutex lock for this structure. //TODO
+    size_t allocation;  // Space allocated for the block.
+    size_t size;        // Total valid data in the block.
+    size_t offset;      // Current offset into the block.
+    off_t filepos;      // Position of next entry to read.
+    /* Directory block.  */
+    char data[0] __attribute__((aligned(__alignof__(void*))));
 
-  /* ... Data structures / Estructuras de datos ........................ */
+    char* path;
+    DIR* remote_handler;
+};
 
-     struct __dirstream
-     {
-				int fd;                       // File descriptor.
-		//__libc_lock_define (, lock) // Mutex lock for this structure. //TODO
-		size_t allocation;            // Space allocated for the block.
-		size_t size;                  // Total valid data in the block.
-		size_t offset;                // Current offset into the block.
-		off_t  filepos;               // Position of next entry to read.
-		/* Directory block.  */
-		char data[0] __attribute__ ((aligned (__alignof__ (void*))));
-
-		char * path;
-		DIR  * remote_handler;
-
-      } ;
-
-
-   /* ................................................................... */
+/* ................................................................... */
 
 #endif
-

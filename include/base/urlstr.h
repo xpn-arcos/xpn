@@ -19,38 +19,27 @@
  *
  */
 
-
 #ifndef _URLSTR_H
 #define _URLSTR_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-
-  /* ... Include / Inclusion ........................................... */
-
-     #include "all_system.h"
-     #include "string_misc.h"
-     #include "path_misc.h"
-
-
-  /* ... Functions / Funciones ......................................... */
-
-     int ParseURL ( char *url,  
-                    char *protocol, 
-                    char *login, 
-                    char *passwd, 
-                    char *server,  
-                    char *port,  
-                    char *dir) ;
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include "all_system.h"
+#include "path_misc.h"
+#include "string_misc.h"
+
+/* ... Functions / Funciones ......................................... */
+
+int ParseURL(char* url, char* protocol, char* login, char* passwd, char* server, char* port, char* dir);
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

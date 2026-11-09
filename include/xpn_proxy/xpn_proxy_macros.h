@@ -22,55 +22,50 @@
  *  + Otherwise, PROXY_XPN_XXXX maps to POSIX functions.
  */
 
-
 #ifndef PROXY_XPN_MACROS_H
 #define PROXY_XPN_MACROS_H
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+// for open():
+#include <fcntl.h>
+// for close(), read(), write():
+#include <unistd.h>
 
-    // for open():
-    #include <fcntl.h>
-    // for close(), read(), write():
-    #include <unistd.h>
-
-
-  /* ... Macros / Macros ............................................... */
+/* ... Macros / Macros ............................................... */
 
 #ifdef USE_XPN_FUNCTIONS
-    // Map to Expand functions
-    #define PROXY_XPN_OPEN      xpn_open
-    #define PROXY_XPN_CREAT     xpn_creat
-    #define PROXY_XPN_CLOSE     xpn_close
-    #define PROXY_XPN_READ      xpn_read
-    #define PROXY_XPN_WRITE     xpn_write
-    #define PROXY_XPN_UNLINK    xpn_unlink
-    #define PROXY_XPN_RENAME    xpn_rename
-    #define PROXY_XPN_STAT      xpn_stat
-    #define PROXY_XPN_MKDIR     xpn_mkdir
-    #define PROXY_XPN_OPENDIR   xpn_opendir
-    #define PROXY_XPN_CLOSEDIR  xpn_closedir
-    #define PROXY_XPN_READDIR   xpn_readdir
-    #define PROXY_XPN_RMDIR     xpn_rmdir
+// Map to Expand functions
+#define PROXY_XPN_OPEN     xpn_open
+#define PROXY_XPN_CREAT    xpn_creat
+#define PROXY_XPN_CLOSE    xpn_close
+#define PROXY_XPN_READ     xpn_read
+#define PROXY_XPN_WRITE    xpn_write
+#define PROXY_XPN_UNLINK   xpn_unlink
+#define PROXY_XPN_RENAME   xpn_rename
+#define PROXY_XPN_STAT     xpn_stat
+#define PROXY_XPN_MKDIR    xpn_mkdir
+#define PROXY_XPN_OPENDIR  xpn_opendir
+#define PROXY_XPN_CLOSEDIR xpn_closedir
+#define PROXY_XPN_READDIR  xpn_readdir
+#define PROXY_XPN_RMDIR    xpn_rmdir
 #else
-    // Map to POSIX functions
-    #define PROXY_XPN_OPEN      open
-    #define PROXY_XPN_CREAT     creat
-    #define PROXY_XPN_CLOSE     close
-    #define PROXY_XPN_READ      filesystem_read
-    #define PROXY_XPN_WRITE     filesystem_write
-    #define PROXY_XPN_UNLINK    unlink
-    #define PROXY_XPN_RENAME    rename
-    #define PROXY_XPN_STAT      stat
-    #define PROXY_XPN_MKDIR     mkdir
-    #define PROXY_XPN_OPENDIR   opendir
-    #define PROXY_XPN_CLOSEDIR  closedir
-    #define PROXY_XPN_READDIR   readdir
-    #define PROXY_XPN_RMDIR     rmdir
+// Map to POSIX functions
+#define PROXY_XPN_OPEN     open
+#define PROXY_XPN_CREAT    creat
+#define PROXY_XPN_CLOSE    close
+#define PROXY_XPN_READ     filesystem_read
+#define PROXY_XPN_WRITE    filesystem_write
+#define PROXY_XPN_UNLINK   unlink
+#define PROXY_XPN_RENAME   rename
+#define PROXY_XPN_STAT     stat
+#define PROXY_XPN_MKDIR    mkdir
+#define PROXY_XPN_OPENDIR  opendir
+#define PROXY_XPN_CLOSEDIR closedir
+#define PROXY_XPN_READDIR  readdir
+#define PROXY_XPN_RMDIR    rmdir
 #endif
 
-  /* ................................................................... */
+/* ................................................................... */
 
-
-#endif // PROXY_XPN_MACROS_H
-
+#endif  // PROXY_XPN_MACROS_H

@@ -19,64 +19,56 @@
  *
  */
 
-
 #ifndef _MQ_SERVER_UTILS_H_
 #define _MQ_SERVER_UTILS_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-  /* ... Include / Inclusion ........................................... */
-
-     #include "all_system.h"
-     #include <sys/time.h>
-     #include "base/utils.h"
-
-
-  /* ... Const / Constantes ............................................ */
-
-     #define QUEUE_MQ_SIZE 1000000
-
-
-  /* ... Data Types / Tipo de datos .................................... */
-
-	typedef struct
-	{
-	    char * topic;
-	    char * msg;
-	}
-	ThreadData;
-
-	typedef struct
-	{
-	    ThreadData * queue[QUEUE_MQ_SIZE];
-	    int front;
-	    int rear;
-	    int count;
-	    pthread_mutex_t mutex;
-	    pthread_cond_t not_empty;
-	    pthread_cond_t not_full;
-	}
-	CircularQueueMQ;
-
-
-  /* ... Functions / Funciones ......................................... */
-
-     double get_time (void) ;
-     double get_time_ops ( void ) ;
-
-     void         queue_mq_init ( void ) ;
-     void         enqueue_mq ( ThreadData * client ) ;
-     ThreadData * dequeue_mq ( void ) ;
-
-
-  /* ................................................................... */
-
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include <sys/time.h>
+
+#include "all_system.h"
+#include "base/utils.h"
+
+/* ... Const / Constantes ............................................ */
+
+#define QUEUE_MQ_SIZE 1000000
+
+/* ... Data Types / Tipo de datos .................................... */
+
+typedef struct
+{
+    char* topic;
+    char* msg;
+} ThreadData;
+
+typedef struct
+{
+    ThreadData* queue[QUEUE_MQ_SIZE];
+    int front;
+    int rear;
+    int count;
+    pthread_mutex_t mutex;
+    pthread_cond_t not_empty;
+    pthread_cond_t not_full;
+} CircularQueueMQ;
+
+/* ... Functions / Funciones ......................................... */
+
+double get_time(void);
+double get_time_ops(void);
+
+void queue_mq_init(void);
+void enqueue_mq(ThreadData* client);
+ThreadData* dequeue_mq(void);
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

@@ -1,51 +1,49 @@
 
-  /*
-   *  Copyright 2000-2026 The Expand Team.
-   *
-   *  This file is part of Expand.
-   *
-   *  Expand is free software: you can redistribute it and/or modify
-   *  it under the terms of the GNU Lesser General Public License as published by
-   *  the Free Software Foundation, either version 3 of the License, or
-   *  (at your option) any later version.
-   *
-   *  Expand is distributed in the hope that it will be useful,
-   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   *  GNU Lesser General Public License for more details.
-   *
-   *  You should have received a copy of the GNU Lesser General Public License
-   *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
-   *
-   */
+/*
+ *  Copyright 2000-2026 The Expand Team.
+ *
+ *  This file is part of Expand.
+ *
+ *  Expand is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Expand is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Expand.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #ifndef _XPN_POLICY_INIT_H
 #define _XPN_POLICY_INIT_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "xpn.h"
+#include "xpn_conf_reader.h"
+#include "xpn_init.h"
 
-     #include "xpn.h"
-     #include "xpn_init.h"
-     #include "xpn_conf_reader.h"
+/* ... Functions / Funciones ......................................... */
 
+int XpnInitServer(struct conf_file_data* conf_data, struct xpn_partition* part, struct nfi_server* serv,
+                  int server_num);
 
-  /* ... Functions / Funciones ......................................... */
-  
-     int                    XpnInitServer   ( struct conf_file_data *conf_data, struct xpn_partition * part, struct nfi_server * serv, int server_num );
-  
-     struct xpn_partition * XpnSearchPart   ( int pd );
-     int                    XpnGetPartition ( char *path );
+struct xpn_partition* XpnSearchPart(int pd);
+int XpnGetPartition(char* path);
 
+/* ................................................................... */
 
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

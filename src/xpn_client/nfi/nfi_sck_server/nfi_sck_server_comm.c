@@ -19,75 +19,68 @@
  *
  */
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "nfi_sck_server_comm.h"
 
-     #include "socket.h"
-     #include "base/ns.h"
-     #include "nfi_sck_server_comm.h"
+#include "base/ns.h"
+#include "socket.h"
 
+/* ... Functions / Funciones ......................................... */
 
-  /* ... Functions / Funciones ......................................... */
+int nfi_sck_server_comm_connect(char* srv_name, char* port_name, int* out_socket)
+{
+    int ret;
+    int ipv;
 
-     int nfi_sck_server_comm_connect ( char *srv_name, char *port_name, int *out_socket )
-     {
-         int ret ;
-         int ipv ;
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] >> Begin\n");
 
-         debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] >> Begin\n");
+    ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
+    ret = socket_client_connect_with_retries(srv_name, port_name, out_socket, 2, ipv);
 
-         ipv = utils_getenv_int("XPN_SCK_IPV", DEFAULT_XPN_SCK_IPV);
-	 ret = socket_client_connect_with_retries(srv_name, port_name, out_socket, 2, ipv) ;
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] << End\n");
 
-         debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_connect] << End\n");
+    return ret;
+}
 
-         return ret ;
-     }
+int nfi_sck_server_comm_disconnect(int socket, int keep_connected)
+{
+    int ret;
+    int code = XPN_SERVER_DISCONNECT;
 
-     int nfi_sck_server_comm_disconnect(int socket, int keep_connected)
-     {
-         int ret;
-         int code = XPN_SERVER_DISCONNECT;
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] >> Begin\n");
 
-         debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] >> Begin\n");
+    // If it has been previously disconnected, just return OK
+    if (socket == -1) {
+        debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Previously disconnected\n");
+        debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] << End\n");
+        return 0;
+    }
 
-         // If it has been previously disconnected, just return OK
-         if (socket == -1)
-         {
-             debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Previously disconnected\n");
-             debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] << End\n");
-             return 0;
-         }
+    if (keep_connected == 1) {
+        debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Send disconnect message\n");
+        ret = socket_send(socket, &code, sizeof(code));
+        if (ret < 0) {
+            printf(
+                "[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] ERROR: nfi_sck_server_comm_write_operation "
+                "fails\n");
+            return ret;
+        }
 
-         if (keep_connected == 1)
-         {
+        // Disconnect
+        debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Disconnect\n");
+    }
 
-             debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Send disconnect message\n");
-             ret = socket_send(socket, &code, sizeof(code));
-             if (ret < 0)
-             {
-                 printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] ERROR: nfi_sck_server_comm_write_operation fails\n");
-                 return ret;
-             }
+    ret = socket_close(socket);
+    if (ret < 0) {
+        printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] ERROR: MPI_Comm_disconnect fails\n");
+        return ret;
+    }
 
-             // Disconnect
-             debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] Disconnect\n");
+    debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] << End\n");
 
-         }
+    // Return OK
+    return ret;
+}
 
-         ret = socket_close(socket);
-         if (ret < 0)
-         {
-             printf("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] ERROR: MPI_Comm_disconnect fails\n");
-             return ret;
-         }
-
-         debug_info("[NFI_SCK_SERVER_COMM] [nfi_sck_server_comm_disconnect] << End\n");
-
-         // Return OK
-         return ret;
-     }
-
-
-  /* ................................................................... */
-
+/* ................................................................... */

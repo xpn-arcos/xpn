@@ -22,60 +22,56 @@
 #ifndef _XPN_POLICY_OPEN_H
 #define _XPN_POLICY_OPEN_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "xpn_file.h"
+#include "xpn_policy_rw.h"
 
-  #include "xpn_file.h"
-  #include "xpn_policy_rw.h"
+/* ... Const / Const ................................................. */
 
+#define XPN_META_SIZE (4 * KB)
 
-  /* ... Const / Const ................................................. */
+/* ... Data structures / Estructuras de datos ........................ */
 
-  #define XPN_META_SIZE (4*KB)
-
-  /* ... Data structures / Estructuras de datos ........................ */
-
-  enum xpn_work{
-    no_xpn_op       = -1,
-    op_xpn_getattr  =  0,
-    op_xpn_setattr  =  1,
-    op_xpn_open     =  2,
-    op_xpn_creat    =  3,
-    op_xpn_close    =  4,
-    op_xpn_remove   =  5,
-    op_xpn_rename   =  6,
-    op_xpn_read     =  7,
-    op_xpn_write    =  8,
-    op_xpn_mkdir    =  9,
-    op_xpn_rmdir    = 10,
-    op_xpn_opendir  = 11,
-    op_xpn_readdir  = 12,
+enum xpn_work {
+    no_xpn_op = -1,
+    op_xpn_getattr = 0,
+    op_xpn_setattr = 1,
+    op_xpn_open = 2,
+    op_xpn_creat = 3,
+    op_xpn_close = 4,
+    op_xpn_remove = 5,
+    op_xpn_rename = 6,
+    op_xpn_read = 7,
+    op_xpn_write = 8,
+    op_xpn_mkdir = 9,
+    op_xpn_rmdir = 10,
+    op_xpn_opendir = 11,
+    op_xpn_readdir = 12,
     op_xpn_closedir = 13,
-    op_xpn_statfs   = 14,
-  };
+    op_xpn_statfs = 14,
+};
 
+/* ... Functions / Funciones ......................................... */
 
-  /* ... Functions / Funciones ......................................... */
+void XpnGetURLServer(struct nfi_server* serv, const char* abs_path, char* url_serv);
 
-  void XpnGetURLServer( struct nfi_server *serv, const char *abs_path, char *url_serv);
+int XpnGetServers(int pd, int fd, struct nfi_server** servers);
 
-  int XpnGetServers(int pd, int fd, struct nfi_server **servers);
+int XpnGetFh(struct xpn_metadata* mdata, struct nfi_fhandle** fh, struct nfi_server* servers, char* path);
+int XpnGetFhDir(struct xpn_metadata* mdata, struct nfi_fhandle** fh, struct nfi_server* servers, char* path);
 
-  int XpnGetFh(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);
-  int XpnGetFhDir(struct xpn_metadata *mdata, struct nfi_fhandle **fh,  struct nfi_server *servers,  char *path);
+int XpnGetAtribFd(int fd, struct stat* st);
+int XpnGetAtribPath(char* path, struct stat* st);
 
-  int XpnGetAtribFd   (int fd,      struct stat *st);
-  int XpnGetAtribPath (char * path, struct stat *st);
+/* ................................................................... */
 
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -19,72 +19,65 @@
  *
  */
 
-
 /* ... Include / Inclusion ........................................... */
 
-   #include "mq_server_ops.h"
-
+#include "mq_server_ops.h"
 
 /* ... Functions / Funciones ......................................... */
 
-void mq_server_op_subscribe ( xpn_server_param_st *params, struct st_xpn_server_msg *head )
+void mq_server_op_subscribe(xpn_server_param_st* params, struct st_xpn_server_msg* head)
 {
     if (params->mosquitto_mode != 1) {
-    	debug_info("WARNING: mosquitto is not enabled :-(\n") ;
-    	return ;
+        debug_info("WARNING: mosquitto is not enabled :-(\n");
+        return;
     }
 
-    #ifdef HAVE_MOSQUITTO_H
+#ifdef HAVE_MOSQUITTO_H
 
-    	//char * s;
-	    char * extra = "/#";
-	    char * sm = malloc(strlen(head->u_st_xpn_server_msg.op_open.path) + strlen(extra) + 1);
-	    strcpy(sm, head->u_st_xpn_server_msg.op_open.path);
-	    strcat(sm, extra);
+    // char * s;
+    char* extra = "/#";
+    char* sm = malloc(strlen(head->u_st_xpn_server_msg.op_open.path) + strlen(extra) + 1);
+    strcpy(sm, head->u_st_xpn_server_msg.op_open.path);
+    strcat(sm, extra);
 
-	    debug_info("[%d]\tBEGIN OPEN MOSQUITTO MQ_SERVER WS - %s\n", __LINE__, sm);
+    debug_info("[%d]\tBEGIN OPEN MOSQUITTO MQ_SERVER WS - %s\n", __LINE__, sm);
 
-	    int rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
-	    if (rc != MOSQ_ERR_SUCCESS) {
-	        debug_info(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
-	        mosquitto_disconnect(params->mqtt);
-	    }
+    int rc = mosquitto_subscribe(params->mqtt, NULL, sm, params->mosquitto_qos);
+    if (rc != MOSQ_ERR_SUCCESS) {
+        debug_info(stderr, "Error subscribing open: %s\n", mosquitto_strerror(rc));
+        mosquitto_disconnect(params->mqtt);
+    }
 
-	    debug_info("[%d]\tEND OPEN MOSQUITTO MQ_SERVER WS - %s\n\n", __LINE__, sm);
+    debug_info("[%d]\tEND OPEN MOSQUITTO MQ_SERVER WS - %s\n\n", __LINE__, sm);
 
-    #endif
+#endif
 }
 
-
-void mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_server_msg *head )
+void mq_server_op_unsubscribe(xpn_server_param_st* params, struct st_xpn_server_msg* head)
 {
-    if (params->mosquitto_mode != 1) 
-    {
-    	debug_info("WARNING: mosquitto is not enabled :-(\n") ;
-    	return ;
+    if (params->mosquitto_mode != 1) {
+        debug_info("WARNING: mosquitto is not enabled :-(\n");
+        return;
     }
 
-    #ifdef HAVE_MOSQUITTO_H
+#ifdef HAVE_MOSQUITTO_H
 
-	char * extra = "/#";
-	char * sm = malloc(strlen(head->u_st_xpn_server_msg.op_close.path) + strlen(extra) + 1);
-	strcpy(sm, head->u_st_xpn_server_msg.op_close.path);
-	strcat(sm, extra);
+    char* extra = "/#";
+    char* sm = malloc(strlen(head->u_st_xpn_server_msg.op_close.path) + strlen(extra) + 1);
+    strcpy(sm, head->u_st_xpn_server_msg.op_close.path);
+    strcat(sm, extra);
 
-	char * s;
-	s = head->u_st_xpn_server_msg.op_close.path;
+    char* s;
+    s = head->u_st_xpn_server_msg.op_close.path;
 
-	debug_info("[%d]\tBEGIN CLOSE MOSQUITTO MQ_SERVER - WS \n\n", __LINE__);
+    debug_info("[%d]\tBEGIN CLOSE MOSQUITTO MQ_SERVER - WS \n\n", __LINE__);
 
     mosquitto_unsubscribe(params->mqtt, NULL, sm);
     mosquitto_unsubscribe(params->mqtt, NULL, s);
 
     debug_info("[%d]\tEND CLOSE MOSQUITTO MQ_SERVER - WS %s\n\n", __LINE__, sm);
 
-    #endif
+#endif
 }
 
-
 /* ................................................................... */
-
-

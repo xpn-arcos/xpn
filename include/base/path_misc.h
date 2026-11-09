@@ -19,44 +19,40 @@
  *
  */
 
-
 #ifndef _PATH_MISC_H_
 #define _PATH_MISC_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include <libgen.h>
 
-     #include "all_system.h"
-     #include "base/string_misc.h"
-     #include <libgen.h>
+#include "all_system.h"
+#include "base/string_misc.h"
 
+/* ... Functions / Funciones ......................................... */
 
-  /* ... Functions / Funciones ......................................... */
+int hash(const char* file, int nServ, int isfile);
 
-     int hash (const char *file, int nServ, int isfile);
+int getFirstDir(char* dir, char* path);
+long getSizeFactor(char* name);
 
-     int  getFirstDir   ( char *dir, char *path);
-     long getSizeFactor ( char *name );
+// get the last name of a path and erase the file name
+int getNameFile(char* file, char* dir);
 
-     // get the last name of a path and erase the file name
-     int getNameFile(char *file, char *dir);
+// get the first name of the path and erase the part name
+int getNamePart(char* part, char* dir);
 
-     // get the first name of the path and erase the part name
-     int getNamePart(char *part, char *dir);
+// erase the initial dir used in the url
+int getDirWithURL(char* url, char* dir);
 
-     // erase the initial dir used in the url
-     int getDirWithURL(char *url, char *dir);
+/* .................................................................... */
 
-
-  /* .................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _PATH_MISC_H */
-

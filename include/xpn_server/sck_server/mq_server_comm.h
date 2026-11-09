@@ -19,40 +19,36 @@
  *
  */
 
-
 #ifndef _MQ_SERVER_COMM_H_
 #define _MQ_SERVER_COMM_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-  /* ... Include / Inclusion ........................................... */
-
-     #include "all_system.h"
-     #include <sys/time.h>
-
-     #include "base/utils.h"
-     #include "socket.h"
-     #include "mq_server_utils.h"
-     #include "xpn_server/xpn_server_params.h"
-
-
-  /* ... Functions / Funciones ......................................... */
-  
-     #ifdef HAVE_MOSQUITTO_H
-     void on_message( __attribute__((__unused__)) struct mosquitto * mqtt, void * obj, const struct mosquitto_message * msg) ;
-     #endif
-
-     int mq_server_mqtt_init    ( xpn_server_param_st * params ) ;
-     int mq_server_mqtt_destroy ( xpn_server_param_st * params ) ;
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include <sys/time.h>
+
+#include "all_system.h"
+#include "base/utils.h"
+#include "mq_server_utils.h"
+#include "socket.h"
+#include "xpn_server/xpn_server_params.h"
+
+/* ... Functions / Funciones ......................................... */
+
+#ifdef HAVE_MOSQUITTO_H
+void on_message(__attribute__((__unused__)) struct mosquitto* mqtt, void* obj, const struct mosquitto_message* msg);
+#endif
+
+int mq_server_mqtt_init(xpn_server_param_st* params);
+int mq_server_mqtt_destroy(xpn_server_param_st* params);
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

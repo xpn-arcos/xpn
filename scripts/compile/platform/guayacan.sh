@@ -22,15 +22,21 @@
 
 
 # 1) software (if needed)...
-module load "impi/2017.4"
+echo " * Checking build software... (it might take a while)"
+PKG_NAMES="autoconf automake gcc g++ make flex libtool doxygen"
+for P in $PKG_NAMES; do
+    apt-mark showinstall | grep -q "^$P$" || sudo apt-get install -y $P
+done
 
 # 2) working path...
-MPICC_PATH=/gpfs/apps/MN4/INTEL/2017.4/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpicc
-INSTALL_PATH=$HOME/mn4/bin/
+#MPICC_PATH=/usr/bin/mpicc
+MPICC_PATH=mpicc
+# INSTALL_PATH=$HOME/bin/
+INSTALL_PATH=$HOME/xpn_test/test/bin
 BASE_PATH=$(dirname $0)
 
 # 3) preconfigure build-me...
-$BASE_PATH/../software/xpn.sh                -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
-$BASE_PATH/../software/ior.sh                -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
-$BASE_PATH/../software/lz4.sh                -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500/build/pfind/lz4/
-$BASE_PATH/../software/io500_noinet.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500
+$BASE_PATH/../software/xpn.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../xpn
+$BASE_PATH/../software/ior.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../ior
+$BASE_PATH/../software/lz4.sh         -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500/build/pfind/lz4/
+$BASE_PATH/../software/io500.sh       -m $MPICC_PATH -i $INSTALL_PATH -s $BASE_PATH/../../../../io500

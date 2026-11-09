@@ -19,34 +19,30 @@
  *
  */
 
-
 #ifndef _MQ_SERVER_OPS_H_
 #define _MQ_SERVER_OPS_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-  /* ... Include / Inclusion ........................................... */
-
-     #include "all_system.h"
-     #include "base/utils.h"
-     #include "mq_server_utils.h"
-     #include "xpn_server_params.h"
-     #include "xpn_server_ops.h"
-
-
-  /* ... Functions / Funciones ......................................... */
-  
-     void   mq_server_op_subscribe   ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
-     void   mq_server_op_unsubscribe ( xpn_server_param_st *params, struct st_xpn_server_msg *head ) ;
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include "all_system.h"
+#include "base/utils.h"
+#include "mq_server_utils.h"
+#include "xpn_server_ops.h"
+#include "xpn_server_params.h"
+
+/* ... Functions / Funciones ......................................... */
+
+void mq_server_op_subscribe(xpn_server_param_st* params, struct st_xpn_server_msg* head);
+void mq_server_op_unsubscribe(xpn_server_param_st* params, struct st_xpn_server_msg* head);
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

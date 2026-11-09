@@ -19,112 +19,97 @@
  *
  */
 
-
 #ifndef DEBUG_MSG_H
 #define DEBUG_MSG_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* ... Include / Inclusion ........................................... */
 
-  /* ... Include / Inclusion ........................................... */
+#include "all_system.h"
+#include "string_misc.h"
 
-     #include "all_system.h"
-     #include "string_misc.h"
+/* ... Const / Const ................................................. */
 
+// debug messages
+#ifdef DEBUG
+#define debug_error(...)   debug_msg_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
+#define debug_warning(...) debug_msg_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
+#define debug_info(...)    debug_msg_printf(3, __FILE__, __LINE__, stdout, __VA_ARGS__)
+#else
+#define debug_error(...)
+#define debug_warning(...)
+#define debug_info(...)
+#endif
 
-  /* ... Const / Const ................................................. */
+// Current function
+#define DEBUG_BEGIN() debug_info("Begin %s()\n", __func__)
 
-     // debug messages
-     #ifdef DEBUG
-       #define debug_error(...)    debug_msg_printf(1, __FILE__, __LINE__, stderr, __VA_ARGS__)
-       #define debug_warning(...)  debug_msg_printf(2, __FILE__, __LINE__, stderr, __VA_ARGS__)
-       #define debug_info(...)     debug_msg_printf(3, __FILE__, __LINE__, stdout, __VA_ARGS__)
-     #else
-       #define debug_error(...)
-       #define debug_warning(...)
-       #define debug_info(...)
-     #endif
+#define DEBUG_END()   debug_info("End   %s(), errno=%d\n", __func__, errno)
 
-     // Current function
-     #define DEBUG_BEGIN() \
-             debug_info("Begin %s()\n", __func__)
+/* ... Functions / Funciones ......................................... */
 
-     #define DEBUG_END() \
-             debug_info("End   %s(), errno=%d\n", __func__, errno)
+/** Debug API **/
 
+void debug_msg_init(void);
+int debug_msg_printf(int src_type, char* src_fname, long src_line, FILE* fd, char* msg_fmt, ...);
 
-  /* ... Functions / Funciones ......................................... */
+/** Extra Debug API **/
 
-     /** Debug API **/
+/**
+ *
+ *  Set 'printer' dispacher.
+ *  @param printer the printer function to be used.
+ *  @return nothing.
+ *
+ */
+void DEBUG_MSG_setPrinter(
+    /*IN*/ int (*printer)(const char*, va_list));
 
-     void debug_msg_init   ( void );
-     int  debug_msg_printf ( int src_type, char *src_fname, long src_line, FILE *fd, char *msg_fmt, ... );
+/**
+ *
+ *  Write a message using the format and the argument list given to it.
+ *  @param line the line of code where message is generated.
+ *  @param name the file name at the code where message is generated.
+ *  @param pid  the process that send this message.
+ *  @param type the type of message.
+ *  @param fto  the message format.
+ *  @param vl   the argument list.
+ *  @return nothing.
+ *
+ */
+void DEBUG_MSG_VPrintF(
+    /*IN*/ int line,
+    /*IN*/ char* name,
+    /*IN*/ long pid,
+    /*IN*/ int type,
+    /*IN*/ char* fto,
+    /*IN*/ va_list vl);
 
+/**
+ *
+ *  Write a message using the format and arguments given to it.
+ *  @param line the line of code where message is generated.
+ *  @param name the file name at the code where message is generated.
+ *  @param pid  the process that send this message.
+ *  @param type the type of message.
+ *  @param fto  the message format.
+ *  @return nothing.
+ *
+ */
+void DEBUG_MSG_PrintF(
+    /*IN*/ int line,
+    /*IN*/ char* name,
+    /*IN*/ long pid,
+    /*IN*/ int type,
+    /*IN*/ char* fto, ...);
 
-     /** Extra Debug API **/
+/* ................................................................... */
 
-     /**
-      *
-      *  Set 'printer' dispacher.
-      *  @param printer the printer function to be used.
-      *  @return nothing.
-      *
-      */
-     void   DEBUG_MSG_setPrinter
-     (
-       /*IN*/      int (*printer) (const   char *, va_list)
-     );
-
-     /**
-      *
-      *  Write a message using the format and the argument list given to it.
-      *  @param line the line of code where message is generated.
-      *  @param name the file name at the code where message is generated.
-      *  @param pid  the process that send this message.
-      *  @param type the type of message.
-      *  @param fto  the message format.
-      *  @param vl   the argument list.
-      *  @return nothing.
-      *
-      */
-     void   DEBUG_MSG_VPrintF
-     (
-       /*IN*/      int    line,
-       /*IN*/      char  *name,
-       /*IN*/     long    pid,
-       /*IN*/      int    type,
-       /*IN*/      char  *fto,
-       /*IN*/    va_list  vl
-     );
-
-     /**
-      *
-      *  Write a message using the format and arguments given to it.
-      *  @param line the line of code where message is generated.
-      *  @param name the file name at the code where message is generated.
-      *  @param pid  the process that send this message.
-      *  @param type the type of message.
-      *  @param fto  the message format.
-      *  @return nothing.
-      *
-      */
-     void   DEBUG_MSG_PrintF
-     (
-       /*IN*/      int    line,
-       /*IN*/      char  *name,
-       /*IN*/     long    pid,
-       /*IN*/      int    type,
-       /*IN*/      char  *fto,
-       ...
-     );
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
+#ifdef __cplusplus
+}
+#endif
 
 #endif

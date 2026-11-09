@@ -19,30 +19,25 @@
  *
  */
 
-
 #ifndef TRACE_TAGS_H
 #define TRACE_TAGS_H
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-
-  /* ... Include / Inclusion ........................................... */
-
-     #include "all_system.h"
-
-
-  /* ... Consts / Constantes ........................................... */
-
-     #define  SPOT __LINE__,__FILE__,getpid(),0
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include "all_system.h"
+
+/* ... Consts / Constantes ........................................... */
+
+#define SPOT __LINE__, __FILE__, getpid(), 0
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

@@ -19,41 +19,37 @@
  *
  */
 
-
 #ifndef _NFI_XPN_SERVER_COMM_H_
 #define _NFI_XPN_SERVER_COMM_H_
 
-  #ifdef  __cplusplus
-    extern "C" {
-  #endif
-
-  /* ... Include / Inclusion ........................................... */
-
-     #include "all_system.h"
-     #include "nfi_xpn_server.h"
-     #include "base/utils.h"
-     #include "base/ns.h"
-     #include "base/socket.h"
-
-
-  /* ... Functions / Funciones ......................................... */
-
-     int     nfi_xpn_server_comm_init              ( struct nfi_xpn_server *params );
-     int     nfi_xpn_server_comm_destroy           ( struct nfi_xpn_server *params );
-
-     int     nfi_xpn_server_comm_connect           ( struct nfi_xpn_server *params );
-     int     nfi_xpn_server_comm_disconnect        ( struct nfi_xpn_server *params );
-
-     int     nfi_xpn_server_comm_write_operation   ( struct nfi_xpn_server *params, int op);
-     ssize_t nfi_xpn_server_comm_write_data        ( struct nfi_xpn_server *params, char *data, ssize_t size );
-     ssize_t nfi_xpn_server_comm_read_data         ( struct nfi_xpn_server *params, char *data, ssize_t size );
-
-
-  /* ................................................................... */
-
-  #ifdef  __cplusplus
-    }
-  #endif
-
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+/* ... Include / Inclusion ........................................... */
+
+#include "all_system.h"
+#include "base/ns.h"
+#include "base/socket.h"
+#include "base/utils.h"
+#include "nfi_xpn_server.h"
+
+/* ... Functions / Funciones ......................................... */
+
+int nfi_xpn_server_comm_init(struct nfi_xpn_server* params);
+int nfi_xpn_server_comm_destroy(struct nfi_xpn_server* params);
+
+int nfi_xpn_server_comm_connect(struct nfi_xpn_server* params);
+int nfi_xpn_server_comm_disconnect(struct nfi_xpn_server* params);
+
+int nfi_xpn_server_comm_write_operation(struct nfi_xpn_server* params, int op);
+ssize_t nfi_xpn_server_comm_write_data(struct nfi_xpn_server* params, char* data, ssize_t size);
+ssize_t nfi_xpn_server_comm_read_data(struct nfi_xpn_server* params, char* data, ssize_t size);
+
+/* ................................................................... */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
